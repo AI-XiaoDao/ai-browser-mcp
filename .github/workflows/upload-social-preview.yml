@@ -15,34 +15,59 @@ jobs:
       - name: Upload via GitHub repository-images API
         env:
           GH_TOKEN: ${{ secrets.UPLOAD_PAT }}
+          REPO: AI-XiaoDao/ai-browser-mcp
           REPO_ID: "1274856747"
         run: |
           node <<'NODE'
           const fs = require('fs');
           const path = '.github/social-preview.jpg';
           const token = process.env.GH_TOKEN;
+          const repo = process.env.REPO;
           const repoId = process.env.REPO_ID;
           const buf = fs.readFileSync(path);
           const fileName = 'social-preview.jpg';
 
+          const ghHeaders = {
+            Authorization: `token ${token}`,
+            'User-Agent': 'ai-browser-mcp-upload-cover',
+            Accept: 'text/html,application/json',
+          };
+
           async function main() {
+            const settingsRes = await fetch(`https://github.com/${repo}/settings`, {
+              headers: ghHeaders,
+              redirect: 'follow',
+            });
+            const settingsHtml = await settingsRes.text();
+            if (!settingsRes.ok || settingsHtml.includes('Sign in to GitHub')) {
+              throw new Error(`settings ${settingsRes.status}, login required? url=${settingsRes.url}`);
+            }
+            const authMatch = settingsHtml.match(/name="authenticity_token"\s+value="([^"]+)"/);
+            if (!authMatch) throw new Error('authenticity_token not found on settings page');
+            const authenticityToken = authMatch[1];
+            console.log('got authenticity_token');
+
+            const policyBody = new URLSearchParams({
+              authenticity_token: authenticityToken,
+              repository_id: repoId,
+              size: String(buf.length),
+              content_type: 'image/jpeg',
+              name: fileName,
+            });
+
             const policyRes = await fetch('https://github.com/upload/policies/repository-images', {
               method: 'POST',
               headers: {
+                ...ghHeaders,
                 Accept: 'application/json',
-                Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-Requested-With': 'XMLHttpRequest',
+                Referer: `https://github.com/${repo}/settings`,
               },
-              body: new URLSearchParams({
-                repository_id: repoId,
-                size: String(buf.length),
-                content_type: 'image/jpeg',
-                name: fileName,
-              }),
+              body: policyBody.toString(),
             });
             const policyText = await policyRes.text();
-            if (!policyRes.ok) throw new Error(`policy ${policyRes.status}: ${policyText}`);
+            if (!policyRes.ok) throw new Error(`policy ${policyRes.status}: ${policyText.slice(0, 400)}`);
             const policy = JSON.parse(policyText);
             console.log('policy ok', Object.keys(policy));
 
@@ -54,7 +79,7 @@ jobs:
 
             const uploadRes = await fetch(uploadUrl, { method: 'POST', body: form });
             const uploadText = await uploadRes.text();
-            if (!uploadRes.ok) throw new Error(`upload ${uploadRes.status}: ${uploadText.slice(0, 500)}`);
+            if (!uploadRes.ok) throw new Error(`upload ${uploadRes.status}: ${uploadText.slice(0, 400)}`);
             console.log('upload ok', uploadText.slice(0, 300));
           }
 
