@@ -10,7 +10,7 @@ AI Browser MCP Server
 任意 AI 代理 · 一句话操控 Windows 真实浏览器
 
 Cursor / Claude / 自研 Agent · MCP 标准 · 217 tools
-采集 · 逆向 · 定位 sign · Release VIP 全开
+采集 · 逆向 · 定位 sign · 下载即全功能
 
 github.com/AI-XiaoDao/ai-browser-mcp
 ```

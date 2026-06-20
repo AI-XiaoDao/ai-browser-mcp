@@ -27,7 +27,6 @@
 ### 说明
 
 - 嵌入式 GUI 模式下 4 个窗口类工具（create/close/create_background/create_tab）已禁用
-- **Release 成品 zip**：VIP 功能（截图、CDP、调试器、指纹、拦截等）**全部免费开放**，无需 `vip_code`
-- **自行编译**：须向 **FBrowser CEF 内核作者**申请 VIP 授权码，写入 `mcp_config.json`
+- **GitHub Release zip** 包含全部 217 个工具（截图、CDP、调试器、指纹、拦截等），解压即用
 
 [2.6.0]: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0

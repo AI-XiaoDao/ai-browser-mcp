@@ -32,8 +32,7 @@
 
 ✅ Open: Volcano .wsv source + generated C++ reference + docs (MIT)
 
-✅ Binary: GitHub Releases (~157MB, exe + CEF) — all VIP features included free in release zip
-✅ Self-build: contact FBrowser kernel author for VIP license if compiling from source
+✅ Binary: GitHub Releases (~157MB, exe + CEF) — **all 217 tools included, download and go**
 
 ✅ Local-only: 127.0.0.1:9222 by default
 
@@ -133,9 +132,9 @@ See [README · Core advantages](README.md#-核心优点全景) for the complete 
 
 | **MIT open source** | `.wsv` source + `generated-cpp/` + docs + `run_all_tests.js` |
 
-| **Release VIP included** | GitHub release zip: all VIP tools **free**, no `vip_code` |
+| **Download = full power** | Release zip includes screenshot, CDP, debugger, fingerprint, intercept — all 217 tools |
 
-| **Self-build VIP** | Compile from source → license from **FBrowser kernel author** |
+| **Extensible** | Workflows, Hook scenarios, skills, MIT source — PRs welcome |
 
 
 
@@ -249,7 +248,7 @@ You describe the goal in Cursor
 
 
 
-#### Walkthrough: locate (VIP)
+#### Walkthrough: locate (CDP debugger)
 
 
 
@@ -311,19 +310,11 @@ A: Often: login required, lazy-load not scrolled, wrong selector. Ask AI to scro
 
 **Q: Reverse vs locate?**  
 
-A: **Reverse** = which request/field looks encrypted (Hook + network). **Locate** = which JS function computes it (CDP debugger + stack, usually VIP).
-
-
+A: **Reverse** = which request/field looks encrypted (Hook + network). **Locate** = which JS function computes it (CDP debugger + stack).
 
 **Q: Can MCP network tools see POST bodies?**  
 
-A: **No by default.** Use persist Hook (`browser_inject`) or VIP intercept. See `skills/场景与Hook测试.md`.
-
-
-
-**Q: What is VIP? Do release users need a license?**  
-
-A: **GitHub release zip** includes **all VIP features for free** — no `vip_code` required. If you **compile from Volcano source**, contact the **FBrowser CEF kernel author** for a VIP license and set `"vip_code"` in `mcp_config.json`.
+A: **No by default.** Use persist Hook (`browser_inject`). See `skills/场景与Hook测试.md`.
 
 
 

@@ -2,7 +2,7 @@
 
 **Windows x64 本地浏览器自动化 MCP 服务** — 217 个 `browser_*` 工具，供 **任意 AI 代理**（Cursor / Claude / 自研 MCP 客户端）通过 HTTP、WebSocket 或 `mcp_bridge.js` 调用。
 
-> **🎁 Release 成品 VIP 全开**：本 Release 的 **`AI-Browser-MCP-x64-v2.6.0.zip`** 已**免费开放全部 VIP 功能**（截图、CDP 调试器、指纹、拦截等），**无需**填写 `vip_code`。自行编译 exe 须向 FBrowser 内核作者申请授权。
+> **🎁 下载即全功能**：本 Release 的 **`AI-Browser-MCP-x64-v2.6.0.zip`** 已包含 **全部 217 个工具**（截图、CDP 调试器、指纹、拦截等），解压运行即可。
 
 ---
 
@@ -69,7 +69,7 @@
 |------|--------|
 | 采集 | 「滚动列表，采标题价格 JSON」 |
 | 逆向 | 「扫描 POST，标疑似加密字段」 |
-| 定位 | 「断点跟到 sign 函数，给源码」（VIP） |
+| 定位 | 「断点跟到 sign 函数，给源码」 |
 | 填表 | 「登录后台，导出订单表」 |
 | 复用 | 「存成 workflow，下次一键跑」 |
 
@@ -90,7 +90,7 @@
 
 ### 本版本特性
 
-- **217 MCP 工具**：导航、填表、DOM、网络、工作流、CDP 调试等 — **Release 成品 VIP 全开**
+- **217 MCP 工具**：导航、填表、DOM、网络、工作流、CDP 调试等 — **下载即全功能**
 - **一句话自动执行**：Agent 串联 navigate → collect / inject / debugger，sync-wait 逐步等结果
 - **JSON-RPC**：WebSocket + HTTP POST `http://127.0.0.1:9222/mcp`
 - sync-wait、batch、欢迎页控制台、工作流 JSON
