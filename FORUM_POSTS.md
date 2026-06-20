@@ -43,7 +43,8 @@
 ## §0 通用发帖文字（全平台 · 复制即用）
 
 > **纯文本**，QQ 群 / V2EX / 贴吧 / 知乎 / 火山论坛 均可直接粘贴。  
-> **Discuz 论坛**要排版请用 [§2-A BBCode](#2-a-discuz-dz-论坛--bbcode-格式)。
+> **Discuz 论坛**要排版请用 [§2-A BBCode](#2-a-discuz-dz-论坛--bbcode-格式)。  
+> **完整 HTML 宣传页**（可本地打开 / 托管 / 论坛外链）：[promo.html](../promo.html) · [GitHub 在线预览](https://htmlpreview.github.io/?https://github.com/AI-XiaoDao/ai-browser-mcp/blob/main/promo.html)
 
 **通用标题：**
 
