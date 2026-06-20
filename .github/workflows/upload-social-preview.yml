@@ -12,75 +12,90 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Upload via GitHub repository-images API
+      - name: Install Playwright Chromium
+        run: npm install --no-save playwright@1.49.1 && npx playwright install chromium
+
+      - name: Upload social preview via Playwright
         env:
-          GH_TOKEN: ${{ secrets.UPLOAD_PAT }}
+          GH_USER: AI-XiaoDao
+          GH_PAT: ${{ secrets.UPLOAD_PAT }}
           REPO: AI-XiaoDao/ai-browser-mcp
-          REPO_ID: "1274856747"
         run: |
           node <<'NODE'
+          const { chromium } = require('playwright');
           const fs = require('fs');
-          const path = '.github/social-preview.jpg';
-          const token = process.env.GH_TOKEN;
+          const path = require('path');
+          const imagePath = path.resolve('.github/social-preview.jpg');
           const repo = process.env.REPO;
-          const repoId = process.env.REPO_ID;
-          const buf = fs.readFileSync(path);
-          const fileName = 'social-preview.jpg';
+          const user = process.env.GH_USER;
+          const pat = process.env.GH_PAT;
 
-          const ghHeaders = {
-            Authorization: `token ${token}`,
-            'User-Agent': 'ai-browser-mcp-upload-cover',
-            Accept: 'text/html,application/json',
-          };
+          async function loginIfNeeded(page) {
+            await page.goto('https://github.com/login', { waitUntil: 'domcontentloaded', timeout: 60000 });
+            if (!page.url().includes('/login')) return;
+            await page.fill('input#login_field', user);
+            await page.fill('input#password', pat);
+            await page.click('input[name="commit"]');
+            await page.waitForURL((url) => !url.toString().includes('/login'), { timeout: 60000 });
+            const html = await page.content();
+            if (html.includes('Incorrect username or password') || html.includes('Authentication failed')) {
+              throw new Error('GitHub web login failed with PAT');
+            }
+          }
 
           async function main() {
-            const settingsRes = await fetch(`https://github.com/${repo}/settings`, {
-              headers: ghHeaders,
-              redirect: 'follow',
-            });
-            const settingsHtml = await settingsRes.text();
-            if (!settingsRes.ok || settingsHtml.includes('Sign in to GitHub')) {
-              throw new Error(`settings ${settingsRes.status}, login required? url=${settingsRes.url}`);
+            const browser = await chromium.launch({ headless: true });
+            const context = await browser.newContext();
+            const page = await context.newPage();
+            try {
+              await loginIfNeeded(page);
+              const settingsUrl = `https://github.com/${repo}/settings`;
+              await page.goto(settingsUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
+              if (page.url().includes('/login')) throw new Error('still on login after auth');
+
+              const heading = page.locator('h2', { hasText: 'Social preview' }).first();
+              await heading.waitFor({ state: 'attached', timeout: 30000 });
+              await heading.scrollIntoViewIfNeeded();
+
+              const editBtn = page.locator('#edit-social-preview-button');
+              const editSummary = page.locator('xpath=//h2[normalize-space()="Social preview"]/following::*[(self::button or self::summary) and normalize-space(.)="Edit"][1]');
+              if (await editBtn.count()) await editBtn.first().click({ force: true });
+              else if (await editSummary.count()) await editSummary.first().click({ force: true });
+
+              const fileInput = page.locator('input#repo-image-file-input');
+              const uploadMenu = page.getByText(/upload an image/i).first();
+              await Promise.any([
+                fileInput.first().waitFor({ state: 'attached', timeout: 20000 }),
+                uploadMenu.waitFor({ state: 'visible', timeout: 20000 }),
+              ]);
+
+              const uploadResponse = page.waitForResponse((resp) => {
+                const u = resp.url();
+                return resp.status() >= 200 && resp.status() < 300 && u.includes('/upload/repository-images/');
+              }, { timeout: 30000 }).catch(() => null);
+
+              if (await fileInput.count()) {
+                await fileInput.first().setInputFiles(imagePath);
+              } else {
+                const [chooser] = await Promise.all([
+                  page.waitForEvent('filechooser'),
+                  uploadMenu.click({ force: true }),
+                ]);
+                await chooser.setFiles(imagePath);
+              }
+
+              const resp = await uploadResponse;
+              if (resp) console.log('upload response', resp.status(), resp.url());
+
+              await page.waitForFunction(() => {
+                const input = document.querySelector('input.js-repository-image-id');
+                return !!((input?.value || '').trim());
+              }, { timeout: 30000 });
+
+              console.log('social preview uploaded');
+            } finally {
+              await browser.close();
             }
-            const authMatch = settingsHtml.match(/name="authenticity_token"\s+value="([^"]+)"/);
-            if (!authMatch) throw new Error('authenticity_token not found on settings page');
-            const authenticityToken = authMatch[1];
-            console.log('got authenticity_token');
-
-            const policyBody = new URLSearchParams({
-              authenticity_token: authenticityToken,
-              repository_id: repoId,
-              size: String(buf.length),
-              content_type: 'image/jpeg',
-              name: fileName,
-            });
-
-            const policyRes = await fetch('https://github.com/upload/policies/repository-images', {
-              method: 'POST',
-              headers: {
-                ...ghHeaders,
-                Accept: 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Requested-With': 'XMLHttpRequest',
-                Referer: `https://github.com/${repo}/settings`,
-              },
-              body: policyBody.toString(),
-            });
-            const policyText = await policyRes.text();
-            if (!policyRes.ok) throw new Error(`policy ${policyRes.status}: ${policyText.slice(0, 400)}`);
-            const policy = JSON.parse(policyText);
-            console.log('policy ok', Object.keys(policy));
-
-            const uploadUrl = policy.upload_url || policy.href || policy.url;
-            const fields = policy.form || policy.fields || {};
-            const form = new FormData();
-            for (const [k, v] of Object.entries(fields)) form.append(k, v);
-            form.append('file', new Blob([buf], { type: 'image/jpeg' }), fileName);
-
-            const uploadRes = await fetch(uploadUrl, { method: 'POST', body: form });
-            const uploadText = await uploadRes.text();
-            if (!uploadRes.ok) throw new Error(`upload ${uploadRes.status}: ${uploadText.slice(0, 400)}`);
-            console.log('upload ok', uploadText.slice(0, 300));
           }
 
           main().catch((e) => {
