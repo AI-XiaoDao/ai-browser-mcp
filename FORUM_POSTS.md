@@ -4,7 +4,7 @@
 > **仓库**：https://github.com/AI-XiaoDao/ai-browser-mcp  
 > **下载**：https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0  
 > **演示图**（外链可用）：https://github.com/AI-XiaoDao/ai-browser-mcp/raw/main/.github/demo-douyin-post-scan.png  
-> **技术支持**：QQ 212577526 · 群 737680767 · 微信 XSMZAS1
+> **技术支持**：作者 QQ 212577526
 
 ---
 
@@ -56,35 +56,44 @@
 ```
 【开源】AI浏览器 MCP Server v2.6.0
 
-Windows 本地 MCP 浏览器自动化 — 217 个 browser_* 工具，任意 AI 代理（Cursor / Claude / Cline / 自研 MCP）一句话操控 FBrowser CEF 真实浏览器。
+Windows 本地 MCP 浏览器自动化服务。启动 exe 后，本机 9222 端口对外提供标准 MCP 协议；任意 AI 代理（Cursor、Claude、Cline、自研客户端）可调用 217 个 browser_* 工具，操控 FBrowser CEF 真实浏览器。
 
-不用写 Playwright，说目标即可，Agent 自动串联工具：
+和 Playwright 脚本链不同：你说目标，Agent 自动选工具、逐步执行，不用从零写自动化代码。
 
-· 采集：「滚动列表，采标题价格 JSON」
-· 逆向：「扫描 POST，标出疑似加密字段」（Hook 抓 body）
-· 定位：「断点跟到 sign 函数，给源码片段」（CDP 调试器）
+【一句话示例】
+· 采集：「滚动商品列表，把标题价格采成 JSON」
+· 逆向：「扫描 XHR/fetch POST，标出疑似加密字段」（persist Hook 抓 body）
+· 定位：「提交时下断点，跟到 sign 函数，给源码片段」（CDP 调试器）
 · 填表：「登录后台，导出订单表」
+· 复用：「把流程存成 workflow JSON，下次一键跑」
 
-亮点：
-· MIT 开源（.wsv 源码 + 文档 + mcp_bridge.js）
-· GitHub Release 217 工具全开放，解压即用（约 157MB）
-· 本机 127.0.0.1:9222，默认不暴露外网
-· sync-wait / batch / 工作流 JSON
+【亮点】
+· 217 工具全开放：导航 / 填表 / DOM / 网络 / 截图 / CDP / Hook / 工作流 …
+· MIT 开源：11 个 .wsv 模块 + 文档 + mcp_bridge.js + 场景脚本
+· Release 下载即用（约 157MB，含 CEF 运行时）
+· sync-wait + batch，Agent 编排更省轮次
+· 默认 127.0.0.1，本机运行，数据不出机器
+
+【3 步上手】
+1. 下载 Release → 解压 → 运行 AI浏览器.exe
+2. 打开 http://127.0.0.1:9222/health 确认 ok
+3. 配置 mcp_bridge.js 接入 AI 代理 → 说上面任一句话
 
 下载：https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
 仓库：https://github.com/AI-XiaoDao/ai-browser-mcp
-演示图：https://github.com/AI-XiaoDao/ai-browser-mcp/raw/main/.github/demo-douyin-post-scan.png
+演示：https://github.com/AI-XiaoDao/ai-browser-mcp/raw/main/.github/demo-douyin-post-scan.png
 
-QQ：212577526 · 群：737680767 · 微信：XSMZAS1
+作者 QQ：212577526
 欢迎 Star / Issue / PR
 ```
 
 **超短版（群公告 / 动态）：**
 
 ```
-【开源】AI浏览器 MCP v2.6 — Windows 本机 217 工具，Cursor/Claude 一句话采集·逆向·断点，MIT 下载即用
+【开源】AI浏览器 MCP v2.6 — Windows 本机 217 工具，AI 一句话采集·逆向·断点，MIT 解压即用
 
 https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
+作者 QQ：212577526
 ```
 
 ---
@@ -103,6 +112,7 @@ https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
   AI-Browser-MCP-x64-v2.6.0.zip（~157MB，217 工具全开放，解压即用）
 
 源码仓库：https://github.com/AI-XiaoDao/ai-browser-mcp
+作者 QQ：212577526
 Star / Issue / PR 欢迎
 ```
 
@@ -127,7 +137,7 @@ Star / Issue / PR 欢迎
 「打开抖音，扫描 XHR/fetch POST，标出疑似加密字段」
 「滚动商品列表，把标题价格采成 JSON」
 
-QQ：212577526 · 群：737680767
+作者 QQ：212577526
 ```
 
 ---
@@ -170,7 +180,7 @@ Cursor / Claude / 任意 MCP 客户端可用自然语言调用 217 个 browser_*
 【二次开发】
 打开 AI浏览器.vprj → Release x64 → 详见仓库 CONTRIBUTING.md
 
-QQ：212577526 · 群：737680767 · 火山交流群：https://qm.qq.com/q/Hpv6qm8qUE
+作者 QQ：212577526
 ```
 
 > **火山论坛 / 其他 Discuz 站点**：请用下方 [§2-A DZ BBCode 专帖](#2-a-discuz-dz-论坛--bbcode-格式)，粘贴到论坛「高级模式」发帖框。
@@ -243,7 +253,7 @@ Windows 本地 [b]MCP 浏览器自动化[/b]服务 — [b]217 个[/b] browser_* 
 [align=center][img]https://github.com/AI-XiaoDao/ai-browser-mcp/raw/main/.github/demo-douyin-post-scan.png[/img][/align]
 [i]实测：Cursor 一句话 → 抖音 POST 扫描 + Hook + 分析 33 条请求[/i]
 
-[b]交流：[/b]QQ 212577526 · 群 737680767 · 火山群 [url=https://qm.qq.com/q/Hpv6qm8qUE]点击加入[/url]
+[b]作者 QQ：[/b]212577526
 
 欢迎 [b]Star ⭐[/b] / Issue / PR
 ```
@@ -309,7 +319,7 @@ Windows 本地 [b]MCP 浏览器自动化[/b]服务 — [b]217 个[/b] browser_* 
 [*][b]论坛发帖文案[/b]：[url=https://github.com/AI-XiaoDao/ai-browser-mcp/blob/main/FORUM_POSTS.md]FORUM_POSTS.md[/url]
 [/list]
 
-[b]QQ[/b]：212577526 · [b]群[/b]：737680767 · [b]微信[/b]：XSMZAS1
+[b]作者 QQ：[/b]212577526
 
 欢迎 [b]Star ⭐[/b] · Issue · PR
 ```
@@ -612,7 +622,7 @@ Windows 本地跑真实浏览器，Cursor 里一句话自动化：
 217 工具 · MIT · 下载即用
 github.com/AI-XiaoDao/ai-browser-mcp
 
-有问题可留帖，或 QQ 群 737680767
+有问题可留帖，或联系作者 QQ：212577526
 ```
 
 ---
@@ -638,7 +648,7 @@ MIT 开源，Release 免费下载，217 工具全开放。
 ```
 下载：https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
 文档：回复「MCP」获取快速上手步骤
-交流：QQ 群 737680767
+交流：作者 QQ 212577526
 ```
 
 ---
@@ -815,7 +825,7 @@ One-liner scenarios:
 🔗 Repo: https://github.com/AI-XiaoDao/ai-browser-mcp
 ⬇ Release: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
 
-Questions → GitHub Issues or QQ group 737680767
+Questions → GitHub Issues · 作者 QQ 212577526
 ```
 
 ---
