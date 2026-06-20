@@ -47,7 +47,7 @@ Compress-Archive -Path (Join-Path $staging '*') -DestinationPath $runtimeZip -Co
 Remove-Item $staging -Recurse -Force
 
 $rtMb = [math]::Round((Get-Item $runtimeZip).Length / 1MB, 2)
-Write-Host "OK runtime zip: $runtimeZip ($rtMb MB)"
+Write-Host ("OK runtime zip: {0} ({1} MB)" -f $runtimeZip, $rtMb)
 
 # --- C++ 对照 zip + 同步 generated-cpp ---
 if ($project) {
@@ -61,7 +61,7 @@ if ($project) {
     if (Test-Path $cppZip) { Remove-Item $cppZip -Force }
     Compress-Archive -Path (Join-Path $project.FullName '*') -DestinationPath $cppZip -CompressionLevel Optimal
     $cppKb = [math]::Round((Get-Item $cppZip).Length / 1KB, 0)
-    Write-Host "OK cpp zip: $cppZip ($cppKb KB)"
+    Write-Host ("OK cpp zip: {0} ({1} KB)" -f $cppZip, $cppKb)
 } else {
     Write-Warning "未找到 project/，跳过 cpp zip"
 }
