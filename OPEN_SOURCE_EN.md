@@ -22,7 +22,7 @@
 
 
 
-217 MCP tools for Cursor / Claude: navigate, fill forms, read DOM, network, workflows, CDP debugger.
+217 MCP tools for **any AI agent** (Cursor, Claude, Cline, custom MCP clients): navigate, fill forms, read DOM, network, workflows, CDP debugger.
 
 
 
@@ -95,7 +95,7 @@ Repo: github.com/AI-XiaoDao/ai-browser-mcp
 
 
 
-**AI Browser MCP Server** is a **Windows-native local MCP service** built with Volcano IDE + FBrowser CEF. Run the exe, connect Cursor via `mcp_bridge.js`, and drive a real browser with **217** `browser_*` tools — **one sentence** to scrape data, reverse crypto fields, or locate sign algorithms via breakpoints.
+**AI Browser MCP Server** is a **Windows-native local MCP service** built with Volcano IDE + FBrowser CEF. **Any MCP-compatible AI agent** — Cursor, Claude Desktop, Cline, OpenCode, or your own app — can drive a real browser with **217** `browser_*` tools via HTTP/WebSocket or `mcp_bridge.js`.
 
 
 
@@ -427,7 +427,7 @@ https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
 
 ```
 
-Title: [Release] AI Browser MCP Server v2.6 — local Windows browser automation for Cursor (217 MCP tools)
+Title: [Release] AI Browser MCP Server v2.6 — local Windows browser automation for any MCP AI agent (217 tools)
 
 
 

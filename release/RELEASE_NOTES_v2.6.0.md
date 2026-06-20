@@ -1,6 +1,6 @@
 ## AI浏览器 MCP Server v2.6.0
 
-**Windows x64 本地浏览器自动化 MCP 服务** — 217 个 `browser_*` 工具，供 Cursor / Claude 通过 `mcp_bridge.js` 调用。
+**Windows x64 本地浏览器自动化 MCP 服务** — 217 个 `browser_*` 工具，供 **任意 AI 代理**（Cursor / Claude / 自研 MCP 客户端）通过 HTTP、WebSocket 或 `mcp_bridge.js` 调用。
 
 > **🎁 Release 成品 VIP 全开**：本 Release 的 **`AI-Browser-MCP-x64-v2.6.0.zip`** 已**免费开放全部 VIP 功能**（截图、CDP 调试器、指纹、拦截等），**无需**填写 `vip_code`。自行编译 exe 须向 FBrowser 内核作者申请授权。
 

@@ -10,7 +10,7 @@
 ```
 【开源】AI浏览器 MCP Server v2.6.0 — Windows 本地浏览器自动化 MCP 服务
 
-让 Cursor / Claude 用自然语言操控真实浏览器：217 个 browser_* 工具，导航/填表/读 DOM/抓网络/工作流/CDP 断点。
+让 **任意 AI 代理**（Cursor / Claude / Cline / 自研 MCP 客户端）用自然语言操控真实浏览器：217 个 browser_* 工具，导航/填表/读 DOM/抓网络/工作流/CDP 断点。
 
 一句话自动执行：采集数据 · 逆向 POST 加密字段 · CDP 定位 sign 算法 — AI 自己串联工具，不用写 Playwright。
 
@@ -31,7 +31,7 @@ QQ：212577526 · 群：737680767
 
 ## 一句话介绍
 
-**AI浏览器 MCP Server** —— 基于火山视窗 + FBrowser CEF 的 **Windows 本地浏览器自动化 MCP 服务**。启动 exe 后，Cursor / Claude 通过 `mcp_bridge.js` 调用 **217 个** `browser_*` 工具。**一句话**即可完成采集数据、逆向 POST 加密字段、CDP 定位 sign 算法 — Agent 自动串联工具，无需手写 Playwright。
+**AI浏览器 MCP Server** —— 基于火山视窗 + FBrowser CEF 的 **Windows 本地浏览器自动化 MCP 服务**。启动 exe 后，**任何支持 MCP 的 AI 代理**（不限 Cursor）均可通过 HTTP/WebSocket 或 `mcp_bridge.js` 调用 **217 个** `browser_*` 工具。
 
 ---
 

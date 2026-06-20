@@ -7,11 +7,10 @@
 
 ```
 AI Browser MCP Server
-让 Cursor 一句话操控 Windows 真实浏览器
+任意 AI 代理 · 一句话操控 Windows 真实浏览器
 
-采集数据 · 逆向 POST · 定位 sign 算法
-217 MCP 工具 · FBrowser CEF · MIT 开源
-127.0.0.1:9222 · v2.6.0
+Cursor / Claude / 自研 Agent · MCP 标准 · 217 tools
+采集 · 逆向 · 定位 sign · Release VIP 全开
 
 github.com/AI-XiaoDao/ai-browser-mcp
 ```
