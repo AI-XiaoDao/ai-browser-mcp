@@ -12,6 +12,7 @@
 
 | 平台 | 章节 | 建议形式 |
 |------|------|----------|
+| **通用纯文本（全平台）** | **[§0](#0-通用发帖文字全平台--复制即用)** | **首选复制** |
 | QQ / Telegram 群公告 | [§1](#1-qq--telegram-群公告) | 短帖 |
 | 火山视窗论坛 | [§2](#2-火山视窗论坛) | 专帖 |
 | **Discuz (DZ) BBCode** | **[§2-A](#2-a-discuz-dz-论坛--bbcode-格式)** | **纯 BBCode 复制** |
@@ -36,6 +37,55 @@
 | **论坛回帖 FAQ** | [§21](#21-论坛回帖-faq) | 评论回复 |
 
 更完整的开源公告与 FAQ 见 [OPEN_SOURCE.md](OPEN_SOURCE.md) · 英文论坛文案见 [FORUM_POSTS_EN.md](FORUM_POSTS_EN.md) · 英文公告 [OPEN_SOURCE_EN.md](OPEN_SOURCE_EN.md)。
+
+---
+
+## §0 通用发帖文字（全平台 · 复制即用）
+
+> **纯文本**，QQ 群 / V2EX / 贴吧 / 知乎 / 火山论坛 均可直接粘贴。  
+> **Discuz 论坛**要排版请用 [§2-A BBCode](#2-a-discuz-dz-论坛--bbcode-格式)。
+
+**通用标题：**
+
+```
+【开源】AI浏览器 MCP Server v2.6 — 217 工具 · 任意 AI 代理 · Windows 本机
+```
+
+**通用正文（推荐这一版）：**
+
+```
+【开源】AI浏览器 MCP Server v2.6.0
+
+Windows 本地 MCP 浏览器自动化 — 217 个 browser_* 工具，任意 AI 代理（Cursor / Claude / Cline / 自研 MCP）一句话操控 FBrowser CEF 真实浏览器。
+
+不用写 Playwright，说目标即可，Agent 自动串联工具：
+
+· 采集：「滚动列表，采标题价格 JSON」
+· 逆向：「扫描 POST，标出疑似加密字段」（Hook 抓 body）
+· 定位：「断点跟到 sign 函数，给源码片段」（CDP 调试器）
+· 填表：「登录后台，导出订单表」
+
+亮点：
+· MIT 开源（.wsv 源码 + 文档 + mcp_bridge.js）
+· GitHub Release 217 工具全开放，解压即用（约 157MB）
+· 本机 127.0.0.1:9222，默认不暴露外网
+· sync-wait / batch / 工作流 JSON
+
+下载：https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
+仓库：https://github.com/AI-XiaoDao/ai-browser-mcp
+演示图：https://github.com/AI-XiaoDao/ai-browser-mcp/raw/main/.github/demo-douyin-post-scan.png
+
+QQ：212577526 · 群：737680767 · 微信：XSMZAS1
+欢迎 Star / Issue / PR
+```
+
+**超短版（群公告 / 动态）：**
+
+```
+【开源】AI浏览器 MCP v2.6 — Windows 本机 217 工具，Cursor/Claude 一句话采集·逆向·断点，MIT 下载即用
+
+https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
+```
 
 ---
 
