@@ -1,0 +1,72 @@
+name: Upload Social Preview
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  upload-cover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Upload via GitHub repository-images API
+        env:
+          GH_TOKEN: ${{ secrets.UPLOAD_PAT }}
+          REPO_ID: "1274856747"
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = '.github/social-preview.jpg';
+          const token = process.env.GH_TOKEN;
+          const repoId = process.env.REPO_ID;
+          const buf = fs.readFileSync(path);
+          const fileName = 'social-preview.jpg';
+
+          async function main() {
+            const policyRes = await fetch('https://github.com/upload/policies/repository-images', {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest',
+              },
+              body: new URLSearchParams({
+                repository_id: repoId,
+                size: String(buf.length),
+                content_type: 'image/jpeg',
+                name: fileName,
+              }),
+            });
+            const policyText = await policyRes.text();
+            if (!policyRes.ok) throw new Error(`policy ${policyRes.status}: ${policyText}`);
+            const policy = JSON.parse(policyText);
+            console.log('policy ok', Object.keys(policy));
+
+            const uploadUrl = policy.upload_url || policy.href || policy.url;
+            const fields = policy.form || policy.fields || {};
+            const form = new FormData();
+            for (const [k, v] of Object.entries(fields)) form.append(k, v);
+            form.append('file', new Blob([buf], { type: 'image/jpeg' }), fileName);
+
+            const uploadRes = await fetch(uploadUrl, { method: 'POST', body: form });
+            const uploadText = await uploadRes.text();
+            if (!uploadRes.ok) throw new Error(`upload ${uploadRes.status}: ${uploadText.slice(0, 500)}`);
+            console.log('upload ok', uploadText.slice(0, 300));
+          }
+
+          main().catch((e) => {
+            console.error(e);
+            process.exit(1);
+          });
+          NODE
+
+      - name: Verify
+        env:
+          GH_TOKEN: ${{ secrets.UPLOAD_PAT }}
+        run: |
+          sleep 5
+          gh api graphql -f query='query { repository(owner:"AI-XiaoDao", name:"ai-browser-mcp") { usesCustomOpenGraphImage openGraphImageUrl } }'
