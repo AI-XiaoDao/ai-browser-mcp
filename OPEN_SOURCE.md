@@ -143,20 +143,23 @@ QQ：212577526 · 群：737680767
 
 ---
 
-## 源码说明：`.wsv` vs C++ vs `out/`（常见误解）
+## 源码与编译目录（`.wsv` vs C++ vs `out/`）
 
-**二次开发请以 `src/*.wsv` 为准。** 仓库中的 C++ 是火山编译器自动翻译的对照产物，便于审计，请勿手工修改。
+完整说明见仓库 [README · 开源范围与火山编译目录](https://github.com/AI-XiaoDao/ai-browser-mcp#-开源范围与火山编译目录)。核心对照：
+
+| 层级 | 路径 | 能否改 | Release |
+|:--:|------|:--:|:--:|
+| **① 权威源码** | `src/*.wsv` | ✅ | — |
+| **② 生成 C++** | `generated-cpp/` = 编译时 `project/` | ❌ 只读 | cpp zip |
+| **③ 中间产物** | `linker/out/`（`.obj`/`.pch`） | ❌ | **不含** |
+| **④ 运行成品** | `linker/` 除 `out/` | — | x64 zip |
 
 ```
-src/*.wsv  ──火山翻译──►  project/*.cpp  ──MSVC──►  linker/out/*.obj  ──链接──►  AI浏览器.exe
-  ↑ 权威源码              ↑ generated-cpp/          ↑ 中间产物，勿打包
+src/*.wsv → project/ ≡ generated-cpp/ → linker/out/ → AI浏览器.exe
+  ① 改这里      ② 对照                  ③ 勿发布        ④ 给用户
 ```
 
-| 目录 | 是什么 | 是否 Release |
-|------|--------|--------------|
-| `src/*.wsv` | 人工编写的火山源码 | ✅ Git 仓库 |
-| `generated-cpp/` / `project/` | 自动生成的 `.cpp`/`.h` | ✅ Git + cpp zip |
-| `linker/out/` | `.obj`/`.pch` 链接中间文件 | ❌ **不是 C++ 源码** |
+**二次开发、提 PR 请只改 `src/*.wsv`。**
 
 ---
 

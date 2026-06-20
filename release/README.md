@@ -10,15 +10,20 @@
 
 ## 火山编译目录对照（Release x64）
 
-编译后本地路径：`CEFbro/AI浏览器/_int/AI浏览器/release/x64/`
+与仓库 [README · 四层对照表](../README.md#四层对照先看这张表) 一致：
 
-| 子目录 | 内容 | 成品 zip 是否包含 |
-|--------|------|-------------------|
-| `project/` | 自动生成的 **C++ 源码**（`.cpp`/`.h`），仓库同步于 `generated-cpp/release-x64/` | ❌ 不入成品 zip |
-| `linker/` | exe、dll、CEF 运行时、docs、workflows | ✅ 除 `out/` 外全部 |
-| `linker/out/` | `.obj`/`.pch` 编译中间产物，**不是 C++ 源码** | ❌ **必须排除** |
+| 层级 | 本地 `_int/.../release/x64/` | 入 Git | 成品 zip |
+|:--:|------------------------------|:--:|:--:|
+| ② 生成 C++ | `project/` | `generated-cpp/release-x64/` | cpp zip |
+| ③ 中间产物 | `linker/out/` | ❌ | ❌ **必须排除** |
+| ④ 运行成品 | `linker/`（除 `out/`） | ❌ | x64 zip |
 
-**常见误解**：`out/` 里只有目标文件和构建参数，不是 C++ 源文件；真正的生成 C++ 在 **`project/`**。
+```
+src/*.wsv → project/ → linker/out/ → linker/AI浏览器.exe
+  ①           ②           ③              ④
+```
+
+**误区**：`out/` 只有 `.obj`/`.pch`，不是 C++；C++ 在 **`project/`**（= Git `generated-cpp/`）。
 
 ## 使用方式
 
