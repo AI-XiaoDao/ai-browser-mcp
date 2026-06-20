@@ -6,7 +6,19 @@
 
 | 路径 | 内容 |
 |------|------|
-| `linker/` | 与编译输出 `linker/` 同结构：桥接脚本、配置、文档、工作流 |
+| `linker/` | 与编译输出 `linker/` 同结构：桥接脚本、配置、文档、工作流（**无 exe/dll**） |
+
+## 火山编译目录对照（Release x64）
+
+编译后本地路径：`CEFbro/AI浏览器/_int/AI浏览器/release/x64/`
+
+| 子目录 | 内容 | 成品 zip 是否包含 |
+|--------|------|-------------------|
+| `project/` | 自动生成的 **C++ 源码**（`.cpp`/`.h`），由 `.wsv` 翻译而来 | ❌ 不入仓、不打包 |
+| `linker/` | exe、dll、CEF 运行时、docs、workflows | ✅ 除 `out/` 外全部 |
+| `linker/out/` | `.obj`/`.pch` 编译中间产物，**不是源码** | ❌ 必须排除 |
+
+**常见误解**：`out/` 里只有目标文件和构建参数，不是 C++ 源文件；真正的生成 C++ 在 **`project/`**。
 
 ## 使用方式
 
@@ -27,17 +39,21 @@ CEFbro/AI浏览器/mcp_config.json  → 编译后位于 linker/
 
 ## 发布 GitHub Release 建议
 
+从 `_int/AI浏览器/release/x64/linker/` 打包时，**不要包含 `out/` 目录**（火山编译中间产物：`.obj`、`.pch`、`make_params.txt` 等，非运行所需，体积约 400MB）。
+
 打包 zip 结构示例：
 
 ```
-AI浏览器-x64-v2.6.0.zip
+AI-Browser-MCP-x64-v2.6.0.zip
 ├── AI浏览器.exe
-├── *.dll / CEF 运行时（编译产物）
-└── linker/          ← 本目录内容
-    ├── mcp_bridge.js
-    ├── mcp_config.json
-    ├── docs/
-    └── workflows/
+├── *.dll / CEF 运行时
+├── docs/
+├── workflows/
+├── locales/
+├── mcp_bridge.js
+├── mcp_config.json
+└── index.html
+（不含 out/）
 ```
 
 ## 版本

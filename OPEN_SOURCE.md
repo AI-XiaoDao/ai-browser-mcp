@@ -35,20 +35,61 @@
 ## 3 分钟上手
 
 ```
-1. 下载 Release 或编译 release/linker + AI浏览器.exe
-2. 启动 AI浏览器.exe → 访问 http://127.0.0.1:9222/health
-3. Cursor 配置 mcp_bridge.js（见 README）
+1. 下载 Release：https://github.com/AI-XiaoDao/ai-browser-mcp/releases
+   文件：AI-Browser-MCP-x64-v2.6.0.zip（约 157MB）
+2. 解压 → 双击 AI浏览器.exe → 访问 http://127.0.0.1:9222/health
+3. Cursor 配置 mcp_bridge.js（见 README / .mcp.json）
 4. 对 AI 说：「打开 https://example.com 并读标题」
 ```
+
+**环境要求**：Windows x64 · Node.js（Cursor 桥接）· 成品包已含 CEF 运行时
 
 ---
 
 ## 仓库包含什么？
 
-- **`CEFbro/AI浏览器/src/`** — 火山 MCP 服务完整源码（~2 万行 `.wsv`）
-- **`release/linker/`** — 成品配置包（桥接脚本、文档、工作流、mcp_config）
-- **`docs/` + `skills/`** — 客户手册、配置说明、217 工具参考
-- **`run_all_tests.js`** — 顺序全量 MCP 测试
+### ✅ 已开源（Git 仓库内）
+
+| 内容 | 路径 |
+|------|------|
+| **MCP 服务核心** | `CEFbro/AI浏览器/src/*.wsv`（11 个源文件） |
+| 文档 | `CEFbro/AI浏览器/docs/` — 客户手册、配置说明、使用技能书 |
+| 工具参考 | `CEFbro/AI浏览器/skills/AI浏览器MCP.md` — 217 工具 |
+| Agent 技能书 | `CEFbro/AI浏览器/skills/` — 火山 API 知识库 |
+| 桥接与测试 | `mcp_bridge.js`、`mcp_client.js`、`run_all_tests.js` |
+| 工作流示例 | `CEFbro/AI浏览器/workflows/`（编译复制到 `linker/workflows/`） |
+| 配置包 | `release/linker/` — 脚本/文档/工作流（无 exe） |
+| Cursor 示例 | 根目录 `.mcp.json` |
+| 许可证 | `LICENSE`（MIT） |
+
+### ❌ 不在仓库内（需另行获取）
+
+| 内容 | 获取方式 |
+|------|----------|
+| `AI浏览器.exe` + CEF 运行时 | [GitHub Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) 下载 zip |
+| FBrowser CEF 闭源库 | 安装火山视窗 IDE 时自带 |
+| 编译生成的 C++ | 本地编译时在 `_int/.../project/` 自动生成，不入仓 |
+
+---
+
+## 源码说明：`.wsv` vs C++ vs `out/`
+
+**本项目的「源码」指火山视窗 `.wsv` 文件**，不是 MSVC 生成的 C++。
+
+编译 Release x64 后，火山 IDE 在 `_int/AI浏览器/release/x64/` 产出：
+
+| 目录 | 性质 | 是否入 Git |
+|------|------|------------|
+| **`project/`** | 火山**自动生成**的 C++（`vpkg_*.cpp`、`vcls_*.h`、`makefile`） | ❌ 可再生 |
+| **`linker/`** | **运行成品**（exe、dll、docs、mcp 脚本） | ❌ 大二进制走 Releases |
+| **`linker/out/`** | 编译**中间产物**（`.obj`、`.pch`），**不是 C++ 源码** | ❌ 勿打包进 zip |
+
+```
+src/*.wsv  ──火山翻译──►  project/*.cpp  ──MSVC──►  linker/out/*.obj  ──链接──►  linker/AI浏览器.exe
+  ↑开源主体              ↑自动生成 C++              ↑中间产物（约 400MB）
+```
+
+二次开发、Code Review、提 PR 请以 **`CEFbro/AI浏览器/src/`** 为准。
 
 ---
 
@@ -65,7 +106,8 @@
 ## 链接
 
 - **仓库**：https://github.com/AI-XiaoDao/ai-browser-mcp
-- **文档**：仓库内 `docs/客户使用手册.md`
+- **成品下载**：https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
+- **文档**：仓库内 `CEFbro/AI浏览器/docs/客户使用手册.md`
 - **Issues / Star**：欢迎反馈与收藏
 
 ---
@@ -76,4 +118,4 @@ QQ：212577526 · QQ群：737680767 · 微信：XSMZAS1
 
 ---
 
-*AI浏览器 MCP Server v2.6 · MIT License · 基于 FBrowser CEF*
+*AI浏览器 MCP Server v2.6.0 · MIT License · 基于 FBrowser CEF*
