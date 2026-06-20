@@ -75,3 +75,5 @@ AI-Browser-MCP-x64-v2.6.0.zip
 - 同步 `CEFbro/AI浏览器/generated-cpp/release-x64/`
 
 上传：`gh release upload v2.6.0 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber`
+
+完整说明模板见 [`RELEASE_NOTES_v2.6.0.md`](RELEASE_NOTES_v2.6.0.md)。重新发版可先 `gh release delete v2.6.0 --yes` 再 `gh release create ... --notes-file release/RELEASE_NOTES_v2.6.0.md`。
