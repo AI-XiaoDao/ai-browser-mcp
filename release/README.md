@@ -59,3 +59,19 @@ AI-Browser-MCP-x64-v2.6.0.zip
 ## 版本
 
 与源码 `MCP_版本号`（当前 2.6.0）保持一致。
+
+## 一键打包
+
+编译 **Release x64** 后，在仓库根目录执行：
+
+```powershell
+.\release\pack-release.ps1 -Version 2.6.0
+```
+
+输出：
+
+- `AI-Browser-MCP-x64-v2.6.0.zip` — 运行包（自动排除 `out/`）
+- `AI-Browser-MCP-cpp-x64-v2.6.0.zip` — C++ 对照
+- 同步 `CEFbro/AI浏览器/generated-cpp/release-x64/`
+
+上传：`gh release upload v2.6.0 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber`

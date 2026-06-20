@@ -282,3 +282,70 @@ QQ：**212577526** · QQ群：**737680767** · 微信：**XSMZAS1**
 
 **欢迎 Star ⭐ 与 Issue 反馈。**
 
+---
+
+## 🔥 火山视窗论坛 · 专帖（复制即用）
+
+**标题建议**：【开源】AI浏览器 MCP Server v2.6 — 217 工具 · FBrowser CEF · Cursor 桥接
+
+```
+各位火山开发者好，
+
+基于火山视窗 + FBrowser CEF 的 MCP 浏览器自动化服务现已 MIT 开源。
+
+【项目】AI Browser MCP Server v2.6.0
+【仓库】https://github.com/AI-XiaoDao/ai-browser-mcp
+【成品】https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
+
+【技术栈】
+· 源码：火山 .wsv（11 个 MCP 模块，~2 万行）
+· 内核：FBrowser CEF
+· 协议：MCP JSON-RPC，WebSocket + HTTP POST，端口 9222
+· 桥接：Node mcp_bridge.js → Cursor / Claude
+
+【开源内容】
+· src/*.wsv — 权威源码
+· generated-cpp/release-x64/ — 编译生成的 C++ 对照（33 cpp + 218 h）
+· docs / skills / workflows / 全量测试脚本
+
+【编译说明】
+打开 AI浏览器.vprj → Release x64 → 产物在 _int/.../linker/
+注意：linker/out/ 是 .obj 中间产物，不是 C++ 源码；C++ 在 project/ 或仓库 generated-cpp/
+
+【适合】
+· 学习火山 + FBrowser 集成 MCP 服务
+· Cursor Agent 浏览器自动化
+· 工作流 JSON、Hook、CDP 调试扩展
+
+欢迎 Star、Issue、PR。QQ：212577526 · 群：737680767
+```
+
+---
+
+## 📺 B 站 / 视频简介（复制即用）
+
+```
+AI浏览器 MCP Server 开源啦｜让 Cursor 用自然语言操控 Windows 真实浏览器
+
+217 个 MCP 工具｜FBrowser CEF 内核｜本机 9222 端口｜MIT
+
+下载：https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
+仓库：https://github.com/AI-XiaoDao/ai-browser-mcp
+文档：见仓库 OPEN_SOURCE.md
+
+#Cursor #MCP #浏览器自动化 #火山编程 #FBrowser #开源
+```
+
+---
+
+## 📑 宣传材料索引
+
+| 场景 | 文件 / 章节 |
+|------|-------------|
+| QQ 群 / 论坛短帖 | 本文「论坛短帖」 |
+| 公众号 / 知乎长文 | 本文「公众号长文」 |
+| 火山开发者论坛 | 本文「火山视窗论坛专帖」 |
+| B 站 / 视频简介 | 本文「B 站简介」 |
+| 英文社区 | [OPEN_SOURCE_EN.md](OPEN_SOURCE_EN.md) |
+| 贡献与发版 | [CONTRIBUTING.md](CONTRIBUTING.md) |
+

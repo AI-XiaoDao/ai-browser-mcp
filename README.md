@@ -169,8 +169,11 @@ ai-browser-mcp/
 │   ├── run_all_tests.js  # MCP 全量测试
 │   ├── workflows/        # 工作流 JSON 源码（编译复制到 linker/workflows/）
 │   └── AI浏览器.vprj     # 火山工程文件
-├── release/linker/       # 成品配置包（文档/脚本/工作流，无 exe）
-├── OPEN_SOURCE.md        # 开源发布公告（中文，可转发）
+├── release/
+│   ├── linker/           # 成品配置包（文档/脚本/工作流，无 exe）
+│   └── pack-release.ps1  # Release 一键打包脚本
+├── CONTRIBUTING.md       # 贡献与发版指南
+├── OPEN_SOURCE.md        # 开源公告（中文，多平台可复制）
 ├── OPEN_SOURCE_EN.md     # Open-source announcement (English)
 ├── LICENSE               # MIT
 └── README.md
@@ -204,8 +207,21 @@ ai-browser-mcp/
 ## 🤝 参与与反馈
 
 - **Issue**：Bug、功能建议
-- **PR**：欢迎改进文档与脚本；核心 `.wsv` 请附测试说明
+- **PR**：见 [CONTRIBUTING.md](CONTRIBUTING.md)；核心 `.wsv` 请附测试说明
+- **宣传材料**：中文 [OPEN_SOURCE.md](OPEN_SOURCE.md) · 英文 [OPEN_SOURCE_EN.md](OPEN_SOURCE_EN.md)
 - **交流**：QQ 212577526 · 群 737680767 · [火山编程交流群](https://qm.qq.com/q/Hpv6qm8qUE)
+
+## ❓ 常见问题
+
+| 问题 | 处理 |
+|------|------|
+| `/health` 失败 | 确认 exe 已启动；检查 9222 端口占用 |
+| Cursor 连不上 MCP | `node mcp_bridge.js --check`；确认 `AI_BROWSER_MCP_HTTP_POST` |
+| 工具调用超时 | 增大 `mcp_config.json` 中 `default_timeout_ms` |
+| POST body 抓不到 | 默认网络层不记录 POST 正文，见 `skills/场景与Hook测试.md` |
+| 成品 zip 很大 | 正常；勿把 `linker/out/` 打进包（见 `release/pack-release.ps1`） |
+
+更多 FAQ 见 [OPEN_SOURCE.md#常见问题](OPEN_SOURCE.md#常见问题faq)。
 
 ## 📄 许可证
 

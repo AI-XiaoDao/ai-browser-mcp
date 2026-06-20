@@ -98,7 +98,15 @@ Star welcome: https://github.com/AI-XiaoDao/ai-browser-mcp
 - **Repo**: https://github.com/AI-XiaoDao/ai-browser-mcp
 - **Release v2.6.0**: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
 - **Chinese announcement**: [OPEN_SOURCE.md](OPEN_SOURCE.md)
+- **Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ---
 
-*AI Browser MCP Server v2.6.0 · MIT · FBrowser CEF · port 9222*
+## Long-form (blog / Dev.to)
+
+**AI Browser MCP Server** bridges the gap between AI assistants and a real Windows browser. Instead of asking Cursor to write Playwright scripts from scratch, you run a local exe that exposes **217** ready-made MCP tools — navigate, fill forms, query DOM, inspect network, run JSON workflows, and (with VIP) CDP debugging.
+
+The repo ships Volcano `.wsv` source (authoritative), generated C++ for audit, docs, and `mcp_bridge.js` for Cursor. Binaries are on GitHub Releases (~157MB, CEF included). Default bind: `127.0.0.1:9222`.
+
+Download: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
+
