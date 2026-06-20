@@ -1,9 +1,6 @@
 <火山程序 类型 = "通常" 版本 = 1 />
-
 包 火山.程序
-
 # MCP_系统分派 — 从 MCP_Server.wsv 拆分 (L5)
-
 类 MCP_系统分派 <公开 @全局类 = 真>
 {
     方法 分类分派_系统操作 <公开 静态 类型 = 文本型>
@@ -18,22 +15,7 @@
         }
         否则 (方法名 == "browser.task_runner_post" || 方法名 == "browser_task_runner_post")
         {
-            变量 threadID <类型 = 整数>
-            threadID = MCP命令服务器.yyjson取整数 (参数JSON, "thread_id")
-            如果 (threadID == 0)
-            {
-                threadID = 线程ID.UI
-            }
-            变量 任务代码 <类型 = 文本型>
-            任务代码 = MCP命令服务器.yyjson取文本 (参数JSON, "code")
-            变量 异步任务ID <类型 = 文本型>
-            异步任务ID = MCP命令服务器.生成异步任务ID ()
-            变量 任务回调 <类型 = 类_FBrowser_事件智能指针>
-            任务回调.创建 (类_MCP_任务回调)
-            任务回调.取执行类 (类_MCP_任务回调).任务ID = 异步任务ID
-            任务回调.取执行类 (类_MCP_任务回调).执行代码 = 任务代码
-            FBrowser_任务运行器_投递任务 (threadID, 任务回调)
-            返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步任务ID, "任务已投递到线程" + 到文本 (threadID) + ", 通过mcp_result查询执行结果"))
+            返回 (MCP命令服务器.命令失败 (命令ID, "⛔ 远程 task_runner 创建浏览器已禁用 | 浏览器由GUI自动管理 | 如需线程投递请改用已有 browser_id 操作"))
         }
         // === v1.6 其他 ===
         否则 (方法名 == "browser.send_message" || 方法名 == "browser_send_message")

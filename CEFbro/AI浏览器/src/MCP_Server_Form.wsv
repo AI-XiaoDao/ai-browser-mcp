@@ -1,13 +1,9 @@
 <火山程序 类型 = "通常" 版本 = 1 />
-
 包 火山.程序
-
 # MCP_填表分派 — 从 MCP_Server.wsv 拆分 (L5)
-
 类 MCP_填表分派 <公开 @全局类 = 真>
 {
     # === 分类分派: 填表操作 (FBrowser 官方填表框架 API) ===
-
     方法 分类分派_填表操作 <公开 静态 类型 = 文本型>
     参数 命令ID <类型 = 文本型>
     参数 方法名 <类型 = 文本型>
@@ -21,7 +17,7 @@
             value = MCP命令服务器.yyjson取文本 (参数JSON, "value")
             如果 (selector == "")
             {
-                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))
             }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
@@ -44,7 +40,7 @@
             selector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
             如果 (selector == "")
             {
-                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))
             }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
@@ -67,7 +63,7 @@
             selector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
             如果 (selector == "")
             {
-                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))
             }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
@@ -90,7 +86,7 @@
             selector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
             如果 (selector == "")
             {
-                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))
             }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
@@ -113,7 +109,7 @@
             selector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
             如果 (selector == "")
             {
-                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))
             }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
@@ -145,7 +141,7 @@
             value = MCP命令服务器.yyjson取文本 (参数JSON, "value")
             如果 (selector == "")
             {
-                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))
             }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
@@ -170,7 +166,7 @@
             attr = MCP命令服务器.yyjson取文本 (参数JSON, "attribute")
             如果 (selector == "")
             {
-                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))
             }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
@@ -204,7 +200,7 @@
             }
             如果 (selector == "")
             {
-                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))
             }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
@@ -229,7 +225,7 @@
             value = MCP命令服务器.yyjson取文本 (参数JSON, "value")
             如果 (selector == "")
             {
-                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))
             }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
@@ -241,7 +237,9 @@
                 {
                     变量 选择状态 <类型 = 逻辑型>
                     选择状态 = 真
-                    如果 (value == "false" || value == "0" || value == "off")
+                    变量 valLower <类型 = 文本型>
+                    valLower = 到小写 (value)
+                    如果 (valLower == "false" || valLower == "0" || valLower == "off" || valLower == "no")
                     {
                         选择状态 = 假
                     }

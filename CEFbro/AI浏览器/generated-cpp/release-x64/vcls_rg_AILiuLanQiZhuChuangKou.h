@@ -16,7 +16,6 @@ public:
     virtual INT GetDesignClientWidth () const override  {  return _DPISIZE (1200);  }
     virtual INT GetDesignClientHeight () const override  {  return _DPISIZE (800);  }
 
-    void rg_XianShiYinCangChuangKou (BOOL rg_YinCang);
     void rg_ChuangJianKanRuShiLiuLanQi ();
     void rg_HuiFuKanRuShiBuJu ();
     void rg_QueBaoZhuLiuLanQiJianKang ();
@@ -35,49 +34,53 @@ public:
     virtual void SaveIntoStream (CVolBaseOutputStream& stream) override;
 
 public:
-    static INT re_AILiuLanQiZhuChuangKou_AILiuLanQiZhuChuangKou_ChuangJianWanBi (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
-    {
-        return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_AILiuLanQiZhuChuangKou_ChuangJianWanBi ((rg_AILiuLanQiZhuChuangKou&)*pobjEventSource, nTagNumber);
-    }
-    static INT re_AILiuLanQiZhuChuangKou_button_clicked (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
-    {
-        return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_button_clicked ((rg_volcano_MFCJieMian_base::rg_button1&)*pobjEventSource, nTagNumber);
-    }
-    static INT re_AILiuLanQiZhuChuangKou_AILiuLanQiZhuChuangKou_WeiZhiBeiGaiBian (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
-    {
-        return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_AILiuLanQiZhuChuangKou_WeiZhiBeiGaiBian ((rg_AILiuLanQiZhuChuangKou&)*pobjEventSource, nTagNumber);
-    }
-    static INT re_AILiuLanQiZhuChuangKou_AILiuLanQiZhuChuangKou_CheCunBeiGaiBian (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
-    {
-        return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_AILiuLanQiZhuChuangKou_CheCunBeiGaiBian ((rg_AILiuLanQiZhuChuangKou&)*pobjEventSource, nTagNumber);
-    }
     static INT re_AILiuLanQiZhuChuangKou_edit_box_HuoDeJiaoDian (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
     {
         return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_edit_box_HuoDeJiaoDian ((rg_volcano_MFCJieMian_base::rg_edit_box1&)*pobjEventSource, nTagNumber);
-    }
-    static INT re_AILiuLanQiZhuChuangKou_edit_box_ShiQuJiaoDian (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
-    {
-        return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_edit_box_ShiQuJiaoDian ((rg_volcano_MFCJieMian_base::rg_edit_box1&)*pobjEventSource, nTagNumber);
     }
     static INT re_AILiuLanQiZhuChuangKou_edit_box_AnXiaMouJian (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber, INT rg_JianDaiMa, INT rg_FuZhuJianZhuangTai)
     {
         return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_edit_box_AnXiaMouJian ((rg_volcano_MFCJieMian_base::rg_edit_box1&)*pobjEventSource, nTagNumber, rg_JianDaiMa, rg_FuZhuJianZhuangTai);
     }
+    static INT re_AILiuLanQiZhuChuangKou_edit_box_ShiQuJiaoDian (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
+    {
+        return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_edit_box_ShiQuJiaoDian ((rg_volcano_MFCJieMian_base::rg_edit_box1&)*pobjEventSource, nTagNumber);
+    }
     static INT re_AILiuLanQiZhuChuangKou_timer_ZhouJiShiJian (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
     {
         return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_timer_ZhouJiShiJian ((rg_volcano_MFCJieMian_base::rg_timer&)*pobjEventSource, nTagNumber);
+    }
+    static INT re_AILiuLanQiZhuChuangKou_AILiuLanQiZhuChuangKou_KeFouBeiGuanBi (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
+    {
+        return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_AILiuLanQiZhuChuangKou_KeFouBeiGuanBi ((rg_AILiuLanQiZhuChuangKou&)*pobjEventSource, nTagNumber);
     }
     static INT re_AILiuLanQiZhuChuangKou_AILiuLanQiZhuChuangKou_TuoPanShiJian (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber, INT rg_CaoZuoLeiXing)
     {
         return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_AILiuLanQiZhuChuangKou_TuoPanShiJian ((rg_AILiuLanQiZhuChuangKou&)*pobjEventSource, nTagNumber, rg_CaoZuoLeiXing);
     }
+    static INT re_AILiuLanQiZhuChuangKou_AILiuLanQiZhuChuangKou_JiangBeiXiaoHui (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
+    {
+        return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_AILiuLanQiZhuChuangKou_JiangBeiXiaoHui ((rg_AILiuLanQiZhuChuangKou&)*pobjEventSource, nTagNumber);
+    }
     static INT re_AILiuLanQiZhuChuangKou_AILiuLanQiZhuChuangKou_YiBeiXiaoHui (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
     {
         return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_AILiuLanQiZhuChuangKou_YiBeiXiaoHui ((rg_AILiuLanQiZhuChuangKou&)*pobjEventSource, nTagNumber);
     }
-    static INT re_AILiuLanQiZhuChuangKou_AILiuLanQiZhuChuangKou_KeFouBeiGuanBi (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
+    static INT re_AILiuLanQiZhuChuangKou_AILiuLanQiZhuChuangKou_CheCunBeiGaiBian (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
     {
-        return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_AILiuLanQiZhuChuangKou_KeFouBeiGuanBi ((rg_AILiuLanQiZhuChuangKou&)*pobjEventSource, nTagNumber);
+        return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_AILiuLanQiZhuChuangKou_CheCunBeiGaiBian ((rg_AILiuLanQiZhuChuangKou&)*pobjEventSource, nTagNumber);
+    }
+    static INT re_AILiuLanQiZhuChuangKou_AILiuLanQiZhuChuangKou_WeiZhiBeiGaiBian (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
+    {
+        return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_AILiuLanQiZhuChuangKou_WeiZhiBeiGaiBian ((rg_AILiuLanQiZhuChuangKou&)*pobjEventSource, nTagNumber);
+    }
+    static INT re_AILiuLanQiZhuChuangKou_button_clicked (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
+    {
+        return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_button_clicked ((rg_volcano_MFCJieMian_base::rg_button1&)*pobjEventSource, nTagNumber);
+    }
+    static INT re_AILiuLanQiZhuChuangKou_AILiuLanQiZhuChuangKou_ChuangJianWanBi (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
+    {
+        return ((rg_AILiuLanQiZhuChuangKou*)pobjEventReceiver)->rg_AILiuLanQiZhuChuangKou_ChuangJianWanBi ((rg_AILiuLanQiZhuChuangKou&)*pobjEventSource, nTagNumber);
     }
 
 protected:
@@ -92,6 +95,7 @@ protected:
     INT rg_AILiuLanQiZhuChuangKou_KeFouBeiGuanBi (rg_AILiuLanQiZhuChuangKou& rg_LaiYuanDuiXiang8, INT rg_BiaoJiZhi8);
     INT rg_AILiuLanQiZhuChuangKou_TuoPanShiJian (rg_AILiuLanQiZhuChuangKou& rg_LaiYuanDuiXiang9, INT rg_BiaoJiZhi9, INT rg_CaoZuoLeiXing);
     INT rg_AILiuLanQiZhuChuangKou_YiBeiXiaoHui (rg_AILiuLanQiZhuChuangKou& rg_LaiYuanDuiXiang10, INT rg_BiaoJiZhi10);
+    INT rg_AILiuLanQiZhuChuangKou_JiangBeiXiaoHui (rg_AILiuLanQiZhuChuangKou& rg_LaiYuanDuiXiang11, INT rg_BiaoJiZhi11);
 
 protected:
     static const INT rg_GongJuLanGaoDu;

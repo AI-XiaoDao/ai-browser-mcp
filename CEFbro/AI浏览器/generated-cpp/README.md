@@ -31,7 +31,7 @@
 |----|-----|
 | 版本 | 与 `MCP_版本号` 一致（当前 2.6.0） |
 | 手动同步 | 编译 Release x64 后，复制 `project/` → 覆盖 `release-x64/` |
-| 自动 | [`release/pack-release.ps1`](../../../release/pack-release.ps1)（默认同步 + 打 cpp zip） |
+| 自动 | 编译 Release x64 后手动同步 `project/` → `release-x64/` |
 
 ## 常见误区
 

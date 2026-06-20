@@ -18,8 +18,8 @@ public:
         virtual void Callback_ListData(CefRefPtr<CefBrowser> browser,int message_id,bool success,CefRefPtr<CefListValue> listvalue) override;
 
 public:
-    virtual void rg_ShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi50, INT rg_BiaoShiID20, BOOL rg_ChengGong10, INT64 rg_ShuJuZhiZhen12, INT rg_ShuJuDaXiao6);
-    virtual void rg_LieBiaoShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi51, INT rg_BiaoShiID21, BOOL rg_ChengGong11, rg_FBrowser_value::FBroListValue& rg_LieBiaoZhi1);
+    virtual void rg_ShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi51, INT rg_BiaoShiID20, BOOL rg_ChengGong10, INT64 rg_ShuJuZhiZhen12, INT rg_ShuJuDaXiao6);
+    virtual void rg_LieBiaoShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi52, INT rg_BiaoShiID21, BOOL rg_ChengGong11, rg_FBrowser_value::FBroListValue& rg_LieBiaoZhi1);
     rg_class_FBrowserVIP_tyhd ();
     void _VolObjectInitMembers ();
     virtual ~rg_class_FBrowserVIP_tyhd ();

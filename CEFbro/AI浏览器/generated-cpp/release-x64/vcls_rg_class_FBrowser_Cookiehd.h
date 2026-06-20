@@ -21,7 +21,7 @@ public:
 public:
     virtual void rg_KaiShi ();
     virtual void rg_JieShu ();
-    virtual BOOL rg_FangWen (rg_FBrowser_ShuJuLeiXing::rg_FBrowser_CookieShuJu& rg_CookieShuJu2, INT rg_DangQianXiang1, INT rg_ZongShu4, rg_volcano_base::rg_LuoJiXingLei& rg_ShanChuDangQiancookie1);
+    virtual BOOL rg_FangWen (rg_FBrowser_ShuJuLeiXing::rg_FBrowser_CookieShuJu& rg_CookieShuJu2, INT rg_DangQianXiang1, INT rg_ZongShu6, rg_volcano_base::rg_LuoJiXingLei& rg_ShanChuDangQiancookie1);
     rg_class_FBrowser_Cookiehd ();
     void _VolObjectInitMembers ();
     virtual ~rg_class_FBrowser_Cookiehd ();

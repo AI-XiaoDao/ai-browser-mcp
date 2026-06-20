@@ -13,6 +13,7 @@ class rg_startup_class : public rg_volcano_base::rg_ChuangKouChengXuLei
 
 public:
     INT rg_startup_method ();
+    virtual void rg_JiJiangTuiChu ();
     inline_ rg_startup_class () { }
     inline_ void _VolObjectInitMembers () { }
     virtual void LoadFromStream (CVolBaseInputStream& stream) override;

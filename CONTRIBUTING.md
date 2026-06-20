@@ -10,7 +10,7 @@
 | 文档 | `docs/`、`skills/`、`README.md` | 错别字、步骤、示例 |
 | 桥接/测试 | `mcp_bridge.js`、`run_all_tests.js` | Node 脚本 |
 | 工作流 | `CEFbro/AI浏览器/workflows/` | JSON 示例 |
-| 发布脚本 | `release/pack-release.ps1` | 打包流程 |
+| 发布 | GitHub Releases 页面 | 打包上传 |
 
 **请勿修改** `generated-cpp/` 手改内容 — 该目录由编译同步，PR 会被要求改为改 `.wsv` 后重新生成。
 
@@ -38,12 +38,7 @@ node CEFbro/AI浏览器/run_all_tests.js
 
 ## 发布维护者（Release）
 
-```powershell
-# 编译 Release x64 后
-.\release\pack-release.ps1 -Version 2.6.0
-```
-
-生成运行包 zip 与 cpp zip，上传 GitHub Releases。详见 `release/README.md`。
+编译 Release x64 后，将 `release/linker/` 目录内容打包为 zip，上传至 GitHub Releases 页面。
 
 ## 行为准则
 

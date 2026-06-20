@@ -16,17 +16,19 @@ public:
     virtual void rg_HuoQuShuJu (INT64 rg_BiaoShiID4, INT64 rg_ShuJuZhiZhen2, INT rg_ShuJuDaXiao2);
     virtual INT rg_XiuGaiShuJu (INT64 rg_BiaoShiID5, INT64 rg_ShuRuZhiZhen, INT rg_ShuRuDaXiao, rg_volcano_base::rg_ZhengShuLei& rg_ShuRuDouQuDaXiao, INT64 rg_ShuChuZhiZhen, INT rg_ShuChuDaXiao, rg_volcano_base::rg_ZhengShuLei& rg_ShuChuXieRuDaXiao);
     virtual void rg_JieShu1 (INT64 rg_BiaoShiID6);
-    inline_ rg_class_MCP_HuanCunGuoLuQi () { }
-    inline_ void _VolObjectInitMembers () { }
+    rg_class_MCP_HuanCunGuoLuQi ();
+    void _VolObjectInitMembers ();
     virtual void LoadFromStream (CVolBaseInputStream& stream) override;
     virtual void SaveIntoStream (CVolBaseOutputStream& stream) override;
 
 public:
     CVolString rg_ZiYuanDeZhi;
     CVolString rg_ZiYuanMIME;
+    static const INT rg_ChanXiangYingZuiDaZiJie;
 
 protected:
     CVolMem rg_ShuJuHuanCun;
+    BOOL rg_YiJieDuan1;
 };
 
 }

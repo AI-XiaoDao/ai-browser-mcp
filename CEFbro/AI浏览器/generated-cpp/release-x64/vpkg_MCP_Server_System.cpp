@@ -15,22 +15,7 @@ CVolString CALLBACK rg_MCP_JiTongFenPa::rg_FenLeiFenPa_JiTongCaoZuo (CVolString&
     }
     else if (rg_FangFaMing10 == _T ("browser.task_runner_post") || rg_FangFaMing10 == _T ("browser_task_runner_post"))
     {
-        INT rg_threadID;
-        rg_threadID = rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON18, _CT2 (_T ("thread_id")));
-        if (rg_threadID == 0)
-        {
-            rg_threadID = 0;
-        }
-        CVolString rg_RenWuDaiMa;
-        rg_RenWuDaiMa = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("code")));
-        CVolString rg_YiBuRenWuID2;
-        rg_YiBuRenWuID2 = rg_MCPMingLingFuWuQi::rg_ShengChengYiBuRenWuID ();
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_shjzhnzhzh rg_RenWuHuiDiao;
-        rg_RenWuHuiDiao.m_class = static_cast<rg_class_MCP_RenWuHuiDiao*>(new rg_class_MCP_RenWuHuiDiao());
-        (*static_cast<rg_class_MCP_RenWuHuiDiao *>(rg_RenWuHuiDiao.m_class.get())).rg_RenWuID5 = rg_YiBuRenWuID2;
-        (*static_cast<rg_class_MCP_RenWuHuiDiao *>(rg_RenWuHuiDiao.m_class.get())).rg_ZhiHangDaiMa = rg_RenWuDaiMa;
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_rwyhq::rg_FBrowser_RenWuYunHangQi_TouDiRenWu (rg_threadID, rg_RenWuHuiDiao);
-        return (rg_MCPMingLingFuWuQi::rg_MingLingChengGong_YiBu (rg_MingLingID26, rg_YiBuRenWuID2, _CT2 (_T ("任务已投递到线程")) + CVolString (rg_threadID) + _T (", 通过mcp_result查询执行结果"), 0));
+        return (rg_MCPMingLingFuWuQi::rg_MingLingShiBai (rg_MingLingID26, _CT2 (_T ("⛔ 远程 task_runner 创建浏览器已禁用 | 浏览器由GUI自动管理 | 如需线程投递请改用已有 browser_id 操作"))));
     }
     else if (rg_FangFaMing10 == _T ("browser.send_message") || rg_FangFaMing10 == _T ("browser_send_message"))
     {
@@ -42,11 +27,11 @@ CVolString CALLBACK rg_MCP_JiTongFenPa::rg_FenLeiFenPa_JiTongCaoZuo (CVolString&
         }
         CVolString rg_msgData2;
         rg_msgData2 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("data")));
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser115;
-        rg_browser115 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser115.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser116;
+        rg_browser116 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser116.rg_ShiFouWeiKong127 () == FALSE)
         {
-            rg_browser115.rg_JinChengJianXiaoXi_FaSongShuJu_DaoZhuJinCheng (rg_msgName2, CVolMem (rg_msgData2));
+            rg_browser116.rg_JinChengJianXiaoXi_FaSongShuJu_DaoZhuJinCheng (rg_msgName2, CVolMem (rg_msgData2));
             return (rg_MCPMingLingFuWuQi::rg_MingLingChengGong (rg_MingLingID26, _CT2 (_T ("已向主进程发送消息"))));
         }
         return (rg_MCPMingLingFuWuQi::rg_MingLingShiBai (rg_MingLingID26, rg_MCPMingLingFuWuQi::rg_CuoWu_MoLiuLanQi));
@@ -65,30 +50,30 @@ CVolString CALLBACK rg_MCP_JiTongFenPa::rg_FenLeiFenPa_JiTongCaoZuo (CVolString&
     }
     else if (rg_FangFaMing10 == _T ("browser.get_window_style") || rg_FangFaMing10 == _T ("browser_get_window_style"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser116;
-        rg_browser116 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser116.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser117;
+        rg_browser117 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser117.rg_ShiFouWeiKong127 () == FALSE)
         {
-            return (rg_MCPMingLingFuWuQi::rg_GouJianJianChanJSON (_CT2 (_T ("style")), CVolString (rg_browser116.rg_QuChuangKouShuXing (-16))));
+            return (rg_MCPMingLingFuWuQi::rg_GouJianJianChanJSON (_CT2 (_T ("style")), CVolString (rg_browser117.rg_QuChuangKouShuXing (-16))));
         }
         return (rg_MCPMingLingFuWuQi::rg_MingLingShiBai (rg_MingLingID26, rg_MCPMingLingFuWuQi::rg_CuoWu_MoLiuLanQi));
     }
     else if (rg_FangFaMing10 == _T ("browser.set_window_style") || rg_FangFaMing10 == _T ("browser_set_window_style"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser117;
-        rg_browser117 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser117.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser118;
+        rg_browser118 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser118.rg_ShiFouWeiKong127 () == FALSE)
         {
-            rg_browser117.rg_ZhiChuangKouShuXing (rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON18, _CT2 (_T ("type"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON18, _CT2 (_T ("style"))));
+            rg_browser118.rg_ZhiChuangKouShuXing (rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON18, _CT2 (_T ("type"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON18, _CT2 (_T ("style"))));
             return (rg_MCPMingLingFuWuQi::rg_XiangYing_XuYaoShuaXin (rg_MingLingID26, _CT2 (_T ("窗口风格已设置"))));
         }
         return (rg_MCPMingLingFuWuQi::rg_MingLingShiBai (rg_MingLingID26, rg_MCPMingLingFuWuQi::rg_CuoWu_MoLiuLanQi));
     }
     else if (rg_FangFaMing10 == _T ("browser.get_run_style") || rg_FangFaMing10 == _T ("browser_get_run_style"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser118;
-        rg_browser118 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser118.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser119;
+        rg_browser119 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser119.rg_ShiFouWeiKong127 () == FALSE)
         {
             return (rg_MCPMingLingFuWuQi::rg_GouJianJianChanJSON (_CT2 (_T ("run_style")), _CT2 (_T ("暂不支持此方法工具"))));
         }

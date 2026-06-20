@@ -71,7 +71,7 @@ void rg_class_FBrowser_dkwjdhkhd::FBroHs_OnFileDialogDismissed(const wchar_t * f
   rg_JiJiangGuanBiWenJianDuiHuaKuang(CVolString(file_paths));
 }
 
-void rg_class_FBrowser_dkwjdhkhd::rg_JiJiangGuanBiWenJianDuiHuaKuang (CVolString& rg_WenJianLuJing8)
+void rg_class_FBrowser_dkwjdhkhd::rg_JiJiangGuanBiWenJianDuiHuaKuang (CVolString& rg_WenJianLuJing9)
 {
 }
 
@@ -281,38 +281,6 @@ void rg_class_FBrowser_JSdhkhd::rg_JiXu7 (BOOL rg_ChengGong8, CVolString& rg_Yon
     if(!IsEmpty()) FBroJSDialogCallback_Continue(m_class,rg_ChengGong8,rg_YongHuShuRu.GetText());
 }
 
-rg_class_FBrowser_RenWuHuiDiao::rg_class_FBrowser_RenWuHuiDiao ()
-{
-    _VolObjectInitMembers ();
-}
-
-void rg_class_FBrowser_RenWuHuiDiao::_VolObjectInitMembers ()
-{
-    rg_class_FBrowser_rwhd_class_chshh ();
-}
-
-rg_class_FBrowser_RenWuHuiDiao::~rg_class_FBrowser_RenWuHuiDiao ()
-{
-    OnBeforeObjectCleanup ();
-    rg_class_FBrowser_rwhd_class_ql ();
-}
-
-void rg_class_FBrowser_RenWuHuiDiao::rg_class_FBrowser_rwhd_class_chshh ()
-{
-    type_ = TaskType;
-    _FBRO_SHOW_CLASS_TYPE(_CT("类_FBrowser_任务回调"), 0);
-}
-
-void rg_class_FBrowser_RenWuHuiDiao::rg_class_FBrowser_rwhd_class_ql ()
-{
-    _FBRO_SHOW_CLASS_TYPE(_CT("类_FBrowser_任务回调"), 1);
-}
-void rg_class_FBrowser_RenWuHuiDiao::Execute() {rg_ZhiHang();}
-
-void rg_class_FBrowser_RenWuHuiDiao::rg_ZhiHang ()
-{
-}
-
 rg_class_FBrowser_Cookiehd::rg_class_FBrowser_Cookiehd ()
 {
     _VolObjectInitMembers ();
@@ -356,7 +324,7 @@ void rg_class_FBrowser_Cookiehd::rg_JieShu ()
 {
 }
 
-BOOL rg_class_FBrowser_Cookiehd::rg_FangWen (rg_FBrowser_ShuJuLeiXing::rg_FBrowser_CookieShuJu& rg_CookieShuJu2, INT rg_DangQianXiang1, INT rg_ZongShu4, rg_volcano_base::rg_LuoJiXingLei& rg_ShanChuDangQiancookie1)
+BOOL rg_class_FBrowser_Cookiehd::rg_FangWen (rg_FBrowser_ShuJuLeiXing::rg_FBrowser_CookieShuJu& rg_CookieShuJu2, INT rg_DangQianXiang1, INT rg_ZongShu6, rg_volcano_base::rg_LuoJiXingLei& rg_ShanChuDangQiancookie1)
 {
     return (TRUE);
 }
@@ -418,14 +386,14 @@ void rg_class_FBrowserVIP_tyhd::rg_class_FBrowserVIP_tyhd_class_ql ()
         rg_ShuJuHuiDiao(rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi(browser),message_id,success,(int64_t)data,(INT)datasize);
 };
 
-void rg_class_FBrowserVIP_tyhd::rg_ShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi50, INT rg_BiaoShiID20, BOOL rg_ChengGong10, INT64 rg_ShuJuZhiZhen12, INT rg_ShuJuDaXiao6)
+void rg_class_FBrowserVIP_tyhd::rg_ShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi51, INT rg_BiaoShiID20, BOOL rg_ChengGong10, INT64 rg_ShuJuZhiZhen12, INT rg_ShuJuDaXiao6)
 {
 }
     void rg_class_FBrowserVIP_tyhd::Callback_ListData(CefRefPtr<CefBrowser> browser,int message_id,bool success,CefRefPtr<CefListValue> listvalue){
         rg_LieBiaoShuJuHuiDiao(rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi(browser),message_id,success,rg_FBrowser_value::FBroListValue(listvalue));
 };
 
-void rg_class_FBrowserVIP_tyhd::rg_LieBiaoShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi51, INT rg_BiaoShiID21, BOOL rg_ChengGong11, rg_FBrowser_value::FBroListValue& rg_LieBiaoZhi1)
+void rg_class_FBrowserVIP_tyhd::rg_LieBiaoShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi52, INT rg_BiaoShiID21, BOOL rg_ChengGong11, rg_FBrowser_value::FBroListValue& rg_LieBiaoZhi1)
 {
 }
 

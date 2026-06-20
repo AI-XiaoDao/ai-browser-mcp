@@ -73,11 +73,11 @@ INT CALLBACK rg_FBrowserChuShiHuaKongZhi::rg_FBrowser_JinCheng_QuDangQianJinChen
     return FBroGetProcessType();
 }
 
-void CALLBACK rg_FBrowserChuShiHuaKongZhi::rg_FBrowser_ChuangJianURLQingQiu (FBroRequest& rg_QingQiu25, FBroRequestContext& rg_QingQiuHuanJing5, rg_class_FBrowser_shjzhnzhzh& rg_URLQingQiuShiJian1, INT64 rg_BiaoShi9)
+void CALLBACK rg_FBrowserChuShiHuaKongZhi::rg_FBrowser_ChuangJianURLQingQiu (FBroRequest& rg_QingQiu25, FBroRequestContext& rg_QingQiuHuanJing5, rg_class_FBrowser_shjzhnzhzh& rg_URLQingQiuShiJian1, INT64 rg_BiaoShi10)
 {
     _FBRO_CHECK_EVENT_TYPE(rg_URLQingQiuShiJian1.GetPtr(),URLRequestClientType,_CT("FBrowser初始化控制"),_CT("FBrowser_创建URL请求"));
     CefRefPtr<FBroHsURLRequestClient> tempclass = static_cast<FBroHsURLRequestClient*>(rg_URLQingQiuShiJian1.GetPtr());
-    FBroHsURLRequest_Create(rg_QingQiu25.m_class,rg_QingQiuHuanJing5.m_class,tempclass,rg_BiaoShi9);
+    FBroHsURLRequest_Create(rg_QingQiu25.m_class,rg_QingQiuHuanJing5.m_class,tempclass,rg_BiaoShi10);
 }
 
 CVolString CALLBACK rg_FBrowserChuShiHuaKongZhi::rg_FBrowser_QuBanBenHao ()
@@ -176,20 +176,12 @@ void rg_class_FBrowser_LiuLanQi::_CopySelfFrom (const rg_class_FBrowser_LiuLanQi
     _CopySelfFromExtra (objCopyFrom);
 }
 
-BOOL CALLBACK rg_class_FBrowser_LiuLanQi::rg_FBrowser_ChuangJianLiuLanQi (CVolString& rg_LianJieDeZhi, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_ChuangKouXinXi& rg_ChuangKouXinXi5, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_LiuLanQiPeiZhi& rg_LiuLanQiSheZhi3, FBroRequestContext& rg_QingQiuHuanJing6, rg_FBrowser_value::FBroDictionaryValue& rg_EWaiXinXi5, rg_class_FBrowser_shjzhnzhzh& rg_LiuLanQiShiJian3, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_JinYongShiJian& rg_JinYongShiJian, CVolString& rg_BiaoShi10)
+BOOL CALLBACK rg_class_FBrowser_LiuLanQi::rg_FBrowser_ChuangJianLiuLanQi (CVolString& rg_LianJieDeZhi, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_ChuangKouXinXi& rg_ChuangKouXinXi4, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_LiuLanQiPeiZhi& rg_LiuLanQiSheZhi3, FBroRequestContext& rg_QingQiuHuanJing6, rg_FBrowser_value::FBroDictionaryValue& rg_EWaiXinXi5, rg_class_FBrowser_shjzhnzhzh& rg_LiuLanQiShiJian2, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_JinYongShiJian& rg_JinYongShiJian, CVolString& rg_BiaoShi11)
 {
-    _FBRO_CHECK_EVENT_TYPE(rg_LiuLanQiShiJian3.GetPtr(),BroEventType,_CT("类_FBrowser_浏览器"),_CT("FBrowser_创建浏览器"));
-    CefRefPtr<FBroHsBroEvent> hsbroevent = static_cast<FBroHsBroEvent*>(rg_LiuLanQiShiJian3.GetPtr());
-    return FBroHsCreate(rg_LianJieDeZhi.GetText(), rg_ChuangKouXinXi5.ToFBroData(), rg_LiuLanQiSheZhi3.ToFBroData(), rg_QingQiuHuanJing6.m_class, rg_EWaiXinXi5.m_class,
-    hsbroevent, rg_JinYongShiJian.ToFBroData(), rg_BiaoShi10.GetText());
-}
-
-rg_class_FBrowser_LiuLanQi CALLBACK rg_class_FBrowser_LiuLanQi::rg_FBrowser_ChuangJianLiuLanQi_TongBu (CVolString& rg_LianJieDeZhi1, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_ChuangKouXinXi& rg_ChuangKouXinXi6, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_LiuLanQiPeiZhi& rg_LiuLanQiSheZhi4, FBroRequestContext& rg_QingQiuHuanJing7, rg_FBrowser_value::FBroDictionaryValue& rg_EWaiXinXi6, rg_class_FBrowser_shjzhnzhzh& rg_LiuLanQiShiJian4, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_JinYongShiJian& rg_JinYongShiJian1, CVolString& rg_BiaoShi11)
-{
-    _FBRO_CHECK_EVENT_TYPE(rg_LiuLanQiShiJian4.GetPtr(),BroEventType,_CT("类_FBrowser_浏览器"),_CT("FBrowser_创建浏览器_同步"));
-    CefRefPtr<FBroHsBroEvent> hsbroevent = static_cast<FBroHsBroEvent*>(rg_LiuLanQiShiJian4.GetPtr());
-    return rg_class_FBrowser_LiuLanQi(FBroHsCreateSync(rg_LianJieDeZhi1.GetText(), rg_ChuangKouXinXi6.ToFBroData(), rg_LiuLanQiSheZhi4.ToFBroData(), rg_QingQiuHuanJing7.m_class, rg_EWaiXinXi6.m_class,
-    hsbroevent, rg_JinYongShiJian1.ToFBroData(), rg_BiaoShi11.GetText()));
+    _FBRO_CHECK_EVENT_TYPE(rg_LiuLanQiShiJian2.GetPtr(),BroEventType,_CT("类_FBrowser_浏览器"),_CT("FBrowser_创建浏览器"));
+    CefRefPtr<FBroHsBroEvent> hsbroevent = static_cast<FBroHsBroEvent*>(rg_LiuLanQiShiJian2.GetPtr());
+    return FBroHsCreate(rg_LianJieDeZhi.GetText(), rg_ChuangKouXinXi4.ToFBroData(), rg_LiuLanQiSheZhi3.ToFBroData(), rg_QingQiuHuanJing6.m_class, rg_EWaiXinXi5.m_class,
+    hsbroevent, rg_JinYongShiJian.ToFBroData(), rg_BiaoShi11.GetText());
 }
 
 BOOL rg_class_FBrowser_LiuLanQi::rg_ShiFouWeiKong127 ()
@@ -384,11 +376,11 @@ void rg_class_FBrowser_LiuLanQi::rg_TingZhiChaZhao (BOOL rg_QingChuXuanXiang)
     FBroHsBrowserHost_StopFinding(m_class,rg_QingChuXuanXiang);
 }
 
-void rg_class_FBrowser_LiuLanQi::rg_DaKaiKaiFaZheGongJu (CVolString& rg_BiaoTi5, INT64 rg_FuChuangKou, INT rg_HengZuoBiao10, INT rg_ZongZuoBiao10, INT rg_KuanDu13, INT rg_GaoDu13, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_LiuLanQiPeiZhi& rg_LiuLanQiSheZhi7, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_WeiZhi& rg_YuanSuZuoBiao, rg_class_FBrowser_shjzhnzhzh& rg_LiuLanQiShiJian7, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_JinYongShiJian& rg_JinYongShiJian4)
+void rg_class_FBrowser_LiuLanQi::rg_DaKaiKaiFaZheGongJu (CVolString& rg_BiaoTi5, INT64 rg_FuChuangKou, INT rg_HengZuoBiao10, INT rg_ZongZuoBiao10, INT rg_KuanDu13, INT rg_GaoDu13, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_LiuLanQiPeiZhi& rg_LiuLanQiSheZhi7, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_WeiZhi& rg_YuanSuZuoBiao, rg_class_FBrowser_shjzhnzhzh& rg_LiuLanQiShiJian6, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_JinYongShiJian& rg_JinYongShiJian4)
 {
     if(IsEmpty()) return ;
-    _FBRO_CHECK_EVENT_TYPE(rg_LiuLanQiShiJian7.GetPtr(),BroEventType,_CT("类_FBrowser_浏览器"),_CT("打开开发者工具"));
-    CefRefPtr<FBroHsBroEvent> tempclass= static_cast<FBroHsBroEvent*>(rg_LiuLanQiShiJian7.GetPtr());
+    _FBRO_CHECK_EVENT_TYPE(rg_LiuLanQiShiJian6.GetPtr(),BroEventType,_CT("类_FBrowser_浏览器"),_CT("打开开发者工具"));
+    CefRefPtr<FBroHsBroEvent> tempclass= static_cast<FBroHsBroEvent*>(rg_LiuLanQiShiJian6.GetPtr());
     FBroHsBrowserHost_ShowDevTools(m_class,rg_BiaoTi5.GetText(),(HWND)rg_FuChuangKou,rg_HengZuoBiao10,rg_ZongZuoBiao10,rg_KuanDu13,rg_GaoDu13,rg_LiuLanQiSheZhi7.ToFBroData(), rg_YuanSuZuoBiao.ToFBroData(),tempclass,rg_JinYongShiJian4.ToFBroData());
 }
 
@@ -957,25 +949,6 @@ void FBroProcessMessage::_CopySelfFrom (const FBroProcessMessage& objCopyFrom)
     _CopySelfFromExtra (objCopyFrom);
 }
 
-BOOL rg_class_FBrowser_rwyhq::_IsSelfEqual (const rg_class_FBrowser_rwyhq& objCompare) const
-{
-    if (_IsSelfEqualExtra (objCompare) == FALSE)
-        return FALSE;
-    return TRUE;
-}
-
-void rg_class_FBrowser_rwyhq::_CopySelfFrom (const rg_class_FBrowser_rwyhq& objCopyFrom)
-{
-    _CopySelfFromExtra (objCopyFrom);
-}
-
-BOOL CALLBACK rg_class_FBrowser_rwyhq::rg_FBrowser_RenWuYunHangQi_TouDiRenWu (INT rg_XianChengID3, rg_class_FBrowser_shjzhnzhzh& rg_RenWuZhiHangHuiDiao)
-{
-    _FBRO_CHECK_EVENT_TYPE(rg_RenWuZhiHangHuiDiao.GetPtr(),TaskType,_CT("类_FBrowser_任务运行器"),_CT("FBrowser_任务运行器_投递任务"));
-    CefRefPtr<FBroHsTask> tempclass=static_cast<FBroHsTask*>(rg_RenWuZhiHangHuiDiao.GetPtr());
-    return FBroHsTaskRunner_CefPostTask(rg_XianChengID3,tempclass);
-}
-
 BOOL rg_class_FBrowser_Cookieglq::_IsSelfEqual (const rg_class_FBrowser_Cookieglq& objCompare) const
 {
     if (_IsSelfEqualExtra (objCompare) == FALSE)
@@ -1242,19 +1215,9 @@ void CALLBACK rg_class_FBrowser_FuWuQi::rg_FBrowser_FuWuQi_ChuangJian (CVolStrin
     FBroHsServer_CreateServer(rg_DeZhi17.GetText(),rg_DuanKou9,rg_ZuiDaLianJieShu,callback);
 }
 
-BOOL rg_class_FBrowser_FuWuQi::rg_ShiFouWeiKong152 ()
-{
-    return IsEmpty();
-}
-
 void rg_class_FBrowser_FuWuQi::rg_ZhiKong26 ()
 {
     m_class = nullptr;
-}
-
-void rg_class_FBrowser_FuWuQi::rg_GuanBi3 ()
-{
-    if(!IsEmpty()) FBroHsServer_Shutdown(m_class);
 }
 
 void rg_class_FBrowser_FuWuQi::rg_FaSongYuanShiShuJu (INT rg_LianJieID22, INT64 rg_ShuJuZhiZhen18, INT rg_ShuJuDaXiao10)

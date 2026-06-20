@@ -3,7 +3,6 @@
 
 
 > Copy for GitHub, forums, Twitter/X, Reddit, Dev.to.  
-> **Forum post templates** → [FORUM_POSTS_EN.md](FORUM_POSTS_EN.md) · Chinese → [FORUM_POSTS.md](FORUM_POSTS.md)  
 
 > Repository: https://github.com/AI-XiaoDao/ai-browser-mcp
 

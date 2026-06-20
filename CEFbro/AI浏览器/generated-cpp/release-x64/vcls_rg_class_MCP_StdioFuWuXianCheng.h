@@ -23,7 +23,7 @@ public:
     }
 
 protected:
-    INT rg_HuanCunXianChengLei_XianChengYunHang (rg_volcano_base::rg_HuanCunXianChengLei& rg_LaiYuanDuiXiang11, INT rg_BiaoJiZhi11, INT64 rg_XianChengGouBing2, INT64 rg_YongHuCanShu, INT64 rg_TuiChuShiJian);
+    INT rg_HuanCunXianChengLei_XianChengYunHang (rg_volcano_base::rg_HuanCunXianChengLei& rg_LaiYuanDuiXiang12, INT rg_BiaoJiZhi12, INT64 rg_XianChengGouBing2, INT64 rg_YongHuCanShu, INT64 rg_TuiChuShiJian);
 
 protected:
     CVolEventObjectPointer* rw_2;

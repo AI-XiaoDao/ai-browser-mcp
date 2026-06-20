@@ -12,6 +12,7 @@ class rg_class_MCP_LiuLanQiShiJian : public rg_FBrowser_ShiJianKongZhi::rg_class
     DECLARE_EMPTY_VOL_CLASS (rg_volcano_app, rg_class_MCP_LiuLanQiShiJian)
 
 public:
+    static BOOL CALLBACK rg_ShiFouWeiLiChengBeiJinDu (INT rg_JinDu);
     virtual void rg_LiuLanQi_ChuangJianWanBi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi6, rg_FBrowser_value::FBroDictionaryValue& rg_EWaiXinXi1);
     virtual BOOL rg_LiuLanQi_KongZhiTaiXiaoXi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi7, INT rg_RiZhiJiBie, CVolString& rg_XiaoXi, CVolString& rg_NeiRong, INT rg_Hang);
     virtual void rg_LiuLanQi_JiJiangGuanBi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi8);
@@ -48,7 +49,7 @@ public:
     virtual BOOL rg_LiuLanQi_AnXiaMouJian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi39, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_AnJianShiJian& rg_AnJianShiJian, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_JiTongShiJian& rg_JiTongShiJian, BOOL rg_ShiFouKuaiJieJian);
     virtual void rg_LiuLanQi_JiJiangShiQuJiaoDian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi40, BOOL rg_XiaYiGe);
     virtual void rg_LiuLanQi_ShouDaoJiaoDian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi41);
-    virtual void rg_LiuLanQi_JiaZaiJinDuBeiGaiBian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi42, INT rg_JinDu1);
+    virtual void rg_LiuLanQi_JiaZaiJinDuBeiGaiBian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi42, INT rg_JinDu2);
     virtual BOOL rg_LiuLanQi_ZhiHangGuanBi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi43);
     inline_ rg_class_MCP_LiuLanQiShiJian () { }
     inline_ void _VolObjectInitMembers () { }

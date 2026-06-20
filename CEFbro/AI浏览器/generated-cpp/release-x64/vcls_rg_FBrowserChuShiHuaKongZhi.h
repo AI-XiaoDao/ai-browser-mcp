@@ -16,7 +16,7 @@ public:
     static void CALLBACK rg_FBrowser_GuanBi (BOOL rg_JieShuChengXu);
     static void CALLBACK rg_FBrowser_NeiCun_YaSuQingLi ();
     static INT CALLBACK rg_FBrowser_JinCheng_QuDangQianJinChengLeiXing ();
-    static void CALLBACK rg_FBrowser_ChuangJianURLQingQiu (FBroRequest& rg_QingQiu25, FBroRequestContext& rg_QingQiuHuanJing5, rg_class_FBrowser_shjzhnzhzh& rg_URLQingQiuShiJian1, INT64 rg_BiaoShi9);
+    static void CALLBACK rg_FBrowser_ChuangJianURLQingQiu (FBroRequest& rg_QingQiu25, FBroRequestContext& rg_QingQiuHuanJing5, rg_class_FBrowser_shjzhnzhzh& rg_URLQingQiuShiJian1, INT64 rg_BiaoShi10);
     static CVolString CALLBACK rg_FBrowser_QuBanBenHao ();
     inline_ rg_FBrowserChuShiHuaKongZhi () { }
     inline_ void _VolObjectInitMembers () { }

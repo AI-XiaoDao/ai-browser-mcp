@@ -22,9 +22,7 @@ public:
 
 public:
     static void CALLBACK rg_FBrowser_FuWuQi_ChuangJian (CVolString& rg_DeZhi17, INT rg_DuanKou9, INT rg_ZuiDaLianJieShu, rg_class_FBrowser_shjzhnzhzh& rg_FuWuChuLiShiJian);
-    BOOL rg_ShiFouWeiKong152 ();
     void rg_ZhiKong26 ();
-    void rg_GuanBi3 ();
     void rg_FaSongYuanShiShuJu (INT rg_LianJieID22, INT64 rg_ShuJuZhiZhen18, INT rg_ShuJuDaXiao10);
     void rg_FaSongWebSocketShuJu (INT rg_LianJieID24, INT64 rg_ShuJuZhiZhen19, INT rg_ShuJuDaXiao11);
     void rg_FaSongHttpResponse (INT rg_LianJieID25, INT rg_XiangYingDaiMa, CVolString& rg_XiangYingLeiXing, INT rg_NeiRongChangDu2, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_ShuangWenBenShuZu& rg_EWaiTouShuJu);

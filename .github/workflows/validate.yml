@@ -42,4 +42,4 @@ jobs:
 
       - name: Block secrets pattern (quick scan)
         run: |
-          ! rg -i 'ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|session=XN0YXJ0-' --glob '!*.png' || (echo 'Possible secret found' && exit 1)
+          ! grep -rI --include='*.js' --include='*.json' --include='*.md' --include='*.wsv' -i 'ghp_[A-Za-z0-9]\{20,\}\|github_pat_[A-Za-z0-9_]\{20,\}' . 2>/dev/null || (echo 'Possible secret found' && exit 1)

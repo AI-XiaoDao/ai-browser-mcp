@@ -12,6 +12,7 @@ class rg_CiPanCaoZuoLei : public CVolObject
     DECLARE_EMPTY_VOL_CLASS (rg_volcano_base, rg_CiPanCaoZuoLei)
 
 public:
+    static DOUBLE CALLBACK rg_QuWenJianShiJian (CVolString& rg_SuoYuJianCeDeWenJianHuoMuLuMing1);
     static CVolMem CALLBACK rg_DouRuWenJian (CVolString& rg_SuoYuDouQuWenJianMing1, INT rg_SuoYuDouQuShuJuCheCun1);
     inline_ rg_CiPanCaoZuoLei () { }
     inline_ void _VolObjectInitMembers () { }

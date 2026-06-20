@@ -16,21 +16,18 @@ BOOL rg_class_MCP_LiuLanQiShiJian::rg_JiLuJianKongShiJian (BOOL rg_KaiGuan, CVol
     return (rg_KaiGuan);
 }
 
+BOOL CALLBACK rg_class_MCP_LiuLanQiShiJian::rg_ShiFouWeiLiChengBeiJinDu (INT rg_JinDu)
+{
+    return (rg_JinDu == 0 || rg_JinDu == 25 || rg_JinDu == 50 || rg_JinDu == 75 || rg_JinDu == 100);
+}
+
 void rg_class_MCP_LiuLanQiShiJian::rg_LiuLanQi_ChuangJianWanBi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi6, rg_FBrowser_value::FBroDictionaryValue& rg_EWaiXinXi1)
 {
     rg_MCPMingLingFuWuQi::rg_LiuLanQiShuZuSuo.data ().lock (FALSE);
     rg_LiuLanQiRongQi::rg_LiuLanQiShuZu.Add (rg_LiuLanQi6, NULL);
     rg_MCPMingLingFuWuQi::rg_LiuLanQiShuZuSuo.data ().unlock ();
     _DEBUG_STATMENT (DebugTrace (FALSE, 0, 0, _T ("SnS"), _T ("[MCP] 浏览器创建完毕 [ID:"), rg_LiuLanQi6.rg_QuID (), _T ("]")));
-    if (rg_MCPMingLingFuWuQi::rg_ChiJiuDaiLiDeZhi != _T (""))
-    {
-        rg_LiuLanQi6.rg_SheZhiDaiLi (rg_MCPMingLingFuWuQi::rg_ChiJiuDaiLiDeZhi, rg_MCPMingLingFuWuQi::rg_ChiJiuDaiLiZhangHao, rg_MCPMingLingFuWuQi::rg_ChiJiuDaiLiMiMa);
-    }
-    if (rg_MCPMingLingFuWuQi::rg_ChiJiuSuFangJiBie > 0)
-    {
-        rg_LiuLanQi6.rg_ZhiSuFangJiBie (rg_MCPMingLingFuWuQi::rg_ChiJiuSuFangJiBie);
-    }
-    rg_LiuLanQi6.rg_ZhiYeMianJingYin (rg_MCPMingLingFuWuQi::rg_ChiJiuJingYinZhuangTai);
+    rg_MCPMingLingFuWuQi::rg_YingYongChiJiuPeiZhiDaoLiuLanQi (rg_LiuLanQi6);
     rg_MCPMingLingFuWuQi::rg_QueBaoCDPGuanChaZheYiZhuCe ();
     if (rg_MCPMingLingFuWuQi::rg_ShiFouHookDaoHang && rg_MCPMingLingFuWuQi::rg_DaoHangLanJieGuiZe != _T (""))
     {
@@ -102,10 +99,21 @@ void rg_class_MCP_LiuLanQiShiJian::rg_LiuLanQi_JiJiangGuanBi (rg_FBrowser_LiuLan
     INT rg_ShengYuShuLiang;
     rg_ShengYuShuLiang = (INT)rg_LiuLanQiRongQi::rg_LiuLanQiShuZu.GetCount ();
     rg_MCPMingLingFuWuQi::rg_LiuLanQiShuZuSuo.data ().unlock ();
+    if (rg_MCPMingLingFuWuQi::rg_CDPGuanChaZheYiZhuCe && rg_LiuLanQi8.rg_QuID () == rg_MCPMingLingFuWuQi::rg_CDPFuZhaoLiuLanQiID)
+    {
+        rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_closeVip;
+        rg_closeVip = rg_LiuLanQi8.rg_QuVIPKongZhiQi1 ();
+        if (rg_closeVip.rg_ShiFouWeiKong167 () == FALSE)
+        {
+            rg_closeVip.rg_KaiFaZheXiaoXi_GuanBiJianGuanZheShiJian ();
+        }
+        rg_MCPMingLingFuWuQi::rg_CDPGuanChaZheYiZhuCe = FALSE;
+        rg_MCPMingLingFuWuQi::rg_CDPFuZhaoLiuLanQiID = 0;
+        _DEBUG_STATMENT (DebugTrace (FALSE, 0, 0, _T ("SnS"), _T ("[MCP] CDP DevTools观察者因浏览器关闭而注销 [ID:"), rg_LiuLanQi8.rg_QuID (), _T ("]")));
+    }
     if (rg_ShengYuShuLiang == 0)
     {
-        rg_LiuLanQiRongQi::rg_HuanYingYeYiDaoHang = FALSE;
-        rg_LiuLanQiRongQi::rg_HuanYingYeDaoHangYiFaQi = FALSE;
+        rg_LiuLanQiRongQi::rg_ChongZhiHuanYingYeDaoHangZhuangTai ();
         rg_LiuLanQiRongQi::rg_BiaoJiXuYaoChongJianLiuLanQi ();
     }
 }
@@ -196,15 +204,15 @@ BOOL rg_class_MCP_LiuLanQiShiJian::rg_LiuLanQi_JiJiangXiaZai (rg_FBrowser_LiuLan
 
 void rg_class_MCP_LiuLanQiShiJian::rg_LiuLanQi_ZhengZaiXiaZai (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi13, rg_FBrowser_LiuLanQi::FBroDownloadItem& rg_XiaZai1, rg_FBrowser_HuiDiao::rg_class_FBrowser_zhzxzhd& rg_XiaZaiHuiDiao1)
 {
-    INT rg_JinDu;
-    rg_JinDu = rg_XiaZai1.rg_QuXiaZaiBaiFenBi ();
-    _DEBUG_STATMENT (DebugTrace (FALSE, 0, 0, _T ("SSSnS"), _T ("[MCP] 下载中:"), (rg_XiaZai1.rg_QuTuiJianWenJianMing ()).GetText (), _T (" 进度:"), rg_JinDu, _T ("%")));
-    if (rg_MCPMingLingFuWuQi::rg_ShiFouJianKongXiaZaiShiJian && (rg_JinDu == 0 || rg_JinDu == 25 || rg_JinDu == 50 || rg_JinDu == 75 || rg_JinDu == 100))
+    INT rg_JinDu1;
+    rg_JinDu1 = rg_XiaZai1.rg_QuXiaZaiBaiFenBi ();
+    _DEBUG_STATMENT (DebugTrace (FALSE, 0, 0, _T ("SSSnS"), _T ("[MCP] 下载中:"), (rg_XiaZai1.rg_QuTuiJianWenJianMing ()).GetText (), _T (" 进度:"), rg_JinDu1, _T ("%")));
+    if (rg_MCPMingLingFuWuQi::rg_ShiFouJianKongXiaZaiShiJian && rg_ShiFouWeiLiChengBeiJinDu (rg_JinDu1))
     {
         rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_JinDuShuJu;
         rg_JinDuShuJu.data().CreateFromText(_CT2 (_T ("{}")));
         rg_JinDuShuJu.rg_JiaRuWenBenChengYuan (_CT2 (_T ("filename")), rg_XiaZai1.rg_QuTuiJianWenJianMing ());
-        rg_JinDuShuJu.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("percent")), rg_JinDu);
+        rg_JinDuShuJu.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("percent")), rg_JinDu1);
         rg_JinDuShuJu.rg_JiaRuChangZhengShuChengYuan (_CT2 (_T ("received_bytes")), rg_XiaZai1.rg_QuYiXiaZaiChangDu ());
         rg_JinDuShuJu.rg_JiaRuChangZhengShuChengYuan (_CT2 (_T ("total_bytes")), rg_XiaZai1.rg_QuZongChangDu ());
         rg_JiLuJianKongShiJian (TRUE, _CT2 (_T ("download_progress")), rg_LiuLanQi13.rg_QuID (), rg_JinDuShuJu.data().ToString(YYJSON_WRITE_NOFLAG));
@@ -226,6 +234,7 @@ void rg_class_MCP_LiuLanQiShiJian::rg_LiuLanQi_ZaiRuJieShu (rg_FBrowser_LiuLanQi
         {
             rg_LiuLanQiRongQi::rg_HuanYingYeYiDaoHang = TRUE;
             rg_LiuLanQiRongQi::rg_HuanYingYeDaoHangYiFaQi = FALSE;
+            rg_LiuLanQiRongQi::rg_HuanYingYeDaoHangFaQiHaoMiao = 0;
         }
     }
 }
@@ -246,6 +255,22 @@ void rg_class_MCP_LiuLanQiShiJian::rg_LiuLanQi_XuanRanYiWaiZhongZhi (rg_FBrowser
 {
     _DEBUG_STATMENT (DebugTrace (FALSE, 0, 0, _T ("SnSnSS"), _T ("[MCP] 渲染进程崩溃! 浏览器ID:"), rg_LiuLanQi16.rg_QuID (), _T (" 状态:"), rg_ZhuangTai, _T (" 错误:"), rg_CuoWuWenBen1.GetText ()));
     rg_MCPMingLingFuWuQi::rg_JiLuJiaZaiShiJian (_CT2 (_T ("crash")), rg_LiuLanQi16.rg_QuID (), rg_CuoWuMa);
+    rg_MCPMingLingFuWuQi::rg_LiuLanQiShuZuSuo.data ().lock (FALSE);
+    INT rg_count1;
+    rg_count1 = (INT)rg_LiuLanQiRongQi::rg_LiuLanQiShuZu.GetCount ();
+    for (INT_P __vol_counter_index = 0; __vol_counter_index < rg_count1; __vol_counter_index++)
+    {
+        INT rg_idx1;
+        rg_idx1 = (INT)__vol_counter_index;
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_temp1;
+        rg_temp1 = (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi&)rg_LiuLanQiRongQi::rg_LiuLanQiShuZu.GetAt (rg_idx1, VOL_RUNTIME_CLASS (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi), rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi ());
+        if (rg_temp1.rg_QuID () == rg_LiuLanQi16.rg_QuID ())
+        {
+            rg_LiuLanQiRongQi::rg_LiuLanQiShuZu.RemoveAt (rg_idx1, 1);
+            break;
+        }
+    }
+    rg_MCPMingLingFuWuQi::rg_LiuLanQiShuZuSuo.data ().unlock ();
 }
 
 BOOL rg_class_MCP_LiuLanQiShiJian::rg_LiuLanQi_JiJiangDaoHang (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi17, rg_FBrowser_LiuLanQi::FBroFrame& rg_KuangJia9, rg_FBrowser_LiuLanQi::FBroRequest& rg_QingQiu3, BOOL rg_YongHuDongZuo, BOOL rg_ShiFouChongDingXiang)
@@ -310,6 +335,13 @@ BOOL rg_class_MCP_LiuLanQiShiJian::rg_LiuLanQi_JiJiangDaoHang (rg_FBrowser_LiuLa
 
 BOOL rg_class_MCP_LiuLanQiShiJian::rg_LiuLanQi_JiJiangDaKaiXinChuangKou (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi18, rg_FBrowser_LiuLanQi::FBroFrame& rg_KuangJia10, INT rg_DanChuangID, CVolString& rg_DeZhi1, CVolString& rg_MuBiaoKuangJiaMingChen, INT rg_MuBiaoLeiXing, BOOL rg_YongHuShouShi, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_DanChuGongNeng& rg_DanChuGongNeng, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_ChuangKouXinXi& rg_ChuangKouXinXi1, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_LiuLanQiPeiZhi& rg_LiuLanQiSheZhi, rg_volcano_base::rg_LuoJiXingLei& rg_MoJSFangWen, rg_FBrowser_LiuLanQi::rg_class_FBrowser_yhewpzh& rg_YongHuEWaiPeiZhi)
 {
+    INT rg_DangQianLiuLanQiShu;
+    rg_DangQianLiuLanQiShu = rg_FBrowser_LiuLanQi::rg_FBrowserFuZhuGongNeng::rg_FBrowser_LiuLanQi_QuShuLiang ();
+    if (rg_DangQianLiuLanQiShu >= 16)
+    {
+        _DEBUG_STATMENT (DebugTrace (FALSE, 0, 0, _T ("SnSnSS"), _T ("[MCP] 弹窗已拒绝: 浏览器实例数="), rg_DangQianLiuLanQiShu, _T (" 上限="), 16, _T (" url="), rg_DeZhi1.GetText ()));
+        return (TRUE);
+    }
     if (rg_MCPMingLingFuWuQi::rg_ShiFouHookDanChuang && rg_MCPMingLingFuWuQi::rg_DanChuangPeiZhi != _T (""))
     {
         rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei rg_DanChuangJSON;
@@ -399,6 +431,19 @@ void rg_class_MCP_LiuLanQiShiJian::rg_LiuLanQi_ZaiRuKaiShi (rg_FBrowser_LiuLanQi
 
 void rg_class_MCP_LiuLanQiShiJian::rg_LiuLanQi_ZaiRuCuoWu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi23, rg_FBrowser_LiuLanQi::FBroFrame& rg_KuangJia12, INT rg_CuoWuMa1, CVolString& rg_CuoWuWenBen2, CVolString& rg_ShiBaiDeZhi1)
 {
+    if (rg_KuangJia12.rg_ShiFouWeiZhuKuangJia ())
+    {
+        if (rg_LiuLanQiRongQi::rg_HuanYingYeDaoHangYiFaQi)
+        {
+            CVolString rg_HuanYingDeZhi;
+            rg_HuanYingDeZhi = rg_LiuLanQiRongQi::rg_QuHuanYingYeDeZhi ();
+            if (rg_ShiBaiDeZhi1 == rg_HuanYingDeZhi || rg_ShiBaiDeZhi1 == rg_HuanYingDeZhi + _T ("/") || rg_ShiBaiDeZhi1.Left ((INT)rg_HuanYingDeZhi.GetLength ()) == rg_HuanYingDeZhi)
+            {
+                rg_LiuLanQiRongQi::rg_ChongZhiHuanYingYeDaoHangZhuangTai ();
+                _DEBUG_STATMENT (DebugTrace (FALSE, 0, 0, _T ("SS"), _T ("[MCP] 欢迎页载入失败, 已重置导航状态:"), rg_ShiBaiDeZhi1.GetText ()));
+            }
+        }
+    }
     if (rg_MCPMingLingFuWuQi::rg_ShiFouJianKongZaiRuShiJian && rg_KuangJia12.rg_ShiFouWeiZhuKuangJia ())
     {
         rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_ShuJu7;
@@ -680,15 +725,15 @@ void rg_class_MCP_LiuLanQiShiJian::rg_LiuLanQi_ShouDaoJiaoDian (rg_FBrowser_LiuL
     }
 }
 
-void rg_class_MCP_LiuLanQiShiJian::rg_LiuLanQi_JiaZaiJinDuBeiGaiBian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi42, INT rg_JinDu1)
+void rg_class_MCP_LiuLanQiShiJian::rg_LiuLanQi_JiaZaiJinDuBeiGaiBian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi42, INT rg_JinDu2)
 {
     if (rg_MCPMingLingFuWuQi::rg_ShiFouJianKongJiaZaiJinDu)
     {
-        if (rg_JinDu1 == 0 || rg_JinDu1 == 25 || rg_JinDu1 == 50 || rg_JinDu1 == 75 || rg_JinDu1 == 100)
+        if (rg_ShiFouWeiLiChengBeiJinDu (rg_JinDu2))
         {
             rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_JinDuShuJu1;
             rg_JinDuShuJu1.data().CreateFromText(_CT2 (_T ("{}")));
-            rg_JinDuShuJu1.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("progress")), rg_JinDu1);
+            rg_JinDuShuJu1.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("progress")), rg_JinDu2);
             rg_JiLuJianKongShiJian (TRUE, _CT2 (_T ("load_progress")), rg_LiuLanQi42.rg_QuID (), rg_JinDuShuJu1.data().ToString(YYJSON_WRITE_NOFLAG));
         }
     }

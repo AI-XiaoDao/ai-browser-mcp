@@ -57,6 +57,18 @@ BOOL CALLBACK rg_HuanJingCunQuLei::rg_XieHuanJingBianLiang (CVolString& rg_HuanJ
     return (_tputenv ((rg_HuanJingBianLiangMingChen1 + _T ("=") + rg_SuoYuSheZhiDeZhi28).GetText ()) == 0);
 }
 
+DOUBLE CALLBACK rg_CiPanCaoZuoLei::rg_QuWenJianShiJian (CVolString& rg_SuoYuJianCeDeWenJianHuoMuLuMing1)
+{
+    WIN32_FIND_DATA inf;
+    const HANDLE handle = ::FindFirstFile (rg_SuoYuJianCeDeWenJianHuoMuLuMing1.GetText (), &inf);
+    if (handle != INVALID_HANDLE_VALUE)
+    {
+        ::FindClose (handle);
+        return ConvertFileTime (inf.ftLastWriteTime);
+    }
+    return _VOL_MIN_DATE;
+}
+
 CVolMem CALLBACK rg_CiPanCaoZuoLei::rg_DouRuWenJian (CVolString& rg_SuoYuDouQuWenJianMing1, INT rg_SuoYuDouQuShuJuCheCun1)
 {
     CVolMem mem;

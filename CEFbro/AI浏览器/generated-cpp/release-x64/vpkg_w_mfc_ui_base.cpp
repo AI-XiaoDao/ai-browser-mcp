@@ -380,6 +380,16 @@ void CVolWinControl::rg_BiaoTi16 (CVolString& rg_SuoYuSheZhiDeBiaoTi2)
         GetMfcWndObject ()->m_strAttrCaption = rg_SuoYuSheZhiDeBiaoTi2;
 }
 
+BOOL CVolWinControl::rg_KeShi ()
+{
+    #ifndef _VOL_FOR_UI_DESIGNER
+        CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        if (pWnd != NULL)
+            return IsVolControlVisible (pWnd->m_hWnd);
+    #endif
+    return ((GetMfcWndObject ()->m_dwAttrInitialStyle & WS_VISIBLE) != 0);
+}
+
 void CVolWinControl::rg_KeShi1 (BOOL rg_ShiFouKeShi)
 {
     #ifndef _VOL_FOR_UI_DESIGNER

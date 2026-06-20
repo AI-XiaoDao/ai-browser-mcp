@@ -1,0 +1,12 @@
+{
+  "port": 9222,
+  "bind_address": "127.0.0.1",
+  "disable_auth": true,
+  "rate_limit_per_minute": 0,
+  "enable_network_log": true,
+  "enable_console_log": false,
+  "enable_response_cache": false,
+  "network_log_max_bytes": 262144,
+  "auto_download_save": true,
+  "auto_dismiss_js_dialog": false
+}

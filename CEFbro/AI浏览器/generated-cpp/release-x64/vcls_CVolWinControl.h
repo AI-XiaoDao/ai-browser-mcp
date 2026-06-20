@@ -103,6 +103,7 @@ public:
     INT rg_WenJianBeiTuoFang (rg_volcano_base::rg_WenBenShuZuLei& rg_SuoTuoFangWenJian);
     CVolString rg_BiaoTi15 ();
     void rg_BiaoTi16 (CVolString& rg_SuoYuSheZhiDeBiaoTi2);
+    BOOL rg_KeShi ();
     void rg_KeShi1 (BOOL rg_ShiFouKeShi);
     void rg_ZuoBian5 (INT rg_SuoYuSheZhiDeWeiZhi2);
     void rg_DingBian7 (INT rg_SuoYuSheZhiDeWeiZhi3);

@@ -67,11 +67,7 @@ AI-Browser-MCP-x64-v2.6.0.zip
 
 ## 一键打包
 
-编译 **Release x64** 后，在仓库根目录执行：
-
-```powershell
-.\release\pack-release.ps1 -Version 2.6.0
-```
+编译 **Release x64** 后，将 `release/linker/` 目录打包为 zip，上传至 GitHub Releases 页面。
 
 输出：
 

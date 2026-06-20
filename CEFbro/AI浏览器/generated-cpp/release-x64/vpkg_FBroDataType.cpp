@@ -1138,10 +1138,10 @@ BOOL rg_FBrowser_ShuangWenBenShuZu::rg_DaoXiaYiGe2 ()
 
 rg_FBrowser_ShuangWenBen rg_FBrowser_ShuangWenBenShuZu::rg_QuDangQianWeiZhiShuJu2 ()
 {
-    rg_FBrowser_ShuangWenBen rg_temp1;
-    rg_temp1.rg_name1 = rg_QuDangQianWeiZhiShuJu_GuanJianZi ();
-    rg_temp1.rg_value85 = rg_QuDangQianWeiZhiShuJu_ShuJu ();
-    return (rg_temp1);
+    rg_FBrowser_ShuangWenBen rg_temp3;
+    rg_temp3.rg_name1 = rg_QuDangQianWeiZhiShuJu_GuanJianZi ();
+    rg_temp3.rg_value85 = rg_QuDangQianWeiZhiShuJu_ShuJu ();
+    return (rg_temp3);
 }
 
 CVolString rg_FBrowser_ShuangWenBenShuZu::rg_QuDangQianWeiZhiShuJu_GuanJianZi ()

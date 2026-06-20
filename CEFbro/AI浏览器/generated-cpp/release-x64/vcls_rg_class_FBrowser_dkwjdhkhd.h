@@ -17,7 +17,7 @@ public:
         virtual void FBroHs_OnFileDialogDismissed(const wchar_t * file_paths) override;
 
 public:
-    virtual void rg_JiJiangGuanBiWenJianDuiHuaKuang (CVolString& rg_WenJianLuJing8);
+    virtual void rg_JiJiangGuanBiWenJianDuiHuaKuang (CVolString& rg_WenJianLuJing9);
     rg_class_FBrowser_dkwjdhkhd ();
     void _VolObjectInitMembers ();
     virtual ~rg_class_FBrowser_dkwjdhkhd ();

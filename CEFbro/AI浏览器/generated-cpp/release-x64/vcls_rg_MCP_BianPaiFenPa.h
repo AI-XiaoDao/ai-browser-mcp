@@ -12,16 +12,17 @@ class rg_MCP_BianPaiFenPa : public CVolObject
     DECLARE_EMPTY_VOL_CLASS (rg_volcano_app, rg_MCP_BianPaiFenPa)
 
 public:
+    static void CALLBACK rg_JiangZhiZhongZhiChaoShiGongZuoLiu ();
     static CVolString CALLBACK rg_FenLeiFenPa_BianPaiCaoZuo (CVolString& rg_MingLingID28, CVolString& rg_FangFaMing12, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON20);
     static BOOL CALLBACK rg_MuLuHanGongZuoLiuJSON (CVolString& rg_MuLu);
-    static CVolString CALLBACK rg_DouRuGongZuoLiuJSONWenBen (CVolString& rg_WenJianLuJing5);
+    static CVolString CALLBACK rg_DouRuGongZuoLiuJSONWenBen (CVolString& rg_WenJianLuJing6);
     static rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouShuZuLei CALLBACK rg_CongDingYiDuiXiangQuBuZhouShuZu (rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_DingYiDuiXiang);
     static CVolString CALLBACK rg_QuGongZuoLiuMuLu ();
     static CVolString CALLBACK rg_GuiFanHuaGongZuoLiuMing (CVolString& rg_YuanShiMing);
     static CVolString CALLBACK rg_ChuLi_GongZuoLiuLieBiao (CVolString& rg_MingLingID29);
     static CVolString CALLBACK rg_ChuLi_GongZuoLiuHuoQu (CVolString& rg_MingLingID30, CVolString& rg_GongZuoLiuMing1);
     static CVolString CALLBACK rg_JiaZaiGongZuoLiuDingYi (rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON21);
-    static CVolString CALLBACK rg_CongJieGuoDiQuRenWuID (CVolString& rg_JieGuoJSON4);
+    static CVolString CALLBACK rg_CongJieGuoDiQuRenWuID (CVolString& rg_JieGuoJSON7);
     static CVolString CALLBACK rg_DengDaiBuZhouYiBuWanCheng (CVolString& rg_RenWuID27, INT rg_ZuiDaHaoMiao7, CVolString& rg_GongZuoLiuMingLingID, CVolString& rg_GongJuMing4);
     static CVolString CALLBACK rg_BuZhouJSONPianDuanLieBiaoDaoShuZuWenBen (rg_volcano_base::rg_WenBenShuZuLei& rg_PianDuanLieBiao);
     static void CALLBACK rg_ZhuiJiaBuZhouJieGouShiBaiJiLu (rg_volcano_base::rg_WenBenShuZuLei& rg_BuZhouJieGuoJSONLieBiao, INT rg_BuSuoYin, CVolString& rg_GongJuMing5, CVolString& rg_CuoWuXiaoXi5);
@@ -37,6 +38,8 @@ public:
     static BOOL rg_GongZuoLiuYunHangZhong;
     static CVolString rg_DangQianGongZuoLiuMing;
     static CVolString rg_GongZuoLiuMuLuHuanCun;
+    static INT64 rg_GongZuoLiuKaiShiShiJian;
+    static const INT rg_GongZuoLiuZuiDaYunHangHaoMiao;
 };
 
 }

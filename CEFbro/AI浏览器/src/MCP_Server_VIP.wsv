@@ -1,12 +1,8 @@
 <火山程序 类型 = "通常" 版本 = 1 />
-
 包 火山.程序
-
 # VIP 命令分派 — 从 MCP_Server.wsv 拆分 (L5/M10)
-
 类 MCP_VIP分派 <公开 @全局类 = 真>
 {
-
     方法 分类分派_VIP操作 <公开 静态 类型 = 文本型>
     参数 命令ID <类型 = 文本型>
     参数 方法名 <类型 = 文本型>
@@ -625,19 +621,19 @@
                 tls_max_int = MCP命令服务器.yyjson取整数 (参数JSON, "tls_max")
                 变量 tls_min_enum <类型 = TLS版本>
                 变量 tls_max_enum <类型 = TLS版本>
-                如果 (tls_min_int == 769)
+                如果 (tls_min_int == MCP命令服务器.TLS指纹_1_0)
                 {
                     tls_min_enum = TLS版本.Version_1
                 }
-                否则 (tls_min_int == 790)
+                否则 (tls_min_int == MCP命令服务器.TLS指纹_1_1)
                 {
                     tls_min_enum = TLS版本.Version_1_1
                 }
-                否则 (tls_min_int == 791)
+                否则 (tls_min_int == MCP命令服务器.TLS指纹_1_2)
                 {
                     tls_min_enum = TLS版本.Version_1_2
                 }
-                否则 (tls_min_int == 792)
+                否则 (tls_min_int == MCP命令服务器.TLS指纹_1_3)
                 {
                     tls_min_enum = TLS版本.Version_1_3
                 }
@@ -645,19 +641,19 @@
                 {
                     tls_min_enum = TLS版本.Version_1_2
                 }
-                如果 (tls_max_int == 769)
+                如果 (tls_max_int == MCP命令服务器.TLS指纹_1_0)
                 {
                     tls_max_enum = TLS版本.Version_1
                 }
-                否则 (tls_max_int == 790)
+                否则 (tls_max_int == MCP命令服务器.TLS指纹_1_1)
                 {
                     tls_max_enum = TLS版本.Version_1_1
                 }
-                否则 (tls_max_int == 791)
+                否则 (tls_max_int == MCP命令服务器.TLS指纹_1_2)
                 {
                     tls_max_enum = TLS版本.Version_1_2
                 }
-                否则 (tls_max_int == 792)
+                否则 (tls_max_int == MCP命令服务器.TLS指纹_1_3)
                 {
                     tls_max_enum = TLS版本.Version_1_3
                 }
@@ -861,6 +857,12 @@
         // === VIP 内核开关扩展 ===
         否则 (方法名 == "browser.vip_set_css_version" || 方法名 == "browser_vip_set_css_version")
         {
+            变量 cssVerText <类型 = 文本型>
+            cssVerText = MCP命令服务器.yyjson取文本 (参数JSON, "version")
+            如果 (cssVerText == "" || 文本到整数 (cssVerText) <= 0)
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "version 必须为正整数, 如: 86 或 104"))
+            }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
             如果 (browser.是否为空 () == 假)
@@ -869,7 +871,7 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    vip_ctrl.内核开关_设置CSS内核 (文本到整数 (MCP命令服务器.yyjson取文本 (参数JSON, "version")))
+                    vip_ctrl.内核开关_设置CSS内核 (文本到整数 (cssVerText))
                     返回 (MCP命令服务器.响应_需要刷新 (命令ID, "CSS内核已设置"))
                 }
                 返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
@@ -878,6 +880,12 @@
         }
         否则 (方法名 == "browser.vip_set_web_version" || 方法名 == "browser_vip_set_web_version")
         {
+            变量 webVerText <类型 = 文本型>
+            webVerText = MCP命令服务器.yyjson取文本 (参数JSON, "version")
+            如果 (webVerText == "" || 文本到整数 (webVerText) <= 0)
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "version 必须为正整数, 如: 86 或 104"))
+            }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
             如果 (browser.是否为空 () == 假)
@@ -886,7 +894,7 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    vip_ctrl.内核开关_设置Web内核 (文本到整数 (MCP命令服务器.yyjson取文本 (参数JSON, "version")))
+                    vip_ctrl.内核开关_设置Web内核 (文本到整数 (webVerText))
                     返回 (MCP命令服务器.响应_需要刷新 (命令ID, "Web内核已设置"))
                 }
                 返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
@@ -895,6 +903,12 @@
         }
         否则 (方法名 == "browser.vip_set_v8_version" || 方法名 == "browser_vip_set_v8_version")
         {
+            变量 v8VerText <类型 = 文本型>
+            v8VerText = MCP命令服务器.yyjson取文本 (参数JSON, "version")
+            如果 (v8VerText == "" || 文本到整数 (v8VerText) <= 0)
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "version 必须为正整数, 如: 86 或 104"))
+            }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
             如果 (browser.是否为空 () == 假)
@@ -903,7 +917,7 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    vip_ctrl.内核开关_设置V8内核 (文本到整数 (MCP命令服务器.yyjson取文本 (参数JSON, "version")))
+                    vip_ctrl.内核开关_设置V8内核 (文本到整数 (v8VerText))
                     返回 (MCP命令服务器.响应_需要刷新 (命令ID, "V8内核已设置"))
                 }
                 返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
@@ -968,22 +982,24 @@
                     }
                     变量 设置值 <类型 = 类_FBrowser_值>
                     设置值.创建 ()
-                    // 尝试解析为整数, 否则按文本值设置
-                    变量 整数结果 <类型 = 整数>
-                    整数结果 = 文本到整数 (值文本)
-                    设置值.置整数值 (整数结果)
-                    // 尝试逻辑值
-                    如果 (值文本 == "true")
+                    // 按优先级匹配类型: 逻辑 > 整数环回验证 > 文本兜底
+                    如果 (值文本 == "true" || 值文本 == "false")
                     {
-                        设置值.置逻辑值 (真)
-                    }
-                    否则 (值文本 == "false")
-                    {
-                        设置值.置逻辑值 (假)
+                        设置值.置逻辑值 (值文本 == "true")
                     }
                     否则
                     {
-                        设置值.置文本值 (值文本)
+                        变量 整数结果 <类型 = 整数>
+                        整数结果 = 文本到整数 (值文本)
+                        // 环回验证: 文本形式的整数应该严格匹配 (防止 "123abc" 被当作整数 123)
+                        如果 (值文本 == 到文本 (整数结果) && 值文本 != "")
+                        {
+                            设置值.置整数值 (整数结果)
+                        }
+                        否则
+                        {
+                            设置值.置文本值 (值文本)
+                        }
                     }
                     变量 错误文本 <类型 = 文本型>
                     reqCtx.置首选项 (设置值, 名称, 错误文本)
@@ -1344,6 +1360,5 @@
         }
         返回 ("")
     }
-
     #
 }

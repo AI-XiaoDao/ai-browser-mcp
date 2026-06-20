@@ -20,8 +20,7 @@ public:
     inline_ void Set (CefRefPtr<CefBrowser> object) { m_class = object; }
 
 public:
-    static BOOL CALLBACK rg_FBrowser_ChuangJianLiuLanQi (CVolString& rg_LianJieDeZhi, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_ChuangKouXinXi& rg_ChuangKouXinXi5, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_LiuLanQiPeiZhi& rg_LiuLanQiSheZhi3, FBroRequestContext& rg_QingQiuHuanJing6, rg_FBrowser_value::FBroDictionaryValue& rg_EWaiXinXi5, rg_class_FBrowser_shjzhnzhzh& rg_LiuLanQiShiJian3, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_JinYongShiJian& rg_JinYongShiJian, CVolString& rg_BiaoShi10);
-    static rg_class_FBrowser_LiuLanQi CALLBACK rg_FBrowser_ChuangJianLiuLanQi_TongBu (CVolString& rg_LianJieDeZhi1, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_ChuangKouXinXi& rg_ChuangKouXinXi6, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_LiuLanQiPeiZhi& rg_LiuLanQiSheZhi4, FBroRequestContext& rg_QingQiuHuanJing7, rg_FBrowser_value::FBroDictionaryValue& rg_EWaiXinXi6, rg_class_FBrowser_shjzhnzhzh& rg_LiuLanQiShiJian4, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_JinYongShiJian& rg_JinYongShiJian1, CVolString& rg_BiaoShi11);
+    static BOOL CALLBACK rg_FBrowser_ChuangJianLiuLanQi (CVolString& rg_LianJieDeZhi, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_ChuangKouXinXi& rg_ChuangKouXinXi4, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_LiuLanQiPeiZhi& rg_LiuLanQiSheZhi3, FBroRequestContext& rg_QingQiuHuanJing6, rg_FBrowser_value::FBroDictionaryValue& rg_EWaiXinXi5, rg_class_FBrowser_shjzhnzhzh& rg_LiuLanQiShiJian2, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_JinYongShiJian& rg_JinYongShiJian, CVolString& rg_BiaoShi11);
     BOOL rg_ShiFouWeiKong127 ();
     BOOL rg_ShiFouYiGuanBi ();
     CVolString rg_QuYongHuBiaoShi ();
@@ -53,7 +52,7 @@ public:
     void rg_DaYinWeiPDF (CVolString& rg_BaoCunWenJianLuJing, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_PDFDaYinSheZhi& rg_PDFDaYinSheZhi, rg_class_FBrowser_shjzhnzhzh& rg_DaYinWeiPDFHuiDiao1);
     void rg_ChaZhao (CVolString& rg_ChaZhaoWenBen, BOOL rg_XiangQian, BOOL rg_ShiFouOuFenDaXiao, BOOL rg_ChaZhaoXiaYiGe);
     void rg_TingZhiChaZhao (BOOL rg_QingChuXuanXiang);
-    void rg_DaKaiKaiFaZheGongJu (CVolString& rg_BiaoTi5, INT64 rg_FuChuangKou, INT rg_HengZuoBiao10, INT rg_ZongZuoBiao10, INT rg_KuanDu13, INT rg_GaoDu13, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_LiuLanQiPeiZhi& rg_LiuLanQiSheZhi7, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_WeiZhi& rg_YuanSuZuoBiao, rg_class_FBrowser_shjzhnzhzh& rg_LiuLanQiShiJian7, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_JinYongShiJian& rg_JinYongShiJian4);
+    void rg_DaKaiKaiFaZheGongJu (CVolString& rg_BiaoTi5, INT64 rg_FuChuangKou, INT rg_HengZuoBiao10, INT rg_ZongZuoBiao10, INT rg_KuanDu13, INT rg_GaoDu13, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_LiuLanQiPeiZhi& rg_LiuLanQiSheZhi7, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_WeiZhi& rg_YuanSuZuoBiao, rg_class_FBrowser_shjzhnzhzh& rg_LiuLanQiShiJian6, rg_FBrowser_ShuJuLeiXing::rg_FBrowser_JinYongShiJian& rg_JinYongShiJian4);
     void rg_GuanBiKaiFaZheGongJu ();
     BOOL rg_ShiFouWeiKaiFaZhe ();
     BOOL rg_ShiFouCunZaiKaiFaZheGongJu ();

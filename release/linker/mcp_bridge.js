@@ -349,7 +349,7 @@ function filterToolsForClient(tools) {
     return list;
 }
 
-/** Cursor 支持的 MCP 协议版本；服务端返回 2026-06-05 会导致连接失败 */
+/** Cursor 支持的 MCP 协议版本；服务端为 2026-06-21，经桥接回写客户端请求的 2024-11-05 */
 const CURSOR_PROTOCOL_VERSION = '2024-11-05';
 
 function sanitizeMcpResponse(response, request) {
@@ -440,18 +440,61 @@ async function runStdio() {
 
 // ---------- CLI: --call / --feed（不写磁盘）----------
 
-function parseCallArgs(argv) {
+function tryParseCallArgs(raw) {
+    // 1. 标准 JSON
+    try { return JSON.parse(raw); } catch (_) {}
+    // 2. PowerShell/CMD 可能删除外层引号, 尝试修复裸 key/value
+    //    {url:https://example.com/,key:val} → {"url":"https://example.com/","key":"val"}
+    try {
+        const fixed = raw.replace(/([{,]\s*)(\w+)(\s*:)/g, '$1"$2"$3')
+            .replace(/:(\s*)([^",\[\]\{\}\s]+)/g, ':$1"$2"');
+        return JSON.parse(fixed);
+    } catch (_) {}
+    // 3. 参数被空格拆分 (argv 多元素), 已由调用方 join 处理
+    return null;
+}
+
+async function parseCallArgs(argv) {
     const tool = argv[0];
     let args = {};
-    if (argv[1]) {
-        try { args = JSON.parse(argv[1]); }
-        catch (e) { throw new Error('参数须为 JSON: ' + e.message); }
+    // --stdin: 从管道读取 JSON (echo '{...}' | node mcp_bridge.js --call browser_evaluate --stdin)
+    if (argv.includes('--stdin')) {
+        return new Promise((resolve, reject) => {
+            let data = '';
+            process.stdin.setEncoding('utf8');
+            process.stdin.on('data', c => { data += c; });
+            process.stdin.on('end', () => {
+                try { args = JSON.parse(data.trim() || '{}'); }
+                catch (e) { return reject(new Error('stdin 须为合法 JSON: ' + e.message)); }
+                resolve({ tool, args });
+            });
+            process.stdin.on('error', e => reject(e));
+        });
+    }
+    // --arg-file: 从文件读取 JSON 参数 (绕过 shell 编码/特殊字符问题)
+    const fileIdx = argv.indexOf('--arg-file');
+    if (fileIdx !== -1 && argv[fileIdx + 1]) {
+        const filePath = argv[fileIdx + 1];
+        try {
+            args = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            return { tool, args };
+        } catch (e) {
+            throw new Error('--arg-file 读取失败: ' + filePath + ' — ' + e.message);
+        }
+    }
+    // 合并可能被 shell 拆分的参数
+    const raw = argv.slice(1).join(' ');
+    if (raw.trim()) {
+        const parsed = tryParseCallArgs(raw.trim());
+        if (!parsed) throw new Error('参数须为 JSON, 当前: ' + raw.slice(0, 200) + '\n  提示: 含中文/正则/箭头函数等特殊字符请用 --arg-file tmp.json');
+        args = parsed;
     }
     return { tool, args };
 }
 
 async function runCall(argv) {
-    const { tool, args } = parseCallArgs(argv);
+    const parsed = await parseCallArgs(argv);
+    const { tool, args } = parsed;
     if (!tool) {
         console.error('用法: node mcp_bridge.js --call <tool> [json-args]');
         process.exit(1);
@@ -578,8 +621,11 @@ Cursor stdio (默认):
 一次性调用（不写文件）:
   node mcp_bridge.js --check
   node mcp_bridge.js --call browser_get_url
-  node mcp_bridge.js --call browser_navigate '{"url":"https://www.douyin.com/"}'
+  node mcp_bridge.js --call browser_navigate {url:https://www.douyin.com/}
   node mcp_bridge.js --feed [--limit 30] [--scroll] [--skip-navigate] [--json]
+  # PowerShell: 在参数前加 --% 阻止解析, 或使用 url:value 简写格式
+  # 复杂参数(含中文/正则/箭头函数): echo '{...}' | node mcp_bridge.js --call X --stdin
+  #                             或  node mcp_bridge.js --call X --arg-file tmp.json
 `);
 }
 

@@ -13,15 +13,24 @@ class rg_class_MCP_URLQingQiuHuiDiao : public rg_FBrowser_ShiJianKongZhi::rg_cla
 
 public:
     virtual void rg_HuoQuDaoShuJu (INT64 rg_BiaoShi, rg_FBrowser_LiuLanQi::rg_class_FBrowser_URLqq& rg_URLQingQiu, CVolMem& rg_ShuJu8);
-    virtual void rg_JiJiangWanCheng (INT64 rg_BiaoShi1, rg_FBrowser_LiuLanQi::rg_class_FBrowser_URLqq& rg_URLQingQiu1);
-    inline_ rg_class_MCP_URLQingQiuHuiDiao () { }
-    inline_ void _VolObjectInitMembers () { }
+    virtual void rg_DouQuJieShu (INT64 rg_BiaoShi1);
+    virtual void rg_JiJiangWanCheng (INT64 rg_BiaoShi2, rg_FBrowser_LiuLanQi::rg_class_FBrowser_URLqq& rg_URLQingQiu1);
+    rg_class_MCP_URLQingQiuHuiDiao ();
+    void _VolObjectInitMembers ();
     virtual void LoadFromStream (CVolBaseInputStream& stream) override;
     virtual void SaveIntoStream (CVolBaseOutputStream& stream) override;
 
 public:
     CVolString rg_RenWuID7;
     CVolMem rg_XiangYingShuJu1;
+    static const INT rg_XiangYingZuiDaZiJie;
+
+protected:
+    void rg_ShiFangCao_YiCi ();
+
+protected:
+    BOOL rg_YiJieDuan;
+    BOOL rg_YiShiFangCao;
 };
 
 }

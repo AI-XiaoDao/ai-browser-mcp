@@ -1,12 +1,12 @@
 # 更新日志
 
-本文件记录面向用户的版本变更。发版流程见 [CONTRIBUTING.md](CONTRIBUTING.md) 与 `release/pack-release.ps1`。
+本文件记录面向用户的版本变更。发版流程见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)。
 
 ---
 
-## [2.6.0] - 2026-06-20
+## [2.6.0] - 2026-06-21
 
 ### 新增
 
@@ -16,13 +16,20 @@
 - **欢迎页控制台**：`http://127.0.0.1:9222/`
 - **Cursor 桥接**：`mcp_bridge.js` stdio ↔ HTTP（自动修复 Cursor 协议版本 / JSON-RPC id / schema）
 - **GitHub 开源**：`.wsv` 源码、`generated-cpp/` C++ 对照、完整文档与技能书
+- **场景脚本**：`verify_cursor_tools.js`（Cursor 握手自检）、`baidu_search_params_analyze.js`
+
+### 变更
+
+- 同步 Release x64 编译产物至 `release/linker/`、`generated-cpp/release-x64/`
+- 精简 MCP Stdio 模块；优化 Server/Core/Callbacks 分派与事件 Hook
+- 移除冗余宣传/论坛文案文件（`FORUM_POSTS*`、`promo.*`、根目录 PDF/Word 等），保留 README 演示截图
 
 ### 发布包
 
 | 文件 | 说明 |
 |------|------|
-| `AI-Browser-MCP-x64-v2.6.0.zip` | 运行成品（exe + CEF，不含 `out/`） |
-| `AI-Browser-MCP-cpp-x64-v2.6.0.zip` | 火山生成 C++ 对照 |
+| GitHub Release | 运行成品 (exe + CEF，见 Releases 页面) |
+| GitHub Release | 火山生成 C++ 对照 (见 Releases 页面) |
 
 ### 说明
 

@@ -84,9 +84,9 @@ BOOL CALLBACK rg_MCPStdioQiao::rg_ShiFouWeiStdioMoShi ()
 {
     rg_volcano_base::rg_WenBenShuZuLei rg_MingLingHangShuZu;
     GetCommandLineArray (rg_MingLingHangShuZu.data ());
-    INT rg_count2;
-    rg_count2 = (INT)rg_MingLingHangShuZu.data ().GetCount ();
-    for (INT_P __vol_counter_index = 0; __vol_counter_index < rg_count2; __vol_counter_index++)
+    INT rg_count5;
+    rg_count5 = (INT)rg_MingLingHangShuZu.data ().GetCount ();
+    for (INT_P __vol_counter_index = 0; __vol_counter_index < rg_count5; __vol_counter_index++)
     {
         CVolString rg_arg;
         rg_arg = CVolString (rg_MingLingHangShuZu.data ().GetAt ((INT)__vol_counter_index));
@@ -180,7 +180,7 @@ rg_class_MCP_StdioFuWuXianCheng::~rg_class_MCP_StdioFuWuXianCheng ()
     rw_2->ReleasePointer ();
 }
 
-INT rg_class_MCP_StdioFuWuXianCheng::rg_HuanCunXianChengLei_XianChengYunHang (rg_volcano_base::rg_HuanCunXianChengLei& rg_LaiYuanDuiXiang11, INT rg_BiaoJiZhi11, INT64 rg_XianChengGouBing2, INT64 rg_YongHuCanShu, INT64 rg_TuiChuShiJian)
+INT rg_class_MCP_StdioFuWuXianCheng::rg_HuanCunXianChengLei_XianChengYunHang (rg_volcano_base::rg_HuanCunXianChengLei& rg_LaiYuanDuiXiang12, INT rg_BiaoJiZhi12, INT64 rg_XianChengGouBing2, INT64 rg_YongHuCanShu, INT64 rg_TuiChuShiJian)
 {
     rg_MCPStdioQiao::rg_YunHangStdioZhuXunHuan (rg_XianChengGouBing2);
     return (0);

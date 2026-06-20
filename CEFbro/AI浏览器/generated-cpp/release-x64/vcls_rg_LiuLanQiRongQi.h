@@ -12,6 +12,10 @@ class rg_LiuLanQiRongQi : public CVolObject
     DECLARE_EMPTY_VOL_CLASS (rg_volcano_app, rg_LiuLanQiRongQi)
 
 public:
+    static void CALLBACK rg_ChongZhiHuanYingYeDaoHangZhuangTai ();
+    static void CALLBACK rg_BiaoJiHuanYingYeDaoHangYiFaQi ();
+    static BOOL CALLBACK rg_JianChaHuanYingYeDaoHangChaoShi ();
+    static void CALLBACK rg_ChangShiHuiFuHuanYingYeDaoHang ();
     static void CALLBACK rg_BiaoJiXuYaoChongJianLiuLanQi ();
     static void CALLBACK rg_BiaoJiXuYaoHuiFuBuJu ();
     static void CALLBACK rg_HuiFuHuanYingYe ();
@@ -29,9 +33,13 @@ public:
     static BOOL rg_MCPFuWuYiJiuXu;
     static BOOL rg_HuanYingYeYiDaoHang;
     static BOOL rg_HuanYingYeDaoHangYiFaQi;
+    static INT64 rg_HuanYingYeDaoHangFaQiHaoMiao;
     static BOOL rg_DeZhiLanYiBangDing;
     static BOOL rg_XuYaoChongJianLiuLanQi;
     static BOOL rg_XuYaoHuiFuBuJu;
+
+protected:
+    static const INT rg_HuanYingYeDaoHangChaoShiHaoMiao;
 };
 
 }
