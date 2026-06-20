@@ -146,11 +146,11 @@ flowchart LR
 | 类别 | 示例工具 | VIP |
 |------|----------|-----|
 | 导航 | `browser_navigate` / `back` / `reload` | 否 |
-| DOM / 填表 | `browser_fill_click` / `dom_query` | 否 |
+| DOM / 填表 | `browser_fill_click` / `browser_dom_query` | 否 |
 | JS | `browser_evaluate` / `execute_js` | 否 |
 | 网络 | `browser_network` / `browser_collect` | 否 |
 | 工作流 | `workflow_run` 多步骤 JSON | 否 |
-| 截图 / CDP / 指纹 | `browser_screenshot` / `browser_cdp` | 是 |
+| 截图 / CDP / 指纹 | `browser_screenshot` / `browser_debugger_enable` 等 | 是 |
 
 完整列表见 [`skills/AI浏览器MCP.md`](CEFbro/AI浏览器/skills/AI浏览器MCP.md)。
 
