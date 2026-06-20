@@ -25,6 +25,8 @@
 
 Star / Issue 欢迎：https://github.com/AI-XiaoDao/ai-browser-mcp
 QQ：212577526 · 群：737680767
+
+#MCP #Cursor #浏览器自动化 #webscraping #Playwright替代 #开源 #CEF #逆向
 ```
 
 ---

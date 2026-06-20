@@ -1,10 +1,10 @@
 <div align="center">
 
-# AI Browser MCP Server
+# AI Browser MCP Server · Windows 浏览器自动化 MCP
 
-### 任意 AI 代理 · 一句话操控 Windows 真实浏览器
+### 任意 AI 代理 · 一句话操控 Windows 真实浏览器 · Cursor / Claude / Cline
 
-**标准 MCP 协议** · **217 工具全开放** · **FBrowser CEF 真实浏览器** · **本机 `127.0.0.1:9222`** · **MIT 开源**
+**Model Context Protocol (MCP)** · **217 browser tools** · **web scraping · POST reverse · CDP debugger** · **FBrowser CEF** · **`127.0.0.1:9222`** · **MIT**
 
 *Any MCP agent — Cursor, Claude Desktop, Cline, OpenCode, or your own LLM app · Download and go*
 
@@ -16,7 +16,7 @@
 [![Platform](https://img.shields.io/badge/Platform-Windows_x64%20%7C%20win32-0078d4)]()
 [![FBrowser](https://img.shields.io/badge/Kernel-FBrowser_CEF-a78bfa)]()
 
-[⚡ 3 步上手](#-3-步上手) · [强大扩展](#-强大扩展能力) · [一句话场景](#-典型场景一句话自动执行) · [下载](#-下载与运行成品) · [核心优点](#-核心优点全景) · [文档](#-文档) · [开源公告](OPEN_SOURCE.md) · [English](OPEN_SOURCE_EN.md)
+[⚡ 3 步上手](#-3-步上手) · [强大扩展](#-强大扩展能力) · [一句话场景](#-典型场景一句话自动执行) · [下载](#-下载与运行成品) · [关键词 SEO](docs/SEO_KEYWORDS.md) · [文档](#-文档) · [开源公告](OPEN_SOURCE.md) · [English](OPEN_SOURCE_EN.md)
 
 </div>
 
@@ -520,7 +520,9 @@ ai-browser-mcp/
 | 文档 | 读者 |
 |------|------|
 | [客户使用手册](CEFbro/AI浏览器/docs/客户使用手册.md) | 终端用户 |
-| [Quick Start (English)](CEFbro/AI浏览器/docs/QUICKSTART_EN.md) | International users · SEO |
+| [中文快速上手 · SEO](CEFbro/AI浏览器/docs/QUICKSTART_ZH.md) | 中文检索 / 论坛外链 |
+| [Quick Start (English)](CEFbro/AI浏览器/docs/QUICKSTART_EN.md) | International SEO |
+| [SEO 关键词矩阵](docs/SEO_KEYWORDS.md) | 搜索词 / 发帖标签 |
 | [MCP 工具配置说明书](CEFbro/AI浏览器/docs/MCP工具配置说明书.md) | 部署 / 集成 |
 | [使用技能书](CEFbro/AI浏览器/docs/使用技能书.md) | 开发者 / Agent |
 | [217 工具参考](CEFbro/AI浏览器/skills/AI浏览器MCP.md) | 全量 API |
@@ -602,9 +604,18 @@ ai-browser-mcp/
 </details>
 
 <details>
-<summary><b>Search keywords / 搜索关键词</b></summary>
+<summary><b>Cline / OpenCode 能用吗？</b></summary>
 
-`AI Browser MCP` · `浏览器 MCP` · `Cursor browser automation` · `Claude Desktop MCP browser` · `Windows MCP server` · `Model Context Protocol browser` · `Playwright alternative` · `web scraping MCP` · `browser automation MCP` · `reverse engineering POST` · `CDP debugger MCP` · `FBrowser CEF` · `数据采集` · `浏览器自动化` · `逆向 Hook`
+可以。任何支持 **MCP** 的客户端均可接入：stdio 配置 [`mcp_bridge.js`](CEFbro/AI浏览器/mcp_bridge.js)，或 HTTP `POST http://127.0.0.1:9222/mcp`、WebSocket `ws://127.0.0.1:9222`。
+
+</details>
+
+<details>
+<summary><b>Search keywords / 搜索关键词（完整列表）</b></summary>
+
+完整矩阵见 **[docs/SEO_KEYWORDS.md](docs/SEO_KEYWORDS.md)**。
+
+高频词：`Cursor browser MCP` · `Claude Desktop MCP` · `Windows browser automation` · `web scraping MCP` · `Playwright alternative` · `Puppeteer MCP` · `POST reverse engineering` · `CDP debugger MCP` · `浏览器 MCP` · `数据采集` · `逆向 Hook` · `自动填表 RPA` · `Model Context Protocol` · `FBrowser CEF` · `217 MCP tools`
 
 </details>
 

@@ -82,4 +82,6 @@ Log in with user test / pass 123456, go to order list, export first 20 rows as a
 
 ## Keywords
 
-Cursor browser MCP · Claude Desktop browser · Windows browser automation · Model Context Protocol · web scraping MCP · Playwright alternative · reverse engineering POST · CDP debugger · CEF browser · local MCP server
+See full matrix: [docs/SEO_KEYWORDS.md](../../../docs/SEO_KEYWORDS.md)
+
+Cursor browser MCP · Claude Desktop browser · Cline MCP · Windows browser automation · Model Context Protocol · web scraping MCP · Playwright alternative · Puppeteer alternative · reverse engineering POST · CDP debugger · form automation RPA · CEF browser · local MCP server · 217 browser tools · AI agent browser control
