@@ -1,0 +1,23 @@
+# 火山 IDE 自动备份
+**/*.~vbak.wsv
+*.vhistory
+
+# 测试报告（运行 run_all_tests.js 可再生）
+CEFbro/AI浏览器/*_report.json
+
+# Node
+node_modules/
+
+# 编译中间产物（保留源码 workflows/）
+CEFbro/AI浏览器/_int/
+
+# CEF 浏览器缓存（运行时生成）
+**/CacheData/
+
+# 成品大二进制走 GitHub Releases，不进 git
+release/**/*.exe
+release/**/*.dll
+release/**/*.pak
+release/**/*.bin
+release/**/*.dat
+release/**/libcef*

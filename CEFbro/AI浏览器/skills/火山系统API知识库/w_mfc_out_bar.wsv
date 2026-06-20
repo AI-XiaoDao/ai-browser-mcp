@@ -1,0 +1,701 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.MFC界面.卷帘式菜单
+
+类 卷帘菜单排列方式 <公开 @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 图标方式 <公开 值 = 0>
+    常量 列表方式 <公开 值 = 1>
+}
+
+类 卷帘菜单风格 <公开 @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 无 <公开 值 = 0>
+    常量 蓝色XP风格 <公开 值 = 1>
+    常量 绿色XP风格 <公开 值 = 2>
+    常量 银色XP风格 <公开 值 = 3>
+    常量 自定义 <公开 值 = 4>
+}
+
+类 卷帘式菜单 <公开 基础类 = 窗口组件 @视窗.外部头文件 = "src\\mfc_out_bar.h"
+        @视窗.外部源文件 = "src\\mfc_out_bar.cpp\r\nsrc\\lib\\GfxGroupEdit.cpp\r\nsrc\\lib\\GfxOutBarCtrl.cpp\r\nsrc\\lib\\OutBarDC.cpp\r\nsrc\\lib\\OutBarTipWnd.cpp"
+        @视窗.后缀文本 = "public IOutBarEventListener" @视窗.外部资源文件 = "src\\lib\\res\\vol_out_bar.rc"
+        @视窗.窗口组件 = "icon=\"res\\vol_out_bar.bmp\"\ndefault_size = \"100, 240\"">
+{
+
+    # @ @m<DECLARE_MFC_CONTROL_DEFAULT> (CVWnd_OutBar, IOutBarEventListener, 0, 0, WS_TABSTOP, 0)
+    #
+    # 事件 --
+
+    方法 项目被选择 <公开 定义事件 类型 = 整数 注释 = "当用户单击项目时产生本事件">
+    参数 菜单索引 <类型 = 整数 注释 = "提供相关菜单的索引位置,从0开始.">
+    参数 项目索引 <类型 = 整数 注释 = "提供相关项目的索引位置,从0开始.">
+
+    方法 菜单被改变 <公开 定义事件 类型 = 整数 注释 = "当菜单被改变时产生本事件">
+    参数 菜单索引 <类型 = 整数 注释 = "提供相关菜单的索引位置,从0开始.">
+
+    方法 项目名称被改变 <公开 定义事件 类型 = 整数 注释 = "当修改项目名称时产生本事件. 返回1表示不允许修改,返回0表示允许修改.">
+    参数 菜单索引 <类型 = 整数 注释 = "提供名称被修改项目所处菜单的索引位置,从0开始.">
+    参数 项目索引 <类型 = 整数 注释 = "提供名称被修改项目的索引位置,从0开始.">
+    参数 项目文本 <类型 = 文本型 注释 = "提供所欲修改到的项目名称">
+
+    方法 菜单名称被改变 <公开 定义事件 类型 = 整数 注释 = "当修改菜单名称时产生本事件. 返回1表示不允许修改,返回0表示允许修改.">
+    参数 菜单索引 <类型 = 整数 注释 = "提供名称被修改菜单的索引位置,从0开始.">
+    参数 菜单文本 <类型 = 文本型 注释 = "提供所欲修改到的菜单名称">
+
+    方法 菜单被单击 <公开 定义事件 类型 = 整数 注释 = "当用户单击菜单时产生本事件">
+    参数 菜单索引 <类型 = 整数 注释 = "提供相关菜单的索引位置,从0开始.">
+
+    方法 菜单被右击 <公开 定义事件 类型 = 整数 注释 = "当用户用鼠标右键单击菜单时产生本事件">
+    参数 菜单索引 <类型 = 整数 注释 = "提供相关菜单的索引位置,从0开始.">
+
+    方法 项目被右击 <公开 定义事件 类型 = 整数 注释 = "当用户用鼠标右键单击项目时产生本事件">
+    参数 菜单索引 <类型 = 整数 注释 = "提供相关菜单的索引位置,从0开始.">
+    参数 项目索引 <类型 = 整数 注释 = "提供相关项目的索引位置,从0开始.">
+
+    方法 项目被双击 <公开 定义事件 类型 = 整数 注释 = "当用户用鼠标左键双击项目时产生本事件">
+    参数 菜单索引 <类型 = 整数 注释 = "提供相关菜单的索引位置,从0开始.">
+    参数 项目索引 <类型 = 整数 注释 = "提供相关项目的索引位置,从0开始.">
+
+    # 属性 --
+
+    方法 项目 <公开 属性写 注释 = "设置组合框下拉列表部分中的列表项目内容" @视窗.设置时机 = 组件创建前后 @值细节类型 = 自定义
+            @附加文本 = "..\\mfc_ui_base\\designer\\mfc_designer_x64.dll\r\n..\\mfc_ui_base\\designer\\mfc_designer_win32.dll\r\nOutBarDesigner">
+    参数 所欲设置的内容 <类型 = 文本型 注释 = "项目内容为以\'\\n\'字符分隔的文本数组" 编辑时信息 = "157FEA, 0, 0, 0">
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->ResetOutBarItems (@<所欲设置的内容>);
+    }
+
+    方法 项目图标图片组 <公开 属性写 注释 = "提供当\"排列方式\"属性为\"图标方式\"时项目使用的图标" @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的图片组 <类型 = 图片组资源 注释 = "对图片组图片格式的要求请参见\"图片组资源\"类中的说明">
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->TakeOverBigImageList ((HIMAGELIST)g_objVolApp.LoadResImage (VRIT_IMAGE_LIST, @<所欲设置的图片组>));
+    }
+
+    方法 项目列表图片组 <公开 属性写 注释 = "提供当\"排列方式\"属性为\"列表方式\"时项目使用的图标" @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的图片组 <类型 = 图片组资源 注释 = "对图片组图片格式的要求请参见\"图片组资源\"类中的说明">
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->TakeOverSmallImageList ((HIMAGELIST)g_objVolApp.LoadResImage (VRIT_IMAGE_LIST, @<所欲设置的图片组>));
+    }
+
+    方法 置项目图标图片组 <公开 注释 = "设置当\"排列方式\"属性为\"图标方式\"时项目使用的图标">
+    参数 所欲设置的图片组 <类型 = 图片组对象类 注释 = "注意该参数对象内的图片组资源将移交本对象管理">
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->TakeOverBigImageList ((HIMAGELIST)@<所欲设置的图片组>.DetachGDIHandle ());
+    }
+
+    方法 置项目列表图片组 <公开 注释 = "设置当\"排列方式\"属性为\"列表方式\"时项目使用的图标">
+    参数 所欲设置的图片组 <类型 = 图片组对象类 注释 = "注意该参数对象内的图片组资源将移交本对象管理">
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->TakeOverSmallImageList ((HIMAGELIST)@<所欲设置的图片组>.DetachGDIHandle ());
+    }
+
+    方法 背景颜色 <公开 属性写 @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetColor (_T ("crBackGroundColor"), GetRealBackColor (pOutBar->m_BackColor = @<所欲设置的颜色>));
+    }
+
+    方法 背景颜色 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_BackColor
+    }
+
+    方法 排列方式 <公开 属性写 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的方式 <类型 = 卷帘菜单排列方式>
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->SetRangeStyle (@<所欲设置的方式>);
+    }
+
+    方法 排列方式 <公开 属性读 类型 = 卷帘菜单排列方式 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->RangeStyle
+    }
+
+    方法 现行选中菜单 <公开 属性写 注释 = "设置当前被选中菜单" @视窗.设置时机 = 组件创建前后>
+    参数 菜单位置索引 <类型 = 整数 注释 = "菜单位置索引从0开始,为-1表示无现行选中菜单.">
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->SetSelFolder (@<菜单位置索引>);
+    }
+
+    方法 现行选中菜单 <公开 属性读 类型 = 整数 注释 = "返回现行选中菜单位置索引,为-1表示无." @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.GetSelFolder ()
+    }
+
+    方法 现行选中项目 <公开 属性写 注释 = "设置现行被选中菜单中的当前被选中项目" @视窗.设置时机 = 组件创建前后>
+    参数 项目位置索引 <类型 = 整数 注释 = "项目位置索引从0开始,为-1表示没有现行选中项目.">
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->SetSelItem (@<项目位置索引>);
+    }
+
+    方法 现行选中项目 <公开 属性读 类型 = 整数 返回值注释 = "返回现行选中项目位置索引,为-1表示无." @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.GetSelItem ()
+    }
+
+    方法 菜单底色 <公开 属性写 注释 = "注意仅当\"XP风格\"为无/自定义时候有效" @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetColor (_T ("crFolderBgColor"), GetRealBackColor (pOutBar->crFolderBgColor = @<所欲设置的颜色>));
+    }
+
+    方法 菜单底色 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->crFolderBgColor
+    }
+
+    方法 菜单下按色 <公开 属性写 注释 = "注意仅当\"XP风格\"为无/自定义时候有效" @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetColor (_T ("crFolderBgDownColor"), GetRealBackColor (pOutBar->crFolderBgDownColor = @<所欲设置的颜色>));
+    }
+
+    方法 菜单下按色 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->crFolderBgDownColor
+    }
+
+    方法 菜单悬停色 <公开 属性写 注释 = "注意仅当\"XP风格\"为无/自定义时候有效" @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetColor (_T ("crFolderBgHoverColor"), GetRealBackColor (pOutBar->crFolderBgHoverColor = @<所欲设置的颜色>));
+    }
+
+    方法 菜单悬停色 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->crFolderBgHoverColor
+    }
+
+    方法 菜单选中色 <公开 属性写 注释 = "注意仅当\"XP风格\"为无/自定义时候有效" @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetColor (_T ("crFolderSelBgColor"), GetRealBackColor (pOutBar->crFolderSelBgColor = @<所欲设置的颜色>));
+    }
+
+    方法 菜单选中色 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->crFolderSelBgColor
+    }
+
+    方法 菜单文本色 <公开 属性写 @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetColor (_T ("crFolderTextColor"), GetRealBackColor (pOutBar->crFolderTextColor = @<所欲设置的颜色>));
+    }
+
+    方法 菜单文本色 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->crFolderTextColor
+    }
+
+    方法 菜单下按文本色 <公开 属性写 @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetColor (_T ("crFolderTextDownColor"), GetRealBackColor (pOutBar->crFolderTextDownColor = @<所欲设置的颜色>));
+    }
+
+    方法 菜单下按文本色 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->crFolderTextDownColor
+    }
+
+    方法 菜单悬停文本色 <公开 属性写 @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetColor (_T ("crFolderTextHoverColor"), GetRealBackColor (pOutBar->crFolderTextHoverColor = @<所欲设置的颜色>));
+    }
+
+    方法 菜单悬停文本色 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->crFolderTextHoverColor
+    }
+
+    方法 菜单选中文本色 <公开 属性写 @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetColor (_T ("crFolderSelTextColor"), GetRealBackColor (pOutBar->crFolderSelTextColor = @<所欲设置的颜色>));
+    }
+
+    方法 菜单选中文本色 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->crFolderSelTextColor
+    }
+
+    方法 项目文本色 <公开 属性写 @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetColor (_T ("crItemTextColor"), GetRealBackColor (pOutBar->crItemTextColor = @<所欲设置的颜色>));
+    }
+
+    方法 项目文本色 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->crItemTextColor
+    }
+
+    方法 项目悬停文本色 <公开 属性写 @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetColor (_T ("crItemTextHoverColor"), GetRealBackColor (pOutBar->crItemTextHoverColor = @<所欲设置的颜色>));
+    }
+
+    方法 项目悬停文本色 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->crItemTextHoverColor
+    }
+
+    方法 项目选中文本色 <公开 属性写 @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetColor (_T ("crItemSelTextColor"), GetRealBackColor (pOutBar->crItemSelTextColor = @<所欲设置的颜色>));
+    }
+
+    方法 项目选中文本色 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->crItemSelTextColor
+    }
+
+    方法 亮边框色 <公开 属性写 @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetColor (_T ("crHilightBorder"), GetRealBackColor (pOutBar->crHilightBorder = @<所欲设置的颜色>));
+    }
+
+    方法 亮边框色 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->crHilightBorder
+    }
+
+    方法 暗边框色 <公开 属性写 @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetColor (_T ("crDkShadowBorder"), GetRealBackColor (pOutBar->crDkShadowBorder = @<所欲设置的颜色>));
+    }
+
+    方法 暗边框色 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->crDkShadowBorder
+    }
+
+    方法 菜单字体 <公开 属性写 注释 = "设置菜单所使用的字体" @视窗.设置时机 = 组件创建前后 @值细节类型 = 字体>
+    参数 字体描述文本 <类型 = 文本型 注释 = "  本参数的格式为: \"字体名, 字体尺寸, 是否为粗体, 是否为斜体, 是否有下划线, 是否有删除线, 旋转角度\","
+            注释 = "其中\"是否\"字段,用1代表真,0代表假,可以被省略.字体尺寸单位为磅, 旋转角度单位为1/10度." 注释 = "  例子: \"宋体, 10\", \"宋体, 10, 0, 1, 1, 0, 100\"." "">
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->SetFolderFont (@<字体描述文本>.GetText ());
+    }
+
+    方法 项目字体 <公开 属性写 注释 = "设置菜单内的项目所使用的字体" @视窗.设置时机 = 组件创建前后 @值细节类型 = 字体>
+    参数 字体描述文本 <类型 = 文本型 注释 = "  本参数的格式为: \"字体名, 字体尺寸, 是否为粗体, 是否为斜体, 是否有下划线, 是否有删除线, 旋转角度\","
+            注释 = "其中\"是否\"字段,用1代表真,0代表假,可以被省略.字体尺寸单位为磅, 旋转角度单位为1/10度." 注释 = "  例子: \"宋体, 10\", \"宋体, 10, 0, 1, 1, 0, 100\"." "">
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->SetItemFont (@<字体描述文本>.GetText ());
+    }
+
+    方法 菜单高度 <公开 属性写 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置高度 <类型 = 整数>
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->SetFolderHeight (@<所欲设置高度>);
+    }
+
+    方法 菜单高度 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->FolderHeight
+    }
+
+    方法 菜单滚动速度 <公开 属性写 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置速度 <类型 = 整数 注释 = "值越大滚动越快,0表示没有滚动效果. 此值如果不为0,必须大于\"菜单高度\"属性值.">
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->SetFolderScrollSpeed (@<所欲设置速度>);
+    }
+
+    方法 菜单滚动速度 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->FolderScrollSpeed
+    }
+
+    方法 平面 <公开 属性写 @视窗.设置时机 = 组件创建前后>
+    参数 是否平面显示 <类型 = 逻辑型>
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetFlatStyle (pOutBar->bFlatStyle = @<是否平面显示>);
+    }
+
+    方法 平面 <公开 属性读 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->bFlatStyle
+    }
+
+    方法 XP风格 <公开 属性写 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置风格 <类型 = 卷帘菜单风格>
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetXPStyle (pOutBar->nXPStyle = @<所欲设置风格>);
+    }
+
+    方法 XP风格 <公开 属性读 类型 = 卷帘菜单风格 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->nXPStyle
+    }
+
+    方法 闪烁选中项目 <公开 属性写 @视窗.设置时机 = 组件创建前后>
+    参数 是否闪烁选中项目 <类型 = 逻辑型>
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetFlashItem (pOutBar->bFlashItem = @<是否闪烁选中项目>);
+    }
+
+    方法 闪烁选中项目 <公开 属性读 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->bFlashItem
+    }
+
+    方法 菜单图标图片组 <公开 属性写 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的图片组 <类型 = 图片组资源 注释 = "对图片组图片格式的要求请参见\"图片组资源\"类中的说明">
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->TakeOverFolderIconImageList ((HIMAGELIST)g_objVolApp.LoadResImage (VRIT_IMAGE_LIST, @<所欲设置的图片组>));
+    }
+
+    方法 菜单背景图片组 <公开 属性写 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的图片组 <类型 = 图片组资源 注释 = "对图片组图片格式的要求请参见\"图片组资源\"类中的说明">
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->TakeOverFolderBackImageList ((HIMAGELIST)g_objVolApp.LoadResImage (VRIT_IMAGE_LIST, @<所欲设置的图片组>));
+    }
+
+    方法 置菜单图标图片组 <公开>
+    参数 所欲设置的图片组 <类型 = 图片组对象类 注释 = "注意该参数对象内的图片组资源将移交本对象管理">
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->TakeOverFolderIconImageList ((HIMAGELIST)@<所欲设置的图片组>.DetachGDIHandle ());
+    }
+
+    方法 置菜单背景图片组 <公开>
+    参数 所欲设置的图片组 <类型 = 图片组对象类 注释 = "注意该参数对象内的图片组资源将移交本对象管理">
+    {
+        @ ((CVWnd_OutBar*)GetMfcWndPtr ())->TakeOverFolderBackImageList ((HIMAGELIST)@<所欲设置的图片组>.DetachGDIHandle ());
+    }
+
+    方法 显示菜单文本 <公开 属性写 注释 = "注意仅当设置有菜单底图时有效" @视窗.设置时机 = 组件创建前后>
+    参数 是否显示菜单文本 <类型 = 逻辑型>
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetDrawTextOnImage (pOutBar->bShowTextOnImage = @<是否显示菜单文本>);
+    }
+
+    方法 显示菜单文本 <公开 属性读 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->bShowTextOnImage
+    }
+
+    方法 显示菜单图标 <公开 属性写 注释 = "注意仅当设置有菜单底图时有效" @视窗.设置时机 = 组件创建前后>
+    参数 是否显示菜单图标 <类型 = 逻辑型>
+    {
+        @ CVWnd_OutBar* pOutBar = (CVWnd_OutBar*)GetMfcWndPtr ();
+        @ pOutBar->m_OutBar.SetDrawIconOnImage (pOutBar->bShowIconOnImage = @<是否显示菜单图标>);
+    }
+
+    方法 显示菜单图标 <公开 属性读 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->bShowIconOnImage
+    }
+
+    # 方法 --
+
+    方法 加入菜单 <公开 类型 = 逻辑型 注释 = "加入一个新的菜单" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 菜单名称 <类型 = 文本型>
+    参数 加入位置 <类型 = 整数 注释 = "指定将加入的菜单所在位置,如果为-1,则自动添加在尾部." @默认值 = -1>
+    参数 菜单数值 <类型 = 变整数 注释 = "指定与该菜单相关联的附加数值,供用户自己使用." @默认值 = 0>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->InsertFolder (@<加入位置>, @<菜单名称>.GetText (), @<菜单数值>)
+    }
+
+    方法 加入项目 <公开 类型 = 逻辑型 注释 = "在指定菜单中加入一个新的项目" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 项目名称 <类型 = 文本型>
+    参数 菜单索引 <类型 = 整数 注释 = "指定在哪个菜单中插入项目. 索引从0开始,如果参数值为-1,表示在当前菜单中插入项目." @默认值 = -1>
+    参数 项目索引 <类型 = 整数 注释 = "指定项目插入的位置. 索引从0开始,如果参数值为-1,表示在所指定菜单(前一个参数决定)的尾部插入项目." @默认值 = -1>
+    参数 图片索引 <类型 = 整数 注释 = "指定该项目所使用的图片. 索引从0开始,如果参数值为-1,表示不使用图片." @默认值 = -1>
+    参数 项目数值 <类型 = 变整数 注释 = "指定与该项目相关联的附加数值,供用户自己使用." @默认值 = 0>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->InsertItem (@<菜单索引>, @<项目索引>, @<项目名称>.GetText (), @<图片索引>, @<项目数值>)
+    }
+
+    方法 删除菜单 <公开 类型 = 逻辑型 注释 = "删除指定的菜单" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "索引值从0开始. 如果为-1,表示要删除所有菜单(相当于调用\"清除\").">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->RemoveFolder (@<菜单索引>)
+    }
+
+    方法 删除项目 <公开 类型 = 逻辑型 注释 = "删除指定菜单中的指定项目" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 项目索引 <类型 = 整数 注释 = "指定欲删除项目的位置. 索引从0开始,如果参数值为-1,表示删除指定菜单中的所有项目." @默认值 = -1>
+    参数 菜单索引 <类型 = 整数 注释 = "索引值从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->RemoveItem (@<项目索引>, @<菜单索引>)
+    }
+
+    方法 取菜单数 <公开 类型 = 整数 注释 = "返回菜单的数目" @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.GetFolderCount ()
+    }
+
+    方法 取项目数 <公开 类型 = 整数 注释 = "返回指定菜单中的项目数目" @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "索引值从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->GetItemCount (@<菜单索引>)
+    }
+
+    方法 取菜单名称 <公开 类型 = 文本型 注释 = "返回指定菜单的名称文本" @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "索引值从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    {
+        @ CVolString ((const TCHAR*)((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.GetFolderText (@<菜单索引>))
+    }
+
+    方法 取项目名称 <公开 类型 = 文本型 注释 = "返回指定菜单中指定项目的名称文本" @嵌入式方法 = "">
+    参数 项目索引 <类型 = 整数 注释 = "提供项目的位置,索引从0开始.">
+    参数 菜单索引 <类型 = 整数 注释 = "索引值从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    {
+        @ CVolString ((const TCHAR*)((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.GetItemText (@<项目索引>, @<菜单索引>))
+    }
+
+    方法 置菜单名称 <公开 类型 = 逻辑型 注释 = "设置指定菜单的名称文本. 调用本方法将触发\"菜单名称被改变\"事件." 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 菜单索引 <类型 = 整数 注释 = "提供所欲修改菜单的索引位置,从0开始.">
+    参数 菜单名称 <类型 = 文本型 注释 = "提供所欲修改到的菜单名称">
+    {
+        @ CGfxOutBarCtrl* pOutBar = &((CVWnd_OutBar*)GetMfcWndPtr ())->m_OutBar;
+        @ if (@<菜单索引> < 0 || @<菜单索引> >= pOutBar->GetFolderCount () || @<菜单名称被改变> (@<菜单索引>, @<菜单名称>) != 0)
+        @     return FALSE;
+        @ pOutBar->SetFolderText (@<菜单索引>, @<菜单名称>.GetText ());
+        @ if (pOutBar->m_hWnd != NULL)  pOutBar->Invalidate ();
+        @ return TRUE;
+    }
+
+    方法 置项目名称 <公开 类型 = 逻辑型 注释 = "设置指定菜单中指定项目的名称文本. 调用本方法将触发\"项目名称被改变\"事件." 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 项目索引 <类型 = 整数 注释 = "提供项目的位置,索引从0开始.">
+    参数 项目名称 <类型 = 文本型 注释 = "提供项目所欲修改到的名称">
+    参数 菜单索引 <类型 = 整数 注释 = "提供项目所处菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    {
+        @ CGfxOutBarCtrl* pOutBar = &((CVWnd_OutBar*)GetMfcWndPtr ())->m_OutBar;
+        @ if (@<菜单索引> < 0)  @<菜单索引> = pOutBar->GetSelFolder ();
+        @ if (@<项目索引> < 0 || @<项目索引> >= pOutBar->GetItemCount (@<菜单索引>) ||
+        @         @<项目名称被改变> (@<菜单索引>, @<项目索引>, @<项目名称>) != 0 ||
+        @         pOutBar->SetItemText (@<项目索引>, @<项目名称>.GetText (), @<菜单索引>) == FALSE)
+        @     return FALSE;
+        @ if (pOutBar->m_hWnd != NULL)  pOutBar->Invalidate ();
+        @ return TRUE;
+    }
+
+    方法 取菜单数值 <公开 类型 = 变整数 注释 = "返回指定菜单的用户关联数值,如不存在则返回0(注意正常值也可能为0)." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.GetFolderData (@<菜单索引>)
+    }
+
+    方法 取项目数值 <公开 类型 = 变整数 注释 = "获取指定菜单中指定项目的用户关联数值,如不存在则返回0(注意正常值也可能为0)." @嵌入式方法 = "">
+    参数 项目索引 <类型 = 整数 注释 = "提供项目的位置,索引从0开始.">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.GetItemData (@<项目索引>, @<菜单索引>)
+    }
+
+    方法 置菜单数值 <公开 类型 = 逻辑型 注释 = "设置指定菜单的用户关联数值" 返回值注释 = "成功返回真,所提供菜单位置无效返回假." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始.">
+    参数 菜单数值 <类型 = 变整数 注释 = "提供所欲设置的用户关联数值">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.SetFolderData (@<菜单索引>, @<菜单数值>)
+    }
+
+    方法 置项目数值 <公开 类型 = 逻辑型 注释 = "设置指定菜单中指定项目的用户关联数值" 返回值注释 = "成功返回真,所提供项目位置无效返回假." @嵌入式方法 = "">
+    参数 项目索引 <类型 = 整数 注释 = "提供项目的位置,索引从0开始.">
+    参数 项目数值 <类型 = 变整数 注释 = "提供所欲设置的用户关联数值">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.SetItemData (@<项目索引>, @<项目数值>, @<菜单索引>)
+    }
+
+    方法 取项目图片 <公开 类型 = 整数 注释 = "获取指定菜单中指定项目的图片索引,如所指定项目不存在或无图片则返回-1." @嵌入式方法 = "">
+    参数 项目索引 <类型 = 整数 注释 = "提供项目的位置,索引从0开始.">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.GetItemImage (@<项目索引>, @<菜单索引>)
+    }
+
+    方法 置项目图片 <公开 类型 = 逻辑型 注释 = "设置指定菜单中指定项目的图片索引" 返回值注释 = "成功返回真,所提供项目位置无效返回假." @禁止流程检查 = 真>
+    参数 项目索引 <类型 = 整数 注释 = "提供项目的位置,索引从0开始.">
+    参数 图片索引 <类型 = 整数 注释 = "提供所欲设置的图片索引值">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    {
+        @ CGfxOutBarCtrl* pOutBar = &((CVWnd_OutBar*)GetMfcWndPtr ())->m_OutBar;
+        @ if (pOutBar->SetItemImage (@<项目索引>, @<图片索引>, @<菜单索引>) == FALSE)  return FALSE;
+        @ if (pOutBar->m_hWnd != NULL)  pOutBar->Invalidate ();
+        @ return TRUE;
+    }
+
+    方法 清除 <公开 注释 = "删除所有菜单以及所有项目" @嵌入式方法 = "">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.RemoveAll ()
+    }
+
+    方法 加入组件菜单 <公开 类型 = 逻辑型 注释 = "在指定位置添加新的菜单,该菜单将容纳所指定的窗口组件(不能再容纳普通项目)." 注释 = "本组件必须已经成功创建." 返回值注释 = "成功返回真,失败返回假.">
+    参数 菜单名称 <类型 = 文本型 注释 = "提供所加入菜单的名称文本">
+    参数 窗口组件对象 <类型 = 窗口组件 注释 = "提供要加入的窗口组件. 该窗口组件将被自动调整大小,以便恰好放置于菜单中."
+            注释 = "建议使用容器类窗口组件,因为容器类窗口组件中再可放其它组件.即使被加入的组件不可视,必要时也会被自动显示出来." 注释 = "如果加入的是窗口,将自动取消其标题栏并禁止最大化/最小化和关闭.">
+    参数 加入位置 <类型 = 整数 注释 = "指定将加入的菜单所在位置,如果为-1,则自动添加在尾部." @默认值 = -1>
+    参数 菜单数值 <类型 = 变整数 注释 = "指定与该菜单相关联的附加数值,供用户自己使用." @默认值 = 0>
+    {
+        返回 (加入组件菜单2 (菜单名称, 窗口组件对象.取窗口句柄 (), 加入位置, 菜单数值))
+    }
+
+    方法 加入组件菜单2 <公开 类型 = 逻辑型 注释 = "在指定位置添加新的菜单,该菜单将容纳所指定的窗口组件(不能再容纳普通项目)." 注释 = "本组件必须已经成功创建." 返回值注释 = "成功返回真,失败返回假."
+            @嵌入式方法 = "">
+    参数 菜单名称 <类型 = 文本型 注释 = "提供所加入菜单的名称文本">
+    参数 窗口组件句柄 <类型 = 变整数 注释 = "提供要加入的窗口组件句柄值. 该窗口组件将被自动调整大小,以便恰好放置于菜单中."
+            注释 = "建议使用容器类窗口组件,因为容器类窗口组件中再可放其它组件.即使被加入的组件不可视,必要时也会被自动显示出来." 注释 = "如果加入的是窗口,将自动取消其标题栏并禁止最大化/最小化和关闭.">
+    参数 加入位置 <类型 = 整数 注释 = "指定将加入的菜单所在位置,如果为-1,则自动添加在尾部." @默认值 = -1>
+    参数 菜单数值 <类型 = 变整数 注释 = "指定与该菜单相关联的附加数值,供用户自己使用." @默认值 = 0>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.InsertFolderBar (@<加入位置>, @<菜单名称>.GetText (), (HWND)@<窗口组件句柄>, @<菜单数值>)
+    }
+
+    方法 置菜单图标 <公开 注释 = "设置指定菜单的图标" @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示设置现有全部菜单的图标.">
+    参数 图标索引 <类型 = 整数>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.SetFolderIcon (@<菜单索引>, @<图标索引>)
+    }
+
+    方法 取菜单图标 <公开 类型 = 整数 注释 = "返回指定菜单的图标索引位置,如果所提供菜单位置无效或尚未设置图标,将返回-1." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始.">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.GetFolderIcon (@<菜单索引>)
+    }
+
+    方法 置菜单底图 <公开 注释 = "设置指定菜单的背景图片" @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示设置现有全部菜单的背景图片.">
+    参数 正常图片索引 <类型 = 整数 注释 = "索引值从0开始,如果为-1,表示无图片." @默认值 = -1>
+    参数 选中图片索引 <类型 = 整数 注释 = "索引值从0开始,如果为-1,表示无图片." @默认值 = -1>
+    参数 正常加亮图片索引 <类型 = 整数 注释 = "索引值从0开始,如果为-1,表示无图片." @默认值 = -1>
+    参数 选中加亮图片索引 <类型 = 整数 注释 = "索引值从0开始,如果为-1,表示无图片." @默认值 = -1>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.SetFolderBackImage (@<菜单索引>, @<正常图片索引>, @<选中图片索引>, @<正常加亮图片索引>, @<选中加亮图片索引>)
+    }
+
+    方法 取菜单底图 <公开 注释 = "获取指定菜单的背景图片" @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始.">
+    参数 正常图片索引 <类型 = 整数类 注释 = "用作保存所获取到的图片索引,为空对象表示忽略本参数." @默认值 = 空对象>
+    参数 选中图片索引 <类型 = 整数类 注释 = "用作保存所获取到的图片索引,为空对象表示忽略本参数." @默认值 = 空对象>
+    参数 正常加亮图片索引 <类型 = 整数类 注释 = "用作保存所获取到的图片索引,为空对象表示忽略本参数." @默认值 = 空对象>
+    参数 选中加亮图片索引 <类型 = 整数类 注释 = "用作保存所获取到的图片索引,为空对象表示忽略本参数." @默认值 = 空对象>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.GetFolderBackImage (@<菜单索引>, @<正常图片索引.值>, @<选中图片索引.值>, @<正常加亮图片索引.值>, @<选中加亮图片索引.值>)
+    }
+
+    方法 菜单是否已禁止 <公开 类型 = 逻辑型 注释 = "返回所指定菜单是否已经被禁止,如果所指定菜单不存在,将返回假(注意正常也可能返回假)." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单.">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.IsFolderDisabled (@<菜单索引>)
+    }
+
+    方法 禁止菜单 <公开 类型 = 逻辑型 注释 = "禁止或取消禁止指定菜单." 注释 = "被禁止的菜单不接受鼠标点击,外观上也与正常菜单有所区别." 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单.">
+    参数 是否禁止 <类型 = 逻辑型>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.DisableFolder (@<菜单索引>, @<是否禁止>)
+    }
+
+    方法 项目是否已禁止 <公开 类型 = 逻辑型 注释 = "返回指定项目是否已被禁止. 如果所指定项目不存在,将返回假(注意正常情况下也可能返回假)." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    参数 项目索引 <类型 = 整数 注释 = "提供项目的位置,索引从0开始.">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.IsItemDisabled (@<菜单索引>, @<项目索引>)
+    }
+
+    方法 禁止项目 <公开 类型 = 逻辑型 注释 = "禁止或取消禁止指定项目." 注释 = "被禁止的项目不接受鼠标点击,外观上也与正常项目有所区别." 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    参数 项目索引 <类型 = 整数 注释 = "提供项目的位置,索引从0开始.">
+    参数 是否禁止 <类型 = 逻辑型>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.DisableItem (@<菜单索引>, @<项目索引>, @<是否禁止>)
+    }
+
+    方法 菜单是否已隐藏 <公开 类型 = 逻辑型 注释 = "返回所指定菜单是否已经被隐藏,如果所指定菜单不存在,将返回假(注意正常也可能返回假)." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单.">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.IsFolderHided (@<菜单索引>)
+    }
+
+    方法 隐藏菜单 <公开 类型 = 逻辑型 注释 = "隐藏或取消隐藏指定菜单." 注释 = "被隐藏的菜单不可见,且不可被设置为当前菜单." 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单.">
+    参数 是否隐藏 <类型 = 逻辑型>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.HideFolder (@<菜单索引>, @<是否隐藏>)
+    }
+
+    方法 项目是否已隐藏 <公开 类型 = 逻辑型 注释 = "返回指定项目是否已被隐藏. 如果所指定项目不存在,将返回假(注意正常情况下也可能返回假)." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    参数 项目索引 <类型 = 整数 注释 = "提供项目的位置,索引从0开始.">
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.IsItemHided (@<菜单索引>, @<项目索引>)
+    }
+
+    方法 隐藏项目 <公开 类型 = 逻辑型 注释 = "隐藏或取消隐藏指定项目" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    参数 项目索引 <类型 = 整数 注释 = "提供项目的位置,索引从0开始.">
+    参数 是否隐藏 <类型 = 逻辑型>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.HideItem (@<菜单索引>, @<项目索引>, @<是否隐藏>)
+    }
+
+    方法 取菜单提示文本 <公开 类型 = 文本型 注释 = "返回所指定菜单的提示文本." 注释 = "如果所指定菜单不存在,将返回空文本(注意正常也可能返回空文本)." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单.">
+    {
+        @ @an<CVolString> (((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.GetFolderTipText (@<菜单索引>))
+    }
+
+    方法 置菜单提示文本 <公开 类型 = 逻辑型 注释 = "设置指定菜单的提示文本" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单.">
+    参数 提示文本 <类型 = 文本型>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.SetFolderTipText (@<菜单索引>, @<提示文本>.GetText ())
+    }
+
+    方法 取项目提示文本 <公开 类型 = 文本型 注释 = "返回所指定项目的提示文本." 注释 = "如果所指定项目不存在,将返回空文本(注意正常也可能返回空文本)." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    参数 项目索引 <类型 = 整数 注释 = "提供项目的位置,索引从0开始.">
+    {
+        @ @an<CVolString> (((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.GetItemTipText (@<菜单索引>, @<项目索引>))
+    }
+
+    方法 置项目提示文本 <公开 类型 = 逻辑型 注释 = "设置指定项目的提示文本" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 菜单索引 <类型 = 整数 注释 = "提供菜单的索引位置,从0开始. 如果为-1,表示为当前选中菜单." @默认值 = -1>
+    参数 项目索引 <类型 = 整数 注释 = "提供项目的位置,索引从0开始.">
+    参数 提示文本 <类型 = 文本型>
+    {
+        @ ((CVWnd_OutBar*)@sn<this>.GetMfcWndPtr ())->m_OutBar.SetItemTipText (@<菜单索引>, @<项目索引>, @<提示文本>.GetText ())
+    }
+
+    # --
+    #
+    # @begin
+    # <> <include>
+    # virtual void OnItemSelected (INT nFolerIndex, INT nItemIndex)  { @<项目被选择> (nFolerIndex, nItemIndex); }
+    # virtual void OnFolerChanged (INT nFolerIndex)  { @<菜单被改变> (nFolerIndex); }
+    # virtual BOOL OnItemNameChanged (INT nFolderIndex, INT nItemIndex, const TCHAR* szItemName)  { return (@<项目名称被改变> (nFolderIndex, nItemIndex, @an<CVolString> (szItemName)) == 0); }
+    # virtual BOOL OnFolerNameChanged (INT nFolerIndex, const TCHAR* szFolerName)  { return (@<菜单名称被改变> (nFolerIndex, @an<CVolString> (szFolerName)) == 0); }
+    # virtual void OnFolerClicked (INT nFolerIndex)  { @<菜单被单击> (nFolerIndex); }
+    # virtual void OnFolerRClicked (INT nFolerIndex)  { @<菜单被右击> (nFolerIndex); }
+    # virtual void OnItemRClicked (INT nFolerIndex, INT nItemIndex)  { @<项目被右击> (nFolerIndex, nItemIndex); }
+    # virtual void OnItemDblClicked (INT nFolerIndex, INT nItemIndex)  { @<项目被双击> (nFolerIndex, nItemIndex); }
+    # <> </include>
+    # @end
+}

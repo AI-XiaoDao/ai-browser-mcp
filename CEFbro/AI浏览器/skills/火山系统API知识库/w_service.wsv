@@ -1,0 +1,240 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.基本 <注释 = "本包中的内容用作提供火山服务程序相关代码" @文档 = "category = \"服务\"">
+
+类 服务事件类型 <公开 @文档 = "category = \"服务.辅助类\"" @常量类 = 整数>
+{
+    常量 成功 <公开 值 = @EVENTLOG_SUCCESS>
+    常量 错误 <公开 值 = @EVENTLOG_ERROR_TYPE>
+    常量 警告 <公开 值 = @EVENTLOG_WARNING_TYPE>
+    常量 信息 <公开 值 = @EVENTLOG_INFORMATION_TYPE>
+    常量 审核成功 <公开 值 = @EVENTLOG_AUDIT_SUCCESS>
+    常量 审核失败 <公开 值 = @EVENTLOG_AUDIT_FAILURE>
+}
+
+类 服务类 <公开 @视窗.外部头文件 = "libs\\win_base\\include\\vol_service.h" @视窗.外部源文件 = "libs\\win_base\\cpp\\vol_service.cpp">
+{
+    方法 运行 <公开 静态 类型 = 逻辑型 注释 = "开始运行所指定的服务处理程序,返回是否成功." 注释 = "注意: 一旦服务开始运行,本方法将一直等待到该服务运行完毕后才会返回." @嵌入式方法 = "">
+    参数 所提供的服务处理类 <类型 = 服务处理类 注释 = "提供具体的服务处理类,必须为\"服务处理类\"的继承类." @需求类型 = 数据类型>
+    参数 为调试版时直接运行 <类型 = 逻辑型 注释 = "  指定在编译本程序的调试版本时,是否编译为普通的非服务程序后直接运行所提供" 注释 = "的服务处理器,用作支持在IDE中直接调试服务程序.在编译发布版本时不受本参数影"
+            注释 = "响会编译出正常的Windows服务程序." @默认值 = 假>
+    {
+        @ @dt<服务类>::sRunService (VOL_RUNTIME_CLASS (@<所提供的服务处理类>), @<为调试版时直接运行>)
+    }
+
+    方法 记录事件 <公开 静态 类型 = 逻辑型 注释 = "  在操作系统事件信息表中记录所指定的事件信息,该信息可以通过操作系统的" 注释 = "\"事件查看器\"工具软件来查看." 返回值注释 = "成功返回真,失败返回假."
+            @嵌入式方法 = "">
+    参数 事件来源名称 <类型 = 文本型 注释 = "提供事件来源的名称,不能为空文本.一般情况下,可以使用自己的服务名称.">
+    参数 事件消息 <类型 = 文本型 注释 = "提供所需要记录的具体事件消息文本,不能为空文本.">
+    参数 事件类型 <类型 = 服务事件类型 注释 = "提供具体的事件类型" @默认值 = 服务事件类型.信息>
+    参数 事件分类 <类型 = 短整数 注释 = "提供事件分类,由用户自定义." @默认值 = 0>
+    参数 事件ID <类型 = 整数 注释 = "提供事件的ID值,由用户自定义." @默认值 = 0>
+    {
+        @ CVolService::sLogEvent (@<事件来源名称>.GetText (), @<事件消息>.GetText (), (WORD)@<事件类型>, (WORD)@<事件分类>, (DWORD)@<事件ID>)
+    }
+
+    方法 服务是否被安装 <公开 静态 类型 = 逻辑型 注释 = "返回所指定名称的服务是否已经被安装" @嵌入式方法 = "">
+    参数 服务名称 <类型 = 文本型 注释 = "提供服务的具体名称,不能为空文本.">
+    {
+        @ CVolService::sIsServiceInstalled (@<服务名称>.GetText ())
+    }
+
+    方法 安装服务 <公开 静态 类型 = 逻辑型 注释 = "安装所指定名称的服务" 返回值注释 = "成功返回真,失败或该名称的服务已经被安装返回假." @嵌入式方法 = "">
+    参数 服务名称 <类型 = 文本型 注释 = "提供所安装服务的名称,不能为空文本.">
+    参数 服务显示名称 <类型 = 文本型 注释 = "提供所安装服务的显示用名称,如果为空文本则等于\"服务名称\"." @默认值 = "">
+    参数 服务描述 <类型 = 文本型 注释 = "提供所安装服务的描述信息,为空文本表示无." @默认值 = "">
+    参数 服务文件名 <类型 = 文本型 注释 = "提供用作执行所安装服务功能的可执行文件名称,为空文本表示使用当前程序的文件名." @默认值 = "">
+    参数 是否自动启动 <类型 = 逻辑型 注释 = "指定所安装的服务是否在操作系统启动后被自动启动,为假则需要用户手动启动." @默认值 = 真>
+    参数 启动参数 <类型 = 文本型 注释 = "提供服务启动参数" @默认值 = "">
+    {
+        @ CVolService::sInstallService (@<服务名称>.GetText (), @<服务显示名称>.GetText (), @<服务描述>.GetText (), @<服务文件名>.GetText (), @<是否自动启动>, @<启动参数>.GetText ())
+    }
+
+    方法 卸载服务 <公开 静态 类型 = 逻辑型 注释 = "卸载所指定名称的服务" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 服务名称 <类型 = 文本型 注释 = "提供所欲卸载服务的名称,不能为空文本.">
+    {
+        @ CVolService::sUninstallService (@<服务名称>.GetText ())
+    }
+
+    方法 启动服务 <公开 静态 类型 = 逻辑型 注释 = "启动所指定名称的服务" 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 服务名称 <类型 = 文本型 注释 = "提供所欲启动服务的名称,不能为空文本.">
+    参数 启动参数数组 <类型 = 文本数组类 注释 = "提供启动参数数组(注意类库会自动在首部加入所启动服务名称),为空对象表示无." @默认值 = 空对象>
+    {
+        @ return CVolService::sStartService (@<服务名称>.GetText (), (@<启动参数数组>.IsNullObject () ? NULL : &@<启动参数数组>.data ()));
+    }
+
+    方法 停止服务 <公开 静态 类型 = 逻辑型 注释 = "停止所指定名称服务的运行" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 服务名称 <类型 = 文本型 注释 = "提供所欲停止服务的名称,不能为空文本.">
+    {
+        @ CVolService::sStopService (@<服务名称>.GetText ())
+    }
+
+    方法 暂停服务 <公开 静态 类型 = 逻辑型 注释 = "暂停所指定名称服务的运行(本功能需要服务本身的支持)" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 服务名称 <类型 = 文本型 注释 = "提供所指定服务的名称,不能为空文本.">
+    {
+        @ CVolService::sPauseService (@<服务名称>.GetText (), TRUE)
+    }
+
+    方法 继续服务 <公开 静态 类型 = 逻辑型 注释 = "继续运行已经被暂停的所指定名称服务(本功能需要服务本身的支持)" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 服务名称 <类型 = 文本型 注释 = "提供所指定服务的名称,不能为空文本.">
+    {
+        @ CVolService::sPauseService (@<服务名称>.GetText (), FALSE)
+    }
+
+    方法 取服务状态 <公开 静态 类型 = 整数 注释 = "成功返回所指定名称服务的当前运行状态,失败或服务不存在返回0." 返回值注释 = "返回值为以下值之一:" 返回值注释 = "  获取失败: 0" 返回值注释 = "  已停止: 1"
+            返回值注释 = "  准备启动: 2" 返回值注释 = "  准备停止: 3" 返回值注释 = "  正在运行: 4" 返回值注释 = "  准备继续运行: 5" 返回值注释 = "  准备暂停: 6" 返回值注释 = "  已暂停: 7"
+            @嵌入式方法 = "">
+    参数 服务名称 <类型 = 文本型 注释 = "提供所指定服务的名称,不能为空文本.">
+    {
+        @ CVolService::sGetServiceStatus (@<服务名称>.GetText ())
+    }
+
+    方法 取服务类型 <公开 静态 类型 = 整数 注释 = "成功返回所指定名称服务的组合类型,失败或服务不存在返回0." 返回值注释 = "返回值为以下值之一或组合:" 返回值注释 = "  核心驱动: 1"
+            返回值注释 = "  文件系统驱动: 2" 返回值注释 = "  适配器: 4" 返回值注释 = "  识别器驱动: 8" 返回值注释 = "  自有进程: 16" 返回值注释 = "  公用进程: 32"
+            返回值注释 = "  交互式进程: 256" @禁止流程检查 = 真>
+    参数 服务名称 <类型 = 文本型 注释 = "提供所指定服务的名称,不能为空文本.">
+    {
+        @ CVolMem memBuf;
+        @ LPQUERY_SERVICE_CONFIG pConfig = CVolService::sGetServiceConfig (@<服务名称>.GetText (), memBuf);
+        @ return (pConfig == NULL ? 0 : (INT)pConfig->dwServiceType);
+    }
+
+    方法 取服务文件名 <公开 静态 类型 = 文本型 注释 = "成功返回所指定名称服务的文件名,失败或服务不存在返回空文本." @禁止流程检查 = 真>
+    参数 服务名称 <类型 = 文本型 注释 = "提供所指定服务的名称,不能为空文本.">
+    {
+        @ CVolMem memBuf;
+        @ LPQUERY_SERVICE_CONFIG pConfig = CVolService::sGetServiceConfig (@<服务名称>.GetText (), memBuf);
+        @ return (pConfig == NULL ? CVolString () : CVolString (pConfig->lpBinaryPathName));
+    }
+
+    方法 取服务启动类型 <公开 静态 类型 = 整数 注释 = "成功返回所指定名称服务的启动类型,失败或服务不存在返回0." 返回值注释 = "返回值为以下值之一:" 返回值注释 = "  获取失败: -1"
+            返回值注释 = "  操作系统载入时自动启动(仅针对驱动类型的服务): 0" 返回值注释 = "  操作系统初始化时自动启动(仅针对驱动类型的服务): 1" 返回值注释 = "  操作系统服务控制器自动启动: 2"
+            返回值注释 = "  手动启动: 3" 返回值注释 = "  禁止启动: 4" @禁止流程检查 = 真>
+    参数 服务名称 <类型 = 文本型 注释 = "提供所指定服务的名称,不能为空文本.">
+    {
+        @ CVolMem memBuf;
+        @ LPQUERY_SERVICE_CONFIG pConfig = CVolService::sGetServiceConfig (@<服务名称>.GetText (), memBuf);
+        @ return (pConfig == NULL ? -1 : (INT)pConfig->dwStartType);
+    }
+
+    方法 取服务显示名称 <公开 静态 类型 = 文本型 注释 = "成功返回所指定名称服务的显示名称,失败或服务不存在返回空文本." @禁止流程检查 = 真>
+    参数 服务名称 <类型 = 文本型 注释 = "提供所指定服务的名称,不能为空文本.">
+    {
+        @ CVolMem memBuf;
+        @ LPQUERY_SERVICE_CONFIG pConfig = CVolService::sGetServiceConfig (@<服务名称>.GetText (), memBuf);
+        @ return (pConfig == NULL ? CVolString () : CVolString (pConfig->lpDisplayName));
+    }
+
+    # --
+    # @begin
+    # <> <include>
+    # static BOOL sRunService (CVolRuntimeClass* pUserServiceProcessor, BOOL blRunDirectlyWhileDebugging);
+    # static void sStopService ();
+    # <> </include>
+    #
+    # static @dt<同步事件类> s_eventExit;
+    #
+    # static void WINAPI sServiceStrl (DWORD dwControl)
+    # {
+    #     if ((dwControl == SERVICE_CONTROL_STOP || dwControl == SERVICE_CONTROL_SHUTDOWN) && CVolService::ms_dwLastStatus != SERVICE_STOPPED)
+    #         @sn<current_class>::sStopService ();
+    # }
+    #
+    # static BOOL sDispatchService (DWORD argc, LPTSTR* argv)
+    # {
+    #     ASSERT (CVolService::ms_pUserServiceProcessor != NULL);
+    #
+    #     s_eventExit.data ().reset ();
+    #     CVolService::sSetServiceStatus (SERVICE_START_PENDING);
+    #
+    #     @dt<文本数组类> args;
+    #     for (DWORD dwIndex = 1; dwIndex < argc; dwIndex++)  // 跳过第一个服务名参数
+    #         args.data ().Add (argv [dwIndex]);
+    #
+    #     CVolObject* pobjUserProcessor = CVolService::ms_pUserServiceProcessor->CreateObject ();
+    #     ASSERT (P_IS_VOL_INSTANCE_OF (pobjUserProcessor, @dt<服务处理类>));
+    #
+    #     const BOOL blSucceeded = ((@dt<服务处理类>*)pobjUserProcessor)->@n<服务处理类.准备> (args);
+    #     if (blSucceeded)
+    #     {
+    #         CVolService::sSetServiceStatus (SERVICE_RUNNING);
+    #         ((@dt<服务处理类>*)pobjUserProcessor)->@n<服务处理类.处理> (args, s_eventExit);
+    #     }
+    #
+    #     CVolService::sSetServiceStatus (SERVICE_STOPPED);
+    #     pobjUserProcessor->Destroy ();
+    #     return blSucceeded;
+    # }
+    #
+    # static void WINAPI sServiceEntry (DWORD argc, LPTSTR* argv)
+    # {
+    #     if (CVolService::ms_pUserServiceProcessor != NULL)
+    #     {
+    #         CVolService::ms_hServiceStatusHandle = RegisterServiceCtrlHandler (_T (""), sServiceStrl);
+    #         if (CVolService::ms_hServiceStatusHandle != NULL)
+    #             sDispatchService (argc, argv);
+    #     }
+    # }
+    #
+    # BOOL @sn<current_class>::sRunService (CVolRuntimeClass* pUserServiceProcessor, BOOL blRunDirectlyWhileDebugging)
+    # {
+    #     if (CVolService::ms_pUserServiceProcessor != NULL || pUserServiceProcessor == NULL)
+    #         return FALSE;
+    #
+    #     CVolService::sInitMembers (pUserServiceProcessor);
+    #
+    #     BOOL blSucceeded;
+    # #ifdef _DEBUG
+    #     if (blRunDirectlyWhileDebugging)
+    #     {
+    #         CMStringArray saryArgs;
+    #         const INT nNumArgs = GetCommandLineArray (saryArgs);
+    #         saryArgs.InsertAt (0, _T (""));  // 在第一个参数位置处插入一个空白的服务名称参数
+    #         blSucceeded = sDispatchService ((DWORD)nNumArgs, (LPTSTR*)saryArgs.GetData ());
+    #     }
+    #     else
+    # #endif
+    #     {
+    #         SERVICE_TABLE_ENTRY param [2];
+    #         param [0].lpServiceName = _T ("");
+    #         param [0].lpServiceProc = sServiceEntry;
+    #         param [1].lpServiceName = NULL;
+    #         param [1].lpServiceProc = NULL;
+    #         blSucceeded = StartServiceCtrlDispatcher (param);
+    #     }
+    #
+    #     CVolService::sInitMembers ();
+    #     return blSucceeded;
+    # }
+    #
+    # void @sn<current_class>::sStopService ()
+    # {
+    #     CVolService::sSetServiceStatus (SERVICE_STOP_PENDING);
+    #     s_eventExit.data ().post ();
+    # }
+    #
+    # @end
+}
+
+类 服务处理类 <公开>
+{
+    方法 准备 <公开 类型 = 逻辑型 注释 = "  当服务准备开始运行前本方法被调用,用户继承类可以覆盖本方法" 注释 = "以完成自己的处理准备工作,注意耗时不要太长."
+            注释 = "  注意: 在本方法中不能显示任何界面窗口(包括信息框),否则将会" 注释 = "导致服务卡死." 返回值注释 = "返回准备工作是否成功,如果返回假,服务不会被运行." @虚拟方法 = 可覆盖>
+    参数 启动参数数组 <类型 = 文本数组类 注释 = "提供所有的启动参数文本">
+    {
+        返回 (真)
+    }
+
+    方法 处理 <公开 注释 = "服务启动后本方法被调用,用户继承类应该覆盖本方法以进行自己的服务处理循环." 注释 = "如果\"准备\"方法返回假,本方法不会被调用,否则必定在\"准备\"方法之后被调用."
+            注释 = "注意: 在本方法中不能显示任何界面窗口(包括信息框),否则将会导致服务卡死." @虚拟方法 = 可覆盖>
+    参数 启动参数数组 <类型 = 文本数组类 注释 = "提供所有的启动参数文本">
+    参数 退出通知 <类型 = 同步事件类 注释 = "  注意: 在本处理方法的服务处理循环中,一旦发现本退出事件被置位(即" 注释 = "\"退出通知.等待 (真)\"或\"退出通知.限时等待 (xxx)\"方法调用返回真),此时表示服务已经"
+            注释 = "被操作系统服务管理器通知退出,就需要尽快退出本方法,否则可能会被操作系统强行中止.">
+
+    方法 停止 <公开 静态 注释 = "用作设置停止执行服务处理的状态,仅支持在本类或其继承类的\"处理\"方法内调用." 注释 = "本方法执行后,\"处理\"方法的\"退出通知\"参数将被置位." @嵌入式方法 = "">
+    {
+        @ @dt<服务类>::sStopService ()
+    }
+
+    #
+}

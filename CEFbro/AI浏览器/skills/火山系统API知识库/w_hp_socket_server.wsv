@@ -1,0 +1,2387 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.网络 <注释 = "提供各种服务端组件.">
+
+# @begin
+#
+# // 用作定义HP服务器类,内部使用.
+# // 本地类名, 别名, 事件接口.
+# @def_macro DECLARE_HPSOCKET_SERVER_REF(server_class_name, create_method_name, event_interface_class_name)  \
+#         @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA>(CHPSocketWrapper##create_method_name)    \
+# <>         <include>  \
+#         inline_ void CreateSocket () { data().data = HP_Create_##create_method_name((event_interface_class_name*)this); }  \
+#         inline_ server_class_name* Get##create_method_name ()  { return data ().data; }  \
+#         inline_ virtual IComplexSocket* GetSocketPtr() { return (IComplexSocket*)Get##create_method_name (); }  \
+# <>         </include>
+#
+# // 用作定义抽象基础类,内部使用
+# // 接口, 别名, 实例方法.
+# @ @def_macro DECLARE_HPSOCKET_ABS(base_class_name, create_method_name, ptr_method_name)  \
+# <>         <include>  \
+#         inline_ base_class_name* Get##create_method_name () { return (base_class_name*)ptr_method_name (); } \
+# <>         </include> 
+#
+# @end
+
+类 HP通信基础类 <注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "HPSocket通信组件基础类,提供公共方法,请使用其子类创建各个服务器." 折叠 @文档 = "category = \"辅助类\""
+        @强制依赖 = "HPSocket基础类" @禁止创建对象 = 真>
+{
+
+    # 属性 ---
+
+    方法 是否为安全连接 <公开 属性读 类型 = 逻辑型 注释 = "检测当前是否为安全连接(SSL/HTTPS)." 返回值注释 = "为安全连接返回真,反之假." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSocketPtr()->IsSecure()
+    }
+
+    方法 是否已启动 <公开 属性读 类型 = 逻辑型 注释 = "检测当前通信组件已经启动." 返回值注释 = "已成功启动返回真,反之假." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSocketPtr()->HasStarted()
+    }
+
+    方法 当前状态 <公开 属性读 类型 = HP状态 注释 = "获取当前通信组件的状态." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetSocketPtr()->GetState()
+    }
+
+    方法 客户端连接数 <公开 属性读 类型 = 整数 注释 = "获取当前通信组件的连接数." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetSocketPtr()->GetConnectionCount()
+    }
+
+    方法 当前错误码 <公开 属性读 类型 = HP错误码 注释 = "获取最近一次失败操作的错误代码." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetSocketPtr()->GetLastError()
+    }
+
+    方法 当前错误描述 <公开 属性读 类型 = 文本型 注释 = "获取最近一次失败操作的错误描述." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> (@sn<this>.GetSocketPtr()->GetLastErrorDesc())
+    }
+
+    方法 地址重用策略 <公开 属性读 类型 = HP地址重用选项 注释 = "获取地址重用选项." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetSocketPtr()->GetReuseAddressPolicy()
+    }
+
+    方法 地址重用策略 <公开 属性写 注释 = "设置地址重用选项.">
+    参数 欲使用选项 <类型 = HP地址重用选项>
+    {
+        @ GetSocketPtr()->SetReuseAddressPolicy((EnReuseAddressPolicy)@<欲使用选项>);
+    }
+
+    方法 数据发送策略 <公开 属性读 类型 = HP数据发送策略 注释 = "获取数据发送策略." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetSocketPtr()->GetSendPolicy()
+    }
+
+    方法 数据发送策略 <公开 属性写 注释 = "设置数据发送策略.">
+    参数 欲使用选项 <类型 = HP数据发送策略>
+    {
+        @ GetSocketPtr()->SetSendPolicy((EnSendPolicy)@<欲使用选项>);
+    }
+
+    方法 发送事件同步策略 <公开 属性读 类型 = HP发送事件同步策略 注释 = "获取数据发送事件同步策略." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetSocketPtr()->GetOnSendSyncPolicy()
+    }
+
+    方法 发送事件同步策略 <公开 属性写 注释 = "设置数据发送事件同步策略.">
+    参数 欲使用选项 <类型 = HP发送事件同步策略>
+    {
+        @ GetSocketPtr()->SetOnSendSyncPolicy((EnOnSendSyncPolicy)@<欲使用选项>);
+    }
+
+    方法 最大连接数 <公开 属性读 类型 = 整数 注释 = "获取通信组件所设置的最大连接数." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetSocketPtr()->GetMaxConnectionCount()
+    }
+
+    方法 最大连接数 <公开 属性写 注释 = "设置通信组件所设置的最大连接数." 注释 = "注意:请按实际情况设置,组件会根据该值预分配内存,不宜过大.">
+    参数 最大数量 <类型 = 整数>
+    {
+        @ GetSocketPtr()->SetMaxConnectionCount(@<最大数量>);
+    }
+
+    方法 缓存对象锁定时长 <公开 属性读 类型 = 整数 注释 = "获取Socket缓存对象锁定时间." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetSocketPtr()->GetFreeSocketObjLockTime()
+    }
+
+    方法 缓存对象锁定时长 <公开 属性写 注释 = "设置Socket缓存对象锁定时间(在锁定期间该Socket缓存对象不能被获取使用).">
+    参数 锁定时长 <类型 = 整数 注释 = "单位:毫秒.">
+    {
+        @ GetSocketPtr()->SetFreeSocketObjLockTime(@<锁定时长>);
+    }
+
+    方法 缓存池尺寸 <公开 属性读 类型 = 整数 注释 = "获取Socket缓存池大小." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetSocketPtr()->GetFreeSocketObjPool()
+    }
+
+    方法 缓存池尺寸 <公开 属性写 注释 = "设置Socket缓存池大小(通常设置为平均并发连接数的1/3 - 1/2).">
+    参数 尺寸 <类型 = 整数>
+    {
+        @ GetSocketPtr()->SetFreeSocketObjPool(@<尺寸>);
+    }
+
+    方法 缓存池尺寸_内存块 <公开 属性读 类型 = 整数 注释 = "获取内存块缓存池大小." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetSocketPtr()->GetFreeBufferObjPool()
+    }
+
+    方法 缓存池尺寸_内存块 <公开 属性写 注释 = "设置内存块缓存池大小(通常设置为Socket缓存池尺寸的2-3倍).">
+    参数 尺寸 <类型 = 整数>
+    {
+        @ GetSocketPtr()->SetFreeBufferObjPool(@<尺寸>);
+    }
+
+    方法 缓存池回收阀值 <公开 属性读 类型 = 整数 注释 = "获取Socket缓存池回收阀值." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetSocketPtr()->GetFreeSocketObjHold()
+    }
+
+    方法 缓存池回收阀值 <公开 属性写 注释 = "设置Socket缓存池回收阀值(通常设置为Socket缓存池大小的3倍).">
+    参数 阀值 <类型 = 整数>
+    {
+        @ GetSocketPtr()->SetFreeSocketObjHold(@<阀值>);
+    }
+
+    方法 缓存池回收阀值_内存块 <公开 属性读 类型 = 整数 注释 = "获取内存块缓存池回收阀值." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetSocketPtr()->GetFreeBufferObjHold()
+    }
+
+    方法 缓存池回收阀值_内存块 <公开 属性写 注释 = "设置内存块缓存池回收阀值.">
+    参数 阀值 <类型 = 整数>
+    {
+        @ GetSocketPtr()->SetFreeBufferObjHold(@<阀值>);
+    }
+
+    方法 工作线程数 <公开 属性读 类型 = 整数 注释 = "获取工作线程数量." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetSocketPtr()->GetWorkerThreadCount()
+    }
+
+    方法 工作线程数 <公开 属性写 注释 = "设置工作线程数量(通常设置为 2 * CPU + 2).">
+    参数 线程数量 <类型 = 整数>
+    {
+        @ GetSocketPtr()->SetWorkerThreadCount(@<线程数量>);
+    }
+
+    方法 标记静默时间 <公开 属性读 类型 = 逻辑型 注释 = "返回是否标记静默时间." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSocketPtr()->IsMarkSilence()
+    }
+
+    方法 标记静默时间 <公开 属性写 注释 = "是否标记静默时间." 注释 = "注意:仅在该属性启用为真时,\"断开静默连接\"方法才会起作用.">
+    参数 标记 <类型 = 逻辑型>
+    {
+        @ GetSocketPtr()->SetMarkSilence(@<标记>);
+    }
+
+    # ---
+
+    方法 停止 <公开 类型 = 逻辑型 注释 = "关闭通信组件,关闭完成后断开所有连接并释放所有资源." 返回值注释 = "关闭成功返回真,否则返回假." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSocketPtr()->Stop()
+    }
+
+    方法 发送数据 <公开 类型 = 逻辑型 注释 = "向指定客户连接ID发送数据." 返回值注释 = "发送成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "所欲接收数据的客户连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "所欲发送数据,本参数不可为空,否则将会发送失败.">
+    参数 数据长度 <类型 = 整数 注释 = "提供所欲发送数据的数据长度,默认-1则使用所提供的数据长度." @默认值 = -1>
+    参数 起始偏移量 <类型 = 整数 注释 = "发送数据缓冲区指针偏移量." @默认值 = 0>
+    {
+        @ return GetSocketPtr()->Send(@<连接ID>, (const BYTE*)@<数据>.GetPtr (), @<数据长度> == -1 ? (INT)@<数据>.GetSize () : @<数据长度>, @<起始偏移量>);
+    }
+
+    方法 发送数据组 <公开 类型 = 逻辑型 注释 = "向指定客户连接ID发送多组数据." 返回值注释 = "发送成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "所欲接收数据的客户连接ID.">
+    参数 数据 <类型 = 字节集数组类 注释 = "所欲发送多组数据,一个成员表示一组数据.">
+    {
+        @ WSABUF *arr = new WSABUF[(INT)@<数据>.GetCount()];
+        @ for (INT i = 0; i < (INT)@<数据>.GetCount(); i++){
+        @     arr[i].len = (INT)((@dt<字节集类>&)@<数据>.GetAt (i)).GetSize();
+        @     arr[i].buf = (CHAR *)((@dt<字节集类>&)@<数据>.GetAt (i)).GetPtr();
+        @ }
+        @ BOOL success = GetSocketPtr()->SendPackets(@<连接ID>, arr, (INT)@<数据>.GetCount());
+        @ delete[] arr;
+        @ return success;
+    }
+
+    方法 置暂停接收 <公开 类型 = 逻辑型 注释 = "设置服务器是否暂停指定连接的数据接收." 注释 = "注意:本方法将会暂停指定连接ID的数据接收,其他连接将正常进行数据接收." 返回值注释 = "返回是否操作成功."
+            @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "所欲暂停/恢复接收数据的客户连接ID.">
+    参数 是否暂停 <类型 = 逻辑型 注释 = "提供真则暂停数据接收,提供假则恢复该连接的数据接收." @默认值 = 真>
+    {
+        @ @sn<this>.GetSocketPtr()->PauseReceive(@<连接ID>, @<是否暂停>)
+    }
+
+    方法 断开连接 <公开 类型 = 逻辑型 注释 = "断开指定客户的连接." 返回值注释 = "断开成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "所欲断开的客户连接ID.">
+    参数 强制断开 <类型 = 逻辑型 注释 = "是否强制断开.">
+    {
+        @ @sn<this>.GetSocketPtr()->Disconnect(@<连接ID>, @<强制断开>)
+    }
+
+    方法 断开超时连接 <公开 类型 = 逻辑型 注释 = "断开超过指定时长的连接." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 超时 <类型 = 整数 注释 = "提供一个超时时长,超出该时长的即断开,单位毫秒.">
+    参数 强制断开 <类型 = 逻辑型 注释 = "是否强制断开.">
+    {
+        @ @sn<this>.GetSocketPtr()->DisconnectLongConnections(@<超时>, @<强制断开>)
+    }
+
+    方法 断开静默连接 <公开 类型 = 逻辑型 注释 = "断开超过指定时长的静默连接." 注释 = "注意:如该方法无效,请检查是否启用过属性\"标记静默时间\"." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 静默超时 <类型 = 整数 注释 = "提供一个超时时长,超出该时长的静默连接即断开,单位毫秒.">
+    参数 强制断开 <类型 = 逻辑型 注释 = "是否强制断开.">
+    {
+        @ @sn<this>.GetSocketPtr()->DisconnectSilenceConnections(@<静默超时>, @<强制断开>)
+    }
+
+    方法 超时等待 <公开 类型 = 逻辑型 注释 = "等待通信组件停止运行." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 时长 <类型 = 整数 注释 = "提供一个超时时长,单位毫秒.">
+    {
+        @ @sn<this>.GetSocketPtr()->Wait(@<时长>)
+    }
+
+    方法 置连接附加数据 <公开 类型 = 逻辑型 注释 = "以指定连接ID为索引设置一个附加数据." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "提供连接ID.">
+    参数 数据 <类型 = 变整数 注释 = "是否为连接绑定附加数据或者绑定什么样的数据,均由应用程序自身决定.">
+    {
+        @ @sn<this>.GetSocketPtr()->SetConnectionExtra(@<连接ID>, (PVOID)@<数据>)
+    }
+
+    方法 取连接附加数据 <公开 类型 = 逻辑型 注释 = "以指定连接ID为索引设置一个附加数据." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "提供连接ID.">
+    参数 数据指针 <类型 = 变整数>
+    {
+        @ @sn<this>.GetSocketPtr()->GetConnectionExtra(@<连接ID>, (PVOID*)@<数据指针>)
+    }
+
+    方法 取所有连接ID <公开 类型 = 变整数数组类 注释 = "获取当前已连接的所有连接ID.">
+    {
+        变量 结果 <类型 = 变整数数组类>
+        @ DWORD dwCount = 0;
+        @ GetSocketPtr()->GetAllConnectionIDs(nullptr, dwCount);
+        @ if (dwCount <= 0)
+        @     return @<结果>;
+        @ CONNID* pIDs = new CONNID[dwCount];
+        @ GetSocketPtr()->GetAllConnectionIDs(pIDs, dwCount);
+        @ for (INT i = 0; i < (INT)dwCount; i++)
+        @ {
+        @     @<结果>.data ().Add (pIDs[i]);
+        @ }
+        @ delete[] pIDs;
+        返回 (结果)
+    }
+
+    方法 取连接时长 <公开 类型 = 整数 注释 = "获取某个客户端连接时长(毫秒)." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供连接ID.">
+    {
+        @ DWORD dwPeriod = 0;
+        @ GetSocketPtr()->GetConnectPeriod(@<连接ID>, dwPeriod);
+        @ return dwPeriod;
+    }
+
+    方法 取静默时长 <公开 类型 = 整数 注释 = "获取某个客户端静默连接时长(毫秒)." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供连接ID.">
+    {
+        @ DWORD dwPeriod = 0;
+        @ GetSocketPtr()->GetSilencePeriod(@<连接ID>, dwPeriod);
+        @ return (INT)dwPeriod;
+    }
+
+    方法 取客户本地地址 <公开 类型 = 逻辑型 注释 = "获取某个连接的本地地址信息." 返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供连接ID.">
+    参数 地址信息 <类型 = 文本型 注释 = "提供一个储存地址内容的文本.">
+    {
+        @ USHORT usPort;
+        @ TCHAR buf [128];
+        @ buf [0] = '\0';
+        @ int iAddressLen = NUM_ELEMENTS_OF (buf) - 1;
+        @ BOOL isSuccess = GetSocketPtr()->GetLocalAddress(@<连接ID>, buf, iAddressLen, usPort);
+        @ if (isSuccess)
+        @     @<地址信息>.SetText (buf);
+        @ return isSuccess;
+    }
+
+    方法 取客户本地端口 <公开 类型 = 整数 注释 = "获取某个连接的本地端口信息." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供连接ID.">
+    {
+        @ USHORT usPort = 0;
+        @ TCHAR buf [128];
+        @ buf [0] = '\0';
+        @ int iAddressLen = NUM_ELEMENTS_OF (buf) - 1;
+        @ GetSocketPtr()->GetLocalAddress(@<连接ID>, buf, iAddressLen, usPort);
+        @ return (INT)(DWORD)usPort;
+    }
+
+    方法 取客户远程地址 <公开 类型 = 逻辑型 注释 = "获取某个连接的远程地址信息." 返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供连接ID.">
+    参数 地址信息 <类型 = 文本型 注释 = "提供一个储存地址内容的文本.">
+    {
+        @ USHORT usPort;
+        @ TCHAR buf [128];
+        @ buf [0] = '\0';
+        @ int iAddressLen = NUM_ELEMENTS_OF (buf) - 1;
+        @ BOOL isSuccess = GetSocketPtr()->GetRemoteAddress(@<连接ID>, buf, iAddressLen, usPort);
+        @ if (isSuccess)
+        @     @<地址信息>.SetText (buf);
+        @ return isSuccess;
+    }
+
+    方法 取客户远程端口 <公开 类型 = 整数 注释 = "获取某个连接的远程端口信息." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供连接ID.">
+    {
+        @ USHORT usPort = 0;
+        @ TCHAR buf [128];
+        @ buf [0] = '\0';
+        @ int iAddressLen = NUM_ELEMENTS_OF (buf) - 1;
+        @ GetSocketPtr()->GetRemoteAddress(@<连接ID>, buf, iAddressLen, usPort);
+        @ return (INT)(DWORD)usPort;
+    }
+
+    方法 取未发出数据长度 <公开 类型 = 整数 注释 = "获取连接中未发出数据的长度." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供连接ID.">
+    {
+        @ int iPending = 0;
+        @ GetSocketPtr()->GetPendingDataLength(@<连接ID>, iPending);
+        @ return iPending;
+    }
+
+    方法 取客户接收状态 <公开 类型 = 逻辑型 注释 = "获取指定连接客户的数据接收状态." 返回值注释 = "返回真则表示正在接收,反之假." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供连接ID.">
+    {
+        @ BOOL bPaused = FALSE;
+        @ GetSocketPtr()->IsPauseReceive(@<连接ID>, bPaused);
+        @ return bPaused;
+    }
+
+    方法 取连接状态 <公开 类型 = 逻辑型 注释 = "获取与指定客户的连接是否有效." 返回值注释 = "有效返回真,反之假." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "提供连接ID.">
+    {
+        @ @sn<this>.GetSocketPtr()->IsConnected(@<连接ID>)
+    }
+
+    # ---
+    # @begin
+    #
+    # <> <include>
+    #     virtual IComplexSocket* GetSocketPtr() { return NULL; }
+    # <> </include>
+    #
+    # @end
+}
+
+类 HPTCP服务器基础类 <基础类 = HP通信基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "TCP服务器基础类,提供TCP服务器组件基础方法." 折叠 编辑时信息 = "A954A, 0, 0, 0"
+        @文档 = "category = \"辅助类\"" @禁止创建对象 = 真>
+{
+
+    # @ @m<DECLARE_HPSOCKET_ABS>(ITcpServer, BaseTcpServer, GetSocketPtr)
+    #
+    # 属性 ---
+
+    方法 预投递数量 <公开 属性写 注释 = "设置Accept预投递数量(根据负载调整设置,Accept预投递数量越大则支持的并发连接请求越多).">
+    参数 数量 <类型 = 整数>
+    {
+        @ GetBaseTcpServer()->SetAcceptSocketCount(@<数量>);
+    }
+
+    方法 预投递数量 <公开 属性读 类型 = 整数 注释 = "获取Accept预投递数量." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetBaseTcpServer()->GetAcceptSocketCount()
+    }
+
+    方法 通信缓冲区尺寸 <公开 属性写 注释 = "设置通信数据缓冲区大小(根据平均通信数据包大小调整设置,通常设置为1024的倍数).">
+    参数 尺寸 <类型 = 整数>
+    {
+        @ GetBaseTcpServer()->SetSocketBufferSize(@<尺寸>);
+    }
+
+    方法 通信缓冲区尺寸 <公开 属性读 类型 = 整数 注释 = "获取通信数据缓冲区大小." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetBaseTcpServer()->GetSocketBufferSize()
+    }
+
+    方法 等候队列尺寸 <公开 属性写 注释 = "设置监听Socket的等候队列大小(根据并发连接数量调整设置).">
+    参数 尺寸 <类型 = 整数>
+    {
+        @ GetBaseTcpServer()->SetSocketListenQueue(@<尺寸>);
+    }
+
+    方法 等候队列尺寸 <公开 属性读 类型 = 整数 注释 = "获取监听Socket的等候队列大小." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetBaseTcpServer()->GetSocketListenQueue()
+    }
+
+    方法 正常心跳发送间隔 <公开 属性写 注释 = "设置正常心跳包间隔,默认60000毫秒.">
+    参数 间隔 <类型 = 整数 注释 = "单位:毫秒,0则不发送心跳包.">
+    {
+        @ GetBaseTcpServer()->SetKeepAliveTime(@<间隔>);
+    }
+
+    方法 正常心跳发送间隔 <公开 属性读 类型 = 整数 注释 = "获取正常心跳包间隔." 返回值注释 = "单位:毫秒,0则不发送心跳包." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetBaseTcpServer()->GetKeepAliveTime()
+    }
+
+    方法 异常心跳发送间隔 <公开 属性写 注释 = "设置异常心跳包间隔,默认20000毫秒." 注释 = "注意:如果超过若干次检测不到心跳确认即会触发断线处理(WinXP 5次, Win7 10次).">
+    参数 间隔 <类型 = 整数 注释 = "单位:毫秒,0则不发送心跳包.">
+    {
+        @ GetBaseTcpServer()->SetKeepAliveInterval(@<间隔>);
+    }
+
+    方法 异常心跳发送间隔 <公开 属性读 类型 = 整数 注释 = "获取异常心跳包间隔." 返回值注释 = "单位:毫秒,0则不发送心跳包." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetBaseTcpServer()->GetKeepAliveInterval()
+    }
+
+    # ---
+
+    方法 取当前监听地址 <公开 类型 = 逻辑型 注释 = "获取当前通信组件所监听的地址." 返回值注释 = "返回是否获取成功." @禁止流程检查 = 真>
+    参数 地址信息 <类型 = 文本型 注释 = "提供所欲存放地址内容的文本.">
+    {
+        @ USHORT usPort;
+        @ TCHAR buf [128];
+        @ buf [0] = '\0';
+        @ int iAddressLen = NUM_ELEMENTS_OF (buf) - 1;
+        @ BOOL isSuccess = GetBaseTcpServer()->GetListenAddress(buf, iAddressLen, usPort);
+        @ if (isSuccess)
+        @     @<地址信息>.SetText (buf);
+        @ return isSuccess;
+    }
+
+    方法 取当前监听端口 <公开 类型 = 整数 注释 = "获取当前通信组件所监听的端口号." @禁止流程检查 = 真>
+    {
+        @ USHORT usPort = 0;
+        @ TCHAR buf [128];
+        @ buf [0] = '\0';
+        @ int iAddressLen = NUM_ELEMENTS_OF (buf) - 1;
+        @ GetBaseTcpServer()->GetListenAddress(buf, iAddressLen, usPort);
+        @ return (INT)(DWORD)usPort;
+    }
+
+    方法 发送小文件 <公开 类型 = 逻辑型 注释 = "向指定客户端发送小文件(小于4096kb)." 返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供所欲接收数据的连接ID.">
+    参数 文件路径 <类型 = 文本型 注释 = "提供所欲发送文件的完整路径.">
+    参数 附加头数据 <类型 = 字节集类 注释 = "头部附加数据,空对象则不附加数据." @默认值 = 空对象>
+    参数 附加尾数据 <类型 = 字节集类 注释 = "尾部附加数据,空对象则不附加数据." @默认值 = 空对象>
+    {
+        @ WSABUF header, footer;
+        @ header.len = (INT)@<附加头数据>.GetSize();
+        @ header.buf = (CHAR *)@<附加头数据>.GetPtr();
+        @ footer.len = (INT)@<附加尾数据>.GetSize();
+        @ footer.buf = (CHAR *)@<附加尾数据>.GetPtr();
+        @ return GetBaseTcpServer()->SendSmallFile(@<连接ID>, @<文件路径>, &header, &footer);
+    }
+
+    方法 无延迟模式 <公开 属性写 注释 = "设置是否开启无延迟(nodelay)模式.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ GetBaseTcpServer()->SetNoDelay(@<启用>);
+    }
+
+    方法 无延迟模式 <公开 属性读 类型 = 逻辑型 注释 = "获取当前是否已开启无延迟(nodelay)模式." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetBaseTcpServer()->IsNoDelay()
+    }
+}
+
+类 HP_TCP服务器 <公开 基础类 = HPTCP服务器基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "  TCP服务器组件,不含SSL功能,如需SSL请使用\"HPTCP安全服务器类\"."
+        注释 = "  本类还有对应的易语言客户端和服务器配合程序,具体请Ctrl+鼠标左键点击"
+        注释 = "\"file://../../../../../samples/vprj_win/samples/hp_socket/易语言配合端/HP-TCP客户端.e\"和"
+        注释 = "\"file://../../../../../samples/vprj_win/samples/hp_socket/易语言配合端/HP-TCP服务器端.e\"" 折叠
+        @视窗.后缀文本 = "public ITcpServerListener" @文档 = "category = \"HP服务器\"">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (ITcpServer, TcpServer, ITcpServerListener)
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动服务器并且监听指定端口号." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 地址 <类型 = 文本型 注释 = "提供所欲监听的地址.">
+    参数 端口号 <类型 = 整数 注释 = "提供所欲监听的端口号. 有效端口号范围为从0到65535.">
+    {
+        @ @sn<this>.GetTcpServer()->Start(@<地址>, (USHORT)@<端口号>)
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "  当客户端通过事件\"客户进入\"后,将会立即触发本事件,只有通过本事件,才会进行握手动作." 返回值注释 = "可选返回值:"
+            返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手." 返回值注释 = "  1 = 忽略本次操作, 客户端可与服务器建立正式连接." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当服务器发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当服务器成功接收数据后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作."
+            返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 已接收数据 <类型 = 字节集类 注释 = "所接收到的数据.">
+    参数 已接收长度 <类型 = 整数 注释 = "已接收数据长度.">
+
+    方法 客户离开 <公开 定义事件 类型 = 整数 注释 = "当客户端主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 服务器被关闭 <公开 定义事件 类型 = 整数 注释 = "当服务器被关闭后,将会触发本事件.">
+
+    方法 启动完毕 <公开 定义事件 类型 = 整数 注释 = "服务器端启动完毕并开始监听后,将触发本事件.">
+
+    方法 客户进入 <公开 定义事件 类型 = 整数 注释 = "  当客户连接到服务器后,将会触发本事件,请注意,本事件下的连接并非是正式连接,"
+            注释 = "只有该连接通过\"完成握手\"事件,才可以与服务器建立正式连接,本事件返回值拥有具体意义,请参考返回值说明." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 将触发\"完成握手\"事件."
+            返回值注释 = "  1 = 忽略本次操作, 将触发\"完成握手\"事件." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # 事件实现 ---
+    #
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpServer* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }  //忽略,仅在PULL模型下触发.
+    # virtual EnHandleResult OnClose(ITcpServer* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<客户离开>(dwConnID, (INT)enOperation, (INT)iErrorCode); } 
+    # virtual EnHandleResult OnShutdown(ITcpServer* pSender) override { return (EnHandleResult)@<服务器被关闭>(); } 
+    # virtual EnHandleResult OnPrepareListen(ITcpServer* pSender, SOCKET soListen) override { return (EnHandleResult)@<启动完毕>(); }
+    # virtual EnHandleResult OnAccept(ITcpServer* pSender, CONNID dwConnID, UINT_PTR soClient) override { return (EnHandleResult)@<客户进入>(dwConnID); }
+    #
+    # <> </include>
+    # @end
+}
+
+类 HP_TCP安全服务器 <公开 基础类 = HPTCP服务器基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "TCP安全服务器类,支持SSL相关功能." 折叠
+        @视窗.后缀文本 = "public ITcpServerListener" @文档 = "category = \"HP服务器\"">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (ITcpServer, SSLServer, ITcpServerListener)
+    #
+    # 属性 ---
+
+    方法 握手模式 <公开 属性写 注释 = "设置通信组件SSL握手方式(默认为真,自动握手)">
+    参数 自动 <类型 = 逻辑型 注释 = "提供真则表示自动握手,否则需手动调用\"开始SSL握手\"方法.">
+    {
+        @ GetSSLServer()->SetSSLAutoHandShake(@<自动>);
+    }
+
+    方法 握手模式 <公开 属性读 类型 = 逻辑型 注释 = "获取通信组件SSL握手方式." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLServer()->IsSSLAutoHandShake()
+    }
+
+    方法 加密算法列表 <公开 属性写 注释 = "设置SSL加密算法列表.">
+    参数 算法 <类型 = 文本型>
+    {
+        @ GetSSLServer()->SetSSLCipherList(@<算法>);
+    }
+
+    方法 加密算法列表 <公开 属性读 类型 = 文本型 注释 = "获取SSL加密算法列表." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLServer()->GetSSLCipherList()
+    }
+
+    # ---
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动服务器并且监听指定端口号." 注释 = "注意:调用前请确保已初始化SSL环境成功,否则无法正确启动." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 地址 <类型 = 文本型 注释 = "提供所欲监听的地址.">
+    参数 端口号 <类型 = 整数 注释 = "提供所欲监听的端口号. 有效端口号范围为从0到65535.">
+    {
+        @ @sn<this>.GetSSLServer()->Start(@<地址>, (USHORT)@<端口号>)
+    }
+
+    方法 初始化SSL环境 <公开 类型 = 逻辑型 注释 = "初始化通信组件 SSL 环境参数." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败." 返回值注释 = "返回是否操作成功."
+            @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件路径." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件路径." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书文件或目录(单向验证或客户端可选)" @默认值 = "">
+    参数 SNI回调 <类型 = 变整数 注释 = "SNI回调函数指针(可选,如果为0则使用SNI默认回调函数)." @默认值 = 0>
+    {
+        @ return GetSSLServer()->SetupSSLContext((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : (LPCTSTR)@<证书文件>, @<私钥文件>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥文件>, @<私钥密码>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥密码>,@<CA证书>.IsEmpty() ? nullptr : (LPCTSTR)@<CA证书>,@<SNI回调> == 0 ? nullptr : (Fn_SNI_ServerNameCallback)@<SNI回调>);
+    }
+
+    方法 初始化SSL环境_内存 <公开 类型 = 逻辑型 注释 = "初始化通信组件SSL环境参数(从内存载入证书内容)." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败."
+            返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件内容." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件内容." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书内容." @默认值 = "">
+    参数 SNI回调 <类型 = 变整数 注释 = "SNI回调函数指针(可选,如果为0则使用SNI默认回调函数)." @默认值 = 0>
+    {
+        @ return GetSSLServer()->SetupSSLContextByMemory((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : GetMbsText (@<证书文件>, CVolMem (), NULL), @<私钥文件>.IsEmpty() ? nullptr : GetMbsText (@<私钥文件>, CVolMem (), NULL), @<私钥密码>.IsEmpty() ? nullptr : GetMbsText (@<私钥密码>, CVolMem (), NULL),@<CA证书>.IsEmpty() ? nullptr : GetMbsText (@<CA证书>, CVolMem (), NULL), @<SNI回调> == 0 ? nullptr : (Fn_SNI_ServerNameCallback)@<SNI回调>);
+    }
+
+    方法 添加SNI主机证书 <公开 类型 = 整数 注释 = "增加SNI主机证书." 注释 = "注意:需在初始化SSL环境成功后调用,可增加多个证书." 返回值注释 = "返回大于0则添加成功,且该值为主机证书对应的索引,小于0则添加失败."
+            编辑时信息 = "AAAA0, 0, 0, 0" @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." 编辑时信息 = "AAAA0, 0, 0, 0" @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件路径." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件路径." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书文件或目录(单向验证可选)." @默认值 = "">
+    {
+        @ return GetSSLServer()->AddSSLContext((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : (LPCTSTR)@<证书文件>, @<私钥文件>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥文件>, @<私钥密码>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥密码>,@<CA证书>.IsEmpty() ? nullptr : (LPCTSTR)@<CA证书>);
+    }
+
+    方法 添加SNI主机证书_内存 <公开 类型 = 整数 注释 = "增加SNI主机证书(从内存载入证书内容)." 注释 = "注意:需在初始化SSL环境成功后调用,可增加多个证书."
+            返回值注释 = "返回大于0则添加成功,且该值为主机证书对应的索引,小于0则添加失败." @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." 编辑时信息 = "AAAA0, 0, 0, 0" @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件内容." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件内容." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书内容." @默认值 = "">
+    {
+        @ return GetSSLServer()->AddSSLContextByMemory((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : GetMbsText (@<证书文件>, CVolMem (), NULL), @<私钥文件>.IsEmpty() ? nullptr : GetMbsText (@<私钥文件>, CVolMem (), NULL), @<私钥密码>.IsEmpty() ? nullptr : GetMbsText (@<私钥密码>, CVolMem (), NULL), @<CA证书>.IsEmpty() ? nullptr : GetMbsText (@<CA证书>, CVolMem (), NULL));
+    }
+
+    方法 绑定SNI主机域名 <公开 类型 = 逻辑型 注释 = "将指定主机域名绑定至已添加成功的SNI主机证书." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 主机域名 <类型 = 文本型 注释 = "提供所欲绑定的主机域名." 编辑时信息 = "AAAA0, 0, 0, 0">
+    参数 证书索引 <类型 = 整数 注释 = "提供SNI证书对应的索引,即\"添加SNI主机证书\"成功所返回的索引值.">
+    {
+        @ @sn<this>.GetSSLServer()->BindSSLServerName(@<主机域名>, @<证书索引>)
+    }
+
+    方法 清理SSL环境 <公开 注释 = "清理通信组件SSL运行环境,回收SSL相关内存." 注释 = "注意:当通信组件需要重设SSL信息时,请先调用该方法清空原有环境参数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLServer()->CleanupSSLContext()
+    }
+
+    方法 开始SSL握手 <公开 类型 = 逻辑型 注释 = "启动SSL握手." 注释 = "注意:如果当前通信组件的\"握手模式\"为假时,需调用该方法握手,否则将导致连接失败." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "指定所欲与其握手的连接ID.">
+    {
+        @ @sn<this>.GetSSLServer()->StartSSLHandShake(@<连接ID>)
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "  当客户端通过事件\"客户进入\"后,将会立即触发本事件,只有通过本事件,才会进行握手动作." 返回值注释 = "可选返回值:"
+            返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手." 返回值注释 = "  1 = 忽略本次操作, 客户端可与服务器建立正式连接." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当服务器发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当服务器成功接收数据后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作."
+            返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 已接收数据 <类型 = 字节集类 注释 = "所接收到的数据.">
+    参数 已接收长度 <类型 = 整数 注释 = "已接收数据长度.">
+
+    方法 客户离开 <公开 定义事件 类型 = 整数 注释 = "当客户端主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 服务器被关闭 <公开 定义事件 类型 = 整数 注释 = "当服务器被关闭后,将会触发本事件.">
+
+    方法 启动完毕 <公开 定义事件 类型 = 整数 注释 = "服务器端启动完毕并开始监听后,将触发本事件.">
+
+    方法 客户进入 <公开 定义事件 类型 = 整数 注释 = "  当客户连接到服务器后,将会触发本事件,请注意,本事件下的连接并非是正式连接,"
+            注释 = "只有该连接通过\"完成握手\"事件,才可以与服务器建立正式连接,本事件返回值拥有具体意义,请参考返回值说明." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 将触发\"完成握手\"事件."
+            返回值注释 = "  1 = 忽略本次操作, 将触发\"完成握手\"事件." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # 事件实现 ---
+    #
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpServer* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }  //忽略,仅在PULL模型下触发.
+    # virtual EnHandleResult OnClose(ITcpServer* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<客户离开>(dwConnID, (INT)enOperation, (INT)iErrorCode); } 
+    # virtual EnHandleResult OnShutdown(ITcpServer* pSender) override { return (EnHandleResult)@<服务器被关闭>(); }
+    # virtual EnHandleResult OnPrepareListen(ITcpServer* pSender, SOCKET soListen) override { return (EnHandleResult)@<启动完毕>(); }
+    # virtual EnHandleResult OnAccept(ITcpServer* pSender, CONNID dwConnID, UINT_PTR soClient) override { return (EnHandleResult)@<客户进入>(dwConnID); }
+    #
+    # <> </include>
+    # @end
+}
+
+# TCPPULL ---
+
+类 HPPULL服务器基础类 <公开 基础类 = HPTCP服务器基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "TCPPULL服务器的基础类,子类包含PULL服务器,SSL服务器." 折叠
+        编辑时信息 = "7954D, 0, 0, 0" @文档 = "category = \"辅助类\"" @禁止创建对象 = 真>
+{
+
+    # @ @m<DECLARE_HPSOCKET_ABS>(ITcpPullServer, BaseTcpPullServer, GetSocketPtr)  //重定义双继承的Pull指针类型.
+    #
+
+    方法 抓取数据 <公开 类型 = HP数据抓取结果 注释 = "抓取指定连接所发送的数据." 返回值注释 = "返回本次数据抓取结果." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供所欲抓取其数据的连接ID.">
+    参数 缓冲区 <类型 = 字节集类 注释 = "提供所欲装载该数据的缓冲区." 注释 = "注意:如所提供缓冲区未分配空间程序将自动按数据长度参数分配指定空间.">
+    参数 数据长度 <类型 = 整数 注释 = "提供所欲抓取数据的长度." "">
+    {
+        @ return (INT)GetBaseTcpPullServer()->Fetch(@<连接ID>, @<缓冲区>.GetSize () < @<数据长度> ? @<缓冲区>.Alloc (@<数据长度>, TRUE) : @<缓冲区>.GetPtr(), @<数据长度>);
+    }
+
+    方法 窥探数据 <公开 类型 = HP数据抓取结果 注释 = "窥探指定连接所发送的数据(不会移除缓冲区数据)." 返回值注释 = "返回本次数据窥探结果." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供所欲窥探其数据的连接ID.">
+    参数 缓冲区 <类型 = 字节集类 注释 = "提供所欲窥探该数据的缓冲区." 注释 = "注意:如所提供缓冲区未分配空间程序将自动按数据长度参数分配指定空间.">
+    参数 数据长度 <类型 = 整数 注释 = "提供所欲窥探数据的长度.">
+    {
+        @ return (INT)GetBaseTcpPullServer()->Peek(@<连接ID>, @<缓冲区>.GetSize () < @<数据长度> ? @<缓冲区>.Alloc (@<数据长度>, TRUE) : @<缓冲区>.GetPtr(), @<数据长度>);
+    }
+}
+
+类 HP_PULL服务器 <公开 基础类 = HPPULL服务器基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = " 本类为PULL服务器"
+        注释 = "  PULL服务器和\"HP_TCP服务器\"的区别为,\"HP_TCP服务器\"接收到客户数据之后,将会通过事件\"数据进入\"同时"
+        注释 = "为用户提供当前所收到数据和数据长度,而PULL服务器将只会提供当前数据长度,而将数据写入到" 注释 = "内存中,您可以在进行数据长度累计,当累计长度为一个完整的包长度时,使用方法\"抓取数据\"或\""
+        注释 = "窥探数据\"从内存中将指定长度的数据提取出来,直接组成完整的包,省去了您自行拆包和组包的步" 注释 = "骤." 折叠 @视窗.后缀文本 = "public ITcpServerListener"
+        @文档 = "category = \"HP服务器\"">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (ITcpPullServer, TcpPullServer, ITcpServerListener)
+    #
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动服务器并且监听指定端口号." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 地址 <类型 = 文本型 注释 = "提供所欲监听的地址.">
+    参数 端口号 <类型 = 整数 注释 = "提供所欲监听的端口号. 有效端口号范围为从0到65535.">
+    {
+        @ @sn<this>.GetTcpPullServer()->Start(@<地址>, (USHORT)@<端口号>)
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "  当客户端通过事件\"客户进入\"后,将会立即触发本事件,只有通过本事件,才会进行握手动作." 返回值注释 = "可选返回值:"
+            返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手." 返回值注释 = "  1 = 忽略本次操作, 客户端可与服务器建立正式连接." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当服务器发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当服务器成功接收数据后将触发本事件,此时可以进行抓取数据/窥探数据." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 数据长度 <类型 = 整数 注释 = "本次接收的数据长度.">
+
+    方法 客户离开 <公开 定义事件 类型 = 整数 注释 = "当客户端主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 服务器被关闭 <公开 定义事件 类型 = 整数 注释 = "当服务器被关闭后,将会触发本事件.">
+
+    方法 启动完毕 <公开 定义事件 类型 = 整数 注释 = "服务器端启动完毕并开始监听后,将触发本事件.">
+
+    方法 客户进入 <公开 定义事件 类型 = 整数 注释 = "  当客户连接到服务器后,将会触发本事件,请注意,本事件下的连接并非是正式连接,"
+            注释 = "只有该连接通过\"完成握手\"事件,才可以与服务器建立正式连接,本事件返回值拥有具体意义,请参考返回值说明." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 将触发\"完成握手\"事件."
+            返回值注释 = "  1 = 忽略本次操作, 将触发\"完成握手\"事件." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # 事件实现 ---
+    #
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpServer* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return HR_IGNORE; }  //忽略,仅在PUSH/PACK模型下触发.
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, iLength); }
+    # virtual EnHandleResult OnClose(ITcpServer* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<客户离开>(dwConnID, (INT)enOperation, (INT)iErrorCode); } 
+    # virtual EnHandleResult OnShutdown(ITcpServer* pSender) override { return (EnHandleResult)@<服务器被关闭>(); } 
+    # virtual EnHandleResult OnPrepareListen(ITcpServer* pSender, SOCKET soListen) override { return (EnHandleResult)@<启动完毕>(); }
+    # virtual EnHandleResult OnAccept(ITcpServer* pSender, CONNID dwConnID, UINT_PTR soClient) override { return (EnHandleResult)@<客户进入>(dwConnID); }
+    #
+    # <> </include>
+    # @end
+}
+
+类 HP_PULL安全服务器 <公开 基础类 = HPPULL服务器基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "  本类为PULL安全服务器"
+        注释 = "  PULL服务器和\"HP_TCP服务器\"的区别为,\"HP_TCP服务器\"接收到客户数据之后,将会通过事件\"数据进入\"同时"
+        注释 = "为用户提供当前所收到数据和数据长度,而PULL服务器将只会提供当前数据长度,而将数据写入到" 注释 = "内存中,您可以在进行数据长度累计,当累计长度为一个完整的包长度时,使用方法\"抓取数据\"或\""
+        注释 = "窥探数据\"从内存中将指定长度的数据提取出来,直接组成完整的包,省去了您自行拆包和组包的步" 注释 = "骤." 注释 = "  请注意: 安全服务器,需要在启动之前,为其设初始化SSL环境,添加证书文件以及私钥文件,否则服"
+        注释 = "务器将会启动失败." 折叠 @视窗.后缀文本 = "public ITcpServerListener" @文档 = "category = \"HP服务器\"">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (ITcpPullServer, SSLPullServer, ITcpServerListener)
+    #
+    # 属性 ---
+
+    方法 握手模式 <公开 属性写 注释 = "设置通信组件SSL握手方式(默认为真,自动握手)">
+    参数 自动 <类型 = 逻辑型 注释 = "提供真则表示自动握手,否则需手动调用\"开始SSL握手\"方法.">
+    {
+        @ GetSSLPullServer()->SetSSLAutoHandShake(@<自动>);
+    }
+
+    方法 握手模式 <公开 属性读 类型 = 逻辑型 注释 = "获取通信组件SSL握手方式." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLPullServer()->IsSSLAutoHandShake()
+    }
+
+    方法 加密算法列表 <公开 属性写 注释 = "设置SSL加密算法列表.">
+    参数 算法 <类型 = 文本型>
+    {
+        @ GetSSLPullServer()->SetSSLCipherList(@<算法>);
+    }
+
+    方法 加密算法列表 <公开 属性读 类型 = 文本型 注释 = "获取SSL加密算法列表." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLPullServer()->GetSSLCipherList()
+    }
+
+    # ---
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动服务器并且监听指定端口号." 注释 = "注意:调用前请确保已初始化SSL环境成功,否则无法正确启动." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 地址 <类型 = 文本型 注释 = "提供所欲监听的地址.">
+    参数 端口号 <类型 = 整数 注释 = "提供所欲监听的端口号. 有效端口号范围为从0到65535.">
+    {
+        @ @sn<this>.GetSSLPullServer()->Start(@<地址>, (USHORT)@<端口号>)
+    }
+
+    方法 初始化SSL环境 <公开 类型 = 逻辑型 注释 = "初始化通信组件 SSL 环境参数." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败." 返回值注释 = "返回是否操作成功."
+            @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件路径." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件路径." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书文件或目录(单向验证或客户端可选)" @默认值 = "">
+    参数 SNI回调 <类型 = 变整数 注释 = "SNI回调函数指针(可选,如果为0则使用SNI默认回调函数)." @默认值 = 0>
+    {
+        @ return GetSSLPullServer()->SetupSSLContext((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : (LPCTSTR)@<证书文件>, @<私钥文件>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥文件>, @<私钥密码>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥密码>,@<CA证书>.IsEmpty() ? nullptr : (LPCTSTR)@<CA证书>,@<SNI回调> == 0 ? nullptr : (Fn_SNI_ServerNameCallback)@<SNI回调>);
+    }
+
+    方法 初始化SSL环境_内存 <公开 类型 = 逻辑型 注释 = "初始化通信组件SSL环境参数(从内存载入证书内容)." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败."
+            返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件内容." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件内容." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书内容." @默认值 = "">
+    参数 SNI回调 <类型 = 变整数 注释 = "SNI回调函数指针(可选,如果为0则使用SNI默认回调函数)." @默认值 = 0>
+    {
+        @ return GetSSLPullServer()->SetupSSLContextByMemory((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : GetMbsText (@<证书文件>, CVolMem (), NULL), @<私钥文件>.IsEmpty() ? nullptr : GetMbsText (@<私钥文件>, CVolMem (), NULL), @<私钥密码>.IsEmpty() ? nullptr : GetMbsText (@<私钥密码>, CVolMem (), NULL),@<CA证书>.IsEmpty() ? nullptr : GetMbsText (@<CA证书>, CVolMem (), NULL), @<SNI回调> == 0 ? nullptr : (Fn_SNI_ServerNameCallback)@<SNI回调>);
+    }
+
+    方法 添加SNI主机证书 <公开 类型 = 整数 注释 = "增加SNI主机证书." 注释 = "注意:需在初始化SSL环境成功后调用,可增加多个证书." 返回值注释 = "返回大于0则添加成功,且该值为主机证书对应的索引,小于0则添加失败."
+            编辑时信息 = "AAAA0, 0, 0, 0" @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." 编辑时信息 = "AAAA0, 0, 0, 0" @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件路径." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件路径." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书文件或目录(单向验证可选)." @默认值 = "">
+    {
+        @ return GetSSLPullServer()->AddSSLContext((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : (LPCTSTR)@<证书文件>, @<私钥文件>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥文件>, @<私钥密码>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥密码>,@<CA证书>.IsEmpty() ? nullptr : (LPCTSTR)@<CA证书>);
+    }
+
+    方法 添加SNI主机证书_内存 <公开 类型 = 整数 注释 = "增加SNI主机证书(从内存载入证书内容)." 注释 = "注意:需在初始化SSL环境成功后调用,可增加多个证书."
+            返回值注释 = "返回大于0则添加成功,且该值为主机证书对应的索引,小于0则添加失败." @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." 编辑时信息 = "AAAA0, 0, 0, 0" @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件内容." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件内容." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书内容." @默认值 = "">
+    {
+        @ return GetSSLPullServer()->AddSSLContextByMemory((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : GetMbsText (@<证书文件>, CVolMem (), NULL), @<私钥文件>.IsEmpty() ? nullptr : GetMbsText (@<私钥文件>, CVolMem (), NULL), @<私钥密码>.IsEmpty() ? nullptr : GetMbsText (@<私钥密码>, CVolMem (), NULL), @<CA证书>.IsEmpty() ? nullptr : GetMbsText (@<CA证书>, CVolMem (), NULL));
+    }
+
+    方法 绑定SNI主机域名 <公开 类型 = 逻辑型 注释 = "将指定主机域名绑定至已添加成功的SNI主机证书." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 主机域名 <类型 = 文本型 注释 = "提供所欲绑定的主机域名." 编辑时信息 = "AAAA0, 0, 0, 0">
+    参数 证书索引 <类型 = 整数 注释 = "提供SNI证书对应的索引,即\"添加SNI主机证书\"成功所返回的索引值.">
+    {
+        @ @sn<this>.GetSSLPullServer()->BindSSLServerName(@<主机域名>, @<证书索引>)
+    }
+
+    方法 清理SSL环境 <公开 注释 = "清理通信组件SSL运行环境,回收SSL相关内存." 注释 = "注意:当通信组件需要重设SSL信息时,请先调用该方法清空原有环境参数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLPullServer()->CleanupSSLContext()
+    }
+
+    方法 开始SSL握手 <公开 类型 = 逻辑型 注释 = "启动SSL握手." 注释 = "注意:如果当前通信组件的\"握手模式\"为假时,需调用该方法握手,否则将导致连接失败." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "指定所欲与其握手的连接ID.">
+    {
+        @ @sn<this>.GetSSLPullServer()->StartSSLHandShake(@<连接ID>)
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "  当客户端通过事件\"客户进入\"后,将会立即触发本事件,只有通过本事件,才会进行握手动作." 返回值注释 = "可选返回值:"
+            返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手." 返回值注释 = "  1 = 忽略本次操作, 客户端可与服务器建立正式连接." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当服务器发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当服务器成功接收数据后将触发本事件,此时可以进行抓取数据/窥探数据." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 数据长度 <类型 = 整数 注释 = "本次接收的数据长度.">
+
+    方法 客户离开 <公开 定义事件 类型 = 整数 注释 = "当客户端主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 服务器被关闭 <公开 定义事件 类型 = 整数 注释 = "当服务器被关闭后,将会触发本事件.">
+
+    方法 启动完毕 <公开 定义事件 类型 = 整数 注释 = "服务器端启动完毕并开始监听后,将触发本事件.">
+
+    方法 客户进入 <公开 定义事件 类型 = 整数 注释 = "  当客户连接到服务器后,将会触发本事件,请注意,本事件下的连接并非是正式连接,"
+            注释 = "只有该连接通过\"完成握手\"事件,才可以与服务器建立正式连接,本事件返回值拥有具体意义,请参考返回值说明." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 将触发\"完成握手\"事件."
+            返回值注释 = "  1 = 忽略本次操作, 将触发\"完成握手\"事件." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # 事件实现 ---
+    #
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpServer* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return HR_IGNORE; }  //忽略,仅在PUSH/PACK模型下触发.
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, iLength); }
+    # virtual EnHandleResult OnClose(ITcpServer* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<客户离开>(dwConnID, (INT)enOperation, (INT)iErrorCode); } 
+    # virtual EnHandleResult OnShutdown(ITcpServer* pSender) override { return (EnHandleResult)@<服务器被关闭>(); } 
+    # virtual EnHandleResult OnPrepareListen(ITcpServer* pSender, SOCKET soListen) override { return (EnHandleResult)@<启动完毕>(); }
+    # virtual EnHandleResult OnAccept(ITcpServer* pSender, CONNID dwConnID, UINT_PTR soClient) override { return (EnHandleResult)@<客户进入>(dwConnID); }
+    #
+    # <> </include>
+    # @end
+}
+
+# UDP ---
+
+类 HP_UDP服务器 <公开 基础类 = HP通信基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "用于C/S模式的点对点单播通信服务器." 折叠 @视窗.后缀文本 = "public IUdpServerListener"
+        @文档 = "category = \"UDP服务器\"">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (IUdpServer, UdpServer, IUdpServerListener)
+    #
+    # 属性 ---
+
+    方法 报文最大尺寸 <公开 属性写 注释 = "设置数据报文最大长度(建议在局域网环境下不超过1432字节,在广域网环境下不超过548字节)">
+    参数 最大尺寸 <类型 = 整数>
+    {
+        @ GetUdpServer()->SetMaxDatagramSize(@<最大尺寸>);
+    }
+
+    方法 报文最大尺寸 <公开 属性读 类型 = 整数 注释 = "获取数据报文最大长度." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpServer()->GetMaxDatagramSize()
+    }
+
+    方法 预投递数量 <公开 属性写 注释 = "设置Receive预投递数量(根据负载调整设置,Receive预投递数量越大则丢包概率越小).">
+    参数 数量 <类型 = 整数>
+    {
+        @ GetUdpServer()->SetPostReceiveCount(@<数量>);
+    }
+
+    方法 预投递数量 <公开 属性读 类型 = 整数 注释 = "获取Receive预投递数量." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpServer()->GetPostReceiveCount()
+    }
+
+    方法 心跳发送间隔 <公开 属性写 注释 = "设置心跳包发送间隔.">
+    参数 间隔 <类型 = 整数 注释 = "单位:毫秒,0则不发送心跳包.">
+    {
+        @ GetUdpServer()->SetDetectInterval(@<间隔>);
+    }
+
+    方法 心跳发送间隔 <公开 属性读 类型 = 整数 注释 = "获取心跳包发送间隔." 返回值注释 = "单位:毫秒,0则不发送心跳包." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpServer()->GetDetectInterval()
+    }
+
+    方法 心跳包尝试次数 <公开 属性写 注释 = "设置心跳包最大尝试的次数,超过最大次数将以断线处理.">
+    参数 尝试次数 <类型 = 整数 注释 = "如果超出该次数则会以断线处理,0则不发送心跳包.">
+    {
+        @ GetUdpServer()->SetDetectAttempts(@<尝试次数>);
+    }
+
+    方法 心跳包尝试次数 <公开 属性读 类型 = 整数 注释 = "获取心跳包最大尝试的次数." 返回值注释 = "单位:毫秒,0则不发送心跳包." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpServer()->GetDetectAttempts()
+    }
+
+    # ---
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动服务器并且监听指定端口号." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 地址 <类型 = 文本型 注释 = "提供所欲监听的地址.">
+    参数 端口号 <类型 = 整数 注释 = "提供所欲监听的端口号. 有效端口号范围为从0到65535.">
+    {
+        @ @sn<this>.GetUdpServer()->Start(@<地址>, (USHORT)@<端口号>)
+    }
+
+    方法 取当前监听地址 <公开 类型 = 逻辑型 注释 = "获取当前通信组件所监听的地址." 返回值注释 = "返回是否获取成功." @禁止流程检查 = 真>
+    参数 地址信息 <类型 = 文本型 注释 = "提供所欲存放地址内容的文本.">
+    {
+        @ USHORT usPort;
+        @ TCHAR buf [128];
+        @ buf [0] = '\0';
+        @ int iAddressLen = NUM_ELEMENTS_OF (buf) - 1;
+        @ BOOL isSuccess = GetUdpServer()->GetListenAddress(buf, iAddressLen, usPort);
+        @ if (isSuccess) @<地址信息>.SetText (buf);
+        @ return isSuccess;
+    }
+
+    方法 取当前监听端口 <公开 类型 = 整数 注释 = "获取当前通信组件所监听的端口号." @禁止流程检查 = 真>
+    {
+        @ USHORT usPort = 0;
+        @ TCHAR buf [128];
+        @ buf [0] = '\0';
+        @ int iAddressLen = NUM_ELEMENTS_OF (buf) - 1;
+        @ GetUdpServer()->GetListenAddress(buf, iAddressLen, usPort);
+        @ return (INT)(DWORD)usPort;
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "  当客户端通过事件\"客户进入\"后,将会立即触发本事件,只有通过本事件,才会进行握手动作." 返回值注释 = "可选返回值:"
+            返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手." 返回值注释 = "  1 = 忽略本次操作, 客户端可与服务器建立正式连接." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当服务器发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当服务器成功接收数据后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作."
+            返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 已接收数据 <类型 = 字节集类 注释 = "所接收到的数据.">
+    参数 已接收长度 <类型 = 整数 注释 = "已接收数据长度.">
+
+    方法 通信发生错误 <公开 定义事件 类型 = 整数 注释 = "当客户端主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 服务器被关闭 <公开 定义事件 类型 = 整数 注释 = "当服务器被关闭后,将会触发本事件.">
+
+    方法 启动完毕 <公开 定义事件 类型 = 整数 注释 = "服务器端启动完毕并开始监听后,将触发本事件.">
+
+    方法 客户进入 <公开 定义事件 类型 = 整数 注释 = "  当客户连接到服务器后,将会触发本事件,请注意,本事件下的连接并非是正式连接,"
+            注释 = "只有该连接通过\"完成握手\"事件,才可以与服务器建立正式连接,本事件返回值拥有具体意义,请参考返回值说明." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 将触发\"完成握手\"事件."
+            返回值注释 = "  1 = 忽略本次操作, 将触发\"完成握手\"事件." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # 事件实现 ---
+    #
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(IUdpServer* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); } 
+    # virtual EnHandleResult OnSend(IUdpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(IUdpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(IUdpServer* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }
+    # virtual EnHandleResult OnClose(IUdpServer* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<通信发生错误>(dwConnID, (INT)enOperation, (INT)iErrorCode); }
+    # virtual EnHandleResult OnShutdown(IUdpServer* pSender) override { return (EnHandleResult)@<服务器被关闭>(); } 
+    # virtual EnHandleResult OnPrepareListen(IUdpServer* pSender, SOCKET soListen) override { return (EnHandleResult)@<启动完毕>(); }
+    # virtual EnHandleResult OnAccept(IUdpServer* pSender, CONNID dwConnID, UINT_PTR soClient) override { return (EnHandleResult)@<客户进入>(dwConnID); } 
+    #
+    # <> </include>
+    # @end
+}
+
+# 代理 ---
+
+类 HPTCP代理基础类 <公开 基础类 = HP通信基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "Agent抽象基类,提供公共方法,请使用其子类创建不同的代理端." @文档 = "category = \"辅助类\""
+        @禁止创建对象 = 真>
+{
+
+    # @ @m<DECLARE_HPSOCKET_ABS>(ITcpAgent, BaseTcpAgent, GetSocketPtr)
+    #
+    # 属性 ---
+
+    方法 通信缓冲区尺寸 <公开 属性写 注释 = "设置通信数据缓冲区大小(根据平均通信数据包大小调整设置,通常设置为1024的倍数).">
+    参数 尺寸 <类型 = 整数>
+    {
+        @ GetBaseTcpAgent()->SetSocketBufferSize(@<尺寸>);
+    }
+
+    方法 通信缓冲区尺寸 <公开 属性读 类型 = 整数 注释 = "获取通信数据缓冲区大小." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetBaseTcpAgent()->GetSocketBufferSize()
+    }
+
+    方法 正常心跳发送间隔 <公开 属性写 注释 = "设置正常心跳包间隔,默认60000毫秒.">
+    参数 间隔 <类型 = 整数 注释 = "单位:毫秒,0则不发送心跳包.">
+    {
+        @ GetBaseTcpAgent()->SetKeepAliveTime(@<间隔>);
+    }
+
+    方法 正常心跳发送间隔 <公开 属性读 类型 = 整数 注释 = "获取正常心跳包间隔." 返回值注释 = "单位:毫秒,0则不发送心跳包." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetBaseTcpAgent()->GetKeepAliveTime()
+    }
+
+    方法 异常心跳发送间隔 <公开 属性写 注释 = "设置异常心跳包间隔,默认20000毫秒." 注释 = "注意:如果超过若干次检测不到心跳确认即会触发断线处理(WinXP 5次, Win7 10次).">
+    参数 间隔 <类型 = 整数 注释 = "单位:毫秒,0则不发送心跳包.">
+    {
+        @ GetBaseTcpAgent()->SetKeepAliveInterval(@<间隔>);
+    }
+
+    方法 异常心跳发送间隔 <公开 属性读 类型 = 整数 注释 = "获取异常心跳包间隔." 返回值注释 = "单位:毫秒,0则不发送心跳包." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetBaseTcpAgent()->GetKeepAliveInterval()
+    }
+
+    方法 同步连接超时 <公开 属性读 类型 = 整数 注释 = "获取以同步方式连接时所欲等待连接的超时时间." 返回值注释 = "单位:毫秒,0则永不超时." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetBaseTcpAgent()->GetSyncConnectTimeout()
+    }
+
+    方法 同步连接超时 <公开 属性写 注释 = "设置以同步方式连接时所欲等待连接的超时时间.">
+    参数 超时 <类型 = 整数 注释 = "单位:毫秒,0则永不超时.">
+    {
+        @ GetBaseTcpAgent()->SetSyncConnectTimeout((DWORD)@<超时>);
+    }
+
+    # 方法 ---
+
+    方法 连接 <公开 类型 = 逻辑型 注释 = "连接到指定服务器,请在启动成功之后使用." @禁止流程检查 = 真>
+    参数 远程地址 <类型 = 文本型 注释 = "提供所欲连接的服务器地址.">
+    参数 远程端口 <类型 = 整数 注释 = "提供该服务器的端口. 有效端口号范围为从0到65535.">
+    参数 本地地址 <类型 = 文本型 注释 = "提供本地地址,空文本则使用\"启动()\"时所绑定的地址." @默认值 = 空对象>
+    参数 本地端口 <类型 = 整数 注释 = "提供本地端口号. 有效端口号范围为从0到65535." @默认值 = 0>
+    参数 附加数据 <类型 = 变整数 注释 = "连接附加数据,为0则无附加." @默认值 = 0>
+    参数 连接ID结果 <类型 = 变整数类 注释 = "获取本次连接所分配的连接ID,值将写入该变量,提供空对象表示不获取." @默认值 = 空对象>
+    {
+        @ return GetBaseTcpAgent()->Connect(@<远程地址>, (USHORT)@<远程端口>, (@<连接ID结果>.IsNullObject () ? nullptr : (CONNID*)@<连接ID结果>.GetDataPtr()), @<附加数据> == 0 ? nullptr : (PVOID)@<附加数据>, (USHORT)@<本地端口>, (BOOL)@<本地地址>.IsNullObject () ? (LPCTSTR)nullptr : @<本地地址>);
+    }
+
+    方法 取指定连接远程地址 <公开 类型 = 逻辑型 注释 = "获取某个连接的远程地址信息." 返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供连接ID.">
+    参数 地址信息 <类型 = 文本型 注释 = "提供一个储存地址内容的文本.">
+    {
+        @ USHORT usPort;
+        @ TCHAR buf [128];
+        @ buf [0] = '\0';
+        @ int iAddressLen = NUM_ELEMENTS_OF (buf) - 1;
+        @ BOOL isSuccess = GetBaseTcpAgent()->GetRemoteHost(@<连接ID>, buf, iAddressLen, usPort);
+        @ if (isSuccess) @<地址信息>.SetText (buf);
+        @ return isSuccess;
+    }
+
+    方法 取指定连接远程端口 <公开 类型 = 整数 注释 = "获取某个连接的远程端口信息." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供连接ID.">
+    {
+        @ USHORT usPort = 0;
+        @ TCHAR buf [128];
+        @ buf [0] = '\0';
+        @ int iAddressLen = NUM_ELEMENTS_OF (buf) - 1;
+        @ GetBaseTcpAgent()->GetRemoteHost(@<连接ID>, buf, iAddressLen, usPort);
+        @ return (INT)(DWORD)usPort;
+    }
+
+    方法 发送小文件 <公开 类型 = 逻辑型 注释 = "向指定连接发送小文件(小于4096kb)." 返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供所欲接收数据的连接ID.">
+    参数 文件路径 <类型 = 文本型 注释 = "提供所欲发送文件的完整路径.">
+    参数 附加头数据 <类型 = 字节集类 注释 = "头部附加数据,空对象则不附加数据." @默认值 = 空对象>
+    参数 附加尾数据 <类型 = 字节集类 注释 = "尾部附加数据,空对象则不附加数据." @默认值 = 空对象>
+    {
+        @ WSABUF header,footer;
+        @ header.len = (INT)@<附加头数据>.GetSize();
+        @ header.buf = (CHAR *)@<附加头数据>.GetPtr();
+        @ footer.len = (INT)@<附加尾数据>.GetSize();
+        @ footer.buf = (CHAR *)@<附加尾数据>.GetPtr();
+        @ return GetBaseTcpAgent()->SendSmallFile(@<连接ID>, @<文件路径>, &header, &footer);
+    }
+
+    方法 无延迟模式 <公开 属性写 注释 = "设置是否开启无延迟(nodelay)模式.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ GetBaseTcpAgent()->SetNoDelay(@<启用>);
+    }
+
+    方法 无延迟模式 <公开 属性读 类型 = 逻辑型 注释 = "获取当前是否已开启无延迟(nodelay)模式." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetBaseTcpAgent()->IsNoDelay()
+    }
+}
+
+类 HP_TCP代理类 <公开 基础类 = HPTCP代理基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "TCPAgent组件,如欲使用SSL请查看\"HPTCP安全代理类\"."
+        @视窗.后缀文本 = "public ITcpAgentListener" @文档 = "category = \"HP客户端\"">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (ITcpAgent, TcpAgent, ITcpAgentListener)
+    #
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动通信代理组件,启动完成后可开始连接远程服务器." 返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 绑定地址 <类型 = 文本型 注释 = "提供所欲绑定的地址,默认空绑定任意地址." @默认值 = "">
+    参数 异步连接 <类型 = 逻辑型 注释 = "是否采用异步连接方式." @默认值 = 真>
+    {
+        @ return GetTcpAgent()->Start(@<绑定地址>.IsEmpty() ? nullptr : (LPCTSTR)@<绑定地址>, @<异步连接>);
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "与服务端进行握手时将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当通信组件发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当通信组件成功接收数据后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作."
+            返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 已接收数据 <类型 = 字节集类 注释 = "所接收到的数据.">
+    参数 已接收长度 <类型 = 整数 注释 = "已接收数据长度.">
+
+    方法 通信发生错误 <公开 定义事件 类型 = 整数 注释 = "当通信组件主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 代理被关闭 <公开 定义事件 类型 = 整数 注释 = "当通信组件被关闭后,将会触发本事件.">
+
+    方法 准备连接 <公开 定义事件 类型 = 整数 注释 = "当通信组件启动之后,会触发一次本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行连接."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行连接." 返回值注释 = "  2 = 本次操作错误, 终止启动通信客户端组件.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 连接完成 <公开 定义事件 类型 = 整数 注释 = "与服务端成功建立连接时本事件将被触发." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行." 返回值注释 = "  2 = 本次操作错误, 如果为同步连接将终止启动通信客户端,为异步则会关闭连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }  //忽略,仅在PULL模型下触发.
+    # virtual EnHandleResult OnClose(ITcpAgent* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<通信发生错误>(dwConnID, (INT)enOperation, (INT)iErrorCode); }
+    # virtual EnHandleResult OnShutdown(ITcpAgent* pSender) override { return (EnHandleResult)@<代理被关闭>(); }
+    # virtual EnHandleResult OnPrepareConnect(ITcpAgent* pSender, CONNID dwConnID, SOCKET socket) override { return (EnHandleResult)@<准备连接>(dwConnID); }
+    # virtual EnHandleResult OnConnect(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<连接完成>(dwConnID); } 
+    #
+    # <> </include>
+    # @end
+}
+
+类 HP_TCP安全代理类 <公开 基础类 = HPTCP代理基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "TCPAgent组件,支持SSL." @视窗.后缀文本 = "public ITcpAgentListener"
+        @文档 = "category = \"HP客户端\"">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (ITcpAgent, SSLAgent, ITcpAgentListener)
+    #
+    # 属性 ---
+
+    方法 握手模式 <公开 属性写 注释 = "设置通信组件SSL握手方式(默认为真,自动握手)">
+    参数 自动 <类型 = 逻辑型 注释 = "提供真则表示自动握手,否则需手动调用\"开始SSL握手\"方法.">
+    {
+        @ GetSSLAgent()->SetSSLAutoHandShake(@<自动>);
+    }
+
+    方法 握手模式 <公开 属性读 类型 = 逻辑型 注释 = "获取通信组件SSL握手方式." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLAgent()->IsSSLAutoHandShake()
+    }
+
+    方法 加密算法列表 <公开 属性写 注释 = "设置SSL加密算法列表.">
+    参数 算法 <类型 = 文本型>
+    {
+        @ GetSSLAgent()->SetSSLCipherList(@<算法>);
+    }
+
+    方法 加密算法列表 <公开 属性读 类型 = 文本型 注释 = "获取SSL加密算法列表." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLAgent()->GetSSLCipherList()
+    }
+
+    # 方法 ---
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动通信代理组件,启动完成后可开始连接远程服务器." 注释 = "注意:调用前请确保已初始化SSL环境成功,否则无法正确启动." 返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 绑定地址 <类型 = 文本型 注释 = "提供所欲绑定的地址,默认空绑定任意地址." @默认值 = "">
+    参数 异步连接 <类型 = 逻辑型 注释 = "是否采用异步连接方式." @默认值 = 真>
+    {
+        @ return GetSSLAgent()->Start(@<绑定地址>.IsEmpty() ? nullptr : (LPCTSTR)@<绑定地址>, @<异步连接>);
+    }
+
+    方法 初始化SSL环境 <公开 类型 = 逻辑型 注释 = "初始化通信组件 SSL 环境参数." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败." 返回值注释 = "返回是否操作成功."
+            @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件路径(客户端可选)." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件路径(客户端可选)." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书文件或目录(单向验证或客户端可选)." @默认值 = "">
+    {
+        @ return GetSSLAgent()->SetupSSLContext((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? (LPCTSTR)nullptr : @<证书文件>, @<私钥文件>.IsEmpty() ? (LPCTSTR)nullptr : @<私钥文件>, @<私钥密码>.IsEmpty() ? (LPCTSTR)nullptr : @<私钥密码>,@<CA证书>.IsEmpty() ? (LPCTSTR)nullptr : @<CA证书>);
+    }
+
+    方法 初始化SSL环境_内存 <公开 类型 = 逻辑型 注释 = "初始化通信组件SSL环境参数(从内存载入证书内容)." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败."
+            返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件内容." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件内容." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书内容." @默认值 = "">
+    {
+        @ return GetSSLAgent()->SetupSSLContextByMemory((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : GetMbsText (@<证书文件>, CVolMem (), NULL), @<私钥文件>.IsEmpty() ? nullptr : GetMbsText (@<私钥文件>, CVolMem (), NULL), @<私钥密码>.IsEmpty() ? nullptr : GetMbsText (@<私钥密码>, CVolMem (), NULL),@<CA证书>.IsEmpty() ? nullptr : GetMbsText (@<CA证书>, CVolMem (), NULL));
+    }
+
+    方法 清理SSL环境 <公开 注释 = "清理通信组件SSL运行环境,回收SSL相关内存." 注释 = "注意:当通信组件需要重设SSL信息时,请先调用该方法清空原有环境参数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLAgent()->CleanupSSLContext()
+    }
+
+    方法 开始SSL握手 <公开 类型 = 逻辑型 注释 = "启动SSL握手." 注释 = "注意:如果当前通信组件的\"握手模式\"为假时,需调用该方法握手,否则将导致连接失败." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "指定所欲与其握手的连接ID.">
+    {
+        @ @sn<this>.GetSSLAgent()->StartSSLHandShake(@<连接ID>)
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "与服务端进行握手时将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当通信组件发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当通信组件成功接收数据后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作."
+            返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 已接收数据 <类型 = 字节集类 注释 = "所接收到的数据.">
+    参数 已接收长度 <类型 = 整数 注释 = "已接收数据长度.">
+
+    方法 通信发生错误 <公开 定义事件 类型 = 整数 注释 = "当通信组件主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 代理被关闭 <公开 定义事件 类型 = 整数 注释 = "当通信组件被关闭后,将会触发本事件.">
+
+    方法 准备连接 <公开 定义事件 类型 = 整数 注释 = "当通信组件启动之后,会触发一次本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行连接."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行连接." 返回值注释 = "  2 = 本次操作错误, 终止启动通信客户端组件.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 连接完成 <公开 定义事件 类型 = 整数 注释 = "与服务端成功建立连接时本事件将被触发." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行." 返回值注释 = "  2 = 本次操作错误, 如果为同步连接将终止启动通信客户端,为异步则会关闭连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # @begin
+    #
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); } 
+    # virtual EnHandleResult OnSend(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }  //忽略,仅在PULL模型下触发.
+    # virtual EnHandleResult OnClose(ITcpAgent* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<通信发生错误>(dwConnID, (INT)enOperation, (INT)iErrorCode); }
+    # virtual EnHandleResult OnShutdown(ITcpAgent* pSender) override { return (EnHandleResult)@<代理被关闭>(); } 
+    # virtual EnHandleResult OnPrepareConnect(ITcpAgent* pSender, CONNID dwConnID, SOCKET socket) override { return (EnHandleResult)@<准备连接>(dwConnID); }
+    # virtual EnHandleResult OnConnect(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<连接完成>(dwConnID); } 
+    #
+    # <> </include>
+    #
+    # @end
+}
+
+类 HPPULL代理基础类 <公开 基础类 = HPTCP代理基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "PULL模型Agent基础类." @文档 = "category = \"辅助类\"" @禁止创建对象 = 真>
+{
+
+    # @ @m<DECLARE_HPSOCKET_ABS>(ITcpPullAgent, BaseTcpPullAgent, GetSocketPtr)
+    #
+
+    方法 抓取数据 <公开 类型 = HP数据抓取结果 注释 = "抓取指定连接所发送的数据." 返回值注释 = "返回本次数据抓取结果." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供所欲抓取其数据的连接ID.">
+    参数 缓冲区 <类型 = 字节集类 注释 = "提供所欲装载该数据的缓冲区." 注释 = "注意:如所提供缓冲区未分配空间程序将自动按数据长度参数分配指定空间.">
+    参数 数据长度 <类型 = 整数 注释 = "提供所欲抓取数据的长度." "">
+    {
+        @ return (INT)GetBaseTcpPullAgent()->Fetch(@<连接ID>, @<缓冲区>.GetSize () <= 0 ? @<缓冲区>.Alloc (@<数据长度>, TRUE) : @<缓冲区>.GetPtr(), @<数据长度>);
+    }
+
+    方法 窥探数据 <公开 类型 = HP数据抓取结果 注释 = "窥探指定连接所发送的数据(不会移除缓冲区数据)." 返回值注释 = "返回本次数据窥探结果." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供所欲窥探其数据的连接ID.">
+    参数 缓冲区 <类型 = 字节集类 注释 = "提供所欲窥探该数据的缓冲区." 注释 = "注意:如所提供缓冲区未分配空间程序将自动按数据长度参数分配指定空间.">
+    参数 数据长度 <类型 = 整数 注释 = "提供所欲窥探数据的长度.">
+    {
+        @ return (INT)GetBaseTcpPullAgent()->Peek(@<连接ID>, @<缓冲区>.GetSize () <= 0 ? @<缓冲区>.Alloc (@<数据长度>, TRUE) : @<缓冲区>.GetPtr(), @<数据长度>);
+    }
+}
+
+类 HP_PULL代理类 <公开 基础类 = HPPULL代理基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "TCPPullAgent组件." @视窗.后缀文本 = "public ITcpAgentListener"
+        @文档 = "category = \"HP客户端\"">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (ITcpPullAgent, TcpPullAgent, ITcpAgentListener)
+    #
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动通信代理组件,启动完成后可开始连接远程服务器." 返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 绑定地址 <类型 = 文本型 注释 = "提供所欲绑定的地址,默认空绑定任意地址." @默认值 = "">
+    参数 异步连接 <类型 = 逻辑型 注释 = "是否采用异步连接方式." @默认值 = 真>
+    {
+        @ return GetTcpPullAgent()->Start(@<绑定地址>.IsEmpty() ? (LPCTSTR)nullptr : @<绑定地址>, @<异步连接>);
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "与服务端进行握手时将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当通信组件发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当通信组件成功接收数据后将触发本事件,此时可以进行抓取数据/窥探数据." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 数据长度 <类型 = 整数 注释 = "本次接收的数据长度.">
+
+    方法 通信发生错误 <公开 定义事件 类型 = 整数 注释 = "当通信组件主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 代理被关闭 <公开 定义事件 类型 = 整数 注释 = "当通信组件被关闭后,将会触发本事件.">
+
+    方法 准备连接 <公开 定义事件 类型 = 整数 注释 = "当通信组件启动之后,会触发一次本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行连接."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行连接." 返回值注释 = "  2 = 本次操作错误, 终止启动通信客户端组件.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 连接完成 <公开 定义事件 类型 = 整数 注释 = "与服务端成功建立连接时本事件将被触发." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行." 返回值注释 = "  2 = 本次操作错误, 如果为同步连接将终止启动通信客户端,为异步则会关闭连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # @begin
+    #
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); } 
+    # virtual EnHandleResult OnSend(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return HR_IGNORE; }  //忽略,仅在PUSH/PACK模型下触发.
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, iLength); }
+    # virtual EnHandleResult OnClose(ITcpAgent* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<通信发生错误>(dwConnID, (INT)enOperation, (INT)iErrorCode); }
+    # virtual EnHandleResult OnShutdown(ITcpAgent* pSender) override { return (EnHandleResult)@<代理被关闭>(); } 
+    # virtual EnHandleResult OnPrepareConnect(ITcpAgent* pSender, CONNID dwConnID, SOCKET socket) override { return (EnHandleResult)@<准备连接>(dwConnID); }
+    # virtual EnHandleResult OnConnect(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<连接完成>(dwConnID); } 
+    #
+    # <> </include>
+    #
+    # @end
+}
+
+类 HP_PULL安全代理类 <公开 基础类 = HPPULL代理基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "TCPPullAgent组件,支持SSL."
+        @视窗.后缀文本 = "public ITcpAgentListener" @文档 = "category = \"HP客户端\"">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (ITcpPullAgent, SSLPullAgent, ITcpAgentListener)
+    #
+    # 属性 ---
+
+    方法 握手模式 <公开 属性写 注释 = "设置通信组件SSL握手方式(默认为真,自动握手)">
+    参数 自动 <类型 = 逻辑型 注释 = "提供真则表示自动握手,否则需手动调用\"开始SSL握手\"方法.">
+    {
+        @ GetSSLPullAgent()->SetSSLAutoHandShake(@<自动>);
+    }
+
+    方法 握手模式 <公开 属性读 类型 = 逻辑型 注释 = "获取通信组件SSL握手方式." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLPullAgent()->IsSSLAutoHandShake()
+    }
+
+    方法 加密算法列表 <公开 属性写 注释 = "设置SSL加密算法列表.">
+    参数 算法 <类型 = 文本型>
+    {
+        @ GetSSLPullAgent()->SetSSLCipherList(@<算法>);
+    }
+
+    方法 加密算法列表 <公开 属性读 类型 = 文本型 注释 = "获取SSL加密算法列表." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLPullAgent()->GetSSLCipherList()
+    }
+
+    # 方法 ---
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动通信代理组件,启动完成后可开始连接远程服务器." 注释 = "注意:调用前请确保已初始化SSL环境成功,否则无法正确启动." 返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 绑定地址 <类型 = 文本型 注释 = "提供所欲绑定的地址,默认空绑定任意地址." @默认值 = "">
+    参数 异步连接 <类型 = 逻辑型 注释 = "是否采用异步连接方式." @默认值 = 真>
+    {
+        @ return GetSSLPullAgent()->Start(@<绑定地址>.IsEmpty() ? nullptr : (LPCTSTR)@<绑定地址>, @<异步连接>);
+    }
+
+    方法 初始化SSL环境 <公开 类型 = 逻辑型 注释 = "初始化通信组件 SSL 环境参数." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败." 返回值注释 = "返回是否操作成功."
+            @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件路径(客户端可选)." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件路径(客户端可选)." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书文件或目录(单向验证或客户端可选)." @默认值 = "">
+    {
+        @ return GetSSLPullAgent()->SetupSSLContext((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : (LPCTSTR)@<证书文件>, @<私钥文件>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥文件>, @<私钥密码>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥密码>,@<CA证书>.IsEmpty() ? nullptr : (LPCTSTR)@<CA证书>);
+    }
+
+    方法 初始化SSL环境_内存 <公开 类型 = 逻辑型 注释 = "初始化通信组件SSL环境参数(从内存载入证书内容)." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败."
+            返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件内容." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件内容." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书内容." @默认值 = "">
+    {
+        @ return GetSSLPullAgent()->SetupSSLContextByMemory((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : GetMbsText (@<证书文件>, CVolMem (), NULL), @<私钥文件>.IsEmpty() ? nullptr : GetMbsText (@<私钥文件>, CVolMem (), NULL), @<私钥密码>.IsEmpty() ? nullptr : GetMbsText (@<私钥密码>, CVolMem (), NULL),@<CA证书>.IsEmpty() ? nullptr : GetMbsText (@<CA证书>, CVolMem (), NULL));
+    }
+
+    方法 清理SSL环境 <公开 注释 = "清理通信组件SSL运行环境,回收SSL相关内存." 注释 = "注意:当通信组件需要重设SSL信息时,请先调用该方法清空原有环境参数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLPullAgent()->CleanupSSLContext()
+    }
+
+    方法 开始SSL握手 <公开 类型 = 逻辑型 注释 = "启动SSL握手." 注释 = "注意:如果当前通信组件的\"握手模式\"为假时,需调用该方法握手,否则将导致连接失败." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "指定所欲与其握手的连接ID.">
+    {
+        @ @sn<this>.GetSSLPullAgent()->StartSSLHandShake(@<连接ID>)
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "与服务端进行握手时将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当通信组件发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当通信组件成功接收数据后将触发本事件,此时可以进行抓取数据/窥探数据." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 数据长度 <类型 = 整数 注释 = "本次接收的数据长度.">
+
+    方法 通信发生错误 <公开 定义事件 类型 = 整数 注释 = "当通信组件主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 代理被关闭 <公开 定义事件 类型 = 整数 注释 = "当通信组件被关闭后,将会触发本事件.">
+
+    方法 准备连接 <公开 定义事件 类型 = 整数 注释 = "当通信组件启动之后,会触发一次本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行连接."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行连接." 返回值注释 = "  2 = 本次操作错误, 终止启动通信客户端组件.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 连接完成 <公开 定义事件 类型 = 整数 注释 = "与服务端成功建立连接时本事件将被触发." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行." 返回值注释 = "  2 = 本次操作错误, 如果为同步连接将终止启动通信客户端,为异步则会关闭连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); } 
+    # virtual EnHandleResult OnSend(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return HR_IGNORE; }  //忽略,仅在PUSH/PACK模型下触发.
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, iLength); }
+    # virtual EnHandleResult OnClose(ITcpAgent* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<通信发生错误>(dwConnID, (INT)enOperation, (INT)iErrorCode); }
+    # virtual EnHandleResult OnShutdown(ITcpAgent* pSender) override { return (EnHandleResult)@<代理被关闭>(); } 
+    # virtual EnHandleResult OnPrepareConnect(ITcpAgent* pSender, CONNID dwConnID, SOCKET socket) override { return (EnHandleResult)@<准备连接>(dwConnID); }
+    # virtual EnHandleResult OnConnect(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<连接完成>(dwConnID); } 
+    #
+    # <> </include>
+    # @end
+}
+
+类 HPPACK服务器基础类 <公开 基础类 = HPTCP服务器基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "TCP-PACK服务器基础类,请使用其子类创建Pack服务器."
+        @文档 = "category = \"辅助类\"" @禁止创建对象 = 真>
+{
+
+    # @ @m<DECLARE_HPSOCKET_ABS>(ITcpPackServer, BaseTcpPackServer, GetSocketPtr)  //将双继承方法合并
+    #
+    # 属性 ---
+
+    方法 最大包尺寸 <公开 属性读 类型 = 整数 注释 = "获取数据包最大长度." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetBaseTcpPackServer()->GetMaxPackSize()
+    }
+
+    方法 最大包尺寸 <公开 属性写 注释 = "设置数据包最大长度." 注释 = "注意:有效数据包最大长度不能超过4194303/0x3FFFFF字节,默认为262144/0x40000字节.">
+    参数 长度 <类型 = 整数>
+    {
+        @ GetBaseTcpPackServer()->SetMaxPackSize(@<长度>);
+    }
+
+    方法 自定义包头标识 <公开 属性读 类型 = 短整数 注释 = "获取数据包头的标识." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetBaseTcpPackServer()->GetPackHeaderFlag()
+    }
+
+    方法 自定义包头标识 <公开 属性写 注释 = "设置数据包头标识." 注释 = "注意:有效包头标识取值范围0~1023/0x3FF.">
+    参数 标识 <类型 = 短整数 注释 = "默认:0,为0时不校验包头.">
+    {
+        @ GetBaseTcpPackServer()->SetPackHeaderFlag(@<标识>);
+    }
+}
+
+类 HP_PACK服务器 <公开 基础类 = HPPACK服务器基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装."
+        注释 = "  PACK服务器与\"HP_TCP服务器\"的区别为,\"HP_TCP服务器\"接收到客户数据之后,会立即触发事件\"数据进入\","
+        注释 = "并且设置该事件参数\"已接收长度\"和\"已接收数据\"而PACK服务器,则会在内部将所接收数据" 注释 = "组成一个完整的包之后,才会触发该事件,直接提供给用户一个完整的数据包."
+        注释 = " 本服务器不支持SSL需要使用\"HP_PACK安全服务器\"." @视窗.后缀文本 = "public ITcpServerListener" @文档 = "category = \"HP服务器\"">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (ITcpPackServer, TcpPackServer, ITcpServerListener)
+    #
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动服务器并且监听指定端口号." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 地址 <类型 = 文本型 注释 = "提供所欲监听的地址.">
+    参数 端口号 <类型 = 整数 注释 = "提供所欲监听的端口号. 有效端口号范围为从0到65535.">
+    {
+        @ @sn<this>.GetTcpPackServer()->Start(@<地址>, (USHORT)@<端口号>)
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "  当客户端通过事件\"客户进入\"后,将会立即触发本事件,只有通过本事件,才会进行握手动作." 返回值注释 = "可选返回值:"
+            返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手." 返回值注释 = "  1 = 忽略本次操作, 客户端可与服务器建立正式连接." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当服务器发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当服务器成功接收数据后将触发本事件." 注释 = "注意:仅在当前组件接收完整个数据包本事件才会触发(PACK模型)." 返回值注释 = "可选返回值:"
+            返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 数据 <类型 = 字节集类 注释 = "所接收到的完整数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所接收完整数据的长度.">
+
+    方法 客户离开 <公开 定义事件 类型 = 整数 注释 = "当客户端主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 服务器被关闭 <公开 定义事件 类型 = 整数 注释 = "当服务器被关闭后,将会触发本事件.">
+
+    方法 启动完毕 <公开 定义事件 类型 = 整数 注释 = "服务器端启动完毕并开始监听后,将触发本事件.">
+
+    方法 客户进入 <公开 定义事件 类型 = 整数 注释 = "  当客户连接到服务器后,将会触发本事件,请注意,本事件下的连接并非是正式连接,"
+            注释 = "只有该连接通过\"完成握手\"事件,才可以与服务器建立正式连接,本事件返回值拥有具体意义,请参考返回值说明." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 将触发\"完成握手\"事件."
+            返回值注释 = "  1 = 忽略本次操作, 将触发\"完成握手\"事件." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # 事件实现 ---
+    #
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpServer* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); } //完整数据触发.
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }
+    # virtual EnHandleResult OnClose(ITcpServer* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<客户离开>(dwConnID, (INT)enOperation, (INT)iErrorCode); } 
+    # virtual EnHandleResult OnShutdown(ITcpServer* pSender) override { return (EnHandleResult)@<服务器被关闭>(); } 
+    # virtual EnHandleResult OnPrepareListen(ITcpServer* pSender, SOCKET soListen) override { return (EnHandleResult)@<启动完毕>(); }
+    # virtual EnHandleResult OnAccept(ITcpServer* pSender, CONNID dwConnID, UINT_PTR soClient) override { return (EnHandleResult)@<客户进入>(dwConnID); }
+    #
+    # <> </include>
+    # @end
+}
+
+类 HP_PACK安全服务器 <公开 基础类 = HPPACK服务器基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "  本类为PACK安全服务器"
+        注释 = "  PACK服务器与\"HP_TCP服务器\"的区别为,\"HP_TCP服务器\"接收到客户数据之后,会立即触发事件\"数据进入\","
+        注释 = "并且设置该事件参数\"已接收长度\"和\"已接收数据\"而PACK服务器,则会在内部将所接收数据" 注释 = "组成一个完整的包之后,才会触发该事件,直接提供给用户一个完整的数据包."
+        注释 = "  请注意: 安全服务器,需要在启动之前,为其设初始化SSL环境,添加证书文件以及私钥文件,否则服" 注释 = "务器将会启动失败." @视窗.后缀文本 = "public ITcpServerListener"
+        @文档 = "category = \"HP服务器\"">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (ITcpPackServer, SSLPackServer, ITcpServerListener)
+    #
+    # 属性 ---
+
+    方法 握手模式 <公开 属性写 注释 = "设置通信组件SSL握手方式(默认为真,自动握手)">
+    参数 自动 <类型 = 逻辑型 注释 = "提供真则表示自动握手,否则需手动调用\"开始SSL握手\"方法.">
+    {
+        @ GetSSLPackServer()->SetSSLAutoHandShake(@<自动>);
+    }
+
+    方法 握手模式 <公开 属性读 类型 = 逻辑型 注释 = "获取通信组件SSL握手方式." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLPackServer()->IsSSLAutoHandShake()
+    }
+
+    方法 加密算法列表 <公开 属性写 注释 = "设置SSL加密算法列表.">
+    参数 算法 <类型 = 文本型>
+    {
+        @ GetSSLPackServer()->SetSSLCipherList(@<算法>);
+    }
+
+    方法 加密算法列表 <公开 属性读 类型 = 文本型 注释 = "获取SSL加密算法列表." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLPackServer()->GetSSLCipherList()
+    }
+
+    # ---
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动服务器并且监听指定端口号." 注释 = "注意:调用前请确保已初始化SSL环境成功,否则无法正确启动." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 地址 <类型 = 文本型 注释 = "提供所欲监听的地址.">
+    参数 端口号 <类型 = 整数 注释 = "提供所欲监听的端口号. 有效端口号范围为从0到65535.">
+    {
+        @ @sn<this>.GetSSLPackServer()->Start(@<地址>, (USHORT)@<端口号>)
+    }
+
+    方法 初始化SSL环境 <公开 类型 = 逻辑型 注释 = "初始化通信组件 SSL 环境参数." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败." 返回值注释 = "返回是否操作成功."
+            @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件路径." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件路径." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书文件或目录(单向验证或客户端可选)" @默认值 = "">
+    参数 SNI回调 <类型 = 变整数 注释 = "SNI回调函数指针(可选,如果为0则使用SNI默认回调函数)." @默认值 = 0>
+    {
+        @ return GetSSLPackServer()->SetupSSLContext((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : (LPCTSTR)@<证书文件>, @<私钥文件>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥文件>, @<私钥密码>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥密码>,@<CA证书>.IsEmpty() ? nullptr : (LPCTSTR)@<CA证书>,@<SNI回调> == 0 ? nullptr : (Fn_SNI_ServerNameCallback)@<SNI回调>);
+    }
+
+    方法 初始化SSL环境_内存 <公开 类型 = 逻辑型 注释 = "初始化通信组件SSL环境参数(从内存载入证书内容)." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败."
+            返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件内容." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件内容." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书内容." @默认值 = "">
+    参数 SNI回调 <类型 = 变整数 注释 = "SNI回调函数指针(可选,如果为0则使用SNI默认回调函数)." @默认值 = 0>
+    {
+        @ return GetSSLPackServer()->SetupSSLContextByMemory((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : GetMbsText (@<证书文件>, CVolMem (), NULL), @<私钥文件>.IsEmpty() ? nullptr : GetMbsText (@<私钥文件>, CVolMem (), NULL), @<私钥密码>.IsEmpty() ? nullptr : GetMbsText (@<私钥密码>, CVolMem (), NULL),@<CA证书>.IsEmpty() ? nullptr : GetMbsText (@<CA证书>, CVolMem (), NULL), @<SNI回调> == 0 ? nullptr : (Fn_SNI_ServerNameCallback)@<SNI回调>);
+    }
+
+    方法 添加SNI主机证书 <公开 类型 = 整数 注释 = "增加SNI主机证书." 注释 = "注意:需在初始化SSL环境成功后调用,可增加多个证书." 返回值注释 = "返回大于0则添加成功,且该值为主机证书对应的索引,小于0则添加失败."
+            编辑时信息 = "AAAA0, 0, 0, 0" @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." 编辑时信息 = "AAAA0, 0, 0, 0" @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件路径." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件路径." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书文件或目录(单向验证可选)." @默认值 = "">
+    {
+        @ return GetSSLPackServer()->AddSSLContext((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : (LPCTSTR)@<证书文件>, @<私钥文件>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥文件>, @<私钥密码>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥密码>,@<CA证书>.IsEmpty() ? nullptr : (LPCTSTR)@<CA证书>);
+    }
+
+    方法 添加SNI主机证书_内存 <公开 类型 = 整数 注释 = "增加SNI主机证书(从内存载入证书内容)." 注释 = "注意:需在初始化SSL环境成功后调用,可增加多个证书."
+            返回值注释 = "返回大于0则添加成功,且该值为主机证书对应的索引,小于0则添加失败." @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." 编辑时信息 = "AAAA0, 0, 0, 0" @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件内容." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件内容." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书内容." @默认值 = "">
+    {
+        @ return GetSSLPackServer()->AddSSLContextByMemory((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : GetMbsText (@<证书文件>, CVolMem (), NULL), @<私钥文件>.IsEmpty() ? nullptr : GetMbsText (@<私钥文件>, CVolMem (), NULL), @<私钥密码>.IsEmpty() ? nullptr : GetMbsText (@<私钥密码>, CVolMem (), NULL), @<CA证书>.IsEmpty() ? nullptr : GetMbsText (@<CA证书>, CVolMem (), NULL));
+    }
+
+    方法 绑定SNI主机域名 <公开 类型 = 逻辑型 注释 = "将指定主机域名绑定至已添加成功的SNI主机证书." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 主机域名 <类型 = 文本型 注释 = "提供所欲绑定的主机域名." 编辑时信息 = "AAAA0, 0, 0, 0">
+    参数 证书索引 <类型 = 整数 注释 = "提供SNI证书对应的索引,即\"添加SNI主机证书\"成功所返回的索引值.">
+    {
+        @ @sn<this>.GetSSLPackServer()->BindSSLServerName(@<主机域名>, @<证书索引>)
+    }
+
+    方法 清理SSL环境 <公开 注释 = "清理通信组件SSL运行环境,回收SSL相关内存." 注释 = "注意:当通信组件需要重设SSL信息时,请先调用该方法清空原有环境参数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLPackServer()->CleanupSSLContext()
+    }
+
+    方法 开始SSL握手 <公开 类型 = 逻辑型 注释 = "启动SSL握手." 注释 = "注意:如果当前通信组件的\"握手模式\"为假时,需调用该方法握手,否则将导致连接失败." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "指定所欲与其握手的连接ID.">
+    {
+        @ @sn<this>.GetSSLPackServer()->StartSSLHandShake(@<连接ID>)
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "  当客户端通过事件\"客户进入\"后,将会立即触发本事件,只有通过本事件,才会进行握手动作." 返回值注释 = "可选返回值:"
+            返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手." 返回值注释 = "  1 = 忽略本次操作, 客户端可与服务器建立正式连接." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当服务器发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当服务器成功接收数据后将触发本事件." 注释 = "注意:仅在当前组件接收完整个数据包本事件才会触发(PACK模型)." 返回值注释 = "可选返回值:"
+            返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 数据 <类型 = 字节集类 注释 = "所接收到的完整数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所接收完整数据的长度.">
+
+    方法 客户离开 <公开 定义事件 类型 = 整数 注释 = "当客户端主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 服务器被关闭 <公开 定义事件 类型 = 整数 注释 = "当服务器被关闭后,将会触发本事件.">
+
+    方法 启动完毕 <公开 定义事件 类型 = 整数 注释 = "服务器端启动完毕并开始监听后,将触发本事件.">
+
+    方法 客户进入 <公开 定义事件 类型 = 整数 注释 = "  当客户连接到服务器后,将会触发本事件,请注意,本事件下的连接并非是正式连接,"
+            注释 = "只有该连接通过\"完成握手\"事件,才可以与服务器建立正式连接,本事件返回值拥有具体意义,请参考返回值说明." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 将触发\"完成握手\"事件."
+            返回值注释 = "  1 = 忽略本次操作, 将触发\"完成握手\"事件." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # 事件实现 ---
+    #
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpServer* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }
+    # virtual EnHandleResult OnClose(ITcpServer* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<客户离开>(dwConnID, (INT)enOperation, (INT)iErrorCode); } 
+    # virtual EnHandleResult OnShutdown(ITcpServer* pSender) override { return (EnHandleResult)@<服务器被关闭>(); }
+    # virtual EnHandleResult OnPrepareListen(ITcpServer* pSender, SOCKET soListen) override { return (EnHandleResult)@<启动完毕>(); }
+    # virtual EnHandleResult OnAccept(ITcpServer* pSender, CONNID dwConnID, UINT_PTR soClient) override { return (EnHandleResult)@<客户进入>(dwConnID); }
+    #
+    # <> </include>
+    # @end
+}
+
+类 HPPACK代理基础类 <公开 基础类 = HPTCP代理基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "PACK模型Agent基础类." @文档 = "category = \"辅助类\"" @禁止创建对象 = 真>
+{
+
+    # @ @m<DECLARE_HPSOCKET_ABS>(ITcpPackAgent, BaseTcpPackAgent, GetSocketPtr)
+    #
+    # 属性 ---
+
+    方法 数据包最大长度 <公开 属性读 类型 = 整数 注释 = "获取数据包最大长度." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetBaseTcpPackAgent()->GetMaxPackSize()
+    }
+
+    方法 数据包最大长度 <公开 属性写 注释 = "设置数据包最大长度." 注释 = "注意:有效数据包最大长度不能超过4194303/0x3FFFFF字节,默认为262144/0x40000字节.">
+    参数 长度 <类型 = 整数>
+    {
+        @ GetBaseTcpPackAgent()->SetMaxPackSize(@<长度>);
+    }
+
+    方法 数据包头标识 <公开 属性读 类型 = 短整数 注释 = "获取数据包头的标识." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetBaseTcpPackAgent()->GetPackHeaderFlag()
+    }
+
+    方法 数据包头标识 <公开 属性写 注释 = "设置数据包头标识." 注释 = "注意:有效包头标识取值范围0~1023/0x3FF.">
+    参数 标识 <类型 = 短整数 注释 = "默认:0,为0时不校验包头.">
+    {
+        @ GetBaseTcpPackAgent()->SetPackHeaderFlag(@<标识>);
+    }
+}
+
+类 HP_PACK代理类 <公开 基础类 = HPPACK代理基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "TCP-PACK模型Agent组件,如欲使用SSL请查看\"HP_PACK安全代理类\"."
+        @视窗.后缀文本 = "public ITcpAgentListener" @文档 = "category = \"HP客户端\"">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (ITcpPackAgent, TcpPackAgent, ITcpAgentListener)
+    #
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动通信代理组件,启动完成后可开始连接远程服务器." 返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 绑定地址 <类型 = 文本型 注释 = "提供所欲绑定的地址,默认空绑定任意地址." @默认值 = "">
+    参数 异步连接 <类型 = 逻辑型 注释 = "是否采用异步连接方式." @默认值 = 真>
+    {
+        @ return GetTcpPackAgent()->Start(@<绑定地址>.IsEmpty() ? nullptr : (LPCTSTR)@<绑定地址>, @<异步连接>);
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "与服务端进行握手时将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当通信组件发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当通信组件成功接收数据后将触发本事件." 注释 = "注意:仅在当前组件接收完整个数据包本事件才会触发(PACK模型)." 返回值注释 = "可选返回值:"
+            返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 数据 <类型 = 字节集类 注释 = "所接收到的完整数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所接收完整数据的长度.">
+
+    方法 通信发生错误 <公开 定义事件 类型 = 整数 注释 = "当通信组件主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 代理被关闭 <公开 定义事件 类型 = 整数 注释 = "当通信组件被关闭后,将会触发本事件.">
+
+    方法 准备连接 <公开 定义事件 类型 = 整数 注释 = "当通信组件启动之后,会触发一次本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行连接."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行连接." 返回值注释 = "  2 = 本次操作错误, 终止启动通信客户端组件.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 连接完成 <公开 定义事件 类型 = 整数 注释 = "与服务端成功建立连接时本事件将被触发." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行." 返回值注释 = "  2 = 本次操作错误, 如果为同步连接将终止启动通信客户端,为异步则会关闭连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # @begin
+    #
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }
+    # virtual EnHandleResult OnClose(ITcpAgent* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<通信发生错误>(dwConnID, (INT)enOperation, (INT)iErrorCode); }
+    # virtual EnHandleResult OnShutdown(ITcpAgent* pSender) override { return (EnHandleResult)@<代理被关闭>(); }
+    # virtual EnHandleResult OnPrepareConnect(ITcpAgent* pSender, CONNID dwConnID, SOCKET socket) override { return (EnHandleResult)@<准备连接>(dwConnID); }
+    # virtual EnHandleResult OnConnect(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<连接完成>(dwConnID); } 
+    #
+    # <> </include>
+    #
+    # @end
+}
+
+类 HP_PACK安全代理类 <公开 基础类 = HPPACK代理基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "TCP-PACK模型Agent组件,支持SSL."
+        @视窗.后缀文本 = "public ITcpAgentListener" @文档 = "category = \"HP客户端\"">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (ITcpPackAgent, SSLPackAgent, ITcpAgentListener)
+    #
+    # 属性 ---
+
+    方法 握手模式 <公开 属性写 注释 = "设置通信组件SSL握手方式(默认为真,自动握手)">
+    参数 自动 <类型 = 逻辑型 注释 = "提供真则表示自动握手,否则需手动调用\"开始SSL握手\"方法.">
+    {
+        @ GetSSLPackAgent()->SetSSLAutoHandShake(@<自动>);
+    }
+
+    方法 握手模式 <公开 属性读 类型 = 逻辑型 注释 = "获取通信组件SSL握手方式." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLPackAgent()->IsSSLAutoHandShake()
+    }
+
+    方法 加密算法列表 <公开 属性写 注释 = "设置SSL加密算法列表.">
+    参数 算法 <类型 = 文本型>
+    {
+        @ GetSSLPackAgent()->SetSSLCipherList(@<算法>);
+    }
+
+    方法 加密算法列表 <公开 属性读 类型 = 文本型 注释 = "获取SSL加密算法列表." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLPackAgent()->GetSSLCipherList()
+    }
+
+    # 方法 ---
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动通信代理组件,启动完成后可开始连接远程服务器." 注释 = "注意:调用前请确保已初始化SSL环境成功,否则无法正确启动." 返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 绑定地址 <类型 = 文本型 注释 = "提供所欲绑定的地址,默认空绑定任意地址." @默认值 = "">
+    参数 异步连接 <类型 = 逻辑型 注释 = "是否采用异步连接方式." @默认值 = 真>
+    {
+        @ return GetSSLPackAgent()->Start(@<绑定地址>.IsEmpty() ? nullptr : (LPCTSTR)@<绑定地址>, @<异步连接>);
+    }
+
+    方法 初始化SSL环境 <公开 类型 = 逻辑型 注释 = "初始化通信组件 SSL 环境参数." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败." 返回值注释 = "返回是否操作成功."
+            @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件路径(客户端可选)." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件路径(客户端可选)." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书文件或目录(单向验证或客户端可选)." @默认值 = "">
+    {
+        @ return GetSSLPackAgent()->SetupSSLContext((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : (LPCTSTR)@<证书文件>, @<私钥文件>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥文件>, @<私钥密码>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥密码>,@<CA证书>.IsEmpty() ? nullptr : (LPCTSTR)@<CA证书>);
+    }
+
+    方法 初始化SSL环境_内存 <公开 类型 = 逻辑型 注释 = "初始化通信组件SSL环境参数(从内存载入证书内容)." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败."
+            返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件内容." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件内容." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书内容." @默认值 = "">
+    {
+        @ return GetSSLPackAgent()->SetupSSLContextByMemory((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : GetMbsText (@<证书文件>, CVolMem (), NULL), @<私钥文件>.IsEmpty() ? nullptr : GetMbsText (@<私钥文件>, CVolMem (), NULL), @<私钥密码>.IsEmpty() ? nullptr : GetMbsText (@<私钥密码>, CVolMem (), NULL),@<CA证书>.IsEmpty() ? nullptr : GetMbsText (@<CA证书>, CVolMem (), NULL));
+    }
+
+    方法 清理SSL环境 <公开 注释 = "清理通信组件SSL运行环境,回收SSL相关内存." 注释 = "注意:当通信组件需要重设SSL信息时,请先调用该方法清空原有环境参数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetSSLPackAgent()->CleanupSSLContext()
+    }
+
+    方法 开始SSL握手 <公开 类型 = 逻辑型 注释 = "启动SSL握手." 注释 = "注意:如果当前通信组件的\"握手模式\"为假时,需调用该方法握手,否则将导致连接失败." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "指定所欲与其握手的连接ID.">
+    {
+        @ @sn<this>.GetSSLPackAgent()->StartSSLHandShake(@<连接ID>)
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "与服务端进行握手时将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当通信组件发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当通信组件成功接收数据后将触发本事件." 注释 = "注意:仅在当前组件接收完整个数据包本事件才会触发(PACK模型)." 返回值注释 = "可选返回值:"
+            返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 数据 <类型 = 字节集类 注释 = "所接收到的完整数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所接收完整数据的长度.">
+
+    方法 通信发生错误 <公开 定义事件 类型 = 整数 注释 = "当通信组件主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 代理被关闭 <公开 定义事件 类型 = 整数 注释 = "当通信组件被关闭后,将会触发本事件.">
+
+    方法 准备连接 <公开 定义事件 类型 = 整数 注释 = "当通信组件启动之后,会触发一次本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行连接."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行连接." 返回值注释 = "  2 = 本次操作错误, 终止启动通信客户端组件.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 连接完成 <公开 定义事件 类型 = 整数 注释 = "与服务端成功建立连接时本事件将被触发." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行." 返回值注释 = "  2 = 本次操作错误, 如果为同步连接将终止启动通信客户端,为异步则会关闭连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); } 
+    # virtual EnHandleResult OnSend(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }
+    # virtual EnHandleResult OnClose(ITcpAgent* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<通信发生错误>(dwConnID, (INT)enOperation, (INT)iErrorCode); }
+    # virtual EnHandleResult OnShutdown(ITcpAgent* pSender) override { return (EnHandleResult)@<代理被关闭>(); } 
+    # virtual EnHandleResult OnPrepareConnect(ITcpAgent* pSender, CONNID dwConnID, SOCKET socket) override { return (EnHandleResult)@<准备连接>(dwConnID); }
+    # virtual EnHandleResult OnConnect(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<连接完成>(dwConnID); } 
+    #
+    # <> </include>
+    # @end
+}
+
+类 HP_UDP_ARQ服务器 <公开 基础类 = HP通信基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "可靠自动重传UDP通信服务器." @视窗.后缀文本 = "public IUdpServerListener"
+        @文档 = "category = \"UDP服务器\"">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (IUdpArqServer, UdpArqServer, IUdpServerListener)
+    #
+    # 属性 ---
+
+    方法 无延迟模式 <公开 属性写 注释 = "设置是否开启无延迟(nodelay)模式.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ GetUdpArqServer()->SetNoDelay(@<启用>);
+    }
+
+    方法 无延迟模式 <公开 属性读 类型 = 逻辑型 注释 = "获取当前是否已开启无延迟(nodelay)模式." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetUdpArqServer()->IsNoDelay()
+    }
+
+    方法 拥塞控制 <公开 属性写 注释 = "设置是否关闭无拥塞控制.">
+    参数 是否关闭 <类型 = 逻辑型 注释 = "提供真则关闭拥塞控制,反之开启.">
+    {
+        @ GetUdpArqServer()->SetTurnoffCongestCtrl(@<是否关闭>);
+    }
+
+    方法 拥塞控制 <公开 属性读 类型 = 逻辑型 注释 = "获取当前是否已关闭拥塞." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetUdpArqServer()->IsTurnoffCongestCtrl()
+    }
+
+    方法 数据刷新间隔 <公开 属性写 注释 = "设置数据刷新间隔.">
+    参数 间隔 <类型 = 整数 注释 = "单位:毫秒(默认60).">
+    {
+        @ GetUdpArqServer()->SetFlushInterval(@<间隔>);
+    }
+
+    方法 数据刷新间隔 <公开 属性读 类型 = 整数 注释 = "获取数据刷新间隔." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpArqServer()->GetFlushInterval()
+    }
+
+    方法 快速重传 <公开 属性写 注释 = "设置快速重传ACK跨越次数.">
+    参数 跨越次数 <类型 = 整数 注释 = "默认0,关闭快速重传.">
+    {
+        @ GetUdpArqServer()->SetResendByAcks(@<跨越次数>);
+    }
+
+    方法 快速重传 <公开 属性读 类型 = 整数 注释 = "获取快速重传ACK跨越次数." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpArqServer()->GetResendByAcks()
+    }
+
+    方法 发送窗口尺寸 <公开 属性写 注释 = "设置发送窗口大小(数据包数量,默认128).">
+    参数 数量 <类型 = 整数>
+    {
+        @ GetUdpArqServer()->SetSendWndSize(@<数量>);
+    }
+
+    方法 发送窗口尺寸 <公开 属性读 类型 = 整数 注释 = "获取发送窗口大小(数据包数量)." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpArqServer()->GetSendWndSize()
+    }
+
+    方法 接收窗口尺寸 <公开 属性写 注释 = "设置接收窗口大小(数据包数量,默认512).">
+    参数 数量 <类型 = 整数>
+    {
+        @ GetUdpArqServer()->SetRecvWndSize(@<数量>);
+    }
+
+    方法 接收窗口尺寸 <公开 属性读 类型 = 整数 注释 = "获取接收窗口大小(数据包数量)." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpArqServer()->SetRecvWndSize()
+    }
+
+    方法 最小重传超时 <公开 属性写 注释 = "设置最小重传超时时间.">
+    参数 超时 <类型 = 整数 注释 = "单位:毫秒(默认30)">
+    {
+        @ GetUdpArqServer()->SetMinRto(@<超时>);
+    }
+
+    方法 最小重传超时 <公开 属性读 类型 = 整数 注释 = "获取最小重传超时时间." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpArqServer()->GetMinRto()
+    }
+
+    方法 快速握手次数 <公开 属性写 注释 = "设置快速握手次数限制(默认为5).">
+    参数 次数 <类型 = 整数 注释 = "0表示不限制,默认为5.">
+    {
+        @ GetUdpArqServer()->SetFastLimit(@<次数>);
+    }
+
+    方法 快速握手次数 <公开 属性读 类型 = 整数 注释 = "获取快速握手次数限制." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpArqServer()->GetFastLimit()
+    }
+
+    方法 最大传输单元 <公开 属性写 注释 = "设置最大传输单元,默认0不限制.(与\"报文最大尺寸\"属性一致).">
+    参数 最大尺寸 <类型 = 整数>
+    {
+        @ GetUdpArqServer()->SetMaxTransUnit(@<最大尺寸>);
+    }
+
+    方法 最大传输单元 <公开 属性读 类型 = 整数 注释 = "获取最大传输单元." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpArqServer()->GetMaxTransUnit()
+    }
+
+    方法 最大数据包尺寸 <公开 属性写 注释 = "设置最大数据包尺寸(默认4096).">
+    参数 最大尺寸 <类型 = 整数>
+    {
+        @ GetUdpArqServer()->SetMaxMessageSize(@<最大尺寸>);
+    }
+
+    方法 最大数据包尺寸 <公开 属性读 类型 = 整数 注释 = "获取最大数据包尺寸." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpArqServer()->GetMaxMessageSize()
+    }
+
+    方法 握手超时 <公开 属性写 注释 = "设置握手超时时间.">
+    参数 超时 <类型 = 整数 注释 = "单位:毫秒(默认5000)">
+    {
+        @ GetUdpArqServer()->SetHandShakeTimeout(@<超时>);
+    }
+
+    方法 握手超时 <公开 属性读 类型 = 整数 注释 = "获取握手超时时间." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpArqServer()->GetHandShakeTimeout()
+    }
+
+    方法 报文最大尺寸 <公开 属性写 注释 = "设置数据报文最大长度(建议在局域网环境下不超过1432字节,在广域网环境下不超过548字节)">
+    参数 最大尺寸 <类型 = 整数>
+    {
+        @ GetUdpArqServer()->SetMaxDatagramSize(@<最大尺寸>);
+    }
+
+    方法 报文最大尺寸 <公开 属性读 类型 = 整数 注释 = "获取数据报文最大长度." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpArqServer()->GetMaxDatagramSize()
+    }
+
+    方法 预投递数量 <公开 属性写 注释 = "设置Receive预投递数量(根据负载调整设置,Receive预投递数量越大则丢包概率越小).">
+    参数 数量 <类型 = 整数>
+    {
+        @ GetUdpArqServer()->SetPostReceiveCount(@<数量>);
+    }
+
+    方法 预投递数量 <公开 属性读 类型 = 整数 注释 = "获取Receive预投递数量." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpArqServer()->GetPostReceiveCount()
+    }
+
+    方法 心跳发送间隔 <公开 属性写 注释 = "设置心跳包发送间隔.">
+    参数 间隔 <类型 = 整数 注释 = "单位:毫秒,0则不发送心跳包.">
+    {
+        @ GetUdpArqServer()->SetDetectInterval(@<间隔>);
+    }
+
+    方法 心跳发送间隔 <公开 属性读 类型 = 整数 注释 = "获取心跳包发送间隔." 返回值注释 = "单位:毫秒,0则不发送心跳包." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpArqServer()->GetDetectInterval()
+    }
+
+    方法 心跳包尝试次数 <公开 属性写 注释 = "设置心跳包最大尝试的次数,超过最大次数将以断线处理.">
+    参数 尝试次数 <类型 = 整数 注释 = "如果超出该次数则会以断线处理,0则不发送心跳包.">
+    {
+        @ GetUdpArqServer()->SetDetectAttempts(@<尝试次数>);
+    }
+
+    方法 心跳包尝试次数 <公开 属性读 类型 = 整数 注释 = "获取心跳包最大尝试的次数." 返回值注释 = "单位:毫秒,0则不发送心跳包." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetUdpArqServer()->GetDetectAttempts()
+    }
+
+    方法 取当前监听地址 <公开 类型 = 逻辑型 注释 = "获取当前通信组件所监听的地址." 返回值注释 = "返回是否获取成功." @禁止流程检查 = 真>
+    参数 地址信息 <类型 = 文本型 注释 = "提供所欲存放地址内容的文本.">
+    {
+        @ USHORT usPort;
+        @ TCHAR buf [128];
+        @ buf [0] = '\0';
+        @ int iAddressLen = NUM_ELEMENTS_OF (buf) - 1;
+        @ BOOL isSuccess = GetUdpArqServer()->GetListenAddress(buf, iAddressLen, usPort);
+        @ if (isSuccess) @<地址信息>.SetText (buf);
+        @ return isSuccess;
+    }
+
+    方法 取当前监听端口 <公开 类型 = 整数 注释 = "获取当前通信组件所监听的端口号." @禁止流程检查 = 真>
+    {
+        @ USHORT usPort = 0;
+        @ TCHAR buf [128];
+        @ buf [0] = '\0';
+        @ int iAddressLen = NUM_ELEMENTS_OF (buf) - 1;
+        @ GetUdpArqServer()->GetListenAddress(buf, iAddressLen, usPort);
+        @ return (INT)(DWORD)usPort;
+    }
+
+    # ---
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动服务器并且监听指定端口号." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 地址 <类型 = 文本型 注释 = "提供所欲监听的地址.">
+    参数 端口号 <类型 = 整数 注释 = "提供所欲监听的端口号. 有效端口号范围为从0到65535.">
+    {
+        @ @sn<this>.GetUdpArqServer()->Start(@<地址>, (USHORT)@<端口号>)
+    }
+
+    方法 取等待发送数量 <公开 类型 = 整数 注释 = "获取连接中等待发送数据包数量." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供连接ID.">
+    {
+        @ int iCount = 0;
+        @ GetUdpArqServer()->GetWaitingSendMessageCount(@<连接ID>, iCount);
+        @ return iCount;
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "  当客户端通过事件\"客户进入\"后,将会立即触发本事件,只有通过本事件,才会进行握手动作." 返回值注释 = "可选返回值:"
+            返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手." 返回值注释 = "  1 = 忽略本次操作, 客户端可与服务器建立正式连接." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当服务器发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当服务器成功接收数据后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作."
+            返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 已接收数据 <类型 = 字节集类 注释 = "所接收到的数据.">
+    参数 已接收长度 <类型 = 整数 注释 = "已接收数据长度.">
+
+    方法 通信发生错误 <公开 定义事件 类型 = 整数 注释 = "当客户端主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 服务器被关闭 <公开 定义事件 类型 = 整数 注释 = "当服务器被关闭后,将会触发本事件.">
+
+    方法 启动完毕 <公开 定义事件 类型 = 整数 注释 = "服务器端启动完毕并开始监听后,将触发本事件.">
+
+    方法 客户进入 <公开 定义事件 类型 = 整数 注释 = "  当客户连接到服务器后,将会触发本事件,请注意,本事件下的连接并非是正式连接,"
+            注释 = "只有该连接通过\"完成握手\"事件,才可以与服务器建立正式连接,本事件返回值拥有具体意义,请参考返回值说明." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 将触发\"完成握手\"事件."
+            返回值注释 = "  1 = 忽略本次操作, 将触发\"完成握手\"事件." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # 事件实现 ---
+    #
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(IUdpServer* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); } 
+    # virtual EnHandleResult OnSend(IUdpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(IUdpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(IUdpServer* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }
+    # virtual EnHandleResult OnClose(IUdpServer* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<通信发生错误>(dwConnID, (INT)enOperation, (INT)iErrorCode); }
+    # virtual EnHandleResult OnShutdown(IUdpServer* pSender) override { return (EnHandleResult)@<服务器被关闭>(); } 
+    # virtual EnHandleResult OnPrepareListen(IUdpServer* pSender, SOCKET soListen) override { return (EnHandleResult)@<启动完毕>(); }
+    # virtual EnHandleResult OnAccept(IUdpServer* pSender, CONNID dwConnID, UINT_PTR soClient) override { return (EnHandleResult)@<客户进入>(dwConnID); } 
+    #
+    # <> </include>
+    # @end
+}

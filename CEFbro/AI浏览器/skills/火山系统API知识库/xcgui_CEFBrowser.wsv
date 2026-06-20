@@ -1,0 +1,1582 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 xc.gui <折叠2 编辑时信息 = "177FE8, 0, 0, 0" @视窗.附属文件 = "lib\\$(p)\\FTBrowser.dll" @视窗.外部库 = "lib\\$(p)\\FTBrowser.lib"
+        "//@视窗.外部库" = "lib\\$(p)\\libcef.lib" "//@视窗.外部库" = "lib\\$(p)\\libcef_dll_wrapper.lib"
+        @视窗.外部头文件 = "lib\\module_FTBrowser.h"
+        "//@视窗.外部库.release-win32" = "..\\..\\..\\..\\..\\..\\火山\\XCGUI\\dll\\lib\\win32\\libcef.lib"
+        "//@视窗.外部库.release-win32" = "..\\..\\..\\..\\..\\..\\火山\\XCGUI\\dll\\lib\\win32\\libcef_dll_wrapper.lib"
+        "//@视窗.外部库.debug-win32" = "..\\..\\..\\..\\..\\..\\火山\\XCGUI\\dll\\lib\\win32\\libcefd.lib"
+        "//@视窗.外部库.debug-win32" = "..\\..\\..\\..\\..\\..\\火山\\XCGUI\\dll\\lib\\win32\\libcef_dll_wrapperd.lib"
+        "//@视窗.预定义宏.debug" = "_ITERATOR_DEBUG_LEVEL=0"
+        "//@视窗.外部头文件" = "..\\..\\..\\..\\..\\..\\火山\\XCGUI\\dll\\Cef_App.h\n..\\..\\..\\..\\..\\..\\火山\\XCGUI\\dll\\Cef_Client.h\n..\\..\\..\\..\\..\\..\\火山\\XCGUI\\dll\\Cef_help.h"
+        "//@视窗.外部源文件" = "..\\..\\..\\..\\..\\..\\火山\\XCGUI\\dll\\Cef_App.cpp\n..\\..\\..\\..\\..\\..\\火山\\XCGUI\\dll\\Cef_Browser.cpp\n..\\..\\..\\..\\..\\..\\火山\\XCGUI\\dll\\Cef_Client.cpp\n..\\..\\..\\..\\..\\..\\火山\\XCGUI\\dll\\Cef_help.cpp"
+        @文档 = "category = \"炫彩WEB组件\"">
+
+类 炫彩CEF函数 <公开 折叠 @全局类 = 真>
+{
+    方法 炫彩_CEF退出消息循环 <公开 静态 折叠 @嵌入式方法 = "">
+    {
+        @ FT_QuitMessageLoop()
+    }
+
+    #
+}
+
+类 炫彩CEFV8回调 <折叠>
+{
+
+    # @begin
+    # void CALLBACK OnFunction(LPCWSTR name, HV8VALUE object, std::vector<uintptr_t*> arguments, uintptr_t* retval, LPCWSTR exception,bool* pbHandled, void* lParam) {
+    #     @sn<current_class>* pThis = (@sn<current_class>*)lParam;
+    #     @dt<逻辑型类> bHandle;
+    #     bHandle.@n<逻辑型类.值> = (*pbHandled);
+    #     @dt<炫彩CEFV8值> bretval;
+    #     //int x=FTV8_GetIntValue((HV8VALUE)arguments[0]);
+    #     //TCHAR szBuffer[1024];
+    #    // LPCTSTR str = TEXT("pretval: %i");
+    #   // wsprintf(szBuffer, str, x);
+    #    //::MessageBox(NULL, szBuffer, TEXT("pretval"), MB_OK);
+    #     @dt<炫彩CEFV8值> bargument;
+    #     @dt<炫彩CEFV8值数组> barguments;
+    #      for (INT npIndex = 0; npIndex < arguments.size(); npIndex++) {
+    #             bargument.m_class = (HV8VALUE)arguments[npIndex];
+    #             barguments.Add(bargument,NULL);
+    #      }
+    # pThis->@<函数被执行>(CWString(name),@dt<炫彩CEFV8值>(object),barguments ,bretval,CWString(exception) ,bHandle);
+    # *pbHandled = bHandle.@n<逻辑型类.值>;
+    #     if(bretval.m_class != 0){
+    #         *retval =(uintptr_t)bretval.m_class;
+    #     }
+    # //if (CWString(name) ==L"addFunction" ){
+    # //*retval = (uintptr_t)XCCef_V8CreateInt(10);
+    # //}
+    # }
+    # @end
+
+    方法 函数被执行 <公开 定义事件 类型 = 整数 注释 = "属于渲染进程所以无法调试" 注释 = "当使用\"注册JS函数/创建函数\"方法登记的JS函数在网页中被执行时,本事件被触发." 折叠2>
+    参数 函数名 <类型 = 文本型 注释 = "提供所执行函数的名称">
+    参数 调用对象 <类型 = 炫彩CEFV8值>
+    参数 参数列表 <类型 = 炫彩CEFV8值数组>
+    参数 置返回值 <类型 = 炫彩CEFV8值>
+    参数 异常信息 <类型 = 文本型>
+    参数 是否拦截 <类型 = 逻辑型类 注释 = "默认:假">
+
+    #
+}
+
+类 炫彩CEFJS交互 <公开 基础类 = 炫彩CEFV8回调 折叠>
+{
+    方法 注册JS <公开 静态 折叠 @嵌入式方法 = "">
+    参数 扩展名 <类型 = 文本型>
+    参数 扩展JS代码 <类型 = 文本型>
+    {
+        @ FT_RegisterExtension(@<扩展名>.GetText(),@<扩展JS代码>.GetText());
+    }
+
+    方法 注册JSEx <公开 注释 = "函数被执行-事件将被触发,注意:不支持调试模式" @禁止流程检查 = 真>
+    参数 扩展名 <类型 = 文本型>
+    参数 扩展JS代码 <类型 = 文本型>
+    {
+        @ FT_RegisterExtensionEx(@<扩展名>.GetText(),@<扩展JS代码>.GetText(),OnFunction,this);
+    }
+}
+
+类 炫彩CEFV8值 <公开 基础类 = 炫彩CEFV8回调 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # HV8VALUE m_class;
+    # inline_ @sn<current_class> (HV8VALUE object) : @sn<current_class> () { m_class = object;}
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == NULL; }
+    # inline_ void Set (HV8VALUE object) { m_class = object; }
+    #
+    # <> </include>
+    # void CALLBACK OnFunAccessor(int uMsg,LPCWSTR name, HV8VALUE object, uintptr_t* retval, LPCWSTR exception, bool* pbHandled, void* lParam){
+    # //::MessageBox(NULL, name, TEXT("pretval"), MB_OK);
+    # if(uMsg == 1){
+    #     @sn<current_class>* pThis = (@sn<current_class>*)lParam;
+    #     @dt<逻辑型类> bHandle;
+    #     bHandle.@n<逻辑型类.值> = (*pbHandled);
+    #     @dt<炫彩CEFV8值> bretval;
+    #     pThis->@<对象事件_获取>(CWString(name),@dt<炫彩CEFV8值>(object),bretval,CWString(exception) ,bHandle);
+    #     *pbHandled = bHandle.@n<逻辑型类.值>;
+    #     if(bretval.m_class != 0){
+    #         *retval =(uintptr_t)bretval.m_class;
+    #     }
+    # }else if (uMsg == 2) {
+    #     @sn<current_class>* pThis = (@sn<current_class>*)lParam;
+    #     @dt<逻辑型类> bHandle;
+    #     bHandle.@n<逻辑型类.值> = (*pbHandled);
+    #     pThis->@<对象事件_设置>(CWString(name),@dt<炫彩CEFV8值>(object),@dt<炫彩CEFV8值>((HV8VALUE)retval),CWString(exception) ,bHandle);
+    #     *pbHandled = bHandle.@n<逻辑型类.值>;
+    # }
+    #
+    # }
+    # @end
+
+    方法 对象事件_获取 <公开 定义事件 类型 = 整数 折叠>
+    参数 函数名称 <类型 = 文本型>
+    参数 调用对象 <类型 = 炫彩CEFV8值>
+    参数 置返回值 <类型 = 炫彩CEFV8值>
+    参数 异常信息 <类型 = 文本型>
+    参数 是否拦截 <类型 = 逻辑型类 注释 = "默认:假">
+
+    方法 对象事件_设置 <公开 定义事件 类型 = 整数 折叠>
+    参数 函数名称 <类型 = 文本型>
+    参数 调用对象 <类型 = 炫彩CEFV8值>
+    参数 置V8值 <类型 = 炫彩CEFV8值>
+    参数 异常信息 <类型 = 文本型>
+    参数 是否拦截 <类型 = 逻辑型类 注释 = "默认:假">
+
+    方法 取指针 <公开 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.m_class
+    }
+
+    方法 是否为空 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.IsEmpty()
+    }
+
+    方法 是否为函数 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ FTV8_IsFunction(@sn<this>.m_class)
+    }
+
+    方法 是否为文本 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ FTV8_IsString(@sn<this>.m_class)
+    }
+
+    方法 是否为整数 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ FTV8_IsInt(@sn<this>.m_class)
+    }
+
+    方法 是否为对象 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ FTV8_IsObject(@sn<this>.m_class)
+    }
+
+    方法 是否为空值 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ FTV8_IsNull(@sn<this>.m_class)
+    }
+
+    方法 置值 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 关键值 <类型 = 文本型>
+    参数 V8值 <类型 = 炫彩CEFV8值>
+    参数 性能属性 <类型 = 整数 注释 = "CEFV8性能属性.**" @默认值 = 0>
+    {
+        @ FTV8_SetValue(@sn<this>.m_class,@<关键值>.GetText(),@<V8值>.m_class,@<性能属性>)
+    }
+
+    方法 置值Ex <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 关键值 <类型 = 文本型>
+    参数 访问控制 <类型 = 整数 注释 = "CEFV8访问控制.**">
+    参数 性能属性 <类型 = 整数 注释 = "CEFV8性能属性.**" @默认值 = 0>
+    {
+        @ FTV8_SetValueEx(@sn<this>.m_class,@<关键值>.GetText(),@<访问控制>,@<性能属性>)
+    }
+
+    方法 置值自索引 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    参数 V8值 <类型 = 炫彩CEFV8值>
+    {
+        @ FTV8_SetValueindex(@sn<this>.m_class,@<索引>,@<V8值>.m_class)
+    }
+
+    方法 执行函数_整数 <公开 类型 = 炫彩CEFV8值 注释 = "注意:不支持调试模式" 折叠 @禁止流程检查 = 真>
+    参数 整数数值 <类型 = 整数数组类>
+    {
+        @ int i = (int)@<整数数值>.data ().GetCount ();
+        // @ std::vector<int> args  ;
+        // @ for (INT npIndex = 0; npIndex < i; npIndex++) {
+        // @ args.push_back(@<整数数值>.data ().GetAt (npIndex));
+        // @ }
+        @ return @dt<炫彩CEFV8值>(FTV8_ExecuteFunctionInt(m_class,@<整数数值>.data().GetData (),i));
+    }
+
+    方法 执行函数_文本 <公开 类型 = 炫彩CEFV8值 注释 = "注意:不支持调试模式" 折叠 @禁止流程检查 = 真>
+    参数 文本数值 <类型 = 文本数组类>
+    {
+        @ int i = (int)@<文本数值>.data ().GetCount ();
+        // @ std::vector<LPCWSTR> args  ;
+        // @ CWString str;
+        // @ for (INT npIndex = 0; npIndex < i; npIndex++) {
+        // @ str = @<文本数值>.data ().GetAt (npIndex);
+        // @ args.push_back(str.GetText());
+        // // @ ::MessageBox(NULL, str, TEXT("pretval"), MB_OK);
+        // @ }
+        // @ args.push_back(L"火山");
+        // @ args.push_back(L"456sdasd易团雪");
+        @ return @dt<炫彩CEFV8值>(FTV8_ExecuteFunctionString(m_class,@<文本数值>.data().GetData (),i));
+    }
+
+    方法 取文本值 <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ @an<CVolString> (FTV8_GetStringValue(@sn<this>.m_class))
+    }
+
+    方法 取整数值 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ FTV8_GetIntValue(@sn<this>.m_class)
+    }
+
+    方法 创建文本值 <公开 静态 类型 = 炫彩CEFV8值 折叠 @嵌入式方法 = "">
+    参数 函数名称 <类型 = 文本型>
+    {
+        @ @dt<炫彩CEFV8值>(FTV8_CreateString(@<函数名称>.GetText()))
+    }
+
+    方法 创建整数值 <公开 静态 类型 = 炫彩CEFV8值 折叠 @嵌入式方法 = "">
+    参数 列表 <类型 = 整数>
+    {
+        @ @dt<炫彩CEFV8值>(FTV8_CreateInt(@<列表>))
+    }
+
+    方法 创建函数 <公开 类型 = 炫彩CEFV8值 注释 = "函数被执行-事件将被触发,注意:不支持调试模式" 折叠 @禁止流程检查 = 真>
+    参数 函数名称 <类型 = 文本型>
+    {
+        @ return @dt<炫彩CEFV8值>(FTV8_CreateFunction(@<函数名称>.GetText(),OnFunction,this));
+    }
+
+    方法 创建对象 <公开 类型 = 炫彩CEFV8值 注释 = "对象事件_获取/设置-事件将被触发" 折叠 @禁止流程检查 = 真>
+    {
+        @ return @dt<炫彩CEFV8值>(FTV8_CreateObject(OnFunAccessor,this));
+    }
+}
+
+类 炫彩CEFV8值数组 <公开 基础类 = 对象数组模板类 @模板实现类 = "炫彩CEFV8值">
+
+类 炫彩CEFV8环境 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # HV8CONTEXE m_class;
+    # inline_ @sn<current_class> (HV8CONTEXE object) : @sn<current_class> () { m_class = object;}
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == NULL; }
+    # inline_ void Set (HV8CONTEXE object) { m_class = object; }
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    方法 是否有效 <公开 类型 = 逻辑型 注释 = "英文名：IsValid" 折叠 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()? false : FTV8Context_IsValid(m_class);
+    }
+
+    方法 是否当前环境 <公开 类型 = 逻辑型 注释 = "英文名：InContext" 折叠 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()? false : FTV8Context_InContext(m_class);
+    }
+
+    方法 "//取任务处理器" <公开 类型 = 炫彩CEF任务运行器 注释 = "英文名：GetTaskRunner" 折叠 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()? @dt<炫彩CEF任务运行器>() : @dt<炫彩CEF任务运行器>(FTV8Context_GetTaskRunner(m_class));
+    }
+
+    方法 取全局V8值 <公开 类型 = 炫彩CEFV8值 折叠 @嵌入式方法 = "">
+    {
+        @ @dt<炫彩CEFV8值>(FTV8Context_GetGlobal(@sn<this>.m_class))
+    }
+
+    方法 是否相同 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 对比值 <类型 = 炫彩CEFV8环境>
+    {
+        @ FTV8Context_IsSame(@sn<this>.m_class,@<对比值>.m_class)
+    }
+
+    方法 进入 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ FTV8Context_Enter(@sn<this>.m_class)
+    }
+
+    方法 退出 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ FTV8Context_Exit(@sn<this>.m_class)
+    }
+
+    方法 执行JS代码 <公开 折叠 @嵌入式方法 = "">
+    参数 JS代码 <类型 = 文本型>
+    参数 链接地址 <类型 = 文本型>
+    参数 错误行位置 <类型 = 整数 @默认值 = 0>
+    参数 设置返回值 <类型 = 炫彩CEFV8值 @默认值 = 空对象>
+    {
+        @ FTV8Context_Eval(@sn<this>.m_class,@<JS代码>.GetText(),@<链接地址>.GetText(),@<错误行位置>,(uintptr_t*)@<设置返回值>.m_class);
+    }
+}
+
+类 炫彩CEF初始化环境 <公开 折叠>
+{
+
+    # @begin
+    # void CALLBACK OnBeforeInit(int uMsg, HANDLE handler, LONG_PTR hObj, LONG_PTR attach1, LONG_PTR attach2, LONG_PTR attach3, LONG_PTR attach4, bool* pbHandled,void* lParam){
+    # if (uMsg == 1) {
+    #     @sn<current_class>* pThis = (@sn<current_class>*)lParam;
+    #     pThis->@<即将处理命令行>(@dt<炫彩CEF命令行>((HCOMMAND)handler),CWString(hObj));
+    # }else if (uMsg == 2) {
+    # //DebugTrace (FALSE, 0, 0, _T ("Snppp"),  _T("渲染_即将创建V8环境"),uMsg,(INT_P)handler,(INT_P)hObj,(INT_P)attach1);
+    #     @sn<current_class>* pThis = (@sn<current_class>*)lParam;
+    #     pThis->@<即将创建V8环境>((INT_P)handler,@dt<炫彩CEF框架>((HFRAME)hObj),@dt<炫彩CEFV8环境>((HV8CONTEXE)attach1));
+    # }else if (uMsg == 3) {
+    #     @sn<current_class>* pThis = (@sn<current_class>*)lParam;
+    #     pThis->@<即将释放V8环境>((INT_P)handler,@dt<炫彩CEF框架>((HFRAME)hObj),@dt<炫彩CEFV8环境>((HV8CONTEXE)attach1));
+    # }else if (uMsg == 4) {
+    # @sn<current_class>* pThis = (@sn<current_class>*)lParam;
+    #  pThis->@<即将初始化WebKit>();
+    # }
+    #
+    #
+    #  }
+    # @end
+
+    方法 即将处理命令行 <公开 定义事件 类型 = 整数 折叠>
+    参数 命令行 <类型 = 炫彩CEF命令行>
+    参数 进程类型 <类型 = 文本型>
+
+    方法 即将创建V8环境 <公开 定义事件 类型 = 整数 注释 = "注:属于渲染进程所以无法调试,如设置子进程(CefSubprocess.exe)此事件无效," 折叠>
+    参数 浏览器句柄 <类型 = 变整数>
+    参数 CEF框架 <类型 = 炫彩CEF框架>
+    参数 CEFV8环境 <类型 = 炫彩CEFV8环境>
+
+    方法 即将释放V8环境 <公开 定义事件 类型 = 整数 注释 = "注:属于渲染进程所以无法调试,如设置子进程(CefSubprocess.exe)此事件无效," 折叠>
+    参数 浏览器句柄 <类型 = 变整数>
+    参数 CEF框架 <类型 = 炫彩CEF框架>
+    参数 CEFV8环境 <类型 = 炫彩CEFV8环境>
+
+    方法 即将初始化WebKit <公开 定义事件 类型 = 整数 注释 = "注:属于渲染进程所以无法调试,如设置子进程(CefSubprocess.exe)此事件无效,">
+
+    方法 "//初始化" <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 缓存目录 <类型 = 文本型 注释 = "此目录将保存浏览器缓存和用户数据缓存,默认无缓存" @默认值 = 空对象>
+    参数 子进程文件 <类型 = 文本型 注释 = "注:如设置了子进程(CefSubprocess.exe)渲染进程相关事件无效" @默认值 = 空对象>
+    参数 浏览器标识 <类型 = 文本型 注释 = "值，该值将作为用户代理HTTP头返回。" @默认值 = 空对象>
+    参数 远程端口 <类型 = 整数 注释 = "设置为介于1024和65535之间的值，以便在指定端口上启用远程调试。" @默认值 = 0>
+    {
+        // @ CVolString strPath;
+        // @ GetInstancePath (strPath);
+        @ return FT_Browser_Init(GetModuleHandle(NULL),@<子进程文件>,  @<缓存目录>.GetText (), @<浏览器标识>.GetText (), @<远程端口>,OnBeforeInit,this);
+    }
+
+    方法 初始化 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 初始化配置 <类型 = CEF初始化配置>
+    {
+        @ FTSettings  Settings;
+        @ @<初始化配置>.ToFTSettings(Settings);
+        @ return FT_CefInit(GetModuleHandle(NULL), Settings, OnBeforeInit,this);
+    }
+
+    方法 运行 <公开 折叠 @嵌入式方法 = "">
+    {
+        @ FT_RunMessageLoop();
+    }
+
+    方法 退出 <公开 折叠 折叠2 @嵌入式方法 = "" "//@视窗.前缀文本" = "@__cdecl">
+    {
+        @ FT_Shutdown();
+    }
+
+    #
+}
+
+类 炫彩CEF命令行 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # HCOMMAND m_class;
+    # inline_ @sn<current_class> (HCOMMAND object) : @sn<current_class> () { m_class = object;}
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == NULL; }
+    # inline_ void Set (HCOMMAND object) { m_class = object; }
+    # <> </include>
+    # @end
+
+    方法 置值 <公开 折叠 @嵌入式方法 = "">
+    参数 值 <类型 = 文本型 注释 = "炫彩CEF标识.命令行_**">
+    {
+        @ FTCommandLine_AppendSwitch(@sn<this>.m_class,@<值>.GetText());
+    }
+
+    方法 置项值 <公开 折叠 @嵌入式方法 = "">
+    参数 项目名 <类型 = 文本型 注释 = "炫彩CEF标识.命令行_**">
+    参数 项目值 <类型 = 文本型>
+    {
+        @ FTCommandLine_AppendSwitchWithValue(@sn<this>.m_class,@<项目名>.GetText(),@<项目值>.GetText());
+    }
+
+    方法 取项值 <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 值 <类型 = 文本型 注释 = "炫彩CEF标识.命令行_**">
+    {
+        @ @an<CVolString> (FTCommandLine_GetSwitchValue(@sn<this>.m_class,@<值>.GetText()))
+    }
+
+    方法 取程序 <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ @an<CVolString> (FTCommandLine_GetProgram(@sn<this>.m_class))
+    }
+
+    方法 是否存在项 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ FTCommandLine_HasSwitches(@sn<this>.m_class)
+    }
+
+    方法 是否存在某项 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 值 <类型 = 文本型 注释 = "炫彩CEF标识.命令行_**">
+    {
+        @ FTCommandLine_HasSwitch(@sn<this>.m_class,@<值>.GetText())
+    }
+
+    #
+}
+
+类 炫彩CEFCookie <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # HCOOKIE hCookie ;
+    # inline_ @sn<current_class> (HCOOKIE object) : @sn<current_class> () { hCookie = object;}
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { hCookie = objCopyFrom.hCookie; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (hCookie == objCompare.hCookie); }
+    # inline_ BOOL_P IsEmpty () const { return hCookie == NULL; }
+    # inline_ void Set (HCOOKIE object) { hCookie = object; }
+    # <> </include>
+    # void CALLBACK OnEnumAllCookies(FTCookie& cook,bool blpIsLastCookie,int &upResult,void* hCallParam){
+    # @sn<current_class>* p = (@sn<current_class>*)hCallParam;
+    # @dt<CEFCookie信息> inf;
+    #  inf.FromFTCookie (cook);
+    # //DebugTrace (FALSE, 0, 0, _T ("Sn"),  _T("FTCookie"),cook.expires.year);
+    #   @dt<整数类> bHandle;
+    #   bHandle.@n<整数类.值> = upResult;
+    #  p->@<获得Cookie>(inf,blpIsLastCookie,bHandle);
+    # upResult =  bHandle.@n<整数类.值> ;
+    #  }
+    #
+    # @end
+
+    方法 获得Cookie <公开 定义事件 类型 = 整数 注释 = "当调用\"枚举Cookie\"方法后,每枚举到一个Cookie时,发送一次本事件." 折叠>
+    参数 cookie <类型 = CEFCookie信息 注释 = "提供所枚举到的Cookie信息">
+    参数 为最后一个 <类型 = 逻辑型 注释 = "提供当前所所枚举到的Cookie是否为最后一个能枚举到的Cookie.">
+    参数 是否拦截 <类型 = 整数类 注释 = "返回1停止继续枚举;" 注释 = "返回0继续枚举;" 注释 = "返回-1删除当前cookie并继续枚举;" 注释 = "返回-2删除当前cookie并停止继续枚举.">
+
+    方法 枚举Cookie <公开 类型 = 逻辑型 注释 = "枚举所有现有Cookie,每枚举到一个Cookie,就发送一个对应的\"获得Cookie\"事件."
+            注释 = "Cookie枚举以其最长路径排序,如果路径相同,则以创建时间从早到晚排序." 返回值注释 = "返回真表示枚举操作启动成功,返回假表示无法访问Cookie." 折叠 折叠2 @禁止流程检查 = 真>
+    参数 匹配链接地址 <类型 = 文本型 注释 = "如果不为空文本,则仅当匹配此链接地址的Cookie才会被枚举." @默认值 = "">
+    参数 仅普通链接 <类型 = 逻辑型 注释 = "如果为真,则仅枚举\"CEFCookie信息.仅普通链接使用\"成员值为真的Cookie." @默认值 = 假>
+    {
+        @ Set(FTCookies_GetGlobalManager());
+        @ return FTCookies_EnumAll (hCookie,@<匹配链接地址>.GetText (), @<仅普通链接>,OnEnumAllCookies,this);
+    }
+
+    方法 置Cookie <公开 类型 = 逻辑型 注释 = "设置所指定的Cookie" 返回值注释 = "成功返回真,失败返回假." 折叠 @禁止流程检查 = 真>
+    参数 链接地址 <类型 = 文本型 注释 = "提供所对应的链接地址">
+    参数 Cookie <类型 = CEFCookie信息 注释 = "提供对应的Cookie信息">
+    {
+        @ if(IsEmpty()) return false;
+        @ FTCookie cookie;
+        @ @<Cookie>.ToFTCookie (cookie);
+        @ return FTCookies_Set (hCookie,@<链接地址>.GetText (), cookie) ;
+    }
+
+    方法 删除Cookie <公开 类型 = 逻辑型 注释 = "删除所有匹配的Cookie" 返回值注释 = "成功返回真,失败返回假." 折叠 @禁止流程检查 = 真>
+    参数 匹配链接地址 <类型 = 文本型 注释 = "提供用作匹配的链接地址">
+    参数 Cookie名称 <类型 = 文本型 注释 = "提供用作匹配的Cookie名称">
+    {
+        @ if(IsEmpty()) return false;
+        @ return FTCookies_Delete (hCookie,@<匹配链接地址>.GetText (), @<Cookie名称>.GetText ()) ;
+    }
+
+    方法 刷新Cookie <公开 类型 = 逻辑型 注释 = "将所有后备Cookie数据刷新存储到磁盘" 返回值注释 = "成功返回真,无法访问Cookie返回假." 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FTCookies_FlushStore (hCookie) ;
+    }
+
+    #
+}
+
+类 炫彩CEF浏览器 <公开 基础类 = 元素基类>
+{
+
+    # @begin
+    # <> <include>
+    # HWEBVIEW hWebView = NULL;
+    # HBROWSER hWebView1 = NULL;
+    # inline_ @sn<current_class> (HWEBVIEW object) : @sn<current_class> () { hWebView = object;}
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { hWebView = objCopyFrom.hWebView; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (hWebView == objCompare.hWebView); }
+    # inline_ BOOL_P IsEmpty () const { return hWebView == NULL; }
+    # inline_ void Set (HWEBVIEW object) { hWebView = object; }
+    #
+    # HBITMAP hbitmap;
+    # int OnDraw(HELE hEle, HDRAW hDraw,BOOL *pbHandled) ;
+    # int OnEventProc(HELE hEle,UINT nEvent, WPARAM wParam, LPARAM lParam, BOOL *pbHandled);
+    # void CefSetCursor(DWORD dwCursorType);
+    # int OnImeStartComposition(HELE hEle,WPARAM wParam,LPARAM lParam){ 
+    # HWND hWnd = XWidget_GetHWND(hEle);
+    #  POINT point;
+    # // ::GetCaretPos(&point);
+    # XWnd_GetCursorPos(XWidget_GetHWINDOW(hEle),&point);
+    # // DebugTrace (FALSE, 0, 0, _T ("Snnn"), _T("GetCaretPos"),point.x,point.y);
+    #  //::ClientToScreen(hWnd,&point);
+    #  CANDIDATEFORM form;
+    #  form.dwIndex = 0;
+    #  form.dwStyle = CFS_EXCLUDE;
+    #  form.ptCurrentPos.x = point.x;
+    #  form.ptCurrentPos.y = point.y ;
+    #  form.rcArea.top = point.y;
+    #  form.rcArea.bottom = point.y ; 
+    #  form.rcArea.left = point.x ;//选择框左边位置
+    #  form.rcArea.right = point.x  ;
+    #  COMPOSITIONFORM comfrom;
+    #  comfrom.dwStyle = CFS_EXCLUDE;
+    #  comfrom.ptCurrentPos = form.ptCurrentPos;
+    #  comfrom.rcArea = form.rcArea;
+    #  HIMC hIMC = ImmGetContext(hWnd);
+    #  ImmSetCandidateWindow(hIMC, &form);
+    #  ImmSetCompositionWindow (hIMC, &comfrom);
+    #  ImmReleaseContext(hWnd, hIMC);
+    #
+    # return 0;}
+    # <> </include>
+    # BOOL CALLBACK OnBeforeCreate(int uMsg, HANDLE handler, LONG_PTR hObj, LONG_PTR attach1, LONG_PTR attach2, LONG_PTR attach3, LONG_PTR attach4, bool* pbHandled,void* lParam) {
+    #  if (uMsg == 1) {  //初始化-创建完成
+    #   @sn<current_class>* p = (@sn<current_class>*)lParam;
+    # //p->hWebView = (HWEBVIEW)handler;
+    #   p->@<创建完成>((INT_P)hObj,@dt<炫彩CEF浏览器>((HWEBVIEW)handler));
+    #  }
+    #  else if (uMsg == 2) {  //绘制
+    #    @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   if(p->hbitmap) DeleteObject(p->hbitmap);
+    #   p->hbitmap = NULL;
+    #   p->hbitmap = CreateBitmap(attach2,attach3,1,32,(void *)attach1);
+    #   if(XC_IsHXCGUI((HELE)hObj,XC_ELE) && p->hbitmap)
+    #   //DebugTrace (FALSE, 0, 0, _T ("Snnnn"),  _T("OnDraw"),uMsg,attach1,attach2,attach3);
+    #    XEle_Redraw ((HELE)hObj,FALSE);
+    #  }
+    #  else if (uMsg == 3) {
+    #   XEle_SetUserData((HELE)hObj,attach1);
+    #  }
+    #  else if (uMsg == 4) {
+    #   
+    #  }
+    #  else if (uMsg == 5) {  //菜单即将被创建
+    #   @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<即将打开菜单>((INT_P)hObj,@dt<炫彩CEF浏览器>((HWEBVIEW)handler),@dt<炫彩CEF框架>((HFRAME)attach3),(INT_P)attach2,@dt<炫彩CEF菜单模式>((HMENUMODEL)attach1));
+    #   //DebugTrace (FALSE, 0, 0, _T ("Snn"),  _T("菜单即将被创建"),attach1,attach2);
+    #  }
+    #  else if (uMsg == 6) {
+    #   @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<菜单项被点击>((INT_P)hObj,@dt<炫彩CEF浏览器>((HWEBVIEW)handler),(INT)attach1);
+    #  }
+    #  else if (uMsg == 7) {
+    #   @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<标题被改变>((INT_P)hObj,CWString((TCHAR*)attach1));
+    #   //DebugTrace (FALSE, 0, 0, _T ("SnS"),  _T("标题改变"),uMsg,(const TCHAR*)attach1);
+    #  }
+    #  else if (uMsg == 8) {
+    #    @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<地址被改变>((INT_P)hObj,CWString((TCHAR*)attach1));
+    #  }
+    #  else if (uMsg == 9) {
+    #    @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<加载完成>((INT_P)hObj,(int)attach1);
+    #  }
+    #  else if (uMsg == 10) {
+    #  @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<加载开始>((INT_P)hObj,(int)attach1);
+    #  }
+    #  else if (uMsg == 11) {
+    #  @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<加载状态被改变>((INT_P)hObj,(bool)attach1,(bool)attach2,(bool)attach3);
+    #  }
+    #  else if (uMsg == 12) {
+    #  @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<接收到状态信息>((INT_P)hObj,CWString((TCHAR*)attach1));
+    #  }
+    #  else if (uMsg == 13) {
+    #  @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<加载错误>((INT_P)hObj,(int)attach1,CWString((TCHAR*)attach2),CWString((TCHAR*)attach3));
+    #  }
+    #  else if (uMsg == 14) {
+    #   @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<网页图标被改变>((INT_P)hObj,CWString((TCHAR*)attach1),CWString((TCHAR*)attach2));
+    #  }
+    #  else if (uMsg == 15) {
+    #   @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   @dt<逻辑型类> bHandle;
+    #   bHandle.@n<逻辑型类.值> = (*pbHandled);
+    #
+    # @dt<CEF窗口信息> inf;
+    # FTWindowInfo* info;
+    # info = (FTWindowInfo*)attach4;
+    # inf.FromFTWindowInfo (*info);
+    # p->@<即将打开新窗口>((INT_P)hObj,@dt<炫彩CEF浏览器>((HWEBVIEW)handler),@dt<炫彩CEF框架>((HFRAME)attach1),CWString((TCHAR*)attach2),CWString((TCHAR*)attach3),inf,bHandle);
+    # *pbHandled = bHandle.@n<逻辑型类.值>;
+    # inf.ToFTWindowInfo(*info);
+    # attach4 =(LONG_PTR) info;
+    #  }
+    #  else if (uMsg == 16) {
+    #   @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<关闭浏览器>((INT_P)hObj,@dt<炫彩CEF浏览器>((HWEBVIEW)handler),(INT_P)attach1);
+    #  }
+    #  else if (uMsg == 17) {
+    #   @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<按下某键>((INT_P)hObj,@dt<炫彩CEF浏览器>((HWEBVIEW)handler),(INT_P)attach1,(INT_P)attach2,*pbHandled);
+    # //DebugTrace (FALSE, 0, 0, _T ("Sn"),  _T("标题改变"),uMsg);
+    #  }
+    #  else if (uMsg == 18) {
+    #   @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #     @dt<逻辑型类> bHandle;
+    #     bHandle.@n<逻辑型类.值> = (*pbHandled);
+    #   p->@<即将加载资源>((INT_P)hObj,@dt<炫彩CEF浏览器>((HWEBVIEW)handler),@dt<炫彩CEF框架>((HFRAME)attach1),@dt<炫彩CEF请求>((HREQUEST)attach2),attach3,bHandle);
+    # *pbHandled = bHandle.@n<逻辑型类.值>;
+    #
+    #  }
+    #  else if (uMsg == 19) {
+    #   @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<控制台信息>((INT_P)hObj,@dt<炫彩CEF浏览器>((HWEBVIEW)handler),(INT)attach1,CVolString((TCHAR*)attach2),CVolString((TCHAR*)attach3),attach4);
+    # //DebugTrace (FALSE, 0, 0, _T ("Sn"),  _T("标题改变"),uMsg);
+    #  }
+    #  else if (uMsg == 20) {
+    #   @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #     @dt<逻辑型类> bHandle;
+    #     bHandle.@n<逻辑型类.值> = (*pbHandled);
+    #   p->@<处理协议请求>((INT_P)hObj,@dt<炫彩CEF浏览器>((HWEBVIEW)handler),@dt<炫彩CEF框架>((HFRAME)attach1),@dt<炫彩CEF请求>((HREQUEST)attach2),bHandle);
+    # *pbHandled = bHandle.@n<逻辑型类.值>;
+    #  }
+    #  else if (uMsg == 21) {
+    #   @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<资源加载完毕>(@dt<炫彩CEF浏览器>((HWEBVIEW)handler),@dt<炫彩CEF框架>((HFRAME)hObj),@dt<炫彩CEF请求>((HREQUEST)attach1),@dt<炫彩CEF响应>((HRESPONSE)attach2),(int)attach3,(INT_P)attach4);
+    #  }
+    #  else if (uMsg == 22) {
+    #   @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<获取资源过滤器>((INT_P)hObj,@dt<炫彩CEF浏览器>((HWEBVIEW)handler),@dt<炫彩CEF框架>((HFRAME)attach1),@dt<炫彩CEF请求>((HREQUEST)attach2),@dt<炫彩CEF响应>((HRESPONSE)attach3));
+    #  }
+    #  else if (uMsg == 23) {
+    #   @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #     @dt<逻辑型类> bHandle;
+    #     bHandle.@n<逻辑型类.值> = (*pbHandled);
+    #   p->@<响应资源>((INT_P)hObj,@dt<炫彩CEF浏览器>((HWEBVIEW)handler),@dt<炫彩CEF框架>((HFRAME)attach1),@dt<炫彩CEF请求>((HREQUEST)attach2),@dt<炫彩CEF响应>((HRESPONSE)attach3),bHandle);
+    # *pbHandled = bHandle.@n<逻辑型类.值>;
+    #  }
+    #  else if (uMsg == 24) {
+    #   @sn<current_class>* p = (@sn<current_class>*)lParam;
+    #   p->@<重定向资源>((INT_P)hObj,@dt<炫彩CEF浏览器>((HWEBVIEW)handler),@dt<炫彩CEF框架>((HFRAME)attach1),@dt<炫彩CEF请求>((HREQUEST)attach2),@dt<炫彩CEF响应>((HRESPONSE)attach3),CVolString((TCHAR*)attach2));
+    #  }
+    #
+    #  return 0;
+    # }
+    #
+    # int @sn<current_class>::OnDraw(HELE hEle, HDRAW hDraw,BOOL *pbHandled) {
+    #  *pbHandled = true;
+    #  //XEle_DrawEle(hEle,hDraw);
+    #  if (hbitmap != 0) {
+    #   HIMAGE  hImg = XImage_LoadFromHBITMAP(hbitmap);
+    #   if (hImg != 0) {
+    #    XDraw_Image(hDraw, hImg, 0, 0);
+    #    XImage_Release(hImg);
+    #    }   
+    #  }
+    #  return 0;
+    # }
+    #
+    # void @sn<current_class>::CefSetCursor(DWORD dwCursorType) {
+    #  if (dwCursorType < 0 || dwCursorType > 44) {
+    #   return;
+    #  }
+    #  std::vector<INT> arrCurs = { 32512, 32515, 32649, 32513, 32514, 32651, 32644, 32645, 32643, 32642, 32645, 32642, 32643, 32644, 32645, 32644, 32643, 32642, 32644, 32645, 32640, 32644, 32644, 32643, 32642, 32645, 32642, 32643, 32644, 32646, 32513, 32512, 32512, 32512, 32650, 32648, 32512, -1, 32648, 32515, 32646, 32512, 32512, 32512 };
+    #  LPCWSTR CursorName = NULL;
+    #  int i = 0;
+    #  for (i = 0; i < arrCurs.size(); i++) {
+    #   if (i == dwCursorType) {
+    #    CursorName = MAKEINTRESOURCE(arrCurs[i]);
+    #    break;
+    #   }
+    #  }
+    #  HCURSOR hCursor = LoadCursorW(0, CursorName);
+    #  SetCursor(hCursor);
+    #  //XEle_SetCursor(m_hele,hCursor);
+    # }
+    #
+    # int @sn<current_class>::OnEventProc(HELE hEle,UINT nEvent, WPARAM wParam, LPARAM lParam, BOOL *pbHandled) { 
+    #  if(nEvent == XE_MOUSEWHEEL){
+    #   *pbHandled = true;
+    #   POINT*  pt= (POINT*)lParam;
+    #   if (hWebView != 0) FTBrowser_SendMouse(hWebView, WM_MOUSEWHEEL, wParam, MAKELPARAM(pt->x, pt->y));
+    #  }else if (nEvent == XE_MOUSEMOVE ) {
+    #   *pbHandled = true;
+    #   POINT*  pt= (POINT*)lParam;
+    #   if (hWebView != 0) FTBrowser_SendMouse(hWebView, WM_MOUSEMOVE, wParam, MAKELPARAM(pt->x, pt->y));
+    #   //DebugTrace (FALSE, 0, 0, _T ("Snnnnn"),  _T("WM_MOUSEMOVE"),nEvent,wParam,lParam,pt->x, pt->y);
+    #  }else if (nEvent == XE_LBUTTONDOWN ) {
+    #   *pbHandled = true;
+    #   XWnd_SetFocusEle(XWidget_GetHWINDOW(hEle),hEle);
+    #   XEle_SetCapture(hEle,TRUE);
+    #   POINT*  pt= (POINT*)lParam;
+    #   if (hWebView != 0) FTBrowser_SendMouse(hWebView, WM_LBUTTONDOWN, wParam, MAKELPARAM(pt->x, pt->y));
+    #  }else if (nEvent == XE_LBUTTONUP ) {
+    #   *pbHandled = true;
+    #   XEle_SetCapture(hEle,FALSE);
+    #   POINT*  pt= (POINT*)lParam;
+    #   if (hWebView != 0) FTBrowser_SendMouse(hWebView, WM_LBUTTONUP, wParam, MAKELPARAM(pt->x, pt->y));
+    #  }else if (nEvent == XE_RBUTTONDOWN ) {
+    #   *pbHandled = true;
+    #   XWnd_SetFocusEle(XWidget_GetHWINDOW(hEle),hEle);
+    #   XEle_SetCapture(hEle,TRUE);
+    #   POINT*  pt= (POINT*)lParam;
+    #   if (hWebView != 0) FTBrowser_SendMouse(hWebView, WM_RBUTTONDOWN, wParam, MAKELPARAM(pt->x, pt->y));
+    #  }else if (nEvent == XE_RBUTTONUP ) {
+    #   *pbHandled = true;
+    #   XEle_SetCapture(hEle,FALSE);
+    #   POINT*  pt= (POINT*)lParam;
+    #  // ClientToScreen(XWidget_GetHWND((HXCGUI)hEle), pt);
+    #   if (hWebView != 0) FTBrowser_SendMouse(hWebView, WM_RBUTTONUP, wParam, MAKELPARAM(pt->x, pt->y+29));
+    #  }else if (nEvent == XE_SETFOCUS) {
+    #   *pbHandled = true;
+    #   if (hWebView != 0) FTBrowser_Focus(hWebView, TRUE);
+    #  }else if (nEvent == XE_KILLFOCUS) {
+    #   *pbHandled = true;
+    #   if (hWebView != 0) FTBrowser_Focus(hWebView, FALSE);
+    #  }else if (nEvent == XE_DESTROY) {
+    #   if (hWebView != 0) {
+    #    FTBrowser_Close(hWebView);
+    #    //DebugTrace (FALSE, 0, 0, _T ("Sn"),  _T("XE_DESTROY"),nEvent);
+    #    hWebView = 0;
+    #   }
+    #  }else if (nEvent == XE_SETCURSOR) {
+    #   *pbHandled = true;
+    #   DWORD i = XEle_GetUserData(hEle);
+    #   if ( i != -1) {
+    #    CefSetCursor(i);
+    #   }
+    #  }else if (nEvent == XE_KEYDOWN ) {//WM_SYSKEYDOWN
+    #   *pbHandled = true;
+    #   if (hWebView != 0) {
+    #    FTBrowser_SendKey(hWebView, WM_KEYDOWN, wParam, lParam);
+    #    OnImeStartComposition(hEle,wParam,lParam);
+    #   }
+    #  }else if (nEvent == XE_KEYUP ) {//WM_SYSKEYUP
+    #   *pbHandled = true;
+    #   if (hWebView != 0) FTBrowser_SendKey(hWebView, WM_KEYUP, wParam, lParam);
+    #  }else if (nEvent == XE_CHAR ) {//WM_SYSCHAR
+    #   *pbHandled = true;
+    #   if (hWebView != 0) FTBrowser_SendKey(hWebView, WM_CHAR, wParam, lParam);
+    #  }else if (nEvent == XE_SIZE) {
+    #   *pbHandled = true;
+    #  // if (hWebView != 0){
+    #    int cx = XEle_GetWidth(hEle);
+    #    int cy = XEle_GetHeight(hEle);
+    # //  RECT rc ;
+    # //   XEle_GetRect(hEle,&rc);
+    #   // DebugTrace (FALSE, 0, 0, _T ("Snnnnn"),  _T("XE_SIZE"),nEvent,rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top);
+    #     FTBrowser_HandlerSetRect(0x80000000,0x80000000, cx,cy-24);
+    #     FTBrowser_Move(hWebView);
+    #   
+    #  // }
+    #  }
+    #  
+    #  return 0;
+    # }
+    #
+    #
+    # @end
+
+    方法 关闭 <公开 折叠 @嵌入式方法 = "">
+    {
+        @ FTBrowser_Close(@sn<this>.hWebView)
+    }
+
+    方法 取指针 <公开 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.hWebView1
+    }
+
+    方法 取浏览器句柄 <公开 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    {
+        @ return (INT_P)hWebView;
+    }
+
+    方法 置浏览器句柄 <公开 折叠>
+    参数 句柄 <类型 = 变整数>
+    {
+        @ hWebView = (HWEBVIEW)@<句柄>;
+    }
+
+    方法 创建 <公开 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    参数 URL <类型 = 文本型>
+    参数 请求环境 <类型 = 炫彩CEF请求环境 @默认值 = 空对象>
+    参数 句柄 <类型 = 变整数>
+    参数 窗口信息 <类型 = CEF窗口信息>
+    {
+        @ HELE hele = XEle_Create(@<窗口信息.左边>,@<窗口信息.顶边>,@<窗口信息.宽度>,@<窗口信息.高度>,(HXCGUI)@<句柄>);
+        @ FTWindowInfo Info;
+        @ @<窗口信息>.ToFTWindowInfo(Info);
+        @ hWebView1 = FTBrowser_Create(Info, (LONG_PTR)hele,  RGB(255,0,0), @<URL>,@<请求环境>.IsNullObject()?nullptr:@<请求环境>.m_class, OnBeforeCreate,this);
+        @ if(XC_IsHXCGUI(hele,XC_ELE)){
+        @ set((vint)hele);
+        @  XEle_RegEventCPP1(hele,XE_PAINT,&@sn<current_class>::OnDraw);
+        @  XEle_EnableEvent_XE_MOUSEWHEEL(hele,TRUE);
+        @  XEle_RegEventCPP1(hele,XE_ELEPROCE,&@sn<current_class>::OnEventProc);
+        @  return (INT_P)hele;
+        @ }
+        @ return 0;
+
+    }
+
+    方法 后退 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FTBrowser_GoBack(hWebView);
+    }
+
+    方法 是否可后退 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FTBrowser_IsBack(hWebView);
+    }
+
+    方法 前进 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FTBrowser_GoForward(hWebView);
+    }
+
+    方法 是否可前进 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FTBrowser_IsForward(hWebView);
+    }
+
+    方法 是否正在加载 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FTBrowser_IsLoading(hWebView);
+    }
+
+    方法 刷新 <公开 注释 = "重新加载" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return ;
+        @ FTBrowser_Refresh(hWebView);
+    }
+
+    方法 重新加载 <公开 注释 = "忽略任何缓存数据" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty())  return ;
+        @ FTBrowser_ReloadIgnoreCache(hWebView);
+    }
+
+    方法 停止加载 <公开 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty())  return ;
+        @ FTBrowser_StopLoad(hWebView);
+    }
+
+    方法 是否相同 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 浏览器 <类型 = 炫彩CEF浏览器>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FTBrowser_IsSame(hWebView,@<浏览器>.hWebView);
+    }
+
+    方法 取框架数量 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return NULL;
+        @ return FTBrowser_GetFrameCount(hWebView);
+    }
+
+    方法 取主框架 <公开 类型 = 炫彩CEF框架 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return NULL;
+        @ return @dt<炫彩CEF框架>(FTBrowser_GetMframe(hWebView));
+    }
+
+    方法 取焦点框架 <公开 类型 = 炫彩CEF框架 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return NULL;
+        @ return @dt<炫彩CEF框架>(FTBrowser_GetFframe(hWebView));
+    }
+
+    方法 取指定名称框架 <公开 类型 = 炫彩CEF框架 注释 = "返回当前页面中具有指定名称的框架" 返回值注释 = "如果失败,所返回框架将为空(\"CEF页面框架.是否为空\"方法返回真)." 折叠 @禁止流程检查 = 真>
+    参数 框架名称 <类型 = 文本型 注释 = "提供所欲获取页面框架的名称">
+    {
+        @ if(IsEmpty()) return NULL;
+        @ return @dt<炫彩CEF框架>(FTBrowser_GetFrame (hWebView,@<框架名称>.GetText ()));
+    }
+
+    方法 取ID <公开 类型 = 整数 注释 = "返回本浏览器的全局唯一ID值" 返回值注释 = "如果本浏览器组件尚未创建,将返回0." 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return NULL;
+        @ return FTBrowser_GetIdentifier(hWebView);
+    }
+
+    方法 开始下载 <公开 折叠 @禁止流程检查 = 真>
+    参数 链接地址 <类型 = 文本型>
+    {
+        @ if(IsEmpty())  return ;
+        @ FTBrowser_StartDownload (hWebView,@<链接地址>.GetText ()) ;
+    }
+
+    方法 关闭浏览器 <公开 定义事件 类型 = 整数 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 CEF浏览器对象 <类型 = 炫彩CEF浏览器>
+    参数 浏览器句柄 <类型 = 变整数>
+
+    方法 创建完成 <公开 定义事件 类型 = 整数 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 CEF浏览器对象 <类型 = 炫彩CEF浏览器>
+
+    方法 标题被改变 <公开 定义事件 类型 = 整数 注释 = "当标题改变时,将触发本事件." 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 标题 <类型 = 文本型 注释 = "接收本次的标题文本.">
+
+    方法 地址被改变 <公开 定义事件 类型 = 整数 注释 = "当地址改变时,将触发本事件." 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 地址 <类型 = 文本型 注释 = "接收本次的地址文本.">
+
+    方法 加载完成 <公开 定义事件 类型 = 整数 注释 = "当地址加载完成时,将触发本事件." 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 状态码 <类型 = 整数 注释 = "接收本次的状态.">
+
+    方法 加载开始 <公开 定义事件 类型 = 整数 注释 = "当地址加载开始时,将触发本事件." 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 状态类型 <类型 = 整数 注释 = "接收本次的状态.">
+
+    方法 加载状态被改变 <公开 定义事件 类型 = 整数 注释 = "当地址加载状态改变,将触发本事件." 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 是否加载中 <类型 = 逻辑型>
+    参数 是否可后退 <类型 = 逻辑型>
+    参数 是否可前进 <类型 = 逻辑型>
+
+    方法 接收到状态信息 <公开 定义事件 类型 = 整数 注释 = "当接收到状态信息时,将触发本事件." 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 状态信息 <类型 = 文本型 注释 = "接收本次的状态信息.">
+
+    方法 加载错误 <公开 定义事件 类型 = 整数 注释 = "当地址加载错误时,将触发本事件." 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 错误码 <类型 = 整数>
+    参数 错误文本 <类型 = 文本型>
+    参数 失败地址 <类型 = 文本型>
+
+    方法 网页图标被改变 <公开 定义事件 类型 = 整数 注释 = "当地址网页图标被改变时,将触发本事件." 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 图标地址 <类型 = 文本型 注释 = ".">
+    参数 备用地址 <类型 = 文本型 注释 = "如没有地址,则返回\"空\"">
+
+    方法 即将打开新窗口 <公开 定义事件 类型 = 整数 注释 = "当点击某个链接时,将触发本事件" 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 浏览器句柄 <类型 = 炫彩CEF浏览器>
+    参数 CEF框架 <类型 = 炫彩CEF框架>
+    参数 链接地址 <类型 = 文本型>
+    参数 框架名称 <类型 = 文本型>
+    参数 窗口信息 <类型 = CEF窗口信息>
+    参数 是否拦截 <类型 = 逻辑型类>
+
+    方法 即将打开菜单 <公开 定义事件 类型 = 整数 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 CEF浏览器对象 <类型 = 炫彩CEF浏览器>
+    参数 框架 <类型 = 炫彩CEF框架>
+    参数 菜单环境 <类型 = 变整数>
+    参数 菜单模式 <类型 = 炫彩CEF菜单模式>
+    {
+
+    }
+
+    方法 菜单项被点击 <公开 定义事件 类型 = 整数 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 CEF浏览器对象 <类型 = 炫彩CEF浏览器>
+    参数 菜单ID <类型 = 整数>
+
+    方法 按下某键 <公开 定义事件 类型 = 整数 返回值注释 = "返回真阻止当前操作，返回假继续" 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 浏览器 <类型 = 炫彩CEF浏览器>
+    参数 按键事件 <类型 = 变整数>
+    参数 系统事件 <类型 = 变整数>
+    参数 是否快捷键 <类型 = 逻辑型>
+
+    方法 即将加载资源 <公开 定义事件 类型 = 整数 注释 = "在浏览器主进程中调用 最好吧开发者工具排除，否则因框架地址过长造成卡满" 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 浏览器 <类型 = 炫彩CEF浏览器>
+    参数 框架 <类型 = 炫彩CEF框架>
+    参数 请求 <类型 = 炫彩CEF请求 注释 = "将请求里面的地址进行修改，将会触发重定向事件">
+    参数 请求回调 <类型 = 变整数>
+    参数 是否拦截 <类型 = 逻辑型类 注释 = "返回真阻止当前操作，返回假继续">
+
+    方法 控制台信息 <公开 定义事件 类型 = 整数 注释 = "在浏览器主进程中调用" 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 浏览器 <类型 = 炫彩CEF浏览器>
+    参数 日志等级 <类型 = 整数>
+    参数 日志消息 <类型 = 文本型>
+    参数 来源 <类型 = 文本型>
+    参数 行号 <类型 = 整数>
+
+    方法 处理协议请求 <公开 定义事件 类型 = 整数 注释 = "英文名：OnProtocolExecution 说明：在浏览器调用外部程序时候调用，以处理对带有未知协议组件的url的请求" 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 浏览器 <类型 = 炫彩CEF浏览器>
+    参数 框架 <类型 = 炫彩CEF框架>
+    参数 请求 <类型 = 炫彩CEF请求>
+    参数 允许操作系统执行 <类型 = 逻辑型类 注释 = "allowosexecution 可设置值">
+
+    方法 资源加载完毕 <公开 定义事件 类型 = 整数 注释 = "英文名：OnResourceLoadComplete 说明：在浏览器主进程中调用" 折叠>
+    参数 浏览器 <类型 = 炫彩CEF浏览器>
+    参数 框架 <类型 = 炫彩CEF框架>
+    参数 请求 <类型 = 炫彩CEF请求>
+    参数 响应 <类型 = 炫彩CEF响应>
+    参数 状态 <类型 = 整数>
+    参数 资源大小 <类型 = 长整数>
+
+    方法 获取资源过滤器 <公开 定义事件 类型 = 整数 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 浏览器 <类型 = 炫彩CEF浏览器>
+    参数 框架 <类型 = 炫彩CEF框架>
+    参数 请求 <类型 = 炫彩CEF请求>
+    参数 响应 <类型 = 炫彩CEF响应>
+    参数 "//设置资源过滤器" <类型 = 炫彩CEF设置资源过滤器 注释 = "调用该类中的“设置”方法设置返回资源过滤器，如果不需要则不设置,设置的资源过滤器不能为局部变量">
+
+    方法 响应资源 <公开 定义事件 类型 = 整数 注释 = "英文名：OnResourceResponse 说明：在浏览器主进程中调用 注意这里如果是开发者工具，则取地址可能过长造成浏览器卡" 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 浏览器 <类型 = 炫彩CEF浏览器>
+    参数 框架 <类型 = 炫彩CEF框架>
+    参数 请求 <类型 = 炫彩CEF请求>
+    参数 响应 <类型 = 炫彩CEF响应>
+    参数 是否拦截 <类型 = 逻辑型类 注释 = "返回真阻止当前操作，返回假继续">
+
+    方法 重定向资源 <公开 定义事件 类型 = 整数 注释 = "英文名：OnResourceRedirect 说明：在浏览器主进程中调用 在“即将加载资源”修改请求才会触发" 折叠>
+    参数 元素句柄 <类型 = 变整数>
+    参数 浏览器 <类型 = 炫彩CEF浏览器>
+    参数 框架 <类型 = 炫彩CEF框架>
+    参数 请求 <类型 = 炫彩CEF请求>
+    参数 响应 <类型 = 炫彩CEF响应>
+    参数 新地址 <类型 = 文本型 注释 = "可修改">
+
+    #
+}
+
+类 炫彩CEF框架 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # HFRAME m_class;
+    # inline_ @sn<current_class> (HFRAME object) : @sn<current_class> () { m_class = object;}
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == NULL; }
+    # inline_ void Set (HFRAME object) { m_class = object; }
+    # <> </include>
+    # @end
+
+    方法 链接地址 <公开 属性读 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ @an<CVolString> (FTFrame_GetUrl(@sn<this>.m_class))
+    }
+
+    方法 链接地址 <公开 属性写 折叠>
+    参数 URL <类型 = 文本型>
+    {
+        @ FTFrame_LoadUrl(m_class,@<URL>.GetText ());
+    }
+
+    方法 是否可前进 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ FTFrame_IsFocused(@sn<this>.m_class)
+    }
+
+    方法 是否主框架 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ FTFrame_IsMain(@sn<this>.m_class)
+    }
+
+    方法 查看网页源码 <公开 注释 = "启动文本外部编辑器查看本框架中当前所浏览页面内容的HTML源代码" 折叠 @嵌入式方法 = "">
+    {
+        @ FTFrame_ViewSource(@sn<this>.m_class)
+    }
+
+    方法 取父框架 <公开 类型 = 炫彩CEF框架 折叠 @嵌入式方法 = "">
+    {
+        @ @dt<炫彩CEF框架> (FTFrame_GetParent(@sn<this>.m_class))
+    }
+
+    方法 取网页源码 <公开 类型 = 文本型 注释 = "返回本框架中当前所浏览页面内容的HTML源代码" 折叠 @嵌入式方法 = "">
+    {
+        @ @an<CVolString> (FTFrame_GetWebcode(@sn<this>.m_class))
+    }
+
+    方法 取网页文本 <公开 类型 = 文本型 注释 = "返回本框架中当前所浏览页面内容的可显示文本" @嵌入式方法 = "">
+    {
+        @ @an<CVolString> (FTFrame_GetWebText(@sn<this>.m_class))
+    }
+
+    方法 取框架名称 <公开 类型 = 文本型 注释 = "返回本框架的名称" @嵌入式方法 = "">
+    {
+        @ @an<CVolString> (FTFrame_GetName(@sn<this>.m_class))
+    }
+
+    方法 执行JS脚本 <公开 注释 = "执行所指定的JS脚本代码" @嵌入式方法 = "">
+    参数 JS代码 <类型 = 文本型 注释 = "提供所欲执行的JavaScript脚本内容" 折叠>
+    参数 链接地址 <类型 = 文本型 注释 = "  提供脚本所对应的链接地址,当脚本执行遇到问题时,浏览器" 注释 = "将访问此地址为脚本开发者提供错误来源." @默认值 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供出错报告的基准行号" @默认值 = 1>
+    {
+        @ FTFrame_ExecJs(@sn<this>.m_class,@<JS代码>.GetText(),@<链接地址>.GetText (), @<起始行号>)
+    }
+
+    方法 网页_点击 <公开 注释 = "执行JS查找并执行元素点击事件" 折叠>
+    参数 css选择器 <类型 = 文本型 注释 = "提供一个 css选择器 如: #id  .css  div p 等">
+    参数 元素索引 <类型 = 整数 注释 = "元素索引从0开始默认为第一个" @默认值 = 0>
+    {
+        执行JS脚本 ("document.querySelectorAll('" + css选择器 + "')[" + 到文本 (元素索引) + "].click()")
+    }
+
+    #
+}
+
+类 炫彩CEF菜单模式 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # HMENUMODEL m_class;
+    # inline_ @sn<current_class> (HMENUMODEL object) : @sn<current_class> () { m_class = object;}
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == NULL; }
+    # inline_ void Set (HMENUMODEL object) { m_class = object; }
+    # <> </include>
+    # @end
+
+    方法 清除 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ FTMenu_Clear(@sn<this>.m_class)
+    }
+
+    方法 取数量 <公开 类型 = 整数 注释 = "英文名：GetCount" 折叠 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()? 0 : FTMenu_GetCount(m_class);
+    }
+
+    方法 添加分隔栏 <公开 类型 = 逻辑型 注释 = "英文名：AddSeparator" 折叠 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()? false : FTMenu_AddSeparator(m_class);
+    }
+
+    方法 添加菜单 <公开 类型 = 逻辑型 注释 = "英文名：AddItem" 折叠 @禁止流程检查 = 真>
+    参数 命令ID <类型 = 整数>
+    参数 标签名 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) return FTMenu_AddItem(m_class,@<命令ID>,@<标签名>.GetText());
+        @ return false;
+    }
+
+    方法 添加Check菜单 <公开 类型 = 逻辑型 注释 = "英文名：AddCheckItem" @禁止流程检查 = 真>
+    参数 命令ID <类型 = 整数>
+    参数 标签名 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) return FTMenu_AddCheckItem(m_class,@<命令ID>,@<标签名>.GetText());
+        @ return false;
+    }
+
+    方法 添加Radio菜单 <公开 类型 = 逻辑型 注释 = "英文名：AddRadioItem" 折叠 @禁止流程检查 = 真>
+    参数 命令ID <类型 = 整数>
+    参数 标签名 <类型 = 文本型>
+    参数 群ID <类型 = 整数>
+    {
+        @ if(!IsEmpty()) return FTMenu_AddRadioItem(m_class,@<命令ID>,@<标签名>.GetText(),@<群ID>);
+        @ return false;
+    }
+
+    方法 添加子菜单 <公开 类型 = 炫彩CEF菜单模式 注释 = "英文名：AddSubMenu" 折叠 @禁止流程检查 = 真>
+    参数 命令ID <类型 = 整数>
+    参数 标签名 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) return @dt<炫彩CEF菜单模式>(FTMenu_AddSubMenu(m_class,@<命令ID>,@<标签名>.GetText()));
+        @ return @dt<炫彩CEF菜单模式>();
+    }
+
+    方法 删除菜单 <公开 类型 = 逻辑型 注释 = "英文名：Remove" 折叠 @禁止流程检查 = 真>
+    参数 命令ID <类型 = 整数>
+    {
+        @ if(!IsEmpty()) return FTMenu_Remove(m_class,@<命令ID>);
+        @ return false;
+    }
+
+    #
+}
+
+类 炫彩CEF请求 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # HREQUEST m_class;
+    # inline_ @sn<current_class> (HREQUEST object) : @sn<current_class> () { m_class = object;}
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == NULL; }
+    # inline_ void Set (HREQUEST object) { m_class = object; }
+    # <> </include>
+    # @end
+
+    方法 创建 <公开 折叠 @禁止流程检查 = 真>
+    {
+        @ Set( FTRequest_Create());
+    }
+
+    方法 取类型 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        @ return CVolString( FTRequest_GetMethod(m_class));
+    }
+
+    方法 置类型 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 Method <类型 = 文本型>
+    {
+        @ return FTRequest_SetMethod(m_class,@<Method>.GetText());
+    }
+
+    方法 是否只读 <公开 类型 = 逻辑型 注释 = "英文名：IsReadOnly" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FTRequest_IsReadOnly(m_class);
+    }
+
+    方法 取地址 <公开 类型 = 文本型 注释 = "英文名：GetURL" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ return CVolString(FTRequest_GetURL(m_class));
+    }
+
+    方法 置地址 <公开 注释 = "英文名：SetURL" 折叠>
+    参数 地址 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return;
+        @ FTRequest_SetURL(m_class,@<地址>.GetText());
+    }
+
+    方法 置来路 <公开 注释 = "英文名：SetReferrer" 折叠>
+    参数 来路地址 <类型 = 文本型>
+    参数 来路类型 <类型 = 整数>
+    {
+        @ if(IsEmpty()) return;
+        @ FTRequest_SetReferrer(m_class,@<来路地址>.GetText(),@<来路类型>);
+    }
+
+    方法 取来路地址 <公开 类型 = 文本型 注释 = "英文名：GetReferrerURL" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ return CVolString( FTRequest_GetReferrerURL(m_class));
+    }
+
+    方法 取来路类型 <公开 类型 = 整数 注释 = "英文名：GetReferrerPolicy 说明：" 返回值注释 = "参考：来路策略." @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return 0;
+        @ return FTRequest_GetReferrerPolicy(m_class);
+    }
+
+    方法 取POST数据 <公开 类型 = 变整数 注释 = "英文名：GetPostData" @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty ()) return 0;
+        @ return (INT_P)FTRequest_GetPostData(m_class);
+
+    }
+
+    方法 置POST数据 <公开 注释 = "英文名：SetPostData">
+    参数 POST数据 <类型 = 变整数>
+    {
+        @ if(IsEmpty ()) return; 
+        @ FTRequest_SetPostData (m_class, (HPOSTDATA)@<POST数据>);
+
+    }
+
+    方法 取协议头_名称 <公开 类型 = 文本型 注释 = "英文名：GetHeaderByName" @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ return CVolString(FTRequest_GetHeaderByName(m_class,@<名称>.GetText()));
+    }
+
+    #
+}
+
+类 炫彩CEF请求环境 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # HREQUESTCONTEXE m_class;
+    # inline_ @sn<current_class> (HREQUESTCONTEXE object) : @sn<current_class> () { m_class = object;}
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == NULL; }
+    # inline_ void Set (HREQUESTCONTEXE object) { m_class = object; }
+    # <> </include>
+    # @end
+
+    方法 取全局 <公开 静态 类型 = 炫彩CEF请求环境 @禁止流程检查 = 真>
+    {
+        @ return @dt<炫彩CEF请求环境>(FTRequestContext_GetGlobalContext());
+    }
+
+    方法 是否为空 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    方法 是否为全局 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return (FTRequestContext_IsGlobal(m_class));
+    }
+
+    #
+}
+
+类 炫彩CEF响应 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # HRESPONSE m_class;
+    # inline_ @sn<current_class> (HRESPONSE object) : @sn<current_class> () { m_class = object;}
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == NULL; }
+    # inline_ void Set (HRESPONSE object) { m_class = object; }
+    # <> </include>
+    # @end
+
+    方法 创建 <公开 折叠 @禁止流程检查 = 真>
+    {
+        @ Set( FTResponse_Create());
+    }
+
+    方法 是否只读 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return FTResponse_IsReadOnly(m_class);
+    }
+
+    方法 取错误 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return FTResponse_GetError(m_class);
+    }
+
+    方法 置错误 <公开 注释 = "英文名：SetError 说明：Set the response error code.">
+    参数 错误代码 <类型 = 整数>
+    {
+        @ if(!IsEmpty()) FTResponse_SetError(m_class,@<错误代码>);
+    }
+
+    方法 取状态 <公开 类型 = 整数 注释 = "英文名：GetStatus 说明：Get the response status code." 折叠 @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return FTResponse_GetStatus(m_class);
+    }
+
+    方法 置状态 <公开 注释 = "英文名：SetStatus 说明：Set the response status code." 折叠>
+    参数 状态代码 <类型 = 整数>
+    {
+        @ if(!IsEmpty()) FTResponse_SetStatus(m_class,@<状态代码>);
+
+    }
+
+    方法 取状态文本 <公开 类型 = 文本型 注释 = "英文名：GetStatusText 说明：Get the response status text." @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ return CVolString( FTResponse_GetStatusText(m_class));
+    }
+
+    方法 置状态文本 <公开 注释 = "英文名：SetStatusText 说明：Set the response status text.">
+    参数 文本 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FTResponse_SetStatusText(m_class,@<文本>.GetText());
+    }
+
+    #
+}
+
+类 CEF初始化配置 <公开 折叠 @文档 = "category = \"炫彩WEB组件.辅助类\"">
+{
+    变量 缓存目录 <公开 类型 = 文本型>
+    变量 用户数据目录 <公开 类型 = 文本型>
+    变量 浏览器标识 <公开 类型 = 文本型 值 = "" 注释 = "该值将作为用户代理HTTP头返回">
+    变量 远程端口 <公开 类型 = 整数 值 = 0 注释 = "设置为介于1024和65535之间的值,以便在指定端口上启用远程调试">
+    变量 执行子进程 <公开 类型 = 文本型 值 = "" 注释 = "注:如设置了子进程(CefSubprocess.exe)渲染进程相关事件无效">
+    变量 保留用户首选项 <公开 类型 = 逻辑型 值 = 假>
+    变量 启用系统消息循环 <公开 类型 = 逻辑型 值 = 假>
+    变量 日志模式 <公开 类型 = 整数 值 = CEF日志级别.致命 注释 = "CEF日志级别.**">
+    变量 本地化语言 <公开 类型 = 文本型 值 = "zh-CN">
+    变量 接收语言清单 <公开 类型 = 文本型 值 = "zh-CN,zh,en">
+    变量 启用离屏渲染 <公开 类型 = 逻辑型 值 = 真>
+    变量 保留Cookies <公开 类型 = 逻辑型 值 = 真>
+    变量 启用进程间消息 <公开 类型 = 整数 值 = 0 注释 = "0:加,1真">
+    变量 无沙箱 <公开 类型 = 逻辑型 值 = 真>
+
+    # @begin
+    # <> <include>
+    # void FromFTSettings (const FTSettings& Info);
+    # void ToFTSettings (FTSettings& Info);
+    # <> </include>
+    # void @sn<current_class>::FromFTSettings (const FTSettings& Info) {
+    #     @<缓存目录>= Info.cache_path;  @<用户数据目录>= Info.user_data_path;  @<浏览器标识>= Info.user_agent;@<远程端口>= Info.remote_debugging_port; 
+    #     @<执行子进程> = (INT_P)Info.browser_subprocess_path ; @<保留用户首选项>= Info.persist_user_preferences; @<启用系统消息循环>= Info.multi_threaded_message_loop; 
+    #     @<日志模式>= Info.log_severity;  @<本地化语言>= Info.locale;  @<接收语言清单>= Info.accept_language_list;@<启用离屏渲染>= Info.windowless_rendering_enabled; 
+    # }
+    # void @sn<current_class>::ToFTSettings (FTSettings& Info) {
+    #     Info.cache_path = @<缓存目录>.GetText ();  Info.user_data_path = @<用户数据目录>.GetText ();  Info.user_agent = @<浏览器标识>.GetText ();
+    #     Info.remote_debugging_port = @<远程端口>; Info.browser_subprocess_path = @<执行子进程>.GetText (); 
+    #     Info.persist_user_preferences = @<保留用户首选项>;Info.multi_threaded_message_loop = @<启用系统消息循环>; 
+    #     Info.log_severity = @<日志模式>; Info.locale = @<本地化语言>.GetText ();Info.accept_language_list = @<接收语言清单>.GetText ();
+    #     Info.windowless_rendering_enabled = @<启用离屏渲染>;  Info.persist_session_cookies = @<保留Cookies>; 
+    #     Info.external_message_pump = @<启用进程间消息>; Info.no_sandbox = @<无沙箱>; 
+    # }
+    # @end
+}
+
+类 CEF窗口信息 <公开 @文档 = "category = \"炫彩WEB组件.辅助类\"">
+{
+    变量 左边 <公开 类型 = 整数>
+    变量 顶边 <公开 类型 = 整数>
+    变量 宽度 <公开 类型 = 整数>
+    变量 高度 <公开 类型 = 整数>
+    变量 窗口句柄 <公开 类型 = 变整数>
+    变量 额外风格 <公开 类型 = 整数>
+    变量 窗口名称 <公开 类型 = 文本型>
+    变量 窗口风格 <公开 类型 = 整数>
+    变量 父窗口句柄 <公开 类型 = 变整数>
+    变量 菜单句柄 <公开 类型 = 变整数>
+    变量 启用离屏渲染模式 <公开 类型 = 逻辑型 值 = 真>
+    变量 启用共享结构 <公开 类型 = 逻辑型>
+    变量 启用外部框架 <公开 类型 = 逻辑型>
+
+    # @begin
+    # <> <include>
+    # void FromFTWindowInfo (const FTWindowInfo& Info);
+    # void ToFTWindowInfo (FTWindowInfo& Info);
+    # <> </include>
+    # void @sn<current_class>::FromFTWindowInfo (const FTWindowInfo& Info) {
+    #     @<左边>= Info.x;  @<顶边>= Info.y;  @<宽度>= Info.w;@<窗口名称> = (INT_P)Info.window_name ; 
+    #     @<高度>= Info.h; @<窗口句柄> = (INT_P)Info.window ; @<父窗口句柄> = (INT_P)Info.parent_window ; 
+    #     @<启用离屏渲染模式>= Info.windowless_rendering_enabled;
+    #     
+    # }
+    # void @sn<current_class>::ToFTWindowInfo (FTWindowInfo& Info) {
+    #     Info.x = @<左边>;  Info.y = @<顶边>;  Info.w = @<宽度>;
+    #     Info.h = @<高度>; Info.window = (HWND)@<窗口句柄>; 
+    #     Info.style = WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_TABSTOP | WS_VISIBLE;
+    #     Info.parent_window=(HWND)@<窗口句柄>; Info.window_name =@<窗口名称>.GetText() ; 
+    #     Info.windowless_rendering_enabled=@<启用离屏渲染模式>;
+    # }
+    # @end
+}
+
+类 CEF时间类型 <公开 折叠 @文档 = "category = \"炫彩WEB组件.辅助类\"">
+{
+    变量 年 <公开 类型 = 整数 注释 = "year" 折叠>
+    变量 月 <公开 类型 = 整数 注释 = "month">
+    变量 日 <公开 类型 = 整数 注释 = "day">
+    变量 时 <公开 类型 = 整数 注释 = "hour">
+    变量 分 <公开 类型 = 整数 注释 = "minute">
+    变量 秒 <公开 类型 = 整数 注释 = "second">
+    变量 毫秒 <公开 类型 = 整数 注释 = "millisecond">
+    变量 周几 <公开 类型 = 整数 注释 = "day_of_week">
+
+    # @begin
+    # <> <include>
+    # void FromFTTime (const FTTime& tm);
+    # void ToFTTime (FTTime& tm);
+    # <> </include>
+    # void @sn<current_class>::ToFTTime ( FTTime& tm) {
+    #   tm.year=@<年>;  tm.month=@<月>;  tm.day_of_month=@<日>;  tm.hour=@<时>;
+    #   tm.minute=@<分>;  tm.second=@<秒>;  tm.millisecond=@<毫秒>;tm.day_of_week=@<周几>;
+    # }
+    # void @sn<current_class>::FromFTTime (const FTTime& tm) {
+    #   @<年>=tm.year;  @<月>=tm.month;  @<日>=tm.day_of_month;@<周几>=tm.day_of_week;
+    #   @<时>=tm.hour;  @<分>=tm.minute;  @<秒>=tm.second;  @<毫秒>=tm.millisecond;
+    # }
+    # @end
+}
+
+类 CEFCookie信息 <公开 注释 = "提供CEF的Cookie信息" 折叠 @文档 = "category = \"炫彩WEB组件.辅助类\"">
+{
+    变量 名称 <公开 类型 = 文本型 注释 = "提供Cookie的名称" 折叠>
+    变量 值 <公开 类型 = 文本型 注释 = "提供Cookie的值">
+    变量 域名 <公开 类型 = 文本型 注释 = "  如果域名为空文本,则将创建一个主机Cookie来替换此域名Cookie." 注释 = "  域名Cookie存储时将以句点\'.\'字符为开头并对所有下属子域名可见,"
+            注释 = "而主机Cookie不会如此." 折叠2>
+    变量 路径 <公开 类型 = 文本型 注释 = "如果路径非空,则只有在此路径下的链接地址网页才能获取此Cookie值.">
+    变量 仅安全链接使用 <公开 类型 = 逻辑型 注释 = "如果为真则本Cookie只在 Https 安全链接请求下才会发送">
+    变量 仅普通链接使用 <公开 类型 = 逻辑型 注释 = "如果为真则本Cookie只在 Http 请求下才会发送">
+    变量 是否会过期 <公开 类型 = 逻辑型 注释 = "指定本Cookie是否会过期">
+    变量 过期时间 <公开 类型 = CEF时间类型 注释 = "如果\"是否会过期\"为真,则提供具体的过期时间.">
+    变量 创建时间 <公开 类型 = CEF时间类型 注释 = "本成员由CEF自动维护(用户无需填写),用作提供本Cookie的创建时间.">
+    变量 最后访问时间 <公开 类型 = CEF时间类型 注释 = "本成员由CEF自动维护(用户无需填写),用作提供本Cookie的最后访问时间.">
+
+    # @begin
+    # <> <include>
+    # void FromFTCookie (const FTCookie& cookie);
+    # void ToFTCookie (FTCookie& cookie);
+    # <> </include>
+    # void @sn<current_class>::FromFTCookie (const FTCookie& cookie) {
+    #     @<名称>.SetText (cookie.name);  @<值>.SetText (cookie.value);  @<域名>.SetText (cookie.domain);
+    #     @<路径>.SetText (cookie.path); @<仅安全链接使用> = (cookie.secure != FALSE);  @<仅普通链接使用> = (cookie.httponly != FALSE);
+    #     @<是否会过期> = (cookie.has_expires != FALSE); @<过期时间>.FromFTTime(cookie.expires); 
+    #     @<创建时间>.FromFTTime(cookie.creation); @<最后访问时间>.FromFTTime(cookie.last_access); 
+    # }
+    # void @sn<current_class>::ToFTCookie (FTCookie& cookie) {
+    #     cookie.name = @<名称>.GetText ();  cookie.value = @<值>.GetText ();  cookie.domain = @<域名>.GetText ();
+    #     cookie.path = @<路径>.GetText (); cookie.secure = @<仅安全链接使用>;  cookie.httponly = @<仅普通链接使用>;  cookie.has_expires = @<是否会过期>;  @<过期时间>.ToFTTime(cookie.expires); @<创建时间>.ToFTTime(cookie.creation);
+    #    @<最后访问时间>.ToFTTime(cookie.last_access);
+    # }
+    # @end
+}
+
+类 CEF命令行标识 <公开 折叠 @文档 = "category = \"炫彩WEB组件.辅助类\"">
+{
+    常量 单进程 <公开 类型 = 文本型 值 = "single-process">
+    常量 开启摄像头 <公开 类型 = 文本型 值 = "enable-media-stream" 注释 = "1">
+    常量 flash <公开 类型 = 文本型 值 = "enable-system-flash" 注释 = "1">
+    常量 语音输入 <公开 类型 = 文本型 值 = "enable-speech-input" 注释 = "1">
+    常量 禁用GPU <公开 类型 = 文本型 值 = "disable-gpu">
+    常量 禁用GPU组合 <公开 类型 = 文本型 值 = "disable-gpu-compositing">
+    常量 开启WEBGL <公开 类型 = 文本型 值 = "enable-webgl" 注释 = "1">
+    常量 忽略显卡黑名单 <公开 类型 = 文本型 值 = "ignore-gpu-blacklist" 注释 = "1">
+    常量 本地调试WEBGL <公开 类型 = 文本型 值 = "allow-file-access-from-files" 注释 = "1">
+}
+
+类 CEFV8性能属性 <公开 注释 = "PropertyAttribute" 折叠 @文档 = "category = \"炫彩WEB组件.辅助类\"">
+{
+    常量 无 <公开 类型 = 整数 值 = 0 注释 = "V8_PROPERTY_ATTRIBUTE_NONE">
+    常量 只读 <公开 类型 = 整数 值 = 1 注释 = "V8_PROPERTY_ATTRIBUTE_READONLY= 1<< 0">
+    常量 不能枚举 <公开 类型 = 整数 值 = 2 注释 = "V8_PROPERTY_ATTRIBUTE_DONTENUM= 1<< 1">
+    常量 不能删除 <公开 类型 = 整数 值 = 4 注释 = "V8_PROPERTY_ATTRIBUTE_DONTDELETE= 1<< 2">
+}
+
+类 CEFV8访问控制 <公开 注释 = "AccessControl" 折叠 @文档 = "category = \"炫彩WEB组件.辅助类\"">
+{
+    常量 默认 <公开 类型 = 整数 值 = 0 注释 = "V8_ACCESS_CONTROL_DEFAULT">
+    常量 可读 <公开 类型 = 整数 值 = 1 注释 = "V8_ACCESS_CONTROL_ALL_CAN_READ">
+    常量 可写 <公开 类型 = 整数 值 = 2 注释 = "V8_ACCESS_CONTROL_ALL_CAN_WRITE= 1<< 1">
+    常量 禁止覆盖 <公开 类型 = 整数 值 = 4 注释 = "V8_ACCESS_CONTROL_PROHIBITS_OVERWRITING= 1<< 2">
+}
+
+类 CEF日志级别 <公开 折叠 @文档 = "category = \"炫彩WEB组件.辅助类\"">
+{
+    常量 默认 <公开 类型 = 整数 值 = 0>
+    常量 详细 <公开 类型 = 整数 值 = 1>
+    常量 调试 <公开 类型 = 整数 值 = 2>
+    常量 信息 <公开 类型 = 整数 值 = 3>
+    常量 警告 <公开 类型 = 整数 值 = 4>
+    常量 错误 <公开 类型 = 整数 值 = 5>
+    常量 致命 <公开 类型 = 整数 值 = 6>
+    常量 禁用 <公开 类型 = 整数 值 = 99>
+}
+
+#

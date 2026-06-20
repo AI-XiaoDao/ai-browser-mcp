@@ -1,0 +1,151 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"windows.设备管理器\"" @视窗.外部头文件 = "DeviceEnum\\DeviceEnumTool.h"
+        @视窗.外部库.win32 = "DeviceEnum\\DeviceEnumToolx86.lib" @视窗.附属文件.win32 = "DeviceEnum\\DeviceEnumToolx86.dll"
+        @视窗.外部库.x64 = "DeviceEnum\\DeviceEnumToolx64.lib" @视窗.附属文件.x64 = "DeviceEnum\\DeviceEnumToolx64.dll">
+
+类 __设备管理器测试类
+{
+    方法 开始测试 <公开>
+    {
+        变量 设备 <类型 = 设备管理器类F>
+        变量 设备类名 <类型 = 文本型>
+        变量 设备描述 <类型 = 文本型>
+        变量 设备索引 <类型 = 整数 值 = 0>
+        变量 图标索引 <类型 = 整数>
+
+
+        图标索引 = 设备.取类名 (设备索引, 设备类名, 设备描述)
+        判断循环 (图标索引 >= 0)
+        {
+            变量 临时文本 <类型 = 文本型>
+
+            如果 (设备描述 == "")
+            {
+                临时文本 = 设备类名
+            }
+            否则
+            {
+                临时文本 = 设备描述
+            }
+
+            变量 临时设备索引 <类型 = 整数>
+            变量 设备返回值 <类型 = 整数>
+            变量 设备名称 <类型 = 文本型>
+
+            设备返回值 = 设备.取设备 (临时设备索引, 设备类名, 设备名称)
+            如果 (设备返回值 != -1)
+            {
+                调试输出 (临时文本, 设备索引)
+            }
+
+            判断循环 (设备返回值 != -1)
+            {
+                如果 (设备返回值 == 0)
+                {
+                    调试输出 ("    ", 临时设备索引, 设备名称)
+
+                }
+                临时设备索引 = 临时设备索引 + 1
+                设备返回值 = 设备.取设备 (临时设备索引, 设备类名, 设备名称)
+
+            }
+
+            设备索引 = 设备索引 + 1
+            图标索引 = 设备.取类名 (设备索引, 设备类名, 设备描述)
+
+
+        }
+
+    }
+
+    #
+}
+
+类 设备管理器类F <公开>
+{
+
+    # @begin
+    # <> <include>
+    #
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void* pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+    #
+    # void* FUCTIONTYPE DeviceEnumTool_New();
+    # void FUCTIONTYPE DeviceEnumTool_Delete(void* hDev);
+    # void* FUCTIONTYPE DeviceEnumTool_GetImageList(void* hDev);
+    # int FUCTIONTYPE DeviceEnumTool_EnumDeviceClasses(void* hDev,int index, TCHAR* DeviceClassName, TCHAR* DeviceClassDesc, BOOL* DevicePresent, int* ClassImage);
+    # int FUCTIONTYPE DeviceEnumTool_EnumDevices(int index, TCHAR* DeviceClassName, TCHAR* DeviceName);
+    #
+
+    方法 类_清理
+    {
+        @ DeviceEnumTool_Delete(GetData());
+    }
+
+    方法 类_初始化
+    {
+
+        @ SetData( DeviceEnumTool_New() );
+    }
+
+    方法 取图标列表句柄 <公开 类型 = 变整数 返回值注释 = "HIMAGELIST" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)DeviceEnumTool_GetImageList(@sn<this>.GetData())
+    }
+
+    方法 取类名 <公开 类型 = 整数 返回值注释 = "返回图标索引 小于0失败" 折叠 @禁止流程检查 = 真>
+    参数 设备索引 <类型 = 整数>
+    参数 输出_设备类名 <类型 = 文本型>
+    参数 输出_设备描述 <类型 = 文本型>
+    {
+        @ TCHAR szname[260] = { 0 };
+        @ TCHAR szDesc[260] = { 0 };
+        @ BOOL  DevExist = false;
+        @ int   nImageIndex = 0;
+        @ int nCode = DeviceEnumTool_EnumDeviceClasses(GetData(),@<设备索引>,szname,szDesc,&DevExist,&nImageIndex);
+        @ if (nCode >= -1 && DevExist)
+        @ {
+        @   @<输出_设备类名> = szname;
+        @   @<输出_设备描述> = szDesc;
+        @   return nImageIndex;
+        @ }
+        @ return -1;
+
+    }
+
+    方法 取设备 <公开 类型 = 整数 返回值注释 = "如果 返回值 不等-1，那么说明还可以继续枚举" 返回值注释 = "如果返回值 等于0，则可以获得设备名称" 折叠 @禁止流程检查 = 真>
+    参数 设备索引 <类型 = 整数>
+    参数 设备类名 <类型 = 文本型>
+    参数 输出_设备名称 <类型 = 文本型>
+    {
+        @ TCHAR DeviceName[260] = {0};
+        @ int nCode = DeviceEnumTool_EnumDevices(@<设备索引>, @<设备类名>.GetText(),DeviceName);
+        @ @<输出_设备名称> = DeviceName;
+        @ return nCode;
+    }
+
+    方法 启用设备 <公开 静态 类型 = 逻辑型 注释 = "注意，需要管理员权限" 返回值注释 = "状态改变 返回真，否则返回假" @嵌入式方法 = "">
+    参数 设备名称 <类型 = 文本型>
+    {
+        @ DeviceEnumTool_NetCardStateChange (TRUE,@<设备名称>.GetText())
+    }
+
+    方法 禁用设备 <公开 静态 类型 = 逻辑型 注释 = "注意，需要管理员权限" 返回值注释 = "状态改变 返回真，否则返回假" @嵌入式方法 = "">
+    参数 设备名称 <类型 = 文本型>
+    {
+        @ DeviceEnumTool_NetCardStateChange (FALSE,@<设备名称>.GetText())
+
+    }
+
+    #
+}

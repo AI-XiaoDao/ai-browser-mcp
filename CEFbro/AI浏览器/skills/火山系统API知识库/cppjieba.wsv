@@ -1,0 +1,169 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "https://github.com/yanyiwu/cppjieba" @文档 = "category = \"开源库.结巴分词\""
+        @视窗.外部头文件 = "cppjieba\\cppjiebaTool.h" @视窗.外部库.win32 = "cppjieba\\cppjiebaToolx86.lib"
+        @视窗.附属文件.win32 = "cppjieba\\cppjiebaToolx86.dll" @视窗.外部库.x64 = "cppjieba\\cppjiebaToolx64.lib"
+        @视窗.附属文件.x64 = "cppjieba\\cppjiebaToolx64.dll" @视窗.附属文件 = "cppjieba\\dic">
+
+类 结巴分词类 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     jiebaTool_CopyConstruct(m_pData,objCopyFrom.m_pData);
+    # }
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void * pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ SetData( jiebaTool_new());
+    }
+
+    方法 类_清理
+    {
+        @ jiebaTool_delete(GetData());
+    }
+
+    方法 打开 <公开 @嵌入式方法 = "">
+    参数 词典文件 <类型 = 文本型>
+    参数 HMM文件 <类型 = 文本型>
+    参数 用户词典文件 <类型 = 文本型>
+    参数 IDF文件 <类型 = 文本型>
+    参数 停止词文件 <类型 = 文本型>
+    {
+        @ jiebaTool_SetDict(@sn<this>.GetData(),GetMbsText(@<词典文件>, CVolMem(), NULL),
+        @ GetMbsText(@<HMM文件>, CVolMem(), NULL),
+        @ GetMbsText(@<用户词典文件>, CVolMem(), NULL),
+        @ GetMbsText(@<IDF文件>, CVolMem(), NULL),
+        @ GetMbsText(@<停止词文件>, CVolMem(), NULL) )
+    }
+
+    方法 关闭 <公开 @嵌入式方法 = "">
+    {
+        @ jiebaTool_Close(@sn<this>.GetData())
+    }
+
+    方法 分词 <公开 @嵌入式方法 = "">
+    参数 要分词的内容 <类型 = 文本型>
+    参数 结巴文本 <类型 = 结巴文本数组>
+    参数 是否用HMM <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ jiebaTool_Cut(@sn<this>.GetData(),CU8String(@<要分词的内容>.GetText ()).GetText (), @<结巴文本>.GetData(), @<是否用HMM>)
+    }
+
+    方法 分词所有 <公开 @嵌入式方法 = "">
+    参数 要分词的内容 <类型 = 文本型>
+    参数 结巴文本 <类型 = 结巴文本数组>
+    {
+        @ jiebaTool_CutAll(@sn<this>.GetData(),CU8String(@<要分词的内容>.GetText ()).GetText (), @<结巴文本>.GetData())
+    }
+
+    方法 搜索分词 <公开 @嵌入式方法 = "">
+    参数 要分词的内容 <类型 = 文本型>
+    参数 结巴文本 <类型 = 结巴文本数组>
+    参数 是否用HMM <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ jiebaTool_CutForSearch(@sn<this>.GetData(),CU8String(@<要分词的内容>.GetText ()).GetText (), @<结巴文本>.GetData(), @<是否用HMM>)
+    }
+
+    方法 置插入短语 <公开 @嵌入式方法 = "">
+    参数 用户单词 <类型 = 文本型>
+    参数 结束标签 <类型 = 文本型 @默认值 = "">
+    {
+        @ jiebaTool_InsertUserWord(@sn<this>.GetData(),CU8String(@<用户单词>.GetText ()).GetText (), CU8String(@<结束标签>.GetText ()).GetText () )
+    }
+
+    方法 置插入短语频率 <公开 @嵌入式方法 = "">
+    参数 用户单词 <类型 = 文本型>
+    参数 插入频率 <类型 = 整数>
+    参数 结束标签 <类型 = 文本型 @默认值 = "">
+    {
+        @ jiebaTool_InsertUserWord(@sn<this>.GetData(),CU8String(@<用户单词>.GetText ()).GetText (),@<插入频率> ,CU8String(@<结束标签>.GetText ()).GetText () )
+    }
+
+    方法 取词性 <公开 @嵌入式方法 = "">
+    参数 单词数组 <类型 = 结巴文本数组>
+    参数 词性数组 <类型 = 结巴文本数组>
+    {
+        @ jiebaTool_LookupTag(@sn<this>.GetData(), @<单词数组>.GetData(), @<词性数组>.GetData())
+    }
+
+    #
+    #
+    #
+}
+
+类 结巴文本数组 <公开 注释 = "这个是 高性能键值表 配套组件，暂时也不建议用到其他地方，当然也可以用的">
+{
+
+    # @begin
+    # <> <include>
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     jiebaVectorStringTool_CopyConstruct(m_pData,objCopyFrom.m_pData);
+    # }
+    # public:
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化 <公开>
+    {
+        @ m_pData = jiebaVectorStringTool_New();
+    }
+
+    方法 类_清理 <公开>
+    {
+        @ jiebaVectorStringTool_Delete(m_pData);
+    }
+
+    方法 取成员数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ jiebaVectorStringTool_GetCount(@sn<this>.GetData())
+    }
+
+    方法 取成员 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ CVolString(  jiebaVectorStringTool_GetString(@sn<this>.GetData(),@<索引>) )
+
+    }
+
+    方法 加入成员 <公开>
+    参数 要加入的内容 <类型 = 文本型>
+    {
+        变量 bin <类型 = 字节集类>
+        bin = 文本到UTF8 (要加入的内容)
+        @ jiebaVectorStringTool_PushString(GetData(),(const char*)@<bin>.GetPtr());
+    }
+
+    方法 删除成员 <公开 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ jiebaVectorStringTool_Erase(@sn<this>.GetData(),@<索引>)
+    }
+
+    方法 清空 <公开 @嵌入式方法 = "">
+    {
+        @ jiebaVectorStringTool_Clear(@sn<this>.GetData())
+    }
+
+    #
+}

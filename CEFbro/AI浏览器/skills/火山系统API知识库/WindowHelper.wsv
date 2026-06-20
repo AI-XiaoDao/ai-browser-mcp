@@ -1,0 +1,1534 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" 注释 = "" 注释 = "https://docs.microsoft.com/en-us/windows/win32/api/"
+        @文档 = "category = \"windows.窗口辅助\"" "" @视窗.外部头文件 = "<Shlwapi.h>" @视窗.外部库 = "Shlwapi.lib">
+
+类 ______CHM帮助文档_全局类 <公开 @全局类 = 真>
+{
+    方法 打开CHM文档 <公开 静态 类型 = 变整数 注释 = "https://docs.microsoft.com/zh-tw/windows/win32/api/htmlhelp/nf-htmlhelp-htmlhelpw"
+            返回值注释 = "返回窗口句柄" 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 @默认值 = 0>
+    参数 帮助文档路径 <类型 = 文本型 注释 = "例如 \"c:\\\\Help.chm::/Intro.htm>Mainwin\"">
+    参数 选项卡类型 <类型 = 整数 注释 = "可选值" 注释 = "#define HH_DISPLAY_TOPIC        0x0000"
+            注释 = "#define HH_HELP_FINDER          0x0000  // WinHelp equivalent" 注释 = "#define HH_DISPLAY_TOC          0x0001"
+            注释 = "#define HH_DISPLAY_INDEX        0x0002" 注释 = "#define HH_DISPLAY_SEARCH       0x0003"
+            注释 = "#define HH_SET_WIN_TYPE         0x0004" 注释 = "#define HH_GET_WIN_TYPE         0x0005"
+            注释 = "#define HH_GET_WIN_HANDLE       0x0006"
+            注释 = "#define HH_ENUM_INFO_TYPE       0x0007  // Get Info type name, call repeatedly to enumerate, -1 at end"
+            注释 = "#define HH_SET_INFO_TYPE        0x0008  // Add Info type to filter." 注释 = "#define HH_SYNC                 0x0009"
+            注释 = "#define HH_RESERVED1            0x000A" 注释 = "#define HH_RESERVED2            0x000B"
+            注释 = "#define HH_RESERVED3            0x000C" 注释 = "#define HH_KEYWORD_LOOKUP       0x000D"
+            注释 = "#define HH_DISPLAY_TEXT_POPUP   0x000E  // display string resource id or text in a popup window"
+            注释 = "#define HH_HELP_CONTEXT         0x000F  // display mapped numeric value in dwData"
+            注释 = "#define HH_TP_HELP_CONTEXTMENU  0x0010  // text popup help, same as WinHelp HELP_CONTEXTMENU"
+            注释 = "#define HH_TP_HELP_WM_HELP      0x0011  // text popup help, same as WinHelp HELP_WM_HELP"
+            注释 = "#define HH_CLOSE_ALL            0x0012  // close all windows opened directly or indirectly by the caller"
+            注释 = "#define HH_ALINK_LOOKUP         0x0013  // ALink version of HH_KEYWORD_LOOKUP"
+            注释 = "#define HH_GET_LAST_ERROR       0x0014  // not currently implemented // See HHERROR.h"
+            注释 = "#define HH_ENUM_CATEGORY        0x0015 // Get category name, call repeatedly to enumerate, -1 at end"
+            注释 = "#define HH_ENUM_CATEGORY_IT     0x0016  // Get category info type members, call repeatedly to enumerate, -1 at end"
+            注释 = "#define HH_RESET_IT_FILTER      0x0017  // Clear the info type filter of all info types."
+            注释 = "#define HH_SET_INCLUSIVE_FILTER 0x0018  // set inclusive filtering method for untyped topics to be included in display"
+            注释 = "#define HH_SET_EXCLUSIVE_FILTER 0x0019  // set exclusive filtering method for untyped topics to be excluded from display"
+            注释 = "#define HH_INITIALIZE            0x001C  // Initializes the help system."
+            注释 = "#define HH_UNINITIALIZE          0x001D  // Uninitializes the help system."
+            注释 = "#define HH_SET_QUERYSERVICE     0x001E  // Set the Host IQueryService interface"
+            注释 = "#define HH_PRETRANSLATEMESSAGE  0x00fd  // Pumps messages. (NULL, NULL, MSG*)."
+            注释 = "#define HH_SET_GLOBAL_PROPERTY  0x00fc  // Set a global property. (NULL, NULL, HH_GPROP)"
+            注释 = "#define HH_SAFE_DISPLAY_TOPIC   0x0020  // private addition to the interface for InternetExplorer." 折叠2 @默认值 = 0>
+    {
+        @ HWND hWnd = @<窗口句柄> ? (HWND)@<窗口句柄>:GetDesktopWindow();
+        @ HWND hRetWnd = HtmlHelp(hWnd,@<帮助文档路径>.GetText(),(UINT)@<选项卡类型>,NULL);
+        @ return hRetWnd;
+        // HWND HtmlHelpW(
+        // [in, optional] HWND      hwndCaller,
+        // [in]           LPCWSTR   pszFile,
+        // [in]           UINT      uCommand,
+        // [in]           DWORD_PTR dwData
+        //);
+    }
+
+    #
+}
+
+类 窗口显示方式_常量类 <公开 折叠 @常量类 = 整数>
+{
+    常量 强制最小化 <公开 值 = @SW_FORCEMINIMIZE>
+    常量 隐藏 <公开 值 = @SW_HIDE>
+    常量 最大化 <公开 值 = @SW_MAXIMIZE>
+    常量 最小化 <公开 值 = @SW_MINIMIZE>
+    常量 恢复 <公开 值 = @SW_RESTORE>
+    常量 显示 <公开 值 = @SW_SHOW>
+    常量 默认显示 <公开 值 = @SW_SHOWDEFAULT>
+    常量 激活并最大化显示 <公开 值 = @SW_SHOWMAXIMIZED>
+    常量 激活并最小化显示 <公开 值 = @SW_SHOWMINIMIZED>
+    常量 最小化显示不激活 <公开 值 = @SW_SHOWMINNOACTIVE>
+    常量 显示不激活 <公开 值 = @SW_SHOWNA>
+    常量 显示并激活 <公开 值 = @SW_SHOWNOACTIVATE>
+    常量 正常显示 <公开 值 = @SW_SHOWNORMAL>
+    常量 SW_SHOWNOACTIVATE <公开 值 = @SW_SHOWNOACTIVATE>
+    常量 SW_SHOWNORMAL <公开 值 = @SW_SHOWNORMAL>
+
+    #
+}
+
+类 _____消息_组合框_全局类 <公开 折叠 @全局类 = 真>
+{
+    方法 消息_组合框_置选中项 <公开 静态 类型 = 整数
+            注释 = "If the message is successful, the return value is the index of the item selected. If wParam is greater than the number of items in the list or if wParam is –1, the return value is CB_ERR and the selection is cleared."
+            @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 选中索引 <类型 = 整数 注释 = "从0开始">
+    {
+        @ (INT)SendMessage ((HWND)@<窗口句柄>, CB_SETCURSEL, @<选中索引>, 0)
+    }
+
+    方法 消息_组合框_取项数 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ (INT) SendMessage ((HWND)@<窗口句柄>, CB_GETCOUNT, 0, 0)
+    }
+
+    方法 消息_组合框_取现行选中项 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ (INT)SendMessage ((HWND)@<窗口句柄>, CB_GETCURSEL, 0, 0)
+
+    }
+
+    方法 消息_组合框_取项附加数据 <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 索引 <类型 = 整数>
+    {
+        @ (INT_P)::SendMessage((HWND)@<窗口句柄>, CB_GETITEMDATA, @<索引>, 0)
+    }
+
+    方法 消息_组合框_置项附加数据 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 索引 <类型 = 整数>
+    参数 附加数据 <类型 = 变整数>
+    {
+        @ (INT)::SendMessage((HWND)@<窗口句柄>, CB_SETITEMDATA, @<索引>, (LPARAM)@<附加数据>)
+    }
+
+    方法 消息_组合框_取项目文本 <公开 静态 类型 = 文本型 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 索引 <类型 = 整数>
+    {
+        @ int nTextLen = (int)::SendMessage((HWND)@<窗口句柄>, CB_GETLBTEXTLEN, @<索引>, 0);
+        @ TCHAR* lpszText = new TCHAR[nTextLen+1];
+        @ lpszText[nTextLen]= 0;
+        @ (int)::SendMessage((HWND)@<窗口句柄>, CB_GETLBTEXT, @<索引>, (LPARAM)lpszText); 
+        @ CVolString str(lpszText);
+        @ delete [] lpszText;
+        @ return str;
+
+    }
+
+    方法 消息_组合框_加入项目 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 项目文本 <类型 = 文本型>
+    {
+        @ (INT)::SendMessage((HWND)@<窗口句柄>, CB_ADDSTRING, 0, (LPARAM)@<项目文本>.GetText())
+    }
+
+    方法 消息_组合框_插入项目 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 索引 <类型 = 整数>
+    参数 项目文本 <类型 = 文本型>
+    {
+        @ (INT)::SendMessage((HWND)@<窗口句柄>, CB_INSERTSTRING, @<索引>, (LPARAM)@<项目文本>.GetText())
+    }
+
+    方法 消息_组合框_查找 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 索引 <类型 = 整数 注释 = "从指定的索引后开始查找">
+    参数 要查找的文本 <类型 = 文本型>
+    {
+        @ (INT)::SendMessage((HWND)@<窗口句柄>, CB_FINDSTRING, @<索引>, (LPARAM)@<要查找的文本>.GetText())
+    }
+
+    方法 消息_组合框_删除项目 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 索引 <类型 = 整数>
+    {
+        @ (INT)::SendMessage((HWND)@<窗口句柄>, CB_DELETESTRING,  @<索引>, 0)
+    }
+
+    方法 消息_组合框_清空 <公开 静态 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ ::SendMessage((HWND)@<窗口句柄>, CB_RESETCONTENT, 0, 0)
+    }
+
+    方法 消息_组合框_清除 <公开 静态 注释 = "只是清除组合框里面的编辑框内容" @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ ::SendMessage((HWND)@<窗口句柄>, WM_CLEAR, 0, 0)
+    }
+
+    #
+}
+
+类 ______窗口模拟点击 <公开 @全局类 = 真 @禁止创建对象 = 真>
+{
+    方法 消息_窗口_点击 <公开 静态 折叠>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 横坐标 <类型 = 整数 @默认值 = 0>
+    参数 纵坐标 <类型 = 整数 @默认值 = 0>
+    参数 延时 <类型 = 整数 @默认值 = 5>
+    {
+        @ SendMessage ((HWND)@<窗口句柄>, WM_LBUTTONDOWN, 0, MAKEWPARAM (@<横坐标>, @<纵坐标>));
+        @ Sleep (@<延时>);
+        @ SendMessage ((HWND)@<窗口句柄>, WM_LBUTTONUP, 0, MAKEWPARAM (@<横坐标>, @<纵坐标>));
+    }
+
+    方法 消息_窗口_点击_异步 <公开 静态 折叠>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 横坐标 <类型 = 整数 @默认值 = 0>
+    参数 纵坐标 <类型 = 整数 @默认值 = 0>
+    参数 延时 <类型 = 整数 @默认值 = 5>
+    {
+        @ PostMessage ((HWND)@<窗口句柄>, WM_LBUTTONDOWN, 0, MAKEWPARAM (@<横坐标>, @<纵坐标>));
+        @ Sleep (@<延时>);
+        @ PostMessage ((HWND)@<窗口句柄>, WM_LBUTTONUP, 0, MAKEWPARAM (@<横坐标>, @<纵坐标>));
+    }
+
+    方法 消息_编辑框_置内容 <公开 静态 类型 = 逻辑型 注释 = "成功返回真 否则为假" 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 要设置的内容 <类型 = 文本型>
+    {
+        @ return SendMessage ((HWND)@<窗口句柄>, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)@<要设置的内容>) ? true:false;
+    }
+
+    方法 消息_选择框_置选中 <公开 静态 类型 = 整数 注释 = "支持单选框和复选框" 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 类型 <类型 = 整数 注释 = "0 取消选中  1 变灰  2 选中  默认0 取消选中  ,如果填写了其他数值，则默认取消选中" @默认值 = 0>
+    {
+        变量 状态标记 <类型 = 整数>
+
+        如果 (类型 == 1)
+        {
+            @ @<状态标记> = BST_INDETERMINATE;
+        }
+        否则 (类型 == 2)
+        {
+            @ @<状态标记> = BST_CHECKED ;
+        }
+        @ return SendMessageA ((HWND)@<窗口句柄>, BM_SETCHECK, @<状态标记>, 0);
+
+
+
+    }
+
+    方法 消息_选择框_取选中 <公开 静态 类型 = 逻辑型 注释 = "这个只能判断 启用的情况下面的情况，如果选择框是灰色的，似乎不能取出来" 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ LRESULT re = SendMessageA ((HWND)@<窗口句柄>, BM_GETCHECK, 0, 0);
+        @ if( re & BST_CHECKED)
+        @    return true;
+        @ else if( re & BST_UNCHECKED )
+        @    return false;
+        @  return false;
+    }
+
+    方法 消息_模拟组合键 <公开 静态 折叠>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 控制键 <类型 = 键代码_常量类>
+    参数 普通键代码 <类型 = 键代码_常量类>
+    参数 延时 <类型 = 整数 注释 = "按下键和松开键之间的间隔时间" @默认值 = 20>
+    {
+        @ keybd_event (@<控制键>, 0, 0, 0);
+        @ Sleep(@<延时>);
+        消息_模拟按键 (窗口句柄, 普通键代码, 延时)
+        @ Sleep(@<延时>);
+        @ keybd_event (@<控制键>, 0, 2, 0);
+
+
+    }
+
+    方法 消息_模拟输入字符 <公开 静态 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 要输入的字符 <类型 = 整数>
+    {
+        @ PostMessage((HWND)@<窗口句柄>,WM_CHAR,(WPARM)键代码,NULL)
+    }
+
+    方法 消息_模拟按键 <公开 静态 折叠>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 键代码 <类型 = 键代码_常量类>
+    参数 延时 <类型 = 整数 @默认值 = 30>
+    {
+        @ PostMessage((HWND)@<窗口句柄>,WM_KEYDOWN,@<键代码>,NULL);
+        @ Sleep(@<延时>);
+        @ PostMessage((HWND)@<窗口句柄>,WM_KEYUP,@<键代码>,NULL);
+        @ Sleep(@<延时>);
+    }
+
+    方法 消息_模拟回车 <公开 静态>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 延时 <类型 = 整数 @默认值 = 30>
+    {
+        @ PostMessage((HWND)@<窗口句柄>,WM_KEYUP,@<键代码_常量类.回车键>,NULL);
+        @ Sleep(@<延时>);
+    }
+
+    方法 消息_模拟按下某键 <公开 静态>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 键代码 <类型 = 键代码_常量类>
+    参数 延时 <类型 = 整数 @默认值 = 30>
+    {
+        @ PostMessage((HWND)@<窗口句柄>,WM_KEYDOWN,@<键代码>,NULL);
+        @ Sleep(@<延时>);
+
+    }
+
+    方法 消息_模拟松开某键 <公开 静态>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 键代码 <类型 = 键代码_常量类>
+    参数 延时 <类型 = 整数 @默认值 = 30>
+    {
+        @ PostMessage((HWND)@<窗口句柄>,WM_KEYUP,@<键代码>,NULL);
+        @ Sleep(@<延时>);
+
+
+    }
+
+    方法 消息_模拟输入文本 <公开 静态>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 要输入的文本 <类型 = 文本型>
+    参数 延时 <类型 = 整数 @默认值 = 30>
+    {
+        @ const TCHAR* lpText = (const TCHAR*) @<要输入的文本>;
+        @ INT nLen = lstrlen(lpText);
+        @ for(int i = 0; i < nLen; i++)
+        @ {
+        @  PostMessage((HWND)@<窗口句柄>,WM_CHAR,(WPARAM)lpText[i],NULL);
+        @  Sleep(@<延时>);
+        @ }
+    }
+
+    #
+}
+
+类 ______调试输出类 <公开 折叠 @视窗.外部头文件 = "<string>" @视窗.外部头文件 = "<vector>">
+{
+
+    # @begin
+    # <> <include>
+    # void FVolDebugOutputString(const TCHAR* szParamTypes,...)
+    # {
+    # #ifdef _DEBUG
+    #     va_list argList;
+    #     va_start (argList, szParamTypes);
+    #
+    #     CVolString strFormat(_T_VOL_DEBUG_OUT_STRING_LEADER);
+    #     const INT_P npNumParams = _tcslen (szParamTypes);
+    #     for (INT_P npParamIndex = 0; npParamIndex < npNumParams; npParamIndex++)
+    #     {
+    #         CVolString str;
+    #         switch (szParamTypes [npParamIndex])
+    #         {
+    #         case _C_VOL_SBYTE:  // 字节
+    #             str.AddIntText ((INT)va_arg (argList, S_BYTE));
+    #             break;
+    #         case _C_VOL_SHORT:  // 短整数
+    #             str.AddIntText ((INT)va_arg (argList, SHORT));
+    #             break;
+    #         case _C_VOL_WCHAR:  // 字符
+    #             str.AddChar (va_arg (argList, TCHAR));
+    #             break;
+    #         case _C_VOL_INT:  // 整数
+    #             str.AddIntText (va_arg (argList, INT));
+    #             break;
+    #         case _C_VOL_VINT:  // 变整数
+    #             str.AddIntPText (va_arg (argList, INT_P));
+    #             break;
+    #         case _C_VOL_LONG:  // 长整数
+    #             str.AddInt64Text (va_arg (argList, INT64));
+    #             break;
+    #         case _C_VOL_DOUBLE:  // 小数
+    #             str.AddDoubleText (va_arg (argList, DOUBLE));
+    #             break;
+    #         case _C_VOL_BOOL:  // 逻辑值
+    #             str.AddText (va_arg (argList, BOOL) ? _T_V_TRUE : _T_V_FALSE);
+    #             break;
+    #         case _C_VOL_STRING:  // 文本型
+    #             {
+    #                 str.AddText("\"");
+    #                 str.AddText (va_arg (argList, const TCHAR*));
+    #                 str.AddText("\"");
+    #             }
+    #             break;
+    #         default:  {
+    #             ASSERT (szParamTypes [npParamIndex] == _C_VOL_CLASS);  // 唯一剩余的可能
+    #             // 所有对象数据类型由于定义了"req_obj_param_pointer"属性都为指针.
+    #             CVolString strBuf;
+    #             va_arg (argList, CVolObject*)->GetDumpString (strBuf, 0);  // 调用对应对象的取展示内容方法
+    #             str.AddText (strBuf);
+    #             break;  }
+    #         }
+    #             strFormat.AddText(str);
+    #         if(npNumParams > 1)            strFormat.AddText("|");
+    #     }    
+    #         strFormat.AddText("\r\n");
+    #         DEBUG_PRINT (strFormat.GetText ());
+    #     va_end (argList);
+    # #endif
+    # }
+    #
+    # <> </include>
+    # @end
+    #
+}
+
+类 ______窗口辅助 <公开 @全局类 = 真>
+{
+
+    #
+    #
+    #
+    # @begin
+    # <> <include>
+    # static BOOL CALLBACK EnumChildWindow(HWND hwnd,LPARAM lParam);
+    # //static BOOL VolEnumChildWindows(  HWND hWndParent,LPARAM lParam,WNDENUMPROC lpEnumFunc);
+    # <> </include>
+    # //对应 窗口_枚举子窗口F 的回调函数
+    # BOOL CALLBACK @sn<current_class>::EnumChildWindow(HWND hwnd,LPARAM lParam)
+    # {
+    #     @dt<变整数数组类>* pArray = (@dt<变整数数组类>*)lParam;
+    #     pArray->data ().Add2((INT_P)hwnd);
+    #     return TRUE;
+    # }
+    # //BOOL @sn<current_class>::VolEnumChildWindows(HWND hWndParent,WNDENUMPROC lpEnumFunc)
+    # //{
+    # //  return EnumChildWindows(hWndParent,lpEnumFunc,NULL);
+    # //}
+    # @end
+
+    方法 "//窗口_枚举子窗口循环" <公开 静态 @嵌入式方法 = "name = VolEnumChildWindows\r\nhas_loop_body = true\r\nbody_tail = \"});\"">
+    参数 父窗口句柄 <类型 = 变整数>
+    {
+        @ @dt<______窗口辅助>::VolEnumChildWindows((HWND)@<父窗口句柄>,[] CALLBACK (HWND hwnd, LPARAM lparam) 
+    }
+
+    方法 窗口_枚举子窗口F <公开 静态 @嵌入式方法 = "">
+    参数 父窗口句柄 <类型 = 变整数>
+    参数 子窗口句柄数组 <类型 = 变整数数组类 注释 = "用来保存着所有子窗口句柄">
+    {
+        @ ::EnumChildWindows((HWND)@<父窗口句柄>,@dt<______窗口辅助>::EnumChildWindow,(LPARAM)&@<子窗口句柄数组>)
+    }
+
+    方法 调试输出f <公开 静态 @嵌入式方法 = "req_obj_param_pointer = true\r\nreq_str_param_text_pointer = true">
+    参数 参数列表 <@匹配类型 = 所有类型 @可扩展 = "">
+    {
+        @ @dt<______调试输出类>().FVolDebugOutputString(_T (@sn<pm_types>), @<参数列表>)
+    }
+
+    方法 窗口_发送消息_ <公开 静态 注释 = "同步函数，会等待此函数执行完毕才执行下一行代码" 折叠 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 长整数>
+    参数 消息类型 <类型 = 整数>
+    参数 参数1 <类型 = 长整数>
+    参数 参数2 <类型 = 长整数>
+    {
+        @ SendMessage((HWND)@<窗口句柄>,@<消息类型>,(WPARAM)@<参数1>,(LPARAM)@<参数2>)
+    }
+
+    方法 窗口_投递命令 <公开 静态 注释 = "异步函数，投递了消息就执行下一条代码" 折叠 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 长整数>
+    参数 参数1 <类型 = 长整数>
+    参数 参数2 <类型 = 长整数>
+    {
+        @ PostMessage((HWND)@<窗口句柄>, WM_COMMAND,(WPARAM)@<参数1>,(LPARAM)@<参数2>) 
+    }
+
+    方法 窗口_关闭 <公开 静态 折叠>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        窗口_发送消息_ (窗口句柄, 0x10, 0, 0)
+
+    }
+
+    方法 窗口_投递消息_ <公开 静态 注释 = "异步函数，执行完此函数立刻返回" 折叠 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 消息类型 <类型 = 整数>
+    参数 参数1 <类型 = 长整数>
+    参数 参数2 <类型 = 长整数>
+    {
+        @ PostMessage((HWND)@<窗口句柄>,@<消息类型>,(WPARAM)@<参数1>,(LPARAM)@<参数2>)
+    }
+
+    方法 信息框f <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 内容 <类型 = 文本型 @默认值 = "">
+    参数 标题 <类型 = 文本型 @默认值 = "标题">
+    参数 按钮样式 <类型 = 整数 @默认值 = 0>
+    {
+        @ MessageBox (NULL,@<内容>,@<标题>,@<按钮样式>)
+
+    }
+
+    方法 窗口_显示 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 显示方式 <类型 = 窗口显示方式_常量类 "">
+    {
+        @ ::ShowWindow((HWND)@<窗口句柄>,@<显示方式>)
+    }
+
+    方法 蜂鸣器F <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 频率 <类型 = 整数>
+    参数 时长 <类型 = 整数>
+    {
+        @ ::Beep ((DWORD)@<频率>,(DWORD)@<时长>)
+    }
+
+    方法 窗口_置父窗口 <公开 静态 类型 = 变整数 注释 = "给一个窗口 设置一个父窗口" @嵌入式方法 = "">
+    参数 子窗口 <类型 = 变整数>
+    参数 新父窗口 <类型 = 变整数>
+    {
+        @ (@dt<变整数>) SetParent((HWND)@<子窗口>,(HWND)@<新父窗口>)
+
+    }
+
+    方法 窗口_取桌面窗口句柄 <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    {
+        @ (INT64) GetDesktopWindow()
+    }
+
+    方法 取变量地址f <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 参数 <@匹配类型 = 所有类型>
+    {
+        @ (@dt<变整数>)(&@<参数>)
+    }
+
+    方法 取最后一次错误信息 <公开 静态 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ TCHAR* lpMsgBuf;
+        @ ::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER| //自动分配消息缓冲区
+        @ FORMAT_MESSAGE_FROM_SYSTEM, //从系统获取信息
+        @ NULL,::GetLastError(), //获取错误信息标识
+        @ MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT),//使用系统缺省语言
+        @ reinterpret_cast<LPTSTR>(&lpMsgBuf), //消息缓冲区
+        @ 0,
+        @ NULL);
+        @ @an<CVolString> str = lpMsgBuf;
+        @ ::LocalFree(lpMsgBuf);
+        @ return str;
+
+    }
+
+    方法 取最后一次错误代码WSA <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ::WSAGetLastError()
+    }
+
+    方法 取最后一次错误信息WSA <公开 静态 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ TCHAR* lpMsgBuf;
+        @ ::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER| //自动分配消息缓冲区
+        @ FORMAT_MESSAGE_FROM_SYSTEM, //从系统获取信息
+        @ NULL,::WSAGetLastError(), //获取错误信息标识
+        @ MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT),//使用系统缺省语言
+        @ reinterpret_cast<LPTSTR>(&lpMsgBuf), //消息缓冲区
+        @ 0,
+        @ NULL);
+        @ @an<CVolString> str = lpMsgBuf;
+        @ ::LocalFree(lpMsgBuf);
+        @ return str;
+
+    }
+
+    方法 取屏幕宽度f <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ GetSystemMetrics (SM_CXSCREEN)
+    }
+
+    方法 取屏幕高度f <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ GetSystemMetrics (SM_CYSCREEN)
+    }
+
+    方法 窗口_到前台_第一步骤设置广播 <公开 静态 注释 = "代码出处 https://www.cnblogs.com/dengpeng1004/p/5049646.html" 折叠>
+    {
+
+        // BOOL SystemParametersInfo(
+        // UINT uiAction,  // system parameter to retrieve or set
+        // UINT uiParam,   // depends on action to be taken
+        // PVOID pvParam,  // depends on action to be taken
+        // UINT fWinIni    // user profile update option);
+        @ DWORD dwTimeout = -1;  
+        @ SystemParametersInfo(SPI_GETFOREGROUNDLOCKTIMEOUT, 0, (LPVOID)&dwTimeout, 0);  
+        @ if (dwTimeout >= 100) {  
+        @     SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, (LPVOID)0, SPIF_SENDCHANGE | SPIF_UPDATEINIFILE);  
+        @ }  
+
+    }
+
+    方法 窗口_到前台_第二步骤 <公开 静态 注释 = "代码出处 https://www.cnblogs.com/dengpeng1004/p/5049646.html" 折叠>
+    参数 窗口句柄 <类型 = 长整数>
+    {
+        @ HWND hForeWnd = NULL; 
+        @ HWND hWnd= FindWindow(NULL,_T("")); 
+        @ DWORD dwForeID; 
+        @ DWORD dwCurID; 
+        @ hForeWnd =  GetForegroundWindow(); 
+        @ dwCurID =  GetCurrentThreadId(); 
+        @ dwForeID =  GetWindowThreadProcessId( hForeWnd, NULL ); 
+        @ AttachThreadInput( dwCurID, dwForeID, TRUE); 
+        @ ShowWindow((HWND) @<窗口句柄>, SW_SHOWNORMAL ); 
+        @ SetWindowPos( (HWND) @<窗口句柄>, HWND_TOPMOST, 0,0,0,0, SWP_NOSIZE|SWP_NOMOVE ); 
+        @ SetWindowPos( (HWND) @<窗口句柄>, HWND_NOTOPMOST, 0,0,0,0, SWP_NOSIZE|SWP_NOMOVE ); 
+        @ SetForegroundWindow( (HWND) @<窗口句柄> ); 
+        @ AttachThreadInput( dwCurID, dwForeID, FALSE);
+
+    }
+
+    方法 窗口_取句柄从坐标f <公开 静态 类型 = 长整数 折叠 @禁止流程检查 = 真>
+    参数 x <类型 = 整数>
+    参数 y <类型 = 整数>
+    {
+        @ POINT pt;
+        @ pt.x = @<x>;
+        @ pt.y = @<y>;
+        @ return (INT64)WindowFromPoint(pt);
+
+    }
+
+    方法 窗口_是否子窗口 <公开 静态 类型 = 逻辑型 注释 = "测试一个窗口句柄是否是另外一个窗口的子窗口" 折叠 @嵌入式方法 = "">
+    参数 父窗口句柄 <类型 = 长整数>
+    参数 子窗口句柄 <类型 = 长整数>
+    {
+        @ ::IsChild((HWND)@<父窗口句柄>,(HWND)@<子窗口句柄>)
+    }
+
+    方法 窗口_是否可见f <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 长整数>
+    {
+        @ IsWindowVisible((HWND)@<窗口句柄>)
+
+    }
+
+    方法 窗口_取线程进程ID <公开 静态 类型 = 变整数 返回值注释 = "返回创建窗口的线程ID" @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 长整数>
+    参数 返回窗口所属进程id <类型 = 变整数 注释 = "提供一个 变量保存 窗口进程ID">
+    {
+        @  (INT)GetWindowThreadProcessId((HWND)@<窗口句柄>,(LPDWORD)&@<返回窗口所属进程id>)
+    }
+
+    方法 窗口_取进程ID <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 长整数>
+    {
+        @ DWORD dwPID = 0;
+        @ GetWindowThreadProcessId((HWND)@<窗口句柄>,&dwPID)
+        @ return (INT)dwPID;
+    }
+
+    方法 窗口_取线程ID <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 长整数>
+    {
+        @ (INT)GetWindowThreadProcessId((HWND)@<窗口句柄>,NULL);
+    }
+
+    方法 SetWindowLongPtr <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 索引 <类型 = WindowLongPtr常量>
+    参数 新值 <类型 = 变整数 注释 = "此值要看索引设置的值是什么，如果是窗口回调，那么这个就是一个回调函数" 注释 = "如果这个是窗口样式，那么此值代表的就是窗口样式的组合值">
+    {
+        @ (@dt<变整数>) SetWindowLongPtr((HWND)@<窗口句柄>,@<索引>,(LONG_PTR)@<新值>)
+
+    }
+
+    方法 GetWindowLongPtr <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 索引 <类型 = WindowLongPtr常量>
+    {
+        @ (@dt<变整数>) GetWindowLongPtr((HWND)@<窗口句柄>,@<索引>)
+    }
+
+    方法 窗口_取附加数据 <公开 静态 类型 = 变整数>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        返回 (GetWindowLongPtr (窗口句柄, WindowLongPtr常量.窗口用户数据))
+
+
+
+    }
+
+    方法 窗口_置回调 <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 窗口过程回调 <@匹配方法 = "窗口过程">
+    {
+        @ (INT_P)::SetWindowLongPtr((HWND)@<窗口句柄>,GWLP_WNDPROC,(LONG_PTR)@<窗口过程回调>)
+    }
+
+    方法 窗口_恢复默认回调 <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 默认窗口过程 <类型 = 变整数 注释 = "这个参数是  窗口_置回调  的返回值">
+    {
+        @ (INT_P)::SetWindowLongPtr((HWND)@<窗口句柄>,GWLP_WNDPROC,(LONG_PTR)@<默认窗口过程>)
+    }
+
+    方法 窗口过程 <公开 静态 类型 = 整数>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 消息 <类型 = 整数>
+    参数 参数1 <类型 = 变整数>
+    参数 参数2 <类型 = 变整数>
+    {
+
+        // 如果 (消息 == 0x7000)
+        {
+            // 调试输出 (参数1, 参数2)
+
+
+        }
+
+        // 如果 (取程序 ().旧窗口过程句柄 != 0)
+        {
+            变量 "// 临时旧窗口过程句柄" <类型 = 变整数>
+            // 临时旧窗口过程句柄 = 取程序 ().旧窗口过程句柄
+            // @ return ::CallWindowProc((WNDPROC)@<临时旧窗口过程句柄>,(HWND)@<窗口句柄>,(UINT)@<消息>,(WPARAM)@<参数1>,(LPARAM)@<参数2>);
+
+        }
+        // 否则
+        {
+
+            // @ return DefWindowProc((HWND)@<窗口句柄>,(UINT)@<消息>,(WPARAM)@<参数1>,(LPARAM)@<参数2>);
+
+        }
+
+        返回 (0)
+
+    }
+
+    方法 窗口_置附加数据 <公开 静态 类型 = 变整数 "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 附加数据 <类型 = 变整数>
+    {
+        返回 (SetWindowLongPtr (窗口句柄, WindowLongPtr常量.窗口用户数据, 附加数据))
+    }
+
+    方法 窗口_取样式 <公开 静态 类型 = 变整数 "">
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        返回 (GetWindowLongPtr (窗口句柄, WindowLongPtr常量.窗口样式))
+    }
+
+    方法 窗口_置样式 <公开 静态 类型 = 变整数 返回值注释 = "返回原来的样式值" "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 样式值 <类型 = 变整数>
+    {
+        返回 (SetWindowLongPtr (窗口句柄, WindowLongPtr常量.窗口样式, 样式值))
+
+
+    }
+
+    方法 窗口_置焦点F <公开 静态 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @  (INT_P)::SetFocus( (HWND)@<窗口句柄> )
+
+    }
+
+    方法 窗口_取扩展样式 <公开 静态 类型 = 变整数 "">
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        返回 (GetWindowLongPtr (窗口句柄, WindowLongPtr常量.窗口扩展样式))
+    }
+
+    方法 窗口_置扩展样式 <公开 静态 类型 = 变整数 返回值注释 = "返回原来的样式值" "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 样式值 <类型 = 变整数>
+    {
+        返回 (SetWindowLongPtr (窗口句柄, WindowLongPtr常量.窗口扩展样式, 样式值))
+    }
+
+    方法 窗口_刷新 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ UpdateWindow((HWND)@<窗口句柄>)
+
+
+
+    }
+
+    方法 MoveWindow <静态 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    参数 宽度 <类型 = 整数>
+    参数 高度 <类型 = 整数>
+    参数 是否重绘 <类型 = 逻辑型>
+    {
+        @ ::MoveWindow((HWND)@<窗口句柄>,@<横坐标>,@<纵坐标>,@<宽度>,@<高度>,@<是否重绘>)
+
+
+    }
+
+    方法 窗口_激活 <公开 静态 类型 = 变整数 注释 = "SetActiveWindow" 返回值注释 = "如果成功，返回前一个激活的窗口，如果失败，返回0" @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ (INT_P)SetActiveWindow((HWND)@<窗口句柄>)
+
+    }
+
+    方法 窗口_置不接受键盘鼠标消息 <公开 静态 类型 = 逻辑型 返回值注释 = "成功返回真，失败返回假" @嵌入式方法 = "">
+    参数 是否不接收 <类型 = 逻辑型>
+    {
+        @ BlockInput(@<是否不接收>)
+
+    }
+
+    方法 窗口_取当前激活的窗口 <公开 静态 @嵌入式方法 = "">
+    {
+        @ GetActiveWindow()
+    }
+
+    方法 窗口_移动 <公开 静态 "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 横坐标 <类型 = 整数 注释 = "-1代表不变动" @默认值 = -1>
+    参数 纵坐标 <类型 = 整数 @默认值 = -1>
+    参数 宽度 <类型 = 整数 @默认值 = -1>
+    参数 高度 <类型 = 整数 @默认值 = -1>
+    参数 是否重绘 <类型 = 逻辑型 @默认值 = 假>
+    {
+
+        变量 原始横坐标 <类型 = 整数>
+        变量 原始纵坐标 <类型 = 整数>
+        变量 原始窗口宽度 <类型 = 整数>
+        变量 原始窗口高度 <类型 = 整数>
+        @ RECT rt;
+        @ ::GetWindowRect((HWND)@<窗口句柄>,&rt);
+        @ @<原始横坐标> = rt.left;
+        @ @<原始纵坐标> = rt.top;
+        @ @<原始窗口宽度> = rt.right- rt.left;
+        @ @<原始窗口高度> = rt.bottom - rt.top;
+
+        变量 新横坐标 <类型 = 整数>
+        变量 新纵坐标 <类型 = 整数>
+        变量 新宽度 <类型 = 整数>
+        变量 新高度 <类型 = 整数>
+        如果 (横坐标 == -1)
+        {
+            新横坐标 = 原始横坐标
+        }
+        否则
+        {
+            新横坐标 = 横坐标
+        }
+
+        如果 (纵坐标 == -1)
+        {
+            新纵坐标 = 原始纵坐标
+        }
+        否则
+        {
+            新纵坐标 = 纵坐标
+        }
+
+        如果 (宽度 == -1)
+        {
+            新宽度 = 原始窗口宽度
+        }
+        否则
+        {
+            新宽度 = 宽度
+        }
+
+        如果 (高度 == -1)
+        {
+            新高度 = 原始窗口高度
+        }
+        否则
+        {
+            新高度 = 高度
+        }
+
+        MoveWindow (窗口句柄, 新横坐标, 新纵坐标, 新宽度, 新高度, 是否重绘)
+
+
+    }
+
+    方法 窗口_取宽度 <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ RECT rt;
+        @ ::GetWindowRect((HWND)@<窗口句柄>,&rt);
+        @ return rt.right- rt.left;
+    }
+
+    方法 窗口_取高度 <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ RECT rt;
+        @ ::GetWindowRect((HWND)@<窗口句柄>,&rt);
+        @ return rt.bottom - rt.top;
+
+
+    }
+
+    方法 取水平分辨率F <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ::GetSystemMetrics(SM_CXSCREEN)
+    }
+
+    方法 取垂直分辨率F <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ::GetSystemMetrics(SM_CYSCREEN)
+    }
+
+    方法 窗口_取用户区宽度 <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ RECT rt;
+        @ ::GetClientRect((HWND)@<窗口句柄>,&rt);
+        @ return rt.right- rt.left;
+    }
+
+    方法 窗口_取用户区高度 <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ RECT rt;
+        @ ::GetWindowRect((HWND)@<窗口句柄>,&rt);
+        @  return rt.bottom - rt.top;
+
+    }
+
+    方法 窗口_强制刷新 <公开 静态 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 是否擦除 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ InvalidateRect((HWND)@<窗口句柄>,NULL,@<是否擦除>)
+
+
+    }
+
+    方法 GetDesktopWindow <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    {
+        @  (@dt<变整数>)::GetDesktopWindow ()
+    }
+
+    方法 GetWindow <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 类型 <类型 = GetWindow常量>
+    {
+        @ (@dt<变整数>)::GetWindow ((HWND)@<窗口句柄>, @<类型>)
+
+    }
+
+    方法 "//窗口_取控件ID" <公开 静态 类型 = 变整数>
+    参数 窗口句柄 <类型 = 整数>
+    {
+        返回 (GetWindowLongPtr (窗口句柄, WindowLongPtr常量.窗口ID))
+
+    }
+
+    方法 窗口_取父窗口句柄 <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 当前窗口句柄 <类型 = 变整数>
+    {
+        @ (@dt<变整数>)GetParent((HWND)@<当前窗口句柄>)
+    }
+
+    方法 窗口_取控件句柄_从ID <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 控件ID <类型 = 整数>
+    {
+        @ (@dt<变整数>)GetDlgItem((HWND)@<窗口句柄>,@<控件ID>)
+    }
+
+    方法 窗口_取文本 <公开 静态 类型 = 文本型 注释 = "返回控件的标题，或者是内容" 注释 = "如果是窗口那么就是标题，" 注释 = "如果是编辑框那么返回内容" @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ TCHAR buf[4096]={0};
+        @ SendMessage ((HWND)@<窗口句柄>,WM_GETTEXT,4096,(LPARAM)buf);
+        @ return buf;
+
+    }
+
+    方法 窗口_置文本 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 要设置的内容 <类型 = 文本型>
+    {
+        @ SendMessage ((HWND)@<窗口句柄>,WM_SETTEXT,0,(LPARAM)@<要设置的内容>.GetText())
+    }
+
+    方法 窗口_取控件ID <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ GetDlgCtrlID((HWND)@<窗口句柄>)
+    }
+
+    方法 窗口_查找子窗口_根据控件ID <公开 静态 类型 = 变整数 注释 = "如果有多个，那么只会返回第一个" 折叠>
+    参数 父窗口句柄 <类型 = 变整数>
+    参数 ID <类型 = 变整数>
+    {
+        变量 窗口句柄 <类型 = 变整数>
+        窗口句柄 = GetWindow (父窗口句柄, GetWindow常量.GW_CHILD)
+        如果 (窗口句柄 == 0)
+        返回 (0)
+        判断循环 (窗口句柄 != 0)
+        {
+
+            如果 (窗口_取控件ID (窗口句柄) == ID)
+            {
+                返回 (窗口句柄)
+            }
+
+            临时窗口句柄 = 窗口_查找子窗口_根据标题_模糊 (窗口句柄, 要查找的子窗口标题)
+            如果 (临时窗口句柄 != 0)
+            {
+                返回 (临时窗口句柄)
+            }
+
+            窗口句柄 = GetWindow (窗口句柄, GetWindow常量.GW_HWNDNEXT)
+        }
+
+        返回 (0)
+
+
+
+    }
+
+    方法 窗口_查找子窗口_根据标题_模糊 <公开 静态 类型 = 变整数 注释 = "如果有多个，那么只会返回第一个" 折叠>
+    参数 父窗口句柄 <类型 = 变整数>
+    参数 要查找的子窗口标题 <类型 = 文本型>
+    {
+        变量 窗口句柄 <类型 = 变整数>
+        变量 窗口标题 <类型 = 文本型>
+        变量 临时窗口句柄 <类型 = 变整数>
+        变量 ""
+
+        窗口句柄 = GetWindow (父窗口句柄, GetWindow常量.GW_CHILD)
+        如果 (窗口句柄 == 0)
+        {
+            返回 (0)
+        }
+
+        判断循环 (窗口句柄 != 0)
+        {
+            窗口标题 = 窗口_取标题f (窗口句柄)
+            如果 (寻找文本 (窗口标题, 要查找的子窗口标题) != -1)
+            {
+                返回 (窗口句柄)
+            }
+
+            临时窗口句柄 = 窗口_查找子窗口_根据标题_模糊 (窗口句柄, 要查找的子窗口标题)
+            如果 (临时窗口句柄 != 0)
+            {
+                返回 (临时窗口句柄)
+            }
+
+            窗口句柄 = GetWindow (窗口句柄, GetWindow常量.GW_HWNDNEXT)
+        }
+
+        返回 (0)
+
+
+
+    }
+
+    方法 窗口_查找根据类名 <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 窗口类名 <类型 = 文本型>
+    {
+        @ (@dt<变整数>) ::FindWindow(@<窗口类名>,NULL)
+
+    }
+
+    方法 窗口_查找根据标题 <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 窗口标题 <类型 = 文本型>
+    {
+        @ (@dt<变整数>) ::FindWindow(NULL,@<窗口标题>)
+
+    }
+
+    方法 窗口_取类名f <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ TCHAR tszBuffer[1024] = {0};
+        @ ::GetClassName((HWND)@<窗口句柄>, tszBuffer,1024);
+        @ return tszBuffer;
+
+    }
+
+    方法 窗口_取标题f <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ TCHAR tszBuffer[1024] = {0};
+        @ ::GetWindowText ((HWND)@<窗口句柄>, tszBuffer,1024);
+        @ return tszBuffer;
+    }
+
+    方法 窗口_模糊查找_单一 <公开 静态 类型 = 变整数 折叠>
+    参数 窗口标题 <类型 = 文本型>
+    参数 是否查找类名 <类型 = 逻辑型 @默认值 = 假>
+    {
+        @  HWND hDeskTopWindow = ::GetDesktopWindow (); //1.先获得桌面窗口
+        @  HWND hChildWnd = ::GetWindow (hDeskTopWindow, GW_CHILD);   //2.获得一个子窗口
+        @   TCHAR tszBuffer[1024] = {0};
+        @   INT nTextLen = 0;
+        @   while(hChildWnd != NULL)
+        @   {
+        @    if(@<是否查找类名>)
+        @    {
+        @        nTextLen = ::GetClassNameW (hChildWnd, tszBuffer, sizeof(tszBuffer));
+        @    }else
+        @    {
+        @        nTextLen = ::GetWindowText (hChildWnd, tszBuffer, sizeof(tszBuffer));
+        @    }
+        @    if(nTextLen != 0)
+        @    {
+        @     if (::StrStr(tszBuffer,@<窗口标题>) != NULL)
+        @     {
+        @      return (INT64)hChildWnd;
+        @     }
+        @    }
+        @    hChildWnd = ::GetWindow (hChildWnd, GW_HWNDNEXT);
+        @   }
+        返回 (0)
+
+
+    }
+
+    方法 窗口_捕获鼠标_开始 <公开 静态 类型 = 长整数 返回值注释 = "返回值是先前捕获鼠标的窗口的句柄" @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 长整数>
+    {
+        @ SetCapture((HWND)@<窗口句柄>)
+    }
+
+    方法 窗口_捕获鼠标_结束 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ ReleaseCapture()
+    }
+
+    方法 窗口_取菜单句柄 <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ (@dt<变整数>) GetMenu((HWND)@<窗口句柄>)
+    }
+
+    方法 窗口_置菜单句柄 <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 菜单句柄 <类型 = 变整数>
+    {
+        @ SetMenu((HWND)@<窗口句柄>,(HMENU)@<菜单句柄>)
+        // BOOL SetMenu(  HWND hWnd,  // handle to window  HMENU hMenu // handle to menu);
+    }
+
+    #
+    #
+}
+
+类 拖放_全局类 <公开>
+{
+
+    # @begin
+    #
+    # #define FC_MSGFLT_ADD 1
+    # #define FC_MSGFLT_REMOVE 2
+    #
+    # static BOOL  ChangeWndMessageFilterOk( UINT  nMessage,  BOOL  bAllow)
+    # {
+    #      typedef  BOOL  (WINAPI * ChangeWindowMessageFilterOkFn)( UINT ,  DWORD );
+    #  
+    #      HMODULE  hModUser32 = NULL;
+    #      hModUser32 = LoadLibrary(_T( "user32.dll" ));
+    #      if  (hModUser32 == NULL) {
+    #          return  FALSE;
+    #      }
+    #  
+    #      ChangeWindowMessageFilterOkFn pfnChangeWindowMessageFilter = (ChangeWindowMessageFilterOkFn) GetProcAddress(hModUser32,  "ChangeWindowMessageFilter" );
+    #      if  (pfnChangeWindowMessageFilter == NULL)
+    #      {
+    #          FreeLibrary(hModUser32);
+    #          return  FALSE;
+    #      }
+    #  
+    #      FreeLibrary(hModUser32);
+    #  
+    #      return  pfnChangeWindowMessageFilter(nMessage, bAllow ? FC_MSGFLT_ADD : FC_MSGFLT_REMOVE);
+    # }
+    #
+    # @end
+
+    方法 启用 <公开 静态>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 启用拖放 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @  if(@<启用拖放>)
+        @  {
+        @     ChangeWndMessageFilterOk(WM_DROPFILES, TRUE);
+        @     ChangeWndMessageFilterOk(0x0049, TRUE);        // 0x0049 == WM_COPYGLOBALDATA
+        @  }else
+        @  {
+        @     ChangeWndMessageFilterOk(WM_DROPFILES, FALSE);
+        @     ChangeWndMessageFilterOk(0x0049, FALSE);        // 0x0049 == WM_COPYGLOBALDATA
+        @  }
+        @ ::DragAcceptFiles((HWND)@<窗口句柄>,@<启用拖放>);
+    }
+
+    方法 是否拖放消息 <公开 静态 类型 = 逻辑型 注释 = "再 消息过滤  中使用" @嵌入式方法 = "">
+    参数 消息值 <类型 = 变整数>
+    {
+        @ (@<消息值> == WM_DROPFILES ? TRUE:FALSE)
+    }
+
+    方法 取成员数 <公开 静态 类型 = 整数 注释 = "获取拖放的文件的数量" @嵌入式方法 = "">
+    参数 消息参数1 <类型 = 变整数>
+    {
+        @ (int)::DragQueryFile( (HDROP)@<消息参数1>, (UINT)-1, NULL, 0)
+    }
+
+    方法 取成员 <公开 静态 类型 = 文本型 注释 = "得到拖放数组中的文件名" @禁止流程检查 = 真>
+    参数 消息参数1 <类型 = 变整数 注释 = "从0开始">
+    参数 索引 <类型 = 整数>
+    {
+        @ TCHAR szFileName[_MAX_PATH] = {0};
+        @ ::DragQueryFile((HDROP)@<消息参数1> , @<索引>, szFileName, sizeof(szFileName));
+        @ return szFileName;
+    }
+
+    方法 释放资源 <公开 静态 注释 = "当获取成员完毕时候调用此函数" @嵌入式方法 = "">
+    参数 消息参数1 <类型 = 变整数 注释 = "从0开始">
+    {
+        @ DragFinish((HDROP)@<消息参数1>)
+    }
+}
+
+类 "//我的主窗口" <基础类 = 窗口 注释 = "拖放对象使用例子" 折叠 @视窗.布局 = "client_size = \"500, 300\"">
+{
+    变量 编辑框1 <类型 = 编辑框 隐藏值属性 = "0" @视窗.布局 = "id = 101\r\npos = \"37, 6, 392, 40\"">
+
+    方法 我的主窗口_创建完毕 <接收事件 类型 = 整数>
+    参数 来源对象 <类型 = 我的主窗口>
+    参数 标记值 <类型 = 整数>
+    {
+        拖放对象_全局类.启用 (编辑框1.取窗口句柄 ())
+        返回 (0)
+    }
+
+    方法 消息过滤 <公开 类型 = 逻辑型 注释 = "用户的窗口类可以覆盖此方法以过滤处理本窗口及其所有子组件中的消息" 返回值注释 = "返回真表示允许消息继续向后传递并处理,返回假表示取消掉该消息的后续处理." @虚拟方法 = 可覆盖>
+    参数 窗口句柄 <类型 = 变整数 注释 = "提供消息所对应的窗口句柄(HWND),必定为本窗口或其直接/间接下属子窗口.">
+    参数 消息值 <类型 = 整数 注释 = "提供消息的具体值">
+    参数 消息参数1 <类型 = 变整数 注释 = "提供消息所附带的参数1的值">
+    参数 消息参数2 <类型 = 变整数 注释 = "提供消息所附带的参数2的值">
+    参数 消息地址 <类型 = 变整数 注释 = "提供消息的具体 MSG* 地址指针,用作备用.">
+    {
+
+        如果 (拖放对象_全局类.是否拖放消息 (消息值))
+        {
+
+            变量 数量 <类型 = 整数>
+            变量 i <类型 = 整数>
+            数量 = 拖放对象_全局类.取成员数 (消息参数1)
+            循环 (0, 数量, i)
+            {
+                调试输出f (拖放对象_全局类.取成员 (消息参数1, i))
+            }
+            拖放对象_全局类.释放资源 (消息参数1)
+        }
+        返回 (父对象.消息过滤 (窗口句柄, 消息值, 消息参数1, 消息参数2, 消息地址))  // 调用基础类中的被覆盖虚拟方法
+
+    }
+}
+
+类 "//窗口过程类" <公开 注释 = "代码已经无用 可以删除" 折叠>
+{
+
+    # @begin
+    #
+    # <> <include>
+    #
+    # void @an<_OnInitExtra> ()
+    # {
+    #     m_OldWndProc = NULL;
+    #     m_hWnd       = NULL;
+    # }
+    # void @an<_OnCleanupExtra> ()
+    # {
+    #     if(m_hWnd && m_OldWndProc)
+    #     {
+    #        ::SetWindowLongPtr(m_hWnd,GWLP_WNDPROC,(LONG_PTR)m_OldWndProc);
+    #     }  
+    # }
+    #
+    # LONG_PTR m_OldWndProc; 
+    # HWND     m_hWnd;
+    # <> </include>
+    #
+    # LRESULT CALLBACK WindowProc(  HWND hwnd,      // handle to window
+    #   UINT uMsg,      // message identifier
+    #   WPARAM wParam,  // first message parameter
+    #   LPARAM lParam   // second message parameter
+    # )
+    # {
+    #     @sn<current_class>* pThis = (@sn<current_class>*) GetWindowLongPtr(hwnd,GWLP_USERDATA);
+    #     if(pThis != NULL)
+    #     {
+    #         if(uMsg == WM_DROPFILES)
+    #         {
+    #             pThis->@<拖放事件>( (@dt<变整数>)wParam);
+    #             return 0;
+    #         }
+    #         if(pThis->@<窗口过程>((@dt<变整数>)hwnd,(@dt<整数>)uMsg,(@dt<变整数>)wParam,(@dt<变整数>)lParam))
+    #         {
+    #             return 0;
+    #         }
+    #         return ::CallWindowProc((WNDPROC)pThis->m_OldWndProc,hwnd,uMsg,wParam,lParam);
+    #     }
+    #     return DefWindowProc(hwnd,uMsg,wParam,lParam);
+    # }
+    #
+    # @end
+
+    方法 拖放事件 <公开 定义事件 类型 = 整数>
+    参数 拖放句柄 <类型 = 变整数>
+    {
+
+    }
+
+    #
+
+    方法 窗口过程 <公开 定义事件 类型 = 整数 返回值注释 = "返回真表示拦截此消息，假表示不拦截">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 消息 <类型 = 整数>
+    参数 参数1 <类型 = 变整数>
+    参数 参数2 <类型 = 变整数>
+    {
+
+
+    }
+
+    方法 启用窗口过程 <公开>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 是否启用 <类型 = 逻辑型 @默认值 = 真>
+    参数 启用拖放 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ m_hWnd = (HWND)@<窗口句柄>;
+        @ if(@<是否启用>)
+        @ {
+        @     if(!m_OldWndProc) 
+        @     {
+        @        ::SetWindowLongPtr(m_hWnd,GWLP_USERDATA, (LONG_PTR)this);
+        @         m_OldWndProc = ::SetWindowLongPtr(m_hWnd,GWLP_WNDPROC,(LONG_PTR)WindowProc);
+        @      }
+        @ }
+        @ else
+        @ {
+        @    if(m_hWnd && m_OldWndProc)
+        @    {
+        @       ::SetWindowLongPtr(m_hWnd,GWLP_WNDPROC,(LONG_PTR)m_OldWndProc);
+        @    }
+        @ }
+        @ ::DragAcceptFiles(m_hWnd,@<启用拖放>);
+    }
+}
+
+类 窗口过程类F <公开>
+{
+
+    # @begin
+    #
+    # <> <include>
+    #
+    # void @an<_OnInitExtra> ()
+    # {
+    #     m_OldWndProc = NULL;
+    #     m_hWnd       = NULL;
+    # }
+    # void @an<_OnCleanupExtra> ()
+    # {
+    #     if(m_hWnd && m_OldWndProc)
+    #     {
+    #        ::SetWindowLongPtr(m_hWnd,GWLP_WNDPROC,(LONG_PTR)m_OldWndProc);
+    #     }  
+    # }
+    #
+    # LONG_PTR m_OldWndProc; 
+    # HWND     m_hWnd;
+    # <> </include>
+    #
+    # LRESULT CALLBACK WindowProc(  HWND hwnd,      // handle to window
+    #   UINT uMsg,      // message identifier
+    #   WPARAM wParam,  // first message parameter
+    #   LPARAM lParam   // second message parameter
+    # )
+    # {
+    #     @sn<current_class>* pThis = (@sn<current_class>*) GetWindowLongPtr(hwnd,GWLP_USERDATA);
+    #     if(pThis != NULL)
+    #     {
+    #         if(pThis->@<窗口过程>((@dt<变整数>)hwnd,(@dt<整数>)uMsg,(@dt<变整数>)wParam,(@dt<变整数>)lParam))
+    #         {
+    #             return 0;
+    #         }
+    #         return ::CallWindowProc((WNDPROC)pThis->m_OldWndProc,hwnd,uMsg,wParam,lParam);
+    #     }
+    #     return DefWindowProc(hwnd,uMsg,wParam,lParam);
+    # }
+    #
+    #
+
+    方法 窗口过程 <公开 定义事件 类型 = 整数 返回值注释 = "返回真表示拦截此消息，假表示不拦截">
+    参数 窗口句柄 <类型 = 变整数>
+    参数 消息 <类型 = 整数>
+    参数 参数1 <类型 = 变整数>
+    参数 参数2 <类型 = 变整数>
+    {
+
+
+    }
+
+    方法 启用窗口过程 <公开>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 是否启用 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ m_hWnd = (HWND)@<窗口句柄>;
+        @ if(@<是否启用>)
+        @ {
+        @     if(!m_OldWndProc) 
+        @     {
+        @        ::SetWindowLongPtr(m_hWnd,GWLP_USERDATA, (LONG_PTR)this);
+        @         m_OldWndProc = ::SetWindowLongPtr(m_hWnd,GWLP_WNDPROC,(LONG_PTR)WindowProc);
+        @      }
+        @ }
+        @ else
+        @ {
+        @    if(m_hWnd && m_OldWndProc)
+        @    {
+        @       ::SetWindowLongPtr(m_hWnd,GWLP_WNDPROC,(LONG_PTR)m_OldWndProc);
+        @    }
+        @ }
+    }
+}
+
+类 GetWindow常量 <公开 折叠 @常量类 = 整数>
+{
+    常量 GW_CHILD <公开 值 = @GW_CHILD>
+    常量 GW_ENABLEDPOPUP <公开 值 = @GW_ENABLEDPOPUP>
+    常量 GW_HWNDFIRST <公开 值 = @GW_HWNDFIRST>
+    常量 GW_HWNDLAST <公开 值 = @GW_HWNDLAST>
+    常量 GW_HWNDNEXT <公开 值 = @GW_HWNDNEXT>
+    常量 GW_HWNDPREV <公开 值 = @GW_HWNDPREV>
+    常量 GW_OWNER <公开 值 = @GW_OWNER>
+
+    #
+}
+
+类 WindowLongPtr常量 <公开 折叠 @常量类 = 整数>
+{
+    常量 窗口扩展样式 <公开 值 = @GWL_EXSTYLE>
+    常量 窗口样式 <公开 值 = @GWL_STYLE>
+    常量 窗口过程 <公开 值 = @GWLP_WNDPROC>
+    常量 实例句柄 <公开 值 = @GWLP_HINSTANCE>
+    常量 窗口ID <公开 值 = @GWLP_ID>
+    常量 窗口用户数据 <公开 值 = @GWLP_USERDATA>
+    常量 对话框窗口过程 <公开 值 = @DWLP_DLGPROC>
+    常量 对话框消息返回值 <公开 值 = @DWLP_MSGRESULT>
+    常量 对话框用户数据 <公开 值 = @DWLP_USER>
+
+    #
+}
+
+类 __窗口枚举模板类 <公开 折叠 @模板基础类 = 真>
+{
+    变量 是否继续枚举 <公开 类型 = 逻辑型 值 = 真>
+
+    #
+    # @begin
+    # <> <include>
+    #  struct EnumChildWin
+    #  {
+    #     @sn<current_class>* pThis;
+    #     @dt<模板类型1>*        p1;
+    #     @dt<模板类型1>*        p2;
+    #     @dt<模板类型1>*        p3;
+    #     @dt<模板类型1>*        p4;
+    #  };
+    #
+    # static BOOL CALLBACK EnumChildProc(HWND hwnd,LPARAM lParam)
+    # {
+    #     struct EnumChildWin* pEcw = (struct EnumChildWin*)lParam;
+    #     return pEcw->pThis->OnEnumWindow( (@dt<变整数>)hwnd ,pEcw->p1,pEcw->p2,pEcw->p3,pEcw->p4);
+    # }
+    # BOOL  OnEnumWindow(@dt<变整数> hWnd, @dt<模板类型1>* p1,@dt<模板类型2>* p2,@dt<模板类型3>* p3,@dt<模板类型4>* p4)
+    # {
+    #     @<回调函数>(hWnd,*p1,*p2,*p3,*p4);
+    #     return @<是否继续枚举>;
+    # }
+    # <> </include>
+    # @end
+
+    方法 枚举 <公开>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 参数1 <类型 = 模板类型1>
+    参数 参数2 <类型 = 模板类型2>
+    参数 参数3 <类型 = 模板类型3>
+    参数 参数4 <类型 = 模板类型4>
+    {
+        @  struct EnumChildWin ecw;
+        @  ecw.pThis = this;
+        @  ecw.p1 = &@<参数1>;
+        @  ecw.p2 = &@<参数2>;
+        @  ecw.p3 = &@<参数3>;
+        @  ecw.p4 = &@<参数4>;
+        @ ::EnumChildWindows((HWND)@<窗口句柄>,@sn<current_class>::EnumChildProc,(LPARAM)&ecw);
+
+    }
+
+    方法 回调函数 <公开 定义事件 类型 = 整数>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 参数1 <类型 = 模板类型1>
+    参数 参数2 <类型 = 模板类型2>
+    参数 参数3 <类型 = 模板类型3>
+    参数 参数4 <类型 = 模板类型4>
+    {
+
+    }
+
+    #
+    #
+}
+
+类 窗口枚举类_整数 <公开 基础类 = __窗口枚举模板类 折叠 @模板实现类 = "整数,整数,整数,整数">
+{
+
+    #
+}
+
+类 模拟输入测试 <公开 折叠>
+{
+    方法 开始测试 <公开>
+    {
+        变量 火山主窗口句柄 <类型 = 变整数>
+        调试输出 ("我擦执行到这里没？")
+        // 窗口_到前台_第二步骤 (窗口_模糊查找_单一 ("火山软件开发平台"))
+
+        // 火山主窗口句柄 = 窗口_模糊查找_单一 ("火山软件开发平台")
+        // 窗口_到前台_第二步骤 (火山主窗口句柄)
+        // 火山主窗口句柄 = 窗口_取火山编辑框句柄_临时用一下 (火山主窗口句柄)
+        // 窗口_到前台_第二步骤 (火山主窗口句柄)
+        火山主窗口句柄 = 67474
+        消息_模拟组合键 (火山主窗口句柄, 键代码_常量类.CTRL键, 键代码_常量类.字母D键)
+        // 键盘_模拟组合键 (键代码_常量类.VK_CONTROL, 键代码_常量类.VK_D)
+        消息_模拟输入文本 (火山主窗口句柄, "测试常量")
+
+        消息_模拟组合键 (火山主窗口句柄, 键代码_常量类.CTRL键, 键代码_常量类.字母B键)  // 生成一个空行
+        变量 循环计次 <类型 = 整数>
+        循环 (1, 10, 循环计次, 1)
+        {
+            消息_模拟组合键 (火山主窗口句柄, 键代码_常量类.CTRL键, 键代码_常量类.字母B键)  // 光标位置 常量名
+            消息_模拟输入文本 (火山主窗口句柄, 到文本 (循环计次))  // 输入常量名称
+            消息_模拟按键 (火山主窗口句柄, 键代码_常量类.右键)  // 跳到类型
+            消息_模拟按键 (火山主窗口句柄, 键代码_常量类.右键)  // 跳到初始值
+            消息_模拟输入文本 (火山主窗口句柄, "@" + 到文本 (循环计次))  // 设置初始值
+            消息_模拟按键 (火山主窗口句柄, 键代码_常量类.右键)  // 跳到公开
+            消息_模拟按键 (火山主窗口句柄, 键代码_常量类.空格键)  // 设置公开
+            消息_模拟按键 (火山主窗口句柄, 键代码_常量类.右键)  // 跳到属性名
+            消息_模拟按键 (火山主窗口句柄, 键代码_常量类.右键)  // 跳到属性值
+            消息_模拟按键 (火山主窗口句柄, 键代码_常量类.右键)  // 跳到备注
+            消息_模拟按键 (火山主窗口句柄, 键代码_常量类.右键)  // 到下一行行首
+
+        }
+
+
+    }
+
+    #
+}

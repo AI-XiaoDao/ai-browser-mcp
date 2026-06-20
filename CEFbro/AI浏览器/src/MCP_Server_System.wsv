@@ -1,0 +1,117 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.程序
+
+# MCP_系统分派 — 从 MCP_Server.wsv 拆分 (L5)
+
+类 MCP_系统分派 <公开 @全局类 = 真>
+{
+    方法 分类分派_系统操作 <公开 静态 类型 = 文本型>
+    参数 命令ID <类型 = 文本型>
+    参数 方法名 <类型 = 文本型>
+    参数 参数JSON <类型 = YYJSON只读对象类>
+    {
+        // === v1.6 VIP 标签页 (已禁用) ===
+        如果 (方法名 == "browser.create_tab" || 方法名 == "browser_create_tab")
+        {
+            返回 (MCP命令服务器.命令失败 (命令ID, "⛔ 远程创建标签页已禁用 | 浏览器由GUI自动管理"))
+        }
+        否则 (方法名 == "browser.task_runner_post" || 方法名 == "browser_task_runner_post")
+        {
+            变量 threadID <类型 = 整数>
+            threadID = MCP命令服务器.yyjson取整数 (参数JSON, "thread_id")
+            如果 (threadID == 0)
+            {
+                threadID = 线程ID.UI
+            }
+            变量 任务代码 <类型 = 文本型>
+            任务代码 = MCP命令服务器.yyjson取文本 (参数JSON, "code")
+            变量 异步任务ID <类型 = 文本型>
+            异步任务ID = MCP命令服务器.生成异步任务ID ()
+            变量 任务回调 <类型 = 类_FBrowser_事件智能指针>
+            任务回调.创建 (类_MCP_任务回调)
+            任务回调.取执行类 (类_MCP_任务回调).任务ID = 异步任务ID
+            任务回调.取执行类 (类_MCP_任务回调).执行代码 = 任务代码
+            FBrowser_任务运行器_投递任务 (threadID, 任务回调)
+            返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步任务ID, "任务已投递到线程" + 到文本 (threadID) + ", 通过mcp_result查询执行结果"))
+        }
+        // === v1.6 其他 ===
+        否则 (方法名 == "browser.send_message" || 方法名 == "browser_send_message")
+        {
+            变量 msgName <类型 = 文本型>
+            msgName = MCP命令服务器.yyjson取文本 (参数JSON, "name")
+            如果 (msgName == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "name " + MCP命令服务器.错误_缺少参数))
+            }
+            变量 msgData <类型 = 文本型>
+            msgData = MCP命令服务器.yyjson取文本 (参数JSON, "data")
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                browser.进程间消息_发送数据_到主进程 (msgName, 文本到字节集 (msgData))
+                返回 (MCP命令服务器.命令成功 (命令ID, "已向主进程发送消息"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === 系统全局 (VIP 已拆分至 MCP_Server_VIP.wsv) ===
+        如果 (方法名 == "browser.get_global_cache_dir" || 方法名 == "browser_get_global_cache_dir")
+        {
+            变量 全局缓存目录 <类型 = 文本型>
+            全局缓存目录 = 取运行目录 () + "\\CacheData\\GlobalData"
+            返回 (MCP命令服务器.构建简单JSON ("global_cache_dir", 全局缓存目录))
+        }
+        // === 查询进程类型 ===
+        否则 (方法名 == "browser.get_process_type" || 方法名 == "browser_get_process_type")
+        {
+            变量 进程类型值 <类型 = 整数>
+            进程类型值 = FBrowser_进程_取当前进程类型 ()
+            返回 (MCP命令服务器.构建简单JSON ("process_type", 到文本 (进程类型值)))
+        }
+        // === 窗口风格 ===
+        否则 (方法名 == "browser.get_window_style" || 方法名 == "browser_get_window_style")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                返回 (MCP命令服务器.构建简单JSON ("style", 到文本 (browser.取窗口属性 (-16))))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.set_window_style" || 方法名 == "browser_set_window_style")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                browser.置窗口属性 (MCP命令服务器.yyjson取整数 (参数JSON, "type"), MCP命令服务器.yyjson取整数 (参数JSON, "style"))
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "窗口风格已设置"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === 获取窗口运行风格 ===
+        否则 (方法名 == "browser.get_run_style" || 方法名 == "browser_get_run_style")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                返回 (MCP命令服务器.构建简单JSON ("run_style", "暂不支持此方法工具"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "ping")
+        {
+            变量 ping结果 <类型 = YYJSON对象类>
+            ping结果.创建自文本 ("{}")
+            ping结果.加入文本成员 ("pong", 到文本 (取启动时间 ()))
+            ping结果.加入整数成员 ("browsers", FBrowser_浏览器_取数量 ())
+            ping结果.加入文本成员 ("version", MCP命令服务器.MCP_版本号)
+            返回 (MCP命令服务器.命令成功_原始JSON (命令ID, ping结果.到可读文本 (YYJSON格式化选项.压缩)))
+        }
+        返回 ("")
+    }
+    #
+}

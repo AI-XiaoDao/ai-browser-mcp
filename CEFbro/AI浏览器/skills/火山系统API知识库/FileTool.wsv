@@ -1,0 +1,283 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" @文档 = "category = \"windows.文件操作\"">
+
+类 文件打开方式f <公开 折叠 @常量类 = 整数>
+{
+    常量 新建 <公开 值 = @CREATE_NEW 注释 = "创建一个新文件,如果文件已经存在则返回失败"
+            注释 = "Creates a new file. The function fails if the specified file already exists.">
+    常量 新建或覆盖 <公开 值 = @CREATE_ALWAYS 注释 = "创建一个新文件,如果文件存在，则覆盖这个文件,并且清除其属性"
+            注释 = "Creates a new file. If the file exists, the function overwrites the file," 注释 = "clears the existing attributes,"
+            注释 = "and combines the file attributes and flags specified by dwFlagsAndAttributes with FILE_ATTRIBUTE_ARCHIVE.">
+    常量 打开 <公开 值 = @OPEN_EXISTING 注释 = "打开文件,如果文件不存在则打开失败" 注释 = "Opens the file. The function fails if the file does not exist.">
+    常量 打开或创建 <公开 值 = @OPEN_ALWAYS 注释 = "如果文件则打开文件，如果不存在则会创建文件,此时和CREATE_NEW功能一样"
+            注释 = "Opens the file, if it exists. If the file does not exist,"
+            注释 = " the function creates the file as if dwCreationDisposition were CREATE_NEW.">
+    常量 清空 <公开 值 = @TRUNCATE_EXISTING 注释 = "打开文件。 打开后，文件将被截断，因此其大小为零字节。"
+            注释 = "调用过程必须打开至少具有GENERIC_WRITE访问权限的文件。 如果文件不存在，该功能将失败。"
+            注释 = "Opens the file. Once opened, the file is truncated so that its size is zero bytes."
+            注释 = " The calling process must open the file with at least GENERIC_WRITE access. The function fails if the file does not exist.">
+
+    #
+}
+
+类 文件共享方式f <公开 @常量类 = 整数>
+{
+    常量 不共享 <公开 值 = 0 注释 = "不共享， 如果当前软件打开设备后，其他设备就不能打开操作了">
+    常量 共享读 <公开 值 = @FILE_SHARE_READ 注释 = "例如两个软件同时操作 a.txt 如果指定这个标志，表示两个软件都可以对a.txt读  否则只有第一个打开a.txt 的可以操作，其他的不能">
+    常量 共享写 <公开 值 = @FILE_SHARE_WRITE 注释 = "例如两个软件同时操作 a.txt 如果指定这个标志，表示两个软件都可以对a.txt写  否则只有第一个打开a.txt 的可以操作，其他的不能">
+    常量 共享读写 <公开 值 = @"@FILE_SHARE_WRITE|FILE_SHARE_READ">
+    常量 共享删除 <公开 值 = @FILE_SHARE_DELETE 注释 = "原理同上">
+
+    #
+}
+
+类 文件指针常量 <公开 折叠 @常量类 = 整数>
+{
+    常量 文件首 <公开 值 = @FILE_BEGIN 注释 = "文件指针起始位置为文件起始位置，当调用SetFilePointerEx成功后，" 注释 = "文件指针将指向liDistanceToMove指向的位置。"
+            注释 = "FILE_BEGIN The starting point is zero or the beginning of the file.">
+    常量 当前位置 <公开 值 = @FILE_CURRENT 注释 = "文件指针起始位置为当前文件指针指向的位置"
+            注释 = "FILE_CURRENT The starting point is the current value of the file pointer.">
+    常量 文件尾 <公开 值 = @FILE_END 注释 = "文件指针起始位置为文件末尾" 注释 = "FILE_END The starting point is the current end-of-file position.">
+
+    #
+}
+
+类 文件访问方式f <公开 折叠 @常量类 = 整数>
+{
+    常量 读 <公开 值 = @GENERIC_READ>
+    常量 写 <公开 值 = @GENERIC_WRITE>
+    常量 读写 <公开 值 = @"@GENERIC_READ|GENERIC_WRITE">
+
+    #
+}
+
+类 ______文件操作 <公开 @全局类 = 真>
+{
+
+    #
+
+    方法 文件操作_打开 <公开 静态 类型 = 变整数 返回值注释 = "-1 表示打开失败，否则返回 文件句柄" @嵌入式方法 = "">
+    参数 文件名称 <类型 = 文本型>
+    参数 打开方式 <类型 = 文件打开方式f 注释 = "默认只是打开，如果指定的文件不存在，则打开失败" @默认值 = 文件打开方式f.打开>
+    参数 共享模式 <类型 = 文件共享方式f @默认值 = 文件共享方式f.共享读>
+    参数 访问方式 <类型 = 文件访问方式f 注释 = "读模式 写模式 读写模块" 注释 = "解释：用什么方式打开，比如读方式，" 注释 = "例如我们操作文件的时候我们只需要读取一下就行，" 注释 = "某些的话不需要读，只需要写"
+            @默认值 = 文件访问方式f.读写>
+    {
+        @ (@dt<变整数>) ::CreateFile(@<文件名称>,@<访问方式>,@<共享模式>,NULL,(DWORD)@<打开方式>,FILE_ATTRIBUTE_NORMAL,NULL)
+
+    }
+
+    方法 文件操作_关闭 <公开 静态 @嵌入式方法 = "">
+    参数 文件句柄 <类型 = 变整数>
+    {
+        @ ::CloseHandle((HANDLE)@<文件句柄>)
+    }
+
+    方法 文件操作_写内存数据 <公开 静态 类型 = 整数 返回值注释 = "返回写了多少个字节" @禁止流程检查 = 真>
+    参数 文件句柄 <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+        @   DWORD nBytesWrites = 0;
+        @   BOOL bOk = ::WriteFile( (HANDLE)@<文件句柄>,(LPCVOID)@<数据指针>,@<数据大小>,&nBytesWrites,NULL);
+        @   return (INT)nBytesWrites;
+
+    }
+
+    方法 文件操作_读到内存 <公开 静态 类型 = 整数 返回值注释 = "返回实际夺取了多少个字节" @禁止流程检查 = 真>
+    参数 文件句柄 <类型 = 变整数>
+    参数 缓冲区指针 <类型 = 变整数 注释 = "这个参数使用前，必须申请一段空的内存，来存放读到的数据">
+    参数 缓冲区大小 <类型 = 整数 注释 = "分配的内存大小">
+    {
+        变量 是否成功 <类型 = 逻辑型>
+        @   DWORD dwNumberOfBytesRead = 0;
+        @   @<是否成功> = ::ReadFile((HANDLE)@<文件句柄>,(LPVOID)@<缓冲区指针>,(DWORD)@<缓冲区大小>,&dwNumberOfBytesRead,NULL);
+        @   return (INT)dwNumberOfBytesRead;
+
+    }
+
+    方法 文件操作_写字节集 <公开 静态 类型 = 整数 返回值注释 = "返回 实际写成功的 长度" 折叠>
+    参数 文件句柄 <类型 = 变整数>
+    参数 要写的数据 <类型 = 字节集类>
+    {
+        返回 (文件操作_写内存数据 (文件句柄, 要写的数据.取字节集指针 (), 要写的数据.取字节集长度 ()))
+
+    }
+
+    方法 文件操作_读字节集 <公开 静态 类型 = 字节集类 折叠>
+    参数 文件句柄 <类型 = 变整数>
+    参数 读取长度 <类型 = 整数 注释 = "-1表示读取整个文件" @默认值 = -1>
+    {
+
+        变量 空字节集 <类型 = 字节集类>
+        变量 临时读取长度 <类型 = 整数>
+        变量 ""
+        变量 实际读取长度 <类型 = 整数>
+        如果 (读取长度 == 0)
+        {
+            返回 (空字节集)
+        }
+        如果 (读取长度 == -1)
+        {
+            临时读取长度 = (整数)文件操作_取文件大小 (文件句柄)
+        }
+        否则
+        {
+            临时读取长度 = 读取长度
+        }
+
+        空字节集.分配字节集 (临时读取长度)
+        实际读取长度 = 文件操作_读到内存 (文件句柄, 空字节集.取字节集指针 (), 临时读取长度)
+
+        如果 (实际读取长度 < 0)
+        {
+            空字节集.清空字节集 ()
+        }
+        否则 (实际读取长度 < 临时读取长度)
+        {
+            空字节集.重分配字节集 (实际读取长度)
+        }
+
+        返回 (空字节集)
+
+
+
+    }
+
+    方法 文件操作_取文件大小 <公开 静态 类型 = 长整数 折叠 @禁止流程检查 = 真>
+    参数 文件句柄 <类型 = 变整数>
+    {
+        @   LARGE_INTEGER li;
+        @   li.LowPart = ::GetFileSize((HANDLE)@<文件句柄>,(LPDWORD)&li.HighPart);
+        @   return li.QuadPart;
+
+
+    }
+
+    方法 文件操作_置读写位置 <公开 静态 类型 = 长整数 返回值注释 = "返回移动的距离" 折叠 @禁止流程检查 = 真>
+    参数 文件句柄 <类型 = 变整数>
+    参数 移动距离 <类型 = 长整数>
+    参数 移动方式 <类型 = 文件指针常量 "">
+    {
+        @    LARGE_INTEGER li;
+        @    li.QuadPart = @<移动距离>;
+        @    li.LowPart = ::SetFilePointer ((HANDLE)@<文件句柄>, li.LowPart, &li.HighPart, (DWORD)@<移动方式>);
+        @    if (li.LowPart == INVALID_SET_FILE_POINTER && GetLastError() != NO_ERROR)
+        @    {
+        @       li.QuadPart = -1;
+        @    }
+        @    return li.QuadPart;
+
+
+
+    }
+
+    方法 文件操作_置读写位置为文件结尾 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 文件句柄 <类型 = 变整数>
+    {
+        @ ::SetEndOfFile((HANDLE)@<文件句柄>)
+    }
+
+    方法 文件操作_取读写位置 <公开 静态 类型 = 长整数 @禁止流程检查 = 真>
+    参数 文件句柄 <类型 = 变整数>
+    {
+        @    LARGE_INTEGER li;
+        @   li.HighPart = 0;
+        @   li.LowPart = SetFilePointer((HANDLE)@<文件句柄>, 0, &li.HighPart, FILE_CURRENT);
+        @  return li.QuadPart;
+    }
+
+    方法 文件操作_锁定文件 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 文件句柄 <类型 = 变整数>
+    参数 锁定位置 <类型 = 长整数>
+    参数 锁定字节数 <类型 = 长整数>
+    {
+        @    LARGE_INTEGER li,lockBytes;
+        @    li.QuadPart = @<锁定位置>;
+        @    lockBytes.QuadPart = @<锁定字节数>;
+        @   return ::LockFile((HANDLE)@<文件句柄>,li.LowPart, &li.HighPart,lockBytes.LowPart, &lockBytes.HighPart);
+
+
+    }
+
+    方法 文件操作_解锁文件 <公开 静态 @禁止流程检查 = 真>
+    参数 文件句柄 <类型 = 变整数>
+    参数 锁定位置 <类型 = 长整数>
+    参数 锁定字节数 <类型 = 长整数>
+    {
+        @    LARGE_INTEGER li,lockBytes;
+        @    li.QuadPart = @<锁定位置>;
+        @    lockBytes.QuadPart = @<锁定字节数>;
+        @   return ::UnlockFile((HANDLE)@<文件句柄>,li.LowPart, &li.HighPart,lockBytes.LowPart, &lockBytes.HighPart);
+
+    }
+}
+
+类 文件操作_全局类 <公开>
+{
+    方法 写到文件_从指针 <公开 静态 类型 = 逻辑型 折叠>
+    参数 文件名称 <类型 = 文本型>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+        变量 文件句柄 <类型 = 变整数>
+        文件句柄 = 文件操作_打开 (文件名称, 文件打开方式f.新建或覆盖, 文件共享方式f.共享读, 文件访问方式f.读写)
+        如果 (文件句柄 == -1)
+        {
+            调试输出 (取最后一次错误信息 ())
+            返回 (假)
+        }
+        文件操作_写内存数据 (文件句柄, 数据指针, 数据大小)
+        文件操作_关闭 (文件句柄)
+        返回 (真)
+
+    }
+
+    方法 读入文件_到指针 <公开 静态 类型 = 逻辑型 折叠 "">
+    参数 文件名称 <类型 = 文本型>
+    参数 内存指针 <类型 = 变整数>
+    参数 内存大小 <类型 = 整数>
+    {
+        变量 文件句柄 <类型 = 变整数>
+        文件句柄 = 文件操作_打开 (文件名称, 文件打开方式f.打开, 文件共享方式f.共享读, 文件访问方式f.读)
+        如果 (文件句柄 == -1)
+        {
+            返回 (假)
+        }
+
+        文件操作_读到内存 (文件句柄, 内存指针, 内存大小)
+        文件操作_关闭 (文件句柄)
+        返回 (真)
+
+    }
+
+    #
+}
+
+类 ______文件操作测试
+{
+    方法 开始测试
+    {
+        变量 a <类型 = 变整数>
+        变量 b <类型 = 变整数>
+
+        a = 文件操作_打开 (取运行目录 () + "a.txt", 文件打开方式f.打开或创建, 文件共享方式f.共享读写)
+        文件操作_写字节集 (a, 文本到多字节 ("aaa", 假))
+
+
+        b = 文件操作_打开 (取运行目录 () + "a.txt", 文件打开方式f.打开, 文件共享方式f.共享读写)
+        文件操作_置读写位置 (b, 0, 文件指针常量.文件尾)
+
+
+        调试输出 (取最后一次错误信息 ())
+
+
+        文件操作_写字节集 (b, 文本到多字节 ("bb", 假))
+        文件操作_关闭 (a)
+        文件操作_关闭 (b)
+
+    }
+
+    #
+}

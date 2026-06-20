@@ -1,0 +1,1128 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "此模块的源码已经丢失" @文档 = "category = \"开源库.hpsocket\"">
+
+类 ______HP套接字函数_模板 <折叠 @模板基础类 = 真 @视窗.外部头文件 = "HPSocketSimple\\HPSocketSimpleTool.h"
+        @视窗.外部库.win32 = "HPSocketSimple\\HPSocketSimpleToolx86.lib" @视窗.附属文件.win32 = "HPSocketSimple\\HPSocketSimpleToolx86.dll"
+        @视窗.外部库.x64 = "HPSocketSimple\\HPSocketSimpleToolx64.lib" @视窗.附属文件.x64 = "HPSocketSimple\\HPSocketSimpleToolx64.dll">
+{
+    方法 "//置套接字属性" <公开 静态 折叠 @嵌入式方法 = "">
+    参数 套接字句柄 <类型 = 变整数>
+    参数 等级 <类型 = 整数>
+    参数 名称 <类型 = 整数>
+    参数 值指针 <类型 = 变整数>
+    参数 值指针大小 <类型 = 整数>
+    {
+        @ HPSocket_SetSocketOption( (SOCKET)@<套接字句柄>, @<等级>, @<名称>, (LPVOID)@<值指针>, @<值指针大小>)
+    }
+
+    方法 "//置不粘包" <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 套接字句柄 <类型 = 变整数>
+    {
+        @  const char chOpt=1;
+        @  int nErr = HPSocket_SetSocketOption((SOCKET)@<套接字句柄>,   IPPROTO_TCP,   TCP_NODELAY,   (LPVOID)&chOpt,   sizeof(char));   
+        @ return nErr;
+    }
+
+    #
+}
+
+类 ______客户端函数_模板 <基础类 = ______HP套接字函数_模板 折叠 @模板基础类 = 真>
+{
+
+    # bool FUCTIONTYPE  HPClient_Start(void* pClient, const char* lpszIP, unsigned short uPort, bool bAsyncConnect);
+    # bool FUCTIONTYPE  HPClient_Stop(void* pClient);
+    # bool FUCTIONTYPE  HPClient_Send(void* pClient, const BYTE* pBuffer, int iLength);
+
+    方法 启动 <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 IP地址 <类型 = 文本型>
+    参数 端口 <类型 = 短整数>
+    参数 是否异步 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ HPClient_Start((void*)@<通讯句柄>,GetMbsText(@<IP地址>, CVolMem(), NULL),(unsigned short)@<端口>,@<是否异步>)
+    }
+
+    方法 停止 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    {
+        @ HPClient_Stop((void*)@<客户端句柄>)
+
+    }
+
+    方法 发送指针数据 <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据长度 <类型 = 整数>
+    {
+        @ HPClient_Send( (void*)@<客户端句柄>,(const BYTE* )@<数据指针>,@<数据长度>)
+    }
+
+    方法 发送 <公开 静态 类型 = 逻辑型 折叠>
+    参数 客户端句柄 <类型 = 变整数>
+    参数 要发送的数据 <类型 = 字节集类>
+    {
+        返回 (发送指针数据 (客户端句柄, 要发送的数据.取字节集指针 (), 要发送的数据.取字节集长度 ()))
+    }
+
+    方法 是否加密 <公开 静态 类型 = 逻辑型 注释 = "检测套接字是否经过 ssl 加密" 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ HPClient_IsSecure((void*)@<通讯句柄>)
+    }
+
+    方法 加密设置 <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    参数 验证模式 <类型 = 整数 注释 = "//SSL_VM_NONE = 0x00, // SSL_VERIFY_NONE" 注释 = "//SSL_VM_PEER = 0x01, // SSL_VERIFY_PEER"
+            注释 = "//SSL_VM_FAIL_IF_NO_PEER_CERT = 0x02, // SSL_VERIFY_FAIL_IF_NO_PEER_CERT"
+            注释 = "//SSL_VM_CLIENT_ONCE = 0x04, // SSL_VERIFY_CLIENT_ONCE" @默认值 = 0>
+    参数 证书 <类型 = 文本型 注释 = "当内存加载为真时  这个必须是证书字符串，否则填写证书全路径" @默认值 = "">
+    参数 密钥 <类型 = 文本型 注释 = "当内存加载为真时  这个必须是密钥字符串，否则填写密钥全路径" @默认值 = "">
+    参数 密码 <类型 = 文本型 @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "当内存加载为真时  这个必须是CA证书字符串，否则填写CA证书目录或者文件全路径" @默认值 = "">
+    参数 是否内存证书 <类型 = 逻辑型 @默认值 = 假>
+    {
+        @ HPClient_SetSSLContext((void*)@<客户端句柄>,@<是否内存证书>,@<验证模式>, GetMbsText(@<证书>, CVolMem(), NULL), GetMbsText(@<密钥>, CVolMem(), NULL), GetMbsText(@<密码>, CVolMem(), NULL),GetMbsText(@<CA证书>, CVolMem(), NULL) )
+    }
+
+    方法 置不验证证书 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    {
+        @ HPClient_SetSSLContext((void*)@<客户端句柄>,false,0, NULL,NULL,NULL,NULL)
+
+    }
+
+    方法 是否已启动 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ HPClient_HasStarted((void*)@<通讯句柄>)
+    }
+
+    方法 取状态 <公开 静态 类型 = 整数 注释 = "返回值意义" 注释 = "//SS_STARTING = 0, // 正在启动" 注释 = "//SS_STARTED = 1, // 已经启动"
+            注释 = "//SS_STOPPING = 2, // 正在停止" 注释 = "//SS_STOPPED = 3, // 已经停止" 折叠2 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ HPClient_GetState((void*)@<通讯句柄>)
+
+
+    }
+
+    方法 取最后一次错误文本 <公开 静态 类型 = 文本型 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ CVolString(HPClient_GetLastText((void*)@<通讯句柄>))
+
+
+    }
+
+    方法 取连接ID <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ HPClient_GetConnectionID((void*)@<通讯句柄>))
+    }
+
+    方法 置附加数据 <公开 静态 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 附加数据 <类型 = 变整数>
+    {
+        @ HPClient_SetExtra((void*)@<通讯句柄>,(void*)@<附加数据>)
+    }
+
+    方法 取附加数据 <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ (INT_P)HPClient_GetExtra( (void*)@<通讯句柄>)
+    }
+
+    #
+    #
+    #
+}
+
+类 ______服务器函数_模板 <基础类 = ______HP套接字函数_模板 折叠 @模板基础类 = 真>
+{
+
+    # void* FUCTIONTYPE HPServer_GetConnectionExtra(void* pServer, ULONG_PTR dwConnID);
+    # bool  FUCTIONTYPE HPServer_SetConnectionExtra(void* pServer, ULONG_PTR dwConnID, void* pExtra);
+    # bool  FUCTIONTYPE HPServer_Start(void* pServer, const char* lpBindAddr, USHORT uPort);
+    # bool  FUCTIONTYPE HPServer_Stop(void* pServer);
+    # bool  FUCTIONTYPE HPServer_Send(void* pServer, ULONG_PTR dwConnID, const BYTE* pBuffer, int iLength);
+    # bool  FUCTIONTYPE HPServer_GetRemoteAddress(void* pServer, ULONG_PTR dwConnID, char* lpszAddress, int* piAddressLen, USHORT* pusPort);
+    # bool  FUCTIONTYPE HPServer_Disconnect(void* pServer, ULONG_PTR dwConnID);
+    #
+
+    方法 取附加数据 <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    {
+        @ HPServer_GetConnectionExtra((void*)@<通讯句柄>,(ULONG_PTR)@<连接ID>)
+    }
+
+    方法 置附加数据 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 附加数据 <类型 = 变整数 注释 = "总共可以设置30个 从0 - 29">
+    {
+        @  HPServer_SetConnectionExtra((void*)@<通讯句柄>,(ULONG_PTR)@<连接ID>,(void*)@<附加数据>)
+    }
+
+    方法 是否加密 <公开 静态 类型 = 逻辑型 注释 = "检测套接字是否经过 ssl 加密" 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ HPServer_IsSecure((void*)@<通讯句柄>)
+    }
+
+    方法 加密设置 <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 验证模式 <类型 = 整数 注释 = "//SSL_VM_NONE = 0x00, // SSL_VERIFY_NONE" 注释 = "//SSL_VM_PEER = 0x01, // SSL_VERIFY_PEER"
+            注释 = "//SSL_VM_FAIL_IF_NO_PEER_CERT = 0x02, // SSL_VERIFY_FAIL_IF_NO_PEER_CERT"
+            注释 = "//SSL_VM_CLIENT_ONCE = 0x04, // SSL_VERIFY_CLIENT_ONCE" @默认值 = 0>
+    参数 证书 <类型 = 文本型 注释 = "当内存加载为真时  这个必须是证书字符串，否则填写证书全路径" @默认值 = "">
+    参数 密钥 <类型 = 文本型 注释 = "当内存加载为真时  这个必须是密钥字符串，否则填写密钥全路径" @默认值 = "">
+    参数 密钥密码 <类型 = 文本型 @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "当内存加载为真时  这个必须是CA证书字符串，否则填写CA证书目录或者文件全路径" @默认值 = "">
+    参数 是否内存证书 <类型 = 逻辑型 @默认值 = 假>
+    {
+        @ HPServer_SetSSLContext((void*)@<服务器句柄>,@<是否内存证书>,@<验证模式>, GetMbsText(@<证书>, CVolMem(), NULL), GetMbsText(@<密钥>, CVolMem(), NULL), GetMbsText(@<密钥密码>, CVolMem(), NULL),GetMbsText(@<CA证书>, CVolMem(), NULL) )
+    }
+
+    方法 启动 <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 地址 <类型 = 文本型>
+    参数 端口 <类型 = 短整数>
+    {
+        @ HPServer_Start( (void*)@<通讯句柄>, GetMbsText(@<地址>, CVolMem(), NULL), (USHORT)@<端口>)
+
+    }
+
+    方法 停止 <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ HPServer_Stop( (void*)@<通讯句柄>)
+    }
+
+    方法 发送指针 <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+        @ HPServer_Send( (void*)@<通讯句柄>, (ULONG_PTR)@<连接ID>, (const BYTE*) @<数据指针>, @<数据大小>)
+    }
+
+    方法 发送 <公开 静态 类型 = 逻辑型 折叠>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 要发送的数据 <类型 = 字节集类>
+    {
+        返回 (发送指针 (通讯句柄, 连接ID, 取字节集指针 (要发送的数据), 取字节集长度 (要发送的数据)))
+    }
+
+    方法 _HPServer_GetRemoteAddress <静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 缓冲区指针 <类型 = 变整数>
+    参数 缓冲区大小 <类型 = 整数>
+    参数 端口 <类型 = 整数>
+    {
+        @ HPServer_GetRemoteAddress ( (void*)@<通讯句柄>, (ULONG_PTR)@<连接ID>,( char*)@<缓冲区指针>,&@<缓冲区大小>,(USHORT*)&@<端口>)
+    }
+
+    方法 取客户地址 <公开 静态 类型 = 文本型 折叠>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    {
+        变量 缓冲区 <类型 = 字节集类>
+        变量 缓冲区大小 <类型 = 整数>
+        变量 端口 <类型 = 整数>
+        缓冲区 = 取空白字节集 (50)
+        缓冲区大小 = 50
+        端口 = 0
+        如果 (_HPServer_GetRemoteAddress (通讯句柄, 连接ID, 取字节集指针 (缓冲区), 缓冲区大小, 端口))
+        {
+            变量 返回内容 <类型 = 文本型>
+            返回内容 = 多字节到文本 (缓冲区)
+            返回内容 = 返回内容 + ":" + 到文本 (端口)
+            返回 (返回内容)
+        }
+        返回 ("")
+
+    }
+
+    方法 断开连接 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    {
+        @ HPServer_Disconnect( (void*)@<通讯句柄>, (ULONG_PTR)@<连接ID>)
+
+
+    }
+}
+
+类 ______TCP客户端函数_模板 <基础类 = ______客户端函数_模板 折叠 @模板基础类 = 真>
+{
+    方法 置通讯缓冲区大小 <公开 静态 注释 = "/* 设置通信数据缓冲区大小（根据平均通信数据包大小调整设置，通常设置为：(N * 1024) - sizeof(TBufferObj)） */" 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 缓冲区大小 <类型 = 整数>
+    {
+        @ HPTcpClient_SetSocketBufferSize( (void* )@<通讯句柄>,@<缓冲区大小>)
+    }
+
+    方法 取通讯缓冲区大小 <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ HPTcpClient_GetSocketBufferSize( (void* )@<通讯句柄>)
+    }
+
+    方法 置心跳时间 <公开 静态 注释 = "/* 设置正常心跳包间隔（毫秒，0 则不发送心跳包，默认：60 * 1000） */" 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 时间 <类型 = 整数>
+    {
+        @ HPTcpClient_SetKeepAliveTime( (void* )@<通讯句柄>,@<时间>)
+    }
+
+    方法 取心跳时间 <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ HPTcpClient_GetKeepAliveTime( (void* )@<通讯句柄>)
+    }
+
+    方法 置异常心跳间隔 <公开 静态 注释 = "/* 设置异常心跳包间隔（毫秒，0 不发送心跳包，，默认：20 * 1000，如果超过若干次 [默认：WinXP 5 次, Win7 10 次] 检测不到心跳确认包则认为已断线） */" 折叠
+            @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 时间 <类型 = 整数>
+    {
+        @ HPTcpClient_SetKeepAliveInterval( (void* )@<通讯句柄>,@<时间>)
+    }
+
+    方法 取异常心跳间隔 <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ HPTcpClient_GetKeepAliveInterval( (void* )@<通讯句柄>)
+
+    }
+
+    #
+    #
+    #
+    #
+}
+
+类 ______TCP服务器函数_模板 <基础类 = ______服务器函数_模板 折叠 @模板基础类 = 真>
+{
+    方法 _HPTcpServer_Setter <静态 类型 = 整数 折叠 @输出名 = "HPTcpServer_Setter" @禁止流程检查 = 真>
+    参数 服务器句柄 <类型 = 变整数>
+    参数 类型 <类型 = 整数>
+    参数 值 <类型 = 整数>
+    {
+        @ return HPTcpServer_Setter((void*)@<服务器句柄>,@<类型>,(void*)&@<值>,4);
+    }
+
+    方法 置等候队列大小 <公开 静态 注释 = "/* 设置监听 Socket 的等候队列大小（根据并发连接数量调整设置） */" 注释 = "//#define TCPSERVER_SG_TYPE_SocketListenQueue  1" 折叠>
+    参数 服务器句柄 <类型 = 变整数>
+    参数 队列大小 <类型 = 整数>
+    {
+        _HPTcpServer_Setter (服务器句柄, 1, 队列大小)
+    }
+
+    方法 置预投递数量 <公开 静态 注释 = "/* 设置 Accept 预投递数量（根据负载调整设置，Accept 预投递数量越大则支持的并发连接请求越多） */"
+            注释 = "#define TCPSERVER_SG_TYPE_AcceptSocketCount  2" 折叠>
+    参数 服务器句柄 <类型 = 变整数>
+    参数 数量 <类型 = 整数>
+    {
+        _HPTcpServer_Setter (服务器句柄, 2, 数量)
+    }
+
+    方法 置通讯缓冲区大小 <公开 静态 注释 = "/* 设置通信数据缓冲区大小（根据平均通信数据包大小调整设置，通常设置为 1024 的倍数） */"
+            注释 = "#define TCPSERVER_SG_TYPE_SocketBufferSize   3" 折叠>
+    参数 服务器句柄 <类型 = 变整数>
+    参数 大小 <类型 = 整数>
+    {
+        _HPTcpServer_Setter (服务器句柄, 3, 大小)
+    }
+
+    方法 置心跳间隔 <公开 静态 注释 = "/* 设置正常心跳包间隔（毫秒，0 则不发送心跳包，默认：60 * 1000） */" 注释 = "#define TCPSERVER_SG_TYPE_KeepAliveTime   4" 折叠 折叠2>
+    参数 服务器句柄 <类型 = 变整数>
+    参数 大小 <类型 = 整数>
+    {
+        _HPTcpServer_Setter (服务器句柄, 4, 大小)
+    }
+
+    方法 置异常心跳间隔 <公开 静态 注释 = "/* 设置异常心跳包间隔（毫秒，0 不发送心跳包，，默认：20 * 1000，如果超过若干次"
+            注释 = "[默认：WinXP 5 次, Win7 10 次] 检测不到心跳确认包则认为已断线） */" 注释 = "#define TCPSERVER_SG_TYPE_KeepAliveInterval  5" 折叠>
+    参数 服务器句柄 <类型 = 变整数>
+    参数 大小 <类型 = 整数>
+    {
+        _HPTcpServer_Setter (服务器句柄, 5, 大小)
+    }
+
+    # //=====
+
+    方法 _HPTcpServer_Getter <静态 类型 = 整数 @输出名 = "HPTcpServer_Getter" @禁止流程检查 = 真>
+    参数 服务器句柄 <类型 = 变整数>
+    参数 类型 <类型 = 整数>
+    参数 值 <类型 = 整数>
+    {
+        @ return HPTcpServer_Getter((void*)@<服务器句柄>,@<类型>,(void*)&@<值>,4);
+    }
+
+    方法 取等候队列大小 <公开 静态 类型 = 整数 注释 = "/* 设置监听 Socket 的等候队列大小（根据并发连接数量调整设置） */"
+            注释 = "//#define TCPSERVER_SG_TYPE_SocketListenQueue  1" 折叠>
+    参数 服务器句柄 <类型 = 变整数>
+    {
+        变量 返回值 <类型 = 整数 值 = 0>
+        _HPTcpServer_Getter (服务器句柄, 1, 返回值)
+        返回 (返回值)
+    }
+
+    方法 取预投递数量 <公开 静态 类型 = 整数 注释 = "/* 设置 Accept 预投递数量（根据负载调整设置，Accept 预投递数量越大则支持的并发连接请求越多） */"
+            注释 = "#define TCPSERVER_SG_TYPE_AcceptSocketCount  2">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 数量 <类型 = 整数>
+    {
+        变量 返回值 <类型 = 整数 值 = 0>
+        _HPTcpServer_Getter (服务器句柄, 2, 返回值)
+        返回 (返回值)
+    }
+
+    方法 取通讯缓冲区大小 <公开 静态 类型 = 整数 注释 = "/* 设置通信数据缓冲区大小（根据平均通信数据包大小调整设置，通常设置为 1024 的倍数） */"
+            注释 = "#define TCPSERVER_SG_TYPE_SocketBufferSize   3">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 大小 <类型 = 整数>
+    {
+        变量 返回值 <类型 = 整数 值 = 0>
+        _HPTcpServer_Getter (服务器句柄, 3, 返回值)
+        返回 (返回值)
+    }
+
+    方法 取心跳间隔 <公开 静态 类型 = 整数 注释 = "/* 设置正常心跳包间隔（毫秒，0 则不发送心跳包，默认：60 * 1000） */"
+            注释 = "#define TCPSERVER_SG_TYPE_KeepAliveTime   4">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 大小 <类型 = 整数>
+    {
+        变量 返回值 <类型 = 整数 值 = 0>
+        _HPTcpServer_Getter (服务器句柄, 4, 返回值)
+        返回 (返回值)
+    }
+
+    方法 取异常心跳间隔 <公开 静态 类型 = 整数 注释 = "/* 设置异常心跳包间隔（毫秒，0 不发送心跳包，，默认：20 * 1000，如果超过若干次"
+            注释 = "[默认：WinXP 5 次, Win7 10 次] 检测不到心跳确认包则认为已断线） */" 注释 = "#define TCPSERVER_SG_TYPE_KeepAliveInterval  5">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 大小 <类型 = 整数>
+    {
+        变量 返回值 <类型 = 整数 值 = 0>
+        _HPTcpServer_Getter (服务器句柄, 5, 返回值)
+        返回 (返回值)
+    }
+
+    #
+}
+
+类 ______客户端事件_模板类 <折叠 @视窗.后缀文本 = "public IHPClientEvent" @模板基础类 = 真>
+{
+
+    # @begin
+    #
+    # <> <include>
+    # virtual int OnPrepareConnect(void* pSender, ULONG_PTR dwConnID, UINT_PTR socket)
+    # {
+    #     return @<准备连接>( (@dt<变整数>)pSender,(@dt<变整数>) dwConnID,(@dt<变整数>)socket);
+    # }
+    # virtual int  OnConnect(void* pSender, ULONG_PTR dwConnID)
+    # {
+    #     return @<连接成功>( (@dt<变整数>)pSender,(@dt<变整数>) dwConnID);
+    # }
+    # virtual int  OnHandShake(void* pSender, ULONG_PTR dwConnID)
+    # {
+    #     return @<握手成功>((@dt<变整数>)pSender,(int) dwConnID);
+    # }
+    # virtual int OnSend(void* pSender, ULONG_PTR dwConnID, const BYTE* pData, int iLength) 
+    # {
+    #     return @<发送数据>((@dt<变整数>)pSender,(@dt<变整数>) dwConnID,(@dt<变整数>)pData,iLength);
+    # }
+    # //virtual int OnReceive(void* pSender, ULONG_PTR dwConnID, const BYTE* pData, int iLength) = 0;
+    # //virtual int  OnPullReceive(void* pSender, ULONG_PTR dwConnID, int iLength) = 0;
+    # virtual int  OnClose(void* pSender, ULONG_PTR dwConnID, int enOperation, int iErrorCode)
+    # {
+    #     return @<连接关闭>( (@dt<变整数>)pSender,(@dt<变整数>)dwConnID,(int)enOperation,iErrorCode);
+    # }
+    #
+    # <> </include>
+    # @end
+
+    方法 准备连接 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 套接字句柄 <类型 = 变整数>
+    {
+
+    }
+
+    #
+
+    方法 连接成功 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    {
+
+    }
+
+    方法 握手成功 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    {
+
+    }
+
+    方法 发送数据 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+
+    }
+
+    方法 连接关闭 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 操作码 <类型 = 整数>
+    参数 错误代码 <类型 = 整数>
+    {
+
+    }
+}
+
+类 ______服务器事件_模板类 <折叠 @视窗.后缀文本 = "public IHPServerEvent" @模板基础类 = 真>
+{
+
+    # @begin
+    # <> <include>
+    #
+    #  virtual int  OnPrepareListen(void* pSender, SOCKET soListen)
+    # {
+    #      return @<开始监听>( (@dt<变整数>)pSender,(@dt<变整数>)soListen);
+    # }
+    #  virtual int  OnAccept(void* pSender, ULONG_PTR dwConnID, SOCKET soClient)
+    # {
+    #       return @<客户到达>(   (@dt<变整数>)pSender,(@dt<变整数>)dwConnID ,(@dt<变整数>)soClient  );
+    # }
+    #  virtual int  OnHandShake(void* pSender, ULONG_PTR dwConnID)
+    # {
+    #     return @<握手成功>(   (@dt<变整数>)pSender,(@dt<变整数>)dwConnID);
+    # }
+    #  virtual int  OnSend(void* pSender, ULONG_PTR dwConnID, const BYTE* pData,int iLength)
+    # {
+    #      return @<发送数据>(   (@dt<变整数>)pSender,(@dt<变整数>)dwConnID ,(@dt<变整数>)pData ,iLength );
+    # }
+    #  virtual int  OnClose(void* pSender, ULONG_PTR dwConnID, int enOperation, int iErrorCode)
+    # {
+    #      return @<客户断开>( (@dt<变整数>)pSender,(@dt<变整数>)dwConnID ,enOperation,iErrorCode );
+    # }
+    #  virtual int  OnShutdown(void* pSender)
+    # {
+    #      return @<服务器关闭>((@dt<变整数>)pSender);
+    # }
+    #
+    # <> </include>
+    # @end
+    #
+
+    方法 开始监听 <公开 定义事件 类型 = 整数 返回值注释 = "返回值含义 0 成功 1 忽略 2 错误 一般返回0即可">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 监听套接字 <类型 = 变整数>
+
+    方法 握手成功 <公开 定义事件 类型 = 整数 返回值注释 = "返回值含义 0 成功 1 忽略 2 错误 一般返回0即可">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    {
+
+    }
+
+    方法 客户到达 <公开 定义事件 类型 = 整数 返回值注释 = "返回值含义 0 成功 1 忽略 2 错误 一般返回0即可">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 客户套接字 <类型 = 变整数>
+
+    方法 发送数据 <公开 定义事件 类型 = 整数 注释 = "当调用 客户端 发送 的时候，这里会给一个机会，看您最终组包的数据" 返回值注释 = "返回值含义 0 成功 1 忽略 2 错误 一般返回0即可">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+
+    }
+
+    方法 客户断开 <公开 定义事件 类型 = 整数 返回值注释 = "返回值含义 0 成功 1 忽略 2 错误 一般返回0即可">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 操作码 <类型 = 整数>
+    参数 错误代码 <类型 = 整数>
+    {
+
+    }
+
+    方法 服务器关闭 <公开 定义事件 类型 = 整数 返回值注释 = "返回值含义 0 成功 1 忽略 2 错误 一般返回0即可">
+    参数 服务器句柄 <类型 = 变整数>
+    {
+
+    }
+
+    #
+}
+
+# //---
+#
+
+类 ______HPPushClientListener <注释 = "不对外公开，内部直接封装，这样更加易用" 折叠>
+{
+    变量 监听器句柄 <公开 类型 = 变整数>
+
+    方法 类_初始化 <折叠>
+    {
+        @ @<监听器句柄> = (INT_P)HPTcpClient_CreateListener ();
+    }
+
+    方法 类_销毁 <折叠>
+    {
+        @ HPTcpClient_DestoryListener ((void*)@<监听器句柄>);
+    }
+
+    #
+    #
+}
+
+类 HPPush客户端_事件类 <公开 基础类 = ______客户端事件_模板类 折叠 @模板实现类 = "">
+{
+
+    # @begin
+    # <> <include>
+    # virtual int  OnReceive(void* pSender, ULONG_PTR dwConnID, const BYTE* pData, int iLength) {    return @<收到数据>( (@dt<变整数>)pSender,(@dt<变整数>) dwConnID,(INT_P)pData ,iLength); }
+    # virtual int  OnPullReceive(void* pSender, ULONG_PTR dwConnID, int iLength){ return 0;}
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化 <折叠>
+    {
+        @ HPTcpClient_BindEventClass(this);
+    }
+
+    方法 收到数据 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+
+    }
+}
+
+类 HPPush客户端_全局类 <公开 基础类 = ______TCP客户端函数_模板 折叠 @模板实现类 = "">
+{
+    变量 监听器 <静态 类型 = ______HPPushClientListener>
+
+    方法 _HPTcpClient_Create <静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 监听器句柄 <类型 = 变整数>
+    参数 是否SSL <类型 = 逻辑型>
+    {
+        @ (INT_P)HPTcpClient_Create( (void*)@<监听器句柄>, @<是否SSL>)
+    }
+
+    方法 创建 <公开 静态 类型 = 变整数 返回值注释 = "返回通讯句柄">
+    参数 是否SSL <类型 = 逻辑型 @默认值 = 假>
+    {
+        返回 (_HPTcpClient_Create (监听器.监听器句柄, 是否SSL))
+    }
+
+    方法 销毁 <公开 静态 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ HPTcpClient_Destory((void* )@<通讯句柄>)
+    }
+}
+
+# //---
+#
+
+类 ______HPPackClientListener <注释 = "不对外公开，内部直接封装，这样更加易用" 折叠>
+{
+    变量 监听器句柄 <公开 类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ @<监听器句柄> = (INT_P)HPTcpPackClient_CreateListener ();
+    }
+
+    方法 类_销毁
+    {
+        @ HPTcpPackClient_DestoryListener ((void*)@<监听器句柄>);
+    }
+
+    #
+    #
+}
+
+类 HPPack客户端_事件类 <公开 基础类 = ______客户端事件_模板类 折叠 @模板实现类 = "">
+{
+
+    # @begin
+    # <> <include>
+    # virtual int  OnReceive(void* pSender, ULONG_PTR dwConnID, const BYTE* pData, int iLength) {    return @<收到数据>( (@dt<变整数>)pSender,(@dt<变整数>) dwConnID,(INT_P)pData ,iLength); }
+    # virtual int  OnPullReceive(void* pSender, ULONG_PTR dwConnID, int iLength){ return 0;}
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化
+    {
+        @ HPTcpPackClient_BindEventClass(this);
+    }
+
+    方法 收到数据 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+
+    }
+}
+
+类 HPPack客户端_全局类 <公开 基础类 = ______TCP客户端函数_模板 折叠 @模板实现类 = "">
+{
+    变量 监听器 <静态 类型 = ______HPPackClientListener>
+
+    方法 _HPTcpPackClient_Create <静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 监听器句柄 <类型 = 变整数>
+    参数 是否SSL <类型 = 逻辑型>
+    {
+        @ (INT_P)HPTcpPackClient_Create( (void*)@<监听器句柄>, @<是否SSL>)
+    }
+
+    方法 创建 <公开 静态 类型 = 变整数 返回值注释 = "返回通讯句柄">
+    参数 是否SSL <类型 = 逻辑型 @默认值 = 假>
+    {
+        返回 (_HPTcpPackClient_Create (监听器.监听器句柄, 是否SSL))
+    }
+
+    方法 销毁 <公开 静态 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ HPTcpPackClient_Destory((void* )@<通讯句柄>)
+    }
+}
+
+# //---
+
+类 ______HPPullClientListener <注释 = "不对外公开，内部直接封装，这样更加易用" 折叠>
+{
+    变量 监听器句柄 <公开 类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ @<监听器句柄> = (INT_P)HPTcpPullClient_CreateListener ();
+    }
+
+    方法 类_销毁
+    {
+        @ HPTcpPullClient_DestoryListener ((void*)@<监听器句柄>);
+    }
+
+    #
+    #
+}
+
+类 HPPull客户端_事件类 <公开 基础类 = ______客户端事件_模板类 折叠 @模板实现类 = "">
+{
+
+    # @begin
+    # <> <include>
+    # virtual int OnReceive(void* pSender, ULONG_PTR dwConnID, const BYTE* pData, int iLength) { return 0;}
+    # virtual int  OnPullReceive(void* pSender, ULONG_PTR dwConnID, int iLength)
+    # {
+    #     @<收到数据>( (@dt<变整数>)pSender,(@dt<变整数>) dwConnID ,iLength);
+    #     return 0;
+    # }
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化 <折叠>
+    {
+        @ HPTcpPullClient_BindEventClass(this);
+    }
+
+    方法 收到数据 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 收到的数据长度 <类型 = 整数>
+    {
+
+    }
+}
+
+类 HPPull客户端_全局类 <公开 基础类 = ______TCP客户端函数_模板 折叠 @模板实现类 = "">
+{
+    变量 监听器 <静态 类型 = ______HPPullClientListener>
+
+    方法 _HPTcpPullClient_Create <静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 监听器句柄 <类型 = 变整数>
+    参数 是否SSL <类型 = 逻辑型>
+    {
+        @ (INT_P)HPTcpPullClient_Create( (void*)@<监听器句柄>, @<是否SSL>)
+    }
+
+    方法 创建 <公开 静态 类型 = 变整数 返回值注释 = "返回通讯句柄">
+    参数 是否SSL <类型 = 逻辑型 @默认值 = 假>
+    {
+        返回 (_HPTcpPullClient_Create (监听器.监听器句柄, 是否SSL))
+    }
+
+    方法 销毁 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ HPTcpPullClient_Destory((void* )@<通讯句柄>)
+    }
+
+    方法 _HPTcpPullClient_Fetch <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    参数 缓冲区指针 <类型 = 变整数>
+    参数 缓冲区长度 <类型 = 整数>
+    {
+        @ HPTcpPullClient_Fetch((void*)@<客户端句柄>,(BYTE*)@<缓冲区指针>,@<缓冲区长度>)
+    }
+
+    方法 _HPTcpPullClient_Peek <静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    参数 缓冲区指针 <类型 = 变整数>
+    参数 缓冲区长度 <类型 = 整数>
+    {
+        @ HPTcpPullClient_Peek((void*)@<客户端句柄>,(BYTE*)@<缓冲区指针>,@<缓冲区长度>)
+    }
+
+    方法 抓取数据 <公开 静态 类型 = 整数 返回值注释 = "0 成功" 返回值注释 = "1 抓取数据过大" 返回值注释 = "2 客户端句柄 不正确">
+    参数 客户端句柄 <类型 = 变整数>
+    参数 要抓取的长度 <类型 = 整数>
+    参数 用来保存抓取到的数据 <类型 = 字节集类>
+    {
+        变量 状态 <类型 = 整数>
+        用来保存抓取到的数据 = 取空白字节集 (要抓取的长度)
+        状态 = _HPTcpPullClient_Fetch (客户端句柄, 用来保存抓取到的数据.取字节集指针 (), 用来保存抓取到的数据.取字节集长度 ())
+        如果 (状态 != 0)
+        {
+            用来保存抓取到的数据.清空字节集 ()
+        }
+        返回 (状态)
+
+
+    }
+
+    方法 查看数据 <公开 静态 类型 = 整数 返回值注释 = "0 成功" 返回值注释 = "1 抓取数据过大" 返回值注释 = "2 客户端句柄 不正确" 折叠>
+    参数 客户端句柄 <类型 = 变整数>
+    参数 要抓取的长度 <类型 = 整数>
+    参数 用来保存抓取到的数据 <类型 = 字节集类>
+    {
+        变量 状态 <类型 = 整数>
+        用来保存抓取到的数据 = 取空白字节集 (要抓取的长度)
+        状态 = _HPTcpPullClient_Peek (客户端句柄, 用来保存抓取到的数据.取字节集指针 (), 用来保存抓取到的数据.取字节集长度 ())
+        如果 (状态 != 0)
+        {
+            用来保存抓取到的数据.清空字节集 ()
+        }
+        返回 (状态)
+
+
+    }
+}
+
+# //---
+# 下面是服务器相关的了
+# //---
+
+类 ______HPPushServerListener <注释 = "不对外公开，内部直接封装，这样更加易用" 折叠>
+{
+    变量 监听器句柄 <公开 类型 = 变整数>
+
+    方法 类_初始化 <折叠>
+    {
+        @ @<监听器句柄> = (@dt<变整数>) HPTcpServer_CreateListener();
+    }
+
+    方法 类_清理 <折叠>
+    {
+        @ HPTcpServer_DestoryListener((void*)@<监听器句柄>);
+    }
+}
+
+类 HPPush服务器_事件类 <公开 基础类 = ______服务器事件_模板类 折叠 @模板实现类 = "">
+{
+
+    # @begin
+    # <> <include>
+    # virtual int  OnReceive(void* pSender, ULONG_PTR dwConnID, const BYTE* pData, int iLength)
+    # {
+    #     return @<收到数据>(   (@dt<变整数>)pSender,(@dt<变整数>)dwConnID ,(INT_P)pData,iLength );
+    # }
+    #  virtual int  OnPullReceive(void* pSender, ULONG_PTR dwConnID, int iLength)
+    # {
+    #     return 0;
+    # }
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化
+    {
+        @ HPTcpServer_BindEventClass(this);
+    }
+
+    方法 收到数据 <公开 定义事件 类型 = 整数 返回值注释 = "返回值含义 0 成功 1 忽略 2 错误 一般返回0即可">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+
+    }
+}
+
+类 HPPush服务器_全局类 <公开 基础类 = ______TCP服务器函数_模板 @模板实现类 = "">
+{
+    变量 监听器 <静态 类型 = ______HPPushServerListener>
+
+    方法 _HPTcpServer_Create <静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 监听器句柄 <类型 = 变整数>
+    参数 是否SSL <类型 = 逻辑型>
+    {
+        @ (@dt<变整数>) HPTcpServer_Create( (void*)@<监听器句柄> ,@<是否SSL>)
+    }
+
+    方法 创建 <公开 静态 类型 = 变整数 返回值注释 = "返回 通讯句柄" 折叠>
+    参数 是否SSL <类型 = 逻辑型 @默认值 = 假>
+    {
+        返回 (_HPTcpServer_Create (监听器.监听器句柄, 是否SSL))
+    }
+
+    方法 销毁 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 服务器句柄 <类型 = 变整数>
+    {
+        @ HPTcpServer_Destory((void*)@<服务器句柄>)
+    }
+}
+
+# //---
+#
+#
+#
+
+类 ______HPPackServerListener <注释 = "不对外公开，内部直接封装，这样更加易用" 折叠>
+{
+    变量 监听器句柄 <公开 类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ @<监听器句柄> = (@dt<变整数>) HPTcpPackServer_CreateListener();
+    }
+
+    方法 类_清理
+    {
+        @ HPTcpPackServer_DestoryListener((void*)@<监听器句柄>);
+    }
+}
+
+类 HPPack服务器_事件类 <公开 基础类 = ______服务器事件_模板类 折叠 @模板实现类 = "">
+{
+
+    # @begin
+    # <> <include>
+    # virtual int  OnReceive(void* pSender, ULONG_PTR dwConnID, const BYTE* pData, int iLength)
+    # {
+    #     return @<收到数据>(   (@dt<变整数>)pSender,(@dt<变整数>)dwConnID ,(INT_P)pData,iLength );
+    # }
+    #  virtual int  OnPullReceive(void* pSender, ULONG_PTR dwConnID, int iLength)
+    # {
+    #     return 0;
+    # }
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化
+    {
+        @ HPTcpPackServer_BindEventClass(this);
+    }
+
+    方法 收到数据 <公开 定义事件 类型 = 整数 返回值注释 = "返回值含义 0 成功 1 忽略 2 错误 一般返回0即可">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+
+    }
+}
+
+类 HPPack服务器_全局类 <公开 基础类 = ______TCP服务器函数_模板 折叠 @模板实现类 = "">
+{
+    变量 监听器 <静态 类型 = ______HPPackServerListener>
+
+    方法 _HPTcpPackServer_Create <静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 监听器句柄 <类型 = 变整数>
+    参数 是否SSL <类型 = 逻辑型>
+    {
+        @ (@dt<变整数>) HPTcpPackServer_Create( (void*)@<监听器句柄> ,@<是否SSL>)
+    }
+
+    方法 创建 <公开 静态 类型 = 变整数 返回值注释 = "返回 通讯句柄" 折叠>
+    参数 是否SSL <类型 = 逻辑型 @默认值 = 假>
+    {
+        返回 (_HPTcpPackServer_Create (监听器.监听器句柄, 是否SSL))
+    }
+
+    方法 销毁 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 服务器句柄 <类型 = 变整数>
+    {
+        @ HPTcpPackServer_Destory((void*)@<服务器句柄>)
+    }
+}
+
+#
+#
+#
+# //---
+
+类 ______HPPullServerListener <注释 = "不对外公开，内部直接封装，这样更加易用" 折叠>
+{
+    变量 监听器句柄 <公开 类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ @<监听器句柄> = (@dt<变整数>) HPTcpPullServer_CreateListener();
+    }
+
+    方法 类_清理
+    {
+        @ HPTcpPullServer_DestoryListener((void*)@<监听器句柄>);
+    }
+
+    #
+}
+
+类 HPPull服务器_事件类 <公开 基础类 = ______服务器事件_模板类 折叠 @模板实现类 = "">
+{
+
+    # @begin
+    # <> <include>
+    # virtual int  OnReceive(void* pSender, ULONG_PTR dwConnID, const BYTE* pData, int iLength)
+    # {
+    #     return 0;
+    # }
+    #  virtual int  OnPullReceive(void* pSender, ULONG_PTR dwConnID, int iLength)
+    # {
+    #      return @<收到数据>(   (@dt<变整数>)pSender,(@dt<变整数>)dwConnID ,iLength  );
+    # }
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化
+    {
+        @ HPTcpPullServer_BindEventClass(this);
+    }
+
+    方法 收到数据 <公开 定义事件 类型 = 整数 返回值注释 = "返回值含义 0 成功 1 忽略 2 错误 一般返回0即可">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+
+    }
+}
+
+类 HPPull服务器_全局类 <公开 基础类 = ______TCP服务器函数_模板 折叠 @模板实现类 = "">
+{
+    变量 监听器 <静态 类型 = ______HPPullServerListener>
+
+    方法 _HPTcpPullServer_Create <静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 监听器句柄 <类型 = 变整数>
+    参数 是否SSL <类型 = 逻辑型>
+    {
+        @ (@dt<变整数>) HPTcpPullServer_Create( (void*)@<监听器句柄> ,@<是否SSL>)
+    }
+
+    方法 创建 <公开 静态 类型 = 变整数 返回值注释 = "返回 通讯句柄">
+    参数 是否SSL <类型 = 逻辑型 @默认值 = 假>
+    {
+        返回 (_HPTcpPullServer_Create (监听器.监听器句柄, 是否SSL))
+    }
+
+    方法 销毁 <公开 静态 @嵌入式方法 = "">
+    参数 服务器句柄 <类型 = 变整数>
+    {
+        @ HPTcpPullServer_Destory((void*)@<服务器句柄>)
+    }
+
+    方法 "//置不验证证书" <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 服务器句柄 <类型 = 变整数>
+    {
+        @ HPTcpPullServer_SetSSLContext((void*)@<服务器句柄>,false,0, NULL,NULL,NULL,NULL)
+    }
+
+    方法 _HPTcpPullServer_Fetch <静态 类型 = 整数 @嵌入式方法 = "">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 缓冲区指针 <类型 = 变整数>
+    参数 缓冲区大小 <类型 = 整数>
+    {
+        @ HPTcpPullServer_Fetch( (void*)@<服务器句柄>,(ULONG_PTR) @<连接ID>,(BYTE* ) @<缓冲区指针>,@<缓冲区大小>)
+    }
+
+    方法 _HPTcpPullServer_Peek <静态 类型 = 整数 @嵌入式方法 = "">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 缓冲区指针 <类型 = 变整数>
+    参数 缓冲区大小 <类型 = 整数>
+    {
+        @ HPTcpPullServer_Peek( (void*)@<服务器句柄>,(ULONG_PTR) @<连接ID>,(BYTE* ) @<缓冲区指针>,@<缓冲区大小>)
+
+    }
+
+    方法 抓取数据 <公开 静态 类型 = 整数 返回值注释 = "0表示成功" 折叠 "">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 抓取数据大小 <类型 = 整数>
+    参数 用来保存抓取的数据 <类型 = 字节集类>
+    {
+        变量 返回值 <类型 = 整数>
+        用来保存抓取的数据.分配字节集 (抓取数据大小)
+        用来保存抓取的数据.重分配字节集 (抓取数据大小)
+        返回值 = _HPTcpPullServer_Fetch (服务器句柄, 连接ID, 用来保存抓取的数据.取字节集指针 (), 抓取数据大小)
+        如果 (返回值 != 0)
+        {
+            用来保存抓取的数据.清空字节集 ()
+        }
+        返回 (返回值)
+
+    }
+
+    方法 查看数据 <公开 静态 类型 = 整数 返回值注释 = "0表示成功" 折叠 "">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 抓取数据大小 <类型 = 整数>
+    参数 用来保存抓取的数据 <类型 = 字节集类>
+    {
+        变量 返回值 <类型 = 整数>
+        用来保存抓取的数据.分配字节集 (抓取数据大小)
+        用来保存抓取的数据.重分配字节集 (抓取数据大小)
+        返回值 = _HPTcpPullServer_Peek (服务器句柄, 连接ID, 用来保存抓取的数据.取字节集指针 (), 抓取数据大小)
+        如果 (返回值 != 0)
+        {
+            用来保存抓取的数据.清空字节集 ()
+        }
+        返回 (返回值)
+
+    }
+}
+
+# //---

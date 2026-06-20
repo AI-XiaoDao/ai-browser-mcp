@@ -1,0 +1,3753 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.PowrPoint2021支持库 <@视窗.外部头文件 = "lib\\PowerPointconstant.h">
+
+类 PPT窗口状态 <公开 注释 = "指定传递给和\"新建窗口\"对象的窗口状态的常量" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 常规 <公开 值 = @ppWindowNormal 注释 = "常规">
+    常量 最小化 <公开 值 = @ppWindowMinimized 注释 = "最小化">
+    常量 最大化 <公开 值 = @ppWindowMaximized 注释 = "最大化">
+}
+
+类 PPT幻灯片版式 <公开 注释 = "指定幻灯片版式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @ppLayoutMixed 注释 = "混合">
+    常量 标题 <公开 值 = @ppLayoutTitle 注释 = "上下标题">
+    常量 文本 <公开 值 = @ppLayoutText 注释 = "文本">
+    常量 两列文本 <公开 值 = @ppLayoutTwoColumnText 注释 = "两列文本">
+    常量 表格 <公开 值 = @ppLayoutTable 注释 = "表格">
+    常量 文本与图表 <公开 值 = @ppLayoutTextAndChart 注释 = "文本和图表">
+    常量 图表与文本 <公开 值 = @ppLayoutChartAndText 注释 = "图表和文本">
+    常量 结构图 <公开 值 = @ppLayoutOrgchart 注释 = "组织结构图">
+    常量 图表 <公开 值 = @ppLayoutChart 注释 = "图表">
+    常量 文本和剪贴画 <公开 值 = @ppLayoutTextAndClipArt 注释 = "文本和剪贴画">
+    常量 剪贴画与文本 <公开 值 = @ppLayoutClipArtAndText 注释 = "剪贴画和文本">
+    常量 只有标题 <公开 值 = @ppLayoutTitleOnly 注释 = "只有标题">
+    常量 空白 <公开 值 = @ppLayoutBlank 注释 = "空白">
+    常量 文本与对象 <公开 值 = @ppLayoutTextAndObject 注释 = "文本和对象">
+    常量 对象与文本 <公开 值 = @ppLayoutObjectAndText 注释 = "对象和文本">
+    常量 无标题对象 <公开 值 = @ppLayoutLargeObject 注释 = "无标题大型对象">
+    常量 对象 <公开 值 = @ppLayoutObject 注释 = "对象">
+    常量 文本与媒体 <公开 值 = @ppLayoutTextAndMediaClip 注释 = "文本和媒体剪辑">
+    常量 媒体和文本 <公开 值 = @ppLayoutMediaClipAndText 注释 = "媒体剪辑和文本">
+    常量 文本上对象 <公开 值 = @ppLayoutObjectOverText 注释 = "对象在文本之上">
+    常量 对象上文本 <公开 值 = @ppLayoutTextOverObject 注释 = "文本在对象之上">
+    常量 文本与两对象 <公开 值 = @ppLayoutTextAndTwoObjects 注释 = "文本和两个对象">
+    常量 两对象与文本 <公开 值 = @ppLayoutTwoObjectsAndText 注释 = "两个对象和文本">
+    常量 文本上两对象 <公开 值 = @ppLayoutTwoObjectsOverText 注释 = "两个对象在文本之上">
+    常量 四个对象 <公开 值 = @ppLayoutFourObjects 注释 = "四个对象">
+    常量 竖文本 <公开 值 = @ppLayoutVerticalText 注释 = "竖排文本">
+    常量 剪贴画与竖文本 <公开 值 = @ppLayoutClipArtAndVerticalText 注释 = "剪贴画和竖排文本">
+    常量 竖标题与文本 <公开 值 = @ppLayoutVerticalTitleAndText 注释 = "竖排标题和文本">
+    常量 图表上竖文本 <公开 值 = @ppLayoutVerticalTitleAndTextOverChart 注释 = "竖排标题和文本在图表之上">
+    常量 两对象 <公开 值 = @ppLayoutTwoObjects 注释 = "两个对象">
+    常量 对象与两对象 <公开 值 = @ppLayoutObjectAndTwoObjects 注释 = "对象和两个对象">
+    常量 两对象与对象 <公开 值 = @ppLayoutTwoObjectsAndObject 注释 = "两个对象和对象">
+    常量 自定义 <公开 值 = @ppLayoutCustom 注释 = "自定义">
+    常量 节标题 <公开 值 = @ppLayoutSectionHeader 注释 = "节标题">
+    常量 比较 <公开 值 = @ppLayoutComparison 注释 = "比较">
+    常量 文本与标题 <公开 值 = @ppLayoutContentWithCaption 注释 = "左上标题下文本右文本">
+    常量 图片与标题 <公开 值 = @ppLayoutPictureWithCaption 注释 = "左上标题下文本右图片">
+}
+
+类 PPT图形类型 <公开 注释 = "形状的类型或形状范围" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合形状 <公开 值 = @msoShapeTypeMixed 注释 = "混和形状类型">
+    常量 自选 <公开 值 = @msoAutoShape 注释 = "自选形状">
+    常量 标注 <公开 值 = @msoCallout 注释 = "标注">
+    常量 坐标图表 <公开 值 = @msoChart 注释 = "图表">
+    常量 批注 <公开 值 = @msoComment 注释 = "批注">
+    常量 任意多边形 <公开 值 = @msoFreeform 注释 = "任意多边形">
+    常量 组合 <公开 值 = @msoGroup 注释 = "组合">
+    常量 嵌入OLE对象 <公开 值 = @msoEmbeddedOLEObject 注释 = "嵌入式OLE对象">
+    常量 表单控件 <公开 值 = @msoFormControl 注释 = "表单控件">
+    常量 线条 <公开 值 = @msoLine 注释 = "线条">
+    常量 链接OLE对象 <公开 值 = @msoLinkedOLEObject 注释 = "链接OLE对象">
+    常量 链接图片 <公开 值 = @msoLinkedPicture 注释 = "链接图片">
+    常量 OLE对象 <公开 值 = @msoOLEControlObject 注释 = "OLE控件对象">
+    常量 图片 <公开 值 = @msoPicture 注释 = "图片">
+    常量 占位符 <公开 值 = @msoPlaceholder 注释 = "占位符">
+    常量 艺术字 <公开 值 = @msoTextEffect 注释 = "艺术字">
+    常量 媒体 <公开 值 = @msoMedia 注释 = "媒体">
+    常量 文本框 <公开 值 = @msoTextBox 注释 = "文本框">
+    常量 脚本标记 <公开 值 = @msoScriptAnchor 注释 = "脚本定位标记">
+    常量 表格 <公开 值 = @msoTable 注释 = "表格">
+    常量 画布 <公开 值 = @msoCanvas 注释 = "画布">
+    常量 图表 <公开 值 = @msoDiagram 注释 = "图表">
+    常量 墨迹 <公开 值 = @msoInk 注释 = "墨迹">
+    常量 墨迹批注 <公开 值 = @msoInkComment 注释 = "墨迹批注">
+    常量 智能图形 <公开 值 = @msoIgxGraphic 注释 = "SmartArt图形">
+    常量 切片器 <公开 值 = @msoSlicer 注释 = "切片器">
+    常量 Web视频 <公开 值 = @msoWebVideo 注释 = "Web视频">
+    常量 外接Office <公开 值 = @msoContentApp 注释 = "外接程序Office内容">
+    常量 图形 <公开 值 = @msoGraphic 注释 = "图形">
+    常量 链接图形 <公开 值 = @msoLinkedGraphic 注释 = "链接图形">
+    常量 立体模型 <公开 值 = @mso3DModel 注释 = "3D模型">
+    常量 链接立体模型 <公开 值 = @msoLinked3DModel 注释 = "链接的3D模型">
+}
+
+类 PPT图形层次 <公开 注释 = "指定要将形状移动到的相对于其他形状的顺序位置" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 顶层 <公开 值 = @msoBringToFront 注释 = "使形状置于顶层">
+    常量 底层 <公开 值 = @msoSendToBack 注释 = "使形状置于底层">
+    常量 上移一层 <公开 值 = @msoBringForward 注释 = "使形状上移一层">
+    常量 下移一层 <公开 值 = @msoSendBackward 注释 = "使形状下移一层">
+    常量 文字上方 <公开 值 = @msoBringInFrontOfText 注释 = "使形状浮于文字上方">
+    常量 文字下方 <公开 值 = @msoSendBehindText 注释 = "使形状衬于文字下方">
+}
+
+类 PPT图形形状 <公开 注释 = "指定图形对象的形状类型" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 组合 <公开 值 = @msoShapeMixed 注释 = "只返回值,表示其他状态的组合.">
+    常量 矩形 <公开 值 = @msoShapeRectangle 注释 = "矩形">
+    常量 平行四边形 <公开 值 = @msoShapeParallelogram 注释 = "平行四边形">
+    常量 梯形 <公开 值 = @msoShapeTrapezoid 注释 = "梯形">
+    常量 菱形 <公开 值 = @msoShapeDiamond 注释 = "菱形">
+    常量 圆角矩形 <公开 值 = @msoShapeRoundedRectangle 注释 = "圆角矩形">
+    常量 八边形 <公开 值 = @msoShapeOctagon 注释 = "八边形">
+    常量 等边三角形 <公开 值 = @msoShapeIsoscelesTriangle 注释 = "等边三角形">
+    常量 直角三角形 <公开 值 = @msoShapeRightTriangle 注释 = "直角三角形">
+    常量 椭圆形 <公开 值 = @msoShapeOval 注释 = "椭圆形">
+    常量 六边形 <公开 值 = @msoShapeHexagon 注释 = "六边形">
+    常量 十字形 <公开 值 = @msoShapeCross 注释 = "十字形">
+    常量 正五边形 <公开 值 = @msoShapeRegularPentagon 注释 = "正五边形">
+    常量 罐形 <公开 值 = @msoShapeCan 注释 = "罐形">
+    常量 立方体 <公开 值 = @msoShapeCube 注释 = "立方体">
+    常量 棱台效果 <公开 值 = @msoShapeBevel 注释 = "棱台效果">
+    常量 折叠角 <公开 值 = @msoShapeFoldedCorner 注释 = "折叠的角">
+    常量 笑脸 <公开 值 = @msoShapeSmileyFace 注释 = "笑脸">
+    常量 圆环图 <公开 值 = @msoShapeDonut 注释 = "圆环图">
+    常量 无符号 <公开 值 = @msoShapeNoSymbol 注释 = "无符号">
+    常量 弧形块 <公开 值 = @msoShapeBlockArc 注释 = "弧形块">
+    常量 心形 <公开 值 = @msoShapeHeart 注释 = "心形">
+    常量 闪电 <公开 值 = @msoShapeLightningBolt 注释 = "闪电">
+    常量 太阳 <公开 值 = @msoShapeSun 注释 = "太阳">
+    常量 小月 <公开 值 = @msoShapeMoon 注释 = "小月">
+    常量 弧形 <公开 值 = @msoShapeArc 注释 = "弧形">
+    常量 双括号 <公开 值 = @msoShapeDoubleBracket 注释 = "双括号">
+    常量 双大括号 <公开 值 = @msoShapeDoubleBrace 注释 = "双大括号">
+    常量 斑块 <公开 值 = @msoShapePlaque 注释 = "斑块">
+    常量 左方括号 <公开 值 = @msoShapeLeftBracket 注释 = "左方括号">
+    常量 右方括号 <公开 值 = @msoShapeRightBracket 注释 = "右方括号">
+    常量 左大括号 <公开 值 = @msoShapeLeftBrace 注释 = "左大括号">
+    常量 右大括号 <公开 值 = @msoShapeRightBrace 注释 = "右大括号">
+    常量 右箭头 <公开 值 = @msoShapeRightArrow 注释 = "右箭头">
+    常量 左箭头 <公开 值 = @msoShapeLeftArrow 注释 = "向左指向的箭头">
+    常量 上箭头 <公开 值 = @msoShapeUpArrow 注释 = "向上指向的箭头">
+    常量 下箭头 <公开 值 = @msoShapeDownArrow 注释 = "下箭头">
+    常量 左右箭头 <公开 值 = @msoShapeLeftRightArrow 注释 = "带左右箭头的箭头">
+    常量 上下箭头 <公开 值 = @msoShapeUpDownArrow 注释 = "向上和向下指向的箭头">
+    常量 上下左右箭头 <公开 值 = @msoShapeQuadArrow 注释 = "向上、向下、向左和向右的箭头.">
+    常量 左右上箭头 <公开 值 = @msoShapeLeftRightUpArrow 注释 = "带向左、向右和向上箭头的箭头">
+    常量 圆角箭头90度 <公开 值 = @msoShapeBentArrow 注释 = "带90度圆角的箭头">
+    常量 U形箭头 <公开 值 = @msoShapeUTurnArrow 注释 = "形成U形状的箭头">
+    常量 左上箭头 <公开 值 = @msoShapeLeftUpArrow 注释 = "带向左和向上箭头的箭头">
+    常量 直角箭头90度 <公开 值 = @msoShapeBentUpArrow 注释 = "带90度直角的箭头默认情况下上指">
+    常量 右曲线箭头 <公开 值 = @msoShapeCurvedRightArrow 注释 = "向右曲线的箭头">
+    常量 左曲线箭头 <公开 值 = @msoShapeCurvedLeftArrow 注释 = "向左曲线的箭头">
+    常量 上曲线箭头 <公开 值 = @msoShapeCurvedUpArrow 注释 = "上曲线的箭头">
+    常量 下曲线箭头 <公开 值 = @msoShapeCurvedDownArrow 注释 = "下曲线的箭头">
+    常量 尾条纹箭头 <公开 值 = @msoShapeStripedRightArrow 注释 = "尾部带条纹的右箭头">
+    常量 右块箭头 <公开 值 = @msoShapeNotchedRightArrow 注释 = "指向右边的块箭头">
+    常量 五边形 <公开 值 = @msoShapePentagon 注释 = "五边形">
+    常量 人字形 <公开 值 = @msoShapeChevron 注释 = "人字形">
+    常量 右箭头标注 <公开 值 = @msoShapeRightArrowCallout 注释 = "向右箭头的标注">
+    常量 左箭头标注 <公开 值 = @msoShapeLeftArrowCallout 注释 = "带向左箭头的标注">
+    常量 上箭头标注 <公开 值 = @msoShapeUpArrowCallout 注释 = "带向上箭头的标注">
+    常量 下箭头标注 <公开 值 = @msoShapeDownArrowCallout 注释 = "带向下箭头的标注">
+    常量 左右箭头标注 <公开 值 = @msoShapeLeftRightArrowCallout 注释 = "带左右箭头的标注">
+    常量 上下箭头标注 <公开 值 = @msoShapeUpDownArrowCallout 注释 = "带向上和向下箭头的标注">
+    常量 上下左右箭头标注 <公开 值 = @msoShapeQuadArrowCallout 注释 = "带向上、向下、向左和向右箭头的标注.">
+    常量 曲线箭头180度 <公开 值 = @msoShapeCircularArrow 注释 = "带180度曲线的箭头">
+    常量 流程图符号 <公开 值 = @msoShapeFlowchartProcess 注释 = "流程图符号">
+    常量 备用图 <公开 值 = @msoShapeFlowchartAlternateProcess 注释 = "备用流程图符号">
+    常量 决策图 <公开 值 = @msoShapeFlowchartDecision 注释 = "决策流程图符号">
+    常量 数据图 <公开 值 = @msoShapeFlowchartData 注释 = "数据流程图符号">
+    常量 预定义图 <公开 值 = @msoShapeFlowchartPredefinedProcess 注释 = "预定义的流程图符号">
+    常量 内部存储图 <公开 值 = @msoShapeFlowchartInternalStorage 注释 = "内部存储流程图符号">
+    常量 文档图 <公开 值 = @msoShapeFlowchartDocument 注释 = "文档流程图符号">
+    常量 多文档图 <公开 值 = @msoShapeFlowchartMultidocument 注释 = "多文档流程图符号">
+    常量 终止符图 <公开 值 = @msoShapeFlowchartTerminator 注释 = "终止符流程图符号">
+    常量 准备图 <公开 值 = @msoShapeFlowchartPreparation 注释 = "准备流程图符号">
+    常量 手动输入图 <公开 值 = @msoShapeFlowchartManualInput 注释 = "手动输入流程图符号">
+    常量 手动图 <公开 值 = @msoShapeFlowchartManualOperation 注释 = "手动操作流程图符号">
+    常量 连接器图 <公开 值 = @msoShapeFlowchartConnector 注释 = "连接器流程图符号">
+    常量 外连接器图 <公开 值 = @msoShapeFlowchartOffpageConnector 注释 = "页面外连接器流程图符号">
+    常量 卡片图 <公开 值 = @msoShapeFlowchartCard 注释 = "卡片流程图符号">
+    常量 下压磁带图 <公开 值 = @msoShapeFlowchartPunchedTape 注释 = "下压磁带流程图符号">
+    常量 加法结合图 <公开 值 = @msoShapeFlowchartSummingJunction 注释 = "汇总流程图符号">
+    常量 或流程图 <公开 值 = @msoShapeFlowchartOr 注释 = "流程图符号">
+    常量 对比图 <公开 值 = @msoShapeFlowchartCollate 注释 = "整理流程图符号">
+    常量 排序图 <公开 值 = @msoShapeFlowchartSort 注释 = "排序流程图符号">
+    常量 提取图 <公开 值 = @msoShapeFlowchartExtract 注释 = "提取流程图符号">
+    常量 合并图 <公开 值 = @msoShapeFlowchartMerge 注释 = "合并流程图符号">
+    常量 存储数据图 <公开 值 = @msoShapeFlowchartStoredData 注释 = "存储的数据流程图符号">
+    常量 延迟图 <公开 值 = @msoShapeFlowchartDelay 注释 = "延迟流程图符号">
+    常量 顺序存储图 <公开 值 = @msoShapeFlowchartSequentialAccessStorage 注释 = "顺序访问存储流程图符号">
+    常量 磁盘图 <公开 值 = @msoShapeFlowchartDiskTicDisk 注释 = "磁盘流程图符号">
+    常量 直接存储图 <公开 值 = @msoShapeFlowchartDirectAccessStorage 注释 = "直接访问存储流程图符号">
+    常量 显示图 <公开 值 = @msoShapeFlowchartDisplay 注释 = "显示流程图符号">
+    常量 爆炸1 <公开 值 = @msoShapeExplosion1 注释 = "爆炸1">
+    常量 爆炸2 <公开 值 = @msoShapeExplosion2 注释 = "爆炸2">
+    常量 四角星 <公开 值 = @msoShape4pointStar 注释 = "四角星">
+    常量 五角星 <公开 值 = @msoShape5pointStar 注释 = "五角星">
+    常量 八角星 <公开 值 = @msoShape8pointStar 注释 = "8角星">
+    常量 十六角星 <公开 值 = @msoShape16pointStar 注释 = "16角星">
+    常量 二十四角星 <公开 值 = @msoShape24pointStar 注释 = "24角星">
+    常量 三十二角星 <公开 值 = @msoShape32pointStar 注释 = "32角星">
+    常量 上方横幅 <公开 值 = @msoShapeUpRibbon 注释 = "中心区域位于功能区末端上方的功能区横幅">
+    常量 下方横幅 <公开 值 = @msoShapeDownRibbon 注释 = "中心区域位于功能区末端下方的功能区横幅">
+    常量 上弯横幅 <公开 值 = @msoShapeCurvedUpRibbon 注释 = "上弯曲的功能区横幅">
+    常量 下弯横幅 <公开 值 = @msoShapeCurvedDownRibbon 注释 = "下弯曲的功能区横幅">
+    常量 垂直滚动 <公开 值 = @msoShapeVerticalScroll 注释 = "垂直滚动">
+    常量 水平滚动 <公开 值 = @msoShapeHorizontalScroll 注释 = "水平滚动">
+    常量 波浪 <公开 值 = @msoShapeWave 注释 = "波浪">
+    常量 双波浪 <公开 值 = @msoShapeDoubleWave 注释 = "双波浪">
+    常量 矩形标注 <公开 值 = @msoShapeRectangularCallout 注释 = "矩形标注">
+    常量 圆角矩形标注 <公开 值 = @msoShapeRoundedRectangularCallout 注释 = "圆角矩形标注">
+    常量 椭圆标注 <公开 值 = @msoShapeOvalCallout 注释 = "椭圆标注">
+    常量 云标注 <公开 值 = @msoShapeCloudCallout 注释 = "云标注">
+    常量 水平标注 <公开 值 = @msoShapeLineCallout1 注释 = "带边框和水平标注线的标注">
+    常量 对角标注 <公开 值 = @msoShapeLineCallout2 注释 = "带对角直线的标注">
+    常量 倾斜标注 <公开 值 = @msoShapeLineCallout3 注释 = "带倾斜线条的标注">
+    常量 U型标注 <公开 值 = @msoShapeLineCallout4 注释 = "带U型标注线段的标注">
+    常量 无框强调水平标注 <公开 值 = @msoShapeLineCallout1AccentBar 注释 = "带水平强调线标注">
+    常量 无框强调对角标注 <公开 值 = @msoShapeLineCallout2AccentBar 注释 = "带对角标注线和强调线的标注">
+    常量 无框强调倾斜标注 <公开 值 = @msoShapeLineCallout3AccentBar 注释 = "带倾斜标注线和强调线的标注">
+    常量 无框强调U型标注 <公开 值 = @msoShapeLineCallout4AccentBar 注释 = "带强调线和U型标注线段的标注">
+    常量 无框水平标注 <公开 值 = @msoShapeLineCallout1NoBorder 注释 = "带横线的标注">
+    常量 无框对角标注 <公开 值 = @msoShapeLineCallout2NoBorder 注释 = "无边框和对角标注线的标注">
+    常量 无框倾斜标注 <公开 值 = @msoShapeLineCallout3NoBorder 注释 = "无边框和倾斜标注线的标注">
+    常量 无框U型标注 <公开 值 = @msoShapeLineCallout4NoBorder 注释 = "没有边框的标注和形成U型的标注线段">
+    常量 强调水平标注 <公开 值 = @msoShapeLineCallout1BorderandAccentBar 注释 = "带边框和水平强调线标注">
+    常量 强调对角标注 <公开 值 = @msoShapeLineCallout2BorderandAccentBar 注释 = "带边框、对角线和强调线的标注">
+    常量 强调倾斜标注 <公开 值 = @msoShapeLineCallout3BorderandAccentBar 注释 = "带边框、倾斜标注线和强调线的标注">
+    常量 强调U型标注 <公开 值 = @msoShapeLineCallout4BorderandAccentBar 注释 = "带边框、强调线和U型标注线段的标注">
+    常量 动作按钮 <公开 值 = @msoShapeActionButtonCustom 注释 = "不带默认图片或文本的按钮支持鼠标单击和鼠标移过操作">
+    常量 主页按钮 <公开 值 = @msoShapeActionButtonHome 注释 = "主页按钮支持鼠标单击和鼠标移过操作">
+    常量 帮助按钮 <公开 值 = @msoShapeActionButtonHelp 注释 = "帮助按钮支持鼠标单击和鼠标移过操作">
+    常量 信息按钮 <公开 值 = @msoShapeActionButtonInformation 注释 = "信息按钮支持鼠标单击和鼠标移过操作">
+    常量 后上按钮 <公开 值 = @msoShapeActionButtonBackorPrevious 注释 = "后退或上一个按钮支持鼠标单击和鼠标移过操作">
+    常量 前下按钮 <公开 值 = @msoShapeActionButtonForwardorNext 注释 = "前进或下一个按钮支持鼠标单击和鼠标移过操作">
+    常量 开始按钮 <公开 值 = @msoShapeActionButtonBeginning 注释 = "开始按钮支持鼠标单击和鼠标移过操作">
+    常量 结束按钮 <公开 值 = @msoShapeActionButtonEnd 注释 = "结束按钮支持鼠标单击和鼠标移过操作">
+    常量 返回按钮 <公开 值 = @msoShapeActionButtonReturn 注释 = "返回按钮支持鼠标单击和鼠标移过操作">
+    常量 文档按钮 <公开 值 = @msoShapeActionButtonDocument 注释 = "文档按钮支持鼠标单击和鼠标移过操作">
+    常量 声音按钮 <公开 值 = @msoShapeActionButtonSound 注释 = "声音按钮支持鼠标单击和鼠标移过操作">
+    常量 影片按钮 <公开 值 = @msoShapeActionButtonMovie 注释 = "影片按钮支持鼠标单击和鼠标移过操作">
+    常量 气球 <公开 值 = @msoShapeBalloon 注释 = "气球">
+    常量 非原始 <公开 值 = @msoShapeNotPrimitive 注释 = "非原始">
+    常量 脱机存储图 <公开 值 = @msoShapeFlowchartOfflineStorage 注释 = "脱机存储流程图符号">
+    常量 两端箭头 <公开 值 = @msoShapeLeftRightRibbon 注释 = "两端都有箭头的功能区">
+    常量 对角带 <公开 值 = @msoShapeDiagonalStripe 注释 = "删除了两个三角形形状的矩形;对角带">
+    常量 圆饼图 <公开 值 = @msoShapePie 注释 = "圆(饼图)部分缺失">
+    常量 并行面 <公开 值 = @msoShapeNonIsoscelesTrapezoid 注释 = "具有非对称非并行面的陷阱">
+    常量 二角形 <公开 值 = @msoShapeDecagon 注释 = "十角形">
+    常量 七角形 <公开 值 = @msoShapeHeptagon 注释 = "七角形">
+    常量 十二角形 <公开 值 = @msoShapeDodecagon 注释 = "十二角形">
+    常量 六点星 <公开 值 = @msoShape6pointStar 注释 = "6角星">
+    常量 七点星 <公开 值 = @msoShape7pointStar 注释 = "7角星">
+    常量 十点星 <公开 值 = @msoShape10pointStar 注释 = "10角星">
+    常量 十二点星 <公开 值 = @msoShape12pointStar 注释 = "12角星">
+    常量 圆环矩形 <公开 值 = @msoShapeRound1Rectangle 注释 = "带有一个圆角的矩形">
+    常量 二圆环矩形 <公开 值 = @msoShapeRound2SameRectangle 注释 = "具有共享一侧的两个圆角的矩形">
+    常量 裁角圆环矩形 <公开 值 = @msoShapeSnipRoundRectangle 注释 = "具有一个裁剪的角和一个圆角的矩形">
+    常量 裁角矩形 <公开 值 = @msoShapeSnip1Rectangle 注释 = "具有一个裁剪角的矩形">
+    常量 缩小角矩形 <公开 值 = @msoShapeSnip2SameRectangle 注释 = "具有两个共享一侧的缩小角的矩形">
+    常量 二裁角矩形 <公开 值 = @msoShapeSnip2DiagRectangle 注释 = "带有两个裁剪角的矩形,对角线相反">
+    常量 二圆角矩形 <公开 值 = @msoShapeRound2DiagRectangle 注释 = "带有两个圆角的矩形,对角线相反">
+    常量 矩形框架 <公开 值 = @msoShapeFrame 注释 = "矩形图片框架">
+    常量 半矩形框 <公开 值 = @msoShapeHalfFrame 注释 = "矩形图片框的一半">
+    常量 水珠 <公开 值 = @msoShapeTear 注释 = "水珠">
+    常量 和弦圆 <公开 值 = @msoShapeChord 注释 = "圆,通过圆的内部连接外围上的两个点的直线;带一个和弦的圆.">
+    常量 矩形中矩形 <公开 值 = @msoShapeCorner 注释 = "带有矩形内径的矩形">
+    常量 加号 <公开 值 = @msoShapeMathPlus 注释 = "加法符号+">
+    常量 减号 <公开 值 = @msoShapeMathMinus 注释 = "减法符号-">
+    常量 乘号 <公开 值 = @msoShapeMathMultiply 注释 = "乘法符号x">
+    常量 除号 <公开 值 = @msoShapeMathDivide 注释 = "除法符号÷">
+    常量 等于号 <公开 值 = @msoShapeMathEqual 注释 = "等于号符号=">
+    常量 不等于号 <公开 值 = @msoShapeMathNotEqual 注释 = "不等于符号≠">
+    常量 等腰三角形 <公开 值 = @msoShapeCornerTabs 注释 = "等腰三角形">
+    常量 小正方形 <公开 值 = @msoShapeSquareTabs 注释 = "四个定义矩形形状的小正方形">
+    常量 四圆 <公开 值 = @msoShapePlaqueTabs 注释 = "定义矩形形状的四个四分之一圆">
+    常量 六齿轮 <公开 值 = @msoShapeGear6 注释 = "具有六个档的齿轮">
+    常量 九齿轮 <公开 值 = @msoShapeGear9 注释 = "具有九个齿轮的齿轮">
+    常量 漏斗 <公开 值 = @msoShapeFunnel 注释 = "漏斗">
+    常量 扇形边 <公开 值 = @msoShapePieWedge 注释 = "圆形的四分之一">
+    常量 左圆箭头 <公开 值 = @msoShapeLeftCircularArrow 注释 = "逆时针方向的圆形箭头">
+    常量 左右圆箭头 <公开 值 = @msoShapeLeftRightCircularArrow 注释 = "顺时针和逆时针方向的圆形箭头,两端都有点的曲线箭头.">
+    常量 曲线箭头 <公开 值 = @msoShapeSwooshArrow 注释 = "曲线箭头">
+    常量 云形状 <公开 值 = @msoShapeCloud 注释 = "云形状">
+    常量 对角正方形 <公开 值 = @msoShapeChartX 注释 = "沿对角线划分为四个部分的正方形">
+    常量 垂直对角正方形 <公开 值 = @msoShapeChartStar 注释 = "沿垂直线和对角线划分为六部分的正方形">
+    常量 垂直水平正方形 <公开 值 = @msoShapeChartPlus 注释 = "垂直和水平划分为四分之四的正方形">
+    常量 反线 <公开 值 = @msoShapeLineInverse 注释 = "反线">
+}
+
+类 PPT粘贴格式 <公开 注释 = "指定\"剪贴板\"内容在插入到PPT文稿时采用的格式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 默认内容 <公开 值 = @ppPasteDefault 注释 = "粘贴剪贴板的默认内容">
+    常量 位图 <公开 值 = @ppPasteBitmap 注释 = "粘贴位图">
+    常量 矢量图 <公开 值 = @ppPasteEnhancedMetafile 注释 = "粘贴矢量图">
+    常量 图片 <公开 值 = @ppPasteMetafilePicture 注释 = "粘贴图元文件图片">
+    常量 GIF图像 <公开 值 = @ppPasteGIF 注释 = "粘贴GIF图像">
+    常量 JPG图像 <公开 值 = @ppPasteJPG 注释 = "粘贴JPG图像">
+    常量 PNG图像 <公开 值 = @ppPastePNG 注释 = "粘贴PNG图像">
+    常量 文本 <公开 值 = @ppPasteText 注释 = "粘贴文本">
+    常量 HTML <公开 值 = @ppPasteHTML 注释 = "粘贴HTML">
+    常量 富文本 <公开 值 = @ppPasteRTF 注释 = "粘贴RTF富文本">
+    常量 OLE对象 <公开 值 = @ppPasteOLEObject 注释 = "粘贴OLE对象">
+    常量 形状 <公开 值 = @ppPasteShape 注释 = "粘贴形状">
+}
+
+类 PPT日期格式 <公开 注释 = "指定自动更新的日期和时间的格式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合格式 <公开 值 = @ppDateTimeFormatMixed 注释 = "混合格式">
+    常量 年月日 <公开 值 = @ppDateTimeMdyy 注释 = "2022/7/30">
+    常量 年月日2 <公开 值 = @ppDateTimeddddMMMMddyyyy 注释 = "2022年7月30日">
+    常量 年月日星期 <公开 值 = @ppDateTimedMMMMyyyy 注释 = "2022年7月30日星期六">
+    常量 年月日星期2 <公开 值 = @ppDateTimeMMMMdyyyy 注释 = "2022年7月30日星期六">
+    常量 年月日3 <公开 值 = @ppDateTimedMMMyy 注释 = "2022/7/30">
+    常量 年月 <公开 值 = @ppDateTimeMMMMyy 注释 = "2022年7月">
+    常量 年月日4 <公开 值 = @ppDateTimeMMyy 注释 = "22.7.30">
+    常量 年月日时分 <公开 值 = @ppDateTimeMMddyyHmm 注释 = "2022年7月30日5时59分">
+    常量 年月日时分秒 <公开 值 = @ppDateTimeMMddyyhmmAMPM 注释 = "2022年7月30日星期六5时59分34秒">
+    常量 时分 <公开 值 = @ppDateTimeHmm 注释 = "17:59">
+    常量 时分秒 <公开 值 = @ppDateTimeHmmss 注释 = "17:59:35">
+    常量 AMPM时分 <公开 值 = @ppDateTimehmmAMPM 注释 = "下午5时59分">
+    常量 AMPM时分秒 <公开 值 = @ppDateTimehmmssAMPM 注释 = "下午5时59分36秒">
+    常量 年月日5 <公开 值 = @ppDateTimeFigureOut 注释 = "2022/7/30">
+}
+
+类 PPT保存格式 <公开 注释 = "指定的文件保存格式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 PPT文稿 <公开 值 = @ppSaveAsPresentation 注释 = "PPT文稿">
+    常量 模版 <公开 值 = @ppSaveAsTemplate 注释 = "模版">
+    常量 富文本 <公开 值 = @ppSaveAsRTF 注释 = "富文本">
+    常量 幻灯片 <公开 值 = @ppSaveAsShow 注释 = "幻灯片">
+    常量 加载项 <公开 值 = @ppSaveAsAddIn 注释 = "加载项">
+    常量 默认格式 <公开 值 = @ppSaveAsDefault 注释 = "默认格式保存">
+    常量 图元文件 <公开 值 = @ppSaveAsMetaFile 注释 = "图元文件">
+    常量 GIF图像 <公开 值 = @ppSaveAsGIF 注释 = "GIF图像">
+    常量 JPG图像 <公开 值 = @ppSaveAsJPG 注释 = "JPG图像">
+    常量 PNG图像 <公开 值 = @ppSaveAsPNG 注释 = "PNG图像">
+    常量 BMP图像 <公开 值 = @ppSaveAsBMP 注释 = "BMP图像">
+    常量 TIF文件 <公开 值 = @ppSaveAsTIF 注释 = "TIF文件">
+    常量 增强型元文件 <公开 值 = @ppSaveAsEMF 注释 = "增强型元文件">
+    常量 OpenXML文稿 <公开 值 = @ppSaveAsOpenXMLPresentation 注释 = "OpenXML文稿">
+    常量 宏OpenXML文稿 <公开 值 = @ppSaveAsOpenXMLPresentationMacroEnabled 注释 = "宏OpenXML文稿">
+    常量 OpenXML模版 <公开 值 = @ppSaveAsOpenXMLTemplate 注释 = "OpenXML模版">
+    常量 宏OpenXML模板 <公开 值 = @ppSaveAsOpenXMLTemplateMacroEnabled 注释 = "宏OpenXML模板">
+    常量 OpenXML幻灯片 <公开 值 = @ppSaveAsOpenXMLShow 注释 = "OpenXML幻灯片">
+    常量 宏OpenXML幻灯片 <公开 值 = @ppSaveAsOpenXMLShowMacroEnabled 注释 = "宏OpenXML幻灯片">
+    常量 OpenXML加载项 <公开 值 = @ppSaveAsOpenXMLAddin 注释 = "OpenXML加载项">
+    常量 OpenXML主题 <公开 值 = @ppSaveAsOpenXMLTheme 注释 = "OpenXML主题">
+    常量 PDF文件 <公开 值 = @ppSaveAsPDF 注释 = "PDF文件">
+    常量 XPS文件 <公开 值 = @ppSaveAsXPS 注释 = "XPS文件">
+    常量 XML文稿 <公开 值 = @ppSaveAsXMLPresentation 注释 = "XML文稿">
+    常量 OpenDocument文稿 <公开 值 = @ppSaveAsOpenDocumentPresentation 注释 = "开放PPT文稿">
+    常量 OpenXML图片文稿 <公开 值 = @ppSaveAsOpenXMLPicturePresentation 注释 = "OpenXML图片PPT文稿">
+    常量 WMV文件 <公开 值 = @ppSaveAsWMV 注释 = "WMV文件">
+    常量 规范OpenXML文稿 <公开 值 = @ppSaveAsStrictOpenXMLPresentation 注释 = "规范OpenXML文稿">
+    常量 MP4文件 <公开 值 = @ppSaveAsMP4 注释 = "MP4文件">
+    常量 GIF文件 <公开 值 = @ppSaveAsAnimatedGIF 注释 = "GIF文件">
+    常量 外部转换器 <公开 值 = @ppSaveAsExternalConverter 注释 = "外部转换器">
+}
+
+类 PPT段落对齐 <公开 注释 = "指定段落对齐方式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @ppAlignmentMixed 注释 = "混合对齐方式">
+    常量 左 <公开 值 = @ppAlignLeft 注释 = "左对齐">
+    常量 居中 <公开 值 = @ppAlignCenter 注释 = "居中对齐">
+    常量 右 <公开 值 = @ppAlignRight 注释 = "右对齐">
+    常量 两端 <公开 值 = @ppAlignJustify 注释 = "两端对齐">
+    常量 分散 <公开 值 = @ppAlignDistribute 注释 = "分散对齐">
+    常量 泰式分散 <公开 值 = @ppAlignThaiDistribute 注释 = "泰语分散对齐">
+    常量 两端低 <公开 值 = @ppAlignJustifyLow 注释 = "两端对齐(低)">
+}
+
+类 PPT基准线对齐 <公开 注释 = "指定段落基准线对齐方式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @ppBaselineAlignMixed 注释 = "混合对齐方式">
+    常量 以基准线 <公开 值 = @ppBaselineAlignBaseline 注释 = "向基准线对齐">
+    常量 顶端 <公开 值 = @ppBaselineAlignTop 注释 = "顶端对齐">
+    常量 居中 <公开 值 = @ppBaselineAlignCenter 注释 = "居中对齐">
+    常量 远东 <公开 值 = @ppBaselineAlignFarEast50 注释 = "远东对齐">
+}
+
+类 PPT段落文本方向 <公开 注释 = "指定段落文本方向" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @ppDirectionMixed 注释 = "混合版式">
+    常量 从左向右 <公开 值 = @ppDirectionLeftToRight 注释 = "从左向右版式">
+    常量 从右向左 <公开 值 = @ppDirectionRightToLeft 注释 = "从右向左版式">
+}
+
+类 PPT文本方向 <公开 注释 = "指定文本的方向" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @msoTextOrientationMixed 注释 = "混合">
+    常量 水平 <公开 值 = @msoTextOrientationHorizontal 注释 = "水平">
+    常量 向上 <公开 值 = @msoTextOrientationUpward 注释 = "向上">
+    常量 向下 <公开 值 = @msoTextOrientationDownward 注释 = "向下">
+    常量 远东垂直 <公开 值 = @msoTextOrientationVerticalFarEast 注释 = "亚洲语言支持所需的垂直">
+    常量 垂直 <公开 值 = @msoTextOrientationVertical 注释 = "垂直">
+    常量 远东水平旋转 <公开 值 = @msoTextOrientationHorizontalRotatedFarEast 注释 = "亚洲语言支持所需的水平旋转">
+}
+
+类 PPT放映类型 <公开 注释 = "指定的幻灯片放映,显示属性类型的常量." @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 演讲者 <公开 值 = @ppShowTypeSpeaker 注释 = "演讲者">
+    常量 窗口 <公开 值 = @ppShowTypeWindow 注释 = "窗口">
+    常量 展台 <公开 值 = @ppShowTypeKiosk 注释 = "展台">
+    常量 窗口2 <公开 值 = @ppShowTypeWindow2 注释 = "窗口2">
+}
+
+类 PPT放映范围 <公开 注释 = "指定的幻灯片放映范围" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 全部 <公开 值 = @ppShowAll 注释 = "全部显示">
+    常量 幻灯片范围 <公开 值 = @ppShowSlideRange 注释 = "显示幻灯片范围">
+    常量 命名幻灯片 <公开 值 = @ppShowNamedSlideShow 注释 = "显示命名的幻灯片">
+}
+
+类 PPT换页方式 <公开 注释 = "指定的幻灯片放映时换页方式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 手动换页 <公开 值 = @ppSlideShowManualAdvance 注释 = "手动换页">
+    常量 按间隔时间播放 <公开 值 = @ppSlideShowUseSlideTimings 注释 = "为每张幻灯片指定的计时">
+    常量 按预设时间播放 <公开 值 = @ppSlideShowRehearseNewTimings 注释 = "排练计时">
+}
+
+类 PPT放映状态 <公开 注释 = "指定和返回幻灯片放映状态" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 运行 <公开 值 = @ppSlideShowRunning 注释 = "运行">
+    常量 暂停 <公开 值 = @ppSlideShowPaused 注释 = "暂停">
+    常量 黑屏 <公开 值 = @ppSlideShowBlackScreen 注释 = "黑屏">
+    常量 白屏 <公开 值 = @ppSlideShowWhiteScreen 注释 = "白屏">
+    常量 完成 <公开 值 = @ppSlideShowDone 注释 = "完成">
+}
+
+类 PPT放映指针 <公开 注释 = "指定的幻灯片放映时鼠标指针" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 无指针 <公开 值 = @ppSlideShowPointerNone 注释 = "不使用指针">
+    常量 箭头 <公开 值 = @ppSlideShowPointerArrow 注释 = "使用箭头指针">
+    常量 画笔 <公开 值 = @ppSlideShowPointerPen 注释 = "使用笔指针">
+    常量 隐藏 <公开 值 = @ppSlideShowPointerAlwaysHidden 注释 = "指针始终隐藏">
+    常量 自动箭头 <公开 值 = @ppSlideShowPointerAutoArrow 注释 = "使用自动箭头指针">
+    常量 橡皮擦 <公开 值 = @ppSlideShowPointerEraser 注释 = "使用橡皮擦指针">
+}
+
+类 PPT段落动画效果 <公开 注释 = "指定设置段落动画效果" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合级别 <公开 值 = @ppAnimateLevelMixed 注释 = "混合级别">
+    常量 无级别 <公开 值 = @ppAnimateLevelNone 注释 = "无级别">
+    常量 第1级 <公开 值 = @ppAnimateByFirstLevel 注释 = "按第1级">
+    常量 第2级 <公开 值 = @ppAnimateBySecondLevel 注释 = "按第2级">
+    常量 第3级 <公开 值 = @ppAnimateByThirdLevel 注释 = "按第3级">
+    常量 第4级 <公开 值 = @ppAnimateByFourthLevel 注释 = "按第4级">
+    常量 第5级 <公开 值 = @ppAnimateByFifthLevel 注释 = "按第5级">
+    常量 所有级别 <公开 值 = @ppAnimateByAllLevels 注释 = "按所有级别">
+}
+
+类 PPT文字动画对象 <公开 注释 = "指定设置文本动画效果" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合方式 <公开 值 = @ppAnimateUnitMixed 注释 = "以混合方式动画显示文本单元效果">
+    常量 按段落 <公开 值 = @ppAnimateByParagraph 注释 = "按段落动画显示文本单元效果">
+    常量 按词 <公开 值 = @ppAnimateByWord 注释 = "按字/词动画显示文本单元效果">
+    常量 按字符 <公开 值 = @ppAnimateByCharacter 注释 = "按字符动画显示文本单元效果">
+}
+
+类 PPT切换模式 <公开 注释 = "指定指定动画是如何换页的" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @ppAdvanceModeMixed 注释 = "混合模式">
+    常量 单击时 <公开 值 = @ppAdvanceOnClick 注释 = "仅在单击时">
+    常量 自动 <公开 值 = @ppAdvanceOnTime 注释 = "在指定的一段时间后自动">
+}
+
+类 PPT段落编号 <公开 注释 = "指定项目符号样式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 无 <公开 值 = @ppBulletStyleMixed 注释 = "任何未定义的样式">
+    常量 小写字母点 <公开 值 = @ppBulletAlphaLCPeriod 注释 = "带句号的小写字母字符">
+    常量 大写字母点 <公开 值 = @ppBulletAlphaUCPeriod 注释 = "带句号的大写字母字符">
+    常量 右括号数字 <公开 值 = @ppBulletArabicParenRight 注释 = "带右括号的阿拉伯数字">
+    常量 数字点 <公开 值 = @ppBulletArabicPeriod 注释 = "带句号的阿拉伯数字">
+    常量 双括号小写罗马数字 <公开 值 = @ppBulletRomanLCParenBoth 注释 = "带双括号的小写罗马数字">
+    常量 右括号小写罗马数字 <公开 值 = @ppBulletRomanLCParenRight 注释 = "带右括号的小写罗马数字">
+    常量 小写罗马数字点 <公开 值 = @ppBulletRomanLCPeriod 注释 = "带句号的小写罗马数字">
+    常量 大写罗马数字点 <公开 值 = @ppBulletRomanUCPeriod 注释 = "带句号的大写罗马数字">
+    常量 双括号小写字母 <公开 值 = @ppBulletAlphaLCParenBoth 注释 = "带双括号的小写字母字符">
+    常量 右括号小写字母 <公开 值 = @ppBulletAlphaLCParenRight 注释 = "带右括号的小写字母字符">
+    常量 双括号大写字母 <公开 值 = @ppBulletAlphaUCParenBoth 注释 = "带双括号的大写字母字符">
+    常量 右括号大写字母 <公开 值 = @ppBulletAlphaUCParenRight 注释 = "带右括号的大写字母字符">
+    常量 双括号数字 <公开 值 = @ppBulletArabicParenBoth 注释 = "带双括号的阿拉伯数字">
+    常量 数字 <公开 值 = @ppBulletArabicPlain 注释 = "阿拉伯数字">
+    常量 双括号大写罗马数字 <公开 值 = @ppBulletRomanUCParenBoth 注释 = "带双括号的大写罗马数字">
+    常量 右括号大写罗马数字 <公开 值 = @ppBulletRomanUCParenRight 注释 = "带右括号的大写罗马数字">
+    常量 简体中文 <公开 值 = @ppBulletSimpChinPlain 注释 = "不带句号的简体中文">
+    常量 简体中文点 <公开 值 = @ppBulletSimpChinPeriod 注释 = "带句号的简体中文">
+    常量 圆圈数字 <公开 值 = @ppBulletCircleNumDBPlain 注释 = "双字节带圆圈数字项目符号(最大值为10)">
+    常量 圆形彩色数字 <公开 值 = @ppBulletCircleNumWDWhitePlain 注释 = "周围绘有相同颜色圆形的彩色文本数字">
+    常量 圆形彩色阴影数字 <公开 值 = @ppBulletCircleNumWDBlackPlain 注释 = "圆形背景为一般文本颜色的彩色阴影数字">
+    常量 繁体中文 <公开 值 = @ppBulletTradChinPlain 注释 = "不带句号的繁体中文">
+    常量 繁体中文点 <公开 值 = @ppBulletTradChinPeriod 注释 = "带句号的繁体中文">
+    常量 破折号阿拉伯字母 <公开 值 = @ppBulletArabicAlphaDash 注释 = "带破折号的阿拉伯语字母字符">
+    常量 破折号阿拉伯字母1 <公开 值 = @ppBulletArabicAbjadDash 注释 = "带破折号的阿拉伯语Abjad字母">
+    常量 破折号希伯来字母 <公开 值 = @ppBulletHebrewAlphaDash 注释 = "带破折号的希伯来语字母字符">
+    常量 日本数字 <公开 值 = @ppBulletKanjiKoreanPlain 注释 = "不带句号的日本/朝鲜数字">
+    常量 日本数字点 <公开 值 = @ppBulletKanjiKoreanPeriod 注释 = "带句号的日本/朝鲜数字">
+    常量 阿拉伯编号 <公开 值 = @ppBulletArabicDBPlain 注释 = "双字节阿拉伯语编号方案(无标点)">
+    常量 阿拉伯点 <公开 值 = @ppBulletArabicDBPeriod 注释 = "带双字节句号的双字节阿拉伯语编号方案">
+    常量 泰语字母点 <公开 值 = @ppBulletThaiAlphaPeriod 注释 = "泰语字母句号">
+    常量 泰语字母右括号 <公开 值 = @ppBulletThaiAlphaParenRight 注释 = "泰语字母右括号">
+    常量 泰语字母双括号 <公开 值 = @ppBulletThaiAlphaParenBoth 注释 = "泰语字母双括号">
+    常量 泰语数字点 <公开 值 = @ppBulletThaiNumPeriod 注释 = "泰语数字句号">
+    常量 泰语数字右括号 <公开 值 = @ppBulletThaiNumParenRight 注释 = "泰语数字右括号">
+    常量 泰语数字双括号 <公开 值 = @ppBulletThaiNumParenBoth 注释 = "泰语数字双括号">
+    常量 印地字母点 <公开 值 = @ppBulletHindiAlphaPeriod 注释 = "印地语字母句号">
+    常量 印地数字点 <公开 值 = @ppBulletHindiNumPeriod 注释 = "印地语数字句号">
+    常量 日文 <公开 值 = @ppBulletKanjiSimpChinDBPeriod 注释 = "带双字节句号的日文汉字">
+    常量 括号印地数字 <公开 值 = @ppBulletHindiNumParenRight 注释 = "印地语数字右括号">
+    常量 印地字母点1 <公开 值 = @ppBulletHindiAlpha1Period 注释 = "印地语字母1句号">
+}
+
+类 PPT段落符号 <公开 注释 = "指定项目符号的类型" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @ppBulletMixed 注释 = "混合项目符号">
+    常量 无 <公开 值 = @ppBulletNone 注释 = "无项目符号">
+    常量 无编号符号 <公开 值 = @ppBulletUnnumbered 注释 = "未编号的项目符号">
+    常量 编号 <公开 值 = @ppBulletNumbered 注释 = "编号项目符号">
+    常量 带图像 <公开 值 = @ppBulletPicture 注释 = "带有图像的项目符号">
+}
+
+类 PPT动画效果 <公开 注释 = "指定应用于指定形状的动画或应用于指定幻灯片切换的特殊效果" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @ppEffectMixed 注释 = "混合">
+    常量 无 <公开 值 = @ppEffectNone 注释 = "无">
+    常量 切出 <公开 值 = @ppEffectCut 注释 = "切出">
+    常量 切穿黑色 <公开 值 = @ppEffectCutThroughBlack 注释 = "从全黑中切出">
+    常量 随机 <公开 值 = @ppEffectRandom 注释 = "随机">
+    常量 水平百叶窗 <公开 值 = @ppEffectBlindsHorizontal 注释 = "水平百叶窗">
+    常量 垂直百叶窗 <公开 值 = @ppEffectBlindsVertical 注释 = "垂直百叶窗">
+    常量 横跨棋盘 <公开 值 = @ppEffectCheckerboardAcross 注释 = "横向棋盘式">
+    常量 纵跨棋盘 <公开 值 = @ppEffectCheckerboardDown 注释 = "纵向棋盘式">
+    常量 向左覆盖 <公开 值 = @ppEffectCoverLeft 注释 = "向左覆盖">
+    常量 向上覆盖 <公开 值 = @ppEffectCoverUp 注释 = "向上覆盖">
+    常量 向右覆盖 <公开 值 = @ppEffectCoverRight 注释 = "向右覆盖">
+    常量 向下覆盖 <公开 值 = @ppEffectCoverDown 注释 = "向下覆盖">
+    常量 向左上覆盖 <公开 值 = @ppEffectCoverLeftUp 注释 = "向左上覆盖">
+    常量 向右上覆盖 <公开 值 = @ppEffectCoverRightUp 注释 = "向右上覆盖">
+    常量 向左下覆盖 <公开 值 = @ppEffectCoverLeftDown 注释 = "向左下覆盖">
+    常量 向右下覆盖 <公开 值 = @ppEffectCoverRightDown 注释 = "向右下覆盖">
+    常量 迭化 <公开 值 = @ppEffectDissolve 注释 = "迭化">
+    常量 淡出 <公开 值 = @ppEffectFade 注释 = "淡出">
+    常量 向左揭开 <公开 值 = @ppEffectUncoverLeft 注释 = "向左揭开">
+    常量 向上揭开 <公开 值 = @ppEffectUncoverUp 注释 = "向上揭开">
+    常量 向右揭开 <公开 值 = @ppEffectUncoverRight 注释 = "向右揭开">
+    常量 向下揭开 <公开 值 = @ppEffectUncoverDown 注释 = "向下揭开">
+    常量 向左上揭开 <公开 值 = @ppEffectUncoverLeftUp 注释 = "向左上揭开">
+    常量 向右上揭开 <公开 值 = @ppEffectUncoverRightUp 注释 = "向右上揭开">
+    常量 向左下揭开 <公开 值 = @ppEffectUncoverLeftDown 注释 = "向左下揭开">
+    常量 向右下揭开 <公开 值 = @ppEffectUncoverRightDown 注释 = "向右下揭开">
+    常量 随机水平条 <公开 值 = @ppEffectRandomBarsHorizontal 注释 = "随机水平条">
+    常量 随机垂直条 <公开 值 = @ppEffectRandomBarsVertical 注释 = "随机垂直条">
+    常量 条纹上左展开 <公开 值 = @ppEffectStripsUpLeft 注释 = "条纹上左展开">
+    常量 条纹上右展开 <公开 值 = @ppEffectStripsUpRight 注释 = "条纹上右展开">
+    常量 条纹下左展开 <公开 值 = @ppEffectStripsDownLeft 注释 = "条纹下左展开">
+    常量 条纹下右展开 <公开 值 = @ppEffectStripsDownRight 注释 = "条纹下右展开">
+    常量 条纹左上展开 <公开 值 = @ppEffectStripsLeftUp 注释 = "条纹左上展开">
+    常量 条纹右上展开 <公开 值 = @ppEffectStripsRightUp 注释 = "条纹右上展开">
+    常量 条纹左下展开 <公开 值 = @ppEffectStripsLeftDown 注释 = "条纹左下展开">
+    常量 条纹右下展开 <公开 值 = @ppEffectStripsRightDown 注释 = "条纹右下展开">
+    常量 向左擦除 <公开 值 = @ppEffectWipeLeft 注释 = "向左擦除">
+    常量 向上擦除 <公开 值 = @ppEffectWipeUp 注释 = "向上擦除">
+    常量 向右擦除 <公开 值 = @ppEffectWipeRight 注释 = "向右擦除">
+    常量 向下擦除 <公开 值 = @ppEffectWipeDown 注释 = "向下擦除">
+    常量 盒状展开 <公开 值 = @ppEffectBoxOut 注释 = "盒状展开">
+    常量 盒状收缩 <公开 值 = @ppEffectBoxIn 注释 = "盒状收缩">
+    常量 自左侧飞入 <公开 值 = @ppEffectFlyFromLeft 注释 = "自左侧飞入">
+    常量 自顶部飞入 <公开 值 = @ppEffectFlyFromTop 注释 = "自顶部飞入">
+    常量 自右侧飞入 <公开 值 = @ppEffectFlyFromRight 注释 = "自右侧飞入">
+    常量 自底部飞入 <公开 值 = @ppEffectFlyFromBottom 注释 = "自底部飞入">
+    常量 自左上角飞入 <公开 值 = @ppEffectFlyFromTopLeft 注释 = "自左上角飞入">
+    常量 自右上角飞入 <公开 值 = @ppEffectFlyFromTopRight 注释 = "自右上角飞入">
+    常量 自左下角飞入 <公开 值 = @ppEffectFlyFromBottomLeft 注释 = "自左下角飞入">
+    常量 自右下角飞入 <公开 值 = @ppEffectFlyFromBottomRight 注释 = "自右下角飞入">
+    常量 自左侧切入 <公开 值 = @ppEffectPeekFromLeft 注释 = "自左侧切入">
+    常量 自底部切入 <公开 值 = @ppEffectPeekFromDown 注释 = "自底部切入">
+    常量 自右侧切入 <公开 值 = @ppEffectPeekFromRight 注释 = "自右侧切入">
+    常量 自上部切入 <公开 值 = @ppEffectPeekFromUp 注释 = "自上部切入">
+    常量 自左侧缓慢移入 <公开 值 = @ppEffectCrawlFromLeft 注释 = "自左侧缓慢移入">
+    常量 自上部缓慢移入 <公开 值 = @ppEffectCrawlFromUp 注释 = "自上部缓慢移入">
+    常量 自右侧缓慢移入 <公开 值 = @ppEffectCrawlFromRight 注释 = "自右侧缓慢移入">
+    常量 自下部缓慢移入 <公开 值 = @ppEffectCrawlFromDown 注释 = "自下部缓慢移入">
+    常量 放大 <公开 值 = @ppEffectZoomIn 注释 = "放大">
+    常量 轻微放大 <公开 值 = @ppEffectZoomInSlightly 注释 = "轻微放大">
+    常量 缩小 <公开 值 = @ppEffectZoomOut 注释 = "缩小">
+    常量 轻微缩小 <公开 值 = @ppEffectZoomOutSlightly 注释 = "轻微缩小">
+    常量 居中缩放 <公开 值 = @ppEffectZoomCenter 注释 = "居中缩放">
+    常量 向下缩放 <公开 值 = @ppEffectZoomBottom 注释 = "向下缩放">
+    常量 水平伸展 <公开 值 = @ppEffectStretchAcross 注释 = "水平伸展">
+    常量 向左伸展 <公开 值 = @ppEffectStretchLeft 注释 = "向左伸展">
+    常量 向上伸展 <公开 值 = @ppEffectStretchUp 注释 = "向上伸展">
+    常量 向右伸展 <公开 值 = @ppEffectStretchRight 注释 = "向右伸展">
+    常量 向下伸展 <公开 值 = @ppEffectStretchDown 注释 = "向下伸展">
+    常量 旋转 <公开 值 = @ppEffectSwivel 注释 = "旋转">
+    常量 螺旋 <公开 值 = @ppEffectSpiral 注释 = "螺旋">
+    常量 内到外水平分割 <公开 值 = @ppEffectSplitHorizontalOut 注释 = "从内到外水平分割">
+    常量 外到内水平分割 <公开 值 = @ppEffectSplitHorizontalIn 注释 = "从内到外水平分割">
+    常量 内到外垂直分割 <公开 值 = @ppEffectSplitVerticalOut 注释 = "从内到外垂直分割">
+    常量 外到内垂直分割 <公开 值 = @ppEffectSplitVerticalIn 注释 = "从外到内垂直分割">
+    常量 快速闪烁一次 <公开 值 = @ppEffectFlashOnceFast 注释 = "快速闪烁一次">
+    常量 中速闪烁一次 <公开 值 = @ppEffectFlashOnceMedium 注释 = "中速闪烁一次">
+    常量 慢速闪烁一次 <公开 值 = @ppEffectFlashOnceSlow 注释 = "慢速闪烁一次">
+    常量 出现 <公开 值 = @ppEffectAppear 注释 = "出现">
+    常量 圆形放射 <公开 值 = @ppEffectCircleOut 注释 = "圆形放射">
+    常量 菱形 <公开 值 = @ppEffectDiamondOut 注释 = "菱形">
+    常量 水平梳理 <公开 值 = @ppEffectCombHorizontal 注释 = "水平梳理">
+    常量 垂直梳理 <公开 值 = @ppEffectCombVertical 注释 = "垂直梳理">
+    常量 平滑淡出 <公开 值 = @ppEffectFadeSmoothly 注释 = "平滑淡出">
+    常量 新闻快报 <公开 值 = @ppEffectNewsflash 注释 = "新闻快报">
+    常量 十字扩展 <公开 值 = @ppEffectPlusOut 注释 = "十字形扩展">
+    常量 向下推进 <公开 值 = @ppEffectPushDown 注释 = "向上推进">
+    常量 向左推进 <公开 值 = @ppEffectPushLeft 注释 = "向左推进">
+    常量 向右推进 <公开 值 = @ppEffectPushRight 注释 = "向右推进">
+    常量 向上推进 <公开 值 = @ppEffectPushUp 注释 = "向上推进">
+    常量 挤入 <公开 值 = @ppEffectWedge 注释 = "楔入">
+    常量 轮辐1 <公开 值 = @ppEffectWheel1Spoke 注释 = "轮辐1">
+    常量 轮辐2 <公开 值 = @ppEffectWheel2Spokes 注释 = "轮辐2">
+    常量 轮辐3 <公开 值 = @ppEffectWheel3Spokes 注释 = "轮辐3">
+    常量 轮辐4 <公开 值 = @ppEffectWheel4Spokes 注释 = "轮辐4">
+    常量 轮辐8 <公开 值 = @ppEffectWheel8Spokes 注释 = "轮辐8">
+    常量 反向滚轮 <公开 值 = @ppEffectWheelReverse1Spoke 注释 = "滚轮反向1分支">
+    常量 向左旋涡 <公开 值 = @ppEffectVortexLeft 注释 = "向左旋涡">
+    常量 向上旋涡 <公开 值 = @ppEffectVortexUp 注释 = "向上旋涡">
+    常量 向右旋涡 <公开 值 = @ppEffectVortexRight 注释 = "向右旋涡">
+    常量 向下旋涡 <公开 值 = @ppEffectVortexDown 注释 = "向下旋涡">
+    常量 中心波浪 <公开 值 = @ppEffectRippleCenter 注释 = "中心波浪">
+    常量 右上波浪 <公开 值 = @ppEffectRippleRightUp 注释 = "右上波浪">
+    常量 左上波浪 <公开 值 = @ppEffectRippleLeftUp 注释 = "左上波浪">
+    常量 左下波浪 <公开 值 = @ppEffectRippleLeftDown 注释 = "左下波浪">
+    常量 右下波浪 <公开 值 = @ppEffectRippleRightDown 注释 = "右下波浪">
+    常量 左菱形 <公开 值 = @ppEffectTtertterDiamondLeft 注释 = "左菱形">
+    常量 上菱形 <公开 值 = @ppEffectTtertterDiamondUp 注释 = "上菱形">
+    常量 右菱形 <公开 值 = @ppEffectTtertterDiamondRight 注释 = "右菱形">
+    常量 下菱形 <公开 值 = @ppEffectTtertterDiamondDown 注释 = "下菱形">
+    常量 左六边形 <公开 值 = @ppEffectTtertterHexagonLeft 注释 = "左六边形">
+    常量 上六边形 <公开 值 = @ppEffectTtertterHexagonUp 注释 = "上六边形">
+    常量 右六边形 <公开 值 = @ppEffectTtertterHexagonRight 注释 = "右六边形">
+    常量 下六边形 <公开 值 = @ppEffectTtertterHexagonDown 注释 = "下六边形">
+    常量 左图库 <公开 值 = @ppEffectGalleryLeft 注释 = "左图库">
+    常量 右图库 <公开 值 = @ppEffectGalleryRight 注释 = "右图库">
+    常量 传送到左 <公开 值 = @ppEffectConveyorLeft 注释 = "传送到左">
+    常量 传送到右 <公开 值 = @ppEffectConveyorRight 注释 = "传送到右">
+    常量 垂直门 <公开 值 = @ppEffectDoorsVertical 注释 = "垂直门">
+    常量 水平门 <公开 值 = @ppEffectDoorsHorizontal 注释 = "水平门">
+    常量 窗口垂直 <公开 值 = @ppEffectWindowVertical 注释 = "窗口垂直">
+    常量 窗口水平 <公开 值 = @ppEffectWindowHorizontal 注释 = "窗口水平">
+    常量 向里扭曲 <公开 值 = @ppEffectWarpIn 注释 = "向里扭曲">
+    常量 向外扭曲 <公开 值 = @ppEffectWarpOut 注释 = "向外扭曲">
+    常量 飞入 <公开 值 = @ppEffectFlyThroughIn 注释 = "飞入">
+    常量 飞出 <公开 值 = @ppEffectFlyThroughOut 注释 = "飞出">
+    常量 弹跳飞入 <公开 值 = @ppEffectFlyThroughInBounce 注释 = "弹跳飞入">
+    常量 弹跳飞出 <公开 值 = @ppEffectFlyThroughOutBounce 注释 = "弹跳飞出">
+    常量 向左滑现 <公开 值 = @ppEffectRevealSmoothLeft 注释 = "向左平滑显示">
+    常量 向右滑现 <公开 值 = @ppEffectRevealSmoothRight 注释 = "向右平滑显示">
+    常量 左黑显现 <公开 值 = @ppEffectRevealBlackLeft 注释 = "显示黑色左侧">
+    常量 右黑显现 <公开 值 = @ppEffectRevealBlackRight 注释 = "显示黑色右侧">
+    常量 蜂窝式 <公开 值 = @ppEffectHoneycomb 注释 = "蜂窝式">
+    常量 左摩天轮 <公开 值 = @ppEffectFerrisWheelLeft 注释 = "左摩天轮">
+    常量 右摩天轮 <公开 值 = @ppEffectFerrisWheelRight 注释 = "右摩天轮">
+    常量 向左切换 <公开 值 = @ppEffectSwitchLeft 注释 = "向左切换">
+    常量 向上切换 <公开 值 = @ppEffectSwitchUp 注释 = "向上切换">
+    常量 向右切换 <公开 值 = @ppEffectSwitchRight 注释 = "向右切换">
+    常量 向下切换 <公开 值 = @ppEffectSwitchDown 注释 = "向下切换">
+    常量 向左翻转 <公开 值 = @ppEffectFlipLeft 注释 = "向左翻转">
+    常量 向上翻转 <公开 值 = @ppEffectFlipUp 注释 = "向上翻转">
+    常量 向右翻转 <公开 值 = @ppEffectFlipRight 注释 = "向右翻转">
+    常量 向下翻转 <公开 值 = @ppEffectFlipDown 注释 = "向下翻转">
+    常量 闪光灯 <公开 值 = @ppEffectFlashbulb 注释 = "闪光灯">
+    常量 内条纹 <公开 值 = @ppEffectShredStripsIn 注释 = "内条纹">
+    常量 外条纹 <公开 值 = @ppEffectShredStripsOut 注释 = "外条纹">
+    常量 矩形内条纹 <公开 值 = @ppEffectShredRectangleIn 注释 = "矩形内条纹">
+    常量 矩形外条纹 <公开 值 = @ppEffectShredRectangleOut 注释 = "矩形外条纹">
+    常量 向左立方体 <公开 值 = @ppEffectCubeLeft 注释 = "向左立方体">
+    常量 向上立方体 <公开 值 = @ppEffectCubeUp 注释 = "向上立方体">
+    常量 向右立方体 <公开 值 = @ppEffectCubeRight 注释 = "向右立方体">
+    常量 向下立方体 <公开 值 = @ppEffectCubeDown 注释 = "向下立方体">
+    常量 向左旋转 <公开 值 = @ppEffectRotateLeft 注释 = "向左旋转">
+    常量 向上旋转 <公开 值 = @ppEffectRotateUp 注释 = "向上旋转">
+    常量 向右旋转 <公开 值 = @ppEffectRotateRight 注释 = "向右旋转">
+    常量 向下旋转 <公开 值 = @ppEffectRotateDown 注释 = "向下旋转">
+    常量 左方框 <公开 值 = @ppEffectBoxLeft 注释 = "左方框">
+    常量 上方框 <公开 值 = @ppEffectBoxUp 注释 = "上方框">
+    常量 右方框 <公开 值 = @ppEffectBoxRight 注释 = "右方框">
+    常量 下方框 <公开 值 = @ppEffectBoxDown 注释 = "下方框">
+    常量 向左轨道 <公开 值 = @ppEffectOrbitLeft 注释 = "向左轨道">
+    常量 向上轨道 <公开 值 = @ppEffectOrbitUp 注释 = "向上轨道">
+    常量 向右轨道 <公开 值 = @ppEffectOrbitRight 注释 = "向右轨道">
+    常量 向下轨道 <公开 值 = @ppEffectOrbitDown 注释 = "向下轨道">
+    常量 向左平移 <公开 值 = @ppEffectPanLeft 注释 = "向左平移">
+    常量 向上平移 <公开 值 = @ppEffectPanUp 注释 = "向上平移">
+    常量 向右平移 <公开 值 = @ppEffectPanRight 注释 = "向右平移">
+    常量 向下平移 <公开 值 = @ppEffectPanDown 注释 = "向下平移">
+}
+
+类 PPT渐变样式 <公开 注释 = "指定渐变填充的样式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混和 <公开 值 = @msoGradientMixed 注释 = "渐变是混和的">
+    常量 水平 <公开 值 = @msoGradientHorizontal 注释 = "水平经过图形的渐变">
+    常量 垂直 <公开 值 = @msoGradientVertical 注释 = "垂直向下填充图形的渐变">
+    常量 斜上 <公开 值 = @msoGradientDiagonalUp 注释 = "从一个底角到另一侧顶角的对角渐变">
+    常量 斜下 <公开 值 = @msoGradientDiagonalDown 注释 = "从一个顶角到另一侧底角的对角渐变">
+    常量 角部辐射 <公开 值 = @msoGradientFromCorner 注释 = "从一个角到其他三个角的渐变">
+    常量 标题向外 <公开 值 = @msoGradientFromTitle 注释 = "从标题向外的渐变">
+    常量 中心辐射 <公开 值 = @msoGradientFromCenter 注释 = "从中心到各个角的渐变">
+}
+
+类 PPT阴影风格 <公开 注释 = "指定阴影效果的类型" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 内外组合 <公开 值 = @msoShadowStyleMixed 注释 = "指定内部阴影效果和外部阴影效果的组合">
+    常量 内阴影 <公开 值 = @msoShadowStyleInnerShadow 注释 = "指定内部阴影效果">
+    常量 外阴影 <公开 值 = @msoShadowStyleOuterShadow 注释 = "指定外部阴影效果">
+}
+
+类 PPT背景图案 <公开 注释 = "将指定填充设置为一种图案" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @msoPatternMixed 注释 = "混和图案">
+    常量 点线百分之5 <公开 值 = @msoPattern5Percent 注释 = "点线百分之5">
+    常量 点线百分之10 <公开 值 = @msoPattern10Percent 注释 = "点线百分之10">
+    常量 点线百分之20 <公开 值 = @msoPattern20Percent 注释 = "点线百分之20">
+    常量 点线百分之25 <公开 值 = @msoPattern25Percent 注释 = "点线百分之25">
+    常量 点线百分之30 <公开 值 = @msoPattern30Percent 注释 = "点线百分之30">
+    常量 点线百分之40 <公开 值 = @msoPattern40Percent 注释 = "点线百分之40">
+    常量 点线百分之50 <公开 值 = @msoPattern50Percent 注释 = "点线百分之50">
+    常量 点线百分之60 <公开 值 = @msoPattern60Percent 注释 = "点线百分之60">
+    常量 点线百分之70 <公开 值 = @msoPattern70Percent 注释 = "点线百分之70">
+    常量 点线百分之75 <公开 值 = @msoPattern75Percent 注释 = "点线百分之75">
+    常量 点线百分之80 <公开 值 = @msoPattern80Percent 注释 = "点线百分之80">
+    常量 点线百分之90 <公开 值 = @msoPattern90Percent 注释 = "点线百分之90">
+    常量 深色横线 <公开 值 = @msoPatternDarkHorizontal 注释 = "深色横线">
+    常量 深色竖线 <公开 值 = @msoPatternDarkVertical 注释 = "深色竖线">
+    常量 深色斜下 <公开 值 = @msoPatternDarkDownwardDiagonal 注释 = "深色斜下线">
+    常量 深色斜上 <公开 值 = @msoPatternDarkUpwardDiagonal 注释 = "深色斜上线">
+    常量 小棋盘 <公开 值 = @msoPatternSmallCheckerBoard 注释 = "小棋盘">
+    常量 格子 <公开 值 = @msoPatternTrellis 注释 = "格子">
+    常量 浅色横线 <公开 值 = @msoPatternLightHorizontal 注释 = "浅色横线">
+    常量 浅色竖线 <公开 值 = @msoPatternLightVertical 注释 = "浅色竖线">
+    常量 浅色斜下 <公开 值 = @msoPatternLightDownwardDiagonal 注释 = "浅色斜下线">
+    常量 浅色斜上 <公开 值 = @msoPatternLightUpwardDiagonal 注释 = "浅色斜上线">
+    常量 小网格 <公开 值 = @msoPatternSmallGrid 注释 = "小网格">
+    常量 点式菱形 <公开 值 = @msoPatternDottedDiamond 注释 = "点式菱形">
+    常量 宽斜下 <公开 值 = @msoPatternWideDownwardDiagonal 注释 = "宽斜下线">
+    常量 宽斜上 <公开 值 = @msoPatternWideUpwardDiagonal 注释 = "宽斜上线">
+    常量 斜上虚线 <公开 值 = @msoPatternDashedUpwardDiagonal 注释 = "斜上虚线">
+    常量 斜下虚线 <公开 值 = @msoPatternDashedDownwardDiagonal 注释 = "斜下虚线">
+    常量 窄竖线 <公开 值 = @msoPatternNarrowVertical 注释 = "窄竖线">
+    常量 窄横线 <公开 值 = @msoPatternNarrowHorizontal 注释 = "窄横线">
+    常量 竖虚线 <公开 值 = @msoPatternDashedVertical 注释 = "竖虚线">
+    常量 横虚线 <公开 值 = @msoPatternDashedHorizontal 注释 = "横虚线">
+    常量 大纸屑 <公开 值 = @msoPatternLargeConftern 注释 = "大纸屑">
+    常量 大网格 <公开 值 = @msoPatternLargeGrid 注释 = "大网格">
+    常量 横向砖形 <公开 值 = @msoPatternHorizontalBrick 注释 = "横向砖形">
+    常量 大棋盘 <公开 值 = @msoPatternLargeCheckerBoard 注释 = "大棋盘">
+    常量 小纸屑 <公开 值 = @msoPatternSmallConftern 注释 = "小纸屑">
+    常量 之字形 <公开 值 = @msoPatternZigZag 注释 = "之字形">
+    常量 实心菱形 <公开 值 = @msoPatternSolidDiamond 注释 = "实心菱形">
+    常量 对角砖形 <公开 值 = @msoPatternDiagonalBagon 注释 = "对角砖形">
+    常量 轮廓菱形 <公开 值 = @msoPatternOutlinedDiamond 注释 = "轮廓式菱形">
+    常量 彩格 <公开 值 = @msoPatternPlaid 注释 = "彩格">
+    常量 球体 <公开 值 = @msoPatternSphere 注释 = "球体">
+    常量 编织物 <公开 值 = @msoPatternWeave 注释 = "编织物">
+    常量 虚线网格 <公开 值 = @msoPatternDottedGrid 注释 = "虚线网格">
+    常量 草皮 <公开 值 = @msoPatternDivot 注释 = "草皮">
+    常量 木瓦板 <公开 值 = @msoPatternShingle 注释 = "木瓦板">
+    常量 波浪线 <公开 值 = @msoPatternWave 注释 = "波浪">
+    常量 水平 <公开 值 = @msoPatternHorizontal 注释 = "水平">
+    常量 垂直 <公开 值 = @msoPatternVertical 注释 = "垂直">
+    常量 十字形 <公开 值 = @msoPatternCross 注释 = "十字形">
+    常量 斜下线 <公开 值 = @msoPatternDownwardDiagonal 注释 = "斜下线">
+    常量 斜上线 <公开 值 = @msoPatternUpwardDiagonal 注释 = "斜上线">
+    常量 对角十字 <公开 值 = @msoPatternDiagonalCross 注释 = "对角十字">
+}
+
+类 PPT占位符类型 <公开 注释 = "代表占位符的类型" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @ppPlaceholderMixed 注释 = "混合">
+    常量 标题 <公开 值 = @ppPlaceholderTitle 注释 = "标题">
+    常量 正文 <公开 值 = @ppPlaceholderBody 注释 = "正文">
+    常量 居中标题 <公开 值 = @ppPlaceholderCenterTitle 注释 = "居中标题">
+    常量 副标题 <公开 值 = @ppPlaceholderSubtitle 注释 = "副标题">
+    常量 垂直标题 <公开 值 = @ppPlaceholderVerticalTitle 注释 = "垂直标题">
+    常量 垂直正文 <公开 值 = @ppPlaceholderVerticalBody 注释 = "垂直正文">
+    常量 对象 <公开 值 = @ppPlaceholderObject 注释 = "对象">
+    常量 图表 <公开 值 = @ppPlaceholderChart 注释 = "图表">
+    常量 位图 <公开 值 = @ppPlaceholderBitmap 注释 = "位图">
+    常量 媒体 <公开 值 = @ppPlaceholderMediaClip 注释 = "媒体剪辑">
+    常量 结构图 <公开 值 = @ppPlaceholderOrgChart 注释 = "组织结构图">
+    常量 表 <公开 值 = @ppPlaceholderTable 注释 = "表">
+    常量 幻灯片编号 <公开 值 = @ppPlaceholderSlideNumber 注释 = "幻灯片编号">
+    常量 页眉 <公开 值 = @ppPlaceholderHeader 注释 = "页眉">
+    常量 页脚 <公开 值 = @ppPlaceholderFooter 注释 = "页脚">
+    常量 日期 <公开 值 = @ppPlaceholderDate 注释 = "日期">
+    常量 垂直对象 <公开 值 = @ppPlaceholderVerticalObject 注释 = "垂直对象">
+    常量 图片 <公开 值 = @ppPlaceholderPicture 注释 = "图片">
+}
+
+类 PPT边框集合 <公开 注释 = "指示单元格边框或对角线绘制的方向" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 上边框 <公开 值 = @ppBorderTop 注释 = "向上">
+    常量 左边框 <公开 值 = @ppBorderLeft 注释 = "向左">
+    常量 下边框 <公开 值 = @ppBorderBottom 注释 = "向下">
+    常量 右边框 <公开 值 = @ppBorderRight 注释 = "向右">
+    常量 斜下 <公开 值 = @ppBorderDiagonalDown 注释 = "沿对角线向下">
+    常量 斜上 <公开 值 = @ppBorderDiagonalUp 注释 = "沿对角线向上">
+}
+
+类 PPT表格样式 <公开 注释 = "图形表格样式ID" @常量类 = 文本型 @文档 = "category = \"辅助类\"">
+{
+    常量 无主题无网格 <公开 值 = "{2D5ABB26-0587-4C30-8999-92F81FD0307C}" 注释 = "无主题无网格">
+    常量 主题1强调1 <公开 值 = "{3C2FFA5D-87B4-456A-9821-1D502468CF0F}" 注释 = "主题1强调1">
+    常量 主题1强调2 <公开 值 = "{284E427A-3D55-4303-BF80-6455036E1DE7}" 注释 = "主题1强调2">
+    常量 主题1强调3 <公开 值 = "{69C7853C-536D-4A76-A0AE-DD22124D55A5}" 注释 = "主题1强调3">
+    常量 主题1强调4 <公开 值 = "{775DCB02-9BB8-47FD-8907-85C794F793BA}" 注释 = "主题1强调4">
+    常量 主题1强调5 <公开 值 = "{35758FB7-9AC5-4552-8A53-C91805E547FA}" 注释 = "主题1强调5">
+    常量 主题1强调6 <公开 值 = "{08FB837D-C827-4EFA-A057-4D05807E0F7C}" 注释 = "主题1强调6">
+    常量 无主题 <公开 值 = "{5940675A-B579-460E-94D1-54222C63F5DA}" 注释 = "无主题">
+    常量 主题2强调1 <公开 值 = "{D113A9D2-9D6B-4929-AA2D-F23B5EE8CBE7}" 注释 = "主题2强调1">
+    常量 主题2强调2 <公开 值 = "{18603FDC-E32A-4AB5-989C-0864C3EAD2B8}" 注释 = "主题2强调2">
+    常量 主题2强调3 <公开 值 = "{306799F8-075E-4A3A-A7F6-7FBC6576F1A4}" 注释 = "主题2强调3">
+    常量 主题2强调4 <公开 值 = "{E269D01E-BC32-4049-B463-5C60D7B0CCD2}" 注释 = "主题2强调4">
+    常量 主题2强调5 <公开 值 = "{327F97BB-C833-4FB7-BDE5-3F7075034690}" 注释 = "主题2强调5">
+    常量 主题2强调6 <公开 值 = "{638B1855-1B75-4FBE-930C-398BA8C253C6}" 注释 = "主题2强调6">
+    常量 浅色1 <公开 值 = "{9D7B26C5-4107-4FEC-AEDC-1716B250A1EF}" 注释 = "浅色1">
+    常量 浅色1强调1 <公开 值 = "{3B4B98B0-60AC-42C2-AFA5-B58CD77FA1E5}" 注释 = "浅色1强调1">
+    常量 浅色1强调2 <公开 值 = "{0E3FDE45-AF77-4B5C-9715-49D594BDF05E}" 注释 = "浅色1强调2">
+    常量 浅色1强调3 <公开 值 = "{C083E6E3-FA7D-4D7B-A595-EF9225AFEA82}" 注释 = "浅色1强调3">
+    常量 浅色1强调4 <公开 值 = "{D27102A9-8310-4765-A935-A1911B00CA55}" 注释 = "浅色1强调4">
+    常量 浅色1强调5 <公开 值 = "{5FD0F851-EC5A-4D38-B0AD-8093EC10F338}" 注释 = "浅色1强调5">
+    常量 浅色1强调6 <公开 值 = "{68D230F3-CF80-4859-8CE7-A43EE81993B5}" 注释 = "浅色1强调6">
+    常量 浅色2 <公开 值 = "{7E9639D4-E3E2-4D34-9284-5A2195B3D0D7}" 注释 = "浅色2">
+    常量 浅色2强调1 <公开 值 = "{69012ECD-51FC-41F1-AA8D-1B2483CD663E}" 注释 = "浅色2强调1">
+    常量 浅色2强调2 <公开 值 = "{72833802-FEF1-4C79-8D5D-14CF1EAF98D9}" 注释 = "浅色2强调2">
+    常量 浅色2强调3 <公开 值 = "{F2DE63D5-997A-4646-A377-4702673A728D}" 注释 = "浅色2强调3">
+    常量 浅色2强调4 <公开 值 = "{17292A2E-F333-43FB-9621-5CBBE7FDCDCB}" 注释 = "浅色2强调4">
+    常量 浅色2强调5 <公开 值 = "{5A111915-BE36-4E01-A7E5-04B1672EAD32}" 注释 = "浅色2强调5">
+    常量 浅色2强调6 <公开 值 = "{912C8C85-51F0-491E-9774-3900AFEF0FD7}" 注释 = "浅色2强调6">
+    常量 浅色3 <公开 值 = "{616DA210-FB5B-4158-B5E0-FEB733F419BA}" 注释 = "浅色3">
+    常量 浅色3强调1 <公开 值 = "{BC89EF96-8CEA-46FF-86C4-4CE0E7609802}" 注释 = "浅色3强调1">
+    常量 浅色3强调2 <公开 值 = "{5DA37D80-6434-44D0-A028-1B22A696006F}" 注释 = "浅色3强调2">
+    常量 浅色3强调3 <公开 值 = "{8799B23B-EC83-4686-B30A-512413B5E67A}" 注释 = "浅色3强调3">
+    常量 浅色3强调4 <公开 值 = "{ED083AE6-46FA-4A59-8FB0-9F97EB10719F}" 注释 = "浅色3强调4">
+    常量 浅色3强调5 <公开 值 = "{BDBED569-4797-4DF1-A0F4-6AAB3CD982D8}" 注释 = "浅色3强调5">
+    常量 浅色3强调6 <公开 值 = "{E8B1032C-EA38-4F05-BA0D-38AFFFC7BED3}" 注释 = "浅色3强调6">
+    常量 中色1 <公开 值 = "{793D81CF-94F2-401A-BA57-92F5A7B2D0C5}" 注释 = "中色1">
+    常量 中色1强调1 <公开 值 = "{B301B821-A1FF-4177-AEE7-76D212191A09}" 注释 = "中色1强调1">
+    常量 中色1强调2 <公开 值 = "{9DCAF9ED-07DC-4A11-8D7F-57B35C25682E}" 注释 = "中色1强调2">
+    常量 中色1强调3 <公开 值 = "{1FECB4D8-DB02-4DC6-A0A2-4F2EBAE1DC90}" 注释 = "中色1强调3">
+    常量 中色1强调4 <公开 值 = "{1E171933-4619-4E11-9A3F-F7608DF75F80}" 注释 = "中色1强调4">
+    常量 中色1强调5 <公开 值 = "{FABFCF23-3B69-468F-B69F-88F6DE6A72F2}" 注释 = "中色1强调5">
+    常量 中色1强调6 <公开 值 = "{10A1B5D5-9B99-4C35-A422-299274C87663}" 注释 = "中色1强调6">
+    常量 中色2 <公开 值 = "{073A0DAA-6AF3-43AB-8588-CEC1D06C72B9}" 注释 = "中色2">
+    常量 中色2强调1 <公开 值 = "{5C22544A-7EE6-4342-B048-85BDC9FD1C3A}" 注释 = "中色2强调1">
+    常量 中色2强调2 <公开 值 = "{21E4AEA4-8DFA-4A89-87EB-49C32662AFE0}" 注释 = "中色2强调2">
+    常量 中色2强调3 <公开 值 = "{F5AB1C69-6EDB-4FF4-983F-18BD219EF322}" 注释 = "中色2强调3">
+    常量 中色2强调4 <公开 值 = "{00A15C55-8517-42AA-B614-E9B94910E393}" 注释 = "中色2强调4">
+    常量 中色2强调5 <公开 值 = "{7DF18680-E054-41AD-8BC1-D1AEF772440D}" 注释 = "中色2强调5">
+    常量 中色2强调6 <公开 值 = "{93296810-A885-4BE3-A3E7-6D5BEEA58F35}" 注释 = "中色2强调6">
+    常量 中色3 <公开 值 = "{8EC20E35-A176-4012-BC5E-935CFFF8708E}" 注释 = "中色3">
+    常量 中色3强调1 <公开 值 = "{6E25E649-3F16-4E02-A733-19D2CDBF48F0}" 注释 = "中色3强调1">
+    常量 中色3强调2 <公开 值 = "{85BE263C-DBD7-4A20-BB59-AAB30ACAA65A}" 注释 = "中色3强调2">
+    常量 中色3强调3 <公开 值 = "{EB344D84-9AFB-497E-A393-DC336BA19D2E}" 注释 = "中色3强调3">
+    常量 中色3强调4 <公开 值 = "{EB9631B5-78F2-41C9-869B-9F39066F8104}" 注释 = "中色3强调4">
+    常量 中色3强调5 <公开 值 = "{74C1A8A3-306A-4EB7-A6B1-4F7E0EB9C5D6}" 注释 = "中色3强调5">
+    常量 中色3强调6 <公开 值 = "{2A488322-F2BA-4B5B-9748-0D474271808F}" 注释 = "中色3强调6">
+    常量 中色4 <公开 值 = "{D7AC3CCA-C797-4891-BE02-D94E43425B78}" 注释 = "中色4">
+    常量 中色4强调1 <公开 值 = "{69CF1AB2-1976-4502-BF36-3FF5EA218861}" 注释 = "中色4强调1">
+    常量 中色4强调2 <公开 值 = "{8A107856-5554-42FB-B03E-39F5DBC370BA}" 注释 = "中色4强调2">
+    常量 中色4强调3 <公开 值 = "{0505E3EF-67EA-436B-97B2-0124C06EBD24}" 注释 = "中色4强调3">
+    常量 中色4强调4 <公开 值 = "{C4B1156A-380E-4F78-BDF5-A606A8083BF9}" 注释 = "中色4强调4">
+    常量 中色4强调5 <公开 值 = "{22838BEF-8BB2-4498-84A7-C5851F593DF1}" 注释 = "中色4强调5">
+    常量 中色4强调6 <公开 值 = "{16D9F66E-5EB9-4882-86FB-DCBF35E3C3E4}" 注释 = "中色4强调6">
+    常量 深色1 <公开 值 = "{E8034E78-7F5D-4C2E-B375-FC64B27BC917}" 注释 = "深色1">
+    常量 深色1强调1 <公开 值 = "{125E5076-3810-47DD-B79F-674D7AD40C01}" 注释 = "深色1强调1">
+    常量 深色1强调2 <公开 值 = "{37CE84F3-28C3-443E-9E96-99CF82512B78}" 注释 = "深色1强调2">
+    常量 深色1强调3 <公开 值 = "{D03447BB-5D67-496B-8E87-E561075AD55C}" 注释 = "深色1强调3">
+    常量 深色1强调4 <公开 值 = "{E929F9F4-4A8F-4326-A1B4-22849713DDAB}" 注释 = "深色1强调4">
+    常量 深色1强调5 <公开 值 = "{8FD4443E-F989-4FC4-A0C8-D5A2AF1F390B}" 注释 = "深色1强调5">
+    常量 深色1强调6 <公开 值 = "{AF606853-7671-496A-8E4F-DF71F8EC918B}" 注释 = "深色1强调6">
+    常量 深色2 <公开 值 = "{5202B0CA-FC54-4496-8BCA-5EF66A818D29}" 注释 = "深色2">
+    常量 深色2强调1V2 <公开 值 = "{0660B408-B3CF-4A94-85FC-2B1E0A45F4A2}" 注释 = "深色2强调1V2">
+    常量 深色2强调3V4 <公开 值 = "{91EBBBCC-DAD2-459C-BE2E-F6DE35CF9A28}" 注释 = "深色2强调3V4">
+    常量 深色2强调5V6 <公开 值 = "{46F890A9-2807-4EBB-B81D-B2AA78EC7F39}" 注释 = "深色2强调5V6">
+}
+
+类 PPT背景纹理 <公开 注释 = "指定用于填充形状的纹理" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @msoPresetTextureMixed 注释 = "混合">
+    常量 草纸 <公开 值 = @msoTexturePapyrus 注释 = "草纸纹理">
+    常量 画布 <公开 值 = @msoTextureCanvas 注释 = "画布纹理">
+    常量 斜纹 <公开 值 = @msoTextureDenim 注释 = "Denim纹理">
+    常量 月光 <公开 值 = @msoTextureWovenMat 注释 = "月光纹理">
+    常量 水珠 <公开 值 = @msoTextureWaterDroplets 注释 = "水珠纹理">
+    常量 纸袋 <公开 值 = @msoTexturePaperBag 注释 = "纸袋纹理">
+    常量 化石 <公开 值 = @msoTextureFishFossil 注释 = "化石纹理">
+    常量 沙 <公开 值 = @msoTextureSand 注释 = "沙纹理">
+    常量 绿色大理石 <公开 值 = @msoTextureGreenMarble 注释 = "绿色大理石纹理">
+    常量 白色大理石 <公开 值 = @msoTextureWhiteMarble 注释 = "白色大理石纹理">
+    常量 黑色大理石 <公开 值 = @msoTextureBrownMarble 注释 = "黑色大理石纹理">
+    常量 花岗岩 <公开 值 = @msoTextureGranite 注释 = "花岗岩纹理">
+    常量 报刊 <公开 值 = @msoTextureNewsprint 注释 = "报刊纹理">
+    常量 回收的纸张 <公开 值 = @msoTextureRecycledPaper 注释 = "回收的纸张纹理">
+    常量 羊皮纸 <公开 值 = @msoTextureParchment 注释 = "羊皮纸纹理">
+    常量 信纸 <公开 值 = @msoTextureStationery 注释 = "信纸纹理">
+    常量 蓝色纸 <公开 值 = @msoTextureBlueTissuePaper 注释 = "蓝色纸纹理">
+    常量 粉色纸 <公开 值 = @msoTexturePinkTissuePaper 注释 = "粉色纸纹理">
+    常量 紫色网格 <公开 值 = @msoTexturePurpleMesh 注释 = "紫色网格纹理">
+    常量 花纹 <公开 值 = @msoTextureBouquet 注释 = "花纹纹理">
+    常量 软木塞 <公开 值 = @msoTextureCork 注释 = "软木塞纹理">
+    常量 桃木色 <公开 值 = @msoTextureWalnut 注释 = "桃木色纹理">
+    常量 橡木 <公开 值 = @msoTextureOak 注释 = "橡木纹理">
+    常量 中等纹理 <公开 值 = @msoTextureMediumWood 注释 = "中等纹理纹理">
+}
+
+类 PPT渐变填充 <公开 注释 = "指定使用哪种预定义渐变填充形状" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @msoPresetGradientMixed 注释 = "混合渐变">
+    常量 晚霞 <公开 值 = @msoGradientEarlySunset 注释 = "晚霞渐变">
+    常量 晚红 <公开 值 = @msoGradientLateSunset 注释 = "晚红渐变">
+    常量 夜间 <公开 值 = @msoGradientNightfall 注释 = "夜间渐变">
+    常量 黎明 <公开 值 = @msoGradientDaybreak 注释 = "黎明渐变">
+    常量 水平 <公开 值 = @msoGradientHorizon 注释 = "水平渐变">
+    常量 沙漠 <公开 值 = @msoGradientDesert 注释 = "沙漠渐变">
+    常量 海洋 <公开 值 = @msoGradientOcean 注释 = "海洋渐变">
+    常量 静水 <公开 值 = @msoGradientCalmWater 注释 = "静水渐变">
+    常量 射击 <公开 值 = @msoGradientFire 注释 = "射击渐变">
+    常量 雾 <公开 值 = @msoGradientFog 注释 = "云雾渐变">
+    常量 苔藓 <公开 值 = @msoGradientMoss 注释 = "苔藓渐变">
+    常量 孔雀开屏 <公开 值 = @msoGradientPeacock 注释 = "孔雀开屏渐变">
+    常量 麦黄色 <公开 值 = @msoGradientWheat 注释 = "麦黄色渐变">
+    常量 羊皮纸 <公开 值 = @msoGradientParchment 注释 = "羊皮纸渐变">
+    常量 红木 <公开 值 = @msoGradientMahogany 注释 = "红木渐变">
+    常量 彩虹 <公开 值 = @msoGradientRainbow 注释 = "水彩渐变">
+    常量 彩虹2 <公开 值 = @msoGradientRainbowII 注释 = "水彩II渐变">
+    常量 金色 <公开 值 = @msoGradientGold 注释 = "金色渐变">
+    常量 金色2 <公开 值 = @msoGradientGoldII 注释 = "金色II渐变">
+    常量 黄铜 <公开 值 = @msoGradientBrass 注释 = "黄铜渐变">
+    常量 铬合金 <公开 值 = @msoGradientChrome 注释 = "铬合金渐变">
+    常量 铬合金2 <公开 值 = @msoGradientChromeII 注释 = "铬合金II渐变">
+    常量 银白色 <公开 值 = @msoGradientSilver 注释 = "银白色渐变">
+    常量 蔚蓝色 <公开 值 = @msoGradientSapphire 注释 = "蔚蓝色渐变">
+}
+
+类 PPT艺术字对齐 <公开 注释 = "艺术字对齐方式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @msoTextEffectAlignmentMixed 注释 = "混合">
+    常量 左对齐 <公开 值 = @msoTextEffectAlignmentLeft 注释 = "左对齐">
+    常量 居中 <公开 值 = @msoTextEffectAlignmentCentered 注释 = "居中">
+    常量 右对齐 <公开 值 = @msoTextEffectAlignmentRight 注释 = "右对齐">
+    常量 两端对齐 <公开 值 = @msoTextEffectAlignmentLetterJustify 注释 = "文字两端对齐可以调整字母之间的间距以使文字两端对齐">
+    常量 两端对齐2 <公开 值 = @msoTextEffectAlignmentWordJustify 注释 = "文字两端对齐可以调整单词（而非字母）之间的间距以使文字两端对齐">
+    常量 两端对齐3 <公开 值 = @msoTextEffectAlignmentStretchJustify 注释 = "文字两端对齐可以伸展字母以使文字两端对齐">
+}
+
+类 PPT宏类型 <公开 @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 模块 <公开 值 = @vbext_ct_StdModule 注释 = "模块">
+    常量 类模块 <公开 值 = @vbext_ct_ClassModule 注释 = "类模块">
+    常量 窗口 <公开 值 = @vbext_ct_MSForm 注释 = "Microsoft 窗体">
+    常量 设计器 <公开 值 = @vbext_ct_ActiveXDesigner 注释 = "ActiveX 设计器">
+    常量 文档模块 <公开 值 = @vbext_ct_Document 注释 = "文档模块">
+}
+
+类 PPT程序 <公开 注释 = "代表整个PowerPoint程序">
+{
+    变量 Application对象 <类型 = COM对象类>
+    变量 Application事件 <类型 = COM对象事件类 注释 = "事件对象">
+
+    方法 创建 <公开 类型 = 逻辑型 注释 = "创建PowerPoint对象" 返回值注释 = "成功返回真." 返回值注释 = "失败返回假,没有安装Microsoft Office PowerPoint程序." "">
+    {
+        返回 (Application对象.创建 ("PowerPoint.Application", ""))
+    }
+
+    方法 获取 <公开 类型 = 逻辑型 注释 = "获取当前操作系统中已经存在的\"PowerPoint对象\"填入本对象中,本对象中的原有内容将被覆盖.">
+    {
+        返回 (Application对象.获取 ("PowerPoint.Application"))
+    }
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作.">
+    参数 参_Application对象 <类型 = COM对象类>
+    {
+        Application对象 = 参_Application对象
+        返回 (Application对象.是否为空 () == 假)
+    }
+
+    方法 宏设置 <公开 注释 = "设置是否启用宏并信任VBA工程对象模型的访问,需要在文稿未打开前使用.">
+    参数 启用宏方式 <类型 = 整数 注释 = "1.启用所有宏." 注释 = "2.通过通知禁用VBA宏." 注释 = "3.禁用无数字签署的VBA宏." 注释 = "4.不提供通知,禁用VBA宏." @默认值 = 1>
+    参数 信任 <类型 = 逻辑型 注释 = "是否信任对VBA工程对象模型的访问" @默认值 = 真>
+    {
+        写数值注册项 (注册表根目录类型.现行用户, "Software\\Microsoft\\Office\\" + 版本 + "\\PowerPoint\\Security\\VBAWarnings", 启用宏方式)  // 启用宏方式
+        写数值注册项 (注册表根目录类型.现行用户, "Software\\Microsoft\\Office\\" + 版本 + "\\PowerPoint\\Security\\AccessVBOM", 选择 (信任, 1, 0))  // 是否信任对VBA工程对象模型的访问
+    }
+
+    方法 退出 <公开 注释 = "退出PowerPoint程序,并可选择保存或发送打开的文稿.">
+    {
+        Application对象.无参数及返回值方法 ("Quit")
+    }
+
+    方法 版本 <公开 属性读 类型 = 文本型 注释 = "PowerPoint版本号,与Office版本对应如下:" 注释 = "1.0----Office 1.0." 注释 = "5.0----Office 4.2."
+            注释 = "7.0----Office 95." 注释 = "8.0----Office 97." 注释 = "9.0----Office 2000." 注释 = "10.0----Office XP/2002."
+            注释 = "11.0----Office XP/2003." 注释 = "12.0----Office XP/2007." 注释 = "14.0----Office 2010." 注释 = "15.0----Office 2013."
+            注释 = "16.0----Office 2016." 注释 = "16.0----Office 2021." "">
+    {
+        返回 (Application对象.读无参数属性 ("Version", 文本型))
+    }
+
+    方法 内部版本 <公开 属性读 类型 = 文本型 注释 = "返回PowerPoint内部版本号" "">
+    {
+        返回 (Application对象.读无参数属性 ("Build", 文本型))
+    }
+
+    方法 文稿集 <公开 属性读 类型 = PPT文稿集 注释 = "返回一个\"PPT文稿集\"集合,该集合代表所有打开的PPT文稿.此为只读属性." "">
+    {
+        变量 局_PPT文稿集 <类型 = PPT文稿集>
+        局_PPT文稿集.置对象 (Application对象.读无参数对象型属性 ("Presentations", COM对象类))
+        返回 (局_PPT文稿集)
+    }
+
+    方法 图表版式数 <公开 属性读 类型 = 整数 注释 = "返回应用程序中当前智能图表版式数量">
+    {
+        返回 (Application对象.读无参数对象型属性 ("SmartArtLayouts", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 图表样式数 <公开 属性读 类型 = 整数 注释 = "返回应用程序中当前智能图表快速样式数量">
+    {
+        返回 (Application对象.读无参数对象型属性 ("SmartArtQuickStyles", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 图表配色数 <公开 属性读 类型 = 整数 注释 = "返回应用程序中当前智能图表配色数量">
+    {
+        返回 (Application对象.读无参数对象型属性 ("SmartArtColors", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 显示警告 <公开 属性读 类型 = 逻辑型 注释 = "返回运行宏时产生的一些警告和消息的处理方式" 返回值注释 = "如果为真.则表示显示所有警告;如果为假.则表示不显示任何警告." 返回值注释 = "">
+    {
+        返回 (Application对象.读无参数属性 ("DisplayAlerts", 逻辑型))
+    }
+
+    方法 显示警告 <公开 属性写 注释 = "设置运行宏时产生的一些警告和消息的处理方式">
+    参数 所欲设置的值 <类型 = 逻辑型 注释 = "如果为真.则表示显示所有警告;默认值为假.表示不显示任何警告或消息框.如果运行宏时遇到消息框.则选择默认值并继续运行宏." @默认值 = 假>
+    {
+        Application对象.写属性 ("DisplayAlerts", 选择 (所欲设置的值, 2, 1))
+    }
+
+    方法 可视 <公开 属性读 类型 = 逻辑型 注释 = "返回对象是否可见">
+    {
+        返回 (Application对象.读无参数属性 ("Visible", 逻辑型))
+    }
+
+    方法 可视 <公开 属性写 注释 = "设置对象是否可见">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Application对象.写属性 ("Visible", 所欲设置的值)
+    }
+
+    方法 取对象 <公开 类型 = COM对象类 注释 = "获取PowerPoint提供的对象.与\"COM对象类\"数据类型兼容,可交互操作.">
+    {
+        返回 (Application对象)
+    }
+
+    方法 激活 <公开 注释 = "激活指定的对象">
+    {
+        Application对象.无参数及返回值方法 ("Activate")
+    }
+
+    方法 像素到磅 <公开 类型 = 小数 注释 = "屏幕像素转换到以磅为单位大小">
+    参数 待转换像素值 <类型 = 小数 注释 = "待转换像素值">
+    {
+        返回 (待转换像素值 * 0.75)
+    }
+
+    方法 帮助 <公开 注释 = "显示一个帮助主题">
+    参数 文件名 <类型 = 文本型 注释 = "要显示的帮助文件的名称.可以是后缀为\".chm\"或\".hlp\"的文件.如果未指定该参数.将使用PowerPoint帮助." @默认值 = "">
+    参数 ID号 <类型 = 整数 注释 = "帮助主题的上下文ID号.如果未指定该参数.或者没有与指定的上下文ID号相关的帮助主题.则显示\"帮助主题\"对话框." @默认值 = 0>
+    {
+        变量 局_文件名 <类型 = COM变体型>
+        变量 局_ID号 <类型 = COM变体型>
+        如果 (文件名 != "")
+        {
+            局_文件名.赋值 (文件名, )
+        }
+        如果 (ID号 != 0)
+        {
+            局_ID号.赋值 (ID号, )
+        }
+        Application对象.无返回值方法 ("Help", 文件名, ID号)
+    }
+
+    方法 激活文稿 <公开 注释 = "激活文稿集合中的一个文稿">
+    参数 索引号 <类型 = 整数 注释 = "二选一,对象的索引号.从1开始,表示文稿在文稿集中的位置.为-1时忽略该参数." @默认值 = -1>
+    参数 名称 <类型 = 文本型 注释 = "二选一,对象的名称.索引号不为-1时忽略该参数." @默认值 = "">
+    {
+        如果 (索引号 == -1)
+        {
+            Application对象.读无参数对象型属性 ("ActivePresentation", COM对象类).读对象型属性 ("Item", COM对象类, 名称).无参数及返回值方法 ("Activate")  // 从文稿名激活
+        }
+        否则
+        {
+            Application对象.读无参数对象型属性 ("ActivePresentation", COM对象类).读对象型属性 ("Item", COM对象类, 索引号).无参数及返回值方法 ("Activate")  // 从文稿索引激活
+        }
+    }
+
+    方法 活动文稿 <公开 属性读 类型 = PPT文稿 注释 = "返回一个\"PPT文稿\",代表活动窗口中打开的PPT文稿.">
+    {
+        变量 局_PPT文稿 <类型 = PPT文稿>
+        局_PPT文稿.置对象 (Application对象.读无参数对象型属性 ("ActivePresentation", COM对象类))
+        返回 (局_PPT文稿)
+    }
+
+    方法 打开主题 <公开 类型 = PPT文稿 注释 = "打开指定的主题文件(*thmx)">
+    参数 文件名 <类型 = 文本型 注释 = "主题文件的路径(*.thmx)">
+    {
+        变量 局_PPT文稿 <类型 = PPT文稿>
+        局_PPT文稿.置对象 (Application对象.对象型方法 ("OpenThemeFile", COM对象类, 文件名))
+        返回 (局_PPT文稿)
+    }
+
+    方法 安装路径 <公开 属性读 类型 = 文本型 注释 = "返回PowerPoint在本机中安装路径">
+    {
+        返回 (Application对象.读无参数属性 ("Path", 文本型))
+    }
+
+    方法 左 <公开 属性读 类型 = 整数 注释 = "返回该值代表活动文稿的水平位置,以磅为单位.">
+    {
+        返回 (Application对象.读无参数属性 ("Left", 整数))
+    }
+
+    方法 左 <公开 属性写 注释 = "设置从屏幕左边缘到PowerPoint主窗口左边缘的距离,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Application对象.写属性 ("Left", 所欲设置的值)
+    }
+
+    方法 上 <公开 属性读 类型 = 整数 注释 = "返回应用程序窗口工作区的上边缘到文稿、 PowerPoint程序和幻灯片放映窗口的上边缘的距离.以磅为单位.">
+    {
+        返回 (Application对象.读无参数属性 ("Top", 整数))
+    }
+
+    方法 上 <公开 属性写 注释 = "设置应用程序窗口工作区的上边缘到文稿、 PowerPoint程序和幻灯片放映窗口的上边缘的距离.以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Application对象.写属性 ("Top", 所欲设置的值)
+    }
+
+    方法 宽 <公开 属性读 类型 = 整数 注释 = "返回从PowerPoint程序窗口左边缘到其右边缘的距离">
+    {
+        返回 (Application对象.读无参数属性 ("Width", 整数))
+    }
+
+    方法 宽 <公开 属性写 注释 = "设置从PowerPoint程序窗口左边缘到其右边缘的距离">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Application对象.写属性 ("Width", 所欲设置的值)
+    }
+
+    方法 高 <公开 属性读 类型 = 整数 注释 = "返回PowerPoint程序窗口的高度,以磅为单位.">
+    {
+        返回 (Application对象.读无参数属性 ("Height", 整数))
+    }
+
+    方法 高 <公开 属性写 注释 = "设置PowerPoint程序窗口的高度,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Application对象.写属性 ("Height", 所欲设置的值)
+    }
+
+    方法 宏 <公开 属性读 类型 = PPT宏 注释 = "返回表示VB编辑器中工作区对象">
+    {
+        变量 局_PPT宏 <类型 = PPT宏>
+        变量 局_宏工作区对象 <类型 = COM对象类>
+        局_宏工作区对象 = Application对象.读无参数对象型属性 ("VBE", COM对象类).读无参数对象型属性 ("ActiveVBProject", COM对象类).读无参数对象型属性 ("VBComponents", COM对象类)
+        局_PPT宏.置对象 (局_宏工作区对象)
+        返回 (局_PPT宏)
+    }
+
+    方法 运行宏 <公开 注释 = "运行Visual Basic 宏">
+    参数 宏名 <类型 = 文本型 注释 = "宏的名称,参数可以是任意模板,模块和宏名的组合.">
+    参数 文本数组参数 <类型 = 文本数组类 注释 = "二选一,宏参数值." @默认值 = 空对象>
+    参数 整数数组参数 <类型 = 整数数组类 注释 = "二选一,宏参数值." @默认值 = 空对象>
+    {
+        变量 COM变体 <类型 = COM变体型>
+        如果 (文本数组参数.取成员数 () > 0)
+        {
+            COM变体.创建数组 (COM数组成员类型.文本值, 文本数组参数.取成员数 ())
+            文本数组参数.枚举循环 ()
+            {
+                COM变体.赋值 (文本数组参数.取枚举值 (), 文本数组参数.取枚举索引 ())
+            }
+        }
+        否则
+        {
+            COM变体.创建数组 (COM数组成员类型.整数值, 整数数组参数.取成员数 ())
+            整数数组参数.枚举循环 ()
+            {
+                COM变体.赋值 (整数数组参数.取枚举值 (), 整数数组参数.取枚举索引 ())
+            }
+        }
+        Application对象.无返回值方法 ("Run", 宏名, COM变体)
+    }
+
+    方法 标题 <公开 属性读 类型 = 文本型 注释 = "返回出现在PowerPoint程序窗口标题栏中显示的名称">
+    {
+        返回 (Application对象.读无参数属性 ("Caption", 文本型))
+    }
+
+    方法 标题 <公开 属性写 注释 = "设置出现在PowerPoint程序窗口标题栏中显示的名称,注:标题不会跟随文稿保存而被保存.">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Application对象.写属性 ("Caption", 所欲设置的值)
+    }
+
+    方法 取显示比例 <公开 类型 = 整数 注释 = "返回正常大小的百分比,代表指定视图的缩放大小." 返回值注释 = "" 返回值注释 = "">
+    参数 索引号 <类型 = 整数 注释 = "百分比,取值范围10%到400%之间.">
+    {
+        返回 (Application对象.读无参数对象型属性 ("Windows", COM对象类).对象型方法 ("Item", COM对象类, 索引号).读无参数对象型属性 ("View", COM对象类).读无参数属性 ("Zoom ", 整数))
+    }
+
+    方法 置显示比例 <公开 注释 = "以正常大小的百分比形式设置指定视图的缩放大小">
+    参数 索引号 <类型 = 整数 注释 = "文稿窗口索引号">
+    参数 所欲设置的值 <类型 = 整数 注释 = "百分比,取值范围10%到400%之间." "">
+    {
+        Application对象.读无参数对象型属性 ("Windows", COM对象类).对象型方法 ("Item", COM对象类, 索引号).读无参数对象型属性 ("View", COM对象类).写属性 ("Zoom", 所欲设置的值)
+    }
+
+    方法 窗口状态 <公开 属性读 类型 = PPT窗口状态 注释 = "返回窗口的状态" 返回值注释 = "PPT窗口状态.*">
+    {
+        返回 (Application对象.读无参数属性 ("WindowState", PPT窗口状态))
+    }
+
+    方法 窗口状态 <公开 属性写 注释 = "设置指定窗口的状态">
+    参数 所欲设置的值 <类型 = PPT窗口状态 注释 = "PPT窗口状态.*" "">
+    {
+        Application对象.写属性 ("WindowState", 所欲设置的值)
+    }
+
+    方法 打印机 <公开 属性读 类型 = 文本型 注释 = "返回活动打印机的名称">
+    {
+        返回 (Application对象.读无参数属性 ("ActivePrinter", 文本型))
+    }
+
+    方法 打印机 <公开 属性写 注释 = "设置活动打印机的名称">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Application对象.写属性 ("ActivePrinter", 所欲设置的值)
+    }
+
+    方法 注册事件 <公开 类型 = 逻辑型 注释 = "使用定义事件前需先运行一次注册事件,在\"创建\"方法成功后执行.">
+    {
+        返回 (Application事件.挂接 (Application对象, "{914934C2-5A91-11CF-8700-00AA0060263B}"))
+    }
+
+    方法 开始放映 <公开 定义事件 类型 = 整数 注释 = "当启动幻灯片放映时发生此事件">
+    参数 参_窗口对象 <类型 = COM对象类 注释 = "PowerPoint提供的SlideShowWindow对象,代表运行幻灯片放映的窗口对象">
+
+    方法 结束放映 <公开 定义事件 类型 = 整数 注释 = "此事件在幻灯片放映结束后,紧跟在最后一个\"幻灯片被切换\"事件发生后触发.">
+    参数 参_窗口对象 <类型 = COM对象类 注释 = "PowerPoint提供的SlideShowWindow对象,代表运行幻灯片放映的窗口对象.">
+
+    方法 幻灯片被切换 <公开 定义事件 类型 = 整数 注释 = "发生在幻灯放映期间,即将切换到下一张幻灯片之前发生此事件,对于第一张幻灯片,紧跟在\"开始放映\"事件发生后发生此事件.">
+    参数 参_窗口对象 <类型 = COM对象类 注释 = "PowerPoint提供的SlideShowWindow对象,代表运行幻灯片放映的窗口对象.">
+
+    方法 文稿被打开 <公开 定义事件 类型 = 整数 注释 = "打开已有\"PPT文稿\"时即发生此事件">
+    参数 参_PPT文稿 <类型 = PPT文稿 注释 = "打开的文稿">
+
+    方法 幻灯片被新建 <公开 定义事件 类型 = 整数 注释 = "在任意打开的\"PPT文稿\"中新建幻灯片时发生">
+    参数 参_PPT幻灯片 <类型 = PPT幻灯片 注释 = "新建的幻灯片">
+
+    方法 幻灯片被重选 <公开 定义事件 类型 = 整数 注释 = "1,普通视图和母版视图下更改幻灯片窗格中的幻灯片时发生." 注释 = "2,幻灯片浏览视图下更改幻灯片选择范围时发生." 注释 = "3,幻灯片视图和备注视图下更改幻灯片时发生."
+            注释 = "4,大纲视图下不发生事件.">
+    参数 参_PPT幻灯片 <类型 = PPT幻灯片 注释 = "选中的幻灯片">
+
+    方法 文稿被新建 <公开 定义事件 类型 = 整数 注释 = "在创建\"PPT文稿\"后发生">
+    参数 参_PPT文稿 <类型 = PPT文稿 注释 = "被创建的文稿">
+
+    方法 文稿被关闭 <公开 定义事件 类型 = 整数 注释 = "即将关闭任意打开的\"PPT文稿\"之前发生,同时将该文稿从PPT文稿集中删除.">
+    参数 参_PPT文稿 <类型 = PPT文稿 注释 = "被关闭的文稿">
+
+    方法 文稿被打印 <公开 定义事件 类型 = 整数 注释 = "打印\"PPT文稿\"前发生此事件">
+    参数 参_PPT文稿 <类型 = PPT文稿 注释 = "被打印的文稿">
+
+    方法 文稿被保存 <公开 定义事件 类型 = 整数 注释 = "保存任意打开的\"PPT文稿\"前发生此事件">
+    参数 参_PPT文稿 <类型 = PPT文稿 注释 = "被保存的文稿">
+
+    方法 窗口被激活 <公开 定义事件 类型 = 整数 注释 = "保存任意打开的\"PPT文稿\"前发生此事件">
+    参数 参_PPT文稿 <类型 = PPT文稿 注释 = "在激活的窗口中显示的文稿">
+    参数 参_窗口对象 <类型 = COM对象类 注释 = "PowerPoint提供的DocumentWindow对象,代表激活的文档窗口.">
+
+    方法 窗口反激活 <公开 定义事件 类型 = 整数 注释 = "停用应用程序窗口或任意文档窗口时发生此事件">
+    参数 参_PPT文稿 <类型 = PPT文稿 注释 = "非活动窗口中显示的文稿">
+    参数 参_窗口对象 <类型 = COM对象类 注释 = "PowerPoint提供的DocumentWindow对象,代表非活动文档窗口.">
+
+    方法 COM对象事件类_接收到事件 <接收事件 类型 = 整数 注释 = "当接收到所挂接COM事件时,本事件被触发.">
+    参数 来源对象 <类型 = COM对象事件类 注释 = "提供事件产生的具体来源对象">
+    参数 标记值 <类型 = 整数 注释 = "用户调用\"挂接事件\"命令时所提供的\"标记值\"参数值,非此方式挂接事件则本参数值固定为0.">
+    参数 来源COM对象 <类型 = COM对象类 注释 = "提供挂接事件时所提供的来源COM对象">
+    参数 事件方法ID <类型 = 整数 注释 = "提供所触发的具体事件的对应COM方法ID值">
+    参数 事件参数 <类型 = COM变体型数组类 注释 = "提供事件的所有参数数据">
+    参数 事件返回值 <类型 = COM变体型 注释 = "仅用作输出.事件处理完毕后如果需要返回数据,请将所欲返回数据值填入到此参数变量中.">
+    {
+        变量 局_返回值 <类型 = 整数 值 = 0>
+        如果 (来源对象 == Application事件)
+        {
+            如果 (事件方法ID == 2004)  // 文稿被关闭
+            {
+                变量 局_PPT文稿 <类型 = PPT文稿>
+                变量 文稿对象 <类型 = COM对象类>
+                事件参数.取成员 (0).取COM对象 (文稿对象, )  // 第一个参数为文稿对象
+                局_PPT文稿.置对象 (文稿对象)
+                局_返回值 = 文稿被关闭 (局_PPT文稿)
+            }
+            如果 (事件方法ID == 2005)  // 文稿被保存
+            {
+                变量 局_PPT文稿 <类型 = PPT文稿>
+                变量 文稿对象 <类型 = COM对象类>
+                事件参数.取成员 (0).取COM对象 (文稿对象, )  // 第一个参数为文稿对象
+                局_PPT文稿.置对象 (文稿对象)
+                局_返回值 = 文稿被保存 (局_PPT文稿)
+            }
+            如果 (事件方法ID == 2006)  // 文稿被打开
+            {
+                变量 局_PPT文稿 <类型 = PPT文稿>
+                变量 文稿对象 <类型 = COM对象类>
+                事件参数.取成员 (0).取COM对象 (文稿对象, )  // 第一个参数为文稿对象
+                局_PPT文稿.置对象 (文稿对象)
+                局_返回值 = 文稿被打开 (局_PPT文稿)
+            }
+            如果 (事件方法ID == 2007)  // 文稿被新建
+            {
+                变量 局_PPT文稿 <类型 = PPT文稿>
+                变量 文稿对象 <类型 = COM对象类>
+                事件参数.取成员 (0).取COM对象 (文稿对象, )  // 第一个参数为文稿对象
+                局_PPT文稿.置对象 (文稿对象)
+                局_返回值 = 文稿被新建 (局_PPT文稿)
+            }
+            如果 (事件方法ID == 2008)  // 幻灯片被新建
+            {
+                变量 局_PPT幻灯片 <类型 = PPT幻灯片>
+                变量 幻灯片对象 <类型 = COM对象类>
+                事件参数.取成员 (0).取COM对象 (幻灯片对象, )  // 第一个参数为幻灯片对象
+                局_PPT幻灯片.置对象 (幻灯片对象)
+                局_返回值 = 幻灯片被新建 (局_PPT幻灯片)
+            }
+            如果 (事件方法ID == 2009)  // 窗口被激活
+            {
+                变量 局_PPT文稿 <类型 = PPT文稿>
+                变量 文档对象 <类型 = COM对象类>
+                变量 窗口对象 <类型 = COM对象类>
+                事件参数.取成员 (0).取COM对象 (文档对象, )  // 第一个参数为文稿对象
+                局_PPT文稿.置对象 (文档对象)
+                事件参数.取成员 (1).取COM对象 (窗口对象, )  // 第二个参数为窗口对象
+                局_返回值 = 窗口被激活 (局_PPT文稿, 窗口对象)
+            }
+            如果 (事件方法ID == 2010)  // 窗口被激活
+            {
+                变量 局_PPT文稿 <类型 = PPT文稿>
+                变量 文档对象 <类型 = COM对象类>
+                变量 窗口对象 <类型 = COM对象类>
+                事件参数.取成员 (0).取COM对象 (文档对象, )  // 第一个参数为文稿对象
+                局_PPT文稿.置对象 (文档对象)
+                事件参数.取成员 (1).取COM对象 (窗口对象, )  // 第二个参数为窗口对象
+                局_返回值 = 窗口反激活 (局_PPT文稿, 窗口对象)
+            }
+            如果 (事件方法ID == 2011)  // 幻灯片放映开始
+            {
+                变量 窗口对象 <类型 = COM对象类>
+                事件参数.取成员 (0).取COM对象 (窗口对象, )  // 第一个参数为窗口对象
+                局_返回值 = 开始放映 (窗口对象)
+            }
+            如果 (事件方法ID == 2013)  // 幻灯片放映切换到下一张
+            {
+                变量 窗口对象 <类型 = COM对象类>
+                事件参数.取成员 (0).取COM对象 (窗口对象, )  // 第一个参数为窗口对象
+                局_返回值 = 幻灯片被切换 (窗口对象)
+            }
+            如果 (事件方法ID == 2014)  // 幻灯片放映结束
+            {
+                变量 窗口对象 <类型 = COM对象类>
+                事件参数.取成员 (0).取COM对象 (窗口对象, )  // 第一个参数为窗口对象
+                局_返回值 = 结束放映 (窗口对象)
+            }
+            如果 (事件方法ID == 2015)  // 文稿被打印
+            {
+                变量 局_PPT文稿 <类型 = PPT文稿>
+                变量 文稿对象 <类型 = COM对象类>
+                事件参数.取成员 (0).取COM对象 (文稿对象, )  // 第一个参数为文稿对象
+                局_PPT文稿.置对象 (文稿对象)
+                局_返回值 = 文稿被打印 (局_PPT文稿)
+            }
+            如果 (事件方法ID == 2016)  // 幻灯片被重选
+            {
+                变量 局_PPT幻灯片 <类型 = PPT幻灯片>
+                变量 幻灯片对象 <类型 = COM对象类>
+                事件参数.取成员 (0).取COM对象 (幻灯片对象, )  // 第一个参数为幻灯片对象
+                局_PPT幻灯片.置对象 (幻灯片对象)
+                局_返回值 = 幻灯片被重选 (局_PPT幻灯片)
+            }
+        }
+        返回 (局_返回值)
+    }
+}
+
+类 PPT宏 <公开 注释 = "代表VB宏对象">
+{
+    变量 VBComponents对象 <类型 = COM对象类>
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作." "">
+    参数 参_VBComponents对象 <类型 = COM对象类 注释 = "VBComponents对象">
+    {
+        VBComponents对象 = 参_VBComponents对象
+        返回 (VBComponents对象.是否为空 () == 假)
+    }
+
+    方法 取对象 <公开 类型 = COM对象类 注释 = "获取PPT程序提供的VB宏对象.与\"COM对象\"数据类型兼容,可交互操作." "">
+    {
+        返回 (VBComponents对象)
+    }
+
+    方法 工作区数量 <公开 属性读 类型 = 整数 注释 = "获取宏工作区数量" "">
+    {
+        返回 (VBComponents对象.读无参数属性 ("Count", 整数))
+    }
+
+    方法 取工作区名称 <公开 类型 = 文本型 注释 = "取宏工作区对象名称" "">
+    参数 索引号 <类型 = 整数 注释 = "工作区索引号,从1开始.">
+    {
+        返回 (VBComponents对象.方法 ("Item", COM对象类, 索引号).读无参数对象型属性 ("CodeModule", COM对象类).读无参数属性 ("Name", 文本型))
+    }
+
+    方法 取工作区类型 <公开 类型 = PPT宏类型 注释 = "取宏工作区对象类型" "">
+    参数 索引号 <类型 = 整数 注释 = "工作区索引号">
+    {
+        返回 (VBComponents对象.方法 ("Item", COM对象类, 索引号).读无参数属性 ("Type", PPT宏类型))
+    }
+
+    方法 插入行代码 <公开 注释 = "在指定工作区对应行增加代码,原代码后移.增加代码不理会和判断插入处代码的内容.当指定行大于最后一行行号时,在最后一行的后面插入." "">
+    参数 区名 <类型 = 文本型>
+    参数 行号 <类型 = 整数>
+    参数 代码内容 <类型 = 文本型>
+    {
+        VBComponents对象.方法 ("Item", COM对象类, 区名).读无参数对象型属性 ("CodeModule", COM对象类).无返回值方法 ("InsertLines", 行号, 代码内容)
+    }
+
+    方法 添加代码 <公开 注释 = "在指定工作区第一个过程前面的行开始增加代码,原代码后移." "">
+    参数 区名 <类型 = 文本型>
+    参数 代码内容 <类型 = 文本型>
+    {
+        VBComponents对象.方法 ("Item", COM对象类, 区名).读无参数对象型属性 ("CodeModule", COM对象类).无返回值方法 ("AddFromString", 代码内容)
+    }
+
+    方法 添加模块 <公开 注释 = "向VB工作区中添加模块">
+    参数 模块名称 <类型 = 文本型 @默认值 = "">
+    参数 类型 <类型 = PPT宏类型 @默认值 = PPT宏类型.模块>
+    {
+        变量 局_模块对象 <类型 = COM对象类>
+        局_模块对象 = VBComponents对象.方法 ("Add", COM对象类, 类型)
+        如果 (模块名称 != "")
+        {
+            局_模块对象.写属性 ("Name", 模块名称)
+        }
+    }
+
+    方法 取代码行数 <公开 类型 = 整数 注释 = "获取工作区代码总行数" "">
+    参数 区名 <类型 = 文本型>
+    {
+        返回 (VBComponents对象.方法 ("Item", COM对象类, 区名).读无参数对象型属性 ("CodeModule", COM对象类).读无参数属性 ("CountOfLines", 整数))
+    }
+
+    方法 取代码内容 <公开 类型 = 文本型 注释 = "获取工作区宏代码内容" "">
+    参数 区名 <类型 = 文本型 注释 = "对象名称,如模块名称.">
+    参数 开始行 <类型 = 整数 注释 = "欲取出代码区开始行">
+    参数 结束行 <类型 = 整数 注释 = "欲取出代码区结束行">
+    {
+        返回 (VBComponents对象.方法 ("Item", COM对象类, 区名).读无参数对象型属性 ("CodeModule", COM对象类).读属性 ("Lines", 文本型, 开始行, 结束行))
+    }
+
+    方法 移除模块 <公开 注释 = "根据宏模块名称移除宏模块">
+    参数 模块名 <类型 = 文本型 @默认值 = "">
+    {
+        变量 COM变体 <类型 = COM变体型>
+        COM变体 = VBComponents对象.方法 ("Item", COM变体型, 模块名)  // 根据名称取出对象
+        VBComponents对象.无返回值方法 ("Remove", COM变体)
+    }
+
+    方法 导入文件 <公开 注释 = "将VB宏代码文件导入宏工作区中" "">
+    参数 文件名 <类型 = 文本型 注释 = "欲导入的宏文件">
+    {
+        VBComponents对象.无返回值方法 ("Import", 文件名)
+    }
+}
+
+类 PPT文稿集 <公开 注释 = " 在PowerPoint中的所有\"PPT文稿\"对象的集合">
+{
+    变量 Presentations对象 <类型 = COM对象类>
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作." "">
+    参数 参_PPT文稿集 <类型 = COM对象类 注释 = "PPT文稿集对象">
+    {
+        Presentations对象 = 参_PPT文稿集
+        返回 (Presentations对象.是否为空 () == 假)
+    }
+
+    方法 取对象 <公开 类型 = COM对象类 注释 = "获取PowerPoint提供的对象.与\"COM对象类\"数据类型兼容,可交互操作." "">
+    {
+        返回 (Presentations对象)
+    }
+
+    方法 打开 <公开 类型 = PPT文稿 注释 = "打开一个文稿方法1" 返回值注释 = "PPT文稿" "">
+    参数 文件名 <类型 = 文本型 注释 = "要打开的文稿的文件名">
+    参数 只读模式 <类型 = 逻辑型 注释 = "指定是以可读/写状态还是以只读状态打开文件" @默认值 = 假>
+    参数 标题可见 <类型 = 逻辑型 注释 = "指定程序窗口是否有标题" @默认值 = 真>
+    参数 可视 <类型 = 逻辑型 注释 = "设置打开程序时窗口是否可见" @默认值 = 真>
+    {
+        变量 局_PPT文稿 <类型 = PPT文稿>
+        局_PPT文稿.置对象 (Presentations对象.对象型方法 ("Open", COM对象类, 文件名, 只读模式, 标题可见, 可视))
+        返回 (局_PPT文稿)
+    }
+
+    方法 打开2 <公开 类型 = PPT文稿 注释 = "打开一个文稿方法2" 返回值注释 = "PPT文稿" "">
+    参数 文件名 <类型 = 文本型 注释 = "要打开的文稿的文件名">
+    参数 只读模式 <类型 = 逻辑型 注释 = "指定是以可读/写状态还是以只读状态打开文件">
+    参数 标题可见 <类型 = 逻辑型 注释 = "指定程序窗口是否有标题">
+    参数 可视 <类型 = 逻辑型 注释 = "设置打开程序时窗口是否可见" @默认值 = 真>
+    参数 修复 <类型 = 逻辑型 注释 = "指定是否在打开文件之前修复文件以避免损坏" @默认值 = 假>
+    {
+        变量 局_PPT文稿 <类型 = PPT文稿>
+        局_PPT文稿.置对象 (Presentations对象.对象型方法 ("Open2007", COM对象类, 文件名, 只读模式, 标题可见, 可视, 修复))
+        返回 (局_PPT文稿)
+    }
+
+    方法 添加文稿 <公开 类型 = PPT文稿 注释 = "创建一个PPT文稿.返回一个代表新PPT文稿的\"PPT文稿\"类.">
+    参数 可视 <类型 = 逻辑型 注释 = "是否在可视窗口中显示文稿" @默认值 = 真>
+    {
+        变量 局_PPT文稿 <类型 = PPT文稿>
+        局_PPT文稿.置对象 (Presentations对象.对象型方法 ("Add", COM对象类, 选择 (可视, -1, 0)))
+        返回 (局_PPT文稿)
+    }
+
+    方法 文稿数量 <公开 属性读 类型 = 整数 注释 = "返回文稿集合中文稿的数量">
+    {
+        返回 (Presentations对象.读无参数属性 ("Count", 整数))
+    }
+
+    方法 取文稿 <公开 类型 = PPT文稿 注释 = "从文稿集合中返回一个文稿">
+    参数 索引号 <类型 = 整数 注释 = "二选一,从1开始,对象在文稿集合的索引号.为-1时.忽略该参数." @默认值 = -1>
+    参数 名称 <类型 = 文本型 注释 = "二选一,对象的名称.索引号不为0时.忽略该参数." @默认值 = "">
+    {
+        变量 局_PPT文稿 <类型 = PPT文稿>
+        如果 (索引号 == -1)
+        {
+            如果 (名称 != "")  // 名称不为空时根据名称取出文稿
+            {
+                局_PPT文稿.置对象 (Presentations对象.对象型方法 ("Item", COM对象类, 名称))  // 使用名称
+            }
+        }
+        否则
+        {
+            局_PPT文稿.置对象 (Presentations对象.对象型方法 ("Item", COM对象类, 索引号))  // 使用索引号
+        }
+        返回 (局_PPT文稿)
+    }
+}
+
+类 PPT文稿 <公开>
+{
+    变量 Presentation对象 <类型 = COM对象类>
+
+    方法 保存 <公开 注释 = "保存指定的PPT文稿">
+    {
+        Presentation对象.无参数及返回值方法 ("Save")
+    }
+
+    方法 关闭 <公开 注释 = "关闭指定的PPT文稿">
+    参数 保存更改 <类型 = 逻辑型 注释 = "是否保存更改" @默认值 = 真>
+    {
+        如果 (保存更改)
+        {
+            Presentation对象.无参数及返回值方法 ("Close")
+        }
+        否则
+        {
+            已保存 = 真  // 设置不保存更改
+            Presentation对象.无参数及返回值方法 ("Close")
+        }
+        Presentation对象.清除 ()
+    }
+
+    方法 另存为 <公开 注释 = "另外保存PPT文稿">
+    参数 文件名 <类型 = 文本型 注释 = "指定文件的保存名称.如果不指定完整路径.PowerPoint会将该文件保存于当前文件夹中." "">
+    参数 保存格式 <类型 = PPT保存格式 注释 = "指定文件的保存的格式" @默认值 = PPT保存格式.默认格式>
+    参数 保存字体 <类型 = 逻辑型 注释 = "指定是否将\"字体\"嵌入保存的PPT文稿中" @默认值 = 真>
+    {
+        Presentation对象.无返回值方法 ("SaveAs", 文件名, 保存格式, 选择 (保存字体, -1, 0))
+    }
+
+    方法 宏 <公开 属性读 类型 = PPT宏 注释 = "返回文档中的VB宏项目">
+    {
+        变量 局_PPT宏 <类型 = PPT宏>
+        变量 局_宏工作区对象 <类型 = COM对象类>
+        局_宏工作区对象 = Presentation对象.读无参数对象型属性 ("VBProject", COM对象类).读无参数对象型属性 ("VBComponents", COM对象类)
+        局_PPT宏.置对象 (局_宏工作区对象)
+        返回 (局_PPT宏)
+    }
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作." "">
+    参数 参_PPT文稿对象 <类型 = COM对象类 注释 = "PPT文稿对象">
+    {
+        Presentation对象 = 参_PPT文稿对象
+        返回 (Presentation对象.是否为空 () == 假)
+    }
+
+    方法 取对象 <公开 类型 = COM对象类 注释 = "获取PowerPoint提供的对象.与\"COM对象类\"数据类型兼容,可交互操作." "">
+    {
+        返回 (Presentation对象)
+    }
+
+    方法 幻灯片数量 <公开 属性读 类型 = 整数 注释 = "返回文稿中所有幻灯片的数量">
+    {
+        返回 (Presentation对象.读无参数对象型属性 ("Slides", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 取幻灯片 <公开 类型 = PPT幻灯片 注释 = "返回一个\"PPT幻灯片\"类.表示从指定幻灯片集合中,取出的单个幻灯片.">
+    参数 索引号 <类型 = 整数 注释 = "三选一,对象的索引号.从1开始,表示幻灯片在幻灯片集合中位置.如果值为-1时,忽略该参数." @默认值 = -1>
+    参数 名称 <类型 = 文本型 注释 = "三选一,对象的名称.索引号不为-1时,忽略该参数." @默认值 = "">
+    参数 ID <类型 = 整数 注释 = "三选一,对象的ID.如果索引号不为-1或者该值为-1时,则忽略该参数." @默认值 = -1>
+    {
+        变量 局_PPT幻灯片 <类型 = PPT幻灯片>
+
+        如果 (索引号 == -1)
+        {
+            如果 (名称 != "")
+            {
+                局_PPT幻灯片.置对象 (Presentation对象.读无参数对象型属性 ("Slides", COM对象类).对象型方法 ("Item", COM对象类, 名称))  // 名称取PPT幻灯片
+            }
+            如果 (ID != -1)
+            {
+                局_PPT幻灯片.置对象 (Presentation对象.读无参数对象型属性 ("Slides", COM对象类).对象型方法 ("FindBySlideID", COM对象类, ID))  // ID取PPT幻灯片
+            }
+        }
+        否则
+        {
+            局_PPT幻灯片.置对象 (Presentation对象.读无参数对象型属性 ("Slides", COM对象类).对象型方法 ("Item", COM对象类, 索引号))  // 索引号取PPT幻灯片
+        }
+        返回 (局_PPT幻灯片)
+    }
+
+    方法 打印 <公开 注释 = "打印全部或部分指定文稿">
+    参数 开始页号 <类型 = 整数 注释 = "打印的开始页号.当\"打印范围\"设置为\"指定范围\"时生效." @默认值 = 0>
+    参数 终止页号 <类型 = 整数 注释 = "打印的终止页号.当\"打印范围\"设置为\"指定范围\"时生效." @默认值 = 0>
+    参数 输出文件名 <类型 = 文本型 注释 = "此参数将指定输出文件的路径和文件名称.如果此参数不为空文本.则文件将输出到某个文件.而不是发送到打印机." @默认值 = "">
+    参数 打印份数 <类型 = 整数 注释 = "打印份数" @默认值 = 1>
+    参数 副本 <类型 = 逻辑型 注释 = "在打印PPT文稿的多份副本时,若此参数为真,则打印完一份副本之后再打印下一份副本." @默认值 = 真>
+    {
+        变量 局_输出文件名 <类型 = COM变体型 "">
+        变量 局_开始页号 <类型 = COM变体型>
+        变量 局_终止页号 <类型 = COM变体型>
+        如果 (输出文件名 != "")
+        {
+            局_输出文件名.赋值 (输出文件名, )
+        }
+        如果 (开始页号 != 0)
+        {
+            局_开始页号.赋值 (开始页号, )
+        }
+        如果 (终止页号 != 0)
+        {
+            局_终止页号.赋值 (终止页号, )
+        }
+        Presentation对象.无返回值方法 ("PrintOut", 局_开始页号, 局_终止页号, 局_输出文件名, 打印份数, 副本)
+    }
+
+    方法 添加幻灯片 <公开 类型 = PPT幻灯片 注释 = "创建一张新幻灯片.并返回该幻灯片.">
+    参数 索引号 <类型 = 整数 注释 = "要添加的幻灯片的索引,从1开始.默认-1.表示在末尾添加." @默认值 = -1>
+    参数 从索引号 <类型 = 整数 注释 = "二选一.根据现有幻灯片索引号新建同样版式的幻灯片.如果值为一1时,则忽略该参数." @默认值 = -1>
+    参数 版式 <类型 = PPT幻灯片版式 注释 = "二选一.PPT幻灯片版式.*.当\"从索引号\"不等于\"一1\"时.忽略该参数." @默认值 = PPT幻灯片版式.空白>
+    {
+        变量 局_自定义版式 <类型 = COM变体型>
+        变量 局_PPT幻灯片 <类型 = PPT幻灯片>
+        变量 局_图形对象 <类型 = COM对象类>
+        如果 (索引号 == -1)
+        {
+            索引号 = 幻灯片数量 + 1  // 表示在末尾添加幻灯片
+        }
+        如果 (从索引号 != -1)
+        {
+            局_自定义版式 = Presentation对象.读无参数对象型属性 ("Slides", COM对象类).对象型方法 ("Item", COM对象类, 从索引号).读无参数属性 ("CustomLayout", COM变体型)  // 取"从索引号"自定义版式
+            局_图形对象 = Presentation对象.读无参数对象型属性 ("Slides", COM对象类).对象型方法 ("AddSlide", COM对象类, 索引号, 局_自定义版式)  // 根据自定义版式创建新的幻灯片
+        }
+        否则
+        {
+            局_图形对象 = Presentation对象.读无参数对象型属性 ("Slides", COM对象类).对象型方法 ("Add", COM对象类, 索引号, 版式)  // 根据版式创建新的幻灯片
+        }
+        局_PPT幻灯片.置对象 (局_图形对象)
+        返回 (局_PPT幻灯片)
+    }
+
+    方法 模板名称 <公开 属性读 类型 = 文本型 注释 = "返回与指定PPT文稿关联的第一个设计/母版的名称.此为只读属性." "">
+    {
+        返回 (Presentation对象.读无参数属性 ("TemplateName", 文本型))
+    }
+
+    方法 名称 <公开 属性读 类型 = 文本型 注释 = "PPT文稿的名称包括文件扩展名,不包括其路径.如果需要更改名称,请使用\"另存为\"方法以其他名称保存PPT文稿.此为只读属性." "">
+    {
+        返回 (Presentation对象.读无参数属性 ("Name", 文本型))
+    }
+
+    方法 文件路径 <公开 属性读 类型 = 文本型 注释 = "返回一个代表打开\"PPT文稿\"的文件路径,如\"PPT文稿\"未保存则返回空文本.此为只读属性." "">
+    {
+        返回 (Presentation对象.读无参数属性 ("Path", 文本型))
+    }
+
+    方法 字体数量 <公开 属性读 类型 = 整数 注释 = "替换PPT文稿使用字体集合中字体的数量" "">
+    {
+        返回 (Presentation对象.读无参数对象型属性 ("Fonts", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 取字体 <公开 类型 = 文本型 注释 = "返回文稿中字体索引号字体名称" "">
+    参数 索引号 <类型 = 整数>
+    {
+        返回 (Presentation对象.读无参数对象型属性 ("Fonts", COM对象类).对象型方法 ("Item", COM对象类, 索引号).读无参数属性 ("Name", 文本型))
+    }
+
+    方法 置字体 <公开 注释 = "根据文稿中字体索引号设置字体" "">
+    参数 索引号 <类型 = 整数 注释 = "PPT文稿中第几种字体">
+    参数 字体 <类型 = 文本型 注释 = "要设置的字体名称">
+    {
+        Presentation对象.读无参数对象型属性 ("Fonts", COM对象类).对象型方法 ("Item", COM对象类, 索引号).写属性 ("Name", 字体)
+    }
+
+    方法 已保存 <公开 属性读 类型 = 逻辑型 注释 = "确定\"PPT文稿\"自上次保存以来是否进行过更改" "">
+    {
+        返回 (Presentation对象.读无参数属性 ("Saved", 逻辑型))
+    }
+
+    方法 已保存 <公开 属性写 注释 = "当设置为真时,表示退出文稿时不会提示用户保存更改." "">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Presentation对象.写属性 ("Saved", 所欲设置的值)
+    }
+
+    方法 自动保存 <公开 属性读 类型 = 逻辑型 注释 = "如果是否自动保存在PPT文稿中所做的编辑">
+    {
+        返回 (Presentation对象.读无参数属性 ("AutoSaveOn", 逻辑型))
+    }
+
+    方法 自动保存 <公开 属性写 注释 = "设置是否自动保存PPT文稿中所做的编辑">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Presentation对象.写属性 ("AutoSaveOn", 所欲设置的值)
+    }
+
+    方法 密码 <公开 属性读 类型 = 文本型 注释 = "返回在打开指定PPT文稿时必须提供的密码">
+    {
+        返回 (Presentation对象.读无参数属性 ("Password", 文本型))
+    }
+
+    方法 密码 <公开 属性写 注释 = "设置在打开指定PPT文稿时必须提供的密码">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Presentation对象.写属性 ("Password", 所欲设置的值)
+    }
+
+    方法 写权限密码 <公开 属性读 类型 = 文本型 注释 = "返回保存PPT文稿更改时必须提供的密码">
+    {
+        返回 (Presentation对象.读无参数属性 ("WritePassword", 文本型))
+    }
+
+    方法 写权限密码 <公开 属性写 注释 = "设置保存PPT文稿更改时必须提供的密码">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Presentation对象.写属性 ("WritePassword", 所欲设置的值)
+    }
+
+    方法 播放设置 <公开 属性读 类型 = PPT播放 注释 = "代表PPT文稿的幻灯片放映设置及播放对象">
+    {
+        变量 局_PPT播放 <类型 = PPT播放>
+        局_PPT播放.置对象 (Presentation对象.读无参数对象型属性 ("SlideShowSettings", COM对象类))
+        返回 (局_PPT播放)
+    }
+
+    方法 替换字体 <公开 注释 = "替换PPT文稿集合中的某种字体" "">
+    参数 被替换字体 <类型 = 文本型 注释 = "被替换字体">
+    参数 替换字体 <类型 = 文本型 注释 = "用于替换字体">
+    {
+        Presentation对象.读无参数对象型属性 ("Fonts", COM对象类).无返回值方法 ("Replace", 被替换字体, 替换字体)
+    }
+}
+
+类 PPT播放 <公开 注释 = "代表PPT文稿的幻灯片放映设置及播放">
+{
+    变量 SlideShowSettings对象 <类型 = COM对象类>
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作." "">
+    参数 参_SlideShowSettings对象 <类型 = COM对象类>
+    {
+        SlideShowSettings对象 = 参_SlideShowSettings对象
+        返回 (SlideShowSettings对象.是否为空 () == 假)
+    }
+
+    方法 取对象 <公开 类型 = COM对象类 注释 = "获取PowerPoint提供的对象.与\"COM对象类\"数据类型兼容,可交互操作." "">
+    {
+        返回 (SlideShowSettings对象)
+    }
+
+    方法 开始放映 <公开 注释 = "运行指定\"PPT文稿\"的幻灯片放映">
+    {
+        SlideShowSettings对象.无参数及返回值方法 ("Run")
+    }
+
+    方法 结束放映 <公开 注释 = "结束指定\"PPT文稿\"的幻灯片的放映">
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数对象型属性 ("View", COM对象类).无参数及返回值方法 ("Exit")
+    }
+
+    方法 上 <公开 属性读 类型 = 小数 注释 = "表示应用程序窗口工作区上边缘到幻灯片放映窗口的上边缘的距离,以磅为单位.">
+    {
+        返回 (SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数属性 ("Top", 小数))
+    }
+
+    方法 上 <公开 属性写 注释 = "表示应用程序窗口工作区上边缘到幻灯片放映窗口的上边缘的距离,以磅为单位.">
+    参数 所欲设置的值 <类型 = 小数>
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).写属性 ("Top", 所欲设置的值)
+    }
+
+    方法 左 <公开 属性读 类型 = 小数 注释 = "表示应用程序窗口工作区左边缘到幻灯片放映窗口的左边缘的距离,以磅为单位.">
+    {
+        返回 (SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数属性 ("Left", 小数))
+    }
+
+    方法 左 <公开 属性写 注释 = "表示应用程序窗口工作区左边缘到幻灯片放映窗口的左边缘的距离,以磅为单位.">
+    参数 所欲设置的值 <类型 = 小数>
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).写属性 ("Left", 所欲设置的值)
+    }
+
+    方法 宽 <公开 属性读 类型 = 小数 注释 = "返回放映时对象的宽度,以磅为单位.">
+    {
+        返回 (SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数属性 ("Width", 小数))
+    }
+
+    方法 宽 <公开 属性写 注释 = "设置放映时对象的宽度,以磅为单位.">
+    参数 所欲设置的值 <类型 = 小数>
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).写属性 ("Width", 所欲设置的值)
+    }
+
+    方法 高 <公开 属性读 类型 = 小数 注释 = "返回放映时对象的高度,以磅为单位.">
+    {
+        返回 (SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数属性 ("Height", 小数))
+    }
+
+    方法 高 <公开 属性写 注释 = "设置放映时对象的高度,以磅为单位.">
+    参数 所欲设置的值 <类型 = 小数>
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).写属性 ("Height", 所欲设置的值)
+    }
+
+    方法 开始页 <公开 属性读 类型 = 整数 注释 = "返回指定幻灯片放映中要放映的第一张幻灯片">
+    {
+        返回 (SlideShowSettings对象.读无参数属性 ("StartingSlide", 整数))
+    }
+
+    方法 开始页 <公开 属性写 注释 = "设置指定幻灯片放映中要放映的第一张幻灯片">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        SlideShowSettings对象.写属性 ("StartingSlide", 所欲设置的值)
+    }
+
+    方法 结束页 <公开 属性读 类型 = 整数 注释 = "返回指定幻灯片放映中要放映的最后一张幻灯片">
+    {
+        返回 (SlideShowSettings对象.读无参数属性 ("EndingSlide", 整数))
+    }
+
+    方法 结束页 <公开 属性写 注释 = "设置指定幻灯片放映中要放映的最后一张幻灯片">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        SlideShowSettings对象.写属性 ("EndingSlide", 所欲设置的值)
+    }
+
+    方法 旁白 <公开 属性读 类型 = 逻辑型 注释 = "返回幻灯片放映时是否有旁白">
+    {
+        返回 (SlideShowSettings对象.读无参数属性 ("ShowWithNarration", 逻辑型))
+    }
+
+    方法 旁白 <公开 属性写 注释 = "设置幻灯片放映时是否有旁白">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        SlideShowSettings对象.写属性 ("ShowWithNarration", 所欲设置的值)
+    }
+
+    方法 滚动条 <公开 属性读 类型 = 逻辑型 注释 = "返回浏览模式放映幻灯片的过程中是否显示滚动条">
+    {
+        返回 (SlideShowSettings对象.读无参数属性 ("ShowScrollbar", 逻辑型))
+    }
+
+    方法 滚动条 <公开 属性写 注释 = "设置浏览模式放映幻灯片的过程中是否显示滚动条">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        SlideShowSettings对象.写属性 ("ShowScrollbar", 所欲设置的值)
+    }
+
+    方法 放映类型 <公开 属性读 类型 = PPT放映类型 注释 = "返回指定幻灯片放映的放映类型" 返回值注释 = "PPT放映类型.*">
+    {
+        返回 (SlideShowSettings对象.读无参数属性 ("ShowType", PPT放映类型))
+    }
+
+    方法 放映类型 <公开 属性写 注释 = "设置指定幻灯片放映的放映类型">
+    参数 所欲设置的值 <类型 = PPT放映类型 注释 = "PPT放映类型.*">
+    {
+        SlideShowSettings对象.写属性 ("ShowType", 所欲设置的值)
+    }
+
+    方法 放映范围 <公开 属性读 类型 = PPT放映范围 注释 = "返回指定幻灯片放映的放映范围" 返回值注释 = "PPT放映范围.*">
+    {
+        返回 (SlideShowSettings对象.读无参数属性 ("RangeType", PPT放映范围))
+    }
+
+    方法 放映范围 <公开 属性写 注释 = "设置指定幻灯片放映的放映范围">
+    参数 所欲设置的值 <类型 = PPT放映范围 注释 = "PPT放映范围.*">
+    {
+        SlideShowSettings对象.写属性 ("RangeType", 所欲设置的值)
+    }
+
+    方法 放映状态 <公开 属性读 类型 = PPT放映状态 注释 = "返回指定幻灯片放映的放映状态" 返回值注释 = "PPT放映范围.*">
+    {
+        返回 (SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数对象型属性 ("View", COM对象类).读无参数属性 ("State", PPT放映状态))
+    }
+
+    方法 索引号 <公开 属性读 类型 = 整数 注释 = "返回当前放映中的幻灯片在幻灯片集合中索引号">
+    {
+        返回 (SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数对象型属性 ("View", COM对象类).读无参数对象型属性 ("Slide", COM对象类).读无参数属性 ("SlideIndex", 整数))
+    }
+
+    方法 放映状态 <公开 属性写 注释 = "设置指定幻灯片放映的放映状态">
+    参数 所欲设置的值 <类型 = PPT放映状态 注释 = "PPT放映范围.*">
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数对象型属性 ("View", COM对象类).写属性 ("State", 所欲设置的值)
+    }
+
+    方法 置放映指针 <公开 注释 = "设置在幻灯片放映中使用的鼠标指针类型.如未开始放映.该方法将开始触发开始放映.">
+    参数 放映指针 <类型 = PPT放映指针 注释 = "PPT放映指针.*">
+    参数 画笔颜色 <类型 = 整数 注释 = "指定\"放映指针\"为绘图笔时的颜色">
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数对象型属性 ("View", COM对象类).写属性 ("PointerType", 放映指针)
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数对象型属性 ("View", COM对象类).无参数对象型方法 ("PointerColor", COM对象类).写属性 ("RGB", 画笔颜色)
+    }
+
+    方法 循环播放 <公开 属性读 类型 = 逻辑型 注释 = "返回幻灯片是否以循环方式播放">
+    {
+        返回 (SlideShowSettings对象.读无参数属性 ("LoopUntilStopped", 逻辑型))
+    }
+
+    方法 循环播放 <公开 属性写 注释 = "设置幻灯片是否以循环方式播放">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        SlideShowSettings对象.写属性 ("LoopUntilStopped", 所欲设置的值)
+    }
+
+    方法 换页方式 <公开 属性读 类型 = PPT换页方式 注释 = "返回幻灯片放映时的换页方式" 返回值注释 = "PPT换页方式.*">
+    {
+        返回 (SlideShowSettings对象.读无参数属性 ("AdvanceMode", PPT换页方式))
+    }
+
+    方法 换页方式 <公开 属性写 注释 = "设置幻灯片放映时的换页方式">
+    参数 所欲设置的值 <类型 = PPT换页方式 注释 = "PPT换页方式.*">
+    {
+        SlideShowSettings对象.写属性 ("AdvanceMode", 所欲设置的值)
+    }
+
+    方法 激活 <公开 注释 = "激活指定对象">
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).无参数及返回值方法 ("Activate")
+    }
+
+    方法 第一张 <公开 注释 = "放映第一张">
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数对象型属性 ("View", COM对象类).无参数及返回值方法 ("First")
+    }
+
+    方法 下一张 <公开 注释 = "切换到下一张幻灯片">
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数对象型属性 ("View", COM对象类).无参数及返回值方法 ("Next")
+    }
+
+    方法 上一张 <公开 注释 = "切换到上一张幻灯片">
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数对象型属性 ("View", COM对象类).无参数及返回值方法 ("Previous")
+    }
+
+    方法 切换 <公开 注释 = "在幻灯片放映期间切换到指定幻灯片.可指定是否要重运行动画效果.">
+    参数 索引号 <类型 = 整数 注释 = "要切换到的幻灯片的编号">
+    参数 重新运行 <类型 = 逻辑型 注释 = "当返回第一张幻灯片时是否应重新运行动画效果.有关详细信息." @默认值 = 真>
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数对象型属性 ("View", COM对象类).无返回值方法 ("GotoSlide", 索引号, 重新运行)
+    }
+
+    方法 最后一张 <公开 注释 = "放映最后一张">
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数对象型属性 ("View", COM对象类).无参数及返回值方法 ("Last")
+    }
+
+    方法 重置时间 <公开 注释 = "将当前放映的幻灯片的播放时间重置为0">
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数对象型属性 ("View", COM对象类).无参数及返回值方法 ("ResetSlideTime")
+    }
+
+    方法 画线 <公开 注释 = "在指定幻灯片放映视图中画一条线">
+    参数 起点横坐标 <类型 = 小数 注释 = "线条起点相对于幻灯片左边缘水平位置,以磅为单位." "">
+    参数 起点纵坐标 <类型 = 小数 注释 = "线条起点相对于幻灯片上边缘垂直位置,以磅为单位." "">
+    参数 终点横坐标 <类型 = 小数 注释 = "线条终点相对于幻灯片左边缘水平位置,以磅为单位." "">
+    参数 终点纵坐标 <类型 = 小数 注释 = "线条终点相对于幻灯片上边缘垂直位置,以磅为单位." "">
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数对象型属性 ("View", COM对象类).无参数及返回值方法 ("ResetSlideTime")
+    }
+
+    方法 擦除笔迹 <公开 注释 = "删除幻灯片放映时使用\"画线\"方法或钢笔工具绘制的线条">
+    {
+        SlideShowSettings对象.无参数对象型方法 ("Run", COM对象类).读无参数对象型属性 ("View", COM对象类).无参数及返回值方法 ("EraseDrawing")
+    }
+}
+
+类 PPT幻灯片 <公开>
+{
+    变量 Slide对象 <类型 = COM对象类>
+
+    方法 标题 <公开 属性读 类型 = 文本型 注释 = "返回幻灯片中有标题时的标题文本">
+    {
+        返回 (Slide对象.读无参数对象型属性 ("Shapes", COM对象类).读无参数对象型属性 ("Title", COM对象类).读无参数对象型属性 ("TextFrame", COM对象类).读无参数对象型属性 ("TextRange", COM对象类).读无参数属性 ("Text", 文本型))
+    }
+
+    方法 标题 <公开 属性写 注释 = "设置幻灯片中有标题时的标题文本">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Slide对象.读无参数对象型属性 ("Shapes", COM对象类).读无参数对象型属性 ("Title", COM对象类).读无参数对象型属性 ("TextFrame", COM对象类).读无参数对象型属性 ("TextRange", COM对象类).写属性 ("Text", 所欲设置的值)
+    }
+
+    方法 名称 <公开 属性读 类型 = 文本型 注释 = "返回幻灯片名称" "">
+    {
+        返回 (Slide对象.读无参数属性 ("Name", 文本型))
+    }
+
+    方法 名称 <公开 属性写 注释 = "设置幻灯片名称,当幻灯片插入到演示文稿中时,自动分配一个名称,格式为\"Slide n\",其中n是一个整数,表示幻灯片在演示文稿中的创建顺序." "">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Slide对象.写属性 ("Name", 所欲设置的值)
+    }
+
+    方法 ID <公开 属性读 类型 = 整数 注释 = "返回指定幻灯片的唯一ID号" "">
+    {
+        返回 (Slide对象.读无参数属性 ("SlideID", 整数))
+    }
+
+    方法 编号 <公开 属性读 类型 = 整数 注释 = "返回幻灯片编号,显示在幻灯片的右下角的实际数目,幻灯片编号总是等于开始幻灯片编号+幻灯片索引号-1." "">
+    {
+        返回 (Slide对象.读无参数属性 ("SlideNumber", 整数))
+    }
+
+    方法 图形数量 <公开 属性读 类型 = 整数 注释 = "返回PPT文稿中图形的数量">
+    {
+        返回 (Slide对象.读无参数对象型属性 ("Shapes", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 复制 <公开 注释 = "将幻灯片复制到剪贴板">
+    {
+        Slide对象.无参数及返回值方法 ("Copy")
+    }
+
+    方法 剪切 <公开 注释 = "删除幻灯片并将其放到剪贴板中">
+    {
+        Slide对象.无参数及返回值方法 ("Cup")
+    }
+
+    方法 删除 <公开 注释 = "删除幻灯片">
+    {
+        Slide对象.无参数及返回值方法 ("Delete")
+    }
+
+    方法 选定 <公开 注释 = "选定幻灯片">
+    {
+        Slide对象.无参数及返回值方法 ("Select")
+    }
+
+    方法 移动 <公开 注释 = "将指定幻灯片移动到同一集合中的指定位置.并适当地对集合中所有其他项目进行重新编号.">
+    参数 索引号 <类型 = 整数 注释 = "动画效果要移动到的索引位置">
+    {
+        Slide对象.无返回值方法 ("MoveTo", 索引号)
+    }
+
+    方法 导出 <公开 注释 = "使用指定的图形筛选器导出幻灯片.并将导出的文件以指定的文件名保存.">
+    参数 文件名 <类型 = 文本型 注释 = "将导出并保存到磁盘的文件的名称.可以包括完整路径.如果不包括完整路径,会在当前文件夹中创建一个文件.">
+    参数 后缀名 <类型 = 文本型 注释 = "要导出幻灯片的图形格式.导出过程首先在注册表中搜索匹配的扩展名.如果没有找到与指定字符串匹配的扩展名.将查找匹配的筛选器名称.">
+    参数 宽度 <类型 = 整数 注释 = "导出幻灯片的宽度(以像素为单位),默认为不指定." @默认值 = -1>
+    参数 高度 <类型 = 整数 注释 = "导出幻灯片的高度(以像素为单位),默认为不指定." @默认值 = -1>
+    {
+        变量 局_宽度 <类型 = COM变体型>
+        变量 局_高度 <类型 = COM变体型>
+        如果 (宽度 != -1)
+        {
+            局_宽度.赋值 (宽度, )
+        }
+        如果 (高度 != -1)
+        {
+            局_高度.赋值 (高度, )
+        }
+        Slide对象.无返回值方法 ("Export", 文件名, 后缀名, 宽度, 高度)
+    }
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作." "">
+    参数 参_PPT文稿对象 <类型 = COM对象类 注释 = "PPT文稿">
+    {
+        Slide对象 = 参_PPT文稿对象
+        返回 (Slide对象.是否为空 () == 假)
+    }
+
+    方法 取对象 <公开 类型 = COM对象类 注释 = "获取PowerPoint提供的对象.与\"COM对象类\"数据类型兼容,可交互操作." "">
+    {
+        返回 (Slide对象)
+    }
+
+    方法 创建副本 <公开 注释 = "创建在指定\"幻灯片\"对象的一个副本.为原始幻灯片,创建重复的幻灯片.">
+    {
+        Slide对象 = Slide对象.无参数对象型方法 ("Duplicate", COM对象类)
+    }
+
+    方法 置设计模板 <公开 注释 = "将设计模板应用于指定的幻灯片">
+    参数 模板名 <类型 = 文本型 注释 = "指定设计模板的名称">
+    {
+        Slide对象 = Slide对象.对象型方法 ("ApplyTemplate", COM对象类, 模板名)
+    }
+
+    方法 置设计模板2 <公开 注释 = "将设计模板应用于指定的幻灯片">
+    参数 模板名 <类型 = 文本型 注释 = "指定设计模板的名称">
+    参数 主题ID <类型 = 文本型 注释 = "主题中变量ID">
+    {
+        Slide对象 = Slide对象.对象型方法 ("ApplyTemplate2", COM对象类, 模板名, 主题ID)
+    }
+
+    方法 添加图形 <公开 类型 = PPT图形 注释 = "添加一个自选图形">
+    参数 形状类型 <类型 = PPT图形形状 注释 = "PPT图形形状.*,指定要创建的自选形状的类型.">
+    参数 左边 <类型 = 小数 注释 = "设置幻灯片左边缘到图形对象左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "设置幻灯片上边缘到图形对象上边缘的位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "设置图形对象的宽度,以磅为单位." @默认值 = 100>
+    参数 高度 <类型 = 小数 注释 = "设置图形对象的高度,以磅为单位." @默认值 = 100>
+    {
+        变量 局_图形对象 <类型 = COM对象类>
+        变量 局_PPT图形 <类型 = PPT图形>
+        局_图形对象 = Slide对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddShape", COM对象类, 形状类型, 左边, 上边, 宽度, 高度)
+        局_PPT图形.置对象 (局_图形对象)
+        返回 (局_PPT图形)
+    }
+
+    方法 选定所有图形 <公开 类型 = PPT图形 注释 = "选择\"图形\"集合中的所有图形">
+    {
+        变量 局_PPT图形 <类型 = PPT图形>
+        局_PPT图形.置对象 (Slide对象.读无参数对象型属性 ("Shapes", COM对象类).无参数对象型方法 ("SelectAll", COM对象类))
+        返回 (局_PPT图形)
+    }
+
+    方法 清空图形 <公开 注释 = "清空幻灯片\"图形\"集合中的所有图形">
+    {
+        Slide对象.读无参数对象型属性 ("Shapes", COM对象类).读无参数对象型属性 ("Range", COM对象类).无参数及返回值方法 ("Delete")
+    }
+
+    方法 添加媒体 <公开 类型 = PPT图形 注释 = "添加一个音频或视频文件(*.mpg,*.avi,*.mp3,*.cda...).并且可以在幻灯片中播放.">
+    参数 文件名 <类型 = 文本型 注释 = "要添加的文件的名称." "">
+    参数 链接源目标 <类型 = 逻辑型 注释 = "二选一.指示是否链接到文件.与\"文稿中存储\".必须有一个为真." @默认值 = 假>
+    参数 文稿中存储 <类型 = 逻辑型 注释 = "二选一.指示是否随文稿一起保存媒体.与\"链接源目标\".必须有一个为真." @默认值 = 真>
+    参数 左边 <类型 = 小数 注释 = "设置幻灯片左边缘到媒体对象左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "设置幻灯片上边缘到媒体对象上边缘的位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "设置媒体对象的宽度,以磅为单位.默认为-1.表示不指定宽度由内容决定宽度大小." @默认值 = -1>
+    参数 高度 <类型 = 小数 注释 = "设置媒体对象的高度,以磅为单位.默认为-1.表示不指定高度由内容决定高度大小." @默认值 = -1>
+    {
+        变量 局_图形对象 <类型 = COM对象类>
+        变量 局_PPT图形 <类型 = PPT图形>
+        变量 局_宽度 <类型 = COM变体型>
+        变量 局_高度 <类型 = COM变体型>
+        如果 (宽度 != -1)
+        {
+            局_宽度.赋值 (宽度, )
+        }
+        如果 (高度 != -1)
+        {
+            局_高度.赋值 (高度, )
+        }
+        局_图形对象 = Slide对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddMediaObject2", COM对象类, 文件名, 链接源目标, 文稿中存储, 左边, 上边, 局_宽度, 局_高度)
+        局_PPT图形.置对象 (局_图形对象)
+        返回 (局_PPT图形)
+    }
+
+    方法 添加OLE对象 <公开 类型 = PPT图形 注释 = "添加OLE对象并返回一个\"PPT图形\"类">
+    参数 文件名 <类型 = 文本型 注释 = "二选一.要添加的文件的名称.为空文本时忽略该参数." "">
+    参数 类名 <类型 = 文本型 注释 = "二选一.指定要添加的类对象名称.当\"文件名\"不为空时.忽略该参数.当\"文件名\"为空时.必须指定类名." @默认值 = "">
+    参数 链接源目标 <类型 = 逻辑型 注释 = "指示是否链接到文件" @默认值 = 假>
+    参数 左边 <类型 = 小数 注释 = "新对象左上角相对于幻灯片左上角的水平位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "新对象左上角相对于幻灯片左上角的垂直位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "OLE对象的初始宽度,以磅为单位.默认为-1.表示不指定宽度由内容决定宽度大小." @默认值 = -1>
+    参数 高度 <类型 = 小数 注释 = "OLE对象的初始高度,以磅为单位.默认为-1.表示不指定高度由内容决定高度大小." @默认值 = -1>
+    参数 显示为图标 <类型 = 逻辑型 注释 = "决定是否将OLE对象显示为图标" @默认值 = 假>
+    参数 图标文件 <类型 = 文本型 注释 = "包含将要显示的图标的文件" @默认值 = "">
+    参数 图标索引 <类型 = 整数 注释 = "\"图标文件\"中的图标索引.从0开始.如果具有给定索引编号的图标不存在时.则使用的图标索引号为1(文件中的第二个图标)." @默认值 = 0>
+    参数 标签 <类型 = 文本型 注释 = "显示在图标下面的标签(标题)." @默认值 = "">
+    {
+        变量 局_图形对象 <类型 = COM对象类>
+        变量 局_PPT图形 <类型 = PPT图形>
+        变量 局_宽度 <类型 = COM变体型>
+        变量 局_高度 <类型 = COM变体型>
+        如果 (宽度 != -1)
+        {
+            局_宽度.赋值 (宽度, )
+        }
+        如果 (高度 != -1)
+        {
+            局_高度.赋值 (高度, )
+        }
+        局_图形对象 = Slide对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddOLEObject", COM对象类, 左边, 上边, 局_宽度, 局_高度, 类名, 文件名, 显示为图标, 图标文件, 图标索引, 标签, 链接源目标)
+        局_PPT图形.置对象 (局_图形对象)
+        返回 (局_PPT图形)
+    }
+
+    方法 添加直线 <公开 类型 = PPT图形 注释 = "向幻灯片添加一条直线图形,并返回新建的图形.">
+    参数 起点横坐标 <类型 = 小数 注释 = "线条起点相对于幻灯片左边缘水平位置,以磅为单位." "">
+    参数 起点纵坐标 <类型 = 小数 注释 = "线条起点相对于幻灯片上边缘垂直位置,以磅为单位." "">
+    参数 终点横坐标 <类型 = 小数 注释 = "线条终点相对于幻灯片左边缘水平位置,以磅为单位." "">
+    参数 终点纵坐标 <类型 = 小数 注释 = "线条终点相对于幻灯片上边缘垂直位置,以磅为单位." "">
+    {
+        变量 局_图形对象 <类型 = COM对象类>
+        变量 局_PPT图形 <类型 = PPT图形>
+        局_图形对象 = Slide对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddLine", COM对象类, 起点横坐标, 起点纵坐标, 终点横坐标, 终点纵坐标)
+        局_PPT图形.置对象 (局_图形对象)
+        返回 (局_PPT图形)
+    }
+
+    方法 添加文本框 <公开 类型 = PPT图形 注释 = "向幻灯片添加一个文本框">
+    参数 内容 <类型 = 文本型 注释 = "艺术字中的文字">
+    参数 方向 <类型 = PPT文本方向 注释 = "PPT文本方向.*,指定文本的方向.其中某些常量可能不可用,这取决于您所选择或安装的语言支持." @默认值 = PPT文本方向.水平>
+    参数 左边 <类型 = 小数 注释 = "设置幻灯片左边缘到文本框左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "设置幻灯片左边缘到文本框左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "设置文本框的宽度,以磅为单位." @默认值 = 100>
+    参数 高度 <类型 = 小数 注释 = "设置文本框的高度,以磅为单位." @默认值 = 100>
+    {
+        变量 局_图形对象 <类型 = COM对象类>
+        变量 局_PPT图形 <类型 = PPT图形>
+        局_图形对象 = Slide对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddTextbox", COM对象类, 方向, 左边, 上边, 宽度, 高度)
+        局_图形对象.读无参数对象型属性 ("TextFrame", COM对象类).读无参数对象型属性 ("TextRange", COM对象类).写属性 ("Text", 内容)  // 向文本框中写入内容
+        局_PPT图形.置对象 (局_图形对象)
+        返回 (局_PPT图形)
+    }
+
+    方法 置标题文本 <公开 类型 = PPT图形 注释 = "设置对象标题区标题文本并返回该标题区域,请确保对象存在标题区.">
+    参数 内容 <类型 = 文本型>
+    {
+        变量 局_图形对象 <类型 = COM对象类>
+        变量 局_PPT图形 <类型 = PPT图形>
+        局_图形对象 = Slide对象.读无参数对象型属性 ("Shapes", COM对象类).无参数对象型方法 ("AddTitle", COM对象类)
+        局_图形对象.读无参数对象型属性 ("TextFrame", COM对象类).读无参数对象型属性 ("TextRange", COM对象类).写属性 ("Text", 内容)  // 向标题写入内容
+        局_PPT图形.置对象 (局_图形对象)
+        返回 (局_PPT图形)
+    }
+
+    方法 背景 <公开 属性读 类型 = PPT图形 注释 = "该对象表示幻灯片的背景">
+    {
+        变量 局_PPT图形 <类型 = PPT图形>
+        局_PPT图形.置对象 (Slide对象.读无参数对象型属性 ("Background", COM对象类))
+        返回 (局_PPT图形)
+    }
+
+    方法 隐藏背景图形 <公开 属性读 类型 = 逻辑型 注释 = "返回背景图形是否被隐藏">
+    {
+        返回 (Slide对象.读无参数属性 ("DisplayMasterShapes", 逻辑型))
+    }
+
+    方法 隐藏背景图形 <公开 属性写 注释 = "设置背景图形是否被隐藏">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Slide对象.写属性 ("DisplayMasterShapes", 所欲设置的值)
+    }
+
+    方法 取图形 <公开 类型 = PPT图形 注释 = "取出代表幻灯片中形状的PPT图形类">
+    参数 索引号 <类型 = 整数 注释 = "对象的索引号.从1开始,表示图形在PPT文稿图形集合中位置.为-1时忽略该参数." @默认值 = -1>
+    参数 名称 <类型 = 文本型 注释 = "对象的名称.索引号不为-1时忽略该参数." @默认值 = "">
+    {
+        变量 局_PPT图形 <类型 = PPT图形>
+        如果 (索引号 == -1)
+        {
+            如果 (名称 != "")
+            {
+                局_PPT图形.置对象 (Slide对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("Item", COM对象类, 名称))  // 名称取PPT图形
+            }
+        }
+        否则
+        {
+            局_PPT图形.置对象 (Slide对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("Item", COM对象类, 索引号))  // 索引号取PPT图形
+        }
+        返回 (局_PPT图形)
+    }
+
+    方法 添加表格 <公开 类型 = PPT图形 注释 = "将表格形状添加到幻灯片中">
+    参数 行数 <类型 = 整数 注释 = "表格的行数" @默认值 = 1>
+    参数 列数 <类型 = 整数 注释 = "表格的列数" @默认值 = 1>
+    参数 左边 <类型 = 小数 注释 = "设置幻灯片左边缘到表格左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "设置幻灯片左边缘到表格左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "设置表格的宽度,以磅为单位." @默认值 = 100>
+    参数 高度 <类型 = 小数 注释 = "设置表格的高度,以磅为单位." @默认值 = 100>
+    {
+        变量 局_图形对象 <类型 = COM对象类>
+        变量 局_PPT图形 <类型 = PPT图形>
+        局_图形对象 = Slide对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddTable", COM对象类, 行数, 列数, 左边, 上边, 宽度, 高度)
+        局_PPT图形.置对象 (局_图形对象)
+        返回 (局_PPT图形)
+    }
+
+    方法 添加智能图表 <公开 类型 = PPT图形 注释 = "向文档中添加智能图表,并返回新建的图形.">
+    参数 版式索引 <类型 = 整数 注释 = "智能图表样式索引号,索引号不能大于图表总数量.智能图表数量可通过\"PPT程序.图表版式数\"获得." @默认值 = 1>
+    参数 左边 <类型 = 小数 注释 = "设置新建图形左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "设置新建图形左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "设置新建图形的宽度,以磅为单位." @默认值 = 100>
+    参数 高度 <类型 = 小数 注释 = "设置新建图形的高度,以磅为单位." @默认值 = 100>
+    参数 名称 <类型 = 文本型 注释 = "指定所添加对象的名称" @默认值 = "">
+    {
+        变量 局_图形 <类型 = COM对象类>
+        变量 局_PPT图形 <类型 = PPT图形>
+        变量 局_版式 <类型 = COM变体型>
+        局_版式 = Slide对象.读无参数对象型属性 ("Application", COM对象类).读无参数对象型属性 ("SmartArtLayouts", COM对象类).方法 ("Item", COM变体型, 版式索引)
+        局_图形 = Slide对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddSmartArt", COM对象类, 局_版式, 左边, 上边, 宽度, 高度)
+        如果 (名称 != "")
+        {
+            局_图形.写属性 ("Name", 名称)
+        }
+        局_PPT图形.置对象 (局_图形)
+        返回 (局_PPT图形)
+    }
+
+    方法 添加图片 <公开 类型 = PPT图形 注释 = "将图片添加到幻灯片中,并返回新建图片的\"PPT图形\"类.">
+    参数 文件名 <类型 = 文本型 注释 = "图片文件名">
+    参数 链接到文件 <类型 = 逻辑型 注释 = "确定是否将图片链接到从中创建该图片的文件.与\"文稿中存储\".必须有一个为真." @默认值 = 假>
+    参数 文稿中存储 <类型 = 逻辑型 注释 = "确定是否将已链接的图片插入到文稿一起保存.与\"链接源目标\".必须有一个为真." @默认值 = 真>
+    参数 左边 <类型 = 小数 注释 = "设置幻灯片左边缘到图片对象左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "设置幻灯片上边缘到图片对象上边缘的位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "设置图片对象的宽度,以磅为单位.默认为-1.表示不指定宽度由内容决定宽度大小." @默认值 = -1>
+    参数 高度 <类型 = 小数 注释 = "设置图片对象的高度,以磅为单位.默认为-1.表示不指定高度由内容决定高度大小." @默认值 = -1>
+    {
+        变量 局_图形对象 <类型 = COM对象类>
+        变量 局_PPT图形 <类型 = PPT图形>
+        变量 局_宽度 <类型 = COM变体型>
+        变量 局_高度 <类型 = COM变体型>
+        如果 (宽度 != -1)
+        {
+            局_宽度.赋值 (宽度, )
+        }
+        如果 (高度 != -1)
+        {
+            局_高度.赋值 (高度, )
+        }
+        局_图形对象 = Slide对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddPicture2", COM对象类, 文件名, 链接到文件, 文稿中存储, 左边, 上边, 局_宽度, 局_高度)
+        局_PPT图形.置对象 (局_图形对象)
+        返回 (局_PPT图形)
+    }
+
+    方法 添加3D模型 <公开 类型 = PPT图形 注释 = "将3D模型添加到幻灯片中,并返回新建图片的\"PPT图形\"类.">
+    参数 文件名 <类型 = 文本型 注释 = "将依据其创建3D模型对象的文件">
+    参数 链接到文件 <类型 = 逻辑型 注释 = "确定是否将3D模型链接到从中创建该图片的文件.与\"文稿中存储\".必须有一个为真." @默认值 = 假>
+    参数 文稿中存储 <类型 = 逻辑型 注释 = "确定是否将已链接的3D模型插入到文稿一起保存.与\"链接源目标\".必须有一个为真." @默认值 = 真>
+    参数 左边 <类型 = 小数 注释 = "设置幻灯片左边缘到3D模型对象左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "设置幻灯片上边缘到3D模型对象上边缘的位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "设置3D模型对象的宽度,以磅为单位.默认为-1.表示不指定宽度由内容决定宽度大小." @默认值 = -1>
+    参数 高度 <类型 = 小数 注释 = "设置3D模型对象的高度,以磅为单位.默认为-1.表示不指定高度由内容决定高度大小." @默认值 = -1>
+    {
+        变量 局_图形对象 <类型 = COM对象类>
+        变量 局_PPT图形 <类型 = PPT图形>
+        变量 局_宽度 <类型 = COM变体型>
+        变量 局_高度 <类型 = COM变体型>
+        如果 (宽度 != -1)
+        {
+            局_宽度.赋值 (宽度, )
+        }
+        如果 (高度 != -1)
+        {
+            局_高度.赋值 (高度, )
+        }
+        局_图形对象 = Slide对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("Add3DModel", COM对象类, 文件名, 链接到文件, 文稿中存储, 左边, 上边, 局_宽度, 局_高度)
+        局_PPT图形.置对象 (局_图形对象)
+        返回 (局_PPT图形)
+    }
+
+    方法 添加艺术字 <公开 类型 = PPT图形 注释 = "添加艺术字.返回一个代表新艺术字对象的\"PPT图形\"类.">
+    参数 内容 <类型 = 文本型 注释 = "艺术字中的文字">
+    参数 预设样式 <类型 = 整数 注释 = "预置艺术字预设样式.-2,混合型.0~49表示50个艺术字样式.">
+    参数 字体名称 <类型 = 文本型 注释 = "艺术字中所用字体的名称" @默认值 = "宋体">
+    参数 字体大小 <类型 = 小数 注释 = "艺术字中所用字体的大小" @默认值 = 36>
+    参数 加粗 <类型 = 逻辑型 注释 = "艺术字字体是否加粗" @默认值 = 假>
+    参数 斜体 <类型 = 逻辑型 注释 = "以斜体显示艺术字" @默认值 = 假>
+    参数 左边 <类型 = 小数 注释 = "设置艺术字相对于幻灯片左边缘的位置,以磅为单位." @默认值 = 1>
+    参数 上边 <类型 = 小数 注释 = "设置艺术字相对于幻灯片左边缘的位置,以磅为单位." @默认值 = 1>
+    {
+        变量 局_图形对象 <类型 = COM对象类>
+        变量 局_PPT图形 <类型 = PPT图形>
+        局_图形对象 = Slide对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddTextEffect", COM对象类, 预设样式, 内容, 字体名称, 字体大小, 加粗, 斜体, 左边, 上边)
+        局_PPT图形.置对象 (局_图形对象)
+        返回 (局_PPT图形)
+    }
+
+    方法 继承背景 <公开 属性读 类型 = 逻辑型 注释 = "返回幻灯片是否继承幻灯片母版背景">
+    {
+        返回 (Slide对象.读无参数属性 ("FollowMasterBackground", 逻辑型))
+    }
+
+    方法 继承背景 <公开 属性写 注释 = "设置幻灯片是否继承幻灯片母版背景">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Slide对象.写属性 ("FollowMasterBackground", 所欲设置的值)
+    }
+
+    方法 母版背景样式 <公开 属性写 注释 = "返回指定幻灯片的背景样式">
+    参数 所欲设置的值 <类型 = 整数 注释 = "-2 指定样式组合." 注释 = "0 不指定样式." 注释 = "1-12 指定样式.">
+    {
+        Slide对象.读无参数对象型属性 ("Master", COM对象类).写属性 ("BackgroundStyle", 所欲设置的值)
+    }
+
+    方法 母版背景 <公开 属性读 类型 = PPT图形 注释 = "返回幻灯片的背景">
+    {
+        变量 局_母版背景对象 <类型 = COM对象类>
+        变量 局_PPT图形 <类型 = PPT图形>
+        局_母版背景对象 = Slide对象.读无参数对象型属性 ("Master", COM对象类).读无参数对象型属性 ("Background", COM对象类)
+        局_PPT图形.置对象 (局_母版背景对象)
+        返回 (局_PPT图形)
+    }
+
+    方法 取母版文本区 <公开 类型 = PPT文本区 注释 = "返回幻灯片母版样式文本区">
+    参数 文本样式 <类型 = 整数 注释 = "幻灯片母版的三种文本样式,取值范围：1-3,分别为默认文本、标题文本和正文文本.">
+    {
+        变量 局_文本区对象 <类型 = COM对象类>
+        变量 局_PPT文本区 <类型 = PPT文本区>
+        局_文本区对象 = Slide对象.读无参数对象型属性 ("Master", COM对象类).读无参数对象型属性 ("TextStyles", COM对象类).对象型方法 ("Item", COM对象类, 文本样式).读无参数对象型属性 ("TextFrame", COM对象类).读无参数对象型属性 ("TextRange", COM对象类)
+        局_PPT文本区.置对象 (局_文本区对象)
+        返回 (局_PPT文本区)
+    }
+
+    方法 背景样式 <公开 属性读 类型 = 整数 注释 = "返回指定幻灯片的背景样式" 返回值注释 = "-2 指定样式组合." 返回值注释 = "0 不指定样式." 返回值注释 = "1-12 指定样式.">
+    {
+        返回 (Slide对象.读无参数属性 ("BackgroundStyle", 整数))
+    }
+
+    方法 背景样式 <公开 属性写 注释 = "设置指定幻灯片的背景样式">
+    参数 所欲设置的值 <类型 = 整数 注释 = "-2 指定样式组合." 注释 = "0 不指定样式." 注释 = "1-12 指定样式.">
+    {
+        Slide对象.写属性 ("BackgroundStyle", 所欲设置的值)
+    }
+
+    方法 自动切换 <公开 属性读 类型 = 逻辑型 注释 = "返回指定的幻灯片在经过指定时间后是否自动切换">
+    {
+        返回 (Slide对象.读无参数对象型属性 ("SlideShowTransition", COM对象类).读无参数属性 ("AdvanceOnTime", 逻辑型))
+    }
+
+    方法 自动切换 <公开 属性写 注释 = "决定指定的幻灯片在经过指定时间后是否自动切换">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Slide对象.读无参数对象型属性 ("SlideShowTransition", COM对象类).写属性 ("AdvanceOnTime", 所欲设置的值)
+    }
+
+    方法 切换声音 <公开 属性写 注释 = "设置幻灯片放映切换时发出的声音">
+    参数 文件名 <类型 = 文本型>
+    {
+        Slide对象.读无参数对象型属性 ("SlideShowTransition", COM对象类).读无参数对象型属性 ("SoundEffect", COM对象类).无返回值方法 ("ImportFromFile", 文件名)
+    }
+
+    方法 播放切换声音 <公开 注释 = "播放设置幻灯片放映切换时发出的声音">
+    {
+        Slide对象.读无参数对象型属性 ("SlideShowTransition", COM对象类).读无参数对象型属性 ("SoundEffect", COM对象类).无参数及返回值方法 ("Play")
+    }
+
+    方法 放映隐藏 <公开 属性读 类型 = 逻辑型 注释 = "返回幻灯片放映过程中是否隐藏该幻灯片">
+    {
+        返回 (Slide对象.读无参数对象型属性 ("SlideShowTransition", COM对象类).读无参数属性 ("Hidden", 逻辑型))
+    }
+
+    方法 放映隐藏 <公开 属性写 注释 = "设置幻灯片放映过程中是否隐藏该幻灯片">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Slide对象.读无参数对象型属性 ("SlideShowTransition", COM对象类).写属性 ("Hidden", 所欲设置的值)
+    }
+
+    方法 切换时间 <公开 属性读 类型 = 整数 注释 = "返回以秒为单位的时间长度.该段时间过后.指定的幻灯片将会切换." 返回值注释 = "以秒为单位">
+    {
+        返回 (Slide对象.读无参数对象型属性 ("SlideShowTransition", COM对象类).读无参数属性 ("AdvanceTime", 整数))
+    }
+
+    方法 切换时间 <公开 属性写 注释 = "设置以秒为单位的时间长度.该段时间过后.指定的幻灯片将会切换.">
+    参数 所欲设置的值 <类型 = 整数 注释 = "以秒为单位">
+    {
+        Slide对象.读无参数对象型属性 ("SlideShowTransition", COM对象类).写属性 ("AdvanceTime", 所欲设置的值)
+    }
+
+    方法 索引号 <公开 属性读 类型 = 整数 注释 = "返回幻灯片在\"幻灯片集合\"内的索引号">
+    {
+        返回 (Slide对象.读无参数属性 ("SlideIndex", 整数))
+    }
+
+    方法 版式 <公开 属性读 类型 = PPT幻灯片版式 注释 = "返回指定幻灯片的版式" 返回值注释 = "PPT幻灯片版式.*">
+    {
+        返回 (Slide对象.读无参数属性 ("Layout", PPT幻灯片版式))
+    }
+
+    方法 版式 <公开 属性写 注释 = "设置指定幻灯片的版式">
+    参数 所欲设置的值 <类型 = PPT幻灯片版式 注释 = "PPT幻灯片版式.*">
+    {
+        Slide对象.写属性 ("Layout", 所欲设置的值)
+    }
+}
+
+类 PPT文本区 <公开 注释 = "代表PPT文稿中的一个段落中的指定文本区域内容">
+{
+    变量 TextRange对象 <类型 = COM对象类>
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作." "">
+    参数 局_TextRange对象 <类型 = COM对象类>
+    {
+        TextRange对象 = 局_TextRange对象
+        返回 (TextRange对象.是否为空 () == 假)
+    }
+
+    方法 取对象 <公开 类型 = COM对象类 注释 = "获取PPT提供的对象.与\"COM对象类\"数据类型兼容,可交互操作." "">
+    {
+        返回 (TextRange对象)
+    }
+
+    方法 删除 <公开 注释 = "删除该文本区内容" "">
+    {
+        TextRange对象.无参数及返回值方法 ("Delete")
+    }
+
+    方法 复制 <公开 注释 = "复制文本区内容到剪贴板上" "">
+    {
+        TextRange对象.无参数及返回值方法 ("Copy")
+    }
+
+    方法 粘贴 <公开 注释 = "将\"剪贴板\"的内容插入指定的选择范围处" "">
+    {
+        TextRange对象.无参数及返回值方法 ("Paste")
+    }
+
+    方法 选择性粘贴 <公开 注释 = "将\"剪贴板\"的内容插入指定的选择范围处" "">
+    参数 格式 <类型 = PPT粘贴格式 注释 = "PPT粘贴格式.*" @默认值 = PPT粘贴格式.文本>
+    {
+        TextRange对象.无返回值方法 ("PasteSpecial", 格式)
+    }
+
+    方法 选定 <公开 注释 = "选中该文本区" "">
+    {
+        TextRange对象.无参数及返回值方法 ("Select")
+    }
+
+    方法 插入文本 <公开 类型 = PPT文本区 注释 = "将指定文本插入文本区的前面或末尾" "">
+    参数 内容 <类型 = 文本型 注释 = "要插入的文本" "">
+    参数 前插 <类型 = 逻辑型 注释 = "如果为真,则在前面插入." 注释 = "如果为假,则在后面插入." @默认值 = 假>
+    {
+        变量 局_PPT文本区 <类型 = PPT文本区>
+        如果 (前插)
+        {
+            局_PPT文本区.置对象 (TextRange对象.方法 ("InsertBefore", COM对象类, 内容))
+        }
+        否则
+        {
+            局_PPT文本区.置对象 (TextRange对象.方法 ("InsertAfter", COM对象类, 内容))
+        }
+        返回 (局_PPT文本区)
+    }
+
+    方法 插入日期 <公开 类型 = PPT文本区 注释 = "在指定的文本区域中插入的日期和时间" "">
+    参数 日期格式 <类型 = PPT日期格式 注释 = "日期和时间的格式" "">
+    参数 打开更新 <类型 = 逻辑型 注释 = "决定是否每次打开PPT文稿时都更新插入的日期和时间" @默认值 = 假>
+    {
+        变量 局_PPT文本区 <类型 = PPT文本区>
+        局_PPT文本区.置对象 (TextRange对象.方法 ("InsertDateTime", COM对象类, 日期格式, 选择 (打开更新, -1, 0)))
+        返回 (局_PPT文本区)
+    }
+
+    方法 插入回车符 <公开 注释 = "将回车符插入范围或所选内容的末尾" "">
+    {
+        TextRange对象.无返回值方法 ("InsertAfter", "\r\n")
+    }
+
+    方法 剪切 <公开 注释 = "剪切该段落到剪贴板上" "">
+    {
+        TextRange对象.无参数及返回值方法 ("Cut")
+    }
+
+    方法 字符数量 <公开 属性读 类型 = 整数 注释 = "返回该文本区的字符数量" "">
+    {
+        返回 (TextRange对象.无参数对象型方法 ("Characters", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 取范围文本 <公开 类型 = 文本型 注释 = "根据文本区中字符的索引号取出一定长度的文本内容" "">
+    参数 位置 <类型 = 整数 注释 = "返回的范围中的位置">
+    参数 长度 <类型 = 整数 注释 = "要取出文本长度">
+    {
+        返回 (TextRange对象.对象型方法 ("Characters", COM对象类, 位置, 长度).读无参数属性 ("Text", 文本型))
+    }
+
+    方法 取范围文本区 <公开 类型 = PPT文本区 注释 = "从文本区中,取出从\"位置\"一定长度的文本区.">
+    参数 位置 <类型 = 整数 注释 = "开始字符位置">
+    参数 长度 <类型 = 整数 注释 = "要取出文本长度">
+    {
+        变量 局_PPT文本区 <类型 = PPT文本区>
+        变量 局_对象 <类型 = COM对象类>
+        局_对象 = TextRange对象.对象型方法 ("Characters", COM对象类, 位置, 长度)
+        局_PPT文本区.置对象 (局_对象)
+        返回 (局_PPT文本区)
+    }
+
+    方法 内容 <公开 属性读 类型 = 文本型 注释 = "返回当前选区中的内容" "">
+    {
+        返回 (TextRange对象.读无参数属性 ("Text", 文本型))
+    }
+
+    方法 内容 <公开 属性写 注释 = "设置当前选区中的内容" "">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        TextRange对象.写属性 ("Text", 所欲设置的值)
+    }
+
+    方法 字体名称 <公开 属性读 类型 = 文本型 注释 = "返回当前选区字体名称">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Name", 文本型))
+    }
+
+    方法 字体名称 <公开 属性写 注释 = "设置当前选区字体名称">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        TextRange对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Name", 所欲设置的值)
+    }
+
+    方法 字体倾斜 <公开 属性读 类型 = 逻辑型 注释 = "返回当前选区字体是否倾斜">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Italic", 逻辑型))
+    }
+
+    方法 字体倾斜 <公开 属性写 注释 = "设置当前选区字体是否倾斜">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        TextRange对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Italic", 所欲设置的值)
+    }
+
+    方法 字体上标 <公开 属性读 类型 = 逻辑型 注释 = "返回当前选区字体是否使用上标">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Superscript", 逻辑型))
+    }
+
+    方法 字体上标 <公开 属性写 注释 = "设置当前选区字体是否使用上标">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        TextRange对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Superscript", 所欲设置的值)
+    }
+
+    方法 字体浮雕 <公开 属性读 类型 = 逻辑型 注释 = "返回当前选区字体是否使用下标">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Emboss", 逻辑型))
+    }
+
+    方法 字体浮雕 <公开 属性写 注释 = "设置当前选区字体浮雕阳效果">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        TextRange对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Emboss", 所欲设置的值)
+    }
+
+    方法 字体删除线 <公开 属性读 类型 = 逻辑型 注释 = "返回字体的格式是否为带删除线的文本">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("StrikeThrough", 逻辑型))
+    }
+
+    方法 字体删除线 <公开 属性写 注释 = "字体的格式设置为带删除线的文本">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        TextRange对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("StrikeThrough", 所欲设置的值)
+    }
+
+    方法 字体下标 <公开 属性读 类型 = 逻辑型 注释 = "返回应用于字体是否使用下标">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Subscript", 逻辑型))
+    }
+
+    方法 字体下标 <公开 属性写 注释 = "设置应用于字体是否使用下标">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        TextRange对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Subscript", 所欲设置的值)
+    }
+
+    方法 字体偏移 <公开 属性读 类型 = 小数 注释 = "返回指定上标或下标字符的基准线偏移量" 返回值注释 = "值范围为-1到1之间的浮点值.如果值为-1.表示偏移量为-100%.如果值为1.表示偏移量为100%.">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("BaselineOffset", 小数))
+    }
+
+    方法 字体偏移 <公开 属性写 注释 = "设置指定上标或下标字符的基准线偏移量">
+    参数 所欲设置的值 <类型 = 小数 注释 = "取值范围为-1到1之间的浮点值.如果值为-1.表示偏移量为-100%.如果值为1.表示偏移量为100%.">
+    {
+        TextRange对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("BaselineOffset", 所欲设置的值)
+    }
+
+    方法 字体下划线 <公开 属性读 类型 = 逻辑型 注释 = "返回当前选区字体下方下划线风格">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Underline", 逻辑型))
+    }
+
+    方法 字体下划线 <公开 属性写 注释 = "设置当前选区字体下方下划线风格">
+    参数 所欲设置的值 <类型 = 逻辑型 注释 = "逻辑型">
+    {
+        TextRange对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Underline", 选择 (所欲设置的值, -1, 0))
+    }
+
+    方法 字体加粗 <公开 属性读 类型 = 逻辑型 注释 = "返回当前选区字体是否加粗">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Bold", 逻辑型))
+    }
+
+    方法 字体加粗 <公开 属性写 注释 = "设置当前选区字体是否加粗">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        TextRange对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Bold", 所欲设置的值)
+    }
+
+    方法 字体阴影 <公开 属性读 类型 = 逻辑型 注释 = "返回文本是否带有阴影">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Shadow", 逻辑型))
+    }
+
+    方法 字体阴影 <公开 属性写 注释 = "设置文本是否带有阴影">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        TextRange对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Shadow", 所欲设置的值)
+    }
+
+    方法 字体颜色 <公开 属性读 类型 = 整数 注释 = "返回当前选区字体颜色,使用RGB函数创建颜色值.">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Color", 整数))
+    }
+
+    方法 字体颜色 <公开 属性写 注释 = "设置当前选区字体颜色,使用RGB函数创建颜色值.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        TextRange对象.读无参数对象型属性 ("Font", COM对象类).读无参数对象型属性 ("Color", COM对象类).写属性 ("RGB", 所欲设置的值)
+    }
+
+    方法 字体大小 <公开 属性读 类型 = 整数 注释 = "返回当前选区字体大小,以磅为单位.">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Size", 整数))
+    }
+
+    方法 字体大小 <公开 属性写 注释 = "设置当前选区字体大小,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        TextRange对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Size", 所欲设置的值)
+    }
+
+    方法 开始位置 <公开 属性读 类型 = 整数 注释 = "取文本区在整个PPT文稿中的开始位置" "">
+    {
+        返回 (TextRange对象.读无参数属性 ("Start", 整数))
+    }
+
+    方法 替换 <公开 注释 = "替换文本区中对应的文本内容" "">
+    参数 查找文本 <类型 = 文本型 注释 = "用作查找文本">
+    参数 替换文本 <类型 = 文本型 注释 = "用作替换文本">
+    参数 开始位置 <类型 = 整数 注释 = "查找开始位置" @默认值 = 0>
+    参数 替换所有 <类型 = 逻辑型 注释 = "如果为假,表示只替换遇到的第一个匹配项." @默认值 = 真>
+    参数 区分大小写 <类型 = 逻辑型 注释 = "英文是否区分大小写" @默认值 = 真>
+    {
+        变量 Find对象 <类型 = COM对象类>
+        变量 COM变体 <类型 = COM变体型>
+        循环判断首 ()
+        {
+            Find对象 = TextRange对象.对象型方法 ("Find", COM对象类, 查找文本, 开始位置, 区分大小写)  // 取出查找到对象
+            Find对象.写属性 ("Text", 替换文本)  // 将替换内容写入找到对象
+            开始位置 = Find对象.读无参数属性 ("Start", 整数)  // 更新找到位置为下次查找位置
+            如果 (替换所有 == 假)
+            {
+                跳出循环
+            }
+        }
+        循环判断尾 (Find对象.是否为空 () == 假)  // 查找到对象为空时退出循环
+    }
+
+    方法 查找 <公开 类型 = PPT文本区 注释 = "查找文本区中对应的文本内容,返回一个新的\"PPT文本区\"." "">
+    参数 查找文本 <类型 = 文本型 注释 = "用作查找文本">
+    参数 开始位置 <类型 = 整数 注释 = "查找开始位置" @默认值 = 0>
+    参数 区分大小写 <类型 = 逻辑型 注释 = "英文字母是否区分大小写" @默认值 = 真>
+    {
+        变量 局_PPT文本区 <类型 = PPT文本区>
+        变量 局_对象 <类型 = COM对象类>
+        局_对象 = TextRange对象.对象型方法 ("Find", COM对象类, 查找文本, 开始位置, 区分大小写)
+        局_PPT文本区.置对象 (局_对象)
+        返回 (局_PPT文本区)
+    }
+
+    方法 段落数 <公开 属性读 类型 = 整数 注释 = "返回当前文本区中段落数量,代表当前选区中段落数量.注意:当前文本区,非整个PPT文稿.">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("Paragraphs", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 取段落 <公开 类型 = PPT文本区 注释 = "返回一个\"PPT段落\"类,代表当前文本区中段落集合中根据索引号对应的一段段落.注意:当前文本区,非整个PPT文稿.">
+    参数 索引号 <类型 = 整数 注释 = "欲取出选区中的段落开始索引号">
+    参数 段落数量 <类型 = 整数 注释 = "指从索引号开始算起,要取出段落的数量." @默认值 = 1>
+    {
+        变量 局_PPT文本区 <类型 = PPT文本区>
+        局_PPT文本区.置对象 (TextRange对象.对象型方法 ("Paragraphs", COM对象类, 索引号, 段落数量))
+        返回 (局_PPT文本区)
+    }
+
+    方法 段落对齐 <公开 属性读 类型 = PPT段落对齐 注释 = "返回每个段落的对齐方式">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).读无参数属性 ("Alignment", PPT段落对齐))
+    }
+
+    方法 段落对齐 <公开 属性写 注释 = "设置每个段落的对齐方式">
+    参数 对齐方式 <类型 = PPT段落对齐 注释 = "PPT段落对齐.*" "">
+    {
+        TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).写属性 ("Alignment", 对齐方式)
+    }
+
+    方法 段落字间距 <公开 属性读 类型 = 整数 注释 = "以磅为单位返回指定文本中基准行之间的距离" 返回值注释 = "磅为单位">
+    {
+        TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).写属性 ("LineRuleWithin", 0)  // 将基线间的行距设为特定磅数
+        返回 (TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).读无参数属性 ("SpaceWithin", 整数))
+    }
+
+    方法 段落字间距 <公开 属性写 注释 = "以磅为单位设置指定文本中基准行之间的距离">
+    参数 间距 <类型 = 整数 注释 = "磅为单位" "">
+    {
+        TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).写属性 ("LineRuleWithin", 0)  // 将基线间的行距设为特定磅数
+        TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).写属性 ("SpaceWithin", 间距)
+    }
+
+    方法 段落文本方向 <公开 属性读 类型 = PPT段落文本方向 注释 = "返回段落文本方向" 返回值注释 = "PPT段落文本方向.*">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).读无参数属性 ("TextDirection", PPT段落文本方向))
+    }
+
+    方法 段落文本方向 <公开 属性写 注释 = "设置段落文本方向">
+    参数 所欲设置的值 <类型 = PPT段落文本方向 注释 = "PPT段落文本方向.*" "">
+    {
+        TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).写属性 ("TextDirection", 所欲设置的值)
+    }
+
+    方法 段落编号 <公开 属性读 类型 = PPT段落编号 注释 = "返回项目段落编号" 返回值注释 = "PPT段落编号.*">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).读无参数对象型属性 ("Bullet", COM对象类).读无参数属性 ("Style", PPT段落编号))
+    }
+
+    方法 段落编号 <公开 属性写 注释 = "设置项目段落编号">
+    参数 所欲设置的值 <类型 = PPT段落编号 注释 = "PPT段落编号.*" "">
+    {
+        TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).读无参数对象型属性 ("Bullet", COM对象类).写属性 ("Style", 所欲设置的值)
+    }
+
+    方法 段落编号缩放 <公开 属性读 类型 = 小数 注释 = "返回项目符号相对于段落中第一个文本字符的大小" 返回值注释 = "属性值可以是 0.25 至 4.表示项目符号的大小可以从25%到400%的文本字符大小之间的浮点值">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).读无参数对象型属性 ("Bullet", COM对象类).读无参数属性 ("RelativeSize", 小数))
+    }
+
+    方法 段落编号缩放 <公开 属性写 注释 = "设置项目符号相对于段落中第一个文本字符的大小">
+    参数 所欲设置的值 <类型 = 小数 注释 = "属性值可以是0.25至4,表示项目符号的大小可以从25%到400%的文本字符大小之间的浮点值" "">
+    {
+        TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).读无参数对象型属性 ("Bullet", COM对象类).写属性 ("RelativeSize", 所欲设置的值)
+    }
+
+    方法 段落编号开始值 <公开 属性读 类型 = 整数 注释 = "返回项目符号列表的开始值" 返回值注释 = "值必须在1到32767范围">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).读无参数对象型属性 ("Bullet", COM对象类).读无参数属性 ("StartValue", 整数))
+    }
+
+    方法 段落编号开始值 <公开 属性写 注释 = "设置项目符号列表的开始值">
+    参数 所欲设置的值 <类型 = 整数 注释 = "值必须在1到32767范围" "">
+    {
+        TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).读无参数对象型属性 ("Bullet", COM对象类).写属性 ("StartValue", 所欲设置的值)
+    }
+
+    方法 置段落图形编号 <公开 注释 = "设置要用于项目符号列表中的项目符号的图形文件">
+    参数 文件名 <类型 = 文本型 "">
+    {
+        段落符号类型 = PPT段落符号.带图像  // 设置图形编号前必须指定"段落符号类型"为带图像类型
+        TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).读无参数对象型属性 ("Bullet", COM对象类).无返回值方法 ("Picture", 文件名)
+    }
+
+    方法 段落符号类型 <公开 属性读 类型 = PPT段落符号 注释 = "返回段落符号类型" 返回值注释 = "PPT段落符号类型.*">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).读无参数对象型属性 ("Bullet", COM对象类).读无参数属性 ("Type", PPT段落符号))
+    }
+
+    方法 段落符号类型 <公开 属性写 注释 = "设置段落符号类型">
+    参数 所欲设置的值 <类型 = PPT段落符号 注释 = "PPT段落符号类型.*" "">
+    {
+        TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).读无参数对象型属性 ("Bullet", COM对象类).写属性 ("Type", 所欲设置的值)
+    }
+
+    方法 段落基准线对齐 <公开 属性读 类型 = PPT基准线对齐 注释 = "返回指定段落的基准线对齐方式" 返回值注释 = "PPT基准线对齐.*">
+    {
+        返回 (TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).读无参数属性 ("BaseLineAlignment", PPT基准线对齐))
+    }
+
+    方法 段落基准线对齐 <公开 属性写 注释 = "设置指定段落的基准线对齐方式">
+    参数 所欲设置的值 <类型 = PPT基准线对齐 注释 = "PPT基准线对齐.*" "">
+    {
+        TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).写属性 ("BaseLineAlignment", 所欲设置的值)
+    }
+
+    方法 段落后间距 <公开 属性写 注释 = "设置指定文本中每段最后一行后的间距大小,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数 注释 = "以磅为单位" "">
+    {
+        TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).写属性 ("LineRuleAfter", 0)  // 将每段最后一行之后的行距设为特定的磅数
+        TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).写属性 ("SpaceAfter", 所欲设置的值)
+    }
+
+    方法 段落前间距 <公开 属性写 注释 = "设置指定文本中每段第一行前的间距大小,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数 注释 = "以磅为单位" "">
+    {
+        TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).写属性 ("LineRuleBefore", 0)  //  将每段首行前面的行距设为特定的磅数
+        TextRange对象.读无参数对象型属性 ("ParagraphFormat", COM对象类).写属性 ("SpaceBefore", 所欲设置的值)
+    }
+
+    方法 段落加句号 <公开 注释 = "在指定文本的每个段落末尾添加英文句号">
+    {
+        TextRange对象.无参数方法 ("AddPeriods", COM对象类)
+    }
+
+    方法 取行 <公开 类型 = PPT文本区 注释 = "返回当前文本区中的行">
+    参数 索引号 <类型 = 整数 注释 = "返回的范围中的第一行">
+    参数 长度 <类型 = 整数 注释 = "要返回的行数">
+    {
+        变量 局_PPT文本区 <类型 = PPT文本区>
+        局_PPT文本区.置对象 (TextRange对象.对象型方法 ("Lines", COM对象类, 索引号, 长度))
+        返回 (局_PPT文本区)
+    }
+}
+
+类 PPT图形 <公开 注释 = "代表绘图层中的对象,例如自选图形、任意多边形、OLE对象或图片.">
+{
+    变量 Shape对象 <类型 = COM对象类>
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作.">
+    参数 参_Shape对象 <类型 = COM对象类>
+    {
+        Shape对象 = 参_Shape对象
+        返回 (Shape对象.是否为空 () == 假)
+    }
+
+    方法 取对象 <公开 类型 = COM对象类 注释 = "获取PowerPoint提供的对象.与\"COM对象类\"数据类型兼容,可交互操作." "">
+    {
+        返回 (Shape对象)
+    }
+
+    方法 删除 <公开 注释 = "删除指定区域的形状" "">
+    {
+        Shape对象.无参数及返回值方法 ("Delete")
+    }
+
+    方法 复制 <公开 注释 = "将指定对象复制到剪贴板" "">
+    {
+        Shape对象.无参数及返回值方法 ("Copy")
+    }
+
+    方法 剪切 <公开 注释 = "将指定对象剪切到剪贴板" "">
+    {
+        Shape对象.无参数及返回值方法 ("Cuts")
+    }
+
+    方法 复制格式 <公开 注释 = "复制指定形状的格式" "">
+    {
+        Shape对象.无参数及返回值方法 ("PickUp")
+    }
+
+    方法 粘贴格式 <公开 注释 = "粘贴来源于\"复制格式\"指定形状的格式" "">
+    {
+        Shape对象.无参数及返回值方法 ("Apply")
+    }
+
+    方法 翻转 <公开 注释 = "绕指定形状的水平或垂直对称轴翻转该形状" "">
+    参数 水平翻转 <类型 = 逻辑型 注释 = "指定形状是水平翻转还是垂直翻转.如果值为真.则表示水平翻转;如果值为假.则表示垂直翻转." @默认值 = 真>
+    {
+        Shape对象.无返回值方法 ("Flip", 选择 (水平翻转, 0, 1))
+    }
+
+    方法 旋转 <公开 注释 = "按指定度数值.改变指定形状绕z轴的旋转角度." "">
+    参数 角度 <类型 = 整数 注释 = "指定形状的水平旋转量.以度为单位.为正值时顺时针旋转形状.为负值时逆时针旋转形状." "">
+    {
+        Shape对象.无返回值方法 ("IncrementRotation", 角度)
+    }
+
+    方法 置阴影 <公开 注释 = "指定形状的阴影格式">
+    参数 颜色 <类型 = 整数 注释 = "设置阴影颜色.默认为黑色." @默认值 = 0>
+    参数 水平偏移量 <类型 = 小数 注释 = "设置阴影相对指定形状的水平偏移量.以磅为单位." @默认值 = 2>
+    参数 垂直偏移量 <类型 = 小数 注释 = "设置阴影相对指定形状的垂直偏移量.以磅为单位." @默认值 = 2>
+    参数 风格 <类型 = PPT阴影风格 注释 = "PPT阴影风格.*" @默认值 = PPT阴影风格.外阴影>
+    参数 类型 <类型 = 整数 注释 = "如果值为-2.则表示混合类型;如果值为1-20.则表示20个不同阴影类型.如果值为-1.则表示忽略该参数;" @默认值 = -1>
+    参数 透明度 <类型 = 小数 注释 = "取值范围:0.0到1.0之间的小数值.如果值为-1.则表示忽略该参数." @默认值 = -1>
+    参数 虚化半径 <类型 = 小数 注释 = "取值范围为正整数.设置指定阴影的虚化半径.以磅为单位.如果值为-1.则表示忽略该参数." @默认值 = -1>
+    参数 大小 <类型 = 整数 注释 = "指定阴影的大小作为形状大小的百分比.取值范围:0到200之间的整数值.如果值为-1.则表示忽略该参数." @默认值 = -1>
+    参数 跟随旋转 <类型 = 逻辑型 注释 = "设置与指定阴影相关联的形状旋转时指定的阴影是否旋转" @默认值 = 假>
+    {
+        Shape对象.读无参数对象型属性 ("Shadow", COM对象类).写属性 ("Visible", 真)  // 设置对象格式的可见性
+        Shape对象.读无参数对象型属性 ("Shadow", COM对象类).读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 颜色)
+        Shape对象.读无参数对象型属性 ("Shadow", COM对象类).写属性 ("Style", 风格)  // 设置阴影风格
+        Shape对象.读无参数对象型属性 ("Shadow", COM对象类).写属性 ("RotateWithShape", 跟随旋转)  // 设置与指定阴影相关联的形状旋转时指定的阴影是否旋转
+        Shape对象.读无参数对象型属性 ("Shadow", COM对象类).写属性 ("OffsetX", 水平偏移量)  // 设置阴影水平偏移量
+        Shape对象.读无参数对象型属性 ("Shadow", COM对象类).写属性 ("OffsetY", 垂直偏移量)  // 设置阴影垂直偏移量
+        如果 (虚化半径 != -1)
+        {
+            Shape对象.读无参数对象型属性 ("Shadow", COM对象类).写属性 ("Blur", 虚化半径)  // 设置阴影虚化半径
+        }
+        如果 (透明度 != -1)
+        {
+            Shape对象.读无参数对象型属性 ("Shadow", COM对象类).写属性 ("Transparency", 透明度)  // 设置阴影透明度
+        }
+        如果 (类型 != -1)
+        {
+            Shape对象.读无参数对象型属性 ("Shadow", COM对象类).写属性 ("Type", 类型)  // 设置阴影类型
+        }
+        如果 (大小 != -1)
+        {
+            Shape对象.读无参数对象型属性 ("Shadow", COM对象类).写属性 ("Size", 大小)  // 设置对象格式的可见性
+        }
+    }
+
+    方法 取消组合 <公开 注释 = "取消指定的形状或形状范围中所有组合的形状的组合.图片和OLE对象指定的形状或形状范围." "">
+    {
+        Shape对象.无参数及返回值方法 ("Ungroup")
+    }
+
+    方法 按宽度缩放 <公开 注释 = "根据指定的系数缩放图形宽度.对于图片和OLE对象.您可以说明是相对于原始大小还是相对于当前大小缩放形状.图片和OLE对象以外的形状总是相对于当前宽度缩放." "">
+    参数 缩放比例 <类型 = 小数 注释 = "指定形状调整后的宽度与当前或原始宽度的比例.例如.要将一个矩形放大百分之五十.请将此参数指定为 1.5.">
+    参数 原形缩放 <类型 = 逻辑型 注释 = "指定是否相对于形状的当前或原始尺寸来缩放形状." 注释 = "真 相对于原始尺寸缩放形状." 注释 = "假 相对于当前尺寸缩放形状" @默认值 = 真>
+    参数 不变位置 <类型 = 整数 注释 = "在缩放形状时.形状中位置不变的部分." 注释 = "0 形状的左上角保持在原有的位置." 注释 = "1 形状的中点保持在原有的位置." 注释 = "2 形状的右下角保持在原有的位置."
+            @默认值 = 0>
+    {
+        Shape对象.无返回值方法 ("ScaleWidth", 缩放比例, 原形缩放, 不变位置)
+    }
+
+    方法 按高度缩放 <公开 注释 = "根据指定的系数缩放图形高度.对于图片和OLE对象.您可以说明是相对于原始大小还是相对于当前大小缩放形状.图片和OLE对象以外的形状总是相对于当前高度缩放." "">
+    参数 缩放比例 <类型 = 小数 注释 = "指定形状调整后的高度与当前或原始高度的比例.例如.要将一个矩形放大百分之五十.请将此参数指定为 1.5.">
+    参数 原形缩放 <类型 = 逻辑型 注释 = "指定是否相对于形状的当前或原始尺寸来缩放形状." 注释 = "真 相对于原始尺寸缩放形状." 注释 = "假 相对于当前尺寸缩放形状" @默认值 = 真>
+    参数 不变位置 <类型 = 整数 注释 = "在缩放形状时.形状中位置不变的部分." 注释 = "0 形状的左上角保持在原有的位置." 注释 = "1 形状的中点保持在原有的位置." 注释 = "2 形状的右下角保持在原有的位置."
+            @默认值 = 0>
+    {
+        Shape对象.无返回值方法 ("ScaleHeight", 缩放比例, 原形缩放, 不变位置)
+    }
+
+    方法 置层次 <公开 注释 = "指定层次方式设置形状的层次" "">
+    参数 层次方式 <类型 = PPT图形层次 注释 = "PPT图形层次.*">
+    {
+        Shape对象.无返回值方法 ("ZOrder", 层次方式)
+    }
+
+    方法 置背景图案 <公开 注释 = "将背景填充为图案">
+    参数 图案 <类型 = PPT背景图案 注释 = "PPT背景图案.*" @默认值 = PPT背景图案.点线百分之5>
+    参数 前景色 <类型 = 整数 注释 = "前景色" @默认值 = 颜色类.蓝色>
+    参数 背景色 <类型 = 整数 注释 = "背景色" @默认值 = 颜色类.白色>
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 前景色)
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("BackColor", COM对象类).写属性 ("RGB", 背景色)
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).无返回值方法 ("Patterned", 图案)
+    }
+
+    方法 置背景纹理 <公开 注释 = "将背景填充为纹理">
+    参数 纹理 <类型 = PPT背景纹理 注释 = "PPT背景纹理.*" @默认值 = PPT背景纹理.草纸>
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).无返回值方法 ("PresetTextured", 纹理)
+    }
+
+    方法 置背景图片 <公开 注释 = "设置用于作为图形背景的图片">
+    参数 文件名 <类型 = 文本型 注释 = "图片文件名">
+    参数 是否平铺 <类型 = 逻辑型 注释 = "设置背景图片是否以平铺形式进行填充" @默认值 = 假>
+    {
+        背景可视 = 真  // 设置背景可视为真
+        如果 (是否平铺)
+        {
+            Shape对象.读无参数对象型属性 ("Fill", COM对象类).无返回值方法 ("UserTextured", 文件名)
+        }
+        否则
+        {
+            Shape对象.读无参数对象型属性 ("Fill", COM对象类).无返回值方法 ("UserPicture", 文件名)
+        }
+    }
+
+    方法 置纯色背景 <公开 注释 = "将背景填充设置为纯色">
+    参数 颜色 <类型 = 整数 注释 = "颜色整数型数值">
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 颜色)
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).无参数及返回值方法 ("Solid")
+    }
+
+    方法 置单色背景 <公开 注释 = "将背景填充设置为单色渐变">
+    参数 颜色 <类型 = 整数 注释 = "颜色整数型数值">
+    参数 渐变样式 <类型 = PPT渐变样式 注释 = "PPT渐变样式.*" @默认值 = PPT渐变样式.水平>
+    参数 渐变量 <类型 = 整数 注释 = "取值范围:1到4之间的整数值.对应四个渐变方向的值.如果\"渐变样式\"为\"标题向外\"或\"中心辐射\".则此参数值为1或2." @默认值 = 1>
+    参数 渐变深度 <类型 = 小数 注释 = "取值范围:0.0到1.0之间的小数值." @默认值 = 0>
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 颜色)
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).无返回值方法 ("OneColorGradient", 渐变样式, 渐变量, 渐变深度)
+    }
+
+    方法 置双色背景 <公开 注释 = "将背景填充设置为单色渐变">
+    参数 前景色 <类型 = 整数 注释 = "颜色整数型数值">
+    参数 背景色 <类型 = 整数 注释 = "颜色整数型数值">
+    参数 渐变样式 <类型 = PPT渐变样式 注释 = "PPT渐变样式.*" @默认值 = PPT渐变样式.水平>
+    参数 渐变量 <类型 = 整数 注释 = "取值范围:1到4之间的整数值.对应四个渐变方向的值.如果\"渐变样式\"为\"标题向外\"或\"中心辐射\".则此参数值为1或2." @默认值 = 1>
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 前景色)
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("BackColor", COM对象类).写属性 ("RGB", 背景色)
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).无返回值方法 ("TwoColorGradient", 渐变样式, 渐变量)
+    }
+
+    方法 置背景渐变色 <公开 注释 = "将背景填充设置为单色渐变">
+    参数 渐变样式 <类型 = PPT渐变样式 注释 = "PPT渐变样式.*" @默认值 = PPT渐变样式.水平>
+    参数 渐变量 <类型 = 整数 注释 = "取值范围:1到4之间的整数值.对应四个渐变方向的值.如果\"渐变样式\"为\"标题向外\"或\"中心辐射\".则此参数值为1或2." @默认值 = 1>
+    参数 渐变填充 <类型 = PPT渐变填充 注释 = "PPT渐变填充.*" @默认值 = PPT渐变填充.晚霞>
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).无返回值方法 ("PresetGradient", 渐变样式, 渐变量, 渐变填充)
+    }
+
+    方法 置前背景色 <公开 注释 = "填充背景前背景色">
+    参数 颜色 <类型 = 整数 注释 = "颜色整数型数值">
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 颜色)
+    }
+
+    方法 置后背景色 <公开 注释 = "填充背景后背景色">
+    参数 颜色 <类型 = 整数 注释 = "颜色整数型数值">
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("BackColor", COM对象类).写属性 ("RGB", 颜色)
+    }
+
+    方法 置背景透明度 <公开 注释 = "设置背景透明度">
+    参数 透明度 <类型 = 整数 注释 = "取值范围:0.0到1.0之间的小数值.如果值为0.则表示不透明.">
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).写属性 ("Transparency", 透明度)
+    }
+
+    方法 融合背景 <公开 注释 = "指定形状的背景填充为与幻灯片背景相匹配">
+    {
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).无参数及返回值方法 ("Background")
+    }
+
+    方法 类型 <公开 属性读 类型 = PPT图形类型 注释 = "返回指定对象的图形类型" 返回值注释 = "PPT图形类型.*" "">
+    {
+        返回 (Shape对象.读无参数属性 ("Type", PPT图形类型))
+    }
+
+    方法 占位符类型 <公开 属性读 类型 = PPT占位符类型 注释 = "返回指定对象的占位符类型" 返回值注释 = "PPT占位符类型.*" "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("PlaceholderFormat", COM对象类).读无参数属性 ("Type", PPT占位符类型))
+    }
+
+    方法 名称 <公开 属性读 类型 = 文本型 注释 = "返回指定对象的名称" "">
+    {
+        返回 (Shape对象.读无参数属性 ("Name", 文本型))
+    }
+
+    方法 名称 <公开 属性写 注释 = "设置指定对象的名称" "">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Shape对象.写属性 ("Name", 所欲设置的值)
+    }
+
+    方法 ID <公开 属性读 类型 = 整数 注释 = "返回指定对象的ID" "">
+    {
+        返回 (Shape对象.读无参数属性 ("Id", 整数))
+    }
+
+    方法 样式 <公开 属性读 类型 = 整数 注释 = "返回指定形状的形状样式" 返回值注释 = "-2,表示混合形状样式." 返回值注释 = "1-20,表示形状样式." 返回值注释 = "10001-10020,表示线条样式.">
+    {
+        返回 (Shape对象.读无参数属性 ("ShapeStyle", 整数))
+    }
+
+    方法 样式 <公开 属性写 注释 = "设置指定形状的形状样式">
+    参数 所欲设置的值 <类型 = 整数 注释 = "-2,表示混合形状样式." 注释 = "1-20,表示形状样式." 注释 = "10001-10020,表示线条样式.">
+    {
+        Shape对象.写属性 ("ShapeStyle", 所欲设置的值)
+    }
+
+    方法 左 <公开 属性读 类型 = 整数 注释 = "返回指定的形状或形状范围的水平位置,以磅为单位.">
+    {
+        返回 (Shape对象.读无参数属性 ("Left", 整数))
+    }
+
+    方法 左 <公开 属性写 注释 = "设置指定的形状或形状范围的水平位置,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Shape对象.写属性 ("Left", 所欲设置的值)
+    }
+
+    方法 上 <公开 属性读 类型 = 整数 注释 = "返回指定的形状或形状范围的垂直位置,以磅为单位.">
+    {
+        返回 (Shape对象.读无参数属性 ("Top", 整数))
+    }
+
+    方法 上 <公开 属性写 注释 = "设置指定的形状或形状范围的垂直位置,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Shape对象.写属性 ("Top", 所欲设置的值)
+    }
+
+    方法 图表版式 <公开 属性写 注释 = "当对象为智能图表时,设置智能图表版式.">
+    参数 版式索引号 <类型 = 整数>
+    {
+        变量 局_版式 <类型 = COM变体型>
+        局_版式 = Shape对象.读无参数对象型属性 ("Application", COM对象类).读无参数对象型属性 ("SmartArtLayouts", COM对象类).方法 ("Item", COM变体型, 版式索引号)
+        Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).写属性 ("Layout", 局_版式)
+    }
+
+    方法 图表样式 <公开 属性写 注释 = "当对象为智能图表时,设置智能图表快速样式.">
+    参数 样式索引号 <类型 = 整数>
+    {
+        变量 局_样式 <类型 = COM变体型>
+        局_样式 = Shape对象.读无参数对象型属性 ("Application", COM对象类).读无参数对象型属性 ("SmartArtQuickStyles", COM对象类).方法 ("Item", COM变体型, 样式索引号)
+        Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).写属性 ("QuickStyle", 局_样式)
+    }
+
+    方法 图表配色 <公开 属性写 注释 = "当对象为智能图表时,设置智能图表颜色配色.">
+    参数 配色索引号 <类型 = 整数>
+    {
+        变量 局_配色 <类型 = COM变体型>
+        局_配色 = Shape对象.读无参数对象型属性 ("Application", COM对象类).读无参数对象型属性 ("SmartArtColors", COM对象类).方法 ("Item", COM变体型, 配色索引号)
+        Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).写属性 ("Color", 局_配色)
+    }
+
+    方法 宽 <公开 属性读 类型 = 整数 注释 = "返回指定形状的宽度,以磅为单位.">
+    {
+        返回 (Shape对象.读无参数属性 ("Width", 整数))
+    }
+
+    方法 宽 <公开 属性写 注释 = "设置指定形状的宽度,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Shape对象.写属性 ("Width", 所欲设置的值)
+    }
+
+    方法 高 <公开 属性读 类型 = 整数 注释 = "返回指定形状的高度,以磅为单位.">
+    {
+        返回 (Shape对象.读无参数属性 ("Height", 整数))
+    }
+
+    方法 高 <公开 属性写 注释 = "设置指定形状的高度,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Shape对象.写属性 ("Height", 所欲设置的值)
+    }
+
+    方法 背景图片 <公开 属性写 注释 = "设置用于作为图形背景的图片">
+    参数 文件名 <类型 = 文本型 注释 = "图片文件名">
+    {
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).无返回值方法 ("UserPicture", 文件名)
+    }
+
+    方法 可视 <公开 属性读 类型 = 逻辑型 注释 = "返回对象是否可视" "">
+    {
+        返回 (Shape对象.读无参数属性 ("Visible", 逻辑型))
+    }
+
+    方法 可视 <公开 属性写 注释 = "指定的对象是否可视" "">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Shape对象.写属性 ("Visible", 所欲设置的值)
+    }
+
+    方法 背景可视 <公开 属性读 类型 = 逻辑型 注释 = "返回对象背景是否可视" "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数属性 ("Visible", 逻辑型))
+    }
+
+    方法 背景可视 <公开 属性写 注释 = "指定的对象背景是否可视" "">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).写属性 ("Visible", 所欲设置的值)
+    }
+
+    方法 文本区 <公开 属性读 类型 = PPT文本区 注释 = "返回文本区" "">
+    {
+        变量 局_PPT文本区 <类型 = PPT文本区>
+        局_PPT文本区.置对象 (Shape对象.读无参数对象型属性 ("TextFrame", COM对象类).读无参数对象型属性 ("TextRange", COM对象类))
+        返回 (局_PPT文本区)
+    }
+
+    方法 边框颜色 <公开 属性读 类型 = 整数 注释 = "返回图形边框前背景颜色,如对象为线条则为线条前背景色." "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("Line", COM对象类).读无参数属性 ("ForeColor", 整数))
+    }
+
+    方法 边框颜色 <公开 属性写 注释 = "设置图形边框前背景颜色,如对象为线条则为线条前背景色." "">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Shape对象.读无参数对象型属性 ("Line", COM对象类).读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 所欲设置的值)
+    }
+
+    方法 边框大小 <公开 属性读 类型 = 整数 注释 = "返回图形边框大小" "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("Line", COM对象类).读无参数属性 ("Weight", 整数))
+    }
+
+    方法 边框大小 <公开 属性写 注释 = "设置图形边框大小" "">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Shape对象.读无参数对象型属性 ("Line", COM对象类).写属性 ("Weight", 所欲设置的值)
+    }
+
+    方法 艺术字内容 <公开 属性读 类型 = 文本型 注释 = "当类型为\"艺术字\"时,返回艺术字文本内容." "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).读无参数属性 ("Text", 文本型))
+    }
+
+    方法 艺术字内容 <公开 属性写 注释 = "当类型为\"艺术字\"时,设置艺术字文本内容." "">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        可视 = 假  // 解决字体更改后不能及时看到效果问题
+        Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).写属性 ("Text", 所欲设置的值)
+        可视 = 真  // 解决字体更改后不能及时看到效果问题
+    }
+
+    方法 艺术字对齐 <公开 属性读 类型 = PPT艺术字对齐 注释 = "返回指定艺术字的对齐方式" 返回值注释 = "PPT艺术字对齐.*" "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).读无参数属性 ("Alignment", PPT艺术字对齐))
+    }
+
+    方法 艺术字对齐 <公开 属性写 注释 = "设置指定艺术字的对齐方式" "">
+    参数 所欲设置的值 <类型 = PPT艺术字对齐 注释 = "PPT艺术字对齐.*">
+    {
+        Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).写属性 ("Alignment", 所欲设置的值)
+    }
+
+    方法 艺术字加粗 <公开 属性读 类型 = 逻辑型 注释 = "返回指定艺术字中的字体是否为粗体" "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).读无参数属性 ("FontBold", 逻辑型))
+    }
+
+    方法 艺术字加粗 <公开 属性写 注释 = "确定指定艺术字中的字体是否为粗体" "">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).写属性 ("FontBold", 所欲设置的值)
+    }
+
+    方法 艺术字字号 <公开 属性读 类型 = 小数 注释 = "返回艺术字的字号.以磅为单位." "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).读无参数属性 ("FontSize", 整数))
+    }
+
+    方法 艺术字字号 <公开 属性写 注释 = "设置艺术字的字号.以磅为单位." "">
+    参数 所欲设置的值 <类型 = 小数>
+    {
+        Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).写属性 ("FontSize", 所欲设置的值)
+    }
+
+    方法 艺术字字体 <公开 属性读 类型 = 文本型 注释 = "返回指定的艺术字中的字体名称,支持英文和符号." "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).读无参数属性 ("FontName", 文本型))
+    }
+
+    方法 艺术字字体 <公开 属性写 注释 = "设置指定的艺术字中的字体名称,支持英文和符号." "">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).写属性 ("FontName", 所欲设置的值)
+    }
+
+    方法 艺术字字体2 <公开 属性读 类型 = 文本型 注释 = "返回指定的艺术字中的字体名称,支持中文." "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("TextFrame", COM对象类).读无参数对象型属性 ("TextRange", COM对象类).读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("NameFarEast", 文本型))
+    }
+
+    方法 艺术字字体2 <公开 属性写 注释 = "设置指定的艺术字中的字体名称,支持中文." "">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Shape对象.读无参数对象型属性 ("TextFrame", COM对象类).读无参数对象型属性 ("TextRange", COM对象类).读无参数对象型属性 ("Font", COM对象类).写属性 ("NameFarEast", 所欲设置的值)
+    }
+
+    方法 艺术字倾斜 <公开 属性读 类型 = 逻辑型 注释 = "返回指定艺术字中的字体是否为斜体" "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).读无参数属性 ("FontItalic", 逻辑型))
+    }
+
+    方法 艺术字倾斜 <公开 属性写 注释 = "设置指定艺术字中的字体是否为斜体" "">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).写属性 ("FontItalic", 所欲设置的值)
+    }
+
+    方法 艺术字样式 <公开 属性读 类型 = 整数 注释 = "返回或设置指定艺术字的样式" 返回值注释 = "-2表示混合;0-49表示50个样式." "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).读无参数属性 ("PresetTextEffect", 整数))
+    }
+
+    方法 艺术字样式 <公开 属性写 注释 = "返回或设置指定艺术字的样式" "">
+    参数 所欲设置的值 <类型 = 整数 注释 = "-2表示混合;0-49表示50个样式.">
+    {
+        Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).写属性 ("PresetTextEffect", 所欲设置的值)
+    }
+
+    方法 艺术字换向 <公开 注释 = "将指定的艺术字中的文字排列从水平切换为垂直.反之亦然." "">
+    {
+        Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).无参数及返回值方法 ("ToggleVerticalText")
+    }
+
+    方法 点击声音 <公开 属性写 注释 = "设置当单击形状时发出的声音文件">
+    参数 文件名 <类型 = 文本型>
+    {
+        Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数对象型属性 ("SoundEffect", COM对象类).无返回值方法 ("ImportFromFile", 文件名)
+    }
+
+    方法 播放点击声音 <公开 注释 = "播放设置当单击形状时发出的声音文件">
+    参数 文件名 <类型 = 文本型>
+    {
+        Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数对象型属性 ("SoundEffect", COM对象类).无参数及返回值方法 ("Play")
+    }
+
+    方法 开启动画效果 <公开 属性读 类型 = 逻辑型 注释 = "返回幻灯片放映期间是否为指定的形状设置开启动画效果">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数属性 ("Animate", 逻辑型))
+    }
+
+    方法 开启动画效果 <公开 属性写 注释 = "决定在幻灯片放映期间是否为指定的形状设置开启动画效果">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).写属性 ("Animate", 所欲设置的值)
+    }
+
+    方法 动画效果 <公开 属性读 类型 = PPT动画效果 注释 = "返回应用于指定形状的动画的特殊效果" 返回值注释 = "PPT动画效果.*">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数属性 ("EntryEffect", PPT动画效果))
+    }
+
+    方法 动画效果 <公开 属性写 注释 = "设置应用于指定形状的动画的特殊效果">
+    参数 所欲设置的值 <类型 = PPT动画效果 注释 = "PPT动画效果.*">
+    {
+        Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).写属性 ("EntryEffect", 所欲设置的值)
+    }
+
+    方法 动画间隔 <公开 属性读 类型 = 整数 注释 = "返回以秒为单位的时间.在该时间过后指定的形状将开始播放动画." 返回值注释 = "以秒为单位">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数属性 ("AdvanceTime", 整数))
+    }
+
+    方法 动画间隔 <公开 属性写 注释 = "设置以秒为单位的时间.在该时间过后指定的形状将开始播放动画.">
+    参数 所欲设置的值 <类型 = 整数 注释 = "以秒为单位">
+    {
+        Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).写属性 ("AdvanceTime", 所欲设置的值)
+    }
+
+    方法 切换模式 <公开 属性读 类型 = PPT切换模式 注释 = "返回指示指定形状的动画是仅在被单击时切换还是在经过指定时间后自动切换." 返回值注释 = "PPT切换模式.*">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数属性 ("AdvanceMode", PPT切换模式))
+    }
+
+    方法 切换模式 <公开 属性写 注释 = "设置一个值.该值指示指定形状的动画是仅在被单击时切换还是在经过指定时间后自动切换.">
+    参数 所欲设置的值 <类型 = PPT切换模式 注释 = "PPT切换模式.*">
+    {
+        Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).写属性 ("AdvanceMode", 所欲设置的值)
+    }
+
+    方法 段落动画 <公开 属性读 类型 = PPT段落动画效果 注释 = "指示指定形状内的文本是由第一级段落、第二级段落还是其他级段落(最高为第五级段落)激活动画显示." 返回值注释 = "PPT段落动画效果.*">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数属性 ("TextLevelEffect", PPT段落动画效果))
+    }
+
+    方法 段落动画 <公开 属性写 注释 = "指示指定形状内的文本是由第一级段落、第二级段落还是其他级段落(最高为第五级段落)激活动画显示.">
+    参数 所欲设置的值 <类型 = PPT段落动画效果 注释 = "PPT段落动画效果.*">
+    {
+        Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).写属性 ("TextLevelEffect", 所欲设置的值)
+    }
+
+    方法 文字动画对象 <公开 属性读 类型 = PPT文字动画对象 注释 = "指指示指定形状中的文本是按段落、按字还是按字母显示动画效果." 返回值注释 = "PPT文字动画对象.*">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数属性 ("TextUnitEffect", PPT文字动画对象))
+    }
+
+    方法 文字动画对象 <公开 属性写 注释 = "指示指定形状中的文本是按段落、按字还是按字母显示动画效果.">
+    参数 所欲设置的值 <类型 = PPT文字动画对象 注释 = "PPT文字动画对象.*">
+    {
+        Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).写属性 ("TextUnitEffect", 所欲设置的值)
+    }
+
+    方法 自动播放 <公开 属性读 类型 = 逻辑型 注释 = "返回媒体或声音激活后是否自动播放">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数对象型属性 ("PlaySettings", COM对象类).读无参数属性 ("PlayOnEntry", 逻辑型))
+    }
+
+    方法 自动播放 <公开 属性写 注释 = "设置媒体或声音激活后是否自动播放">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        如果 (所欲设置的值)
+        {
+            切换模式 = PPT切换模式.自动  // 只有当"切换模式"为"PPT切换模式.自动"时才能指定媒体或声音自动播放
+        }
+        Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数对象型属性 ("PlaySettings", COM对象类).写属性 ("PlayOnEntry", 所欲设置的值)
+    }
+
+    方法 循环播放 <公开 属性读 类型 = 逻辑型 注释 = "返回媒体或声音是否持续循环播放">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数对象型属性 ("PlaySettings", COM对象类).读无参数属性 ("LoopUntilStopped", 逻辑型))
+    }
+
+    方法 循环播放 <公开 属性写 注释 = "指定媒体或声音是否持续循环播放">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数对象型属性 ("PlaySettings", COM对象类).写属性 ("LoopUntilStopped", 所欲设置的值)
+    }
+
+    方法 媒体可视 <公开 属性读 类型 = 逻辑型 注释 = "返回幻灯片放映期间指定媒体剪辑在不播放时是否隐藏">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数对象型属性 ("PlaySettings", COM对象类).读无参数属性 ("HideWhileNotPlaying", 逻辑型))
+    }
+
+    方法 媒体可视 <公开 属性写 注释 = "确定在幻灯片放映期间指定媒体剪辑在不播放时是否隐藏">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数对象型属性 ("PlaySettings", COM对象类).写属性 ("HideWhileNotPlaying", 所欲设置的值)
+    }
+
+    方法 是否为表 <公开 属性读 类型 = 逻辑型 注释 = "返回指定的形状是否为表格">
+    {
+        返回 (Shape对象.读无参数属性 ("HasTable", 逻辑型))
+    }
+
+    方法 置表格行高 <公开 注释 = "当对象为表格时,设置表格行高大小.">
+    参数 行索引 <类型 = 整数 注释 = "指定要设置行高的行索引号">
+    参数 行高 <类型 = 小数 注释 = "设置指定行的高度,以磅为单位.">
+    {
+        Shape对象.读无参数对象型属性 ("Table", COM对象类).无参数对象型方法 ("Rows", COM对象类).对象型方法 ("Item", COM对象类, 行索引).写属性 ("Height", 行高)
+    }
+
+    方法 置表格列宽 <公开 注释 = "当对象为表格时,设置表格列宽大小.">
+    参数 列索引 <类型 = 整数 注释 = "指定要设置列宽的列索引号">
+    参数 列宽 <类型 = 小数 注释 = "设置指定列的宽度,以磅为单位.">
+    {
+        Shape对象.读无参数对象型属性 ("Table", COM对象类).无参数对象型方法 ("Columns", COM对象类).对象型方法 ("Item", COM对象类, 列索引).写属性 ("Width", 列宽)
+    }
+
+    方法 表格样式 <公开 属性读 类型 = PPT表格样式 注释 = "当对象为表格时,返回表格样式." 返回值注释 = "PPT表格样式.*">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("Table", COM对象类).读无参数对象型属性 ("Style", COM对象类).读无参数属性 ("Id", PPT表格样式))
+    }
+
+    方法 表格样式 <公开 属性写 注释 = "当对象为表格时,设置表格样式.">
+    参数 表格样式 <类型 = PPT表格样式 注释 = "PPT表格样式.*">
+    {
+        Shape对象.读无参数对象型属性 ("Table", COM对象类).无返回值方法 ("ApplyStyle", 表格样式, 真)
+    }
+
+    方法 表格行数 <公开 属性读 类型 = 整数 注释 = "当对象为表格时,返回表格行数.">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("Table", COM对象类).无参数对象型方法 ("Rows", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 表格列数 <公开 属性读 类型 = 整数 注释 = "当对象为表格时,返回表格列数.">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("Table", COM对象类).无参数对象型方法 ("Columns", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 置表格边框 <公开 注释 = "当对象为表格时,设置表格边框.">
+    参数 行索引 <类型 = 整数 注释 = "指定表格行索引号">
+    参数 列索引 <类型 = 整数 注释 = "指定表格列索引号">
+    参数 边框 <类型 = PPT边框集合 注释 = "二选一.PPT边框集合.*.如果\"四边\"为真.则忽略该参数." @默认值 = PPT边框集合.上边框>
+    参数 四边 <类型 = 逻辑型 注释 = "二选一.是否指定设置上下左右四个边框.为假时则根据指定边框进行设置." @默认值 = 假>
+    参数 宽度 <类型 = 小数 注释 = "设置指定线条的粗细,以磅为单位.如果值为-1.则忽略该参数." @默认值 = -1>
+    参数 前景色 <类型 = 整数 注释 = "设置指定线条的前景色.如果值为-1.则忽略该参数." @默认值 = -1>
+    参数 背景色 <类型 = 整数 注释 = "设置指定线条的背景色.如果值为-1.则忽略该参数." @默认值 = -1>
+    参数 透明度 <类型 = 小数 注释 = "设置指定线条的透明度.取值范围0.0-1.0之间.如果值为-1.则忽略该参数." @默认值 = -1>
+    参数 虚线样式 <类型 = 整数 注释 = "取值范围1-12设置,指定线条为虚线样式.如果值为1.则表示实线.如果值为-1.则忽略该参数." @默认值 = -1>
+    {
+        变量 局_边框 <类型 = COM对象类>
+        如果 (四边)
+        {
+            计次循环 (4)  // 表示上下左右四个边框
+            {
+                局_边框 = Shape对象.读无参数对象型属性 ("Table", COM对象类).对象型方法 ("Cell", COM对象类, 行索引, 列索引).读无参数对象型属性 ("Borders", COM对象类).对象型方法 ("Item", COM对象类, 取循环索引 () + 1)
+                如果 (宽度 != -1)
+                {
+                    局_边框.写属性 ("Weight", 宽度)  // 设置指定线条的粗细
+                }
+                如果 (前景色 != -1)
+                {
+                    局_边框.读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 前景色)  // 设置指定线条的前景色
+                }
+                如果 (背景色 != -1)
+                {
+                    局_边框.读无参数对象型属性 ("BackColor", COM对象类).写属性 ("RGB", 背景色)  // 设置指定线条的背景色
+                }
+                如果 (透明度 != -1)
+                {
+                    局_边框.写属性 ("Transparency", 透明度)  // 设置指定线条的透明度
+                }
+                如果 (虚线样式 != -1)
+                {
+                    局_边框.写属性 ("DashStyle", 虚线样式)  // 设置指定线条的虚线样式
+                }
+            }
+        }
+        否则
+        {
+            局_边框 = Shape对象.读无参数对象型属性 ("Table", COM对象类).对象型方法 ("Cell", COM对象类, 行索引, 列索引).读无参数对象型属性 ("Borders", COM对象类).对象型方法 ("Item", COM对象类, 边框)
+            如果 (宽度 != -1)
+            {
+                局_边框.写属性 ("Weight", 宽度)  // 设置指定线条的粗细
+            }
+            如果 (前景色 != -1)
+            {
+                局_边框.读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 前景色)  // 设置指定线条的前景色
+            }
+            如果 (背景色 != -1)
+            {
+                局_边框.读无参数对象型属性 ("BackColor", COM对象类).写属性 ("RGB", 背景色)  // 设置指定线条的背景色
+            }
+            如果 (透明度 != -1)
+            {
+                局_边框.写属性 ("Transparency", 透明度)  // 设置指定线条的透明度
+            }
+            如果 (虚线样式 != -1)
+            {
+                局_边框.写属性 ("DashStyle", 虚线样式)  // 设置指定线条的虚线样式
+            }
+        }
+    }
+
+    方法 取单元格 <公开 类型 = PPT图形 注释 = "返回形状为表格的其中一个单元格">
+    参数 行索引 <类型 = 整数 注释 = "指定表格行索引号">
+    参数 列索引 <类型 = 整数 注释 = "指定表格列索引号">
+    {
+        变量 局_PPT图形 <类型 = PPT图形>
+        局_PPT图形.置对象 (Shape对象.读无参数对象型属性 ("Table", COM对象类).对象型方法 ("Cell", COM对象类, 行索引, 列索引).读无参数对象型属性 ("Shape", COM对象类))
+        返回 (局_PPT图形)
+    }
+
+    方法 拆分单元格 <公开 注释 = "当对象为表格时,将一个表格单元格拆分为多个.">
+    参数 行索引 <类型 = 整数 注释 = "指定表格行索引号">
+    参数 列索引 <类型 = 整数 注释 = "指定表格列索引号">
+    参数 行数 <类型 = 整数 注释 = "该单元格要拆分成的行数">
+    参数 列数 <类型 = 整数 注释 = "该单元格要拆分成的列数">
+    {
+        Shape对象.读无参数对象型属性 ("Table", COM对象类).对象型方法 ("Cell", COM对象类, 行索引, 列索引).无返回值方法 ("Split", 行数, 列数)
+    }
+
+    方法 合并单元格 <公开 注释 = "当对象为表格时,合并表格中的单元格.">
+    参数 起行索引 <类型 = 整数 注释 = "指定表格要合并开始单元格的行索引号">
+    参数 起列索引 <类型 = 整数 注释 = "指定表格要合并开始单元格的列索引号">
+    参数 止行索引 <类型 = 整数 注释 = "指定表格要合并结束单元格的行索引号">
+    参数 止列索引 <类型 = 整数 注释 = "指定表格要合并结束单元格的列索引号">
+    {
+        变量 局_PPT图形 <类型 = PPT图形>
+        变量 局_止单元格 <类型 = COM变体型>
+        局_止单元格 = Shape对象.读无参数对象型属性 ("Table", COM对象类).方法 ("Cell", COM变体型, 止行索引, 止列索引)  // 取出止单元格用作传入参数
+        Shape对象.读无参数对象型属性 ("Table", COM对象类).对象型方法 ("Cell", COM对象类, 起行索引, 起列索引).无返回值方法 ("Merge", 局_止单元格)
+    }
+
+    方法 回到第一帧 <公开 属性读 类型 = 逻辑型 注释 = "返回指定影片播放完毕后是否自动重新显示该影片的第一帧">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数对象型属性 ("PlaySettings", COM对象类).读无参数属性 ("RewindMovie", 逻辑型))
+    }
+
+    方法 回到第一帧 <公开 属性写 注释 = "指定影片播放完毕后是否自动重新显示该影片的第一帧">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数对象型属性 ("PlaySettings", COM对象类).写属性 ("RewindMovie", 所欲设置的值)
+    }
+
+    方法 媒体放映到尾 <公开 属性读 类型 = 逻辑型 注释 = "当对象为媒体时,返回媒体剪辑播放结束前是否暂停幻灯片放映.">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数对象型属性 ("PlaySettings", COM对象类).读无参数属性 ("PauseAnimation", 逻辑型))
+    }
+
+    方法 媒体放映到尾 <公开 属性写 注释 = "当对象为媒体时,确定媒体剪辑播放结束前是否暂停幻灯片放映.">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Shape对象.读无参数对象型属性 ("AnimationSettings", COM对象类).读无参数对象型属性 ("PlaySettings", COM对象类).写属性 ("PauseAnimation", 所欲设置的值)
+    }
+
+    方法 取节点文本 <公开 类型 = 文本型 注释 = "当对象为智能图表时,返回智能图表节点文本." "">
+    参数 节点索引 <类型 = 整数 注释 = "智能图表节点索引号">
+    {
+        变量 局_节点 <类型 = COM对象类>
+        变量 局_文本区 <类型 = COM对象类>
+        局_节点 = Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).读无参数对象型属性 ("AllNodes", COM对象类).对象型方法 ("Item", COM对象类, 节点索引)  // 取节点对象
+        局_文本区 = 局_节点.读无参数对象型属性 ("TextFrame2", COM对象类).读无参数对象型属性 ("TextRange", COM对象类)  // 取节点文本区
+        返回 (局_文本区.读无参数属性 ("Text", 文本型))
+    }
+
+    方法 置节点文本位置 <公开 注释 = "当对象为智能图表时,设置智能图表节点文本位置." "">
+    参数 节点索引 <类型 = 整数 "">
+    参数 上 <类型 = 整数 注释 = "设置文本框架顶端与文本所在形状的内接矩形顶端之间的距离(以磅为单位),如果值为-1,则忽略该参数." @默认值 = -1>
+    参数 下 <类型 = 整数 注释 = "设置文本框架底端与文本所在形状的内接矩形底端之间的距离(以磅为单位),如果值为-1,则忽略该参数." @默认值 = -1>
+    参数 左 <类型 = 整数 注释 = "设置文本框架左边缘与文本所在形状的内接矩形左边缘之间的距离(以磅为单位),如果值为-1,则忽略该参数." @默认值 = -1>
+    参数 右 <类型 = 整数 注释 = "设置文本框架右边缘与文本所在形状的内接矩形右边缘之间的距离(以磅为单位),如果值为-1,则忽略该参数." @默认值 = -1>
+    {
+        变量 局_文本区 <类型 = COM对象类>
+        局_文本区 = Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).读无参数对象型属性 ("AllNodes", COM对象类).对象型方法 ("Item", COM对象类, 节点索引).读无参数对象型属性 ("TextFrame2", COM对象类)  // 取节点文本区对象
+        如果 (上 != -1)
+        {
+            局_文本区.写属性 ("MarginTop", 上)
+        }
+        如果 (下 != -1)
+        {
+            局_文本区.写属性 ("MarginBottom", 下)
+        }
+        如果 (左 != -1)
+        {
+            局_文本区.写属性 ("MarginLeft", 左)
+        }
+        如果 (右 != -1)
+        {
+            局_文本区.写属性 ("MarginRight", 右)
+        }
+    }
+
+    方法 置节点文本 <公开 注释 = "当对象为智能图表时,设置智能图表节点文本." "">
+    参数 节点索引 <类型 = 整数 注释 = "智能图表节点索引号">
+    参数 内容 <类型 = 文本型 注释 = "智能图表节点所欲设置的内容">
+    参数 字体名称 <类型 = 文本型 注释 = "设置字体名称,如果值为\"\",则忽略该参数." @默认值 = "">
+    参数 字体大小 <类型 = 整数 注释 = "设置字体大小,如果值为-1,则忽略该参数." @默认值 = -1>
+    参数 字体颜色 <类型 = 整数 注释 = "设置字体颜色,如果值为-1,则忽略该参数." @默认值 = -1>
+    参数 加粗 <类型 = 逻辑型 注释 = "设置字体是否加粗" @默认值 = 假>
+    参数 透明度 <类型 = 小数 注释 = "设置透明度的指定填充形状为0.0(不透明)到1.0(透明)之间的值" @默认值 = 0>
+    {
+        变量 局_节点 <类型 = COM对象类>
+        变量 局_文本区 <类型 = COM对象类>
+        局_节点 = Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).读无参数对象型属性 ("AllNodes", COM对象类).对象型方法 ("Item", COM对象类, 节点索引)  // 取节点对象
+        局_文本区 = 局_节点.读无参数对象型属性 ("TextFrame2", COM对象类).读无参数对象型属性 ("TextRange", COM对象类)  // 取节点文本区
+        局_文本区.写属性 ("Text", 内容)
+        如果 (字体名称 != "")
+        {
+            局_文本区.读无参数对象型属性 ("Font", COM对象类).写属性 ("NameFarEast", 字体名称)  // 设置字体名称
+        }
+        如果 (字体大小 != -1)
+        {
+            局_文本区.读无参数对象型属性 ("Font", COM对象类).写属性 ("Size", 字体大小)  // 设置字体大小
+        }
+        如果 (字体颜色 != -1)
+        {
+            局_文本区.读无参数对象型属性 ("Font", COM对象类).读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 字体颜色)  // 填充字体颜色
+        }
+        局_文本区.读无参数对象型属性 ("Font", COM对象类).写属性 ("Bold", 加粗)  // 设置字体加粗
+        局_文本区.读无参数对象型属性 ("Font", COM对象类).读无参数对象型属性 ("Fill", COM对象类).写属性 ("Transparency", 透明度)  // 设置透明度
+    }
+
+    方法 节点数量 <公开 属性读 类型 = 整数 注释 = "当对象为智能图表时,返回智能图表节点的总数量." "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).读无参数对象型属性 ("AllNodes", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 添加节点 <公开 注释 = "当对象为智能图表时,添加智能图表的节点." "">
+    {
+        Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).读无参数对象型属性 ("AllNodes", COM对象类).无参数及返回值方法 ("Add")
+    }
+
+    方法 删除节点 <公开 注释 = "当对象为智能图表时,删除智能图表的节点." "">
+    参数 节点索引 <类型 = 整数 注释 = "智能图表节点索引号">
+    {
+        Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).读无参数对象型属性 ("AllNodes", COM对象类).对象型方法 ("Item", COM对象类, 节点索引).无参数及返回值方法 ("Delete")
+    }
+}

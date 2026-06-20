@@ -1,0 +1,172 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.网络通讯.IXWebsocket\"" "" @视窗.外部头文件 = "ixwebsocket\\ixwebsocketTool.h"
+        @视窗.外部库.win32 = "ixwebsocket\\ixwebsocketToolx86.lib" @视窗.附属文件.win32 = "ixwebsocket\\ixwebsocketToolx86.dll"
+        @视窗.外部库.x64 = "ixwebsocket\\ixwebsocketToolx64.lib" @视窗.附属文件.x64 = "ixwebsocket\\ixwebsocketToolx64.dll" "">
+
+类 网页套接字消息类型常量 <公开 注释 = "#define IxWebsocket_CallBackType_Message  0" 注释 = "#define IxWebsocket_CallBackType_Open  1"
+        注释 = "#define IxWebsocket_CallBackType_Close  2" 注释 = "#define IxWebsocket_CallBackType_Error  3"
+        注释 = "#define IxWebsocket_CallBackType_Ping  4" 注释 = "#define IxWebsocket_CallBackType_Pong  5"
+        注释 = "#define IxWebsocket_CallBackType_Fragment 6" @常量类 = 整数>
+{
+    常量 消息 <公开 值 = 0>
+    常量 打开 <公开 值 = 1>
+    常量 关闭 <公开 值 = 2>
+    常量 错误 <公开 值 = 3>
+    常量 Ping <公开 值 = 4>
+    常量 Pong <公开 值 = 5>
+    常量 帧 <公开 值 = 6>
+
+    #
+}
+
+类 网页套接字发送常量 <公开 注释 = "#define IxWebsocket_MsgType_Bin  1" 注释 = "#define IxWebsocket_MsgType_Text 2"
+        注释 = "#define IxWebsocket_MsgType_Ping 3" 注释 = "#define IxWebsocket_MsgType_Close 4" @常量类 = 整数>
+{
+    常量 字节集 <公开 值 = 1>
+    常量 文本 <公开 值 = 2>
+    常量 Ping <公开 值 = 3>
+    常量 关闭 <公开 值 = 4>
+
+    #
+}
+
+类 网页套接字客户端类 <公开>
+{
+
+    # @begin
+    # <> <include>
+    #
+    # //inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const
+    # //{
+    # //    if(clang_equalCursors(this->m_data,objCompare.m_data))
+    # //        return TRUE;
+    # // return FALSE;
+    # //}
+    #
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #   ixwsclient_CopyConstruct(m_data , objCopyFrom.m_data);
+    # }
+    #
+    # void SetData(void* pData)
+    # {
+    #     m_data = pData;
+    # }
+    # void* GetData()
+    # {
+    #     return m_data;
+    # }
+    # void* m_data;
+    #
+    # static void __stdcall @sn<current_class>::IxWebsocketCallBack(int nMsgType, const char* pData, int nDataSize, bool bMsgBinary, void* pUserData);
+    # <> </include>
+    #
+    # void __stdcall @sn<current_class>::IxWebsocketCallBack(int nMsgType, const char* pData, int nDataSize, bool bMsgBinary, void* pUserData)
+    # {
+    #     @sn<current_class>* pThis = (@sn<current_class>*)pUserData;
+    #     if(pThis)
+    #     {
+    #         pThis->@<事件>(nMsgType,CVolMem(pData,nDataSize),bMsgBinary);
+    #     }
+    # }
+    # @end
+    #
+
+    方法 事件 <公开 定义事件 类型 = 整数>
+    参数 消息类型 <类型 = 网页套接字消息类型常量>
+    参数 数据 <类型 = 字节集类>
+    参数 是否字节集数据 <类型 = 逻辑型>
+
+    方法 类_初始化
+    {
+        @ SetData(ixwsclient_new ());
+        @ ixwsclient_SetCallBack(GetData(),@sn<current_class>::IxWebsocketCallBack,this);
+    }
+
+    方法 类_清理
+    {
+        @ ixwsclient_delete(GetData());
+    }
+
+    方法 置附加协议头 <公开 @嵌入式方法 = "">
+    参数 键名称 <类型 = 文本型>
+    参数 键值 <类型 = 文本型>
+    {
+        @ ixwsclient_SetHeader(@sn<this>.GetData(),GetMbsText(@<键名称>, CVolMem(), NULL),GetMbsText(@<键值>, CVolMem(), NULL))
+    }
+
+    方法 启动 <公开 @嵌入式方法 = "">
+    {
+        @ ixwsclient_Start(@sn<this>.GetData())
+    }
+
+    方法 停止 <公开 @嵌入式方法 = "">
+    {
+        @ ixwsclient_Stop(@sn<this>.GetData())
+    }
+
+    方法 取网址 <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( ixwsclient_GetUrl(@sn<this>.GetData()) )
+    }
+
+    方法 置网址 <公开>
+    参数 网址 <类型 = 文本型>
+    {
+        变量 url <类型 = 字节集类>
+        url = 文本到UTF8 (网址)
+        @ ixwsclient_SetUrl(GetData(),(const char*)@<url>.GetPtr());
+    }
+
+    方法 发送 <公开>
+    参数 数据 <类型 = 字节集类 @默认值 = 空对象>
+    参数 消息类型 <类型 = 网页套接字发送常量 @默认值 = 网页套接字发送常量.字节集>
+    {
+        @ ixwsclient_Send(GetData(),(void*)@<数据>.GetPtr(),@<数据>.GetSize(),@<消息类型>);
+    }
+
+    方法 启用自动重连 <公开 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型>
+    参数 重连次数 <类型 = 整数 注释 = "只有当 第一个参数为真时，这个才起用" @默认值 = 1000>
+    {
+        @ ixwsclient_EnableAutoReconnect(@sn<this>.GetData(),@<是否启用>,@<重连次数>) 
+    }
+
+    方法 是否自动重连 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ ixwsclient_IsAutoReconnect(@sn<this>.GetData()) 
+    }
+
+    #
+
+    方法 启用Pong <公开 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型>
+    {
+        @ ixwsclient_EnablePong(@sn<this>.GetData(),@<是否启用>) 
+    }
+
+    方法 置Ping间隔时间 <公开 @嵌入式方法 = "">
+    参数 时间 <类型 = 整数 注释 = "秒" @默认值 = 3>
+    {
+        @ ixwsclient_SetPingInterval(@sn<this>.GetData(),@<时间>) 
+    }
+
+    方法 取Ping间隔时间 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ixwsclient_GetPingInterval(@sn<this>.GetData()) 
+    }
+
+    方法 添加子协议 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 子协议 <类型 = 文本型>
+    {
+        @ ixwsclient_AddSubProtocol(@sn<this>.GetData(),GetMbsText(@<子协议>, CVolMem(), NULL)) 
+    }
+
+    方法 置TlsPeerVerifyNone <公开 @嵌入式方法 = "">
+    {
+        @ ixwsclient_SetTlsPeerVerifyNone(@sn<this>.GetData())
+    }
+
+    #
+}

@@ -1,0 +1,994 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <@文档 = "category = \"注册表库\"">
+
+类 注册表类_ <公开 折叠 @全局类 = 真>
+{
+    常量 HKEY_CLASSES_ROOT <类型 = 变整数 值 = @"@(INT_P)HKEY_CLASSES_ROOT" "">
+    常量 HKEY_CURRENT_USER <类型 = 变整数 值 = @"@(INT_P)HKEY_CURRENT_USER">
+    常量 HKEY_LOCAL_MACHINE <类型 = 变整数 值 = @"@(INT_P)HKEY_LOCAL_MACHINE">
+    常量 HKEY_USERS <类型 = 变整数 值 = @"@(INT_P)HKEY_USERS">
+    常量 HKEY_CURRENT_CONFIG <类型 = 变整数 值 = @"@(INT_P)HKEY_CURRENT_CONFIG">
+
+    方法 注册表读文本_ <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 整数 注释 = "例如调整常量：“注册表根类型常量.HKEY_CURRENT_USER”."
+            注释 = "1、HKEY_CLASSES_ROOT　2、HKEY_CURRENT_USER　3、HKEY_LOCAL_MACHINE　4、HKEY_USERS　5、HKEY_CURRENT_CONFIG">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型 @默认值 = "">
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 临时节点 <类型 = 变整数>
+        如果 (根节点 == 1)
+        {
+            临时节点 = HKEY_CLASSES_ROOT
+        }
+        否则 (根节点 == 2)
+        {
+            临时节点 = HKEY_CURRENT_USER
+        }
+        否则 (根节点 == 3)
+        {
+            临时节点 = HKEY_LOCAL_MACHINE
+        }
+        否则 (根节点 == 4)
+        {
+            临时节点 = HKEY_USERS
+        }
+        否则 (根节点 == 5)
+        {
+            临时节点 = HKEY_CURRENT_CONFIG
+        }
+        @     REGSAM  option = KEY_QUERY_VALUE;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+        @  HKEY hSubKey;
+        @  TCHAR buffer[4096] = {0};
+        @ DWORD dwBufferSize = sizeof(TCHAR)*sizeof(buffer);
+        @  LONG lResult = RegOpenKeyEx((HKEY)@<临时节点>,@<键路径>,0,option,&hSubKey);
+        @  if( ERROR_SUCCESS != lResult )
+        @  {
+        @   SetLastError(lResult);
+        @   return buffer;
+        @  }
+        @  lResult = RegQueryValueEx(hSubKey,@<键名称> , NULL, NULL ,(LPBYTE)buffer,&dwBufferSize);
+        @  if(ERROR_SUCCESS != lResult)
+        @  {
+        @   RegCloseKey(hSubKey);
+        @   SetLastError(lResult);
+        @   return buffer;
+        @  }
+        @  RegCloseKey(hSubKey);
+        @  return buffer;
+    }
+
+    方法 注册表读整数_ <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 整数 注释 = "例如调整常量：“注册表根类型常量.HKEY_CURRENT_USER”."
+            注释 = "1、HKEY_CLASSES_ROOT　2、HKEY_CURRENT_USER　3、HKEY_LOCAL_MACHINE　4、HKEY_USERS　5、HKEY_CURRENT_CONFIG">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 返回值 <类型 = 整数>
+        变量 临时节点 <类型 = 变整数>
+        如果 (根节点 == 1)
+        {
+            临时节点 = HKEY_CLASSES_ROOT
+        }
+        否则 (根节点 == 2)
+        {
+            临时节点 = HKEY_CURRENT_USER
+        }
+        否则 (根节点 == 3)
+        {
+            临时节点 = HKEY_LOCAL_MACHINE
+        }
+        否则 (根节点 == 4)
+        {
+            临时节点 = HKEY_USERS
+        }
+        否则 (根节点 == 5)
+        {
+            临时节点 = HKEY_CURRENT_CONFIG
+        }
+        @     REGSAM  option = KEY_QUERY_VALUE;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+        @  HKEY hSubKey;
+        @ DWORD dwBufferSize = 4;
+        @  LONG lResult = RegOpenKeyEx((HKEY)@<临时节点>,@<键路径>,0,option,&hSubKey);
+        @  if( ERROR_SUCCESS != lResult )
+        @  {
+        @   SetLastError(lResult);
+        @   return -1;
+        @  }
+        @  lResult = RegQueryValueEx(hSubKey,@<键名称> , NULL, NULL ,(LPBYTE)&@<返回值>,&dwBufferSize);
+        @  if(ERROR_SUCCESS != lResult)
+        @  {
+        @   RegCloseKey(hSubKey);
+        @   SetLastError(lResult);
+        @   return -1;
+        @  }
+        @  RegCloseKey(hSubKey);
+        返回 (返回值)
+    }
+
+    方法 注册表读长整数_ <公开 静态 类型 = 长整数 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 整数 注释 = "例如调整常量：“注册表根类型常量.HKEY_CURRENT_USER”."
+            注释 = "1、HKEY_CLASSES_ROOT　2、HKEY_CURRENT_USER　3、HKEY_LOCAL_MACHINE　4、HKEY_USERS　5、HKEY_CURRENT_CONFIG">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 返回值 <类型 = 长整数>
+        变量 临时节点 <类型 = 变整数>
+        如果 (根节点 == 1)
+        {
+            临时节点 = HKEY_CLASSES_ROOT
+        }
+        否则 (根节点 == 2)
+        {
+            临时节点 = HKEY_CURRENT_USER
+        }
+        否则 (根节点 == 3)
+        {
+            临时节点 = HKEY_LOCAL_MACHINE
+        }
+        否则 (根节点 == 4)
+        {
+            临时节点 = HKEY_USERS
+        }
+        否则 (根节点 == 5)
+        {
+            临时节点 = HKEY_CURRENT_CONFIG
+        }
+        @     REGSAM  option = KEY_QUERY_VALUE;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+        @  HKEY hSubKey;
+        @ DWORD dwBufferSize = 8;
+        @  LONG lResult = RegOpenKeyEx((HKEY)@<临时节点>,@<键路径>,0,option,&hSubKey);
+        @  if( ERROR_SUCCESS != lResult )
+        @  {
+        @   SetLastError(lResult);
+        @   return -1;
+        @  }
+        @  lResult = RegQueryValueEx(hSubKey,@<键名称> , NULL, NULL ,(LPBYTE)&@<返回值>,&dwBufferSize);
+        @  if(ERROR_SUCCESS != lResult)
+        @  {
+        @   RegCloseKey(hSubKey);
+        @   SetLastError(lResult);
+        @   return -1;
+        @  }
+        @  RegCloseKey(hSubKey);
+        返回 (返回值)
+    }
+
+    方法 注册表读字节集_ <公开 静态 类型 = 字节集类 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 整数 注释 = "例如调整常量：“注册表根类型常量.HKEY_CURRENT_USER”."
+            注释 = "1、HKEY_CLASSES_ROOT　2、HKEY_CURRENT_USER　3、HKEY_LOCAL_MACHINE　4、HKEY_USERS　5、HKEY_CURRENT_CONFIG">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型 @默认值 = "">
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 临时节点 <类型 = 变整数>
+        变量 hLocal <类型 = 变整数>
+        变量 cbData <类型 = 整数>
+        变量 lpData <类型 = 字节集类>
+        如果 (根节点 == 1)
+        {
+            临时节点 = HKEY_CLASSES_ROOT
+        }
+        否则 (根节点 == 2)
+        {
+            临时节点 = HKEY_CURRENT_USER
+        }
+        否则 (根节点 == 3)
+        {
+            临时节点 = HKEY_LOCAL_MACHINE
+        }
+        否则 (根节点 == 4)
+        {
+            临时节点 = HKEY_USERS
+        }
+        否则 (根节点 == 5)
+        {
+            临时节点 = HKEY_CURRENT_CONFIG
+        }
+        @ if (!@<临时节点>) return @<lpData>;
+        @ DWORD flag = @<是否64位> ? KEY_WOW64_64KEY : KEY_WOW64_32KEY;
+        @ HKEY 临时节点;
+        @ LSTATUS lRes = RegOpenKeyExW((HKEY)@<临时节点>, @<键路径>.GetText(), 0, flag | KEY_QUERY_VALUE, &临时节点);
+        @ if (lRes != ERROR_SUCCESS) return @<lpData>;
+        @ DWORD Data, cbData;
+        @ if (RegQueryValueExW(临时节点, @<键名称>.GetText(), NULL, &Data, NULL, &cbData) == ERROR_SUCCESS)
+        @ {
+        @ LPBYTE lpData = new BYTE[cbData];
+        @ memset(lpData, 0, cbData);
+        @ RegQueryValueExW(临时节点, @<键名称>.GetText(), NULL, &Data, lpData, &cbData);
+        @ @<hLocal> = (INT_PTR)lpData;
+        @ @<cbData> = cbData;
+        lpData = 指针到字节集 (hLocal, cbData)
+        @ delete[] lpData;
+        @ }
+        @ RegCloseKey(临时节点);
+        @ return @<lpData>;
+    }
+
+    方法 注册表写文本_ <公开 静态 类型 = 逻辑型 注释 = "例如：注册表写文本_ (2, \"主项\\\\子项\", \"测试\", \"内容\") ;" 注释 = "相当于："
+            注释 = "[HKEY_CURRENT_USER\\主项\\子项]" 注释 = "\"测试\"=\"内容\"" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 整数 注释 = "例如调整常量：“注册表根类型常量.HKEY_CURRENT_USER”."
+            注释 = "1、HKEY_CLASSES_ROOT　2、HKEY_CURRENT_USER　3、HKEY_LOCAL_MACHINE　4、HKEY_USERS　5、HKEY_CURRENT_CONFIG">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型 "">
+    参数 键值 <类型 = 文本型 "">
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    参数 键值类型 <类型 = 整数 注释 = "可调用常量值，如：“注册表键值类型常量.REG_DWORD”."
+            注释 = "0、REG_NONE 1、REG_SZ 2、REG_EXPAND_SZ 3、REG_BINARY 4、REG_DWORD 5、REG_DWORD_BIG_ENDIAN"
+            注释 = "6、REG_LINK 7、REG_MULTI_SZ 8、REG_RESOURCE_LIST 9、REG_FULL_RESOURCE_DESCRIPTOR"
+            注释 = "10、REG_RESOURCE_REQUIREMENTS_LIST 11、REG_QWORD" @默认值 = 1 "">
+    {
+        变量 临时节点 <类型 = 变整数>
+        如果 (根节点 == 1)
+        {
+            临时节点 = HKEY_CLASSES_ROOT
+        }
+        否则 (根节点 == 2)
+        {
+            临时节点 = HKEY_CURRENT_USER
+        }
+        否则 (根节点 == 3)
+        {
+            临时节点 = HKEY_LOCAL_MACHINE
+        }
+        否则 (根节点 == 4)
+        {
+            临时节点 = HKEY_USERS
+        }
+        否则 (根节点 == 5)
+        {
+            临时节点 = HKEY_CURRENT_CONFIG
+        }
+        @ if (!@<临时节点>) return false;
+        @ DWORD flag = @<是否64位> ? KEY_WOW64_64KEY : KEY_WOW64_32KEY;
+        @ HKEY 临时节点;
+        @ LSTATUS lRes = RegOpenKeyExW((HKEY)@<临时节点>, @<键路径>.GetText(), 0, flag | KEY_CREATE_SUB_KEY | KEY_WRITE , &临时节点);
+        @ if (lRes = 2)
+        @ lRes = RegCreateKeyExW((HKEY)@<临时节点>, @<键路径>.GetText(), 0, NULL, REG_OPTION_NON_VOLATILE, flag | KEY_CREATE_SUB_KEY | KEY_WRITE, NULL, &临时节点, NULL);
+        @ if (lRes != ERROR_SUCCESS) return false;
+        @ DWORD cbData = (DWORD)wcslen(@<键值>.GetText());
+        @ cbData++;
+        @ LPWSTR lpData = new TCHAR[cbData]();
+        @ wcscpy(lpData, @<键值>.GetText());
+        @ lRes = RegSetValueExW(临时节点, @<键名称>.GetText(), 0, @<键值类型>, (LPBYTE)lpData, cbData * sizeof(TCHAR));
+        @ delete[] lpData;
+        @ RegCloseKey(临时节点);
+        @ return (lRes == ERROR_SUCCESS);
+    }
+
+    方法 注册表写整数_ <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 整数 注释 = "例如调整常量：“注册表根类型常量.HKEY_CURRENT_USER”."
+            注释 = "1、HKEY_CLASSES_ROOT　2、HKEY_CURRENT_USER　3、HKEY_LOCAL_MACHINE　4、HKEY_USERS　5、HKEY_CURRENT_CONFIG">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型 "">
+    参数 键值 <类型 = 整数 "">
+    参数 是否64位 <类型 = 逻辑型 注释 = "如果为真，带有KEY_WOW64_64KEY，如果为假，带有KEY_WOW64_32KEY" @默认值 = 假>
+    参数 键值类型 <类型 = 整数 注释 = "可调用常量值，如：“注册表键值类型常量.REG_DWORD”."
+            注释 = "0、REG_NONE 1、REG_SZ 2、REG_EXPAND_SZ 3、REG_BINARY 4、REG_DWORD 5、REG_DWORD_BIG_ENDIAN"
+            注释 = "6、REG_LINK 7、REG_MULTI_SZ 8、REG_RESOURCE_LIST 9、REG_FULL_RESOURCE_DESCRIPTOR"
+            注释 = "10、REG_RESOURCE_REQUIREMENTS_LIST 11、REG_QWORD" @默认值 = 4 "">
+    {
+        变量 临时节点 <类型 = 变整数>
+        如果 (根节点 == 1)
+        {
+            临时节点 = HKEY_CLASSES_ROOT
+        }
+        否则 (根节点 == 2)
+        {
+            临时节点 = HKEY_CURRENT_USER
+        }
+        否则 (根节点 == 3)
+        {
+            临时节点 = HKEY_LOCAL_MACHINE
+        }
+        否则 (根节点 == 4)
+        {
+            临时节点 = HKEY_USERS
+        }
+        否则 (根节点 == 5)
+        {
+            临时节点 = HKEY_CURRENT_CONFIG
+        }
+        @ if (!@<临时节点>) return false;
+        @ DWORD flag = @<是否64位> ? KEY_WOW64_64KEY : KEY_WOW64_32KEY;
+        @ HKEY 临时节点;
+        @ LSTATUS lRes = RegOpenKeyExW((HKEY)@<临时节点>, @<键路径>.GetText(), 0, flag | KEY_CREATE_SUB_KEY | KEY_WRITE, &临时节点);
+        @ if (lRes = 2)
+        @ lRes = RegCreateKeyExW((HKEY)@<临时节点>, @<键路径>.GetText(), 0, NULL, REG_OPTION_NON_VOLATILE, flag | KEY_WRITE | KEY_CREATE_SUB_KEY, NULL, &临时节点, NULL);
+        @ if (lRes != ERROR_SUCCESS) return false;
+        @ lRes = RegSetValueExW(临时节点, @<键名称>.GetText(), 0, @<键值类型>, (LPBYTE)&@<键值>, sizeof(INT));
+        @ RegCloseKey(临时节点);
+        @ return (lRes == ERROR_SUCCESS);
+    }
+
+    方法 注册表写长整数_ <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 整数 注释 = "例如调整常量：“注册表根类型常量.HKEY_CURRENT_USER”."
+            注释 = "1、HKEY_CLASSES_ROOT　2、HKEY_CURRENT_USER　3、HKEY_LOCAL_MACHINE　4、HKEY_USERS　5、HKEY_CURRENT_CONFIG">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型 "">
+    参数 键值 <类型 = 长整数 "">
+    参数 是否64位 <类型 = 逻辑型 注释 = "如果为真，带有KEY_WOW64_64KEY，如果为假，带有KEY_WOW64_32KEY" @默认值 = 假>
+    参数 键值类型 <类型 = 整数 注释 = "可调用常量值，如：“注册表键值类型常量.REG_DWORD”."
+            注释 = "0、REG_NONE 1、REG_SZ 2、REG_EXPAND_SZ 3、REG_BINARY 4、REG_DWORD 5、REG_DWORD_BIG_ENDIAN"
+            注释 = "6、REG_LINK 7、REG_MULTI_SZ 8、REG_RESOURCE_LIST 9、REG_FULL_RESOURCE_DESCRIPTOR"
+            注释 = "10、REG_RESOURCE_REQUIREMENTS_LIST 11、REG_QWORD" @默认值 = 11 "">
+    {
+        变量 临时节点 <类型 = 变整数>
+        如果 (根节点 == 1)
+        {
+            临时节点 = HKEY_CLASSES_ROOT
+        }
+        否则 (根节点 == 2)
+        {
+            临时节点 = HKEY_CURRENT_USER
+        }
+        否则 (根节点 == 3)
+        {
+            临时节点 = HKEY_LOCAL_MACHINE
+        }
+        否则 (根节点 == 4)
+        {
+            临时节点 = HKEY_USERS
+        }
+        否则 (根节点 == 5)
+        {
+            临时节点 = HKEY_CURRENT_CONFIG
+        }
+        @ if (!@<临时节点>) return false;
+        @ DWORD flag = @<是否64位> ? KEY_WOW64_64KEY : KEY_WOW64_32KEY;
+        @ HKEY 临时节点;
+        @ LSTATUS lRes = RegOpenKeyExW((HKEY)@<临时节点>, @<键路径>.GetText(), 0, flag | KEY_CREATE_SUB_KEY | KEY_WRITE, &临时节点);
+        @ if (lRes = 2)
+        @ lRes = RegCreateKeyExW((HKEY)@<临时节点>, @<键路径>.GetText(), 0, NULL, REG_OPTION_NON_VOLATILE, flag | KEY_WRITE | KEY_CREATE_SUB_KEY, NULL, &临时节点, NULL);
+        @ if (lRes != ERROR_SUCCESS) return false;
+        @ lRes = RegSetValueExW(临时节点, @<键名称>.GetText(), 0, @<键值类型>, (LPBYTE)&@<键值>, sizeof(INT_P));
+        @ RegCloseKey(临时节点);
+        @ return (lRes == ERROR_SUCCESS);
+    }
+
+    方法 注册表写字节集_ <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 整数 注释 = "例如调整常量：“注册表根类型常量.HKEY_CURRENT_USER”."
+            注释 = "1、HKEY_CLASSES_ROOT　2、HKEY_CURRENT_USER　3、HKEY_LOCAL_MACHINE　4、HKEY_USERS　5、HKEY_CURRENT_CONFIG">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型 "">
+    参数 键值 <类型 = 字节集类 "">
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    参数 键值类型 <类型 = 整数 注释 = "可调用常量值，如：“注册表键值类型常量.REG_DWORD”."
+            注释 = "0、REG_NONE 1、REG_SZ 2、REG_EXPAND_SZ 3、REG_BINARY 4、REG_DWORD 5、REG_DWORD_BIG_ENDIAN"
+            注释 = "6、REG_LINK 7、REG_MULTI_SZ 8、REG_RESOURCE_LIST 9、REG_FULL_RESOURCE_DESCRIPTOR"
+            注释 = "10、REG_RESOURCE_REQUIREMENTS_LIST 11、REG_QWORD" @默认值 = 4 "">
+    {
+        变量 临时节点 <类型 = 变整数>
+        变量 lpData <类型 = 变整数>
+        变量 cbData <类型 = 整数>
+        如果 (根节点 == 1)
+        {
+            临时节点 = HKEY_CLASSES_ROOT
+        }
+        否则 (根节点 == 2)
+        {
+            临时节点 = HKEY_CURRENT_USER
+        }
+        否则 (根节点 == 3)
+        {
+            临时节点 = HKEY_LOCAL_MACHINE
+        }
+        否则 (根节点 == 4)
+        {
+            临时节点 = HKEY_USERS
+        }
+        否则 (根节点 == 5)
+        {
+            临时节点 = HKEY_CURRENT_CONFIG
+        }
+        @ if (!@<临时节点>) return false;
+        @ DWORD flag = @<是否64位> ? KEY_WOW64_64KEY : KEY_WOW64_32KEY;
+        @ HKEY 临时节点;
+        @ LSTATUS lRes = RegOpenKeyExW((HKEY)@<临时节点>, @<键路径>.GetText(), 0, flag | KEY_CREATE_SUB_KEY | KEY_WRITE, &临时节点);
+        @ if (lRes = 2)
+        @ lRes = RegCreateKeyExW((HKEY)@<临时节点>, @<键路径>.GetText(), 0, NULL, REG_OPTION_NON_VOLATILE, flag | KEY_CREATE_SUB_KEY | KEY_WRITE, NULL, &临时节点, NULL);
+        @ if (lRes != ERROR_SUCCESS) return false;
+        lpData = 取字节集指针 (键值)
+        cbData = 取字节集长度 (键值)
+        @ lRes = RegSetValueExW(临时节点, @<键名称>.GetText(), 0, @<键值类型>, (LPBYTE)@<lpData>, @<cbData>);
+        @ RegCloseKey(临时节点);
+        @ return (lRes == ERROR_SUCCESS);
+    }
+
+    方法 注册表导出_ <公开 静态 类型 = 逻辑型
+            注释 = "注册表导出_ (\"C:\\\\注册表.reg\", \"HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\")" 折叠>
+    参数 保存路径 <类型 = 文本型>
+    参数 全路径注册项名 <类型 = 文本型>
+    {
+        返回 (运行 ("regedit /e " + 保存路径 + " " + 全路径注册项名, 假, ))
+    }
+
+    方法 注册表导入_ <公开 静态 类型 = 逻辑型 折叠>
+    参数 欲导入的注册表文件 <类型 = 文本型>
+    {
+        如果真 (文件是否存在 (欲导入的注册表文件) == 假)
+        {
+            返回 (假)
+        }
+        返回 (运行 ("regedit /s " + 欲导入的注册表文件, 假, ))
+    }
+
+    方法 注册表创建项_ <公开 静态 类型 = 逻辑型 注释 = "例如：注册表创建项_ (2, \"主项\\\\子项\") ；相当于：[HKEY_CURRENT_USER\\主项\\子项]" 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 整数 注释 = "例如调整常量：“注册表根类型常量.HKEY_CURRENT_USER”."
+            注释 = "1、HKEY_CLASSES_ROOT　2、HKEY_CURRENT_USER　3、HKEY_LOCAL_MACHINE　4、HKEY_USERS　5、HKEY_CURRENT_CONFIG">
+    参数 项名称 <类型 = 文本型>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 临时节点 <类型 = 变整数>
+        如果 (根节点 == 1)
+        {
+            临时节点 = HKEY_CLASSES_ROOT
+        }
+        否则 (根节点 == 2)
+        {
+            临时节点 = HKEY_CURRENT_USER
+        }
+        否则 (根节点 == 3)
+        {
+            临时节点 = HKEY_LOCAL_MACHINE
+        }
+        否则 (根节点 == 4)
+        {
+            临时节点 = HKEY_USERS
+        }
+        否则 (根节点 == 5)
+        {
+            临时节点 = HKEY_CURRENT_CONFIG
+        }
+        @  DWORD dwOperat = REG_CREATED_NEW_KEY;
+        @     REGSAM  option = KEY_QUERY_VALUE;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+        @  HKEY  hKey;
+        @  LONG  lResult  = RegCreateKeyEx((HKEY)@<临时节点>,@<项名称>,NULL,NULL,NULL,option,NULL,&hKey,&dwOperat); 
+        @  if(lResult != ERROR_SUCCESS)
+        @  {
+        @   RegCloseKey(hKey);
+        @   SetLastError(lResult);
+        @   return false;
+        @  }
+        @  RegCloseKey(hKey);
+        @ return true;
+    }
+
+    方法 注册表枚举键名_ <公开 静态 注释 = "例如：" 注释 = "注册表枚举键名_ (2, \"主项\", 名称变量)  ，就会得到主项下的\"子项\"和\"子项2\"两个名称  ;"
+            注释 = "[HKEY_CURRENT_USER\\主项\\子项]" 注释 = "[HKEY_CURRENT_USER\\主项\\子项2]" 折叠 折叠2>
+    参数 根节点 <类型 = 整数 注释 = "例如调整常量：“注册表根类型常量.HKEY_CURRENT_USER”."
+            注释 = "1、HKEY_CLASSES_ROOT　2、HKEY_CURRENT_USER　3、HKEY_LOCAL_MACHINE　4、HKEY_USERS　5、HKEY_CURRENT_CONFIG">
+    参数 键路径 <类型 = 文本型>
+    参数 返回的键名组 <类型 = 文本数组类>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 临时节点 <类型 = 变整数>
+        如果 (根节点 == 1)
+        {
+            临时节点 = HKEY_CLASSES_ROOT
+        }
+        否则 (根节点 == 2)
+        {
+            临时节点 = HKEY_CURRENT_USER
+        }
+        否则 (根节点 == 3)
+        {
+            临时节点 = HKEY_LOCAL_MACHINE
+        }
+        否则 (根节点 == 4)
+        {
+            临时节点 = HKEY_USERS
+        }
+        否则 (根节点 == 5)
+        {
+            临时节点 = HKEY_CURRENT_CONFIG
+        }
+        返回的键名组.删除所有成员 ()
+        @ HKEY hKey = (HKEY)@<临时节点>;
+        @ LPCTSTR lpsubkey = (LPCTSTR)@<键路径>;
+        @ #define MAX_KEY_LENGTH 255
+        @ #define MAX_VALUE_NAME 16383
+        @     HKEY hTestKey;
+        @     REGSAM  option = KEY_READ;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+        @     if (RegOpenKeyEx(hKey, lpsubkey, 0, option, &hTestKey) != ERROR_SUCCESS) return;
+        @     TCHAR    achKey[MAX_KEY_LENGTH];
+        @     DWORD    cbName;
+        @     TCHAR    achClass[MAX_PATH] = TEXT("");
+        @     DWORD    cchClassName = MAX_PATH;
+        @     DWORD    cSubKeys = 0;
+        @     DWORD    cbMaxSubKey; 
+        @     DWORD    cchMaxClass;
+        @     DWORD    cValues;
+        @     DWORD    cchMaxValue;
+        @     DWORD    cbMaxValueData;
+        @     DWORD    cbSecurityDescriptor;
+        @     FILETIME ftLastWriteTime;
+        @     DWORD i, retCode;
+        @     DWORD cchValue = MAX_VALUE_NAME;
+        @     retCode = RegQueryInfoKey(
+        @         hTestKey,
+        @         achClass,
+        @         &cchClassName,
+        @         NULL,
+        @         &cSubKeys,
+        @         &cbMaxSubKey,
+        @         &cchMaxClass,
+        @         &cValues,
+        @         &cchMaxValue,
+        @         &cbMaxValueData,
+        @         &cbSecurityDescriptor,
+        @         &ftLastWriteTime);
+        @     if (cSubKeys)
+        @     {
+        @         for (i = 0; i < cSubKeys; i++)
+        @         {
+        @             cbName = MAX_KEY_LENGTH;
+        @             retCode = RegEnumKeyEx(hTestKey, i,
+        @                 achKey,
+        @                 &cbName,
+        @                 NULL,
+        @                 NULL,
+        @                 NULL,
+        @                 &ftLastWriteTime);
+        @             if (retCode == ERROR_SUCCESS)
+        @             {
+        @                 @<返回的键名组>.data ().Add2 (achKey);
+        @             }
+        @         }
+        @     }
+        @ 
+        @     RegCloseKey(hTestKey);
+    }
+
+    方法 注册表枚举键值名_ <公开 静态 注释 = "例如：" 注释 = "注册表枚举键值名_ (2, \"主项\\\\子项\", 名称变量)  ，就会得到子项下的\"测试1\"和\"测试2\"两个名称  ;"
+            注释 = "[HKEY_CURRENT_USER\\主项\\子项]" 注释 = "\"测试1\"=\"内容1\"" 注释 = "\"测试2\"=\"内容2\"" 折叠 折叠2>
+    参数 根节点 <类型 = 整数 注释 = "例如调整常量：“注册表根类型常量.HKEY_CURRENT_USER”."
+            注释 = "1、HKEY_CLASSES_ROOT　2、HKEY_CURRENT_USER　3、HKEY_LOCAL_MACHINE　4、HKEY_USERS　5、HKEY_CURRENT_CONFIG">
+    参数 键路径 <类型 = 文本型>
+    参数 返回的值名称组 <类型 = 文本数组类>
+    参数 返回的值类型组 <类型 = 整数数组类 @默认值 = 空对象>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 临时节点 <类型 = 变整数>
+        如果 (根节点 == 1)
+        {
+            临时节点 = HKEY_CLASSES_ROOT
+        }
+        否则 (根节点 == 2)
+        {
+            临时节点 = HKEY_CURRENT_USER
+        }
+        否则 (根节点 == 3)
+        {
+            临时节点 = HKEY_LOCAL_MACHINE
+        }
+        否则 (根节点 == 4)
+        {
+            临时节点 = HKEY_USERS
+        }
+        否则 (根节点 == 5)
+        {
+            临时节点 = HKEY_CURRENT_CONFIG
+        }
+        返回的值名称组.删除所有成员 ()
+        如果 (返回的值类型组 != 空对象)
+        {
+            返回的值类型组.删除所有成员 ()
+        }
+        @ HKEY hKey = (HKEY)@<临时节点>;
+        @ LPCTSTR lpsubkey = (LPCTSTR)@<键路径>;
+        @ #define MAX_KEY_LENGTH 255
+        @ #define MAX_VALUE_NAME 16383
+        @     HKEY hTestKey;
+        @     REGSAM  option = KEY_READ;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+        @     if (RegOpenKeyEx(hKey, lpsubkey, 0, option, &hTestKey) != ERROR_SUCCESS) return;
+        @     TCHAR    achKey[MAX_KEY_LENGTH];
+        @     DWORD    cbName;
+        @     TCHAR    achClass[MAX_PATH] = TEXT("");
+        @     DWORD    cchClassName = MAX_PATH;
+        @     DWORD    cSubKeys = 0;
+        @     DWORD    cbMaxSubKey;
+        @     DWORD    cchMaxClass;
+        @     DWORD    cValues; 
+        @     DWORD    cchMaxValue;
+        @     DWORD    cbMaxValueData; 
+        @     DWORD    cbSecurityDescriptor;
+        @     FILETIME ftLastWriteTime;
+        @     DWORD i, retCode;
+        @     TCHAR  achValue[MAX_VALUE_NAME];
+        @     DWORD cchValue = MAX_VALUE_NAME;
+        @     retCode = RegQueryInfoKey(
+        @         hTestKey,
+        @         achClass,
+        @         &cchClassName, 
+        @         NULL,
+        @         &cSubKeys,
+        @         &cbMaxSubKey,
+        @         &cchMaxClass,
+        @         &cValues,
+        @         &cchMaxValue,
+        @         &cbMaxValueData,
+        @         &cbSecurityDescriptor,
+        @         &ftLastWriteTime);
+        @     if (cValues)
+        @     {
+        @         for (i = 0, retCode = ERROR_SUCCESS; i < cValues; i++)
+        @         {
+        @             DWORD dwValueType = 0;
+        @             cchValue = MAX_VALUE_NAME;
+        @             achValue[0] = '\0';
+        @             retCode = RegEnumValue(hTestKey, i,achValue,&cchValue,NULL,&dwValueType,NULL,NULL);
+        @             if (retCode == ERROR_SUCCESS)
+        @             {
+        @                 @<返回的值名称组>.data ().Add2 (achValue);
+        @             }
+        @             if( !@<返回的值类型组>.IsNullObject () )
+        @             {
+        @                  @<返回的值类型组>.data().Add2((INT)dwValueType);   
+        @             }
+        @         }
+        @     }
+        @     RegCloseKey(hTestKey);
+    }
+
+    # @begin
+    # BOOL RegDelnodeRecurse (HKEY hKeyRoot, LPTSTR lpSubKey,BOOL b64bit)
+    # {
+    #     LPTSTR lpEnd;
+    #     LONG lResult;
+    #     DWORD dwSize;
+    #     TCHAR szName[MAX_PATH];
+    #     HKEY hKey;
+    #     FILETIME ftWrite;
+    #     lResult = RegDeleteKey(hKeyRoot, lpSubKey);
+    #     if (lResult == ERROR_SUCCESS) 
+    #         return TRUE;
+    #      REGSAM  option = KEY_READ;
+    #      if(b64bit)
+    #       option|=KEY_WOW64_64KEY;
+    #      else
+    #       option|=KEY_WOW64_32KEY;
+    #     lResult = RegOpenKeyEx (hKeyRoot, lpSubKey, 0, option, &hKey);
+    #     if (lResult != ERROR_SUCCESS) 
+    #     {
+    #         if (lResult == ERROR_FILE_NOT_FOUND) {
+    #             return TRUE;
+    #         } 
+    #         else {
+    #             return FALSE;
+    #         }
+    #     }
+    #     lpEnd = lpSubKey + lstrlen(lpSubKey);
+    #     if (*(lpEnd - 1) != TEXT('\\')) 
+    #     {
+    #         *lpEnd =  TEXT('\\');
+    #         lpEnd++;
+    #         *lpEnd =  TEXT('\0');
+    #     }
+    #     dwSize = MAX_PATH;
+    #     lResult = RegEnumKeyEx(hKey, 0, szName, &dwSize, NULL, NULL, NULL, &ftWrite);
+    #     if (lResult == ERROR_SUCCESS) 
+    #     {
+    #         do {
+    #             lstrcpy (lpEnd, szName);
+    #             if (!RegDelnodeRecurse(hKeyRoot, lpSubKey,b64bit)) {
+    #                 break;
+    #             }
+    #             dwSize = MAX_PATH;
+    #             lResult = RegEnumKeyEx(hKey, 0, szName, &dwSize, NULL,
+    #                                    NULL, NULL, &ftWrite);
+    #         } while (lResult == ERROR_SUCCESS);
+    #     }
+    #     lpEnd--;
+    #     *lpEnd = TEXT('\0');
+    #     RegCloseKey (hKey);
+    #     RegDeleteValue(hKeyRoot,lpSubKey);
+    #     lResult = RegDeleteKey(hKeyRoot, lpSubKey);
+    #     if (lResult == ERROR_SUCCESS) 
+    #         return TRUE;
+    #     return FALSE;
+    # }
+    # @end
+
+    方法 注册表删除键_ <公开 静态 类型 = "逻辑型  " 注释 = "例如：　;" 注释 = "注册表删除键_ (2, \"主项\\\\子项\")　;" 注释 = "相当于删除\"子项\"处"
+            注释 = "[HKEY_CURRENT_USER\\主项\\子项]" 注释 = "\"测试\"=\"内容\"" 注释 = "" 注释 = "注册表删除键_ (2, \"主项\")　;" 注释 = "相当于删除整个\"主项\"处"
+            返回值注释 = "不存在也返回真" 折叠 折叠2 @禁止流程检查 = 真 @视窗.外部头文件 = "<winreg.h>" @视窗.预定义宏 = "_WIN32_WINNT=0x0600">
+    参数 根节点 <类型 = 整数 注释 = "例如调整常量：“注册表根类型常量.HKEY_CURRENT_USER”."
+            注释 = "1、HKEY_CLASSES_ROOT　2、HKEY_CURRENT_USER　3、HKEY_LOCAL_MACHINE　4、HKEY_USERS　5、HKEY_CURRENT_CONFIG">
+    参数 键路径 <类型 = 文本型>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 临时节点 <类型 = 变整数>
+        如果 (根节点 == 1)
+        {
+            临时节点 = HKEY_CLASSES_ROOT
+        }
+        否则 (根节点 == 2)
+        {
+            临时节点 = HKEY_CURRENT_USER
+        }
+        否则 (根节点 == 3)
+        {
+            临时节点 = HKEY_LOCAL_MACHINE
+        }
+        否则 (根节点 == 4)
+        {
+            临时节点 = HKEY_USERS
+        }
+        否则 (根节点 == 5)
+        {
+            临时节点 = HKEY_CURRENT_CONFIG
+        }
+        @ if ( (INT_PTR) @<临时节点> >=0) return false;
+        @ REGSAM X86X64 = @<是否64位> ? KEY_WOW64_64KEY : KEY_WOW64_32KEY;
+        @ HKEY Hwndkey;
+        @ if ( RegOpenKeyExW((HKEY)@<临时节点>, @<键路径>.GetText(), 0, X86X64 | KEY_ALL_ACCESS,   (PHKEY)&Hwndkey) != ERROR_SUCCESS)  return 0;
+        @ if (Hwndkey <=0)  return true;
+        @ if( RegDeleteKeyW((HKEY)Hwndkey, _T("")) ==ERROR_SUCCESS ) return true; 
+        @ if(RegDeleteTreeA((HKEY)Hwndkey,0)==ERROR_SUCCESS)
+        @ {
+        @   if( RegDeleteKeyW((HKEY)Hwndkey, _T("")) ==ERROR_SUCCESS ) return true;
+        @ }
+        @  RegCloseKey ((HKEY)Hwndkey);
+        @  return false;
+    }
+
+    方法 注册表删除键值_ <公开 静态 类型 = 逻辑型 注释 = "例如：注册表删除键值_ (2, \"主项\\\\子项\", \"测试\") ;" 注释 = "相当于删除\"测试\"项："
+            注释 = "[HKEY_CURRENT_USER\\主项\\子项]" 注释 = "\"测试\"=\"内容\"" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 整数 注释 = "例如调整常量：“注册表根类型常量.HKEY_CURRENT_USER”."
+            注释 = "1、HKEY_CLASSES_ROOT　2、HKEY_CURRENT_USER　3、HKEY_LOCAL_MACHINE　4、HKEY_USERS　5、HKEY_CURRENT_CONFIG">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 临时节点 <类型 = 变整数>
+        变量 bRes <类型 = 逻辑型>
+        如果 (根节点 == 1)
+        {
+            临时节点 = HKEY_CLASSES_ROOT
+        }
+        否则 (根节点 == 2)
+        {
+            临时节点 = HKEY_CURRENT_USER
+        }
+        否则 (根节点 == 3)
+        {
+            临时节点 = HKEY_LOCAL_MACHINE
+        }
+        否则 (根节点 == 4)
+        {
+            临时节点 = HKEY_USERS
+        }
+        否则 (根节点 == 5)
+        {
+            临时节点 = HKEY_CURRENT_CONFIG
+        }
+        @ if (!@<临时节点>) return false;
+        @ DWORD flag = @<是否64位> ? KEY_WOW64_64KEY : KEY_WOW64_32KEY;
+        @ HKEY 临时节点;
+        @ LSTATUS lRes = RegOpenKeyExW((HKEY)@<临时节点>, @<键路径>.GetText(), 0, flag | KEY_ALL_ACCESS, &临时节点);
+        @ @<bRes> = RegDeleteValueW(临时节点, @<键名称>.GetText()) == ERROR_SUCCESS;
+        @ RegCloseKey(临时节点);
+        @ return @<bRes>;
+    }
+
+    方法 注册表定位打开_ <公开 静态 类型 = 逻辑型
+            注释 = "注册表定位打开_ (\"HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\", \"Sysdiag\")" 折叠>
+    参数 键路径 <类型 = 文本型 注释 = "完整的注册表路径；例如：\"HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\"">
+    参数 键值 <类型 = 文本型 注释 = "需要定位到的键值名称；例如：\"Sysdiag\"" @默认值 = "">
+    参数 定位次数 <类型 = 整数 注释 = "可能会定位错误，建议设置次数为2－3左右" @默认值 = 3>
+    {
+        变量 窗口句柄 <类型 = 整数>
+        变量 窗口句柄2 <类型 = 变整数>
+        变量 窗口句柄3 <类型 = 变整数>
+        变量 临时内容 <类型 = 文本型>
+        变量 代码值 <类型 = 整数>
+        变量 结果 <类型 = 变整数>
+        变量 i <类型 = 整数>
+        窗口句柄 = 定位api.FindWindow ("RegEdit_RegEdit", 0)
+        运行 ("regedit.exe")
+        延迟_ (100)
+        窗口句柄 = 定位api.FindWindow ("RegEdit_RegEdit", 0)
+        如果真 (窗口句柄 == 0)
+        {
+            返回 (假)
+        }
+        结果 = 定位api.ShowWindow (窗口句柄, 5)
+        结果 = 定位api.SetForegroundWindow (窗口句柄)
+        窗口句柄2 = 定位api.FindWindowEx (窗口句柄, 0, "SysTreeView32", 0)
+        结果 = 定位api.SetForegroundWindow (窗口句柄2)
+        结果 = 定位api.SetFocus (窗口句柄2)
+        计次循环 (定位次数)
+        {
+            计次循环 (30)
+            {
+                结果 = 定位api.SendMessage (窗口句柄2, 256, 39, 0)
+            }
+            循环 (, 取文本长度 (键路径), i)
+            {
+                临时内容 = 取文本中间 (键路径, i, 1)
+                如果 (临时内容 == "\\")
+                {
+                    结果 = 定位api.SendMessage (窗口句柄2, 256, 39, 0)
+                }
+                否则
+                {
+                    代码值 = 取代码_ (到大写 (临时内容), )
+                    结果 = 定位api.SendMessage (窗口句柄2, 258, 代码值, 0)
+                }
+            }
+        }
+        如果真 (键值 != "")
+        {
+            窗口句柄3 = 定位api.FindWindowEx (窗口句柄, 0, "SysListView32", 0)
+            结果 = 定位api.SetForegroundWindow (窗口句柄3)
+            结果 = 定位api.SetFocus (窗口句柄3)
+            延迟_ (100)
+            结果 = 定位api.SendMessage (窗口句柄3, 256, 36, 0)
+            循环 (, 取文本长度 (键值), i)
+            {
+                临时内容 = 取文本中间 (键值, i, 1)
+                如果 (临时内容 == 键值)
+                {
+                    结果 = 定位api.SendMessage (窗口句柄3, 256, 39, 0)
+                }
+                否则
+                {
+                    代码值 = 取代码_ (到大写 (临时内容), )
+                    结果 = 定位api.SendMessage (窗口句柄3, 258, 代码值, 0)
+                }
+            }
+        }
+        结果 = 定位api.SetForegroundWindow (窗口句柄)
+        结果 = 定位api.SetFocus (窗口句柄)
+        返回 (真)
+
+    }
+
+    # @ @def_macro _VOL_REG_OPER_HEADER  \
+    # @     CVolString strPath;  \
+    # @     const TCHAR* szItemName = @<全路径注册项名>.GetText ();  \
+    # @     const TCHAR* ps = _tcsrchr (szItemName, '\\');  \
+    # @     if (ps != NULL)  \
+    # @     {  \
+    # @         strPath.SetText (szItemName, ps - szItemName);  \
+    # @         szItemName = ps + 1;  \
+    # @     }
+
+    方法 注册表是否存在_ <公开 静态 类型 = 逻辑型 折叠>
+    参数 根节点 <类型 = 整数 注释 = "1、HKEY_CLASSES_ROOT　2、HKEY_CURRENT_USER　3、HKEY_LOCAL_MACHINE　4、HKEY_USERS　5、HKEY_CURRENT_CONFIG">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 临时节点 <类型 = 变整数>
+        如果 (根节点 == 1)
+        {
+            临时节点 = HKEY_CLASSES_ROOT
+        }
+        否则 (根节点 == 2)
+        {
+            临时节点 = HKEY_CURRENT_USER
+        }
+        否则 (根节点 == 3)
+        {
+            临时节点 = HKEY_LOCAL_MACHINE
+        }
+        否则 (根节点 == 4)
+        {
+            临时节点 = HKEY_USERS
+        }
+        否则 (根节点 == 5)
+        {
+            临时节点 = HKEY_CURRENT_CONFIG
+        }
+        @ if ( (INT_PTR) @<临时节点> >=0) return false;
+        @ REGSAM X86X64 = @<是否64位> ? KEY_WOW64_64KEY : KEY_WOW64_32KEY;
+        @ HKEY hKey;
+        @ if (::RegOpenKeyEx ((HKEY)(UINT_P)@<临时节点>, @<键路径>.GetText (), 0, X86X64 | KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS)
+        @ {
+        @     DWORD dwType, dwDataSize;
+        @     const BOOL_P blpExist = (::RegQueryValueEx (hKey, @<键名称>.GetText (), NULL, &dwType, NULL, &dwDataSize) == ERROR_SUCCESS);
+        @     ::RegCloseKey (hKey);
+        @     return (BOOL)blpExist;
+        @ }
+        返回 (假)
+    }
+}
+
+类 注册表根类型常量 <公开 折叠 @文档 = "category = \"注册表库.附加类\"">
+{
+    常量 HKEY_CLASSES_ROOT <公开 类型 = 整数 值 = 1>
+    常量 HKEY_CURRENT_USER <公开 类型 = 整数 值 = 2>
+    常量 HKEY_LOCAL_MACHINE <公开 类型 = 整数 值 = 3>
+    常量 HKEY_USERS <公开 类型 = 整数 值 = 4>
+    常量 HKEY_CURRENT_CONFIG <公开 类型 = 整数 值 = 5>
+}
+
+类 注册表键值类型常量 <公开 折叠 @文档 = "category = \"注册表库.附加类\"">
+{
+    常量 REG_NONE <公开 类型 = 整数 值 = 0>
+    常量 REG_SZ <公开 类型 = 整数 值 = 1>
+    常量 REG_EXPAND_SZ <公开 类型 = 整数 值 = 2>
+    常量 REG_BINARY <公开 类型 = 整数 值 = 3>
+    常量 REG_DWORD <公开 类型 = 整数 值 = 4>
+    常量 REG_DWORD_BIG_ENDIAN <公开 类型 = 整数 值 = 5>
+    常量 REG_LINK <公开 类型 = 整数 值 = 6>
+    常量 REG_MULTI_SZ <公开 类型 = 整数 值 = 7>
+    常量 REG_RESOURCE_LIST <公开 类型 = 整数 值 = 8>
+    常量 REG_FULL_RESOURCE_DESCRIPTOR <公开 类型 = 整数 值 = 9>
+    常量 REG_RESOURCE_REQUIREMENTS_LIST <公开 类型 = 整数 值 = 10>
+    常量 REG_QWORD <公开 类型 = 整数 值 = 11>
+}
+
+类 定位api <折叠 @文档 = "category = \"注册表库.附加类\"">
+{
+    方法 FindWindow <公开 静态 类型 = 整数 折叠 折叠2 @输出名 = "FindWindowW" @视窗.输入 = "user32.dll">
+    参数 lpClassName <类型 = 文本型>
+    参数 lpWindowName <类型 = 整数>
+
+    方法 FindWindowEx <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "FindWindowExW" @视窗.输入 = "user32.dll">
+    参数 hWnd1 <类型 = 变整数>
+    参数 hWnd2 <类型 = 整数>
+    参数 lpsz1 <类型 = 文本型>
+    参数 lpsz2 <类型 = 整数>
+
+    方法 SetForegroundWindow <公开 静态 类型 = 整数 折叠 折叠2 @输出名 = "SetForegroundWindow" @视窗.输入 = "user32.dll">
+    参数 hwnd <类型 = 变整数>
+
+    方法 ShowWindow <公开 静态 类型 = 整数 折叠 折叠2 @输出名 = "ShowWindow" @视窗.输入 = "user32.dll">
+    参数 hwnd <类型 = 整数>
+    参数 nCmdShow <类型 = 整数>
+
+    方法 SetFocus <公开 静态 类型 = 整数 折叠 折叠2 @输出名 = "SetFocus" @视窗.输入 = "user32.dll">
+    参数 hwnd <类型 = 变整数>
+
+    方法 SendMessage <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "SendMessageW" @视窗.输入 = "user32.dll">
+    参数 hwnd <类型 = 变整数>
+    参数 wMsg <类型 = 整数>
+    参数 wParam <类型 = 整数>
+    参数 lParam <类型 = 整数>
+
+    方法 GetWindowThreadProcessId <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "GetWindowThreadProcessId" @视窗.输入 = "user32.dll">
+    参数 hwnd <类型 = 变整数>
+    参数 lpdwProcessId <类型 = 变整数 @视窗.输出参数 = 真>
+
+    方法 OpenProcess <公开 静态 类型 = 整数 折叠 折叠2 @输出名 = "OpenProcessToken" @视窗.输入 = "kernel32.dll">
+    参数 dwDesiredAccess <类型 = 整数>
+    参数 bInheritHandle <类型 = 整数>
+    参数 dwProcessId <类型 = 整数>
+
+    方法 CloseHandle <公开 静态 类型 = 整数 折叠 折叠2 @输出名 = "CloseHandle" @视窗.输入 = "kernel32.dll">
+    参数 hObject <类型 = 整数>
+
+    方法 WaitForInputIdle <公开 静态 类型 = 整数 折叠 折叠2 @输出名 = "WaitForInputIdle" @视窗.输入 = "user32.dll">
+    参数 hProcess <类型 = 整数>
+    参数 dwMilliseconds <类型 = 整数>
+}

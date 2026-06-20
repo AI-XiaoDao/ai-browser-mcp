@@ -1,0 +1,39 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 FBrowser.浏览器 <@视窗.头文件搜寻目录 = "env" @视窗.外部头文件 = "src\\env\\include\\cef_app.h"
+        @视窗.外部库 = "env\\lib\\libcef.lib\nenv\\lib\\libcef_dll_wrapper.lib"
+        @视窗.附属文件.win32 = "CEFLib\\cef.pak\nCEFLib\\cef_100_percent.pak\nCEFLib\\cef_200_percent.pak\nCEFLib\\cef_extensions.pak\nCEFLib\\chrome_elf.dll\nCEFLib\\d3dcompiler_47.dll\nCEFLib\\devtools_resources.pak\nCEFLib\\FBrowserCEF3lib.dll\nCEFLib\\FBrowserCEF3Subprocess.exe\nCEFLib\\FBrowserVIP.dll\nCEFLib\\FLicence\nCEFLib\\icudtl.dat\nCEFLib\\libcef.dll\nCEFLib\\libEGL.dll\nCEFLib\\libGLESv2.dll\nCEFLib\\LICENSE\nCEFLib\\resources.pak\nCEFLib\\snapshot_blob.bin\nCEFLib\\v8_context_snapshot.bin">
+
+类 FBrowser浏览器 <公开>
+{
+    方法 初始化 <公开 静态 类型 = 逻辑型>
+    {
+        返回 (假)
+    }
+
+    #
+}
+
+类 FBrowserAPP <公开 @视窗.外部头文件 "">
+{
+
+    # @begin
+    # <> <include>
+    # <> </include>
+    # @end
+}
+
+类 FBrowser浏览器控制 <公开>
+
+#
+# //@begin
+# <> <include>
+# CefRefPtr<CefBrowser> m_browser;
+# inline_ @sn<current_class> (CefRefPtr<CefBrowser> browser) : @sn<current_class> ()  { m_browser = browser; }
+# inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)  { m_browser = objCopyFrom.m_browser; }
+# inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const  { return (m_browser.get () == objCompare.m_browser.get ()); }
+# inline_ BOOL_P IsEmpty () const  { return (m_browser.get () == NULL); }
+# inline_ void Set (CefRefPtr<CefBrowser> browser)  { m_browser = browser; }
+# <> </include>
+# //@end
+#

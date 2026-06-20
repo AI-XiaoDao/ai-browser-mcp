@@ -1,0 +1,155 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" 注释 = "" 注释 = "" 注释 = "由 RobBer 完善了部分crc算法" @文档 = "category = \"开源库.校验算法\"">
+
+类 ______校验算法 <公开 @全局类 = 真>
+{
+    方法 校验_取CRC <公开 静态 类型 = 长整数 注释 = "资料来源" 注释 = "https://github.com/whik/crc-lib-c/blob/master/main.c" 折叠 @禁止流程检查 = 真
+            @视窗.外部头文件 = "HashAlgorithm\\crcLib.h" @视窗.外部源文件 = "HashAlgorithm\\crcLib.cpp">
+    参数 数据 <类型 = 字节集类>
+    参数 算法类型 <类型 = CRC算法常量>
+    {
+        变量 数据指针 <类型 = 变整数>
+        变量 数据长度 <类型 = 整数>
+        数据指针 = 数据.取字节集指针 ()
+        数据长度 = 数据.取字节集长度 ()
+        @ uint64_t uRet = 0;
+        如果 (算法类型 == CRC算法常量.crc4_itu)
+        {
+            @ uRet =  crc4_itu((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc5_epc)
+        {
+            @ uRet =  crc5_epc((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc5_itu)
+        {
+            @ uRet =  crc5_itu((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc5_usb)
+        {
+            @ uRet =  crc5_usb((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc6_itu)
+        {
+            @ uRet =  crc6_itu((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc7_mmc)
+        {
+            @ uRet =  crc7_mmc((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc8)
+        {
+            @ uRet =  crc8((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc8_itu)
+        {
+            @ uRet =  crc8_itu((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc8_rohc)
+        {
+            @ uRet =  crc8_rohc((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc8_maxim)
+        {
+            @ uRet =  crc8_maxim((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc16_ibm)
+        {
+            @ uRet =  crc16_ibm((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc16_maxim)
+        {
+            @ uRet =  crc16_maxim((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc16_usb)
+        {
+            @ uRet =  crc16_usb((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc16_modbus)
+        {
+            @ uRet =  crc16_modbus((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc16_ccitt)
+        {
+            @ uRet =  crc16_ccitt((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc16_ccitt_false)
+        {
+            @ uRet =  crc16_ccitt_false((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc16_x25)
+        {
+            @ uRet =  crc16_x25((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc16_xmodem)
+        {
+            @ uRet =  crc16_xmodem((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc16_dnp)
+        {
+            @ uRet =  crc16_dnp((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc32)
+        {
+            @ uRet =  crc32((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc32_mpeg_2)
+        {
+            @ uRet =  crc32_mpeg_2((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc64)
+        {
+            @ uRet =  crc64(0,(uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+        }
+        否则 (算法类型 == CRC算法常量.crc8_checksum)
+        {
+            @ uRet =  TX_CheckSum((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+            // uint8_t TX_CheckSum(uint8_t *buf, U8 len)
+        }
+        否则 (算法类型 == CRC算法常量.crc8_chk_xrl)
+        {
+            @ uRet =  chk_xrl((uint8_t *)@<数据指针>,(uint16_t)@<数据长度>);
+            // uint8_t chk_xrl(const void *data, uint16_t length)
+
+        }
+
+        @ return uRet;
+
+
+    }
+
+    #
+}
+
+类 CRC算法常量 <公开 折叠 @常量类 = 整数>
+{
+    常量 crc4_itu <公开 值 = 1>
+    常量 crc5_epc <公开 值 = 2>
+    常量 crc5_itu <公开 值 = 3>
+    常量 crc5_usb <公开 值 = 4>
+    常量 crc6_itu <公开 值 = 5>
+    常量 crc7_mmc <公开 值 = 6>
+    常量 crc8 <公开 值 = 7>
+    常量 crc8_itu <公开 值 = 8>
+    常量 crc8_rohc <公开 值 = 9>
+    常量 crc8_maxim <公开 值 = 10>
+    常量 crc16_ibm <公开 值 = 11>
+    常量 crc16_maxim <公开 值 = 12>
+    常量 crc16_usb <公开 值 = 13>
+    常量 crc16_modbus <公开 值 = 14>
+    常量 crc16_ccitt <公开 值 = 15>
+    常量 crc16_ccitt_false <公开 值 = 16>
+    常量 crc16_x25 <公开 值 = 17>
+    常量 crc16_xmodem <公开 值 = 18>
+    常量 crc16_dnp <公开 值 = 19>
+    常量 crc32 <公开 值 = 20>
+    常量 crc32_mpeg_2 <公开 值 = 21>
+    常量 crc64 <公开 值 = 22>
+    常量 crc8_checksum <公开 值 = 23>
+    常量 crc8_chk_xrl <公开 值 = 24>
+
+    #
+}
+
+#

@@ -1,0 +1,637 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" @文档 = "category = \"windows.剪辑版_全局类\"">
+
+类 ______剪辑版_全局类 <公开 折叠 @全局类 = 真>
+{
+
+    # @begin
+    # <> <include>
+    # #define Clipboard_for(hWnd,out_nfomat) \
+    # for(OpenClipboard((HWND)hWnd),out_nfomat = EnumClipboardFormats(0);(!out_nfomat?CloseClipboard():0) ,out_nfomat; out_nfomat = EnumClipboardFormats(out_nfomat) )
+    # <> </include>
+    # @end
+    #
+
+    方法 剪辑版_打开 <静态 类型 = 逻辑型 注释 = "暂时用不到" @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数 @默认值 = 0>
+    {
+        @ OpenClipboard((HWND)@<窗口句柄>)
+    }
+
+    方法 剪辑版_关闭 <静态 类型 = 逻辑型 注释 = "暂时用不到" @嵌入式方法 = "">
+    {
+        @ CloseClipboard()
+    }
+
+    方法 剪辑版_删除监视器 <公开 静态 注释 = "函数从剪贴板查看器链中删除指定的窗口。" @嵌入式方法 = "">
+    参数 要删除的窗口句柄 <类型 = 变整数>
+    参数 下一个窗口句柄 <类型 = 变整数>
+    {
+        @ ChangeClipboardChain((HWND)@<要删除的窗口句柄>,(HWND)@<下一个窗口句柄>)
+    }
+
+    方法 剪辑版_取格式数量 <公开 静态 类型 = 整数 注释 = "可以不用调用 剪辑版_打开" @嵌入式方法 = "">
+    {
+        @ CountClipboardFormats()
+    }
+
+    方法 剪辑版_清空 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 要清空的窗口句柄 <类型 = 变整数 @默认值 = 0>
+    {
+        @ OpenClipboard((HWND)@<要清空的窗口句柄>);
+        @ EmptyClipboard();
+        @ CloseClipboard()
+    }
+
+    方法 剪辑版_枚举格式 <公开 静态 @嵌入式方法 = "name = Clipboard_for\nhas_body = true">
+    参数 用来保存当前剪辑版可用格式 <类型 = 整数 "" = 用来保存可用剪辑版格式>
+    参数 指定剪辑版窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        @ Clipboard_for(@<指定剪辑版窗口句柄>,@<用来保存当前剪辑版可用格式>)
+    }
+
+    方法 剪辑版_取所属窗口句柄 <公开 静态 类型 = 变整数 注释 = "取剪贴板当前所有者的窗口句柄" 返回值注释 = "返回 剪辑版 当前所属的窗口句柄" @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>) GetClipboardOwner()
+    }
+
+    方法 剪辑版_取监视窗口句柄 <公开 静态 注释 = "返回监视窗口链中的 第一个窗口句柄" @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>)GetClipboardViewer()
+    }
+
+    方法 剪辑版_取队列号 <公开 静态 类型 = 整数 注释 = "函数检索当前窗口站的剪贴板序列号。" @嵌入式方法 = "">
+    {
+        @ (INT)GetClipboardSequenceNumber()
+    }
+
+    方法 剪辑版_取格式名称 <公开 静态 类型 = 文本型 注释 = "可以不用调用 剪辑版_打开" 折叠 @禁止流程检查 = 真>
+    参数 剪辑版格式 <类型 = 整数>
+    {
+        @ TCHAR *StrClipboardFormats[18]={
+        @ _T ("CF_UNKONW"),
+        @  _T("CF_TEXT"),
+        @  _T("CF_BITMAP"),
+        @  _T("CF_METAFILEPICT"),
+        @  _T("CF_SYLK"),
+        @  _T("CF_DIF"),
+        @  _T("CF_TIFF"),
+        @  _T("CF_OEMTEXT"),
+        @  _T("CF_DIB"),
+        @  _T("CF_PALETTE"),
+        @  _T("CF_PENDATA"),
+        @  _T("CF_RIFF"),
+        @  _T("CF_WAVE"),
+        @  _T("CF_UNICODETEXT"),
+        @  _T("CF_ENHMETAFILE"),
+        @  _T("CF_HDROP"),
+        @  _T("CF_LOCALE"),
+        @ _T ("CF_DIBV5")
+        @ };
+        @ if(@<剪辑版格式> <= 18)
+        @   return StrClipboardFormats[@<剪辑版格式>];
+        // #define CF_OWNERDISPLAY     0x0080
+        // #define CF_DSPTEXT          0x0081
+        // #define CF_DSPBITMAP        0x0082
+        // #define CF_DSPMETAFILEPICT  0x0083
+        // #define CF_DSPENHMETAFILE   0x008E
+        @ if(@<剪辑版格式> == CF_OWNERDISPLAY)
+        @   return _T("CF_OWNERDISPLAY");
+        @ else if(@<剪辑版格式> == CF_DSPTEXT)
+        @   return _T("CF_DSPTEXT");
+        @ else if(@<剪辑版格式> == CF_DSPBITMAP)
+        @   return _T("CF_DSPBITMAP");
+        @ else if(@<剪辑版格式> == CF_DSPMETAFILEPICT)
+        @   return _T("CF_DSPMETAFILEPICT");
+        @ else if(@<剪辑版格式> == CF_DSPENHMETAFILE)
+        @   return _T("CF_DSPENHMETAFILE");
+
+        @ TCHAR buffer[1024] = {0};
+        @ GetClipboardFormatName(@<剪辑版格式>,buffer,1024);
+        @ return buffer;
+    }
+
+    方法 剪辑版_取打开剪辑版窗口句柄 <公开 静态 类型 = 变整数 注释 = "当前打开剪贴板的窗口的句柄。" @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>) GetOpenClipboardWindow();
+    }
+
+    方法 "//剪辑版_是否存在格式数据" <公开 静态 类型 = 逻辑型 注释 = "可以不用调用 剪辑版_打开" @嵌入式方法 = "">
+    参数 剪辑版格式 <类型 = 整数>
+    {
+        @ IsClipboardFormatAvailable(@<剪辑版格式>)
+
+    }
+
+    方法 剪辑版_是否存在指定格式数据 <公开 静态 类型 = 整数 注释 = "如果存在 则返回指定格式的 整数标记，否则返回0">
+    参数 格式文本 <类型 = 文本型 注释 = "例如 \"VolNEPrgClipFormat\"  或者 \"CF_UNICODETEXT\" 等等">
+    参数 剪辑版窗口句柄 <类型 = 变整数 @默认值 = 0>
+    {
+        变量 当前剪辑版可用格式 <类型 = 整数>
+        剪辑版_枚举格式 (当前剪辑版可用格式, 剪辑版窗口句柄)
+        {
+            如果 (剪辑版_取格式名称 (当前剪辑版可用格式) == 格式文本)
+            {
+                返回 (当前剪辑版可用格式)
+            }
+        }
+        返回 (0)
+    }
+
+    方法 剪辑版_取火山格式字节集 <公开 静态 类型 = 字节集类>
+    {
+        变量 剪辑版格式 <类型 = 整数>
+        变量 返回值 <类型 = 字节集类>
+        剪辑版格式 = 剪辑版_是否存在指定格式数据 ("VolNESrcClip")
+        如果 (剪辑版格式 == 0)
+        {
+            返回 (返回值)
+        }
+        返回 (剪辑版_取字节集 (剪辑版格式))
+
+    }
+
+    方法 剪辑版_置火山格式字节集 <公开 静态 类型 = 逻辑型>
+    参数 要设置的字节集 <类型 = 字节集类>
+    {
+        变量 剪辑版格式 <类型 = 整数>
+        剪辑版格式 = 剪辑版_注册自定义格式 ("VolNESrcClip")
+        返回 (剪辑版_置字节集 (要设置的字节集, 剪辑版格式))
+
+
+
+
+    }
+
+    方法 剪辑版_注册自定义格式 <公开 静态 类型 = 整数 注释 = "可以不用调用 剪辑版_打开" 折叠 @嵌入式方法 = "">
+    参数 自定义格式文本 <类型 = 文本型>
+    {
+        @ RegisterClipboardFormat(@<自定义格式文本>)
+
+    }
+
+    方法 剪辑版_置监视窗口 <公开 静态 类型 = 变整数 注释 = "如果函数成功，返回值将标识剪贴板查看器链中的下一个窗口。" 注释 = "如果发生错误或剪贴板查看器链中没有其他窗口，则返回值为空。"
+            注释 = "要获取扩展错误信息，请调用GetLastError。" @嵌入式方法 = "">
+    参数 新监视窗口句柄 <类型 = 变整数>
+    {
+        @ (@dt<变整数>)SetClipboardViewer((HWND)@<新监视窗口句柄>)
+    }
+
+    方法 剪辑版_取字节集 <公开 静态 类型 = 字节集类 @禁止流程检查 = 真>
+    参数 剪辑版格式 <类型 = 整数 注释 = "如果不填写格式，则使用 CVolMem 格式的数据" @默认值 = 0>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        变量 空字节集 <类型 = 字节集类>
+        如果 (剪辑版_打开 (窗口句柄) == 假)
+        {
+            返回 (空字节集)
+        }
+        如果 (剪辑版格式 == 0)
+        {
+            剪辑版格式 = 剪辑版_注册自定义格式 ("CVolMem")
+        }
+        @ HGLOBAL hObj = GetClipboardData(@<剪辑版格式>);
+        @  if(hObj == NULL) return @an<CVolMem>();
+        @ LPVOID lpBuffer =  GlobalLock(hObj);
+        @ if(lpBuffer == NULL) return @an<CVolMem>();
+        @ SIZE_T memSize = LocalSize(hObj);
+        @ @an<CVolMem> memBuf((BYTE*)lpBuffer,memSize);
+        @ GlobalUnlock(hObj);
+        剪辑版_关闭 ()
+        @ return memBuf;
+
+    }
+
+    方法 剪辑版_取文本A <公开 静态 类型 = 字节集类 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        变量 空字节集 <类型 = 字节集类>
+        如果 (剪辑版_打开 (窗口句柄) == 假)
+        {
+            返回 (空字节集)
+        }
+        @ HGLOBAL hObj = GetClipboardData(CF_TEXT);
+        @  if(hObj == NULL) return @an<CVolMem>();
+        @ LPVOID lpBuffer =  GlobalLock(hObj);
+        @ if(lpBuffer == NULL) return @<空字节集>;
+        @ UINT memSize = LocalSize(hObj);
+        @ @an<CVolMem> memBuf((BYTE*)lpBuffer,memSize);
+        @ GlobalUnlock(hObj);
+        剪辑版_关闭 ()
+        @ return memBuf;
+
+    }
+
+    方法 剪辑版_取文本 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        如果 (剪辑版_打开 (窗口句柄) == 假)
+        {
+            返回 ("")
+        }
+        @ HGLOBAL hObj = GetClipboardData(CF_UNICODETEXT);
+        @  if(hObj == NULL) return @an<CVolString>(_T(""));
+        @ LPVOID lpBuffer =  GlobalLock(hObj);
+        @ if(lpBuffer == NULL) return @an<CVolString>(_T(""));
+        // @ UINT memSize = LocalSize(hObj);
+        @ @an<CVolString> str((LPCTSTR)lpBuffer);
+        @ GlobalUnlock(hObj);
+        剪辑版_关闭 ()
+        @ return str;
+
+    }
+
+    方法 剪辑版_置字节集 <公开 静态 类型 = 逻辑型>
+    参数 要设置的内容 <类型 = 字节集类>
+    参数 剪辑版格式 <类型 = 整数 注释 = "如果不填写，则会注册默认 CVolMem格式 的剪辑版数据" @默认值 = 0>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        如果 (剪辑版格式 == 0)
+        {
+            剪辑版格式 = 剪辑版_注册自定义格式 ("CVolMem")
+        }
+        @ SIZE_T memSize =  @<要设置的内容>.GetSize();
+        @ HANDLE hGlobalMemory = GlobalAlloc(GHND,memSize); // 分配内存
+        @ if(hGlobalMemory == NULL) return FALSE;
+        @ LPBYTE lpGlobalMemory = (LPBYTE)GlobalLock(hGlobalMemory); // 锁定内存
+        @ CopyMemory(lpGlobalMemory,@<要设置的内容>.GetPtr(),@<要设置的内容>.GetSize());
+        @ GlobalUnlock(hGlobalMemory); // 锁定内存块解锁
+        如果 (剪辑版_打开 (窗口句柄) == 假)
+        {
+            返回 (假)
+        }
+        // 剪辑版_清空 ()
+        @ ::SetClipboardData(@<剪辑版格式>, hGlobalMemory); // 将内存中的数据放置到剪贴板
+        剪辑版_关闭 ()
+        返回 (真)
+
+
+    }
+
+    方法 剪辑版_置文本A <公开 静态 类型 = 逻辑型>
+    参数 要设置的内容 <类型 = 字节集类 注释 = "用户自行确保 是以0结尾的 多字节集文本">
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        @ SIZE_T memSize =  @<要设置的内容>.GetSize();
+        @ HANDLE hGlobalMemory = GlobalAlloc(GHND,memSize); // 分配内存
+        @ if(hGlobalMemory == NULL) return FALSE;
+        @ LPBYTE lpGlobalMemory = (LPBYTE)GlobalLock(hGlobalMemory); // 锁定内存
+        @ CopyMemory(lpGlobalMemory,@<要设置的内容>.GetPtr(),@<要设置的内容>.GetSize());
+        @ GlobalUnlock(hGlobalMemory); // 锁定内存块解锁
+        @ if(@<窗口句柄> == 0)
+        @ {
+        @   @<窗口句柄> = (@dt<变整数>)::GetDesktopWindow ();
+        @ }
+        如果 (剪辑版_打开 (窗口句柄) == 假)
+        {
+            返回 (假)
+        }
+        @ ::SetClipboardData( CF_TEXT, hGlobalMemory); // 将内存中的数据放置到剪贴板
+        剪辑版_关闭 ()
+        返回 (真)
+
+    }
+
+    方法 剪辑版_置文本 <公开 静态 类型 = 逻辑型>
+    参数 要设置的内容 <类型 = 文本型>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        变量 临时字节集 <类型 = 字节集类>
+        临时字节集 = 文本到字节集 (要设置的内容)
+        @ SIZE_T memSize =  @<临时字节集>.GetSize() +2;
+        @ HANDLE hGlobalMemory = GlobalAlloc(GHND,memSize); // 分配内存
+        @ if(hGlobalMemory == NULL) return FALSE;
+        @ LPBYTE lpGlobalMemory = (LPBYTE)GlobalLock(hGlobalMemory); // 锁定内存
+        @ CopyMemory(lpGlobalMemory,@<临时字节集>.GetPtr(),@<临时字节集>.GetSize());
+        @ GlobalUnlock(hGlobalMemory); // 锁定内存块解锁
+        @ if(@<窗口句柄> == 0)
+        @ {
+        @   @<窗口句柄> = (@dt<变整数>)::GetDesktopWindow ();
+        @ }
+        如果 (剪辑版_打开 (窗口句柄) == 假)
+        {
+            返回 (假)
+        }
+        @ ::SetClipboardData(CF_UNICODETEXT, hGlobalMemory); // 将内存中的数据放置到剪贴板
+        剪辑版_关闭 ()
+        返回 (真)
+
+    }
+
+    #
+}
+
+类 剪辑版_全局类 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # #define Clipboard_for(hWnd,out_nfomat) \
+    # for(OpenClipboard((HWND)hWnd),out_nfomat = EnumClipboardFormats(0);(!out_nfomat?CloseClipboard():0) ,out_nfomat; out_nfomat = EnumClipboardFormats(out_nfomat) )
+    # <> </include>
+    # @end
+    #
+
+    方法 打开 <静态 类型 = 逻辑型 注释 = "暂时用不到" @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数 @默认值 = 0>
+    {
+        @ OpenClipboard((HWND)@<窗口句柄>)
+    }
+
+    方法 关闭 <静态 类型 = 逻辑型 注释 = "暂时用不到" @嵌入式方法 = "">
+    {
+        @ CloseClipboard()
+    }
+
+    方法 删除监视器 <公开 静态 注释 = "函数从剪贴板查看器链中删除指定的窗口。" @嵌入式方法 = "">
+    参数 要删除的窗口句柄 <类型 = 变整数>
+    参数 下一个窗口句柄 <类型 = 变整数>
+    {
+        @ ChangeClipboardChain((HWND)@<要删除的窗口句柄>,(HWND)@<下一个窗口句柄>)
+    }
+
+    方法 取格式数量 <公开 静态 类型 = 整数 注释 = "可以不用调用 剪辑版_打开" @嵌入式方法 = "">
+    {
+        @ CountClipboardFormats()
+    }
+
+    方法 清空 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 要清空的窗口句柄 <类型 = 变整数 @默认值 = 0>
+    {
+        @ OpenClipboard((HWND)@<要清空的窗口句柄>);
+        @ EmptyClipboard();
+        @ CloseClipboard()
+    }
+
+    方法 枚举格式 <公开 静态 @嵌入式方法 = "name = Clipboard_for\nhas_body = true">
+    参数 用来保存当前剪辑版可用格式 <类型 = 整数 "" = 用来保存可用剪辑版格式>
+    参数 指定剪辑版窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        @ Clipboard_for(@<指定剪辑版窗口句柄>,@<用来保存当前剪辑版可用格式>)
+    }
+
+    方法 取所属窗口句柄 <公开 静态 类型 = 变整数 注释 = "取剪贴板当前所有者的窗口句柄" 返回值注释 = "返回 剪辑版_全局类 当前所属的窗口句柄" @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>) GetClipboardOwner()
+    }
+
+    方法 取监视窗口句柄 <公开 静态 注释 = "返回监视窗口链中的 第一个窗口句柄" @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>)GetClipboardViewer()
+    }
+
+    方法 取队列号 <公开 静态 类型 = 整数 注释 = "函数检索当前窗口站的剪贴板序列号。" @嵌入式方法 = "">
+    {
+        @ (INT)GetClipboardSequenceNumber()
+    }
+
+    方法 取格式名称 <公开 静态 类型 = 文本型 注释 = "可以不用调用 剪辑版_打开" 折叠 @禁止流程检查 = 真>
+    参数 剪辑版格式 <类型 = 整数>
+    {
+        @ TCHAR *StrClipboardFormats[18]={
+        @ _T ("CF_UNKONW"),
+        @  _T("CF_TEXT"),
+        @  _T("CF_BITMAP"),
+        @  _T("CF_METAFILEPICT"),
+        @  _T("CF_SYLK"),
+        @  _T("CF_DIF"),
+        @  _T("CF_TIFF"),
+        @  _T("CF_OEMTEXT"),
+        @  _T("CF_DIB"),
+        @  _T("CF_PALETTE"),
+        @  _T("CF_PENDATA"),
+        @  _T("CF_RIFF"),
+        @  _T("CF_WAVE"),
+        @  _T("CF_UNICODETEXT"),
+        @  _T("CF_ENHMETAFILE"),
+        @  _T("CF_HDROP"),
+        @  _T("CF_LOCALE"),
+        @ _T ("CF_DIBV5")
+        @ };
+        @ if(@<剪辑版格式> <= 18)
+        @   return StrClipboardFormats[@<剪辑版格式>];
+        // #define CF_OWNERDISPLAY     0x0080
+        // #define CF_DSPTEXT          0x0081
+        // #define CF_DSPBITMAP        0x0082
+        // #define CF_DSPMETAFILEPICT  0x0083
+        // #define CF_DSPENHMETAFILE   0x008E
+        @ if(@<剪辑版格式> == CF_OWNERDISPLAY)
+        @   return _T("CF_OWNERDISPLAY");
+        @ else if(@<剪辑版格式> == CF_DSPTEXT)
+        @   return _T("CF_DSPTEXT");
+        @ else if(@<剪辑版格式> == CF_DSPBITMAP)
+        @   return _T("CF_DSPBITMAP");
+        @ else if(@<剪辑版格式> == CF_DSPMETAFILEPICT)
+        @   return _T("CF_DSPMETAFILEPICT");
+        @ else if(@<剪辑版格式> == CF_DSPENHMETAFILE)
+        @   return _T("CF_DSPENHMETAFILE");
+
+        @ TCHAR buffer[1024] = {0};
+        @ GetClipboardFormatName(@<剪辑版格式>,buffer,1024);
+        @ return buffer;
+    }
+
+    方法 取打开剪辑版窗口句柄 <公开 静态 类型 = 变整数 注释 = "当前打开剪贴板的窗口的句柄。" @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>) GetOpenClipboardWindow();
+    }
+
+    方法 "//剪辑版_是否存在格式数据" <公开 静态 类型 = 逻辑型 注释 = "可以不用调用 剪辑版_打开" @嵌入式方法 = "">
+    参数 剪辑版格式 <类型 = 整数>
+    {
+        @ IsClipboardFormatAvailable(@<剪辑版格式>)
+    }
+
+    方法 是否存在指定格式数据 <公开 静态 类型 = 整数 注释 = "如果存在 则返回指定格式的 整数标记，否则返回0">
+    参数 格式文本 <类型 = 文本型 注释 = "例如 \"VolNEPrgClipFormat\"  或者 \"CF_UNICODETEXT\" 等等">
+    参数 剪辑版窗口句柄 <类型 = 变整数 @默认值 = 0>
+    {
+        变量 当前剪辑版可用格式 <类型 = 整数>
+        剪辑版_全局类.枚举格式 (当前剪辑版可用格式, 剪辑版窗口句柄)
+        {
+            如果 (剪辑版_全局类.取格式名称 (当前剪辑版可用格式) == 格式文本)
+            {
+                返回 (当前剪辑版可用格式)
+            }
+        }
+        返回 (0)
+    }
+
+    方法 取火山格式字节集 <公开 静态 类型 = 字节集类 折叠>
+    {
+        变量 剪辑版格式 <类型 = 整数>
+        变量 返回值 <类型 = 字节集类>
+        剪辑版格式 = 剪辑版_全局类.是否存在指定格式数据 ("VolNESrcClip")
+        如果 (剪辑版格式 == 0)
+        {
+            返回 (返回值)
+        }
+        返回 (剪辑版_全局类.取字节集 (剪辑版格式))
+    }
+
+    方法 置火山格式字节集 <公开 静态 类型 = 逻辑型>
+    参数 要设置的字节集 <类型 = 字节集类>
+    {
+        变量 剪辑版格式 <类型 = 整数>
+        剪辑版格式 = 剪辑版_全局类.注册自定义格式 ("VolNESrcClip")
+        返回 (剪辑版_全局类.置字节集 (要设置的字节集, 剪辑版格式))
+    }
+
+    方法 注册自定义格式 <公开 静态 类型 = 整数 注释 = "可以不用调用 剪辑版_打开" 折叠 @嵌入式方法 = "">
+    参数 自定义格式文本 <类型 = 文本型>
+    {
+        @ RegisterClipboardFormat(@<自定义格式文本>)
+
+    }
+
+    方法 置监视窗口 <公开 静态 类型 = 变整数 注释 = "如果函数成功，返回值将标识剪贴板查看器链中的下一个窗口。" 注释 = "如果发生错误或剪贴板查看器链中没有其他窗口，则返回值为空。"
+            注释 = "要获取扩展错误信息，请调用GetLastError。" @嵌入式方法 = "">
+    参数 新监视窗口句柄 <类型 = 变整数>
+    {
+        @ (@dt<变整数>)SetClipboardViewer((HWND)@<新监视窗口句柄>)
+    }
+
+    方法 取字节集 <公开 静态 类型 = 字节集类 折叠 @禁止流程检查 = 真>
+    参数 剪辑版格式 <类型 = 整数 注释 = "如果不填写格式，则使用 CVolMem 格式的数据" @默认值 = 0>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        变量 空字节集 <类型 = 字节集类>
+        如果 (剪辑版_全局类.打开 (窗口句柄) == 假)
+        {
+            返回 (空字节集)
+        }
+        如果 (剪辑版格式 == 0)
+        {
+            剪辑版格式 = 剪辑版_全局类.注册自定义格式 ("CVolMem")
+        }
+        @ HGLOBAL hObj = GetClipboardData(@<剪辑版格式>);
+        @  if(hObj == NULL) return @an<CVolMem>();
+        @ LPVOID lpBuffer =  GlobalLock(hObj);
+        @ if(lpBuffer == NULL) return @an<CVolMem>();
+        @ SIZE_T memSize = LocalSize(hObj);
+        @ @an<CVolMem> memBuf((BYTE*)lpBuffer,memSize);
+        @ GlobalUnlock(hObj);
+        剪辑版_全局类.关闭 ()
+        @ return memBuf;
+
+    }
+
+    方法 取文本A <公开 静态 类型 = 字节集类 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        变量 空字节集 <类型 = 字节集类>
+        如果 (剪辑版_全局类.打开 (窗口句柄) == 假)
+        {
+            返回 (空字节集)
+        }
+        @ HGLOBAL hObj = GetClipboardData(CF_TEXT);
+        @  if(hObj == NULL) return @an<CVolMem>();
+        @ LPVOID lpBuffer =  GlobalLock(hObj);
+        @ if(lpBuffer == NULL) return @<空字节集>;
+        @ UINT memSize = LocalSize(hObj);
+        @ @an<CVolMem> memBuf((BYTE*)lpBuffer,memSize);
+        @ GlobalUnlock(hObj);
+        剪辑版_全局类.关闭 ()
+        @ return memBuf;
+
+    }
+
+    方法 取文本 <公开 静态 类型 = 文本型 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        如果 (剪辑版_全局类.打开 (窗口句柄) == 假)
+        {
+            返回 ("")
+        }
+        @ HGLOBAL hObj = GetClipboardData(CF_UNICODETEXT);
+        @  if(hObj == NULL) return @an<CVolString>(_T(""));
+        @ LPVOID lpBuffer =  GlobalLock(hObj);
+        @ if(lpBuffer == NULL) return @an<CVolString>(_T(""));
+        // @ UINT memSize = LocalSize(hObj);
+        @ @an<CVolString> str((LPCTSTR)lpBuffer);
+        @ GlobalUnlock(hObj);
+        剪辑版_全局类.关闭 ()
+        @ return str;
+
+    }
+
+    方法 置字节集 <公开 静态 类型 = 逻辑型 折叠>
+    参数 要设置的内容 <类型 = 字节集类>
+    参数 剪辑版格式 <类型 = 整数 注释 = "如果不填写，则会注册默认 CVolMem格式 的剪辑版数据" @默认值 = 0>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        如果 (剪辑版格式 == 0)
+        {
+            剪辑版格式 = 剪辑版_全局类.注册自定义格式 ("CVolMem")
+        }
+        @ SIZE_T memSize =  @<要设置的内容>.GetSize();
+        @ HANDLE hGlobalMemory = GlobalAlloc(GHND,memSize); // 分配内存
+        @ if(hGlobalMemory == NULL) return FALSE;
+        @ LPBYTE lpGlobalMemory = (LPBYTE)GlobalLock(hGlobalMemory); // 锁定内存
+        @ CopyMemory(lpGlobalMemory,@<要设置的内容>.GetPtr(),@<要设置的内容>.GetSize());
+        @ GlobalUnlock(hGlobalMemory); // 锁定内存块解锁
+        如果 (剪辑版_全局类.打开 (窗口句柄) == 假)
+        {
+            返回 (假)
+        }
+        // 剪辑版_清空 ()
+        @ ::SetClipboardData(@<剪辑版格式>, hGlobalMemory); // 将内存中的数据放置到剪贴板
+        剪辑版_全局类.关闭 ()
+        返回 (真)
+
+
+    }
+
+    方法 置文本A <公开 静态 类型 = 逻辑型 折叠>
+    参数 要设置的内容 <类型 = 字节集类 注释 = "用户自行确保 是以0结尾的 多字节集文本">
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        @ SIZE_T memSize =  @<要设置的内容>.GetSize();
+        @ HANDLE hGlobalMemory = GlobalAlloc(GHND,memSize); // 分配内存
+        @ if(hGlobalMemory == NULL) return FALSE;
+        @ LPBYTE lpGlobalMemory = (LPBYTE)GlobalLock(hGlobalMemory); // 锁定内存
+        @ CopyMemory(lpGlobalMemory,@<要设置的内容>.GetPtr(),@<要设置的内容>.GetSize());
+        @ GlobalUnlock(hGlobalMemory); // 锁定内存块解锁
+        @ if(@<窗口句柄> == 0)
+        @ {
+        @   @<窗口句柄> = (@dt<变整数>)::GetDesktopWindow ();
+        @ }
+        如果 (剪辑版_全局类.打开 (窗口句柄) == 假)
+        {
+            返回 (假)
+        }
+        @ ::SetClipboardData( CF_TEXT, hGlobalMemory); // 将内存中的数据放置到剪贴板
+        剪辑版_全局类.关闭 ()
+        返回 (真)
+
+    }
+
+    方法 置文本 <公开 静态 类型 = 逻辑型 折叠>
+    参数 要设置的内容 <类型 = 文本型>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        变量 临时字节集 <类型 = 字节集类>
+        临时字节集 = 文本到字节集 (要设置的内容)
+        @ SIZE_T memSize =  @<临时字节集>.GetSize() +2;
+        @ HANDLE hGlobalMemory = GlobalAlloc(GHND,memSize); // 分配内存
+        @ if(hGlobalMemory == NULL) return FALSE;
+        @ LPBYTE lpGlobalMemory = (LPBYTE)GlobalLock(hGlobalMemory); // 锁定内存
+        @ CopyMemory(lpGlobalMemory,@<临时字节集>.GetPtr(),@<临时字节集>.GetSize());
+        @ GlobalUnlock(hGlobalMemory); // 锁定内存块解锁
+        @ if(@<窗口句柄> == 0)
+        @ {
+        @   @<窗口句柄> = (@dt<变整数>)::GetDesktopWindow ();
+        @ }
+        如果 (剪辑版_全局类.打开 (窗口句柄) == 假)
+        {
+            返回 (假)
+        }
+        @ ::SetClipboardData(CF_UNICODETEXT, hGlobalMemory); // 将内存中的数据放置到剪贴板
+        剪辑版_全局类.关闭 ()
+        返回 (真)
+
+    }
+
+    #
+}

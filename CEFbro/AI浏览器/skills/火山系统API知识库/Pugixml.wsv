@@ -1,0 +1,1847 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.pugixml\"" "" "">
+
+类 pugi节点值 <公开 折叠>
+{
+
+    # bool xml_text::set(const char_t* rhs);
+    # bool xml_text::set(int rhs);
+    # bool xml_text::set(unsigned int rhs);
+    # bool xml_text::set(long rhs);
+    # bool xml_text::set(unsigned long rhs);
+    # bool xml_text::set(double rhs);
+    # bool xml_text::set(float rhs);
+    # bool xml_text::set(bool rhs);
+    # bool xml_text::set(long long rhs);
+    # bool xml_text::set(unsigned long long rhs);
+    # @begin
+    # <> <include>
+    #
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_data = objCopyFrom.m_data;
+    # }
+    #
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const
+    # {
+    #     return m_data == objCompare.m_data;
+    # }
+    # @sn<current_class>(pugi::xml_text& o)
+    # {
+    #     m_data = o;
+    # }
+    # pugi::xml_text& data()
+    # {
+    #     return m_data;
+    # }
+    # pugi::xml_text m_data;
+    # <> </include>
+    # @end
+    #
+
+    方法 置文本 <公开 @嵌入式方法 = "">
+    参数 内容 <类型 = 文本型>
+    {
+        @ @sn<this>.data().set(@<内容>)
+    }
+
+    方法 置整数 <公开 折叠 @嵌入式方法 = "">
+    参数 内容 <类型 = 整数>
+    {
+        @ @sn<this>.data().set(@<内容>)
+    }
+
+    方法 置逻辑型 <公开 折叠 @嵌入式方法 = "">
+    参数 内容 <类型 = 逻辑型>
+    {
+        @ @sn<this>.data().set(@<内容>)
+    }
+
+    方法 置小数 <公开 折叠 @嵌入式方法 = "">
+    参数 内容 <类型 = 小数>
+    {
+        @ @sn<this>.data().set(@<内容>)
+    }
+
+    # @begin
+    # <> <include>
+    # #ifdef PUGIXML_HAS_LONG_LONG
+    #     #define set_text_value_INT64(default_value,menber_xml_text_data)  menber_xml_text_data.set(default_value)
+    # #else
+    #     #define set_text_value_INT64(default_value)  menber_xml_text_data.set((double)default_value)
+    # #endif
+    # <> </include>
+    # @end
+    #
+
+    方法 置长整数 <公开 折叠 @嵌入式方法 = "">
+    参数 内容 <类型 = 长整数>
+    {
+        @ set_text_value_INT64(@<内容>,@sn<this>.data())
+    }
+
+    #
+    #
+
+    方法 取文本 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 默认值 <类型 = 文本型 注释 = "如果没有属性，那么将返回这个默认值" @默认值 = "">
+    {
+        @ @an<CVolString>( @sn<this>.data().as_string(@<默认值>) )
+    }
+
+    方法 取逻辑型 <公开 折叠 @嵌入式方法 = "">
+    参数 默认值 <类型 = 逻辑型 注释 = "如果没有属性，那么将返回这个默认值" @默认值 = 假>
+    {
+        @ @sn<this>.data().as_bool(@<默认值>)
+
+    }
+
+    方法 取整数 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 默认值 <类型 = 整数 注释 = "如果没有属性，那么将返回这个默认值" @默认值 = 0>
+    {
+        @ @sn<this>.data().as_int(@<默认值>)
+    }
+
+    方法 取小数 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 默认值 <类型 = 小数 注释 = "如果没有属性，那么将返回这个默认值" @默认值 = 0>
+    {
+        @ @sn<this>.data().as_double(@<默认值>)
+    }
+
+    方法 取长整数 <公开 类型 = 长整数 折叠 @嵌入式方法 = "">
+    参数 默认值 <类型 = 长整数 注释 = "如果没有属性，那么将返回这个默认值" @默认值 = 0>
+    {
+        @ (INT64)get_text_value_INT64( @sn<this>.data(),@<默认值>)
+    }
+
+    #
+    #
+}
+
+类 xml_attribute <公开 @模板基础类 = 真>
+{
+
+    # xml_attribute xml_node::first_attribute() const;
+    # xml_attribute xml_node::last_attribute() const;
+    # xml_attribute xml_attribute::next_attribute() const;
+    # xml_attribute xml_attribute::previous_attribute() const;
+    #
+
+    方法 取首属性 <公开 类型 = pugi属性 折叠 @嵌入式方法 = "">
+    {
+        @ @dt<pugi属性>( @sn<this>.data().first_child() )
+    }
+
+    方法 取尾属性 <公开 类型 = pugi属性 折叠 @嵌入式方法 = "">
+    {
+        @ @dt<pugi属性>( @sn<this>.data().last_child() )
+    }
+
+    方法 取下一个兄弟属性 <公开 类型 = pugi属性 @嵌入式方法 = "">
+    {
+        @ @dt<pugi属性>( @sn<this>.data().next_attribute() )
+    }
+
+    方法 取上一个兄弟属性 <公开 类型 = pugi属性 @嵌入式方法 = "">
+    {
+        @ @dt<pugi属性>( @sn<this>.data().previous_attribute())
+    }
+
+    方法 取属性名 <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ @an<CVolString>( @sn<this>.data().name() )
+    }
+
+    方法 取属性值_文本型 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 默认值 <类型 = 文本型 注释 = "如果没有属性，那么将返回这个默认值" @默认值 = "">
+    {
+        @ @an<CVolString>( @sn<this>.data().as_string(@<默认值>) )
+    }
+
+    方法 取属性值_逻辑型 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 默认值 <类型 = 逻辑型 注释 = "如果没有属性，那么将返回这个默认值" @默认值 = 假>
+    {
+        @ @sn<this>.data().as_bool(@<默认值>)
+
+    }
+
+    方法 取属性值_整数型 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 默认值 <类型 = 整数 注释 = "如果没有属性，那么将返回这个默认值" @默认值 = 0>
+    {
+        @ @sn<this>.data().as_int(@<默认值>)
+    }
+
+    方法 取属性值_小数型 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 默认值 <类型 = 小数 注释 = "如果没有属性，那么将返回这个默认值" @默认值 = 0>
+    {
+        @ @sn<this>.data().as_double(@<默认值>)
+    }
+
+    # double as_double(double def = 0) const;
+    # #ifndef PUGIXML_HAS_LONG_LONG
+    # # if __cplusplus >= 201103
+    # #  define PUGIXML_HAS_LONG_LONG
+    # # elif defined(_MSC_VER) && _MSC_VER >= 1400
+    # #  define PUGIXML_HAS_LONG_LONG
+    # # endif
+    # #endif
+    # #ifdef PUGIXML_HAS_LONG_LONG
+    #   long long as_llong(long long def = 0) const;
+    #   unsigned long long as_ullong(unsigned long long def = 0) const;
+    # #endif
+    # @begin
+    # <> <include>
+    # #ifdef PUGIXML_HAS_LONG_LONG
+    #     #define attribute_value_INT64(attribute,default_value)  attribute.as_llong(default_value)
+    # #else
+    #     #define attribute_value_INT64(attribute,default_value)  (INT64)attribute.as_double(default_value)
+    # #endif
+    # <> </include>
+    # @end
+
+    方法 取属性值_长整数 <公开 类型 = 长整数 @嵌入式方法 = "">
+    参数 默认值 <类型 = 长整数 注释 = "如果没有属性，那么将返回这个默认值" @默认值 = 0>
+    {
+        @ ( _ttoi64( @sn<this>.data().as_string() )+ @<默认值> ) 
+
+    }
+
+    #
+    # //====
+    #
+
+    方法 置文本 <公开 @嵌入式方法 = "">
+    参数 内容 <类型 = 文本型>
+    {
+        @ @sn<this>.data().set_value(@<内容>)
+    }
+
+    方法 置整数 <公开 @嵌入式方法 = "">
+    参数 内容 <类型 = 整数>
+    {
+        @ @sn<this>.data().set_value(@<内容>)
+    }
+
+    方法 置逻辑型 <公开 @嵌入式方法 = "">
+    参数 内容 <类型 = 逻辑型>
+    {
+        @ @sn<this>.data().set_value(@<内容>)
+    }
+
+    方法 置小数 <公开 @嵌入式方法 = "">
+    参数 内容 <类型 = 小数>
+    {
+        @ @sn<this>.data().set_value(@<内容>)
+    }
+
+    # @begin
+    # <> <include>
+    # #ifdef PUGIXML_HAS_LONG_LONG
+    #     #define set_value_INT64(default_value,menber_xml_text_data)  menber_xml_text_data.set_value(default_value)
+    # #else
+    #     #define set_value_INT64(default_value)  menber_xml_text_data.set_value((double)default_value)
+    # #endif
+    # <> </include>
+    # @end
+    #
+
+    方法 置长整数 <公开 @嵌入式方法 = "">
+    参数 内容 <类型 = 长整数>
+    {
+        @ set_value_INT64(@<内容>,@sn<this>.data())
+    }
+
+    方法 取哈希值 <公开 类型 = 变整数 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().hash_value()
+
+    }
+
+    #
+}
+
+类 pugi节点类型 <公开 折叠 @常量类 = 整数>
+{
+    常量 空 <公开 值 = 0 注释 = " (null)">
+    常量 文档 <公开 值 = 1>
+    常量 元素 <公开 值 = 2 注释 = "\'<node/>\'">
+    常量 pcdata <公开 值 = 3 注释 = "\'text\'">
+    常量 cdata <公开 值 = 4 注释 = "<![CDATA[text]]>\'">
+    常量 注释 <公开 值 = 5 注释 = "<!-- text -->\'">
+    常量 处理指令 <公开 值 = 6 注释 = "<?name?>\'">
+    常量 声明 <公开 值 = 7 注释 = "\'<?xml version=\"1.0\"?>\'">
+    常量 文档类型 <公开 值 = 8 注释 = "\'<!DOCTYPE doc>\'">
+
+    #   node_null,   // Empty (null) node handle
+    #   node_document,  // A document tree's absolute root
+    #   node_element,  // Element tag, i.e. '<node/>'
+    #   node_pcdata,  // Plain character data, i.e. 'text'
+    #   node_cdata,   // Character data, i.e. '<![CDATA[text]]>'
+    #   node_comment,  // Comment tag, i.e. '<!-- text -->'
+    #   node_pi,   // Processing instruction, i.e. '<?name?>'
+    #   node_declaration, // Document declaration, i.e. '<?xml version="1.0"?>'
+    #   node_doctype  // Document type declaration, i.e. '<!DOCTYPE doc>'
+    #
+}
+
+类 xml_node <公开 注释 = "节点基础模板" @模板基础类 = 真>
+{
+
+    #
+    # xml_node xml_node::parent() const;
+    # xml_node xml_node::first_child() const;
+    # xml_node xml_node::last_child() const;
+    # xml_node xml_node::next_sibling() const;
+    # xml_node xml_node::previous_sibling() const;
+
+    方法 取节点类型文本 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        @ const TCHAR* node_types[] =
+        @ {
+        @ _T("null"), _T("document"), _T("element"), _T("pcdata"),_T( "cdata"), _T("comment"), _T("pi"), _T("declaration")
+        @ };
+        @ if (data().type() < sizeof (node_types))
+        @    return @an<CVolString>(node_types[data().type()] );
+        @ else
+        @    return @an<CVolString>(_T("null"));
+
+    }
+
+    方法 取节点类型整数 <公开 折叠 @禁止流程检查 = 真>
+    {
+        @ data().type()
+
+    }
+
+    方法 取父节点 <公开 类型 = pugi节点 注释 = "函数返回节点的父节点；除文档外，所有非空节点都具有非空父节点" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().parent()
+    }
+
+    方法 取首子节点 <公开 类型 = pugi节点 折叠 @嵌入式方法 = "">
+    {
+        @ @dt<pugi节点>( @sn<this>.data().first_child())
+    }
+
+    方法 取尾子节点 <公开 类型 = pugi节点 折叠 @嵌入式方法 = "">
+    {
+        @ @dt<pugi节点>(@sn<this>.data().last_child())
+    }
+
+    方法 取第一个子节点 <公开 类型 = pugi节点 注释 = "和 取首子节点 一模一样" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().first_child()
+    }
+
+    方法 取最后一个子节点 <公开 类型 = pugi节点 注释 = "和 取尾子节点 一模一样" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().last_child()
+    }
+
+    方法 取下一个兄弟节点 <公开 类型 = pugi节点 @嵌入式方法 = "">
+    {
+        @ @dt<pugi节点>( @sn<this>.data().next_sibling() )
+    }
+
+    方法 取上一个兄弟节点 <公开 类型 = pugi节点 @嵌入式方法 = "">
+    {
+        @ @dt<pugi节点>( @sn<this>.data().previous_sibling() )
+    }
+
+    #   
+    #   xml_node next_sibling(const char_t* name) const;
+    #   xml_node previous_sibling(const char_t* name) const;
+    #
+
+    方法 取下一个兄弟节点_指定节点名 <公开 类型 = pugi节点 @嵌入式方法 = "">
+    参数 节点名称 <类型 = 文本型>
+    {
+        @ @dt<pugi节点>( @sn<this>.data().next_sibling(@<节点名称>) )
+    }
+
+    方法 取上一个兄弟节点_指定节点名 <公开 类型 = pugi节点 注释 = "只能用做元素节点的操作" @嵌入式方法 = "">
+    参数 节点名称 <类型 = 文本型>
+    {
+        @ @dt<pugi节点>( @sn<this>.data().previous_sibling(@<节点名称>) )
+    }
+
+    #
+    #
+    # @begin
+    # <> <include>
+    #  #define pugui_for(pugui_node_recv_data,this_member_data) \
+    #  for (pugui_node_recv_data.data() = this_member_data.first_child(); pugui_node_recv_data.data(); pugui_node_recv_data.data() =  pugui_node_recv_data.data().next_sibling())
+    # <> </include>
+    # @end
+
+    方法 遍历子节点 <公开 @嵌入式方法 = "name = pugi_node_for\nhas_body = true">
+    参数 用来保存节点值 <类型 = pugi节点 注释 = "它是一个循环，循环一次则 赋值给 用来保存节点值">
+    {
+        @ pugui_for(@<用来保存节点值>,@sn<this>.data())
+
+    }
+
+    # @begin
+    # <> <include>
+    #  #define pugui_for_attribute(pugui_attribute_recv_data,this_node_data) \
+    #  for (pugui_attribute_recv_data.data() = this_node_data.first_attribute(); pugui_attribute_recv_data.data(); pugui_attribute_recv_data.data() =  pugui_attribute_recv_data.data().next_attribute())
+    # <> </include>
+    # @end
+    #
+
+    方法 遍历属性 <公开 @嵌入式方法 = "name = pugi_attribute_for\nhas_body = true">
+    参数 用来保存属性值 <类型 = pugi属性>
+    {
+        @ pugui_for_attribute(@<用来保存属性值>,@sn<this>.data())
+    }
+
+    方法 取子节点 <公开 类型 = pugi节点 @嵌入式方法 = "">
+    参数 节点名称 <类型 = 文本型>
+    {
+        @ @dt<pugi节点>( @sn<this>.data().child(@<节点名称>))
+
+    }
+
+    方法 是否为空 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @  ((bool)@sn<this>.data())
+    }
+
+    方法 取子元素节点值_文本型 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 节点名称 <类型 = 文本型>
+    {
+        @ @an<CVolString>( @sn<this>.data().child_value(@<节点名称>) )
+    }
+
+    方法 取数据节点值 <公开 类型 = 文本型 注释 = "用于 cdata pcdata comment 等数据节点" @嵌入式方法 = "">
+    {
+        @ @an<CVolString>( @sn<this>.data().value() )
+
+    }
+
+    方法 置数据节点值 <公开 注释 = "用于 cdata pcdata comment 等数据节点" @嵌入式方法 = "">
+    参数 节点值 <类型 = 文本型>
+    {
+        @ @sn<this>.data().set_value(@<节点值>)
+    }
+
+    方法 取元素节点值 <公开 类型 = pugi节点值 注释 = "只能" @嵌入式方法 = "">
+    {
+        @ @dt<pugi节点值>( @sn<this>.data().text())
+
+    }
+
+    方法 取元素节点名称 <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ @an<CVolString>( @sn<this>.data().name() )
+
+    }
+
+    方法 取属性 <公开 类型 = pugi属性 @嵌入式方法 = "">
+    参数 属性名称 <类型 = 文本型>
+    {
+        @ @dt<pugi属性>(@sn<this>.data().attribute(@<属性名称>) )
+
+    }
+
+    # xml_attribute attribute(const char_t* name) const;
+    #
+    # //  xml_attribute first_attribute() const;
+    # //  xml_attribute last_attribute() const;
+
+    方法 取属性_第一个 <公开 类型 = pugi属性 @嵌入式方法 = "">
+    {
+        @ @dt<pugi属性>( @sn<this>.data().first_attribute())
+    }
+
+    方法 取属性_最后一个 <公开 类型 = pugi属性 @嵌入式方法 = "">
+    {
+        @ @dt<pugi属性>( @sn<this>.data().last_attribute())
+    }
+
+    # //==节点修改方法===
+
+    方法 置节点名称 <公开 @嵌入式方法 = "">
+    参数 节点名称 <类型 = 文本型>
+    {
+        @ @sn<this>.data().set_name(@<节点名称>)
+    }
+
+    # // 节点属性增加
+    # // xml_attribute xml_node::append_attribute(const char_t* name);
+    # // xml_attribute xml_node::prepend_attribute(const char_t* name);
+    # // xml_attribute xml_node::insert_attribute_after(const char_t* name, const xml_attribute& attr);
+    # // xml_attribute xml_node::insert_attribute_before(const char_t* name, const xml_attribute& attr);
+    #
+
+    方法 加入属性名_到末尾 <公开 类型 = pugi属性 注释 = "返回新加入的属性节点" 折叠 @嵌入式方法 = "">
+    参数 属性名 <类型 = 文本型>
+    {
+        @ @dt<pugi属性>( @sn<this>.data().append_attribute(@<属性名>) )
+    }
+
+    方法 加入属性名_到头部 <公开 类型 = pugi属性 注释 = "返回新加入的属性节点" 折叠 @嵌入式方法 = "">
+    参数 属性名 <类型 = 文本型>
+    {
+        @ @dt<pugi属性>( @sn<this>.data().prepend_attribute(@<属性名>))
+
+    }
+
+    方法 加入属性_指定属性之前 <公开 类型 = pugi属性 折叠 @嵌入式方法 = "">
+    参数 指定的属性名 <类型 = 文本型>
+    参数 属性值 <类型 = pugi属性>
+    {
+        @ @dt<pugi属性>( @sn<this>.data().insert_attribute_before(@<指定的属性名> ,@<属性值>.data()) )
+    }
+
+    方法 加入属性_指定属性之后 <公开 类型 = pugi属性 折叠 @嵌入式方法 = "">
+    参数 指定的属性名 <类型 = 文本型>
+    参数 属性值 <类型 = pugi属性>
+    {
+        @ @dt<pugi属性>( @sn<this>.data().insert_attribute_before(@<指定的属性名>,@<属性值>.data()) )
+    }
+
+    # 增加子节点
+    # xml_node xml_node::append_child(xml_node_type type = node_element);
+    # xml_node xml_node::prepend_child(xml_node_type type = node_element);
+    # xml_node xml_node::insert_child_after(xml_node_type type, const xml_node& node);
+    # xml_node xml_node::insert_child_before(xml_node_type type, const xml_node& node);
+
+    方法 加入子节点_到尾部_类型 <公开 类型 = pugi节点 注释 = "可以加入 注释节点 元素节点 等等" @嵌入式方法 = "">
+    参数 节点类型 <类型 = pugi节点类型 注释 = "默认增加一个元素节点" @默认值 = pugi节点类型.元素>
+    {
+        @ @dt<pugi节点>( @sn<this>.data().append_child((pugi::xml_node_type)@<节点类型>))
+    }
+
+    方法 加入子节点_到首部_类型 <公开 类型 = pugi节点 注释 = "可以加入 注释节点 元素节点 等等" @嵌入式方法 = "">
+    参数 节点类型 <类型 = pugi节点类型 注释 = "默认增加一个元素节点" @默认值 = pugi节点类型.元素>
+    {
+        @ @dt<pugi节点>( @sn<this>.data().prepend_child((pugi::xml_node_type)@<节点类型>))
+    }
+
+    方法 加入子节点_指定位置之前_类型 <公开 类型 = pugi节点 注释 = "可以加入 注释节点 元素节点 等等 返回新增加的节点" @嵌入式方法 = "">
+    参数 新节点类型 <类型 = pugi节点类型 注释 = "默认增加一个元素节点" @默认值 = pugi节点类型.元素>
+    参数 指定的节点 <类型 = pugi节点>
+    {
+        @ @dt<pugi节点>( @sn<this>.data().insert_child_before(@<新节点类型>),@<指定的节点>.data())
+    }
+
+    方法 加入子节点_指定位置之后_类型 <公开 类型 = pugi节点 注释 = "可以加入 注释节点 元素节点 等等 返回新增加的节点" @嵌入式方法 = "">
+    参数 新节点类型 <类型 = pugi节点类型 注释 = "默认增加一个元素节点" @默认值 = pugi节点类型.元素>
+    参数 指定的节点 <类型 = pugi节点>
+    {
+        @ @dt<pugi节点>( @sn<this>.data().insert_child_after(@<新节点类型>),@<指定的节点>.data())
+    }
+
+    # xml_node xml_node::append_child(const char_t* name);
+    # xml_node xml_node::prepend_child(const char_t* name);
+    # xml_node xml_node::insert_child_after(const char_t* name, const xml_node& node);
+    # xml_node xml_node::insert_child_before(const char_t* name, const xml_node& node);
+
+    方法 加入子元素节点_到头部_名称 <公开 类型 = pugi节点 注释 = "默认加入的是元素节点 element" @嵌入式方法 = "">
+    参数 新节点名称 <类型 = 文本型>
+    {
+        @ @dt<pugi节点>( @sn<this>.data().append_child(@<新节点名称>))
+    }
+
+    方法 加入子元素节点_到尾部_名称 <公开 类型 = pugi节点 注释 = "默认加入的是元素节点 element" @嵌入式方法 = "">
+    参数 新节点名称 <类型 = 文本型>
+    {
+        @ @dt<pugi节点>( @sn<this>.data().append_child(@<新节点名称>))
+    }
+
+    方法 加入子元素节点_指定位置之前_名称 <公开 类型 = pugi节点 注释 = "默认加入的是元素节点 element 返回新增加的节点" @嵌入式方法 = "">
+    参数 新节点名称 <类型 = 文本型 注释 = "默认增加一个元素节点">
+    参数 指定的节点 <类型 = pugi节点>
+    {
+        @ @dt<pugi节点>( @sn<this>.data().insert_child_before(@<新节点名称>),@<指定的节点>.data())
+    }
+
+    方法 加入子元素节点_指定位置之后_名称 <公开 类型 = pugi节点 注释 = "默认加入的是元素节点 element 返回新增加的节点" @嵌入式方法 = "">
+    参数 新节点名称 <类型 = 文本型 注释 = "默认增加一个元素节点">
+    参数 指定的节点 <类型 = pugi节点>
+    {
+        @ @dt<pugi节点>( @sn<this>.data().insert_child_after(@<新节点名称>),@<指定的节点>.data())
+    }
+
+    #
+    # 6.3.删除节点/属性
+    # 如果不希望文档包含某些节点或属性，可以使用以下函数之一删除它：
+    # bool xml_node::remove_attribute(const xml_attribute& a);
+    # bool xml_node::remove_child(const xml_node& n);
+    # remove_attribute从节点的属性列表中移除该属性，并返回操作结果。remove_child从文档中移除具有整个子树(包括所有子节点和属性)的子节点，并返回操作结果。如果下列情况之一为真，则删除失败：
+    #
+    # 调用函数的节点为空；
+    # 要删除的属性/节点为空；
+    # 要删除的属性/节点不在节点的属性/子列表中。
+    #
+    # 删除属性或节点会使指向同一个基础对象的所有句柄无效，并使指向同一对象的所有迭代器无效。删除节点还会使其属性或子节点列表中的所有过去的结束迭代器无效.要确保所有这些句柄和迭代器都不存在，或者在删除属性/节点之后不使用。
+    #
+
+    方法 删除属性 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 要删除的属性 <类型 = pugi属性>
+    {
+        @ @sn<this>.data().remove_attribute(@<要删除的属性>.data())
+
+    }
+
+    方法 删除子节点 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 要删除的节点 <类型 = pugi节点>
+    {
+        @ @sn<this>.data().remove_child(@<要删除的节点>.data())
+
+    }
+
+    # 如果要按属性或子节点的名称删除其名称，则可以使用两个额外的辅助函数：
+    # bool xml_node::remove_attribute(const char_t* name);
+    # bool xml_node::remove_child(const char_t* name);
+    # 这些函数查找具有指定名称的第一个属性或子属性，然后删除它，返回结果。如果没有具有此名称的属性或子属性，则该函数将返回false如果有两个具有给定名称的节点，则只删除第一个节点。如果要删除所有具有指定名称的节点，可以使用如下代码：while (node.remove_child("tool")) ;.
+    #
+
+    方法 删除属性_通过名称 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 要删除的属性名称 <类型 = 文本型>
+    {
+        @ @sn<this>.data().remove_attribute(@<要删除的属性名称>)
+
+    }
+
+    方法 删除子节点_通过名称 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 要删除的属性名称 <类型 = 文本型>
+    {
+        @ @sn<this>.data().remove_child(@<要删除的属性名称>)
+
+    }
+
+    #
+}
+
+类 xml格式 <公开 折叠 @常量类 = 整数>
+{
+    常量 标准格式 <公开 值 = 0x01
+            注释 = " // Indent the nodes that are written to output stream with as many indentation strings as deep the node is in DOM tree. This flag is on by default.">
+    常量 写入bom头 <公开 值 = 0x02 注释 = " // Write encoding-specific BOM to the output stream. This flag is off by default.">
+    常量 原始格式 <公开 值 = 0x04
+            注释 = "// Use raw output mode (no indentation and no line breaks are written). This flag is off by default.">
+    常量 不保存声明 <公开 值 = 0x08
+            注释 = " // Omit default XML declaration even if there is no declaration in the document. This flag is off by default.">
+    常量 没有空格 <公开 值 = 0x10 注释 = " // Don\'t escape attribute values and PCDATA contents. This flag is off by default.">
+    常量 文本格式 <公开 值 = 0x20
+            注释 = " // Open file using text mode in xml_document::save_file. This enables special character (i.e. new-line) conversions on some systems. This flag is off by default.">
+    常量 标准属性 <公开 值 = 0x40
+            注释 = " // Write every attribute on a new line with appropriate indentation. This flag is off by default.">
+    常量 不保存空元素标签 <公开 值 = 0x80
+            注释 = "// Don\'t output empty element tags, instead writing an explicit start and end tag even if there are no children. This flag is off by default.">
+    常量 忽略控制字符 <公开 值 = 0x100
+            注释 = " // Skip characters belonging to range [0; 32) instead of \"&#xNN;\" encoding. This flag is off by default.">
+    常量 属性单引号 <公开 值 = 0x200
+            注释 = " // Use single quotes \' instead of double quotes \" for enclosing attribute values. This flag is off by default.">
+
+    #
+}
+
+类 xml编码 <公开 折叠 @常量类 = 整数>
+{
+    常量 自动 <公开 值 = 0 注释 = "// Auto-detect input encoding using BOM or < / <? detection; use UTF8 if BOM is not found">
+    常量 utf8 <公开 值 = 1 注释 = "// UTF8 encoding">
+    常量 utf16_le <公开 值 = 2 注释 = "// Little-endian UTF16">
+    常量 utf16_be <公开 值 = 3 注释 = "// Big-endian UTF16">
+    常量 utf16 <公开 值 = 4 注释 = " // UTF16 with native endianness">
+    常量 utf32_le <公开 值 = 5 注释 = "// Little-endian UTF32">
+    常量 utf32_be <公开 值 = 6 注释 = "// Big-endian UTF32">
+    常量 utf32 <公开 值 = 7 注释 = "// UTF32 with native endianness">
+    常量 wchar <公开 值 = 8 注释 = "// The same encoding wchar_t has (either UTF16 or UTF32)">
+    常量 latin1 <公开 值 = 9>
+
+    #
+}
+
+类 pugi文档 <公开 基础类 = xml_node @模板实现类 = "" @视窗.预定义宏 = "PUGIXML_WCHAR_MODE"
+        @视窗.外部头文件 = "pugixml\\pugixml-1.10\\src\\pugixml.hpp" @视窗.外部源文件 = "pugixml\\pugixml-1.10\\src\\pugixml.cpp">
+{
+
+    # @begin
+    # <> <include>
+    #
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     @ DEBUG_PRINT ((_T_VOL_DEBUG_OUT_STRING_LEADER + @an<CVolString> (_T("pugui文档 类不支持 = 或者复制构造函数"))).GetText ());
+    #     //m_data = objCopyFrom.m_data;
+    # }
+    #
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const
+    # {
+    #     return m_data == objCompare.m_data;
+    # }
+    #
+    # pugi::xml_document& data()
+    # {
+    #     return m_data;
+    # }
+    #
+    # pugi::xml_document m_data;
+    # <> </include>
+    #
+
+    方法 到字节集 <公开 类型 = 字节集类 注释 = "把节点保存成缓冲区" 折叠 @禁止流程检查 = 真>
+    参数 缩进 <类型 = 文本型 @默认值 = "\t">
+    参数 格式 <类型 = xml格式 @默认值 = xml格式.标准格式>
+    参数 编码 <类型 = xml编码 @默认值 = xml编码.utf8>
+    {
+        @ class CBuffer_Writer: public pugi::xml_writer
+        @ {
+        @ public: 
+        @     virtual void write(const void* data, size_t size) 
+        @     {
+        @         buf.Append ((void*)data,(int)size);
+        @     }
+        @     @dt<字节集类>& data()
+        @     {
+        @         return buf;
+        @     }
+        @     @dt<字节集类> buf;
+        @ };
+        @ CBuffer_Writer bufWriter;
+        @ data().save(bufWriter,@<缩进>,@<格式>,(pugi::xml_encoding)@<编码>);
+        @ return bufWriter.data();
+
+    }
+
+    #
+
+    方法 从资源加载 <公开 类型 = 逻辑型>
+    参数 资源名称 <类型 = 视窗文件资源>
+    {
+        变量 数据 <类型 = 字节集类>
+        数据 = 资源_取文件 (资源名称)
+        返回 (从字节集加载 (数据))
+    }
+
+    方法 从文件加载 <公开 类型 = 逻辑型>
+    参数 文件名称 <类型 = 文本型>
+    {
+        //  xml_parse_result load_file(const char* path, unsigned int options = parse_default, xml_encoding encoding = encoding_auto);
+        //  xml_parse_result load_file(const wchar_t* path, unsigned int options = parse_default, xml_encoding encoding = encoding_auto);
+        @ pugi::xml_parse_result result = data().load_file(@<文件名称>);
+        @ if(!result)
+        @ { 
+        @     DEBUG_PRINT ((_T_VOL_DEBUG_OUT_STRING_LEADER  + (@an<CVolString> (@<文件名称>))+@an<CVolString> ("  ") + @an<CVolString> (result.description()) ).GetText ());
+        @     return false;
+        @ }
+        返回 (真)
+    }
+
+    方法 从文本加载 <公开 类型 = 逻辑型>
+    参数 文件内容 <类型 = 文本型>
+    {
+        // xml_parse_result xml_document::load_string(const char_t* contents, unsigned int options = parse_default);
+        @ pugi::xml_parse_result result = data().load_string((const wchar_t*)@<文件内容>);
+        @ if(!result)
+        @ { 
+        @     DEBUG_PRINT ((_T_VOL_DEBUG_OUT_STRING_LEADER +@an<CVolString>(_T("pugi文档从 文本加载  ")) + @an<CVolString> (result.description()) ).GetText ());
+        @     return false;
+        @ }
+        返回 (真)
+
+    }
+
+    方法 从内存加载 <公开 类型 = 逻辑型 折叠>
+    参数 内存指针 <类型 = 变整数>
+    参数 内存数据大小 <类型 = 变整数>
+    {
+        // xml_parse_result xml_document::load_string(const char_t* contents, unsigned int options = parse_default);
+        @ pugi::xml_parse_result result = data().load_buffer((void*)@<内存指针>,@<内存数据大小>);
+        @ if(!result)
+        @ { 
+        @     DEBUG_PRINT ((_T_VOL_DEBUG_OUT_STRING_LEADER  + @an<CVolString>(_T("pugi文档从从内存加载  ")) + @an<CVolString> (result.description()) ).GetText ());
+        @     return false;
+        @ }
+        返回 (真)
+
+    }
+
+    方法 从字节集加载 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 字节集数据 <类型 = 字节集类>
+    {
+        @ return @<从内存加载>((@dt<变整数>)@<字节集数据>.GetPtr(),@<字节集数据>.GetSize());
+    }
+
+    方法 到文本 <公开 类型 = 文本型>
+    参数 缩进格式 <类型 = 文本型 @默认值 = "\t">
+    参数 格式 <类型 = xml格式 @默认值 = xml格式.标准格式>
+    参数 编码 <类型 = xml编码 @默认值 = xml编码.utf8>
+    {
+        返回 (UTF8到文本 (到字节集 (缩进格式, 格式, 编码)))
+    }
+
+    方法 保存到文件 <公开 @嵌入式方法 = "">
+    参数 文件名 <类型 = 文本型>
+    参数 格式 <类型 = xml格式 @默认值 = xml格式.标准格式>
+    参数 编码 <类型 = xml编码 @默认值 = xml编码.utf8>
+    {
+        @ @sn<this>.data().save_file(@<文件名>,@<格式>,@<编码>)
+
+    }
+
+    方法 遍历所有节点 <公开 折叠 @嵌入式方法 = "">
+    参数 walker <类型 = pugi树遍历事件接收器>
+    {
+        @ @sn<this>.data().traverse(@<walker>);
+
+    }
+
+    # //每个XPath表达式可以有以下类型之一：布尔值、数字、字符串或节点集。布尔型bool类型，数字类型对应于double类型，字符串类型对应于std::string或std::wstring，取决于启用宽字符接口，节点集对应于XPath节点集类型。有一个枚举，xpath_value_type，它可以接受以下值xpath_type_boolean, xpath_type_number, xpath_type_string或xpath_type_node_set，相应地。
+    #
+    # //因为XPath节点可以是节点，也可以是属性，所以有一种特殊的类型，xpath_node，这是这些类型的受歧视的结合。此类型的值包含两个节点句柄，其中一个为xml_node类型，另一种xml_attribute类型；最多只能有一个为非空类型。获取这些句柄的访问器可用：
+    #
+    # //xml_node xpath_node::node() const;
+    # //xml_attribute xpath_node::attribute() const;
+    #
+    # //XPath节点可以为空，在这种情况下，两个访问器都返回空句柄。
+    # //请注意，根据XPath规范，每个XPath节点都有一个父节点，可以通过以下函数检索该父节点：
+    # //xml_node xpath_node::parent() const;
+    #
+
+    方法 路径_取节点 <公开 类型 = pugi节点 @禁止流程检查 = 真>
+    参数 路径文本 <类型 = 文本型>
+    {
+        @ pugi::xpath_node build_tool = data().select_node(@<路径文本>);
+        @ return @dt<pugi节点>( build_tool.node());
+    }
+
+    方法 路径_取属性 <公开 类型 = pugi属性 @禁止流程检查 = 真>
+    参数 路径文本 <类型 = 文本型>
+    {
+        @ pugi::xpath_node build_tool = data().select_node(@<路径文本>);
+        @ return @dt<pugi属性>( build_tool.attribute());
+    }
+
+    方法 select_nodes的一些说明注释 <折叠>
+    {
+        // 节点集由xpath_node_set对象,该对象具有类似于顺序随机访问容器之一的接口。它有一个迭代器类型以及通常的开始/结束迭代器访问器:
+
+        // typedef const xpath_node* xpath_node_set::const_iterator;
+        // const_iterator xpath_node_set::begin() const;
+        // const_iterator xpath_node_set::end() const;
+        // 它也可以通过索引迭代,就像std::vector:
+
+        // const xpath_node& xpath_node_set::operator[](size_t index) const;
+        // size_t xpath_node_set::size() const;
+        // bool xpath_node_set::empty() const;
+        // 所有上述操作的语义都与std::vector:迭代器是随机访问的,所有上述操作都是常数时间,访问大于或等于设置大小的元素将导致未定义的行为。您可以同时使用基于迭代器的访问和基于索引的迭代访问,但是基于迭代器的访问可以更快。
+
+        // 迭代顺序取决于集合内节点的顺序;可以通过以下函数查询顺序:
+
+        // enum xpath_node_set::type_t {type_unsorted, type_sorted, type_sorted_reverse};
+        // type_t xpath_node_set::type() const;
+
+        // type函数返回节点的当前顺序;type_sorted意味着节点按前向文档顺序排列,type_sorted_reverse表示节点处于反向文档顺序,并且type_unsorted意味着两种顺序都没有得到保证(节点可能意外地处于排序顺序,即使在以下情况下)type()回报type_unsorted)。如果需要特定的迭代顺序,则可以通过sort函数:
+
+        // void xpath_node_set::sort(bool reverse = false);
+
+
+        // 调用sort根据参数将节点按正向或反向文档顺序排序;在此调用之后type()会回来type_sorted或type_sorted_reverse.
+        // 通常不需要实际的迭代;相反,只需要文档顺序中的第一个元素。为此,提供了一个特殊访问器:
+        // xpath_node xpath_node_set::first() const;
+        // 此函数从集合中返回第一个按前向文档顺序排列的节点,如果集合为空,则返回空节点。注意,虽然节点的结果不依赖于集合中节点的顺序(即type()),如果对集合进行排序,则复杂度是常数,否则它在元素数或更糟的数量上是线性的。
+
+        // 虽然在大多数情况下,节点集由XPath函数返回,但有时需要手动构造节点集。对于这种情况,提供了一个构造函数,该构造函数采用迭代器范围(const_iterator是const xpath_node*),以及一个可选类型:
+
+        // xpath_node_set::xpath_node_set(const_iterator begin, const_iterator end, type_t type = type_unsorted);
+        // 构造函数复制指定的范围并设置指定的类型。没有以任何方式检查范围中的对象;您必须确保范围不包含重复项,并且必须按照type参数。否则,使用此集合的XPath操作可能会产生意外的结果。
+
+
+        // select_nodes函数编译表达式,然后以节点作为上下文节点执行表达式,并返回结果节点集。select_node仅按文档顺序从结果返回第一个节点,并等效于调用select_nodes(query).first()。如果XPath表达式与任何内容不匹配,或者节点句柄为空,select_nodes返回一个空集,并且select_node返回空XPath节点。
+
+        // 如果未禁用异常处理,则两个函数都会引发XPath异常如果无法编译查询,或者查询返回的值类型不是节点集,请参见错误处理关于细节。
+
+        // 虽然编译表达式速度快,但如果在小子树上多次使用相同的表达式,则编译时间会带来很大的开销。如果您正在执行许多类似的查询,请考虑将它们编译成查询对象(请参见使用查询对象供进一步参考)。一旦获得已编译的查询对象,就可以将其传递给选择函数而不是表达式字符串:
+
+        // pugi::xpath_node_set tools = doc.select_nodes("/Profile/Tools/Tool[@AllowRemote='true' and @DeriveCaptionFrom='lastparam']");
+        // std::cout << "Tools:\n";
+        // for (pugi::xpath_node_set::const_iterator it = tools.begin(); it != tools.end(); ++it)
+        // {
+        //    pugi::xpath_node node = *it;
+        //    std::cout << node.node().attribute("Filename").value() << "\n";
+        // }
+        // pugi::xpath_node build_tool = doc.select_node("//Tool[contains(Description, 'build system')]");
+        // if (build_tool)
+        //    std::cout << "Build tool: " << build_tool.node().attribute("Filename").value() << "\n"
+
+    }
+
+    方法 路径_取节点集 <公开 类型 = pugi节点集 注释 = "这个用于查询一系列结果集"
+            注释 = "\"/Profile/Tools/Tool[@AllowRemote=\'true\' and @DeriveCaptionFrom=\'lastparam\']\"" 折叠 @嵌入式方法 = "">
+    参数 路径文本 <类型 = 文本型>
+    {
+        @ @dt<pugi节点集>( @sn<this>.data().select_nodes(@<路径文本>) )
+    }
+
+    # //我们常用的一般都是取路径的值，这里我封装了几个易用api来取路径值整数
+
+    方法 路径_取整数 <公开 类型 = 整数 @禁止流程检查 = 真>
+    参数 路径文本 <类型 = 文本型>
+    {
+        @  pugi::xpath_node xnode = data().select_node(@<路径文本>);
+        @  if (!xnode.attribute())
+        @  {
+        @   return _ttoi( xnode.node().text().as_string() );
+        @  }else
+        @  {
+        @   return _ttoi( xnode.attribute().as_string() );
+        @  }
+
+
+
+
+    }
+
+    方法 路径_取长整数 <公开 类型 = 长整数 @禁止流程检查 = 真>
+    参数 路径文本 <类型 = 文本型>
+    {
+        @  pugi::xpath_node xnode = data().select_node(@<路径文本>);
+        @  if (!xnode.attribute())
+        @  {
+        @   return _ttoi64( xnode.node().text().as_string() );
+        @  }else
+        @  {
+        @   return _ttoi64( xnode.attribute().as_string() );
+        @  }
+
+    }
+
+    方法 路径_取文本 <公开 类型 = 文本型 注释 = "取节点的值，或者属性的值" @禁止流程检查 = 真>
+    参数 路径文本 <类型 = 文本型>
+    {
+        @  pugi::xpath_node xnode = data().select_node(@<路径文本>);
+        @  if (!xnode.attribute())
+        @  {
+        // @ DEBUG_PRINT ((_T_VOL_DEBUG_OUT_STRING_LEADER + @an<CVolString> (_T("是节点"))).GetText ());
+        @   return @an<CVolString>( xnode.node().text().as_string() );
+        @  }else
+        @  {
+        // @ DEBUG_PRINT ((_T_VOL_DEBUG_OUT_STRING_LEADER + @an<CVolString> (_T("是属性"))).GetText ());
+        @   return @an<CVolString>( xnode.attribute().as_string() );
+        @  }
+
+    }
+
+    方法 路径_取逻辑值 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 路径文本 <类型 = 文本型>
+    {
+        @  pugi::xpath_node xnode = data().select_node(@<路径文本>);
+        @  if (!xnode.attribute())
+        @  {
+        @   return xnode.node().text().as_bool();
+        @  }else
+        @  {
+        @   return xnode.attribute().as_bool();
+        @  }
+
+
+
+    }
+
+    方法 路径_取小数 <公开 类型 = 小数 折叠 @禁止流程检查 = 真>
+    参数 路径文本 <类型 = 文本型>
+    {
+        @  pugi::xpath_node xnode = data().select_node(@<路径文本>);
+        @  if (!xnode.attribute())
+        @  {
+        // @ DEBUG_PRINT ((_T_VOL_DEBUG_OUT_STRING_LEADER + @an<CVolString> (_T("无属性值"))).GetText ());
+        @   return xnode.node().text().as_double();
+        @  }else
+        @  {
+        // @ DEBUG_PRINT ((_T_VOL_DEBUG_OUT_STRING_LEADER + @an<CVolString> (_T("有属性值"))).GetText ());
+        @   return xnode.attribute().as_double();
+        @  }
+
+    }
+
+    # //---
+    # //这里主要弄的是路径置值
+
+    方法 路径_置整数 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 路径文本 <类型 = 文本型>
+    参数 内容 <类型 = 整数>
+    {
+        @  pugi::xpath_node xnode = data().select_node(@<路径文本>);
+        @  if (!xnode.attribute())
+        @  {
+        @   return xnode.node().text().set(@<内容>) ;
+        @  }else
+        @  {
+        @  return xnode.attribute().set_value(@<内容>) ;
+        @  }
+
+    }
+
+    方法 路径_置长整数 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 路径文本 <类型 = 文本型>
+    参数 内容 <类型 = 长整数>
+    {
+        @  pugi::xpath_node xnode = data().select_node(@<路径文本>);
+        @  if (!xnode.attribute())
+        @  {
+        @   return xnode.node().text().set(@<内容>) ;
+        @  }else
+        @  {
+        @  return xnode.attribute().set_value(@<内容>) ;
+        @  }
+
+    }
+
+    方法 路径_置文本 <公开 类型 = 逻辑型 注释 = "取节点的值，或者属性的值" @禁止流程检查 = 真>
+    参数 路径文本 <类型 = 文本型>
+    参数 内容 <类型 = 文本型>
+    {
+        @  pugi::xpath_node xnode = data().select_node(@<路径文本>);
+        @  if (!xnode.attribute())
+        @  {
+        // @ DEBUG_PRINT ((_T_VOL_DEBUG_OUT_STRING_LEADER + @an<CVolString> (_T("是节点"))).GetText ());
+        @  return  xnode.node().text().set(@<内容>) ;
+        @  }else
+        @  {
+        // @ DEBUG_PRINT ((_T_VOL_DEBUG_OUT_STRING_LEADER + @an<CVolString> (_T("是属性"))).GetText ());
+        @   return xnode.attribute().set_value(@<内容>) ;
+        @  }
+
+    }
+
+    方法 路径_置逻辑值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 路径文本 <类型 = 文本型>
+    参数 内容 <类型 = 逻辑型>
+    {
+        @  pugi::xpath_node xnode = data().select_node(@<路径文本>);
+        @  if (!xnode.attribute())
+        @  {
+        @   return xnode.node().text().set(@<内容>) ;
+        @  }else
+        @  {
+        @  return xnode.attribute().set_value(@<内容>) ;
+        @  }
+
+
+
+    }
+
+    方法 路径_置小数 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 路径文本 <类型 = 文本型>
+    参数 内容 <类型 = 小数>
+    {
+        @  pugi::xpath_node xnode = data().select_node(@<路径文本>);
+        @  if (!xnode.attribute())
+        @  {
+        // @ DEBUG_PRINT ((_T_VOL_DEBUG_OUT_STRING_LEADER + @an<CVolString> (_T("无属性值"))).GetText ());
+        @   return xnode.node().text().set(@<内容>) ;
+        @  }else
+        @  {
+        // @ DEBUG_PRINT ((_T_VOL_DEBUG_OUT_STRING_LEADER + @an<CVolString> (_T("有属性值"))).GetText ());
+        @   return xnode.attribute().set_value(@<内容>) ;
+        @  }
+
+    }
+
+    #
+    #
+}
+
+类 pugi节点集 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # //复制构造
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_data = objCopyFrom.m_data;
+    # }
+    #
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const
+    # {
+    #     return &m_data == &objCompare.m_data;
+    # }
+    # @sn<current_class>(const pugi::xpath_node_set& o)
+    # {
+    #     m_data = o;
+    # }
+    #
+    # pugi::xpath_node_set& data()
+    # {
+    #     return m_data;
+    # }
+    # pugi::xpath_node_set m_data;
+    #
+    # #define for_xpath_node_set(member_data) \
+    #     for (pugi::xpath_node_set::const_iterator it = member_data.begin(); it != member_data.end(); ++it)
+    # <> </include>
+    # @end
+
+    方法 迭代循环 <公开 注释 = "您可以用迭代方式，" 注释 = "也可以用取成员方式" 注释 = "来遍历节点集内容，" 注释 = "通常迭代比较高效"
+            @嵌入式方法 = "name = for_xpath_node_set\nhas_body = true">
+    {
+        @ for_xpath_node_set(@sn<this>.data())
+    }
+
+    方法 取迭代节点 <公开 类型 = pugi节点 注释 = "只能用在 迭代循环 流程先包围 中" @嵌入式方法 = "">
+    {
+        @ @dt<pugi节点>( (*it).node() )
+    }
+
+    方法 "//取迭代属性" <公开 类型 = pugi属性 注释 = "暂未研究清楚用在什么情景" @嵌入式方法 = "">
+    {
+        @ @dt<pugi属性>( (*it).attribute() )
+
+    }
+
+    方法 "//取迭代节点是否为属性" <公开 类型 = 逻辑型>
+    {
+        @ ((*it).attribute() ? false:true )
+
+    }
+
+    方法 取成员节点 <公开 类型 = pugi节点 注释 = "您可以用迭代方式，也可以用取成员方式 来遍历节点集内容，通常迭代比较高效" @嵌入式方法 = "">
+    参数 索引 <类型 = 整数 注释 = "范围  0 <  索引 < 取成员数">
+    {
+        @ @dt<pugi节点>( @sn<this>.data()[@<索引>].node() ) 
+    }
+
+    方法 取成员属性 <公开 类型 = pugi属性 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数 注释 = "范围  0 <  索引 < 取成员数">
+    {
+        @ @dt<pugi节点>( @sn<this>.data()[@<索引>].attribute())
+    }
+
+    方法 取成员数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT) @sn<this>.data().size()
+
+
+    }
+
+    #
+    # const xpath_node& xpath_node_set::operator[](size_t index) const;
+    # size_t xpath_node_set::size() const;
+    #
+}
+
+类 pugi节点 <公开 基础类 = xml_node @模板实现类 = "">
+{
+
+    # @begin
+    # <> <include>
+    # //复制构造
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_data = objCopyFrom.m_data;
+    # }
+    #
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const
+    # {
+    #     return m_data == objCompare.m_data;
+    # }
+    # @sn<current_class>(pugi::xml_node& o)
+    # {
+    #     m_data = o;
+    # }
+    # pugi::xml_node& data()
+    # {
+    # //@ DEBUG_PRINT ((_T_VOL_DEBUG_OUT_STRING_LEADER + @an<CVolString> (m_data.text().as_string())).GetText ());
+    #     return m_data;
+    # }
+    # pugi::xml_node m_data;
+    # <> </include>
+    # @end
+
+    方法 到字节集 <公开 类型 = 字节集类 注释 = "把节点保存成缓冲区" @禁止流程检查 = 真>
+    参数 缩进 <类型 = 文本型 @默认值 = "\t">
+    参数 格式 <类型 = xml格式 @默认值 = xml格式.标准格式>
+    参数 编码 <类型 = xml编码 @默认值 = xml编码.utf8>
+    {
+        @ class CBuffer_Writer: public pugi::xml_writer
+        @ {
+        @ public: 
+        @     virtual void write(const void* data, size_t size) 
+        @     {
+        @         buf.Append ((void*)data,(int)size);
+        @     }
+        @     @dt<字节集类>& data()
+        @     {
+        @         return buf;
+        @     }
+        @     @dt<字节集类> buf;
+        @ };
+        @ CBuffer_Writer bufWriter;
+        @ data().print(bufWriter,@<缩进>,@<格式>,(pugi::xml_encoding)@<编码>);
+        @ return bufWriter.data();
+
+    }
+
+    #
+
+    方法 到文本 <公开 类型 = 文本型 注释 = "把节点保存成文本" @禁止流程检查 = 真>
+    参数 缩进 <类型 = 文本型 @默认值 = "\t">
+    参数 格式 <类型 = xml格式 @默认值 = xml格式.标准格式>
+    参数 编码 <类型 = xml编码 @默认值 = xml编码.utf8>
+    {
+        返回 (UTF8到文本 (到字节集 (缩进, 格式, 编码)))
+
+
+
+
+    }
+
+    #
+}
+
+类 pugi属性 <公开 基础类 = xml_attribute @模板实现类 = "">
+{
+
+    # xml_attribute
+    # @begin
+    # <> <include>
+    # //复制构造
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_data = objCopyFrom.m_data;
+    # }
+    #
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const
+    # {
+    #     return m_data == objCompare.m_data;
+    # }
+    # @sn<current_class>(pugi::xml_attribute& o)
+    # {
+    #     m_data = o;
+    # }
+    #
+    # pugi::xml_attribute m_data;
+    # pugi::xml_attribute& data()
+    # {
+    #     return m_data;
+    # }
+    # <> </include>
+    # @end
+    #
+
+    方法 是否为空 <公开 @嵌入式方法 = "">
+    {
+        @ (bool)@sn<this>.data()
+    }
+
+    #
+}
+
+类 pugi树遍历事件接收器 <公开 折叠 @视窗.后缀文本 = "public pugi::xml_tree_walker">
+{
+
+    # @begin
+    # <> <include>
+    # public:
+    #     virtual bool for_each(pugi::xml_node& node);
+    #     int GetDepth();
+    # <> </include>
+    #     bool @sn<current_class>::for_each(pugi::xml_node& node)
+    #     {
+    #         @dt<pugi节点> mNode(node);
+    #         return @<遍历事件>(mNode);
+    #
+    #     }
+    # int  @sn<current_class>::GetDepth()
+    # {
+    #         return depth();
+    # }
+    # @end
+
+    方法 遍历事件 <公开 定义事件 类型 = 整数 注释 = "如果返回 1 则继续迭代，否则停止迭代">
+    参数 节点 <类型 = pugi节点>
+    {
+
+
+    }
+
+    方法 取深度 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetDepth()
+    }
+
+    #
+}
+
+#
+
+类 pugixml简易类 <公开 注释 = "这个类主要用于 别人网络传输了一个 xml 此时你要取值和置值，有了这个就很方便了">
+{
+    变量 文档 <类型 = pugi文档>
+
+    方法 从文件载入 <公开 类型 = 逻辑型>
+    参数 文件名称 <类型 = 文本型>
+    {
+        返回 (文档.从文件加载 (文件名称))
+
+    }
+
+    方法 从文本载入 <公开 类型 = 逻辑型>
+    参数 文本内容 <类型 = 文本型>
+    {
+        返回 (文档.从文本加载 (文本内容))
+
+    }
+
+    方法 保存到文件 <公开>
+    参数 文本 <类型 = 文本型>
+    {
+        文档.保存到文件 (文本)
+    }
+
+    方法 到文本 <公开 类型 = 文本型 注释 = "将整个xml文档转换成文本">
+    {
+        返回 (文档.到文本 ())
+    }
+
+    #
+    #
+
+    方法 取文本 <公开 类型 = 文本型 注释 = "取节点的值，或者属性的值" 折叠>
+    参数 路径 <类型 = 文本型 注释 = "例如 /Nodes/node1/@长整数测试">
+    {
+        返回 (文档.路径_取文本 (路径))
+
+
+    }
+
+    方法 取整数 <公开 类型 = 整数 注释 = "取节点的值，或者属性的值" 折叠>
+    参数 路径 <类型 = 文本型 注释 = "例如 /Nodes/node1/@长整数测试">
+    {
+        返回 (文档.路径_取整数 (路径))
+    }
+
+    方法 取小数 <公开 类型 = 小数 注释 = "取节点的值，或者属性的值" 折叠>
+    参数 路径 <类型 = 文本型 注释 = "例如 /Nodes/node1/@长整数测试">
+    {
+        返回 (文档.路径_取小数 (路径))
+    }
+
+    方法 取逻辑型 <公开 类型 = 逻辑型 注释 = "取节点的值，或者属性的值">
+    参数 路径 <类型 = 文本型 注释 = "例如 /Nodes/node1/@长整数测试">
+    {
+        返回 (文档.路径_取逻辑值 (路径))
+
+
+    }
+
+    方法 取长整数 <公开 类型 = 长整数 注释 = "取节点的值，或者属性的值">
+    参数 路径 <类型 = 文本型 注释 = "例如 /Nodes/node1/@长整数测试">
+    {
+        返回 (文档.路径_取长整数 (路径))
+    }
+
+    方法 置文本 <公开>
+    参数 路径 <类型 = 文本型>
+    参数 内容 <类型 = 文本型>
+    {
+        文档.路径_置文本 (路径, 内容)
+    }
+
+    方法 置整数 <公开>
+    参数 路径 <类型 = 文本型>
+    参数 内容 <类型 = 整数>
+    {
+        文档.路径_置整数 (路径, 内容)
+    }
+
+    方法 置小数 <公开>
+    参数 路径 <类型 = 文本型>
+    参数 内容 <类型 = 小数>
+    {
+        文档.路径_置小数 (路径, 内容)
+    }
+
+    方法 置长整数 <公开>
+    参数 路径 <类型 = 文本型>
+    参数 内容 <类型 = 长整数>
+    {
+        文档.路径_置长整数 (路径, 内容)
+    }
+
+    方法 置逻辑型 <公开>
+    参数 路径 <类型 = 文本型>
+    参数 内容 <类型 = 逻辑型>
+    {
+        文档.路径_置逻辑值 (路径, 内容)
+    }
+
+    #
+}
+
+类 __pugi测试类 <公开>
+{
+    变量 树遍历事件接收器 <类型 = pugi树遍历事件接收器>
+
+    方法 开始测试 <公开>
+    {
+        // 节点遍历测试 ()
+        // 节点修改测试 ()
+        // 路径选择测试 ()
+        路径取值测试 ()
+        // pugi简易类测试 ()
+        // 加载测试 ()
+
+
+    }
+
+    方法 pugi简易类测试 <折叠>
+    {
+        变量 xml <类型 = pugixml简易类>
+        变量 测试文档 <类型 = 文本型
+                值 = "<?xml version=\"1.0\"?>\n<Nodes>\n <node1 长整数测试=\"9223372036854774807\" 整数测试=\"2147483647\" 小数测试=\"1.77\" 一个属性=\"我是 加入属性_指定属性之前 的属性\" 文本测试=\"aa大\" 逻辑测试=\"1\" />\n <node1 />\n <node2 param=\"1\" />\n <node2 param=\"1\" />\n <node2 param=\"1\" />\n <node3 param1=\"1\" param2=\"2\" param3=\"3\" />\n <node4>1.71</node4>\n <node5>2147483647</node5>\n <node6>aa大</node6>\n <node7>9223372036854774807</node7><![CDATA[你实在欺骗我的感情？]]>pcdata节点值<!--我是注释-->\n <?:anonymous 我是指令?>\n</Nodes>\n<!DOCTYPE doc>">
+        变量 ""
+        xml.从文本载入 (测试文档)
+
+        // 属性测试
+        xml.置整数 ("/Nodes/node2/@param", 2147483647)
+        如果 (xml.取整数 ("/Nodes/node2/@param") != 2147483647)
+        {
+            调试输出 ("测试置整数失败")
+
+        }
+
+        xml.置长整数 ("/Nodes/node2/@param", 9223372036854774807)
+        如果 (xml.取长整数 ("/Nodes/node2/@param") != 9223372036854774807)
+        {
+            调试输出 ("测试置长整数失败")
+
+        }
+
+        xml.置逻辑型 ("/Nodes/node2/@param", 真)
+        如果 (xml.取逻辑型 ("/Nodes/node2/@param") != 真)
+        {
+            调试输出 ("测试置逻辑值失败")
+
+        }
+
+        xml.置小数 ("/Nodes/node2/@param", 1.77)
+        如果 (xml.取小数 ("/Nodes/node2/@param") != 1.77)
+        {
+            调试输出 ("测试置小数值失败")
+
+        }
+
+        xml.置文本 ("/Nodes/node2/@param", "aA大色")
+        如果 (xml.取文本 ("/Nodes/node2/@param") != "aA大色")
+        {
+            调试输出 ("测试置文本失败")
+
+        }
+
+        // 节点值测试
+        xml.置整数 ("/Nodes/node2", 2147483647)
+        如果 (xml.取整数 ("/Nodes/node2") != 2147483647)
+        {
+            调试输出 ("测试置节点整数失败")
+
+        }
+
+        xml.置长整数 ("/Nodes/node2", 9223372036854774807)
+        如果 (xml.取长整数 ("/Nodes/node2") != 9223372036854774807)
+        {
+            调试输出 ("测试置节点长整数失败")
+
+        }
+
+        xml.置逻辑型 ("/Nodes/node2", 真)
+        如果 (xml.取逻辑型 ("/Nodes/node2") != 真)
+        {
+            调试输出 ("测试置节点逻辑值失败")
+
+        }
+
+        xml.置小数 ("/Nodes/node2", 1.77)
+        如果 (xml.取小数 ("/Nodes/node2") != 1.77)
+        {
+            调试输出 ("测试置节点小数值失败")
+
+        }
+
+        xml.置文本 ("/Nodes/node2", "aA大色")
+        如果 (xml.取文本 ("/Nodes/node2") != "aA大色")
+        {
+            调试输出 ("测试置节点文本失败")
+        }
+
+        调试输出 (xml.到文本 ())
+
+
+    }
+
+    #
+
+    方法 路径取值测试
+    {
+        变量 文档 <类型 = pugi文档>
+        变量 根节点 <类型 = pugi节点>
+        变量 子节点 <类型 = pugi节点>
+        变量 "//属性" <类型 = pugi属性>
+        变量 文本属性 <类型 = pugi属性>
+        根节点 = 文档.加入子元素节点_到尾部_名称 ("Nodes")
+
+        子节点 = 根节点.加入子元素节点_到尾部_名称 ("node1")
+        子节点.加入属性名_到末尾 ("整数测试").置整数 (2147483647)
+        子节点.加入属性名_到末尾 ("小数测试").置小数 (1.77)
+        文本属性 = 子节点.加入属性名_到末尾 ("文本测试")
+        文本属性.置文本 ("aa大")
+
+        子节点.加入属性名_到末尾 ("逻辑测试").置逻辑型 (真)
+        子节点.加入属性名_到头部 ("长整数测试").置长整数 (9223372036854774807)
+
+        子节点.加入属性_指定属性之前 ("一个属性", 文本属性).置文本 ("我是 加入属性_指定属性之前 的属性")
+
+        根节点.加入子元素节点_到尾部_名称 ("node1")
+        根节点.加入子元素节点_到尾部_名称 ("node2").加入属性名_到末尾 ("param").置文本 ("1")
+        根节点.加入子元素节点_到尾部_名称 ("node2").加入属性名_到末尾 ("param").置文本 ("1")
+        根节点.加入子元素节点_到尾部_名称 ("node2").加入属性名_到末尾 ("param").置文本 ("1")
+        子节点 = 根节点.加入子元素节点_到尾部_名称 ("node3")
+        子节点.加入属性名_到末尾 ("param1").置文本 ("1")
+        子节点.加入属性名_到末尾 ("param2").置文本 ("2")
+        子节点.加入属性名_到末尾 ("param3").置文本 ("3")
+        根节点.加入子元素节点_到尾部_名称 ("node4").取元素节点值 ().置小数 (1.71)
+        根节点.加入子元素节点_到尾部_名称 ("node5").取元素节点值 ().置整数 (2147483647)
+        根节点.加入子元素节点_到尾部_名称 ("node6").取元素节点值 ().置文本 ("aa大")
+        根节点.加入子元素节点_到尾部_名称 ("node7").取元素节点值 ().置长整数 (9223372036854774807)
+
+        变量 附加数据节点 <类型 = pugi节点>
+        调试输出 ("----- 附加数据节点 取值 置值 测试")
+        附加数据节点 = 根节点.加入子节点_到尾部_类型 (pugi节点类型.cdata)
+        附加数据节点.置数据节点值 ("cdata节点值")
+        如果 (附加数据节点.取数据节点值 () != "cdata节点值")
+        {
+            调试输出 ("置数据节点值 取数据节点值 cdata节点值 测试未通过")
+            调试输出 (附加数据节点.取数据节点值 ())
+        }
+
+
+
+        附加数据节点 = 根节点.加入子节点_到尾部_类型 (pugi节点类型.pcdata)
+        附加数据节点.置数据节点值 ("pcdata节点值")
+        如果 (附加数据节点.取数据节点值 () != "pcdata节点值")
+        {
+            调试输出 ("置数据节点值 取数据节点值 pcdata节点值  测试未通过")
+            调试输出 (附加数据节点.取数据节点值 ())
+
+        }
+
+
+
+        附加数据节点 = 根节点.加入子节点_到尾部_类型 (pugi节点类型.声明)
+        附加数据节点.置数据节点值 ("我是声明")
+
+        附加数据节点 = 根节点.加入子节点_到尾部_类型 (pugi节点类型.注释)
+        附加数据节点.置数据节点值 ("我是注释")
+
+        附加数据节点 = 根节点.加入子节点_到尾部_类型 (pugi节点类型.处理指令)
+        附加数据节点.置数据节点值 ("我是指令")
+
+        附加数据节点 = 文档.加入子节点_到尾部_类型 (pugi节点类型.文档类型)
+        附加数据节点.置数据节点值 ("doc")
+
+
+
+        调试输出 (根节点.取元素节点值 ().取文本 ())  // 取出来的是  "cdata节点值"
+
+
+        根节点.取元素节点值 ().置文本 ("你实在欺骗我的感情？")
+        调试输出 (根节点.取元素节点值 ().取文本 ())  // 取出来的是  "你实在欺骗我的感情"
+
+        调试输出 ("----取单个路径值测试")
+        // 调试输出 (文档.路径_取长整数 ("/Nodes/node1/@长整数测试"))
+        // 9223372036854774784
+        // 9223372036854774807
+        // 调试输出 (文档.路径_取整数 ("/Nodes/node1/@整数测试"))
+
+        如果 (文档.路径_取长整数 ("/Nodes/node1/@长整数测试") != 9223372036854774807)
+        {
+            调试输出 ("路径_取长整数 测试失败")
+        }
+        如果 (文档.路径_取整数 ("/Nodes/node1/@整数测试") != 2147483647)
+        {
+            调试输出 ("路径_取整数 测试失败")
+        }
+        如果 (文档.路径_取小数 ("/Nodes/node1/@小数测试") != 1.77)
+        {
+            调试输出 ("小数测试 测试失败")
+        }
+        如果 (文档.路径_取逻辑值 ("/Nodes/node1/@逻辑测试") != 真)
+        {
+            调试输出 ("路径_取逻辑值 测试失败")
+        }
+        如果 (文档.路径_取文本 ("/Nodes/node1/@文本测试") != "aa大")
+        {
+            调试输出 ("路径_取文本 测试失败")
+        }
+
+
+
+
+        调试输出 ("--------------------利用属性自带函数进行遍历属性")
+
+        变量 测试节点 <类型 = pugi节点>
+        变量 最后一个属性 <类型 = pugi属性>
+        变量 当前属性 <类型 = pugi属性>
+        调试输出 (文档.取子节点 ("Nodes").取子节点 ("node1").到文本 ())
+
+
+
+        调试输出 ("--------------------")
+        测试节点 = 文档.取子节点 ("Nodes").取子节点 ("node1")
+        当前属性 = 测试节点.取属性_第一个 ()
+        最后一个属性 = 测试节点.取属性_最后一个 ()
+        判断循环 (真)
+        {
+
+            如果 (当前属性.对象内容是否相同 (最后一个属性))
+            {
+                跳出循环
+            }
+
+            调试输出 (当前属性.取属性名 () + " - " + 当前属性.取属性值_文本型 ())
+
+            当前属性 = 当前属性.取下一个兄弟属性 ()
+
+        }
+
+
+
+        调试输出 ("------ 开始测试属性取值函数 --------------")
+        如果 (测试节点.取属性 ("长整数测试").取属性值_长整数 () != 9223372036854774807)
+        {
+            调试输出 ("路径_取长整数 测试失败")
+        }
+        如果 (测试节点.取属性 ("整数测试").取属性值_整数型 () != 2147483647)
+        {
+            调试输出 ("路径_取整数 测试失败")
+        }
+        如果 (测试节点.取属性 ("小数测试").取属性值_小数型 () != 1.77)
+        {
+            调试输出 ("小数测试 测试失败")
+        }
+        如果 (测试节点.取属性 ("逻辑测试").取属性值_逻辑型 () != 真)
+        {
+            调试输出 ("路径_取逻辑值 测试失败")
+        }
+        如果 (测试节点.取属性 ("文本测试").取属性值_文本型 () != "aa大")
+        {
+            调试输出 ("路径_取文本 测试失败")
+        }
+        调试输出 ("------ 结束测试属性取值函数 --------------")
+
+
+
+        变量 节点 <类型 = pugi节点>
+        变量 子节点A <类型 = pugi节点>
+        变量 子节点A属性 <类型 = pugi属性>
+        调试输出 ("---------节点遍历测试--------")
+        节点 = 文档.路径_取节点 ("/Nodes")
+        节点.遍历子节点 (子节点A)
+        {
+            调试输出 ("-->节点文本")
+            调试输出 (子节点A.到文本 ())
+            调试输出 ("-->节点属性")
+            子节点A.遍历属性 (子节点A属性)
+            {
+                调试输出 (子节点A属性.取属性名 () + " - " + 子节点A属性.取属性值_文本型 ())
+
+            }
+        }
+
+        变量 节点集 <类型 = pugi节点集>
+        变量 节点集节点 <类型 = pugi节点>
+        变量 节点集属性 <类型 = pugi属性>
+        变量 ""
+        调试输出 ("---------节点集遍历测试--------")
+        调试输出 ("    节点集 节点合集遍历")
+        节点集 = 文档.路径_取节点集 ("/Nodes/node2")
+        节点集.迭代循环 ()
+        {
+            调试输出 ("-->节点文本")
+            节点集节点 = 节点集.取迭代节点 ()
+            调试输出 (节点集节点.到文本 ())
+            调试输出 ("-->节点属性 子属性遍历")
+            节点集节点.遍历属性 (节点集属性)
+            {
+
+                调试输出 (节点集属性.取属性名 () + " - " + 节点集属性.取属性值_文本型 ())
+
+            }
+        }
+
+
+        调试输出 ("---------文档到文本测试--------")
+        调试输出 (文档.到文本 ())
+
+
+
+
+
+
+    }
+
+    #
+
+    方法 加载测试
+    {
+        变量 "//编译" <类型 = 常用编译命令>
+        变量 文档 <类型 = pugi文档>
+        变量 "//xml数据" <类型 = 字节集类>
+        变量 "//缓冲区" <类型 = 缓冲区类>
+        变量 tree_xml <类型 = 视窗文件资源>
+        变量 "//测试文本" <类型 = 文本型
+                值 = "<!--   Copyright w3school.com.cn  -->\r\n<note>\r\n<to>George</to>\r\n<from>John</from>\r\n<heading>Reminder</heading>\r\n<body>Don\'t forget the meeting!</body>\r\n</note>">
+        // 编译.展开宏并写入文件 ()
+
+        // 调试输出 (取当前目录_f ())
+        // 文档.从文本加载 (测试文本)
+
+
+
+
+        // 文档.从资源加载 (tree_xml)
+        文档.从文件加载 ("tree.xml")
+        // 文档.从字节集加载 (xml数据)
+        // 文档.从缓冲区加载 (缓冲区)
+
+        调试输出f (文档.到文本 ("\t\t", xml格式.标准格式, xml编码.utf8))
+        调试输出f (文档.到字节集 ("||"))
+
+
+    }
+
+    方法 节点遍历测试 <折叠>
+    {
+        变量 文档 <类型 = pugi文档>
+        变量 "//缓冲区" <类型 = 缓冲区类>
+        变量 xgconsole_xml <类型 = 视窗文件资源 值 = "xgconsole.xml">
+        变量 tools <类型 = pugi节点>
+        变量 子节点 <类型 = pugi节点>
+        变量 属性 <类型 = pugi属性>
+        文档.从资源加载 (xgconsole_xml)
+        // 缓冲区 = 文档.到缓冲区 ()
+        // 调试输出 (缓冲区.到十六进制文本 ())
+        // 调试输出 (缓冲区.到文本_从U8 ())
+        tools = 文档.取子节点 ("Profile").取子节点 ("Tools")
+        tools.遍历子节点 (子节点)
+        {
+            子节点.遍历属性 (属性)
+            {
+                调试输出 (属性.取属性名 ())
+                调试输出 (属性.取属性值_文本型 ())
+
+            }
+        }
+
+        文档.遍历所有节点 (树遍历事件接收器)
+
+    }
+
+    方法 节点修改测试 <折叠>
+    {
+        变量 文档 <类型 = pugi文档>
+        变量 节点 <类型 = pugi节点>
+        变量 ""
+        变量 临时文本 <类型 = 文本型>
+        如果 (文档.从文本加载 ("<node id='123'>text</node><!-- comment -->") == 假)
+        {
+            返回
+        }
+
+        调试输出 ("------------------")
+        // 修改节点名称
+        节点 = 文档.取子节点 ("node")
+
+        节点.置节点名称 ("notnode")
+        调试输出 (节点.取元素节点名称 ())
+        调试输出 ("------------------")
+        临时文本 = 文档.取节点类型文本 ()
+        调试输出 (临时文本)
+        // 修改注释
+        调试输出 ("------------------")
+        // 注意,普通的 <element>text</element>是一个节点
+        // text 也是一个节点,如果对 element 置节点值会失败,此时要取子节点 text这个所在的节点 来设置值才可以
+        文档.取尾子节点 ().取首子节点 ().取元素节点值 ().置文本 ("useless comment")
+        临时文本 = 文档.取尾子节点 ().取元素节点值 ().取文本 ()
+
+
+        文档.取尾子节点 ().取元素节点值 ().置文本 (" 哈啊哈adsfasdfasdf ")
+        临时文本 = 文档.取尾子节点 ().取元素节点值 ().取文本 ()
+        调试输出 (临时文本)
+
+        调试输出 ("------------------")
+        临时文本 = 文档.到文本 ()
+        调试输出 (临时文本)
+
+        // 文档.保存到文件 ("test.xml")
+
+
+        // std::cout << ", new comment text: " << doc.last_child().value() << std::endl;
+
+        // // we can't change value of the element or name of the comment
+        // std::cout << node.set_value("1") << ", " << doc.last_child().set_name("2") << std::endl;
+        // // end::node[]
+
+        // // tag::attr[]
+        // pugi::xml_attribute attr = node.attribute("id");
+
+        // // change attribute name/value
+        // std::cout << attr.set_name("key") << ", " << attr.set_value("345");
+        // std::cout << ", new attribute: " << attr.name() << "=" << attr.value() << std::endl;
+
+        // // we can use numbers or booleans
+        // attr.set_value(1.234);
+        // std::cout << "new attribute value: " << attr.value() << std::endl;
+
+        // // we can also use assignment operators for more concise code
+        // attr = true;
+        // std::cout << "final attribute value: " << attr.value() << std::endl;
+        // // end::attr[]
+
+    }
+
+    方法 路径选择测试 <折叠>
+    {
+        变量 文档 <类型 = pugi文档>
+        变量 xml <类型 = 文本型
+                值 = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n<Profile FormatVersion=\"1\">\n    <Tools>\n        <Tool Filename=\"jam\" AllowIntercept=\"true\">\n        \t<Description>Jamplus build system</Description>\n        </Tool>\n        <Tool Filename=\"mayabatch.exe\" AllowRemote=\"true\" OutputFileMasks=\"*.dae\" DeriveCaptionFrom=\"lastparam\" Timeout=\"40\" />\n        <Tool Filename=\"meshbuilder_*.exe\" AllowRemote=\"false\" OutputFileMasks=\"*.mesh\" DeriveCaptionFrom=\"lastparam\" Timeout=\"10\" />\n        <Tool Filename=\"texbuilder_*.exe\" AllowRemote=\"true\" OutputFileMasks=\"*.tex\" DeriveCaptionFrom=\"lastparam\" />\n        <Tool Filename=\"shaderbuilder_*.exe\" AllowRemote=\"true\" DeriveCaptionFrom=\"lastparam\" />\n    </Tools>\n</Profile>">
+        文档.从文本加载 (xml)
+        调试输出 (文档.路径_取属性 ("/Profile/Tools/Tool/@Filename").取属性值_文本型 ())
+
+
+        变量 节点集 <类型 = pugi节点集>
+        节点集 = 文档.路径_取节点集 ("/Profile/Tools/Tool[@AllowRemote='true' and @DeriveCaptionFrom='lastparam']")
+        调试输出 (节点集.取成员数 ())
+
+        节点集.迭代循环 ()
+        {
+            调试输出 (节点集.取迭代节点 ().到文本 ())
+
+        }
+
+
+
+
+    }
+
+    方法 pugi树遍历事件接收器_遍历事件 <接收事件 类型 = 整数 折叠>
+    参数 来源对象 <类型 = pugi树遍历事件接收器>
+    参数 标记值 <类型 = 整数>
+    参数 节点 <类型 = pugi节点>
+    {
+        调试输出 (来源对象.取深度 ())
+        调试输出 (节点.取元素节点名称 ())
+        调试输出 (节点.取元素节点值 ().取文本 ())
+
+        返回 (1)
+    }
+
+    #
+}
+
+#

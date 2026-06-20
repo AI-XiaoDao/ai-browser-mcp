@@ -1,0 +1,967 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.ECharts <注释 = "火山WTL·Echarts图表控件">
+
+类 EC基础图表 <公开 基础类 = 窗口组件 注释 = "火山WTL·Echarts图表基础组件,基于此组件可创建各类丰富的图表." 注释 = "Apache ECharts 基于 JavaScript 的开源可视化图表库."
+        注释 = "本封装尽可能的还原了Echarts官方配置项(Option)的结构,概念及命名." 注释 = "用户可参考官方及示例迅速掌握各类图表的构建过程."
+        注释 = "新手教程:https://echarts.apache.org/zh/tutorial.html" 注释 = "官方文档及示例:https://echarts.apache.org/examples/zh/index.html"
+        注释 = "" @视窗.后缀文本 = "public IEChartsEventListener"
+        @视窗.窗口组件 = "icon=\"icon\\ECharts.bmp\"\r\ndefault_size = \"240, 200\"\r\npreview_unsupported"
+        @视窗.外部头文件 = "include\\wtl_ui_mb_echarts_wnd.h" @视窗.外部源文件 = "include\\wtl_ui_mb_echarts_wnd.cpp"
+        @文档 = "category = \"图表控件\"" "//@视窗.附属文件" = "data\\echarts > echarts" ""
+        "@视窗.外部源文件.d:!_VOL_ECHARTS_CTL_BASE_EDGE" = "..\\wtl_mini_blink\\lib\\wtl_ui_mb_wnd.cpp"
+        "@视窗.附属文件.x64 - d:!_VOL_ECHARTS_CTL_BASE_EDGE" = "..\\vMiniblink\\lib\\x64\\node.dll"
+        "@视窗.附属文件.win32 - d:!_VOL_ECHARTS_CTL_BASE_EDGE" = "..\\vMiniblink\\lib\\win32\\node.dll" ""
+        "@视窗.外部库.win32 - d:_VOL_ECHARTS_CTL_BASE_EDGE" = "..\\ui_webview2\\lib\\x86\\WebView2LoaderStatic.lib"
+        "@视窗.外部库.x64 - d:_VOL_ECHARTS_CTL_BASE_EDGE" = "..\\ui_webview2\\lib\\x64\\WebView2LoaderStatic.lib"
+        "@视窗.需求VS版本.d:_VOL_ECHARTS_CTL_BASE_EDGE" = "16-">
+{
+    方法 使用Edge浏览框 <公开 静态 注释 = "调用本方法指示编译器基于Edge浏览框来编译ECharts图表组件,如果不调用本方法,将使用MiniBlink浏览框进行编译."
+            注释 = "注意: 本方法为编译时处理方法,系统在编译时只要检测到用户程序实际执行流程中任意位置调用了此方法,就启用对应的编译特性,和方法本身是否被执行到没有任何关系."
+            @视窗.预定义宏 = "_VOL_ECHARTS_CTL_BASE_EDGE\r\n_WIN32_WINNT=0x0600" @视窗.编译信息 = "基于Edge浏览框来编译ECharts图表组件">
+    {
+
+    }
+
+    # @ @m<DECLARE_WTL_CONTROL_DEFAULT> (CVWnd_EChartsWnd, IEChartsEventListener, 0, 0, 0, 0)
+
+    变量 标题栏 <公开 类型 = 图表标题栏类 注释 = "标题组件,包含主标题和副标题. (对应option.title配置项)" 编辑时信息 = "12D2C, 0, 0, 0">
+    变量 图例 <公开 类型 = 图表图例类 注释 = "图例组件(对应option.legend 配置项)展现了不同系列的标记,颜色和名字.可以通过点击图例控制哪些系列不显示." 编辑时信息 = "12D2C, 0, 0, 0">
+    变量 提示框 <公开 类型 = 图表提示框类 注释 = "提示框组件,(对应option.tooltip配置项)">
+    变量 工具栏 <公开 类型 = 图表工具栏类 注释 = "工具栏组件,(对应option.toolbox配置项)内置有,数据视图,动态类型切换,数据区域缩放,数据重置等工具组件.">
+    变量 数据区域缩放 <公开 类型 = 图表数据区域缩放类 注释 = "区域数据缩放组件,(对应option.dataZoom配置项) 用于区域缩放,从而能自由关注细节的数据信息,或者概览数据整体,或者去除离群点的影响.">
+    变量 区域选择 <公开 类型 = 图表区域选择组件类 注释 = "区域选择组件,(对应option.brush配置项) 用户可以选择图中一部分数据,从而便于向用户展示被选中数据,或者他们的一些统计计算结果.">
+    变量 视觉映射 <公开 类型 = 图表视觉映射类 注释 = "视觉映射组件,(对应option.visualMap配置项)用于进行视觉编码,也就是将数据映射到视觉元素（视觉通道）">
+    变量 坐标系 <公开 类型 = 图表坐标系组件类 注释 = "图表坐标系组件,用于配置各类图表的底板网格.例如:直角坐标系上可以绘制折线图,柱状图.雷达图坐标系上可以绘制雷达图.地图坐标系上可以绘制地图.">
+    变量 坐标轴 <公开 类型 = 图表坐标轴组件类 注释 = "图表坐标轴组件,用来配置各个坐标系下的坐标轴.">
+    变量 坐标轴指示器 <公开 类型 = 坐标轴指示器类 注释 = "坐标轴指示器,(对应option.axisPointer配置项) 全局坐标轴指示器公用设置">
+    变量 系列集 <公开 类型 = 图表系列集类 注释 = "  系列集,(对应option.series配置项)此配置项实际是个数组,每个成员即一个系列,系列是指:一组数值以及他们映射成的图."
+            注释 = "其不仅表示数据,也表示数据映射成为的图.所以一个系列包含的要素至少有:一组数值,图表类型,以及其他的关于这些数据如何映射成图的参数.">
+    变量 动画设置 <公开 类型 = 图表动画设置类 注释 = "作用于全局的动画设置">
+
+    方法 取文本 <公开 类型 = 文本型 注释 = "将当前图表配置参数转换成JSON文本" 返回值注释 = "成功返回本配置项JSON文本">
+    {
+        变量 jsonStr <类型 = 文本型>
+        变量 str <类型 = 文本型>
+        str = 标题栏.取文本 ()
+        如果 (str != "")
+        {
+            jsonStr = 选择 (jsonStr != "", jsonStr + ",\"title\":" + str, "\"title\":" + str)
+        }
+        str = 图例.取文本 ()
+        如果 (str != "")
+        {
+            jsonStr = 选择 (jsonStr != "", jsonStr + ",\"legend\":" + str, "\"legend\":" + str)
+        }
+        str = 提示框.取文本 ()
+        如果 (str != "")
+        {
+            jsonStr = 选择 (jsonStr != "", jsonStr + ",\"tooltip\":" + str, "\"tooltip\":" + str)
+        }
+        str = 工具栏.取文本 ()
+        如果 (str != "")
+        {
+            jsonStr = 选择 (jsonStr != "", jsonStr + ",\"toolbox\":" + str, "\"toolbox\":" + str)
+        }
+        str = 坐标轴指示器.取文本 ()
+        如果 (str != "")
+        {
+            jsonStr = 选择 (jsonStr != "", jsonStr + ",\"axisPointer\":" + str, "\"axisPointer\":" + str)
+        }
+        str = 系列集.取文本 ()
+        如果 (str != "")
+        {
+            jsonStr = 选择 (jsonStr != "", jsonStr + ",\"series\":" + str, "\"series\":" + str)
+        }
+        @ @<str> =  getWndPtr ()->m_color;  //调色盘
+        如果 (str != "")
+        {
+            jsonStr = 选择 (jsonStr != "", jsonStr + "," + "\"color\":" + str, "\"color\":" + str)
+        }
+        @ @<str> = getWndPtr ()->m_backgroundColor;  //背景色
+        如果 (str != "")
+        {
+            如果 (取文本左边 (str, 1) == "{")  // 渐变或纹理填充时为js对象
+            {
+                jsonStr = 选择 (jsonStr != "", jsonStr + "," + "\"backgroundColor\":" + str, "\"backgroundColor\":" + str)
+            }
+            否则
+            {
+                jsonStr = 选择 (jsonStr != "", jsonStr + "," + "\"backgroundColor\":\"" + str + "\"", "\"backgroundColor\":\"" + str + "\"")
+            }
+        }
+        @ @<str> = getWndPtr ()->m_darkMode; //暗黑模式
+        如果 (str != "")
+        {
+            jsonStr = 选择 (jsonStr != "", jsonStr + "," + "\"darkMode\":" + str, "\"darkMode\":" + str)
+        }
+        str = 坐标系.取文本 ()
+        如果 (str != "")
+        {
+            jsonStr = 选择 (jsonStr != "", jsonStr + "," + str, str)
+        }
+        str = 坐标轴.取文本 ()
+        如果 (str != "")
+        {
+            jsonStr = 选择 (jsonStr != "", jsonStr + "," + str, str)
+        }
+        str = 视觉映射.取文本 ()
+        如果 (str != "")
+        {
+            jsonStr = 选择 (jsonStr != "", jsonStr + ",\"visualMap\":" + str, "\"visualMap\":" + str)
+        }
+        str = 数据区域缩放.取文本 ()
+        如果 (str != "")
+        {
+            jsonStr = 选择 (jsonStr != "", jsonStr + ",\"dataZoom\":" + str, "\"dataZoom\":" + str)
+        }
+        str = 区域选择.取文本 ()
+        如果 (str != "")
+        {
+            jsonStr = 选择 (jsonStr != "", jsonStr + ",\"brush\":" + str, "\"brush\":" + str)
+        }
+        @ @<str>=@<动画设置>.getKeyValueStr(); //动画设置的成员是option的子成员 这里直接拼接到根
+        如果 (str != "")
+        {
+            jsonStr = 选择 (jsonStr != "", jsonStr + "," + str, str)
+        }
+        jsonStr = "{" + jsonStr + "}"
+        返回 (jsonStr)
+    }
+
+    方法 清空参数 <公开 注释 = "清空本图表对象的所有配置参数,同时柱图,折线图,K线图等基础图表组件的初始设置也会被一并清空.">
+    参数 保留主题风格 <类型 = 逻辑型 注释 = "真为保留风格主题配置" @默认值 = 假>
+    参数 保留调色盘 <类型 = 逻辑型 注释 = "真为保留调色盘配置" @默认值 = 假>
+    参数 保留背景颜色 <类型 = 逻辑型 注释 = "真为保留背景颜色" @默认值 = 假>
+    {
+        标题栏.重置对象内容 ()
+        图例.重置对象内容 ()
+        提示框.重置对象内容 ()
+        工具栏.重置对象内容 ()
+        视觉映射.重置对象内容 ()
+        数据区域缩放.重置对象内容 ()
+        区域选择.重置对象内容 ()
+        坐标系.重置对象内容 ()
+        坐标轴.重置对象内容 ()
+        坐标轴指示器.重置对象内容 ()
+        系列集.清空 ()
+        动画设置.清空参数 ()
+        如果 (保留主题风格 == 假)
+        {
+            @ getWndPtr ()->m_theme =_T("");
+            @ getWndPtr ()->m_userTheme =_T("");
+            @ getWndPtr ()->m_userThemeJson =_T("");
+        }
+        如果 (保留调色盘 == 假)
+        {
+            @ getWndPtr ()->m_color =_T("");
+        }
+        如果 (保留背景颜色 == 假)
+        {
+            @ getWndPtr ()->m_backgroundColor =_T("");
+        }
+    }
+
+    方法 画图 <公开 注释 = "生成图表配置,创建图表实例并执行画图.">
+    {
+        变量 jsStr <类型 = 文本型>
+        变量 主题插件 <类型 = 文本型>
+        变量 主题名称 <类型 = 文本型>
+        jsStr = "window.option=" + 取文本 ()  // 全部配置项
+        @ getWndPtr ()->ExecuteScript (@<jsStr>.GetText (), NULL);
+        // 设置主题
+        @ if (getWndPtr ()->m_userTheme != _T("") && getWndPtr ()->m_userThemeJson != _T(""))
+        @ {
+        @ @<主题名称>= getWndPtr ()->m_userTheme;
+        @ @<主题插件> = getWndPtr ()->m_userThemeJson;
+        jsStr = "ThemeObj=" + 主题插件 + ";echarts.registerTheme('" + 主题名称 + "', ThemeObj);"
+        @ getWndPtr ()->ExecuteScript (@<jsStr>.GetText (), NULL);
+        @ } else {
+        @ @<主题名称>=getWndPtr ()->m_theme;
+        如果真 (主题名称 != "")
+        {
+            如果 (主题名称 == "dark")
+            {
+                主题插件 = dark
+            }
+            否则 (主题名称 == "vintage")
+            {
+                主题插件 = vintage
+            }
+            否则 (主题名称 == "macarons")
+            {
+                主题插件 = macarons
+            }
+            否则 (主题名称 == "infographic")
+            {
+                主题插件 = infographic
+            }
+            否则 (主题名称 == "roma")
+            {
+                主题插件 = roma
+            }
+            否则 (主题名称 == "shine")
+            {
+                主题插件 = shine
+            }
+            否则 (主题名称 == "westeros")
+            {
+                主题插件 = westeros
+            }
+            否则 (主题名称 == "essos")
+            {
+                主题插件 = essos
+            }
+            否则 (主题名称 == "walden")
+            {
+                主题插件 = walden
+            }
+            否则 (主题名称 == "wonderland")
+            {
+                主题插件 = wonderland
+            }
+            否则 (主题名称 == "chalk")
+            {
+                主题插件 = chalk
+            }
+            否则 (主题名称 == "purple-passion")
+            {
+                主题插件 = purplepassion
+            }
+            @ getWndPtr ()->ExecuteScript (@<主题插件>.GetText (), NULL);
+        }
+        @ }
+        // 添加点击事件脚本
+        @ if (getWndPtr ()->m_enableClickEvent) {
+        @ #ifndef _VOL_ECHARTS_CTL_BASE_EDGE
+        常量 添加点击事件1 <类型 = 文本型
+                值 = "if (sendOnClickEventData != undefined)\r\n{\r\n  myChart.on(\"click\", function (e) {\r\n    const data = {\r\n      name: e.name,\r\n      value: e.value,\r\n      seriesName: e.seriesName,\r\n      seriesIndex: e.seriesIndex,\r\n      seriesType: e.seriesType,\r\n      data: e.data,\r\n      dataIndex: e.dataIndex,\r\n      dataType: e.dataType,\r\n      color: e.color,\r\n      componentType: e.componentType,\r\n      componentSubType: e.componentSubType,\r\n      componentIndex: e.componentIndex,\r\n      percent: e.percent,\r\n      info: e.info\r\n    }\r\n    sendOnClickEventData(JSON.stringify(data));\r\n  })\r\n}">
+        jsStr = "setTimeout(()=>{if(myChart != undefined)myChart.dispose(); myChart = echarts.init (dom,'" + 主题名称 + "'); myChart.setOption(option);" + 添加点击事件1 + "},0)"
+        @ #else
+        常量 添加点击事件2 <类型 = 文本型
+                值 = "myChart.on(\"click\", function (e) {\r\nconst params = {\r\nevent: \"OnEChartItemClick\",\r\nname: e.name,\r\nvalue: e.value,\r\nseriesName: e.seriesName,\r\nseriesIndex: e.seriesIndex,\r\nseriesType: e.seriesType,\r\ndata: e.data,\r\ndataIndex: e.dataIndex,\r\ndataType: e.dataType,\r\ncolor: e.color,\r\ncomponentType: e.componentType,\r\ncomponentSubType: e.componentSubType,\r\ncomponentIndex: e.componentIndex,\r\npercent: e.percent,\r\ninfo: e.info\r\n};\r\nwindow.chrome.webview.postMessage(JSON.stringify(params));\r\n});">
+        jsStr = "setTimeout(()=>{if(myChart != undefined)myChart.dispose(); myChart = echarts.init (dom,'" + 主题名称 + "'); myChart.setOption(option);" + 添加点击事件2 + "},0)"
+        @ #endif
+        @ } else {
+        jsStr = "setTimeout(()=>{if(myChart != undefined)myChart.dispose(); myChart = echarts.init (dom,'" + 主题名称 + "'); myChart.setOption(option);},0)"
+        @ }
+
+        @ getWndPtr ()->ExecuteScript (@<jsStr>.GetText (), NULL);
+        @ getWndPtr ()->m_echartsInit=true;
+    }
+
+    方法 更新重画 <公开 注释 = "生成图表配置,不创建新的图表实例,将配置数据以覆盖的方式写入实例配置,并更新图表.">
+    {
+        变量 jsStr <类型 = 文本型>
+        jsStr = "window.option=" + 取文本 ()
+        @ getWndPtr ()->ExecuteScript (@<jsStr>.GetText (), NULL);
+        jsStr = "setTimeout(()=>{if(myChart != undefined)myChart.setOption(option);},0)"
+        @ getWndPtr ()->ExecuteScript (@<jsStr>.GetText (), NULL);
+    }
+
+    常量 vintage <类型 = 文本型
+            值 = "echarts.registerTheme(\'vintage\',{\"color\":[\"#d87c7c\",\"#919e8b\",\"#d7ab82\",\"#6e7074\",\"#61a0a8\",\"#efa18d\",\"#787464\",\"#cc7e63\",\"#724e58\",\"#4b565b\"],\"backgroundColor\":\"rgba(254,248,239,1)\",\"textStyle\":{},\"title\":{\"textStyle\":{\"color\":\"#333333\"},\"subtextStyle\":{\"color\":\"#aaaaaa\"}},\"line\":{\"itemStyle\":{\"borderWidth\":1},\"lineStyle\":{\"width\":2},\"symbolSize\":4,\"symbol\":\"emptyCircle\",\"smooth\":false},\"radar\":{\"itemStyle\":{\"borderWidth\":1},\"lineStyle\":{\"width\":2},\"symbolSize\":4,\"symbol\":\"emptyCircle\",\"smooth\":false},\"bar\":{\"itemStyle\":{\"barBorderWidth\":0,\"barBorderColor\":\"#ccc\"}},\"pie\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"scatter\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"boxplot\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"parallel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"sankey\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"funnel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"gauge\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"candlestick\":{\"itemStyle\":{\"color\":\"#c23531\",\"color0\":\"#314656\",\"borderColor\":\"#c23531\",\"borderColor0\":\"#314656\",\"borderWidth\":1}},\"graph\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"},\"lineStyle\":{\"width\":1,\"color\":\"#aaa\"},\"symbolSize\":4,\"symbol\":\"emptyCircle\",\"smooth\":false,\"color\":[\"#d87c7c\",\"#919e8b\",\"#d7ab82\",\"#6e7074\",\"#61a0a8\",\"#efa18d\",\"#787464\",\"#cc7e63\",\"#724e58\",\"#4b565b\"],\"label\":{\"color\":\"#eeeeee\"}},\"map\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#eeeeee\",\"borderColor\":\"#444444\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"rgba(255,215,0,0.8)\",\"borderColor\":\"#444444\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#000000\"}},\"emphasis\":{\"textStyle\":{\"color\":\"rgb(100,0,0)\"}}}},\"geo\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#eeeeee\",\"borderColor\":\"#444444\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"rgba(255,215,0,0.8)\",\"borderColor\":\"#444444\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#000000\"}},\"emphasis\":{\"textStyle\":{\"color\":\"rgb(100,0,0)\"}}}},\"categoryAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":false,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"valueAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"logAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"timeAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"toolbox\":{\"iconStyle\":{\"normal\":{\"borderColor\":\"#999999\"},\"emphasis\":{\"borderColor\":\"#666666\"}}},\"legend\":{\"textStyle\":{\"color\":\"#333333\"}},\"tooltip\":{\"axisPointer\":{\"lineStyle\":{\"color\":\"#cccccc\",\"width\":1},\"crossStyle\":{\"color\":\"#cccccc\",\"width\":1}}},\"timeline\":{\"lineStyle\":{\"color\":\"#293c55\",\"width\":1},\"itemStyle\":{\"normal\":{\"color\":\"#293c55\",\"borderWidth\":1},\"emphasis\":{\"color\":\"#a9334c\"}},\"controlStyle\":{\"normal\":{\"color\":\"#293c55\",\"borderColor\":\"#293c55\",\"borderWidth\":0.5},\"emphasis\":{\"color\":\"#293c55\",\"borderColor\":\"#293c55\",\"borderWidth\":0.5}},\"checkpointStyle\":{\"color\":\"#e43c59\",\"borderColor\":\"#c23531\"},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#293c55\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#293c55\"}}}},\"visualMap\":{\"color\":[\"#bf444c\",\"#d88273\",\"#f6efa6\"]},\"dataZoom\":{\"backgroundColor\":\"rgba(47,69,84,0)\",\"dataBackgroundColor\":\"rgba(47,69,84,0.3)\",\"fillerColor\":\"rgba(167,183,204,0.4)\",\"handleColor\":\"#a7b7cc\",\"handleSize\":\"100%\",\"textStyle\":{\"color\":\"#333333\"}},\"markPoint\":{\"label\":{\"color\":\"#eeeeee\"},\"emphasis\":{\"label\":{\"color\":\"#eeeeee\"}}}})"
+            注释 = "主题风格 vintage 复古">
+    常量 dark <类型 = 文本型
+            值 = "echarts.registerTheme(\'dark\',{\"color\":[\"#dd6b66\",\"#759aa0\",\"#e69d87\",\"#8dc1a9\",\"#ea7e53\",\"#eedd78\",\"#73a373\",\"#73b9bc\",\"#7289ab\",\"#91ca8c\",\"#f49f42\"],\"backgroundColor\":\"rgba(51,51,51,1)\",\"textStyle\":{},\"title\":{\"textStyle\":{\"color\":\"#eeeeee\"},\"subtextStyle\":{\"color\":\"#aaaaaa\"}},\"line\":{\"itemStyle\":{\"borderWidth\":1},\"lineStyle\":{\"width\":2},\"symbolSize\":4,\"symbol\":\"circle\",\"smooth\":false},\"radar\":{\"itemStyle\":{\"borderWidth\":1},\"lineStyle\":{\"width\":2},\"symbolSize\":4,\"symbol\":\"circle\",\"smooth\":false},\"bar\":{\"itemStyle\":{\"barBorderWidth\":0,\"barBorderColor\":\"#ccc\"}},\"pie\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"scatter\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"boxplot\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"parallel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"sankey\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"funnel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"gauge\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"candlestick\":{\"itemStyle\":{\"color\":\"#fd1050\",\"color0\":\"#0cf49b\",\"borderColor\":\"#fd1050\",\"borderColor0\":\"#0cf49b\",\"borderWidth\":1}},\"graph\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"},\"lineStyle\":{\"width\":1,\"color\":\"#aaa\"},\"symbolSize\":4,\"symbol\":\"circle\",\"smooth\":false,\"color\":[\"#dd6b66\",\"#759aa0\",\"#e69d87\",\"#8dc1a9\",\"#ea7e53\",\"#eedd78\",\"#73a373\",\"#73b9bc\",\"#7289ab\",\"#91ca8c\",\"#f49f42\"],\"label\":{\"color\":\"#eeeeee\"}},\"map\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#eee\",\"borderColor\":\"#444\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"rgba(255,215,0,0.8)\",\"borderColor\":\"#444\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#000\"}},\"emphasis\":{\"textStyle\":{\"color\":\"rgb(100,0,0)\"}}}},\"geo\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#eee\",\"borderColor\":\"#444\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"rgba(255,215,0,0.8)\",\"borderColor\":\"#444\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#000\"}},\"emphasis\":{\"textStyle\":{\"color\":\"rgb(100,0,0)\"}}}},\"categoryAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#eeeeee\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#eeeeee\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#eeeeee\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#aaaaaa\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"#eeeeee\"]}}},\"valueAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#eeeeee\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#eeeeee\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#eeeeee\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#aaaaaa\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"#eeeeee\"]}}},\"logAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#eeeeee\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#eeeeee\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#eeeeee\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#aaaaaa\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"#eeeeee\"]}}},\"timeAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#eeeeee\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#eeeeee\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#eeeeee\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#aaaaaa\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"#eeeeee\"]}}},\"toolbox\":{\"iconStyle\":{\"normal\":{\"borderColor\":\"#999999\"},\"emphasis\":{\"borderColor\":\"#666666\"}}},\"legend\":{\"textStyle\":{\"color\":\"#eeeeee\"}},\"tooltip\":{\"axisPointer\":{\"lineStyle\":{\"color\":\"#eeeeee\",\"width\":\"1\"},\"crossStyle\":{\"color\":\"#eeeeee\",\"width\":\"1\"}}},\"timeline\":{\"lineStyle\":{\"color\":\"#eeeeee\",\"width\":1},\"itemStyle\":{\"normal\":{\"color\":\"#dd6b66\",\"borderWidth\":1},\"emphasis\":{\"color\":\"#a9334c\"}},\"controlStyle\":{\"normal\":{\"color\":\"#eeeeee\",\"borderColor\":\"#eeeeee\",\"borderWidth\":0.5},\"emphasis\":{\"color\":\"#eeeeee\",\"borderColor\":\"#eeeeee\",\"borderWidth\":0.5}},\"checkpointStyle\":{\"color\":\"#e43c59\",\"borderColor\":\"#c23531\"},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#eeeeee\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#eeeeee\"}}}},\"visualMap\":{\"color\":[\"#bf444c\",\"#d88273\",\"#f6efa6\"]},\"dataZoom\":{\"backgroundColor\":\"rgba(47,69,84,0)\",\"dataBackgroundColor\":\"rgba(255,255,255,0.3)\",\"fillerColor\":\"rgba(167,183,204,0.4)\",\"handleColor\":\"#a7b7cc\",\"handleSize\":\"100%\",\"textStyle\":{\"color\":\"#eeeeee\"}},\"markPoint\":{\"label\":{\"color\":\"#eeeeee\"},\"emphasis\":{\"label\":{\"color\":\"#eeeeee\"}}}})"
+            注释 = "主题风格 dark 暗黑">
+    常量 macarons <类型 = 文本型
+            值 = "echarts.registerTheme(\'macarons\',{\"color\":[\"#2ec7c9\",\"#b6a2de\",\"#5ab1ef\",\"#ffb980\",\"#d87a80\",\"#8d98b3\",\"#e5cf0d\",\"#97b552\",\"#95706d\",\"#dc69aa\",\"#07a2a4\",\"#9a7fd1\",\"#588dd5\",\"#f5994e\",\"#c05050\",\"#59678c\",\"#c9ab00\",\"#7eb00a\",\"#6f5553\",\"#c14089\"],\"backgroundColor\":\"rgba(0,0,0,0)\",\"textStyle\":{},\"title\":{\"textStyle\":{\"color\":\"#008acd\"},\"subtextStyle\":{\"color\":\"#aaaaaa\"}},\"line\":{\"itemStyle\":{\"borderWidth\":1},\"lineStyle\":{\"width\":2},\"symbolSize\":3,\"symbol\":\"emptyCircle\",\"smooth\":true},\"radar\":{\"itemStyle\":{\"borderWidth\":1},\"lineStyle\":{\"width\":2},\"symbolSize\":3,\"symbol\":\"emptyCircle\",\"smooth\":true},\"bar\":{\"itemStyle\":{\"barBorderWidth\":0,\"barBorderColor\":\"#ccc\"}},\"pie\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"scatter\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"boxplot\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"parallel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"sankey\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"funnel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"gauge\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"candlestick\":{\"itemStyle\":{\"color\":\"#d87a80\",\"color0\":\"#2ec7c9\",\"borderColor\":\"#d87a80\",\"borderColor0\":\"#2ec7c9\",\"borderWidth\":1}},\"graph\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"},\"lineStyle\":{\"width\":1,\"color\":\"#aaaaaa\"},\"symbolSize\":3,\"symbol\":\"emptyCircle\",\"smooth\":true,\"color\":[\"#2ec7c9\",\"#b6a2de\",\"#5ab1ef\",\"#ffb980\",\"#d87a80\",\"#8d98b3\",\"#e5cf0d\",\"#97b552\",\"#95706d\",\"#dc69aa\",\"#07a2a4\",\"#9a7fd1\",\"#588dd5\",\"#f5994e\",\"#c05050\",\"#59678c\",\"#c9ab00\",\"#7eb00a\",\"#6f5553\",\"#c14089\"],\"label\":{\"color\":\"#eeeeee\"}},\"map\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#dddddd\",\"borderColor\":\"#eeeeee\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"rgba(254,153,78,1)\",\"borderColor\":\"#444\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#d87a80\"}},\"emphasis\":{\"textStyle\":{\"color\":\"rgb(100,0,0)\"}}}},\"geo\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#dddddd\",\"borderColor\":\"#eeeeee\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"rgba(254,153,78,1)\",\"borderColor\":\"#444\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#d87a80\"}},\"emphasis\":{\"textStyle\":{\"color\":\"rgb(100,0,0)\"}}}},\"categoryAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#008acd\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":false,\"lineStyle\":{\"color\":[\"#eee\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"valueAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#008acd\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#eee\"]}},\"splitArea\":{\"show\":true,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"logAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#008acd\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#eee\"]}},\"splitArea\":{\"show\":true,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"timeAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#008acd\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#eee\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"toolbox\":{\"iconStyle\":{\"normal\":{\"borderColor\":\"#2ec7c9\"},\"emphasis\":{\"borderColor\":\"#18a4a6\"}}},\"legend\":{\"textStyle\":{\"color\":\"#333333\"}},\"tooltip\":{\"axisPointer\":{\"lineStyle\":{\"color\":\"#008acd\",\"width\":\"1\"},\"crossStyle\":{\"color\":\"#008acd\",\"width\":\"1\"}}},\"timeline\":{\"lineStyle\":{\"color\":\"#008acd\",\"width\":1},\"itemStyle\":{\"normal\":{\"color\":\"#008acd\",\"borderWidth\":1},\"emphasis\":{\"color\":\"#a9334c\"}},\"controlStyle\":{\"normal\":{\"color\":\"#008acd\",\"borderColor\":\"#008acd\",\"borderWidth\":0.5},\"emphasis\":{\"color\":\"#008acd\",\"borderColor\":\"#008acd\",\"borderWidth\":0.5}},\"checkpointStyle\":{\"color\":\"#2ec7c9\",\"borderColor\":\"#2ec7c9\"},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#008acd\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#008acd\"}}}},\"visualMap\":{\"color\":[\"#5ab1ef\",\"#e0ffff\"]},\"dataZoom\":{\"backgroundColor\":\"rgba(47,69,84,0)\",\"dataBackgroundColor\":\"#efefff\",\"fillerColor\":\"rgba(182,162,222,0.2)\",\"handleColor\":\"#008acd\",\"handleSize\":\"100%\",\"textStyle\":{\"color\":\"#333333\"}},\"markPoint\":{\"label\":{\"color\":\"#eeeeee\"},\"emphasis\":{\"label\":{\"color\":\"#eeeeee\"}}}})"
+            注释 = "主题风格 macarons 马卡龙">
+    常量 infographic <类型 = 文本型
+            值 = "echarts.registerTheme(\'infographic\',{\"color\":[\"#c1232b\",\"#27727b\",\"#fcce10\",\"#e87c25\",\"#b5c334\",\"#fe8463\",\"#9bca63\",\"#fad860\",\"#f3a43b\",\"#60c0dd\",\"#d7504b\",\"#c6e579\",\"#f4e001\",\"#f0805a\",\"#26c0c0\"],\"backgroundColor\":\"rgba(0,0,0,0)\",\"textStyle\":{},\"title\":{\"textStyle\":{\"color\":\"#27727b\"},\"subtextStyle\":{\"color\":\"#aaaaaa\"}},\"line\":{\"itemStyle\":{\"borderWidth\":1},\"lineStyle\":{\"width\":\"3\"},\"symbolSize\":\"5\",\"symbol\":\"emptyCircle\",\"smooth\":false},\"radar\":{\"itemStyle\":{\"borderWidth\":1},\"lineStyle\":{\"width\":\"3\"},\"symbolSize\":\"5\",\"symbol\":\"emptyCircle\",\"smooth\":false},\"bar\":{\"itemStyle\":{\"barBorderWidth\":0,\"barBorderColor\":\"#ccc\"}},\"pie\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"scatter\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"boxplot\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"parallel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"sankey\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"funnel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"gauge\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"candlestick\":{\"itemStyle\":{\"color\":\"#c1232b\",\"color0\":\"#b5c334\",\"borderColor\":\"#c1232b\",\"borderColor0\":\"#b5c334\",\"borderWidth\":1}},\"graph\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"},\"lineStyle\":{\"width\":1,\"color\":\"#aaaaaa\"},\"symbolSize\":\"5\",\"symbol\":\"emptyCircle\",\"smooth\":false,\"color\":[\"#c1232b\",\"#27727b\",\"#fcce10\",\"#e87c25\",\"#b5c334\",\"#fe8463\",\"#9bca63\",\"#fad860\",\"#f3a43b\",\"#60c0dd\",\"#d7504b\",\"#c6e579\",\"#f4e001\",\"#f0805a\",\"#26c0c0\"],\"label\":{\"color\":\"#eeeeee\"}},\"map\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#dddddd\",\"borderColor\":\"#eeeeee\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"#fe994e\",\"borderColor\":\"#444\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#c1232b\"}},\"emphasis\":{\"textStyle\":{\"color\":\"rgb(100,0,0)\"}}}},\"geo\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#dddddd\",\"borderColor\":\"#eeeeee\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"#fe994e\",\"borderColor\":\"#444\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#c1232b\"}},\"emphasis\":{\"textStyle\":{\"color\":\"rgb(100,0,0)\"}}}},\"categoryAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#27727b\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#27727b\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":false,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"valueAxis\":{\"axisLine\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"logAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#27727b\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"timeAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#27727b\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"toolbox\":{\"iconStyle\":{\"normal\":{\"borderColor\":\"#c1232b\"},\"emphasis\":{\"borderColor\":\"#e87c25\"}}},\"legend\":{\"textStyle\":{\"color\":\"#333333\"}},\"tooltip\":{\"axisPointer\":{\"lineStyle\":{\"color\":\"#27727b\",\"width\":1},\"crossStyle\":{\"color\":\"#27727b\",\"width\":1}}},\"timeline\":{\"lineStyle\":{\"color\":\"#293c55\",\"width\":1},\"itemStyle\":{\"normal\":{\"color\":\"#27727b\",\"borderWidth\":1},\"emphasis\":{\"color\":\"#72d4e0\"}},\"controlStyle\":{\"normal\":{\"color\":\"#27727b\",\"borderColor\":\"#27727b\",\"borderWidth\":0.5},\"emphasis\":{\"color\":\"#27727b\",\"borderColor\":\"#27727b\",\"borderWidth\":0.5}},\"checkpointStyle\":{\"color\":\"#c1232b\",\"borderColor\":\"#c23531\"},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#293c55\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#293c55\"}}}},\"visualMap\":{\"color\":[\"#c1232b\",\"#fcce10\"]},\"dataZoom\":{\"backgroundColor\":\"rgba(0,0,0,0)\",\"dataBackgroundColor\":\"rgba(181,195,52,0.3)\",\"fillerColor\":\"rgba(181,195,52,0.2)\",\"handleColor\":\"#27727b\",\"handleSize\":\"100%\",\"textStyle\":{\"color\":\"#999999\"}},\"markPoint\":{\"label\":{\"color\":\"#eeeeee\"},\"emphasis\":{\"label\":{\"color\":\"#eeeeee\"}}}})"
+            注释 = "主题风格 infographic 信息图形学">
+    常量 shine <类型 = 文本型
+            值 = "echarts.registerTheme(\'shine\',{\"color\":[\"#c12e34\",\"#e6b600\",\"#0098d9\",\"#2b821d\",\"#005eaa\",\"#339ca8\",\"#cda819\",\"#32a487\"],\"backgroundColor\":\"rgba(0,0,0,0)\",\"textStyle\":{},\"title\":{\"textStyle\":{\"color\":\"#333333\"},\"subtextStyle\":{\"color\":\"#aaaaaa\"}},\"line\":{\"itemStyle\":{\"borderWidth\":1},\"lineStyle\":{\"width\":2},\"symbolSize\":4,\"symbol\":\"emptyCircle\",\"smooth\":false},\"radar\":{\"itemStyle\":{\"borderWidth\":1},\"lineStyle\":{\"width\":2},\"symbolSize\":4,\"symbol\":\"emptyCircle\",\"smooth\":false},\"bar\":{\"itemStyle\":{\"barBorderWidth\":0,\"barBorderColor\":\"#ccc\"}},\"pie\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"scatter\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"boxplot\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"parallel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"sankey\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"funnel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"gauge\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"candlestick\":{\"itemStyle\":{\"color\":\"#c12e34\",\"color0\":\"#2b821d\",\"borderColor\":\"#c12e34\",\"borderColor0\":\"#2b821d\",\"borderWidth\":1}},\"graph\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"},\"lineStyle\":{\"width\":1,\"color\":\"#aaaaaa\"},\"symbolSize\":4,\"symbol\":\"emptyCircle\",\"smooth\":false,\"color\":[\"#c12e34\",\"#e6b600\",\"#0098d9\",\"#2b821d\",\"#005eaa\",\"#339ca8\",\"#cda819\",\"#32a487\"],\"label\":{\"color\":\"#eeeeee\"}},\"map\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#ddd\",\"borderColor\":\"#eee\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"#e6b600\",\"borderColor\":\"#ddd\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#c12e34\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#c12e34\"}}}},\"geo\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#ddd\",\"borderColor\":\"#eee\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"#e6b600\",\"borderColor\":\"#ddd\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#c12e34\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#c12e34\"}}}},\"categoryAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":false,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"valueAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"logAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"timeAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"toolbox\":{\"iconStyle\":{\"normal\":{\"borderColor\":\"#06467c\"},\"emphasis\":{\"borderColor\":\"#4187c2\"}}},\"legend\":{\"textStyle\":{\"color\":\"#333333\"}},\"tooltip\":{\"axisPointer\":{\"lineStyle\":{\"color\":\"#cccccc\",\"width\":1},\"crossStyle\":{\"color\":\"#cccccc\",\"width\":1}}},\"timeline\":{\"lineStyle\":{\"color\":\"#005eaa\",\"width\":1},\"itemStyle\":{\"normal\":{\"color\":\"#005eaa\",\"borderWidth\":1},\"emphasis\":{\"color\":\"#005eaa\"}},\"controlStyle\":{\"normal\":{\"color\":\"#005eaa\",\"borderColor\":\"#005eaa\",\"borderWidth\":0.5},\"emphasis\":{\"color\":\"#005eaa\",\"borderColor\":\"#005eaa\",\"borderWidth\":0.5}},\"checkpointStyle\":{\"color\":\"#005eaa\",\"borderColor\":\"#316bc2\"},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#005eaa\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#005eaa\"}}}},\"visualMap\":{\"color\":[\"#1790cf\",\"#a2d4e6\"]},\"dataZoom\":{\"backgroundColor\":\"rgba(47,69,84,0)\",\"dataBackgroundColor\":\"rgba(47,69,84,0.3)\",\"fillerColor\":\"rgba(167,183,204,0.4)\",\"handleColor\":\"#a7b7cc\",\"handleSize\":\"100%\",\"textStyle\":{\"color\":\"#333333\"}},\"markPoint\":{\"label\":{\"color\":\"#eeeeee\"},\"emphasis\":{\"label\":{\"color\":\"#eeeeee\"}}}})"
+            注释 = "主题风格 shine 闪亮非主流">
+    常量 roma <类型 = 文本型
+            值 = "echarts.registerTheme(\'roma\',{\"color\":[\"#e01f54\",\"#001852\",\"#f5e8c8\",\"#b8d2c7\",\"#c6b38e\",\"#a4d8c2\",\"#f3d999\",\"#d3758f\",\"#dcc392\",\"#2e4783\",\"#82b6e9\",\"#ff6347\",\"#a092f1\",\"#0a915d\",\"#eaf889\",\"#6699ff\",\"#ff6666\",\"#3cb371\",\"#d5b158\",\"#38b6b6\"],\"backgroundColor\":\"rgba(0,0,0,0)\",\"textStyle\":{},\"title\":{\"textStyle\":{\"color\":\"#333333\"},\"subtextStyle\":{\"color\":\"#aaaaaa\"}},\"line\":{\"itemStyle\":{\"borderWidth\":1},\"lineStyle\":{\"width\":2},\"symbolSize\":4,\"symbol\":\"emptyCircle\",\"smooth\":false},\"radar\":{\"itemStyle\":{\"borderWidth\":1},\"lineStyle\":{\"width\":2},\"symbolSize\":4,\"symbol\":\"emptyCircle\",\"smooth\":false},\"bar\":{\"itemStyle\":{\"barBorderWidth\":0,\"barBorderColor\":\"#ccc\"}},\"pie\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"scatter\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"boxplot\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"parallel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"sankey\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"funnel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"gauge\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"candlestick\":{\"itemStyle\":{\"color\":\"#e01f54\",\"color0\":\"#001852\",\"borderColor\":\"#f5e8c8\",\"borderColor0\":\"#b8d2c7\",\"borderWidth\":1}},\"graph\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"},\"lineStyle\":{\"width\":1,\"color\":\"#aaaaaa\"},\"symbolSize\":4,\"symbol\":\"emptyCircle\",\"smooth\":false,\"color\":[\"#e01f54\",\"#001852\",\"#f5e8c8\",\"#b8d2c7\",\"#c6b38e\",\"#a4d8c2\",\"#f3d999\",\"#d3758f\",\"#dcc392\",\"#2e4783\",\"#82b6e9\",\"#ff6347\",\"#a092f1\",\"#0a915d\",\"#eaf889\",\"#6699ff\",\"#ff6666\",\"#3cb371\",\"#d5b158\",\"#38b6b6\"],\"label\":{\"color\":\"#eeeeee\"}},\"map\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#eeeeee\",\"borderColor\":\"#444444\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"rgba(255,215,0,0.8)\",\"borderColor\":\"#444\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#000000\"}},\"emphasis\":{\"textStyle\":{\"color\":\"rgb(100,0,0)\"}}}},\"geo\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#eeeeee\",\"borderColor\":\"#444444\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"rgba(255,215,0,0.8)\",\"borderColor\":\"#444\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#000000\"}},\"emphasis\":{\"textStyle\":{\"color\":\"rgb(100,0,0)\"}}}},\"categoryAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":false,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"valueAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"logAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"timeAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisTick\":{\"show\":true,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#333\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#ccc\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.3)\",\"rgba(200,200,200,0.3)\"]}}},\"toolbox\":{\"iconStyle\":{\"normal\":{\"borderColor\":\"#999999\"},\"emphasis\":{\"borderColor\":\"#666666\"}}},\"legend\":{\"textStyle\":{\"color\":\"#333333\"}},\"tooltip\":{\"axisPointer\":{\"lineStyle\":{\"color\":\"#cccccc\",\"width\":1},\"crossStyle\":{\"color\":\"#cccccc\",\"width\":1}}},\"timeline\":{\"lineStyle\":{\"color\":\"#293c55\",\"width\":1},\"itemStyle\":{\"normal\":{\"color\":\"#293c55\",\"borderWidth\":1},\"emphasis\":{\"color\":\"#a9334c\"}},\"controlStyle\":{\"normal\":{\"color\":\"#293c55\",\"borderColor\":\"#293c55\",\"borderWidth\":0.5},\"emphasis\":{\"color\":\"#293c55\",\"borderColor\":\"#293c55\",\"borderWidth\":0.5}},\"checkpointStyle\":{\"color\":\"#e43c59\",\"borderColor\":\"#c23531\"},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#293c55\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#293c55\"}}}},\"visualMap\":{\"color\":[\"#e01f54\",\"#e7dbc3\"]},\"dataZoom\":{\"backgroundColor\":\"rgba(47,69,84,0)\",\"dataBackgroundColor\":\"rgba(47,69,84,0.3)\",\"fillerColor\":\"rgba(167,183,204,0.4)\",\"handleColor\":\"#a7b7cc\",\"handleSize\":\"100%\",\"textStyle\":{\"color\":\"#333333\"}},\"markPoint\":{\"label\":{\"color\":\"#eeeeee\"},\"emphasis\":{\"label\":{\"color\":\"#eeeeee\"}}}})"
+            注释 = "主题风格 roma 罗马吉普赛">
+    常量 westeros <类型 = 文本型
+            值 = "echarts.registerTheme(\'westeros\',{\"color\":[\"#516b91\",\"#59c4e6\",\"#edafda\",\"#93b7e3\",\"#a5e7f0\",\"#cbb0e3\"],\"backgroundColor\":\"rgba(0,0,0,0)\",\"textStyle\":{},\"title\":{\"textStyle\":{\"color\":\"#516b91\"},\"subtextStyle\":{\"color\":\"#93b7e3\"}},\"line\":{\"itemStyle\":{\"borderWidth\":\"2\"},\"lineStyle\":{\"width\":\"2\"},\"symbolSize\":\"6\",\"symbol\":\"emptyCircle\",\"smooth\":true},\"radar\":{\"itemStyle\":{\"borderWidth\":\"2\"},\"lineStyle\":{\"width\":\"2\"},\"symbolSize\":\"6\",\"symbol\":\"emptyCircle\",\"smooth\":true},\"bar\":{\"itemStyle\":{\"barBorderWidth\":0,\"barBorderColor\":\"#ccc\"}},\"pie\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"scatter\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"boxplot\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"parallel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"sankey\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"funnel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"gauge\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"candlestick\":{\"itemStyle\":{\"color\":\"#edafda\",\"color0\":\"transparent\",\"borderColor\":\"#d680bc\",\"borderColor0\":\"#8fd3e8\",\"borderWidth\":\"2\"}},\"graph\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"},\"lineStyle\":{\"width\":1,\"color\":\"#aaa\"},\"symbolSize\":\"6\",\"symbol\":\"emptyCircle\",\"smooth\":true,\"color\":[\"#516b91\",\"#59c4e6\",\"#edafda\",\"#93b7e3\",\"#a5e7f0\",\"#cbb0e3\"],\"label\":{\"color\":\"#eeeeee\"}},\"map\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#f3f3f3\",\"borderColor\":\"#516b91\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"#a5e7f0\",\"borderColor\":\"#516b91\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#000\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#516b91\"}}}},\"geo\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#f3f3f3\",\"borderColor\":\"#516b91\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"#a5e7f0\",\"borderColor\":\"#516b91\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#000\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#516b91\"}}}},\"categoryAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#eeeeee\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"valueAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#eeeeee\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"logAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#eeeeee\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"timeAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#eeeeee\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"toolbox\":{\"iconStyle\":{\"normal\":{\"borderColor\":\"#999999\"},\"emphasis\":{\"borderColor\":\"#666666\"}}},\"legend\":{\"textStyle\":{\"color\":\"#999999\"}},\"tooltip\":{\"axisPointer\":{\"lineStyle\":{\"color\":\"#cccccc\",\"width\":1},\"crossStyle\":{\"color\":\"#cccccc\",\"width\":1}}},\"timeline\":{\"lineStyle\":{\"color\":\"#8fd3e8\",\"width\":1},\"itemStyle\":{\"normal\":{\"color\":\"#8fd3e8\",\"borderWidth\":1},\"emphasis\":{\"color\":\"#8fd3e8\"}},\"controlStyle\":{\"normal\":{\"color\":\"#8fd3e8\",\"borderColor\":\"#8fd3e8\",\"borderWidth\":0.5},\"emphasis\":{\"color\":\"#8fd3e8\",\"borderColor\":\"#8fd3e8\",\"borderWidth\":0.5}},\"checkpointStyle\":{\"color\":\"#8fd3e8\",\"borderColor\":\"#8a7ca8\"},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#8fd3e8\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#8fd3e8\"}}}},\"visualMap\":{\"color\":[\"#516b91\",\"#59c4e6\",\"#a5e7f0\"]},\"dataZoom\":{\"backgroundColor\":\"rgba(0,0,0,0)\",\"dataBackgroundColor\":\"rgba(255,255,255,0.3)\",\"fillerColor\":\"rgba(167,183,204,0.4)\",\"handleColor\":\"#a7b7cc\",\"handleSize\":\"100%\",\"textStyle\":{\"color\":\"#333\"}},\"markPoint\":{\"label\":{\"color\":\"#eeeeee\"},\"emphasis\":{\"label\":{\"color\":\"#eeeeee\"}}}})"
+            注释 = "主题风格 westeros 维斯特洛">
+    常量 essos <类型 = 文本型
+            值 = "echarts.registerTheme(\'essos\',{\"color\":[\"#893448\",\"#d95850\",\"#eb8146\",\"#ffb248\",\"#f2d643\",\"#ebdba4\"],\"backgroundColor\":\"rgba(242,234,191,0.15)\",\"textStyle\":{},\"title\":{\"textStyle\":{\"color\":\"#893448\"},\"subtextStyle\":{\"color\":\"#d95850\"}},\"line\":{\"itemStyle\":{\"borderWidth\":\"2\"},\"lineStyle\":{\"width\":\"2\"},\"symbolSize\":\"6\",\"symbol\":\"emptyCircle\",\"smooth\":true},\"radar\":{\"itemStyle\":{\"borderWidth\":\"2\"},\"lineStyle\":{\"width\":\"2\"},\"symbolSize\":\"6\",\"symbol\":\"emptyCircle\",\"smooth\":true},\"bar\":{\"itemStyle\":{\"barBorderWidth\":0,\"barBorderColor\":\"#ccc\"}},\"pie\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"scatter\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"boxplot\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"parallel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"sankey\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"funnel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"gauge\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"candlestick\":{\"itemStyle\":{\"color\":\"#eb8146\",\"color0\":\"transparent\",\"borderColor\":\"#d95850\",\"borderColor0\":\"#58c470\",\"borderWidth\":\"2\"}},\"graph\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"},\"lineStyle\":{\"width\":1,\"color\":\"#aaa\"},\"symbolSize\":\"6\",\"symbol\":\"emptyCircle\",\"smooth\":true,\"color\":[\"#893448\",\"#d95850\",\"#eb8146\",\"#ffb248\",\"#f2d643\",\"#ebdba4\"],\"label\":{\"color\":\"#ffffff\"}},\"map\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#f3f3f3\",\"borderColor\":\"#999999\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"#ffb248\",\"borderColor\":\"#eb8146\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#893448\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#893448\"}}}},\"geo\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#f3f3f3\",\"borderColor\":\"#999999\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"#ffb248\",\"borderColor\":\"#eb8146\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#893448\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#893448\"}}}},\"categoryAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#aaaaaa\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#e6e6e6\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"valueAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#aaaaaa\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#e6e6e6\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"logAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#aaaaaa\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#e6e6e6\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"timeAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#aaaaaa\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#e6e6e6\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"toolbox\":{\"iconStyle\":{\"normal\":{\"borderColor\":\"#999999\"},\"emphasis\":{\"borderColor\":\"#666666\"}}},\"legend\":{\"textStyle\":{\"color\":\"#999999\"}},\"tooltip\":{\"axisPointer\":{\"lineStyle\":{\"color\":\"#cccccc\",\"width\":1},\"crossStyle\":{\"color\":\"#cccccc\",\"width\":1}}},\"timeline\":{\"lineStyle\":{\"color\":\"#893448\",\"width\":1},\"itemStyle\":{\"normal\":{\"color\":\"#893448\",\"borderWidth\":1},\"emphasis\":{\"color\":\"#ffb248\"}},\"controlStyle\":{\"normal\":{\"color\":\"#893448\",\"borderColor\":\"#893448\",\"borderWidth\":0.5},\"emphasis\":{\"color\":\"#893448\",\"borderColor\":\"#893448\",\"borderWidth\":0.5}},\"checkpointStyle\":{\"color\":\"#eb8146\",\"borderColor\":\"#ffb248\"},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#893448\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#893448\"}}}},\"visualMap\":{\"color\":[\"#893448\",\"#d95850\",\"#eb8146\",\"#ffb248\",\"#f2d643\",\"rgb(247,238,173)\"]},\"dataZoom\":{\"backgroundColor\":\"rgba(255,255,255,0)\",\"dataBackgroundColor\":\"rgba(255,178,72,0.5)\",\"fillerColor\":\"rgba(255,178,72,0.15)\",\"handleColor\":\"#ffb248\",\"handleSize\":\"100%\",\"textStyle\":{\"color\":\"#333\"}},\"markPoint\":{\"label\":{\"color\":\"#ffffff\"},\"emphasis\":{\"label\":{\"color\":\"#ffffff\"}}}})"
+            注释 = "主题风格 essos  厄索斯">
+    常量 walden <类型 = 文本型
+            值 = "echarts.registerTheme(\'walden\',{\"color\":[\"#3fb1e3\",\"#6be6c1\",\"#626c91\",\"#a0a7e6\",\"#c4ebad\",\"#96dee8\"],\"backgroundColor\":\"rgba(252,252,252,0)\",\"textStyle\":{},\"title\":{\"textStyle\":{\"color\":\"#666666\"},\"subtextStyle\":{\"color\":\"#999999\"}},\"line\":{\"itemStyle\":{\"borderWidth\":\"2\"},\"lineStyle\":{\"width\":\"3\"},\"symbolSize\":\"8\",\"symbol\":\"emptyCircle\",\"smooth\":false},\"radar\":{\"itemStyle\":{\"borderWidth\":\"2\"},\"lineStyle\":{\"width\":\"3\"},\"symbolSize\":\"8\",\"symbol\":\"emptyCircle\",\"smooth\":false},\"bar\":{\"itemStyle\":{\"barBorderWidth\":0,\"barBorderColor\":\"#ccc\"}},\"pie\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"scatter\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"boxplot\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"parallel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"sankey\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"funnel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"gauge\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"candlestick\":{\"itemStyle\":{\"color\":\"#e6a0d2\",\"color0\":\"transparent\",\"borderColor\":\"#e6a0d2\",\"borderColor0\":\"#3fb1e3\",\"borderWidth\":\"2\"}},\"graph\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"},\"lineStyle\":{\"width\":\"1\",\"color\":\"#cccccc\"},\"symbolSize\":\"8\",\"symbol\":\"emptyCircle\",\"smooth\":false,\"color\":[\"#3fb1e3\",\"#6be6c1\",\"#626c91\",\"#a0a7e6\",\"#c4ebad\",\"#96dee8\"],\"label\":{\"color\":\"#ffffff\"}},\"map\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#eeeeee\",\"borderColor\":\"#aaaaaa\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"rgba(63,177,227,0.25)\",\"borderColor\":\"#3fb1e3\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#ffffff\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#3fb1e3\"}}}},\"geo\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#eeeeee\",\"borderColor\":\"#aaaaaa\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"rgba(63,177,227,0.25)\",\"borderColor\":\"#3fb1e3\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#ffffff\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#3fb1e3\"}}}},\"categoryAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#eeeeee\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"valueAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#eeeeee\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"logAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#eeeeee\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"timeAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#eeeeee\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"toolbox\":{\"iconStyle\":{\"normal\":{\"borderColor\":\"#999999\"},\"emphasis\":{\"borderColor\":\"#666666\"}}},\"legend\":{\"textStyle\":{\"color\":\"#999999\"}},\"tooltip\":{\"axisPointer\":{\"lineStyle\":{\"color\":\"#cccccc\",\"width\":1},\"crossStyle\":{\"color\":\"#cccccc\",\"width\":1}}},\"timeline\":{\"lineStyle\":{\"color\":\"#626c91\",\"width\":1},\"itemStyle\":{\"normal\":{\"color\":\"#626c91\",\"borderWidth\":1},\"emphasis\":{\"color\":\"#626c91\"}},\"controlStyle\":{\"normal\":{\"color\":\"#626c91\",\"borderColor\":\"#626c91\",\"borderWidth\":0.5},\"emphasis\":{\"color\":\"#626c91\",\"borderColor\":\"#626c91\",\"borderWidth\":0.5}},\"checkpointStyle\":{\"color\":\"#3fb1e3\",\"borderColor\":\"#3fb1e3\"},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#626c91\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#626c91\"}}}},\"visualMap\":{\"color\":[\"#2a99c9\",\"#afe8ff\"]},\"dataZoom\":{\"backgroundColor\":\"rgba(255,255,255,0)\",\"dataBackgroundColor\":\"rgba(222,222,222,1)\",\"fillerColor\":\"rgba(114,230,212,0.25)\",\"handleColor\":\"#cccccc\",\"handleSize\":\"100%\",\"textStyle\":{\"color\":\"#999999\"}},\"markPoint\":{\"label\":{\"color\":\"#ffffff\"},\"emphasis\":{\"label\":{\"color\":\"#ffffff\"}}}})"
+            注释 = "主题风格 walden 瓦尔登湖">
+    常量 wonderland <类型 = 文本型
+            值 = "echarts.registerTheme(\'wonderland\',{\"color\":[\"#4ea397\",\"#22c3aa\",\"#7bd9a5\",\"#d0648a\",\"#f58db2\",\"#f2b3c9\"],\"backgroundColor\":\"rgba(255,255,255,0)\",\"textStyle\":{},\"title\":{\"textStyle\":{\"color\":\"#666666\"},\"subtextStyle\":{\"color\":\"#999999\"}},\"line\":{\"itemStyle\":{\"borderWidth\":\"2\"},\"lineStyle\":{\"width\":\"3\"},\"symbolSize\":\"8\",\"symbol\":\"emptyCircle\",\"smooth\":false},\"radar\":{\"itemStyle\":{\"borderWidth\":\"2\"},\"lineStyle\":{\"width\":\"3\"},\"symbolSize\":\"8\",\"symbol\":\"emptyCircle\",\"smooth\":false},\"bar\":{\"itemStyle\":{\"barBorderWidth\":0,\"barBorderColor\":\"#ccc\"}},\"pie\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"scatter\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"boxplot\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"parallel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"sankey\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"funnel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"gauge\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"candlestick\":{\"itemStyle\":{\"color\":\"#d0648a\",\"color0\":\"transparent\",\"borderColor\":\"#d0648a\",\"borderColor0\":\"#22c3aa\",\"borderWidth\":\"1\"}},\"graph\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"},\"lineStyle\":{\"width\":\"1\",\"color\":\"#cccccc\"},\"symbolSize\":\"8\",\"symbol\":\"emptyCircle\",\"smooth\":false,\"color\":[\"#4ea397\",\"#22c3aa\",\"#7bd9a5\",\"#d0648a\",\"#f58db2\",\"#f2b3c9\"],\"label\":{\"color\":\"#ffffff\"}},\"map\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#eeeeee\",\"borderColor\":\"#999999\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"rgba(34,195,170,0.25)\",\"borderColor\":\"#22c3aa\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#28544e\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#349e8e\"}}}},\"geo\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#eeeeee\",\"borderColor\":\"#999999\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"rgba(34,195,170,0.25)\",\"borderColor\":\"#22c3aa\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#28544e\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#349e8e\"}}}},\"categoryAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#eeeeee\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"valueAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#eeeeee\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"logAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#eeeeee\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"timeAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#999999\"}},\"splitLine\":{\"show\":true,\"lineStyle\":{\"color\":[\"#eeeeee\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"toolbox\":{\"iconStyle\":{\"normal\":{\"borderColor\":\"#999999\"},\"emphasis\":{\"borderColor\":\"#666666\"}}},\"legend\":{\"textStyle\":{\"color\":\"#999999\"}},\"tooltip\":{\"axisPointer\":{\"lineStyle\":{\"color\":\"#cccccc\",\"width\":1},\"crossStyle\":{\"color\":\"#cccccc\",\"width\":1}}},\"timeline\":{\"lineStyle\":{\"color\":\"#4ea397\",\"width\":1},\"itemStyle\":{\"normal\":{\"color\":\"#4ea397\",\"borderWidth\":1},\"emphasis\":{\"color\":\"#4ea397\"}},\"controlStyle\":{\"normal\":{\"color\":\"#4ea397\",\"borderColor\":\"#4ea397\",\"borderWidth\":0.5},\"emphasis\":{\"color\":\"#4ea397\",\"borderColor\":\"#4ea397\",\"borderWidth\":0.5}},\"checkpointStyle\":{\"color\":\"#4ea397\",\"borderColor\":\"#3cebd2\"},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#4ea397\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#4ea397\"}}}},\"visualMap\":{\"color\":[\"#d0648a\",\"#22c3aa\",\"#adfff1\"]},\"dataZoom\":{\"backgroundColor\":\"rgba(255,255,255,0)\",\"dataBackgroundColor\":\"rgba(222,222,222,1)\",\"fillerColor\":\"rgba(114,230,212,0.25)\",\"handleColor\":\"#cccccc\",\"handleSize\":\"100%\",\"textStyle\":{\"color\":\"#999999\"}},\"markPoint\":{\"label\":{\"color\":\"#ffffff\"},\"emphasis\":{\"label\":{\"color\":\"#ffffff\"}}}})"
+            注释 = "主题风格 wonderland 梦游仙境">
+    常量 chalk <类型 = 文本型
+            值 = "echarts.registerTheme(\'chalk\',{\"color\":[\"#fc97af\",\"#87f7cf\",\"#f7f494\",\"#72ccff\",\"#f7c5a0\",\"#d4a4eb\",\"#d2f5a6\",\"#76f2f2\"],\"backgroundColor\":\"rgba(41,52,65,1)\",\"textStyle\":{},\"title\":{\"textStyle\":{\"color\":\"#ffffff\"},\"subtextStyle\":{\"color\":\"#dddddd\"}},\"line\":{\"itemStyle\":{\"borderWidth\":\"4\"},\"lineStyle\":{\"width\":\"3\"},\"symbolSize\":\"0\",\"symbol\":\"circle\",\"smooth\":true},\"radar\":{\"itemStyle\":{\"borderWidth\":\"4\"},\"lineStyle\":{\"width\":\"3\"},\"symbolSize\":\"0\",\"symbol\":\"circle\",\"smooth\":true},\"bar\":{\"itemStyle\":{\"barBorderWidth\":0,\"barBorderColor\":\"#ccc\"}},\"pie\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"scatter\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"boxplot\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"parallel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"sankey\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"funnel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"gauge\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"candlestick\":{\"itemStyle\":{\"color\":\"#fc97af\",\"color0\":\"transparent\",\"borderColor\":\"#fc97af\",\"borderColor0\":\"#87f7cf\",\"borderWidth\":\"2\"}},\"graph\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"},\"lineStyle\":{\"width\":\"1\",\"color\":\"#ffffff\"},\"symbolSize\":\"0\",\"symbol\":\"circle\",\"smooth\":true,\"color\":[\"#fc97af\",\"#87f7cf\",\"#f7f494\",\"#72ccff\",\"#f7c5a0\",\"#d4a4eb\",\"#d2f5a6\",\"#76f2f2\"],\"label\":{\"color\":\"#293441\"}},\"map\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#f3f3f3\",\"borderColor\":\"#999999\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"rgba(255,178,72,1)\",\"borderColor\":\"#eb8146\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#893448\"}},\"emphasis\":{\"textStyle\":{\"color\":\"rgb(137,52,72)\"}}}},\"geo\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#f3f3f3\",\"borderColor\":\"#999999\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"rgba(255,178,72,1)\",\"borderColor\":\"#eb8146\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#893448\"}},\"emphasis\":{\"textStyle\":{\"color\":\"rgb(137,52,72)\"}}}},\"categoryAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#666666\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#aaaaaa\"}},\"splitLine\":{\"show\":false,\"lineStyle\":{\"color\":[\"#e6e6e6\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"valueAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#666666\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#aaaaaa\"}},\"splitLine\":{\"show\":false,\"lineStyle\":{\"color\":[\"#e6e6e6\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"logAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#666666\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#aaaaaa\"}},\"splitLine\":{\"show\":false,\"lineStyle\":{\"color\":[\"#e6e6e6\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"timeAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#666666\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#aaaaaa\"}},\"splitLine\":{\"show\":false,\"lineStyle\":{\"color\":[\"#e6e6e6\"]}},\"splitArea\":{\"show\":false,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"toolbox\":{\"iconStyle\":{\"normal\":{\"borderColor\":\"#999999\"},\"emphasis\":{\"borderColor\":\"#666666\"}}},\"legend\":{\"textStyle\":{\"color\":\"#999999\"}},\"tooltip\":{\"axisPointer\":{\"lineStyle\":{\"color\":\"#cccccc\",\"width\":1},\"crossStyle\":{\"color\":\"#cccccc\",\"width\":1}}},\"timeline\":{\"lineStyle\":{\"color\":\"#87f7cf\",\"width\":1},\"itemStyle\":{\"normal\":{\"color\":\"#87f7cf\",\"borderWidth\":1},\"emphasis\":{\"color\":\"#f7f494\"}},\"controlStyle\":{\"normal\":{\"color\":\"#87f7cf\",\"borderColor\":\"#87f7cf\",\"borderWidth\":0.5},\"emphasis\":{\"color\":\"#87f7cf\",\"borderColor\":\"#87f7cf\",\"borderWidth\":0.5}},\"checkpointStyle\":{\"color\":\"#fc97af\",\"borderColor\":\"#fc97af\"},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#87f7cf\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#87f7cf\"}}}},\"visualMap\":{\"color\":[\"#fc97af\",\"#87f7cf\"]},\"dataZoom\":{\"backgroundColor\":\"rgba(255,255,255,0)\",\"dataBackgroundColor\":\"rgba(114,204,255,1)\",\"fillerColor\":\"rgba(114,204,255,0.2)\",\"handleColor\":\"#72ccff\",\"handleSize\":\"100%\",\"textStyle\":{\"color\":\"#333333\"}},\"markPoint\":{\"label\":{\"color\":\"#293441\"},\"emphasis\":{\"label\":{\"color\":\"#293441\"}}}})"
+            注释 = "主题风格 chalk 黑粉 板书">
+    常量 purplepassion <类型 = 文本型
+            值 = "echarts.registerTheme(\'purple-passion\',{\"color\":[\"#9b8bba\",\"#e098c7\",\"#8fd3e8\",\"#71669e\",\"#cc70af\",\"#7cb4cc\"],\"backgroundColor\":\"rgba(91,92,110,1)\",\"textStyle\":{},\"title\":{\"textStyle\":{\"color\":\"#ffffff\"},\"subtextStyle\":{\"color\":\"#cccccc\"}},\"line\":{\"itemStyle\":{\"borderWidth\":\"2\"},\"lineStyle\":{\"width\":\"3\"},\"symbolSize\":\"7\",\"symbol\":\"circle\",\"smooth\":true},\"radar\":{\"itemStyle\":{\"borderWidth\":\"2\"},\"lineStyle\":{\"width\":\"3\"},\"symbolSize\":\"7\",\"symbol\":\"circle\",\"smooth\":true},\"bar\":{\"itemStyle\":{\"barBorderWidth\":0,\"barBorderColor\":\"#ccc\"}},\"pie\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"scatter\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"boxplot\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"parallel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"sankey\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"funnel\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"gauge\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"}},\"candlestick\":{\"itemStyle\":{\"color\":\"#e098c7\",\"color0\":\"transparent\",\"borderColor\":\"#e098c7\",\"borderColor0\":\"#8fd3e8\",\"borderWidth\":\"2\"}},\"graph\":{\"itemStyle\":{\"borderWidth\":0,\"borderColor\":\"#ccc\"},\"lineStyle\":{\"width\":1,\"color\":\"#aaaaaa\"},\"symbolSize\":\"7\",\"symbol\":\"circle\",\"smooth\":true,\"color\":[\"#9b8bba\",\"#e098c7\",\"#8fd3e8\",\"#71669e\",\"#cc70af\",\"#7cb4cc\"],\"label\":{\"color\":\"#eeeeee\"}},\"map\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#eee\",\"borderColor\":\"#444\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"#e098c7\",\"borderColor\":\"#444\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#000\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#ffffff\"}}}},\"geo\":{\"itemStyle\":{\"normal\":{\"areaColor\":\"#eee\",\"borderColor\":\"#444\",\"borderWidth\":0.5},\"emphasis\":{\"areaColor\":\"#e098c7\",\"borderColor\":\"#444\",\"borderWidth\":1}},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#000\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#ffffff\"}}}},\"categoryAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#cccccc\"}},\"splitLine\":{\"show\":false,\"lineStyle\":{\"color\":[\"#eeeeee\",\"#333333\"]}},\"splitArea\":{\"show\":true,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"valueAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#cccccc\"}},\"splitLine\":{\"show\":false,\"lineStyle\":{\"color\":[\"#eeeeee\",\"#333333\"]}},\"splitArea\":{\"show\":true,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"logAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#cccccc\"}},\"splitLine\":{\"show\":false,\"lineStyle\":{\"color\":[\"#eeeeee\",\"#333333\"]}},\"splitArea\":{\"show\":true,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"timeAxis\":{\"axisLine\":{\"show\":true,\"lineStyle\":{\"color\":\"#cccccc\"}},\"axisTick\":{\"show\":false,\"lineStyle\":{\"color\":\"#333\"}},\"axisLabel\":{\"show\":true,\"textStyle\":{\"color\":\"#cccccc\"}},\"splitLine\":{\"show\":false,\"lineStyle\":{\"color\":[\"#eeeeee\",\"#333333\"]}},\"splitArea\":{\"show\":true,\"areaStyle\":{\"color\":[\"rgba(250,250,250,0.05)\",\"rgba(200,200,200,0.02)\"]}}},\"toolbox\":{\"iconStyle\":{\"normal\":{\"borderColor\":\"#999999\"},\"emphasis\":{\"borderColor\":\"#666666\"}}},\"legend\":{\"textStyle\":{\"color\":\"#cccccc\"}},\"tooltip\":{\"axisPointer\":{\"lineStyle\":{\"color\":\"#cccccc\",\"width\":1},\"crossStyle\":{\"color\":\"#cccccc\",\"width\":1}}},\"timeline\":{\"lineStyle\":{\"color\":\"#8fd3e8\",\"width\":1},\"itemStyle\":{\"normal\":{\"color\":\"#8fd3e8\",\"borderWidth\":1},\"emphasis\":{\"color\":\"#8fd3e8\"}},\"controlStyle\":{\"normal\":{\"color\":\"#8fd3e8\",\"borderColor\":\"#8fd3e8\",\"borderWidth\":0.5},\"emphasis\":{\"color\":\"#8fd3e8\",\"borderColor\":\"#8fd3e8\",\"borderWidth\":0.5}},\"checkpointStyle\":{\"color\":\"#8fd3e8\",\"borderColor\":\"#8a7ca8\"},\"label\":{\"normal\":{\"textStyle\":{\"color\":\"#8fd3e8\"}},\"emphasis\":{\"textStyle\":{\"color\":\"#8fd3e8\"}}}},\"visualMap\":{\"color\":[\"#8a7ca8\",\"#e098c7\",\"#cceffa\"]},\"dataZoom\":{\"backgroundColor\":\"rgba(0,0,0,0)\",\"dataBackgroundColor\":\"rgba(255,255,255,0.3)\",\"fillerColor\":\"rgba(167,183,204,0.4)\",\"handleColor\":\"#a7b7cc\",\"handleSize\":\"100%\",\"textStyle\":{\"color\":\"#333\"}},\"markPoint\":{\"label\":{\"color\":\"#eeeeee\"},\"emphasis\":{\"label\":{\"color\":\"#eeeeee\"}}}})"
+            注释 = "主题风格 purple-passion 紫色激情">
+    常量 m_echartJsFile <类型 = 视窗文件资源 值 = "data\\echarts\\echarts.min.js" 注释 = "ECharts js">
+
+    方法 执行JS脚本 <公开 类型 = 文本型 注释 = "执行一段js脚本" @嵌入式方法 = "">
+    参数 JS文本 <类型 = 文本型 注释 = "提供一段js文本">
+    {
+        @ @sn<this>.runJs(@<JS文本>)
+    }
+
+    方法 执行JS脚本2 <公开 类型 = 文本型 注释 = "执行一段js脚本,返回执行结果文本." @嵌入式方法 = "">
+    参数 JS文本 <类型 = 文本型 注释 = "提供一段js文本,如果要返回结果请在欲返回的内容之前添加\"return\"">
+    {
+        @ @sn<this>.runJsGetStr(@<JS文本>)
+    }
+
+    方法 启用高分辨率支持 <公开 注释 = "本质是通过设置缩放级别并且关闭系统默认缩放来实现的." @嵌入式方法 = "">
+    {
+        @ wkeEnableHighDPISupport()
+    }
+
+    方法 缩放级别 <公开 属性写 注释 = "浏览器容器的缩放系数">
+    参数 缩放级别 <类型 = 小数 注释 = "缩放系数,正常为1.">
+    {
+        @ getWndPtr ()->SetZoomFactor (@<缩放级别>);
+    }
+
+    方法 缩放级别 <公开 属性读 类型 = 小数 注释 = "浏览器容器缩放系数" 返回值注释 = "返回缩放系数" @禁止流程检查 = 真>
+    {
+        @ return getWndPtr ()->GetZoomFactor ();
+    }
+
+    方法 启用复制图片菜单 <公开 属性写 注释 = "启用或屏蔽\'复制图片\'右键菜单." 注释 = "注意: 本方法在使用\"Edge浏览框\"来编译本组件时无效.">
+    参数 是否启用 <类型 = 逻辑型 注释 = "假为屏蔽" @默认值 = 真>
+    {
+        @ #ifndef _VOL_ECHARTS_CTL_BASE_EDGE
+        @     wkeSetContextMenuItemShow(getWndPtr ()->m_webView, wkeMenuItemId::kWkeMenuCopyImageId,@<是否启用>);
+        @ #endif
+    }
+
+    方法 启用图片另存菜单 <公开 属性写 注释 = "启用或屏蔽\'启用图片另存\'右键菜单." 注释 = "注意: 本方法在使用\"Edge浏览框\"来编译本组件时无效.">
+    参数 是否启用 <类型 = 逻辑型 注释 = "假为屏蔽" @默认值 = 真>
+    {
+        @ #ifndef _VOL_ECHARTS_CTL_BASE_EDGE
+        @     wkeSetContextMenuItemShow(getWndPtr ()->m_webView, wkeMenuItemId::kWkeMenuSaveImageId,@<是否启用>);
+        @ #endif
+    }
+
+    方法 截图 <公开 类型 = 字节集类 注释 = "将图表页面打印到位图,如果使用\"MiniBlink浏览框\"编译,返回位图(bmp)字节集数据,如果使用\"Edge浏览框\"编译,返回的是PNG图片字节集数据."
+            返回值注释 = "成功返回截图数据,失败返回空字节集." @禁止流程检查 = 真>
+    {
+        @ return getWndPtr ()->CapturePreview ();
+    }
+
+    方法 自定义风格主题 <公开 注释 = "用户可自行构建风格主题" "">
+    参数 主题名称 <类型 = 文本型 注释 = "提供自定义主题名称" "">
+    参数 主题配置文本 <类型 = 文本型 注释 = "主题配置,提供一个ECharts主题JSON文本,具体格式参考官方主题构建工具">
+    {
+        @ getWndPtr ()->m_userTheme= @<主题名称>;
+        @ getWndPtr ()->m_userThemeJson= @<主题配置文本>;
+    }
+
+    方法 风格主题 <公开 属性写 注释 = "设置图表的颜色风格,本模块中内置了官方提供的12种主题风格." "">
+    参数 主题名称 <类型 = 图表风格主题 注释 = "提供图表风格主题常量" "">
+    {
+        @ getWndPtr ()->m_theme=  @<主题名称>;
+        @ getWndPtr ()->m_userTheme=_T("");
+    }
+
+    方法 暗黑模式 <公开 属性写 注释 = "是否是暗黑模式,默认会根据背景色的亮度自动设置, 如果是设置了容器的背景色而无法判断到,就可以使用该配置手动指定,echarts会根据是否是暗黑模式调整文本等的颜色。" "">
+    参数 是否启用 <类型 = 逻辑型 注释 = "真为启用">
+    {
+        @ getWndPtr ()->m_darkMode= @<是否启用> ? _T("true") : _T("false");
+    }
+
+    方法 调色盘颜色列表 <公开 属性写 注释 = "调色盘颜色列表,如果系列没有设置颜色,则会依次循环从默认列表中取颜色作为系列颜色">
+    参数 颜色列表 <类型 = 文本型
+            注释 = "  提供一个数组文本如:\"[\'#5470c6\', \'#91cc75\', \'#fac858\', \'#ee6666\', \'#73c0de\', \'#3ba272\', \'#fc8452\', \'#9a60b4\', \'#ea7ccc\']\"."
+            注释 = "每个成员为一个颜色值依次代表一个系列的颜色.">
+    {
+        @ getWndPtr ()->m_color= @<颜色列表>;
+    }
+
+    方法 背景颜色 <公开 属性写 注释 = "设置图表容器的背景颜色">
+    参数 颜色值 <类型 = 文本型 注释 = "颜色可以使用RGB表示，比如 \'rgb(128, 128, 128)\' 或 \'rgba(128, 128, 128, 0.5)\',也可以使用十六进制格式,比如 \'#ccc\'">
+    {
+        @ getWndPtr ()->m_backgroundColor= @<颜色值>;
+    }
+
+    方法 启用图表项点击事件 <公开 属性写 注释 = "启用图表项点击事件" @视窗.设置时机 = 组件创建前>
+    参数 是否启用 <类型 = 逻辑型>
+    {
+        @ getWndPtr ()->m_enableClickEvent = @<是否启用>? true : false;
+    }
+
+    方法 置背景填充 <公开 注释 = "设置图表容器的背景纹理填充">
+    参数 纹理图形 <类型 = 文本型 注释 = "提供一个图片链接地址,支持本地路相对径如:\"img/img.png\".也可以是dataURL格式 如:\"data:image/png;...\"">
+    参数 平铺重复 <类型 = 图表背景重复模式 注释 = "提供图表背景重复模式常量" @默认值 = 图表背景重复模式.重复>
+    {
+        @ CVolString jsStr=_T("window.bgImg = new Image();window.bgImg.src='")+@<纹理图形>+=_T("'");
+        @ runJs (jsStr);
+        变量 重复 <静态 类型 = 文本型>
+        重复 = "{\"image\":window.bgImg, \"repeat\":\"" + (文本型)平铺重复 + "\"}"
+        @ getWndPtr ()->m_backgroundColor= @<重复>; 
+    }
+
+    方法 置背景颜色径向渐变 <公开 注释 = "设置图表容器的背景径向渐变颜色">
+    参数 中心点横坐标 <类型 = 小数 注释 = "取值范围0-1.">
+    参数 中心点纵坐标 <类型 = 小数 注释 = "取值范围0-1.">
+    参数 渐变半径 <类型 = 小数 注释 = "取值范围0-1.">
+    参数 起始颜色 <类型 = 文本型 注释 = "可以使用rgb或十六进制格式颜色值">
+    参数 结束颜色 <类型 = 文本型 注释 = "可以使用rgb或十六进制格式颜色值">
+    参数 是否绝对值 <类型 = 逻辑型 注释 = "默认位置采用百分比值,如果设置为真则采用绝对像素值" @默认值 = 假>
+    {
+        变量 color <静态 类型 = 文本型>
+        color = "{\"type\":\"radial\",\"x\":" + 到文本 (中心点横坐标) + ",\"y\":" + 到文本 (中心点纵坐标) + ", \"r\":" + 到文本 (渐变半径) + ",\"colorStops\":[{\"offset\": 0, \"color\":\"" + 起始颜色 + "\"}, {\"offset\":1, \"color\":\"" + 结束颜色 + "\"}], \"global\":" + 选择 (是否绝对值, "1", "0") + "}"
+        @ getWndPtr ()->m_backgroundColor= @<color>; 
+    }
+
+    方法 置背景颜色线性渐变 <公开 注释 = "设置图表容器的背景线性渐变颜色">
+    参数 起始点横坐标 <类型 = 小数 注释 = "取值范围0-1.">
+    参数 起始点纵坐标 <类型 = 小数 注释 = "取值范围0-1.">
+    参数 结束点横坐标 <类型 = 小数 注释 = "取值范围0-1.">
+    参数 结束点纵坐标 <类型 = 小数 注释 = "取值范围0-1.">
+    参数 起始颜色 <类型 = 文本型 注释 = "可以使用rgb或十六进制格式颜色值">
+    参数 结束颜色 <类型 = 文本型 注释 = "可以使用rgb或十六进制格式颜色值">
+    参数 是否绝对值 <类型 = 逻辑型 注释 = "默认位置采用百分比值,如果设置为真则采用绝对像素值" @默认值 = 假>
+    {
+        变量 color <静态 类型 = 文本型>
+        color = "{\"type\":\"linear\",\"x\":" + 到文本 (起始点横坐标) + ",\"y\":" + 到文本 (起始点纵坐标) + ", \"x2\":" + 到文本 (结束点横坐标) + ", \"y2\":" + 到文本 (结束点纵坐标) + ",\"colorStops\":[{\"offset\": 0, \"color\":\"" + 起始颜色 + "\"}, {\"offset\":1, \"color\":\"" + 结束颜色 + "\"}], \"global\":" + 选择 (是否绝对值, "1", "0") + "}"
+        @ getWndPtr ()->m_backgroundColor= @<color>; 
+    }
+
+    方法 置图片元素 <公开 注释 = "在图表环境中创建一个图片元素(Image),用于后续图表元素的纹理填充.">
+    参数 图片地址 <类型 = 文本型 注释 = "提供一个图片链接地址,支持本地路相对径如:\"img/img.png\".也可以是dataURL格式 如:\"data:image/png;...\"">
+    参数 图片名称 <类型 = 文本型 注释 = "图片在图表环境中的唯一名称">
+    {
+        @ CVolString jsStr=_T("window.")+@<图片名称>+_T(" = new Image();window.")+@<图片名称>+_T(".src='")+@<图片地址>+=_T("'");
+        @ runJs (jsStr);
+    }
+
+    方法 注册地图 <公开 注释 = "用于为地理坐标或地图系列的地图类型系注册地图">
+    参数 地图名称 <类型 = 文本型 注释 = "提供一个地图名称,用于在地理坐标系或地图系列中指定所注册的地图.">
+    参数 地图数据 <类型 = 文本型 注释 = "提供一个地图数据对象文本,可以是geoJSON,也可以是SGV文件数据: \"{ svg: svg }\"具体使用格式请参考官方文档.">
+    参数 特定区域设置 <类型 = 文本型 注释 = "如果地图数据为geoJSON,这里可以提供一个对象文本用与配置特定区域的位置缩放及样式.具体使用格式请参考官方文档." @默认值 = "">
+    {
+        @ CVolString jsStr;
+        如果 (特定区域设置 == "")
+        {
+            @ jsStr=_T("echarts.registerMap('")+@<地图名称>+_T("', ")+@<地图数据>+_T(");");
+        }
+        否则
+        {
+            @ jsStr=_T("echarts.registerMap('")+@<地图名称>+_T("', ")+@<地图数据>+_T(", ")+@<特定区域设置>+_T(");");
+        }
+        @ runJs (jsStr);
+    }
+
+    方法 显示标题栏 <公开 属性写 注释 = "是否显示图表标题栏">
+    参数 是否显示 <类型 = 逻辑型 注释 = "真为显示" @默认值 = 假>
+    {
+        标题栏.是否显示 = 是否显示
+    }
+
+    方法 显示图例 <公开 属性写 注释 = "是否显示图例">
+    参数 是否显示 <类型 = 逻辑型 注释 = "真为显示" @默认值 = 假>
+    {
+        图例.是否显示 = 是否显示
+    }
+
+    方法 显示提示框 <公开 属性写 注释 = "是否显示提示框组件">
+    参数 是否显示 <类型 = 逻辑型 注释 = "真为显示" @默认值 = 假>
+    {
+        提示框.是否显示 = 是否显示
+    }
+
+    方法 显示工具栏 <公开 属性写 注释 = "是否显示工具栏组件">
+    参数 是否显示 <类型 = 逻辑型 注释 = "真为显示" @默认值 = 假>
+    {
+        工具栏.是否显示 = 是否显示
+    }
+
+    方法 主标题 <公开 属性写 注释 = "设置图表的主标题内容,设置该项将自动显示标题栏.">
+    参数 标题 <类型 = 文本型 注释 = "主标题文本" @默认值 = "主标题">
+    {
+        @ @<标题栏.主标题> (@<标题>);
+    }
+
+    方法 副标题 <公开 属性写 注释 = "设置图表的副标题内容.设置该项将自动显示标题栏">
+    参数 标题 <类型 = 文本型 注释 = "副标题文本" @默认值 = "副标题">
+    {
+        @ @<标题栏.副标题> (@<标题>);
+    }
+
+    方法 准备就绪 <公开 定义事件 类型 = 整数 注释 = "  当页面文档及ECharts图表环境准备就绪时触发此事件.">
+    参数 系列集对象 <类型 = 图表系列集类 注释 = "  系列集,(对应option.series配置项)此配置项实际是个数组,每个成员即一个系列,系列是指:一组数值以及他们映射成的图."
+            注释 = "其不仅表示数据,也表示数据映射成为的图.所以一个系列包含的要素至少有:一组数值,图表类型,以及其他的关于这些数据如何映射成图的参数.">
+
+    方法 图表项被单击 <公开 定义事件 类型 = 整数 注释 = "  当图表项被单击时触发此事件.">
+    参数 图表项信息 <类型 = 文本型 注释 = "图表项信息JSON文本">
+
+    # --
+    # @begin
+    # <> <include>
+    # static void @an<_sOnBeforeAppInit> ()  {
+    # #ifndef _VOL_ECHARTS_CTL_BASE_EDGE
+    #     CVWnd_MBWnd::mbInit (s_wkeDllPath);  //初始化MiniBlink
+    # #endif
+    # }
+    # inline_ CVWnd_EChartsWnd* getWndPtr () { return (CVWnd_EChartsWnd*)this->GetWtlControlPtr ();} //控件窗口对象
+    # inline_ void runJs (const CVolString& jsStr) { getWndPtr()->ExecuteScript (jsStr.GetText (), NULL); }
+    #
+    # CVolString runJsGetStr (const CVolString& jsStr)
+    # {
+    #     CVolString strResult;
+    #     getWndPtr()->ExecuteScript (jsStr.GetText (), &strResult);
+    #     return strResult;
+    # }
+    #
+    # virtual void OnDocumentReady () override 
+    # {  
+    #     static @an<CVolMem> memBuf;
+    #     if (memBuf.GetSize()==0)
+    #     {
+    #         g_objVolApp.LoadResData ((UINT_P)@<m_echartJsFile>, memBuf); //从资源读取js
+    #         memBuf.AddDWord (0);
+    #     }
+    #
+    # #ifndef _VOL_ECHARTS_CTL_BASE_EDGE
+    #     wkeRunJS (getWndPtr()->m_webView, (const CHAR*)memBuf.GetPtr ()); //注入到页面
+    #     //DebugTrace (0, 0, _T ("Sn"), _T("OnReady:LoadTime:"), (GetTickCount() - getWndPtr()->m_startLoadTime));
+    #     wkeSetHeadlessEnabled (getWndPtr()->m_webView, 0);
+    #     wkeShowWindow (getWndPtr()->m_webView, 1);
+    # #else
+    #     getWndPtr()->ExecuteScript (CVolString ((const U8CHAR*)memBuf.GetPtr ()).GetText (), NULL);
+    # #endif
+    #     @<准备就绪> (@<系列集>);  
+    # }
+    #
+    # virtual void OnBeforeNativeWndCreate (CVolNativeWndCreateParam* pCreateParam) override
+    # {
+    #     BaseClass::OnBeforeNativeWndCreate (pCreateParam);
+    #     AttachEventListenerIfNone ();  //强制挂接事件
+    # }
+    # virtual void OnDestroy () override { @<清空参数>(0,0,0);}
+    # virtual void OnSize () override { if (getWndPtr()->m_ready && getWndPtr ()->m_echartsInit) @<画图>(); }
+    # virtual void OnChartsItemClick (const TCHAR* szData) override { @<图表项被单击>(CVolString (szData)); }
+    # <> </include>
+    # @end
+}
+
+类 直角坐标系图表基础类 <公开 基础类 = EC基础图表 注释 = "折线图,柱状图,K线图等默认使用直角坐标系">
+{
+    方法 横坐标轴 <公开 属性读 类型 = 图表坐标轴类 注释 = "取首个横轴" @视窗.返回参考 = 真>
+    {
+        如果 (坐标轴.横轴.取坐标轴数 () == 0)
+        {
+            坐标轴.横轴.创建坐标轴 (坐标轴类型.类目轴, , )
+        }
+        返回 (坐标轴.横轴.取坐标轴 (0))
+    }
+
+    方法 横坐标轴 <公开 属性写 注释 = "设置横轴">
+    参数 坐标轴配置 <类型 = 图表坐标轴类 注释 = "提供一个坐标轴对象">
+    {
+        坐标轴.横轴.清空 ()
+        坐标轴.横轴.添加坐标轴 (坐标轴配置)
+    }
+
+    方法 纵坐标轴 <公开 属性读 类型 = 图表坐标轴类 注释 = "取首个纵轴" @视窗.返回参考 = 真>
+    {
+        如果 (坐标轴.纵轴.取坐标轴数 () == 0)
+        {
+            坐标轴.纵轴.创建数值轴 ()
+        }
+        返回 (坐标轴.纵轴.取坐标轴 (0))
+    }
+
+    方法 纵坐标轴 <公开 属性写 注释 = "设置纵轴">
+    参数 坐标轴配置 <类型 = 图表坐标轴类 注释 = "提供一个坐标轴对象">
+    {
+        坐标轴.纵轴.清空 ()
+        坐标轴.纵轴.添加坐标轴 (坐标轴配置)
+    }
+
+    方法 提示框指示器 <公开 属性写 注释 = "设置提示框组件的坐标轴指示器类型">
+    参数 指示器类型 <类型 = 坐标轴指示器类型 注释 = "提供坐标轴指示器类型常量" @默认值 = 坐标轴指示器类型.十字准星指示器>
+    {
+        提示框.坐标轴指示器.类型 = 指示器类型
+    }
+
+    方法 提示框触发类型 <公开 属性写 注释 = "鼠标动到数据图形上时,触发显示提示框的类型.">
+    参数 触发类型 <类型 = 提示框触发类型 注释 = "提供提示框触发类型常量" @默认值 = 提示框触发类型.坐标轴触发>
+    {
+        提示框.触发类型 = 触发类型
+    }
+}
+
+类 EC折线图 <公开 基础类 = 直角坐标系图表基础类 注释 = "Echarts折线图组件" @文档 = "category = \"图表控件\""
+        @视窗.窗口组件 = "icon=\"icon\\折线图.bmp\"\r\ndefault_size = \"240, 200\"\r\npreview_unsupported">
+{
+
+    # @begin
+    # <> <include>
+    # virtual void OnCreate () override {  @<初始设置>();}
+    # <> </include>
+    # @end
+
+    方法 初始设置
+    {
+        坐标轴.横轴.创建坐标轴 (坐标轴类型.类目轴).类目轴边界留白 = 假
+        坐标轴.纵轴.创建坐标轴 (坐标轴类型.数值轴)
+        提示框.触发类型 = 提示框触发类型.坐标轴触发
+        提示框.坐标轴指示器.类型 = 坐标轴指示器类型.十字准星指示器
+    }
+
+    方法 平滑曲线 <公开 属性写 注释 = "折线图是否平滑曲线显示.在系列创建前设置有效.">
+    参数 是否启用 <类型 = 逻辑型 注释 = "默认关闭" @默认值 = 假>
+    {
+        @ @<系列集>.data().m_mapData[_T("smooth")]=@<是否启用> ? _T("true"): _T("");   
+    }
+
+    方法 显示标签 <公开 属性写 注释 = "是否显示数据的文字标签,在系列创建前有效.">
+    参数 是否显示 <类型 = 逻辑型 注释 = "真为显示" @默认值 = 假>
+    {
+        @ @<系列集>.data().m_mapData[_T("label")]=@<是否显示> ? _T("{\"show\":true}"): _T("{\"show\":false}");
+    }
+
+    方法 显示标记图形 <公开 属性写 注释 = "是否显示标记图形,">
+    参数 是否显示 <类型 = 逻辑型 注释 = "如果为假则只有在提示框点亮的时候显示" "">
+    {
+        @ @<系列集>.data().m_mapData[_T("showSymbol")]=@<是否显示> ? _T("true") : _T("false");   
+    }
+
+    方法 创建折线图系列 <公开 类型 = 图表系列类 注释 = "创建一个类型为折线图的系列数据加入系列集,并返回该系列,折线图的一个系列代表一条数据线." @视窗.返回参考 = 真>
+    参数 系列名称 <类型 = 文本型 注释 = "系列名称,在折线图中表示此数据线的名称或类目" @默认值 = "">
+    参数 文本系列数据 <类型 = 文本型 注释 = "  提供一个数组文本如:\"[1,2,3,4,5,6,7]\"每个成员表示一个数据节点值." 注释 = "此参数与本方法第三个参数至少提供一个,如果同时提供了第三个参数,"
+            注释 = "那么此参数将被舍弃." @默认值 = "">
+    参数 数组系列数据 <类型 = 整数数组类 注释 = "数组型系列数据,如果提供了此参数,那么本方法第二参数提供的内容将被舍弃." @默认值 = 空对象>
+    参数 平滑曲线 <类型 = 逻辑型 注释 = "是否平滑曲线显示" @默认值 = 假>
+    参数 区域填充 <类型 = 逻辑型 注释 = "是否显示成面积图" @默认值 = 假>
+    参数 数据堆叠 <类型 = 逻辑型 注释 = "是否数据堆叠" @默认值 = 假>
+    {
+        变量 系列参数对象 <类型 = 图表系列类>
+        系列参数对象.图表类型 = 图表类型.折线图
+        系列参数对象.系列名称 = 系列名称
+        如果真 (数组系列数据 != 空对象)
+        {
+            如果真 (数组系列数据.取成员数 () > 0)
+            {
+                文本系列数据 = "["
+                数组系列数据.枚举循环 ()
+                {
+                    如果 (文本系列数据 == "[")
+                    {
+                        文本系列数据 = 文本系列数据 + 到文本 (数组系列数据.取枚举值 ())
+                    }
+                    否则
+                    {
+                        文本系列数据 = 文本系列数据 + "," + 到文本 (数组系列数据.取枚举值 ())
+                    }
+                }
+                文本系列数据 = 文本系列数据 + "]"
+            }
+        }
+        如果真 (文本系列数据 != "")
+        {
+            系列参数对象.数据_文本 = 文本系列数据
+        }
+
+        系列参数对象.平滑曲线 = 平滑曲线
+        如果真 (区域填充)
+        {
+            系列参数对象.区域填充.是否显示 = 区域填充
+        }
+        如果真 (数据堆叠)
+        {
+            系列参数对象.数据堆叠 = "总量"
+        }
+        返回 (系列集.添加系列 (系列参数对象))
+    }
+}
+
+类 EC柱状图 <公开 基础类 = 直角坐标系图表基础类 注释 = "Echarts柱状图组件" @文档 = "category = \"图表控件\""
+        @视窗.窗口组件 = "icon=\"icon\\柱状图.bmp\"\r\ndefault_size = \"240, 200\"\r\npreview_unsupported">
+{
+
+    # @begin
+    # <> <include>
+    # virtual void OnCreate () override {  @<初始设置>();}
+    # <> </include>
+    # @end
+
+    方法 初始设置
+    {
+        坐标轴.横轴.创建坐标轴 (坐标轴类型.类目轴)
+        坐标轴.纵轴.创建坐标轴 (坐标轴类型.数值轴)
+        显示图例 = 真
+        提示框.触发类型 = 提示框触发类型.坐标轴触发
+        提示框.坐标轴指示器.类型 = 坐标轴指示器类型.阴影指示器
+    }
+
+    方法 显示背景 <公开 属性写 注释 = "是否显示柱状图柱条的背景色,在系列创建前有效.">
+    参数 是否显示背景颜色 <类型 = 逻辑型 注释 = "真为显示" @默认值 = 假>
+    {
+        @ @<系列集>.data().m_mapData[_T("showBackground")]=@<是否显示背景颜色> ? _T("true") : _T("false");   
+    }
+
+    方法 显示标签 <公开 属性写 注释 = "是否在柱条显示数据的文字标签,在系列创建前有效.">
+    参数 是否显示 <类型 = 逻辑型 注释 = "真为显示" @默认值 = 假>
+    {
+        @ @<系列集>.data().m_mapData[_T("label")]=@<是否显示> ? _T("{\"show\":true}") : _T("{\"show\":false}");
+    }
+
+    方法 柱条宽度 <公开 属性写 注释 = "柱条的宽度,不设时自适应.在系列创建前有效.">
+    参数 宽度值文本 <类型 = 文本型 注释 = "可以是绝对值例如\"40\"或者百分数例如\"60%\"百分数基于自动计算出的每一类目的宽度">
+    {
+        如果 (取文本右边 (宽度值文本, 1) == "%")
+        {
+            @ @<系列集>.data().m_mapData[_T("barWidth")]=_T("\"")+@<宽度值文本>+_T("\"");   
+        }
+        否则
+        {
+            @ @<系列集>.data().m_mapData[_T("barWidth")]=@<宽度值文本>;
+        }
+    }
+
+    方法 创建柱状图系列 <公开 类型 = 图表系列类 注释 = "创建一个类型为柱状图的系列数据加入系列集,并返回该系列,柱状图的一个系列代表一个柱条." @视窗.返回参考 = 真>
+    参数 系列名称 <类型 = 文本型 注释 = "系列名称,在折线图中表示此数据线的名称或类目" @默认值 = "">
+    参数 文本系列数据 <类型 = 文本型 注释 = "  提供一个数组文本如:\"[1,2,3,4,5,6,7]\"每个成员表示一个数据节点值." 注释 = "此参数与本方法第三个参数至少提供一个,如果同时提供了第三个参数,"
+            注释 = "那么此参数将被舍弃." @默认值 = "">
+    参数 数组系列数据 <类型 = 整数数组类 注释 = "数组型系列数据,如果提供了此参数,那么本方法第二参数提供的内容将被舍弃." @默认值 = 空对象>
+    参数 数据堆叠 <类型 = 逻辑型 注释 = "是否数据堆叠" @默认值 = 假>
+    {
+        变量 系列参数对象 <类型 = 图表系列类>
+        系列参数对象.图表类型 = 图表类型.柱状图
+        系列参数对象.系列名称 = 系列名称
+        如果真 (数组系列数据 != 空对象)
+        {
+            如果真 (数组系列数据.取成员数 () > 0)
+            {
+                文本系列数据 = "["
+                数组系列数据.枚举循环 ()
+                {
+                    如果 (文本系列数据 == "[")
+                    {
+                        文本系列数据 = 文本系列数据 + 到文本 (数组系列数据.取枚举值 ())
+                    }
+                    否则
+                    {
+                        文本系列数据 = 文本系列数据 + "," + 到文本 (数组系列数据.取枚举值 ())
+                    }
+                }
+                文本系列数据 = 文本系列数据 + "]"
+            }
+        }
+        如果真 (文本系列数据 != "")
+        {
+            系列参数对象.数据_文本 = 文本系列数据
+        }
+
+        如果真 (数据堆叠)
+        {
+            系列参数对象.数据堆叠 = "总量"
+        }
+        返回 (系列集.添加系列 (系列参数对象))
+    }
+}
+
+类 EC饼图 <公开 基础类 = EC基础图表 注释 = "Echarts饼图组件" @文档 = "category = \"图表控件\""
+        @视窗.窗口组件 = "icon=\"icon\\饼图.bmp\"\r\ndefault_size = \"240, 200\"\r\npreview_unsupported">
+{
+
+    # @begin
+    # <> <include>
+    # virtual void OnCreate () override {  @<初始设置>();}
+    # <> </include>
+    # @end
+
+    方法 初始设置
+    {
+        显示图例 = 真
+        提示框.触发类型 = 提示框触发类型.数据项图形触发
+    }
+
+    方法 提示框触发类型 <公开 属性写 注释 = "鼠标动到数据图形上时,触发显示提示框的类型.">
+    参数 触发类型 <类型 = 提示框触发类型 注释 = "提供提示框触发类型常量" @默认值 = 提示框触发类型.数据项图形触发>
+    {
+        提示框.触发类型 = 触发类型
+    }
+
+    方法 显示标签 <公开 属性写 注释 = "是否显示数据的文字标签,在系列创建前有效.">
+    参数 是否显示 <类型 = 逻辑型 注释 = "真为显示" @默认值 = 假>
+    {
+        @ @<系列集>.data().m_mapData[_T("label")]=@<是否显示> ? _T("{\"show\":true}"): _T("{\"show\":false}");
+    }
+
+    方法 玫瑰图 <公开 属性写 注释 = "饼图是否展示成南丁格尔玫瑰图,通过半径区分数据大小.在系列创建前设置有效">
+    参数 是否为玫瑰图 <类型 = 逻辑型 注释 = "真为开启" @默认值 = 假>
+    {
+        @ @<系列集>.data().m_mapData[_T("roseType")]=@<是否为玫瑰图> ? _T("true"): _T("");   
+    }
+}
+
+类 EC雷达图 <公开 基础类 = EC基础图表 注释 = "Echarts雷达图组件" @文档 = "category = \"图表控件\""
+        @视窗.窗口组件 = "icon=\"icon\\雷达图.bmp\"\r\ndefault_size = \"240, 200\"\r\npreview_unsupported">
+{
+
+    # @begin
+    # <> <include>
+    # virtual void OnCreate () override {  @<初始设置>();}
+    # <> </include>
+    # @end
+    #
+
+    方法 初始设置
+    {
+        提示框.触发类型 = 提示框触发类型.数据项图形触发
+    }
+
+    方法 显示标签 <公开 属性写 注释 = "是否显示数据的文字标签,在系列创建前有效.">
+    参数 是否显示 <类型 = 逻辑型 注释 = "真为显示" @默认值 = 假>
+    {
+        @ @<系列集>.data().m_mapData[_T("label")]=@<是否显示> ? _T("{\"show\":true}"): _T("{\"show\":false}");
+    }
+
+    方法 提示框触发类型 <公开 属性写>
+    参数 触发类型 <类型 = 提示框触发类型 @默认值 = 提示框触发类型.数据项图形触发>
+    {
+        提示框.触发类型 = 触发类型
+    }
+}
+
+类 EC漏斗图 <公开 基础类 = EC基础图表 注释 = "Echarts漏斗图组件" @文档 = "category = \"图表控件\""
+        @视窗.窗口组件 = "icon=\"icon\\漏斗图.bmp\"\r\ndefault_size = \"240, 200\"\r\npreview_unsupported">
+{
+
+    # @begin
+    # <> <include>
+    # virtual void OnCreate () override {  @<初始设置>();}
+    # <> </include>
+    # @end
+
+    方法 初始设置
+    {
+        显示图例 = 真
+        提示框.触发类型 = 提示框触发类型.数据项图形触发
+    }
+
+    方法 显示标签 <公开 属性写 注释 = "是否显示数据的文字标签,在系列创建前有效.">
+    参数 是否显示 <类型 = 逻辑型 注释 = "真为显示" @默认值 = 假>
+    {
+        @ @<系列集>.data().m_mapData[_T("label")]=@<是否显示> ? _T("{\"show\":true}"): _T("{\"show\":false}");
+    }
+
+    方法 内部显示标签 <公开 属性写 注释 = "是否显示数据图形的内部文字标签,在系列创建前有效.">
+    参数 是否显示 <类型 = 逻辑型 注释 = "真为内部显示,假为外部(默认右侧)显示" @默认值 = 假>
+    {
+        @ @<系列集>.data().m_mapData[_T("label")]=@<是否显示> ? _T("{\"show\":true,\"position\":\"inside\"}"): _T("{\"show\":true}");
+    }
+
+    方法 提示框触发类型 <公开 属性写 注释 = "鼠标动到数据图形上时,触发显示提示框的类型.">
+    参数 触发类型 <类型 = 提示框触发类型 注释 = "提供提示框触发类型常量" @默认值 = 提示框触发类型.数据项图形触发>
+    {
+        提示框.触发类型 = 触发类型
+    }
+}
+
+类 EC仪表盘 <公开 基础类 = EC基础图表 注释 = "Echarts仪表盘组件" @文档 = "category = \"图表控件\""
+        @视窗.窗口组件 = "icon=\"icon\\仪表盘.bmp\"\r\ndefault_size = \"240, 200\"\r\npreview_unsupported">
+{
+    方法 初始设置
+    {
+        提示框.触发类型 = 提示框触发类型.数据项图形触发
+    }
+
+    # @begin
+    # <> <include>
+    # virtual void OnCreate () override {  @<初始设置>();}
+    # <> </include>
+    # @end
+
+    方法 显示进度条 <公开 属性写 注释 = "是否显示进度条,在系列创建设置前有效." "">
+    参数 是否显示 <类型 = 逻辑型 注释 = "真为显示" @默认值 = 假>
+    {
+        @ @<系列集>.data().m_mapData[_T("progress")]=@<是否显示> ? _T("{\"show\":true}"): _T("{\"show\":false}");
+    }
+
+    方法 显示指针 <公开 属性写 注释 = "是否显示指针在系列创建设置前有效." "">
+    参数 是否显示 <类型 = 逻辑型 注释 = "真为显示" @默认值 = 真>
+    {
+        @ @<系列集>.data().m_mapData[_T("pointer")]=@<是否显示> ? _T("{\"show\":true}"): _T("{\"show\":false}");
+    }
+}
+
+类 EC_K线图 <公开 基础类 = 直角坐标系图表基础类 注释 = "EchartsK线图组件" @文档 = "category = \"图表控件\""
+        @视窗.窗口组件 = "icon=\"icon\\K线图.bmp\"\r\ndefault_size = \"240, 200\"\r\npreview_unsupported">
+{
+    方法 初始设置
+    {
+        坐标轴.横轴.创建坐标轴 (坐标轴类型.类目轴)
+        坐标轴.纵轴.创建坐标轴 (坐标轴类型.数值轴)
+        提示框.触发类型 = 提示框触发类型.数据项图形触发
+
+    }
+
+    # @begin
+    # <> <include>
+    # virtual void OnCreate () override {  @<初始设置>();}
+    # <> </include>
+    # @end
+
+    方法 阳线颜色 <公开 属性写 注释 = "K线图阳线图形颜色,即涨,在系列创建前设置有效." "">
+    参数 颜色值文本 <类型 = 文本型
+            注释 = "颜色可以使用 RGB 表示,比如\"rgb(128, 128, 128)\" ,如果想要加上 alpha 通道,可以使用 RGBA,比如 \"rgba(128, 128, 128, 0.5)\"."
+            注释 = "也可以使用十六进制格式,比如 \'#ccc\' 设置为\"null\"表示空." @默认值 = "#c23531">
+    {
+        如果 (到小写 (颜色值文本) == 到小写 ("null"))
+        {
+            @ @<系列集>.data().m_mapData[_T("itemStyle")]=  _T("{\"color\":null}");
+        }
+        否则
+        {
+            @ @<系列集>.data().m_mapData[_T("itemStyle")]=  _T("{\"color\":'")+@<颜色值文本>+_T("'}");
+        }
+    }
+
+    方法 阴线颜色 <公开 属性写 注释 = "K线图阴线图形颜色,即跌.在系列创建前设置有效.">
+    参数 颜色值文本 <类型 = 文本型
+            注释 = "颜色可以使用 RGB 表示,比如\"rgb(128, 128, 128)\" ,如果想要加上 alpha 通道,可以使用 RGBA,比如 \"rgba(128, 128, 128, 0.5)\"."
+            注释 = "也可以使用十六进制格式,比如 \'#ccc\' 设置为\"null\"表示空." @默认值 = "#314656">
+    {
+        如果 (到小写 (颜色值文本) == 到小写 ("null"))
+        {
+            @ @<系列集>.data().m_mapData[_T("itemStyle")]=  _T("{\"color0\":null}");
+        }
+        否则
+        {
+            @ @<系列集>.data().m_mapData[_T("itemStyle")]=  _T("{\"color0\":'")+@<颜色值文本>+_T("'}");
+        }
+    }
+
+    方法 阳线边框颜色 <公开 属性写 注释 = "K线图阳线图形描边颜色,在系列创建前设置有效." "">
+    参数 颜色值文本 <类型 = 文本型
+            注释 = "颜色可以使用 RGB 表示,比如\"rgb(128, 128, 128)\" ,如果想要加上 alpha 通道,可以使用 RGBA,比如 \"rgba(128, 128, 128, 0.5)\"."
+            注释 = "也可以使用十六进制格式,比如 \'#ccc\'" @默认值 = "#c23531">
+    {
+        如果 (到小写 (颜色值文本) == 到小写 ("null"))
+        {
+            @ @<系列集>.data().m_mapData[_T("itemStyle")]=  _T("{\"borderColor\":null}");
+        }
+        否则
+        {
+            @ @<系列集>.data().m_mapData[_T("itemStyle")]=  _T("{\"borderColor\":'")+@<颜色值文本>+_T("'}");
+        }
+    }
+
+    方法 阴线边框颜色 <公开 属性写 注释 = "K线图阴线图形描边颜色,在系列创建前设置有效.">
+    参数 颜色值文本 <类型 = 文本型
+            注释 = "颜色可以使用 RGB 表示,比如\"rgb(128, 128, 128)\" ,如果想要加上 alpha 通道,可以使用 RGBA,比如 \"rgba(128, 128, 128, 0.5)\"."
+            注释 = "也可以使用十六进制格式,比如 \'#ccc\'" @默认值 = "#314656">
+    {
+        如果 (到小写 (颜色值文本) == 到小写 ("null"))
+        {
+            @ @<系列集>.data().m_mapData[_T("itemStyle")]=  _T("{\"borderColor0\":null}");
+        }
+        否则
+        {
+            @ @<系列集>.data().m_mapData[_T("itemStyle")]=  _T("{\"borderColor0\":'")+@<颜色值文本>+_T("'}");
+        }
+    }
+}

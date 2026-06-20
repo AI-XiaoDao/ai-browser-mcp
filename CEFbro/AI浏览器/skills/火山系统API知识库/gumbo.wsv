@@ -1,0 +1,663 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.HTML5解析\"" @视窗.外部头文件 = "gumbo\\GumboQueryTool.h"
+        @视窗.外部库.x64 = "gumbo\\GumboQueryToolx64.lib" @视窗.外部库.win32 = "gumbo\\GumboQueryToolx86.lib"
+        @视窗.附属文件.x64 = "gumbo\\GumboQueryToolx64.dll" @视窗.附属文件.win32 = "gumbo\\GumboQueryToolx86.dll" "">
+
+类 网页解析节点类型 <公开 折叠 @常量类 = 整数>
+{
+    常量 文档 <公开 值 = @GUMBO_NODE_DOCUMENT 注释 = "  GUMBO_NODE_DOCUMENT,">
+    常量 元素 <公开 值 = @GUMBO_NODE_ELEMENT 注释 = "  /** Element node.  v will be a GumboElement. */" 注释 = "  GUMBO_NODE_ELEMENT,">
+    常量 文本 <公开 值 = @GUMBO_NODE_TEXT 注释 = "  /** Text node.  v will be a GumboText. */" 注释 = "  GUMBO_NODE_TEXT,">
+    常量 附加数据 <公开 值 = @GUMBO_NODE_CDATA 注释 = " /** CDATA node. v will be a GumboText. */" 注释 = "  GUMBO_NODE_CDATA,">
+    常量 注释 <公开 值 = @GUMBO_NODE_COMMENT 注释 = "  /** Comment node.  v will be a GumboText, excluding comment delimiters. */"
+            注释 = "  GUMBO_NODE_COMMENT,">
+    常量 空格 <公开 值 = @GUMBO_NODE_WHITESPACE 注释 = " /** Text node, where all contents is whitespace.  v will be a GumboText. */"
+            注释 = "  GUMBO_NODE_WHITESPACE,">
+    常量 模板 <公开 值 = @GUMBO_NODE_TEMPLATE 注释 = "  /** Template node.  This is separate from GUMBO_NODE_ELEMENT because many"
+            注释 = "   * client libraries will want to ignore the contents of template nodes, as"
+            注释 = "   * the spec suggests.  Recursing on GUMBO_NODE_ELEMENT will do the right thing"
+            注释 = "   * here, while clients that want to include template contents should also"
+            注释 = "   * check for GUMBO_NODE_TEMPLATE.  v will be a GumboElement.  */" 注释 = "  GUMBO_NODE_TEMPLATE">
+
+    #
+}
+
+类 ______网页解析模块 <公开 @全局类 = 真>
+{
+    方法 GumboNode_Parese <静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 utf8文本指针 <类型 = 变整数>
+    参数 文本长度 <类型 = 整数>
+    {
+        @ (@dt<变整数>)GumboNode_Parese((const char* )@<utf8文本指针>,@<文本长度>)
+    }
+
+    方法 网页解析_打开 <公开 静态 类型 = 变整数 注释 = "返回解析器句柄" "">
+    参数 utf8 <类型 = 字节集类 注释 = "必须是utf8的内容才能解析">
+    {
+        返回 (GumboNode_Parese (utf8.取字节集指针 (), utf8.取字节集长度 ()))
+    }
+
+    方法 网页解析_关闭 <公开 静态 @嵌入式方法 = "">
+    参数 解析器句柄 <类型 = 变整数>
+    {
+        @ GumboNode_Destory((GumboOutput*)@<解析器句柄>)
+    }
+
+    方法 网页解析_取根节点 <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 解析器句柄 <类型 = 变整数>
+    {
+        @ (@dt<变整数>)GumboNode_GetRoot((GumboOutput*)@<解析器句柄>)
+    }
+
+    方法 网页解析_取子节点 <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 节点句柄 <类型 = 变整数>
+    参数 子节点索引 <类型 = 整数 注释 = "从0开始">
+    {
+        @ (@dt<变整数>)GumboNode_GetChild((GumboNode*)@<节点句柄>,@<子节点索引>)
+    }
+
+    方法 网页解析_取子节点数 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 节点句柄 <类型 = 变整数>
+    {
+        @ GumboNode_GetChildCount((GumboNode*)@<节点句柄>)
+    }
+
+    方法 网页解析_取节点类型 <公开 静态 类型 = 网页解析节点类型 注释 = "是元素节点还是文本节点" @嵌入式方法 = "">
+    参数 节点句柄 <类型 = 变整数>
+    {
+        @ GumboNode_GetType((GumboNode*)@<节点句柄>)
+    }
+
+    方法 网页解析_取文本节点内容 <公开 静态 @嵌入式方法 = "">
+    参数 节点句柄 <类型 = 变整数>
+    {
+        @ GumboNode_GetTextNodeData((GumboNode*)@<节点句柄>)
+    }
+
+    方法 网页解析_取标签类型 <公开 静态 类型 = 网页解析节点类型 注释 = "是 span h1 div 还是什么" @嵌入式方法 = "">
+    参数 节点句柄 <类型 = 变整数>
+    {
+        @ GumboNode_GetTag((GumboNode*)@<节点句柄>)
+    }
+
+    方法 网页解析_取标签名称 <公开 静态 类型 = 文本型 注释 = "返回 h1 div 之类的 文本名称" @嵌入式方法 = "">
+    参数 节点句柄 <类型 = 变整数>
+    {
+        @ CVolString( GumboNode_GetTagName((GumboNode*)@<节点句柄>))
+    }
+
+    方法 网页解析_取开始标签源码 <公开 静态 类型 = 文本型 注释 = "<a herf=\"aaaa\"   > 类似这样的">
+    参数 节点句柄 <类型 = 变整数>
+    {
+        变量 标签内容 <类型 = 字节集类>
+        @ CVolMem mem(GumboNode_GetTagStart((GumboNode*)@<节点句柄>),  GumboNode_GetTagStartLen((GumboNode*)@<节点句柄>));
+        @ @<标签内容> = mem;
+        返回 (UTF8到文本 (标签内容))
+
+    }
+
+    方法 网页解析_取父节点 <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 节点句柄 <类型 = 变整数>
+    {
+        @ (@dt<变整数>)GumboNode_GetParent((GumboNode*)@<节点句柄>)
+    }
+
+    方法 GumboNode_GetAttrbuteValue <静态 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 节点句柄 <类型 = 变整数>
+    参数 属性名称 <类型 = 变整数>
+    {
+        @  GumboNode_GetAttrbuteValue((GumboNode*)@<节点句柄>,(const char* )@<属性名称>)
+
+    }
+
+    方法 网页解析_取标签属性值 <公开 静态 类型 = 文本型 注释 = "当前节点是 <a herf=\"aaaa\"   > 传递 herf 则函数返回 aaaa" 折叠>
+    参数 节点句柄 <类型 = 变整数>
+    参数 属性名称 <类型 = 文本型>
+    {
+        变量 属性名 <类型 = 字节集类>
+        属性名 = 文本到UTF8 (属性名称)
+        返回 (GumboNode_GetAttrbuteValue (节点句柄, 属性名.取字节集指针 ()))
+    }
+
+    方法 GumboNode_getElementsByClassName <静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 节点句柄 <类型 = 变整数>
+    参数 类名称 <类型 = 变整数>
+    {
+        @ (@dt<变整数>) GumboNode_getElementsByClassName((GumboNode*)@<节点句柄>,(const char* )@<类名称>)
+
+    }
+
+    方法 网页解析_取节点_根据类名 <公开 静态 类型 = 变整数 折叠>
+    参数 节点句柄 <类型 = 变整数>
+    参数 类名称 <类型 = 文本型>
+    {
+        变量 临时数据 <类型 = 字节集类>
+        临时数据 = 文本到UTF8 (类名称)
+        返回 (GumboNode_getElementsByClassName (节点句柄, 临时数据.取字节集指针 ()))
+
+    }
+
+    方法 GumboNode_getElementById <静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 节点句柄 <类型 = 变整数>
+    参数 id <类型 = 变整数>
+    {
+        @ (@dt<变整数>) GumboNode_getElementById((GumboNode*)@<节点句柄>,(const char* )@<id>)
+
+    }
+
+    方法 网页解析_取节点_根据ID <公开 静态 类型 = 变整数 折叠>
+    参数 节点句柄 <类型 = 变整数>
+    参数 ID <类型 = 文本型>
+    {
+        变量 临时数据 <类型 = 字节集类>
+        临时数据 = 文本到UTF8 (ID)
+        返回 (GumboNode_getElementById (节点句柄, 临时数据.取字节集指针 ()))
+
+    }
+
+    方法 GumboNode_getElementByAttrib <静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 节点句柄 <类型 = 变整数>
+    参数 属性名称 <类型 = 变整数>
+    参数 属性值 <类型 = 变整数>
+    {
+        @ (@dt<变整数>) GumboNode_getElementByAttrib((GumboNode*)@<节点句柄>,(const char* )@<属性名称>,(const char* )@<属性值>)
+
+    }
+
+    方法 网页解析_取节点_根据属性 <公开 静态 类型 = 变整数 折叠>
+    参数 节点句柄 <类型 = 变整数>
+    参数 属性名 <类型 = 文本型>
+    参数 属性值 <类型 = 文本型>
+    {
+        变量 临时数据 <类型 = 字节集类>
+        变量 临时数据1 <类型 = 字节集类>
+        临时数据 = 文本到UTF8 (属性名)
+        临时数据1 = 文本到UTF8 (属性值)
+        返回 (GumboNode_getElementByAttrib (节点句柄, 临时数据.取字节集指针 (), 临时数据1.取字节集指针 ()))
+
+
+    }
+
+    方法 网页解析_取节点源码 <公开 静态 类型 = 文本型 注释 = "例如 <p> aaa </p> 得到的是 <p> aaa </p>">
+    参数 节点句柄 <类型 = 变整数>
+    {
+        变量 节点数据 <类型 = 字节集类>
+
+        @ const char* pStart = GumboNode_GetTagStart((GumboNode*)@<节点句柄>);
+        @ const char* pEnd   = GumboNode_GetTagEnd((GumboNode*)@<节点句柄>);
+        @ CVolMem mem(pStart,pEnd-pStart);
+        @ @<节点数据> = mem;
+
+        返回 (UTF8到文本 (节点数据))
+
+    }
+
+    方法 网页解析_取节点内容 <公开 静态 类型 = 文本型 注释 = "例如 <p> aaa </p> 得到的是 aaa">
+    参数 节点句柄 <类型 = 变整数>
+    {
+        变量 节点数据 <类型 = 字节集类>
+
+        @ const char* pStart = GumboNode_GetTagContentStart((GumboNode*)@<节点句柄>);
+        @ const char* pEnd   = GumboNode_GetTagContentEnd((GumboNode*)@<节点句柄>);
+        @ CVolMem mem(pStart,pEnd-pStart);
+        @ @<节点数据> = mem;
+        返回 (UTF8到文本 (节点数据))
+
+
+
+
+    }
+
+    #
+}
+
+类 网页查询器 <公开 注释 = "首先要调用  网页解析类相关接口得到查询器，，查询器接口得到节点操作接口">
+{
+
+    # @begin
+    # <> <include>
+    # class CGumboSelectWapper
+    # {
+    # public:
+    #  CGumboSelectWapper()
+    #  {
+    #    //DebugTrace (0, 0, _T ("S"), L"RefObject Construct");
+    #   m_pData = NULL;
+    #  }
+    #  ~CGumboSelectWapper()
+    #  {
+    #   if (m_pData)
+    #   {
+    #    //DebugTrace (0, 0, _T ("S"), L"RefObject Destruct");
+    #    Gumbo_Query_Delete(m_pData);
+    #    m_pData = NULL;
+    #   }
+    #  }
+    #  void* GetData()
+    #  {
+    #   return m_pData;
+    #  }
+    #  void SetData(void* ptr)
+    #  {
+    #   m_pData = ptr;
+    #  }
+    # private:
+    #  void* m_pData;
+    # };
+    #
+    # @sn<current_class>(void* pSelect)
+    # {
+    #     //DebugTrace (0, 0, _T ("S"), L"construct");
+    #     m_pRefObject = new CRefObjectWithData<CGumboSelectWapper>;
+    #     data().SetData(pSelect);
+    # }
+    # <> </include>
+    #
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CGumboSelectWapper)
+    # @end
+    #
+
+    方法 取节点 <公开 类型 = 网页节点类 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ @dt<网页节点类>( Gumbo_Query_GetNode(@sn<this>.data().GetData(),@<索引>))
+    }
+
+    方法 取节点数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @  Gumbo_Query_GetCount(@sn<this>.data().GetData())
+    }
+
+    方法 查询 <公开 类型 = 网页查询器 @嵌入式方法 = "">
+    参数 选择器文本 <类型 = 文本型>
+    {
+        @ @dt<网页查询器>( Gumbo_Query_Find( @sn<this>.data().GetData() ,CU8String(@<选择器文本>.GetText ()).GetText ()))
+    }
+
+    #
+}
+
+类 网页解析类 <公开 注释 = "一旦这个类销毁了，那么其他接口都会失效，" 注释 = "如果还有用到网页解析相关的所有接口，那么必须保证这个类的" 注释 = "有效性">
+{
+    变量 网页解析句柄 <公开 类型 = 变整数>
+    变量 网页源码 <类型 = 字节集类>
+
+    方法 类_初始化
+    {
+        @ @<网页解析句柄>=(INT_P)Gumbo_Query_Document_new();
+    }
+
+    方法 类_清理
+    {
+        @ Gumbo_Query_Document_Delete((void*)@<网页解析句柄>);
+    }
+
+    方法 解析文本 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 网页内容 <类型 = 文本型>
+    {
+        网页源码 = 文本到UTF8 (网页内容)
+        @ return Gumbo_Query_Document_parse ((void*)@<网页解析句柄>,(const char*)@<网页源码>.GetPtr());
+    }
+
+    方法 解析字节集 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 网页内容 <类型 = 字节集类 注释 = "一定要确保 内容是 utf8 编码的">
+    {
+        网页源码 = 网页内容
+        @ return Gumbo_Query_Document_parse ((void*)@<网页解析句柄>,(const char*)@<网页源码>.GetPtr());
+    }
+
+    方法 取指定位置文本 <公开 类型 = 文本型>
+    参数 开始位置 <类型 = 整数>
+    参数 结束位置 <类型 = 整数>
+    {
+        变量 临时字节集 <类型 = 字节集类>
+        临时字节集 = 取字节集中间 (网页源码, 开始位置, 结束位置 - 开始位置)
+        返回 (UTF8到文本 (临时字节集))
+    }
+
+    方法 查询 <公开 类型 = 网页查询器 @禁止流程检查 = 真>
+    参数 选择器文本 <类型 = 文本型>
+    {
+        @ return @dt<网页查询器>(Gumbo_Query_Document_Find((void*)@<网页解析句柄>,CU8String(@<选择器文本>.GetText ()).GetText () ));
+    }
+
+    #
+}
+
+类 网页节点类 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # class CGumboQueryNodeWapper
+    # {
+    # public:
+    #  CGumboQueryNodeWapper()
+    #  {
+    #    //DebugTrace (0, 0, _T ("S"), L"RefObject Construct");
+    #   m_pData = NULL;
+    #  }
+    #  ~CGumboQueryNodeWapper()
+    #  {
+    #   if (m_pData)
+    #   {
+    #    //DebugTrace (0, 0, _T ("S"), L"RefObject Destruct");
+    #    Gumbo_Query_Node_Delete(m_pData);
+    #    m_pData = NULL;
+    #   }
+    #  }
+    #  void* GetData()
+    #  {
+    #   return m_pData;
+    #  }
+    #  void SetData(void* ptr)
+    #  {
+    #   m_pData = ptr;
+    #  }
+    # private:
+    #  void* m_pData;
+    # };
+    #
+    # @sn<current_class>(void* pNode)
+    # {
+    #     //DebugTrace (0, 0, _T ("S"), L"construct");
+    #     m_pRefObject = new CRefObjectWithData<CGumboQueryNodeWapper>;
+    #     data().SetData(pNode);
+    # }
+    # <> </include>
+    #
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CGumboQueryNodeWapper)
+    # @end
+    #
+
+    方法 是否有效 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ Gumbo_Query_Node_valid(@sn<this>.data().GetData())
+    }
+
+    方法 取父节点 <公开 类型 = 网页节点类 @嵌入式方法 = "">
+    {
+        @ @dt<网页节点类>( Gumbo_Query_Node_parent(@sn<this>.data().GetData() ))
+    }
+
+    方法 取下一个兄弟节点 <公开 类型 = 网页节点类 @嵌入式方法 = "">
+    {
+        @ @dt<网页节点类>( Gumbo_Query_Node_nextSibling(@sn<this>.data().GetData() ))
+    }
+
+    方法 取上一个兄弟节点 <公开 类型 = 网页节点类 @嵌入式方法 = "">
+    {
+        @ @dt<网页节点类>( Gumbo_Query_Node_prevSibling(@sn<this>.data().GetData() ))
+    }
+
+    方法 取节点数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @  Gumbo_Query_Node_childNum(@sn<this>.data().GetData())
+    }
+
+    方法 取节点 <公开 类型 = 网页节点类 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ @dt<网页节点类>( Gumbo_Query_Node_childAt(@sn<this>.data().GetData(),@<索引>) )
+    }
+
+    方法 取属性 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 属性名称 <类型 = 文本型>
+    {
+        @ CVolString( Gumbo_Query_Node_attribute(@sn<this>.data().GetData() ,CU8String(@<属性名称>.GetText ()).GetText ()) )
+    }
+
+    方法 取属性数量 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ Gumbo_Query_Node_attributeCount(@sn<this>.data().GetData())
+    }
+
+    方法 取属性名 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ CVOlString( Gumbo_Query_Node_GetAttributeNameByIndex(@sn<this>.data().GetData(),@<索引>));
+    }
+
+    方法 取属性值 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ CVOlString( Gumbo_Query_Node_GetAttributeValueByIndex(@sn<this>.data().GetData(),@<索引>))
+    }
+
+    方法 取文本 <公开 类型 = 文本型>
+    {
+        变量 返回文本 <类型 = 文本型>
+        @ void* pString = Gumbo_Query_Node_text(data().GetData());
+        @ @<返回文本> = Gumbo_Query_String_GetText(pString);
+        @ Gumbo_Query_String_Delete(pString);
+        返回 (返回文本)
+
+    }
+
+    方法 "//取节点源码" <公开 类型 = 文本型 注释 = "因为gumb并不会保存网页源码，内置取网页节点源码是错误的，所以只能用这种方式代替">
+    参数 网页文本 <类型 = 文本型>
+    {
+        变量 返回文本 <类型 = 文本型>
+        变量 节点开始位置 <类型 = 整数>
+        变量 节点结束位置 <类型 = 整数>
+        节点开始位置 = 取节点外围开始位置 ()
+        节点结束位置 = 取节点外围结束位置 ()
+        返回 (取文本中间 (网页文本, 节点开始位置, 节点结束位置 - 节点开始位置))
+
+    }
+
+    方法 取节点自身文本 <公开 类型 = 文本型>
+    {
+        变量 返回文本 <类型 = 文本型>
+        @ void* pString = Gumbo_Query_Node_ownText(data().GetData())
+        @ @<返回文本> = Gumbo_Query_String_GetText(pString);
+        @ Gumbo_Query_String_Delete(pString);
+        返回 (返回文本)
+    }
+
+    方法 取节点开始位置 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @  Gumbo_Query_Node_startPos(@sn<this>.data().GetData())
+    }
+
+    方法 取节点结束位置 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @  Gumbo_Query_Node_endPos(@sn<this>.data().GetData())
+    }
+
+    方法 取节点外围开始位置 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ Gumbo_Query_Node_startPosOuter(@sn<this>.data().GetData())
+    }
+
+    方法 取节点外围结束位置 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @  Gumbo_Query_Node_endPosOuter(@sn<this>.data().GetData())
+    }
+
+    方法 取标签名称 <公开 类型 = 文本型>
+    {
+        变量 返回文本 <类型 = 文本型>
+        @ void* pString = Gumbo_Query_Node_tag( data().GetData() );
+        @ @<返回文本> = Gumbo_Query_String_GetText(pString);
+        @ Gumbo_Query_String_Delete(pString);
+        返回 (返回文本)
+    }
+
+    方法 查询 <公开 类型 = 网页查询器 @嵌入式方法 = "">
+    参数 选择器文本 <类型 = 文本型>
+    {
+        @ @dt<网页查询器>( Gumbo_Query_Node_find( @sn<this>.data().GetData() ,CU8String(@<选择器文本>.GetText ()).GetText ()))
+    }
+
+    #
+    #
+}
+
+类 "//网页节点类" <公开 折叠>
+{
+    变量 节点句柄 <公开 类型 = 变整数 值 = 0>
+
+    方法 类_清理 <折叠>
+    {
+        _销毁 ()
+    }
+
+    方法 _销毁 <公开 注释 = "普通用户不要随意调用" 折叠>
+    {
+        如果 (节点句柄 != 0)
+        {
+            @ Gumbo_Query_Node_Delete((void*)@<节点句柄>);
+            节点句柄 = 0
+
+        }
+    }
+
+    方法 是否有效 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @ return Gumbo_Query_Node_valid((void*)@<节点句柄>);
+    }
+
+    方法 取父节点 <公开 类型 = 网页节点类 折叠>
+    {
+        变量 临时句柄 <类型 = 变整数>
+        变量 节点 <类型 = 网页节点类>
+        @ @<临时句柄> = Gumbo_Query_Node_parent(@<节点句柄>);
+        节点.节点句柄 = 节点句柄
+        返回 (节点)
+    }
+
+    方法 取下一个兄弟节点 <公开 类型 = 网页节点类 折叠>
+    {
+        变量 临时句柄 <类型 = 变整数>
+        变量 节点 <类型 = 网页节点类>
+        @ @<临时句柄> = Gumbo_Query_Node_nextSibling(@<节点句柄>);
+        节点.节点句柄 = 节点句柄
+        返回 (节点)
+    }
+
+    方法 取上一个兄弟节点 <公开 类型 = 网页节点类 折叠>
+    {
+        变量 临时句柄 <类型 = 变整数>
+        变量 节点 <类型 = 网页节点类>
+        @ @<临时句柄> = Gumbo_Query_Node_prevSibling(@<节点句柄>);
+        节点.节点句柄 = 节点句柄
+        返回 (节点)
+    }
+
+    方法 取节点数 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ return Gumbo_Query_Node_childNum(@<节点句柄>);
+    }
+
+    方法 取节点 <公开 类型 = 网页节点类 折叠>
+    参数 索引 <类型 = 整数>
+    {
+        变量 临时句柄 <类型 = 变整数>
+        变量 节点 <类型 = 网页节点类>
+        @ @<临时句柄> = Gumbo_Query_Node_childAt(@<节点句柄>,@<索引>);
+        节点.节点句柄 = 节点句柄
+        返回 (节点)
+    }
+
+    方法 取属性 <公开 类型 = 文本型 折叠>
+    参数 属性名称 <类型 = 文本型>
+    {
+        变量 临时文本 <类型 = 字节集类>
+        变量 返回文本 <类型 = 文本型>
+        临时文本 = 文本到UTF8 (属性名称)
+        @ @<返回文本> = Gumbo_Query_Node_attribute((void*)@<节点句柄> ,@<临时文本>.GetPtr());
+        返回 (返回文本)
+    }
+
+    方法 取属性数量 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ return Gumbo_Query_Node_attributeCount((void*)@<节点句柄>);
+    }
+
+    方法 取属性名 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ return CVOlString( Gumbo_Query_Node_GetAttributeNameByIndex(@<节点句柄>,@<索引>));
+    }
+
+    方法 取属性值 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ return CVOlString( Gumbo_Query_Node_GetAttributeValueByIndex(@<节点句柄>,@<索引>));
+    }
+
+    方法 取文本 <公开 类型 = 文本型>
+    {
+        变量 返回文本 <类型 = 文本型>
+        @ void* pString = Gumbo_Query_Node_text((void*)@<节点句柄>);
+        @ @<返回文本> = Gumbo_Query_String_GetText(pString);
+        @ Gumbo_Query_String_Delete(pString);
+        返回 (返回文本)
+
+    }
+
+    方法 "//取节点源码" <公开 类型 = 文本型 注释 = "暂时不能用">
+    {
+        变量 返回文本 <类型 = 文本型>
+        @ void* pString = Gumbo_Query_Node_outerHTML((void*)@<节点句柄>);
+        @ @<返回文本> = Gumbo_Query_String_GetText(pString);
+        @ Gumbo_Query_String_Delete(pString);
+        返回 (返回文本)
+
+    }
+
+    方法 取节点自身文本 <公开 类型 = 文本型 折叠>
+    {
+        变量 返回文本 <类型 = 文本型>
+        @ void* pString = Gumbo_Query_Node_ownText((void*)@<节点句柄>);
+        @ @<返回文本> = Gumbo_Query_String_GetText(pString);
+        @ Gumbo_Query_String_Delete(pString);
+        返回 (返回文本)
+    }
+
+    方法 取节点开始位置 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ return Gumbo_Query_Node_startPos((void*)@<节点句柄>);
+    }
+
+    方法 取节点结束位置 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ return Gumbo_Query_Node_endPos((void*)@<节点句柄>);
+    }
+
+    方法 取节点外围开始位置 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ return Gumbo_Query_Node_startPosOuter((void*)@<节点句柄>);
+    }
+
+    方法 取节点外围结束位置 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ return Gumbo_Query_Node_endPosOuter((void*)@<节点句柄>);
+    }
+
+    方法 取标签名称 <公开 类型 = 文本型 折叠>
+    {
+        变量 返回文本 <类型 = 文本型>
+        @ void* pString = Gumbo_Query_Node_tag((void*)@<节点句柄> );
+        @ @<返回文本> = Gumbo_Query_String_GetText(pString);
+        @ Gumbo_Query_String_Delete(pString);
+        返回 (返回文本)
+    }
+
+    方法 查询 <公开 折叠>
+    参数 选择器文本 <类型 = 文本型>
+    参数 用来保存查询结果 <类型 = 网页查询器>
+    {
+        变量 临时选择器 <类型 = 字节集类>
+        变量 查询器句柄 <类型 = 变整数>
+        临时选择器 = 文本到UTF8 (选择器文本)
+        @ @<查询器句柄> = Gumbo_Query_Node_find((void*)@<节点句柄>,@<临时选择器>.GetPtr());
+        用来保存查询结果._销毁 ()
+        用来保存查询结果.查询器句柄 = 查询器句柄
+    }
+
+    #
+    #
+}

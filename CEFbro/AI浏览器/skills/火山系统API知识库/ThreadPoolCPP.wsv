@@ -1,0 +1,73 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.程序 <@文档 = "category = \"开源库.线程池\"" @视窗.外部头文件 = "ThreadPoolCPP\\ThreadPoolCPPTool.h"
+        @视窗.外部库.win32 = "ThreadPoolCPP\\ThreadPoolCPPToolx86.lib" @视窗.附属文件.win32 = "ThreadPoolCPP\\ThreadPoolCPPToolx86.dll"
+        @视窗.外部库.x64 = "ThreadPoolCPP\\ThreadPoolCPPToolx64.lib" @视窗.附属文件.x64 = "ThreadPoolCPP\\ThreadPoolCPPToolx64.dll" "">
+
+类 标准线程池 <公开 注释 = "使用本线程池注意事项，如果工作函数中还有函数阻塞了线程" 注释 = "那么 当调用销毁的时候，会一直等待线程退出" @视窗.后缀文本 = "public TPVolCppBaseEvent">
+{
+
+    # @begin
+    # <> <include>
+    # virtual int OnWork(__int64 nValue,void* WParam,void* lParam)
+    # {
+    #     return @<工作函数>(nValue,(INT_P)WParam,(INT_P)lParam);
+    # }
+    #
+    # void* m_hThread;
+    # <> </include>
+    #
+    #
+    # @end
+
+    方法 类_初始化
+    {
+        @ m_hThread = NULL;
+    }
+
+    #
+
+    方法 工作函数 <公开 定义事件 类型 = 整数>
+    参数 参数 <类型 = 长整数>
+    参数 参数2 <类型 = 变整数>
+    参数 参数3 <类型 = 变整数>
+    {
+
+    }
+
+    方法 创建 <公开 @嵌入式方法 = "">
+    参数 线程数量 <类型 = 整数>
+    {
+        @ @sn<this>.m_hThread =  TPVolCpp_Create(@<线程数量>);
+    }
+
+    方法 销毁 <公开>
+    {
+        @ TPVolCpp_Destory(m_hThread);
+        @ m_hThread = NULL;
+
+    }
+
+    方法 取线程标识 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ TPVolCpp_GetThreadID()
+    }
+
+    方法 投递任务 <公开 注释 = "这个是异步的，投递一些参数到回调函数，然后继续执行其他代码">
+    参数 参数1 <类型 = 长整数 @默认值 = 0>
+    参数 参数2 <类型 = 变整数 @默认值 = 0>
+    参数 参数3 <类型 = 变整数 @默认值 = 0>
+    {
+        @ TPVolCpp_PostWorkItemClass(m_hThread, this, @<参数1>, (void* )@<参数2>,(void* )@<参数3> );
+    }
+
+    方法 执行任务 <公开 类型 = 整数 注释 = "这个是同步的，等待执行任务完毕后，得到返回值" @禁止流程检查 = 真>
+    参数 参数1 <类型 = 长整数 @默认值 = 0>
+    参数 参数2 <类型 = 变整数 @默认值 = 0>
+    参数 参数3 <类型 = 变整数 @默认值 = 0>
+    {
+        @ return TPVolCpp_SendWorkItemClass(m_hThread, this, @<参数1>, (void* )@<参数2>,(void* )@<参数3> );
+    }
+
+    #
+}

@@ -1,0 +1,435 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"windows.COM基础\"" @视窗.外部头文件 = "<OAIdl.h>">
+
+# @begin
+#
+# //=======
+# // 以下几个宏，适用场景，， 条件一，必须自己手动生成 tli 和tlh文件 必须有这两个东西才能调用
+#
+# // 这个是用于 通过  xxx.yyy , IXXXXPtr 这两个参数来创建对象的 tlh 里面有
+# // ProgID_or_REFCLSID  Microsoft.FeedsManager 或者是  __uuidof(WinHttp::WinHttpRequest)
+# // _VOL_COM_TLI_DATATYPE_SMARTPTR_T  WinHttp::IWinHttpRequestPtr
+# @def_macro define_vol_use_System_com_ProgID(ProgID_or_REFCLSID,_VOL_COM_TLI_DATATYPE_SMARTPTR_T) \
+# <> <include>    \
+# _VOL_COM_TLI_DATATYPE_SMARTPTR_T m_pvObject; \
+# BOOL Init(BOOL bMutiThread = TRUE)    \
+# {    \
+#  HRESULT hr = S_OK;    \
+#  if(bMutiThread)        \
+#      hr = ::CoInitialize(nullptr);    \
+#  else                    \
+#      hr = ::CoInitializeEx(0, COINIT_MULTITHREADED);    \
+#  hr = m_pvObject.CreateInstance(ProgID_or_REFCLSID);     \ 
+#  return hr == S_OK?TRUE:FALSE;    \
+# }    \
+# VOID Unit()    \
+# {    \
+#     CoUninitialize();    \
+# }    \
+# _VOL_COM_TLI_DATATYPE_SMARTPTR_T pdata()    \
+# {    \
+#     return m_pvObject;    \
+# }    \
+# _VOL_COM_TLI_DATATYPE_SMARTPTR_T GetComObjPtr() \
+# {    \
+#     return m_pvObject;    \
+# }    \
+# <> </include> 
+#
+#
+# //_REFCLSID   如果你的是大漠 你可以写 __uuidof(Dm::dmsoft)
+# // _VOL_COM_TLI_DATATYPE_SMARTPTR_ 智能指针 如果你的是大漠，你可以写 Dm::IdmsoftPtr 或者 Idmsoft* 建议一般写Dm::IdmsoftPtr 因为这个无需调用 realse(); 
+# @def_macro define_vol_use_com_with_registered_tlh_X86_X64(_ProgID_or_REFCLSID_X86,_ProgID_or_REFCLSID_X64,_VOL_COM_TLI_DATATYPE_SMARTPTR_X86,_VOL_COM_TLI_DATATYPE_SMARTPTR_X64) \
+# <> <include>    \
+# #ifdef _VOL_X64    \
+#     @m<define_vol_use_System_com_ProgID>(_ProgID_or_REFCLSID_X64,_VOL_COM_TLI_DATATYPE_SMARTPTR_X64)    \
+# #else    \
+#     @m<define_vol_use_System_com_ProgID>(_ProgID_or_REFCLSID_X86,_VOL_COM_TLI_DATATYPE_SMARTPTR_X86)    \
+# #endif    
+#
+#
+#
+# //=======
+#
+# //这种是用于 obj->GetObjectptr() 返回值为 IDispatchPtr 这种类型的   可以参考 msfeeds 里面有这个宏
+# //这种 一般用在声明一个类，然后设置其构造函数，从而达到   @dt<数据类型>( ppvObject->GetObject()  ) 这种效果
+# @def_macro vol_define_IDispatchPtr_Construct(_VOL_COM_TLI_DATATYPE_SMARTPTR_T,_IDispatchPtr) \
+# <> <include> \
+# void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) \
+# {    \
+#     m_ppObject = objCopyFrom.m_ppObject;    \
+# }    \
+# @sn<current_class>(_IDispatchPtr ptr) \
+# {    \
+#     m_ppObject = (_VOL_COM_TLI_DATATYPE_SMARTPTR_T)ptr;    \
+# }    \
+# _VOL_COM_TLI_DATATYPE_SMARTPTR_T m_ppObject;    \
+# _VOL_COM_TLI_DATATYPE_SMARTPTR_T GetComObjPtr()    \
+# {    \
+#     return m_ppObject;    \
+# }    \
+# <> </include>
+#
+# @def_macro vol_define_sys_com_obj_point(ObjectTypePoint) \
+# <> <include>    \
+# ObjectTypePoint m_pvObject; \
+# ObjectTypePoint GetObjectPoint()    {    return m_pvObject;    } \
+# <> </include>
+#
+#
+# //免注册调用系列宏======
+# //同样必须 有 tli和tlh 文件
+#
+# //这个宏
+# //@def_macro  define_LoadComDll_GetInterfacePtr(_T_REFCLSID_,_T_IID,_VOL_COM_TLI_DATATYPE_SMARTPTR_)
+#
+#
+#
+# //_T_REFCLSID_   如果你的是大漠 你可以写 __uuidof(Dm::dmsoft)   //类
+# // _T_IID        如果你的是大漠 你可以写 __uuidof(Dm::Idmsoft)  //接口
+# // _VOL_COM_TLI_DATATYPE_SMARTPTR_ 智能指针 如果你的是大漠，你可以写 Dm::IdmsoftPtr 或者 Idmsoft* 建议一般写Dm::IdmsoftPtr 因为这个无需调用 realse(); 
+# @def_macro define_vol_use_com_without_register2(_T_REFCLSID_,_T_IID,_VOL_COM_TLI_DATATYPE_SMARTPTR_) \
+# <> <include>    \
+# BOOL Init(LPCTSTR lpszDLLFile,BOOL bMutiThread = TRUE)    \
+# {    \
+#  HRESULT hr = S_OK;    \
+#  if(bMutiThread)        \
+#      hr = ::CoInitialize(nullptr);    \
+#  else                    \
+#      hr = ::CoInitializeEx(0, COINIT_MULTITHREADED);    \
+#   typedef HRESULT(__stdcall* pDllGetClassObject)(REFCLSID, REFIID, void**);    \
+#   HMODULE hdllInst = LoadLibrary(lpszDLLFile);    \
+#   if (hdllInst)    \
+#   {    \
+#    pDllGetClassObject fnDllGetClassObject = (pDllGetClassObject)GetProcAddress(hdllInst, "DllGetClassObject");    \
+#    if (fnDllGetClassObject != 0)    \
+#    {    \
+#     HRESULT hr = (fnDllGetClassObject)(_T_REFCLSID_, IID_IClassFactory, (LPVOID*)&pClassFactory);    \
+#     if (SUCCEEDED(hr) && (pClassFactory != NULL))    \
+#     {    \
+#        return  pClassFactory->CreateInstance(NULL, _T_IID, (void**)&m_pvObject) == S_OK ? TRUE:FALSE;    \
+#      }    \
+#    }    \
+#   }    \
+#  return FALSE;    \
+# }    \
+# VOID Unit()    \
+# {    \
+#     if (pClassFactory) pClassFactory->Release();    \
+#     if (hdllInst)    FreeLibrary(hdllInst);    \
+#     CoUninitialize();    \
+# }    \
+# _VOL_COM_TLI_DATATYPE_SMARTPTR_ GetComObjPtr() \
+# {    \
+#     return m_pvObject;    \
+# }    \
+#  HMODULE hdllInst;    \
+#  IClassFactory* pClassFactory;    \
+#  _VOL_COM_TLI_DATATYPE_SMARTPTR_ m_pvObject;    \
+# <> </include>
+#
+#
+# @def_macro define_vol_use_com_without_register_X86_X64(_REFCLSID_X86,_REFCLSID_X64,_IID_X86,_IID_X64,_VOL_COM_TLI_DATATYPE_SMARTPTR_X86,_VOL_COM_TLI_DATATYPE_SMARTPTR_X64) \
+# <> <include>    \
+# #ifdef _VOL_X64    \
+#     #define _T_REFCLSID                 _REFCLSID_X64    \
+#     #define _T_IID                    _IID_X64            \
+#     #define _T_VOL_COM_TLI_DATATYPE_SMARTPTR_     _VOL_COM_TLI_DATATYPE_SMARTPTR_X64    \
+# #else    \
+#     #define _T_REFCLSID                 _REFCLSID_X86    \
+#     #define _T_IID                    _IID_X86            \
+#     #define _T_VOL_COM_TLI_DATATYPE_SMARTPTR_     _VOL_COM_TLI_DATATYPE_SMARTPTR_X86    \
+# #endif    \
+#     @m<define_vol_use_com_without_register2>(_T_REFCLSID,_T_IID,_T_VOL_COM_TLI_DATATYPE_SMARTPTR_)    \
+# <> </include>    \
+#
+# <> </include>
+#
+#
+#
+#
+#
+# @end
+
+类 IStream <公开 折叠>
+{
+
+    # @ @m<vol_define_sys_com_obj_point>(IStream*)
+
+    方法 Seek <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 dlibMove <类型 = 长整数 注释 = "/* [in] */ LARGE_INTEGER dlibMove,">
+    参数 dwOrigin <类型 = 整数 注释 = "/* [in] */ DWORD dwOrigin,">
+    参数 输出_libNewPosition <类型 = 长整数 注释 = "/* [annotation] */  ULARGE_INTEGER *plibNewPosition">
+    {
+        @ @sn<this>.GetObjectPoint()->Seek((LARGE_INTEGER)@<dlibMove>,@<dwOrigin>,&@<输出_libNewPosition>)
+    }
+
+    方法 SetSize <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 libNewSize <类型 = 长整数 注释 = "/* [in] */ ULARGE_INTEGER libNewSize">
+    {
+        @ @sn<this>.GetObjectPoint()->SetSize((LARGE_INTEGER)@<libNewSize>)
+    }
+
+    方法 CopyTo <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 pstm <类型 = IStream 注释 = "/* [annotation][unique][in] */ _In_  IStream *pstm,">
+    参数 cb <类型 = 长整数 注释 = "/* [in] */ ULARGE_INTEGER cb,">
+    参数 输出_pcbRead <类型 = 长整数 注释 = "/* [annotation] */ _Out_opt_  ULARGE_INTEGER *pcbRead,">
+    参数 输出_pcbWritten <类型 = 长整数 注释 = "_Out_opt_  ULARGE_INTEGER *pcbWritten)">
+    {
+        @ @sn<this>.GetObjectPoint()->CopyTo(@<pstm>.GetObjectPoint(),(LARGE_INTEGER)@<cb>,(ULARGE_INTEGER *)&@<输出_pcbRead>,(ULARGE_INTEGER *)&@<输出_pcbWritten>)
+    }
+
+    方法 Commit <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 grfCommitFlags <类型 = 整数 注释 = " /* [in] */ DWORD grfCommitFlags">
+    {
+        @ @sn<this>.GetObjectPoint()->SetSize((DWORD)@<grfCommitFlags>)
+    }
+
+    方法 Revert <公开 @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetObjectPoint()->Revert()
+    }
+
+    方法 LockRegion <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 libOffset <类型 = 长整数 注释 = "/* [in] */ ULARGE_INTEGER libOffset,">
+    参数 cb <类型 = 长整数 注释 = "/* [in] */ ULARGE_INTEGER cb,">
+    参数 dwLockType <类型 = 整数 注释 = "/* [in] */ DWORD dwLockType">
+    {
+        @ @sn<this>.GetObjectPoint()->LockRegion((ULARGE_INTEGER)@<libOffset>,(ULARGE_INTEGER)@<cb>,(DWORD)@<dwLockType>)
+    }
+
+    方法 UnlockRegion <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 libOffset <类型 = 长整数 注释 = "/* [in] */ ULARGE_INTEGER libOffset,">
+    参数 cb <类型 = 长整数 注释 = "/* [in] */ ULARGE_INTEGER cb,">
+    参数 dwLockType <类型 = 长整数 注释 = "/* [in] */ DWORD dwLockType">
+    {
+        @ @sn<this>.GetObjectPoint()->LockRegion((ULARGE_INTEGER)@<libOffset>,(ULARGE_INTEGER)@<cb>,(DWORD)@<dwLockType>)
+    }
+
+    方法 "//Stat" <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 pstatstg <注释 = "/* [out] */ __RPC__out STATSTG *pstatstg,">
+    参数 grfStatFlag <类型 = 整数 注释 = "/* [in] */ DWORD grfStatFlag">
+    {
+        @ @sn<this>.GetObjectPoint()->Stat(@<pstatstg>.pdata(),@<grfStatFlag>)
+    }
+
+    方法 Clone <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 ppstm <类型 = IStream 注释 = " /* [out] */ __RPC__deref_out_opt IStream **ppstm">
+    {
+        @ @sn<this>.GetObjectPoint()->Clone(&@<ppstm>.GetObjectPoint())
+    }
+
+    #
+}
+
+#
+#
+#
+#
+#
+#
+#
+#
+
+类 变体型类型_常量类 <公开 注释 = "enum VARENUM" 注释 = "    {" 注释 = "        VT_EMPTY = 0," 注释 = "        VT_NULL = 1,"
+        注释 = "        VT_I2 = 2," 注释 = "        VT_I4 = 3," 注释 = "        VT_R4 = 4," 注释 = "        VT_R8 = 5,"
+        注释 = "        VT_CY = 6," 注释 = "        VT_DATE = 7," 注释 = "        VT_BSTR = 8," 注释 = "        VT_DISPATCH = 9,"
+        注释 = "        VT_ERROR = 10," 注释 = "        VT_BOOL = 11," 注释 = "        VT_VARIANT = 12,"
+        注释 = "        VT_UNKNOWN = 13," 注释 = "        VT_DECIMAL = 14," 注释 = "        VT_I1 = 16," 注释 = "        VT_UI1 = 17,"
+        注释 = "        VT_UI2 = 18," 注释 = "        VT_UI4 = 19," 注释 = "        VT_I8 = 20," 注释 = "        VT_UI8 = 21,"
+        注释 = "        VT_INT = 22," 注释 = "        VT_UINT = 23," 注释 = "        VT_VOID = 24," 注释 = "        VT_HRESULT = 25,"
+        注释 = "        VT_PTR = 26," 注释 = "        VT_SAFEARRAY = 27," 注释 = "        VT_CARRAY = 28,"
+        注释 = "        VT_USERDEFINED = 29," 注释 = "        VT_LPSTR = 30," 注释 = "        VT_LPWSTR = 31,"
+        注释 = "        VT_RECORD = 36," 注释 = "        VT_INT_PTR = 37," 注释 = "        VT_UINT_PTR = 38,"
+        注释 = "        VT_FILETIME = 64," 注释 = "        VT_BLOB = 65," 注释 = "        VT_STREAM = 66,"
+        注释 = "        VT_STORAGE = 67," 注释 = "        VT_STREAMED_OBJECT = 68," 注释 = "        VT_STORED_OBJECT = 69,"
+        注释 = "        VT_BLOB_OBJECT = 70," 注释 = "        VT_CF = 71," 注释 = "        VT_CLSID = 72,"
+        注释 = "        VT_VERSIONED_STREAM = 73," 注释 = "        VT_BSTR_BLOB = 0xfff," 注释 = "        VT_VECTOR = 0x1000,"
+        注释 = "        VT_ARRAY = 0x2000," 注释 = "        VT_BYREF = 0x4000," 注释 = "        VT_RESERVED = 0x8000,"
+        注释 = "        VT_ILLEGAL = 0xffff," 注释 = "        VT_ILLEGALMASKED = 0xfff," 注释 = "        VT_TYPEMASK = 0xfff"
+        注释 = "    } ;" 注释 = "typedef ULONG PROPID;" 折叠2 @常量类 = 短整数>
+{
+    常量 ""
+
+    #
+}
+
+类 变体型_结构类 <公开 基础类 = 结构基础类 注释 = "struct tagVARIANT" 注释 = "    {" 注释 = "    union" 注释 = "        {"
+        注释 = "        struct __tagVARIANT" 注释 = "            {" 注释 = "            VARTYPE vt;"
+        注释 = "            WORD wReserved1;" 注释 = "            WORD wReserved2;" 注释 = "            WORD wReserved3;"
+        注释 = "            union" 注释 = "                {" 注释 = "                LONGLONG llVal;"
+        注释 = "                LONG lVal;" 注释 = "                BYTE bVal;" 注释 = "                SHORT iVal;"
+        注释 = "                FLOAT fltVal;" 注释 = "                DOUBLE dblVal;" 注释 = "                VARIANT_BOOL boolVal;"
+        注释 = "                VARIANT_BOOL __OBSOLETE__VARIANT_BOOL;" 注释 = "                SCODE scode;"
+        注释 = "                CY cyVal;" 注释 = "                DATE date;" 注释 = "                BSTR bstrVal;"
+        注释 = "                IUnknown *punkVal;" 注释 = "                IDispatch *pdispVal;"
+        注释 = "                SAFEARRAY *parray;" 注释 = "                BYTE *pbVal;" 注释 = "                SHORT *piVal;"
+        注释 = "                LONG *plVal;" 注释 = "                LONGLONG *pllVal;" 注释 = "                FLOAT *pfltVal;"
+        注释 = "                DOUBLE *pdblVal;" 注释 = "                VARIANT_BOOL *pboolVal;"
+        注释 = "                VARIANT_BOOL *__OBSOLETE__VARIANT_PBOOL;" 注释 = "                SCODE *pscode;"
+        注释 = "                CY *pcyVal;" 注释 = "                DATE *pdate;" 注释 = "                BSTR *pbstrVal;"
+        注释 = "                IUnknown **ppunkVal;" 注释 = "                IDispatch **ppdispVal;"
+        注释 = "                SAFEARRAY **pparray;" 注释 = "                VARIANT *pvarVal;" 注释 = "                PVOID byref;"
+        注释 = "                CHAR cVal;" 注释 = "                USHORT uiVal;" 注释 = "                ULONG ulVal;"
+        注释 = "                ULONGLONG ullVal;" 注释 = "                INT intVal;" 注释 = "                UINT uintVal;"
+        注释 = "                DECIMAL *pdecVal;" 注释 = "                CHAR *pcVal;" 注释 = "                USHORT *puiVal;"
+        注释 = "                ULONG *pulVal;" 注释 = "                ULONGLONG *pullVal;" 注释 = "                INT *pintVal;"
+        注释 = "                UINT *puintVal;" 注释 = "                struct __tagBRECORD" 注释 = "                    {"
+        注释 = "                    PVOID pvRecord;" 注释 = "                    IRecordInfo *pRecInfo;"
+        注释 = "                    }  __VARIANT_NAME_4;" 注释 = "                }  __VARIANT_NAME_3;"
+        注释 = "            }  __VARIANT_NAME_2;" 注释 = "        DECIMAL decVal;" 注释 = "        }  __VARIANT_NAME_1;" 注释 = "    } ;"
+        折叠2>
+{
+
+    # @begin
+    # @m<DECLARE_STRUCT_CLASS>(VARIANT)
+    # @end
+
+    方法 类_初始化 <折叠>
+    {
+        @ VariantInit(pdata())
+    }
+
+    方法 取展示内容 <公开 注释 = "将本对象中的所有数据用文本方式填入到所提供的文本参数中,用作调试或其它场合展示时使用." 注释 = "" 折叠 折叠2 @虚拟方法 = 可覆盖 @输出名 = "GetDumpString"
+            @视窗.后缀文本 = "override">
+    参数 展示内容 <类型 = 文本型 注释 = "用作填入本对象中所有数据的展示文本">
+    参数 最大展示数据尺寸 <类型 = 整数 注释 = "提供用户所指定的最大允许展示数据尺寸,小于0表示全部展示,等于0表示展示默认尺寸数据.">
+    {
+
+    }
+
+    方法 类型 <公开 属性读 类型 = 短整数 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata()->vt
+    }
+
+    方法 长整数值 <公开 属性读 类型 = 长整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata()->llVal
+
+    }
+
+    方法 整数值 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata()->intVal
+    }
+
+    方法 字节值 <公开 属性读 类型 = 字节 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata()->bVal
+
+    }
+
+    方法 短整数值 <公开 属性读 类型 = 短整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata()->iVal
+
+    }
+
+    方法 单精度小数值 <公开 属性读 类型 = 小数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata()->fltVal
+
+    }
+
+    方法 双精度小数值 <公开 属性读 类型 = 小数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata()->dblVal
+
+    }
+
+    方法 逻辑值 <公开 属性读 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata()->boolVal
+
+
+    }
+
+    方法 文本值 <公开 属性读 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ CVolString( @sn<this>.pdata()->pbstrVal)
+        // ::SysAllocString(L"Test");
+    }
+
+    方法 取指针 <公开 类型 = 变整数 注释 = "结构体内部保存着一些指针" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata()->pcVal
+
+    }
+
+    # //==
+    # //属性写
+
+    方法 类型 <公开 属性写 折叠>
+    参数 值 <类型 = 短整数>
+    {
+        @  pdata()->vt = (VARTYPE)@<值>;
+    }
+
+    方法 长整数值 <公开 属性写 折叠>
+    参数 值 <类型 = 长整数>
+    {
+        @  pdata()->llVal = (LONGLONG)@<值>;
+    }
+
+    方法 整数值 <公开 属性写 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @  pdata()->vt     = VT_INT;
+        @  pdata()->intVal = (LONG)@<值>;
+    }
+
+    方法 字节值 <公开 属性写 折叠>
+    参数 值 <类型 = 字节>
+    {
+        @  pdata()->vt   = VT_UI1;
+        @  pdata()->bVal = (BYTE)@<值>;
+    }
+
+    方法 短整数值 <公开 属性写 折叠>
+    参数 值 <类型 = 短整数>
+    {
+        @  pdata()->vt   = VT_I2;
+        @  pdata()->iVal = (SHORT)@<值>;
+    }
+
+    方法 单精度小数值 <公开 属性写 折叠>
+    参数 值 <类型 = 小数>
+    {
+        @  pdata()->vt   = VT_R4;
+        @  pdata()->fltVal = (FLOAT)@<值>;
+    }
+
+    方法 双精度小数值 <公开 属性写 折叠>
+    参数 值 <类型 = 小数>
+    {
+        @  pdata()->vt   = VT_R8;
+        @  pdata()->dblVal = (DOUBLE)@<值>;
+    }
+
+    方法 逻辑值 <公开 属性写 折叠>
+    参数 值 <类型 = 逻辑型>
+    {
+        @  pdata()->vt   = VT_BOOL;
+        @  pdata()->boolVal = (VARIANT_BOOL)@<值>;
+    }
+
+    方法 文本值 <公开 属性写 注释 = "此方法可能会内存泄漏，要解决这个问题，必须封装一个Com文本类" 折叠>
+    参数 值 <类型 = 文本型>
+    {
+        @  pdata()->vt       = VT_BSTR;
+        @  pdata()->pbstrVal = ::SysAllocString(@<值>.GetText());
+
+    }
+}
+
+类 免注册COM调用模板 <公开 注释 = "针对的tlh 和 tli 有这两个文件的" @模板基础类 = 真>
+{
+
+    # @begin
+    #
+    # @end
+    #
+    #
+}

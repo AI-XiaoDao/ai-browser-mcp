@@ -1,0 +1,180 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.WTL界面.超级菜单
+
+类 超级菜单类 <公开 基础类 = 菜单类 注释 = "提供超级菜单功能支持" 编辑时信息 = "166A94, 0, 0, 0" @视窗.外部头文件 = "src\\vol_wtl_adv_menu.h"
+        @视窗.外部源文件 = "src\\vol_wtl_adv_menu.cpp\r\nsrc\\vol_wtl_menu_canvas.cpp"
+        @设计器 = "name = \"菜单设计器\"\r\ndll_file_name\r\n{\r\n    x64 = \"..\\mfc_ui_base\\designer\\mfc_designer_x64.dll\"\r\n    win32 = \"..\\mfc_ui_base\\designer\\mfc_designer_win32.dll\"\r\n}\r\nauto_generate_mark = \"wtl\"\r\nuser_param = 1"
+        @可插入程序类 = "icon=\"res\\adv_menu.bmp\"\r\nexplain=\"在所插入新菜单类上单击鼠标右键,选择\\\"打开菜单设计器\\\"菜单项即可设计该菜单的内容.\"">
+{
+    方法 配色方案 <公开 属性读 类型 = 整数 注释 = "返回超级菜单所使用的配色方案" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetAdvVolMenu ()->m_nColorScheme
+    }
+
+    方法 配色方案 <公开 属性写 注释 = "指定超级菜单所使用的配色方案" @列表选择项 = "自定义\n蓝色\n灰色\n雅绿\n粉红\n青春\n古朴">
+    参数 欲设置属性值 <类型 = 整数>
+    {
+        @ GetAdvVolMenu ()->SetColorScheme (@<欲设置属性值>);
+    }
+
+    方法 底色 <公开 属性读 类型 = 整数 注释 = "返回菜单的背景颜色" @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.GetAdvVolMenu ()->m_clrBk
+    }
+
+    方法 底色 <公开 属性写 注释 = "指定菜单的背景颜色" @值细节类型 = 颜色>
+    参数 欲设置属性值 <类型 = 整数>
+    {
+        @ GetAdvVolMenu ()->m_clrBk = (COLORREF)@<欲设置属性值>;
+    }
+
+    方法 文本颜色 <公开 属性读 类型 = 整数 注释 = "返回菜单的文本颜色" @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.GetAdvVolMenu ()->m_clrText
+    }
+
+    方法 文本颜色 <公开 属性写 注释 = "指定菜单的文本颜色" @值细节类型 = 颜色>
+    参数 欲设置属性值 <类型 = 整数>
+    {
+        @ GetAdvVolMenu ()->m_clrText = (COLORREF)@<欲设置属性值>;
+    }
+
+    方法 禁止文本颜色 <公开 属性读 类型 = 整数 注释 = "返回菜单项为禁止状态时的文本颜色" @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.GetAdvVolMenu ()->m_clrDisableText
+    }
+
+    方法 禁止文本颜色 <公开 属性写 注释 = "指定菜单项为禁止状态时的文本颜色" @值细节类型 = 颜色>
+    参数 欲设置属性值 <类型 = 整数>
+    {
+        @ GetAdvVolMenu ()->m_clrDisableText = (COLORREF)@<欲设置属性值>;
+    }
+
+    方法 点燃颜色 <公开 属性读 类型 = 整数 注释 = "返回当菜单项被选定（高亮显示）时所用的颜色" @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.GetAdvVolMenu ()->m_clrSelected
+    }
+
+    方法 点燃颜色 <公开 属性写 注释 = "指定当菜单项被选定（高亮显示）时所用的颜色" @值细节类型 = 颜色>
+    参数 欲设置属性值 <类型 = 整数>
+    {
+        @ GetAdvVolMenu ()->m_clrSelected = (COLORREF)@<欲设置属性值>;
+    }
+
+    方法 渐变条颜色1 <公开 属性读 类型 = 整数 注释 = "返回显示在每个菜单左边的渐变条最左边的颜色" @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.GetAdvVolMenu ()->m_clrBand1
+    }
+
+    方法 渐变条颜色1 <公开 属性写 注释 = "指定显示在每个菜单左边的渐变条最左边的颜色" @值细节类型 = 颜色>
+    参数 欲设置属性值 <类型 = 整数>
+    {
+        @ GetAdvVolMenu ()->m_clrBand1 = (COLORREF)@<欲设置属性值>;
+    }
+
+    方法 渐变条颜色2 <公开 属性读 类型 = 整数 注释 = "返回显示在每个菜单左边的渐变条最右边的颜色" @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.GetAdvVolMenu ()->m_clrBand2
+    }
+
+    方法 渐变条颜色2 <公开 属性写 注释 = "指定显示在每个菜单左边的渐变条最右边的颜色" @值细节类型 = 颜色>
+    参数 欲设置属性值 <类型 = 整数>
+    {
+        @ GetAdvVolMenu ()->m_clrBand2 = (COLORREF)@<欲设置属性值>;
+    }
+
+    方法 菜单条点燃颜色1 <公开 属性读 类型 = 整数 注释 = "返回当菜单条上的项目被点燃（高亮显示）时渐变区域最上边的颜色" @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.GetAdvVolMenu ()->m_clrBarHighLight1
+    }
+
+    方法 菜单条点燃颜色1 <公开 属性写 注释 = "指定当菜单条上的项目被点燃（高亮显示）时渐变区域最上边的颜色" @值细节类型 = 颜色>
+    参数 欲设置属性值 <类型 = 整数>
+    {
+        @ GetAdvVolMenu ()->m_clrBarHighLight1 = (COLORREF)@<欲设置属性值>;
+    }
+
+    方法 菜单条点燃颜色2 <公开 属性读 类型 = 整数 注释 = "返回当菜单条上的项目被点燃（高亮显示）时渐变区域最下边的颜色" @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.GetAdvVolMenu ()->m_clrBarHighLight2
+    }
+
+    方法 菜单条点燃颜色2 <公开 属性写 注释 = "指定当菜单条上的项目被点燃（高亮显示）时渐变区域最下边的颜色" @值细节类型 = 颜色>
+    参数 欲设置属性值 <类型 = 整数>
+    {
+        @ GetAdvVolMenu ()->m_clrBarHighLight2 = (COLORREF)@<欲设置属性值>;
+    }
+
+    方法 点燃区边框颜色 <公开 属性读 类型 = 整数 注释 = "返回菜单项被点燃时渐变区域的边框颜色" @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.GetAdvVolMenu ()->m_clrSelectBorder
+    }
+
+    方法 点燃区边框颜色 <公开 属性写 注释 = "指定菜单项被点燃时渐变区域的边框颜色" @值细节类型 = 颜色>
+    参数 欲设置属性值 <类型 = 整数>
+    {
+        @ GetAdvVolMenu ()->m_clrSelectBorder = (COLORREF)@<欲设置属性值>;
+    }
+
+    方法 分割条颜色 <公开 属性读 类型 = 整数 注释 = "返回菜单分割条的颜色" @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.GetAdvVolMenu ()->m_clrSeparator
+    }
+
+    方法 分割条颜色 <公开 属性写 注释 = "指定菜单分割条的颜色" @值细节类型 = 颜色>
+    参数 欲设置属性值 <类型 = 整数>
+    {
+        @ GetAdvVolMenu ()->m_clrSeparator = (COLORREF)@<欲设置属性值>;
+    }
+
+    方法 菜单条背景色 <公开 属性读 类型 = 整数 注释 = "返回菜单条的背景颜色" @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.GetAdvVolMenu ()->m_clrBarBk
+    }
+
+    方法 菜单条背景色 <公开 属性写 注释 = "指定菜单条的背景颜色" @值细节类型 = 颜色支持默认>
+    参数 欲设置属性值 <类型 = 整数 注释 = "使用\"颜色类.默认色\"表示使用默认背景颜色">
+    {
+        @ GetAdvVolMenu ()->SetMenuBarBackColor ((COLORREF)@<欲设置属性值>);
+    }
+
+    方法 图片组 <公开 属性写 注释 = "设置在菜单项左侧显示图标用的图片组">
+    参数 所欲设置的图片组 <类型 = 图片组资源 注释 = "对图片组图片格式的要求请参见\"图片组资源\"类中的说明">
+    {
+        @ GetAdvVolMenu ()->TakeOverImageList ((HIMAGELIST)g_objVolApp.LoadResImage (VRIT_IMAGE_LIST, @<所欲设置的图片组>));
+    }
+
+    方法 图片组文件 <公开 属性写 注释 = "设置在菜单项左侧显示图标用的图片组">
+    参数 所欲设置的图片组文件 <类型 = 文本型 注释 = "  提供用作保存图片组的图片文件名,该图片文件的格式必须符合" 注释 = "\"图片组资源\"类中所说明的要求.">
+    {
+        @ GetAdvVolMenu ()->TakeOverImageList ((HIMAGELIST)g_objVolApp.LoadResImageFile (VRIT_IMAGE_LIST, @<所欲设置的图片组文件>.GetText ()));
+    }
+
+    方法 置图片组 <公开 注释 = "设置在菜单项左侧显示图标用的图片组">
+    参数 所欲设置的图片组 <类型 = 图片组对象类 注释 = "注意该参数对象内的图片组将被移交给本对象管理">
+    {
+        @ GetAdvVolMenu ()->TakeOverImageList ((HIMAGELIST)@<所欲设置的图片组>.DetachGDIHandle ());
+    }
+
+    方法 菜单项字体 <公开 属性写 注释 = "指定菜单项在显示时所用的字体. 本属性的设置不影响菜单条上的文本,菜单条上的文本在显示时将固定使用系统默认字体."
+            注释 = "菜单项在显示时会根据本属性所设置的字体和\"图片组\"属性中的图片大小自动调整高度和宽度,菜单项的高度取决于两者中的较大值." @值细节类型 = 字体>
+    参数 字体描述文本 <类型 = 文本型 注释 = "  本参数的格式为: \"字体名, 字体尺寸, 是否为粗体, 是否为斜体, 是否有下划线, 是否有删除线, 旋转角度\","
+            注释 = "其中\"是否\"字段,用1代表真,0代表假,可以被省略.字体尺寸单位为磅, 旋转角度单位为1/10度." 注释 = "  例子: \"宋体, 10\", \"宋体, 10, 0, 1, 1, 0, 100\"." "">
+    {
+        @ GetAdvVolMenu ()->SetMenuFont (@<字体描述文本>);
+    }
+
+    # --
+
+    方法 重置 <公开 注释 = "  当修改了菜单项目的标题/快捷键这些会导致菜单框尺寸改变" 注释 = "的内容后,需要调用本方法重置以正确展示被修改内容." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetAdvVolMenu ()->Reset ()
+    }
+
+    # @ <include>
+    # @ virtual CRefVolMenu* NewVolMenuObject () override { return new CAdvRefVolMenu; }
+    # @ CAdvRefVolMenu* GetAdvVolMenu ()  { return (CAdvRefVolMenu*)GetVolMenu (); }
+    # @ </include>
+    #
+}

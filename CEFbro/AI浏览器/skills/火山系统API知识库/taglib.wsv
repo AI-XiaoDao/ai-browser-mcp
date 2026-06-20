@@ -1,0 +1,106 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.音频处理.音频信息\"" "" @视窗.外部头文件 = "taglib\\taglibTool.h"
+        @视窗.外部库.win32 = "taglib\\taglibToolx86.lib" @视窗.附属文件.win32 = "taglib\\taglibToolx86.dll"
+        @视窗.外部库.x64 = "taglib\\taglibToolx64.lib" @视窗.附属文件.x64 = "taglib\\taglibToolx64.dll">
+
+类 音频信息类 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     TaglibTool_CopyConstruct(m_pData,objCopyFrom.m_pData);
+    # }
+    #
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void * pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化
+    {
+        @ SetData( TaglibTool_new());
+    }
+
+    方法 类_清理
+    {
+        @ TaglibTool_Delete(GetData());
+
+
+    }
+
+    方法 打开 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 音频文件 <类型 = 文本型>
+    {
+        变量 name <类型 = 字节集类>
+        name = 文本到多字节 (音频文件)
+        @ return TaglibTool_Open(GetData(),(const char*)@<name>.GetPtr());
+    }
+
+    方法 保存 <公开 类型 = 逻辑型 注释 = "如果修改过 音频文件的信息，就要调用保存" @嵌入式方法 = "">
+    {
+        @ TaglibTool_Save(@sn<this>.GetData())
+    }
+
+    方法 是否有效 <公开 类型 = 逻辑型 注释 = "音频文件信息是否有效" 注释 = " * Returns true if the file is open and readable and valid information for"
+            注释 = " * the Tag and / or AudioProperties was found." 折叠 折叠2 @嵌入式方法 = "">
+    {
+        @ TaglibTool_IsValid(@sn<this>.GetData())
+    }
+
+    方法 关闭 <公开 @嵌入式方法 = "">
+    {
+        @ TaglibTool_Close(@sn<this>.GetData())
+    }
+
+    方法 取标签 <公开 类型 = 文本型>
+    参数 标签类型 <类型 = 整数 注释 = "// 范围 0 - 6 | 0 title | 1 artist | 2 album | 3 year | 4 comment | 5 track | 6 genre">
+    {
+        变量 返回值 <类型 = 文本型>
+        @ const char * pText = TaglibTool_GetTag (GetData(),@<标签类型>);
+        @ if( pText)
+        @  @<返回值> = pText;
+        @ TaglibTool_FreeString(pText);
+        返回 (返回值)
+    }
+
+    方法 置标签 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 标签类型 <类型 = 整数 注释 = "// 范围 0 - 6 | 0 title | 1 artist | 2 album | 3 year | 4 comment | 5 track | 6 genre">
+    参数 标签属性 <类型 = 文本型>
+    {
+        变量 value <类型 = 字节集类>
+        value = 文本到UTF8 (标签属性)
+        @ return TaglibTool_SetTag(GetData(),@<标签类型>,(const char*)@<value>.GetPtr());
+    }
+
+    方法 取属性 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 类型 <类型 = 整数 注释 = "//0 时长(秒)  | 1 比特率 | 2 采样率 | 3 通道数">
+    {
+        @ TaglibTool_GetProperty(@sn<this>.GetData(),@<类型>)
+    }
+
+    方法 置默认编码 <公开 @嵌入式方法 = "">
+    参数 是否unicode <类型 = 逻辑型>
+    {
+        @ TaglibTool_SetUnicode(@<是否unicode>)
+
+    }
+
+    方法 置ID3v2默认编码 <公开 @嵌入式方法 = "">
+    参数 编码类型 <类型 = 整数 注释 = "可选值 0 1 2 3" 注释 = "//typedef enum {" 注释 = "// TagLib_ID3v2_Latin1,  == 0"
+            注释 = "// TagLib_ID3v2_UTF16,   == 1" 注释 = "// TagLib_ID3v2_UTF16BE, == 2" 注释 = "// TagLib_ID3v2_UTF8     == 3"
+            注释 = "//} TagLib_ID3v2_Encoding;">
+    {
+        @ TaglibTool_SetID3v2Encoding(@<编码类型>)
+    }
+}

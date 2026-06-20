@@ -1,0 +1,426 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" @文档 = "category = \"windows.键鼠模拟\""
+        @视窗.外部头文件 = "KeyboardMouseSimulation\\KeyboardConst.h">
+
+类 键代码_常量类 <公开 @常量类 = 整数>
+{
+    常量 退格键 <公开 值 = @VK_BACK>
+    常量 回车键 <公开 值 = @VK_RETURN>
+    常量 CTRL键 <公开 值 = @VK_CONTROL>
+    常量 ALT键 <公开 值 = @VK_MENU>
+    常量 DEL键 <公开 值 = @VK_DECIMAL>
+    常量 ESC键 <公开 值 = @VK_ESCAPE>
+    常量 TAB键 <公开 值 = @VK_TAB 注释 = ":">
+    常量 PAUSEBREAK键 <公开 值 = @VK_PAUSE>
+    常量 空格键 <公开 值 = @VK_SPACE>
+    常量 END键 <公开 值 = @VK_END>
+    常量 HOME键 <公开 值 = @VK_HOME>
+    常量 INSERT键 <公开 值 = @VK_INSERT>
+    常量 DELETE键 <公开 值 = @VK_DELETE>
+    常量 上键 <公开 值 = @VK_UP>
+    常量 下键 <公开 值 = @VK_DOWN>
+    常量 左键 <公开 值 = @VK_LEFT>
+    常量 右键 <公开 值 = @VK_RIGHT>
+    常量 ""
+    常量 "//数字大键盘"
+    常量 数字0大键 <公开 值 = @VK_0>
+    常量 数字1大键 <公开 值 = @VK_1>
+    常量 数字2大键 <公开 值 = @VK_2>
+    常量 数字3大键 <公开 值 = @VK_3>
+    常量 数字4大键 <公开 值 = @VK_4>
+    常量 数字5大键 <公开 值 = @VK_5>
+    常量 数字6大键 <公开 值 = @VK_6>
+    常量 数字7大键 <公开 值 = @VK_7>
+    常量 数字8大键 <公开 值 = @VK_8>
+    常量 数字9大键 <公开 值 = @VK_9>
+    常量 ""
+    常量 "//字母键"
+    常量 字母Q键 <公开 值 = @VK_Q>
+    常量 字母W键 <公开 值 = @VK_W>
+    常量 字母E键 <公开 值 = @VK_E>
+    常量 字母R键 <公开 值 = @VK_R>
+    常量 字母T键 <公开 值 = @VK_T>
+    常量 字母Y键 <公开 值 = @VK_Y>
+    常量 字母U键 <公开 值 = @VK_U>
+    常量 字母I键 <公开 值 = @VK_I>
+    常量 字母O键 <公开 值 = @VK_O>
+    常量 字母P键 <公开 值 = @VK_P>
+    常量 字母A键 <公开 值 = @VK_A>
+    常量 字母S键 <公开 值 = @VK_S>
+    常量 字母D键 <公开 值 = @VK_D>
+    常量 字母F键 <公开 值 = @VK_F>
+    常量 字母G键 <公开 值 = @VK_G>
+    常量 字母H键 <公开 值 = @VK_H>
+    常量 字母J键 <公开 值 = @VK_J>
+    常量 字母K键 <公开 值 = @VK_K>
+    常量 字母L键 <公开 值 = @VK_L>
+    常量 字母Z键 <公开 值 = @VK_Z>
+    常量 字母X键 <公开 值 = @VK_X>
+    常量 字母C键 <公开 值 = @VK_C>
+    常量 字母V键 <公开 值 = @VK_V>
+    常量 字母B键 <公开 值 = @VK_B>
+    常量 字母N键 <公开 值 = @VK_N>
+    常量 字母M键 <公开 值 = @VK_M>
+    常量 ""
+    常量 "//数字小键盘"
+    常量 数字0小键 <公开 值 = @VK_NUMPAD0>
+    常量 数字1小键 <公开 值 = @VK_NUMPAD1>
+    常量 数字2小键 <公开 值 = @VK_NUMPAD2>
+    常量 数字3小键 <公开 值 = @VK_NUMPAD3>
+    常量 数字4小键 <公开 值 = @VK_NUMPAD4>
+    常量 数字5小键 <公开 值 = @VK_NUMPAD5>
+    常量 数字6小键 <公开 值 = @VK_NUMPAD6>
+    常量 数字7小键 <公开 值 = @VK_NUMPAD7>
+    常量 数字8小键 <公开 值 = @VK_NUMPAD8>
+    常量 数字9小键 <公开 值 = @VK_NUMPAD9>
+    常量 ""
+    常量 "//辅助键"
+    常量 星号小键盘 <公开 值 = @VK_MULTIPLY>
+    常量 加号小键盘 <公开 值 = @VK_ADD>
+    常量 减号小键盘 <公开 值 = @VK_SUBTRACT>
+    常量 斜杠小键盘 <公开 值 = @VK_DIVIDE>
+    常量 F1键 <公开 值 = @VK_F1>
+    常量 F2键 <公开 值 = @VK_F2>
+    常量 F3键 <公开 值 = @VK_F3>
+    常量 F4键 <公开 值 = @VK_F4>
+    常量 F5键 <公开 值 = @VK_F5>
+    常量 F6键 <公开 值 = @VK_F6>
+    常量 F7键 <公开 值 = @VK_F7>
+    常量 F8键 <公开 值 = @VK_F8>
+    常量 F9键 <公开 值 = @VK_F9>
+    常量 F10键 <公开 值 = @VK_F10>
+    常量 F11键 <公开 值 = @VK_F11>
+    常量 F12键 <公开 值 = @VK_F12>
+    常量 SCROLLLock键 <公开 值 = @VK_SCROLL>
+    常量 分号和冒号 <公开 值 = @VK_OEM_1>
+    常量 加键 <公开 值 = @VK_OEM_PLUS>
+    常量 减键 <公开 值 = @VK_OEM_MINUS>
+    常量 小于号键 <公开 值 = @VK_OEM_PERIOD>
+    常量 大于号键 <公开 值 = @VK_OEM_PERIOD>
+    常量 等于号键 <公开 值 = @VK_EQUALS>
+    常量 ""
+    常量 Win键 <公开 值 = @VK_LWIN>
+    常量 重音符键 <公开 值 = @VK_BACK_QUOTE 注释 = "表示键盘上的“`” 在键盘左上角的位置 ESC键的下面一个就是">
+    常量 反斜杠键 <公开 值 = @VK_BACK_SLASH>
+    常量 CAPSLOCK键 <公开 值 = @VK_CAPITAL>
+    常量 中括号键 <公开 值 = @VK_CLOSE_BRACKET>
+    常量 逗号键 <公开 值 = @VK_COMMA>
+    常量 分号键 <公开 值 = @VK_SEMICOLON>
+    常量 SHIFT键 <公开 值 = @VK_SHIFT>
+    常量 横杠键 <公开 值 = @VK_SUBTRACT>
+
+    #
+}
+
+类 ______键盘鼠标模拟类 <公开 @全局类 = 真>
+{
+
+    # @begin
+    # <> <include>
+    # static void Mouse_GetCursorPos_FC(int* px,int* py);
+    # <> </include>
+    #
+    # void @sn<current_class>::Mouse_GetCursorPos_FC(int* px,int* py)
+    # {
+    #     POINT pt;
+    #     GetCursorPos (&pt);
+    #     *px = pt.x;
+    #     *py = pt.y;
+    # }
+    #
+    # @end
+
+    方法 键盘_模拟组合键2_SendInput <公开 类型 = 逻辑型 注释 = "sendinput是不支持后台的哟" 注释 = "支持两个组合键 例如 ctrl+A alt+B 这种" @禁止流程检查 = 真>
+    参数 控制键 <类型 = 键代码_常量类 注释 = "一般这个为 ctrl alt win 之类的控制键">
+    参数 普通键 <类型 = 键代码_常量类 注释 = "一般为 A B C D到Z之类的字母键">
+    {
+
+        @     INPUT inputs[4] = {};
+        @     ZeroMemory(inputs, sizeof(inputs));
+        @ 
+        @     inputs[0].type = INPUT_KEYBOARD;
+        @     inputs[0].ki.wVk = @<控制键>;
+        @    
+        @     inputs[1].type = INPUT_KEYBOARD;
+        @     inputs[1].ki.wVk = @<普通键>;
+        @ 
+        @     inputs[2].type = INPUT_KEYBOARD;
+        @     inputs[2].ki.wVk = @<普通键>;
+        @     inputs[2].ki.dwFlags = KEYEVENTF_KEYUP;
+        @ 
+        @     inputs[3].type = INPUT_KEYBOARD;
+        @     inputs[3].ki.wVk = @<控制键>;
+        @     inputs[3].ki.dwFlags = KEYEVENTF_KEYUP;
+        @ 
+        @     UINT uSent = SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
+        @     if (uSent != ARRAYSIZE(inputs))
+        @     {
+        @         return FALSE;
+        @         //OutputString(L"SendInput failed: 0x%x\n", HRESULT_FROM_WIN32(GetLastError()));
+        @     } 
+        @    return TRUE;
+
+    }
+
+    方法 键盘_模拟组合键3_SendInput <公开 类型 = 逻辑型 注释 = "sendinput是不支持后台的哟" 注释 = "支持两个组合键 例如 ctrl+alt+A ctrl+alt+B 这种" @禁止流程检查 = 真>
+    参数 控制键 <类型 = 键代码_常量类 注释 = "一般这个为 ctrl  之类的控制键">
+    参数 控制键2 <类型 = 键代码_常量类 注释 = "一般这个为 alt shift 之类的控制键">
+    参数 普通键 <类型 = 键代码_常量类 注释 = "一般为 A B C D到Z之类的字母键">
+    {
+
+        @     INPUT inputs[6] = {};
+        @     ZeroMemory(inputs, sizeof(inputs));
+        @ 
+        @     inputs[0].type = INPUT_KEYBOARD;
+        @     inputs[0].ki.wVk = @<控制键>;
+        @    
+        @     inputs[1].type = INPUT_KEYBOARD;
+        @     inputs[1].ki.wVk = @<控制键2>;
+
+        @     inputs[2].type = INPUT_KEYBOARD;
+        @     inputs[2].ki.wVk = @<普通键>;
+        @ 
+        @     inputs[3].type = INPUT_KEYBOARD;
+        @     inputs[3].ki.wVk = @<普通键>;
+        @     inputs[3].ki.dwFlags = KEYEVENTF_KEYUP;
+        @ 
+        @     inputs[4].type = INPUT_KEYBOARD;
+        @     inputs[4].ki.wVk = @<控制键2>;
+        @     inputs[4].ki.dwFlags = KEYEVENTF_KEYUP;
+
+        @     inputs[5].type = INPUT_KEYBOARD;
+        @     inputs[5].ki.wVk = @<控制键>;
+        @     inputs[5].ki.dwFlags = KEYEVENTF_KEYUP;
+        @ 
+        @     UINT uSent = SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
+        @     if (uSent != ARRAYSIZE(inputs))
+        @     {
+        @         return FALSE;
+        @         //OutputString(L"SendInput failed: 0x%x\n", HRESULT_FROM_WIN32(GetLastError()));
+        @     } 
+        @    return TRUE;
+
+    }
+
+    方法 键盘_模拟按键_SendInput <公开 类型 = 逻辑型 注释 = "sendinput是不支持后台的哟" @禁止流程检查 = 真>
+    参数 普通键 <类型 = 键代码_常量类 注释 = "一般为 A B C D到Z之类的字母键">
+    {
+
+        @     INPUT inputs[2] = {};
+        @     ZeroMemory(inputs, sizeof(inputs));
+        @ 
+        @     inputs[0].type = INPUT_KEYBOARD;
+        @     inputs[0].ki.wVk = @<普通键>;
+        @ 
+        @     inputs[1].type = INPUT_KEYBOARD;
+        @     inputs[1].ki.wVk = @<普通键>;
+        @     inputs[1].ki.dwFlags = KEYEVENTF_KEYUP;
+        @ 
+        @     UINT uSent = SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
+        @     if (uSent != ARRAYSIZE(inputs))
+        @     {
+        @         return FALSE;
+        @         //OutputString(L"SendInput failed: 0x%x\n", HRESULT_FROM_WIN32(GetLastError()));
+        @     } 
+        @    return TRUE;
+
+    }
+
+    # //下面是keybd_event相关=======
+    #
+
+    常量 MOUSEEVENTF_ABSOLUTE <公开 类型 = 整数 值 = @MOUSEEVENTF_ABSOLUTE 注释 = "鼠标事件 绝对坐标标志">
+    常量 MOUSEEVENTF_MOVE <公开 类型 = 整数 值 = @MOUSEEVENTF_MOVE 注释 = "鼠标事件 移动">
+    常量 MOUSEEVENTF_LEFTDOWN <公开 类型 = 整数 值 = @MOUSEEVENTF_LEFTDOWN>
+    常量 MOUSEEVENTF_LEFTUP <公开 类型 = 整数 值 = @MOUSEEVENTF_LEFTUP>
+    常量 MOUSEEVENTF_RIGHTDOWN <公开 类型 = 整数 值 = @MOUSEEVENTF_RIGHTDOWN>
+    常量 MOUSEEVENTF_RIGHTUP <公开 类型 = 整数 值 = @MOUSEEVENTF_RIGHTUP>
+    常量 MOUSEEVENTF_MIDDLEDOWN <公开 类型 = 整数 值 = @MOUSEEVENTF_MIDDLEDOWN>
+    常量 MOUSEEVENTF_MIDDLEUP <公开 类型 = 整数 值 = @MOUSEEVENTF_MIDDLEUP>
+    常量 MOUSEEVENTF_WHEEL <公开 类型 = 整数 值 = @MOUSEEVENTF_WHEEL>
+    常量 MOUSEEVENTF_XDOWN <公开 类型 = 整数 值 = @MOUSEEVENTF_XDOWN>
+    常量 MOUSEEVENTF_XUP <公开 类型 = 整数 值 = @MOUSEEVENTF_XUP>
+    常量 ""
+    常量 ""
+
+    方法 keybd_event <公开 静态 折叠 @嵌入式方法 = "">
+    参数 虚拟键代码 <类型 = 字节 注释 = "bVk,欲模拟的虚拟键码 win键代码=91">
+    参数 扫描码 <类型 = 字节 注释 = "bScan,键的OEM扫描码" @默认值 = 0>
+    参数 标志 <类型 = 整数 注释 = "dwFlags,标志常数  KEYEVENTF_KEYUP=2  放开某键的标志" @默认值 = 0>
+    参数 dwExtraInfo <类型 = 长整数 注释 = "不常用" @默认值 = 0>
+    {
+        @ keybd_event(@<虚拟键代码>,@<扫描码>,@<标志>,@<dwExtraInfo>)
+    }
+
+    方法 键盘_模拟按下某键 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 虚拟键代码 <类型 = 字节 注释 = "bVk,欲模拟的虚拟键码 win键代码=91">
+    参数 扫描码 <类型 = 字节 注释 = "bScan,键的OEM扫描码" @默认值 = 0>
+    参数 标志 <类型 = 整数 注释 = "dwFlags,标志常数  KEYEVENTF_KEYUP=2  放开某键的标志" @默认值 = 0>
+    参数 dwExtraInfo <类型 = 长整数 @默认值 = 0>
+    {
+        // VOID keybd_event(  BYTE bVk,               // virtual-key code
+        // BYTE bScan,             // hardware scan code
+        // DWORD dwFlags,          // function options
+        // ULONG_PTR dwExtraInfo   // additional keystroke data
+        //);
+        @ keybd_event(@<虚拟键代码>,@<扫描码>,@<标志>,@<dwExtraInfo>)
+    }
+
+    方法 键盘_模拟放开某键 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 虚拟键代码 <类型 = 字节 注释 = "bVk,欲模拟的虚拟键码 win键代码=91">
+    参数 扫描码 <类型 = 字节 注释 = "bScan,键的OEM扫描码" @默认值 = 0>
+    参数 标志 <类型 = 整数 注释 = "dwFlags,标志常数  KEYEVENTF_KEYUP=2  放开某键的标志" @默认值 = 2>
+    参数 dwExtraInfo <类型 = 长整数 @默认值 = 0>
+    {
+        // VOID keybd_event(  BYTE bVk,               // virtual-key code
+        // BYTE bScan,             // hardware scan code
+        // DWORD dwFlags,          // function options
+        // ULONG_PTR dwExtraInfo   // additional keystroke data
+        //);
+        @ keybd_event(@<虚拟键代码>,@<扫描码>,@<标志>,@<dwExtraInfo>)
+    }
+
+    方法 键盘_模拟按键 <公开 静态 注释 = "这个包括了 按下和放开两个操作" 折叠 "">
+    参数 键代码 <类型 = 键代码_常量类 注释 = "bVk,欲模拟的虚拟键码 win键代码=91">
+    参数 扫描码 <类型 = 字节 注释 = "bScan,键的OEM扫描码" @默认值 = 0>
+    参数 延时 <类型 = 整数 注释 = "按下键和松开键之间的间隔时间" @默认值 = 20>
+    {
+        @ keybd_event (@<键代码>, @<扫描码>, 0, 0);
+        @ Sleep(@<延时>);
+        @ keybd_event (@<键代码>, @<扫描码>, 2, 0);
+
+    }
+
+    方法 键盘_模拟组合键 <公开 静态 折叠 "">
+    参数 控制键 <类型 = 键代码_常量类 注释 = "比如说 ctrl啥的">
+    参数 键代码 <类型 = 键代码_常量类 注释 = "比如说 s键">
+    参数 延时 <类型 = 整数 注释 = "按下键和松开键之间的间隔时间" @默认值 = 20>
+    {
+        @ keybd_event (@<控制键>, 0, 0, 0);
+        @ Sleep(@<延时>);
+        @ keybd_event (@<键代码>, 0, 0, 0);
+        @ Sleep(@<延时>);
+        @ keybd_event (@<键代码>, 0, 2, 0);
+        @ Sleep(@<延时>);
+        @ keybd_event (@<控制键>, 0, 2, 0);
+
+    }
+
+    方法 键盘_模拟回车 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 延时 <类型 = 整数 注释 = "按下键和松开键之间的间隔时间" @默认值 = 20>
+    {
+        @ keybd_event(VK_RETURN, 0, 0, 0);
+        @ Sleep(@<延时>);
+        @ keybd_event(VK_RETURN, 0, 2, 0);
+    }
+
+    方法 mouse_event <公开 静态 折叠 @嵌入式方法 = "">
+    参数 dwFlags <类型 = 整数 注释 = "motion and click options">
+    参数 dx <类型 = 整数 注释 = " horizontal position or change">
+    参数 dy <类型 = 整数 注释 = "horizontal position or change">
+    参数 dwData <类型 = 整数 注释 = " wheel movement">
+    参数 dwExtraInfo <类型 = 长整数 注释 = "application-defined information">
+    {
+        // VOID mouse_event(  DWORD dwFlags,         // motion and click options
+        // DWORD dx,              // horizontal position or change
+        // DWORD dy,              // vertical position or change
+        // DWORD dwData,          // wheel movement
+        // ULONG_PTR dwExtraInfo  // application-defined information);
+        @ mouse_event(@<dwFlags>,@<dx>,@<dy>,@<dwData>,(ULONG_PTR)@<dwExtraInfo>)
+
+
+    }
+
+    方法 鼠标_模拟移动鼠标位置_mouse_event <公开 静态 注释 = "绝对坐标，相对于屏幕左上角" 折叠>
+    参数 x <类型 = 整数>
+    参数 y <类型 = 整数>
+    {
+        mouse_event (位或 (MOUSEEVENTF_ABSOLUTE, MOUSEEVENTF_MOVE), 65535 / 取屏幕宽度f () * x, 65535 / 取屏幕高度f () * y, 0, 0)
+    }
+
+    方法 鼠标_模拟左键点击_mouse_event <公开 静态 注释 = "mouse_event 相对于光标的。。意思就是 当前鼠标光标再哪里，就点击哪里" 折叠>
+    参数 延时 <类型 = 整数 @默认值 = 20>
+    {
+        mouse_event (MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+        延时 (延时)
+        mouse_event (MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+
+    }
+
+    方法 鼠标_模拟左键点击_屏幕坐标_mouse_event <公开 静态 折叠>
+    参数 x <类型 = 整数>
+    参数 y <类型 = 整数>
+    参数 延时 <类型 = 整数 @默认值 = 20>
+    {
+        鼠标_模拟移动鼠标位置_mouse_event (x, y)
+        延时 (延时)
+        鼠标_模拟左键点击_mouse_event ()
+
+    }
+
+    方法 鼠标_模拟右键点击_mouse_event <公开 静态 注释 = "mouse_event 相对于光标的。。坐标是" 折叠>
+    参数 延时 <类型 = 整数 @默认值 = 20>
+    {
+        mouse_event (MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0)
+        延时 (延时)
+        mouse_event (MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
+    }
+
+    方法 鼠标_模拟滚轮滚动_mouse_event <公开 静态 注释 = "注意，必须某个窗口先获得焦点，才能收到滚轮消息" 折叠>
+    参数 滚动距离 <类型 = 整数>
+    {
+        mouse_event (MOUSEEVENTF_WHEEL, 0, 0, 滚动距离, 0)
+    }
+
+    方法 鼠标_置位置_屏幕位置 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 x <类型 = 整数>
+    参数 y <类型 = 整数>
+    {
+        @ SetCursorPos(@<x>,@<y>)
+    }
+
+    方法 "// 鼠标_取位置" <公开 静态 折叠 "">
+    参数 "// x" <类型 = 整数 @返回值类型>
+    参数 "// y" <类型 = 整数 @返回值类型>
+    {
+        // @ POINT pt;
+        // @ GetCursorPos (&pt);
+        // @ @<x>= pt.x;
+        // @ @<y>= pt.y;
+    }
+
+    方法 鼠标_取位置窗口句柄 <公开 静态 类型 = 长整数 折叠>
+    {
+        变量 窗口句柄 <类型 = 长整数>
+        @ POINT pt;
+        @ GetCursorPos (&pt);
+        @ @<窗口句柄> =(INT64) WindowFromPoint(pt);
+        返回 (窗口句柄)
+    }
+
+    方法 鼠标_取位置子窗口句柄 <公开 静态 类型 = 长整数>
+    {
+        变量 窗口句柄 <类型 = 长整数>
+        @ POINT pt;
+        @ GetCursorPos (&pt);
+        @ @<窗口句柄> =(INT64) WindowFromPoint(pt);
+        @ if(@<窗口句柄> != 0)  @<窗口句柄> = (@dt<变整数>)ChildWindowFromPoint((HWND)@<窗口句柄>,pt);
+        返回 (窗口句柄)
+
+    }
+
+    方法 鼠标_取当前屏幕坐标 <公开 静态 注释 = "取当前 鼠标光标再屏幕中的坐标" @嵌入式方法 = "">
+    参数 输出_横坐标 <类型 = 整数>
+    参数 输出_纵坐标 <类型 = 整数>
+    {
+        @  @dt<______键盘鼠标模拟类>::Mouse_GetCursorPos_FC(&@<输出_横坐标>,&@<输出_纵坐标>)
+    }
+
+    方法 鼠标_是否左键被按下 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ (GetAsyncKeyState(VK_LBUTTON)&0x8000?TRUE:FALSE)
+    }
+
+    #
+}

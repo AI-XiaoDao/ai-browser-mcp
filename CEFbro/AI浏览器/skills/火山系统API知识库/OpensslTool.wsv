@@ -1,0 +1,61 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <编辑时信息 = "246FDB, 0, 0, 0" @文档 = "category = \"开源库.OpenCV\"" "" "" "//@视窗.头文件搜寻目录" = "OpensslTool\\include"
+        @视窗.外部头文件 = "OpensslTool\\OpensslTool.h" @视窗.外部库.win32 = "OpensslTool\\OpensslToolx86.lib"
+        @视窗.附属文件.win32 = "OpensslTool\\OpensslToolx86.dll" "" "" @视窗.外部库.x64 = "OpensslTool\\OpensslToolx64.lib"
+        @视窗.附属文件.x64 = "OpensslTool\\OpensslToolx64.dll" "" "" "">
+
+类 ______OpensslTool <公开 @全局类 = 真>
+{
+    方法 校验_Hmac <公开 静态 类型 = 字节集类 返回值注释 = "返回校验值 自行用 字节集到十六进制文本 解决">
+    参数 校验类型 <类型 = 整数 注释 = "0: EVP_sha1();" 注释 = "1: EVP_sha224();" 注释 = "2: EVP_sha256();" 注释 = "3: EVP_sha512()"
+            注释 = "4: EVP_md5();" 注释 = "5: EVP_sha384();">
+    参数 数据 <类型 = 字节集类>
+    参数 密钥 <类型 = 文本型>
+    {
+        变量 key <类型 = 字节集类>
+        变量 校验值 <类型 = 字节集类>
+        key = 文本到多字节 (密钥, 假)
+        @ void* pOutHash = NULL;
+        @ int nOutLen = 0;
+        @ if( OpensslTool_HmacEncode (@<校验类型>,(const char*)@<数据>.GetPtr(),@<数据>.GetSize(),(const char*)@<key>.GetPtr(),@<key>.GetSize(),&pOutHash,&nOutLen))
+        @ {
+        @   CVolMem mem( (const char*)pOutHash,nOutLen);
+        @   @<校验值> = mem;
+        @  OpensslTool_Free(pOutHash);
+        @  }
+
+        返回 (校验值)
+
+
+
+    }
+
+    方法 校验_Cmac <公开 静态 类型 = 字节集类 注释 = "aes128" 返回值注释 = "返回校验值 自行用 字节集到十六进制文本 解决">
+    参数 数据 <类型 = 字节集类>
+    参数 密钥 <类型 = 字节集类>
+    {
+        变量 校验值 <类型 = 字节集类>
+        如果 (取字节集长度(密钥) != 16)
+        {
+            调试输出 (取当前语句位置()+ " 校验_Cmac 密钥的长度必须是16字节")
+            返回(校验值)
+        }
+
+        @ void* pOutHash = NULL;
+        @ int nOutLen = 0;
+        @ if( OpensslTool_CmacEncode (0,(const char*)@<数据>.GetPtr(),@<数据>.GetSize(),(const char*)@<密钥>.GetPtr(),@<密钥>.GetSize(),&pOutHash,&nOutLen))
+        @ {
+        @   CVolMem mem( (const char*)pOutHash,nOutLen);
+        @   @<校验值> = mem;
+        @  OpensslTool_Free(pOutHash);
+        @  }
+
+        返回 (校验值)
+
+
+
+    }
+
+    #
+}

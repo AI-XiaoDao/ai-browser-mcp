@@ -1,0 +1,173 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.NodeJS <@视窗.外部头文件 = "..\\..\\shared\\extern_lib\\common\\NodeV8\\1\\NodeJsTool.h"
+        @视窗.外部库.win32 = "..\\..\\shared\\extern_lib\\common\\NodeV8\\1\\win32\\NodeJsToolx86.lib"
+        @视窗.外部库.x64 = "..\\..\\shared\\extern_lib\\common\\NodeV8\\1\\x64\\NodeJsToolx64.lib"
+        @视窗.附属文件.win32 = "..\\..\\shared\\extern_lib\\common\\NodeV8\\1\\win32\\NodeJsToolx86.dll"
+        @视窗.附属文件.x64 = "..\\..\\shared\\extern_lib\\common\\NodeV8\\1\\x64\\NodeJsToolx64.dll" @视窗.预定义宏 = "NODE_DLL">
+
+类 JS平台类 <公开 基础类 = 参考对象类 注释 = "用作创建JS引擎">
+{
+
+    # @begin
+    # @m<DECLARE_DERIVED_REF_OBJECT_CLASS_WITH_NEW_OBJECT> (CJSPlatformWrapper)
+    # <> <global>
+    # INT_P CJSPlatformWrapper::ms_npPlatformRefCount = 0;
+    # LPNodeV8_Platform CJSPlatformWrapper::ms_pPlatform = NULL;
+    # <> </global>
+    # @end
+
+    方法 是否已初始化 <公开 静态 类型 = 逻辑型 注释 = "返回JS平台当前是否已经成功初始化." 注释 = "定义本类的对象实例时将自动初始化JS平台." @嵌入式方法 = "">
+    {
+        @ CJSPlatformWrapper::ms_pPlatform != NULL
+    }
+
+    方法 取JS平台版本 <公开 静态 类型 = 文本型>
+    {
+        变量 结果变量 <类型 = 文本型>
+        如果 (是否已初始化 ())
+        {
+            @ @<结果变量>.SetText (NodeV8_GetVersion ());
+        }
+        返回 (结果变量)
+    }
+
+    方法 创建JS引擎 <公开 类型 = JS引擎类 注释 = "创建JS引擎对象,该对象在不使用后会自动销毁." 返回值注释 = "如果平台尚未初始化,将返回为空的JS引擎对象." @禁止流程检查 = 真>
+    {
+        @ @dt<JS引擎类> obj;
+        @ if (CJSPlatformWrapper::ms_pPlatform != NULL)
+        @     obj.pdata ()->init (pdata ());
+        @ return obj;
+    }
+
+    方法 执行JS脚本 <公开 类型 = 文本型 注释 = "本方法可快捷执行JS脚本,自动创建JS引擎,执行JS后自动销毁引擎." 返回值注释 = "返回执行结果,失败将返回空文本(注意正常执行也可能返回空文本).">
+    参数 要执行的脚本 <类型 = 文本型 注释 = "提供要执行的JS脚本">
+    {
+        如果 (是否已初始化 ())
+        {
+            返回 (创建JS引擎 ().执行JS (要执行的脚本))
+        }
+        返回 ("")
+    }
+
+    方法 JS注册火山方法 <公开 注释 = "  将JS方法和火山方法绑定,实现JS方法调用火山方法." 注释 = "  本方法必须在\"创建JS隔离空间\"方法前调用,并且想要成功使用,"
+            注释 = "必须使用\"执行JS隔离脚本\"方法来执行脚本." @嵌入式方法 = "">
+    参数 方法名称 <类型 = 文本型 注释 = "提供方法名称,需要和JS脚本中的一致.">
+    参数 回调方法 <注释 = "提供所对应的回调方法" @匹配方法 = "JS模板方法">
+    {
+        @ if (CJSPlatformWrapper::ms_pPlatform != NULL)  NodeV8_RegisterFunction(CU8String (@<方法名称>.GetText ()), (void*)&@<回调方法>)
+    }
+
+    方法 JS取参数数量 <公开 静态 类型 = 整数 注释 = "取JS脚本方法参数数量">
+    参数 参数句柄 <类型 = 变整数 注释 = " 在使用JS回调火山方法时,所需要调用的火山方法必须提供一个类型为\"变整数\"的参数." 注释 = " 本参数填写的就是这个变整数参数.">
+    {
+        如果 (是否已初始化 ())
+        {
+            @ return NodeV8_GetArgCount ((void*)@<参数句柄>);
+        }
+        返回 (0)
+    }
+
+    方法 JS取参数 <公开 静态 类型 = 文本型 注释 = "获取JS脚本方法的参数" 返回值注释 = "返回参数内容">
+    参数 参数句柄 <类型 = 变整数 注释 = "在使用JS回调火山方法时,所需要调用的火山方法必须提供一个类型为\"变整数\"的参数." 注释 = "本参数填写的就是这个变整数参数.">
+    参数 参数索引 <类型 = 整数 注释 = "提供参数索引,从0开始.">
+    {
+        变量 结果变量 <类型 = 文本型>
+        如果 (是否已初始化 ())
+        {
+            @ const char* lpUtf8Text  = NodeV8_GetArg ((void*)@<参数句柄>,@<参数索引>);
+            @ @<结果变量>.SetText (lpUtf8Text);
+            @ NodeV8_FreeArg (lpUtf8Text);
+        }
+        返回 (结果变量)
+    }
+
+    方法 JS置返回值 <公开 静态 注释 = "本方法可将结果返回给JS脚本.">
+    参数 参数句柄 <类型 = 变整数 注释 = "在使用JS回调火山方法时,所需要调用的火山方法必须提供一个类型为\"变整数\"的参数." 注释 = "本参数填写的就是这个变整数参数.">
+    参数 返回值文本 <类型 = 文本型 注释 = "提供要返回的文本">
+    {
+        如果 (是否已初始化 ())
+        {
+            @ NodeV8_SetReturnValue ((void*)@<参数句柄>,CU8String (@<返回值文本>.GetText ()));
+        }
+    }
+
+    方法 JS模板方法 <静态 注释 = "用作提供用户所提供的类静态方法的格式模板">
+    参数 参数句柄 <类型 = 变整数 "">
+}
+
+# ===
+
+类 JS引擎类 <公开 基础类 = 参考对象类 注释 = "本类对象必须通过JS平台类的创建才能正常使用">
+{
+
+    # @ @m<DECLARE_DERIVED_REF_OBJECT_CLASS_WITH_NEW_OBJECT> (CJSEngineWrapper)
+
+    方法 是否为空 <公开 类型 = 逻辑型 注释 = "返回本对象的内容是否为空" @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->m_pIsolate == NULL
+    }
+
+    方法 执行JS <公开 类型 = 文本型 注释 = "执行一次JS脚本,执行后的脚本不会进行保留." 注释 = "例如：先运行了 function add(a,b){return a+b;},之后再执行脚本 add(1,3) 这个就会报错."
+            注释 = "因为上次执行的脚本不会进行保留,每次执行都是唯一的." 返回值注释 = "返回执行结果">
+    参数 要运行的脚本 <类型 = 文本型 注释 = "提供要运行的JS代码">
+    {
+        @ if (pdata ()->m_pIsolate != NULL)
+        {
+            变量 脚本 <类型 = 字节集类>
+            变量 脚本指针 <类型 = 变整数>
+            脚本 = 文本到UTF8 (要运行的脚本)
+            脚本指针 = 脚本.取字节集指针 ()
+            @ const char* pText = NodeV8_RunJs (pdata ()->m_pIsolate, (const char*)@<脚本指针>);
+            @ if (pText != NULL)
+            @ {
+            @     CVolString str (pText);
+            @     NodeV8_FreeRunJsResult (pText);
+            @     return str;
+            @ }
+        }
+        返回 ("")
+    }
+
+    方法 创建JS隔离空间 <公开 类型 = JS隔离空间类 注释 = "  创建隔离空间后,执行JS脚本的结果可以进行保留."
+            注释 = "  只要在同一个隔离空间内,执行了function add(ab){ return a+b;},之后合适的时机" 注释 = "再调用\"执行JS隔离脚本\"执行脚本add(1+3); 此时是成立的,不会报错."
+            返回值注释 = "返回所创建的隔离空间对象,该对象在不使用后会自动销毁." @禁止流程检查 = 真>
+    {
+        @ @dt<JS隔离空间类> obj;
+        @ obj.pdata ()->init (pdata ());
+        @ return obj;
+    }
+}
+
+# ===
+
+类 JS隔离空间类 <公开 基础类 = 参考对象类 注释 = "本类对象必须通过JS引擎类的创建才能正常使用">
+{
+
+    # @ @m<DECLARE_DERIVED_REF_OBJECT_CLASS_WITH_DATA> (CJSContextWrapper)
+
+    方法 是否为空 <公开 类型 = 逻辑型 注释 = "返回本对象的内容是否为空" @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->m_pContext == NULL
+    }
+
+    方法 执行JS隔离脚本 <公开 类型 = 文本型 返回值注释 = "返回执行结果">
+    参数 要运行的脚本 <类型 = 文本型 注释 = "提供要运行的JS代码">
+    {
+        @ if (pdata ()->m_pContext != NULL)
+        {
+            变量 脚本 <类型 = 字节集类>
+            变量 脚本指针 <类型 = 变整数>
+            脚本 = 文本到UTF8 (要运行的脚本)
+            脚本指针 = 脚本.取字节集指针 ()
+            @ const char* pText = NodeV8_RunJsEx (pdata ()->m_pJSEngineWrapper->m_pIsolate, pdata ()->m_pContext ,(const char*)@<脚本指针>);
+            @ if(pText)
+            @ {
+            @     CVolString str (pText);
+            @     NodeV8_FreeRunJsResult(pText);
+            @     return str;
+            @ }
+        }
+        返回 ("")
+    }
+}

@@ -1,0 +1,274 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.程序 <@视窗.头文件搜寻目录 = "Tars\\include"
+        @视窗.外部头文件 = "Tars\\include\\util\\tc_des.h\r\nTars\\include\\util\\tc_ex.h\r\nTars\\include\\util\\tc_md5.h\r\nTars\\include\\util\\tc_tea.h\r\nTars\\include\\util\\tc_pack.h"
+        @视窗.外部源文件 = "Tars\\src\\tc_des.cpp\r\nTars\\src\\tc_ex.cpp\r\nTars\\src\\tc_md5.cpp\r\nTars\\src\\tc_tea.cpp\r\nTars\\src\\tc_pack.cpp">
+
+类 ______QQTea <公开 折叠 @全局类 = 真>
+{
+    方法 加密_Tea_FC <公开 静态 类型 = 字节集类 @禁止流程检查 = 真>
+    参数 加密内容 <类型 = 字节集类>
+    参数 密钥 <类型 = 字节集类>
+    {
+        @ vector<char> re;
+        @ tars::TC_Tea::encrypt( (const char *)@<密钥>.GetPtr(),(const char *)@<加密内容>.GetPtr(),@<加密内容>.GetSize(),re );
+        @ return CVolMem(&re[0],re.size());
+    }
+
+    方法 解密_Tea_FC <公开 静态 类型 = 字节集类 @禁止流程检查 = 真>
+    参数 解密内容 <类型 = 字节集类>
+    参数 密钥 <类型 = 字节集类>
+    {
+        @ vector<char> re;
+        @ tars::TC_Tea::decrypt( (const char *)@<密钥>.GetPtr(),(const char *)@<解密内容>.GetPtr(),@<解密内容>.GetSize(),re );
+        @ return CVolMem(&re[0],re.size());
+
+    }
+
+    #
+}
+
+类 TarsPackIn <公开 注释 = "小数据的加密，文本不长度能超过255字节 字节集不能超过512" 折叠>
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (tars::TC_PackIn)
+
+    方法 清空 <公开 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().clear()
+    }
+
+    方法 取长度 <公开 类型 = 长整数 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().length()
+    }
+
+    方法 到字节集 <公开 类型 = 字节集类 @禁止流程检查 = 真>
+    {
+        @ string sz = data().topacket();
+        @ return CVolMem(sz.data(),sz.size());
+    }
+
+    方法 加入字节 <公开 @嵌入式方法 = "">
+    参数 数据 <类型 = 字节>
+    {
+        @ @sn<this>.data() << (char)@<数据>
+    }
+
+    方法 加入短整数 <公开 @嵌入式方法 = "">
+    参数 数据 <类型 = 短整数>
+    {
+        @ @sn<this>.data() << @<数据>
+    }
+
+    方法 加入整数 <公开 @嵌入式方法 = "">
+    参数 数据 <类型 = 整数>
+    {
+        @ @sn<this>.data() << @<数据>
+    }
+
+    方法 加入长整数 <公开 @嵌入式方法 = "">
+    参数 数据 <类型 = 长整数>
+    {
+        @ @sn<this>.data() << @<数据>
+    }
+
+    方法 加入双精度小数 <公开 @嵌入式方法 = "">
+    参数 数据 <类型 = 小数>
+    {
+        @ @sn<this>.data() << @<数据>
+    }
+
+    方法 加入文本 <公开>
+    参数 数据 <类型 = 文本型>
+    参数 是否UTF8编码 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ if(@<是否UTF8编码>)
+        @ {
+        @  data() << CU8String(@<数据>.GetText ()).GetText ();
+        @ }else
+        @ {
+        @  data() << GetMbsText(@<数据>, CVolMem(), NULL);
+        @ }
+    }
+
+    方法 加入字节集 <公开>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ string bin((char*)@<数据>.GetPtr(),@<数据>.GetSize());
+        @  data() << bin;
+    }
+
+    #
+    #
+}
+
+类 TarsPackOut <公开 注释 = "小数据的加密，，，文本不能超过255字节" 折叠>
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (tars::TC_PackOut)
+
+    变量 成员_数据 <类型 = 字节集类>
+
+    方法 从字节集载入 <公开 "">
+    参数 数据 <类型 = 字节集类>
+    {
+        成员_数据 = 数据
+        @ data().init((const char *)@<成员_数据>.GetPtr(),@<成员_数据>.GetSize());
+    }
+
+    方法 是否到尾部 <公开 类型 = 逻辑型>
+    {
+        变量 数据 <类型 = 逻辑型>
+        @ @<数据> = data().isEnd();
+        返回 (数据)
+
+    }
+
+    方法 读字节 <公开 类型 = 字节>
+    {
+        变量 数据 <类型 = 字节>
+        @ char a = 0;
+        @ data() >> a;
+        @ @<数据> = a;
+        返回 (数据)
+    }
+
+    方法 读短整数 <公开 类型 = 短整数>
+    {
+        变量 数据 <类型 = 短整数>
+        @  data() >> @<数据> ;
+        返回 (数据)
+    }
+
+    方法 读整数 <公开 类型 = 整数>
+    {
+        变量 数据 <类型 = 整数>
+        @  data() >> @<数据> ;
+        返回 (数据)
+
+    }
+
+    方法 读长整数 <公开 类型 = 长整数>
+    {
+        变量 数据 <类型 = 长整数>
+        @  data() >> @<数据> ;
+        返回 (数据)
+
+    }
+
+    方法 读双精度小数 <公开 类型 = 小数>
+    {
+        变量 数据 <类型 = 小数>
+        @  data() >> @<数据> ;
+        返回 (数据)
+
+    }
+
+    方法 读文本 <公开 类型 = 文本型 注释 = "可能只能读 长度小于255的文本">
+    参数 是否UTF8解码 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 数据 <类型 = 字节集类>
+        @ char buf[255] ={0};
+        @  data() >> buf;
+        @ @<数据> = CVolMem(buf,255);
+        如果 (是否UTF8解码)
+        {
+            返回 (UTF8到文本 (数据))
+        }
+        否则
+        {
+            返回 (多字节到文本 (数据))
+        }
+    }
+
+    方法 读字节集 <公开 类型 = 字节集类 @禁止流程检查 = 真>
+    {
+        @ string bin;
+        @  data() >> bin;
+        @ return CVolMem(bin.data(),bin.size());
+    }
+
+    #
+}
+
+类 TarsDES <公开 @全局类 = 真>
+{
+    方法 加密1 <公开 类型 = 字节集类 @禁止流程检查 = 真>
+    参数 密钥 <类型 = 字节集类 注释 = "key, 8个字节">
+    参数 要加密的数据 <类型 = 字节集类>
+    {
+        @ string re = tars::TC_Des::encrypt( (const char *)@<密钥>.GetPtr(),(const char *)@<要加密的数据>.GetPtr(),@<要加密的数据>.GetSize());
+        @ return CVolMem(re.data(),re.size());
+        //@    static string encrypt(const char *key, const char *sIn, size_t iInlen);
+    }
+
+    方法 解密1 <公开 类型 = 字节集类 @禁止流程检查 = 真>
+    参数 密钥 <类型 = 字节集类>
+    参数 要解密的数据 <类型 = 字节集类>
+    {
+        @ string re = tars::TC_Des::decrypt( (const char *)@<密钥>.GetPtr(),(const char *)@<要解密的数据>.GetPtr(),@<要解密的数据>.GetSize());
+        @ return CVolMem(re.data(),re.size());
+        //static string decrypt(const char *key, const char *sIn, size_t iInlen);
+    }
+
+    方法 加密3 <公开 类型 = 字节集类 @禁止流程检查 = 真>
+    参数 密钥 <类型 = 字节集类 注释 = "key, 8个字节">
+    参数 要加密的数据 <类型 = 字节集类>
+    {
+        @ string re = tars::TC_Des::encrypt3( (const char *)@<密钥>.GetPtr(),(const char *)@<要加密的数据>.GetPtr(),@<要加密的数据>.GetSize());
+        @ return CVolMem(re.data(),re.size());
+        //static string encrypt3(const char *key, const char *sIn, size_t iInlen);
+    }
+
+    方法 解密3 <公开 类型 = 字节集类 @禁止流程检查 = 真>
+    参数 密钥 <类型 = 字节集类 注释 = "key, 24个字节">
+    参数 要解密的数据 <类型 = 字节集类>
+    {
+        @ string re = tars::TC_Des::decrypt3( (const char *)@<密钥>.GetPtr(),(const char *)@<要解密的数据>.GetPtr(),@<要解密的数据>.GetSize());
+        @ return CVolMem(re.data(),re.size());
+        //static string decrypt3(const char *key, const char *sIn, size_t iInlen);
+    }
+
+    #
+    #
+}
+
+类 "//MD5" <公开>
+{
+
+    #     /**
+    #     * @brief 对字符串进行md5处理,返回16字节二进制数据. 
+    #     * @brief MD5 string processing, return 16 bytes of binary data
+    #     *  
+    #     * @param sString  输入字符串
+    #     * @param sString  Input string
+    #     * @return string 输出,16个字节的二进制数据
+    #     * @return string Output, 16 bytes of binary data
+    #     */
+    #     static vector<char> md5bin(const string &sString);
+    #     static vector<char> md5bin(const char *buffer, size_t length);
+
+    方法 md5返回字节集 <公开 静态 类型 = 字节集类 折叠 @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ vector<char> re = tars::TC_MD5::md5bin((const char *)@<数据>.GetPtr(),@<数据>.GetSize());
+        @ return CVolMem(&re[0],re.size());
+    }
+
+    方法 md5返回文本 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ string re = tars::TC_MD5::md5str((const char *)@<数据>.GetPtr(),@<数据>.GetSize());
+        @ return CVolString(re.c_str());
+    }
+
+    方法 md5文件 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 文件名 <类型 = 文本型>
+    {
+        @ string re = md5file(GetMbsText(@<文件名>, CVolMem(), NULL));
+        @ return CVolString(re.c_str());
+    }
+
+    #
+}

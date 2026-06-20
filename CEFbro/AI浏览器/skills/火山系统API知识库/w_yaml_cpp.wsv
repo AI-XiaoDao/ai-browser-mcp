@@ -1,0 +1,784 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.基本 <注释 = "开源项目:https://github.com/jbeder/yaml-cpp" 注释 = "开源许可:https://github.com/jbeder/yaml-cpp/blob/master/LICENSE"
+        注释 = "火山模块链接方式：" 注释 = "  1.默认: 本库默认使用\"3.静态\"为链接方式;" 注释 = "  2.动态: 使用动态链接方式(注意:此时必须将\"使用静态C++运行时库\"属性设置为假);"
+        注释 = "  3.静态: 使用静态链接方式(注意:此时必须将\"使用静态C++运行时库\"属性设置为真);" @视窗.头文件搜寻目录 = "include" @视窗.外部头文件 = "<yaml-cpp/yaml.h>"
+        @视窗.附属文件.dynamic = "dll\\$(p)\\$(d)\\yaml-cpp.dll" @视窗.外部库.dynamic = "dll\\$(p)\\$(d)\\yaml-cpp.lib"
+        @视窗.外部库.non_dynamic = "lib\\$(p)\\$(d)\\yaml-cpp.lib" @视窗.预定义宏.non_dynamic = "YAML_CPP_STATIC_DEFINE" @视窗.需求VS版本 = "16-"
+        @视窗.使用静态运行时库.dynamic = 假 @视窗.使用静态运行时库.non_dynamic = 真>
+
+类 YAML输出样式 <公开 @常量类 = 整数>
+{
+    常量 默认 <公开 值 = @"@ YAML::EmitterStyle::value::Default" 注释 = "(0)以默认样式展示">
+    常量 块 <公开 值 = @"@ YAML::EmitterStyle::value::Block" 注释 = "(1)以块样式展示">
+    常量 流 <公开 值 = @"@ YAML::EmitterStyle::value::Flow" 注释 = "(2)以流样式展示">
+}
+
+类 YAML节点类型 <公开 @常量类 = 整数>
+{
+    常量 未定义 <公开 值 = @"@ YAML::NodeType::value::Undefined" 注释 = "(0)未定义">
+    常量 空 <公开 值 = @"@ YAML::NodeType::value::Null" 注释 = "(1)空类型">
+    常量 标量 <公开 值 = @"@ YAML::NodeType::value::Scalar" 注释 = "(2)单个的,不可再分的值.">
+    常量 数组 <公开 值 = @"@ YAML::NodeType::value::Sequence" 注释 = "(3)一组按次序排列的值,又称为序列(sequence)/列表(list).">
+    常量 对象 <公开 值 = @"@ YAML::NodeType::value::Map" 注释 = "(4)键值对的集合,又称为映射(mapping)/哈希(hashes)/字典(dictionary).">
+}
+
+类 YAML设计标志 <公开 @常量类 = 整数>
+{
+    常量 自动 <公开 值 = @"@ YAML::EMITTER_MANIP::Auto" 注释 = "自动">
+    常量 标签种类 <公开 值 = @"@ YAML::EMITTER_MANIP::TagByKind" 注释 = "[通常]">
+    常量 换行符 <公开 值 = @"@ YAML::EMITTER_MANIP::Newline" 注释 = "将下一个内容输出到新的一行">
+    常量 编码_非Ascii <公开 值 = @"@ YAML::EMITTER_MANIP::EmitNonAscii" 注释 = "输出始终为UTF-8.默认情况下将输出尽可能多的内容,而不会转义任何字符.">
+    常量 编码_Ascii <公开 值 = @"@ YAML::EMITTER_MANIP::EscapeNonAscii" 注释 = "将输出限制为ASCII,对非Ascii的字符进行转义处理.">
+    常量 编码_Json <公开 值 = @"@ YAML::EMITTER_MANIP::EscapeAsJson" 注释 = "[输出字符集]">
+    常量 文本样式_单引号 <公开 值 = @"@ YAML::EMITTER_MANIP::SingleQuoted" 注释 = "在字符串前后加上\"\'\"单引号,将字符串包裹起来.">
+    常量 文本样式_双引号 <公开 值 = @"@ YAML::EMITTER_MANIP::DoubleQuoted" 注释 = "在字符串前后加上\"\"\"双引号,将字符串包裹起来.">
+    常量 文本样式_字面量 <公开 值 = @"@ YAML::EMITTER_MANIP::Literal" 注释 = "以字面量的方式展示字符串.">
+    常量 空样式_小写 <公开 值 = @"@ YAML::EMITTER_MANIP::LowerNull" 注释 = "空白名称或值将以[NULL]展示">
+    常量 空样式_大写 <公开 值 = @"@ YAML::EMITTER_MANIP::UpperNull" 注释 = "空白名称或值将以[null]展示">
+    常量 空样式_驼峰 <公开 值 = @"@ YAML::EMITTER_MANIP::CamelNull" 注释 = "空白名称或值将以[Null]展示">
+    常量 空样式_波浪 <公开 值 = @"@ YAML::EMITTER_MANIP::TildeNull" 注释 = "空白名称或值将以[~]展示">
+    常量 逻辑样式_是否 <公开 值 = @"@ YAML::EMITTER_MANIP::YesNoBool" 注释 = "逻辑型将以[yes, no]展示">
+    常量 逻辑样式_真假 <公开 值 = @"@ YAML::EMITTER_MANIP::TrueFalseBool" 注释 = "逻辑型将以[true, false]展示">
+    常量 逻辑样式_开关 <公开 值 = @"@ YAML::EMITTER_MANIP::OnOffBool" 注释 = "逻辑型将以[on, off]展示">
+    常量 逻辑样式_大写 <公开 值 = @"@ YAML::EMITTER_MANIP::UpperCase" 注释 = "逻辑型中的值将转换为大写,如:true将转换为TRUE,on将转换为ON..">
+    常量 逻辑样式_小写 <公开 值 = @"@ YAML::EMITTER_MANIP::LowerCase" 注释 = "逻辑型中的值将转换为大写,如:TRUE将转换为true,ON将转换为on..">
+    常量 逻辑样式_驼峰 <公开 值 = @"@ YAML::EMITTER_MANIP::CamelCase" 注释 = "逻辑型中的值将以驼峰命名法展示(每个单词的首字母大写).">
+    常量 逻辑样式_详细 <公开 值 = @"@ YAML::EMITTER_MANIP::LongBool" 注释 = "逻辑型中的值将详细展示.">
+    常量 逻辑样式_简单 <公开 值 = @"@ YAML::EMITTER_MANIP::ShortBool" 注释 = "逻辑型中的值将简单展示(只展示单词首字母).">
+    常量 整数样式_十进制 <公开 值 = @"@ YAML::EMITTER_MANIP::Dec" 注释 = "整数型中的值将以十进制方式展示.">
+    常量 整数样式_十六进制 <公开 值 = @"@ YAML::EMITTER_MANIP::Hex" 注释 = "整数型中的值将以十六进制方式展示.">
+    常量 整数样式_八进制 <公开 值 = @"@ YAML::EMITTER_MANIP::Oct" 注释 = "整数型中的值将以八进制方式展示.">
+    常量 开始设计文档 <公开 值 = @"@ YAML::EMITTER_MANIP::BeginDoc" 注释 = "开始设计文档,主要用于设计多文档结构,设计结束后必须置入配套的\"结束设计文档\".">
+    常量 结束设计文档 <公开 值 = @"@ YAML::EMITTER_MANIP::EndDoc" 注释 = "结束设计文档,当\"开始设计文档\"设计结束后使用.">
+    常量 开始设计数组 <公开 值 = @"@ YAML::EMITTER_MANIP::BeginSeq" 注释 = "开始设计数组结构,设计结束后必须置入配套的\"结束设计数组\".">
+    常量 结束设计数组 <公开 值 = @"@ YAML::EMITTER_MANIP::EndSeq" 注释 = "结束设计数组,当\"开始设计数组\"设计结束后使用.">
+    常量 样式_流 <公开 值 = @"@ YAML::EMITTER_MANIP::Flow" 注释 = "设置当前结构输出风格为流样式">
+    常量 样式_块 <公开 值 = @"@ YAML::EMITTER_MANIP::Block" 注释 = "设置当前结构输出风格为块样式">
+    常量 开始设计对象 <公开 值 = @"@ YAML::EMITTER_MANIP::BeginMap" 注释 = "开始设计对象结构,设计结束后必须置入配套的\"结束设计对象\".">
+    常量 结束设计对象 <公开 值 = @"@ YAML::EMITTER_MANIP::EndMap" 注释 = "结束设计对象,当\"开始设计对象\"设计结束后使用.">
+    常量 置对象名 <公开 值 = @"@ YAML::EMITTER_MANIP::Key" 注释 = "表示下一个置入的内容为对象名称">
+    常量 置对象值 <公开 值 = @"@ YAML::EMITTER_MANIP::Value" 注释 = "表示下一个置入的内容为对象值">
+    常量 对象长键名 <公开 值 = @"@ YAML::EMITTER_MANIP::LongKey" 注释 = "表示设计的键名为长键名">
+}
+
+类 YAML解析类 <公开 基础类 = 对象类>
+{
+    方法 创建 <公开 静态 类型 = YAML节点类 注释 = "创建节点对象" 返回值注释 = "注意:值内容为\"YAML节点\"类时为浅拷贝(仅拷贝节点指针,当原节点内容发生变化时,当前节点也会改变)." @嵌入式方法 = "">
+    参数 数据内容 <注释 = "@匹配类型: 通用基本型、YAML节点、YAML类型." @匹配类型 = 通用型>
+    {
+        @ @dt<YAML节点类>(YAML::Node(@<数据内容>))
+    }
+
+    方法 克隆 <公开 静态 类型 = YAML节点类 注释 = "克隆节点对象" 返回值注释 = "返回的是克隆后的对象,不受原节点影响." @嵌入式方法 = "">
+    参数 欲克隆的对象 <类型 = YAML节点类 注释 = "与\"创建\"命令相似,但是当前命令为深拷贝(将拷贝所有内容,当原节点内容发生改变时,当前节点不发生改变).">
+    {
+        @ @dt<YAML节点类>(YAML::Clone(@<欲克隆的对象>.data()))
+    }
+
+    方法 载入 <公开 静态 类型 = YAML节点类 注释 = "加载数据到节点对象" @嵌入式方法 = "req_str_param_text_pointer_u8 = true">
+    参数 数据文本 <类型 = 文本型 注释 = "欲载入的YAML语法格式文本">
+    {
+        @ @dt<YAML节点类>(YAML::Load(@<数据文本>))
+    }
+
+    方法 枚举载入 <公开 静态 注释 = "加载多段数据到节点对象" @嵌入式方法 = "req_str_param_text_pointer_u8 = true\r\nhas_loop_body = true">
+    参数 数据文本 <类型 = 文本型 注释 = "欲载入的YAML语法格式文本">
+    参数 接收对象 <类型 = YAML节点类 注释 = "用于接收当前枚举对象的变量" @需求类型 = 可写入变量>
+    {
+        @ std::vector<YAML::Node> nodes = YAML::LoadAll(@<数据文本>);
+        @ for(std::vector<YAML::Node>::iterator it = nodes.begin(); it != nodes.end() ? @<接收对象>.data() = *it, true : false; it++)
+    }
+
+    方法 载入文件 <公开 静态 类型 = YAML节点类 注释 = "从文件加载数据到节点对象" @嵌入式方法 = "req_str_param_text_pointer_u8 = true">
+    参数 文件名称 <类型 = 文本型 注释 = "欲载入的文件名称">
+    {
+        @ @dt<YAML节点类>(YAML::LoadFile(std::string(@<文件名称>)))
+    }
+
+    方法 枚举载入文件 <公开 静态 注释 = "从文件加载多段数据到节点对象" @嵌入式方法 = "req_str_param_text_pointer_u8 = true\r\nhas_loop_body = true">
+    参数 文件名称 <类型 = 文本型 注释 = "欲载入的文件名称">
+    参数 接收对象 <类型 = YAML节点类 注释 = "用于接收当前枚举对象的变量" @需求类型 = 可写入变量>
+    {
+        @ std::vector<YAML::Node> nodes = YAML::LoadAllFromFile(@<文件名称>);
+        @ for(std::vector<YAML::Node>::iterator it = nodes.begin(); it != nodes.end() ? @<接收对象>.data() = *it, true : false; it++)
+    }
+
+    方法 是否为空 <公开 静态 类型 = 逻辑型 注释 = "判断指定对象是否为空" @嵌入式方法 = "">
+    参数 节点对象 <类型 = YAML节点类 注释 = "欲判断的节点" "">
+    {
+        @ (@dt<逻辑型>)YAML::IsNull(@<节点对象>.data())
+    }
+
+    方法 是否为空文本 <公开 静态 类型 = 逻辑型 注释 = "判断指定文本是否为空" @嵌入式方法 = "req_str_param_text_pointer_u8 = true">
+    参数 文本内容 <类型 = 文本型 注释 = "欲判断的文本" "">
+    {
+        @ (@dt<逻辑型>)YAML::IsNullString(std::string(@<文本内容>))
+    }
+
+    方法 生成空 <公开 静态 类型 = 变整数 注释 = "生成一个为空内容的对象" @嵌入式方法 = "">
+    {
+        @ YAML::Null
+    }
+
+    方法 生成注释 <公开 静态 类型 = 变整数 注释 = "生成一段含注释内容的对象" @嵌入式方法 = "req_str_param_text_pointer_u8 = true">
+    参数 备注内容 <类型 = 文本型 注释 = "欲生成的注释内容">
+    {
+        @ YAML::Comment(std::string(@<备注内容>))
+    }
+
+    方法 生成锚点 <公开 静态 类型 = 变整数 注释 = "生成描点对象" @嵌入式方法 = "req_str_param_text_pointer_u8 = true">
+    参数 锚点名称 <类型 = 文本型 注释 = "欲生成的锚点对象名称">
+    {
+        @ YAML::Anchor(std::string(@<锚点名称>))
+    }
+
+    方法 生成别名 <公开 静态 类型 = 变整数 注释 = "生成别名对象" @嵌入式方法 = "req_str_param_text_pointer_u8 = true">
+    参数 别名 <类型 = 文本型 注释 = "欲生成的别名对象名称">
+    {
+        @ YAML::Alias(std::string(@<别名>))
+    }
+}
+
+类 YAML标记类 <公开 基础类 = 对象类>
+{
+    方法 是否为空 <公开 类型 = 逻辑型 注释 = "判断当前标记对象是否为空" @嵌入式方法 = "">
+    {
+        @ (@dt<逻辑型>)@sn<this>.data().is_null()
+    }
+
+    方法 位置 <公开 属性读 类型 = 整数 注释 = "获取当前标记对象位置" @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.data().pos
+    }
+
+    方法 行 <公开 属性读 类型 = 整数 注释 = "获取当前标记对象行索引" @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.data().line
+    }
+
+    方法 列 <公开 属性读 类型 = 整数 注释 = "获取当前标记对象列索引" @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.data().column
+    }
+
+    # @begin
+    # <> <include>
+    # public:
+    #     virtual void GetDumpString (@dt<文本型>& strDump, @dt<整数> nMaxDumpSize) override {
+    #         strDump.AddFormatText(_T("{ 是否为空: %s; 位置: %d; 行: %d; 列: %d }"), this->data().is_null() ? _T_V_TRUE : _T_V_FALSE, this->data().pos, this->data().line, this->data().column);
+    #     }
+    #     void @an<_CopySelfFromExtra>(const @sn<current_package>::@sn<current_class>& objCopyFrom){
+    #         this->m_data = objCopyFrom.m_data;
+    #     }
+    #     @sn<current_package>::@sn<current_class>(const YAML::Mark& data){
+    #         this->m_data = data;
+    #     }
+    #     YAML::Mark& data(){
+    #         return m_data;
+    #     }
+    #     YAML::Mark m_data;
+    # <> </include>
+    # @end
+}
+
+类 YAML异常类 <公开 基础类 = 对象类>
+{
+    方法 俘获异常 <公开 静态 注释 = "开始俘获异常" 隐藏值属性 = "0"
+            @嵌入式方法 = "name = try\r\nhas_body = true\r\nnext = \"catch, catch_Exception, catch_ParserException, catch_RepresentationException, catch_InvalidScalar, catch_KeyNotFound, catch_TypedKeyNotFound, catch_InvalidNode, catch_BadConversion, catch_TypedBadConversion\"">
+    {
+        @ try
+    }
+
+    方法 取异常描述 <公开 静态 类型 = 文本型 注释 = "获取当前已俘获的异常描述信息." 隐藏值属性 = "0"
+            @嵌入式方法 = "parent=\"catch_Exception, catch_ParserException, catch_RepresentationException, catch_InvalidScalar, catch_KeyNotFound, catch_TypedKeyNotFound, catch_InvalidNode, catch_BadConversion, catch_TypedBadConversion\"">
+    {
+        @ @dt<文本型>(_yaml_exception_.what())
+    }
+
+    方法 取异常消息 <公开 静态 类型 = 文本型 注释 = "获取当前已俘获的异常消息文本." 隐藏值属性 = "0"
+            @嵌入式方法 = "parent=\"catch_Exception, catch_ParserException, catch_RepresentationException, catch_InvalidScalar, catch_KeyNotFound, catch_TypedKeyNotFound, catch_InvalidNode, catch_BadConversion, catch_TypedBadConversion\"">
+    {
+        @ @dt<文本型>(_yaml_exception_.msg.c_str())
+    }
+
+    方法 取异常标记 <公开 静态 类型 = YAML标记类 注释 = "获取当前已俘获的异常标记对象." 隐藏值属性 = "0"
+            @嵌入式方法 = "parent=\"catch_Exception, catch_ParserException, catch_RepresentationException, catch_InvalidScalar, catch_KeyNotFound, catch_TypedKeyNotFound, catch_InvalidNode, catch_BadConversion, catch_TypedBadConversion\"">
+    {
+        @ @dt<YAML标记类>(_yaml_exception_.mark)
+    }
+
+    方法 接收所有异常 <公开 静态 注释 = "匹配所有异常" 隐藏值属性 = "0"
+            @嵌入式方法 = "name = catch\r\nhas_body = true\r\nprev = \"try, catch_Exception, catch_ParserException, catch_RepresentationException, catch_InvalidScalar, catch_KeyNotFound, catch_TypedKeyNotFound, catch_InvalidNode, catch_BadConversion, catch_TypedBadConversion\"">
+    {
+        @ catch(...)
+    }
+
+    方法 接收异常 <公开 静态 注释 = "匹配YAML基本异常" 隐藏值属性 = "0"
+            @嵌入式方法 = "name = catch_Exception\r\nhas_body = true\r\nprev = \"try, catch, catch_ParserException, catch_RepresentationException, catch_InvalidScalar, catch_KeyNotFound, catch_TypedKeyNotFound, catch_InvalidNode, catch_BadConversion, catch_TypedBadConversion\"">
+    {
+        @ catch(YAML::Exception& _yaml_exception_)
+    }
+
+    方法 接收异常_解析异常 <公开 静态 注释 = "当解析发生异常时将被俘获接收此异常." 隐藏值属性 = "0"
+            @嵌入式方法 = "name = catch_ParserException\r\nhas_body = true\r\nprev = \"try, catch, catch_Exception, catch_RepresentationException, catch_InvalidScalar, catch_KeyNotFound, catch_TypedKeyNotFound, catch_InvalidNode, catch_BadConversion, catch_TypedBadConversion\"">
+    {
+        @ catch(YAML::ParserException& _yaml_exception_)
+    }
+
+    方法 接收异常_表现异常 <公开 静态 注释 = "当表现异常时将被俘获接收此异常" 隐藏值属性 = "0"
+            @嵌入式方法 = "name = catch_RepresentationException\r\nhas_body = true\r\nprev = \"try, catch, catch_Exception, catch_ParserException, catch_InvalidScalar, catch_KeyNotFound, catch_TypedKeyNotFound, catch_InvalidNode, catch_BadConversion, catch_TypedBadConversion\"">
+    {
+        @ catch(YAML::RepresentationException& _yaml_exception_)
+    }
+
+    方法 接收异常_无效标量 <公开 静态 注释 = "当标量无效时将被俘获接收此异常" 隐藏值属性 = "0"
+            @嵌入式方法 = "name = catch_InvalidScalar\r\nhas_body = true\r\nprev = \"try, catch, catch_Exception, catch_ParserException, catch_RepresentationException, catch_KeyNotFound, catch_TypedKeyNotFound, catch_InvalidNode, catch_BadConversion, catch_TypedBadConversion\"">
+    {
+        @ catch(YAML::InvalidScalar& _yaml_exception_)
+    }
+
+    方法 接收异常_键名不存在 <公开 静态 注释 = "当操作的对象名称不存在时将被俘获接收此异常" 隐藏值属性 = "0"
+            @嵌入式方法 = "name = catch_KeyNotFound\r\nhas_body = true\r\nprev = \"try, catch, catch_Exception, catch_ParserException, catch_RepresentationException, catch_InvalidScalar, catch_TypedKeyNotFound, catch_InvalidNode, catch_BadConversion, catch_TypedBadConversion\"">
+    {
+        @ catch(YAML::KeyNotFound& _yaml_exception_)
+    }
+
+    方法 接收异常_键类型不存在 <公开 静态 注释 = "当操作的对象类型不存在时将被俘获接收此异常" 隐藏值属性 = "0"
+            @嵌入式方法 = "name = catch_TypedKeyNotFound\r\nhas_body = true\r\nprev = \"try, catch, catch_Exception, catch_ParserException, catch_RepresentationException, catch_InvalidScalar, catch_KeyNotFound, catch_InvalidNode, catch_BadConversion, catch_TypedBadConversion\"">
+    {
+        @ catch(YAML::TypedKeyNotFound& _yaml_exception_)
+    }
+
+    方法 接收异常_无效节点 <公开 静态 注释 = "当操作的节点对象无效时将被俘获接收此异常" 隐藏值属性 = "0"
+            @嵌入式方法 = "name = catch_InvalidNode\r\nhas_body = true\r\nprev = \"try, catch, catch_Exception, catch_ParserException, catch_RepresentationException, catch_InvalidScalar, catch_KeyNotFound, catch_TypedKeyNotFound, catch_BadConversion, catch_TypedBadConversion\"">
+    {
+        @ catch(YAML::InvalidNode& _yaml_exception_)
+    }
+
+    方法 接收异常_无法转换 <公开 静态 注释 = "当数据无法转换时将被俘获接收此异常" 隐藏值属性 = "0"
+            @嵌入式方法 = "name = catch_BadConversion\r\nhas_body = true\r\nprev = \"try, catch, catch_Exception, catch_ParserException, catch_RepresentationException, catch_InvalidScalar, catch_KeyNotFound, catch_TypedKeyNotFound, catch_InvalidNode, catch_TypedBadConversion\"">
+    {
+        @ catch(YAML::BadConversion& _yaml_exception_)
+    }
+
+    方法 接收异常_类型无法转换 <公开 静态 注释 = "当类型无法转换时将被俘获接收此异常." 隐藏值属性 = "0"
+            @嵌入式方法 = "name = catch_TypedBadConversion\r\nhas_body = true\r\nprev = \"try, catch, catch_Exception, catch_ParserException, catch_RepresentationException, catch_InvalidScalar, catch_KeyNotFound, catch_TypedKeyNotFound, catch_InvalidNode, catch_BadConversion\"">
+    {
+        @ catch(YAML::TypedBadConversion& _yaml_exception_)
+    }
+}
+
+类 YAML设计类 <公开 基础类 = 对象类 @视窗.后缀文本 = "public YAML::Emitter">
+{
+    方法 置入 <公开 注释 = "将内容置入到设计器当中" @嵌入式方法 = "req_cpp_bool = true">
+    参数 数据内容 <注释 = "欲写入的数据内容,可以为以下类型:" 注释 = "@匹配类型: 通用基本型、YAML节点、YAML类型、YAML设计标志." @可扩展 = "d_text = \" << \"" @匹配类型 = 通用型>
+    {
+        @ @sn<this> << @<数据内容>
+    }
+
+    方法 取文本 <公开 类型 = 文本型 注释 = "取最终输出文本" @嵌入式方法 = "">
+    {
+        @ @dt<文本型>(@sn<this>.c_str())
+    }
+
+    方法 取大小 <公开 类型 = 整数 注释 = "取本对象数据的数据长度" @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.size()
+    }
+
+    方法 是否成功 <公开 类型 = 逻辑型 注释 = "判断当前放置位置是否成功" @嵌入式方法 = "">
+    {
+        @ @sn<this>.good()
+    }
+
+    方法 取错误文本 <公开 类型 = 文本型 注释 = "当\"是否成功\"命令返回假时,此命令获取错误文本." @嵌入式方法 = "">
+    {
+        @ @dt<文本型>(@sn<this>.GetLastError().c_str())
+    }
+
+    方法 置全局输出编码 <公开 类型 = 逻辑型 注释 = "设置当前对象中的输出字符集" @嵌入式方法 = "">
+    参数 输出编码 <类型 = YAML设计标志 注释 = "欲设置的输出字符集编码">
+    {
+        @ (@dt<逻辑型>)@sn<this>.SetOutputCharset((YAML::EMITTER_MANIP)@<输出编码>)
+    }
+
+    方法 置全局文本值格式 <公开 类型 = 逻辑型 注释 = "设置当前对象文本型的展示格式" @嵌入式方法 = "">
+    参数 文本值格式 <类型 = YAML设计标志 注释 = "欲设置的字符串展示格式">
+    {
+        @ (@dt<逻辑型>)@sn<this>.SetStringFormat((YAML::EMITTER_MANIP)@<文本值格式>)
+    }
+
+    方法 置全局逻辑值格式 <公开 类型 = 逻辑型 注释 = "设置当前对象逻辑型的展示格式" @嵌入式方法 = "">
+    参数 逻辑值格式 <类型 = YAML设计标志 注释 = "欲设置的逻辑型展示格式">
+    {
+        @ (@dt<逻辑型>)@sn<this>.SetBoolFormat((YAML::EMITTER_MANIP)@<逻辑值格式>)
+    }
+
+    方法 置全局空值格式 <公开 类型 = 逻辑型 注释 = "设置当前对象空型的展示格式" @嵌入式方法 = "">
+    参数 空值格式 <类型 = YAML设计标志 注释 = "欲设置的空展示格式">
+    {
+        @ (@dt<逻辑型>)@sn<this>.SetNullFormat((YAML::EMITTER_MANIP)@<空值格式>)
+    }
+
+    方法 置全局整数值格式 <公开 类型 = 逻辑型 注释 = "设置当前对象整数的展示格式" @嵌入式方法 = "">
+    参数 整数值格式 <类型 = YAML设计标志 注释 = "欲设置的整数展示格式">
+    {
+        @ (@dt<逻辑型>)@sn<this>.SetIntBase((YAML::EMITTER_MANIP)@<整数值格式>)
+    }
+
+    方法 置全局数组样式 <公开 类型 = 逻辑型 注释 = "设置当前对象数组的展示格式" @嵌入式方法 = "">
+    参数 数组值格式 <类型 = YAML设计标志 注释 = "欲设置的数组展示格式">
+    {
+        @ (@dt<逻辑型>)@sn<this>.SetSeqFormat((YAML::EMITTER_MANIP)@<数组值格式>)
+    }
+
+    方法 置全局对象样式 <公开 类型 = 逻辑型 注释 = "设置当前对象数组的展示格式" @嵌入式方法 = "">
+    参数 对象值格式 <类型 = YAML设计标志 注释 = "欲设置的数组展示格式">
+    {
+        @ (@dt<逻辑型>)@sn<this>.SetMapFormat((YAML::EMITTER_MANIP)@<对象值格式>)
+    }
+
+    方法 置全局缩进深度 <公开 类型 = 逻辑型 注释 = "设置当前对象缩进深度" @嵌入式方法 = "">
+    参数 缩进深度 <类型 = 整数 注释 = "欲设置的缩进深度" @默认值 = 2>
+    {
+        @ (@dt<逻辑型>)@sn<this>.SetIndent((std::size_t)@<缩进深度>)
+    }
+
+    方法 置全局注释符前缩进深度 <公开 类型 = 逻辑型 注释 = "设置注释文本\"#\"字符前的缩进深度" @嵌入式方法 = "">
+    参数 缩进深度 <类型 = 整数 注释 = "欲设置的缩进深度" @默认值 = 2>
+    {
+        @ (@dt<逻辑型>)@sn<this>.SetPreCommentIndent((std::size_t)@<缩进深度>)
+    }
+
+    方法 置全局注释符后缩进深度 <公开 类型 = 逻辑型 注释 = "设置注释文本\"#\"字符后的缩进深度" @嵌入式方法 = "">
+    参数 缩进深度 <类型 = 整数 注释 = "欲设置的缩进深度" @默认值 = 2>
+    {
+        @ (@dt<逻辑型>)@sn<this>.SetPostCommentIndent((std::size_t)@<缩进深度>)
+    }
+
+    方法 置全局数值精度 <公开 类型 = 逻辑型 注释 = "设置数值精度(小数位数)" @嵌入式方法 = "">
+    参数 数值精度 <类型 = 整数 注释 = "欲设置数值精度" @默认值 = 17>
+    {
+        @ (@dt<逻辑型>)@sn<this>.SetDoublePrecision((std::size_t)@<数值精度>)
+    }
+
+    方法 重置全局已修改设置 <公开 注释 = "重置当前对象中所有已修改的设置" @嵌入式方法 = "">
+    {
+        @ @sn<this>.RestoreGlobalModifiedSettings()
+    }
+
+    方法 置局部标志 <公开 注释 = "设置当前对象内容值" @嵌入式方法 = "">
+    参数 标志值 <类型 = YAML设计标志 注释 = "欲设置的标志值">
+    {
+        @ @sn<this>.SetLocalValue((YAML::EMITTER_MANIP)@<标志值>)
+    }
+
+    方法 置局部缩进 <公开 注释 = "设置当前对象内容的缩进深度" @嵌入式方法 = "">
+    参数 缩进深度 <类型 = 整数 注释 = "欲缩进的字符数" @默认值 = 2>
+    {
+        @ @sn<this>.SetLocalIndent(YAML::_Indent((int)@<缩进深度>))
+    }
+
+    方法 置局部精度 <公开 注释 = "设置当前对象内容的数值精度(小数位数)" @嵌入式方法 = "">
+    参数 单精度数值精度 <类型 = 整数 注释 = "单精度小数欲显示的位数" @默认值 = 9>
+    参数 双精度数值精度 <类型 = 整数 注释 = "双精度小数欲显示的位数" @默认值 = 17>
+    {
+        @ @sn<this>.SetLocalPrecision(YAML::_Precision(@<单精度数值精度>, @<双精度数值精度>))
+    }
+
+    # @begin
+    # <> <include>
+    # public:
+    #     virtual void GetDumpString (@dt<文本型>& strDump, @dt<整数> nMaxDumpSize) override {
+    #         strDump.SetValueText(this->c_str());
+    #     }
+    # <> </include>
+    # <> <global>
+    # <> <include>
+    # namespace YAML {
+    #     Emitter& operator<<(Emitter& emitter, const wchar_t* str);
+    # }
+    # <> </include>
+    # namespace YAML {
+    #     Emitter& operator<<(Emitter& out, const wchar_t* str){
+    #         out << (const char*)CU8String(str).GetText();
+    #         return out;
+    #     }
+    # }
+    # <> </global>
+    # @end
+}
+
+类 YAML节点类 <公开 基础类 = 对象类>
+{
+    方法 取标记 <公开 类型 = YAML标记类 注释 = "获取当前对象所处位置信息" @嵌入式方法 = "">
+    {
+        @ @dt<YAML标记类>(@sn<this>.data().Mark())
+    }
+
+    方法 取类型 <公开 类型 = YAML节点类型 注释 = "获取当前对象的值类型" @嵌入式方法 = "">
+    {
+        @ (@dt<YAML节点类型>)@sn<this>.data().Type()
+    }
+
+    方法 是否为空 <公开 类型 = 逻辑型 注释 = "获取当前对象的值类型是否为空" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().IsNull()
+    }
+
+    方法 是否为标量 <公开 类型 = 逻辑型 注释 = "获取当前对象的值类型是否为标量" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().IsScalar()
+    }
+
+    方法 是否为数组 <公开 类型 = 逻辑型 注释 = "获取当前对象的值类型是否为数组" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().IsSequence()
+    }
+
+    方法 是否为对象 <公开 类型 = 逻辑型 注释 = "获取当前对象的值类型是否为对象" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().IsMap()
+    }
+
+    方法 是否为未定义 <公开 类型 = 逻辑型 注释 = "获取当前对象的值类型是否为未定义" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().IsDefined()
+    }
+
+    方法 取值 <公开 注释 = "获取当前对象的值" @嵌入式方法 = "">
+    参数 返回值类型 <注释 = "欲返回的值类型,必须对应数据中的值类型." @需求类型 = 数据类型 @匹配类型 = 通用型 @返回值类型 = 0>
+    {
+        @ @sn<this>.data().as<@pdt<返回值类型>>()
+    }
+
+    方法 置值 <公开 注释 = "设置当前对象的值" @嵌入式方法 = "req_cpp_bool = true">
+    参数 内容 <注释 = "@匹配类型:通用基本型、YAML节点类、YAML节点类型" @匹配类型 = 通用型>
+    {
+        @ @sn<this>.data() = @<内容>
+    }
+
+    方法 置空值 <公开 注释 = "设置当前对象为空值" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data() = YAML::Null
+    }
+
+    方法 取标量值 <公开 类型 = 文本型 注释 = "获取当前节点的标量值" @嵌入式方法 = "">
+    {
+        @ @dt<文本型>(@sn<this>.data().Scalar().c_str())
+    }
+
+    方法 取标签 <公开 类型 = 文本型 注释 = "取当前节点标签" @嵌入式方法 = "">
+    {
+        @ @dt<文本型>(@sn<this>.data().Tag().c_str())
+    }
+
+    方法 置标签 <公开 注释 = "设置当前节点标签" @嵌入式方法 = "">
+    参数 欲设置的标签 <类型 = 文本型>
+    {
+        @ @sn<this>.data().SetTag(std::string(@<欲设置的标签>))
+    }
+
+    方法 取节点样式 <公开 类型 = YAML输出样式 注释 = "获取当前节点样式" @嵌入式方法 = "">
+    {
+        @ (@dt<YAML输出样式>)@sn<this>.data().Style()
+    }
+
+    方法 置节点样式 <公开 注释 = "设置当前节点样式" @嵌入式方法 = "">
+    参数 欲设置的风格 <类型 = YAML输出样式>
+    {
+        @ @sn<this>.data().SetStyle((YAML::EmitterStyle::value)@<欲设置的风格>)
+    }
+
+    方法 是否相等 <公开 类型 = 逻辑型 注释 = "比较两个节点是否等" @嵌入式方法 = "">
+    参数 欲比较的对象 <类型 = YAML输出样式>
+    {
+        @ (@dt<逻辑型>)@sn<this>.data().is(@<欲比较的对象>.data())
+    }
+
+    方法 重置 <公开 注释 = "重置当前对象" @嵌入式方法 = "">
+    参数 节点对象 <类型 = YAML节点类 注释 = "重置后欲克隆的节点对象" @默认值 = 空对象>
+    {
+        @ @sn<this>.data().reset(@<节点对象>.data())
+    }
+
+    方法 取数量 <公开 类型 = 变整数 注释 = "取当前成员数,如果当前节点为对象则返回对象数量,如果为数组则返回数组成员数" @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>)@sn<this>.data().size()
+    }
+
+    方法 枚举循环 <公开 注释 = "枚举循环当前对象或数组" @嵌入式方法 = "name = iterator\r\nhas_loop_body = true">
+    {
+        @ YAML_ENUM(@sn<this>.data())
+    }
+
+    方法 取枚举对象名 <公开 类型 = YAML节点类 注释 = "如果枚举的节点是对象则用此方法获取枚举键名" @嵌入式方法 = "parent = \"iterator\"">
+    {
+        @ @sn<current_class_def>(it->first)
+    }
+
+    方法 取枚举对象值 <公开 类型 = YAML节点类 注释 = "如果枚举的节点是对象则用此方法获取枚举键值" @嵌入式方法 = "parent = \"iterator\"">
+    {
+        @ @sn<current_class_def>(it->second)
+    }
+
+    方法 取枚举数组值 <公开 类型 = YAML节点类 注释 = "如果枚举的节点是数组则用此方法获取枚举成员值" @嵌入式方法 = "parent = \"iterator\"">
+    {
+        @ @sn<current_class_def>(*it)
+    }
+
+    方法 添加成员 <公开 注释 = "添加数组成员" @嵌入式方法 = "req_cpp_bool = true">
+    参数 成员 <注释 = "欲添加的成员.@匹配类型:通用基本型、YAML节点类、YAML节点类型" @匹配类型 = 通用型>
+    {
+        @ @sn<this>.data().push_back(@<成员>)
+    }
+
+    方法 添加多成员 <公开 注释 = "连续添加数组成员" @嵌入式方法 = "req_cpp_bool = true">
+    参数 成员 <注释 = "" 注释 = "欲添加的成员.@匹配类型:通用基本型、YAML节点类、YAML节点类型" @可扩展 = "" @匹配类型 = 通用型>
+    {
+        @ @sn<current_class_def>::push_back(@sn<this>.data(), _T(@sn<pm_types>), @<成员>)
+    }
+
+    方法 选择 <公开 类型 = YAML节点类 注释 = "选择当前节点" @嵌入式方法 = "req_cpp_bool = true">
+    参数 节点名称 <注释 = "选择当前节点." 注释 = "如果为对象则输出对象名称,如果为数组则输入成员序号" @可扩展 = "d_text = \"][\"" @匹配类型 = 通用型>
+    {
+        @ @sn<current_class_def>(@sn<this>.data()[@<节点名称>])
+    }
+
+    方法 移除 <公开 类型 = 逻辑型 注释 = "移除当前节点" @嵌入式方法 = "req_cpp_bool = true">
+    参数 节点名称 <注释 = "如果为对象则输出对象名称,如果为数组则输入成员序号" @匹配类型 = 通用型>
+    {
+        @ (@dt<逻辑型>)@sn<this>.data().remove(@<节点名称>)
+    }
+
+    方法 添加对象 <公开 注释 = "添加对象内容" @嵌入式方法 = "req_cpp_bool = true">
+    参数 对象名 <注释 = "对象名称" @匹配类型 = 通用型>
+    参数 对象值 <注释 = "对象值" @匹配类型 = 通用型>
+    {
+        @ @sn<this>.data().force_insert(@<对象名>,@<对象值>)
+    }
+
+    方法 添加多对象 <公开 注释 = "连续添加对象内容" @嵌入式方法 = "req_cpp_bool = true">
+    参数 键值对 <注释 = "欲添加的对象名称及值." 注释 = "注意:键值对必须成对出现(键名,键值...)" @可扩展 = "" @匹配类型 = 通用型>
+    {
+        @ @sn<current_class_def>::force_insert(@sn<this>.data(), _T(@sn<pm_types>), @<键值对>)
+    }
+
+    方法 取文本值 <公开 类型 = 文本型 注释 = "取当前节点文本值" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().as<@dt<文本型>>()
+    }
+
+    方法 取逻辑值 <公开 类型 = 逻辑型 注释 = "取当前节点逻辑值" @嵌入式方法 = "">
+    {
+        @ (@dt<逻辑型>)@sn<this>.data().as<bool>()
+    }
+
+    方法 取小数值 <公开 类型 = 小数 注释 = "取当前节点小数值" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().as<@dt<小数>>()
+    }
+
+    方法 取整数值 <公开 类型 = 整数 注释 = "取当前节点整数值" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().as<@dt<整数>>()
+    }
+
+    方法 取短整数值 <公开 类型 = 短整数 注释 = "取当前节点短整数值" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().as<@dt<短整数>>()
+    }
+
+    方法 取长整数值 <公开 类型 = 长整数 注释 = "取当前节点长整数值" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().as<@dt<长整数>>()
+    }
+
+    方法 取变整数值 <公开 类型 = 变整数 注释 = "取当前节点变整数值" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().as<@dt<变整数>>()
+    }
+
+    方法 到文本 <公开 类型 = 文本型 注释 = "将当前对象输出到文本" @嵌入式方法 = "">
+    {
+        @ @dt<文本型>(YAML::Dump(@sn<this>.data()).c_str())
+    }
+
+    方法 保存到文件 <公开 注释 = "将当前对象保存到文件" @嵌入式方法 = "req_str_param_text_pointer_u8 = true" @视窗.外部头文件 = "<fstream>">
+    参数 文件名称 <类型 = 文本型 注释 = "欲保存的文件名称">
+    {
+        @ std::ofstream fout(@<文件名称>);
+        @ fout << @sn<this>.data()
+    }
+
+    # @begin
+    # <> <include>
+    # #define YAML_ENUM(node) for(YAML::const_iterator it = ##node.begin(); it != ##node.end(); ++it)
+    # public:
+    #     virtual void GetDumpString (@dt<文本型>& strDump, @dt<整数> nMaxDumpSize) override {
+    #         strDump.SetValueText(YAML::Dump(this->data()).c_str());
+    #     }
+    #     @dt<逻辑型> @an<_IsSelfEqualExtra> (const @sn<current_package>::@sn<current_class>& objCompare) const {
+    #         return (@dt<逻辑型>)(this->m_data.is(objCompare.m_data));
+    #     }
+    #     void @an<_CopySelfFromExtra>(const @sn<current_package>::@sn<current_class>& objCopyFrom){
+    #         this->m_data = objCopyFrom.m_data;
+    #     }
+    #     @sn<current_package>::@sn<current_class>(const YAML::Node& data){
+    #         this->m_data = data;
+    #     }
+    #     YAML::Node& data(){
+    #         return m_data;
+    #     }
+    #     YAML::Node m_data;
+    # public:
+    #     static YAML::Node& push_back(YAML::Node& node, const TCHAR* szParamTypes, ...){
+    #         va_list argList;
+    #         va_start (argList, szParamTypes);
+    #         const INT_P npNumParams = _tcslen(szParamTypes);
+    #         for (INT_P npParamIndex = 0; npParamIndex < npNumParams; npParamIndex++){
+    #             @m<YAML_PUSH_KEY>(szParamTypes[npParamIndex], node.push_back)
+    #         }
+    #         va_end (argList);
+    #         return node;
+    #     }
+    #     static YAML::Node& force_insert(YAML::Node& node, const TCHAR* szParamTypes, ...){
+    #         va_list argList;
+    #         va_start (argList, szParamTypes);
+    #         const INT_P npNumParams = _tcslen (szParamTypes);
+    #         for (INT_P npParamIndex = 0; npParamIndex < npNumParams; npParamIndex++){
+    #             switch(szParamTypes[npParamIndex++]){
+    #                 case _C_VOL_INT:
+    #                     @m<YAML_PUSH_KEY_VALUE>(szParamTypes[npParamIndex], @dt<整数>, node.force_insert)
+    #                     break;
+    #                 case _C_VOL_DOUBLE:
+    #                     @m<YAML_PUSH_KEY_VALUE>(szParamTypes[npParamIndex], @dt<小数>, node.force_insert)
+    #                     break;
+    #                 case _C_VOL_LONG:
+    #                     @m<YAML_PUSH_KEY_VALUE>(szParamTypes[npParamIndex], @dt<长整数>, node.force_insert)
+    #                     break;
+    #                 case _C_VOL_VINT:
+    #                     @m<YAML_PUSH_KEY_VALUE>(szParamTypes[npParamIndex], @dt<变整数>, node.force_insert)
+    #                     break;
+    #                 case _C_VOL_BOOL:
+    #                     @m<YAML_PUSH_KEY_VALUE>(szParamTypes[npParamIndex], bool, node.force_insert)
+    #                     break;
+    #                 case _C_VOL_STRING:
+    #                     @m<YAML_PUSH_KEY_VALUE>(szParamTypes[npParamIndex], @dt<文本型>, node.force_insert)
+    #                     break;
+    #                 default:
+    #                     @m<YAML_PUSH_KEY_VALUE>(szParamTypes[npParamIndex], @sn<current_package>::@sn<current_class>, node.force_insert)
+    #                     break;  
+    #             }
+    #         }
+    #         va_end (argList);
+    #         return node;
+    #     }
+    # <> </include>
+    # @def_macro YAML_PUSH_KEY_VALUE(param_ctype, key_type, function)           \
+    #         {                                                                 \
+    #             ##key_type key = va_arg(argList, key_type);                   \
+    #             switch(##param_ctype){                                        \
+    #                 case _C_VOL_INT:                                          \
+    #                     ##function(key, va_arg(argList, @dt<整数>));          \
+    #                     break;                                                \
+    #                 case _C_VOL_DOUBLE:                                       \
+    #                     ##function(key, va_arg(argList, @dt<小数>));          \
+    #                     break;                                                \
+    #                 case _C_VOL_LONG:                                         \
+    #                     ##function(key, va_arg(argList, @dt<长整数>));        \
+    #                     break;                                                \
+    #                 case _C_VOL_VINT:                                         \
+    #                     ##function(key, va_arg(argList, @dt<变整数>));        \
+    #                     break;                                                \
+    #                 case _C_VOL_BOOL:                                         \
+    #                     ##function(key, va_arg(argList, bool));               \
+    #                     break;                                                \
+    #                 case _C_VOL_STRING:                                       \
+    #                     ##function(key, va_arg(argList, @dt<文本型>));        \
+    #                     break;                                                \
+    #                 default:                                                  \
+    #                     ##function(key, va_arg(argList, @sn<current_package>::@sn<current_class>)); \
+    #                     break;                                                \
+    #             }                                                             \
+    #         }
+    # @def_macro YAML_PUSH_KEY(param_ctype, function)                      \
+    #             switch(##param_ctype){                                   \
+    #                 case _C_VOL_INT:                                     \
+    #                     ##function(va_arg(argList, @dt<整数>));          \
+    #                     break;                                           \
+    #                 case _C_VOL_DOUBLE:                                  \
+    #                     ##function(va_arg(argList, @dt<小数>));          \
+    #                     break;                                           \
+    #                 case _C_VOL_LONG:                                    \
+    #                     ##function(va_arg(argList, @dt<长整数>));        \
+    #                     break;                                           \
+    #                 case _C_VOL_VINT:                                    \
+    #                     ##function(va_arg(argList, @dt<变整数>));        \
+    #                     break;                                           \
+    #                 case _C_VOL_BOOL:                                    \
+    #                     ##function(va_arg(argList, bool));               \
+    #                     break;                                           \
+    #                 case _C_VOL_STRING:                                  \
+    #                     ##function(va_arg(argList, @dt<文本型>));        \
+    #                     break;                                           \
+    #                 default:                                             \
+    #                     ##function(va_arg(argList, @sn<current_package>::@sn<current_class>)); \
+    #                     break;                                           \
+    #             }
+    # <> <global>
+    # <> <include>
+    # namespace YAML {
+    #     Emitter& operator<<(Emitter& out, @sn<current_package>::@sn<current_class>& node);
+    #     template <>
+    #     struct convert<CWString> {
+    #         static Node encode(const CWString rhs);
+    #         static bool decode(const Node& node, CWString& rhs);
+    #     };
+    #     template <>
+    #     struct convert<CWConstString> {
+    #         static Node encode(const CWConstString rhs);
+    #         static bool decode(const Node& node, CWConstString& rhs);
+    #     };
+    #     template <>
+    #     struct convert<@sn<current_package>::@sn<current_class>> {
+    #         static Node encode(@sn<current_package>::@sn<current_class> rhs);
+    #         static bool decode(const Node& node, @sn<current_package>::@sn<current_class>& rhs);
+    #     };
+    # }
+    # <> </include>
+    # namespace YAML {
+    #     Emitter& operator<<(Emitter& out, @sn<current_package>::@sn<current_class>& node){
+    #         out << node.data();
+    #         return out;
+    #     }
+    #     Node convert<CWString>::encode(const CWString rhs) {
+    #         return Node((const char*)CU8String(rhs).GetText());
+    #     }
+    #     bool convert<CWString>::decode(const Node& node, CWString& rhs){
+    #         if (!node.IsScalar())
+    #             return false;
+    #         rhs.SetValueText(node.Scalar().c_str());
+    #         return true;
+    #     }
+    #     Node convert<CWConstString>::encode(const CWConstString rhs) {
+    #         return Node((const char*)CU8String(rhs).GetText());
+    #     }
+    #     bool convert<CWConstString>::decode(const Node& node, CWConstString& rhs){
+    #         if (!node.IsScalar())
+    #             return false;
+    #         rhs.SetValueText(node.Scalar().c_str());
+    #         return true;
+    #     }
+    #     Node convert<@sn<current_package>::@sn<current_class>>::encode(@sn<current_package>::@sn<current_class> rhs) {
+    #         return rhs.data();
+    #     }
+    #     bool convert<@sn<current_package>::@sn<current_class>>::decode(const Node& node, @sn<current_package>::@sn<current_class>& rhs){
+    #         rhs.data().reset(node);
+    #         return true;
+    #     }
+    # }
+    # <> </global>
+    # @end
+}

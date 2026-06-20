@@ -1,0 +1,879 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <@文档 = "category = \"队列操作库\"">
+
+类 队列类_ <公开 注释 = "翻译自易语言鱼刺队列" 折叠>
+{
+    变量 互斥锁 <类型 = 许可锁类_>
+    变量 堆句柄 <类型 = 变整数>
+    变量 内存块句柄 <类型 = 变整数>
+    变量 内存块当前长度 <类型 = 整数>
+    变量 全局缓冲区大小 <类型 = 整数>
+    变量 压入位置 <类型 = 整数>
+    变量 弹出位置 <类型 = 整数>
+    变量 队列数量 <类型 = 整数>
+    变量 已启动 <类型 = 逻辑型>
+    变量 线程状态 <类型 = 逻辑型>
+    变量 消息等待 <类型 = 逻辑型>
+    变量 线程 <类型 = 线程类_>
+
+    方法 类_清理 <折叠>
+    {
+        队列api.HeapDestroy (堆句柄)
+        连续赋值 (队列数量, 内存块句柄, 堆句柄)
+    }
+
+    方法 增量缓冲区 <类型 = 逻辑型 折叠>
+    参数 len <类型 = 整数>
+    {
+        变量 tmp_len <类型 = 整数>
+        变量 tmp_ptr <类型 = 变整数>
+        tmp_len = 内存块当前长度 - 弹出位置
+        内存块当前长度 = tmp_len + 全局缓冲区大小 + len
+        tmp_ptr = 队列api.HeapAlloc (堆句柄, 8, 内存块当前长度)
+        如果真 (tmp_ptr == 0)
+        {
+            内存块当前长度 = tmp_len + 弹出位置
+            返回 (假)
+        }
+        内存移动 (tmp_ptr, 内存块句柄 + 弹出位置, tmp_len)
+        队列api.HeapFree (堆句柄, 1, 内存块句柄)
+        内存块句柄 = tmp_ptr
+        压入位置 = 压入位置 - 弹出位置
+        弹出位置 = 0
+        返回 (真)
+    }
+
+    方法 收缩缓冲区 <折叠>
+    {
+        变量 tmp_len <类型 = 整数>
+        变量 tmp_ptr <类型 = 变整数>
+        tmp_len = 内存块当前长度 - 弹出位置
+        tmp_ptr = 队列api.HeapAlloc (堆句柄, 8, tmp_len)
+        如果真 (tmp_ptr == 0)
+        {
+            返回
+        }
+        内存移动 (tmp_ptr, 内存块句柄 + 弹出位置, tmp_len)
+        队列api.HeapFree (堆句柄, 1, 内存块句柄)
+        内存块句柄 = tmp_ptr
+        内存块当前长度 = tmp_len
+        压入位置 = 压入位置 - 弹出位置
+        弹出位置 = 0
+    }
+
+    方法 初始化队列_ <公开 折叠>
+    {
+        全局缓冲区大小 = 1024 * 1024
+        堆句柄 = 队列api.HeapCreate (1, 全局缓冲区大小, 0)
+        内存块句柄 = 队列api.HeapAlloc (堆句柄, 8, 全局缓冲区大小)
+        内存块当前长度 = 全局缓冲区大小
+        连续赋值 (0, 压入位置, 弹出位置, 队列数量)
+    }
+
+    方法 启用消息等待_ <公开 注释 = "启用了消息等待，当窗口关闭时需要调用“停止消息等待_”" 折叠>
+    {
+        如果真 (已启动 == 假)
+        {
+            消息等待 = 真
+            线程状态 = 假
+            已启动 = 真
+            处理事件_ ()
+            线程.创建线程_ ()
+        }
+    }
+
+    方法 停止消息等待_ <公开 折叠>
+    {
+        已启动 = 假
+        消息等待 = 假
+        线程状态 = 真
+        处理事件_ ()
+    }
+
+    方法 置缓冲区大小_ <公开 注释 = "缓冲区大小建议是压入数据长度的倍数。（缓冲区大小不影响队列的容量）">
+    参数 缓冲区大小 <类型 = 整数 注释 = "单位：KB，默认1M  不能低于1024字节" @默认值 = 0>
+    {
+        互斥锁.加锁 ()
+        如果 (缓冲区大小 == 0)
+        {
+            全局缓冲区大小 = 1024 * 1024
+        }
+        否则
+        {
+            全局缓冲区大小 = 缓冲区大小 * 1024
+        }
+        互斥锁.解锁 ()
+    }
+
+    方法 压入字节集_ <公开 类型 = 逻辑型 注释 = "与“压入文本_”是公用一个通道" 返回值注释 = "成功返回真，失败返回假" 折叠>
+    参数 内容 <类型 = 字节集类>
+    {
+        变量 len <类型 = 整数>
+        互斥锁.加锁 ()
+        len = 内容.取字节集长度 ()
+        如果真 (len < 1)
+        {
+            互斥锁.解锁 ()
+            返回 (假)
+        }
+        如果真 (压入位置 + 4 + len > 内存块当前长度)
+        {
+            如果真 (增量缓冲区 (len + 4) == 假)
+            {
+                互斥锁.解锁 ()
+                返回 (假)
+            }
+        }
+        内存移动 (内存块句柄 + 压入位置, 取变量地址 (len), 4)
+        压入位置 = 压入位置 + 4
+        内存移动 (内存块句柄 + 压入位置, 内容.取字节集指针 (), len)
+        压入位置 = 压入位置 + len
+        队列数量 = 队列数量 + 1
+        互斥锁.解锁 ()
+        返回 (真)
+    }
+
+    方法 压入文本_ <公开 类型 = 逻辑型 注释 = "与“压入字节集_”是公用一个通道，压入文本就是压入字节集" 返回值注释 = "成功返回真，失败返回假" 折叠>
+    参数 内容 <类型 = 文本型>
+    {
+        返回 (压入字节集_ (文本到字节集 (内容)))
+    }
+
+    方法 弹出字节集_ <公开 类型 = 逻辑型 注释 = "与“弹出文本_”是公用一个通道，弹字节集就是弹出文本" 返回值注释 = "成功返回真，失败返回假" 折叠>
+    参数 返回的内容 <类型 = 字节集类>
+    {
+        变量 len <类型 = 整数>
+        互斥锁.加锁 ()
+        如果真 (队列数量 < 1)
+        {
+            互斥锁.解锁 ()
+            返回 (假)
+        }
+        如果真 (弹出位置 > 全局缓冲区大小)
+        {
+            收缩缓冲区 ()
+        }
+        len = 0
+        内存移动 (取变量地址 (len), 内存块句柄 + 弹出位置, 4)
+        弹出位置 = 弹出位置 + 4
+        返回的内容 = 取空白字节集 (len)
+        内存移动 (返回的内容.取字节集指针 (), 内存块句柄 + 弹出位置, len)
+        弹出位置 = 弹出位置 + len
+        队列数量 = 队列数量 - 1
+        互斥锁.解锁 ()
+        返回 (真)
+    }
+
+    方法 弹出文本_ <公开 类型 = 逻辑型 注释 = "与“弹出字节集_”是公用一个通道，弹文本就是弹出字节集" 返回值注释 = "成功返回真，失败返回假" 折叠>
+    参数 返回的内容 <类型 = 文本型>
+    {
+        变量 返回值 <类型 = 字节集类>
+        变量 结果 <类型 = 逻辑型>
+        结果 = 弹出字节集_ (返回值)
+        返回的内容 = 字节集到文本 (返回值)
+        返回 (结果)
+    }
+
+    方法 取队列长度_ <公开 类型 = 整数 注释 = "返回当前队列数量" 折叠>
+    {
+        返回 (队列数量)
+    }
+
+    方法 线程类__线程事件 <接收事件 类型 = 整数 折叠>
+    参数 来源对象 <类型 = 线程类_>
+    参数 标记值 <类型 = 整数>
+    参数 线程参数 <类型 = 变整数>
+    {
+        变量 字节数据 <类型 = 字节集类>
+        判断循环 (线程状态 == 假)
+        {
+            如果真 (取队列长度_ () > 0)
+            {
+                弹出字节集_ (字节数据)
+                队列事件 (字节集到文本 (字节数据), 字节数据)
+            }
+            延迟_ (1)
+        }
+        返回 (0)
+    }
+
+    方法 队列事件 <公开 定义事件 类型 = 整数 折叠>
+    参数 文本内容 <类型 = 文本型>
+    参数 字节集内容 <类型 = 字节集类>
+}
+
+类 超级队列类_ <公开 折叠 @视窗.外部头文件 = "<queue>">
+{
+    变量 线程 <类型 = 线程类_>
+    变量 已启动 <类型 = 逻辑型>
+    变量 线程状态 <类型 = 逻辑型>
+    变量 消息等待 <类型 = 逻辑型>
+
+    # @begin
+    # <> <include>
+    # @ std::queue<int> iqueue;
+    # @ std::queue<CWString> iCS;
+    # @ std::queue<double> idouble;
+    # @ std::queue<float> ifloat;
+    # @ std::queue<@an<CVolMem>> iCVolMem;
+    # @ std::queue<CVolObjectArray> iCVolObjectArray;
+    # @ std::queue<@an<CVolObject>> iCVolObject;
+    # @ std::queue<@dt<COM对象类>> iCVolComObject;
+    # @ std::queue<@dt<变整数>> iCVoBzs;
+    # @ CRITICAL_SECTION m_CriticalSection; 
+    # @ bool IFCRITICAL_SECTION=false; 
+    # <> </include>
+    # @end
+
+    方法 类_清理 <折叠>
+    {
+        @ DeleteCriticalSection(&m_CriticalSection);
+    }
+
+    方法 类_初始化 <折叠>
+    {
+        @ InitializeCriticalSection(&m_CriticalSection); 
+    }
+
+    方法 启用消息等待_ <公开 注释 = "启用了消息等待，当窗口关闭时需要调用“停止消息等待_”" 折叠>
+    {
+        如果真 (已启动 == 假)
+        {
+            消息等待 = 真
+            线程状态 = 假
+            已启动 = 真
+            处理事件_ ()
+            线程.创建线程_ ()
+        }
+    }
+
+    方法 停止消息等待_ <公开 折叠>
+    {
+        已启动 = 假
+        消息等待 = 假
+        线程状态 = 真
+        处理事件_ ()
+    }
+
+    方法 关闭队列加锁_ <公开 注释 = "默认是加锁状态" 折叠>
+    {
+        @ IFCRITICAL_SECTION = true;
+    }
+
+    方法 开启队列加锁_ <公开 注释 = "默认是加锁状态" 折叠>
+    {
+        @ IFCRITICAL_SECTION = false;
+    }
+
+    方法 压入对象类_ <公开 折叠 @禁止流程检查 = 真>
+    参数 数据 <类型 = 对象类>
+    {
+        @ if(IFCRITICAL_SECTION==true){iCVolObject.push(@<数据>);}
+        @ else{EnterCriticalSection(&m_CriticalSection);iCVolObject.push(@<数据>);LeaveCriticalSection(&m_CriticalSection);}
+
+    }
+
+    方法 压入对象数组类_ <公开 折叠 @禁止流程检查 = 真>
+    参数 数据 <类型 = 对象数组类>
+    {
+        @ if(IFCRITICAL_SECTION==true){iCVolObjectArray.push(@<数据>);}
+        @ else{EnterCriticalSection(&m_CriticalSection);iCVolObjectArray.push(@<数据>);LeaveCriticalSection(&m_CriticalSection);}
+
+    }
+
+    方法 压入COM对象类_ <公开 折叠>
+    参数 数据 <类型 = COM对象类>
+    {
+        @ if(IFCRITICAL_SECTION==true){iCVolComObject.push(@<数据>);}
+        @ else{EnterCriticalSection(&m_CriticalSection);iCVolComObject.push(@<数据>);LeaveCriticalSection(&m_CriticalSection);}
+    }
+
+    方法 压入整数_ <公开 折叠 @禁止流程检查 = 真>
+    参数 数据 <类型 = 整数>
+    {
+        @ if(IFCRITICAL_SECTION==true){iqueue.push(@<数据>);}
+        @ else{EnterCriticalSection(&m_CriticalSection);iqueue.push(@<数据>);LeaveCriticalSection(&m_CriticalSection);}
+    }
+
+    方法 压入小数_ <公开 注释 = "双精度" 折叠 @禁止流程检查 = 真>
+    参数 数据 <类型 = 小数>
+    {
+        @ if(IFCRITICAL_SECTION==true){idouble.push(@<数据>);}
+        @ else{EnterCriticalSection(&m_CriticalSection);idouble.push(@<数据>);LeaveCriticalSection(&m_CriticalSection);}
+    }
+
+    方法 压入小数2_ <公开 注释 = "单精度" 折叠 @禁止流程检查 = 真>
+    参数 数据 <类型 = 单精度小数>
+    {
+        @ if(IFCRITICAL_SECTION==true){ifloat.push(@<数据>);}
+        @ else{EnterCriticalSection(&m_CriticalSection);ifloat.push(@<数据>);LeaveCriticalSection(&m_CriticalSection);}
+    }
+
+    方法 压入变整数_ <公开 折叠 @禁止流程检查 = 真>
+    参数 数据 <类型 = 变整数>
+    {
+        @ if(IFCRITICAL_SECTION==true){iCVoBzs.push(@<数据>);}
+        @ else{EnterCriticalSection(&m_CriticalSection);iCVoBzs.push(@<数据>);LeaveCriticalSection(&m_CriticalSection);}
+
+    }
+
+    方法 压入文本_ <公开 折叠 @禁止流程检查 = 真>
+    参数 数据 <类型 = 文本型>
+    {
+        @ if(IFCRITICAL_SECTION==true){iCS.push(@<数据>);}
+        @ else{EnterCriticalSection(&m_CriticalSection);iCS.push(@<数据>);LeaveCriticalSection(&m_CriticalSection);}
+    }
+
+    方法 压入字节集_ <公开 折叠 @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ if(IFCRITICAL_SECTION==true){iCVolMem.push(@<数据>);}
+        @ else{EnterCriticalSection(&m_CriticalSection);iCVolMem.push(@<数据>);LeaveCriticalSection(&m_CriticalSection);}
+    }
+
+    方法 弹出对象类_ <公开 类型 = 对象类 返回值注释 = "失败返回空对象" 折叠 @禁止流程检查 = 真>
+    {
+        变量 对象 <类型 = 对象类>
+        @ if(IFCRITICAL_SECTION==true){
+        @     if (iCVolObject.empty()) 
+        @     {
+        @        return @<对象>; 
+        @     }
+        @     @an<CVolObject> tmp = iCVolObject.front();
+        @     iCVolObject.pop();
+        @     return tmp;
+        @ }
+        @ else{
+        @     EnterCriticalSection(&m_CriticalSection);
+        @     if (iCVolObject.empty()) 
+        @     {
+        @        LeaveCriticalSection(&m_CriticalSection);
+        @        return @<对象>; 
+        @     }
+        @     @an<CVolObject> tmp = iCVolObject.front();
+        @     iCVolObject.pop();
+        @     LeaveCriticalSection(&m_CriticalSection);
+        @     return tmp;
+        @ }
+
+
+    }
+
+    方法 弹出对象数组类_ <公开 类型 = 对象数组类 返回值注释 = "失败返回空对象数组" 折叠 @禁止流程检查 = 真>
+    {
+        变量 数组 <类型 = 对象数组类>
+        @ if(IFCRITICAL_SECTION==true){
+        @     if (iCVolObjectArray.empty()) 
+        @     {
+        @        return @<数组>; 
+        @     }
+        @     CVolObjectArray tmp = iCVolObjectArray.front();
+        @     iCVolObjectArray.pop();
+        @     return tmp;
+        @ }
+        @ else{
+        @     EnterCriticalSection(&m_CriticalSection);
+        @     if (iCVolObjectArray.empty()) 
+        @     {
+        @        LeaveCriticalSection(&m_CriticalSection);
+        @        return @<数组>; 
+        @     }
+        @     CVolObjectArray tmp = iCVolObjectArray.front();
+        @     iCVolObjectArray.pop();
+        @     LeaveCriticalSection(&m_CriticalSection);
+        @     return tmp;
+        @ }
+
+    }
+
+    方法 弹出整数_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IFCRITICAL_SECTION==true){
+        @     if (iqueue.empty()) 
+        @     {
+        @        return -1; 
+        @     }
+        @     int tmp = iqueue.front();
+        @     iqueue.pop();
+        @     return tmp;
+        @ }
+        @ else{
+        @     EnterCriticalSection(&m_CriticalSection);
+        @     if (iqueue.empty()) 
+        @     {
+        @        LeaveCriticalSection(&m_CriticalSection);
+        @        return -1; 
+        @     }
+        @     int tmp = iqueue.front();
+        @     iqueue.pop();
+        @     LeaveCriticalSection(&m_CriticalSection);
+        @     return tmp;
+        @ }
+
+    }
+
+    方法 弹出小数_ <公开 类型 = 小数 注释 = "双精度" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IFCRITICAL_SECTION==true){
+        @     if (idouble.empty()) 
+        @     {
+        @        return -1; 
+        @     }
+        @     double tmp = idouble.front();
+        @     idouble.pop();
+        @     return tmp;
+        @ }
+        @ else{
+        @     EnterCriticalSection(&m_CriticalSection);
+        @     if (idouble.empty()) 
+        @     {
+        @        LeaveCriticalSection(&m_CriticalSection);
+        @        return -1; 
+        @     }
+        @     double tmp = idouble.front();
+        @     idouble.pop();
+        @     LeaveCriticalSection(&m_CriticalSection);
+        @     return tmp;
+        @ }
+
+    }
+
+    方法 弹出小数2_ <公开 类型 = 单精度小数 注释 = "单精度" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IFCRITICAL_SECTION==true){
+        @     if (ifloat.empty()) 
+        @     {
+        @        return -1; 
+        @     }
+        @     float tmp = ifloat.front();
+        @     ifloat.pop();
+        @     return tmp;
+        @ }
+        @ else{
+        @     EnterCriticalSection(&m_CriticalSection);
+        @     if (ifloat.empty()) 
+        @     {
+        @        LeaveCriticalSection(&m_CriticalSection);
+        @        return -1; 
+        @     }
+        @     float tmp = ifloat.front();
+        @     ifloat.pop();
+        @     LeaveCriticalSection(&m_CriticalSection);
+        @     return tmp;
+        @ }
+
+    }
+
+    方法 弹出变整数_ <公开 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IFCRITICAL_SECTION==true){
+        @     if (iCVoBzs.empty()) 
+        @     {
+        @        return -1; 
+        @     }
+        @     @dt<变整数> tmp = iCVoBzs.front();
+        @     iCVoBzs.pop();
+        @     return tmp;
+        @ }
+        @ else{
+        @     EnterCriticalSection(&m_CriticalSection);
+        @     if (iCVoBzs.empty()) 
+        @     {
+        @        LeaveCriticalSection(&m_CriticalSection);
+        @        return -1; 
+        @     }
+        @     @dt<变整数> tmp = iCVoBzs.front();
+        @     iCVoBzs.pop();
+        @     LeaveCriticalSection(&m_CriticalSection);
+        @     return tmp;
+        @ }
+
+
+    }
+
+    方法 弹出文本_ <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IFCRITICAL_SECTION==true){
+        @     if (iCS.empty()) 
+        @     {
+        @        return -1; 
+        @     }
+        @     CWString tmp = iCS.front();
+        @     iCS.pop();
+        @     return tmp;
+        @ }
+        @ else{
+        @     EnterCriticalSection(&m_CriticalSection);
+        @     if (iCS.empty()) 
+        @     {
+        @        LeaveCriticalSection(&m_CriticalSection);
+        @        return -1; 
+        @     }
+        @     CWString tmp = iCS.front();
+        @     iCS.pop();
+        @     LeaveCriticalSection(&m_CriticalSection);
+        @     return tmp;
+        @ }
+
+
+    }
+
+    方法 弹出字节集_ <公开 类型 = 字节集类 返回值注释 = "失败返回空字节集" 折叠 @禁止流程检查 = 真>
+    {
+        变量 空字节 <类型 = 字节集类>
+        @ if(IFCRITICAL_SECTION==true){
+        @     if (iCVolMem.empty()) 
+        @     {
+        @        return @<空字节>; 
+        @     }
+        @     @an<CVolMem> tmp = iCVolMem.front();
+        @     iCVolMem.pop();
+        @     return tmp;
+        @ }
+        @ else{
+        @     EnterCriticalSection(&m_CriticalSection);
+        @     if (iCVolMem.empty()) 
+        @     {
+        @        LeaveCriticalSection(&m_CriticalSection);
+        @        return @<空字节>; 
+        @     }
+        @     @an<CVolMem> tmp = iCVolMem.front();
+        @     iCVolMem.pop();
+        @     LeaveCriticalSection(&m_CriticalSection);
+        @     return tmp;
+        @ }
+
+
+    }
+
+    方法 弹出COM对象类_ <公开 类型 = COM对象类 返回值注释 = "失败返回空对象" 折叠 @禁止流程检查 = 真>
+    {
+        变量 对象 <类型 = COM对象类>
+        @ if(IFCRITICAL_SECTION==true){
+        @     if (iCVolComObject.empty()) 
+        @     {
+        @        return @<对象>; 
+        @     }
+        @     @dt<COM对象类> tmp = iCVolComObject.front();
+        @     iCVolComObject.pop();
+        @     return tmp;
+        @ }
+        @ else{
+        @     EnterCriticalSection(&m_CriticalSection);
+        @     if (iCVolComObject.empty()) 
+        @     {
+        @        LeaveCriticalSection(&m_CriticalSection);
+        @        return @<对象>; 
+        @     }
+        @     @dt<COM对象类> tmp = iCVolComObject.front();
+        @     iCVolComObject.pop();
+        @     LeaveCriticalSection(&m_CriticalSection);
+        @     return tmp;
+        @ }
+
+
+    }
+
+    方法 取对象类队列数_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+
+        @ if(IFCRITICAL_SECTION==true){
+        @ @dt<整数> a;
+        @ a=(@dt<整数>)iCVolObject.size();
+        @ return a;
+        @ }
+        @ else{
+        @ @dt<整数> a;
+        @ EnterCriticalSection(&m_CriticalSection);
+        @ a=(@dt<整数>)iCVolObject.size();
+        @ LeaveCriticalSection(&m_CriticalSection);
+        @ return a;
+        @ }
+
+    }
+
+    方法 取对象数组队列数_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IFCRITICAL_SECTION==true){
+        @ @dt<整数> a;
+        @ a=(@dt<整数>)iCVolObjectArray.size();
+        @ return a;
+        @ }
+        @ else{
+        @ @dt<整数> a;
+        @ EnterCriticalSection(&m_CriticalSection);
+        @ a=(@dt<整数>)iCVolObjectArray.size();
+        @ LeaveCriticalSection(&m_CriticalSection);
+        @ return a;
+        @ }
+
+    }
+
+    方法 取COM对象队列数_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IFCRITICAL_SECTION==true){
+        @ @dt<整数> a;
+        @ a=(@dt<整数>)iCVolComObject.size();
+        @ return a;
+        @ }
+        @ else{
+        @ @dt<整数> a;
+        @ EnterCriticalSection(&m_CriticalSection);
+        @ a=(@dt<整数>)iCVolComObject.size();
+        @ LeaveCriticalSection(&m_CriticalSection);
+        @ return a;
+        @ }
+
+    }
+
+    方法 取整数队列数_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IFCRITICAL_SECTION==true){
+        @ @dt<整数> a;
+        @ a=(@dt<整数>)iqueue.size();
+        @ return a;
+        @ }
+        @ else{
+        @ @dt<整数> a;
+        @ EnterCriticalSection(&m_CriticalSection);
+        @ a=(@dt<整数>)iqueue.size();
+        @ LeaveCriticalSection(&m_CriticalSection);
+        @ return a;
+        @ }
+
+    }
+
+    方法 取小数队列数_ <公开 类型 = 整数 注释 = "双精度" 折叠 @禁止流程检查 = 真>
+    {
+
+        @ if(IFCRITICAL_SECTION==true){
+        @ @dt<整数> a;
+        @ a=(@dt<整数>)idouble.size();
+        @ return a;
+        @ }
+        @ else{
+        @ @dt<整数> a;
+        @ EnterCriticalSection(&m_CriticalSection);
+        @ a=(@dt<整数>)idouble.size();
+        @ LeaveCriticalSection(&m_CriticalSection);
+        @ return a;
+        @ }
+
+    }
+
+    方法 取小数队列数2_ <公开 类型 = 整数 注释 = "单精度" 折叠 @禁止流程检查 = 真>
+    {
+
+        @ if(IFCRITICAL_SECTION==true){
+        @ @dt<整数> a;
+        @ a=(@dt<整数>)ifloat.size();
+        @ return a;
+        @ }
+        @ else{
+        @ @dt<整数> a;
+        @ EnterCriticalSection(&m_CriticalSection);
+        @ a=(@dt<整数>)ifloat.size();
+        @ LeaveCriticalSection(&m_CriticalSection);
+        @ return a;
+        @ }
+
+    }
+
+    方法 取变整数队列数_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IFCRITICAL_SECTION==true){
+        @ @dt<整数> a;
+        @ a=(@dt<整数>)iCVoBzs.size();
+        @ return a;
+        @ }
+        @ else{
+        @ @dt<整数> a;
+        @ EnterCriticalSection(&m_CriticalSection);
+        @ a=(@dt<整数>)iCVoBzs.size();
+        @ LeaveCriticalSection(&m_CriticalSection);
+        @ return a;
+        @ }
+
+    }
+
+    方法 取文本队列数_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IFCRITICAL_SECTION==true){
+        @ @dt<整数> a;
+        @ a=(@dt<整数>)iCS.size();
+        @ return a;
+        @ }
+        @ else{
+        @ @dt<整数> a;
+        @ EnterCriticalSection(&m_CriticalSection);
+        @ a=(@dt<整数>)iCS.size();
+        @ LeaveCriticalSection(&m_CriticalSection);
+        @ return a;
+        @ }
+
+    }
+
+    方法 取字节集队列数_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ if(IFCRITICAL_SECTION==true){
+        @ @dt<整数> a;
+        @ a=(@dt<整数>)iCVolMem.size();
+        @ return a;
+        @ }
+        @ else{
+        @ @dt<整数> a;
+        @ EnterCriticalSection(&m_CriticalSection);
+        @ a=(@dt<整数>)iCVolMem.size();
+        @ LeaveCriticalSection(&m_CriticalSection);
+        @ return a;
+        @ }
+
+    }
+
+    方法 线程类__线程事件 <接收事件 类型 = 整数 折叠>
+    参数 来源对象 <类型 = 线程类_>
+    参数 标记值 <类型 = 整数>
+    参数 线程参数 <类型 = 变整数>
+    {
+        变量 类型 <类型 = 整数>
+        变量 对象类内容 <类型 = 对象类>
+        变量 对象数组类内容 <类型 = 对象数组类>
+        变量 COM对象类内容 <类型 = COM对象类>
+        变量 整数内容 <类型 = 整数>
+        变量 小数内容 <类型 = 小数>
+        变量 小数内容2 <类型 = 单精度小数>
+        变量 变整数内容 <类型 = 变整数>
+        变量 文本型内容 <类型 = 文本型>
+        变量 字节集类内容 <类型 = 字节集类>
+        判断循环 (线程状态 == 假)
+        {
+            如果真 (取对象类队列数_ () > 0)
+            {
+                类型 = 1
+                对象类内容 = 弹出对象类_ ()
+                队列事件_对象类 (对象类内容)
+            }
+            如果真 (取对象数组队列数_ () > 0)
+            {
+                类型 = 2
+                对象数组类内容 = 弹出对象数组类_ ()
+                队列事件_对象数组 (对象数组类内容)
+            }
+            如果真 (取COM对象队列数_ () > 0)
+            {
+                类型 = 3
+                COM对象类内容 = 弹出COM对象类_ ()
+                队列事件_COM对象 (COM对象类内容)
+            }
+            如果真 (取整数队列数_ () > 0)
+            {
+                类型 = 4
+                整数内容 = 弹出整数_ ()
+                队列事件_整数 (整数内容)
+            }
+            如果真 (取小数队列数_ () > 0)
+            {
+                类型 = 5
+                小数内容 = 弹出小数_ ()
+                队列事件_小数 (小数内容)
+            }
+            如果真 (取小数队列数2_ () > 0)
+            {
+                类型 = 6
+                小数内容2 = 弹出小数2_ ()
+                队列事件_小数2 (小数内容2)
+            }
+            如果真 (取变整数队列数_ () > 0)
+            {
+                类型 = 7
+                变整数内容 = 弹出变整数_ ()
+                队列事件_变整数 (变整数内容)
+            }
+            如果真 (取文本队列数_ () > 0)
+            {
+                类型 = 8
+                文本型内容 = 弹出文本_ ()
+                队列事件_文本 (文本型内容)
+            }
+            如果真 (取字节集队列数_ () > 0)
+            {
+                类型 = 9
+                字节集类内容 = 弹出字节集_ ()
+                队列事件_字节集 (字节集类内容)
+            }
+            队列事件_综合 (类型, 对象类内容, 对象数组类内容, COM对象类内容, 整数内容, 小数内容, 小数内容2, 变整数内容, 文本型内容, 字节集类内容)
+            延迟_ (1)
+        }
+        返回 (0)
+    }
+
+    方法 队列事件_对象类 <公开 定义事件 类型 = 整数 折叠>
+    参数 事件内容 <类型 = 对象类>
+
+    方法 队列事件_对象数组 <公开 定义事件 类型 = 整数 折叠>
+    参数 事件内容 <类型 = 对象数组类>
+
+    方法 队列事件_COM对象 <公开 定义事件 类型 = 整数 折叠>
+    参数 事件内容 <类型 = COM对象类>
+
+    方法 队列事件_整数 <公开 定义事件 类型 = 整数 折叠>
+    参数 事件内容 <类型 = 整数>
+
+    方法 队列事件_小数 <公开 定义事件 类型 = 整数 折叠>
+    参数 事件内容 <类型 = 小数>
+
+    方法 队列事件_小数2 <公开 定义事件 类型 = 整数 折叠>
+    参数 事件内容 <类型 = 单精度小数>
+
+    方法 队列事件_变整数 <公开 定义事件 类型 = 整数 折叠>
+    参数 事件内容 <类型 = 变整数>
+
+    方法 队列事件_文本 <公开 定义事件 类型 = 整数 折叠>
+    参数 事件内容 <类型 = 文本型>
+
+    方法 队列事件_字节集 <公开 定义事件 类型 = 整数 折叠>
+    参数 事件内容 <类型 = 字节集类>
+
+    方法 队列事件_综合 <公开 定义事件 类型 = 整数 折叠>
+    参数 消息类型 <类型 = 整数 注释 = "1.对象类 2.对象数组 3.com对象 4.整数 5.双精度小数 6.单精度小数 7.变整数 8.文本 9.字节集">
+    参数 对象类内容 <类型 = 对象类>
+    参数 对象数组类内容 <类型 = 对象数组类>
+    参数 COM对象类内容 <类型 = COM对象类>
+    参数 整数内容 <类型 = 整数>
+    参数 小数内容 <类型 = 小数>
+    参数 小数内容2 <类型 = 单精度小数>
+    参数 变整数内容 <类型 = 变整数>
+    参数 文本型内容 <类型 = 文本型>
+    参数 字节集类内容 <类型 = 字节集类>
+}
+
+类 队列api <折叠 @文档 = "category = \"队列操作库.附加类\"">
+{
+    方法 HeapCreate <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "HeapCreate" @视窗.输入 = "kernel32.dll">
+    参数 flOptions <类型 = 变整数>
+    参数 dwInitialSize <类型 = 变整数>
+    参数 dwMaximumSize <类型 = 变整数>
+
+    方法 HeapDestroy <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "HeapDestroy" @视窗.输入 = "kernel32.dll">
+    参数 hHeap <类型 = 变整数>
+
+    方法 HeapAlloc <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "HeapAlloc" @视窗.输入 = "kernel32.dll">
+    参数 hHeap <类型 = 变整数>
+    参数 dwFlags <类型 = 变整数>
+    参数 dwBytes <类型 = 变整数>
+
+    方法 HeapFree <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "HeapFree" @视窗.输入 = "kernel32.dll">
+    参数 hHeap <类型 = 变整数>
+    参数 dwFlags <类型 = 变整数>
+    参数 lpMem <类型 = 变整数>
+
+    方法 HeapReAlloc <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "HeapReAlloc" @视窗.输入 = "kernel32.dll">
+    参数 hHeap <类型 = 变整数>
+    参数 dwFlags <类型 = 变整数>
+    参数 lpMem <类型 = 变整数>
+    参数 dwBytes <类型 = 变整数>
+    {
+
+    }
+}

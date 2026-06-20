@@ -1,0 +1,59 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"STL.双向队列\"">
+
+类 双向队列模板 <公开 基础类 = _deque_list_公有模板 注释 = "http://www.cplusplus.com/reference/stl/" @模板基础类 = 真>
+{
+
+    # @begin
+    #
+    # <> <include>
+    #
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_data = objCopyFrom.m_data;
+    # }
+    #
+    # //inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const
+    # //{
+    # //    return m_data == objCompare.m_data;
+    # //}
+    #
+    # @m<DECLARE_VOL_STD_DEFAULT_FUCTION>( std::deque<@dt<模板类型1>> )
+    #
+    # <> </include>
+    # @end
+    #
+
+    方法 取成员 <公开 类型 = 模板类型1 注释 = "根据索引取值" @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ @dt<模板类型1>( @sn<this>.GetData()[@<索引>] )
+
+    }
+
+    方法 取成员_引用 <公开 类型 = 模板类型1 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ @sn<this>.GetData().at(@<索引>)
+    }
+
+    # //正反迭代----
+
+    方法 迭代正向 <公开 @嵌入式方法 = "name = VDL_deque_Forward_Iterator\r\nhas_body = true">
+    {
+        @ CFVol_FOR_FORWARD_ITERATOR(std::deque<@dt<模板类型1>>,@sn<this>.GetData())
+    }
+
+    方法 迭代反向 <公开 @嵌入式方法 = "name = VDL_deque_Reverse_Iterator\r\nhas_body = true">
+    {
+        @ CFVol_FOR_REVERSE_ITERATOR(std::deque<@dt<模板类型1>>,@sn<this>.GetData())
+    }
+
+    方法 迭代值 <公开 类型 = 模板类型1 @嵌入式方法 = "parent = \"VDL_deque_Forward_Iterator,VDL_deque_Reverse_Iterator\"">
+    {
+        @ @dt<模板类型1>(*it)
+    }
+
+    #
+}

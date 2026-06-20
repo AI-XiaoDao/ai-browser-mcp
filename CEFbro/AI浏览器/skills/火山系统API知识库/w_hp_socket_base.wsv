@@ -1,0 +1,654 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.网络
+
+类 HPSocket基础类 <注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "HPSocket开源高性能跨平台网络通信框架." 注释 = "封装HPSocket版本:5.7.2" 注释 = "2021.1.8升级至版本:5.7.3"
+        注释 = "2024.4.20升级至版本:6.0.1" 注释 = "HPsocket项目码云:https://gitee.com/ldcsaa/HP-Socket" 编辑时信息 = "382A72, 0, 0, 0"
+        @文档 = "category = \"辅助类\"" @视窗.外部头文件 = "HPSocket\VOL_HPSocket.h"
+        @视窗.头文件搜寻目录 = "..\\..\\shared\\extern_lib\\common\\hp_socket\\2\\Include" ""
+        @视窗.附属文件.non_static = "..\\..\\shared\\extern_lib\\common\\hp_socket\\2\\$(p)\\HPSocket_U.dll"
+        @视窗.外部库.non_static = "..\\..\\shared\\extern_lib\\common\\hp_socket\\2\\$(p)\\HPSocket_U.lib"
+        @视窗.外部库.static = "..\\..\\shared\\extern_lib\\common\\hp_socket\\2\\$(p)\\static\\HPSocket_U-$(d).lib"
+        @视窗.预定义宏.static = "HPSOCKET_STATIC_LIB" @视窗.需求VS版本.static = "16" @禁止创建对象 = 真>
+{
+
+    # @begin
+    # <> <global>
+    # <> <include>
+    # class CHPHttpReqHeader
+    # {
+    # public:
+    #     CHPHttpReqHeader (@dt<HP请求头数组类>& ary);
+    #     inline_ ~CHPHttpReqHeader ()
+    #     {
+    #         if (m_pHeaders != NULL)  delete[] m_pHeaders;
+    #         if (m_apMems != NULL)  delete[] m_apMems;
+    #     }
+    #     THeader* m_pHeaders;
+    #     CVolMem* m_apMems;
+    # };
+    # <> </include>
+    # CHPHttpReqHeader::CHPHttpReqHeader (@dt<HP请求头数组类>& ary)
+    # {
+    #     m_pHeaders = NULL;
+    #     m_apMems = NULL;
+    #     const INT nCount = (INT)ary.GetCount ();
+    #     if (nCount > 0)
+    #     {
+    #         m_pHeaders = new THeader [nCount];
+    #         m_apMems = new CVolMem [nCount * 2];
+    #         for (INT i = 0; i < nCount; i++)
+    #         {
+    #             m_pHeaders[i].name = GetMbsText (((@pkg<火山.视窗.网络>::@dt<HP请求头类>&)ary.GetAt (i)).@n<HP请求头类.名称>, m_apMems [i * 2], NULL);
+    #             m_pHeaders[i].value = GetMbsText (((@pkg<火山.视窗.网络>::@dt<HP请求头类>&)ary.GetAt (i)).@n<HP请求头类.值>, m_apMems [i * 2 + 1], NULL);
+    #         }
+    #     }
+    # }
+    # <> </global>
+    # @end
+}
+
+类 HPSocket类 <公开 基础类 = HPSocket基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "提供一些全局方法." @禁止创建对象 = 真>
+{
+
+    # Global---
+
+    方法 取HP版本号 <公开 静态 类型 = 整数 注释 = "获取当前库的版本号." 返回值注释 = "4个字节分别对应主版本号,子版本号,修正版本号,构建编号." @嵌入式方法 = "">
+    {
+        @ (INT)HP_GetHPSocketVersion()
+    }
+
+    方法 取错误码描述 <公开 静态 类型 = 文本型 注释 = "获取指定错误代码的描述文本." @嵌入式方法 = "">
+    参数 错误码 <类型 = 整数 注释 = "提供所欲获取其文本描述的错误码.">
+    {
+        @ @an<CVolString> (HP_GetSocketErrorDesc((EnSocketError)@<错误码>))
+    }
+
+    方法 取上次错误码 <公开 静态 类型 = 整数 注释 = "获取系统返回的错误代码." @嵌入式方法 = "">
+    {
+        @ (INT)SYS_GetLastError()
+    }
+
+    方法 取上次错误码_WSA <公开 静态 类型 = 整数 注释 = "获取系统返回的错误代码(调用WSAGetLastError()方法)." @嵌入式方法 = "">
+    {
+        @ (INT)SYS_WSAGetLastError()
+    }
+
+    # Cookie管理器 ---
+
+    方法 从文件加载Cookie <公开 静态 类型 = 逻辑型 注释 = "从指定文件加载Cookie." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 目标文件 <类型 = 文本型 注释 = "提供所欲加载Cookie的文件.">
+    参数 是否追加 <类型 = 逻辑型 注释 = "指定是否保留已存在的Cookie,提供假将清除原有Cookie." @默认值 = 真>
+    {
+        @ HP_HttpCookie_MGR_LoadFromFile(GetMbsText (@<目标文件>, CVolMem (), NULL), @<是否追加>)
+    }
+
+    方法 保存Cookie到文件 <公开 静态 类型 = 逻辑型 注释 = "将Cookie写出到文件保存." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 目标文件 <类型 = 文本型 注释 = "提供所欲保存Cookie的文件.">
+    参数 是否追加 <类型 = 逻辑型 注释 = "指定是否保留文件中已存在的Cookie,提供假将清除原有Cookie." @默认值 = 真>
+    {
+        @ HP_HttpCookie_MGR_SaveToFile(GetMbsText (@<目标文件>, CVolMem (), NULL), @<是否追加>)
+    }
+
+    方法 清理Cookie <公开 静态 类型 = 逻辑型 注释 = "清理指定域名下Cookies." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 域名 <类型 = 文本型 注释 = "提供所欲清除Cookie的域名,提供空将清除所有.">
+    参数 路径 <类型 = 文本型 注释 = "路径,提供空文本将清除所有路径.">
+    {
+        @ HP_HttpCookie_MGR_ClearCookies(GetMbsText (@<域名>,CVolMem (), NULL), GetMbsText (@<路径>, CVolMem (), NULL))
+    }
+
+    方法 清理过期Cookie <公开 静态 类型 = 逻辑型 注释 = "清理指定域名下过期的Cookies." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 域名 <类型 = 文本型 注释 = "提供所欲清除过期Cookie的域名,提供空将清除所有.">
+    参数 路径 <类型 = 文本型 注释 = "路径,提供空文本将清除所有路径.">
+    {
+        @ HP_HttpCookie_MGR_ClearCookies(GetMbsText (@<域名>, CVolMem (), NULL), GetMbsText (@<路径>, CVolMem (), NULL))
+    }
+
+    方法 置Cookie <公开 静态 类型 = 逻辑型 注释 = "设置Cookie." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 名称 <类型 = 文本型 注释 = "提供Cookie名称.">
+    参数 值 <类型 = 文本型 注释 = "提供Cookie值内容.">
+    参数 域名 <类型 = 文本型 注释 = "提供所欲置入的域.">
+    参数 路径 <类型 = 文本型 注释 = "提供所欲置入的路径.">
+    参数 生命周期 <类型 = 整数 注释 = "即\"MaxAge\"属性.">
+    参数 HttpOnly <类型 = 逻辑型 注释 = "即\"HttpOnly\"属性.">
+    参数 Secure <类型 = 逻辑型 注释 = "即\"Secure\"属性.">
+    参数 SameSite <类型 = 整数 注释 = "即\"SameSite\"属性.">
+    参数 已存在更新值 <类型 = 逻辑型 注释 = "如果所欲置入Cookie已存在,是否仅更新其值内容." @默认值 = 真>
+    {
+        @ HP_HttpCookie_MGR_SetCookie(GetMbsText (@<名称>, CVolMem (), NULL), GetMbsText (@<值>, CVolMem (), NULL), GetMbsText (@<域名>, CVolMem (), NULL), GetMbsText (@<路径>, CVolMem (), NULL), @<生命周期>, @<HttpOnly>, @<Secure>, @<SameSite>, @<已存在更新值>)
+    }
+
+    方法 删除Cookie <公开 静态 类型 = 逻辑型 注释 = "删除指定Cookie." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 域名 <类型 = 文本型 注释 = "提供所欲删除Cookie所在域.">
+    参数 路径 <类型 = 文本型 注释 = "提供所欲删除Cookie所处路径.">
+    参数 名称 <类型 = 文本型 注释 = "提供所欲删除Cookie的名称.">
+    {
+        @ HP_HttpCookie_MGR_DeleteCookie(GetMbsText (@<域名>, CVolMem (), NULL), GetMbsText (@<路径>, CVolMem (), NULL), GetMbsText (@<名称>, CVolMem (), NULL))
+    }
+
+    方法 置允许三方Cookie <公开 静态 注释 = "设置是否允许第三方Cookie." @嵌入式方法 = "">
+    参数 是否允许 <类型 = 逻辑型>
+    {
+        @ HP_HttpCookie_MGR_SetEnableThirdPartyCookie(@<是否允许>)
+    }
+
+    方法 取允许三方Cookie <公开 静态 类型 = 逻辑型 注释 = "获取是否允许第三方Cookie." @嵌入式方法 = "">
+    {
+        @ HP_HttpCookie_MGR_IsEnableThirdPartyCookie()
+    }
+
+    方法 Cookie过期文本到整数 <公开 静态 类型 = 长整数 注释 = "将指定Cookie expires字符串转换为整数." 返回值注释 = "返回时间戳." @禁止流程检查 = 真>
+    参数 内容 <类型 = 文本型 注释 = "提供所欲转换的Cookie expires内容.">
+    {
+        @ __time64_t time;
+        @ HP_HttpCookie_HLP_ParseExpires(GetMbsText (@<内容>, CVolMem (), NULL), time);
+        @ return time;
+    }
+
+    方法 Cookie过期整数到文本 <公开 静态 类型 = 逻辑型 注释 = "将指定时间戳转换为Cookie expires内容." 返回值注释 = "返回是否操作成功." 编辑时信息 = "9AAA1, 0, 0, 0" @禁止流程检查 = 真>
+    参数 时间戳 <类型 = 长整数 注释 = "提供所欲转换的expires时间." 编辑时信息 = "9AAA1, 0, 0, 0">
+    参数 内容 <类型 = 文本型 注释 = "转换成功将返回Cookie expires内容.">
+    {
+        @ int len = 0;
+        @ HP_HttpCookie_HLP_MakeExpiresStr(nullptr, len, @<时间戳>);
+        @ char *str2 = new char[len];
+        @ BOOL isSuccess = HP_HttpCookie_HLP_MakeExpiresStr(str2, len, @<时间戳>);
+        @ if (isSuccess) @<内容>.SetText(str2);
+        @ delete[] str2;
+        @ return isSuccess;
+    }
+
+    方法 生成Cookie内容 <公开 静态 类型 = 逻辑型 注释 = "提供指定Cookie属性生成一个Cookie字符串." 返回值注释 = "返回是否生成成功." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "提供Cookie名称.">
+    参数 值 <类型 = 文本型 注释 = "提供Cookie值内容.">
+    参数 域名 <类型 = 文本型 注释 = "提供所欲置入的域.">
+    参数 路径 <类型 = 文本型 注释 = "提供所欲置入的路径.">
+    参数 生命周期 <类型 = 整数 注释 = "即\"MaxAge\"属性.">
+    参数 HttpOnly <类型 = 逻辑型 注释 = "即\"HttpOnly\"属性.">
+    参数 Secure <类型 = 逻辑型 注释 = "即\"Secure\"属性.">
+    参数 SameSite <类型 = 整数 注释 = "即\"SameSite\"属性.">
+    参数 内容 <类型 = 文本型 注释 = "转换成功将返回所生成的Cookie内容.">
+    {
+        @ int len = 0;
+        @ HP_HttpCookie_HLP_ToString(nullptr, len, GetMbsText (@<名称>, CVolMem (), NULL), GetMbsText (@<值>, CVolMem (), NULL), GetMbsText (@<域名>,CVolMem (), NULL), GetMbsText (@<路径>, CVolMem (), NULL), @<生命周期>, @<HttpOnly>, @<Secure>, @<SameSite>);
+        @ char *str = new char[len + 1];
+        @ BOOL isSuccess = HP_HttpCookie_HLP_ToString(str, len, GetMbsText (@<名称>, CVolMem (), NULL), GetMbsText (@<值>, CVolMem (), NULL), GetMbsText (@<域名>, CVolMem (), NULL), GetMbsText (@<路径>, CVolMem (), NULL), @<生命周期>, @<HttpOnly>, @<Secure>, @<SameSite>);
+        @ if (isSuccess) @<内容>.SetText (GetWideText (str, CVolMem (), NULL));
+        @ delete[] str;
+        @ return isSuccess;
+    }
+
+    方法 取当前UTC时间 <公开 静态 类型 = 长整数 注释 = "获取当前UTC时间." @嵌入式方法 = "">
+    {
+        @ (INT64)HP_HttpCookie_HLP_CurrentUTCTime()
+    }
+
+    方法 Cookie最大时间到过期时间 <公开 静态 类型 = 长整数 注释 = "将指定Cookie MaxAge属性转换为过期时间." @嵌入式方法 = "">
+    参数 MaxAge <类型 = 整数>
+    {
+        @ (INT64)HP_HttpCookie_HLP_MaxAgeToExpires(@<MaxAge>)
+    }
+
+    方法 Cookie过期时间到最大时间 <公开 静态 类型 = 整数 注释 = "将指定Cookie Expires属性转换为MaxAge." @嵌入式方法 = "">
+    参数 Expires <类型 = 长整数>
+    {
+        @ HP_HttpCookie_HLP_ExpiresToMaxAge(@<Expires>)
+    }
+
+    方法 取主机IP地址 <公开 静态 类型 = 文本数组类 注释 = "获取指定主机IPV4地址." @禁止流程检查 = 真>
+    参数 主机名 <类型 = 文本型 注释 = "提供空文本则表示获取本机." @默认值 = "">
+    {
+        变量 返回结果 <类型 = 文本数组类>
+        @ int count = 0;
+        @ LPTIPAddr* adds = nullptr;
+        @ if (SYS_EnumHostIPAddresses(@<主机名>, IPT_IPV4, &adds, count))
+        @ {
+        @     for (INT i = 0; i < count && count <= 10; i++)
+        @     {
+        @         @<返回结果>.data ().Add (adds[i]->address);
+        @     }
+        @ }
+        @ SYS_FreeHostIPAddresses(adds);
+        @ return @<返回结果>;
+    }
+
+    方法 取主机IPV6地址 <公开 静态 类型 = 文本数组类 注释 = "获取主机IPV6地址." @禁止流程检查 = 真>
+    参数 主机名 <类型 = 文本型 注释 = "提供空文本则表示获取本机." @默认值 = "">
+    {
+        变量 返回结果 <类型 = 文本数组类>
+        @ int count = 0;
+        @ LPTIPAddr* adds = nullptr;
+        @ if (SYS_EnumHostIPAddresses(@<主机名>, IPT_IPV6, &adds, count))
+        @ {
+        @     for (INT i = 0; i < count && count <= 10; i++)
+        @     {
+        @         @<返回结果>.data ().Add (adds[i]->address);
+        @     }
+        @ }
+        @ SYS_FreeHostIPAddresses(adds);
+        @ return @<返回结果>;
+    }
+
+    方法 压缩数据 <公开 静态 类型 = 字节集类 注释 = "对指定数据进行Zlib压缩." 返回值注释 = "返回被压缩后的数据." @禁止流程检查 = 真>
+    参数 欲压缩数据 <类型 = 字节集类 注释 = "提供所欲压缩的数据.">
+    参数 压缩级别 <类型 = 整数 注释 = "0-9之间,级别越高压缩率越大,相应的压缩时间会变长." @默认值 = -1>
+    参数 压缩位数 <类型 = 整数 注释 = "8-15,表示处理raw deflate的方法." @默认值 = 15>
+    参数 压缩状态 <类型 = 整数 注释 = "指定分配内存的等级,1-9之间,1会使用最低的内存,压缩时间最长." @默认值 = 8>
+    参数 压缩算法 <类型 = 整数 注释 = "指定所欲使用的压缩算法." @默认值 = 0>
+    {
+        变量 目标 <类型 = 字节集类>
+        @ DWORD dwDestLen = SYS_GuessCompressBound((INT)@<欲压缩数据>.GetSize(), FALSE);
+        @ SYS_CompressEx(@<欲压缩数据>.GetPtr(), (INT)@<欲压缩数据>.GetSize(), @<目标>.Alloc (dwDestLen, TRUE), dwDestLen, @<压缩级别>, 8, @<压缩位数>, @<压缩状态>, @<压缩算法>);
+        @ return @<目标>.GetBinLeft (dwDestLen);
+    }
+
+    方法 解压数据 <公开 静态 类型 = 整数 注释 = "对指定数据进行Zlib解压." 返回值注释 = "返回解压的结果." 返回值注释 = "0->解压成功." 返回值注释 = "-3->提供的解压数据不正确."
+            返回值注释 = "-5->输出缓冲区尺寸不足,需要分配更大空间." @禁止流程检查 = 真>
+    参数 欲解压数据 <类型 = 字节集类 注释 = "提供所欲解压的数据.">
+    参数 输出缓冲区 <类型 = 字节集类 注释 = "提供的字节集必须先预分配足够的空间.">
+    参数 压缩位数 <类型 = 整数 注释 = "8-15,表示处理raw deflate的方法." @默认值 = 15>
+    {
+        @ DWORD dwDestLen;
+        @ return SYS_UncompressEx(@<欲解压数据>.GetPtr(), (INT)@<欲解压数据>.GetSize(), @<输出缓冲区>.GetPtr(), dwDestLen, @<压缩位数>);
+    }
+
+    方法 压缩数据_GZip <公开 静态 类型 = 字节集类 注释 = "对指定数据进行GZip压缩." 返回值注释 = "返回被压缩后的数据." @禁止流程检查 = 真>
+    参数 欲压缩数据 <类型 = 字节集类 注释 = "提供所欲压缩的数据.">
+    {
+        变量 目标 <类型 = 字节集类>
+        @ DWORD dwDestLen = SYS_GuessCompressBound((INT)@<欲压缩数据>.GetSize(), TRUE);
+        @ SYS_GZipCompress(@<欲压缩数据>.GetPtr(), (INT)@<欲压缩数据>.GetSize(), @<目标>.Alloc (dwDestLen, TRUE), dwDestLen);
+        @ return @<目标>.GetBinLeft (dwDestLen);
+    }
+
+    方法 解压数据_GZip <公开 静态 类型 = 字节集类 注释 = "对指定数据进行GZip解压." 返回值注释 = "返回被解压后的数据." @禁止流程检查 = 真>
+    参数 欲解压数据 <类型 = 字节集类 注释 = "提供所欲解压的数据.">
+    {
+        变量 目标 <类型 = 字节集类>
+        @ DWORD dwDestLen = SYS_GZipGuessUncompressBound(@<欲解压数据>.GetPtr(), (INT)@<欲解压数据>.GetSize());
+        @ SYS_GZipUncompress(@<欲解压数据>.GetPtr(), (INT)@<欲解压数据>.GetSize(), @<目标>.Alloc (dwDestLen, TRUE), dwDestLen);
+        @ return @<目标>.GetBinLeft (dwDestLen);
+    }
+
+    方法 Base64编码 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行Base64编码." 返回值注释 = "返回编码后的数据." @禁止流程检查 = 真>
+    参数 欲编码数据 <类型 = 字节集类 注释 = "提供所欲进行编码的数据.">
+    {
+        变量 目标 <类型 = 字节集类>
+        @ DWORD dwDestLen = SYS_GuessBase64EncodeBound((INT)@<欲编码数据>.GetSize());
+        @ SYS_Base64Encode(@<欲编码数据>.GetPtr(), (INT)@<欲编码数据>.GetSize(), @<目标>.Alloc (dwDestLen, TRUE), dwDestLen);
+        @ return @<目标>.GetBinLeft (dwDestLen);
+    }
+
+    方法 Base64解码 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行Base64解码." 返回值注释 = "返回解码后的数据." @禁止流程检查 = 真>
+    参数 欲解码数据 <类型 = 字节集类 注释 = "提供所欲进行解码的数据.">
+    {
+        变量 目标 <类型 = 字节集类>
+        @ DWORD dwDestLen = SYS_GuessBase64DecodeBound(@<欲解码数据>.GetPtr(), (INT)@<欲解码数据>.GetSize());
+        @ SYS_Base64Decode(@<欲解码数据>.GetPtr(), (INT)@<欲解码数据>.GetSize(), @<目标>.Alloc (dwDestLen, TRUE), dwDestLen);
+        @ return @<目标>.GetBinLeft (dwDestLen);
+    }
+
+    方法 URL编码 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行URL编码." 返回值注释 = "返回编码后的数据." @禁止流程检查 = 真>
+    参数 欲编码数据 <类型 = 字节集类 注释 = "提供所欲进行编码的数据.">
+    {
+        变量 目标 <类型 = 字节集类>
+        @ DWORD dwDestLen = SYS_GuessUrlEncodeBound(@<欲编码数据>.GetPtr(), (INT)@<欲编码数据>.GetSize());
+        @ SYS_UrlEncode(@<欲编码数据>.GetPtr(), (INT)@<欲编码数据>.GetSize(), @<目标>.Alloc (dwDestLen, TRUE), dwDestLen);
+        @ return @<目标>.GetBinLeft (dwDestLen);
+    }
+
+    方法 URL解码 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行URL解码." 返回值注释 = "返回解码后的数据." @禁止流程检查 = 真>
+    参数 欲解码数据 <类型 = 字节集类 注释 = "提供所欲进行解码的数据.">
+    {
+        变量 目标 <类型 = 字节集类>
+        @ DWORD dwDestLen = SYS_GuessUrlDecodeBound(@<欲解码数据>.GetPtr(), (INT)@<欲解码数据>.GetSize());
+        @ SYS_UrlDecode(@<欲解码数据>.GetPtr(), (INT)@<欲解码数据>.GetSize(), @<目标>.Alloc (dwDestLen, TRUE), dwDestLen);
+        @ return @<目标>.GetBinLeft (dwDestLen);
+    }
+
+    方法 压缩数据_Brotli <公开 静态 类型 = 字节集类 注释 = "将指定数据使用Brotli算法进行无损压缩后返回" @禁止流程检查 = 真>
+    参数 欲压缩数据 <类型 = 字节集类 注释 = "提供所欲对其进行压缩的数据">
+    {
+        变量 目标 <类型 = 字节集类>
+        @ DWORD dwDestLen = SYS_BrotliGuessCompressBound((INT)@<欲压缩数据>.GetSize());
+        @ SYS_BrotliCompress(@<欲压缩数据>.GetPtr(), (INT)@<欲压缩数据>.GetSize(), @<目标>.Alloc (dwDestLen, TRUE), dwDestLen);
+        @ return @<目标>.GetBinLeft (dwDestLen);
+    }
+
+    方法 解压数据_Brotli <公开 静态 类型 = 整数 注释 = "将指定使用Brotli压缩算法压缩后的数据进行解压后返回"
+            返回值注释 = "返回0表示解压成功,返回-3表示所提供的压缩数据不正确,返回-5表示所提供的数据缓冲区尺寸不足,需增加尺寸后重试." @禁止流程检查 = 真>
+    参数 欲解压数据 <类型 = 字节集类 注释 = "提供所欲对其进行解压的数据">
+    参数 数据缓冲区 <类型 = 字节集类 注释 = "解压成功后数据将写入该参数">
+    参数 数据长度 <类型 = 整数类 注释 = "解压成功后数据的真实长度将写入该参数">
+    {
+        @ DWORD dwDestLen = @<数据缓冲区>.GetSize();
+        @ INT ret = SYS_BrotliUncompress(@<欲解压数据>.GetPtr(), (INT)@<欲解压数据>.GetSize(), @<数据缓冲区>.GetPtr (), dwDestLen);
+        @ if (ret == 0)
+        @     @<数据长度.值> = dwDestLen;
+        @ return ret;
+    }
+}
+
+类 HP线程池类 <公开 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "可用于执行异步任务的线程池类." @强制依赖 = "HPSocket基础类"
+        @视窗.后缀文本 = "public IHPThreadPoolListener">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CHPSocketThreadPoolWraper)
+    #
+
+    方法 创建 <公开 注释 = "主动创建线程池,可设置是否监听线程池的各种事件." 注释 = "注:如不主动创建将自动创建,不会启用监听事件,如已经使用过该对象再调用本方法将会被忽略.">
+    参数 是否监听 <类型 = 逻辑型 注释 = "设置是否监听线程池中发生的各种事件,譬如:\"线程池已启动\" / \"线程即将执行\"等系列事件.">
+    {
+        @ data().GetData(@<是否监听> ? this : nullptr);
+    }
+
+    方法 启动状态 <公开 属性读 类型 = 逻辑型 注释 = "检查当前线程池是否已经启动." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetPoolPtr()->HasStarted()
+    }
+
+    方法 运行状态 <公开 属性读 类型 = HP状态 注释 = "检查当前线程池当前的运行状态." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetPoolPtr()->GetState()
+    }
+
+    方法 任务等待数量 <公开 属性读 类型 = 整数 注释 = "检查当前线程池中处于等待队列中的任务数量." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetPoolPtr()->GetQueueSize()
+    }
+
+    方法 正在执行数量 <公开 属性读 类型 = 整数 注释 = "检查当前线程池中处于执行中的任务数量." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetPoolPtr()->GetTaskCount()
+    }
+
+    方法 工作线程数量 <公开 属性读 类型 = 整数 注释 = "检查当前线程池的工作线程数量." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetPoolPtr()->GetThreadCount()
+    }
+
+    方法 队列最大容量 <公开 属性读 类型 = 整数 注释 = "检查当前线程池的任务队列最大容量." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetPoolPtr()->GetMaxQueueSize()
+    }
+
+    方法 任务拒绝策略 <公开 属性读 类型 = HP线程任务拒绝策略 注释 = "检查当前线程池所使用的任务拒绝策略." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetPoolPtr()->GetRejectedPolicy()
+    }
+
+    # 方法 ---
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动线程池组件并设定线程池运行参数." 编辑时信息 = "52AA5, 0, 0, 0" @嵌入式方法 = "">
+    参数 线程数量 <类型 = 整数 注释 = "默认为0,即(CPU核数 * 2 + 2)." 编辑时信息 = "52AA5, 0, 0, 0" @默认值 = 0>
+    参数 队列容量 <类型 = 整数 注释 = "任务队列最大容量,默认为0,即不限制." 编辑时信息 = "52AA5, 0, 0, 0" @默认值 = 0>
+    参数 拒绝策略 <类型 = HP线程任务拒绝策略 注释 = "当任务无法处理时所欲使用的策略." 编辑时信息 = "52AA5, 0, 0, 0" @默认值 = HP线程任务拒绝策略.立即返回失败>
+    参数 堆栈大小 <类型 = 整数 注释 = "线程堆栈空间大小(默认为0,即由操作系统默认)." @默认值 = 0>
+    {
+        @ @sn<this>.GetPoolPtr()->Start(@<线程数量>, @<队列容量>, (EnRejectedPolicy)@<拒绝策略>, @<堆栈大小>)
+    }
+
+    方法 关闭 <公开 类型 = 逻辑型 注释 = "关闭线程池组件,在线程池不再使用之后可以调用本方法进行关闭." @嵌入式方法 = "">
+    参数 等待时间 <类型 = 整数 注释 = "单位:毫秒,默认-1即无限等待.如果在此等待时间内未能正常关闭,此时会尝试强制关闭." @默认值 = -1>
+    {
+        @ @sn<this>.GetPoolPtr()->Stop(@<等待时间>)
+    }
+
+    方法 等待 <公开 类型 = 逻辑型 注释 = "等待线程池组件停止运行." @嵌入式方法 = "">
+    参数 超时时间 <类型 = 整数>
+    {
+        @ @sn<this>.GetPoolPtr()->Wait(@<超时时间>)
+    }
+
+    方法 置线程数量 <公开 类型 = 逻辑型 注释 = "动态调整该线程池可工作线程的数量." @嵌入式方法 = "">
+    参数 线程数量 <类型 = 整数 注释 = "默认为0,即(CPU核数 * 2 + 2).">
+    {
+        @ @sn<this>.GetPoolPtr()->AdjustThreadCount(@<线程数量>)
+    }
+
+    方法 提交任务 <公开 类型 = 逻辑型 注释 = "提交新任务至当前线程池组件中等待执行,注意使用本方法提交的线程将不会触发\"任务启动\"事件." 注释 = "" 返回值注释 = "返回任务是否提交成功." @嵌入式方法 = "">
+    参数 执行函数 <注释 = "提供所欲执行的线程函数." @匹配方法 = "线程模板函数">
+    参数 用户数据 <类型 = 变整数 注释 = "自定义用户数据,将会在线程执行函数中提供数据." @默认值 = 0>
+    参数 等待时间 <类型 = 整数 注释 = "单位:毫秒,默认-1即无限等待." 注释 = "注意:仅在\"拒绝策略\"为立即返回失败时有效." @默认值 = -1>
+    {
+        @ @sn<this>.GetPoolPtr()->Submit((Fn_TaskProc)&@<执行函数>, (PVOID)@<用户数据>, @<等待时间>)
+    }
+
+    方法 线程模板函数 <静态 注释 = "提供线程执行函数的模板方法.">
+    参数 用户数据 <类型 = 变整数 注释 = "在提交任务时所提供的用户数据参数.">
+
+    # ---
+
+    方法 线程池已启动 <公开 定义事件 类型 = 整数 注释 = "当线程池启动成功本事件将被发送">
+
+    方法 线程池已关闭 <公开 定义事件 类型 = 整数 注释 = "当线程池关闭后本事件将被发送">
+
+    方法 线程已就绪 <公开 定义事件 类型 = 整数 注释 = "当线程池中的任意一条工作线程准备就绪后本事件将被发送">
+    参数 线程ID <类型 = 变整数>
+
+    方法 线程已退出 <公开 定义事件 类型 = 整数 注释 = "当线程池中的任意一条工作线程已执行完毕退出后本事件将被发送">
+    参数 线程ID <类型 = 变整数>
+
+    #
+    # @begin
+    #
+    # <> <include>
+    # inline_ IHPThreadPool* GetPoolPtr() { return data().GetData(); }
+    #
+    # @ virtual void OnStartup(IHPThreadPool* pThreadPool) override  {  @<线程池已启动> ();  }
+    # @ virtual void OnShutdown(IHPThreadPool* pThreadPool) override  {  @<线程池已关闭> ();  }
+    # @ virtual void OnWorkerThreadStart(IHPThreadPool* pThreadPool, THR_ID dwThreadID) override  {  @<线程已就绪> (dwThreadID);  }
+    # @ virtual void OnWorkerThreadEnd(IHPThreadPool* pThreadPool, THR_ID dwThreadID) override  {  @<线程已退出> (dwThreadID);  }
+    # <> </include>
+    #
+    # @end
+}
+
+# 常量 ---
+
+类 HP状态 <公开 注释 = "提供常量以表示HP通信组件的状态." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 正在启动 <公开 值 = 0>
+    常量 已经启动 <公开 值 = 1>
+    常量 正在停止 <公开 值 = 2>
+    常量 已经停止 <公开 值 = 3>
+}
+
+类 HP错误码 <公开 注释 = "提供常量以表示HP通信组件所返回的各个错误码." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 成功 <公开 值 = 0 注释 = "无错误">
+    常量 未启动 <公开 值 = 1 注释 = "当前状态不允许操作">
+    常量 参数错误 <公开 值 = 2 注释 = "非法参数">
+    常量 创建失败 <公开 值 = 3 注释 = "创建SOCKET失败">
+    常量 绑定失败 <公开 值 = 4 注释 = "绑定SOCKET失败">
+    常量 设置失败 <公开 值 = 5 注释 = "设置SOCKET失败">
+    常量 监听失败 <公开 值 = 6 注释 = "监听SOCKET失败">
+    常量 端口错误 <公开 值 = 7 注释 = "创建完成端口失败">
+    常量 创建线程失败 <公开 值 = 8 注释 = "创建工作线程失败">
+    常量 监测线程失败 <公开 值 = 9 注释 = "创建监测线程失败">
+    常量 绑定端口失败 <公开 值 = 10 注释 = "绑定完成端口失败">
+    常量 连接失败 <公开 值 = 11 注释 = "连接服务器失败">
+    常量 网络错误 <公开 值 = 12 注释 = "网络错误">
+    常量 数据处理错误 <公开 值 = 13 注释 = "数据处理错误">
+    常量 数据发送失败 <公开 值 = 14 注释 = "数据发送失败">
+    常量 SSL环境错误 <公开 值 = 101 注释 = "SSL环境未就绪">
+}
+
+类 HP地址重用选项 <公开 注释 = "HP通信组件地址重用模式选项." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 不重用 <公开 值 = 0 注释 = "不进行重用.">
+    常量 仅地址 <公开 值 = 1 注释 = "仅重用IP地址.">
+    常量 全部 <公开 值 = 2 注释 = "重用端口与IP地址.">
+}
+
+类 HP数据发送策略 <公开 注释 = "HP通信组件数据发送模式选项." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 打包模式 <公开 值 = 0 注释 = "默认使用该模式.">
+    常量 安全模式 <公开 值 = 1>
+    常量 直接模式 <公开 值 = 2>
+}
+
+类 HP发送事件同步策略 <公开 注释 = "HP通信组件数据发送事件同步选项." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 不同步 <公开 值 = 0 注释 = "默认使用该模式.">
+    常量 同步关闭事件 <公开 值 = 1>
+    常量 同步接收事件 <公开 值 = 2 注释 = "仅适用于TCP.">
+}
+
+类 HP操作类型 <公开 注释 = "用于在\"连接被关闭()\"事件中通过该常量标识是哪种操作导致的错误." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 未知操作 <公开 值 = 0>
+    常量 接受请求 <公开 值 = 1>
+    常量 连接请求 <公开 值 = 2>
+    常量 发送请求 <公开 值 = 3>
+    常量 接收请求 <公开 值 = 4>
+    常量 主动断开 <公开 值 = 5>
+}
+
+类 HPSSL验证模式 <公开 注释 = "提供SSL验证模式选项." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 无验证 <公开 值 = 0x00 注释 = "完全忽略验证证书.">
+    常量 单项验证 <公开 值 = 0x01 注释 = "希望验证对方的证书,对于客户端来说,如果设置了这样的模式,如果在验证服务器端证书的时候,出现了错误,将捂手失败,"
+            注释 = "对于服务器来说,如果设置了这样的模式,客户端可以不提供证书,如果客户端不提供证书,服务器端自行决定如何处理.">
+    常量 双向验证 <公开 值 = 0x02 注释 = "本模式下,服务器将会向客户端索要证书,如果客户端无法提供正确证书,将会握手失败.">
+    常量 单次验证 <公开 值 = 0x04>
+}
+
+类 HP数据抓取结果 <公开 注释 = "提供抓取数据/窥探数据的结果类型." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 成功 <公开 值 = 0 注释 = "抓取数据成功.">
+    常量 长度过大 <公开 值 = 1 注释 = "抓取数据失败,原因:所欲抓取数据过长.">
+    常量 无数据 <公开 值 = 2 注释 = "抓取数据失败,原因:指定连接ID中没有数据.">
+}
+
+类 HP数据报传播模式 <公开 注释 = "提供数据报的几种传播模式." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 单播 <公开 值 = -1>
+    常量 组播 <公开 值 = 0>
+    常量 广播 <公开 值 = 1>
+}
+
+类 HPHTTP协议版本 <公开 注释 = "提供HTTP协议版本." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 HTTP1_0 <公开 值 = 1 注释 = "HTTP/1.0">
+    常量 HTTP1_1 <公开 值 = 2 注释 = "HTTP/1.1">
+}
+
+类 HPHTTP协议升级类型 <公开 注释 = "提供HTTP协议升级类型" @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 无 <公开 值 = 0 注释 = "没有升级.">
+    常量 WebSocket <公开 值 = 1>
+    常量 HTTP隧道 <公开 值 = 2>
+    常量 未知 <公开 值 = -1>
+}
+
+类 HP请求头类 <公开 注释 = "提供键/值成员,用于Cookie及请求头等." @文档 = "category = \"辅助类\"">
+{
+    变量 名称 <公开 类型 = 文本型>
+    变量 值 <公开 类型 = 文本型>
+}
+
+类 HP请求头数组类 <公开 基础类 = 对象数组模板类 注释 = "实现一个键/值数组列表类型." @文档 = "category = \"辅助类\"" @模板实现类 = "HP请求头类">
+{
+    方法 检查加入头成员 <公开 静态>
+    参数 欲操作本对象 <类型 = HP请求头数组类>
+    参数 参数1 <类型 = HP请求头类>
+    {
+        欲操作本对象.枚举循环 ()
+        {
+            如果 (欲操作本对象.取枚举值 ().名称 == 参数1.名称)
+            {
+                欲操作本对象.取枚举值 ().值 = 参数1.值
+                返回
+            }
+        }
+        欲操作本对象.加入成员 (参数1)
+    }
+}
+
+类 HPHTTP状态码 <公开 注释 = "定义HTTP状态码." 编辑时信息 = "CFFF3, 0, 0, 0" @文档 = "category = \"辅助类\"">
+{
+    常量 继续 <公开 类型 = 短整数 值 = 100 注释 = "CONTINUE">
+    常量 交换协议 <公开 类型 = 短整数 值 = 101 注释 = "SWITCHING_PROTOCOLS">
+    常量 正在处理 <公开 类型 = 短整数 值 = 102 注释 = "PROCESSING">
+    常量 成功 <公开 类型 = 短整数 值 = 200 注释 = "HTTP_OK">
+    常量 已创建 <公开 类型 = 短整数 值 = 201 注释 = "CREATED">
+    常量 已同意 <公开 类型 = 短整数 值 = 202 注释 = "ACCEPTED">
+    常量 非权威信息 <公开 类型 = 短整数 值 = 203 注释 = "NON_AUTHORITATIVE_INFORMATION">
+    常量 空内容 <公开 类型 = 短整数 值 = 204 注释 = "NO_CONTENT">
+    常量 重置内容 <公开 类型 = 短整数 值 = 205 注释 = "RESET_CONTENT">
+    常量 分块内容 <公开 类型 = 短整数 值 = 206 注释 = "PARTIAL_CONTENT">
+    常量 多状态 <公开 类型 = 短整数 值 = 207 注释 = "MULTI_STATUS">
+    常量 已报告 <公开 类型 = 短整数 值 = 208 注释 = "ALREADY_REPORTED">
+    常量 已响应 <公开 类型 = 短整数 值 = 226 注释 = "IM_USED">
+    常量 多重选择 <公开 类型 = 短整数 值 = 300 注释 = "MULTIPLE_CHOICES">
+    常量 永久重定向 <公开 类型 = 短整数 值 = 301 注释 = "MOVED_PERMANENTLY">
+    常量 临时重定向 <公开 类型 = 短整数 值 = 302 注释 = "MOVED_TEMPORARILY">
+    常量 重定向 <公开 类型 = 短整数 值 = 303 注释 = "SEE_OTHER">
+    常量 缓存 <公开 类型 = 短整数 值 = 304 注释 = "NOT_MODIFIED">
+    常量 使用代理 <公开 类型 = 短整数 值 = 305 注释 = "USE_PROXY">
+    常量 选择代理 <公开 类型 = 短整数 值 = 306 注释 = "SWITCH_PROXY">
+    常量 临时重定向_ <公开 类型 = 短整数 值 = 307 注释 = "TEMPORARY_REDIRECT">
+    常量 永久重定向_ <公开 类型 = 短整数 值 = 308 注释 = "PERMANENT_REDIRECT">
+    常量 请求无效 <公开 类型 = 短整数 值 = 400 注释 = "BAD_REQUEST">
+    常量 未授权 <公开 类型 = 短整数 值 = 401 注释 = "UNAUTHORIZED">
+    常量 需要付款 <公开 类型 = 短整数 值 = 402 注释 = "PAYMENT_REQUIRED">
+    常量 拒绝访问 <公开 类型 = 短整数 值 = 403 注释 = "FORBIDDEN">
+    常量 未找到资源 <公开 类型 = 短整数 值 = 404 注释 = "NOT_FOUND">
+    常量 不允许的请求方法 <公开 类型 = 短整数 值 = 405 注释 = "METHOD_NOT_ALLOWED">
+    常量 不允许的请求 <公开 类型 = 短整数 值 = 406 注释 = "NOT_ACCEPTABLE">
+    常量 需要代理服务器认证身份 <公开 类型 = 短整数 值 = 407 注释 = "PROXY_AUTHENTICATION_REQUIRED">
+    常量 请求超时 <公开 类型 = 短整数 值 = 408 注释 = "REQUEST_TIMEOUT">
+    常量 资源状态冲突 <公开 类型 = 短整数 值 = 409 注释 = "CONFLICT">
+    常量 资源过期 <公开 类型 = 短整数 值 = 410 注释 = "GONE">
+    常量 需要表明长度 <公开 类型 = 短整数 值 = 411 注释 = "LENGTH_REQUIRED">
+    常量 未满足先决条件 <公开 类型 = 短整数 值 = 412 注释 = "PRECONDITION_FAILED">
+    常量 请求体太大 <公开 类型 = 短整数 值 = 413 注释 = "REQUEST_ENTITY_TOO_LARGE">
+    常量 请求域太长 <公开 类型 = 短整数 值 = 414 注释 = "REQUEST_URI_TOO_LONG">
+    常量 不支持的媒体类型 <公开 类型 = 短整数 值 = 415 注释 = "UNSUPPORTED_MEDIA_TYPE">
+    常量 不满足请求范围 <公开 类型 = 短整数 值 = 416 注释 = "REQUESTED_RANGE_NOT_SATISFIABLE">
+    常量 预期结果失败 <公开 类型 = 短整数 值 = 417 注释 = "EXPECTATION_FAILED">
+    常量 错误的请求 <公开 类型 = 短整数 值 = 421 注释 = "MISDIRECTED_REQUEST">
+    常量 无法遵循的语义错误 <公开 类型 = 短整数 值 = 422 注释 = "UNPROCESSABLE_ENTITY">
+    常量 已锁定 <公开 类型 = 短整数 值 = 423 注释 = "LOCKED">
+    常量 失败的依赖项 <公开 类型 = 短整数 值 = 424 注释 = "FAILED_DEPENDENCY">
+    常量 无序收集 <公开 类型 = 短整数 值 = 425 注释 = "UNORDERED_COLLECTION">
+    常量 需要升级协议 <公开 类型 = 短整数 值 = 426 注释 = "UPGRADE_REQUIRED">
+    常量 需要条件请求 <公开 类型 = 短整数 值 = 428 注释 = "PRECONDITION_REQUIRED">
+    常量 请求过多 <公开 类型 = 短整数 值 = 429 注释 = "TOO_MANY_REQUESTS">
+    常量 请求头过大 <公开 类型 = 短整数 值 = 431 注释 = "REQUEST_HEADER_FIELDS_TOO_LARGE">
+    常量 因法律不可用 <公开 类型 = 短整数 值 = 451 注释 = "UNAVAILABLE_FOR_LEGAL_REASONS">
+    常量 使用重试 <公开 类型 = 短整数 值 = 449 注释 = "RETRY_WITH">
+    常量 服务器内部错误 <公开 类型 = 短整数 值 = 500 注释 = "INTERNAL_SERVER_ERROR">
+    常量 尚未实现 <公开 类型 = 短整数 值 = 501 注释 = "NOT_IMPLEMENTED">
+    常量 错误网关 <公开 类型 = 短整数 值 = 502 注释 = "BAD_GATEWAY">
+    常量 服务不可用 <公开 类型 = 短整数 值 = 503 注释 = "SERVICE_UNAVAILABLE">
+    常量 网关超时 <公开 类型 = 短整数 值 = 504 注释 = "GATEWAY_TIMEOUT">
+    常量 HTTP版本不支持 <公开 类型 = 短整数 值 = 505 注释 = "HTTP_VERSION_NOT_SUPPORTED">
+    常量 服务器存在内部配置错误 <公开 类型 = 短整数 值 = 506 注释 = "VARIANT_ALSO_NEGOTIATES">
+    常量 服务器无法存储 <公开 类型 = 短整数 值 = 507 注释 = "INSUFFICIENT_STORAGE">
+    常量 发现无穷循环 <公开 类型 = 短整数 值 = 508 注释 = "LOOP_DETECTED">
+    常量 流量超限 <公开 类型 = 短整数 值 = 509 注释 = "BANDWIDTH_LIMIT_EXCEEDED">
+    常量 未扩展 <公开 类型 = 短整数 值 = 510 注释 = "NOT_EXTENDED">
+    常量 需要网络验证 <公开 类型 = 短整数 值 = 511 注释 = "NETWORK_AUTHENTICATION_REQUIRED">
+    常量 无法解析响应头 <公开 类型 = 短整数 值 = 600 注释 = "UNPARSEABLE_RESPONSE_HEADERS">
+}
+
+类 HPURL字段 <公开 注释 = "本常量类定义了HP_HTTP服务器可以取得的URL域值字段名." @文档 = "category = \"辅助类\"" @常量类 = 短整数>
+{
+    常量 概要 <公开 值 = 0 注释 = "当前所请求概要">
+    常量 主机 <公开 值 = 1 注释 = "当前所请求主机">
+    常量 端口 <公开 值 = 2 注释 = "当前所请求端口">
+    常量 路径 <公开 值 = 3 注释 = "当前所请求路径,即请求文件的路径">
+    常量 查询 <公开 值 = 4 注释 = "当前所请求查询文本,即GET访问?后面的参数">
+    常量 片段 <公开 值 = 5 注释 = "当前所请求片段">
+    常量 用户信息 <公开 值 = 6 注释 = "当前所请求用户信息">
+    常量 字段数量 <公开 值 = 7>
+}
+
+类 HP线程任务拒绝策略 <公开 编辑时信息 = "AAAA0, 0, 0, 0" @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 立即返回失败 <公开 值 = 0 注释 = "当任务无法执行时直接返回失败.">
+    常量 等待 <公开 值 = 1 注释 = "等待(直到执行成功,超时或线程池关闭等原因导致失败).">
+    常量 调用者线程执行 <公开 值 = 2 注释 = "转到调用处的线程去执行.">
+}

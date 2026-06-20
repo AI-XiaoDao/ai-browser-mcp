@@ -1,0 +1,220 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗
+
+类 视窗系统通知类 <公开 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "提供在Windows8/Windows10系统上通知支持." 注释 = "最低编译要求NTDDI_VISTA版本" 注释 = ""
+        编辑时信息 = "142A96, 0, 0, 0" @视窗.外部库 = "psapi.lib" @视窗.预定义宏 = "NTDDI_VERSION=NTDDI_VISTA, _WIN32_WINNT=_WIN32_WINNT_VISTA"
+        @视窗.外部头文件 = "lib\\wintoastlib.h" @视窗.外部源文件 = "lib\\wintoastlib.cpp">
+{
+    方法 初始化 <公开 静态 类型 = 视窗通知错误类型 注释 = "在发送任何通知之前务必调用本方法进行全局初始化,否则无法发送通知." 返回值注释 = "返回初始化的结果." @禁止流程检查 = 真>
+    参数 程序名称 <类型 = 文本型 注释 = "提供所欲显示在通知栏的程序标题内容." @默认值 = "火山程序">
+    参数 程序ID <类型 = 文本型 注释 = "提供所欲使用的用户程序ID,即程序唯一性标记." @默认值 = "Recursion.Voldp.Pc.1">
+    {
+        @ WinToastLib::WinToast::instance()->setAppName(@<程序名称>.GetText());
+        @ WinToastLib::WinToast::instance()->setAppUserModelId(@<程序ID>.GetText());
+        @ WinToastLib::WinToast::WinToastError result;
+        @ WinToastLib::WinToast::instance()->initialize(&result);
+        @ return result;
+    }
+
+    方法 是否已初始化 <公开 静态 类型 = 逻辑型 注释 = "检查当前通知库是否已初始化成功." @嵌入式方法 = "">
+    {
+        @ WinToastLib::WinToast::instance()->isInitialized()
+    }
+
+    方法 隐藏通知 <公开 静态 类型 = 逻辑型 注释 = "将当前显示的指定通知隐藏." 返回值注释 = "返回操作结果." @嵌入式方法 = "">
+    参数 通知ID <类型 = 长整数 注释 = "提供所欲隐藏的通知ID.">
+    {
+        @ WinToastLib::WinToast::instance()->hideToast(@<通知ID>)
+    }
+
+    方法 发送通知 <公开 静态 类型 = 长整数 注释 = "发送一条新通知到当前系统的通知栏." 返回值注释 = "如果发送成功,返回本条通知的ID." @禁止流程检查 = 真>
+    参数 通知对象 <类型 = 视窗通知类 注释 = "提供所欲发送的通知.">
+    {
+        @ return WinToastLib::WinToast::instance()->showToast(@<通知对象>.data(), &@<通知对象>, nullptr);
+    }
+}
+
+类 视窗通知类 <公开 注释 = "表示视窗系统中的一个系统通知." 编辑时信息 = "9BFF6, 0, 0, 0" @强制依赖 = "视窗系统通知类"
+        @视窗.后缀文本 = "public WinToastLib::IWinToastHandler">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (WinToastLib::WinToastTemplate)
+
+    方法 类型 <公开 属性写 注释 = "指定当前通知的类型.">
+    参数 内容类型 <类型 = 视窗通知内容类型 @默认值 = 视窗通知内容类型.图文二>
+    {
+        @ data().setType((WinToastLib::WinToastTemplate::WinToastTemplateType)@<内容类型>);
+    }
+
+    方法 类型 <公开 属性读 类型 = 视窗通知内容类型 注释 = "获取当前通知的类型." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().type()
+    }
+
+    方法 第一行文本 <公开 属性写 注释 = "指定当前通知的第一行文本内容,通常用作标题.">
+    参数 内容 <类型 = 文本型>
+    {
+        @ data().setFirstLine(@<内容>.GetText());
+    }
+
+    方法 第二行文本 <公开 属性写 注释 = "指定当前通知的第二行文本内容">
+    参数 内容 <类型 = 文本型>
+    {
+        @ data().setSecondLine(@<内容>.GetText());
+    }
+
+    方法 第三行文本 <公开 属性写 注释 = "指定当前通知的第三行文本内容">
+    参数 内容 <类型 = 文本型>
+    {
+        @ data().setThirdLine(@<内容>.GetText());
+    }
+
+    方法 图片路径 <公开 属性写 注释 = "指定当前通知所欲显示的图片内容,仅在图文类型下有效.">
+    参数 路径 <类型 = 文本型>
+    {
+        @ data().setImagePath(@<路径>.GetText());
+    }
+
+    方法 提示音路径 <公开 属性写 注释 = "指定当前通知所欲使用的提示提示铃声文件.">
+    参数 路径 <类型 = 文本型>
+    {
+        @ data().setAudioPath(@<路径>.GetText());
+    }
+
+    方法 提示音类型 <公开 属性写 注释 = "指定当前通知所欲使用的提示铃声类型.">
+    参数 类型 <类型 = 视窗通知提示音类型>
+    {
+        @ data().setAudioPath((WinToastLib::WinToastTemplate::AudioSystemFile)@<类型>);
+    }
+
+    方法 提示音循环 <公开 属性写 注释 = "指定提示音是否循环播放.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ data().setAudioOption(@<启用> ? WinToastLib::WinToastTemplate::AudioOption::Loop : WinToastLib::WinToastTemplate::AudioOption::Default);
+    }
+
+    方法 通知时间 <公开 属性写 注释 = "指定当前通知发送的时间.">
+    参数 时间戳 <类型 = 长整数>
+    {
+        @ data().setExpiration(@<时间戳>);
+    }
+
+    方法 归属内容 <公开 属性写 注释 = "设置当前通知的归属文本内容.">
+    参数 内容 <类型 = 文本型>
+    {
+        @ data().setAttributionText(@<内容>.GetText());
+    }
+
+    方法 持续类型 <公开 属性写 注释 = "设置当前通知的持续显示时长类型.">
+    参数 类型 <类型 = 视窗通知持续类型>
+    {
+        @ data().setDuration((WinToastLib::WinToastTemplate::Duration)@<类型>);
+    }
+
+    方法 添加按钮 <公开 注释 = "往当前通知上添加一个操作按钮." @嵌入式方法 = "">
+    参数 标题 <类型 = 文本型 注释 = "指定所欲添加按钮的标题内容.">
+    {
+        @ @sn<this>.data().addAction(@<标题>.GetText());
+    }
+
+    方法 通知已展示 <公开 定义事件 类型 = 整数 注释 = "当通知已展示出来时本事件被调用.">
+
+    方法 通知已消失 <公开 定义事件 类型 = 整数 注释 = "当通知已取消展示时本事件被调用.">
+    参数 原因 <类型 = 视窗通知关闭原因>
+
+    方法 通知被激活 <公开 定义事件 类型 = 整数 注释 = "当通知被用户点击激活时本事件被调用.">
+    参数 按钮索引 <类型 = 整数>
+
+    方法 通知展示失败 <公开 定义事件 类型 = 整数 注释 = "当通知发送并展示失败时本事件被调用.">
+
+    # @begin
+    #
+    # <> <include>
+    # virtual void toastActivated() override { @<通知已展示>(); }
+    # virtual void toastDismissed(WinToastLib::IWinToastHandler::WinToastDismissalReason state) override { @<通知已消失>(state); }
+    # virtual void toastActivated(int actionIndex) override { @<通知被激活>(actionIndex); }
+    # virtual void toastFailed() override { @<通知展示失败>(); }
+    # <> </include>
+    #
+    # @end
+}
+
+类 视窗通知错误类型 <公开 注释 = "定义视窗通知的各种错误原因." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 成功 <公开 值 = @"@WinToastLib::WinToast::WinToastError::NoError" 注释 = "表示无错误,成功." 编辑时信息 = "0, D1548, 0, 0">
+    常量 未初始化 <公开 值 = @"@WinToastLib::WinToast::WinToastError::NotInitialized" 注释 = "表示暂未调用初始化方法." 编辑时信息 = "0, D1548, 0, 0">
+    常量 系统不支持 <公开 值 = @"@WinToastLib::WinToast::WinToastError::SystemNotSupported" 注释 = "表示系统不支持通知." 编辑时信息 = "0, D1548, 0, 0">
+    常量 未创建ShellLink <公开 值 = @"@WinToastLib::WinToast::WinToastError::ShellLinkNotCreated" 注释 = "ShellLink未创建."
+            编辑时信息 = "0, D1548, 0, 0">
+    常量 无效程序ID <公开 值 = @"@WinToastLib::WinToast::WinToastError::InvalidAppUserModelID" 注释 = "表示所提供的程序ID无效."
+            编辑时信息 = "0, D1548, 0, 0">
+    常量 无效参数 <公开 值 = @"@WinToastLib::WinToast::WinToastError::InvalidParameters" 编辑时信息 = "0, D1548, 0, 0">
+    常量 无效回调 <公开 值 = @"@WinToastLib::WinToast::WinToastError::InvalidHandler" 编辑时信息 = "0, D1548, 0, 0">
+    常量 已未展示 <公开 值 = @"@WinToastLib::WinToast::WinToastError::NotDisplayed" 编辑时信息 = "0, D1548, 0, 0">
+    常量 未知错误 <公开 值 = @"@WinToastLib::WinToast::WinToastError::UnknownError" 编辑时信息 = "0, D1548, 0, 0">
+}
+
+类 视窗通知内容类型 <公开 注释 = "指定视窗通知的内容类型." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 图文一 <公开 值 = @"@WinToastLib::WinToastTemplate::WinToastTemplateType::ImageAndText01" 注释 = "显示一个图标+三行连续的常规文本."
+            编辑时信息 = "0, CAA9E, 0, 0">
+    常量 图文二 <公开 值 = @"@WinToastLib::WinToastTemplate::WinToastTemplateType::ImageAndText02"
+            注释 = "显示一个图标+三行文本(首行文本加粗,后两行常规(连续))." 编辑时信息 = "0, CAA9E, 0, 0">
+    常量 图文三 <公开 值 = @"@WinToastLib::WinToastTemplate::WinToastTemplateType::ImageAndText03"
+            注释 = "显示一个图标+三行文本(前两行文本加粗(连续),最后一行常规)." 编辑时信息 = "0, CAA9E, 0, 0">
+    常量 图文四 <公开 值 = @"@WinToastLib::WinToastTemplate::WinToastTemplateType::ImageAndText04" 注释 = "显示一个图标+三行文本(首行加粗),三行文本都不连续."
+            编辑时信息 = "0, CAA9E, 0, 0">
+    常量 文字一 <公开 值 = @"@WinToastLib::WinToastTemplate::WinToastTemplateType::Text01" 注释 = "显示三行连续的常规文本." 编辑时信息 = "0, CAA9E, 0, 0">
+    常量 文字二 <公开 值 = @"@WinToastLib::WinToastTemplate::WinToastTemplateType::Text02" 注释 = "首行文本加粗,后两行为常规的连续文本."
+            编辑时信息 = "0, CAA9E, 0, 0">
+    常量 文字三 <公开 值 = @"@WinToastLib::WinToastTemplate::WinToastTemplateType::Text03" 注释 = "前两行为连续的加粗文本,最后一行常规."
+            编辑时信息 = "0, CAA9E, 0, 0">
+    常量 文字四 <公开 值 = @"@WinToastLib::WinToastTemplate::WinToastTemplateType::Text04" 注释 = "首行文本加粗,三行非连续的文本."
+            编辑时信息 = "0, CAA9E, 0, 0">
+}
+
+类 视窗通知提示音类型 <公开 注释 = "指定视窗通知弹出时的提示音类型." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 默认 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::DefaultSound" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 消息 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::IM" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 邮件 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Mail" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 提醒 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Reminder" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 短信 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::SMS" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 警告 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Alarm" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 警告二 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Alarm2" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 警告三 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Alarm3" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 警告四 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Alarm4" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 警告五 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Alarm5" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 警告六 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Alarm6" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 警告七 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Alarm7" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 警告八 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Alarm8" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 警告九 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Alarm9" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 警告十 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Alarm10" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 呼叫 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Call" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 呼叫一 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Call1" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 呼叫二 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Call2" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 呼叫三 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Call3" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 呼叫四 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Call4" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 呼叫五 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Call5" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 呼叫六 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Call6" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 呼叫七 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Call7" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 呼叫八 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Call8" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 呼叫九 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Call9" 编辑时信息 = "0, 9EAA0, 0, 0">
+    常量 呼叫十 <公开 值 = @"@WinToastLib::WinToastTemplate::AudioSystemFile::Call10" 编辑时信息 = "0, 9EAA0, 0, 0">
+}
+
+类 视窗通知持续类型 <公开 注释 = "指定了通知的持续时间类型." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 系统 <公开 值 = @"@WinToastLib::WinToastTemplate::Duration::System" 编辑时信息 = "0, 6FFF9, 0, 0">
+    常量 短时间 <公开 值 = @"@WinToastLib::WinToastTemplate::Duration::Short">
+    常量 长时间 <公开 值 = @"@WinToastLib::WinToastTemplate::Duration::Long">
+}
+
+类 视窗通知关闭原因 <公开 注释 = "指定了通知取消展示的原因类型." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 用户取消 <公开 值 = @"@WinToastLib::IWinToastHandler::WinToastDismissalReason::UserCanceled" 注释 = "表示被用户取消展示"
+            编辑时信息 = "0, 6FFF9, 0, 0">
+    常量 主动隐藏 <公开 值 = @"@WinToastLib::IWinToastHandler::WinToastDismissalReason::ApplicationHidden" 注释 = "表示应用程序自己主动隐藏">
+    常量 超时关闭 <公开 值 = @"@WinToastLib::IWinToastHandler::WinToastDismissalReason::TimedOut" 注释 = "表示该通知已达到最大显示时间">
+}

@@ -1,0 +1,117 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <@文档 = "category = \"PDF操作库\"">
+
+类 PDF_Foxit类 <公开 折叠 折叠2 @视窗.外部头文件 = "pdf\\include\\public\\fpdfview.h" @视窗.头文件搜寻目录 = "pdf\\include\\public"
+        @视窗.附属文件.x64 = "pdf\\bin\\x64\\pdfium.dll" @视窗.外部库.x64 = "pdf\\lib\\x64\\pdfium.lib"
+        @视窗.外部库.win32 = "pdf\\lib\\x86\\pdfium.lib" @视窗.附属文件.win32 = "pdf\\bin\\x86\\pdfium.dll">
+{
+
+    # @ FPDF_DOCUMENT pdf_doc;
+    # @ FPDF_PAGE pdf_page;
+
+    方法 类_初始化 <折叠>
+    {
+        @ FPDF_InitLibrary ();
+    }
+
+    方法 类_清理 <折叠>
+    {
+        关闭文档 ()
+    }
+
+    方法 加载文档 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 路径 <类型 = 文本型 @默认值 = "">
+    参数 密码 <类型 = 文本型 @默认值 = "">
+    {
+        @ if (pdf_doc != NULL)
+        @ FPDF_CloseDocument(pdf_doc);
+
+        @ pdf_doc = FPDF_LoadDocument(CW2A(@<路径>.GetText ()),CW2A(@<密码>.GetText ()));
+        @ if (pdf_doc == NULL)
+        返回 (假)
+        返回 (真)
+    }
+
+    方法 关闭文档 <公开 折叠>
+    {
+        @ if (pdf_doc != NULL)
+        @ FPDF_CloseDocument(pdf_doc);
+        @ FPDF_DestroyLibrary();
+        @ pdf_doc = NULL;
+        @ pdf_page = NULL;
+    }
+
+    方法 读取页面 <公开 类型 = 逻辑型 注释 = "执行本命令后，显示组件执行“重画”命令" 折叠 @禁止流程检查 = 真>
+    参数 页码 <类型 = 整数 @输出名 = "page" @默认值 = 0>
+    {
+        @  pdf_page = FPDF_LoadPage(pdf_doc, page);
+        @ if (pdf_page == NULL)
+        返回 (假)
+        返回 (真)
+    }
+
+    方法 取总页数 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ return FPDF_GetPageCount(pdf_doc);
+    }
+
+    方法 画渲染页 <公开 注释 = "在显示组件的“组件消息过滤”事件中调用本命令" 折叠>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 消息值 <类型 = 整数>
+    参数 背景色 <类型 = 整数 @默认值 = 颜色类.白色>
+    参数 左边 <类型 = 整数 @默认值 = 0>
+    参数 顶边 <类型 = 整数 @默认值 = 0>
+    参数 宽度 <类型 = 整数>
+    参数 高度 <类型 = 整数>
+    {
+        变量 hdc <类型 = 变整数 @输出名 = "hdc">
+        如果真 (消息值 != 15)
+        {
+            返回
+        }
+        @ PAINTSTRUCT ps;
+        @ if (pdf_doc != NULL && pdf_page != NULL)
+        @ hdc=(INT_P)BeginPaint ((HWND)@<窗口句柄>, &ps);
+        @ COLORREF customColor = @<背景色>; 
+        @ HBRUSH hBrush = CreateSolidBrush(customColor); 
+        @   RECT rt;
+        @   ::GetClientRect((HWND)@<窗口句柄>, &rt);
+        @ FillRect (ps.hdc, &rt, hBrush) ;
+        @ FPDF_RenderPage((HDC)hdc, pdf_page, @<左边>, @<顶边>, @<宽度>, @<高度>, 0, 0);
+        @ DeleteObject(hBrush); 
+        @  EndPaint ((HWND)@<窗口句柄>, &ps);
+    }
+
+    方法 关闭页面 <公开 折叠>
+    {
+        @ FPDF_ClosePage(pdf_page);
+    }
+
+    方法 释放资源 <公开 折叠>
+    {
+        @ FPDF_DestroyLibrary();
+    }
+
+    方法 取页面宽度 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ return (int)FPDF_GetPageWidth(pdf_page);
+    }
+
+    方法 取页面高度 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ return (int)FPDF_GetPageHeight(pdf_page);
+    }
+
+    方法 取页面尺寸 <公开 折叠>
+    参数 页面索引 <类型 = 整数 注释 = "从0开始">
+    参数 返回的页面宽度 <类型 = 整数 @视窗.后缀文本 = "&">
+    参数 返回的页面高度 <类型 = 整数 @视窗.后缀文本 = "&">
+    {
+        变量 页面宽度 <类型 = 小数>
+        变量 页面高度 <类型 = 小数>
+        @ FPDF_GetPageSizeByIndex(pdf_doc,@<页面索引>,&@<页面宽度>,&@<页面高度>);
+        返回的页面宽度 = (整数)页面宽度
+        返回的页面高度 = (整数)页面高度
+    }
+}

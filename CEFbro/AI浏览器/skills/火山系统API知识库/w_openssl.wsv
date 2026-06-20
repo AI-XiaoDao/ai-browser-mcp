@@ -1,0 +1,3984 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.OPENSSL <编辑时信息 = "34BFCB, 0, 0, 0"
+        "@视窗.头文件搜寻目录.d:!_VOL_OPENSSL_VER2" = "..\\..\\shared\\extern_lib\\common\\openssl\\1\\include"
+        "@视窗.附属文件.win32-non_static - d:!_VOL_OPENSSL_VER2" = "..\\..\\shared\\extern_lib\\common\\openssl\\1\\win32\\bin\\libcrypto-1_1.dll"
+        "@视窗.附属文件.x64-non_static - d:!_VOL_OPENSSL_VER2" = "..\\..\\shared\\extern_lib\\common\\openssl\\1\\x64\\bin\\libcrypto-1_1-x64.dll"
+        "@视窗.外部库.non_static - d:!_VOL_OPENSSL_VER2" = "..\\..\\shared\\extern_lib\\common\\openssl\\1\\$(p)\\lib\\libcrypto.lib"
+        "@视窗.外部库.static - d:!_VOL_OPENSSL_VER2" = "..\\..\\shared\\extern_lib\\common\\openssl\\1\\$(vs)\\$(p)\\lib\\libcrypto.lib\r\n..\\..\\shared\\extern_lib\\common\\openssl\\1\\$(vs)\\$(p)\\lib\\libssl.lib\r\nCrypt32.lib"
+        "@视窗.需求VS版本.static - d:!_VOL_OPENSSL_VER2" = "10,14-" ""
+        "@视窗.头文件搜寻目录.d:_VOL_OPENSSL_VER2" = "..\\..\\shared\\extern_lib\\common\\openssl\\2\\include"
+        "@视窗.附属文件.win32-non_static - d:_VOL_OPENSSL_VER2" = "..\\..\\shared\\extern_lib\\common\\openssl\\2\\dll\\win32\\libcrypto-3.dll"
+        "@视窗.附属文件.x64-non_static - d:_VOL_OPENSSL_VER2" = "..\\..\\shared\\extern_lib\\common\\openssl\\2\\dll\\x64\\libcrypto-3-x64.dll"
+        "@视窗.外部库.non_static - d:_VOL_OPENSSL_VER2" = "..\\..\\shared\\extern_lib\\common\\openssl\\2\\dll\\$(p)\\libcrypto.lib"
+        ""
+        "@视窗.附属文件.win32-static-debug - d:_VOL_OPENSSL_VER2" = "..\\..\\shared\\extern_lib\\common\\openssl\\2\\dll\\win32\\libcrypto-3.dll"
+        "@视窗.附属文件.x64-static-debug - d:_VOL_OPENSSL_VER2" = "..\\..\\shared\\extern_lib\\common\\openssl\\2\\dll\\x64\\libcrypto-3-x64.dll"
+        "@视窗.外部库.static-debug - d:_VOL_OPENSSL_VER2" = "..\\..\\shared\\extern_lib\\common\\openssl\\2\\dll\\$(p)\\libcrypto.lib"
+        ""
+        "@视窗.外部库.static-release - d:_VOL_OPENSSL_VER2" = "..\\..\\shared\\extern_lib\\common\\openssl\\2\\lib\\$(d)\\$(p)\\libcrypto.lib\r\n..\\..\\shared\\extern_lib\\common\\openssl\\2\\lib\\$(d)\\$(p)\\libssl.lib\r\nCrypt32.lib"
+        "@视窗.需求VS版本.static - d:_VOL_OPENSSL_VER2" = "16-" "" @视窗.使用静态运行时库.static = 真>
+
+类 加解密类 <公开 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "源码:https://www.openssl.org/source/ ."
+        注释 = "如果用户程序中调用了本类中的\"使用新版本\"方法,将使用openssl最新3.5.0#1版进行编译,否则将使用openssl-1.1.1h版进行编译." 编辑时信息 = "14EA95, 0, 0, 0"
+        @视窗.外部头文件 = "openssl\\evp.h\r\nopenssl\\aes.h\r\nopenssl\\des.h\r\nopenssl\\rsa.h\r\nopenssl\\pem.h\r\nopenssl\\conf.h\r\nopenssl\\engine.h\r\nopenssl\\err.h\r\nopenssl\\hmac.h">
+{
+    方法 使用新版本 <公开 静态 注释 = "调用本方法指示编译器使用openssl最新3.5.0#1版进行编译,如果不调用本方法,将使用openssl-1.1.1h版进行编译." 注释 = "注意:"
+            注释 = "  1. 从 OpenSSL 3.0 开始，很多旧算法(如 MD2、MD5、DES、RC4、RC2 等)不再被支持。如果你尝试使用它们，就会返回\"算法不被支持\"错误。"
+            注释 = "如果您确认要使用这些算法,请不要调用本方法以依旧使用openssl-1.1.1h版进行编译;"
+            注释 = "  2. 本方法为编译时处理方法,系统在编译时只要检测到用户程序实际执行流程中任意位置调用了此方法,就启用对应的编译特性,和方法本身是否被执行到没有任何关系." @视窗.预定义宏 = "_VOL_OPENSSL_VER2"
+            @视窗.编译信息 = "基于 OPENSSL 3.5.0#1 版本编译">
+    {
+
+    }
+
+    # @begin
+    #
+    # <> <include>
+    # static void @an<_sOnBeforeAppInit> () { OpenSSL_add_all_algorithms(); }
+    # static void @an<_sOnAfterAppExit> ();
+    # //摘要
+    # static void VolDigest(const EVP_MD *cipher, @an<CVolMem>& userData, @an<CVolMem>& out);
+    # //HMAC系列摘要
+    # static void VolHmacDigest(const EVP_MD *cipher, const unsigned char* passWord, INT len, @an<CVolMem>& userData, @an<CVolMem>& outData);
+    # //通用加解密
+    # static void VolEncrypt(const EVP_CIPHER *cipher, @an<CVolMem>& userData, @an<CVolMem>& outData, const unsigned char* passWord, INT enc = 0);
+    # static void VolCommEncrypt(@an<CVolMem>& outData, const EVP_CIPHER *cipher, @an<CVolMem>& userData, const unsigned char* passWord, @an<CVolMem>* ivData, INT padding, INT nBlockSize, INT enc);
+    #
+    # inline_ static void VolCommEncrypt(@an<CVolMem>& outData, const EVP_CIPHER *cipher, @an<CVolMem>& userData, @an<CVolString>& passWord, @an<CVolMem>* ivData, INT padding, INT nBlockSize, INT enc)
+    # {
+    #     VolCommEncrypt(outData, cipher, userData, (const unsigned char*)GetMbsText(passWord.GetText(), CVolMem(), NULL), ivData, padding, nBlockSize, enc);
+    # }
+    # inline_ static void VolCommEncrypt(@an<CVolMem>& outData, const EVP_CIPHER *cipher, @an<CVolMem>& userData, @an<CVolMem>& passWord, @an<CVolMem>* ivData, INT padding, INT nBlockSize, INT enc)
+    # {
+    #     VolCommEncrypt(outData, cipher, userData, (const unsigned char*)passWord.GetPtr(), ivData, padding, nBlockSize, enc);
+    # }
+    #
+    # inline_ static void VolEncrypt(const EVP_CIPHER *cipher, @an<CVolMem>& userData, @an<CVolMem>& outData, @an<CVolString>& passWord, INT enc = 0)
+    # {
+    #     VolEncrypt(cipher, userData, outData, (const unsigned char*)GetMbsText(passWord.GetText(), CVolMem(), NULL), enc);
+    # }
+    # inline_ static void VolEncrypt(const EVP_CIPHER *cipher, @an<CVolMem>& userData, @an<CVolMem>& outData, @an<CVolMem>& passWord, INT enc = 0)
+    # {
+    #     VolEncrypt(cipher, userData, outData, (const unsigned char*)passWord.GetPtr(), enc);
+    # }
+    #
+    # inline_ static void VolHmacDigest(const EVP_MD *cipher, @an<CVolMem>& passWord, @an<CVolMem>& userData, @an<CVolMem>& outData)
+    # {
+    #     VolHmacDigest(cipher, (const unsigned char*)passWord.GetPtr(), (INT)passWord.GetSize(), userData, outData);
+    # }
+    # inline_ static void VolHmacDigest(const EVP_MD *cipher, @an<CVolString>& passWord, @an<CVolMem>& userData, @an<CVolMem>& outData)
+    # {
+    #     INT_P len;
+    #     @an<CVolMem> memBuf;
+    #     const unsigned char* keyText = (const unsigned char*)GetMbsText(passWord.GetText(), memBuf, &len);
+    #     VolHmacDigest(cipher, keyText, (INT)len, userData, outData);
+    # }
+    #
+    # //私钥加解密
+    # static void VolRSA_Private_Encrypt(int mode, @an<CVolMem>& outData, const @an<CVolMem>& userData, @an<CVolMem>& externalKey, BOOL isPkcs8, int padding);
+    # //公钥加解密
+    # static void VolRSA_Pubkey_Encrypt(int mode, @an<CVolMem>& outData, const @an<CVolMem>& userData, @an<CVolMem>& externalKey, BOOL isPkcs8, int padding);
+    # static RSA * VolRSA_GenerateRsa(BOOL keyMode, @an<CVolMem>& externalKey, BOOL isPkcs8);
+    # <> </include>
+    #
+    # void @sn<current_class>::@an<_sOnAfterAppExit> ()
+    # {
+    #     CONF_modules_unload(1);    //配置项相关
+    #     EVP_cleanup();   //加解密模块
+    #     ENGINE_cleanup();    //SSL引擎
+    #     CRYPTO_cleanup_all_ex_data();
+    #     // ERR_remove_state(0);    //错误信息相关
+    #     ERR_free_strings();     //错误信息相关
+    # }
+    #
+    # void @sn<current_class>::VolDigest(const EVP_MD *cipher, @an<CVolMem>& userData, @an<CVolMem>& outData)
+    # {
+    #     // if (userData != NULL && (INT)userData.GetSize() > 0)
+    #     {
+    #         EVP_MD_CTX * pContext = EVP_MD_CTX_new();
+    #         unsigned int outLen;
+    #         EVP_DigestInit_ex(pContext, cipher, NULL);
+    #         EVP_DigestUpdate(pContext, (const char *)userData.GetPtr(), (size_t)(INT)userData.GetSize());
+    #         EVP_DigestFinal_ex(pContext, (unsigned char *)outData.Alloc(EVP_MAX_MD_SIZE, TRUE) ,&outLen);
+    #         EVP_MD_CTX_free(pContext);
+    #         outData.Realloc (outLen);    //删掉多余空白
+    #     }
+    # }
+    #
+    # void @sn<current_class>::VolHmacDigest(const EVP_MD *cipher, const unsigned char* passWord, INT len, @an<CVolMem>& userData, @an<CVolMem>& outData)
+    # {
+    #     // if (userData != NULL && (INT)userData.GetSize() > 0)
+    #     {
+    #         HMAC_CTX * pContext = HMAC_CTX_new();
+    #         HMAC_Init_ex(pContext, passWord, len, cipher, NULL);
+    #         HMAC_Update(pContext, (unsigned char*)userData.GetPtr(), (INT)userData.GetSize());
+    #         unsigned int outLen;
+    #         HMAC_Final(pContext, outData.Alloc((INT)HMAC_size(pContext), TRUE), &outLen);
+    #         outData.Realloc ((INT)outLen);    //删掉多余空白
+    #         HMAC_CTX_free(pContext);
+    #     }
+    # }
+    #
+    #
+    # void @sn<current_class>::VolEncrypt(const EVP_CIPHER *cipher, @an<CVolMem>& userData, @an<CVolMem>& outData, const unsigned char* passWord, INT enc)
+    # {
+    #     if (userData != NULL && (INT)userData.GetSize() > 0)
+    #     {
+    #         EVP_CIPHER_CTX * pContext = EVP_CIPHER_CTX_new();
+    #         INT outLen = 0;
+    #         INT inLen = (INT)userData.GetSize();    //输入数据长度
+    #         EVP_CipherInit_ex(pContext, cipher, NULL, passWord, NULL, enc);   
+    #         EVP_CIPHER_CTX_set_padding(pContext, 0);
+    #         EVP_CipherUpdate(pContext, (unsigned char*)outData.Alloc(inLen + EVP_MAX_BLOCK_LENGTH, TRUE), &outLen, (const unsigned char*)userData.GetPtr(), inLen);
+    #         outData.Realloc (outLen);    //删掉多余空白
+    #         EVP_CIPHER_CTX_free(pContext);
+    #     }
+    # }
+    #
+    # void @sn<current_class>::VolCommEncrypt(@an<CVolMem>& outData, const EVP_CIPHER *cipher, @an<CVolMem>& userData, const unsigned char* passWord, @an<CVolMem>* ivData, INT padding, INT nBlockSize, INT enc)
+    # {
+    #     if ((INT)userData.GetSize() == 0)
+    #         return ;
+    #     EVP_CIPHER_CTX * pContext = EVP_CIPHER_CTX_new();
+    #     INT outLen = 0;
+    #     INT inLen = (INT)userData.GetSize();    //输入数据长度
+    #     EVP_CipherInit_ex(pContext, cipher, NULL, passWord, ((ivData == NULL || ivData->IsNullObject()) ? NULL : (const unsigned char*)ivData->GetPtr()), enc);   
+    #     EVP_CIPHER_CTX_set_padding(pContext, 0);    //禁用自带的padding,仅支持PKCS7方式.
+    #
+    #     outLen = inLen;
+    #     if (enc == 1)
+    #     {
+    #         if (outLen % nBlockSize == 0)
+    #         {
+    #             if (padding != 0)
+    #                 outLen += nBlockSize;
+    #         }
+    #         else  //需要填充对齐
+    #             outLen += (nBlockSize - (outLen % nBlockSize));
+    #     }
+    #     unsigned char * pInData = new unsigned char[outLen];
+    #     memset (pInData, 0, outLen);
+    #     memcpy (pInData, (const unsigned char*)userData.GetPtr (), inLen);
+    #     if (outLen != inLen && enc == 1)
+    #     {
+    #         if (padding == 1)    //PKCS7
+    #         {
+    #             INT paddingValue = outLen - inLen;
+    #             memset (&pInData[inLen], (unsigned char)paddingValue, (size_t)paddingValue);
+    #         }
+    #         else if (padding == 2)     //ANSIX923
+    #             pInData[outLen - 1] = (unsigned char)(outLen - inLen);
+    #         else if (padding == 3)    //ISO10126
+    #         {
+    #             INT paddingSize = outLen - inLen;
+    #             while(paddingSize > 0)
+    #             {
+    #                 pInData[outLen - paddingSize] = (unsigned char)randint (0, 255);
+    #                 paddingSize--;
+    #             }
+    #             pInData[outLen - 1] = (unsigned char)(outLen - inLen);    //最后一位填充长度.
+    #         }    //其余模式按零填充
+    #     }
+    #     unsigned char * pOutData = new unsigned char[outLen + EVP_MAX_BLOCK_LENGTH];    //接收容器
+    #     memset (pOutData, 0, outLen + EVP_MAX_BLOCK_LENGTH);
+    #     EVP_CipherUpdate(pContext, pOutData, &outLen, pInData, outLen);
+    #     
+    #     if (enc == 0 && padding != 0 && padding != 4)    //去除填充数据
+    #         outLen -= pOutData[outLen - 1];
+    #     outData.Insert (0, (void*)pOutData, outLen);
+    #     EVP_CIPHER_CTX_free(pContext);
+    #     delete []pInData;
+    #     delete []pOutData;
+    # }
+    #
+    # RSA * @sn<current_class>::VolRSA_GenerateRsa(BOOL keyMode, @an<CVolMem>& externalKey, BOOL isPkcs8)
+    # {
+    #     RSA * tmpRsa;
+    #     BIO * pBio = BIO_new_mem_buf((const void *)externalKey.GetPtr(), (INT)externalKey.GetSize());     //externalKey可能会被释放,务必自行拷贝缓冲区!
+    # //    BIO_puts (pBio, (const char *)externalKey.GetPtr());
+    #     if (keyMode)
+    #     {
+    #         if (isPkcs8)
+    #         {
+    #             EVP_PKEY* ppKey = PEM_read_bio_PrivateKey(pBio, NULL, NULL, NULL);
+    #             tmpRsa = EVP_PKEY_get1_RSA(ppKey);
+    #             EVP_PKEY_free(ppKey);
+    #         }
+    #         else
+    #             tmpRsa = PEM_read_bio_RSAPrivateKey (pBio, NULL, NULL, NULL);
+    #     }
+    #     else
+    #     {
+    #         if (isPkcs8)
+    #             tmpRsa = PEM_read_bio_RSAPublicKey (pBio, NULL, NULL, NULL);
+    #         else
+    #         {
+    #             EVP_PKEY* ppKey = PEM_read_bio_PUBKEY(pBio, NULL, NULL, NULL);
+    #             tmpRsa = EVP_PKEY_get1_RSA(ppKey);
+    #             EVP_PKEY_free(ppKey);
+    #         }
+    #     }
+    #     BIO_free(pBio);
+    #     return tmpRsa;
+    # }
+    #
+    # void @sn<current_class>::VolRSA_Private_Encrypt(int mode, @an<CVolMem>& outData, const @an<CVolMem>& userData, @an<CVolMem>& externalKey, BOOL isPkcs8, int padding)
+    # {
+    #     INT inLen = (INT)userData.GetSize();
+    #     if ((INT)externalKey.GetSize() == 0 || inLen == 0)
+    #         return ;
+    #     RSA * tmpRsa = VolRSA_GenerateRsa(TRUE, externalKey, isPkcs8);
+    #     if (!tmpRsa)
+    #         return ;
+    #     unsigned char * pOut = (unsigned char *)outData.Alloc(RSA_size(tmpRsa), TRUE);
+    #     INT outLen;
+    #     if (mode == 1)
+    #         outLen = RSA_private_encrypt(inLen, (unsigned char *)userData.GetPtr(), pOut, tmpRsa, padding);
+    #     else
+    #         outLen = RSA_private_decrypt(inLen, (unsigned char *)userData.GetPtr(), pOut, tmpRsa, padding);
+    #     RSA_free(tmpRsa);
+    #     if (outLen > 0)
+    #         outData.Realloc(outLen);
+    #     else
+    #         outData.Free();    //操作失败?
+    # }
+    #
+    # void @sn<current_class>::VolRSA_Pubkey_Encrypt(int mode, @an<CVolMem>& outData, const @an<CVolMem>& userData, @an<CVolMem>& externalKey, BOOL isPkcs8, int padding)
+    # {
+    #     INT inLen = (INT)userData.GetSize();
+    #     if ((INT)externalKey.GetSize() == 0 || inLen == 0)
+    #         return ;
+    #     RSA * tmpRsa = VolRSA_GenerateRsa(FALSE, externalKey, isPkcs8);
+    #     if (!tmpRsa)
+    #         return ;
+    #     unsigned char * pOut = (unsigned char *)outData.Alloc(RSA_size(tmpRsa), TRUE);
+    #     INT outLen;
+    #     if (mode == 1)
+    #         outLen = RSA_public_encrypt(inLen, (unsigned char *)userData.GetPtr(), pOut, tmpRsa, padding);
+    #     else
+    #         outLen = RSA_public_decrypt(inLen, (unsigned char *)userData.GetPtr(), pOut, tmpRsa, padding);
+    #     RSA_free(tmpRsa);
+    #     if (outLen > 0)
+    #         outData.Realloc(outLen);
+    #     else
+    #         outData.Free();    //操作失败?
+    # }
+    #
+    # @end
+
+    方法 加密_AES_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_AES_ECB (数据, 文本到多字节 (密码, 假), 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_AES_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_ecb() : @<密钥位> == 256 ? EVP_aes_256_ecb() : EVP_aes_128_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, AES_BLOCK_SIZE, AES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_AES_ECB <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,最大长度不能超过32.">
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_AES_ECB (数据, 文本到多字节 (密码, 假), 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_AES_ECB <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,最大长度不能超过32.">
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_ecb() : @<密钥位> == 256 ? EVP_aes_256_ecb() : EVP_aes_128_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, AES_BLOCK_SIZE, AES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_AES_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_AES_CBC (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_AES_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_cbc() : @<密钥位> == 256 ? EVP_aes_256_cbc() : EVP_aes_128_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, AES_BLOCK_SIZE, AES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_AES_CBC <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_AES_CBC (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_AES_CBC <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_cbc() : @<密钥位> == 256 ? EVP_aes_256_cbc() : EVP_aes_128_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, AES_BLOCK_SIZE, AES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_AES_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(CFB-1位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_AES_CFB1 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_AES_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(CFB-1位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_cfb1() : @<密钥位> == 256 ? EVP_aes_256_cfb1() : EVP_aes_128_cfb1(), @<数据>, @<密码>, &@<向量>, @<填充方式>, AES_BLOCK_SIZE, AES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_AES_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(CFB-1位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_AES_CFB1 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_AES_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(CFB-1位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_cfb1() : @<密钥位> == 256 ? EVP_aes_256_cfb1() : EVP_aes_128_cfb1(), @<数据>, @<密码>, &@<向量>, @<填充方式>, AES_BLOCK_SIZE, AES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_AES_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(CFB-8位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_AES_CFB8 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_AES_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(CFB-8位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_cfb8() : @<密钥位> == 256 ? EVP_aes_256_cfb8() : EVP_aes_128_cfb8(), @<数据>, @<密码>, &@<向量>, @<填充方式>, AES_BLOCK_SIZE, AES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_AES_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(CFB-8位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_AES_CFB8 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_AES_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(CFB-8位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_cfb8() : @<密钥位> == 256 ? EVP_aes_256_cfb8() : EVP_aes_128_cfb8(), @<数据>, @<密码>, &@<向量>, @<填充方式>, AES_BLOCK_SIZE, AES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_AES_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(CFB-128位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_AES_CFB128 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_AES_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(CFB-128位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_cfb128() : @<密钥位> == 256 ? EVP_aes_256_cfb128() : EVP_aes_128_cfb128(), @<数据>, @<密码>, &@<向量>, @<填充方式>, AES_BLOCK_SIZE, AES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_AES_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(CFB-128位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_AES_CFB128 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_AES_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(CFB-128位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_cfb128() : @<密钥位> == 256 ? EVP_aes_256_cfb128() : EVP_aes_128_cfb128(), @<数据>, @<密码>, &@<向量>, @<填充方式>, AES_BLOCK_SIZE, AES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_AES_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_AES_OFB (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_AES_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_ofb() : @<密钥位> == 256 ? EVP_aes_256_ofb() : EVP_aes_128_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, AES_BLOCK_SIZE, AES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_AES_OFB <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_AES_OFB (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_AES_OFB <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_ofb() : @<密钥位> == 256 ? EVP_aes_256_ofb() : EVP_aes_128_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, AES_BLOCK_SIZE, AES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_AES_CTR <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(CTR模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_AES_CTR (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_AES_CTR <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(CTR模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_ctr() : @<密钥位> == 256 ? EVP_aes_256_ctr() : EVP_aes_128_ctr(), @<数据>, @<密码>, &@<向量>, @<填充方式>, AES_BLOCK_SIZE, AES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_AES_CTR <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(CTR模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_AES_CTR (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_AES_CTR <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(CTR模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,最大长度不能超过32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供16字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_ctr() : @<密钥位> == 256 ? EVP_aes_256_ctr() : EVP_aes_128_ctr(), @<数据>, @<密码>, &@<向量>, @<填充方式>, AES_BLOCK_SIZE, AES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_AES_GCM <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(GCM模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_AES_GCM (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_AES_GCM <公开 静态 类型 = 字节集类 注释 = "将指定数据进行AES加密(GCM模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_gcm() : @<密钥位> == 256 ? EVP_aes_256_gcm() : EVP_aes_128_gcm(), @<数据>, @<密码>, &@<向量>, @<填充方式>, AES_BLOCK_SIZE, AES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_AES_GCM <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(GCM模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_AES_GCM (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_AES_GCM <公开 静态 类型 = 字节集类 注释 = "将指定AES加密的数据进行解密(GCM模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<密钥位> == 192 ? EVP_aes_192_gcm() : @<密钥位> == 256 ? EVP_aes_256_gcm() : EVP_aes_128_gcm(), @<数据>, @<密码>, &@<向量>, @<填充方式>, AES_BLOCK_SIZE, AES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_DES_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行DES加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,最少需提供4字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_DES_ECB (数据, 文本到多字节 (密码, 假), 填充方式))
+    }
+
+    方法 加密_字节集_DES_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行DES加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,最少需提供4字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 8, DES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_DES_ECB <公开 静态 类型 = 字节集类 注释 = "将指定DES加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,最少需提供4字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_DES_ECB (数据, 文本到多字节 (密码, 假), 填充方式))
+    }
+
+    方法 解密_字节集_DES_ECB <公开 静态 类型 = 字节集类 注释 = "将指定DES加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,最少需提供4字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 8, DES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_DES_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行DES加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_DES_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_DES_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行DES加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_DES_CBC <公开 静态 类型 = 字节集类 注释 = "将指定DES加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_DES_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_DES_CBC <公开 静态 类型 = 字节集类 注释 = "将指定DES加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_DES_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行DES加密(CFB-1位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_DES_CFB1 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_DES_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行DES加密(CFB-1位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_cfb1(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_DES_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定DES加密的数据进行解密(CFB-1位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_DES_CFB1 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_DES_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定DES加密的数据进行解密(CFB-1位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_cfb1(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_DES_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行DES加密(CFB-8位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_DES_CFB8 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_DES_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行DES加密(CFB-8位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_cfb8(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_DES_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定DES加密的数据进行解密(CFB-8位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_DES_CFB8 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_DES_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定DES加密的数据进行解密(CFB-8位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_cfb8(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_DES_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行DES加密(CFB-64位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_DES_CFB64 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_DES_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行DES加密(CFB-64位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_cfb64(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_DES_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定DES加密的数据进行解密(CFB-64位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_DES_CFB64 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_DES_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定DES加密的数据进行解密(CFB-64位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_cfb64(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_DES_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行DES加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_DES_OFB (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_DES_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行DES加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_DES_OFB <公开 静态 类型 = 字节集类 注释 = "将指定DES加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_DES_OFB (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_DES_OFB <公开 静态 类型 = 字节集类 注释 = "将指定DES加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,最少需提供4字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_DESX_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行DESX加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度23字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_DESX_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_DESX_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行DESX加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度23字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_desx_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_DESX_CBC <公开 静态 类型 = 字节集类 注释 = "将指定DESX加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度23字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_DESX_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_DESX_CBC <公开 静态 类型 = 字节集类 注释 = "将指定DESX加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度23字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_desx_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_3DES_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行3DES(ECB模式)加密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度24字节.">
+    参数 高强度 <类型 = 逻辑型 注释 = "是否采用高强度方式加密,为真时加密过程中会采用三个不同密钥,为假时仅使用两个相同密钥." @默认值 = 真>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_3DES_ECB (数据, 文本到多字节 (密码, 假), 高强度, 填充方式))
+    }
+
+    方法 加密_字节集_3DES_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行3DES(ECB模式)加密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度24字节.">
+    参数 高强度 <类型 = 逻辑型 注释 = "是否采用高强度方式加密,为真时加密过程中会采用三个不同密钥,为假时仅使用两个相同密钥." @默认值 = 真>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<高强度> ? EVP_des_ede3_ecb() : EVP_des_ede_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 8, DES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_3DES_ECB <公开 静态 类型 = 字节集类 注释 = "将指定3DES(ECB模式)加密的数据进行解密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度24字节.">
+    参数 高强度 <类型 = 逻辑型 注释 = "是否以高强度(三种不同密钥)方式解密." @默认值 = 真>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_3DES_ECB (数据, 文本到多字节 (密码, 假), 高强度, 填充方式))
+    }
+
+    方法 解密_字节集_3DES_ECB <公开 静态 类型 = 字节集类 注释 = "将指定3DES(ECB模式)加密的数据进行解密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度24字节.">
+    参数 高强度 <类型 = 逻辑型 注释 = "是否以高强度(三种不同密钥)方式解密." @默认值 = 真>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<高强度> ? EVP_des_ede3_ecb() : EVP_des_ede_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 8, DES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_3DES_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行3DES(CBC模式)加密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 高强度 <类型 = 逻辑型 注释 = "是否采用高强度方式加密,为真时加密过程中会采用三个不同密钥,为假时仅使用两个相同密钥." @默认值 = 真>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_3DES_CBC (数据, 文本到多字节 (密码, 假), 向量, 高强度, 填充方式))
+    }
+
+    方法 加密_字节集_3DES_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行3DES(CBC模式)加密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 高强度 <类型 = 逻辑型 注释 = "是否采用高强度方式加密,为真时加密过程中会采用三个不同密钥,为假时仅使用两个相同密钥." @默认值 = 真>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<高强度> ? EVP_des_ede3_cbc() : EVP_des_ede_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_3DES_CBC <公开 静态 类型 = 字节集类 注释 = "将指定3DES(CBC模式)加密的数据进行解密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 高强度 <类型 = 逻辑型 注释 = "是否以高强度(三种不同密钥)方式解密." @默认值 = 真>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_3DES_CBC (数据, 文本到多字节 (密码, 假), 向量, 高强度, 填充方式))
+    }
+
+    方法 解密_字节集_3DES_CBC <公开 静态 类型 = 字节集类 注释 = "将指定3DES(CBC模式)加密的数据进行解密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 高强度 <类型 = 逻辑型 注释 = "是否以高强度(三种不同密钥)方式解密." @默认值 = 真>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<高强度> ? EVP_des_ede3_cbc() : EVP_des_ede_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_3DES_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行3DES(OFB模式)加密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 高强度 <类型 = 逻辑型 注释 = "是否采用高强度方式加密,为真时加密过程中会采用三个不同密钥,为假时仅使用两个相同密钥." @默认值 = 真>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_3DES_OFB (数据, 文本到多字节 (密码, 假), 向量, 高强度, 填充方式))
+    }
+
+    方法 加密_字节集_3DES_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行3DES(OFB模式)加密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 高强度 <类型 = 逻辑型 注释 = "是否采用高强度方式加密,为真时加密过程中会采用三个不同密钥,为假时仅使用两个相同密钥." @默认值 = 真>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<高强度> ? EVP_des_ede3_ofb() : EVP_des_ede_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_3DES_OFB <公开 静态 类型 = 字节集类 注释 = "将指定3DES(OFB模式)加密的数据进行解密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 高强度 <类型 = 逻辑型 注释 = "是否以高强度(三种不同密钥)方式解密." @默认值 = 真>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_3DES_OFB (数据, 文本到多字节 (密码, 假), 向量, 高强度, 填充方式))
+    }
+
+    方法 解密_字节集_3DES_OFB <公开 静态 类型 = 字节集类 注释 = "将指定3DES(OFB模式)加密的数据进行解密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 高强度 <类型 = 逻辑型 注释 = "是否以高强度(三种不同密钥)方式解密." @默认值 = 真>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, @<高强度> ? EVP_des_ede3_ofb() : EVP_des_ede_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_3DES_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行3DES(CFB-1位模式)加密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_3DES_CFB1 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_3DES_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行3DES(CFB-1位模式)加密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_ede3_cfb1(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_3DES_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定3DES(CFB-1位模式)加密的数据进行解密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_3DES_CFB1 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_3DES_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定3DES(CFB-1位模式)加密的数据进行解密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_ede3_cfb1(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_3DES_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行3DES(CFB-8位模式)加密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_3DES_CFB8 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_3DES_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行3DES(CFB-8位模式)加密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_ede3_cfb8(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_3DES_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定3DES(CFB-8位模式)加密的数据进行解密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_3DES_CFB8 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_3DES_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定3DES(CFB-8位模式)加密的数据进行解密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_ede3_cfb8(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_3DES_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行3DES(CFB-64位模式)加密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_3DES_CFB64 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_3DES_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行3DES(CFB-64位模式)加密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_ede3_cfb64(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_3DES_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定3DES(CFB-64位模式)加密的数据进行解密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_3DES_CFB64 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_3DES_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定3DES(CFB-64位模式)加密的数据进行解密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_ede3_cfb64(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_3DES_WRAP <公开 静态 类型 = 字节集类 注释 = "将指定数据进行3DES(WRAP模式)加密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_3DES_WRAP (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_3DES_WRAP <公开 静态 类型 = 字节集类 注释 = "将指定数据进行3DES(WRAP模式)加密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_ede3_wrap(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_ENCRYPT);
+        @ return memBuf;
+    }
+
+    方法 解密_3DES_WRAP <公开 静态 类型 = 字节集类 注释 = "将指定3DES(WRAP模式)加密的数据进行解密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_3DES_WRAP (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_3DES_WRAP <公开 静态 类型 = 字节集类 注释 = "将指定3DES(WRAP模式)加密的数据进行解密,3DES即将DES算法进行三次(加密-解密-加密)计算."
+            返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度24字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_des_ede3_wrap(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, DES_DECRYPT);
+        @ return memBuf;
+    }
+
+    方法 加密_RC2_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC2加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_RC2_ECB (数据, 文本到多字节 (密码, 假), 填充方式))
+    }
+
+    方法 加密_字节集_RC2_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC2加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_rc2_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 8, 1);
+        @ return memBuf;
+    }
+
+    方法 解密_RC2_ECB <公开 静态 类型 = 字节集类 注释 = "将指定RC2加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_RC2_ECB (数据, 文本到多字节 (密码, 假), 填充方式))
+    }
+
+    方法 解密_字节集_RC2_ECB <公开 静态 类型 = 字节集类 注释 = "将指定RC2加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_rc2_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 8, 0);
+        @ return memBuf;
+    }
+
+    方法 加密_RC2_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC2加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_RC2_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_RC2_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC2加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_rc2_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 1);
+        @ return memBuf;
+    }
+
+    方法 解密_RC2_CBC <公开 静态 类型 = 字节集类 注释 = "将指定RC2加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_RC2_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_RC2_CBC <公开 静态 类型 = 字节集类 注释 = "将指定RC2加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_rc2_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 0);
+        @ return memBuf;
+    }
+
+    方法 加密_RC2_40_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC2(40位)加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度5字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_RC2_40_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_RC2_40_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC2(40位)加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度5字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_rc2_40_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 1);
+        @ return memBuf;
+    }
+
+    方法 解密_RC2_40_CBC <公开 静态 类型 = 字节集类 注释 = "将指定RC2(40位)加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度5字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_RC2_40_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_RC2_40_CBC <公开 静态 类型 = 字节集类 注释 = "将指定RC2(40位)加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度5字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_rc2_40_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 0);
+        @ return memBuf;
+    }
+
+    方法 加密_RC2_64_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC2(64位)加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度8字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_RC2_64_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_RC2_64_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC2(64位)加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度8字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_rc2_64_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 1);
+        @ return memBuf;
+    }
+
+    方法 解密_RC2_64_CBC <公开 静态 类型 = 字节集类 注释 = "将指定RC2(64位)加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度8字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_RC2_64_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_RC2_64_CBC <公开 静态 类型 = 字节集类 注释 = "将指定RC2(64位)加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度8字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_rc2_64_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 0);
+        @ return memBuf;
+    }
+
+    方法 加密_RC2_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC2加密(CFB-64位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_RC2_CFB64 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_RC2_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC2加密(CFB-64位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_rc2_cfb64(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 1);
+        @ return memBuf;
+    }
+
+    方法 解密_RC2_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定RC2加密的数据进行解密(CFB-64位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_RC2_CFB64 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_RC2_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定RC2加密的数据进行解密(CFB-64位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_rc2_cfb64(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 0);
+        @ return memBuf;
+    }
+
+    方法 加密_RC2_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC2加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_RC2_OFB (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_RC2_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC2加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_rc2_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 1);
+        @ return memBuf;
+    }
+
+    方法 解密_RC2_OFB <公开 静态 类型 = 字节集类 注释 = "将指定RC2加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_RC2_OFB (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_RC2_OFB <公开 静态 类型 = 字节集类 注释 = "将指定RC2加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> memBuf;
+        @ VolCommEncrypt(memBuf, EVP_rc2_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 0);
+        @ return memBuf;
+    }
+
+    方法 加密_RC4 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC4加密." 返回值注释 = "返回加密后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定16字节.">
+    {
+        返回 (加密_字节集_RC4 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 加密_字节集_RC4 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC4加密." 返回值注释 = "返回加密后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定16字节.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolEncrypt(EVP_rc4(), @<数据>, mem, @<密码>);
+        @ return mem;
+    }
+
+    方法 解密_RC4 <公开 静态 类型 = 字节集类 注释 = "将指定RC4解密的数据进行解密." 返回值注释 = "返回解密后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定16字节.">
+    {
+        返回 (解密_字节集_RC4 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 解密_字节集_RC4 <公开 静态 类型 = 字节集类 注释 = "将指定RC4解密的数据进行解密." 返回值注释 = "返回解密后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定16字节.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolEncrypt(EVP_rc4(), @<数据>, mem, @<密码>);
+        @ return mem;
+    }
+
+    方法 加密_RC4_40位 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC4(40位)加密." 返回值注释 = "返回加密后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定5字节.">
+    {
+        返回 (加密_字节集_RC4_40位 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 加密_字节集_RC4_40位 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行RC4(40位)加密." 返回值注释 = "返回加密后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定5字节.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolEncrypt(EVP_rc4_40(), @<数据>, mem, @<密码>);
+        @ return mem;
+    }
+
+    方法 解密_RC4_40位 <公开 静态 类型 = 字节集类 注释 = "将指定RC4(40位)解密的数据进行解密." 返回值注释 = "返回解密后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定5字节.">
+    {
+        返回 (解密_字节集_RC4_40位 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 解密_字节集_RC4_40位 <公开 静态 类型 = 字节集类 注释 = "将指定RC4(40位)解密的数据进行解密." 返回值注释 = "返回解密后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定5字节.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolEncrypt(EVP_rc4_40(), @<数据>, mem, @<密码>);
+        @ return mem;
+    }
+
+    方法 加密_IDEA_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行IDEA加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_IDEA_ECB (数据, 文本到多字节 (密码, 假), 填充方式))
+    }
+
+    方法 加密_字节集_IDEA_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行IDEA加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_idea_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 8, 1);
+        @ return mem;
+    }
+
+    方法 解密_IDEA_ECB <公开 静态 类型 = 字节集类 注释 = "将指定IDEA加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_IDEA_ECB (数据, 文本到多字节 (密码, 假), 填充方式))
+    }
+
+    方法 解密_字节集_IDEA_ECB <公开 静态 类型 = 字节集类 注释 = "将指定IDEA加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_idea_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 8, 0);
+        @ return mem;
+    }
+
+    方法 加密_IDEA_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行IDEA加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_IDEA_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_IDEA_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行IDEA加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_idea_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 1);
+        @ return mem;
+    }
+
+    方法 解密_IDEA_CBC <公开 静态 类型 = 字节集类 注释 = "将指定IDEA加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_IDEA_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_IDEA_CBC <公开 静态 类型 = 字节集类 注释 = "将指定IDEA加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_idea_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 0);
+        @ return mem;
+    }
+
+    方法 加密_IDEA_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行IDEA加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_IDEA_OFB (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_IDEA_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行IDEA加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_idea_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 1);
+        @ return mem;
+    }
+
+    方法 解密_IDEA_OFB <公开 静态 类型 = 字节集类 注释 = "将指定IDEA加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_IDEA_OFB (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_IDEA_OFB <公开 静态 类型 = 字节集类 注释 = "将指定IDEA加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_idea_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 0);
+        @ return mem;
+    }
+
+    方法 加密_IDEA_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行IDEA加密(CFB-64位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_IDEA_CFB64 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_IDEA_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行IDEA加密(CFB-64位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_idea_cfb64(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 1);
+        @ return mem;
+    }
+
+    方法 解密_IDEA_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定IDEA加密的数据进行解密(CFB-64位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_IDEA_CFB64 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_IDEA_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定IDEA加密的数据进行解密(CFB-64位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_idea_cfb64(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 0);
+        @ return mem;
+    }
+
+    方法 加密_BF_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行Blowfish加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_BF_ECB (数据, 文本到多字节 (密码, 假), 填充方式))
+    }
+
+    方法 加密_字节集_BF_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行Blowfish加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_bf_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 8, 1);
+        @ return mem;
+    }
+
+    方法 解密_BF_ECB <公开 静态 类型 = 字节集类 注释 = "将指定Blowfish加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_BF_ECB (数据, 文本到多字节 (密码, 假), 填充方式))
+    }
+
+    方法 解密_字节集_BF_ECB <公开 静态 类型 = 字节集类 注释 = "将指定Blowfish加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_bf_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 8, 0);
+        @ return mem;
+    }
+
+    方法 加密_BF_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行Blowfish加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_BF_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_BF_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行Blowfish加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_bf_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 1);
+        @ return mem;
+    }
+
+    方法 解密_BF_CBC <公开 静态 类型 = 字节集类 注释 = "将指定Blowfish加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_BF_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_BF_CBC <公开 静态 类型 = 字节集类 注释 = "将指定Blowfish加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_bf_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 0);
+        @ return mem;
+    }
+
+    方法 加密_BF_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行Blowfish加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_BF_OFB (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_BF_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行Blowfish加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_bf_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 1);
+        @ return mem;
+    }
+
+    方法 解密_BF_OFB <公开 静态 类型 = 字节集类 注释 = "将指定Blowfish加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_BF_OFB (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_BF_OFB <公开 静态 类型 = 字节集类 注释 = "将指定Blowfish加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_bf_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 0);
+        @ return mem;
+    }
+
+    方法 加密_BF_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行Blowfish加密(CFB-64位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_BF_CFB64 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_BF_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行Blowfish加密(CFB-64位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_bf_cfb64(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 1);
+        @ return mem;
+    }
+
+    方法 解密_BF_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定Blowfish加密的数据进行解密(CFB-64位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_BF_CFB64 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_BF_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定Blowfish加密的数据进行解密(CFB-64位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_bf_cfb64(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 0);
+        @ return mem;
+    }
+
+    方法 加密_CAST_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAST加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_CAST_ECB (数据, 文本到多字节 (密码, 假), 填充方式))
+    }
+
+    方法 加密_字节集_CAST_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAST加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_cast5_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 8, 1);
+        @ return mem;
+    }
+
+    方法 解密_CAST_ECB <公开 静态 类型 = 字节集类 注释 = "将指定CAST加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_CAST_ECB (数据, 文本到多字节 (密码, 假), 填充方式))
+    }
+
+    方法 解密_字节集_CAST_ECB <公开 静态 类型 = 字节集类 注释 = "将指定CAST加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_cast5_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 8, 0);
+        @ return mem;
+    }
+
+    方法 加密_CAST_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAST加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_CAST_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_CAST_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAST加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_cast5_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 1);
+        @ return mem;
+    }
+
+    方法 解密_CAST_CBC <公开 静态 类型 = 字节集类 注释 = "将指定CAST加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_CAST_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_CAST_CBC <公开 静态 类型 = 字节集类 注释 = "将指定CAST加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_cast5_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 0);
+        @ return mem;
+    }
+
+    方法 加密_CAST_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAST加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_CAST_OFB (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_CAST_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAST加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_cast5_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 1);
+        @ return mem;
+    }
+
+    方法 解密_CAST_OFB <公开 静态 类型 = 字节集类 注释 = "将指定CAST加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_CAST_OFB (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_CAST_OFB <公开 静态 类型 = 字节集类 注释 = "将指定CAST加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_cast5_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 0);
+        @ return mem;
+    }
+
+    方法 加密_CAST_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAST加密(CFB-64位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_CAST_CFB64 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_CAST_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAST加密(CFB-64位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_cast5_cfb64(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 1);
+        @ return mem;
+    }
+
+    方法 解密_CAST_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定CAST加密的数据进行解密(CFB-64位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_CAST_CFB64 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_CAST_CFB64 <公开 静态 类型 = 字节集类 注释 = "将指定CAST加密的数据进行解密(CFB-64位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_cast5_cfb64(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 8, 0);
+        @ return mem;
+    }
+
+    方法 加密_ARIA_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_ARIA_ECB (数据, 文本到多字节 (密码, 假), 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_ARIA_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_ecb() : @<密钥位> == 256 ? EVP_aria_256_ecb() : EVP_aria_128_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_ARIA_ECB <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_ARIA_ECB (数据, 文本到多字节 (密码, 假), 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_ARIA_ECB <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_ecb() : @<密钥位> == 256 ? EVP_aria_256_ecb() : EVP_aria_128_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_ARIA_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_ARIA_CBC (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_ARIA_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_cbc() : @<密钥位> == 256 ? EVP_aria_256_cbc() : EVP_aria_128_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_ARIA_CBC <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_ARIA_CBC (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_ARIA_CBC <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_cbc() : @<密钥位> == 256 ? EVP_aria_256_cbc() : EVP_aria_128_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_ARIA_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(CBC-1位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_ARIA_CFB1 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_ARIA_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(CBC-1位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_cfb1() : @<密钥位> == 256 ? EVP_aria_256_cfb1() : EVP_aria_128_cfb1(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_ARIA_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(CBC-1位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_ARIA_CFB1 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_ARIA_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(CBC-1位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_cfb1() : @<密钥位> == 256 ? EVP_aria_256_cfb1() : EVP_aria_128_cfb1(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_ARIA_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(CBC-8位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_ARIA_CFB8 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_ARIA_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(CBC-8位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_cfb8() : @<密钥位> == 256 ? EVP_aria_256_cfb8() : EVP_aria_128_cfb8(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_ARIA_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(CBC-8位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_ARIA_CFB8 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_ARIA_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(CBC-8位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_cfb8() : @<密钥位> == 256 ? EVP_aria_256_cfb8() : EVP_aria_128_cfb8(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_ARIA_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(CBC-128位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_ARIA_CFB128 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_ARIA_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(CBC-128位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_cfb128() : @<密钥位> == 256 ? EVP_aria_256_cfb128() : EVP_aria_128_cfb128(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_ARIA_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(CBC-128位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_ARIA_CFB128 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_ARIA_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(CBC-128位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_cfb128() : @<密钥位> == 256 ? EVP_aria_256_cfb128() : EVP_aria_128_cfb128(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_ARIA_CTR <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(CTR模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_ARIA_CTR (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_ARIA_CTR <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(CTR模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_ctr() : @<密钥位> == 256 ? EVP_aria_256_ctr() : EVP_aria_128_ctr(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_ARIA_CTR <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(CTR模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_ARIA_CTR (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_ARIA_CTR <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(CTR模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_ctr() : @<密钥位> == 256 ? EVP_aria_256_ctr() : EVP_aria_128_ctr(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_ARIA_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_ARIA_OFB (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_ARIA_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_ofb() : @<密钥位> == 256 ? EVP_aria_256_ofb() : EVP_aria_128_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_ARIA_OFB <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_ARIA_OFB (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_ARIA_OFB <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_ofb() : @<密钥位> == 256 ? EVP_aria_256_ofb() : EVP_aria_128_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_ARIA_GCM <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(GCM模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_ARIA_GCM (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_ARIA_GCM <公开 静态 类型 = 字节集类 注释 = "将指定数据进行ARIA加密(GCM模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_gcm() : @<密钥位> == 256 ? EVP_aria_256_gcm() : EVP_aria_128_gcm(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_ARIA_GCM <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(GCM模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_ARIA_GCM (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_ARIA_GCM <公开 静态 类型 = 字节集类 注释 = "将指定ARIA加密的数据进行解密(GCM模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_aria_192_gcm() : @<密钥位> == 256 ? EVP_aria_256_gcm() : EVP_aria_128_gcm(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_CAMELLIA_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAMELLIA加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_CAMELLIA_ECB (数据, 文本到多字节 (密码, 假), 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_CAMELLIA_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAMELLIA加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_camellia_192_ecb() : @<密钥位> == 256 ? EVP_camellia_256_ecb() : EVP_camellia_128_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_CAMELLIA_ECB <公开 静态 类型 = 字节集类 注释 = "将指定CAMELLIA加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_CAMELLIA_ECB (数据, 文本到多字节 (密码, 假), 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_CAMELLIA_ECB <公开 静态 类型 = 字节集类 注释 = "将指定CAMELLIA加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_camellia_192_ecb() : @<密钥位> == 256 ? EVP_camellia_256_ecb() : EVP_camellia_128_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_CAMELLIA_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAMELLIA加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_CAMELLIA_CBC (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_CAMELLIA_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAMELLIA加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_camellia_192_cbc() : @<密钥位> == 256 ? EVP_camellia_256_cbc() : EVP_camellia_128_cbc(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_CAMELLIA_CBC <公开 静态 类型 = 字节集类 注释 = "将指定CAMELLIA加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_CAMELLIA_CBC (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_CAMELLIA_CBC <公开 静态 类型 = 字节集类 注释 = "将指定CAMELLIA加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_camellia_192_cbc() : @<密钥位> == 256 ? EVP_camellia_256_cbc() : EVP_camellia_128_cbc(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_CAMELLIA_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAMELLIA加密(CFB-1位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_CAMELLIA_CFB1 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_CAMELLIA_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAMELLIA加密(CFB-1位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据."
+            @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_camellia_192_cfb1() : @<密钥位> == 256 ? EVP_camellia_256_cfb1() : EVP_camellia_128_cfb1(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_CAMELLIA_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定CAMELLIA加密的数据进行解密(CFB-1位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_CAMELLIA_CFB1 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_CAMELLIA_CFB1 <公开 静态 类型 = 字节集类 注释 = "将指定CAMELLIA加密的数据进行解密(CFB-1位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据."
+            @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_camellia_192_cfb1() : @<密钥位> == 256 ? EVP_camellia_256_cfb1() : EVP_camellia_128_cfb1(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_CAMELLIA_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAMELLIA加密(CFB-8位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_CAMELLIA_CFB8 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_CAMELLIA_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAMELLIA加密(CFB-8位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据."
+            @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_camellia_192_cfb8() : @<密钥位> == 256 ? EVP_camellia_256_cfb8() : EVP_camellia_128_cfb8(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_CAMELLIA_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定CAMELLIA加密的数据进行解密(CFB-8位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_CAMELLIA_CFB8 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_CAMELLIA_CFB8 <公开 静态 类型 = 字节集类 注释 = "将指定CAMELLIA加密的数据进行解密(CFB-8位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据."
+            @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_camellia_192_cfb8() : @<密钥位> == 256 ? EVP_camellia_256_cfb8() : EVP_camellia_128_cfb8(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_CAMELLIA_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAMELLIA加密(CFB-128位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_CAMELLIA_CFB128 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_CAMELLIA_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAMELLIA加密(CFB-128位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据."
+            @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_camellia_192_cfb128() : @<密钥位> == 256 ? EVP_camellia_256_cfb128() : EVP_camellia_128_cfb128(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_CAMELLIA_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定CAMELLIA加密的数据进行解密(CFB-128位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_CAMELLIA_CFB128 (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_CAMELLIA_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定CAMELLIA加密的数据进行解密(CFB-128位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据."
+            @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_camellia_192_cfb128() : @<密钥位> == 256 ? EVP_camellia_256_cfb128() : EVP_camellia_128_cfb128(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_CAMELLIA_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAMELLIA加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_CAMELLIA_OFB (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_CAMELLIA_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAMELLIA加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_camellia_192_ofb() : @<密钥位> == 256 ? EVP_camellia_256_ofb() : EVP_camellia_128_ofb(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_CAMELLIA_OFB <公开 静态 类型 = 字节集类 注释 = "将指定CAMELLIA加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_CAMELLIA_OFB (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_CAMELLIA_OFB <公开 静态 类型 = 字节集类 注释 = "将指定CAMELLIA加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_camellia_192_ofb() : @<密钥位> == 256 ? EVP_camellia_256_ofb() : EVP_camellia_128_ofb(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_CAMELLIA_CTR <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAMELLIA加密(CTR模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_CAMELLIA_CTR (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 加密_字节集_CAMELLIA_CTR <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CAMELLIA加密(CTR模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_camellia_192_ctr() : @<密钥位> == 256 ? EVP_camellia_256_ctr() : EVP_camellia_128_ctr(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_CAMELLIA_CTR <公开 静态 类型 = 字节集类 注释 = "将指定CAMELLIA加密的数据进行解密(CTR模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_CAMELLIA_CTR (数据, 文本到多字节 (密码, 假), 向量, 密钥位, 填充方式))
+    }
+
+    方法 解密_字节集_CAMELLIA_CTR <公开 静态 类型 = 字节集类 注释 = "将指定CAMELLIA加密的数据进行解密(CTR模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,请提供三种标准长度的密码,支持16,24,32.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,最少要提供8字节." @默认值 = 空对象>
+    参数 密钥位 <类型 = 整数 注释 = "请根据所提供的密码字节数选择,支持128,192,256." @默认值 = 128>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, @<密钥位> == 192 ? EVP_camellia_192_ctr() : @<密钥位> == 256 ? EVP_camellia_256_ctr() : EVP_camellia_128_ctr(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_CHACHA20 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CHACHA20加密." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度32字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_CHACHA20 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_CHACHA20 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行CHACHA20加密." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度32字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_chacha20(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_CHACHA20 <公开 静态 类型 = 字节集类 注释 = "将指定CHACHA20加密的数据进行解密." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度32字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_CHACHA20 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_CHACHA20 <公开 静态 类型 = 字节集类 注释 = "将指定CHACHA20加密的数据进行解密." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度32字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_chacha20(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_SEED_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SEED加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_SEED_ECB (数据, 文本到多字节 (密码, 假), 填充方式))
+    }
+
+    方法 加密_字节集_SEED_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SEED加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_seed_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_SEED_ECB <公开 静态 类型 = 字节集类 注释 = "将指定SEED加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_SEED_ECB (数据, 文本到多字节 (密码, 假), 填充方式))
+    }
+
+    方法 解密_字节集_SEED_ECB <公开 静态 类型 = 字节集类 注释 = "将指定SEED加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_seed_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_SEED_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SEED加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_SEED_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_SEED_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SEED加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_seed_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_SEED_CBC <公开 静态 类型 = 字节集类 注释 = "将指定SEED加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_SEED_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_SEED_CBC <公开 静态 类型 = 字节集类 注释 = "将指定SEED加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_seed_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_SEED_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SEED加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_SEED_OFB (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_SEED_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SEED加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_seed_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_SEED_OFB <公开 静态 类型 = 字节集类 注释 = "将指定SEED加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_SEED_OFB (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_SEED_OFB <公开 静态 类型 = 字节集类 注释 = "将指定SEED加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_seed_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_SEED_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SEED加密(CFB-128位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_SEED_CFB128 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_SEED_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SEED加密(CFB-128位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_seed_cfb128(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_SEED_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定SEED加密的数据进行解密(CFB-128位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_SEED_CFB128 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_SEED_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定SEED加密的数据进行解密(CFB-128位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_seed_cfb128(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_SM4_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SM4加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_SM4_ECB (数据, 文本到多字节 (密码, 假), 填充方式))
+    }
+
+    方法 加密_字节集_SM4_ECB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SM4加密(ECB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_sm4_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_SM4_ECB <公开 静态 类型 = 字节集类 注释 = "将指定SM4加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_SM4_ECB (数据, 文本到多字节 (密码, 假), 填充方式))
+    }
+
+    方法 解密_字节集_SM4_ECB <公开 静态 类型 = 字节集类 注释 = "将指定SM4加密的数据进行解密(ECB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_sm4_ecb(), @<数据>, @<密码>, NULL, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_SM4_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SM4加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_SM4_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_SM4_CBC <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SM4加密(CBC模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_sm4_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_SM4_CBC <公开 静态 类型 = 字节集类 注释 = "将指定SM4加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_SM4_CBC (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_SM4_CBC <公开 静态 类型 = 字节集类 注释 = "将指定SM4加密的数据进行解密(CBC模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_sm4_cbc(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_SM4_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SM4加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_SM4_OFB (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_SM4_OFB <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SM4加密(OFB模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_sm4_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_SM4_OFB <公开 静态 类型 = 字节集类 注释 = "将指定SM4加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_SM4_OFB (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_SM4_OFB <公开 静态 类型 = 字节集类 注释 = "将指定SM4加密的数据进行解密(OFB模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_sm4_ofb(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_SM4_CTR <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SM4加密(CTR模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_SM4_CTR (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_SM4_CTR <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SM4加密(CTR模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_sm4_ctr(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_SM4_CTR <公开 静态 类型 = 字节集类 注释 = "将指定SM4加密的数据进行解密(CTR模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_SM4_CTR (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_SM4_CTR <公开 静态 类型 = 字节集类 注释 = "将指定SM4加密的数据进行解密(CTR模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_sm4_ctr(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 加密_SM4_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SM4加密(CFB-128位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 文本型 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (加密_字节集_SM4_CFB128 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 加密_字节集_SM4_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行SM4加密(CFB-128位模式)." 返回值注释 = "返回数据加密后的原始结果,如果加密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据.">
+    参数 密码 <类型 = 字节集类 注释 = "提供加密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_sm4_cfb128(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 1);
+        @ return mem;
+    }
+
+    方法 解密_SM4_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定SM4加密的数据进行解密(CFB-128位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 文本型 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        返回 (解密_字节集_SM4_CFB128 (数据, 文本到多字节 (密码, 假), 向量, 填充方式))
+    }
+
+    方法 解密_字节集_SM4_CFB128 <公开 静态 类型 = 字节集类 注释 = "将指定SM4加密的数据进行解密(CFB-128位模式)." 返回值注释 = "返回解密后的结果,如果解密失败将会返回原数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲解密的数据,必须是加密后的原始结果.">
+    参数 密码 <类型 = 字节集类 注释 = "提供解密所使用的密码,固定长度16字节.">
+    参数 向量 <类型 = 字节集类 注释 = "初始向量数据,固定长度16字节." @默认值 = 空对象>
+    参数 填充方式 <类型 = 数据填充模式 注释 = "在提供的数据未对齐的情况下,所欲使用的填充方式." @默认值 = 数据填充模式.零填充>
+    {
+        @ @an<CVolMem> mem;
+        @ VolCommEncrypt(mem, EVP_sm4_cfb128(), @<数据>, @<密码>, &@<向量>, @<填充方式>, 16, 0);
+        @ return mem;
+    }
+
+    方法 取数据MD5 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的MD5数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_md5(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_MD5 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-MD5数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_MD5 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_MD5 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-MD5数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_md5(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据MD4 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的MD5数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_md4(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_MD4 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-MD4数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_MD4 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_MD4 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-MD4数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_md4(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据SHA1 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的SHA1数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_sha1(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_SHA1 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA1数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_SHA1 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_SHA1 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA1数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_sha1(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据SHA224 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的SHA224数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_sha224(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_SHA224 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA224数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_SHA224 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_SHA224 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA224数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_sha224(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据SHA256 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的SHA256数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_sha256(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_SHA256 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA256数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_SHA256 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_SHA256 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA256数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_sha256(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据SHA384 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的SHA384数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_sha384(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_SHA384 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA384数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_SHA384 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_SHA384 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA384数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_sha384(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据SHA512 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的SHA512数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_sha512(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_SHA512 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA512数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_SHA512 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_SHA512 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA512数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_sha512(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据MDC2 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的MDC2数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_mdc2(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_MDC2 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-MDC2数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_MDC2 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_MDC2 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-MDC2数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_mdc2(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据SHA3_224 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的SHA3(224位)数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_sha3_224(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_SHA3_224 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA3-224数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_SHA3_224 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_SHA3_224 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA3-224数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_sha3_224(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据SHA3_256 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的SHA3(256位)数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_sha3_256(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_SHA3_256 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA3-256数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_SHA3_256 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_SHA3_256 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA3-256数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_sha3_256(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据SHA3_384 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的SHA3(384位)数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_sha3_384(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_SHA3_384 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA3-384数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_SHA3_384 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_SHA3_384 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA3-384数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_sha3_384(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据SHA3_512 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的SHA3(512位)数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_sha3_512(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_SHA3_512 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA3-512数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_SHA3_512 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_SHA3_512 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHA3-512数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_sha3_512(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据SHAKE_128 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的SHAKE(128位)数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_shake128(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_SHAKE_128 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHAKE-128数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_SHAKE_128 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_SHAKE_128 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHAKE-128数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_shake128(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据SHAKE_256 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的SHAKE(256位)数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_shake256(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_SHAKE_256 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHAKE-256数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_SHAKE_256 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_SHAKE_256 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SHAKE-256数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_shake256(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据BLAKE2B_512 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的BLAKE2b(512位)数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_blake2b512(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_BLAKE2B_512 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-BLAKE2B-512数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_BLAKE2B_512 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_BLAKE2B_512 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-BLAKE2B-512数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_blake2b512(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据BLAKE2S_256 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的BLAKE2s(256位)数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_blake2s256(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_BLAKE2S_256 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-BLAKE2S-256数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_BLAKE2S_256 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_BLAKE2S_256 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-BLAKE2S-256数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_blake2s256(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据RMD_160 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的RIPEMD(160位)数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_ripemd160(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_RMD_160 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-RMD-160数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_RMD_160 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_RMD_160 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-RMD-160数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_ripemd160(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据WHIRLPOOL <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的WHIRLPOOL数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_whirlpool(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_WHIRLPOOL <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-WHIRLPOOL数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_WHIRLPOOL (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_WHIRLPOOL <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-WHIRLPOOL数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_whirlpool(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据SM3 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的SM3数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    {
+        @ @an<CVolMem> mem;
+        @ VolDigest(EVP_sm3(), @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 取数据HMAC_SM3 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SM3数据摘要." 返回值注释 = "返回摘要计算后的结果.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲使用的密码内容.">
+    {
+        返回 (取数据HMAC_字节集_SM3 (数据, 文本到多字节 (密码, 假)))
+    }
+
+    方法 取数据HMAC_字节集_SM3 <公开 静态 类型 = 文本型 注释 = "用作获取指定数据的HMAC-SM3数据摘要." 返回值注释 = "返回摘要计算后的结果." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲计算摘要的数据." 编辑时信息 = "8554D, 0, 0, 0">
+    参数 密码 <类型 = 字节集类 注释 = "提供所欲使用的密码内容.">
+    {
+        @ @an<CVolMem> mem;
+        @ VolHmacDigest(EVP_sm3(), @<密码>, @<数据>, mem);
+        @ return mem.ToHexStr(CVolString());
+    }
+
+    方法 加密_RSA_私钥 <公开 静态 类型 = 字节集类 注释 = "使用私钥对指定数据进行RSA加密后返回." 返回值注释 = "返回加密后的数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据." 注释 = "注意输入的数据长度,不能超过(密钥位/8-填充尺寸),例如生成密钥为2048位,无填充的情况下可加密256字节的数据."
+            编辑时信息 = "9554C, 0, 0, 0">
+    参数 指定私钥 <类型 = 字节集类 注释 = "提供本次加密所欲使用的私钥数据.">
+    参数 PKCS8格式 <类型 = 逻辑型 注释 = "指定所提供私钥数据的格式." @默认值 = 假>
+    参数 填充方式 <类型 = RSA填充方式 注释 = "加密所欲使用的数据填充方式." 编辑时信息 = "9554C, 0, 0, 0" @默认值 = RSA填充方式.PKCS1>
+    {
+        @ @an<CVolMem> outData;
+        @ VolRSA_Private_Encrypt(1, outData, @<数据>, @<指定私钥>, @<PKCS8格式>, @<填充方式>);
+        @ return outData;
+    }
+
+    方法 加密_RSA_公钥 <公开 静态 类型 = 字节集类 注释 = "使用公钥对指定数据进行RSA加密后返回." 返回值注释 = "返回加密后的数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加密的数据." 注释 = "注意输入的数据长度,不能超过(密钥位/8-填充尺寸),例如生成密钥为2048位,无填充的情况下可加密256字节的数据."
+            编辑时信息 = "9554C, 0, 0, 0">
+    参数 指定公钥 <类型 = 字节集类 注释 = "提供本次加密所欲使用的公钥数据.">
+    参数 PKCS8格式 <类型 = 逻辑型 注释 = "指定所提供公钥数据的格式." @默认值 = 假>
+    参数 填充方式 <类型 = RSA填充方式 注释 = "加密所欲使用的数据填充方式." 编辑时信息 = "9554C, 0, 0, 0" @默认值 = RSA填充方式.PKCS1>
+    {
+        @ @an<CVolMem> outData;
+        @ VolRSA_Pubkey_Encrypt(1, outData, @<数据>, @<指定公钥>, @<PKCS8格式>, @<填充方式>);
+        @ return outData;
+    }
+
+    方法 解密_RSA_私钥 <公开 静态 类型 = 字节集类 注释 = "使用私钥对指定RSA公钥加密过的数据进行解密后返回." 返回值注释 = "返回解密后的数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供加密后的数据." 编辑时信息 = "9554C, 0, 0, 0">
+    参数 指定私钥 <类型 = 字节集类 注释 = "提供本次解密所欲使用的私钥数据.">
+    参数 PKCS8格式 <类型 = 逻辑型 注释 = "指定所提供私钥数据的格式." @默认值 = 假>
+    参数 填充方式 <类型 = RSA填充方式 注释 = "解密所欲使用的数据填充方式." 编辑时信息 = "9554C, 0, 0, 0" @默认值 = RSA填充方式.PKCS1>
+    {
+        @ @an<CVolMem> outData;
+        @ VolRSA_Private_Encrypt(0, outData, @<数据>, @<指定私钥>, @<PKCS8格式>, @<填充方式>);
+        @ return outData;
+    }
+
+    方法 解密_RSA_公钥 <公开 静态 类型 = 字节集类 注释 = "使用公钥对指定RSA私钥加密过的数据进行解密后返回." 返回值注释 = "返回解密后的数据." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供加密后的数据." 编辑时信息 = "53FFA, 0, 0, 0">
+    参数 指定公钥 <类型 = 字节集类 注释 = "提供本次解密所欲使用的公钥数据.">
+    参数 PKCS8格式 <类型 = 逻辑型 注释 = "指定所提供公钥数据的格式." @默认值 = 假>
+    参数 填充方式 <类型 = RSA填充方式 注释 = "解密所欲使用的数据填充方式." 编辑时信息 = "53FFA, 0, 0, 0" @默认值 = RSA填充方式.PKCS1>
+    {
+        @ @an<CVolMem> outData;
+        @ VolRSA_Pubkey_Encrypt(0, outData, @<数据>, @<指定公钥>, @<PKCS8格式>, @<填充方式>);
+        @ return outData;
+    }
+
+    方法 数字签名 <公开 静态 类型 = 字节集类 注释 = "将指定数据进行数字签名,可通过\"验证签名\"验证数据完整性."
+            注释 = "附: OPENSSL类库之数字签名与其他平台(如支付宝)通用的过程: http://bbs.voldp.com/forum.php?mod=viewthread&tid=7723"
+            返回值注释 = "签名成功将会返回签名内容,签名失败返回空字节集." 编辑时信息 = "76AA3, 0, 0, 0" @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲签名的数据." 编辑时信息 = "76AA3, 0, 0, 0">
+    参数 私钥数据 <类型 = 字节集类 注释 = "提供本次签名所使用的私钥数据." 编辑时信息 = "76AA3, 0, 0, 0">
+    参数 PKCS8格式 <类型 = 逻辑型 注释 = "指定所提供私钥数据的格式." 编辑时信息 = "76AA3, 0, 0, 0" @默认值 = 假>
+    参数 摘要算法 <类型 = 整数 注释 = "签名所使用的摘要算法." 编辑时信息 = "76AA3, 0, 0, 0" @默认值 = RSA数字签名算法.SHA1>
+    {
+        @ @an<CVolMem> sig;
+        @ INT inLen = (INT)@<数据>.GetSize();
+        @ if ((INT)@<私钥数据>.GetSize() == 0 || inLen == 0)
+        @     return sig;
+        @ RSA * tmpRsa = VolRSA_GenerateRsa(TRUE, @<私钥数据>, @<PKCS8格式>);
+        @ if (tmpRsa != NULL)
+        @ {
+        @     unsigned char * pOut = (unsigned char *)sig.Alloc(RSA_size(tmpRsa), TRUE);
+        @     unsigned int outLen = 0;
+        @     RSA_sign(@<摘要算法>, (unsigned char *)@<数据>.GetPtr(), inLen, pOut, &outLen, tmpRsa);
+        @     RSA_free(tmpRsa);
+        @     if (outLen > 0)
+        @         sig.Realloc(outLen);
+        @     else
+        @         sig.Free();
+        @ }
+        @ return sig;
+    }
+
+    方法 验证签名 <公开 静态 类型 = 逻辑型 注释 = "提供指定的数据以及该数据对应的签名内容,验证数据与签名是否对应,以保障数据的完整性."
+            注释 = "附: OPENSSL类库之数字签名与其他平台(如支付宝)通用的过程: http://bbs.voldp.com/forum.php?mod=viewthread&tid=7723" 返回值注释 = "返回该数据签名是否验证成功."
+            @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲验证签名的数据." 编辑时信息 = "9154C, 0, 0, 0">
+    参数 签名内容 <类型 = 字节集类 注释 = "提供该数据对应的签名内容." 编辑时信息 = "9154C, 0, 0, 0">
+    参数 公钥数据 <类型 = 字节集类 注释 = "提供本次验证所使用的公钥数据.">
+    参数 PKCS8格式 <类型 = 逻辑型 注释 = "指定所提供公钥数据的格式." @默认值 = 假>
+    参数 摘要算法 <类型 = 整数 注释 = "提供验签所使用的摘要算法,必须与签名时保持一致,否则会导致验签失败." 编辑时信息 = "9154C, 0, 0, 0" @默认值 = RSA数字签名算法.SHA1>
+    {
+        @ INT dataLen = (INT)@<数据>.GetSize();
+        @ INT sigLen = (INT)@<签名内容>.GetSize();
+        @ if ((INT)@<公钥数据>.GetSize() == 0 || dataLen == 0 || sigLen == 0)
+        @     return FALSE;
+        @ RSA * tmpRsa = VolRSA_GenerateRsa(FALSE, @<公钥数据>, @<PKCS8格式>);
+        @ if (!tmpRsa)
+        @     return FALSE;
+        @ BOOL blSucceeded = (RSA_verify(@<摘要算法>, (unsigned char *)@<数据>.GetPtr(), dataLen, (unsigned char *)@<签名内容>.GetPtr(), sigLen, tmpRsa) == 1);
+        @ RSA_free (tmpRsa);
+        @ return blSucceeded;
+    }
+}
+
+类 RSA密钥生成类 <公开 注释 = "本类实例提供RSA密钥对生成方法." @强制依赖 = "加解密类" @视窗.外部头文件 = "vol_rsa.h">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (COpensslRSAWraper)
+
+    方法 生成密钥对 <公开 类型 = 逻辑型 注释 = "随机生成一个新的密钥对,包含私钥以及公钥,可使用\"取私钥数据()/取公钥数据()\"获取所生成的密钥数据." 返回值注释 = "返回密钥是否生成成功" @禁止流程检查 = 真>
+    参数 密钥位 <类型 = 整数 注释 = "生成密钥所欲使用的位数." @默认值 = 1024>
+    参数 奇数 <类型 = 变整数 注释 = "选择一个奇数以在生成密钥对时使用." @默认值 = 65537>
+    {
+        @ BIGNUM* bne = BN_new();
+        @ BN_set_word(bne, @<奇数>);
+        @ INT ret = RSA_generate_key_ex(data().GetPRsa(), @<密钥位>, bne, NULL);
+        @ BN_clear_free(bne);
+        @ data().SetKeyBits(@<密钥位>);    //记录密钥位
+        @ return ret == 1;
+    }
+
+    方法 取私钥数据 <公开 类型 = 字节集类 注释 = "在调用\"生成密钥对\"方法后,取出生成的私钥数据." 返回值注释 = "返回私钥数据." @禁止流程检查 = 真>
+    参数 PKCS8格式 <类型 = 逻辑型 注释 = "指定生成的密钥数据是否以PKCS#8格式返回." @默认值 = 假>
+    {
+        @ BIO* pBio = BIO_new(BIO_s_mem());
+        @ INT ret;
+        @ @an<CVolMem> keyData;
+        @ if (@<PKCS8格式>)
+        @ {
+        @     EVP_PKEY* ppKey = EVP_PKEY_new();
+        @     EVP_PKEY_set1_RSA(ppKey, data().GetPRsa());
+        @     ret = PEM_write_bio_PKCS8PrivateKey(pBio, ppKey, NULL, NULL, NULL, NULL, NULL);
+        @     EVP_PKEY_free(ppKey);
+        @ }
+        @ else
+        @     ret = PEM_write_bio_RSAPrivateKey(pBio, data().GetPRsa(), NULL, NULL, NULL, NULL, NULL);
+        @ if (ret > 0)    //可能还未生成密钥对
+        @ {
+        @     @an<CVolMem> readTemp;
+        @     readTemp.Alloc(1024, FALSE);
+        @     while(TRUE)
+        @     {
+        @         readTemp.Zero ();    //必须清零
+        @         INT readLen = BIO_gets(pBio, (CHAR*)readTemp.GetPtr(), 1024);
+        @         if (readLen <= 0)  break;
+        @         keyData.Append(readTemp.GetPtr (), readLen);
+        @     }
+        @ }
+        @ BIO_free(pBio);
+        @ return keyData;
+    }
+
+    方法 取公钥数据 <公开 类型 = 字节集类 注释 = "在调用\"生成密钥对\"方法后,取出生成的公钥数据." 返回值注释 = "返回公钥数据." @禁止流程检查 = 真>
+    {
+        @ BIO* pBio = BIO_new(BIO_s_mem());
+        @ @an<CVolMem> keyData;
+        @ if (PEM_write_bio_RSA_PUBKEY(pBio, data().GetPRsa()) > 0)
+        @ {
+        @     @an<CVolMem> readTemp;
+        @     readTemp.Alloc(1024, FALSE);
+        @     while(TRUE)
+        @     {
+        @         readTemp.Zero ();    //必须清零
+        @         INT readLen = BIO_gets(pBio, (CHAR*)readTemp.GetPtr(), 1024);
+        @         if (readLen <= 0)  break;
+        @         keyData.Append(readTemp.GetPtr (), readLen);
+        @     }
+        @ }
+        @ BIO_free(pBio);
+        @ return keyData;
+    }
+}
+
+类 数据填充模式 <公开 注释 = "填充模式即数据的补码方式,参考资料:https://www.cnblogs.com/midea0978/articles/1437257.html" @文档 = "category = \"辅助类\""
+        @常量类 = 整数>
+{
+    常量 无 <公开 值 = 0 注释 = "不进行任何填充,注意使用该模式后必须确保提供的数据为数据块的倍数,即 输入长度 % 16 = 0.">
+    常量 PKCS7 <公开 值 = 1 注释 = "使用补码的字节序列长度值来填充.">
+    常量 ANSIX923 <公开 值 = 2 注释 = "与\"零填充\"基本一致,但最后一位是补码的字节序列长度.">
+    常量 ISO10126 <公开 值 = 3 注释 = "以随机字符补码,最后一位是补码的字节序列长度.">
+    常量 零填充 <公开 值 = 4 注释 = "即ZeroPadding,在数据对齐时使用0补位.">
+}
+
+类 RSA填充方式 <公开 注释 = "RSA加解密类专用的填充方式." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 无 <公开 值 = @RSA_NO_PADDING>
+    常量 PKCS1 <公开 值 = @RSA_PKCS1_PADDING>
+    常量 SSLV23 <公开 值 = @RSA_SSLV23_PADDING>
+    常量 PKCS1_OAEP <公开 值 = @RSA_PKCS1_OAEP_PADDING>
+    常量 X931 <公开 值 = @RSA_X931_PADDING>
+    常量 PKCS1_PSS <公开 值 = @RSA_PKCS1_PSS_PADDING>
+}
+
+类 RSA数字签名算法 <公开 注释 = "提供RSA数字签名所使用的摘要算法." @文档 = "category = \"辅助类\"">
+{
+    常量 SHA <公开 类型 = 整数 值 = @NID_sha>
+    常量 SHA1 <公开 类型 = 整数 值 = @NID_sha1>
+    常量 SHA224 <公开 类型 = 整数 值 = @NID_sha224>
+    常量 SHA256 <公开 类型 = 整数 值 = @NID_sha256>
+    常量 SHA384 <公开 类型 = 整数 值 = @NID_sha384>
+    常量 SHA512 <公开 类型 = 整数 值 = @NID_sha512>
+    常量 SHA3_224 <公开 类型 = 整数 值 = @NID_sha3_224>
+    常量 SHA3_256 <公开 类型 = 整数 值 = @NID_sha3_256>
+    常量 SHA3_384 <公开 类型 = 整数 值 = @NID_sha3_384>
+    常量 SHA3_512 <公开 类型 = 整数 值 = @NID_sha3_512>
+    常量 MD5 <公开 类型 = 整数 值 = @NID_md5>
+    常量 MD4 <公开 类型 = 整数 值 = @NID_md4>
+    常量 MD2 <公开 类型 = 整数 值 = @NID_md2>
+    常量 SM2 <公开 类型 = 整数 值 = @NID_sm2>
+    常量 SM3 <公开 类型 = 整数 值 = @NID_sm3>
+    常量 SHAKE128 <公开 类型 = 整数 值 = @NID_shake128>
+    常量 SHAKE256 <公开 类型 = 整数 值 = @NID_shake256>
+    常量 MDC2 <公开 类型 = 整数 值 = @NID_mdc2>
+}
+
+类 大整数类 <公开 基础类 = 扩展对象类 注释 = "提供大整数运算相关支持." @视窗.外部头文件 = "..\\..\\shared\\extern_lib\\common\\openssl\\1\\include\\vol_bn.h">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (COpensslBNWraper)
+
+    方法 取展示内容 <公开 注释 = "将本对象中的所有数据用文本方式填入到所提供的文本参数中,用作调试或其它场合展示时使用." 注释 = "" @虚拟方法 = 可覆盖>
+    参数 展示内容 <类型 = 文本型 注释 = "用作填入本对象中所有数据的展示文本">
+    参数 最大展示数据尺寸 <类型 = 整数 注释 = "提供用户所指定的最大允许展示数据尺寸,小于0表示全部展示,等于0表示展示默认尺寸数据.">
+    {
+        展示内容 = 取十进制值 ()  // 以十进制文本输出大数表示的数值
+    }
+
+    方法 是否为奇数 <公开 属性读 类型 = 逻辑型 注释 = "判断当前大数是否为一个奇数." 返回值注释 = "为奇数返回真,否则返回假." @禁止流程检查 = 真>
+    {
+        @ return BN_is_odd(data().GetBN());
+    }
+
+    方法 是否为零 <公开 属性读 类型 = 逻辑型 注释 = "判断当前大数是否为零." 返回值注释 = "为0返回真,否则返回假." @禁止流程检查 = 真>
+    {
+        @ return BN_is_zero(data().GetBN());
+    }
+
+    方法 是否为一 <公开 属性读 类型 = 逻辑型 注释 = "判断当前大数是否为一." 返回值注释 = "为1返回真,否则返回假." @禁止流程检查 = 真>
+    {
+        @ return BN_is_one(data().GetBN());
+    }
+
+    方法 位数 <公开 属性读 类型 = 整数 注释 = "表示当前大数实例实际需要的比特数(bits)." @禁止流程检查 = 真>
+    {
+        @ return BN_num_bits(data().GetBN());
+    }
+
+    方法 字节数 <公开 属性读 类型 = 整数 注释 = "表示当前大数实例实际需要的字节数." @禁止流程检查 = 真>
+    {
+        @ return BN_num_bytes(data().GetBN());
+    }
+
+    方法 是否为指定值 <公开 类型 = 逻辑型 注释 = "判断当前大数是否为指定的数值." @禁止流程检查 = 真>
+    参数 数值 <类型 = 变整数 注释 = "提供所欲对比的数值.">
+    参数 取绝对值 <类型 = 逻辑型 注释 = "是否取当前大数的绝对值来进行对比." @默认值 = 假>
+    {
+        如果 (取绝对值)
+        {
+            @ return BN_abs_is_word(data().GetBN(), (const BN_ULONG)@<数值>);
+        }
+        否则
+        {
+            @ return BN_is_word(data().GetBN(), (const BN_ULONG)@<数值>);
+        }
+    }
+
+    方法 是否为素数 <公开 类型 = 逻辑型 注释 = "判断当前大数是否为素数." @禁止流程检查 = 真>
+    {
+        @ return BN_is_prime_ex(data().GetBN(), BN_prime_checks, data().GetContext(), NULL);
+    }
+
+    方法 复制 <公开 类型 = 大整数类 注释 = "将当前大数实例复制并返回." @禁止流程检查 = 真>
+    {
+        @ BIGNUM * temp = BN_dup(data().GetBN());
+        @ @sn<current_class> volBn;
+        @ volBn.data().SetBN(temp);
+        @ return volBn;
+    }
+
+    方法 交换 <公开 注释 = "将当前大数实例与另一大数实例交换内容." @禁止流程检查 = 真>
+    参数 待交换值 <类型 = 大整数类 注释 = "提供所欲与其交换内容的大数.">
+    {
+        @ BN_swap(data().GetBN(), @<待交换值>.data().GetBN());
+    }
+
+    方法 置数值 <公开 类型 = 逻辑型 注释 = "将当前大数置为指定的数值." 返回值注释 = "返回操作是否成功." @禁止流程检查 = 真>
+    参数 值 <类型 = 变整数 注释 = "提供所欲设置的数值.">
+    {
+        @ return BN_set_word(data().GetBN(), (const BN_ULONG)@<值>);
+    }
+
+    方法 置随机值 <公开 类型 = 逻辑型 注释 = "将当前大数实例生成一个强密码学伪随机数." 返回值注释 = "返回操作是否成功." @禁止流程检查 = 真>
+    参数 位数 <类型 = 整数 注释 = "提供需要生成随机数的位数." @默认值 = 32>
+    参数 最高位选项 <类型 = 整数 注释 = "该参数为-1表示生成随机数的最高位设置为0,为0表示最高位设置为1,为1时表示最高两位都设置为1." @默认值 = -1>
+    参数 是否奇数 <类型 = 逻辑型 注释 = "指定所生成的随机数是否为奇数,提供真则生成偶数." @默认值 = 假>
+    {
+        @ return BN_rand(data().GetBN(), @<位数>, @<最高位选项>, @<是否奇数>);
+    }
+
+    方法 置素数值 <公开 类型 = 逻辑型 注释 = "将当前大数实例生成一个素数值." 返回值注释 = "返回操作是否成功." @禁止流程检查 = 真>
+    参数 位数 <类型 = 整数 注释 = "提供需要生成素数的位数." @默认值 = 32>
+    {
+        @ return BN_generate_prime_ex(data().GetBN(), @<位数>, 0, NULL, NULL, NULL);
+    }
+
+    方法 置十进制值 <公开 类型 = 逻辑型 注释 = "将当前大数置为指定的十进制值." 返回值注释 = "返回操作是否成功." @禁止流程检查 = 真>
+    参数 值 <类型 = 文本型 注释 = "提供所欲设置的值.">
+    {
+        @ CVolMem mem;
+        @ const char * dec = GetMbsText (@<值>.GetText (), mem, NULL);
+        @ BIGNUM * ptr = data().GetBN();
+        @ return BN_dec2bn(&ptr, dec);
+    }
+
+    方法 置十六进制值 <公开 类型 = 逻辑型 注释 = "将当前大数置为指定的十六进制值." 返回值注释 = "返回操作是否成功." @禁止流程检查 = 真>
+    参数 值 <类型 = 文本型 注释 = "提供所欲设置的值.">
+    {
+        @ CVolMem mem;
+        @ const char * dec = GetMbsText (@<值>.GetText (), mem, NULL);
+        @ BIGNUM * ptr = data().GetBN();
+        @ return BN_hex2bn(&ptr, dec);
+    }
+
+    方法 置字节集值 <公开 类型 = 逻辑型 注释 = "将指定字节集中的正整数置为当前大数的值." 注释 = "注意:如果最高位为0,将会被忽略." 返回值注释 = "返回操作是否成功." @禁止流程检查 = 真>
+    参数 值 <类型 = 字节集类 注释 = "提供所欲设置的值.">
+    {
+        @ BIGNUM * temp = NULL;
+        @ temp = BN_bin2bn((unsigned char *)@<值>.GetPtr(), (INT)@<值>.GetSize(), NULL);
+        @ data().SetBN(temp);    //释放并置入新值
+        @ return temp != NULL;
+    }
+
+    方法 取数值 <公开 类型 = 变整数 注释 = "获取该大数的数值." 返回值注释 = "如果该大数可使用变整数表示,返回该大数的数值." @禁止流程检查 = 真>
+    {
+        @ return (INT_P)BN_get_word(data().GetBN());
+    }
+
+    方法 取十进制值 <公开 类型 = 文本型 注释 = "以十进制文本表示当前大数." @禁止流程检查 = 真>
+    {
+        @ char * dec = BN_bn2dec(data().GetBN());
+        @ @an<CVolString> ret(dec);
+        @ OPENSSL_free(dec);
+        @ return ret;
+    }
+
+    方法 取十六进制值 <公开 类型 = 文本型 注释 = "以十进制文本表示当前大数." @禁止流程检查 = 真>
+    {
+        @ char * hex = BN_bn2hex(data().GetBN());
+        @ @an<CVolString> ret(hex);
+        @ OPENSSL_free(hex);
+        @ return ret;
+    }
+
+    方法 取字节集值 <公开 类型 = 字节集类 注释 = "将当前大数实例以字符形式置入字节集内." 返回值注释 = "注意:如果最高位为0,将会被忽略." @禁止流程检查 = 真>
+    {
+        @ @an<CVolMem> mem;
+        @ BN_bn2bin(data().GetBN(), (unsigned char *)mem.Alloc(BN_num_bytes(data().GetBN()), TRUE));
+        @ return mem;
+    }
+
+    方法 比较绝对值 <公开 类型 = 整数 注释 = "将当前大数与另一大数进行绝对值的数值大小对比." 返回值注释 = "如果当前大数的绝对值小于另一大数返回-1,如果相等返回0,如果大于则返回1." @禁止流程检查 = 真>
+    参数 欲比较大数 <类型 = 大整数类 注释 = "提供欲进行绝对值对比的另一的大数.">
+    {
+        @ return BN_ucmp(data().GetBN(), @<欲比较大数>.data().GetBN());
+    }
+
+    方法 比较 <公开 类型 = 整数 注释 = "将当前大数与另一大数进行数值大小对比." 返回值注释 = "如果当前大数的绝对值小于另一大数返回-1,如果相等返回0,如果大于则返回1." @禁止流程检查 = 真>
+    参数 欲比较大数 <类型 = 大整数类 注释 = "提供欲进行对比的另一的大数.">
+    {
+        @ return BN_cmp(data().GetBN(), @<欲比较大数>.data().GetBN());
+    }
+
+    方法 加 <公开 类型 = 大整数类 注释 = "将当前大数实例与另一指定的大数进行加法运算." 返回值注释 = "返回本次运算后的结果." @禁止流程检查 = 真>
+    参数 加数 <类型 = 大整数类>
+    {
+        @ BIGNUM * temp = BN_new();
+        @ BN_add(temp, data().GetBN(), @<加数>.data().GetBN());
+        @ @sn<current_class> volBn;
+        @ volBn.data().SetBN(temp);
+        @ return volBn;
+    }
+
+    方法 加数值 <公开 类型 = 逻辑型 注释 = "将当前大数实例与另一指定的数值进行加法运算." 返回值注释 = "返回本次运算是否成功." @禁止流程检查 = 真>
+    参数 加数 <类型 = 变整数>
+    {
+        @ return BN_add_word(data().GetBN(), (BN_ULONG)@<加数>);
+    }
+
+    方法 减 <公开 类型 = 大整数类 注释 = "将当前大数实例与另一指定的大数进行减法运算." 返回值注释 = "返回本次运算后的结果." @禁止流程检查 = 真>
+    参数 减数 <类型 = 大整数类>
+    {
+        @ BIGNUM * temp = BN_new();
+        @ BN_sub(temp, data().GetBN(), @<减数>.data().GetBN());
+        @ @sn<current_class> volBn;
+        @ volBn.data().SetBN(temp);
+        @ return volBn;
+    }
+
+    方法 减数值 <公开 类型 = 逻辑型 注释 = "将当前大数实例与另一指定的数值进行减法运算." 返回值注释 = "返回本次运算是否成功." @禁止流程检查 = 真>
+    参数 减数 <类型 = 变整数>
+    {
+        @ return BN_sub_word(data().GetBN(), (BN_ULONG)@<减数>);
+    }
+
+    方法 乘 <公开 类型 = 大整数类 注释 = "将当前大数实例与另一指定的大数进行乘法运算." 返回值注释 = "返回本次运算后的结果." @禁止流程检查 = 真>
+    参数 乘数 <类型 = 大整数类>
+    {
+        @ BIGNUM * temp = BN_new();
+        @ BN_mul(temp, data().GetBN(), @<乘数>.data().GetBN(), data().GetContext());
+        @ @sn<current_class> volBn;
+        @ volBn.data().SetBN(temp);
+        @ return volBn;
+    }
+
+    方法 乘数值 <公开 类型 = 逻辑型 注释 = "将当前大数实例与另一指定的数值进行乘法运算." 返回值注释 = "返回本次运算是否成功." @禁止流程检查 = 真>
+    参数 乘数 <类型 = 变整数>
+    {
+        @ return BN_mul_word(data().GetBN(), (BN_ULONG)@<乘数>);
+    }
+
+    方法 求平方 <公开 类型 = 大整数类 注释 = "求当前大数实例的平方(相比\"实例.乘(实例)\"方法效率要高)." 返回值注释 = "返回当前实例的平方." @禁止流程检查 = 真>
+    {
+        @ BIGNUM * temp = BN_new();
+        @ BN_sqr(temp, data().GetBN(), data().GetContext());
+        @ @sn<current_class> volBn;
+        @ volBn.data().SetBN(temp);
+        @ return volBn;
+    }
+
+    方法 求次方 <公开 类型 = 大整数类 注释 = "求当前大数实例的指定次方." 返回值注释 = "返回本次运算后的结果." @禁止流程检查 = 真>
+    参数 次方数 <类型 = 大整数类 注释 = "指定对欲求次方数值的运算指数.">
+    {
+        @ BIGNUM * temp = BN_new();
+        @ BN_exp(temp, data().GetBN(), @<次方数>.data().GetBN(), data().GetContext());
+        @ @sn<current_class> volBn;
+        @ volBn.data().SetBN(temp);
+        @ return volBn;
+    }
+
+    方法 除 <公开 类型 = 大整数类 注释 = "将当前大数实例与另一指定的大数进行除法运算(当前实例作为被除数)." 返回值注释 = "返回本次运算后的结果." @禁止流程检查 = 真>
+    参数 除数 <类型 = 大整数类>
+    参数 余数 <类型 = 大整数类 注释 = "该参数将会返回本次除法运算后的余数." @默认值 = 空对象>
+    {
+        @ BIGNUM * temp = BN_new();
+        @ BN_div(temp, (BOOL)@<余数>.IsNullObject() ? NULL : @<余数>.data().GetBN(), data().GetBN(), @<除数>.data().GetBN(), data().GetContext());
+        @ @sn<current_class> volBn;
+        @ volBn.data().SetBN(temp);
+        @ return volBn;
+    }
+
+    方法 除数值 <公开 类型 = 变整数 注释 = "将当前大数实例与另一指定的数值进行除法运算(当前实例作为被除数)." 返回值注释 = "返回本次运算的结果." @禁止流程检查 = 真>
+    参数 除数 <类型 = 变整数>
+    {
+        @ return (INT_P)BN_div_word(data().GetBN(), (BN_ULONG)@<除数>);
+    }
+
+    方法 求模 <公开 类型 = 变整数 注释 = "将当前大数实例与另一指定的数值进行取余运算." 返回值注释 = "返回本次运算的结果." @禁止流程检查 = 真>
+    参数 除数 <类型 = 变整数>
+    {
+        @ return (INT_P)BN_mod_word(data().GetBN(), (BN_ULONG)@<除数>);
+    }
+
+    方法 求最大公约数 <公开 类型 = 大整数类 注释 = "求当前大数实例与另一大数的最大公约数." 返回值注释 = "返回最大公约数." @禁止流程检查 = 真>
+    参数 值 <类型 = 大整数类>
+    {
+        @ BIGNUM * temp = BN_new();
+        @ BN_gcd(temp, data().GetBN(), @<值>.data().GetBN(), data().GetContext());
+        @ @sn<current_class> volBn;
+        @ volBn.data().SetBN(temp);
+        @ return volBn;
+    }
+
+    方法 置指定位 <公开 类型 = 逻辑型 注释 = "将当前大数实例的第指定位设置为1." 返回值注释 = "返回操作是否成功." @禁止流程检查 = 真>
+    参数 位 <类型 = 整数 注释 = "所欲设置的第几位,如果大数小于该位数将会被扩展.">
+    {
+        @ return BN_set_bit(data().GetBN(), @<位>);
+    }
+
+    方法 清除指定位 <公开 类型 = 逻辑型 注释 = "将当前大数实例的第指定位设置为0." 返回值注释 = "返回操作是否成功." @禁止流程检查 = 真>
+    参数 位 <类型 = 整数 注释 = "所欲清除的第几位,如果大数小于该位数将返回失败.">
+    {
+        @ return BN_clear_bit(data().GetBN(), @<位>);
+    }
+
+    方法 截取 <公开 类型 = 整数 注释 = "将当前大数实例截断至指定位." 返回值注释 = "返回截断后的结果值" @禁止流程检查 = 真>
+    参数 位 <类型 = 整数 注释 = "所欲截取到第几位,如果大数小于该位数将会返回失败.">
+    {
+        @ return BN_mask_bits(data().GetBN(), @<位>);
+    }
+
+    方法 左移 <公开 类型 = 大整数类 注释 = "将当前大数实例进行位左移运算." 返回值注释 = "返回左移后的结果." @禁止流程检查 = 真>
+    参数 左移位数 <类型 = 整数 注释 = "所欲左移的位数." @默认值 = 1>
+    {
+        @ BIGNUM * temp = BN_new();
+        @ BN_lshift(temp, data().GetBN(), @<左移位数>);
+        @ @sn<current_class> volBn;
+        @ volBn.data().SetBN(temp);
+        @ return volBn;
+    }
+
+    方法 右移 <公开 类型 = 大整数类 注释 = "将当前大数实例进行位右移运算." 返回值注释 = "返回右移后的结果." @禁止流程检查 = 真>
+    参数 左移位数 <类型 = 整数 注释 = "所欲右移的位数." @默认值 = 1>
+    {
+        @ BIGNUM * temp = BN_new();
+        @ BN_rshift(temp, data().GetBN(), @<左移位数>);
+        @ @sn<current_class> volBn;
+        @ volBn.data().SetBN(temp);
+        @ return volBn;
+    }
+}

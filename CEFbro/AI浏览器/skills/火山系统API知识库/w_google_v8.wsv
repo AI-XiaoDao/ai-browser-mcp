@@ -1,0 +1,1579 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.V8引擎 <注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "谷歌V8 JS引擎,可用于执行JS脚本以及交互." 注释 = "开源地址:https://v8.dev/"
+        编辑时信息 = "1F5536, 0, 0, 0" @视窗.头文件搜寻目录 = "include\\$(lm)\\include, include\\$(lm)" @视窗.预定义宏.x64 = "V8_COMPRESS_POINTERS"
+        @视窗.外部资源文件 = "src\\v8_blob_$(p).rc" @视窗.外部头文件 = "src\\vol_google_v8.h" @视窗.外部源文件 = "src\\vol_google_v8.cpp" ""
+        @视窗.外部库 = "lib\\$(p)\\dynamic\\icudt.lib\r\nlib\\$(p)\\dynamic\\icuin.lib\r\nlib\\$(p)\\dynamic\\icuio.lib\r\nlib\\$(p)\\dynamic\\icutu.lib\r\nlib\\$(p)\\dynamic\\icuuc.lib\r\nlib\\$(p)\\dynamic\\v8.dll.lib\r\nlib\\$(p)\\dynamic\\v8_libbase.dll.lib\r\nlib\\$(p)\\dynamic\\v8_libplatform.dll.lib\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\dll\\zlib.lib"
+        @视窗.附属文件 = "lib\\$(p)\\dynamic\\icudt69.dll\r\nlib\\$(p)\\dynamic\\icuin69.dll\r\nlib\\$(p)\\dynamic\\icuio69.dll\r\nlib\\$(p)\\dynamic\\icutu69.dll\r\nlib\\$(p)\\dynamic\\icuuc69.dll\r\nlib\\$(p)\\dynamic\\v8.dll\r\nlib\\$(p)\\dynamic\\v8_libbase.dll\r\nlib\\$(p)\\dynamic\\v8_libplatform.dll\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\dll\\zlib1.dll"
+        @视窗.预定义宏 = "USING_V8_SHARED, V8_USE_EXTERNAL_STARTUP_DATA" @视窗.需求VS版本 = "14-" ""
+        "// @视窗.外部库.non_static" = "lib\\$(p)\\dynamic\\icudt.lib\r\nlib\\$(p)\\dynamic\\icuin.lib\r\nlib\\$(p)\\dynamic\\icuio.lib\r\nlib\\$(p)\\dynamic\\icutu.lib\r\nlib\\$(p)\\dynamic\\icuuc.lib\r\nlib\\$(p)\\dynamic\\v8.dll.lib\r\nlib\\$(p)\\dynamic\\v8_libbase.dll.lib\r\nlib\\$(p)\\dynamic\\v8_libplatform.dll.lib\r\nlib\\$(p)\\dynamic\\zlib.lib"
+        "// @视窗.附属文件.non_static" = "lib\\$(p)\\dynamic\\icudt69.dll\r\nlib\\$(p)\\dynamic\\icuin69.dll\r\nlib\\$(p)\\dynamic\\icuio69.dll\r\nlib\\$(p)\\dynamic\\icutu69.dll\r\nlib\\$(p)\\dynamic\\icuuc69.dll\r\nlib\\$(p)\\dynamic\\v8.dll\r\nlib\\$(p)\\dynamic\\v8_libbase.dll\r\nlib\\$(p)\\dynamic\\v8_libplatform.dll\r\nlib\\$(p)\\dynamic\\zlib1.dll"
+        "// @视窗.预定义宏.non_static" = "USING_V8_SHARED, V8_USE_EXTERNAL_STARTUP_DATA" "// @视窗.需求VS版本.non_static" = "14-"
+        "// @视窗.外部库.static" = "lib\\$(p)\\static\\$(d)\\icudt.lib\r\nlib\\$(p)\\static\\$(d)\\icuin.lib\r\nlib\\$(p)\\static\\$(d)\\icuio.lib\r\nlib\\$(p)\\static\\$(d)\\icutu.lib\r\nlib\\$(p)\\static\\$(d)\\icuuc.lib\r\nlib\\$(p)\\static\\$(d)\\v8_monolith.lib\r\nlib\\$(p)\\static\\$(d)\\zlib.lib\r\nDbghelp.lib"
+        "// @视窗.需求VS版本.static" = "16-">
+
+类 JS引擎类 <公开 注释 = "提供V8引擎的全局初始化以及一些全局方法">
+{
+    方法 初始化 <公开 静态 类型 = 逻辑型 注释 = "JS引擎全局初始化并设置默认使用的平台对象" @禁止流程检查 = 真>
+    参数 平台 <类型 = JS平台类 注释 = "提供所欲使用的默认平台对象">
+    {
+        @ V8::InitializePlatform(@<平台>.data().GetPlatform());
+        @ return V8::Initialize();
+    }
+
+    方法 取库版本信息 <公开 静态 类型 = 文本型 注释 = "取当前V8库版本号相关信息" @嵌入式方法 = "">
+    {
+        @ CVolString(v8::V8::GetVersion())
+    }
+
+    方法 执行脚本 <公开 静态 类型 = 文本型 注释 = "提供指定JS脚本内容,对其编译执行并返回执行后结果." 返回值注释 = "以文本形式返回脚本执行后所返回的内容,失败返回空文本.">
+    参数 脚本内容 <类型 = 文本型 注释 = "提供所欲执行的脚本内容">
+    {
+        变量 运行空间 <类型 = JS隔离空间类>
+        变量 运行环境 <类型 = JS环境类>
+        运行空间.创建 ()
+        运行环境.创建 (运行空间)
+        变量 JS脚本 <类型 = JS脚本类>
+        JS脚本 = 运行环境.编译脚本 (脚本内容)
+        如果 (JS脚本.是否为空 ())
+        {
+            返回 ("")
+        }
+        返回 (JS脚本.执行 (运行环境).取文本值 (运行环境))
+    }
+
+    # @begin
+    # <> <include>
+    # static void @an<_sOnBeforeAppInit> ();
+    # <> </include>
+    # void @sn<current_class>::@an<_sOnBeforeAppInit>()
+    # {
+    # #if defined(USING_V8_SHARED) && defined(V8_USE_EXTERNAL_STARTUP_DATA)    //为动态编译?
+    #     static CVolMem membuf;
+    #     static StartupData snapshot_data;
+    #     VERIFY(g_objVolApp.LoadResData (_ID_VOL_V8_BLOB, membuf));
+    #     snapshot_data.data = (const char*)membuf.GetPtr();
+    #     snapshot_data.raw_size = (int)membuf.GetSize();
+    #     V8::SetSnapshotDataBlob(&snapshot_data);
+    # #endif
+    # }
+    # @end
+}
+
+类 JS平台类 <公开 注释 = "表示JS的一个平台,本类实例负责管理线程池,调用栈以及事件队列等.">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8PlatformWrapper)
+
+    方法 创建 <公开 注释 = "创建并初始化当前平台对象" @嵌入式方法 = "">
+    参数 线程数 <类型 = 整数 注释 = "指定该平台中线程池的最大线程数,提供小于0表示使用单线程,提供0表示使用(CPU数量-1)个线程." @默认值 = 0>
+    参数 空闲任务 <类型 = 逻辑型 注释 = "指定该平台是否启用空闲任务" @默认值 = 假>
+    参数 堆栈输出到控制台 <类型 = 逻辑型 注释 = "如果当前程序为控制台应用,是否将堆栈信息转储于控制台中进行输出." @默认值 = 假>
+    {
+        @ @sn<this>.data().CreatePlatform(@<线程数>, @<空闲任务>, @<堆栈输出到控制台>)
+    }
+
+    方法 取工作线程数 <公开 类型 = 整数 注释 = "获取当前平台的工作线程数量" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetPlatform()->NumberOfWorkerThreads()
+    }
+}
+
+类 JS隔离空间类 <公开 注释 = "本类实例表示JS环境运行的隔离空间,不同的空间之间无法互相影响.">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8IsolateWrapper)
+    # <> <include>
+    # @sn<current_class>(Isolate::CreateParams& stParams):@sn<current_class>() { data().CreateIsolate(stParams); }
+    # @sn<current_class>(Isolate* pIsolate):@sn<current_class>() { data().CreateIsolateWithoutWrapper(pIsolate); }
+    # <> </include>
+    # @end
+
+    方法 创建 <公开 注释 = "初始化当前空间对象." 注释 = "注意:本方法须在引擎\"初始化\"成功后调用.">
+    参数 栈限制 <类型 = 变整数 注释 = "提供所欲使用的VM堆栈的最大地址限制,提供0表示使用默认." @默认值 = 0>
+    参数 代码区尺寸 <类型 = 变整数 注释 = "为生成的代码保留的虚拟内存量,提供0表示使用默认." @默认值 = 0>
+    参数 老生代初始尺寸 <类型 = 变整数 注释 = "指定老生代的初始内存大小,提供0表示使用默认." @默认值 = 0>
+    参数 老生代最大尺寸 <类型 = 变整数 注释 = "指定老生代可使用内存的最大尺寸,达到该限制时将会执行一系列垃圾回收动作,提供0表示使用默认." @默认值 = 0>
+    参数 新生代初始尺寸 <类型 = 变整数 注释 = "指定新生代的初始内存大小,提供0表示使用默认." @默认值 = 0>
+    参数 新生代最大尺寸 <类型 = 变整数 注释 = "指定新生代可使用内存的最大尺寸,该值将会影响垃圾回收的频率." @默认值 = 0>
+    参数 允许原子等待 <类型 = 逻辑型 注释 = "指定是否允许执行原子等待." @默认值 = 真>
+    参数 仅允许安全终止 <类型 = 逻辑型 注释 = "指定是否在没有有效的安全终止范围时,延迟终止动作." @默认值 = 假>
+    {
+        @ Isolate::CreateParams stParams;
+        @ stParams.array_buffer_allocator = ArrayBuffer::Allocator::NewDefaultAllocator();
+        @ stParams.constraints.set_stack_limit(@<栈限制> == 0 ? nullptr : (uint32_t*)@<栈限制>);
+        @ stParams.constraints.set_code_range_size_in_bytes((size_t)@<代码区尺寸>);
+        @ stParams.constraints.set_initial_old_generation_size_in_bytes((size_t)@<老生代初始尺寸>);
+        @ stParams.constraints.set_max_old_generation_size_in_bytes((size_t)@<老生代最大尺寸>);
+        @ stParams.constraints.set_initial_young_generation_size_in_bytes((size_t)@<新生代初始尺寸>);
+        @ stParams.constraints.set_max_young_generation_size_in_bytes((size_t)@<新生代最大尺寸>);
+        // @ stParams.code_event_handler = @sn<current_class>::OnJitEvent;
+        @ stParams.allow_atomics_wait = @<允许原子等待>;
+        @ stParams.only_terminate_in_safe_scope = @<仅允许安全终止>;
+        @ this->data().CreateIsolate(stParams);
+    }
+}
+
+类 JS环境类 <公开 注释 = "表示JS脚本的执行环境">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8ContextWrapper)
+    # <> <include>
+    # @sn<current_class>(const Local<Context>& context):@sn<current_class>() { data().CreateContext(context); }
+    # inline_ Local<String> VolString2LocalU8 (CVolString& value)
+    # {
+    #     CU8String u8str(value.GetText());
+    #     return String::NewFromUtf8(data().GetLocalContext()->GetIsolate(), u8str.GetText(), NewStringType::kNormal).ToLocalChecked();
+    # }
+    # <> </include>
+    # @end
+
+    方法 创建 <公开 注释 = "基于指定空间创建环境" @嵌入式方法 = "">
+    参数 空间 <类型 = JS隔离空间类 注释 = "所提供的空间对象,必须已经执行过\"创建\".">
+    {
+        @ @sn<this>.data().CreateContext(@<空间>.data().GetIsolate())
+    }
+
+    方法 编译脚本 <公开 类型 = JS脚本类 注释 = "提供JS脚本内容,进行编译并执行." 注释 = "注意: 如果编译失败,所返回\"JS脚本类\"对象将为空(其\"是否为空\"方法返回真),此时不能执行该对象的其它方法."
+            @禁止流程检查 = 真>
+    参数 内容 <类型 = 文本型 注释 = "提供所欲编译的JS脚本内容">
+    {
+        @ Local<Script> mScript;
+        @ Script::Compile(data().GetLocalContext(), VolString2LocalU8(@<内容>)).ToLocal(&mScript);
+        @ return @dt<JS脚本类>(mScript);
+    }
+
+    方法 取数据分配字段数 <公开 类型 = 整数 注释 = "返回为嵌入程序数据分配的字段数" @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.data().GetLocalContext()->GetNumberOfEmbedderDataFields()
+    }
+
+    方法 取嵌入数据 <公开 类型 = JS结果类 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalContext()->GetEmbedderData(@<索引>))
+    }
+
+    方法 置嵌入数据 <公开 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    参数 数据 <类型 = JS结果类>
+    {
+        @ @sn<this>.data().GetLocalContext()->SetEmbedderData(@<索引>, @<数据>.data().GetLocalValue())
+    }
+
+    方法 取保留嵌入数据 <公开 类型 = JS结果类 @嵌入式方法 = "">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalContext()->GetContinuationPreservedEmbedderData())
+    }
+
+    方法 置保留嵌入数据 <公开 @嵌入式方法 = "">
+    参数 数据 <类型 = JS结果类>
+    {
+        @ @sn<this>.data().GetLocalContext()->SetContinuationPreservedEmbedderData(@<数据>.data().GetLocalValue())
+    }
+
+    方法 取全局对象 <公开 类型 = JS对象类 注释 = "获取处于当前执行环境中的JS全局对象" @嵌入式方法 = "">
+    {
+        @ @dt<JS对象类>(@sn<this>.data().GetLocalContext()->Global())
+    }
+
+    方法 分离全局对象 <公开 类型 = JS对象类 注释 = "分离处于当前执行环境中的JS全局对象" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalContext()->DetachGlobal()
+    }
+
+    方法 取额外绑定对象 <公开 类型 = JS对象类 注释 = "获取额外绑定的JS对象" @嵌入式方法 = "">
+    {
+        @ @dt<JS对象类>(@sn<this>.data().GetLocalContext()->GetExtrasBindingObject())
+    }
+}
+
+类 JS脚本类 <公开 注释 = "本类实例表示一个已编译完成的JS脚本." 注释 = "注意: 在执行本类中除了\"是否为空\"之外的其它方法前,请先确认本类对象不为空(\"是否为空\"方法返回假).">
+{
+    方法 是否为空 <公开 类型 = 逻辑型 注释 = "检查当前脚本是否有效可被执行" 返回值注释 = "有效返回真,否则返回假." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue().IsEmpty()
+    }
+
+    方法 执行 <公开 类型 = JS结果类 注释 = "开始执行当前脚本" 返回值注释 = "如果该脚本执行后有返回值,将返回的值置入该返回的对象中." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供执行当前脚本所欲使用的运行环境">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->Run(@<环境>.data().GetLocalContext()).ToLocalChecked())
+    }
+
+    方法 取ID <公开 类型 = 整数 注释 = "获取脚本ID" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->GetUnboundScript()->GetId()
+    }
+
+    方法 取脚本名称 <公开 类型 = JS结果类 注释 = "获取脚本名称" @嵌入式方法 = "">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->GetUnboundScript()->GetScriptName())
+    }
+
+    方法 取源地址 <公开 类型 = JS结果类 注释 = "获取脚本源地址" @嵌入式方法 = "">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->GetUnboundScript()->GetSourceURL())
+    }
+
+    方法 取源映射地址 <公开 类型 = JS结果类 注释 = "获取脚本源映射地址" @嵌入式方法 = "">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->GetUnboundScript()->GetSourceMappingURL())
+    }
+
+    方法 取代码所处行 <公开 类型 = 整数 注释 = "根据指定代码位置取出其所处行数." @嵌入式方法 = "">
+    参数 代码位置 <类型 = 整数>
+    {
+        @ @sn<this>.data().GetLocalValue()->GetUnboundScript()->GetLineNumber()
+    }
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8WrapperTemplate<Script>)
+    # <> <include>
+    # @sn<current_class>(Local<Script>& value):@sn<current_class>() { data().CreateValue(value); }
+    # <> </include>
+    # @end
+    #
+}
+
+类 JS数据类 <公开 注释 = "本类用于表示JS中的一个数据">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8WrapperTemplate<Data>)
+    # <> <include>
+    # @sn<current_class>(Local<Data>& value):@sn<current_class>() { data().CreateValue(value); }
+    # <> </include>
+    # @end
+
+    方法 是否为结果 <公开 类型 = 逻辑型 注释 = "检查当前对象是否为结果对象(JS结果类)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsValue()
+    }
+
+    方法 是否为模块 <公开 类型 = 逻辑型 注释 = "检查当前对象是否为结果对象(JS模块类)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsModule()
+    }
+
+    方法 是否为私有符号 <公开 类型 = 逻辑型 注释 = "检查当前对象是否为私有符号(JS私有符号类)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsPrivate()
+    }
+
+    方法 是否为对象模板 <公开 类型 = 逻辑型 注释 = "检查当前对象是否为对象模板." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsObjectTemplate()
+    }
+
+    方法 是否为函数模板 <公开 类型 = 逻辑型 注释 = "检查当前对象是否为函数模板." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsFunctionTemplate()
+    }
+
+    方法 是否为环境 <公开 类型 = 逻辑型 注释 = "检查当前对象是否为环境对象(JS环境类)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsContext()
+    }
+
+    方法 到环境 <公开 类型 = JS环境类 注释 = "将当前结果对象转换环境对象" @嵌入式方法 = "">
+    {
+        @ @dt<JS环境类>(@sn<this>.data().GetLocalValue().As<Context>())
+    }
+
+    方法 到结果 <公开 类型 = JS结果类 注释 = "将当前结果对象转换JS结果对象" @嵌入式方法 = "">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue().As<Value>())
+    }
+
+    方法 到私有符号 <公开 类型 = JS私有符号类 注释 = "将当前结果对象转换JS私有符号对象" @嵌入式方法 = "">
+    {
+        @ @dt<JS私有符号类>(@sn<this>.data().GetLocalValue().As<Private>())
+    }
+}
+
+类 JS结果类 <公开 基础类 = JS数据类 注释 = "本类实例表示一个值对象">
+{
+    方法 创建空对象 <公开 静态 类型 = JS结果类 注释 = "创建一个空内容的当前本类实例." @嵌入式方法 = "">
+    {
+        @ @dt<JS结果类>(Local<Value>())
+    }
+
+    方法 比较 <公开 类型 = 逻辑型 注释 = "将当前结果对象中的值与另一结果对象中的值做比较,即对应JS中的\"==\"运算符." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 比较对象 <类型 = JS结果类 注释 = "提供欲与其进行对比的另一对象">
+    {
+        @ @sn<this>.data().GetLocalValue()->Equals(@<环境>.data().GetLocalContext(), @<比较对象>.data().GetLocalValue()).ToLocalChecked()->Value()
+    }
+
+    方法 严格比较 <公开 类型 = 逻辑型 注释 = "将当前结果对象中的值与另一结果对象中的值做严格对比" @嵌入式方法 = "">
+    参数 比较对象 <类型 = JS结果类 注释 = "提供欲与其进行对比的另一对象">
+    {
+        @ @sn<this>.data().GetLocalValue()->StrictEquals(@<比较对象>.data().GetLocalValue())
+    }
+
+    方法 值比较 <公开 类型 = 逻辑型 注释 = "将当前结果对象中的值与另一结果对象中的值对比" @嵌入式方法 = "">
+    参数 比较对象 <类型 = JS结果类 注释 = "提供欲与其进行对比的另一对象">
+    {
+        @ @sn<this>.data().GetLocalValue()->SameValue(@<比较对象>.data().GetLocalValue())
+    }
+
+    方法 取文本值 <公开 类型 = 文本型 注释 = "以文本形式取出值" @禁止流程检查 = 真>
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    {
+        @ v8::String::Utf8Value utf8(@<环境>.data().GetLocalContext()->GetIsolate(), data().GetLocalValue());
+        @ return CVolString(*utf8);
+    }
+
+    方法 取大整数值 <公开 类型 = 长整数 注释 = "以大整数形式取出值" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    {
+        @ (INT64)@sn<this>.data().GetLocalValue()->ToBigInt(@<环境>.data().GetLocalContext()).ToLocalChecked()->Int64Value()
+    }
+
+    方法 取数值 <公开 类型 = 小数 注释 = "以数值形式取出值" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    {
+        @ @sn<this>.data().GetLocalValue()->ToNumber(@<环境>.data().GetLocalContext()).ToLocalChecked()->Value()
+    }
+
+    方法 取整数值 <公开 类型 = 整数 注释 = "以整数形式取出值" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    {
+        @ @sn<this>.data().GetLocalValue()->ToInt32(@<环境>.data().GetLocalContext()).ToLocalChecked()->Value()
+    }
+
+    方法 取逻辑值 <公开 类型 = 逻辑型 注释 = "以逻辑型形式取出值" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    {
+        @ @sn<this>.data().GetLocalValue()->ToInt32(@<环境>.data().GetLocalContext()->GetIsolate()).ToLocalChecked()->Value()
+    }
+
+    方法 是否为未定义 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值为未定义,即对应JS中\"value === undefined\"." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsUndefined()
+    }
+
+    方法 是否为空 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值为空,即对应JS中\"value === null\"." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsNull()
+    }
+
+    方法 是否为空或未定义 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值为空或未定义,即对应JS中\"value == null\"." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsNullOrUndefined()
+    }
+
+    方法 是否为真 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值为真,即对应JS中\"value === true\"." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsTrue()
+    }
+
+    方法 是否为假 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值为假,即对应JS中\"value === false\"." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsFalse()
+    }
+
+    方法 是否为符号或文本 <公开 类型 = 逻辑型
+            注释 = "判断当前结果对象中所储存值是否为符号或一个字符串,即对应JS中\"typeof value === \'string\' || typeof value === \'symbol\'\"." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsName()
+    }
+
+    方法 是否为文本 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个字符串,即对应JS中\"typeof value === \'string\'\"." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsString()
+    }
+
+    方法 是否为符号 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个符号,即对应JS中\"typeof value === \'symbol\'\"." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsSymbol()
+    }
+
+    方法 是否为函数 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个函数,即对应JS中\"typeof value === \'function\'\"." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsFunction()
+    }
+
+    方法 是否为数组 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个数组." 注释 = "注意:如果为数组代理将返回假." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsArray()
+    }
+
+    方法 是否为对象 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个对象." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsObject()
+    }
+
+    方法 是否为大整数 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个大整数,即对应JS中\"typeof value === \'bigint\'\"." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsBigInt()
+    }
+
+    方法 是否为逻辑型 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个逻辑型的值,即对应JS中\"typeof value === \'boolean\'\"." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsBoolean()
+    }
+
+    方法 是否为数值 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个数值,即对应JS中\"typeof value === \'number\'\"." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsNumber()
+    }
+
+    方法 是否为外部对象 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个外部对象" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsExternal()
+    }
+
+    方法 是否为32位整数 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个32位整数" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsInt32()
+    }
+
+    方法 是否为无符32位整数 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个无符号32位整数" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsUint32()
+    }
+
+    方法 是否为日期型 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个日期值" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsDate()
+    }
+
+    方法 是否为参数对象 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个参数对象" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsArgumentsObject()
+    }
+
+    方法 是否为大整数对象 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个大整数对象" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsBigIntObject()
+    }
+
+    方法 是否为逻辑型对象 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个逻辑值对象" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsBooleanObject()
+    }
+
+    方法 是否为数值对象 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个数值对象" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsNumberObject()
+    }
+
+    方法 是否为文本对象 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个文本型对象" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsStringObject()
+    }
+
+    方法 是否为符号对象 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为一个符号对象" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsSymbolObject()
+    }
+
+    方法 是否为本地错误 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为本地错误(NativeError)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsNativeError()
+    }
+
+    方法 是否为正则表达式 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为正则表达式" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsRegExp()
+    }
+
+    方法 是否为异步函数 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为异步函数(async function)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsAsyncFunction()
+    }
+
+    方法 是否为生成器函数 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为生成器函数(Generator function)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsGeneratorFunction()
+    }
+
+    方法 是否为生成器对象 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为生成器对象(迭代器)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsGeneratorObject()
+    }
+
+    方法 是否为Promise对象 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为Promise对象" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsPromise()
+    }
+
+    方法 是否为键值表 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为Map对象" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsMap()
+    }
+
+    方法 是否为集合 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为Set对象" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsSet()
+    }
+
+    方法 是否为键值表迭代器 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为Map迭代器" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsMapIterator()
+    }
+
+    方法 是否为集合迭代器 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为Set迭代器" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsSetIterator()
+    }
+
+    方法 是否为弱引用键值表 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为WeakMap对象" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsWeakMap()
+    }
+
+    方法 是否为弱引用集合 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为WeakSet对象" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsWeakSet()
+    }
+
+    方法 是否为数组缓冲区 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为ArrayBuffer" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsArrayBuffer()
+    }
+
+    方法 是否为数组缓冲区视图 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为ArrayBufferView" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsArrayBufferView()
+    }
+
+    方法 是否为类型数组 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为类型数组(TypedArray)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsArrayBufferView()
+    }
+
+    方法 是否为8位无符整数数组 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为8位无符号整数数组(Uint8Array)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsUint8Array()
+    }
+
+    方法 是否为8位无符固定整数数组 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为8位无符号固定整数数组(Uint8ClampedArray)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsUint8ClampedArray()
+    }
+
+    方法 是否为8位整数数组 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为8位整数数组(Int8Array)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsInt8Array()
+    }
+
+    方法 是否为16位无符整数数组 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为16位无符号整数数组(Uint16Array)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsUint16Array()
+    }
+
+    方法 是否为16位整数数组 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为16位整数数组(Int16Array)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsInt16Array()
+    }
+
+    方法 是否为32位无符整数数组 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为32位无符号整数数组(Uint32Array)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsUint32Array()
+    }
+
+    方法 是否为32位整数数组 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为32位整数数组(Int32Array)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsInt32Array()
+    }
+
+    方法 是否为32位浮点数组 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为32位浮点数组(Float32Array)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsFloat32Array()
+    }
+
+    方法 是否为64位浮点数组 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为64位浮点数组(Float64Array)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsFloat64Array()
+    }
+
+    方法 是否为64位大整数数组 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为64位大整数数组(BigInt64Array)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsBigInt64Array()
+    }
+
+    方法 是否为64位无符大整数数组 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为64位大整数数组(BigUint64Array)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsBigUint64Array()
+    }
+
+    方法 是否为数据视图 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为数据视图(DataView)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsDataView()
+    }
+
+    方法 是否为共享数组缓冲区 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为共享内存数组缓冲区对象(SharedArrayBuffer)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsSharedArrayBuffer()
+    }
+
+    方法 是否为代理 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为代理(JavaScript Proxy)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsProxy()
+    }
+
+    方法 是否为汇编内存对象 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为汇编内存对象(WasmMemoryObject)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsWasmMemoryObject()
+    }
+
+    方法 是否为汇编模块对象 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为汇编模块对象(WasmModuleObject)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsWasmModuleObject()
+    }
+
+    方法 是否为模块命名空间对象 <公开 类型 = 逻辑型 注释 = "判断当前结果对象中所储存值是否为模块命名空间对象(Module Namespace Object)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsModuleNamespaceObject()
+    }
+
+    方法 到对象 <公开 类型 = JS对象类 注释 = "将当前结果对象转换到对象类型" @嵌入式方法 = "">
+    {
+        @ @dt<JS对象类>(@sn<this>.data().GetLocalValue().As<Object>())
+    }
+
+    方法 到函数 <公开 类型 = JS函数类 注释 = "将当前结果对象转换到函数类型" @嵌入式方法 = "">
+    {
+        @ @dt<JS函数类>(@sn<this>.data().GetLocalValue().As<Function>())
+    }
+
+    方法 到数组 <公开 类型 = JS数组类 注释 = "将当前结果对象转换到数组类型" @嵌入式方法 = "">
+    {
+        @ @dt<JS数组类>(@sn<this>.data().GetLocalValue().As<Array>())
+    }
+
+    方法 到文本 <公开 类型 = JS文本类 注释 = "将当前结果对象转换到文本类型" @嵌入式方法 = "">
+    {
+        @ @dt<JS文本类>(@sn<this>.data().GetLocalValue().As<String>())
+    }
+
+    方法 到集合 <公开 类型 = JS集合类 注释 = "将当前结果对象转换到集合类型" @嵌入式方法 = "">
+    {
+        @ @dt<JS集合类>(@sn<this>.data().GetLocalValue().As<Set>())
+    }
+
+    方法 到键值表 <公开 类型 = JS键值表类 注释 = "将当前结果对象转换到键值表类型" @嵌入式方法 = "">
+    {
+        @ @dt<JS集合类>(@sn<this>.data().GetLocalValue().As<Map>())
+    }
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8WrapperTemplate<Value>)
+    # <> <include>
+    # @sn<current_class>(Local<Value>& value):@sn<current_class>() { data().CreateValue(value); }
+    # //virtual Local<Value>& GetLocalValue() { return data().GetLocalValue(); }
+    # <> </include>
+    # @end
+}
+
+类 JS对象类 <公开 基础类 = JS结果类 注释 = "本类实例表示一个JS中的任意对象,通过键值对方式取/置任意值.">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8WrapperTemplate<Object>)
+    #
+    # @def_macro DECLARE_V8_GET_ACCESSOR_CALLBACK(event_name)  \
+    #     ASSERT(!info.Data().IsEmpty());                       \
+    #     Local<External> data = info.Data().As<External>();    \
+    #     @sn<current_class>* pThis = (@sn<current_class>*)data->Value();    \
+    #     pThis->@n<JS对象类.event_name>(@dt<JS文本类>(property.As<String>()), @dt<JS返回值类>(info.GetReturnValue()), info.ShouldThrowOnError());
+    #
+    # @def_macro DECLARE_V8_SET_ACCESSOR_CALLBACK(event_name)  \
+    #     ASSERT(!info.Data().IsEmpty());                      \
+    #     Local<External> data = info.Data().As<External>();   \
+    #     @sn<current_class>* pThis = (@sn<current_class>*)data->Value();    \
+    #     pThis->@n<JS对象类.event_name>(@dt<JS文本类>(property.As<String>()), @dt<JS结果类>(value), info.ShouldThrowOnError());
+    #
+    # <> <include>
+    # //@ #ifdef _VOL_X64    //指针数据类型
+    # //@ #define V8_INT_P BigInt
+    # //@ #else
+    # //@ #define V8_INT_P Integer
+    # //@ #endif
+    # @sn<current_class>(Local<Object>& value):@sn<current_class>() { data().CreateValue(value); }
+    # static void CallbackSetAccessorNameGetter(Local<Name> property, const PropertyCallbackInfo<Value>& info);
+    # static void CallbackSetAccessorNameSetter(Local<Name> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
+    # static void CallbackSetNativeDataPropertyGetter(Local<Name> property, const PropertyCallbackInfo<Value>& info);
+    # static void CallbackSetNativeDataPropertySetter(Local<Name> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
+    # static void CallbackSetLazyDataPropertyGetter(Local<Name> property, const PropertyCallbackInfo<Value>& info);
+    # <> </include>
+    #
+    # void @sn<current_class>::CallbackSetAccessorNameGetter(Local<Name> property, const PropertyCallbackInfo<Value>& info)
+    # {
+    #     @m<DECLARE_V8_GET_ACCESSOR_CALLBACK>(属性读方法回调)
+    # }
+    # void @sn<current_class>::CallbackSetAccessorNameSetter(Local<Name> property, Local<Value> value, const PropertyCallbackInfo<void>& info)
+    # {
+    #     @m<DECLARE_V8_SET_ACCESSOR_CALLBACK>(属性写方法回调)
+    # }
+    # void @sn<current_class>::CallbackSetNativeDataPropertyGetter(Local<Name> property, const PropertyCallbackInfo<Value>& info)
+    # {
+    #     @m<DECLARE_V8_GET_ACCESSOR_CALLBACK>(本地数据属性读方法回调)
+    # }
+    # void @sn<current_class>::CallbackSetNativeDataPropertySetter(Local<Name> property, Local<Value> value, const PropertyCallbackInfo<void>& info)
+    # {
+    #     @m<DECLARE_V8_SET_ACCESSOR_CALLBACK>(本地数据属性写方法回调)
+    # }
+    # void @sn<current_class>::CallbackSetLazyDataPropertyGetter(Local<Name> property, const PropertyCallbackInfo<Value>& info)
+    # {
+    #     @m<DECLARE_V8_GET_ACCESSOR_CALLBACK>(懒数据属性读方法回调)
+    # }
+    # @end
+
+    方法 创建新对象 <公开 注释 = "基于指定空间中创建对象" @嵌入式方法 = "">
+    参数 空间 <类型 = JS隔离空间类>
+    {
+        @ @sn<this>.data().CreateValue(Object::New(@<空间>.data().GetIsolate()))
+    }
+
+    方法 置结果值 <公开 类型 = 逻辑型 注释 = "置入指定值." 返回值注释 = "返回执行是否成功" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 键对象 <类型 = JS结果类 注释 = "提供所欲置入值对应的键对象">
+    参数 值对象 <类型 = JS结果类 注释 = "提供所欲置入值对应的值对象">
+    {
+        @ @sn<this>.data().GetLocalValue()->Set(@<环境>.data().GetLocalContext(), @<键对象>.data().GetLocalValue(), @<值对象>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 置数组值 <公开 类型 = 逻辑型 注释 = "置入数组指定索引处的值." 返回值注释 = "返回执行是否成功" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 索引 <类型 = 整数 注释 = "提供所欲置入值对应的数组索引">
+    参数 值对象 <类型 = JS结果类 注释 = "提供所欲置入值对应的值对象">
+    {
+        @ @sn<this>.data().GetLocalValue()->Set(@<环境>.data().GetLocalContext(), (uint32_t)@<索引>, @<值对象>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 创建数据对象属性 <公开 类型 = 逻辑型 注释 = "定义当前对象具有给定值的可配置,可写,可枚举属性." 返回值注释 = "返回执行是否成功" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 属性名 <类型 = JS文本类 注释 = "提供所欲定义属性的名称">
+    参数 属性值 <类型 = JS结果类 注释 = "提供所欲定义属性的值">
+    {
+        @ @sn<this>.data().GetLocalValue()->CreateDataProperty(@<环境>.data().GetLocalContext(), @<属性名>.data().GetLocalValue(), @<属性值>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 创建数据数组属性 <公开 类型 = 逻辑型 注释 = "定义当前对象具有给定值的可配置,可写,可枚举属性." 返回值注释 = "返回执行是否成功" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 索引 <类型 = 整数 注释 = "提供所欲定义属性的索引位置">
+    参数 属性值 <类型 = JS结果类 注释 = "提供所欲定义属性的值">
+    {
+        @ @sn<this>.data().GetLocalValue()->CreateDataProperty(@<环境>.data().GetLocalContext(), (uint32_t)@<索引>, @<属性值>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 定义自有属性 <公开 类型 = 逻辑型 注释 = "定义自有属性,可以指定属性的类型." 返回值注释 = "返回执行是否成功" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 属性名 <类型 = JS文本类 注释 = "提供所欲定义属性的名称">
+    参数 属性值 <类型 = JS对象类 注释 = "提供所欲定义属性的值">
+    参数 属性类型 <类型 = JS属性类型 注释 = "提供所欲定义属性的类型" @默认值 = JS属性类型.无>
+    {
+        @ @sn<this>.data().GetLocalValue()->DefineOwnProperty(@<环境>.data().GetLocalContext(), @<属性名>.data().GetLocalValue(), @<属性值>.data().GetLocalValue(), (PropertyAttribute)@<属性类型>).ToChecked()
+    }
+
+    方法 取结果值 <公开 类型 = JS结果类 注释 = "取出指定值" 返回值注释 = "返回所取出的值" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 键对象 <类型 = JS结果类 注释 = "提供所欲取值所对应的键对象">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->Get(@<环境>.data().GetLocalContext(), @<键对象>.data().GetLocalValue()).ToLocalChecked())
+    }
+
+    方法 取数组成员 <公开 类型 = JS结果类 注释 = "取出数组指定索引处的值" 返回值注释 = "返回所取出的值" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 索引 <类型 = 整数 注释 = "提供所欲取值对应的数组索引">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->Get(@<环境>.data().GetLocalContext(), (uint32_t)@<索引>).ToLocalChecked())
+    }
+
+    方法 取属性类型 <公开 类型 = JS属性类型 注释 = "获取当前对象指定属性的属性类型" 返回值注释 = "返回该属性的类型" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 属性名 <类型 = JS文本类 注释 = "提供所欲取其类型的属性名">
+    {
+        @ @sn<this>.data().GetLocalValue()->GetPropertyAttributes(@<环境>.data().GetLocalContext(), @<属性名>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 取自有属性描述 <公开 类型 = JS结果类 注释 = "获取当前对象自有属性描述符,即\"Object.GetOwnPropertyDescriptor()\"." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 属性名 <类型 = JS文本类 注释 = "提供所欲取属性描述的属性名">
+    {
+        @ @sn<this>.data().GetLocalValue()->GetOwnPropertyDescriptor(@<环境>.data().GetLocalContext(), @<属性名>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 置属性存取器 <公开 注释 = "设置属性存取器" @嵌入式方法 = "">
+    参数 名称 <类型 = JS文本类 注释 = "提供该存取器名称">
+    参数 读属性 <类型 = JS函数类 注释 = "提供读属性对应函数对象">
+    参数 写属性 <类型 = JS函数类 注释 = "提供写属性对应函数对象" @默认值 = 空对象>
+    参数 属性类型 <类型 = JS属性类型 注释 = "提供所欲使用的属性类型" @默认值 = JS属性类型.无>
+    参数 访问控制 <类型 = JS访问控制类型 注释 = "提供该存取器访问控制类型" @默认值 = JS访问控制类型.默认>
+    {
+        @ @sn<this>.data().GetLocalValue()->SetAccessorProperty(@<名称>.data().GetLocalValue(), @<读属性>.data().GetLocalValue(), @<写属性>.data().GetLocalValue(), (PropertyAttribute)@<属性类型>, (AccessControl)@<访问控制>)
+    }
+
+    方法 置属性存取器2 <公开 类型 = 逻辑型 注释 = "  设置属性存取器,读写属性的回调将通过事件(属性读方法回调/属性写方法" 注释 = "回调)方式发送." 返回值注释 = "返回执行是否成功"
+            编辑时信息 = "9332A, 0, 0, 0" @禁止流程检查 = 真>
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象" 编辑时信息 = "9332A, 0, 0, 0">
+    参数 名称 <类型 = JS文本类 注释 = "提供该存取器名称" 编辑时信息 = "9332A, 0, 0, 0">
+    参数 访问控制 <类型 = JS访问控制类型 注释 = "提供该存取器访问控制类型" 编辑时信息 = "9332A, 0, 0, 0" @默认值 = JS访问控制类型.默认>
+    参数 属性类型 <类型 = JS属性类型 注释 = "提供所欲使用的属性类型" 编辑时信息 = "9332A, 0, 0, 0" @默认值 = JS属性类型.无>
+    参数 读副作用类型 <类型 = JS副作用类型 注释 = "提供所欲使用的读属性副作用类型" 编辑时信息 = "9332A, 0, 0, 0" @默认值 = JS副作用类型.启用>
+    参数 写副作用类型 <类型 = JS副作用类型 注释 = "提供所欲使用的写属性副作用类型" 编辑时信息 = "9332A, 0, 0, 0" @默认值 = JS副作用类型.启用>
+    {
+        @ Local<External> pData = External::New(@<环境>.data().GetLocalContext()->GetIsolate(), this);
+        @ return data().GetLocalValue()->SetAccessor(@<环境>.data().GetLocalContext(), @<名称>.data().GetLocalValue(), CallbackSetAccessorNameGetter, CallbackSetAccessorNameSetter, pData, (AccessControl)@<访问控制>, (PropertyAttribute)@<属性类型>, @<读副作用类型> == 0 ? SideEffectType::kHasSideEffect : (@<读副作用类型> == 1 ? SideEffectType::kHasNoSideEffect : SideEffectType::kHasSideEffectToReceiver), @<写副作用类型> == 0 ? SideEffectType::kHasSideEffect : (@<写副作用类型> == 1 ? SideEffectType::kHasNoSideEffect : SideEffectType::kHasSideEffectToReceiver)).ToChecked();
+    }
+
+    方法 置本地数据属性存取器 <公开 类型 = 逻辑型 注释 = "  设置本地数据属性存取器,读写属性的回调将通过事件(本地数据属性读" 注释 = "方法回调/本地数据属性写方法回调)方式发送." 返回值注释 = "返回执行是否成功"
+            编辑时信息 = "7DDD6, 0, 0, 0" @禁止流程检查 = 真>
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象" 编辑时信息 = "7DDD6, 0, 0, 0">
+    参数 名称 <类型 = JS文本类 注释 = "提供该存取器名称" 编辑时信息 = "7DDD6, 0, 0, 0">
+    参数 属性类型 <类型 = JS属性类型 注释 = "提供所欲使用的属性类型" 编辑时信息 = "7DDD6, 0, 0, 0" @默认值 = JS属性类型.无>
+    参数 读副作用类型 <类型 = JS副作用类型 注释 = "提供所欲使用的读属性副作用类型" 编辑时信息 = "7DDD6, 0, 0, 0" @默认值 = JS副作用类型.启用>
+    参数 写副作用类型 <类型 = JS副作用类型 注释 = "提供所欲使用的写属性副作用类型" 编辑时信息 = "7DDD6, 0, 0, 0" @默认值 = JS副作用类型.启用>
+    {
+        @ Local<External> pData = External::New(@<环境>.data().GetLocalContext()->GetIsolate(), this);
+        @ return data().GetLocalValue()->SetNativeDataProperty(@<环境>.data().GetLocalContext(), @<名称>.data().GetLocalValue(), CallbackSetNativeDataPropertyGetter, CallbackSetNativeDataPropertySetter, pData, (PropertyAttribute)@<属性类型>, @<读副作用类型> == 0 ? SideEffectType::kHasSideEffect : (@<读副作用类型> == 1 ? SideEffectType::kHasNoSideEffect : SideEffectType::kHasSideEffectToReceiver), @<写副作用类型> == 0 ? SideEffectType::kHasSideEffect : (@<写副作用类型> == 1 ? SideEffectType::kHasNoSideEffect : SideEffectType::kHasSideEffectToReceiver)).ToChecked();
+    }
+
+    方法 置懒数据属性读回调 <公开 类型 = 逻辑型 注释 = "设置懒数据(LazyData,在首次读取时提供其值)属性读,回调将通过事件(懒数据属性读方法回调)方式发送." 返回值注释 = "返回执行是否成功" @禁止流程检查 = 真>
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象" 编辑时信息 = "7DDD6, 0, 0, 0">
+    参数 名称 <类型 = JS文本类 注释 = "提供所欲使用的名称" 编辑时信息 = "7DDD6, 0, 0, 0">
+    参数 属性类型 <类型 = JS属性类型 注释 = "提供所欲使用的属性类型" 编辑时信息 = "7DDD6, 0, 0, 0" @默认值 = JS属性类型.无>
+    参数 读副作用类型 <类型 = JS副作用类型 注释 = "提供所欲使用的读属性副作用类型" 编辑时信息 = "7DDD6, 0, 0, 0" @默认值 = JS副作用类型.启用>
+    参数 写副作用类型 <类型 = JS副作用类型 注释 = "提供所欲使用的写属性副作用类型" 编辑时信息 = "7DDD6, 0, 0, 0" @默认值 = JS副作用类型.启用>
+    {
+        @ Local<External> pData = External::New(@<环境>.data().GetLocalContext()->GetIsolate(), this);
+        @ return data().GetLocalValue()->SetLazyDataProperty(@<环境>.data().GetLocalContext(), @<名称>.data().GetLocalValue(), CallbackSetLazyDataPropertyGetter, pData, (PropertyAttribute)@<属性类型>, @<读副作用类型> == 0 ? SideEffectType::kHasSideEffect : (@<读副作用类型> == 1 ? SideEffectType::kHasNoSideEffect : SideEffectType::kHasSideEffectToReceiver), @<写副作用类型> == 0 ? SideEffectType::kHasSideEffect : (@<写副作用类型> == 1 ? SideEffectType::kHasNoSideEffect : SideEffectType::kHasSideEffectToReceiver)).ToChecked();
+    }
+
+    方法 是否存在私有符号 <公开 类型 = 逻辑型 注释 = "检查当前对象中是否存在指定私有符号" 返回值注释 = "存在则返回真,反之则假." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 符号 <类型 = JS私有符号类 注释 = "提供所欲检查的私有符号">
+    {
+        @ @sn<this>.data().GetLocalValue()->HasPrivate(@<环境>.data().GetLocalContext(), @<符号>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 置私有符号值 <公开 类型 = 逻辑型 注释 = "设置指定私有符号的值" 返回值注释 = "返回设置是否成功" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 符号 <类型 = JS私有符号类 注释 = "提供所欲设置的私有符号">
+    参数 值内容 <类型 = JS结果类 注释 = "提供所欲置入的值内容">
+    {
+        @ @sn<this>.data().GetLocalValue()->SetPrivate(@<环境>.data().GetLocalContext(), @<符号>.data().GetLocalValue(), @<值内容>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 删除私有符号 <公开 类型 = 逻辑型 注释 = "删除当前对象中已存在的私有符号" 返回值注释 = "返回删除结果" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 符号 <类型 = JS私有符号类 注释 = "提供所欲删除的私有符号">
+    {
+        @ @sn<this>.data().GetLocalValue()->DeletePrivate(@<环境>.data().GetLocalContext(), @<符号>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 取私有符号值 <公开 类型 = JS结果类 注释 = "获取当前对象中已存在的私有符号的值" 返回值注释 = "返回删除结果" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 符号 <类型 = JS私有符号类 注释 = "提供所欲获取其值的私有符号">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->GetPrivate(@<环境>.data().GetLocalContext(), @<符号>.data().GetLocalValue()).ToLocalChecked())
+    }
+
+    方法 取所有属性名 <公开 类型 = JS数组类 注释 = "获取当前对象的所有属性名称,以数组形式返回" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    {
+        @ @dt<JS数组类>(@sn<this>.data().GetLocalValue()->GetPropertyNames(@<环境>.data().GetLocalContext()).ToLocalChecked())
+    }
+
+    方法 取所有自有属性名 <公开 类型 = JS数组类 注释 = "获取当前对象的所有自有属性名称,以数组形式返回" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    {
+        @ @dt<JS数组类>(@sn<this>.data().GetLocalValue()->GetOwnPropertyNames(@<环境>.data().GetLocalContext()).ToLocalChecked())
+    }
+
+    方法 取原型对象 <公开 类型 = JS结果类 注释 = "获取所设置原型对象" @嵌入式方法 = "">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->GetPrototype())
+    }
+
+    方法 置原型对象 <公开 类型 = 逻辑型 注释 = "设置原型对象" 返回值注释 = "返回设置结果" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 内容 <类型 = JS结果类 注释 = "提供所欲设置的原型对象内容">
+    {
+        @ @sn<this>.data().GetLocalValue()->SetPrototype(@<环境>.data().GetLocalContext(), @<内容>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 取构造函数名 <公开 类型 = JS文本类 注释 = "获取当前对象构造函数名" @嵌入式方法 = "">
+    {
+        @ @dt<JS文本类>(@sn<this>.data().GetLocalValue()->GetConstructorName())
+    }
+
+    方法 取内部字段数量 <公开 类型 = 整数 注释 = "获取当前对象内部字段的数量" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->InternalFieldCount()
+    }
+
+    方法 取内部字段 <公开 类型 = JS结果类 注释 = "获取指定内部字段内容" @嵌入式方法 = "">
+    参数 索引 <类型 = 整数 注释 = "提供所欲获取字段的索引">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->GetInternalField(@<索引>))
+    }
+
+    方法 置内部字段 <公开 注释 = "设置指定内部字段内容" @嵌入式方法 = "">
+    参数 索引 <类型 = 整数 注释 = "提供所欲设置字段的索引">
+    参数 值内容 <类型 = JS结果类 注释 = "提供所欲设置字段的内容">
+    {
+        @ @sn<this>.data().GetLocalValue()->SetInternalField(@<索引>, @<值内容>.data().GetLocalValue())
+    }
+
+    方法 取内部字段对齐指针 <公开 类型 = 变整数 注释 = "获取指定内部字段对齐指针数据" @嵌入式方法 = "">
+    参数 索引 <类型 = 整数 注释 = "提供所欲获取字段的索引">
+    {
+        @ (INT_P)@sn<this>.data().GetLocalValue()->GetAlignedPointerFromInternalField(@<索引>)
+    }
+
+    方法 置内部字段对齐指针 <公开 注释 = "设置指定内部字段对齐指针数据" @嵌入式方法 = "">
+    参数 索引 <类型 = 整数 注释 = "提供所欲设置字段的索引">
+    参数 数据 <类型 = 变整数 注释 = "提供所欲设置的字段数据">
+    {
+        @ @sn<this>.data().GetLocalValue()->SetAlignedPointerInInternalField(@<索引>, (void*)@<数据>)
+    }
+
+    方法 是否存在自有属性 <公开 类型 = 逻辑型 注释 = "检查当前对象中是否存在指定自有属性" 返回值注释 = "存在则返回真,反之则假." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 属性名 <类型 = JS文本类 注释 = "提供所欲检查属性的名称">
+    {
+        @ @sn<this>.data().GetLocalValue()->HasOwnProperty(@<环境>.data().GetLocalContext(), @<属性名>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 是否存在自有属性2 <公开 类型 = 逻辑型 注释 = "同\"是否存在自有属性\"一致,本方法以索引方式检查而非属性名称." 返回值注释 = "存在则返回真,反之则假." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 属性索引 <类型 = 整数 注释 = "提供所欲检查属性的索引">
+    {
+        @ @sn<this>.data().GetLocalValue()->HasOwnProperty(@<环境>.data().GetLocalContext(), (uint32_t)@<属性索引>).ToChecked()
+    }
+
+    方法 是否存在真实命名属性 <公开 类型 = 逻辑型 注释 = "检查当前对象中是否存在指定真实命名属性" 返回值注释 = "存在则返回真,反之则假." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 属性名 <类型 = JS文本类 注释 = "提供所欲检查属性的名称">
+    {
+        @ @sn<this>.data().GetLocalValue()->HasRealNamedProperty(@<环境>.data().GetLocalContext(), @<属性名>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 是否存在真实命名属性2 <公开 类型 = 逻辑型 注释 = "同\"是否存在真实命名属性\"一致,本方法以索引方式检查而非属性名称." 返回值注释 = "存在则返回真,反之则假." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 属性索引 <类型 = 整数 注释 = "提供所欲检查属性的索引">
+    {
+        @ @sn<this>.data().GetLocalValue()->HasRealIndexedProperty(@<环境>.data().GetLocalContext(), (uint32_t)@<属性索引>).ToChecked()
+    }
+
+    方法 是否存在真实命名回调属性 <公开 类型 = 逻辑型 注释 = "检查当前对象中是否存在指定真实命名回调属性" 返回值注释 = "存在则返回真,反之则假." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 属性名 <类型 = JS文本类 注释 = "提供所欲检查属性的名称">
+    {
+        @ @sn<this>.data().GetLocalValue()->HasRealNamedCallbackProperty(@<环境>.data().GetLocalContext(), @<属性名>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 取原型链真实命名属性 <公开 类型 = JS结果类 注释 = "在原型链中获取指定真实命名属性" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 属性名 <类型 = JS文本类 注释 = "提供所欲获取属性的名称">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->GetRealNamedPropertyInPrototypeChain(@<环境>.data().GetLocalContext(), @<属性名>.data().GetLocalValue()))
+    }
+
+    方法 取原型链真实命名属性类型 <公开 类型 = JS属性类型 注释 = "在原型链中获取指定真实命名属性的类型" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 属性名 <类型 = JS文本类 注释 = "提供所欲获取属性的名称">
+    {
+        @ @sn<this>.data().GetLocalValue()->GetRealNamedPropertyAttributesInPrototypeChain(@<环境>.data().GetLocalContext(), @<属性名>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 取真实命名属性 <公开 类型 = JS结果类 注释 = "获取指定真实命名属性内容" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 属性名 <类型 = JS文本类 注释 = "提供所欲获取属性的名称">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->GetRealNamedProperty(@<环境>.data().GetLocalContext(), @<属性名>.data().GetLocalValue()))
+    }
+
+    方法 取真实命名属性类型 <公开 类型 = JS属性类型 注释 = "获取指定真实命名属性的类型" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 属性名 <类型 = JS文本类 注释 = "提供所欲获取属性的名称">
+    {
+        @ @sn<this>.data().GetLocalValue()->GetRealNamedPropertyAttributes(@<环境>.data().GetLocalContext(), @<属性名>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 是否存在对象值 <公开 类型 = 逻辑型 注释 = "检查当前对象中是否存在指定值" 返回值注释 = "存在则返回真,反之则假." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 键对象 <类型 = JS结果类 注释 = "提供所欲检查是否存在值所对应的键">
+    {
+        @ @sn<this>.data().GetLocalValue()->Has(@<环境>.data().GetLocalContext(), @<键对象>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 删除对象值 <公开 类型 = 逻辑型 注释 = "删除当前对象中指定值" 返回值注释 = "返回删除结果" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 键对象 <类型 = JS结果类 注释 = "提供所欲删除值所对应的键">
+    {
+        @ @sn<this>.data().GetLocalValue()->Delete(@<环境>.data().GetLocalContext(), @<键对象>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 是否存在数组值 <公开 类型 = 逻辑型 注释 = "检查当前对象数组中是否存在指定值" 返回值注释 = "存在则返回真,反之则假." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 索引 <类型 = 整数 注释 = "提供所欲检查是否存在值所对应的索引">
+    {
+        @ @sn<this>.data().GetLocalValue()->Has(@<环境>.data().GetLocalContext(), (uint32_t)@<索引>).ToChecked()
+    }
+
+    方法 删除数组值 <公开 类型 = 逻辑型 注释 = "删除当前对象数组中的指定值" 返回值注释 = "存在则返回真,反之则假." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 索引 <类型 = 整数 注释 = "提供所欲删除值所对应的索引">
+    {
+        @ @sn<this>.data().GetLocalValue()->Delete(@<环境>.data().GetLocalContext(), (uint32_t)@<索引>).ToChecked()
+    }
+
+    方法 取唯一哈希值 <公开 类型 = 整数 注释 = "获取当前对象相对于所有JS对象的唯一哈希值" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->GetIdentityHash()
+    }
+
+    方法 克隆 <公开 类型 = JS对象类 注释 = "复制创建一个与当前对象内容一致的对象" 返回值注释 = "返回复制出来的新对象" @嵌入式方法 = "">
+    {
+        @ @dt<JS对象类>(@sn<this>.data().GetLocalValue()->Clone())
+    }
+
+    方法 是否可调用 <公开 类型 = 逻辑型 注释 = "检查当前对象是否可被调用" 返回值注释 = "可调用返回真,否则返回假." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsCallable()
+    }
+
+    方法 是否为构造函数 <公开 类型 = 逻辑型 注释 = "检查当前对象是否为构造函数" 返回值注释 = "为构造函数返回真,否则返回假." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsConstructor()
+    }
+
+    方法 是否为包装接口 <公开 类型 = 逻辑型 注释 = "检查当前对象是否为包装接口" 返回值注释 = "为包装接口返回真,否则返回假." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsApiWrapper()
+    }
+
+    方法 是否为模板对象 <公开 类型 = 逻辑型 注释 = "检查当前对象是否模板创建的对象(不可检测)." 返回值注释 = "为模板创建的对象返回真,否则返回假." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->IsUndetectable()
+    }
+
+    方法 调用函数 <公开 类型 = JS结果类 注释 = "将当前对象作为一个函数进行调用" 返回值注释 = "返回执行后的结果" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 执行对象 <类型 = JS结果类 注释 = "提供本方法所处的实例对象,即所欲执行本函数的指定对象.">
+    参数 参数 <注释 = "提供调用该构造函数所需的参数列表" @匹配类型 = 通用基本型 @可扩展 = "">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().CallAsFunction(_T (@sn<pm_types>), @<环境>.data().GetLocalContext(), @<执行对象>.data().GetLocalValue(), @<参数>).ToLocalChecked())
+    }
+
+    方法 调用无参函数 <公开 类型 = JS结果类 注释 = "将当前对象作为一个函数进行调用" 返回值注释 = "返回执行后的结果" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 执行对象 <类型 = JS结果类 注释 = "提供本方法所处的实例对象,即所欲执行本函数的指定对象.">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->CallAsFunction(@<环境>.data().GetLocalContext(), @<执行对象>.data().GetLocalValue(), 0, nullptr).ToLocalChecked())
+    }
+
+    方法 调用构造函数 <公开 类型 = JS结果类 注释 = "将当前对象作为一个构造函数进行调用" 返回值注释 = "返回执行后的结果" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 参数 <注释 = "提供调用该构造函数所需的参数列表" @可扩展 = "" @匹配类型 = 通用基本型>
+    {
+        @ @dt<JS结果类>(@sn<this>.data().CallAsConstructor(_T (@sn<pm_types>), @<环境>.data().GetLocalContext(), @<参数>).ToLocalChecked())
+    }
+
+    方法 调用无参构造函数 <公开 类型 = JS结果类 注释 = "将当前对象作为一个构造函数进行调用" 返回值注释 = "返回执行后的结果" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    {
+        @ @dt<JS结果类>(data().GetLocalValue()->CallAsConstructor(@<环境>.data().GetLocalContext(), 0, nullptr).ToLocalChecked())
+    }
+
+    方法 取所处环境 <公开 类型 = JS环境类 注释 = "返回创建当前对象的环境" @嵌入式方法 = "">
+    {
+        @ @dt<JS环境类>(@sn<this>.data().GetLocalValue()->GetCreationContext().ToLocalChecked())
+    }
+
+    方法 取所处空间 <公开 类型 = JS隔离空间类 注释 = "返回当前对象所处的空间" @嵌入式方法 = "">
+    {
+        @ @dt<JS隔离空间类>(@sn<this>.data().GetLocalValue()->GetIsolate())
+    }
+
+    # 相关回调事件 ---
+
+    方法 属性读方法回调 <公开 定义事件 类型 = 整数 注释 = "响应读属性的事件回调">
+    参数 属性名 <类型 = JS文本类 注释 = "本次调用的属性名称">
+    参数 返回值 <类型 = JS返回值类 注释 = "本次调用后的返回值">
+    参数 抛出错误 <类型 = 逻辑型>
+
+    方法 属性写方法回调 <公开 定义事件 类型 = 整数 注释 = "响应写属性的事件回调">
+    参数 属性名 <类型 = JS文本类 注释 = "本次调用的属性名称">
+    参数 属性值 <类型 = JS结果类 注释 = "本次调用的属性值">
+    参数 抛出错误 <类型 = 逻辑型>
+
+    方法 本地数据属性读方法回调 <公开 定义事件 类型 = 整数 注释 = "响应读属性(NativeData)的事件回调">
+    参数 属性名 <类型 = JS文本类 注释 = "本次调用的属性名称">
+    参数 返回值 <类型 = JS返回值类 注释 = "本次调用后的返回值">
+    参数 抛出错误 <类型 = 逻辑型>
+
+    方法 本地数据属性写方法回调 <公开 定义事件 类型 = 整数 注释 = "响应写属性(NativeData)的事件回调">
+    参数 属性名 <类型 = JS文本类 注释 = "本次调用的属性名称">
+    参数 属性值 <类型 = JS结果类 注释 = "本次调用的属性值">
+    参数 抛出错误 <类型 = 逻辑型>
+
+    方法 懒数据属性读方法回调 <公开 定义事件 类型 = 整数 注释 = "响应读属性(LazyData)的事件回调">
+    参数 属性名 <类型 = JS文本类 注释 = "本次调用的属性名称">
+    参数 返回值 <类型 = JS返回值类 注释 = "本次调用后的返回值">
+    参数 抛出错误 <类型 = 逻辑型>
+}
+
+类 JS文本类 <公开 基础类 = JS结果类 注释 = "本类实例表示一个文本对象" @文档 = "category = \"辅助类\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8WrapperTemplate<String>)
+    # <> <include>
+    # @sn<current_class>(Local<String>& value):@sn<current_class>() { data().CreateValue(value); }
+    # <> </include>
+    # @end
+
+    方法 创建 <公开 注释 = "根据指定文本内容创建一个JS文本对象" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 内容 <类型 = 文本型 注释 = "提供所欲置入的文本内容">
+    {
+        @ @sn<this>.data().ReplaceValue(String::NewFromUtf8(@<环境>.data().GetLocalContext()->GetIsolate(), CU8String(@<内容>.GetText()).GetText()))
+    }
+}
+
+类 JS数值类 <公开 基础类 = JS结果类 注释 = "本类实例表示一个JS数值对象" @文档 = "category = \"辅助类\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8WrapperTemplate<Number>)
+    # <> <include>
+    # @sn<current_class>(Local<Number>& value):@sn<current_class>() { data().CreateValue(value); }
+    # <> </include>
+    # @end
+
+    方法 创建 <公开 注释 = "根据指定数值内容创建一个JS数值对象" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 值 <类型 = 小数 注释 = "提供所欲置入的值内容">
+    {
+        @ @sn<this>.data().ReplaceValue(Number::New(@<环境>.data().GetLocalContext()->GetIsolate(), @<值>))
+    }
+}
+
+类 JS整数类 <公开 基础类 = JS结果类 注释 = "本类实例表示一个JS整数对象" @文档 = "category = \"辅助类\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8WrapperTemplate<Integer>)
+    # <> <include>
+    # @sn<current_class>(Local<Integer>& value):@sn<current_class>() { data().CreateValue(value); }
+    # <> </include>
+    # @end
+
+    方法 创建 <公开 注释 = "根据指定数值内容创建一个JS数值对象" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 值 <类型 = 整数 注释 = "提供所欲置入的值内容">
+    {
+        @ @sn<this>.data().ReplaceValue(Integer::New(@<环境>.data().GetLocalContext()->GetIsolate(), (int32_t)@<值>))
+    }
+
+    方法 创建新实例 <公开 静态 类型 = JS整数类 注释 = "根据指定数值内容创建一个JS数值对象" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS环境对象">
+    参数 值 <类型 = 整数 注释 = "提供所欲置入的值内容">
+    {
+        @ @dt<JS整数类>(Integer::New(@<环境>.data().GetLocalContext()->GetIsolate(), (int32_t)@<值>))
+    }
+}
+
+类 JS返回值类 <公开 基础类 = JS对象类 注释 = "本类实例表示一个返回值对象,可以设置/获取其值." @文档 = "category = \"辅助类\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8ReturnValueWrapperTemplate<Value>)
+    # <> <include>
+    # @sn<current_class>(ReturnValue<Value>& value):@sn<current_class>() { data().CreateValue(value); }
+    # <> </include>
+    # @end
+
+    方法 置值 <公开 注释 = "设置所欲返回的值" @嵌入式方法 = "">
+    参数 值 <类型 = JS结果类>
+    {
+        @ @sn<this>.data().GetValue()->Set(@<值>.data().GetLocalValue())
+    }
+
+    方法 取值 <公开 类型 = JS结果类 注释 = "设置所欲返回的值" @嵌入式方法 = "">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetValue()->Get())
+    }
+
+    方法 置逻辑值 <公开 注释 = "设置所欲返回的值" @嵌入式方法 = "">
+    参数 值 <类型 = 逻辑型>
+    {
+        @ @sn<this>.data().GetValue()->Set((bool)@<值>)
+    }
+
+    方法 置小数值 <公开 注释 = "设置所欲返回的值" @嵌入式方法 = "">
+    参数 值 <类型 = 小数>
+    {
+        @ @sn<this>.data().GetValue()->Set(@<值>)
+    }
+
+    方法 置整数值 <公开 注释 = "设置所欲返回的值" @嵌入式方法 = "">
+    参数 值 <类型 = 整数>
+    {
+        @ @sn<this>.data().GetValue()->Set((int32_t)@<值>)
+    }
+
+    方法 置为空 <公开 注释 = "将返回值置为Null" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetValue()->SetNull()
+    }
+
+    方法 置为未定义 <公开 注释 = "将返回值置为Undefined" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetValue()->SetUndefined()
+    }
+
+    方法 置为空文本 <公开 注释 = "将返回值置为空文本" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetValue()->SetEmptyString()
+    }
+}
+
+类 JS数组类 <公开 基础类 = JS对象类 注释 = "本类实例表示JS中的数组对象(Array)." @文档 = "category = \"辅助类\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8WrapperTemplate<Array>)
+    # <> <include>
+    # @sn<current_class>(Local<Array>& value):@sn<current_class>() { data().CreateValue(value); }
+    # <> </include>
+    # @end
+
+    方法 成员数 <公开 属性读 类型 = 整数 注释 = "获取当前数组的成员数量" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->Length()
+    }
+
+    方法 创建 <公开 注释 = "基于指定空间创建数组对象" @嵌入式方法 = "">
+    参数 空间 <类型 = JS隔离空间类>
+    参数 成员数量 <类型 = 整数>
+    {
+        @ @sn<this>.data().ReplaceValue(Array::New(@<空间>.data().GetIsolate(), @<成员数量>))
+    }
+}
+
+类 JS键值表类 <公开 基础类 = JS对象类 注释 = "本类实例表示JS中的Map对象" @文档 = "category = \"辅助类\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8WrapperTemplate<Map>)
+    # <> <include>
+    # @sn<current_class>(Local<Map>& value):@sn<current_class>() { data().CreateValue(value); }
+    # <> </include>
+    # @end
+
+    方法 成员数 <公开 属性读 类型 = 变整数 注释 = "获取当前键值表中的成员数量" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->Size()
+    }
+
+    方法 创建 <公开 注释 = "基于指定空间创建键值表对象" @嵌入式方法 = "">
+    参数 空间 <类型 = JS隔离空间类>
+    {
+        @ @sn<this>.data().ReplaceValue(Map::New(@<空间>.data().GetIsolate()))
+    }
+
+    方法 清空 <公开 注释 = "清空当前键值表中所有内容" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->Clear()
+    }
+
+    方法 取值 <公开 类型 = JS结果类 注释 = "根据指定键名取出其对应的值" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS执行环境">
+    参数 键对象 <类型 = JS结果类 注释 = "提供所欲取其对应值的键对象">
+    {
+        @ @sn<this>.data().GetLocalValue()->Get(@<环境>.data().GetLocalContext(), @<键对象>.data().GetLocalValue())
+    }
+
+    方法 置值 <公开 注释 = "置入一对键值" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS执行环境">
+    参数 键对象 <类型 = JS结果类 注释 = "提供所欲置入的键对象">
+    参数 值对象 <类型 = JS结果类 注释 = "提供所欲置入的值对象">
+    {
+        @ @sn<this>.data().GetLocalValue()->Set(@<环境>.data().GetLocalContext(), @<键对象>.data().GetLocalValue(), @<值对象>.data().GetLocalValue())
+    }
+
+    方法 是否存在值 <公开 类型 = 逻辑型 注释 = "检查指定键对象是否存在其对应的值" 返回值注释 = "存在则返回真,否则返回假." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS执行环境">
+    参数 键对象 <类型 = JS结果类 注释 = "提供所欲检查的键对象">
+    {
+        @ @sn<this>.data().GetLocalValue()->Has(@<环境>.data().GetLocalContext(), @<键对象>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 删除 <公开 类型 = 逻辑型 注释 = "删除指定的一对键值" 返回值注释 = "删除成功则返回真,否则返回假." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS执行环境">
+    参数 键对象 <类型 = JS结果类 注释 = "提供所欲删除的键对象">
+    {
+        @ @sn<this>.data().GetLocalValue()->Delete(@<环境>.data().GetLocalContext(), @<键对象>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 转为数组 <公开 类型 = JS数组类 注释 = "将当前键值表中的所有内容转换为一个数组装载并返回该数组" 注释 = "" 返回值注释 = "每个键以及值对象都会作为一个成员加入至该数组" @嵌入式方法 = "">
+    {
+        @ @dt<JS数组类>(@sn<this>.data().GetLocalValue()->AsArray())
+    }
+}
+
+类 JS集合类 <公开 基础类 = JS对象类 注释 = "本类实例表示JS中的Set对象" @文档 = "category = \"辅助类\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8WrapperTemplate<Set>)
+    # <> <include>
+    # @sn<current_class>(Local<Set>& value):@sn<current_class>() { data().CreateValue(value); }
+    # <> </include>
+    # @end
+
+    方法 成员数 <公开 属性读 类型 = 变整数 注释 = "获取当前集合中的成员数量" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->Size()
+    }
+
+    方法 创建 <公开 注释 = "基于指定空间创建集合对象" @嵌入式方法 = "">
+    参数 空间 <类型 = JS隔离空间类>
+    {
+        @ @sn<this>.data().ReplaceValue(Set::New(@<空间>.data().GetIsolate()))
+    }
+
+    方法 清空 <公开 注释 = "清空当前集合中所有内容" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->Clear()
+    }
+
+    方法 加入 <公开 注释 = "加入一个新成员" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS执行环境">
+    参数 成员 <类型 = JS结果类 注释 = "提供所欲加入的成员对象">
+    {
+        @ @sn<this>.data().GetLocalValue()->Add(@<环境>.data().GetLocalContext(), @<成员>.data().GetLocalValue())
+    }
+
+    方法 是否存在值 <公开 类型 = 逻辑型 注释 = "检查指定成员对象是否处于当前集合中" 返回值注释 = "存在则返回真,否则返回假." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS执行环境">
+    参数 成员 <类型 = JS结果类 注释 = "提供所欲检查的成员对象">
+    {
+        @ @sn<this>.data().GetLocalValue()->Has(@<环境>.data().GetLocalContext(), @<成员>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 删除 <公开 类型 = 逻辑型 注释 = "删除指定的成员对象" 返回值注释 = "删除成功则返回真,否则返回假." @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前所使用的JS执行环境">
+    参数 成员 <类型 = JS结果类 注释 = "提供所欲删除的成员对象">
+    {
+        @ @sn<this>.data().GetLocalValue()->Delete(@<环境>.data().GetLocalContext(), @<成员>.data().GetLocalValue()).ToChecked()
+    }
+
+    方法 转为数组 <公开 类型 = JS数组类 注释 = "将当前键值对中的所有内容转换为一个数组装载并返回该数组." 注释 = "" @嵌入式方法 = "">
+    {
+        @ @dt<JS数组类>(@sn<this>.data().GetLocalValue()->AsArray())
+    }
+}
+
+类 JS函数类 <公开 基础类 = JS对象类 注释 = "本类实例表示JS中的函数(Function)." @文档 = "category = \"辅助类\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8WrapperTemplate<Function>)
+    #
+    # <> <include>
+    # @sn<current_class>(Local<Function>& value):@sn<current_class>() { data().CreateValue(value); }
+    # static void VolFunctionCallback(const FunctionCallbackInfo<Value>& info);
+    # MaybeLocal<Value> Call(const TCHAR* szParamType, Local<Context> context, Local<Value> recv, ...);
+    # MaybeLocal<Object> NewInstance(const TCHAR* szParamType, Local<Context> context, ...);
+    # <> </include>
+    # void @sn<current_class>::VolFunctionCallback(const FunctionCallbackInfo<Value>& info)
+    # {
+    #     ASSERT(!info.Data().IsEmpty());
+    #     Local<External> data = info.Data().As<External>();
+    #     @sn<current_class>* pThis = (@sn<current_class>*)data->Value();
+    #     pThis->@n<JS函数类.函数被执行>(@dt<JS函数回调信息类>(info));
+    # }
+    # @end
+
+    方法 置名称 <公开 注释 = "设置当前函数的函数名称" @嵌入式方法 = "">
+    参数 函数名称 <类型 = JS文本类 注释 = "提供所欲设置的函数名称">
+    {
+        @ @sn<this>.data().GetLocalValue()->SetName(@<函数名称>.data().GetLocalValue())
+    }
+
+    方法 取名称 <公开 类型 = JS结果类 注释 = "获取当前函数的函数名称" @嵌入式方法 = "">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->GetName())
+    }
+
+    方法 取推断名称 <公开 类型 = JS结果类 注释 = "推断当前函数的函数名称" @嵌入式方法 = "">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->GetInferredName())
+    }
+
+    方法 取调试名称 <公开 类型 = JS结果类 注释 = "当前函数的调试函数名称" @嵌入式方法 = "">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->GetDebugName())
+    }
+
+    方法 函数被执行 <公开 定义事件 类型 = 整数 注释 = "当本函数被执行时将会发送本事件">
+    参数 执行信息 <类型 = JS函数回调信息类>
+
+    方法 创建 <公开 注释 = "基于指定执行环境创建当前函数对象,当函数被执行时将会响应事件\"函数被执行\"." 编辑时信息 = "5443F, 0, 0, 0">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前执行JS的环境" 编辑时信息 = "5443F, 0, 0, 0">
+    参数 长度 <类型 = 整数 注释 = "提供所欲使用的长度" 编辑时信息 = "5443F, 0, 0, 0" @默认值 = 0>
+    参数 允许构造 <类型 = 逻辑型 注释 = "指定该函数是否允许为构造函数" 编辑时信息 = "5443F, 0, 0, 0" @默认值 = 真>
+    参数 副作用类型 <类型 = JS副作用类型 注释 = "指定该函数的副作用类型" 编辑时信息 = "5443F, 0, 0, 0" @默认值 = JS副作用类型.启用>
+    {
+        @ Local<External> pData = External::New(@<环境>.data().GetLocalContext()->GetIsolate(), this);
+        @ data().ReplaceValue(Function::New(@<环境>.data().GetLocalContext(), VolFunctionCallback, pData, @<长度>, @<允许构造> ? ConstructorBehavior::kAllow : ConstructorBehavior::kThrow, @<副作用类型> == 0 ? SideEffectType::kHasSideEffect : (@<副作用类型> == 1 ? SideEffectType::kHasNoSideEffect : SideEffectType::kHasSideEffectToReceiver)));
+    }
+
+    方法 执行 <公开 类型 = JS结果类 注释 = "执行当前函数并返回执行结果" 返回值注释 = "返回函数执行后的结果" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前执行JS的环境">
+    参数 执行对象 <类型 = JS结果类 注释 = "提供本方法所处的实例对象,即所欲执行本函数的指定对象.">
+    参数 参数 <注释 = "提供调用该构造函数所需的参数列表" @匹配类型 = 通用基本型 @可扩展 = "">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().Call(_T (@sn<pm_types>), @<环境>.data().GetLocalContext(), @<执行对象>.data().GetLocalValue(), @<参数>).ToLocalChecked())
+    }
+
+    方法 执行无参方法 <公开 类型 = JS结果类 注释 = "执行当前函数并返回执行结果" 返回值注释 = "返回函数执行后的结果" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前执行JS的环境">
+    参数 执行对象 <类型 = JS结果类 注释 = "提供本方法所处的实例对象,即所欲执行本函数的指定对象.">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->Call(@<环境>.data().GetLocalContext(), @<执行对象>.data().GetLocalValue(), 0, nullptr).ToLocalChecked())
+    }
+
+    方法 新建实例 <公开 类型 = JS对象类 注释 = "提供指定的参数以新建指定函数实例" 返回值注释 = "返回所新建的实例对象" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前执行JS的环境">
+    参数 参数 <注释 = "提供新建实例函数所需的参数列表" @匹配类型 = 通用基本型 @可扩展 = "">
+    {
+        @ @dt<JS对象类>(@sn<this>.data().NewInstance(_T (@sn<pm_types>), @<环境>.data().GetLocalContext(), @<参数>).ToLocalChecked())
+    }
+
+    方法 新建实例无参 <公开 类型 = JS对象类 注释 = "与\"新建实例\"方法一致,本方法不需要提供参数以新建指定函数实例." 返回值注释 = "返回所新建的实例对象" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类 注释 = "提供当前执行JS的环境">
+    {
+        @ @dt<JS对象类>(@sn<this>.data().GetLocalValue()->NewInstance(@<环境>.data().GetLocalContext()).ToLocalChecked())
+    }
+
+    方法 取所处代码行号 <公开 类型 = 整数 注释 = "获取该函数处于脚本中的代码行号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->GetScriptLineNumber()
+    }
+
+    方法 取所处代码列号 <公开 类型 = 整数 注释 = "获取该函数处于脚本中的代码列号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->GetScriptColumnNumber()
+    }
+
+    方法 取所处脚本ID <公开 类型 = 整数 注释 = "获取该函数处于脚本的ID" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetLocalValue()->ScriptId()
+    }
+
+    方法 取已绑定函数 <公开 类型 = JS结果类 注释 = "如果当前函数已绑定则返回原始函数,否则返回未定义值." @嵌入式方法 = "">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->GetBoundFunction())
+    }
+
+    方法 到序列化文本 <公开 类型 = JS文本类 注释 = "将当前函数对象序列化到文本" @嵌入式方法 = "">
+    参数 环境 <类型 = JS环境类>
+    {
+        @ @dt<JS文本类>(@sn<this>.data().GetLocalValue()->FunctionProtoToString(@<环境>.data().GetLocalContext()).ToLocalChecked())
+    }
+}
+
+类 JS函数回调信息类 <公开 注释 = "本类实例表示JS中的函数执行回调的结果信息" @文档 = "category = \"辅助类\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8WithOutLocalWrapperTemplate<FunctionCallbackInfo<Value>>)
+    # <> <include>
+    # @sn<current_class>(const FunctionCallbackInfo<Value>& info):@sn<current_class>() { data().CreateObject(info); }
+    # <> </include>
+    # @end
+
+    方法 取参数数量 <公开 类型 = 整数 注释 = "取出在调用时所使用的参数个数" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetObject().Length()
+    }
+
+    方法 取指定参数 <公开 类型 = JS结果类 注释 = "取出在调用时所使用的参数对象" 返回值注释 = "如果提供的索引越界,将返回一个未定义内容的值." @嵌入式方法 = "">
+    参数 索引 <类型 = 整数 注释 = "提供所欲获取参数的索引位置">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetObject()[@<索引>])
+    }
+
+    方法 取当前本对象 <公开 类型 = JS对象类 注释 = "返回接收器,相当于this." @嵌入式方法 = "">
+    {
+        @ @dt<JS对象类>(@sn<this>.data().GetObject().This())
+    }
+
+    方法 取持有对象 <公开 类型 = JS对象类 注释 = "返回持有对象,即Holder." @嵌入式方法 = "">
+    {
+        @ @dt<JS对象类>(@sn<this>.data().GetObject().Holder())
+    }
+
+    方法 取新目标值 <公开 类型 = JS结果类 @嵌入式方法 = "">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetObject().NewTarget())
+    }
+
+    方法 是否为构造调用 <公开 类型 = 逻辑型 注释 = "返回本次调用是否为构造调用" 返回值注释 = "返回真表示为构造调用,否则为常规调用." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetObject().IsConstructCall()
+    }
+
+    方法 取返回值 <公开 类型 = JS返回值类 注释 = "获取该函数的返回值" @嵌入式方法 = "">
+    {
+        @ @dt<JS返回值类>(@sn<this>.data().GetObject().GetReturnValue())
+    }
+}
+
+类 JS私有符号类 <公开 基础类 = JS数据类 注释 = "本类实例表示JS中的私有符号(Private)." @文档 = "category = \"辅助类\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CV8WrapperTemplate<Private>)
+    # <> <include>
+    # @sn<current_class>(Local<Private>& value):@sn<current_class>() { data().CreateValue(value); }
+    # <> </include>
+    # @end
+
+    方法 取名称 <公开 类型 = JS结果类 注释 = "获取该符号的名称" @嵌入式方法 = "">
+    {
+        @ @dt<JS结果类>(@sn<this>.data().GetLocalValue()->Name())
+    }
+
+    方法 创建 <公开 注释 = "创建一个私有符号对象" @嵌入式方法 = "">
+    参数 空间 <类型 = JS隔离空间类 注释 = "提供该私有符号所处空间">
+    参数 名称 <类型 = JS文本类 注释 = "提供该私有符号的名称">
+    {
+        @ @sn<this>.data().Create(Private::New(@<空间>.data().GetIsolate(), @<名称>.data().GetLocalValue()))
+    }
+}
+
+类 JS属性类型 <公开 注释 = "定义了属性的可选类型" @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 无 <公开 值 = @"@PropertyAttribute::None">
+    常量 只读 <公开 值 = @"@PropertyAttribute::ReadOnly">
+    常量 不可枚举 <公开 值 = @"@PropertyAttribute::DontEnum">
+    常量 不可配置 <公开 值 = @"@PropertyAttribute::DontDelete">
+}
+
+类 JS访问控制类型 <公开 注释 = "定义了访问控制的可选类型" @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 默认 <公开 值 = @"@AccessControl::DEFAULT" 编辑时信息 = "0, FCCBD, 0, 0">
+    常量 所有可读 <公开 值 = @"@AccessControl::ALL_CAN_READ" 编辑时信息 = "0, FCCBD, 0, 0">
+    常量 所有可写 <公开 值 = @"@AccessControl::ALL_CAN_WRITE" 编辑时信息 = "0, FCCBD, 0, 0">
+    常量 禁止覆盖 <公开 值 = @"@AccessControl::PROHIBITS_OVERWRITING" 编辑时信息 = "0, FCCBD, 0, 0">
+}
+
+类 JS副作用类型 <公开 注释 = "定义了副作用的可选类型" @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 启用 <公开 值 = 0 编辑时信息 = "0, 46662, 0, 0">
+    常量 禁用 <公开 值 = 1 编辑时信息 = "0, 46662, 0, 0">
+    常量 仅接收器启用 <公开 值 = 2 编辑时信息 = "0, 46662, 0, 0">
+}

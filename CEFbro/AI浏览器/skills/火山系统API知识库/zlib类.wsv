@@ -1,0 +1,272 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 星火.zlib
+
+类 zlib <公开 @视窗.预定义宏 = "ZLIB_WINAPI" @视窗.头文件搜寻目录 = "zlib\\include" @视窗.外部头文件 = "zlib.h"
+        @视窗.附属文件.non_static = "zlib\\$(p)\\$(d)\\dynamic\\bin\\zlibwapi.dll" @视窗.外部库 = "zlib\\$(p)\\$(d)\\$(lm)\\lib\\zlib.lib"
+        @视窗.需求VS版本.static = "17-">
+{
+
+    # @begin
+    # <> <include>
+    #     //压缩
+    #     inline_ static int CompressEx(const BYTE* lpszSrc, DWORD dwSrcLen, BYTE* lpszDest, DWORD& dwDestLen, int iLevel = -1, int iMethod = 8, int iWindowBits = -15, int iMemLevel = 8, int iStrategy = 0)
+    #     {
+    #          z_stream stream;
+    #
+    #          stream.next_in  = (z_const Bytef*)lpszSrc;
+    #          stream.avail_in  = dwSrcLen;
+    #          stream.next_out  = lpszDest;
+    #          stream.avail_out = dwDestLen;
+    #          stream.zalloc  = nullptr;
+    #          stream.zfree  = nullptr;
+    #          stream.opaque  = nullptr;
+    #
+    #          int err = deflateInit2(&stream, iLevel, iMethod, iWindowBits, iMemLevel, iStrategy);
+    #
+    #          if(err != Z_OK) return err;
+    #
+    #          err = deflate(&stream, Z_FINISH);
+    #
+    #          if(err != Z_STREAM_END)
+    #          {
+    #               deflateEnd(&stream);
+    #               return err == Z_OK ? Z_BUF_ERROR : err;
+    #          }
+    #
+    #          if(dwDestLen > stream.total_out)
+    #          {
+    #               lpszDest[stream.total_out] = 0;
+    #               dwDestLen = stream.total_out;
+    #          }
+    #
+    #         return deflateEnd(&stream);
+    #     }
+    #
+    #     //解压
+    #     inline_ static int UncompressEx(const BYTE* lpszSrc, DWORD dwSrcLen, BYTE* lpszDest, DWORD& dwDestLen, int iWindowBits = -15)
+    #     {
+    #          z_stream stream;
+    #
+    #          stream.next_in  = (z_const Bytef*)lpszSrc;
+    #          stream.avail_in  = dwSrcLen;
+    #          stream.next_out  = lpszDest;
+    #          stream.avail_out = dwDestLen;
+    #          stream.zalloc  = nullptr;
+    #          stream.zfree  = nullptr;
+    #
+    #          int err = inflateInit2(&stream, iWindowBits);
+    #
+    #          if(err != Z_OK) return err;
+    #
+    #          err = inflate(&stream, Z_FINISH);
+    #
+    #          if(err != Z_STREAM_END)
+    #          {
+    #               inflateEnd(&stream);
+    #               return (err == Z_NEED_DICT || (err == Z_BUF_ERROR && stream.avail_in == 0)) ? Z_DATA_ERROR : err;
+    #          }
+    #
+    #          if(dwDestLen > stream.total_out)
+    #          {
+    #               lpszDest[stream.total_out] = 0;
+    #               dwDestLen = stream.total_out;
+    #          }
+    #
+    #          return inflateEnd(&stream);
+    #     }
+    #
+    # <> </include>
+    # @end
+
+    方法 取版本信息 <公开 静态 类型 = 文本型 注释 = "获取zlib库版本信息." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> (zlibVersion())
+    }
+
+    方法 gzip压缩 <公开 静态 类型 = 字节集类 返回值注释 = "压缩失败返回空字节集" 折叠 @禁止流程检查 = 真>
+    参数 欲压缩数据 <类型 = 字节集类>
+    {
+        @ DWORD SrcLen = (DWORD)@<欲压缩数据>.GetSize();
+        @ if (SrcLen == 0) return CVolMem();//空数据直接返回空字节集
+        @ CVolMem Dest = CVolMem();//缓存
+        @ DWORD DestLen = SrcLen + 20;//缓存长度,数据长度加上头部长度
+        @ if (CompressEx(@<欲压缩数据>.GetPtr(),SrcLen,Dest.Alloc(DestLen,false),DestLen,Z_DEFAULT_COMPRESSION, Z_DEFLATED, MAX_WBITS + 16) != Z_OK) return CVolMem();//失败返回空字节集
+        @ if(Dest.GetSize() > DestLen)Dest.Realloc(DestLen);//删除多余数据
+        @ return Dest;
+    }
+
+    方法 gzip解压 <公开 静态 类型 = 字节集类 返回值注释 = "解压失败返回空字节集" @禁止流程检查 = 真>
+    参数 欲解压数据 <类型 = 字节集类>
+    参数 缓存大小 <类型 = 整数 注释 = "-1为欲解压数据的三倍,如果返回缓存不足增加一倍" @默认值 = -1>
+    {
+        @ DWORD SrcLen = (DWORD)@<欲解压数据>.GetSize();
+        @ if (SrcLen == 0) return CVolMem();//空数据直接返回空字节集
+        @ CVolMem Dest = CVolMem();//缓存
+        @ DWORD DestLen;//缓存长度
+
+        @ int ret;
+        @ if(@<缓存大小> == -1)
+        @ {
+        @     int i = 2;//计次默认2,先加一次,缓存空间原数据三倍起步,定义结果变量
+        // 执行解压
+        @     do
+        @     {
+        @         i++;
+        @         DestLen = SrcLen * i;
+        @         ret = UncompressEx(@<欲解压数据>.GetPtr(),SrcLen,Dest.Alloc(DestLen,false),DestLen,MAX_WBITS + 16);
+        @     }while(ret == Z_BUF_ERROR);//缓存空间不足
+        @ }else
+        @ {
+        @     DestLen = (DWORD)@<缓存大小>;
+        @     ret = UncompressEx(@<欲解压数据>.GetPtr(),SrcLen,Dest.Alloc(DestLen,false),DestLen,MAX_WBITS + 16);
+        @ }
+
+        @ if (ret != Z_OK) return CVolMem();//失败返回空字节集
+        @ if(Dest.GetSize() > DestLen)Dest.Realloc(DestLen);//删除多余数据
+        @ return Dest;
+    }
+
+    方法 deflate压缩 <公开 静态 类型 = 字节集类 返回值注释 = "压缩失败返回空字节集" @禁止流程检查 = 真>
+    参数 欲压缩数据 <类型 = 字节集类>
+    {
+        @ DWORD SrcLen = (DWORD)@<欲压缩数据>.GetSize();
+        @ if (SrcLen == 0) return CVolMem();//空数据直接返回空字节集
+        @ CVolMem Dest = CVolMem();//缓存
+        @ DWORD DestLen = SrcLen + 8;//缓存长度,数据长度加上头部长度
+        @ if (CompressEx(@<欲压缩数据>.GetPtr(),SrcLen,Dest.Alloc(DestLen,false),DestLen,Z_DEFAULT_COMPRESSION, Z_DEFLATED) != Z_OK) return CVolMem();//失败返回空字节集
+        @ if(Dest.GetSize() > DestLen)Dest.Realloc(DestLen);//删除多余数据
+        @ return Dest;
+    }
+
+    方法 deflate解压 <公开 静态 类型 = 字节集类 返回值注释 = "解压失败返回空字节集" @禁止流程检查 = 真>
+    参数 欲解压数据 <类型 = 字节集类>
+    参数 缓存大小 <类型 = 整数 注释 = "-1为欲解压数据的三倍,如果返回缓存不足增加一倍" @默认值 = -1>
+    {
+        @ DWORD SrcLen = (DWORD)@<欲解压数据>.GetSize();
+        @ if (SrcLen == 0) return CVolMem();//空数据直接返回空字节集
+        @ CVolMem Dest = CVolMem();//缓存
+        @ DWORD DestLen;//缓存长度
+
+        @ int ret;
+        @ if(@<缓存大小> == -1)
+        @ {
+        @     int i = 2;//计次默认2,先加一次,缓存空间原数据三倍起步,定义结果变量
+        // 执行解压
+        @     do
+        @     {
+        @         i++;
+        @         DestLen = SrcLen * i;
+        @         ret = UncompressEx(@<欲解压数据>.GetPtr(),SrcLen,Dest.Alloc(DestLen,false),DestLen);
+        @     }while(ret == Z_BUF_ERROR);//缓存空间不足
+        @ }else
+        @ {
+        @     DestLen = (DWORD)@<缓存大小>;
+        @     ret = UncompressEx(@<欲解压数据>.GetPtr(),SrcLen,Dest.Alloc(DestLen,false),DestLen);
+        @ }
+
+        @ if (ret != Z_OK) return CVolMem();//失败返回空字节集
+        @ if(Dest.GetSize() > DestLen)Dest.Realloc(DestLen);//删除多余数据
+        @ return Dest;
+    }
+
+    方法 zlib压缩 <公开 静态 类型 = 字节集类 返回值注释 = "压缩失败返回空字节集" 折叠 @禁止流程检查 = 真>
+    参数 欲压缩数据 <类型 = 字节集类>
+    参数 压缩等级 <类型 = 整数 注释 = "0-9之间,0表示不进行任何压缩,值越大压缩率越高,所耗时间变长,提供-1表示使用默认." @默认值 = -1>
+    {
+        @ uLongf SrcLen = (uLongf)@<欲压缩数据>.GetSize();
+        @ if (SrcLen == 0) return CVolMem();//空数据直接返回空字节集
+        @ CVolMem Dest = CVolMem();//缓存
+        @ uLongf DestLen = SrcLen + 8;//缓存长度,数据长度加上头部长度
+        @ if (compress2(Dest.Alloc(DestLen,false),&DestLen,@<欲压缩数据>.GetPtr(),SrcLen,@<压缩等级>) != Z_OK) return CVolMem();//失败返回空字节集
+        @ if(Dest.GetSize() > DestLen)Dest.Realloc(DestLen);//删除多余数据
+        @ return Dest;
+    }
+
+    方法 zlib解压 <公开 静态 类型 = 字节集类 返回值注释 = "解压失败返回空字节集" @禁止流程检查 = 真>
+    参数 欲解压数据 <类型 = 字节集类>
+    参数 缓存大小 <类型 = 整数 注释 = "-1为欲解压数据的三倍,如果返回缓存不足增加一倍" @默认值 = -1>
+    {
+        @ uLong SrcLen = (uLong)@<欲解压数据>.GetSize();
+        @ if (SrcLen == 0) return CVolMem();//空数据直接返回空字节集
+        @ CVolMem Dest = CVolMem();//缓存
+        @ uLong DestLen;//缓存长度
+
+        @ int ret;
+        @ if(@<缓存大小> == -1)
+        @ {
+        @     int i = 2;//计次默认2,先加一次,缓存空间原数据三倍起步,定义结果变量
+        // 执行解压
+        @     do
+        @     {
+        @         i++;
+        @         DestLen = SrcLen * i;
+        @         ret = uncompress(Dest.Alloc(DestLen,false),&DestLen,@<欲解压数据>.GetPtr(),SrcLen);
+        @     }while(ret == Z_BUF_ERROR);//缓存空间不足
+        @ }else
+        @ {
+        @     DestLen = (DWORD)@<缓存大小>;
+        @     ret = uncompress(Dest.Alloc(DestLen,false),&DestLen,@<欲解压数据>.GetPtr(),SrcLen);
+        @ }
+        @ if (ret != Z_OK) return CVolMem();//失败返回空字节集
+        @ if(Dest.GetSize() > DestLen)Dest.Realloc(DestLen);//删除多余数据
+        @ return Dest;
+    }
+
+    方法 压缩 <公开 静态 类型 = 字节集类 返回值注释 = "压缩失败返回空字节集" 折叠 @禁止流程检查 = 真>
+    参数 欲压缩数据 <类型 = 字节集类>
+    参数 压缩级别 <类型 = 整数 注释 = "0-9之间,级别越高压缩率越大,相应的压缩时间会变长.默认为-1" @默认值 = -1>
+    参数 压缩位数 <类型 = 整数 注释 = "8-15,表示处理raw deflate的方法，默认为15" @默认值 = 15>
+    参数 压缩状态 <类型 = 整数 注释 = "指定分配内存的等级,1-9之间,1会使用最低的内存,压缩时间最长，默认为8" @默认值 = 8>
+    参数 压缩策略 <类型 = 整数 注释 = "指定所欲使用的压缩策略，0为自动，具体查询zlib文档可选值为0-4" @默认值 = 0>
+    {
+        @ DWORD SrcLen = (DWORD)@<欲压缩数据>.GetSize();
+        @ if (SrcLen == 0) return CVolMem();//空数据直接返回空字节集
+        @ CVolMem Dest = CVolMem();//缓存
+        @ DWORD DestLen;;//缓存长度
+        @ int i = 0, ret;//计次默认1,先加一次,缓存空间原数据两倍起步,定义结果变量
+        // 执行压缩
+        @ do
+        @ {
+        @     i++;
+        @     DestLen = SrcLen + i * 24;
+        @     ret = CompressEx(@<欲压缩数据>.GetPtr(),SrcLen,Dest.Alloc(DestLen,false),DestLen,@<压缩级别>, Z_DEFLATED, @<压缩位数>,@<压缩状态>,@<压缩策略>);
+        @ }while(ret == Z_BUF_ERROR);//缓存空间不足
+
+        @ if (ret != Z_OK) return CVolMem();//失败返回空字节集
+        @ if(Dest.GetSize() > DestLen)Dest.Realloc(DestLen);//删除多余数据
+        @ return Dest;
+    }
+
+    方法 解压 <公开 静态 类型 = 字节集类 返回值注释 = "解压失败返回空字节集" 折叠 @禁止流程检查 = 真>
+    参数 欲解压数据 <类型 = 字节集类>
+    参数 压缩位数 <类型 = 整数 注释 = "8-15,表示处理raw deflate的方法，默认为15" @默认值 = 15>
+    参数 缓存大小 <类型 = 整数 注释 = "-1为欲解压数据的三倍,如果返回缓存不足增加一倍" @默认值 = -1>
+    {
+        @ DWORD SrcLen = (DWORD)@<欲解压数据>.GetSize();
+        @ if (SrcLen == 0) return CVolMem();//空数据直接返回空字节集
+        @ CVolMem Dest = CVolMem();//缓存
+        @ DWORD DestLen;//缓存长度
+
+        @ int ret;
+        @ if(@<缓存大小> == -1)
+        @ {
+        @     int i = 2;//计次默认2,先加一次,缓存空间原数据三倍起步,定义结果变量
+        // 执行解压
+        @     do
+        @     {
+        @         i++;
+        @         DestLen = SrcLen * i;
+        @         ret = UncompressEx(@<欲解压数据>.GetPtr(),SrcLen,Dest.Alloc(DestLen,false),DestLen,@<压缩位数>);
+        @     }while(ret == Z_BUF_ERROR);//缓存空间不足
+        @ }else
+        @ {
+        @     DestLen = (DWORD)@<缓存大小>;
+        @     ret = UncompressEx(@<欲解压数据>.GetPtr(),SrcLen,Dest.Alloc(DestLen,false),DestLen,@<压缩位数>);
+        @ }
+
+        @ if (ret != Z_OK) return CVolMem();//失败返回空字节集
+        @ if(Dest.GetSize() > DestLen)Dest.Realloc(DestLen);//删除多余数据
+        @ return Dest;
+    }
+}

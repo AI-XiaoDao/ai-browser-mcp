@@ -1,0 +1,896 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.程序 <注释 = "RSS相关的" @视窗.外部头文件 = "COM_msfeeds\\msfeeds.tlh">
+
+类 "//RSS操作类FC" <公开 折叠>
+{
+
+    # @begin
+    # @m<define_vol_use_System_com_ProgID>("Microsoft.FeedsManager",Feeds::IFeedFolderPtr)
+    # @end
+
+    方法 类_初始化 <折叠>
+    {
+        变量 是否创建成功 <类型 = 逻辑型>
+        @ @<是否创建成功> = Init();
+        如果 (是否创建成功 == 假)
+        {
+            调试输出 ("初始化 DebenuPDF 失败")
+        }
+
+    }
+
+    方法 类_清理
+    {
+        @ Unit();
+
+    }
+}
+
+类 IFeed <公开 折叠>
+{
+
+    # @begin
+    # @m<vol_define_IDispatchPtr_Construct>(Feeds::IFeedPtr,IDispatchPtr)
+    # @end
+
+    方法 Xml <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 Count <类型 = 整数 注释 = "long Count">
+    参数 sortProperty <类型 = 整数 注释 = "enum FEEDS_XML_SORT_PROPERTY sortProperty">
+    参数 sortOrder <类型 = 整数 注释 = "enum FEEDS_XML_SORT_ORDER sortOrder">
+    参数 filterFlags <类型 = 整数 注释 = "enum FEEDS_XML_FILTER_FLAGS filterFlags">
+    参数 includeFlags <类型 = 整数 注释 = "enum FEEDS_XML_INCLUDE_FLAGS includeFlags">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->Xml(@<Count>,@<sortProperty>,@<sortOrder>,@<filterFlags>,@<includeFlags>))
+    }
+
+    方法 GetName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetName())
+    }
+
+    方法 Rename <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Name <类型 = 文本型 注释 = "_bstr_t Name">
+    {
+        @ @sn<this>.GetComObjPtr()->Rename(@<Name>.GetText())
+    }
+
+    方法 GetUrl <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetUrl())
+    }
+
+    方法 PutUrl <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 feedUrl <类型 = 文本型 注释 = "_bstr_t feedUrl">
+    {
+        @ @sn<this>.GetComObjPtr()->PutUrl(@<feedUrl>.GetText())
+    }
+
+    方法 GetLocalId <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetLocalId())
+    }
+
+    方法 GetPath <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetPath())
+    }
+
+    方法 Move <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 newParentPath <类型 = 文本型 注释 = "_bstr_t newParentPath">
+    {
+        @ @sn<this>.GetComObjPtr()->Move(@<newParentPath>.GetText())
+    }
+
+    方法 GetParent <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetParent()
+    }
+
+    方法 GetLastWriteTime <公开 返回值注释 = "DATE" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetLastWriteTime()
+    }
+
+    方法 Delete <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Delete()
+    }
+
+    方法 Download <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Download()
+    }
+
+    方法 AsyncDownload <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->AsyncDownload()
+    }
+
+    方法 CancelAsyncDownload <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->CancelAsyncDownload()
+    }
+
+    方法 PutSyncSetting <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 SyncSetting <类型 = 整数 注释 = "enum FEEDS_SYNC_SETTING SyncSetting">
+    {
+        @ @sn<this>.GetComObjPtr()->PutSyncSetting(@<SyncSetting>)
+    }
+
+    方法 GetInterval <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetInterval()
+    }
+
+    方法 PutInterval <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 minutes <类型 = 整数 注释 = "long minutes">
+    {
+        @ @sn<this>.GetComObjPtr()->PutInterval(@<minutes>)
+    }
+
+    方法 GetLastDownloadTime <公开 返回值注释 = "DATE" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetLastDownloadTime()
+    }
+
+    方法 GetLocalEnclosurePath <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetLocalEnclosurePath())
+    }
+
+    方法 GetItems <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetItems()
+    }
+
+    方法 GetItem <公开 类型 = IFeedItem 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    参数 itemId <类型 = 整数 注释 = "long itemId">
+    {
+        @ @dt<IFeedItem>( @sn<this>.GetComObjPtr()->GetItem(@<itemId>) )
+    }
+
+    方法 GetTitle <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetTitle())
+    }
+
+    方法 GetDescription <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetDescription())
+    }
+
+    方法 GetLink <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetLink())
+    }
+
+    方法 GetImage <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetImage())
+    }
+
+    方法 GetLastBuildDate <公开 返回值注释 = "DATE" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetLastBuildDate()
+    }
+
+    方法 GetPubDate <公开 返回值注释 = "DATE" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetPubDate()
+    }
+
+    方法 GetTtl <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetTtl()
+    }
+
+    方法 GetLanguage <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetLanguage())
+    }
+
+    方法 GetCopyright <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetCopyright())
+    }
+
+    方法 GetMaxItemCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetMaxItemCount()
+    }
+
+    方法 PutMaxItemCount <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 Count <类型 = 整数 注释 = "long Count">
+    {
+        @ @sn<this>.GetComObjPtr()->PutMaxItemCount(@<Count>)
+    }
+
+    方法 GetDownloadEnclosuresAutomatically <公开 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetDownloadEnclosuresAutomatically()
+    }
+
+    方法 PutDownloadEnclosuresAutomatically <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 DownloadEnclosuresAutomatically <类型 = 逻辑型 注释 = "VARIANT_BOOL DownloadEnclosuresAutomatically">
+    {
+        @ @sn<this>.GetComObjPtr()->PutDownloadEnclosuresAutomatically(@<DownloadEnclosuresAutomatically>)
+    }
+
+    方法 Merge <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 feedXml <类型 = 文本型 注释 = "_bstr_t feedXml">
+    参数 feedUrl <类型 = 文本型 注释 = "_bstr_t feedUrl">
+    {
+        @ @sn<this>.GetComObjPtr()->Merge(@<feedXml>.GetText(),@<feedUrl>.GetText())
+    }
+
+    方法 GetDownloadUrl <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetDownloadUrl())
+    }
+
+    方法 GetIsList <公开 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetIsList()
+    }
+
+    方法 MarkAllItemsRead <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->MarkAllItemsRead()
+    }
+
+    方法 GetWatcher <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    参数 scope <类型 = 整数 注释 = "enum FEEDS_EVENTS_SCOPE scope">
+    参数 mask <类型 = 整数 注释 = "enum FEEDS_EVENTS_MASK mask">
+    {
+        @ @sn<this>.GetComObjPtr()->GetWatcher(@<scope>,@<mask>)
+    }
+
+    方法 GetUnreadItemCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetUnreadItemCount()
+    }
+
+    方法 GetItemCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetItemCount()
+    }
+
+    #
+}
+
+类 "// IFeed2" <公开 折叠>
+{
+
+    # @begin
+    # @m<define_vol_use_System_com_ProgID>("Microsoft.FeedsManager",Feeds::IFeed2Ptr)
+    # @end
+
+    方法 GetItemByEffectiveId <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    参数 itemEffectiveId <类型 = 整数 注释 = "long itemEffectiveId">
+    {
+        @ @sn<this>.GetComObjPtr()->GetItemByEffectiveId(@<itemEffectiveId>)
+    }
+
+    方法 GetLastItemDownloadTime <公开 返回值注释 = "DATE" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetLastItemDownloadTime()
+    }
+
+    方法 GetUsername <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetUsername())
+    }
+
+    方法 GetPassword <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetPassword())
+    }
+
+    方法 SetCredentials <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Username <类型 = 文本型 注释 = "_bstr_t Username">
+    参数 Password <类型 = 文本型 注释 = "_bstr_t Password">
+    {
+        @ @sn<this>.GetComObjPtr()->SetCredentials(@<Username>.GetText(),@<Password>.GetText())
+    }
+
+    方法 ClearCredentials <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->ClearCredentials()
+
+    }
+
+    #
+}
+
+类 IFeedEnclosure <公开 折叠>
+{
+
+    # @begin
+    # @m<vol_define_IDispatchPtr_Construct>(Feeds::IFeedEnclosurePtr,IDispatchPtr)
+    # @end
+
+    方法 GetUrl <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetUrl())
+    }
+
+    方法 GetType <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetType())
+    }
+
+    方法 GetLength <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetLength()
+    }
+
+    方法 AsyncDownload <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->AsyncDownload()
+    }
+
+    方法 CancelAsyncDownload <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->CancelAsyncDownload()
+    }
+
+    方法 GetLocalPath <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetLocalPath())
+    }
+
+    方法 GetParent <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetParent()
+    }
+
+    方法 GetDownloadUrl <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetDownloadUrl())
+    }
+
+    方法 GetDownloadMimeType <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetDownloadMimeType())
+    }
+
+    方法 RemoveFile <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->RemoveFile()
+    }
+
+    方法 SetFile <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 DownloadUrl <类型 = 文本型 注释 = "_bstr_t DownloadUrl">
+    参数 downloadFilePath <类型 = 文本型 注释 = "_bstr_t downloadFilePath">
+    参数 DownloadMimeType <类型 = 文本型 注释 = "_bstr_t DownloadMimeType">
+    参数 enclosureFilename <类型 = 文本型 注释 = "_bstr_t enclosureFilename">
+    {
+        @ @sn<this>.GetComObjPtr()->SetFile(@<DownloadUrl>.GetText(),@<downloadFilePath>.GetText(),@<DownloadMimeType>.GetText(),@<enclosureFilename>.GetText())
+
+    }
+
+    #
+}
+
+类 "// IFeedEvents" <公开 折叠>
+{
+    方法 Error <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Error()
+    }
+
+    方法 FeedDeleted <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedDeleted(@<Path>.GetText())
+    }
+
+    方法 FeedRenamed <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    参数 oldPath <类型 = 文本型 注释 = "_bstr_t oldPath">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedRenamed(@<Path>.GetText(),@<oldPath>.GetText())
+    }
+
+    方法 FeedUrlChanged <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedUrlChanged(@<Path>.GetText())
+    }
+
+    方法 FeedMoved <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    参数 oldPath <类型 = 文本型 注释 = "_bstr_t oldPath">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedMoved(@<Path>.GetText(),@<oldPath>.GetText())
+    }
+
+    方法 FeedDownloading <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedDownloading(@<Path>.GetText())
+    }
+
+    方法 FeedDownloadCompleted <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    参数 Error <类型 = 整数 注释 = "enum FEEDS_DOWNLOAD_ERROR Error">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedDownloadCompleted(@<Path>.GetText(),@<Error>)
+    }
+
+    方法 FeedItemCountChanged <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    参数 itemCountType <类型 = 整数 注释 = "long itemCountType">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedItemCountChanged(@<Path>.GetText(),@<itemCountType>)
+    }
+
+    #
+}
+
+类 IFeedFolder <公开 折叠>
+{
+
+    # @begin
+    # @m<vol_define_IDispatchPtr_Construct>(Feeds::IFeedFolderPtr,IDispatchPtr)
+    # @end
+
+    方法 GetFeeds <公开 类型 = IFeed 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    {
+        @ @dt<IFeed>( @sn<this>.GetComObjPtr()->GetFeeds())
+    }
+
+    方法 GetSubfolders <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetSubfolders()
+    }
+
+    方法 CreateFeed <公开 类型 = IFeed 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    参数 feedName <类型 = 文本型 注释 = "_bstr_t feedName">
+    参数 feedUrl <类型 = 文本型 注释 = "_bstr_t feedUrl">
+    {
+        @ @dt<IFeed>( @sn<this>.GetComObjPtr()->CreateFeed(@<feedName>.GetText(),@<feedUrl>.GetText()))
+    }
+
+    方法 CreateSubfolder <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    参数 folderName <类型 = 文本型 注释 = "_bstr_t folderName">
+    {
+        @ @sn<this>.GetComObjPtr()->CreateSubfolder(@<folderName>.GetText())
+    }
+
+    方法 ExistsFeed <公开 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    参数 feedName <类型 = 文本型 注释 = "_bstr_t feedName">
+    {
+        @ @sn<this>.GetComObjPtr()->ExistsFeed(@<feedName>.GetText())
+    }
+
+    方法 GetFeed <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    参数 feedName <类型 = 文本型 注释 = "_bstr_t feedName">
+    {
+        @ @sn<this>.GetComObjPtr()->GetFeed(@<feedName>.GetText())
+    }
+
+    方法 ExistsSubfolder <公开 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    参数 folderName <类型 = 文本型 注释 = "_bstr_t folderName">
+    {
+        @ @sn<this>.GetComObjPtr()->ExistsSubfolder(@<folderName>.GetText())
+    }
+
+    方法 GetSubfolder <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    参数 folderName <类型 = 文本型 注释 = "_bstr_t folderName">
+    {
+        @ @sn<this>.GetComObjPtr()->GetSubfolder(@<folderName>.GetText())
+    }
+
+    方法 Delete <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Delete()
+    }
+
+    方法 GetName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetName())
+    }
+
+    方法 Rename <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 folderName <类型 = 文本型 注释 = "_bstr_t folderName">
+    {
+        @ @sn<this>.GetComObjPtr()->Rename(@<folderName>.GetText())
+    }
+
+    方法 GetPath <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetPath())
+    }
+
+    方法 Move <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 newParentPath <类型 = 文本型 注释 = "_bstr_t newParentPath">
+    {
+        @ @sn<this>.GetComObjPtr()->Move(@<newParentPath>.GetText())
+    }
+
+    方法 GetParent <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetParent()
+    }
+
+    方法 GetIsRoot <公开 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetIsRoot()
+    }
+
+    方法 GetTotalUnreadItemCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetTotalUnreadItemCount()
+    }
+
+    方法 GetTotalItemCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetTotalItemCount()
+    }
+
+    方法 GetWatcher <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    参数 scope <类型 = 整数 注释 = "enum FEEDS_EVENTS_SCOPE scope">
+    参数 mask <类型 = 整数 注释 = "enum FEEDS_EVENTS_MASK mask">
+    {
+        @ @sn<this>.GetComObjPtr()->GetWatcher(@<scope>,@<mask>)
+    }
+
+    #
+}
+
+类 "// IFeedFolderEvents" <公开 折叠>
+{
+    方法 Error <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Error()
+    }
+
+    方法 FolderAdded <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @ @sn<this>.GetComObjPtr()->FolderAdded(@<Path>.GetText())
+    }
+
+    方法 FolderDeleted <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @ @sn<this>.GetComObjPtr()->FolderDeleted(@<Path>.GetText())
+    }
+
+    方法 FolderRenamed <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    参数 oldPath <类型 = 文本型 注释 = "_bstr_t oldPath">
+    {
+        @ @sn<this>.GetComObjPtr()->FolderRenamed(@<Path>.GetText(),@<oldPath>.GetText())
+    }
+
+    方法 FolderMovedFrom <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    参数 oldPath <类型 = 文本型 注释 = "_bstr_t oldPath">
+    {
+        @ @sn<this>.GetComObjPtr()->FolderMovedFrom(@<Path>.GetText(),@<oldPath>.GetText())
+    }
+
+    方法 FolderMovedTo <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    参数 oldPath <类型 = 文本型 注释 = "_bstr_t oldPath">
+    {
+        @ @sn<this>.GetComObjPtr()->FolderMovedTo(@<Path>.GetText(),@<oldPath>.GetText())
+    }
+
+    方法 FolderItemCountChanged <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    参数 itemCountType <类型 = 整数 注释 = "long itemCountType">
+    {
+        @ @sn<this>.GetComObjPtr()->FolderItemCountChanged(@<Path>.GetText(),@<itemCountType>)
+    }
+
+    方法 FeedAdded <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedAdded(@<Path>.GetText())
+    }
+
+    方法 FeedDeleted <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedDeleted(@<Path>.GetText())
+    }
+
+    方法 FeedRenamed <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    参数 oldPath <类型 = 文本型 注释 = "_bstr_t oldPath">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedRenamed(@<Path>.GetText(),@<oldPath>.GetText())
+    }
+
+    方法 FeedUrlChanged <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedUrlChanged(@<Path>.GetText())
+    }
+
+    方法 FeedMovedFrom <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    参数 oldPath <类型 = 文本型 注释 = "_bstr_t oldPath">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedMovedFrom(@<Path>.GetText(),@<oldPath>.GetText())
+    }
+
+    方法 FeedMovedTo <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    参数 oldPath <类型 = 文本型 注释 = "_bstr_t oldPath">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedMovedTo(@<Path>.GetText(),@<oldPath>.GetText())
+    }
+
+    方法 FeedDownloading <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedDownloading(@<Path>.GetText())
+    }
+
+    方法 FeedDownloadCompleted <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    参数 Error <类型 = 整数 注释 = "enum FEEDS_DOWNLOAD_ERROR Error">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedDownloadCompleted(@<Path>.GetText(),@<Error>)
+    }
+
+    方法 FeedItemCountChanged <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    参数 itemCountType <类型 = 整数 注释 = "long itemCountType">
+    {
+        @ @sn<this>.GetComObjPtr()->FeedItemCountChanged(@<Path>.GetText(),@<itemCountType>)
+    }
+
+    #
+}
+
+类 IFeedItem <公开 折叠>
+{
+
+    # @begin
+    # @m<vol_define_IDispatchPtr_Construct>(Feeds::IFeedItemPtr,IDispatchPtr)
+    # @end
+
+    方法 Xml <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 includeFlags <类型 = 整数 注释 = "enum FEEDS_XML_INCLUDE_FLAGS includeFlags">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->Xml(@<includeFlags>))
+    }
+
+    方法 GetTitle <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetTitle())
+    }
+
+    方法 GetLink <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetLink())
+    }
+
+    方法 GetGuid <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetGuid())
+    }
+
+    方法 GetDescription <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetDescription())
+    }
+
+    方法 GetPubDate <公开 返回值注释 = "DATE" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetPubDate()
+    }
+
+    方法 GetComments <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetComments())
+    }
+
+    方法 GetAuthor <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetAuthor())
+    }
+
+    方法 GetEnclosure <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetEnclosure()
+    }
+
+    方法 GetIsRead <公开 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetIsRead()
+    }
+
+    方法 PutIsRead <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 IsRead <类型 = 逻辑型 注释 = "VARIANT_BOOL IsRead">
+    {
+        @ @sn<this>.GetComObjPtr()->PutIsRead(@<IsRead>)
+    }
+
+    方法 GetLocalId <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetLocalId()
+    }
+
+    方法 GetParent <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetParent()
+    }
+
+    方法 Delete <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Delete()
+    }
+
+    方法 GetDownloadUrl <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetDownloadUrl())
+    }
+
+    方法 GetLastDownloadTime <公开 返回值注释 = "DATE" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetLastDownloadTime()
+    }
+
+    方法 GetModified <公开 返回值注释 = "DATE" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetModified()
+    }
+
+    #
+}
+
+类 "// IFeedItem2" <公开 折叠>
+{
+    方法 GetEffectiveId <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetEffectiveId()
+    }
+
+    #
+}
+
+类 IFeedsEnum <公开 折叠>
+{
+
+    # @begin
+    # @m<vol_define_IDispatchPtr_Construct>(Feeds::IFeedsEnumPtr,IDispatchPtr)
+    # @end
+
+    方法 GetCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetCount()
+    }
+
+    方法 Item <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    参数 index <类型 = 整数 注释 = "long index">
+    {
+        @ @sn<this>.GetComObjPtr()->Item(@<index>)
+    }
+
+    方法 Get_NewEnum <公开 返回值注释 = "IEnumVARIANTPtr" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Get_NewEnum()
+    }
+
+    #
+}
+
+类 IFeedsManager <公开 折叠>
+{
+
+    # @begin
+    # @m<define_vol_use_System_com_ProgID>("Microsoft.FeedsManager",Feeds::IFeedsManagerPtr)
+    # @end
+
+    方法 类_初始化
+    {
+        变量 是否创建成功 <类型 = 逻辑型>
+        @ @<是否创建成功> = Init();
+        如果 (是否创建成功 == 假)
+        {
+            调试输出 ("初始化 IFeedsManager 失败")
+        }
+
+    }
+
+    方法 类_清理
+    {
+        @ Unit();
+
+    }
+
+    方法 GetRootFolder <公开 类型 = IFeedFolder 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    {
+        @ @dt<IFeedFolder>( @sn<this>.GetComObjPtr()->GetRootFolder())
+    }
+
+    方法 IsSubscribed <公开 类型 = 逻辑型 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    参数 feedUrl <类型 = 文本型 注释 = "_bstr_t feedUrl">
+    {
+        @ @sn<this>.GetComObjPtr()->IsSubscribed(@<feedUrl>.GetText())
+    }
+
+    方法 ExistsFeed <公开 类型 = 逻辑型 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    参数 feedPath <类型 = 文本型 注释 = "_bstr_t feedPath">
+    {
+        @ @sn<this>.GetComObjPtr()->ExistsFeed(@<feedPath>.GetText())
+    }
+
+    方法 GetFeed <公开 类型 = IFeed 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    参数 feedPath <类型 = 文本型 注释 = "_bstr_t feedPath">
+    {
+        @ @dt<IFeed>( @sn<this>.GetComObjPtr()->GetFeed(@<feedPath>.GetText()))
+    }
+
+    方法 GetFeedByUrl <公开 类型 = IFeed 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    参数 feedUrl <类型 = 文本型 注释 = "_bstr_t feedUrl">
+    {
+        @ @dt<IFeed>( @sn<this>.GetComObjPtr()->GetFeedByUrl(@<feedUrl>.GetText()) )
+    }
+
+    方法 ExistsFolder <公开 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    参数 folderPath <类型 = 文本型 注释 = "_bstr_t folderPath">
+    {
+        @ @sn<this>.GetComObjPtr()->ExistsFolder(@<folderPath>.GetText())
+    }
+
+    方法 GetFolder <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    参数 folderPath <类型 = 文本型 注释 = "_bstr_t folderPath">
+    {
+        @ @sn<this>.GetComObjPtr()->GetFolder(@<folderPath>.GetText())
+    }
+
+    方法 DeleteFeed <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 feedPath <类型 = 文本型 注释 = "_bstr_t feedPath">
+    {
+        @ @sn<this>.GetComObjPtr()->DeleteFeed(@<feedPath>.GetText())
+    }
+
+    方法 DeleteFolder <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 folderPath <类型 = 文本型 注释 = "_bstr_t folderPath">
+    {
+        @ @sn<this>.GetComObjPtr()->DeleteFolder(@<folderPath>.GetText())
+    }
+
+    方法 BackgroundSync <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 action <类型 = 整数 注释 = "enum FEEDS_BACKGROUNDSYNC_ACTION action">
+    {
+        @ @sn<this>.GetComObjPtr()->BackgroundSync(@<action>)
+    }
+
+    方法 GetDefaultInterval <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetDefaultInterval()
+    }
+
+    方法 PutDefaultInterval <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 minutes <类型 = 整数 注释 = "long minutes">
+    {
+        @ @sn<this>.GetComObjPtr()->PutDefaultInterval(@<minutes>)
+    }
+
+    方法 AsyncSyncAll <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->AsyncSyncAll()
+    }
+
+    方法 Normalize <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 feedXmlIn <类型 = 文本型 注释 = "_bstr_t feedXmlIn">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->Normalize(@<feedXmlIn>.GetText()))
+    }
+
+    方法 GetItemCountLimit <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetItemCountLimit()
+    }
+
+    #
+}

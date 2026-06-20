@@ -1,0 +1,247 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"windows.离线注册与授权\"" "">
+
+类 生成授权类 <公开 注释 = "这个是软件卖家使用的哦，一般用来生成序列号哦，然后发送给  验证授权类 来使用哦" 折叠>
+{
+    变量 成员_硬件信息解密密钥 <类型 = 文本型
+            值 = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALPC+ASLKPgDE8LvlebC1Lzz\r\nZYWnBxAwIB+fWa6/9uaPz/1Y5LSt8Ic02nGGaxXehbDIybH3eLIYIGHklfgQ55FG+61fGkmj\r\nkFPaxUfeImqKXXFUSH/G+CmEwCdnWoIAXn0dBoWaE2DTX2Et9iUxDb1/phhd1IpXNdmuUR2U\r\nbD/nAgERAoGAJQJ+W0nTupc4xkBioHNoCMizBO2uoXNR6GSSds0rTZYUO7BrUmAL35nwvQUW\r\nDAgqlVaD4OAgYObZfZDxsxKKBvmI5htO/O9Asbu46BntiyttR+tAEMD7N5vYO+e2a2svBFac\r\nhi+GFQxKOMcxSvclKiFVXwY2hKP9qfNRnO/fLc0CQQDu5l4ltRuyh3kXKlewqH+6bmoZ3lAR\r\nrF5SwF9jLQzVJVGAXZsIg97q5vlsGSudzVNRJHUbgFZkvUcpOV4QUBz1AkEAwKDxkC6qi4V7\r\nfPQ/r4prarep6FeVMIeYhi6lDG5G2XlfrtU6PQRAPw/mQ3/WmbB4+lCxJCbUQ6h9nh2greAf\r\n6wJBAKiinM9SqiOq7BBaH8f+eEdc/5nKGmbUBliHytyYRUspZrT2x8nGfzxmzi4v4o2B4HWD\r\nJXzTD86jucK/FTixBWECQQC1TC6l0ZF0QWUqT0r/kVYKFkWPYX1a2fj2wn044EKukFoN9dx1\r\nqaXg/+fHDugYLZ8JtVttUbi4JhvgG+KFh6WRAkEAnQG7lG+JXE3JL3Uzkb7FLZczLNfw5lT7\r\nm5nUDNy9U6R50iqr2j9WRDgg3Y1v6vgJztxNVfK9/6DyMxKp1w7l2w==">
+    变量 成员_授权信息加密公钥 <类型 = 文本型
+            值 = "MIGdMA0GCSqGSIb3DQEBAQUAA4GLADCBhwKBgQDgGXCbAo6IfkxpJJyCFjteaIQbdGyuXGYJ\r\n3Q66jL2RwWyteIOqNdt1QwlsdxNPn/u9x/Iu/rpeJJxHvNy0k74KyXiUDBBqlPPTZNGImqyf\r\n2TrR49GWD1fL9SlJgF7rqFQVLUbvDoiycH+/RmPH4F65cqaAbBYjtp7F2R0RHXGSMwIBEQ==">
+
+    方法 解密硬件信息 <类型 = 文本型 折叠>
+    参数 加密的硬件信息 <类型 = 文本型>
+    {
+        变量 解密的硬件信息 <类型 = 文本型>
+        变量 "//硬件信息" <类型 = 键值表>
+        密码学_RSA_PKCS1v15_私钥解密 (成员_硬件信息解密密钥, 加密的硬件信息, 解密的硬件信息)
+        // 调试输出 ("解密后的文本", 解密的硬件信息)
+        // 硬件信息.从文本载入 (解密的硬件信息)
+        // 调试输出 (硬件信息)
+        返回 (解密的硬件信息)
+
+    }
+
+    方法 生成注册码_到期不能用 <公开 类型 = 文本型 折叠>
+    参数 硬件信息 <类型 = 文本型>
+    参数 到期时间 <类型 = 文本型>
+    {
+        变量 kv <类型 = 键值表>
+        kv.从文本载入 (解密硬件信息 (硬件信息))
+        kv.置整数 ("type", 0)  // 0表示到期就不能用咯
+        kv.置文本 ("time", 到期时间)
+        kv.置文本 ("SKCT",时间_取日期时间()) // Server Key Create Time 的缩写 服务器授权码生成时间
+
+        变量 加密后的文本 <类型 = 文本型>
+        密码学_RSA_PKCS1v15_公钥加密 (成员_授权信息加密公钥, kv.到文本 (), 加密后的文本)
+        返回 (加密后的文本)
+    }
+
+    方法 生成注册码_生成永久有效 <公开 类型 = 文本型 折叠>
+    参数 硬件信息 <类型 = 文本型>
+    {
+        变量 kv <类型 = 键值表>
+        kv.从文本载入 (解密硬件信息 (硬件信息))
+        kv.置整数 ("type", 1)  // 0表示终身vip
+        kv.置逻辑值 ("a", 真)  // a是 admin的缩写
+        变量 加密后的文本 <类型 = 文本型>
+        密码学_RSA_PKCS1v15_公钥加密 (成员_授权信息加密公钥, kv.到文本 (), 加密后的文本)
+        返回 (加密后的文本)
+
+
+
+    }
+
+    方法 生成注册码_生成会员等级 <公开 类型 = 文本型 折叠>
+    参数 硬件信息 <类型 = 文本型>
+    参数 会员等级 <类型 = 整数 注释 = "等级自定义哦" @默认值 = 0>
+    {
+        变量 kv <类型 = 键值表>
+        kv.从文本载入 (解密硬件信息 (硬件信息))
+        kv.置整数 ("type", 2)  // 2表示会员等级
+        kv.置整数 ("u", 会员等级)  // u是 user的缩写
+        变量 加密后的文本 <类型 = 文本型>
+        密码学_RSA_PKCS1v15_公钥加密 (成员_授权信息加密公钥, kv.到文本 (), 加密后的文本)
+        返回 (加密后的文本)
+
+
+    }
+}
+
+类 验证授权类 <公开 注释 = "一般用在软件上面，获得序列号，丢给卖家，然后卖家通过 生成授权类 生成一个注册码给 软件，软件验证是否有效" 折叠>
+{
+    变量 成员_硬件信息加密公钥 <类型 = 文本型
+            值 = "MIGdMA0GCSqGSIb3DQEBAQUAA4GLADCBhwKBgQCzwvgEiyj4AxPC75XmwtS882WFpwcQMCAf\r\nn1muv/bmj8/9WOS0rfCHNNpxhmsV3oWwyMmx93iyGCBh5JX4EOeRRvutXxpJo5BT2sVH3iJq\r\nil1xVEh/xvgphMAnZ1qCAF59HQaFmhNg019hLfYlMQ29f6YYXdSKVzXZrlEdlGw/5wIBEQ=="
+            编辑时信息 = "0, 2FFFD0, 0, 0">
+    变量 成员_授权信息密钥 <类型 = 文本型
+            值 = "MIICdAIBADANBgkqhkiG9w0BAQEFAASCAl4wggJaAgEAAoGBAOAZcJsCjoh+TGkknIIWO15o\r\nhBt0bK5cZgndDrqMvZHBbK14g6o123VDCWx3E0+f+73H8i7+ul4knEe83LSTvgrJeJQMEGqU\r\n89Nk0YiarJ/ZOtHj0ZYPV8v1KUmAXuuoVBUtRu8OiLJwf79GY8fgXrlypoBsFiO2nsXZHREd\r\ncZIzAgERAoGABGTkFx4q854Vk6FYZvFgiWFsAInP71clI1Sl75RUB+CnxyqFF2p3wQtaiaf7\r\nW+oJ9KmRTDcw1Ktib9aG1l0/9iK0laApJZt8soKei00gGbCJ0HeWcv/kmoXREE0LZ8ARYbCm\r\nvhr75eo4ogVb30Q2OgPZ5TwVpq/VbDJj1CnU0LkCQQD6Nd6HrCOIrEi4NQM9V8a7+PEz+OCf\r\n6+zbXq1w53saQWmZOHBFJbsrDwaj0oZehQNLlJvUDFvgc/2+0X8YUMuXAkEA5UjmnDHJEm/6\r\npwbE/++68c1Y3N/MdOEWcSRctjHFSpw1YtafaTQpnChxkUPG6wwnYqk5n7mSzqY6EGhNr7sx\r\nxQJASZdfkVC/KDKr+fF5bGUcVWdWADoj8szrT5RRITUGFsfx4cVOMnSCV/VcTkz6WAkA+Bym\r\nTW0L9ri0CvJSjq5Z/wJAeWLUcM8QGNHfDSGzlo35jxJcOLK3iSvetF6Lb4PCzSWFrMv6CoUG\r\n+FGliSPhx7sj6PAtkMuoEwy1U/r7859WlQJBAMecoPhSwkXcG9mFMq+q254Z35uMipyC2NeX\r\nTWFXLF1jTEcpy37MfwrrFG8BnH7sCHorhsK14ORrg1+CwoPaLZI="
+            编辑时信息 = "0, 2FFFD0, 0, 0">
+    变量 ""
+    变量 成员_会员等级 <类型 = 整数 值 = 0>
+
+    方法 获取硬件信息 <公开 类型 = 文本型>
+    {
+        变量 kv <类型 = 键值表>
+        kv.置整数 ("机器码", 系统_取硬件特征F ())
+        kv.置整数 ("CPU核心数", 系统_取CPU核心数F ())
+        kv.置小数 ("内存总大小", 系统_取内存大小F ())
+        kv.置逻辑值 ("是否64位", 系统_是否64位 ())
+        kv.置文本 ("CKCTime", 时间_取日期时间 ())  // 是 Client Key Create Time 的缩写,客户端 创建 机器码的时间
+
+        变量 加密后的文本 <类型 = 文本型>
+        // 调试输出 ("加密前的文本", kv.到文本 ())
+        密码学_RSA_PKCS1v15_公钥加密 (成员_硬件信息加密公钥, kv.到文本 (), 加密后的文本)
+        // 调试输出 ("加密后的文本", 加密后的文本)
+        返回 (加密后的文本)
+
+    }
+
+    方法 验证注册码是否有效 <公开 类型 = 逻辑型 折叠>
+    参数 注册码 <类型 = 文本型 注释 = "这个参数必须对应  生成授权类.生成注册码  开头的函数的返回值">
+    {
+        变量 解密后的硬件信息 <类型 = 文本型>
+        变量 授权信息 <类型 = 键值表>
+
+        密码学_RSA_PKCS1v15_私钥解密 (成员_授权信息密钥, 注册码, 解密后的硬件信息)
+        // 调试输出 ("aaa", 解密后的硬件信息)
+        授权信息.从文本载入 (解密后的硬件信息)
+        如果 (授权信息.取整数 ("机器码") != 系统_取硬件特征F ())
+        {
+            返回 (假)
+        }
+
+        变量 授权类型 <类型 = 整数>
+        授权类型 = 授权信息.取整数 ("type")
+        // 调试输出 ("授权类型", 授权类型)
+        如果 (授权类型 == 0)
+        {
+            // 延时 (3000)
+            // 到期就不能用咯
+            变量 到期时间 <类型 = 文本型>
+            到期时间 = 授权信息.取文本 ("time")
+            // 调试输出 ("到期时间", 到期时间)
+            // 调试输出 ("本机时间", 时间_取日期时间 ())
+            // 调试输出 ("时间间隔", 时间_取时间间隔f (时间_取日期时间 (), 到期时间, 时间间隔常量.秒))
+
+            如果 (时间_取时间间隔f (时间_取日期时间 (), 到期时间, 时间间隔常量.秒) > 0)
+            {
+                返回 (真)
+            }
+            否则
+            {
+                返回 (假)
+            }
+
+        }
+        否则 (授权类型 == 1)
+        {
+            如果 (授权信息.取逻辑值 ("a"))
+            {
+                返回 (真)
+            }
+            否则
+            {
+                返回 (假)
+            }
+
+        }
+        否则 (授权类型 == 2)
+        {
+            如果 (授权信息.是否存在 ("u"))
+            {
+                成员_会员等级 = 授权信息.取整数 ("u")
+                返回 (真)
+            }
+            否则
+            {
+                返回 (假)
+            }
+
+
+        }
+
+        返回 (假)
+
+    }
+
+    方法 取会员等级 <公开 类型 = 整数>
+    {
+        返回 (成员_会员等级)
+
+    }
+
+    #
+}
+
+类 "//一些测试例子哦"
+{
+    方法 生成到期不能用的例子 <折叠>
+    {
+        变量 验证 <类型 = 验证授权类>
+        变量 生成 <类型 = 生成授权类>
+        变量 硬件信息 <类型 = 文本型>
+        变量 注册码 <类型 = 文本型>
+        硬件信息 = 验证.获取硬件信息 ()
+        注册码 = 生成.生成注册码_到期不能用 (硬件信息, 时间_取日期时间 ())
+
+        如果 (验证.验证注册码是否有效 (注册码))
+        {
+            调试输出 ("注册码有效")
+        }
+        否则
+        {
+            调试输出 ("注册码无效")
+
+        }
+
+
+    }
+
+    方法 生成终身vip的例子 <折叠>
+    {
+        变量 验证 <类型 = 验证授权类>
+        变量 生成 <类型 = 生成授权类>
+        变量 硬件信息 <类型 = 文本型>
+        变量 注册码 <类型 = 文本型>
+        硬件信息 = 验证.获取硬件信息 ()
+        注册码 = 生成.生成注册码_生成永久有效 (硬件信息)
+
+        如果 (验证.验证注册码是否有效 (注册码))
+        {
+            调试输出 ("注册码有效")
+        }
+        否则
+        {
+            调试输出 ("注册码无效")
+
+        }
+
+
+    }
+
+    方法 生成等级的例子 <注释 = "这个对应 普通版本 专业版本 高级版本 这种情况" 折叠>
+    {
+        变量 验证 <类型 = 验证授权类>
+        变量 生成 <类型 = 生成授权类>
+        变量 硬件信息 <类型 = 文本型>
+        变量 注册码 <类型 = 文本型>
+        硬件信息 = 验证.获取硬件信息 ()
+        注册码 = 生成.生成注册码_生成会员等级 (硬件信息, 10086)
+
+        如果 (验证.验证注册码是否有效 (注册码))
+        {
+            调试输出 ("注册码有效 对应等级", 验证.取会员等级 ())
+
+        }
+        否则
+        {
+            调试输出 ("注册码无效")
+
+        }
+
+
+    }
+
+    #
+    #
+}

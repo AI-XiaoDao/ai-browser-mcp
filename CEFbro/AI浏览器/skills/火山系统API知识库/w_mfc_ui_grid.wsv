@@ -1,0 +1,1183 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.MFC界面.表格 <编辑时信息 = "116A99, 0, 0, 0">
+
+类 表格线显示类型 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 不显示 <公开 值 = 0>
+    常量 横线 <公开 值 = 1>
+    常量 纵线 <公开 值 = 2>
+    常量 横纵线 <公开 值 = 3>
+}
+
+类 表格附件打印位置 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 不打印 <公开 值 = 0>
+    常量 左边 <公开 值 = 1>
+    常量 中间 <公开 值 = 2>
+    常量 右边 <公开 值 = 3>
+}
+
+类 表格回车键用途 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 编辑切换 <公开 值 = 0>
+    常量 跳到下一列 <公开 值 = 1>
+    常量 跳到下一行 <公开 值 = 2>
+    常量 无 <公开 值 = 3>
+}
+
+类 表格常量 <公开 注释 = "提供对表格组件进行操作时所使用的相关常量值" @文档 = "category = \"辅助类\"">
+{
+    常量 行斑马线 <公开 类型 = 整数 值 = 1>
+    常量 列斑马线 <公开 类型 = 整数 值 = 2>
+    常量 ""
+    常量 左对齐 <公开 类型 = 整数 值 = 1>
+    常量 居中对齐 <公开 类型 = 整数 值 = 2>
+    常量 右对齐 <公开 类型 = 整数 值 = 3>
+    常量 ""
+    常量 文本值型 <公开 类型 = 整数 值 = 1>
+    常量 数值型 <公开 类型 = 整数 值 = 2>
+    常量 日期型 <公开 类型 = 整数 值 = 3>
+    常量 列表型 <公开 类型 = 整数 值 = 4>
+    常量 选择型 <公开 类型 = 整数 值 = 5>
+    常量 图片型 <公开 类型 = 整数 值 = 6>
+    常量 货币型 <公开 类型 = 整数 值 = 7>
+    常量 不可编辑列表型 <公开 类型 = 整数 值 = 8>
+    常量 ""
+    常量 长日期格式 <公开 类型 = 整数 值 = 1>
+    常量 短日期格式1 <公开 类型 = 整数 值 = 2>
+    常量 短日期格式2 <公开 类型 = 整数 值 = 3>
+    常量 短日期格式3 <公开 类型 = 整数 值 = 4>
+    常量 美式格式1 <公开 类型 = 整数 值 = 5>
+    常量 美式格式2 <公开 类型 = 整数 值 = 6>
+    常量 美式格式3 <公开 类型 = 整数 值 = 7>
+    常量 美式格式4 <公开 类型 = 整数 值 = 8>
+    常量 ""
+    常量 人民币 <公开 类型 = 整数 值 = 1>
+    常量 美元 <公开 类型 = 整数 值 = 2>
+    常量 欧元 <公开 类型 = 整数 值 = 3>
+    常量 英镑 <公开 类型 = 整数 值 = 4>
+    常量 自定义货币 <公开 类型 = 整数 值 = 5>
+    常量 ""
+    常量 平铺 <公开 类型 = 整数 值 = 1>
+    常量 拉伸 <公开 类型 = 整数 值 = 2>
+    常量 居中 <公开 类型 = 整数 值 = 3>
+    常量 左上角 <公开 类型 = 整数 值 = 4>
+    常量 适合大小 <公开 类型 = 整数 值 = 5>
+    常量 ""
+    常量 加 <公开 类型 = 整数 值 = 1>
+    常量 减 <公开 类型 = 整数 值 = 2>
+    常量 乘 <公开 类型 = 整数 值 = 3>
+    常量 除 <公开 类型 = 整数 值 = 4>
+    常量 ""
+    常量 无线条 <公开 类型 = 整数 值 = 0>
+    常量 单斜线 <公开 类型 = 整数 值 = 1>
+    常量 双斜线 <公开 类型 = 整数 值 = 2>
+    常量 交叉线 <公开 类型 = 整数 值 = 3>
+    常量 ""
+    常量 左边距 <公开 类型 = 整数 值 = 1>
+    常量 右边距 <公开 类型 = 整数 值 = 2>
+    常量 上边距 <公开 类型 = 整数 值 = 3>
+    常量 下边距 <公开 类型 = 整数 值 = 4>
+    常量 页眉 <公开 类型 = 整数 值 = 5>
+    常量 页脚 <公开 类型 = 整数 值 = 6>
+    常量 表头与表格间隔 <公开 类型 = 整数 值 = 7>
+    常量 ""
+    常量 粗体 <公开 类型 = 整数 值 = 1>
+    常量 斜体 <公开 类型 = 整数 值 = 2>
+    常量 下划线 <公开 类型 = 整数 值 = 4>
+    常量 删除线 <公开 类型 = 整数 值 = 8>
+}
+
+类 表格 <公开 基础类 = 窗口组件 编辑时信息 = "255530, 0, 0, 0" @视窗.外部头文件 = "src\\mfc_ui_grid.h"
+        @视窗.外部源文件 = "src\\grid\\ComboGridCtrl.cpp\r\nsrc\\grid\\GridCell.cpp\r\nsrc\\grid\\GridCellBase.cpp\r\nsrc\\grid\\GridCtrl.cpp\r\nsrc\\grid\\GridDropTarget.cpp\r\nsrc\\grid\\InPlaceButton.cpp\r\nsrc\\grid\\inplacedatepick.cpp\r\nsrc\\grid\\InPlaceEdit.cpp\r\nsrc\\grid\\inplacelist.cpp\r\nsrc\\grid\\TitleTip.cpp\r\nsrc\\mfc_ui_grid.cpp\r\nsrc\\mfc_ui_grid_preview.cpp"
+        @视窗.后缀文本 = "public IGridEventListener" @视窗.外部资源文件 = "src\\res\\mfc_ui_grid.rc"
+        @视窗.窗口组件 = "icon=\"@66\"\r\ndefault_size = \"160, 160\"">
+{
+
+    # @ @m<DECLARE_MFC_CONTROL_DEFAULT> (CVWnd_Grid, IGridEventListener, 0, 0, WS_TABSTOP, WS_EX_CLIENTEDGE)
+    #
+    # 事件 --
+
+    方法 光标位置改变 <公开 定义事件 类型 = 整数 注释 = "当用户更改了当前被选择单元时会产生本事件">
+
+    方法 将被编辑 <公开 定义事件 类型 = 整数 注释 = "当单元格将被编辑前产生本事件,调用\"取光标行号\"和\"取光标列号\"方法可获取将被编辑的单元格位置.">
+
+    方法 结束编辑 <公开 定义事件 类型 = 整数 注释 = "当单元格编辑结束之后产生此事件">
+
+    方法 行高被改变 <公开 定义事件 类型 = 整数 注释 = "当用户调整了表格行行高时即产生此事件">
+    参数 行号 <类型 = 整数 注释 = "提供行高被改变的表格行号,行号从0开始.">
+
+    方法 列宽被改变 <公开 定义事件 类型 = 整数 注释 = "当用户调整了表格列列宽时即产生此事件">
+    参数 列号 <类型 = 整数 注释 = "提供列宽被改变的表格列号,列号从0开始.">
+
+    方法 被单击 <公开 定义事件 类型 = 整数 注释 = "当用户单击表格时即产生此事件,关于表格的鼠标点击事件都应在此事件中处理.">
+    参数 横向位置 <类型 = 整数 注释 = "提供单击位置在当前所处窗口组件中的横向位置">
+    参数 纵向位置 <类型 = 整数 注释 = "提供单击位置在当前所处窗口组件中的纵向位置">
+
+    方法 列表项被选择 <公开 定义事件 类型 = 整数 注释 = "当用户选择列表型单元格中的列表项时产生此事件">
+    参数 行号 <类型 = 整数 注释 = "提供当前单元格所处表格行的行号,行号从0开始.">
+    参数 列号 <类型 = 整数 注释 = "提供当前单元格所处表格列的列号,列号从0开始.">
+    参数 被选择项目文本 <类型 = 文本型 注释 = "提供被选择项目的文本内容">
+
+    方法 可否被编辑 <公开 定义事件 类型 = 整数 注释 = "  在某单元格\"将被编辑\"事件之前产生本事件,如果本事件返回1,表示不允许" 注释 = "该单元格进入编辑状态,这种情况下不会有后续的\"将被编辑\"事件.本事件并"
+            注释 = "不能阻止\"不进入编辑状态而修改单元格内容\"的行为,如按下DEL或Ctrl+V键.">
+
+    方法 表头被单击 <公开 定义事件 类型 = 整数 注释 = "当表头被单击后发送本事件">
+    参数 行号 <类型 = 整数 注释 = "提供当前单元格所处表格行的行号,行号从0开始.">
+    参数 列号 <类型 = 整数 注释 = "提供当前单元格所处表格列的列号,列号从0开始.">
+
+    方法 表头被双击 <公开 定义事件 类型 = 整数 注释 = "当表头被双击后发送本事件">
+    参数 行号 <类型 = 整数 注释 = "提供当前单元格所处表格行的行号,行号从0开始.">
+    参数 列号 <类型 = 整数 注释 = "提供当前单元格所处表格列的列号,列号从0开始.">
+
+    # 属性 --
+
+    方法 表格线颜色 <公开 属性读 类型 = 整数 注释 = "返回当前表格线颜色" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (INT)(pWnd->m_hWnd != NULL ? pWnd->GetGridColor () : pWnd->m_clrLine);
+    }
+
+    方法 表格线颜色 <公开 属性写 注释 = "设置当前表格线颜色" @值细节类型 = 颜色 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置颜色值 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetGridColor (pWnd->m_clrLine = @<所欲设置颜色值>);
+        @ SafeInvalidateWnd (pWnd, FALSE);
+    }
+
+    方法 背景颜色 <公开 属性读 类型 = 整数 注释 = "返回当前文本背景颜色" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (INT)(pWnd->m_hWnd != NULL ? pWnd->GetTextBkColor () : pWnd->m_clrBk);
+    }
+
+    方法 背景颜色 <公开 属性写 注释 = "设置当前文本背景颜色" @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置颜色值 <类型 = 整数 注释 = "  可以使用\"颜色类\"所提供的颜色值,可以使用\"颜色类.默认色\"" 注释 = "来指定使用默认组件背景颜色.">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetTextBkColor (pWnd->m_clrBk = GetRealBackColor (@<所欲设置颜色值>));
+        @ SafeInvalidateWnd (pWnd, FALSE);
+    }
+
+    方法 文字颜色 <公开 属性读 类型 = 整数 注释 = "返回当前文本颜色" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (INT)(pWnd->m_hWnd != NULL ? pWnd->GetTextColor () : pWnd->m_clrText);
+    }
+
+    方法 文字颜色 <公开 属性写 注释 = "设置当前文本颜色" @值细节类型 = 颜色 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置颜色值 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetTextColor (pWnd->m_clrText = @<所欲设置颜色值>);
+        @ SafeInvalidateWnd (pWnd, FALSE);
+    }
+
+    方法 点燃色 <公开 属性读 类型 = 整数 注释 = "返回当前焦点所在单元格文本颜色" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (INT)(pWnd->m_hWnd != NULL ? pWnd->GetLightColor () : pWnd->m_clrLight);
+    }
+
+    方法 点燃色 <公开 属性写 注释 = "设置当前焦点所在单元格文本颜色" @值细节类型 = 颜色 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置颜色值 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetLightColor (pWnd->m_clrLight = @<所欲设置颜色值>);
+        @ SafeInvalidateWnd (pWnd, FALSE);
+    }
+
+    方法 显示表格线 <公开 属性读 类型 = 表格线显示类型 注释 = "返回当前表格线显示类型" @嵌入式方法 = "">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->m_nLineType
+    }
+
+    方法 显示表格线 <公开 属性写 注释 = "设置当前表格线显示类型" @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的显示类型 <类型 = 表格线显示类型>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->m_nLineType = CLIP (@<所欲设置的显示类型>, 0, 3);
+        @ pWnd->SetGridLines (pWnd->m_nLineType);
+    }
+
+    方法 允许调整行高 <公开 属性读 类型 = 逻辑型 注释 = "返回是否允许用户调整表格行高" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (INT)(pWnd->m_hWnd != NULL ? pWnd->GetRowResize () : pWnd->m_blResizeHeight);
+    }
+
+    方法 允许调整行高 <公开 属性写 注释 = "设置是否允许用户调整表格行高" @视窗.设置时机 = 组件创建前后>
+    参数 是否允许调整行高 <类型 = 逻辑型>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetRowResize (pWnd->m_blResizeHeight = @<是否允许调整行高>);
+        @ SafeInvalidateWnd (pWnd, FALSE);
+    }
+
+    方法 允许调整列宽 <公开 属性读 类型 = 逻辑型 注释 = "返回是否允许用户调整表格列宽" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (INT)(pWnd->m_hWnd != NULL ? pWnd->GetColumnResize () : pWnd->m_blResizeWidth);
+    }
+
+    方法 允许调整列宽 <公开 属性写 注释 = "设置是否允许用户调整表格列宽" @视窗.设置时机 = 组件创建前后>
+    参数 是否允许调整列宽 <类型 = 逻辑型>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetColumnResize (pWnd->m_blResizeWidth = @<是否允许调整列宽>);
+        @ SafeInvalidateWnd (pWnd, FALSE);
+    }
+
+    方法 行高 <公开 属性读 类型 = 整数 注释 = "返回当前所设置的表格默认行高" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->GetDefCellHeight () : pWnd->m_nRowHeight);
+    }
+
+    方法 行高 <公开 属性写 注释 = "设置表格默认行高,并且同时设置当前所有表格行的高度." @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的行高 <类型 = 整数>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->m_nRowHeight = MAX (0, @<所欲设置的行高>);
+        @ if (pWnd->m_hWnd != NULL)
+        @ {
+        @     pWnd->SetDefCellHeight (pWnd->m_nRowHeight);
+        @     const INT nNumRows = pWnd->GetRowCount ();
+        @     for (INT nRowIndex = 0; nRowIndex < nNumRows; nRowIndex++)
+        @         pWnd->SetRowHeight (nRowIndex, pWnd->m_nRowHeight);
+        @     pWnd->Refresh ();
+        @ }
+    }
+
+    方法 列宽 <公开 属性读 类型 = 整数 注释 = "返回当前所设置的表格默认列宽" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->GetDefCellWidth () : pWnd->m_nColWidth);
+    }
+
+    方法 列宽 <公开 属性写 注释 = "设置表格默认列宽,并且同时设置当前所有表格列的宽度." @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的列宽 <类型 = 整数>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->m_nColWidth = MAX (0, @<所欲设置的列宽>);
+        @ if (pWnd->m_hWnd != NULL)
+        @ {
+        @     pWnd->SetDefCellWidth (pWnd->m_nColWidth);
+        @     const INT nNumCols = pWnd->GetColumnCount ();
+        @     for (INT nColIndex = 0; nColIndex < nNumCols; nColIndex++)
+        @         pWnd->SetColumnWidth (nColIndex, pWnd->m_nColWidth);
+        @     pWnd->Refresh ();
+        @ }
+    }
+
+    方法 行数 <公开 属性读 类型 = 整数 注释 = "返回当前表格行数" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->GetRowCount () : pWnd->m_nRowCount);
+    }
+
+    方法 行数 <公开 属性写 注释 = "设置当前表格行数" @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的行数 <类型 = 整数>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->m_nRowCount = MAX (1, @<所欲设置的行数>);
+        @ if (pWnd->m_hWnd != NULL)
+        @ {
+        @     pWnd->SetRowCount (pWnd->m_nRowCount);
+        @     if (pWnd->m_bShowBM)
+        @         pWnd->ShowZebraLine (pWnd->m_iLineType, pWnd->m_clr1, pWnd->m_clr2);
+        @ }
+    }
+
+    方法 列数 <公开 属性读 类型 = 整数 注释 = "返回当前表格列数" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->GetColumnCount () : pWnd->m_nColCount);
+    }
+
+    方法 列数 <公开 属性写 注释 = "设置当前表格列数" @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的列数 <类型 = 整数>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->m_nColCount = MAX (1, @<所欲设置的列数>);
+        @ if (pWnd->m_hWnd != NULL)
+        @ {
+        @     pWnd->SetColumnCount (pWnd->m_nColCount);
+        @     if (pWnd->m_bShowBM)
+        @         pWnd->ShowZebraLine (pWnd->m_iLineType, pWnd->m_clr1, pWnd->m_clr2);
+        @ }
+    }
+
+    方法 表头行数 <公开 属性读 类型 = 整数 注释 = "返回当前表格表头行数" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->GetFixedRowCount () : pWnd->m_nHeadRowCount);
+    }
+
+    方法 表头行数 <公开 属性写 注释 = "设置当前表格表头行数" @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的行数 <类型 = 整数>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->m_nHeadRowCount = MAX (0, @<所欲设置的行数>);
+        @ if (pWnd->m_hWnd != NULL)
+        @     pWnd->SetFixedRowCount (pWnd->m_nHeadRowCount);
+    }
+
+    方法 表头列数 <公开 属性读 类型 = 整数 注释 = "返回当前表格表头列数" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->GetFixedColumnCount () : pWnd->m_nHeadColCount);
+    }
+
+    方法 表头列数 <公开 属性写 注释 = "设置当前表格表头列数" @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的列数 <类型 = 整数>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->m_nHeadColCount = MAX (0, @<所欲设置的列数>);
+        @ if (pWnd->m_hWnd != NULL)
+        @     pWnd->SetFixedColumnCount (pWnd->m_nHeadColCount);
+    }
+
+    方法 是否可编辑 <公开 属性读 类型 = 逻辑型 注释 = "返回用户是否可编辑表格内容" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->IsEditable () : pWnd->m_blEdit);
+    }
+
+    方法 是否可编辑 <公开 属性写 注释 = "设置用户是否可编辑表格内容" @视窗.设置时机 = 组件创建前后>
+    参数 是否允许用户编辑 <类型 = 逻辑型>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetEditable (pWnd->m_blEdit = @<是否允许用户编辑>);
+    }
+
+    方法 显示打印对话框 <公开 属性读 类型 = 逻辑型 注释 = "返回打印前是否显示打印对话框" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->IsShowDialog () : pWnd->m_bShowDialog);
+    }
+
+    方法 显示打印对话框 <公开 属性写 注释 = "设置打印前是否显示打印对话框" @视窗.设置时机 = 组件创建前后>
+    参数 是否显示打印对话框 <类型 = 逻辑型>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetShowDialog (pWnd->m_bShowDialog = @<是否显示打印对话框>);
+    }
+
+    方法 允许选择块 <公开 属性读 类型 = 逻辑型 注释 = "返回是否可以选择多个单元格" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->IsSelectable () : pWnd->m_bSelection);
+    }
+
+    方法 允许选择块 <公开 属性写 注释 = "设置是否可以选择多个单元格" @视窗.设置时机 = 组件创建前后>
+    参数 是否允许选择块 <类型 = 逻辑型>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->EnableSelection (pWnd->m_bSelection = (pWnd->m_bCanSelectRow || @<是否允许选择块>));
+    }
+
+    方法 显示打印按钮 <公开 属性读 类型 = 逻辑型 注释 = "返回打印预览时是否显示打印按钮" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->IsShowPrintButton () : pWnd->m_bShowPrintBtn);
+    }
+
+    方法 显示打印按钮 <公开 属性写 注释 = "设置打印预览时是否显示打印按钮" @视窗.设置时机 = 组件创建前后>
+    参数 是否显示打印按钮 <类型 = 逻辑型>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetShowPrintButton (pWnd->m_bShowPrintBtn = @<是否显示打印按钮>);
+    }
+
+    方法 表头背景颜色 <公开 属性读 类型 = 整数 注释 = "返回当前表头背景颜色" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (INT)(pWnd->m_hWnd != NULL ? pWnd->GetFixedBkColor () : pWnd->m_clrFixedBk);
+    }
+
+    方法 表头背景颜色 <公开 属性写 注释 = "设置当前表头背景颜色" @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置颜色值 <类型 = 整数 注释 = "  可以使用\"颜色类\"所提供的颜色值,可以使用\"颜色类.默认色\"" 注释 = "来指定使用默认组件背景颜色.">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetFixedBkColor (pWnd->m_clrFixedBk = GetRealBackColor (@<所欲设置颜色值>));
+        @ SafeInvalidateWnd (pWnd, FALSE);
+    }
+
+    方法 打印页码 <公开 属性读 类型 = 表格附件打印位置 注释 = "返回是否打印页码及页码打印位置" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->GetPrintPageNoPos () : pWnd->m_nPrintPageNoPos);
+    }
+
+    方法 打印页码 <公开 属性写 注释 = "设置是否打印页码及页码打印位置" @视窗.设置时机 = 组件创建前后>
+    参数 页码打印位置 <类型 = 表格附件打印位置>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetPrintPageNoPos (pWnd->m_nPrintPageNoPos = CLIP (@<页码打印位置>, 0, 3));
+    }
+
+    方法 打印日期 <公开 属性读 类型 = 表格附件打印位置 注释 = "返回是否打印日期及日期打印位置" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->GetPrintDatePos () : pWnd->m_nPrintDatePos);
+    }
+
+    方法 打印日期 <公开 属性写 注释 = "设置是否打印日期及日期打印位置" @视窗.设置时机 = 组件创建前后>
+    参数 日期打印位置 <类型 = 表格附件打印位置>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetPrintDatePos (pWnd->m_nPrintDatePos = CLIP (@<日期打印位置>, 0, 3));
+    }
+
+    方法 回车键功能 <公开 属性读 类型 = 表格回车键用途 注释 = "返回在表格中回车键的用途" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->GetEnterType () : pWnd->m_nEnterType);
+    }
+
+    方法 回车键功能 <公开 属性写 注释 = "设置在表格中回车键的用途" @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的用途 <类型 = 表格回车键用途>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetEnterType (pWnd->m_nEnterType = CLIP (@<所欲设置的用途>, 0, 3));
+    }
+
+    方法 响应表头被单击 <公开 属性读 类型 = 逻辑型 注释 = "返回是否自动响应并处理表头被单击事件" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->IsCanClickFixed () : pWnd->m_bCanClickFixed);
+    }
+
+    方法 响应表头被单击 <公开 属性写 注释 = "  如果本属性设置为真,单击表头时,将自动进行一些处理,例如: 把" 注释 = "被单击行或列处首单元格置为光标所在单元格,选中被单击行或列等." @视窗.设置时机 = 组件创建前后>
+    参数 是否响应表头被单击 <类型 = 逻辑型>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetCanClickFixed (pWnd->m_bCanClickFixed = @<是否响应表头被单击>);
+    }
+
+    方法 选择整行 <公开 属性读 类型 = 逻辑型 注释 = "返回单击单元格时是否选择所处整行" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->GetListMode () : pWnd->m_bCanSelectRow);
+    }
+
+    方法 选择整行 <公开 属性写 注释 = "设置单击单元格时是否选择所处整行" @视窗.设置时机 = 组件创建前后>
+    参数 是否选择整行 <类型 = 逻辑型>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetListMode (pWnd->m_bCanSelectRow = @<是否选择整行>);
+        @ if (pWnd->m_bCanSelectRow)
+        @     pWnd->EnableSelection (pWnd->m_bSelection = TRUE);
+    }
+
+    方法 选择区背景颜色 <公开 属性读 类型 = 整数 注释 = "返回表格中当前被选择区域的背景颜色" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (INT)(pWnd->m_hWnd != NULL ? pWnd->GetSelectBk () : pWnd->m_clrSelectBk);
+    }
+
+    方法 选择区背景颜色 <公开 属性写 注释 = "设置表格中当前被选择区域的背景颜色" @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置颜色值 <类型 = 整数 注释 = "  可以使用\"颜色类\"所提供的颜色值,可以使用\"颜色类.默认色\"" 注释 = "来指定使用默认组件背景颜色.">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetSelectBk (pWnd->m_clrSelectBk = GetRealBackColor (@<所欲设置颜色值>));
+        @ SafeInvalidateWnd (pWnd, FALSE);
+    }
+
+    方法 选择区文字颜色 <公开 属性读 类型 = 整数 注释 = "返回表格中当前被选择区域中的文本颜色" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (INT)(pWnd->m_hWnd != NULL ? pWnd->GetSelectColor () : pWnd->m_clrSelect);
+    }
+
+    方法 选择区文字颜色 <公开 属性写 注释 = "设置表格中当前被选择区域中的文本颜色" @值细节类型 = 颜色 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置颜色值 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetSelectColor (pWnd->m_clrSelect = @<所欲设置颜色值>);
+        @ SafeInvalidateWnd (pWnd, FALSE);
+    }
+
+    方法 打印缩放至页宽 <公开 属性读 类型 = 逻辑型 注释 = "返回打印表格时是否压缩列到页宽" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->IsSizeToWidth () : pWnd->m_bSizeToWidth);
+    }
+
+    方法 打印缩放至页宽 <公开 属性写 注释 = "设置打印表格时是否压缩列到页宽" @视窗.设置时机 = 组件创建前后>
+    参数 打印是否缩放至页宽 <类型 = 逻辑型>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetSizeToWidth (pWnd->m_bSizeToWidth = @<打印是否缩放至页宽>);
+    }
+
+    方法 表格线宽度 <公开 属性读 类型 = 整数 注释 = "返回表格线的宽度" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->GetGridLineWidth () : pWnd->m_nLineWidth);
+    }
+
+    方法 表格线宽度 <公开 属性写 注释 = "设置表格线的宽度" @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的线宽 <类型 = 整数>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetGridLineWidth (pWnd->m_nLineWidth = MAX (0, @<所欲设置的线宽>));
+        @ SafeInvalidateWnd (pWnd, FALSE);
+    }
+
+    方法 单元格显示零 <公开 属性读 类型 = 逻辑型 注释 = "返回在数值型的单元格中是否显示零" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (pWnd->m_hWnd != NULL ? pWnd->GetShowZeroInNumCell () : pWnd->m_bShowZeroInNumCell);
+    }
+
+    方法 单元格显示零 <公开 属性写 注释 = "设置在数值型的单元格中是否显示零" @视窗.设置时机 = 组件创建前后>
+    参数 单元格是否显示零 <类型 = 逻辑型>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetShowZeroInNumCell (pWnd->m_bShowZeroInNumCell = @<单元格是否显示零>);
+    }
+
+    方法 客户区背景颜色 <公开 属性读 类型 = 整数 注释 = "返回表格组件边框以内所有单元格以外的区域背景颜色" @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (INT)(pWnd->m_hWnd != NULL ? pWnd->GetBkColor () : pWnd->m_clrClientBack);
+    }
+
+    方法 客户区背景颜色 <公开 属性写 注释 = "设置表格组件边框以内所有单元格以外的区域背景颜色" @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置颜色值 <类型 = 整数 注释 = "  可以使用\"颜色类\"所提供的颜色值,可以使用\"颜色类.默认色\"" 注释 = "来指定使用默认组件背景颜色.">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetBkColor (pWnd->m_clrClientBack = GetRealBackColor (@<所欲设置颜色值>));
+        @ SafeInvalidateWnd (pWnd, FALSE);
+    }
+
+    方法 点燃边框色 <公开 属性读 类型 = 整数 注释 = "返回表格中焦点组件的边框颜色,为\"颜色类.透明色\"表示无." @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ return (INT)(pWnd->m_hWnd != NULL ? pWnd->GetLightBorderColor () : pWnd->m_clrFocusCellBorderLight);
+    }
+
+    方法 点燃边框色 <公开 属性写 注释 = "设置表格中焦点组件的边框颜色,为\"颜色类.透明色\"表示无." @值细节类型 = 颜色支持透明 @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置颜色值 <类型 = 整数 注释 = "  可以使用\"颜色类\"所提供的颜色值,可以使用\"颜色类.透明色\"" 注释 = "来指定无点燃边框色.">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtr ();
+        @ pWnd->SetLightBorderColor (pWnd->m_clrFocusCellBorderLight = @<所欲设置颜色值>);
+        @ SafeInvalidateWnd (pWnd, FALSE);
+    }
+
+    # 方法 --
+
+    方法 置光标 <公开 注释 = "将光标移动到指定的单元格上,如果参数指定的行号或列号无效,则隐藏光标并把当前光标行号和列号置为-1." @嵌入式方法 = "">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetCaretCellPos (@<行号>, @<列号>)
+    }
+
+    方法 选择区域 <公开 注释 = "选择指定区域的单元格" @嵌入式方法 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供选择区域起始行的行号,行号从0开始.">
+    参数 起始列号 <类型 = 整数 注释 = "提供选择区域起始列的列号,列号从0开始.">
+    参数 结束行号 <类型 = 整数 注释 = "提供选择区域结束行的行号,行号从0开始.如果为-1,表示等于起始行号." @默认值 = -1>
+    参数 结束列号 <类型 = 整数 注释 = "提供选择区域结束列的列号,列号从0开始.如果为-1,表示等于起始列号." @默认值 = -1>
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SelectCells (@<起始行号>, @<起始列号>, @<结束行号>, @<结束列号>)
+    }
+
+    方法 全部选择 <公开 注释 = "选择所有单元格" @嵌入式方法 = "">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SelectAllCells ()
+    }
+
+    方法 取光标行号 <公开 类型 = 整数 注释 = "返回当前光标所在单元格的行号,失败返回-1." @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd == NULL ? -1 : pWnd->GetFocusCell ().row);
+    }
+
+    方法 取光标列号 <公开 类型 = 整数 注释 = "返回当前光标所在单元格的列号,失败返回-1." @禁止流程检查 = 真>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd == NULL ? -1 : pWnd->GetFocusCell ().col);
+    }
+
+    方法 取选择起始行 <公开 类型 = 整数 注释 = "返回选择区域起始行的行号,行号从0开始." 注释 = "如果当前选择区域无效,则返回-1." @嵌入式方法 = "">
+    {
+        @ (INT)((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetSelectionRect ().top
+    }
+
+    方法 取选择起始列 <公开 类型 = 整数 注释 = "返回选择区域起始列的列号,列号从0开始." 注释 = "如果当前选择区域无效,则返回-1." @嵌入式方法 = "">
+    {
+        @ (INT)((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetSelectionRect ().left
+    }
+
+    方法 取选择终止行 <公开 类型 = 整数 注释 = "返回选择区域结束行的行号(该行本身亦在选择区域内),行号从0开始." 注释 = "如果当前选择区域无效,则返回-1." @嵌入式方法 = "">
+    {
+        @ (INT)((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetSelectionRect ().bottom
+    }
+
+    方法 取选择终止列 <公开 类型 = 整数 注释 = "返回选择区域结束列的列号(该列本身亦在选择区域内),列号从0开始." 注释 = "如果当前选择区域无效,则返回-1." @嵌入式方法 = "">
+    {
+        @ (INT)((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetSelectionRect ().right
+    }
+
+    方法 取选择区域 <公开 类型 = 矩形类 注释 = "返回当前选择区域矩形,如果当前选择区域无效,则所返回矩形所有成员均为-1." @嵌入式方法 = "">
+    {
+        @ @dt<矩形类> (&((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetSelectionRect ())
+    }
+
+    方法 置数据 <公开 类型 = 逻辑型 注释 = "设置指定单元格的值,返回是否成功." 编辑时信息 = "119543, 0, 0, 0"
+            @嵌入式方法 = "req_obj_param_pointer = true\r\nreq_str_param_text_pointer = true">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始" 编辑时信息 = "119543, 0, 0, 0">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始" 编辑时信息 = "119543, 0, 0, 0">
+    参数 欲置入类型 <类型 = 整数 注释 = "指定要置入数据的列类型,为以下常量值之一: 1:表格常量.文本值型; 5:表格常量.选择型; 6:表格常量.图片型." 编辑时信息 = "119543, 0, 0, 0">
+    参数 欲置入数据 <注释 = "提供准备置入单元格的数据." 注释 = "如\"欲置入类型\"为文本值型,则必须为任意基本数据类型,类库将自动将其转换为文本内容;"
+            注释 = "如\"欲置入类型\"为图片型,则必须为字节集类/图片文件名文本/位图资源;" 注释 = "如\"欲置入类型\"为选择型,则必须为逻辑型,为真表示选中,假表示不选中." 编辑时信息 = "119543, 0, 0, 0"
+            @匹配类型 = 通用型>
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetCellData (@<行号>, @<列号>, @<欲置入类型>, @pdt_ch<欲置入数据>, @<欲置入数据>)
+    }
+
+    方法 取文本数据 <公开 类型 = 文本型 注释 = "  返回所指定单元格对应的文本内容,如果所指定行列位置无效或" 注释 = "类型不匹配则返回空文本(注意正常情况下也可能返回空文本)." @嵌入式方法 = "">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ CVolString (((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetItemText (@<行号>, @<列号>))
+    }
+
+    方法 取选择型数据 <公开 类型 = 逻辑型 注释 = "  返回所指定选择型单元格对应的逻辑值,如果所指定行列位置无效或" 注释 = "类型不匹配则返回假(注意正常情况下也可能返回假)." @嵌入式方法 = "">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetItemCheck (@<行号>, @<列号>)
+    }
+
+    方法 取图片数据 <公开 类型 = 字节集类 注释 = "  返回所指定图片型单元格对应的图片数据(BMP格式),如果所指定行列位置无效或" 注释 = "类型不匹配则返回空字节集(注意正常情况下也可能返回空字节集)." @嵌入式方法 = "">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetItemBitmapData (@<行号>, @<列号>, CVolMem ())
+    }
+
+    方法 剪切选定文本 <公开 注释 = "将当前选中(单选或块选)单元格的文本内容剪切到剪切板">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->OnEditCut ();
+    }
+
+    方法 复制选定文本 <公开 注释 = "将当前选中(单选或块选)单元格的文本内容复制到剪切板">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->OnEditCopy ();
+    }
+
+    方法 粘贴 <公开 注释 = "将剪切板的内容粘贴到当前单元格位置">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->OnEditPaste ();
+    }
+
+    方法 显示斑马线 <公开 注释 = "用不同的颜色显示奇偶行或列">
+    参数 斑马线类型 <类型 = 整数 注释 = "指定斑马线的类型,为以下常量值之一: 1:表格常量.行斑马线; 2:表格常量.列斑马线.">
+    参数 奇数行列颜色 <类型 = 整数 注释 = "提供奇数行或列的背景颜色,可以使用\"颜色类\"所提供的颜色值.">
+    参数 偶数行列颜色 <类型 = 整数 注释 = "提供偶数行或列的背景颜色,可以使用\"颜色类\"所提供的颜色值.">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @    pWnd->ShowZebraLine (@<斑马线类型>, (COLORREF)@<奇数行列颜色>, (COLORREF)@<偶数行列颜色>);
+    }
+
+    方法 取字体名 <公开 类型 = 文本型 注释 = "返回表格中指定单元格在显示时所使用字体的名称,失败返回空文本." @嵌入式方法 = "">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetCellFontName (@<行号>, @<列号>, CVolString ())
+    }
+
+    方法 置字体名 <公开 类型 = 逻辑型 注释 = "设置表格中指定区域在显示时所使用字体的名称,返回是否成功." @嵌入式方法 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供所指定区域起始行的行号,行号从0开始.">
+    参数 起始列号 <类型 = 整数 注释 = "提供所指定区域起始列的列号,列号从0开始.">
+    参数 结束行号 <类型 = 整数 注释 = "提供所指定区域结束行的行号,行号从0开始.如果为-1,表示等于起始行号." @默认值 = -1>
+    参数 结束列号 <类型 = 整数 注释 = "提供所指定区域结束列的列号,列号从0开始.如果为-1,表示等于起始列号." @默认值 = -1>
+    参数 字体名 <类型 = 文本型 注释 = "提供所欲设置的表格文字显示字体名称,不能为空文本.">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetCellFont (@<起始行号>, @<起始列号>, @<结束行号>, @<结束列号>, @<字体名>.GetText (), 0, -1)
+    }
+
+    方法 取字体尺寸 <公开 类型 = 整数 注释 = "返回表格中指定单元格在显示时所使用字体的尺寸,失败返回-1." @嵌入式方法 = "">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetCellFontSize (@<行号>, @<列号>)
+    }
+
+    方法 置字体尺寸 <公开 类型 = 逻辑型 注释 = "设置表格中指定区域在显示时所使用字体的尺寸,返回是否成功." @嵌入式方法 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供所指定区域起始行的行号,行号从0开始.">
+    参数 起始列号 <类型 = 整数 注释 = "提供所指定区域起始列的列号,列号从0开始.">
+    参数 结束行号 <类型 = 整数 注释 = "提供所指定区域结束行的行号,行号从0开始.如果为-1,表示等于起始行号." @默认值 = -1>
+    参数 结束列号 <类型 = 整数 注释 = "提供所指定区域结束列的列号,列号从0开始.如果为-1,表示等于起始列号." @默认值 = -1>
+    参数 字体尺寸 <类型 = 整数 注释 = "提供所欲设置的表格文字显示字体尺寸,不能为0.">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetCellFont (@<起始行号>, @<起始列号>, @<结束行号>, @<结束列号>, _T (""), @<字体尺寸>, -1)
+    }
+
+    方法 取字体属性 <公开 类型 = 整数 注释 = "返回表格中指定单元格在显示时所使用字体的属性." 注释 = "失败返回-1,否则返回以下常量值之一或之和:"
+            注释 = "  1:表格常量.粗体; 2:表格常量.斜体; 4:表格常量.下划线; 8:表格常量.删除线." @嵌入式方法 = "">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetCellFontAttr (@<行号>, @<列号>)
+    }
+
+    方法 置字体属性 <公开 类型 = 逻辑型 注释 = "设置表格中指定区域在显示时所使用字体的尺寸,返回是否成功." @嵌入式方法 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供所指定区域起始行的行号,行号从0开始.">
+    参数 起始列号 <类型 = 整数 注释 = "提供所指定区域起始列的列号,列号从0开始.">
+    参数 结束行号 <类型 = 整数 注释 = "提供所指定区域结束行的行号,行号从0开始.如果为-1,表示等于起始行号." @默认值 = -1>
+    参数 结束列号 <类型 = 整数 注释 = "提供所指定区域结束列的列号,列号从0开始.如果为-1,表示等于起始列号." @默认值 = -1>
+    参数 字体属性 <类型 = 整数 注释 = "提供所欲设置的表格文字显示字体属性,为以下常量值之一或之和:" 注释 = "  1:表格常量.粗体; 2:表格常量.斜体; 4:表格常量.下划线; 8:表格常量.删除线.">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetCellFont (@<起始行号>, @<起始列号>, @<结束行号>, @<结束列号>, _T (""), 0, @<字体属性>)
+    }
+
+    方法 置单元格字体 <公开 类型 = 逻辑型 注释 = "设置表格中指定区域在显示时所使用的字体,返回是否成功." @嵌入式方法 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供所指定区域起始行的行号,行号从0开始.">
+    参数 起始列号 <类型 = 整数 注释 = "提供所指定区域起始列的列号,列号从0开始.">
+    参数 结束行号 <类型 = 整数 注释 = "提供所指定区域结束行的行号,行号从0开始.如果为-1,表示等于起始行号." @默认值 = -1>
+    参数 结束列号 <类型 = 整数 注释 = "提供所指定区域结束列的列号,列号从0开始.如果为-1,表示等于起始列号." @默认值 = -1>
+    参数 字体名 <类型 = 文本型 注释 = "提供所欲设置的表格文字显示字体名称,为空文本表示不修改原值." @默认值 = "">
+    参数 字体尺寸 <类型 = 整数 注释 = "提供所欲设置的表格文字显示字体尺寸,为0表示不修改原值." @默认值 = 0>
+    参数 字体属性 <类型 = 整数 注释 = "提供所欲设置的表格文字显示字体属性,为以下常量值之一或之和:" 注释 = "  1:表格常量.粗体; 2:表格常量.斜体; 4:表格常量.下划线; 8:表格常量.删除线."
+            注释 = "为-1表示不修改原值." @默认值 = -1>
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetCellFont (@<起始行号>, @<起始列号>, @<结束行号>, @<结束列号>, @<字体名>.GetText (), @<字体尺寸>, @<字体属性>)
+    }
+
+    方法 取单元格文字颜色 <公开 类型 = 整数 注释 = "返回表格中指定单元格在显示文字时所使用的颜色值,失败返回-1." @嵌入式方法 = "">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetCellTextColor (@<行号>, @<列号>)
+    }
+
+    方法 置单元格文字颜色 <公开 类型 = 逻辑型 注释 = "设置表格中指定区域在显示文字时所使的颜色,返回是否成功." @嵌入式方法 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供所指定区域起始行的行号,行号从0开始.">
+    参数 起始列号 <类型 = 整数 注释 = "提供所指定区域起始列的列号,列号从0开始.">
+    参数 结束行号 <类型 = 整数 注释 = "提供所指定区域结束行的行号,行号从0开始.如果为-1,表示等于起始行号." @默认值 = -1>
+    参数 结束列号 <类型 = 整数 注释 = "提供所指定区域结束列的列号,列号从0开始.如果为-1,表示等于起始列号." @默认值 = -1>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "提供所欲设置的颜色值,可以使用\"颜色类\"所提供的颜色值.">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetCellTextColor (@<起始行号>, @<起始列号>, @<结束行号>, @<结束列号>, @<所欲设置的颜色>)
+    }
+
+    方法 取单元格背景颜色 <公开 类型 = 整数 注释 = "返回表格中指定单元格在显示时所使用的背景颜色值,失败返回-1." @嵌入式方法 = "">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetCellBackColor (@<行号>, @<列号>)
+    }
+
+    方法 置单元格背景颜色 <公开 类型 = 逻辑型 注释 = "设置表格中指定区域在显示时所使的背景颜色,返回是否成功." @嵌入式方法 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供所指定区域起始行的行号,行号从0开始.">
+    参数 起始列号 <类型 = 整数 注释 = "提供所指定区域起始列的列号,列号从0开始.">
+    参数 结束行号 <类型 = 整数 注释 = "提供所指定区域结束行的行号,行号从0开始.如果为-1,表示等于起始行号." @默认值 = -1>
+    参数 结束列号 <类型 = 整数 注释 = "提供所指定区域结束列的列号,列号从0开始.如果为-1,表示等于起始列号." @默认值 = -1>
+    参数 所欲设置的颜色 <类型 = 整数 注释 = "  提供所欲设置的颜色值,可以使用\"颜色类\"所提供的颜色值,可以使用\"颜色类.默认色\"" 注释 = "来指定使用默认组件背景颜色.">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetCellBackColor (@<起始行号>, @<起始列号>, @<结束行号>, @<结束列号>, GetRealBackColor (@<所欲设置的颜色>))
+    }
+
+    方法 置对齐方式 <公开 类型 = 逻辑型 注释 = "设置表格中指定区域在显示文字时所使用的文本对齐方式,返回是否成功." @嵌入式方法 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供所指定区域起始行的行号,行号从0开始.">
+    参数 起始列号 <类型 = 整数 注释 = "提供所指定区域起始列的列号,列号从0开始.">
+    参数 结束行号 <类型 = 整数 注释 = "提供所指定区域结束行的行号,行号从0开始.如果为-1,表示等于起始行号." @默认值 = -1>
+    参数 结束列号 <类型 = 整数 注释 = "提供所指定区域结束列的列号,列号从0开始.如果为-1,表示等于起始列号." @默认值 = -1>
+    参数 所欲设置的对齐方式 <类型 = 整数 注释 = "提供所欲设置的文本对齐方式,可以为以下常量值之一:" 注释 = "  1:表格常量.左对齐; 2:表格常量.居中对齐; 3:表格常量.右对齐.">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetCellTextAlignMode (@<起始行号>, @<起始列号>, @<结束行号>, @<结束列号>, @<所欲设置的对齐方式>)
+    }
+
+    方法 取对齐方式 <公开 类型 = 整数 注释 = "返回表格中指定区域在显示文字时所使用的文本对齐方式,为以下值之一:" 注释 = "  1:表格常量.左对齐; 2:表格常量.居中对齐; 3:表格常量.右对齐;  -1:失败"
+            @嵌入式方法 = "">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetCellTextAlignMode (@<行号>, @<列号>)
+    }
+
+    方法 打印 <公开 注释 = "打印当前表格内容">
+    参数 左边距 <类型 = 整数 @默认值 = 0>
+    参数 顶边距 <类型 = 整数 @默认值 = 0>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     pWnd->SetPrintSpace (@<左边距>, @<顶边距>);
+        @     pWnd->UpdateWindow ();
+        @     pWnd->Print ();
+        @     pWnd->UpdateWindow ();
+        @ }
+    }
+
+    方法 打印预览 <公开 注释 = "打印预览当前表格内容">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->PrintPreview ();
+    }
+
+    方法 清空下拉列表 <公开 注释 = "删除所有的下拉列表项">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->RemoveAllList ();
+    }
+
+    方法 添加下拉列表内容 <公开 注释 = "应该在设置列类型为列表型之前首先调用本方法添加所有下拉列表项">
+    参数 列表项内容 <类型 = 文本型 注释 = "提供表格中下拉列表框的单个列表项目内容">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->AddList ((TCHAR*)@<列表项内容>.GetText ());
+    }
+
+    方法 置列类型 <公开 类型 = 逻辑型 注释 = "设置单元列所包含数据的输入方式,返回是否成功." @嵌入式方法 = "">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    参数 所欲设置的列类型 <类型 = 整数 注释 = "单元格的数据输入类型,为以下常量值之一:" 注释 = "  1:表格常量.文本型; 2:表格常量.数值型; 3:表格常量.日期型; 4:表格常量.列表型;"
+            注释 = "  5:表格常量.选择型; 6:表格常量.图片型; 7:表格常量.货币型; 8:表格常量.不可编辑列表型.">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetGridColType (@<列号>, @<所欲设置的列类型>)
+    }
+
+    方法 置行高 <公开 类型 = 逻辑型 注释 = "设置指定行的高度,返回是否成功." @禁止流程检查 = 真>
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 所欲设置的高度 <类型 = 整数 注释 = "提供所欲设置的表格行高度">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL && pWnd->SetRowHeight (@<行号>, @<所欲设置的高度>, TRUE))
+        @ {
+        @     pWnd->Refresh ();
+        @     return TRUE;
+        @ }
+        @ return FALSE;
+    }
+
+    方法 置列宽 <公开 类型 = 逻辑型 注释 = "设置指定列的宽度,返回是否成功." @禁止流程检查 = 真>
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    参数 所欲设置的宽度 <类型 = 整数 注释 = "提供所欲设置的表格列宽度">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL && pWnd->SetColumnWidth (@<列号>, @<所欲设置的宽度>, TRUE))
+        @ {
+        @     pWnd->Refresh ();
+        @     return TRUE;
+        @ }
+        @ return FALSE;
+    }
+
+    方法 置日期格式 <公开 类型 = 逻辑型 注释 = "设置日期显示格式,返回是否成功." @嵌入式方法 = "">
+    参数 列号 <类型 = 整数 注释 = "提供需要置日期格式的列号,从0开始.">
+    参数 所欲设置的日期格式 <类型 = 整数 注释 = "提供所欲设置的日期格式类型,为以下常量值之一:" 注释 = "  1:表格常量.长日期格式; 2:表格常量.短日期格式1; 3:表格常量.短日期格式2; 4:表格常量.短日期格式3;"
+            注释 = "  5:表格常量.美式格式1; 6:表格常量.美式格式2; 7:表格常量.美式格式3;  8:表格常量.美式格式4.">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetGridDateFormat (@<列号>, @<所欲设置的日期格式>)
+    }
+
+    方法 置货币前缀 <公开 类型 = 逻辑型 注释 = "设置货币型单元格的显示前缀,返回是否成功." @嵌入式方法 = "">
+    参数 列号 <类型 = 整数 注释 = "提供需要置货币前缀的列的列号,从0开始.">
+    参数 货币类型 <类型 = 整数 注释 = "货币型单元格的货币类型,为以下常量值之一:" 注释 = "  1:表格常量.人民币; 2:表格常量.美元; 3:表格常量.欧元; 4:表格常量.英镑; 5:表格常量.自定义货币.">
+    参数 自定义前缀 <类型 = 文本型 注释 = "提供货币型单元格的自定义显示前缀,仅当\"货币类型\"参数值为\"表格常量.自定义货币\"时有效." @默认值 = "">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetGridMoneyLeader (@<列号>, @<货币类型>, @<自定义前缀>.GetText ())
+    }
+
+    方法 置图片显示方式 <公开 类型 = 逻辑型 注释 = "设置图片型单元格的显示方式,返回是否成功." @嵌入式方法 = "">
+    参数 列号 <类型 = 整数 注释 = "提供需要置图片显示方式的列号,从0开始.">
+    参数 显示方式 <类型 = 整数 注释 = "图片型单元格的显示方式,值为以下常量值之一:" 注释 = "  1:表格常量.平铺; 2:表格常量.拉伸; 3:表格常量.居中; 4:表格常量.左上角; 5:表格常量.适合大小.">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetGridPicShowMode (@<列号>, @<显示方式>)
+    }
+
+    方法 删除行 <公开 类型 = 逻辑型 注释 = "删除指定的表格行,返回是否成功." @嵌入式方法 = "">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->DeleteGridRow (@<行号>)
+    }
+
+    方法 删除列 <公开 类型 = 逻辑型 注释 = "删除指定的表格列,返回是否成功." @嵌入式方法 = "">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->DeleteGridCol (@<列号>)
+    }
+
+    方法 插入行 <公开 类型 = 逻辑型 注释 = "在指定的位置插入空行,返回是否成功." @嵌入式方法 = "">
+    参数 行标题 <类型 = 文本型 注释 = "指定所插入空行的标题文本" @默认值 = "">
+    参数 行号 <类型 = 整数 注释 = "指定空行的插入行号位置,从0开始,如果为-1,表示插入到表格尾部." @默认值 = -1>
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->InsertGridRow (@<行号>, @<行标题>.GetText ())
+    }
+
+    方法 插入列 <公开 类型 = 逻辑型 注释 = "在指定的位置插入空列,返回是否成功." @嵌入式方法 = "">
+    参数 列标题 <类型 = 文本型 注释 = "指定所插入空列的标题文本">
+    参数 列号 <类型 = 整数 注释 = "指定空列的插入列号位置,从0开始,如果为-1,表示插入到表格最右侧." @默认值 = -1>
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->InsertGridCol (@<列号>, @<列标题>.GetText ())
+    }
+
+    方法 置计算公式 <公开 类型 = 逻辑型 注释 = "  指定在表格中任意两个数字列之间进行简单的数学计算后自动将结" 注释 = "果赋予表格中的另一列." 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 列号1 <类型 = 整数 注释 = "指定参与自动计算的第1列的列号,从0开始,该列必须为数值或货币型.">
+    参数 列号2 <类型 = 整数 注释 = "指定参与自动计算的第2列的列号,从0开始,该列必须为数值或货币型.">
+    参数 计算操作符 <类型 = 整数 注释 = "指定自动计算的操作符,值为以下常量值之一:" 注释 = "  1:表格常量.加; 2:表格常量.减; 3:表格常量.乘; 4:表格常量.除.">
+    参数 结果列号 <类型 = 整数 注释 = "指定自动计算结果存放到的列,从0开始,该列必须为数值或货币型.">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetGridColAutoCalc (@<列号1>, @<列号2>, @<计算操作符>, @<结果列号>)
+    }
+
+    方法 置单元格小数位数 <公开 类型 = 逻辑型 注释 = "指定单元格数字的小数位数,只对数值和货币型单元格有效." 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 列号 <类型 = 整数 注释 = "指定需要置小数位数的列号,从0开始.">
+    参数 小数位数 <类型 = 整数 注释 = "指定数值或货币类型数据的小数位数,为从0到9之间的整数.">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL && pWnd->SetBitCount (@<列号>, @<小数位数>))
+        @ {
+        @     pWnd->Refresh ();
+        @     return TRUE;
+        @ }
+        @ return FALSE;
+    }
+
+    方法 置自动换行 <公开 类型 = 逻辑型 注释 = "指定单元格内容是否自动换行" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供所指定区域起始行的行号,行号从0开始.">
+    参数 起始列号 <类型 = 整数 注释 = "提供所指定区域起始列的列号,列号从0开始.">
+    参数 结束行号 <类型 = 整数 注释 = "提供所指定区域结束行的行号,行号从0开始.如果为-1,表示等于起始行号." @默认值 = -1>
+    参数 结束列号 <类型 = 整数 注释 = "提供所指定区域结束列的列号,列号从0开始.如果为-1,表示等于起始列号." @默认值 = -1>
+    参数 是否自动换行 <类型 = 逻辑型 注释 = "指定单元格内容是否自动换行,为真则自动换行,为假则单行显示." @默认值 = 真>
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetGridLineAutoWrap (@<起始行号>, @<起始列号>, @<结束行号>, @<结束列号>, @<是否自动换行>)
+    }
+
+    方法 取行高 <公开 类型 = 整数 注释 = "返回所指定行的高度,成功返回行高,失败返回-1." @禁止流程检查 = 真>
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd == NULL ? -1 : pWnd->GetRowHeight (@<行号>));
+    }
+
+    方法 取列宽 <公开 类型 = 整数 注释 = "返回所指定列的宽度,成功返回列宽,失败返回-1." @禁止流程检查 = 真>
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd == NULL ? -1 : pWnd->GetColumnWidth (@<列号>));
+    }
+
+    方法 插入下拉列表项 <公开 类型 = 逻辑型 注释 = "插入指定列的下拉列表项,该列必须为列表型." 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 列号 <类型 = 整数 注释 = "提供需要插入下拉列表项的列号,从0开始.">
+    参数 列表项 <类型 = 文本型 注释 = "提供需要插入的下拉列表项文本">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd == NULL ? FALSE : pWnd->InsertComboList (@<列号>, @<列表项>.GetText ()));
+    }
+
+    方法 置打印表头 <公开 类型 = 逻辑型 注释 = "指定表格打印时的表头名称及字体" 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 表头名称 <类型 = 文本型 注释 = "提供表格打印时的表头名称">
+    参数 字体名称 <类型 = 文本型 注释 = "提供表格打印时的表头字体名称">
+    参数 字体尺寸 <类型 = 整数 注释 = "提供表格打印时的表头字体尺寸,字体尺寸为0-100之间的整数." @默认值 = 20>
+    参数 是否为粗体 <类型 = 逻辑型 注释 = "提供表格打印时的表头是否使用粗体" @默认值 = 真>
+    参数 对齐方式 <类型 = 整数 注释 = "表格打印时表头的对齐方式,可以为以下常量值之一:" 注释 = "  1:表格常量.左对齐; 2:表格常量.居中对齐; 3:表格常量.右对齐." @默认值 = 2>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd == NULL ? FALSE : pWnd->SetPrintHeadInfo (@<表头名称>.GetText (), @<字体名称>.GetText (), @<字体尺寸>, @<是否为粗体>, @<对齐方式>));
+    }
+
+    方法 加线条 <公开 注释 = "为指定的单元格添加线条">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    参数 斜线种类 <类型 = 整数 注释 = "提供需要添加的斜线类型,可以为以下常量值之一:" 注释 = "  0:表格常量.无线条; 1:表格常量.单斜线; 2:表格常量.双斜线; 3:表格常量.交叉线." @默认值 = 1>
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL && pWnd->IsValid (@<行号>, @<列号>))
+        @ {
+        @     pWnd->SetItemLineType (@<行号>, @<列号>, @<斜线种类>);
+        @     pWnd->RedrawCell (@<行号>, @<列号>);
+        @ }
+    }
+
+    方法 删线条 <公开 注释 = "去除指定单元格中的线条">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        加线条 (行号, 列号, 表格常量.无线条)
+    }
+
+    方法 置边距 <公开 类型 = 逻辑型 注释 = "设置指定单元格在显示其中数据时到其单元格边框之间的空白距离,单位为0.1毫米." 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供所指定区域起始行的行号,行号从0开始.">
+    参数 起始列号 <类型 = 整数 注释 = "提供所指定区域起始列的列号,列号从0开始.">
+    参数 结束行号 <类型 = 整数 注释 = "提供所指定区域结束行的行号,行号从0开始.如果为-1,表示等于起始行号." @默认值 = -1>
+    参数 结束列号 <类型 = 整数 注释 = "提供所指定区域结束列的列号,列号从0开始.如果为-1,表示等于起始列号." @默认值 = -1>
+    参数 所欲设置的边距 <类型 = 整数 注释 = "提供所欲设置的边距尺寸,单位为0.1毫米." @默认值 = 9>
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetGridCellMargin (@<起始行号>, @<起始列号>, @<结束行号>, @<结束列号>, @<所欲设置的边距>)
+    }
+
+    方法 取边距 <公开 类型 = 整数 注释 = "返回指定单元格在显示其中数据时到其单元格边框之间的空白距离,单位为0.1毫米." @禁止流程检查 = 真>
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd == NULL ? 0 : pWnd->GetItemMargin (@<行号>, @<列号>));
+    }
+
+    方法 置密码方式 <公开 类型 = 逻辑型 注释 = "设置指定单元格在显示其中数据时是否以密码字符方式呈现" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供所指定区域起始行的行号,行号从0开始.">
+    参数 起始列号 <类型 = 整数 注释 = "提供所指定区域起始列的列号,列号从0开始.">
+    参数 结束行号 <类型 = 整数 注释 = "提供所指定区域结束行的行号,行号从0开始.如果为-1,表示等于起始行号." @默认值 = -1>
+    参数 结束列号 <类型 = 整数 注释 = "提供所指定区域结束列的列号,列号从0开始.如果为-1,表示等于起始列号." @默认值 = -1>
+    参数 是否以密码方式显示 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetGridCellPasswordMode (@<起始行号>, @<起始列号>, @<结束行号>, @<结束列号>, @<是否以密码方式显示>)
+    }
+
+    方法 取密码方式 <公开 类型 = 逻辑型 注释 = "返回指定单元格在显示其中数据时是否以密码字符方式呈现" @禁止流程检查 = 真>
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd == NULL ? FALSE : pWnd->GetItemPwdMode (@<行号>, @<列号>));
+    }
+
+    方法 置只读方式 <公开 类型 = 逻辑型 注释 = "设置指定单元格是否只读" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供所指定区域起始行的行号,行号从0开始.">
+    参数 起始列号 <类型 = 整数 注释 = "提供所指定区域起始列的列号,列号从0开始.">
+    参数 结束行号 <类型 = 整数 注释 = "提供所指定区域结束行的行号,行号从0开始.如果为-1,表示等于起始行号." @默认值 = -1>
+    参数 结束列号 <类型 = 整数 注释 = "提供所指定区域结束列的列号,列号从0开始.如果为-1,表示等于起始列号." @默认值 = -1>
+    参数 是否只读 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetGridCellReadonly (@<起始行号>, @<起始列号>, @<结束行号>, @<结束列号>, @<是否只读>)
+    }
+
+    方法 取只读方式 <公开 类型 = 逻辑型 注释 = "返回指定单元格是否只读" @禁止流程检查 = 真>
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd == NULL ? FALSE : !pWnd->IsCellEditable (@<行号>, @<列号>));
+    }
+
+    方法 清空数据 <公开 注释 = "将所有单元格的内容清空" @嵌入式方法 = "">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->CleanAllCellContent ()
+    }
+
+    方法 合并 <公开 注释 = "组合表格中指定范围内的单元格,使之以一个单元格的形式表现." @嵌入式方法 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供所指定区域起始行的行号,行号从0开始.">
+    参数 起始列号 <类型 = 整数 注释 = "提供所指定区域起始列的列号,列号从0开始.">
+    参数 结束行号 <类型 = 整数 注释 = "提供所指定区域结束行的行号,行号从0开始.如果为-1,表示等于起始行号." @默认值 = -1>
+    参数 结束列号 <类型 = 整数 注释 = "提供所指定区域结束列的列号,列号从0开始.如果为-1,表示等于起始列号." @默认值 = -1>
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->MergeGridCells (@<起始行号>, @<起始列号>, @<结束行号>, @<结束列号>)
+    }
+
+    方法 分解 <公开 类型 = 逻辑型 注释 = "分解表格中指定的已经组合的单元格,行列参数指向被组合单元格内的任何一个单元格即可." 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 行号 <类型 = 整数 注释 = "行号从0开始">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL && pWnd->BreakSelectionCell (@<行号>, @<列号>))
+        @ {
+        @     pWnd->Refresh ();
+        @     return TRUE;
+        @ }
+        @ return FALSE;
+    }
+
+    方法 取列类型 <公开 类型 = 整数 注释 = "返回指定单元列的数据类型。返回值为以下常量值之一:" 注释 = "  0:失败; 1:表格常量.文本型; 2:表格常量.数值型; 3:表格常量.日期型; 4:表格常量.列表型;"
+            注释 = "  5:表格常量.选择型; 6:表格常量.图片型; 7:表格常量.货币型; 8:表格常量.不可编辑列表型." @嵌入式方法 = "">
+    参数 列号 <类型 = 整数 注释 = "列号从0开始">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetGridColType (@<列号>)
+    }
+
+    方法 清空单元格数据 <公开 注释 = "清除指定区域的单元格的内容" @嵌入式方法 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供所指定区域起始行的行号,行号从0开始.">
+    参数 起始列号 <类型 = 整数 注释 = "提供所指定区域起始列的列号,列号从0开始.">
+    参数 结束行号 <类型 = 整数 注释 = "提供所指定区域结束行的行号,行号从0开始.如果为-1,表示等于起始行号." @默认值 = -1>
+    参数 结束列号 <类型 = 整数 注释 = "提供所指定区域结束列的列号,列号从0开始.如果为-1,表示等于起始列号." @默认值 = -1>
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->CleanCellsContent (@<起始行号>, @<起始列号>, @<结束行号>, @<结束列号>)
+    }
+
+    方法 取单元格行高 <公开 类型 = 整数 注释 = "取得指定单元格的高度.成功返回该单元格高度,失败返回-1." 注释 = "注意: 如果所指定单元格位置位于被合并的单元格中,将返回被合并单元格的高度." @嵌入式方法 = "">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始,如为-1,则为当前焦点所在单元格行号." @默认值 = -1>
+    参数 列号 <类型 = 整数 注释 = "列号从0开始,如为-1,则为当前焦点所在单元格列号." @默认值 = -1>
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetGridCellHeight (@<行号>, @<列号>)
+    }
+
+    方法 取单元格列宽 <公开 类型 = 整数 注释 = "取得指定单元格的宽度.成功返回该单元格宽度,失败返回-1." 注释 = "注意: 如果所指定单元格位置位于被合并的单元格中,将返回被合并单元格的宽度." @嵌入式方法 = "">
+    参数 行号 <类型 = 整数 注释 = "行号从0开始,如为-1,则为当前焦点所在单元格行号." @默认值 = -1>
+    参数 列号 <类型 = 整数 注释 = "列号从0开始,如为-1,则为当前焦点所在单元格列号." @默认值 = -1>
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->GetGridCellWidth (@<行号>, @<列号>)
+    }
+
+    方法 置打印页边距 <公开 注释 = "设置打印页中的各种边距" @嵌入式方法 = "">
+    参数 所欲设置的页边距 <类型 = 整数 注释 = "提供所欲设置页边距的类型,可以为以下常量值之一:" 注释 = "  1:表格常量.左边距; 2:表格常量.右边距; 3:表格常量.上边距; 4:表格常量.下边距;"
+            注释 = "  5:表格常量.页眉; 6:表格常量.页脚; 7:表格常量.表头与表格间隔.">
+    参数 页边距值 <类型 = 整数 注释 = "提供所欲设置的页边距值,单位为0.1毫米.">
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetGridPrintMargin (@<所欲设置的页边距>, @<页边距值>)
+    }
+
+    方法 置累加公式 <公开 类型 = 逻辑型 注释 = "设置纵向单元格累加公式" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 列号 <类型 = 整数 注释 = "提供要设置累加公式的列号,从0开始.">
+    参数 起始行号 <类型 = 整数 注释 = "提供进行累加的起始行号,从0开始.">
+    参数 结束行号 <类型 = 整数 注释 = "提供进行累加的结束行号,从0开始.">
+    参数 结果存放行号 <类型 = 整数 注释 = "提供累加结果存放到行的行号,从0开始,如果为-1,表示为\"结束行号\"的下一行." 注释 = "本行号不能位于\"起始行号\"和\"结束行号\"之间." @默认值 = -1>
+    {
+        @ ((CVWnd_Grid*)@sn<this>.GetMfcWndPtr ())->SetGridAddRows (@<列号>, @<起始行号>, @<结束行号>, @<结果存放行号>)
+    }
+
+    方法 删除累加公式 <公开 类型 = 逻辑型 注释 = "删除指定列的单元格累加公式" 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 列号 <类型 = 整数 注释 = "提供要删除累加公式的列号,从0开始.">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd != NULL ? pWnd->DeleteAddCol (@<列号>) : FALSE);
+    }
+
+    方法 刷新单元格 <公开 注释 = "重新绘制表格所有单元格,主要用于计算公式结果单元格的刷新.">
+    {
+        @ CVWnd_Grid* pWnd = (CVWnd_Grid*)GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->RefreshResCell ();
+    }
+
+    方法 置编辑状态字体和颜色 <公开 类型 = 逻辑型 注释 = "  设置单元格编辑状态下使用的文本字体和颜色." 注释 = "  默认情况下,编辑状态下的文本字体和颜色与当前正在编辑的单元格的文本"
+            注释 = "字体和颜色一致,用户可以在处理\"将被编辑\"事件时调用本方法进行修改." 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 所欲设置的字体 <类型 = 字体对象类 注释 = "提供编辑时所使用的字体,为空对象表示不进行修改." @默认值 = 空对象>
+    参数 文本颜色 <类型 = 整数 注释 = "提供编辑时所使用的文本颜色,为\"颜色类.透明色\"表示不进行修改." @默认值 = 颜色类.透明色>
+    参数 背景颜色 <类型 = 整数 注释 = "提供编辑时所使用的背景颜色,为\"颜色类.透明色\"表示不进行修改." @默认值 = 颜色类.透明色>
+    {
+        @ return ((CVWnd_Grid*)GetMfcWndPtr ())->SetGridEditFontAndColor ((HFONT)(@<所欲设置的字体>.IsNullObject () ? NULL : @<所欲设置的字体>.GetGDIHandle ()), @<文本颜色>, @<背景颜色>);
+    }
+
+    # --
+    # @begin
+    # <> <include>
+    # virtual void OnCurrentCellPosChanged () override  { @<光标位置改变> (); }
+    # virtual BOOL IsCellEditable () override  { return (@<可否被编辑> () == 0); }
+    # virtual void OnBeforeEditCell () override  {  @<将被编辑> (); }
+    # virtual void OnEndEditCell () override  {  @<结束编辑> (); }
+    # virtual void OnColWidthChanged (INT col) override  { @<列宽被改变> (col); }
+    # virtual void OnRowHeightChanged (INT row) override  { @<行高被改变> (row); }
+    # virtual void OnCellClick (INT x, INT y) override  { @<被单击> (x, y); }
+    # virtual void OnFixedCellClick (INT row, INT col) override  { @<表头被单击> (row, col); }
+    # virtual void OnFixedCellDblClick (INT row, INT col) override  { @<表头被双击> (row, col); }
+    # virtual void OnListItemChoose (INT row, INT col, const TCHAR* szListItem)  { @<列表项被选择> (row, col, CVolString (szListItem)); }
+    # <> </include>
+    # @end
+}

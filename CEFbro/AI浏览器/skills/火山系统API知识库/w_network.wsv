@@ -1,0 +1,408 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.基本 <注释 = "提供网络操作支持相关类" @文档 = "category = \"网络\"" @视窗.外部源文件 = "libs\\win_base\\cpp\\vol_network.cpp">
+
+类 网络通信 <公开 @全局类 = 真>
+{
+    方法 取主机名 <公开 静态 类型 = 文本型 注释 = "返回本机的主机名,用作在网络通讯中标志本机地址." @禁止流程检查 = 真>
+    {
+        @ char buf [MAX_COMPUTERNAME_LENGTH + 1];
+        @ buf [0] = '\0';
+        @ if (g_objVolApp.InitWinSock ())
+        @ {
+        @     if (gethostname (buf, sizeof (buf)) == SOCKET_ERROR)
+        @         buf [0] = '\0';
+        @ }
+        @ return CVolString (buf);
+    }
+
+    方法 通信测试 <公开 静态 类型 = 整数 注释 = "测试与指定主机是否能够正常通讯,返回被测试主机的通讯响应时间(单位毫秒).如果无法通讯或者测试失败,返回-1." @禁止流程检查 = 真>
+    参数 被测试主机地址 <类型 = 文本型 注释 = "提供被测试主机地址,可以为主机名或IP地址等.">
+    参数 最长等待时间 <类型 = 整数 注释 = "指定最长等待被测试主机响应的时间,单位为毫秒,超过此时间即认为无法与被测试主机通讯." @默认值 = 10000>
+    {
+        @ CVolPinger objPinger;
+        @ return objPinger.ping (@<被测试主机地址>.GetText (), @<最长等待时间>);
+    }
+
+    方法 转换为主机名 <公开 静态 类型 = 文本型 注释 = "将指定的 IP 地址转换为其主机名,如果失败返回空文本." @禁止流程检查 = 真>
+    参数 欲转换IP地址 <类型 = 文本型>
+    {
+        @ CVolString strHostName;
+        @ if (g_objVolApp.InitWinSock ())
+        @ {
+        @     unsigned long addr = inet_addr (CU8String (@<欲转换IP地址>.GetText ()).GetText ());
+        @     if (addr != INADDR_NONE)
+        @     {
+        @         struct hostent* hp = gethostbyaddr ((char*)&addr, sizeof (addr), AF_INET);
+        @         if (hp != NULL && hp->h_name != NULL)
+        @             strHostName.SetText (hp->h_name);
+        @     }
+        @ }
+        @ return strHostName;
+    }
+
+    方法 转换为IP地址 <公开 静态 类型 = 文本型 注释 = "将指定的主机名转换为其 IP 地址,如果失败返回空文本." @禁止流程检查 = 真>
+    参数 欲转换主机名 <类型 = 文本型>
+    {
+        @ CVolString strIPAddress;
+        @ if (g_objVolApp.InitWinSock ())
+        @ {
+        @     struct hostent* hp = gethostbyname (CU8String (@<欲转换主机名>.GetText ()).GetText ());
+        @     if (hp != NULL)
+        @     {
+        @         const char* szName = inet_ntoa (*(struct in_addr*)hp->h_addr);
+        @         if (szName != NULL)
+        @             strIPAddress.SetText (szName);
+        @     }
+        @ }
+        @ return strIPAddress;
+    }
+}
+
+# ===
+
+类 数据报 <公开 @视窗.后缀文本 = "public IVolSocketInterface">
+{
+
+    # 事件 --
+
+    方法 数据到达 <公开 定义事件 类型 = 整数 注释 = "当有数据到达后,会产生本事件.">
+    参数 所接收到的数据 <类型 = 字节集类 注释 = "提供所接收到的数据,必定不为空字节集.">
+    参数 对方地址 <类型 = 文本型 注释 = "提供数据来源方的IP地址">
+    参数 对方端口 <类型 = 整数 注释 = "提供数据来源方的端口">
+
+    # 属性 --
+
+    方法 端口 <公开 属性写 注释 = "指定监听数据到达的端口号,如果为0表示不监听数据到达. 如果不进行设置,默认值为0." 注释 = "注意,修改端口后,如果先前设置有相关传输选项(譬如多播相关),需要重新设置.">
+    参数 所欲监听的端口号 <类型 = 整数 注释 = "可以是大于 0 小于 32767 的任何自定整数值">
+    {
+        @ m_objUDP.ChangePort (@<所欲监听的端口号>);
+    }
+
+    方法 端口 <公开 属性读 类型 = 整数 注释 = "返回当前所设置的监听数据到达的端口号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_objUDP.GetPort ()
+    }
+
+    # 方法 --
+
+    方法 初始化 <公开 类型 = 逻辑型 注释 = "初始化本对象,如果\"端口\"属性值不为0,则开始在其所指定的端口上监听数据到达. 返回是否成功."
+            注释 = "注意,本对象初始化后,如果先前设置有相关传输选项(譬如多播相关),需要重新设置." @禁止流程检查 = 真>
+    {
+        @ return m_objUDP.Create (this);
+    }
+
+    方法 发送数据 <公开 类型 = 逻辑型 注释 = "发送数据到指定主机上的指定端口,本对象必须已经初始化. 成功返回真,失败返回假." 编辑时信息 = "EAA9C, 0, 0, 0"
+            @嵌入式方法 = "req_obj_param_pointer = true\r\nreq_str_param_text_pointer = true">
+    参数 接收主机地址 <类型 = 文本型 注释 = "可以为主机名/IP地址等.如果提供空文本,则在指定端口广播欲发送数据." 编辑时信息 = "EAA9C, 0, 0, 0" @默认值 = "">
+    参数 接收主机端口号 <类型 = 整数 编辑时信息 = "EAA9C, 0, 0, 0">
+    参数 所欲发送的所有数据 <注释 = "提供所欲发送的所有数据,可以为基本数据类型或字节集类数据." 编辑时信息 = "EAA9C, 0, 0, 0" @匹配类型 = 通用型 @可扩展 = "">
+    {
+        @ @sn<this>.SendData (@<接收主机地址>.GetText (), @<接收主机端口号>, CollectVariantVolDatas (CVolMem (), _T (@sn<pm_types>) + 2, @<所欲发送的所有数据>))
+    }
+
+    方法 置多播传出接口 <公开 类型 = 逻辑型 注释 = "设置通过本对象发送多播数据时所使用的本地传出接口地址." 注释 = "此选项不会更改用于接收多播数据的本地默认接口地址."
+            注释 = "除非本机具有多个网络接口或多个IP地址,否则不用设置本选项直接使用本地默认接口地址即可." 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 主机地址 <类型 = 文本型 注释 = "可以为主机名/IP地址等,用作提供多播输出接口使用的本地地址,为空文本表示回送到本地默认接口." @默认值 = "">
+    {
+        @ IN_ADDR addr;
+        @ if (CBaseSocketObjct::sFillNetAddr (&addr, @<主机地址>.GetText (), TRUE) == FALSE)  return FALSE;
+        @ return m_objUDP.SetSockOption (IPPROTO_IP, IP_MULTICAST_IF, &addr.s_addr, sizeof (addr.s_addr));
+    }
+
+    方法 置多播超时TTL <公开 类型 = 逻辑型 注释 = "设置多播流量关联的超时 TTL 值." 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 所欲设置的值 <类型 = 整数 注释 = "  提供所欲设置的超时TTL值,有效值范围在0到255之间," 注释 = "当转发的次数大于等于此值时,则不再转发." @默认值 = 255>
+    {
+        @ DWORD dwTTL = (DWORD)(BYTE)@<所欲设置的值>;
+        @ return m_objUDP.SetSockOption (IPPROTO_IP, IP_MULTICAST_TTL, &dwTTL, sizeof (dwTTL));
+    }
+
+    方法 是否允许多播回送 <公开 类型 = 逻辑型 注释 = "  本对象如果加入到一个或多个多播组,此方法指定是否接收通过所选多播接口发" 注释 = "送到这些多播组的传出数据包的副本. 默认情况下,本选项值为真."
+            返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 是否允许回送 <类型 = 逻辑型 注释 = "  此参数值为真时本对象将接收当前计算机发送的匹配多播数据包,为假时即使本" 注释 = "对象的关联套接字在环回接口上打开,也不会接收从本地计算机发送的多播数据包." @默认值 = 真>
+    {
+        @ DWORD dwBool = (DWORD)@<是否允许回送>;
+        @ return m_objUDP.SetSockOption (IPPROTO_IP, IP_MULTICAST_LOOP, &dwBool, sizeof (dwBool));
+    }
+
+    方法 加入多播组 <公开 类型 = 逻辑型 注释 = "加入指定多播接口中的指定多播组. 可以同时加入多个多播组." 注释 = "多播组的程序操作步骤顺序大致如下:" 注释 = "  1. 设置多播超时TTL值 (可选)"
+            注释 = "  2. 设置是否允许多播回送 (可选)" 注释 = "  3. 加入多播组" 注释 = "  4. 发送/接收数据 (发送数据到多播组主机地址即可发送数据到此整个多播组)" 注释 = "  5. 离开多播组"
+            注释 = "注意: 在Windows系统下使用多播组注意设置系统防火墙." 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 多播组主机地址 <类型 = 文本型 注释 = "可以为主机名/IP地址等,用作提供具体加入的多播组主机地址.">
+    参数 多播接口地址 <类型 = 文本型 注释 = "提供所使用多播接口的本地地址,为空文本表示使用本地默认多播接口地址." @默认值 = "">
+    {
+        @ struct ip_mreq mreq;
+        @ if (CBaseSocketObjct::sFillNetAddr (&mreq.imr_multiaddr, @<多播组主机地址>.GetText (), FALSE) == FALSE ||
+        @         CBaseSocketObjct::sFillNetAddr (&mreq.imr_interface, @<多播接口地址>.GetText (), TRUE) == FALSE)
+        @     return FALSE;
+        @ return m_objUDP.SetSockOption (IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof (mreq));
+    }
+
+    方法 离开多播组 <公开 类型 = 逻辑型 注释 = "离开指定多播接口中的指定多播组" 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 多播组主机地址 <类型 = 文本型 注释 = "可以为主机名/IP地址等,用作提供具体离开的多播组主机地址.">
+    参数 多播接口地址 <类型 = 文本型 注释 = "提供所使用多播接口的本地地址,为空文本表示使用本地默认多播接口地址." @默认值 = "">
+    {
+        @ struct ip_mreq mreq;
+        @ if (CBaseSocketObjct::sFillNetAddr (&mreq.imr_multiaddr, @<多播组主机地址>.GetText (), FALSE) == FALSE ||
+        @         CBaseSocketObjct::sFillNetAddr (&mreq.imr_interface, @<多播接口地址>.GetText (), TRUE) == FALSE)
+        @     return FALSE;
+        @ return m_objUDP.SetSockOption (IPPROTO_IP, IP_DROP_MEMBERSHIP, &mreq, sizeof (mreq));
+    }
+
+    # --
+    # @begin
+    # <> <include>
+    # CUDPSocketObject m_objUDP;
+    # virtual void OnRecvUDPData (CVolMem& memData, CVolString& strFromAddr, INT nFromPort) override  { @<数据到达> (memData, strFromAddr, nFromPort); }
+    # inline_ BOOL SendData (const TCHAR* szHostName, INT nPort, const CVolMem& memData)  { return m_objUDP.SendData (szHostName, nPort, memData.GetPtr (), (INT)memData.GetSize ()); }
+    # <> </include>
+    # @end
+}
+
+# ===
+
+类 客户 <公开 @视窗.后缀文本 = "public IVolSocketInterface">
+{
+
+    # 事件 --
+
+    方法 数据到达 <公开 定义事件 类型 = 整数 注释 = "当服务器端将数据发送过来后,会产生本事件.">
+    参数 所接收到的数据 <类型 = 字节集类 注释 = "提供所接收到的数据,必定不为空字节集.">
+
+    方法 连接断开 <公开 定义事件 类型 = 整数 注释 = "当连接被服务器端断开后,会产生本事件.">
+
+    # 方法 --
+
+    方法 连接 <公开 类型 = 逻辑型 注释 = "连接到指定主机上的指定端口,该主机上的该端口必须已经被某一服务器监听." 注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 服务器地址 <类型 = 文本型 注释 = "可以为主机名/IP地址等">
+    参数 服务器端口号 <类型 = 整数 注释 = "该端口必须已经被服务器组件监听">
+    {
+        @ return (m_objClient.Create (this) && m_objClient.ConnectServer (@<服务器地址>.GetText (), @<服务器端口号>));
+    }
+
+    方法 断开连接 <公开 注释 = "断开与服务器的已有连接" @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_objClient.CloseConnection ()
+    }
+
+    方法 发送数据 <公开 类型 = 逻辑型 注释 = "在成功建立与服务器的连接后,发送数据到服务器端组件." 注释 = "成功返回真,失败返回假."
+            @嵌入式方法 = "req_obj_param_pointer = true\r\nreq_str_param_text_pointer = true">
+    参数 所欲发送的所有数据 <注释 = "提供所欲发送的所有数据,可以为基本数据类型或字节集类数据." 编辑时信息 = "EAA9C, 0, 0, 0" @匹配类型 = 通用型 @可扩展 = "">
+    {
+        @ @sn<this>.SendData (-1, CollectVariantVolDatas (CVolMem (), _T (@sn<pm_types>), @<所欲发送的所有数据>))
+    }
+
+    方法 发送数据2 <公开 类型 = 逻辑型 注释 = "在成功建立与服务器的连接后,发送数据到服务器端组件." 注释 = "成功返回真,失败返回假."
+            @嵌入式方法 = "req_obj_param_pointer = true\r\nreq_str_param_text_pointer = true">
+    参数 最长等待时间 <类型 = 整数 注释 = "指定等待发送成功的最长时间,单位为秒.如果为-1,表示为无限等待.">
+    参数 所欲发送的所有数据 <注释 = "提供所欲发送的所有数据,可以为基本数据类型或字节集类数据." 编辑时信息 = "EAA9C, 0, 0, 0" @匹配类型 = 通用型 @可扩展 = "">
+    {
+        @ @sn<this>.SendData (@<最长等待时间>, CollectVariantVolDatas (CVolMem (), _T (@sn<pm_types>) + 1, @<所欲发送的所有数据>))
+    }
+
+    方法 是否已连接 <公开 类型 = 逻辑型 注释 = "返回当前是否已经连接到了服务器" @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_objClient.IsConnected ()
+    }
+
+    # --
+    # @begin
+    # <> <include>
+    # CClientSockObject m_objClient;
+    # virtual void OnRecvPeerData (CVolMem& memData) override  { @<数据到达> (memData); }
+    # virtual void OnServerCloseConnect () override  { @<连接断开> (); }
+    # inline_ BOOL SendData (INT nWaitSeconds, const CVolMem& memData)  { return m_objClient.SendData (memData.GetPtr (), (INT)memData.GetSize (), nWaitSeconds); }
+    # <> </include>
+    # @end
+}
+
+# ===
+
+类 服务器 <公开 @视窗.后缀文本 = "public IVolSocketInterface">
+{
+
+    # 事件 --
+
+    方法 数据到达 <公开 定义事件 类型 = 整数 注释 = "当有客户端数据到达后,会产生本事件.">
+    参数 客户地址 <类型 = 文本型 注释 = "提供所对应客户的地址文本: IP地址 + 端口">
+    参数 所接收到的数据 <类型 = 字节集类 注释 = "提供所接收到的数据,必定不为空字节集.">
+
+    方法 客户进入 <公开 定义事件 类型 = 整数 注释 = "当有新客户连接入本服务器后,会产生本事件.">
+    参数 所进入客户地址 <类型 = 文本型 注释 = "提供所进入客户的地址文本: IP地址 + 端口">
+
+    方法 客户离开 <公开 定义事件 类型 = 整数 注释 = "当有已连接客户断开与本服务器的连接后,会产生本事件.">
+    参数 所离开客户地址 <类型 = 文本型 注释 = "提供所离开客户的地址文本: IP地址 + 端口">
+
+    # 属性 --
+
+    方法 端口 <公开 属性写 注释 = "指定监听客户连接的端口号,如果不进行设置,默认为19730.">
+    参数 所欲监听的端口号 <类型 = 整数 注释 = "可以是大于 0 小于 32767 的任何自定整数值">
+    {
+        @ m_objServer.ChangePort (@<所欲监听的端口号>);
+    }
+
+    方法 端口 <公开 属性读 类型 = 整数 注释 = "返回当前所设置的监听数据到达的端口号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_objServer.GetPort ()
+    }
+
+    方法 仅监听本机 <公开 属性写 注释 = "为真指定仅监听本机地址(127.0.0.1),一般用作进程之间通讯时使用,为假则监听所有地址." 注释 = "注意: 本属性仅在调用\"开始监听\"方法前设置有效.">
+    参数 是否仅监听本机 <类型 = 逻辑型>
+    {
+        @ m_objServer.m_blOnlyBindLocalHost = @<是否仅监听本机>;
+    }
+
+    方法 仅监听本机 <公开 属性读 类型 = 逻辑型 注释 = "返回是否仅监听本机地址(127.0.0.1)" @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_objServer.m_blOnlyBindLocalHost
+    }
+
+    # 方法 --
+
+    方法 开始监听 <公开 类型 = 逻辑型 注释 = "开始在\"端口\"属性所指定的端口上监听客户端连接及数据到达,返回是否成功." @禁止流程检查 = 真>
+    {
+        @ return m_objServer.Create (this);
+    }
+
+    方法 停止监听 <公开 注释 = "断开所有已连接客户端(注意不会发送\"客户离开\"事件),停止监听端口." @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_objServer.Close ()
+    }
+
+    方法 发送数据 <公开 类型 = 逻辑型 注释 = "向指定已经连接进来的客户发送数据. 成功返回真,失败返回假."
+            @嵌入式方法 = "req_obj_param_pointer = true\r\nreq_str_param_text_pointer = true">
+    参数 接收客户地址 <类型 = 文本型 注释 = "为\"数据到达\"/\"客户进入\"事件或\"取客户\"方法中所提供的客户地址文本,为空文本表示向所有现有客户发送数据.">
+    参数 最长等待时间 <类型 = 整数 注释 = "指定等待发送到每个客户成功的最长时间,单位为秒.如果为-1,表示为无限等待." @默认值 = -1>
+    参数 所欲发送的所有数据 <注释 = "提供所欲发送的所有数据,可以为基本数据类型或字节集类数据." 编辑时信息 = "EAA9C, 0, 0, 0" @匹配类型 = 通用型 @可扩展 = "">
+    {
+        @ @sn<this>.SendData (@<接收客户地址>.GetText (), @<最长等待时间>, CollectVariantVolDatas (CVolMem (), _T (@sn<pm_types>) + 2, @<所欲发送的所有数据>))
+    }
+
+    方法 断开客户 <公开 注释 = "断开与指定客户之间的连接,发送\"客户离开\"事件." @嵌入式方法 = "">
+    参数 欲断开客户 <类型 = 文本型 注释 = "为\"数据到达\"/\"客户进入\"事件或\"取客户\"方法中所提供的客户地址文本,为空文本表示断开所有现有客户.">
+    {
+        @ @sn<this>.m_objServer.CloseSpecClientConnect (@<欲断开客户>.GetText ())
+    }
+
+    方法 取客户数目 <公开 类型 = 整数 注释 = "返回当前所有已经连接客户的数目" @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_objServer.GetNumClients ()
+    }
+
+    方法 取客户 <公开 类型 = 文本型 注释 = "返回所指定索引位置处已连接客户的地址文本" @嵌入式方法 = "">
+    参数 客户索引位置 <类型 = 整数 注释 = "提供所欲获取已连接客户的索引位置,必须大于等于0且小于\"取客户数目\"方法的返回值,如索引值无效将返回空文本.">
+    {
+        @ CVolString (@sn<this>.m_objServer.GetClient (@<客户索引位置>))
+    }
+
+    方法 取客户句柄 <公开 类型 = 变整数 注释 = "返回所指定索引位置处已连接客户的 HSOCKET 句柄值" @嵌入式方法 = "">
+    参数 客户索引位置 <类型 = 整数 注释 = "提供所欲获取已连接客户的索引位置,必须大于等于0且小于\"取客户数目\"方法的返回值,如索引值无效将返回-1.">
+    {
+        @ @sn<this>.m_objServer.GetClientSocket (@<客户索引位置>)
+    }
+
+    方法 查找客户句柄 <公开 类型 = 变整数 注释 = "返回所指定地址文本客户所对应的 HSOCKET 句柄值,不存在返回0." @嵌入式方法 = "">
+    参数 客户地址文本 <类型 = 文本型 注释 = "为\"数据到达\"/\"客户进入\"事件或\"取客户\"方法中所提供的客户地址文本">
+    {
+        @ @sn<this>.m_objServer.FindClientSocket (@<客户地址文本>.GetText ())
+    }
+
+    # --
+    # @begin
+    # <> <include>
+    # CServerSockObject m_objServer;
+    # virtual void OnRecvClientData (CVolMem& memData, const TCHAR* szClient) override  { @<数据到达> (CVolString (szClient), memData); }
+    # virtual void OnClientEntry (const TCHAR* szClient) override  { @<客户进入> (CVolString (szClient)); }
+    # virtual void OnClientLeave  (const TCHAR* szClient) override  { @<客户离开> (CVolString (szClient)); }
+    # inline_ BOOL SendData (const TCHAR* szClient, INT nWaitSeconds, const CVolMem& memData)  { return m_objServer.SendData (szClient, memData.GetPtr (), (INT)memData.GetSize (), nWaitSeconds); }
+    # <> </include>
+    # @end
+}
+
+# ===
+
+类 服务器2 <公开 注释 = "提供直接基于SOCKET句柄进行高效网络操作的服务器类." 注释 = "注意: 相比\"服务器\"类,本类未在内部维护已连接客户列表,用户需要自行管理."
+        @视窗.后缀文本 = "public IVolSocketInterface">
+{
+
+    # 事件 --
+
+    方法 数据到达 <公开 定义事件 类型 = 整数 注释 = "当有客户端数据到达后,会产生本事件.">
+    参数 客户句柄 <类型 = 变整数 注释 = "提供所对应客户的SOCKET句柄值">
+    参数 所接收到的数据 <类型 = 字节集类 注释 = "提供所接收到的数据,必定不为空字节集.">
+
+    方法 客户进入 <公开 定义事件 类型 = 整数 注释 = "当有新客户连接入本服务器后,会产生本事件.">
+    参数 客户句柄 <类型 = 变整数 注释 = "提供所对应客户的SOCKET句柄值">
+
+    方法 客户离开 <公开 定义事件 类型 = 整数 注释 = "当有已连接客户断开与本服务器的连接后,会产生本事件.">
+    参数 客户句柄 <类型 = 变整数 注释 = "提供所对应客户的SOCKET句柄值">
+
+    # 属性 --
+
+    方法 端口 <公开 属性写 注释 = "指定监听客户连接的端口号,如果不进行设置,默认为19730.">
+    参数 所欲监听的端口号 <类型 = 整数 注释 = "可以是大于 0 小于 32767 的任何自定整数值">
+    {
+        @ m_objServer.ChangePort (@<所欲监听的端口号>);
+    }
+
+    方法 端口 <公开 属性读 类型 = 整数 注释 = "返回当前所设置的监听数据到达的端口号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_objServer.GetPort ()
+    }
+
+    方法 仅监听本机 <公开 属性写 注释 = "为真指定仅监听本机地址(127.0.0.1),一般用作进程之间通讯时使用,为假则监听所有地址." 注释 = "注意: 本属性仅在调用\"开始监听\"方法前设置有效.">
+    参数 是否仅监听本机 <类型 = 逻辑型>
+    {
+        @ m_objServer.m_blOnlyBindLocalHost = @<是否仅监听本机>;
+    }
+
+    方法 仅监听本机 <公开 属性读 类型 = 逻辑型 注释 = "返回是否仅监听本机地址(127.0.0.1)" @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_objServer.m_blOnlyBindLocalHost
+    }
+
+    # 方法 --
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "开始在\"端口\"属性所指定的端口上监听客户端连接及数据到达,返回是否成功." @禁止流程检查 = 真>
+    {
+        @ return m_objServer.Create (this);
+    }
+
+    方法 停止 <公开 注释 = "停止监听端口,断开与所有客户的连接,如需再使用本对象,需要重新启动." @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_objServer.Close ()
+    }
+
+    方法 发送数据 <公开 类型 = 逻辑型 注释 = "向指定已经连接进来的客户发送数据. 成功返回真,失败返回假." 注释 = "本方法支持在多线程环境下运行."
+            @嵌入式方法 = "req_obj_param_pointer = true\r\nreq_str_param_text_pointer = true">
+    参数 客户句柄 <类型 = 变整数 注释 = "为\"数据到达\"/\"客户进入\"事件或\"取客户\"方法中所提供的客户SOCKET句柄值">
+    参数 最长等待时间 <类型 = 整数 注释 = "指定等待发送到每个客户成功的最长时间,单位为秒.如果为-1,表示为无限等待." @默认值 = -1>
+    参数 所欲发送的所有数据 <注释 = "提供所欲发送的所有数据,可以为基本数据类型或字节集类数据." 编辑时信息 = "EAA9C, 0, 0, 0" @匹配类型 = 通用型 @可扩展 = "">
+    {
+        @ @sn<this>.SendData (@<客户句柄>, @<最长等待时间>, CollectVariantVolDatas (CVolMem (), _T (@sn<pm_types>) + 2, @<所欲发送的所有数据>))
+    }
+
+    方法 断开客户 <公开 注释 = "断开与指定客户之间的连接(注意不会发送\"客户离开\"事件)." 注释 = "本方法支持在多线程环境下运行." @嵌入式方法 = "">
+    参数 客户句柄 <类型 = 变整数 注释 = "为\"数据到达\"/\"客户进入\"事件或\"取客户\"方法中所提供的客户SOCKET句柄值">
+    {
+        @ @sn<this>.m_objServer.CloseSpecClientConnect (@<客户句柄>)
+    }
+
+    方法 取客户地址 <公开 静态 类型 = 文本型 注释 = "成功返回所指定客户的地址文本(格式为\"IP地址:端口\"),失败返回空文本." @嵌入式方法 = "">
+    参数 客户句柄 <类型 = 变整数 注释 = "为\"数据到达\"/\"客户进入\"事件或\"取客户\"方法中所提供的客户SOCKET句柄值">
+    {
+        @ CServerSockObject2::sGetPeerAddress (@<客户句柄>, CVolString ())
+    }
+
+    # --
+    # @begin
+    # <> <include>
+    # CServerSockObject2 m_objServer;
+    # virtual void OnRecvClientData2 (CVolMem& memData, const INT_P npSocketHandle) override  { @<数据到达> (npSocketHandle, memData); }
+    # virtual void OnClientEntry2 (const INT_P npSocketHandle) override  { @<客户进入> (npSocketHandle); }
+    # virtual void OnClientLeave2  (const INT_P npSocketHandle) override  { @<客户离开> (npSocketHandle); }
+    # inline_ BOOL SendData (const INT_P npSocketHandle, INT nWaitSeconds, const CVolMem& memData)  { return CBaseSocketObjct::sSendData ((SOCKET)npSocketHandle, memData.GetPtr (), (INT)memData.GetSize (), nWaitSeconds); }
+    # <> </include>
+    # @end
+    #
+}

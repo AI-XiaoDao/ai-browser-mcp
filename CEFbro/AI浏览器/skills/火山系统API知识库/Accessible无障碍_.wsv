@@ -1,0 +1,781 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <@文档 = "category = \"Accessible无障碍\"">
+
+类 Accessible无障碍类_ <公开 注释 = "微软无障碍" 折叠 折叠2 @视窗.外部头文件 = "<oleacc.h>" @视窗.外部库 = "Oleacc.lib">
+{
+    变量 m_parent <公开 类型 = COM对象类>
+    变量 m_self <公开 类型 = COM对象类>
+    变量 m_id <公开 类型 = 整数>
+
+    方法 创建自窗口句柄 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 参数_窗口句柄 <类型 = 变整数 @输出名 = "hwnd">
+    {
+        m_parent.清除 ()
+        m_self.清除 ()
+        m_id = 0
+        @ IAccessible* ppvObject = NULL;
+        @ HRESULT hr = AccessibleObjectFromWindow((HWND)@<参数_窗口句柄>, OBJID_WINDOW, IID_IAccessible, (void**)&ppvObject);
+        @ if(hr == S_OK)
+        @ {
+        @     @<m_self>.SetUnknownObject ((IUnknown*)ppvObject);
+        @     return true;
+        @ } 
+        @ return false;     
+    }
+
+    方法 创建自屏幕坐标 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 参数_X <类型 = 整数>
+    参数 参数_Y <类型 = 整数>
+    {
+        m_parent.清除 ()
+        m_self.清除 ()
+        m_id = 0
+        @ POINT point = { @<参数_X>, @<参数_Y> };
+        @ IAccessible* ppvObject = NULL;
+        @ VARIANT varItem;
+        @ HRESULT hr = AccessibleObjectFromPoint(point, &ppvObject, &varItem);
+        @ if(hr == S_OK)
+        @ {
+        @     @<m_self>.SetUnknownObject ((IUnknown*)ppvObject);
+        @     @<m_id> = varItem.lVal;
+        @     if (@<m_id>)
+        @     {
+        @        @<m_parent>.SetUnknownObject ((IUnknown*)@<m_self>.m_pUnknownObject);
+        @        @<m_self>.ReleaseUnknownObject ();
+        @        VariantClear(&varItem);
+        @     } 
+        @     return true;
+        @ } 
+        @ return false;     
+    }
+
+    方法 创建自对象 <公开 折叠>
+    参数 参数_对象 <类型 = COM对象类>
+    {
+        m_self.清除 ()
+        m_parent.清除 ()
+        m_id = 0
+        m_self = 参数_对象
+    }
+
+    方法 创建自ID <公开 折叠>
+    参数 参数_ID <类型 = 整数>
+    参数 参数_对象 <类型 = COM对象类>
+    {
+        m_self.清除 ()
+        m_parent.清除 ()
+        m_id = 参数_ID
+        m_parent = 参数_对象
+    }
+
+    方法 到变体型 <公开 类型 = COM变体型 折叠>
+    {
+        变量 var <类型 = COM变体型>
+        如果 (m_id == 0)
+        {
+            var.置COM对象 (m_self)
+        }
+        否则
+        {
+            var.赋值 (m_id)
+        }
+        返回 (var)
+    }
+
+    方法 是否空 <公开 类型 = 逻辑型 折叠>
+    {
+        如果 (m_id == 0)
+        {
+            返回 (m_parent.是否为空 ())
+        }
+        否则
+        {
+            返回 (m_self.是否为空 ())
+        }
+    }
+
+    方法 取ID <公开 类型 = 整数 折叠>
+    {
+        返回 (m_id)
+    }
+
+    方法 取父元素 <公开 类型 = 逻辑型 折叠>
+    参数 参数_父元素 <类型 = Accessible无障碍类_>
+    {
+        如果 (m_id != 0)
+        {
+            参数_父元素.创建自对象 (m_parent)
+        }
+        否则
+        {
+            参数_父元素.创建自对象 (m_self.读对象型属性 ("accParent", COM对象类, 取空基本对象 ()))
+        }
+        返回 (取反 (参数_父元素.是否空 ()))
+    }
+
+    方法 取子元素总数 <公开 类型 = 整数 折叠 折叠2 @禁止流程检查 = 真 @输出名 = "QuZiYuanSuZongShu">
+    {
+        如果 (m_self.是否为空 ())
+        {
+            返回 (0)
+        }
+        @ long childCount;
+        @ ((IAccessible*)@<m_self>.m_pUnknownObject)->get_accChildCount(&childCount);
+        // @ DebugTrace (FALSE, 0, 0, _T ("Sn"), _T("子元素总数"), childCount);
+        @ return childCount;
+    }
+
+    方法 取子元素 <公开 类型 = 逻辑型 折叠>
+    参数 参数_索引 <类型 = 整数 注释 = "索引从0开始">
+    参数 参数_子元素 <类型 = Accessible无障碍类_>
+    {
+        变量 obj <类型 = COM对象类>
+        @ VARIANT var[1];
+        @ long cObtained;
+        @ HRESULT hr = AccessibleChildren ((IAccessible*)@<m_self>.m_pUnknownObject, @<参数_索引>, 1, var, &cObtained);
+        @ if (hr == 0 && cObtained == 1)
+        @ {
+        @    if (var[0].vt == VT_DISPATCH)
+        @       @<obj>.SetUnknownObject ((IUnknown*)var[0].pdispVal);
+        @    else
+        @    {
+        变量 var <类型 = COM变体型>
+        // @ (CVolComObject&)@<m_self>.Invoke_ComObject (CVolComObject::IMT_GET_PROPERTY, _CT ("accChild").GetText (), CVolComObject (), 3, _T ("CSCC"), &rg_n4);
+        @ @<var>.SetVariant (&var[0], -1);
+        obj = m_self.读对象型属性 ("accChild", COM对象类, var)
+        @    }
+        如果 (obj.是否为空 ())
+        {
+            变量 ID <类型 = 整数>
+            @ @<ID> = var [0].lVal;
+            参数_子元素.创建自ID (ID, m_self)
+        }
+        否则
+        {
+            参数_子元素.创建自对象 (obj)
+        }
+        @ }
+        返回 (取反 (参数_子元素.是否空 ()))
+    }
+
+    方法 枚举子元素 <公开 类型 = 整数 折叠 折叠2 @禁止流程检查 = 真 @输出名 = "MeiJuZiYuanSu">
+    参数 元素信息数组 <类型 = Accessible无障碍组_ @默认值 = 空对象>
+    {
+        变量 元素数据 <类型 = COM变体型 @输出名 = "YuanSuShuJu">
+        变量 单个元素 <类型 = COM变体型 @输出名 = "ShanGeYuanSu">
+        变量 元素数量 <类型 = 整数 @输出名 = "childCount">
+        变量 返回数量 <类型 = 整数 @输出名 = "returnCount">
+        变量 成员索引 <类型 = 整数>
+        元素信息数组.删除所有成员 ()
+        元素数量 = 取子元素总数 ()
+        如果 (元素数量 == 0)
+        {
+            返回 (0)
+        }
+        @ HRESULT hr;
+        @ VARIANT* pArray = new VARIANT[childCount];
+        @ hr = AccessibleChildren((IAccessible*)@<m_self>.m_pUnknownObject, 0, childCount, pArray, &(long)returnCount);
+        // @ DebugTrace (FALSE, 0, 0, _T ("nn"), childCount);
+        @ if (hr != S_OK)
+        @ {
+        @     return 0;
+        @ }
+        @ for (int x = 0; x < returnCount; x++){
+        @     VARIANT vtChild = pArray[x];
+        // @     DebugTrace (FALSE, 0, 0, _T ("nn"), vtChild.pdispVal, vtChild.vt);
+        @     if (vtChild.vt == VT_DISPATCH){
+        @         @<成员索引> = (INT)@<元素信息数组>.AddNewObject (VOL_RUNTIME_CLASS (@dt<Accessible无障碍类_>), 0);
+        @         ((@dt<Accessible无障碍类_>&)@<元素信息数组>.GetAt (@<成员索引>)).@<m_self>.SetUnknownObject((IAccessible*)vtChild.pdispVal);
+        // @     DebugTrace (FALSE, 0, 0, _T ("nn"), ((@dt<Accessible无障碍类_>&)@<元素信息数组>.GetAt (@<成员索引>)).@<m_self>.m_pUnknownObject);
+        @     }else{
+        @         @<成员索引> = (INT)@<元素信息数组>.AddNewObject (VOL_RUNTIME_CLASS (@dt<Accessible无障碍类_>), 0);
+        @         ((@dt<Accessible无障碍类_>&)@<元素信息数组>.GetAt (@<成员索引>)).@<m_id> = (@dt<整数>)vtChild.pdispVal;
+        @         ((@dt<Accessible无障碍类_>&)@<元素信息数组>.GetAt (@<成员索引>)).@<m_parent> = @<m_self>;
+        // @         DebugTrace (FALSE, 0, 0, _T ("Sn"), _T (@sn<current_statment>), vtChild.vt);
+        @     }
+        @ }
+        @ return returnCount;
+    }
+
+    方法 取名称 <公开 类型 = 文本型 折叠>
+    {
+        @     BSTR bstrName;
+        @     VARIANT varChild;
+        @     varChild.vt = VT_I4;
+        如果 (m_id != 0)
+        {
+            @ varChild.lVal = @<m_id>;
+            @ ((IAccessible*)@<m_parent>.m_pUnknownObject)->get_accName(varChild, &bstrName);
+            @ SysFreeString(bstrName);
+            @ return bstrName;
+        }
+        否则
+        {
+            @ varChild.lVal = CHILDID_SELF;
+            @ ((IAccessible*)@<m_self>.m_pUnknownObject)->get_accName(varChild, &bstrName);
+            @ SysFreeString(bstrName);
+            @ return bstrName;
+        }
+        返回 ("")
+    }
+
+    方法 置名称 <公开 类型 = 逻辑型 折叠>
+    参数 参数_名称 <类型 = 文本型>
+    {
+        变量 var <类型 = COM变体型>
+        如果 (m_id != 0)
+        {
+            var.赋值 (m_id, )
+            返回 (m_parent.写属性 ("accName", var, 参数_名称))
+        }
+        否则
+        {
+            var.赋值 (0, )
+            返回 (m_self.写属性 ("accName", var, 参数_名称))
+        }
+    }
+
+    方法 取值 <公开 类型 = 文本型 折叠>
+    {
+        @     BSTR bstrName;
+        @     VARIANT varChild;
+        @     varChild.vt = VT_I4;
+        如果 (m_id != 0)
+        {
+            @ varChild.lVal = @<m_id>;
+            @ ((IAccessible*)@<m_parent>.m_pUnknownObject)->get_accValue(varChild, &bstrName);
+            @ SysFreeString(bstrName);
+            @ return bstrName;
+        }
+        否则
+        {
+            @ varChild.lVal = CHILDID_SELF;
+            @ ((IAccessible*)@<m_self>.m_pUnknownObject)->get_accValue(varChild, &bstrName);
+            @ SysFreeString(bstrName);
+            @ return bstrName;
+        }
+        返回 ("")
+    }
+
+    方法 赋值 <公开 类型 = 逻辑型 折叠>
+    参数 参数_值 <类型 = 文本型>
+    {
+        变量 var <类型 = COM变体型>
+        如果 (m_id != 0)
+        {
+            var.赋值 (m_id, )
+            返回 (m_parent.写属性 ("accValue", var, 参数_值))
+        }
+        否则
+        {
+            var.赋值 (0, )
+            返回 (m_self.写属性 ("accValue", var, 参数_值))
+        }
+    }
+
+    方法 取描述 <公开 类型 = 文本型 折叠>
+    {
+        @     BSTR bstrName;
+        @     VARIANT varChild;
+        @     varChild.vt = VT_I4;
+        如果 (m_id != 0)
+        {
+            @ varChild.lVal = @<m_id>;
+            @ ((IAccessible*)@<m_parent>.m_pUnknownObject)->get_accDescription(varChild, &bstrName);
+            @ SysFreeString(bstrName);
+            @ return bstrName;
+        }
+        否则
+        {
+            @ varChild.lVal = CHILDID_SELF;
+            @ ((IAccessible*)@<m_self>.m_pUnknownObject)->get_accDescription(varChild, &bstrName);
+            @ SysFreeString(bstrName);
+            @ return bstrName;
+        }
+        返回 ("")
+    }
+
+    方法 取角色 <公开 类型 = 整数 折叠>
+    {
+        @ DWORD roleId;
+        @ VARIANT varChild, varResult;
+        @ varChild.vt = VT_I4;
+        如果 (m_id != 0)
+        {
+            @ varChild.lVal = @<m_id>;
+            @ ((IAccessible*)@<m_parent>.m_pUnknownObject)->get_accRole(varChild, &varResult);
+            @ roleId = varResult.lVal;
+            @ return roleId;
+        }
+        否则
+        {
+            @ varChild.lVal = CHILDID_SELF;
+            @ ((IAccessible*)@<m_self>.m_pUnknownObject)->get_accRole(varChild, &varResult);
+            @ roleId = varResult.lVal;
+            @ return roleId;
+        }
+        返回 (0)
+    }
+
+    方法 取角色文本 <公开 类型 = 文本型 折叠>
+    {
+        @ DWORD roleId;
+        @ VARIANT varChild, varResult;
+        @ varChild.vt = VT_I4;
+        如果 (m_id != 0)
+        {
+            @ varChild.lVal = @<m_id>;
+            @ ((IAccessible*)@<m_parent>.m_pUnknownObject)->get_accRole(varChild, &varResult);
+            @ roleId = varResult.lVal;
+            @ UINT roleLength;
+            @ roleLength = GetRoleText(roleId, NULL, 0);
+            @ CVolMem text;
+            @ text.Alloc(roleLength * 2 + 2, TRUE);
+            @ GetRoleText(roleId, (LPWSTR)text.GetPtr(), roleLength + 1);
+            @ return @an<CVolString> ((LPCWSTR)text.GetPtr(), roleLength);
+        }
+        否则
+        {
+            @ varChild.lVal = CHILDID_SELF;
+            @ ((IAccessible*)@<m_self>.m_pUnknownObject)->get_accRole(varChild, &varResult);
+            @ roleId = varResult.lVal;
+            @ UINT roleLength;
+            @ roleLength = GetRoleText(roleId, NULL, 0);
+            @ CVolMem text;
+            @ text.Alloc(roleLength * 2 + 2, TRUE);
+            @ GetRoleText(roleId, (LPWSTR)text.GetPtr(), roleLength + 1);
+            @ return @an<CVolString> ((LPCWSTR)text.GetPtr(), roleLength);
+        }
+        返回 ("")
+    }
+
+    方法 取状态 <公开 类型 = 整数 折叠>
+    {
+        @ DWORD roleId;
+        @ VARIANT varChild, varResult;
+        @ varChild.vt = VT_I4;
+        如果 (m_id != 0)
+        {
+            @ varChild.lVal = @<m_id>;
+            @ ((IAccessible*)@<m_parent>.m_pUnknownObject)->get_accState(varChild, &varResult);
+            @ roleId = varResult.lVal;
+            @ return roleId;
+        }
+        否则
+        {
+            @ varChild.lVal = CHILDID_SELF;
+            @ ((IAccessible*)@<m_self>.m_pUnknownObject)->get_accState(varChild, &varResult);
+            @ roleId = varResult.lVal;
+            @ return roleId;
+        }
+        返回 (0)
+    }
+
+    方法 取状态文本 <公开 类型 = 文本型 折叠>
+    {
+        @ DWORD roleId;
+        @ VARIANT varChild, varResult;
+        @ varChild.vt = VT_I4;
+        如果 (m_id != 0)
+        {
+            @ varChild.lVal = @<m_id>;
+            @ ((IAccessible*)@<m_parent>.m_pUnknownObject)->get_accState(varChild, &varResult);
+            @ roleId = varResult.lVal;
+            @ UINT roleLength;
+            @ roleLength = GetStateText(roleId, NULL, 0);
+            @ CVolMem text;
+            @ text.Alloc(roleLength * 2 + 2, TRUE);
+            @ GetStateText(roleId, (LPWSTR)text.GetPtr(), roleLength + 1);
+            @ return @an<CVolString> ((LPCWSTR)text.GetPtr(), roleLength);
+        }
+        否则
+        {
+            @ varChild.lVal = CHILDID_SELF;
+            @ ((IAccessible*)@<m_self>.m_pUnknownObject)->get_accState(varChild, &varResult);
+            @ roleId = varResult.lVal;
+            @ UINT roleLength;
+            @ roleLength = GetStateText(roleId, NULL, 0);
+            @ CVolMem text;
+            @ text.Alloc(roleLength * 2 + 2, TRUE);
+            @ GetStateText(roleId, (LPWSTR)text.GetPtr(), roleLength + 1);
+            @ return @an<CVolString> ((LPCWSTR)text.GetPtr(), roleLength);
+        }
+        返回 ("")
+    }
+
+    方法 取帮助 <公开 类型 = 文本型 折叠>
+    {
+        变量 var <类型 = COM变体型>
+        如果 (m_id != 0)
+        {
+            var.赋值 (m_id, )
+            返回 (m_parent.读属性 ("accHelp", 文本型, var))
+        }
+        否则
+        {
+            var.赋值 (0, )
+            返回 (m_self.读属性 ("accHelp", 文本型, var))
+        }
+    }
+
+    方法 取帮助主题 <公开 类型 = 整数 折叠>
+    {
+        变量 var <类型 = COM变体型>
+        变量 HelpFile <类型 = COM变体型>
+        如果 (m_id != 0)
+        {
+            var.赋值 (m_id, )
+            返回 (m_parent.读属性 ("accHelpTopic", 整数, HelpFile, var))
+        }
+        否则
+        {
+            var.赋值 (0, )
+            返回 (m_self.读属性 ("accHelpTopic", 整数, HelpFile, var))
+        }
+    }
+
+    方法 取快捷键 <公开 类型 = 文本型 折叠>
+    {
+        变量 var <类型 = COM变体型>
+        如果 (m_id != 0)
+        {
+            var.赋值 (m_id, )
+            返回 (m_parent.读属性 ("accKeyboardShortcut", 文本型, var))
+        }
+        否则
+        {
+            var.赋值 (0, )
+            返回 (m_self.读属性 ("accKeyboardShortcut", 文本型, var))
+        }
+    }
+
+    方法 取默认动作 <公开 类型 = 文本型 折叠>
+    {
+        @     BSTR bstrName;
+        @     VARIANT varChild;
+        @     varChild.vt = VT_I4;
+        如果 (m_id != 0)
+        {
+            @ varChild.lVal = @<m_id>;
+            @ ((IAccessible*)@<m_parent>.m_pUnknownObject)->get_accDefaultAction(varChild, &bstrName);
+            @ SysFreeString(bstrName);
+            @ return bstrName;
+        }
+        否则
+        {
+            @ varChild.lVal = CHILDID_SELF;
+            @ ((IAccessible*)@<m_self>.m_pUnknownObject)->get_accDefaultAction(varChild, &bstrName);
+            @ SysFreeString(bstrName);
+            @ return bstrName;
+        }
+        返回 ("")
+    }
+
+    方法 取焦点元素 <公开 类型 = 逻辑型 折叠>
+    参数 参数_焦点元素 <类型 = Accessible无障碍类_>
+    {
+        变量 var <类型 = COM变体型>
+        如果 (m_id == 0)
+        {
+            <> var = m_self.读属性 ("accFocus", COM变体型, 取空基本对象 ())
+            如果 (var.取类型 () == COM变体类型.空)
+            {
+                返回 (假)
+            }
+            如果 (var.取类型 () == COM变体类型.COM对象)
+            {
+                参数_焦点元素.创建自对象 (var.取COM对象2 (COM对象类))
+            }
+            否则
+            {
+                参数_焦点元素.创建自ID (var.取值 (整数, ), m_self)
+            }
+        }
+        否则
+        {
+            <> var = m_parent.读属性 ("accFocus", COM变体型, 取空基本对象 ())
+            如果 (var.取类型 () == COM变体类型.空)
+            {
+                返回 (假)
+            }
+            如果 (var.取类型 () == COM变体类型.COM对象)
+            {
+                参数_焦点元素.创建自对象 (var.取COM对象2 (COM对象类))
+            }
+            否则
+            {
+                参数_焦点元素.创建自ID (var.取值 (整数, ), m_parent)
+            }
+        }
+        返回 (取反 (参数_焦点元素.是否空 ()))
+    }
+
+    方法 取选择元素 <公开 类型 = 逻辑型 折叠>
+    参数 参数_选择元素 <类型 = Accessible无障碍类_>
+    {
+        变量 var <类型 = COM变体型>
+        如果 (m_id == 0)
+        {
+            <> var = m_self.读属性 ("accSelection", COM变体型, 取空基本对象 ())
+            如果 (var.取类型 () == COM变体类型.空)
+            {
+                返回 (假)
+            }
+            如果 (var.取类型 () == COM变体类型.COM对象)
+            {
+                参数_选择元素.创建自对象 (var.取COM对象2 (COM对象类))
+            }
+            否则
+            {
+                参数_选择元素.创建自ID (var.取值 (整数, ), m_self)
+            }
+        }
+        否则
+        {
+            <> var = m_parent.读属性 ("accSelection", COM变体型, 取空基本对象 ())
+            如果 (var.取类型 () == COM变体类型.空)
+            {
+                返回 (假)
+            }
+            如果 (var.取类型 () == COM变体类型.COM对象)
+            {
+                参数_选择元素.创建自对象 (var.取COM对象2 (COM对象类))
+            }
+            否则
+            {
+                参数_选择元素.创建自ID (var.取值 (整数, ), m_parent)
+            }
+        }
+        返回 (取反 (参数_选择元素.是否空 ()))
+    }
+
+    方法 选择元素 <公开 折叠>
+    参数 参数_标志 <类型 = 整数>
+    参数 参数_被选择元素 <类型 = Accessible无障碍类_ @默认值 = 空对象>
+    {
+        变量 var <类型 = COM变体型>
+
+        // @ if (m_pIAccessible) {
+        // @       _variant_t varChild;
+        // @         V_VT(&varChild) = VT_I4;
+        // @         V_I4(&varChild) =  (m_lVal != 0) ? m_lVal : 0;
+        // @         _variant_t varSelected;
+        // @         HRESULT hr = m_pIAccessible->accSelect(0x0001,varChild);
+        // @         if (hr == S_OK) {
+        // @             hr = m_pIAccessible->get_accState(varChild, &varSelected);
+        // @             if (hr == S_OK) {
+        // @                 long lParamSelected = V_I4(&varSelected);
+        // @                return lParamSelected;
+        // @           }
+        // @         }
+        // @     }
+        // @ return 0; // 返回0表示失败或无效值
+
+
+
+        如果 (参数_被选择元素.是否为空对象 ())
+        {
+            var.赋值 (0, )
+        }
+        否则
+        {
+            <> var = 参数_被选择元素.到变体型 ()
+        }
+        如果 (m_id == 0)
+        {
+            m_self.无返回值方法 ("accSelect", 参数_标志, var)
+        }
+        否则
+        {
+            m_parent.无返回值方法 ("accSelect", 参数_标志, var)
+        }
+    }
+
+    方法 取位置 <公开 折叠>
+    参数 控件位置 <类型 = 矩形类>
+    {
+        @ long pxLeft = 0;
+        @ long pyTop = 0;
+        @ long pcxWidth = 0;
+        @ long pcyHeight = 0;
+        @ VARIANT varChild;
+        @ varChild.vt = VT_I4;
+        如果 (m_id != 0)
+        {
+            @ varChild.lVal = @<m_id>;
+            @ ((IAccessible*)@<m_parent>.m_pUnknownObject)->accLocation(&pxLeft, &pyTop, &pcxWidth, &pcyHeight, varChild);
+            @ @<控件位置.左边> = pxLeft;
+            @ @<控件位置.顶边> = pyTop;
+            @ @<控件位置.右边> = pxLeft + pcxWidth;
+            @ @<控件位置.底边> = pyTop + pcyHeight;
+        }
+        否则
+        {
+            @ varChild.lVal = CHILDID_SELF;
+            @ ((IAccessible*)@<m_self>.m_pUnknownObject)->accLocation(&pxLeft, &pyTop, &pcxWidth, &pcyHeight, varChild);
+            @ @<控件位置.左边> = pxLeft;
+            @ @<控件位置.顶边> = pyTop;
+            @ @<控件位置.右边> = pxLeft + pcxWidth;
+            @ @<控件位置.底边> = pyTop + pcyHeight;
+        }
+    }
+
+    方法 导航 <公开 类型 = 逻辑型 折叠>
+    参数 参数_标志 <类型 = 整数>
+    参数 参数_开始元素 <类型 = Accessible无障碍类_>
+    参数 参数_返回元素 <类型 = Accessible无障碍类_>
+    {
+        变量 varStart <类型 = COM变体型>
+        变量 varEnd <类型 = COM变体型>
+        varStart = 参数_开始元素.到变体型 ()
+        如果 (m_id != 0)
+        {
+            varEnd = m_parent.方法 ("accNavigate", COM变体型, 参数_标志, varStart)
+            如果 (varEnd.取类型 () == COM变体类型.COM对象)
+            {
+                参数_返回元素.创建自对象 (varEnd.取COM对象2 (COM对象类))
+            }
+            否则
+            {
+                参数_返回元素.创建自ID (varEnd.取值 (整数), m_parent)
+            }
+        }
+        否则
+        {
+            varEnd = m_self.方法 ("accNavigate", COM变体型, 参数_标志, varStart)
+            如果 (varEnd.取类型 () == COM变体类型.COM对象)
+            {
+                参数_返回元素.创建自对象 (varEnd.取COM对象2 (COM对象类))
+            }
+            否则
+            {
+                参数_返回元素.创建自ID (varEnd.取值 (整数), m_self)
+            }
+        }
+        返回 (取反 (参数_返回元素.是否空 ()))
+    }
+
+    方法 命中测试 <公开 类型 = 逻辑型 折叠>
+    参数 参数_左边 <类型 = 整数>
+    参数 参数_顶边 <类型 = 整数>
+    参数 参数_元素 <类型 = Accessible无障碍类_>
+    {
+        变量 var <类型 = COM变体型>
+        如果 (m_id != 0)
+        {
+            <> var = m_parent.方法 ("accHitTest", COM变体型, 参数_左边, 参数_顶边)
+        }
+        否则
+        {
+            <> var = m_self.方法 ("accHitTest", COM变体型, 参数_左边, 参数_顶边)
+        }
+        如果真 (var.取类型 () == COM变体类型.空)
+        {
+            返回 (假)
+        }
+        如果真 (var.取类型 () == COM变体类型.整数值)
+        {
+            如果 (var.取值 (整数) == 0)
+            {
+                参数_元素.创建自对象 (m_self)
+            }
+            否则
+            {
+                参数_元素.创建自ID (var.取值 (整数, ), m_self)
+            }
+            返回 (真)
+        }
+        如果真 (var.取类型 () == COM变体类型.COM对象)
+        {
+            参数_元素.创建自对象 (var.取COM对象2 (COM对象类, ))
+            返回 (真)
+        }
+        返回 (假)
+    }
+
+    方法 执行默认动作 <公开 折叠 @禁止流程检查 = 真>
+    {
+        变量 var <类型 = COM变体型>
+        如果 (m_id != 0)
+        {
+            var.赋值 (m_id, )
+            m_parent.无返回值方法 ("accDoDefaultAction", var)
+        }
+        否则
+        {
+            var.赋值 (0, )
+            m_self.无返回值方法 ("accDoDefaultAction", var)
+        }
+
+
+        // @     HRESULT hr;
+        // @     _variant_t varChild;
+        // @     V_VT(&varChild) = VT_I4;
+        // @     V_I4(&varChild) = (@<m_id> != 0) ? @<m_id> : 0;
+        // @     hr = ((IAccessible*)@<m_self>.m_pUnknownObject)->accDoDefaultAction(varChild);
+        // @     return hr == S_OK;
+    }
+
+    方法 取窗口句柄 <公开 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    {
+        @ IAccessible* pAccessible = nullptr;
+        @ IUnknown* pUnknown = nullptr;
+        @ if(@<m_id>!=0){
+        @     pUnknown = @<m_parent>.m_pUnknownObject;
+        @ }
+        @ else {
+        @     pUnknown = @<m_self>.m_pUnknownObject;
+        @ }
+        @ if (pUnknown != nullptr){
+        @     HRESULT hr = pUnknown->QueryInterface(IID_IAccessible, (void**)&pAccessible);
+        @     if (FAILED(hr) || pAccessible == nullptr){
+        @         return -1;
+        @     }
+        @ }
+        @ HWND hwnd = nullptr;
+        @ if (pAccessible != nullptr){
+        @     HRESULT hr = WindowFromAccessibleObject(pAccessible, &hwnd);
+        @     if (FAILED(hr) || hwnd == nullptr){
+        @         return -1;
+        @     }
+        @     pAccessible->Release();
+        @ }
+        @ return (INT_PTR)hwnd;
+    }
+
+    方法 获取对象 <公开 折叠>
+    参数 参_对象m_parent <类型 = COM对象类>
+    参数 参_对象m_self <类型 = COM对象类>
+    {
+        参_对象m_parent = m_parent
+        参_对象m_self = m_self
+
+
+
+
+
+    }
+}
+
+类 Accessible信息类_ <公开 折叠 折叠2 @文档 = "category = \"Accessible无障碍.附加类\"" @输出名 = "YuanSuXinXiXing">
+{
+    变量 子窗口数 <公开 类型 = 文本型>
+    变量 控件ID <公开 类型 = 文本型>
+    变量 控件描述 <公开 类型 = 文本型>
+    变量 控件名称 <公开 类型 = 文本型>
+    变量 控件状态 <公开 类型 = 文本型>
+    变量 控件类型 <公开 类型 = 文本型>
+    变量 控件值 <公开 类型 = 文本型>
+    变量 窗口位置 <公开 类型 = 文本型>
+    变量 矩形信息 <公开 类型 = 矩形类>
+    变量 默认动作 <公开 类型 = 文本型>
+    变量 状态标识 <公开 类型 = 文本型>
+    变量 类型标识 <公开 类型 = 文本型>
+    变量 屏幕位置 <公开 类型 = 文本型>
+    变量 窗口大小 <公开 类型 = 文本型>
+}
+
+类 Accessible信息组_ <公开 基础类 = 对象数组模板类 折叠2 @文档 = "category = \"Accessible无障碍.附加类\"" @模板实现类 = "Accessible信息类_">
+
+类 Accessible无障碍组_ <公开 基础类 = 对象数组模板类 折叠2 @文档 = "category = \"Accessible无障碍.附加类\"" @模板实现类 = "Accessible无障碍类_">

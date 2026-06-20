@@ -1,0 +1,132 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"windows.资源操作\"">
+
+类 ______资源操作 <公开 @全局类 = 真>
+{
+    方法 资源_取文件 <公开 静态 类型 = 字节集类 @禁止流程检查 = 真>
+    参数 资源文件 <类型 = 视窗文件资源>
+    {
+        @ CVolMem memRes;
+        @ do
+        @     {
+        @         const HRSRC hSrc = FindResource (GetModuleHandle (NULL), MAKEINTRESOURCE (@<资源文件>), RT_RCDATA);
+        @         if (hSrc == NULL)
+        @             break;
+        @         const HGLOBAL hResData = LoadResource (NULL, hSrc);
+        @         if (hResData == NULL)
+        @             break;
+        @ 
+        @         const BYTE* pb = (const BYTE*)LockResource (hResData);
+        @         if (pb != NULL)
+        @         {
+        @             memRes.CopyFrom (pb, (INT_P)SizeofResource (NULL, hSrc));
+        @         }
+        @ 
+        @         UnlockResource (hResData);
+        @         FreeResource (hResData);
+        @     }
+        @     while (FALSE);
+        @  return memRes;
+
+
+    }
+}
+
+类 资源操作_全局类 <公开>
+{
+    常量 ACCELERATOR <公开 类型 = 文本型 值 = @RT_ACCELERATOR 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 动画光标 <公开 类型 = 文本型 值 = @RT_ANICURSOR 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 动画图标 <公开 类型 = 文本型 值 = @RT_ANIICON 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 位图 <公开 类型 = 文本型 值 = @RT_BITMAP 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 光标 <公开 类型 = 文本型 值 = @RT_CURSOR 注释 = "Hardware-dependent cursor resource" 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 对话框 <公开 类型 = 文本型 值 = @RT_DIALOG 注释 = "Dialog box" 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 DLGINCLUDE <公开 类型 = 文本型 值 = @RT_DLGINCLUDE 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 字体 <公开 类型 = 文本型 值 = @RT_FONT 注释 = " Font resource" 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 FONTDIR <公开 类型 = 文本型 值 = @RT_FONTDIR 注释 = "RT_FONTDIR Font directory resource" 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 光标组 <公开 类型 = 文本型 值 = @RT_GROUP_CURSOR 注释 = "RT_GROUP_CURSOR Hardware-independent cursor resource"
+            编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 图标组 <公开 类型 = 文本型 值 = @RT_GROUP_ICON 注释 = "RT_GROUP_ICON Hardware-independent icon resource" 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 HTML <公开 类型 = 文本型 值 = @RT_HTML 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 图标 <公开 类型 = 文本型 值 = @RT_ICON 注释 = "RT_ICON Hardware-dependent icon resource" 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 清单 <公开 类型 = 文本型 值 = @RT_MANIFEST 注释 = "RT_MANIFEST Windows XP: Fusion XML Manifest" 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 菜单 <公开 类型 = 文本型 值 = @RT_MENU 注释 = "RT_MENU Menu resource" 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 MESSAGETABLE <公开 类型 = 文本型 值 = @RT_MESSAGETABLE 注释 = "RT_MESSAGETABLE Message-table entry" 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 PLUGPLAY <公开 类型 = 文本型 值 = @RT_PLUGPLAY 注释 = "RT_PLUGPLAY Plug and Play resource" 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 附加数据 <公开 类型 = 文本型 值 = @RT_RCDATA 注释 = "RT_RCDATA Application-defined resource (raw data)" 编辑时信息 = "3FFFC, 0, 0, 0">
+    常量 文本 <公开 类型 = 文本型 值 = @RT_STRING 注释 = "RT_STRING String-table entry">
+    常量 版本 <公开 类型 = 文本型 值 = @RT_VERSION 注释 = "RT_VERSION Version resource">
+    常量 VXD <公开 类型 = 文本型 值 = @RT_VXD 注释 = "RT_VXD">
+
+    方法 加载模块 <公开 类型 = 变整数 返回值注释 = "返回模块句柄" @嵌入式方法 = "">
+    参数 模块全路径 <类型 = 文本型 注释 = "可以是 dll 也可以是 exe">
+    {
+        @ (INT_P)LoadLibrary (@<模块全路径>)
+    }
+
+    方法 释放模块 <公开>
+    参数 模块句柄 <类型 = 变整数>
+    {
+        @ FreeLibrary((HMODULE)@<模块句柄>)
+    }
+
+    方法 查找资源 <公开 静态 类型 = 变整数 注释 = "首先，您要调用 查找 找到资源" 返回值注释 = "返回资源句柄 HRSRC" @嵌入式方法 = "">
+    参数 模块句柄 <类型 = 变整数 注释 = "HMODULE">
+    参数 资源名称 <类型 = 文本型>
+    参数 资源类型 <类型 = 文本型>
+    {
+        @ (INT_P)FindResource((HMODULE)@<模块句柄>,@<资源名称>,@<资源类型>)
+    }
+
+    方法 加载资源 <公开 静态 类型 = 变整数 注释 = "打开资源" 返回值注释 = "资源数据句柄" @嵌入式方法 = "">
+    参数 模块句柄 <类型 = 变整数 注释 = "HMODULE">
+    参数 资源句柄 <类型 = 变整数 注释 = "HRSRC">
+    {
+        @ (INT_P)LoadResource((HMODULE)@<模块句柄>,(HRSRC)@<资源句柄>)
+    }
+
+    方法 取数据指针 <公开 静态 类型 = 变整数 注释 = "得到资源数据的内存指针" 返回值注释 = "返回数据指针" 折叠 @嵌入式方法 = "">
+    参数 资源数据句柄 <类型 = 变整数>
+    {
+        @ (INT_P)LockResource((HGLOBAL )@<资源数据句柄>)
+    }
+
+    方法 取数据大小 <公开 静态 类型 = 整数 注释 = "得到资源数据的大小" 折叠 @嵌入式方法 = "">
+    参数 资源句柄 <类型 = 变整数>
+    参数 模块句柄 <类型 = 变整数 @默认值 = 0>
+    {
+        @ (INT)SizeofResource((HMODULE)@<模块句柄>,(HRSRC)@<资源句柄>)
+        // DWORD SizeofResource(  HMODULE hModule, // module handle HRSRC hResInfo   // resource handle);
+    }
+
+    方法 关闭资源 <公开 静态 @嵌入式方法 = "">
+    参数 资源数据句柄 <类型 = 变整数>
+    {
+        @ FreeResource((HGLOBAL)@<资源数据句柄>)
+    }
+
+    方法 准备更新资源 <公开 类型 = 变整数 返回值注释 = "返回 更新句柄" 折叠 @嵌入式方法 = "">
+    参数 可执行文件名 <类型 = 文本型>
+    参数 是否删除资源 <类型 = 逻辑型 @默认值 = 假>
+    {
+        @ BeginUpdateResource(@<可执行文件名>,@<是否删除资源>)
+    }
+
+    方法 更新资源 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 更新句柄 <类型 = 变整数>
+    参数 资源类型 <类型 = 文本型>
+    参数 资源名称 <类型 = 文本型>
+    参数 语言 <类型 = 短整数>
+    参数 用作更新的数据指针 <类型 = 变整数>
+    参数 用作更新的数据大小 <类型 = 整数>
+    {
+        @ UpdateResource((HANDLE)@<更新句柄>,@<资源类型>,@<资源名称>,(WORD)@<语言>,(LPVOID)@<用作更新的数据指针>,(DWORD)@<用作更新的数据大小>)
+    }
+
+    方法 结束更新资源 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 更新句柄 <类型 = 变整数>
+    参数 是否取消 <类型 = 逻辑型>
+    {
+        @ EndUpdateResource((HANDLE)@<更新句柄>,@<是否取消>)
+    }
+}

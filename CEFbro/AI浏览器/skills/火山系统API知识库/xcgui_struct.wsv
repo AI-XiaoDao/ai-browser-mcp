@@ -1,0 +1,1808 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 xc.gui <@文档 = "category = \"数据类型\"">
+
+类 单精度小数坐标数组类 <公开 基础类 = 对象数组模板类 @模板实现类 = "单精度小数坐标_xc">
+
+类 坐标数组 <公开 折叠 "">
+{
+    变量 字节集 <类型 = 字节集类>
+
+    方法 加入坐标成员 <公开 折叠>
+    参数 x <类型 = 整数>
+    参数 y <类型 = 整数>
+    {
+        字节集.添加值到字节集 (x)
+        字节集.添加值到字节集 (y)
+    }
+
+    方法 取成员数 <公开 类型 = 整数 折叠>
+    {
+        返回 (字节集.取字节集长度 () / 8)
+    }
+
+    方法 取数组指针 <公开 类型 = 变整数 折叠>
+    {
+        返回 (字节集.取字节集指针 ())
+    }
+
+    方法 清空 <公开>
+    {
+        字节集.清空字节集 ()
+    }
+
+    #
+}
+
+类 坐标数组类 <公开 基础类 = 对象数组模板类 @模板实现类 = "坐标_xc">
+
+类 位置_xc <公开 基础类 = 结构基础类 注释 = "Position_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (position_)
+
+    方法 行号 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->iRow
+    }
+
+    方法 行号 <公开 属性写 折叠>
+    参数 所欲设置行号 <类型 = 整数>
+    {
+        @ pdata ()->iRow = @<所欲设置行号>;
+    }
+
+    方法 列号 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->iColumn
+    }
+
+    方法 列号 <公开 属性写 折叠>
+    参数 所欲设置列号 <类型 = 整数>
+    {
+        @ pdata ()->iColumn = @<所欲设置列号>;
+    }
+}
+
+类 单精度小数坐标_xc <公开 基础类 = 结构基础类 注释 = "POINTF" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (POINTF)
+
+    方法 横坐标 <公开 属性读 类型 = 单精度小数 注释 = "用作返回横坐标" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->x
+    }
+
+    方法 横坐标 <公开 属性写 注释 = "用作设置横坐标" 折叠>
+    参数 所欲设置坐标 <类型 = 单精度小数>
+    {
+        @ pdata ()->x = @<所欲设置坐标>;
+    }
+
+    方法 纵坐标 <公开 属性读 类型 = 单精度小数 注释 = "用作返回纵坐标" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->y
+    }
+
+    方法 纵坐标 <公开 属性写 注释 = "用作设置纵坐标" 折叠>
+    参数 所欲设置坐标 <类型 = 单精度小数>
+    {
+        @ pdata ()->y = @<所欲设置坐标>;
+    }
+}
+
+类 坐标_xc <公开 基础类 = 结构基础类 注释 = "POINT" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (POINT)
+
+    方法 横坐标 <公开 属性读 类型 = 整数 注释 = "用作返回横坐标" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->x
+    }
+
+    方法 横坐标 <公开 属性写 注释 = "用作设置横坐标" 折叠>
+    参数 所欲设置坐标 <类型 = 整数>
+    {
+        @ pdata ()->x = @<所欲设置坐标>;
+    }
+
+    方法 纵坐标 <公开 属性读 类型 = 整数 注释 = "用作返回纵坐标" @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->y
+    }
+
+    方法 纵坐标 <公开 属性写 注释 = "用作设置纵坐标" 折叠>
+    参数 所欲设置坐标 <类型 = 整数>
+    {
+        @ pdata ()->y = @<所欲设置坐标>;
+    }
+}
+
+类 尺寸_xc <公开 基础类 = 结构基础类 注释 = "SIZE" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (SIZE)
+
+    方法 宽 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->cx
+    }
+
+    方法 宽 <公开 属性写 折叠>
+    参数 所欲设置坐标 <类型 = 整数>
+    {
+        @ pdata ()->cx = @<所欲设置坐标>;
+    }
+
+    方法 高 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->cy
+    }
+
+    方法 高 <公开 属性写 折叠>
+    参数 所欲设置坐标 <类型 = 整数>
+    {
+        @ pdata ()->cy = @<所欲设置坐标>;
+    }
+}
+
+类 单精度小数矩形_xc <公开 基础类 = 结构基础类 注释 = "RECTF" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (RECTF)
+
+    方法 左边 <公开 属性读 类型 = 单精度小数 注释 = "用作返回矩形的左边坐标" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->left
+    }
+
+    方法 左边 <公开 属性写 注释 = "用作设置矩形的左边坐标" 折叠>
+    参数 欲设置左边 <类型 = 单精度小数>
+    {
+        @ pdata ()->left = @<欲设置左边>;
+    }
+
+    方法 顶边 <公开 属性读 类型 = 单精度小数 注释 = "用作返回矩形的顶边坐标" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->top
+    }
+
+    方法 顶边 <公开 属性写 注释 = "用作设置矩形的顶边坐标" 折叠>
+    参数 欲设置顶边 <类型 = 单精度小数>
+    {
+        @ pdata ()->top = @<欲设置顶边>;
+    }
+
+    方法 右边 <公开 属性读 类型 = 单精度小数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->right
+    }
+
+    方法 右边 <公开 属性写 折叠>
+    参数 欲设置右边 <类型 = 单精度小数>
+    {
+        @ pdata ()->right = @<欲设置右边>;
+    }
+
+    方法 底边 <公开 属性读 类型 = 单精度小数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->bottom
+    }
+
+    方法 底边 <公开 属性写 折叠>
+    参数 欲设置底边 <类型 = 单精度小数>
+    {
+        @ pdata ()->bottom = @<欲设置底边>;
+    }
+}
+
+类 矩形_xc <公开 基础类 = 结构基础类 注释 = "RECT" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (RECT)
+
+    方法 左边 <公开 属性读 类型 = 整数 注释 = "用作返回矩形的左边坐标" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->left
+    }
+
+    方法 左边 <公开 属性写 注释 = "用作设置矩形的左边坐标" 折叠>
+    参数 欲设置左边 <类型 = 整数>
+    {
+        @ pdata ()->left = @<欲设置左边>;
+    }
+
+    方法 顶边 <公开 属性读 类型 = 整数 注释 = "用作返回矩形的顶边坐标" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->top
+    }
+
+    方法 顶边 <公开 属性写 注释 = "用作设置矩形的顶边坐标" 折叠>
+    参数 欲设置顶边 <类型 = 整数>
+    {
+        @ pdata ()->top = @<欲设置顶边>;
+    }
+
+    方法 右边 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->right
+    }
+
+    方法 右边 <公开 属性写 折叠>
+    参数 欲设置右边 <类型 = 整数>
+    {
+        @ pdata ()->right = @<欲设置右边>;
+    }
+
+    方法 底边 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->bottom
+    }
+
+    方法 底边 <公开 属性写 折叠>
+    参数 欲设置底边 <类型 = 整数>
+    {
+        @ pdata ()->bottom = @<欲设置底边>;
+    }
+}
+
+类 字体信息_结构 <公开 基础类 = 结构基础类 注释 = "font_info_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (font_info_)
+
+    方法 字体大小 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nSize
+    }
+
+    方法 字体大小 <公开 属性写 折叠>
+    参数 大小 <类型 = 整数>
+    {
+        @ pdata ()->nSize = @<大小>;
+    }
+
+    方法 字体样式 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nStyle
+    }
+
+    方法 字体样式 <公开 属性写 注释 = "字体样式.***" 折叠>
+    参数 样式 <类型 = 整数 注释 = "字体样式.***">
+    {
+        @ pdata ()->nStyle = @<样式>;
+    }
+
+    方法 字体名称 <公开 属性读 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        @ return pdata ()->name;
+    }
+
+    方法 字体名称 <公开 属性写 折叠>
+    参数 名称 <类型 = 文本型>
+    {
+        @ pdata ()->name = @<名称>;
+    }
+}
+
+类 边框大小_xc <公开 基础类 = 结构基础类 注释 = "BorderSize_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (borderSize_)
+
+    方法 左边 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->leftSize
+    }
+
+    方法 左边 <公开 属性写 折叠>
+    参数 欲设置左边 <类型 = 整数>
+    {
+        @ pdata ()->leftSize = @<欲设置左边>;
+    }
+
+    方法 顶边 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->topSize
+    }
+
+    方法 顶边 <公开 属性写 折叠>
+    参数 欲设置顶边 <类型 = 整数>
+    {
+        @ pdata ()->topSize = @<欲设置顶边>;
+    }
+
+    方法 右边 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->rightSize
+    }
+
+    方法 右边 <公开 属性写 折叠>
+    参数 欲设置右边 <类型 = 整数>
+    {
+        @ pdata ()->rightSize = @<欲设置右边>;
+    }
+
+    方法 底边 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->bottomSize
+    }
+
+    方法 底边 <公开 属性写 折叠>
+    参数 欲设置底边 <类型 = 整数>
+    {
+        @ pdata ()->bottomSize = @<欲设置底边>;
+    }
+}
+
+类 列表框_项结构1 <公开 基础类 = 结构基础类 注释 = "listBox_item_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (listBox_item_)
+
+    方法 项索引 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->index
+    }
+
+    方法 项索引 <公开 属性写 折叠>
+    参数 索引 <类型 = 整数>
+    {
+        @ pdata ()->index = @<索引>;
+    }
+
+    方法 用户绑定数据 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->nUserData
+    }
+
+    方法 用户绑定数据 <公开 属性写 折叠>
+    参数 数据 <类型 = 变整数>
+    {
+        @ pdata ()->nUserData = (vint)@<数据>;
+    }
+
+    方法 项默认高度 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nHeight
+    }
+
+    方法 项默认高度 <公开 属性写 折叠>
+    参数 高度 <类型 = 整数>
+    {
+        @ pdata ()->nHeight = @<高度>;
+    }
+
+    方法 项选中时高度 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nSelHeight
+    }
+
+    方法 项选中时高度 <公开 属性写 折叠>
+    参数 高度 <类型 = 整数>
+    {
+        @ pdata ()->nSelHeight = @<高度>;
+    }
+
+    方法 状态 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nState
+    }
+
+    方法 状态 <公开 属性写 注释 = "列表状态.**" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->nState = (list_item_state_)@<值>;
+    }
+
+    方法 项坐标 <公开 属性读 类型 = 矩形_xc 折叠 @禁止流程检查 = 真>
+    {
+        @ return pdata ()->rcItem;
+    }
+
+    方法 项坐标 <公开 属性写>
+    参数 所欲设置坐标 <类型 = 矩形_xc 注释 = "矩形_xc">
+    {
+        @ @m<SET_STRUCT_MEMBER> (rcItem, @<所欲设置坐标>);
+    }
+
+    方法 布局对象 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hLayout
+    }
+
+    方法 布局对象 <公开 属性写 折叠>
+    参数 值 <类型 = 变整数>
+    {
+        @ pdata ()->hLayout = (HXCGUI)@<值>;
+    }
+
+    方法 模板句柄 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hTemp
+    }
+
+    方法 模板句柄 <公开 属性写 折叠>
+    参数 值 <类型 = 变整数>
+    {
+        @ pdata ()->hTemp = (HTEMP)@<值>;
+    }
+}
+
+类 列表框_项结构2 <公开 基础类 = 结构基础类 注释 = "listBox_item_info_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (listBox_item_info_)
+
+    方法 用户绑定数据 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->nUserData
+    }
+
+    方法 用户绑定数据 <公开 属性写 折叠>
+    参数 数据 <类型 = 变整数>
+    {
+        @ pdata ()->nUserData = (vint)@<数据>;
+    }
+
+    方法 项默认高度 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nHeight
+    }
+
+    方法 项默认高度 <公开 属性写 折叠>
+    参数 高度 <类型 = 整数>
+    {
+        @ pdata ()->nHeight = @<高度>;
+    }
+
+    方法 项选中时高度 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nSelHeight
+    }
+
+    方法 项选中时高度 <公开 属性写 折叠>
+    参数 高度 <类型 = 整数>
+    {
+        @ pdata ()->nSelHeight = @<高度>;
+    }
+}
+
+类 菜单_绘制背景结构 <公开 基础类 = 结构基础类 注释 = "menu_drawBackground_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (menu_drawBackground_)
+
+    方法 菜单句柄 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hMenu
+    }
+
+    方法 菜单句柄 <公开 属性写 折叠>
+    参数 句柄 <类型 = 变整数>
+    {
+        @ pdata ()->hMenu = (HMENUX)@<句柄>;
+    }
+
+    方法 窗口句柄 <公开 属性读 类型 = 变整数 注释 = "当前弹出菜单项的窗口句柄" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hWindow
+    }
+
+    方法 窗口句柄 <公开 属性写 注释 = "当前弹出菜单项的窗口句柄" 折叠>
+    参数 句柄 <类型 = 变整数>
+    {
+        @ pdata ()->hWindow = (HWINDOW)@<句柄>;
+    }
+
+    方法 父项ID <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nParentID
+    }
+
+    方法 父项ID <公开 属性写 折叠>
+    参数 高度 <类型 = 整数>
+    {
+        @ pdata ()->nParentID = @<高度>;
+    }
+}
+
+类 菜单_绘制项结构 <公开 基础类 = 结构基础类 注释 = "menu_drawItem_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (menu_drawItem_)
+
+    方法 菜单句柄 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hMenu
+    }
+
+    方法 菜单句柄 <公开 属性写 折叠>
+    参数 句柄 <类型 = 变整数>
+    {
+        @ pdata ()->hMenu = (HMENUX)@<句柄>;
+    }
+
+    方法 窗口句柄 <公开 属性读 类型 = 变整数 注释 = "当前弹出菜单项的窗口句柄" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hWindow
+    }
+
+    方法 窗口句柄 <公开 属性写 注释 = "当前弹出菜单项的窗口句柄" 折叠>
+    参数 句柄 <类型 = 变整数>
+    {
+        @ pdata ()->hWindow = (HWINDOW)@<句柄>;
+    }
+
+    方法 项ID <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nID
+    }
+
+    方法 项ID <公开 属性写 折叠>
+    参数 高度 <类型 = 整数>
+    {
+        @ pdata ()->nID = @<高度>;
+    }
+
+    方法 状态 <公开 属性读 类型 = 整数 注释 = "菜单标识.项_***" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nState
+    }
+
+    方法 状态 <公开 属性写 注释 = "菜单标识.项_***" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->nState = @<值>;
+    }
+
+    方法 快捷键宽度 <公开 属性读 类型 = 整数 注释 = "右侧快捷键占位宽度" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nShortcutKeyWidth
+    }
+
+    方法 快捷键宽度 <公开 属性写 注释 = "右侧快捷键占位宽度" 折叠>
+    参数 宽度 <类型 = 整数>
+    {
+        @ pdata ()->nShortcutKeyWidth = @<宽度>;
+    }
+
+    方法 项坐标 <公开 属性读 类型 = 矩形_xc 折叠 @禁止流程检查 = 真>
+    {
+        @ return pdata ()->rcItem;
+    }
+
+    方法 项坐标 <公开 属性写 折叠>
+    参数 所欲设置坐标 <类型 = 矩形_xc 注释 = "矩形_xc">
+    {
+        @ @m<SET_STRUCT_MEMBER> (rcItem, @<所欲设置坐标>);
+    }
+
+    方法 菜单项图标 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hIcon
+    }
+
+    方法 菜单项图标 <公开 属性写 折叠>
+    参数 图标 <类型 = 变整数>
+    {
+        @ pdata ()->hIcon = (HIMAGE)@<图标>;
+
+    }
+
+    方法 项文本 <公开 属性读 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        变量 返回文本 <类型 = 文本型>
+        @ @<返回文本>=pdata ()->pText;
+        @ return @<返回文本>;
+    }
+
+    方法 项文本 <公开 属性写 折叠>
+    参数 文本 <类型 = 文本型>
+    {
+        @ pdata ()->pText = @<文本>.GetText ();
+
+    }
+}
+
+类 菜单_弹出窗口结构 <公开 基础类 = 结构基础类 注释 = "menu_popupWnd_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (menu_popupWnd_)
+
+    方法 窗口句柄 <公开 属性读 类型 = 变整数 注释 = "当前弹出菜单项的窗口句柄" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hWindow
+    }
+
+    方法 窗口句柄 <公开 属性写 注释 = "当前弹出菜单项的窗口句柄" 折叠>
+    参数 句柄 <类型 = 变整数>
+    {
+        @ pdata ()->hWindow = (HWINDOW)@<句柄>;
+    }
+
+    方法 父项ID <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nParentID
+    }
+
+    方法 父项ID <公开 属性写 折叠>
+    参数 高度 <类型 = 整数>
+    {
+        @ pdata ()->nParentID = @<高度>;
+    }
+}
+
+类 列表树_项结构 <公开 基础类 = 结构基础类 注释 = "tree_item_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (tree_item_)
+
+    方法 项ID <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nID
+    }
+
+    方法 项ID <公开 属性写 折叠>
+    参数 索引 <类型 = 整数>
+    {
+        @ pdata ()->nID = @<索引>;
+    }
+
+    方法 缩进层次 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nDepth
+    }
+
+    方法 缩进层次 <公开 属性写 折叠>
+    参数 索引 <类型 = 整数>
+    {
+        @ pdata ()->nDepth = @<索引>;
+    }
+
+    方法 用户绑定数据 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->nUserData
+    }
+
+    方法 用户绑定数据 <公开 属性写 折叠>
+    参数 数据 <类型 = 变整数>
+    {
+        @ pdata ()->nUserData = (vint)@<数据>;
+    }
+
+    方法 项默认高度 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nHeight
+    }
+
+    方法 项默认高度 <公开 属性写 折叠>
+    参数 高度 <类型 = 整数>
+    {
+        @ pdata ()->nHeight = @<高度>;
+    }
+
+    方法 项选中时高度 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nSelHeight
+    }
+
+    方法 项选中时高度 <公开 属性写 折叠>
+    参数 高度 <类型 = 整数>
+    {
+        @ pdata ()->nSelHeight = @<高度>;
+    }
+
+    方法 是否扩展 <公开 属性读 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->bExpand
+    }
+
+    方法 是否扩展 <公开 属性写 折叠>
+    参数 值 <类型 = 逻辑型>
+    {
+        @ pdata ()->bExpand = @<值>;
+    }
+
+    方法 状态 <公开 属性读 类型 = 整数 注释 = "列表树项状态.**" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nState
+    }
+
+    方法 状态 <公开 属性写 注释 = "列表树项状态.**" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->nState = (tree_item_state_)@<值>;
+    }
+
+    方法 项坐标 <公开 属性读 类型 = 矩形_xc 折叠 @禁止流程检查 = 真>
+    {
+        @ return pdata ()->rcItem;
+    }
+
+    方法 项坐标 <公开 属性写 折叠>
+    参数 所欲设置坐标 <类型 = 矩形_xc 注释 = "矩形_xc">
+    {
+        @ @m<SET_STRUCT_MEMBER> (rcItem, @<所欲设置坐标>);
+    }
+
+    方法 布局对象 <公开 属性读 类型 = 变整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hLayout
+    }
+
+    方法 布局对象 <公开 属性写 注释 = "" 折叠>
+    参数 句柄 <类型 = 变整数>
+    {
+        @ pdata ()->hLayout = (HXCGUI)@<句柄>;
+    }
+
+    方法 模板句柄 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hTemp
+    }
+
+    方法 模板句柄 <公开 属性写 折叠>
+    参数 模板 <类型 = 变整数>
+    {
+        @ pdata ()->hTemp = (HTEMP)@<模板>;
+    }
+}
+
+类 列表树_项拖动结构 <公开 基础类 = 结构基础类 注释 = "tree_drag_item_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (tree_drag_item_)
+
+    方法 拖动项ID <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nDragItem
+    }
+
+    方法 拖动项ID <公开 属性写 注释 = "" 折叠>
+    参数 ID <类型 = 整数>
+    {
+        @ pdata ()->nDragItem = @<ID>;
+    }
+
+    方法 目标项ID <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nDestItem
+    }
+
+    方法 目标项ID <公开 属性写 折叠>
+    参数 ID <类型 = 整数>
+    {
+        @ pdata ()->nDestItem = @<ID>;
+    }
+
+    方法 停放位置 <公开 属性读 类型 = 整数 注释 = "0:(上)停放到目标的上面, 1:(下)停放到目标的下面, 3:(中)停放到目标的的子项," 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nType
+    }
+
+    方法 停放位置 <公开 属性写 注释 = "0:(上)停放到目标的上面, 1:(下)停放到目标的下面, 3:(中)停放到目标的的子项," 折叠>
+    参数 位置 <类型 = 整数>
+    {
+        @ pdata ()->nType = @<位置>;
+    }
+}
+
+类 编辑框_样式信息结构 <公开 基础类 = 结构基础类 注释 = "edit_style_info_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (edit_style_info_)
+
+    方法 样式类型 <公开 属性读 类型 = 短整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ (@dt<短整数>)@sn<this>.pdata ()->type
+    }
+
+    方法 样式类型 <公开 属性写 注释 = "" 折叠>
+    参数 类型 <类型 = 短整数>
+    {
+        @ pdata ()->type = (USHORT)@<类型>;
+    }
+
+    方法 引用计数 <公开 属性读 类型 = 短整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ (@dt<短整数>)@sn<this>.pdata ()->nRef
+    }
+
+    方法 引用计数 <公开 属性写 注释 = "" 折叠>
+    参数 计次 <类型 = 短整数>
+    {
+        @ pdata ()->nRef = (USHORT)@<计次>;
+    }
+
+    方法 对象句柄 <公开 属性读 类型 = 变整数 注释 = " 字体,图片,UI对象" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hFont_image_obj
+    }
+
+    方法 对象句柄 <公开 属性写 注释 = " 字体,图片,UI对象" 折叠>
+    参数 句柄 <类型 = 变整数>
+    {
+        @ pdata ()->hFont_image_obj = (HXCGUI)@<句柄>;
+    }
+
+    方法 颜色 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.pdata ()->color
+    }
+
+    方法 颜色 <公开 属性写 折叠>
+    参数 argb <类型 = 整数 注释 = "argb">
+    {
+        @ pdata ()->color = (COLORREF)@<argb>;
+    }
+
+    方法 是否使用颜色 <公开 属性读 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->bColor
+    }
+
+    方法 是否使用颜色 <公开 属性写 注释 = "" 折叠>
+    参数 是否 <类型 = 逻辑型>
+    {
+        @ pdata ()->bColor = @<是否>;
+    }
+}
+
+类 编辑框_数据_结构 <公开 基础类 = 结构基础类 注释 = "edit_data_copy_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (edit_data_copy_)
+
+    方法 内容数量 <公开 属性读 类型 = 整数 注释 = " nCount" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nCount
+    }
+
+    方法 内容数量 <公开 属性写 注释 = " nCount" 折叠>
+    参数 数量 <类型 = 整数>
+    {
+        @ pdata ()->nCount = @<数量>;
+    }
+
+    方法 样式数量 <公开 属性读 类型 = 整数 注释 = "nStyleCount" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nStyleCount
+    }
+
+    方法 样式数量 <公开 属性写 注释 = "nStyleCount" 折叠>
+    参数 Count <类型 = 整数>
+    {
+        @ pdata ()->nStyleCount = @<Count>;
+    }
+
+    方法 样式数组 <公开 属性读 类型 = 编辑框_数据_样式数组 折叠 @禁止流程检查 = 真>
+    {
+        变量 数组 <类型 = 编辑框_数据_样式数组>
+        @ for (int i = 0; i < pdata ()->nStyleCount; i++)  {
+        // @ @<样式结构> = pdata ()->pStyle[i];
+        @ @<数组>.Add ((@dt<编辑框_数据_样式结构>)pdata ()->pStyle[i],NULL);
+        // @  pdata ()->pStyle[i].hFont_image_obj;
+        // @ DebugTrace (FALSE, 0, 0, _T ("nnn"), pdata ()->pStyle[i].hFont_image_obj, pdata ()->pStyle[i].color, pdata ()->pStyle[i].bColor);
+        @ }
+        @ return @<数组>;
+    }
+
+    方法 样式数组 <公开 属性写 折叠>
+    参数 样式结构 <类型 = 编辑框_数据_样式数组>
+    {
+        变量 style <类型 = 编辑框_数据_样式结构>
+        @ int Count = @<样式结构>.GetCount();
+        @ edit_data_copy_style_* data_style = new(edit_data_copy_style_[Count]);
+        @ for (int i = 0; i < Count; i++)  {
+        @ @<style> = @dt<编辑框_数据_样式结构>(&@<样式结构>.GetAt(i));
+        @ data_style[i].hFont_image_obj = @<style>.pdata()->hFont_image_obj;
+        @ data_style[i].color = @<style>.pdata()->color;
+        @ data_style[i].bColor = @<style>.pdata()->bColor;
+        @ }
+        @ pdata ()->pStyle = data_style;
+        @ delete []data_style;
+        // @ @m<SET_STRUCT_MEMBER> (pStyle, data_style);
+    }
+
+    方法 内容数组 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        // 1. 转火山字节集
+        // CVolMem men = CVolMem (pData, sizeof(UINT) * nCount);
+        // men.AddValue_SHORT((SHORT)*pdata ()->pData);
+        // 2. 转整数数组类
+        // @ @dt<变整数数组类> intArr;
+        // @ for (INT i = 0; i < pdata ()->nCount; i++) {
+        // // @        intArr.data().Add((INT_P)pdata ()->pData++);
+        // // @ DebugTrace (FALSE, 0, 0, _T ("SSnS"),  _T("内容数组数据"),(const TCHAR*)pdata ()->pData++,i,(const TCHAR*)intArr.data ().GetAt (i));
+        // @ }
+        // @ DebugTrace (FALSE, 0, 0, _T ("SS"),  _T("内容数组数据"),(const TCHAR*)intArr.data ().GetAt (0));
+        // 3.字节数组类
+        // @ dt<字节数组类> men;
+        // @ men.data().Append((S_BYET*)pdata ()->pData,2);
+        @ (INT)@sn<this>.pdata ()->pData
+
+    }
+
+    方法 内容数组 <公开 属性写 注释 = "">
+    参数 Data <类型 = 整数>
+    {
+        @ pdata ()->pData = (UINT *)@<Data>;
+    }
+}
+
+类 编辑框_数据_样式结构 <公开 基础类 = 结构基础类 注释 = "edit_data_copy_style_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (edit_data_copy_style_)
+
+    方法 对象句柄 <公开 属性读 类型 = 整数 注释 = " 字体,图片,UI对象(使用UINT目的当64位时可以节约4字节内存)" @嵌入式方法 = "">
+    {
+        @ (int)@sn<this>.pdata ()->hFont_image_obj
+    }
+
+    方法 对象句柄 <公开 属性写 注释 = " 字体,图片,UI对象(使用UINT目的当64位时可以节约4字节内存)">
+    参数 句柄 <类型 = 整数>
+    {
+        @ pdata ()->hFont_image_obj = (UINT*)@<句柄>;
+    }
+
+    方法 颜色 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.pdata ()->color
+    }
+
+    方法 颜色 <公开 属性写 折叠>
+    参数 Count <类型 = 整数 注释 = "argb">
+    {
+        @ pdata ()->color = (COLORREF)@<Count>;
+    }
+
+    方法 是否使用颜色 <公开 属性读 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->bColor
+    }
+
+    方法 是否使用颜色 <公开 属性写 注释 = "" 折叠>
+    参数 是否 <类型 = 逻辑型>
+    {
+        @ pdata ()->bColor = @<是否>;
+    }
+}
+
+类 编辑框_数据_样式数组 <公开 基础类 = 对象数组模板类 @模板实现类 = "编辑框_数据_样式结构">
+
+类 "//编辑框_数据结构" <公开 折叠 @视窗.结构类 = 0>
+{
+    变量 nCount <公开 类型 = 整数>
+    变量 nStyleCount <公开 类型 = 整数>
+    变量 pStyle <公开 类型 = 编辑框_样式结构>
+    变量 pData <公开 类型 = 变整数>
+}
+
+类 "//编辑框_样式结构" <公开 折叠 @视窗.结构类 = 0>
+{
+    变量 hFont_image_obj <公开 类型 = 变整数>
+    变量 color <公开 类型 = 整数>
+    变量 bColor <公开 类型 = 逻辑型>
+}
+
+类 "//编辑框_数据" <公开 基础类 = 编辑框_数据结构 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # public: 
+    #     @sn<base_class>::S s;
+    #     @sn<current_class>(edit_data_copy_ stru);//这里需要修改为欲交互的c++实际结构体类名
+    #     @sn<base_class>::S* GetSPtr();
+    #     inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)  { s=objCopyFrom.s; }
+    # <> </include>
+    # @sn<base_class>::S* @sn<current_class>::GetSPtr()
+    # {
+    #     return @sn<base_class>::GetStruct(&s);
+    # }
+    # @sn<current_class>::@sn<current_class>(edit_data_copy_ stru)//这里需要修改为欲交互的c++实际结构体类名
+    # {
+    #     this->s = *(S*)&stru;
+    #     @sn<base_class>::SetStruct(&(this->s));
+    # }
+    # @end
+
+    方法 取结构体指针 <公开 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    {
+        @ return (INT_P)@sn<base_class>::GetStruct(&(this->s));
+    }
+
+    方法 置结构体指针 <公开 注释 = "将指针处数据读取到火山的类成员" 折叠 @禁止流程检查 = 真>
+    参数 指针 <类型 = 变整数>
+    {
+        @ s=*(S*)@<指针>;//这里需要修改为欲交互的c++实际结构体类名
+        @ @sn<base_class>::SetStruct(&(this->s));
+    }
+}
+
+#
+
+类 代码框_颜色结构 <公开 基础类 = 结构基础类 注释 = "editor_color_">
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (editor_color_)
+
+    方法 是否显示箭头 <公开 属性读 类型 = 逻辑型 注释 = " 对齐线 - 是否显示箭头" @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->bAlignLineArrow
+    }
+
+    方法 是否显示箭头 <公开 属性写 注释 = " 对齐线 - 是否显示箭头">
+    参数 是否显示 <类型 = 逻辑型>
+    {
+        @ pdata ()->bAlignLineArrow = @<是否显示>;
+    }
+
+    方法 是否缩进 <公开 属性读 类型 = 逻辑型 注释 = " 展开收缩按钮" @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->bAlignLineBtnIndent
+    }
+
+    方法 是否缩进 <公开 属性写 注释 = " 展开收缩按钮">
+    参数 是否 <类型 = 逻辑型>
+    {
+        @ pdata ()->bAlignLineBtnIndent = @<是否>;
+    }
+
+    方法 填充缩进TAB背景 <公开 属性读 类型 = 逻辑型 注释 = "" @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->bTabFillColor
+    }
+
+    方法 填充缩进TAB背景 <公开 属性写 注释 = "">
+    参数 是否 <类型 = 逻辑型>
+    {
+        @ pdata ()->bTabFillColor = @<是否>;
+    }
+
+    方法 是否使用彩虹线 <公开 属性读 类型 = 逻辑型 注释 = "" @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->bAlignLineColor7
+    }
+
+    方法 是否使用彩虹线 <公开 属性写 注释 = "">
+    参数 是否 <类型 = 逻辑型>
+    {
+        @ pdata ()->bAlignLineColor7 = @<是否>;
+    }
+
+    方法 左背景色1 <公开 属性读 类型 = 整数 注释 = " 侧边栏 - 背景色1, 显示断点" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.pdata ()->clrMargin1
+    }
+
+    方法 左背景色1 <公开 属性写 注释 = " 侧边栏 - 背景色1, 显示断点" 折叠>
+    参数 颜色 <类型 = 整数 注释 = "argb">
+    {
+        @ pdata ()->clrMargin1 = (COLORREF)@<颜色>;
+    }
+
+    方法 左背景色2 <公开 属性读 类型 = 整数 注释 = " 侧边栏 - 背景色2, 显示行号" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.pdata ()->clrMargin2
+    }
+
+    方法 左背景色2 <公开 属性写 注释 = " 侧边栏 - 背景色2, 显示行号" 折叠>
+    参数 颜色 <类型 = 整数 注释 = "argb">
+    {
+        @ pdata ()->clrMargin2 = (COLORREF)@<颜色>;
+    }
+
+    方法 行号文本色 <公开 属性读 类型 = 整数 注释 = " 侧边栏 - 文本色 - 行号颜色" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.pdata ()->clrMargin_text
+    }
+
+    方法 行号文本色 <公开 属性写 注释 = " 侧边栏 - 文本色 - 行号颜色" 折叠>
+    参数 颜色 <类型 = 整数 注释 = "argb">
+    {
+        @ pdata ()->clrMargin_text = (COLORREF)@<颜色>;
+    }
+
+    方法 断点颜色 <公开 属性读 类型 = 整数 注释 = " 侧边栏 - 断点色" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.pdata ()->clrMargin_breakpoint
+    }
+
+    方法 断点颜色 <公开 属性写 注释 = " 侧边栏 - 断点色" 折叠>
+    参数 颜色 <类型 = 整数 注释 = "argb">
+    {
+        @ pdata ()->clrMargin_breakpoint = (COLORREF)@<颜色>;
+    }
+
+    方法 断点描边色 <公开 属性读 类型 = 整数 注释 = " 侧边栏 - 断点描边色" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.pdata ()->clrMargin_breakpointBorder
+    }
+
+    方法 断点描边色 <公开 属性写 注释 = " 侧边栏 - 断点描边色" 折叠>
+    参数 颜色 <类型 = 整数 注释 = "argb">
+    {
+        @ pdata ()->clrMargin_breakpointBorder = (COLORREF)@<颜色>;
+    }
+
+    方法 断点箭头颜色 <公开 属性读 类型 = 整数 注释 = " 侧边栏 - 调试位置箭头" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.pdata ()->clrMargin_runRowArrow
+    }
+
+    方法 断点箭头颜色 <公开 属性写 注释 = " 侧边栏 - 调试位置箭头" 折叠>
+    参数 颜色 <类型 = 整数 注释 = "argb">
+    {
+        @ pdata ()->clrMargin_runRowArrow = (COLORREF)@<颜色>;
+    }
+
+    方法 当前执行位置指示色 <公开 属性读 类型 = 整数 注释 = " 侧边栏 - 当前行指示色,光标所在行" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.pdata ()->clrMargin_curRow
+    }
+
+    方法 当前执行位置指示色 <公开 属性写 注释 = " 侧边栏 - 当前行指示色,光标所在行" 折叠>
+    参数 颜色 <类型 = 整数 注释 = "argb">
+    {
+        @ pdata ()->clrMargin_curRow = (COLORREF)@<颜色>;
+    }
+
+    方法 错误指示色 <公开 属性读 类型 = 整数 注释 = " 侧边栏 - 错误指示色" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.pdata ()->clrMargin_error
+    }
+
+    方法 错误指示色 <公开 属性写 注释 = " 侧边栏 - 错误指示色" 折叠>
+    参数 颜色 <类型 = 整数 注释 = "argb">
+    {
+        @ pdata ()->clrMargin_error = (COLORREF)@<颜色>;
+    }
+
+    方法 当前行热点色 <公开 属性读 类型 = 整数 注释 = " 突出显示当前行颜色" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.pdata ()->clrCurRowFull
+    }
+
+    方法 当前行热点色 <公开 属性写 注释 = " 突出显示当前行颜色" 折叠>
+    参数 颜色 <类型 = 整数 注释 = "argb">
+    {
+        @ pdata ()->clrCurRowFull = (COLORREF)@<颜色>;
+    }
+
+    方法 匹配文本背景色 <公开 属性读 类型 = 整数 注释 = " 匹配选择文本背景色" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.pdata ()->clrMatchSel
+    }
+
+    方法 匹配文本背景色 <公开 属性写 注释 = " 匹配选择文本背景色" 折叠>
+    参数 颜色 <类型 = 整数 注释 = "argb">
+    {
+        @ pdata ()->clrMatchSel = (COLORREF)@<颜色>;
+    }
+
+    方法 对齐线 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.pdata ()->clrAlignLine
+    }
+
+    方法 对齐线 <公开 属性写 注释 = "" 折叠>
+    参数 颜色 <类型 = 整数 注释 = "argb">
+    {
+        @ pdata ()->clrAlignLine = (COLORREF)@<颜色>;
+    }
+
+    方法 对齐线选择内容块 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.pdata ()->clrAlignLineSel
+    }
+
+    方法 对齐线选择内容块 <公开 属性写 注释 = "" 折叠>
+    参数 颜色 <类型 = 整数 注释 = "argb">
+    {
+        @ pdata ()->clrAlignLineSel = (COLORREF)@<颜色>;
+    }
+
+    方法 函数分割线颜色 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.pdata ()->clrFunSplitLine
+    }
+
+    方法 函数分割线颜色 <公开 属性写 注释 = "" 折叠>
+    参数 颜色 <类型 = 整数 注释 = "argb">
+    {
+        @ pdata ()->clrFunSplitLine = (COLORREF)@<颜色>;
+    }
+
+    方法 填充模式 <公开 属性读 类型 = 逻辑型 注释 = " 函数分割线-填充模式: 0:无, 1:线, 2:填充" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->funSplitLineMode
+    }
+
+    方法 填充模式 <公开 属性写 注释 = " 函数分割线-填充模式: 0:无, 1:线, 2:填充" 折叠>
+    参数 模式 <类型 = 逻辑型>
+    {
+        @ pdata ()->funSplitLineMode = @<模式>;
+    }
+
+    方法 样式关键字 <公开 属性读 类型 = 整数 注释 = " 系统关键字  return, break, for" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->styleSys
+    }
+
+    方法 样式关键字 <公开 属性写 注释 = " 系统关键字  return, break, for" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->styleSys = @<值>;
+    }
+
+    方法 样式函数 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->styleFunction
+    }
+
+    方法 样式函数 <公开 属性写 注释 = "" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->styleFunction = @<值>;
+    }
+
+    方法 样式变量 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->styleVar
+    }
+
+    方法 样式变量 <公开 属性写 注释 = "" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->styleVar = @<值>;
+    }
+
+    方法 样式基础类型 <公开 属性读 类型 = 整数 注释 = " 数据类型" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->styleDataType
+    }
+
+    方法 样式基础类型 <公开 属性写 注释 = "" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->styleDataType = @<值>;
+    }
+
+    方法 样式类 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->styleClass
+    }
+
+    方法 样式类 <公开 属性写 注释 = "" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->styleClass = @<值>;
+    }
+
+    方法 样式宏 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->styleMacro
+    }
+
+    方法 样式宏 <公开 属性写 注释 = "" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->styleMacro = @<值>;
+    }
+
+    方法 样式枚举 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->styleEnum
+    }
+
+    方法 样式枚举 <公开 属性写 注释 = "" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->styleEnum = @<值>;
+    }
+
+    方法 样式数字 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->styleNumber
+    }
+
+    方法 样式数字 <公开 属性写 注释 = "" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->styleNumber = @<值>;
+    }
+
+    方法 样式字符串 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->styleString
+    }
+
+    方法 样式字符串 <公开 属性写 注释 = "" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->styleString = @<值>;
+    }
+
+    方法 样式注释 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->styleComment
+    }
+
+    方法 样式注释 <公开 属性写 注释 = "" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->styleComment = @<值>;
+    }
+
+    方法 样式标点符号 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->StylePunctuation
+    }
+
+    方法 样式标点符号 <公开 属性写 注释 = "" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->StylePunctuation = @<值>;
+    }
+}
+
+类 列表视图_项ID结构 <公开 基础类 = 结构基础类 注释 = "listView_item_id_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (listView_item_id_)
+
+    方法 组索引 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->iGroup
+    }
+
+    方法 组索引 <公开 属性写 注释 = "" 折叠>
+    参数 索引 <类型 = 整数>
+    {
+        @ pdata ()->iGroup = @<索引 >;
+    }
+
+    方法 项索引 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->iItem
+    }
+
+    方法 项索引 <公开 属性写 折叠>
+    参数 索引 <类型 = 整数>
+    {
+        @ pdata ()->iItem = @<索引 >;
+    }
+}
+
+类 列表视图_项ID结构数组 <公开 基础类 = 对象数组模板类 @模板实现类 = "列表视图_项ID结构">
+
+类 列表视图_项结构 <公开 基础类 = 结构基础类 注释 = "listView_item_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (listView_item_)
+
+    方法 组索引 <公开 属性读 类型 = 整数 注释 = " 项所述组索引 -1没有组" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->iGroup
+    }
+
+    方法 组索引 <公开 属性写 注释 = " 项所述组索引 -1没有组" 折叠>
+    参数 索引 <类型 = 整数>
+    {
+        @ pdata ()->iGroup = @<索引 >;
+    }
+
+    方法 项索引 <公开 属性读 类型 = 整数 注释 = "项在数组中位置索引,如果此致为-1,那么为组" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->iItem
+    }
+
+    方法 项索引 <公开 属性写 注释 = "项在数组中位置索引,如果此致为-1,那么为组" 折叠>
+    参数 索引 <类型 = 整数>
+    {
+        @ pdata ()->iItem = @<索引 >;
+    }
+
+    方法 用户绑定数据 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->nUserData
+    }
+
+    方法 用户绑定数据 <公开 属性写 注释 = "" 折叠>
+    参数 数据 <类型 = 变整数>
+    {
+        @ pdata ()->nUserData = (vint)@<数据 >;
+    }
+
+    方法 状态 <公开 属性读 类型 = 整数 注释 = "列表状态.项_***" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nState
+    }
+
+    方法 状态 <公开 属性写 注释 = " 列表状态.项_***" 折叠>
+    参数 id <类型 = 整数 注释 = "列表状态.项_***">
+    {
+        @ pdata ()->nState = (list_item_state_)@<id >;
+    }
+
+    方法 项坐标 <公开 属性读 类型 = 矩形_xc 折叠 @禁止流程检查 = 真>
+    {
+        @ return pdata ()->rcItem;
+    }
+
+    方法 项坐标 <公开 属性写 折叠>
+    参数 所欲设置坐标 <类型 = 矩形_xc 注释 = "矩形_xc">
+    {
+        @ @m<SET_STRUCT_MEMBER> (rcItem, @<所欲设置坐标>);
+    }
+
+    方法 布局对象 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hLayout
+    }
+
+    方法 布局对象 <公开 属性写 注释 = "" 折叠>
+    参数 对象 <类型 = 变整数>
+    {
+        @ pdata ()->hLayout = (HXCGUI)@<对象 >;
+    }
+
+    方法 模板句柄 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hTemp
+    }
+
+    方法 模板句柄 <公开 属性写 注释 = "" 折叠>
+    参数 模板 <类型 = 变整数>
+    {
+        @ pdata ()->hTemp = (HTEMP)@<模板>;
+    }
+}
+
+类 列表_项结构 <公开 基础类 = 结构基础类 注释 = "list_item_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (list_item_)
+
+    方法 索引 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->index
+    }
+
+    方法 索引 <公开 属性写 注释 = "" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->index = @<值>;
+    }
+
+    方法 子项索引 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->iSubItem
+    }
+
+    方法 子项索引 <公开 属性写 注释 = "" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->iSubItem = @<值>;
+    }
+
+    方法 用户绑定数据 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->nUserData
+    }
+
+    方法 用户绑定数据 <公开 属性写 注释 = "" 折叠>
+    参数 数据 <类型 = 变整数>
+    {
+        @ pdata ()->nUserData = (vint)@<数据 >;
+    }
+
+    方法 状态 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ (int)@sn<this>.pdata ()->nState
+    }
+
+    方法 状态 <公开 属性写 折叠>
+    参数 id <类型 = 整数 注释 = "列表状态.项_***">
+    {
+        @ pdata ()->nState = (list_item_state_)@<id >;
+    }
+
+    方法 项坐标 <公开 属性读 类型 = 矩形_xc 折叠 @禁止流程检查 = 真>
+    {
+        @ return pdata ()->rcItem;
+    }
+
+    方法 项坐标 <公开 属性写 折叠>
+    参数 所欲设置坐标 <类型 = 矩形_xc 注释 = "矩形_xc">
+    {
+        @ @m<SET_STRUCT_MEMBER> (rcItem, @<所欲设置坐标>);
+    }
+
+    方法 布局对象 <公开 属性读 类型 = 变整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hLayout
+    }
+
+    方法 布局对象 <公开 属性写 注释 = "" 折叠>
+    参数 句柄 <类型 = 变整数>
+    {
+        @ pdata ()->hLayout = (HXCGUI)@<句柄>;
+    }
+
+    方法 模板句柄 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hTemp
+    }
+
+    方法 模板句柄 <公开 属性写 折叠>
+    参数 模板 <类型 = 变整数>
+    {
+        @ pdata ()->hTemp = (HTEMP)@<模板>;
+    }
+}
+
+类 列表_头项结构 <公开 基础类 = 结构基础类 注释 = "list_header_item_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (list_header_item_)
+
+    方法 索引 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->index
+    }
+
+    方法 索引 <公开 属性写 注释 = "" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->index = @<值>;
+    }
+
+    方法 用户绑定数据 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->nUserData
+    }
+
+    方法 用户绑定数据 <公开 属性写 注释 = "" 折叠>
+    参数 数据 <类型 = 变整数>
+    {
+        @ pdata ()->nUserData = (vint)@<数据 >;
+    }
+
+    方法 是否支持排序 <公开 属性读 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->bSort
+    }
+
+    方法 是否支持排序 <公开 属性写 注释 = "" 折叠>
+    参数 是否 <类型 = 逻辑型>
+    {
+        @ pdata ()->bSort = @<是否 >;
+    }
+
+    方法 排序方式 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nSortType
+    }
+
+    方法 排序方式 <公开 属性写 注释 = " 0无效,1升序,2降序" 折叠>
+    参数 方式 <类型 = 整数>
+    {
+        @ pdata ()->nSortType = @<方式>;
+    }
+
+    方法 列索引 <公开 属性读 类型 = 整数 注释 = "  对应数据适配器中的列索引" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->iColumnAdapter
+    }
+
+    方法 列索引 <公开 属性写 注释 = "  对应数据适配器中的列索引" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->iColumnAdapter = @<值>;
+    }
+
+    方法 状态 <公开 属性读 类型 = 整数 注释 = "普通状态.***" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nState
+    }
+
+    方法 状态 <公开 属性写 注释 = "" 折叠>
+    参数 新值 <类型 = 整数 注释 = "普通状态.***">
+    {
+        @ pdata ()->nState = (common_state3_)@<新值>;
+    }
+
+    方法 项坐标 <公开 属性读 类型 = 矩形_xc 折叠 @禁止流程检查 = 真>
+    {
+        @ return pdata ()->rcItem;
+    }
+
+    方法 项坐标 <公开 属性写 折叠>
+    参数 所欲设置坐标 <类型 = 矩形_xc 注释 = "矩形_xc">
+    {
+        @ @m<SET_STRUCT_MEMBER> (rcItem, @<所欲设置坐标>);
+    }
+
+    方法 布局对象 <公开 属性读 类型 = 变整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hLayout
+    }
+
+    方法 布局对象 <公开 属性写 注释 = "" 折叠>
+    参数 句柄 <类型 = 变整数>
+    {
+        @ pdata ()->hLayout = (HXCGUI)@<句柄>;
+    }
+
+    方法 模板句柄 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->hTemp
+    }
+
+    方法 模板句柄 <公开 属性写 折叠>
+    参数 模板 <类型 = 变整数>
+    {
+        @ pdata ()->hTemp = (HTEMP)@<模板>;
+    }
+}
+
+类 逻辑字体_结构 <公开 注释 = "逻辑字体;LOGFONTA" 折叠>
+{
+    变量 字符高度 <公开 类型 = 整数 注释 = "lfHeight,以逻辑单位指定字体字符元(character cell)或字符的高度">
+    变量 字符宽度 <公开 类型 = 整数 注释 = "lfWidth,以逻辑单位指定字体字符的平均宽度"
+            注释 = "如果lfWidth的值为0,则根据设备的纵横比从可用字体的数字转换纵横中选取最接近的匹配值,该值通过比较两者之间的差异的绝对值得出" 折叠2>
+    变量 打印角度 <公开 类型 = 整数 注释 = "lfEscapement,打印角度,900垂直打印,0水平打印,以十分之一度为单位指定每一行文本输出时相对于页面底端的角度">
+    变量 字体打印角度 <公开 类型 = 整数 注释 = "lfOrientation,字体打印角度,1800上下倒置,900左右倒置,以十分之一度为单位指定字符基线相对于页面底端的角度">
+    变量 字体重量 <公开 类型 = 整数 注释 = "lfWeight,FW_DONTCARE,指定字体重量.在Windows中,字体重量这个术语用来指代字体的粗细程度"
+            注释 = "lfWeight的范围为0到1000,正常情况下的字体重量为400,粗体为700.如果lfWeight为0,则使用默认的字体重量" 折叠2>
+    变量 斜体 <公开 类型 = 字节 注释 = "lfItalic,FW_NORMAL,当lfItalic为TRUE时使用斜体">
+    变量 下划线 <公开 类型 = 字节 注释 = "lfUnderline,当lfUnderline为TRUE时给字体添加下划线">
+    变量 删除线 <公开 类型 = 字节 注释 = "lfStrikeOut,当lfStrikeOut为TRUE时给字体添加删除线">
+    变量 字符集 <公开 类型 = 字节 注释 = "lfCharSet,ANSI_CHARSET,指定字符集">
+    变量 输出精度 <公开 类型 = 字节 注释 = "lfOutPrecision,OUT_DEFAULT_PRECIS,指定输出精度.输出精度定义了输出与所要求的字体高度.宽度.字符方向等的接近程度">
+    变量 剪辑精度 <公开 类型 = 字节 注释 = "lfClipPrecision,CLIP_DEFAULT_PRECIS,指定剪辑精度.剪辑精度定义了当字符的一部分超过剪辑区域时对字符的剪辑方式">
+    变量 输出质量 <公开 类型 = 字节 注释 = "lfQuality,PROOF_QUALITY,定义输出质量.输出质量定义了图形设备接口在匹配逻辑字体属性到实际的物理字体的所使用的方式"
+            注释 = "它可以为下列值之一:DEFAULT_QUALITY (默认质量).DRAFT_QUALITY (草稿质量).PROOF_QUALITY (正稿质量)" 折叠2>
+    变量 间距 <公开 类型 = 字节 注释 = "lfPitchAndFamily,VARIABLE_PITCH + FF_ROMAN,指定字体的字符间距和族">
+    变量 字体名称 <公开 类型 = 文本型 注释 = "lfFaceName,一个指定以NULL结尾的字符串,它指定的所用的字体名.该字符串的长度不得超过32个字符,如果lfFaceName为NULL,图形设备接口将使用默认的字体名">
+
+    # @begin
+    # <> <include>
+    # inline_ @sn<current_class> (const LOGFONTW* pCopy) : @sn<current_class> () {
+    #     Copy (pCopy);
+    # }
+    # void Copy (const LOGFONTW* pCopy);
+    # <> </include>
+    # void @sn<current_class>::Copy (const LOGFONTW* pCopy) {
+    #     ASSERT (pCopy != NULL);
+    #      TCHAR temp[32];
+    #      MultiByteToWideChar(CP_ACP, 0, pCopy->lfFaceName, -1, temp, 100);
+    #     @<字符高度> = pCopy->lfHeight;
+    #     @<字符宽度> = pCopy->lfWidth;    
+    #     @<打印角度> = pCopy->lfEscapement;
+    #     @<字体打印角度> = pCopy->lfOrientation;
+    #     @<字体重量> = pCopy->lfWeight;
+    #     @<斜体> = pCopy->lfItalic;
+    #     @<下划线> = pCopy->lfUnderline;
+    #     @<删除线> = pCopy->lfStrikeOut;
+    #     @<字符集> = pCopy->lfCharSet;
+    #     @<输出精度> = pCopy->lfOutPrecision;
+    #     @<间距> = pCopy->lfPitchAndFamily;
+    #     @<字体名称> = temp;
+    # }
+    # <> </include>
+    # @end
+}
+
+类 属性框_项结构 <公开 基础类 = 结构基础类 注释 = "propertyGrid_item_" 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (propertyGrid_item_)
+
+    方法 类型 <公开 属性读 类型 = 整数 注释 = "属性网格项类型.**" 折叠 @嵌入式方法 = "">
+    {
+        @ (int)@sn<this>.pdata ()->nType
+    }
+
+    方法 类型 <公开 属性写 注释 = "属性网格项类型.**" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->nType = (propertyGrid_item_type_)@<值>;
+    }
+
+    方法 项ID <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nID
+    }
+
+    方法 项ID <公开 属性写 注释 = "" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->nID = @<值>;
+    }
+
+    方法 深度 <公开 属性读 类型 = 整数 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nDepth
+    }
+
+    方法 深度 <公开 属性写 注释 = "" 折叠>
+    参数 值 <类型 = 整数>
+    {
+        @ pdata ()->nDepth = @<值>;
+    }
+
+    方法 用户绑定数据 <公开 属性读 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->nUserData
+    }
+
+    方法 用户绑定数据 <公开 属性写 注释 = "" 折叠>
+    参数 数据 <类型 = 变整数>
+    {
+        @ pdata ()->nUserData = (vint)@<数据 >;
+    }
+
+    方法 名称列宽度 <公开 属性读 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->nNameColWidth
+    }
+
+    方法 名称列宽度 <公开 属性写 折叠>
+    参数 宽度 <类型 = 整数>
+    {
+        @ pdata ()->nNameColWidth = @<宽度>;
+    }
+
+    方法 项坐标 <公开 属性读 类型 = 矩形_xc 折叠 @禁止流程检查 = 真>
+    {
+        @ return pdata ()->rcItem;
+    }
+
+    方法 项坐标 <公开 属性写 折叠>
+    参数 所欲设置坐标 <类型 = 矩形_xc 注释 = "矩形_xc">
+    {
+        @ @m<SET_STRUCT_MEMBER> (rcItem, @<所欲设置坐标>);
+    }
+
+    方法 展开坐标 <公开 属性读 类型 = 矩形_xc 折叠 @禁止流程检查 = 真>
+    {
+        @ return pdata ()->rcExpand;
+    }
+
+    方法 展开坐标 <公开 属性写 折叠>
+    参数 所欲设置坐标 <类型 = 矩形_xc 注释 = "矩形_xc">
+    {
+        @ @m<SET_STRUCT_MEMBER> (rcExpand, @<所欲设置坐标>);
+    }
+
+    方法 是否展开 <公开 属性读 类型 = 逻辑型 注释 = "" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->bExpand
+    }
+
+    方法 是否展开 <公开 属性写 注释 = "" 折叠>
+    参数 是否 <类型 = 逻辑型>
+    {
+        @ pdata ()->bExpand = @<是否>;
+    }
+
+    方法 是否可见 <公开 属性读 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.pdata ()->bShow
+    }
+
+    方法 是否可见 <公开 属性写 折叠>
+    参数 是否 <类型 = 逻辑型>
+    {
+        @ pdata ()->bShow = @<是否>;
+    }
+}
+
+#

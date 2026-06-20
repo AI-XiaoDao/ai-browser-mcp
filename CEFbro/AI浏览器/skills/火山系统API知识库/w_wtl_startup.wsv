@@ -1,0 +1,158 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.WTL界面.基本 <编辑时信息 = "116A99, 0, 0, 0" @文档 = "category = \"基础类\"" "@视窗.外部头文件.全局-100" = "src\\vol_wtl.h"
+        @视窗.外部源文件 = "src\\vol_wtl.cpp" @视窗.预定义宏 = "_VOL_DISABLE_STANDARD_STARTUP"
+        @视窗.需求系统头文件 = "atlbase.h | 当前 Visual Studio 本地编译环境未安装 ATL ,需要首先将其安装才能进行编译,安装方法请参考系统菜单\"工具->安装 Visual Studio 2019 生成工具\"功能对话框中的相关说明."
+        @视窗.头文件搜寻目录 = "wtl\\10\\include">
+
+# @begin
+# <> <global>  // 将下面内容置入全局命名空间中
+#
+# //---
+#
+# static HMODULE sInitAtlApp (HMODULE hModule)
+# {
+#     if (hModule == NULL)
+#         hModule = ::GetModuleHandle (NULL);
+#     ASSERT (hModule != NULL);
+#
+#     AtlInitCommonControls (ICC_WIN95_CLASSES);
+#     _Module.Init (NULL, hModule);
+#     // AtlAxWinInit ();
+#
+#     return hModule;
+# }
+#
+# static void sCleanAtlApp ()
+# {
+#     _Module.Term ();
+# }
+#
+# #if (defined (_CONSOLE) || defined (@an<_VOL_CONSOLE_EXE>))  // 控制台应用程序
+#
+# int _tmain (int argc, TCHAR* argv [])
+# {
+#     setlocale (LC_CTYPE, "");
+#     g_objVolApp.init (sInitAtlApp (NULL), argc, (const TCHAR**)argv, gGetStartupRuntimeClass ());  // 初始化程序信息
+#     const int nAppResult = gCallStartupMethod ();  // 调用用户程序启动类中的启动方法
+#
+#     sCleanAtlApp ();
+#     return nAppResult;
+# }
+#
+# #elif (defined (_USRDLL) || defined (@an<_VOL_DLL>))  // 动态链接库
+#
+# BOOL APIENTRY DllMain (HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
+# {
+#     if  (ul_reason_for_call == DLL_PROCESS_ATTACH)
+#     {
+#         sInitAtlApp (hModule);
+#         g_objVolApp.init (hModule, 0, NULL, gGetStartupRuntimeClass ());  // 初始化程序信息
+#         if (gCallStartupMethod () == 0)  // 调用用户程序启动类的启动方法失败?
+#             return FALSE;
+#     }
+#
+#     CVolUserApp& objUserApp = g_objVolApp.GetVolApp ();
+#     const BOOL_P blpIsDllApp = IS_VOL_INSTANCE_OF (objUserApp, @fdt<动态库程序类>);  // 获得是否为基于火山动态库程序类
+#     const BOOL blResult = (blpIsDllApp ? ((@fdt<动态库程序类>&)objUserApp).@n<动态库程序类.入口通知> ((INT_P)hModule, (INT)ul_reason_for_call, (INT_P)lpReserved) : TRUE);
+#
+#     if (ul_reason_for_call == DLL_PROCESS_DETACH)
+#     {
+#         if (blpIsDllApp)  // 基于火山动态库程序类?
+#             ((@fdt<动态库程序类>&)objUserApp).@n<动态库程序类.将被卸载> ();  // 通知用户程序
+#         g_objVolApp.OnBeforeExit ();
+#         sCleanAtlApp ();
+#     }
+#
+#     return blResult;
+# }
+# #else  // 应用程序
+#
+# class CVolMainMessageLoop : public CVolMessageLoop
+# {
+# public:
+#     inline_ CVolMainMessageLoop (@fdt<窗口程序类>* pobjWinApp) :
+#             CVolMessageLoop (), m_pobjWinApp (pobjWinApp)
+#     {
+#     }
+#
+#     virtual BOOL PreTranslateMessage (MSG* pMsg) override;
+#
+#     virtual BOOL OnIdle (int nIdleCount) override
+#     {
+#         g_objVolApp.OnIdle ();
+#         if (m_pobjWinApp != NULL)
+#             m_pobjWinApp->@n<窗口程序类.空闲> (0);
+#         return CVolMessageLoop::OnIdle (nIdleCount);
+#     }
+#
+# protected:
+#     @fdt<窗口程序类>* const m_pobjWinApp;
+# };
+#
+# BOOL CVolMainMessageLoop::PreTranslateMessage (MSG* pMsg)
+# {
+# #if defined (_VOL_UI_CEF_WEB_BROWSER) && !defined (_VOL_CEF_MULTI_THREADED_MESSAGE_LOOP)  // 程序中使用了CEF浏览器组件且未使用线程消息循环?
+#     CefDoMessageLoopWork ();
+#     if (pMsg->hwnd == NULL ? (pMsg->message == MWM_CEF_BROWSER_WORK_MSG) : (::IsWindow (pMsg->hwnd) == FALSE))
+#         return TRUE;
+# #endif
+#
+#     if (m_pobjWinApp != NULL &&
+#             m_pobjWinApp->@n<窗口程序类.消息过滤> ((INT_P)pMsg->hwnd, (INT)pMsg->message,
+#                 (INT_P)pMsg->wParam, (INT_P)pMsg->lParam, (INT_P)pMsg) == FALSE)  // 被过滤掉了?
+#     {
+#         return TRUE;
+#     }
+#
+#     return CVolMessageLoop::PreTranslateMessage (pMsg);
+# }
+#
+# int APIENTRY _tWinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
+# {
+# #ifdef _VOL_UI_CEF_WEB_BROWSER  // 程序中使用了CEF浏览器组件?
+#     int nExitCode = CCefWebBrowserRenderApp::sCefCheckExecuteRenderProcess (hInstance);
+#     if (nExitCode >= 0) return nExitCode;
+# #endif
+#
+#     sInitAtlApp (hInstance);  // 初始化程序信息
+#     g_objVolApp.init (hInstance, __argc, (const TCHAR**)__targv, gGetStartupRuntimeClass ());
+#     ::DefWindowProc (NULL, 0, 0, 0L);  // this resolves ATL window thunking problem when Microsoft Layer for Unicode (MSLU) is used
+#
+#     // 调用用户程序启动类的启动方法
+#     int nAppResult = (gCallStartupMethod () == 0 ? -1 : 0);
+#     if (nAppResult != -1)  // 启动方法返回成功值?
+#     {
+#         // 检查用户程序的启动类实例对象是否为基于火山窗口程序类
+#         @fdt<窗口程序类>* pobjWinApp;
+#         if (IS_VOL_INSTANCE_OF (g_objVolApp.GetVolApp (), @fdt<窗口程序类>))  // 基于火山窗口程序类?
+#             pobjWinApp = (@fdt<窗口程序类>*)&g_objVolApp.GetVolApp ();
+#         else
+#             pobjWinApp = NULL;
+#
+#         if (_Module.m_hMainWnd != NULL)  // 在启动方法中创建了主窗口?
+#         {
+#             CVolMainMessageLoop theLoop (pobjWinApp);
+#             _Module.AddMessageLoop (&theLoop);
+#
+#             nAppResult = theLoop.Run ();
+#             _Module.RemoveMessageLoop ();
+#         }
+#
+#         if (pobjWinApp != NULL)  // 为基于火山窗口程序类?
+#             pobjWinApp->@n<窗口程序类.即将退出> ();  // 通知用户程序
+#     }
+#
+#     g_objVolApp.OnBeforeExit ();
+# #ifdef _VOL_UI_CEF_WEB_BROWSER  // 程序中使用了CEF浏览器组件?
+#     CCefBrowserManager::sCleanupCef ();
+# #endif
+#     sCleanAtlApp ();
+#     return nAppResult;
+# }
+#
+# #endif
+#
+# <> </global>
+# @end
+#

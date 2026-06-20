@@ -1,0 +1,928 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 利快云.libmysql
+
+类 MYSQL连接选项 <公开 折叠>
+{
+    常量 MYSQL选项_连接超时 <公开 类型 = 整数 值 = 0 注释 = "MYSQL_OPT_CONNECT_TIMEOUT 值为：整数型">
+    常量 MYSQL选项_使用压缩协议 <公开 类型 = 整数 值 = 1 注释 = "MYSQL_OPT_COMPRESS 值为：0或1">
+    常量 MYSQL选项_使用命名管道 <公开 类型 = 整数 值 = 2 注释 = "MYSQL_OPT_NAMED_PIPE 值为：0或1">
+    常量 MYSQL选项_初始命令 <公开 类型 = 整数 值 = 3 注释 = "MYSQL_INIT_COMMAND 值为：文本型，连接到服务器自动执行的SQL命令，如果重新连接，则自动重新执行">
+    常量 MYSQL选项_读取默认文件 <公开 类型 = 整数 值 = 4 注释 = "MYSQL_READ_DEFAULT_FILE，值为：文本型，从指定文件中读取配置，而不是my.cnf">
+    常量 MYSQL选项_读取默认分组 <公开 类型 = 整数 值 = 5 注释 = "MYSQL_READ_DEFAULT_GROUP，值为：文本型，从my.cnf指定的组中读取配置">
+    常量 MYSQL选项_字符集定义文件目录 <公开 类型 = 整数 值 = 6 注释 = "MYSQL_SET_CHARSET_DIR 值为：文本型">
+    常量 MYSQL选项_默认字符集名 <公开 类型 = 整数 值 = 7 注释 = "MYSQL_SET_CHARSET_NAME 值为：文本型，\"auto\" 表示系统默认">
+    常量 MYSQL选项_LOCAL_INFILE <公开 类型 = 整数 值 = 8 注释 = "MYSQL_OPT_LOCAL_INFILE，值为：0或1，启用或禁用 LOAD DATA">
+    常量 MYSQL选项_连接协议 <公开 类型 = 整数 值 = 9 注释 = "MYSQL_OPT_PROTOCOL 值为：整数型， “MYSQL协议_”开头常量">
+    常量 MYSQL选项_共享内存名 <公开 类型 = 整数 值 = 10 注释 = "MYSQL_SHARED_MEMORY_BASE_NAME，文本型，与 --shared-memory-base-name 配置一样">
+    常量 MYSQL选项_读取超时 <公开 类型 = 整数 值 = 11 注释 = "MYSQL_OPT_READ_TIMEOUT 值为：整数型">
+    常量 MYSQL选项_写入超时 <公开 类型 = 整数 值 = 12 注释 = "MYSQL_OPT_WRITE_TIMEOUT 值为：整数型">
+    常量 MYSQL_OPT_USE_RESULT <公开 类型 = 整数 值 = 13 注释 = "MYSQL_OPT_USE_RESULT，没有使用">
+    常量 MYSQL选项_使用远程连接 <公开 类型 = 整数 值 = 14 注释 = "MYSQL_OPT_USE_REMOTE_CONNECTION，无参数，对于嵌入式库这将强制远程连接，对于客户端库没有任何效果">
+    常量 MYSQL选项_使用嵌入式连接 <公开 类型 = 整数 值 = 15 注释 = "MYSQL_OPT_USE_EMBEDDED_CONNECTION，无参数，对于嵌入式库这将强制嵌入式连接，对于客户端库没有任何效果">
+    常量 MYSQL选项_使用智能连接 <公开 类型 = 整数 值 = 16
+            注释 = "MYSQL_OPT_GUESS_CONNECTION，无参数，对于嵌入式库，如果是本地IP就使用嵌入式连接，远程IP地址就使用远程连接，对于客户端库没有任何效果">
+    常量 MYSQL选项_置客户端IP <公开 类型 = 整数 值 = 17 注释 = "MYSQL_SET_CLIENT_IP，值为：文本型，对于嵌入式库有效">
+    常量 MYSQL选项_安全验证 <公开 类型 = 整数 值 = 18 注释 = "MYSQL_SECURE_AUTH，值为：0或1">
+    常量 MYSQL选项_报告数据交换 <公开 类型 = 整数 值 = 19 注释 = "MYSQL_REPORT_DATA_TRUNCATION，值为：0或1，MYSQL_BIND结构的error成员">
+    常量 MYSQL选项_自动重新连接 <公开 类型 = 整数 值 = 20 注释 = "MYSQL_OPT_RECONNECT 值为：0或1" 注释 = "所设置的重连并不是连接断开就自动重连，而是在执行 mysql_ping() 的时候"
+            注释 = "如果连接断开了且自动重连设置为了true，则 mysql_ping() 会进行自动重连" 注释 = "若没有设置为自动重连，则 mysql_ping() 仅返回当前连接状态是否正常" 折叠2>
+    常量 MYSQL选项_SSL验证服务器证书 <公开 类型 = 整数 值 = 21 注释 = "MYSQL_OPT_SSL_VERIFY_SERVER_CERT，值为：0或1">
+    常量 MYSQL选项_插件目录 <公开 类型 = 整数 值 = 22 注释 = "MYSQL_PLUGIN_DIR，值为：文本型">
+    常量 MYSQL选项_默认验证插件名 <公开 类型 = 整数 值 = 23 注释 = "MYSQL_DEFAULT_AUTH，值为：文本型">
+    常量 MYSQL选项_客户端网络接口 <公开 类型 = 整数 值 = 24 注释 = "MYSQL_OPT_BIND，值为：文本型">
+    常量 MYSQL选项_SSL_秘钥文件 <公开 类型 = 整数 值 = 25 注释 = "MYSQL_OPT_SSL_KEY，值为：文本型，pem格式">
+    常量 MYSQL选项_SSL_证书文件 <公开 类型 = 整数 值 = 26 注释 = "MYSQL_OPT_SSL_CERT，值为：文本型，pem格式">
+    常量 MYSQL选项_SSL_CA文件 <公开 类型 = 整数 值 = 27 注释 = "MYSQL_OPT_SSL_CA，值为：文本型，pem格式">
+    常量 MYSQL选项_SSL_CA文件目录 <公开 类型 = 整数 值 = 28 注释 = "MYSQL_OPT_SSL_CAPATH，值为：文本型">
+    常量 MYSQL选项_SSL_加密列表 <公开 类型 = 整数 值 = 29 注释 = "MYSQL_OPT_SSL_CIPHER，值为：文本型">
+    常量 MYSQL选项_SSL_吊销列表文件 <公开 类型 = 整数 值 = 30 注释 = "MYSQL_OPT_SSL_CRL，值为：文本型">
+    常量 MYSQL选项_SSL_吊销列表文件目录 <公开 类型 = 整数 值 = 31 注释 = "MYSQL_OPT_SSL_CRLPATH，值为：文本型">
+    常量 MYSQL选项_连接属性清除 <公开 类型 = 整数 值 = 32 注释 = "MYSQL_OPT_CONNECT_ATTR_RESET，无参数">
+    常量 MYSQL选项_连接属性添加 <公开 类型 = 整数 值 = 33 注释 = "MYSQL_OPT_CONNECT_ATTR_ADD，值为：文本型，参数1 和 参数2 分别代表 key/value，需要调用 mysql.置连接选项2（）">
+    常量 MYSQL选项_连接属性删除 <公开 类型 = 整数 值 = 34 注释 = "YSQL_OPT_CONNECT_ATTR_DELETE，值为：文本型，key">
+    常量 MYSQL选项_服务器公钥文件 <公开 类型 = 整数 值 = 35 注释 = "MYSQL_SERVER_PUBLIC_KEY，值为：文本型，pem格式">
+    常量 MYSQL选项_使用明文认证插件 <公开 类型 = 整数 值 = 36 注释 = "MYSQL_ENABLE_CLEARTEXT_PLUGIN 值为：0或1">
+    常量 MYSQL选项_可处理过期密码 <公开 类型 = 整数 值 = 37 注释 = "MYSQL_OPT_CAN_HANDLE_EXPIRED_PASSWORDS 值为：0或1">
+    常量 MYSQL_OPT_SSL_ENFORCE <公开 类型 = 整数 值 = 28>
+    常量 MYSQL选项_最大允许包 <公开 类型 = 整数 值 = 39 注释 = "MYSQL_OPT_MAX_ALLOWED_PACKET 值为：整数型，同my.ini里面的 max_allowed_packet">
+    常量 MYSQL选项_缓冲区大小 <公开 类型 = 整数 值 = 40 注释 = "MYSQL_OPT_NET_BUFFER_LENGTH 值为：整数型，同my.ini里面的 net_buffer_length">
+    常量 MYSQL选项_TLS版本 <公开 类型 = 整数 值 = 41 注释 = "MYSQL_OPT_TLS_VERSION，文本型">
+    常量 MYSQL选项_SSL_模式 <公开 类型 = 整数 值 = 42 注释 = "MYSQL_OPT_SSL_MODE，值为：整数型，“SSL_MODE_”开头常量">
+
+    #
+}
+
+类 MySqlDLL <折叠 折叠2 @视窗.头文件搜寻目录 = "lib\\MysqlLib\\include" @视窗.附属文件.x64 = "lib\\MysqlLib\\win64\\libmysql.dll"
+        @视窗.附属文件.win32 = "lib\\MysqlLib\\win32\\libmysql.dll" @视窗.外部头文件 = "lib\\MysqlLib\\include\\mysql.h" @视窗.外部头文件 = "wchar.h">
+{
+    方法 Utf8ToUnicode <类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 Utf8 <类型 = 变整数>
+    {
+        @  int textlen = 0;
+        @  wchar_t* result;
+        @  textlen = ::MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)@<Utf8>,-1,NULL,0 );  
+        @  result =  new wchar_t[textlen+1];
+        @  textlen = ::MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)@<Utf8>,-1,result,textlen);
+        @  result[textlen] = L'\0';
+        @  @an<CVolString> str(result);
+        @  delete [] result;
+        @  result = NULL;
+        @  free (result);
+        @ return str;
+    }
+
+    方法 AsciiToUnicode <类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 Ascii <类型 = 变整数>
+    {
+        @  int textlen = 0;
+        @  wchar_t * result;
+        @  textlen = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)@<Ascii>,-1,NULL,0 );  
+        @  result = (wchar_t *)malloc((textlen+1)*sizeof(wchar_t));
+        @  result[textlen] = L'\0';
+        @  MultiByteToWideChar(CP_ACP, 0, (LPCSTR)@<Ascii>,-1,result,textlen);  
+        @  @an<CVolString> str = result;
+        @  free (result);
+        @ return str;
+
+    }
+
+    方法 UnicodeToUtf8 <类型 = 变整数 折叠>
+    参数 Unicode <类型 = 变整数>
+    {
+        变量 MemBuf <类型 = 字节集类>
+        变量 textlen <类型 = 整数>
+        @ @<textlen> = WideCharToMultiByte( CP_UTF8,0,(LPCWSTR)@<Unicode>,-1,NULL,0,NULL,NULL);
+        分配字节集 (MemBuf, textlen)
+        @ WideCharToMultiByte( CP_UTF8, 0, (LPCWSTR)@<Unicode>,-1,(LPSTR) @<MemBuf>.GetPtr(),@<textlen>, NULL, NULL );
+        返回 (取字节集指针 (MemBuf))
+
+    }
+
+    方法 UicodeToAscii <类型 = 变整数 折叠>
+    参数 Uicode <类型 = 文本型>
+    {
+        变量 MemBuf <类型 = 字节集类>
+        变量 textlen <类型 = 整数>
+        @ @<textlen> = WideCharToMultiByte( CP_ACP,0,(LPCWSTR)@<Uicode>,-1,NULL, 0, NULL, NULL );
+        分配字节集 (MemBuf, textlen)
+        @ WideCharToMultiByte( CP_ACP, 0, (LPCWSTR)@<Uicode>,-1,(LPSTR)@<MemBuf>.GetPtr(),  @<textlen>, NULL, NULL );
+        返回 (取字节集指针 (MemBuf))
+    }
+
+    方法 mysql_initTs <公开 静态 类型 = 变整数 折叠 @输出名 = "mysql_init" @视窗.输入 = "libmySQL.dll">
+    参数 lMysql <类型 = 整数>
+    {
+
+    }
+
+    # @begin
+    # HINSTANCE hmod = ::LoadLibrary(_T("libmysql.dll"));
+    # //=====
+    # typedef MYSQL*(WINAPI *mysql_initAPI)(MYSQL *mysql);
+    # mysql_initAPI mysql_init = (mysql_initAPI)GetProcAddress(hmod,"mysql_init");
+    #
+    # typedef void(WINAPI *mysql_closeAPI)(MYSQL *mysql);
+    # mysql_closeAPI mysql_close = (mysql_closeAPI)GetProcAddress(hmod,"mysql_close");
+    #
+    # typedef int(WINAPI *mysql_set_character_setAPI)(MYSQL *mysql,const char *csname);
+    # mysql_set_character_setAPI mysql_set_character_set = (mysql_set_character_setAPI)GetProcAddress(hmod,"mysql_set_character_set");
+    #
+    # typedef MYSQL *(WINAPI *mysql_real_connectAPI)(MYSQL *mysql, const char *host, const char *user, const char *passwd, const char *db, unsigned int port, const char *unix_socket, unsigned long client_flag);
+    # mysql_real_connectAPI mysql_real_connect = (mysql_real_connectAPI)GetProcAddress(hmod,"mysql_real_connect");
+    #
+    # typedef int(WINAPI *mysql_queryAPI)(MYSQL *mysql, const char *query);
+    # mysql_queryAPI mysql_query = (mysql_queryAPI)GetProcAddress(hmod,"mysql_query");
+    #
+    # typedef MYSQL_RES *(WINAPI *mysql_store_resultAPI)(MYSQL *mysql);
+    # mysql_store_resultAPI mysql_store_result = (mysql_store_resultAPI)GetProcAddress(hmod,"mysql_store_result");
+    #
+    # typedef int (WINAPI *mysql_num_fieldsAPI)(MYSQL_RES *result);
+    # mysql_num_fieldsAPI mysql_num_fields = (mysql_num_fieldsAPI)GetProcAddress(hmod,"mysql_num_fields");
+    #
+    # typedef MYSQL_FIELD * (WINAPI *mysql_fetch_fieldsAPI)(MYSQL_RES *result);
+    # mysql_fetch_fieldsAPI mysql_fetch_fields = (mysql_fetch_fieldsAPI)GetProcAddress(hmod,"mysql_fetch_fields");
+    #
+    # typedef my_ulonglong  (WINAPI *mysql_num_rowsAPI)(MYSQL_RES *result);
+    # mysql_num_rowsAPI mysql_num_rows = (mysql_num_rowsAPI)GetProcAddress(hmod,"mysql_num_rows");
+    #
+    # typedef MYSQL_ROW_OFFSET  (WINAPI *mysql_row_tellAPI)(MYSQL_RES *result);
+    # mysql_row_tellAPI mysql_row_tell = (mysql_row_tellAPI)GetProcAddress(hmod,"mysql_row_tell");
+    #
+    # typedef long *(WINAPI *mysql_fetch_lengthsAPI)(MYSQL_RES *result);
+    # mysql_fetch_lengthsAPI mysql_fetch_lengths = (mysql_fetch_lengthsAPI)GetProcAddress(hmod,"mysql_fetch_lengths");
+    #
+    # typedef MYSQL_ROW_OFFSET(WINAPI *mysql_row_seekAPI)(MYSQL_RES *result, MYSQL_ROW_OFFSET offset);
+    # mysql_row_seekAPI mysql_row_seek = (mysql_row_seekAPI)GetProcAddress(hmod,"mysql_row_seek");
+    #
+    # typedef MYSQL_ROW(WINAPI *mysql_fetch_rowAPI)(MYSQL_RES *result);
+    # mysql_fetch_rowAPI mysql_fetch_row = (mysql_fetch_rowAPI)GetProcAddress(hmod,"mysql_fetch_row");
+    #
+    # typedef void(WINAPI *mysql_free_resultAPI)(MYSQL_RES *result);
+    # mysql_free_resultAPI mysql_free_result = (mysql_free_resultAPI)GetProcAddress(hmod,"mysql_free_result");
+    #
+    # typedef int(WINAPI *mysql_next_resultAPI)(MYSQL *result);
+    # mysql_next_resultAPI mysql_next_result = (mysql_next_resultAPI)GetProcAddress(hmod,"mysql_next_result");
+    #
+    # typedef int(WINAPI *mysql_pingAPI)(MYSQL *mysql);
+    # mysql_pingAPI mysql_ping = (mysql_pingAPI)GetProcAddress(hmod,"mysql_ping");
+    #
+    # typedef int(WINAPI *mysql_errnoAPI)(MYSQL *mysql);
+    # mysql_errnoAPI mysql_errno = (mysql_errnoAPI)GetProcAddress(hmod,"mysql_errno");
+    #
+    # typedef int(WINAPI *mysql_field_countAPI)(MYSQL *mysql);
+    # mysql_field_countAPI mysql_field_count = (mysql_field_countAPI)GetProcAddress(hmod,"mysql_field_count");
+    #
+    # typedef int(WINAPI *mysql_affected_rowsAPI)(MYSQL *mysql);
+    # mysql_affected_rowsAPI mysql_affected_rows = (mysql_affected_rowsAPI)GetProcAddress(hmod,"mysql_affected_rows");
+    #
+    # typedef char *(WINAPI *mysql_errorAPI)(MYSQL *mysql);
+    # mysql_errorAPI mysql_error = (mysql_errorAPI)GetProcAddress(hmod,"mysql_error");
+    #
+    # typedef void(WINAPI *mysql_data_seekAPI)(MYSQL_RES *result, my_ulonglong offset);
+    # mysql_data_seekAPI mysql_data_seek = (mysql_data_seekAPI)GetProcAddress(hmod,"mysql_data_seek");
+    #
+    # typedef my_bool(WINAPI *mysql_autocommitAPI)(MYSQL *mysql, my_bool mode);
+    # mysql_autocommitAPI mysql_autocommit = (mysql_autocommitAPI)GetProcAddress(hmod,"mysql_autocommit");
+    #
+    # typedef my_bool(WINAPI *mysql_commitAPI)(MYSQL *mysql);
+    # mysql_commitAPI mysql_commit = (mysql_commitAPI)GetProcAddress(hmod,"mysql_commit");
+    #
+    # typedef my_bool(WINAPI *mysql_rollbackAPI)(MYSQL *mysql);
+    # mysql_rollbackAPI mysql_rollback = (mysql_rollbackAPI)GetProcAddress(hmod,"mysql_rollback");
+    #
+    # typedef const char *(WINAPI *mysql_character_set_nameAPI)(MYSQL *mysql);
+    # mysql_character_set_nameAPI mysql_character_set_name = (mysql_character_set_nameAPI)GetProcAddress(hmod,"mysql_character_set_name");
+    #
+    # typedef char *(WINAPI *mysql_infoAPI)(MYSQL *mysql);
+    # mysql_infoAPI mysql_info = (mysql_infoAPI)GetProcAddress(hmod,"mysql_info");
+    #
+    # typedef my_ulonglong(WINAPI *mysql_insert_idAPI)(MYSQL *mysql);
+    # mysql_insert_idAPI mysql_insert_id = (mysql_insert_idAPI)GetProcAddress(hmod,"mysql_insert_id");
+    #
+    # typedef int(WINAPI *mysql_optionsAPI)(MYSQL *mysql, enum mysql_option option, const char *arg);
+    # mysql_optionsAPI mysql_options = (mysql_optionsAPI)GetProcAddress(hmod,"mysql_options");
+    #
+    # @end
+}
+
+类 数据库_LibMySQL数据库 <公开 基础类 = MySqlDLL 注释 = "使用方法参考本案例：https://www.lkuaiy.com/rsdetails?id=16064486821870&page=1"
+        注释 = "本数据库效率测试案例地址：https://www.lkuaiy.com/rsdetails?id=37461615352297" 折叠2>
+{
+    变量 队列 <类型 = 类_超级队列>
+
+    方法 类_初始化 <折叠>
+    {
+        变量 杂项 <类型 = 类_系统杂项>
+        如果 (杂项.程序_是否64位 () == 真)
+        {
+            调试输出 ("64位MYSQL可能会初始化失败，如果你遇见链接MYSQL崩溃的情况，请下载安装驱动包:https://www.lkuaiy.com/rsdetails?id=16180224193018")
+
+        }
+    }
+
+    方法 创建 <类型 = 变整数 折叠 @禁止流程检查 = 真>
+    {
+        @ MYSQL* MysqlThis;
+        @ MysqlThis=mysql_init (NULL);
+        @ return (@dt<变整数>)MysqlThis;
+
+    }
+
+    方法 连接 <公开 类型 = 整数 注释 = "返回最终连接成功的数量" 折叠>
+    参数 参连接地址 <类型 = 文本型 注释 = "注意：如果是远程连接，请参考这个案例：https://www.lkuaiy.com/rsdetails?id=23241606530849&page=1">
+    参数 参数据库名 <类型 = 文本型>
+    参数 参用户名 <类型 = 文本型>
+    参数 参密码 <类型 = 文本型>
+    参数 参端口 <类型 = 整数 @默认值 = 3306>
+    参数 参最大连接数 <类型 = 整数 注释 = "需要时FOF连接池数量的两倍，也就是FOF连接池是10，那么这里要填写20" @默认值 = 20>
+    参数 连接选项 <类型 = 整数数组类 注释 = "默认空对象，这个可以忽略掉，设置方法参考MYSQL连接选项"
+            注释 = "使用方法参考这篇案例：https://www.lkuaiy.com/rsdetails?id=16064490721459&page=1" 折叠2 @默认值 = 空对象>
+    参数 连接内容 <类型 = 文本数组类 注释 = "默认空，这个可以忽略掉，如果上方的连接选项设置使用了MYSQL连接选项，就一定要设置本处"
+            注释 = "使用方法参考这篇案例：https://www.lkuaiy.com/rsdetails?id=16064490721459&page=1" 折叠2 @默认值 = 空对象>
+    参数 是否支持SSL <类型 = 逻辑型 注释 = "注意:如果是远程SSL连接，本处务设置为真" @默认值 = 假>
+    {
+        变量 局句柄 <类型 = 变整数>
+        变量 局计次 <类型 = 整数>
+        如果真 (参最大连接数 <= 0)
+        {
+            参最大连接数 = 10
+        }
+        如果 (参最大连接数 <= 50)
+        {
+            参最大连接数 = 参最大连接数 * 2
+        }
+        计次循环 (参最大连接数)
+        {
+            局句柄 = 创建 ()
+            如果真 (局句柄 > 0)
+            {
+                变量 循环N <类型 = 整数>
+                变量 是否设置 <类型 = 逻辑型>
+                循环 (0, 连接选项.取成员数 (), 循环N, 1)
+                {
+                    如果 (连接选项.取成员 (循环N) == MYSQL连接选项.MYSQL选项_默认字符集名)
+                    {
+                        是否设置 = 真
+                        如果 (连接选项.取成员数 () >= 1 && 连接内容.取成员数 () >= 1 && 连接选项.取成员数 () == 连接内容.取成员数 ())
+                        {
+                            设置访问字符集 (局句柄, 连接内容.取成员 (循环N))
+
+                        }
+
+                    }
+                }
+                如果 (是否设置 == 假)
+                {
+                    设置额外连接选项 (局句柄, MYSQL连接选项.MYSQL选项_默认字符集名, "UTF8")
+                    设置访问字符集 (局句柄, "UTF8")
+                }
+                如果 (连接选项.取成员数 () >= 1 && 连接内容.取成员数 () >= 1 && 连接选项.取成员数 () == 连接内容.取成员数 ())
+                {
+                    变量 循环变量 <类型 = 整数>
+                    循环 (0, 连接选项.取成员数 (), 循环变量, 1)
+                    {
+                        设置额外连接选项 (局句柄, 连接选项.取成员 (循环变量), 连接内容.取成员 (循环变量))
+
+                    }
+                }
+                如果 (是否支持SSL == 真)
+                {
+                    @ int optval2=1;
+                    @ mysql_options((MYSQL *)@<局句柄>,MYSQL_OPT_SSL_MODE,(char*)&optval2);
+                }
+                @ char optval=1;
+                @ mysql_options((MYSQL *)@<局句柄>,MYSQL_OPT_RECONNECT,&optval);
+                如果真 (连接MYSQL (局句柄, 参连接地址, 参数据库名, 参用户名, 参密码, 参端口) == 真)
+                {
+                    局计次 = 局计次 + 1
+                    队列.投递变整数 (局句柄)
+
+                }
+
+            }
+
+        }
+
+        返回 (局计次)
+    }
+
+    方法 关闭数据库 <折叠>
+    参数 数据库句柄 <类型 = 变整数>
+    {
+        @ mysql_close ((MYSQL *)@<数据库句柄>);
+
+    }
+
+    方法 销毁数据库 <公开 注释 = "注意：销毁数据库建议在关闭程序时使用" 折叠>
+    {
+        变量 对列数 <类型 = 整数>
+        对列数 = 队列.取变整数队列数 ()
+        循环 (0, 对列数)
+        {
+            关闭数据库 (队列.获取变整数 ())
+
+        }
+    }
+
+    方法 获取句柄 <公开 类型 = 变整数 返回值注释 = "返回0代表获取失败" 折叠>
+    {
+        变量 对列数 <类型 = 整数>
+        对列数 = 队列.取变整数队列数 ()
+        如果 (对列数 >= 1)
+        {
+            返回 (队列.获取变整数 ())
+        }
+        否则
+        {
+            返回 (0)
+
+        }
+
+    }
+
+    方法 取可用连接数 <公开 类型 = "整数 " 折叠>
+    {
+        返回 (队列.取变整数队列数 ())
+    }
+
+    方法 释放句柄 <公开 折叠>
+    参数 参句柄 <类型 = 变整数>
+    {
+        队列.投递变整数 (参句柄)
+    }
+
+    方法 连接MYSQL <类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    参数 数据库地址 <类型 = 文本型 注释 = "数据库地址">
+    参数 数据库名称 <类型 = 文本型 注释 = "数据库名称">
+    参数 用户名 <类型 = 文本型 注释 = "用户名">
+    参数 密码 <类型 = 文本型 注释 = "密码">
+    参数 端口 <类型 = 整数 注释 = "链接端口">
+    {
+        @ CU8String u8str (@<数据库地址>.GetText ());
+        @ const U8CHAR* Host = u8str.GetText ();
+
+        @ CU8String Useru (@<用户名>.GetText ());
+        @ const U8CHAR* User = Useru.GetText ();
+
+        @ CU8String passwdu (@<密码>.GetText ());
+        @ const U8CHAR* passwd = passwdu.GetText ();
+
+        @ CU8String dbu (@<数据库名称>.GetText ());
+        @ const U8CHAR* db = dbu.GetText ();
+
+        // @ return (@dt<变整数>)mysql_real_connect((MYSQL *)@<MYSQL池子句柄>,Host,User,passwd, db,@<端口>,NULL,0);
+        @ if((@dt<变整数>)mysql_real_connect((MYSQL *)@<MYSQL池子句柄>,Host,User,passwd, db,@<端口>,NULL,0)==0){return false;}
+        返回 (真)
+
+        // 数据库测试.连接 ("localhost", "fof", "root", "root", 3306, 10, MYSQL连接选项.MYSQL选项_默认字符集名, "UTF8")
+        变量 "// 记录集" <类型 = 数据库_LibMySQL记录集>
+        变量 "// 句柄" <类型 = 变整数>
+        // 句柄 = 数据库测试.获取句柄 ()
+        // 数据库测试.执行SQL语句 (句柄, "select * from fofusername where F_UserName='asd的方式'")
+        // 记录集.获取记录集 (句柄)
+        // 调试输出 (记录集.读文本 ("F_UserName"))
+        // 调试输出 (记录集.读文本 ("F_Password"))
+        // 记录集.到下一条 ()
+        // 调试输出 (记录集.读文本 ("F_UserName"))
+        // 调试输出 (记录集.读文本 ("F_Password"))
+
+        // 记录集.释放记录集 ()
+        // 数据库测试.释放句柄 (句柄)
+
+    }
+
+    方法 设置访问字符集 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    参数 cs_name <类型 = 文本型 注释 = "utf8/gbk/等 字符集编码文本">
+    {
+        @ CU8String u8str (@<cs_name>.GetText ());
+        @ const U8CHAR* ps = u8str.GetText ();
+        @ return mysql_set_character_set((MYSQL *)@<MYSQL池子句柄>,ps);
+    }
+
+    方法 是否连接成功 <公开 类型 = 整数 注释 = "如果与服务器的连接有效返回0。如果出现错误，返回非0值。返回的非0值不表示MySQL服务器本身是否已关闭，连接可能因其他原因终端，如网络问题等。" 折叠 @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    {
+        @ return mysql_ping ((MYSQL *)@<MYSQL池子句柄>);
+    }
+
+    方法 取最后错误 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    {
+        @ if((MYSQL *)@<MYSQL池子句柄>==NULL)
+        @ {
+        @ return _T ("");
+        @ }
+        @ const char* ero=mysql_error((MYSQL *)@<MYSQL池子句柄>);
+        @ if (ero != NULL) return @an<CVolString> (ero);
+        @ return _T ("");
+    }
+
+    方法 事务提交模式 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    参数 自动启用 <类型 = 逻辑型 注释 = "如果需要自己手动执行事务操作，请将本处设置为假">
+    {
+        @ return (bool)mysql_autocommit((MYSQL *)@<MYSQL池子句柄>,(CHAR)@<自动启用>);
+    }
+
+    方法 开始提交事务 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    {
+        @ return (bool)mysql_commit((MYSQL *)@<MYSQL池子句柄>);
+    }
+
+    方法 回滚当前事务 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    {
+        @ return (bool)mysql_rollback((MYSQL *)@<MYSQL池子句柄>);
+    }
+
+    方法 执行SQL语句 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    参数 SQL语句 <类型 = 文本型 注释 = "SQL语句命令，不需要进行转码处理，可以直接输入中文使用">
+    {
+        如果 (是否连接成功 (MYSQL池子句柄) != 0)
+        {
+            调试输出 ("连接校验失败:", 取最后错误 (MYSQL池子句柄), SQL语句)
+            返回 (假)
+        }
+        变量 失败 <类型 = 逻辑型>
+        @ CU8String u8str (@<SQL语句>.GetText ());
+        @ const U8CHAR* ps = u8str.GetText ();
+        @ int Ret=mysql_query((MYSQL *)@<MYSQL池子句柄>,ps);
+        @ if(Ret!=0){ @<失败>=true; }
+        如果真 (失败)
+        {
+            调试输出 ("执行语句出错:", 取最后错误 (MYSQL池子句柄), SQL语句)
+        }
+        @ if(Ret!=0){return false;}
+        返回 (真)
+    }
+
+    方法 执行查询语句并分页 <公开 类型 = 整数 注释 = "本方法参考案例地址：https://www.lkuaiy.com/rsdetails?id=16084465804144&page=1"
+            注释 = "本方法效率测试案例地址：https://www.lkuaiy.com/rsdetails?id=37461615352297" 返回值注释 = "成功返回总页数,失败或者没有数据返回0" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    参数 表名 <类型 = 文本型>
+    参数 条件 <类型 = 文本型 注释 = "需要带上where 例如:where XXX=XXX" @默认值 = "">
+    参数 当前页数 <类型 = 整数 @默认值 = 1>
+    参数 每页数量 <类型 = 整数 @默认值 = 10>
+    {
+        如果 (是否连接成功 (MYSQL池子句柄) != 0)
+        {
+            返回 (0)
+
+        }
+
+        变量 临时句柄 <类型 = 变整数>
+        临时句柄 = 获取句柄 ()
+        执行SQL语句 (临时句柄, "select COUNT(*) from " + 表名 + " " + 条件)
+        变量 临时记录集 <类型 = 数据库_LibMySQL记录集>
+        临时记录集.获取记录集 (临时句柄)
+        变量 总数 <类型 = 整数>
+        总数 = 临时记录集.读整数 ("COUNT")
+        临时记录集.释放记录集 ()
+        释放句柄 (临时句柄)
+
+        变量 SQL语句 <类型 = 文本型>
+        SQL语句 = "select * from " + 表名 + " " + 条件 + " limit " + 到文本 ((当前页数 - 1) * 每页数量) + "," + 到文本 (每页数量)
+        @ CU8String u8str (@<SQL语句>.GetText ());
+        @ const U8CHAR* ps = u8str.GetText ();
+        @ int Ret=mysql_query((MYSQL *)@<MYSQL池子句柄>,ps);
+        @ if(Ret!=0){return 0;}
+        如果 (总数 <= 0)
+        {
+            返回 (0)
+
+        }
+
+        如果 (总数 % 每页数量 == 0)
+        {
+            返回 (总数 / 每页数量)
+
+        }
+        否则
+        {
+            返回 (总数 / 每页数量 + 1)
+
+        }
+
+    }
+
+    方法 获取连接字符集 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    {
+        @ if((MYSQL *)@<MYSQL池子句柄>==NULL)
+        @ {
+        @ return _T ("");
+        @ }
+        @ const char* Text = mysql_character_set_name((MYSQL *)@<MYSQL池子句柄>);  //可能会返回NULL.
+        @ if (Text != NULL) return @an<CVolString> (Text);
+        @ return _T ("");
+    }
+
+    方法 取影响行数 <公开 类型 = 长整数 注释 = "获取在执行了指定SQL语句后所影响到的记录数." @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    {
+        @ if((MYSQL *)@<MYSQL池子句柄>==NULL)
+        @ {
+        @ return 0;
+        @ }
+        @ return (INT)mysql_affected_rows((MYSQL *)@<MYSQL池子句柄>);
+    }
+
+    方法 取查询列数 <公开 类型 = 整数 注释 = "获取最近一次查询语句所取得的列数." 折叠 @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    {
+        @ if((MYSQL *)@<MYSQL池子句柄>==NULL)
+        @ {
+        @ return 0;
+        @ }
+        @ return (INT)mysql_field_count((MYSQL *)@<MYSQL池子句柄>);
+    }
+
+    方法 检索字符串 <公开 类型 = 文本型
+            注释 = "检索字符串，该字符串提供了关于最近执行查询的信息，但仅对这里列出的语句有效。对于其他语句，mysql_info()返回NULL。字符串的格式取决于查询的类型，如本节所述。数值仅是说明性的，字符串包含与查询相适应的值。"
+            注释 = "例如：" 注释 = "·         INSERT INTO ... SELECT ..." 注释 = "" 注释 = "字符串格式：记录，100；副本，0；警告，0" 注释 = ""
+            注释 = "·         INSERT INTO ... VALUES (...),(...),(...)..." 注释 = "" 注释 = "字符串格式：记录，3；副本，0；警告，0" 注释 = ""
+            注释 = "·         LOAD DATA INFILE ..." 注释 = "" 注释 = "字符串格式：记录，1；删除，0；跳过，0；警告，0" 注释 = "" 注释 = "·         ALTER TABLE"
+            注释 = "" 注释 = "字符串格式：记录，3；副本，0；警告，0" 注释 = "" 注释 = "·         UPDATE" 注释 = "" 注释 = "字符串格式：匹配行，40；更改，40；警告，0" 折叠 折叠2
+            @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    {
+        @ if((MYSQL *)@<MYSQL池子句柄>==NULL)
+        @ {
+        @ return _T ("");
+        @ }
+        @ const char* Text = mysql_info((MYSQL *)@<MYSQL池子句柄>);  //可能会返回NULL.
+        @ if (Text != NULL) return @an<CVolString> (Text);
+        @ return _T ("");
+    }
+
+    方法 设置额外连接选项 <折叠>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    参数 连接选项 <类型 = 整数>
+    参数 连接内容 <类型 = 文本型>
+    {
+        @ CU8String u8str (@<连接内容>.GetText ());
+        @ const U8CHAR* ps = u8str.GetText ();
+        @ mysql_options((MYSQL *)@<MYSQL池子句柄>, (enum mysql_option) @<连接选项>, ps);
+
+    }
+
+    方法 获取最后一次ID <公开 类型 = 长整数 注释 = "回由以前的INSERT或UPDATE语句为AUTO_INCREMENT列生成的值。在包含AUTO_INCREMENT字段的表中执行了INSERT语句后，应使用该函数" 折叠
+            @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    {
+        @ return mysql_insert_id((MYSQL *)@<MYSQL池子句柄>);
+    }
+}
+
+类 数据库_LibMySQL记录集 <公开 基础类 = MySqlDLL 折叠>
+{
+    变量 keys <类型 = 文本数组类>
+    变量 keystext <类型 = 文本数组类>
+    变量 记录集句柄 <类型 = 变整数>
+
+    方法 获取键值表 <公开 类型 = 类_键值数组 注释 = "本方法可以将所有的数据保存到键值列表中，注意：使用本命令可以直接使用，使用完成后不用释放记录集" 注释 = "因为没有使用获取记录集，就不用释放记录集"
+            注释 = "本方法的使用案例请观看本方法内屏蔽的示例代码" 注释 = "使用方法参考本案例：https://www.lkuaiy.com/rsdetails?id=16064486821870&page=1" 返回值注释 = "返回键值列表"
+            折叠 折叠2>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    {
+        变量 记录集数据 <类型 = 数据库_LibMySQL记录集>
+        记录集数据.获取记录集 (MYSQL池子句柄)
+
+        变量 记录数 <类型 = 整数>
+        变量 循环变量 <类型 = 整数>
+        变量 键值表 <类型 = 类_键值表>
+        变量 键值列表 <类型 = 类_键值数组>
+        记录数 = 记录集数据.取记录数 ()
+        循环 (0, 记录数, 循环变量, 1)
+        {
+            变量 内部循环 <类型 = 整数>
+            循环 (0, 记录集数据.读字段集合 ().取成员数 (), 内部循环, 1)
+            {
+                变量 字段 <类型 = 文本型>
+                变量 内容 <类型 = 文本型>
+                字段 = 记录集数据.读字段集合 ().取成员 (内部循环)
+                内容 = 记录集数据.读内容集合 ().取成员 (内部循环)
+                键值表.置入文本值 (字段, 内容)
+                键值表.置入文本值 (到文本 (内部循环), 内容)
+
+            }
+
+            键值列表.加入成员 (键值表)
+            键值表.清空 ()
+            记录集数据.到下一条 ()
+
+        }
+
+        记录集数据.释放记录集 ()
+        返回 (键值列表)
+
+
+    }
+
+    方法 获取JSON文本 <公开 类型 = 文本型 注释 = "直接返回JSON的文本数组" 注释 = "使用方法参考本案例：https://www.lkuaiy.com/rsdetails?id=34821606472173&page=1"
+            返回值注释 = "直接返回JSON的文本数组" 折叠 折叠2>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    参数 JSON字段名 <类型 = 文本型>
+    {
+        变量 记录集数据 <类型 = 数据库_LibMySQL记录集>
+        记录集数据.获取记录集 (MYSQL池子句柄)
+        变量 记录数 <类型 = 整数>
+        变量 循环变量 <类型 = 整数>
+        变量 键值表 <类型 = 类_键值表>
+        变量 JSON文本 <类型 = 文本型>
+        变量 JSON最终文本 <类型 = 文本型 值 = "{\r\n   \"表名替换\": \r\n   [\r\n\t文本内容替换\r\n   ]\r\n}">
+        记录数 = 记录集数据.取记录数 ()
+        循环 (0, 记录数, 循环变量, 1)
+        {
+            变量 内部循环 <类型 = 整数>
+            循环 (0, 记录集数据.读字段集合 ().取成员数 (), 内部循环, 1)
+            {
+                变量 字段 <类型 = 文本型>
+                变量 内容 <类型 = 文本型>
+                字段 = 记录集数据.读字段集合 ().取成员 (内部循环)
+                内容 = 记录集数据.读内容集合 ().取成员 (内部循环)
+                键值表.置入文本值 (字段, 内容)
+
+            }
+
+            变量 换行符_ <类型 = 文本型 值 = "\r\n">
+            如果 (循环变量 + 1 >= 记录数)
+            {
+                加入文本 (JSON文本, 键值表.到可读文本 ())
+            }
+            否则
+            {
+                加入文本 (JSON文本, 键值表.到可读文本 () + "," + 换行符_)
+
+            }
+
+            键值表.清空 ()
+            记录集数据.到下一条 ()
+
+        }
+
+        记录集数据.释放记录集 ()
+        子文本替换 (JSON最终文本, "表名替换", JSON字段名)
+        子文本替换 (JSON最终文本, "文本内容替换", JSON文本)
+        返回 (JSON最终文本)
+
+
+    }
+
+    方法 获取记录集2 <公开 类型 = 逻辑型 注释 = "查询,如果结果有多个记录集，则使用本函数" 折叠 @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    {
+        变量 临时文本 <类型 = 文本型>
+        keys.删除所有成员 ()
+        keystext.删除所有成员 ()
+        @ MYSQL_RES * MYSQL_RESID=mysql_store_result((MYSQL *)@<MYSQL池子句柄>);
+        @ if(MYSQL_RESID!=NULL)
+        @ {
+        @       int num=mysql_num_fields(MYSQL_RESID);
+        @       MYSQL_FIELD *fields=mysql_fetch_fields(MYSQL_RESID);
+        @       if(fields!=NULL)
+        @       {
+        @           for(int i = 0; i < num; i++)
+        @           {
+        @            @<临时文本>=fields[i].name;
+        keys.加入成员 (临时文本)
+        @           }
+        @       }
+        @       MYSQL_ROW column=mysql_fetch_row(MYSQL_RESID);
+        @       long *lengths;
+        @       lengths = mysql_fetch_lengths(MYSQL_RESID);
+        @       if(column!=NULL)
+        @       {
+        @           for(int i = 0; i < num; i++)
+        @           {
+        @               if(lengths[i]<=0)
+        @                {
+        @                    @<临时文本>=_T("");
+        @                }else{
+        @                    @<临时文本>=column[i];
+        @                }
+        keystext.加入成员 (临时文本)
+        @               
+        @           }
+        @       }
+        @ }
+        @ @<记录集句柄>=(@dt<变整数>)MYSQL_RESID;
+        @ while(!mysql_next_result((MYSQL *)@<MYSQL池子句柄>))
+        @  {
+        @         MYSQL_RES *pRes = mysql_store_result((MYSQL *)@<MYSQL池子句柄>);
+        @         if(pRes!=NULL){ mysql_free_result(pRes);}
+        @    }
+        如果 (记录集句柄 <= 0)
+        {
+            返回 (假)
+        }
+        否则
+        {
+            返回 (真)
+
+        }
+    }
+
+    方法 获取记录集 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 MYSQL池子句柄 <类型 = 变整数>
+    {
+        变量 临时文本 <类型 = 文本型>
+        keys.删除所有成员 ()
+        keystext.删除所有成员 ()
+        @ MYSQL_RES * MYSQL_RESID=mysql_store_result((MYSQL *)@<MYSQL池子句柄>);
+        @ if(MYSQL_RESID!=NULL)
+        @ {
+        @       int num=mysql_num_fields(MYSQL_RESID);
+        @       MYSQL_FIELD *fields=mysql_fetch_fields(MYSQL_RESID);
+        @       if(fields!=NULL)
+        @       {
+        @           for(int i = 0; i < num; i++)
+        @           {
+        @            @<临时文本>=fields[i].name;
+        keys.加入成员 (临时文本)
+        @           }
+        @       }
+        @       MYSQL_ROW column=mysql_fetch_row(MYSQL_RESID);
+        @       long *lengths;
+        @       lengths = mysql_fetch_lengths(MYSQL_RESID);
+        @       if(column!=NULL)
+        @       {
+        @           for(int i = 0; i < num; i++)
+        @           {
+        @               if(lengths[i]<=0)
+        @                {
+        @                    @<临时文本>=_T("");
+        @                }else{
+        @                    @<临时文本>=column[i];
+        @                }
+        keystext.加入成员 (临时文本)
+        @               
+        @           }
+        @       }
+        @ }
+        @ @<记录集句柄>=(@dt<变整数>)MYSQL_RESID;
+        如果 (记录集句柄 <= 0)
+        {
+            返回 (假)
+        }
+        否则
+        {
+            返回 (真)
+
+        }
+    }
+
+    方法 释放记录集 <公开 折叠>
+    {
+        keys.删除所有成员 ()
+        keystext.删除所有成员 ()
+        @ mysql_free_result ((MYSQL_RES *)@<记录集句柄>);
+    }
+
+    方法 取记录数 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ if ((MYSQL_RES *)@<记录集句柄> == NULL){return 0;}
+        @ return (int)mysql_num_rows((MYSQL_RES *)@<记录集句柄>);
+    }
+
+    方法 读文本 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 name <类型 = 文本型>
+    {
+        变量 item <类型 = 整数 值 = 0>
+        变量 字段名称 <类型 = 文本型>
+        变量 字段数量 <类型 = 整数>
+        变量 循环变量 <类型 = 整数>
+        @ if ((MYSQL_RES *)@<记录集句柄> == NULL){return _T("");}
+        字段数量 = keys.取成员数 ()
+        如果 (字段数量 >= 1)
+        {
+            循环 (0, keys.取成员数 (), 循环变量, 1)
+            {
+                如果 (name == keys.取成员 (循环变量))
+                {
+                    字段名称 = keys.取成员 (循环变量)
+                    item = 循环变量
+                    跳出循环
+
+                }
+
+            }
+
+            如果 (keystext.取成员数 () < 字段数量)
+            {
+                返回 ("")
+            }
+            否则
+            {
+                返回 (keystext.取成员 (item))
+
+            }
+
+        }
+        否则
+        {
+            返回 ("")
+
+        }
+    }
+
+    方法 读整数 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 name <类型 = 文本型>
+    {
+        @ if ((MYSQL_RES *)@<记录集句柄> == NULL){return 0;}
+        返回 (文本到整数 (读文本 (name)))
+    }
+
+    方法 读短整数 <公开 类型 = 短整数 折叠 @禁止流程检查 = 真>
+    参数 name <类型 = 文本型>
+    {
+        @ if ((MYSQL_RES *)@<记录集句柄> == NULL){return 0;}
+        返回 ((短整数)文本到整数 (读文本 (name)))
+    }
+
+    方法 读长整数 <公开 类型 = 长整数 折叠 @禁止流程检查 = 真>
+    参数 name <类型 = 文本型>
+    {
+        @ if ((MYSQL_RES *)@<记录集句柄> == NULL){return 0;}
+        返回 (文本到长整数 (读文本 (name)))
+    }
+
+    方法 读变整数 <公开 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    参数 name <类型 = 文本型>
+    {
+        @ if ((MYSQL_RES *)@<记录集句柄> == NULL){return 0;}
+        返回 ((变整数)文本到长整数 (读文本 (name)))
+
+    }
+
+    方法 读小数 <公开 类型 = 小数 折叠 @禁止流程检查 = 真>
+    参数 name <类型 = 文本型>
+    {
+        @ if ((MYSQL_RES *)@<记录集句柄> == NULL){return 0;}
+        返回 (文本到小数 (读文本 (name)))
+
+    }
+
+    方法 读UTF8 <公开 类型 = 字节集类 折叠 @禁止流程检查 = 真>
+    参数 name <类型 = 文本型>
+    {
+        变量 空字节集 <类型 = 字节集类>
+        @ if ((MYSQL_RES *)@<记录集句柄> == NULL){return @<空字节集>;}
+        返回 (文本到UTF8 (读文本 (name)))
+
+    }
+
+    方法 读字段集合 <公开 类型 = 文本数组类 返回值注释 = "返回字段的集合" 折叠>
+    {
+        返回 (keys)
+    }
+
+    方法 读内容集合 <公开 类型 = 文本数组类 返回值注释 = "返回内容的集合" 折叠>
+    {
+        返回 (keystext)
+    }
+
+    方法 到下一条 <公开 类型 = 逻辑型 折叠>
+    {
+        @ if ((MYSQL_RES *)@<记录集句柄> == NULL){return false;}
+        @ MYSQL_ROW MYSQL_ROWOBJ=mysql_fetch_row((MYSQL_RES *)@<记录集句柄>);
+        @ long *lengths;
+        @ lengths = mysql_fetch_lengths((MYSQL_RES *)@<记录集句柄>);
+        keystext.删除所有成员 ()
+        @ if(MYSQL_ROWOBJ==NULL){return false;}
+        变量 num <类型 = 整数>
+        变量 text <类型 = 文本型>
+        num = keys.取成员数 ()
+        @ for(int i = 0; i < @<num>; i++)
+        @ {
+        @    if(lengths[i]<=0)
+        @    {
+        @        @<text>=_T("");
+        @    }else{
+        @        @<text>=MYSQL_ROWOBJ[i];
+        @    }
+        keystext.加入成员 (text)
+        @ }
+        返回 (真)
+    }
+
+    方法 到指定行 <公开 折叠>
+    参数 指定行 <类型 = 整数>
+    {
+        @ if ((MYSQL_RES *)@<记录集句柄> == NULL){return;}
+        @ mysql_data_seek((MYSQL_RES *)@<记录集句柄>,(my_ulonglong)@<指定行>);
+        如果 (指定行 >= 1)
+        {
+            到下一条 ()
+
+        }
+    }
+
+    #
+    #
+}

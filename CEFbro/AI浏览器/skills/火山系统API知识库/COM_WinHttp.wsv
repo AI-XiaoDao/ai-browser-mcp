@@ -1,0 +1,207 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"windows.硬件特征\"" "" @视窗.外部头文件 = "COM_WinHttp\\winhttpcom.tlh">
+
+类 WinHttpFC <公开>
+{
+
+    # @begin
+    # <> <include>
+    # WinHttp::IWinHttpRequestPtr ptrHttpReq;
+    #
+    # @def_macro CheckReturnValue(hr)  ((hr == S_OK)?TRUE:FALSE)  
+    #
+    # HRESULT @sn<current_class>::CreateStreamFromBytes(BYTE *inBytes, DWORD cbSize, IStream **ppStm);
+    #
+    # <> </include>
+    #
+    # HRESULT @sn<current_class>::CreateStreamFromBytes(BYTE *inBytes, DWORD cbSize, IStream **ppStm)  
+    # {  
+    #     HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE, 0);  
+    #
+    #     if (!hGlobal)  
+    #         return E_OUTOFMEMORY;  
+    #       
+    #     HRESULT hr = CreateStreamOnHGlobal(hGlobal, TRUE, ppStm);  
+    #
+    #     if (hr != S_OK || ppStm == 0){  
+    #         GlobalFree(hGlobal);  
+    #         return hr;  
+    #     }  
+    #       
+    #     ULONG  ulWritten = 0;  
+    #     hr = (*ppStm)->Write(inBytes, cbSize, &ulWritten);  
+    #     if (hr != S_OK || ulWritten != cbSize)  
+    #         return E_FAIL;  
+    #     return S_OK; 
+    # }  
+    #
+    #
+    # @end
+
+    方法 类_初始化
+    {
+        @ HRESULT hr = S_OK;
+        @ hr = CoInitialize(nullptr);
+        @ hr = ptrHttpReq.CreateInstance(__uuidof(WinHttp::WinHttpRequest));
+
+    }
+
+    方法 类_清理
+    {
+        @    CoUninitialize();
+    }
+
+    方法 SetTimeouts <公开 @嵌入式方法 = "">
+    参数 解析超时 <类型 = 整数 @默认值 = 15000>
+    参数 连接超时 <类型 = 整数 @默认值 = 15000>
+    参数 发送超时 <类型 = 整数 @默认值 = 15000>
+    参数 接收超时 <类型 = 整数 @默认值 = 15000>
+    {
+        @ @m<CheckReturnValue>( @sn<this>.ptrHttpReq->SetTimeouts(@<解析超时>,@<连接超时>,@<发送超时>,@<接收超时>))
+    }
+
+    方法 SetProxy <公开
+            注释 = "设置代理 https://docs.microsoft.com/zh-cn/windows/win32/winhttp/iwinhttprequest-setproxy?redirectedfrom=MSDN"
+            注释 = "https://docs.microsoft.com/zh-cn/windows/win32/winhttp/iwinhttprequest-setcredentials" 注释 = "" @嵌入式方法 = "">
+    参数 代理IP与端口 <类型 = 文本型>
+    参数 代理方式 <类型 = 整数 注释 = "HTTPREQUEST_PROXY_SETTING HTTPREQUEST_PROXYSETTING_DEFAULT = 0; 默认"
+            注释 = "HTTPREQUEST_PROXY_SETTING HTTPREQUEST_PROXYSETTING_PRECONFIG = 0;"
+            注释 = "HTTPREQUEST_PROXY_SETTING HTTPREQUEST_PROXYSETTING_DIRECT = 1;  直接访问"
+            注释 = "HTTPREQUEST_PROXY_SETTING HTTPREQUEST_PROXYSETTING_PROXY = 2;   代理访问" @默认值 = 2>
+    参数 旁域名 <类型 = 文本型 注释 = "我也不知道是做什么的" @默认值 = "">
+    {
+        @ @m<CheckReturnValue>( @sn<this>.ptrHttpReq->SetProxy(@<代理方式>,@<代理IP与端口>.GetText(), @<旁域名>.GetText()))
+    }
+
+    方法 SetCredentials <注释 = "打开网址，需要用户名和密码那种" 注释 = "https://blog.csdn.net/weixin_30266829/article/details/95141717" @嵌入式方法 = "">
+    参数 用户名 <类型 = 文本型>
+    参数 密码 <类型 = 文本型>
+    参数 标志 <类型 = 整数 注释 = "Const HTTPREQUEST_SETCREDENTIALS_FOR_SERVER = 0" 注释 = "Const HTTPREQUEST_SETCREDENTIALS_FOR_PROXY = 1"
+            @默认值 = 0>
+    {
+        @ @m<CheckReturnValue>( @sn<this>.ptrHttpReq->SetCredentials(@<用户名>.GetText(),@<密码>.GetText(),@<标志>))
+    }
+
+    方法 Open <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 方式 <类型 = 文本型 注释 = "GET , POST" "">
+    参数 网址 <类型 = 文本型>
+    {
+        @ @m<CheckReturnValue>( @sn<this>.ptrHttpReq->Open(@<方式>.GetText(), @<网址>.GetText()))
+    }
+
+    方法 SetRequestHeader <公开 类型 = 逻辑型 注释 = "Open后调用 置协议头" 折叠 @嵌入式方法 = "">
+    参数 协议名 <类型 = 文本型>
+    参数 协议值 <类型 = 文本型>
+    {
+        @ @m<CheckReturnValue>( @sn<this>.ptrHttpReq->SetRequestHeader(@<协议名>.GetText(), @<协议值>.GetText()))
+
+    }
+
+    方法 Send <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 要发送的数据 <类型 = 字节集类 @默认值 = 空对象>
+    {
+        如果 (要发送的数据 == 空对象)
+        {
+            @ return @m<CheckReturnValue>( ptrHttpReq->Send() );
+        }
+        否则
+        {
+            @ IStream* memStream = NULL;
+            @ CreateStreamFromBytes((byte*)@<要发送的数据>.GetPtr(),(DWORD)@<要发送的数据>.GetSize(),&memStream);
+            @ return @m<CheckReturnValue>( ptrHttpReq->Send(memStream) );
+
+        }
+    }
+
+    方法 GetResponseBody <公开 类型 = 字节集类 折叠 @禁止流程检查 = 真>
+    {
+        @ _variant_t varRspBody = ptrHttpReq->GetResponseBody();
+        @ ULONG dataLen = varRspBody.parray->rgsabound[0].cElements; // 文本长度
+        @ char* pContentBuffer = (char*)varRspBody.parray->pvData;
+        @ return CVolMem(pContentBuffer,dataLen);
+    }
+
+    方法 GetResponseBodyText <公开 类型 = 文本型 折叠>
+    参数 是否UTF8解码 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 数据 <类型 = 字节集类>
+        数据 = GetResponseBody ()
+        如果 (是否UTF8解码)
+        {
+            返回 (UTF8到文本 (数据))
+        }
+        否则
+        {
+            返回 (多字节到文本 (数据))
+        }
+    }
+
+    方法 GetResponseHeader <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 协议名 <类型 = 文本型>
+    {
+        @ CVolString( (const TCHAR*) @sn<this>.ptrHttpReq->GetResponseHeader(@<协议名>.GetText()) )
+        //    _bstr_t GetResponseHeader ( _bstr_t Header );
+        //    _bstr_t GetAllResponseHeaders ( );
+    }
+
+    方法 GetAllResponseHeaders <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( (const TCHAR*) @sn<this>.ptrHttpReq->GetAllResponseHeaders() )
+    }
+
+    方法 GetStatus <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ @sn<this>.ptrHttpReq->GetStatus()
+        //    long GetStatus ( )
+    }
+
+    方法 GetStatusText <公开 @嵌入式方法 = "">
+    {
+        @ CVolString( (const TCHAR*) @sn<this>.ptrHttpReq->GetStatusText() )
+        //    _bstr_t GetStatusText ( );
+    }
+
+    方法 WaitForResponse <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 等待时间 <类型 = 整数>
+    {
+        @ @sn<this>.ptrHttpReq->WaitForResponse(@<等待时间>)
+        //    VARIANT_BOOL WaitForResponse ( const _variant_t & Timeout = vtMissing );
+    }
+
+    方法 SetClientCertificate <公开 类型 = 逻辑型 注释 = "设置证书" @嵌入式方法 = "">
+    参数 证书路径 <类型 = 文本型>
+    {
+        @ @m<CheckReturnValue>( @sn<this>.ptrHttpReq->SetClientCertificate(@<证书路径>.GetText()))
+        //    HRESULT SetClientCertificate ( _bstr_t ClientCertificate );
+    }
+
+    方法 SetAutoLogonPolicy <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 AutoLogonPolicy <类型 = 整数 注释 = "    AutoLogonPolicy_Always = 0," 注释 = "    AutoLogonPolicy_OnlyIfBypassProxy = 1,"
+            注释 = "    AutoLogonPolicy_Never = 2">
+    {
+        @ @m<CheckReturnValue>( @sn<this>.ptrHttpReq->SetClientCertificate(@<AutoLogonPolicy>))
+        //    HRESULT SetAutoLogonPolicy (enum WinHttpRequestAutoLogonPolicy AutoLogonPolicy );
+
+    }
+
+    方法 "//GetOption" <公开>
+    {
+            _variant_t GetOption (   enum WinHttpRequestOption Option );
+            void PutOption (  enum WinHttpRequestOption Option, const _variant_t & Value );
+
+    }
+
+    方法 启用重定向 <公开>
+    参数 是否启用 <类型 = 逻辑型 @默认值 = 真>
+    参数 重定向次数 <类型 = 整数 @默认值 = 15>
+    {
+        @ ptrHttpReq->PutOption(WinHttp::WinHttpRequestOption::WinHttpRequestOption_EnableRedirects,@<是否启用>)
+        @ ptrHttpReq->PutOption(WinHttp::WinHttpRequestOption::WinHttpRequestOption_MaxAutomaticRedirects,@<重定向次数>)
+
+    }
+
+    #
+    #
+    #
+}

@@ -1,0 +1,2444 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.海康威视 <编辑时信息 = "215534, 0, 0, 0" @视窗.头文件搜寻目录 = "lib\\include" @视窗.外部头文件 = "src\\vol_hik_machine.h"
+        @视窗.外部库 = "lib\\$(p)\\MvCameraControl.lib">
+
+类 工业相机类 <公开 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "海康工业相机SDK V3.4.0" 注释 = "使用前确保系统已安装对应环境(MVS驱动以及动态链接库环境变量)."
+        注释 = "官方网站:https://www.hikrobotics.com/"
+        注释 = "运行时软件环境下载(MSV):https://www.hikrobotics.com/machinevision/service/download?module=0" 编辑时信息 = "7BBB4, 0, 0, 0"
+        @禁止创建对象 = 真>
+{
+    方法 取库版本号 <公开 静态 类型 = 整数 注释 = "获取SDK版本号." 返回值注释 = "4个字节分别对应主版本号,子版本号,修正版本号,测试." @嵌入式方法 = "">
+    {
+        @ MV_CC_GetSDKVersion()
+    }
+
+    方法 取支持传输协议层 <公开 静态 类型 = 整数 注释 = "获取支持的传输层,包含Gige和U3V传输层,Gige代表支持GigeVision协议的工业相机,U3V代表支持U3V协议的工业相机." 返回值注释 = "返回支持的传输层编号."
+            @嵌入式方法 = "">
+    {
+        @ MV_CC_EnumerateTls()
+    }
+
+    方法 取所有设备信息 <公开 静态 类型 = 整数 注释 = "枚举获取指定类型的设备列表." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 传输层 <类型 = 整数 注释 = "提供所欲枚举的指定设备类型,请参考\"相机传输层协议类型\"所提供的常量,本参数支持位或多选.">
+    参数 信息列表 <类型 = 相机设备信息数组类 注释 = "如果获取成功,获取的设备信息列表结果将写入至该变量.">
+    {
+        @ MV_CC_DEVICE_INFO_LIST m_stDevList;    //sdk内部分配, 随时可能被释放, 值复制到火山对象.
+        @ memset(&m_stDevList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));
+        @ INT ret = MV_CC_EnumDevices(@<传输层>, &m_stDevList);
+        @ if (ret == MV_OK)
+        @ {
+        @     TRACE0((INT)m_stDevList.nDeviceNum);
+        @     @<信息列表>.RemoveAll();    //避免携带成员越界.
+        @     @<信息列表>.AddNewObjects(@dt<相机设备信息类>::sGetRuntimeClass(), 0, m_stDevList.nDeviceNum);
+        @     for (INT i = 0; i < (INT)@<信息列表>.GetCount(); i++)
+        @         ((@dt<相机设备信息类>&)@<信息列表>.GetAt(i)).SetInfo(m_stDevList.pDeviceInfo[i]);
+        @ }
+        @ return ret;
+    }
+
+    方法 取接口信息列表 <公开 静态 类型 = 整数 注释 = "通过GenTL枚举接口信息列表." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 文件路径 <类型 = 文本型 注释 = "提供所欲使用的GenTL的cti文件路径.">
+    参数 信息列表 <类型 = 接口信息数组类 注释 = "如果获取成功,获取的接口信息列表结果将写入至该变量.">
+    {
+        @ MV_GENTL_IF_INFO_LIST m_stIFList;    //sdk内部分配, 随时可能被释放, 值复制到火山对象.
+        @ memset(&m_stIFList, 0, sizeof(MV_GENTL_IF_INFO_LIST));
+        @ INT ret = MV_CC_EnumInterfacesByGenTL(&m_stIFList, (const char*)GetMbsText(@<文件路径>.GetText(), CVolMem(), NULL));
+        @ if (ret == MV_OK)
+        @ {
+        @     @<信息列表>.RemoveAll();    //避免携带成员越界.
+        @     @<信息列表>.AddNewObjects(@dt<接口信息类>::sGetRuntimeClass(), 0, m_stIFList.nInterfaceNum);
+        @     for (INT i = 0; i < (INT)@<信息列表>.GetCount(); i++)
+        @         ((@dt<接口信息类>&)@<信息列表>.GetAt(i)).SetInfo(m_stIFList.pIFInfo[i]);
+        @ }
+        @ return ret;
+    }
+
+    方法 取指定接口设备信息 <公开 静态 类型 = 整数 注释 = "通过指定的通过GenTL Interface枚举所有设备列表." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 接口信息 <类型 = 接口信息类 注释 = "提供指定的接口信息对象.">
+    参数 信息列表 <类型 = GENTL设备信息数组类 注释 = "如果获取成功,获取的设备信息列表结果将写入至该变量.">
+    {
+        @ MV_GENTL_DEV_INFO_LIST m_stDevList;
+        @ memset(&m_stDevList, 0, sizeof(MV_GENTL_DEV_INFO_LIST));
+        @ INT ret = MV_CC_EnumDevicesByGenTL(@<接口信息>.data().GetInterfaceInfo(), &m_stDevList);
+        @ if (ret == MV_OK)
+        @ {
+        @     @<信息列表>.RemoveAll();
+        @     @<信息列表>.AddNewObjects(@dt<GENTL设备信息类>::sGetRuntimeClass(), 0, m_stDevList.nDeviceNum);
+        @     for (INT i = 0; i < (INT)@<信息列表>.GetCount(); i++)
+        @         ((@dt<GENTL设备信息类>&)@<信息列表>.GetAt(i)).SetInfo(m_stDevList.pDeviceInfo[i]);
+        @ }
+        @ return ret;
+    }
+
+    方法 取指定设备可访问权限 <公开 静态 类型 = 逻辑型 注释 = "读取设备CCP寄存器的值,判断当前状态是否具有指定类型的访问权限." 返回值注释 = "可用返回真,否则返回假." @嵌入式方法 = "">
+    参数 设备 <类型 = 相机设备信息类 注释 = "提供所欲检查的设备.">
+    参数 检查类型 <类型 = 相机访问权限类型 注释 = "提供所欲检查该设备的权限类型.">
+    {
+        @ MV_CC_IsDeviceAccessible(@<设备>.data().GetDeviceInfo(), (UINT)@<检查类型>)
+    }
+
+    方法 置日志储存路径 <公开 静态 类型 = 整数 注释 = "设置SDK输出的日志保存路径." 返回值注释 = "返回设置是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 路径 <类型 = 文本型 注释 = "提供所欲指定的日志储存路径.">
+    {
+        @ MV_CC_SetSDKLogPath((const char*)GetMbsText(@<路径>.GetText(), CVolMem(), NULL))
+    }
+
+    方法 创建设备 <公开 静态 类型 = 相机设备类 注释 = "根据指定的设备信息创建相机设备对象." 返回值注释 = "返回所创建的相机设备对象." @禁止流程检查 = 真>
+    参数 设备信息 <类型 = 相机设备信息类 注释 = "提供所欲创建设备的信息对象.">
+    参数 启用日志 <类型 = 逻辑型 注释 = "指定所打开的相机设备对象是否生成其操作日志." @默认值 = 真>
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次创建设备的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ void* handle = NULL;
+        @ INT ret = @<启用日志> ? MV_CC_CreateHandle(&handle, @<设备信息>.data().GetDeviceInfo()) : MV_CC_CreateHandleWithoutLog(&handle, @<设备信息>.data().GetDeviceInfo());
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return @dt<相机设备类>(handle);
+    }
+
+    方法 创建接口设备 <公开 静态 类型 = 相机设备类 注释 = "根据指定的接口设备信息创建相机设备对象." 返回值注释 = "返回所创建的相机设备对象." @禁止流程检查 = 真>
+    参数 设备信息 <类型 = GENTL设备信息类 注释 = "提供所欲创建GENTL接口设备的信息对象.">
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次创建设备的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ void* handle = NULL;
+        @ INT ret = MV_CC_CreateHandleByGenTL(&handle, @<设备信息>.data().GetGenTLDevInfo());
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return @dt<相机设备类>(handle);
+    }
+
+    方法 发送动作命令 <公开 静态 类型 = 相机动作命令结果数组类 注释 = "对当前相机设备发出动作命令,仅GIGE设备可用." 返回值注释 = "返回执行动作命令后的结果." @禁止流程检查 = 真>
+    参数 设备密钥 <类型 = 整数 注释 = "设备密钥.">
+    参数 组键 <类型 = 整数>
+    参数 组掩码 <类型 = 整数>
+    参数 广播包地址 <类型 = 文本型>
+    参数 启用动作时间 <类型 = 逻辑型 注释 = "指定是否启用动作时间." @默认值 = 假>
+    参数 动作时间 <类型 = 长整数 注释 = "预定的动作时间,和设备主频有关,仅在\"启用动作时间\"为真时本参数才有意义." @默认值 = 0>
+    参数 ACK超时 <类型 = 整数 注释 = "等待ACK的超时时间,如果为0表示不需要ACK." @默认值 = 0>
+    参数 启用指定网卡 <类型 = 逻辑型 注释 = "指定是否启用指定网卡." @默认值 = 假>
+    参数 指定网卡IP <类型 = 整数 注释 = "指定的网卡IP,仅在\"启用指定网卡\"为真时本参数才有意义." @默认值 = 0>
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ MV_ACTION_CMD_INFO stActionCmdInfo = {0};
+        @ MV_ACTION_CMD_RESULT_LIST stActionCmdResults = {0};
+        @ CVolMem memBuf;
+        @ stActionCmdInfo.nDeviceKey = (UINT)@<设备密钥>;
+        @ stActionCmdInfo.nGroupKey = (UINT)@<组键>;
+        @ stActionCmdInfo.nGroupMask = (UINT)@<组掩码>;
+        @ stActionCmdInfo.bActionTimeEnable = (UINT)@<启用动作时间>;
+        @ stActionCmdInfo.nActionTime = (int64_t)@<动作时间>;
+        @ stActionCmdInfo.pBroadcastAddress = (const char*)GetMbsText(@<广播包地址>.GetText(), memBuf, NULL);
+        @ stActionCmdInfo.nTimeOut = (UINT)@<启用动作时间>;
+        @ stActionCmdInfo.bSpecialNetEnable = (UINT)@<启用指定网卡>;
+        @ stActionCmdInfo.nSpecialNetIP = (UINT)@<指定网卡IP>;
+        @ INT ret = MV_GIGE_IssueActionCommand(&stActionCmdInfo, &stActionCmdResults);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ @dt<相机动作命令结果数组类> results;
+        @ if (ret == MV_OK && stActionCmdResults.nNumResults > 0)
+        @ {
+        @     results.AddNewObjects(@dt<相机动作命令结果类>::sGetRuntimeClass(), 0, stActionCmdResults.nNumResults);
+        @     for (INT i = 0; i < (INT)results.GetCount(); i++)
+        @         ((@dt<相机动作命令结果类>&)results.GetAt(i)).SetInfo(&stActionCmdResults.pResults[i]);
+        @ }
+        @ return results;
+    }
+
+    方法 置枚举命令回复包类型 <公开 静态 类型 = 整数 注释 = "设置枚举命令的回复包类型,该方法只对GigE相机有效." 返回值注释 = "返回设置是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 类型 <类型 = 整数 注释 = "0表示单播,1表示广播." "">
+    {
+        @ MV_GIGE_SetDiscoveryMode((UINT)@<类型>)
+    }
+}
+
+类 相机设备类 <公开 注释 = "表示一个相机设备对象,提供设备的所有操作接口.">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CDeviceHandleWrapper)
+    #
+    # <> <include>
+    # inline_ @sn<current_class> (void* ptr) : @sn<current_class>()  { data().SetDeviceHandle(ptr); }
+    # static void WINAPI ExceptionCallBack(unsigned int nMsgType, void* pUser) { ((@sn<current_class>*)pUser)->@n<相机设备类.收到异常消息>((INT)nMsgType); }
+    # static void WINAPI EventCallBack(MV_EVENT_OUT_INFO* pEventInfo, void* pUser)
+    # {
+    #     if (pEventInfo)
+    #         ((@sn<current_class>*)pUser)->@n<相机设备类.收到设备事件>(CVolString(GetWideText((const CHAR *)pEventInfo->EventName, CVolMem(), NULL)), 
+    #         (SHORT)pEventInfo->nEventID, (SHORT)pEventInfo->nStreamChannel, (INT)pEventInfo->nBlockIdHigh, (INT)pEventInfo->nBlockIdLow, 
+    #         (INT)pEventInfo->nTimestampHigh, (INT)pEventInfo->nTimestampLow, CVolMem(pEventInfo->pEventData, pEventInfo->nEventDataSize));
+    # }
+    # static void WINAPI ImageCallBackEx(unsigned char *pData, MV_FRAME_OUT_INFO_EX* pstFrameInfo, void* pUser);
+    # <> </include>
+    # void @sn<current_class>::ImageCallBackEx(unsigned char *pData, MV_FRAME_OUT_INFO_EX* pstFrameInfo, void* pUser)
+    # {
+    #     ((@sn<current_class>*)pUser)->@n<相机设备类.收到图像采集数据>((INT_P)pData, @dt<图像数据信息>(pstFrameInfo));
+    # }
+    # @end
+
+    方法 打开设备 <公开 类型 = 整数 注释 = "在对设备进行任何操作之前务必确保已成功打开设备." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 访问权限 <类型 = 相机访问权限类型 注释 = "提供打开该设备所欲使用的权限类型." @默认值 = 相机访问权限类型.独占权限>
+    参数 权限切换密钥 <类型 = 短整数 注释 = "提供切换访问权限时的密钥." @默认值 = 0>
+    {
+        @ INT ret = MV_CC_OpenDevice(this->data().GetDeviceHandle(), (UINT)@<访问权限>, (USHORT)@<权限切换密钥>);
+        @ if (ret == MV_OK)    //注册异常回调以及全事件回调
+        @ {
+        @     MV_CC_RegisterExceptionCallBack(this->data().GetDeviceHandle(), ExceptionCallBack, this);
+        @     MV_CC_RegisterAllEventCallBack(this->data().GetDeviceHandle(), EventCallBack, this);
+        @ }
+        @ return ret;
+    }
+
+    方法 关闭设备 <公开 类型 = 整数 注释 = "通常与\"打开设备\"成对使用,关闭后如需再使用设备需再次调用\"打开设备\"方法." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    {
+        @ MV_CC_CloseDevice(@sn<this>.data().GetDeviceHandle())
+    }
+
+    方法 取设备信息 <公开 类型 = 相机设备信息类 注释 = "获取该设备的信息对象." 返回值注释 = "返回该相机的设备信息对象." @禁止流程检查 = 真>
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ MV_CC_DEVICE_INFO stDevInfo = {0};
+        @ INT ret = MV_CC_GetDeviceInfo(this->data().GetDeviceHandle(), &stDevInfo);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return @dt<相机设备信息类>(&stDevInfo, FALSE);
+    }
+
+    方法 读整数值属性 <公开 类型 = 相机数值属性类 注释 = "读取该设备的数值属性." 返回值注释 = "返回读取的属性值." @禁止流程检查 = 真>
+    参数 属性名 <类型 = 文本型 注释 = "提供所欲读取的属性名称,例如需获取其宽度属性即提供\"Width\",具体可以查看MVS属性描述.">
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ MVCC_INTVALUE_EX stIntValue = {0};
+        @ INT ret = MV_CC_GetIntValueEx(this->data().GetDeviceHandle(), (const char*)GetMbsText(@<属性名>.GetText(), CVolMem(), NULL), &stIntValue);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return @dt<相机数值属性类>(&stIntValue);
+    }
+
+    方法 写整数值属性 <公开 类型 = 整数 注释 = "写入该设备的数值属性." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 属性名 <类型 = 文本型 注释 = "提供所欲写入的属性名称,例如需设置其宽度属性即提供\"Width\",具体可以查看MVS属性描述.">
+    参数 值 <类型 = 长整数 注释 = "提供所欲写入的属性值.">
+    {
+        @ MV_CC_SetIntValueEx(@sn<this>.data().GetDeviceHandle(), (const char*)GetMbsText(@<属性名>.GetText(), CVolMem(), NULL), (int64_t)@<值>)
+    }
+
+    方法 读枚举值属性 <公开 类型 = 相机枚举值属性类 注释 = "读取该设备的枚举值属性." 返回值注释 = "返回读取的属性值." @禁止流程检查 = 真>
+    参数 属性名 <类型 = 文本型 注释 = "提供所欲读取的属性名称,例如需获取其像素格式属性即提供\"PixelFormat\",具体可以查看MVS属性描述.">
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ MVCC_ENUMVALUE stEnumValue = {0};
+        @ INT ret = MV_CC_GetEnumValue(this->data().GetDeviceHandle(), (const char*)GetMbsText(@<属性名>.GetText(), CVolMem(), NULL), &stEnumValue);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return @dt<相机枚举值属性类>(&stEnumValue);
+    }
+
+    方法 写枚举值属性 <公开 类型 = 整数 注释 = "写入该设备的枚举值属性." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 属性名 <类型 = 文本型 注释 = "提供所欲写入的属性名称,例如需设置其像素格式属性即提供\"PixelFormat\",具体可以查看MVS属性描述.">
+    参数 值 <类型 = 整数 注释 = "提供所欲写入的属性值.">
+    {
+        @ MV_CC_SetEnumValue(@sn<this>.data().GetDeviceHandle(), (const char*)GetMbsText(@<属性名>.GetText(), CVolMem(), NULL), (UINT)@<值>)
+    }
+
+    方法 写文本枚举值属性 <公开 类型 = 整数 注释 = "同\"写枚举值属性\"一致,本方法以文本型内容写入该设备的枚举值属性." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 属性名 <类型 = 文本型 注释 = "提供所欲写入的属性名称,例如需设置其像素格式属性即提供\"PixelFormat\",具体可以查看MVS属性描述.">
+    参数 值 <类型 = 文本型 注释 = "提供所欲写入的属性值.">
+    {
+        @ MV_CC_SetEnumValueByString(@sn<this>.data().GetDeviceHandle(), (const char*)GetMbsText(@<属性名>.GetText(), CVolMem(), NULL), (const char*)GetMbsText(@<值>.GetText(), CVolMem(), NULL))
+    }
+
+    方法 读浮点值属性 <公开 类型 = 相机浮点属性类 注释 = "读取该设备的浮点属性." 返回值注释 = "返回读取的属性值." @禁止流程检查 = 真>
+    参数 属性名 <类型 = 文本型 注释 = "提供所欲读取的属性名称,具体可以查看MVS属性描述.">
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ MVCC_FLOATVALUE stFloatValue = {0};
+        @ INT ret = MV_CC_GetFloatValue(this->data().GetDeviceHandle(), (const char*)GetMbsText(@<属性名>.GetText(), CVolMem(), NULL), &stFloatValue);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return @dt<相机浮点属性类>(&stFloatValue);
+    }
+
+    方法 写浮点值属性 <公开 类型 = 整数 注释 = "写入该设备的浮点属性." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 属性名 <类型 = 文本型 注释 = "提供所欲写入的属性名称,具体可以查看MVS属性描述.">
+    参数 值 <类型 = 小数 注释 = "提供所欲写入的属性值.">
+    {
+        @ MV_CC_SetFloatValue(@sn<this>.data().GetDeviceHandle(), (const char*)GetMbsText(@<属性名>.GetText(), CVolMem(), NULL), (FLOAT)@<值>)
+    }
+
+    方法 读逻辑值属性 <公开 类型 = 逻辑型 注释 = "读取该设备的逻辑值属性." 返回值注释 = "返回读取的属性值." @禁止流程检查 = 真>
+    参数 属性名 <类型 = 文本型 注释 = "提供所欲读取的属性名称,具体可以查看MVS属性描述.">
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ bool bValue = false;
+        @ INT ret = MV_CC_GetBoolValue(this->data().GetDeviceHandle(), (const char*)GetMbsText(@<属性名>.GetText(), CVolMem(), NULL), &bValue);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return bValue;
+    }
+
+    方法 写逻辑值属性 <公开 类型 = 整数 注释 = "写入该设备的逻辑值属性." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 属性名 <类型 = 文本型 注释 = "提供所欲写入的属性名称,具体可以查看MVS属性描述.">
+    参数 值 <类型 = 逻辑型 注释 = "提供所欲写入的属性值.">
+    {
+        @ MV_CC_SetBoolValue(@sn<this>.data().GetDeviceHandle(), (const char*)GetMbsText(@<属性名>.GetText(), CVolMem(), NULL), @<值>)
+    }
+
+    方法 读文本值属性 <公开 类型 = 文本型 注释 = "读取该设备的文本值属性." 返回值注释 = "返回读取的属性值." @禁止流程检查 = 真>
+    参数 属性名 <类型 = 文本型 注释 = "提供所欲读取的属性名称,具体可以查看MVS属性描述.">
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ MVCC_STRINGVALUE stStringValue = {0};
+        @ INT ret = MV_CC_GetStringValue(this->data().GetDeviceHandle(), (const char*)GetMbsText(@<属性名>.GetText(), CVolMem(), NULL), &stStringValue);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return GetWideText ((const CHAR*)stStringValue.chCurValue, CVolMem(), NULL);
+    }
+
+    方法 写文本值属性 <公开 类型 = 整数 注释 = "写入该设备的文本值属性." 返回值注释 = "返回执行是否成功，请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 属性名 <类型 = 文本型 注释 = "提供所欲写入的属性名称,具体可以查看MVS属性描述.">
+    参数 值 <类型 = 文本型 注释 = "提供所欲写入的属性值.">
+    {
+        @ MV_CC_SetStringValue(@sn<this>.data().GetDeviceHandle(), (const char*)GetMbsText(@<属性名>.GetText(), CVolMem(), NULL), (const char*)GetMbsText(@<值>.GetText(), CVolMem(), NULL))
+    }
+
+    方法 执行指定命令 <公开 类型 = 整数 注释 = "设置该设备的命令属性,以执行指定的命令." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 命令 <类型 = 文本型 注释 = "提供所欲执行的命令,例如:\"TriggerSoftware\".">
+    {
+        @ MV_CC_SetCommandValue(@sn<this>.data().GetDeviceHandle(), (const char*)GetMbsText(@<命令>.GetText(), CVolMem(), NULL))
+    }
+
+    方法 读指定内存地址值 <公开 类型 = 字节集类 注释 = "通过寄存器地址获取该相机设备寄存器的数据." 返回值注释 = "返回读取到的数据." @禁止流程检查 = 真>
+    参数 地址 <类型 = 长整数 注释 = "待读取的内存地址,该地址可以从设备的Camera.xml文件中获取,形如xxx_RegAddr的xml节点值.">
+    参数 读取长度 <类型 = 长整数 注释 = "提供所欲读取数据的尺寸(单位字节).">
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ CVolMem memBuf;
+        @ INT ret = MV_CC_ReadMemory(this->data().GetDeviceHandle(), (void*)memBuf.Alloc(@<读取长度>, TRUE), (int64_t)@<地址>, (int64_t)@<读取长度>);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return memBuf;
+    }
+
+    方法 写指定内存地址值 <公开 类型 = 整数 注释 = "通过寄存器地址写入该相机设备寄存器的数据." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲写入的完整数据.">
+    参数 地址 <类型 = 长整数 注释 = "待读取的内存地址,该地址可以从设备的Camera.xml文件中获取,形如xxx_RegAddr的xml节点值.">
+    {
+        @ return MV_CC_WriteMemory(this->data().GetDeviceHandle(), (const void*)@<数据>.GetPtr(), (int64_t)@<地址>, (int64_t)@<数据>.GetSize());
+    }
+
+    方法 取当前连接状态 <公开 类型 = 逻辑型 注释 = "获取当前该设备是否处于连接状态." 返回值注释 = "返回真表示处于连接状态,否则为失去连接." @嵌入式方法 = "">
+    {
+        @ (BOOL)MV_CC_IsDeviceConnected(@sn<this>.data().GetDeviceHandle())
+    }
+
+    方法 置内部图像缓存节点数量 <公开 类型 = 整数 注释 = "设置SDK内部图像缓存节点个数,通常在抓图前调用." 注释 = "注意:该方法不支持CameraLink设备."
+            返回值注释 = "返回执行是否成功，请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 数量 <类型 = 整数 注释 = "提供所欲设置的缓存节点个数,必须大于等于1.">
+    {
+        @ MV_CC_SetImageNodeNum(@sn<this>.data().GetDeviceHandle(), (UINT)@<数量>)
+    }
+
+    方法 置取流策略 <公开 类型 = 整数 注释 = "设置该设备的取流策略." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 策略 <类型 = 相机取流策略 注释 = "提供所欲设置的策略类型.">
+    {
+        @ MV_CC_SetGrabStrategy(@sn<this>.data().GetDeviceHandle(), (MV_GRAB_STRATEGY)@<策略>)
+    }
+
+    方法 置输出缓存数量 <公开 类型 = 整数 注释 = "设置输出缓存个数(只有在\"列表最新\"取流策略下才有效." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 数量 <类型 = 整数 注释 = "提供所欲设置的数量,范围:大于等于1,小于图像缓存节点个数(即\"置内部图像缓存节点数量\"方法的设置值).">
+    {
+        @ MV_CC_SetOutputQueueSize(@sn<this>.data().GetDeviceHandle(), (UINT)@<数量>)
+    }
+
+    方法 取流量及丢包信息 <公开 类型 = 相机流量丢包信息类 注释 = "如果当前设备为GigE设备,调用本方法以获取网络流量以及丢包信息,其他类型设备无法获取." 注释 = "注意:需要在开启抓图后才可使用."
+            返回值注释 = "返回流量以及丢包信息." @禁止流程检查 = 真>
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ MV_ALL_MATCH_INFO stMatchInfo = {0};
+        @ MV_MATCH_INFO_NET_DETECT stMatchInfoNetDetect = {0};
+        @ stMatchInfo.nType = MV_MATCH_TYPE_NET_DETECT;
+        @ stMatchInfo.pInfo = &stMatchInfoNetDetect;
+        @ stMatchInfo.nInfoSize = sizeof (MV_MATCH_INFO_NET_DETECT);
+        @ INT ret = MV_CC_GetAllMatchInfo(this->data().GetDeviceHandle(), &stMatchInfo);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return @dt<相机流量丢包信息类>(&stMatchInfoNetDetect);
+    }
+
+    方法 取相机数据接收信息 <公开 类型 = 相机数据接收信息类 注释 = "如果当前设备为U3V设备,调用本方法以获取host收到从设备端的总字节数,其他类型设备无法获取." 返回值注释 = "返回数据接收信息." @禁止流程检查 = 真>
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ MV_ALL_MATCH_INFO stMatchInfo = {0};
+        @ MV_MATCH_INFO_USB_DETECT stMatchInfoUSBDetect = {0};
+        @ stMatchInfo.nType = MV_MATCH_TYPE_USB_DETECT;
+        @ stMatchInfo.pInfo = &stMatchInfoUSBDetect;
+        @ stMatchInfo.nInfoSize = sizeof (MV_MATCH_INFO_USB_DETECT);
+        @ INT ret = MV_CC_GetAllMatchInfo(this->data().GetDeviceHandle(), &stMatchInfo);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return @dt<相机数据接收信息类>(&stMatchInfoUSBDetect);
+    }
+
+    方法 保存相机属性 <公开 类型 = 整数 注释 = "保存当前相机设备指定属性." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 属性名 <类型 = 文本型 注释 = "提供所欲保存的属性名称.">
+    {
+        @ MV_CC_FeatureSave(@sn<this>.data().GetDeviceHandle(), (const char*)GetMbsText(@<属性名>.GetText(), CVolMem(), NULL))
+    }
+
+    方法 导入相机属性 <公开 类型 = 整数 注释 = "导入当前相机设备指定属性." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 属性名 <类型 = 文本型 注释 = "提供所欲导入的属性名称.">
+    {
+        @ MV_CC_FeatureLoad(@sn<this>.data().GetDeviceHandle(), (const char*)GetMbsText(@<属性名>.GetText(), CVolMem(), NULL))
+    }
+
+    方法 读取相机文件 <公开 类型 = 整数 注释 = "从当前相机设备读取文件." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 用户文件名 <类型 = 文本型 注释 = "提供用户文件名,例如:UserSet1.bin">
+    参数 设备文件名 <类型 = 文本型 注释 = "提供设备文件名,例如:UserSet1">
+    {
+        @ MV_CC_FILE_ACCESS stFileAccess = {0};
+        @ CVolMem memBuf, memBuf2;
+        @ stFileAccess.pUserFileName = (const char*)GetMbsText(@<用户文件名>.GetText(), memBuf, NULL);
+        @ stFileAccess.pDevFileName = (const char*)GetMbsText(@<设备文件名>.GetText(), memBuf2, NULL);
+        @ return MV_CC_FileAccessRead(this->data().GetDeviceHandle(), &stFileAccess);
+    }
+
+    方法 写入相机文件 <公开 类型 = 整数 注释 = "将文件写入当前相机设备." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 用户文件名 <类型 = 文本型 注释 = "提供用户文件名,例如:UserSet1.bin">
+    参数 设备文件名 <类型 = 文本型 注释 = "提供设备文件名,例如:UserSet1">
+    {
+        @ MV_CC_FILE_ACCESS stFileAccess = {0};
+        @ CVolMem memBuf, memBuf2;
+        @ stFileAccess.pUserFileName = (const char*)GetMbsText(@<用户文件名>.GetText(), memBuf, NULL);
+        @ stFileAccess.pDevFileName = (const char*)GetMbsText(@<设备文件名>.GetText(), memBuf2, NULL);
+        @ return MV_CC_FileAccessWrite(this->data().GetDeviceHandle(), &stFileAccess);
+    }
+
+    方法 取文件存取进度 <公开 类型 = 整数 注释 = "获取文件存取的进度." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 总长度 <类型 = 长整数类 注释 = "提供变量以接收文件存取的总长度值.">
+    参数 已完成长度 <类型 = 长整数类 注释 = "提供变量以接收文件存取的已完成长度值.">
+    {
+        @ MV_CC_FILE_ACCESS_PROGRESS stFileAccessProgress = {0};
+        @ INT ret = MV_CC_GetFileAccessProgress(this->data().GetDeviceHandle(), &stFileAccessProgress);
+        @ if (ret == MV_OK)
+        @ {
+        @     *(INT64*)@<总长度>.GetDataPtr() = (INT64)stFileAccessProgress.nTotal;
+        @     *(INT64*)@<已完成长度>.GetDataPtr() = (INT64)stFileAccessProgress.nCompleted;
+        @ }
+        @ return ret;
+    }
+
+    # GIGE独有接口 ---
+
+    方法 强制设置网络参数 <公开 类型 = 整数 注释 = "强制设置设备网络参数(包括IP,子网掩码,默认网关),仅GIGE设备可用."
+            注释 = "  注意:本方法调用后需要重新创建设备,即重新调用\"工业相机类.创建设备()\",当前本对象将失效无法继续使用." 注释 = "如果设备为DHCP的状态,调用该接口强制设置设备网络参数之后设备将会重启."
+            返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 IP <类型 = 整数>
+    参数 子网掩码 <类型 = 整数>
+    参数 默认网关 <类型 = 整数>
+    {
+        @ MV_GIGE_ForceIpEx(@sn<this>.data().GetDeviceHandle(), (UINT)@<IP>, (UINT)@<子网掩码>, (UINT)@<默认网关>)
+    }
+
+    方法 置IP配置方式 <公开 类型 = 整数 注释 = "设置当前设备IP配置方式,仅GIGE设备可用." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 模式 <类型 = 相机IP配置模式 注释 = "提供所欲设置的模式.">
+    {
+        @ MV_GIGE_SetIpConfig(@sn<this>.data().GetDeviceHandle(), (UINT)@<模式>)
+    }
+
+    方法 置网络传输模式 <公开 类型 = 整数 注释 = "设置SDK内部优先使用的网络模式,如不设置默认优先使用驱动模式,仅GIGE设备可用." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @嵌入式方法 = "">
+    参数 模式 <类型 = 相机网络传输模式 注释 = "提供所欲设置的模式.">
+    {
+        @ MV_GIGE_SetNetTransMode(@sn<this>.data().GetDeviceHandle(), (UINT)@<模式>)
+    }
+
+    方法 取网络传输信息 <公开 类型 = 相机网络传输信息类 注释 = "获取网络传输相关信息,包括已接收数据大小,丢帧数量等,请在开始取流开启采集之后调用,仅GIGE设备可用." 返回值注释 = "返回网络传输信息." @嵌入式方法 = "">
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ MV_NETTRANS_INFO stInfo = {0};
+        @ INT ret = MV_GIGE_GetNetTransInfo(this->data().GetDeviceHandle(), &stInfo);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return @dt<相机网络传输信息类>(&stInfo);
+    }
+
+    方法 置GVSP取流超时 <公开 类型 = 整数 注释 = "在开始取流之前调用本方法以设置GVSP取流超时时间,仅GIGE设备可用." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 超时 <类型 = 整数 注释 = "单位:毫秒,提供的值必须大于等于10毫秒.">
+    {
+        @ MV_GIGE_SetGvspTimeout(@sn<this>.data().GetDeviceHandle(), (UINT)@<超时>)
+    }
+
+    方法 取GVSP取流超时 <公开 类型 = 整数 注释 = "获取所设置的GVSP取流超时时间,仅GIGE设备可用." 返回值注释 = "返回所定义的取流超时时间,单位:毫秒." @禁止流程检查 = 真>
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ UINT nMillisec = 0;
+        @ INT ret = MV_GIGE_GetGvspTimeout(this->data().GetDeviceHandle(), &nMillisec);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return (INT)nMillisec;
+    }
+
+    方法 取最佳包尺寸 <公开 类型 = 整数 注释 = "获取当前相机设备的最佳包尺寸(packetsize),该大小即网络上传输一个包的大小,仅GIGE设备可用." 返回值注释 = "返回最佳包尺寸." @嵌入式方法 = "">
+    {
+        @ MV_CC_GetOptimalPacketSize(@sn<this>.data().GetDeviceHandle())
+    }
+
+    方法 置重发包配置 <公开 类型 = 整数 注释 = "设置是否打开重发包支持,及重发包设置,仅GIGE设备可用." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            编辑时信息 = "49550, 0, 0, 0" @嵌入式方法 = "">
+    参数 启用 <类型 = 逻辑型 注释 = "指定是否启用重发包." 编辑时信息 = "49550, 0, 0, 0">
+    参数 最大重发比 <类型 = 整数>
+    参数 重发超时 <类型 = 整数>
+    {
+        @ MV_GIGE_SetResend(@sn<this>.data().GetDeviceHandle(), (UINT)@<启用>, (UINT)@<最大重发比>, (UINT)@<重发超时>)
+    }
+
+    方法 置重传命令重试次数 <公开 类型 = 整数 注释 = "设置重传命令最大尝试次数,在重发包配置启用的状态下可设置,仅GIGE设备可用." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @嵌入式方法 = "">
+    参数 最大次数 <类型 = 整数 注释 = "重传命令最大尝试次数,默认为20.">
+    {
+        @ MV_GIGE_SetResendMaxRetryTimes(@sn<this>.data().GetDeviceHandle(), (UINT)@<最大次数>)
+    }
+
+    方法 取重传命令重试次数 <公开 类型 = 整数 注释 = "获取重传命令最大尝试次数,仅GIGE设备可用." 返回值注释 = "返回所定义的最大重传命令重试次数." @禁止流程检查 = 真>
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ UINT nRetryTimes = 0;
+        @ INT ret = MV_GIGE_GetResendMaxRetryTimes(this->data().GetDeviceHandle(), &nRetryTimes);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return (INT)nRetryTimes;
+    }
+
+    方法 置重传包请求间隔 <公开 类型 = 整数 注释 = "设置同一重传包多次请求之间的时间间隔,在重发包配置启用的状态下可设置,仅GIGE设备可用." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @嵌入式方法 = "">
+    参数 间隔 <类型 = 整数 注释 = "单位:毫秒.">
+    {
+        @ MV_GIGE_SetResendTimeInterval(@sn<this>.data().GetDeviceHandle(), (UINT)@<间隔>)
+    }
+
+    方法 取重传包请求间隔 <公开 类型 = 整数 注释 = "获取同一重传包多次请求之间的时间间隔,仅GIGE设备可用." 返回值注释 = "返回所定义的重传包请求间隔." @禁止流程检查 = 真>
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ UINT nMillisec = 0;
+        @ INT ret = MV_GIGE_GetResendTimeInterval(this->data().GetDeviceHandle(), &nMillisec);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return (INT)nMillisec;
+    }
+
+    方法 置数据传输模式 <公开 类型 = 整数 注释 = "设置传输模式,可以为单播模式,组播模式等,仅GIGE设备可用." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 类型 <类型 = 相机数据传输模式 注释 = "提供所欲设置的传输模式.">
+    参数 目标IP <类型 = 整数 注释 = "仅在组播模式下需要提供本参数." @默认值 = 0>
+    参数 目标端口 <类型 = 短整数 注释 = "仅在组播模式下需要提供本参数." @默认值 = 0>
+    {
+        @ MV_TRANSMISSION_TYPE stTransmissionType;
+        @ memset(&stTransmissionType, 0, sizeof(MV_TRANSMISSION_TYPE));
+        @ stTransmissionType.enTransmissionType = (MV_GIGE_TRANSMISSION_TYPE)@<类型>;
+        @ stTransmissionType.nDestIp = (UINT)@<目标IP>;
+        @ stTransmissionType.nDestPort = (USHORT)@<目标端口>;
+        @ return MV_GIGE_SetTransmissionType(this->data().GetDeviceHandle(), &stTransmissionType);
+    }
+
+    # CameraLink独有接口 ---
+
+    方法 置设备波特率 <公开 类型 = 整数 注释 = "设置设备波特率,支持在未打开前调用,仅CameraLink设备可用." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 波特率 <类型 = 相机波特率类型 注释 = "提供所欲使用的波特率.">
+    {
+        @ MV_CAML_SetDeviceBaudrate(@sn<this>.data().GetDeviceHandle(), (UINT)@<波特率>);
+    }
+
+    方法 取设备波特率 <公开 类型 = 相机波特率类型 注释 = "获取设备的波特率,支持在未打开前调用,仅CameraLink设备可用." @禁止流程检查 = 真>
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ UINT value = 0;
+        @ INT ret = MV_CAML_GetDeviceBaudrate(this->data().GetDeviceHandle(), &value);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return (INT)value;
+    }
+
+    方法 "//取主机连接支持波特率" <公开 类型 = 相机波特率类型 注释 = "获取设备与主机间连接支持的波特率,支持在未打开前调用,仅CameraLink设备可用." @禁止流程检查 = 真>
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ UINT value = 0;
+        @ INT ret = MV_CAML_GetSupportBaudrates(this->data().GetDeviceHandle(), &value);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return (INT)value;
+    }
+
+    方法 置串口操作等待超时 <公开 类型 = 整数 注释 = "设置串口操作等待时长." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 超时 <类型 = 整数 注释 = "提供串口操作的等待时长,单位:毫秒.">
+    {
+        @ MV_CAML_SetGenCPTimeOut(@sn<this>.data().GetDeviceHandle(), (UINT)@<超时>);
+    }
+
+    方法 注册图像数据采集回调 <公开 类型 = 整数 注释 = "本方法设置图像数据的回调函数(图像数据将通过\"收到图像采集数据\"事件返回),即被动采集图像,本方法不支持CameraLink设备."
+            返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    {
+        @ return MV_CC_RegisterImageCallBackEx(this->data().GetDeviceHandle(), ImageCallBackEx, this);
+    }
+
+    方法 注册图像RGB数据采集回调 <公开 类型 = 整数 注释 = "本方法设置RGB图像数据的回调函数(图像数据将通过\"收到图像采集数据\"事件返回),即被动采集图像,本方法不支持CameraLink设备."
+            返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    {
+        @ return MV_CC_RegisterImageCallBackForRGB(this->data().GetDeviceHandle(), ImageCallBackEx, this);
+    }
+
+    方法 注册图像BGR数据采集回调 <公开 类型 = 整数 注释 = "本方法设置BGR图像数据的回调函数(图像数据将通过\"收到图像采集数据\"事件返回),即被动采集图像,本方法不支持CameraLink设备."
+            返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    {
+        @ return MV_CC_RegisterImageCallBackForBGR(this->data().GetDeviceHandle(), ImageCallBackEx, this);
+    }
+
+    方法 开始取流 <公开 类型 = 整数 注释 = "  开始取流,如果调用了\"注册图像数据采集回调\"等方法,采集到数据后将会触发\"收到图像采集数据\"事件."
+            注释 = "如未使用上述方法注册事件,此时可调用\"取图像帧采集数据\"等方法获取采集的图像数据,本方法不支持CameraLink设备." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @嵌入式方法 = "">
+    {
+        @ MV_CC_StartGrabbing(@sn<this>.data().GetDeviceHandle())
+    }
+
+    方法 停止取流 <公开 类型 = 整数 注释 = "调用了\"开始取流\"后,可使用本方法停止,通常成对使用,本方法不支持CameraLink设备." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @嵌入式方法 = "">
+    {
+        @ MV_CC_StopGrabbing(@sn<this>.data().GetDeviceHandle())
+    }
+
+    方法 取图像帧采集数据 <公开 类型 = 整数 注释 = "  在调用\"开始取流\"后,获取一帧采集到的图像数据,应用程序需要根据帧率,控制好调用该方法的频率."
+            注释 = "注意:调用本方法将阻塞直到有数据返回或指定的超时时间达到后返回错误,本方法不支持CameraLink设备." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 帧数据 <类型 = 字节集类 注释 = "提供存放数据的缓冲区,获取到数据后将写入至该变量." 注释 = "注意:调用本方法前务必为其分配足够的内存空间.">
+    参数 数据对象 <类型 = 图像数据信息 注释 = "提供数据信息对象,获取到的信息将写入至该变量.">
+    参数 超时时间 <类型 = 整数 注释 = "提供本次执行的最大超时时间,单位毫秒,在该时间内未获取到数据将返回一个错误." @默认值 = 1000>
+    {
+        @ @<帧数据>.Zero();    //交由用户分配,清零即可
+        @ MV_FRAME_OUT_INFO_EX stFrameInfo = {0};
+        @ INT ret = MV_CC_GetOneFrameTimeout(this->data().GetDeviceHandle(), (unsigned char*)@<帧数据>.GetPtr(), (UINT)@<帧数据>.GetSize(), &stFrameInfo, (UINT)@<超时时间>);
+        @ @<数据对象>.SetInfo(&stFrameInfo);
+        @ return ret;
+    }
+
+    方法 取内部缓存图像帧数据 <公开 类型 = 整数 注释 = "  在调用\"开始取流\"后,使用内部缓存获取一帧图片,应用程序需要根据帧率,控制好调用该方法的频率."
+            注释 = "注意:调用本方法将阻塞直到有数据返回或指定的超时时间达到后返回错误,本方法不支持CameraLink设备." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 数据对象 <类型 = 图像帧输出数据信息 注释 = "提供数据信息对象,获取到的信息将写入至该变量.">
+    参数 超时时间 <类型 = 整数 注释 = "提供本次执行的最大超时时间,单位毫秒,在该时间内未获取到数据将返回一个错误." @默认值 = 1000>
+    {
+        @ MV_CC_GetImageBuffer(@sn<this>.data().GetDeviceHandle(), @<数据对象>.GetSTFrame(), (UINT)@<超时时间>)
+    }
+
+    方法 取内部缓存图像帧RGB数据 <公开 类型 = 整数 注释 = "  同\"取内部缓存图像帧数据\"方法一致,但会将获取到的数据转为RGB24格式再返回,本方法不支持CameraLink设备."
+            注释 = "注意:因为图像转换成RGB24格式有耗时,所以当数据帧率过高时该方法可能会导致丢帧." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 帧数据 <类型 = 字节集类 注释 = "提供存放数据的缓冲区,获取到数据后将写入至该变量." 注释 = "注意:调用本方法前务必为其分配足够的内存空间.">
+    参数 数据对象 <类型 = 图像数据信息 注释 = "提供数据信息对象,获取到的信息将写入至该变量.">
+    参数 超时时间 <类型 = 整数 注释 = "提供本次执行的最大超时时间,单位毫秒,在该时间内未获取到数据将返回一个错误." @默认值 = 1000>
+    {
+        @ MV_FRAME_OUT_INFO_EX stFrameInfo = {0};
+        @ INT ret = MV_CC_GetImageForRGB(this->data().GetDeviceHandle(), (unsigned char*)@<帧数据>.GetPtr(), (UINT)@<帧数据>.GetSize(), &stFrameInfo, (UINT)@<超时时间>);
+        @ @<数据对象>.SetInfo(&stFrameInfo);
+        @ return ret;
+    }
+
+    方法 释放内部缓存图像帧数据 <公开 类型 = 整数 注释 = "释放图像缓存(此接口用于释放不再使用的图像缓存,与\"取内部缓存图像帧数据\"成对使用),本方法不支持CameraLink设备."
+            返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 数据对象 <类型 = 图像帧输出数据信息 注释 = "提供所欲释放的数据对象.">
+    {
+        @ MV_CC_FreeImageBuffer(@sn<this>.data().GetDeviceHandle(), @<数据对象>.GetSTFrame())
+    }
+
+    方法 清除取流数据缓存 <公开 类型 = 整数 注释 = "  支持在取流过程中调用,以清除缓存中不需要的图像数据." 注释 = "在连续模式切触发模式后,可以清除历史数据,本方法不支持CameraLink设备."
+            返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    {
+        @ MV_CC_ClearImageBuffer(@sn<this>.data().GetDeviceHandle())
+    }
+
+    # 图像处理 ---
+
+    方法 显示图像帧到组件 <公开 类型 = 整数 注释 = "将一帧图像显示到指定的窗口组件上,该方法不支持CameraLink设备." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值.">
+    参数 窗口句柄 <类型 = 变整数 注释 = "提供所欲图像的窗口组件句柄.">
+    参数 数据 <类型 = 字节集类 注释 = "提供采集到的原始图像数据.">
+    参数 图像宽度 <类型 = 短整数 注释 = "提供所欲显示图像的宽度.">
+    参数 图像高度 <类型 = 短整数 注释 = "提供所欲显示图像的高度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供所欲显示图像的像素格式.">
+    {
+        返回 (显示图像帧到组件2 (窗口句柄, 数据.取字节集指针 (), 数据.取字节集长度 (), 图像宽度, 图像高度, 像素格式))
+    }
+
+    方法 显示图像帧到组件2 <公开 类型 = 整数 注释 = "同\"显示图像帧到组件\"方法基本一致,不同的是本方法的数据需要提供数据指针方式而非字节集方式." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "提供所欲图像的窗口组件句柄.">
+    参数 数据指针 <类型 = 变整数 注释 = "提供所欲显示的数据指针.">
+    参数 数据长度 <类型 = 整数 注释 = "提供数据指针指向数据的长度.">
+    参数 图像宽度 <类型 = 短整数 注释 = "提供所欲显示图像的宽度.">
+    参数 图像高度 <类型 = 短整数 注释 = "提供所欲显示图像的高度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供所欲显示图像的像素格式.">
+    {
+        @ MV_DISPLAY_FRAME_INFO stDisplayInfo = {0};
+        @ stDisplayInfo.hWnd = (void*)@<窗口句柄>;
+        @ stDisplayInfo.pData = (unsigned char*)@<数据指针>;
+        @ stDisplayInfo.nDataLen = (UINT)@<数据长度>;
+        @ stDisplayInfo.nWidth = (USHORT)@<图像宽度>;
+        @ stDisplayInfo.nHeight = (USHORT)@<图像高度>;
+        @ stDisplayInfo.enPixelType = (MvGvspPixelType)@<像素格式>;
+        @ return MV_CC_DisplayOneFrame(this->data().GetDeviceHandle(), &stDisplayInfo);
+    }
+
+    方法 保存图像数据 <公开 类型 = 整数 注释 = "将所采集的图像帧数据转换保存为指定格式(JPG/BMP等)的图像数据." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值.">
+    参数 图像数据 <类型 = 字节集类 注释 = "提供采集到的原始图像数据.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供采集到的原始图像的像素格式.">
+    参数 图像宽度 <类型 = 短整数 注释 = "提供所欲输出图像的宽度">
+    参数 图像高度 <类型 = 短整数 注释 = "提供所欲输出图像的高度.">
+    参数 输出格式 <类型 = 相机图像数据保存格式 注释 = "提供所欲输出的图像格式类型.">
+    参数 JPG质量 <类型 = 整数 注释 = "在指定输出格式为\"JPEG\"时本参数有意义,其他格式无效,范围:[50-99].">
+    参数 插值方法 <类型 = 整数 注释 = "指定所欲使用的插值方法,0表示快速,1表示均衡,2表示最优." @默认值 = 2>
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,务必提供足够长度的空间,转换后将图像数据写入至该变量.">
+    {
+        返回 (保存图像数据2 (图像数据.取字节集指针 (), 图像数据.取字节集长度 (), 像素格式, 图像宽度, 图像高度, 输出格式, JPG质量, 插值方法, 输出数据))
+    }
+
+    方法 保存图像数据2 <公开 类型 = 整数 注释 = "同\"保存图像数据\"方法基本一致,不同的是本方法的数据需要提供数据指针方式而非字节集方式." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数 注释 = "提供采集到的原始图像的数据指针.">
+    参数 数据长度 <类型 = 整数 注释 = "提供数据指针指向数据的长度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供采集到的原始图像的像素格式.">
+    参数 图像宽度 <类型 = 短整数 注释 = "提供所欲输出图像的宽度">
+    参数 图像高度 <类型 = 短整数 注释 = "提供所欲输出图像的高度.">
+    参数 输出格式 <类型 = 相机图像数据保存格式 注释 = "提供所欲输出的图像格式类型.">
+    参数 JPG质量 <类型 = 整数 注释 = "在指定输出格式为\"JPEG\"时本参数有意义,其他格式无效,范围:[50-99].">
+    参数 插值方法 <类型 = 整数 注释 = "指定所欲使用的插值方法,0表示快速,1表示均衡,2表示最优.">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,务必提供足够长度的空间,转换后将图像数据写入至该变量.">
+    {
+        @ MV_SAVE_IMAGE_PARAM_EX stSaveParam = {0};
+        @ stSaveParam.pData = (unsigned char*)@<数据指针>;
+        @ stSaveParam.nDataLen = (UINT)@<数据长度>;
+        @ stSaveParam.enPixelType = (MvGvspPixelType)@<像素格式>;
+        @ stSaveParam.nWidth = (USHORT)@<图像宽度>;
+        @ stSaveParam.nHeight = (USHORT)@<图像高度>;
+        @ stSaveParam.pImageBuffer = (unsigned char*)@<输出数据>.GetPtr();
+        @ stSaveParam.nBufferSize = (UINT)@<输出数据>.GetSize();
+        @ stSaveParam.enImageType = (MV_SAVE_IAMGE_TYPE)@<输出格式>;
+        @ stSaveParam.nJpgQuality = (UINT)@<JPG质量>;
+        @ stSaveParam.iMethodValue = (UINT)@<插值方法>;
+        @ INT ret = MV_CC_SaveImageEx2(this->data().GetDeviceHandle(), &stSaveParam);
+        @ if (ret == MV_OK) 
+        @     @<输出数据>.Realloc(stSaveParam.nImageLen);
+        @ else 
+        @     @<输出数据>.Free();
+        @ return ret;
+    }
+
+    方法 保存图像数据到文件 <公开 类型 = 整数 注释 = "将所采集的图像帧数据转换保存为指定格式(JPG/BMP等)的图像数据并写出到指定文件." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值.">
+    参数 图像数据 <类型 = 字节集类 注释 = "提供采集到的原始图像数据.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供采集到的原始图像的像素格式.">
+    参数 图像宽度 <类型 = 短整数 注释 = "提供所欲输出图像的宽度">
+    参数 图像高度 <类型 = 短整数 注释 = "提供所欲输出图像的高度.">
+    参数 保存格式 <类型 = 相机图像数据保存格式 注释 = "提供所欲保存图像的图像格式类型.">
+    参数 图像质量 <类型 = 整数 注释 = "在指定保存格式为\"JPEG/PNG\"时本参数有意义,其他格式无效,JPG范围:[50-99]，PNG范围:[0-9].">
+    参数 插值方法 <类型 = 整数 注释 = "指定所欲使用的插值方法,0表示快速,1表示均衡,2表示最优.">
+    参数 保存路径 <类型 = 文本型 注释 = "提供图像文件的写出路径.">
+    {
+        返回 (保存图像数据到文件2 (图像数据.取字节集指针 (), 图像数据.取字节集长度 (), 像素格式, 图像宽度, 图像高度, 保存格式, 图像质量, 插值方法, 保存路径))
+    }
+
+    方法 保存图像数据到文件2 <公开 类型 = 整数 注释 = "同\"保存图像数据到文件\"基本一致,不同的是本方法的数据需要提供数据指针方式而非字节集方式." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数 注释 = "提供采集到的原始图像数据指针.">
+    参数 数据长度 <类型 = 整数 注释 = "提供数据指针指向数据的长度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供采集到的原始图像的像素格式.">
+    参数 图像宽度 <类型 = 短整数 注释 = "提供所欲输出图像的宽度">
+    参数 图像高度 <类型 = 短整数 注释 = "提供所欲输出图像的高度.">
+    参数 保存格式 <类型 = 相机图像数据保存格式 注释 = "提供所欲保存图像的图像格式类型.">
+    参数 图像质量 <类型 = 整数 注释 = "在指定保存格式为\"JPEG/PNG\"时本参数有意义,其他格式无效,JPG范围:[50-99]，PNG范围:[0-9].">
+    参数 插值方法 <类型 = 整数 注释 = "指定所欲使用的插值方法,0表示快速,1表示均衡,2表示最优.">
+    参数 保存路径 <类型 = 文本型 注释 = "提供图像文件的写出路径.">
+    {
+        @ MV_SAVE_IMG_TO_FILE_PARAM stSaveFileParam;
+        @ memset(&stSaveFileParam, 0, sizeof(MV_SAVE_IMG_TO_FILE_PARAM));
+        @ stSaveFileParam.pData = (unsigned char*)@<数据指针>;
+        @ stSaveFileParam.nDataLen = (UINT)@<数据长度>;
+        @ stSaveFileParam.enPixelType = (MvGvspPixelType)@<像素格式>;
+        @ stSaveFileParam.nWidth = (USHORT)@<图像宽度>;
+        @ stSaveFileParam.nHeight = (USHORT)@<图像高度>;
+        @ INT_P mbsLen;
+        @ CVolMem memBuf;
+        @ char* mbsPath = (char*)GetMbsText(@<保存路径>.GetText(), memBuf, &mbsLen);
+        @ memcpy(stSaveFileParam.pImagePath, mbsPath, mbsLen > 256 ? 256 : mbsLen);
+        @ stSaveFileParam.enImageType = (MV_SAVE_IAMGE_TYPE)@<保存格式>;
+        @ stSaveFileParam.nQuality = (UINT)@<图像质量>;
+        @ stSaveFileParam.iMethodValue = (UINT)@<插值方法>;
+        @ return MV_CC_SaveImageToFile(this->data().GetDeviceHandle(), &stSaveFileParam);
+    }
+
+    方法 保存3D点云数据 <公开 类型 = 整数 注释 = "保存3D点云数据,支持PLY,CSV和OBJ三种格式." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值.">
+    参数 图像数据 <类型 = 字节集类 注释 = "提供采集到的原始图像数据.">
+    参数 行点数 <类型 = 整数 注释 = "行点数,即图像宽度.">
+    参数 行数 <类型 = 整数 注释 = "行数,即图像宽高.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供采集到的原始图像的像素格式.">
+    参数 输出格式 <类型 = 点云数据保存文件格式 注释 = "提供所欲输出点云文件的格式类型.">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,转换后将图像数据写入至该变量.">
+    {
+        返回 (保存3D点云数据2 (图像数据.取字节集指针 (), 图像数据.取字节集长度 (), 行点数, 行数, 像素格式, 输出格式, 输出数据))
+    }
+
+    方法 保存3D点云数据2 <公开 类型 = 整数 注释 = "同\"保存3D点云数据\"方法基本一致,不同的是本方法的数据需要提供数据指针方式而非字节集方式." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数 注释 = "提供采集到的原始图像数据指针.">
+    参数 数据长度 <类型 = 整数 注释 = "提供数据指针指向数据的长度.">
+    参数 行点数 <类型 = 整数 注释 = "行点数,即图像宽度.">
+    参数 行数 <类型 = 整数 注释 = "行数,即图像宽高.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供采集到的原始图像的像素格式.">
+    参数 输出格式 <类型 = 点云数据保存文件格式 注释 = "提供所欲输出点云文件的格式类型.">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,转换后将图像数据写入至该变量.">
+    {
+        @ MV_SAVE_POINT_CLOUD_PARAM stPointDataParam = {0};
+        @ stPointDataParam.nLinePntNum = (UINT)@<行点数>;
+        @ stPointDataParam.nLineNum = (UINT)@<行数>;
+        @ stPointDataParam.enSrcPixelType = (MvGvspPixelType)@<像素格式>;
+        @ stPointDataParam.pSrcData = (unsigned char*)@<数据指针>;
+        @ stPointDataParam.nSrcDataLen = (UINT)@<数据长度>;
+        @ stPointDataParam.pDstBuf = (unsigned char*)@<输出数据>.Alloc(@<行点数> * @<行数> * (16 * 3 + 4) + 2048, TRUE);
+        @ stPointDataParam.nDstBufSize = (UINT)@<输出数据>.GetSize();
+        @ stPointDataParam.enPointCloudFileType = (MV_SAVE_POINT_CLOUD_FILE_TYPE)@<输出格式>;
+        @ INT ret = MV_CC_SavePointCloudData(this->data().GetDeviceHandle(), &stPointDataParam);
+        @ if (ret == MV_OK)
+        @     @<输出数据>.Realloc(stPointDataParam.nDstBufLen);
+        @ else 
+        @     @<输出数据>.Free();
+        @ return ret;
+    }
+
+    方法 旋转图像数据 <公开 类型 = 整数 注释 = "将指定图像数据进行旋转变换后返回,本方法仅支持MONO8/RGB24/BGR24格式数据的90/180/270度旋转."
+            返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值.">
+    参数 图像数据 <类型 = 字节集类 注释 = "提供采集到的原始图像数据指针.">
+    参数 图像宽度 <类型 = 整数类 注释 = "需提供原始图像的宽度,旋转后新图像数据的宽度将被写入至该变量.">
+    参数 图像高度 <类型 = 整数类 注释 = "需提供原始图像的高度,旋转后新图像数据的高度将被写入至该变量.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供采集到的原始图像的像素格式.">
+    参数 旋转类型 <类型 = 整数 注释 = "提供所欲使用的旋转类型,1表示旋转90度,2表示旋转180度,3表示旋转270度.">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,务必提供足够长度的空间,转换后将图像数据写入至该变量.">
+    {
+        返回 (旋转图像数据2 (图像数据.取字节集指针 (), 图像数据.取字节集长度 (), 图像宽度, 图像高度, 像素格式, 旋转类型, 输出数据))
+    }
+
+    方法 旋转图像数据2 <公开 类型 = 整数 注释 = "同\"旋转图像数据\"方法基本一致,不同的是本方法的数据需要提供数据指针方式而非字节集方式." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数 注释 = "提供采集到的原始图像数据指针.">
+    参数 数据长度 <类型 = 整数 注释 = "提供数据指针指向数据的长度.">
+    参数 图像宽度 <类型 = 整数类 注释 = "需提供原始图像的宽度,旋转后新图像数据的宽度将被写入至该变量.">
+    参数 图像高度 <类型 = 整数类 注释 = "需提供原始图像的高度,旋转后新图像数据的高度将被写入至该变量.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供采集到的原始图像的像素格式.">
+    参数 旋转类型 <类型 = 整数 注释 = "提供所欲使用的旋转类型,1表示旋转90度,2表示旋转180度,3表示旋转270度.">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,务必提供足够长度的空间,转换后将图像数据写入至该变量.">
+    {
+        @ MV_CC_ROTATE_IMAGE_PARAM stRotateParam;
+        @ memset(&stRotateParam, 0, sizeof(MV_CC_ROTATE_IMAGE_PARAM));
+        @ stRotateParam.enPixelType = (MvGvspPixelType)@<像素格式>;
+        @ stRotateParam.nWidth = (UINT)*(INT*)@<图像宽度>.GetDataPtr();
+        @ stRotateParam.nHeight = (UINT)*(INT*)@<图像高度>.GetDataPtr();
+        @ stRotateParam.pSrcData = (unsigned char*)@<数据指针>;
+        @ stRotateParam.nSrcDataLen = (UINT)@<数据长度>;
+        @ stRotateParam.pDstBuf = (unsigned char*)@<输出数据>.GetPtr();
+        @ stRotateParam.nDstBufSize = (UINT)@<输出数据>.GetSize();
+        @ stRotateParam.enRotationAngle = (MV_IMG_ROTATION_ANGLE)@<旋转类型>;
+        @ INT ret = MV_CC_RotateImage(this->data().GetDeviceHandle(), &stRotateParam);
+        @ if (ret == MV_OK)
+        @ {
+        @     @<输出数据>.Realloc(stRotateParam.nDstBufLen);
+        @     *(INT*)@<图像宽度>.GetDataPtr() = (INT)stRotateParam.nWidth;
+        @     *(INT*)@<图像高度>.GetDataPtr() = (INT)stRotateParam.nHeight;
+        @ }
+        @ else
+        @     @<输出数据>.Free();
+        @ return ret;
+    }
+
+    方法 翻转图像数据 <公开 类型 = 整数 注释 = "将指定图像数据进行翻转变换后返回,本方法仅支持MONO8/RGB24/BGR24格式数据的垂直和水平翻转."
+            返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值.">
+    参数 图像数据 <类型 = 字节集类 注释 = "提供采集到的原始图像数据指针.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度,翻转后新图像数据的宽度将被写入至该变量.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度,翻转后新图像数据的高度将被写入至该变量.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供采集到的原始图像的像素格式.">
+    参数 垂直翻转 <类型 = 逻辑型 注释 = "提供真表示垂直翻转,否则水平翻转.">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,务必提供足够长度的空间,转换后将图像数据写入至该变量.">
+    {
+        返回 (翻转图像数据2 (图像数据.取字节集指针 (), 图像数据.取字节集长度 (), 图像宽度, 图像高度, 像素格式, 垂直翻转, 输出数据))
+    }
+
+    方法 翻转图像数据2 <公开 类型 = 整数 注释 = "同\"翻转图像数据\"方法基本一致,不同的是本方法的数据需要提供数据指针方式而非字节集方式." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数 注释 = "提供采集到的原始图像数据指针.">
+    参数 数据长度 <类型 = 整数 注释 = "提供数据指针指向数据的长度.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供采集到的原始图像的像素格式.">
+    参数 垂直翻转 <类型 = 逻辑型 注释 = "提供真表示垂直翻转,否则水平翻转.">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,务必提供足够长度的空间,转换后将图像数据写入至该变量.">
+    {
+        @ MV_CC_FLIP_IMAGE_PARAM stFlipParam;
+        @ memset(&stFlipParam, 0, sizeof(MV_CC_FLIP_IMAGE_PARAM));
+        @ stFlipParam.enPixelType = (MvGvspPixelType)@<像素格式>;
+        @ stFlipParam.nWidth = (UINT)@<图像宽度>;
+        @ stFlipParam.nHeight = (UINT)@<图像高度>;
+        @ stFlipParam.pSrcData = (unsigned char*)@<数据指针>;
+        @ stFlipParam.nSrcDataLen = (UINT)@<数据长度>;
+        @ stFlipParam.pDstBuf = (unsigned char*)@<输出数据>.GetPtr();
+        @ stFlipParam.nDstBufSize = (UINT)@<输出数据>.GetSize();
+        @ stFlipParam.enFlipType = @<垂直翻转> ? MV_IMG_FLIP_TYPE::MV_FLIP_VERTICAL : MV_IMG_FLIP_TYPE::MV_FLIP_HORIZONTAL;
+        @ INT ret = MV_CC_FlipImage(this->data().GetDeviceHandle(), &stFlipParam);
+        @ if (ret == MV_OK)
+        @     @<输出数据>.Realloc(stFlipParam.nDstBufLen);
+        @ else
+        @     @<输出数据>.Free();
+        @ return ret;
+    }
+
+    方法 转换图像像素格式 <公开 类型 = 整数 注释 = "将指定图像数据的像素格式转换到指定格式." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值.">
+    参数 图像数据 <类型 = 字节集类 注释 = "提供所欲转换的源图像数据.">
+    参数 图像宽度 <类型 = 短整数 注释 = "需提供原始图像的宽度.">
+    参数 图像高度 <类型 = 短整数 注释 = "需提供原始图像的高度.">
+    参数 原像素格式 <类型 = 图像像素格式 注释 = "提供采集到的原始图像的像素格式.">
+    参数 新像素格式 <类型 = 图像像素格式 注释 = "提供所欲转换到的新像素格式.">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,务必提供足够长度的空间,转换后将图像数据写入至该变量.">
+    {
+        返回 (转换图像像素格式2 (图像数据.取字节集指针 (), 图像数据.取字节集长度 (), 图像宽度, 图像高度, 原像素格式, 新像素格式, 输出数据))
+    }
+
+    方法 转换图像像素格式2 <公开 类型 = 整数 注释 = "同\"转换图像像素格式\"方法基本一致,不同的是本方法的数据需要提供数据指针方式而非字节集方式." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数 注释 = "提供采集到的原始图像数据指针.">
+    参数 数据长度 <类型 = 整数 注释 = "提供数据指针指向数据的长度.">
+    参数 图像宽度 <类型 = 短整数 注释 = "需提供原始图像的宽度.">
+    参数 图像高度 <类型 = 短整数 注释 = "需提供原始图像的高度.">
+    参数 原像素格式 <类型 = 图像像素格式 注释 = "提供采集到的原始图像的像素格式.">
+    参数 新像素格式 <类型 = 图像像素格式 注释 = "提供所欲转换到的新像素格式.">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,务必提供足够长度的空间,转换后将图像数据写入至该变量.">
+    {
+        @ MV_CC_PIXEL_CONVERT_PARAM stCvtParam = {0};
+        @ stCvtParam.enSrcPixelType = (MvGvspPixelType)@<原像素格式>;
+        @ stCvtParam.enDstPixelType = (MvGvspPixelType)@<新像素格式>;
+        @ stCvtParam.nWidth = (USHORT)@<图像宽度>;
+        @ stCvtParam.nHeight = (USHORT)@<图像高度>;
+        @ stCvtParam.pSrcData = (unsigned char*)@<数据指针>;
+        @ stCvtParam.nSrcDataLen = (UINT)@<数据长度>;
+        @ stCvtParam.pDstBuffer = (unsigned char*)@<输出数据>.GetPtr();
+        @ stCvtParam.nDstBufferSize = (UINT)@<输出数据>.GetSize();
+        @ INT ret = MV_CC_ConvertPixelType(this->data().GetDeviceHandle(), &stCvtParam);
+        @ if (ret == MV_OK)
+        @     @<输出数据>.Realloc(stCvtParam.nDstLen);
+        @ else
+        @     @<输出数据>.Free();
+        @ return ret;
+    }
+
+    方法 置Bayer插值算法类型 <公开 类型 = 整数 注释 = "设置内部图像转换接口的Bayer插值算法类型." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 插值方法 <类型 = 整数 注释 = "指定所欲使用的插值方法,0表示快速,1表示均衡,2表示最优.">
+    {
+        @ MV_CC_SetBayerCvtQuality(@sn<this>.data().GetDeviceHandle(), (UINT)@<插值方法>)
+    }
+
+    方法 置Bayer伽马值 <公开 类型 = 整数 注释 = "设置Bayer格式的Gamma值." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 伽马值 <类型 = 小数 注释 = "提供所欲使用的Gamma值,范围:[0.1,4.0]">
+    {
+        @ MV_CC_SetBayerGammaValue(@sn<this>.data().GetDeviceHandle(), (FLOAT)@<伽马值>)
+    }
+
+    方法 置Bayer伽马信息 <公开 类型 = 整数 注释 = "设置Bayer格式的Gamma信息." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 类型 <类型 = 图像Bayer伽马类型 注释 = "提供所欲指定的类型.">
+    参数 伽马值 <类型 = 小数 注释 = "提供所欲使用的Gamma值,范围:[0.1,4.0]">
+    参数 曲线缓存 <类型 = 字节集类 注释 = "提供所欲使用的Gamma曲线缓存数据.">
+    {
+        @ MV_CC_GAMMA_PARAM stGammaParam;
+        @ memset(&stGammaParam, 0, sizeof(MV_CC_GAMMA_PARAM));
+        @ stGammaParam.enGammaType = (MV_CC_GAMMA_TYPE)@<类型>;
+        @ stGammaParam.fGammaValue = (FLOAT)@<伽马值>;
+        @ stGammaParam.pGammaCurveBuf = (unsigned char*)@<曲线缓存>.GetPtr();
+        @ stGammaParam.nGammaCurveBufLen = (UINT)@<曲线缓存>.GetSize();
+        @ return MV_CC_SetBayerGammaParam(this->data().GetDeviceHandle(), &stGammaParam);
+    }
+
+    方法 置BayerCCM参数 <公开 类型 = 整数 注释 = "设置Bayer格式的CCM使能和矩阵,量化系数默认1024." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 启用 <类型 = 逻辑型 注释 = "是否启用CCM.">
+    参数 矩阵数据 <类型 = 整数数组类 注释 = "提供CCM矩阵数据,最多可提供9个成员.">
+    参数 量化系数 <类型 = 整数 注释 = "提供所欲使用的量化系数,必须是2的整数幂,最大值65536." @默认值 = 1024>
+    {
+        @ MV_CC_CCM_PARAM_EX stCCMParam = {0};
+        @ stCCMParam.bCCMEnable = @<启用>;
+        @ COPY_MEM (&stCCMParam.nCCMat[0], @<矩阵数据>.data ().GetData (), 9 * sizeof (INT));
+        @ stCCMParam.nCCMScale = (UINT)@<量化系数>;
+        @ return MV_CC_SetBayerCCMParamEx(this->data().GetDeviceHandle(), &stCCMParam);
+    }
+
+    方法 置BayerCLUT参数 <公开 类型 = 整数 注释 = "设置Bayer格式的CLUT使能和信息." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 启用 <类型 = 逻辑型 注释 = "是否启用CLUT.">
+    参数 CLUT尺寸 <类型 = 整数 注释 = "指定CLUT尺寸,范围:[17-33].">
+    参数 量化CLUT表 <类型 = 字节集类>
+    参数 量化系数 <类型 = 整数 注释 = "提供所欲使用的量化系数,必须是2的整数幂,最大值65536." @默认值 = 1024>
+    {
+        @ MV_CC_CLUT_PARAM stCLUTParam = {0};
+        @ stCLUTParam.bCLUTEnable = @<启用>;
+        @ stCLUTParam.nCLUTScale = (UINT)@<量化系数>;
+        @ stCLUTParam.nCLUTSize = (UINT)@<CLUT尺寸>;
+        @ stCLUTParam.pCLUTBuf = (unsigned char*)@<量化CLUT表>.GetPtr();
+        @ stCLUTParam.nCLUTBufLen = (UINT)@<量化CLUT表>.GetSize();
+        @ return MV_CC_SetBayerCLUTParam(this->data().GetDeviceHandle(), &stCLUTParam);
+    }
+
+    方法 调整图像对比度 <公开 类型 = 整数 注释 = "将指定图像数据的对比度调整后返回,以相机实际支持为准." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值.">
+    参数 图像数据 <类型 = 字节集类 注释 = "提供所欲处理的源图像数据.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供原始图像的像素格式.">
+    参数 对比度值 <类型 = 整数 注释 = "提供所欲设置的对比度值,范围:[0-10000].">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,务必提供足够长度的空间,转换后将图像数据写入至该变量.">
+    {
+        返回 (调整图像对比度2 (图像数据.取字节集指针 (), 图像数据.取字节集长度 (), 图像宽度, 图像高度, 像素格式, 对比度值, 输出数据))
+    }
+
+    方法 调整图像对比度2 <公开 类型 = 整数 注释 = "同\"调整图像对比度\"方法基本一致,不同的是本方法的数据需要提供数据指针方式而非字节集方式." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数 注释 = "提供原始图像数据指针.">
+    参数 数据长度 <类型 = 整数 注释 = "提供数据指针指向数据的长度.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供原始图像的像素格式.">
+    参数 对比度值 <类型 = 整数 注释 = "提供所欲设置的对比度值,范围:[0-10000].">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,务必提供足够长度的空间,转换后将图像数据写入至该变量.">
+    {
+        @ MV_CC_CONTRAST_PARAM stContrastParam = {0};
+        @ stContrastParam.nWidth = (UINT)@<图像宽度>;
+        @ stContrastParam.nHeight = (UINT)@<图像高度>;
+        @ stContrastParam.pSrcBuf = (unsigned char*)@<数据指针>;
+        @ stContrastParam.nSrcBufLen = (UINT)@<数据长度>;
+        @ stContrastParam.enPixelType = (MvGvspPixelType)@<像素格式>;
+        @ stContrastParam.pDstBuf = (unsigned char*)@<输出数据>.GetPtr();
+        @ stContrastParam.nDstBufSize = (UINT)@<输出数据>.GetSize();
+        @ stContrastParam.nContrastFactor = (UINT)@<对比度值>;
+        @ INT ret = MV_CC_ImageContrast(this->data().GetDeviceHandle(), &stContrastParam);
+        @ if (ret == MV_OK)
+        @     @<输出数据>.Realloc(stContrastParam.nDstBufLen);
+        @ else
+        @     @<输出数据>.Free();
+        @ return ret;
+    }
+
+    方法 调整图像锐化 <公开 类型 = 整数 注释 = "将指定图像数据进行锐化调整后返回,以相机实际支持为准." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值.">
+    参数 图像数据 <类型 = 字节集类 注释 = "提供所欲处理的源图像数据.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供原始图像的像素格式.">
+    参数 锐化强度 <类型 = 整数 注释 = "提供锐度调节强度,范围[0-500].">
+    参数 锐化半径 <类型 = 整数 注释 = "提供锐度调节半径,范围[1-21].">
+    参数 调节阀值 <类型 = 整数 注释 = "提供锐度调节阈值,范围[0-255].">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,务必提供足够长度的空间,转换后将图像数据写入至该变量.">
+    {
+        返回 (调整图像锐化2 (图像数据.取字节集指针 (), 图像数据.取字节集长度 (), 图像宽度, 图像高度, 像素格式, 锐化强度, 锐化半径, 调节阀值, 输出数据))
+    }
+
+    方法 调整图像锐化2 <公开 类型 = 整数 注释 = "同\"调整图像锐化\"方法基本一致,不同的是本方法的数据需要提供数据指针方式而非字节集方式." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数 注释 = "提供原始图像数据指针.">
+    参数 数据长度 <类型 = 整数 注释 = "提供数据指针指向数据的长度.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供原始图像的像素格式.">
+    参数 锐化强度 <类型 = 整数 注释 = "提供锐度调节强度,范围[0-500].">
+    参数 锐化半径 <类型 = 整数 注释 = "提供锐度调节半径,范围[1-21].">
+    参数 调节阀值 <类型 = 整数 注释 = "提供锐度调节阈值,范围[0-255].">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,务必提供足够长度的空间,转换后将图像数据写入至该变量.">
+    {
+        @ MV_CC_SHARPEN_PARAM stSharpenParam = {0};
+        @ stSharpenParam.nWidth = (UINT)@<图像宽度>;
+        @ stSharpenParam.nHeight = (UINT)@<图像高度>;
+        @ stSharpenParam.pSrcBuf = (unsigned char*)@<数据指针>;
+        @ stSharpenParam.nSrcBufLen = (UINT)@<数据长度>;
+        @ stSharpenParam.enPixelType = (MvGvspPixelType)@<像素格式>;
+        @ stSharpenParam.pDstBuf = (unsigned char*)@<输出数据>.GetPtr();
+        @ stSharpenParam.nDstBufSize = (UINT)@<输出数据>.GetSize();
+        @ stSharpenParam.nSharpenAmount = (UINT)@<锐化强度>;
+        @ stSharpenParam.nSharpenRadius = (UINT)@<锐化半径>;
+        @ stSharpenParam.nSharpenThreshold = (UINT)@<调节阀值>;
+        @ INT ret = MV_CC_ImageSharpen(this->data().GetDeviceHandle(), &stSharpenParam);
+        @ if (ret == MV_OK)
+        @     @<输出数据>.Realloc(stSharpenParam.nDstBufLen);
+        @ else
+        @     @<输出数据>.Free();
+        @ return ret;
+    }
+
+    方法 调整图像色彩校正 <公开 类型 = 整数 注释 = "将指定图像数据进行色彩校正(包括CCM和CLUT)后返回,以相机实际支持为准." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值.">
+    参数 图像数据 <类型 = 字节集类 注释 = "提供所欲处理的源图像数据.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供原始图像的像素格式.">
+    参数 有效图像位 <类型 = 整数 注释 = "提供有效图像位数(8,10,12,16).">
+    参数 伽马类型 <类型 = 图像Bayer伽马类型 注释 = "提供所欲指定的类型.">
+    参数 伽马值 <类型 = 小数 注释 = "提供所欲使用的Gamma值,范围:[0.1,4.0]">
+    参数 伽马曲线缓存 <类型 = 字节集类 注释 = "提供所欲使用的Gamma曲线缓存数据.">
+    参数 CCM启用 <类型 = 逻辑型 注释 = "是否启用CCM.">
+    参数 CCM矩阵数据 <类型 = 整数数组类 注释 = "提供矩阵数据,最多可提供9个成员.">
+    参数 CCM量化系数 <类型 = 整数 注释 = "提供所欲使用的CCM量化系数,必须是2的整数幂,最大值65536.">
+    参数 CLUT启用 <类型 = 逻辑型 注释 = "是否启用CLUT.">
+    参数 CLUT尺寸 <类型 = 整数 注释 = "指定CLUT尺寸,范围:[17-33].">
+    参数 CLUT量化表 <类型 = 字节集类 注释 = "提供量化CLUT表数据.">
+    参数 CLUT量化系数 <类型 = 整数 注释 = "提供所欲使用的CLUT量化系数,必须是2的整数幂,最大值65536.">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,务必提供足够长度的空间,转换后将图像数据写入至该变量.">
+    {
+        返回 (调整图像色彩校正2 (图像数据.取字节集指针 (), 图像数据.取字节集长度 (), 图像宽度, 图像高度, 像素格式, 有效图像位, 伽马类型, 伽马值, 伽马曲线缓存, CCM启用, CCM矩阵数据, CCM量化系数, CLUT启用, CLUT尺寸, CLUT量化表, CLUT量化系数, 输出数据))
+    }
+
+    方法 调整图像色彩校正2 <公开 类型 = 整数 注释 = "同\"调整图像色彩校正\"方法基本一致,不同的是本方法的数据需要提供数据指针方式而非字节集方式." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数 注释 = "提供原始图像数据指针.">
+    参数 数据长度 <类型 = 整数 注释 = "提供数据指针指向数据的长度.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供原始图像的像素格式.">
+    参数 有效图像位 <类型 = 整数 注释 = "提供有效图像位数(8,10,12,16).">
+    参数 伽马类型 <类型 = 图像Bayer伽马类型 注释 = "提供所欲指定的类型.">
+    参数 伽马值 <类型 = 小数 注释 = "提供所欲使用的Gamma值,范围:[0.1,4.0]">
+    参数 伽马曲线缓存 <类型 = 字节集类 注释 = "提供所欲使用的Gamma曲线缓存数据.">
+    参数 CCM启用 <类型 = 逻辑型 注释 = "是否启用CCM.">
+    参数 CCM矩阵数据 <类型 = 整数数组类 注释 = "提供矩阵数据,最多可提供9个成员.">
+    参数 CCM量化系数 <类型 = 整数 注释 = "提供所欲使用的CCM量化系数,必须是2的整数幂,最大值65536.">
+    参数 CLUT启用 <类型 = 逻辑型 注释 = "是否启用CLUT.">
+    参数 CLUT尺寸 <类型 = 整数 注释 = "指定CLUT尺寸,范围:[17-33].">
+    参数 CLUT量化表 <类型 = 字节集类 注释 = "提供量化CLUT表数据.">
+    参数 CLUT量化系数 <类型 = 整数 注释 = "提供所欲使用的CLUT量化系数,必须是2的整数幂,最大值65536.">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,务必提供足够长度的空间,转换后将图像数据写入至该变量.">
+    {
+        @ MV_CC_COLOR_CORRECT_PARAM stColorCorrectParam = {0};
+        @ stColorCorrectParam.nWidth = (UINT)@<图像宽度>;
+        @ stColorCorrectParam.nHeight = (UINT)@<图像高度>;
+        @ stColorCorrectParam.pSrcBuf = (unsigned char*)@<数据指针>;
+        @ stColorCorrectParam.nSrcBufLen = (UINT)@<数据长度>;
+        @ stColorCorrectParam.enPixelType = (MvGvspPixelType)@<像素格式>;
+        @ stColorCorrectParam.pDstBuf = (unsigned char*)@<输出数据>.GetPtr();
+        @ stColorCorrectParam.nDstBufSize = (UINT)@<输出数据>.GetSize();
+        @ stColorCorrectParam.nImageBit = (UINT)@<有效图像位>;
+
+        @ stColorCorrectParam.stGammaParam.enGammaType = (MV_CC_GAMMA_TYPE)@<伽马类型>;
+        @ stColorCorrectParam.stGammaParam.fGammaValue = (FLOAT)@<伽马值>;
+        @ stColorCorrectParam.stGammaParam.pGammaCurveBuf = (unsigned char*)@<伽马曲线缓存>.GetPtr();
+        @ stColorCorrectParam.stGammaParam.nGammaCurveBufLen = (UINT)@<伽马曲线缓存>.GetSize();
+
+        @ stColorCorrectParam.stCCMParam.bCCMEnable = @<CCM启用>;
+        @ COPY_MEM (&stColorCorrectParam.stCCMParam.nCCMat[0], @<CCM矩阵数据>.data ().GetData (), 9 * sizeof (INT));
+        @ stColorCorrectParam.stCCMParam.nCCMScale = (UINT)@<CCM量化系数>;
+
+        @ stColorCorrectParam.stCLUTParam.bCLUTEnable = @<CLUT启用>;
+        @ stColorCorrectParam.stCLUTParam.nCLUTScale = (UINT)@<CLUT量化系数>;
+        @ stColorCorrectParam.stCLUTParam.nCLUTSize = (UINT)@<CLUT尺寸>;
+        @ stColorCorrectParam.stCLUTParam.pCLUTBuf = (unsigned char*)@<CLUT量化表>.GetPtr();
+        @ stColorCorrectParam.stCLUTParam.nCLUTBufLen = (UINT)@<CLUT量化表>.GetSize();
+
+        @ INT ret = MV_CC_ColorCorrect (this->data().GetDeviceHandle(), &stColorCorrectParam);
+        @ if (ret == MV_OK)
+        @     @<输出数据>.Realloc(stColorCorrectParam.nDstBufLen);
+        @ else
+        @     @<输出数据>.Free();
+        @ return ret;
+    }
+
+    方法 图像噪声估计 <公开 类型 = 整数 注释 = "对指定图像数据进行噪声估计,以相机实际支持为准." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值.">
+    参数 图像数据 <类型 = 字节集类 注释 = "提供所欲处理的源图像数据.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供原始图像的像素格式.">
+    参数 图像ROI <类型 = 矩形类 注释 = "提供图像区域数据,如果提供空对象则会进行全图噪声估计.">
+    参数 噪声阀值 <类型 = 整数 注释 = "提供噪声阈值,范围:[0-4095].">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放图像数据的变量,务必提供足够长度的空间,转换后将图像数据写入至该变量.">
+    {
+        返回 (图像噪声估计2 (图像数据.取字节集指针 (), 图像数据.取字节集长度 (), 图像宽度, 图像高度, 像素格式, 图像ROI, 噪声阀值, 输出数据))
+    }
+
+    方法 图像噪声估计2 <公开 类型 = 整数 注释 = "同\"图像噪声估计\"方法基本一致,不同的是本方法的数据需要提供数据指针方式而非字节集方式." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数 注释 = "提供原始图像数据指针.">
+    参数 数据长度 <类型 = 整数 注释 = "提供数据指针指向数据的长度.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供原始图像的像素格式.">
+    参数 图像ROI <类型 = 矩形类 注释 = "提供图像区域数据,如果提供空对象则会进行全图噪声估计.">
+    参数 噪声阀值 <类型 = 整数 注释 = "提供噪声阈值,范围:[0-4095].">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放噪声特性的变量,务必提供足够长度的空间,处理完成后将数据写入至该变量.">
+    {
+        @ MV_CC_NOISE_ESTIMATE_PARAM stNoiseEstimateParam = {0};
+        @ stNoiseEstimateParam.nWidth = (UINT)@<图像宽度>;
+        @ stNoiseEstimateParam.nHeight = (UINT)@<图像高度>;
+        @ stNoiseEstimateParam.enPixelType = (MvGvspPixelType)@<像素格式>;
+        @ stNoiseEstimateParam.pSrcBuf = (unsigned char*)@<数据指针>;
+        @ stNoiseEstimateParam.nSrcBufLen = (UINT)@<数据长度>;
+        @ MV_CC_RECT_I rect;
+        @ rect.nX = (UINT)@<图像ROI.左边>;
+        @ rect.nY = (UINT)@<图像ROI.顶边>;
+        @ rect.nWidth = (UINT)@<图像ROI.宽度>();
+        @ rect.nHeight = (UINT)@<图像ROI.高度>();
+        @ stNoiseEstimateParam.pNoiseProfile = (unsigned char*)@<输出数据>.GetPtr();
+        @ stNoiseEstimateParam.nNoiseProfileSize = (UINT)@<输出数据>.GetSize();
+        @ stNoiseEstimateParam.nNoiseThreshold = (UINT)@<噪声阀值>;
+        @ stNoiseEstimateParam.pstROIRect = @<图像ROI>.IsNullObject() ? NULL : &rect;
+        @ stNoiseEstimateParam.nROINum = @<图像ROI>.IsNullObject() ? 0 : 1;
+        @ INT ret = MV_CC_NoiseEstimate (this->data().GetDeviceHandle(), &stNoiseEstimateParam);
+        @ if (ret == MV_OK)
+        @     @<输出数据>.Realloc(stNoiseEstimateParam.nNoiseProfileLen);
+        @ else
+        @     @<输出数据>.Free();
+        @ return ret;
+    }
+
+    方法 调整图像空域降噪 <公开 类型 = 整数 注释 = "对指定图像数据进行空域降噪处理,以相机实际支持为准." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值.">
+    参数 图像数据 <类型 = 字节集类 注释 = "提供所欲处理的源图像数据.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供原始图像的像素格式.">
+    参数 噪声特性 <类型 = 字节集类 注释 = "提供噪声特性数据.">
+    参数 降噪强度 <类型 = 整数 注释 = "提供所欲使用的降噪强度,范围:[0-100].">
+    参数 Bayer锐化强度 <类型 = 整数 注释 = "提供所欲使用的Bayer锐化强度,范围:[0-32].">
+    参数 噪声校正系数 <类型 = 整数 注释 = "提供所欲使用的噪声校正系数,范围:[0-1280].">
+    参数 亮度校正系数 <类型 = 整数 注释 = "提供所欲使用的亮度校正系数,范围:[1-2000].">
+    参数 色度校正系数 <类型 = 整数 注释 = "提供所欲使用的色度校正系数,范围:[1-2000].">
+    参数 亮度降噪强度 <类型 = 整数 注释 = "提供所欲使用的亮度降噪强度,范围:[0-100].">
+    参数 色度降噪强度 <类型 = 整数 注释 = "提供所欲使用的色度降噪强度,范围:[0-100].">
+    参数 锐化强度 <类型 = 整数 注释 = "提供所欲使用的锐化强度,范围:[1-1000].">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放处理后数据的变量,务必提供足够长度的空间,处理完成后将数据写入至该变量.">
+    {
+        返回 (调整图像空域降噪2 (图像数据.取字节集指针 (), 图像数据.取字节集长度 (), 图像宽度, 图像高度, 像素格式, 噪声特性, 降噪强度, Bayer锐化强度, 噪声校正系数, 亮度校正系数, 色度校正系数, 亮度降噪强度, 色度降噪强度, 锐化强度, 输出数据))
+    }
+
+    方法 调整图像空域降噪2 <公开 类型 = 整数 注释 = "同\"调整图像空域降噪\"方法基本一致,不同的是本方法的数据需要提供数据指针方式而非字节集方式." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值."
+            @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数 注释 = "提供原始图像数据指针.">
+    参数 数据长度 <类型 = 整数 注释 = "提供数据指针指向数据的长度.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供原始图像的像素格式.">
+    参数 噪声特性 <类型 = 字节集类 注释 = "提供噪声特性数据.">
+    参数 降噪强度 <类型 = 整数 注释 = "提供所欲使用的降噪强度,范围:[0-100].">
+    参数 Bayer锐化强度 <类型 = 整数 注释 = "提供所欲使用的Bayer锐化强度,范围:[0-32].">
+    参数 噪声校正系数 <类型 = 整数 注释 = "提供所欲使用的噪声校正系数,范围:[0-1280].">
+    参数 亮度校正系数 <类型 = 整数 注释 = "提供所欲使用的亮度校正系数,范围:[1-2000].">
+    参数 色度校正系数 <类型 = 整数 注释 = "提供所欲使用的色度校正系数,范围:[1-2000].">
+    参数 亮度降噪强度 <类型 = 整数 注释 = "提供所欲使用的亮度降噪强度,范围:[0-100].">
+    参数 色度降噪强度 <类型 = 整数 注释 = "提供所欲使用的色度降噪强度,范围:[0-100].">
+    参数 锐化强度 <类型 = 整数 注释 = "提供所欲使用的锐化强度,范围:[1-1000].">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放处理后数据的变量,务必提供足够长度的空间,处理完成后将数据写入至该变量.">
+    {
+        @ MV_CC_SPATIAL_DENOISE_PARAM stSpatialDenoiseParam = {0};
+        @ stSpatialDenoiseParam.nWidth = (UINT)@<图像宽度>;
+        @ stSpatialDenoiseParam.nHeight = (UINT)@<图像高度>;
+        @ stSpatialDenoiseParam.enPixelType = (MvGvspPixelType)@<像素格式>;
+        @ stSpatialDenoiseParam.pSrcBuf = (unsigned char*)@<数据指针>;
+        @ stSpatialDenoiseParam.nSrcBufLen = (UINT)@<数据长度>;
+        @ stSpatialDenoiseParam.pDstBuf = (unsigned char*)@<输出数据>.GetPtr();
+        @ stSpatialDenoiseParam.nDstBufSize = (UINT)@<输出数据>.GetSize();
+        @ stSpatialDenoiseParam.pNoiseProfile = (unsigned char*)@<噪声特性>.GetPtr();
+        @ stSpatialDenoiseParam.nNoiseProfileLen = (UINT)@<噪声特性>.GetSize();
+        @ stSpatialDenoiseParam.nBayerDenoiseStrength = (UINT)@<降噪强度>;
+        @ stSpatialDenoiseParam.nBayerSharpenStrength = (UINT)@<Bayer锐化强度>;
+        @ stSpatialDenoiseParam.nBayerNoiseCorrect = (UINT)@<噪声校正系数>;
+        @ stSpatialDenoiseParam.nNoiseCorrectLum = (UINT)@<亮度校正系数>;
+        @ stSpatialDenoiseParam.nNoiseCorrectChrom = (UINT)@<色度校正系数>;
+        @ stSpatialDenoiseParam.nStrengthLum = (UINT)@<亮度降噪强度>;
+        @ stSpatialDenoiseParam.nStrengthChrom = (UINT)@<色度降噪强度>;
+        @ stSpatialDenoiseParam.nStrengthSharpen = (UINT)@<锐化强度>;
+        @ INT ret = MV_CC_SpatialDenoise(this->data().GetDeviceHandle(), &stSpatialDenoiseParam);
+        @ if (ret == MV_OK)
+        @     @<输出数据>.Realloc(stSpatialDenoiseParam.nDstBufLen);
+        @ else
+        @     @<输出数据>.Free();
+        @ return ret;
+    }
+
+    方法 图像LSC标定 <公开 类型 = 整数 注释 = "对指定图像数据进行LSC标定,以相机实际支持为准." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值.">
+    参数 图像数据 <类型 = 字节集类 注释 = "提供所欲处理的源图像数据.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供原始图像的像素格式.">
+    参数 宽度分块数 <类型 = 整数 注释 = "提供宽度分块数.">
+    参数 高度分块数 <类型 = 整数 注释 = "提供高度分块数.">
+    参数 边缘填充系数 <类型 = 整数 注释 = "提供边缘填充系数,范围:[1-5].">
+    参数 标定方式 <类型 = 整数 注释 = "提供标定方式,0表示以中心为基准,1表示以最亮区为基准,2表示以\"目标亮度\"参数为基准.">
+    参数 目标亮度 <类型 = 整数 注释 = "提供所欲使用的目标亮度基准(标定方式为2时本参数有意义),8位时范围为[0-255],10位时范围为[0-1023],12位时范围为[0-4095],16位时范围为[0-65535].">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放处理后数据的变量,处理完成后将数据写入至该变量.">
+    {
+        返回 (图像LSC标定2 (图像数据.取字节集指针 (), 图像数据.取字节集长度 (), 图像宽度, 图像高度, 像素格式, 宽度分块数, 高度分块数, 边缘填充系数, 标定方式, 目标亮度, 输出数据))
+    }
+
+    方法 图像LSC标定2 <公开 类型 = 整数 注释 = "对指定图像数据进行LSC标定,以相机实际支持为准." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数 注释 = "提供原始图像数据指针.">
+    参数 数据长度 <类型 = 整数 注释 = "提供数据指针指向数据的长度.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供原始图像的像素格式.">
+    参数 宽度分块数 <类型 = 整数 注释 = "提供宽度分块数.">
+    参数 高度分块数 <类型 = 整数 注释 = "提供高度分块数.">
+    参数 边缘填充系数 <类型 = 整数 注释 = "提供边缘填充系数,范围:[1-5].">
+    参数 标定方式 <类型 = 整数 注释 = "提供标定方式,0表示以中心为基准,1表示以最亮区为基准,2表示以\"目标亮度\"参数为基准.">
+    参数 目标亮度 <类型 = 整数 注释 = "提供所欲使用的目标亮度基准(标定方式为2时本参数有意义),8位时范围为[0-255],10位时范围为[0-1023],12位时范围为[0-4095],16位时范围为[0-65535].">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放标定表缓存数据的变量,处理完成后将数据写入至该变量.">
+    {
+        @ MV_CC_LSC_CALIB_PARAM stLSCCalibParam = {0};
+        @ stLSCCalibParam.nWidth = (UINT)@<图像宽度>;
+        @ stLSCCalibParam.nHeight = (UINT)@<图像高度>;
+        @ stLSCCalibParam.enPixelType = (MvGvspPixelType)@<像素格式>;
+        @ stLSCCalibParam.pSrcBuf = (unsigned char*)@<数据指针>;
+        @ stLSCCalibParam.nSrcBufLen = (UINT)@<数据长度>;
+        @ stLSCCalibParam.pCalibBuf = (unsigned char*)@<输出数据>.Alloc(@<图像宽度> * @<图像高度> * sizeof(USHORT));
+        @ stLSCCalibParam.nCalibBufSize = (UINT)@<输出数据>.GetSize();
+        @ stLSCCalibParam.nSecNumW = (UINT)@<宽度分块数>;
+        @ stLSCCalibParam.nSecNumH = (UINT)@<高度分块数>;
+        @ stLSCCalibParam.nPadCoef = (UINT)@<边缘填充系数>;
+        @ stLSCCalibParam.nCalibMethod = (UINT)@<标定方式>;
+        @ stLSCCalibParam.nTargetGray = (UINT)@<目标亮度>;
+        @ INT ret = MV_CC_LSCCalib(this->data().GetDeviceHandle(), &stLSCCalibParam);
+        @ if (ret == MV_OK)
+        @     @<输出数据>.Realloc(stLSCCalibParam.nCalibBufLen);
+        @ else
+        @     @<输出数据>.Free();
+        @ return ret;
+    }
+
+    方法 图像LSC校正 <公开 类型 = 整数 注释 = "对指定图像数据进行LSC校正,以相机实际支持为准." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值.">
+    参数 图像数据 <类型 = 字节集类 注释 = "提供所欲处理的源图像数据.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度,范围:16-65535.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度,范围:16-65535.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供原始图像的像素格式.">
+    参数 标定数据 <类型 = 字节集类 注释 = "提供该图像的标定数据.">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放校正后数据的变量,务必提供足够长度的空间,处理完成后将数据写入至该变量.">
+    {
+        返回 (图像LSC校正2 (图像数据.取字节集指针 (), 图像数据.取字节集长度 (), 图像宽度, 图像高度, 像素格式, 标定数据, 输出数据))
+    }
+
+    方法 图像LSC校正2 <公开 类型 = 整数 注释 = "对指定图像数据进行LSC校正,以相机实际支持为准." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数 注释 = "提供原始图像数据指针.">
+    参数 数据长度 <类型 = 整数 注释 = "提供数据指针指向数据的长度.">
+    参数 图像宽度 <类型 = 整数 注释 = "需提供原始图像的宽度,范围:16-65535.">
+    参数 图像高度 <类型 = 整数 注释 = "需提供原始图像的高度,范围:16-65535.">
+    参数 像素格式 <类型 = 图像像素格式 注释 = "提供原始图像的像素格式.">
+    参数 标定数据 <类型 = 字节集类 注释 = "提供该图像的标定数据.">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放校正后数据的变量,务必提供足够长度的空间,处理完成后将数据写入至该变量.">
+    {
+        @ MV_CC_LSC_CORRECT_PARAM stLSCCorrectParam = {0};
+        @ stLSCCorrectParam.nWidth = (UINT)@<图像宽度>;
+        @ stLSCCorrectParam.nHeight = (UINT)@<图像高度>;
+        @ stLSCCorrectParam.enPixelType = (MvGvspPixelType)@<像素格式>;
+        @ stLSCCorrectParam.pSrcBuf = (unsigned char*)@<数据指针>;
+        @ stLSCCorrectParam.nSrcBufLen = (UINT)@<数据长度>;
+        @ stLSCCorrectParam.pDstBuf = (unsigned char*)@<输出数据>.GetPtr();
+        @ stLSCCorrectParam.nDstBufSize = (UINT)@<输出数据>.GetSize();
+        @ stLSCCorrectParam.pCalibBuf = (unsigned char*)@<标定数据>.GetPtr();
+        @ stLSCCorrectParam.nCalibBufLen = (UINT)@<标定数据>.GetSize();
+        @ INT ret = MV_CC_LSCCorrect(this->data().GetDeviceHandle(), &stLSCCorrectParam);
+        @ if (ret == MV_OK)
+        @     @<输出数据>.Realloc(stLSCCorrectParam.nDstBufLen);
+        @ else
+        @     @<输出数据>.Free();
+        @ return ret;
+    }
+
+    方法 图像无损解码 <公开 类型 = 整数 注释 = "对指定图像数据进行LSC校正,以相机实际支持为准." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值.">
+    参数 图像数据 <类型 = 字节集类 注释 = "提供所欲处理的源图像数据.">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放解码后数据的变量,务必提供足够长度的空间,处理完成后将数据写入至该变量.">
+    参数 输出信息 <类型 = 图像解码结果信息类 注释 = "提供存放解码后图像信息的变量,处理完成后解码的图像信息将写入该变量.">
+    {
+        返回 (图像无损解码2 (图像数据.取字节集指针 (), 图像数据.取字节集长度 (), 输出数据, 输出信息))
+    }
+
+    方法 图像无损解码2 <公开 类型 = 整数 注释 = "将从相机中取到的无损压缩码流解码成裸数据,同时支持解析当前相机实时图像的水印信息(如果输入的无损码流不是当前相机或者不是实时取流的，则水印解析可能异常),以相机实际支持为准."
+            返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数 注释 = "提供原始图像数据指针.">
+    参数 数据长度 <类型 = 整数 注释 = "提供数据指针指向数据的长度.">
+    参数 输出数据 <类型 = 字节集类 注释 = "提供存放解码后数据的变量,务必提供足够长度的空间,处理完成后将数据写入至该变量.">
+    参数 输出信息 <类型 = 图像解码结果信息类 注释 = "提供存放解码后图像信息的变量,处理完成后解码的图像信息将写入该变量.">
+    {
+        @ MV_CC_HB_DECODE_PARAM stDecodeParam = {0};
+        @ stDecodeParam.pSrcBuf = (unsigned char*)@<数据指针>;
+        @ stDecodeParam.nSrcLen = (UINT)@<数据长度>;
+        @ stDecodeParam.pDstBuf = (unsigned char*)@<输出数据>.GetPtr();
+        @ stDecodeParam.nDstBufSize = (UINT)@<输出数据>.GetSize();
+        @ INT ret = MV_CC_HB_Decode(this->data().GetDeviceHandle(), &stDecodeParam);
+        @ if (ret == MV_OK)
+        @ {
+        @     @<输出数据>.Realloc(stDecodeParam.nDstBufLen);
+        @     @<输出信息>.SetInfo(&stDecodeParam);
+        @ }
+        @ else
+        @     @<输出数据>.Free();
+        @ return ret;
+    }
+
+    方法 开始录像 <公开 类型 = 整数 注释 = "开始录像." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 像素格式 <类型 = 图像像素格式 注释 = "输入数据的像素格式.">
+    参数 图像宽度 <类型 = 短整数 注释 = "图像宽(指定目标参数时需为2的倍数).">
+    参数 图像高度 <类型 = 短整数 注释 = "图像高(指定目标参数时需为2的倍数).">
+    参数 帧率 <类型 = 小数 注释 = "帧率fps(大于1/16).">
+    参数 码率 <类型 = 整数 注释 = "码率kbps(128-16*1024).">
+    参数 存放路径 <类型 = 文本型 注释 = "录像文件存放路径.">
+    参数 录像格式 <类型 = 整数 注释 = "录像格式,1表示AVI格式,目前仅支持AVI." @默认值 = 1>
+    {
+        @ MV_CC_RECORD_PARAM stRecordParam;
+        @ memset(&stRecordParam, 0, sizeof(MV_CC_RECORD_PARAM));
+        @ stRecordParam.enPixelType = (MvGvspPixelType)@<像素格式>;
+        @ stRecordParam.nWidth = (USHORT)@<图像宽度>;
+        @ stRecordParam.nHeight = (USHORT)@<图像高度>;
+        @ stRecordParam.fFrameRate = (FLOAT)@<帧率>;
+        @ stRecordParam.nBitRate = (USHORT)@<码率>;
+        @ stRecordParam.enRecordFmtType = (MV_RECORD_FORMAT_TYPE)@<录像格式>;
+        @ CU8String u8str (@<存放路径>.GetText ());    //避免存在中文.
+        @ stRecordParam.strFilePath = (char *)u8str.GetText();
+        @ return MV_CC_StartRecord (this->data().GetDeviceHandle(), &stRecordParam);
+    }
+
+    方法 输入录像数据 <公开 类型 = 整数 注释 = "输入录像数据." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲输入的录像数据.">
+    {
+        @ MV_CC_INPUT_FRAME_INFO stInputFrameInfo = {0};
+        @ stInputFrameInfo.pData = (unsigned char*)@<数据>.GetPtr();
+        @ stInputFrameInfo.nDataLen = (UINT)@<数据>.GetSize();
+        @ return MV_CC_InputOneFrame(this->data().GetDeviceHandle(), &stInputFrameInfo);
+    }
+
+    方法 停止录像 <公开 类型 = 整数 注释 = "停止录像." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    {
+        @ MV_CC_StopRecord(@sn<this>.data().GetDeviceHandle())
+    }
+
+    方法 清除GenICam节点缓存 <公开 类型 = 整数 注释 = "在加载工业相机节点时需要读取GenICam配置文件,该方法可以起到清除GenICam缓存的功能."
+            返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    {
+        @ MV_CC_InvalidateNodes(@sn<this>.data().GetDeviceHandle())
+    }
+
+    方法 置GVCP命令超时 <公开 类型 = 整数 注释 = "设置GVCP命令超时时间,仅用于GIGE设备." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 超时 <类型 = 整数 注释 = "提供所欲设置的超时时间,单位:毫秒.">
+    {
+        @ MV_GIGE_SetGvcpTimeout(@sn<this>.data().GetDeviceHandle(), (UINT)@<超时>)
+    }
+
+    方法 置重传GVCP命令次数 <公开 类型 = 整数 注释 = "该方法用于在GVCP包传输异常时,增加重传的次数,在一定程度上可以避免设备掉线,仅用于GIGE设备."
+            返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 次数 <类型 = 整数 注释 = "提供所欲设置的重传次数,范围:0-100">
+    {
+        @ MV_GIGE_SetRetryGvcpTimes(@sn<this>.data().GetDeviceHandle(), (UINT)@<次数>)
+    }
+
+    方法 取重传GVCP命令次数 <公开 类型 = 整数 注释 = "获取当前设备所设置的GVCP重传次数,仅用于GIGE设备." 返回值注释 = "返回所设置的重传次数." @禁止流程检查 = 真>
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ UINT value = 0;
+        @ INT ret = MV_GIGE_GetRetryGvcpTimes(this->data().GetDeviceHandle(), &value);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return (INT)value;
+    }
+
+    方法 置U3V传输包尺寸 <公开 类型 = 整数 注释 = "增加传输包大小可以适当降低取流时的CPU占用率,但不同的PC和不同USB扩展卡存在不同的兼容性,如果参数设置过大可能会出现取不到图像的风险."
+            返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 尺寸 <类型 = 整数 注释 = "提供所欲设置的传输的包大小,单位:字节.">
+    {
+        @ MV_USB_SetTransferSize(@sn<this>.data().GetDeviceHandle(), (UINT)@<尺寸>)
+    }
+
+    方法 取U3V传输包尺寸 <公开 类型 = 整数 注释 = "获取当前设备所设置的传输包尺寸,仅用于USB3设备." 返回值注释 = "返回所设置的传输包尺寸." @禁止流程检查 = 真>
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ UINT value = 0;
+        @ INT ret = MV_USB_GetTransferSize(this->data().GetDeviceHandle(), &value);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return (INT)value;
+    }
+
+    方法 置U3V传输通道个数 <公开 类型 = 整数 注释 = "可以根据PC的性能,设备出图帧率,图像大小和内存使用率等因素对该参数进行调节,但不同的PC和不同的USB扩展卡存在不同的兼容性."
+            返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 个数 <类型 = 整数 注释 = "提供所欲设置的传输通道个数,范围:1-10">
+    {
+        @ MV_USB_SetTransferWays(@sn<this>.data().GetDeviceHandle(), (UINT)@<个数>)
+    }
+
+    方法 取U3V传输通道个数 <公开 类型 = 整数 注释 = "获取当前设置的U3V异步取流节点个数,2000W设备的MONO8默认为3个,YUV为默认2个,RGB为默认1个,其它情况默认8个节点." 返回值注释 = "返回传输通道个数."
+            @禁止流程检查 = 真>
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ UINT value = 0;
+        @ INT ret = MV_USB_GetTransferWays(this->data().GetDeviceHandle(), &value);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return (INT)value;
+    }
+
+    方法 本地升级设备 <公开 类型 = 整数 注释 = "通过本方法可以将升级固件文件发送给设备进行升级,该接口需要等待升级固件文件成功传给设备端之后再返回,响应时间可能较长."
+            返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @嵌入式方法 = "">
+    参数 文件名 <类型 = 文本型 注释 = "提供升级固件文件.">
+    {
+        @ MV_CC_LocalUpgrade(@sn<this>.data().GetDeviceHandle(), (const void*)GetMbsText(@<文件名>.GetText(), CVolMem(), NULL))
+    }
+
+    方法 取当前升级进度 <公开 类型 = 整数 注释 = "获取升级进度." 返回值注释 = "返回当前进度值." @禁止流程检查 = 真>
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ UINT value = 0;
+        @ INT ret = MV_CC_GetUpgradeProcess(this->data().GetDeviceHandle(), &value);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return (INT)value;
+    }
+
+    方法 取相机属性树 <公开 类型 = 整数 注释 = "获取相机属性树XML." 返回值注释 = "返回执行是否成功,请参考\"工业相机状态码\"所提供的常量值." @禁止流程检查 = 真>
+    参数 返回数据 <类型 = 字节集类 注释 = "提供接收数据的缓冲区变量,获取的结果将写入至该变量.">
+    {
+        @ UINT nDataLen = 0;
+        @ INT ret;
+        @ ret = MV_XML_GetGenICamXML(this->data().GetDeviceHandle(), NULL, 0, &nDataLen);
+        @ if (nDataLen > 0)
+        @ {
+        @     @<返回数据>.Alloc(nDataLen, TRUE);
+        @     ret = MV_XML_GetGenICamXML(this->data().GetDeviceHandle(), (unsigned char*)@<返回数据>.GetPtr(), (UINT)@<返回数据>.GetSize(), &nDataLen);
+        @ }
+        @ return ret;
+    }
+
+    方法 取指定节点访问模式 <公开 类型 = 相机属性树节点访问模式 注释 = "获得指定节点的访问模式." @禁止流程检查 = 真>
+    参数 节点名称 <类型 = 文本型 注释 = "提供所欲检查的节点名称.">
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ MV_XML_AccessMode value = MV_XML_AccessMode::AM_Undefined;
+        @ INT ret = MV_XML_GetNodeAccessMode(this->data().GetDeviceHandle(), (const char*)GetMbsText(@<节点名称>.GetText(), CVolMem(), NULL), &value);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return (INT)value;
+    }
+
+    方法 取指定节点接口类型 <公开 类型 = 相机属性树节点接口类型 注释 = "获得指定节点的类型." @禁止流程检查 = 真>
+    参数 节点名称 <类型 = 文本型 注释 = "提供所欲检查的节点名称.">
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ MV_XML_InterfaceType value = MV_XML_InterfaceType::IFT_IValue;
+        @ INT ret = MV_XML_GetNodeInterfaceType(this->data().GetDeviceHandle(), (const char*)GetMbsText(@<节点名称>.GetText(), CVolMem(), NULL), &value);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return (INT)value;
+    }
+
+    # 事件 ---
+
+    方法 收到异常消息 <公开 定义事件 类型 = 整数 注释 = "运行过程中如果设备发送异常消息,本事件将被发送.">
+    参数 消息类型 <类型 = 整数 注释 = "提供本次设备异常的消息类型,请参考\"相机异常消息类型\"所提供的常量值.">
+
+    方法 收到设备事件 <公开 定义事件 类型 = 整数 注释 = "在设备被成功打开后,相机有事件回调时本事件将被发送.">
+    参数 事件名称 <类型 = 文本型 注释 = "提供本次事件的事件名称.">
+    参数 事件ID <类型 = 短整数 注释 = "提供本次事件的事件序号.">
+    参数 流通道序号 <类型 = 短整数>
+    参数 帧号高位 <类型 = 整数>
+    参数 帧号低位 <类型 = 整数>
+    参数 时间戳高位 <类型 = 整数>
+    参数 时间戳低位 <类型 = 整数>
+    参数 数据 <类型 = 字节集类>
+
+    方法 收到图像采集数据 <公开 定义事件 类型 = 整数 注释 = "在调用了\"注册图像数据采集回调\"并且开始取流后,如果采集到图像数据将通过本事件发送.">
+    参数 数据指针 <类型 = 变整数>
+    参数 图像信息 <类型 = 图像数据信息>
+}
+
+类 图像帧输出数据信息 <公开 注释 = "包含图像帧的输出信息." @文档 = "category = \"辅助类\"">
+{
+
+    # @begin
+    # <> <include>
+    # private:
+    #     MV_FRAME_OUT stFrame;
+    # public:
+    #     void @an<_OnInitExtra> (){ memset(&stFrame, 0, sizeof(MV_FRAME_OUT)); }
+    #     inline_ MV_FRAME_OUT* GetSTFrame(){ return &stFrame; }
+    # <> </include>
+    # @end
+
+    方法 取图像信息对象 <公开 类型 = 图像数据信息 注释 = "获取该输出信息中所包含的图像信息." @嵌入式方法 = "">
+    {
+        @ @dt<图像数据信息>(&@sn<this>.GetSTFrame()->stFrameInfo)
+    }
+
+    方法 取图像指针地址 <公开 类型 = 变整数 注释 = "获取该图像帧的原始数据指针." @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.GetSTFrame()->pBufAddr
+    }
+}
+
+类 工业相机状态码 <公开 注释 = "工业相机SDK状态码定义." @文档 = "category = \"辅助类\"">
+{
+    常量 成功 <公开 类型 = 整数 值 = @MV_OK 注释 = "成功,未出现错误">
+    常量 无效句柄 <公开 类型 = 整数 值 = @MV_E_HANDLE 注释 = "错误或无效的句柄">
+    常量 功能不支持 <公开 类型 = 整数 值 = @MV_E_SUPPORT 注释 = "不支持的功能">
+    常量 缓存已满 <公开 类型 = 整数 值 = @MV_E_SUPPORT 注释 = "缓存已满">
+    常量 函数调用顺序错误 <公开 类型 = 整数 值 = @MV_E_CALLORDER 注释 = "函数调用顺序有误">
+    常量 参数错误 <公开 类型 = 整数 值 = @MV_E_PARAMETER 注释 = "错误的参数">
+    常量 资源申请失败 <公开 类型 = 整数 值 = @MV_E_RESOURCE 注释 = "资源申请失败">
+    常量 无数据 <公开 类型 = 整数 值 = @MV_E_NODATA 注释 = "无数据">
+    常量 前置条件有误 <公开 类型 = 整数 值 = @MV_E_PRECONDITION 注释 = "前置条件有误,或运行环境已发生变化.">
+    常量 版本不匹配 <公开 类型 = 整数 值 = @MV_E_VERSION 注释 = "版本不匹配">
+    常量 缓冲区尺寸不足 <公开 类型 = 整数 值 = @MV_E_NOENOUGH_BUF 注释 = "传入的内存空间不足">
+    常量 图像异常 <公开 类型 = 整数 值 = @MV_E_ABNORMAL_IMAGE 注释 = "异常图像,可能是丢包导致图像不完整.">
+    常量 无法载入动态链接库 <公开 类型 = 整数 值 = @MV_E_LOAD_LIBRARY 注释 = "动态导入DLL失败">
+    常量 无可输出缓存 <公开 类型 = 整数 值 = @MV_E_NOOUTBUF 注释 = "没有可输出的缓存">
+    常量 加密错误 <公开 类型 = 整数 值 = @MV_E_ENCRYPT 注释 = "加密错误">
+    常量 未知错误 <公开 类型 = 整数 值 = @MV_E_UNKNOW 注释 = "未知的错误">
+    常量 "//GenICam系列错误码"
+    常量 GC_通用错误 <公开 类型 = 整数 值 = @MV_E_GC_GENERIC 注释 = "通用错误">
+    常量 GC_参数非法 <公开 类型 = 整数 值 = @MV_E_GC_ARGUMENT 注释 = "参数非法">
+    常量 GC_值超出范围 <公开 类型 = 整数 值 = @MV_E_GC_RANGE>
+    常量 GC_属性 <公开 类型 = 整数 值 = @MV_E_GC_PROPERTY>
+    常量 GC_运行环境有错误 <公开 类型 = 整数 值 = @MV_E_GC_RUNTIME>
+    常量 GC_逻辑错误 <公开 类型 = 整数 值 = @MV_E_GC_LOGICAL>
+    常量 GC_节点访问条件错误 <公开 类型 = 整数 值 = @MV_E_GC_ACCESS>
+    常量 GC_超时错误 <公开 类型 = 整数 值 = @MV_E_GC_TIMEOUT>
+    常量 GC_转换异常 <公开 类型 = 整数 值 = @MV_E_GC_DYNAMICCAST>
+    常量 GC_未知错误 <公开 类型 = 整数 值 = @MV_E_GC_UNKNOW>
+    常量 "//GigE_STATUS对应的错误码"
+    常量 不支持的命令 <公开 类型 = 整数 值 = @MV_E_NOT_IMPLEMENTED 注释 = "命令不被设备支持">
+    常量 目标地址不存在 <公开 类型 = 整数 值 = @MV_E_INVALID_ADDRESS 注释 = "访问的目标地址不存在">
+    常量 目标地址不可写 <公开 类型 = 整数 值 = @MV_E_WRITE_PROTECT 注释 = "目标地址不可写">
+    常量 设备无权访问 <公开 类型 = 整数 值 = @MV_E_ACCESS_DENIED 注释 = "设备无访问权限">
+    常量 设备繁忙 <公开 类型 = 整数 值 = @MV_E_BUSY 注释 = "设备忙,或网络断开">
+    常量 网络包数据错误 <公开 类型 = 整数 值 = @MV_E_PACKET 注释 = "网络包数据错误">
+    常量 网络错误 <公开 类型 = 整数 值 = @MV_E_NETER 注释 = "网络相关错误">
+    常量 设备IP冲突 <公开 类型 = 整数 值 = @MV_E_IP_CONFLICT 注释 = "设备IP冲突">
+    常量 "//USB_STATUS"
+    常量 USB_读USB错误 <公开 类型 = 整数 值 = @MV_E_USB_READ 注释 = "读USB出错">
+    常量 USB_写USB错误 <公开 类型 = 整数 值 = @MV_E_USB_WRITE 注释 = "写USB出错">
+    常量 USB_设备异常 <公开 类型 = 整数 值 = @MV_E_USB_DEVICE 注释 = "设备异常">
+    常量 USB_GenICam错误 <公开 类型 = 整数 值 = @MV_E_USB_GENICAM 注释 = "GenICam相关错误">
+    常量 USB_带宽不足 <公开 类型 = 整数 值 = @MV_E_USB_BANDWIDTH 注释 = "带宽不足">
+    常量 USB_驱动错误 <公开 类型 = 整数 值 = @MV_E_USB_DRIVER 注释 = "驱动不匹配或者未装驱动">
+    常量 USB_未知错误 <公开 类型 = 整数 值 = @MV_E_USB_UNKNOW 注释 = "USB未知的错误">
+    常量 "//升级相关"
+    常量 升级固件不匹配 <公开 类型 = 整数 值 = @MV_E_UPG_FILE_MISMATCH 注释 = "升级固件不匹配">
+    常量 升级固件语言不匹配 <公开 类型 = 整数 值 = @MV_E_UPG_LANGUSGE_MISMATCH 注释 = "升级固件语言不匹配">
+    常量 升级冲突 <公开 类型 = 整数 值 = @MV_E_UPG_CONFLICT 注释 = "升级冲突">
+    常量 升级内部错误 <公开 类型 = 整数 值 = @MV_E_UPG_INNER_ERR 注释 = "升级时相机内部出现错误">
+    常量 升级未知错误 <公开 类型 = 整数 值 = @MV_E_UPG_UNKNOW 注释 = "升级时未知错误">
+    常量 设备断开连接 <公开 类型 = 整数 值 = @MV_EXCEPTION_DEV_DISCONNECT 注释 = "设备断开连接">
+    常量 库与驱动版本不匹配 <公开 类型 = 整数 值 = @MV_EXCEPTION_VERSION_CHECK 注释 = "SDK与驱动版本不匹配">
+    常量 "//算法库透传状态码"
+    常量 ALG_成功 <公开 类型 = 整数 值 = @MV_ALG_OK 注释 = "处理正确">
+    常量 ALG_未知错误 <公开 类型 = 整数 值 = @MV_ALG_ERR 注释 = "不确定类型错误">
+    常量 ALG_能力集有无效参数 <公开 类型 = 整数 值 = @MV_ALG_E_ABILITY_ARG 注释 = "能力集中存在无效参数">
+    常量 ALG_空内存地址 <公开 类型 = 整数 值 = @MV_ALG_E_MEM_NULL 注释 = "内存地址为空">
+    常量 ALG_内存对齐不满足 <公开 类型 = 整数 值 = @MV_ALG_E_MEM_ALIGN 注释 = "内存对齐不满足要求">
+    常量 ALG_内存空间不足 <公开 类型 = 整数 值 = @MV_ALG_E_MEM_LACK 注释 = "内存空间大小不够">
+    常量 ALG_内存空间对齐不满足 <公开 类型 = 整数 值 = @MV_ALG_E_MEM_SIZE_ALIGN 注释 = "内存空间大小不满足对齐要求">
+    常量 ALG_内存地址对齐不满足 <公开 类型 = 整数 值 = @MV_ALG_E_MEM_ADDR_ALIGN 注释 = "内存地址不满足对齐要求">
+    常量 ALG_图像格式不正确 <公开 类型 = 整数 值 = @MV_ALG_E_IMG_FORMAT 注释 = "图像格式不正确或者不支持">
+    常量 ALG_图像尺寸不正确 <公开 类型 = 整数 值 = @MV_ALG_E_IMG_SIZE 注释 = "图像宽高不正确或者超出范围">
+    常量 ALG_图像宽高与步进不匹配 <公开 类型 = 整数 值 = @MV_ALG_E_IMG_STEP 注释 = "图像宽高与step参数不匹配">
+    常量 ALG_图像数据地址为空 <公开 类型 = 整数 值 = @MV_ALG_E_IMG_DATA_NULL 注释 = "图像数据存储地址为空(某个分量)">
+    常量 ALG_配置参数类型不正确 <公开 类型 = 整数 值 = @MV_ALG_E_CFG_TYPE 注释 = "设置或者获取参数类型不正确">
+    常量 ALG_配置参数大小不正确 <公开 类型 = 整数 值 = @MV_ALG_E_CFG_SIZE 注释 = "设置或者获取参数的输入,输出结构体大小不正确.">
+    常量 ALG_处理参数类型不正确 <公开 类型 = 整数 值 = @MV_ALG_E_PRC_TYPE 注释 = "处理类型不正确">
+    常量 ALG_处理参数尺寸不正确 <公开 类型 = 整数 值 = @MV_ALG_E_PRC_SIZE 注释 = "处理时输入,输出参数大小不正确.">
+    常量 ALG_子处理参数类型不正确 <公开 类型 = 整数 值 = @MV_ALG_E_FUNC_TYPE 注释 = "子处理类型不正确">
+    常量 ALG_子处理参数尺寸不正确 <公开 类型 = 整数 值 = @MV_ALG_E_FUNC_SIZE 注释 = "子处理时输入,输出参数大小不正确.">
+    常量 ALG_索引不正确 <公开 类型 = 整数 值 = @MV_ALG_E_PARAM_INDEX 注释 = "index参数不正确">
+    常量 ALG_值参数不正确 <公开 类型 = 整数 值 = @MV_ALG_E_PARAM_INDEX 注释 = "value参数不正确或者超出范围">
+    常量 ALG_参数数量不正确 <公开 类型 = 整数 值 = @MV_ALG_E_PARAM_NUM 注释 = "param_num参数不正确">
+    常量 ALG_函数参数指针为空 <公开 类型 = 整数 值 = @MV_ALG_E_NULL_PTR 注释 = "函数参数指针为空">
+    常量 ALG_超过最大内存限定 <公开 类型 = 整数 值 = @MV_ALG_E_OVER_MAX_MEM 注释 = "超过限定的最大内存">
+    常量 ALG_回调函数错误 <公开 类型 = 整数 值 = @MV_ALG_E_CALL_BACK 注释 = "回调函数出错">
+    常量 ALG_加密错误 <公开 类型 = 整数 值 = @MV_ALG_E_ENCRYPT 注释 = "加密错误">
+    常量 ALG_算法库期限错误 <公开 类型 = 整数 值 = @MV_ALG_E_EXPIRE 注释 = "算法库使用期限错误">
+    常量 ALG_参数范围错误 <公开 类型 = 整数 值 = @MV_ALG_E_BAD_ARG 注释 = "参数范围不正确">
+    常量 ALG_数据大小错误 <公开 类型 = 整数 值 = @MV_ALG_E_DATA_SIZE 注释 = "数据大小不正确">
+    常量 ALG_数据步进错误 <公开 类型 = 整数 值 = @MV_ALG_E_STEP 注释 = "数据step不正确">
+    常量 "//CPU指令集错误"
+    常量 ALG_不支持指令集 <公开 类型 = 整数 值 = @MV_ALG_E_CPUID 注释 = "cpu不支持优化代码中的指令集">
+    常量 ALG_警告 <公开 类型 = 整数 值 = @MV_ALG_WARNING 注释 = "警告">
+    常量 ALG_算法库超时 <公开 类型 = 整数 值 = @MV_ALG_E_TIME_OUT 注释 = "算法库超时">
+    常量 ALG_算法库版本号错误 <公开 类型 = 整数 值 = @MV_ALG_E_LIB_VERSION 注释 = "算法版本号出错">
+    常量 ALG_模型版本号错误 <公开 类型 = 整数 值 = @MV_ALG_E_MODEL_VERSION 注释 = "模型版本号出错">
+    常量 ALG_GPU内存分配错误 <公开 类型 = 整数 值 = @MV_ALG_E_GPU_MEM_ALLOC 注释 = "GPU内存分配错误">
+    常量 ALG_文件不存在 <公开 类型 = 整数 值 = @MV_ALG_E_FILE_NON_EXIST>
+    常量 ALG_字符串为空 <公开 类型 = 整数 值 = @MV_ALG_E_NONE_STRING>
+    常量 ALG_图像解码器错误 <公开 类型 = 整数 值 = @MV_ALG_E_IMAGE_CODEC>
+    常量 ALG_打开文件错误 <公开 类型 = 整数 值 = @MV_ALG_E_FILE_OPEN>
+    常量 ALG_文件读取错误 <公开 类型 = 整数 值 = @MV_ALG_E_FILE_READ>
+    常量 ALG_文件写错误 <公开 类型 = 整数 值 = @MV_ALG_E_FILE_WRITE>
+    常量 ALG_文件读取大小错误 <公开 类型 = 整数 值 = @MV_ALG_E_FILE_READ_SIZE>
+    常量 ALG_文件类型错误 <公开 类型 = 整数 值 = @MV_ALG_E_FILE_TYPE>
+    常量 ALG_模型类型错误 <公开 类型 = 整数 值 = @MV_ALG_E_MODEL_TYPE>
+    常量 ALG_分配内存错误 <公开 类型 = 整数 值 = @MV_ALG_E_MALLOC_MEM>
+    常量 ALG_线程绑核失败 <公开 类型 = 整数 值 = @MV_ALG_E_BIND_CORE_FAILED>
+    常量 "//降噪相关"
+    常量 ALG_噪声特性图像格式错误 <公开 类型 = 整数 值 = @MV_ALG_E_DENOISE_NE_IMG_FORMAT>
+    常量 ALG_噪声特性类型错误 <公开 类型 = 整数 值 = @MV_ALG_E_DENOISE_NE_FEATURE_TYPE>
+    常量 ALG_噪声特性个数错误 <公开 类型 = 整数 值 = @MV_ALG_E_DENOISE_NE_PROFILE_NUM>
+    常量 ALG_噪声特性增益个数错误 <公开 类型 = 整数 值 = @MV_ALG_E_DENOISE_NE_GAIN_NUM>
+    常量 ALG_噪声曲线增益值输入错误 <公开 类型 = 整数 值 = @MV_ALG_E_DENOISE_NE_GAIN_VAL>
+    常量 ALG_噪声曲线柱数错误 <公开 类型 = 整数 值 = @MV_ALG_E_DENOISE_NE_BIN_NUM>
+    常量 ALG_噪声初始化增益设置错误 <公开 类型 = 整数 值 = @MV_ALG_E_DENOISE_NE_INIT_GAIN>
+    常量 ALG_噪声未初始化 <公开 类型 = 整数 值 = @MV_ALG_E_DENOISE_NE_NOT_INIT>
+    常量 ALG_颜色空间模式错误 <公开 类型 = 整数 值 = @MV_ALG_E_DENOISE_COLOR_MODE>
+    常量 ALG_图像ROI个数错误 <公开 类型 = 整数 值 = @MV_ALG_E_DENOISE_ROI_NUM>
+    常量 ALG_图像ROI原点错误 <公开 类型 = 整数 值 = @MV_ALG_E_DENOISE_ROI_ORI_PT>
+    常量 ALG_图像ROI大小错误 <公开 类型 = 整数 值 = @MV_ALG_E_DENOISE_ROI_SIZE>
+    常量 ALG_输入相机增益不存在 <公开 类型 = 整数 值 = @MV_ALG_E_DENOISE_GAIN_NOT_EXIST>
+    常量 ALG_输入相机增益超范围 <公开 类型 = 整数 值 = @MV_ALG_E_DENOISE_GAIN_BEYOND_RANGE>
+    常量 ALG_输入噪声特性内存大小错误 <公开 类型 = 整数 值 = @MV_ALG_E_DENOISE_NP_BUF_SIZE>
+}
+
+类 图像数据信息 <公开 注释 = "表示相机采集到的图像帧的数据信息." @文档 = "category = \"辅助类\"">
+{
+    变量 图像宽度 <公开 类型 = 短整数>
+    变量 图像高度 <公开 类型 = 短整数>
+    变量 像素格式 <公开 类型 = 图像像素格式>
+    变量 帧号 <公开 类型 = 整数>
+    变量 时间戳高位 <公开 类型 = 整数>
+    变量 时间戳低位 <公开 类型 = 整数>
+    变量 保留 <公开 类型 = 整数>
+    变量 主机时间戳 <公开 类型 = 长整数>
+    变量 帧长度 <公开 类型 = 整数>
+    变量 水印时标秒数 <公开 类型 = 整数>
+    变量 周期数 <公开 类型 = 整数>
+    变量 周期偏移 <公开 类型 = 整数>
+    变量 增益 <公开 类型 = 小数>
+    变量 曝光时间 <公开 类型 = 小数>
+    变量 平均亮度 <公开 类型 = 整数>
+    变量 红色 <公开 类型 = 整数>
+    变量 绿色 <公开 类型 = 整数>
+    变量 蓝色 <公开 类型 = 整数>
+    变量 总帧数 <公开 类型 = 整数>
+    变量 触发计数 <公开 类型 = 整数>
+    变量 输入 <公开 类型 = 整数>
+    变量 输出 <公开 类型 = 整数>
+    变量 水平偏移量 <公开 类型 = 短整数>
+    变量 垂直偏移量 <公开 类型 = 短整数>
+    变量 Chunk宽 <公开 类型 = 短整数>
+    变量 Chunk高 <公开 类型 = 短整数>
+    变量 本帧丢包数 <公开 类型 = 整数>
+    变量 未解析Chunk数据 <公开 类型 = 图像Chunk数据数组类>
+    变量 校准 <公开 类型 = 长整数>
+
+    # @begin
+    # <> <include>
+    # public:
+    #     void SetInfo(MV_FRAME_OUT_INFO_EX* pValue);
+    #     inline_ @sn<current_class> (MV_FRAME_OUT_INFO_EX* pValue) : @sn<current_class>()  { this->SetInfo(pValue); }
+    # <> </include>
+    #
+    # void @sn<current_class>::SetInfo(MV_FRAME_OUT_INFO_EX* pValue)
+    # {
+    #         @<图像宽度> = (SHORT)pValue->nWidth;
+    #         @<图像高度> = (SHORT)pValue->nHeight;
+    #         @<像素格式> = (INT)pValue->enPixelType;
+    #         @<帧号> = (INT)pValue->nFrameNum;
+    #         @<时间戳高位> = (INT)pValue->nDevTimeStampHigh;
+    #         @<时间戳低位> = (INT)pValue->nDevTimeStampLow;
+    #         @<保留> = (INT)pValue->nReserved0;
+    #         @<主机时间戳> = (INT64)pValue->nHostTimeStamp;
+    #         @<帧长度> = (INT)pValue->nFrameLen;
+    #         @<水印时标秒数> = (INT)pValue->nSecondCount;
+    #         @<周期数> = (INT)pValue->nCycleCount;
+    #         @<周期偏移> = (INT)pValue->nCycleOffset;
+    #         @<增益> = (DOUBLE)pValue->fGain;
+    #         @<曝光时间> = (DOUBLE)pValue->fExposureTime;
+    #         @<平均亮度> = (INT)pValue->nAverageBrightness;
+    #         @<红色> = (INT)pValue->nRed;
+    #         @<绿色> = (INT)pValue->nGreen;
+    #         @<蓝色> = (INT)pValue->nBlue;
+    #         @<总帧数> = (INT)pValue->nFrameCounter;
+    #         @<触发计数> = (INT)pValue->nTriggerIndex;
+    #         @<输入> = (INT)pValue->nInput;
+    #         @<输出> = (INT)pValue->nOutput;
+    #         @<水平偏移量> = (SHORT)pValue->nOffsetX;
+    #         @<垂直偏移量> = (SHORT)pValue->nOffsetY;
+    #         @<Chunk宽> = (SHORT)pValue->nChunkWidth;
+    #         @<Chunk高> = (SHORT)pValue->nChunkHeight;
+    #         @<本帧丢包数> = (INT)pValue->nLostPacket;
+    #         @<校准> = (INT64)pValue->UnparsedChunkList.nAligning;
+    #         if ((INT)@<未解析Chunk数据>.GetCount() > 0)
+    #             @<未解析Chunk数据>.RemoveAll();
+    #         @<未解析Chunk数据>.AddNewObjects(@dt<图像Chunk数据类>::sGetRuntimeClass(), 0, pValue->nUnparsedChunkNum);
+    #         for (INT i = 0; i < (INT)@<未解析Chunk数据>.GetCount(); i++)
+    #             ((@dt<图像Chunk数据类>&)@<未解析Chunk数据>.GetAt(i)).SetInfo(&pValue->UnparsedChunkList.pUnparsedChunkContent[i]);    
+    # }
+    #
+    # @end
+}
+
+类 图像Chunk数据类 <公开 @文档 = "category = \"辅助类\"">
+{
+    变量 Chunk数据 <公开 类型 = 变整数 注释 = "未解析的Chunk数据指针.">
+    变量 Chunk数据长度 <公开 类型 = 整数 注释 = "Chunk数据的长度.">
+    变量 Chunk数据ID <公开 类型 = 整数>
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ void SetInfo(MV_CHUNK_DATA_CONTENT* pValue)
+    #     {
+    #         @<Chunk数据> = (INT_P)pValue->pChunkData;
+    #         @<Chunk数据ID> = (INT)pValue->nChunkID;
+    #         @<Chunk数据长度> = (INT)pValue->nChunkLen;
+    #     }
+    #     inline_ @sn<current_class> (MV_CHUNK_DATA_CONTENT* pValue) : @sn<current_class>()  { this->SetInfo(pValue); }
+    # <> </include>
+    # @end
+}
+
+类 图像解码结果信息类 <公开 注释 = "存放图像解码后的结果信息." @文档 = "category = \"辅助类\"">
+{
+    变量 图像宽度 <公开 类型 = 整数>
+    变量 图像高度 <公开 类型 = 整数>
+    变量 像素格式 <公开 类型 = 图像像素格式>
+    变量 水印时标秒数 <公开 类型 = 整数>
+    变量 水印周期数 <公开 类型 = 整数>
+    变量 水印周期偏移 <公开 类型 = 整数>
+    变量 水印增益 <公开 类型 = 小数>
+    变量 水印曝光时间 <公开 类型 = 小数>
+    变量 水印平均亮度 <公开 类型 = 整数>
+    变量 水印红色 <公开 类型 = 整数>
+    变量 水印绿色 <公开 类型 = 整数>
+    变量 水印蓝色 <公开 类型 = 整数>
+    变量 水印总帧数 <公开 类型 = 整数>
+    变量 水印触发计数 <公开 类型 = 整数>
+    变量 水印输入 <公开 类型 = 整数>
+    变量 水印输出 <公开 类型 = 整数>
+    变量 水印水平偏移量 <公开 类型 = 短整数>
+    变量 水印垂直偏移量 <公开 类型 = 短整数>
+    变量 水印宽度 <公开 类型 = 短整数>
+    变量 水印高度 <公开 类型 = 短整数>
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ void SetInfo(MV_CC_HB_DECODE_PARAM* pValue)
+    #     {
+    #         @<图像宽度> = (INT)pValue->nWidth;
+    #         @<图像高度> = (INT)pValue->nHeight;
+    #         @<像素格式> = (INT)pValue->enDstPixelType;
+    #         @<水印时标秒数> = (INT)pValue->stFrameSpecInfo.nSecondCount;
+    #         @<水印周期数> = (INT)pValue->stFrameSpecInfo.nCycleCount;
+    #         @<水印周期偏移> = (INT)pValue->stFrameSpecInfo.nCycleOffset;
+    #         @<水印增益> = (DOUBLE)pValue->stFrameSpecInfo.fGain;
+    #         @<水印曝光时间> = (DOUBLE)pValue->stFrameSpecInfo.fExposureTime;
+    #         @<水印平均亮度> = (INT)pValue->stFrameSpecInfo.nAverageBrightness;
+    #         @<水印红色> = (INT)pValue->stFrameSpecInfo.nRed;
+    #         @<水印绿色> = (INT)pValue->stFrameSpecInfo.nGreen;
+    #         @<水印蓝色> = (INT)pValue->stFrameSpecInfo.nBlue;
+    #         @<水印总帧数> = (INT)pValue->stFrameSpecInfo.nFrameCounter;
+    #         @<水印触发计数> = (INT)pValue->stFrameSpecInfo.nTriggerIndex;
+    #         @<水印输入> = (INT)pValue->stFrameSpecInfo.nInput;
+    #         @<水印输出> = (INT)pValue->stFrameSpecInfo.nOutput;
+    #         @<水印水平偏移量> = (SHORT)pValue->stFrameSpecInfo.nOffsetX;
+    #         @<水印垂直偏移量> = (SHORT)pValue->stFrameSpecInfo.nOffsetY;
+    #         @<水印宽度> = (SHORT)pValue->stFrameSpecInfo.nFrameWidth;
+    #         @<水印高度> = (SHORT)pValue->stFrameSpecInfo.nFrameHeight;
+    #     }
+    #     inline_ @sn<current_class> (MV_CC_HB_DECODE_PARAM* pValue) : @sn<current_class>()  { this->SetInfo(pValue); }
+    # <> </include>
+    # @end
+}
+
+类 图像像素格式 <公开 注释 = "指定了采集到图像数据帧的像素格式." 编辑时信息 = "DEEE1, 0, 0, 0" @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 未知格式 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Undefined" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Mono1p <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Mono1p" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Mono4p <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Mono4p" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Mono8 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Mono8" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Mono8_Signed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Mono8_Signed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Mono10 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Mono10" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Mono10_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Mono10_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Mono12 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Mono12" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Mono12_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Mono12_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Mono14 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Mono14" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Mono16 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Mono16" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerGR8 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerGR8" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerRG8 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerRG8" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerGB8 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerGB8" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerBG8 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerBG8" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerGR10 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerGR10" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerRG10 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerRG10" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerGB10 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerGB10" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerBG10 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerBG10" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerGR12 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerGR12" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerRG12 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerRG12" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerGB12 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerGB12" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerBG12 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerBG12" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerGR10_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerGR10_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerRG10_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerRG10_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerGB10_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerGB10_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerBG10_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerBG10_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerGR12_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerGR12_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerRG12_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerRG12_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerGB12_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerGB12_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerBG12_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerBG12_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerGR16 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerGR16" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerRG16 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerRG16" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerGB16 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerGB16" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BayerBG16 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BayerBG16" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 RGB8_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_RGB8_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BGR8_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BGR8_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 RGBA8_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_RGBA8_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BGRA8_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BGRA8_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 RGB10_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_RGB10_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BGR10_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BGR10_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 RGB12_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_RGB12_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BGR12_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BGR12_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 RGB16_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_RGB16_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BGR16_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BGR16_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 RGBA16_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_RGBA16_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BGRA16_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BGRA16_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 RGB10V1_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_RGB10V1_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 RGB10V2_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_RGB10V2_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 RGB12V1_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_RGB12V1_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 RGB565_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_RGB565_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 BGR565_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_BGR565_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YUV411_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YUV411_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YUV422_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YUV422_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YUV422_YUYV_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YUV422_YUYV_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YUV444_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YUV444_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YCBCR8_CBYCR <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YCBCR8_CBYCR" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YCBCR422_8 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YCBCR422_8" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YCBCR422_8_CBYCRY <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YCBCR422_8_CBYCRY" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YCBCR411_8_CBYYCRYY <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YCBCR411_8_CBYYCRYY" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YCBCR601_8_CBYCR <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YCBCR601_8_CBYCR" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YCBCR601_422_8 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YCBCR601_422_8" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YCBCR601_422_8_CBYCRY <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YCBCR601_422_8_CBYCRY" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YCBCR601_411_8_CBYYCRYY <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YCBCR601_411_8_CBYYCRYY" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YCBCR709_8_CBYCR <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YCBCR709_8_CBYCR" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YCBCR709_422_8 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YCBCR709_422_8" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YCBCR709_422_8_CBYCRY <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YCBCR709_422_8_CBYCRY" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 YCBCR709_411_8_CBYYCRYY <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_YCBCR709_411_8_CBYYCRYY" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 RGB8_Planar <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_RGB8_Planar" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 RGB10_Planar <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_RGB10_Planar" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 RGB12_Planar <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_RGB12_Planar" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 RGB16_Planar <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_RGB16_Planar" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Jpeg <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Jpeg" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Coord3D_ABC32f <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Coord3D_ABC32f" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Coord3D_ABC32f_Planar <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Coord3D_ABC32f_Planar" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Coord3D_AC32f <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Coord3D_AC32f" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 COORD3D_DEPTH_PLUS_MASK <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_COORD3D_DEPTH_PLUS_MASK" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Coord3D_ABC32 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Coord3D_ABC32" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Coord3D_AB32f <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Coord3D_AB32f" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Coord3D_AB32 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Coord3D_AB32" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Coord3D_AC32f_64 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Coord3D_AC32f_64" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Coord3D_AC32f_Planar <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Coord3D_AC32f_Planar" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Coord3D_AC32 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Coord3D_AC32" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Coord3D_A32f <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Coord3D_A32f" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Coord3D_A32 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Coord3D_A32" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Coord3D_C32f <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Coord3D_C32f" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Coord3D_C32 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Coord3D_C32" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Coord3D_ABC16 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Coord3D_ABC16" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 Coord3D_C16 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_Coord3D_C16" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_Mono8 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_Mono8" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_Mono10 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_Mono10" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_Mono10_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_Mono10_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_Mono12 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_Mono12" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_Mono12_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_Mono12_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_Mono16 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_Mono16" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerGR8 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerGR8" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerRG8 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerRG8" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerGB8 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerGB8" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerBG8 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerBG8" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerGR10 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerGR10" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerRG10 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerRG10" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerGB10 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerGB10" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerBG10 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerBG10" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerGR12 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerGR12" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerRG12 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerRG12" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerGB12 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerGB12" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerBG12 <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerBG12" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerGR10_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerGR10_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerRG10_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerRG10_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerGB10_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerGB10_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerBG10_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerBG10_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerGR12_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerGR12_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerRG12_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerRG12_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerGB12_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerGB12_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BayerBG12_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BayerBG12_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_YUV422_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_YUV422_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_YUV422_YUYV_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_YUV422_YUYV_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_RGB8_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_RGB8_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BGR8_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BGR8_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_RGBA8_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_RGBA8_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BGRA8_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BGRA8_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_RGB16_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_RGB16_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BGR16_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BGR16_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_RGBA16_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_RGBA16_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+    常量 HB_BGRA16_Packed <公开 值 = @"@MvGvspPixelType::PixelType_Gvsp_HB_BGRA16_Packed" 编辑时信息 = "0, DCCBF, 0, 0">
+}
+
+类 相机动作命令结果类 <公开 注释 = "对相机设备执行指定的动作命令后返回的结果对象." @文档 = "category = \"辅助类\"">
+{
+    变量 设备IP <公开 类型 = 文本型 编辑时信息 = "4EAA5, 0, 0, 0">
+    变量 状态码 <公开 类型 = 整数 编辑时信息 = "4EAA5, 0, 0, 0">
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ void SetInfo(MV_ACTION_CMD_RESULT* pValue)
+    #     {
+    #         @<设备IP>.SetText(GetWideText((const CHAR *)pValue->strDeviceAddress, CVolMem(), NULL));
+    #         @<状态码> = (INT)pValue->nStatus;
+    #     }
+    #     inline_ @sn<current_class> (MV_ACTION_CMD_RESULT* pValue) : @sn<current_class>()  { this->SetInfo(pValue); }
+    # <> </include>
+    # @end
+}
+
+类 相机网络传输信息类 <公开 注释 = "网络传输的相关信息." @文档 = "category = \"辅助类\"">
+{
+    变量 已接收数据尺寸 <公开 类型 = 长整数 注释 = "开始取流和结束取流之间的统计." 编辑时信息 = "4EAA5, 0, 0, 0">
+    变量 丢帧数量 <公开 类型 = 整数 编辑时信息 = "4EAA5, 0, 0, 0">
+    变量 已接收帧数量 <公开 类型 = 整数 编辑时信息 = "4EAA5, 0, 0, 0">
+    变量 请求重发包数 <公开 类型 = 长整数 编辑时信息 = "4EAA5, 0, 0, 0">
+    变量 重发包数 <公开 类型 = 长整数 编辑时信息 = "4EAA5, 0, 0, 0">
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ void SetInfo(MV_NETTRANS_INFO* pValue)
+    #     {
+    #         @<已接收数据尺寸> = (INT64)pValue->nReceiveDataSize;
+    #         @<丢帧数量> = (INT)pValue->nThrowFrameCount;
+    #         @<已接收帧数量> = (INT)pValue->nNetRecvFrameCount;
+    #         @<请求重发包数> = (INT64)pValue->nRequestResendPacketCount;
+    #         @<重发包数> = (INT64)pValue->nResendPacketCount;
+    #     }
+    #     inline_ @sn<current_class> (MV_NETTRANS_INFO* pValue) : @sn<current_class>()  { this->SetInfo(pValue); }
+    # <> </include>
+    # @end
+}
+
+类 相机流量丢包信息类 <公开 注释 = "GigE相机设备的网络流量和丢包信息反馈信息." @文档 = "category = \"辅助类\"">
+{
+    变量 已接收数据尺寸 <公开 类型 = 长整数 注释 = "Start和Stop之间的统计." 编辑时信息 = "4EAA5, 0, 0, 0">
+    变量 丢包数量 <公开 类型 = 长整数 编辑时信息 = "4EAA5, 0, 0, 0">
+    变量 丢帧数量 <公开 类型 = 整数 编辑时信息 = "4EAA5, 0, 0, 0">
+    变量 已接收帧数量 <公开 类型 = 整数 编辑时信息 = "4EAA5, 0, 0, 0">
+    变量 请求重发包数 <公开 类型 = 长整数 编辑时信息 = "4EAA5, 0, 0, 0">
+    变量 重发包数 <公开 类型 = 长整数 编辑时信息 = "4EAA5, 0, 0, 0">
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ void SetInfo(MV_MATCH_INFO_NET_DETECT* pValue)
+    #     {
+    #         @<已接收数据尺寸> = (INT64)pValue->nReceiveDataSize;
+    #         @<丢包数量> = (INT64)pValue->nLostPacketCount;
+    #         @<丢帧数量> = (INT)pValue->nLostFrameCount;
+    #         @<已接收帧数量> = (INT)pValue->nNetRecvFrameCount;
+    #         @<请求重发包数> = (INT64)pValue->nRequestResendPacketCount;
+    #         @<重发包数> = (INT64)pValue->nResendPacketCount;
+    #     }
+    #     inline_ @sn<current_class> (MV_MATCH_INFO_NET_DETECT* pValue) : @sn<current_class>()  { this->SetInfo(pValue); }
+    # <> </include>
+    # @end
+}
+
+类 相机数据接收信息类 <公开 注释 = "表示host收到从u3v设备端的总字节数." @文档 = "category = \"辅助类\"">
+{
+    变量 已接收数据尺寸 <公开 类型 = 长整数 注释 = "Open和Close之间的统计." 编辑时信息 = "4EAA5, 0, 0, 0">
+    变量 已收到帧数 <公开 类型 = 整数 编辑时信息 = "4EAA5, 0, 0, 0">
+    变量 错误帧数 <公开 类型 = 整数 编辑时信息 = "4EAA5, 0, 0, 0">
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ void SetInfo(MV_MATCH_INFO_USB_DETECT* pValue)
+    #     {
+    #         @<已接收数据尺寸> = (INT64)pValue->nReceiveDataSize;
+    #         @<已收到帧数> = (INT)pValue->nReceivedFrameCount;
+    #         @<错误帧数> = (INT)pValue->nErrorFrameCount;
+    #     }
+    #     inline_ @sn<current_class> (MV_MATCH_INFO_USB_DETECT* pValue) : @sn<current_class>()  { this->SetInfo(pValue); }
+    # <> </include>
+    # @end
+}
+
+类 相机数值属性类 <公开 注释 = "表示相机设备的数值属性." @文档 = "category = \"辅助类\"">
+{
+    变量 当前值 <公开 类型 = 长整数>
+    变量 最大值 <公开 类型 = 长整数>
+    变量 最小值 <公开 类型 = 长整数>
+    变量 INC <公开 类型 = 长整数>
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ void SetInfo(MVCC_INTVALUE_EX* pValue)
+    #     {
+    #         @<当前值> = (INT64)pValue->nCurValue;
+    #         @<最大值> = (INT64)pValue->nMax;
+    #         @<最小值> = (INT64)pValue->nMin;
+    #         @<INC> = (INT64)pValue->nInc;
+    #     }
+    #     inline_ @sn<current_class> (MVCC_INTVALUE_EX* pValue) : @sn<current_class>()  { this->SetInfo(pValue); }
+    # <> </include>
+    # @end
+}
+
+类 相机枚举值属性类 <公开 注释 = "表示相机设备的枚举值属性." @文档 = "category = \"辅助类\"">
+{
+    变量 当前值 <公开 类型 = 整数>
+    变量 支持值 <公开 类型 = 整数数组类>
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ void SetInfo(MVCC_ENUMVALUE* pValue)
+    #     {
+    #         @<当前值> = (INT)pValue->nCurValue;
+    #         for (INT i = 0; i < (INT)pValue->nSupportedNum; i++)
+    #             @<支持值>.data().Add(pValue->nSupportValue[i]);
+    #     }
+    #     inline_ @sn<current_class> (MVCC_ENUMVALUE* pValue) : @sn<current_class>()  { this->SetInfo(pValue); }
+    # <> </include>
+    # @end
+}
+
+类 相机浮点属性类 <公开 注释 = "表示相机设备的数值属性." @文档 = "category = \"辅助类\"">
+{
+    变量 当前值 <公开 类型 = 小数>
+    变量 最大值 <公开 类型 = 小数>
+    变量 最小值 <公开 类型 = 小数>
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ void SetInfo(MVCC_FLOATVALUE* pValue)
+    #     {
+    #         @<当前值> = (DOUBLE)pValue->fCurValue;
+    #         @<最大值> = (DOUBLE)pValue->fMax;
+    #         @<最小值> = (DOUBLE)pValue->fMin;
+    #     }
+    #     inline_ @sn<current_class> (MVCC_FLOATVALUE* pValue) : @sn<current_class>()  { this->SetInfo(pValue); }
+    # <> </include>
+    # @end
+}
+
+类 相机传输层协议类型 <公开 注释 = "相机设备传输层协议类型." 编辑时信息 = "9554C, 0, 0, 0" @文档 = "category = \"辅助类\"">
+{
+    常量 未知 <公开 类型 = 整数 值 = @MV_UNKNOW_DEVICE 注释 = "未知设备类型">
+    常量 GIGE <公开 类型 = 整数 值 = @MV_GIGE_DEVICE 注释 = "GigE设备">
+    常量 _1394 <公开 类型 = 整数 值 = @MV_1394_DEVICE 注释 = "1394-a/b设备">
+    常量 USB <公开 类型 = 整数 值 = @MV_USB_DEVICE 注释 = "USB3.0设备">
+    常量 CameraLink <公开 类型 = 整数 值 = @MV_CAMERALINK_DEVICE 注释 = "CameraLink设备">
+}
+
+类 相机数据传输模式 <公开 注释 = "定义设备的网络传输模式." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 单播 <公开 值 = @"@MV_GIGE_TRANSMISSION_TYPE::MV_GIGE_TRANSTYPE_UNICAST" 注释 = "表示单播(默认)">
+    常量 组播 <公开 值 = @"@MV_GIGE_TRANSMISSION_TYPE::MV_GIGE_TRANSTYPE_MULTICAST" 注释 = "表示组播">
+    常量 局域网广播 <公开 值 = @"@MV_GIGE_TRANSMISSION_TYPE::MV_GIGE_TRANSTYPE_LIMITEDBROADCAST" 注释 = "表示局域网内广播,暂不支持.">
+    常量 子网内广播 <公开 值 = @"@MV_GIGE_TRANSMISSION_TYPE::MV_GIGE_TRANSTYPE_SUBNETBROADCAST" 注释 = "表示子网内广播,暂不支持.">
+    常量 从设备获取 <公开 值 = @"@MV_GIGE_TRANSMISSION_TYPE::MV_GIGE_TRANSTYPE_CAMERADEFINED" 注释 = "表示从设备获取,暂不支持.">
+    常量 自定义接收 <公开 值 = @"@MV_GIGE_TRANSMISSION_TYPE::MV_GIGE_TRANSTYPE_UNICAST_DEFINED_PORT" 注释 = "表示用户自定义应用端接收图像数据端口号.">
+    常量 单播不接收数据 <公开 值 = @"@MV_GIGE_TRANSMISSION_TYPE::MV_GIGE_TRANSTYPE_UNICAST_WITHOUT_RECV" 注释 = "表示设置了单播,但本实例不接收图像数据.">
+    常量 组播不接收数据 <公开 值 = @"@MV_GIGE_TRANSMISSION_TYPE::MV_GIGE_TRANSTYPE_MULTICAST_WITHOUT_RECV" 注释 = "表示组播模式,但本实例不接收图像数据.">
+}
+
+类 图像Bayer伽马类型 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 不启用 <公开 值 = @"@MV_CC_GAMMA_TYPE::MV_CC_GAMMA_TYPE_NONE">
+    常量 伽马值 <公开 值 = @"@MV_CC_GAMMA_TYPE::MV_CC_GAMMA_TYPE_VALUE">
+    常量 伽马曲线 <公开 值 = @"@MV_CC_GAMMA_TYPE::MV_CC_GAMMA_TYPE_USER_CURVE">
+    常量 线性RGB到sRGB <公开 值 = @"@MV_CC_GAMMA_TYPE::MV_CC_GAMMA_TYPE_LRGB2SRGB">
+    常量 sRGB到线性RGB <公开 值 = @"@MV_CC_GAMMA_TYPE::MV_CC_GAMMA_TYPE_SRGB2LRGB" 注释 = "仅色彩插值时支持,色彩校正时无效.">
+}
+
+类 相机波特率类型 <公开 注释 = "定义设备可选的波特率类型." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 波特率_9600 <公开 值 = @MV_CAML_BAUDRATE_9600>
+    常量 波特率_19200 <公开 值 = @MV_CAML_BAUDRATE_19200>
+    常量 波特率_38400 <公开 值 = @MV_CAML_BAUDRATE_38400>
+    常量 波特率_57600 <公开 值 = @MV_CAML_BAUDRATE_57600>
+    常量 波特率_115200 <公开 值 = @MV_CAML_BAUDRATE_115200>
+    常量 波特率_230400 <公开 值 = @MV_CAML_BAUDRATE_230400>
+    常量 波特率_460800 <公开 值 = @MV_CAML_BAUDRATE_460800>
+    常量 波特率_921600 <公开 值 = @MV_CAML_BAUDRATE_921600>
+    常量 最大值 <公开 值 = @MV_CAML_BAUDRATE_AUTOMAX>
+}
+
+类 相机属性树节点访问模式 <公开 注释 = "定义XML当前节点的访问模式." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 不可实现 <公开 值 = @"@MV_XML_AccessMode::AM_NI">
+    常量 不可用 <公开 值 = @"@MV_XML_AccessMode::AM_NA">
+    常量 只写 <公开 值 = @"@MV_XML_AccessMode::AM_WO">
+    常量 只读 <公开 值 = @"@MV_XML_AccessMode::AM_RO">
+    常量 读写 <公开 值 = @"@MV_XML_AccessMode::AM_RW">
+    常量 未定义 <公开 值 = @"@MV_XML_AccessMode::AM_Undefined">
+    常量 循环检测 <公开 值 = @"@MV_XML_AccessMode::AM_CycleDetect">
+}
+
+类 相机属性树节点接口类型 <公开 注释 = "定义每个节点对应的接口类型." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 值 <公开 值 = @"@MV_XML_InterfaceType::IFT_IValue">
+    常量 基础 <公开 值 = @"@MV_XML_InterfaceType::IFT_IBase">
+    常量 数值 <公开 值 = @"@MV_XML_InterfaceType::IFT_IInteger">
+    常量 逻辑 <公开 值 = @"@MV_XML_InterfaceType::IFT_IBoolean">
+    常量 命令 <公开 值 = @"@MV_XML_InterfaceType::IFT_ICommand">
+    常量 浮点 <公开 值 = @"@MV_XML_InterfaceType::IFT_IFloat">
+    常量 文本 <公开 值 = @"@MV_XML_InterfaceType::IFT_IString">
+    常量 注册 <公开 值 = @"@MV_XML_InterfaceType::IFT_IRegister">
+    常量 分类 <公开 值 = @"@MV_XML_InterfaceType::IFT_ICategory">
+    常量 枚举 <公开 值 = @"@MV_XML_InterfaceType::IFT_IEnumeration">
+    常量 枚举项 <公开 值 = @"@MV_XML_InterfaceType::IFT_IEnumEntry">
+    常量 端口 <公开 值 = @"@MV_XML_InterfaceType::IFT_IPort">
+}
+
+类 相机图像数据保存格式 <公开 注释 = "定义保存图片格式." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 未定义 <公开 值 = @"@MV_SAVE_IAMGE_TYPE::MV_Image_Undefined">
+    常量 BMP <公开 值 = @"@MV_SAVE_IAMGE_TYPE::MV_Image_Bmp">
+    常量 JPEG <公开 值 = @"@MV_SAVE_IAMGE_TYPE::MV_Image_Jpeg">
+    常量 PNG <公开 值 = @"@MV_SAVE_IAMGE_TYPE::MV_Image_Png">
+    常量 TIFF <公开 值 = @"@MV_SAVE_IAMGE_TYPE::MV_Image_Tif">
+}
+
+类 点云数据保存文件格式 <公开 注释 = "定义点云数据保存文件格式." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 未定义 <公开 值 = @"@MV_SAVE_POINT_CLOUD_FILE_TYPE::MV_PointCloudFile_Undefined">
+    常量 PLY <公开 值 = @"@MV_SAVE_POINT_CLOUD_FILE_TYPE::MV_PointCloudFile_PLY">
+    常量 CSV <公开 值 = @"@MV_SAVE_POINT_CLOUD_FILE_TYPE::MV_PointCloudFile_CSV">
+    常量 OBJ <公开 值 = @"@MV_SAVE_POINT_CLOUD_FILE_TYPE::MV_PointCloudFile_OBJ">
+}
+
+类 相机IP配置模式 <公开 注释 = "定义设备的IP配置方式." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 固定 <公开 值 = @MV_IP_CFG_STATIC 注释 = "固定IP地址模式">
+    常量 自动获取 <公开 值 = @MV_IP_CFG_DHCP 注释 = "DHCP自动获取IP模式">
+    常量 链路本地 <公开 值 = @MV_IP_CFG_LLA 注释 = "LLA(Link-local address),链路本地地址.">
+}
+
+类 相机网络传输模式 <公开 注释 = "定义设备的网络传输模式." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 驱动 <公开 值 = @MV_NET_TRANS_DRIVER 注释 = "驱动模式">
+    常量 Socket <公开 值 = @MV_NET_TRANS_SOCKET 注释 = "Socket模式">
+}
+
+类 相机访问权限类型 <公开 注释 = "相机设备的可访问权限类型." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 独占权限 <公开 值 = @MV_ACCESS_Exclusive 注释 = "独占权限,其他应用只允许读CCP寄存器.">
+    常量 选择独占 <公开 值 = @MV_ACCESS_ExclusiveWithSwitch 注释 = "可以从5模式下抢占权限,然后以独占权限打开.">
+    常量 控制权限 <公开 值 = @MV_ACCESS_Control 注释 = "控制权限,其他应用允许读所有寄存器.">
+    常量 选择控制 <公开 值 = @MV_ACCESS_ControlWithSwitch 注释 = "可以从5的模式下抢占权限,然后以控制权限打开.">
+    常量 可抢占控制 <公开 值 = @MV_ACCESS_ControlSwitchEnable 注释 = "可被抢占的控制权限打开.">
+    常量 抢占控制 <公开 值 = @MV_ACCESS_ControlSwitchEnableWithKey 注释 = "可以从5的模式下抢占权限,然后以可被抢占的控制权限打开.">
+    常量 只读 <公开 值 = @MV_ACCESS_Monitor 注释 = "读模式打开设备,适用于控制权限下.">
+}
+
+类 相机取流策略 <公开 注释 = "相机设备的取流策略类型." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 逐帧获取 <公开 值 = @"@MV_GRAB_STRATEGY::MV_GrabStrategy_OneByOne" 注释 = "从旧到新一帧一帧的从输出缓存列表中获取图像,打开设备后默认为该策略.">
+    常量 列表最新帧 <公开 值 = @"@MV_GRAB_STRATEGY::MV_GrabStrategy_LatestImagesOnly" 注释 = "仅从输出缓存列表中获取最新的一帧图像,同时清空输出缓存列表.">
+    常量 列表最新 <公开 值 = @"@MV_GRAB_STRATEGY::MV_GrabStrategy_LatestImages" 注释 = "从输出缓存列表中获取最新的指定多帧(由\"置输出缓存数量\"方法设置)的图像.">
+    常量 等待下帧 <公开 值 = @"@MV_GRAB_STRATEGY::MV_GrabStrategy_UpcomingImage"
+            注释 = "在调用取流接口时忽略输出缓存列表中所有图像,并等待设备即将生成的一帧图像.该策略只支持GigE设备.不支持U3V设备.">
+}
+
+类 相机异常消息类型 <公开 注释 = "提供相机设备异常消息类型." @文档 = "category = \"辅助类\"">
+{
+    常量 设备断开连接 <公开 类型 = 整数 值 = @MV_EXCEPTION_DEV_DISCONNECT>
+    常量 版本不匹配 <公开 类型 = 整数 值 = @MV_EXCEPTION_VERSION_CHECK 注释 = "当前所使用SDK与驱动版本不匹配.">
+}
+
+类 接口信息类 <公开 注释 = "通过GenTL枚举到的接口信息." @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CInterfaceInfoWrapper)
+    #
+
+    变量 接口ID <公开 类型 = 文本型 注释 = "GenTL接口ID.">
+    变量 传输层类型 <公开 类型 = 文本型 注释 = "传输层类型.">
+    变量 接口显示名称 <公开 类型 = 文本型 注释 = "Interface显示名称.">
+    变量 文件索引 <公开 类型 = 整数 注释 = "GenTL的cti文件索引.">
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ void SetInfo(MV_GENTL_IF_INFO* pInfo)
+    #     {
+    #         data().SetInterfaceInfo(pInfo);    //记录pInfo.
+    #         @<接口ID>.SetText(GetWideText((const CHAR*)pInfo->chInterfaceID, CVolMem(), NULL));
+    #         @<传输层类型>.SetText(GetWideText((const CHAR*)pInfo->chTLType, CVolMem(), NULL));
+    #         @<接口显示名称>.SetText(GetWideText((const CHAR*)pInfo->chDisplayName, CVolMem(), NULL));
+    #         @<文件索引> = (UINT)pInfo->nCtiIndex;
+    #     }
+    #     inline_ @sn<current_class> (MV_GENTL_IF_INFO* ptr) : @sn<current_class>()  { this->SetInfo(ptr); }
+    # <> </include>
+    # @end
+}
+
+类 GENTL设备信息类 <公开 注释 = "通过GenTL枚举到的设备信息." @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CGenTLDeviceInfoWrapper)
+    #
+
+    变量 接口ID <公开 类型 = 文本型>
+    变量 设备ID <公开 类型 = 文本型>
+    变量 供应商名称 <公开 类型 = 文本型>
+    变量 型号名称 <公开 类型 = 文本型>
+    变量 传输层类型 <公开 类型 = 文本型>
+    变量 设备显示名 <公开 类型 = 文本型>
+    变量 用户自定义名 <公开 类型 = 文本型>
+    变量 序列号 <公开 类型 = 文本型>
+    变量 设备版本号 <公开 类型 = 文本型>
+    变量 文件索引 <公开 类型 = 整数>
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ void SetInfo(MV_GENTL_DEV_INFO* pInfo)
+    #     {
+    #         data().SetGenTLDevInfo(pInfo);
+    #         @<接口ID>.SetText(GetWideText((const CHAR*)pInfo->chInterfaceID, CVolMem(), NULL));
+    #         @<设备ID>.SetText(GetWideText((const CHAR*)pInfo->chDeviceID, CVolMem(), NULL));
+    #         @<供应商名称>.SetText(GetWideText((const CHAR*)pInfo->chVendorName, CVolMem(), NULL));
+    #         @<型号名称>.SetText(GetWideText((const CHAR*)pInfo->chModelName, CVolMem(), NULL));
+    #         @<传输层类型>.SetText(GetWideText((const CHAR*)pInfo->chTLType, CVolMem(), NULL));
+    #         @<设备显示名>.SetText(GetWideText((const CHAR*)pInfo->chDisplayName, CVolMem(), NULL));
+    #         @<用户自定义名>.SetText(GetWideText((const CHAR*)pInfo->chUserDefinedName, CVolMem(), NULL));
+    #         @<序列号>.SetText(GetWideText((const CHAR*)pInfo->chSerialNumber, CVolMem(), NULL));
+    #         @<设备版本号>.SetText(GetWideText((const CHAR*)pInfo->chDeviceVersion, CVolMem(), NULL));
+    #         @<文件索引> = (INT)pInfo->nCtiIndex;
+    #     }
+    #     inline_ @sn<current_class> (MV_GENTL_DEV_INFO* ptr) : @sn<current_class>()  { this->SetInfo(ptr); }
+    # <> </include>
+    # @end
+}
+
+类 相机设备信息类 <公开 注释 = "表示指定相机设备的各种信息." @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CDeviceInfoWrapper)
+    #
+
+    变量 主要版本号 <公开 类型 = 短整数 注释 = "获取该设备的主要版本号.">
+    变量 次要版本号 <公开 类型 = 短整数 注释 = "获取该设备的次要版本号.">
+    变量 高MAC地址 <公开 类型 = 整数 注释 = "获取该设备的高MAC地址.">
+    变量 低MAC地址 <公开 类型 = 整数 注释 = "获取该设备的低MAC地址.">
+    变量 传输层协议类型 <公开 类型 = 整数 注释 = "获取该设备的传输层协议类型,常量值请参考\"相机传输层协议类型\".">
+    变量 GIGE设备信息 <公开 类型 = GIGE设备信息类 注释 = "如果当前设备为GIGE设备,获取其详细信息.">
+    变量 USB3设备信息 <公开 类型 = USB设备信息类 注释 = "如果当前设备为USB3设备,获取其详细信息.">
+    变量 CAML设备信息 <公开 类型 = CAML设备信息类 注释 = "如果当前设备为CAML设备,获取其详细信息.">
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ void SetInfo(MV_CC_DEVICE_INFO* pInfo, BOOL isRecordPtr = TRUE)
+    #     {
+    #         if (isRecordPtr) data().SetDeviceInfo(pInfo);    //记录pInfo.
+    #         @<主要版本号> = (SHORT)pInfo->nMajorVer;
+    #         @<次要版本号> = (SHORT)pInfo->nMinorVer;
+    #         @<高MAC地址> = (INT)pInfo->nMacAddrHigh;
+    #         @<低MAC地址> = (INT)pInfo->nMacAddrLow;
+    #         @<传输层协议类型> = (INT)pInfo->nTLayerType;
+    #         @<GIGE设备信息>.SetInfo(pInfo->SpecialInfo.stGigEInfo);
+    #         @<USB3设备信息>.SetInfo(pInfo->SpecialInfo.stUsb3VInfo);
+    #         @<CAML设备信息>.SetInfo(pInfo->SpecialInfo.stCamLInfo);
+    #     }
+    #     inline_ @sn<current_class>(MV_CC_DEVICE_INFO* pInfo, BOOL isRecordPtr) : @sn<current_class>() { this->SetInfo(pInfo, isRecordPtr); }
+    # <> </include>
+    # @end
+
+    方法 取设备组播状态 <公开 类型 = 逻辑型 注释 = "获取该设备的组播状态,无需打开设备即可获取其状态." 返回值注释 = "返回真表示处于组播状态,反之则未处于组播." @禁止流程检查 = 真>
+    参数 结果 <类型 = 整数类 注释 = "提供变量以接收本次执行的结果,值可参考\"工业相机状态码\"所提供的常量值." @默认值 = 空对象>
+    {
+        @ bool value = false;
+        @ INT ret = MV_GIGE_GetMulticastStatus(this->data().GetDeviceInfo(), &value);
+        @ if (!(BOOL)@<结果>.IsNullObject()) *(INT*)@<结果>.GetDataPtr() = ret;
+        @ return value;
+    }
+}
+
+类 GIGE设备信息类 <公开 注释 = "表示GIGE设备的具体信息." @文档 = "category = \"辅助类\"">
+{
+    变量 IP配置选项 <公开 类型 = 整数 注释 = "获取该设备的IP配置选项.">
+    变量 当前IP配置 <公开 类型 = 整数 注释 = "获取该设备的当前IP配置.">
+    变量 当前IP地址 <公开 类型 = 整数 注释 = "获取该设备的当前IP地址.">
+    变量 当前子网掩码 <公开 类型 = 整数 注释 = "获取该设备的当前子网掩码.">
+    变量 当前网关 <公开 类型 = 整数 注释 = "获取该设备的当前网关.">
+    变量 制造商名称 <公开 类型 = 文本型 注释 = "获取该设备的制造商名称.">
+    变量 型号名称 <公开 类型 = 文本型 注释 = "获取该设备的型号名称.">
+    变量 设备版本 <公开 类型 = 文本型 注释 = "获取该设备的设备版本.">
+    变量 制造商信息 <公开 类型 = 文本型 注释 = "获取该设备的制造商的具体信息.">
+    变量 序列号 <公开 类型 = 文本型 注释 = "获取该设备的序列号.">
+    变量 用户名称 <公开 类型 = 文本型 注释 = "获取该设备的用户自定义名称.">
+    变量 网口IP地址 <公开 类型 = 整数 注释 = "获取该设备的网口IP地址.">
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ void SetInfo(MV_GIGE_DEVICE_INFO& stInfo)
+    #     {
+    #         @<IP配置选项> = (INT)stInfo.nIpCfgOption;
+    #         @<当前IP配置> = (INT)stInfo.nIpCfgOption;
+    #         @<当前IP地址> = (INT)stInfo.nIpCfgOption;
+    #         @<当前子网掩码> = (INT)stInfo.nIpCfgOption;
+    #         @<当前网关> = (INT)stInfo.nIpCfgOption;
+    #         @<制造商名称>.SetText(GetWideText ((const CHAR *)stInfo.chManufacturerName, CVolMem(), NULL));
+    #         @<型号名称>.SetText(GetWideText ((const CHAR *)stInfo.chModelName, CVolMem(), NULL));
+    #         @<设备版本>.SetText(GetWideText ((const CHAR *)stInfo.chDeviceVersion, CVolMem(), NULL));
+    #         @<制造商信息>.SetText(GetWideText ((const CHAR *)stInfo.chManufacturerSpecificInfo, CVolMem(), NULL));
+    #         @<序列号>.SetText(GetWideText ((const CHAR *)stInfo.chSerialNumber, CVolMem(), NULL));
+    #         @<用户名称>.SetText(GetWideText ((const CHAR *)stInfo.chUserDefinedName, CVolMem(), NULL));
+    #         @<网口IP地址> = (INT)stInfo.nNetExport;
+    #     }
+    # <> </include>
+    # @end
+}
+
+类 USB设备信息类 <公开 注释 = "表示USB3设备的具体信息." @文档 = "category = \"辅助类\"">
+{
+    变量 控制输入端点 <公开 类型 = 字节 注释 = "获取该设备的控制输入端点.">
+    变量 控制输出端点 <公开 类型 = 字节 注释 = "获取该设备的控制输出端点.">
+    变量 流端点 <公开 类型 = 字节 注释 = "获取该设备的流端点.">
+    变量 事件端点 <公开 类型 = 字节 注释 = "获取该设备的事件端点.">
+    变量 供应商ID号 <公开 类型 = 短整数 注释 = "获取该设备的供应商ID号.">
+    变量 产品ID号 <公开 类型 = 短整数 注释 = "获取该设备的产品ID号.">
+    变量 设备索引号 <公开 类型 = 整数 注释 = "获取该设备的设备索引号.">
+    变量 设备GUID <公开 类型 = 文本型 注释 = "获取该设备的设备GUID号.">
+    变量 供应商名称 <公开 类型 = 文本型 注释 = "获取该设备的供应商名字.">
+    变量 型号名称 <公开 类型 = 文本型 注释 = "获取该设备的型号名字.">
+    变量 家族名称 <公开 类型 = 文本型 注释 = "获取该设备的家族名字.">
+    变量 设备版本 <公开 类型 = 文本型 注释 = "获取该设备的设备版本.">
+    变量 制造商名称 <公开 类型 = 文本型 注释 = "获取该设备的制造商名字.">
+    变量 序列号 <公开 类型 = 文本型 注释 = "获取该设备的序列号.">
+    变量 用户名称 <公开 类型 = 文本型 注释 = "获取该设备的用户自定义名称.">
+    变量 支持USB协议 <公开 类型 = 整数 注释 = "获取该设备的支持的USB协议.">
+    变量 设备地址 <公开 类型 = 整数 注释 = "获取该设备的地址.">
+
+    # @begin
+    # <> <include>
+    # public:
+    #     void SetInfo(MV_USB3_DEVICE_INFO& stInfo)
+    #     {
+    #         @<控制输入端点> = (S_BYTE)stInfo.CrtlInEndPoint;
+    #         @<控制输出端点> = (S_BYTE)stInfo.CrtlOutEndPoint;
+    #         @<流端点> = (S_BYTE)stInfo.StreamEndPoint;
+    #         @<事件端点> = (S_BYTE)stInfo.EventEndPoint;
+    #         @<供应商ID号> = (SHORT)stInfo.idVendor;
+    #         @<产品ID号> = (SHORT)stInfo.idProduct;
+    #         @<设备索引号> = (INT)stInfo.nDeviceNumber;
+    #         @<设备GUID>.SetText(GetWideText ((const CHAR *)stInfo.chDeviceGUID, CVolMem(), NULL));
+    #         @<供应商名称>.SetText(GetWideText ((const CHAR *)stInfo.chVendorName, CVolMem(), NULL));
+    #         @<型号名称>.SetText(GetWideText ((const CHAR *)stInfo.chModelName, CVolMem(), NULL));
+    #         @<家族名称>.SetText(GetWideText ((const CHAR *)stInfo.chFamilyName, CVolMem(), NULL));
+    #         @<设备版本>.SetText(GetWideText ((const CHAR *)stInfo.chDeviceVersion, CVolMem(), NULL));
+    #         @<制造商名称>.SetText(GetWideText ((const CHAR *)stInfo.chManufacturerName, CVolMem(), NULL));
+    #         @<序列号>.SetText(GetWideText ((const CHAR *)stInfo.chSerialNumber, CVolMem(), NULL));
+    #         @<用户名称>.SetText(GetWideText ((const CHAR *)stInfo.chUserDefinedName, CVolMem(), NULL));
+    #         @<支持USB协议> = (INT)stInfo.nbcdUSB;
+    #         @<设备地址> = (INT)stInfo.nDeviceAddress;
+    #     }
+    # <> </include>
+    # @end
+    #
+}
+
+类 CAML设备信息类 <公开 注释 = "表示CAML设备的具体信息." @文档 = "category = \"辅助类\"">
+{
+    变量 端口号 <公开 类型 = 文本型 注释 = "获取该设备的端口号.">
+    变量 型号名称 <公开 类型 = 文本型 注释 = "获取该设备的型号名字.">
+    变量 家族名称 <公开 类型 = 文本型 注释 = "获取该设备的名称.">
+    变量 设备版本 <公开 类型 = 文本型 注释 = "获取该设备的设备版本.">
+    变量 制造商名称 <公开 类型 = 文本型 注释 = "获取该设备的制造商名字.">
+    变量 序列号 <公开 类型 = 文本型 注释 = "获取该设备的序列号.">
+
+    # @begin
+    # <> <include>
+    # public:
+    #     void SetInfo(MV_CamL_DEV_INFO& stInfo)
+    #     {
+    #         @<端口号>.SetText(GetWideText ((const CHAR *)stInfo.chPortID, CVolMem(), NULL));
+    #         @<型号名称>.SetText(GetWideText ((const CHAR *)stInfo.chModelName, CVolMem(), NULL));
+    #         @<家族名称>.SetText(GetWideText ((const CHAR *)stInfo.chFamilyName, CVolMem(), NULL));
+    #         @<设备版本>.SetText(GetWideText ((const CHAR *)stInfo.chDeviceVersion, CVolMem(), NULL));
+    #         @<制造商名称>.SetText(GetWideText ((const CHAR *)stInfo.chManufacturerName, CVolMem(), NULL));
+    #         @<序列号>.SetText(GetWideText ((const CHAR *)stInfo.chSerialNumber, CVolMem(), NULL));
+    #     }
+    # <> </include>
+    # @end
+}
+
+类 相机设备信息数组类 <公开 基础类 = 对象数组模板类 @文档 = "category = \"辅助类\"" @模板实现类 = "相机设备信息类">
+
+类 GENTL设备信息数组类 <公开 基础类 = 对象数组模板类 编辑时信息 = "C1549, 0, 0, 0" @文档 = "category = \"辅助类\"" @模板实现类 = "GENTL设备信息类">
+
+类 接口信息数组类 <公开 基础类 = 对象数组模板类 @文档 = "category = \"辅助类\"" @模板实现类 = "接口信息类">
+
+类 图像Chunk数据数组类 <公开 基础类 = 对象数组模板类 @文档 = "category = \"辅助类\"" @模板实现类 = "图像Chunk数据类">
+
+类 相机动作命令结果数组类 <公开 基础类 = 对象数组模板类 @文档 = "category = \"辅助类\"" @模板实现类 = "相机动作命令结果类">

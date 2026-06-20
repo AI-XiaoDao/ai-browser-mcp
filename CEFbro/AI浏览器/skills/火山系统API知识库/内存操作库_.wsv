@@ -1,0 +1,1429 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <@文档 = "category = \"内存操作库\"">
+
+类 远程Call操作类_ <公开 折叠 折叠2 @文档 = "category = \"内存操作库.远程Call\"" @全局类 = 真>
+{
+    方法 内存_FastCall <公开 静态 类型 = 长整数 注释 = "非嵌入" 折叠 @禁止流程检查 = 真>
+    参数 指向地址 <类型 = 变整数 注释 = "call地址">
+    参数 RCX <类型 = 变整数 @默认值 = 0>
+    参数 RDX <类型 = 变整数 @默认值 = 0>
+    参数 R8 <类型 = 变整数 @默认值 = 0>
+    参数 R9 <类型 = 变整数 @默认值 = 0>
+    参数 R10 <类型 = 变整数 @默认值 = 0>
+    参数 R11 <类型 = 变整数 @默认值 = 0>
+    参数 R12 <类型 = 变整数 @默认值 = 0>
+    参数 R13 <类型 = 变整数 @默认值 = 0>
+    参数 R14 <类型 = 变整数 @默认值 = 0>
+    参数 R15 <类型 = 变整数 @默认值 = 0>
+    {
+        @ typedef INT64(__fastcall* Tfunction)(INT64 @<RCX>,INT64 @<RDX>,INT64 @<R8>,INT64 @<R9>,INT64 @<R10>,INT64 @<R11>,INT64 @<R12>,INT64 @<R13>,INT64 @<R14>,INT64 @<R15>);
+        @ Tfunction function = (Tfunction)@<指向地址>;
+        @ return function(@<RCX>,@<RDX>,@<R8>,@<R9>,@<R10>,@<R11>,@<R12>,@<R13>,@<R14>,@<R15>);
+    }
+
+    方法 内存_远程Call <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 汇编字节集 <类型 = 字节集类>
+    {
+        变量 指针 <类型 = 变整数>
+        变量 写入长度 <类型 = 整数>
+        指针 = 汇编字节集.取字节集指针 ()
+        写入长度 = 汇编字节集.取字节集长度 () + 1
+        @ HANDLE  hProcess=OpenProcess(PROCESS_ALL_ACCESS, FALSE, @<进程ID>);
+        @ LPVOID ptr= VirtualAllocEx(hProcess,0,@<写入长度>,4096,64);
+        @ if( WriteProcessMemory(hProcess,ptr,(void*)@<指针>,@<写入长度>,0)==0){ VirtualFreeEx(hProcess,ptr,0,32768);return false;}
+        @ HANDLE hThread = CreateRemoteThread(hProcess,0,0,(LPTHREAD_START_ROUTINE)ptr,0,4,NULL);
+        @ if (hThread==NULL){return false ;}
+        @ ResumeThread(hThread);
+        @ WaitForSingleObject(hThread, -1);
+        @ CloseHandle(hThread);
+        @  VirtualFreeEx(hProcess,ptr,0,32768);
+        @ return true;
+    }
+
+    方法 内存_远程Call2 <公开 静态 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    参数 指向地址 <类型 = 变整数 注释 = "Call地址">
+    参数 附加参数 <类型 = 变整数>
+    参数 p1 <类型 = 变整数 @默认值 = 0>
+    参数 p2 <类型 = 变整数 @默认值 = 0>
+    参数 p3 <类型 = 变整数 @默认值 = 0>
+    参数 p4 <类型 = 变整数 @默认值 = 0>
+    参数 p5 <类型 = 变整数 @默认值 = 0>
+    参数 p6 <类型 = 变整数 @默认值 = 0>
+    参数 p7 <类型 = 变整数 @默认值 = 0>
+    参数 p8 <类型 = 变整数 @默认值 = 0>
+    {
+        如果 (附加参数 == 0)
+        {
+            @ HANDLE hRemoteThread = NULL;
+            @ PTHREAD_START_ROUTINE CallWindows = NULL;
+            @ HMODULE hModule = GetModuleHandleA("user32.dll");
+            @ if (hModule != NULL) {
+            @  CallWindows = (PTHREAD_START_ROUTINE)GetProcAddress(hModule, "CallWindowProcA");
+            @  if (CallWindows != NULL) {
+            @   hRemoteThread = CreateThread(NULL, 0, CallWindows, (LPVOID)@<指向地址>, 0, NULL);
+            @   if (hRemoteThread != NULL) {
+            @    WaitForSingleObject(hRemoteThread, INFINITE);
+            @    CloseHandle(hRemoteThread);
+            @    return *(__int64*)(@<指向地址>);
+            @   }
+            @  }
+            @ }
+            @ return 0;
+        }
+        否则
+        {
+            @ typedef INT64(_fastcall* Tfunction)(INT64,INT64,INT64,INT64,INT64,INT64,INT64,INT64,INT64);
+            @ Tfunction function = (Tfunction)@<指向地址>;
+            @ return function(@<附加参数>,@<p1>,@<p2>,@<p3>,@<p4>,@<p5>,@<p6>,@<p7>,@<p8>);
+        }
+    }
+}
+
+# //==========
+
+类 内存释放类_ <公开 折叠 折叠2 @文档 = "category = \"内存操作库.内存释放\"" @全局类 = 真>
+{
+    方法 内存_释放程序内存 <公开 静态 类型 = 逻辑型 注释 = "释放指定程序进程的内存" 折叠 折叠2 @禁止流程检查 = 真 @视窗.外部头文件 = "psapi.h" @视窗.外部库 = "psapi.lib">
+    参数 进程ID <类型 = 整数 注释 = "默认为自身进程ID" @默认值 = 0>
+    参数 最小工作集 <类型 = 整数 注释 = "默认为1M ，单位：字节。进程在物理内存中当前实际存在的页面集合" @默认值 = 1048576>
+    参数 最大工作集 <类型 = 整数 注释 = "默认为2M ，单位：字节。进程在物理内存中当前实际存在的页面集合" @默认值 = 2097152>
+    {
+        @ DWORD processId;
+        @ if(@<进程ID>==0) {
+        @     processId = GetCurrentProcessId();
+        @ } else {
+        @     processId = @<进程ID>;
+        @ }
+        @     HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId);
+        @     if (hProcess == NULL) {
+        @         return 0;
+        @     }
+        @     BOOL result = SetProcessWorkingSetSize(hProcess, @<最小工作集>, @<最大工作集>);
+        @     if (!result) {
+        @         CloseHandle(hProcess);
+        @         return 0;
+        @     }
+        @     BOOL result2 = EmptyWorkingSet(hProcess);
+        @     if (!result2) {
+        @        CloseHandle(hProcess);
+        @        return 0;
+        @     } 
+        @     CloseHandle(hProcess);
+        @     return 1;
+    }
+}
+
+# //==========
+
+类 内存操作类_ <公开 折叠 折叠2 @文档 = "category = \"内存操作库.内存读写\"" @全局类 = 真 @视窗.外部头文件 = "<TlHelp32.h>">
+{
+    方法 内存特征码搜索_ <公开 静态 类型 = 整数 注释 = "搜索指定进程中的特征码，支持通配符 ?" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 特征码 <类型 = 文本型 注释 = "十六进制文本，如“BA ?? 00 B4 09 ?? 21”， 首尾无空格,中间空格不可省略">
+    参数 返回的特征码地址 <类型 = 长整数数组类 注释 = "返回 十进制地址 数组">
+    参数 搜寻起始地址 <类型 = 长整数 注释 = "0x401000" @默认值 = 0x401000>
+    参数 搜寻结束地址 <类型 = 长整数 注释 = "0xFFFFFFFFFFFF" @默认值 = 0xFFFFFFFFFFFF>
+    {
+        变量 地址 <类型 = 长整数>
+        @ int dwNum = WideCharToMultiByte(CP_ACP,NULL,@<特征码>,-1,NULL,NULL,0,NULL);
+        @ char *Tzm = new char[dwNum];
+        @ WideCharToMultiByte(CP_ACP,NULL,@<特征码>,-1,Tzm,dwNum,0,NULL);
+        @ unsigned __int64 StartAddress=@<搜寻起始地址>;
+        @ unsigned __int64 EndAddress=@<搜寻结束地址>;
+        @ HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, false, @<进程ID>); 
+        @ #define BLOCKMAXSIZE 409600
+        @ unsigned char* MemoryData = new BYTE[BLOCKMAXSIZE];
+        @ unsigned long BlockSize;
+        @ MEMORY_BASIC_INFORMATION mbi;
+        @ WORD TzmLength = (WORD)(strlen(Tzm) / 3 + 1);
+        @ WORD* TzmArray = new WORD[TzmLength];
+        @ int len = 0;
+        @ for (int i = 0; i < strlen(Tzm); )
+        @ {
+        @  char num[2];
+        @  num[0] = Tzm[i++];
+        @  num[1] = Tzm[i++];
+        @  i++;
+        @  if (num[0] != '?' && num[1] != '?')
+        @  {
+        @   int sum = 0;
+        @   WORD a[2];
+        @   for (int i = 0; i < 2; i++)
+        @   {
+        @    if (num[i] >= '0' && num[i] <= '9')
+        @    {
+        @     a[i] = num[i] - '0';
+        @    }
+        @    else if (num[i] >= 'a' && num[i] <= 'z')
+        @    {
+        @     a[i] = num[i] - 87;
+        @    }
+        @    else if (num[i] >= 'A' && num[i] <= 'Z')
+        @    {
+        @     a[i] = num[i] - 55;
+        @    }
+        @   }
+        @   sum = a[0] * 16 + a[1];
+        @   TzmArray[len++] = sum;
+        @  }
+        @  else
+        @  {
+        @   TzmArray[len++] = 256;
+        @  }
+        @ }
+        @ short Next[260]; 
+        @ for (int i = 0; i < 260; i++)
+        @  Next[i] = -1;
+        @ for (int i = 0; i < TzmLength; i++)
+        @  Next[TzmArray[i]] = i;
+        返回的特征码地址.删除所有成员 ()
+        @ while (VirtualQueryEx(hProcess, (LPCVOID)StartAddress, &mbi, sizeof(mbi)) != 0)
+        @ {
+        @      int i = 0;
+        @   BlockSize = (unsigned long)mbi.RegionSize;
+        @   while (BlockSize >= BLOCKMAXSIZE)
+        @   {
+        @    if (ReadProcessMemory(hProcess, (LPCVOID)(StartAddress + (BLOCKMAXSIZE * i)), MemoryData, BLOCKMAXSIZE, NULL))
+        @    {
+        @     for (int m = 0, j, k; m < BLOCKMAXSIZE;)
+        @     {
+        @      j = m; k = 0;
+        @      for (; k < TzmLength && j < BLOCKMAXSIZE && (TzmArray[k] == MemoryData[j] || TzmArray[k] == 256); k++, j++);
+        @      if (k == TzmLength)
+        @      {
+        @  @<地址>=StartAddress + (BLOCKMAXSIZE * i) + m;
+        返回的特征码地址.加入成员 (地址)
+        @      }
+        @      if ((m + TzmLength) >= BLOCKMAXSIZE)
+        @      {
+        @       break;
+        @      }
+        @      int num = Next[MemoryData[m + TzmLength]];
+        @      if (num == -1)
+        @       m += (TzmLength - Next[256]);
+        @      else
+        @       m += (TzmLength - num);
+        @     }
+        @    }
+        @    BlockSize -= BLOCKMAXSIZE; i++;
+        @   }
+        @   if (ReadProcessMemory(hProcess, (LPCVOID)(StartAddress + (BLOCKMAXSIZE * i)), MemoryData, BlockSize, NULL))
+        @   {
+        @    for (int m = 0, j, k; m < BlockSize;)
+        @    {
+        @     j = m; k = 0;
+        @     for (; k < TzmLength && j < BlockSize && (TzmArray[k] == MemoryData[j] || TzmArray[k] == 256); k++, j++);
+        @     if (k == TzmLength)
+        @     {
+        @  @<地址>=StartAddress + (BLOCKMAXSIZE * i) + m;
+        返回的特征码地址.加入成员 (地址)
+        @     }
+        @     if ((m + TzmLength) >= BlockSize)
+        @     {
+        @      break;
+        @     }
+        @     int num = Next[MemoryData[m + TzmLength]];
+        @     if (num == -1)
+        @      m += (TzmLength - Next[256]);
+        @     else
+        @      m += (TzmLength - num);
+        @    }
+        @   }
+        @  StartAddress += mbi.RegionSize;
+        @  if (EndAddress != 0 && StartAddress > EndAddress){ break; }
+        @ }
+        @ delete[]TzmArray;
+        @ delete[]MemoryData;
+        @ CloseHandle(hProcess);
+        返回 (返回的特征码地址.取成员数 ())
+    }
+
+    方法 内存特征码修改_ <公开 静态 类型 = 逻辑型 注释 = "修改指定进程中，特征码地址处的数据" 折叠>
+    参数 进程ID <类型 = 整数>
+    参数 特征码地址 <类型 = 长整数>
+    参数 欲写入的数据 <类型 = 文本型 注释 = "十六进制文本，如“0F 84 91 02 00 00”，首尾无空格,中间空格可有可无">
+    {
+        变量 临时数据 <类型 = 字节集类>
+        临时数据 = 十六进制文本到字节集 (删全部空_ (欲写入的数据))
+        返回 (内存_写内存字节集 (进程ID, (变整数)特征码地址, 临时数据))
+    }
+
+    方法 申请内存_ <公开 静态 类型 = 变整数 注释 = "申请当前进程中的内存" 返回值注释 = "返回内存地址" 折叠 @禁止流程检查 = 真>
+    参数 内存长度 <类型 = 变整数>
+    参数 清零内存 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ byte* tmp = 0;
+        @ tmp = new byte[@<内存长度>];
+        如果真 (清零内存)
+        {
+            @ memset (tmp, 0, @<内存长度>);
+        }
+        @ return (INT64)tmp;
+    }
+
+    方法 内存_申请内存 <公开 静态 类型 = 变整数 注释 = "申请当前进程中的内存" 返回值注释 = "返回内存地址" 折叠>
+    参数 内存长度 <类型 = 变整数>
+    参数 清零内存 <类型 = 逻辑型 @默认值 = 真>
+    {
+        返回 (申请内存_ (内存长度, 清零内存))
+    }
+
+    方法 申请内存2_ <公开 静态 类型 = 变整数 返回值注释 = "返回内存地址" 折叠 @禁止流程检查 = 真>
+    参数 进程句柄 <类型 = 变整数 注释 = "进程句柄">
+    参数 内存长度 <类型 = 整数 注释 = "要申请的内存长度,尽量填4096的倍数吧,因为不足4096时系统自动以此倍数值来分配的">
+    参数 保护属性 <类型 = 整数 注释 = "2=只读，4=可读写，64=可读写运行，默认=64( PAGE_READWRITE)" @默认值 = 64>
+    {
+        @ return (INT_P)VirtualAllocEx((HANDLE)@<进程句柄>,(LPVOID)NULL,@<内存长度>,MEM_COMMIT,(DWORD)@<保护属性>);
+    }
+
+    方法 内存_申请内存2 <公开 静态 类型 = 变整数 返回值注释 = "返回内存地址" 折叠>
+    参数 进程句柄 <类型 = 变整数 注释 = "进程句柄">
+    参数 内存长度 <类型 = 整数 注释 = "要申请的内存长度,尽量填4096的倍数吧,因为不足4096时系统自动以此倍数值来分配的">
+    参数 保护属性 <类型 = 整数 注释 = "2=只读，4=可读写，64=可读写运行，默认=64( PAGE_READWRITE)" @默认值 = 64>
+    {
+        返回 (申请内存2_ (进程句柄, 内存长度, 保护属性))
+    }
+
+    方法 申请内存3_ <公开 静态 类型 = 变整数 返回值注释 = "返回内存地址" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存长度 <类型 = 整数 注释 = "要申请的内存长度,尽量填4096的倍数吧,因为不足4096时系统自动以此倍数值来分配的">
+    参数 保护属性 <类型 = 整数 注释 = "2=只读，4=可读写，64=可读写运行，默认=64( PAGE_READWRITE)" @默认值 = 64>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @ if (hProcess == NULL){ return false; }
+        @ INT_P ret =  (INT_P)VirtualAllocEx((HANDLE)hProcess,(LPVOID)NULL,@<内存长度>,MEM_COMMIT,(DWORD)@<保护属性>);
+        @ ::CloseHandle(hProcess);
+        @ return ret;
+    }
+
+    方法 内存_申请内存3 <公开 静态 类型 = 变整数 返回值注释 = "返回内存地址" 折叠>
+    参数 进程ID <类型 = 整数>
+    参数 内存长度 <类型 = 整数 注释 = "要申请的内存长度,尽量填4096的倍数吧,因为不足4096时系统自动以此倍数值来分配的">
+    参数 保护属性 <类型 = 整数 注释 = "2=只读，4=可读写，64=可读写运行，默认=64( PAGE_READWRITE)" @默认值 = 64>
+    {
+        返回 (申请内存3_ (进程ID, 内存长度, 保护属性))
+    }
+
+    方法 释放内存_ <公开 静态 折叠 折叠2 @嵌入式方法 = "" @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @ delete [] (BYTE*)@<内存地址>
+    }
+
+    方法 内存_释放内存 <公开 静态 折叠>
+    参数 内存地址 <类型 = 变整数>
+    {
+        返回 (释放内存_ (内存地址))
+    }
+
+    方法 释放内存2_ <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程句柄 <类型 = 变整数>
+    参数 地址 <类型 = 变整数>
+    {
+        @ return VirtualFreeEx((HANDLE)@<进程句柄>,(LPVOID)@<地址>,0,32768);
+    }
+
+    方法 内存_释放内存2 <公开 静态 类型 = 逻辑型 折叠>
+    参数 进程句柄 <类型 = 变整数>
+    参数 地址 <类型 = 变整数>
+    {
+        返回 (释放内存2_ (进程句柄, 地址))
+    }
+
+    方法 释放内存3_ <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 地址 <类型 = 变整数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @ if (hProcess == NULL){ return false; }
+        @ bool ret = VirtualFreeEx((HANDLE)hProcess,(LPVOID)@<地址>,0,32768);
+        @ ::CloseHandle(hProcess);
+        @ return ret;
+    }
+
+    方法 内存_释放内存3 <公开 静态 类型 = 逻辑型 折叠>
+    参数 进程ID <类型 = 整数>
+    参数 地址 <类型 = 变整数>
+    {
+        返回 (释放内存3_ (进程ID, 地址))
+    }
+
+    方法 内存_申请内存整数地址 <公开 静态 类型 = 变整数 注释 = "在自身进程申请自身整数内存" 返回值注释 = "返回内存地址" 折叠 @禁止流程检查 = 真>
+    参数 初始值 <类型 = 整数 @默认值 = 0>
+    {
+        @ byte* tmp = 0;
+        @ tmp = new byte[4];
+        @ memcpy ((LPVOID)tmp, &@<初始值>, 4);
+        @ return (INT64)tmp;
+    }
+
+    方法 内存_写内存短整数 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 短整数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @ if (hProcess == NULL){ return false; }
+        @ bool ret = ::WriteProcessMemory(hProcess,(LPVOID)@<内存地址>,&(LPCVOID)@<写入值>,2,NULL);
+        @ ::CloseHandle(hProcess);
+        @ return ret;
+    }
+
+    方法 内存_读内存短整数 <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @ if (hProcess == NULL){ return -1; }
+        @ short value;
+        @ bool ret = ::ReadProcessMemory(hProcess,(LPVOID)@<内存地址>,&value,2,NULL);
+        @ ::CloseHandle(hProcess);
+        @ if (ret == false) { return -1; }
+        @ return value;
+    }
+
+    方法 内存_写内存整数 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 整数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @ if (hProcess == NULL){ return false; }
+        @ bool ret = ::WriteProcessMemory(hProcess,(LPVOID)@<内存地址>,&(LPCVOID)@<写入值>,4,NULL);
+        @ ::CloseHandle(hProcess);
+        @ return ret;
+    }
+
+    方法 内存_读内存整数 <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @ if (hProcess == NULL){ return -1; }
+        @ int value;
+        @ bool ret = ::ReadProcessMemory(hProcess,(LPVOID)@<内存地址>,&value,4,NULL);
+        @ ::CloseHandle(hProcess);
+        @ if (ret == false) { return -1; }
+        @ return value;
+    }
+
+    方法 内存_写内存长整数 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 长整数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @ if (hProcess == NULL){ return false; }
+        @ bool ret = ::WriteProcessMemory(hProcess,(LPVOID)@<内存地址>,&(LPCVOID)@<写入值>,8,NULL);
+        @ ::CloseHandle(hProcess);
+        @ return ret;
+    }
+
+    方法 内存_读内存长整数 <公开 静态 类型 = 长整数 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @    long long p;
+        @    ::ReadProcessMemory(hProcess, (LPCVOID)@<内存地址>, &p,8, NULL);
+        @ ::CloseHandle(hProcess);
+        @    return p;
+    }
+
+    方法 内存_写内存变整数 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 变整数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @ if (hProcess == NULL){ return false; }
+        @ bool ret = ::WriteProcessMemory(hProcess,(LPVOID)@<内存地址>,&(LPCVOID)@<写入值>,8,NULL);
+        @ ::CloseHandle(hProcess);
+        @ return ret;
+    }
+
+    方法 内存_读内存变整数 <公开 静态 类型 = 长整数 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @    INT_P p;
+        @    ::ReadProcessMemory(hProcess, (LPCVOID)@<内存地址>, &p,8, NULL);
+        @ ::CloseHandle(hProcess);
+        @    return p;
+    }
+
+    方法 内存_写内存小数_单精度 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 单精度小数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @ if (hProcess == NULL){ return false; }
+        @ float value=@<写入值>;
+        @ bool ret = ::WriteProcessMemory(hProcess,(LPVOID)@<内存地址>,&value,4,NULL);
+        @ ::CloseHandle(hProcess);
+        @ return ret;
+    }
+
+    方法 内存_读内存小数_单精度 <公开 静态 类型 = 单精度小数 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @ if (hProcess == NULL){ return -1; }
+        @ float value;
+        @ bool ret = ::ReadProcessMemory(hProcess,(LPVOID)@<内存地址>,&value,4,NULL);
+        @ ::CloseHandle(hProcess);
+        @ if (ret == false) { return -1; }
+        @ return value;
+    }
+
+    方法 内存_写内存小数_双精度 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 小数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @ if (hProcess == NULL){ return false; }
+        @ bool ret = ::WriteProcessMemory(hProcess,(LPVOID)@<内存地址>,&@<写入值>,8,NULL);
+        @ ::CloseHandle(hProcess);
+        @ return ret;
+    }
+
+    方法 内存_读内存小数_双精度 <公开 静态 类型 = 小数 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @ if (hProcess == NULL){ return -1; }
+        @ double value;
+        @ bool ret = ::ReadProcessMemory(hProcess,(LPVOID)@<内存地址>,&value,8,NULL);
+        @ ::CloseHandle(hProcess);
+        @ if (ret == false) { return -1; }
+        @ return value;
+    }
+
+    方法 内存_写内存短整数2 <公开 静态 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 短整数>
+    {
+        @ memcpy ((LPVOID)@<内存地址>, &@<写入值>, 2);
+    }
+
+    方法 内存_读内存短整数2 <公开 静态 类型 = 短整数 折叠 折叠2 @嵌入式方法 = "" @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @ *(INT*)@<内存地址>
+    }
+
+    方法 内存_写内存整数2 <公开 静态 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 整数>
+    {
+        @ memcpy ((LPVOID)@<内存地址>, &@<写入值>, 4);
+    }
+
+    方法 内存_读内存整数2 <公开 静态 类型 = 整数 折叠 折叠2 @嵌入式方法 = "" @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @ *(INT*)@<内存地址>
+    }
+
+    方法 内存_写内存长整数2 <公开 静态 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 长整数>
+    {
+        @ memcpy ((LPVOID)@<内存地址>, &@<写入值>, 8);
+    }
+
+    方法 内存_读内存长整数2 <公开 静态 类型 = 长整数 折叠 折叠2 @嵌入式方法 = "" @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @ *(INT*)@<内存地址>
+    }
+
+    方法 内存_写内存文本 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 文本型>
+    参数 Unicode编码 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 地址2 <类型 = 变整数>
+        变量 进程句柄 <类型 = 变整数>
+        变量 空白数据 <类型 = 字节集类>
+        变量 地址 <类型 = 变整数>
+        进程句柄 = 进程_打开进程_ID (进程ID)
+        {
+            如果真 (进程句柄 != 0)
+            {
+                如果 (Unicode编码 == 假)
+                {
+                    空白数据 = 转Unicode到Ascii_ (写入值)
+                }
+                否则
+                {
+                    空白数据 = 到字节集 (写入值)
+                }
+                地址2 = 内存_修改内存属性3 (进程句柄, 内存地址, 取字节集长度 (空白数据), 64)
+                地址 = 内存api.WriteProcessMemory (进程句柄, 内存地址, 取字节集指针 (空白数据), 取字节集长度 (空白数据), 0)
+                内存_修改内存属性3 (进程句柄, 内存地址, 取字节集长度 (空白数据), 地址2)
+                进程_关闭进程 (进程句柄)
+                返回 (地址 != 0)
+            }
+        }
+        返回 (假)
+    }
+
+    方法 内存_读内存文本 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 内存长度 <类型 = 整数>
+    参数 Unicode编码 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 进程句柄 <类型 = 变整数>
+        变量 空白数据 <类型 = 字节集类 "">
+        变量 地址 <类型 = 变整数>
+        进程句柄 = 进程_打开进程_ID (进程ID)
+        如果真 (进程句柄 != 0)
+        {
+            空白数据 = 取空白字节集 (内存长度)
+            地址 = 内存api.ReadProcessMemory (进程句柄, 内存地址, 取字节集指针 (空白数据), 内存长度, 0)
+            进程_关闭进程 (进程句柄)
+        }
+        如果 (Unicode编码 == 假)
+        {
+            返回 (转Ascii到Unicode_ (空白数据))
+        }
+        否则
+        {
+            返回 (字节集到文本 (空白数据))
+        }
+    }
+
+    方法 内存_写内存文本2 <公开 静态 类型 = 逻辑型 注释 = "胖指针方式" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 文本型>
+    参数 Unicode编码 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 地址2 <类型 = 变整数>
+        变量 进程句柄 <类型 = 变整数>
+        变量 空白数据 <类型 = 字节集类>
+        变量 地址 <类型 = 变整数>
+        进程句柄 = 进程_打开进程_ID (进程ID)
+        如果真 (进程句柄 != 0)
+        {
+            如果 (Unicode编码 == 假)
+            {
+                空白数据 = 转Unicode到Ascii_ (写入值)
+            }
+            否则
+            {
+                空白数据 = 到字节集 (写入值)
+            }
+            内存_写内存整数 (进程ID, 内存地址, 空白数据.取字节集长度 ())
+            地址2 = 内存_修改内存属性3 (进程句柄, 内存地址 + 4, 取字节集长度 (空白数据), 64)
+            地址 = 内存api.WriteProcessMemory (进程句柄, 内存地址 + 4, 取字节集指针 (空白数据), 取字节集长度 (空白数据), 0)
+            内存_修改内存属性3 (进程句柄, 内存地址 + 4, 取字节集长度 (空白数据), 地址2)
+            进程_关闭进程 (进程句柄)
+            返回 (地址 != 0)
+        }
+        返回 (假)
+    }
+
+    方法 内存_读内存文本2 <公开 静态 类型 = 文本型 注释 = "胖指针方式，不需要指定长度" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 Unicode编码 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 进程句柄 <类型 = 变整数>
+        变量 空白数据 <类型 = 字节集类 "">
+        变量 地址 <类型 = 变整数>
+        变量 长度 <类型 = 整数>
+        进程句柄 = 进程_打开进程_ID (进程ID)
+        如果真 (进程句柄 != 0)
+        {
+            长度 = 内存_读内存整数 (进程ID, 内存地址)
+            空白数据 = 取空白字节集 (长度)
+            地址 = 内存api.ReadProcessMemory (进程句柄, 内存地址 + 4, 取字节集指针 (空白数据), 长度, 0)
+            进程_关闭进程 (进程句柄)
+        }
+        如果 (Unicode编码 == 假)
+        {
+            返回 (转Ascii到Unicode_ (空白数据))
+        }
+        否则
+        {
+            返回 (字节集到文本 (空白数据))
+        }
+    }
+
+    方法 内存_写内存文本3 <公开 静态 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数 "">
+    参数 写入值 <类型 = 文本型>
+    参数 长度 <类型 = 变整数>
+    {
+        @ memcpy((void*)@<内存地址>,(const void*)@<写入值>,@<长度>);
+    }
+
+    方法 内存_读内存文本3 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 长度 <类型 = 变整数>
+    {
+        变量 Buffer <类型 = 文本型>
+        @ int Size = @<长度>;
+        @ LPWSTR Buffer = new TCHAR[Size]();
+        @ memcpy((void*)Buffer,(const void*)@<内存地址>,Size);
+        @ @<Buffer> = Buffer;
+        @ delete[] Buffer;
+        @ return @<Buffer>.GetText();
+    }
+
+    方法 内存_写内存字节集 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 字节集类>
+    {
+        变量 地址2 <类型 = 变整数>
+        变量 进程句柄 <类型 = 变整数>
+        变量 地址 <类型 = 变整数>
+        进程句柄 = 进程_打开进程_ID (进程ID)
+        {
+            如果真 (进程句柄 != 0)
+            {
+                地址2 = 内存_修改内存属性3 (进程句柄, 内存地址, 取字节集长度 (写入值), 64)
+                地址 = 内存api.WriteProcessMemory (进程句柄, 内存地址, 取字节集指针 (写入值), 取字节集长度 (写入值), 0)
+                内存_修改内存属性3 (进程句柄, 内存地址, 取字节集长度 (写入值), 地址2)
+                进程_关闭进程 (进程句柄)
+                返回 (地址 != 0)
+            }
+        }
+        返回 (假)
+    }
+
+    方法 内存_读内存字节集 <公开 静态 类型 = 字节集类 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 内存长度 <类型 = 整数>
+    {
+        变量 进程句柄 <类型 = 变整数>
+        变量 空白数据 <类型 = 字节集类 "">
+        变量 空白数据2 <类型 = 字节集类>
+        变量 地址 <类型 = 变整数>
+        进程句柄 = 进程_打开进程_ID (进程ID)
+        {
+            如果真 (进程句柄 != 0)
+            {
+                空白数据 = 取空白字节集 (内存长度)
+                地址 = 内存api.ReadProcessMemory (进程句柄, 内存地址, 取字节集指针 (空白数据), 内存长度, 0)
+                进程_关闭进程 (进程句柄)
+                返回 (空白数据)
+            }
+        }
+        返回 (空白数据2)
+    }
+
+    方法 内存_写内存字节集2 <公开 静态 类型 = 逻辑型 注释 = "胖指针方式" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 字节集类>
+    {
+        变量 地址2 <类型 = 变整数>
+        变量 进程句柄 <类型 = 变整数>
+        变量 地址 <类型 = 变整数>
+        进程句柄 = 进程_打开进程_ID (进程ID)
+        如果真 (进程句柄 != 0)
+        {
+            内存_写内存整数 (进程ID, 内存地址, 写入值.取字节集长度 ())
+            地址2 = 内存_修改内存属性3 (进程句柄, 内存地址 + 4, 取字节集长度 (写入值), 64)
+            地址 = 内存api.WriteProcessMemory (进程句柄, 内存地址 + 4, 取字节集指针 (写入值), 取字节集长度 (写入值), 0)
+            内存_修改内存属性3 (进程句柄, 内存地址 + 4, 取字节集长度 (写入值), 地址2)
+            进程_关闭进程 (进程句柄)
+            返回 (地址 != 0)
+        }
+        返回 (假)
+    }
+
+    方法 内存_读内存字节集2 <公开 静态 类型 = 字节集类 注释 = "胖指针方式，不需要指定长度" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    {
+        变量 进程句柄 <类型 = 变整数>
+        变量 空白数据 <类型 = 字节集类 "">
+        变量 空白数据2 <类型 = 字节集类>
+        变量 地址 <类型 = 变整数>
+        变量 长度 <类型 = 整数>
+        进程句柄 = 进程_打开进程_ID (进程ID)
+        如果真 (进程句柄 != 0)
+        {
+            长度 = 内存_读内存整数 (进程ID, 内存地址)
+            空白数据 = 取空白字节集 (长度)
+            地址 = 内存api.ReadProcessMemory (进程句柄, 内存地址 + 4, 取字节集指针 (空白数据), 长度, 0)
+            进程_关闭进程 (进程句柄)
+            返回 (空白数据)
+        }
+        返回 (空白数据2)
+    }
+
+    方法 内存_写内存字节集3 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程句柄 <类型 = 变整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 字节集类 注释 = "如果写入的是文本型；文本到多字节()=Ansi编码;  文本到字节集()=Unicode编码;">
+    {
+        变量 Len <类型 = 整数>
+        Len = 取字节集长度 (写入值)
+        @ return ::WriteProcessMemory((HANDLE)@<进程句柄>,(LPVOID)@<内存地址>,(LPCVOID)@<写入值>.GetPtr(),(SIZE_T)@<Len>,NULL);
+    }
+
+    方法 内存_读内存字节集3 <公开 静态 类型 = 字节集类 折叠 @禁止流程检查 = 真>
+    参数 进程句柄 <类型 = 变整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 内存长度 <类型 = 整数 注释 = "不填则默认长度为：50字节；" @默认值 = 50>
+    {
+        变量 局_临时容器 <类型 = 字节集类>
+        局_临时容器 = 取空白字节集 (内存长度)
+        @ ::ReadProcessMemory((HANDLE)@<进程句柄>,(LPCVOID)@<内存地址>,@<局_临时容器>.GetPtr(),@<内存长度>,NULL);
+        返回 (局_临时容器)
+    }
+
+    方法 内存_内存是否可读 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 内存长度 <类型 = 整数 @默认值 = 8>
+    {
+        @ int jg = ::IsBadReadPtr((LPVOID)@<内存地址>,@<内存长度>);
+        @ if (jg == 0){ return true; }
+        @ return false;
+    }
+
+    方法 内存_内存是否可写 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 内存长度 <类型 = 整数 @默认值 = 8>
+    {
+        @ int jg = IsBadWritePtr((LPVOID)@<内存地址>,@<内存长度>);
+        @ if (jg == 0){ return true; }
+        @ return false;
+    }
+
+    方法 内存_修改内存属性 <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 内存长度 <类型 = 变整数>
+    参数 新属性 <类型 = 变整数 注释 = "1   = PAGE_NOACCESS（任何访问该区域的操作将被拒绝）；" 注释 = "2   = PAGE_READONLY（区域为只读。如果应用程序试图访问区域中的页的时候，将会被拒绝访问）；"
+            注释 = "4   = PAGE_READWRITE（区域可被应用程序读写）；" 注释 = "16  = PAGE_EXECUTE（区域包含可被系统执行的代码。试图读写该区域的操作将被拒绝）；"
+            注释 = "32  = PAGE_EXECUTE_READ（区域包含可执行代码，应用程序可以读该区域）；" 注释 = "64  = PAGE_EXECUTE_READWRITE（区域包含可执行代码，应用程序可以读写该区域）；"
+            注释 = "256 = PAGE_GUARD（区域第一次被访问时进入一个STATUS_GUARD_PAGE异常，这个标志要和其他保护标志合并使用，表明区域被第一次访问的权限）；"
+            注释 = "512 = PAGE_NOCACHE（RAM中的页映射到该区域时将不会被微处理器缓存（cached)）" 折叠2 @默认值 = 64>
+    {
+        变量 进程句柄 <类型 = 变整数>
+        变量 地址 <类型 = 变整数>
+        进程句柄 = 进程_打开进程_ID (进程ID)
+        如果真 (进程句柄 == 0)
+        {
+            返回 (-1)
+        }
+        @ DWORD 地址2;
+        @ @<地址> = VirtualProtectEx((HANDLE*)@<进程句柄>, (void*)@<内存地址>, @<内存长度>,@<新属性>,&地址2);
+        进程_关闭进程 (进程句柄)
+        如果 (地址 == 1)
+        {
+            @ return 地址2;
+        }
+        否则
+        {
+            @ return -1;
+        }
+        返回 (-1)
+    }
+
+    方法 内存_修改内存属性2 <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 内存长度 <类型 = 变整数>
+    参数 新属性 <类型 = 变整数 注释 = "1   = PAGE_NOACCESS（任何访问该区域的操作将被拒绝）；" 注释 = "2   = PAGE_READONLY（区域为只读。如果应用程序试图访问区域中的页的时候，将会被拒绝访问）；"
+            注释 = "4   = PAGE_READWRITE（区域可被应用程序读写）；" 注释 = "16  = PAGE_EXECUTE（区域包含可被系统执行的代码。试图读写该区域的操作将被拒绝）；"
+            注释 = "32  = PAGE_EXECUTE_READ（区域包含可执行代码，应用程序可以读该区域）；" 注释 = "64  = PAGE_EXECUTE_READWRITE（区域包含可执行代码，应用程序可以读写该区域）；"
+            注释 = "256 = PAGE_GUARD（区域第一次被访问时进入一个STATUS_GUARD_PAGE异常，这个标志要和其他保护标志合并使用，表明区域被第一次访问的权限）；"
+            注释 = "512 = PAGE_NOCACHE（RAM中的页映射到该区域时将不会被微处理器缓存（cached)）" 折叠2 @默认值 = 64>
+    {
+        变量 地址 <类型 = 变整数>
+        @ DWORD 地址2;
+        @ @<地址> = VirtualProtect((void*)@<内存地址>, @<内存长度>,@<新属性>,&地址2);
+        如果 (地址 == 1)
+        {
+            @ return 地址2;
+        }
+        否则
+        {
+            @ return -1;
+        }
+        返回 (-1)
+    }
+
+    方法 内存_修改内存属性3 <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 进程句柄 <类型 = 变整数>
+    参数 内存地址 <类型 = 变整数>
+    参数 内存长度 <类型 = 变整数>
+    参数 新属性 <类型 = 变整数 注释 = "1   = PAGE_NOACCESS（任何访问该区域的操作将被拒绝）；" 注释 = "2   = PAGE_READONLY（区域为只读。如果应用程序试图访问区域中的页的时候，将会被拒绝访问）；"
+            注释 = "4   = PAGE_READWRITE（区域可被应用程序读写）；" 注释 = "16  = PAGE_EXECUTE（区域包含可被系统执行的代码。试图读写该区域的操作将被拒绝）；"
+            注释 = "32  = PAGE_EXECUTE_READ（区域包含可执行代码，应用程序可以读该区域）；" 注释 = "64  = PAGE_EXECUTE_READWRITE（区域包含可执行代码，应用程序可以读写该区域）；"
+            注释 = "256 = PAGE_GUARD（区域第一次被访问时进入一个STATUS_GUARD_PAGE异常，这个标志要和其他保护标志合并使用，表明区域被第一次访问的权限）；"
+            注释 = "512 = PAGE_NOCACHE（RAM中的页映射到该区域时将不会被微处理器缓存（cached)）" 折叠2 @默认值 = 64>
+    {
+        变量 地址 <类型 = 变整数>
+        @ DWORD 地址2;
+        @ @<地址> = VirtualProtectEx((HANDLE*)@<进程句柄>, (void*)@<内存地址>, @<内存长度>,@<新属性>,&地址2);
+        如果 (地址 == 1)
+        {
+            @ return 地址2;
+        }
+        否则
+        {
+            @ return -1;
+        }
+        返回 (-1)
+    }
+}
+
+类 内存操作类2_ <公开 折叠 折叠2 @文档 = "category = \"内存操作库.内存读写\"" @全局类 = 真 @视窗.外部头文件 = "<TlHelp32.h>">
+{
+    变量 进程句柄 <类型 = 变整数>
+
+    方法 申请内存_ <公开 类型 = 变整数 注释 = "申请当前进程中的内存" 返回值注释 = "返回内存地址" 折叠 @禁止流程检查 = 真>
+    参数 内存长度 <类型 = 变整数>
+    参数 清零内存 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ byte* tmp = 0;
+        @ tmp = new byte[@<内存长度>];
+        如果真 (清零内存)
+        {
+            @ memset (tmp, 0, @<内存长度>);
+        }
+        @ return (INT64)tmp;
+    }
+
+    方法 释放内存_ <公开 折叠 @嵌入式方法 = "">
+    参数 内存地址 <类型 = 变整数>
+    {
+        @ delete [] (BYTE*)@<内存地址>
+    }
+
+    方法 打开进程_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @ @<进程句柄>=(INT_P)hProcess;
+        @ return @<进程句柄>>0;
+    }
+
+    方法 进程_关闭进程 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @ return CloseHandle((HANDLE)@<进程句柄>);
+    }
+
+    方法 写短整数_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 短整数>
+    {
+        @ bool ret = ::WriteProcessMemory((HANDLE)@<进程句柄>,(LPVOID)@<内存地址>,&(LPCVOID)@<写入值>,2,NULL);
+        @ return ret;
+    }
+
+    方法 读短整数_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @ short value;
+        @ bool ret = ::ReadProcessMemory((HANDLE)@<进程句柄>,(LPVOID)@<内存地址>,&value,2,NULL);
+        @ return value;
+    }
+
+    方法 写整数_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 整数>
+    {
+        @ bool ret = ::WriteProcessMemory((HANDLE)@<进程句柄>,(LPVOID)@<内存地址>,&(LPCVOID)@<写入值>,4,NULL);
+        @ return ret;
+    }
+
+    方法 读整数_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @ int value;
+        @ bool ret = ::ReadProcessMemory((HANDLE)@<进程句柄>,(LPVOID)@<内存地址>,&value,4,NULL);
+        @ if (ret == false) { return -1; }
+        @ return value;
+    }
+
+    方法 写长整数_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 长整数>
+    {
+        @ bool ret = ::WriteProcessMemory((HANDLE)@<进程句柄>,(LPVOID)@<内存地址>,&(LPCVOID)@<写入值>,8,NULL);
+        @ return ret;
+    }
+
+    方法 读长整数_ <公开 类型 = 长整数 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @    long long p;
+        @    ::ReadProcessMemory((HANDLE)@<进程句柄>, (LPCVOID)@<内存地址>, &p,8, NULL);
+        @    return p;
+    }
+
+    方法 写变整数_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 变整数>
+    {
+        @ bool ret = ::WriteProcessMemory((HANDLE)@<进程句柄>,(LPVOID)@<内存地址>,&(LPCVOID)@<写入值>,8,NULL);
+        @ return ret;
+    }
+
+    方法 读变整数_ <公开 类型 = 长整数 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @    INT_P p;
+        @    ::ReadProcessMemory((HANDLE)@<进程句柄>, (LPCVOID)@<内存地址>, &p,8, NULL);
+        @    return p;
+    }
+
+    方法 写小数_单精度 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 单精度小数>
+    {
+        @ float value=@<写入值>;
+        @ bool ret = ::WriteProcessMemory((HANDLE)@<进程句柄>,(LPVOID)@<内存地址>,&value,4,NULL);
+        @ return ret;
+    }
+
+    方法 读小数_单精度 <公开 类型 = 单精度小数 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @ float value;
+        @ bool ret = ::ReadProcessMemory((HANDLE)@<进程句柄>,(LPVOID)@<内存地址>,&value,4,NULL);
+        @ if (ret == false) { return -1; }
+        @ return value;
+    }
+
+    方法 写小数_双精度 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 小数>
+    {
+        @ double value=@<写入值>;
+        @ bool ret = ::WriteProcessMemory((HANDLE)@<进程句柄>,(LPVOID)@<内存地址>,&value,8,NULL);
+        @ return ret;
+    }
+
+    方法 读小数_双精度 <公开 类型 = 小数 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    {
+        @ double value;
+        @ bool ret = ::ReadProcessMemory((HANDLE)@<进程句柄>,(LPVOID)@<内存地址>,&value,8,NULL);
+        @ if (ret == false) { return -1; }
+        @ return value;
+    }
+
+    方法 写文本_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 文本型>
+    参数 Unicode编码 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 地址2 <类型 = 变整数>
+        变量 空白数据 <类型 = 字节集类>
+        变量 地址 <类型 = 变整数>
+        如果 (Unicode编码 == 假)
+        {
+            空白数据 = 转Unicode到Ascii_ (写入值)
+        }
+        否则
+        {
+            空白数据 = 到字节集 (写入值)
+        }
+        地址2 = 内存_修改内存属性3 (进程句柄, 内存地址, 取字节集长度 (空白数据), 64)
+        地址 = 内存api.WriteProcessMemory (进程句柄, 内存地址, 取字节集指针 (空白数据), 取字节集长度 (空白数据), 0)
+        内存_修改内存属性3 (进程句柄, 内存地址, 取字节集长度 (空白数据), 地址2)
+        返回 (地址 != 0)
+    }
+
+    方法 写文本2_ <公开 类型 = 逻辑型 注释 = "胖指针方式" 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 文本型>
+    参数 Unicode编码 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 地址2 <类型 = 变整数>
+        变量 空白数据 <类型 = 字节集类>
+        变量 地址 <类型 = 变整数>
+        如果 (Unicode编码 == 假)
+        {
+            空白数据 = 转Unicode到Ascii_ (写入值)
+        }
+        否则
+        {
+            空白数据 = 到字节集 (写入值)
+        }
+        写整数_ (内存地址, 空白数据.取字节集长度 ())
+        地址2 = 内存_修改内存属性3 (进程句柄, 内存地址 + 4, 取字节集长度 (空白数据), 64)
+        地址 = 内存api.WriteProcessMemory (进程句柄, 内存地址 + 4, 取字节集指针 (空白数据), 取字节集长度 (空白数据), 0)
+        内存_修改内存属性3 (进程句柄, 内存地址 + 4, 取字节集长度 (空白数据), 地址2)
+        返回 (地址 != 0)
+    }
+
+    方法 读文本_ <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 内存长度 <类型 = 整数>
+    参数 Unicode编码 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 空白数据 <类型 = 字节集类 "">
+        变量 地址 <类型 = 变整数>
+        空白数据 = 取空白字节集 (内存长度)
+        地址 = 内存api.ReadProcessMemory (进程句柄, 内存地址, 取字节集指针 (空白数据), 内存长度, 0)
+        如果 (Unicode编码 == 假)
+        {
+            返回 (转Ascii到Unicode_ (空白数据))
+        }
+        否则
+        {
+            返回 (字节集到文本 (空白数据))
+        }
+    }
+
+    方法 读文本2_ <公开 类型 = 文本型 注释 = "胖指针方式，不需要指定长度" 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 Unicode编码 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 空白数据 <类型 = 字节集类 "">
+        变量 地址 <类型 = 变整数>
+        变量 长度 <类型 = 整数>
+        长度 = 读整数_ (内存地址)
+        空白数据 = 取空白字节集 (长度)
+        地址 = 内存api.ReadProcessMemory (进程句柄, 内存地址 + 4, 取字节集指针 (空白数据), 长度, 0)
+        如果 (Unicode编码 == 假)
+        {
+            返回 (转Ascii到Unicode_ (空白数据))
+        }
+        否则
+        {
+            返回 (字节集到文本 (空白数据))
+        }
+    }
+
+    方法 写字节集_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 字节集类>
+    {
+        变量 地址2 <类型 = 变整数>
+        变量 地址 <类型 = 变整数>
+        地址2 = 内存_修改内存属性3 (进程句柄, 内存地址, 取字节集长度 (写入值), 64)
+        地址 = 内存api.WriteProcessMemory (进程句柄, 内存地址, 取字节集指针 (写入值), 取字节集长度 (写入值), 0)
+        内存_修改内存属性3 (进程句柄, 内存地址, 取字节集长度 (写入值), 地址2)
+        返回 (地址 != 0)
+    }
+
+    方法 写字节集2_ <公开 类型 = 逻辑型 注释 = "胖指针方式" 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 写入值 <类型 = 字节集类>
+    {
+        变量 地址2 <类型 = 变整数>
+        变量 地址 <类型 = 变整数>
+        写整数_ (内存地址, 写入值.取字节集长度 ())
+        地址2 = 内存_修改内存属性3 (进程句柄, 内存地址 + 4, 取字节集长度 (写入值), 64)
+        地址 = 内存api.WriteProcessMemory (进程句柄, 内存地址 + 4, 取字节集指针 (写入值), 取字节集长度 (写入值), 0)
+        内存_修改内存属性3 (进程句柄, 内存地址 + 4, 取字节集长度 (写入值), 地址2)
+        返回 (地址 != 0)
+    }
+
+    方法 读字节集_ <公开 类型 = 字节集类 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    参数 内存长度 <类型 = 整数>
+    {
+        变量 空白数据 <类型 = 字节集类 "">
+        变量 地址 <类型 = 变整数>
+        空白数据 = 取空白字节集 (内存长度)
+        地址 = 内存api.ReadProcessMemory (进程句柄, 内存地址, 取字节集指针 (空白数据), 内存长度, 0)
+        返回 (空白数据)
+    }
+
+    方法 读字节集2_ <公开 类型 = 字节集类 注释 = "胖指针方式，不需要指定长度" 折叠 @禁止流程检查 = 真>
+    参数 内存地址 <类型 = 变整数>
+    {
+        变量 空白数据 <类型 = 字节集类 "">
+        变量 地址 <类型 = 变整数>
+        变量 长度 <类型 = 整数>
+        长度 = 读整数_ (内存地址)
+        空白数据 = 取空白字节集 (长度)
+        地址 = 内存api.ReadProcessMemory (进程句柄, 内存地址 + 4, 取字节集指针 (空白数据), 长度, 0)
+        返回 (空白数据)
+    }
+
+    方法 表达式取地址_ <公开 类型 = 变整数 注释 = "支持+或-的地址表达式，例如：50339C+254-1C0" 折叠 @禁止流程检查 = 真>
+    参数 基址地址 <类型 = 文本型 注释 = "基址文本表达式，例如：50339C+254+1c0">
+    {
+        变量 结果组 <类型 = 文本数组类>
+        变量 正则 <类型 = 正则类_>
+        变量 临时数量 <类型 = 整数>
+        变量 临时指针 <类型 = 整数>
+        变量 临时地址 <类型 = 变整数>
+        变量 公式 <类型 = 文本型 值 = "[-|\\+]">
+        变量 i <类型 = 整数>
+        分割文本 (基址地址, "+-", 结果组)
+        临时数量 = 结果组.取成员数 ()
+        如果真 (临时数量 <= 1)
+        {
+            返回 (文本到整数 (基址地址))
+        }
+        正则.创建 (公式, 基址地址, , , )
+        循环 (0, 临时数量, i)
+        {
+            如果真 (i == 临时数量 - 1)
+            {
+                跳出循环
+            }
+            如果 (正则.取匹配文本 (i, ) == "-")
+            {
+                临时地址 = 临时指针 - 十六进制转十进制2_ (结果组.取成员 (i))
+                @ bool ret = ::ReadProcessMemory((HANDLE)@<进程句柄>,(LPVOID)@<临时地址>,&@<临时指针>,4,NULL);
+            }
+            否则
+            {
+                临时地址 = 临时指针 + 十六进制转十进制2_ (结果组.取成员 (i))
+                @ bool ret = ::ReadProcessMemory((HANDLE)@<进程句柄>,(LPVOID)@<临时地址>,&@<临时指针>,4,NULL);
+            }
+        }
+        如果 (正则.取匹配文本 (临时数量 - 1, ) == "-")
+        {
+            临时地址 = 临时指针 - 十六进制转十进制2_ (结果组.取成员 (临时数量 - 1))
+        }
+        否则
+        {
+            临时地址 = 临时指针 + 十六进制转十进制2_ (结果组.取成员 (临时数量 - 1))
+        }
+        返回 (临时地址)
+    }
+}
+
+类 内存api <折叠 @文档 = "category = \"内存操作库.内存读写.附加类\"">
+{
+    方法 ReadProcessMemory <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "ReadProcessMemory" @视窗.输入 = "kernel32.dll">
+    参数 hProcess <类型 = 变整数>
+    参数 lpBaseAddress <类型 = 变整数>
+    参数 lpBuffer <类型 = 变整数 "">
+    参数 dwSize <类型 = 变整数>
+    参数 lpNumberOfBytesRead <类型 = 变整数>
+    {
+
+    }
+
+    方法 WriteProcessMemory <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "WriteProcessMemory" @视窗.输入 = "kernel32.dll">
+    参数 hProcess <类型 = 变整数>
+    参数 lpBaseAddress <类型 = 变整数>
+    参数 lpBuffer <类型 = 变整数 "">
+    参数 dwSize <类型 = 变整数>
+    参数 lpNumberOfBytesWritten <类型 = 变整数>
+    {
+
+    }
+
+    #
+}
+
+# //==========
+
+类 共享内存类_ <公开 注释 = "本库改自于“山高人为峰”模块" 折叠 @文档 = "category = \"内存操作库.内存共享\"">
+{
+    变量 Hand_Arr <类型 = 变整数数组类>
+    变量 共享内存 <类型 = 共享内存api>
+
+    方法 类_清理 <折叠>
+    {
+        释放句柄_ ()
+    }
+
+    方法 释放句柄_ <公开 注释 = "所有" 折叠>
+    {
+        变量 总数 <类型 = 整数>
+        变量 句柄 <类型 = 变整数>
+        总数 = Hand_Arr.取成员数 ()
+        计次循环 (总数)
+        {
+            句柄 = Hand_Arr.取成员 (取循环索引 ())
+            如果真 (指针是否有效_ (句柄))
+            {
+                共享内存.CloseHandle (句柄)
+            }
+        }
+    }
+
+    方法 释放句柄2_ <公开 类型 = 逻辑型 注释 = "指定" 折叠>
+    参数 句柄 <类型 = 变整数 注释 = "写“写共享数据_”所返回的句柄">
+    {
+        如果真 (指针是否有效_ (句柄))
+        {
+            返回 (共享内存.CloseHandle (句柄))
+        }
+        返回 (假)
+    }
+
+    方法 写共享数据_ <公开 类型 = 逻辑型 注释 = "共享数据的本类变量必须为非局部变量，或为静态变量" 返回值注释 = "成功返回真" 折叠>
+    参数 共享标记名 <类型 = 文本型 注释 = "例如：共享标记 ;" 注释 = "为跨窗口、跨程序、跨进程间的通讯密钥，名称一致即可共享信息" 折叠2>
+    参数 共享数据 <类型 = 字节集类 注释 = "支持写入：文本、整数、长整数、变整数、小数、字节集、变量、结构体等 ;" 注释 = "如果为结构体类型数据，请使用：XX对象.取对象数据() 进行写入 ;"
+            注释 = "取出时，使用：XX对象.置对象数据() 取出类型数据 ;" 注释 = "例如：;" 注释 = "  1、共享内存.写共享数据_ (\"共享标记\", 文本到字节集 (\"我是内容\")) ;"
+            注释 = "  2、共享内存.写共享数据_ (\"共享标记\", 到字节集 (123456789)) ;" 注释 = "  3、共享内存.写共享数据_ (\"共享标记\", 到字节集 (取文本指针 (\"我是内容\"))) ;"
+            注释 = "  4、共享内存.写共享数据_ (\"共享标记\", 到字节集 (取变量地址 (结构))) ;" 注释 = "  5、共享内存.写共享数据_ (\"共享标记\", XX结构.取对象数据 ())">
+    {
+        变量 局_数据块 <类型 = 字节集类>
+        变量 LPSTR <类型 = 变整数>
+        变量 hMemFile <类型 = 变整数>
+        局_数据块.添加值到字节集 (共享数据.取字节集长度 ())
+        局_数据块.添加字节集 (共享数据)
+        hMemFile = 共享内存.OpenFileMappingW (6, 假, 取文本指针 (共享标记名))
+        如果 (hMemFile == 0)
+        {
+            hMemFile = 共享内存.CreateFileMappingW (-1, 0, 4, 0, 4, 取文本指针 (共享标记名))
+            如果真 (hMemFile < 1)
+            {
+                返回 (假)
+            }
+            Hand_Arr.加入成员 (hMemFile)
+            LPSTR = 共享内存.MapViewOfFile (hMemFile, 2, 0, 0, 0)
+            如果真 (LPSTR < 1)
+            {
+                共享内存.CloseHandle (hMemFile)
+                返回 (假)
+            }
+            内存复制 (LPSTR, 局_数据块.取字节集指针 (), 局_数据块.取字节集长度 ())
+            返回 (共享内存.UnmapViewOfFile (LPSTR))
+        }
+        LPSTR = 共享内存.MapViewOfFile (hMemFile, 2, 0, 0, 0)
+        如果真 (LPSTR < 1)
+        {
+            共享内存.CloseHandle (hMemFile)
+            返回 (假)
+        }
+        内存复制 (LPSTR, 局_数据块.取字节集指针 (), 局_数据块.取字节集长度 ())
+        返回 (共享内存.UnmapViewOfFile (LPSTR) && 共享内存.CloseHandle (hMemFile))
+    }
+
+    方法 写共享数据2_ <公开 类型 = 变整数 注释 = "共享数据的本类变量必须为非局部变量，或为静态变量" 返回值注释 = "成功返>0的句柄" 折叠>
+    参数 共享标记名 <类型 = 文本型 注释 = "例如：共享标记 ;" 注释 = "为跨窗口、跨程序、跨进程间的通讯密钥，名称一致即可共享信息" 折叠2>
+    参数 共享数据 <类型 = 字节集类 注释 = "支持写入：文本、整数、长整数、变整数、小数、字节集、变量、结构体等 ;" 注释 = "如果为结构体类型数据，请使用：XX对象.取对象数据() 进行写入 ;"
+            注释 = "取出时，使用：XX对象.置对象数据() 取出类型数据 ;" 注释 = "例如：;" 注释 = "  1、共享内存.写共享数据_ (\"共享标记\", 文本到字节集 (\"我是内容\")) ;"
+            注释 = "  2、共享内存.写共享数据_ (\"共享标记\", 到字节集 (123456789)) ;" 注释 = "  3、共享内存.写共享数据_ (\"共享标记\", 到字节集 (取文本指针 (\"我是内容\"))) ;"
+            注释 = "  4、共享内存.写共享数据_ (\"共享标记\", 到字节集 (取变量地址 (结构))) ;" 注释 = "  5、共享内存.写共享数据_ (\"共享标记\", XX结构.取对象数据 ())">
+    {
+        变量 局_数据块 <类型 = 字节集类>
+        变量 LPSTR <类型 = 变整数>
+        变量 hMemFile <类型 = 变整数>
+        局_数据块.添加值到字节集 (共享数据.取字节集长度 ())
+        局_数据块.添加字节集 (共享数据)
+        hMemFile = 共享内存.OpenFileMappingW (6, 假, 取文本指针 (共享标记名))
+        如果 (hMemFile == 0)
+        {
+            hMemFile = 共享内存.CreateFileMappingW (-1, 0, 4, 0, 4, 取文本指针 (共享标记名))
+            如果真 (hMemFile < 1)
+            {
+                返回 (-1)
+            }
+            Hand_Arr.加入成员 (hMemFile)
+            LPSTR = 共享内存.MapViewOfFile (hMemFile, 2, 0, 0, 0)
+            如果真 (LPSTR < 1)
+            {
+                共享内存.CloseHandle (hMemFile)
+                返回 (-1)
+            }
+            内存复制 (LPSTR, 局_数据块.取字节集指针 (), 局_数据块.取字节集长度 ())
+            如果真 (共享内存.UnmapViewOfFile (LPSTR))
+            {
+                返回 (hMemFile)
+            }
+            返回 (-1)
+        }
+        LPSTR = 共享内存.MapViewOfFile (hMemFile, 2, 0, 0, 0)
+        如果真 (LPSTR < 1)
+        {
+            共享内存.CloseHandle (hMemFile)
+            返回 (-1)
+        }
+        内存复制 (LPSTR, 局_数据块.取字节集指针 (), 局_数据块.取字节集长度 ())
+        如果真 (共享内存.UnmapViewOfFile (LPSTR) && 共享内存.CloseHandle (hMemFile))
+        {
+            返回 (hMemFile)
+        }
+        返回 (-1)
+    }
+
+    方法 读共享数据_ <公开 类型 = 字节集类 注释 = "支持读取：文本、整数、长整数、变整数、小数、字节集、变量、结构体等 ;" 注释 = "例如：;" 注释 = "1、数据块 = 共享内存.读共享数据_ (\"共享标记\") ;"
+            注释 = "   编辑框1.内容 = 字节集到文本 (数据块) ;" 注释 = "" 注释 = "2、数据块 = 共享内存.读共享数据_ (\"共享标记\") ;" 注释 = "   到文本 (取字节集数据 (数据块, 0, 变整数)) ;"
+            注释 = "" 注释 = "3、数据块 = 共享内存.读共享数据_ (\"共享标记\") ;" 注释 = "   指针到文本 (取字节集数据 (数据块, , 变整数)) ;" 注释 = ""
+            注释 = "4、数据块 = 共享内存.读共享数据_ (\"共享标记\") ;" 注释 = "   指针 = 到文本 (取字节集数据 (数据块, 0, 变整数)) ;"
+            注释 = "   结构2 = 读指针处对象 ((变整数)文本到长整数 (指针), 结构类) ;" 注释 = "" 注释 = "5、数据块 = 共享内存.读共享数据_ (\"共享标记\") ;"
+            注释 = "   XX结构.置对象数据 (数据块)" 返回值注释 = "成功返回字节集数据，失败返回空字节集;" 返回值注释 = "如果为结构体类型数据，请使用：XX对象.置对象数据() 将本方法所读取的数据转换成对应类型" 折叠 折叠2>
+    参数 共享标记名 <类型 = 文本型 注释 = "例如：共享标记 ;" 注释 = "为跨窗口、跨程序、跨进程间的通讯密钥，名称一致即可共享信息" 折叠2>
+    {
+        变量 临时字节集 <类型 = 字节集类>
+        变量 hMemFile <类型 = 变整数>
+        hMemFile = 共享内存.OpenFileMappingW (4, 假, 取文本指针 (共享标记名))
+        如果真 (hMemFile < 1)
+        {
+            返回 (临时字节集)
+        }
+        变量 LPSTR <类型 = 变整数>
+        LPSTR = 共享内存.MapViewOfFile (hMemFile, 4, 0, 0, 0)
+        如果真 (LPSTR < 1)
+        {
+            共享内存.CloseHandle (hMemFile)
+            返回 (临时字节集)
+        }
+        临时字节集 = 指针到字节集 (LPSTR, 4)
+        变量 长度 <类型 = 整数>
+        长度 = 取字节集数据 (临时字节集, 0, 整数)
+        临时字节集 = 指针到字节集 (LPSTR, 长度 + 4)
+        临时字节集 = 取字节集右边 (临时字节集, 长度)
+        共享内存.UnmapViewOfFile (LPSTR)
+        共享内存.CloseHandle (hMemFile)
+        返回 (临时字节集)
+    }
+}
+
+类 共享内存api <折叠 @文档 = "category = \"内存操作库.内存共享.附加类\"">
+{
+    方法 CreateFileMappingW <公开 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 文件映射句柄 <类型 = 变整数>
+    参数 安全对象 <类型 = 变整数>
+    参数 打开映射方式 <类型 = 整数>
+    参数 文件映射最大长度 <类型 = 整数>
+    参数 文件映射的最小长度 <类型 = 整数>
+    参数 映射对象名 <类型 = 变整数>
+    {
+        @ (__int64)CreateFileMappingW((HANDLE)@<文件映射句柄>,@<安全对象>,@<打开映射方式>,@<文件映射最大长度>,@<文件映射的最小长度>,(LPCWSTR)@<映射对象名>)
+    }
+
+    方法 MapViewOfFile <公开 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 hFileMappingObject <类型 = 变整数>
+    参数 dwDesiredAccess <类型 = 整数>
+    参数 dwFileOffsetHigh <类型 = 整数>
+    参数 dwFileOffsetLow <类型 = 整数>
+    参数 dwNumberOfBytesToMap <类型 = 整数>
+    {
+        @ (__int64)MapViewOfFile((HANDLE)@<hFileMappingObject>,@<dwDesiredAccess>,@<dwFileOffsetHigh>,@<dwFileOffsetLow>,@<dwNumberOfBytesToMap>)
+    }
+
+    方法 UnmapViewOfFile <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 lpBaseAddress <类型 = 变整数>
+    {
+        @ (bool)UnmapViewOfFile((LPCVOID)@<lpBaseAddress>)
+    }
+
+    方法 OpenFileMappingW <公开 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 dwDesiredAccess <类型 = 整数 @默认值 = 6>
+    参数 bInheritHandle <类型 = 逻辑型 @默认值 = 真>
+    参数 lpName <类型 = 变整数>
+    {
+        @ (__int64)OpenFileMappingW(@<dwDesiredAccess>,@<bInheritHandle>,(LPCWSTR)@<lpName>)
+    }
+
+    方法 CloseHandle <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    {
+        @ (bool)::CloseHandle((HANDLE)@<句柄>)
+    }
+}

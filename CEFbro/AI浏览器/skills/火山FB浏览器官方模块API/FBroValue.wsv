@@ -1,0 +1,1749 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 FBrowser.值 <注释 = "浏览器各数据类型合集" "">
+
+类 类_FBrowser_值转换 <公开 @全局类 = 真>
+{
+    方法 FBrowser_数据到字节集 <公开 静态 类型 = 类_FBrowser_字节集 @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+        @ return @dt<类_FBrowser_字节集>(FBroHsBinaryValue_Create((void *)@<数据指针>,@<数据大小>));
+    }
+
+    方法 FBrowser_字节集到字节集 <公开 静态 类型 = 类_FBrowser_字节集 注释 = "火山的字节集到cef字节集" @禁止流程检查 = 真>
+    参数 字节集 <类型 = 字节集类>
+    {
+        变量 ptr <类型 = 变整数>
+        变量 size <类型 = 整数>
+        ptr = 字节集.取字节集指针 ()
+        size = 字节集.取字节集长度 ()
+        返回 (FBrowser_数据到字节集 (ptr, size))
+    }
+
+    方法 FBrowser_文本到字节集 <公开 静态 类型 = 类_FBrowser_字节集 注释 = "火山文本到cef字节集" @禁止流程检查 = 真>
+    参数 文本 <类型 = 文本型>
+    {
+        变量 temp <类型 = 字节集类>
+        temp = 文本到字节集 (文本)
+        返回 (FBrowser_字节集到字节集 (temp))
+    }
+
+    #
+}
+
+类 类_FBrowser_字节集 <公开 @输出名 = "FBroBinaryValue">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefBinaryValue> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefBinaryValue> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set (CefRefPtr<CefBinaryValue> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 创建 <公开 注释 = "由数据创建" "">
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+        @ Set(FBroHsBinaryValue_Create((void *)@<数据指针>,@<数据大小>));
+
+    }
+
+    方法 创建_字节集 <公开 注释 = "由火山字节集创建" "">
+    参数 字节集 <类型 = 字节集类>
+    {
+        变量 ptr <类型 = 变整数>
+        变量 size <类型 = 整数>
+        ptr = 字节集.取字节集指针 ()
+        size = 字节集.取字节集长度 ()
+        返回 (创建 (ptr, size))
+
+
+    }
+
+    方法 创建_文本 <公开 注释 = "由文本创建" "">
+    参数 文本数据 <类型 = 文本型>
+    {
+        变量 temp <类型 = 字节集类>
+        temp = 文本到字节集 (文本数据)
+        返回 (创建_字节集 (temp))
+
+
+    }
+
+    方法 是否有效 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsBinaryValue_IsValid(m_class);
+    }
+
+    方法 是否拥有 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsBinaryValue_IsOwned(m_class);
+    }
+
+    方法 是否相同 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 对比值 <类型 = 类_FBrowser_字节集>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsBinaryValue_IsSame(m_class,@<对比值>.m_class);
+    }
+
+    方法 是否相等 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 对比值 <类型 = 类_FBrowser_字节集>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsBinaryValue_IsEqual(m_class,@<对比值>.m_class);
+
+    }
+
+    方法 复制 <公开 类型 = 类_FBrowser_字节集 @禁止流程检查 = 真>
+    {
+
+        变量 tempdata <类型 = 类_FBrowser_字节集>
+        @ if(IsEmpty ()) return @<tempdata>;
+        @ @<tempdata>.set(FBroHsBinaryValue_Copy(m_class));
+        返回 (tempdata)
+    }
+
+    方法 取大小 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return 0;
+        @ return FBroHsBinaryValue_GetSize(m_class);
+    }
+
+    方法 取值 <公开 @禁止流程检查 = 真>
+    参数 缓存指针 <类型 = 变整数 注释 = "存放数据的指针">
+    参数 缓存大小 <类型 = 整数>
+    参数 偏移量 <类型 = 整数>
+    {
+        @ if(IsEmpty ()) return;
+        @ FBroHsBinaryValue_GetData(m_class,(void *)@<缓存指针>,@<缓存大小>,@<偏移量>);
+
+    }
+
+    方法 取文本 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty ()) return FBroUnit::FBroStringToCWString(FBroHsBinaryValue_GetString(m_class));
+
+    }
+
+    方法 取字节集 <公开 类型 = 字节集类>
+    {
+        @ if(IsEmpty ()) return @dt<字节集类>();
+        变量 size <类型 = 整数>
+        变量 datapoint <类型 = 变整数>
+        变量 tempret <类型 = 字节集类>
+        size = 取大小 ()
+        如果真 (size > 0)
+        {
+            datapoint = 分配内存 (size)
+            取值 (datapoint, size, 0)
+            tempret = 指针到字节集 (datapoint, size)
+            释放内存 (datapoint)
+
+        }
+
+        返回 (tempret)
+
+
+    }
+}
+
+类 类_FBrowser_字节集数组 <公开 注释 = "FBroBinaryValueList" @输出名 = "FBroBinaryValueList" "">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<FBroBinaryValueList> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<FBroBinaryValueList> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set(CefRefPtr<FBroBinaryValueList> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    方法 创建 <公开>
+    {
+        @ m_class=FBroBinaryValueList_Creat();
+    }
+
+    方法 取个数 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return FBroBinaryValueList_Size(m_class);//.size();
+    }
+
+    方法 加入成员 <公开>
+    参数 成员 <类型 = 类_FBrowser_字节集>
+    {
+        @ if(!IsEmpty()) FBroBinaryValueList_Add(m_class,@<成员>.m_class);
+    }
+
+    方法 到数组首 <公开 注释 = "当前指向数组第一个数据">
+    {
+        @ if(!IsEmpty()) FBroBinaryValueList_ToBegin(m_class);
+    }
+
+    方法 到下一个 <公开 类型 = 逻辑型 注释 = "第一次使用前要使用“到数组首”使指针指向第一个值，读取完毕再执行将会返回假" @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return FBroBinaryValueList_ToNext(m_class);
+        返回 (假)
+    }
+
+    方法 取当前位置数据 <公开 类型 = 类_FBrowser_字节集 @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return @dt<类_FBrowser_字节集>(FBroBinaryValueList_GetCurrentData_Value(m_class));
+        @ return @dt<类_FBrowser_字节集>();
+
+    }
+
+    方法 取数据 <公开 类型 = 类_FBrowser_字节集 @禁止流程检查 = 真>
+    参数 ID <类型 = 整数>
+    {
+        @ if(!IsEmpty()) return @dt<类_FBrowser_字节集>(FBroBinaryValueList_GetValue(m_class,@<ID>));
+        @ return @dt<类_FBrowser_字节集>();
+
+    }
+
+    方法 清空 <公开>
+    {
+        @ if(!IsEmpty()) FBroBinaryValueList_Clear(m_class);
+    }
+
+    #
+}
+
+#
+
+类 类_FBrowser_列表值 <公开 @输出名 = "FBroListValue">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefListValue> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefListValue> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set(CefRefPtr<CefListValue> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 创建 <公开>
+    {
+        @ Set(FBroHsListValue_Create());
+    }
+
+    方法 是否有效 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsListValue_IsValid(m_class);
+
+    }
+
+    方法 是否属于其他对象 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsListValue_IsOwned(m_class);
+    }
+
+    方法 是否只读 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsListValue_IsReadOnly(m_class);
+
+    }
+
+    方法 是否相同 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 对比值 <类型 = 类_FBrowser_列表值>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsListValue_IsSame(m_class,@<对比值>.m_class);
+
+    }
+
+    方法 是否值相同 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 对比值 <类型 = 类_FBrowser_列表值>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsListValue_IsEqual(m_class,@<对比值>.m_class);
+
+    }
+
+    方法 复制 <公开 类型 = 类_FBrowser_列表值 @禁止流程检查 = 真>
+    {
+        变量 临时类 <类型 = 类_FBrowser_列表值 "">
+        @ if(!IsEmpty ()){@<临时类>.Set(FBroHsListValue_Copy(m_class));}
+        返回 (临时类)
+
+    }
+
+    方法 置大小 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 大小 <类型 = 整数>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsListValue_SetSize(m_class,@<大小>);
+
+    }
+
+    方法 取大小 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return 0;
+        @ return FBroHsListValue_GetSize(m_class);
+
+    }
+
+    方法 清空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsListValue_Clear(m_class);
+
+    }
+
+    方法 移除 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsListValue_Remove(m_class,@<索引>);
+
+    }
+
+    方法 取类型 <公开 类型 = 整数 返回值注释 = "返回值参考：#值类型_" @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ if(IsEmpty ()) return 0;
+        @ return FBroHsListValue_GetType(m_class,@<索引>);
+    }
+
+    方法 取逻辑值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsListValue_GetBool(m_class,@<索引>);
+
+    }
+
+    方法 取整数值 <公开 类型 = 整数 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ if(IsEmpty ()) return 0;
+        @ return FBroHsListValue_GetInt(m_class,@<索引>);
+
+    }
+
+    方法 取双精度小数值 <公开 类型 = 小数 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ if(IsEmpty ()) return 0;
+        @ return FBroHsListValue_GetDouble(m_class,@<索引>);
+    }
+
+    方法 取文本值 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsListValue_GetString(m_class,@<索引>);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取字节集值 <公开 类型 = 类_FBrowser_字节集>
+    参数 索引 <类型 = 整数>
+    {
+        变量 tempdata <类型 = 类_FBrowser_字节集>
+        @ if(!IsEmpty()){ @<tempdata>.Set(FBroHsListValue_GetBinary(m_class,@<索引>));}
+        返回 (tempdata)
+
+    }
+
+    方法 置空值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsListValue_SetNull(m_class,@<索引>);
+
+    }
+
+    方法 置逻辑值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    参数 逻辑值 <类型 = 逻辑型>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsListValue_SetBool(m_class,@<索引>,@<逻辑值>);
+
+    }
+
+    方法 置整数值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    参数 整数值 <类型 = 整数>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsListValue_SetInt(m_class,@<索引>,@<整数值>);
+
+    }
+
+    方法 置双精度小数值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    参数 双精度小数值 <类型 = 小数>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsListValue_SetDouble(m_class,@<索引>,@<双精度小数值>);
+
+    }
+
+    方法 置文本值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    参数 文本 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsListValue_SetString(m_class,@<索引>,@<文本>.GetText());
+    }
+
+    方法 置字节集值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    参数 数据 <类型 = 类_FBrowser_字节集>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsListValue_SetBinary(m_class,@<索引>,@<数据>.m_class);
+
+    }
+
+    方法 取值 <公开 类型 = 类_FBrowser_值 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ if(IsEmpty()) return @dt<类_FBrowser_值>();
+        @ return @dt<类_FBrowser_值>(FBroHsListValue_GetValue(m_class,@<索引>));
+
+    }
+
+    方法 置值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    参数 数据 <类型 = 类_FBrowser_值>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsListValue_SetValue(m_class,@<索引>,@<数据>.m_class);
+
+
+    }
+
+    方法 取字典值 <公开 类型 = 类_FBrowser_字典值 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ if(IsEmpty()) return @dt<类_FBrowser_字典值>();
+        @ return @dt<类_FBrowser_字典值>(FBroHsListValue_GetDictionary(m_class,@<索引>));
+
+    }
+
+    方法 置字典值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    参数 数据 <类型 = 类_FBrowser_字典值>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsListValue_SetDictionary(m_class,@<索引>,@<数据>.m_class);
+
+
+    }
+
+    方法 取列表值 <公开 类型 = 类_FBrowser_列表值 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ if(IsEmpty()) return @dt<类_FBrowser_列表值>());
+        @ return @dt<类_FBrowser_列表值>(FBroHsListValue_GetList(m_class,@<索引>));
+
+    }
+
+    方法 置列表值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    参数 数据 <类型 = 类_FBrowser_列表值>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsListValue_SetList(m_class,@<索引>,@<数据>.m_class);
+
+
+    }
+}
+
+类 类_FBrowser_值 <公开 @输出名 = "FBroValue">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefValue> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefValue> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set(CefRefPtr<CefValue> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 创建 <公开>
+    {
+        @ Set(FBroHsValue_Create());
+    }
+
+    方法 是否有效 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsValue_IsValid(m_class);
+
+    }
+
+    方法 是否属于其他对象 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsValue_IsOwned(m_class);
+
+    }
+
+    方法 是否只读 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsValue_IsReadOnly(m_class);
+
+    }
+
+    方法 是否相同 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 对比值 <类型 = 类_FBrowser_值>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsValue_IsSame(m_class,@<对比值>.m_class);
+    }
+
+    方法 是否值相同 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 对比值 <类型 = 类_FBrowser_值>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsValue_IsEqual(m_class,@<对比值>.m_class);
+    }
+
+    方法 复制 <公开 类型 = 类_FBrowser_值 @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return @dt<类_FBrowser_值>(FBroHsValue_Copy(m_class));
+        @ return @dt<类_FBrowser_值>();
+
+
+    }
+
+    方法 取类型 <公开 类型 = 整数 返回值注释 = "返回值参考：#值类型_" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return 0;
+        @ return FBroHsValue_GetType(m_class);
+    }
+
+    方法 取逻辑值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsValue_GetBool(m_class);
+
+    }
+
+    方法 取整数值 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return 0;
+        @ return FBroHsValue_GetInt(m_class);
+
+    }
+
+    方法 取双精度小数值 <公开 类型 = 小数 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return 0;
+        @ return FBroHsValue_GetDouble(m_class);
+
+    }
+
+    方法 取文本值 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsValue_GetString(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取字节集值 <公开 类型 = 类_FBrowser_字节集 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return @dt<类_FBrowser_字节集>();
+        @ return @dt<类_FBrowser_字节集>(FBroHsValue_GetBinary(m_class));
+
+
+    }
+
+    方法 置空值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsValue_SetNull(m_class);
+
+    }
+
+    方法 置逻辑值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 逻辑值 <类型 = 逻辑型>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsValue_SetBool(m_class,@<逻辑值>);
+
+    }
+
+    方法 置整数值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 整数值 <类型 = 整数>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsValue_SetInt(m_class,@<整数值>);
+
+    }
+
+    方法 置双精度小数值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 双精度小数值 <类型 = 小数>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsValue_SetDouble(m_class,@<双精度小数值>);
+
+    }
+
+    方法 置文本值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 文本 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsValue_SetString(m_class,@<文本>.GetText());
+    }
+
+    方法 置字节集值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 数据 <类型 = 类_FBrowser_字节集>
+    {
+        @ if(IsEmpty() || !@<数据>.m_class) return false;
+        @ return FBroHsValue_SetBinary(m_class,@<数据>.m_class);
+    }
+
+    方法 取字典值 <公开 类型 = 类_FBrowser_字典值 @禁止流程检查 = 真>
+    {
+        变量 tempdata <类型 = 类_FBrowser_字典值>
+        @ if(!IsEmpty()) { @<tempdata>.Set(FBroHsValue_GetDictionary(m_class));}
+        返回 (tempdata)
+
+    }
+
+    方法 取列表值 <公开 类型 = 类_FBrowser_列表值 @禁止流程检查 = 真>
+    {
+        变量 tempdata <类型 = 类_FBrowser_列表值>
+        @ if(!IsEmpty()) {@<tempdata>.Set(FBroHsValue_GetList(m_class));}
+        返回 (tempdata)
+
+    }
+
+    方法 置字典值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 字典值 <类型 = 类_FBrowser_字典值>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsValue_SetDictionary(m_class,@<字典值>.m_class);
+
+    }
+
+    方法 置列表值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 列表值 <类型 = 类_FBrowser_列表值>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsValue_SetList(m_class,@<列表值>.m_class);
+
+    }
+
+    #
+}
+
+类 类_FBrowser_字典值 <公开 @输出名 = "FBroDictionaryValue">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefDictionaryValue> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefDictionaryValue> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set(CefRefPtr<CefDictionaryValue> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 创建 <公开>
+    {
+        @ Set(FBroHsDictionaryValue_Create());
+    }
+
+    方法 是否有效 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsDictionaryValue_IsValid(m_class);
+
+    }
+
+    方法 是否属于其他对象 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsDictionaryValue_IsOwned(m_class);
+
+    }
+
+    方法 是否只读 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsDictionaryValue_IsReadOnly(m_class);
+
+    }
+
+    方法 是否相同 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 对比值 <类型 = 类_FBrowser_字典值>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsDictionaryValue_IsSame(m_class,@<对比值>.m_class);
+    }
+
+    方法 是否值相同 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 对比值 <类型 = 类_FBrowser_字典值>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsDictionaryValue_IsEqual(m_class,@<对比值>.m_class);
+    }
+
+    方法 复制 <公开 类型 = 类_FBrowser_字典值 @禁止流程检查 = 真>
+    参数 包含空项 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 临时类 <类型 = 类_FBrowser_字典值 "">
+        @ if(!IsEmpty()) {@<临时类>.Set(FBroHsDictionaryValue_Copy(m_class,@<包含空项>));}
+        返回 (临时类)
+
+
+    }
+
+    方法 取大小 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return 0;
+        @ return FBroHsDictionaryValue_GetSize(m_class);
+
+    }
+
+    方法 清空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsDictionaryValue_Clear(m_class);
+
+    }
+
+    方法 是否存在关键字 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsDictionaryValue_HasKey(m_class,@<关键字>.GetText());
+    }
+
+    方法 取关键字 <公开 类型 = FBrowser_文本数组 @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return @dt<FBrowser_文本数组>(FBroHsDictionaryValue_GetKeys(m_class));
+        @ return @dt<FBrowser_文本数组>();
+
+    }
+
+    方法 移除 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsDictionaryValue_Remove(m_class,@<关键字>.GetText());
+
+    }
+
+    方法 取类型 <公开 类型 = 整数 返回值注释 = "返回值参考：#值类型_" @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ if(IsEmpty ()) return 0;
+        @ return FBroHsDictionaryValue_GetType(m_class,@<关键字>.GetText());
+    }
+
+    方法 取逻辑值 <公开 类型 = 逻辑型 返回值注释 = "返回值参考：#值类型_" @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ if(IsEmpty ()) return 0;
+        @ return FBroHsDictionaryValue_GetBool(m_class,@<关键字>.GetText());
+    }
+
+    方法 取整数值 <公开 类型 = 整数 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ if(IsEmpty ()) return 0;
+        @ return FBroHsDictionaryValue_GetInt(m_class,@<关键字>.GetText());
+
+    }
+
+    方法 取双精度小数值 <公开 类型 = 小数 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ if(IsEmpty ()) return 0;
+        @ return FBroHsDictionaryValue_GetDouble(m_class,@<关键字>.GetText());
+    }
+
+    方法 取文本值 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsDictionaryValue_GetString(m_class,@<关键字>.GetText());
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取字节集值 <公开 类型 = 类_FBrowser_字节集 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) return @dt<类_FBrowser_字节集>(FBroHsDictionaryValue_GetBinary(m_class,@<关键字>.GetText()));
+        @ return @dt<类_FBrowser_字节集>();
+
+    }
+
+    方法 置空值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsDictionaryValue_SetNull(m_class,@<关键字>.GetText());
+    }
+
+    方法 置逻辑值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    参数 逻辑值 <类型 = 逻辑型>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsDictionaryValue_SetBool(m_class,@<关键字>.GetText(),@<逻辑值>);
+
+    }
+
+    方法 置整数值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    参数 整数值 <类型 = 整数>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsDictionaryValue_SetInt(m_class,@<关键字>.GetText(),@<整数值>);
+    }
+
+    方法 置双精度小数值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    参数 双精度小数值 <类型 = 小数>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsDictionaryValue_SetDouble(m_class,@<关键字>.GetText(),@<双精度小数值>);
+
+    }
+
+    方法 置文本值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    参数 文本 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsDictionaryValue_SetString(m_class,@<关键字>.GetText(),@<文本>.GetText());
+    }
+
+    方法 置字节集值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    参数 数据 <类型 = 类_FBrowser_字节集>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsDictionaryValue_SetBinary(m_class,@<关键字>.GetText(),@<数据>.m_class);
+    }
+
+    方法 取字典值 <公开 类型 = 类_FBrowser_字典值 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) return @dt<类_FBrowser_字典值>(FBroHsDictionaryValue_GetDictionary(m_class,@<关键字>.GetText()));
+        @ return @dt<类_FBrowser_字典值>();
+
+    }
+
+    方法 取列表值 <公开 类型 = 类_FBrowser_列表值 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) return @dt<类_FBrowser_列表值>(FBroHsDictionaryValue_GetList(m_class,@<关键字>.GetText()));
+        @ return @dt<类_FBrowser_列表值>();
+    }
+
+    方法 取值 <公开 类型 = 类_FBrowser_值 注释 = "或者失败返回空框架" @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ if(!IsEmpty ()) return @dt<类_FBrowser_值>(FBroHsDictionaryValue_GetValue(m_class,@<关键字>.GetText()));
+        @ return @dt<类_FBrowser_值>();
+
+    }
+
+    方法 置值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    参数 值 <类型 = 类_FBrowser_值>
+    {
+        @ if(IsEmpty ()) return false;
+        @ return FBroHsDictionaryValue_SetValue(m_class,@<值>.m_class,@<关键字>.GetText());
+
+    }
+
+    方法 置字典值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    参数 字典值 <类型 = 类_FBrowser_字典值>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsDictionaryValue_SetDictionary(m_class,@<字典值>.m_class,@<关键字>.GetText());
+    }
+
+    方法 置列表值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    参数 列表值 <类型 = 类_FBrowser_列表值>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsDictionaryValue_SetList(m_class,@<列表值>.m_class,@<关键字>.GetText());
+
+    }
+
+    #
+}
+
+类 类_FBrowser_POST元素数组 <公开 @输出名 = "FBroPostDataElementVector">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<FBroPostDataList> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<FBroPostDataList> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set (CefRefPtr<FBroPostDataList> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 取个数 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return FBroPostDataList_Size(m_class);//.size();
+    }
+
+    方法 加入成员 <公开>
+    参数 成员 <类型 = 类_FBrowser_POST元素>
+    {
+        @ if(!IsEmpty()) FBroPostDataList_Add(m_class,@<成员>.m_class);
+    }
+
+    方法 到数组首 <公开 注释 = "当前指向数组第一个数据">
+    {
+        @ if(!IsEmpty()) FBroPostDataList_ToBegin(m_class);
+    }
+
+    方法 到下一个 <公开 类型 = 逻辑型 注释 = "第一次使用前要使用“到数组首”使指针指向第一个值，读取完毕再执行将会返回假" @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return FBroPostDataList_ToNext(m_class);
+        返回 (假)
+    }
+
+    方法 取当前位置数据 <公开 类型 = 类_FBrowser_POST元素 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()? @dt<类_FBrowser_POST元素>() : @dt<类_FBrowser_POST元素>(FBroPostDataList_GetCurrentData(m_class));
+
+    }
+
+    方法 清空 <公开>
+    {
+        @ if(!IsEmpty()) FBroPostDataList_Clear(m_class);
+    }
+
+    #
+    #
+    #
+}
+
+类 类_FBrowser_X509证书数组 <公开 注释 = "待修改">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<FBroX509CertificateList> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<FBroX509CertificateList> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set (CefRefPtr<FBroX509CertificateList> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 创建 <公开>
+    {
+        @ m_class=FBroX509CertificateList_Creat();
+    }
+
+    方法 取个数 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return FBroX509CertificateList_Size(m_class);//.size();
+    }
+
+    方法 加入成员 <公开>
+    参数 成员 <类型 = 类_FBrowser_X509证书>
+    {
+        @ if(!IsEmpty()) FBroX509CertificateList_Add(m_class,@<成员>.m_class);
+    }
+
+    方法 到数组首 <公开 注释 = "当前指向数组第一个数据">
+    {
+        @ if(!IsEmpty()) FBroX509CertificateList_ToBegin(m_class);
+    }
+
+    方法 到下一个 <公开 类型 = 逻辑型 注释 = "第一次使用前要使用“到数组首”使指针指向第一个值，读取完毕再执行将会返回假" @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return FBroX509CertificateList_ToNext(m_class);
+        返回 (假)
+    }
+
+    方法 取当前位置数据 <公开 类型 = 类_FBrowser_POST元素 @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return @dt<类_FBrowser_POST元素>(FBroX509CertificateList_GetCurrentData_Value(m_class));
+        @ return @dt<类_FBrowser_POST元素>();
+
+    }
+
+    方法 清空 <公开>
+    {
+        @ if(!IsEmpty()) FBroX509CertificateList_Clear(m_class);
+    }
+
+    #
+    #
+}
+
+类 类_FBrowser_V8值 <公开 注释 = "CefV8Value" @输出名 = "FBroV8Value" @全局类 = 真>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefV8Value> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefV8Value> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set(CefRefPtr<CefV8Value> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 FBrowser_V8值_创建未定义类 <公开 静态 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    {
+        @ return @dt<类_FBrowser_V8值>(FBroHsV8Value_CreateUndefined());
+    }
+
+    方法 FBrowser_V8值_创建空类 <公开 静态 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    {
+        @ return @dt<类_FBrowser_V8值>(FBroHsV8Value_CreateNull());
+    }
+
+    方法 FBrowser_V8值_创建逻辑值 <公开 静态 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    参数 值 <类型 = 逻辑型>
+    {
+        @ return @dt<类_FBrowser_V8值>(FBroHsV8Value_CreateBool(@<值>));
+    }
+
+    方法 FBrowser_V8值_创建整型值 <公开 静态 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    参数 值 <类型 = 整数>
+    {
+        @ return @dt<类_FBrowser_V8值>(FBroHsV8Value_CreateInt(@<值>));
+    }
+
+    方法 FBrowser_V8值_创建无符号整型值 <公开 静态 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    参数 值 <类型 = 整数>
+    {
+        @ return @dt<类_FBrowser_V8值>(FBroHsV8Value_CreateUInt(@<值>));
+    }
+
+    方法 FBrowser_V8值_创建双精度小数型值 <公开 静态 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    参数 值 <类型 = 小数>
+    {
+        @ return @dt<类_FBrowser_V8值>(FBroHsV8Value_CreateDouble(@<值>));
+    }
+
+    方法 FBrowser_V8值_创建日期值 <公开 静态 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    参数 值 <类型 = FBrowser_时间类型>
+    {
+        @ return @dt<类_FBrowser_V8值>(FBroHsV8Value_CreateDate(@<值>.ToFBroData()));
+    }
+
+    方法 FBrowser_V8值_创建文本值 <公开 静态 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    参数 值 <类型 = 文本型>
+    {
+        @ return @dt<类_FBrowser_V8值>(FBroHsV8Value_CreateString(@<值>.GetText()));
+    }
+
+    方法 FBrowser_V8值_创建类 <公开 静态 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    参数 存取器回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowser_V8存取器”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    参数 拦截器回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowser_V8拦截器”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    参数 存取器标识ID <类型 = 长整数类 注释 = "创建成功返回创建的存取器标识ID，与事件中的第一个参数标识ID一一对应" @默认值 = 空对象>
+    参数 拦截器标识ID <类型 = 长整数类 注释 = "创建成功返回创建的拦截器标识ID，与事件中的第一个参数标识ID一一对应" @默认值 = 空对象>
+    {
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<存取器回调>.GetPtr(),V8AccessorType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+        @ _FBRO_CHECK_EVENT_TYPE(@<拦截器回调>.GetPtr(),V8InterceptorType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsV8Accessor> tempV8Accessor = static_cast<FBroHsV8Accessor*>(@<存取器回调>.GetPtr());
+        @ CefRefPtr<FBroHsV8Interceptor> tempV8Interceptor = static_cast<FBroHsV8Interceptor*>(@<拦截器回调>.GetPtr());
+        @ return @dt<类_FBrowser_V8值>(FBroHsV8Value_CreateObject(tempV8Accessor,tempV8Interceptor,@<存取器标识ID.值>,@<拦截器标识ID.值>));
+
+
+    }
+
+    方法 FBrowser_V8值_创建数组值 <公开 静态 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    参数 长度 <类型 = 整数>
+    {
+        @ return @dt<类_FBrowser_V8值>(FBroHsV8Value_CreateArray(@<长度>));
+
+    }
+
+    方法 FBrowser_V8值_创建数组缓存值 <公开 静态 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    参数 数组指针 <类型 = 变整数>
+    参数 数据长度 <类型 = 整数>
+    {
+        @ return @dt<类_FBrowser_V8值>(FBroHsV8Value_CreateArrayBuffer((void *)@<数组指针>,@<数据长度>));
+
+    }
+
+    方法 FBrowser_V8值_创建函数 <公开 静态 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    参数 函数名 <类型 = 文本型>
+    参数 处理回调 <类型 = 类_FBrowser_事件智能指针 注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowser_V8处理程序”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    参数 处理回调标识ID <类型 = 长整数类 注释 = "创建成功返回创建的处理回调标识ID，与事件中的第一个参数标识ID一一对应">
+    {
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<处理回调>.GetPtr(),V8HandlerType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsV8Handler> callback = static_cast<FBroHsV8Handler*>(@<处理回调>.GetPtr());
+        @ return @dt<类_FBrowser_V8值>(FBroHsV8Value_CreateFunction(@<函数名>.GetText(),callback,@<处理回调标识ID.值>));
+
+
+    }
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 是否有效 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_IsValid(m_class);
+    }
+
+    方法 是否未定义 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_IsUndefined(m_class);
+    }
+
+    #
+
+    方法 是否为空类 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_IsNull(m_class);
+    }
+
+    方法 是否为逻辑型 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_IsBool(m_class);
+    }
+
+    方法 是否为整数型 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_IsInt(m_class);
+    }
+
+    方法 是否为无符号整数型 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_IsUInt(m_class);
+    }
+
+    方法 是否双精度小数型 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_IsDouble(m_class);
+    }
+
+    方法 是否为日期型 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_IsDate(m_class);
+    }
+
+    方法 是否为文本型 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_IsString(m_class);
+    }
+
+    方法 是否为类 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_IsObject(m_class);
+    }
+
+    方法 是否为数组 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_IsArray(m_class);
+    }
+
+    方法 是否为数组缓存 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_IsArrayBuffer(m_class);
+    }
+
+    方法 是否为函数 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_IsFunction(m_class);
+    }
+
+    方法 是否相同 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_IsSame(m_class);
+    }
+
+    方法 取逻辑值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_GetBoolValue(m_class);
+    }
+
+    方法 取整数值 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? 0 : FBroHsV8Value_GetIntValue(m_class);
+    }
+
+    方法 取无符号整数值 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? 0 : FBroHsV8Value_GetUIntValue(m_class);
+    }
+
+    方法 取双精度小数值 <公开 类型 = 小数 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? 0 : FBroHsV8Value_GetDoubleValue(m_class);
+    }
+
+    方法 取时间值 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        变量 时间戳 <类型 = 整数>
+        @ @<时间戳> = IsEmpty() ? 0 : FBroHsV8Value_GetDateValue(m_class);
+        如果 (时间戳 == 0)
+        {
+            返回 ("")
+        }
+        返回 (时间到文本 (时间戳到时间 (时间戳)))
+
+    }
+
+    方法 取文本值 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsV8Value_GetStringValue(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+    }
+
+    方法 是否用户创建 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_IsUserCreated(m_class);
+    }
+
+    方法 是否有异常 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_HasException(m_class);
+    }
+
+    方法 取异常 <公开 类型 = 类_FBrowser_V8异常 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? @dt<类_FBrowser_V8异常>() : @dt<类_FBrowser_V8异常>(FBroHsV8Value_GetException(m_class));
+    }
+
+    方法 清理异常 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_ClearException(m_class);
+    }
+
+    方法 将重新抛出异常 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_WillRethrowExceptions(m_class);
+    }
+
+    方法 置重新抛出异常 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 重新抛出 <类型 = 逻辑型>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_SetRethrowExceptions(m_class,@<重新抛出>);
+    }
+
+    方法 是否存在值_关键字 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_HasValue_Key(m_class,@<关键字>.GetText());
+    }
+
+    方法 是否存在值_索引 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ return IsEmpty() ? false : FBroV8Value_HasValue_Index(m_class,@<索引>);
+
+    }
+
+    方法 删除值_关键字 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_DeleteValue_Key(m_class,@<关键字>.GetText());
+    }
+
+    方法 删除值_索引 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_DeleteValue_Index(m_class,@<索引>);
+
+    }
+
+    方法 取值_关键字 <公开 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ return IsEmpty() ? @dt<类_FBrowser_V8值>() :@dt<类_FBrowser_V8值>(FBroHsV8Value_GetValue_Key(m_class,@<关键字>.GetText()));
+    }
+
+    方法 取值_索引 <公开 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ return IsEmpty() ? @dt<类_FBrowser_V8值>() :@dt<类_FBrowser_V8值>(FBroHsV8Value_GetValue_Index(m_class,@<索引>));
+
+    }
+
+    方法 置值_关键字 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    参数 V8值 <类型 = 类_FBrowser_V8值>
+    参数 性能属性 <类型 = 整数 注释 = "参考: V8性能属性.****">
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_SetValue_Key(m_class,@<关键字>.GetText(),@<V8值>.m_class,@<性能属性>);
+    }
+
+    方法 置值_索引 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    参数 V8值 <类型 = 类_FBrowser_V8值 注释 = "参考:V8访问控制.***">
+    参数 性能属性 <类型 = 整数 注释 = "参考:V8性能属性.***">
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_SetValue_index(m_class,索引,@<V8值>.m_class,@<性能属性>);
+    }
+
+    方法 置值 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    参数 设置 <类型 = 整数>
+    参数 性能属性 <类型 = 整数>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_SetValue(m_class,@<关键字>.GetText(),@<设置>,@<性能属性>);
+    }
+
+    方法 取关键字 <公开 类型 = FBrowser_文本数组 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? @dt<FBrowser_文本数组>() : @dt<FBrowser_文本数组>(FBroHsV8Value_GetKeys(m_class));
+    }
+
+    方法 取外部分配的内存 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? 0 : FBroHsV8Value_GetExternallyAllocatedMemory(m_class);
+    }
+
+    方法 调整外部内存大小 <公开 类型 = 整数 @禁止流程检查 = 真>
+    参数 调整大小 <类型 = 整数>
+    {
+        @ return IsEmpty() ? 0 : FBroHsV8Value_AdjustExternallyAllocatedMemory(m_class,@<调整大小>);
+    }
+
+    方法 取数组元素数量 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? 0 : FBroHsV8Value_GetArrayLength(m_class);
+    }
+
+    方法 清空数组缓存 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? false : FBroHsV8Value_NeuterArrayBuffer(m_class);
+    }
+
+    方法 取函数执行事件 <公开 类型 = 变整数 注释 = "取出设置的“类_FBrowser_V8处理程序”类型的指针" @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() ? 0 : (@dt<变整数>)((void *)(FBroHsV8Value_GetFunctionHandler(m_class).get()));
+    }
+
+    方法 取函数名 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsV8Value_GetFunctionName(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+    }
+
+    方法 执行函数 <公开 @禁止流程检查 = 真>
+    参数 对象 <类型 = 类_FBrowser_V8值 @默认值 = 空对象>
+    参数 参数 <类型 = 类_FBrowser_V8值数组>
+    {
+        @ if(!IsEmpty()) FBroHsV8Value_ExecuteFunction(m_class,@<对象>.IsNullObject()?nullptr:@<对象>.m_class,@<参数>.m_class);
+    }
+
+    方法 指定环境执行函数 <公开 @禁止流程检查 = 真>
+    参数 指定V8环境 <类型 = 类_FBrowser_V8环境>
+    参数 对象 <类型 = 类_FBrowser_V8值>
+    参数 参数 <类型 = 类_FBrowser_V8值数组>
+    {
+        @ if(!IsEmpty()) FBroHsV8Value_ExecuteFunctionWithContext(m_class,@<指定V8环境>.m_class,@<对象>.m_class,@<参数>.m_class);
+    }
+
+    #
+}
+
+类 类_FBrowser_V8值数组 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<FBroV8ValueList> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<FBroV8ValueList> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set(CefRefPtr<FBroV8ValueList> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 创建 <公开>
+    {
+        @ m_class=FBroV8ValueList_Creat();
+    }
+
+    方法 取个数 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return FBroV8ValueList_Size(m_class);//.size();
+    }
+
+    方法 加入成员 <公开>
+    参数 成员 <类型 = 类_FBrowser_V8值>
+    {
+        @ if(!IsEmpty()) FBroV8ValueList_Add(m_class,@<成员>.m_class);
+    }
+
+    方法 到数组首 <公开 注释 = "当前指向数组第一个数据">
+    {
+        @ if(!IsEmpty()) FBroV8ValueList_ToBegin(m_class);
+    }
+
+    方法 到下一个 <公开 类型 = 逻辑型 注释 = "第一次使用前要使用“到数组首”使指针指向第一个值，读取完毕再执行将会返回假" @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return FBroV8ValueList_ToNext(m_class);
+        返回 (假)
+    }
+
+    方法 取当前位置数据 <公开 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return @dt<类_FBrowser_V8值>(FBroV8ValueList_GetCurrentData_Value(m_class));
+        @ return @dt<类_FBrowser_V8值>();
+
+    }
+
+    方法 取数据 <公开 类型 = 类_FBrowser_V8值 @禁止流程检查 = 真>
+    参数 ID <类型 = 整数>
+    {
+        @ if(!IsEmpty()) return @dt<类_FBrowser_V8值>(FBroV8ValueList_GetValue(m_class,@<ID>));
+        @ return @dt<类_FBrowser_V8值>();
+
+    }
+
+    方法 清空 <公开>
+    {
+        @ if(!IsEmpty()) FBroV8ValueList_Clear(m_class);
+    }
+}
+
+类 类_FBrowser_拖拽数据 <公开 注释 = "CefDragData" @输出名 = "FBroDragData" "">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefDragData> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefDragData> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set(CefRefPtr<CefDragData> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    方法 创建 <公开 注释 = "Create a new CefDragData object">
+    {
+        @ Set(FBroHsDragData_Create());
+    }
+
+    方法 复制 <公开 类型 = 类_FBrowser_拖拽数据 注释 = "Returns a copy of the current object" @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()? @dt<类_FBrowser_拖拽数据>() : @dt<类_FBrowser_拖拽数据>(FBroHsDragData_Clone(m_class));
+
+    }
+
+    方法 是否只读 <公开 类型 = 逻辑型 注释 = "Returns true if this object is read-only" @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()? false : FBroHsDragData_IsReadOnly(m_class);
+
+    }
+
+    方法 是否为链接 <公开 类型 = 逻辑型 注释 = " Returns true if the drag data is a link" @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()? false : FBroHsDragData_IsLink(m_class);
+
+    }
+
+    方法 是否为碎片 <公开 类型 = 逻辑型 注释 = "Returns true if the drag data is a text or html fragment" @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()? false : FBroHsDragData_IsFragment(m_class);
+
+    }
+
+    方法 是否为文件 <公开 类型 = 逻辑型 注释 = "Returns true if the drag data is a file" @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()? false : FBroHsDragData_IsFile(m_class);
+
+    }
+
+    方法 取链接地址 <公开 类型 = 文本型 注释 = "Return the link URL that is being dragged." @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsDragData_GetLinkURL(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取链接标题 <公开 类型 = 文本型 注释 = "Return the title associated with the link being dragged" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsDragData_GetLinkTitle(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取链接关联数据 <公开 类型 = 文本型 注释 = "Return the metadata, if any, associated with the link being dragged" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsDragData_GetLinkMetadata(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取碎片文本 <公开 类型 = 文本型 注释 = "Return the plain text fragment that is being dragged" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsDragData_GetFragmentText(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取碎片源码 <公开 类型 = 文本型 注释 = "Return the text/html fragment that is being dragged" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsDragData_GetFragmentHtml(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取碎片基础地址 <公开 类型 = 文本型 注释 = "Return the base URL that the fragment came from. This value is used for"
+            注释 = "resolving relative URLs and may be empty." @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsDragData_GetFragmentBaseURL(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取文件名 <公开 类型 = 文本型 注释 = "Return the name of the file being dragged out of the browser window" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsDragData_GetFileName(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+
+    }
+
+    方法 置链接地址 <公开 注释 = "Set the link URL that is being dragged." @禁止流程检查 = 真>
+    参数 地址 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsDragData_SetLinkURL(m_class,@<地址>.GetText());
+
+    }
+
+    方法 置链接标题 <公开 注释 = "Set the title associated with the link being dragged" @禁止流程检查 = 真>
+    参数 标题 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsDragData_SetLinkTitle(m_class,@<标题>.GetText());
+
+    }
+
+    方法 置关联数据 <公开 注释 = "Set the metadata associated with the link being dragged" @禁止流程检查 = 真>
+    参数 数据 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsDragData_SetLinkMetadata(m_class,@<数据>.GetText());
+
+    }
+
+    方法 置碎片文本 <公开 注释 = "Set the plain text fragment that is being dragged" @禁止流程检查 = 真>
+    参数 数据 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsDragData_SetFragmentText(m_class,@<数据>.GetText());
+
+    }
+
+    方法 置碎片源码 <公开 注释 = "Set the text/html fragment that is being dragged" @禁止流程检查 = 真>
+    参数 数据 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsDragData_SetFragmentHtml(m_class,@<数据>.GetText());
+
+    }
+
+    方法 置碎片基础地址 <公开 注释 = "Set the base URL that the fragment came from" @禁止流程检查 = 真>
+    参数 地址 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsDragData_SetFragmentBaseURL(m_class,@<地址>.GetText());
+
+    }
+
+    方法 增加文件 <公开 注释 = "Add a file that is being dragged into the webview" @禁止流程检查 = 真>
+    参数 文件路径 <类型 = 文本型>
+    参数 显示名 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsDragData_AddFile(m_class,@<文件路径>.GetText(),@<显示名>.GetText());
+
+
+    }
+
+    方法 取图片 <公开 类型 = 类_FBrowser_图片 注释 = "Get the image representation of drag data. May return NULL if no image"
+            注释 = "representation is available." @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()? @dt<类_FBrowser_图片>() : @dt<类_FBrowser_图片>(FBroHsDragData_GetImage(m_class));
+
+    }
+
+    方法 取图片坐标 <公开 类型 = FBrowser_位置 注释 = "Get the image hotspot (drag start location relative to image dimensions)." @禁止流程检查 = 真>
+    {
+        变量 rettemp <类型 = FBrowser_位置>
+        @ if(!IsEmpty()) {FBroHsDragData_GetImageHotspot(m_class,@<rettemp>.ToFBroData()); @<rettemp>.ToHsData();}
+        返回 (rettemp)
+    }
+
+    方法 是否有图片 <公开 类型 = 逻辑型 注释 = "Returns true if an image representation of drag data is available" @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()? false : FBroHsDragData_HasImage(m_class);
+
+    }
+
+    #
+}
+
+类 类_FBrowser_共享内存数据 <公开 注释 = "CefSharedMemoryRegion" @输出名 = "FBroSharedMemoryRegion" "">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefSharedMemoryRegion> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefSharedMemoryRegion> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set(CefRefPtr<CefSharedMemoryRegion> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    方法 取数据大小 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()? 0 : FBroHsSharedMemoryRegion_Size(m_class);
+    }
+
+    方法 取数据 <公开 类型 = 字节集类 @禁止流程检查 = 真>
+    {
+        变量 size <类型 = 整数>
+        变量 tempret <类型 = 字节集类>
+        size = 取数据大小 ()
+        如果真 (size > 0)
+        {
+            变量 datapoint <类型 = 变整数>
+            datapoint = 分配内存 (size)
+            @ FBroHsSharedMemoryRegion_Memory(m_class,(void *)@<datapoint>,@<size>);
+            tempret = 指针到字节集 (datapoint, size)
+            释放内存 (datapoint)
+
+        }
+        返回 (tempret)
+
+    }
+
+    #
+}

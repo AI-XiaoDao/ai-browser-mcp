@@ -1,0 +1,38 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "用法，，调试模式，直接生成一个dump文件，然后用vs打开" 注释 = "直接 点击本地调试接口" @文档 = "category = \"开源库.异常信息\""
+        @视窗.外部头文件 = "breakpad\\breakpadTool.h" @视窗.外部库.win32 = "breakpad\\breakpadToolx86.lib"
+        @视窗.附属文件.win32 = "breakpad\\breakpadToolx86.dll" @视窗.外部库.x64 = "breakpad\\breakpadToolx64.lib"
+        @视窗.附属文件.x64 = "breakpad\\breakpadToolx64.dll">
+
+类 异常信息类 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    #
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void * pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化
+    {
+        @ SetData( GBreakPad_New());
+    }
+
+    方法 类_清理
+    {
+        @ GBreakPad_Delete(GetData());
+    }
+}
+
+#

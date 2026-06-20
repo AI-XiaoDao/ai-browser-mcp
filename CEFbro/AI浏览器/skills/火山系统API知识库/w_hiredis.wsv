@@ -1,0 +1,414 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.数据库
+
+类 Redis数据库类 <公开 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "提供对Redis数据库的操作支持." 编辑时信息 = "158873, 0, 0, 0"
+        @视窗.头文件搜寻目录 = "lib\\include\\hiredis" @视窗.外部头文件 = "vol_hi_redis.h" @视窗.外部源文件 = "lib\\src\\vol_hi_redis.cpp"
+        @视窗.外部源文件 = "lib\\src\\alloc.c\nlib\\src\\async.c\nlib\\src\\dict.c\nlib\\src\\hiredis.c\nlib\\src\\net.c\nlib\\src\\read.c\nlib\\src\\sds.c\nlib\\src\\sockcompat.c"
+        @视窗.需求VS版本 = "14-">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CVolRedisWraper)
+    #
+    # <> <include>
+    # public:
+    #     inline_ redisContext* SafeGetContext() { return data().SafeGetContext(); }
+    #     inline_ BOOL SetKeepAlive() { return (SafeGetContext() != NULL ? redisEnableKeepAlive(SafeGetContext()) : FALSE); }
+    # <> </include>
+    # @end
+
+    方法 连接 <公开 类型 = 逻辑型 注释 = "开始连接到指定的Redis数据库,如果当前处于已连接的状态将会被断开." 返回值注释 = "返回连接结果." @禁止流程检查 = 真>
+    参数 地址 <类型 = 文本型 注释 = "提供所欲连接数据库的地址/IP.">
+    参数 端口 <类型 = 整数 注释 = "提供所欲连接数据库的连接端口号." @默认值 = 6379>
+    参数 密码 <类型 = 文本型 注释 = "提供该库的授权密码,无密码请留空." @默认值 = 空对象>
+    参数 库号 <类型 = 整数 注释 = "  提供连接成功后所欲使用的库号索引,默认情况下有16个库,可" 注释 = "提供0-15之间的索引号,如自己设置库数量请提供正确范围内的索引." @默认值 = 0>
+    参数 超时 <类型 = 整数 注释 = "提供连接服务器的超时时间,单位:秒." @默认值 = 10>
+    {
+        @ if (data().SafeGetContext())    //处于连接状态?
+        @     data().Close();
+        @ @an<CVolMem> memBuf;
+        @ data().Connect(GetMbsText (@<地址>.GetText (), memBuf, NULL), @<端口>, @<密码>, (UINT)@<库号>, @<超时>);
+        @ return data().SafeGetContext() != NULL && data().SafeGetContext()->err == NULL;
+    }
+
+    方法 启用心跳保活 <公开 类型 = 逻辑型 注释 = "将当前数据库连接启用KeepAlive功能." @嵌入式方法 = "">
+    {
+        @ @sn<this>.SetKeepAlive()
+    }
+
+    方法 取错误内容 <公开 类型 = 文本型 注释 = "获取错误内容." 返回值注释 = "无错误时返回空文本.">
+    {
+        @ if (data().SafeGetContext())
+        @     return @an<CVolString>(data().SafeGetContext()->errstr);
+        返回 ("")
+    }
+
+    方法 取错误码 <公开 类型 = 整数 注释 = "获取错误码." 返回值注释 = "无错误时返回0.">
+    {
+        @ if (data().SafeGetContext())
+        @     return data().SafeGetContext()->err;
+        返回 (0)
+    }
+
+    方法 关闭 <公开 注释 = "关闭并将当前已连接的数据库断开." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Close()
+    }
+
+    方法 执行命令 <公开 类型 = Redis执行结果类 注释 = "对当前已连接的数据库执行指定命令,如欲提供二进制数据或其他非文本型数据的命令执行,请使用\"执行命令2\"." 返回值注释 = "返回执行该命令后服务器所返回的结果."
+            编辑时信息 = "66AA4, 0, 0, 0" @嵌入式方法 = "">
+    参数 命令内容 <类型 = 文本型 注释 = "提供所欲执行完整命令内容,例如\"SET key value\"." 编辑时信息 = "66AA4, 0, 0, 0">
+    {
+        @ @dt<Redis执行结果类>(@sn<this>.data().ExcCommand(GetMbsText(@<命令内容>.GetText(), CVolMem(), NULL)))
+    }
+
+    方法 执行命令2 <公开 类型 = Redis执行结果类 注释 = "对当前已连接的数据库执行指定命令." 返回值注释 = "返回执行该命令后服务器所返回的结果." 编辑时信息 = "7554E, 0, 0, 0"
+            @嵌入式方法 = "req_obj_param_pointer = true\r\nreq_str_param_text_pointer = true">
+    参数 命令类型 <类型 = 文本型 注释 = "提供所欲执行的命令类型,例如\"SET\"." 编辑时信息 = "7554E, 0, 0, 0">
+    参数 参数内容 <注释 = "提供所欲执行命令携带的所有参数,文本型的参数将会以多字节编码方式提交储存." 注释 = "注意:除支持基本型外仅支持字节集类参数,提交其他类型参数将导致失败立即返回."
+            编辑时信息 = "7554E, 0, 0, 0" @匹配类型 = 通用型 @可扩展 = "">
+    {
+        @ @dt<Redis执行结果类>(@sn<this>.data().ExcCommandExtend(_T (@sn<pm_types>), GetMbsText(@<命令类型>.GetText(), CVolMem(), NULL), @<参数内容>))
+    }
+
+    方法 连续执行命令 <公开 类型 = 逻辑型 注释 = "  加入一个命令到执行命令缓冲区中等待执行,适用于需要执行大量命令而不需要立即返回结"
+            注释 = "果的场景下使用,如欲提供二进制数据或其他非文本型数据的命令执行,请使用\"连续执行命令2\"." 返回值注释 = "返回是否加入命令成功" @嵌入式方法 = "">
+    参数 命令内容 <类型 = 文本型 注释 = "提供所欲执行完整命令内容,例如\"SET key value\".">
+    {
+        @ @sn<this>.data().AppendCommand(GetMbsText(@<命令内容>.GetText(), CVolMem(), NULL))
+    }
+
+    方法 连续执行命令2 <公开 类型 = 逻辑型 注释 = "  加入一个命令到执行命令缓冲区中等待执行,适用于需要执行大量命令而不需要" 注释 = "立即返回结果的场景下使用." 返回值注释 = "返回是否加入命令成功."
+            @嵌入式方法 = "req_obj_param_pointer = true\r\nreq_str_param_text_pointer = true">
+    参数 命令类型 <类型 = 文本型 注释 = "提供所欲执行的命令类型,例如\"SET\"." 编辑时信息 = "7554E, 0, 0, 0">
+    参数 参数内容 <注释 = "提供所欲执行命令携带的所有参数,文本型的参数将会以多字节编码方式提交储存." 注释 = "注意:除支持基本型外仅支持字节集类参数,提交其他类型参数将导致失败立即返回."
+            编辑时信息 = "7554E, 0, 0, 0" @匹配类型 = 通用型 @可扩展 = "">
+    {
+        @ @sn<this>.data().AppendCommandExtend(_T (@sn<pm_types>), GetMbsText(@<命令类型>.GetText(), CVolMem(), NULL), @<参数内容>)
+    }
+
+    方法 取连续执行结果 <公开 类型 = Redis执行结果类 注释 = "  在使用了\"连续执行命令\"或\"连续执行命令2\"加入了多条命令后,使用本方法提" 注释 = "交命令执行并且获取命令执行结果." @嵌入式方法 = "">
+    {
+        @ @dt<Redis执行结果类>(@sn<this>.data().GetExcReply())
+    }
+
+    方法 取连接状态 <公开 类型 = 逻辑型 注释 = "获取当前与服务器的连接状态" 返回值注释 = "返回真表示与服务器连接正常,否则与服务器的连接已丢失." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().IsConnected()
+    }
+}
+
+类 Redis执行结果类 <公开 注释 = "本类实例表示一个服务器的返回信息(命令执行后)." @强制依赖 = "Redis数据库类">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CRedisReplyWrapper)
+    # @ <include>
+    # @ @sn<current_class>(redisReply* ptr):@sn<current_class>() { data().SetReply(ptr); }
+    # @ </include>
+
+    方法 类型 <公开 属性读 类型 = Redis结果类型 注释 = "获取该结果中数据的类型." @禁止流程检查 = 真>
+    {
+        @ if (data().GetReply())
+        @     return data().GetReply()->type;
+        @ return REDIS_REPLY_ERROR;
+    }
+
+    方法 是否有效 <公开 属性读 类型 = 逻辑型 注释 = "获取当前执行结果是否为有效状态" 返回值注释 = "返回真表示有效,否则无效无法获取其任何数据." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().IsValid()
+    }
+
+    方法 取文本内容 <公开 类型 = 文本型 注释 = "以文本方式获取命令执行结果的内容." @禁止流程检查 = 真>
+    {
+        @ if (data().GetReply())
+        @ {
+        @     INT_P len;
+        @     CVolMem memBuf;
+        @     const WCHAR* pws = GetWideText (data().GetReply()->str, memBuf, &len);
+        @     return @an<CVolString> (pws, len);
+        @ }
+        @ return _T("");
+    }
+
+    方法 取字节集内容 <公开 类型 = 字节集类 注释 = "以字节集方式获取命令执行结果的内容." @禁止流程检查 = 真>
+    {
+        @ if (data().GetReply())
+        @     return CVolMem (data().GetReply()->str, data().GetReply()->len);
+        @ return CVolMem(); 
+    }
+
+    方法 取整数内容 <公开 类型 = 长整数 注释 = "获取该结果中的数值内容." @禁止流程检查 = 真>
+    {
+        @ if (data().GetReply())
+        @     return data().GetReply()->integer;
+        @ return 0;
+    }
+
+    方法 取小数内容 <公开 类型 = 小数 注释 = "获取该结果中的小数内容." @禁止流程检查 = 真>
+    {
+        @ if (data().GetReply())
+        @     return data().GetReply()->dval;
+        @ return 0;
+    }
+
+    方法 取数组内容 <公开 类型 = 整数 注释 = "获取该结果中的数组内容并将其写入到结果参数中" 返回值注释 = "返回写入到结果参数数组中的成员数目" @禁止流程检查 = 真>
+    参数 结果参数 <类型 = Redis执行结果数组类>
+    {
+        @ @<结果参数>.RemoveAll ();
+        @ if (data().GetReply())
+        @ {
+        @     if (data().GetReply()->elements > 0)
+        @     {
+        @         @<结果参数>.AddNewObjects(@dt<Redis执行结果类>::sGetRuntimeClass(), 0, (INT)data().GetReply()->elements);
+        @         for (UINT i = 0; i < data().GetReply()->elements; i++) 
+        @             ((@dt<Redis执行结果类>&)@<结果参数>.GetAt(i)).data().SetReply(data().GetReply()->element[i], FALSE);    //数组内成员会跟随其所处父一同释放.
+        @     }
+        @ }
+        @ return (INT)@<结果参数>.GetCount ();
+    }
+}
+
+类 Redis结果类型 <公开 注释 = "表示Redis执行结果中信息的类型." @常量类 = 整数>
+{
+    常量 文本内容 <公开 值 = @REDIS_REPLY_STRING>
+    常量 数组内容 <公开 值 = @REDIS_REPLY_ARRAY>
+    常量 整型内容 <公开 值 = @REDIS_REPLY_INTEGER>
+    常量 空内容 <公开 值 = @REDIS_REPLY_NIL 注释 = "表示Nil,无任何内容.">
+    常量 状态内容 <公开 值 = @REDIS_REPLY_STATUS 注释 = "表示本次回复的是一个状态,例如SET命令将数据成功置入将会返回该类型.">
+    常量 错误内容 <公开 值 = @REDIS_REPLY_ERROR 注释 = "表示本次执行错误,可用取文本内容取出错误描述.">
+    常量 小数内容 <公开 值 = @REDIS_REPLY_DOUBLE>
+    常量 逻辑值内容 <公开 值 = @REDIS_REPLY_BOOL>
+    常量 可变内容 <公开 值 = @REDIS_REPLY_VERB>
+    常量 键值对内容 <公开 值 = @REDIS_REPLY_MAP>
+    常量 集合内容 <公开 值 = @REDIS_REPLY_SET>
+    常量 属性内容 <公开 值 = @REDIS_REPLY_ATTR>
+    常量 推送内容 <公开 值 = @REDIS_REPLY_PUSH>
+    常量 大数内容 <公开 值 = @REDIS_REPLY_BIGNUM>
+}
+
+类 Redis执行结果数组类 <公开 基础类 = 对象数组模板类 @模板实现类 = "Redis执行结果类">
+
+类 Redis连接池类 <公开 注释 = "提供一个线程安全的Redis连接池.">
+{
+
+    # @begin
+    # <> <include>
+    # protected:
+    #     CMMutex m_mutex;
+    #     CMSemaphore m_semap;
+    #     INT m_maxSize;    //最大连接数
+    #     BOOL isInit;
+    #     CVolObjectArray m_connectList;
+    #     CVolMem memBuf;
+    #     char* m_host;
+    #     INT m_port;
+    #     CVolString m_password;
+    #     unsigned int m_dbid;
+    #     INT m_connectTimeout;
+    #
+    #     inline_ void @an<_OnInitExtra> ()  { isInit = FALSE; }
+    # public:
+    #     INT GetActiveConnectCount();
+    #     inline_ INT GetConnectCount() { return (INT)m_connectList.GetCount(); }
+    #     INT InitConnectPool(CVolString& host, INT port, INT connectTimeout, const CVolString& password, unsigned int dbid, INT maxSize, INT initSize);
+    #     BOOL CreateRedis(INT* pIndex);
+    #     BOOL GetListActivityRedis(@dt<Redis数据库类>& objResult, INT timeout);
+    #     void DestroyRedis(@dt<Redis数据库类>& obj);
+    #     void ReleaseRedis(@dt<Redis数据库类>& obj);
+    #     void ReleaseAll();
+    # <> </include>
+    #     
+    # INT @sn<current_class>::GetActiveConnectCount()
+    # {
+    #     CMutexLocker locker (m_mutex);
+    #     INT ret = 0;
+    #     INT nCount = (INT)m_connectList.GetCount();
+    #     for (INT i = 0; i < nCount; i++)
+    #         if (m_connectList.GetAt(i).m_npUserValue == 0) ret++;
+    #     return ret;
+    # }
+    #
+    # INT @sn<current_class>::InitConnectPool(CVolString& host, INT port, INT connectTimeout, const CVolString& password, unsigned int dbid, INT maxSize, INT initSize)
+    # {
+    #     CMutexLocker locker (m_mutex);
+    #     m_host = (char*)GetMbsText (host, memBuf, NULL);
+    #     m_port = port;
+    #     m_connectTimeout = connectTimeout;
+    #     m_maxSize = MAX (10, maxSize);
+    #     m_password = password;
+    #     m_dbid = dbid;
+    #     if (initSize > m_maxSize) initSize = m_maxSize;
+    #     m_connectList.RemoveAll();
+    #     m_connectList.AddNewObjects(@dt<Redis数据库类>::sGetRuntimeClass(), 0, initSize);  // 0:未使用,1:正在使用.
+    #     isInit = TRUE;
+    #
+    #     for (INT i = (INT)m_connectList.GetCount() - 1; i >= 0; i--)
+    #     {
+    #         ((@dt<Redis数据库类>&)m_connectList.GetAt(i)).data().Connect(m_host, m_port, m_password, m_dbid, m_connectTimeout);
+    #         ((@dt<Redis数据库类>&)m_connectList.GetAt(i)).SetKeepAlive();    //防止池中连接掉线
+    #         if (((@dt<Redis数据库类>&)m_connectList.GetAt(i)).SafeGetContext() == NULL)  // 未成功连接?
+    #             m_connectList.RemoveAt(i);
+    #     }
+    #     m_semap.post();
+    #     return (INT)m_connectList.GetCount();
+    # }
+    #
+    # BOOL @sn<current_class>::CreateRedis(INT* pIndex)
+    # {
+    #     CMutexLocker locker (m_mutex);
+    #     if (isInit == FALSE)  return FALSE;
+    #     if ((INT)m_connectList.GetCount() >= m_maxSize)  return FALSE;
+    #     INT nNewIndex;
+    #     ((@dt<Redis数据库类>&)m_connectList.AddNewObject(@dt<Redis数据库类>::sGetRuntimeClass(), 0, (pIndex == NULL ? &nNewIndex : pIndex))).data().Connect(m_host, m_port, m_password, m_dbid, m_connectTimeout);
+    #     ((@dt<Redis数据库类>&)m_connectList.GetAt(pIndex == NULL ? nNewIndex : *pIndex)).SetKeepAlive();    //防止池中连接掉线
+    #     if (((@dt<Redis数据库类>&)m_connectList.GetAt(pIndex == NULL ? nNewIndex : *pIndex)).SafeGetContext() == NULL)
+    #     {
+    #         m_connectList.RemoveAt ((pIndex == NULL ? nNewIndex : *pIndex), 1);  // 未成功连接
+    #         return FALSE;
+    #     }
+    #     m_semap.post();
+    #     return TRUE;
+    # }
+    #
+    # BOOL @sn<current_class>::GetListActivityRedis(@dt<Redis数据库类>& objResult, INT timeout)
+    # {
+    #     while (isInit)
+    #     {
+    #         {
+    #             CMutexLocker locker (m_mutex);
+    #             for (INT i = 0; i < (INT)m_connectList.GetCount(); i++)
+    #             {
+    #                 if (m_connectList.GetAt(i).m_npUserValue == 0)
+    #                 {
+    #                     m_connectList.GetAt(i).m_npUserValue = 1;
+    #                     objResult.CopyFrom ((@dt<Redis数据库类>&)m_connectList.GetAt(i));
+    #                     if (!objResult.data().IsConnected())    //检查连接有效,无效重连,确保取出连接为有效状态
+    #                     {
+    #                          objResult.data().Close();
+    #                          objResult.data().Connect(m_host, m_port, m_password, m_dbid, m_connectTimeout);
+    #                     }
+    #                     return objResult.data().SafeGetContext() != NULL; //为TRUE必定为有效连接
+    #                 }
+    #             }
+    #
+    #             // 无余量,尝试创建
+    #             INT createIndex;
+    #             if (CreateRedis(&createIndex))
+    #             {
+    #                 m_connectList.GetAt(createIndex).m_npUserValue = 1;
+    #                 objResult.CopyFrom ((@dt<Redis数据库类>&)m_connectList.GetAt(createIndex));
+    #                 if (!objResult.data().IsConnected())
+    #                 {
+    #                     objResult.data().Close();
+    #                     objResult.data().Connect(m_host, m_port, m_password, m_dbid, m_connectTimeout);
+    #                 }
+    #                 return objResult.data().SafeGetContext() != NULL;
+    #             }
+    #         }
+    #
+    #         if (timeout ==  0)
+    #             break;
+    #         else if (timeout <  0)
+    #             m_semap.wait (FALSE);
+    #         else
+    #         {
+    #             DWORD dwEntryTime = ::GetTickCount ();
+    #             if (m_semap.wait_timeout (timeout) == FALSE)
+    #                 break;
+    #             timeout -= (INT)(::GetTickCount () - dwEntryTime);
+    #             if (timeout < 0)  timeout = 0;
+    #         }
+    #     }
+    #     return FALSE;
+    # }
+    #
+    # void @sn<current_class>::DestroyRedis(@dt<Redis数据库类>& obj)
+    # {
+    #     CMutexLocker locker (m_mutex);
+    #     for (INT i = 0; i < (INT)m_connectList.GetCount(); i++)
+    #     {
+    #         if (((@dt<Redis数据库类>&)m_connectList.GetAt(i)).SafeGetContext() == obj.SafeGetContext())
+    #         {
+    #             m_connectList.RemoveAt(i, 1);
+    #             break;                
+    #         }
+    #     }
+    # }
+    #     
+    # void @sn<current_class>::ReleaseRedis(@dt<Redis数据库类>& obj)
+    # {
+    #     CMutexLocker locker (m_mutex);
+    #     for (INT i = 0; i < (INT)m_connectList.GetCount(); i++)
+    #     {
+    #         if (((@dt<Redis数据库类>&)m_connectList.GetAt(i)).SafeGetContext() == obj.SafeGetContext())
+    #         {
+    #             m_connectList.GetAt(i).m_npUserValue = 0;
+    #             m_semap.post();
+    #             break;
+    #         }
+    #     }
+    # }
+    #
+    # void @sn<current_class>::ReleaseAll()
+    # {
+    #     CMutexLocker locker (m_mutex);
+    #     for (INT i = 0; i < (INT)m_connectList.GetCount(); i++)
+    #         m_connectList.GetAt(i).m_npUserValue = 0;
+    #     m_semap.post();
+    # }
+    #
+    # @end
+
+    方法 初始化 <公开 类型 = 整数 注释 = "初始化Redis连接池并连接至指定Redis服务器" 返回值注释 = "返回该连接池中所创建成功的连接数" @嵌入式方法 = "">
+    参数 地址 <类型 = 文本型 注释 = "提供所欲连接数据库的地址/IP.">
+    参数 端口 <类型 = 整数 注释 = "提供所欲连接数据库的连接端口号." @默认值 = 6379>
+    参数 超时 <类型 = 整数 注释 = "提供连接服务器的超时时间,单位:秒." @默认值 = 10>
+    参数 密码 <类型 = 文本型 注释 = "提供该库的授权密码,无密码请留空." @默认值 = 空对象>
+    参数 库号 <类型 = 整数 注释 = "  提供连接成功后所欲使用的库号索引,默认情况下有16个库,可" 注释 = "提供0-15之间的索引号,如自己设置库数量请提供正确范围内的索引." @默认值 = 0>
+    参数 最大连接数 <类型 = 整数 注释 = "连接池中所能创建的最大连接数量." @默认值 = 50>
+    参数 初始连接数 <类型 = 整数 注释 = "初始化时所欲创建的可用连接数." @默认值 = 10>
+    {
+        @ @sn<this>.InitConnectPool(@<地址>, @<端口>, @<超时>, @<密码>, @<库号>, @<最大连接数>, @<初始连接数>)
+    }
+
+    方法 取连接 <公开 类型 = 逻辑型 注释 = "  从Redis连接池中取出一个可用的连接,成功返回真,失败返回假." 注释 = "  如果当前连接池中暂无可用连接,将会新建一个连接,如果已达到最大连接数限制时将会等待指定时长,"
+            注释 = "超时后将会返回假." 注释 = "  注意:取出的连接使用完毕后务必调用\"释放连接\"方法,否则所取出的连接将一直处于占用状态." 返回值注释 = "返回本次获取的连接是否有效." @嵌入式方法 = "">
+    参数 结果连接 <类型 = Redis数据库类 注释 = "如果本方法成功,则所获得连接将填入此结果变量中.">
+    参数 繁忙等待时间 <类型 = 整数 注释 = "指定在所有连接都已用尽时所欲等待的时长,提供-1表示无限等待,0表示不等待.单位:毫秒." @默认值 = 10000>
+    {
+        @ @sn<this>.GetListActivityRedis(@<结果连接>, @<繁忙等待时间>)
+    }
+
+    方法 释放连接 <公开 注释 = "释放从连接池中所取出的连接对象,使其在连接池中恢复空闲状态等待被获取." 注释 = "注意:取出的连接使用完毕后务必调用本方法释放,否则所取出的连接将一直处于占用状态." @嵌入式方法 = "">
+    参数 连接对象 <类型 = Redis数据库类 注释 = "提供所欲释放的连接对象,必须确认此连接目前不再使用.">
+    {
+        @ @sn<this>.ReleaseRedis(@<连接对象>)
+    }
+
+    方法 释放所有连接 <公开 注释 = "释放连接池中所有的连接对象,使其在连接池中恢复空闲状态等待被获取." 注释 = "调用本方法时必须确认所有连接目前不再使用." @嵌入式方法 = "">
+    {
+        @ @sn<this>.ReleaseAll()
+    }
+
+    方法 销毁连接 <公开 注释 = "销毁连接池中的指定连接,该连接将会从连接池中被移除并断开释放." @嵌入式方法 = "">
+    参数 连接对象 <类型 = Redis数据库类 注释 = "提供所欲销毁的连接对象,必须确认此连接不再使用.">
+    {
+        @ @sn<this>.DestroyRedis(@<连接对象>)
+    }
+
+    方法 创建连接 <公开 类型 = 逻辑型 注释 = "在该连接池中新建一个连接,返回创建的结果." 返回值注释 = "如果当前连接池中连接已达最大连接数将会返回失败." @嵌入式方法 = "">
+    {
+        @ @sn<this>.CreateRedis(NULL)
+    }
+
+    方法 取空闲连接数 <公开 类型 = 整数 注释 = "获取当前连接池中空闲的可用连接数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetActiveConnectCount()
+    }
+
+    方法 取连接数 <公开 类型 = 整数 注释 = "获取当前连接池中所有的可用连接数(包括所有空闲或正在执行任务的连接)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetConnectCount()
+    }
+}

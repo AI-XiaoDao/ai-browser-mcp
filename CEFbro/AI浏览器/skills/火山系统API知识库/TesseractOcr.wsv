@@ -1,0 +1,213 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "切勿用作非法用途 模块代码来源于网络" 注释 = "此模块只供办公文字识别，提高大家的工作效率" @文档 = "category = \"开源库.TesseractOcr\"" ""
+        @视窗.外部头文件 = "Tesseract\\TesseractTool.h" @视窗.外部头文件 = "Tesseract\\TesseractTool.h"
+        @视窗.外部库.win32 = "Tesseract\\TesseractToolx86.lib" @视窗.附属文件.win32 = "Tesseract\\TesseractToolx86.dll"
+        @视窗.外部库.x64 = "Tesseract\\TesseractToolx64.lib" @视窗.附属文件.x64 = "Tesseract\\TesseractToolx64.dll" "">
+
+类 TesseractOcr类 <公开 注释 = "用来做图片文字识别">
+{
+
+    # @begin
+    # <> <include>
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     TessTool_CopyConstruct(m_data,objCopyFrom.m_data);
+    # }
+    # void SetData(void* pData)
+    # {
+    #     m_data = pData;
+    # }
+    # void* GetData()
+    # {
+    #     return m_data;
+    # }
+    # void* m_data;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ SetData(TessTool_new ());
+    }
+
+    方法 类_清理
+    {
+        @ TessTool_delete(GetData());
+    }
+
+    方法 打开2 <公开 静态 类型 = 变整数 返回值注释 = "返回  控制句柄" @禁止流程检查 = 真>
+    参数 训练库路径 <类型 = 文本型 @默认值 = "">
+    参数 语言 <类型 = 文本型 @默认值 = "eng">
+    参数 训练库类型 <类型 = 整数 注释 = "  0 OEM_TESSERACT_ONLY," 注释 = "  1 OEM_LSTM_ONLY," 注释 = "  2 OEM_TESSERACT_LSTM_COMBINED,"
+            注释 = "  3 OEM_DEFAULT" @默认值 = 3>
+    {
+        变量 path <类型 = 字节集类>
+        变量 lang <类型 = 字节集类>
+        path = 文本到多字节 (训练库路径)
+        lang = 文本到多字节 (语言)
+        @ return TessTool_Open2(GetData(),(const char*)@<path>.GetPtr(),(const char*)@<lang>.GetPtr(),@<训练库类型>);
+    }
+
+    方法 打开3 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 训练库路径 <类型 = 文本型 @默认值 = "">
+    参数 语言 <类型 = 文本型 @默认值 = "eng">
+    {
+        变量 path <类型 = 字节集类>
+        变量 lang <类型 = 字节集类>
+        path = 文本到多字节 (训练库路径)
+        lang = 文本到多字节 (语言)
+        @ return TessTool_Open3(GetData(),(const char*)@<path>.GetPtr(),(const char*)@<lang>.GetPtr());
+    }
+
+    方法 识别图片文件 <公开 类型 = 文本型>
+    参数 文件路径 <类型 = 文本型>
+    {
+        变量 file <类型 = 字节集类>
+        变量 返回值 <类型 = 文本型>
+        file = 文本到多字节 (文件路径)
+        @ char* pText = TessTool_OcrImageFile(GetData(),(const char*)@<file>.GetPtr());
+        @ if(pText)
+        @  @<返回值> = pText;
+        @ TessTool_FreeText(pText);
+        返回 (返回值)
+    }
+
+    方法 识别内存图片 <公开 类型 = 文本型>
+    参数 图片数据 <类型 = 字节集类>
+    {
+        变量 返回值 <类型 = 文本型>
+        @ char* pText = TessTool_OcrImageMemmery(GetData(), (const unsigned char*)@<图片数据>.GetPtr() ,@<图片数据>.GetSize());
+        @ if(pText)
+        @  @<返回值> = pText;
+        @ TessTool_FreeText(pText);
+        返回 (返回值)
+    }
+
+    方法 识别像素图片 <公开 类型 = 文本型>
+    参数 图片数据 <类型 = 变整数>
+    参数 图片宽度 <类型 = 整数>
+    参数 图片高度 <类型 = 整数>
+    参数 像素字节数 <类型 = 整数>
+    参数 图片行字节数 <类型 = 整数 注释 = "图片的一行占多少个字节">
+    {
+        变量 返回值 <类型 = 文本型>
+        @ char* pText =  TessTool_OcrPixsMemmery(GetData(),(const unsigned char *)@<图片数据>,@<图片宽度>,@<图片高度>,@<像素字节数>,@<图片行字节数>);
+        @ if(pText)
+        @  @<返回值> = pText;
+        @ TessTool_FreeText(pText);
+        返回 (返回值)
+    }
+
+    方法 关闭 <公开 @嵌入式方法 = "">
+    {
+        @ TessTool_Close(@sn<this>.GetData())
+    }
+
+    #
+}
+
+类 ______TesseractOcr <公开 @全局类 = 真>
+{
+    方法 TesseractOcr_Open3 <静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 训练库路径指针 <类型 = 变整数>
+    参数 语言 <类型 = 变整数>
+    {
+        @ (@dt<变整数>)TesseractOcr_Open3((const char* )@<训练库路径指针>,(const char* )@<语言>)
+    }
+
+    方法 TesseractOcr_Open2 <静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 训练库路径指针 <类型 = 变整数>
+    参数 语言 <类型 = 变整数>
+    参数 oem <类型 = 整数 注释 = "  0 OEM_TESSERACT_ONLY," 注释 = "  1 OEM_LSTM_ONLY," 注释 = "  2 OEM_TESSERACT_LSTM_COMBINED,"
+            注释 = "  3 OEM_DEFAULT">
+    {
+        @ (@dt<变整数>)TesseractOcr_Open3((const char* )@<训练库路径指针>,(const char* )@<语言>)
+
+    }
+
+    方法 tess_打开2 <公开 静态 类型 = 变整数 返回值注释 = "返回  控制句柄">
+    参数 训练库路径 <类型 = 文本型 @默认值 = "">
+    参数 语言 <类型 = 文本型 @默认值 = "eng">
+    参数 训练库类型 <类型 = 整数 注释 = "  0 OEM_TESSERACT_ONLY," 注释 = "  1 OEM_LSTM_ONLY," 注释 = "  2 OEM_TESSERACT_LSTM_COMBINED,"
+            注释 = "  3 OEM_DEFAULT" @默认值 = 3>
+    {
+
+        变量 语言字节集 <类型 = 字节集类>
+        语言字节集 = 文本到多字节 (语言)
+
+        如果 (训练库路径 == "")
+        {
+            返回 (TesseractOcr_Open2 (0, 语言字节集.取字节集指针 (), 训练库类型))
+        }
+        否则
+        {
+            变量 训练库路径字节集 <类型 = 字节集类>
+            训练库路径字节集 = 文本到多字节 (训练库路径)
+            返回 (TesseractOcr_Open2 (训练库路径字节集.取字节集指针 (), 语言字节集.取字节集指针 (), 训练库类型))
+
+        }
+
+
+
+
+    }
+
+    方法 tess_打开3 <公开 静态 类型 = 变整数 返回值注释 = "返回  控制句柄" 折叠>
+    参数 训练库路径 <类型 = 文本型 @默认值 = "">
+    参数 语言 <类型 = 文本型 @默认值 = "eng">
+    {
+
+        变量 语言字节集 <类型 = 字节集类>
+        语言字节集 = 文本到多字节 (语言)
+
+        如果 (训练库路径 == "")
+        {
+            返回 (TesseractOcr_Open3 (0, 语言字节集.取字节集指针 ()))
+        }
+        否则
+        {
+            变量 训练库路径字节集 <类型 = 字节集类>
+            训练库路径字节集 = 文本到多字节 (训练库路径)
+            返回 (TesseractOcr_Open3 (训练库路径字节集.取字节集指针 (), 语言字节集.取字节集指针 ()))
+
+        }
+
+
+
+
+    }
+
+    方法 tess_关闭 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 控制句柄 <类型 = 变整数>
+    {
+        @ TesseractOcr_Close((TessBaseAPI*)@<控制句柄>)
+    }
+
+    方法 "//tess_识别cv图片" <公开 静态 类型 = 文本型>
+    参数 控制句柄 <类型 = 变整数>
+    参数 图片 <类型 = 图片操作类>
+    {
+        返回 (tess_识别内存图片 (控制句柄, 图片.取像素数据指针 (), 图片.宽度, 图片.高度, 图片.通道数, 图片.行字节数))
+    }
+
+    方法 tess_识别内存图片 <公开 静态 类型 = 文本型>
+    参数 控制句柄 <类型 = 变整数>
+    参数 图片数据 <类型 = 变整数>
+    参数 图片宽度 <类型 = 整数>
+    参数 图片高度 <类型 = 整数>
+    参数 像素字节数 <类型 = 整数>
+    参数 图片行字节数 <类型 = 整数 注释 = "图片的一行占多少个字节">
+    {
+        变量 火山文本 <类型 = 文本型>
+        @ char* lpText =  TesseractOcr_ImageMemery((TessBaseAPI *)@<控制句柄>,(const unsigned char *)@<图片数据>,@<图片宽度>,@<图片高度>,@<像素字节数>,@<图片行字节数>,NULL);
+        @ if(lpText != NULL)
+        @ { 
+        @  @<火山文本> = lpText;
+        @  TesseractOcr_FreeText(lpText);
+        @ }
+        返回 (火山文本)
+    }
+
+    #
+}

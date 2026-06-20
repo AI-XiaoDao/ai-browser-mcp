@@ -1,0 +1,121 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.cpu特征检测\"" "" ""
+        @视窗.外部头文件 = "libcpuid\\$(p)\\include\\libcpuid.h\r\nlibcpuid\\$(p)\\include\\libcpuid_constants.h\r\nlibcpuid\\$(p)\\include\\libcpuid_types.h"
+        @视窗.外部库.win32 = "libcpuid\\win32\\lib\\ReleaseDLL\\libcpuid.lib"
+        @视窗.附属文件.win32 = "libcpuid\\win32\\lib\\ReleaseDLL\\libcpuid.dll" "" ""
+        @视窗.外部库.x64 = "libcpuid\\x64\\lib\\ReleaseDLL\\libcpuid.lib"
+        @视窗.附属文件.x64 = "libcpuid\\x64\\lib\\ReleaseDLL\\libcpuid.dll" "" "">
+
+类 cpuid信息 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # struct cpu_id_t data;
+    # <> </include>
+    # @end 
+
+    方法 制造公司 <公开 属性读 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ return data.vendor_str;
+    }
+
+    方法 型号 <公开 属性读 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ return data.brand_str;
+    }
+
+    方法 代码 <公开 属性读 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ return data.cpu_codename;
+    }
+
+    方法 逻辑cpu数量 <公开 属性读 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return data.num_logical_cpus;
+    }
+
+    方法 逻辑cpu总数量 <公开 属性读 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return data.total_logical_cpus;
+    }
+
+    方法 一级缓存 <公开 属性读 类型 = 整数 注释 = "kb" @禁止流程检查 = 真>
+    {
+        @  return data.l1_data_cache
+    }
+
+    方法 二级缓存 <公开 属性读 类型 = 整数 注释 = "kb" @禁止流程检查 = 真>
+    {
+        @  return data.l2_cache
+    }
+
+    方法 三级缓存 <公开 属性读 类型 = 整数 注释 = "kb" @禁止流程检查 = 真>
+    {
+        @  return data.l3_cache
+    }
+
+    方法 四级缓存 <公开 属性读 类型 = 整数 注释 = "kb" @禁止流程检查 = 真>
+    {
+        @  return data.l4_cache
+    }
+
+    #
+    #
+}
+
+类 ______libcpuID <公开 注释 = "简易例子 http ://libcpuid.sourceforge.net/documentation.html" @全局类 = 真>
+{
+    方法 cpuid_是否支持 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ cpuid_present()
+
+    }
+
+    方法 cpuid_取数量 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ cpuid_get_total_cpus()
+    }
+
+    方法 cpuid_取信息 <公开 静态 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 信息 <类型 = cpuid信息>
+    {
+        @ struct cpu_raw_data_t raw;                                             // contains only raw data
+        @ struct cpu_id_t data;                                                  // contains recognized CPU features data
+        @ if( cpuid_get_raw_data (&raw) < 0)
+        @ return false;
+        @ if (cpu_identify(&raw, &@<信息>.data) < 0)
+        @ return false;
+
+        @ return true;
+
+
+    }
+
+    方法 cpuid_保存信息到文件 <公开 静态 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 文件路径 <类型 = 文本型>
+    {
+        变量 路径 <类型 = 字节集类>
+        变量 路径指针 <类型 = 变整数>
+        路径 = 文本到多字节 (文件路径)
+        路径指针 = 路径.取字节集指针 ()
+
+        @ struct cpu_raw_data_t raw;                                             // contains only raw data
+        @ struct cpu_id_t data;                                                  // contains recognized CPU features data
+        @ if( cpuid_get_raw_data (&raw) < 0)
+        @ return false;
+        @ if (cpuid_serialize_raw_data(&raw,(const char*) @<路径指针>) < 0)
+        @ return false;
+
+        @ return true;
+
+    }
+
+    方法 cpuid_取错误信息 <公开 静态 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ cpuid_error()
+    }
+
+    #
+}

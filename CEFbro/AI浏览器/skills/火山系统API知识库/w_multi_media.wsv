@@ -1,0 +1,121 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.基本
+
+类 媒体播放类 <公开 @文档 = "category = \"媒体播放\"" @全局类 = 真 @视窗.外部库 = "Winmm.lib">
+{
+    方法 播放WAV资源 <公开 静态 类型 = 逻辑型 注释 = "播放所指定的WAV声音资源" 返回值注释 = "返回是否播放成功" @嵌入式方法 = "">
+    参数 所欲播放的WAV资源 <类型 = WAV资源>
+    参数 是否循环播放 <类型 = 逻辑型 注释 = "指定是否循环播放所指定的声音" @默认值 = 假>
+    参数 是否同步播放 <类型 = 逻辑型 注释 = "  参数值如果为真,则本方法一直等到声音播放完毕后" 注释 = "才会返回,否则将立即返回而声音将异步播放." @默认值 = 假>
+    {
+        @ ::PlaySound (MAKEINTRESOURCE (@<所欲播放的WAV资源>), g_objVolApp.GetInstanceHandle (), (SND_RESOURCE | (@<是否循环播放> ? SND_LOOP : 0) | (@<是否同步播放> ? SND_SYNC : SND_ASYNC)))
+    }
+
+    方法 播放WAV文件 <公开 静态 类型 = 逻辑型 注释 = "播放所指定的WAV声音文件" 返回值注释 = "返回是否播放成功" @嵌入式方法 = "">
+    参数 所欲播放的WAV文件 <类型 = 文本型>
+    参数 是否循环播放 <类型 = 逻辑型 注释 = "指定是否循环播放所指定的声音" @默认值 = 假>
+    参数 是否同步播放 <类型 = 逻辑型 注释 = "  参数值如果为真,则本方法一直等到声音播放完毕后" 注释 = "才会返回,否则将立即返回而声音将异步播放." @默认值 = 假>
+    {
+        @ ::PlaySound (@<所欲播放的WAV文件>.GetText (), 0, (SND_FILENAME | (@<是否循环播放> ? SND_LOOP : 0) | (@<是否同步播放> ? SND_SYNC : SND_ASYNC)))
+    }
+
+    方法 播放WAV数据 <公开 静态 类型 = 逻辑型 注释 = "播放所指定的WAV声音数据" 返回值注释 = "返回是否播放成功" @嵌入式方法 = "">
+    参数 所欲播放的WAV数据 <类型 = 字节集类>
+    参数 是否循环播放 <类型 = 逻辑型 注释 = "指定是否循环播放所指定的声音" @默认值 = 假>
+    参数 是否同步播放 <类型 = 逻辑型 注释 = "  参数值如果为真,则本方法一直等到声音播放完毕后" 注释 = "才会返回,否则将立即返回而声音将异步播放." @默认值 = 假>
+    {
+        @ ::PlaySound ((LPCTSTR)@<所欲播放的WAV数据>.GetPtr (), 0, (SND_MEMORY | (@<是否循环播放> ? SND_LOOP : 0) | (@<是否同步播放> ? SND_SYNC : SND_ASYNC)))
+    }
+
+    方法 停止播放Wav声音 <公开 静态 注释 = "停止当前正在进行的所有异步WAV声音播放" @嵌入式方法 = "">
+    {
+        @ ::PlaySound (NULL, 0, 0)
+    }
+}
+
+# ===
+
+类 声音播放器 <公开 基础类 = 参考对象类 注释 = "用作支持对各种格式声音的播放,可以定义本类的多个实例以支持同时播放多个声音." 编辑时信息 = "177FE8, 0, 0, 0" @文档 = "category = \"媒体播放\""
+        @视窗.头文件搜寻目录 = "libs\\sound\\mpg123-1.13.3\\src\\libmpg123\r\nlibs\\sound\\mpg123-1.13.3\\ports\\MSVC++"
+        @视窗.外部头文件 = "libs\\sound\\vol_sound.h" @视窗.外部源文件 = "libs\\sound\\vol_sound.cpp"
+        @视窗.外部源文件 = "libs\\sound\\mpg123-1.13.3\\src\\libmpg123\\compat.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\dct64.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\equalizer.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\feature.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\format.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\frame.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\icy.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\icy2utf8.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\id3.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\index.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\layer1.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\layer2.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\layer3.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\libmpg123.c\r\nlibs\\sound\\mpg123-1.13.3\\ports\\MSVC++\\msvc.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\ntom.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\optimize.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\parse.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\readers.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\stringbuf.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\synth.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\synth_8bit.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\synth_real.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\synth_s32.c\r\nlibs\\sound\\mpg123-1.13.3\\src\\libmpg123\\tabinit.c\r\n"
+        @视窗.预定义宏 = "_CRT_SECURE_NO_WARNINGS\r\nOPT_GENERIC">
+{
+
+    # @ @m<DECLARE_DERIVED_REF_OBJECT_CLASS_WITH_DATA> (CVolSoundPlayer)
+    # 属性 --
+
+    方法 音量 <公开 属性读 类型 = 小数 注释 = "返回当前所设置的播放音量" @嵌入式方法 = "">
+    {
+        @ sn<this>.data ().GetVolume ()
+    }
+
+    方法 音量 <公开 属性写 注释 = "设置当前播放音量">
+    参数 所欲设置的音量 <类型 = 小数 注释 = "提供播放音量,音量值从0到1. 0表示静默,1表示使用声音原始音量.">
+    {
+        @ data ().SetVolume (@<所欲设置的音量>);
+    }
+
+    方法 声道均衡值 <公开 属性读 类型 = 小数 注释 = "返回当前所设置的左右声道均衡值" @嵌入式方法 = "">
+    {
+        @ sn<this>.data ().GetPan ()
+    }
+
+    方法 声道均衡值 <公开 属性写 注释 = "设置当前播放时所使用的左右声道均衡值">
+    参数 所欲设置的均衡值 <类型 = 小数 注释 = "提供左右声道均衡值. 从-1到1, -1表示左声道音量最大右声道完全静默,1表示右声道音量最大左声道完全静默,0表示左右声道均为最大音量.">
+    {
+        @ data ().SetPan (@<所欲设置的均衡值>);
+    }
+
+    # 方法 --
+
+    方法 播放文件 <公开 类型 = 逻辑型 注释 = "播放所指定的声音文件,返回是否成功." @嵌入式方法 = "">
+    参数 所欲播放的声音文件名 <类型 = 文本型 注释 = "提供所欲播放的声音文件名,目前支持wav或mp3格式.">
+    参数 是否循环播放 <类型 = 逻辑型 注释 = "指定是否循环播放所指定的音乐" @默认值 = 假>
+    {
+        @ (BOOL)@sn<this>.data ().SoundPlayFile (@<所欲播放的声音文件名>.GetText (), @<是否循环播放>)
+    }
+
+    方法 播放数据 <公开 类型 = 逻辑型 注释 = "播放所指定的声音字节集数据,返回是否成功." @嵌入式方法 = "">
+    参数 所欲播放的声音数据 <类型 = 字节集类 注释 = "提供所欲播放的声音数据,目前支持wav或mp3格式.">
+    参数 是否循环播放 <类型 = 逻辑型 注释 = "指定是否循环播放所指定的音乐" @默认值 = 假>
+    {
+        @ (BOOL)@sn<this>.data ().SoundPlayData (@<所欲播放的声音数据>, @<是否循环播放>)
+    }
+
+    方法 播放资源 <公开 类型 = 逻辑型 注释 = "播放所指定的声音资源数据,返回是否成功." @禁止流程检查 = 真>
+    参数 所欲播放的声音资源 <类型 = 声音资源 注释 = "提供所欲播放的声音资源数据,目前支持wav或mp3格式.">
+    参数 是否循环播放 <类型 = 逻辑型 注释 = "指定是否循环播放所指定的音乐" @默认值 = 假>
+    {
+        @ CVolMem memRes;
+        @ return (BOOL)(g_objVolApp.LoadResData (@<所欲播放的声音资源>, memRes) ? data ().SoundPlayData (memRes, @<是否循环播放>) : FALSE);
+    }
+
+    方法 停止 <公开 注释 = "停止当前正在播放的声音" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data ().Cleanup ()
+    }
+
+    方法 暂停 <公开 注释 = "暂停当前正在播放的声音" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data ().Pause ()
+    }
+
+    方法 继续 <公开 注释 = "继续播放当前被暂停播放的声音" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data ().Contiue ()
+    }
+
+    方法 是否循环播放 <公开 类型 = 逻辑型 注释 = "返回当前是否设置为循环播放" @嵌入式方法 = "">
+    {
+        @ (BOOL)@sn<this>.data ().IsPlayLooping ()
+    }
+
+    方法 是否正在播放 <公开 类型 = 逻辑型 注释 = "返回当前是否正在进行播放" @嵌入式方法 = "">
+    {
+        @ (BOOL)@sn<this>.data ().IsPlaying ()
+    }
+}
+
+#

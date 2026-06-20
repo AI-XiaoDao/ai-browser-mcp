@@ -1,0 +1,294 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.程序 <@文档 = "category = \"开源库.POCO\"" @视窗.外部头文件 = "poco\\pocoTool.h" @视窗.外部库.win32 = "poco\\pocoToolx86.lib"
+        @视窗.附属文件.win32 = "poco\\pocoToolx86.dll" @视窗.外部库.x64 = "poco\\pocoToolx64.lib" @视窗.附属文件.x64 = "poco\\pocoToolx64.dll">
+
+类 强大网页套接字数据类型_常量类 <公开 注释 = "#define PocoTool_Send_Type_Bin  2" 注释 = "#define PocoTool_Send_Type_Text  1"
+        注释 = "#define PocoTool_Send_Type_Ping  9" 注释 = "#define PocoTool_Send_Type_Pong  10"
+        注释 = "#define PocoTool_Send_Type_Close 8" 注释 = "#define PocoTool_Send_Type_BITMASK 15">
+{
+    常量 字节集 <公开 类型 = 整数 值 = @PocoTool_Send_Type_Bin>
+    常量 文本 <公开 类型 = 整数 值 = @PocoTool_Send_Type_Text>
+    常量 Ping <公开 类型 = 整数 值 = @PocoTool_Send_Type_Ping>
+    常量 Pong <公开 类型 = 整数 值 = @PocoTool_Send_Type_Pong>
+    常量 断开 <公开 类型 = 整数 值 = @PocoTool_Send_Type_Close>
+    常量 掩码 <公开 类型 = 整数 值 = @PocoTool_Send_Type_BITMASK>
+
+    #
+}
+
+类 强大网页套接字查询类型_常量类 <公开>
+{
+    常量 读 <公开 类型 = 整数 值 = @PocoTool_Poll_Read>
+    常量 写 <公开 类型 = 整数 值 = @PocoTool_Poll_Write>
+    常量 错误 <公开 类型 = 整数 值 = @PocoTool_Poll_Error>
+    常量 读_写_错误 <公开 类型 = 整数 值 = 7>
+
+    #
+}
+
+类 强大网页套接字数据类 <公开>
+{
+    变量 数据长度 <公开 类型 = 整数>
+    变量 数据类型 <公开 类型 = 整数>
+    变量 数据 <公开 类型 = 字节集类>
+
+    #
+}
+
+类 强大网页套接字类 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # class CPocoWapper
+    # {
+    # public:
+    #  CPocoWapper()
+    #  {
+    #    //DebugTrace (0, 0, _T ("S"), L"RefObject Construct");
+    #   m_pData = NULL;
+    #  }
+    #  ~CPocoWapper()
+    #  {
+    #   if (m_pData)
+    #   {
+    #    PocoTool_HTTPClient_delete(m_pData);
+    #    m_pData = NULL;
+    #   }
+    #  }
+    #  void* GetData()
+    #  {
+    #   return m_pData;
+    #  }
+    #  void SetData(void* ptr)
+    #  {
+    #   m_pData = ptr;
+    #  }
+    # private:
+    #  void* m_pData;
+    # };
+    #
+    # @sn<current_class>(void* pSelect)
+    # {
+    #     //DebugTrace (0, 0, _T ("S"), L"construct");
+    #     m_pRefObject = new CRefObjectWithData<CPocoWapper>;
+    #     data().SetData(pSelect);
+    # }
+    # <> </include>
+    #
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CPocoWapper)
+    # @end
+
+    方法 类_初始化
+    {
+        @ data().SetData(PocoTool_HTTPClient_new());
+
+
+    }
+
+    方法 置协议头 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 键 <类型 = 文本型>
+    参数 值 <类型 = 文本型>
+    {
+        @ PocoTool_HTTPRequest_SetRequestHeader(@sn<this>.data().GetData(), GetMbsText(@<键>, CVolMem(), NULL), GetMbsText(@<值>, CVolMem(), NULL))
+
+    }
+
+    方法 置附加数据 <公开 @嵌入式方法 = "">
+    参数 附加数据 <类型 = 变整数>
+    {
+        @ PocoTool_HTTPClient_SetUserData(@sn<this>.data().GetData(), @<附加数据>)
+    }
+
+    方法 取附加数据 <公开 类型 = 变整数 @禁止流程检查 = 真>
+    {
+        @ void* pUserData = NULL;
+        @ PocoTool_HTTPClient_GetUserData(data().GetData(),&pUserData);
+        @ return (INT_P)pUserData;
+    }
+
+    方法 置附加数据通过索引 <公开 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    参数 附加数据 <类型 = 变整数>
+    {
+        @ PocoTool_HTTPClient_SetUserData(@sn<this>.data().GetData(),@<索引>,@<附加数据>)
+    }
+
+    方法 取附加数据通过索引 <公开 类型 = 变整数 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ void* pUserData = NULL;
+        @ PocoTool_HTTPClient_GetUserData(data().GetData(),@<索引>,&pUserData);
+        @ return (INT_P)pUserData;
+    }
+
+    方法 取错误代码 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ PocoTool_HTTPClient_GetLastErrorCode(@sn<this>.data().GetData())
+
+    }
+
+    方法 取错误信息 <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( PocoTool_HTTPClient_GetLastErrorText(@sn<this>.data().GetData()))
+    }
+
+    方法 置同步模式 <公开 @嵌入式方法 = "">
+    参数 是否同步模式 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ PocoTool_Socket_SetBlocking( @sn<this>.data().GetData(), @<是否同步模式>)
+
+        // int FUCTIONTYPE PocoTool_Socket_GetAvailableCountOfRecv(void* hClient);
+        // void FUCTIONTYPE PocoTool_Socket_SetReceiveTimeout(void* hClient, int nSecond, int nMsc);
+        // BOOL FUCTIONTYPE PocoTool_Socket_poll(void* hClient, int nSecond, int microseconds, int PocoTool_Pool_);
+        // void FUCTIONTYPE PocoTool_Socket_Close(void* hClient);
+
+    }
+
+    方法 置接收超时 <公开 @嵌入式方法 = "">
+    参数 秒 <类型 = 整数 @默认值 = 2>
+    参数 毫秒 <类型 = 整数 @默认值 = 0>
+    {
+        @ PocoTool_Socket_SetReceiveTimeout( @sn<this>.data().GetData(),@<秒>, @<毫秒>)
+
+    }
+
+    方法 查询 <公开 类型 = 逻辑型 注释 = "此函数的主要作用是用来查询是否可读，可写,或者说有错误" @嵌入式方法 = "">
+    参数 查询类型 <类型 = 整数 @默认值 = 强大网页套接字查询类型_常量类.读_写_错误>
+    参数 查询等待时间秒 <类型 = 整数 @默认值 = 0>
+    参数 查询等待时间毫秒 <类型 = 整数 @默认值 = 30>
+    {
+        @ PocoTool_Socket_poll( @sn<this>.data().GetData(),@<查询等待时间秒>,@<查询等待时间毫秒>,@<查询类型>)
+
+    }
+
+    方法 关闭 <公开 注释 = "关闭套接字" @嵌入式方法 = "">
+    {
+        @ PocoTool_Socket_Close(@sn<this>.data().GetData())
+    }
+
+    方法 连接 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 网址 <类型 = 文本型>
+    参数 代理IP <类型 = 文本型 @默认值 = "">
+    参数 代理端口 <类型 = 整数 @默认值 = 8080>
+    参数 代理账号 <类型 = 文本型 @默认值 = "">
+    参数 代理密码 <类型 = 文本型 @默认值 = "">
+    {
+        @ PocoTool_WSClient_Create(@sn<this>.data().GetData(), GetMbsText(@<网址>, CVolMem(), NULL),  GetMbsText(@<代理IP>, CVolMem(), NULL), @<代理端口>, GetMbsText(@<代理账号>, CVolMem(), NULL),GetMbsText(@<代理密码>, CVolMem(), NULL))
+    }
+
+    方法 发送数据 <公开 类型 = 整数 返回值注释 = "返回发送了多少个字节" @嵌入式方法 = "">
+    参数 数据指针 <类型 = 变整数>
+    参数 数据长度 <类型 = 整数>
+    参数 数据类型 <类型 = 整数 注释 = "网页套接字数据类型_常量类 中的常量">
+    参数 是否最后一帧 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ PocoTool_WSClient_Send(@sn<this>.data().GetData(),(const void*)@<数据指针>,@<数据长度>,@<数据类型>,@<是否最后一帧>)
+    }
+
+    方法 发送字节集 <公开 类型 = 逻辑型>
+    参数 要发送的数据 <类型 = 字节集类>
+    参数 是否是最后一帧 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 发送字节数 <类型 = 整数>
+        发送字节数 = 发送数据 (取字节集指针 (要发送的数据), 取字节集长度 (要发送的数据), 强大网页套接字数据类型_常量类.字节集, 是否是最后一帧)
+        如果 (发送字节数 == 取字节集长度 (要发送的数据))
+        {
+            返回 (真)
+        }
+        返回 (假)
+
+
+    }
+
+    方法 发送文本 <公开 类型 = 逻辑型>
+    参数 文本数据 <类型 = 文本型>
+    参数 是否是最后一帧 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 要发送的数据 <类型 = 字节集类>
+        变量 发送字节数 <类型 = 整数>
+        要发送的数据 = 文本到UTF8 (文本数据, 假)
+        发送字节数 = 发送数据 (取字节集指针 (要发送的数据), 取字节集长度 (要发送的数据), 强大网页套接字数据类型_常量类.文本, 是否是最后一帧)
+        如果 (发送字节数 == 取字节集长度 (要发送的数据))
+        {
+            返回 (真)
+        }
+        返回 (假)
+
+
+    }
+
+    方法 发送Ping <公开 类型 = 逻辑型>
+    参数 要发送的数据 <类型 = 字节集类>
+    {
+        变量 发送字节数 <类型 = 整数>
+        发送字节数 = 发送数据 (取字节集指针 (要发送的数据), 取字节集长度 (要发送的数据), 强大网页套接字数据类型_常量类.Ping, 真)
+        如果 (发送字节数 == 取字节集长度 (要发送的数据))
+        {
+            返回 (真)
+        }
+        返回 (假)
+
+
+    }
+
+    方法 发送Pong <公开 类型 = 逻辑型>
+    参数 要发送的数据 <类型 = 字节集类>
+    {
+        变量 发送字节数 <类型 = 整数>
+        发送字节数 = 发送数据 (取字节集指针 (要发送的数据), 取字节集长度 (要发送的数据), 强大网页套接字数据类型_常量类.Pong, 真)
+        如果 (发送字节数 == 取字节集长度 (要发送的数据))
+        {
+            返回 (真)
+        }
+        返回 (假)
+    }
+
+    方法 断开 <公开 类型 = 逻辑型 注释 = "发送一个断开指令给服务器">
+    {
+        变量 要发送的数据 <类型 = 字节集类>
+        变量 发送字节数 <类型 = 整数>
+        要发送的数据 = 文本到字节集 ("")
+        发送字节数 = 发送数据 (取字节集指针 (要发送的数据), 取字节集长度 (要发送的数据), 强大网页套接字数据类型_常量类.断开)
+        如果 (发送字节数 == 取字节集长度 (要发送的数据))
+        {
+            返回 (真)
+        }
+        返回 (假)
+
+    }
+
+    方法 接收数据 <公开 类型 = 整数 返回值注释 = "返回收到的数据长度" @禁止流程检查 = 真>
+    参数 用来保存收到的数据 <类型 = 强大网页套接字数据类>
+    {
+        // 如果再同步模式下面,如果收到的数据刚好有4096个字节,那么会一直等待。。。。
+        用来保存收到的数据.数据.清空字节集 ()
+        @ char buff[4096]={0};
+        @ int nTotalRecvCount = 0;
+        @ int flags = 0;
+        @ int nRecvCount = 0;
+        @ do
+        @ {
+        @  nRecvCount = PocoTool_WSClient_Recv(data().GetData(),buff,4096,&flags);
+        @  if(nRecvCount > 0 && nRecvCount < 4096)
+        @  {
+        @    @<用来保存收到的数据.数据>.Append ((void*)buff,nRecvCount);
+        @    nTotalRecvCount += nRecvCount;
+        @    break;
+        @  }else if(nRecvCount == 4096)
+        @  {
+        @    nTotalRecvCount += nRecvCount;
+        @  }else
+        @  {
+        @     break;
+        @  }
+        @ }while(nRecvCount > 0);
+        @ @<用来保存收到的数据.数据长度> = nTotalRecvCount;
+        @ @<用来保存收到的数据.数据类型> = flags;
+        @ return nTotalRecvCount;
+
+    }
+
+    #
+}

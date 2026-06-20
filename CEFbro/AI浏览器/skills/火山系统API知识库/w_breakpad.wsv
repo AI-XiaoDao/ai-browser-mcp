@@ -1,0 +1,56 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗
+
+类 程序崩溃处理类 <公开 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "用于在发布版程序异常后写出dump异常信息文件." 注释 = "注意:该类仅用于Release版本程序,Debug版本下将不会生效."
+        编辑时信息 = "1B775C, 0, 0, 0"
+        @视窗.外部库.release = "lib\\$(p)\\libdisasm.lib\r\nlib\\$(p)\\libbreakpad_client.lib\r\nlib\\$(p)\\libbreakpad.lib"
+        @视窗.需求VS版本 = "16-" @视窗.头文件搜寻目录 = "lib\\include" @视窗.外部头文件 = "vol_breakpad.h"
+        @视窗.外部源文件.release = "lib\\include\\vol_breakpad.cpp" @禁止创建对象 = 真>
+{
+
+    # @begin
+    # <> <include>
+    # #ifndef _DEBUG
+    #     typedef BOOL (CALLBACK *FN_VOL_EXCEPTION_CALLBACK) (CVolString& path, CVolString& id, BOOL isSuccess);
+    #     static bool ExceptionCallback(const wchar_t *dump_path, const wchar_t *id, void *context, EXCEPTION_POINTERS *exinfo, MDRawAssertionInfo *assertion, bool succeeded);
+    # #endif
+    # <> </include>
+    # #ifndef _DEBUG
+    # bool @sn<current_class>::ExceptionCallback(const wchar_t *dump_path, const wchar_t *id, void *context, EXCEPTION_POINTERS *exinfo, MDRawAssertionInfo *assertion, bool succeeded)
+    # {
+    #     return ((FN_VOL_EXCEPTION_CALLBACK)context)(CVolString(dump_path), CVolString(id), succeeded);
+    # }
+    # #endif
+    # @end
+
+    方法 注册 <公开 静态 注释 = "调用本方法以注册异常管理." 注释 = "  注意:调用本方法会使编译器为当前程序生成调试信息并将其放在pdb输出文件中,在程序异常后首先会"
+            注释 = "写出dump文件到\"文件路径\"参数所指定的路径,而后将执行\"回调方法\"所指向的回调函数(并不确保一定能执行)." 注释 = "  异常调试方法:"
+            注释 = "拿到dump错误信息文件,以及在编译程序后一同生成的pdb文件和程序文件,将其三者放入同一目录下,再将dump文件拖入Visual Studio调试即可." 编辑时信息 = "ACFF5, 0, 0, 0"
+            @视窗.附加编译参数.release = "link:/DEBUG" @嵌入式方法 = "">
+    参数 文件路径 <类型 = 文本型 注释 = "请提供dump文件的保存目录." 编辑时信息 = "ACFF5, 0, 0, 0">
+    参数 回调方法 <注释 = "俘获到程序异常后该回调方法将被执行." 编辑时信息 = "ACFF5, 0, 0, 0" @匹配方法 = "异常回调模板函数">
+    参数 处理类型 <类型 = 处理异常类型 注释 = "提供所欲俘获异常的范围类型." @默认值 = 处理异常类型.所有>
+    {
+        @ #ifndef _DEBUG
+        @ CVolExceptionHandler::instance()->Initialize(@<文件路径>.GetText(), @dt<程序崩溃处理类>::ExceptionCallback, &@<回调方法>, @<处理类型>);
+        @ #endif
+    }
+
+    方法 异常回调模板函数 <静态 类型 = 逻辑型 注释 = "提供程序异常后回调方法的模板." 返回值注释 = "返回值暂无意义.">
+    参数 文件路径 <类型 = 文本型 注释 = "dump文件的写出路径.">
+    参数 ID <类型 = 文本型 注释 = "dump文件的唯一ID.">
+    参数 写出成功 <类型 = 逻辑型 注释 = "dump文件是否写出成功.">
+    {
+        返回 (假)
+    }
+}
+
+类 处理异常类型 <公开 注释 = "表示将要俘获的异常类型." @常量类 = 整数>
+{
+    常量 无 <公开 值 = @"@VolExceptionHandler::HandlerType::HANDLER_NONE" 注释 = "不俘获任何异常." 编辑时信息 = "0, 123321, 0, 0">
+    常量 未处理异常 <公开 值 = @"@VolExceptionHandler::HandlerType::HANDLER_EXCEPTION" 注释 = "仅俘获未被处理的异常." 编辑时信息 = "0, 123321, 0, 0">
+    常量 无效参数 <公开 值 = @"@VolExceptionHandler::HandlerType::HANDLER_INVALID_PARAMETER" 注释 = "俘获无效参数的异常." 编辑时信息 = "0, 123321, 0, 0">
+    常量 虚函数异常 <公开 值 = @"@VolExceptionHandler::HandlerType::HANDLER_PURECALL" 注释 = "俘获虚函数异常." 编辑时信息 = "0, 123321, 0, 0">
+    常量 所有 <公开 值 = @"@VolExceptionHandler::HandlerType::HANDLER_ALL" 注释 = "俘获所有程序异常." 编辑时信息 = "0, 123321, 0, 0">
+}

@@ -1,0 +1,98 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"windows.宽带连接\"" @视窗.外部头文件 = "Rasapi\\RasapiTool.h"
+        @视窗.外部库.win32 = "Rasapi\\RasapiToolx86.lib" @视窗.附属文件.win32 = "Rasapi\\RasapiToolx86.dll"
+        @视窗.外部库.x64 = "Rasapi\\RasapiToolx64.lib" @视窗.附属文件.x64 = "Rasapi\\RasapiToolx64.dll">
+
+类 宽带连接状态类 <公开 @视窗.后缀文本 = "public CRasapiEvent">
+{
+
+    # @begin
+    # <> <include>
+    # virtual void RasDialFunc(void* hrasconn, const wchar_t* lpMsgText)
+    # {
+    #     CVolString str(lpMsgText);
+    #     @<连接状态>((INT_P)hrasconn ,str);
+    # }
+    # <> </include>
+    # @end
+    #
+
+    方法 连接状态 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 状态文本 <类型 = 文本型>
+    {
+
+    }
+
+    方法 类_初始化
+    {
+        @ RasapiTool_BindEventClass(this);
+    }
+
+    #
+}
+
+类 宽带连接类 <公开>
+{
+
+    # @begin
+    # <> <include>
+    #
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_pData = objCopyFrom.m_pData;
+    # }
+    #
+    # void* m_pData;
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void* pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # int m_nRetCode;
+    # <> </include>
+    # @end
+
+    方法 置连接句柄 <公开>
+    参数 连接句柄 <类型 = 变整数>
+    {
+        @ SetData((void*)@<连接句柄>);
+    }
+
+    方法 连接 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 宽带名称 <类型 = 文本型>
+    参数 用户名 <类型 = 文本型>
+    参数 密码 <类型 = 文本型>
+    {
+        @ m_nRetCode = 0;
+        @ SetData( RasapiTool_Connect(@<宽带名称>,@<用户名>,@<密码>,&m_nRetCode) );
+        @ return (m_nRetCode == 0)? true :false;
+    }
+
+    方法 断开 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ m_nRetCode = RasapiTool_Disconnect(GetData());
+        @ return (m_nRetCode == 0)? true :false;
+    }
+
+    方法 取错误信息 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ const wchar_t* pText = RasapiTool_GetErrorText(m_nRetCode);
+        @ if(!pText)
+        @   return _CT("未知错误");
+        @ CVolString txt(pText);
+        @ RasapiTool_FreeErrorText(pText);
+        @ return txt;
+    }
+
+    方法 断开所有 <公开 @嵌入式方法 = "">
+    {
+        @ RasapiTool_DisconnectAll();
+    }
+
+    #
+}

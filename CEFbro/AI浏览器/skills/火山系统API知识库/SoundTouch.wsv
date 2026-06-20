@@ -1,0 +1,539 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.音频处理 <注释 = "https://www.surina.net/soundtouch/soundstretch.html" 注释 = "https://codeberg.org/soundtouch/soundtouch"
+        注释 = "封装自开源库soundtouch 2.3.2" 注释 = "" 编辑时信息 = "116A99, 0, 0, 0" @视窗.头文件搜寻目录 = "include"
+        @视窗.外部头文件 = "include\\BPMDetect.h\ninclude\\FIFOSampleBuffer.h\ninclude\\FIFOSamplePipe.h\ninclude\\SoundTouch.h\ninclude\\soundtouch_config.h\ninclude\\STTypes.h\ninclude\\WavFile.h"
+        @视窗.外部源文件 = "src\\AAFilter.cpp\nsrc\\BPMDetect.cpp\nsrc\\cpu_detect_x86.cpp\nsrc\\FIFOSampleBuffer.cpp\nsrc\\FIRFilter.cpp\nsrc\\InterpolateCubic.cpp\nsrc\\InterpolateLinear.cpp\nsrc\\InterpolateShannon.cpp\nsrc\\mmx_optimized.cpp\nsrc\\PeakFinder.cpp\nsrc\\RateTransposer.cpp\nsrc\\SoundTouch.cpp\nsrc\\sse_optimized.cpp\nsrc\\TDStretch.cpp\nsrc\\WavFile.cpp"
+        @视窗.外部头文件 = "<memory>">
+
+类 音频处理类 <公开 注释 = "本类提供音频处理功能.">
+{
+
+    # -----版本
+
+    方法 取版本号2 <公开 静态 类型 = 文本型 注释 = "返回SoundTouch库的文本型版本号." @嵌入式方法 = "">
+    {
+        @ CVolString(soundtouch::SoundTouch::getVersionString())
+    }
+
+    方法 取版本号 <公开 静态 类型 = 整数 注释 = "返回SoundTouch库的版本号." @嵌入式方法 = "">
+    {
+        @ soundtouch::SoundTouch::getVersionId()
+    }
+
+    # -----参数设置
+
+    方法 置速率 <公开 注释 = "设置新的速率控制值." @嵌入式方法 = "">
+    参数 所欲设置的新速率 <类型 = 小数 注释 = "正常速率=1,小于1变慢,大于1变快.">
+    {
+        @ @sn<this>.data()->setRate(@<所欲设置的新速率>)
+    }
+
+    方法 置节拍 <公开 注释 = "设置新的节拍控制值." @嵌入式方法 = "">
+    参数 所欲设置的新节拍 <类型 = 小数 注释 = "正常节拍=1.0,小于1变慢,大于1变快.">
+    {
+        @ @sn<this>.data()->setTempo(@<所欲设置的新节拍>)
+    }
+
+    方法 置速率百分比 <公开 注释 = "设置新的速率百分比值." @嵌入式方法 = "">
+    参数 所欲设置的新速率 <类型 = 小数 注释 = "值为(-50 .. +100 %)之间.">
+    {
+        @ @sn<this>.data()->setRateChange(@<所欲设置的新速率>)
+    }
+
+    方法 置节拍百分比 <公开 注释 = "设置新的节拍百分比值." @嵌入式方法 = "">
+    参数 所欲设置的新节拍 <类型 = 小数 注释 = "值为(-50 .. +100 %)之间.">
+    {
+        @ @sn<this>.data()->setTempoChange(@<所欲设置的新节拍>)
+    }
+
+    方法 置音调 <公开 注释 = "设置新的音调." @嵌入式方法 = "">
+    参数 所欲设置的新音调 <类型 = 小数 注释 = "正常音调=1.0,小于1音调变低,大于1音调变高.">
+    {
+        @ @sn<this>.data()->setPitch(@<所欲设置的新音调>)
+    }
+
+    方法 置音调2 <公开 注释 = "在原音调基础上以八度音为单位进行调整." @嵌入式方法 = "">
+    参数 所欲设置的新音调 <类型 = 小数 注释 = "值为-1.00到1.00之间.">
+    {
+        @ @sn<this>.data()->setPitchOctaves(@<所欲设置的新音调>)
+    }
+
+    方法 置音调3 <公开 注释 = "在原音调基础上以半音为单位进行调整." @嵌入式方法 = "">
+    参数 所欲设置的新音调 <类型 = 整数 注释 = "值为-12到12之间.">
+    {
+        @ @sn<this>.data()->setPitchSemiTones(@<所欲设置的新音调>)
+    }
+
+    方法 置通道数 <公开 注释 = "设置音频数据的通道数." @嵌入式方法 = "">
+    参数 所欲设置的通道数 <类型 = 整数 注释 = "1=单声道,2=立体声.">
+    {
+        @ @sn<this>.data()->setChannels(@<所欲设置的通道数>)
+    }
+
+    方法 置采样率 <公开 注释 = "设置采样率." @嵌入式方法 = "">
+    参数 所欲设置的采样率 <类型 = 整数>
+    {
+        @ @sn<this>.data()->setSampleRate(@<所欲设置的采样率>)
+    }
+
+    方法 置控制属性 <公开 类型 = 逻辑型 注释 = "更改控制处理系统的行为设置." @嵌入式方法 = "">
+    参数 所欲设置的属性类型 <类型 = 音频控制类型>
+    参数 所欲设置的属性值 <类型 = 整数>
+    {
+        @ @sn<this>.data()->setSetting((int)@<所欲设置的属性类型>,@<所欲设置的属性值>)
+    }
+
+    # -----数据读取
+
+    方法 取未处理样本数 <公开 类型 = 整数 注释 = "返回当前未处理的样本数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data()->numUnprocessedSamples()
+    }
+
+    方法 取控制属性 <公开 类型 = 整数 注释 = "更改控制处理系统的行为设置." @嵌入式方法 = "">
+    参数 所欲获取的属性类型 <类型 = 音频控制类型>
+    {
+        @ @sn<this>.data()->getSetting((int)@<所欲获取的属性类型>)
+    }
+
+    方法 取通道数 <公开 类型 = 整数 注释 = "返回音频数据的通道数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data()->numChannels()
+    }
+
+    方法 取输入输出采样率比率 <公开 类型 = 小数 注释 = "获取输入和输出音频持续时间之间的比率,用于计算处理输出持续时间.如果您要处理N个样本流,可以预料得到(N*取输入输出采样率比率())个样本."
+            注释 = "假设整个音轨是用相同的处理参数处理的,该比率将给出完整音轨的精确目标持续时间比率."
+            注释 = "如果将此比率应用于计算处理内部的中间偏移流,那么这个比率是近似的,可以从理想的偏移偏离正负几十毫秒,但到音频流结束时,持续时间比率将变为准确." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data()->getInputOutputSampleRatio()
+    }
+
+    # -----方法
+
+    方法 刷新 <公开 注释 = "将最后一个样本从管道刷新到输出并清除内部缓冲区." 注释 = "注意：此函数用于提取声音的最后样本流.该功能最终可能会引入额外的空白样本因此不建议在声音流的中间调用此函数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data()->flush()
+    }
+
+    方法 输入样本32 <公开 注释 = "将音频样本数据输入到采样处理缓冲区中." 注释 = "注意:调用本方法之前需要先设置采样率,否则将引发运行时异常." 注释 = "注意:本方法使用32位浮点采样类型." @嵌入式方法 = "">
+    参数 所欲提供的样本输入缓冲区 <类型 = 变整数 注释 = "提供样本数据的输入缓冲区内存地址." 注释 = "注意:内存指针类型为单精度小数,即(float*).">
+    参数 所欲提供的样本数 <类型 = 整数 注释 = "注意:在立体声的情况下,单个样本包含两个通道的数据.">
+    {
+        @ @sn<this>.data()->putSamples((soundtouch::SAMPLETYPE*)@<所欲提供的样本输入缓冲区>,@<所欲提供的样本数>)
+    }
+
+    方法 输入样本16 <公开 注释 = "将音频样本数据输入到采样处理缓冲区中." 注释 = "注意:调用本方法之前需要先设置采样率,否则将引发运行时异常." 注释 = "注意:本方法使用16位整数采样类型." @嵌入式方法 = "">
+    参数 所欲提供的样本输入缓冲区 <类型 = 变整数 注释 = "提供样本数据的输入缓冲区内存地址." 注释 = "注意:内存指针类型为短整数,即(short*).">
+    参数 所欲提供的样本数 <类型 = 整数 注释 = "注意:在立体声的情况下,单个样本包含两个通道的数据.">
+    {
+        @ @sn<this>.soundtouch_putSamples_i16((const short *)@<所欲提供的样本输入缓冲区>,@<所欲提供的样本数>)
+    }
+
+    方法 输出样本32 <公开 类型 = 整数 注释 = "从样本缓冲区的开头输出采样,将输入的样本复制到样本输出缓冲区,并将它们从采样缓冲区中删除." 注释 = "如果少于缓冲区中的样本数,返回所有可获取的样本."
+            注释 = "注意:本方法使用32位浮点采样类型." 返回值注释 = "返回输出的样本数." @嵌入式方法 = "">
+    参数 所欲提供的样本输出缓冲区 <类型 = 变整数 注释 = "提供样本数据的输出缓冲区内存地址." 注释 = "注意:内存指针类型为单精度小数,即(float*).">
+    参数 最大接收样本数 <类型 = 整数 注释 = "输出缓冲区最大可接收的样本数.">
+    {
+        @ @sn<this>.data()->receiveSamples((soundtouch::SAMPLETYPE*)@<所欲提供的样本输出缓冲区>,@<最大接收样本数>)
+    }
+
+    方法 输出样本16 <公开 类型 = 整数 注释 = "从样本缓冲区的开头输出采样,将输入的样本复制到样本输出缓冲区,并将它们从采样缓冲区中删除." 注释 = "如果少于缓冲区中的样本数,返回所有可获取的样本."
+            注释 = "注意:本方法使用16位浮点采样类型." 返回值注释 = "返回输出的样本数." @嵌入式方法 = "">
+    参数 所欲提供的样本输出缓冲区 <类型 = 变整数 注释 = "提供样本数据的输出缓冲区内存地址." 注释 = "注意:内存指针类型为短整数,即(short*).">
+    参数 最大接收样本数 <类型 = 整数 注释 = "输出缓冲区最大可接收的样本数.">
+    {
+        @ @sn<this>.soundtouch_receiveSamples_i16((short*)@<所欲提供的样本输出缓冲区>,@<最大接收样本数>)
+    }
+
+    方法 删除样本 <公开 类型 = 整数 注释 = "从样本缓冲区的开头删除指定数量的样本,而不将其复制到任何位置." 注释 = "用于在直接访问样本缓冲区时减少缓冲区中的样本数量." 返回值注释 = "返回输出样本数." @嵌入式方法 = "">
+    参数 所欲删除的样本数 <类型 = 整数 注释 = "从样本缓冲区的开头删除的样本数.">
+    {
+        @ @sn<this>.data()->receiveSamples(@<所欲删除的样本数>)
+    }
+
+    方法 清空 <公开 注释 = "清空所有样本缓冲区." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data()->clear()
+    }
+
+    方法 是否为空 <公开 类型 = 逻辑型 注释 = "返回是否有任何可用于输出的样本." @嵌入式方法 = "">
+    {
+        @ (@sn<this>.data()->isEmpty()!=0)
+    }
+
+    方法 置样本数 <公开 类型 = 整数 注释 = "设置管道中的样本数量." 返回值注释 = "返回修改后的样本数." @嵌入式方法 = "">
+    参数 所欲设置的样本数 <类型 = 整数>
+    {
+        @ @sn<this>.data()->adjustAmountOfSamples(@<所欲设置的样本数>)
+    }
+
+    方法 移动样本 <公开 注释 = "将其他\"音频处理类\"中的样本数据移动到当前实例." @嵌入式方法 = "">
+    参数 所欲移动的音频 <类型 = 音频处理类 注释 = "要移动的源样本数据">
+    {
+        @ @sn<this>.data()->moveSamples(*@<所欲移动的音频>.data())
+    }
+
+    方法 取输出样本地址 <公开 类型 = 变整数 注释 = "返回指向输出样本的起始地址,该功能用于直接访问输出样本." 注释 = "注意:如非对指针非常了解,请不要使用本方法."
+            注释 = "使用此函数输出样本时,通过调用\"删除样本()\"函数删除." 返回值注释 = "返回输出样本的起始地址." @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.data()->ptrBegin()
+    }
+
+    # @begin
+    # <> <include>
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)  { m_Sound=objCopyFrom.m_Sound; }
+    # soundtouch::SoundTouch* data(){return m_Sound.get();}
+    # std::shared_ptr<soundtouch::SoundTouch> m_Sound=std::make_shared<soundtouch::SoundTouch>();
+    # void soundtouch_putSamples_i16(const short *samples, unsigned int numSamples);
+    # uint  soundtouch_receiveSamples_i16(short *outBuffer, unsigned int maxSamples);
+    # <> </include>
+    # void @sn<current_class>::soundtouch_putSamples_i16(const short *samples, unsigned int numSamples)
+    # {
+    #     uint numChannels = data()->numChannels();
+    #
+    #     // iterate until all samples converted & put to SoundTouch object
+    #     while (numSamples > 0)
+    #     {
+    #         float convert[8192];    // allocate temporary conversion buffer from stack
+    #         // how many multichannel samples fit into 'convert' buffer:
+    #         uint convSamples = 8192 / numChannels;
+    #         // convert max 'nround' values at a time to guarantee that these fit in the 'convert' buffer
+    #         uint n = (numSamples > convSamples) ? convSamples : numSamples;
+    #         for (uint i = 0; i < n * numChannels; i++)
+    #         {
+    #             convert[i] = samples[i];
+    #         }
+    #         // put the converted samples into SoundTouch
+    #         data()->putSamples(convert, n);
+    #         numSamples -= n;
+    #         samples += n * numChannels;
+    #     }
+    # }
+    #
+    # uint @sn<current_class>::soundtouch_receiveSamples_i16(short *outBuffer, unsigned int maxSamples)
+    # {
+    #     uint outTotal = 0;
+    #
+    #     if (outBuffer == NULL)
+    #     {
+    #         // only reduce sample count, not receive samples
+    #         return  data()->receiveSamples(maxSamples);
+    #     }
+    #
+    #     uint numChannels =  data()->numChannels();
+    #
+    #     // iterate until all samples converted & put to SoundTouch object
+    #     while (maxSamples > 0)
+    #     {
+    #         float convert[8192];    // allocate temporary conversion buffer from stack
+    #         // how many multichannel samples fit into 'convert' buffer:
+    #         uint convSamples = 8192 / numChannels;
+    #         // request max 'nround' values at a time to guarantee that these fit in the 'convert' buffer
+    #         uint n = (maxSamples > convSamples) ? convSamples : maxSamples;
+    #         uint out =  data()->receiveSamples(convert, n);
+    #         // convert & saturate received samples to int16
+    #         for (uint i = 0; i < out * numChannels; i++)
+    #         {
+    #             // first convert value to int32, then saturate to int16 min/max limits
+    #             int value = (int)convert[i];
+    #             value = (value < SHRT_MIN) ? SHRT_MIN : (value > SHRT_MAX) ? SHRT_MAX : value;
+    #             outBuffer[i] = (short)value;
+    #         }
+    #         outTotal += out;
+    #         if (out < n) break;  // didn't get as many as asked => no more samples available => break here
+    #         maxSamples -= n;
+    #         outBuffer += out * numChannels;
+    #     }
+    #     // return number of processed samples
+    #     return outTotal;
+    # }
+    # @end
+}
+
+类 音频速率类 <公开 注释 = "本类计算音频数据的BPM速率.">
+{
+    变量 样本通道数 <类型 = 整数>
+
+    方法 创建 <公开 注释 = "创建对象数据,使用本类方式之前必须先调用本方法.">
+    参数 所欲设置的样本通道数 <类型 = 整数>
+    参数 所欲设置的样本采样率 <类型 = 整数>
+    {
+        @ this->m_Bpm=std::make_shared<soundtouch::BPMDetect>(@<所欲设置的样本通道数>,@<所欲设置的样本采样率>);
+        @ @<样本通道数>=@<所欲设置的样本通道数>;
+    }
+
+    方法 销毁 <公开 注释 = "销毁之前创建的对象数据." @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_Bpm.reset()
+    }
+
+    方法 取速率 <公开 类型 = 单精度小数 注释 = "返回BPM速率." 返回值注释 = "成功返回速率,失败返回零." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data()->getBpm()
+    }
+
+    方法 输入样本32 <公开 注释 = "将音频样本数据输入到缓冲区中进行计算,使用\"取速率()\"可以获取到处理结果." 注释 = "注意:本方法使用32位浮点采样类型." @嵌入式方法 = "">
+    参数 所欲提供的样本输入缓冲区 <类型 = 变整数 注释 = "提供样本数据的输入缓冲区内存地址." 注释 = "注意:内存指针类型为单精度小数,即(float*).">
+    参数 所欲提供的样本数 <类型 = 整数 注释 = "注意:在立体声的情况下,单个样本包含两个通道的数据.">
+    {
+        @  @sn<this>.data()->inputSamples((soundtouch::SAMPLETYPE*)@<所欲提供的样本输入缓冲区>,@<所欲提供的样本数>)
+    }
+
+    方法 输入样本16 <公开 注释 = "将音频样本数据输入到采样处理缓冲区中进行计算,使用\"取速率()\"可以获取到处理结果." 注释 = "注意:本方法使用16位整数采样类型." @嵌入式方法 = "">
+    参数 所欲提供的样本输入缓冲区 <类型 = 变整数 注释 = "提供样本数据的输入缓冲区内存地址." 注释 = "注意:内存指针类型为短整数,即(short*).">
+    参数 所欲提供的样本数 <类型 = 整数 注释 = "注意:在立体声的情况下,单个样本包含两个通道的数据.">
+    {
+        @ @sn<this>.bpm_putSamples_i16((short *)@<所欲提供的样本输入缓冲区>,@<所欲提供的样本数>)
+    }
+
+    # @begin
+    # <> <include>
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_Bpm=objCopyFrom.m_Bpm; }
+    # inline soundtouch::BPMDetect* data(){return m_Bpm.get();}
+    # std::shared_ptr<soundtouch::BPMDetect> m_Bpm;
+    # void bpm_putSamples_i16(const short *samples, unsigned int numSamples);
+    # <> </include>
+    # void @sn<current_class>::bpm_putSamples_i16(const short *samples, unsigned int numSamples)
+    # {
+    #     if(data()==nullptr)return;
+    #     uint numChannels =@<样本通道数>; //bpmh->numChannels;注意：源码里面 bpmh->numChannels 未赋值为未知值,根据源码来看应该是创建时的通道数!!!!!!!!!!!!!!
+    #     // iterate until all samples converted & put to SoundTouch object
+    #     while (numSamples > 0)
+    #     {
+    #         float convert[8192];    // allocate temporary conversion buffer from stack
+    #         // how many multichannel samples fit into 'convert' buffer:
+    #         uint convSamples = 8192 / numChannels;
+    #         // convert max 'nround' values at a time to guarantee that these fit in the 'convert' buffer
+    #         uint n = (numSamples > convSamples) ? convSamples : numSamples;
+    #         for (uint i = 0; i < n * numChannels; i++)
+    #         {
+    #             convert[i] = samples[i];
+    #         }
+    #         // put the converted samples into SoundTouch
+    #        data()->inputSamples(convert, n);
+    #         numSamples -= n;
+    #         samples += n * numChannels;
+    #     }
+    # }
+    # @end
+}
+
+类 音频文件输入类 <公开 注释 = "本类提供WAV格式文件的读取操作.">
+{
+
+    # ----文件基本信息
+
+    方法 取采样率 <公开 类型 = 整数 注释 = "获取音频文件采样率. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data()->getSampleRate()
+    }
+
+    方法 取位数 <公开 类型 = 整数 注释 = "获取每个样本的位数,即8或16. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data()->getNumBits()
+    }
+
+    方法 取数据大小 <公开 类型 = 整数 注释 = "获取以字节为单位的样本数据大小. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." 注释 = "本方法应该返回\"取样本大小()\"相同信息." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data()->getDataSizeInBytes()
+    }
+
+    方法 取样本数 <公开 类型 = 整数 注释 = "获取文件中的样本数. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data()->getNumSamples()
+    }
+
+    方法 取样本大小 <公开 类型 = 整数 注释 = "获取每个音频样本的字节数（例如,16位立体声=4字节/样本）. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data()->getDataSizeInBytes()
+    }
+
+    方法 取通道数 <公开 类型 = 整数 注释 = "获取文件中的音频通道数（1=单声道,2=立体声）. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data()->getNumChannels()
+    }
+
+    方法 取时间长度 <公开 类型 = 整数 注释 = "获取音频文件长度（以毫秒为单位）. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data()->getNumChannels()
+    }
+
+    方法 取已读时间 <公开 类型 = 整数 注释 = "获取到目前为止从文件中读取音频的毫秒数. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data()->getElapsedMS()
+    }
+
+    # ----方法
+
+    方法 打开文件 <公开 类型 = 逻辑型 注释 = "打开文件并初始化资源,使用本类方法之前,必须先调用本方法." @禁止流程检查 = 真>
+    参数 所欲打开的文件路径 <类型 = 文本型>
+    {
+        变量 临时字节集 <类型 = 字节集类>
+        临时字节集 = 文本到多字节 (所欲打开的文件路径, )
+        @ bool boRet=true; //文件打开失败会抛异常
+        @ try{  this->m_Wav=std::make_shared<WavInFile>((const char*)@<临时字节集>.GetPtr()); }
+        @ catch (...)  { boRet=false; } 
+        @ return boRet;
+    }
+
+    方法 关闭文件 <公开 注释 = "关闭之前打开的文件,并释放资源." @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_Wav.reset()
+    }
+
+    方法 移到文件首 <公开 注释 = "回放到文件的开头. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data()->rewind()
+    }
+
+    方法 是否文件尾 <公开 类型 = 逻辑型 注释 = "获取是否到达文件结尾. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." @嵌入式方法 = "">
+    {
+        @ (@sn<this>.data()->eof()!=0)
+    }
+
+    方法 读入数据8 <公开 类型 = 整数 注释 = "从WAV文件中读取音频样本. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." 注释 = "注意:此方法仅适用于8位样本." 返回值注释 = "返回实际读取的大小."
+            @嵌入式方法 = "">
+    参数 要保存的数据缓冲区 <类型 = 变整数 注释 = "注意:必须确保内存地址有效.">
+    参数 缓冲区尺寸 <类型 = 整数>
+    {
+        @ @sn<this>.data()->read((unsigned char*)@<要保存的数据缓冲区>,@<缓冲区尺寸>)
+    }
+
+    方法 读入数据16 <公开 类型 = 整数 注释 = "从WAV文件中读取音频样本为16位整数格式. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." 返回值注释 = "返回实际读取的大小." @嵌入式方法 = "">
+    参数 要保存的短整数数组地址 <类型 = 变整数 注释 = "指向短整数的内存地址,即：提供一个短整数的数组地址." 注释 = "注意:必须确保内存地址有效.">
+    参数 短整数数组的成员数 <类型 = 整数 注释 = "参数\"要保存的短整数数组地址\"数组中的成员数.">
+    {
+        @ @sn<this>.data()->read((short*)@<要保存的短整数数组地址>,@<短整数数组的成员数>)
+    }
+
+    方法 读入数据32 <公开 类型 = 整数 注释 = "从WAV文件中读取音频样本为32位浮点格式。转换范围为[-1,1]的采样值."
+            注释 = "本方法支持读取8/16/24/32位样本格式. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." 返回值注释 = "返回实际读取的大小." @嵌入式方法 = "">
+    参数 要保存的单精度数组地址 <类型 = 变整数 注释 = "指向单精度小数的内存地址,即：提供一个单精度小数的数组地址." 注释 = "注意:必须确保内存地址有效.">
+    参数 单精度数组的成员数 <类型 = 整数 注释 = "参数\"要保存的单精度数组地址\"数组中的成员数.">
+    {
+        @ @sn<this>.data()->read((float*)@<要保存的单精度数组地址>,@<单精度数组的成员数>)
+    }
+
+    # @begin
+    # <> <include>
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_Wav=objCopyFrom.m_Wav;
+    # }
+    # inline WavInFile* data()
+    # {
+    #     ASSERT (m_Wav.get()!=nullptr);//必须先调用打开文件方法
+    #     return m_Wav.get();
+    # }
+    # std::shared_ptr<WavInFile> m_Wav;
+    # <> </include>
+    # @end
+}
+
+类 音频文件输出类 <公开 注释 = "本类提供WAV格式文件的写出操作">
+{
+
+    # ----方法
+
+    方法 打开文件 <公开 类型 = 逻辑型 注释 = "打开文件并初始化资源,使用本类方法之前,必须先调用本方法." @禁止流程检查 = 真>
+    参数 所欲打开的文件路径 <类型 = 文本型>
+    参数 所欲设置的样本采样率 <类型 = 整数 注释 = "如:44100.">
+    参数 所欲设置的样本位数 <类型 = 整数 注释 = "8或16位.">
+    参数 所欲设置的样本通道数 <类型 = 整数 注释 = "1=单声道,2=立体声">
+    {
+        变量 临时字节集 <类型 = 字节集类>
+        临时字节集 = 文本到多字节 (所欲打开的文件路径, )
+        @ bool boRet=true; //文件打开失败会抛异常
+        @ try
+        @ { 
+        @     this->m_Wav=std::make_shared<WavOutFile>((const char*)@<临时字节集>.GetPtr(),@<所欲设置的样本采样率>,@<所欲设置的样本位数>,@<所欲设置的样本通道数>);
+        @ }
+        @ catch (...) 
+        @ {
+        @     boRet=false;
+        @ } 
+        @ return boRet;
+    }
+
+    方法 关闭文件 <公开 注释 = "关闭之前打开的文件,并释放资源." @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_Wav.reset()
+    }
+
+    方法 写出数据8 <公开 类型 = 逻辑型 注释 = "将数据写入WAV文件. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." 注释 = "注意:此方法仅适用于8位样本." 返回值注释 = "返回操作是否成功."
+            @禁止流程检查 = 真>
+    参数 要写出的数据缓冲区 <类型 = 变整数 注释 = "注意:必须确保内存地址有效.">
+    参数 缓冲区尺寸 <类型 = 整数>
+    {
+        @ try
+        @ {
+        @     data()->write((unsigned char*)@<要写出的数据缓冲区>,@<缓冲区尺寸>);
+        @     return true;
+        @ }
+        @ catch (...)
+        @ {
+        @     return false;
+        @ }
+    }
+
+    方法 写出数据16 <公开 类型 = 逻辑型 注释 = "以16位整数格式,将数据写入WAV文件. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." 返回值注释 = "返回操作是否成功." @禁止流程检查 = 真>
+    参数 要保存的短整数数组地址 <类型 = 变整数 注释 = "指向短整数的内存地址,即：提供一个短整数的数组地址." 注释 = "注意:必须确保内存地址有效.">
+    参数 短整数数组的成员数 <类型 = 整数 注释 = "参数\"要保存的短整数数组地址\"数组中的成员数.">
+    {
+        @ try
+        @ {
+        @     data()->write((short*)@<要保存的短整数数组地址>,@<短整数数组的成员数>);
+        @     return true;
+        @ }
+        @ catch (...)
+        @ {
+        @     return false;
+        @ }
+    }
+
+    方法 写出数据32 <公开 类型 = 逻辑型 注释 = "以32位浮点格式,将数据写入WAV文件. 调用本方法前,必须首先调用\"打开文件\"方法打开文件." 返回值注释 = "返回操作是否成功." @禁止流程检查 = 真>
+    参数 要保存的单精度数组地址 <类型 = 变整数 注释 = "指向单精度小数的内存地址,即：提供一个单精度小数的数组地址." 注释 = "注意:必须确保内存地址有效.">
+    参数 单精度数组的成员数 <类型 = 整数 注释 = "参数\"要保存的单精度数组地址\"数组中的成员数.">
+    {
+        @ try
+        @ {
+        @     data()->write((float*)@<要保存的单精度数组地址>,@<单精度数组的成员数>);
+        @     return true;
+        @ }
+        @ catch (...)
+        @ {
+        @     return false;
+        @ }
+    }
+
+    # @begin
+    # <> <include>
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_Wav=objCopyFrom.m_Wav;
+    # }
+    # inline WavOutFile* data()
+    # {
+    #     ASSERT (m_Wav.get()!=nullptr);//必须先调用创建方法以创建对象
+    #     return m_Wav.get();
+    # }
+    # std::shared_ptr<WavOutFile> m_Wav;
+    # <> </include>
+}
+
+类 音频控制类型 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 AA滤波器 <公开 值 = @"@soundtouch::SETTING_USE_AA_FILTER" 注释 = "启用/禁用音调转置器中的抗混叠滤波器（0=禁用）.">
+    常量 AA滤波器长度 <公开 值 = @"@soundtouch::SETTING_AA_FILTER_LENGTH" 注释 = "AA滤波器长度（8-128,默认值=32）.">
+    常量 快速搜索算法 <公开 值 = @"@soundtouch::SETTING_USE_QUICKSEEK" 注释 = "启用/禁用快速搜索算法.">
+    常量 帧时间 <公开 值 = @"@soundtouch::SETTING_SEQUENCE_MS" 注释 = "时间拉伸算法单个处理序列的长度（以毫秒为单位）.这决定了原始声音在时间拉伸算法中被截断的序列长度.官方例子设置值为40.">
+    常量 叠加寻找窗的范围长度 <公开 值 = @"@soundtouch::SETTING_SEEKWINDOW_MS" 注释 = "时间拉伸算法为找到最佳可能重叠位置.官方例子设置值为15.">
+    常量 叠加范围 <公开 值 = @"@soundtouch::SETTING_OVERLAP_MS" 注释 = "时间拉伸算法重叠长度（以毫秒为单位）.官方例子设置值为8.">
+    常量 查询样本处理序列输入大小 <公开 值 = @"@soundtouch::SETTING_NOMINAL_INPUT_SEQUENCE"
+            注释 = "查询样本中的处理序列大小.注意：这是只读参数,即不可设置此参数.此参数值不是恒定的,而是根据节奏/音高/速率/采样率设置.">
+    常量 查询样本处理平均输出大小 <公开 值 = @"@soundtouch::SETTING_NOMINAL_OUTPUT_SEQUENCE"
+            注释 = "查询样本平均处理输出大小.注意：这是只读参数,即不可设置此参数.此参数值不是恒定的,而是根据节奏/音高/速率/采样率设置.">
+    常量 查询初始处理延迟 <公开 值 = @"@soundtouch::SETTING_INITIAL_LATENCY"
+            注释 = "查询初始处理延迟.注意：这是只读参数,即不可设置此参数.此参数值不是恒定的,而是根据节奏/音高/速率/采样率设置.">
+}

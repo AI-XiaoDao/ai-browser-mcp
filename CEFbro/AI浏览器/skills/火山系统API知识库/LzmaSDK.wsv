@@ -1,0 +1,53 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.LzmaSDK\"" "" @视窗.外部头文件 = "LzmaSDK\\LzmaSDKTool.h"
+        @视窗.外部库.win32 = "LzmaSDK\\LzmaSDKToolx86.lib" @视窗.附属文件.win32 = "LzmaSDK\\LzmaSDKToolx86.dll"
+        @视窗.外部库.x64 = "LzmaSDK\\LzmaSDKToolx64.lib" @视窗.附属文件.x64 = "LzmaSDK\\LzmaSDKToolx64.dll" "">
+
+类 ______LzmaSDK <公开 注释 = "7z的开源库 https://www.7-zip.org/sdk.html 这里下载" @全局类 = 真>
+{
+    方法 压缩_lzma <公开 静态 类型 = 字节集类>
+    参数 要压缩的数据 <类型 = 字节集类>
+    参数 压缩等级 <类型 = 整数 @默认值 = 7>
+    参数 字典大小 <类型 = 整数 注释 = "需要自己计算值可选值为  1 << 27 == 16777216" 注释 = "        128 MB = (1 << 27) bytes for 32-bit version"
+            注释 = "          1 GB = (1 << 30) bytes for 64-bit version" 注释 = "     The default value is 16 MB = (1 << 24) bytes."
+            @默认值 = 16777216>
+    {
+        返回 (压缩_lzma_指针 (取字节集指针 (要压缩的数据), 取字节集长度 (要压缩的数据)))
+
+    }
+
+    方法 解压_lzma <公开 静态 类型 = 字节集类>
+    参数 要解压的数据 <类型 = 字节集类>
+    {
+        返回 (解压_lzma_指针 (取字节集指针 (要解压的数据), 取字节集长度 (要解压的数据)))
+
+
+    }
+
+    方法 压缩_lzma_指针 <公开 静态 类型 = 字节集类 @禁止流程检查 = 真>
+    参数 要压缩的数据指针 <类型 = 变整数>
+    参数 数据长度 <类型 = 整数>
+    参数 压缩等级 <类型 = 整数 @默认值 = 6>
+    参数 字典大小 <类型 = 整数 @默认值 = 16777216>
+    {
+        @ int nCompressedLen = 0;
+        @ const char* pCompData = LzmaSDKTool_Compress((const char*)@<要压缩的数据指针>,@<数据长度>,&nCompressedLen,@<压缩等级>,@<字典大小>);
+        @ CVolMem mem(pCompData,nCompressedLen);
+        @ LzmaSDKTool_Free(pCompData);
+        @ return mem;
+    }
+
+    方法 解压_lzma_指针 <公开 静态 类型 = 字节集类 @禁止流程检查 = 真>
+    参数 要解压的数据 <类型 = 变整数>
+    参数 数据长度 <类型 = 整数>
+    {
+        @ int nDeCompressLen = 0;
+        @ const char* pCompData = LzmaSDKTool_Decompress((const char*)@<要解压的数据>,@<数据长度>,&nDeCompressLen);
+        @ CVolMem mem(pCompData,nDeCompressLen);
+        @ LzmaSDKTool_Free(pCompData);
+        @ return mem;
+
+
+    }
+}

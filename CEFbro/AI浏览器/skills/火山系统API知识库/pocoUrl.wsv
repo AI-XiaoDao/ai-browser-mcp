@@ -1,0 +1,83 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.程序 <@文档 = "category = \"开源库.pocoUrl\"" @视窗.外部头文件 = "pocoUrl\\pocoUrlTool.h"
+        @视窗.外部库.win32 = "pocoUrl\\pocoUrlToolx86.lib" @视窗.附属文件.win32 = "pocoUrl\\pocoUrlToolx86.dll"
+        @视窗.外部库.x64 = "pocoUrl\\pocoUrlToolx64.lib" @视窗.附属文件.x64 = "pocoUrl\\pocoUrlToolx64.dll">
+
+类 URL解析类F <公开>
+{
+
+    # @begin
+    # <> <include>
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void* pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ m_pData = NULL;
+
+    }
+
+    方法 类_清理
+    {
+        @ PocoTool_Destroy(GetData());
+    }
+
+    方法 解析 <公开>
+    参数 要解析的网址 <类型 = 文本型>
+    {
+        @ PocoTool_Destroy(GetData());
+        @ SetData( PocoTool_ParseURI( GetMbsText(@<要解析的网址>, CVolMem(), NULL) ));
+    }
+
+    方法 取Scheme <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( PocoTool_GetScheme( @sn<this>.GetData() ) )
+    }
+
+    方法 取用户信息 <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( PocoTool_GetUserInfo( @sn<this>.GetData() ) )
+    }
+
+    方法 取Host <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( PocoTool_GetHost( @sn<this>.GetData() ) )
+    }
+
+    方法 取端口 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT)PocoTool_getPort( @sn<this>.GetData() ) 
+    }
+
+    方法 取特殊端口 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT)PocoTool_GetSpecifiedPort( @sn<this>.GetData() ) 
+    }
+
+    方法 取路径 <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( PocoTool_GetPath( @sn<this>.GetData() ) )
+    }
+
+    方法 取查询 <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( PocoTool_GetRawQuery( @sn<this>.GetData() ) )
+    }
+
+    方法 取Fragment <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( PocoTool_GetFragment( @sn<this>.GetData() ) )
+    }
+
+    #
+}

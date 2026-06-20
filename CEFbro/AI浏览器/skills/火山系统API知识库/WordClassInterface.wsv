@@ -1,0 +1,4382 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.Word2021支持库 <@视窗.外部头文件 = "lib\\Wordconstant.h">
+
+类 Word保存选项 <公开 注释 = "指定应该如何处理待定的更改" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 提示更改 <公开 值 = @wdPromptToSaveChanges 注释 = "提示用户保存待定更改" "">
+    常量 自动保存 <公开 值 = @wdSaveChanges 注释 = "自动保存待定更改,而不提示用户" "">
+    常量 不保存 <公开 值 = @wdDoNotSaveChanges 注释 = "不保存待定的更改">
+}
+
+类 Word保存格式 <公开 注释 = "指定文档格式.在保存文档时通常使用此枚举." @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 文档 <公开 值 = @wdWordDocument 注释 = "Word文档格式">
+    常量 原格式 <公开 值 = @wdOriginalDocumentFormat 注释 = "原始文档格式">
+    常量 提示选择 <公开 值 = @wdPromptUser 注释 = "提示用户选择文档格式">
+}
+
+类 Word警告 <公开 注释 = "指定运行宏时产生的一些警告和消息的处理方式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 仅消息框 <公开 值 = @wdAlertsMessageBox 注释 = "仅显示消息框,同时捕获错误并将其返回宏.">
+    常量 显示 <公开 值 = @wdAlertsAll 注释 = "显示所有的消息框和警告,并将错误返回宏.">
+    常量 不显示 <公开 值 = @wdAlertsNone 注释 = "不显示任何警告或消息框.如果出现消息框,宏将选择默认值并继续运行.">
+}
+
+类 Word窗口状态 <公开 注释 = "指定窗口的状态" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 正常 <公开 值 = @wdWindowStateNormal 注释 = "正常">
+    常量 最大化 <公开 值 = @wdWindowStateMaximize 注释 = "最大化">
+    常量 最小化 <公开 值 = @wdWindowStateMinimize 注释 = "最小化">
+}
+
+类 Word创建类型 <公开 注释 = "指定要创建的新文档的类型" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 空白文档 <公开 值 = @wdNewBlankDocument 注释 = "空白文档">
+    常量 网页 <公开 值 = @wdNewWebPage 注释 = "网页">
+    常量 电子邮件 <公开 值 = @wdNewEmailMessage 注释 = "电子邮件">
+    常量 框架 <公开 值 = @wdNewFrameset 注释 = "框架集">
+    常量 XML文档 <公开 值 = @wdNewXMLDocument 注释 = "XML 文档">
+}
+
+类 Word格式化 <公开 注释 = "指定打开文档时要使用的格式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 自动识别 <公开 值 = @wdOpenFormatAuto 注释 = "自动识别">
+    常量 Word <公开 值 = @wdOpenFormatDocument 注释 = "Word格式">
+    常量 Word模板 <公开 值 = @wdOpenFormatTemplate 注释 = "用作Word模板">
+    常量 RTF <公开 值 = @wdOpenFormatRTF 注释 = "RTF格式">
+    常量 TXT文本 <公开 值 = @wdOpenFormatText 注释 = "TXT文本文件">
+    常量 Unicode <公开 值 = @wdOpenFormatUnicodeText 注释 = "Unicode文本格式">
+    常量 兼容Word <公开 值 = @wdOpenFormatAllWord 注释 = "与Word早期版本向后兼容的Word格式">
+    常量 HTML <公开 值 = @wdOpenFormatWebPages 注释 = "HTML格式">
+    常量 XML <公开 值 = @wdOpenFormatXML 注释 = "XML格式">
+    常量 XML文档 <公开 值 = @wdOpenFormatXMLDocument 注释 = "XML文档格式">
+    常量 宏XML文档 <公开 值 = @wdOpenFormatXMLDocumentMacroEnabled 注释 = "启用了宏的XML文档格式">
+    常量 XML模板 <公开 值 = @wdOpenFormatXMLTemplate 注释 = "XML模板格式">
+    常量 宏XML模板 <公开 值 = @wdOpenFormatXMLTemplateMacroEnabled 注释 = "启用了宏的XML模板格式">
+    常量 兼容模板 <公开 值 = @wdOpenFormatAllWordTemplates 注释 = "兼容早期版本Word模板格式">
+    常量 系列化XML <公开 值 = @wdOpenFormatXMLDocumentSerialized 注释 = "打开XML文件格式保存为一个XML文件">
+    常量 宏系列化XML <公开 值 = @wdOpenFormatXMLDocumentMacroEnabledSerialized 注释 = "打开XML文件格式启用了宏保存为一个XML文件">
+}
+
+类 Word编码 <公开 注释 = "指定用什么编码方式打开文件.以下罗列互联网编码格式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 泰文 <公开 值 = @windows874 注释 = "泰文(Windows)">
+    常量 日文 <公开 值 = @iso2022jp 注释 = "日文(Shift-JIS)">
+    常量 简体中文 <公开 值 = @gb2312 注释 = "简体中文(GB2312)">
+    常量 韩语 <公开 值 = @ksc56011987 注释 = "韩语韩语">
+    常量 繁体中文 <公开 值 = @big5 注释 = "繁体中文(Big5)">
+    常量 中欧 <公开 值 = @windows1250 注释 = "中欧字符(Windows)">
+    常量 西里尔文 <公开 值 = @windows1251 注释 = "西里尔文(Windows)">
+    常量 西欧 <公开 值 = @windows1252 注释 = "西欧(Windows)">
+    常量 希腊 <公开 值 = @windows1253 注释 = "希腊语(Windows)">
+    常量 土耳其 <公开 值 = @windows1254 注释 = "土耳其语(Windows)">
+    常量 希伯来文 <公开 值 = @windows1255 注释 = "希伯来文(Windows)">
+    常量 阿拉伯文 <公开 值 = @windows1256 注释 = "阿拉伯文(Windows)">
+    常量 波罗的海 <公开 值 = @windows1257 注释 = "波罗的海字符(Windows)">
+    常量 越南 <公开 值 = @windows1258 注释 = "越南语(Windows)">
+    常量 ASCII <公开 值 = @ASCII 注释 = "ASCII编码">
+    常量 拉丁文 <公开 值 = @iso88593 注释 = "拉丁文3(ISO)">
+    常量 塞瑞利克 <公开 值 = @iso88595 注释 = "塞瑞利克字符(ISO)">
+    常量 阿拉伯语 <公开 值 = @iso88596 注释 = "阿拉伯语(ISO)">
+    常量 日语 <公开 值 = @eucjp 注释 = "日语(EUC)">
+    常量 朝鲜 <公开 值 = @euckr 注释 = "朝鲜语(EUC)">
+    常量 简体中文HZ <公开 值 = @hzgb2312 注释 = "简体中文(HZ)">
+    常量 UTF7 <公开 值 = @word_utf7 注释 = "Unicode(UTF-7)">
+    常量 UTF8 <公开 值 = @word_utf8 注释 = "Unicode(UTF-8)">
+}
+
+类 Word另存格式 <公开 注释 = "指定要在保存文档时使用的格式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 标准 <公开 值 = @wdFormatDocument 注释 = "Word97-2003文件格式">
+    常量 模板 <公开 值 = @wdFormatTemplate 注释 = "Word模板格式">
+    常量 文本 <公开 值 = @wdFormatText 注释 = "Microsoft Windows文本格式">
+    常量 文本换行 <公开 值 = @wdFormatTextLineBreaks 注释 = "保留换行符的Windows文本格式">
+    常量 DOS <公开 值 = @wdFormatDOSText 注释 = "MicrosoftDOS文本格式">
+    常量 DOS换行 <公开 值 = @wdFormatDOSTextLineBreaks 注释 = "保留了换行符的Microsoft DOS文本">
+    常量 RTF <公开 值 = @wdFormatRTF 注释 = "富文本格式(RTF)">
+    常量 Unicode <公开 值 = @wdFormatUnicodeText 注释 = "Unicode文本格式">
+    常量 HTML <公开 值 = @wdFormatHTML 注释 = "标准HTML格式">
+    常量 Web <公开 值 = @wdFormatWebArchive 注释 = "网络存档格式">
+    常量 HTML过滤 <公开 值 = @wdFormatFilteredHTML 注释 = "过滤的HTML格式">
+    常量 XML <公开 值 = @wdFormatXML 注释 = "可扩展标记语言(XML)格式">
+    常量 XML文档 <公开 值 = @wdFormatXMLDocument 注释 = "XML文档格式">
+    常量 宏XML文档 <公开 值 = @wdFormatXMLDocumentMacroEnabled 注释 = "启用宏的XML文档格式">
+    常量 XML模板 <公开 值 = @wdFormatXMLTemplate 注释 = "XML模板格式">
+    常量 宏模板 <公开 值 = @wdFormatXMLTemplateMacroEnabled 注释 = "启用宏的XML模板格式">
+    常量 默认 <公开 值 = @wdFormatDocumentDefault 注释 = "Word默认文档文件格式">
+    常量 PDF <公开 值 = @wdFormatPDF 注释 = "PDF格式">
+    常量 XPS <公开 值 = @wdFormatXPS 注释 = "XPS格式">
+    常量 单个XML <公开 值 = @wdFormatFlatXML 注释 = "打开XML文件格式保存为单个XML文件">
+    常量 宏平面XML <公开 值 = @wdFormatFlatXMLMacroEnabled 注释 = "打开启用宏的XML文件格式保存为单个XML文件">
+    常量 平面模板 <公开 值 = @wdFormatFlatXMLTemplate 注释 = "打开XML模板格式保存为XML单个文件">
+    常量 宏平面模板 <公开 值 = @wdFormatFlatXMLTemplateMacroEnabled 注释 = "打开启用宏的XML模板格式保存为单个XML文件">
+    常量 OpenDocument文本 <公开 值 = @wdFormatOpenDocumentText
+            注释 = "OpenDocument格式基于XML,用于保存字处理(Text),表格处理(SpreadSheet),图表(Graphics),简报文档(Presentation)等文档.">
+    常量 OpenDocument文档 <公开 值 = @wdFormatStrictOpenXMLDocument 注释 = "严格的OpenXML文档格式">
+}
+
+类 Word路径类型 <公开 注释 = "为与Microsoft Word相关的文件指定默认文件夹" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 文档 <公开 值 = @wdDocumentsPath 注释 = "文档路径">
+    常量 图片 <公开 值 = @wdPicturesPath 注释 = "图片路径">
+    常量 模板 <公开 值 = @wdUserTemplatesPath 注释 = "用户模板路径">
+    常量 工作组模板 <公开 值 = @wdWorkgroupTemplatesPath 注释 = "工作组模板路径">
+    常量 用户选项 <公开 值 = @wdUserOptionsPath 注释 = "用户选项路径">
+    常量 恢复文件 <公开 值 = @wdAutoRecoverPath 注释 = "自动恢复文件的路径">
+    常量 工具 <公开 值 = @wdToolsPath 注释 = "工具路径">
+    常量 教程 <公开 值 = @wdTutorialPath 注释 = "教程路径">
+    常量 启动 <公开 值 = @wdStartupPath 注释 = "启动路径">
+    常量 程序 <公开 值 = @wdProgramPath 注释 = "程序路径">
+    常量 图形 <公开 值 = @wdGraphicsFiltersPath 注释 = "图形过滤器路径">
+    常量 文字 <公开 值 = @wdTextConvertersPath 注释 = "文字转换器路径">
+    常量 校对工具 <公开 值 = @wdProofingToolsPath 注释 = "校对工具路径">
+    常量 临时文件 <公开 值 = @wdTempFilePath 注释 = "临时文件路径">
+    常量 当前文件 <公开 值 = @wdCurrentFolderPath 注释 = "当前文件夹路径">
+    常量 样式库 <公开 值 = @wdStyleGalleryPath 注释 = "样式库路径">
+    常量 艺术边框 <公开 值 = @wdBorderArtPath 注释 = "艺术型边框路径">
+}
+
+类 Word自动宏 <公开 注释 = "指定存储在文档中的自动宏" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 运行 <公开 值 = @wdAutoExec 注释 = "运行">
+    常量 新建 <公开 值 = @wdAutoNew 注释 = "新建">
+    常量 打开 <公开 值 = @wdAutoOpen 注释 = "打开">
+    常量 关闭 <公开 值 = @wdAutoClose 注释 = "关闭">
+    常量 退出 <公开 值 = @wdAutoExit 注释 = "退出">
+    常量 同步 <公开 值 = @wdAutoSync 注释 = "同步">
+}
+
+类 Word颜色索引 <公开 注释 = "指定要应用的颜色" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 定义 <公开 值 = @wdByAuthor 注释 = "由文档作者定义的颜色">
+    常量 自动 <公开 值 = @wdAuto 注释 = "自动配色.默认值,通常为黑色.">
+    常量 黑 <公开 值 = @wdBlack 注释 = "黑色">
+    常量 蓝 <公开 值 = @wdBlue 注释 = "蓝色">
+    常量 青绿 <公开 值 = @wdTurquoise 注释 = "青绿色">
+    常量 鲜绿 <公开 值 = @wdBrightGreen 注释 = "鲜绿色">
+    常量 粉红 <公开 值 = @wdPink 注释 = "粉红色">
+    常量 红 <公开 值 = @wdRed 注释 = "红色">
+    常量 黄 <公开 值 = @wdYellow 注释 = "黄色">
+    常量 白 <公开 值 = @wdWhite 注释 = "白色">
+    常量 深蓝 <公开 值 = @wdDarkBlue 注释 = "深蓝色">
+    常量 青 <公开 值 = @wdTeal 注释 = "青色">
+    常量 绿 <公开 值 = @wdGreen 注释 = "绿色">
+    常量 紫 <公开 值 = @wdViolet 注释 = "紫色">
+    常量 深红 <公开 值 = @wdDarkRed 注释 = "深红色">
+    常量 深黄 <公开 值 = @wdDarkYellow 注释 = "深黄色">
+    常量 深灰 <公开 值 = @wdGray50 注释 = "50灰色底纹">
+    常量 浅灰 <公开 值 = @wdGray25 注释 = "25灰色底纹">
+}
+
+类 Word下划线 <公开 注释 = "指定要应用的下划线的类型" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 无 <公开 值 = @wdUnderlineNone 注释 = "无下划线">
+    常量 单 <公开 值 = @wdUnderlineSingle 注释 = "单线">
+    常量 单字 <公开 值 = @wdUnderlineWords 注释 = "仅为单个字加下划线">
+    常量 双 <公开 值 = @wdUnderlineDouble 注释 = "双线">
+    常量 点 <公开 值 = @wdUnderlineDotted 注释 = "点">
+    常量 单粗 <公开 值 = @wdUnderlineThick 注释 = "单粗线">
+    常量 划 <公开 值 = @wdUnderlineDash 注释 = "划线">
+    常量 点划 <公开 值 = @wdUnderlineDotDash 注释 = "点划相间线">
+    常量 点点划 <公开 值 = @wdUnderlineDotDotDash 注释 = "点-点-划线相间模式">
+    常量 单波浪 <公开 值 = @wdUnderlineWavy 注释 = "单波浪线">
+    常量 粗点 <公开 值 = @wdUnderlineDottedHeavy 注释 = "粗点">
+    常量 粗划 <公开 值 = @wdUnderlineDashHeavy 注释 = "粗划线">
+    常量 粗点划 <公开 值 = @wdUnderlineDotDashHeavy 注释 = "粗点划相间线">
+    常量 粗点点划 <公开 值 = @wdUnderlineDotDotDashHeavy 注释 = "粗点-点-划线相间模式">
+    常量 粗波浪 <公开 值 = @wdUnderlineWavyHeavy 注释 = "粗波浪线">
+    常量 长 <公开 值 = @wdUnderlineDashLong 注释 = "长划线">
+    常量 双波浪 <公开 值 = @wdUnderlineWavyDouble 注释 = "双波浪线">
+    常量 长粗 <公开 值 = @wdUnderlineDashLongHeavy 注释 = "长粗划线">
+}
+
+类 Word文档纸张 <公开 注释 = "指定纸张大小" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 十英寸 <公开 值 = @wdPaper10x14 注释 = "10英寸(25.4厘米)宽,14英寸(35.56厘米)长.">
+    常量 十一英寸 <公开 值 = @wdPaper11x17 注释 = "正规11英寸(27.94厘米)宽,17英寸(43.18厘米)长.">
+    常量 信函 <公开 值 = @wdPaperLetter 注释 = "信函尺寸">
+    常量 小信函 <公开 值 = @wdPaperLetterSmall 注释 = "小型信函尺寸">
+    常量 正规尺寸 <公开 值 = @wdPaperLegal 注释 = "正规尺寸">
+    常量 行政专用 <公开 值 = @wdPaperExecutive 注释 = "行政型尺寸">
+    常量 A3 <公开 值 = @wdPaperA3 注释 = "A3尺寸">
+    常量 A4 <公开 值 = @wdPaperA4 注释 = "A4尺寸">
+    常量 小A4 <公开 值 = @wdPaperA4Small 注释 = "小A4尺寸">
+    常量 A5 <公开 值 = @wdPaperA5 注释 = "A5尺寸">
+    常量 B4 <公开 值 = @wdPaperB4 注释 = "B4尺寸">
+    常量 B5 <公开 值 = @wdPaperB5 注释 = "B5尺寸">
+    常量 C <公开 值 = @wdPaperCSheet 注释 = "CSheet尺寸">
+    常量 D <公开 值 = @wdPaperDSheet 注释 = "DSheet尺寸">
+    常量 E <公开 值 = @wdPaperESheet 注释 = "ESheet尺寸">
+    常量 正规复写簿 <公开 值 = @wdPaperFanfoldLegalGerman 注释 = "德国正规复写簿尺寸">
+    常量 标准复写簿 <公开 值 = @wdPaperFanfoldStdGerman 注释 = "德国标准复写簿尺寸">
+    常量 美式复写簿 <公开 值 = @wdPaperFanfoldUS 注释 = "美国复写簿尺寸">
+    常量 对开 <公开 值 = @wdPaperFolio 注释 = "对开尺寸">
+    常量 分类帐 <公开 值 = @wdPaperLedger 注释 = "分类帐尺寸">
+    常量 便笺 <公开 值 = @wdPaperNote 注释 = "便笺尺寸">
+    常量 四开 <公开 值 = @wdPaperQuarto 注释 = "四开尺寸">
+    常量 报表 <公开 值 = @wdPaperStatement 注释 = "报表尺寸">
+    常量 小报 <公开 值 = @wdPaperTabloid 注释 = "文摘尺寸">
+    常量 信封9号 <公开 值 = @wdPaperEnvelope9 注释 = "信封,尺寸9.">
+    常量 信封10号 <公开 值 = @wdPaperEnvelope10 注释 = "正规信封,尺寸10.">
+    常量 信封11号 <公开 值 = @wdPaperEnvelope11 注释 = "信封,尺寸11.">
+    常量 信封12号 <公开 值 = @wdPaperEnvelope12 注释 = "信封,尺寸12.">
+    常量 信封14号 <公开 值 = @wdPaperEnvelope14 注释 = "信封,尺寸14.">
+    常量 信封B4 <公开 值 = @wdPaperEnvelopeB4 注释 = "B4信封">
+    常量 信封B5 <公开 值 = @wdPaperEnvelopeB5 注释 = "B5信封">
+    常量 信封B6 <公开 值 = @wdPaperEnvelopeB6 注释 = "B6信封">
+    常量 信封C3 <公开 值 = @wdPaperEnvelopeC3 注释 = "C3信封">
+    常量 信封C4 <公开 值 = @wdPaperEnvelopeC4 注释 = "C4信封">
+    常量 信封C5 <公开 值 = @wdPaperEnvelopeC5 注释 = "C5信封">
+    常量 信封C6 <公开 值 = @wdPaperEnvelopeC6 注释 = "C6信封">
+    常量 信封C65 <公开 值 = @wdPaperEnvelopeC65 注释 = "C65信封">
+    常量 信封DL <公开 值 = @wdPaperEnvelopeDL 注释 = "DL信封">
+    常量 意式信封 <公开 值 = @wdPaperEnvelopeItaly 注释 = "意大利式信封">
+    常量 美式信封 <公开 值 = @wdPaperEnvelopeMonarch 注释 = "君主式信封">
+    常量 私人信封 <公开 值 = @wdPaperEnvelopePersonal 注释 = "私人信封">
+    常量 自定义 <公开 值 = @wdPaperCustom 注释 = "自定义纸张大小">
+}
+
+类 Word垂直对齐 <公开 注释 = "指定要应用的垂直对齐方式的类型" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 顶对齐 <公开 值 = @wdAlignVerticalTop 注释 = "顶端垂直对齐">
+    常量 居中 <公开 值 = @wdAlignVerticalCenter 注释 = "居中垂直对齐">
+    常量 两端 <公开 值 = @wdAlignVerticalJustify 注释 = "两端垂直对齐">
+    常量 底对齐 <公开 值 = @wdAlignVerticalBottom 注释 = "底端垂直对齐">
+}
+
+类 Word段落对齐 <公开 注释 = "指定段落的对齐方式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 左对齐 <公开 值 = @wdAlignParagraphLeft 注释 = "左对齐">
+    常量 居中 <公开 值 = @wdAlignParagraphCenter 注释 = "居中">
+    常量 右对齐 <公开 值 = @wdAlignParagraphRight 注释 = "右对齐">
+    常量 两端对齐 <公开 值 = @wdAlignParagraphJustify 注释 = "完全两端对齐">
+    常量 分布排列 <公开 值 = @wdAlignParagraphDistribute 注释 = "段落字符被分布排列,以填满整个段落宽度.">
+    常量 两端中度压缩 <公开 值 = @wdAlignParagraphJustifyMed 注释 = "两端对齐,字符中度压缩.">
+    常量 两端高度压缩 <公开 值 = @wdAlignParagraphJustifyHi 注释 = "两端对齐,字符高度压缩.">
+    常量 两端轻微压缩 <公开 值 = @wdAlignParagraphJustifyLow 注释 = "两端对齐,字符轻微压缩.">
+    常量 泰式两端对齐 <公开 值 = @wdAlignParagraphThaiJustify 注释 = "按照泰语格式布局两端对齐">
+}
+
+类 Word打印纸盒 <公开 注释 = "指定打印机纸盒" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 默认 <公开 值 = @wdPrinterDefaultBin 注释 = "默认纸盒">
+    常量 上层 <公开 值 = @wdPrinterUpperBin 注释 = "上层纸盒">
+    常量 唯一 <公开 值 = @wdPrinterOnlyBin 注释 = "打印机的唯一纸盒">
+    常量 下层 <公开 值 = @wdPrinterLowerBin 注释 = "下层纸盒">
+    常量 中层 <公开 值 = @wdPrinterMiddleBin 注释 = "中层纸盒">
+    常量 手动送纸 <公开 值 = @wdPrinterManualFeed 注释 = "手动送纸">
+    常量 信封送纸 <公开 值 = @wdPrinterEnvelopeFeed 注释 = "信封送纸器">
+    常量 手动信封送纸 <公开 值 = @wdPrinterManualEnvelopeFeed 注释 = "手动信封送纸">
+    常量 自动送纸 <公开 值 = @wdPrinterAutomaticSheetFeed 注释 = "自动送纸">
+    常量 送纸 <公开 值 = @wdPrinterTractorFeed 注释 = "送纸器">
+    常量 小格式 <公开 值 = @wdPrinterSmallFormatBin 注释 = "小格式纸盒">
+    常量 大格式 <公开 值 = @wdPrinterLargeFormatBin 注释 = "大格式纸盒">
+    常量 大容量 <公开 值 = @wdPrinterLargeCapacityBin 注释 = "大容量纸盒">
+    常量 磁带式 <公开 值 = @wdPrinterPaperCassette 注释 = "磁带式纸盒">
+    常量 表单来源 <公开 值 = @wdPrinterFormSource 注释 = "表单来源">
+}
+
+类 Word分节符 <公开 注释 = "指定所指定项的分节符的类型" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 连续 <公开 值 = @wdSectionContinuous 注释 = "\"连续\"分节符">
+    常量 新栏 <公开 值 = @wdSectionNewColumn 注释 = "\"新栏\"分节符">
+    常量 新页 <公开 值 = @wdSectionNewPage 注释 = "\"新页\"分节符">
+    常量 偶数页 <公开 值 = @wdSectionEvenPage 注释 = "\"偶数页\"分节符">
+    常量 奇数页 <公开 值 = @wdSectionOddPage 注释 = "\"奇数页\"分节符">
+}
+
+类 Word表格格式 <公开 注释 = "指定要应用于表格的预定义格式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 无格式 <公开 值 = @wdTableFormatNone 注释 = "无格式">
+    常量 简明1 <公开 值 = @wdTableFormatSimple1 注释 = "1号简明格式">
+    常量 简明2 <公开 值 = @wdTableFormatSimple2 注释 = "2号简明格式">
+    常量 简明3 <公开 值 = @wdTableFormatSimple3 注释 = "3号简明格式">
+    常量 古典1 <公开 值 = @wdTableFormatClassic1 注释 = "1号古典格式">
+    常量 古典2 <公开 值 = @wdTableFormatClassic2 注释 = "2号古典格式">
+    常量 古典3 <公开 值 = @wdTableFormatClassic3 注释 = "3号古典格式">
+    常量 古典4 <公开 值 = @wdTableFormatClassic4 注释 = "4号古典格式">
+    常量 彩色1 <公开 值 = @wdTableFormatColorful1 注释 = "1号彩色格式">
+    常量 彩色2 <公开 值 = @wdTableFormatColorful2 注释 = "2号彩色格式">
+    常量 彩色3 <公开 值 = @wdTableFormatColorful3 注释 = "3号彩色格式">
+    常量 竖列1 <公开 值 = @wdTableFormatColumns1 注释 = "1号竖列格式">
+    常量 竖列2 <公开 值 = @wdTableFormatColumns2 注释 = "2号竖列格式">
+    常量 竖列3 <公开 值 = @wdTableFormatColumns3 注释 = "3号竖列格式">
+    常量 竖列4 <公开 值 = @wdTableFormatColumns4 注释 = "4号竖列格式">
+    常量 竖列5 <公开 值 = @wdTableFormatColumns5 注释 = "5号竖列格式">
+    常量 网格1 <公开 值 = @wdTableFormatGrid1 注释 = "1号网格格式">
+    常量 网格2 <公开 值 = @wdTableFormatGrid2 注释 = "2号网格格式">
+    常量 网格3 <公开 值 = @wdTableFormatGrid3 注释 = "3号网格格式">
+    常量 网格4 <公开 值 = @wdTableFormatGrid4 注释 = "4号网格格式">
+    常量 网格5 <公开 值 = @wdTableFormatGrid5 注释 = "5号网格格式">
+    常量 网格6 <公开 值 = @wdTableFormatGrid6 注释 = "6号网格格式">
+    常量 网格7 <公开 值 = @wdTableFormatGrid7 注释 = "7号网格格式">
+    常量 网格8 <公开 值 = @wdTableFormatGrid8 注释 = "8号网格格式">
+    常量 列表1 <公开 值 = @wdTableFormatList1 注释 = "1号列表格式">
+    常量 列表2 <公开 值 = @wdTableFormatList2 注释 = "2号列表格式">
+    常量 列表3 <公开 值 = @wdTableFormatList3 注释 = "3号列表格式">
+    常量 列表4 <公开 值 = @wdTableFormatList4 注释 = "4号列表格式">
+    常量 列表5 <公开 值 = @wdTableFormatList5 注释 = "5号列表格式">
+    常量 列表6 <公开 值 = @wdTableFormatList6 注释 = "6号列表格式">
+    常量 列表7 <公开 值 = @wdTableFormatList7 注释 = "7号列表格式">
+    常量 列表8 <公开 值 = @wdTableFormatList8 注释 = "8号列表格式">
+    常量 立体1 <公开 值 = @wdTableFormat3DEffects1 注释 = "1号3D效果格式">
+    常量 立体2 <公开 值 = @wdTableFormat3DEffects2 注释 = "2号3D效果格式">
+    常量 立体3 <公开 值 = @wdTableFormat3DEffects3 注释 = "3号3D效果格式">
+    常量 流行 <公开 值 = @wdTableFormatContemporary 注释 = "流行格式">
+    常量 典雅 <公开 值 = @wdTableFormatElegant 注释 = "典雅格式">
+    常量 专业 <公开 值 = @wdTableFormatProfessional 注释 = "专业格式">
+    常量 精巧1 <公开 值 = @wdTableFormatSubtle1 注释 = "1号精巧格式">
+    常量 精巧2 <公开 值 = @wdTableFormatSubtle2 注释 = "2号精巧格式">
+    常量 Web1 <公开 值 = @wdTableFormatWeb1 注释 = "1号Web格式">
+    常量 Web2 <公开 值 = @wdTableFormatWeb2 注释 = "2号Web格式">
+    常量 Web3 <公开 值 = @wdTableFormatWeb3 注释 = "3号Web格式">
+}
+
+类 Word度量单位 <公开 注释 = "指定要使用的度量单位" @常量类 = 整数 @文档 = "category= \"辅助类\"">
+{
+    常量 字符单位 <公开 值 = @wdCharacter 注释 = "字符">
+    常量 单词 <公开 值 = @wdWord 注释 = "单词">
+    常量 句子 <公开 值 = @wdSentence 注释 = "句子">
+    常量 段落 <公开 值 = @wdParagraph 注释 = "段落">
+    常量 当前行 <公开 值 = @wdLine 注释 = "当前行">
+    常量 文档 <公开 值 = @wdStory 注释 = "文档">
+    常量 屏幕尺寸 <公开 值 = @wdScreen 注释 = "屏幕尺寸">
+    常量 节 <公开 值 = @wdSection 注释 = "一节">
+    常量 列 <公开 值 = @wdColumn 注释 = "列">
+    常量 行 <公开 值 = @wdRow 注释 = "行">
+    常量 窗口 <公开 值 = @wdWindow 注释 = "窗口">
+    常量 单元格 <公开 值 = @wdCell 注释 = "单元格">
+    常量 字符格式 <公开 值 = @wdCharacterFormatting 注释 = "字符格式">
+    常量 段落格式 <公开 值 = @wdParagraphFormatting 注释 = "段落格式">
+    常量 表格 <公开 值 = @wdTable 注释 = "一个表格">
+    常量 所选项 <公开 值 = @wdItem 注释 = "所选项">
+}
+
+类 Word项目类型 <公开 注释 = "指定要将光标插入点或所选内容移到其正前方的项目类型" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 书签 <公开 值 = @wdGoToBookmark 注释 = "书签">
+    常量 分节 <公开 值 = @wdGoToSection 注释 = "一节">
+    常量 页 <公开 值 = @wdGoToPage 注释 = "页">
+    常量 表格 <公开 值 = @wdGoToTable 注释 = "一个表格">
+    常量 行 <公开 值 = @wdGoToLine 注释 = "一个行">
+    常量 脚注 <公开 值 = @wdGoToFootnote 注释 = "脚注">
+    常量 尾注 <公开 值 = @wdGoToEndnote 注释 = "尾注">
+    常量 批注 <公开 值 = @wdGoToComment 注释 = "批注">
+    常量 域 <公开 值 = @wdGoToField 注释 = "域">
+    常量 图形 <公开 值 = @wdGoToGraphic 注释 = "图形">
+    常量 对象 <公开 值 = @wdGoToObject 注释 = "对象">
+    常量 公式 <公开 值 = @wdGoToEquation 注释 = "公式">
+    常量 标题 <公开 值 = @wdGoToHeading 注释 = "标题">
+    常量 百分比 <公开 值 = @wdGoToPercent 注释 = "百分比">
+    常量 拼写错误 <公开 值 = @wdGoToSpellingError 注释 = "拼写错误">
+    常量 语法错误 <公开 值 = @wdGoToGrammaticalError 注释 = "语法错误">
+    常量 校对错误 <公开 值 = @wdGoToProofreadingError 注释 = "校对错误">
+}
+
+类 Word项目位置 <公开 注释 = "指定要相对于对象或其自身移动所选内容或光标插入点的位置" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 尾 <公开 值 = @wdGoToLast 注释 = "所指定对象的最后一个实例">
+    常量 首 <公开 值 = @wdGoToFirst 注释 = "所指定对象的第一个实例">
+    常量 绝对 <公开 值 = @wdGoToAbsolute 注释 = "绝对位置">
+    常量 相对 <公开 值 = @wdGoToRelative 注释 = "相对于当前位置的位置">
+    常量 下一个 <公开 值 = @wdGoToNext 注释 = "所指定对象的下一个实例">
+    常量 上一个 <公开 值 = @wdGoToPrevious 注释 = "所指定对象的上一个实例">
+}
+
+类 Word分隔符 <公开 注释 = "指定分隔符的类型" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 下页分节符 <公开 值 = @wdSectionBreakNextPage 注释 = "分节符在下一页">
+    常量 连续分节符 <公开 值 = @wdSectionBreakContinuous 注释 = "新节不包含相应分页符">
+    常量 偶页分节符 <公开 值 = @wdSectionBreakEvenPage 注释 = "使下一节从下一偶数页开始的分节符.如果分节符落入偶数页,则Word将下一奇数页留为空白.">
+    常量 奇页分节符 <公开 值 = @wdSectionBreakOddPage 注释 = "使下一节从下一奇数页开始的分节符.如果分节符落入奇数页,则Word将下一偶数页留为空白.">
+    常量 换行符 <公开 值 = @wdLineBreak 注释 = "换行符">
+    常量 分页符 <公开 值 = @wdPageBreak 注释 = "光标插入点处的分页符">
+    常量 分栏符 <公开 值 = @wdColumnBreak 注释 = "光标插入点处的分栏符">
+    常量 左换行符 <公开 值 = @wdLineBreakClearLeft 注释 = "左换行符">
+    常量 右换行符 <公开 值 = @wdLineBreakClearRight 注释 = "右换行符">
+    常量 文字换行符 <公开 值 = @wdTextWrappingBreak 注释 = "结束当前行,并强制文字在图片、表格或其他项目的下方继续.文字将在下一个空行(且该空行不包含与左边距或右边距对齐的表格)上继续.">
+}
+
+类 Word图形形状 <公开 注释 = "指定图形对象的形状类型" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 组合 <公开 值 = @msoShapeMixed 注释 = "只返回值,表示其他状态的组合.">
+    常量 矩形 <公开 值 = @msoShapeRectangle 注释 = "矩形">
+    常量 平行四边形 <公开 值 = @msoShapeParallelogram 注释 = "平行四边形">
+    常量 梯形 <公开 值 = @msoShapeTrapezoid 注释 = "梯形">
+    常量 菱形 <公开 值 = @msoShapeDiamond 注释 = "菱形">
+    常量 圆角矩形 <公开 值 = @msoShapeRoundedRectangle 注释 = "圆角矩形">
+    常量 八边形 <公开 值 = @msoShapeOctagon 注释 = "八边形">
+    常量 等边三角形 <公开 值 = @msoShapeIsoscelesTriangle 注释 = "等边三角形">
+    常量 直角三角形 <公开 值 = @msoShapeRightTriangle 注释 = "直角三角形">
+    常量 椭圆形 <公开 值 = @msoShapeOval 注释 = "椭圆形">
+    常量 六边形 <公开 值 = @msoShapeHexagon 注释 = "六边形">
+    常量 十字形 <公开 值 = @msoShapeCross 注释 = "十字形">
+    常量 正五边形 <公开 值 = @msoShapeRegularPentagon 注释 = "正五边形">
+    常量 罐形 <公开 值 = @msoShapeCan 注释 = "罐形">
+    常量 立方体 <公开 值 = @msoShapeCube 注释 = "立方体">
+    常量 棱台效果 <公开 值 = @msoShapeBevel 注释 = "棱台效果">
+    常量 折叠角 <公开 值 = @msoShapeFoldedCorner 注释 = "折叠的角">
+    常量 笑脸 <公开 值 = @msoShapeSmileyFace 注释 = "笑脸">
+    常量 圆环图 <公开 值 = @msoShapeDonut 注释 = "圆环图">
+    常量 无符号 <公开 值 = @msoShapeNoSymbol 注释 = "无符号">
+    常量 弧形块 <公开 值 = @msoShapeBlockArc 注释 = "弧形块">
+    常量 心形 <公开 值 = @msoShapeHeart 注释 = "心形">
+    常量 闪电 <公开 值 = @msoShapeLightningBolt 注释 = "闪电">
+    常量 太阳 <公开 值 = @msoShapeSun 注释 = "太阳">
+    常量 小月 <公开 值 = @msoShapeMoon 注释 = "小月">
+    常量 弧形 <公开 值 = @msoShapeArc 注释 = "弧形">
+    常量 双括号 <公开 值 = @msoShapeDoubleBracket 注释 = "双括号">
+    常量 双大括号 <公开 值 = @msoShapeDoubleBrace 注释 = "双大括号">
+    常量 斑块 <公开 值 = @msoShapePlaque 注释 = "斑块">
+    常量 左方括号 <公开 值 = @msoShapeLeftBracket 注释 = "左方括号">
+    常量 右方括号 <公开 值 = @msoShapeRightBracket 注释 = "右方括号">
+    常量 左大括号 <公开 值 = @msoShapeLeftBrace 注释 = "左大括号">
+    常量 右大括号 <公开 值 = @msoShapeRightBrace 注释 = "右大括号">
+    常量 右箭头 <公开 值 = @msoShapeRightArrow 注释 = "右箭头">
+    常量 左箭头 <公开 值 = @msoShapeLeftArrow 注释 = "向左指向的箭头">
+    常量 上箭头 <公开 值 = @msoShapeUpArrow 注释 = "向上指向的箭头">
+    常量 下箭头 <公开 值 = @msoShapeDownArrow 注释 = "下箭头">
+    常量 左右箭头 <公开 值 = @msoShapeLeftRightArrow 注释 = "带左右箭头的箭头">
+    常量 上下箭头 <公开 值 = @msoShapeUpDownArrow 注释 = "向上和向下指向的箭头">
+    常量 上下左右箭头 <公开 值 = @msoShapeQuadArrow 注释 = "向上、向下、向左和向右的箭头.">
+    常量 左右上箭头 <公开 值 = @msoShapeLeftRightUpArrow 注释 = "带向左、向右和向上箭头的箭头">
+    常量 圆角箭头90度 <公开 值 = @msoShapeBentArrow 注释 = "带90度圆角的箭头">
+    常量 U形箭头 <公开 值 = @msoShapeUTurnArrow 注释 = "形成U形状的箭头">
+    常量 左上箭头 <公开 值 = @msoShapeLeftUpArrow 注释 = "带向左和向上箭头的箭头">
+    常量 直角箭头90度 <公开 值 = @msoShapeBentUpArrow 注释 = "带90度直角的箭头默认情况下上指">
+    常量 右曲线箭头 <公开 值 = @msoShapeCurvedRightArrow 注释 = "向右曲线的箭头">
+    常量 左曲线箭头 <公开 值 = @msoShapeCurvedLeftArrow 注释 = "向左曲线的箭头">
+    常量 上曲线箭头 <公开 值 = @msoShapeCurvedUpArrow 注释 = "上曲线的箭头">
+    常量 下曲线箭头 <公开 值 = @msoShapeCurvedDownArrow 注释 = "下曲线的箭头">
+    常量 尾条纹箭头 <公开 值 = @msoShapeStripedRightArrow 注释 = "尾部带条纹的右箭头">
+    常量 右块箭头 <公开 值 = @msoShapeNotchedRightArrow 注释 = "指向右边的块箭头">
+    常量 五边形 <公开 值 = @msoShapePentagon 注释 = "五边形">
+    常量 人字形 <公开 值 = @msoShapeChevron 注释 = "人字形">
+    常量 右箭头标注 <公开 值 = @msoShapeRightArrowCallout 注释 = "向右箭头的标注">
+    常量 左箭头标注 <公开 值 = @msoShapeLeftArrowCallout 注释 = "带向左箭头的标注">
+    常量 上箭头标注 <公开 值 = @msoShapeUpArrowCallout 注释 = "带向上箭头的标注">
+    常量 下箭头标注 <公开 值 = @msoShapeDownArrowCallout 注释 = "带向下箭头的标注">
+    常量 左右箭头标注 <公开 值 = @msoShapeLeftRightArrowCallout 注释 = "带左右箭头的标注">
+    常量 上下箭头标注 <公开 值 = @msoShapeUpDownArrowCallout 注释 = "带向上和向下箭头的标注">
+    常量 上下左右箭头标注 <公开 值 = @msoShapeQuadArrowCallout 注释 = "带向上、向下、向左和向右箭头的标注.">
+    常量 曲线箭头180度 <公开 值 = @msoShapeCircularArrow 注释 = "带180度曲线的箭头">
+    常量 流程图符号 <公开 值 = @msoShapeFlowchartProcess 注释 = "流程图符号">
+    常量 备用图 <公开 值 = @msoShapeFlowchartAlternateProcess 注释 = "备用流程图符号">
+    常量 决策图 <公开 值 = @msoShapeFlowchartDecision 注释 = "决策流程图符号">
+    常量 数据图 <公开 值 = @msoShapeFlowchartData 注释 = "数据流程图符号">
+    常量 预定义图 <公开 值 = @msoShapeFlowchartPredefinedProcess 注释 = "预定义的流程图符号">
+    常量 内部存储图 <公开 值 = @msoShapeFlowchartInternalStorage 注释 = "内部存储流程图符号">
+    常量 文档图 <公开 值 = @msoShapeFlowchartDocument 注释 = "文档流程图符号">
+    常量 多文档图 <公开 值 = @msoShapeFlowchartMultidocument 注释 = "多文档流程图符号">
+    常量 终止符图 <公开 值 = @msoShapeFlowchartTerminator 注释 = "终止符流程图符号">
+    常量 准备图 <公开 值 = @msoShapeFlowchartPreparation 注释 = "准备流程图符号">
+    常量 手动输入图 <公开 值 = @msoShapeFlowchartManualInput 注释 = "手动输入流程图符号">
+    常量 手动图 <公开 值 = @msoShapeFlowchartManualOperation 注释 = "手动操作流程图符号">
+    常量 连接器图 <公开 值 = @msoShapeFlowchartConnector 注释 = "连接器流程图符号">
+    常量 外连接器图 <公开 值 = @msoShapeFlowchartOffpageConnector 注释 = "页面外连接器流程图符号">
+    常量 卡片图 <公开 值 = @msoShapeFlowchartCard 注释 = "卡片流程图符号">
+    常量 下压磁带图 <公开 值 = @msoShapeFlowchartPunchedTape 注释 = "下压磁带流程图符号">
+    常量 加法结合图 <公开 值 = @msoShapeFlowchartSummingJunction 注释 = "汇总流程图符号">
+    常量 或流程图 <公开 值 = @msoShapeFlowchartOr 注释 = "流程图符号">
+    常量 对比图 <公开 值 = @msoShapeFlowchartCollate 注释 = "整理流程图符号">
+    常量 排序图 <公开 值 = @msoShapeFlowchartSort 注释 = "排序流程图符号">
+    常量 提取图 <公开 值 = @msoShapeFlowchartExtract 注释 = "提取流程图符号">
+    常量 合并图 <公开 值 = @msoShapeFlowchartMerge 注释 = "合并流程图符号">
+    常量 存储数据图 <公开 值 = @msoShapeFlowchartStoredData 注释 = "存储的数据流程图符号">
+    常量 延迟图 <公开 值 = @msoShapeFlowchartDelay 注释 = "延迟流程图符号">
+    常量 顺序存储图 <公开 值 = @msoShapeFlowchartSequentialAccessStorage 注释 = "顺序访问存储流程图符号">
+    常量 磁盘图 <公开 值 = @msoShapeFlowchartDiskTicDisk 注释 = "磁盘流程图符号">
+    常量 直接存储图 <公开 值 = @msoShapeFlowchartDirectAccessStorage 注释 = "直接访问存储流程图符号">
+    常量 显示图 <公开 值 = @msoShapeFlowchartDisplay 注释 = "显示流程图符号">
+    常量 爆炸1 <公开 值 = @msoShapeExplosion1 注释 = "爆炸1">
+    常量 爆炸2 <公开 值 = @msoShapeExplosion2 注释 = "爆炸2">
+    常量 四角星 <公开 值 = @msoShape4pointStar 注释 = "四角星">
+    常量 五角星 <公开 值 = @msoShape5pointStar 注释 = "五角星">
+    常量 八角星 <公开 值 = @msoShape8pointStar 注释 = "8角星">
+    常量 十六角星 <公开 值 = @msoShape16pointStar 注释 = "16角星">
+    常量 二十四角星 <公开 值 = @msoShape24pointStar 注释 = "24角星">
+    常量 三十二角星 <公开 值 = @msoShape32pointStar 注释 = "32角星">
+    常量 上方横幅 <公开 值 = @msoShapeUpRibbon 注释 = "中心区域位于功能区末端上方的功能区横幅">
+    常量 下方横幅 <公开 值 = @msoShapeDownRibbon 注释 = "中心区域位于功能区末端下方的功能区横幅">
+    常量 上弯横幅 <公开 值 = @msoShapeCurvedUpRibbon 注释 = "上弯曲的功能区横幅">
+    常量 下弯横幅 <公开 值 = @msoShapeCurvedDownRibbon 注释 = "下弯曲的功能区横幅">
+    常量 垂直滚动 <公开 值 = @msoShapeVerticalScroll 注释 = "垂直滚动">
+    常量 水平滚动 <公开 值 = @msoShapeHorizontalScroll 注释 = "水平滚动">
+    常量 波浪 <公开 值 = @msoShapeWave 注释 = "波浪">
+    常量 双波浪 <公开 值 = @msoShapeDoubleWave 注释 = "双波浪">
+    常量 矩形标注 <公开 值 = @msoShapeRectangularCallout 注释 = "矩形标注">
+    常量 圆角矩形标注 <公开 值 = @msoShapeRoundedRectangularCallout 注释 = "圆角矩形标注">
+    常量 椭圆标注 <公开 值 = @msoShapeOvalCallout 注释 = "椭圆标注">
+    常量 云标注 <公开 值 = @msoShapeCloudCallout 注释 = "云标注">
+    常量 边框水平线标注 <公开 值 = @msoShapeLineCallout1 注释 = "带边框和水平标注线的标注">
+    常量 对角直线标注 <公开 值 = @msoShapeLineCallout2 注释 = "带对角直线的标注">
+    常量 倾斜线标注 <公开 值 = @msoShapeLineCallout3 注释 = "带倾斜线条的标注">
+    常量 U型线段标注 <公开 值 = @msoShapeLineCallout4 注释 = "带U型标注线段的标注">
+    常量 水平线标注 <公开 值 = @msoShapeLineCallout1AccentBar 注释 = "带水平强调线标注">
+    常量 对角强调标注 <公开 值 = @msoShapeLineCallout2AccentBar 注释 = "带对角标注线和强调线的标注">
+    常量 倾斜强调标注 <公开 值 = @msoShapeLineCallout3AccentBar 注释 = "带倾斜标注线和强调线的标注">
+    常量 强调线U型标注 <公开 值 = @msoShapeLineCallout4AccentBar 注释 = "带强调线和U型标注线段的标注">
+    常量 无框横标注 <公开 值 = @msoShapeLineCallout1NoBorder 注释 = "带横线的标注">
+    常量 无框对角标注 <公开 值 = @msoShapeLineCallout2NoBorder 注释 = "无边框和对角标注线的标注">
+    常量 无框倾斜标注 <公开 值 = @msoShapeLineCallout3NoBorder 注释 = "无边框和倾斜标注线的标注">
+    常量 无框U型标注 <公开 值 = @msoShapeLineCallout4NoBorder 注释 = "没有边框的标注和形成U型的标注线段">
+    常量 带框水平强调标注 <公开 值 = @msoShapeLineCallout1BorderandAccentBar 注释 = "带边框和水平强调线标注">
+    常量 带框对角强调标注 <公开 值 = @msoShapeLineCallout2BorderandAccentBar 注释 = "带边框、对角线和强调线的标注">
+    常量 带框倾斜强调标注 <公开 值 = @msoShapeLineCallout3BorderandAccentBar 注释 = "带边框、倾斜标注线和强调线的标注">
+    常量 带框强调U型标注 <公开 值 = @msoShapeLineCallout4BorderandAccentBar 注释 = "带边框、强调线和U型标注线段的标注">
+    常量 动作按钮 <公开 值 = @msoShapeActionButtonCustom 注释 = "不带默认图片或文本的按钮支持鼠标单击和鼠标移过操作">
+    常量 主页动作按钮 <公开 值 = @msoShapeActionButtonHome 注释 = "主页按钮支持鼠标单击和鼠标移过操作">
+    常量 动作帮助按钮 <公开 值 = @msoShapeActionButtonHelp 注释 = "帮助按钮支持鼠标单击和鼠标移过操作">
+    常量 动作信息按钮 <公开 值 = @msoShapeActionButtonInformation 注释 = "信息按钮支持鼠标单击和鼠标移过操作">
+    常量 动作后上按钮 <公开 值 = @msoShapeActionButtonBackorPrevious 注释 = "后退或上一个按钮支持鼠标单击和鼠标移过操作">
+    常量 动作前下按钮 <公开 值 = @msoShapeActionButtonForwardorNext 注释 = "前进或下一个按钮支持鼠标单击和鼠标移过操作">
+    常量 动作开始按钮 <公开 值 = @msoShapeActionButtonBeginning 注释 = "开始按钮支持鼠标单击和鼠标移过操作">
+    常量 动作结束按钮 <公开 值 = @msoShapeActionButtonEnd 注释 = "结束按钮支持鼠标单击和鼠标移过操作">
+    常量 动作返回按钮 <公开 值 = @msoShapeActionButtonReturn 注释 = "返回按钮支持鼠标单击和鼠标移过操作">
+    常量 动作文档按钮 <公开 值 = @msoShapeActionButtonDocument 注释 = "文档按钮支持鼠标单击和鼠标移过操作">
+    常量 动作声音按钮 <公开 值 = @msoShapeActionButtonSound 注释 = "声音按钮支持鼠标单击和鼠标移过操作">
+    常量 动作影片按钮 <公开 值 = @msoShapeActionButtonMovie 注释 = "影片按钮支持鼠标单击和鼠标移过操作">
+    常量 气球 <公开 值 = @msoShapeBalloon 注释 = "气球">
+    常量 非原始 <公开 值 = @msoShapeNotPrimitive 注释 = "非原始">
+    常量 脱机存储图 <公开 值 = @msoShapeFlowchartOfflineStorage 注释 = "脱机存储流程图符号">
+    常量 两端箭头 <公开 值 = @msoShapeLeftRightRibbon 注释 = "两端都有箭头的功能区">
+    常量 对角带 <公开 值 = @msoShapeDiagonalStripe 注释 = "删除了两个三角形形状的矩形;对角带">
+    常量 圆饼图 <公开 值 = @msoShapePie 注释 = "圆(饼图)部分缺失">
+    常量 并行面 <公开 值 = @msoShapeNonIsoscelesTrapezoid 注释 = "具有非对称非并行面的陷阱">
+    常量 二角形 <公开 值 = @msoShapeDecagon 注释 = "十角形">
+    常量 七角形 <公开 值 = @msoShapeHeptagon 注释 = "七角形">
+    常量 十二角形 <公开 值 = @msoShapeDodecagon 注释 = "十二角形">
+    常量 六点星 <公开 值 = @msoShape6pointStar 注释 = "6角星">
+    常量 七点星 <公开 值 = @msoShape7pointStar 注释 = "7角星">
+    常量 十点星 <公开 值 = @msoShape10pointStar 注释 = "10角星">
+    常量 十二点星 <公开 值 = @msoShape12pointStar 注释 = "12角星">
+    常量 圆环矩形 <公开 值 = @msoShapeRound1Rectangle 注释 = "带有一个圆角的矩形">
+    常量 二圆环矩形 <公开 值 = @msoShapeRound2SameRectangle 注释 = "具有共享一侧的两个圆角的矩形">
+    常量 裁剪角圆环矩形 <公开 值 = @msoShapeSnipRoundRectangle 注释 = "具有一个裁剪的角和一个圆角的矩形">
+    常量 裁剪角矩形 <公开 值 = @msoShapeSnip1Rectangle 注释 = "具有一个裁剪角的矩形">
+    常量 缩小角矩形 <公开 值 = @msoShapeSnip2SameRectangle 注释 = "具有两个共享一侧的缩小角的矩形">
+    常量 二裁剪角矩形 <公开 值 = @msoShapeSnip2DiagRectangle 注释 = "带有两个裁剪角的矩形,对角线相反">
+    常量 二圆角矩形 <公开 值 = @msoShapeRound2DiagRectangle 注释 = "带有两个圆角的矩形,对角线相反">
+    常量 矩形框架 <公开 值 = @msoShapeFrame 注释 = "矩形图片框架">
+    常量 半矩形框 <公开 值 = @msoShapeHalfFrame 注释 = "矩形图片框的一半">
+    常量 水珠 <公开 值 = @msoShapeTear 注释 = "水珠">
+    常量 和弦圆 <公开 值 = @msoShapeChord 注释 = "圆,通过圆的内部连接外围上的两个点的直线;带一个和弦的圆.">
+    常量 矩形中矩形 <公开 值 = @msoShapeCorner 注释 = "带有矩形内径的矩形">
+    常量 加号 <公开 值 = @msoShapeMathPlus 注释 = "加法符号+">
+    常量 减号 <公开 值 = @msoShapeMathMinus 注释 = "减法符号-">
+    常量 乘号 <公开 值 = @msoShapeMathMultiply 注释 = "乘法符号x">
+    常量 除号 <公开 值 = @msoShapeMathDivide 注释 = "除法符号÷">
+    常量 等于号 <公开 值 = @msoShapeMathEqual 注释 = "等于号符号=">
+    常量 不等于号 <公开 值 = @msoShapeMathNotEqual 注释 = "不等于符号≠">
+    常量 等腰三角形 <公开 值 = @msoShapeCornerTabs 注释 = "等腰三角形">
+    常量 小正方形 <公开 值 = @msoShapeSquareTabs 注释 = "四个定义矩形形状的小正方形">
+    常量 四圆 <公开 值 = @msoShapePlaqueTabs 注释 = "定义矩形形状的四个四分之一圆">
+    常量 六齿轮 <公开 值 = @msoShapeGear6 注释 = "具有六个档的齿轮">
+    常量 九齿轮 <公开 值 = @msoShapeGear9 注释 = "具有九个齿轮的齿轮">
+    常量 漏斗 <公开 值 = @msoShapeFunnel 注释 = "漏斗">
+    常量 扇形边 <公开 值 = @msoShapePieWedge 注释 = "圆形的四分之一">
+    常量 左圆箭头 <公开 值 = @msoShapeLeftCircularArrow 注释 = "逆时针方向的圆形箭头">
+    常量 左右圆箭头 <公开 值 = @msoShapeLeftRightCircularArrow 注释 = "顺时针和逆时针方向的圆形箭头,两端都有点的曲线箭头.">
+    常量 曲线箭头 <公开 值 = @msoShapeSwooshArrow 注释 = "曲线箭头">
+    常量 云形状 <公开 值 = @msoShapeCloud 注释 = "云形状">
+    常量 对角正方形 <公开 值 = @msoShapeChartX 注释 = "沿对角线划分为四个部分的正方形">
+    常量 垂直对角正方形 <公开 值 = @msoShapeChartStar 注释 = "沿垂直线和对角线划分为六部分的正方形">
+    常量 垂直水平正方形 <公开 值 = @msoShapeChartPlus 注释 = "垂直和水平划分为四分之四的正方形">
+    常量 反线 <公开 值 = @msoShapeLineInverse 注释 = "反线">
+}
+
+类 Word图形层次 <公开 注释 = "指定要将形状移动到的相对于其他形状的顺序位置" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 置于顶层 <公开 值 = @msoBringToFront 注释 = "使形状置于顶层">
+    常量 置于底层 <公开 值 = @msoSendToBack 注释 = "使形状置于底层">
+    常量 上移一层 <公开 值 = @msoBringForward 注释 = "使形状上移一层">
+    常量 下移一层 <公开 值 = @msoSendBackward 注释 = "使形状下移一层">
+    常量 文字上方 <公开 值 = @msoBringInFrontOfText 注释 = "使形状浮于文字上方">
+    常量 文字下方 <公开 值 = @msoSendBehindText 注释 = "使形状衬于文字下方">
+}
+
+类 Word文本方向 <公开 注释 = "指定文本的方向" 折叠 @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @msoTextOrientationMixed 注释 = "混合">
+    常量 水平 <公开 值 = @msoTextOrientationHorizontal 注释 = "水平">
+    常量 向上 <公开 值 = @msoTextOrientationUpward 注释 = "向上">
+    常量 向下 <公开 值 = @msoTextOrientationDownward 注释 = "向下">
+    常量 远东垂直 <公开 值 = @msoTextOrientationVerticalFarEast 注释 = "亚洲语言支持所需的垂直">
+    常量 垂直 <公开 值 = @msoTextOrientationVertical 注释 = "垂直">
+    常量 远东水平旋转 <公开 值 = @msoTextOrientationHorizontalRotatedFarEast 注释 = "亚洲语言支持所需的水平旋转">
+}
+
+类 Word粘贴格式 <公开 注释 = "指定要在粘贴所选的表格单元格时使用的格式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 默认 <公开 值 = @wdPasteDefault 注释 = "默认">
+    常量 单元格到文本 <公开 值 = @wdSingleCellText 注释 = "将单个单元格粘贴为文本">
+    常量 表格 <公开 值 = @wdSingleCellTable 注释 = "将单个单元格表格粘贴为独立的表格">
+    常量 列表编号 <公开 值 = @wdListContinueNumbering 注释 = "使粘贴的列表根据文档中的列表继续编号">
+    常量 列表重新编号 <公开 值 = @wdListRestartNumbering 注释 = "对粘贴的列表重新进行编号">
+    常量 合并表格 <公开 值 = @wdTableAppendTable 注释 = "通过在所选行之间插入粘贴的行,将粘贴的单元格合并到现有的表格中.">
+    常量 插入表格 <公开 值 = @wdTableInsertAsRows 注释 = "将粘贴的表格作为行插入到目标表格的两行中间">
+    常量 追加表格 <公开 值 = @wdTableOriginalFormatting 注释 = "粘贴一个追加的表格,而不合并表格样式.">
+    常量 Excel图表到图片 <公开 值 = @wdChartPicture 注释 = "将Excel图表粘贴为图片">
+    常量 Excel图表到对象 <公开 值 = @wdChart 注释 = "将Excel图表粘贴为嵌入的OLE对象">
+    常量 Excel图表链接 <公开 值 = @wdChartLinked 注释 = "粘贴Excel图表并将其链接到原始Excel电子表格">
+    常量 原始格式 <公开 值 = @wdFormatOriginalFormatting 注释 = "保留所粘贴材料的原始格式">
+    常量 样式 <公开 值 = @wdUseDestinationStylesRecovery 注释 = "使用目标文档中使用的样式">
+    常量 使用周围格式 <公开 值 = @wdFormatSurroundingFormattingWithEmphasis 注释 = "使所粘贴文本的格式与周围文本的格式匹配">
+    常量 纯文本 <公开 值 = @wdFormatPlainText 注释 = "粘贴为无格式的纯文本文字">
+    常量 覆盖表格 <公开 值 = @wdTableOverwriteCells 注释 = "粘贴表格单元格并覆盖现有的表格单元格">
+    常量 合并列表 <公开 值 = @wdListCombineWithExistingList 注释 = "将粘贴的列表与邻近的列表合并">
+    常量 不合并列表 <公开 值 = @wdListDontMerge 注释 = "不合并列表">
+}
+
+类 Word打印范围 <公开 注释 = "指定要打印的范围" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 整个文档 <公开 值 = @wdPrintAllDocument 注释 = "整个文档">
+    常量 所选内容 <公开 值 = @wdPrintSelection 注释 = "当前所选内容">
+    常量 当前页面 <公开 值 = @wdPrintCurrentPage 注释 = "当前页面">
+    常量 指定范围 <公开 值 = @wdPrintFromTo 注释 = "指定范围">
+    常量 页面范围 <公开 值 = @wdPrintRangeOfPages 注释 = "指定的页面范围">
+}
+
+类 Word打印项目 <公开 注释 = "指定要打印的项目" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 文档内容 <公开 值 = @wdPrintDocumentContent 注释 = "当前文档内容">
+    常量 文档属性 <公开 值 = @wdPrintProperties 注释 = "当前文档中的属性">
+    常量 文档标记 <公开 值 = @wdPrintMarkup 注释 = "当前文档中的标记">
+    常量 文档批注 <公开 值 = @wdPrintComments 注释 = "当前文档中的批注">
+    常量 文档样式 <公开 值 = @wdPrintStyles 注释 = "当前文档中的样式">
+    常量 自动图文集 <公开 值 = @wdPrintAutoTextEntries 注释 = "当前文档中的自动图文集条目">
+    常量 按键分配方案 <公开 值 = @wdPrintKeyAssignments 注释 = "当前文档中的按键分配方案">
+    常量 信封 <公开 值 = @wdPrintEnvelope 注释 = "信封;封皮;包裹物.">
+    常量 内容加批注 <公开 值 = @wdPrintDocumentWithMarkup 注释 = "当前文档内容(包括标记)">
+}
+
+类 Word图形类型 <公开 注释 = "形状的类型或形状范围" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合形状 <公开 值 = @msoShapeTypeMixed 注释 = "混和形状类型">
+    常量 自选 <公开 值 = @msoAutoShape 注释 = "自选形状">
+    常量 标注 <公开 值 = @msoCallout 注释 = "标注">
+    常量 坐标图表 <公开 值 = @msoChart 注释 = "图表">
+    常量 批注 <公开 值 = @msoComment 注释 = "批注">
+    常量 任意多边形 <公开 值 = @msoFreeform 注释 = "任意多边形">
+    常量 组合 <公开 值 = @msoGroup 注释 = "组合">
+    常量 嵌入OLE对象 <公开 值 = @msoEmbeddedOLEObject 注释 = "嵌入式OLE对象">
+    常量 表单控件 <公开 值 = @msoFormControl 注释 = "表单控件">
+    常量 线条 <公开 值 = @msoLine 注释 = "线条">
+    常量 链接OLE对象 <公开 值 = @msoLinkedOLEObject 注释 = "链接OLE对象">
+    常量 链接图片 <公开 值 = @msoLinkedPicture 注释 = "链接图片">
+    常量 OLE对象 <公开 值 = @msoOLEControlObject 注释 = "OLE控件对象">
+    常量 图片 <公开 值 = @msoPicture 注释 = "图片">
+    常量 占位符 <公开 值 = @msoPlaceholder 注释 = "占位符">
+    常量 文本效果 <公开 值 = @msoTextEffect 注释 = "文本效果">
+    常量 媒体 <公开 值 = @msoMedia 注释 = "媒体">
+    常量 文本框 <公开 值 = @msoTextBox 注释 = "文本框">
+    常量 脚本标记 <公开 值 = @msoScriptAnchor 注释 = "脚本定位标记">
+    常量 表格 <公开 值 = @msoTable 注释 = "表格">
+    常量 画布 <公开 值 = @msoCanvas 注释 = "画布">
+    常量 图表 <公开 值 = @msoDiagram 注释 = "图表">
+    常量 墨迹 <公开 值 = @msoInk 注释 = "墨迹">
+    常量 墨迹批注 <公开 值 = @msoInkComment 注释 = "墨迹批注">
+    常量 Smart图形 <公开 值 = @msoIgxGraphic 注释 = "SmartArt图形">
+    常量 切片器 <公开 值 = @msoSlicer 注释 = "切片器">
+    常量 Web视频 <公开 值 = @msoWebVideo 注释 = "Web视频">
+    常量 外接Office <公开 值 = @msoContentApp 注释 = "外接程序Office内容">
+    常量 图形 <公开 值 = @msoGraphic 注释 = "图形">
+    常量 链接图形 <公开 值 = @msoLinkedGraphic 注释 = "链接图形">
+    常量 立体模型 <公开 值 = @mso3DModel 注释 = "3D模型">
+    常量 链接立体模型 <公开 值 = @msoLinked3DModel 注释 = "链接的3D模型">
+}
+
+类 Word标注线 <公开 注释 = "指定标注线的类型" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @msoCalloutMixed 注释 = "只返回值,表示其他状态的组合.">
+    常量 单段 <公开 值 = @msoCalloutOne 注释 = "可水平或垂直的单段标注线">
+    常量 旋转 <公开 值 = @msoCalloutTwo 注释 = "可自由旋转的单段标注线">
+    常量 左侧 <公开 值 = @msoCalloutThree 注释 = "由两条线段组成标注线附加在文本边界框的左侧">
+    常量 右侧 <公开 值 = @msoCalloutFour 注释 = "由两条线段组成标注线连接到文本边界框的右侧">
+}
+
+类 Word段落样式 <公开 注释 = "指定段落样式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 书籍标题 <公开 值 = @wdStyleBookTitle 注释 = "书籍标题">
+    常量 明显参考 <公开 值 = @wdStyleIntenseReference 注释 = "明显参考">
+    常量 不明显参考 <公开 值 = @wdStyleSubtleReference 注释 = "不明显参考">
+    常量 明显强调 <公开 值 = @wdStyleIntenseEmphasis 注释 = "明显强调">
+    常量 不明显强调 <公开 值 = @wdStyleSubtleEmphasis 注释 = "不明显强调">
+    常量 明显引用 <公开 值 = @wdStyleIntenseQuote 注释 = "明显引用">
+    常量 引用 <公开 值 = @wdStyleQuote 注释 = "引用">
+    常量 列出段落 <公开 值 = @wdStyleListParagraph 注释 = "列出段落">
+    常量 列表字中色1 <公开 值 = @wdStyleTableMediumList1Accent1 注释 = "中间色列表1强调文字颜色1">
+    常量 底纹字中色2 <公开 值 = @wdStyleTableMediumShading2Accent1 注释 = "中间色底纹2强调文字颜色1">
+    常量 底纹字中色1 <公开 值 = @wdStyleTableMediumShading1Accent1 注释 = "中间色底纹1强调文字颜色1">
+    常量 浅字色网格 <公开 值 = @wdStyleTableLightGridAccent1 注释 = "浅色网格强调文字颜色1">
+    常量 浅字色列表 <公开 值 = @wdStyleTableLightListAccent1 注释 = "浅色列表强调文字颜色1">
+    常量 浅字色底纹 <公开 值 = @wdStyleTableLightShadingAccent1 注释 = "浅色底纹强调文字颜色1">
+    常量 彩色网格 <公开 值 = @wdStyleTableColorfulGrid 注释 = "彩色网格">
+    常量 彩色列表 <公开 值 = @wdStyleTableColorfulList 注释 = "彩色列表">
+    常量 彩色底纹 <公开 值 = @wdStyleTableColorfulShading 注释 = "彩色底纹">
+    常量 深色列表 <公开 值 = @wdStyleTableDarkList 注释 = "深色列表">
+    常量 中色网格3 <公开 值 = @wdStyleTableMediumGrid3 注释 = "中间色网格3">
+    常量 中色网格2 <公开 值 = @wdStyleTableMediumGrid2 注释 = "中间色网格2">
+    常量 中色网格1 <公开 值 = @wdStyleTableMediumGrid1 注释 = "中间色网格1">
+    常量 中色列表2 <公开 值 = @wdStyleTableMediumList2 注释 = "中间色列表2">
+    常量 中色列表1 <公开 值 = @wdStyleTableMediumList1 注释 = "中间色列表1">
+    常量 中色底纹2 <公开 值 = @wdStyleTableMediumShading2 注释 = "中间色底纹2">
+    常量 中色底纹1 <公开 值 = @wdStyleTableMediumShading1 注释 = "中间色底纹1">
+    常量 浅色网格 <公开 值 = @wdStyleTableLightGrid 注释 = "浅色网格">
+    常量 浅色列表 <公开 值 = @wdStyleTableLightList 注释 = "浅色列表">
+    常量 浅色底纹 <公开 值 = @wdStyleTableLightShading 注释 = "浅色底纹">
+    常量 对象正文 <公开 值 = @wdStyleNormalObject 注释 = "正文(应用于对象)">
+    常量 表格正文 <公开 值 = @wdStyleNormalTable 注释 = "正文(在表格中应用)">
+    常量 HTML变量 <公开 值 = @wdStyleHtmlVar 注释 = "HTML变量">
+    常量 HTML等宽 <公开 值 = @wdStyleHtmlTt 注释 = "HTML类似打字机或者等宽的文本效果">
+    常量 HTML样本 <公开 值 = @wdStyleHtmlSamp 注释 = "HTML样本">
+    常量 HTML预设 <公开 值 = @wdStyleHtmlPre 注释 = "HTML预设格式">
+    常量 HTML键盘 <公开 值 = @wdStyleHtmlKbd 注释 = "HTML键盘">
+    常量 HTML定义 <公开 值 = @wdStyleHtmlDfn 注释 = "HTML定义">
+    常量 HTML代码 <公开 值 = @wdStyleHtmlCode 注释 = "HTML代码">
+    常量 HTML引文 <公开 值 = @wdStyleHtmlCite 注释 = "HTML引文">
+    常量 HTML地址 <公开 值 = @wdStyleHtmlAddress 注释 = "HTML地址">
+    常量 HTML缩写 <公开 值 = @wdStyleHtmlAcronym 注释 = "HTML首字母缩写">
+    常量 普通网站 <公开 值 = @wdStyleHtmlNormal 注释 = "普通(网站)">
+    常量 纯文本 <公开 值 = @wdStylePlainText 注释 = "纯文本">
+    常量 文档结构图 <公开 值 = @wdStyleNavPane 注释 = "文档结构图">
+    常量 强调 <公开 值 = @wdStyleEmphasis 注释 = "强调">
+    常量 要点 <公开 值 = @wdStyleStrong 注释 = "要点">
+    常量 访问超链接 <公开 值 = @wdStyleHyperlinkFollowed 注释 = "访问过的超链接">
+    常量 超链接 <公开 值 = @wdStyleHyperlink 注释 = "超链接">
+    常量 文本块 <公开 值 = @wdStyleBlockQuotation 注释 = "文本块">
+    常量 正文缩进3 <公开 值 = @wdStyleBodyTextIndent3 注释 = "正文文本缩进3">
+    常量 正文缩进2 <公开 值 = @wdStyleBodyTextIndent2 注释 = "正文文本缩进2">
+    常量 正文3 <公开 值 = @wdStyleBodyText3 注释 = "正文文本3">
+    常量 正文2 <公开 值 = @wdStyleBodyText2 注释 = "正文文本2">
+    常量 注释标题 <公开 值 = @wdStyleNoteHeading 注释 = "注释标题">
+    常量 首行缩进2 <公开 值 = @wdStyleBodyTextFirstIndent2 注释 = "正文首行缩进2">
+    常量 首行缩进 <公开 值 = @wdStyleBodyTextFirstIndent 注释 = "正文首行缩进">
+    常量 日期 <公开 值 = @wdStyleDate 注释 = "日期">
+    常量 称呼 <公开 值 = @wdStyleSalutation 注释 = "称呼">
+    常量 副标题 <公开 值 = @wdStyleSubtitle 注释 = "副标题">
+    常量 信息标题 <公开 值 = @wdStyleMessageHeader 注释 = "信息标题">
+    常量 列表连续5 <公开 值 = @wdStyleListContinue5 注释 = "列表连续5">
+    常量 列表连续4 <公开 值 = @wdStyleListContinue4 注释 = "列表连续4">
+    常量 列表连续3 <公开 值 = @wdStyleListContinue3 注释 = "列表连续3">
+    常量 列表连续2 <公开 值 = @wdStyleListContinue2 注释 = "列表连续2">
+    常量 列表连续 <公开 值 = @wdStyleListContinue 注释 = "列表连续">
+    常量 正文缩进 <公开 值 = @wdStyleBodyTextIndent 注释 = "正文文本缩进">
+    常量 正文 <公开 值 = @wdStyleBodyText 注释 = "正文文本">
+    常量 默认字体 <公开 值 = @wdStyleDefaultParagraphFont 注释 = "默认段落字体">
+    常量 签名 <公开 值 = @wdStyleSignature 注释 = "签名">
+    常量 结束语 <公开 值 = @wdStyleClosing 注释 = "结束语">
+    常量 标题 <公开 值 = @wdStyleTitle 注释 = "标题">
+    常量 列表编号5 <公开 值 = @wdStyleListNumber5 注释 = "列表编号5">
+    常量 列表编号4 <公开 值 = @wdStyleListNumber4 注释 = "列表编号4">
+    常量 列表编号3 <公开 值 = @wdStyleListNumber3 注释 = "列表编号3">
+    常量 列表编号2 <公开 值 = @wdStyleListNumber2 注释 = "列表编号2">
+    常量 列表符号5 <公开 值 = @wdStyleListBullet5 注释 = "列表项目符号5">
+    常量 列表符号4 <公开 值 = @wdStyleListBullet4 注释 = "列表项目符号4">
+    常量 列表符号3 <公开 值 = @wdStyleListBullet3 注释 = "列表项目符号3">
+    常量 列表符号2 <公开 值 = @wdStyleListBullet2 注释 = "列表项目符号2">
+    常量 列表5 <公开 值 = @wdStyleList5 注释 = "列表5">
+    常量 列表4 <公开 值 = @wdStyleList4 注释 = "列表4">
+    常量 列表3 <公开 值 = @wdStyleList3 注释 = "列表3">
+    常量 列表2 <公开 值 = @wdStyleList2 注释 = "列表2">
+    常量 列表编号 <公开 值 = @wdStyleListNumber 注释 = "列表编号">
+    常量 列表符号 <公开 值 = @wdStyleListBullet 注释 = "列表项目符号">
+    常量 列表 <公开 值 = @wdStyleList 注释 = "列表">
+    常量 引文标题 <公开 值 = @wdStyleTOAHeading 注释 = "引文目录标题">
+    常量 宏文本 <公开 值 = @wdStyleMacroText 注释 = "宏文本">
+    常量 引文 <公开 值 = @wdStyleTableOfAuthorities 注释 = "引文目录">
+    常量 尾注文本 <公开 值 = @wdStyleEndnoteText 注释 = "尾注文本">
+    常量 尾注引用 <公开 值 = @wdStyleEndnoteReference 注释 = "尾注引用">
+    常量 页码 <公开 值 = @wdStylePageNumber 注释 = "页码">
+    常量 行号 <公开 值 = @wdStyleLineNumber 注释 = "行号">
+    常量 批注引用 <公开 值 = @wdStyleCommentReference 注释 = "批注引用">
+    常量 脚注引用 <公开 值 = @wdStyleFootnoteReference 注释 = "脚注引用">
+    常量 寄信地址 <公开 值 = @wdStyleEnvelopeReturn 注释 = "寄信人地址">
+    常量 收信地址 <公开 值 = @wdStyleEnvelopeAddress 注释 = "收信人地址">
+    常量 图表目录 <公开 值 = @wdStyleTableOfFigures 注释 = "图表目录">
+    常量 题注 <公开 值 = @wdStyleCaption 注释 = "题注">
+    常量 索引标题 <公开 值 = @wdStyleIndexHeading 注释 = "索引标题">
+    常量 页脚 <公开 值 = @wdStyleFooter 注释 = "页脚">
+    常量 页眉 <公开 值 = @wdStyleHeader 注释 = "页眉">
+    常量 批注文字 <公开 值 = @wdStyleCommentText 注释 = "批注文字">
+    常量 脚注文本 <公开 值 = @wdStyleFootnoteText 注释 = "脚注文本">
+    常量 缩进 <公开 值 = @wdStyleNormalIndent 注释 = "正文缩进">
+    常量 目录9 <公开 值 = @wdStyleTOC9 注释 = "目录9">
+    常量 目录8 <公开 值 = @wdStyleTOC8 注释 = "目录8">
+    常量 目录7 <公开 值 = @wdStyleTOC7 注释 = "目录7">
+    常量 目录6 <公开 值 = @wdStyleTOC6 注释 = "目录6">
+    常量 目录5 <公开 值 = @wdStyleTOC5 注释 = "目录5">
+    常量 目录4 <公开 值 = @wdStyleTOC4 注释 = "目录4">
+    常量 目录3 <公开 值 = @wdStyleTOC3 注释 = "目录3">
+    常量 目录2 <公开 值 = @wdStyleTOC2 注释 = "目录2">
+    常量 目录1 <公开 值 = @wdStyleTOC1 注释 = "目录1">
+    常量 索引9 <公开 值 = @wdStyleIndex9 注释 = "索引9">
+    常量 索引8 <公开 值 = @wdStyleIndex8 注释 = "索引8">
+    常量 索引7 <公开 值 = @wdStyleIndex7 注释 = "索引7">
+    常量 索引6 <公开 值 = @wdStyleIndex6 注释 = "索引6">
+    常量 索引5 <公开 值 = @wdStyleIndex5 注释 = "索引5">
+    常量 索引4 <公开 值 = @wdStyleIndex4 注释 = "索引4">
+    常量 索引3 <公开 值 = @wdStyleIndex3 注释 = "索引3">
+    常量 索引2 <公开 值 = @wdStyleIndex2 注释 = "索引2">
+    常量 索引1 <公开 值 = @wdStyleIndex1 注释 = "索引1">
+    常量 标题9 <公开 值 = @wdStyleHeading9 注释 = "标题9">
+    常量 标题8 <公开 值 = @wdStyleHeading8 注释 = "标题8">
+    常量 标题7 <公开 值 = @wdStyleHeading7 注释 = "标题7">
+    常量 标题6 <公开 值 = @wdStyleHeading6 注释 = "标题6">
+    常量 标题5 <公开 值 = @wdStyleHeading5 注释 = "标题5">
+    常量 标题4 <公开 值 = @wdStyleHeading4 注释 = "标题4">
+    常量 标题3 <公开 值 = @wdStyleHeading3 注释 = "标题3">
+    常量 标题2 <公开 值 = @wdStyleHeading2 注释 = "标题2">
+    常量 标题1 <公开 值 = @wdStyleHeading1 注释 = "标题1">
+    常量 默认 <公开 值 = @wdStyleNormal 注释 = "默认">
+}
+
+类 Word段落行距 <公开 注释 = "指定要应用于段落的行距格式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 一倍 <公开 值 = @wdLineSpaceSingle 注释 = "1倍行距">
+    常量 一倍半 <公开 值 = @wdLineSpace1pt5 注释 = "1.5倍行距该行距相当于当前字号加6磅">
+    常量 二倍 <公开 值 = @wdLineSpaceDouble 注释 = "双倍行距">
+    常量 指定 <公开 值 = @wdLineSpaceAtLeast 注释 = "行距至少为一个指定值该值需要单独指定">
+    常量 小一倍 <公开 值 = @wdLineSpaceExactly 注释 = "行距只能是所需的最大行距此设置所使用的行距通常小于单倍行距">
+    常量 行数确定 <公开 值 = @wdLineSpaceMultiple 注释 = "由指定的行数确定的行距">
+}
+
+类 Word列表范围 <公开 注释 = "指定要应用列表模板的列表部分" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 列表集 <公开 值 = @wdListApplyToWholeList 注释 = "整个列表">
+    常量 至末尾 <公开 值 = @wdListApplyToThisPointForward 注释 = "从光标插入点到列表末尾">
+    常量 选择区 <公开 值 = @wdListApplyToSelection 注释 = "所选内容">
+}
+
+类 Word着重号 <公开 注释 = "指定用于字符或指定字符串的着重号类型" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 无 <公开 值 = @wdEmphasisMarkNone 注释 = "无着重号">
+    常量 上实心圆 <公开 值 = @wdEmphasisMarkOverSolidCircle 注释 = "上实心圆注:实测实心圆在下方.">
+    常量 上逗号 <公开 值 = @wdEmphasisMarkOverComma 注释 = "一个逗号">
+    常量 上圆 <公开 值 = @wdEmphasisMarkOverWhiteCircle 注释 = "白色空心圈">
+    常量 下实心圆 <公开 值 = @wdEmphasisMarkUnderSolidCircle 注释 = "下实心圆">
+}
+
+类 Word统计单位 <公开 注释 = "用于统计数量单位" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 单词 <公开 值 = @wdStatisticWords 注释 = "单词数">
+    常量 行 <公开 值 = @wdStatisticLines 注释 = "行数">
+    常量 页 <公开 值 = @wdStatisticPages 注释 = "页数">
+    常量 字符无空格 <公开 值 = @wdStatisticCharacters 注释 = "字符数">
+    常量 段落 <公开 值 = @wdStatisticParagraphs 注释 = "段落数">
+    常量 字符带空格 <公开 值 = @wdStatisticCharactersWithSpaces 注释 = "包括空格在内的字符数">
+    常量 远东字符 <公开 值 = @wdStatisticFarEastCharacters 注释 = "亚洲语言字符数">
+}
+
+类 Word导出范围 <公开 @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 整个文档 <公开 值 = @wdExportAllDocument 注释 = "导出整个文档">
+    常量 选中内容 <公开 值 = @wdExportSelection 注释 = "导出当前选择的内容">
+    常量 当前页 <公开 值 = @wdExportCurrentPage 注释 = "导出当前页">
+    常量 页范围 <公开 值 = @wdExportFromTo 注释 = "使用起始和结束位置导出某个范围的内容">
+}
+
+类 Word背景图案 <公开 注释 = "将指定填充设置为一种图案" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @msoPatternMixed 注释 = "混和图案">
+    常量 点线百分之5 <公开 值 = @msoPattern5Percent 注释 = "点线百分之5">
+    常量 点线百分之10 <公开 值 = @msoPattern10Percent 注释 = "点线百分之10">
+    常量 点线百分之20 <公开 值 = @msoPattern20Percent 注释 = "点线百分之20">
+    常量 点线百分之25 <公开 值 = @msoPattern25Percent 注释 = "点线百分之25">
+    常量 点线百分之30 <公开 值 = @msoPattern30Percent 注释 = "点线百分之30">
+    常量 点线百分之40 <公开 值 = @msoPattern40Percent 注释 = "点线百分之40">
+    常量 点线百分之50 <公开 值 = @msoPattern50Percent 注释 = "点线百分之50">
+    常量 点线百分之60 <公开 值 = @msoPattern60Percent 注释 = "点线百分之60">
+    常量 点线百分之70 <公开 值 = @msoPattern70Percent 注释 = "点线百分之70">
+    常量 点线百分之75 <公开 值 = @msoPattern75Percent 注释 = "点线百分之75">
+    常量 点线百分之80 <公开 值 = @msoPattern80Percent 注释 = "点线百分之80">
+    常量 点线百分之90 <公开 值 = @msoPattern90Percent 注释 = "点线百分之90">
+    常量 深色横线 <公开 值 = @msoPatternDarkHorizontal 注释 = "深色横线">
+    常量 深色竖线 <公开 值 = @msoPatternDarkVertical 注释 = "深色竖线">
+    常量 深色斜下 <公开 值 = @msoPatternDarkDownwardDiagonal 注释 = "深色斜下线">
+    常量 深色斜上 <公开 值 = @msoPatternDarkUpwardDiagonal 注释 = "深色斜上线">
+    常量 小棋盘 <公开 值 = @msoPatternSmallCheckerBoard 注释 = "小棋盘">
+    常量 格子 <公开 值 = @msoPatternTrellis 注释 = "格子">
+    常量 浅色横线 <公开 值 = @msoPatternLightHorizontal 注释 = "浅色横线">
+    常量 浅色竖线 <公开 值 = @msoPatternLightVertical 注释 = "浅色竖线">
+    常量 浅色斜下 <公开 值 = @msoPatternLightDownwardDiagonal 注释 = "浅色斜下线">
+    常量 浅色斜上 <公开 值 = @msoPatternLightUpwardDiagonal 注释 = "浅色斜上线">
+    常量 小网格 <公开 值 = @msoPatternSmallGrid 注释 = "小网格">
+    常量 点式菱形 <公开 值 = @msoPatternDottedDiamond 注释 = "点式菱形">
+    常量 宽斜下 <公开 值 = @msoPatternWideDownwardDiagonal 注释 = "宽斜下线">
+    常量 宽斜上 <公开 值 = @msoPatternWideUpwardDiagonal 注释 = "宽斜上线">
+    常量 斜上虚线 <公开 值 = @msoPatternDashedUpwardDiagonal 注释 = "斜上虚线">
+    常量 斜下虚线 <公开 值 = @msoPatternDashedDownwardDiagonal 注释 = "斜下虚线">
+    常量 窄竖线 <公开 值 = @msoPatternNarrowVertical 注释 = "窄竖线">
+    常量 窄横线 <公开 值 = @msoPatternNarrowHorizontal 注释 = "窄横线">
+    常量 竖虚线 <公开 值 = @msoPatternDashedVertical 注释 = "竖虚线">
+    常量 横虚线 <公开 值 = @msoPatternDashedHorizontal 注释 = "横虚线">
+    常量 大纸屑 <公开 值 = @msoPatternLargeConftern 注释 = "大纸屑">
+    常量 大网格 <公开 值 = @msoPatternLargeGrid 注释 = "大网格">
+    常量 横向砖形 <公开 值 = @msoPatternHorizontalBrick 注释 = "横向砖形">
+    常量 大棋盘 <公开 值 = @msoPatternLargeCheckerBoard 注释 = "大棋盘">
+    常量 小纸屑 <公开 值 = @msoPatternSmallConftern 注释 = "小纸屑">
+    常量 之字形 <公开 值 = @msoPatternZigZag 注释 = "之字形">
+    常量 实心菱形 <公开 值 = @msoPatternSolidDiamond 注释 = "实心菱形">
+    常量 对角砖形 <公开 值 = @msoPatternDiagonalBagon 注释 = "对角砖形">
+    常量 轮廓菱形 <公开 值 = @msoPatternOutlinedDiamond 注释 = "轮廓式菱形">
+    常量 彩格 <公开 值 = @msoPatternPlaid 注释 = "彩格">
+    常量 球体 <公开 值 = @msoPatternSphere 注释 = "球体">
+    常量 编织物 <公开 值 = @msoPatternWeave 注释 = "编织物">
+    常量 虚线网格 <公开 值 = @msoPatternDottedGrid 注释 = "虚线网格">
+    常量 草皮 <公开 值 = @msoPatternDivot 注释 = "草皮">
+    常量 木瓦板 <公开 值 = @msoPatternShingle 注释 = "木瓦板">
+    常量 波浪线 <公开 值 = @msoPatternWave 注释 = "波浪">
+    常量 水平 <公开 值 = @msoPatternHorizontal 注释 = "水平">
+    常量 垂直 <公开 值 = @msoPatternVertical 注释 = "垂直">
+    常量 十字形 <公开 值 = @msoPatternCross 注释 = "十字形">
+    常量 斜下线 <公开 值 = @msoPatternDownwardDiagonal 注释 = "斜下线">
+    常量 斜上线 <公开 值 = @msoPatternUpwardDiagonal 注释 = "斜上线">
+    常量 对角十字 <公开 值 = @msoPatternDiagonalCross 注释 = "对角十字">
+}
+
+类 Word渐变样式 <公开 注释 = "指定渐变填充的样式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混和 <公开 值 = @msoGradientMixed 注释 = "渐变是混和的">
+    常量 水平 <公开 值 = @msoGradientHorizontal 注释 = "水平经过图形的渐变">
+    常量 垂直 <公开 值 = @msoGradientVertical 注释 = "垂直向下填充图形的渐变">
+    常量 斜上 <公开 值 = @msoGradientDiagonalUp 注释 = "从一个底角到另一侧顶角的对角渐变">
+    常量 斜下 <公开 值 = @msoGradientDiagonalDown 注释 = "从一个顶角到另一侧底角的对角渐变">
+    常量 角部辐射 <公开 值 = @msoGradientFromCorner 注释 = "从一个角到其他三个角的渐变">
+    常量 标题向外 <公开 值 = @msoGradientFromTitle 注释 = "从标题向外的渐变">
+    常量 中心辐射 <公开 值 = @msoGradientFromCenter 注释 = "从中心到各个角的渐变">
+}
+
+类 Word视图类型 <公开 注释 = "指定视图类型" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 普通 <公开 值 = @wdNormalView 注释 = "普通视图">
+    常量 大纲 <公开 值 = @wdOutlineView 注释 = "大纲视图">
+    常量 页面 <公开 值 = @wdPrintView 注释 = "页面视图">
+    常量 打印预览 <公开 值 = @wdPrintPreview 注释 = "打印预览视图">
+    常量 主控 <公开 值 = @wdMasterView 注释 = "主控视图">
+    常量 Web <公开 值 = @wdWebView 注释 = "Web视图">
+    常量 阅读 <公开 值 = @wdReadingView 注释 = "阅读视图">
+}
+
+类 Word背景纹理 <公开 注释 = "指定用于填充形状的纹理" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @msoPresetTextureMixed 注释 = "混合">
+    常量 草纸 <公开 值 = @msoTexturePapyrus 注释 = "草纸纹理">
+    常量 画布 <公开 值 = @msoTextureCanvas 注释 = "画布纹理">
+    常量 斜纹 <公开 值 = @msoTextureDenim 注释 = "Denim纹理">
+    常量 月光 <公开 值 = @msoTextureWovenMat 注释 = "月光纹理">
+    常量 水珠 <公开 值 = @msoTextureWaterDroplets 注释 = "水珠纹理">
+    常量 纸袋 <公开 值 = @msoTexturePaperBag 注释 = "纸袋纹理">
+    常量 化石 <公开 值 = @msoTextureFishFossil 注释 = "化石纹理">
+    常量 沙 <公开 值 = @msoTextureSand 注释 = "沙纹理">
+    常量 绿色大理石 <公开 值 = @msoTextureGreenMarble 注释 = "绿色大理石纹理">
+    常量 白色大理石 <公开 值 = @msoTextureWhiteMarble 注释 = "白色大理石纹理">
+    常量 黑色大理石 <公开 值 = @msoTextureBrownMarble 注释 = "黑色大理石纹理">
+    常量 花岗岩 <公开 值 = @msoTextureGranite 注释 = "花岗岩纹理">
+    常量 报刊 <公开 值 = @msoTextureNewsprint 注释 = "报刊纹理">
+    常量 环保纸 <公开 值 = @msoTextureRecycledPaper 注释 = "环保纸纹理">
+    常量 羊皮纸 <公开 值 = @msoTextureParchment 注释 = "羊皮纸纹理">
+    常量 信纸 <公开 值 = @msoTextureStationery 注释 = "信纸纹理">
+    常量 蓝色纸 <公开 值 = @msoTextureBlueTissuePaper 注释 = "蓝色纸纹理">
+    常量 粉色纸 <公开 值 = @msoTexturePinkTissuePaper 注释 = "粉色纸纹理">
+    常量 紫色网格 <公开 值 = @msoTexturePurpleMesh 注释 = "紫色网格纹理">
+    常量 花纹 <公开 值 = @msoTextureBouquet 注释 = "花纹纹理">
+    常量 软木塞 <公开 值 = @msoTextureCork 注释 = "软木塞纹理">
+    常量 桃木色 <公开 值 = @msoTextureWalnut 注释 = "桃木色纹理">
+    常量 橡木 <公开 值 = @msoTextureOak 注释 = "橡木纹理">
+    常量 中等纹理 <公开 值 = @msoTextureMediumWood 注释 = "中等纹理纹理">
+}
+
+类 Word渐变填充 <公开 注释 = "指定使用哪种预定义渐变填充形状" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 混合 <公开 值 = @msoPresetGradientMixed 注释 = "混合渐变">
+    常量 晚霞 <公开 值 = @msoGradientEarlySunset 注释 = "晚霞渐变">
+    常量 晚红 <公开 值 = @msoGradientLateSunset 注释 = "晚红渐变">
+    常量 夜间 <公开 值 = @msoGradientNightfall 注释 = "夜间渐变">
+    常量 黎明 <公开 值 = @msoGradientDaybreak 注释 = "黎明渐变">
+    常量 水平 <公开 值 = @msoGradientHorizon 注释 = "水平渐变">
+    常量 沙漠 <公开 值 = @msoGradientDesert 注释 = "沙漠渐变">
+    常量 海洋 <公开 值 = @msoGradientOcean 注释 = "海洋渐变">
+    常量 静水 <公开 值 = @msoGradientCalmWater 注释 = "静水渐变">
+    常量 射击 <公开 值 = @msoGradientFire 注释 = "射击渐变">
+    常量 雾 <公开 值 = @msoGradientFog 注释 = "云雾渐变">
+    常量 苔藓 <公开 值 = @msoGradientMoss 注释 = "苔藓渐变">
+    常量 孔雀开屏 <公开 值 = @msoGradientPeacock 注释 = "孔雀开屏渐变">
+    常量 麦黄色 <公开 值 = @msoGradientWheat 注释 = "麦黄色渐变">
+    常量 羊皮纸 <公开 值 = @msoGradientParchment 注释 = "羊皮纸渐变">
+    常量 红木 <公开 值 = @msoGradientMahogany 注释 = "红木渐变">
+    常量 彩虹 <公开 值 = @msoGradientRainbow 注释 = "水彩渐变">
+    常量 彩虹2 <公开 值 = @msoGradientRainbowII 注释 = "水彩II渐变">
+    常量 金色 <公开 值 = @msoGradientGold 注释 = "金色渐变">
+    常量 金色2 <公开 值 = @msoGradientGoldII 注释 = "金色II渐变">
+    常量 黄铜 <公开 值 = @msoGradientBrass 注释 = "黄铜渐变">
+    常量 铬合金 <公开 值 = @msoGradientChrome 注释 = "铬合金渐变">
+    常量 铬合金2 <公开 值 = @msoGradientChromeII 注释 = "铬合金II渐变">
+    常量 银白色 <公开 值 = @msoGradientSilver 注释 = "银白色渐变">
+    常量 蔚蓝色 <公开 值 = @msoGradientSapphire 注释 = "蔚蓝色渐变">
+}
+
+类 Word边框 <公开 注释 = "指定要使用的边框类型" 折叠2 @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 斜上 <公开 值 = @wdBorderDiagonalUp 注释 = "方向从左下角开始的斜向边框线">
+    常量 斜下 <公开 值 = @wdBorderDiagonalDown 注释 = "方向从左上角开始的斜向边框线">
+    常量 纵向 <公开 值 = @wdBorderVertical 注释 = "纵向框线">
+    常量 横向 <公开 值 = @wdBorderHorizontal 注释 = "横向框线">
+    常量 右边 <公开 值 = @wdBorderRight 注释 = "右侧框线">
+    常量 下边 <公开 值 = @wdBorderBottom 注释 = "底边框线">
+    常量 左边 <公开 值 = @wdBorderLeft 注释 = "左侧框线">
+    常量 上边 <公开 值 = @wdBorderTop 注释 = "上框线">
+}
+
+类 Word线条样式 <公开 注释 = "指定边框的线条样式" @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 无边框 <公开 值 = @wdLineStyleNone 注释 = "无边框">
+    常量 单线 <公开 值 = @wdLineStyleSingle 注释 = "单实线">
+    常量 点线 <公开 值 = @wdLineStyleDot 注释 = "点线">
+    常量 划线 <公开 值 = @wdLineStyleDashSmallGap 注释 = "划线后跟小间隙">
+    常量 划线2 <公开 值 = @wdLineStyleDashLargeGap 注释 = "划线后跟大间隙">
+    常量 划线点 <公开 值 = @wdLineStyleDashDot 注释 = "划线后跟点">
+    常量 划线两点 <公开 值 = @wdLineStyleDashDotDot 注释 = "划线后跟两个点">
+    常量 双线 <公开 值 = @wdLineStyleDouble 注释 = "双实线">
+    常量 三线 <公开 值 = @wdLineStyleTriple 注释 = "三条细实线">
+    常量 里细外粗 <公开 值 = @wdLineStyleThinThickSmallGap 注释 = "里面是一条细实线,外面是一条粗实线,两条线的间隙较小.">
+    常量 里粗外细 <公开 值 = @wdLineStyleThickThinSmallGap 注释 = "里面是一条粗实线,外面是一条细实线,两条线的间隙较小.">
+    常量 里细外细 <公开 值 = @wdLineStyleThinThickThinSmallGap 注释 = "最里面一条细实线,其次一条粗实线,最外面是一条细实线,所有线之间的间隙较小.">
+    常量 里细外粗2 <公开 值 = @wdLineStyleThinThickMedGap 注释 = "里面是一条细实线,外面是一条粗实线,两条线的间隙中等.">
+    常量 里粗外细2 <公开 值 = @wdLineStyleThickThinMedGap 注释 = "里面是一条粗实线,外面是一条细实线,两条线的间隙中等.">
+    常量 里细外细2 <公开 值 = @wdLineStyleThinThickThinMedGap 注释 = "最里面是一条细实线,其次是一条粗实线,最外面是一条细实线,所有线之间的间隙中等.">
+    常量 里细外粗3 <公开 值 = @wdLineStyleThinThickLargeGap 注释 = "里面是一条细实线,外面是一条粗实线,两条线的间隙较大.">
+    常量 里粗外细3 <公开 值 = @wdLineStyleThickThinLargeGap 注释 = "里面是一条粗实线,外面是一条细实线,两条线的间隙较大.">
+    常量 里细外细3 <公开 值 = @wdLineStyleThinThickThinLargeGap 注释 = "最里面是一条细实线,其次是一条粗实线,最外面是一条细实线,所有线之间的间隙较大.">
+    常量 波浪线 <公开 值 = @wdLineStyleSingleWavy 注释 = "波浪型单实线">
+    常量 波浪双线 <公开 值 = @wdLineStyleDoubleWavy 注释 = "波浪型双实线">
+    常量 划线粗点 <公开 值 = @wdLineStyleDashDotStroked 注释 = "划线后跟粗点,使边框的外观类似于理发店招牌.">
+    常量 浮雕阳 <公开 值 = @wdLineStyleEmboss3D 注释 = "边框看起来具有3D浮现外观">
+    常量 浮雕阴 <公开 值 = @wdLineStyleEngrave3D 注释 = "边框看起来具有3D阴文外观">
+    常量 凸边框 <公开 值 = @wdLineStyleOutset 注释 = "边框呈现凸起效果">
+    常量 凹边框 <公开 值 = @wdLineStyleInset 注释 = "边框呈现凹进效果">
+}
+
+类 Word宏类型 <公开 @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 模块 <公开 值 = @vbext_ct_StdModule 注释 = "模块">
+    常量 类模块 <公开 值 = @vbext_ct_ClassModule 注释 = "类模块">
+    常量 窗口 <公开 值 = @vbext_ct_MSForm 注释 = "Microsoft 窗体">
+    常量 设计器 <公开 值 = @vbext_ct_ActiveXDesigner 注释 = "ActiveX 设计器">
+    常量 文档模块 <公开 值 = @vbext_ct_Document 注释 = "文档模块">
+}
+
+类 Word主题 <公开 @常量类 = 文本型 @文档 = "category = \"辅助类\"">
+{
+    常量 奶白 <公开 值 = "AFTRNOON" 注释 = "奶白">
+    常量 北极 <公开 值 = "ARCTIC" 注释 = "北极">
+    常量 轴线 <公开 值 = "AXIS" 注释 = "轴线">
+    常量 混杂 <公开 值 = "BLENDS" 注释 = "混杂">
+    常量 平蓝 <公开 值 = "BLUECALM" 注释 = "平蓝">
+    常量 蓝色 <公开 值 = "BLUEPRNT" 注释 = "蓝色">
+    常量 醒目灰 <公开 值 = "BOLDSTRI" 注释 = "醒目灰">
+    常量 微风 <公开 值 = "BREEZE" 注释 = "微风">
+    常量 峡谷 <公开 值 = "CANYON" 注释 = "峡谷">
+    常量 胶囊 <公开 值 = "CAPSULES" 注释 = "胶囊">
+    常量 瀑布 <公开 值 = "CASCADE" 注释 = "瀑布">
+    常量 罗盘 <公开 值 = "COMPASS" 注释 = "罗盘">
+    常量 混凝土 <公开 值 = "CONCRETE" 注释 = "混凝土">
+    常量 深蓝色 <公开 值 = "DEEPBLUE" 注释 = "深蓝色">
+    常量 回声 <公开 值 = "ECHO" 注释 = "回声">
+    常量 暮色 <公开 值 = "ECLIPSE" 注释 = "暮色">
+    常量 边缘 <公开 值 = "EDGE" 注释 = "边缘">
+    常量 绿色 <公开 值 = "EVRGREEN" 注释 = "绿色">
+    常量 品牌 <公开 值 = "EXPEDITN" 注释 = "品牌">
+    常量 冰 <公开 值 = "ICE" 注释 = "冰">
+    常量 网络 <公开 值 = "INDUST" 注释 = "网络">
+    常量 虹 <公开 值 = "IRIS" 注释 = "虹">
+    常量 杂志 <公开 值 = "JOURNAL" 注释 = "杂志">
+    常量 层次 <公开 值 = "LAYERS" 注释 = "层次">
+    常量 水平 <公开 值 = "LEVEL" 注释 = "水平">
+    常量 网状 <公开 值 = "NETWORK" 注释 = "网状">
+    常量 纸莎草 <公开 值 = "PAPYRUS" 注释 = "纸莎草">
+    常量 像素 <公开 值 = "PIXEL" 注释 = "像素">
+    常量 轮廓 <公开 值 = "PROFILE" 注释 = "轮廓">
+    常量 框架 <公开 值 = "QUAD" 注释 = "框架">
+    常量 放射式 <公开 值 = "RADIAL" 注释 = "放射式">
+    常量 优雅 <公开 值 = "REFINED" 注释 = "优雅">
+    常量 大米 <公开 值 = "RICEPAPR" 注释 = "大米">
+    常量 涟漪 <公开 值 = "RIPPLE" 注释 = "涟漪">
+    常量 网格 <公开 值 = "RMNSQUE" 注释 = "网格">
+    常量 缎子 <公开 值 = "SATIN" 注释 = "缎子">
+    常量 天空 <公开 值 = "SKY" 注释 = "天空">
+    常量 石板 <公开 值 = "SLATE" 注释 = "石板">
+    常量 雷暴 <公开 值 = "SONORA" 注释 = "雷暴">
+    常量 春天 <公开 值 = "SPRING" 注释 = "春天">
+    常量 橄榄绿 <公开 值 = "STRTEDGE" 注释 = "橄榄绿">
+    常量 浅灰 <公开 值 = "STUDIO" 注释 = "浅灰">
+    常量 奶黄 <公开 值 = "SUMIPNTG" 注释 = "奶黄">
+    常量 水 <公开 值 = "WATER" 注释 = "水">
+    常量 水印 <公开 值 = "WATERMAR" 注释 = "水印">
+}
+
+类 Word选区类型 <公开 @常量类 = 整数 @文档 = "category = \"辅助类\"">
+{
+    常量 正文 <公开 值 = @wdMainTextStory 注释 = "正文部分">
+    常量 脚注 <公开 值 = @wdFootnotesStory 注释 = "脚注部分">
+    常量 尾注 <公开 值 = @wdEndnotesStory 注释 = "尾注部分">
+    常量 批注 <公开 值 = @wdCommentsStory 注释 = "批注部分">
+    常量 文本框架 <公开 值 = @wdTextFrameStory 注释 = "文本框架部分">
+    常量 偶数页页眉 <公开 值 = @wdEvenPagesHeaderStory 注释 = "偶数页页眉部分">
+    常量 主页眉 <公开 值 = @wdPrimaryHeaderStory 注释 = "主页眉部分">
+    常量 偶数页页脚 <公开 值 = @wdEvenPagesFooterStory 注释 = "偶数页页脚部分">
+    常量 主页脚 <公开 值 = @wdPrimaryFooterStory 注释 = "主页脚部分">
+    常量 首页页眉 <公开 值 = @wdFirstPageHeaderStory 注释 = "首页页眉部分">
+    常量 首页页脚 <公开 值 = @wdFirstPageFooterStory 注释 = "首页页脚部分">
+    常量 脚注分隔符 <公开 值 = @wdFootnoteSeparatorStory 注释 = "脚注分隔符部分">
+    常量 脚注延续分隔符 <公开 值 = @wdFootnoteContinuationSeparatorStory 注释 = "脚注延续分隔符部分">
+    常量 脚注延续标记 <公开 值 = @wdFootnoteContinuationNoticeStory 注释 = "脚注延续标记部分">
+    常量 尾注分隔符 <公开 值 = @wdEndnoteSeparatorStory 注释 = "尾注分隔符部分">
+    常量 尾注延续分隔符 <公开 值 = @wdEndnoteContinuationSeparatorStory 注释 = "尾注延续分隔符部分">
+    常量 尾注延续标记 <公开 值 = @wdEndnoteContinuationNoticeStory 注释 = "尾注延续标记部分">
+}
+
+类 Word程序 <公开 注释 = "代表整个Word应用程序">
+{
+    变量 Application对象 <类型 = COM对象类>
+    变量 Application事件 <类型 = COM对象事件类>
+
+    方法 创建 <公开 类型 = 逻辑型 注释 = "创建Word对象" 返回值注释 = "成功返回真." 返回值注释 = "失败返回假,没有安装Microsoft Office Word程序." "">
+    {
+        返回 (Application对象.创建 ("Word.Application", ""))
+    }
+
+    方法 获取 <公开 类型 = 逻辑型 注释 = "获取当前操作系统中已经存在的\"Word对象\"填入本对象中,本对象中的原有内容将被覆盖.">
+    {
+        返回 (Application对象.获取 ("Word.Application"))
+    }
+
+    方法 注册事件 <公开 类型 = 逻辑型 注释 = "使用定义事件前需先运行一次注册事件,在\"创建\"方法成功后执行.">
+    {
+        返回 (Application事件.挂接 (Application对象, "{00020A01-0000-0000-C000-000000000046}"))
+    }
+
+    方法 宏设置 <公开 注释 = "设置是否启用宏并信任VBA工程对象模型的访问,需要在文档未打开前使用.">
+    参数 启用宏方式 <类型 = 整数 注释 = "1.启用所有宏." 注释 = "2.通过通知禁用VBA宏." 注释 = "3.禁用无数字签署的VBA宏." 注释 = "4.不提供通知,禁用VBA宏." @默认值 = 1>
+    参数 信任 <类型 = 逻辑型 注释 = "是否信任对VBA工程对象模型的访问" @默认值 = 真>
+    {
+        写数值注册项 (注册表根目录类型.现行用户, "Software\\Microsoft\\Office\\" + 版本 + "\\Word\\Security\\VBAWarnings", 启用宏方式)  // 启用宏方式
+        写数值注册项 (注册表根目录类型.现行用户, "Software\\Microsoft\\Office\\" + 版本 + "\\Word\\Security\\AccessVBOM", 选择 (信任, 1, 0))  // 是否信任对VBA工程对象模型的访问
+    }
+
+    方法 程序被退出 <公开 定义事件 类型 = 整数 注释 = "当用户退出\"Microsoft Word\"时发生">
+
+    方法 文档被打开 <公开 定义事件 类型 = 整数 注释 = "该事件在用户打开文档时发生">
+    参数 参_Word文档 <类型 = Word文档 注释 = "即将打开的文档">
+
+    方法 活动文档被改变 <公开 定义事件 类型 = 整数 注释 = "在创建新文档、打开已有文档或激活其他文档时发生.">
+
+    方法 文档即将保存 <公开 定义事件 类型 = 整数 注释 = "在保存打开的文档之前发生" 返回值注释 = "如果返回值为1,表示过程完成后文档不会保存." "">
+    参数 参_Word文档 <类型 = Word文档 注释 = "即将被保存的文档">
+
+    方法 文档即将关闭 <公开 定义事件 类型 = 整数 注释 = "在打开的文档即将关闭之前发生" 返回值注释 = "如果返回值为1,表示过程完成后文档不会关闭." "">
+    参数 参_Word文档 <类型 = Word文档 注释 = "即将被关闭的文档">
+
+    方法 新建文档 <公开 定义事件 类型 = 整数 注释 = "在创建新文档时发生" "">
+    参数 参_Word文档 <类型 = Word文档 注释 = "新文档">
+
+    方法 窗口被激活 <公开 定义事件 类型 = 整数 注释 = "在激活文档窗口时发生">
+    参数 参_Word文档 <类型 = Word文档 注释 = "在激活的窗口中显示的文档">
+    参数 参_窗口对象 <类型 = COM对象类 注释 = "Word提供的Window对象类,代表正在激活的窗口对象.">
+
+    方法 窗口反激活 <公开 定义事件 类型 = 整数 注释 = "在文档窗口成为非活动窗口时发生">
+    参数 参_Word文档 <类型 = Word文档 注释 = "非活动窗口中显示的文档">
+    参数 参_窗口对象 <类型 = COM对象类 注释 = "Word提供的Window对象类,代表非活动窗口对象.">
+
+    方法 窗口尺寸被改变 <公开 定义事件 类型 = 整数 注释 = "在对应用程序窗口进行大小调整或移动时发生">
+    参数 参_Word文档 <类型 = Word文档 注释 = "大小正在调整的窗口中的文档">
+    参数 参_窗口对象 <类型 = COM对象类 注释 = "Word提供的Window对象类,代表大小正在调整的窗口对象.">
+
+    方法 COM对象事件类_接收到事件 <接收事件 类型 = 整数 注释 = "当接收到所挂接COM事件时,本事件被触发.">
+    参数 来源对象 <类型 = COM对象事件类 注释 = "提供事件产生的具体来源对象">
+    参数 标记值 <类型 = 整数 注释 = "用户调用\"挂接事件\"命令时所提供的\"标记值\"参数值,非此方式挂接事件则本参数值固定为0.">
+    参数 来源COM对象 <类型 = COM对象类 注释 = "提供挂接事件时所提供的来源COM对象">
+    参数 事件方法ID <类型 = 整数 注释 = "提供所触发的具体事件的对应COM方法ID值">
+    参数 事件参数 <类型 = COM变体型数组类 注释 = "提供事件的所有参数数据">
+    参数 事件返回值 <类型 = COM变体型 注释 = "仅用作输出.事件处理完毕后如果需要返回数据,请将所欲返回数据值填入到此参数变量中.">
+    {
+        变量 局_返回值 <类型 = 整数 值 = 0>
+        如果 (来源对象 == Application事件)
+        {
+            如果 (事件方法ID == 2)
+            {
+                局_返回值 = 程序被退出 ()
+            }
+            如果 (事件方法ID == 3)  // 活动文档被改变
+            {
+                活动文档被改变 ()
+            }
+            如果 (事件方法ID == 4)  // 文档被打开
+            {
+                变量 局_Word文档 <类型 = Word文档>
+                变量 文档对象 <类型 = COM对象类>
+                事件参数.取成员 (0).取COM对象 (文档对象, )  // 第一个参数为被打开的文档对象
+                局_Word文档.置对象 (文档对象)
+                文档被打开 (局_Word文档)
+            }
+            如果 (事件方法ID == 6)  // 文档即将关闭
+            {
+                变量 局_Word文档 <类型 = Word文档>
+                变量 文档对象 <类型 = COM对象类>
+                事件参数.取成员 (1).取COM对象 (文档对象, )  // 第二个参数为被打开的文档对象
+                局_Word文档.置对象 (文档对象)
+                局_返回值 = 文档即将关闭 (局_Word文档)
+                事件参数.取成员 (0).赋值 (选择 (局_返回值 == 1, 真, 假), )
+                局_返回值 = 1
+            }
+            如果 (事件方法ID == 8)  // 文档保存前
+            {
+                变量 局_Word文档 <类型 = Word文档>
+                变量 文档对象 <类型 = COM对象类>
+                事件参数.取成员 (2).取COM对象 (文档对象, )  // 第一个参数为被打开的文档对象
+                局_Word文档.置对象 (文档对象)
+                局_返回值 = 文档即将保存 (局_Word文档)
+                事件参数.取成员 (0).赋值 (选择 (局_返回值 == 1, 真, 假), )  // 第三个参数设置是否保存文档
+                局_返回值 = 1
+            }
+            如果 (事件方法ID == 9)  // 新建文档
+            {
+                变量 局_Word文档 <类型 = Word文档>
+                变量 文档对象 <类型 = COM对象类>
+                事件参数.取成员 (0).取COM对象 (文档对象, )  // 第一个参数为新文档对象
+                局_Word文档.置对象 (文档对象)
+                局_返回值 = 新建文档 (局_Word文档)
+            }
+            如果 (事件方法ID == 10)  // 窗口被激活
+            {
+                变量 局_Word文档 <类型 = Word文档>
+                变量 文档对象 <类型 = COM对象类>
+                变量 windows对象 <类型 = COM对象类>
+                事件参数.取成员 (1).取COM对象 (文档对象, )  // 第二个参数为新文档对象
+                局_Word文档.置对象 (文档对象)
+                事件参数.取成员 (0).取COM对象 (windows对象, )  // 第一个参数为windows对象
+                局_返回值 = 窗口被激活 (局_Word文档, windows对象)
+            }
+            如果 (事件方法ID == 11)  // 窗口反激活
+            {
+                变量 局_Word文档 <类型 = Word文档>
+                变量 文档对象 <类型 = COM对象类>
+                变量 windows对象 <类型 = COM对象类>
+                事件参数.取成员 (1).取COM对象 (文档对象, )  // 第二个参数为新文档对象
+                局_Word文档.置对象 (文档对象)
+                事件参数.取成员 (0).取COM对象 (windows对象, )  // 第一个参数为windows对象
+                局_返回值 = 窗口反激活 (局_Word文档, windows对象)
+            }
+            如果 (事件方法ID == 25)  // 窗口尺寸被改变
+            {
+                变量 局_Word文档 <类型 = Word文档>
+                变量 文档对象 <类型 = COM对象类>
+                变量 windows对象 <类型 = COM对象类>
+                事件参数.取成员 (1).取COM对象 (文档对象, )  // 第一个参数为新文档对象
+                局_Word文档.置对象 (文档对象)
+                事件参数.取成员 (0).取COM对象 (windows对象, )  // 第二个参数为windows对象
+                局_返回值 = 窗口尺寸被改变 (局_Word文档, windows对象)
+            }
+        }
+        返回 (局_返回值)
+    }
+
+    方法 取可用打印机 <公开 类型 = 整数 注释 = "返回本地可用打印机数量" @禁止流程检查 = 真>
+    参数 打印机名 <类型 = 文本参考数组类 注释 = "本地可用打印机名称集合">
+    参数 打印机端口 <类型 = 文本参考数组类 注释 = "本地可用打印机名称对应端口集合">
+    {
+        变量 局_打印机名 <类型 = 文本型>
+        变量 局_打印机端口 <类型 = 文本型>
+        @ DWORD dwSize = 0, dwPrinters;
+        @ ::EnumPrinters(PRINTER_ENUM_CONNECTIONS | PRINTER_ENUM_LOCAL, NULL, 5, NULL, 0, &dwSize, &dwPrinters);
+        @ if (dwSize == 0)  return 0;
+        @ BYTE* pBuffer = new BYTE[dwSize];
+        @ dwPrinters = 0;
+        @ ::EnumPrinters(PRINTER_ENUM_CONNECTIONS | PRINTER_ENUM_LOCAL, NULL, 5, pBuffer, dwSize, &dwSize, &dwPrinters);
+        @ _PRINTER_INFO_5W* pPrnInfo = (_PRINTER_INFO_5W*)pBuffer;
+        @ for (DWORD i = 0; i<dwPrinters; i++)
+        @ {
+        @     @<局_打印机名>.SetText (pPrnInfo->pPrinterName);
+        @     @<局_打印机端口>.SetText (pPrnInfo->pPortName);
+        打印机名.加入成员 (局_打印机名)
+        打印机端口.加入成员 (局_打印机端口)
+        @     pPrnInfo++;
+        @ }
+        @ delete[]pBuffer;
+        @ return dwPrinters;
+    }
+
+    方法 打印 <公开 注释 = "打印全部或部分指定文档">
+    参数 运行宏 <类型 = 逻辑型 注释 = "设置为真,打印文档同时继续运行宏." @默认值 = 真>
+    参数 文件追加 <类型 = 逻辑型 注释 = "如果该参数为真,则将指定文档添至由输出文件参数所指定的文件中.如果为假,则覆盖输出文件所指定文件的内容." @默认值 = 假>
+    参数 范围 <类型 = Word打印范围 注释 = "Word打印范围..*,指定打印页面范围." @默认值 = Word打印范围.整个文档>
+    参数 开始页号 <类型 = 整数 注释 = "打印的开始页号.当\"打印范围\"设置为\"指定范围\"时生效." @默认值 = 0>
+    参数 终止页号 <类型 = 整数 注释 = "打印的终止页号.当\"打印范围\"设置为\"指定范围\"时生效." @默认值 = 0>
+    参数 项目 <类型 = Word打印项目 注释 = "指定要打印的项目" @默认值 = Word打印项目.文档内容>
+    参数 打印份数 <类型 = 整数 注释 = "打印份数" @默认值 = 1>
+    参数 打印页码 <类型 = 文本型 注释 = "例如,\"2,6-10\"表示打印第2页以及第6至第10页.当\"打印范围\"设置为\"当前页面\"或\"页面范围\"时生效." @默认值 = "">
+    参数 页面类型 <类型 = 整数 注释 = "要打印的页面类型.可为下列常量之一:0、所有页;1、只有奇数页;2、只有偶数页." @默认值 = 0>
+    参数 打印到文件 <类型 = 逻辑型 注释 = "如果为真,则将打印指令发送到文件.请确保由输出文件参数指定了文件名." @默认值 = 假>
+    参数 输出文件名 <类型 = 文本型 注释 = "如果\"打印到文件\"的值为真,此参数将指定输出文件的路径和文件名称." @默认值 = "">
+    参数 副本 <类型 = 逻辑型 注释 = "在打印文档的多份副本时,若此参数为真,则打印完一份副本之后再打印下一份副本." @默认值 = 真>
+    参数 文件名 <类型 = 文本型 注释 = "要打印的文档的路径和文件名称.如果值为空文本时,表示将打印活动文档." @默认值 = "">
+    参数 水平页数 <类型 = 整数 注释 = "1-4与垂直页数同时设置表示Word在一页纸上水平放置的页数.可在单张纸上打印多页文档." @默认值 = 0>
+    参数 垂直页数 <类型 = 整数 注释 = "1-4与水平页数同时设置表示Word在一页纸上垂直放置的页数.可在单张纸上打印多页文档." @默认值 = 0>
+    参数 缩放宽度 <类型 = 整数 注释 = "指定将待打印页面缩放到的宽度,以缇为单位(20缇=1磅;72磅=1英寸)." @默认值 = 0>
+    参数 缩放高度 <类型 = 整数 注释 = "指定将打印页面缩放到的高度,以缇为单位(20缇=1磅;72磅=1英寸)." @默认值 = 0>
+    {
+        变量 COM变体 <类型 = COM变体型>
+        变量 局_水平页数 <类型 = COM变体型>
+        变量 局_垂直页数 <类型 = COM变体型>
+        变量 局_打印页码 <类型 = COM变体型>
+        变量 局_输出文件名 <类型 = COM变体型>
+        变量 局_缩放宽度 <类型 = COM变体型>
+        变量 局_缩放高度 <类型 = COM变体型>
+        变量 局_文件名 <类型 = COM变体型>
+        变量 局_开始页号 <类型 = COM变体型>
+        变量 局_终止页号 <类型 = COM变体型>
+        如果 (水平页数 > 0)
+        {
+            局_水平页数.赋值 (水平页数, )  // 多页合并到单页打印时水平页数
+        }
+        如果 (垂直页数 > 0)
+        {
+            局_垂直页数.赋值 (垂直页数, )  // 多页合并到单页打印时垂直页数
+        }
+        如果 (打印页码 != "")
+        {
+            局_打印页码.赋值 (打印页码, )
+        }
+        如果 (输出文件名 != "")
+        {
+            局_输出文件名.赋值 (输出文件名, )
+        }
+        如果 (文件名 != "")
+        {
+            局_文件名.赋值 (文件名, )
+        }
+        如果 (缩放宽度 != 0)
+        {
+            局_缩放宽度.赋值 (缩放宽度)
+        }
+        如果 (缩放高度 != 0)
+        {
+            局_缩放高度.赋值 (缩放高度)
+        }
+        如果 (开始页号 != 0)
+        {
+            局_开始页号.赋值 (开始页号, )
+        }
+        如果 (终止页号 != 0)
+        {
+            局_终止页号.赋值 (终止页号, )
+        }
+        Application对象.无返回值方法 ("PrintOut", 运行宏, 文件追加, 范围, 局_输出文件名, 局_开始页号, 局_终止页号, 项目, 打印份数, 局_打印页码, 页面类型, 打印到文件, 副本, 局_文件名, COM变体, COM变体, 局_水平页数, 局_垂直页数, 局_缩放宽度, 局_缩放高度)
+    }
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作.">
+    参数 参_Application对象 <类型 = COM对象类>
+    {
+        Application对象 = 参_Application对象
+        返回 (Application对象.是否为空 () == 假)
+    }
+
+    方法 退出 <公开 注释 = "退出Word应用程序,并可选择保存或发送打开的文档.">
+    参数 选项 <类型 = Word保存选项 注释 = "Word保存选项.*,指定 Word 保存方式." @默认值 = Word保存选项.不保存>
+    参数 格式 <类型 = Word保存格式 注释 = "Word保存格式.*,指定 Word 保存格式." @默认值 = Word保存格式.原格式>
+    {
+        Application对象.无返回值方法 ("Quit", 选项, 格式)
+    }
+
+    方法 版本 <公开 属性读 类型 = 文本型 注释 = "Word 版本号,与Office版本对应如下:" 注释 = "1.0----Office 1.0." 注释 = "5.0----Office 4.2."
+            注释 = "7.0----Office 95." 注释 = "8.0----Office 97." 注释 = "9.0----Office 2000." 注释 = "10.0----Office XP/2002."
+            注释 = "11.0----Office XP/2003." 注释 = "12.0----Office XP/2007." 注释 = "14.0----Office 2010." 注释 = "15.0----Office 2013."
+            注释 = "16.0----Office 2016." 注释 = "16.0----Office 2021." "">
+    {
+        返回 (Application对象.读无参数属性 ("Version", 文本型))
+    }
+
+    方法 选区 <公开 属性读 类型 = Word选区 注释 = "返回Word选区对象,该对象代表选定的范围或光标插入点.">
+    {
+        变量 局_Word选区 <类型 = Word选区>
+        局_Word选区.置对象 (Application对象.读无参数对象型属性 ("Selection", COM对象类))
+        返回 (局_Word选区)
+    }
+
+    方法 文档集 <公开 属性读 类型 = Word文档集 注释 = "返回一个\"Word文档\"集合,该集合代表所有打开的文档.此为只读属性." "">
+    {
+        变量 局_文档集 <类型 = Word文档集>
+        局_文档集.置对象 (Application对象.读无参数对象型属性 ("Documents", COM对象类))
+        返回 (局_文档集)
+    }
+
+    方法 显示警告 <公开 属性读 类型 = Word警告 注释 = "返回运行宏时产生的一些警告和消息的处理方式" 返回值注释 = "Word警告.*,警告处理方式.">
+    {
+        返回 (Application对象.读无参数属性 ("DisplayAlerts", Word警告))
+    }
+
+    方法 显示警告 <公开 属性写 注释 = "设置运行宏时产生的一些警告和消息的处理方式">
+    参数 所欲设置的值 <类型 = Word警告 注释 = "Word警告.*,警告处理方式." "">
+    {
+        Application对象.写属性 ("DisplayAlerts", 所欲设置的值)
+    }
+
+    方法 可视 <公开 属性读 类型 = 逻辑型 注释 = "返回对象是否可见">
+    {
+        返回 (Application对象.读无参数属性 ("Visible", 逻辑型))
+    }
+
+    方法 可视 <公开 属性写 注释 = "设置对象是否可见">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Application对象.写属性 ("Visible", 所欲设置的值)
+    }
+
+    方法 取对象 <公开 类型 = COM对象类 注释 = "获取Word提供的对象.与\"COM对象类\"数据类型兼容,可交互操作.">
+    {
+        返回 (Application对象)
+    }
+
+    方法 激活 <公开 注释 = "激活指定的对象">
+    {
+        Application对象.无参数及返回值方法 ("Activate")
+    }
+
+    方法 激活文档 <公开 注释 = "激活文档集合中的一个文档">
+    参数 索引号 <类型 = 整数 注释 = "二选一,对象的索引号.从1开始,表示文档在文档集中的位置.为0时忽略该参数." @默认值 = 0>
+    参数 名称 <类型 = 文本型 注释 = "二选一,对象的名称.索引号不为0时忽略该参数." @默认值 = "">
+    {
+        如果 (索引号 == 0)
+        {
+            Application对象.读无参数对象型属性 ("Documents", COM对象类).读对象型属性 ("Item", COM对象类, 名称).无参数及返回值方法 ("Activate")  // 从文档名激活
+        }
+        否则
+        {
+            Application对象.读无参数对象型属性 ("Documents", COM对象类).读对象型属性 ("Item", COM对象类, 索引号).无参数及返回值方法 ("Activate")  // 从文档索引激活
+        }
+    }
+
+    方法 活动文档 <公开 属性读 类型 = Word文档 注释 = "返回一个Word文档,它表示活动文档中或指定的窗口或文档中的活动文档(顶部文档).如果没有活动的文档,则返回空对象.">
+    {
+        变量 局_Word文档 <类型 = Word文档>
+        局_Word文档.置对象 (Application对象.读无参数对象型属性 ("ActiveDocument", COM对象类))
+        返回 (局_Word文档)
+    }
+
+    方法 宏 <公开 属性读 类型 = Word宏 注释 = "返回表示VB编辑器中工作区对象">
+    {
+        变量 局_Word宏 <类型 = Word宏>
+        变量 局_宏工作区对象 <类型 = COM对象类>
+        局_宏工作区对象 = Application对象.读无参数对象型属性 ("VBE", COM对象类).读无参数对象型属性 ("ActiveVBProject", COM对象类).读无参数对象型属性 ("VBComponents", COM对象类)
+        局_Word宏.置对象 (局_宏工作区对象)
+        返回 (局_Word宏)
+    }
+
+    方法 运行宏 <公开 注释 = "运行Visual Basic 宏">
+    参数 宏名 <类型 = 文本型 注释 = "宏的名称,参数可以是任意模板,模块和宏名的组合.">
+    参数 文本数组参数 <类型 = 文本数组类 注释 = "二选一,宏参数值.最多可以给指定宏传递30个参数值." @默认值 = 空对象>
+    参数 整数数组参数 <类型 = 整数数组类 注释 = "二选一,宏参数值.最多可以给指定宏传递30个参数值." @默认值 = 空对象>
+    {
+        变量 变体型数组 <类型 = COM变体型数组类>
+        变量 参数数量 <类型 = 整数>
+        如果 (文本数组参数.取成员数 () > 0)
+        {
+            文本数组参数.枚举循环 ()
+            {
+                如果 (文本数组参数.取枚举索引 () > 29)  // 最多30个参数
+                {
+                    跳出循环
+                }
+                变体型数组.加入并返回新成员 (COM变体型).赋值 (文本数组参数.取枚举值 (), )  // 加入新成员并对新成员赋值
+            }
+        }
+        否则
+        {
+            整数数组参数.枚举循环 ()
+            {
+                如果 (整数数组参数.取枚举索引 () > 29)  // 最多30个参数
+                {
+                    跳出循环
+                }
+                变体型数组.加入并返回新成员 (COM变体型).赋值 (整数数组参数.取枚举值 (), )  // 加入新成员并对新成员赋值
+            }
+        }
+        参数数量 = 变体型数组.取成员数 ()  // 取出有多少个参数
+        计次循环 (30 - 参数数量)
+        {
+            变体型数组.加入新成员 (COM变体型)  // 没有的参数赋为空对象
+        }
+        Application对象.无返回值方法 ("Run", 宏名, 变体型数组.取成员 (0), 变体型数组.取成员 (1), 变体型数组.取成员 (2), 变体型数组.取成员 (3), 变体型数组.取成员 (4), 变体型数组.取成员 (5), 变体型数组.取成员 (6), 变体型数组.取成员 (7), 变体型数组.取成员 (8), 变体型数组.取成员 (9), 变体型数组.取成员 (10), 变体型数组.取成员 (11), 变体型数组.取成员 (12), 变体型数组.取成员 (13), 变体型数组.取成员 (14), 变体型数组.取成员 (15), 变体型数组.取成员 (16), 变体型数组.取成员 (17), 变体型数组.取成员 (18), 变体型数组.取成员 (19), 变体型数组.取成员 (20), 变体型数组.取成员 (21), 变体型数组.取成员 (22), 变体型数组.取成员 (23), 变体型数组.取成员 (24), 变体型数组.取成员 (25), 变体型数组.取成员 (26), 变体型数组.取成员 (27), 变体型数组.取成员 (28), 变体型数组.取成员 (29))
+    }
+
+    方法 打印预览 <公开 属性读 类型 = 逻辑型 注释 = "当前视图打印预览时为真">
+    {
+        返回 (Application对象.读无参数属性 ("PrintPreview", 逻辑型))
+    }
+
+    方法 打印预览 <公开 属性写 注释 = "视图切换为打印预览">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Application对象.写属性 ("PrintPreview", 所欲设置的值)
+    }
+
+    方法 安装路径 <公开 属性读 类型 = 文本型 注释 = "返回Word在本机中安装路径">
+    {
+        返回 (Application对象.读无参数属性 ("Path", 文本型))
+    }
+
+    方法 图表版式数 <公开 属性读 类型 = 整数 注释 = "返回应用程序中当前智能图表版式数量">
+    {
+        返回 (Application对象.读无参数对象型属性 ("SmartArtLayouts", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 图表样式数 <公开 属性读 类型 = 整数 注释 = "返回应用程序中当前智能图表快速样式数量">
+    {
+        返回 (Application对象.读无参数对象型属性 ("SmartArtQuickStyles", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 图表配色数 <公开 属性读 类型 = 整数 注释 = "返回应用程序中当前智能图表配色数量">
+    {
+        返回 (Application对象.读无参数对象型属性 ("SmartArtColors", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 左 <公开 属性读 类型 = 整数 注释 = "返回该值代表活动文档的水平位置,以磅为单位.">
+    {
+        返回 (Application对象.读无参数属性 ("Left", 整数))
+    }
+
+    方法 左 <公开 属性写 注释 = "设置从屏幕左边缘到Word主窗口左边缘的距离,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Application对象.写属性 ("Left", 所欲设置的值)
+    }
+
+    方法 上 <公开 属性读 类型 = 整数 注释 = "返回从屏幕的上边缘到Word主窗口的上边缘的距离,以磅为单位.">
+    {
+        返回 (Application对象.读无参数属性 ("Top", 整数))
+    }
+
+    方法 上 <公开 属性写 注释 = "设置从屏幕的上边缘到Word主窗口的上边缘的距离,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Application对象.写属性 ("Top", 所欲设置的值)
+    }
+
+    方法 宽 <公开 属性读 类型 = 整数 注释 = "返回从Word应用程序窗口左边缘到其右边缘的距离">
+    {
+        返回 (Application对象.读无参数属性 ("Width", 整数))
+    }
+
+    方法 宽 <公开 属性写 注释 = "设置从Word应用程序窗口左边缘到其右边缘的距离">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Application对象.写属性 ("Width", 所欲设置的值)
+    }
+
+    方法 高 <公开 属性读 类型 = 整数 注释 = "返回Word应用程序窗口的高度,以磅为单位.">
+    {
+        返回 (Application对象.读无参数属性 ("Height", 整数))
+    }
+
+    方法 高 <公开 属性写 注释 = "设置Word应用程序窗口的高度,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Application对象.写属性 ("Height", 所欲设置的值)
+    }
+
+    方法 置顶窗口 <公开 注释 = "设置窗口置顶状态">
+    参数 索引号 <类型 = 整数 注释 = "要置顶窗口索引号" @默认值 = 1>
+    参数 取消 <类型 = 逻辑型 注释 = "为真是取消窗口置顶状态" @默认值 = 假>
+    {
+        变量 hwnd <类型 = 变整数>
+        hwnd = Application对象.读无参数对象型属性 ("Windows", COM对象类).对象型方法 ("Item", COM对象类, 1).读无参数属性 ("Hwnd", 变整数)  // 取出窗口句柄
+        如果 (取消)
+        {
+            @ SetWindowPos((HWND)@<hwnd>, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+        }
+        否则
+        {
+            @ SetWindowPos((HWND)@<hwnd>, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+        }
+    }
+
+    方法 窗口数量 <公开 属性读 类型 = 整数 注释 = "返回窗口数量">
+    {
+        返回 (Application对象.读无参数对象型属性 ("Windows", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 标题 <公开 属性读 类型 = 文本型 注释 = "返回一个文本值,它代表出现在主窗口标题栏中显示的名称.">
+    {
+        返回 (Application对象.读无参数属性 ("Caption", 文本型))
+    }
+
+    方法 标题 <公开 属性写 注释 = "设置一个文本值,它代表出现在主窗口标题栏中显示的名称.">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Application对象.写属性 ("Caption", 所欲设置的值)
+    }
+
+    方法 窗口状态 <公开 属性读 类型 = Word窗口状态 注释 = "返回窗口的状态">
+    {
+        返回 (Application对象.读无参数属性 ("WindowState", Word窗口状态))
+    }
+
+    方法 窗口状态 <公开 属性写 注释 = "设置窗口的状态,无法设置不活动窗口的状态.使用前请先使用激活方法激活窗口.">
+    参数 所欲设置的值 <类型 = Word窗口状态 注释 = "Word窗口状态.*" "">
+    {
+        Application对象.写属性 ("WindowState", 所欲设置的值)
+    }
+
+    方法 打印机 <公开 属性读 类型 = 文本型 注释 = "返回活动打印机的名称">
+    {
+        返回 (Application对象.读无参数属性 ("ActivePrinter", 文本型))
+    }
+
+    方法 打印机 <公开 属性写 注释 = "设置活动打印机的名称">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Application对象.写属性 ("ActivePrinter", 所欲设置的值)
+    }
+
+    方法 取默认路径 <公开 类型 = 文本型 注释 = "根据路径类型返回对应的默认路径">
+    参数 类型 <类型 = Word路径类型 注释 = "Word路径类型.*" @默认值 = Word路径类型.文档>
+    {
+        返回 (Application对象.读无参数对象型属性 ("Options", COM对象类).读属性 ("DefaultFilePath", 文本型, 类型))
+    }
+
+    方法 置默认路径 <公开 注释 = "根据路径类型设置对应的默认路径">
+    参数 类型 <类型 = Word路径类型 注释 = "Word路径类型.*">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Application对象.读无参数对象型属性 ("Options", COM对象类).写属性 ("DefaultFilePath", 类型, 所欲设置的值)
+    }
+}
+
+类 Word宏 <公开 注释 = "代表VB宏对象">
+{
+    变量 VBComponents对象 <类型 = COM对象类>
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作." "">
+    参数 参_VBComponents对象 <类型 = COM对象类 注释 = "VBComponents对象">
+    {
+        VBComponents对象 = 参_VBComponents对象
+        返回 (VBComponents对象.是否为空 () == 假)
+    }
+
+    方法 取对象 <公开 类型 = COM对象类 注释 = "获取Word提供的VB宏对象.与\"COM对象\"数据类型兼容,可交互操作." "">
+    {
+        返回 (VBComponents对象)
+    }
+
+    方法 工作区数量 <公开 属性读 类型 = 整数 注释 = "获取宏工作区数量" "">
+    {
+        返回 (VBComponents对象.读无参数属性 ("Count", 整数))
+    }
+
+    方法 取工作区名称 <公开 类型 = 文本型 注释 = "取宏工作区对象名称" "">
+    参数 索引号 <类型 = 整数 注释 = "工作区索引号,从1开始.">
+    {
+        返回 (VBComponents对象.方法 ("Item", COM对象类, 索引号).读无参数对象型属性 ("CodeModule", COM对象类).读无参数属性 ("Name", 文本型))
+    }
+
+    方法 取工作区类型 <公开 类型 = Word宏类型 注释 = "取宏工作区对象类型" "">
+    参数 索引号 <类型 = 整数 注释 = "工作区索引号">
+    {
+        返回 (VBComponents对象.方法 ("Item", COM对象类, 索引号).读无参数属性 ("Type", Word宏类型))
+    }
+
+    方法 插入行代码 <公开 注释 = "在指定工作区对应行增加代码,原代码后移.增加代码不理会和判断插入处代码的内容.当指定行大于最后一行行号时,在最后一行的后面插入." "">
+    参数 区名 <类型 = 文本型>
+    参数 行号 <类型 = 整数>
+    参数 代码内容 <类型 = 文本型>
+    {
+        VBComponents对象.方法 ("Item", COM对象类, 区名).读无参数对象型属性 ("CodeModule", COM对象类).无返回值方法 ("InsertLines", 行号, 代码内容)
+    }
+
+    方法 添加代码 <公开 注释 = "在指定工作区第一个过程前面的行开始增加代码,原代码后移." "">
+    参数 区名 <类型 = 文本型>
+    参数 代码内容 <类型 = 文本型>
+    {
+        VBComponents对象.方法 ("Item", COM对象类, 区名).读无参数对象型属性 ("CodeModule", COM对象类).无返回值方法 ("AddFromString", 代码内容)
+    }
+
+    方法 添加模块 <公开 注释 = "向VB工作区中添加模块">
+    参数 模块名称 <类型 = 文本型 @默认值 = "">
+    参数 类型 <类型 = Word宏类型 @默认值 = Word宏类型.模块>
+    {
+        变量 局_模块对象 <类型 = COM对象类>
+        局_模块对象 = VBComponents对象.方法 ("Add", COM对象类, 类型)
+        如果 (模块名称 != "")
+        {
+            局_模块对象.写属性 ("Name", 模块名称)
+        }
+    }
+
+    方法 取代码行数 <公开 类型 = 整数 注释 = "获取工作区代码总行数" "">
+    参数 区名 <类型 = 文本型>
+    {
+        返回 (VBComponents对象.方法 ("Item", COM对象类, 区名).读无参数对象型属性 ("CodeModule", COM对象类).读无参数属性 ("CountOfLines", 整数))
+    }
+
+    方法 取代码内容 <公开 类型 = 文本型 注释 = "获取工作区宏代码内容" "">
+    参数 区名 <类型 = 文本型 注释 = "对象名称,如模块名称.">
+    参数 开始行 <类型 = 整数 注释 = "欲取出代码区开始行">
+    参数 结束行 <类型 = 整数 注释 = "欲取出代码区结束行">
+    {
+        返回 (VBComponents对象.方法 ("Item", COM对象类, 区名).读无参数对象型属性 ("CodeModule", COM对象类).读属性 ("Lines", 文本型, 开始行, 结束行))
+    }
+
+    方法 移除模块 <公开 注释 = "根据宏模块名称移除宏模块">
+    参数 模块名 <类型 = 文本型 @默认值 = "">
+    {
+        变量 COM变体 <类型 = COM变体型>
+        COM变体 = VBComponents对象.方法 ("Item", COM变体型, 模块名)  // 根据名称取出对象
+        VBComponents对象.无返回值方法 ("Remove", COM变体)
+    }
+
+    方法 导入文件 <公开 注释 = "将VB宏代码文件导入宏工作区中" "">
+    参数 文件名 <类型 = 文本型 注释 = "欲导入的宏文件">
+    {
+        VBComponents对象.无返回值方法 ("Import", 文件名)
+    }
+}
+
+类 Word文档集 <公开 注释 = " 当前在Word程序内打开的所有Word文档集合">
+{
+    变量 Documents对象 <类型 = COM对象类>
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作." "">
+    参数 集合对象 <类型 = COM对象类 注释 = "Word文档集">
+    {
+        Documents对象 = 集合对象
+        返回 (Documents对象.是否为空 () == 假)
+    }
+
+    方法 取对象 <公开 类型 = COM对象类 注释 = "获取Word提供的对象.与\"COM对象类\"数据类型兼容,可交互操作." "">
+    {
+        返回 (Documents对象)
+    }
+
+    方法 新建文档 <公开 类型 = Word文档 注释 = "新建一个文档.新文档将成为活动文档.">
+    参数 模板 <类型 = 文本型 注释 = "确定如何创建新文档.如果此参数为指定现有Word文件名的字符串,那么创建新文档将以该指定的文件作为模板." @默认值 = "">
+    参数 作为模板 <类型 = 逻辑型 注释 = "如果为真,则将文档作为模板打开." @默认值 = 假>
+    参数 类型 <类型 = Word创建类型 注释 = "Word创建类型.*" @默认值 = Word创建类型.空白文档>
+    参数 可视 <类型 = 逻辑型 注释 = "设置新建文档窗口是否可见" @默认值 = 真>
+    {
+        变量 局_文档 <类型 = Word文档>
+        局_文档.置对象 (Documents对象.对象型方法 ("Add", COM对象类, 模板, 作为模板, 类型, 可视))
+        返回 (局_文档)
+    }
+
+    方法 关闭 <公开 注释 = "关闭所有文档">
+    参数 选项 <类型 = Word保存选项 注释 = "Word保存选项.*,指定内容有更改时保存文档的操作方式." @默认值 = Word保存选项.自动保存>
+    参数 格式 <类型 = Word保存格式 注释 = "Word保存格式.*,指定保存文档的格式." @默认值 = Word保存格式.原格式>
+    {
+        Documents对象.无返回值方法 ("Close", 选项, 格式)
+    }
+
+    方法 打开 <公开 类型 = Word文档 注释 = "打开一个文档" "">
+    参数 文件名 <类型 = 文本型 注释 = "要打开的文档的文件名">
+    参数 转换文件 <类型 = 逻辑型 注释 = "如果为真,且该文件不是\"Word\"格式时将显示\"转换文件\"对话框." @默认值 = 假>
+    参数 只读模式 <类型 = 逻辑型 注释 = "如果为真,则以只读模式打开文档." @默认值 = 假>
+    参数 添加到最近 <类型 = 逻辑型 注释 = "如果为真,则将该文档添加到最近使用的文件列表中." @默认值 = 假>
+    参数 密码 <类型 = 文本型 注释 = "包含打开受保护文档所需密码的字符串.如果省略此参数并且文档需要密码,则会提示用户输入密码." @默认值 = "">
+    参数 模板密码 <类型 = 文本型 注释 = "包含打开受保护模板所需密码的字符串.如果省略此参数并且文档需要密码,则将提示用户输入密码." @默认值 = "">
+    参数 写密码 <类型 = 文本型 注释 = "用于保存文档更改的密码" @默认值 = "">
+    参数 模板写密码 <类型 = 文本型 注释 = "用于保存模板更改的密码" @默认值 = "">
+    参数 打开操作 <类型 = 逻辑型 注释 = "控制打开文档时会进行什么操作.如果为真,则放弃对打开文档的任何未保存更改并重新打开文件.如果为假,则激活打开的文档." @默认值 = 假>
+    参数 格式化方式 <类型 = Word格式化 注释 = "Word格式化.*,指定打开文档时要使用的格式." @默认值 = Word格式化.自动识别>
+    参数 语言编码 <类型 = Word编码 注释 = "Word编码.*,指定的文本来源编码方式." @默认值 = Word编码.简体中文>
+    参数 可视 <类型 = 逻辑型 注释 = "设置打开接程序时窗口是否可见" @默认值 = 真>
+    {
+        变量 局_Word文档 <类型 = Word文档>
+        局_Word文档.置对象 (Documents对象.对象型方法 ("Open", COM对象类, 文件名, 转换文件, 只读模式, 添加到最近, 密码, 模板密码, 打开操作, 写密码, 模板写密码, 格式化方式, 语言编码, 可视))
+        返回 (局_Word文档)
+    }
+
+    方法 文档数量 <公开 属性读 类型 = 整数 注释 = "返回文档集合中文档的数量">
+    {
+        返回 (Documents对象.读无参数属性 ("Count", 整数))
+    }
+
+    方法 保存 <公开 注释 = "保存文档集合中的所有文档.如果此文档以前未保存过,则弹出\"另存为\"对话框并提示用户键入文件名.">
+    参数 自动保存 <类型 = 逻辑型 注释 = "如果为真,自动保存的所有文档.如果为假,则将提示用户保存已更改的每个文档." @默认值 = 假>
+    参数 格式 <类型 = Word保存格式 注释 = "Word保存格式.*,指定Word保存格式." @默认值 = Word保存格式.原格式>
+    {
+        Documents对象.无返回值方法 ("Save", 自动保存, 格式)
+    }
+
+    方法 取文档 <公开 类型 = Word文档 注释 = "从文档集合中返回一个文档">
+    参数 索引号 <类型 = 整数 注释 = "二选一,从1开始,对象在文档集合的索引号.为0时.忽略该参数." @默认值 = 0>
+    参数 名称 <类型 = 文本型 注释 = "二选一,对象的名称.索引号不为0时.忽略该参数." @默认值 = "">
+    {
+        变量 局_文档 <类型 = Word文档>
+        如果 (索引号 == 0)
+        {
+            如果 (名称 != "")  // 名称不为空时根据名称取出文档
+            {
+                局_文档.置对象 (Documents对象.对象型方法 ("Item", COM对象类, 名称))  // 使用名称
+            }
+        }
+        否则
+        {
+            局_文档.置对象 (Documents对象.对象型方法 ("Item", COM对象类, 索引号))  // 使用索引号
+        }
+        返回 (局_文档)
+    }
+}
+
+类 Word文档 <公开 注释 = "代表一个Word文档">
+{
+    变量 Document对象 <类型 = COM对象类>
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作.">
+    参数 参_Document对象 <类型 = COM对象类>
+    {
+        Document对象 = 参_Document对象
+        返回 (Document对象.是否为空 () == 假)
+    }
+
+    方法 置页边距 <公开 注释 = "设置页面左上右下边缘与正文文本边界之间的距离">
+    参数 方向 <类型 = 整数 注释 = "0 左边距;1 上边距;2 右边距;3 下边距." "">
+    参数 所欲设置的值 <类型 = 整数 注释 = "距离,以磅为单位.">
+    {
+        分支判断 (方向)
+        {
+            分支 (0)
+            {
+                Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("LeftMargin", 所欲设置的值)  // 设置页面左边的缘与正文文本的左边的界之间的距离
+                跳出分支 ()
+            }
+            分支 (1)
+            {
+                Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("TopMargin", 所欲设置的值)  // 设置页面的上边缘与正文文本上部边界之间的距离
+                跳出分支 ()
+            }
+            分支 (2)
+            {
+                Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("RightMargin", 所欲设置的值)  // 设置页面的右边缘与正文文本的右边界之间的距离
+                跳出分支 ()
+            }
+            分支 (3)
+            {
+                Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("BottomMargin", 所欲设置的值)  // 设置页面的下边缘与正文文本边界之间的距离
+            }
+        }
+    }
+
+    方法 取页边距 <公开 类型 = 整数 注释 = "返回页面左上右下边缘与正文文本上部边界之间的距离" 返回值注释 = "距离,以磅为单位.">
+    参数 方向 <类型 = 整数 注释 = "0 左边距;1 上边距;2 右边距;3 下边距." "">
+    {
+        变量 局_距离 <类型 = 整数>
+        分支判断 (方向)
+        {
+            分支 (0)
+            {
+                局_距离 = Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("LeftMargin", 整数)  // 返回页面左边的缘与正文文本的左边的界之间的距离
+                跳出分支 ()
+            }
+            分支 (1)
+            {
+                局_距离 = Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("TopMargin", 整数)  // 返回页面的上边缘与正文文本上部边界之间的距离
+                跳出分支 ()
+            }
+            分支 (2)
+            {
+                局_距离 = Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("RightMargin", 整数)  // 返回页面的右边缘与正文文本的右边界之间的距离
+                跳出分支 ()
+            }
+            分支 (3)
+            {
+                局_距离 = Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("BottomMargin", 整数)  // 返回页面的下边缘与正文文本边界之间的距离
+            }
+        }
+        返回 (局_距离)
+    }
+
+    方法 取对象 <公开 类型 = COM对象类 注释 = "获取Word提供的对象.与\"COM对象类\"数据类型兼容,可交互操作." "">
+    {
+        返回 (Document对象)
+    }
+
+    方法 关闭 <公开 注释 = "关闭对象">
+    参数 选项 <类型 = Word保存选项 注释 = "Word保存选项.*,指定保存文档的操作." @默认值 = Word保存选项.自动保存>
+    参数 格式 <类型 = Word保存格式 注释 = "Word保存格式.*,保存此文件名下的更改." @默认值 = Word保存格式.原格式>
+    {
+        Document对象.无返回值方法 ("Close", 选项, 格式)
+    }
+
+    方法 激活 <公开 注释 = "激活该文档,使其成为活动文档.">
+    {
+        Document对象.无参数及返回值方法 ("Activate")
+    }
+
+    方法 查找 <公开 类型 = 整数 注释 = "查找当前文档中所指定文本所处索引位置,未找到则返回-1." "">
+    参数 查找文本 <类型 = 文本型 注释 = "用作查找文本">
+    参数 区分大小写 <类型 = 逻辑型 注释 = "英文字母是否区分大小写" @默认值 = 真>
+    参数 开始位置 <类型 = 整数 注释 = "查找开始位置,默认为文档开头." @默认值 = 1>
+    参数 结束位置 <类型 = 整数 注释 = "查找结束位置,为0时,代表查找到文档结束的位置." @默认值 = 0>
+    {
+        变量 局_文本区 <类型 = Word文本区 注释 = "//用于储存查找选区">
+        局_文本区 = 取文本区 (, )  // 取整个文档
+        如果 (结束位置 == 0)
+        {
+            局_文本区 = 取文本区 (开始位置, 局_文本区.结束位置)  // 从开始位置到文档最后位置取出文本区
+        }
+        否则
+        {
+            局_文本区 = 取文本区 (开始位置, 结束位置)  // 从开始位置到结束位置取出文本区
+        }
+        如果 (局_文本区.查找 (查找文本, 区分大小写))  // 开始查找文本
+        {
+            返回 (局_文本区.开始位置)  // 返回找到文本在文档中开始位置
+        }
+        返回 (-1)  // 找不到
+    }
+
+    方法 插入组合框 <公开 注释 = "在当前光标位置插入下拉列表框并设置下拉列表框中内容">
+    参数 内容数组 <类型 = 文本数组类>
+    参数 占位符 <类型 = 文本型 注释 = "设置在用户输入自己的文本之前显示在内容控件中的占位符文本" @默认值 = "">
+    参数 标题 <类型 = 文本型 注释 = "选中时是否在组合框上方出现标题" @默认值 = "">
+    参数 颜色 <类型 = 整数 注释 = "设置选中时边框及阴影颜色" @默认值 = 颜色类.黑色>
+    {
+        变量 局_组合框对象 <类型 = COM对象类>
+        变量 局_对象 <类型 = COM对象类>
+        局_组合框对象 = Document对象.读无参数对象型属性 ("ContentControls", COM对象类).对象型方法 ("Add", COM对象类, 4)
+        局_组合框对象.无返回值方法 ("SetPlaceholderText", 局_对象, 局_对象, 占位符)
+        局_组合框对象.写属性 ("Title", 标题)
+        局_组合框对象.写属性 ("Color", 颜色)
+        内容数组.枚举循环 ()
+        {
+            局_组合框对象.读无参数对象型属性 ("DropdownListEntries", COM对象类).无返回值方法 ("Add", 内容数组.取枚举值 ())
+        }
+    }
+
+    方法 添加到收藏夹 <公开 注释 = "创建文档或超链接的快捷方式,并将其添加到\"收藏夹\".">
+    {
+        Document对象.无参数及返回值方法 ("AddToFavorites")
+    }
+
+    方法 语法检查 <公开 注释 = "开始对指定的文档或区域执行拼写和语法检查">
+    {
+        Document对象.无参数及返回值方法 ("CheckGrammar")
+    }
+
+    方法 统计数量 <公开 类型 = 整数 注释 = "返回基于指定文档内容的统计值">
+    参数 单位 <类型 = Word统计单位 注释 = "Word统计单位.*,要计算的统计值" @默认值 = Word统计单位.字符无空格>
+    参数 包括脚注 <类型 = 逻辑型 注释 = "真 要计算统计信息时包括脚注和尾注" @默认值 = 假>
+    {
+        返回 (Document对象.方法 ("ComputeStatistics", 整数, 单位, 包括脚注))
+    }
+
+    方法 编号到文本 <公开 注释 = "将指定文档中的列表编号和列表编号域更改为文本">
+    {
+        Document对象.无参数及返回值方法 ("ConvertNumbersToText")
+    }
+
+    方法 删除批注 <公开 注释 = "删除文档中批注集合内的所有批注">
+    {
+        Document对象.无参数及返回值方法 ("DeleteAllComments")
+    }
+
+    方法 删除墨迹 <公开 注释 = "删除文档中所有手写墨迹注释">
+    {
+        Document对象.无参数及返回值方法 ("DeleteAllInkAnnotations")
+    }
+
+    方法 删除主题 <公开 注释 = "删除当前文档中的活动主题">
+    {
+        Document对象.无参数及返回值方法 ("RemoveTheme")
+    }
+
+    方法 缩放字体 <公开 注释 = "适当缩小文本的字体大小,使文档的页数减少.">
+    {
+        Document对象.无参数及返回值方法 ("FitToPages")
+    }
+
+    方法 置主题 <公开 注释 = "将主题应用于打开的文档">
+    参数 主题 <类型 = Word主题 注释 = "Word主题.*,主题是不包含路径的文件夹名称,一般位于\"C:\\Program Files\\Common Files\\Microsoft Shared\\Themes\"下面." "">
+    参数 鲜艳颜色 <类型 = 逻辑型 注释 = "表示要激活的主题鲜艳颜色" @默认值 = 真>
+    参数 动态图形 <类型 = 逻辑型 注释 = "表示要激活的主题动态图形" @默认值 = 假>
+    参数 背景图像 <类型 = 逻辑型 注释 = "表示要激活的主题背景图像" @默认值 = 假>
+    {
+        变量 局_主题 <类型 = 文本型>
+        局_主题 = (文本型)主题 + " " + 选择 (鲜艳颜色, "1", "0") + 选择 (动态图形, "1", "0") + 选择 (背景图像, "1", "0")
+        Document对象.无返回值方法 ("ApplyTheme", 局_主题)
+    }
+
+    方法 另存为 <公开 注释 = "将文档保存到其他位置" 编辑时信息 = "152A95, 0, 0, 0">
+    参数 保存文件名 <类型 = 文本型 注释 = "文档的名称.默认值为当前文件夹和文件名.如果从未保存过文档,将使用默认名称(例如,Doc1.doc).如果已经存在具有指定文件名的文档,则覆盖该文档,并且在覆盖前不提示用户."
+            编辑时信息 = "152A95, 0, 0, 0" @默认值 = "">
+    参数 格式 <类型 = Word另存格式 注释 = "Word另存格式.*,保存文件时使用的文件格式.有关有效选项的列表,对于现有文件,默认采用上一次指定的文件格式;对于新文件,默认采用当前所用Word版本的格式."
+            编辑时信息 = "152A95, 0, 0, 0" @默认值 = Word另存格式.标准>
+    参数 锁定注释 <类型 = 逻辑型 注释 = "如果为真,则锁定文档注释." @默认值 = 假>
+    参数 密码 <类型 = 文本型 注释 = "它是一个区分大小写的字符串(最长不超过15个字符),用于指定文件的保护密码." 编辑时信息 = "152A95, 0, 0, 0" @默认值 = "">
+    参数 写权限密码 <类型 = 文本型 注释 = "一个表示文件写保护密码的字符串.如果文件保存时带有密码,但打开文件时不输入密码,则该文件以只读方式打开." 编辑时信息 = "152A95, 0, 0, 0" @默认值 = "">
+    参数 只读方式 <类型 = 逻辑型 注释 = "如果为真,则在打开文件时显示一条消息,提示该文件以只读方式打开." 编辑时信息 = "152A95, 0, 0, 0" @默认值 = 假>
+    参数 编码语言 <类型 = Word编码 注释 = "Word编码.*,指定的文本来源编码方式." @默认值 = Word编码.简体中文>
+    参数 文本换行符 <类型 = 逻辑型 注释 = "在将文档保存为文本文件时,如果该属性值为真,则在每一行文本后插入换行符." @默认值 = 真>
+    参数 使用列表 <类型 = 逻辑型 注释 = "如果为真,则将该文档添加到最近使用的文件列表中." @默认值 = 假>
+    {
+        Document对象.无返回值方法 ("SaveAs2", 保存文件名, 格式, 锁定注释, 密码, 使用列表, 写权限密码, 只读方式, 真, 真, 假, 假, 编码语言, 文本换行符, 假)
+    }
+
+    方法 导出PDF <公开 注释 = "以PDF或XPS格式保存文档">
+    参数 导出文件名 <类型 = 文本型 注释 = "文档的名称.默认值为当前文件夹和文件名.如果从未保存过文档,将使用默认名称(例如,Doc1.doc).如果已经存在具有指定文件名的文档,则覆盖该文档,并且在覆盖前不提示用户."
+            编辑时信息 = "152A95, 0, 0, 0" "">
+    参数 格式 <类型 = Word另存格式 注释 = "指定采用\"Word另存格式.PDF\"格式或\"Word另存格式.XPS\"格式." 编辑时信息 = "152A95, 0, 0, 0" @默认值 = Word另存格式.PDF>
+    参数 打开 <类型 = 逻辑型 注释 = "导出内容后打开新文件" @默认值 = 假>
+    参数 优化 <类型 = 逻辑型 注释 = "指定导出文档的分辨率和质量,值为假时,表示针对屏幕显示进行导出,质量较差,值为真时,表示以较高的质量导出." @默认值 = 真>
+    参数 导出范围 <类型 = Word导出范围 注释 = "Word导出范围.*, 指定导出区域是整个文档、当前页面、文本区域还是当前所选内容.默认值为导出整个文档." @默认值 = Word导出范围.整个文档>
+    参数 开始页 <类型 = 整数 注释 = "当导出范围为\"页范围\"时,则指定开始页码." @默认值 = -1>
+    参数 结束页 <类型 = 整数 注释 = "当导出范围为\"页范围\"时,则指定结束页码." @默认值 = -1>
+    参数 包含标记 <类型 = 逻辑型 注释 = "指定导出过程是只包括文本还是包括文本和标记" @默认值 = 假>
+    参数 包括属性 <类型 = 逻辑型 注释 = "指定在最新导出的文件中是否包括文档属性" @默认值 = 假>
+    参数 IRM权限 <类型 = 逻辑型 注释 = "指定是否将IRM权限复制到XPS文档,如果在源文档具有IRM保护.如果导出格式为\"PDF\",则此标志还指定是否将标签复制到PDF." @默认值 = 真>
+    参数 书签 <类型 = 整数 注释 = "如果值为0,则表示不在导出的文档中创建书签." 注释 = "如果值为1,则表示在导出的文档中为每个标题创建一个书签,标题只包含主文档和文本框中的标题,不包含页眉、页脚、尾注、脚注或注释中的标题."
+            注释 = "如果值为2,则表示在导出的文档中为每个书签创建一个书签,书签包括除页眉和页脚中所含书签以外的所有书签." @默认值 = 0>
+    {
+        变量 局_开始页 <类型 = COM变体型>
+        变量 局_结束页 <类型 = COM变体型>
+        如果 (开始页 != -1)
+        {
+            局_开始页.赋值 (开始页)
+        }
+        如果 (结束页 != -1)
+        {
+            局_结束页.赋值 (结束页)
+        }
+        Document对象.无返回值方法 ("ExportAsFixedFormat", 导出文件名, 格式, 打开, 选择 (优化, 0, 1), 导出范围, 局_开始页, 局_结束页, 选择 (包含标记, 7, 0), 包括属性, IRM权限, 书签)
+    }
+
+    方法 保存 <公开 注释 = "保存对指定文档所做的更改,如果此文档以前未保存过,则弹出\"另存为\"对话框并提示用户键入文件名.">
+    {
+        Document对象.无参数及返回值方法 ("Save")
+    }
+
+    方法 取段落 <公开 类型 = Word段落 注释 = "返回一个\"Word段落\"类,根据段落索引号取出文档中一段段落.">
+    参数 索引号 <类型 = 整数 注释 = "欲取出的段落索引号,默认为0时,表示取出最后段落." @默认值 = 0>
+    {
+        变量 局_Word段落 <类型 = Word段落>
+        如果 (索引号 == 0)
+        {
+            局_Word段落.置对象 (Document对象.读无参数对象型属性 ("Paragraphs", COM对象类).对象型方法 ("Last", COM对象类, 索引号))  // 表示取出的段落集合中的最后一项
+        }
+        否则
+        {
+            局_Word段落.置对象 (Document对象.读无参数对象型属性 ("Paragraphs", COM对象类).对象型方法 ("Item", COM对象类, 索引号))  // 根据段落索引号取出段落集合中的一项
+        }
+        返回 (局_Word段落)
+    }
+
+    方法 段落缩进 <公开 注释 = "为当前文档中所有段落增加一个级别的缩进" "">
+    {
+        Document对象.读无参数对象型属性 ("Paragraphs", COM对象类).无参数及返回值方法 ("Indent")
+    }
+
+    方法 段落反缩进 <公开 注释 = "为当前文档中所有段落减少一个级别的缩进" "">
+    {
+        Document对象.读无参数对象型属性 ("Paragraphs", COM对象类).无参数及返回值方法 ("Outdent")
+    }
+
+    方法 段落数 <公开 属性读 类型 = 整数 注释 = "返回文档中所有段落的数量">
+    {
+        返回 (Document对象.读无参数对象型属性 ("Paragraphs", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 文本区 <公开 属性读 类型 = Word文本区 注释 = "返回主文档文章做为选区.">
+    {
+        变量 局_Word文本区 <类型 = Word文本区>
+        局_Word文本区.置对象 (Document对象.读无参数对象型属性 ("Content", COM对象类))
+        返回 (局_Word文本区)
+    }
+
+    方法 添加段落 <公开 类型 = Word段落 注释 = "根据已有段落索引及实际字符位置添加新的空段落到文档中并返回新添加段落">
+    参数 段落索引 <类型 = 整数 注释 = "新的段落不替换该区域从1开始,默认为0表示在文档最后位置添加新段落." @默认值 = 0>
+    参数 字符位置 <类型 = 整数 注释 = "段落索引中字符位置,从1开始,新的段落不替换该区域.默认为段落索引位置向上添加新段落." @默认值 = 1>
+    {
+        变量 局_段落 <类型 = Word段落>
+        变量 局_文本区 <类型 = COM变体型>
+        如果 (段落索引 == 0)
+        {
+            局_段落.置对象 (Document对象.读无参数对象型属性 ("Paragraphs", COM对象类).无参数对象型方法 ("Add", COM对象类))  // 得到的是新增前最后的段落
+            局_段落.到下一段 ()  // 移动到新增后的段落
+        }
+        否则
+        {
+            局_文本区 = 取段落 (段落索引).文本区.取对象 ().无参数对象型方法 ("Characters", COM对象类).方法 ("Item", COM变体型, 选择 (字符位置 < 1, 1, 字符位置))  // 取出 段落索引 上的位置用做传入参数,当字符位置小于0时 则以第一个字符作为参照.
+            局_段落.置对象 (Document对象.读无参数对象型属性 ("Paragraphs", COM对象类).对象型方法 ("Add", COM对象类, 局_文本区))
+        }
+        返回 (局_段落)
+    }
+
+    方法 取文本区 <公开 类型 = Word文本区 注释 = "取文档中间文本区">
+    参数 开始位置 <类型 = 整数 注释 = "开始字符位置,结束位置为0时忽略该参数." @默认值 = 1>
+    参数 结束位置 <类型 = 整数 注释 = "结束字符位置,为0时表示取整个文档." @默认值 = 0>
+    {
+        变量 局_Word文本区 <类型 = Word文本区>
+        如果 (结束位置 == 0)
+        {
+            局_Word文本区.置对象 (Document对象.无参数对象型方法 ("Range", COM对象类))  // 没有设置结束位置则取出所有文本区域
+        }
+        否则
+        {
+            局_Word文本区.置对象 (Document对象.对象型方法 ("Range", COM对象类, 开始位置, 结束位置))
+        }
+        返回 (局_Word文本区)
+    }
+
+    方法 取特定选区 <公开 类型 = Word文本区 注释 = "取文档中特定选区">
+    参数 选区类型 <类型 = Word选区类型 注释 = "Word选区类型.*,指定选定内容或项目的部分类型." "">
+    {
+        变量 局_Word文本区 <类型 = Word文本区>
+        局_Word文本区.置对象 (Document对象.无参数对象型方法 ("StoryRanges", COM对象类).对象型方法 ("Item", COM对象类, 选区类型))
+        返回 (局_Word文本区)
+    }
+
+    方法 运行自动宏 <公开 注释 = "运行存储于指定文档的自动宏.如果没有自动宏,则不做任何操作.">
+    参数 宏 <类型 = Word自动宏 注释 = "Word自动宏.*">
+    {
+        Document对象.无返回值方法 ("RunAutoMacro", 宏)
+    }
+
+    方法 选定 <公开 注释 = "选择指定文档的内容">
+    {
+        Document对象.无参数及返回值方法 ("Select")
+    }
+
+    方法 预览 <公开 注释 = "显示当前文档的预览,就像保存为网页一样.">
+    {
+        Document对象.无参数及返回值方法 ("WebPagePreview")
+    }
+
+    方法 删除保护 <公开 注释 = "从指定文档中删除保护">
+    参数 密码 <类型 = 文本型 注释 = "用于保护文档的密码字符串.密码是区分大小写的.如果用户在使用一篇设置有密码的文档时没有提供正确的密码,就会显示一个对话框,提示用户输入密码." @默认值 = "">
+    {
+        变量 局_密码 <类型 = COM变体型>
+        如果 (密码 != "")
+        {
+            局_密码.赋值 (密码)
+        }
+        Document对象.无返回值方法 ("Unprotect", 局_密码)
+    }
+
+    方法 打印 <公开 注释 = "打印全部或部分指定文档">
+    参数 运行宏 <类型 = 逻辑型 注释 = "设置为真,打印文档同时继续运行宏." @默认值 = 真>
+    参数 文件追加 <类型 = 逻辑型 注释 = "如果该参数为真,则将指定文档添至由输出文件参数所指定的文件中.如果为假,则覆盖输出文件所指定文件的内容." @默认值 = 假>
+    参数 范围 <类型 = Word打印范围 注释 = "Word打印范围.*,指定打印页面范围." @默认值 = Word打印范围.页面范围>
+    参数 开始页号 <类型 = 整数 注释 = "打印的开始页号.当\"打印范围\"设置为\"指定范围\"时生效." @默认值 = 0>
+    参数 终止页号 <类型 = 整数 注释 = "打印的终止页号.当\"打印范围\"设置为\"指定范围\"时生效." @默认值 = 0>
+    参数 项目 <类型 = Word打印项目 注释 = "指定要打印的项目" @默认值 = Word打印项目.文档内容>
+    参数 打印份数 <类型 = 整数 注释 = "打印份数" @默认值 = 1>
+    参数 打印页码 <类型 = 文本型 注释 = "例如,\"2,6-10\"表示打印第2页以及第6至第10页.当\"打印范围\"设置为\"当前页面\"或\"页面范围\"时生效." @默认值 = "">
+    参数 页面类型 <类型 = 整数 注释 = "要打印的页面类型.可为下列常量之一:0、所有页;1、只有奇数页;2、只有偶数页." @默认值 = 0>
+    参数 打印到文件 <类型 = 逻辑型 注释 = "如果为真,则将打印指令发送到文件.请确保由输出文件参数指定了文件名." @默认值 = 假>
+    参数 输出文件名 <类型 = 文本型 注释 = "如果\"打印到文件\"的值为真,此参数将指定输出文件的路径和文件名称." @默认值 = "">
+    参数 副本 <类型 = 逻辑型 注释 = "在打印文档的多份副本时,若此参数为真,则打印完一份副本之后再打印下一份副本." @默认值 = 真>
+    参数 文件名 <类型 = 文本型 注释 = "要打印的文档的路径和文件名称.如果值为空文本时,表示将打印活动文档." @默认值 = "">
+    参数 水平页数 <类型 = 整数 注释 = "1-4,与\"垂直页数\"同时设置,表示在一页纸上水平放置的页数.可在单张纸上打印多页文档." @默认值 = 0>
+    参数 垂直页数 <类型 = 整数 注释 = "1-4,与\"水平页数\"同时设置,表示在一页纸上垂直放置的页数.可在单张纸上打印多页文档." @默认值 = 0>
+    参数 缩放宽度 <类型 = 整数 注释 = "指定将待打印页面缩放到的宽度,以缇为单位(20缇=1磅;72磅=1英寸)." @默认值 = 0>
+    参数 缩放高度 <类型 = 整数 注释 = "指定将打印页面缩放到的高度,以缇为单位(20缇=1磅;72磅=1英寸)." @默认值 = 0>
+    {
+        变量 COM变体 <类型 = COM变体型>
+        变量 局_水平页数 <类型 = COM变体型>
+        变量 局_垂直页数 <类型 = COM变体型>
+        变量 局_打印页码 <类型 = COM变体型>
+        变量 局_输出文件名 <类型 = COM变体型>
+        变量 局_缩放宽度 <类型 = COM变体型>
+        变量 局_缩放高度 <类型 = COM变体型>
+        变量 局_文件名 <类型 = COM变体型>
+        变量 局_开始页号 <类型 = COM变体型>
+        变量 局_终止页号 <类型 = COM变体型>
+        如果 (水平页数 > 0)
+        {
+            局_水平页数.赋值 (水平页数, )  // 多页合并到单页打印时水平页数
+        }
+        如果 (垂直页数 > 0)
+        {
+            局_垂直页数.赋值 (垂直页数, )  // 多页合并到单页打印时垂直页数
+        }
+        如果 (打印页码 != "")
+        {
+            局_打印页码.赋值 (打印页码, )
+        }
+        如果 (输出文件名 != "")
+        {
+            局_输出文件名.赋值 (输出文件名, )
+        }
+        如果 (文件名 != "")
+        {
+            局_文件名.赋值 (文件名, )
+        }
+        如果 (缩放宽度 != 0)
+        {
+            局_缩放宽度.赋值 (缩放宽度)
+        }
+        如果 (缩放高度 != 0)
+        {
+            局_缩放高度.赋值 (缩放高度)
+        }
+        如果 (开始页号 != 0)
+        {
+            局_开始页号.赋值 (开始页号, )
+        }
+        如果 (终止页号 != 0)
+        {
+            局_终止页号.赋值 (终止页号, )
+        }
+        Document对象.无返回值方法 ("PrintOut", 运行宏, 文件追加, 范围, 局_输出文件名, 局_开始页号, 局_终止页号, 项目, 打印份数, 局_打印页码, 页面类型, 打印到文件, 副本, 局_文件名, COM变体, COM变体, 局_水平页数, 局_垂直页数, 局_缩放宽度, 局_缩放高度)
+    }
+
+    方法 打印预览 <公开 注释 = "将视图切换到打印预览">
+    {
+        Document对象.无参数及返回值方法 ("PrintPreview")
+    }
+
+    方法 关闭打印预览 <公开 注释 = "将指定文档从打印预览视图切换到以前的视图">
+    {
+        Document对象.无参数及返回值方法 ("ClosePrintPreview")
+    }
+
+    方法 名称 <公开 属性读 类型 = 文本型 注释 = "返回对象名称">
+    {
+        返回 (Document对象.读无参数属性 ("Name", 文本型))
+    }
+
+    方法 宏 <公开 属性读 类型 = Word宏 注释 = "返回文档中的VB宏项目">
+    {
+        变量 局_Word宏 <类型 = Word宏>
+        变量 局_宏工作区对象 <类型 = COM对象类>
+        局_宏工作区对象 = Document对象.读无参数对象型属性 ("VBProject", COM对象类).读无参数对象型属性 ("VBComponents", COM对象类)
+        局_Word宏.置对象 (局_宏工作区对象)
+        返回 (局_Word宏)
+    }
+
+    方法 纸张大小 <公开 属性读 类型 = Word文档纸张 注释 = "返回纸张大小" 返回值注释 = "Word文档纸张.*">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("PaperSize", Word文档纸张))
+    }
+
+    方法 纸张大小 <公开 属性写 注释 = "设置纸张大小">
+    参数 所欲设置的值 <类型 = Word文档纸张 注释 = "Word文档纸张.*">
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("PaperSize", 所欲设置的值)
+    }
+
+    方法 页面方向 <公开 属性读 类型 = 整数 注释 = "返回页面的方向" 返回值注释 = "0 纵向;1 横向.">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("Orientation", 整数))
+    }
+
+    方法 页面方向 <公开 属性写 注释 = "设置页面的方向">
+    参数 所欲设置的值 <类型 = 整数 注释 = "0 纵向;1 横向.">
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("Orientation", 所欲设置的值)
+    }
+
+    方法 页脚距离 <公开 属性读 类型 = 整数 注释 = "返回页脚和页面底部之间的距离,以磅为单位.">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("FooterDistance", 整数))
+    }
+
+    方法 页脚距离 <公开 属性写 注释 = "设置页脚和页面底部之间的距离,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("FooterDistance", 所欲设置的值)
+    }
+
+    方法 首页送纸盒 <公开 属性读 类型 = Word打印纸盒 注释 = "返回用于文档或节的第一页的纸盒" 返回值注释 = "Word打印纸盒.*">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("FirstPageTray", Word打印纸盒))
+    }
+
+    方法 首页送纸盒 <公开 属性写 注释 = "设置用于文档或节的第一页的纸盒">
+    参数 所欲设置的值 <类型 = Word打印纸盒 注释 = "Word打印纸盒.*">
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("FirstPageTray", 所欲设置的值)
+    }
+
+    方法 其他页送纸盒 <公开 属性读 类型 = Word打印纸盒 注释 = "返回用于文档或节中除第一页以外其他所有页的纸盒" 返回值注释 = "Word打印纸盒.*">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("OtherPagesTray", Word打印纸盒))
+    }
+
+    方法 其他页送纸盒 <公开 属性写 注释 = "设置用于文档或节中除第一页以外其他所有页的纸盒">
+    参数 所欲设置的值 <类型 = Word打印纸盒 注释 = "Word打印纸盒.*">
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("OtherPagesTray", 所欲设置的值)
+    }
+
+    方法 行字符数 <公开 属性读 类型 = 整数 注释 = "返回文档网格中每行的字符数">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("CharsLine", 整数))
+    }
+
+    方法 行字符数 <公开 属性写 注释 = "设置文档网格中每行的字符数">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("CharsLine", 所欲设置的值)
+    }
+
+    方法 垂直对齐方式 <公开 属性读 类型 = Word垂直对齐 注释 = "返回对齐方式" 返回值注释 = "Word垂直对齐.*">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("VerticalAlignment", Word垂直对齐))
+    }
+
+    方法 垂直对齐方式 <公开 属性写 注释 = "设置对齐方式">
+    参数 所欲设置的值 <类型 = Word垂直对齐 注释 = "Word垂直对齐.*">
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("VerticalAlignment", 所欲设置的值)
+    }
+
+    方法 视图类型 <公开 属性读 类型 = Word视图类型 注释 = "返回视图的类型" 返回值注释 = "Word视图类型.*">
+    {
+        返回 (Document对象.读无参数对象型属性 ("ActiveWindow", COM对象类).读无参数对象型属性 ("View", COM对象类).读无参数属性 ("Type", Word视图类型))
+    }
+
+    方法 视图类型 <公开 属性写 注释 = "设置视图的类型">
+    参数 所欲设置的值 <类型 = Word视图类型 注释 = "Word视图类型.*">
+    {
+        Document对象.读无参数对象型属性 ("ActiveWindow", COM对象类).读无参数对象型属性 ("View", COM对象类).写属性 ("Type", 所欲设置的值)
+    }
+
+    方法 合页打印 <公开 属性读 类型 = 逻辑型 注释 = "返回是否每两页打印在同一张纸上">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("TwoPagesOnOne", 逻辑型))
+    }
+
+    方法 合页打印 <公开 属性写 注释 = "设置将文档的每两页打印在同一张纸上">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("TwoPagesOnOne", 所欲设置的值)
+    }
+
+    方法 模板 <公开 属性读 类型 = 文本型 注释 = "返回模板路径,代表附加到指定文档的模板." 返回值注释 = "模板文件名">
+    {
+        返回 (Document对象.读无参数对象型属性 ("AttachedTemplate", COM对象类).读无参数属性 ("FullName", 文本型))
+    }
+
+    方法 模板 <公开 属性写 注释 = "设置模板路径,代表附加到指定文档的模板.">
+    参数 模板文件名 <类型 = 文本型 注释 = "所欲设置的模板文件名">
+    {
+        Document对象.写属性 ("AttachedTemplate", 模板文件名)
+    }
+
+    方法 自动保存 <公开 属性读 类型 = 逻辑型 注释 = "返回是否自动保存文档中的编辑">
+    {
+        返回 (Document对象.读无参数属性 ("AutoSaveOn", 逻辑型))
+    }
+
+    方法 自动保存 <公开 属性写 注释 = "设置是否自动保存文档中的编辑">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Document对象.写属性 ("AutoSaveOn", 所欲设置的值)
+    }
+
+    方法 分节符类型 <公开 属性读 类型 = Word分节符 注释 = "返回指定对象的分节符的类型" 返回值注释 = "Word分节符.*">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("SectionStart", Word分节符))
+    }
+
+    方法 分节符类型 <公开 属性写 注释 = "设置指定对象的分节符的类型">
+    参数 所欲设置的值 <类型 = Word分节符 注释 = "Word分节符.*">
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("SectionStart", 所欲设置的值)
+    }
+
+    方法 页宽 <公开 属性读 类型 = 整数 注释 = "返回页面的宽度,以磅为单位.">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("PageWidth", 整数))
+    }
+
+    方法 页宽 <公开 属性写 注释 = "设置页面的宽度,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("PageWidth", 所欲设置的值)
+    }
+
+    方法 页高 <公开 属性读 类型 = 整数 注释 = "返回页面的高度,以磅为单位.">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("PageHeight", 整数))
+    }
+
+    方法 页高 <公开 属性写 注释 = "设置页面的高度,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("PageHeight", 所欲设置的值)
+    }
+
+    方法 取装订线边距 <公开 类型 = 整数 注释 = "返回文档或节的每一页的额外页边距的大小,以磅为单位." 返回值注释 = "装订线距离">
+    参数 方向 <类型 = 整数 注释 = "0 左边;1 上边;2 右边.">
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("GutterPos", 方向)  // 设置装订线方向
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("Gutter", 整数))  // 取出方向订线距离
+    }
+
+    方法 置装订线边距 <公开 注释 = "设置文档或节的每一页的额外页边距的大小,以磅为单位.">
+    参数 方向 <类型 = 整数 注释 = "0 左边;1 上边;2 右边.">
+    参数 所欲设置的值 <类型 = 整数 注释 = "装订线距离">
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("GutterPos", 方向)  // 设置装订线方向
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("Gutter", 所欲设置的值)  // 设置方向装订线距离
+    }
+
+    方法 装订线风格 <公开 属性读 类型 = 整数 注释 = "返回是否使用从右到左或从左到右语言基于当前文档的装订线" 返回值注释 = "2 从右向左文字排列规则." 返回值注释 = "-10 从左向右文字排列规则.">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("GutterStyle", 整数))
+    }
+
+    方法 装订线风格 <公开 属性写 注释 = "设置使用从右到左或从左到右语言基于当前文档的装订线">
+    参数 所欲设置的值 <类型 = 整数 注释 = "2 从右向左文字排列规则." 注释 = "-10 从左向右文字排列规则.">
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("GutterStyle", 所欲设置的值)
+    }
+
+    方法 页眉距离 <公开 属性读 类型 = 整数 注释 = "返回页眉与页面顶端之间的距离,以磅为单位.">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("HeaderDistance", 整数))
+    }
+
+    方法 页眉距离 <公开 属性写 注释 = "设置页眉与页面顶端之间的距离,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("HeaderDistance", 所欲设置的值)
+    }
+
+    方法 布局模式 <公开 属性读 类型 = 整数 注释 = "返回当前文档的布局模式" 返回值注释 = "0 无网格;1 指定行网格;2 指定行网格和字符网格;3 文字对齐字符网格.">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("LayoutMode", 整数))
+    }
+
+    方法 布局模式 <公开 属性写 注释 = "设置当前文档的布局模式">
+    参数 所欲设置的值 <类型 = 整数 注释 = "0 无网格;1 指定行网格;2 指定行网格和字符网格;3 文字对齐字符网格.">
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("LayoutMode", 所欲设置的值)
+    }
+
+    方法 显示网格 <公开 属性读 类型 = 逻辑型 注释 = "返回是否显示页面网格">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("ShowGrid", 逻辑型))
+    }
+
+    方法 显示网格 <公开 属性写 注释 = "设置是否显示页面网格">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("ShowGrid", 所欲设置的值)
+    }
+
+    方法 背景图色 <公开 属性读 类型 = 逻辑型 注释 = "返回是否在页面视图中显示文档时显示背景色和图像">
+    {
+        返回 (Document对象.读无参数对象型属性 ("ActiveWindow", COM对象类).读无参数对象型属性 ("View", COM对象类).读无参数属性 ("DisplayBackgrounds", 逻辑型))
+    }
+
+    方法 背景图色 <公开 属性写 注释 = "设置是否在页面视图中显示文档时显示背景色和图像">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Document对象.读无参数对象型属性 ("ActiveWindow", COM对象类).读无参数对象型属性 ("View", COM对象类).写属性 ("DisplayBackgrounds", 所欲设置的值)
+    }
+
+    方法 阅读顺序 <公开 属性读 类型 = 整数 注释 = "返回阅读顺序和对齐方式指定节" 返回值注释 = "0 用右对齐方式和从右到左的阅读顺序显示节." 返回值注释 = "1 用左对齐方式和从左到右的阅读顺序显示节.">
+    {
+        返回 (Document对象.读无参数对象型属性 ("PageSetup", COM对象类).读无参数属性 ("SectionDirection", 整数))
+    }
+
+    方法 阅读顺序 <公开 属性写 注释 = "设置阅读顺序和对齐方式指定节">
+    参数 所欲设置的值 <类型 = 整数 注释 = "0 用右对齐方式和从右到左的阅读顺序显示节." 注释 = "1 用左对齐方式和从左到右的阅读顺序显示节.">
+    {
+        Document对象.读无参数对象型属性 ("PageSetup", COM对象类).写属性 ("SectionDirection", 所欲设置的值)
+    }
+
+    方法 图形数量 <公开 属性读 类型 = 整数 注释 = "返回文档中图形的数量">
+    {
+        返回 (Document对象.读无参数对象型属性 ("Shapes", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 取图形 <公开 类型 = Word图形 注释 = "取出代表某个范围中的形状的Word图形类">
+    参数 索引号 <类型 = 整数 注释 = "对象的索引号.从1开始,表示图形在文档图形集合中位置.为0时忽略该参数." @默认值 = 0>
+    参数 名称 <类型 = 文本型 注释 = "对象的名称.索引号不为0时忽略该参数." @默认值 = "">
+    {
+        变量 局_图形 <类型 = Word图形>
+        如果 (索引号 == 0)
+        {
+            如果 (名称 != "")
+            {
+                局_图形.置对象 (Document对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("Range", COM对象类, 名称))  // 名称取Word图形
+            }
+        }
+        否则
+        {
+            局_图形.置对象 (Document对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("Range", COM对象类, 索引号))  // 索引号取Word图形
+        }
+        返回 (局_图形)
+    }
+
+    方法 添加艺术字 <公开 类型 = Word图形 注释 = "将艺术字形状添加到绘图画布上">
+    参数 内容 <类型 = 文本型 注释 = "艺术字中的文字">
+    参数 文本效果 <类型 = 整数 注释 = "预设文本效果." 注释 = "-2 表示混合." 注释 = "0-29 表示30个文本效果." @默认值 = 0>
+    参数 字体名称 <类型 = 文本型 注释 = "艺术字中所用字体的名称" @默认值 = "宋体">
+    参数 字体大小 <类型 = 整数 注释 = "艺术字中所用字体的大小" @默认值 = 36>
+    参数 加粗 <类型 = 逻辑型 注释 = "艺术字字体是否加粗" @默认值 = 假>
+    参数 斜体 <类型 = 逻辑型 注释 = "以斜体显示艺术字" @默认值 = 假>
+    参数 左边 <类型 = 小数 注释 = "设置艺术字左边缘的位置,以磅为单位." @默认值 = 1>
+    参数 上边 <类型 = 小数 注释 = "设置艺术字左边缘的位置,以磅为单位." @默认值 = 1>
+    {
+        变量 局_Word图形 <类型 = Word图形>
+        局_Word图形.置对象 (Document对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddTextEffect", COM对象类, 文本效果, 内容, 字体名称, 字体大小, 选择 (加粗, -1, 0), 选择 (斜体, -1, 0), 左边, 上边))
+        返回 (局_Word图形)
+    }
+
+    方法 添加画布 <公开 类型 = Word图形 注释 = "在文档中添加绘图画布">
+    参数 左边 <类型 = 小数 注释 = "设置新建图形左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "设置新建图形左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "设置新建图形的宽度,以磅为单位." @默认值 = 100>
+    参数 高度 <类型 = 小数 注释 = "设置新建图形的高度,以磅为单位." @默认值 = 100>
+    参数 名称 <类型 = 文本型 注释 = "指定所添加对象的名称" @默认值 = "">
+    {
+        变量 局_图形 <类型 = COM对象类>
+        变量 局_Word图形 <类型 = Word图形>
+        局_图形 = Document对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddCanvas", COM对象类, 左边, 上边, 宽度, 高度)
+        如果 (名称 != "")
+        {
+            局_图形.写属性 ("Name", 名称)
+        }
+        局_Word图形.置对象 (局_图形)
+        返回 (局_Word图形)
+    }
+
+    方法 添加直线 <公开 类型 = Word图形 注释 = "向文档中添加一条直线图形,并返回新建的图形.">
+    参数 起点横坐标 <类型 = 小数 注释 = "线条起点相对于文档左边缘水平位置,以磅为单位." "">
+    参数 起点纵坐标 <类型 = 小数 注释 = "线条起点相对于文档上边缘垂直位置,以磅为单位." "">
+    参数 终点横坐标 <类型 = 小数 注释 = "线条终点相对于文档左边缘水平位置,以磅为单位." "">
+    参数 终点纵坐标 <类型 = 小数 注释 = "线条终点相对于文档上边缘垂直位置,以磅为单位." "">
+    参数 颜色 <类型 = 整数 注释 = "设置新建图形的颜色,默认为黑色." @默认值 = 0>
+    参数 名称 <类型 = 文本型 注释 = "指定所添加对象的名称" @默认值 = "">
+    {
+        变量 局_图形 <类型 = COM对象类>
+        变量 局_Word图形 <类型 = Word图形>
+        局_图形 = Document对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddLine", COM对象类, 起点横坐标, 起点纵坐标, 终点横坐标, 终点纵坐标)
+        如果 (名称 != "")
+        {
+            局_图形.写属性 ("Name", 名称)
+        }
+        局_Word图形.置对象 (局_图形)
+        局_Word图形.边框颜色 = 颜色
+        返回 (局_Word图形)
+    }
+
+    方法 添加图形 <公开 类型 = Word图形 注释 = "向文档中添加一个图形,并返回新建的图形.">
+    参数 形状 <类型 = Word图形形状 注释 = "Word图形形状.*.">
+    参数 左边 <类型 = 小数 注释 = "设置新建图形左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "设置新建图形左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "设置新建图形的宽度,以磅为单位." @默认值 = 100>
+    参数 高度 <类型 = 小数 注释 = "设置新建图形的高度,以磅为单位." @默认值 = 100>
+    参数 名称 <类型 = 文本型 注释 = "指定所添加对象的名称" @默认值 = "">
+    {
+        变量 局_图形 <类型 = COM对象类>
+        变量 局_Word图形 <类型 = Word图形>
+        局_图形 = Document对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddShape", COM对象类, 形状, 左边, 上边, 宽度, 高度)
+        如果 (名称 != "")
+        {
+            局_图形.写属性 ("Name", 名称)
+        }
+        局_Word图形.置对象 (局_图形)
+        返回 (局_Word图形)
+    }
+
+    方法 添加智能图表 <公开 类型 = Word图形 注释 = "向文档中添加智能图表,并返回新建的图形.">
+    参数 版式索引 <类型 = 整数 注释 = "智能图表样式索引号,索引号不能大于图表总数量.智能图表数量可通过\"Word程序.图表版式数\"获得." @默认值 = 1>
+    参数 左边 <类型 = 小数 注释 = "设置新建图形左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "设置新建图形左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "设置新建图形的宽度,以磅为单位." @默认值 = 100>
+    参数 高度 <类型 = 小数 注释 = "设置新建图形的高度,以磅为单位." @默认值 = 100>
+    参数 名称 <类型 = 文本型 注释 = "指定所添加对象的名称" @默认值 = "">
+    {
+        变量 局_图形 <类型 = COM对象类>
+        变量 局_Word图形 <类型 = Word图形>
+        变量 局_版式 <类型 = COM变体型>
+        局_版式 = Document对象.读无参数对象型属性 ("Application", COM对象类).读无参数对象型属性 ("SmartArtLayouts", COM对象类).方法 ("Item", COM变体型, 版式索引)
+        局_图形 = Document对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddSmartArt", COM对象类, 局_版式, 左边, 上边, 宽度, 高度)
+        如果 (名称 != "")
+        {
+            局_图形.写属性 ("Name", 名称)
+        }
+        局_Word图形.置对象 (局_图形)
+        返回 (局_Word图形)
+    }
+
+    方法 添加批注 <公开 类型 = Word图形 注释 = "向文档中添加添加无框线的标注,并返回新建的图形.">
+    参数 内容 <类型 = 文本型 注释 = "批注中文本内容" @默认值 = "">
+    参数 线 <类型 = Word标注线 注释 = "Word标注线.*,标注的类型." @默认值 = Word标注线.单段>
+    参数 左边 <类型 = 小数 注释 = "设置新建图形左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "设置新建图形左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "设置新建图形的宽度,以磅为单位." @默认值 = 100>
+    参数 高度 <类型 = 小数 注释 = "设置新建图形的高度,以磅为单位." @默认值 = 100>
+    参数 名称 <类型 = 文本型 注释 = "指定所添加对象的名称" @默认值 = "">
+    {
+        变量 局_图形 <类型 = COM对象类>
+        变量 局_Word图形 <类型 = Word图形>
+        局_图形 = Document对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddCallout", COM对象类, 线, 左边, 上边, 宽度, 高度)
+        局_图形.读无参数对象型属性 ("TextFrame", COM对象类).读无参数对象型属性 ("TextRange", COM对象类).写属性 ("Text", 内容)  // 向批注写入内容
+        如果 (名称 != "")
+        {
+            局_图形.写属性 ("Name", 名称)
+        }
+        局_Word图形.置对象 (局_图形)
+        返回 (局_Word图形)
+    }
+
+    方法 添加文本框 <公开 类型 = Word图形 注释 = "在绘图画布上添加一个文本框">
+    参数 内容 <类型 = 文本型 注释 = "艺术字中的文字">
+    参数 方向 <类型 = Word文本方向 注释 = "文本的方向.其中某些常量可能不可用,这取决于您所选择或安装的语言支持." @默认值 = Word文本方向.水平>
+    参数 左边 <类型 = 小数 注释 = "设置文本框左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "设置文本框左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "设置文本框的宽度,以磅为单位." @默认值 = 100>
+    参数 高度 <类型 = 小数 注释 = "设置文本框的高度,以磅为单位." @默认值 = 100>
+    参数 名称 <类型 = 文本型 注释 = "指定所添加对象的名称" @默认值 = "">
+    {
+        变量 局_图形 <类型 = COM对象类>
+        变量 局_Word图形 <类型 = Word图形>
+        局_图形 = Document对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddTextbox", COM对象类, 方向, 左边, 上边, 宽度, 高度)
+        局_图形.读无参数对象型属性 ("TextFrame", COM对象类).读无参数对象型属性 ("TextRange", COM对象类).写属性 ("Text", 内容)  // 向文本框中写入内容
+        如果 (名称 != "")
+        {
+            局_图形.写属性 ("Name", 名称)
+        }
+        局_Word图形.置对象 (局_图形)
+        返回 (局_Word图形)
+    }
+
+    方法 添加图片 <公开 类型 = Word图形 注释 = "向文档中添加一个图片,并返回新建图片的Word图形类.">
+    参数 图片文件名 <类型 = 文本型 注释 = "图片的路径和文件名">
+    参数 链接到文件 <类型 = 逻辑型 注释 = "如果为真,则要将图片链接到创建它的文件.如果为假,则使图片文件成为独立副本." @默认值 = 真>
+    参数 文档中存储 <类型 = 逻辑型 注释 = "是否随文档一起保存链接的图片" @默认值 = 假>
+    参数 左边 <类型 = 小数 注释 = "设置图片左边缘的位置,以磅为单位." @默认值 = 100>
+    参数 上边 <类型 = 小数 注释 = "设置图片左边缘的位置,以磅为单位." @默认值 = 100>
+    参数 宽度 <类型 = 小数 注释 = "设置图片的宽度,以磅为单位." @默认值 = 100>
+    参数 高度 <类型 = 小数 注释 = "设置图片的高度,以磅为单位." @默认值 = 100>
+    参数 名称 <类型 = 文本型 注释 = "指定所添加对象的名称" @默认值 = "">
+    {
+        变量 局_图形 <类型 = COM对象类>
+        变量 局_Word图形 <类型 = Word图形>
+        局_图形 = Document对象.读无参数对象型属性 ("Shapes", COM对象类).对象型方法 ("AddPicture", COM对象类, 图片文件名, 链接到文件, 文档中存储, 左边, 上边, 宽度, 高度)
+        如果 (名称 != "")
+        {
+            局_图形.写属性 ("Name", 名称)
+        }
+        局_Word图形.置对象 (局_图形)
+        返回 (局_Word图形)
+    }
+
+    方法 密码 <公开 属性读 类型 = 文本型 注释 = "返回在打开指定文档时必须提供的密码">
+    {
+        返回 (Document对象.读无参数属性 ("Password", 文本型))
+    }
+
+    方法 主题 <公开 属性读 类型 = 文本型 注释 = "返回指定的文档的活动主题名称以及主题格式选项">
+    {
+        返回 (Document对象.读无参数属性 ("ActiveTheme", 文本型))
+    }
+
+    方法 背景 <公开 属性读 类型 = Word图形 注释 = "该对象表示指定文档的背景图像.背景仅在Web布局视图中可见.">
+    {
+        变量 局_Word图形 <类型 = Word图形>
+        局_Word图形.置对象 (Document对象.读无参数对象型属性 ("Background", COM对象类))
+        返回 (局_Word图形)
+    }
+
+    方法 主题名称 <公开 属性读 类型 = 文本型 注释 = "返回指定文档的活动主题显示名称">
+    {
+        返回 (Document对象.读无参数属性 ("ActiveThemeDisplayName", 文本型))
+    }
+
+    方法 密码 <公开 属性写 注释 = "设置在打开指定文档时必须提供的密码">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Document对象.写属性 ("Password", 所欲设置的值)
+    }
+
+    方法 写权限密码 <公开 属性读 类型 = 文本型 注释 = "返回在写入文档时必须提供的密码">
+    {
+        返回 (Document对象.读无参数属性 ("WritePassword", 文本型))
+    }
+
+    方法 写权限密码 <公开 属性写 注释 = "设置在写入文档时必须提供的密码">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Document对象.写属性 ("WritePassword", 所欲设置的值)
+    }
+}
+
+类 Word段落 <公开 注释 = "代表文档中的一个段落">
+{
+    变量 Paragraph对象 <类型 = COM对象类>
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作." "">
+    参数 局_Field对象 <类型 = COM对象类 注释 = "Word文档集">
+    {
+        Paragraph对象 = 局_Field对象
+        返回 (Paragraph对象.是否为空 () == 假)
+    }
+
+    方法 取对象 <公开 类型 = COM对象类 注释 = "获取Word提供的对象.与\"COM对象类\"数据类型兼容,可交互操作." "">
+    {
+        返回 (Paragraph对象)
+    }
+
+    方法 文本区 <公开 属性读 类型 = Word文本区 注释 = "取段落到文本区" "">
+    {
+        变量 局_文本区 <类型 = Word文本区>
+        局_文本区.置对象 (Paragraph对象.读无参数对象型属性 ("Range", COM对象类))
+        返回 (局_文本区)
+    }
+
+    方法 样式 <公开 属性读 类型 = Word段落样式 注释 = "返回当前段落的样式" 返回值注释 = "Word段落样式.*" "">
+    {
+        返回 (Paragraph对象.读无参数属性 ("Style", Word段落样式))
+    }
+
+    方法 样式 <公开 属性写 注释 = "设置当前段落的样式" "">
+    参数 所欲设置的值 <类型 = Word段落样式 注释 = "Word段落样式.*">
+    {
+        Paragraph对象.写属性 ("Style", 所欲设置的值)
+    }
+
+    方法 锁定 <公开 属性读 类型 = 逻辑型 注释 = "返回当前段落是否处于锁定状态" "">
+    {
+        返回 (Paragraph对象.读无参数属性 ("Locked", 逻辑型))
+    }
+
+    方法 锁定 <公开 属性写 注释 = "设置当前段落锁定状态" "">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Paragraph对象.写属性 ("Locked", 所欲设置的值)
+    }
+
+    方法 到下一段 <公开 注释 = "到文档中的下一个段落" "">
+    {
+        Paragraph对象 = Paragraph对象.读无参数对象型属性 ("Next", COM对象类)
+    }
+
+    方法 到上一段 <公开 注释 = "到文档中的上一个段落" "">
+    {
+        Paragraph对象 = Paragraph对象.读无参数对象型属性 ("Previous", COM对象类)
+    }
+
+    方法 索引号 <公开 属性读 类型 = 整数 注释 = "返回在文档段落中位置" "">
+    {
+        返回 (Paragraph对象.读无参数属性 ("Index", 整数))
+    }
+
+    方法 行距 <公开 属性读 类型 = Word段落行距 注释 = "返回当前段落的行距" 返回值注释 = "Word段落行距.*">
+    {
+        返回 (Paragraph对象.读无参数属性 ("LineSpacingRule", Word段落行距))
+    }
+
+    方法 行距 <公开 属性写 注释 = "设置当前段落的行距">
+    参数 所欲设置的值 <类型 = Word段落行距 注释 = "Word段落行距.*">
+    {
+        Paragraph对象.写属性 ("LineSpacingRule", 所欲设置的值)
+    }
+
+    方法 对齐方式 <公开 属性读 类型 = Word段落对齐 注释 = "返回段落的对齐方式" 返回值注释 = "Word段落对齐.*">
+    {
+        返回 (Paragraph对象.读无参数属性 ("Alignment", Word段落对齐))
+    }
+
+    方法 对齐方式 <公开 属性写 注释 = "指定段落的对齐方式">
+    参数 所欲设置的值 <类型 = Word段落对齐 注释 = "Word段落对齐.*">
+    {
+        Paragraph对象.写属性 ("Alignment", 所欲设置的值)
+    }
+
+    方法 删除样式 <公开 注释 = "删除段落样式" "">
+    {
+        Paragraph对象.无参数及返回值方法 ("Reset")
+    }
+
+    方法 缩进 <公开 注释 = "为当前段落增加一个级别的缩进或按字符数增加缩进" "">
+    参数 字符数 <类型 = 整数 注释 = "指定段落要缩进的字符数,为0时表示增加一个级别的缩进." @默认值 = 0>
+    {
+        如果 (字符数 == 0)
+        {
+            Paragraph对象.无参数及返回值方法 ("Indent")  // 增加一个级别的缩进
+        }
+        否则
+        {
+            Paragraph对象.无返回值方法 ("IndentCharWidth", 字符数)  // 根据字符数进行缩进
+        }
+    }
+
+    方法 反缩进 <公开 注释 = "为当前段落减少一个级别的缩进" "">
+    {
+        Paragraph对象.无参数及返回值方法 ("Outdent")
+    }
+}
+
+类 Word选区 <公开 注释 = "代表文档中被选中区域">
+{
+    变量 Selection对象 <类型 = COM对象类>
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作." "">
+    参数 局_Selection对象 <类型 = COM对象类 注释 = "Word文档集">
+    {
+        Selection对象 = 局_Selection对象
+        返回 (Selection对象.是否为空 () == 假)
+    }
+
+    方法 取对象 <公开 类型 = COM对象类 注释 = "获取Word提供的对象.与\"COM对象类\"数据类型兼容,可交互操作." "">
+    {
+        返回 (Selection对象)
+    }
+
+    方法 文本区 <公开 属性读 类型 = Word文本区 注释 = "选区到文本区" "">
+    {
+        变量 局_文本区 <类型 = Word文本区>
+        局_文本区.置对象 (Selection对象.读无参数对象型属性 ("Range", COM对象类))
+        返回 (局_文本区)
+    }
+
+    方法 字符数量 <公开 属性读 类型 = 整数 注释 = "选区中的字符数量" "">
+    {
+        返回 (Selection对象.读无参数对象型属性 ("Characters", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 段落数 <公开 属性读 类型 = 整数 注释 = "返回当前选区段落数量,代表当前选区中段落数量.注意:当前选区,非整个文档.">
+    {
+        返回 (Selection对象.读无参数对象型属性 ("Paragraphs", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 首字符 <公开 属性读 类型 = 文本型 注释 = "返回选区中的第一个字符" "">
+    {
+        返回 (Selection对象.读无参数对象型属性 ("Characters", COM对象类).读无参数属性 ("First", 文本型))
+    }
+
+    方法 尾字符 <公开 属性读 类型 = 文本型 注释 = "返回选区中的最后一个字符" "">
+    {
+        返回 (Selection对象.读无参数对象型属性 ("Characters", COM对象类).读无参数属性 ("Last", 文本型))
+    }
+
+    方法 取中间字符 <公开 类型 = 文本型 注释 = "根据选区中字符的索引号取出单个字符内容" "">
+    参数 索引号 <类型 = 整数>
+    {
+        返回 (Selection对象.读无参数对象型属性 ("Characters", COM对象类).方法 ("Item", 文本型, 索引号))
+    }
+
+    方法 所在文档 <公开 属性读 类型 = Word文档 注释 = "选定内容所在的文档" "">
+    {
+        变量 局_Word文档 <类型 = Word文档>
+        局_Word文档.置对象 (Selection对象.读无参数对象型属性 ("Document", COM对象类))
+        返回 (局_Word文档)
+    }
+
+    方法 到下一选区 <公开 注释 = "到文档中的下一个选区" "">
+    {
+        Selection对象 = Selection对象.读无参数对象型属性 ("Next", COM对象类)
+    }
+
+    方法 到上一选区 <公开 注释 = "到文档中的上一个选区" "">
+    {
+        Selection对象 = Selection对象.读无参数对象型属性 ("Previous", COM对象类)
+    }
+
+    方法 内容 <公开 属性读 类型 = 文本型 注释 = "返回该段落中的数据" "">
+    {
+        返回 (Selection对象.读无参数属性 ("Text", 文本型))
+    }
+
+    方法 内容 <公开 属性写 注释 = "设置指定段落中的数据" "">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Selection对象.写属性 ("Text", 所欲设置的值)
+    }
+
+    方法 结束位置 <公开 属性读 类型 = 整数 注释 = "返回所选内容的结束字符位置" "">
+    {
+        返回 (Selection对象.读无参数属性 ("End", 整数))
+    }
+
+    方法 结束位置 <公开 属性写 注释 = "设置所选内容的结束字符位置" "">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Selection对象.写属性 ("End", 所欲设置的值)
+    }
+
+    方法 开始位置 <公开 属性读 类型 = 整数 注释 = "返回所选内容的起始字符位置" "">
+    {
+        返回 (Selection对象.读无参数属性 ("Start", 整数))
+    }
+
+    方法 开始位置 <公开 属性写 注释 = "设置所选内容的起始字符位置" "">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Selection对象.写属性 ("Start", 所欲设置的值)
+    }
+
+    方法 选定表格行 <公开 注释 = "选定表格中光标插入点所在的行或选定内容所在行.如果选定内容不在表格中,则会报错." "">
+    {
+        Selection对象.无参数及返回值方法 ("SelectRow")
+    }
+
+    方法 选定表格列 <公开 注释 = "选定表格中光标插入点所在的列或选定内容所在列.如果选定内容不在表格中,则会报错." "">
+    {
+        Selection对象.无参数及返回值方法 ("SelectColumn")
+    }
+
+    方法 选定表格单元格 <公开 注释 = "选定表格中光标插入点所在的单元格或选定内容所在单元格.如果选定内容不在表格中,则会报错." "">
+    {
+        Selection对象.无参数及返回值方法 ("SelectCell")
+    }
+
+    方法 重置选区 <公开 注释 = "重新设置选定区域为文档中开始位置到结束位置.">
+    参数 参_开始位置 <类型 = 整数 注释 = "开始字符位置">
+    参数 参_结束位置 <类型 = 整数 注释 = "结束字符位置">
+    {
+        Selection对象.无返回值方法 ("SetRange", 参_开始位置, 参_结束位置)
+    }
+
+    方法 取段落 <公开 类型 = Word段落 注释 = "返回一个Word段落类,代表当前选区中段落集合中根据索引号对应的一段段落.注意:当前选区,非整个文档.">
+    参数 索引号 <类型 = 整数 注释 = "欲取出选区中的段落索引号">
+    {
+        变量 局_Word段落 <类型 = Word段落>
+        局_Word段落.置对象 (Selection对象.读无参数对象型属性 ("Paragraphs", COM对象类).对象型方法 ("Item", COM对象类, 索引号))
+        返回 (局_Word段落)
+    }
+
+    方法 加粗 <公开 注释 = "将选定内容转换为加粗格式" "">
+    {
+        Selection对象.无参数及返回值方法 ("BoldRun")
+    }
+
+    方法 清除所有字符格式 <公开 注释 = "从所选文本中删除所有字符格式(包括通过字符样式应用的格式和手动应用的格式)" "">
+    {
+        Selection对象.无参数及返回值方法 ("ClearCharacterAllFormatting")
+    }
+
+    方法 清除字符格式 <公开 注释 = "取消所选文本的字符格式,即通过功能区上的按钮或对话框手动应用的格式." "">
+    {
+        Selection对象.无参数及返回值方法 ("ClearCharacterDirectFormatting")
+    }
+
+    方法 取消字符样式 <公开 注释 = "从所选文本中删除通过字符样式应用的字符格式" "">
+    {
+        Selection对象.无参数及返回值方法 ("ClearCharacterStyle")
+    }
+
+    方法 清除格式 <公开 注释 = "清除所选内容的文本格式和段落格式" "">
+    {
+        Selection对象.无参数及返回值方法 ("ClearFormatting")
+    }
+
+    方法 清除所有段落格式 <公开 注释 = "从所选文本中删除所有段落格式(包括通过段落样式应用的格式和手动应用的格式)" "">
+    {
+        Selection对象.无参数及返回值方法 ("ClearParagraphAllFormatting")
+    }
+
+    方法 清除段落格式 <公开 注释 = "从所选文本中删除通过功能区上的按钮或者对话框手动应用的段落格式" "">
+    {
+        Selection对象.无参数及返回值方法 ("ClearParagraphDirectFormatting")
+    }
+
+    方法 清除段落样式 <公开 注释 = "从所选文本中删除通过段落样式应用的段落格式" "">
+    {
+        Selection对象.无参数及返回值方法 ("ClearParagraphStyle")
+    }
+
+    方法 折叠 <公开 注释 = "将选定内容折叠到起始位置或结束位置.折叠之后起始位置和结束位置相同." "">
+    参数 折叠方向 <类型 = 整数 注释 = "指定某范围或所选内容的折叠方向." 注释 = "0 将该范围折叠到结束点." 注释 = "1 将该范围折叠到起始点." @默认值 = 0>
+    {
+        Selection对象.无返回值方法 ("Collapse", 折叠方向)
+    }
+
+    方法 文本转表格 <公开 注释 = "将范围内的文本转换为表格.作为表对象返回的表." "">
+    参数 分隔符 <类型 = 整数 注释 = "指定用于将文本分隔成单元格的字符." 注释 = "0 段落标记;1 制表符;2 一个逗号;3 默认列表分隔符." @默认值 = 2>
+    参数 行数 <类型 = 整数 注释 = "表格中的行数.默认值为0,表示将根据该范围的内容设置行数." @默认值 = 0>
+    参数 列数 <类型 = 整数 注释 = "表格中的列数.默认值为0,表示将根据该范围的内容设置列数." @默认值 = 0>
+    参数 列宽 <类型 = 整数 注释 = "每一列的初始宽度,以磅为单位.默认值为0,表示将计算并调整列宽,以使表格填满页面." @默认值 = 0>
+    参数 格式 <类型 = Word表格格式 注释 = "Word表格格式.*,指定表格自动套用格式." @默认值 = Word表格格式.无格式>
+    参数 自动列宽 <类型 = 逻辑型 注释 = "设置是否自动调整大小以适合内容(自动调整)表中的单元格" @默认值 = 假>
+    {
+        变量 COM变体 <类型 = COM变体型>
+        变量 行数变体 <类型 = COM变体型>
+        变量 列数变体 <类型 = COM变体型>
+        变量 列宽变体 <类型 = COM变体型>
+        如果 (行数 != 0)
+        {
+            行数变体.赋值 (行数, )
+        }
+        如果 (列数 != 0)
+        {
+            列数变体.赋值 (列数, )
+        }
+        如果 (列宽 != 0)
+        {
+            列宽变体.赋值 (列数, )
+        }
+        Selection对象.无返回值方法 ("ConvertToTable", 分隔符, 行数变体, 列数变体, 列宽变体, 格式, COM变体, COM变体, COM变体, COM变体, COM变体, COM变体, COM变体, COM变体, COM变体, 1, 自动列宽)
+    }
+
+    方法 计算公式 <公开 类型 = 小数 注释 = "计算所选内容中的数学表达式.返回\"小数型\"计算结果." "">
+    {
+        返回 (Selection对象.无参数方法 ("Calculate", 小数))
+    }
+
+    方法 单击 <公开 注释 = "单击该段落" "">
+    {
+        Selection对象.无参数及返回值方法 ("DoClick")
+    }
+
+    方法 复制 <公开 注释 = "复制该段落到剪贴板上" "">
+    {
+        Selection对象.无参数及返回值方法 ("Copy")
+    }
+
+    方法 粘贴 <公开 注释 = "将\"剪贴板\"的内容插入指定的选择范围处" "">
+    {
+        Selection对象.无参数及返回值方法 ("Paste")
+    }
+
+    方法 选择性粘贴 <公开 注释 = "将\"剪贴板\"的内容插入指定的选择范围处" "">
+    参数 格式 <类型 = Word粘贴格式 @默认值 = Word粘贴格式.默认>
+    {
+        Selection对象.无返回值方法 ("PasteAndFormat", 格式)
+    }
+
+    方法 粘贴格式 <公开 注释 = "粘贴复制到所选内容的格式" "">
+    {
+        Selection对象.无参数及返回值方法 ("PasteFormat")
+    }
+
+    方法 粘贴Excel表格 <公开 注释 = "粘贴复制到的Excel表格" "">
+    参数 链接源目标 <类型 = 逻辑型 注释 = "为链接到原始Excel文件粘贴的表格,以便对Excel文件所做的更改将反映在Word中." @默认值 = 假>
+    参数 设置格式 <类型 = 逻辑型 注释 = "为目录设置格式,使用Word文档中的格式设置.如果为假,则根据原始Excel文件的格式设置." @默认值 = 假>
+    参数 富文本格式 <类型 = 逻辑型 注释 = "如果为真,则将粘贴使用丰富文本格式(RTF)表.如果为假,则将Excel表格粘贴为HTML." @默认值 = 真>
+    {
+        Selection对象.无返回值方法 ("PasteExcelTable", 链接源目标, 设置格式, 富文本格式)
+    }
+
+    方法 删除 <公开 注释 = "删除该文本区内容" "">
+    {
+        Selection对象.无参数及返回值方法 ("Delete")
+    }
+
+    方法 剪切 <公开 注释 = "剪切该段落到剪贴板上" "">
+    {
+        Selection对象.无参数及返回值方法 ("Cut")
+    }
+
+    方法 复制为图片 <公开 注释 = "将内容复制为图片" "">
+    {
+        Selection对象.无参数及返回值方法 ("CopyAsPicture")
+    }
+
+    方法 复制字符格式 <公开 注释 = "复制选定文字第一个字符的字符格式" "">
+    {
+        Selection对象.无参数及返回值方法 ("CopyFormat")
+    }
+
+    方法 创建文本框 <公开 注释 = "在选定内容周围添加一个默认大小的文本框,如果所选内容是一个光标插入点,本方法将鼠标指针设为十字型指针,以便绘制一个文本框." "">
+    {
+        Selection对象.无参数及返回值方法 ("CreateTextbox")
+    }
+
+    方法 按建到头尾 <公开 类型 = 整数 注释 = "将选定内容移动或扩展到指定单位的开头或末尾" 返回值注释 = "返回所选内容实际移动的字符数,如果移动不成功,则返回 0." "">
+    参数 移动单位 <类型 = Word度量单位 注释 = "Word度量单位.*" @默认值 = Word度量单位.当前行>
+    参数 移动方式 <类型 = 整数 注释 = "0 将所选内容折叠到光标插入点中并移到指定单位的末尾." 注释 = "1 将所选内容的末尾扩展到指定单位的末尾." @默认值 = 0>
+    参数 到头 <类型 = 逻辑型 注释 = "如果为真,移动到头." 注释 = "如果为假,移动到尾." @默认值 = 假>
+    {
+        变量 字符数 <类型 = 整数>
+        如果 (到头)
+        {
+            字符数 = Selection对象.方法 ("HomeKey", 整数, 移动单位, 移动方式)  // 相当于按下Home键产生的效果
+        }
+        否则
+        {
+            字符数 = Selection对象.方法 ("EndKey", 整数, 移动单位, 移动方式)  // 相当于按下End键产生的效果
+        }
+        返回 (字符数)
+    }
+
+    方法 移动 <公开 类型 = 整数 注释 = "将选定内容移动或扩展到指定单位" 返回值注释 = "返回所选内容实际移动的字符数,如果移动不成功,则返回 0." "">
+    参数 单位 <类型 = Word度量单位 注释 = "Word度量单位.*,移动度量单位." 注释 = "移动方向为上下时可用的有:段落、当前行、屏幕尺寸、窗口." 注释 = "移动方向为左右时可用的有:字符单位、单词、句子."
+            @默认值 = Word度量单位.当前行>
+    参数 移动距离 <类型 = 整数 注释 = "要移动的单位数" @默认值 = 1>
+    参数 移动或扩展 <类型 = 逻辑型 注释 = "如果为假,则将所选内容折叠到光标插入点中并移到指定单位的末尾." 注释 = "如果为真,则将所选内容的末尾扩展到指定单位的末尾." @默认值 = 假>
+    参数 移动方向 <类型 = 整数 注释 = "1 上;2 下;3 左;4 右." @默认值 = 4>
+    {
+        变量 局_返回值 <类型 = 整数 值 = 0>
+        如果 (移动方向 == 1)
+        {
+            局_返回值 = Selection对象.方法 ("MoveUp", 整数, 单位, 移动距离, 选择 (移动或扩展, 1, 0))
+        }
+        如果 (移动方向 == 2)
+        {
+            局_返回值 = Selection对象.方法 ("MoveDown", 整数, 单位, 移动距离, 选择 (移动或扩展, 1, 0))
+        }
+        如果 (移动方向 == 3)
+        {
+            局_返回值 = Selection对象.方法 ("MoveLeft", 整数, 单位, 移动距离, 选择 (移动或扩展, 1, 0))
+        }
+        如果 (移动方向 == 4)
+        {
+            局_返回值 = Selection对象.方法 ("MoveRight", 整数, 单位, 移动距离, 选择 (移动或扩展, 1, 0))
+        }
+        返回 (局_返回值)
+    }
+
+    方法 取消选定 <公开 注释 = "取消某种模式,如取消扩展或列选定模式(与按ESC相同)." "">
+    {
+        Selection对象.无参数及返回值方法 ("EscapeKey")
+    }
+
+    方法 移动到尾部 <公开 注释 = "将区域或选定内容的结束字符位置移动或扩展至最近的一个指定文本单元末尾" "">
+    参数 单位 <类型 = Word度量单位 注释 = "Word度量单位.*,结束字符位置移至的单元.除.行以外的其他度量单位." @默认值 = Word度量单位.句子>
+    参数 移动或扩展 <类型 = 逻辑型 注释 = "如果为假,则将所选内容折叠到光标插入点中并移到指定单位的末尾." 注释 = "如果为真,则将所选内容的末尾扩展到指定单位的末尾." @默认值 = 假>
+    {
+        Selection对象.无返回值方法 ("Endof", 单位, 选择 (移动或扩展, 1, 0))
+    }
+
+    方法 取扩展字数 <公开 类型 = 整数 注释 = "扩展指定的区域或所选内容.返回添至该区域或所选内容的字符数." "">
+    参数 单位 <类型 = Word度量单位 注释 = "Word度量单位.*,代表要扩大范围的度量单位." @默认值 = Word度量单位.字符单位>
+    {
+        返回 (Selection对象.方法 ("Expand", 整数, 单位))
+    }
+
+    方法 跳转 <公开 注释 = "将光标插入点跳转到文档中某一位置" "">
+    参数 类型 <类型 = Word项目类型 注释 = "Word项目类型.*,指定区域或选定内容要跳转到的项的类别." @默认值 = Word项目类型.书签>
+    参数 位置 <类型 = Word项目位置 注释 = "Word项目位置.*,指定区域或选定内容要跳转到的项." @默认值 = Word项目位置.下一个>
+    参数 跳转量 <类型 = 整数 注释 = "跳转量" @默认值 = 1>
+    参数 项名称 <类型 = 文本型 注释 = "如果\"项目类型\"参数是书签、批注、域或对象,则本参数指定名称." @默认值 = "">
+    {
+        Selection对象.无返回值方法 ("GoTo", 类型, 位置, 跳转量, 项名称)
+    }
+
+    方法 前后跳转 <公开 注释 = "将光标插入点跳转到下一个项目或指定内容的前后位置" "">
+    参数 类型 <类型 = Word项目类型 注释 = "Word项目类型.*,指定的区域或选定内容将被跳转到的项." @默认值 = Word项目类型.行>
+    参数 前后 <类型 = 逻辑型 注释 = "如果为真,则向前跳转." 注释 = "如果为假,则向后跳转." @默认值 = 假>
+    {
+        如果 (前后)
+        {
+            Selection对象.无返回值方法 ("GoToPrevious", 类型)
+        }
+        否则
+        {
+            Selection对象.无返回值方法 ("GoToNext", 类型)
+        }
+    }
+
+    方法 插入文本 <公开 注释 = "将指定文本插入范围或所选内容的前面或末尾" "">
+    参数 内容 <类型 = 文本型 注释 = "要插入的文本" "">
+    参数 前或后 <类型 = 逻辑型 注释 = "如果为真,则在前面插入." 注释 = "如果为假,则在后面插入." @默认值 = 假>
+    {
+        如果 (前或后)
+        {
+            Selection对象.无返回值方法 ("InsertBefore", 内容)
+        }
+        否则
+        {
+            Selection对象.无返回值方法 ("InsertAfter", 内容)
+        }
+    }
+
+    方法 插入回车符 <公开 注释 = "将回车符插入范围或所选内容的末尾" "">
+    {
+        Selection对象.无返回值方法 ("InsertAfter", "\r\n")
+    }
+
+    方法 插入文件 <公开 注释 = "插入指定文件的全部或一部分" "">
+    参数 文件名 <类型 = 文本型 注释 = "要插入的文件的路径及文件名.如果没有指定路径,则Word假定文件位于当前文件夹中." "">
+    参数 范围 <类型 = 文本型 注释 = "如果指定的文件是Word文档,则此参数代表书签.如果该文件为其他类型(例如,Excel工作表),则此参数代表命名区域或单元格区域(例如,R1C1:R3C4)." @默认值 = "">
+    参数 其他格式 <类型 = 逻辑型 注释 = "如果为真,则让Word提示您确认时插入Word文档格式之外的其他格式文件的转换,如文本文件." @默认值 = 假>
+    {
+        变量 局_范围 <类型 = COM变体型>
+        如果 (范围 != "")
+        {
+            局_范围.赋值 (范围, )
+        }
+        Selection对象.无返回值方法 ("InsertFile", 文件名, 局_范围, 其他格式, 真)
+    }
+
+    方法 插入分隔符 <公开 注释 = "插入分页符、分栏符或分节符." "">
+    参数 分隔符类型 <类型 = Word分隔符 注释 = "Word分隔符.*,要插入的分隔符的类型." "">
+    {
+        Selection对象.无返回值方法 ("InsertBreak", 分隔符类型)
+    }
+
+    方法 插入标题 <公开 注释 = "紧靠在指定的所选内容之前或之后插入题注" "">
+    参数 标签 <类型 = 文本型 注释 = "要插入的题注标签" "">
+    参数 标题 <类型 = 文本型 注释 = "要紧接在题注标签之后插入的字符串">
+    参数 标签在上方 <类型 = 逻辑型 注释 = "题注标签加在上方" @默认值 = 真>
+    参数 包含标签 <类型 = 逻辑型 注释 = "是否显示题注标签" @默认值 = 真>
+    {
+        Selection对象.无返回值方法 ("InsertCaption", 标签, 标题, 选择 (标签在上方, 0, 1), 包含标签)
+    }
+}
+
+类 Word文本区 <公开 注释 = "代表文档中的一个段落中的指定文本区域内容">
+{
+    变量 Range对象 <类型 = COM对象类>
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作." "">
+    参数 局_Range对象 <类型 = COM对象类 注释 = "Word文档集">
+    {
+        Range对象 = 局_Range对象
+        返回 (Range对象.是否为空 () == 假)
+    }
+
+    方法 取对象 <公开 类型 = COM对象类 注释 = "获取Word提供的对象.与\"COM对象类\"数据类型兼容,可交互操作." "">
+    {
+        返回 (Range对象)
+    }
+
+    方法 删除 <公开 注释 = "删除该文本区内容" "">
+    {
+        Range对象.无参数及返回值方法 ("Delete")
+    }
+
+    方法 复制 <公开 注释 = "复制文本区内容到剪贴板上" "">
+    {
+        Range对象.无参数及返回值方法 ("Copy")
+    }
+
+    方法 粘贴 <公开 注释 = "将\"剪贴板\"的内容插入指定的选择范围处" "">
+    {
+        Range对象.无参数及返回值方法 ("Paste")
+    }
+
+    方法 选择性粘贴 <公开 注释 = "将\"剪贴板\"的内容插入指定的选择范围处" "">
+    参数 格式 <类型 = Word粘贴格式 注释 = "Word粘贴格式.*" @默认值 = Word粘贴格式.默认>
+    {
+        Range对象.无返回值方法 ("PasteAndFormat", 格式)
+    }
+
+    方法 粘贴Excel表格 <公开 注释 = "粘贴复制到的Excel表格" "">
+    参数 链接源目标 <类型 = 逻辑型 注释 = "为链接到原始Excel文件粘贴的表格,以便对Excel文件所做的更改将反映在Word中." @默认值 = 假>
+    参数 设置格式 <类型 = 逻辑型 注释 = "为目录设置格式,使用Word文档中的格式设置.如果为假,则根据原始Excel文件格式设置." @默认值 = 假>
+    参数 富文本格式 <类型 = 逻辑型 注释 = "如果为真,则将粘贴使用丰富文本格式(RTF)表.如果为假,则将Excel表格粘贴为HTML." @默认值 = 真>
+    {
+        Range对象.无返回值方法 ("PasteExcelTable", 链接源目标, 设置格式, 富文本格式)
+    }
+
+    方法 复制为图片 <公开 注释 = "将内容复制为图片" "">
+    {
+        Range对象.无参数及返回值方法 ("CopyAsPicture")
+    }
+
+    方法 选定 <公开 注释 = "选中该文本区" "">
+    {
+        Range对象.无参数及返回值方法 ("Select")
+    }
+
+    方法 插入文本 <公开 注释 = "将指定文本插入文本区的前面或末尾" "">
+    参数 内容 <类型 = 文本型 注释 = "要插入的文本" "">
+    参数 前插 <类型 = 逻辑型 注释 = "如果为真,则在前面插入." 注释 = "如果为假,则在后面插入." @默认值 = 假>
+    {
+        如果 (前插)
+        {
+            Range对象.无返回值方法 ("InsertBefore", 内容)
+        }
+        否则
+        {
+            Range对象.无返回值方法 ("InsertAfter", 内容)
+        }
+    }
+
+    方法 插入回车符 <公开 注释 = "将回车符插入范围或所选内容的末尾" "">
+    {
+        Range对象.无返回值方法 ("InsertAfter", "\r\n")
+    }
+
+    方法 文本转表格 <公开 注释 = "将范围内的文本转换为表格.作为表对象返回的表." "">
+    参数 分隔符 <类型 = 整数 注释 = "指定用于将文本分隔成单元格的字符.0 段落标记;1 制表符;2 一个逗号;3 默认列表分隔符." @默认值 = 2>
+    参数 行数 <类型 = 整数 注释 = "表格中的行数.默认值为0,表示将根据该范围的内容设置行数." @默认值 = 0>
+    参数 列数 <类型 = 整数 注释 = "表格中的列数.默认值为0,表示将根据该范围的内容设置列数." @默认值 = 0>
+    参数 列宽 <类型 = 整数 注释 = "每一列的初始宽度,以磅为单位.默认值为0,表示将计算并调整列宽,以使表格填满页面." @默认值 = 0>
+    参数 格式 <类型 = Word表格格式 注释 = "Word表格格式.*,指定表格自动套用格式." @默认值 = Word表格格式.无格式>
+    参数 自动列宽 <类型 = 逻辑型 注释 = "设置是否自动调整大小以适合内容(自动调整)表中的单元格" @默认值 = 假>
+    {
+        变量 COM变体 <类型 = COM变体型>
+        变量 行数变体 <类型 = COM变体型>
+        变量 列数变体 <类型 = COM变体型>
+        变量 列宽变体 <类型 = COM变体型>
+        如果 (行数 != 0)
+        {
+            行数变体.赋值 (行数, )
+        }
+        如果 (列数 != 0)
+        {
+            列数变体.赋值 (列数, )
+        }
+        如果 (列宽 != 0)
+        {
+            列宽变体.赋值 (列数, )
+        }
+        Range对象.无返回值方法 ("ConvertToTable", 分隔符, 行数变体, 列数变体, 列宽变体, 格式, COM变体, COM变体, COM变体, COM变体, COM变体, COM变体, COM变体, COM变体, COM变体, 1, 自动列宽)
+    }
+
+    方法 插入分隔符 <公开 注释 = "插入分页符、分栏符或分节符.如果您不想替换该范围,请使用该方法之前使用折叠方法." "">
+    参数 分隔符类型 <类型 = Word分隔符 注释 = "Word分隔符.*,要插入的分隔符的类型." "">
+    {
+        Range对象.无返回值方法 ("InsertBreak", 分隔符类型)
+    }
+
+    方法 插入标题 <公开 注释 = "紧靠在指定的所选内容之前或之后插入题注" "">
+    参数 标签 <类型 = 文本型 注释 = "要插入的题注标签" "">
+    参数 标题 <类型 = 文本型 注释 = "要紧接在题注标签之后插入的字符串">
+    参数 标签在上方 <类型 = 逻辑型 注释 = "题注标签加在上方" @默认值 = 真>
+    参数 包含标签 <类型 = 逻辑型 注释 = "是否显示题注标签" @默认值 = 真>
+    {
+        Range对象.无返回值方法 ("InsertCaption", 标签, 标题, 选择 (标签在上方, 0, 1), 包含标签)
+    }
+
+    方法 折叠 <公开 注释 = "将选区内容折叠到起始位置或结束位置.折叠之后起始位置和结束位置相同." "">
+    参数 折叠方向 <类型 = 整数 注释 = "指定某范围或所选内容的折叠方向." 注释 = " 0 将该范围折叠到结束点." 注释 = " 1 将该范围折叠到起始点." @默认值 = 0>
+    {
+        Range对象.无返回值方法 ("Collapse", 折叠方向)
+    }
+
+    方法 跳转 <公开 注释 = "从当前选区位置跳转到下一个项目或指定内容的前后位置,并将当前选区设置为跳转到的位置." "">
+    参数 类型 <类型 = Word项目类型 注释 = "Word项目类型.*,指定区域或选定内容要跳转到的项的类别." @默认值 = Word项目类型.书签>
+    参数 位置 <类型 = Word项目位置 注释 = "Word项目位置.*,指定区域或选定内容要跳转到的项." @默认值 = Word项目位置.下一个>
+    参数 跳转量 <类型 = 整数 注释 = "跳转量" @默认值 = 1>
+    参数 项名称 <类型 = 文本型 注释 = "如果\"项目类型\"参数是书签、批注、域或对象,则本参数指定名称." @默认值 = "">
+    {
+        Range对象.无返回值方法 ("GoTo", 类型, 位置, 跳转量, 项名称)
+    }
+
+    方法 跳转前后 <公开 注释 = "从当前选区位置跳转到下一个项目或指定内容的前后位置,并将当前选区设置为跳转到的位置." "">
+    参数 类型 <类型 = Word项目类型 注释 = "Word项目类型.*,指定的区域或选定内容将被跳转到的项." @默认值 = Word项目类型.行>
+    参数 前后 <类型 = 逻辑型 注释 = "如果为真,则向前跳转." 注释 = "如果为假,则向后跳转." @默认值 = 假>
+    {
+        如果 (前后)
+        {
+            Range对象.无返回值方法 ("GoToPrevious", 类型)
+        }
+        否则
+        {
+            Range对象.无返回值方法 ("GoToNext", 类型)
+        }
+    }
+
+    方法 移动到尾部 <公开 注释 = "将区域的结束字符位置移动或扩展到最近的一个指定文本单位末尾" "">
+    参数 单位 <类型 = Word度量单位 注释 = "Word度量单位.*,结束字符位置移至的单元.除\"Word度量单位.行\"以外的其他度量单位." @默认值 = Word度量单位.句子>
+    参数 移动或扩展 <类型 = 逻辑型 注释 = "如果为真,则将所选内容的末尾扩展到指定单位的末尾." 注释 = "如果为假,则将所选内容折叠到光标插入点中并移到指定单位的末尾." @默认值 = 假>
+    {
+        Range对象.无返回值方法 ("Endof", 单位, 选择 (移动或扩展, 1, 0))
+    }
+
+    方法 剪切 <公开 注释 = "剪切该段落到剪贴板上" "">
+    {
+        Range对象.无参数及返回值方法 ("Cut")
+    }
+
+    方法 字符数量 <公开 属性读 类型 = 整数 注释 = "返回该段落上的字符数量" "">
+    {
+        返回 (Range对象.无参数对象型方法 ("Characters", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 取中间字符 <公开 类型 = 文本型 注释 = "根据文本区中字符的索引号取出单个字符内容" "">
+    参数 位置 <类型 = 整数>
+    {
+        返回 (Range对象.无参数对象型方法 ("Characters", COM对象类).方法 ("Item", 文本型, 位置))
+    }
+
+    方法 置区域 <公开 注释 = "重新设置文本区为当前文本区中某个开始位置到结束位置的区域">
+    参数 参_开始位置 <类型 = 整数 注释 = "开始字符位置">
+    参数 参_结束位置 <类型 = 整数 注释 = "结束字符位置">
+    {
+        Range对象.无返回值方法 ("SetRange", 开始位置 + 参_开始位置, 开始位置 + 参_结束位置)
+    }
+
+    方法 重置区域 <公开 注释 = "重新设置文本区为文档中开始位置到结束位置的文本区">
+    参数 参_开始位置 <类型 = 整数 注释 = "开始字符位置">
+    参数 参_结束位置 <类型 = 整数 注释 = "结束字符位置">
+    {
+        Range对象.无返回值方法 ("SetRange", 参_开始位置, 参_结束位置)
+    }
+
+    方法 置边框线条 <公开 注释 = "向区域边框添加线条,并设置边框线条样式.">
+    参数 边框 <类型 = Word边框 注释 = "Excel边框.*,它代表单元格区域或样式的边框之一." @默认值 = Word边框.下边>
+    参数 线条样式 <类型 = Word线条样式 注释 = "Excel线条样式.*,它代表边框的线条样式." @默认值 = Word线条样式.单线>
+    {
+        变量 Borders <类型 = COM对象类>
+        变量 Border <类型 = COM对象类>
+        Borders = Range对象.读无参数对象型属性 ("Borders", COM对象类)
+        Border = Borders.读对象型属性 ("Item", COM对象类, 边框)
+        Border.写属性 ("LineStyle", 线条样式)
+    }
+
+    方法 置编号 <公开 注释 = "适用于指定的一组列表格式特征">
+    参数 模板索引号 <类型 = 整数 注释 = "列表模板索引号." 注释 = "1 项目符号;2 编号;3 多级列表.">
+    参数 样式索引号 <类型 = 整数 注释 = "通常为 1-7,三种模板中包含样式索引号.">
+    参数 继续编码 <类型 = 逻辑型 注释 = "如果为真,则继续编排页码从前面的列表." 注释 = "如果为假,则启动一个新的列表." @默认值 = 假>
+    参数 范围 <类型 = Word列表范围 注释 = "Word列表范围.*" @默认值 = Word列表范围.选择区>
+    {
+        变量 局_模板 <类型 = COM对象类>
+        变量 局_样式 <类型 = COM变体型>
+        局_模板 = Range对象.读无参数对象型属性 ("Application", COM对象类).读无参数对象型属性 ("ListGalleries", COM对象类).方法 ("Item", COM对象类, 模板索引号)  // 取出 Word 中三种模板其中一种
+        局_样式 = 局_模板.读无参数对象型属性 ("ListTemplates", COM对象类).方法 ("Item", COM变体型, 样式索引号)  // 取出模板样式作为欲设置参数
+        Range对象.读无参数对象型属性 ("ListFormat", COM对象类).无返回值方法 ("ApplyListTemplate", 局_样式, 继续编码, 范围)
+    }
+
+    方法 内容 <公开 属性读 类型 = 文本型 注释 = "返回当前选区中的内容" "">
+    {
+        返回 (Range对象.读无参数属性 ("Text", 文本型))
+    }
+
+    方法 内容 <公开 属性写 注释 = "设置当前选区中的内容" "">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Range对象.写属性 ("Text", 所欲设置的值)
+    }
+
+    方法 加粗 <公开 属性读 类型 = 逻辑型 注释 = "返回当前选区文本是否加粗" "">
+    {
+        返回 (Range对象.读无参数属性 ("Bold", 逻辑型))
+    }
+
+    方法 加粗 <公开 属性写 注释 = "设置当前选区文本加粗" "">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Range对象.写属性 ("Bold", 所欲设置的值)
+    }
+
+    方法 字体名称 <公开 属性读 类型 = 文本型 注释 = "返回当前选区字体名称">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Name", 文本型))
+    }
+
+    方法 字体名称 <公开 属性写 注释 = "设置当前选区字体名称">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Name", 所欲设置的值)
+    }
+
+    方法 字体倾斜 <公开 属性读 类型 = 逻辑型 注释 = "返回当前选区字体是否倾斜">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Italic", 逻辑型))
+    }
+
+    方法 字体倾斜 <公开 属性写 注释 = "设置当前选区字体是否倾斜">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Italic", 所欲设置的值)
+    }
+
+    方法 字体穿透线 <公开 属性读 类型 = 逻辑型 注释 = "返回当前选区字体中间是否带有一条水平线">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Strikethrough", 逻辑型))
+    }
+
+    方法 字体穿透线 <公开 属性写 注释 = "设置当前选区字体中间是否带有一条水平线">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Strikethrough", 所欲设置的值)
+    }
+
+    方法 字体上标 <公开 属性读 类型 = 逻辑型 注释 = "返回当前选区字体是否使用上标">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Superscript", 逻辑型))
+    }
+
+    方法 字体上标 <公开 属性写 注释 = "设置当前选区字体是否使用上标">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Superscript", 所欲设置的值)
+    }
+
+    方法 所在文档 <公开 属性读 类型 = Word文档 注释 = "选区所在的文档" "">
+    {
+        变量 局_Word文档 <类型 = Word文档>
+        局_Word文档.置对象 (Range对象.读无参数对象型属性 ("Document", COM对象类))
+        返回 (局_Word文档)
+    }
+
+    方法 字体浮雕阴 <公开 属性读 类型 = 逻辑型 注释 = "返回当前选区字体浮雕阴效果">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Engrave", 逻辑型))
+    }
+
+    方法 字体浮雕阴 <公开 属性写 注释 = "设置当前选区字体浮雕阴效果">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Engrave", 所欲设置的值)
+    }
+
+    方法 字体浮雕阳 <公开 属性读 类型 = 逻辑型 注释 = "返回当前选区字体浮雕阳效果">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Emboss", 逻辑型))
+    }
+
+    方法 字体浮雕阳 <公开 属性写 注释 = "设置当前选区字体浮雕阳效果">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Emboss", 所欲设置的值)
+    }
+
+    方法 字体镂空 <公开 属性读 类型 = 逻辑型 注释 = "返回是否带字体镂空效果">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Outline", 逻辑型))
+    }
+
+    方法 字体镂空 <公开 属性写 注释 = "设置字体镂空效果">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Outline", 所欲设置的值)
+    }
+
+    方法 字体隐藏 <公开 属性读 类型 = 逻辑型 注释 = "返回字体的格式是否为隐藏文字">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Hidden", 逻辑型))
+    }
+
+    方法 字体隐藏 <公开 属性写 注释 = "设置字体的格式是否为隐藏文字">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Hidden", 所欲设置的值)
+    }
+
+    方法 字体删除线 <公开 属性读 类型 = 逻辑型 注释 = "返回字体的格式是否为带删除线的文本">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("StrikeThrough", 逻辑型))
+    }
+
+    方法 字体删除线 <公开 属性写 注释 = "字体的格式设置为带删除线的文本">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("StrikeThrough", 所欲设置的值)
+    }
+
+    方法 字体双删除线 <公开 属性读 类型 = 逻辑型 注释 = "返回字体的格式是否为带双删除线的文本">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("DoubleStrikeThrough", 逻辑型))
+    }
+
+    方法 字体双删除线 <公开 属性写 注释 = "字体的格式设置为带双删除线的文本">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("DoubleStrikeThrough", 所欲设置的值)
+    }
+
+    方法 字体位置 <公开 属性读 类型 = 整数 注释 = "返回文本相对于基准线上移或下移的位置,以磅为单位." 返回值注释 = "正数表示上移,负数表示下移.">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Position", 整数))
+    }
+
+    方法 字体位置 <公开 属性写 注释 = "设置文本相对于基准线上移或下移的位置,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数 注释 = "正数表示上移,负数表示下移.">
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Position", 所欲设置的值)
+    }
+
+    方法 字体间隔 <公开 属性读 类型 = 整数 注释 = "返回字符之间的间距,以磅为单位.">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Spacing", 整数))
+    }
+
+    方法 字体间隔 <公开 属性写 注释 = "设置字符之间的间距,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Spacing", 所欲设置的值)
+    }
+
+    方法 最小字号 <公开 属性读 类型 = 整数 注释 = "返回将调整自动字距调整的最小字号,以磅为单位.">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Kerning", 整数))
+    }
+
+    方法 最小字号 <公开 属性写 注释 = "设置调整自动字距调整的最小字号,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Kerning", 所欲设置的值)
+    }
+
+    方法 字体缩放比 <公开 属性读 类型 = 整数 注释 = "返回应用于字体的缩放百分比" 返回值注释 = "缩放范围从 1 到 600">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Scaling", 整数))
+    }
+
+    方法 字体缩放比 <公开 属性写 注释 = "设置应用于字体的缩放百分比">
+    参数 所欲设置的值 <类型 = 整数 注释 = "缩放范围从 1 到 600">
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Scaling", 所欲设置的值)
+    }
+
+    方法 字体下标 <公开 属性读 类型 = 逻辑型 注释 = "返回应用于字体是否使用下标">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Subscript", 逻辑型))
+    }
+
+    方法 字体下标 <公开 属性写 注释 = "设置应用于字体是否使用下标">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Subscript", 所欲设置的值)
+    }
+
+    方法 字体着重号 <公开 属性读 类型 = Word着重号 注释 = "返回应用于字体着重号" 返回值注释 = "Word着重号.*">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("EmphasisMark", Word着重号))
+    }
+
+    方法 字体着重号 <公开 属性写 注释 = "设置应用于字体着重号">
+    参数 所欲设置的值 <类型 = Word着重号 注释 = "Word着重号.*">
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("EmphasisMark", 所欲设置的值)
+    }
+
+    方法 字体下划线 <公开 属性读 类型 = Word下划线 注释 = "返回当前选区字体下方下划线风格" 返回值注释 = "Word下划线.*">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Underline", Word下划线))
+    }
+
+    方法 字体下划线 <公开 属性写 注释 = "设置当前选区字体下方下划线风格">
+    参数 所欲设置的值 <类型 = Word下划线 注释 = "Word下划线.*">
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Underline", 所欲设置的值)
+    }
+
+    方法 字体下划线颜色 <公开 属性读 类型 = 整数 注释 = "返回字体下方下划线颜色" 返回值注释 = "RGB函数所返回的整数值">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("UnderlineColor", 整数))
+    }
+
+    方法 字体下划线颜色 <公开 属性写 注释 = "设置字体下方下划线颜色">
+    参数 所欲设置的值 <类型 = 整数 注释 = "RGB函数所返回的整数值">
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("UnderlineColor", 所欲设置的值)
+    }
+
+    方法 字体加粗 <公开 属性读 类型 = 逻辑型 注释 = "返回当前选区字体是否加粗">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Bold", 逻辑型))
+    }
+
+    方法 字体加粗 <公开 属性写 注释 = "设置当前选区字体是否加粗">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Bold", 所欲设置的值)
+    }
+
+    方法 字体字母大写 <公开 属性读 类型 = 逻辑型 注释 = "返回字体字母是否大写">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("AllCaps", 逻辑型))
+    }
+
+    方法 字体字母大写 <公开 属性写 注释 = "设置字体字母是否大写">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("AllCaps", 所欲设置的值)
+    }
+
+    方法 字体数字间距 <公开 属性读 类型 = 整数 注释 = "返回字体的数字间距设置,财务专用.">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("NumberSpacing", 整数))
+    }
+
+    方法 字体数字间距 <公开 属性写 注释 = "设置字体的数字间距设置,财务专用.">
+    参数 所欲设置的值 <类型 = 整数 注释 = "0 应用字体的默认数字间距." 注释 = "1 对字体应用成比例数字间距." 注释 = "2 对字体应用表格数字间距.">
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("NumberSpacing", 所欲设置的值)
+    }
+
+    方法 置字体阴影 <公开 注释 = "设置当前选区字体是否加粗">
+    参数 大小 <类型 = 小数 注释 = "二选一,指定阴影大小,为0时忽略该参数." @默认值 = 0>
+    参数 类型 <类型 = 整数 注释 = "二选一,范围1-20指定与形状一起显示的阴影类型.根据它们在\"绘图\"工具栏的\"阴影样式\"集合内的顺序(从左到右、从上到下)进行编号." @默认值 = 1>
+    参数 颜色 <类型 = 整数 注释 = "指定阴影颜色,默认为-1,表示不指定颜色,不指定时为灰色." @默认值 = -1>
+    参数 透明度 <类型 = 小数 注释 = "指定阴影透明度" @默认值 = 0>
+    参数 水平偏移量 <类型 = 小数 注释 = "按指定磅值改变阴影的水平偏移量" @默认值 = 0>
+    参数 垂直偏移量 <类型 = 小数 注释 = "按指定磅值更改阴影的垂直偏移量" @默认值 = 0>
+    {
+        变量 ShadowFormat <类型 = COM对象类>
+        ShadowFormat = Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数对象型属性 ("TextShadow", COM对象类)
+        如果 (大小 == 0)
+        {
+            ShadowFormat.写属性 ("Type", 类型)  // 指定阴影大小
+        }
+        否则
+        {
+            ShadowFormat.写属性 ("Size", 大小)  // 指定阴影类型
+        }
+        如果 (颜色 != -1)
+        {
+            ShadowFormat.读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 颜色)  // 指定阴影颜色
+        }
+        ShadowFormat.写属性 ("Transparency", 透明度)  // 指定阴影透明度
+        ShadowFormat.无返回值方法 ("IncrementOffsetX", 水平偏移量)
+        ShadowFormat.无返回值方法 ("IncrementOffsetY", 垂直偏移量)
+    }
+
+    方法 字体颜色 <公开 属性读 类型 = 整数 注释 = "返回当前选区字体颜色,使用RGB函数创建颜色值.">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Color", 整数))
+    }
+
+    方法 字体颜色 <公开 属性写 注释 = "设置当前选区字体颜色,使用RGB函数创建颜色值.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Color", 所欲设置的值)
+    }
+
+    方法 字体大小 <公开 属性读 类型 = 整数 注释 = "返回当前选区字体大小,以磅为单位.">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Font", COM对象类).读无参数属性 ("Size", 整数))
+    }
+
+    方法 字体大小 <公开 属性写 注释 = "设置当前选区字体大小,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Range对象.读无参数对象型属性 ("Font", COM对象类).写属性 ("Size", 所欲设置的值)
+    }
+
+    方法 开始位置 <公开 属性读 类型 = 整数 注释 = "取文本区在整个文档中的开始位置" "">
+    {
+        返回 (Range对象.读无参数属性 ("Start", 整数))
+    }
+
+    方法 开始位置 <公开 属性写 注释 = "设置文本区在整个文档中的开始位置" "">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Range对象.写属性 ("Start", 所欲设置的值)
+    }
+
+    方法 结束位置 <公开 属性读 类型 = 整数 注释 = "取文本区在整个文档中的结束位置" "">
+    {
+        返回 (Range对象.读无参数属性 ("End", 整数))
+    }
+
+    方法 结束位置 <公开 属性写 注释 = "设置文本区在整个文档中的结束位置" "">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Range对象.写属性 ("End", 所欲设置的值)
+    }
+
+    方法 高亮色 <公开 属性读 类型 = Word颜色索引 注释 = "返回置指定区域的突出显示颜色" 返回值注释 = "Word颜色索引.*" "">
+    {
+        返回 (Range对象.读无参数属性 ("HighlightColorIndex", Word颜色索引))
+    }
+
+    方法 高亮色 <公开 属性写 注释 = "设置指定区域的突出显示颜色" "">
+    参数 所欲设置的值 <类型 = Word颜色索引 注释 = "Word颜色索引.*">
+    {
+        Range对象.写属性 ("HighlightColorIndex", 所欲设置的值)
+    }
+
+    方法 计算公式 <公开 类型 = 小数 注释 = "计算选区内容中的数学表达式.返回\"小数型\"计算结果." "">
+    {
+        返回 (Range对象.无参数方法 ("Calculate", 小数))
+    }
+
+    方法 简繁转换 <公开 注释 = "将指定区域的文本由繁体中文或简体中文相互转换" "">
+    参数 简转繁 <类型 = 逻辑型 注释 = "如果值为真时,则由简体中文转换到繁体中文;如果值为假时,则由繁体中文转换到简体中文." @默认值 = 真>
+    {
+        Range对象.无返回值方法 ("TCSCConverter", 选择 (简转繁, 0, 1))
+    }
+
+    方法 扩展选区 <公开 注释 = "扩展某一范围使其包含整个文章" "">
+    {
+        Range对象.无参数及返回值方法 ("WholeStory")
+    }
+
+    方法 替换 <公开 注释 = "替换文本区中对应的文本内容" "">
+    参数 查找文本 <类型 = 文本型 注释 = "用作查找文本">
+    参数 替换文本 <类型 = 文本型 注释 = "用作替换文本">
+    参数 替换所有 <类型 = 逻辑型 注释 = "如果为假,表示只替换遇到的第一个匹配项." @默认值 = 真>
+    参数 区分大小写 <类型 = 逻辑型 注释 = "英文是否区分大小写" @默认值 = 真>
+    参数 全文替换 <类型 = 逻辑型 注释 = "是否忽略当前选区而向全文档搜索替换" @默认值 = 假>
+    {
+        变量 Find <类型 = COM对象类>
+        变量 COM变体 <类型 = COM变体型>
+        Find = Range对象.读无参数对象型属性 ("Find", COM对象类)
+        Find.写属性 ("Text", 查找文本)  // 设置查找文本
+        Find.写属性 ("Forward", 真)  // 向前替换
+        Find.写属性 ("MatchCase", 区分大小写)  // 英文是否区分大小写
+        Find.无参数及返回值方法 ("ClearFormatting")  // 取消在查找或替换操作中所指定文本的文本格式和段落格式
+        Find.读无参数对象型属性 ("Replacement", COM对象类).写属性 ("Text", 替换文本)  // 设置替换文本
+        Find.无返回值方法 ("Execute", COM变体, COM变体, COM变体, COM变体, COM变体, COM变体, COM变体, 选择 (全文替换, 1, 0), COM变体, COM变体, 选择 (替换所有, 2, 1))
+    }
+
+    方法 查找 <公开 类型 = 逻辑型 注释 = "查找文本区中对应的文本内容,注意:如果返回真时,文本区将被覆盖为找到区域." "">
+    参数 查找文本 <类型 = 文本型 注释 = "用作查找文本">
+    参数 区分大小写 <类型 = 逻辑型 注释 = "英文字母是否区分大小写" @默认值 = 真>
+    {
+        变量 Find <类型 = COM对象类>
+        Find = Range对象.读无参数对象型属性 ("Find", COM对象类)
+        Find.无参数及返回值方法 ("ClearFormatting")  // 取消在查找操作中所指定文本的文本格式和段落格式
+        Find.写属性 ("Text", 查找文本)  // 设置查找文本
+        Find.写属性 ("MatchCase", 区分大小写)  // 设置英文字母是否区分大小写
+        返回 (Find.无参数方法 ("Execute", 逻辑型))
+    }
+
+    方法 段落数 <公开 属性读 类型 = 整数 注释 = "返回当前文本区中段落数量,代表当前选区中段落数量.注意:当前文本区,非整个文档.">
+    {
+        返回 (Range对象.读无参数对象型属性 ("Paragraphs", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 取段落 <公开 类型 = Word段落 注释 = "返回一个\"Word段落\"类,代表当前文本区中段落集合中根据索引号对应的一段段落.注意:当前文本区,非整个文档.">
+    参数 索引号 <类型 = 整数 注释 = "欲取出选区中的段落索引号">
+    {
+        变量 局_Word段落 <类型 = Word段落>
+        局_Word段落.置对象 (Range对象.读无参数对象型属性 ("Paragraphs", COM对象类).对象型方法 ("Item", COM对象类, 索引号))
+        返回 (局_Word段落)
+    }
+}
+
+类 Word图形 <公开>
+{
+    变量 Shape对象 <类型 = COM对象类>
+
+    方法 置对象 <公开 类型 = 逻辑型 注释 = "将COM对象置入本对象中,可交互操作.">
+    参数 参_Shape对象 <类型 = COM对象类>
+    {
+        Shape对象 = 参_Shape对象
+        返回 (Shape对象.是否为空 () == 假)
+    }
+
+    方法 删除 <公开 注释 = "删除指定区域的形状" "">
+    {
+        Shape对象.无参数及返回值方法 ("Delete")
+    }
+
+    方法 取节点文本 <公开 类型 = 文本型 注释 = "当对象为智能图表时,返回智能图表节点文本." "">
+    参数 节点索引 <类型 = 整数 注释 = "智能图表节点索引号">
+    {
+        变量 局_节点 <类型 = COM对象类>
+        变量 局_文本区 <类型 = COM对象类>
+        局_节点 = Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).读无参数对象型属性 ("AllNodes", COM对象类).对象型方法 ("Item", COM对象类, 节点索引)  // 取节点对象
+        局_文本区 = 局_节点.读无参数对象型属性 ("TextFrame2", COM对象类).读无参数对象型属性 ("TextRange", COM对象类)  // 取节点文本区
+        返回 (局_文本区.读无参数属性 ("Text", 文本型))
+    }
+
+    方法 置节点文本位置 <公开 注释 = "当对象为智能图表时,设置智能图表节点文本位置." "">
+    参数 节点索引 <类型 = 整数 "">
+    参数 上 <类型 = 整数 注释 = "设置文本框架顶端与文本所在形状的内接矩形顶端之间的距离(以磅为单位),如果值为-1,则忽略该参数." @默认值 = -1>
+    参数 下 <类型 = 整数 注释 = "设置文本框架底端与文本所在形状的内接矩形底端之间的距离(以磅为单位),如果值为-1,则忽略该参数." @默认值 = -1>
+    参数 左 <类型 = 整数 注释 = "设置文本框架左边缘与文本所在形状的内接矩形左边缘之间的距离(以磅为单位),如果值为-1,则忽略该参数." @默认值 = -1>
+    参数 右 <类型 = 整数 注释 = "设置文本框架右边缘与文本所在形状的内接矩形右边缘之间的距离(以磅为单位),如果值为-1,则忽略该参数." @默认值 = -1>
+    {
+        变量 局_文本区 <类型 = COM对象类>
+        局_文本区 = Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).读无参数对象型属性 ("AllNodes", COM对象类).对象型方法 ("Item", COM对象类, 节点索引).读无参数对象型属性 ("TextFrame2", COM对象类)  // 取节点文本区对象
+        如果 (上 != -1)
+        {
+            局_文本区.写属性 ("MarginTop", 上)
+        }
+        如果 (下 != -1)
+        {
+            局_文本区.写属性 ("MarginBottom", 下)
+        }
+        如果 (左 != -1)
+        {
+            局_文本区.写属性 ("MarginLeft", 左)
+        }
+        如果 (右 != -1)
+        {
+            局_文本区.写属性 ("MarginRight", 右)
+        }
+    }
+
+    方法 置节点文本 <公开 注释 = "当对象为智能图表时,设置智能图表节点文本." "">
+    参数 节点索引 <类型 = 整数 注释 = "智能图表节点索引号">
+    参数 内容 <类型 = 文本型 注释 = "智能图表节点所欲设置的内容">
+    参数 字体名称 <类型 = 文本型 注释 = "设置字体名称,如果值为\"\",则忽略该参数." @默认值 = "">
+    参数 字体大小 <类型 = 整数 注释 = "设置字体大小,如果值为-1,则忽略该参数." @默认值 = -1>
+    参数 字体颜色 <类型 = 整数 注释 = "设置字体颜色,如果值为-1,则忽略该参数." @默认值 = -1>
+    参数 加粗 <类型 = 逻辑型 注释 = "设置字体是否加粗" @默认值 = 假>
+    参数 透明度 <类型 = 小数 注释 = "设置透明度的指定填充形状为0.0(不透明)到1.0(透明)之间的值" @默认值 = 0>
+    {
+        变量 局_节点 <类型 = COM对象类>
+        变量 局_文本区 <类型 = COM对象类>
+        局_节点 = Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).读无参数对象型属性 ("AllNodes", COM对象类).对象型方法 ("Item", COM对象类, 节点索引)  // 取节点对象
+        局_文本区 = 局_节点.读无参数对象型属性 ("TextFrame2", COM对象类).读无参数对象型属性 ("TextRange", COM对象类)  // 取节点文本区
+        局_文本区.写属性 ("Text", 内容)
+        如果 (字体名称 != "")
+        {
+            局_文本区.读无参数对象型属性 ("Font", COM对象类).写属性 ("NameFarEast", 字体名称)  // 设置字体名称
+        }
+        如果 (字体大小 != -1)
+        {
+            局_文本区.读无参数对象型属性 ("Font", COM对象类).写属性 ("Size", 字体大小)  // 设置字体大小
+        }
+        如果 (字体颜色 != -1)
+        {
+            局_文本区.读无参数对象型属性 ("Font", COM对象类).读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 字体颜色)  // 填充字体颜色
+        }
+        局_文本区.读无参数对象型属性 ("Font", COM对象类).写属性 ("Bold", 加粗)  // 设置字体加粗
+        局_文本区.读无参数对象型属性 ("Font", COM对象类).读无参数对象型属性 ("Fill", COM对象类).写属性 ("Transparency", 透明度)  // 设置透明度
+    }
+
+    方法 节点数量 <公开 属性读 类型 = 整数 注释 = "当对象为智能图表时,返回智能图表节点的总数量." "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).读无参数对象型属性 ("AllNodes", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 添加节点 <公开 注释 = "当对象为智能图表时,添加智能图表的节点." "">
+    {
+        Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).读无参数对象型属性 ("AllNodes", COM对象类).无参数及返回值方法 ("Add")
+    }
+
+    方法 删除节点 <公开 注释 = "当对象为智能图表时,删除智能图表的节点." "">
+    参数 节点索引 <类型 = 整数 注释 = "智能图表节点索引号">
+    {
+        Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).读无参数对象型属性 ("AllNodes", COM对象类).对象型方法 ("Item", COM对象类, 节点索引).无参数及返回值方法 ("Delete")
+    }
+
+    方法 置层次 <公开 注释 = "置图形的层次" "">
+    参数 层次 <类型 = Word图形层次 注释 = "Word图形层次.*">
+    {
+        Shape对象.无返回值方法 ("ZOrder", 层次)
+    }
+
+    方法 类型 <公开 属性读 类型 = Word图形类型 注释 = "返回指定对象的图形类型" 返回值注释 = "Word图形类型.*" "">
+    {
+        返回 (Shape对象.读无参数属性 ("Type", Word图形类型))
+    }
+
+    方法 ID <公开 属性读 类型 = 整数 注释 = "返回指定对象的名称" "">
+    {
+        返回 (Shape对象.读无参数属性 ("ID", 整数))
+    }
+
+    方法 名称 <公开 属性读 类型 = 文本型 注释 = "返回指定对象的名称" "">
+    {
+        返回 (Shape对象.读无参数属性 ("Name", 文本型))
+    }
+
+    方法 名称 <公开 属性写 注释 = "设置指定对象的名称" "">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Shape对象.写属性 ("Name", 所欲设置的值)
+    }
+
+    方法 样式 <公开 属性读 类型 = 整数 注释 = "返回指定形状的形状样式" 返回值注释 = "-2 混合形状样式." 返回值注释 = "0-20 形状样式." 返回值注释 = "10001-10020 线条样式.">
+    {
+        返回 (Shape对象.读无参数属性 ("ShapeStyle", 整数))
+    }
+
+    方法 样式 <公开 属性写 注释 = "设置指定形状的形状样式">
+    参数 所欲设置的值 <类型 = 整数 注释 = "-2 混合形状样式." 注释 = "0-20 形状样式." 注释 = "10001-10020 线条样式.">
+    {
+        Shape对象.写属性 ("ShapeStyle", 所欲设置的值)
+    }
+
+    方法 图表版式 <公开 属性写 注释 = "当对象为智能图表时,设置智能图表版式.">
+    参数 版式索引号 <类型 = 整数>
+    {
+        变量 局_版式 <类型 = COM变体型>
+        局_版式 = Shape对象.读无参数对象型属性 ("Application", COM对象类).读无参数对象型属性 ("SmartArtLayouts", COM对象类).方法 ("Item", COM变体型, 版式索引号)
+        Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).写属性 ("Layout", 局_版式)
+    }
+
+    方法 图表样式 <公开 属性写 注释 = "当对象为智能图表时,设置智能图表快速样式.">
+    参数 样式索引号 <类型 = 整数>
+    {
+        变量 局_样式 <类型 = COM变体型>
+        局_样式 = Shape对象.读无参数对象型属性 ("Application", COM对象类).读无参数对象型属性 ("SmartArtQuickStyles", COM对象类).方法 ("Item", COM变体型, 样式索引号)
+        Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).写属性 ("QuickStyle", 局_样式)
+    }
+
+    方法 图表配色 <公开 属性写 注释 = "当对象为智能图表时,设置智能图表颜色配色.">
+    参数 配色索引号 <类型 = 整数>
+    {
+        变量 局_配色 <类型 = COM变体型>
+        局_配色 = Shape对象.读无参数对象型属性 ("Application", COM对象类).读无参数对象型属性 ("SmartArtColors", COM对象类).方法 ("Item", COM变体型, 配色索引号)
+        Shape对象.读无参数对象型属性 ("SmartArt", COM对象类).写属性 ("Color", 局_配色)
+    }
+
+    方法 背景样式 <公开 属性读 类型 = 整数 注释 = "返回指定幻灯片的背景样式" 返回值注释 = "-2 指定样式组合." 返回值注释 = "0 不指定样式." 返回值注释 = "1-12 指定样式.">
+    {
+        返回 (Shape对象.读无参数属性 ("BackgroundStyle", 整数))
+    }
+
+    方法 背景样式 <公开 属性写 注释 = "设置指定幻灯片的背景样式">
+    参数 所欲设置的值 <类型 = 整数 注释 = "-2 指定样式组合." 注释 = "0 不指定样式." 注释 = "1-12 指定样式.">
+    {
+        Shape对象.写属性 ("BackgroundStyle", 所欲设置的值)
+    }
+
+    方法 左 <公开 属性读 类型 = 整数 注释 = "返回指定的形状或形状范围的水平位置,以磅为单位.">
+    {
+        返回 (Shape对象.读无参数属性 ("Left", 整数))
+    }
+
+    方法 左 <公开 属性写 注释 = "设置指定的形状或形状范围的水平位置,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Shape对象.写属性 ("Left", 所欲设置的值)
+    }
+
+    方法 上 <公开 属性读 类型 = 整数 注释 = "返回指定的形状或形状范围的垂直位置,以磅为单位.">
+    {
+        返回 (Shape对象.读无参数属性 ("Top", 整数))
+    }
+
+    方法 上 <公开 属性写 注释 = "设置指定的形状或形状范围的垂直位置,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Shape对象.写属性 ("Top", 所欲设置的值)
+    }
+
+    方法 宽 <公开 属性读 类型 = 整数 注释 = "返回指定形状的宽度,以磅为单位.">
+    {
+        返回 (Shape对象.读无参数属性 ("Width", 整数))
+    }
+
+    方法 宽 <公开 属性写 注释 = "设置指定形状的宽度,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Shape对象.写属性 ("Width", 所欲设置的值)
+    }
+
+    方法 高 <公开 属性读 类型 = 整数 注释 = "返回指定形状的高度,以磅为单位.">
+    {
+        返回 (Shape对象.读无参数属性 ("Height", 整数))
+    }
+
+    方法 高 <公开 属性写 注释 = "设置指定形状的高度,以磅为单位.">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Shape对象.写属性 ("Height", 所欲设置的值)
+    }
+
+    方法 可视 <公开 属性读 类型 = 逻辑型 注释 = "返回对象是否可视" "">
+    {
+        返回 (Shape对象.读无参数属性 ("Visible", 逻辑型))
+    }
+
+    方法 可视 <公开 属性写 注释 = "指定的对象是否可视" "">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Shape对象.写属性 ("Visible", 所欲设置的值)
+    }
+
+    方法 背景可视 <公开 属性读 类型 = 逻辑型 注释 = "返回对象是否可视" "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数属性 ("Visible", 逻辑型))
+    }
+
+    方法 背景可视 <公开 属性写 注释 = "指定的对象是否可视" "">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).写属性 ("Visible", 所欲设置的值)
+    }
+
+    方法 文本区 <公开 属性读 类型 = Word文本区 注释 = "返回对象文本区" "">
+    {
+        变量 局_Word文本区 <类型 = Word文本区>
+        局_Word文本区.置对象 (Shape对象.读无参数对象型属性 ("TextFrame", COM对象类).读无参数对象型属性 ("TextRange", COM对象类))
+        返回 (局_Word文本区)
+    }
+
+    方法 边框颜色 <公开 属性读 类型 = 整数 注释 = "返回图形边框前背景颜色,如对象为线条则为线条前背景色." "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("Line", COM对象类).读无参数属性 ("ForeColor", 整数))
+    }
+
+    方法 边框颜色 <公开 属性写 注释 = "设置图形边框前背景颜色,如对象为线条则为线条前背景色." "">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Shape对象.读无参数对象型属性 ("Line", COM对象类).读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 所欲设置的值)
+    }
+
+    方法 边框大小 <公开 属性读 类型 = 整数 注释 = "返回图形边框大小" "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("Line", COM对象类).读无参数属性 ("Weight", 整数))
+    }
+
+    方法 边框大小 <公开 属性写 注释 = "设置图形边框大小" "">
+    参数 所欲设置的值 <类型 = 整数>
+    {
+        Shape对象.读无参数对象型属性 ("Line", COM对象类).写属性 ("Weight", 所欲设置的值)
+    }
+
+    方法 艺术字内容 <公开 属性读 类型 = 文本型 注释 = "当类型为\"艺术字\"时,返回艺术字文本内容." "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).读无参数属性 ("Text", 文本型))
+    }
+
+    方法 艺术字内容 <公开 属性写 注释 = "当类型为\"艺术字\"时,设置艺术字文本内容." "">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        可视 = 假  // 解决字体更改后不能及时看到效果问题
+        Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).写属性 ("Text", 所欲设置的值)
+        可视 = 真  // 解决字体更改后不能及时看到效果问题
+    }
+
+    方法 艺术字加粗 <公开 属性读 类型 = 逻辑型 注释 = "返回指定艺术字中的字体是否为粗体" "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).读无参数属性 ("FontBold", 逻辑型))
+    }
+
+    方法 艺术字加粗 <公开 属性写 注释 = "确定指定艺术字中的字体是否为粗体" "">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).写属性 ("FontBold", 所欲设置的值)
+    }
+
+    方法 艺术字字号 <公开 属性读 类型 = 小数 注释 = "返回艺术字的字号.以磅为单位." "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).读无参数属性 ("FontSize", 整数))
+    }
+
+    方法 艺术字字号 <公开 属性写 注释 = "设置艺术字的字号.以磅为单位." "">
+    参数 所欲设置的值 <类型 = 小数>
+    {
+        Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).写属性 ("FontSize", 所欲设置的值)
+    }
+
+    方法 艺术字倾斜 <公开 属性读 类型 = 逻辑型 注释 = "返回指定艺术字中的字体是否为斜体" "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).读无参数属性 ("FontItalic", 逻辑型))
+    }
+
+    方法 艺术字倾斜 <公开 属性写 注释 = "设置指定艺术字中的字体是否为斜体" "">
+    参数 所欲设置的值 <类型 = 逻辑型>
+    {
+        Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).写属性 ("FontItalic", 所欲设置的值)
+    }
+
+    方法 艺术字字体 <公开 属性读 类型 = 文本型 注释 = "返回指定的艺术字中的字体名称" "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).读无参数属性 ("FontName", 文本型))
+    }
+
+    方法 艺术字字体 <公开 属性写 注释 = "设置指定的艺术字中的字体名称" "">
+    参数 所欲设置的值 <类型 = 文本型>
+    {
+        Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).写属性 ("FontName", 所欲设置的值)
+    }
+
+    方法 艺术字样式 <公开 属性读 类型 = 整数 注释 = "返回或设置指定艺术字的样式" 返回值注释 = "-2表示混合;0-29表示30个样式." "">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).读无参数属性 ("PresetTextEffect", 整数))
+    }
+
+    方法 艺术字样式 <公开 属性写 注释 = "返回或设置指定艺术字的样式" "">
+    参数 所欲设置的值 <类型 = 整数 注释 = "-2表示混合;0-29表示30个样式.">
+    {
+        Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).写属性 ("PresetTextEffect", 所欲设置的值)
+    }
+
+    方法 艺术字换向 <公开 注释 = "将指定的艺术字中的文字排列从水平切换为垂直.反之亦然." "">
+    {
+        Shape对象.读无参数对象型属性 ("TextEffect", COM对象类).无参数及返回值方法 ("ToggleVerticalText")
+    }
+
+    方法 添加图形 <公开 类型 = Word图形 注释 = "当类型为\"画布\"时,向画布中添加一个图形,并返回新建的图形.">
+    参数 形状 <类型 = Word图形形状 注释 = "Word图形形状.*">
+    参数 左边 <类型 = 小数 注释 = "设置新建图形左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "设置新建图形左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "设置新建图形的宽度,以磅为单位." @默认值 = 100>
+    参数 高度 <类型 = 小数 注释 = "设置新建图形的高度,以磅为单位." @默认值 = 100>
+    参数 名称 <类型 = 文本型 注释 = "指定所添加对象的名称" @默认值 = "">
+    {
+        变量 局_图形 <类型 = COM对象类>
+        变量 局_Word图形 <类型 = Word图形>
+        局_图形 = Shape对象.读无参数对象型属性 ("CanvasItems", COM对象类).对象型方法 ("AddShape", COM对象类, 形状, 左边, 上边, 宽度, 高度)
+        如果 (名称 != "")
+        {
+            局_图形.写属性 ("Name", 名称)
+        }
+        局_Word图形.置对象 (局_图形)
+        返回 (局_Word图形)
+    }
+
+    方法 图形数量 <公开 属性读 类型 = 整数 注释 = "当类型为\"画布\"时,返回画布中的图形数量.">
+    {
+        返回 (Shape对象.读无参数对象型属性 ("CanvasItems", COM对象类).读无参数属性 ("Count", 整数))
+    }
+
+    方法 置背景图案 <公开 注释 = "将背景填充为图案">
+    参数 图案 <类型 = Word背景图案 注释 = "Word背景图案.*" @默认值 = Word背景图案.点线百分之5>
+    参数 前景色 <类型 = 整数 注释 = "前景色" @默认值 = 颜色类.蓝色>
+    参数 背景色 <类型 = 整数 注释 = "背景色" @默认值 = 颜色类.白色>
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 前景色)
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("BackColor", COM对象类).写属性 ("RGB", 背景色)
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).无返回值方法 ("Patterned", 图案)
+    }
+
+    方法 置背景纹理 <公开 注释 = "将背景填充为纹理">
+    参数 纹理 <类型 = Word背景纹理 注释 = "Word背景纹理.*" @默认值 = Word背景纹理.草纸>
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).无返回值方法 ("PresetTextured", 纹理)
+    }
+
+    方法 置背景图片 <公开 注释 = "设置用于作为图形背景的图片">
+    参数 文件名 <类型 = 文本型 注释 = "图片文件名">
+    参数 是否平铺 <类型 = 逻辑型 注释 = "设置背景图片是否以平铺形式进行填充" @默认值 = 假>
+    {
+        背景可视 = 真  // 设置背景可视为真
+        如果 (是否平铺)
+        {
+            Shape对象.读无参数对象型属性 ("Fill", COM对象类).无返回值方法 ("UserTextured", 文件名)
+        }
+        否则
+        {
+            Shape对象.读无参数对象型属性 ("Fill", COM对象类).无返回值方法 ("UserPicture", 文件名)
+        }
+    }
+
+    方法 置纯色背景 <公开 注释 = "将背景填充设置为纯色">
+    参数 颜色 <类型 = 整数 注释 = "颜色整数型数值">
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 颜色)
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).无参数及返回值方法 ("Solid")
+    }
+
+    方法 置单色背景 <公开 注释 = "将背景填充设置为单色渐变">
+    参数 颜色 <类型 = 整数 注释 = "颜色整数型数值">
+    参数 渐变样式 <类型 = Word渐变样式 注释 = "Word渐变样式.*" @默认值 = Word渐变样式.水平>
+    参数 渐变量 <类型 = 整数 注释 = "取值范围:1到4之间的整数值.对应四个渐变方向的值.如果\"渐变样式\"为\"标题向外\"或\"中心辐射\".则此参数值为1或2." @默认值 = 1>
+    参数 渐变深度 <类型 = 小数 注释 = "取值范围:0.0到1.0之间的小数值." @默认值 = 0>
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 颜色)
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).无返回值方法 ("OneColorGradient", 渐变样式, 渐变量, 渐变深度)
+    }
+
+    方法 置双色背景 <公开 注释 = "将背景填充设置为单色渐变">
+    参数 前景色 <类型 = 整数 注释 = "颜色整数型数值">
+    参数 背景色 <类型 = 整数 注释 = "颜色整数型数值">
+    参数 渐变样式 <类型 = Word渐变样式 注释 = "Word渐变样式.*" @默认值 = Word渐变样式.水平>
+    参数 渐变量 <类型 = 整数 注释 = "取值范围:1到4之间的整数值.对应四个渐变方向的值.如果\"渐变样式\"为\"标题向外\"或\"中心辐射\".则此参数值为1或2." @默认值 = 1>
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 前景色)
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("BackColor", COM对象类).写属性 ("RGB", 背景色)
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).无返回值方法 ("TwoColorGradient", 渐变样式, 渐变量)
+    }
+
+    方法 置背景渐变色 <公开 注释 = "将背景填充设置为单色渐变">
+    参数 渐变样式 <类型 = Word渐变样式 注释 = "Word渐变样式.*" @默认值 = Word渐变样式.水平>
+    参数 渐变量 <类型 = 整数 注释 = "取值范围:1到4之间的整数值.对应四个渐变方向的值.如果\"渐变样式\"为\"标题向外\"或\"中心辐射\".则此参数值为1或2." @默认值 = 1>
+    参数 渐变填充 <类型 = Word渐变填充 注释 = "Word渐变填充.*" @默认值 = Word渐变填充.晚霞>
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).无返回值方法 ("PresetGradient", 渐变样式, 渐变量, 渐变填充)
+    }
+
+    方法 置前背景色 <公开 注释 = "填充背景前背景色">
+    参数 颜色 <类型 = 整数 注释 = "颜色整数型数值">
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("ForeColor", COM对象类).写属性 ("RGB", 颜色)
+    }
+
+    方法 置后背景色 <公开 注释 = "填充背景前背景色">
+    参数 颜色 <类型 = 整数 注释 = "颜色整数型数值">
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).读无参数对象型属性 ("BackColor", COM对象类).写属性 ("RGB", 颜色)
+    }
+
+    方法 置背景透明度 <公开 注释 = "填充背景前背景色">
+    参数 透明度 <类型 = 整数 注释 = "取值范围:0.0到1.0之间的小数值.如果值为0.则表示不透明.">
+    {
+        背景可视 = 真  // 设置背景可视为真
+        Shape对象.读无参数对象型属性 ("Fill", COM对象类).写属性 ("Transparency", 透明度)
+    }
+
+    方法 取图形 <公开 类型 = Word图形 注释 = "当类型为\"画布\"时,取出代表画布中的形状的\"Word图形\"类.">
+    参数 索引号 <类型 = 整数 注释 = "对象的索引号.从1开始,表示图形在文档图形集合中位置.为0时忽略该参数." @默认值 = 0>
+    参数 名称 <类型 = 文本型 注释 = "对象的名称.索引号不为0时忽略该参数." @默认值 = "">
+    {
+        变量 局_图形 <类型 = Word图形>
+        如果 (索引号 == 0)
+        {
+            如果 (名称 != "")
+            {
+                局_图形.置对象 (Shape对象.读无参数对象型属性 ("CanvasItems", COM对象类).对象型方法 ("Item", COM对象类, 名称))  // 名称取Word图形
+            }
+        }
+        否则
+        {
+            局_图形.置对象 (Shape对象.读无参数对象型属性 ("CanvasItems", COM对象类).对象型方法 ("Item", COM对象类, 索引号))  // 索引号取Word图形
+        }
+        返回 (局_图形)
+    }
+
+    方法 添加图片 <公开 类型 = Word图形 注释 = "当类型为\"画布\"时,向\"画布\"中添加一个图片,并返回新建图片的\"Word图形\"类.">
+    参数 图片文件名 <类型 = 文本型 注释 = "图片的路径和文件名">
+    参数 链接到文件 <类型 = 逻辑型 注释 = "如果为真,则将图片链接到创建它的文件.如果为假,则使图片文件成为独立副本." @默认值 = 真>
+    参数 文档中存储 <类型 = 逻辑型 注释 = "是否随文档一起保存链接的图片" @默认值 = 假>
+    参数 左边 <类型 = 小数 注释 = "设置图片左边缘的位置,以磅为单位." @默认值 = 100>
+    参数 上边 <类型 = 小数 注释 = "设置图片左边缘的位置,以磅为单位." @默认值 = 100>
+    参数 宽度 <类型 = 小数 注释 = "设置图片的宽度,以磅为单位." @默认值 = 100>
+    参数 高度 <类型 = 小数 注释 = "设置图片的高度,以磅为单位." @默认值 = 100>
+    参数 名称 <类型 = 文本型 注释 = "指定所添加对象的名称" @默认值 = "">
+    {
+        变量 局_图形 <类型 = COM对象类>
+        变量 局_Word图形 <类型 = Word图形>
+        局_图形 = Shape对象.读无参数对象型属性 ("CanvasItems", COM对象类).对象型方法 ("AddPicture", COM对象类, 图片文件名, 链接到文件, 文档中存储, 左边, 上边, 宽度, 高度)
+        如果 (名称 != "")
+        {
+            局_图形.写属性 ("Name", 名称)
+        }
+        局_Word图形.置对象 (局_图形)
+        返回 (局_Word图形)
+    }
+
+    方法 添加直线 <公开 类型 = Word图形 注释 = "当类型为\"画布\"时,向\"画布\"中添加一条直线图形,并返回新建的图形.">
+    参数 起点横坐标 <类型 = 小数 注释 = "线条起点相对于画布左边缘水平位置,以磅为单位." "">
+    参数 起点纵坐标 <类型 = 小数 注释 = "线条起点相对于画布上边缘垂直位置,以磅为单位." "">
+    参数 终点横坐标 <类型 = 小数 注释 = "线条终点相对于画布左边缘水平位置,以磅为单位." "">
+    参数 终点纵坐标 <类型 = 小数 注释 = "线条终点相对于画布上边缘垂直位置,以磅为单位." "">
+    参数 名称 <类型 = 文本型 注释 = "指定所添加对象的名称" @默认值 = "">
+    {
+        变量 局_图形 <类型 = COM对象类>
+        变量 局_Word图形 <类型 = Word图形>
+        局_图形 = Shape对象.读无参数对象型属性 ("CanvasItems", COM对象类).对象型方法 ("AddLine", COM对象类, 起点横坐标, 起点纵坐标, 终点横坐标, 终点纵坐标)
+        如果 (名称 != "")
+        {
+            局_图形.写属性 ("Name", 名称)
+        }
+        局_Word图形.置对象 (局_图形)
+        返回 (局_Word图形)
+    }
+
+    方法 添加批注 <公开 类型 = Word图形 注释 = "当类型为\"画布\"时,向\"画布\"中添加无框线的标注,并返回新建的图形.">
+    参数 内容 <类型 = 文本型 注释 = "批注中文本内容" @默认值 = "">
+    参数 线 <类型 = Word标注线 注释 = "Word标注线.*,标注的类型." @默认值 = Word标注线.单段>
+    参数 左边 <类型 = 小数 注释 = "设置新建图形左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "设置新建图形左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "设置新建图形的宽度,以磅为单位." @默认值 = 100>
+    参数 高度 <类型 = 小数 注释 = "设置新建图形的高度,以磅为单位." @默认值 = 100>
+    参数 名称 <类型 = 文本型 注释 = "指定所添加对象的名称" @默认值 = "">
+    {
+        变量 局_图形 <类型 = COM对象类>
+        变量 局_Word图形 <类型 = Word图形>
+        局_图形 = Shape对象.读无参数对象型属性 ("CanvasItems", COM对象类).对象型方法 ("AddCallout", COM对象类, 线, 左边, 上边, 宽度, 高度)
+        局_图形.读无参数对象型属性 ("TextFrame", COM对象类).读无参数对象型属性 ("TextRange", COM对象类).写属性 ("Text", 内容)  // 向批注写入内容
+        如果 (名称 != "")
+        {
+            局_图形.写属性 ("Name", 名称)
+        }
+        局_Word图形.置对象 (局_图形)
+        返回 (局_Word图形)
+    }
+
+    方法 添加文本框 <公开 类型 = Word图形 注释 = "当类型为\"画布\"时,在\"画布\"绘图区上添加一个文本框.">
+    参数 内容 <类型 = 文本型 注释 = "文本框中的文字">
+    参数 方向 <类型 = Word文本方向 注释 = "Word文本方向.*,指定文本的方向.其中某些常量可能不可用,这取决于您所选择或安装的语言支持." @默认值 = Word文本方向.水平>
+    参数 左边 <类型 = 小数 注释 = "设置文本框左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 上边 <类型 = 小数 注释 = "设置文本框左边缘的位置,以磅为单位." @默认值 = 0>
+    参数 宽度 <类型 = 小数 注释 = "设置文本框的宽度,以磅为单位." @默认值 = 100>
+    参数 高度 <类型 = 小数 注释 = "设置文本框的高度,以磅为单位." @默认值 = 100>
+    参数 名称 <类型 = 文本型 注释 = "指定所添加对象的名称" @默认值 = "">
+    {
+        变量 局_图形 <类型 = COM对象类>
+        变量 局_Word图形 <类型 = Word图形>
+        局_图形 = Shape对象.读无参数对象型属性 ("CanvasItems", COM对象类).对象型方法 ("AddTextbox", COM对象类, 方向, 左边, 上边, 宽度, 高度)
+        局_图形.读无参数对象型属性 ("TextFrame", COM对象类).读无参数对象型属性 ("TextRange", COM对象类).写属性 ("Text", 内容)  // 向文本框中写入内容
+        如果 (名称 != "")
+        {
+            局_图形.写属性 ("Name", 名称)
+        }
+        局_Word图形.置对象 (局_图形)
+        返回 (局_Word图形)
+    }
+}

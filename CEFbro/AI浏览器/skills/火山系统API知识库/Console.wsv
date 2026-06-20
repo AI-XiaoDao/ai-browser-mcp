@@ -1,0 +1,276 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" @文档 = "category = \"windows.控制台\"">
+
+类 控制台句柄常量 <公开 折叠 @常量类 = 整数>
+{
+    常量 输入句柄 <公开 值 = @STD_INPUT_HANDLE>
+    常量 输出句柄 <公开 值 = @STD_OUTPUT_HANDLE>
+    常量 错误句柄 <公开 值 = @STD_ERROR_HANDLE>
+}
+
+类 控制台文本颜色常量 <公开 折叠 "">
+{
+    常量 前景色_蓝色 <公开 类型 = 短整数 值 = @FOREGROUND_BLUE "">
+    常量 前景色_绿色 <公开 类型 = 短整数 值 = @FOREGROUND_GREEN>
+    常量 前景色_红色 <公开 类型 = 短整数 值 = @FOREGROUND_RED>
+    常量 ""
+    常量 背景色_蓝色 <公开 类型 = 短整数 值 = @BACKGROUND_BLUE "">
+    常量 背景色_绿色 <公开 类型 = 短整数 值 = @BACKGROUND_GREEN>
+    常量 背景色_红色 <公开 类型 = 短整数 值 = @BACKGROUND_RED>
+
+    #
+}
+
+类 ______控制台_全局类 <注释 = "这些函数准备慢慢放弃 请用 控制台_全局类 代替" @全局类 = 真>
+{
+
+    #
+
+    方法 标准输出F <公开 静态 注释 = "在标准输出设备或标准错误设备上输出指定的内容." 注释 = "注意本方法只能在控制台程序中使用." @嵌入式方法 = "">
+    参数 欲输出内容 <@匹配类型 = 通用基本型>
+    参数 输出方向 <类型 = 控制台程序输出方向 注释 = "提供内容所输出到的设备" @默认值 = 控制台程序输出方向.标准输出设备>
+    {
+        @ _ftprintf ((@<输出方向> == 1 ? stdout : stderr), _T ("%s"), @an<CVolString> (@<欲输出内容>).GetText ())
+    }
+
+    #
+
+    方法 控制台_置窗口大小 <公开 静态 注释 = "此代码由 X_desk 提供">
+    参数 宽度 <类型 = 整数>
+    参数 高度 <类型 = 整数>
+    {
+        @ HANDLE hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+        @ SMALL_RECT rc = {0,0, @<宽度>, @<高度>}; // 坐标位置结构体初始化
+        @ SetConsoleWindowInfo(hOutput,true ,&rc);
+        @ COORD dSiz = {@<宽度>, @<高度>};
+        @ SetConsoleScreenBufferSize(hOutput, dSiz);
+
+    }
+
+    方法 控制台_关闭 <公开 静态 @嵌入式方法 = "">
+    {
+        @ FreeConsole()
+    }
+
+    方法 控制台_打开 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ ::AllocConsole()
+    }
+
+    方法 控制台_取输入输出句柄 <公开 静态 类型 = 长整数 @嵌入式方法 = "">
+    参数 句柄类型 <类型 = 控制台句柄常量>
+    {
+        @ (INT64)GetStdHandle(@<句柄类型>)
+    }
+
+    方法 控制台_置文本颜色 <公开 静态 @嵌入式方法 = "">
+    参数 控制台句柄 <类型 = 长整数>
+    参数 颜色 <类型 = 整数>
+    {
+        @ SetConsoleTextAttribute ((HANDLE)@<控制台句柄>, @<颜色>)
+    }
+
+    方法 控制台_写出文本 <公开 静态 "">
+    参数 控制台句柄 <类型 = 长整数>
+    参数 文本内容 <类型 = 文本型>
+    参数 文本长度 <类型 = 整数>
+    {
+        @ WriteConsole((HANDLE) @<控制台句柄>,@<文本内容>,@<文本长度>,NULL,0);
+
+    }
+
+    方法 控制台_获取文本 <公开 静态 类型 = 文本型 @禁止流程检查 = 真>
+    参数 控制台句柄 <类型 = 长整数>
+    {
+        @ TCHAR buffer[4096] = {0};
+        @ DWORD dwNumberOfCharsRead = 0; 
+        @ ReadConsole ((HANDLE)@<控制台句柄>, buffer, sizeof (buffer)-1, &dwNumberOfCharsRead, 0);
+        @ @an<CVolString> str = buffer;
+        @ return str;
+
+    }
+
+    方法 控制台_置标题 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 控制台标题 <类型 = 文本型 注释 = "UNICODE">
+    {
+        @ SetConsoleTitle(@<控制台标题>)
+    }
+
+    #
+}
+
+类 控制台_全局类 <公开>
+{
+    方法 标准输出 <公开 静态 注释 = "在标准输出设备或标准错误设备上输出指定的内容." 注释 = "注意本方法只能在控制台程序中使用." @嵌入式方法 = "">
+    参数 欲输出内容 <@匹配类型 = 通用基本型>
+    参数 输出方向 <类型 = 控制台程序输出方向 注释 = "提供内容所输出到的设备" @默认值 = 控制台程序输出方向.标准输出设备>
+    {
+        @ _ftprintf ((@<输出方向> == 1 ? stdout : stderr), _T ("%s"), @an<CVolString> (@<欲输出内容>).GetText ())
+    }
+
+    方法 关闭 <公开 静态 折叠 @嵌入式方法 = "">
+    {
+        @ FreeConsole()
+    }
+
+    方法 打开 <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ ::AllocConsole()
+    }
+
+    方法 取输入输出句柄 <公开 静态 类型 = 长整数 折叠 @嵌入式方法 = "">
+    参数 句柄类型 <类型 = 控制台句柄常量>
+    {
+        @ (INT64)GetStdHandle(@<句柄类型>)
+    }
+
+    方法 置文本颜色 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 控制台句柄 <类型 = 长整数>
+    参数 颜色 <类型 = 整数>
+    {
+        @ SetConsoleTextAttribute ((HANDLE)@<控制台句柄>, @<颜色>)
+    }
+
+    方法 写出文本 <公开 静态 折叠 "">
+    参数 控制台句柄 <类型 = 长整数>
+    参数 文本内容 <类型 = 文本型>
+    参数 文本长度 <类型 = 整数>
+    {
+        @ WriteConsole((HANDLE) @<控制台句柄>,@<文本内容>,@<文本长度>,NULL,0);
+    }
+
+    方法 获取文本 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 控制台句柄 <类型 = 长整数>
+    {
+        @ TCHAR buffer[4096] = {0};
+        @ DWORD dwNumberOfCharsRead = 0; 
+        @ ReadConsole ((HANDLE)@<控制台句柄>, buffer, sizeof (buffer)-1, &dwNumberOfCharsRead, 0);
+        @ @an<CVolString> str = buffer;
+        @ return str;
+    }
+
+    方法 置标题 <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 控制台标题 <类型 = 文本型 注释 = "UNICODE">
+    {
+        @ SetConsoleTitle(@<控制台标题>)
+    }
+
+    #
+}
+
+类 控制台_类 <公开>
+{
+    变量 错误句柄 <类型 = 长整数>
+    变量 输入句柄 <类型 = 长整数>
+    变量 输出句柄 <类型 = 长整数>
+
+    # FOREGROUND_BLUE Text color contains blue. 
+    # FOREGROUND_GREEN Text color contains green. 
+    # FOREGROUND_RED Text color contains red. 
+    # FOREGROUND_INTENSITY Text color is intensified. 
+    # BACKGROUND_BLUE Background color contains blue. 
+    # BACKGROUND_GREEN Background color contains green. 
+    # BACKGROUND_RED Background color contains red. 
+    # BACKGROUND_INTENSITY Background color is intensified. 
+    # COMMON_LVB_LEADING_BYTE Leading byte. 
+    # COMMON_LVB_TRAILING_BYTE Trailing byte. 
+    # COMMON_LVB_GRID_HORIZONTAL Top horizontal. 
+    # COMMON_LVB_GRID_LVERTICAL Left vertical.  
+    # COMMON_LVB_GRID_RVERTICAL Right vertical. 
+    # COMMON_LVB_REVERSE_VIDEO Reverse foreground and background attributes. 
+    # COMMON_LVB_UNDERSCORE Underscore. 
+
+    方法 标题 <公开 属性写>
+    参数 标题 <类型 = 文本型>
+    {
+        控制台_置标题 (标题)
+    }
+
+    方法 关闭 <公开>
+    {
+        控制台_关闭 ()
+    }
+
+    方法 打开 <公开 类型 = 逻辑型>
+    {
+        变量 是否成功 <类型 = 逻辑型>
+        是否成功 = 控制台_打开 ()
+        输入句柄 = 控制台_取输入输出句柄 (控制台句柄常量.输入句柄)
+        输出句柄 = 控制台_取输入输出句柄 (控制台句柄常量.输出句柄)
+        错误句柄 = 控制台_取输入输出句柄 (控制台句柄常量.错误句柄)
+        返回 (是否成功)
+    }
+
+    方法 输出文本颜色 <公开 属性写>
+    参数 颜色 <类型 = 整数>
+    {
+        控制台_置文本颜色 (输出句柄, 颜色)
+    }
+
+    方法 错误文本颜色 <公开 属性写>
+    参数 文本颜色 <类型 = 整数>
+    {
+        控制台_置文本颜色 (错误句柄, 文本颜色)
+
+    }
+
+    方法 输入文本颜色 <公开 属性写>
+    参数 文本颜色 <类型 = 整数 注释 = "控制台文本颜色常量 开头的">
+    {
+        控制台_置文本颜色 (输入句柄, 文本颜色)
+
+    }
+
+    方法 输入 <公开 类型 = 文本型 "">
+    {
+        返回 (控制台_获取文本 (输入句柄))
+    }
+
+    方法 输出 <公开>
+    参数 文本 <类型 = 文本型 注释 = "要显示的文本">
+    {
+        // 输出调试文本 ("控制台文本长度 " + 到文本 (取文本长度 (文本)))
+        控制台_写出文本 (输出句柄, 文本, 文本_取长度 (文本))
+    }
+
+    方法 错误 <公开>
+    参数 文本 <类型 = 文本型 注释 = "要显示的文本">
+    {
+        控制台_写出文本 (错误句柄, 文本, 文本_取长度 (文本))
+
+    }
+
+    #
+    #
+    #
+    #
+    #
+}
+
+类 控制台测试类 <公开 折叠>
+{
+    变量 控制台 <类型 = 控制台_类>
+
+    方法 开始测试 <公开>
+    {
+        控制台.打开 ()
+        控制台.标题 = "火山控制台"
+
+        控制台.输出 ("开始设置火山文本颜色\r\n")
+        控制台.输出文本颜色 = 控制台文本颜色常量.前景色_绿色
+        控制台.输出 ("火山控制台,您好！\r\n")
+
+        控制台.输出文本颜色 = 控制台文本颜色常量.前景色_绿色 + 控制台文本颜色常量.背景色_蓝色
+        变量 i <类型 = 整数>
+        循环 (5, 0, i, -1)
+        {
+            控制台.输出 ("控制台即将再 " + 到文本 (i) + "秒后关闭 \r")
+            延时 (1000)
+        }
+        控制台.关闭 ()
+
+    }
+
+    #
+}

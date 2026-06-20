@@ -1,0 +1,1144 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <@文档 = "category = \"日期时间库\"">
+
+类 毫秒时间类_ <公开 注释 = "精确到毫秒的全格式时间" 折叠 折叠2 @文档 = "category = \"日期时间库.毫秒时间\"" @全局类 = 真>
+{
+    方法 取现行时间2_ <公开 静态 类型 = 文本型 注释 = "获取“2024-01-24 09:12:01.299”此类格式时间" 折叠 @禁止流程检查 = 真>
+    参数 是否为点 <类型 = 逻辑型 注释 = "真为\".\"   假为\":\"" @默认值 = 真>
+    {
+        @ union {
+        @     FILETIME ft;
+        @     INT64 ftt;
+        @ };
+        @ ::GetSystemTimeAsFileTime(&ft);
+        @ INT64 currentTimeStamp = ftt / 10000 - 11644473600000;
+        @ time_t rawtime = (time_t)(currentTimeStamp / 1000);
+        @ struct tm timeinfo{0};
+        @ ::localtime_s(&timeinfo, &rawtime);
+        @ WCHAR szTime[32]{0};
+        @ size_t len = ::wcsftime(szTime, sizeof(szTime), L"%F %T", &timeinfo);
+        @ ::swprintf(szTime + len, @<是否为点> ? L".%03d":L":%03d", currentTimeStamp - (INT64)rawtime * 1000);
+        @ return @an<CVolString>(szTime);
+    }
+
+    方法 取现行时间3_ <公开 静态 类型 = 文本型 注释 = "获取“2024-01-24 09:12:01”此类格式时间" 折叠 @禁止流程检查 = 真>
+    {
+        @ union {
+        @     FILETIME ft;
+        @     INT64 ftt;
+        @ };
+        @ ::GetSystemTimeAsFileTime(&ft);
+        @ INT64 currentTimeStamp = ftt / 10000 - 11644473600000;
+        @ time_t rawtime = (time_t)(currentTimeStamp / 1000);
+        @ struct tm timeinfo{0};
+        @ ::localtime_s(&timeinfo, &rawtime);
+        @ WCHAR szTime[32]{0};
+        @ size_t len = ::wcsftime(szTime, sizeof(szTime), L"%F %T", &timeinfo);
+        @ return @an<CVolString>(szTime);
+    }
+
+    方法 取现行时间戳_毫秒 <公开 静态 类型 = 长整数 注释 = "13位" 折叠 @禁止流程检查 = 真>
+    {
+        @ FILETIME ft;
+        @ ::GetSystemTimeAsFileTime(&ft);
+        @ return ((INT64)ft.dwLowDateTime | (INT64)ft.dwHighDateTime << 32) / 10000 - 11644473600000;
+    }
+
+    方法 取现行时间戳_微秒 <公开 静态 类型 = 长整数 注释 = "16位" 折叠 @禁止流程检查 = 真>
+    {
+        @ FILETIME ft;
+        @ ::GetSystemTimeAsFileTime(&ft);
+        @ return ((INT64)ft.dwLowDateTime | (INT64)ft.dwHighDateTime << 32) / 10 - 11644473600000000;
+    }
+}
+
+类 纳秒时间戳类_ <公开 注释 = "精确到纳秒的时间戳" 折叠 折叠2 @文档 = "category = \"日期时间库.纳秒时间\"" "@视窗.外部头文件.全局-100" = "<malloc.h>\r\n<chrono>"
+        @视窗.外部头文件 = "piv\\tscns.h" @全局类 = 真>
+{
+    方法 取现行时间戳_纳秒 <公开 静态 类型 = 长整数 注释 = "19位" 折叠 @嵌入式方法 = "">
+    {
+        @ PivNSTimer::rdns()
+    }
+}
+
+# //=====
+
+类 界面延时处理类_ <公开 折叠 折叠2 @文档 = "category = \"日期时间库.延时处理\"" @全局类 = 真>
+{
+    方法 处理事件_ <公开 静态 折叠 @禁止流程检查 = 真>
+    {
+        @ MSG msg;
+        @ while ( ::PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) != 0) 
+        @ {
+        @     DispatchMessage(&msg);
+        @     TranslateMessage(&msg);
+        @ }
+    }
+
+    方法 延迟_ <公开 静态 注释 = "不卡UI，不占CPU，不影响执行其它代码" 折叠>
+    参数 时长 <类型 = 整数 注释 = "单位毫秒；1000毫秒＝1秒  1000微秒=1毫秒">
+    参数 是否微秒 <类型 = 逻辑型 注释 = "为真时将以微秒为等待单位，否则以毫秒为单位" @默认值 = 假>
+    {
+        @ const HANDLE hTimer = ::CreateWaitableTimer (NULL, FALSE, NULL);
+        @ if (hTimer == NULL)  return;
+        @ LARGE_INTEGER liDueTime;
+        @    if (@<是否微秒>) {
+        @       liDueTime.QuadPart = (LONGLONG)-10 * (LONGLONG)MAX (1, @<时长>);
+        @    } else {
+        @       liDueTime.QuadPart = (LONGLONG)-10000 * (LONGLONG)MAX (1, @<时长>);
+        @    }
+        @ if (::SetWaitableTimer (hTimer, &liDueTime, 0, NULL, NULL, FALSE))
+        @ {
+        @     while (TRUE)
+        @     {
+        @         const DWORD dwResult = ::MsgWaitForMultipleObjects (1, &hTimer, FALSE, INFINITE, QS_ALLEVENTS);
+        @         if (dwResult == WAIT_FAILED || dwResult == WAIT_OBJECT_0)
+        @             break;
+        @         @<处理事件_> ();
+        @     }
+        @ }
+        @ ::CloseHandle (hTimer);
+    }
+
+    方法 延迟2_ <公开 静态 注释 = "不卡UI，不占CPU，不影响执行其它代码" 折叠>
+    参数 时长 <类型 = 整数 注释 = "单位毫秒；1000毫秒＝1秒  1000微秒＝1毫秒">
+    参数 是否微秒 <类型 = 逻辑型 注释 = "为真时将以微秒为等待单位，否则以毫秒为单位" @默认值 = 假>
+    {
+        @     HANDLE hEvent = ::CreateWaitableTimer(NULL,FALSE,NULL);
+        @     LARGE_INTEGER ltm;
+        @    if (@<是否微秒>) {
+        @       ltm.QuadPart =-10*@<时长>;
+        @    } else {
+        @       ltm.QuadPart =-10*@<时长> * 1000;
+        @    }
+        @     ::SetWaitableTimer(hEvent,&ltm,0,NULL,NULL,FALSE);
+        @     while(MsgWaitForMultipleObjects(1, &hEvent, FALSE, INFINITE,QS_ALLEVENTS ) != WAIT_OBJECT_0)
+        @     {
+        @         MSG msg;
+        @         while ( ::PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) != 0 ) 
+        @         {
+        @              DispatchMessage(&msg);
+        @              TranslateMessage(&msg);
+        @         }
+        @     }
+        @     CloseHandle(hEvent);
+    }
+}
+
+# //=====
+
+类 UTC时间类_ <公开 折叠 折叠2 @文档 = "category = \"日期时间库.UTC时间\"" @视窗.外部头文件 = "ctime\r\nsstream\r\niomanip" @全局类 = 真>
+{
+    方法 时间_取现行UTC时间_ <公开 静态 类型 = 文本型 注释 = "UTC时间 比 北京时间慢8小时" 折叠 @禁止流程检查 = 真>
+    {
+        @     std::time_t now = std::time(nullptr);
+        @     std::tm utc_time;
+        @     gmtime_s(&utc_time, &now);
+        @     std::stringstream time_stream;
+        @     time_stream << std::setfill('0') 
+        @                << 1900 + utc_time.tm_year << "-"
+        @                << std::setw(2) << 1 + utc_time.tm_mon << "-"
+        @                << std::setw(2) << utc_time.tm_mday << " "
+        @                << std::setw(2) << utc_time.tm_hour << ":"
+        @                << std::setw(2) << utc_time.tm_min << ":"
+        @                << std::setw(2) << utc_time.tm_sec;
+        @     std::string utc_time_str = time_stream.str();
+        @     return utc_time_str.c_str();
+    }
+
+    方法 时间_取现行UTC时间戳_ <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ std::time_t timestamp = std::time(nullptr);
+        @ return timestamp ;
+    }
+
+    方法 时间_取指定UTC时间戳_ <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 时间值 <类型 = 文本型>
+    {
+        @     std::string time_str = std::string (CU8String (@<时间值>).GetText ());
+        @     std::tm tm = {0};
+        @     std::istringstream ss(time_str);
+        @     ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
+        @     tm.tm_isdst = -1; 
+        @     std::time_t timestamp = _mkgmtime(&tm);
+        @ return timestamp;
+    }
+}
+
+# //=====
+
+类 时间类_ <公开 折叠 折叠2 @文档 = "category = \"日期时间库.日期时间操作\"" @全局类 = 真 @视窗.外部头文件 = "<time.h>\r\n<sys/timeb.h>">
+{
+    方法 时间_取随机时间 <公开 静态 类型 = 文本型 折叠>
+    参数 是否格式化 <类型 = 逻辑型 @默认值 = 假>
+    参数 时间样式 <类型 = 文本型 注释 = "日期格式文本：yy,yyyy(年)； M,MM(月)； d,dd(日) ；ddd(周几)； dddd(星期几)；"
+            注释 = "时间格式文本：h,hh(12小时制)； H,HH(24小时制)； m,mm(分钟)； s,ss(秒)；" 注释 = "其它格式文本：tt(上午或下午)；"
+            注释 = "例如：yyyy年MM月dd日 dddd、h:m；yyyy/MM/dd dddd HH:mm:ss等。" @默认值 = "yyyy-MM-dd HH:mm:ss">
+    {
+        变量 数值 <类型 = 整数>
+        变量 时值 <类型 = 小数>
+        变量 结果 <类型 = 文本型>
+        数值 = 取随机数 (-300, 300)
+        如果真 (数值 == 0)
+        {
+            数值 = 取随机数 (1, 300)
+        }
+        如果 (数值 > 0)
+        {
+            时值 = -数值
+        }
+        时值 = 增减时间 (取现行时间 (), 时间字段类型.秒, 数值)
+        结果 = 时间到文本 (时值)
+        如果真 (是否格式化 == 真)
+        {
+            结果 = 时间_格式化时间 (结果, 时间样式)
+        }
+        返回 (结果)
+    }
+
+    方法 时间_取随机时间戳 <公开 静态 类型 = 文本型 折叠>
+    参数 是否13位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 数值 <类型 = 整数>
+        变量 结果 <类型 = 文本型>
+        数值 = 取随机数 (100, 999)
+        结果 = 到文本 (时间_取指定时间戳 (时间_取随机时间 ()))
+        如果真 (是否13位 == 真)
+        {
+            结果 = 结果 + 到文本 (数值)
+        }
+        返回 (结果)
+    }
+
+    方法 时间_格式化时间 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 日期时间值 <类型 = 文本型 注释 = "可以为时间小数：44370.5168287037 ;" 注释 = "可以为时间文本：2021-6-23 12:25:1 ;" 注释 = "可以为时间戳：1667094877">
+    参数 时间样式 <类型 = 文本型 注释 = "日期格式文本：yy,yyyy(年)； M,MM(月)； d,dd(日) ；ddd(周几)； dddd(星期几)；"
+            注释 = "时间格式文本：h,hh(12小时制)； H,HH(24小时制)； m,mm(分钟)； s,ss(秒)；" 注释 = "其它格式文本：tt(上午或下午)；"
+            注释 = "例如：M/d；yy/M/d；yyyy/MM/dd；yyyy年MM月dd日；yyyy年MM月dd日 ddd；yyyy年MM月dd日 dddd；yyyy/MM/dd dddd HH:mm:ss等。"
+            @默认值 = "yyyy-MM-dd HH:mm:ss">
+    参数 是否为中文格式 <类型 = 逻辑型 注释 = "中文格式(年月日排列顺序为年月日),例如:" 注释 = "  1. 1973-11-15-12-30-25  2. 1973-11-15-12:30:25 ;"
+            注释 = "  3. 1973/11/15 12:30:25  4. 1973/11/15/12/30/25 ;" 注释 = "  5. 1973/11/15/12:30:25  6. 1973.11.15 12:30:25 ;"
+            注释 = "  7. 19731115123025       8. 1973年11月15日12时30分25秒 ;" 注释 = "非中文格式(年月日排列顺序为月日年),例如:"
+            注释 = "  1. 11/15/1973 12:30:25  2. 11/15/1973/12/30/25" 注释 = "  4. 11/15/1973/12:30:25  5. 11-15-1973-12-30-25"
+            注释 = "  6. 11-15-1973-12:30:25  7. 11.15.1973 12:30:25" @默认值 = 真>
+    {
+        变量 国家语言代码 <类型 = 整数 值 = 0x0804 注释 = "zh_CN">
+        变量 TimeStr <类型 = 文本型>
+        变量 日期时间值2 <类型 = 小数>
+        如果 (寻找文本 (日期时间值, ".") == -1)
+        {
+            如果 (是否为全数字_ (日期时间值) && 取文本长度 (日期时间值) > 8)
+            {
+                日期时间值2 = 时间戳到时间 (文本到整数 (日期时间值))
+            }
+            否则
+            {
+                日期时间值2 = 到时间 (日期时间值, 是否为中文格式)
+            }
+        }
+        否则
+        {
+            日期时间值2 = 文本到小数 (日期时间值)
+        }
+        @ LPWSTR TimeStr = new TCHAR[256]();
+        @ SYSTEMTIME SystemTime;
+        @ int iRes = VariantTimeToSystemTime (@<日期时间值2>, &SystemTime);
+        @ if (!iRes) return "";
+        @ GetDateFormatW (@<国家语言代码>, 0, &SystemTime, @<时间样式>.GetText(), TimeStr, 50);
+        @ GetTimeFormatW (@<国家语言代码>, 0, &SystemTime, TimeStr, TimeStr, 50);
+        @ @<TimeStr> = TimeStr;
+        @ delete[] TimeStr;
+        @ return @<TimeStr>.GetText();
+    }
+
+    方法 时间_取网络时间 <公开 静态 类型 = 文本型 返回值注释 = "返回明文时间" 折叠>
+    参数 返回的时间戳 <类型 = 文本型 @默认值 = "">
+    {
+        变量 网络 <类型 = 网络访问类_>
+        变量 数据包 <类型 = 文本型>
+        变量 json数据 <类型 = JSON对象类_>
+        变量 结果 <类型 = 文本型>
+        网络.网页访问_B ("www.baidu.com", , , , , , , , 数据包)
+        结果 = 取文本中间_ (数据包, "Date: ", " GMT")
+        如果 (文本是否为空 (结果) == 假)
+        {
+            结果 = 时间_GMT时间转北京时间_文本 (结果)
+            返回的时间戳 = 到文本 (取时间戳 (到时间 (结果)))
+        }
+        否则
+        {
+            计次循环 (3)
+            {
+                数据包 = 网络.网页访问_T ("http://api.k780.com:88/?app=life.time&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json")
+                如果 (取文本长度 (数据包) > 12)
+                {
+                    如果真 (json数据.创建自文本 (数据包))
+                    {
+                        结果 = json数据.取文本值 ("/result/datetime_1")
+                        返回的时间戳 = json数据.取文本值 ("/result/timestamp")
+                    }
+                    跳出循环
+                }
+            }
+        }
+        返回 (结果)
+    }
+
+    方法 取启动时间_ <公开 静态 类型 = 长整数 注释 = "高精度计时" 折叠 @禁止流程检查 = 真>
+    参数 是否微秒 <类型 = 逻辑型 注释 = "真：微秒  假：毫秒" @默认值 = 真>
+    {
+        @ LARGE_INTEGER freq, counter;
+        @ QueryPerformanceFrequency(&freq);
+        @ QueryPerformanceCounter(&counter);
+        @ const ULONGLONG multiplier = @<是否微秒> ? 1000000 : 1000;
+        @ return (counter.QuadPart * multiplier) / freq.QuadPart;
+    }
+
+    方法 取现行时间_ <公开 静态 类型 = 文本型 注释 = "获取“2024-01-24 09:12:01”、“2024-01-24”此类格式时间" 折叠>
+    参数 类型 <类型 = 整数 注释 = "1、年-月-日　2、年-月-日 时:分:秒　3、时:分:秒　默认为1" @默认值 = 1>
+    参数 单数补零 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 临时时间 <类型 = 文本型>
+        如果 (单数补零 == 假)
+        {
+            临时时间 = 取时间值 (类型)
+        }
+        否则
+        {
+            如果 (类型 == 1)
+            {
+                临时时间 = 时间_格式化时间 (取时间值 (类型), "yyyy-MM-dd")
+            }
+            否则 (类型 == 2)
+            {
+                临时时间 = 时间_格式化时间 (取时间值 (类型), "yyyy-MM-dd HH:mm:ss")
+            }
+            否则
+            {
+                临时时间 = 时间_格式化时间 (取时间值 (2), "HH:mm:ss")
+            }
+        }
+        返回 (临时时间)
+    }
+
+    方法 时间_取现行时间 <公开 静态 类型 = 文本型 注释 = "获取“2024-01-24 09:12:01”、“2024-01-24”此类格式时间" 折叠>
+    参数 类型 <类型 = 整数 注释 = "1、年-月-日　2、年-月-日 时:分:秒　3、时:分:秒　默认为1" @默认值 = 1>
+    参数 单数补零 <类型 = 逻辑型 @默认值 = 假>
+    {
+        返回 (取现行时间_ (类型, 单数补零))
+    }
+
+    方法 时间_取现行时间_ISO <公开 静态 类型 = 文本型 注释 = "获取“2024-01-28 T08:23:50Z”此类格式时间" 折叠 折叠2 @禁止流程检查 = 真
+            @视窗.外部头文件 = "iostream\r\nchrono\r\niomanip\r\nsstream">
+    参数 是否带空格 <类型 = 逻辑型 @默认值 = 真>
+    参数 是否东八时区 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ auto now = @<是否东八时区> ?std::chrono::system_clock::now(): std::chrono::system_clock::now() - std::chrono::hours(8);
+        @ auto now_time_t = std::chrono::system_clock::to_time_t(now);  
+        @ std::tm now_tm = *std::localtime(&now_time_t);  
+        @ std::stringstream ss;  
+        @ if(@<是否带空格>==1)ss << std::put_time(&now_tm, "%Y-%m-%d T%H:%M:%SZ");  
+        @ if(@<是否带空格>==0)ss << std::put_time(&now_tm, "%Y-%m-%dT%H:%M:%SZ"); 
+        @ std::string iso_time = ss.str();  
+        @ ATL::CA2T atlStr(iso_time.c_str());
+        @ return atlStr;
+    }
+
+    方法 时间_秒数转时间格式 <公开 静态 类型 = 文本型 注释 = "例如将90转成：“00:01:30”、“00时01分30秒”、“0天 00:01:30”样式" 折叠>
+    参数 秒长 <类型 = 整数>
+    参数 时区是否文字间隔 <类型 = 逻辑型 注释 = "按时分秒或按:符号间隔" @默认值 = 假>
+    参数 是否含天 <类型 = 逻辑型 @默认值 = 假>
+    参数 天间隔符 <类型 = 文本型 @默认值 = " ">
+    {
+        变量 分长 <类型 = 整数>
+        变量 时长 <类型 = 整数>
+        分长 = 秒长 / 60
+        如果 (是否含天)
+        {
+            时长 = 分长 / 60
+            如果真 (时区是否文字间隔)
+            {
+                返回 (取格式文本 ("%d天" + 天间隔符 + "%02d时%02d分%02d秒", 时长 / 24, 时长 % 24, 分长 % 60, 秒长 % 60))
+            }
+            返回 (取格式文本 ("%d天" + 天间隔符 + "%02d:%02d:%02d", 时长 / 24, 时长 % 24, 分长 % 60, 秒长 % 60))
+        }
+        如果真 (时区是否文字间隔)
+        {
+            返回 (取格式文本 ("%02d时%02d分%02d秒", 分长 / 60, 分长 % 60, 秒长 % 60))
+        }
+        返回 (取格式文本 ("%02d:%02d:%02d", 分长 / 60, 分长 % 60, 秒长 % 60))
+    }
+
+    方法 取时间值 <静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 类型 <类型 = 整数 注释 = "1、年-月-日　2、年-月-日 时:分:秒　3、时:分:秒　默认为1" @默认值 = 1>
+    {
+        变量 格式 <类型 = 文本型>
+        如果 (类型 == 1)
+        {
+            格式 = "%u-%u-%u"
+        }
+        否则 (类型 == 2)
+        {
+            格式 = "%u-%u-%u %u:%u:%u"
+        }
+        否则
+        {
+            格式 = "%u:%u:%u"
+        }
+
+        @ LONG lx = @<类型>;
+        @  TCHAR szBuffer[256];
+        @  SYSTEMTIME st;
+        @  ::GetLocalTime(&st);
+        @ if (lx <3)
+        @ {
+        @  ::wsprintf(szBuffer, @<格式>,st.wYear, st.wMonth, st.wDay,st.wHour, st.wMinute, st.wSecond);
+        @ }
+        @ else
+        @ {
+        @  ::wsprintf(szBuffer, @<格式>, st.wHour, st.wMinute, st.wSecond);
+        @ }
+        @ return szBuffer;
+    }
+
+    方法 时间_置现行时间 <公开 静态 类型 = 逻辑型 折叠>
+    参数 年 <类型 = 整数 注释 = "默认为当前 年" @默认值 = 0>
+    参数 月 <类型 = 整数 注释 = "默认为当前 月" @默认值 = 0>
+    参数 日 <类型 = 整数 注释 = "默认为当前 日" @默认值 = 0>
+    参数 时 <类型 = 整数 注释 = "默认为当前 时" @默认值 = 0>
+    参数 分 <类型 = 整数 注释 = "默认为当前 分" @默认值 = 0>
+    参数 秒 <类型 = 整数 注释 = "默认为当前 秒" @默认值 = 0>
+    {
+        变量 时间类 <类型 = 时间类型_>
+        时间类.年 = (短整数)年
+        如果真 (年 == 0)
+        {
+            时间类.年 = (短整数)取年份 (取现行时间 ())
+        }
+        时间类.月 = (短整数)月
+        如果真 (月 == 0)
+        {
+            时间类.月 = (短整数)取月份 (取现行时间 ())
+        }
+        时间类.日 = (短整数)日
+        如果真 (日 == 0)
+        {
+            时间类.日 = (短整数)取日 (取现行时间 ())
+        }
+        时间类.时 = (短整数)时
+        如果真 (时 == 0)
+        {
+            时间类.时 = (短整数)取小时 (取现行时间 ())
+        }
+        时间类.分 = (短整数)分
+        如果真 (分 == 0)
+        {
+            时间类.分 = (短整数)取分钟 (取现行时间 ())
+        }
+        时间类.秒 = (短整数)秒
+        如果真 (秒 == 0)
+        {
+            时间类.秒 = (短整数)取秒 (取现行时间 ())
+        }
+        返回 (SetLocalTime (时间类))
+    }
+
+    方法 SetLocalTime <公开 静态 类型 = 逻辑型 折叠 折叠2 @输出名 = "SetLocalTime" @视窗.输入 = "kernel32">
+    参数 时间参数 <类型 = 时间类型_>
+
+    方法 取年份_ <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 日期时间值 <类型 = 文本型 注释 = "留空取当前时间，不留空则取指定的." 注释 = "可以为时间小数：44370.5168287037 ;" 注释 = "可以为时间戳：1667094877 ;"
+            注释 = "可以为时间文本：2021-6-23 12:25:1 2022年10月30日9时24分50秒" @默认值 = "">
+    {
+        返回 (时间_格式化时间 (选择 (日期时间值 == "", 取现行时间_ (), 日期时间值), "yyyy"))
+    }
+
+    方法 时间_取年份 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 日期时间值 <类型 = 文本型 注释 = "留空取当前时间，不留空则取指定的." 注释 = "可以为时间小数：44370.5168287037 ;" 注释 = "可以为时间戳：1667094877 ;"
+            注释 = "可以为时间文本：2021-6-23 12:25:1 2022年10月30日9时24分50秒" @默认值 = "">
+    {
+        返回 (取年份_ (日期时间值))
+    }
+
+    方法 取月份_ <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 日期时间值 <类型 = 文本型 注释 = "留空取当前时间，不留空则取指定的." 注释 = "可以为时间小数：44370.5168287037 ;" 注释 = "可以为时间戳：1667094877 ;"
+            注释 = "可以为时间文本：2021-6-23 12:25:1 2022年10月30日9时24分50秒" @默认值 = "">
+    {
+        返回 (时间_格式化时间 (选择 (日期时间值 == "", 取现行时间_ (), 日期时间值), "MM"))
+    }
+
+    方法 时间_取月份 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 日期时间值 <类型 = 文本型 注释 = "留空取当前时间，不留空则取指定的." 注释 = "可以为时间小数：44370.5168287037 ;" 注释 = "可以为时间戳：1667094877 ;"
+            注释 = "可以为时间文本：2021-6-23 12:25:1 2022年10月30日9时24分50秒" @默认值 = "">
+    {
+        返回 (取月份_ (日期时间值))
+    }
+
+    方法 取日_ <公开 静态 类型 = 文本型 折叠>
+    参数 日期时间值 <类型 = 文本型 注释 = "留空取当前时间，不留空则取指定的." 注释 = "可以为时间小数：44370.5168287037 ;" 注释 = "可以为时间戳：1667094877 ;"
+            注释 = "可以为时间文本：2021-6-23 12:25:1 2022年10月30日9时24分50秒" @默认值 = "">
+    {
+        返回 (时间_格式化时间 (选择 (日期时间值 == "", 取现行时间_ (), 日期时间值), "dd"))
+    }
+
+    方法 时间_取日 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 日期时间值 <类型 = 文本型 注释 = "留空取当前时间，不留空则取指定的." 注释 = "可以为时间小数：44370.5168287037 ;" 注释 = "可以为时间戳：1667094877 ;"
+            注释 = "可以为时间文本：2021-6-23 12:25:1 2022年10月30日9时24分50秒" @默认值 = "">
+    {
+        返回 (取日_ (日期时间值))
+    }
+
+    方法 取小时_ <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 日期时间值 <类型 = 文本型 注释 = "留空取当前时间，不留空则取指定的." 注释 = "可以为时间小数：44370.5168287037 ;" 注释 = "可以为时间戳：1667094877 ;"
+            注释 = "可以为时间文本：2021-6-23 12:25:1 2022年10月30日9时24分50秒" @默认值 = "">
+    参数 是否24小时制 <类型 = 逻辑型 注释 = "参数一不为空时，本参数才有效" @默认值 = 假>
+    {
+        如果 (日期时间值 != "")
+        {
+            返回 (文本到整数 (时间_格式化时间 (日期时间值, 选择 (是否24小时制 == 假, "hh", "HH"))))
+        }
+        @  TCHAR szBuffer[256];
+        @  SYSTEMTIME st;
+        @  ::GetLocalTime(&st);
+        @ return st.wHour;
+    }
+
+    方法 时间_取小时 <公开 静态 类型 = 整数 折叠>
+    参数 日期时间值 <类型 = 文本型 注释 = "留空取当前时间，不留空则取指定的." 注释 = "可以为时间小数：44370.5168287037 ;" 注释 = "可以为时间戳：1667094877 ;"
+            注释 = "可以为时间文本：2021-6-23 12:25:1 2022年10月30日9时24分50秒" @默认值 = "">
+    参数 是否24小时制 <类型 = 逻辑型 注释 = "参数一不为空时，本参数才有效" @默认值 = 假>
+    {
+        返回 (取小时_ (日期时间值, 是否24小时制))
+    }
+
+    方法 取分钟_ <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 日期时间值 <类型 = 文本型 注释 = "留空取当前时间，不留空则取指定的." 注释 = "可以为时间小数：44370.5168287037 ;" 注释 = "可以为时间戳：1667094877 ;"
+            注释 = "可以为时间文本：2021-6-23 12:25:1 2022年10月30日9时24分50秒" @默认值 = "">
+    {
+        如果 (日期时间值 != "")
+        {
+            返回 (文本到整数 (时间_格式化时间 (日期时间值, "mm")))
+        }
+        @  TCHAR szBuffer[256];
+        @  SYSTEMTIME st;
+        @  ::GetLocalTime(&st);
+        @ return st.wMinute;
+    }
+
+    方法 时间_取分钟 <公开 静态 类型 = 整数 折叠>
+    参数 日期时间值 <类型 = 文本型 注释 = "留空取当前时间，不留空则取指定的." 注释 = "可以为时间小数：44370.5168287037 ;" 注释 = "可以为时间戳：1667094877 ;"
+            注释 = "可以为时间文本：2021-6-23 12:25:1 2022年10月30日9时24分50秒" @默认值 = "">
+    {
+        返回 (取分钟_ (日期时间值))
+    }
+
+    方法 取秒_ <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 日期时间值 <类型 = 文本型 注释 = "留空取当前时间，不留空则取指定的." 注释 = "可以为时间小数：44370.5168287037 ;" 注释 = "可以为时间戳：1667094877 ;"
+            注释 = "可以为时间文本：2021-6-23 12:25:1 2022年10月30日9时24分50秒" @默认值 = "">
+    {
+        如果 (日期时间值 != "")
+        {
+            返回 (文本到整数 (时间_格式化时间 (日期时间值, "ss")))
+        }
+        @  SYSTEMTIME st;
+        @  ::GetLocalTime(&st);
+        @ return st.wSecond;
+    }
+
+    方法 时间_取秒 <公开 静态 类型 = 整数 折叠>
+    参数 日期时间值 <类型 = 文本型 注释 = "留空取当前时间，不留空则取指定的." 注释 = "可以为时间小数：44370.5168287037 ;" 注释 = "可以为时间戳：1667094877 ;"
+            注释 = "可以为时间文本：2021-6-23 12:25:1 2022年10月30日9时24分50秒" @默认值 = "">
+    {
+        返回 (取秒_ (日期时间值))
+    }
+
+    方法 取星期_ <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 日期时间值 <类型 = 文本型 注释 = "留空取当前时间，不留空则取指定的." 注释 = "可以为时间小数：44370.5168287037 ;" 注释 = "可以为时间戳：1667094877 ;"
+            注释 = "可以为时间文本：2021-6-23 12:25:1 2022年10月30日9时24分50秒" @默认值 = "">
+    {
+        返回 (时间_格式化时间 (选择 (日期时间值 == "", 取现行时间_ (), 日期时间值), "dddd"))
+    }
+
+    方法 时间_取星期 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 日期时间值 <类型 = 文本型 注释 = "留空取当前时间，不留空则取指定的." 注释 = "可以为时间小数：44370.5168287037 ;" 注释 = "可以为时间戳：1667094877 ;"
+            注释 = "可以为时间文本：2021-6-23 12:25:1 2022年10月30日9时24分50秒" @默认值 = "">
+    {
+        返回 (取星期_ (日期时间值))
+    }
+
+    方法 时间_取星期几_整数 <公开 静态 类型 = 整数 注释 = "返回数字 0-6" 折叠 @禁止流程检查 = 真>
+    {
+        @  SYSTEMTIME st;
+        @  ::GetLocalTime(&st);
+        @ return st.wDayOfWeek;
+    }
+
+    方法 时间_取星期几_文本 <公开 静态 类型 = 文本型 注释 = "返回 日 - 一" 折叠 @禁止流程检查 = 真>
+    {
+        变量 星期 <类型 = 整数>
+        星期 = 时间_取星期几_整数 ()
+        返回 (多项选择 (星期, "日", "一", "二", "三", "四", "五", "六"))
+    }
+
+    方法 时间_取某日周次 <公开 静态 类型 = 整数 折叠>
+    参数 年份 <类型 = 整数 注释 = "默认为当前年份" @默认值 = -1>
+    参数 月份 <类型 = 整数 注释 = "默认为当前月份" @默认值 = -1>
+    参数 日 <类型 = 整数 注释 = "默认为当前日" @默认值 = -1>
+    参数 基准周 <类型 = 整数 注释 = "以此为界限来划分周次。1-7 之间的整数，依次为：周日、周一、周二、周三、周四、周五、周六" @默认值 = 1>
+    {
+        变量 天数 <类型 = 整数>
+        变量 当时 <类型 = 小数>
+        变量 结果 <类型 = 整数 值 = -1>
+        变量 周次组 <类型 = 整数数组类>
+        变量 i <类型 = 整数>
+        如果真 (年份 == -1)
+        {
+            年份 = 取年份 (取现行时间 ())
+        }
+        如果真 (月份 == -1)
+        {
+            月份 = 取月份 (取现行时间 ())
+        }
+        如果真 (日 == -1)
+        {
+            日 = 取日 (取现行时间 ())
+        }
+        天数 = 时间_取某月天数 (年份, 月份)
+        当时 = 到时间 (到文本 (年份) + "-" + 到文本 (月份) + "-1 00:00:00")
+        循环 (, 天数, i)
+        {
+            如果真 (i > 0)
+            {
+                当时 = 增减时间 (当时, 时间字段类型.日, 1)
+            }
+            如果真 (取星期几 (当时) == 基准周)
+            {
+                周次组.加入成员 (取日 (当时))
+            }
+        }
+        周次组.枚举循环 ()
+        {
+            如果 (周次组.取枚举值 () >= 日)
+            {
+                结果 = 周次组.取枚举索引 () + 1
+                跳出循环
+            }
+        }
+        返回 (结果)
+    }
+
+    方法 时间_取某月周数 <公开 静态 类型 = 整数 折叠>
+    参数 年份 <类型 = 整数 注释 = "默认为当前年份" @默认值 = -1>
+    参数 月份 <类型 = 整数 注释 = "默认为当前月份" @默认值 = -1>
+    参数 基准周 <类型 = 整数 注释 = "以此为界限来划分周数。1-7 之间的整数，依次为：周日、周一、周二、周三、周四、周五、周六" @默认值 = 1>
+    {
+        变量 天数 <类型 = 整数>
+        变量 当时 <类型 = 小数>
+        变量 结果 <类型 = 整数>
+        变量 i <类型 = 整数>
+        如果真 (年份 == -1)
+        {
+            年份 = 取年份 (取现行时间 ())
+        }
+        如果真 (月份 == -1)
+        {
+            月份 = 取月份 (取现行时间 ())
+        }
+        天数 = 时间_取某月天数 (年份, 月份)
+        当时 = 到时间 (到文本 (年份) + "-" + 到文本 (月份) + "-1 00:00:00")
+        循环 (, 天数, i)
+        {
+            如果真 (i > 0)
+            {
+                当时 = 增减时间 (当时, 时间字段类型.日, 1)
+            }
+            如果真 (取星期几 (当时) == 基准周)
+            {
+                结果 = 结果 + 1
+            }
+        }
+        返回 (结果)
+    }
+
+    方法 时间_取某月天数 <公开 静态 类型 = 整数 折叠>
+    参数 年份 <类型 = 整数 注释 = "默认为当前年份" @默认值 = -1>
+    参数 月份 <类型 = 整数 注释 = "默认为当前月份" @默认值 = -1>
+    {
+        如果 (年份 == -1 || 月份 == -1)
+        {
+            如果真 (年份 == -1)
+            {
+                年份 = 取年份 (取现行时间 ())
+            }
+            如果真 (月份 == -1)
+            {
+                月份 = 取月份 (取现行时间 ())
+            }
+        }
+        返回 (取某月天数 (年份, 月份))
+    }
+
+    方法 时间_取某年天数 <公开 静态 类型 = 整数 折叠>
+    参数 年份 <类型 = 整数 注释 = "默认为当前年份" @默认值 = -1>
+    {
+        如果 (年份 == -1)
+        {
+            返回 (选择 (取年份 (取现行时间 ()) % 4 == 0, 366, 365))
+        }
+        返回 (选择 (年份 % 4 == 0, 366, 365))
+    }
+
+    方法 时间_取现行时间戳_文本2 <公开 静态 类型 = 文本型 注释 = "13位" 折叠>
+    {
+        返回 (到文本 (取现行时间戳_毫秒 ()))
+    }
+
+    方法 时间_取现行时间戳_长整数 <公开 静态 类型 = 长整数 注释 = "13位" 折叠>
+    {
+        返回 (取现行时间戳_毫秒 ())
+    }
+
+    方法 时间_取现行时间戳_整数 <公开 静态 类型 = 整数 注释 = "10位" 折叠 @禁止流程检查 = 真>
+    {
+        @     timeb t;
+        @     ftime(&t);
+        @     return (int)t.time;
+    }
+
+    方法 时间_取现行时间戳_文本 <公开 静态 类型 = 文本型 注释 = "10位" 折叠 @禁止流程检查 = 真>
+    {
+        返回 (到文本 (时间_取现行时间戳_整数 ()))
+    }
+
+    # @ struct NTPPacket
+    # @ {
+    # @     union
+    # @     {
+    # @         struct _ControlWord
+    # @         {
+    # @             unsigned int uLI : 2;
+    # @             unsigned int uVersion : 3;
+    # @             unsigned int uMode : 3;
+    # @             unsigned int uStratum : 8;
+    # @             int nPoll : 8;
+    # @             int nPrecision : 8;
+    # @         };
+    # @         int nControlWord;
+    # @     };
+    # @     int nRootDelay;
+    # @     int nRootDispersion;
+    # @     int nReferenceIdentifier;
+    # @     __int64 n64ReferenceTimestamp;
+    # @     __int64 n64OriginateTimestamp;
+    # @     __int64 n64ReceiveTimestamp;
+    # @     int nTransmitTimestampSeconds;
+    # @     int nTransmitTimestampFractions;
+    # @ };
+
+    方法 时间_取现行时间戳_NTP <公开 静态 类型 = 长整数 注释 = "通过NTP服务器获取网络时间，返回10位时间戳，失败返回-1" 折叠 @禁止流程检查 = 真>
+    参数 NTP服务器 <类型 = 文本型 @默认值 = "time.windows.com">
+    {
+        变量 NtpName <类型 = 字节集类>
+        NtpName = 文本到多字节 (NTP服务器)
+        @ ULONGLONG nlTime = (ULONGLONG)INVALID_SOCKET;
+        @ WSADATA wsaData;
+        @ if (WSAStartup(MAKEWORD(2, 2), &wsaData) == NO_ERROR)
+        @ {
+        @     addrinfo hints = { 0 }, * ai_list = NULL;
+        @     hints.ai_family = AF_UNSPEC;
+        @     hints.ai_socktype = SOCK_DGRAM;
+        @     hints.ai_protocol = IPPROTO_UDP;
+        @     if (getaddrinfo((const char*)@<NtpName>.GetPtr(), "123", &hints, &ai_list) == NO_ERROR)
+        @     {
+        @         SOCKET sock;
+        @         sock = socket(ai_list->ai_family, ai_list->ai_socktype, ai_list->ai_protocol);
+        @         if (sock != INVALID_SOCKET)
+        @         {
+        @             NTPPacket ntpBuf = { 0 };
+        @             ntpBuf.nControlWord = 0x1B;
+        @             DWORD dwBufLen = sizeof(ntpBuf);
+        @             int iRes = sendto(sock, (const char*)&ntpBuf, dwBufLen, 0, ai_list->ai_addr, (int)ai_list->ai_addrlen);
+        @             if (iRes == dwBufLen)
+        @             {
+        @                 fd_set readfds = { 0 };
+        @                 FD_SET(sock, &readfds);
+        @                 timeval timeout = { 3,0 };
+        @                 if (select((int)sock + 1, &readfds, NULL, NULL, &timeout) > 0)
+        @                 {
+        @                     FD_ZERO(&ntpBuf);
+        @                     iRes = recvfrom(sock, (char*)&ntpBuf, dwBufLen, 0, ai_list->ai_addr, (int*)&ai_list->ai_addrlen);
+        @                     if (iRes == dwBufLen)
+        @                     {
+        @                         nlTime = (ntohl(ntpBuf.nTransmitTimestampSeconds) - 0x83aa7e80);
+        @                     }
+        @                 }
+        @             }
+        @         }
+        @         freeaddrinfo(ai_list);
+        @         closesocket(sock);
+        @     }
+        @     WSACleanup();
+        @ }
+        @ return nlTime;
+    }
+
+    方法 时间_取指定时间戳 <公开 静态 类型 = 整数 注释 = "10位" 折叠>
+    参数 时间 <类型 = 文本型 注释 = "例如：2021-05-05 16:20:25 ；2021年05月05日16时26分25秒">
+    {
+        返回 (取时间戳 (到时间 (时间)))
+    }
+
+    方法 时间_取指定时间戳2 <公开 静态 类型 = 长整数 注释 = "13位" 折叠>
+    参数 时间 <类型 = 文本型 注释 = "例如：2021-05-05 16:20:25 ；2021年05月05日16时26分25秒">
+    {
+        返回 (取毫秒时间戳 (到时间 (时间)))
+    }
+
+    方法 时间_取指定时间戳3 <公开 静态 类型 = 长整数 返回值注释 = "-1：日期格式无效   -2：日期格式无效   -3：时间格式无效   -4：时间转换失败" 折叠 折叠2
+            @视窗.外部头文件 = "iostream\r\nstring\r\nctime\r\nchrono\r\niomanip\r\nsstream\r\nvector\r\nalgorithm\r\ncctype\r\ncstring"
+            @禁止流程检查 = 真>
+    参数 时间 <类型 = 文本型 注释 = "例如：2021-05-05 16:20:25、2021年05月05日16时26分25秒、2021/05/05 16:26:25、2021-05-05 16:20">
+    参数 是否十位 <类型 = 逻辑型 注释 = "真：10位时间戳  假：13位时间戳" @默认值 = 真>
+    参数 是否实时填充 <类型 = 逻辑型 注释 = "取13位时，本参数生效。真：当前毫秒时间填充  假：000填充" @默认值 = 真>
+    {
+        @ std::string processed = CU8String (@<时间>).GetText ();
+        @ bool millisecond = @<是否十位>;
+        @ bool useCurrentMilliseconds = @<是否实时填充>;
+        @ static const std::pair<const char*, const char*> replacements[] = {
+        @ {"年", "-"}, {"月", "-"}, {"日", " "},
+        @ {"时", ":"}, {"分", ":"}, {"秒", ""},
+        @ {"/", "-"}
+        @ };
+        @ for (const auto& rep : replacements) {
+        @ const size_t from_len = std::strlen(rep.first);
+        @ const size_t to_len = std::strlen(rep.second);
+        @ if (from_len == 1 && to_len == 1) {
+        @ std::replace(processed.begin(), processed.end(), rep.first[0], rep.second[0]);
+        @ }
+        @ else {
+        @ size_t start_pos = 0;
+        @ while ((start_pos = processed.find(rep.first, start_pos)) != std::string::npos) {
+        @ processed.replace(start_pos, from_len, rep.second);
+        @ start_pos += to_len;
+        @ }
+        @ }
+        @ }
+        @ for (size_t pos = processed.find("  "); pos != std::string::npos; pos = processed.find("  ")) {
+        @ processed.replace(pos, 2, " ");
+        @ }
+        @ const size_t space_pos = processed.find(' ');
+        @ if (space_pos == std::string::npos) {
+        @ return -1;
+        @ }
+        @ const std::string date_str = processed.substr(0, space_pos);
+        @ std::vector<int> date_parts;
+        @ size_t start = 0, end;
+        @ while ((end = date_str.find('-', start)) != std::string::npos) {
+        @ date_parts.push_back(std::stoi(date_str.substr(start, end - start)));
+        @ start = end + 1;
+        @ }
+        @ date_parts.push_back(std::stoi(date_str.substr(start)));
+        @ if (date_parts.size() != 3) {
+        @ return -2;
+        @ }
+        @ const std::string time_str = processed.substr(space_pos + 1);
+        @ std::vector<int> time_parts;
+        @ start = 0;
+        @ while ((end = time_str.find(':', start)) != std::string::npos) {
+        @ time_parts.push_back(std::stoi(time_str.substr(start, end - start)));
+        @ start = end + 1;
+        @ }
+        @ time_parts.push_back(std::stoi(time_str.substr(start)));
+        @ if (time_parts.size() < 2 || time_parts.size() > 3) {
+        @ return -3;
+        @ }
+        @ struct tm tm = { 0 };
+        @ tm.tm_year = date_parts[0] - 1900;
+        @ tm.tm_mon = date_parts[1] - 1;
+        @ tm.tm_mday = date_parts[2];
+        @ tm.tm_hour = time_parts[0];
+        @ tm.tm_min = time_parts[1];
+        @ tm.tm_sec = time_parts.size() > 2 ? time_parts[2] : 0;
+        @ tm.tm_isdst = -1;
+        @ const std::time_t timestamp = std::mktime(&tm);
+        @ if (timestamp == -1) {
+        @ return -4;
+        @ }
+        @ if (millisecond) {
+        @ if (useCurrentMilliseconds) {
+        @ const auto now = std::chrono::system_clock::now();
+        @ const auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+        @ now.time_since_epoch()) % 1000;
+        @ return timestamp * 1000 + ms.count();
+        @ }
+        @ else {
+        @ return timestamp * 1000;
+        @ }
+        @ }
+        @ return timestamp;
+    }
+
+    方法 时间_时间戳到时间 <公开 静态 类型 = 文本型 注释 = "只支持10位时间戳" 折叠 @禁止流程检查 = 真>
+    参数 时间戳 <类型 = 整数>
+    参数 类型 <类型 = 整数 注释 = "1、年-月-日　2、年-月-日 时:分:秒　默认为1" @默认值 = 1>
+    {
+        变量 格式 <类型 = 文本型>
+        如果 (类型 == 1)
+        {
+            格式 = "%Y-%m-%d"
+        }
+        否则
+        {
+            格式 = "%Y-%m-%d %H:%M:%S"
+        }
+
+        @ const TCHAR* lpFormat = (const TCHAR*)@<格式>;
+        @ time_t t = @<时间戳>;
+        @  TCHAR str_time[100];
+        @  struct tm* local_time = localtime(&t);
+        @  _tcsftime(str_time, sizeof(str_time), lpFormat, local_time);
+        @ return str_time;
+    }
+
+    方法 时间_时间戳增减 <公开 静态 类型 = 整数 折叠>
+    参数 原时间戳 <类型 = 整数>
+    参数 增减类型 <类型 = 时间字段类型 @默认值 = 时间字段类型.分钟>
+    参数 增减值 <类型 = 整数 注释 = "增用正数，减则用负数" @默认值 = 1>
+    {
+        返回 (取时间戳 (增减时间 (时间戳到时间 (原时间戳), 增减类型, 增减值)))
+    }
+
+    方法 时间_取时间间隔 <公开 静态 类型 = 整数 折叠>
+    参数 时间1 <类型 = 文本型 注释 = "例如：2021-11-12 11:39:8　；2021-11-12　；2021年11月12日11时39分8秒">
+    参数 时间2 <类型 = 文本型 注释 = "例如：2021-11-15 12:33:18　；2021-11-15　；2021年11月12日">
+    参数 所取间隔类型 <类型 = 时间字段类型>
+    参数 是否为中文格式 <类型 = 逻辑型 注释 = "中文格式(年月日排列顺序为年月日),例如:" 注释 = "  1. 1973-11-15-12-30-25  2. 1973-11-15-12:30:25 ;"
+            注释 = "  3. 1973/11/15 12:30:25  4. 1973/11/15/12/30/25 ;" 注释 = "  5. 1973/11/15/12:30:25  6. 1973.11.15 12:30:25 ;"
+            注释 = "  7. 19731115123025       8. 1973年11月15日12时30分25秒 ;" 注释 = "非中文格式(年月日排列顺序为月日年),例如:"
+            注释 = "  1. 11/15/1973 12:30:25  2. 11/15/1973/12/30/25" 注释 = "  4. 11/15/1973/12:30:25  5. 11-15-1973-12-30-25"
+            注释 = "  6. 11-15-1973-12:30:25  7. 11.15.1973 12:30:25" 折叠2 @默认值 = 真>
+    {
+        返回 ((整数)取时间间隔 (到时间 (时间1, 是否为中文格式), 到时间 (时间2, 是否为中文格式), 所取间隔类型))
+    }
+
+    方法 时间_取时间戳间隔 <公开 静态 类型 = 整数 折叠>
+    参数 时间1 <类型 = 整数>
+    参数 时间2 <类型 = 整数>
+    参数 所取间隔类型 <类型 = 时间字段类型>
+    {
+        返回 ((整数)取时间间隔 (时间戳到时间 (时间1), 时间戳到时间 (时间2), 所取间隔类型))
+
+    }
+
+    # @ typedef struct _RTL_SYSTEM_TIMEOFDAY_INFORMATION
+    # @ {
+    # @     LARGE_INTEGER BootTime;
+    # @     LARGE_INTEGER CurrentTime;
+    # @     LARGE_INTEGER TimeZoneBias;
+    # @     ULONG TimeZoneId;
+    # @     ULONG Reserved;
+    # @     ULONGLONG BootTimeBias;
+    # @     ULONGLONG SleepTimeBias;
+    # @ } RTL_SYSTEM_TIMEOFDAY_INFORMATION, * PRTL_SYSTEM_TIMEOFDAY_INFORMATION;
+
+    方法 时间_取系统启动时间 <公开 静态 类型 = 小数 注释 = "时间到文本(时间_取系统启动时间)" 折叠 折叠2 @视窗.外部头文件 = "<winternl.h>" @视窗.外部库 = "ntdll.lib" @禁止流程检查 = 真>
+    {
+        变量 LocalTime <类型 = 变整数>
+        @ RTL_SYSTEM_TIMEOFDAY_INFORMATION sti = { 0 };
+        @ NtQuerySystemInformation(SystemTimeOfDayInformation, &sti, sizeof(sti), NULL);
+        @ @<LocalTime> = (INT_PTR)&sti.BootTime;
+        返回 (FileTimeToVariantTime (LocalTime))
+    }
+
+    方法 FileTimeToVariantTime <静态 类型 = 小数 折叠 @禁止流程检查 = 真>
+    参数 FileTime <类型 = 变整数 "">
+    {
+        @ FILETIME LocalTime;
+        @ FileTimeToLocalFileTime((LPFILETIME)@<FileTime>, &LocalTime);
+        @ SYSTEMTIME SystemTime;
+        @ FileTimeToSystemTime(&LocalTime, &SystemTime);
+        @ DOUBLE vTime;
+        @ SystemTimeToVariantTime(&SystemTime, &vTime);
+        @ return vTime;
+    }
+}
+
+类 时间类型_ <公开 注释 = "SYSTEMTIME" 折叠 折叠2 @文档 = "category = \"日期时间库.日期时间操作.附加类\"" @视窗.结构类 = 0>
+{
+    变量 年 <公开 类型 = 短整数>
+    变量 月 <公开 类型 = 短整数>
+    变量 星期 <公开 类型 = 短整数>
+    变量 日 <公开 类型 = 短整数>
+    变量 时 <公开 类型 = 短整数>
+    变量 分 <公开 类型 = 短整数>
+    变量 秒 <公开 类型 = 短整数>
+    变量 毫秒 <公开 类型 = 短整数>
+
+    #
+}
+
+类 格林时间类_ <公开 折叠 折叠2 @文档 = "category = \"日期时间库.格林时间转换\"" @全局类 = 真 @视窗.外部头文件 = "<time.h>\r\n<winhttp.h>\r\n<sys/timeb.h>"
+        @视窗.外部库 = "winhttp.lib">
+{
+    方法 时间_北京时间转GMT时间_小数 <公开 静态 类型 = 文本型 注释 = "转格林威治时间。例如转成：Sun, 29 Jan 2023 19:14:57 GMT" 折叠 @禁止流程检查 = 真>
+    参数 北京时间 <类型 = 小数 注释 = "例如：44955.8020486111　，也通过命令获取“取现行时间 ()”">
+    {
+        变量 北京时间2 <类型 = 小数>
+        北京时间2 = 增减时间 (北京时间, 时间字段类型.小时, -8)
+        @ typedef BOOL(WINAPI* InternetTimeFromSystemTimeW)(const SYSTEMTIME* pst, DWORD dwRFC, LPWSTR lpszTime, DWORD cbTime);
+        @ HMODULE hModule = LoadLibraryW(L"Wininet.dll");
+        @ if (!hModule) return "";
+        @ InternetTimeFromSystemTimeW pfnInternetTimeFromSystemTimeW = (InternetTimeFromSystemTimeW)GetProcAddress(hModule, "InternetTimeFromSystemTimeW");
+        @ TCHAR szTime[WINHTTP_TIME_FORMAT_BUFSIZE] = { 0 };
+        @ if (pfnInternetTimeFromSystemTimeW)
+        @ {
+        @ SYSTEMTIME SystemTime;
+        @ VariantTimeToSystemTime(@<北京时间2>, &SystemTime);
+        @ pfnInternetTimeFromSystemTimeW(&SystemTime, 0, szTime, WINHTTP_TIME_FORMAT_BUFSIZE);
+        @ }
+        @ FreeLibrary(hModule);
+        @ return szTime;
+    }
+
+    方法 时间_北京时间转GMT时间_文本 <公开 静态 类型 = 文本型 注释 = "转格林威治时间。例如转成：Sun, 29 Jan 2023 19:14:57 GMT" 折叠>
+    参数 北京时间 <类型 = 文本型>
+    {
+        返回 (时间_北京时间转GMT时间_小数 (到时间 (北京时间)))
+    }
+
+    方法 时间_GMT时间转北京时间_小数 <公开 静态 类型 = 小数 返回值注释 = "时间到文本()" 折叠 @禁止流程检查 = 真>
+    参数 GMT时间 <类型 = 文本型 注释 = "例如：Sun, 29 Jan 2023 19:14:57 GMT">
+    {
+        变量 pvtime <类型 = 小数>
+        @ typedef BOOL(WINAPI* InternetTimeToSystemTimeW)(LPCWSTR lpszTime, SYSTEMTIME* pst, DWORD dwReserved);
+        @ HMODULE hModule = LoadLibraryW(L"Wininet.dll");
+        @ if (!hModule) return 0;
+        @ InternetTimeToSystemTimeW pfnInternetTimeToSystemTimeW = (InternetTimeToSystemTimeW)GetProcAddress(hModule, "InternetTimeToSystemTimeW");
+        @ if (pfnInternetTimeToSystemTimeW != NULL)
+        @ {
+        @     SYSTEMTIME pst;
+        @     pfnInternetTimeToSystemTimeW(@<GMT时间>.GetText(), &pst, 0);
+        @     SystemTimeToVariantTime(&pst, &@<pvtime>);
+        @ }
+        @ FreeLibrary(hModule);
+        pvtime = 增减时间 (pvtime, 时间字段类型.小时, 8)
+        返回 (pvtime)
+    }
+
+    方法 时间_GMT时间转北京时间_文本 <公开 静态 类型 = 文本型 折叠>
+    参数 GMT时间 <类型 = 文本型 注释 = "例如：Sun, 29 Jan 2023 19:14:57 GMT">
+    {
+        返回 (时间到文本 (时间_GMT时间转北京时间_小数 (GMT时间)))
+    }
+}
+
+# //=====
+
+类 NTP网络时间类_ <折叠 折叠2 @视窗.外部头文件 = "iostream\r\ncstring\r\nctime\r\nwinsock2.h\r\nws2tcpip.h\r\nwindows.h"
+        @视窗.外部库 = "ws2_32.lib" @全局类 = 真>
+{
+    方法 时间_取网络时间2 <公开 静态 类型 = 文本型 注释 = "从NTP获取" 折叠>
+    参数 NTP服务器 <类型 = 文本型 注释 = "默认为阿里云" @默认值 = "ntp.aliyun.com">
+    参数 超时等待时长 <类型 = 整数 注释 = "单位毫秒  1000毫秒=1秒" @默认值 = 15000>
+    参数 返回的原始时间 <类型 = 文本型 注释 = "世界时间" @默认值 = "">
+    {
+        返回 (时间_取NTP时间 (NTP服务器, 超时等待时长, 返回的原始时间))
+    }
+
+    方法 时间_取NTP时间 <公开 静态 类型 = 文本型 注释 = "更新NTP服务信息自行查询." 注释 = "阿里云：ntp.aliyun.com ;" 注释 = "中国：cn.pool.ntp.org ;"
+            注释 = "国家授时中心：ntp.ntsc.ac.cn ;" 注释 = "中国移动：ntp.neu6.edu.cn ;" 注释 = "全球：pool.ntp.org ;" 注释 = "微软：time.windows.com ;"
+            注释 = "苹果：time.apple.com ;" 注释 = "谷歌：time.google.com" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 NTP服务器 <类型 = 文本型 注释 = "默认为阿里云" @默认值 = "ntp.aliyun.com">
+    参数 超时等待时长 <类型 = 整数 注释 = "单位毫秒  1000毫秒=1秒" @默认值 = 15000>
+    参数 返回的原始时间 <类型 = 文本型 注释 = "世界时间" 编辑时信息 = "83184, 0, 0, 0" @默认值 = "">
+    {
+        @ struct NTPPacket {
+        @ uint8_t li_vn_mode;
+        @ uint8_t stratum;
+        @ uint8_t poll;
+        @ uint8_t precision;
+        @ uint32_t rootDelay;
+        @ uint32_t rootDispersion;
+        @ uint32_t referenceId;
+        @ uint32_t referenceTm_s;
+        @ uint32_t referenceTm_f;
+        @ uint32_t originateTm_s;
+        @ uint32_t originateTm_f;
+        @ uint32_t receiveTm_s;
+        @ uint32_t receiveTm_f;
+        @ uint32_t transmitTm_s;
+        @ uint32_t transmitTm_f;
+        @ };
+        @ WSADATA wsaData;
+        @ if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        调试输出 ("WSAStartup初始化失败")
+        @ return @an<CVolString>(WSAGetLastError());
+        @ }
+        @ std::string ntpServer = CU8String (@<NTP服务器>).GetText ();
+        @ SOCKET sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+        @ if (sockfd == INVALID_SOCKET) {
+        调试输出 ("创建Socket失败")
+        @ WSACleanup();
+        @ return @an<CVolString>(WSAGetLastError());
+        @ }
+        @ sockaddr_in serverAddr{};
+        @ serverAddr.sin_family = AF_INET;
+        @ serverAddr.sin_port = htons(123);
+        @ addrinfo hints{};
+        @ hints.ai_family = AF_INET;
+        @ hints.ai_socktype = SOCK_DGRAM;
+        @ addrinfo* result;
+        @ if (getaddrinfo(ntpServer.c_str(), "123", &hints, &result) != 0) {
+        调试输出 ("解析服务器地址失败")
+        @ closesocket(sockfd);
+        @ WSACleanup();
+        @ return @an<CVolString>(WSAGetLastError());
+        @ }
+        @ memcpy(&serverAddr, result->ai_addr, sizeof(serverAddr));
+        @ freeaddrinfo(result);
+        @ NTPPacket packet = { 0 };
+        @ packet.li_vn_mode = 0x1B;
+        @ DWORD timeout = @<超时等待时长>;
+        @ if (setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO,
+        @ (char*)&timeout, sizeof(timeout)) == SOCKET_ERROR) {
+        调试输出 ("设置Socket超时失败")
+        @ closesocket(sockfd);
+        @ WSACleanup();
+        @ return @an<CVolString>(WSAGetLastError());
+        @ }
+        @ int bytesSent = sendto(sockfd, (char*)&packet, sizeof(packet), 0,
+        @ (sockaddr*)&serverAddr, sizeof(serverAddr));
+        @ if (bytesSent == SOCKET_ERROR) {
+        调试输出 ("发送NTP请求失败")
+        @ closesocket(sockfd);
+        @ WSACleanup();
+        @ return @an<CVolString>(WSAGetLastError());
+        @ }
+        @ sockaddr_in fromAddr{};
+        @ int fromAddrLen = sizeof(fromAddr);
+        @ int bytesRecv = recvfrom(sockfd, (char*)&packet, sizeof(packet), 0,
+        @ (sockaddr*)&fromAddr, &fromAddrLen);
+        @ if (bytesRecv == SOCKET_ERROR) {
+        调试输出 ("接收NTP响应失败")
+        @ closesocket(sockfd);
+        @ WSACleanup();
+        @ return @an<CVolString>(WSAGetLastError());
+        @ }
+        @ closesocket(sockfd);
+        @ WSACleanup();
+        @ const uint32_t ntpEpochOffset = 2208988800UL;
+        @ time_t ntpTime = ntohl(packet.transmitTm_s) - ntpEpochOffset;
+        @ auto formatTime = [](const tm* timeinfo) {
+        @ char buffer[80];
+        @ strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", timeinfo);
+        @ return std::string(buffer);
+        @ };
+        @ tm utcTime;
+        @ gmtime_s(&utcTime, &ntpTime);
+        @ @<返回的原始时间>=formatTime(&utcTime).c_str();
+        @ tm localTime;
+        @ localtime_s(&localTime, &ntpTime);
+        @ return formatTime(&localTime).c_str();
+    }
+}

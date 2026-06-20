@@ -1,0 +1,842 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.对象储存
+
+类 阿里云对象储存类 <公开 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "阿里云OSS-SDK(C++)." 编辑时信息 = "1BFFE4, 0, 0, 0"
+        @视窗.后缀文本 = "public IVolNoticeReceiver" @视窗.头文件搜寻目录 = "lib\\include" @视窗.外部头文件 = "vol_oss_client.h"
+        @视窗.外部库 = "third_party\\$(p)\\libcurl.lib\r\nthird_party\\$(p)\\libeay32.lib\r\nthird_party\\$(p)\\ssleay32.lib\r\nlib\\$(p)\\alibabacloud-oss-cpp-sdk-static-$(d).lib"
+        @视窗.附属文件 = "third_party\\$(p)\\libcurl.dll\r\nthird_party\\$(p)\\libeay32.dll\r\nthird_party\\$(p)\\ssleay32.dll\r\nthird_party\\$(p)\\zlibwapi.dll"
+        @视窗.需求VS版本 = "16-">
+{
+
+    # @begin
+    #
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (COssClientWraper)
+    #
+    # static void @an<_sOnBeforeAppInit> () { InitializeSdk(); }     //初始化网络资源
+    # static void @an<_sOnAfterAppExit> () { ShutdownSdk(); }        //释放网络等资源
+    #
+    # <> <include>
+    # struct VolTransferProgress
+    # {
+    #     @sn<current_class> * pThis;
+    #     INT_P UserData;
+    # };
+    #
+    # BOOL DownObject(VolTransferProgress& handler, const CVolString& bucket, const CVolString& key, const CVolString& localFileName);
+    # inline_ BOOL DownLoadObject(INT_P UserData, const CVolString& bucket, const CVolString& key, const CVolString& localFileName)
+    # {
+    #     return DownObject(VolTransferProgress{this, UserData}, bucket, key, localFileName);
+    # }
+    #
+    # BOOL UpObject(VolTransferProgress& handler, CVolString& bucket, CVolString& key, CVolString& localFileName);
+    # inline_ BOOL UpLoadObject(INT_P UserData, CVolString& bucket, CVolString& key, CVolString& localFileName)
+    # {
+    #     return UpObject(VolTransferProgress{this, UserData}, bucket, key, localFileName);
+    # }
+    #
+    # typedef struct
+    # {
+    #     size_t m_increment;
+    #     int64_t m_transfered;
+    #     int64_t m_total;
+    #     INT_P m_npUserData;
+    # }
+    # UpOrDownProgressInfo;
+    # static void DownProgressCallback(size_t increment, int64_t transfered, int64_t total, void* userData)
+    # {
+    #     UpOrDownProgressInfo inf = { increment, transfered, total, ((VolTransferProgress*)userData)->UserData };
+    #     ((VolTransferProgress*)userData)->pThis->Notify (1, (INT_P)&inf, 0, NULL);
+    # }
+    #
+    # static void UpProgressCallback(size_t increment, int64_t transfered, int64_t total, void* userData)
+    # {
+    #     UpOrDownProgressInfo inf = { increment, transfered, total, ((VolTransferProgress*)userData)->UserData };
+    #     ((VolTransferProgress*)userData)->pThis->Notify (2, (INT_P)&inf, 0, NULL);
+    # }
+    #
+    # virtual INT_P OnNotify (INT_P npCode, INT_P npParam1, INT_P npParam2) override;
+    # <> </include>
+    #
+    # INT_P @sn<current_class>::OnNotify (INT_P npCode, INT_P npParam1, INT_P npParam2)
+    # {
+    #     switch (npCode)
+    #     {
+    #     case 1:  {
+    #         const UpOrDownProgressInfo* pInf = (UpOrDownProgressInfo*)npParam1;
+    #         @<下载进度已改变> ((INT)pInf->m_increment, pInf->m_transfered, pInf->m_total, pInf->m_npUserData);
+    #         break;  }
+    #     case 2:  {
+    #         const UpOrDownProgressInfo* pInf = (UpOrDownProgressInfo*)npParam1;
+    #         @<上传进度已改变> ((INT)pInf->m_increment, pInf->m_transfered, pInf->m_total, pInf->m_npUserData);
+    #         break;  }
+    #     }
+    #     return 0;
+    # }
+    #
+    # BOOL @sn<current_class>::DownObject(VolTransferProgress& handler, const CVolString& bucket, const CVolString& key, const CVolString& localFileName)
+    # {
+    #     if (!data().GetClient()) return FALSE;
+    #     CU8String u8key(key.GetText());
+    #     CU8String u8bucket(bucket.GetText());
+    #     GetObjectRequest request(u8bucket.GetText(), u8key.GetText());
+    #     request.setResponseStreamFactory([=]() 
+    #     { 
+    #         CVolMem memBuf;
+    #         return std::make_shared<std::fstream>(GetMbsText(localFileName.GetText(), memBuf, NULL), std::ios_base::out | std::ios_base::in | std::ios_base::trunc | std::ios_base::binary); 
+    #     });
+    #     TransferProgress progress = { DownProgressCallback, &handler };
+    #     request.setTransferProgress (progress);
+    #     GetObjectOutcome outCome = data().GetClient()->GetObjectVol(request);
+    #     if (!outCome.isSuccess())
+    #     {
+    #          data().SetLastError(outCome.error());
+    #          return FALSE;
+    #     }
+    #     return TRUE;
+    # }
+    #
+    # BOOL @sn<current_class>::UpObject(VolTransferProgress& handler, CVolString& bucket, CVolString& key, CVolString& localFileName)
+    # {
+    #     if (!data().GetClient()) return FALSE;
+    #     CU8String u8key(key.GetText());
+    #     CU8String u8bucket(bucket.GetText());
+    #     CVolMem memBuf;
+    #     std::shared_ptr<std::iostream> content = std::make_shared<std::fstream>(GetMbsText(localFileName.GetText(), memBuf, NULL), std::ios::in | std::ios::binary);
+    #     PutObjectRequest request(u8bucket.GetText(), u8key.GetText(), content);
+    #     TransferProgress progress = { UpProgressCallback, &handler };
+    #     request.setTransferProgress (progress);
+    #     PutObjectOutcome outCome = data().GetClient()->PutObject(request);
+    #     if (!outCome.isSuccess())
+    #     {
+    #          data().SetLastError(outCome.error());
+    #          return FALSE;
+    #     }
+    #     return TRUE;
+    # }
+    #
+    # @end
+
+    方法 初始化 <公开 注释 = "在阿里云对象储存SDK前必须调用该方法初始化后方可正常使用." 编辑时信息 = "B2A9F, 0, 0, 0">
+    参数 节点 <类型 = 文本型 注释 = "提供所欲使用的服务器节点(Endpoint),例如杭州:\"http://oss-cn-hangzhou.aliyuncs.com\"." 编辑时信息 = "B2A9F, 0, 0, 0">
+    参数 Id <类型 = 文本型 注释 = "提供所欲使用的AccessKey ID." 编辑时信息 = "B2A9F, 0, 0, 0">
+    参数 Secret <类型 = 文本型 注释 = "提供所欲使用的AccessKey Secret." 编辑时信息 = "B2A9F, 0, 0, 0">
+    参数 SecurityToken <类型 = 文本型 注释 = "提供所欲使用的临时授权Token,无则提供空文本即可." 编辑时信息 = "B2A9F, 0, 0, 0" @默认值 = "">
+    参数 自定配置 <类型 = 阿里云对象储存配置类 注释 = "提供所欲使用的自定义配置信息." 编辑时信息 = "B2A9F, 0, 0, 0" @默认值 = 空对象>
+    {
+        @ ClientConfiguration configuration;
+        @ if (!@<自定配置>.IsNullObject())    //为空对象保持默认.
+        @ {
+        @     CU8String u8userAgent(@<自定配置>.@n<自定配置.用户代理>.GetText());
+        @     CU8String u8proxyHost(@<自定配置>.@n<自定配置.代理服务器>.GetText());
+        @     CU8String u8proxyPassword(@<自定配置>.@n<自定配置.代理密码>.GetText());
+        @     CU8String u8proxyUserName(@<自定配置>.@n<自定配置.代理用户名>.GetText());
+        @     CU8String u8caPath(@<自定配置>.@n<自定配置.CA证书根目录>.GetText());
+        @     CU8String u8caFile(@<自定配置>.@n<自定配置.CA证书路径>.GetText());
+
+        @     data().configuration.userAgent = u8userAgent.GetText();
+        @     data().configuration.maxConnections = @<自定配置>.@n<自定配置.连接池数>;
+        @     data().configuration.requestTimeoutMs = @<自定配置>.@n<自定配置.请求超时>;
+        @     data().configuration.connectTimeoutMs = @<自定配置>.@n<自定配置.连接超时>;
+        @     data().configuration.proxyScheme = @<自定配置>.@n<自定配置.代理协议> == 1 ? Http::HTTP : Http::HTTPS;
+        @     data().configuration.proxyHost = u8proxyHost.GetText();
+        @     data().configuration.proxyPort = @<自定配置>.@n<自定配置.代理端口>;
+        @     data().configuration.proxyPassword = u8proxyPassword.GetText();
+        @     data().configuration.proxyUserName = u8proxyUserName.GetText();
+        @     data().configuration.verifySSL = @<自定配置>.@n<自定配置.SSL证书校验>;
+        @     data().configuration.caPath = u8caPath.GetText();
+        @     data().configuration.caFile = u8caFile.GetText();
+        @     data().configuration.enableCrc64 = @<自定配置>.@n<自定配置.CRC64校验>;
+        @     data().configuration.enableDateSkewAdjustment = @<自定配置>.@n<自定配置.自动纠正时间>;
+        @ }
+        @ data().InitializeClient(@<节点>, @<Id>, @<Secret>, @<SecurityToken>);
+    }
+
+    方法 上传限速 <公开 属性写 注释 = "设置在传输过程中所欲限定的上传速度.">
+    参数 速度 <类型 = 整数 注释 = "单位:Kb/s.">
+    {
+        @ data().sendRateLimiter->setRate(@<速度>);
+    }
+
+    方法 上传限速 <公开 属性读 类型 = 整数 注释 = "获取在传输过程中所限定的上传速度." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().sendRateLimiter->Rate()
+    }
+
+    方法 下载限速 <公开 属性写 注释 = "设置在传输过程中所欲限定的下载速度.">
+    参数 速度 <类型 = 整数 注释 = "单位:Kb/s.">
+    {
+        @ data().recvRateLimiter->setRate(@<速度>);
+    }
+
+    方法 下载限速 <公开 属性读 类型 = 整数 注释 = "获取在传输过程中所限定的下载速度." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().recvRateLimiter->Rate()
+    }
+
+    方法 取最近错误码 <公开 类型 = 文本型 注释 = "获取最近执行发生的错误码内容." @禁止流程检查 = 真>
+    {
+        @ if (!data().GetClient()) return _T ("");
+        @ INT_P len;
+        @ CVolMem memBuf;
+        @ const WCHAR* pws = GetWideText ((const CHAR*)data().GetLastError().Code().c_str(), memBuf, &len);
+        @ return @an<CVolString> (pws, len);
+    }
+
+    方法 取最近错误信息 <公开 类型 = 文本型 注释 = "获取最近执行发生的错误信息内容." @禁止流程检查 = 真>
+    {
+        @ if (!data().GetClient()) return _T ("");
+        @ INT_P len;
+        @ CVolMem memBuf;
+        @ const WCHAR* pws = GetWideText ((const CHAR*)data().GetLastError().Message().c_str(), memBuf, &len);
+        @ return @an<CVolString> (pws, len);
+    }
+
+    方法 创建储存空间 <公开 类型 = 阿里云储存空间类 注释 = "新建一个储存空间(Bucket)." 返回值注释 = "返回创建的结果,创建失败将返回空对象,可使用\"取错误内容\"获取具体错误."
+            编辑时信息 = "115544, 0, 0, 0" @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲创建储存空间的名称." 编辑时信息 = "115544, 0, 0, 0">
+    参数 储存类型 <类型 = 阿里云储存空间类型 注释 = "提供所欲使用的储存类型." 编辑时信息 = "115544, 0, 0, 0" @默认值 = 阿里云储存空间类型.标准>
+    参数 访问权限 <类型 = 阿里云储存空间访问类型 注释 = "提供所欲使用的储存空间可访问类型." 编辑时信息 = "115544, 0, 0, 0" @默认值 = 阿里云储存空间访问类型.默认>
+    参数 容灾类型 <类型 = 阿里云储存空间容灾类型 注释 = "提供所欲使用的储存数据容灾类型." 编辑时信息 = "115544, 0, 0, 0" @默认值 = 阿里云储存空间容灾类型.本地冗余>
+    {
+        @ @dt<阿里云储存空间类> result;
+        @ if (!data().GetClient())
+        @ {
+        @     result.ResetToNullObject();
+        @     return result;
+        @ }
+        @ CU8String u8name(@<名称>.GetText());
+        @ CreateBucketRequest request(u8name.GetText(), (StorageClass)@<储存类型>, (CannedAccessControlList)@<访问权限>);
+        @ request.setDataRedundancyType(@<容灾类型> == 0 ? DataRedundancyType::NotSet : @<容灾类型> == 1 ? DataRedundancyType::LRS : DataRedundancyType::ZRS);
+        @ CreateBucketOutcome outCome = data().GetClient()->CreateBucket(request);
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     result.ResetToNullObject();
+        @     return result;
+        @ }
+        @ result.data().SetBucket(outCome.result());
+        @ return result;
+    }
+
+    方法 取储存空间列表 <公开 类型 = 阿里云储存空间数组类 注释 = "获取所有已存在的储存空间对象." 返回值注释 = "获取失败将会返回空对象." @禁止流程检查 = 真>
+    参数 指定前缀 <类型 = 文本型 注释 = "指定本次仅获取该指定前缀名称的空间,空文本表示不指定." @默认值 = "">
+    参数 指定标记 <类型 = 文本型 注释 = "指定本次仅获取该标记名称(Marker)的空间,空文本表示不指定." @默认值 = "">
+    参数 获取数量 <类型 = 整数 注释 = "本次获取空间的最大数量,默认获取100个." @默认值 = 100>
+    {
+        @ @dt<阿里云储存空间数组类> result;
+        @ if (!data().GetClient())
+        @ {
+        @     result.ResetToNullObject();
+        @     return result;
+        @ }
+        @ ListBucketsRequest bucketsRequest;
+        @ if (!@<指定前缀>.IsEmpty())
+        @ {
+        @     CU8String u8Prefix(@<指定前缀>.GetText());
+        @     bucketsRequest.setPrefix(u8Prefix.GetText());
+        @ }
+        @ if (!@<指定标记>.IsEmpty())
+        @ {
+        @     CU8String u8Mark(@<指定标记>.GetText());
+        @     bucketsRequest.setMarker(u8Mark.GetText());
+        @ }
+        @ bucketsRequest.setMaxKeys(@<获取数量>);
+        @ ListBucketsOutcome outCome = data().GetClient()->ListBuckets(bucketsRequest);
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     result.ResetToNullObject();
+        @     return result;
+        @ }
+        @ for (Bucket bucket : outCome.result().Buckets())
+        @ {
+        @     @dt<阿里云储存空间类> value;
+        @     value.data().SetBucket(bucket);
+        @     result.Add(value, NULL);
+        @ }
+        @ return result;
+    }
+
+    方法 取储存空间是否存在 <公开 类型 = 逻辑型 注释 = "以指定名称判断储存空间是否已存在." 返回值注释 = "已存在返回真,否则返回假." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "指定所欲检查的空间名称.">
+    {
+        @ if (!data().GetClient()) return FALSE;
+        @ CU8String u8name(@<名称>.GetText());
+        @ return data().GetClient()->DoesBucketExist(u8name.GetText());
+    }
+
+    方法 取储存空间信息 <公开 类型 = 阿里云储存空间信息类 注释 = "获取指定储存空间的详细信息." 返回值注释 = "如果获取失败将返回空对象." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "指定所欲获取其信息的空间名称.">
+    {
+        @ @dt<阿里云储存空间信息类> result;
+        @ if (!data().GetClient())
+        @ {
+        @     result.ResetToNullObject();
+        @     return result;
+        @ }
+        @ CU8String u8name(@<名称>.GetText());
+        @ GetBucketInfoOutcome outCome = data().GetClient()->GetBucketInfo(u8name.GetText());
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     result.ResetToNullObject();
+        @     return result;
+        @ }
+        @ result.data().SetBucketInfo(outCome.result());
+        @ return result;
+    }
+
+    方法 置储存空间访问权限 <公开 类型 = 逻辑型 注释 = "设置指定储存空间的可访问权限(ACL)." 返回值注释 = "返回本次设置是否成功." 编辑时信息 = "3EAA6, 0, 0, 0" @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "指定所欲设置权限的空间名称." 编辑时信息 = "3EAA6, 0, 0, 0">
+    参数 访问权限 <类型 = 阿里云储存空间访问类型 注释 = "提供所欲使用的储存空间可访问类型." 编辑时信息 = "3EAA6, 0, 0, 0">
+    {
+        @ if (!data().GetClient()) return FALSE;
+        @ CU8String u8name(@<名称>.GetText());
+        @ VoidOutcome outCome = data().GetClient()->SetBucketAcl(u8name.GetText(), @<访问权限>);
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     return FALSE;
+        @ }
+        @ return TRUE;
+    }
+
+    方法 删除储存空间 <公开 类型 = 逻辑型 注释 = "删除指定储存空间,删除前必须保证该储存空间为空." 返回值注释 = "返回本次操作是否成功." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲删除的储存空间名称.">
+    {
+        @ if (!data().GetClient()) return FALSE;
+        @ CU8String u8name(@<名称>.GetText());
+        @ VoidOutcome outCome = data().GetClient()->DeleteBucket(u8name.GetText());
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     return FALSE;
+        @ }
+        @ return TRUE;
+    }
+
+    方法 置储存空间授权策略 <公开 类型 = 逻辑型 注释 = "设置指定储存空间的授权策略." 返回值注释 = "返回本次操作是否成功." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲设置授权策略的空间名称.">
+    参数 策略 <类型 = 文本型 注释 = "提供所欲设置的策略内容.">
+    {
+        @ if (!data().GetClient()) return FALSE;
+        @ CU8String u8name(@<名称>.GetText());
+        @ CU8String u8policy(@<策略>.GetText());
+        @ SetBucketPolicyRequest request(u8name.GetText(), u8policy.GetText());
+        @ VoidOutcome outCome = data().GetClient()->SetBucketPolicy(request);
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     return FALSE;
+        @ }
+        @ return TRUE;
+    }
+
+    方法 取储存空间授权策略 <公开 类型 = 文本型 注释 = "获取指定储存空间所使用的授权策略." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲获取其策略内容的空间名称.">
+    {
+        @ if (!data().GetClient()) return _T ("");
+        @ CU8String u8name(@<名称>.GetText());
+        @ GetBucketPolicyRequest request(u8name.GetText());
+        @ GetBucketPolicyOutcome outCome = data().GetClient()->GetBucketPolicy(request);
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     return _T ("");
+        @ }
+        @ return @an<CVolString> ((const CHAR*)outCome.result().Policy().c_str());
+    }
+
+    方法 删储存空间授权策略 <公开 类型 = 逻辑型 注释 = "删除指定储存空间所指定的授权策略." 返回值注释 = "返回本次操作是否成功." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲删除授权策略的储存空间名称.">
+    {
+        @ if (!data().GetClient()) return FALSE;
+        @ CU8String u8name(@<名称>.GetText());
+        @ DeleteBucketPolicyRequest request(u8name.GetText());
+        @ VoidOutcome outCome = data().GetClient()->DeleteBucketPolicy(request);
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     return FALSE;
+        @ }
+        @ return TRUE;
+    }
+
+    方法 置储存空间防盗链 <公开 类型 = 逻辑型 注释 = "设置指定储存空间的防盗链策略." 返回值注释 = "返回本次操作是否成功." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲设置防盗链策略的储存空间名称.">
+    参数 内容 <类型 = 文本数组类 注释 = "提供所欲设置的防盗链内容,每个成员表示一条内容,例如\"http://www.referersample.com\".">
+    参数 允许空来源 <类型 = 逻辑型 注释 = "是否允许空的来源地址请求空间内容." @默认值 = 假>
+    {
+        @ if (!data().GetClient()) return FALSE;
+        @ CU8String u8name(@<名称>.GetText());
+        @ SetBucketRefererRequest request(u8name.GetText());
+        @ for (INT i = 0; i < (INT)@<内容>.data ().GetCount (); i++)
+        @ {
+        @     CU8String u8referer(@<内容>.data().GetAt(i));
+        @     request.addReferer(u8referer.GetText());
+        @ }
+        @ request.setAllowEmptyReferer(@<允许空来源>);
+        @ VoidOutcome outCome = data().GetClient()->SetBucketReferer(request);
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     return FALSE;
+        @ }
+        @ return TRUE;
+    }
+
+    方法 取储存空间防盗链 <公开 类型 = 文本数组类 注释 = "获取指定储存空间的防盗链策略." 返回值注释 = "返回所设置的防盗链,获取失败将返回空对象." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲获取其防盗链策略的储存空间名称.">
+    {
+        @ @dt<文本数组类> result;
+        @ if (!data().GetClient())
+        @ {
+        @      result.ResetToNullObject();
+        @      return result;
+        @ }
+        @ CU8String u8name(@<名称>.GetText());
+        @ GetBucketRefererRequest request(u8name.GetText());
+        @ GetBucketRefererOutcome outCome = data().GetClient()->GetBucketReferer(request);
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     result.ResetToNullObject();
+        @     return result;
+        @ }
+        @ for (string str : outCome.result().RefererList())
+        @ {
+        @     CVolString u(str.c_str());
+        @     result.data ().Add (u.GetText());
+        @ }
+        @ return result;
+    }
+
+    方法 删储存空间防盗链 <公开 类型 = 逻辑型 注释 = "将指定储存空间的防盗链策略清空." 返回值注释 = "返回本次操作是否成功." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲清空其防盗链策略的储存空间名称.">
+    {
+        @ if (!data().GetClient()) return FALSE;
+        @ CU8String u8name(@<名称>.GetText());
+        @ SetBucketRefererRequest request(u8name.GetText());
+        @ request.setAllowEmptyReferer(true);    //为空覆盖之前规则表示删除.
+        @ VoidOutcome outCome = data().GetClient()->SetBucketReferer(request);
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     return FALSE;
+        @ }
+        @ return TRUE;
+    }
+
+    方法 开启访问日志记录 <公开 类型 = 逻辑型 注释 = "开启指定存储空间的访问日志记录" 返回值注释 = "返回本次操作是否成功." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲操作的储存空间名称.">
+    参数 日志前缀 <类型 = 文本型 注释 = "提供日志文件的文件名前缀." @默认值 = "VolDP">
+    参数 目标空间名称 <类型 = 文本型 注释 = "提供所欲开启访问日志记录的空间名称." @默认值 = "">
+    {
+        @ if (!data().GetClient()) return FALSE;
+        @ CU8String u8name(@<名称>.GetText());
+        @ CU8String u8target(@<目标空间名称>.GetText());
+        @ CU8String u8log(@<日志前缀>.GetText());
+        @ SetBucketLoggingRequest request(u8name.GetText(), u8target.GetText(), u8log.GetText());
+        @ VoidOutcome outCome = data().GetClient()->SetBucketLogging(request);
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     return FALSE;
+        @ }
+        @ return TRUE;
+    }
+
+    方法 关闭访问日志记录 <公开 类型 = 逻辑型 注释 = "关闭指定存储空间的访问日志记录" 返回值注释 = "返回本次操作是否成功." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲操作的储存空间名称.">
+    {
+        @ if (!data().GetClient()) return FALSE;
+        @ CU8String u8name(@<名称>.GetText());
+        @ VoidOutcome outCome = data().GetClient()->DeleteBucketLogging(u8name.GetText());
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     return FALSE;
+        @ }
+        @ return TRUE;
+    }
+
+    方法 置静态网站托管 <公开 类型 = 逻辑型 注释 = "设置指定储存空间的静态网站托管." 返回值注释 = "返回本次操作是否成功." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲操作的储存空间名称.">
+    参数 首页文件 <类型 = 文本型 注释 = "默认首页是您通过浏览器访问静态网站域名时,OSS返回的网站首页,例如\"index.html\".">
+    参数 错误文件 <类型 = 文本型 注释 = "默认404页是您通过浏览器访问Bucket内文件出现404错误时,OSS返回的错误页面,例如\"error.html\".">
+    {
+        @ if (!data().GetClient()) return FALSE;
+        @ CU8String u8name(@<名称>.GetText());
+        @ CU8String u8tindex(@<首页文件>.GetText());
+        @ CU8String u8error(@<错误文件>.GetText());
+        @ SetBucketWebsiteRequest request(u8name.GetText());
+        @ request.setIndexDocument(u8tindex.GetText());
+        @ request.setErrorDocument(u8error.GetText());
+        @ VoidOutcome outCome = data().GetClient()->SetBucketWebsite(request);
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     return FALSE;
+        @ }
+        @ return TRUE;
+    }
+
+    方法 删静态网站托管 <公开 类型 = 逻辑型 注释 = "删除指定储存空间的静态网站托管配置." 返回值注释 = "返回本次操作是否成功." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲操作的储存空间名称.">
+    {
+        @ if (!data().GetClient()) return FALSE;
+        @ CU8String u8name(@<名称>.GetText());
+        @ VoidOutcome outCome = data().GetClient()->DeleteBucketWebsite(u8name.GetText());
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     return FALSE;
+        @ }
+        @ return TRUE;
+    }
+
+    方法 上传文件对象 <公开 类型 = 逻辑型 注释 = "将指定的本地文件上传保存至目标储存空间中." 返回值注释 = "返回本次操作是否成功." 编辑时信息 = "AD54A, 0, 0, 0" @嵌入式方法 = "">
+    参数 名称 <类型 = 文本型 注释 = "提供所欲操作的储存空间名称." 编辑时信息 = "AD54A, 0, 0, 0">
+    参数 对象名称 <类型 = 文本型 注释 = "表示上传到储存空间后所欲使用的文件名称." 编辑时信息 = "AD54A, 0, 0, 0">
+    参数 本地文件路径 <类型 = 文本型 注释 = "提供所欲上传文件的完整路径,例如\"/users/local/myfile.txt\"." 编辑时信息 = "AD54A, 0, 0, 0">
+    参数 用户参数 <类型 = 变整数 注释 = "提供用户参数数据,进度回调函数中会返回该值." @默认值 = 0>
+    {
+        @ @sn<this>.UpLoadObject(@<用户参数>, @<名称>, @<对象名称>, @<本地文件路径>)
+    }
+
+    方法 下载文件对象 <公开 类型 = 逻辑型 注释 = "将储存空间中所储存的指定对象下载至本地." 返回值注释 = "返回本次操作是否成功." @嵌入式方法 = "">
+    参数 名称 <类型 = 文本型 注释 = "提供所欲操作的储存空间名称." 编辑时信息 = "AD54A, 0, 0, 0">
+    参数 对象名称 <类型 = 文本型 注释 = "提供所欲下载对象在储存空间中的名称." 编辑时信息 = "AD54A, 0, 0, 0">
+    参数 本地文件路径 <类型 = 文本型 注释 = "提供下载后对象保存的路径,例如\"/users/local/myfile.txt\"." 编辑时信息 = "AD54A, 0, 0, 0">
+    参数 用户参数 <类型 = 变整数 注释 = "提供用户参数数据,进度回调函数中会返回该值." @默认值 = 0>
+    {
+        @ @sn<this>.DownLoadObject(@<用户参数>, @<名称>, @<对象名称>, @<本地文件路径>)
+    }
+
+    方法 下载进度已改变 <公开 定义事件 类型 = 整数 编辑时信息 = "D1548, 0, 0, 0">
+    参数 增量 <类型 = 整数 注释 = "即相较于上次反馈所增加的数据尺寸(字节)." 编辑时信息 = "D1548, 0, 0, 0">
+    参数 已传输 <类型 = 长整数 注释 = "当前已传输的数据尺寸(字节)." 编辑时信息 = "D1548, 0, 0, 0">
+    参数 总量 <类型 = 长整数 注释 = "本次所需要传输的总数据尺寸(字节)." 编辑时信息 = "D1548, 0, 0, 0">
+    参数 用户参数 <类型 = 变整数 注释 = "所提供的用户参数值." 编辑时信息 = "D1548, 0, 0, 0">
+
+    方法 上传进度已改变 <公开 定义事件 类型 = 整数>
+    参数 增量 <类型 = 整数 注释 = "即相较于上次反馈所增加的数据尺寸(字节)." 编辑时信息 = "D1548, 0, 0, 0">
+    参数 已传输 <类型 = 长整数 注释 = "当前已传输的数据尺寸(字节)." 编辑时信息 = "D1548, 0, 0, 0">
+    参数 总量 <类型 = 长整数 注释 = "本次所需要传输的总数据尺寸(字节)." 编辑时信息 = "D1548, 0, 0, 0">
+    参数 用户参数 <类型 = 变整数 注释 = "所提供的用户参数值." 编辑时信息 = "D1548, 0, 0, 0">
+
+    方法 取文件对象列表 <公开 类型 = 阿里云对象信息数组类 注释 = "获取指定储存空间中所储存的对象列表." 返回值注释 = "获取失败将会返回空对象." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲获取其对象列表的空间名称.">
+    参数 指定前缀 <类型 = 文本型 注释 = "指定本次仅获取该指定前缀名称的对象,空文本表示不指定." @默认值 = "">
+    参数 指定标记 <类型 = 文本型 注释 = "指定本次仅获取该标记名称(Marker)的对象,空文本表示不指定." @默认值 = "">
+    参数 获取数量 <类型 = 整数 注释 = "本次获取对象的最大数量,默认获取100个." @默认值 = 100>
+    {
+        @ @dt<阿里云对象信息数组类> result;
+        @ if (!data().GetClient())
+        @ {
+        @     result.ResetToNullObject();
+        @     return result;
+        @ }
+        @ CU8String u8name(@<名称>.GetText());
+        @ ListObjectsRequest request(u8name.GetText());
+        @ if (!@<指定前缀>.IsEmpty())
+        @ {
+        @     CU8String u8prefix(@<指定前缀>.GetText());
+        @     request.setPrefix(u8prefix.GetText());
+        @ }
+        @ if (!@<指定标记>.IsEmpty())
+        @ {
+        @     CU8String u8mark(@<指定标记>.GetText());
+        @     request.setMarker(u8mark.GetText());
+        @ }
+        @ request.setMaxKeys(@<获取数量>);
+        @ ListObjectOutcome outCome = data().GetClient()->ListObjects(request);
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     result.ResetToNullObject();
+        @     return result;
+        @ }
+        @ for (ObjectSummary obj : outCome.result().ObjectSummarys())
+        @ {
+        @     @dt<阿里云对象信息类> value;
+        @     value.data().SetObjectInfo(obj);
+        @     result.Add(value, NULL);
+        @ }
+        @ return result;
+    }
+
+    方法 删文件对象 <公开 类型 = 逻辑型 注释 = "删除指定储存空间中的文件对象." 返回值注释 = "返回本次操作是否成功." @禁止流程检查 = 真>
+    参数 空间名称 <类型 = 文本型 注释 = "提供所欲操作的储存空间名称.">
+    参数 对象名称 <类型 = 文本型 注释 = "提供所欲删除的对象名称(Key).">
+    {
+        @ if (!data().GetClient()) return FALSE;
+        @ CU8String u8name(@<空间名称>.GetText());
+        @ CU8String u8key(@<对象名称>.GetText());
+        @ DeleteObjectOutcome outCome = data().GetClient()->DeleteObject(u8name.GetText(), u8key.GetText());
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     return FALSE;
+        @ }
+        @ return TRUE;
+    }
+
+    方法 删多个文件对象 <公开 类型 = 逻辑型 注释 = "删除指定储存空间中的多个文件对象." 返回值注释 = "返回本次操作是否成功." @禁止流程检查 = 真>
+    参数 空间名称 <类型 = 文本型 注释 = "提供所欲操作的储存空间名称.">
+    参数 对象列表 <类型 = 文本数组类 注释 = "提供所欲删除的对象名称(Key)数组列表.">
+    {
+        @ if (!data().GetClient()) return FALSE;
+        @ DeletedKeyList keyList;
+        @ for (INT i = 0; i < (INT)@<对象列表>.data().GetCount(); i++)
+        @ {
+        @     CU8String u8temp(@<对象列表>.data.GetAt(i));
+        @     keyList.push_back(u8temp.GetText());
+        @ }
+        @ CU8String u8name(@<空间名称>.GetText());
+        @ DeleteObjectOutcome outCome = data().GetClient()->DeleteObjects(u8name.GetText(), keyList);
+        @ if (!outCome.isSuccess())
+        @ {
+        @     data().SetLastError(outCome.error());
+        @     return FALSE;
+        @ }
+        @ return TRUE;
+    }
+
+    方法 进度回调模板函数 <静态 注释 = "用于在上传/下载文件监听其进度变化." "">
+    参数 增量 <类型 = 长整数 注释 = "即相较于上次反馈所增加的数据尺寸(字节).">
+    参数 已传输 <类型 = 长整数 注释 = "当前已传输的数据尺寸(字节).">
+    参数 总量 <类型 = 长整数 注释 = "本次所需要传输的总数据尺寸(字节).">
+    参数 用户参数 <类型 = 变整数 注释 = "所提供的用户参数值.">
+}
+
+类 阿里云储存空间访问类型 <公开 注释 = "指定阿里云储存空间的文件可访问类型." 折叠 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 默认 <公开 值 = @"@CannedAccessControlList::Default" 编辑时信息 = "0, 105545, 0, 0">
+    常量 公共读 <公开 值 = @"@CannedAccessControlList::PublicRead" 编辑时信息 = "0, 105545, 0, 0">
+    常量 公共读写 <公开 值 = @"@CannedAccessControlList::PublicReadWrite" 编辑时信息 = "0, 105545, 0, 0">
+    常量 私有 <公开 值 = @"@CannedAccessControlList::Private" 编辑时信息 = "0, 105545, 0, 0">
+}
+
+类 阿里云储存空间类型 <公开 注释 = "指定阿里云储存空间的储存类型." 折叠 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 标准 <公开 值 = @"@StorageClass::Standard" 编辑时信息 = "0, E9546, 0, 0">
+    常量 低频访问 <公开 值 = @"@StorageClass::IA">
+    常量 归档 <公开 值 = @"@StorageClass::Archive">
+    常量 冷归档 <公开 值 = @"@StorageClass::ColdArchive">
+}
+
+类 阿里云储存空间容灾类型 <公开 注释 = "指定阿里云储存空间的数据容灾类型." 折叠 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 无 <公开 值 = 0 编辑时信息 = "0, 6954E, 0, 0">
+    常量 本地冗余 <公开 值 = 1 编辑时信息 = "0, 6954E, 0, 0">
+    常量 同城冗余 <公开 值 = 2 编辑时信息 = "0, 6954E, 0, 0">
+}
+
+类 阿里云储存空间加密类型 <公开 注释 = "定义服务器端所使用的空间加密类型." 折叠 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 无 <公开 值 = @"@SSEAlgorithm::NotSet">
+    常量 KMS <公开 值 = @"@SSEAlgorithm::KMS">
+    常量 AES256 <公开 值 = @"@SSEAlgorithm::AES256">
+}
+
+类 阿里云储存空间版本控制类型 <公开 注释 = "列举储存空间版本控制的状态." 折叠 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 无 <公开 值 = @"@SSEAlgorithm::NotSet" 折叠>
+    常量 启用 <公开 值 = @"@SSEAlgorithm::Enabled">
+    常量 未启用 <公开 值 = @"@SSEAlgorithm::Suspended">
+}
+
+类 阿里云对象储存配置类 <公开 注释 = "用于在初始化阿里云对象储存SDK时所使用的配置选项." @文档 = "category = \"辅助类\"">
+{
+    变量 用户代理 <公开 类型 = 文本型 值 = "aliyun-sdk-cpp/1.9.0" 注释 = "指定所欲使用的用户代理,指HTTP的User-Agent头.默认代理为aliyun-sdk-cpp/1.X.X." @属性变量 = 真>
+    变量 连接池数 <公开 类型 = 整数 值 = 16 注释 = "连接池数,默认为16个." @属性变量 = 真>
+    变量 请求超时 <公开 类型 = 整数 值 = 10000 注释 = "请求超时时间.请求超时没有收到数据将会关闭连接,默认为10000ms." @属性变量 = 真>
+    变量 连接超时 <公开 类型 = 整数 值 = 5000 注释 = "建立连接的超时时间.默认为5000ms." @属性变量 = 真>
+    变量 代理协议 <公开 类型 = 整数 值 = 1 注释 = "提供代理所欲使用的连接协议,1表示使用HTTP,2表示使用HTTPS." @属性变量 = 真>
+    变量 代理服务器 <公开 类型 = 文本型 注释 = "提供代理服务器的连接地址." @属性变量 = 真>
+    变量 代理端口 <公开 类型 = 整数 注释 = "提供代理服务器的连接端口." @属性变量 = 真>
+    变量 代理用户名 <公开 类型 = 文本型 注释 = "提供代理服务器的连接用户名." @属性变量 = 真>
+    变量 代理密码 <公开 类型 = 文本型 注释 = "提供代理服务器的连接密码." @属性变量 = 真>
+    变量 SSL证书校验 <公开 类型 = 逻辑型 值 = 真 注释 = "是否开启SSL证书校验,默认开启." @属性变量 = 真>
+    变量 CA证书根目录 <公开 类型 = 文本型 注释 = "用于设置CA证书根路径." @属性变量 = 真>
+    变量 CA证书路径 <公开 类型 = 文本型 注释 = "用于设置CA证书路径." @属性变量 = 真>
+    变量 CRC64校验 <公开 类型 = 逻辑型 值 = 真 注释 = "是否开启CRC64校验,默认开启." @属性变量 = 真>
+    变量 自动纠正时间 <公开 类型 = 逻辑型 值 = 真 注释 = "是否开启HTTP请求时间自动修正,默认开启." @属性变量 = 真>
+}
+
+类 阿里云储存空间类 <公开 注释 = "本类实例表示一个储存空间对象,即Bucket." @强制依赖 = "阿里云对象储存类">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CBucketWraper)
+    #
+
+    方法 取地域信息 <公开 类型 = 文本型 注释 = "获取该储存空间的地域信息." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucket().Location().c_str())
+    }
+
+    方法 取空间名称 <公开 类型 = 文本型 注释 = "获取该储存空间的名称信息." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucket().Name().c_str())
+    }
+
+    方法 取创建时间 <公开 类型 = 文本型 注释 = "获取该储存空间的创建时间信息." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucket().CreationDate().c_str())
+    }
+
+    方法 取内网端点 <公开 类型 = 文本型 注释 = "获取该储存空间所处的内网端点." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucket().IntranetEndpoint().c_str())
+    }
+
+    方法 取外网端点 <公开 类型 = 文本型 注释 = "获取该储存空间所处的外网端点." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucket().ExtranetEndpoint().c_str())
+    }
+
+    方法 取储存类型 <公开 类型 = 阿里云储存空间类型 注释 = "获取该储存空间的储存类型." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetBucket().StorageClass()
+    }
+
+    方法 取所属者ID <公开 类型 = 文本型 注释 = "获取该空间所属者(owner)ID." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucket().Owner().Id().c_str())
+    }
+
+    方法 取所属者显示名称 <公开 类型 = 文本型 注释 = "获取该空间所属者(owner)的显示名称." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucket().Owner().DisplayName().c_str())
+    }
+}
+
+类 阿里云储存空间信息类 <公开 注释 = "本类实例储存了一个储存空间的所有信息." @强制依赖 = "阿里云对象储存类">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CBucketInfoWraper)
+    #
+
+    方法 取地域信息 <公开 类型 = 文本型 注释 = "获取该储存空间的地域信息." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucketInfo().Location().c_str())
+    }
+
+    方法 取空间名称 <公开 类型 = 文本型 注释 = "获取该储存空间的名称信息." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucketInfo().Name().c_str())
+    }
+
+    方法 取创建时间 <公开 类型 = 文本型 注释 = "获取该储存空间的创建时间信息." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucketInfo().CreationDate().c_str())
+    }
+
+    方法 取内网端点 <公开 类型 = 文本型 注释 = "获取该储存空间所处的内网端点." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucketInfo().IntranetEndpoint().c_str())
+    }
+
+    方法 取外网端点 <公开 类型 = 文本型 注释 = "获取该储存空间所处的外网端点." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucketInfo().ExtranetEndpoint().c_str())
+    }
+
+    方法 取储存类型 <公开 类型 = 阿里云储存空间类型 注释 = "获取该储存空间的储存类型." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetBucketInfo().StorageClass()
+    }
+
+    方法 取访问权限类型 <公开 类型 = 阿里云储存空间访问类型 注释 = "获取该储存空间的可访问类型." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetBucketInfo().Acl()
+    }
+
+    方法 取所属者ID <公开 类型 = 文本型 注释 = "获取该空间所属者(owner)ID." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucketInfo().Owner().Id().c_str())
+    }
+
+    方法 取所属者显示名称 <公开 类型 = 文本型 注释 = "获取该空间所属者(owner)的显示名称." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucketInfo().Owner().DisplayName().c_str())
+    }
+
+    方法 取数据容灾类型 <公开 类型 = 阿里云储存空间容灾类型 注释 = "获取该储存空间的数据容灾类型." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetBucketInfo().DataRedundancyType()
+    }
+
+    方法 取注释信息 <公开 类型 = 文本型 注释 = "获取该储存空间的注释信息内容." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucketInfo().Comment().c_str())
+    }
+
+    方法 取空间加密类型 <公开 类型 = 阿里云储存空间加密类型 注释 = "获取该储存空间所使用的加密类型." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetBucketInfo().SSEAlgorithm()
+    }
+
+    方法 取KMS密钥ID <公开 类型 = 文本型 注释 = "获取该储存空间的KMS密钥ID(仅当加密类型为KMS时)." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetBucketInfo().KMSMasterKeyID().c_str())
+    }
+
+    方法 取空间版本控制状态 <公开 类型 = 阿里云储存空间版本控制类型 注释 = "获取该储存空间当前的版本控制状态." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetBucketInfo().VersioningStatus()
+    }
+}
+
+类 阿里云对象信息类 <公开 注释 = "本类实例表示一个储存空间中对象的详情信息." @强制依赖 = "阿里云对象储存类">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CObjectSummaryWraper)
+    #
+
+    方法 取对象名称 <公开 类型 = 文本型 注释 = "获取该对象的名称信息(Key)." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetObjectInfo().Key().c_str())
+    }
+
+    方法 取唯一标记 <公开 类型 = 文本型 注释 = "获取该对象的唯一标记信息(ETag)." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetObjectInfo().ETag().c_str())
+    }
+
+    方法 取内容尺寸 <公开 类型 = 长整数 注释 = "获取该对象的数据内容尺寸." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetObjectInfo().Size()
+    }
+
+    方法 取最后修改时间 <公开 类型 = 文本型 注释 = "获对象的最后修改时间." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetObjectInfo().LastModified().c_str())
+    }
+
+    方法 取储存类型 <公开 类型 = 文本型 注释 = "获取该对象的储存类型信息." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetObjectInfo().StorageClass().c_str())
+    }
+
+    方法 取对象类型 <公开 类型 = 文本型 注释 = "获取该对象的类型信息." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetObjectInfo().Type().c_str())
+    }
+
+    方法 取所属者ID <公开 类型 = 文本型 注释 = "获取该空间所属者(owner)ID." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetObjectInfo().Owner().Id().c_str())
+    }
+
+    方法 取所属者显示名称 <公开 类型 = 文本型 注释 = "获取该空间所属者(owner)的显示名称." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> ((const CHAR*)@sn<this>.data().GetObjectInfo().Owner().DisplayName().c_str())
+    }
+}
+
+类 阿里云储存空间数组类 <公开 基础类 = 对象数组模板类 @文档 = "category = \"辅助类\"" @模板实现类 = "阿里云储存空间类">
+
+类 阿里云对象信息数组类 <公开 基础类 = 对象数组模板类 @文档 = "category = \"辅助类\"" @模板实现类 = "阿里云对象信息类">

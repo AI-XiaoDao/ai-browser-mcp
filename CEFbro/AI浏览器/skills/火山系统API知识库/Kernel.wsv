@@ -1,0 +1,824 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" @文档 = "category = \"windows.杂项\"">
+
+类 ______位操作加强版 <公开 @全局类 = 真 @视窗.外部头文件 = "kernel32\\xor_or_and\\Vol_Or_Xor_And.h"
+        @视窗.外部源文件 = "kernel32\\xor_or_and\\Vol_Or_Xor_And.cpp">
+{
+
+    #
+
+    方法 位与F <公开 静态 类型 = 长整数 注释 = "最多支持7个参数" @嵌入式方法 = "">
+    参数 参数 <@匹配类型 = 通用数值型>
+    参数 可扩展参数 <@匹配类型 = 通用数值型 @可扩展 = "">
+    {
+        @ (@dt<长整数>)vol_and(@<参数>,@<可扩展参数>)
+    }
+
+    方法 位或F <公开 静态 类型 = 长整数 注释 = "最多支持7个参数" @嵌入式方法 = "">
+    参数 参数 <@匹配类型 = 通用数值型>
+    参数 可扩展参数 <@匹配类型 = 通用数值型 @可扩展 = "">
+    {
+        @ (@dt<长整数>)vol_or(@<参数>,@<可扩展参数>)
+    }
+
+    方法 位异或F <公开 静态 类型 = 长整数 注释 = "最多支持7个参数" @嵌入式方法 = "">
+    参数 参数 <@匹配类型 = 通用数值型>
+    参数 可扩展参数 <@匹配类型 = 通用数值型 @可扩展 = "">
+    {
+        @ (@dt<长整数>)vol_xor(@<参数>,@<可扩展参数>)
+    }
+
+    #
+
+    方法 取高位_短整数 <公开 静态 类型 = 字节 折叠 @嵌入式方法 = "">
+    参数 参数 <类型 = 短整数>
+    {
+        @ ((BYTE)((((DWORD_PTR)(@<参数>)) >> 8) & 0xff))
+    }
+
+    方法 取低位_短整数 <公开 静态 类型 = 字节 折叠 @嵌入式方法 = "">
+    参数 参数 <类型 = 短整数>
+    {
+        @ ((BYTE)(((DWORD_PTR)(@<参数>)) & 0xff))
+    }
+
+    方法 取高位_整数 <公开 静态 类型 = 短整数 折叠 @嵌入式方法 = "">
+    参数 参数 <类型 = 整数>
+    {
+        @ ((@dt<短整数>)((((DWORD_PTR)(@<参数>)) >> 16) & 0xffff))
+    }
+
+    方法 取低位_整数 <公开 静态 类型 = 短整数 折叠 @嵌入式方法 = "">
+    参数 参数 <类型 = 整数>
+    {
+        @ ((@dt<短整数>)(((DWORD_PTR)(@<参数>)) & 0xffff))
+    }
+
+    #
+}
+
+类 COM对象初始化类F <公开 折叠>
+{
+    方法 类_初始化
+    {
+        @ ::CoInitializeEx(NULL,COINIT_MULTITHREADED);
+    }
+
+    方法 类_清理
+    {
+        @ ::CoUninitialize();
+    }
+
+    #
+    #
+}
+
+类 ______系统杂项 <公开 折叠 @全局类 = 真 @禁止创建对象 = 真 @视窗.外部头文件 = "<Shlwapi.h>" @视窗.外部库 = "Shlwapi.lib" @视窗.外部头文件 = "<math.h>">
+{
+    方法 BGR2RGB整数 <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    参数 颜色 <类型 = 整数>
+    {
+        @ INT C = @<颜色>;
+        @ BYTE* pRGB = (BYTE*) &C;
+        @ BYTE color = pRGB[1];
+        @ pRGB[1] = pRGB[3];
+        @ pRGB[3] = color;
+        @ return C;
+
+    }
+
+    方法 RGB2BGR整数 <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 颜色 <类型 = 整数>
+    {
+        @ INT C = @<颜色>;
+        @ BYTE* pRGB = (BYTE*) &C;
+        @ BYTE color = pRGB[1];
+        @ pRGB[1] = pRGB[3];
+        @ pRGB[3] = color;
+        @ return C;
+    }
+
+    方法 RGB2BGR字节集 <公开 静态 折叠>
+    参数 需要转换的字节集 <类型 = 字节集类>
+    {
+        @ BYTE* pData = (BYTE*)@<需要转换的字节集>.GetPtr();
+        @ int nSize= @<需要转换的字节集>.GetSize();
+        @ int nSteps = 0;
+        @ if (nSize % 4 == 0) nSteps = 4;
+        @ else if(nSize % 3 == 0) nSteps = 4;
+        @ else  return;
+        @ for(int i = 0; i < nSize; i+=nSteps)
+        @ {
+        @  BYTE color = pRGB[i - (nSteps -3)];
+        @  pRGB[i - (nSteps -3)] = pRGB[i+nSteps-1];
+        @  pRGB[i+nSteps-1] = color;
+        @ }
+    }
+
+    方法 BGR2RGB字节集 <公开 静态 折叠>
+    参数 需要转换的字节集 <类型 = 字节集类>
+    {
+        @ BYTE* pData = (BYTE*)@<需要转换的字节集>.GetPtr();
+        @ int nSize= @<需要转换的字节集>.GetSize();
+        @ int nSteps = 0;
+        @ if (nSize % 4 == 0) nSteps = 4;
+        @ else if(nSize % 3 == 0) nSteps = 4;
+        @ else  return;
+        @ for(int i = 0; i < nSize; i+=nSteps)
+        @ {
+        @  BYTE color = pRGB[i - (nSteps -3)];
+        @  pRGB[i - (nSteps -3)] = pRGB[i+nSteps-1];
+        @  pRGB[i+nSteps-1] = color;
+        @ }
+
+
+
+
+
+
+    }
+
+    方法 RGB565_2_RGB24短整数 <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    参数 RGB565 <类型 = 短整数>
+    {
+        @ int rgb24 = 0;
+        @ byte* pRGB24 = (byte*)&rgb24;
+        @ pRGB24[2] = (@<RGB565> & 0xF800) >> 11;
+        @ pRGB24[1] = (@<RGB565> & 0x07E0) >> 5;
+        @ pRGB24[0] = (@<RGB565> & 0x001F);
+        @ pRGB24[2] <<= 3;
+        @ pRGB24[1] <<= 2;
+        @ pRGB24[0] <<= 3;
+        @ return rgb24;
+        // #define RGB565_MASK_RED        0xF800
+        // #define RGB565_MASK_GREEN      0x07E0
+        // #define RGB565_MASK_BLUE       0x001F
+
+        // void rgb565_2_rgb24(BYTE *rgb24, WORD rgb565)
+        // {
+        // //extract RGB
+        // rgb24[2] = (rgb565 & RGB565_MASK_RED) >> 11;
+        // rgb24[1] = (rgb565 & RGB565_MASK_GREEN) >> 5;
+        // rgb24[0] = (rgb565 & RGB565_MASK_BLUE);
+
+        // //amplify the image
+        // rgb24[2] <<= 3;
+        // rgb24[1] <<= 2;
+        // rgb24[0] <<= 3;
+        // }
+    }
+
+    方法 RGB888_2_RGB565 <公开 静态 类型 = 短整数 折叠 @禁止流程检查 = 真>
+    参数 r <类型 = 整数>
+    参数 g <类型 = 整数>
+    参数 b <类型 = 整数>
+    {
+        // USHORT rgb_24_2_565(int r, int g, int b)
+        // {
+        // return (USHORT)(((unsigned(r) << 8) & 0xF800) |
+        // ((unsigned(g) << 3) & 0x7E0)  |
+        // ((unsigned(b) >> 3)));
+        // }
+        @ return (USHORT)(((unsigned(@<r>) << 8) & 0xF800) | ((unsigned(@<g>) << 3) & 0x7E0)  | ((unsigned(@<b>) >> 3)));
+
+
+
+    }
+
+    方法 RGB24_2_RGB555 <公开 静态 类型 = 短整数数组类 折叠 @禁止流程检查 = 真>
+    参数 r <类型 = 整数>
+    参数 g <类型 = 整数>
+    参数 b <类型 = 整数>
+    {
+        // USHORT rgb_24_2_555(int r, int g, int b)
+        // {
+        // return (USHORT)(((unsigned(r) << 7) & 0x7C00) |
+        // ((unsigned(g) << 2) & 0x3E0)  |
+        // ((unsigned(b) >> 3)));
+        // }
+        @ return return (USHORT)(((unsigned(@<r>) << 7) & 0x7C00) |((unsigned(@<g>) << 2) & 0x3E0)  |((unsigned(@<b>) >> 3)));
+
+
+    }
+
+    方法 RGB555_2_RGB24 <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 rgb555 <类型 = 整数>
+    {
+        // COLORREF rgb_555_2_24(int rgb555)
+        // {
+        // unsigned r = ((rgb555 >> 7) & 0xF8);
+        // unsigned g = ((rgb555 >> 2) & 0xF8);
+        // unsigned b = ((rgb555 << 3) & 0xF8);
+        // return RGB(r,g,b);
+        // }
+        @ unsigned r = ((@<rgb555> >> 7) & 0xF8);
+        @ unsigned g = ((@<rgb555> >> 2) & 0xF8);
+        @ unsigned b = ((@<rgb555> << 3) & 0xF8);
+        @ return RGB(r,g,b);
+
+
+
+    }
+
+    方法 RGB555_2_BGR24 <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数 注释 = "这个必须是三个字节">
+    {
+        // void rgb_555_2_bgr24(BYTE* p, int rgb555)
+        // {
+        // p[0] = ((rgb555 << 3) & 0xF8);
+        // p[1] = ((rgb555 >> 2) & 0xF8);
+        // p[2] = ((rgb555 >> 7) & 0xF8);
+        // }
+        @ int rgb555 = 0;
+        @ BYTE* p = (BYTE*)@<数据指针>;
+        @ p[0] = ((rgb555 << 3) & 0xF8);
+        @ p[1] = ((rgb555 >> 2) & 0xF8);
+        @ p[2] = ((rgb555 >> 7) & 0xF8);
+        @ return rgb555;
+
+    }
+
+    方法 RGB555_2_RGB565 <公开 静态 类型 = 短整数 @禁止流程检查 = 真>
+    参数 rgb555 <类型 = 短整数>
+    {
+        // #define RGB565_Val(r,g,b) (WORD)((r)<<11 | (g)<<5 | (b))
+        // WORD rgb555_2_rgb565(WORD rgb555)
+        // {
+        // BYTE r,g,b;
+        // FLOAT fRate = 63/31;
+        // //Get R G B
+        // r = (BYTE)(((rgb555 >> 7) & 0xF8)>>3);
+        // g = (BYTE)((((rgb555 >> 2) & 0xF8)>>3)*fRate);
+        // b = (BYTE)(((rgb555 << 3) & 0xF8)>>3);
+        // *(WORD *)pDest = RGB565_Val(RDest,GDest,BDest);
+        // }
+
+
+    }
+
+    方法 整数到字节集F <公开 静态 类型 = 字节集类 @嵌入式方法 = "">
+    参数 要转换的数值 <类型 = 整数>
+    {
+        @ CVolMem(&@<要转换的数值>,sizeof(INT))
+    }
+
+    #
+    #
+    #
+    # //===
+
+    方法 取代码F <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 文本 <类型 = 文本型>
+    参数 位置 <类型 = 整数 注释 = "从0开始" @默认值 = 0>
+    {
+        @  (INT)(@<文本>.GetText ()[@<位置>])
+
+    }
+
+    方法 字符到整数 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 一个字符 <类型 = 字符>
+    {
+        @  (INT)@<一个字符>
+    }
+
+    方法 四舍五入F <公开 静态 类型 = 小数 返回值注释 = "返回处理后的数" @禁止流程检查 = 真>
+    参数 要处理的数 <类型 = 小数>
+    参数 保留小数点后几位 <类型 = 整数 @默认值 = 2>
+    {
+        @    double dRetval;
+        @    double dMod = 0.0000001;
+        @    if (@<要处理的数><0.0) dMod=-0.0000001;
+        @    dRetval=@<要处理的数>;
+        @    dRetval+=(5.0/pow(10.0,@<保留小数点后几位>+1.0));
+        @    dRetval*=pow(10.0,@<保留小数点后几位>);
+        @    dRetval=floor(dRetval+dMod);
+        @    dRetval/=pow(10.0,@<保留小数点后几位>);
+        @    return(dRetval);
+
+
+    }
+
+    方法 字符F <公开 静态 类型 = 文本型 @嵌入式方法 = "">
+    参数 代码 <类型 = 整数>
+    {
+        @ CVolString( (wchar_t)@<代码>)
+    }
+
+    方法 延时F <公开 静态 @嵌入式方法 = "">
+    参数 时长 <类型 = 整数>
+    {
+        @ Sleep(@<时长>)
+
+    }
+
+    方法 CoInitialize_F <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ ::CoInitialize(NULL)
+
+    }
+
+    方法 CoUninitialize_F <公开 静态 @嵌入式方法 = "">
+    {
+        @ ::CoUninitialize()
+    }
+
+    方法 处理事件F <公开 静态>
+    {
+        @ MSG msg;
+        @ while ( ::PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) != 0) 
+        @ {
+        @     DispatchMessage(&msg);
+        @     TranslateMessage(&msg);
+        @ }
+
+    }
+
+    方法 延迟f <公开 静态>
+    参数 秒 <类型 = 整数>
+    {
+        延时_不卡界面 (秒 * 1000 * 1000)
+
+
+    }
+
+    方法 延时_不卡界面 <公开 静态>
+    参数 时长 <类型 = 长整数 注释 = "微妙">
+    {
+        @     HANDLE hEvent = ::CreateWaitableTimer(NULL,FALSE,NULL);
+        @     LARGE_INTEGER ltm;
+        @     ltm.QuadPart =-10*@<时长>;
+        @     ::SetWaitableTimer(hEvent,&ltm,0,NULL,NULL,FALSE);
+        @     while(MsgWaitForMultipleObjects(1, &hEvent, FALSE, INFINITE,QS_ALLEVENTS ) != WAIT_OBJECT_0)
+        @     {
+        @         MSG msg;
+        @         while ( ::PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) != 0 ) 
+        @         {
+        @              DispatchMessage(&msg);
+        @              TranslateMessage(&msg);
+        @         }
+        @     }
+        @     CloseHandle(hEvent);
+
+    }
+
+    方法 取启动时间_整数 <公开 静态 类型 = 整数 注释 = "WinBase.h" @嵌入式方法 = "">
+    {
+        @  (INT)GetTickCount()
+    }
+
+    方法 取启动时间_长整数 <公开 静态 类型 = 长整数 注释 = "WinBase.h" @禁止流程检查 = 真>
+    {
+
+        @   LARGE_INTEGER TicksPerSecond = { 0 };
+        @   LARGE_INTEGER Tick;
+        @   if (!TicksPerSecond.QuadPart)
+        @    QueryPerformanceFrequency(&TicksPerSecond);
+        @   QueryPerformanceCounter(&Tick);
+        @   __int64 Seconds = Tick.QuadPart / TicksPerSecond.QuadPart;
+        @   __int64 LeftPart = Tick.QuadPart - (TicksPerSecond.QuadPart*Seconds);
+        @   __int64 MillSeconds = LeftPart * 1000 / TicksPerSecond.QuadPart;
+        @   __int64 Ret = Seconds * 1000 + MillSeconds;
+        @   return Ret;
+    }
+
+    方法 取DLL函数地址 <公开 静态 类型 = 长整数 @嵌入式方法 = "">
+    参数 DLL名称 <类型 = 文本型>
+    参数 函数名称 <@匹配类型 = 所有类型>
+    {
+        @ (INT64)GetProcAddress (LoadLibrary (@<DLL名称>),@<函数名称>)
+
+    }
+
+    方法 添加Dll搜索目录f <公开 静态 @嵌入式方法 = "">
+    参数 目录 <类型 = 文本型>
+    {
+        @ SetDllDirectory(@<目录>)
+    }
+
+    方法 恢复Dll搜索目录f <公开 静态 @嵌入式方法 = "">
+    {
+        @ SetDllDirectory(NULL)
+    }
+
+    方法 取运行目录f <公开 静态 类型 = 文本型>
+    {
+        变量 返回值 <类型 = 文本型>
+        @  TCHAR lpBuffer[1024] = {0};
+        @  GetModuleFileName(NULL,lpBuffer,1024);
+        @  PathRemoveFileSpec(lpBuffer);
+        @ @<返回值> = lpBuffer;
+        返回 (返回值)
+    }
+
+    方法 取可执行文件路径 <公开 静态 类型 = 文本型>
+    {
+        变量 返回值 <类型 = 文本型>
+        @  TCHAR lpBuffer[1024] = {0};
+        @  GetModuleFileName(NULL,lpBuffer,1024);
+        @ @<返回值> = lpBuffer;
+        返回 (返回值)
+
+
+    }
+
+    方法 程序_是否64位 <公开 静态 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return (sizeof(int*) == 4 )?false:true;
+    }
+
+    方法 程序_取运行目录 <公开 静态 类型 = 文本型>
+    {
+        变量 返回值 <类型 = 文本型>
+        @  TCHAR lpBuffer[1024] = {0};
+        @  GetModuleFileName(NULL,lpBuffer,1024);
+        @  PathRemoveFileSpec(lpBuffer);
+        @ @<返回值> = lpBuffer;
+        返回 (返回值)
+
+    }
+
+    方法 程序_取名称与后缀 <公开 静态 类型 = 文本型>
+    {
+        变量 返回值 <类型 = 文本型>
+        @  TCHAR lpBuffer[1024] = {0};
+        @  GetModuleFileName(NULL,lpBuffer,1024);
+        @  PathStripPath(lpBuffer);
+        @ @<返回值> = lpBuffer;
+        返回 (返回值)
+
+    }
+
+    方法 程序_取完整路径 <公开 静态 类型 = 文本型 注释 = "取自身完整路径">
+    {
+        变量 返回值 <类型 = 文本型>
+        @  TCHAR lpBuffer[1024] = {0};
+        @  GetModuleFileName(NULL,lpBuffer,1024);
+        @ @<返回值> = lpBuffer;
+        返回 (返回值)
+    }
+
+    方法 进制_任意进制文本到任意进制文本 <公开 静态 类型 = 文本型 注释 = "最高只支持一个长整数这么大的文本">
+    参数 转换前的文本 <类型 = 文本型>
+    参数 转换前的进制 <类型 = 整数>
+    参数 转换后的进制 <类型 = 整数>
+    {
+        变量 临时数据 <类型 = 长整数>
+        临时数据 = 进制_任意进制文本到长整数 (转换前的文本, 转换前的进制)
+        返回 (进制_长整数到任意进制文本 (临时数据, 转换后的进制))
+    }
+
+    方法 进制_任意进制文本到整数 <公开 静态 类型 = 整数 注释 = "2 - 36进制 到10进制" 注释 = "long strtol( const char *nptr, char **endptr, int base );"
+            注释 = "long wcstol( const wchar_t *nptr, wchar_t **endptr, int base );" @禁止流程检查 = 真>
+    参数 转换前的文本 <类型 = 文本型>
+    参数 转换前的进制 <类型 = 整数>
+    {
+        @ wchar_t* lpend = NULL;
+        @ return wcstol(@<转换前的文本>,&lpend,@<转换前的进制>);
+    }
+
+    方法 进制_整数到任意进制文本 <公开 静态 类型 = 文本型 注释 = "2 - 36进制 到10进制" 注释 = "char *_itoa( int value, char *string, int radix );"
+            注释 = "char *_i64toa( __int64 value, char *string, int radix );"
+            注释 = "char * _ui64toa( unsigned _int64 value, char *string, int radix );"
+            注释 = "wchar_t * _itow( int value, wchar_t *string, int radix );"
+            注释 = "wchar_t * _i64tow( __int64 value, wchar_t *string, int radix );"
+            注释 = "wchar_t * _ui64tow( unsigned __int64 value, wchar_t *string, int radix );" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 转换前的数 <类型 = 整数>
+    参数 转换后的进制 <类型 = 整数>
+    {
+        @ wchar_t buffer[20] = {0};
+        @ _itow(@<转换前的数>,buffer,@<转换后的进制>);
+        @ return buffer;
+    }
+
+    # //===
+
+    方法 进制_任意进制文本到长整数 <公开 静态 类型 = 长整数 注释 = "2 - 36进制 到10进制" 注释 = "long strtol( const char *nptr, char **endptr, int base );"
+            注释 = "long wcstol( const wchar_t *nptr, wchar_t **endptr, int base );" 折叠 @禁止流程检查 = 真>
+    参数 转换前的文本 <类型 = 文本型>
+    参数 转换前的进制 <类型 = 整数>
+    {
+        @ wchar_t* lpend = NULL;
+        @ return wcstoll(@<转换前的文本>,&lpend,@<转换前的进制>);
+    }
+
+    方法 进制_长整数到任意进制文本 <公开 静态 类型 = 文本型 注释 = "2 - 36进制 到10进制" 注释 = "char *_itoa( int value, char *string, int radix );"
+            注释 = "char *_i64toa( __int64 value, char *string, int radix );"
+            注释 = "char * _ui64toa( unsigned _int64 value, char *string, int radix );"
+            注释 = "wchar_t * _itow( int value, wchar_t *string, int radix );"
+            注释 = "wchar_t * _i64tow( __int64 value, wchar_t *string, int radix );"
+            注释 = "wchar_t * _ui64tow( unsigned __int64 value, wchar_t *string, int radix );" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 转换前的数 <类型 = 长整数>
+    参数 转换后的进制 <类型 = 整数>
+    {
+        @ wchar_t buffer[40] = {0};
+        @ _i64tow(@<转换前的数>,buffer,@<转换后的进制>);
+        @ return buffer;
+    }
+
+    方法 程序_取名称 <公开 静态 类型 = 文本型 折叠>
+    {
+        变量 返回值 <类型 = 文本型>
+        @  TCHAR lpBuffer[1024] = {0};
+        @  GetModuleFileName(NULL,lpBuffer,1024);
+        @  PathRemoveExtension(lpBuffer);
+        @  PathStripPath(lpBuffer);
+        @ @<返回值> = lpBuffer;
+        返回 (返回值)
+
+    }
+
+    方法 取实例句柄 <公开 静态 类型 = 变整数 @禁止流程检查 = 真>
+    参数 模块名称 <类型 = 文本型 注释 = "模块名称 如果为空，则取当前程序的实例句柄" @默认值 = "">
+    {
+        如果 (模块名称 == "")
+        {
+            @ return (@dt<变整数>)::GetModuleHandle (0);
+        }
+        @ return (@dt<变整数>)::GetModuleHandle (@<模块名称>);
+    }
+
+    方法 程序_取命令行数组 <公开 静态 类型 = 整数 返回值注释 = "返回命令行数量" @禁止流程检查 = 真>
+    参数 用来保存命令行 <类型 = 文本数组类>
+    {
+        变量 临时文本 <类型 = 文本型>
+        @ int argc = 0;
+        @ LPWSTR *wargv = CommandLineToArgvW(GetCommandLine(),&argc);
+        @ for (int i = 0; i < argc; i++)
+        @ {
+        @   @<临时文本> = wargv[i];
+        用来保存命令行.加入成员 (临时文本)
+        @ }
+        @ GlobalFree((HGLOBAL)wargv);
+        @ return argc;
+    }
+
+    方法 memcpy <公开 静态 @嵌入式方法 = "">
+    参数 内存指针 <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+        @ memcpy((void*)@<内存指针>,(const void*)@<数据指针>,@<数据大小>)
+
+    }
+
+    方法 memcmp <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 内存指针 <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+        @ memcmp((void*)@<内存指针>,(const void*)@<数据指针>,@<数据大小>)
+
+    }
+
+    方法 指针_比较内存 <公开 静态 类型 = 整数 注释 = "对比两个指针的内存数据是否一样" 注释 = "小于0 表示 指针1的数据 小于 指针2的" 注释 = "等于0 表示两个指针数据是一样的"
+            注释 = "大于0 表示指针2的数据大于指针1的" @嵌入式方法 = "">
+    参数 指针1 <类型 = 变整数>
+    参数 指针2 <类型 = 变整数>
+    参数 长度 <类型 = 整数 注释 = "代表 比较指针1 和 指针2 要比较的数据长度">
+    {
+        @ memcmp((void*)@<指针1>,(const void*)@<指针2>,@<长度>)
+    }
+
+    方法 CopyMemory <公开 静态 @嵌入式方法 = "">
+    参数 目标指针 <类型 = 变整数>
+    参数 要拷贝的指针 <类型 = 变整数>
+    参数 拷贝的大小 <类型 = 整数>
+    {
+        @ CopyMemory ((void*)@<目标指针>,(const void *)@<要拷贝的指针>,@<拷贝的大小>)
+    }
+
+    方法 指针_拷贝 <公开 静态 @嵌入式方法 = "">
+    参数 目标指针 <类型 = 变整数>
+    参数 要拷贝的指针 <类型 = 变整数>
+    参数 拷贝的大小 <类型 = 整数>
+    {
+        @ CopyMemory ((void*)@<目标指针>,(const void *)@<要拷贝的指针>,@<拷贝的大小>)
+    }
+
+    方法 指针_取变量指针 <公开 静态 类型 = 变整数 注释 = "指针_到自定义类型 (测试类, 指针_取数据指针 (aa)).打印方法 ()" @嵌入式方法 = "">
+    参数 对象 <@匹配类型 = 所有类型>
+    {
+        @ (@dt<变整数>)&@<对象>
+    }
+
+    方法 指针_到自定义类型 <公开 静态 注释 = "指针_到自定义类型 (测试类, 指针_取数据指针 (aa)).打印方法 ()" @嵌入式方法 = "">
+    参数 要强制转换的类型 <@需求类型 = 数据类型 @匹配类型 = 所有类型 @返回值类型 = 0>
+    参数 参数 <类型 = 变整数>
+    {
+        @ *(@<要强制转换的类型>*)@<参数>
+    }
+
+    方法 指针_到整数 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 参数 <类型 = 变整数>
+    {
+        @ *(int*)@<参数>
+    }
+
+    方法 指针_创建对象 <公开 静态 类型 = 变整数 注释 = "创建一个对象，并返回其指针 使用完毕后，调用 指针_销毁对象 来销毁" @嵌入式方法 = "">
+    参数 要创建的对象类型 <@需求类型 = 数据类型 @匹配类型 = 所有类型>
+    {
+        @  (@dt<变整数>) new @<要创建的对象类型>
+    }
+
+    方法 指针_销毁对象 <公开 静态 @嵌入式方法 = "">
+    参数 对象类型 <@需求类型 = 数据类型 @匹配类型 = 所有类型>
+    参数 对象指针 <类型 = 变整数 注释 = "这个参数必须是  指针_创建对象 的返回值">
+    {
+        @ delete (@<对象类型>*)@<对象指针>
+    }
+
+    方法 指针_UTF8到文本 <公开 静态 类型 = 文本型 @禁止流程检查 = 真>
+    参数 utf文本指针 <类型 = 变整数 注释 = "指向utf8文本的指针">
+    {
+        如果 (utf文本指针 == 0)
+        {
+            返回 ("")
+        }
+        @ return @an<CVolString> ( (const char*)@<utf文本指针> );
+    }
+
+    方法 指针_多字节到文本 <公开 静态 类型 = 文本型 @嵌入式方法 = "">
+    参数 多字节指针 <类型 = 变整数>
+    {
+        @  @an<CVolString> (GetWideText((const char*)@<多字节指针>, CVolMem(), NULL) )
+
+
+
+
+
+
+
+    }
+
+    # 系统相关==
+
+    方法 系统_是否64位 <公开 静态 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ #ifndef PROCESSOR_ARCHITECTURE_AMD64
+        @  #define PROCESSOR_ARCHITECTURE_AMD64 9
+        @ #endif
+        @  typedef void (WINAPI *LPGetNativeSystemInfo)(LPSYSTEM_INFO); 
+        @  LPGetNativeSystemInfo pGetNativeSystemInfo = (LPGetNativeSystemInfo)GetProcAddress(GetModuleHandle(TEXT("kernel32.dll")),"GetNativeSystemInfo"); 
+        @  SYSTEM_INFO cur_system_info;
+        @  pGetNativeSystemInfo(&cur_system_info);
+        @  WORD system_str= cur_system_info.wProcessorArchitecture;
+        @  //判断是否为64位系统
+        @  if (system_str == PROCESSOR_ARCHITECTURE_IA64 || system_str == PROCESSOR_ARCHITECTURE_AMD64)
+        @  {
+        @   return true;
+        @  }
+        @  return false;
+
+
+    }
+
+    方法 系统_取CPU核心数F <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @  SYSTEM_INFO SysemInfo;
+        @  GetSystemInfo(&SysemInfo);    //获取系统信息
+        @  return (INT) SysemInfo.dwNumberOfProcessors;   
+
+    }
+
+    方法 系统_取内存大小F <公开 静态 类型 = 小数 返回值注释 = "单位 GB" @禁止流程检查 = 真>
+    {
+        @  MEMORYSTATUS ms;              //记录内容空间信息的结构体变量
+        @  GlobalMemoryStatus(&ms);   //调用GlobalMemoryStatus()函数获取内存信息
+        @  double fGB = (double)ms.dwTotalPhys / 1024 / 1024 / 1024;                                //总的物理内存大小
+        @  //float y = (float)(ms.dwTotalPhys - ms.dwAvailPhys) / 1024 / 1024;  //已用物理内存大小
+        @  //int k = ms.dwAvailPhys / 1024 / 1024 ;                                         //可用物理内存大小
+        @  return fGB;
+    }
+
+    # //===
+
+    方法 堆内存_获取句柄 <公开 静态 类型 = 变整数 注释 = "GetProcessHeap函数获取调用进程堆的句柄。" 注释 = "然后，此句柄可用于对HeapAlloc、HeapAlloc、"
+            注释 = "HeapFree和HeapSize函数的后续调用" @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>)GetProcessHeap()
+    }
+
+    方法 ""
+    {
+        // GetProcessHeaps
+    }
+
+    方法 堆内存_分配 <公开>
+    参数 堆句柄 <类型 = 变整数>
+    {
+        @ HeapAlloc(@<堆句柄>,)
+
+
+
+    }
+}
+
+类 ______字节集辅助_全局类 <公开 @全局类 = 真>
+{
+    方法 字节集_替换F <公开 静态 类型 = 字节集类>
+    参数 原始字节集 <类型 = 字节集类>
+    参数 欲替换的字节集 <类型 = 字节集类>
+    参数 用作替换的字节集 <类型 = 字节集类>
+    参数 起始位置 <类型 = 整数 @默认值 = 0>
+    参数 替换次数 <类型 = 整数 注释 = "-1表示全部替换，" @默认值 = -1>
+    {
+        变量 i <类型 = 整数>
+        变量 临时起始位置 <类型 = 整数>
+        变量 找到的位置 <类型 = 整数>
+        变量 返回值 <类型 = 字节集类>
+        如果 (替换次数 == -1)
+        {
+            替换次数 = 0x7fffffff
+        }
+
+        调试输出 (替换次数)
+
+        返回值 = 原始字节集
+
+        临时起始位置 = 起始位置
+        循环 (0, 替换次数, i)
+        {
+            找到的位置 = 寻找字节集 (返回值, 欲替换的字节集, 临时起始位置)
+            如果 (找到的位置 == -1)
+            {
+                调试输出 (i, 找到的位置, 欲替换的字节集)
+
+                跳出循环
+            }
+
+            字节集替换 (返回值, 找到的位置, 取字节集长度 (欲替换的字节集), 用作替换的字节集)
+            临时起始位置 = 找到的位置 + 取字节集长度 (欲替换的字节集)
+
+        }
+        返回 (返回值)
+
+    }
+
+    方法 字节集_取右边_从右往左找 <公开 静态 类型 = 字节集类>
+    参数 原始数据 <类型 = 字节集类>
+    参数 要查找的数据 <类型 = 字节集类>
+    参数 查找起始位置 <类型 = 整数 注释 = "默认从尾部查找" @默认值 = 数值范围.最大整数值>
+    {
+
+        变量 返回值 <类型 = 字节集类>
+        变量 找到的位置 <类型 = 整数>
+        找到的位置 = 倒找字节集 (原始数据, 要查找的数据, 查找起始位置)
+        如果 (找到的位置 == -1)
+        {
+            返回 (返回值)
+        }
+        返回值 = 取字节集右边 (原始数据, 取字节集长度 (原始数据) - 找到的位置 - 取字节集长度 (要查找的数据))
+
+        返回 (返回值)
+    }
+
+    方法 字节集_取左边_从左往右找 <公开 静态 类型 = 字节集类>
+    参数 原始数据 <类型 = 字节集类>
+    参数 要查找的数据 <类型 = 字节集类>
+    参数 查找起始位置 <类型 = 整数 注释 = "默认从尾部查找" @默认值 = 0>
+    {
+
+        变量 返回值 <类型 = 字节集类>
+        变量 找到的位置 <类型 = 整数>
+        找到的位置 = 寻找字节集 (原始数据, 要查找的数据, 查找起始位置)
+        如果 (找到的位置 == -1)
+        {
+            返回 (返回值)
+        }
+        返回值 = 取字节集左边 (原始数据, 找到的位置)
+        返回 (返回值)
+    }
+
+    方法 字节集_取中间_从左往右查找 <公开 静态 类型 = 字节集类>
+    参数 原始数据 <类型 = 字节集类>
+    参数 开始标记 <类型 = 字节集类>
+    参数 结束标记 <类型 = 字节集类>
+    {
+        变量 返回值 <类型 = 字节集类>
+        变量 开始位置 <类型 = 整数>
+        变量 结束位置 <类型 = 整数>
+        开始位置 = 寻找字节集 (原始数据, 开始标记, 0)
+        如果 (开始位置 == -1)
+        {
+            返回 (返回值)
+        }
+
+        结束位置 = 寻找字节集 (原始数据, 结束标记, 开始位置 + 取字节集长度 (开始标记))
+        如果 (结束位置 == -1)
+        {
+            返回 (返回值)
+        }
+
+        开始位置 = 开始位置 + 取字节集长度 (开始标记)
+        返回值 = 取字节集中间 (原始数据, 开始位置, 结束位置 - 开始位置)
+
+        返回 (返回值)
+
+
+
+
+    }
+
+    #
+}

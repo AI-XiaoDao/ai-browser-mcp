@@ -1,0 +1,1132 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 FBrowser.回调 <注释 = "各种浏览器事件回调和设置回调合集" "">
+
+类 类_FBrowser_下载图片回调 <公开 @视窗.后缀文本 = "public FBroHsDownloadImageCallback" @禁止创建对象 = 真>
+{
+    方法 类_初始化
+    {
+        @ type_ = DownloadImageCallbackType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #
+    # virtual void OnDownloadImageFinished(const CefString& image_url,int http_status_code,CefRefPtr<CefImage> image) override;
+    # <> </include>
+    #
+    # void @sn<current_class>::OnDownloadImageFinished(const CefString& image_url,int http_status_code,CefRefPtr<CefImage> image) {
+    #   @<图片下载完成>(CWString(image_url.ToWString().c_str()),http_status_code,@dt<类_FBrowser_图片>(image));
+    # };
+    # @end
+    #
+
+    方法 图片下载完成 <公开 @虚拟方法 = 可覆盖>
+    参数 图片链接 <类型 = 文本型>
+    参数 状态码 <类型 = 整数>
+    参数 图片 <类型 = 类_FBrowser_图片>
+    {
+
+    }
+}
+
+类 类_FBrowser_打开文件对话框回调 <公开 @视窗.后缀文本 = "public FBroHsFileDialogCallback" @禁止创建对象 = 真 "">
+{
+    方法 类_初始化
+    {
+        @ type_ = FileDialogCallbackType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void FBroHs_OnFileDialogDismissed(const wchar_t * file_paths) override;
+    # <> </include>
+    #
+    # void @sn<current_class>::FBroHs_OnFileDialogDismissed(const wchar_t * file_paths) {
+    #   @<即将关闭文件对话框>(CVolString(file_paths));
+    # }
+    # @end
+
+    方法 即将关闭文件对话框 <公开 @虚拟方法 = 可覆盖>
+    参数 文件路径 <类型 = 文本型 注释 = "多个以\";\"隔开">
+    {
+
+    }
+}
+
+类 类_FBrowser_打印为PDF回调 <公开 @视窗.后缀文本 = "public FBroHsPdfPrintCallback" @禁止创建对象 = 真 "">
+{
+    方法 类_初始化
+    {
+        @ type_ = PdfPrintCallbackType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void OnPdfPrintFinished(const CefString& path, bool ok) override;
+    # <> </include>
+    #
+    # void @sn<current_class>::OnPdfPrintFinished(const CefString& path, bool ok) {
+    #   @<即将完成打印>(CVolString(path.ToWString().c_str()),ok);
+    # }
+    # @end
+    #
+
+    方法 即将完成打印 <公开 @虚拟方法 = 可覆盖>
+    参数 路径 <类型 = 文本型>
+    参数 是否成功 <类型 = 逻辑型>
+    {
+
+    }
+
+    #
+}
+
+类 类_FBrowser_字符串回调 <公开 @视窗.后缀文本 = "public FBroHsStringVisitor" @禁止创建对象 = 真 "">
+{
+    方法 类_初始化
+    {
+        @ type_ = StringVisitorType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void Visit(const CefString& string) override;
+    # <> </include>
+    #
+    # void @sn<current_class>::Visit(const CefString& string){
+    #   @<回调>(CVolString(string.ToWString().c_str()));
+    # }
+    # @end
+
+    方法 回调 <公开 @虚拟方法 = 可覆盖>
+    参数 文本 <类型 = 文本型>
+
+    #
+}
+
+类 类_FBrowser_JS回调 <公开 @视窗.后缀文本 = "public FBroHsJsCallback" @禁止创建对象 = 真 "">
+{
+    方法 类_初始化
+    {
+        @ type_ = JsCallbackType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void Callback(CefRefPtr<CefListValue> pListValue) override;
+    # <> </include>
+    #
+    # void @sn<current_class>::Callback(CefRefPtr<CefListValue> pListValue){
+    #   @<回调>(@dt<类_FBrowser_列表值>(pListValue));
+    # }
+    # @end
+
+    方法 回调 <公开 @虚拟方法 = 可覆盖>
+    参数 返回结果 <类型 = 类_FBrowser_列表值 注释 = "列表索引0为类指针；1为值类型，参考：JS返回值类型.；2为类型对应值">
+
+    #
+}
+
+类 类_FBrowser_DOM回调 <公开 @视窗.后缀文本 = "public FBroHsDOMVisitor" @禁止创建对象 = 真>
+{
+    方法 类_初始化
+    {
+        @ type_ = DOMVisitorType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void Visit(CefRefPtr<CefDOMDocument> document) override;
+    # <> </include>
+    #
+    # void @sn<current_class>::Visit(CefRefPtr<CefDOMDocument> document){
+    #   @<回调>(@dt<类_FBrowser_DOM文档>(document));
+    # }
+    # @end
+
+    方法 回调 <公开 @虚拟方法 = 可覆盖>
+    参数 DOM文档 <类型 = 类_FBrowser_DOM文档 注释 = "列表索引0为类指针，1为值类型，2为类型对应值">
+
+    #
+}
+
+类 类_FBrowser_选择证书回调 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefSelectClientCertificateCallback> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefSelectClientCertificateCallback> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set (CefRefPtr<CefSelectClientCertificateCallback> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 选择 <公开>
+    参数 证书 <类型 = 类_FBrowser_X509证书>
+    {
+        @ if(!IsEmpty ()) FBroSelectClientCertificateCallback_Select(m_class,@<证书>.m_class);
+    }
+
+    #
+    #
+}
+
+类 类_FBrowser_授权回调 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefAuthCallback> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefAuthCallback> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set (CefRefPtr<CefAuthCallback> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 继续 <公开>
+    参数 用户名 <类型 = 文本型>
+    参数 密码 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroAuthCallback_Continue(m_class,@<用户名>.GetText(),@<密码>.GetText());
+    }
+
+    #
+}
+
+类 类_FBrowser_运行命令菜单回调 <公开 注释 = "CefRunContextMenuCallback" 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefRunContextMenuCallback> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefRunContextMenuCallback> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set (CefRefPtr<CefRunContextMenuCallback> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 继续 <公开>
+    参数 命令ID <类型 = 整数>
+    参数 事件标识 <类型 = 整数>
+    {
+        @ if(!IsEmpty ()) FBroRunContextMenuCallback_Continue(m_class,@<命令ID>,@<事件标识>);
+
+    }
+
+    方法 取消 <公开>
+    {
+        @ if(!IsEmpty ()) FBroRunContextMenuCallback_Cancel(m_class);
+    }
+
+    #
+}
+
+类 类_FBrowser_即将下载回调 <公开 注释 = "CefBeforeDownloadCallback" 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefBeforeDownloadCallback> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefBeforeDownloadCallback> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set (CefRefPtr<CefBeforeDownloadCallback> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 继续 <公开>
+    参数 存放位置 <类型 = 文本型>
+    参数 弹出对话框 <类型 = 逻辑型>
+    {
+        @ if(!IsEmpty()) FBroHsBeforeDownloadCallback_Continue(m_class,@<存放位置>.GetText(),@<弹出对话框>);
+    }
+}
+
+类 类_FBrowser_正在下载回调 <公开 注释 = "CefDownloadItemCallback" 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefDownloadItemCallback> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefDownloadItemCallback> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set (CefRefPtr<CefDownloadItemCallback> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 取消 <公开>
+    {
+        @ if(!IsEmpty()) FBroHsBeforeDownloadCallback_Cancel(m_class);
+    }
+
+    方法 暂停 <公开>
+    {
+        @ if(!IsEmpty()) FBroHsBeforeDownloadCallback_Pause(m_class);
+    }
+
+    方法 恢复 <公开>
+    {
+        @ if(!IsEmpty()) FBroHsBeforeDownloadCallback_Resume(m_class);
+    }
+
+    #
+    #
+}
+
+类 类_FBrowser_对话框回调 <公开 注释 = "CefFileDialogCallback" 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefFileDialogCallback> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefFileDialogCallback> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set (CefRefPtr<CefFileDialogCallback> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 继续 <公开>
+    参数 文件路径 <类型 = FBrowser_文本数组 注释 = "设置要上传的文件路径">
+    {
+        @ if(!IsEmpty()) FBroFileDialogCallback_Continue(m_class,@<文件路径>.m_data);
+    }
+
+    方法 取消 <公开>
+    {
+        @ if(!IsEmpty()) FBroFileDialogCallback_Cancel(m_class);
+    }
+
+    #
+}
+
+类 类_FBrowser_JS对话框回调 <公开 注释 = "CefJSDialogCallback" 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefJSDialogCallback> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefJSDialogCallback> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set (CefRefPtr<CefJSDialogCallback> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 继续 <公开>
+    参数 成功 <类型 = 逻辑型>
+    参数 用户输入 <类型 = 文本型 注释 = "设置要上传的文件路径">
+    {
+        @ if(!IsEmpty()) FBroJSDialogCallback_Continue(m_class,@<成功>,@<用户输入>.GetText());
+
+
+
+    }
+}
+
+类 类_FBrowser_任务回调 <公开 @视窗.后缀文本 = "public FBroHsTask" @禁止创建对象 = 真>
+{
+    方法 类_初始化
+    {
+        @ type_ = TaskType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void Execute() override;
+    # <> </include>
+    #
+    # void @sn<current_class>::Execute() {@<执行>();}
+    # @end
+    #
+
+    方法 执行 <公开 @虚拟方法 = 可覆盖>
+    {
+
+
+
+    }
+}
+
+类 类_FBrowser_Cookie回调 <公开 @视窗.后缀文本 = "public FBroHsCookieVisitor" @禁止创建对象 = 真>
+{
+    方法 类_初始化
+    {
+        @ type_ = CookieVisitorType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void Start() override;
+    #     virtual void End() override;
+    #     virtual bool Visit(POINT_COOKIEDATA cookie,int count,int total,bool& deleteCookie) override;
+    # <> </include>
+    #
+    # void @sn<current_class>::Start(){@<开始>();}
+    # void @sn<current_class>::End(){@<结束>();}
+    # bool @sn<current_class>::Visit(POINT_COOKIEDATA cookie,int count,int total,bool& deleteCookie) {
+    #   @dt<逻辑型类> boolclass;BOOL *boolstr=(BOOL *)boolclass.GetDataPtr();*boolstr=deleteCookie;
+    #   bool retbool=@<访问>(@dt<FBrowser_Cookie数据>(*cookie),count,total,boolclass);
+    #   deleteCookie=*boolstr;
+    #   return retbool;
+    # };
+    # @end
+
+    方法 开始 <公开 @虚拟方法 = 可覆盖>
+    {
+
+    }
+
+    方法 结束 <公开 @虚拟方法 = 可覆盖>
+    {
+
+    }
+
+    方法 访问 <公开 类型 = 逻辑型 注释 = "返回真继续，返回假停止获取" @虚拟方法 = 可覆盖>
+    参数 Cookie数据 <类型 = FBrowser_Cookie数据>
+    参数 当前项 <类型 = 整数>
+    参数 总数 <类型 = 整数>
+    参数 删除当前cookie <类型 = 逻辑型类 注释 = "设置为真，则删除当前项">
+    {
+        返回 (真)
+
+
+
+    }
+}
+
+类 类_FBrowser_JS交互回调 <公开 折叠 "">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefMessageRouterBrowserSide::Handler::Callback> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefMessageRouterBrowserSide::Handler::Callback> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == nullptr; }
+    # inline_ void Set (CefRefPtr<CefMessageRouterBrowserSide::Handler::Callback> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 成功 <公开>
+    参数 响应文本 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroJSFunctionCallback_Success(m_class,@<响应文本>.GetText());
+    }
+
+    方法 失败 <公开>
+    参数 错误代码 <类型 = 整数>
+    参数 错误文本 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroJSFunctionCallback_Failure(m_class,@<错误代码>,@<错误文本>.GetText());
+    }
+
+    #
+    #
+}
+
+类 类_FBrowser_回调 <公开 折叠 "">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefCallback> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefCallback> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == nullptr; }
+    # inline_ void Set (CefRefPtr<CefCallback> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 继续 <公开>
+    {
+        @ if(!IsEmpty()) FBroCallback_Continue(m_class);
+    }
+
+    方法 取消 <公开>
+    {
+        @ if(!IsEmpty()) FBroCallback_Cancel(m_class);
+    }
+
+    #
+    #
+}
+
+类 类_FBrowser_资源忽略回调 <公开 折叠 "">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefResourceSkipCallback> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefResourceSkipCallback> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == nullptr; }
+    # inline_ void Set (CefRefPtr<CefResourceSkipCallback> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 继续 <公开>
+    参数 忽略大小 <类型 = 长整数>
+    {
+        @ if(!IsEmpty()) FBroResourceSkipCallback_Continue(m_class,@<忽略大小>);
+    }
+
+    #
+}
+
+类 类_FBrowser_资源读取回调 <公开 折叠 "">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefResourceReadCallback> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefResourceReadCallback> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == nullptr; }
+    # inline_ void Set (CefRefPtr<CefResourceReadCallback> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 继续 <公开>
+    参数 读取大小 <类型 = 长整数>
+    {
+        @ if(!IsEmpty()) FBroResourceReadCallback_Continue(m_class,@<读取大小>);
+    }
+
+    #
+}
+
+类 类_FBrowser_V8处理程序 <公开 @视窗.后缀文本 = "public FBroHsV8Handler" @禁止创建对象 = 真>
+{
+    方法 类_初始化
+    {
+        @ type_ = V8HandlerType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void Start(INT64 flag) override;
+    #     virtual void End(INT64 flag) override;
+    #     virtual bool Execute(INT64 flag,const CefString& name,CefRefPtr<CefV8Value> object,CefRefPtr<FBroV8ValueList> arguments,CefRefPtr<CefV8Value>& retval,CefRefPtr<FBroString> exception)override;
+    # <> </include>
+    #
+    # void @sn<current_class>::Start(INT64 flag){@<开始>(flag);}
+    # void @sn<current_class>::End(INT64 flag){@<结束>(flag);}
+    # bool @sn<current_class>::Execute(INT64 flag,const CefString& name,CefRefPtr<CefV8Value> object,CefRefPtr<FBroV8ValueList> arguments,CefRefPtr<CefV8Value>& retval,CefRefPtr<FBroString> exception){
+    #   @dt<类_FBrowser_设置V8值> v8value;
+    #   bool retbool=@<执行>(flag,CWString(name.ToWString().c_str()),@dt<类_FBrowser_V8值>(object),@dt<类_FBrowser_V8值数组>(arguments),v8value,@dt<FBrowser_文本>(exception));
+    #   retval=v8value.m_class;return retbool;
+    # }
+    # @end
+
+    方法 开始 <@虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 ""
+    {
+
+    }
+
+    方法 结束 <@虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 ""
+    {
+
+    }
+
+    方法 执行 <公开 类型 = 逻辑型 注释 = "返回假执行失败；返回真，通过返回值类指针返回数据" @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 名字 <类型 = 文本型>
+    参数 项目 <类型 = 类_FBrowser_V8值>
+    参数 参数清单 <类型 = 类_FBrowser_V8值数组>
+    参数 设置返回V8值 <类型 = 类_FBrowser_设置V8值 注释 = "设置返回的V8值">
+    参数 返回异常文本 <类型 = FBrowser_文本 注释 = "设置返回的错误文本">
+    {
+        返回 (假)
+
+
+
+    }
+}
+
+类 类_FBrowser_V8存取器 <公开 @视窗.后缀文本 = "public FBroHsV8Accessor">
+{
+    方法 类_初始化
+    {
+        @ type_ = V8AccessorType;
+        @ _FBRO_SHOW_CLASS_TYPE( _CT (@sn<current_source_class>),0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE( _CT (@sn<current_source_class>),1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void Start(INT64 flag) override;
+    #     virtual void End(INT64 flag) override;
+    #     virtual bool Get(INT64 flag, const CefString& name,const CefRefPtr<CefV8Value> object,CefRefPtr<CefV8Value>& retval,CefRefPtr<FBroString> exception) override ;
+    #     virtual bool Set(INT64 flag, const CefString& name,const CefRefPtr<CefV8Value> object,const CefRefPtr<CefV8Value> value,CefRefPtr<FBroString> exception)override;
+    # <> </include>
+    #
+    # void @sn<current_class>::Start(INT64 flag){@<开始>(flag);}
+    # void @sn<current_class>::End(INT64 flag){@<结束>(flag);}
+    #
+    # bool @sn<current_class>::Get(INT64 flag, const CefString& name,
+    # const CefRefPtr<CefV8Value> object,CefRefPtr<CefV8Value>& retval,
+    # CefRefPtr<FBroString> exception){
+    #   @dt<类_FBrowser_设置V8值> v8value;
+    #   bool retbool = @<获取>(flag,CWString(name.ToWString().c_str()),@dt<类_FBrowser_V8值>(object),v8value,@dt<FBrowser_文本>(exception));
+    #   retval = v8value.m_class;
+    #   return retbool;
+    # }
+    #
+    # bool @sn<current_class>::Set(INT64 flag, const CefString& name,
+    # const CefRefPtr<CefV8Value> object,const CefRefPtr<CefV8Value> value,
+    # CefRefPtr<FBroString> exception){
+    #   return @<设置>(flag,CWString(name.ToWString().c_str()),@dt<类_FBrowser_V8值>(object),@dt<类_FBrowser_V8值>(value),@dt<FBrowser_文本>(exception));
+    # }
+    # @end
+    #
+
+    方法 开始 <@虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 ""
+    {
+
+    }
+
+    方法 结束 <@虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 ""
+    {
+
+    }
+
+    方法 获取 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 名 <类型 = 文本型>
+    参数 对象 <类型 = 类_FBrowser_V8值>
+    参数 设置返回值 <类型 = 类_FBrowser_设置V8值 注释 = "设置对象返回值">
+    参数 返回异常文本 <类型 = FBrowser_文本 注释 = "设置异常返回文本">
+    {
+        返回 (假)
+
+    }
+
+    方法 设置 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 名 <类型 = 文本型>
+    参数 对象 <类型 = 类_FBrowser_V8值>
+    参数 值 <类型 = 类_FBrowser_V8值>
+    参数 返回异常文本 <类型 = FBrowser_文本 注释 = "设置异常返回文本">
+    {
+        返回 (假)
+    }
+}
+
+类 类_FBrowser_V8拦截器 <公开 @视窗.后缀文本 = "public FBroHsV8Interceptor">
+{
+    方法 类_初始化
+    {
+        @ type_ = V8InterceptorType;
+        @ _FBRO_SHOW_CLASS_TYPE( _CT (@sn<current_source_class>),0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE( _CT (@sn<current_source_class>),1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void Start(INT64 flag) override;
+    #     virtual void End(INT64 flag) override;
+    #     virtual bool Get(INT64 flag,const CefString& name,const CefRefPtr<CefV8Value> object,CefRefPtr<CefV8Value>& retval,CefRefPtr<FBroString> exception) override;
+    #     virtual bool Get(INT64 flag,int index,const CefRefPtr<CefV8Value> object,CefRefPtr<CefV8Value>& retval,CefRefPtr<FBroString> exception) override;
+    #     virtual bool Set(INT64 flag,const CefString& name,const CefRefPtr<CefV8Value> object,const CefRefPtr<CefV8Value> value,CefRefPtr<FBroString> exception) override;
+    #     virtual bool Set(INT64 flag,int index,const CefRefPtr<CefV8Value> object,const CefRefPtr<CefV8Value> value,CefRefPtr<FBroString> exception) override;
+    # <> </include>
+    #
+    # void @sn<current_class>::Start(INT64 flag){@<开始>(flag);}
+    # void @sn<current_class>::End(INT64 flag){@<结束>(flag);}
+    # bool @sn<current_class>::Get(INT64 flag,const CefString& name,
+    # const CefRefPtr<CefV8Value> object,
+    # CefRefPtr<CefV8Value>& retval,
+    # CefRefPtr<FBroString> exception) {
+    #   @dt<类_FBrowser_设置V8值> v8value;
+    #   bool retbool = @<获取_名>(flag,CWString(name.ToWString().c_str()),@dt<类_FBrowser_V8值>(object),v8value,@dt<FBrowser_文本>(exception));
+    #   retval = v8value.m_class;
+    #   return retbool;
+    #  };
+    #
+    # bool @sn<current_class>::Get(INT64 flag,int index,
+    # const CefRefPtr<CefV8Value> object,
+    # CefRefPtr<CefV8Value>& retval,
+    # CefRefPtr<FBroString> exception) {
+    #   @dt<类_FBrowser_设置V8值> v8value;
+    #   bool retbool = @<获取_索引>(flag,index,@dt<类_FBrowser_V8值>(object),v8value,@dt<FBrowser_文本>(exception));
+    #   retval = v8value.m_class;
+    #   return retbool;
+    #  };
+    #
+    # bool @sn<current_class>::Set(INT64 flag,const CefString& name,
+    # const CefRefPtr<CefV8Value> object,
+    # const CefRefPtr<CefV8Value> value,
+    # CefRefPtr<FBroString> exception) {
+    #  return @<设置_名>(flag,CWString(name.ToWString().c_str()),@dt<类_FBrowser_V8值>(object),@dt<类_FBrowser_V8值>(value),@dt<FBrowser_文本>(exception));
+    #  };
+    #
+    # bool @sn<current_class>::Set(INT64 flag,int index,
+    # const CefRefPtr<CefV8Value> object,
+    # const CefRefPtr<CefV8Value> value,
+    # CefRefPtr<FBroString> exception) {
+    #  return @<设置_索引>(flag,index,@dt<类_FBrowser_V8值>(object),@dt<类_FBrowser_V8值>(value),@dt<FBrowser_文本>(exception));
+    #  };
+    #
+    # @end
+
+    方法 开始 <@虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    {
+
+    }
+
+    方法 结束 <@虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    {
+
+    }
+
+    方法 获取_名 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 名 <类型 = 文本型>
+    参数 对象 <类型 = 类_FBrowser_V8值>
+    参数 设置返回值 <类型 = 类_FBrowser_设置V8值 注释 = "设置对象返回值">
+    参数 返回异常文本 <类型 = FBrowser_文本 注释 = "设置异常返回文本">
+    {
+        返回 (假)
+
+    }
+
+    方法 设置_名 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 名 <类型 = 文本型>
+    参数 对象 <类型 = 类_FBrowser_V8值>
+    参数 值 <类型 = 类_FBrowser_V8值>
+    参数 返回异常文本 <类型 = FBrowser_文本 注释 = "设置异常返回文本">
+    {
+        返回 (假)
+    }
+
+    方法 获取_索引 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 索引 <类型 = 整数>
+    参数 对象 <类型 = 类_FBrowser_V8值>
+    参数 设置返回值 <类型 = 类_FBrowser_设置V8值 注释 = "设置对象返回值">
+    参数 返回异常文本 <类型 = FBrowser_文本 注释 = "设置异常返回文本">
+    {
+        返回 (假)
+    }
+
+    方法 设置_索引 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 索引 <类型 = 整数>
+    参数 对象 <类型 = 类_FBrowser_V8值>
+    参数 值 <类型 = 类_FBrowser_V8值>
+    参数 返回异常文本 <类型 = FBrowser_文本 注释 = "设置异常返回文本">
+    {
+        返回 (假)
+    }
+}
+
+类 类_FBrowser_插件资源回调 <公开 注释 = "CefGetExtensionResourceCallback" 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefGetExtensionResourceCallback> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefGetExtensionResourceCallback> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == nullptr; }
+    # inline_ void Set (CefRefPtr<CefGetExtensionResourceCallback> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    方法 继续 <公开>
+    参数 读取流 <类型 = 类_FBrowser_读取流>
+    {
+        @ if(!IsEmpty()) FBroGetExtensionResourceCallback_Continue(m_class,@<读取流>.m_class);
+    }
+
+    方法 取消 <公开>
+    {
+        @ if(!IsEmpty()) FBroGetExtensionResourceCallback_Cancel(m_class);
+    }
+
+    #
+}
+
+类 类_FBrowserVIP_通用回调 <公开 @视窗.后缀文本 = "public FBroHsGeneralResultCallback" @禁止创建对象 = 真>
+{
+    方法 类_初始化
+    {
+        @ type_ = GeneralResultCallbackType;
+        @ _FBRO_SHOW_CLASS_TYPE( _CT (@sn<current_source_class>),0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE( _CT (@sn<current_source_class>),1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void Callback_Data(CefRefPtr<CefBrowser> browser,int message_id,bool success,const void* data,size_t datasize) override;
+    #     virtual void Callback_ListData(CefRefPtr<CefBrowser> browser,int message_id,bool success,CefRefPtr<CefListValue> listvalue) override;
+    # <> </include>
+    #
+    #     void @sn<current_class>::Callback_Data(CefRefPtr<CefBrowser> browser,int message_id,bool success,const void* data,size_t datasize){
+    #         @<数据回调>(@dt<类_FBrowser_浏览器>(browser),message_id,success,(int64_t)data,(@dt<整数>)datasize);
+    # };
+
+    方法 数据回调 <公开 @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 标识ID <类型 = 整数>
+    参数 成功 <类型 = 逻辑型>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+
+    }
+
+    #
+    #     void @sn<current_class>::Callback_ListData(CefRefPtr<CefBrowser> browser,int message_id,bool success,CefRefPtr<CefListValue> listvalue){
+    #         @<列表数据回调>(@dt<类_FBrowser_浏览器>(browser),message_id,success,@dt<类_FBrowser_列表值>(listvalue));
+    # };
+
+    方法 列表数据回调 <公开 @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 标识ID <类型 = 整数>
+    参数 成功 <类型 = 逻辑型>
+    参数 列表值 <类型 = 类_FBrowser_列表值>
+    {
+
+    }
+
+    #
+    # @end
+    #
+}
+
+类 类_FBrowser_快捷菜单回调 <公开 注释 = "CefRunQuickMenuCallback" 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefRunQuickMenuCallback> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefRunQuickMenuCallback> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == nullptr; }
+    # inline_ void Set (CefRefPtr<CefRunQuickMenuCallback> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    方法 继续 <公开>
+    参数 命令ID <类型 = 整数>
+    参数 事件标识 <类型 = 整数>
+    {
+        @ if(!IsEmpty()) FBroHsRunQuickMenuCallback_Continue(m_class,@<命令ID>,@<事件标识>);
+    }
+
+    方法 取消 <公开>
+    {
+        @ if(!IsEmpty()) FBroHsRunQuickMenuCallback_Cancel(m_class);
+    }
+
+    #
+}
+
+类 类_FBrowser_媒体接入回调 <公开 注释 = "CefMediaAccessCallback" 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefMediaAccessCallback> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefMediaAccessCallback> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == nullptr; }
+    # inline_ void Set (CefRefPtr<CefMediaAccessCallback> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    方法 继续 <公开>
+    参数 允许许可 <类型 = 整数>
+    {
+        @ if(!IsEmpty()) FBroHsMediaAccessCallback_Continue(m_class,@<允许许可>);
+    }
+
+    方法 取消 <公开>
+    {
+        @ if(!IsEmpty()) FBroHsMediaAccessCallback_Cancel(m_class);
+    }
+
+    #
+}
+
+类 类_FBrowser_权限提示回调 <公开 注释 = "CefPermissionPromptCallback" 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefPermissionPromptCallback> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<CefPermissionPromptCallback> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class == objCompare.m_class); }
+    # inline_ BOOL_P IsEmpty () const { return m_class == nullptr; }
+    # inline_ void Set (CefRefPtr<CefPermissionPromptCallback> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    方法 继续 <公开>
+    参数 结果标识 <类型 = 整数>
+    {
+        @ if(!IsEmpty()) FBroHsPermissionPromptCallback_Continue(m_class,@<结果标识>);
+    }
+
+    #
+}
+
+类 类_FBrowser_清理缓存回调 <公开 @视窗.后缀文本 = "public FBroHsClearCacheCallback" @禁止创建对象 = 真 "">
+{
+    方法 类_初始化
+    {
+        @ type_ = ClearCacheCallbackType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void DoFinish(bool success) override;
+    # <> </include>
+    #
+    # void @sn<current_class>::DoFinish(bool success){
+    #   @<完成>(success);
+    # }
+    # @end
+
+    方法 完成 <公开 @虚拟方法 = 可覆盖>
+    参数 是否成功 <类型 = 逻辑型 注释 = "执行成功为真，执行失败为假">
+
+    #
+}

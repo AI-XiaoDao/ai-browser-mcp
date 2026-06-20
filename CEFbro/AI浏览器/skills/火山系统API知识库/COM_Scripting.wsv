@@ -1,0 +1,815 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@视窗.外部头文件 = "COM_Scripting\\scrrun.tlh">
+
+类 IDictionary <公开 折叠>
+{
+
+    # //第一个参数也可以填  "scripting.FileSystemObject"
+    # @ @m<define_vol_use_System_com_ProgID>(__uuidof(Scripting::Dictionary),Scripting::IDictionaryPtr)
+
+    方法 类_初始化
+    {
+        变量 是否创建成功 <类型 = 逻辑型>
+        @ @<是否创建成功> = Init();
+        如果 (是否创建成功 == 假)
+        {
+            调试输出 ("初始化 IDictionary 失败")
+        }
+
+    }
+
+    方法 类_清理
+    {
+        @ Unit();
+
+    }
+
+    #
+
+    方法 PutRefItem <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 Key <类型 = COM变体型 注释 = "VARIANT * Key">
+    参数 pRetItem <类型 = COM变体型 注释 = "VARIANT * pRetItem">
+    {
+        @ @sn<this>.GetComObjPtr()->PutRefItem(&@<Key>.m_var,&@<pRetItem>.m_var)
+    }
+
+    方法 PutItem <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 Key <类型 = COM变体型 注释 = "VARIANT * Key">
+    参数 pRetItem <类型 = COM变体型 注释 = "VARIANT * pRetItem">
+    {
+        @ @sn<this>.GetComObjPtr()->PutItem(&@<Key>.m_var,&@<pRetItem>.m_var)
+    }
+
+    方法 GetItem <公开 类型 = COM变体型 返回值注释 = "_variant_t" @禁止流程检查 = 真>
+    参数 Key <类型 = COM变体型 注释 = "VARIANT * Key">
+    {
+        @ CVolComVariant vt;
+        @ vt.SetVariant(&GetComObjPtr()->GetItem(&@<Key>.m_var),-1);
+        @ return vt;
+    }
+
+    方法 Add <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Key <类型 = COM变体型 注释 = "VARIANT * Key">
+    参数 Item <类型 = COM变体型 注释 = "VARIANT * Item">
+    {
+        @ @sn<this>.GetComObjPtr()->Add(&@<Key>.m_var,&@<Item>.m_var)
+    }
+
+    方法 GetCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetCount()
+    }
+
+    方法 Exists <公开 类型 = 逻辑型 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    参数 Key <类型 = COM变体型 注释 = "VARIANT * Key">
+    {
+        @ @sn<this>.GetComObjPtr()->Exists(&@<Key>.m_var)
+    }
+
+    方法 Items <公开 类型 = COM变体型 返回值注释 = "_variant_t" @禁止流程检查 = 真>
+    {
+        @ CVolComVariant vt;
+        @ vt.SetVariant(&GetComObjPtr()->Items(),-1);
+        @ return vt;
+    }
+
+    方法 PutKey <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 Key <类型 = COM变体型 注释 = "VARIANT * Key">
+    参数 _arg2 <类型 = COM变体型 注释 = "VARIANT * _arg2">
+    {
+        @ @sn<this>.GetComObjPtr()->PutKey(&@<Key>.m_var,&@<_arg2>.m_var)
+    }
+
+    方法 Keys <公开 类型 = COM变体型 返回值注释 = "_variant_t" @禁止流程检查 = 真>
+    {
+        @ CVolComVariant vt;
+        @ vt.SetVariant(&GetComObjPtr()->Keys(),-1);
+        @ return vt;
+    }
+
+    方法 Remove <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Key <类型 = COM变体型 注释 = "VARIANT * Key">
+    {
+        @ @sn<this>.GetComObjPtr()->Remove(&@<Key>.m_var)
+    }
+
+    方法 RemoveAll <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->RemoveAll()
+    }
+
+    方法 PutCompareMode <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 pcomp <类型 = 整数 注释 = "enum CompareMethod pcomp">
+    {
+        @ @sn<this>.GetComObjPtr()->PutCompareMode(@<pcomp>)
+    }
+
+    方法 "//_NewEnum" <公开 类型 = IUnknown 返回值注释 = "IUnknownPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IUnknown>( @sn<this>.GetComObjPtr()->_NewEnum() )
+    }
+
+    方法 GetHashVal <公开 类型 = COM变体型 返回值注释 = "_variant_t" @禁止流程检查 = 真>
+    参数 Key <类型 = COM变体型 注释 = "VARIANT * Key">
+    {
+        @ CVolComVariant vt;
+        @ vt.SetVariant(&GetComObjPtr()->GetHashVal(&@<Key>.m_var),-1);
+        @ return vt;
+    }
+
+    #
+}
+
+类 IDrive <公开 折叠>
+{
+
+    # @  @m<vol_define_IDispatchPtr_Construct>(Scripting::IDrivePtr,Scripting::IDrivePtr) 
+
+    方法 GetPath <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetPath())
+    }
+
+    方法 GetDriveLetter <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetDriveLetter())
+    }
+
+    方法 GetShareName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetShareName())
+    }
+
+    方法 "//GetDriveType" <公开 返回值注释 = "DriveTypeConst" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetDriveType()
+    }
+
+    方法 "//GetRootFolder" <公开 类型 = IFolder 返回值注释 = "IFolderPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IFolder>( @sn<this>.GetComObjPtr()->GetRootFolder() )
+    }
+
+    方法 GetAvailableSpace <公开 类型 = COM变体型 返回值注释 = "_variant_t" @禁止流程检查 = 真>
+    {
+        @ CVolComVariant vt;
+        @ vt.SetVariant(&GetComObjPtr()->GetAvailableSpace(),-1);
+        @ return vt;
+    }
+
+    方法 GetFreeSpaceT <公开 类型 = COM变体型 返回值注释 = "_variant_t" @禁止流程检查 = 真>
+    {
+        @ CVolComVariant vt;
+        @ vt.SetVariant(&GetComObjPtr()->GetFreeSpaceT(),-1);
+        @ return vt;
+    }
+
+    方法 GetTotalSize <公开 类型 = COM变体型 返回值注释 = "_variant_t" @禁止流程检查 = 真>
+    {
+        @ CVolComVariant vt;
+        @ vt.SetVariant(&GetComObjPtr()->GetTotalSize(),-1);
+        @ return vt;
+    }
+
+    方法 GetVolumeName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetVolumeName())
+    }
+
+    方法 PutVolumeName <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 pbstrName <类型 = 文本型 注释 = "_bstr_t pbstrName">
+    {
+        @ @sn<this>.GetComObjPtr()->PutVolumeName(@<pbstrName>.GetText())
+    }
+
+    方法 GetFileSystem <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetFileSystem())
+    }
+
+    方法 GetSerialNumber <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetSerialNumber()
+    }
+
+    方法 GetIsReady <公开 类型 = 逻辑型 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetIsReady()
+    }
+
+    #
+}
+
+类 IDriveCollection <公开 折叠>
+{
+
+    # @  @m<vol_define_IDispatchPtr_Construct>(Scripting::IDriveCollectionPtr,Scripting::IDriveCollectionPtr) 
+
+    方法 GetItem <公开 类型 = IDrive 返回值注释 = "IDrivePtr" @嵌入式方法 = "">
+    参数 Key <类型 = COM变体型 注释 = "const _variant_t & Key">
+    {
+        @  @dt<IDrive>( @sn<this>.GetComObjPtr()->GetItem(&@<Key>.m_var) )
+    }
+
+    方法 "//Get_NewEnum" <公开 类型 = IUnknown 返回值注释 = "IUnknownPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IUnknown>( @sn<this>.GetComObjPtr()->Get_NewEnum() )
+    }
+
+    方法 GetCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetCount()
+    }
+
+    #
+}
+
+类 IFile <公开 折叠>
+{
+
+    # @  @m<vol_define_IDispatchPtr_Construct>(Scripting::IFilePtr,Scripting::IFilePtr) 
+
+    方法 GetPath <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetPath())
+    }
+
+    方法 GetName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetName())
+    }
+
+    方法 PutName <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 pbstrName <类型 = 文本型 注释 = "_bstr_t pbstrName">
+    {
+        @ @sn<this>.GetComObjPtr()->PutName(@<pbstrName>.GetText())
+    }
+
+    方法 GetShortPath <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetShortPath())
+    }
+
+    方法 GetShortName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetShortName())
+    }
+
+    方法 "//GetDrive" <公开 类型 = IDrive 返回值注释 = "IDrivePtr" @嵌入式方法 = "">
+    {
+        @  @dt<IDrive>( @sn<this>.GetComObjPtr()->GetDrive() )
+    }
+
+    方法 "//GetParentFolder" <公开 类型 = IFolder 返回值注释 = "IFolderPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IFolder>( @sn<this>.GetComObjPtr()->GetParentFolder() )
+    }
+
+    方法 "//GetAttributes" <公开 返回值注释 = "FileAttribute" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetAttributes()
+    }
+
+    方法 "//PutAttributes" <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 pfa <注释 = "FileAttribute pfa">
+    {
+        @ @sn<this>.GetComObjPtr()->PutAttributes(@<pfa>)
+    }
+
+    方法 GetDateCreated <公开 类型 = 小数 返回值注释 = "DATE" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetDateCreated()
+    }
+
+    方法 GetDateLastModified <公开 类型 = 小数 返回值注释 = "DATE" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetDateLastModified()
+    }
+
+    方法 GetDateLastAccessed <公开 类型 = 小数 返回值注释 = "DATE" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetDateLastAccessed()
+    }
+
+    方法 GetSize <公开 类型 = COM变体型 返回值注释 = "_variant_t" @禁止流程检查 = 真>
+    {
+        @ CVolComVariant vt;
+        @ vt.SetVariant(&GetComObjPtr()->GetSize(),-1);
+        @ return vt;
+    }
+
+    方法 GetType <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetType())
+    }
+
+    方法 Delete <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Force <类型 = 逻辑型 注释 = "VARIANT_BOOL Force">
+    {
+        @ @sn<this>.GetComObjPtr()->Delete(@<Force>)
+    }
+
+    方法 Copy <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Destination <类型 = 文本型 注释 = "_bstr_t Destination">
+    参数 OverWriteFiles <类型 = 逻辑型 注释 = "VARIANT_BOOL OverWriteFiles">
+    {
+        @ @sn<this>.GetComObjPtr()->Copy(@<Destination>.GetText(),@<OverWriteFiles>)
+    }
+
+    方法 Move <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Destination <类型 = 文本型 注释 = "_bstr_t Destination">
+    {
+        @ @sn<this>.GetComObjPtr()->Move(@<Destination>.GetText())
+    }
+
+    方法 "//OpenAsTextStream" <公开 类型 = ITextStream 返回值注释 = "ITextStreamPtr" @嵌入式方法 = "">
+    参数 IOMode <类型 = 整数 注释 = "enum IOMode IOMode">
+    参数 Format <类型 = 整数 注释 = "enum Tristate Format">
+    {
+        @  @dt<ITextStream>( @sn<this>.GetComObjPtr()->OpenAsTextStream(@<IOMode>,@<Format>) )
+    }
+
+    #
+}
+
+类 IFileCollection <公开 折叠>
+{
+
+    # @  @m<vol_define_IDispatchPtr_Construct>(Scripting::IFileCollectionPtr,Scripting::IFileCollectionPtr) 
+
+    方法 GetItem <公开 类型 = IFile 返回值注释 = "IFilePtr" @嵌入式方法 = "">
+    参数 Key <类型 = COM变体型 注释 = "const _variant_t & Key">
+    {
+        @  @dt<IFile>( @sn<this>.GetComObjPtr()->GetItem(&@<Key>.m_var) )
+    }
+
+    方法 "//Get_NewEnum" <公开 类型 = IUnknown 返回值注释 = "IUnknownPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IUnknown>( @sn<this>.GetComObjPtr()->Get_NewEnum() )
+    }
+
+    方法 GetCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetCount()
+    }
+
+    #
+}
+
+类 IFileSystem <折叠 @模板基础类 = 真>
+{
+    方法 "//GetDrives" <公开 类型 = IDriveCollection 返回值注释 = "IDriveCollectionPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IDriveCollection>( @sn<this>.GetComObjPtr()->GetDrives() )
+    }
+
+    方法 BuildPath <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    参数 Name <类型 = 文本型 注释 = "_bstr_t Name">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->BuildPath(@<Path>.GetText(),@<Name>.GetText()))
+    }
+
+    方法 GetDriveName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetDriveName(@<Path>.GetText()))
+    }
+
+    方法 GetParentFolderName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetParentFolderName(@<Path>.GetText()))
+    }
+
+    方法 GetFileName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetFileName(@<Path>.GetText()))
+    }
+
+    方法 GetBaseName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetBaseName(@<Path>.GetText()))
+    }
+
+    方法 GetExtensionName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetExtensionName(@<Path>.GetText()))
+    }
+
+    方法 GetAbsolutePathName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetAbsolutePathName(@<Path>.GetText()))
+    }
+
+    方法 GetTempName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetTempName())
+    }
+
+    方法 DriveExists <公开 类型 = 逻辑型 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    参数 DriveSpec <类型 = 文本型 注释 = "_bstr_t DriveSpec">
+    {
+        @ @sn<this>.GetComObjPtr()->DriveExists(@<DriveSpec>.GetText())
+    }
+
+    方法 FileExists <公开 类型 = 逻辑型 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    参数 FileSpec <类型 = 文本型 注释 = "_bstr_t FileSpec">
+    {
+        @ @sn<this>.GetComObjPtr()->FileExists(@<FileSpec>.GetText())
+    }
+
+    方法 FolderExists <公开 类型 = 逻辑型 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    参数 FolderSpec <类型 = 文本型 注释 = "_bstr_t FolderSpec">
+    {
+        @ @sn<this>.GetComObjPtr()->FolderExists(@<FolderSpec>.GetText())
+    }
+
+    方法 "//GetDrive" <公开 类型 = IDrive 返回值注释 = "IDrivePtr" @嵌入式方法 = "">
+    参数 DriveSpec <类型 = 文本型 注释 = "_bstr_t DriveSpec">
+    {
+        @  @dt<IDrive>( @sn<this>.GetComObjPtr()->GetDrive(@<DriveSpec>.GetText()) )
+    }
+
+    方法 "//GetFile" <公开 类型 = IFile 返回值注释 = "IFilePtr" @嵌入式方法 = "">
+    参数 FilePath <类型 = 文本型 注释 = "_bstr_t FilePath">
+    {
+        @  @dt<IFile>( @sn<this>.GetComObjPtr()->GetFile(@<FilePath>.GetText()) )
+    }
+
+    方法 "//GetFolder" <公开 类型 = IFolder 返回值注释 = "IFolderPtr" @嵌入式方法 = "">
+    参数 FolderPath <类型 = 文本型 注释 = "_bstr_t FolderPath">
+    {
+        @  @dt<IFolder>( @sn<this>.GetComObjPtr()->GetFolder(@<FolderPath>.GetText()) )
+    }
+
+    方法 "//GetSpecialFolder" <公开 类型 = IFolder 返回值注释 = "IFolderPtr" @嵌入式方法 = "">
+    参数 SpecialFolder <注释 = "SpecialFolderConst SpecialFolder">
+    {
+        @  @dt<IFolder>( @sn<this>.GetComObjPtr()->GetSpecialFolder(@<SpecialFolder>) )
+    }
+
+    方法 DeleteFile <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 FileSpec <类型 = 文本型 注释 = "_bstr_t FileSpec">
+    参数 Force <类型 = 逻辑型 注释 = "VARIANT_BOOL Force">
+    {
+        @ @sn<this>.GetComObjPtr()->DeleteFile(@<FileSpec>.GetText(),@<Force>)
+    }
+
+    方法 DeleteFolder <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 FolderSpec <类型 = 文本型 注释 = "_bstr_t FolderSpec">
+    参数 Force <类型 = 逻辑型 注释 = "VARIANT_BOOL Force">
+    {
+        @ @sn<this>.GetComObjPtr()->DeleteFolder(@<FolderSpec>.GetText(),@<Force>)
+    }
+
+    方法 MoveFile <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Source <类型 = 文本型 注释 = "_bstr_t Source">
+    参数 Destination <类型 = 文本型 注释 = "_bstr_t Destination">
+    {
+        @ @sn<this>.GetComObjPtr()->MoveFile(@<Source>.GetText(),@<Destination>.GetText())
+    }
+
+    方法 MoveFolder <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Source <类型 = 文本型 注释 = "_bstr_t Source">
+    参数 Destination <类型 = 文本型 注释 = "_bstr_t Destination">
+    {
+        @ @sn<this>.GetComObjPtr()->MoveFolder(@<Source>.GetText(),@<Destination>.GetText())
+    }
+
+    方法 CopyFile <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Source <类型 = 文本型 注释 = "_bstr_t Source">
+    参数 Destination <类型 = 文本型 注释 = "_bstr_t Destination">
+    参数 OverWriteFiles <类型 = 逻辑型 注释 = "VARIANT_BOOL OverWriteFiles">
+    {
+        @ @sn<this>.GetComObjPtr()->CopyFile(@<Source>.GetText(),@<Destination>.GetText(),@<OverWriteFiles>)
+    }
+
+    方法 CopyFolder <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Source <类型 = 文本型 注释 = "_bstr_t Source">
+    参数 Destination <类型 = 文本型 注释 = "_bstr_t Destination">
+    参数 OverWriteFiles <类型 = 逻辑型 注释 = "VARIANT_BOOL OverWriteFiles">
+    {
+        @ @sn<this>.GetComObjPtr()->CopyFolder(@<Source>.GetText(),@<Destination>.GetText(),@<OverWriteFiles>)
+    }
+
+    方法 "//CreateFolder" <公开 类型 = IFolder 返回值注释 = "IFolderPtr" @嵌入式方法 = "">
+    参数 Path <类型 = 文本型 注释 = "_bstr_t Path">
+    {
+        @  @dt<IFolder>( @sn<this>.GetComObjPtr()->CreateFolder(@<Path>.GetText()) )
+    }
+
+    方法 "//CreateTextFile" <公开 类型 = ITextStream 返回值注释 = "ITextStreamPtr" @嵌入式方法 = "">
+    参数 FileName <类型 = 文本型 注释 = "_bstr_t FileName">
+    参数 Overwrite <类型 = 逻辑型 注释 = "VARIANT_BOOL Overwrite">
+    参数 Unicode <类型 = 逻辑型 注释 = "VARIANT_BOOL Unicode">
+    {
+        @  @dt<ITextStream>( @sn<this>.GetComObjPtr()->CreateTextFile(@<FileName>.GetText(),@<Overwrite>,@<Unicode>) )
+    }
+
+    方法 "//OpenTextFile" <公开 类型 = ITextStream 返回值注释 = "ITextStreamPtr" @嵌入式方法 = "">
+    参数 FileName <类型 = 文本型 注释 = "_bstr_t FileName">
+    参数 IOMode <类型 = 整数 注释 = "enum IOMode IOMode">
+    参数 Create <类型 = 逻辑型 注释 = "VARIANT_BOOL Create">
+    参数 Format <类型 = 整数 注释 = "enum Tristate Format">
+    {
+        @  @dt<ITextStream>( @sn<this>.GetComObjPtr()->OpenTextFile(@<FileName>.GetText(),@<IOMode>,@<Create>,@<Format>) )
+    }
+
+    #
+}
+
+类 IFileSystem3 <公开 基础类 = IFileSystem @模板实现类 = "">
+{
+
+    # //第一个参数也可以填  "scripting.FileSystemObject"
+    # @ @m<define_vol_use_System_com_ProgID>(__uuidof(Scripting::FileSystemObject),Scripting::IFileSystemPtr)
+
+    方法 类_初始化
+    {
+        变量 是否创建成功 <类型 = 逻辑型>
+        @ @<是否创建成功> = Init();
+        如果 (是否创建成功 == 假)
+        {
+            调试输出 ("初始化 IFileSystem3 失败")
+        }
+
+    }
+
+    方法 类_清理
+    {
+        @ Unit();
+
+    }
+
+    #
+
+    方法 "//GetStandardStream" <公开 类型 = ITextStream 返回值注释 = "ITextStreamPtr" @嵌入式方法 = "">
+    参数 StandardStreamType <注释 = "StandardStreamTypes StandardStreamType">
+    参数 Unicode <类型 = 逻辑型 注释 = "VARIANT_BOOL Unicode">
+    {
+        @  @dt<ITextStream>( @sn<this>.GetComObjPtr()->GetStandardStream(@<StandardStreamType>,@<Unicode>) )
+    }
+
+    方法 GetFileVersion <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 FileName <类型 = 文本型 注释 = "_bstr_t FileName">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetFileVersion(@<FileName>.GetText()))
+    }
+
+    #
+}
+
+类 IFolder <公开 折叠>
+{
+
+    # @  @m<vol_define_IDispatchPtr_Construct>(Scripting::IFolderPtr,Scripting::IFolderPtr) 
+
+    方法 GetPath <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetPath())
+    }
+
+    方法 GetName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetName())
+    }
+
+    方法 PutName <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 pbstrName <类型 = 文本型 注释 = "_bstr_t pbstrName">
+    {
+        @ @sn<this>.GetComObjPtr()->PutName(@<pbstrName>.GetText())
+    }
+
+    方法 GetShortPath <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetShortPath())
+    }
+
+    方法 GetShortName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetShortName())
+    }
+
+    方法 "//GetDrive" <公开 类型 = IDrive 返回值注释 = "IDrivePtr" @嵌入式方法 = "">
+    {
+        @  @dt<IDrive>( @sn<this>.GetComObjPtr()->GetDrive() )
+    }
+
+    方法 "//GetParentFolder" <公开 类型 = IFolder 返回值注释 = "IFolderPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IFolder>( @sn<this>.GetComObjPtr()->GetParentFolder() )
+    }
+
+    方法 "//GetAttributes" <公开 返回值注释 = "FileAttribute" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetAttributes()
+    }
+
+    方法 "//PutAttributes" <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 pfa <注释 = "FileAttribute pfa">
+    {
+        @ @sn<this>.GetComObjPtr()->PutAttributes(@<pfa>)
+    }
+
+    方法 GetDateCreated <公开 类型 = 小数 返回值注释 = "DATE" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetDateCreated()
+    }
+
+    方法 GetDateLastModified <公开 类型 = 小数 返回值注释 = "DATE" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetDateLastModified()
+    }
+
+    方法 GetDateLastAccessed <公开 类型 = 小数 返回值注释 = "DATE" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetDateLastAccessed()
+    }
+
+    方法 GetType <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetType())
+    }
+
+    方法 Delete <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Force <类型 = 逻辑型 注释 = "VARIANT_BOOL Force">
+    {
+        @ @sn<this>.GetComObjPtr()->Delete(@<Force>)
+    }
+
+    方法 Copy <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Destination <类型 = 文本型 注释 = "_bstr_t Destination">
+    参数 OverWriteFiles <类型 = 逻辑型 注释 = "VARIANT_BOOL OverWriteFiles">
+    {
+        @ @sn<this>.GetComObjPtr()->Copy(@<Destination>.GetText(),@<OverWriteFiles>)
+    }
+
+    方法 Move <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Destination <类型 = 文本型 注释 = "_bstr_t Destination">
+    {
+        @ @sn<this>.GetComObjPtr()->Move(@<Destination>.GetText())
+    }
+
+    方法 GetIsRootFolder <公开 类型 = 逻辑型 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetIsRootFolder()
+    }
+
+    方法 GetSize <公开 类型 = COM变体型 返回值注释 = "_variant_t" @禁止流程检查 = 真>
+    {
+        @ CVolComVariant vt;
+        @ vt.SetVariant(&GetComObjPtr()->GetSize(),-1);
+        @ return vt;
+    }
+
+    方法 "//GetSubFolders" <公开 类型 = IFolderCollection 返回值注释 = "IFolderCollectionPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IFolderCollection>( @sn<this>.GetComObjPtr()->GetSubFolders() )
+    }
+
+    方法 "//GetFiles" <公开 类型 = IFileCollection 返回值注释 = "IFileCollectionPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IFileCollection>( @sn<this>.GetComObjPtr()->GetFiles() )
+    }
+
+    方法 "//CreateTextFile" <公开 类型 = ITextStream 返回值注释 = "ITextStreamPtr" @嵌入式方法 = "">
+    参数 FileName <类型 = 文本型 注释 = "_bstr_t FileName">
+    参数 Overwrite <类型 = 逻辑型 注释 = "VARIANT_BOOL Overwrite">
+    参数 Unicode <类型 = 逻辑型 注释 = "VARIANT_BOOL Unicode">
+    {
+        @  @dt<ITextStream>( @sn<this>.GetComObjPtr()->CreateTextFile(@<FileName>.GetText(),@<Overwrite>,@<Unicode>) )
+    }
+
+    #
+}
+
+类 IFolderCollection <公开 折叠>
+{
+
+    # @  @m<vol_define_IDispatchPtr_Construct>(Scripting::IFolderCollectionPtr,Scripting::IFolderCollectionPtr) 
+
+    方法 Add <公开 类型 = IFolder 返回值注释 = "IFolderPtr" @嵌入式方法 = "">
+    参数 Name <类型 = 文本型 注释 = "_bstr_t Name">
+    {
+        @  @dt<IFolder>( @sn<this>.GetComObjPtr()->Add(@<Name>.GetText()) )
+    }
+
+    方法 GetItem <公开 类型 = IFolder 返回值注释 = "IFolderPtr" @嵌入式方法 = "">
+    参数 Key <类型 = COM变体型 注释 = "const _variant_t & Key">
+    {
+        @  @dt<IFolder>( @sn<this>.GetComObjPtr()->GetItem(&@<Key>.m_var) )
+    }
+
+    方法 "//Get_NewEnum" <公开 类型 = IUnknown 返回值注释 = "IUnknownPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IUnknown>( @sn<this>.GetComObjPtr()->Get_NewEnum() )
+    }
+
+    方法 GetCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetCount()
+    }
+
+    #
+}
+
+类 IScriptEncoder <公开 折叠>
+{
+
+    # @  @m<vol_define_IDispatchPtr_Construct>(Scripting::IScriptEncoderPtr,Scripting::IScriptEncoderPtr) 
+
+    方法 EncodeScriptFile <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 szExt <类型 = 文本型 注释 = "_bstr_t szExt">
+    参数 bstrStreamIn <类型 = 文本型 注释 = "_bstr_t bstrStreamIn">
+    参数 cFlags <类型 = 整数 注释 = "long cFlags">
+    参数 bstrDefaultLang <类型 = 文本型 注释 = "_bstr_t bstrDefaultLang">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->EncodeScriptFile(@<szExt>.GetText(),@<bstrStreamIn>.GetText(),@<cFlags>,@<bstrDefaultLang>.GetText()))
+    }
+
+    #
+}
+
+类 ITextStream <公开 折叠>
+{
+
+    # @  @m<vol_define_IDispatchPtr_Construct>(Scripting::ITextStreamPtr,Scripting::ITextStreamPtr) 
+
+    方法 GetLine <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetLine()
+    }
+
+    方法 GetColumn <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetColumn()
+    }
+
+    方法 GetAtEndOfStream <公开 类型 = 逻辑型 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetAtEndOfStream()
+    }
+
+    方法 GetAtEndOfLine <公开 类型 = 逻辑型 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetAtEndOfLine()
+    }
+
+    方法 Read <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 Characters <类型 = 整数 注释 = "long Characters">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->Read(@<Characters>))
+    }
+
+    方法 ReadLine <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->ReadLine())
+    }
+
+    方法 ReadAll <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->ReadAll())
+    }
+
+    方法 Write <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Text <类型 = 文本型 注释 = "_bstr_t Text">
+    {
+        @ @sn<this>.GetComObjPtr()->Write(@<Text>.GetText())
+    }
+
+    方法 WriteLine <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Text <类型 = 文本型 注释 = "_bstr_t Text">
+    {
+        @ @sn<this>.GetComObjPtr()->WriteLine(@<Text>.GetText())
+    }
+
+    方法 WriteBlankLines <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Lines <类型 = 整数 注释 = "long Lines">
+    {
+        @ @sn<this>.GetComObjPtr()->WriteBlankLines(@<Lines>)
+    }
+
+    方法 Skip <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Characters <类型 = 整数 注释 = "long Characters">
+    {
+        @ @sn<this>.GetComObjPtr()->Skip(@<Characters>)
+    }
+
+    方法 SkipLine <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->SkipLine()
+    }
+
+    方法 Close <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Close()
+    }
+
+    #
+}

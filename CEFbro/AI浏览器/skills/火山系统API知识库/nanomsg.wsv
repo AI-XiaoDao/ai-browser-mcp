@@ -1,0 +1,863 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.进程通讯\"">
+
+类 进程通讯配置常量 <公开 折叠 "">
+{
+    常量 NN_LINGER <公开 类型 = 整数 值 = 1>
+    常量 NN_SNDBUF <公开 类型 = 整数 值 = 2 注释 = "发送缓冲区大小，字节。为了防止阻止超过缓冲区的消息，除了发送缓冲区中的数据之外，还可以缓冲一条消息。此选项的类型为 int。默认值为128kB。">
+    常量 NN_RCVBUF <公开 类型 = 整数 值 = 3 注释 = "接收缓冲区大小，字节。为了防止阻止超过缓冲区的消息，除了接收缓冲区中的数据之外，还可以缓冲一条消息。此选项的类型为 int。默认值为128kB。">
+    常量 NN_SNDTIMEO <公开 类型 = 整数 值 = 4 注释 = "插座上发送操作的超时，在毫秒内。如果消息不能在指定的超时内发送，则会返回 ETIMEDOUT 错误。负值意味着无限超时。该选项的类型为 int。默认值为-1。">
+    常量 NN_RCVTIMEO <公开 类型 = 整数 值 = 5 注释 = "插座上 recv 操作的超时，在毫秒内。如果无法在指定超时内收到消息，则会返回 ETIMEDOUT 错误。负值意味着无限超时。该选项的类型为 int。默认值为-1。">
+    常量 NN_RECONNECT_IVL <公开 类型 = 整数 值 = 6 注释 = "对于基于连接的传输（如 TCP），此选项指定在尝试重新建立连接之前，" 注释 = "在毫秒内连接中断时需要等待多长时间。请注意，"
+            注释 = "实际重新连接间隔可能在一定程度上是随机的，以防止严重的重新连接风暴。" 注释 = "该选项的类型为 int。默认值为 100 （0.1 秒）。">
+    常量 NN_RECONNECT_IVL_MAX <公开 类型 = 整数 值 = 7 注释 = "此选项仅在NN_RECONNECT_IVL选项之外使用。它指定了最大的重新连接间隔。"
+            注释 = "在每次重新连接尝试时，以前的间隔将加倍，直到达到NN_RECONNECT_IVL_MAX。" 注释 = "零值意味着不执行指数反向，重新连接间隔仅基于NN_RECONNECT_IVL。"
+            注释 = "如果NN_RECONNECT_IVL_MAX小于NN_RECONNECT_IVL，则忽略它。该选项的类型为 int。默认值为 0。">
+    常量 NN_SNDPRIO <公开 类型 = 整数 值 = 8 注释 = "为随后添加到插座的端点设置出站优先级。此选项对向所有同行发送消息的插座类型没有影响。"
+            注释 = "但是，如果插座类型将每个消息发送给单个对等（或有限的对等器组），则具有高优先级的同级比低优先级的同侪优先。" 注释 = "该选项的类型为 int。最高优先级为 1，最低优先级为 16。默认值为 8。">
+    常量 NN_RCVPRIO <公开 类型 = 整数 值 = 9 注释 = "随后添加到插座的端点设置入站优先级。此选项对无法接收消息的插座类型没有影响。收到邮件时"
+            注释 = "，在收到来自优先级较低的同行的消息之前，将接收来自优先级较高的同行的消息。该选项的类型为 int。最高优先级为 1，最低优先级为 16。默认值为 8。">
+    常量 NN_SNDFD <公开 类型 = 整数 值 = 10>
+    常量 NN_RCVFD <公开 类型 = 整数 值 = 11>
+    常量 NN_DOMAIN <公开 类型 = 整数 值 = 12>
+    常量 NN_PROTOCOL <公开 类型 = 整数 值 = 13>
+    常量 NN_IPV4ONLY <公开 类型 = 整数 值 = 14 注释 = "如果设置为 1，则仅使用 IPv4 地址。如果设置为 0，则使用 IPv4 和 IPv6 地址。该选项的类型为 int。默认值为 1。">
+    常量 NN_SOCKET_NAME <公开 类型 = 整数 值 = 15 注释 = "错误报告和统计的插座名称。选项的类型是字符串。默认值为\"插座\"。N\"其中N是插座整数。此选项是实验性的，详情请参阅nn_env（7）">
+    常量 NN_RCVMAXSIZE <公开 类型 = 整数 值 = 16 注释 = "可以字节接收的最大消息大小。负值意味着接收的大小仅受可用可地址存储器的限制。此选项的类型为 int。默认值为1024kB。">
+    常量 NN_MAXTTL <公开 类型 = 整数 值 = 17 注释 = "设置消息在删除之前可以经过的最大\"跳\"数。每次收到消息（例如通过nn_device（3）函数）都算作单跳。这提供了一种防止无意循环的保护形式。">
+
+    #
+}
+
+类 进程通讯模型常量 <公开 注释 = "" 注释 = "NN_PUSH=80,NN_PULL=81" 注释 = "NN_REQ=48,NN_REP=49" 注释 = "NN_PAIR=16,NN_PAIR=16"
+        注释 = "NN_SUB=33,NN_PUB=32" 注释 = "NN_SUB_SUBSCRIBE=1,NN_SUB_UNSUBSCRIBE=2" 注释 = "NN_SURVEYOR=98,NN_RESPONDENT=99" 折叠 "">
+{
+    常量 NN_PUSH <公开 类型 = 整数 值 = 80>
+    常量 NN_PULL <公开 类型 = 整数 值 = 81>
+    常量 ""
+    常量 NN_REQ <公开 类型 = 整数 值 = 48>
+    常量 NN_REP <公开 类型 = 整数 值 = 49>
+    常量 ""
+    常量 NN_PAIR <公开 类型 = 整数 值 = 16>
+    常量 ""
+    常量 NN_SUB <公开 类型 = 整数 值 = 33>
+    常量 NN_PUB <公开 类型 = 整数 值 = 32>
+    常量 ""
+    常量 NN_BUS <公开 类型 = 整数 值 = 112>
+    常量 ""
+    常量 NN_SURVEYOR <公开 类型 = 整数 值 = 98>
+    常量 NN_RESPONDENT <公开 类型 = 整数 值 = 99>
+    常量 ""
+    常量 ""
+    常量 NN_INPROC <公开 类型 = 整数 值 = -1>
+    常量 ""
+}
+
+类 进程通讯通讯状态常量 <公开 注释 = "/*  Transport statistics  */" 折叠 @常量类 = 整数>
+{
+    常量 NN_STAT_ESTABLISHED_CONNECTIONS <公开 值 = 101>
+    常量 NN_STAT_ACCEPTED_CONNECTIONS <公开 值 = 102>
+    常量 NN_STAT_DROPPED_CONNECTIONS <公开 值 = 103>
+    常量 NN_STAT_BROKEN_CONNECTIONS <公开 值 = 104>
+    常量 NN_STAT_CONNECT_ERRORS <公开 值 = 105>
+    常量 NN_STAT_BIND_ERRORS <公开 值 = 106>
+    常量 NN_STAT_ACCEPT_ERRORS <公开 值 = 107>
+    常量 NN_STAT_CURRENT_CONNECTIONS <公开 值 = 201>
+    常量 NN_STAT_INPROGRESS_CONNECTIONS <公开 值 = 202>
+    常量 NN_STAT_CURRENT_EP_ERRORS <公开 值 = 203>
+    常量 "" <注释 = "/*  The socket-internal statistics  */">
+    常量 NN_STAT_MESSAGES_SENT <公开 值 = 301>
+    常量 NN_STAT_MESSAGES_RECEIVED <公开 值 = 302>
+    常量 NN_STAT_BYTES_SENT <公开 值 = 303>
+    常量 NN_STAT_BYTES_RECEIVED <公开 值 = 304>
+    常量 "" <注释 = "/*  Protocol statistics  */">
+    常量 NN_STAT_CURRENT_SND_PRIORITY <公开 值 = 401>
+
+    #
+}
+
+类 ______进程通讯_全局函数 <公开 注释 = "主页 https://nanomsg.org/gettingstarted/index.html" 折叠 @全局类 = 真
+        @视窗.外部头文件 = "nanomsg\\nanomsgTool.h" @视窗.外部库.win32 = "nanomsg\\nanomsgToolx86.lib"
+        @视窗.附属文件.win32 = "nanomsg\\nanomsgToolx86.dll" @视窗.外部库.x64 = "nanomsg\\nanomsgToolx64.lib"
+        @视窗.附属文件.x64 = "nanomsg\\nanomsgToolx64.dll">
+{
+    方法 Nanomsg_GetState <公开 静态 类型 = 整数哈希集 返回值注释 = "错误返回-1" @嵌入式方法 = "">
+    参数 socket <类型 = 整数>
+    参数 要查询的值 <类型 = 进程通讯通讯状态常量>
+    {
+        @ Nanomsg_GetState(@<socket>,@<要查询的值>)
+    }
+
+    方法 Nanomsg_new <公开 静态 类型 = 变整数 返回值注释 = "void *" @嵌入式方法 = "">
+    {
+        @ Nanomsg_new()
+    }
+
+    方法 Nanomsg_CopyConstruct <公开 静态 返回值注释 = "void" @嵌入式方法 = "">
+    参数 hDes <类型 = 变整数 注释 = "void *">
+    参数 hSrc <类型 = 变整数 注释 = "void *">
+    {
+        @ Nanomsg_CopyConstruct((void *)@<hDes>,(void *)@<hSrc>)
+    }
+
+    方法 Nanomsg_delete <公开 静态 返回值注释 = "void" @嵌入式方法 = "">
+    参数 hNano <类型 = 变整数 注释 = "void *">
+    {
+        @ Nanomsg_delete((void *)@<hNano>)
+    }
+
+    方法 Nanomsg_Socket <公开 静态 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 hNano <类型 = 变整数 注释 = "void *">
+    参数 domain <类型 = 整数 注释 = "#define AF_SP 1" 注释 = "#define AF_SP_RAW 2">
+    参数 protocol <类型 = 整数 注释 = "int">
+    {
+        @ Nanomsg_Socket((void *)@<hNano>,@<domain>,@<protocol>)
+    }
+
+    方法 Nanomsg_GetErrorText <公开 静态 类型 = 文本型 @嵌入式方法 = "">
+    参数 hNano <类型 = 变整数 注释 = "void *">
+    {
+        @ CVolString( Nanomsg_Socket((void *)@<hNano>))
+    }
+
+    方法 Nanomsg_GetErrorCode <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    {
+        @  Nanomsg_GetErrorCode()
+    }
+
+    方法 Nanomsg_Setsockopt <公开 静态 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 hNano <类型 = 变整数 注释 = "void *">
+    参数 level <类型 = 整数>
+    参数 option <类型 = 整数 注释 = "如果 level == 0 ，那么可以调用 进程通讯配置常量的值">
+    参数 optval <类型 = 变整数 注释 = "const void *">
+    参数 optvallen <类型 = 长整数 注释 = "long long">
+    {
+        @ Nanomsg_Setsockopt((void *)@<hNano>,@<level>,@<option>,(const void *)@<optval>,(long long)@<optvallen>)
+    }
+
+    方法 Nanomsg_Getsockopt <公开 静态 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 hNano <类型 = 变整数 注释 = "void *">
+    参数 level <类型 = 整数 注释 = "int">
+    参数 option <类型 = 整数 注释 = "int">
+    参数 optval <类型 = 变整数 注释 = "void *">
+    参数 optvallen <类型 = 长整数 注释 = "long long *">
+    {
+        @ Nanomsg_Getsockopt((void *)@<hNano>,@<level>,@<option>,(void *)@<optval>,(long long *)&@<optvallen>)
+    }
+
+    方法 Nanomsg_close <公开 静态 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 hNano <类型 = 变整数 注释 = "void *">
+    {
+        @ Nanomsg_close((void *)@<hNano>)
+    }
+
+    方法 Nanomsg_Bind <公开 静态 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 hNano <类型 = 变整数 注释 = "void *">
+    参数 addr <类型 = 变整数 注释 = "const char *">
+    {
+        @ Nanomsg_Bind((void *)@<hNano>,(const char *)@<addr>)
+    }
+
+    方法 Nanomsg_Recv <公开 静态 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 hNano <类型 = 变整数 注释 = "void *">
+    参数 buf <类型 = 变整数 注释 = "void *">
+    参数 pbyteRead <类型 = 整数 注释 = "int *">
+    参数 flags <类型 = 整数 注释 = "int">
+    {
+        @ Nanomsg_Recv((void *)@<hNano>,(void *)@<buf>,&@<pbyteRead>,@<flags>)
+    }
+
+    方法 Nanomsg_FreeMsg <公开 静态 返回值注释 = "void" @嵌入式方法 = "">
+    参数 pMsg <类型 = 变整数 注释 = "void *">
+    {
+        @ Nanomsg_FreeMsg((void *)@<pMsg>)
+    }
+
+    方法 Nanomsg_Connect <公开 静态 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 hNano <类型 = 变整数 注释 = "void *">
+    参数 lpszUrl <类型 = 变整数 注释 = "const char *">
+    {
+        @ Nanomsg_Connect((void *)@<hNano>,(const char *)@<lpszUrl>)
+    }
+
+    方法 Nanomsg_Send <公开 静态 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 hNano <类型 = 变整数 注释 = "void *">
+    参数 buf <类型 = 变整数 注释 = "const void *">
+    参数 len <类型 = 整数 注释 = "int">
+    参数 flags <类型 = 整数 注释 = "int">
+    {
+        @ Nanomsg_Send((void *)@<hNano>,(const void *)@<buf>,@<len>,@<flags>)
+    }
+
+    方法 Nanomsg_Shutdown <公开 静态 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 hNano <类型 = 变整数 注释 = "void *">
+    参数 nhow <类型 = 整数 注释 = "int">
+    {
+        @ Nanomsg_Shutdown((void *)@<hNano>,@<nhow>)
+    }
+
+    #
+    #
+    #
+    #
+}
+
+类 ______进程通讯_模板类 <@模板基础类 = 真>
+{
+
+    # @begin
+    # <> <include>
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const
+    # {
+    #     if(m_data == objCompare.m_data)
+    #         return TRUE;
+    #     return FALSE;
+    # }
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     Nanomsg_CopyConstruct(this->m_data,objCopyFrom.m_data);
+    # }
+    # void SetData(void* pData)
+    # {
+    #     m_data = pData;
+    # }
+    # void* GetData()
+    # {
+    #     return m_data;
+    # }
+    # void* m_data;
+    # <> </include>
+    # @end
+
+    方法 _取句柄 <类型 = 变整数 @嵌入式方法 = "">
+    {
+        @ (INT_P) @sn<this>.GetData()
+    }
+
+    方法 类_初始化
+    {
+        @ SetData(Nanomsg_new ());
+    }
+
+    方法 类_清理
+    {
+        @ Nanomsg_delete(GetData());
+    }
+
+    方法 取错误信息 <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( Nanomsg_GetErrorText( @sn<this>.GetData()))
+    }
+
+    方法 取错误代码 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ Nanomsg_GetErrorCode()
+    }
+
+    方法 取状态 <公开 类型 = 整数哈希集 返回值注释 = "错误返回-1" @嵌入式方法 = "">
+    参数 socket <类型 = 整数>
+    参数 要查询的值 <类型 = 进程通讯通讯状态常量>
+    {
+        @ Nanomsg_GetState( @sn<this>.GetData(),@<要查询的值>)
+    }
+
+    #
+}
+
+类 进程通讯_单向_发送器 <公开 基础类 = ______进程通讯_模板类 注释 = "原文连接https://nanomsg.org/gettingstarted/pipeline.html" 折叠 @模板实现类 = "">
+{
+
+    #
+
+    方法 开始 <公开 类型 = 逻辑型 注释 = "   NN_PULL  81">
+    参数 url <类型 = 文本型>
+    参数 协议类型 <类型 = 整数 注释 = "可选值" 注释 = "1 表示自带协议" 注释 = "2 表示原始协议" @默认值 = 1>
+    {
+        变量 szurl <类型 = 字节集类>
+        szurl = 文本到UTF8 (url)
+        如果 (Nanomsg_Socket (_取句柄 (), 协议类型, 进程通讯模型常量.NN_PUSH) == 假)  // NN_PUSH, 80
+        {
+            返回 (假)
+        }
+        如果 (Nanomsg_Connect (_取句柄 (), 取字节集指针 (szurl)) == 假)
+        {
+            返回 (假)
+        }
+        返回 (真)
+    }
+
+    方法 发送 <公开 类型 = 逻辑型>
+    参数 要发送的数据 <类型 = 字节集类>
+    参数 选项 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Send (_取句柄 (), 取字节集指针 (要发送的数据), 取字节集长度 (要发送的数据), 0))
+    }
+
+    方法 停止 <公开 类型 = 逻辑型>
+    参数 停止方式 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Shutdown (_取句柄 (), 停止方式))
+
+
+    }
+
+    #
+    #
+    #
+}
+
+类 进程通讯_单向_接收器 <公开 基础类 = ______进程通讯_模板类 注释 = "原文连接 https://nanomsg.org/gettingstarted/pipeline.html" 折叠 @模板实现类 = "">
+{
+    方法 开始 <公开 类型 = 逻辑型 注释 = "">
+    参数 url <类型 = 文本型>
+    参数 协议类型 <类型 = 整数 注释 = "可选值" 注释 = "1 表示自带协议" 注释 = "2 表示原始协议" @默认值 = 1>
+    {
+        变量 szurl <类型 = 字节集类>
+        szurl = 文本到UTF8 (url)
+        如果 (Nanomsg_Socket (_取句柄 (), 协议类型, 进程通讯模型常量.NN_PULL) == 假)  // NN_PULL 81
+        {
+            返回 (假)
+        }
+        如果 (Nanomsg_Bind (_取句柄 (), 取字节集指针 (szurl)) == 假)
+        {
+            返回 (假)
+        }
+        返回 (真)
+    }
+
+    方法 接收 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 用来存放接收的数据 <类型 = 字节集类>
+    参数 标记 <类型 = 整数 @默认值 = 0>
+    {
+        @ char* pBuf = NULL;
+        @ int nReadByte = 0;
+        @ bool bOK = Nanomsg_Recv(GetData(),&pBuf,&nReadByte,@<标记>);
+        @ @<用来存放接收的数据> = CVolMem(pBuf,nReadByte);
+        @ Nanomsg_FreeMsg(pBuf);
+        @ return bOK;
+
+
+    }
+
+    方法 停止 <公开 类型 = 逻辑型 折叠>
+    参数 停止方式 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Shutdown (_取句柄 (), 停止方式))
+
+
+    }
+
+    #
+}
+
+类 进程通讯_双向_发送器 <公开 基础类 = ______进程通讯_模板类 注释 = "原文连接 https://nanomsg.org/gettingstarted/reqrep.html" 折叠 @模板实现类 = "">
+{
+    方法 开始 <公开 类型 = 逻辑型 折叠>
+    参数 url <类型 = 文本型>
+    参数 协议类型 <类型 = 整数 注释 = "可选值" 注释 = "1 表示自带协议" 注释 = "2 表示原始协议" @默认值 = 1>
+    {
+        变量 szurl <类型 = 字节集类>
+        szurl = 文本到UTF8 (url)
+        如果 (Nanomsg_Socket (_取句柄 (), 协议类型, 进程通讯模型常量.NN_REQ) == 假)  // NN_REQ, 48
+        {
+            返回 (假)
+        }
+        如果 (Nanomsg_Connect (_取句柄 (), 取字节集指针 (szurl)) == 假)
+        {
+            返回 (假)
+        }
+        返回 (真)
+    }
+
+    方法 发送 <公开 类型 = 逻辑型 折叠>
+    参数 要发送的数据 <类型 = 字节集类>
+    参数 选项 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Send (_取句柄 (), 取字节集指针 (要发送的数据), 取字节集长度 (要发送的数据), 0))
+    }
+
+    方法 接收 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 用来存放接收的数据 <类型 = 字节集类>
+    参数 标记 <类型 = 整数 @默认值 = 0>
+    {
+        @ char* pBuf = NULL;
+        @ int nReadByte = 0;
+        @ bool bOK = Nanomsg_Recv(GetData(),&pBuf,&nReadByte,@<标记>);
+        @ @<用来存放接收的数据> = CVolMem(pBuf,nReadByte);
+        @ Nanomsg_FreeMsg(pBuf);
+        @ return bOK;
+
+
+    }
+
+    方法 停止 <公开 类型 = 逻辑型 折叠>
+    参数 停止方式 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Shutdown (_取句柄 (), 停止方式))
+    }
+}
+
+类 进程通讯_双向_接收器 <公开 基础类 = ______进程通讯_模板类 注释 = "原文连接 https://nanomsg.org/gettingstarted/reqrep.html" 折叠 @模板实现类 = "">
+{
+    方法 开始 <公开 类型 = 逻辑型 注释 = "">
+    参数 url <类型 = 文本型>
+    参数 协议类型 <类型 = 整数 注释 = "可选值" 注释 = "1 表示自带协议" 注释 = "2 表示原始协议" @默认值 = 1>
+    {
+        变量 szurl <类型 = 字节集类>
+        szurl = 文本到UTF8 (url)
+        如果 (Nanomsg_Socket (_取句柄 (), 协议类型, 进程通讯模型常量.NN_REP) == 假)  // NN_REP 49
+        {
+            返回 (假)
+        }
+        如果 (Nanomsg_Bind (_取句柄 (), 取字节集指针 (szurl)) == 假)
+        {
+            返回 (假)
+        }
+        返回 (真)
+    }
+
+    方法 接收 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 用来存放接收的数据 <类型 = 字节集类>
+    参数 标记 <类型 = 整数 @默认值 = 0>
+    {
+        @ char* pBuf = NULL;
+        @ int nReadByte = 0;
+        @ bool bOK = Nanomsg_Recv(GetData(),&pBuf,&nReadByte,@<标记>);
+        @ @<用来存放接收的数据> = CVolMem(pBuf,nReadByte);
+        @ Nanomsg_FreeMsg(pBuf);
+        @ return bOK;
+
+
+    }
+
+    方法 发送 <公开 类型 = 逻辑型 折叠>
+    参数 要发送的数据 <类型 = 字节集类>
+    参数 选项 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Send (_取句柄 (), 取字节集指针 (要发送的数据), 取字节集长度 (要发送的数据), 0))
+    }
+
+    方法 停止 <公开 类型 = 逻辑型 折叠>
+    参数 停止方式 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Shutdown (_取句柄 (), 停止方式))
+
+
+    }
+
+    #
+    #
+}
+
+类 ______进程通讯_原始套接字_配置函数 <基础类 = ______进程通讯_模板类 折叠 @模板基础类 = 真>
+{
+    方法 置接收超时 <公开 类型 = 逻辑型 折叠>
+    参数 超时时间 <类型 = 变整数 注释 = "毫秒" @默认值 = 1000>
+    {
+        //  /*  Socket option levels: Negative numbers are reserved for transports,positive for socket types. */
+        // #define NN_SOL_SOCKET 0
+        // #define NN_SNDTIMEO 4
+        // #define NN_RCVTIMEO 5
+        返回 (Nanomsg_Setsockopt (_取句柄 (), 0, 进程通讯配置常量.NN_RCVTIMEO, 超时时间, 取数据尺寸 (超时时间)))
+    }
+
+    方法 置发送超时 <公开 类型 = 逻辑型>
+    参数 超时时间 <类型 = 变整数 注释 = "毫秒" @默认值 = 1000>
+    {
+        //  /*  Socket option levels: Negative numbers are reserved for transports,positive for socket types. */
+        // 第二个参数 #define NN_SOL_SOCKET 0
+        // #define NN_SNDTIMEO 4
+        // #define NN_RCVTIMEO 5
+        返回 (Nanomsg_Setsockopt (_取句柄 (), 0, 进程通讯配置常量.NN_SNDTIMEO, 超时时间, 取数据尺寸 (超时时间)))
+    }
+
+    方法 这里还可以封装其他函数 <注释 = "进程通讯配置常量 相关的。。。。。。" 折叠>
+    {
+
+    }
+}
+
+类 进程通讯_一对一_发送器 <公开 基础类 = ______进程通讯_原始套接字_配置函数 注释 = "例子 https://nanomsg.org/gettingstarted/pair.html" 折叠 @模板实现类 = "">
+{
+    方法 开始 <公开 类型 = 逻辑型>
+    参数 url <类型 = 文本型>
+    参数 协议类型 <类型 = 整数 注释 = "可选值" 注释 = "1 表示自带协议" 注释 = "2 表示原始协议" @默认值 = 1>
+    {
+        变量 szurl <类型 = 字节集类>
+        szurl = 文本到UTF8 (url)
+        如果 (Nanomsg_Socket (_取句柄 (), 协议类型, 进程通讯模型常量.NN_PAIR) == 假)  // NN_PAIR, 16
+        {
+            返回 (假)
+        }
+        如果 (Nanomsg_Connect (_取句柄 (), 取字节集指针 (szurl)) == 假)
+        {
+            返回 (假)
+        }
+        返回 (真)
+    }
+
+    方法 发送 <公开 类型 = 逻辑型 折叠>
+    参数 要发送的数据 <类型 = 字节集类>
+    参数 选项 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Send (_取句柄 (), 取字节集指针 (要发送的数据), 取字节集长度 (要发送的数据), 0))
+    }
+
+    方法 接收 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 用来存放接收的数据 <类型 = 字节集类>
+    参数 标记 <类型 = 整数 @默认值 = 0>
+    {
+        @ char* pBuf = NULL;
+        @ int nReadByte = 0;
+        @ bool bOK = Nanomsg_Recv(GetData(),&pBuf,&nReadByte,@<标记>);
+        @ @<用来存放接收的数据> = CVolMem(pBuf,nReadByte);
+        @ Nanomsg_FreeMsg(pBuf);
+        @ return bOK;
+
+
+    }
+
+    方法 停止 <公开 类型 = 逻辑型 折叠>
+    参数 停止方式 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Shutdown (_取句柄 (), 停止方式))
+    }
+}
+
+类 进程通讯_一对一_接收器 <公开 基础类 = ______进程通讯_原始套接字_配置函数 注释 = "例子 https://nanomsg.org/gettingstarted/pair.html" 折叠 @模板实现类 = "">
+{
+    方法 开始 <公开 类型 = 逻辑型 注释 = "" 折叠>
+    参数 url <类型 = 文本型>
+    参数 协议类型 <类型 = 整数 注释 = "可选值" 注释 = "1 表示自带协议" 注释 = "2 表示原始协议" @默认值 = 1>
+    {
+        变量 szurl <类型 = 字节集类>
+        szurl = 文本到UTF8 (url)
+        如果 (Nanomsg_Socket (_取句柄 (), 协议类型, 进程通讯模型常量.NN_PAIR) == 假)  // NN_PAIR 16
+        {
+            返回 (假)
+        }
+        如果 (Nanomsg_Bind (_取句柄 (), 取字节集指针 (szurl)) == 假)
+        {
+            返回 (假)
+        }
+        返回 (真)
+    }
+
+    方法 接收 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 用来存放接收的数据 <类型 = 字节集类>
+    参数 标记 <类型 = 整数 @默认值 = 0>
+    {
+        @ char* pBuf = NULL;
+        @ int nReadByte = 0;
+        @ bool bOK = Nanomsg_Recv(GetData(),&pBuf,&nReadByte,@<标记>);
+        @ @<用来存放接收的数据> = CVolMem(pBuf,nReadByte);
+        @ Nanomsg_FreeMsg(pBuf);
+        @ return bOK;
+
+
+    }
+
+    方法 发送 <公开 类型 = 逻辑型 折叠>
+    参数 要发送的数据 <类型 = 字节集类>
+    参数 选项 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Send (_取句柄 (), 取字节集指针 (要发送的数据), 取字节集长度 (要发送的数据), 0))
+    }
+
+    方法 停止 <公开 类型 = 逻辑型 折叠>
+    参数 停止方式 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Shutdown (_取句柄 (), 停止方式))
+
+
+    }
+
+    #
+}
+
+类 进程通讯_单向广播_接收器 <公开 基础类 = ______进程通讯_模板类 注释 = "可以有多个接收器" 注释 = "例子 https://nanomsg.org/gettingstarted/pubsub.html" 折叠
+        @模板实现类 = "">
+{
+
+    #
+
+    方法 开始 <公开 类型 = 逻辑型 注释 = "   NN_PULL  81">
+    参数 url <类型 = 文本型>
+    参数 过滤器 <类型 = 文本型 注释 = "默认为空，表示接收所有的消息，否则只接收特定的消息" @默认值 = "">
+    参数 协议类型 <类型 = 整数 注释 = "可选值" 注释 = "1 表示自带协议" 注释 = "2 表示原始协议" @默认值 = 1>
+    {
+        变量 szurl <类型 = 字节集类>
+        szurl = 文本到UTF8 (url)
+        如果 (Nanomsg_Socket (_取句柄 (), 协议类型, 进程通讯模型常量.NN_SUB) == 假)  // NN_SUB=33
+        {
+            返回 (假)
+        }
+
+        变量 subscribe <类型 = 字节集类>
+        subscribe = 文本到多字节 (过滤器)
+        // NN_SUB_SUBSCRIBE=1,NN_SUB_UNSUBSCRIBE=2
+        如果 (Nanomsg_Setsockopt (_取句柄 (), 33, 1, 取字节集指针 (subscribe), 取字节集长度 (subscribe) - 1) == 假)
+        {
+            返回 (假)
+        }
+
+
+        如果 (Nanomsg_Connect (_取句柄 (), 取字节集指针 (szurl)) == 假)
+        {
+            返回 (假)
+        }
+        返回 (真)
+
+    }
+
+    方法 接收 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 用来存放接收的数据 <类型 = 字节集类>
+    参数 标记 <类型 = 整数 @默认值 = 0>
+    {
+        @ char* pBuf = NULL;
+        @ int nReadByte = 0;
+        @ bool bOK = Nanomsg_Recv(GetData(),&pBuf,&nReadByte,@<标记>);
+        @ @<用来存放接收的数据> = CVolMem(pBuf,nReadByte);
+        @ Nanomsg_FreeMsg(pBuf);
+        @ return bOK;
+
+
+    }
+
+    方法 停止 <公开 类型 = 逻辑型>
+    参数 停止方式 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Shutdown (_取句柄 (), 停止方式))
+
+
+    }
+
+    #
+    #
+    #
+}
+
+类 进程通讯_单向广播_发送器 <公开 基础类 = ______进程通讯_模板类 注释 = "只能有一个发送器" 注释 = "例子 https://nanomsg.org/gettingstarted/pubsub.html" 折叠
+        @模板实现类 = "">
+{
+    方法 开始 <公开 类型 = 逻辑型 注释 = "" 折叠>
+    参数 url <类型 = 文本型>
+    参数 协议类型 <类型 = 整数 注释 = "可选值" 注释 = "1 表示自带协议" 注释 = "2 表示原始协议" @默认值 = 1>
+    {
+        变量 szurl <类型 = 字节集类>
+        szurl = 文本到UTF8 (url)
+        如果 (Nanomsg_Socket (_取句柄 (), 协议类型, 进程通讯模型常量.NN_PUB) == 假)  // NN_PUB=32
+        {
+            返回 (假)
+        }
+        如果 (Nanomsg_Bind (_取句柄 (), 取字节集指针 (szurl)) == 假)
+        {
+            返回 (假)
+        }
+        返回 (真)
+    }
+
+    方法 发送 <公开 类型 = 逻辑型>
+    参数 要发送的数据 <类型 = 字节集类>
+    参数 选项 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Send (_取句柄 (), 取字节集指针 (要发送的数据), 取字节集长度 (要发送的数据), 0))
+    }
+
+    方法 停止 <公开 类型 = 逻辑型 折叠>
+    参数 停止方式 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Shutdown (_取句柄 (), 停止方式))
+
+
+    }
+
+    #
+}
+
+类 进程通讯_双向广播_接收器 <公开 基础类 = ______进程通讯_模板类 注释 = "可以有多个接收器" 注释 = "例子https://nanomsg.org/gettingstarted/survey.html" 折叠
+        @模板实现类 = "">
+{
+
+    #
+
+    方法 开始 <公开 类型 = 逻辑型 注释 = "   NN_PULL  81">
+    参数 url <类型 = 文本型>
+    参数 协议类型 <类型 = 整数 注释 = "可选值" 注释 = "1 表示自带协议" 注释 = "2 表示原始协议" @默认值 = 1>
+    {
+        变量 szurl <类型 = 字节集类>
+        szurl = 文本到UTF8 (url)
+        如果 (Nanomsg_Socket (_取句柄 (), 协议类型, 99) == 假)  // NN_RESPONDENT=99
+        {
+            返回 (假)
+        }
+
+        如果 (Nanomsg_Connect (_取句柄 (), 取字节集指针 (szurl)) == 假)
+        {
+            返回 (假)
+        }
+        返回 (真)
+
+    }
+
+    方法 接收 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 用来存放接收的数据 <类型 = 字节集类>
+    参数 标记 <类型 = 整数 @默认值 = 0>
+    {
+        @ char* pBuf = NULL;
+        @ int nReadByte = 0;
+        @ bool bOK = Nanomsg_Recv(GetData(),&pBuf,&nReadByte,@<标记>);
+        @ @<用来存放接收的数据> = CVolMem(pBuf,nReadByte);
+        @ Nanomsg_FreeMsg(pBuf);
+        @ return bOK;
+
+
+    }
+
+    方法 发送 <公开 类型 = 逻辑型>
+    参数 要发送的数据 <类型 = 字节集类>
+    参数 选项 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Send (_取句柄 (), 取字节集指针 (要发送的数据), 取字节集长度 (要发送的数据), 0))
+    }
+
+    方法 停止 <公开 类型 = 逻辑型>
+    参数 停止方式 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Shutdown (_取句柄 (), 停止方式))
+
+
+    }
+
+    #
+    #
+    #
+}
+
+类 进程通讯_双向广播_发送器 <公开 基础类 = ______进程通讯_模板类 注释 = "只能有一个发送器" 注释 = "例子https://nanomsg.org/gettingstarted/survey.html" 折叠
+        @模板实现类 = "">
+{
+    方法 开始 <公开 类型 = 逻辑型 注释 = "" 折叠>
+    参数 url <类型 = 文本型>
+    参数 协议类型 <类型 = 整数 注释 = "可选值" 注释 = "1 表示自带协议" 注释 = "2 表示原始协议" @默认值 = 1>
+    {
+        变量 szurl <类型 = 字节集类>
+        szurl = 文本到UTF8 (url)
+        如果 (Nanomsg_Socket (_取句柄 (), 协议类型, 进程通讯模型常量.NN_SURVEYOR) == 假)  // NN_SURVEYOR=98,
+        {
+            返回 (假)
+        }
+        如果 (Nanomsg_Bind (_取句柄 (), 取字节集指针 (szurl)) == 假)
+        {
+            返回 (假)
+        }
+        返回 (真)
+    }
+
+    方法 发送 <公开 类型 = 逻辑型 折叠>
+    参数 要发送的数据 <类型 = 字节集类>
+    参数 选项 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Send (_取句柄 (), 取字节集指针 (要发送的数据), 取字节集长度 (要发送的数据), 0))
+
+
+    }
+
+    方法 接收 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 用来存放接收的数据 <类型 = 字节集类>
+    参数 标记 <类型 = 整数 @默认值 = 0>
+    {
+        @ char* pBuf = NULL;
+        @ int nReadByte = 0;
+        @ bool bOK = Nanomsg_Recv(GetData(),&pBuf,&nReadByte,@<标记>);
+        @ @<用来存放接收的数据> = CVolMem(pBuf,nReadByte);
+        @ Nanomsg_FreeMsg(pBuf);
+        @ return bOK;
+
+
+    }
+
+    方法 是否接收超时 <公开 类型 = 逻辑型 折叠>
+    {
+        如果 (取错误代码 () == 138)  // ETIMEDOUT  138
+        {
+            返回 (真)
+        }
+        返回 (假)
+    }
+
+    方法 停止 <公开 类型 = 逻辑型 折叠>
+    参数 停止方式 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Shutdown (_取句柄 (), 停止方式))
+
+
+    }
+
+    #
+}
+
+类 进程通讯_双向多对多_发送接收 <公开 基础类 = ______进程通讯_原始套接字_配置函数 注释 = "例子 https://nanomsg.org/gettingstarted/bus.html" 折叠 @模板实现类 = "">
+{
+    方法 绑定 <公开 类型 = 逻辑型 注释 = "">
+    参数 url <类型 = 文本型>
+    参数 协议类型 <类型 = 整数 注释 = "可选值" 注释 = "1 表示自带协议" 注释 = "2 表示原始协议" @默认值 = 1>
+    {
+        变量 szurl <类型 = 字节集类>
+        szurl = 文本到UTF8 (url)
+        如果 (Nanomsg_Socket (_取句柄 (), 协议类型, 进程通讯模型常量.NN_BUS) == 假)
+        {
+            返回 (假)
+        }
+        如果 (Nanomsg_Bind (_取句柄 (), 取字节集指针 (szurl)) == 假)
+        {
+            返回 (假)
+        }
+        返回 (真)
+    }
+
+    方法 连接 <公开 类型 = 逻辑型 折叠>
+    参数 url <类型 = 文本型>
+    参数 协议类型 <类型 = 整数 注释 = "可选值" 注释 = "1 表示自带协议" 注释 = "2 表示原始协议" @默认值 = 1>
+    {
+        变量 szurl <类型 = 字节集类>
+        szurl = 文本到UTF8 (url)
+        如果 (Nanomsg_Connect (_取句柄 (), 取字节集指针 (szurl)) == 假)
+        {
+            返回 (假)
+        }
+        返回 (真)
+    }
+
+    方法 接收 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 用来存放接收的数据 <类型 = 字节集类>
+    参数 标记 <类型 = 整数 @默认值 = 0>
+    {
+        @ char* pBuf = NULL;
+        @ int nReadByte = 0;
+        @ bool bOK = Nanomsg_Recv(GetData(),&pBuf,&nReadByte,@<标记>);
+        @ @<用来存放接收的数据> = CVolMem(pBuf,nReadByte);
+        @ Nanomsg_FreeMsg(pBuf);
+        @ return bOK;
+
+
+    }
+
+    方法 发送 <公开 类型 = 逻辑型 折叠>
+    参数 要发送的数据 <类型 = 字节集类>
+    参数 选项 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Send (_取句柄 (), 取字节集指针 (要发送的数据), 取字节集长度 (要发送的数据), 0))
+    }
+
+    方法 停止 <公开 类型 = 逻辑型 折叠>
+    参数 停止方式 <类型 = 整数 @默认值 = 0>
+    {
+        返回 (Nanomsg_Shutdown (_取句柄 (), 停止方式))
+
+
+    }
+
+    #
+}

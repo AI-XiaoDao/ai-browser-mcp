@@ -1,0 +1,3262 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <@文档 = "category = \"网络访问库\"">
+
+类 SSL缓存类_ <公开 折叠 折叠2 @文档 = "category = \"SSL缓存\"" @全局类 = 真>
+{
+    方法 开启使用SSL及TLS_ <公开 静态 注释 = "开启Internet中所有的SSL及TLS" 折叠>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        注册表写整数_ (2, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "SecureProtocols", 2728, 是否64位, 4)
+    }
+
+    方法 网络_开启使用SSL及TLS <公开 静态 注释 = "开启Internet中所有的SSL及TLS" 折叠>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        开启使用SSL及TLS_ (是否64位)
+    }
+
+    方法 开启SSL缓存_ <公开 静态 折叠>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        注册表写整数_ (2, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "DisableCachingOfSSLPages", 0, 是否64位, 4)
+    }
+
+    方法 网络_开启SSL缓存 <公开 静态 折叠>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        开启SSL缓存_ (是否64位)
+    }
+}
+
+# //=====
+
+类 代理IP类_ <公开 折叠 折叠2 @文档 = "category = \"网络访问库.代理设置\"" @全局类 = 真>
+{
+    方法 置代理IP_ <公开 静态 类型 = 逻辑型 折叠 折叠2 @视窗.外部头文件 = "<wininet.h>" @视窗.外部库 = "Wininet.lib" @禁止流程检查 = 真>
+    参数 代理IP <类型 = 文本型 注释 = "例如：“121.235.194.23:31015”，如需取消代理则将本参数留空即可" @默认值 = "">
+    {
+        注册表写整数_ (2, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "ProxyEnable", 选择 (代理IP == "", 0, 1))
+        注册表写文本_ (2, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "ProxyServer", 代理IP)
+        @  BOOL rebool=InternetSetOptionW(0,39,0,0);
+        @ return rebool;
+    }
+}
+
+# //=====
+
+类 网络判断类_ <公开 折叠 折叠2 @文档 = "category = \"网络访问库.网络判断\"" @全局类 = 真>
+{
+    方法 判断网络状态_ <公开 静态 类型 = 逻辑型 返回值注释 = "返回“真”表示有网络，可上网" 折叠 折叠2 @视窗.外部头文件 = "IP\\Internal.h" @视窗.外部源文件 = "IP\\internal.cpp"
+            @禁止流程检查 = 真>
+    参数 返回信息 <类型 = 文本型 注释 = "1、局域网　2、拨号上网　3、代理上网　4、RAS　5、被非Internal连接占用　6、可以联网但不可用　7、无网" @默认值 = "">
+    {
+        变量 类型 <类型 = 整数>
+        @ Internal_S Inter;
+        @ int lx= Inter.Internal_style();
+        @ @<类型>=(@dt<整数>)lx;
+        如果 (类型 == 1)
+        {
+            返回信息 = "局域网"
+        }
+        否则 (类型 == 2)
+        {
+            返回信息 = "拨号上网"
+        }
+        否则 (类型 == 3)
+        {
+            返回信息 = "代理上网"
+        }
+        否则 (类型 == 4)
+        {
+            返回信息 = "RAS"
+        }
+        否则 (类型 == 5)
+        {
+            返回信息 = "被非Internal连接占用"
+        }
+        否则 (类型 == 6)
+        {
+            返回信息 = "可以联网但不可用"
+        }
+        否则 (类型 == 7)
+        {
+            返回信息 = "无网"
+        }
+        返回 (类型 < 5)
+    }
+}
+
+类 网络判断类2_ <公开 折叠 折叠2 @文档 = "category = \"网络访问库.网络判断\"" @全局类 = 真>
+{
+    方法 判断网络状态2_ <公开 静态 类型 = 逻辑型 注释 = "返回“真”表示有网络，可上网">
+    {
+        返回 (网络判断api.InternetGetConnectedState ())
+    }
+}
+
+类 网络判断api <折叠 @文档 = "category = \"网络访问库.网络判断.附加类\"">
+{
+    方法 InternetGetConnectedState <公开 静态 类型 = 逻辑型 折叠 折叠2 @输出名 = "InternetGetConnectedState" @视窗.输入 = "wininet.dll">
+    参数 标志 <类型 = 变整数 @默认值 = 0>
+    参数 返回值 <类型 = 变整数 @默认值 = 0>
+}
+
+# //=====
+
+类 网址IP处理类_ <公开 折叠 折叠2 @文档 = "category = \"网络访问库.IP域名操作\"" @全局类 = 真>
+{
+    方法 域名转IP地址_ <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 域名 <类型 = 文本型>
+    {
+        变量 cp <类型 = 字节集类>
+        变量 h_addr_list <类型 = 文本型>
+        变量 临时域名 <类型 = 文本型>
+        临时域名 = 到小写 (域名)
+        子文本替换 (临时域名, "http://", "")
+        子文本替换 (临时域名, "https://", "")
+        @ WSADATA WSAData;
+        @ if (!WSAStartup(MAKEWORD(1, 1), &WSAData))
+        @ {
+        cp = 文本到多字节 (临时域名)
+        @ hostent* host = gethostbyname((LPCSTR)@<cp>.GetPtr());
+        @ if (host)
+        @ {
+        @ @<h_addr_list>.SetValueText(inet_ntoa(*(struct in_addr*)host->h_addr_list[0]));
+        @ }
+        @ WSACleanup();
+        @ }
+        @ return @<h_addr_list>.GetText();
+    }
+
+    方法 取网址域名_ <公开 静态 类型 = 文本型 注释 = "网站地址取域名，支持http:// 或 https://" 折叠>
+    参数 网络地址 <类型 = 文本型 "">
+    {
+        变量 临时网络地址 <类型 = 文本型>
+        变量 位置 <类型 = 整数>
+        变量 URL <类型 = 文本型>
+        临时网络地址 = 网络地址
+        如果真 (文本是否为空 (临时网络地址))
+        {
+            返回 ("")
+        }
+        如果 (文本比较 (取文本左边 (临时网络地址, 7), "http://", 假) != 0 && 文本比较 (取文本左边 (临时网络地址, 8), "https://", 假) != 0)
+        {
+            位置 = 寻找文本 (临时网络地址, "/", , 真)
+            如果 (位置 > 0)
+            {
+                URL = 取文本左边 (临时网络地址, 位置 - 1)
+            }
+            否则
+            {
+                URL = 临时网络地址
+            }
+        }
+        否则
+        {
+            位置 = 寻找文本 (临时网络地址, "/", 8, 真)
+            如果 (位置 > 0)
+            {
+                如果 (寻找文本 (临时网络地址, "https://", , ) != -1)
+                {
+                    URL = 取文本中间 (临时网络地址, 8, 位置 - 8)
+                }
+                否则
+                {
+                    URL = 取文本中间 (临时网络地址, 7, 位置 - 7)
+                }
+            }
+            否则
+            {
+                如果 (寻找文本 (临时网络地址, "https://", , ) != -1)
+                {
+                    文本替换 (临时网络地址, 0, 8, "")
+                }
+                否则
+                {
+                    文本替换 (临时网络地址, 0, 7, "")
+                }
+                URL = 临时网络地址
+            }
+        }
+        如果真 (URL == "")
+        {
+            返回 ("")
+        }
+        位置 = 寻找文本 (URL, ":", 1, 真)
+        如果真 (位置 > 0)
+        {
+            URL = 取文本左边 (URL, 位置)
+        }
+        返回 (URL)
+    }
+
+    方法 取网址端口_ <公开 静态 类型 = 整数 注释 = "网站地址取端口号，支持80或443" 折叠>
+    参数 网络地址 <类型 = 文本型>
+    {
+        变量 临时网络地址 <类型 = 文本型>
+        变量 结果 <类型 = 文本型>
+        临时网络地址 = 网络地址
+        如果真 (文本是否为空 (临时网络地址))
+        {
+            返回 (0)
+        }
+        如果真 (寻找文本 (临时网络地址, "http", , 真) == -1)
+        {
+            临时网络地址 = "http" + 临时网络地址
+        }
+        临时网络地址 = 临时网络地址 + "/"
+        结果 = 取文本中间_ (临时网络地址, ":", "/", 6)
+        如果 (文本是否为空 (结果))
+        {
+            返回 (选择 (寻找文本 (临时网络地址, "http://", , 真) != -1, 80, 443))
+        }
+        否则
+        {
+            返回 (文本到整数 (结果))
+        }
+    }
+
+    方法 取网址地址_ <公开 静态 类型 = 文本型 注释 = "网站地址取不包含域名的网页地址 如 /a/abc.php" 折叠>
+    参数 网络地址 <类型 = 文本型>
+    {
+        变量 位置 <类型 = 整数>
+        变量 name <类型 = 文本型>
+        如果真 (文本是否为空 (网络地址))
+        {
+            返回 ("")
+        }
+        name = 取网址域名_ (网络地址)
+        位置 = 寻找文本 (网络地址, "/", 寻找文本 (网络地址, name, 1, 真), 真)
+        如果 (位置 > 0)
+        {
+            返回 (取文本右边 (网络地址, 取文本长度 (网络地址) - 位置))
+        }
+        否则
+        {
+            返回 ("/")
+        }
+    }
+
+    方法 修改IP网关_ <公开 静态 折叠>
+    参数 IP地址 <类型 = 文本型 注释 = "例如：192.168.1.8" @默认值 = "">
+    参数 子网掩码 <类型 = 文本型 注释 = "例如：255.255.255.0" @默认值 = "">
+    参数 默认网关 <类型 = 文本型 注释 = "例如：192.168.1.1" @默认值 = "">
+    参数 首选DNS <类型 = 文本型 注释 = "例如：114.114.114.114" @默认值 = "">
+    参数 备用DNS <类型 = 文本型 注释 = "例如：8.8.8.8" @默认值 = "">
+    参数 本地连接名称 <类型 = 文本型 注释 = "本地网络名称，留空则为：本地连接" @默认值 = "本地连接">
+    {
+        如果真 (IP地址 != "" || 子网掩码 != "" || 默认网关 != "")
+        {
+            运行 ("netsh interface ip set address " + 本地连接名称 + " static " + IP地址 + " " + 子网掩码 + " " + 默认网关 + " 1", 真, 程序窗口显示方式.隐藏窗口)
+        }
+        如果真 (首选DNS != "")
+        {
+            运行 ("netsh interface ip set dns " + 本地连接名称 + " static " + 首选DNS, 真, 程序窗口显示方式.隐藏窗口)
+        }
+        如果真 (备用DNS != "")
+        {
+            运行 ("netsh interface ip add dns " + 本地连接名称 + " addr=" + 备用DNS + " 2", 真, 程序窗口显示方式.隐藏窗口)
+        }
+    }
+
+    方法 修改IP网关_自动 <公开 静态 折叠>
+    参数 本地连接名称 <类型 = 文本型 注释 = "本地网络名称，留空则为：本地连接" @默认值 = "本地连接">
+    {
+        运行 ("netsh interface ip set address " + 本地连接名称 + " dhcp", 真, 程序窗口显示方式.隐藏窗口)
+        运行 ("netsh interface ip set dns " + 本地连接名称 + " dhcp", 真, 程序窗口显示方式.隐藏窗口)
+    }
+
+    方法 取外网IP_ <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        变量 网络 <类型 = 网络访问类_ 编辑时信息 = "0, E1103, 0, 0">
+        变量 结果 <类型 = 文本型 编辑时信息 = "0, E1103, 0, 0">
+        变量 JSON <类型 = JSON对象类_ 编辑时信息 = "0, E1103, 0, 0">
+        如果 (JSON.创建自文本 (网络.网页访问_T ("https://2025.ipchaxun.com/")))
+        {
+            如果 (JSON.取文本值 ("ret") == "ok")
+            {
+                结果 = JSON.取文本值 ("ip")
+            }
+        }
+        如果真 (结果 == "")
+        {
+            结果 = 网络.网页访问_T ("http://ddns.oray.com/checkip")
+            结果 = 取文本右边_ (结果, ": ")
+        }
+        如果真 (结果 == "")
+        {
+            结果 = 网络.网页访问_T ("https://ipv4.gdt.qq.com/get_client_ip", , , , , , )
+            如果 (寻找文本 (结果, ".") == -1 || 寻找文本 (结果, ".", 4) == -1)
+            {
+                结果 = ""
+            }
+        }
+        返回 (结果)
+    }
+
+    方法 取内网IP_ <公开 静态 类型 = 文本型 注释 = "单网卡" 折叠 @禁止流程检查 = 真>
+    {
+        变量 运行结果 <类型 = 文本型>
+        运行控制台程序 ("ipconfig", 运行结果)
+        运行结果 = 删首尾空 (取文本右边2_ (取文本中间_ (运行结果, "IPv4 地址", "子网掩码"), ":"))
+        如果真 (取文本长度 (运行结果) < 8 || 取文本长度 (运行结果) > 15)
+        {
+            运行结果 = ""
+        }
+        返回 (运行结果)
+    }
+
+    方法 取内网IP2_ <公开 静态 类型 = 文本数组类 注释 = "多网卡" 折叠 @禁止流程检查 = 真>
+    {
+        变量 运行结果 <类型 = 文本型>
+        变量 数据包 <类型 = 文本数组类>
+        变量 结果组 <类型 = 文本数组类>
+        变量 结果组2 <类型 = 文本数组类>
+        变量 结果组3 <类型 = 文本数组类>
+        变量 结果 <类型 = 整数>
+        运行控制台程序 ("ipconfig", 运行结果)
+        分割文本 (运行结果, "\r\n", 结果组, 真, 真)
+        结果组.枚举循环 ()
+        {
+            结果 = 寻找文本 (结果组.取枚举值 (), "IPv4 地址", , 真)
+            如果真 (结果 != -1)
+            {
+                分割文本 (结果组.取枚举值 (), ":", 结果组2, 真, 真)
+                如果真 (结果组2.取成员数 () == 2)
+                {
+                    结果组3.加入成员 (结果组2.取成员 (1))
+                }
+            }
+        }
+        返回 (结果组3)
+    }
+}
+
+# //=====
+
+类 URL参数解析类_ <公开 折叠 折叠2 @文档 = "category = \"网络访问库.URL解析\"" @全局类 = 真>
+{
+    方法 URL_取URL参数 <公开 静态 类型 = 整数 返回值注释 = "返回得到的数量，参数二中指定了名称将不会返回数量" 折叠>
+    参数 URL <类型 = 文本型 注释 = "带请求参数的URL，如：“http://www.baidu.com/lky?id=123&name=nhy”;" 注释 = "也可直接是参数体内容，如：“id=123&name=nhy”">
+    参数 指定参数名 <类型 = 文本型 注释 = "指定了参数名，将从参数三中返回参数值。如果留空则从参数四和五中返回所有数据" @默认值 = "">
+    参数 返回的参数值 <类型 = 文本型 注释 = "参数二不留将从本参数中返回参数值" @默认值 = "">
+    参数 返回的参数名组 <类型 = 文本数组类 注释 = "参数二留空将从本参数中返回所有数据" @默认值 = 空对象>
+    参数 返回的参数值组 <类型 = 文本数组类 @默认值 = 空对象>
+    {
+        变量 临时网址 <类型 = 文本型>
+        变量 最后位置 <类型 = 整数>
+        变量 参数文本 <类型 = 文本型>
+        变量 参数名 <类型 = 文本型>
+        变量 参数值 <类型 = 文本型>
+        变量 返回位置1 <类型 = 整数>
+        变量 起始位置1 <类型 = 整数>
+        变量 返回位置2 <类型 = 整数>
+        变量 返回位置3 <类型 = 整数>
+        临时网址 = URL
+        最后位置 = 寻找文本 (临时网址, "?", , 假)
+        如果 (最后位置 == -1)
+        {
+            最后位置 = 0
+            临时网址 = "?" + 临时网址
+        }
+        否则
+        {
+            最后位置 = 倒找文本 (临时网址, "/", 最后位置, 假)
+        }
+        参数文本 = 取文本右边 (临时网址, 取文本长度 (临时网址) - 最后位置)
+        子文本替换 (参数文本, "?", "&", , 1, 假)
+        判断循环 (真)
+        {
+            返回位置1 = 寻找文本 (参数文本, "&", 起始位置1, 假)
+            如果真 (返回位置1 == -1)
+            {
+                跳出循环
+            }
+            返回位置2 = 寻找文本 (参数文本, "=", 返回位置1, 假)
+            如果真 (返回位置2 == -1)
+            {
+                跳出循环
+            }
+            参数名 = 取文本中间 (参数文本, 返回位置1 + 1, 返回位置2 - 返回位置1 - 1)
+            返回的参数名组.加入成员 (参数名)
+            返回位置3 = 寻找文本 (参数文本, "&", 返回位置2, 假)
+            如果 (返回位置3 == -1)
+            {
+                参数值 = 取文本右边 (参数文本, 取文本长度 (参数文本) - 返回位置2 - 1)
+            }
+            否则
+            {
+                参数值 = 取文本中间 (参数文本, 返回位置2 + 1, 返回位置3 - 返回位置2 - 1)
+            }
+            如果真 (指定参数名 == 参数名)
+            {
+                返回的参数值 = 参数值
+                返回的参数名组.删除所有成员 ()
+                返回的参数值组.删除所有成员 ()
+                跳出循环
+            }
+            返回的参数值组.加入成员 (参数值)
+            起始位置1 = 返回位置2
+        }
+        返回 (返回的参数名组.取成员数 ())
+    }
+
+    方法 URL_取URL请求头值 <公开 静态 类型 = 文本型 折叠>
+    参数 请求头内容组 <类型 = 文本型>
+    参数 头名称 <类型 = 文本型 注释 = "例如：“Referer:”或“Referer”，可不区分大小写和不添加:">
+    {
+        如果真 (取文本右边 (头名称, 1) != ":")
+        {
+            头名称 = 头名称 + ":"
+        }
+        加入文本 (请求头内容组, "\r\n")
+        返回 (删首尾空 (取文本中间_ (请求头内容组, 头名称, "\r\n")))
+    }
+}
+
+# //=====
+
+类 网络文件大小类_ <公开 折叠 @全局类 = 真>
+{
+    方法 网络_取网络文件大小 <公开 静态 类型 = 文本型 注释 = "winhttp方式" 折叠 折叠2 @禁止流程检查 = 真
+            @视窗.外部头文件 = "windows.h\r\nwinhttp.h\r\niostream\r\nstring" @视窗.外部库 = "winhttp.lib">
+    参数 URL <类型 = 文本型>
+    {
+        @     const std::wstring url = @<URL>;
+        @     HINTERNET hSession = nullptr, hConnect = nullptr, hRequest = nullptr;
+        @     std::wstring fileSize = L"Unknown";
+        @     URL_COMPONENTS urlComp;
+        @     ZeroMemory(&urlComp, sizeof(urlComp));
+        @     urlComp.dwStructSize = sizeof(urlComp);
+        @     wchar_t hostName[256] = {0};
+        @     wchar_t urlPath[1024] = {0};
+        @     urlComp.lpszHostName = hostName;
+        @     urlComp.dwHostNameLength = sizeof(hostName)/sizeof(wchar_t);
+        @     urlComp.lpszUrlPath = urlPath;
+        @     urlComp.dwUrlPathLength = sizeof(urlPath)/sizeof(wchar_t);
+        @     if (!WinHttpCrackUrl(url.c_str(), url.length(), 0, &urlComp)) {
+        @         return L"解析URL失败";
+        @     }
+        @     hSession = WinHttpOpen(L"FileSizeChecker/1.0", 
+        @                          WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
+        @                          WINHTTP_NO_PROXY_NAME, 
+        @                          WINHTTP_NO_PROXY_BYPASS, 0);
+        @     if (!hSession) {
+        @         return L"创建WinHTTP会话失败";
+        @     }
+        @     hConnect = WinHttpConnect(hSession, hostName, urlComp.nPort, 0);
+        @     if (!hConnect) {
+        @         WinHttpCloseHandle(hSession);
+        @         return L"连接到主机时失败";
+        @     }
+        @     hRequest = WinHttpOpenRequest(hConnect, L"HEAD", urlPath, 
+        @                                 nullptr, WINHTTP_NO_REFERER, 
+        @                                 WINHTTP_DEFAULT_ACCEPT_TYPES, 
+        @                                 (urlComp.nScheme == INTERNET_SCHEME_HTTPS) ? WINHTTP_FLAG_SECURE : 0);
+        @     if (!hRequest) {
+        @         WinHttpCloseHandle(hConnect);
+        @         WinHttpCloseHandle(hSession);
+        @         return L"创建请求时失败";
+        @     }
+        @     if (!WinHttpSendRequest(hRequest, 
+        @                           WINHTTP_NO_ADDITIONAL_HEADERS, 0,
+        @                           WINHTTP_NO_REQUEST_DATA, 0, 
+        @                           0, 0)) {
+        @         WinHttpCloseHandle(hRequest);
+        @         WinHttpCloseHandle(hConnect);
+        @         WinHttpCloseHandle(hSession);
+        @         return L"发送请求时失败";
+        @     }
+        @     if (!WinHttpReceiveResponse(hRequest, nullptr)) {
+        @         WinHttpCloseHandle(hRequest);
+        @         WinHttpCloseHandle(hConnect);
+        @         WinHttpCloseHandle(hSession);
+        @         return L"接收响应时出错";
+        @     }
+        @     wchar_t contentLength[64] = {0};
+        @     DWORD contentLengthSize = sizeof(contentLength);
+        @     if (WinHttpQueryHeaders(hRequest, 
+        @                            WINHTTP_QUERY_CONTENT_LENGTH,
+        @                            WINHTTP_HEADER_NAME_BY_INDEX,
+        @                            &contentLength, 
+        @                            &contentLengthSize,
+        @                            WINHTTP_NO_HEADER_INDEX)) {
+        @         fileSize = contentLength;
+        @ return @an<CVolString> (fileSize.c_str());
+        @     } else {
+        @     WinHttpCloseHandle(hRequest);
+        @     WinHttpCloseHandle(hConnect);
+        @     WinHttpCloseHandle(hSession);
+        @     return L"Content-Length标头不可用";
+        @     }
+        @     WinHttpCloseHandle(hRequest);
+        @     WinHttpCloseHandle(hConnect);
+        @     WinHttpCloseHandle(hSession);
+        @ return "";
+    }
+
+    方法 网络_取网络文件大小2 <公开 静态 类型 = 文本型 注释 = "winInet方式" 折叠 折叠2 @禁止流程检查 = 真
+            @视窗.外部头文件 = "windows.h\r\nwininet.h\r\niostream\r\nstring" @视窗.外部库 = "wininet.lib">
+    参数 URL <类型 = 文本型>
+    {
+        @     const std::wstring url = @<URL>;
+        @     HINTERNET hInternet = nullptr, hConnect = nullptr, hRequest = nullptr;
+        @     std::wstring fileSize = L"Unknown";
+        @     URL_COMPONENTS urlComp;
+        @     ZeroMemory(&urlComp, sizeof(urlComp));
+        @     urlComp.dwStructSize = sizeof(urlComp);
+        @     wchar_t hostName[256] = {0};
+        @     wchar_t urlPath[1024] = {0};
+        @     urlComp.lpszHostName = hostName;
+        @     urlComp.dwHostNameLength = sizeof(hostName)/sizeof(wchar_t);
+        @     urlComp.lpszUrlPath = urlPath;
+        @     urlComp.dwUrlPathLength = sizeof(urlPath)/sizeof(wchar_t);
+        @     if (!InternetCrackUrlW(url.c_str(), url.length(), 0, &urlComp)) {
+        @         return L"解析URL失败";
+        @     }
+        @     hInternet = InternetOpenW(L"FileSizeChecker/1.0", 
+        @                             INTERNET_OPEN_TYPE_PRECONFIG,
+        @                             NULL, 
+        @                             NULL, 
+        @                             0);
+        @     if (!hInternet) {
+        @         return L"创建WinINet会话失败";
+        @     }
+        @     hConnect = InternetConnectW(hInternet, 
+        @                               hostName, 
+        @                               urlComp.nPort,
+        @                               NULL, 
+        @                               NULL, 
+        @                               INTERNET_SERVICE_HTTP,
+        @                               0, 
+        @                               0);
+        @     if (!hConnect) {
+        @         InternetCloseHandle(hInternet);
+        @         return L"连接到主机失败";
+        @     }
+        @     hRequest = HttpOpenRequestW(hConnect, 
+        @                               L"HEAD", 
+        @                               urlPath,
+        @                               NULL, 
+        @                               NULL, 
+        @                               NULL,
+        @                               (urlComp.nScheme == INTERNET_SCHEME_HTTPS) ? INTERNET_FLAG_SECURE : 0, 
+        @                               0);
+        @     if (!hRequest) {
+        @         InternetCloseHandle(hConnect);
+        @         InternetCloseHandle(hInternet);
+        @         return L"创建请求失败";
+        @     }
+        @     if (!HttpSendRequestW(hRequest, NULL, 0, NULL, 0)) {
+        @         InternetCloseHandle(hRequest);
+        @         InternetCloseHandle(hConnect);
+        @         InternetCloseHandle(hInternet);
+        @         return L"发送请求失败";
+        @     }
+        @     wchar_t contentLength[64] = {0};
+        @     DWORD contentLengthSize = sizeof(contentLength);
+        @     DWORD index = 0;
+        @     if (HttpQueryInfoW(hRequest, 
+        @                       HTTP_QUERY_CONTENT_LENGTH,
+        @                       &contentLength, 
+        @                       &contentLengthSize,
+        @                       &index)) {
+        @         fileSize = contentLength;
+        @         return @an<CVolString> (fileSize.c_str());
+        @     } else {
+        @         DWORD error = GetLastError();
+        @         if (error == ERROR_HTTP_HEADER_NOT_FOUND) {
+        @             InternetCloseHandle(hRequest);
+        @             InternetCloseHandle(hConnect);
+        @             InternetCloseHandle(hInternet);
+        @             return L"Content-Length标头不可用.";
+        @         } else {
+        @             InternetCloseHandle(hRequest);
+        @             InternetCloseHandle(hConnect);
+        @             InternetCloseHandle(hInternet);
+        @             return L"查询标头失败";
+        @         }
+        @     }
+        @     InternetCloseHandle(hRequest);
+        @     InternetCloseHandle(hConnect);
+        @     InternetCloseHandle(hInternet);
+        @ return "";
+    }
+}
+
+# //=====
+
+类 网络下载类_ <公开 折叠 @文档 = "category = \"网络访问库.网络文件下载\"">
+{
+    变量 下载 <类型 = 网络下载处理>
+    变量 全局附加标记 <类型 = 整数>
+    变量 全局保存路径 <类型 = 文本型>
+    变量 全局文件名称 <类型 = 文本型>
+
+    方法 下载网络文件_ <公开 类型 = 变整数 注释 = "如果有些电脑上下载失败，可以尝试执行“开启使用SSL及TLS_”、“开启SSL缓存_”." 注释 = "不支带Cookie的下载" 返回值注释 = "成功返回0" 折叠 折叠2>
+    参数 下载地址 <类型 = 文本型 注释 = "例如：https://dldir1.qq.com/qqfile/qq/PCQQ9.7.6/QQ9.7.6.28989.exe">
+    参数 详细保存路径 <类型 = 文本型 注释 = "默认保存到桌面，名称为test.rar ；路径+文件名" @默认值 = "">
+    参数 附加标记 <类型 = 整数 注释 = "此标记将在下载事件中回显，用于判断文件" @默认值 = 0>
+    {
+        变量 是否清理缓存 <类型 = 逻辑型 值 = 真>
+        变量 临时路径 <类型 = 文本型>
+        变量 结果 <类型 = 变整数>
+        清理缓存文件_ (下载地址)
+        全局附加标记 = 0
+        连续赋值 ("", 全局保存路径, 全局文件名称)
+        如果真 (是否清理缓存 == 真)
+        {
+            下载.清理缓存文件 (下载地址)
+        }
+        临时路径 = 详细保存路径
+        如果真 (临时路径 == "")
+        {
+            详细保存路径 = 取特定目录 (特定目录类型.系统桌面) + "test.rar"
+        }
+        创建目录 (取文本左边2_ (详细保存路径, "\\"))
+        全局附加标记 = 附加标记
+        全局保存路径 = 详细保存路径
+        全局文件名称 = 取文本右边2_ (详细保存路径, "\\")
+        结果 = 下载.下载网络文件 (下载地址, 详细保存路径, 下载)
+        如果真 (结果 < 0)
+        {
+            回调事件 (0, 0, 0, "", "", -1, 全局保存路径, 全局附加标记)
+            清理缓存文件_ (下载地址)
+        }
+        返回 (结果)
+    }
+
+    方法 清理缓存文件_ <公开 类型 = 逻辑型 折叠>
+    参数 szURL <类型 = 文本型>
+    {
+        返回 (下载.清理缓存文件 (szURL))
+    }
+
+    方法 网络下载处理_下载回调 <接收事件 类型 = 整数 折叠>
+    参数 来源对象 <类型 = 网络下载处理>
+    参数 标记值 <类型 = 整数>
+    参数 已下大小 <类型 = 长整数>
+    参数 文件总大小 <类型 = 长整数>
+    参数 状态码 <类型 = 整数>
+    参数 文件链接 <类型 = 文本型>
+    {
+        变量 进度 <类型 = 小数>
+        变量 状态 <类型 = 整数>
+        进度 = 四舍五入 ((小数)已下大小 / 文件总大小 * 100, 2)
+        如果 (已下大小 == 文件总大小 && 状态码 == 6)
+        {
+            状态 = 2
+        }
+        否则
+        {
+            状态 = 1
+        }
+        回调事件 (已下大小, 文件总大小, 进度, 文件链接, 全局文件名称, 状态, 全局保存路径, 全局附加标记)
+        返回 (0)
+    }
+
+    方法 回调事件 <公开 定义事件 类型 = 整数 折叠>
+    参数 已下大小 <类型 = 长整数>
+    参数 文件总大小 <类型 = 长整数>
+    参数 当前进度 <类型 = 小数 注释 = "百分比进度">
+    参数 文件链接 <类型 = 文本型>
+    参数 文件名称 <类型 = 文本型>
+    参数 下载状态 <类型 = 整数 注释 = "-1、下载失败　1、下载中　2、下载成功">
+    参数 保存路径 <类型 = 文本型>
+    参数 附加标记 <类型 = 整数>
+}
+
+类 网络下载处理 <注释 = "wininet.h" 折叠 折叠2 @文档 = "category = \"网络访问库.网络文件下载.附加类\"" @视窗.后缀文本 = "public IBindStatusCallback"
+        @视窗.外部头文件 = "Urlmon.h" @视窗.外部库 = "Urlmon.lib">
+{
+
+    # @begin
+    # <> <include>
+    #         virtual ULONG  __stdcall AddRef(){return E_NOTIMPL;};
+    #         virtual HRESULT __stdcall QueryInterface(REFIID riid,void **ppvObject){return E_NOTIMPL;};
+    #         virtual ULONG __stdcall Release(){return E_NOTIMPL;};
+    #         virtual HRESULT __stdcall GetBindInfo(DWORD *grfBINDF,BINDINFO *pbindinfo){return E_NOTIMPL;};
+    #         virtual HRESULT __stdcall GetPriority(long *pnPriority){return E_NOTIMPL;};
+    #         virtual HRESULT __stdcall OnDataAvailable(DWORD grfBSCF,DWORD dwSize,FORMATETC *pformatetc,STGMEDIUM *pstgmed){return E_NOTIMPL;};
+    #         virtual HRESULT __stdcall OnLowResource(DWORD reserved){return E_NOTIMPL;};
+    #         virtual HRESULT __stdcall OnObjectAvailable(REFIID riid,IUnknown *punk){return E_NOTIMPL;};
+    #         virtual HRESULT __stdcall OnProgress(unsigned long ulProgress,unsigned long ulProgressMax,unsigned long ulStatusCode,LPCWSTR szStatusText);
+    #         virtual HRESULT __stdcall OnStartBinding(DWORD dwReserved,IBinding *pib){return E_NOTIMPL;};
+    #         virtual HRESULT __stdcall OnStopBinding(HRESULT hresult,LPCWSTR szError){return E_NOTIMPL;};
+    # <> </include>
+    # HRESULT __stdcall @sn<current_class>::OnProgress(unsigned long ulProgress,unsigned long ulProgressMax,unsigned long ulStatusCode,LPCWSTR szStatusText){
+    #         if(ulProgress>0){  
+    #          @<下载回调>((long long)ulProgress,(long long)ulProgressMax,(INT)ulStatusCode,CVolString(szStatusText));
+    #         }
+    #         return S_OK;
+    # }
+    # @end
+
+    方法 清理缓存文件 <公开 类型 = 逻辑型 折叠 折叠2 @嵌入式方法 = "" @视窗.外部头文件 = "wininet.h" @视窗.外部库 = "wininet.lib">
+    参数 szURL <类型 = 文本型>
+    {
+        @ DeleteUrlCacheEntry ((LPCTSTR)@<szURL>.GetText())
+    }
+
+    方法 下载网络文件 <公开 类型 = 变整数 注释 = "0成功" 折叠 @嵌入式方法 = "">
+    参数 下载地址 <类型 = 文本型>
+    参数 详细保存路径 <类型 = 文本型>
+    参数 回调 <类型 = 网络下载处理>
+    {
+        @ (INT_P)URLDownloadToFile(0,@<下载地址>.GetText(),@<详细保存路径>.GetText(),0,&@<回调>)
+    }
+
+    方法 下载回调 <公开 定义事件 类型 = 整数 折叠>
+    参数 已下大小 <类型 = 长整数>
+    参数 文件总大小 <类型 = 长整数>
+    参数 状态码 <类型 = 整数>
+    参数 文件链接 <类型 = 文本型>
+}
+
+# //=====
+
+类 HTTP读文件类_ <公开 折叠 折叠2 @文档 = "category = \"网络访问库.HTTP读取\"" @全局类 = 真>
+{
+    变量 网络 <静态 类型 = 网络访问类_>
+
+    方法 HTTP读文件_B <公开 静态 类型 = 字节集类 折叠>
+    参数 请求网址 <类型 = 文本型 注释 = "提供所欲访问的网址内容">
+    参数 访问方式 <类型 = 整数 注释 = "0、GET　1、POST　2、HEAD　3、PUT　4、DELETE　5、OPTIONS　6、TRACE　7、CONNECT　8、PATCH" @默认值 = 0>
+    参数 提交信息 <类型 = 文本型 注释 = "本方法会根据提交信息的类型自动添加\"Content-Type\"协议头,无需你手动添加" @默认值 = "">
+    参数 提交字节集 <类型 = 字节集类 注释 = "本方法会根据提交信息的类型自动添加\"Content-Type\"协议头,无需你手动添加" @默认值 = 空对象>
+    参数 附加协议头 <类型 = 文本型 注释 = "提供本次请求所欲使用的附加协议头,每个协议之间请用\"\\r\\n\"换行" @默认值 = 空对象>
+    参数 提交Cookie <类型 = 文本型 @默认值 = "">
+    参数 重定向次数 <类型 = 整数 注释 = "欲遵循网站重定向的最大次数，0为禁止重定向" @默认值 = -1>
+    参数 返回的Cookies <类型 = 文本型 @默认值 = "">
+    参数 返回的协议头 <类型 = 文本型 @默认值 = "">
+    参数 代理地址 <类型 = 文本型 注释 = "设置当前一次网页访问使用的代理地址列表,非空时将代理模式临时改为\"命名代理\";"
+            注释 = "无论代理是什么协议,都一律填http/https，例如Socoks5的代理也是填： \"http://127.0.0.1:7890\";"
+            注释 = "可以用分号支持多个代理服务器，也可以对不同的协议使用不同的代理，例如：\"http=http://127.0.0.1:7890;https=http://192.168.1.1:8080\"" @默认值 = "">
+    参数 代理账号 <类型 = 文本型 注释 = "提供代理服务器所需的用户名(可空)，仅在代理模式为\"命名代理\"时可用" @默认值 = "">
+    参数 代理密码 <类型 = 文本型 注释 = "提供代理服务器所需的用户密码(可空)，仅在代理模式为\"命名代理\"时可用" @默认值 = "">
+    参数 超时时间 <类型 = 整数 注释 = "单位：毫秒；1000毫秒=1秒；默认为15秒，-1为不限制" @默认值 = 15000>
+    参数 忽略SSL错误 <类型 = 逻辑型 注释 = "是否忽略任何SSL验证相关错误，即不验证证书也不验证服务器(如使用了代理将会被一同忽略)" @默认值 = 真>
+    参数 内容编码 <类型 = 文本型 注释 = "指定所欲请求服务器使用的内容编码(压缩)方式，即\"Accept-Encoding\"协议内容;"
+            注释 = "本参数只对Windows 8及更高版本的系统有效，旧系统不支持WinHTTP的自动解压缩;" 注释 = "提供空文本时自动设置为\"Accept-Encoding: gzip, deflate\"，提供空对象则禁用压缩;"
+            注释 = "WinHTTP自动解压缩后，会将响应头的Content-Length、Content-Encoding删除掉" @默认值 = "">
+    参数 返回的结果 <类型 = 网页访问响应类_ @默认值 = 空对象>
+    {
+        返回 (网络.网页访问_B (请求网址, 访问方式, 提交信息, 提交字节集, 附加协议头, 提交Cookie, 重定向次数, 返回的Cookies, 返回的协议头, 代理地址, 代理账号, 代理密码, 超时时间, 忽略SSL错误, 内容编码, 返回的结果))
+    }
+
+    方法 HTTP读文件_T <公开 静态 类型 = 文本型 折叠>
+    参数 请求网址 <类型 = 文本型 注释 = "提供所欲访问的网址内容">
+    参数 访问方式 <类型 = 整数 注释 = "0、GET　1、POST　2、HEAD　3、PUT　4、DELETE　5、OPTIONS　6、TRACE　7、CONNECT　8、PATCH" @默认值 = 0>
+    参数 提交信息 <类型 = 文本型 注释 = "本方法会根据提交信息的类型自动添加\"Content-Type\"协议头,无需你手动添加" @默认值 = "">
+    参数 提交字节集 <类型 = 字节集类 @默认值 = 空对象>
+    参数 附加协议头 <类型 = 文本型 注释 = "提供本次请求所欲使用的附加协议头,每个协议之间请用\"\\r\\n\"换行" @默认值 = 空对象>
+    参数 提交Cookie <类型 = 文本型 @默认值 = "">
+    参数 重定向次数 <类型 = 整数 注释 = "欲遵循网站重定向的最大次数，0为禁止重定向" @默认值 = -1>
+    参数 返回的Cookies <类型 = 文本型 @默认值 = "">
+    参数 返回的协议头 <类型 = 文本型 @默认值 = "">
+    参数 代理地址 <类型 = 文本型 注释 = "设置当前一次网页访问使用的代理地址列表,非空时将代理模式临时改为\"命名代理\";"
+            注释 = "无论代理是什么协议,都一律填http/https,例如Socoks5的代理也是填: \"http://127.0.0.1:7890\";" 注释 = "可以用分号支持多个代理服务器,也可以对不同的协议使用不同的代理,例如:"
+            注释 = "\"http=http://127.0.0.1:7890;https=http://192.168.1.1:8080\"" @默认值 = "">
+    参数 代理账号 <类型 = 文本型 注释 = "提供代理服务器所需的用户名(可空)，仅在代理模式为\"命名代理\"时可用" @默认值 = "">
+    参数 代理密码 <类型 = 文本型 注释 = "提供代理服务器所需的用户密码(可空)，仅在代理模式为\"命名代理\"时可用" @默认值 = "">
+    参数 超时时间 <类型 = 整数 注释 = "单位：毫秒；1000毫秒=1秒；默认为15秒，-1为不限制" @默认值 = 15000>
+    参数 忽略SSL错误 <类型 = 逻辑型 注释 = "是否忽略任何SSL验证相关错误，即不验证证书也不验证服务器(如使用了代理将会被一同忽略)" @默认值 = 真>
+    参数 内容编码 <类型 = 文本型 注释 = "指定所欲请求服务器使用的内容编码(压缩)方式,即\"Accept-Encoding\"协议内容;"
+            注释 = "本参数只对Windows 8及更高版本的系统有效，旧系统不支持WinHTTP的自动解压缩;" 注释 = "提供空文本时自动设置为\"Accept-Encoding: gzip, deflate\"，提供空对象则禁用压缩;"
+            注释 = "WinHTTP自动解压缩后，会将响应头的Content-Length、Content-Encoding删除掉" @默认值 = "">
+    参数 返回的结果 <类型 = 网页访问响应类_ @默认值 = 空对象>
+    参数 返回内容转码方式 <类型 = 整数 注释 = "1、UTF8到文本　2、多字节到文本　3、多字节到文本 (Utf8到多字节()))" @默认值 = 1>
+    {
+        返回 (网络.网页访问_T (请求网址, 访问方式, 提交信息, 提交字节集, 附加协议头, 提交Cookie, 重定向次数, 返回的Cookies, 返回的协议头, 代理地址, 代理账号, 代理密码, 超时时间, 忽略SSL错误, 内容编码, 返回的结果, 返回内容转码方式))
+    }
+}
+
+# //=====
+
+类 网页解析辅助类_ <公开 折叠 折叠2 @文档 = "category = \"网络访问库.网盘解析\"" @全局类 = 真>
+{
+    方法 解析Onedrive直链_ <公开 静态 类型 = 文本型 折叠>
+    参数 解析网址 <类型 = 文本型 注释 = "例如：https://1drv.ms/w/s!AlXpbRNC7_RjbfOCcRMIaW_fojM?e=eXbPSD">
+    {
+        返回 ("https://onw.cc/1drv.ms?url=" + 解析网址)
+    }
+
+    方法 解析飞书直链_ <公开 静态 类型 = 文本型 折叠>
+    参数 解析网址 <类型 = 文本型 注释 = "例如：https://xf3v74qido.feishu.cn/file/boxcnDgMwJZf5IUChr3zUW6s1Id">
+    {
+        变量 "//cookie" <类型 = 文本型
+                值 = "Cookie: lang=zh; locale=zh-CN; session=<YOUR_FEISHU_SESSION>; session_list=<YOUR_FEISHU_SESSION>; _csrf_token=<YOUR_CSRF_TOKEN>"
+                注释 = "下载需要带上此 cookie，请自行抓包替换占位符，勿提交真实 session" 编辑时信息 = "0, CBBAF, 0, 0">
+        返回 ("https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/all/" + 取文本右边2_ (解析网址, "/"))
+    }
+
+    方法 解析蓝奏云直链_ <公开 静态 类型 = 文本型 折叠 "">
+    参数 解析网址 <类型 = 文本型 注释 = "例如：https://ywxk.lanzoui.com/in2fddbbfbg" "">
+    参数 密码 <类型 = 文本型 @默认值 = "">
+    {
+        变量 访问 <类型 = 网络访问类_>
+        变量 提交信息 <类型 = 文本型>
+        变量 网页数据 <类型 = 文本型>
+        变量 左网址 <类型 = 文本型>
+        变量 组合网址 <类型 = 文本型>
+        变量 参数包 <类型 = 文本数组类>
+        变量 json <类型 = JSON对象类_>
+        变量 最终链接 <类型 = 文本型>
+        变量 最终链接2 <类型 = 文本型>
+        变量 附加数据 <类型 = 文本型>
+        变量 正则 <类型 = 正则类_>
+        变量 临时参数 <类型 = 文本型>
+        变量 公式 <类型 = 文本型 值 = "[\\d\\w\\_]{70,}">
+        如果 (密码 == "")
+        {
+            网页数据 = 访问.网页访问_T (解析网址, , , , , , 0)
+            如果真 (取文本长度 (网页数据) < 50)
+            {
+                返回 ("取网页数据失败1")
+            }
+            左网址 = 取文本左边_ (解析网址, "/", 8) + "/"
+            正则.创建 (公式, 网页数据, , , )
+            如果 (正则.取匹配数量 () == 1)
+            {
+                临时参数 = 正则.取匹配文本 (0, )
+            }
+            否则
+            {
+                返回 ("匹配参数失败1")
+            }
+            组合网址 = 左网址 + "fn?" + 临时参数
+            网页数据 = 访问.网页访问_T (组合网址, 0)
+            如果真 (取文本长度 (网页数据) < 50)
+            {
+                返回 ("取网页数据失败2")
+            }
+            正则.创建 (公式, 网页数据, , , )
+            如果 (正则.取匹配数量 () == 1)
+            {
+                临时参数 = 正则.取匹配文本 (0, )
+            }
+            否则
+            {
+                返回 ("匹配参数失败2")
+            }
+            加入文本 (附加数据, "referer:" + 组合网址 + "\r\n")
+            提交信息 = "action=downprocess&sign=" + 临时参数 + "_c_c" + "&ves=1"
+            网页数据 = 访问.网页访问_T (左网址 + "ajaxm.php", 1, 提交信息, , 附加数据, , 0)
+            如果真 (取文本长度 (网页数据) < 50)
+            {
+                返回 ("取网页数据失败3")
+            }
+            json.创建自文本 (网页数据)
+            最终链接 = json.取文本值 ("dom") + "/file/" + json.取文本值 ("url")
+            访问.网页访问_T (最终链接, , , , , , -1, , 网页数据)
+            最终链接2 = "获取地址失败"
+            分割文本 (网页数据, "\n", 参数包)
+            参数包.枚举循环 ()
+            {
+                如果真 (取文本左边 (参数包.取枚举值 (), 9) == "Location:")
+                {
+                    最终链接2 = 删首尾空 (取文本右边_ (参数包.取枚举值 (), "Location:"))
+                    如果真 (取文本长度 (最终链接2) > 30)
+                    {
+                        最终链接 = 最终链接2
+                    }
+                    跳出循环
+                }
+            }
+        }
+        否则
+        {
+            最终链接 = 解析蓝奏云 (解析网址, 密码)
+        }
+        返回 (最终链接)
+    }
+
+    方法 解析蓝奏云 <静态 类型 = 文本型 折叠 "">
+    参数 解析网址 <类型 = 文本型 "">
+    参数 密码 <类型 = 文本型>
+    {
+        变量 访问 <类型 = 网络访问类_ 编辑时信息 = "0, 64EBE, 0, 0">
+        变量 提交信息 <类型 = 文本型 编辑时信息 = "0, 64EBE, 0, 0">
+        变量 网页数据 <类型 = 文本型 编辑时信息 = "0, 64EBE, 0, 0">
+        变量 左网址 <类型 = 文本型 编辑时信息 = "0, 64EBE, 0, 0">
+        变量 参数包 <类型 = 文本数组类 编辑时信息 = "0, 64EBE, 0, 0">
+        变量 json <类型 = JSON对象类_ 编辑时信息 = "0, 64EBE, 0, 0">
+        变量 最终链接 <类型 = 文本型 编辑时信息 = "0, 64EBE, 0, 0">
+        变量 附加数据头 <类型 = 文本型 编辑时信息 = "0, 64EBE, 0, 0">
+        变量 正则 <类型 = 正则类_ 编辑时信息 = "0, 64EBE, 0, 0">
+        变量 临时参数 <类型 = 文本型 编辑时信息 = "0, 64EBE, 0, 0">
+        变量 公式 <类型 = 文本型 值 = "[\\d\\w\\_]{70,}" 编辑时信息 = "0, 64EBE, 0, 0">
+        变量 UA <类型 = 文本型
+                值 = "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36 Core/1.94.209.400 QQBrowser/12.0.5442.400">
+        网页数据 = 访问.网页访问_T (解析网址, , , , , , 0)
+        如果真 (取文本长度 (网页数据) < 50)
+        {
+            返回 ("取网页数据失败1")
+        }
+        左网址 = 取文本左边_ (解析网址, "/", 8) + "/"
+        正则.创建 (公式, 网页数据, , , )
+        如果 (正则.取匹配数量 () == 1)
+        {
+            临时参数 = 正则.取匹配文本 (0, )
+        }
+        否则
+        {
+            返回 ("匹配参数失败1")
+        }
+        提交信息 = "action=downprocess&sign=" + 临时参数 + "&p=" + 密码
+        附加数据头 = "referer:" + 解析网址 + "\r\n" + UA
+        网页数据 = 访问.网页访问_T (左网址 + "ajaxm.php", 1, 提交信息, , 附加数据头, , 0)
+        如果真 (取文本长度 (网页数据) < 50)
+        {
+            返回 ("取网页数据失败2")
+        }
+        json.创建自文本 (网页数据)
+        最终链接 = json.取文本值 ("dom") + "/file/" + json.取文本值 ("url")
+        访问.网页访问_T (最终链接, , , , , , 0, , 网页数据)
+        置剪辑板文本 (最终链接)
+        最终链接 = "获取地址失败"
+        分割文本 (网页数据, "\n", 参数包)
+        参数包.枚举循环 ()
+        {
+            如果真 (取文本左边 (参数包.取枚举值 (), 9) == "Location:")
+            {
+                最终链接 = 删首尾空 (取文本右边_ (参数包.取枚举值 (), "Location:"))
+                跳出循环
+            }
+        }
+        返回 (最终链接)
+    }
+
+    方法 解析有道云笔记_ <公开 静态 类型 = 文本型 注释 = "直接返回笔记内容" 折叠>
+    参数 解析网址 <类型 = 文本型 注释 = "例如：https://note.youdao.com/s/5TCWtv0J">
+    参数 是否换行 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 网络 <类型 = 网络访问类_ 编辑时信息 = "0, B1106, 0, 0">
+        变量 头数据 <类型 = 文本型>
+        变量 头数据2 <类型 = 文本数组类>
+        变量 数据包 <类型 = 文本型>
+        变量 id值 <类型 = 文本型>
+        变量 JSON <类型 = JSON对象类_>
+        变量 模版 <类型 = 文本型
+                值 = "https://note.youdao.com/yws/api/note/###?sev=j1&editorType=1&unloginId=ebf5d5aa-3c03-1df4-1767-98654ecf14ab&editorVersion=new-json-editor&sec=v1">
+        变量 组合包 <类型 = 文本型>
+        变量 成员数 <类型 = 整数>
+        网络.网页访问_B (解析网址, 2, , , , , -1, , 头数据)
+        分割文本 (头数据, "\n", 头数据2)
+        如果真 (头数据2.取成员数 () > 0)
+        {
+            头数据2.枚举循环 ()
+            {
+                id值 = 删全部空_ (取文本右边2_ (头数据2.取枚举值 (), "id="))
+                如果真 (id值 != "")
+                {
+                    跳出循环
+                }
+            }
+            如果 (取文本长度 (id值) < 7)
+            {
+                返回 ("ID错误")
+            }
+            否则
+            {
+                子文本替换 (模版, "###", id值, , , )
+                数据包 = 网络.网页访问_T (模版)
+                如果真 (JSON.创建自文本 (数据包) == 真)
+                {
+                    数据包 = JSON.取文本值 ("content")
+                    如果真 (JSON.创建自文本 (数据包))
+                    {
+                        数据包 = JSON.取文本值 ("/5")
+                        如果真 (JSON.创建自文本 (数据包))
+                        {
+                            成员数 = JSON.成员数
+                            如果 (成员数 > 1)
+                            {
+                                计次循环 (成员数)
+                                {
+                                    数据包 = JSON.取文本值 ("/" + 到文本 (取循环索引 ()) + "/5/0/7/0/8")
+                                    如果 (取循环索引 () + 1 < 成员数)
+                                    {
+                                        如果真 (文本是否为空 (数据包) == 假)
+                                        {
+                                            如果 (是否换行)
+                                            {
+                                                加入文本 (组合包, 数据包 + "\r\n")
+                                            }
+                                            否则
+                                            {
+                                                加入文本 (组合包, 数据包)
+                                            }
+                                        }
+                                    }
+                                    否则
+                                    {
+                                        加入文本 (组合包, 数据包)
+                                    }
+                                }
+                            }
+                            否则
+                            {
+                                数据包 = JSON.取文本值 ("/0/5")
+                                如果真 (JSON.创建自文本 (数据包))
+                                {
+                                    成员数 = JSON.成员数
+                                    计次循环 (成员数)
+                                    {
+                                        数据包 = JSON.取文本值 ("/" + 到文本 (取循环索引 ()) + "/7/0/8")
+                                        如果 (取循环索引 () + 1 < 成员数)
+                                        {
+                                            如果真 (文本是否为空 (数据包) == 假)
+                                            {
+                                                如果 (是否换行)
+                                                {
+                                                    加入文本 (组合包, 数据包 + "\r\n")
+                                                }
+                                                否则
+                                                {
+                                                    加入文本 (组合包, 数据包)
+                                                }
+                                            }
+                                            数据包 = JSON.取文本值 ("/" + 到文本 (取循环索引 ()) + "/5/0/7/0/8")
+                                            如果真 (文本是否为空 (数据包) == 假)
+                                            {
+                                                如果 (是否换行)
+                                                {
+                                                    加入文本 (组合包, 数据包 + "\r\n")
+                                                }
+                                                否则
+                                                {
+                                                    加入文本 (组合包, 数据包)
+                                                }
+                                            }
+                                        }
+                                        否则
+                                        {
+                                            加入文本 (组合包, 数据包)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        返回 (组合包)
+    }
+
+    方法 解析有道云直链_ <公开 静态 类型 = 文本型 折叠>
+    参数 解析网址 <类型 = 文本型 注释 = "例如：https://note.youdao.com/s/90r6Ndxk">
+    参数 是否为视频 <类型 = 逻辑型 注释 = "真：解析视频直播" @默认值 = 假>
+    {
+        变量 网络 <类型 = 网络访问类_ 编辑时信息 = "0, B1106, 0, 0">
+        变量 头数据 <类型 = 文本型>
+        变量 头数据2 <类型 = 文本数组类 编辑时信息 = "0, B1106, 0, 0">
+        变量 数据包 <类型 = 文本型>
+        变量 id值 <类型 = 文本型 编辑时信息 = "0, B1106, 0, 0">
+        变量 P值 <类型 = 文本型>
+        变量 前网址 <类型 = 文本型 值 = "https://note.youdao.com/yws/public/note/" 编辑时信息 = "0, B1106, 0, 0">
+        变量 前网址2 <类型 = 文本型 值 = "https://note.youdao.com/yws/api/personal/file">
+        变量 后网址 <类型 = 文本型 值 = "?editorType=0&cstk=cGtjFpHb">
+        变量 后网址2 <类型 = 文本型 值 = "?method=download&shareKey=">
+        变量 后网址3 <类型 = 文本型 值 = "?method=download&inline=true&shareKey=">
+        变量 JSON <类型 = JSON对象类_>
+        网络.网页访问_B (解析网址, 2, , , , , -1, , 头数据)
+        分割文本 (头数据, "\n", 头数据2)
+        如果真 (头数据2.取成员数 () > 0)
+        {
+            头数据2.枚举循环 ()
+            {
+                id值 = 删全部空_ (取文本右边2_ (头数据2.取枚举值 (), "id="))
+                如果真 (id值 != "")
+                {
+                    跳出循环
+                }
+            }
+            如果 (取文本长度 (id值) < 7)
+            {
+                返回 ("")
+            }
+            否则
+            {
+                数据包 = 网络.网页访问_T (前网址 + id值 + 后网址)
+                如果 (取文本长度 (数据包) < 12)
+                {
+                    返回 ("")
+                }
+                否则
+                {
+                    JSON.创建自文本 (数据包)
+                    如果 (JSON.成员数 > 0)
+                    {
+                        P值 = JSON.取文本值 ("p")
+                        如果 (取文本长度 (P值) > 7)
+                        {
+                            如果 (是否为视频 == 假)
+                            {
+                                返回 (前网址2 + P值 + 后网址2 + id值)
+                            }
+                            否则
+                            {
+                                返回 (前网址2 + P值 + 后网址3 + id值)
+                            }
+                        }
+                        否则
+                        {
+                            返回 ("")
+                        }
+                    }
+                    否则
+                    {
+                        返回 ("")
+                    }
+                }
+            }
+        }
+        返回 ("")
+    }
+
+    方法 解析微云笔记_ <公开 静态 类型 = 文本型 注释 = "主要用于服务器变更后解决程序无法更新问题。笔记内容可以为IP地址或下载链接" 折叠>
+    参数 解析网址 <类型 = 文本型 注释 = "例如：https://share.weiyun.com/s8plMmDT">
+    参数 数据地址标记 <类型 = 文本型 注释 = "即微云笔记中需取的数据段前后所标记的标记数据." 注释 = "例如：###a192.168.1.88b###，前后的###即是地址标记" @默认值 = "###">
+    参数 前标记 <类型 = 文本型 注释 = "例如###a192.168.1.88b###的前标记是a">
+    参数 后标记 <类型 = 文本型 注释 = "例如###a192.168.1.88b###的后标记是b">
+    参数 是否包含前后标记 <类型 = 逻辑型 注释 = "即所取笔记内容是否包含“前标记”、“后标记”参数数据" @默认值 = 假>
+    {
+        变量 网络 <类型 = 网络访问类_>
+        变量 数据包 <类型 = 文本型>
+        变量 数据组 <类型 = 文本数组类>
+        变量 结果 <类型 = 文本型>
+        数据包 = 网络.网页访问_T (解析网址, , , , , , )
+        数据组 = 取文本中间_批量 (数据包, 数据地址标记, 数据地址标记, , )
+        数据组.枚举循环 ()
+        {
+            数据包 = 数据组.取枚举值 ()
+            如果 (取文本左边 (数据包, 取文本长度 (前标记)) == 前标记 && 取文本右边 (数据包, 取文本长度 (后标记)) == 后标记)
+            {
+                如果 (是否包含前后标记)
+                {
+                    结果 = 数据包
+                }
+                否则
+                {
+                    结果 = 取文本中间_ (数据包, 前标记, 后标记, , , , )
+                }
+                跳出循环
+            }
+        }
+        返回 (结果)
+    }
+}
+
+# //=====
+
+类 网址重定向类_ <公开 折叠 折叠2 @文档 = "category = \"网络访问库.重定向\"" @全局类 = 真>
+{
+    方法 取网页重定向地址_ <公开 静态 类型 = 文本型 注释 = "获取现有URL重向跳转后的地址" 折叠>
+    参数 请求网址 <类型 = 文本型>
+    参数 补充协议头 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 url对象 <类型 = COM对象类>
+        变量 Location <类型 = COM变体型>
+        变量 ret <类型 = 文本型>
+        初始化COM库_ ()
+        如果真 (url对象.创建 ("WinHttp.WinHttpRequest.5.1"))
+        {
+            url对象.写属性 ("Option", 6, 0)
+            url对象.方法 ("SetTimeouts", COM对象类, 5000, 5000, 10000, 5000)
+            url对象.方法 ("Open", COM对象类, "HEAD", 请求网址, 假)
+            如果真 (补充协议头)
+            {
+                url对象.方法 ("setRequestHeader", COM对象类, "User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)")
+                url对象.方法 ("setRequestHeader", COM对象类, "Accept-Language", "zh-cn")
+                url对象.方法 ("setRequestHeader", COM对象类, "Connection", "Keep-Alive")
+                url对象.方法 ("setRequestHeader", COM对象类, "Accept", "image/gif, image/x-xbitmap, image/jpeg, imagepeg, application/x-shockwave-flash, application/x-silverlight, */*")
+            }
+            url对象.无参数方法 ("Send", COM对象类)
+            Location = url对象.读属性 ("GetResponseHeader", COM变体型, "Location")
+            ret = Location.取值 (文本型)
+            url对象.清除 ()
+            关闭COM库_ ()
+            返回 (ret)
+        }
+        关闭COM库_ ()
+        返回 ("")
+    }
+}
+
+# //=====
+
+类 网络访问类_COM版 <公开 注释 = "基于WinHttp com版" 折叠 折叠2 @文档 = "category = \"网络访问库.网络访问库.WinHttp\"" @全局类 = 真>
+{
+    变量 HTTPREQUEST_PROXYSETTING_DEFAULT <类型 = 整数 值 = 0 注释 = "默认代理设置。 等效于 HTTPREQUEST_PROXYSETTING_PRECONFIG。">
+    变量 HTTPREQUEST_PROXYSETTING_PRECONFIG <类型 = 整数 值 = 0
+            注释 = "指示应从注册表获取代理设置。 这假定 Proxycfg.exe 已运行。 如果未运行Proxycfg.exe并指定 HTTPREQUEST_PROXYSETTING_PRECONFIG ，则行为等效于 HTTPREQUEST_PROXYSETTING_DIRECT。">
+    变量 HTTPREQUEST_PROXYSETTING_DIRECT <类型 = 整数 值 = 1 注释 = "指示应直接访问所有 HTTP 和 HTTPS 服务器。 如果没有代理服务器，请使用此命令。">
+    变量 HTTPREQUEST_PROXYSETTING_PROXY <类型 = 整数 值 = 2
+            注释 = "指定 HTTPREQUEST_PROXYSETTING_PROXY 时， varProxyServer 应设置为代理服务器字符串， varBypassList 应设置为域绕过列表字符串。 此代理配置仅适用于 WinHttpRequest 对象的当前实例。">
+
+    方法 网页访问_B <公开 类型 = 字节集类 折叠>
+    参数 请求网址 <类型 = 文本型>
+    参数 访问方式 <类型 = 整数 注释 = "0、GET　1、POST　2、HEAD　3、PUT　4、DELETE　5、OPTIONS　6、TRACE　7、CONNECT" @默认值 = 0>
+    参数 提交信息 <类型 = 文本型 注释 = "自动UTF8编码" @默认值 = "">
+    参数 提交字节集 <类型 = 字节集类 注释 = "提交字节集数据" @默认值 = 空对象>
+    参数 附加协议头 <类型 = 文本型 注释 = "多个请用换行符隔开" @默认值 = "">
+    参数 提交Cookies <类型 = 文本型 注释 = "设置提交时的cookie" @默认值 = "">
+    参数 返回Cookies <类型 = 文本型 @默认值 = 空对象>
+    参数 返回协议头 <类型 = 文本型 @默认值 = 空对象>
+    参数 返回状态代码 <类型 = 文本型 @默认值 = 空对象>
+    参数 禁止重定向 <类型 = 逻辑型 注释 = "默认不禁止网页重定向" @默认值 = 假>
+    参数 代理标识 <类型 = 整数 @默认值 = 0>
+    参数 代理地址 <类型 = 文本型 @默认值 = "">
+    参数 代理用户名 <类型 = 文本型 @默认值 = "">
+    参数 代理密码 <类型 = 文本型 @默认值 = "">
+    参数 超时时间 <类型 = 整数 注释 = "单位：毫秒；1000毫秒=1秒；默认为15秒" @默认值 = 15000>
+    参数 是否补全协议头 <类型 = 逻辑型 注释 = "当附件协议头为空时自动添加必要的UA协议头 默认为真，假将不再添加非传入协议头" @默认值 = 真>
+    {
+        变量 空字节集 <类型 = 字节集类>
+        变量 WinHttp <类型 = COM对象类>
+        变量 方式 <类型 = 文本型>
+        变量 数据组1 <类型 = 文本数组类>
+        变量 数据组2 <类型 = 文本数组类>
+        变量 局_变体 <类型 = COM变体型>
+        变量 返回数据 <类型 = 字节集类>
+        变量 Cook <类型 = 文本型>
+        变量 执行结果 <类型 = 逻辑型>
+        @ CoInitialize(NULL);
+        方式 = 选择 (访问方式 < 0 || 访问方式 > 7, "GET", 多项选择 (访问方式, "GET", "POST", "HEAD", "PUT", "DELETE", "OPTIONS", "TRACE", "CONNECT"))
+        如果真 (寻找文本 (请求网址, "http://", , 真) == -1 && 寻找文本 (请求网址, "https://", , 真) == -1)
+        {
+            请求网址 = "http://" + 请求网址
+        }
+        如果真 (WinHttp.创建 ("WinHttp.WinHttpRequest.5.1") == 假)
+        {
+            返回 (空字节集)
+        }
+        如果真 (代理地址 != "")
+        {
+            执行结果 = WinHttp.无返回值方法 ("SetProxy", HTTPREQUEST_PROXYSETTING_PROXY, 代理地址)
+            如果真 (代理用户名 != "")
+            {
+                如果真 (代理标识 == 0)
+                {
+                    代理标识 = 1
+                }
+                执行结果 = WinHttp.无返回值方法 ("SetCredentials", 代理用户名, 代理密码, 代理标识)
+            }
+        }
+        执行结果 = WinHttp.无返回值方法 ("SetTimeouts", 超时时间, 超时时间, 超时时间, 超时时间)
+        如果真 (到小写 (取文本左边 (请求网址, 4)) != "http")
+        {
+            请求网址 = "http://" + 请求网址
+        }
+        执行结果 = WinHttp.无返回值方法 ("Open", 方式, 请求网址, 假)
+        如果真 (禁止重定向)
+        {
+            执行结果 = WinHttp.写属性 ("Option", 6, 0)
+        }
+        执行结果 = WinHttp.写属性 ("Option", 4, 13056)
+        如果真 (是否补全协议头 == 真)
+        {
+            如果真 (寻找文本 (附加协议头, "Accept:", , 真) == -1)
+            {
+                附加协议头 = 附加协议头 + "\r\nAccept: */*"
+            }
+            如果真 (寻找文本 (附加协议头, "Referer:", , 真) == -1)
+            {
+                附加协议头 = 附加协议头 + "\r\nReferer:" + 请求网址
+            }
+            如果真 (寻找文本 (附加协议头, "Accept-Language:", , 真) == -1)
+            {
+                附加协议头 = 附加协议头 + "\r\nAccept-Language: zh-cn"
+            }
+            如果真 (寻找文本 (附加协议头, "User-Agent:", , 真) == -1)
+            {
+                附加协议头 = 附加协议头 + "\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 9.0; Windows NT 6.1)"
+            }
+            如果真 (访问方式 == 1)
+            {
+                如果真 (寻找文本 (附加协议头, "Content-Type:", , 真) == -1)
+                {
+                    附加协议头 = 附加协议头 + "\r\nContent-Type: application/x-www-form-urlencoded"
+                }
+            }
+        }
+        如果真 (取反 (提交Cookies == ""))
+        {
+            如果真 (取文本长度 (提交Cookies) > 0)
+            {
+                如果真 (寻找文本 (提交Cookies, "Cookie:", , 真) != -1)
+                {
+                    子文本替换 (提交Cookies, "Cookie:", "", , , 假)
+                }
+            }
+            执行结果 = WinHttp.无返回值方法 ("SetRequestHeader", "Cookie", 提交Cookies)
+        }
+        如果 (寻找文本 (附加协议头, "\r\n", , 假) == -1)
+        {
+            执行结果 = WinHttp.无返回值方法 ("SetRequestHeader", 内部_协议头取名 (附加协议头), 内部_协议头取值 (附加协议头))
+        }
+        否则
+        {
+            分割文本 (附加协议头, "\r\n", 数据组1)
+            计次循环 (数据组1.取成员数 ())
+            {
+                如果真 (数据组1.取成员 (取循环索引 ()) != "")
+                {
+                    如果真 (内部_协议头取名 (数据组1.取成员 (取循环索引 ())) == "Connection")
+                    {
+                        如果真 (内部_协议头取值 (数据组1.取成员 (取循环索引 ())) == "keep - alive")
+                        {
+                            到循环尾
+                        }
+                    }
+                    执行结果 = WinHttp.无返回值方法 ("SetRequestHeader", 内部_协议头取名 (数据组1.取成员 (取循环索引 ())), 内部_协议头取值 (数据组1.取成员 (取循环索引 ())))
+                }
+            }
+        }
+
+        如果 (提交字节集 == 空对象)
+        {
+            局_变体.置字节集 (文本到UTF8 (提交信息, 假))
+        }
+        否则
+        {
+            局_变体.置字节集 (提交字节集)
+        }
+        执行结果 = WinHttp.无返回值方法 ("Send", 局_变体)
+        局_变体 = WinHttp.读无参数属性 ("ResponseBody", COM变体型)
+        执行结果 = 局_变体.取字节集 (返回数据)
+        返回协议头 = WinHttp.读无参数属性 ("GetAllResponseHeaders", 文本型)
+        返回状态代码 = 到文本 (WinHttp.读无参数属性 ("Status", 整数))
+        WinHttp.读无参数属性 ("StatusText", 文本型)
+        分割文本 (返回协议头, "\r\n", 数据组2)
+        返回Cookies = ""
+        计次循环 (数据组2.取成员数 ())
+        {
+            Cook = 数据组2.取成员 (取循环索引 ())
+            如果真 (取文本左边 (Cook, 寻找文本 (Cook, ":")) == "Set-Cookie")
+            {
+                如果 (寻找文本 (Cook, ";", , 假) != -1)
+                {
+                    返回Cookies = 返回Cookies + 删首尾空 (取文本中间_ (Cook, "Set-Cookie:", ";")) + "; "
+                }
+                否则
+                {
+                    子文本替换 (Cook, "Set-Cookie:", "")
+                    返回Cookies = 返回Cookies + 删首尾空 (Cook) + "; "
+                }
+            }
+        }
+        如果真 (取文本左边 (返回Cookies, 2) == "; ")
+        {
+            返回Cookies = 取文本左边 (返回Cookies, 取文本长度 (返回Cookies) - 2)
+        }
+        返回Cookies = 返回Cookies
+        WinHttp.清除 ()
+        @ CoUninitialize();
+        返回 (返回数据)
+    }
+
+    方法 网页访问_T <公开 类型 = 文本型 折叠>
+    参数 请求网址 <类型 = 文本型>
+    参数 访问方式 <类型 = 整数 注释 = "0、GET　1、POST　2、HEAD　3、PUT　4、DELETE　5、OPTIONS　6、TRACE　7、CONNECT" @默认值 = 0>
+    参数 提交信息 <类型 = 文本型 注释 = "自动UTF8编码" @默认值 = "">
+    参数 提交字节集 <类型 = 字节集类 注释 = "提交字节集数据" @默认值 = 空对象>
+    参数 附加协议头 <类型 = 文本型 注释 = "多个请用换行符隔开" @默认值 = "">
+    参数 提交Cookies <类型 = 文本型 注释 = "设置提交时的cookie" @默认值 = "">
+    参数 返回Cookies <类型 = 文本型 @默认值 = 空对象>
+    参数 返回协议头 <类型 = 文本型 @默认值 = 空对象>
+    参数 返回状态代码 <类型 = 文本型 @默认值 = 空对象>
+    参数 禁止重定向 <类型 = 逻辑型 注释 = "默认不禁止网页重定向" @默认值 = 假>
+    参数 代理标识 <类型 = 整数 @默认值 = 0>
+    参数 代理地址 <类型 = 文本型 @默认值 = "">
+    参数 代理用户名 <类型 = 文本型 @默认值 = "">
+    参数 代理密码 <类型 = 文本型 @默认值 = "">
+    参数 超时时间 <类型 = 整数 注释 = "单位：毫秒；1000毫秒=1秒；默认为15秒" @默认值 = 15000>
+    参数 是否补全协议头 <类型 = 逻辑型 注释 = "当附件协议头为空时自动添加必要的UA协议头 默认为真，假将不再添加非传入协议头" @默认值 = 真>
+    参数 返回内容转码方式 <类型 = 整数 注释 = "1、UTF8到文本　2、多字节到文本　3、多字节到文本 (Utf8到多字节()))" @默认值 = 1>
+    {
+        变量 临时文本 <类型 = 文本型>
+        如果 (返回内容转码方式 == 1)
+        {
+            加入文本 (临时文本, UTF8到文本_ (网页访问_B (请求网址, 访问方式, 提交信息, 提交字节集, 附加协议头, 提交Cookies, 返回Cookies, 返回协议头, 返回状态代码, 禁止重定向, 代理标识, 代理地址, 代理用户名, 代理密码, 超时时间, 是否补全协议头), ))
+        }
+        否则 (返回内容转码方式 == 2)
+        {
+            加入文本 (临时文本, 多字节到文本_ (网页访问_B (请求网址, 访问方式, 提交信息, 提交字节集, 附加协议头, 提交Cookies, 返回Cookies, 返回协议头, 返回状态代码, 禁止重定向, 代理标识, 代理地址, 代理用户名, 代理密码, 超时时间, 是否补全协议头)))
+        }
+        否则 (返回内容转码方式 == 3)
+        {
+            加入文本 (临时文本, 多字节到文本_ (UTF8到多字节_ (网页访问_B (请求网址, 访问方式, 提交信息, 提交字节集, 附加协议头, 提交Cookies, 返回Cookies, 返回协议头, 返回状态代码, 禁止重定向, 代理标识, 代理地址, 代理用户名, 代理密码, 超时时间, 是否补全协议头), , )))
+
+        }
+        返回 (临时文本)
+    }
+
+    方法 网页_处理协议头 <公开 类型 = 文本型 折叠>
+    参数 参_原始协议头 <类型 = 文本型>
+    {
+        变量 局_原始 <类型 = 文本数组类>
+        变量 局_原始位置 <类型 = 整数>
+        变量 局_中间 <类型 = 文本型>
+        变量 局_7 <类型 = 文本型>
+        变量 局_分割 <类型 = 文本数组类>
+        变量 局_11 <类型 = 文本型>
+        变量 局_6 <类型 = 文本型>
+        变量 局_原始计次 <类型 = 整数>
+        变量 局_分割数 <类型 = 整数>
+        变量 局_分割数计次 <类型 = 整数>
+        分割文本 (参_原始协议头, "\r\n", 局_原始, 假, 假)
+        计次循环 (局_原始.取成员数 ())
+        {
+            局_原始计次 = 取循环索引 ()
+            局_原始位置 = 寻找文本 (局_原始.取成员 (局_原始计次), ":", , 假)
+            如果真 (局_原始位置 == -1)
+            {
+                到循环尾
+            }
+            局_中间 = 取文本中间 (局_原始.取成员 (局_原始计次), 0, 局_原始位置)  // -1
+            如果 (寻找文本 (局_中间, "-", , 假) != -1)
+            {
+                局_7 = ""
+                局_分割数 = 分割文本 (局_中间, "-", 局_分割, 假, 假)
+                计次循环 (局_分割数)
+                {
+                    局_分割数计次 = 取循环索引 ()
+                    如果 (局_分割数 == 局_分割数计次 + 1)
+                    {
+                        局_7 = 局_7 + 首字母改大写 (局_分割.取成员 (取循环索引 ()))
+                    }
+                    否则
+                    {
+                        局_7 = 局_7 + 首字母改大写 (局_分割.取成员 (取循环索引 ())) + "-"
+                    }
+                }
+                局_中间 = 局_7
+            }
+            否则
+            {
+                局_中间 = 首字母改大写 (局_中间)
+            }
+            局_11 = 取文本右边 (局_原始.取成员 (局_原始计次), 取文本长度 (局_原始.取成员 (局_原始计次)) - 取文本长度 (局_中间))
+            如果真 (取代码_ (取文本左边 (局_11, 1), 0) == 32)
+            {
+                局_11 = 取文本右边 (局_11, 取文本长度 (局_11) - 1)
+            }
+            局_6 = 局_6 + 局_中间 + 局_11 + "\r\n"
+        }
+        局_6 = 取文本左边 (局_6, 取文本长度 (局_6) - 取文本长度 ("\r\n"))  // 2个长度
+        返回 (局_6)
+    }
+
+    方法 内部_协议头取名 <公开 类型 = 文本型 折叠>
+    参数 协议头 <类型 = 文本型>
+    {
+        变量 位置 <类型 = 整数>
+        变量 结果 <类型 = 文本型>
+        位置 = 寻找文本 (协议头, ":", , 假)
+        如果真 (位置 != -1)
+        {
+            结果 = 取文本左边 (协议头, 位置)
+        }
+        返回 (删首尾空 (结果))
+
+    }
+
+    方法 内部_协议头取值 <公开 类型 = 文本型 折叠>
+    参数 协议头 <类型 = 文本型>
+    {
+        变量 位置 <类型 = 整数>
+        变量 结果 <类型 = 文本型>
+        位置 = 寻找文本 (协议头, ":", , 假)
+        如果真 (位置 != -1)
+        {
+            结果 = 取文本右边 (协议头, 取文本长度 (协议头) - 位置 - 1)
+        }
+        返回 (删首尾空 (结果))
+    }
+
+    方法 首字母改大写 <公开 类型 = 文本型 折叠>
+    参数 英文文本 <类型 = 文本型>
+    {
+        返回 (到大写 (取文本左边 (英文文本, 1)) + 取文本中间 (英文文本, 1, 取文本长度 (英文文本)))
+    }
+
+    方法 取重定向地址_ <公开 类型 = 文本型 注释 = "获取现有URL重向跳转后的地址" 折叠>
+    参数 请求网址 <类型 = 文本型>
+    参数 补充协议头 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 url对象 <类型 = COM对象类>
+        变量 Location <类型 = COM变体型>
+        变量 ret <类型 = 文本型>
+        如果真 (url对象.创建 ("WinHttp.WinHttpRequest.5.1"))
+        {
+            url对象.写属性 ("Option", 6, 0)
+            url对象.方法 ("SetTimeouts", COM对象类, 5000, 5000, 10000, 5000)
+            url对象.方法 ("Open", COM对象类, "HEAD", 请求网址, 假)
+            如果真 (补充协议头)
+            {
+                url对象.方法 ("setRequestHeader", COM对象类, "User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)")
+                url对象.方法 ("setRequestHeader", COM对象类, "Accept-Language", "zh-cn")
+                url对象.方法 ("setRequestHeader", COM对象类, "Connection", "Keep-Alive")
+                url对象.方法 ("setRequestHeader", COM对象类, "Accept", "image/gif, image/x-xbitmap, image/jpeg, imagepeg, application/x-shockwave-flash, application/x-silverlight, */*")
+            }
+            url对象.无参数方法 ("Send", COM对象类)
+            Location = url对象.读属性 ("GetResponseHeader", COM变体型, "Location")
+            ret = Location.取值 (文本型)
+            url对象.清除 ()
+            返回 (ret)
+        }
+        返回 ("")
+    }
+}
+
+类 网络访问类_WinInet版 <公开 注释 = "基于WinInet版" 折叠 @文档 = "category = \"网络访问库.网络访问库.WinInet\"">
+{
+    方法 网页访问_B <公开 类型 = 字节集类 折叠>
+    参数 请求网址 <类型 = 文本型>
+    参数 访问方式 <类型 = 整数 注释 = "0、GET　1、POST　2、HEAD　3、PUT　4、DELETE　5、OPTIONS　6、TRACE　7、CONNECT" @默认值 = 0>
+    参数 提交信息 <类型 = 文本型 @默认值 = "">
+    参数 提交字节集 <类型 = 字节集类 注释 = "提交字节集数据" @默认值 = 空对象>
+    参数 附加协议头 <类型 = 文本型 @默认值 = "">
+    参数 提交Cookies <类型 = 文本型 @默认值 = "">
+    参数 禁止重定向 <类型 = 逻辑型 @默认值 = 假>
+    参数 代理地址 <类型 = 文本型 @默认值 = "">
+    参数 代理密码 <类型 = 文本型 @默认值 = "">
+    参数 是否补全协议头 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 Internet连接句柄 <类型 = 变整数 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 Internet句柄 <类型 = 变整数 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 HTTP请求句柄 <类型 = 变整数 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 User_Agent <类型 = 文本型
+                值 = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
+                编辑时信息 = "0, BCCC1, 0, 0">
+        变量 HTTPS <类型 = 逻辑型 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 数据缓存 <类型 = 字节集类 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 访问数据 <类型 = 字节集类 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 整数地址 <类型 = 变整数 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 请求标记 <类型 = 变整数 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 域名 <类型 = 文本型 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 端口 <类型 = 整数 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 地址 <类型 = 文本型 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 协议头数据 <类型 = 字节集类 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 提交信息数据 <类型 = 字节集类 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 方式 <类型 = 文本型 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 空字节 <类型 = 字节集类 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 句柄 <类型 = 变整数 编辑时信息 = "0, BCCC1, 0, 0">
+        方式 = 选择 (访问方式 < 0 || 访问方式 > 7, "GET", 多项选择 (访问方式, "GET", "POST", "HEAD", "PUT", "DELETE", "OPTIONS", "TRACE", "CONNECT"))
+        如果真 (寻找文本 (请求网址, "http://", , 真) == -1 && 寻找文本 (请求网址, "https://", , 真) == -1)
+        {
+            请求网址 = "http://" + 请求网址
+        }
+        如果真 (到小写 (取文本左边 (请求网址, 8)) == "https://")
+        {
+            HTTPS = 真
+        }
+        如果 (代理地址 == "")
+        {
+            Internet句柄 = 网络访问api.InternetOpen (User_Agent, 1, "", "", 0)
+        }
+        否则
+        {
+            如果 (HTTPS)
+            {
+                Internet句柄 = 网络访问api.InternetOpen (User_Agent, 3, 代理地址, 代理密码, 0)
+            }
+            否则
+            {
+                Internet句柄 = 网络访问api.InternetOpen (User_Agent, 3, "http == " + 代理地址, 代理密码, 0)
+            }
+        }
+        如果真 (Internet句柄 == 0)
+        {
+            返回 (空字节)
+        }
+        端口 = 取网址端口_ (请求网址)
+        域名 = 取网址域名_ (请求网址)
+        Internet连接句柄 = 网络访问api.InternetConnect (Internet句柄, 域名, 端口, "", "", 3, 0, 0)
+        如果真 (Internet连接句柄 == 0)
+        {
+            网络访问api.InternetCloseHandle (Internet句柄)
+            返回 (空字节)
+        }
+        如果 (端口 == 443)
+        {
+            请求标记 = -2139095024
+        }
+        否则
+        {
+            请求标记 = -2147483632
+        }
+        如果真 (提交Cookies != "")
+        {
+            请求标记 = 位或 (请求标记, 524288)
+        }
+        如果真 (禁止重定向 == 真)
+        {
+            请求标记 = 位或 (请求标记, 2097152)
+        }
+        如果 (HTTPS == 真)
+        {
+            请求标记 = 位或 (请求标记, 8388608)
+        }
+        否则
+        {
+            请求标记 = 位或 (请求标记, 16384)
+        }
+        地址 = 取网址地址_ (请求网址)
+        HTTP请求句柄 = 网络访问api.HttpOpenRequest (Internet连接句柄, 方式, 地址, "HTTP/1.1", "", 0, 请求标记, 0)
+        如果真 (HTTP请求句柄 == 0)
+        {
+            网络访问api.InternetCloseHandle (Internet句柄)
+            网络访问api.InternetCloseHandle (Internet连接句柄)
+            返回 (空字节)
+        }
+        如果真 (寻找文本 (附加协议头, "User-Agent:", , 真) == -1)
+        {
+            如果 (附加协议头 == "")
+            {
+                加入文本 (附加协议头, "User-Agent:" + User_Agent)
+            }
+            否则
+            {
+                加入文本 (附加协议头, "User-Agent:" + User_Agent + "\n" + 附加协议头)
+            }
+        }
+        如果真 (是否补全协议头 == 真)
+        {
+            如果真 (寻找文本 (附加协议头, "Referer:", , 真) == -1)
+            {
+                加入文本 (附加协议头, "\nReferer: " + 请求网址)
+            }
+            如果真 (寻找文本 (附加协议头, "Accept:", , 真) == -1)
+            {
+                加入文本 (附加协议头, "\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*")
+
+            }
+            如果真 (寻找文本 (附加协议头, "Accept-Language:", , 真) == -1)
+            {
+                加入文本 (附加协议头, "\nAccept-Language: zh-cn")
+            }
+            如果真 (寻找文本 (附加协议头, "Content-Type:", , 真) == -1)
+            {
+                加入文本 (附加协议头, "\nContent-Type: application/x-www-form-urlencoded")
+            }
+        }
+        如果真 (提交Cookies != "")
+        {
+            如果 (寻找文本 (提交Cookies, "Cookie:", , ) == -1)
+            {
+                加入文本 (附加协议头, "\nCookie: " + 提交Cookies)
+            }
+            否则
+            {
+                加入文本 (附加协议头, 提交Cookies)
+            }
+        }
+        协议头数据 = 文本到UTF8 (附加协议头, 假)
+        如果 (提交字节集.取字节集长度 () > 0)
+        {
+            句柄 = 网络访问api.HttpSendRequest (HTTP请求句柄, 协议头数据.取字节集指针 (), 协议头数据.取字节集长度 (), 提交字节集.取字节集指针 (), 提交字节集.取字节集长度 ())
+        }
+        否则
+        {
+            提交信息数据 = 文本到UTF8 (提交信息, 假)
+            句柄 = 网络访问api.HttpSendRequest (HTTP请求句柄, 协议头数据.取字节集指针 (), 协议头数据.取字节集长度 (), 提交信息数据.取字节集指针 (), 提交信息数据.取字节集长度 ())
+
+        }
+        整数地址 = 内存_申请内存整数地址 (0)
+        数据缓存 = 取空白字节集 (1024)
+        访问数据.置字节集预分配尺寸 (1048576)
+        判断循环 (真)
+        {
+            网络访问api.InternetReadFile (HTTP请求句柄, 数据缓存.取字节集指针 (), 1024, 整数地址)
+            {
+                如果 (内存_读内存整数2 (整数地址) == 0)
+                {
+                    跳出循环
+                }
+                否则
+                {
+                    访问数据.添加字节集 (数据缓存.取字节集左边 (内存_读内存整数2 (整数地址)))
+                }
+            }
+        }
+        释放内存_ (整数地址)
+        网络访问api.InternetCloseHandle (Internet句柄)
+        网络访问api.InternetCloseHandle (Internet连接句柄)
+        网络访问api.InternetCloseHandle (HTTP请求句柄)
+        返回 (访问数据)
+    }
+
+    方法 网页访问_B2 <公开 类型 = 字节集类 折叠>
+    参数 请求网址 <类型 = 文本型>
+    参数 访问方式 <类型 = 整数 注释 = "0、GET　1、POST　2、HEAD　3、PUT　4、DELETE　5、OPTIONS　6、TRACE　7、CONNECT" @默认值 = 0>
+    参数 提交信息 <类型 = 文本型 @默认值 = "">
+    参数 提交字节集 <类型 = 字节集类 注释 = "提交字节集数据" @默认值 = 空对象>
+    参数 附加协议头 <类型 = 文本型 @默认值 = "">
+    参数 提交Cookies <类型 = 文本型 @默认值 = "">
+    参数 返回Cookies <类型 = 文本型 @默认值 = "">
+    参数 返回协议头 <类型 = 文本型 @默认值 = "">
+    参数 禁止重定向 <类型 = 逻辑型 @默认值 = 假>
+    参数 代理地址 <类型 = 文本型 @默认值 = "">
+    参数 代理密码 <类型 = 文本型 @默认值 = "">
+    参数 是否补全协议头 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 Internet连接句柄 <类型 = 变整数 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 Internet句柄 <类型 = 变整数 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 HTTP请求句柄 <类型 = 变整数 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 User_Agent <类型 = 文本型
+                值 = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
+                编辑时信息 = "0, BCCC1, 0, 0">
+        变量 HTTPS <类型 = 逻辑型 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 CK数据地址 <类型 = 变整数 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 整数地址2 <类型 = 变整数 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 数据缓存 <类型 = 字节集类 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 访问数据 <类型 = 字节集类 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 整数地址 <类型 = 变整数 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 请求标记 <类型 = 变整数 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 域名 <类型 = 文本型 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 端口 <类型 = 整数 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 地址 <类型 = 文本型 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 CK组 <类型 = 文本数组类 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 CK值 <类型 = 文本型 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 协议头数据 <类型 = 字节集类 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 提交信息数据 <类型 = 字节集类 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 方式 <类型 = 文本型 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 空字节 <类型 = 字节集类 编辑时信息 = "0, BCCC1, 0, 0">
+        变量 句柄 <类型 = 变整数 编辑时信息 = "0, BCCC1, 0, 0">
+        方式 = 选择 (访问方式 < 0 || 访问方式 > 7, "GET", 多项选择 (访问方式, "GET", "POST", "HEAD", "PUT", "DELETE", "OPTIONS", "TRACE", "CONNECT"))
+        如果真 (寻找文本 (请求网址, "http://", , 真) == -1 && 寻找文本 (请求网址, "https://", , 真) == -1)
+        {
+            请求网址 = "http://" + 请求网址
+        }
+        如果真 (到小写 (取文本左边 (请求网址, 8)) == "https://")
+        {
+            HTTPS = 真
+        }
+        如果 (代理地址 == "")
+        {
+            Internet句柄 = 网络访问api.InternetOpen (User_Agent, 1, "", "", 0)
+        }
+        否则
+        {
+            如果 (HTTPS)
+            {
+                Internet句柄 = 网络访问api.InternetOpen (User_Agent, 3, 代理地址, 代理密码, 0)
+            }
+            否则
+            {
+                Internet句柄 = 网络访问api.InternetOpen (User_Agent, 3, "http == " + 代理地址, 代理密码, 0)
+            }
+        }
+        如果真 (Internet句柄 == 0)
+        {
+            返回 (空字节)
+        }
+        端口 = 取网址端口_ (请求网址)
+        域名 = 取网址域名_ (请求网址)
+        Internet连接句柄 = 网络访问api.InternetConnect (Internet句柄, 域名, 端口, "", "", 3, 0, 0)
+        如果真 (Internet连接句柄 == 0)
+        {
+            网络访问api.InternetCloseHandle (Internet句柄)
+            返回 (空字节)
+        }
+        如果 (端口 == 443)
+        {
+            请求标记 = -2139095024
+        }
+        否则
+        {
+            请求标记 = -2147483632
+        }
+        如果真 (提交Cookies != "")
+        {
+            请求标记 = 位或 (请求标记, 524288)
+        }
+        如果真 (禁止重定向 == 真)
+        {
+            请求标记 = 位或 (请求标记, 2097152)
+        }
+        如果 (HTTPS == 真)
+        {
+            请求标记 = 位或 (请求标记, 8388608)
+        }
+        否则
+        {
+            请求标记 = 位或 (请求标记, 16384)
+        }
+        地址 = 取网址地址_ (请求网址)
+        HTTP请求句柄 = 网络访问api.HttpOpenRequest (Internet连接句柄, 方式, 地址, "HTTP/1.1", "", 0, 请求标记, 0)
+        如果真 (HTTP请求句柄 == 0)
+        {
+            网络访问api.InternetCloseHandle (Internet句柄)
+            网络访问api.InternetCloseHandle (Internet连接句柄)
+            返回 (空字节)
+        }
+        如果真 (是否补全协议头 == 真)
+        {
+            如果真 (寻找文本 (附加协议头, "Referer:", , 真) == -1)
+            {
+                加入文本 (附加协议头, "\nReferer: " + 请求网址)
+            }
+            如果真 (寻找文本 (附加协议头, "Accept:", , 真) == -1)
+            {
+                加入文本 (附加协议头, "\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*")
+
+            }
+            如果真 (寻找文本 (附加协议头, "Accept-Language:", , 真) == -1)
+            {
+                加入文本 (附加协议头, "\nAccept-Language: zh-cn")
+            }
+            如果真 (寻找文本 (附加协议头, "Content-Type:", , 真) == -1)
+            {
+                加入文本 (附加协议头, "\nContent-Type: application/x-www-form-urlencoded")
+            }
+        }
+        如果真 (提交Cookies != "")
+        {
+            如果 (寻找文本 (提交Cookies, "Cookie:", , ) == -1)
+            {
+                加入文本 (附加协议头, "\nCookie: " + 提交Cookies)
+            }
+            否则
+            {
+                加入文本 (附加协议头, 提交Cookies)
+            }
+        }
+        协议头数据 = 文本到UTF8 (附加协议头, 假)
+        如果 (提交字节集.取字节集长度 () > 0)
+        {
+            句柄 = 网络访问api.HttpSendRequest (HTTP请求句柄, 协议头数据.取字节集指针 (), 协议头数据.取字节集长度 (), 提交字节集.取字节集指针 (), 提交字节集.取字节集长度 ())
+        }
+        否则
+        {
+            提交信息数据 = 文本到UTF8 (提交信息, 假)
+            句柄 = 网络访问api.HttpSendRequest (HTTP请求句柄, 协议头数据.取字节集指针 (), 协议头数据.取字节集长度 (), 提交信息数据.取字节集指针 (), 提交信息数据.取字节集长度 ())
+
+        }
+        整数地址 = 内存_申请内存整数地址 (0)
+        数据缓存 = 取空白字节集 (1024)
+        访问数据.置字节集预分配尺寸 (1048576)
+        判断循环 (真)
+        {
+            网络访问api.InternetReadFile (HTTP请求句柄, 数据缓存.取字节集指针 (), 1024, 整数地址)
+            {
+                如果 (内存_读内存整数2 (整数地址) == 0)
+                {
+                    跳出循环
+                }
+                否则
+                {
+                    访问数据.添加字节集 (数据缓存.取字节集左边 (内存_读内存整数2 (整数地址)))
+                }
+            }
+        }
+        释放内存_ (整数地址)
+        CK数据地址 = 申请内存_ (5000)
+        整数地址2 = 内存_申请内存整数地址 (5000)
+        网络访问api.HttpQueryInfo (HTTP请求句柄, 22, CK数据地址, 整数地址2, 0)
+        分割文本 (指针到文本 (CK数据地址), "\n", CK组, , )
+        CK组.枚举循环 ()
+        {
+            CK值 = CK组.取枚举值 ()
+            如果真 (寻找文本 (CK值, "Set-Cookie", , 真) != -1)
+            {
+                加入文本 (返回Cookies, 删首尾空 (取文本中间_ (CK值, "Set-Cookie:", ";")) + "; ")
+            }
+        }
+        返回协议头 = 指针到文本 (CK数据地址)
+        释放内存_ (CK数据地址)
+        释放内存_ (整数地址2)
+        网络访问api.InternetCloseHandle (Internet句柄)
+        网络访问api.InternetCloseHandle (Internet连接句柄)
+        网络访问api.InternetCloseHandle (HTTP请求句柄)
+        返回 (访问数据)
+    }
+
+    方法 网页访问_T <公开 类型 = 文本型 折叠>
+    参数 请求网址 <类型 = 文本型>
+    参数 访问方式 <类型 = 整数 注释 = "0、GET　1、POST　2、HEAD　3、PUT　4、DELETE　5、OPTIONS　6、TRACE　7、CONNECT" @默认值 = 0>
+    参数 提交信息 <类型 = 文本型 @默认值 = "">
+    参数 提交字节集 <类型 = 字节集类 注释 = "提交字节集数据" @默认值 = 空对象>
+    参数 附加协议头 <类型 = 文本型 @默认值 = "">
+    参数 提交Cookies <类型 = 文本型 @默认值 = "">
+    参数 禁止重定向 <类型 = 逻辑型 @默认值 = 假>
+    参数 代理地址 <类型 = 文本型 @默认值 = "">
+    参数 代理密码 <类型 = 文本型 @默认值 = "">
+    参数 是否补全协议头 <类型 = 逻辑型 @默认值 = 真>
+    参数 返回内容转码方式 <类型 = 整数 注释 = "1、UTF8到文本　2、多字节到文本　3、多字节到文本 (Utf8到多字节()))" @默认值 = 1>
+    {
+        变量 临时文本 <类型 = 文本型>
+        如果 (返回内容转码方式 == 1)
+        {
+            加入文本 (临时文本, UTF8到文本_ (网页访问_B (请求网址, 访问方式, 提交信息, 提交字节集, 附加协议头, 提交Cookies, 禁止重定向, 代理地址, 代理密码, 是否补全协议头)))
+        }
+        否则 (返回内容转码方式 == 2)
+        {
+            加入文本 (临时文本, 多字节到文本_ (网页访问_B (请求网址, 访问方式, 提交信息, 提交字节集, 附加协议头, 提交Cookies, 禁止重定向, 代理地址, 代理密码, 是否补全协议头)))
+        }
+        否则 (返回内容转码方式 == 3)
+        {
+            加入文本 (临时文本, 多字节到文本_ (UTF8到多字节_ (网页访问_B (请求网址, 访问方式, 提交信息, 提交字节集, 附加协议头, 提交Cookies, 禁止重定向, 代理地址, 代理密码, 是否补全协议头))))
+        }
+        返回 (临时文本)
+    }
+
+    方法 网页访问_T2 <公开 类型 = 文本型 折叠>
+    参数 请求网址 <类型 = 文本型>
+    参数 访问方式 <类型 = 整数 注释 = "0、GET　1、POST　2、HEAD　3、PUT　4、DELETE　5、OPTIONS　6、TRACE　7、CONNECT" @默认值 = 0>
+    参数 提交信息 <类型 = 文本型 @默认值 = "">
+    参数 提交字节集 <类型 = 字节集类 注释 = "提交字节集数据" @默认值 = 空对象>
+    参数 附加协议头 <类型 = 文本型 @默认值 = "">
+    参数 提交Cookies <类型 = 文本型 @默认值 = "">
+    参数 返回Cookies <类型 = 文本型 @默认值 = "">
+    参数 返回协议头 <类型 = 文本型 @默认值 = "">
+    参数 禁止重定向 <类型 = 逻辑型 @默认值 = 假>
+    参数 代理地址 <类型 = 文本型 @默认值 = "">
+    参数 代理密码 <类型 = 文本型 @默认值 = "">
+    参数 是否补全协议头 <类型 = 逻辑型 @默认值 = 真>
+    参数 返回内容转码方式 <类型 = 整数 注释 = "1、UTF8到文本　2、多字节到文本　3、多字节到文本 (Utf8到多字节()))" @默认值 = 1>
+    {
+        变量 临时文本 <类型 = 文本型>
+        如果 (返回内容转码方式 == 1)
+        {
+            加入文本 (临时文本, UTF8到文本_ (网页访问_B2 (请求网址, 访问方式, 提交信息, 提交字节集, 附加协议头, 提交Cookies, 返回Cookies, 返回协议头, 禁止重定向, 代理地址, 代理密码, 是否补全协议头)))
+        }
+        否则 (返回内容转码方式 == 2)
+        {
+            加入文本 (临时文本, 多字节到文本_ (网页访问_B2 (请求网址, 访问方式, 提交信息, 提交字节集, 附加协议头, 提交Cookies, 返回Cookies, 返回协议头, 禁止重定向, 代理地址, 代理密码, 是否补全协议头)))
+        }
+        否则 (返回内容转码方式 == 3)
+        {
+            加入文本 (临时文本, 多字节到文本_ (UTF8到多字节_ (网页访问_B2 (请求网址, 访问方式, 提交信息, 提交字节集, 附加协议头, 返回Cookies, 返回协议头, 提交Cookies, 禁止重定向, 代理地址, 代理密码, 是否补全协议头))))
+        }
+        返回 (临时文本)
+    }
+}
+
+类 网络访问api <公开 折叠 @文档 = "category = \"网络访问库.网络访问库.WinInet.附加类\"">
+{
+    方法 InternetOpenUrlW <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "InternetOpenUrlW" @视窗.输入 = "wininet.dll">
+    参数 会话句柄 <类型 = 变整数>
+    参数 Url地址 <类型 = 文本型>
+    参数 请求头 <类型 = 文本型>
+    参数 头大小 <类型 = 变整数>
+    参数 标志 <类型 = 变整数>
+    参数 定义值 <类型 = 变整数>
+    {
+
+    }
+
+    方法 InternetConnect <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "InternetConnectW" @视窗.输入 = "wininet.dll">
+    参数 Internet句柄 <类型 = 变整数>
+    参数 域名 <类型 = 文本型>
+    参数 服务器端口 <类型 = 整数>
+    参数 用户名 <类型 = 文本型>
+    参数 用户口令 <类型 = 文本型>
+    参数 服务类型 <类型 = 整数 注释 = "1FTP;3HTTP">
+    参数 dwFlags <类型 = 整数 注释 = "0http;134217728被动FTP模式">
+    参数 dwContext <类型 = 整数>
+
+    方法 InternetOpen <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "InternetOpenW" @视窗.输入 = "wininet.dll">
+    参数 句柄名称 <类型 = 文本型>
+    参数 连接类型 <类型 = 整数 注释 = "1直接连接;3代理连接">
+    参数 代理地址 <类型 = 文本型>
+    参数 代理掩码 <类型 = 文本型>
+    参数 dwFlags <类型 = 整数>
+
+    方法 HttpQueryInfo <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "HttpQueryInfoW" @视窗.输入 = "wininet.dll">
+    参数 Internet请求句柄 <类型 = 变整数>
+    参数 待查信息 <类型 = 变整数>
+    参数 返回容器 <类型 = 变整数 "">
+    参数 返回容器长度 <类型 = 变整数>
+    参数 lpdwIndex <类型 = 变整数>
+
+    方法 InternetReadFile <公开 静态 类型 = 逻辑型 折叠 折叠2 @输出名 = "InternetReadFile" @视窗.输入 = "wininet.dll">
+    参数 HTTP请求句柄 <类型 = 变整数>
+    参数 lpBuffer <类型 = 变整数>
+    参数 dwNumberOfBytesToRead <类型 = 整数>
+    参数 lpdwNumberOfBytesRead <类型 = 变整数 "">
+
+    方法 HttpSendRequest <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "HttpSendRequestA" @视窗.输入 = "wininet.dll">
+    参数 HTTP请求句柄 <类型 = 变整数>
+    参数 附加协议头 <类型 = 变整数>
+    参数 附加协议头长度 <类型 = 整数>
+    参数 提交信息 <类型 = 变整数>
+    参数 提交信息长度 <类型 = 整数>
+
+    方法 HttpOpenRequest <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "HttpOpenRequestW" @视窗.输入 = "wininet.dll">
+    参数 Internet连接句柄 <类型 = 变整数>
+    参数 访问方式 <类型 = 文本型>
+    参数 页面路径 <类型 = 文本型>
+    参数 协议版本 <类型 = 文本型>
+    参数 引用页 <类型 = 文本型>
+    参数 识别类型 <类型 = 变整数>
+    参数 dwFlags <类型 = 变整数>
+    参数 dwContext <类型 = 整数>
+
+    方法 GetVersion <公开 静态 类型 = 变整数 折叠2 @输出名 = "GetVersion" @视窗.输入 = "kernel32.dll">
+
+    方法 InternetCloseHandle <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "InternetCloseHandle" @视窗.输入 = "wininet.dll">
+    参数 句柄 <类型 = 变整数>
+}
+
+# //=====
+
+类 网络访问类_ <公开 注释 = "基于WinHttp api版" 折叠 @文档 = "category = \"网络访问库.网络访问库.WinHttp\"">
+{
+    变量 集用户代理 <公开 类型 = 文本型 注释 = "设置User-Agent,只能本实例首次网页访问之前设置;" 注释 = "空文本为默认UA,空对象为不使用UA(默认不添加这个协议头)." 折叠2 @属性变量 = 真>
+    变量 集代理类型 <公开 类型 = 网络代理类型_ 值 = 网络代理类型_.不使用代理 注释 = "设置代理的类型,只能本实例首次网页访问之前设置." @属性变量 = 真>
+    变量 集代理服务器 <公开 类型 = 文本型 注释 = "设置代理服务器,仅在\"代理类型\"为\"命名代理\"时可用,只能本实例首次网页访问之前设置;"
+            注释 = "无论代理是什么协议,都一律填http/https,例如Socoks5的代理也是填: \"http://127.0.0.1:7890\";" 注释 = "可以用分号支持多个代理服务器,也可以对不同的协议使用不同的代理,例如:"
+            注释 = "\"http=http://127.0.0.1:7890;https=http://192.168.1.1:8080\"" 折叠2 @属性变量 = 真>
+    变量 集代理跳过列表 <公开 类型 = 文本型 值 = "<local>" 注释 = "仅在\"代理类型\"为\"命名代理\"时可用,列表内的域名和IP不会通过代理访问;" 注释 = "请提供用分号分隔的主机域名或IP地址,可以使用通配符;"
+            注释 = "请勿提供空文本,默认的\"<local>\"为忽略所有不含句点的主机名." 折叠2 @属性变量 = 真>
+    变量 集是否编码网址 <公开 类型 = 逻辑型 值 = 假 注释 = "是否自动对网址进行URL编码,默认为假. 请注意不要重复编码." @属性变量 = 真>
+    变量 "//集自动Cookie管理" <公开 类型 = 逻辑型 值 = 真>
+    变量 会话句柄 <类型 = 变整数>
+
+    方法 类_清理 <折叠>
+    {
+        如果 (会话句柄 != 0)
+        {
+            WinHttp基类_.关闭句柄 (会话句柄)
+        }
+    }
+
+    方法 网页访问_B <公开 类型 = 字节集类 返回值注释 = "返回访问网页的结果,如果响应码为0则表示无法连接到目标网址或内部代码错误." 折叠 @虚拟方法 = 可覆盖>
+    参数 请求网址 <类型 = 文本型 注释 = "提供所欲访问的网址内容" 编辑时信息 = "B3FF4, 0, 0, 0">
+    参数 访问方式 <类型 = 整数 注释 = "0、GET　1、POST　2、HEAD　3、PUT　4、DELETE　5、OPTIONS　6、TRACE　7、CONNECT　8、PATCH" @默认值 = 0>
+    参数 提交信息 <类型 = 文本型 注释 = "本方法会根据提交信息的类型自动添加\"Content-Type\"协议头,无需你手动添加" @默认值 = "">
+    参数 提交字节集 <类型 = 字节集类 注释 = "本方法会根据提交信息的类型自动添加\"Content-Type\"协议头,无需你手动添加" @默认值 = 空对象>
+    参数 附加协议头 <类型 = 文本型 注释 = "提供本次请求所欲使用的附加协议头,每个协议之间请用\"\\r\\n\"换行" 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = 空对象>
+    参数 提交Cookie <类型 = 文本型 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = "">
+    参数 重定向次数 <类型 = 整数 注释 = "欲遵循网站重定向的最大次数，-1为禁止重定向" @默认值 = -1>
+    参数 返回的Cookies <类型 = 文本型 @默认值 = "">
+    参数 返回的协议头 <类型 = 文本型 @默认值 = "">
+    参数 代理地址 <类型 = 文本型 注释 = "设置当前一次网页访问使用的代理地址列表,非空时将代理模式临时改为\"命名代理\";"
+            注释 = "无论代理是什么协议,都一律填http/https，例如Socoks5的代理也是填： \"http://127.0.0.1:7890\";"
+            注释 = "可以用分号支持多个代理服务器，也可以对不同的协议使用不同的代理，例如：\"http=http://127.0.0.1:7890;https=http://192.168.1.1:8080\"" @默认值 = "">
+    参数 代理账号 <类型 = 文本型 注释 = "提供代理服务器所需的用户名(可空)，仅在代理模式为\"命名代理\"时可用" @默认值 = "">
+    参数 代理密码 <类型 = 文本型 注释 = "提供代理服务器所需的用户密码(可空)，仅在代理模式为\"命名代理\"时可用" @默认值 = "">
+    参数 超时时间 <类型 = 整数 注释 = "单位：毫秒；1000毫秒=1秒；默认为15秒，-1为不限制" 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = 15000>
+    参数 忽略SSL错误 <类型 = 逻辑型 注释 = "是否忽略任何SSL验证相关错误，即不验证证书也不验证服务器(如使用了代理将会被一同忽略)" @默认值 = 真>
+    参数 内容编码 <类型 = 文本型 注释 = "指定所欲请求服务器使用的内容编码(压缩)方式，即\"Accept-Encoding\"协议内容;"
+            注释 = "本参数只对Windows 8及更高版本的系统有效，旧系统不支持WinHTTP的自动解压缩;" 注释 = "提供空文本时自动设置为\"Accept-Encoding: gzip, deflate\"，提供空对象则禁用压缩;"
+            注释 = "WinHTTP自动解压缩后，会将响应头的Content-Length、Content-Encoding删除掉" @默认值 = "">
+    参数 返回的结果 <类型 = 网页访问响应类_ @默认值 = 空对象>
+    参数 是否补全必要协议头 <类型 = 逻辑型 @默认值 = 真>
+    参数 是否自动管理Cookie <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 连接句柄 <类型 = 变整数>
+        变量 URL组件信息 <类型 = 网络URL组件信息类_>
+        变量 提交信息数据 <类型 = 字节集类>
+        变量 方式 <类型 = 文本型>
+        变量 空字节 <类型 = 字节集类>
+        方式 = 选择 (访问方式 < 0 || 访问方式 > 8, "GET", 多项选择 (访问方式, "GET", "POST", "HEAD", "PUT", "DELETE", "OPTIONS", "TRACE", "CONNECT", "PATCH"))
+        如果真 (寻找文本 (请求网址, "http://", , 真) == -1 && 寻找文本 (请求网址, "https://", , 真) == -1)
+        {
+            请求网址 = "http://" + 请求网址
+        }
+        如果 (内部初始化 () == 假)
+        {
+            返回的结果.错误信息 = "初始化失败：" + WinHttp基类_.取最后错误信息 ()
+            返回 (空字节)
+        }
+        如果 (WinHttp基类_.拆分URL (请求网址, URL组件信息, 选择 (集是否编码网址, 网络URL操作类_.URL编码, 0)) == 假)
+        {
+            返回的结果.错误信息 = "拆分URL失败：" + WinHttp基类_.取最后错误信息 ()
+            返回 (空字节)
+        }
+        连接句柄 = WinHttp基类_.连接服务器 (会话句柄, URL组件信息.域名, 选择 (URL组件信息.端口 == 80 || URL组件信息.端口 == 443, 0, URL组件信息.端口))
+        如果 (连接句柄 == 0)
+        {
+            返回的结果.错误信息 = "连接服务器失败：" + WinHttp基类_.取最后错误信息 ()
+            返回 (空字节)
+        }
+        变量 请求句柄 <类型 = 变整数>
+        变量 请求标志 <类型 = 整数>
+        // 请求标志 = 网络请求头标志类_.URL编码  // 对URL的路径和参数部分进行URL编码
+        如果 (URL组件信息.协议类型 == 2)
+        {
+            请求标志 = 位或 (请求标志, 网络请求头标志类_.安全连接)  // HTTPS必须加上这个标志
+        }
+        请求句柄 = WinHttp基类_.打开请求 (连接句柄, 方式, URL组件信息.路径 + URL组件信息.附加信息, , , 空对象, 请求标志)
+        如果 (请求句柄 == 0)
+        {
+            返回的结果.错误信息 = "打开请求失败：" + WinHttp基类_.取最后错误信息 ()
+            WinHttp基类_.关闭句柄 (连接句柄)
+            返回 (空字节)
+        }
+        WinHttp基类_.置选项_解析超时 (请求句柄, 超时时间)
+        WinHttp基类_.置选项_连接超时 (请求句柄, 超时时间)
+        WinHttp基类_.置选项_接收超时 (请求句柄, 超时时间)
+        WinHttp基类_.置选项_发送超时 (请求句柄, 超时时间)
+        如果 (文本是否为空 (代理地址) == 假)
+        {
+            变量 代理信息 <类型 = 网络代理信息类_>
+            代理信息.访问类型 = 网络代理类型_.命名代理
+            代理信息.代理服务器 = 代理地址
+            代理信息.代理跳过列表 = 集代理跳过列表
+            WinHttp基类_.置选项_代理信息 (请求句柄, 代理信息)
+        }
+        如果 (文本是否为空 (代理账号) == 假)
+        {
+            WinHttp基类_.置选项_代理用户名 (请求句柄, 代理账号)
+            WinHttp基类_.置选项_代理密码 (请求句柄, 代理密码)
+        }
+
+        变量 请求协议头 <类型 = 文本型>
+        如果 (文本是否为空 (附加协议头) == 假)
+        {
+            请求协议头 = 附加协议头 + "\r\n"
+        }
+        如果真 (是否补全必要协议头 == 真)
+        {
+            如果真 (寻找文本 (请求协议头, "User-Agent", , 真) == -1)
+            {
+                请求协议头 = 请求协议头 + "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586" + "\r\n"
+            }
+            如果真 (寻找文本 (请求协议头, "Accept", , 真) == -1)
+            {
+                请求协议头 = 请求协议头 + "Accept: text/html, application/xhtml+xml, */*" + "\r\n"
+            }
+            如果真 (寻找文本 (请求协议头, "Accept-Language", , 真) == -1)
+            {
+                请求协议头 = 请求协议头 + "Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,zh-TW;q=0.5" + "\r\n"
+            }
+        }
+
+        如果 (文本是否为空对象 (内容编码) == 假 && WinHttp基类_.置选项_解压缩 (请求句柄, 3) == 真)
+        {
+            // Windows 8.1以上才能使用自动解压缩,旧系统设置该选项只会返回假,不会造成崩溃.
+            如果真 (寻找文本 (请求协议头, "Accept-Encoding", , 真) == -1)
+            {
+                如果 (文本是否为空 (内容编码) == 真)
+                {
+                    请求协议头 = 请求协议头 + "Accept-Encoding: zip, deflate" + "\r\n"
+                }
+                否则
+                {
+                    请求协议头 = 请求协议头 + 内容编码 + "\r\n"
+                }
+            }
+        }
+        如果 (是否自动管理Cookie == 假)
+        {
+            WinHttp基类_.置选项_禁止功能 (请求句柄, 网络禁止标志类_.禁止Cookies)
+        }
+        如果真 (寻找文本 (请求协议头, "Cookie", , 真) == -1)
+        {
+            如果 (文本是否为空 (提交Cookie) == 假)
+            {
+                如果 (是否以文本开头 (提交Cookie, "Cookie:", 假) == 假)
+                {
+                    请求协议头 = 请求协议头 + "Cookie: " + 提交Cookie + "\r\n"
+                }
+                否则
+                {
+                    请求协议头 = 请求协议头 + 提交Cookie + "\r\n"
+                }
+            }
+        }
+
+        提交信息数据 = 提交字节集
+        如果真 (文本是否为空 (提交信息) == 假)
+        {
+            提交信息数据 = 文本到UTF8_ (提交信息)
+        }
+        如果 (提交信息数据.取字节集长度 () > 0)
+        {
+            如果真 (寻找文本 (请求协议头, "Content-Type", , 真) == -1)
+            {
+                如果 (提交信息数据.取字节集数据 (0, 字节) == 123 || 提交信息数据.取字节集数据 (0, 字节) == 91)  // 首尾字符为'{'或'[',表示是JSON数据
+                {
+                    请求协议头 = 请求协议头 + "Content-Type: " + "application/json; charset=utf-8" + "\r\n"
+                }
+                否则
+                {
+                    请求协议头 = 请求协议头 + "Content-Type: " + "application/x-www-form-urlencoded; charset=utf-8" + "\r\n"
+                }
+
+            }
+        }
+        如果 (文本是否为空 (请求协议头) == 假)
+        {
+            WinHttp基类_.添加请求头 (请求句柄, 请求协议头, 网络请求头修改标志类_.添加请求头)
+        }
+        如果 (重定向次数 <= 0)
+        {
+            WinHttp基类_.置选项_禁止功能 (请求句柄, 网络禁止标志类_.禁止重定向)
+        }
+        否则
+        {
+            WinHttp基类_.置选项_最大重定向次数 (请求句柄, 重定向次数)
+            WinHttp基类_.置状态回调 (请求句柄, 内部重定向回调, 网络回调标志类_.重定向)
+        }
+        如果 (忽略SSL错误 == 真)
+        {
+            WinHttp基类_.置选项_安全标志 (请求句柄, 网络安全标志类_.忽略所有证书错误)
+        }
+        // 开始发送请求
+        如果 (WinHttp基类_.发送请求 (请求句柄, 空对象, 提交信息数据, 提交信息数据.取字节集长度 (), 返回的结果.取对象自身指针 ()) == 真)
+        {
+            如果 (WinHttp基类_.接收响应 (请求句柄) == 真)
+            {
+                // 接收响应头
+                变量 响应头 <类型 = 文本型>
+                WinHttp基类_.取响应头 (请求句柄, 响应头, 网络协议头标志类_.所有标头_换行)
+                返回的结果.响应头 = 响应头
+                返回的结果.响应码 = WinHttp基类_.取响应头_整数 (请求句柄, 网络协议头标志类_.状态码)
+                // 接收主体内容
+                如果 (方式 != "HEAD")
+                {
+                    变量 内容长度 <类型 = 整数>
+                    变量 接收数量 <类型 = 整数类>
+                    内容长度 = WinHttp基类_.取响应头_整数 (请求句柄, 网络协议头标志类_.内容长度)
+                    如果 (内容长度 > 0)
+                    {
+                        变量 次数 <类型 = 整数>
+                        返回的结果.请求结果.分配字节集 (内容长度, 真)  // 提前分配内存
+                        次数 = 内容长度 / 1048576  // 分段接收数据,每次1MB
+                        计次循环 (次数)
+                        {
+                            如果 (WinHttp基类_.接收数据2 (请求句柄, 返回的结果.请求结果.取字节集指针 () + 取循环索引 () * 1048576, 1048576, 接收数量) == 假 && 接收数量.值 != 1048576)
+                            {
+                                返回的结果.错误信息 = "接收数据失败：" + WinHttp基类_.取最后错误信息 ()
+                                跳出循环
+                            }
+                        }
+                        如果 (内容长度 % 1048576 > 0)
+                        {
+                            如果 (WinHttp基类_.接收数据2 (请求句柄, 返回的结果.请求结果.取字节集指针 () + 次数 * 1048576, 内容长度 % 1048576, 接收数量) == 假 && 接收数量.值 != 内容长度 % 1048576)
+                            {
+                                返回的结果.错误信息 = "接收数据失败： " + WinHttp基类_.取最后错误信息 ()
+                            }
+                        }
+                    }
+                    否则  // 内容长度不定(WinHTTP解压缩内容后就取不到长度)
+                    {
+                        变量 可用数量 <类型 = 整数类>
+                        返回的结果.请求结果.置字节集预分配尺寸 (1048576)  // 8KB是WinHTTP内部的默认缓冲区大小
+                        循环判断首 ()
+                        {
+                            变量 缓冲区 <类型 = 字节集类>
+                            如果 (WinHttp基类_.取可用数据量 (请求句柄, 可用数量) == 假)
+                            {
+                                返回的结果.错误信息 = "取可用数据量失败：" + WinHttp基类_.取最后错误信息 ()
+                                跳出循环
+                            }
+                            缓冲区.分配字节集 (可用数量.值)
+                            如果 (WinHttp基类_.接收数据 (请求句柄, 缓冲区, 接收数量) == 真)
+                            {
+                                如果 (接收数量.值 == 0)
+                                {
+                                    跳出循环
+                                }
+                                返回的结果.请求结果.添加字节集 (缓冲区)
+                            }
+                            否则
+                            {
+                                返回的结果.错误信息 = "接收数据失败：" + WinHttp基类_.取最后错误信息 ()
+                                跳出循环
+                            }
+                        }
+                        循环判断尾 (可用数量.值 > 0)
+                    }
+                }
+                // 获取cookies
+                变量 索引 <类型 = 整数类>
+                索引.值 = 0
+                循环判断首 ()
+                {
+                    变量 cookie <类型 = 文本型>
+                    如果 (WinHttp基类_.取响应头 (请求句柄, cookie, 网络协议头标志类_.设置Cookie, 空对象, 索引) == 假)
+                    {
+                        跳出循环
+                    }
+                    加入文本 (返回的结果.Cookies, WinHttp基类_.取Cookie内容 (cookie) + "\r\n")
+                }
+                循环判断尾 (索引.值 >= 0)
+            }
+            否则
+            {
+                返回的结果.错误信息 = "接收响应失败：" + WinHttp基类_.取最后错误信息 ()
+            }
+        }
+        否则
+        {
+            返回的结果.错误信息 = "发送请求失败：" + WinHttp基类_.取最后错误信息 ()
+        }
+        WinHttp基类_.关闭句柄 (请求句柄)
+        WinHttp基类_.关闭句柄 (连接句柄)
+        返回的Cookies = 返回的结果.Cookies
+        返回的协议头 = 返回的结果.响应头
+        返回 (返回的结果.请求结果)
+    }
+
+    方法 网页访问_T <公开 类型 = 文本型 折叠>
+    参数 请求网址 <类型 = 文本型 注释 = "提供所欲访问的网址内容">
+    参数 访问方式 <类型 = 整数 注释 = "0、GET　1、POST　2、HEAD　3、PUT　4、DELETE　5、OPTIONS　6、TRACE　7、CONNECT　8、PATCH" @默认值 = 0>
+    参数 提交信息 <类型 = 文本型 注释 = "本方法会根据提交信息的类型自动添加\"Content-Type\"协议头,无需你手动添加" @默认值 = "">
+    参数 提交字节集 <类型 = 字节集类 @默认值 = 空对象>
+    参数 附加协议头 <类型 = 文本型 注释 = "提供本次请求所欲使用的附加协议头,每个协议之间请用\"\\r\\n\"换行" @默认值 = 空对象>
+    参数 提交Cookie <类型 = 文本型 @默认值 = "">
+    参数 重定向次数 <类型 = 整数 注释 = "欲遵循网站重定向的最大次数，-1为禁止重定向" @默认值 = -1>
+    参数 返回的Cookies <类型 = 文本型 @默认值 = "">
+    参数 返回的协议头 <类型 = 文本型 @默认值 = "">
+    参数 代理地址 <类型 = 文本型 注释 = "设置当前一次网页访问使用的代理地址列表,非空时将代理模式临时改为\"命名代理\";"
+            注释 = "无论代理是什么协议,都一律填http/https,例如Socoks5的代理也是填: \"http://127.0.0.1:7890\";" 注释 = "可以用分号支持多个代理服务器,也可以对不同的协议使用不同的代理,例如:"
+            注释 = "\"http=http://127.0.0.1:7890;https=http://192.168.1.1:8080\"" @默认值 = "">
+    参数 代理账号 <类型 = 文本型 注释 = "提供代理服务器所需的用户名(可空)，仅在代理模式为\"命名代理\"时可用" @默认值 = "">
+    参数 代理密码 <类型 = 文本型 注释 = "提供代理服务器所需的用户密码(可空)，仅在代理模式为\"命名代理\"时可用" @默认值 = "">
+    参数 超时时间 <类型 = 整数 注释 = "单位：毫秒；1000毫秒=1秒；默认为15秒，-1为不限制" @默认值 = 15000>
+    参数 忽略SSL错误 <类型 = 逻辑型 注释 = "是否忽略任何SSL验证相关错误，即不验证证书也不验证服务器(如使用了代理将会被一同忽略)" @默认值 = 真>
+    参数 内容编码 <类型 = 文本型 注释 = "指定所欲请求服务器使用的内容编码(压缩)方式,即\"Accept-Encoding\"协议内容;"
+            注释 = "本参数只对Windows 8及更高版本的系统有效，旧系统不支持WinHTTP的自动解压缩;" 注释 = "提供空文本时自动设置为\"Accept-Encoding: gzip, deflate\"，提供空对象则禁用压缩;"
+            注释 = "WinHTTP自动解压缩后，会将响应头的Content-Length、Content-Encoding删除掉" @默认值 = "">
+    参数 返回的结果 <类型 = 网页访问响应类_ @默认值 = 空对象>
+    参数 返回内容转码方式 <类型 = 整数 注释 = "1、UTF8到文本　2、多字节到文本　3、多字节到文本 (Utf8到多字节()))" @默认值 = 1>
+    参数 是否补全必要协议头 <类型 = 逻辑型 @默认值 = 真>
+    参数 是否自动管理Cookie <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 临时文本 <类型 = 文本型>
+        如果 (返回内容转码方式 == 1)
+        {
+            加入文本 (临时文本, UTF8到文本_ (网页访问_B (请求网址, 访问方式, 提交信息, 提交字节集, 附加协议头, 提交Cookie, 重定向次数, 返回的Cookies, 返回的协议头, 代理地址, 代理账号, 代理密码, 超时时间, 忽略SSL错误, 内容编码, 返回的结果, 是否补全必要协议头, 是否自动管理Cookie)))
+        }
+        否则 (返回内容转码方式 == 2)
+        {
+            加入文本 (临时文本, 多字节到文本_ (网页访问_B (请求网址, 访问方式, 提交信息, 提交字节集, 附加协议头, 提交Cookie, 重定向次数, 返回的Cookies, 返回的协议头, 代理地址, 代理账号, 代理密码, 超时时间, 忽略SSL错误, 内容编码, 返回的结果, 是否补全必要协议头, 是否自动管理Cookie)))
+        }
+        否则 (返回内容转码方式 == 3)
+        {
+            加入文本 (临时文本, 多字节到文本_ (UTF8到多字节_ (网页访问_B (请求网址, 访问方式, 提交信息, 提交字节集, 附加协议头, 提交Cookie, 重定向次数, 返回的Cookies, 返回的协议头, 代理地址, 代理账号, 代理密码, 超时时间, 忽略SSL错误, 内容编码, 返回的结果, 是否补全必要协议头, 是否自动管理Cookie))))
+        }
+        返回 (临时文本)
+    }
+
+    方法 内部初始化 <类型 = 逻辑型 注释 = "内部方法" 折叠>
+    {
+        如果 (会话句柄 == 0)
+        {
+            会话句柄 = WinHttp基类_.初始化 (集用户代理, 集代理类型, 假, 集代理服务器, 集代理跳过列表)
+            如果 (会话句柄 == 0)
+            {
+                返回 (假)
+            }
+            WinHttp基类_.置选项_IPv6快速回退 (会话句柄, 真)  // 在较新系统会优先解析IPV6地址,因为很多网络无法正常访问IPV6,必须设置该选项快速回退到IPV4
+            WinHttp基类_.置选项_TCP快速打开 (会话句柄, 真)
+            WinHttp基类_.置超时时间 (会话句柄, 5000, 2000, 30000, 30000)
+        }
+        返回 (真)
+    }
+
+    方法 内部重定向回调 <静态 注释 = "内部方法" 折叠>
+    参数 网络句柄 <类型 = 变整数 注释 = "与状态回调关联的网络句柄.">
+    参数 上下文值 <类型 = 变整数 注释 = "  与网络句柄关联的的上下文值,可以通过\"置选项_上下文值\"或\"发送请求\"设置," 注释 = "可用于传递用户自定义的数据.">
+    参数 网络状态 <类型 = 网络回调状态标志类_ 注释 = "请参考\"网络回调状态标志类_\"中的常量.">
+    参数 状态信息指针 <类型 = 变整数 注释 = "指向缓冲区的指针,数据类型取决于参数\"网络状态\"的值.">
+    参数 状态信息长度 <类型 = 整数 注释 = "如果状态信息为文本数据,则本参数为文本的字符数,为其他类型时则为字节数.">
+    {
+        如果 (网络状态 == 网络回调状态标志类_.重定向)
+        {
+            读指针处对象 (上下文值, 网页访问响应类_).重定向次数 = 读指针处对象 (上下文值, 网页访问响应类_).重定向次数 + 1
+            读指针处对象 (上下文值, 网页访问响应类_).重定向地址.加入成员 (指针到文本 (状态信息指针))
+            // 获取当前重定向的cookies
+            变量 索引 <类型 = 整数类>
+            索引.值 = 0
+            循环判断首 ()
+            {
+                变量 cookie <类型 = 文本型>
+                如果 (WinHttp基类_.取响应头 (网络句柄, cookie, 网络协议头标志类_.设置Cookie, 空对象, 索引) == 假)
+                {
+                    跳出循环
+                }
+                加入文本 (读指针处对象 (上下文值, 网页访问响应类_).Cookies, WinHttp基类_.取Cookie内容 (cookie))
+            }
+            循环判断尾 (索引.值 >= 0)
+        }
+    }
+}
+
+类 WinHttp基类_ <折叠 折叠2 @文档 = "category = \"网络访问库.网络访问库.WinHttp.基类\"" @视窗.外部头文件 = "winhttp.h" @视窗.外部库 = "Winhttp.lib"
+        @禁止创建对象 = 真>
+{
+    常量 User_Agent <类型 = 文本型
+            值 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.124 Safari/537.36 Edg/102.0.1245.41"
+            注释 = "默认的用户代理UA" 编辑时信息 = "0, AFFF5, 0, 0">
+
+    方法 取最后错误信息 <公开 静态 类型 = 文本型 注释 = "获取最后一次错误的代码和描述信息." 返回值注释 = "成功返回错误信息,失败返回空文本." 折叠 @禁止流程检查 = 真>
+    {
+        @ DWORD dwLastError = ::GetLastError ();
+        @ LPVOID lpvMessageBuffer;
+        @ @an<CVolString> ErrorMsg;
+        @ if (::FormatMessageW (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+        @                       NULL, dwLastError, MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&lpvMessageBuffer, 0, NULL)) {
+        @     ErrorMsg.Format (L"错误(%u): %s", dwLastError, (LPWSTR)lpvMessageBuffer);
+        @     ::LocalFree (lpvMessageBuffer);
+        @ }
+        @ return ErrorMsg;
+    }
+
+    方法 初始化 <公开 静态 类型 = 变整数 注释 = "初始化会话句柄." 注释 = "使用WinHTTP之前必须调用本方法." 返回值注释 = "成功返回会话句柄,失败返回0." 折叠 折叠2 @禁止流程检查 = 真>
+    参数 用户代理 <类型 = 文本型 注释 = "  即User Agent,简称UA,使服务器能识别客户使用的操作系统及版本、CPU类型、" 注释 = "浏览器及版本、浏览器渲染引擎、浏览器语言、浏览器插件等."
+            注释 = "  空文本表示使用本类的常量\"User_Agent\",空对象表示不使用UA." @默认值 = 空对象>
+    参数 代理类型 <类型 = 网络代理类型_ 注释 = "指定是否使用代理服务器" @默认值 = 网络代理类型_.不使用代理>
+    参数 异步模式 <类型 = 逻辑型 注释 = "是否使用异步模式" @默认值 = 假>
+    参数 代理服务器 <类型 = 文本型 注释 = "仅在\"代理类型\"为\"命名代理\"时可用,需要提供CERN类型的HTTP代理." @默认值 = "">
+    参数 代理跳过列表 <类型 = 文本型 注释 = "仅在\"代理类型\"为\"命名代理\"时可用,列表内的域名和IP不会通过代理访问;" 注释 = "请提供用分号分隔的主机域名或IP地址,可以使用通配符;"
+            注释 = "请勿提供空文本,默认的\"<local>\"为忽略所有不含句点的主机名." @默认值 = "<local>">
+    {
+        @ return (INT_P)WinHttpOpen (@<用户代理>.IsNullObject () ? NULL : (@<用户代理>.IsEmpty() ? @<User_Agent>.GetText () : (LPCWSTR)@<用户代理>.GetText ()),
+        @                            (DWORD)@<代理类型>,
+        @                            (DWORD)@<代理类型> == WINHTTP_ACCESS_TYPE_NAMED_PROXY ? (LPCWSTR)@<代理服务器>.GetText () : WINHTTP_NO_PROXY_NAME,
+        @                            (DWORD)@<代理类型> == WINHTTP_ACCESS_TYPE_NAMED_PROXY ? (LPCWSTR)@<代理跳过列表>.GetText () : WINHTTP_NO_PROXY_BYPASS,
+        @                            @<异步模式> ? WINHTTP_FLAG_ASYNC : 0);
+    }
+
+    方法 关闭句柄 <公开 静态 类型 = 逻辑型 注释 = "网络句柄不再使用时必须调用本方法关闭." 折叠 @嵌入式方法 = "">
+    参数 网络句柄 <类型 = 变整数 注释 = "可以是连接句柄、请求句柄、会话句柄、解析器句柄.">
+    {
+        @ WinHttpCloseHandle ((HINTERNET)@<网络句柄>)
+    }
+
+    方法 连接服务器 <公开 静态 类型 = 变整数 注释 = "设置HTTP请求的初始目标服务器,并返回连接句柄." 注释 = "使用本方法之前必须先调用\"初始化\"." 返回值注释 = "成功返回连接句柄,失败返回0." 折叠 折叠2
+            @嵌入式方法 = "">
+    参数 会话句柄 <类型 = 变整数 注释 = "请提供调用\"初始化\"成功时返回的会话句柄.">
+    参数 服务器域名 <类型 = 文本型 注释 = "目标HTTP服务器的域名或IP地址." 注释 = "前面不能有\"http://\"或\"https://\"等协议,后面也不能有端口号或URL路径.">
+    参数 服务器端口 <类型 = 整数 注释 = "可以使用自定义的端口号或以下三个常用数值之一:" 注释 = "  80  使用HTTP服务器的默认端口;" 注释 = "  443 使用HTTPS服务器的默认端口;"
+            注释 = "  0   将端口80用于HTTP,将端口443用于HTTPS;" @默认值 = 0>
+    {
+        @ (INT_P)WinHttpConnect ((HINTERNET)@<会话句柄>, @<服务器域名>.GetText (), (INTERNET_PORT)@<服务器端口>, 0)
+    }
+
+    方法 打开请求 <公开 静态 类型 = 变整数 注释 = "创建请求句柄,并设置请求方式和访问的URL路径." 返回值注释 = "成功返回请求句柄,失败返回0." 折叠 @禁止流程检查 = 真>
+    参数 连接句柄 <类型 = 变整数 注释 = "请提供调用\"连接服务器\"成功时返回的连接句柄.">
+    参数 请求方式 <类型 = 文本型 注释 = "0、GET　1、POST　2、HEAD　3、PUT　4、DELETE　5、OPTIONS　6、TRACE　7、CONNECT　8、PATCH" @默认值 = "GET">
+    参数 目标路径 <类型 = 文本型 注释 = "请求的URL路径,可省略前面的根路径\"/\"" @默认值 = "">
+    参数 HTTP版本 <类型 = 文本型 注释 = "留空为默认的\"HTTP/1.1\"" @默认值 = 空对象>
+    参数 来源参考 <类型 = 文本型 注释 = "  指定\"目标路径\"的访问来源,即表示当前页面是通过此来源页面的链接进入的." 注释 = "  留空表示没有来源参考网页." @默认值 = 空对象>
+    参数 接受类型 <类型 = 文本数组类 注释 = "  该数组指定客户端接受的媒体类型,\"*/*\"表示接受所有类型." 注释 = "  留空表示除了\"text/*\"等文档类型外,不接受其他任何类型."
+            注释 = "  更多媒体类型可参考 http://www.iana.org/assignments/media-types/" @默认值 = 空对象>
+    参数 请求标志 <类型 = 整数 注释 = "请参考\"网络请求头标志类_\"中的常量和备注,部分常量可以用\"位或\"组合使用." @默认值 = 0>
+    {
+        @ HINTERNET hRequest = NULL;
+        @ LPCWSTR* ppwszAcceptTypes = WINHTTP_DEFAULT_ACCEPT_TYPES;
+        @ if (@<接受类型>.data ().IsEmpty () == FALSE) {
+        @     DWORD cAcceptTypes = (DWORD)@<接受类型>.data ().GetCount ();
+        @     ppwszAcceptTypes = (LPCWSTR*)malloc (sizeof(LPCWSTR) * (cAcceptTypes + 1));
+        @     ppwszAcceptTypes[cAcceptTypes] = NULL;
+        @     for (DWORD i = 0; i < cAcceptTypes; i++) {
+        @         ppwszAcceptTypes[i] = (LPCWSTR)@<接受类型>.data ().GetAt (i);
+        @     }
+        @ }
+        @ hRequest = WinHttpOpenRequest ((HINTERNET)@<连接句柄>, (LPCWSTR)@<请求方式>.GetText (),
+        @                                (LPCWSTR)@<目标路径>.GetText (),
+        @                                @<HTTP版本>.IsEmpty () ? NULL : (LPCWSTR)@<HTTP版本>.GetText (),
+        @                                @<来源参考>.IsEmpty () ? WINHTTP_NO_REFERER : (LPCWSTR)@<来源参考>.GetText (),
+        @                                ppwszAcceptTypes, (DWORD)@<请求标志>);
+        @ if (ppwszAcceptTypes) { free (ppwszAcceptTypes); }
+        @ return (INT_P)hRequest;
+    }
+
+    方法 发送请求 <公开 静态 类型 = 逻辑型 注释 = "将指定的请求发送到HTTP服务器." 注释 = "异步模式下执行成功会响应\"发送请求完成\"回调,接着应调用\"接收响应\"." 返回值注释 = "返回是否成功." 折叠 折叠2
+            @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄.">
+    参数 附加请求头 <类型 = 文本型 注释 = "额外添加的请求头(可空),必须在请求头后面加上换行符\"\\r\\n\"." @默认值 = 空对象>
+    参数 提交数据 <类型 = 字节集类 注释 = "POST或PUT请求时,需要在此提供提交请求体参数." @默认值 = 空对象>
+    参数 数据总长度 <类型 = 整数 注释 = "  所发送数据的字节总长度,提交数据不为空时需要填写本参数,如果" 注释 = "提供的长度大于提交数据,则可以使用\"发送数据\"继续发送其他数据." @默认值 = 0>
+    参数 上下文 <类型 = 变整数 注释 = "用户自定义的指针值,将伴随请求句柄传递给任意回调方法." @默认值 = 0>
+    {
+        @ return WinHttpSendRequest ((HINTERNET)@<请求句柄>,
+        @                            @<附加请求头>.IsEmpty () ? WINHTTP_NO_ADDITIONAL_HEADERS : (LPCWSTR)@<附加请求头>.GetText (),
+        @                            @<附加请求头>.IsEmpty () ? 0 : (DWORD)@<附加请求头>.GetLength (),
+        @                            @<提交数据>.IsEmpty () ? WINHTTP_NO_REQUEST_DATA : (LPVOID)@<提交数据>.GetPtr (),
+        @                            @<提交数据>.IsEmpty () ? 0 : (DWORD)@<提交数据>.GetSize (),
+        @                            (DWORD)@<数据总长度>, (DWORD_PTR)@<上下文>);
+    }
+
+    方法 发送数据 <公开 静态 类型 = 逻辑型 注释 = "将请求数据发送给HTTP服务器,在POST、PUT请求发送更多数据时使用." 注释 = "异步模式下执行成功会响应\"发送请求完成\"回调,接着应调用\"接收响应\"."
+            返回值注释 = "返回是否成功." 折叠 折叠2 @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄,且使用过\"发送请求\".">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲发送的数据.">
+    参数 写入字节数 <类型 = 整数类 注释 = "成功时返回写入到缓冲区的字节数.异步模式下本参数必须为空对象." @默认值 = 空对象>
+    {
+        @ return WinHttpWriteData ((HINTERNET)@<请求句柄>, (LPCVOID)@<数据>.GetPtr (), (DWORD)@<数据>.GetSize (),
+        @                          @<写入字节数>.IsNullObject () ? NULL : (LPDWORD)&@<写入字节数.值>);
+    }
+
+    方法 接收响应 <公开 静态 类型 = 逻辑型 注释 = "等待接收HTTP服务器的响应头." 注释 = "必须在执行了\"发送请求\"之后才能使用本方法."
+            注释 = "异步模式下执行成功会响应\"响应头可用\"回调,接着应调用\"取响应头\"." 返回值注释 = "返回是否成功." 折叠 折叠2 @嵌入式方法 = "">
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄,且使用过\"发送请求\".">
+    {
+        @ WinHttpReceiveResponse ((HINTERNET)@<请求句柄>, NULL)
+    }
+
+    方法 取可用数据量 <公开 静态 类型 = 逻辑型 注释 = "  返回可使用\"接收数据\"读取的数据量(以字节为单位)." 注释 = "  本方法不会一次性返回所有的数据量(最多不超过8KB),"
+            注释 = "需要配合\"接收数据\"反复调用." 注释 = "  你也可以跳过本方法直接用\"接收数据\"." 注释 = "  异步模式下执行成功会响应\"数据可用\"回调,接着应调用\"接收数据\"." 返回值注释 = "返回是否成功."
+            折叠 折叠2 @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄,且使用过\"接收响应\".">
+    参数 可用数据量 <类型 = 整数类 注释 = "返回当前可用的数据量(字节). 异步模式时本参数必须为空对象." @默认值 = 空对象>
+    {
+        @ return WinHttpQueryDataAvailable ((HINTERNET)@<请求句柄>, @<可用数据量>.IsNullObject () ? NULL : (LPDWORD)&@<可用数据量.值>);
+    }
+
+    方法 接收数据 <公开 静态 类型 = 逻辑型 注释 = "读取HTTP服务器发来的数据,需要提前给缓冲区分配内存." 注释 = "异步模式下执行成功会响应\"接收数据完成\"回调." 返回值注释 = "返回是否成功." 折叠 折叠2
+            @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄,且使用过\"接收响应\".">
+    参数 缓冲区 <类型 = 字节集类 注释 = "成功时在此缓冲区返回接收的数据,必须提前分配字节集的长度.">
+    参数 已接收长度 <类型 = 整数类 注释 = "  返回缓冲区成功接收的字节数. 异步模式时本参数必须为空对象." 注释 = "  如果执行成功时本参数返回0,则表示传输已完成." @默认值 = 空对象>
+    {
+        @ return WinHttpReadData ((HINTERNET)@<请求句柄>, (LPVOID)@<缓冲区>.GetPtr (), (DWORD)@<缓冲区>.GetSize (),
+        @                         @<已接收长度>.IsNullObject () ? NULL : (LPDWORD)&@<已接收长度.值>);
+    }
+
+    方法 接收数据2 <公开 静态 类型 = 逻辑型 注释 = "跟\"接收数据\"的不同之处是需要提供缓冲区指针,而非字节集." 注释 = "异步模式下执行成功会响应\"接收数据完成\"回调." 返回值注释 = "返回是否成功." 折叠 折叠2
+            @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄,且使用过\"接收响应\".">
+    参数 缓冲区指针 <类型 = 变整数 注释 = "成功时在此缓冲区指针返回接收的数据.">
+    参数 缓冲区长度 <类型 = 整数 注释 = "提供缓冲区长度">
+    参数 已接收长度 <类型 = 整数类 注释 = "  返回缓冲区成功接收的字节数. 异步模式时本参数必须为空对象." 注释 = "  如果执行成功时本参数返回0,则表示传输已完成." @默认值 = 空对象>
+    {
+        @ return WinHttpReadData ((HINTERNET)@<请求句柄>, (LPVOID)@<缓冲区指针>, (DWORD)@<缓冲区长度>,
+        @                         @<已接收长度>.IsNullObject () ? NULL : (LPDWORD)&@<已接收长度.值>);
+    }
+
+    方法 添加请求头 <公开 静态 类型 = 逻辑型 注释 = "添加一个或多个协议头到请求中." 返回值注释 = "返回是否添加成功,本函数会检查协议头是否合规,如果添加的协议头不规范将返回失败." 折叠 @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄.">
+    参数 协议头 <类型 = 文本型 注释 = "  可以添加一个或多个协议头,添加多个协议头时," 注释 = "各协议头之间必须用\"\\r\\n\"分隔." 注释 = "  添加单个协议头时无需添加换行符.">
+    参数 修改方式 <类型 = 整数 注释 = "请参考\"网络请求头修改标志类_\"中的常量和备注,部分常量可以用\"位或\"组合使用." @默认值 = 网络请求头修改标志类_.仅新建添加>
+    {
+        @ return WinHttpAddRequestHeaders ((HINTERNET)@<请求句柄>, (LPCWSTR)@<协议头>.GetText (), (DWORD)@<协议头>.GetLength (), (DWORD)@<修改方式>);
+    }
+
+    方法 添加请求头2 <公开 静态 类型 = 逻辑型 注释 = "跟\"添加请求头\"一样,不同的是添加的协议头为文本数组类." 返回值注释 = "返回是否添加成功,本函数会检查协议头是否合规,如果添加的协议头不规范将返回失败." 折叠
+            @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄.">
+    参数 协议头数组 <类型 = 文本数组类 注释 = "提供的协议头跟curl的一样,无需在单个成员的尾部加入换行符.">
+    参数 修改方式 <类型 = 整数 注释 = "请参考\"网络请求头修改标志类_\"中的常量和备注,部分常量可以用\"位或\"组合使用." @默认值 = 网络请求头修改标志类_.仅新建添加>
+    {
+        @ @an<CVolString> szHeaders;
+        @ for (INT_P npIndex = 0; npIndex < @<协议头数组>.data ().GetCount (); npIndex++) {
+        @     szHeaders.AddText (@<协议头数组>.data ().GetAt (npIndex));
+        @     szHeaders.AddText (L"\r\n");
+        @ }
+        @ szHeaders.TrimRight ();
+        @ return WinHttpAddRequestHeaders ((HINTERNET)@<请求句柄>, (LPCWSTR)szHeaders.GetText (), (DWORD)szHeaders.GetLength (), (DWORD)@<修改方式>);
+    }
+
+    方法 添加请求头EX <公开 静态 类型 = 逻辑型 注释 = "使用键值对的方式,添加一个或多个协议头到请求中." 注释 = "本方法此为Windows 10 Version 21H2新增的API,之前的系统不可用."
+            返回值注释 = "返回是否添加成功,本函数会检查协议头是否合规,如果添加的协议头不规范将返回失败." 折叠 折叠2 @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄.">
+    参数 协议头键值对 <类型 = 文本到文本哈希表 注释 = "  可以添加一个或多个协议头,添加多个协议头时," 注释 = "各协议头之间必须用\"\\r\\n\"分隔." 注释 = "  添加单个协议头时无需添加换行符.">
+    参数 修改方式 <类型 = 整数 注释 = "请参考\"网络请求头修改标志类_\"中的常量和备注,部分常量可以用\"位或\"组合使用." @默认值 = 网络请求头修改标志类_.仅新建添加>
+    {
+        @ DOWRD cHeaders = @<协议头键值对>.m_map.size ();
+        @ PWINHTTP_EXTENDED_HEADER pHeaders = (PWINHTTP_EXTENDED_HEADER)calloc (cHeaders, sizeof (WINHTTP_EXTENDED_HEADER));
+        @ for (auto iter = @<协议头键值对>.m_map.begin (), DWORD dwIndex = 0; iter != @<协议头键值对>.m_map.end (); iter++, dwIndex++) {
+        @     pHeaders[i]->pwszName = iter->first;
+        @     pHeaders[i]->pwszName = iter->second;
+        @ }
+        @ DWORD dwRes = WinHttpAddRequestHeadersEx ((HINTERNET)@<请求句柄>, (DWORD)@<修改方式>, WINHTTP_EXTENDED_HEADER_FLAG_UNICODE, NULL, cHeaders, pHeaders);
+        @ free (pHeaders);
+        @ return (dwRes == 0);
+    }
+
+    方法 取响应头 <公开 静态 类型 = 逻辑型 注释 = "获取HTTP服务器返回的指定响应头信息." 注释 = "本方法返回文本型信息,API内部已经做了编码转换." 返回值注释 = "返回是否成功." 折叠 折叠2 @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄,且使用过\"接收响应\".">
+    参数 响应头 <类型 = 文本型 注释 = "执行成功时在此参数返回获取的响应头.">
+    参数 标头类型 <类型 = 网络协议头标志类_ 注释 = "指定所欲获取的响应头,默认为以换行符分隔的全部响应头." @默认值 = 网络协议头标志类_.所有标头_换行>
+    参数 标头名称 <类型 = 文本型 注释 = "  \"标头类型\"为\"网络协议头标志类_.自定义\"时可用." 注释 = "  提供所欲获取信息的标头名称,不区分大小写,只要" 注释 = "含有完整的名称即可获取."
+            注释 = "  如\"Content-Type\"和\"content-type: \"都能成功获取." @默认值 = 空对象>
+    参数 标头索引 <类型 = 整数类 注释 = "  此参数用于枚举拥有相同名称的多个标头,首索引为0." 注释 = "  执行成功后会在本参数返回下一个标头的索引." 注释 = "  如果下一个标头不存在,则返回-1."
+            注释 = "  留空则只取找到的第一个标头,获取所有标头时忽略." @默认值 = 空对象>
+    {
+        @ @<响应头>.Empty ();
+        @ DWORD dwSize = 0, dwIndex = (DWORD)@<标头索引.值>;
+        @ WinHttpQueryHeaders ((HINTERNET)@<请求句柄>, (DWORD)@<标头类型>,
+        @                      ((DWORD)@<标头类型> == WINHTTP_QUERY_CUSTOM) ? (LPCWSTR)@<标头名称>.GetText () : WINHTTP_HEADER_NAME_BY_INDEX,
+        @                      WINHTTP_NO_OUTPUT_BUFFER, &dwSize, &dwIndex);
+        @ if (dwSize == 0) {
+        @     if (dwIndex > 0 && GetLastError() == ERROR_WINHTTP_HEADER_NOT_FOUND) { @<标头索引.值> = -1; }
+        @     return FALSE; }
+        @ LPVOID Buffer = malloc (dwSize);
+        @ BOOL bRes;
+        @ bRes = WinHttpQueryHeaders ((HINTERNET)@<请求句柄>, (DWORD)@<标头类型>,
+        @                             ((DWORD)@<标头类型> == WINHTTP_QUERY_CUSTOM) ? (LPCWSTR)@<标头名称>.GetText () : WINHTTP_HEADER_NAME_BY_INDEX,
+        @                             Buffer, &dwSize, &dwIndex);
+        @ if (bRes) {
+        @     @<标头索引.值> = (INT)dwIndex;
+        @     @<响应头>.SetText ((const WCHAR*)Buffer);
+        @ }
+        @ free (Buffer);
+        @ return bRes;
+    }
+
+    方法 取响应头_整数 <公开 静态 类型 = 整数 注释 = "以整数的方式获取HTTP服务器返回的数值类型的响应头信息." 返回值注释 = "成功返回整数值,失败返回0." 折叠 @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄,且使用过\"接收响应\".">
+    参数 标头类型 <类型 = 网络协议头标志类_ 注释 = "指定所欲获取的响应头,只支持内容值为数值类型的标头." @默认值 = 网络协议头标志类_.内容长度>
+    参数 标头名称 <类型 = 文本型 注释 = "  \"标头类型\"为\"网络协议头标志类_.自定义\"时可用." 注释 = "  提供所欲获取信息的标头名称,不区分大小写,只要" 注释 = "含有完整的名称即可获取."
+            注释 = "  如\"Content-Type\"和\"content-type: \"都能成功获取." @默认值 = 空对象>
+    参数 标头索引 <类型 = 整数类 注释 = "  此参数用于枚举拥有相同名称的多个标头,首索引为0." 注释 = "  执行成功后会在本参数返回下一个标头的索引." 注释 = "  如果下一个标头不存在,则返回-1."
+            注释 = "  留空则只取找到的第一个标头." @默认值 = 空对象>
+    {
+        @ INT nRes = 0;
+        @ DWORD dwSize = 4, dwIndex = (DWORD)@<标头索引.值>;
+        @ if (WinHttpQueryHeaders ((HINTERNET)@<请求句柄>, (DWORD)@<标头类型> | WINHTTP_QUERY_FLAG_NUMBER,
+        @                          ((DWORD)@<标头类型> == WINHTTP_QUERY_CUSTOM) ? (LPCWSTR)@<标头名称>.GetText () : WINHTTP_HEADER_NAME_BY_INDEX,
+        @                          &nRes, &dwSize, &dwIndex)) {
+        @     @<标头索引.值> = (INT)dwIndex;
+        @     return nRes;
+        @ }
+        @ if (dwIndex > 0 && GetLastError() == ERROR_WINHTTP_HEADER_NOT_FOUND) { @<标头索引.值> = -1; }
+        @ return 0;
+    }
+
+    方法 取请求头 <公开 静态 类型 = 逻辑型 注释 = "获取发送到HTTP服务器的指定请求头信息,可以在\"发送请求\"前获取." 注释 = "本方法返回文本型信息,API内部已经做了编码转换." 返回值注释 = "返回是否成功." 折叠
+            折叠2 @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄.">
+    参数 请求头 <类型 = 文本型 注释 = "执行成功时在此参数返回获取的请求头.">
+    参数 标头类型 <类型 = 网络协议头标志类_ 注释 = "指定所欲获取的请求头,默认为以换行符分隔的全部请求头." @默认值 = 网络协议头标志类_.所有标头_换行>
+    参数 标头名称 <类型 = 文本型 注释 = "  \"标头类型\"为\"网络协议头标志类_.自定义\"时可用." 注释 = "  提供所欲获取信息的标头名称,不区分大小写,只要" 注释 = "含有完整的名称即可获取."
+            注释 = "  如\"Content-Type\"和\"content-type: \"都能成功获取." @默认值 = 空对象>
+    参数 标头索引 <类型 = 整数类 注释 = "  此参数用于枚举拥有相同名称的多个标头,首索引为0." 注释 = "  执行成功后会在本参数返回下一个标头的索引." 注释 = "  如果下一个标头不存在,则返回-1."
+            注释 = "  留空则只取找到的第一个标头,获取所有标头时忽略." @默认值 = 空对象>
+    {
+        @ @<请求头>.Empty ();
+        @ DWORD dwSize = 0, dwIndex = (DWORD)@<标头索引.值>;
+        @ WinHttpQueryHeaders ((HINTERNET)@<请求句柄>, (DWORD)@<标头类型> | WINHTTP_QUERY_FLAG_REQUEST_HEADERS,
+        @                      ((DWORD)@<标头类型> == WINHTTP_QUERY_CUSTOM) ? (LPCWSTR)@<标头名称>.GetText () : WINHTTP_HEADER_NAME_BY_INDEX,
+        @                      WINHTTP_NO_OUTPUT_BUFFER, &dwSize, &dwIndex);
+        @ if (dwSize == 0) {
+        @     if (dwIndex > 0 && GetLastError() == ERROR_WINHTTP_HEADER_NOT_FOUND) { @<标头索引.值> = -1; }
+        @     return FALSE;
+        @ }
+        @ LPVOID Buffer = malloc (dwSize);
+        @ BOOL bRes = WinHttpQueryHeaders ((HINTERNET)@<请求句柄>, (DWORD)@<标头类型> | WINHTTP_QUERY_FLAG_REQUEST_HEADERS,
+        @                                  ((DWORD)@<标头类型> == WINHTTP_QUERY_CUSTOM) ? (LPCWSTR)@<标头名称>.GetText () : WINHTTP_HEADER_NAME_BY_INDEX,
+        @                                  Buffer, &dwSize, &dwIndex);
+        @ if (bRes) {
+        @     @<标头索引.值> = (INT)dwIndex;
+        @     @<请求头>.SetText ((const WCHAR*)Buffer);
+        @ }
+        @ free (Buffer);
+        @ return bRes;
+    }
+
+    方法 置状态回调 <公开 静态 类型 = 变整数 注释 = "设置一个回调函数,WinHTTP可以在操作过程中取得进展时调用该函数." 返回值注释 = "失败返回-1,成功返回上一次设置的回调指针,如果之前没设置过回调则返回0." 折叠
+            @嵌入式方法 = "">
+    参数 网络句柄 <类型 = 变整数 注释 = "所欲设置回调的网络句柄,可以为会话句柄、连接句柄与请求句柄.">
+    参数 回调方法 <注释 = "所欲执行的静态回调方法" @匹配方法 = "状态回调模板">
+    参数 通知标志 <类型 = 网络回调标志类_ 注释 = "注意: 函数不检查此参数,只要提供的网络句柄和回调方法正确,就能返回成功." 注释 = "但如果提供的通知标志不正确,将无法触发对应的回调.">
+    {
+        @ (INT_P)WinHttpSetStatusCallback ((HINTERNET)@<网络句柄>, (WINHTTP_STATUS_CALLBACK)&@<回调方法>, (DWORD)@<通知标志>, NULL)
+    }
+
+    方法 状态回调模板 <公开 静态 注释 = "\"置状态回调\"中回调方法的模板,请勿直接使用." 折叠>
+    参数 网络句柄 <类型 = 变整数 注释 = "与状态回调关联的网络句柄.">
+    参数 上下文值 <类型 = 变整数 注释 = "  与网络句柄关联的的上下文值,可以通过\"置选项_上下文值\"或\"发送请求\"设置," 注释 = "可用于传递用户自定义的数据.">
+    参数 网络状态 <类型 = 网络回调状态标志类_ 注释 = "请参考\"网络回调状态标志类_\"中的常量.">
+    参数 状态信息指针 <类型 = 变整数 注释 = "指向缓冲区的指针,数据类型取决于参数\"网络状态\"的值.">
+    参数 状态信息长度 <类型 = 整数 注释 = "如果状态信息为文本数据,则本参数为文本的字符数,为其他类型时则为字节数.">
+
+    方法 置超时时间 <公开 静态 类型 = 逻辑型 注释 = "设置各种网络连接的超时时间,操作超过指定的时间后将被取消,返回失败." 返回值注释 = "返回是否成功." 折叠 @嵌入式方法 = "">
+    参数 会话句柄 <类型 = 变整数 注释 = "请提供调用\"初始化\"成功时返回的会话句柄.">
+    参数 解析超时 <类型 = 整数 注释 = "解析域名的超时时间(毫秒),0为无限等待." @默认值 = 10000>
+    参数 连接超时 <类型 = 整数 注释 = "连接目标服务器的请求超时时间(毫秒),初始值为60秒." @默认值 = 600000>
+    参数 发送超时 <类型 = 整数 注释 = "发送请求的超时时间(毫秒),初始值为30秒." @默认值 = 300000>
+    参数 接收超时 <类型 = 整数 注释 = "接收服务器响应的超时时间(毫秒),初始值为30秒." @默认值 = 300000>
+    {
+        @ WinHttpSetTimeouts ((HINTERNET)@<会话句柄>, @<解析超时>, @<连接超时>, @<发送超时>, @<接收超时>)
+    }
+
+    方法 拆分URL <公开 静态 类型 = 逻辑型 注释 = "将完整的URL网址拆分成下列的组件,本方法只能解析http和https协议的网址."
+            注释 = "<scheme>://<user>:<password>@<host>:<port>/<path>?<query>#<fragment>" 返回值注释 = "返回是否成功" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 URL <类型 = 文本型 注释 = "所欲解析的规范网址,本函数不会检查URL的格式是否正确.">
+    参数 URL组件 <类型 = 网络URL组件信息类_ 注释 = "解析成功在此参数中返回URL各个组件的信息.">
+    参数 URL操作 <类型 = 整数 注释 = "  请参考\"网络URL操作类_\"中的常量和备注,部分常量可以用\"位或\"组合使用." 注释 = "  可以对URL路径以后的部分进行URL编码和URL解码."
+            注释 = "  默认值0表示不进行任何特殊操作,速度最快." @默认值 = 0>
+    参数 预分配字符 <类型 = 整数 注释 = "  \"URL操作\"为URL编码或URL解码时,本参数指定接收URL路径部分和提交参数" 注释 = "部分的编解码结果的缓冲区长度.2048是IE浏览器最大允许的URL路径长度."
+            注释 = "  如果不进行URL编解码时将本参数设置为0,则表示不拆分URL路径和附加信息." @默认值 = 2048>
+    {
+        @ @<URL组件>.ResetObject ();
+        @ URL_COMPONENTS urlComp { };
+        @ urlComp.dwStructSize      = sizeof (urlComp);
+        @ urlComp.dwSchemeLength    = 10;
+        @ urlComp.dwHostNameLength  = 256;
+        @ urlComp.dwUrlPathLength   = (DWORD)@<预分配字符>;
+        @ urlComp.dwExtraInfoLength = (DWORD)@<预分配字符>;
+        @ if ((DWORD)@<URL操作> != ICU_REJECT_USERPWD) {
+        @     urlComp.dwUserNameLength = 256; urlComp.dwPasswordLength = 256;
+        @ }
+        @ if ((DWORD)@<URL操作> == ICU_DECODE || (DWORD)@<URL操作> == ICU_ESCAPE) {
+        @     urlComp.lpszScheme    = new WCHAR[10];
+        @     urlComp.lpszHostName  = new WCHAR[256];
+        @     urlComp.lpszUrlPath   = new WCHAR[urlComp.dwUrlPathLength];
+        @     urlComp.lpszExtraInfo = new WCHAR[urlComp.dwExtraInfoLength];
+        @     if ((DWORD)@<URL操作> != ICU_REJECT_USERPWD) {
+        @         urlComp.lpszUserName = new WCHAR[256]; urlComp.lpszPassword = new WCHAR[256];
+        @     }
+        @ }
+        @ BOOL bRes = WinHttpCrackUrl ((LPCWSTR)@<URL>.GetText (), (DWORD)@<URL>.GetLength (), (DWORD)@<URL操作>, &urlComp);
+        @ if (bRes) { @<URL组件>.SetInfo (&urlComp); }
+        @ if ((DWORD)@<URL操作> == ICU_DECODE || (DWORD)@<URL操作> == ICU_ESCAPE) {
+        @     delete urlComp.lpszScheme; delete urlComp.lpszHostName; delete urlComp.lpszUrlPath; delete urlComp.lpszExtraInfo;
+        @     if ((DWORD)@<URL操作> != ICU_REJECT_USERPWD) { delete urlComp.lpszUserName; delete urlComp.lpszPassword; }
+        @ }
+        @ return bRes;
+    }
+
+    方法 置选项_解析超时 <公开 静态 类型 = 逻辑型 注释 = "设置解析域名的超时时间,默认为无限." 注释 = "如果设置了非默认值,则为每个域名解析增加一个创建线程的开销." 返回值注释 = "返回设置是否成功." 折叠 折叠2
+            @禁止流程检查 = 真>
+    参数 网络句柄 <类型 = 变整数 注释 = "请提供会话句柄或请求句柄.">
+    参数 超时时间 <类型 = 整数 注释 = "默认为无限时,一直等待到解析结束.">
+    {
+        @ DWORD dwOption = (DWORD)@<超时时间>;
+        @ return WinHttpSetOption ((HINTERNET)@<网络句柄>,
+        @                          WINHTTP_OPTION_RESOLVE_TIMEOUT, (LPVOID)&dwOption, 4);
+    }
+
+    方法 置选项_连接超时 <公开 静态 类型 = 逻辑型 注释 = "设置WinHTTP连接的超时时间,如果连接的时间超过该选项则会取消请求." 注释 = "当你连接到多地址主机时,每个IP地址的超时限制都是单独计算的."
+            返回值注释 = "返回设置是否成功." 折叠 折叠2 @禁止流程检查 = 真>
+    参数 网络句柄 <类型 = 变整数 注释 = "请提供会话句柄或请求句柄.">
+    参数 超时时间 <类型 = 整数 注释 = "默认为600000(毫秒),即60秒.设置为-1时禁用超时.">
+    {
+        @ DWORD dwOption = (DWORD)@<超时时间>;
+        @ return WinHttpSetOption ((HINTERNET)@<网络句柄>,
+        @                          WINHTTP_OPTION_CONNECT_TIMEOUT, (LPVOID)&dwOption, 4);
+    }
+
+    方法 置选项_重连次数 <公开 静态 类型 = 逻辑型 注释 = "设置WinHTTP尝试连接到主机的次数." 注释 = "  WinHTTP对每个IP地址只尝试连接一次,如果目标是拥有10个IP的多地址主机,"
+            注释 = "而重试次数为5,则只尝试连接到前5个IP地址.如果重试次数为20,则对10个IP都" 注释 = "尝试连接一次,10次后仍失败则会取消请求." 返回值注释 = "返回设置是否成功." 折叠 折叠2 @禁止流程检查 = 真>
+    参数 网络句柄 <类型 = 变整数 注释 = "请提供会话句柄或请求句柄.">
+    参数 重试次数 <类型 = 整数 注释 = "默认为5次.">
+    {
+        @ DWORD dwOption = (DWORD)@<重试次数>;
+        @ return WinHttpSetOption ((HINTERNET)@<网络句柄>,
+        @                          WINHTTP_OPTION_CONNECT_RETRIES, (LPVOID)&dwOption, 4);
+    }
+
+    方法 置选项_发送超时 <公开 静态 类型 = 逻辑型 注释 = "设置发送请求或发送数据的超时时间,如果在此超时期限内未发送完数据,则会取消请求." 返回值注释 = "返回设置是否成功." 折叠 @禁止流程检查 = 真>
+    参数 网络句柄 <类型 = 变整数 注释 = "请提供会话句柄或请求句柄.">
+    参数 超时时间 <类型 = 整数 注释 = "默认为300000(毫秒),即30秒.设置为-1时禁用超时.">
+    {
+        @ DWORD dwOption = (DWORD)@<超时时间>;
+        @ return WinHttpSetOption ((HINTERNET)@<网络句柄>,
+        @                          WINHTTP_OPTION_SEND_TIMEOUT, (LPVOID)&dwOption, 4);
+    }
+
+    方法 置选项_接收超时 <公开 静态 类型 = 逻辑型 注释 = "设置接收部分响应的超时时间,如果在此超时期限内未接收完数据,则会取消请求." 返回值注释 = "返回设置是否成功." 折叠 @禁止流程检查 = 真>
+    参数 网络句柄 <类型 = 变整数 注释 = "请提供会话句柄或请求句柄.">
+    参数 超时时间 <类型 = 整数 注释 = "默认为300000(毫秒),即30秒.设置为-1时禁用超时.">
+    {
+        @ DWORD dwOption = (DWORD)@<超时时间>;
+        @ return WinHttpSetOption ((HINTERNET)@<网络句柄>,
+        @                          WINHTTP_OPTION_RECEIVE_TIMEOUT, (LPVOID)&dwOption, 4);
+    }
+
+    方法 置选项_代理信息 <公开 静态 类型 = 逻辑型 注释 = "设置现有会话句柄或请求句柄上的代理数据." 返回值注释 = "返回设置是否成功." 折叠 @禁止流程检查 = 真>
+    参数 网络句柄 <类型 = 变整数 注释 = "请提供会话句柄或请求句柄.设置为0表示查询全局代理数据(默认代理).">
+    参数 代理信息 <类型 = 网络代理信息类_>
+    {
+        @ WINHTTP_PROXY_INFO proxyInfo;
+        @ @<代理信息>.GetInfo (&proxyInfo);
+        @ return WinHttpSetOption ((HINTERNET)@<网络句柄>,
+        @                          WINHTTP_OPTION_PROXY, (LPVOID)&proxyInfo, sizeof(WINHTTP_PROXY_INFO));
+    }
+
+    方法 置选项_最大重定向次数 <公开 静态 类型 = 逻辑型 注释 = "设置WinHTTP遵循的最大重定向次数." 返回值注释 = "返回设置是否成功." 折叠 @禁止流程检查 = 真>
+    参数 网络句柄 <类型 = 变整数 注释 = "请提供会话句柄或请求句柄.">
+    参数 重定向次数 <类型 = 整数 注释 = "默认为10次.">
+    {
+        @ DWORD dwOption = (DWORD)@<重定向次数>;
+        @ return WinHttpSetOption ((HINTERNET)@<网络句柄>,
+        @                          WINHTTP_OPTION_MAX_HTTP_AUTOMATIC_REDIRECTS, (LPVOID)&dwOption, 4);
+    }
+
+    方法 置选项_解压缩 <公开 静态 类型 = 逻辑型 注释 = "设置是否对响应内容自动进行解压缩." 注释 = "WinHTTP自动解压缩后,会将响应头的Content-Length、Content-Encoding删除掉."
+            注释 = "本方法最低系统要求为Windows 8.1,但在旧系统不会造成崩溃,只会返回假." 返回值注释 = "返回设置是否成功." 折叠 折叠2 @禁止流程检查 = 真>
+    参数 网络句柄 <类型 = 变整数 注释 = "请提供会话句柄或请求句柄.">
+    参数 解压缩选项 <类型 = 整数 注释 = "只能使用下列4个数值之一,默认为0" 注释 = "  0 禁用解压缩" 注释 = "  1 使用gzip" 注释 = "  2 使用deflate"
+            注释 = "  3 同时使用gzip和deflate" @默认值 = 3>
+    {
+        @ DWORD dwOption = (DWORD)@<解压缩选项>;
+        @ return WinHttpSetOption ((HINTERNET)@<网络句柄>,
+        @                          118, (LPVOID)&dwOption, 4); // WINHTTP_OPTION_DECOMPRESSION
+    }
+
+    方法 置选项_代码页 <公开 静态 类型 = 逻辑型 注释 = "设置处理URL的代码页,默认为UTF-8(65001),其他请参考:"
+            注释 = "https://docs.microsoft.com/en-us/windows/win32/intl/code-page-identifiers" 返回值注释 = "返回设置是否成功." 折叠 折叠2 @禁止流程检查 = 真>
+    参数 会话句柄 <类型 = 变整数 注释 = "请提供调用\"初始化\"成功时返回的会话句柄.">
+    参数 代码页 <类型 = 整数 注释 = "默认为UTF-8(65001).">
+    {
+        @ DWORD dwOption = (DWORD)@<代码页>;
+        @ return WinHttpSetOption ((HINTERNET)@<会话句柄>, WINHTTP_OPTION_CODEPAGE, (LPVOID)&dwOption, 4);
+    }
+
+    方法 置选项_IPv6快速回退 <公开 静态 类型 = 逻辑型 注释 = "为连接启用IPv6快速回退功能(Happy Eyeballs),用于缩短网络不支持IPv6访问时的连接时间."
+            注释 = "本方法最低系统要求为Windows 10 Version 1903,但在旧系统不会造成崩溃,只会返回假." 返回值注释 = "返回设置是否成功." 折叠 折叠2 @禁止流程检查 = 真>
+    参数 会话句柄 <类型 = 变整数 注释 = "请提供调用\"初始化\"成功时返回的会话句柄.">
+    参数 是否启用 <类型 = 逻辑型 注释 = "真为启用." 注释 = "  如果IPv6和IPv4均已解析,将首先连接到较短超时(300ms)的第一个IPv6地址." 注释 = "  如果连接失败,将尝试连接到IPv4地址.">
+    {
+        @ BOOL bOption = (DWORD)@<是否启用>;
+        @ return WinHttpSetOption ((HINTERNET)@<会话句柄>, 140, (LPVOID)&bOption, 4); // WINHTTP_OPTION_IPV6_FAST_FALLBACK
+    }
+
+    方法 置选项_TCP快速打开 <公开 静态 类型 = 逻辑型 注释 = "为连接启用TCP快速打开." 注释 = "本方法最低系统要求为Windows 10 Version 2004,但在旧系统不会造成崩溃,只会返回假."
+            返回值注释 = "返回设置是否成功." 折叠 折叠2 @禁止流程检查 = 真>
+    参数 会话句柄 <类型 = 变整数 注释 = "请提供调用\"初始化\"成功时返回的会话句柄.">
+    参数 是否启用 <类型 = 逻辑型>
+    {
+        @ BOOL bOption = @<是否启用>;
+        @ return WinHttpSetOption ((HINTERNET)@<会话句柄>, 153, (LPVOID)&bOption, 4); // WINHTTP_OPTION_TCP_FAST_OPEN
+    }
+
+    方法 置选项_安全标志 <公开 静态 类型 = 逻辑型 注释 = "设置请求的安全标志." 返回值注释 = "返回设置是否成功." 折叠 @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄.">
+    参数 安全标志 <类型 = 整数 注释 = "请使用\"网络安全标志类_\"中单个常量,或多个常量的\"位或\"组合值.">
+    {
+        @ DWORD dwOption = (DWORD)@<安全标志>;
+        @ return WinHttpSetOption ((HINTERNET)@<请求句柄>, WINHTTP_OPTION_SECURITY_FLAGS, (LPVOID)&dwOption, 4);
+    }
+
+    方法 置选项_禁止功能 <公开 静态 类型 = 逻辑型 注释 = "设置是否禁止部分的请求功能,需要在\"发送请求\"之前调用本方法." 返回值注释 = "返回设置是否成功." 折叠 @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄.">
+    参数 禁止功能 <类型 = 整数 注释 = "请使用\"网络禁止标志类_\"中单个常量,或多个常量的\"位或\"组合值.">
+    {
+        @ DWORD dwOption = (DWORD)@<禁止功能>;
+        @ return WinHttpSetOption ((HINTERNET)@<请求句柄>, WINHTTP_OPTION_DISABLE_FEATURE, (LPVOID)&dwOption, 4);
+    }
+
+    方法 置选项_拒绝含用户密码的URL <公开 静态 类型 = 逻辑型 注释 = "设置是否拒绝包含用户名和密码的URL." 返回值注释 = "返回设置是否成功." 折叠 @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄.">
+    参数 是否拒绝 <类型 = 逻辑型 注释 = "默认为不拒绝">
+    {
+        @ BOOL bOption = @<是否拒绝>;
+        @ return WinHttpSetOption ((HINTERNET)@<请求句柄>, WINHTTP_OPTION_REJECT_USERPWD_IN_URL, (LPVOID)&bOption, 4);
+    }
+
+    方法 置选项_用户名 <公开 静态 类型 = 逻辑型 注释 = "在请求句柄上设置用户名." 返回值注释 = "返回设置是否成功." 折叠 @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄.">
+    参数 用户名 <类型 = 文本型>
+    {
+        @ return WinHttpSetOption ((HINTERNET)@<请求句柄>, WINHTTP_OPTION_USERNAME,
+        @                          (LPVOID)@<用户名>.GetText (), (DWORD)@<用户名>.GetLength ());
+    }
+
+    方法 置选项_密码 <公开 静态 类型 = 逻辑型 注释 = "在请求句柄上设置密码." 返回值注释 = "返回设置是否成功." 折叠 @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄.">
+    参数 密码 <类型 = 文本型>
+    {
+        @ return WinHttpSetOption ((HINTERNET)@<请求句柄>, WINHTTP_OPTION_PASSWORD,
+        @                          (LPVOID)@<密码>.GetText (), (DWORD)@<密码>.GetLength ());
+    }
+
+    方法 置选项_代理用户名 <公开 静态 类型 = 逻辑型 注释 = "在请求句柄上设置访问代理的用户名." 返回值注释 = "返回设置是否成功." 折叠 @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄.">
+    参数 用户名 <类型 = 文本型>
+    {
+        @ return WinHttpSetOption ((HINTERNET)@<请求句柄>, WINHTTP_OPTION_PROXY_USERNAME,
+        @                          (LPVOID)@<用户名>.GetText (), (DWORD)@<用户名>.GetLength ());
+    }
+
+    方法 置选项_代理密码 <公开 静态 类型 = 逻辑型 注释 = "在请求句柄上设置访问代理的密码." 返回值注释 = "返回设置是否成功." 折叠 @禁止流程检查 = 真>
+    参数 请求句柄 <类型 = 变整数 注释 = "请提供调用\"打开请求\"成功时返回的请求句柄.">
+    参数 密码 <类型 = 文本型>
+    {
+        @ return WinHttpSetOption ((HINTERNET)@<请求句柄>, WINHTTP_OPTION_PROXY_PASSWORD,
+        @                          (LPVOID)@<密码>.GetText (), (DWORD)@<密码>.GetLength ());
+    }
+
+    方法 取Cookie内容 <公开 静态 类型 = 文本型 注释 = "从服务器返回的\"Set-Cookie\"协议头中提取出Cokkie的名字和值字段." 返回值注释 = "返回Cookie内容,用于请求时提交给服务器." 折叠>
+    参数 Cookie <类型 = 文本型 注释 = "服务器返回的Set-Cookie协议头">
+    {
+        变量 返回结果 <类型 = 文本型>
+        变量 值文本 <类型 = 文本型>
+        变量 值数组 <类型 = 文本数组类>
+        变量 局Cookie <类型 = 文本型>
+        局Cookie = Cookie
+        如果 (是否以文本开头 (局Cookie, "Set-Cookie:", 假) == 真)
+        {
+            删除字符 (局Cookie, 0, 11)
+        }
+        置文本预分配字符数 (返回结果, 取文本长度 (局Cookie))
+        分割文本 (局Cookie, ";", 值数组, 真, 真)
+        值数组.枚举循环 ()
+        {
+            值文本 = 值数组.取枚举值 ()
+            如果 (寻找字符 (值文本, '=', 0) != -1)
+            {
+                如果 (是否以文本开头 (值文本, "Domain", 假) == 假 && 是否以文本开头 (值文本, "Path", 假) == 假 && 是否以文本开头 (值文本, "Expires", 假) == 假 && 是否以文本开头 (值文本, "Max-Age", 假) == 假 && 是否以文本开头 (值文本, "SameSite", 假) == 假 && 是否以文本开头 (值文本, "Priority", 假) == 假)
+                {
+                    如果 (文本是否为空 (返回结果) == 假)
+                    {
+                        加入文本 (返回结果, "; ")
+                    }
+                    加入文本 (返回结果, 值文本)
+                }
+            }
+        }
+        返回 (返回结果)
+    }
+}
+
+类 网页访问响应类_ <公开 基础类 = 扩展对象类 注释 = "用于\"WinHttp基类_\"" 折叠 @文档 = "category = \"网络访问库.网络访问库.WinHttp.附加类\"">
+{
+    变量 请求结果 <公开 类型 = 字节集类 注释 = "本次请求所返回的结果数据" @属性变量 = 真>
+    变量 Cookies <公开 类型 = 文本型 注释 = "本次请求所返回的Cookie内容" @属性变量 = 真>
+    变量 响应头 <公开 类型 = 文本型 注释 = "本次请求所接收到服务器的响应头内容" @属性变量 = 真>
+    变量 重定向地址 <公开 类型 = 文本数组类 注释 = "本次请求所有的重定向地址" @属性变量 = 真>
+    变量 重定向次数 <公开 类型 = 整数 注释 = "本次请求所遵循重定向的次数" @属性变量 = 真>
+    变量 响应码 <公开 类型 = 整数 注释 = "本次请求的HTTP状态码" @属性变量 = 真>
+    变量 错误信息 <公开 类型 = 文本型 注释 = "本次请求遇到的错误" @属性变量 = 真>
+}
+
+类 网络URL组件信息类_ <基础类 = 扩展对象类 注释 = "用于\"WinHttp基类_.拆分URL/创建URL\"" 折叠 @文档 = "category = \"网络访问库.网络访问库.WinHttp.附加类\"">
+{
+    变量 协议 <公开 类型 = 文本型 注释 = "URL的协议<scheme>" @输出名 = "szScheme">
+    变量 协议类型 <公开 类型 = 整数 注释 = "1=HTTP; 2=HTTPS; 3=FTP; 4=SOCKS" @输出名 = "nScheme">
+    变量 域名 <公开 类型 = 文本型 注释 = "URL的域名<host>" @输出名 = "szHostName">
+    变量 端口 <公开 类型 = 整数 注释 = "URL的端口号<port>" @输出名 = "nPort">
+    变量 用户名 <公开 类型 = 文本型 注释 = "URL的用户名字段<user>" @输出名 = "szUserName">
+    变量 密码 <公开 类型 = 文本型 注释 = "URL的密码字段<password>" @输出名 = "szPassword">
+    变量 路径 <公开 类型 = 文本型 注释 = "URL的路径/<path>" @输出名 = "szUrlPath">
+    变量 附加信息 <公开 类型 = 文本型 注释 = "URL的提交参数?<query>和段落#<fragment>" @输出名 = "szExtraInfo">
+
+    方法 取展示内容 <公开 注释 = "将本对象中的所有数据用文本方式填入到所提供的文本参数中,用作调试或其它场合展示时使用." @虚拟方法 = 可覆盖>
+    参数 展示内容 <类型 = 文本型 注释 = "用作填入本对象中所有数据的展示文本">
+    参数 最大展示数据尺寸 <类型 = 整数 注释 = "提供用户所指定的最大允许展示数据尺寸,小于0表示全部展示,等于0表示展示默认尺寸数据.">
+    {
+        展示内容 = "<网络URL组件信息类_> 总共 8 个成员:\r\n"
+        加入文本 (展示内容, "1.协议: " + 取调试文本2 (最大展示数据尺寸, 协议) + "\r\n")
+        加入文本 (展示内容, "2.协议类型: " + 取调试文本2 (最大展示数据尺寸, 协议类型) + "\r\n")
+        加入文本 (展示内容, "3.域名: " + 取调试文本2 (最大展示数据尺寸, 域名) + "\r\n")
+        加入文本 (展示内容, "4.端口: " + 取调试文本2 (最大展示数据尺寸, 端口) + "\r\n")
+        加入文本 (展示内容, "5.用户名: " + 取调试文本2 (最大展示数据尺寸, 用户名) + "\r\n")
+        加入文本 (展示内容, "6.密码: " + 取调试文本2 (最大展示数据尺寸, 密码) + "\r\n")
+        加入文本 (展示内容, "7.路径: " + 取调试文本2 (最大展示数据尺寸, 路径) + "\r\n")
+        加入文本 (展示内容, "8.附加信息: " + 取调试文本2 (最大展示数据尺寸, 附加信息) + "\r\n")
+    }
+
+    # @begin
+    # <> <include>
+    # inline void SetInfo (LPURL_COMPONENTS urlComp)
+    # {
+    #     this->ResetObject ();
+    #     if (urlComp->dwSchemeLength)    szScheme.SetText (urlComp->lpszScheme, urlComp->dwSchemeLength);
+    #     if (urlComp->dwHostNameLength)  szHostName.SetText (urlComp->lpszHostName, urlComp->dwHostNameLength);
+    #     if (urlComp->dwUserNameLength)  szUserName.SetText (urlComp->lpszUserName, urlComp->dwUserNameLength);
+    #     if (urlComp->dwPasswordLength)  szPassword.SetText (urlComp->lpszPassword, urlComp->dwPasswordLength);
+    #     if (urlComp->dwUrlPathLength)   szUrlPath.SetText (urlComp->lpszUrlPath, urlComp->dwUrlPathLength);
+    #     if (urlComp->dwExtraInfoLength) szExtraInfo.SetText (urlComp->lpszExtraInfo, urlComp->dwExtraInfoLength);
+    #     nScheme = (INT)urlComp->nScheme; nPort = (INT)urlComp->nPort;
+    # }
+    # inline LPURL_COMPONENTS GetInfo (LPURL_COMPONENTS urlComp)
+    # {
+    #     ZeroMemory (urlComp, sizeof(URL_COMPONENTS));
+    #     urlComp->dwStructSize = sizeof (URL_COMPONENTS);
+    #     if (!szScheme.IsEmpty()) {
+    #         urlComp->lpszScheme = (LPWSTR)szScheme.GetText ();
+    #         urlComp->dwSchemeLength = (DWORD)szScheme.GetLength ();
+    #     }
+    #     urlComp->nScheme = (INTERNET_SCHEME)nScheme;
+    #     if (!szHostName.IsEmpty()) {
+    #         urlComp->lpszHostName = (LPWSTR)szHostName.GetText ();
+    #         urlComp->dwHostNameLength = (DWORD)szHostName.GetLength ();
+    #     }
+    #     urlComp->nPort = (INTERNET_PORT)nPort;
+    #     if (!szUserName.IsEmpty()) {
+    #         urlComp->lpszUserName = (LPWSTR)szUserName.GetText ();
+    #         urlComp->dwUserNameLength = (DWORD)szUserName.GetLength ();
+    #     }
+    #     if (!szPassword.IsEmpty()) {
+    #         urlComp->lpszPassword = (LPWSTR)szPassword.GetText ();
+    #         urlComp->dwPasswordLength = (DWORD)szPassword.GetLength ();
+    #     }
+    #     if (!szUrlPath.IsEmpty()) {
+    #         urlComp->lpszUrlPath = (LPWSTR)szUrlPath.GetText ();
+    #         urlComp->dwUrlPathLength = (DWORD)szUrlPath.GetLength ();
+    #     }
+    #     if (!szExtraInfo.IsEmpty()) {
+    #         urlComp->lpszExtraInfo = (LPWSTR)szExtraInfo.GetText ();
+    #         urlComp->dwExtraInfoLength = (DWORD)szExtraInfo.GetLength ();
+    #     }
+    #     return urlComp;
+    # }
+    # <> </include>
+    # @end
+}
+
+类 网络代理信息类_ <基础类 = 扩展对象类 注释 = "用于\"WinHttp基类_.从URL获取代理/置选项_代理信息/取选项_代理信息\"" 折叠
+        @文档 = "category = \"网络访问库.网络访问库.WinHttp.附加类\"">
+{
+    变量 访问类型 <公开 类型 = 网络代理类型_ 注释 = "代理服务器的访问类型" 编辑时信息 = "0, 17FFE, 0, 0" @输出名 = "dwAccessType">
+    变量 代理服务器 <公开 类型 = 文本型 注释 = "代理服务器列表,仅在\"访问类型\"为\"命名代理\"时可用."
+            注释 = "无论代理是什么协议,都一律填http/https,例如Socoks5的代理也是填: \"http://127.0.0.1:7890\"" 注释 = "可以用分号支持多个代理服务器,也可以对不同的协议使用不同的代理,例如:"
+            注释 = "\"http=http://127.0.0.1:7890;https=http://192.168.1.1:8080\"" 编辑时信息 = "0, 17FFE, 0, 0" @输出名 = "lpszProxy">
+    变量 代理跳过列表 <公开 类型 = 文本型 值 = "<local>" 注释 = "仅在\"代理类型\"为\"命名代理\"时可用,列表内的域名和IP不会通过代理访问." 注释 = "请提供用分号分隔的主机域名或IP地址,可以使用通配符."
+            注释 = "请勿提供空文本,默认的\"<local>\"为忽略所有不含句点的主机名." 编辑时信息 = "0, 17FFE, 0, 0" @输出名 = "lpszProxyBypass">
+
+    方法 取展示内容 <公开 注释 = "将本对象中的所有数据用文本方式填入到所提供的文本参数中,用作调试或其它场合展示时使用." 折叠 @虚拟方法 = 可覆盖>
+    参数 展示内容 <类型 = 文本型 注释 = "用作填入本对象中所有数据的展示文本">
+    参数 最大展示数据尺寸 <类型 = 整数 注释 = "提供用户所指定的最大允许展示数据尺寸,小于0表示全部展示,等于0表示展示默认尺寸数据.">
+    {
+        展示内容 = "<网络代理信息类_> 总共 3 个成员:\r\n"
+        加入文本 (展示内容, "1.访问类型: " + 取调试文本2 (最大展示数据尺寸, 访问类型) + "\r\n")
+        加入文本 (展示内容, "2.代理服务器: " + 取调试文本2 (最大展示数据尺寸, 代理服务器) + "\r\n")
+        加入文本 (展示内容, "3.代理跳过列表: " + 取调试文本2 (最大展示数据尺寸, 代理跳过列表) + "\r\n")
+    }
+
+    # @begin
+    # <> <include>
+    # inline void SetInfo (LPWINHTTP_PROXY_INFO stInfo)
+    # {
+    #     this->ResetObject ();
+    #     dwAccessType = (@dt<网络代理类型_>)stInfo->dwAccessType;
+    #     if (stInfo->lpszProxy) {
+    #         lpszProxy.SetText (stInfo->lpszProxy);
+    #         GlobalFree (stInfo->lpszProxy);
+    #     }
+    #     if (stInfo->lpszProxyBypass) {
+    #         lpszProxyBypass.SetText (stInfo->lpszProxyBypass);
+    #         GlobalFree (stInfo->lpszProxyBypass);
+    #     }
+    # }
+    # inline LPWINHTTP_PROXY_INFO GetInfo (LPWINHTTP_PROXY_INFO stInfo)
+    # {
+    #     ZeroMemory (stInfo, sizeof(WINHTTP_PROXY_INFO));
+    #     stInfo->dwAccessType = (DWORD)dwAccessType;
+    #     stInfo->lpszProxy = (LPWSTR)lpszProxy.GetText ();
+    #     stInfo->lpszProxyBypass = (LPWSTR)lpszProxyBypass.GetText ();
+    #     return stInfo;
+    # }
+    # <> </include>
+    # @end
+}
+
+类 网络代理类型_ <公开 注释 = "用于\"WinHttp基类_.初始化\"" 折叠 折叠2 @文档 = "category = \"网络访问库.网络访问库.WinHttp.附加类\"" @常量类 = 整数>
+{
+    常量 不使用代理 <公开 值 = @WINHTTP_ACCESS_TYPE_NO_PROXY 注释 = "不使用代理直接解析所有主机域名.">
+    常量 默认代理 <公开 值 = @WINHTTP_ACCESS_TYPE_DEFAULT_PROXY 注释 = "从注册表中获取静态的代理设置.此类型不会继承浏览器的代理设置."
+            注释 = "Windows 8.1及更高版本推荐使用\"自动代理\"." 注释 = "这里的代理配置由下列方式之一设置:" 注释 = " - proxycfg.exe" 注释 = " - netsh.exe"
+            注释 = " - WinHttpSetDefaultProxyConfiguration">
+    常量 命名代理 <公开 值 = @WINHTTP_ACCESS_TYPE_NAMED_PROXY 注释 = "将请求传递给代理,除非要解析的名称在代理跳过列表中." 注释 = "本类型需要设置\"代理服务器\"和\"代理跳过列表\"参数.">
+    常量 自动代理 <公开 值 = 4 注释 = "使用系统和各用户的代理设置来确定要使用的代理." 注释 = "注意: 仅在Windows 8.1及更高版本中受支持.">
+}
+
+类 网络URL操作类_ <公开 注释 = "用于\"WinHttp基类_.拆分URL/创建URL\"" 折叠 @文档 = "category = \"网络访问库.网络访问库.WinHttp.附加类\"">
+{
+    常量 URL解码 <公开 类型 = 整数 值 = @ICU_DECODE 注释 = "对URL的路径以后的部分进行URL解码,所有转义序列(%xx)将转换成字符."
+            注释 = "不能和选项\"URL编码\"一起使用,且不能用于方法\"WinHttp基类_.创建URL\".">
+    常量 URL编码 <公开 类型 = 整数 值 = @ICU_ESCAPE 注释 = "对URL的路径以后部分进行URL编码,所有不安全的字符将转换成转义序列(%xx).">
+    常量 拒绝用户密码 <公开 类型 = 整数 值 = @ICU_REJECT_USERPWD 注释 = "如果URL中含有用户名和密码等凭据信息,则拒绝进行拆分和创建,返回失败.">
+}
+
+类 网络请求头标志类_ <公开 注释 = "用于\"WinHttp基类_.打开请求\"" 折叠 @文档 = "category = \"网络访问库.网络访问库.WinHttp.附加类\"">
+{
+    常量 安全连接 <公开 类型 = 整数 值 = @WINHTTP_FLAG_SECURE 注释 = "尝试使用SSL安全连接,HTTPS必须使用此标志.">
+    常量 URL编码 <公开 类型 = 整数 值 = @WINHTTP_FLAG_ESCAPE_PERCENT 注释 = "将URL路径进行URL编码,所有不安全的字符都将转换为以%字符开头的转义序列."
+            注释 = "默认情况下,除了百分百符号之外的所有不安全字符都将转换为转义序列.">
+    常量 不使用编码 <公开 类型 = 整数 值 = @WINHTTP_FLAG_NULL_CODEPAGE 注释 = "假设URL路径中的宽字符都可以转换为有效的ANSI字符,不进行任何编码," 注释 = "此选项不会检查不安全的字符.">
+    常量 忽略代理缓存 <公开 类型 = 整数 值 = @WINHTTP_FLAG_BYPASS_PROXY_CACHE 注释 = "此选项等同\"强制刷新\".">
+    常量 强制刷新 <公开 类型 = 整数 值 = @WINHTTP_FLAG_REFRESH 注释 = "将请求转发给原始服务器,而不是从代理服务器发送资源的缓存版本."
+            注释 = "使用此选项时会将\"Pragma: no-cache\"添加到请求头." 注释 = "如果使用HTTP/1.1,还会添加\"Cache-Control: no-cache\".">
+    常量 禁止转义 <公开 类型 = 整数 值 = @WINHTTP_FLAG_ESCAPE_DISABLE 注释 = "不将URL路径的不安全字符转换为转义序列.">
+    常量 不转义参数 <公开 类型 = 整数 值 = @WINHTTP_FLAG_ESCAPE_DISABLE_QUERY 注释 = "对URL的路径部分进行转义,但不转义URL的请求参数部分.">
+}
+
+类 网络请求头修改标志类_ <公开 注释 = "用于添加请求头的各种方法" 折叠 @文档 = "category = \"网络访问库.网络访问库.WinHttp.附加类\"">
+{
+    常量 添加请求头 <公开 类型 = 整数 值 = @WINHTTP_ADDREQ_FLAG_ADD 注释 = "请求头不存在时添加,可与\"替换和删除\"一起使用.">
+    常量 仅新建添加 <公开 类型 = 整数 值 = @WINHTTP_ADDREQ_FLAG_ADD_IF_NEW 注释 = "仅在添加的请求头不存在时才添加,否则将返回错误.">
+    常量 合并请求头 <公开 类型 = 整数 值 = @WINHTTP_ADDREQ_FLAG_COALESCE 注释 = "合并同名的请求头,等同于\"以逗号合并\".">
+    常量 以逗号合并 <公开 类型 = 整数 值 = @WINHTTP_ADDREQ_FLAG_COALESCE_WITH_COMMA 注释 = "使用逗号合并同名的协议头,必须确保该协议头是以逗号分隔多个值."
+            注释 = "例如: 将\"Accept: text/*\"跟\"Accept: audio/*\"一起添加,会产生协议头\"Accept: text/*, audio/*\".">
+    常量 以分号合并 <公开 类型 = 整数 值 = @WINHTTP_ADDREQ_FLAG_COALESCE_WITH_SEMICOLON 注释 = "使用分号合并同名的协议头,必须确保该协议头是以分号分隔多个值.">
+    常量 替换和删除 <公开 类型 = 整数 值 = @WINHTTP_ADDREQ_FLAG_REPLACE 注释 = "替换或删除请求头.如果提供请求头的值不为空则将其替换."
+            注释 = "如果提供的请求头为空且缓存中存在同名请求头,则将其删除.">
+}
+
+类 网络禁止标志类_ <公开 注释 = "用于\"WinHttp基类_.置选项_禁止功能\"" 折叠 @文档 = "category = \"网络访问库.网络访问库.WinHttp.附加类\"">
+{
+    常量 禁止Cookies <公开 类型 = 整数 值 = @WINHTTP_DISABLE_COOKIES 注释 = "禁止将Cookie协议头添加到请求中,返回的Cookie也不会自动添加到Cookie数据库中.">
+    常量 禁止重定向 <公开 类型 = 整数 值 = @WINHTTP_DISABLE_REDIRECTS 注释 = "禁止在发送请求时自动重定向.">
+    常量 禁止自动身份验证 <公开 类型 = 整数 值 = @WINHTTP_DISABLE_AUTHENTICATION 注释 = "禁止自动身份验证.">
+    常量 禁止保持活动 <公开 类型 = 整数 值 = @WINHTTP_DISABLE_KEEP_ALIVE 注释 = "禁止使用保持活动.">
+}
+
+类 网络协议头标志类_ <公开 注释 = "在WinHttp基类_取协议头时使用." 折叠 折叠2 @文档 = "category = \"网络访问库.网络访问库.WinHttp.附加类\"" @常量类 = 整数>
+{
+    常量 MIME版本 <公开 值 = @WINHTTP_QUERY_MIME_VERSION 注释 = "MIME-Version: 表示使用的MIME的版本号,一般是1.0;" 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 内容类型 <公开 值 = @WINHTTP_QUERY_CONTENT_TYPE 注释 = "Content_Type(响应): 表示主体内容的媒体类型." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 内容传输编码 <公开 值 = @WINHTTP_QUERY_CONTENT_TRANSFER_ENCODING 注释 = "Content-Transfer-Encoding: 传输过程中的内容编码格式."
+            编辑时信息 = "A0AD, 0, 0, 0">
+    常量 内容识别符 <公开 值 = @WINHTTP_QUERY_CONTENT_ID 注释 = "Content-Id(响应): 内容的唯一标识符." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 内容描述 <公开 值 = @WINHTTP_QUERY_CONTENT_DESCRIPTION 注释 = "Content-Description(响应): 内容的可选描述文本(已淘汰)." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 内容长度 <公开 值 = @WINHTTP_QUERY_CONTENT_LENGTH 注释 = "Content-Length(响应): 实体主体部分的大小长度(字节)." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 内容语言 <公开 值 = @WINHTTP_QUERY_CONTENT_LANGUAGE 注释 = "Content-Language(响应): 告知客户端,实体主体使用的自然语言(指中文或英文等)."
+            编辑时信息 = "A0AD, 0, 0, 0">
+    常量 允许方法 <公开 值 = @WINHTTP_QUERY_ALLOW 注释 = "Allow(响应): 服务器支持哪些请求方式(如GET、POST等)." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 公开 <公开 值 = @WINHTTP_QUERY_PUBLIC 注释 = "Public: 接收此服务器上可用的HTTP谓词." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 日期 <公开 值 = @WINHTTP_QUERY_DATE 注释 = "Date(通用): 当前的GMT时间." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 过期时间 <公开 值 = @WINHTTP_QUERY_EXPIRES 注释 = "Expires(响应): 文档的过期时间,过期后不再缓存它." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 最后修改时间 <公开 值 = @WINHTTP_QUERY_LAST_MODIFIED 注释 = "Last-Modified(响应): 文档的最后改动时间." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 信息识别符 <公开 值 = @WINHTTP_QUERY_MESSAGE_ID 注释 = "Message-Id: 信息的唯一标识符." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 URI <公开 值 = @WINHTTP_QUERY_URI 注释 = "Uri: 接收部分或全部URI,通过这些URI可以识别请求URI资源." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 "//" <值 = @WINHTTP_QUERY_DERIVED_FROM 注释 = "(不再支持)" 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 "//" <值 = @WINHTTP_QUERY_COST 注释 = "(不再支持)" 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 链接 <公开 值 = @WINHTTP_QUERY_LINK 注释 = "Link: 链接(已淘汰)" 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 指令 <公开 值 = @WINHTTP_QUERY_PRAGMA 注释 = "Pragma(通用): 包含实现特定的指令,最常用的是Pragma:no-cache,它的含义和Cache-Control:no-cache相同."
+            编辑时信息 = "A0AD, 0, 0, 0">
+    常量 HTTP版本 <公开 值 = @WINHTTP_QUERY_VERSION 注释 = "返回状态行的HTTP版本 [取响应头EX不可用]" 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 状态码 <公开 值 = @WINHTTP_QUERY_STATUS_CODE 注释 = "返回HTTP的状态码 [取响应头EX不可用]" 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 状态文本 <公开 值 = @WINHTTP_QUERY_STATUS_TEXT 注释 = "返回HTTP状态码的附加描述文本,比如200状态码是\"OK\". [取响应头EX不可用]" 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 所有标头 <公开 值 = @WINHTTP_QUERY_RAW_HEADERS 注释 = "返回所有标头,标头之间以\\0分隔." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 所有标头_换行 <公开 值 = @WINHTTP_QUERY_RAW_HEADERS_CRLF 注释 = "返回所有标头,标头之间以换行符分隔. [取响应头EX不可用]" 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 连接 <公开 值 = @WINHTTP_QUERY_CONNECTION 注释 = "Connection(通用): 指定是否需要持久连接." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 接受媒体 <公开 值 = @WINHTTP_QUERY_ACCEPT 注释 = "Accept(请求): 告诉服务器自己接受什么媒体类型." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 接受字符集 <公开 值 = @WINHTTP_QUERY_ACCEPT_CHARSET 注释 = "Accept-Charset(请求): 告诉服务器自己能接收的字符集." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 接受编码 <公开 值 = @WINHTTP_QUERY_ACCEPT_ENCODING 注释 = "Accept-Encoding(请求): 告诉服务器自己能接收的编码方法,通常指定压缩方法."
+            编辑时信息 = "A0AD, 0, 0, 0">
+    常量 接受语言 <公开 值 = @WINHTTP_QUERY_ACCEPT_LANGUAGE 注释 = "Accept-Language(请求): 申明客户端能接收的语言. 中文是语言,中文有多种字符集,比如big5、gb2312、gbk."
+            编辑时信息 = "A0AD, 0, 0, 0">
+    常量 授权 <公开 值 = @WINHTTP_QUERY_AUTHORIZATION
+            注释 = "Authorization(请求): 客户端接收到来自服务器的WWW-Authenticate响应时,用该头部来回应自己的身份验证信息给WEB服务器." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 内容编码 <公开 值 = @WINHTTP_QUERY_CONTENT_ENCODING 注释 = "Content_Encoding(响应): 告知客户端服务器对主体部分选用的内容编码方式."
+            编辑时信息 = "A0AD, 0, 0, 0">
+    常量 转发 <公开 值 = @WINHTTP_QUERY_FORWARDED 注释 = "Forwarder: 转发(已淘汰)" 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 寄件人 <公开 值 = @WINHTTP_QUERY_FROM 注释 = "From(请求): 告知服务器使用用户代理的用户的电子邮件地址." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 自日期以来已修改 <公开 值 = @WINHTTP_QUERY_IF_MODIFIED_SINCE 注释 = "If-Modified-Since(请求): 请求对象在该字段指定的时间之后修改了,才会继续执行请求."
+            编辑时信息 = "A0AD, 0, 0, 0">
+    常量 重定向 <公开 值 = @WINHTTP_QUERY_LOCATION 注释 = "Location(响应): 重定向的地址,会引导客户端尝试访问新的地址." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 来源地址 <公开 值 = @WINHTTP_QUERY_ORIG_URI 注释 = "Orig-Uri: (已淘汰)" 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 来源 <公开 值 = @WINHTTP_QUERY_REFERER 注释 = "Referer(请求): 表示请求的URL是从哪个Web页面发起的." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 重试时间 <公开 值 = @WINHTTP_QUERY_RETRY_AFTER 注释 = "Retry-After(响应): 告知客户端应该在多久之后再次发送请求,可用GMT时间格式或秒数." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 服务器名 <公开 值 = @WINHTTP_QUERY_SERVER 注释 = "Server: 服务器名称,一般为HTTP服务器端应用程序的信息." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 标题 <公开 值 = @WINHTTP_QUERY_TITLE 注释 = "Title(响应): 标题(已淘汰)" 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 用户代理 <公开 值 = @WINHTTP_QUERY_USER_AGENT 注释 = "User-Agent(请求): 将创建请求的游览器和用户代理名称等信息传达给服务器." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 WWW身份验证 <公开 值 = @WINHTTP_QUERY_WWW_AUTHENTICATE 注释 = "WWW-Authenticate(响应): 将服务器所要求的认证信息发送给客户端." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 代理身份验证 <公开 值 = @WINHTTP_QUERY_PROXY_AUTHENTICATE 注释 = "Proxy-Authenticate(响应): 将代理服务器所要求的认证信息发送给客户端."
+            编辑时信息 = "A0AD, 0, 0, 0">
+    常量 接受范围请求 <公开 值 = @WINHTTP_QUERY_ACCEPT_RANGES 注释 = "Accept-Ranges(响应): 客户端发起范围请求时,服务器用来告知自己是否支持范围请求."
+            编辑时信息 = "A0AD, 0, 0, 0">
+    常量 设置Cookie <公开 值 = @WINHTTP_QUERY_SET_COOKIE 注释 = "Set-Cookie(响应): 由服务器返回,用于设置和页面关联的Cookie." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 Cookie <公开 值 = @WINHTTP_QUERY_COOKIE 注释 = "Cookie(请求): 客户端发送到服务器的Cookies." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 请求方式 <公开 值 = @WINHTTP_QUERY_REQUEST_METHOD 注释 = "返回请求方式,如GET、POST." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 刷新时间 <公开 值 = @WINHTTP_QUERY_REFRESH 注释 = "Refresh(响应): 表示浏览器应该在多少时间之后刷新文档,以秒计(已淘汰)." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 内容处置 <公开 值 = @WINHTTP_QUERY_CONTENT_DISPOSITION 注释 = "Content-Disposition(响应): 可用来设置文件下载对话框(已淘汰)."
+            编辑时信息 = "A0AD, 0, 0, 0">
+    常量 经过时间 <公开 值 = @WINHTTP_QUERY_AGE 注释 = "Age(响应): 用来告知客户端,源服务器在多久前创建了响应,单位为秒." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 缓存机制 <公开 值 = @WINHTTP_QUERY_CACHE_CONTROL 注释 = "Cache-Control(通用): 指定请求和响应遵循的缓存机制." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 内容基点 <公开 值 = @WINHTTP_QUERY_CONTENT_BASE 注释 = "Content-Base: URI的基础地址,用来解析实体的相对URL." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 内容重定向 <公开 值 = @WINHTTP_QUERY_CONTENT_LOCATION 注释 = "Content-Location(响应): 当返回的页面内容与实际请求的对象不同时,本字段返回重定向的页面地址."
+            编辑时信息 = "A0AD, 0, 0, 0">
+    常量 内容MD5 <公开 值 = @WINHTTP_QUERY_CONTENT_MD5 注释 = "Content-MD5(响应): 用于检查主体在传输过程中是否保持完整,以及确认传输到达." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 内容范围 <公开 值 = @WINHTTP_QUERY_CONTENT_RANGE 注释 = "Content-Range(响应): 范围请求时,告知客户端返回的是实体哪个部分." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 ETag <公开 值 = @WINHTTP_QUERY_ETAG 注释 = "ETag(响应): 服务器资源的实体标签,当资源发生改变时,ETag值也会更新." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 主机名 <公开 值 = @WINHTTP_QUERY_HOST 注释 = "Host(请求): 告知服务器,请求的资源所处的互联网主机名和端口号." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 匹配ETag <公开 值 = @WINHTTP_QUERY_IF_MATCH 注释 = "If-Match(请求): 参数值的ETag跟服务器一致时,才会继续执行请求." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 不匹配ETag <公开 值 = @WINHTTP_QUERY_IF_NONE_MATCH 注释 = "If-None-Match(请求): 参数值的ETag跟服务器不一致时,才会继续执行请求."
+            编辑时信息 = "A0AD, 0, 0, 0">
+    常量 范围请求 <公开 值 = @WINHTTP_QUERY_IF_RANGE 注释 = "If-Range(请求): 若字段值跟ETge值或更新日期时间一致,那么就作为范围请求处理." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 自日期以来未修改 <公开 值 = @WINHTTP_QUERY_IF_UNMODIFIED_SINCE 注释 = "If-Unmodified-Since(请求): 请求对象在该字段指定的时间之后没有修改,才会继续执行请求."
+            编辑时信息 = "A0AD, 0, 0, 0">
+    常量 最大转发 <公开 值 = @WINHTTP_QUERY_MAX_FORWARDS 注释 = "Max-Forwards(请求): 服务器转发的最大次数." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 代理授权 <公开 值 = @WINHTTP_QUERY_PROXY_AUTHORIZATION
+            注释 = "Proxy-Authorization(请求): 接受到从代理服务器发来的认证质询时,客户端会发送该请求以告知服务器认证所需要的信息." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 范围 <公开 值 = @WINHTTP_QUERY_RANGE 注释 = "Range(请求): 范围请求时,告知服务器请求指定范围的资源." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 传输编码 <公开 值 = @WINHTTP_QUERY_TRANSFER_ENCODING 注释 = "Transfer-Encoding(通用): 传输过程中的编码格式." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 升级 <公开 值 = @WINHTTP_QUERY_UPGRADE 注释 = "Upgrade(通用): 指定另一种可能完全不同的协议,比如从HTTP升级到WebSocket." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 VARY <公开 值 = @WINHTTP_QUERY_VARY 注释 = "Vary(响应): 可对缓存进行控制.源服务器会向代理服务器传达关于本地缓存使用方法的指令." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 经过 <公开 值 = @WINHTTP_QUERY_VIA 注释 = "Via(通用): 列出从客户端到OCS或者相反方向的响应经过了哪些代理服务器,他们用什么协议和版本发送的请求." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 警告 <公开 值 = @WINHTTP_QUERY_WARNING 注释 = "Warning(通用): 告知用户一些与缓存相关的的问题的警告." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 期望 <公开 值 = @WINHTTP_QUERY_EXPECT 注释 = "Expect(请求): 客户端用来告知服务器,期望出现的某种特定行为." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 代理连接 <公开 值 = @WINHTTP_QUERY_PROXY_CONNECTION 注释 = "Proxy-Connection: 代理持久连接." 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 除非自日期以来已被修改 <公开 值 = @WINHTTP_QUERY_UNLESS_MODIFIED_SINCE 注释 = "Unless-Modified-Since: 用来判断文件是否已被修改,用于断点续传."
+            编辑时信息 = "A0AD, 0, 0, 0">
+    常量 代理支持 <公开 值 = @WINHTTP_QUERY_PROXY_SUPPORT 注释 = "Proxy-Support:" 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 身份验证信息 <公开 值 = @WINHTTP_QUERY_AUTHENTICATION_INFO 注释 = "Authentication-Info:" 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 PassportURLs <公开 值 = @WINHTTP_QUERY_PASSPORT_URLS 注释 = "PassportURLs:" 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 Passport配置 <公开 值 = @WINHTTP_QUERY_PASSPORT_CONFIG 注释 = "Passport-Config:" 编辑时信息 = "A0AD, 0, 0, 0">
+    常量 自定义 <公开 值 = @WINHTTP_QUERY_CUSTOM 注释 = "获取指定名称的标头,需要提供参数\"标头名称\",本标志可以获取常量中没包含的标头." 编辑时信息 = "A0AD, 0, 0, 0">
+}
+
+类 网络安全标志类_ <公开 注释 = "用于\"WinHttp基类_.置选项_安全标志\"" 折叠 @文档 = "category = \"网络访问库.网络访问库.WinHttp.附加类\"">
+{
+    常量 忽略未知证书机构 <公开 类型 = 整数 值 = @SECURITY_FLAG_IGNORE_UNKNOWN_CA
+            注释 = "允许无效的证书颁发机构.如果设置了此标志,则不会收到WINHTTP_CALLBACK_STATUS_FLAG_INVALID_CA回调.">
+    常量 忽略无效证书日期 <公开 类型 = 整数 值 = @SECURITY_FLAG_IGNORE_CERT_DATE_INVALID
+            注释 = "允许无效的证书日期,即过期或尚未生效的证书.如果设置了此标志,则不会收到WINHTTP_CALLBACK_STATUS_FLAG_CERT_DATE_INVALID回调.">
+    常量 忽略无效证书公用名 <公开 类型 = 整数 值 = @SECURITY_FLAG_IGNORE_CERT_CN_INVALID
+            注释 = "允许在证书中使用无效的公用名;也就是说,指定的服务器名称与证书中的公用名不匹配.如果设置了此标志,则应用程序不会收到WINHTTP_CALLBACK_STATUS_FLAG_CERT_CN_INVALID回调.">
+    常量 忽略错误使用证书 <公开 类型 = 整数 值 = @SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE 注释 = "允许使用非服务器证书(例如客户端证书)建立服务器的身份.">
+    常量 忽略所有证书错误 <公开 类型 = 整数 值 = 0x00003300 注释 = "忽略以上所有的证书错误.">
+    常量 安全传输 <公开 类型 = 整数 值 = @SECURITY_FLAG_SECURE 注释 = "使用安全传输,只能在\"取选项\"中返回.">
+    常量 弱加密 <公开 类型 = 整数 值 = @SECURITY_FLAG_STRENGTH_WEAK 注释 = "使用弱加密(40位),只能在\"取选项\"中返回.">
+    常量 中加密 <公开 类型 = 整数 值 = @SECURITY_FLAG_STRENGTH_MEDIUM 注释 = "使用中等加密(56位),只能在\"取选项\"中返回.">
+    常量 强加密 <公开 类型 = 整数 值 = @SECURITY_FLAG_STRENGTH_STRONG 注释 = "使用强加密(128位),只能在\"取选项\"中返回.">
+}
+
+类 网络回调标志类_ <公开 注释 = "用于\"WinHttp基类_.置状态回调\"" 折叠 折叠2 @文档 = "category = \"网络访问库.网络访问库.WinHttp.附加类\"" @常量类 = 整数>
+{
+    常量 全部状态完成 <公开 值 = @WINHTTP_CALLBACK_FLAG_ALL_COMPLETIONS 注释 = "在任何完成通知时激活.此标志指定使用读取或写入操作所需的所有通知."
+            注释 = "有关完成操作的列表,请参阅\"网络回调状态标志类_\".">
+    常量 全部状态通知 <公开 值 = @WINHTTP_CALLBACK_FLAG_ALL_NOTIFICATIONS 注释 = "在任何状态更改通知(包括完成通知)时激活." 注释 = "有关通知列表,请参阅\"网络回调状态标志类_\".">
+    常量 域名解析 <公开 值 = @WINHTTP_CALLBACK_FLAG_RESOLVE_NAME 注释 = "在开始和完成域名解析时激活.">
+    常量 连接服务器 <公开 值 = @WINHTTP_CALLBACK_FLAG_CONNECT_TO_SERVER 注释 = "在开始并完成与服务器的连接时激活.">
+    常量 检测代理 <公开 值 = @WINHTTP_CALLBACK_FLAG_DETECTING_PROXY 注释 = "在检测到代理服务器时激活.">
+    常量 数据可用 <公开 值 = @WINHTTP_CALLBACK_FLAG_DATA_AVAILABLE 注释 = "在完成数据查询时激活.">
+    常量 响应头可用 <公开 值 = @WINHTTP_CALLBACK_FLAG_HEADERS_AVAILABLE 注释 = "当响应头可获取时激活.">
+    常量 接收数据完成 <公开 值 = @WINHTTP_CALLBACK_FLAG_READ_COMPLETE 注释 = "在完成数据接收操作时激活.">
+    常量 请求错误 <公开 值 = @WINHTTP_CALLBACK_FLAG_REQUEST_ERROR 注释 = "在发生异步错误时激活.">
+    常量 发送请求 <公开 值 = @WINHTTP_CALLBACK_FLAG_SEND_REQUEST 注释 = "在开始和完成调用\"发送请求/WinHttpSendRequest\"发送请求头时激活.">
+    常量 发送请求完成 <公开 值 = @WINHTTP_CALLBACK_FLAG_SENDREQUEST_COMPLETE 注释 = "当请求头已被\"发送请求/WinHttpSendRequest\"发送完成时激活.">
+    常量 发送数据完成 <公开 值 = @WINHTTP_CALLBACK_FLAG_WRITE_COMPLETE 注释 = "在数据POST操作完成后激活.">
+    常量 接收响应 <公开 值 = @WINHTTP_CALLBACK_FLAG_RECEIVE_RESPONSE 注释 = "在开始和完成从HTTP服务器接收资源时激活.">
+    常量 关闭连接 <公开 值 = @WINHTTP_CALLBACK_FLAG_CLOSE_CONNECTION 注释 = "在开始和完成关闭HTTP连接时激活.">
+    常量 句柄操作 <公开 值 = @WINHTTP_CALLBACK_FLAG_HANDLES 注释 = "在创建或关闭HINTERNET句柄时激活.">
+    常量 重定向 <公开 值 = @WINHTTP_CALLBACK_FLAG_REDIRECT 注释 = "在重定向请求时激活.">
+    常量 中间响应 <公开 值 = @WINHTTP_CALLBACK_FLAG_INTERMEDIATE_RESPONSE 注释 = "在从服务器接收到中间(100级)状态代码消息时激活.">
+    常量 安全连接失败 <公开 值 = @WINHTTP_CALLBACK_FLAG_SECURE_FAILURE 注释 = "在安全连接(SSL)失败时激活.">
+}
+
+类 网络回调状态标志类_ <公开 注释 = "在\"状态回调方法\"中返回" 折叠 折叠2 @文档 = "category = \"网络访问库.网络访问库.WinHttp.附加类\"" @常量类 = 整数>
+{
+    常量 正在解析域名 <公开 值 = @WINHTTP_CALLBACK_STATUS_RESOLVING_NAME 注释 = "[1]正在查找服务器域名的IP地址." 注释 = "状态信息指针: 所欲解析的域名(文本型指针)">
+    常量 解析域名成功 <公开 值 = @WINHTTP_CALLBACK_STATUS_NAME_RESOLVED 注释 = "[2]成功找到服务器的IP地址." 注释 = "状态信息指针: 服务器IP地址(文本型指针)">
+    常量 正在连接服务器 <公开 值 = @WINHTTP_CALLBACK_STATUS_CONNECTING_TO_SERVER 注释 = "[4]正在连接到服务器." 注释 = "状态信息指针: 服务器的IP地址(文本型指针)">
+    常量 连接服务器成功 <公开 值 = @WINHTTP_CALLBACK_STATUS_CONNECTED_TO_SERVER 注释 = "[8]成功连接到服务器." 注释 = "状态信息指针: 服务器的IP地址(文本型指针)">
+    常量 正在发送请求 <公开 值 = @WINHTTP_CALLBACK_STATUS_SENDING_REQUEST 注释 = "[16]正在发送请求信息到服务器." 注释 = "状态信息: 空">
+    常量 发送请求成功 <公开 值 = @WINHTTP_CALLBACK_STATUS_REQUEST_SENT 注释 = "[32]成功发送请求信息到服务器." 注释 = "状态信息指针: 已发送数据的字节长度(整数指针)">
+    常量 正在接收响应 <公开 值 = @WINHTTP_CALLBACK_STATUS_RECEIVING_RESPONSE 注释 = "[64]正在等待服务器对请求的响应." 注释 = "状态信息: 空">
+    常量 接收响应成功 <公开 值 = @WINHTTP_CALLBACK_STATUS_RESPONSE_RECEIVED 注释 = "[128]成功接收服务器的响应." 注释 = "状态信息指针: 已接收数据的字节长度(整数指针)">
+    常量 正在关闭连接 <公开 值 = @WINHTTP_CALLBACK_STATUS_CLOSING_CONNECTION 注释 = "[256]正在关闭与服务器的连接." 注释 = "状态信息: 空">
+    常量 关闭连接成功 <公开 值 = @WINHTTP_CALLBACK_STATUS_CONNECTION_CLOSED 注释 = "[512]成功关闭与服务器的连接." 注释 = "状态信息: 空">
+    常量 创建句柄成功 <公开 值 = @WINHTTP_CALLBACK_STATUS_HANDLE_CREATED 注释 = "[1024]创建了一个网络句柄." 注释 = "状态信息指针: 网络句柄(变整数指针)">
+    常量 正在关闭句柄 <公开 值 = @WINHTTP_CALLBACK_STATUS_HANDLE_CLOSING 注释 = "[2048]即将关闭一个网络句柄." 注释 = "状态信息指针: 网络句柄(变整数指针)">
+    常量 正在检测代理 <公开 值 = @WINHTTP_CALLBACK_STATUS_DETECTING_PROXY 注释 = "[4096]">
+    常量 重定向 <公开 值 = @WINHTTP_CALLBACK_STATUS_REDIRECT 注释 = "[16384]HTTP请求即将被自动重定向.你可以在此时接收重定向的响应头,或通过关闭句柄来取消重定向."
+            注释 = "状态信息指针: 重定向的新URL(文本型指针)">
+    常量 中间响应 <公开 值 = @WINHTTP_CALLBACK_STATUS_INTERMEDIATE_RESPONSE 注释 = "[32768]接收到服务器的中间(100级)状态代码信息."
+            注释 = "状态信息指针: 状态代码(整数指针)">
+    常量 安全连接失败 <公开 值 = @WINHTTP_CALLBACK_STATUS_SECURE_FAILURE 注释 = "[65536]接收服务器的SSL证书时遇到错误." 注释 = "状态信息指针: 标志(整数指针)">
+    常量 响应头可用 <公开 值 = @WINHTTP_CALLBACK_STATUS_HEADERS_AVAILABLE 注释 = "[131072]有可用\"取响应头\"获取的响应头." 注释 = "状态信息: 空">
+    常量 数据可用 <公开 值 = @WINHTTP_CALLBACK_STATUS_DATA_AVAILABLE 注释 = "[262144]有可用\"接收数据\"方法获取的数据." 注释 = "状态信息指针: 数据的字节长度(整数指针)">
+    常量 接收数据完成 <公开 值 = @WINHTTP_CALLBACK_STATUS_READ_COMPLETE 注释 = "[524288]成功接收服务器的数据."
+            注释 = "状态信息指针: 缓冲区(变整数指针); 状态信息长度: 接收的数据长度;" 注释 = "*当使用WebSocket时."
+            注释 = "状态信息指针: 结构体指针,可用\"WebSocket状态类.置数据()\"获取; 状态信息长度: 结构体长度;">
+    常量 发送数据完成 <公开 值 = @WINHTTP_CALLBACK_STATUS_WRITE_COMPLETE 注释 = "[1048576]成功发送数据到服务器." 注释 = "状态信息指针: 已发送数据的字节长度(整数指针);"
+            注释 = "*当使用WebSocket时." 注释 = "状态信息指针: 结构体指针,可用\"WebSocket状态类.置数据()\"获取; 状态信息长度: 结构体长度">
+    常量 请求错误 <公开 值 = @WINHTTP_CALLBACK_STATUS_REQUEST_ERROR 注释 = "[2097152]发送HTTP请求时发生错误."
+            注释 = "状态信息指针: 可用\"WinHTTP异步结果类.置数据()\"获取,其中的\"返回值\"成员请参考\"异步请求结果_WinHTTP\";">
+    常量 发送请求完成 <公开 值 = @WINHTTP_CALLBACK_STATUS_SENDREQUEST_COMPLETE 注释 = "[4194304]成功发送请求." 注释 = "状态信息: 空">
+    常量 从URL取代理完成 <公开 值 = 0x01000000 注释 = "[16777216]在异步调用\"从URL获取代理EX\"完成时触发,然后可以调用\"接收数据\".">
+    常量 WS关闭完成 <公开 值 = 0x02000000 注释 = "[33554432]通过调用\"关闭WebSocket\"关闭连接成功.">
+    常量 WS停止完成 <公开 值 = 0x04000000 注释 = "[67108864]通过调用\"停止WebSocket\"停止连接成功.">
+    常量 设置发送数据完成 <公开 值 = 0x10000000 注释 = "[268435456]">
+    常量 设置接收数据完成 <公开 值 = 0x20000000 注释 = "[536870912]">
+}

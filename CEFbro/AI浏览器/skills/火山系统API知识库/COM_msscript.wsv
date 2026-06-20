@@ -1,0 +1,407 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "" 注释 = "" @文档 = "category = \"COM.脚本控件\"" "" "//@视窗.外部头文件" = "COM_msscript\\ScriptControlFC.h">
+
+类 DScriptControlSource <公开 折叠>
+{
+    方法 Error <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Error()
+    }
+
+    方法 Timeout <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Timeout()
+    }
+
+    #
+}
+
+类 IScriptControl <公开 注释 = "64位的脚本控件源码 https://github.com/tablacus/TablacusScriptControl"
+        @视窗.外部头文件 = "COM_msscript\\msscript.tlh" @视窗.附属文件.x64 = "COM_msscript\\tsc64.dll">
+{
+
+    #
+    # @begin
+    # @m<define_vol_use_System_com_ProgID>(__uuidof(MSScriptControl::ScriptControl),MSScriptControl::IScriptControlPtr)
+    # //@m<define_vol_use_System_com_ProgID>("MSScriptControl.ScriptControl",MSScriptControl::IScriptControlPtr)
+    # //@m<define_vol_use_com_with_registered_tlh_X86_X64>(__uuidof(MSScriptControl::ScriptControl),__uuidof(IScriptControl::IScriptControl),MSScriptControl::IScriptControlPtr,IScriptControl::IScriptControlPtr)
+    #
+    # //@m<define_vol_use_com_without_register_X86_X64>(__uuidof(MSScriptControl::ScriptControl),)
+    #
+    # <> <include>
+    # //这部分代码，只有X64 下才会用到
+    # HMODULE hdllInst;    
+    # IClassFactory* pClassFactory;    
+    # BOOL InitX64(LPCTSTR lpszDLLFile,BOOL bMutiThread ,REFCLSID clsid, REFIID iid)    
+    # {
+    #     HRESULT hr = S_OK;    
+    #     if(bMutiThread)        
+    #         hr = ::CoInitialize(nullptr);    
+    #     else                    
+    #         hr = ::CoInitializeEx(0, COINIT_MULTITHREADED);    
+    #   typedef HRESULT(__stdcall* pDllGetClassObject)(REFCLSID, REFIID, void**);    
+    #   HMODULE hdllInst = LoadLibrary(lpszDLLFile);    
+    #   if (hdllInst)    
+    #   {    
+    #    pDllGetClassObject fnDllGetClassObject = (pDllGetClassObject)GetProcAddress(hdllInst, "DllGetClassObject");    
+    #    if (fnDllGetClassObject != 0)    
+    #    {    
+    #     HRESULT hr = (fnDllGetClassObject)(clsid, IID_IClassFactory, (LPVOID*)&pClassFactory);    
+    #     if (SUCCEEDED(hr) && (pClassFactory != NULL))    
+    #     {    
+    #        return  pClassFactory->CreateInstance(NULL, iid, (void**)&m_pvObject) == S_OK ? TRUE:FALSE;    
+    #      }    
+    #    }    
+    #   }    
+    #  return FALSE;    
+    # }    
+    # VOID UnitX64()    
+    # {    
+    #     if (pClassFactory) pClassFactory->Release();    
+    #     if (hdllInst)    FreeLibrary(hdllInst);  
+    # }    
+    # <> </include>
+    #
+    #
+    # @end
+
+    方法 类_初始化
+    {
+        变量 是否创建成功 <类型 = 逻辑型>
+        变量 DLL路径 <类型 = 文本型>
+        @ #ifdef _VOL_X64
+        DLL路径 = 取运行目录 () + "tsc64.dll"
+        @ @<是否创建成功> = InitX64(@<DLL路径>.GetText(),TRUE,__uuidof(MSScriptControl::ScriptControl),__uuidof(MSScriptControl::IScriptControl));
+        @ #else
+        // 命令行 = "regsvr32 \"" + 取运行目录 () + "DebenuPDFLibraryAX1013.dll"
+        @ @<是否创建成功> = Init();
+        @ #endif
+
+        如果 (是否创建成功 == 假)
+        {
+            调试输出 ("初始化 IScriptControl 失败 IScriptControl只有32位的，没有64的,目录中的64位的是我百度到加上去的")
+        }
+
+    }
+
+    方法 类_清理
+    {
+        @ Unit();
+
+    }
+
+    #
+
+    方法 GetLanguage <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetLanguage())
+    }
+
+    方法 PutLanguage <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 pbstrLanguage <类型 = 文本型 注释 = "_bstr_t pbstrLanguage">
+    {
+        @ @sn<this>.GetComObjPtr()->PutLanguage(@<pbstrLanguage>.GetText())
+    }
+
+    方法 PutState <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 pssState <类型 = 整数 注释 = "enum ScriptControlStates pssState">
+    {
+        @ @sn<this>.GetComObjPtr()->PutState(@<pssState>)
+    }
+
+    方法 PutSitehWnd <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 phwnd <类型 = 整数 注释 = "long phwnd">
+    {
+        @ @sn<this>.GetComObjPtr()->PutSitehWnd(@<phwnd>)
+    }
+
+    方法 GetSitehWnd <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetSitehWnd()
+    }
+
+    方法 GetTimeout <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetTimeout()
+    }
+
+    方法 PutTimeout <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 plMilleseconds <类型 = 整数 注释 = "long plMilleseconds">
+    {
+        @ @sn<this>.GetComObjPtr()->PutTimeout(@<plMilleseconds>)
+    }
+
+    方法 GetAllowUI <公开 类型 = 逻辑型 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetAllowUI()
+    }
+
+    方法 PutAllowUI <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 pfAllowUI <类型 = 逻辑型 注释 = "VARIANT_BOOL pfAllowUI">
+    {
+        @ @sn<this>.GetComObjPtr()->PutAllowUI(@<pfAllowUI>)
+    }
+
+    方法 GetUseSafeSubset <公开 类型 = 逻辑型 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetUseSafeSubset()
+    }
+
+    方法 PutUseSafeSubset <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 pfUseSafeSubset <类型 = 逻辑型 注释 = "VARIANT_BOOL pfUseSafeSubset">
+    {
+        @ @sn<this>.GetComObjPtr()->PutUseSafeSubset(@<pfUseSafeSubset>)
+    }
+
+    方法 "//GetModules" <公开 返回值注释 = "IScriptModuleCollectionPtr" @嵌入式方法 = "">
+    {
+        @  @dt<待处理>( @sn<this>.GetComObjPtr()->GetModules() )
+    }
+
+    方法 GetError <公开 类型 = IScriptError 返回值注释 = "IScriptErrorPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IScriptError>( @sn<this>.GetComObjPtr()->GetError() )
+    }
+
+    方法 "//GetCodeObject" <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    {
+        @  @dt<待处理>( @sn<this>.GetComObjPtr()->GetCodeObject() )
+    }
+
+    方法 "//GetProcedures" <公开 返回值注释 = "IScriptProcedureCollectionPtr" @嵌入式方法 = "">
+    {
+        @  @dt<待处理>( @sn<this>.GetComObjPtr()->GetProcedures() )
+    }
+
+    方法 _AboutBox <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->_AboutBox()
+    }
+
+    方法 "//AddObject" <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Name <类型 = 文本型 注释 = "_bstr_t Name">
+    参数 Object <注释 = "IDispatch * Object">
+    参数 AddMembers <类型 = 逻辑型 注释 = "VARIANT_BOOL AddMembers" @默认值 = 真>
+    {
+        @ @sn<this>.GetComObjPtr()->AddObject(@<Name>.GetText(),@<Object>,@<AddMembers>)
+    }
+
+    方法 Reset <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Reset()
+    }
+
+    方法 AddCode <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Code <类型 = 文本型 注释 = "_bstr_t Code">
+    {
+        @ @sn<this>.GetComObjPtr()->AddCode(@<Code>.GetText())
+    }
+
+    方法 "//Eval" <公开 返回值注释 = "_variant_t" 折叠 @嵌入式方法 = "">
+    参数 Expression <类型 = 文本型 注释 = "_bstr_t Expression">
+    参数 执行结果 <类型 = COM变体型>
+    {
+        @ @<执行结果>.SetVariant( &( @sn<this>.GetComObjPtr()->Eval(@<Expression>.GetText())),-1)
+    }
+
+    方法 "//Eval" <公开 类型 = COM变体型 返回值注释 = "_variant_t" @禁止流程检查 = 真>
+    参数 Expression <类型 = 文本型 注释 = "_bstr_t Expression">
+    {
+        @ CVolComVariant vt;
+        @ vt.SetVariant(&GetComObjPtr()->Eval(@<Expression>.GetText()),-1);
+        @ return vt;
+
+    }
+
+    方法 Eval <公开 类型 = 整数 返回值注释 = "_variant_t" @嵌入式方法 = "">
+    参数 Expression <类型 = 文本型 注释 = "_bstr_t Expression">
+    参数 返回值 <类型 = COM变体型>
+    {
+        @ @sn<this>.GetComObjPtr()->raw_Eval(_bstr_t(@<Expression>.GetText()), &@<返回值>.m_var)
+
+    }
+
+    方法 ExecuteStatement <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Statement <类型 = 文本型 注释 = "_bstr_t Statement">
+    {
+        @ @sn<this>.GetComObjPtr()->ExecuteStatement(@<Statement>.GetText())
+    }
+
+    方法 "//Run" <公开 返回值注释 = "_variant_t" @嵌入式方法 = "">
+    参数 ProcedureName <类型 = 文本型 注释 = "_bstr_t ProcedureName">
+    参数 Parameters <注释 = "SAFEARRAY * * Parameters">
+    {
+        @ @sn<this>.GetComObjPtr()->Run(@<ProcedureName>.GetText(),@<Parameters>)
+    }
+
+    #
+}
+
+类 IScriptError <公开>
+{
+
+    # @ @m<vol_define_IDispatchPtr_Construct>(MSScriptControl::IScriptErrorPtr,MSScriptControl::IScriptErrorPtr)
+    #
+
+    方法 GetNumber <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetNumber()
+    }
+
+    方法 GetSource <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetSource())
+    }
+
+    方法 GetDescription <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetDescription())
+    }
+
+    方法 GetHelpFile <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetHelpFile())
+    }
+
+    方法 GetHelpContext <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetHelpContext()
+    }
+
+    方法 GetText <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetText())
+    }
+
+    方法 GetLine <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetLine()
+    }
+
+    方法 GetColumn <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetColumn()
+    }
+
+    方法 Clear <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Clear()
+    }
+
+    #
+}
+
+类 IScriptModule <公开 折叠>
+{
+    方法 GetName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetName())
+    }
+
+    方法 "//GetCodeObject" <公开 返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    {
+        @  @dt<待处理>( @sn<this>.GetComObjPtr()->GetCodeObject() )
+    }
+
+    方法 "//GetProcedures" <公开 返回值注释 = "IScriptProcedureCollectionPtr" @嵌入式方法 = "">
+    {
+        @  @dt<待处理>( @sn<this>.GetComObjPtr()->GetProcedures() )
+    }
+
+    方法 AddCode <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Code <类型 = 文本型 注释 = "_bstr_t Code">
+    {
+        @ @sn<this>.GetComObjPtr()->AddCode(@<Code>.GetText())
+    }
+
+    方法 Eval <公开 返回值注释 = "_variant_t" @嵌入式方法 = "">
+    参数 Expression <类型 = 文本型 注释 = "_bstr_t Expression">
+    {
+        @ @sn<this>.GetComObjPtr()->Eval(@<Expression>.GetText())
+    }
+
+    方法 ExecuteStatement <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Statement <类型 = 文本型 注释 = "_bstr_t Statement">
+    {
+        @ @sn<this>.GetComObjPtr()->ExecuteStatement(@<Statement>.GetText())
+    }
+
+    方法 "//Run" <公开 返回值注释 = "_variant_t" @嵌入式方法 = "">
+    参数 ProcedureName <类型 = 文本型 注释 = "_bstr_t ProcedureName">
+    参数 Parameters <注释 = "SAFEARRAY * * Parameters">
+    {
+        @ @sn<this>.GetComObjPtr()->Run(@<ProcedureName>.GetText(),@<Parameters>)
+    }
+
+    #
+}
+
+类 IScriptModuleCollection <公开 折叠>
+{
+    方法 "//Get_NewEnum" <公开 返回值注释 = "IUnknownPtr" @嵌入式方法 = "">
+    {
+        @  @dt<待处理>( @sn<this>.GetComObjPtr()->Get_NewEnum() )
+    }
+
+    方法 "//GetItem" <公开 返回值注释 = "IScriptModulePtr" @嵌入式方法 = "">
+    参数 Index <注释 = "const _variant_t & Index">
+    {
+        @  @dt<待处理>( @sn<this>.GetComObjPtr()->GetItem(@<Index>) )
+    }
+
+    方法 GetCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetCount()
+    }
+
+    方法 "//Add" <公开 返回值注释 = "IScriptModulePtr" @嵌入式方法 = "">
+    参数 Name <类型 = 文本型 注释 = "_bstr_t Name">
+    参数 Object <注释 = "VARIANT * Object">
+    {
+        @  @dt<待处理>( @sn<this>.GetComObjPtr()->Add(@<Name>.GetText(),@<Object>) )
+    }
+
+    #
+}
+
+类 IScriptProcedure <公开 折叠>
+{
+    方法 GetName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetName())
+    }
+
+    方法 GetNumArgs <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetNumArgs()
+    }
+
+    方法 GetHasReturnValue <公开 类型 = 逻辑型 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetHasReturnValue()
+    }
+
+    #
+}
+
+类 IScriptProcedureCollection <公开 折叠>
+{
+    方法 "//Get_NewEnum" <公开 返回值注释 = "IUnknownPtr" @嵌入式方法 = "">
+    {
+        @  @dt<待处理>( @sn<this>.GetComObjPtr()->Get_NewEnum() )
+    }
+
+    方法 "//GetItem" <公开 返回值注释 = "IScriptProcedurePtr" @嵌入式方法 = "">
+    参数 Index <注释 = "const _variant_t & Index">
+    {
+        @  @dt<待处理>( @sn<this>.GetComObjPtr()->GetItem(@<Index>) )
+    }
+
+    方法 GetCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetCount()
+    }
+
+    #
+}

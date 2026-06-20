@@ -1,0 +1,504 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.基本 <注释 = "提供视窗资源相关类" @文档 = "category = \"资源\"">
+
+# 资源定义类 ===
+
+类 字符串资源 <公开 注释 = "用作记录一个字符串资源" @输出名 = "@CVolWinStrRes" @常量类 = 文本到ID>
+
+类 视窗文件资源 <公开 注释 = "  所有基于文件数据内容资源的基础类,所有以本类为基础类的资源将直接把" 注释 = "相关文件的全部数据以RCDATA类型(除非继承类中使用\"@视窗.资源类型\"属性"
+        注释 = "进行了修改)放入到编译后的目的程序资源段中." 注释 = "  如果初始值提供一个空文件名,将代表为空文件资源.空资源一般用作取消先" 注释 = "前所已经设置资源的作用效果." 编辑时信息 = "101545, 0, 0, 0"
+        @可插入程序类 = "type = \"const, var\"\r\nprefix = 文件\r\nexplain = \"将所指定文件以资源的形式插入程序\"\r\nicon = \"@5\""
+        @输出名 = "@CVolWinFileRes" @视窗.资源类型 = "RCDATA" @常量类 = 文本到ID @值细节类型 = 文件名>
+
+类 图标资源 <公开 基础类 = 视窗文件资源 注释 = "  用作代表一个ico图标资源,本类资源将把所指定的ico图标数据以" 注释 = "ICON类型放入到编译后的目的程序资源段中."
+        注释 = "  如果初始值提供一个空文件名,将代表为空图标资源." 编辑时信息 = "1A3FE5, 0, 0, 0"
+        @可插入程序类 = "type = \"const, var\"\r\nprefix = 图标\r\nexplain = \"将所指定图标文件以资源的形式插入程序\"\r\nicon = \"@11\"" @视窗.资源类型 = "ICON"
+        @常量类 = 文本到ID @值细节类型 = 文件名 @附加文本 = "图标文件(*.ico)|*.ico|">
+
+类 位图资源 <公开 基础类 = 视窗文件资源 注释 = "  用作代表一个通用位图资源,本类资源将把所指定的位图数据以" 注释 = "RCDATA类型放入到编译后的目的程序资源段中."
+        注释 = "  如果初始值提供一个空文件名,将代表为空位图资源." 编辑时信息 = "EAA9C, 0, 0, 0"
+        @可插入程序类 = "type = \"const, var\"\r\nprefix = 图片\r\nexplain = \"将所指定图片文件以资源的形式插入程序\"\r\nicon = \"@9\"" @视窗.资源类型 = "RCDATA"
+        @常量类 = 文本到ID @值细节类型 = 文件名
+        @附加文本 = "所有图片文件|*.gif;*.bmp;*.emf;*.wmf;*.jpg;*.jpeg;*.png;*.tif;*.ico|GIF文件(*.gif)|*.gif|BMP文件(*.bmp)|*.bmp|EMF文件(*.emf)|*.emf|WMF文件(*.wmf)|*.wmf|JPG文件(*.jpg;*.jpeg)|*.jpg;*.jpeg|PNG文件(*.png)|*.png|TIFF文件(*.tif)|*.tif|ICO文件(*.ico)|*.ico|">
+
+类 BMP位图资源 <公开 基础类 = 视窗文件资源 注释 = "  用作代表一个BITMAP位图资源,本类资源将把所指定的位图数据以" 注释 = "BITMAP类型放入到编译后的目的程序资源段中."
+        注释 = "  如果初始值提供一个空文件名,将代表为空BITMAP位图资源." 编辑时信息 = "16153F, 0, 0, 0"
+        @可插入程序类 = "type = \"const, var\"\r\nprefix = BMP位图\r\nexplain = \"将所指定BMP位图文件以资源的形式插入程序\"\r\nicon = \"@9\""
+        @视窗.资源类型 = "BITMAP" @常量类 = 文本到ID @值细节类型 = 文件名 @附加文本 = "BMP图片文件(*.bmp)|*.bmp|">
+
+类 图片组资源 <公开 基础类 = 位图资源 注释 = "  用作代表一个基于位图的图片组资源,本类资源将把所指定的位图数据以RCDATA" 注释 = "类型放入到编译后的目的程序资源段中."
+        注释 = "  用来作为图片组的位图内容格式具有以下要求:" 注释 = "  1. 必须为图片组中所有单个图片的横向排列组合,即图片组中单个图片的高度" 注释 = "等于整个图片组位图的高度,图片组中所有单个图片的总宽度等于整个图片组位图"
+        注释 = "的宽度;" 注释 = "  2. 图片组中单个图片的宽度等于其高度,如果不为偶数值,则就近向上取偶" 注释 = "(如:高度为15,则宽度为16);"
+        注释 = "  3. 位图中的透明部分用洋红色(红绿蓝分量值分别为: 255, 0, 255)填充标记." 编辑时信息 = "D1548, 0, 0, 0"
+        @可插入程序类 = "type = \"const, var\"\r\nprefix = 图片组\r\nexplain = \"将所指定图片组文件以资源的形式插入程序\"\r\nicon = \"@4\"" @常量类 = 文本到ID
+        @值细节类型 = 文件名
+        @附加文本 = "所有图片文件|*.gif;*.bmp;*.emf;*.wmf;*.jpg;*.jpeg;*.png;*.tif;*.ico|GIF文件(*.gif)|*.gif|BMP文件(*.bmp)|*.bmp|EMF文件(*.emf)|*.emf|WMF文件(*.wmf)|*.wmf|JPG文件(*.jpg;*.jpeg)|*.jpg;*.jpeg|PNG文件(*.png)|*.png|TIFF文件(*.tif)|*.tif|ICO文件(*.ico)|*.ico|">
+
+类 鼠标指针资源 <公开 基础类 = 视窗文件资源 注释 = "  用作代表一个鼠标指针图像资源,本类资源将把所指定的鼠标指针图片" 注释 = "数据以CURSOR类型放入到编译后的目的程序资源段中."
+        注释 = "  如果初始值提供一个空文件名,将代表为空鼠标指针资源." 编辑时信息 = "17EA92, 0, 0, 0"
+        @可插入程序类 = "type = \"const, var\"\r\nprefix = 鼠标指针\r\nexplain = \"将所指定鼠标指针文件以资源的形式插入程序\"\r\nicon = \"@9\""
+        @视窗.资源类型 = "CURSOR" @常量类 = 文本到ID @值细节类型 = 文件名 @附加文本 = "鼠标指针文件(*.cur)|*.cur|">
+
+类 WAV资源 <公开 基础类 = 视窗文件资源 注释 = "用作代表一个wav声音文件资源." 注释 = "如果初始值提供一个空文件名,将代表为空wav资源." 注释 = "" 编辑时信息 = "14EA95, 0, 0, 0"
+        @可插入程序类 = "type = \"const, var\"\r\nprefix = WAV声音\r\nexplain = \"将所指定WAV音频文件以资源的形式插入程序\"\r\nicon = \"@3\""
+        @视窗.资源类型 = "WAVE" @常量类 = 文本到ID @值细节类型 = 文件名 @附加文本 = "WAV声音文件(*.wav)|*.wav|">
+
+类 声音资源 <公开 基础类 = 视窗文件资源 注释 = "用作代表一个wav或mp3声音文件资源." 注释 = "如果初始值提供一个空文件名,将代表为空wav或mp3资源." 编辑时信息 = "1E7FE1, 0, 0, 0"
+        @可插入程序类 = "type = \"const, var\"\r\nprefix = 声音\r\nexplain = \"将所指定WAV或MP3音频文件以资源的形式插入程序\"\r\nicon = \"@3\""
+        @视窗.资源类型 = "RCDATA" @常量类 = 文本到ID @值细节类型 = 文件名
+        @附加文本 = "所有声音文件(*.wav;*.mp3)|*.wav;*.mp3|WAV声音文件(*.wav)|*.wav|MP3声音文件(*.mp3)|*.mp3|">
+
+类 空资源 <公开 注释 = "  提供以上各种资源所对应的空资源常量,空资源一般用作取消" 注释 = "先前所已经设置资源的作用效果.">
+{
+    常量 空字符串 <公开 类型 = 字符串资源 值 = "">
+    常量 空图标 <公开 类型 = 图标资源 值 = "">
+    常量 空位图 <公开 类型 = 位图资源 值 = "">
+    常量 空BMP位图 <公开 类型 = BMP位图资源 值 = "">
+    常量 空鼠标指针 <公开 类型 = 鼠标指针资源 值 = "">
+    常量 空文件 <公开 类型 = 视窗文件资源 值 = "">
+    常量 空WAV声音 <公开 类型 = WAV资源 值 = "">
+    常量 空声音 <公开 类型 = 声音资源 值 = "">
+}
+
+# 资源处理类 ===
+
+类 资源操作类 <公开 @文档 = "category = \"资源.处理类\"" @全局类 = 真>
+{
+    方法 载入字符串资源 <公开 静态 类型 = 文本型 注释 = "载入并返回所指定的字符串资源,载入失败将返回空文本." @嵌入式方法 = "">
+    参数 所欲载入的字符串 <类型 = 字符串资源>
+    {
+        @ g_objVolApp.LoadResString ((UINT_P)@<所欲载入的字符串>, CVolString ())
+    }
+
+    方法 载入字符串资源2 <公开 静态 注释 = "载入并返回所指定的字符串资源" @嵌入式方法 = "">
+    参数 所欲载入的字符串 <类型 = 字符串资源>
+    参数 结果存储参数 <类型 = 文本型 注释 = "所载入的字符串资源将保存进此参数中,载入失败将置入空文本.">
+    {
+        @ g_objVolApp.LoadResString ((UINT_P)@<所欲载入的字符串>, @<结果存储参数>)
+    }
+}
+
+# ---
+
+类 GDI资源类 <公开 基础类 = 参考对象类 注释 = "用作记录一个GDI对象的句柄,支持在不使用后自动对其进行释放." @文档 = "category = \"资源.处理类\"">
+{
+    方法 为空 <公开 类型 = 逻辑型 注释 = "返回本对象内是否未记录有一个非0句柄值" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetGDIHandle () == NULL
+    }
+
+    方法 取句柄值 <公开 类型 = 变整数 注释 = "返回对象中所保存的GDI对象句柄值,不存在返回0." @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.GetGDIHandle ()
+    }
+
+    # --
+    #
+    # @begin
+    # <> <include>
+    #
+    # <> <global>
+    # // 用作指定GDI对象句柄的自动删除方式
+    # typedef enum
+    # {
+    #     GOADT_NOT = 0,  // 不自动删除
+    #     GOADT_DELETE_OBJECT,  // 使用DeleteObject自动删除
+    #     GOADT_DESTORY_ICON,  // 使用DestoryIcon自动删除
+    #     GOADT_DESTORY_CURSOR,  // 使用DestoryCursor自动删除
+    #     GOADT_DESTROY_IMAGELIST,  // 使用ImageList_Destroy自动删除
+    # }
+    # GDI_OBJ_AUTO_DELETE_TYPE;
+    # <> </global>
+    #
+    # inline_ @sn<current_class> (const HGDIOBJ hGDIObject, const GDI_OBJ_AUTO_DELETE_TYPE enAutoDeleteType) : @sn<current_class> ()
+    # {
+    #     if (hGDIObject != NULL)
+    #         TakeOverNewRefObject (new CGDIObjectHandle (hGDIObject, enAutoDeleteType));
+    # }
+    #
+    # // 返回所设置的GDI句柄,不存在返回NULL.
+    # inline_ HGDIOBJ GetGDIHandle ()
+    # {
+    #     ASSER_P_IS_NULL_OR_INSTANCE_OF (GetRefObject (), CGDIObjectHandle);  // 必定符合此条件
+    #     return ((CGDIObjectHandle*)GetRefObject ())->SafeGetGDIHandle ();
+    # }
+    #
+    # inline_ HGDIOBJ SafeGetGDIHandle ()
+    # {
+    #     return (this == NULL ? NULL : GetGDIHandle ());
+    # }
+    #
+    # inline_ HGDIOBJ DetachGDIHandle ()
+    # {
+    #     ASSER_P_IS_NULL_OR_INSTANCE_OF (GetRefObject (), CGDIObjectHandle);  // 必定符合此条件
+    #     return ((CGDIObjectHandle*)GetRefObject ())->DetachGDIHandle ();
+    # }
+    #
+    # // 接管所指定GDI句柄的释放工作,其不再由调用方负责,返回所提供的句柄值.
+    # inline_ HGDIOBJ TakeOverNewGDIObject (const HGDIOBJ hGDIObject, const GDI_OBJ_AUTO_DELETE_TYPE enAutoDeleteType)
+    # {
+    #     TakeOverNewRefObject (new CGDIObjectHandle (hGDIObject, enAutoDeleteType));
+    #     return hGDIObject;
+    # }
+    #
+    # //--
+    #
+    # <> <global>
+    #
+    # // 用作保存视窗GDI句柄
+    # class CGDIObjectHandle : public CRefObject
+    # {
+    #     DECLARE_DERIVED_CLASS (CGDIObjectHandle)
+    #
+    # public:
+    #     inline_ CGDIObjectHandle (const HGDIOBJ hGDIObject, const GDI_OBJ_AUTO_DELETE_TYPE enAutoDeleteType) :
+    #             m_hGDIObject (hGDIObject),
+    #             m_enAutoDeleteType (enAutoDeleteType)
+    #     {
+    #     }
+    #
+    #     virtual ~CGDIObjectHandle ()
+    #     {
+    #         if (m_hGDIObject != NULL)
+    #         {
+    #             switch (m_enAutoDeleteType)
+    #             {
+    #             case GOADT_DESTORY_ICON:
+    #                 VERIFY (::DestroyIcon ((HICON)m_hGDIObject));
+    #                 break;
+    #             case GOADT_DESTORY_CURSOR:
+    #                 VERIFY (::DestroyCursor ((HCURSOR)m_hGDIObject));
+    #                 break;
+    #             case GOADT_DESTROY_IMAGELIST:
+    #                 VERIFY (::ImageList_Destroy ((HIMAGELIST)m_hGDIObject));
+    #                 break;
+    #             case GOADT_DELETE_OBJECT:
+    #                 VERIFY (::DeleteObject (m_hGDIObject));
+    #                 break;
+    #             }
+    #         }
+    #     }
+    #
+    #     inline_ HGDIOBJ SafeGetGDIHandle () const
+    #     {
+    #         return (this == NULL ? NULL : m_hGDIObject);
+    #     }
+    #
+    #     inline_ HGDIOBJ DetachGDIHandle ()
+    #     {
+    #         const HGDIOBJ hGDIObject = m_hGDIObject;
+    #         m_hGDIObject = NULL;
+    #         return hGDIObject;
+    #     }
+    #
+    # protected:
+    #     HGDIOBJ m_hGDIObject;
+    #     const GDI_OBJ_AUTO_DELETE_TYPE m_enAutoDeleteType;
+    # };
+    #
+    # <> </global>
+    # <> </include>
+    # @end
+}
+
+# // 用作声明GDI资源类的继承类
+# @ @def_macro DECLARE_DERIVED_GDI_CLASS  \
+# @     <include>  \
+# @     inline_ @sn<current_class> (const HGDIOBJ hGDIObject, const GDI_OBJ_AUTO_DELETE_TYPE enAutoDeleteType) : @dt<GDI资源类> (hGDIObject, enAutoDeleteType)  { }  \
+# @     </include>
+#
+# ===
+
+类 图标对象类 <公开 基础类 = GDI资源类 注释 = "用作记录一个图标句柄(HICON)及对应的相关操作" @文档 = "category = \"资源.处理类\"" @全局类 = 真>
+{
+
+    # @ @m<DECLARE_DERIVED_GDI_CLASS>
+
+    方法 置图标句柄值 <公开 类型 = 逻辑型 注释 = "将一个所指定图标句柄(HICON)置入本对象中." 返回值注释 = "返回所置入的句柄值是否不为NULL" @禁止流程检查 = 真>
+    参数 所欲设置的句柄值 <类型 = 变整数 注释 = "提供所欲置入的图标句柄值(HICON),调用方必须确保该句柄值的正确性." 注释 = "注意: 该句柄的释放工作将交由本对象负责,调用方不再需要管理.">
+    参数 是否自动释放 <类型 = 逻辑型 注释 = "指定是否需要自动释放所置入的句柄值">
+    {
+        @ return (TakeOverNewGDIObject ((HGDIOBJ)@<所欲设置的句柄值>, (@<是否自动释放> ? GOADT_DESTORY_ICON : GOADT_NOT)) != NULL);
+    }
+
+    方法 载入图标资源 <公开 静态 类型 = 图标对象类 注释 = "载入所指定的图标资源,返回所载入的句柄对象." 返回值注释 = "  成功所返回的句柄对象不为空(\"为空\"方法返回假),失败或所提供资源"
+            返回值注释 = "为空资源则为空(\"为空\"方法返回真)." @嵌入式方法 = "">
+    参数 所欲载入的图标 <类型 = 图标资源>
+    {
+        @ @dt<图标对象类> ((HICON)g_objVolApp.LoadResImage (VRIT_ICON, @<所欲载入的图标>), GOADT_NOT)
+    }
+
+    方法 载入图标文件 <公开 静态 类型 = 图标对象类 注释 = "载入所指定的图标文件,返回所载入的句柄对象." 返回值注释 = "  成功所返回的句柄对象不为空(\"为空\"方法返回假),失败或所提供资源"
+            返回值注释 = "为空资源则为空(\"为空\"方法返回真)." @嵌入式方法 = "">
+    参数 所欲载入的图标文件 <类型 = 文本型>
+    {
+        @ @dt<图标对象类> ((HICON)g_objVolApp.LoadResImageFile (VRIT_ICON, @<所欲载入的图标文件>.GetText ()), GOADT_DESTORY_ICON)
+    }
+}
+
+# ---
+
+类 位图对象类 <公开 基础类 = GDI资源类 注释 = "用作记录一个bmp位图句柄(HBITMAP)及对应的相关操作" @文档 = "category = \"资源.处理类\"" @全局类 = 真>
+{
+
+    # @ @m<DECLARE_DERIVED_GDI_CLASS>
+
+    方法 载入位图资源 <公开 静态 类型 = 位图对象类 注释 = "  载入所指定的位图资源(所支持格式: gif/bmp/emf/wmf/jpg//png/tif/ico)," 注释 = "返回所载入的句柄对象."
+            返回值注释 = "  成功所返回的句柄对象不为空(\"为空\"方法返回假),失败或所提供资源为空资" 返回值注释 = "源则为空(\"为空\"方法返回真)." @嵌入式方法 = "">
+    参数 所欲载入的位图 <类型 = 位图资源>
+    {
+        @ @dt<位图对象类> ((HBITMAP)g_objVolApp.LoadResImage (VRIT_BITMAP, @<所欲载入的位图>), GOADT_DELETE_OBJECT)
+    }
+
+    方法 载入位图文件 <公开 静态 类型 = 位图对象类 注释 = "  载入所指定的位图文件(所支持格式: gif/bmp/emf/wmf/jpg//png/tif/ico)," 注释 = "返回所载入的句柄对象."
+            返回值注释 = "  成功所返回的句柄对象不为空(\"为空\"方法返回假),失败或所提供资源为空资" 返回值注释 = "源则为空(\"为空\"方法返回真)." @嵌入式方法 = "">
+    参数 所欲载入的位图文件 <类型 = 文本型>
+    {
+        @ @dt<位图对象类> ((HBITMAP)g_objVolApp.LoadResImageFile (VRIT_BITMAP, @<所欲载入的位图文件>.GetText ()), GOADT_DELETE_OBJECT)
+    }
+
+    方法 载入位图数据 <公开 静态 类型 = 位图对象类 注释 = "  载入所指定的位图数据(所支持格式: gif/bmp/emf/wmf/jpg//png/tif/ico)," 注释 = "返回所载入的句柄对象."
+            返回值注释 = "  成功所返回的句柄对象不为空(\"为空\"方法返回假),失败或所提供资源为空资" 返回值注释 = "源则为空(\"为空\"方法返回真)." @嵌入式方法 = "">
+    参数 所欲载入的位图数据 <类型 = 字节集类>
+    {
+        @ @dt<位图对象类> (g_objVolApp.LoadBitmapFromMemory (@<所欲载入的位图数据>), GOADT_DELETE_OBJECT)
+    }
+
+    方法 置位图句柄值 <公开 类型 = 逻辑型 注释 = "将一个所指定位图句柄(HBITMAP)置入本对象中." 返回值注释 = "返回所置入的句柄值是否不为NULL" @禁止流程检查 = 真>
+    参数 所欲设置的句柄值 <类型 = 变整数 注释 = "提供所欲置入的位图句柄值(HBITMAP),调用方必须确保该句柄值的正确性." 注释 = "注意: 该句柄的释放工作将交由本对象负责,调用方不再需要管理.">
+    参数 是否自动释放 <类型 = 逻辑型 注释 = "指定是否需要自动释放所置入的句柄值">
+    {
+        @ return (TakeOverNewGDIObject ((HGDIOBJ)@<所欲设置的句柄值>, (@<是否自动释放> ? GOADT_DELETE_OBJECT : GOADT_NOT)) != NULL);
+    }
+
+    方法 取图片尺寸 <公开 类型 = 尺寸类 注释 = "返回当前位图的尺寸,单位像素." 注释 = "如果当前尚未设置有效位图,则返回零尺寸.">
+    {
+        变量 图片尺寸 <类型 = 尺寸类>
+        @ const HBITMAP hBitmap = (HBITMAP)GetGDIHandle ();
+        @ if (hBitmap != NULL)
+        @ {
+        @     BITMAP infBitmap;
+        @     if (::GetObject (hBitmap, sizeof (BITMAP), &infBitmap))
+        @     {
+        @         @<图片尺寸.宽度> = infBitmap.bmWidth;
+        @         @<图片尺寸.高度> = infBitmap.bmHeight;
+        @     }
+        @ }
+        返回 (图片尺寸)
+    }
+
+    方法 取图片数据 <公开 类型 = 逻辑型 注释 = "获取当前位图所对应的BMP图片文件数据" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 数据存放字节集 <类型 = 字节集类 注释 = "用作存放所获得的BMP图片文件数据">
+    参数 输出宽度 <类型 = 整数 注释 = "  指定图片的输出宽度. 如果小于0,参数值指定的是最终图片输出宽度相对于" 注释 = "当前图片宽度的百分比(最小为10%); 如果等于0,则按图片原宽度输出; 如果"
+            注释 = "大于0,指定输出图片的绝对宽度." @默认值 = 0>
+    参数 输出高度 <类型 = 整数 注释 = "  指定图片的输出高度. 如果小于0,参数值指定的是最终图片输出高度相对于" 注释 = "当前图片高度的百分比(最小为10%); 如果等于0,则按图片原高度输出; 如果"
+            注释 = "大于0,指定输出图片的绝对高度." @默认值 = 0>
+    {
+        @ (BOOL)WriteBitmap ((HBITMAP)@sn<this>.GetGDIHandle (), @<数据存放字节集>, @<输出宽度>, @<输出高度>)
+    }
+
+    方法 写图片文件 <公开 类型 = 逻辑型 注释 = "获取当前位图所对应的BMP图片文件数据,并将其写出到所指定名称的文件." 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 所欲写到的文件名 <类型 = 文本型 注释 = "提供所欲写到的BMP文件名">
+    参数 输出宽度 <类型 = 整数 注释 = "  指定图片的输出宽度. 如果小于0,参数值指定的是最终图片输出宽度相对于" 注释 = "当前图片宽度的百分比(最小为10%); 如果等于0,则按图片原宽度输出; 如果"
+            注释 = "大于0,指定输出图片的绝对宽度." @默认值 = 0>
+    参数 输出高度 <类型 = 整数 注释 = "  指定图片的输出高度. 如果小于0,参数值指定的是最终图片输出高度相对于" 注释 = "当前图片高度的百分比(最小为10%); 如果等于0,则按图片原高度输出; 如果"
+            注释 = "大于0,指定输出图片的绝对高度." @默认值 = 0>
+    {
+        @ CVolMem mem;
+        @ if (WriteBitmap ((HBITMAP)GetGDIHandle (), mem, @<输出宽度>, @<输出高度>) == FALSE)
+        @     return FALSE;
+        @ return (BOOL)mem.WriteIntoFile (@<所欲写到的文件名>);
+    }
+}
+
+# ---
+
+类 图片组对象类 <公开 基础类 = GDI资源类 注释 = "用作记录一个图片组句柄(HIMAGELIST)及对应的相关操作" @文档 = "category = \"资源.处理类\"" @全局类 = 真>
+{
+
+    # @ @m<DECLARE_DERIVED_GDI_CLASS>
+
+    方法 置图片组句柄值 <公开 类型 = 逻辑型 注释 = "将一个所指定图片组句柄(HIMAGELIST)置入本对象中." 返回值注释 = "返回所置入的句柄值是否不为NULL" @禁止流程检查 = 真>
+    参数 所欲设置的句柄值 <类型 = 变整数 注释 = "提供所欲置入的图片组句柄值(HIMAGELIST),调用方必须确保该句柄值的正确性." 注释 = "注意: 该句柄的释放工作将交由本对象负责,调用方不再需要管理.">
+    参数 是否自动释放 <类型 = 逻辑型 注释 = "指定是否需要自动释放所置入的句柄值">
+    {
+        @ return (TakeOverNewGDIObject ((HIMAGELIST)@<所欲设置的句柄值>, (@<是否自动释放> ? GOADT_DESTROY_IMAGELIST : GOADT_NOT)) != NULL);
+    }
+
+    方法 载入图片组资源 <公开 静态 类型 = 图片组对象类 注释 = "载入所指定的图片组资源,返回所载入的句柄对象." 返回值注释 = "  成功所返回的句柄对象不为空(\"为空\"方法返回假),失败或所提供资源"
+            返回值注释 = "为空资源则为空(\"为空\"方法返回真)." @嵌入式方法 = "">
+    参数 所欲载入的图片组 <类型 = 图片组资源>
+    {
+        @ @dt<图片组对象类> ((HIMAGELIST)g_objVolApp.LoadResImage (VRIT_IMAGE_LIST, @<所欲载入的图片组>), GOADT_DESTROY_IMAGELIST)
+    }
+
+    方法 载入图片组文件 <公开 静态 类型 = 图片组对象类 注释 = "载入所指定的图片组文件,返回所载入的句柄对象." 返回值注释 = "  成功所返回的句柄对象不为空(\"为空\"方法返回假),失败或所提供资源"
+            返回值注释 = "为空资源则为空(\"为空\"方法返回真)." @嵌入式方法 = "">
+    参数 所欲载入的图片组文件 <类型 = 文本型 注释 = "  提供用作保存图片组的图片文件名,该图片文件的格式必须符合" 注释 = "\"图片组资源\"类中所说明的要求.">
+    {
+        @ @dt<图片组对象类> ((HIMAGELIST)g_objVolApp.LoadResImageFile (VRIT_IMAGE_LIST, @<所欲载入的图片组文件>.GetText ()), GOADT_DESTROY_IMAGELIST)
+    }
+
+    方法 载入图片组数据 <公开 静态 类型 = 图片组对象类 注释 = "载入所指定的图片组数据,返回所载入的句柄对象." 返回值注释 = "  成功所返回的句柄对象不为空(\"为空\"方法返回假),失败或所提供资源"
+            返回值注释 = "为空资源则为空(\"为空\"方法返回真)." @嵌入式方法 = "">
+    参数 所欲载入的图片组文件数据 <类型 = 字节集类>
+    {
+        @ @dt<图片组对象类> (CreateImageListFromBitmapData (@<所欲载入的图片组文件数据>), GOADT_DESTROY_IMAGELIST)
+    }
+}
+
+# ---
+
+类 标准鼠标指针类型 <公开 注释 = "提供各种视窗系统标准的鼠标指针类型" @文档 = "category = \"资源.处理类.辅助类\"" @常量类 = 变整数>
+{
+    常量 标准箭头型 <公开 值 = @"@(INT_P)IDC_ARROW">
+    常量 十字型 <公开 值 = @"@(INT_P)IDC_CROSS">
+    常量 文本编辑型 <公开 值 = @"@(INT_P)IDC_IBEAM">
+    常量 沙漏型 <公开 值 = @"@(INT_P)IDC_WAIT">
+    常量 箭头及问号型 <公开 值 = @"@(INT_P)IDC_HELP">
+    常量 箭头及沙漏型 <公开 值 = @"@(INT_P)IDC_APPSTARTING">
+    常量 禁止符型 <公开 值 = @"@(INT_P)IDC_NO">
+    常量 四向箭头型 <公开 值 = @"@(INT_P)IDC_SIZEALL">
+    常量 北东箭头型 <公开 值 = @"@(INT_P)IDC_SIZENESW">
+    常量 北南箭头型 <公开 值 = @"@(INT_P)IDC_SIZENS">
+    常量 北西箭头型 <公开 值 = @"@(INT_P)IDC_SIZENWSE">
+    常量 西东箭头型 <公开 值 = @"@(INT_P)IDC_SIZEWE">
+    常量 向上箭头型 <公开 值 = @"@(INT_P)IDC_UPARROW">
+    常量 手型 <公开 值 = @"@(INT_P)IDC_HAND">
+}
+
+类 鼠标指针对象类 <公开 基础类 = GDI资源类 注释 = "用作记录一个鼠标指针句柄(HCURSOR)及对应的相关操作" @文档 = "category = \"资源.处理类\"" @全局类 = 真>
+{
+
+    # @ @m<DECLARE_DERIVED_GDI_CLASS>
+
+    方法 置鼠标指针句柄值 <公开 类型 = 逻辑型 注释 = "将一个所指定鼠标指针句柄(HCURSOR)置入本对象中." 返回值注释 = "返回所置入的句柄值是否不为NULL" @禁止流程检查 = 真>
+    参数 所欲设置的句柄值 <类型 = 变整数 注释 = "提供所欲置入的鼠标指针句柄值(HCURSOR),调用方必须确保该句柄值的正确性." 注释 = "注意: 该句柄的释放工作将交由本对象负责,调用方不再需要管理.">
+    参数 是否自动释放 <类型 = 逻辑型 注释 = "指定是否需要自动释放所置入的句柄值">
+    {
+        @ return (TakeOverNewGDIObject ((HGDIOBJ)@<所欲设置的句柄值>, (@<是否自动释放> ? GOADT_DESTORY_CURSOR : GOADT_NOT)) != NULL);
+    }
+
+    方法 载入鼠标指针资源 <公开 静态 类型 = 鼠标指针对象类 注释 = "载入所指定的鼠标指针资源,返回所载入的句柄对象." 返回值注释 = "  成功所返回的句柄对象不为空(\"为空\"方法返回假),失败或所提供资源"
+            返回值注释 = "为空资源则为空(\"为空\"方法返回真)." @嵌入式方法 = "">
+    参数 所欲载入的鼠标指针 <类型 = 鼠标指针资源>
+    {
+        @ @dt<鼠标指针对象类> ((HCURSOR)g_objVolApp.LoadResImage (VRIT_CURSOR, @<所欲载入的鼠标指针>), GOADT_NOT)
+    }
+
+    方法 载入鼠标指针文件 <公开 静态 类型 = 鼠标指针对象类 注释 = "载入所指定的鼠标指针文件,返回所载入的句柄对象." 返回值注释 = "  成功所返回的句柄对象不为空(\"为空\"方法返回假),失败或所提供资源"
+            返回值注释 = "为空资源则为空(\"为空\"方法返回真)." @嵌入式方法 = "">
+    参数 所欲载入的鼠标指针文件 <类型 = 文本型>
+    {
+        @ @dt<鼠标指针对象类> ((HCURSOR)g_objVolApp.LoadResImageFile (VRIT_CURSOR, @<所欲载入的鼠标指针文件>.GetText ()), GOADT_DESTORY_CURSOR)
+    }
+
+    方法 取标准鼠标指针 <公开 静态 类型 = 鼠标指针对象类 注释 = "获取所指定的标准鼠标指针资源,返回所载入的句柄对象." 返回值注释 = "成功所返回的句柄对象不为空(\"为空\"方法返回假),失败为空(\"为空\"方法返回真)."
+            @嵌入式方法 = "">
+    参数 所欲载入的鼠标指针 <类型 = 标准鼠标指针类型>
+    {
+        @ @dt<鼠标指针对象类> (::LoadCursor (NULL, MAKEINTRESOURCE (@<所欲载入的鼠标指针>)), GOADT_NOT)
+    }
+}
+
+# ---
+
+类 字体对象类 <公开 基础类 = GDI资源类 注释 = "用作记录一个字体句柄(HFONT)及对应的相关操作" @文档 = "category = \"资源.处理类\"" @全局类 = 真>
+{
+
+    # @ @m<DECLARE_DERIVED_GDI_CLASS>
+
+    方法 置字体句柄值 <公开 类型 = 逻辑型 注释 = "将一个所指定字体句柄(HFONT)置入本对象中." @禁止流程检查 = 真>
+    参数 所欲设置的句柄值 <类型 = 变整数 注释 = "提供所欲置入的字体句柄值(HFONT),调用方必须确保该句柄值的正确性." 注释 = "注意: 该句柄的释放工作将交由本对象负责,调用方不再需要管理.">
+    参数 是否自动释放 <类型 = 逻辑型 注释 = "指定是否需要自动释放所置入的句柄值">
+    {
+        @ return (TakeOverNewGDIObject ((HGDIOBJ)@<所欲设置的句柄值>, (@<是否自动释放> ? GOADT_DELETE_OBJECT : GOADT_NOT)) != NULL);
+    }
+
+    方法 磅字体尺寸到像素 <公开 静态 类型 = 整数 注释 = "将以磅为单位的字体尺寸转换为以屏幕像素为单位的尺寸" 返回值注释 = "返回转换尺寸结果,以屏幕像素为单位." @嵌入式方法 = "">
+    参数 所欲转换的字体尺寸 <类型 = 整数 注释 = "本尺寸以磅为单位">
+    {
+        @ (INT)FontPtSize2Dp (@<所欲转换的字体尺寸>)
+    }
+
+    方法 像素字体尺寸到磅 <公开 静态 类型 = 整数 注释 = "将以屏幕像素为单位的字体尺寸转换为以磅为单位的尺寸" 返回值注释 = "返回转换尺寸结果,以磅为单位." @嵌入式方法 = "">
+    参数 所欲转换的字体尺寸 <类型 = 整数 注释 = "本尺寸以屏幕像素为单位">
+    {
+        @ (INT)FontDpSize2Pt (@<所欲转换的字体尺寸>)
+    }
+
+    方法 从描述文本创建字体 <公开 静态 类型 = 字体对象类 注释 = "从一个指定格式的字体描述文本创建字体" 返回值注释 = "成功所返回的句柄对象不为空(\"为空\"方法返回假),失败为空(\"为空\"方法返回真)."
+            @禁止流程检查 = 真>
+    参数 字体描述文本 <类型 = 文本型 注释 = "  本参数的格式为: \"字体名, 字体尺寸, 是否为粗体, 是否为斜体, 是否有下划线, 是否有删除线, 旋转角度\","
+            注释 = "其中\"是否\"字段,用1代表真,0代表假,可以被省略.字体尺寸单位为磅,旋转角度单位为1/10度." 注释 = "  例子: \"宋体, 10\", \"宋体, 10, 0, 1, 1, 0, 100\".">
+    {
+        @ LOGFONT infFont;
+        @ GetFontDescTextInfo (@<字体描述文本>, &infFont);
+        @ return @dt<字体对象类> (CreateFontIndirect (&infFont), GOADT_DELETE_OBJECT);
+    }
+
+    方法 取字体描述文本 <公开 类型 = 文本型 注释 = "  返回当前字体的描述文本." 注释 = "  描述文本的格式为: \"字体名, 字体尺寸, 是否为粗体, 是否为斜体, 是否有下划线, 是否有删除线, 旋转角度\","
+            注释 = "其中\"是否\"字段,用1代表真,0代表假,可以被省略.字体尺寸单位为磅, 旋转角度单位为1/10度." 注释 = "  例子: \"宋体, 10\", \"宋体, 10, 0, 1, 1, 0, 100\"."
+            @禁止流程检查 = 真>
+    {
+        @ HFONT hFont = (HFONT)GetGDIHandle ();
+        @ if (hFont == NULL)
+        @     hFont = g_objVolApp.GetDefaultFont ();
+        @ LOGFONT infFont;
+        @ VERIFY_NOT_EQUAL (::GetObject (hFont, sizeof (LOGFONT), &infFont), 0);  // 必定成功
+        @ CVolString strFontDesc;
+        @ GetFontDescText (infFont, strFontDesc);
+        @ return strFontDesc;
+    }
+
+    方法 创建字体 <公开 静态 类型 = 字体对象类 注释 = "从指定参数创建并返回一个字体对象" 返回值注释 = "成功所返回的句柄对象不为空(\"为空\"方法返回假),失败为空(\"为空\"方法返回真)." @禁止流程检查 = 真>
+    参数 字体名称 <类型 = 文本型 注释 = "提供所欲创建字体的名称">
+    参数 字体尺寸 <类型 = 整数 注释 = "提供所欲创建字体的尺寸,单位为磅.">
+    参数 是否粗体 <类型 = 逻辑型 @默认值 = 假>
+    参数 是否斜体 <类型 = 逻辑型 @默认值 = 假>
+    参数 是否有下划线 <类型 = 逻辑型 @默认值 = 假>
+    参数 是否有删除线 <类型 = 逻辑型 @默认值 = 假>
+    参数 旋转角度 <类型 = 整数 注释 = "提供字体的旋转角度,单位为十分之一度." @默认值 = 0>
+    {
+        @ // 使用默认字体的信息进行初始化
+        @ LOGFONT infFont;
+        @ GetDefaultFontInfo (&infFont);
+
+        @ if (@<字体名称>.IsEmpty () == FALSE)
+        @     _tcsncpy_z (infFont.lfFaceName, @<字体名称>.GetText (), NUM_ELEMENTS_OF (infFont.lfFaceName) - 1);
+
+        @ const INT_P npFontSize = FontPtSize2Dp (@<字体尺寸>);
+        @ if (npFontSize > 0)
+        @     infFont.lfHeight = (LONG)npFontSize;
+
+        @ INT_P npAngle = (@<旋转角度> % 3600);
+        @ if (npAngle < 0)  npAngle += 3600;
+        @ infFont.lfOrientation = infFont.lfEscapement = (LONG)npAngle;
+        @ infFont.lfWeight = (@<是否粗体> ? FW_BOLD : FW_NORMAL);
+        @ infFont.lfItalic = (BYTE)@<是否斜体>;
+        @ infFont.lfUnderline = (BYTE)@<是否有下划线>;
+        @ infFont.lfStrikeOut = (BYTE)@<是否有删除线>;
+
+        @ return @dt<字体对象类> (CreateFontIndirect (&infFont), GOADT_DELETE_OBJECT);
+    }
+
+    方法 取默认GUI字体 <公开 静态 类型 = 字体对象类 注释 = "返回操作系统所使用的默认GUI字体" 返回值注释 = "所返回字体对象必定有效" @嵌入式方法 = "">
+    {
+        @ @dt<字体对象类> (g_objVolApp.GetDefaultFont (), GOADT_NOT)
+    }
+
+    方法 取字体句柄 <公开 类型 = 变整数 注释 = "返回本对象中所保存的字体句柄,如果为NULL,则返回操作系统所使用的默认GUI字体句柄." @禁止流程检查 = 真>
+    {
+        @ const HFONT hFont = (HFONT)GetGDIHandle ();
+        @ return (INT_P)(hFont == NULL ? g_objVolApp.GetDefaultFont () : hFont);
+    }
+
+    方法 取文本尺寸 <公开 类型 = 尺寸类 注释 = "返回使用本字体在屏幕上绘制指定文本时所需要的尺寸,单位像素." @嵌入式方法 = "">
+    参数 所欲检查文本 <类型 = 文本型>
+    {
+        @ @dt<尺寸类> (&GetTextDrawSize ((HFONT)@sn<this>.GetGDIHandle (), @<所欲检查文本>.GetText ()))
+    }
+}
+
+#

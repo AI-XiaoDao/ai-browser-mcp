@@ -1,0 +1,88 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.ELK引擎
+
+类 ELK引擎类 <公开 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "Elk是一个小型的可嵌入JavaScript引擎,无任何依赖占用极低."
+        注释 = "注意:暂未实现JavaScript层与火山代码层的交互,可用于执行一些简单的JS代码,且仅支持部分的JS语法标准,详情:https://github.com/cesanta/elk"
+        @视窗.外部头文件 = "lib\\elk_vol.h" @视窗.外部源文件 = "lib\\elk.cpp">
+{
+
+    #
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CElkVolWrapper)
+
+    方法 执行 <公开 类型 = 文本型 注释 = "执行指定的JavaScript代码并返回其执行结果."
+            注释 = "注意:每次执行后将会保存必要的上下文(例如代码中定义的JavaScript变量/对象),可通过\"分配运行内存\"命令重置当前引擎对象." @嵌入式方法 = "">
+    参数 内容 <类型 = 文本型 注释 = "提供所欲执行的JS代码内容">
+    {
+        @ @sn<this>.data().Eval((const char*)GetMbsText(@<内容>.GetText(), CVolMem(), NULL))
+    }
+
+    方法 执行2 <公开 类型 = ELK对象类 注释 = "执行指定的JavaScript代码并返回其执行结果."
+            注释 = "注意:每次执行后将会保存必要的上下文(例如代码中定义的JavaScript变量/对象),可通过\"分配运行内存\"命令重置当前引擎对象." @嵌入式方法 = "">
+    参数 内容 <类型 = 字节集类 注释 = "提供所欲执行的JS代码内容">
+    {
+        @ @dt<ELK对象类>(@sn<this>.data().Eval2(@<内容>))
+    }
+
+    方法 分配运行内存 <公开 注释 = "重新定义当前引擎对象所占用内存,本命令将会导致对象重置,即之前所有通过\"执行\"命令所保留的上下文内容都将丢失." @嵌入式方法 = "">
+    参数 所欲分配尺寸 <类型 = 整数 注释 = "提供所欲分配的数据内容空间尺寸,必须大于等于256.">
+    {
+        @ @sn<this>.data().Alloc(@<所欲分配尺寸>)
+    }
+
+    方法 取当前运行内存 <公开 类型 = 字节集类 注释 = "获取当前执行引擎对象所占用的内存" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetMem()
+    }
+
+    方法 取当前内存占用比 <公开 类型 = 整数 注释 = "获取当前执行引擎对象所占用总内存的比例" 返回值注释 = "返回0-100之间,表示百分比." @嵌入式方法 = "">
+    {
+        @ js_usage(@sn<this>.data().m_instance)
+    }
+
+    方法 取全局对象 <公开 类型 = ELK对象类 注释 = "获取全局对象" @嵌入式方法 = "">
+    {
+        @ @dt<ELK对象类>(js_glob(@sn<this>.data().m_instance))
+    }
+
+    方法 创建新对象 <公开 类型 = ELK对象类 注释 = "创建一个新对象" @嵌入式方法 = "">
+    {
+        @ @dt<ELK对象类>(js_mkobj(@sn<this>.data().m_instance))
+    }
+
+    方法 创建数值对象 <公开 类型 = ELK对象类 注释 = "创建一个新的数值(number)对象" @嵌入式方法 = "">
+    参数 值 <类型 = 小数 注释 = "提供该对象的初始值">
+    {
+        @ @dt<ELK对象类>(js_mknum(@sn<this>.data().m_instance, (double)@<值>))
+    }
+
+    方法 取对象文本 <公开 类型 = 文本型 注释 = "将指定JS对象转为文本形式返回" @嵌入式方法 = "">
+    参数 对象 <类型 = ELK对象类 注释 = "提供所欲转换的JS对象">
+    {
+        @ @sn<this>.data().JsValue2VolString(@<对象>.GetJsValue())
+    }
+
+    方法 置对象属性 <公开 注释 = "给指定JS对象设置指定的属性值" @嵌入式方法 = "">
+    参数 对象 <类型 = ELK对象类 注释 = "提供所欲为其设置属性值的JS对象">
+    参数 属性名 <类型 = 文本型 注释 = "提供所欲设置的属性名称">
+    参数 属性值 <类型 = ELK对象类 注释 = "提供所欲设置的属性值">
+    {
+        @ js_set(@sn<this>.data().m_instance, @<对象>.GetJsValue(), (const char*)GetMbsText(@<属性名>.GetText(), CVolMem(), NULL), @<属性值>.GetJsValue())
+    }
+
+    方法 重置 <公开 注释 = "清除当前执行引擎对象的任何状态,相当于重分配其内存.">
+    {
+        分配运行内存 (取当前运行内存 ().取字节集长度 ())
+    }
+}
+
+类 ELK对象类 <公开 注释 = "表示JS中的一个对象" @强制依赖 = "ELK引擎类">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CElkValueVolWrapper)
+    #
+    # @ <include>
+    # @ inline_ @dt<ELK对象类> (jsval_t value) : @dt<ELK对象类>()  { data().m_value = value; }
+    # @ inline_ jsval_t GetJsValue ()  { return data ().m_value; }
+    # @ </include>
+}

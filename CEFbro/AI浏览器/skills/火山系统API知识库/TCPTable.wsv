@@ -1,0 +1,341 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"windows.TCP连接查看\"" @视窗.外部头文件 = "TCPTable\\TCPTableTool.h"
+        @视窗.外部库.win32 = "TCPTable\\TCPTableToolx86.lib" @视窗.附属文件.win32 = "TCPTable\\TCPTableToolx86.dll"
+        @视窗.外部库.x64 = "TCPTable\\TCPTableToolx64.lib" @视窗.附属文件.x64 = "TCPTable\\TCPTableToolx64.dll">
+
+类 TCPTable类 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ m_pData = NULL;
+    }
+
+    方法 类_清理
+    {
+        @ TCPTable_free(m_pData);
+    }
+
+    方法 枚举 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ TCPTable_Enum(&@sn<this>.m_pData)
+    }
+
+    方法 取成员数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT)TCPTable_GetGount(@sn<this>.m_pData)
+    }
+
+    方法 取本地地址 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ (INT)TCPTable_GetLocalAddr(@sn<this>.m_pData,(unsigned int)@<索引>)
+    }
+
+    方法 取本地端口 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ int nPort = TCPTable_GetLocalPort(m_pData,(unsigned int)@<索引>);
+        @ byte* pStart = (byte*)&nPort;
+        @ byte temp = pStart[0];
+        @ pStart[0]=pStart[1];
+        @ pStart[1] = temp;
+        @ return nPort;
+
+    }
+
+    方法 取远程地址 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ (INT)TCPTable_GetRemoteAddr(@sn<this>.m_pData,(unsigned int)@<索引>)
+    }
+
+    方法 取远程端口 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ int nPort = TCPTable_GetRemotePort(m_pData,(unsigned int)@<索引>);
+        @ byte* pStart = (byte*)&nPort;
+        @ byte temp = pStart[0];
+        @ pStart[0]=pStart[1];
+        @ pStart[1] = temp;
+        @ return nPort;
+
+    }
+
+    方法 取状态 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ (INT)TCPTable_GetState(@sn<this>.m_pData,(unsigned int)@<索引>)
+    }
+
+    方法 取状态文本 <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ CVolString( TCPTable_GetStateText(TCPTable_GetState(@sn<this>.m_pData,(unsigned int)@<索引>)))
+    }
+
+    #
+}
+
+类 UDPTable类 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ m_pData = NULL;
+    }
+
+    方法 类_清理
+    {
+        @ UDPTable_free(m_pData);
+    }
+
+    方法 枚举 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ UDPTable_Enum(&@sn<this>.m_pData)
+    }
+
+    方法 取成员数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT)UDPTable_GetGount(@sn<this>.m_pData)
+    }
+
+    方法 取本地地址 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ (INT)UDPTable_GetLocalAddr(@sn<this>.m_pData,(unsigned int)@<索引>)
+    }
+
+    方法 取本地端口 <公开 类型 = 整数 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ int nPort = UDPTable_GetLocalPort(m_pData,(unsigned int)@<索引>);
+        @ byte* pStart = (byte*)&nPort;
+        @ byte temp = pStart[0];
+        @ pStart[0]=pStart[1];
+        @ pStart[1] = temp;
+        @ return nPort;
+
+    }
+
+    #
+}
+
+类 UDP6Table类 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ m_pData = NULL;
+    }
+
+    方法 类_清理
+    {
+        @ UDP6Table_free(m_pData);
+    }
+
+    方法 枚举 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ UDP6Table_Enum(&@sn<this>.m_pData)
+    }
+
+    方法 取成员数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT)UDP6Table_GetGount(@sn<this>.m_pData)
+    }
+
+    方法 取本地地址 <公开 类型 = 文本型>
+    参数 索引 <类型 = 整数>
+    {
+        变量 数据指针 <类型 = 变整数>
+        变量 格式化后的文本 <类型 = 文本型>
+        @ @<数据指针> = (INT_P)UDP6Table_GetLocalAddr(m_pData,(unsigned int)@<索引>);
+
+        加入格式文本 (格式化后的文本, "%hx::%hx:%hx:%hx:%hx:%hx:%hx:%hx", _取短整数_高低位调换 (数据指针, 0), _取短整数_高低位调换 (数据指针, 2), _取短整数_高低位调换 (数据指针, 4), _取短整数_高低位调换 (数据指针, 6), _取短整数_高低位调换 (数据指针, 8), _取短整数_高低位调换 (数据指针, 10), _取短整数_高低位调换 (数据指针, 12), _取短整数_高低位调换 (数据指针, 14))
+
+
+        // %2x:%2x:%2x:%2x:%2x:%2x:%2x
+        返回 (格式化后的文本)
+
+
+
+    }
+
+    方法 _取短整数_高低位调换 <公开 类型 = 短整数>
+    参数 字节指针 <类型 = 变整数>
+    参数 索引 <类型 = 整数>
+    {
+        变量 数据 <类型 = 短整数>
+        @ unsigned char* pRet = (unsigned char*)&@<数据>;
+        @  pRet[0]  = *((unsigned char*)@<字节指针>+ @<索引> + 1 );
+        @  pRet[1]  =  *((unsigned char*)@<字节指针>+ @<索引> );
+        返回 (数据)
+
+
+
+    }
+
+    方法 取本地端口 <公开 类型 = 整数 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @ int nPort = UDP6Table_GetLocalPort(m_pData,(unsigned int)@<索引>);
+        @ byte* pStart = (byte*)&nPort;
+        @ byte temp = pStart[0];
+        @ pStart[0]=pStart[1];
+        @ pStart[1] = temp;
+        @ return nPort;
+
+    }
+
+    #
+}
+
+类 ______全局_类 <公开 折叠 @全局类 = 真>
+{
+    方法 整数到IP <公开 静态 类型 = 文本型>
+    参数 IP <类型 = 整数>
+    参数 是否调转方向 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 所欲操作的文本 <类型 = 文本型>
+        @ BYTE *addr = (BYTE*)&@<IP>;
+        如果 (是否调转方向 == 假)
+        {
+            @ @<所欲操作的文本>.AddFormatText (_CT("%d.%d.%d.%d"), addr[0], addr[1], addr[2], addr[3]);
+        }
+        否则
+        {
+            @ @<所欲操作的文本>.AddFormatText (_CT("%d.%d.%d.%d"), addr[3], addr[2], addr[1], addr[0]);
+        }
+        返回 (所欲操作的文本)
+    }
+
+    方法 IP到整数 <公开 静态 类型 = 整数>
+    参数 IP <类型 = 文本型>
+    参数 是否调转方向 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 结果数组 <类型 = 文本数组类>
+        分割子文本 (IP, ".", 结果数组)
+        如果 (结果数组.取成员数 () != 4)
+        {
+            调试输出 (结果数组)
+
+            返回 (0)
+        }
+
+        变量 返回值 <类型 = 整数>
+        变量 地址1 <类型 = 整数>
+        变量 地址2 <类型 = 整数>
+        变量 地址3 <类型 = 整数>
+        变量 地址4 <类型 = 整数>
+        地址1 = 文本到整数 (结果数组.取成员 (0))
+        地址2 = 文本到整数 (结果数组.取成员 (1))
+        地址3 = 文本到整数 (结果数组.取成员 (2))
+        地址4 = 文本到整数 (结果数组.取成员 (3))
+        @ BYTE* pIPAddr = (BYTE*)&@<返回值>;
+        如果 (是否调转方向 == 假)
+        {
+            @ pIPAddr[0] = (BYTE)@<地址1>;
+            @ pIPAddr[1] = (BYTE)@<地址2>;
+            @ pIPAddr[2] = (BYTE)@<地址3>;
+            @ pIPAddr[3] = (BYTE)@<地址4>;
+        }
+        否则
+        {
+            @ pIPAddr[0] = (BYTE)@<地址4>;
+            @ pIPAddr[1] = (BYTE)@<地址3>;
+            @ pIPAddr[2] = (BYTE)@<地址2>;
+            @ pIPAddr[3] = (BYTE)@<地址1>;
+
+        }
+
+        返回 (返回值)
+
+    }
+
+    #
+    #
+}
+
+类 ______TCPTable测试类 <公开>
+{
+    方法 开始测试 <公开>
+    {
+        变量 tcp <类型 = TCPTable类>
+        变量 i <类型 = 整数>
+        如果 (tcp.枚举 () == 假)
+        {
+            调试输出 ("枚举失败")
+        }
+
+        循环 (0, tcp.取成员数 (), i)
+        {
+            变量 格式后的文本 <类型 = 文本型>
+
+            加入格式文本 (格式后的文本, "%24s:%-7d%24s:%-7d%10s", 整数到IP (tcp.取本地地址 (i)), tcp.取本地端口 (i), 整数到IP (tcp.取远程地址 (i)), tcp.取远程端口 (i), tcp.取状态文本 (i))
+
+            调试输出 (格式后的文本)
+
+
+            // 调试输出 (整数到IP (tcp.取本地地址 (i)), tcp.取本地端口 (i), 整数到IP (tcp.取远程地址 (i)), tcp.取远程端口 (i), tcp.取状态文本 (i))
+
+        }
+
+        变量 udp <类型 = UDPTable类>
+        如果 (udp.枚举 () == 假)
+        {
+            调试输出 ("枚举失败")
+        }
+
+        循环 (0, udp.取成员数 (), i)
+        {
+            变量 格式后的文本 <类型 = 文本型>
+
+            加入格式文本 (格式后的文本, "%24s:%-7d", 整数到IP (udp.取本地地址 (i)), udp.取本地端口 (i))
+
+            调试输出 (格式后的文本)
+
+
+            // 调试输出 (整数到IP (tcp.取本地地址 (i)), tcp.取本地端口 (i), 整数到IP (tcp.取远程地址 (i)), tcp.取远程端口 (i), tcp.取状态文本 (i))
+
+        }
+
+        变量 udp6 <类型 = UDP6Table类>
+        如果 (udp6.枚举 () == 假)
+        {
+            调试输出 ("枚举失败")
+        }
+
+        循环 (0, udp6.取成员数 (), i)
+        {
+            变量 格式后的文本 <类型 = 文本型>
+
+            加入格式文本 (格式后的文本, "%24s:%-7d", udp6.取本地地址 (i), udp6.取本地端口 (i))
+
+            调试输出 (格式后的文本)
+
+        }
+
+
+    }
+
+    #
+}

@@ -1,0 +1,101 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.日志记录\"">
+
+类 日志_全局类 <公开 @视窗.外部头文件 = "GLog\\GLogTool.h" @视窗.外部库.win32 = "GLog\\GLogToolx86.lib"
+        @视窗.附属文件.win32 = "GLog\\GLogToolx86.dll" @视窗.外部库.x64 = "GLog\\GLogToolx64.lib" @视窗.附属文件.x64 = "GLog\\GLogToolx64.dll">
+{
+    方法 打开 <公开 静态>
+    参数 日志目录 <类型 = 文本型 @默认值 = 空对象>
+    {
+        变量 临时日志目录 <类型 = 文本型>
+        变量 程序完整路径 <类型 = 文本型>
+        程序完整路径 = 程序_取完整路径 ()
+        如果 (日志目录 == 空对象)
+        {
+            临时日志目录 = 取运行目录 ()
+        }
+        否则
+        {
+            临时日志目录 = 日志目录
+        }
+        @ GLogTool_Open(GetMbsText(@<临时日志目录>, CVolMem(), NULL),GetMbsText(@<程序完整路径>, CVolMem(), NULL));
+    }
+
+    方法 关闭 <公开 静态 @嵌入式方法 = "">
+    {
+        @ GLogTool_Close()
+
+    }
+
+    方法 置分类目录与前缀 <公开 静态 注释 = "将不同的日志类型放到不同的目录" @嵌入式方法 = "">
+    参数 类型 <类型 = 整数 注释 = "0 信息" 注释 = "1 警告" 注释 = "2 错误" 注释 = "3 重大错误，一旦遇到重大错误，程序会直接退出，一般这个不用"
+            注释 = "//const int GLOG_INFO = 0, GLOG_WARNING = 1, GLOG_ERROR = 2, GLOG_FATAL = 3," 注释 = "//NUM_SEVERITIES = 4;" @默认值 = 0>
+    参数 目录 <类型 = 文本型 注释 = "可以是目录 \"log/\" 或者是  \"log/前缀名称_\"">
+    {
+        @ GLogTool_SetLogDestination(@<类型>,GetMbsText(@<目录>, CVolMem(), NULL) )
+
+    }
+
+    方法 置日志文件最大大小 <公开 静态 @嵌入式方法 = "">
+    参数 最大大小 <类型 = 整数 注释 = "单位MB">
+    {
+        @ GLogTool_SetMaxLogFileSize(@<最大大小>)
+
+    }
+
+    方法 置大于指定级别输出控制台 <公开 静态 @嵌入式方法 = "">
+    参数 类型 <类型 = 整数 注释 = "0 信息" 注释 = "1 警告" 注释 = "2 错误" 注释 = "3 重大错误，一旦遇到重大错误，程序会直接退出，一般这个不用"
+            注释 = "//const int GLOG_INFO = 0, GLOG_WARNING = 1, GLOG_ERROR = 2, GLOG_FATAL = 3," 注释 = "//NUM_SEVERITIES = 4;" @默认值 = 0>
+    {
+        @ GLogTool_SetStderrLogging(@<类型>)
+
+    }
+
+    方法 置输出到控制台 <公开 静态 @嵌入式方法 = "">
+    参数 是否全部输出到控制台 <类型 = 逻辑型>
+    {
+        @ GLogTool_SetLogToStdErr(@<是否全部输出到控制台>)
+    }
+
+    方法 置文件名主名称 <公开 静态 注释 = "如果没调用这个函数，那么系统会自动使用程序的名称，如果设置了就会用您指定的名称" @嵌入式方法 = "">
+    参数 类型 <类型 = 整数 注释 = "0 信息" 注释 = "1 警告" 注释 = "2 错误" 注释 = "3 重大错误，一旦遇到重大错误，程序会直接退出，一般这个不用"
+            注释 = "//const int GLOG_INFO = 0, GLOG_WARNING = 1, GLOG_ERROR = 2, GLOG_FATAL = 3," 注释 = "//NUM_SEVERITIES = 4;" @默认值 = 0>
+    参数 名称 <类型 = 文本型>
+    {
+        @ GLogTool_SetLogSymlink(@<类型>,GetMbsText(@<名称>, CVolMem(), NULL))
+    }
+
+    方法 记录 <公开 静态 @嵌入式方法 = "">
+    参数 类型 <类型 = 整数 注释 = "0 信息" 注释 = "1 警告" 注释 = "2 错误" 注释 = "3 重大错误，一旦遇到重大错误，程序会直接退出，一般这个不用" @默认值 = 0>
+    参数 信息 <类型 = 文本型>
+    {
+        @ GLogTool_Log(@<类型>,@sn<current_statment>,GetMbsText(@<信息>, CVolMem(), NULL))
+    }
+
+    方法 记录信息 <公开 静态 @嵌入式方法 = "">
+    参数 信息 <类型 = 文本型>
+    {
+        @ GLogTool_Log(0,@sn<current_statment>,GetMbsText(@<信息>, CVolMem(), NULL))
+    }
+
+    方法 记录警告 <公开 静态 @嵌入式方法 = "">
+    参数 信息 <类型 = 文本型>
+    {
+        @ GLogTool_Log(1,@sn<current_statment>,GetMbsText(@<信息>, CVolMem(), NULL))
+    }
+
+    方法 记录错误 <公开 静态 @嵌入式方法 = "">
+    参数 信息 <类型 = 文本型>
+    {
+        @ GLogTool_Log(2,@sn<current_statment>,GetMbsText(@<信息>, CVolMem(), NULL))
+    }
+
+    方法 记录重大错误 <公开 静态 注释 = "一旦调用后，程序会立即退出" @嵌入式方法 = "">
+    参数 信息 <类型 = 文本型>
+    {
+        @ GLogTool_Log(3,@sn<current_statment>,GetMbsText(@<信息>, CVolMem(), NULL))
+    }
+
+    #
+}

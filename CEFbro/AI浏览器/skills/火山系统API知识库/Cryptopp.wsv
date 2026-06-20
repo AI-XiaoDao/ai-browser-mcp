@@ -1,0 +1,456 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.加密解密Cryptopp\"" @视窗.外部头文件 = "Cryptopp\\CryptoppTool.h"
+        @视窗.外部库.win32 = "Cryptopp\\CryptoppToolx86.lib" @视窗.附属文件.win32 = "Cryptopp\\CryptoppToolx86.dll"
+        @视窗.外部库.x64 = "Cryptopp\\CryptoppToolx64.lib" @视窗.附属文件.x64 = "Cryptopp\\CryptoppToolx64.dll" "">
+
+类 jsencrypt <公开 注释 = "RSA_PKCS1v15_GenerateRSAKey  jsencrypt.min" @全局类 = 真>
+{
+    方法 密码学_RSA_PKCS1v15_生成公钥私钥 <静态 类型 = 逻辑型 折叠>
+    参数 生成的公钥 <类型 = 文本型>
+    参数 生成的密钥 <类型 = 文本型>
+    参数 密钥长度 <类型 = 整数 注释 = "如果没猜错，必须是8的整数倍，还要大于1024" @默认值 = 1024>
+    参数 是否BASE64编码 <类型 = 逻辑型 注释 = "如果为真，则是base64 否则 hex编码" @默认值 = 真>
+    {
+        如果 (密钥长度 % 8 != 0)
+        {
+            调试输出 ("密钥长度必须为8的倍数", 取当前语句位置 ())
+            返回 (假)
+        }
+
+        @ void* pPrivate = cryptopp_string_new();
+        @ void* pPublic = cryptopp_string_new();
+        @ RSA_PKCS1v15_GenerateRSAKey(@<密钥长度>, pPrivate, pPublic, @<是否BASE64编码>);
+        @ @<生成的密钥> = cryptopp_string_GetText(pPrivate) ;
+        @ @<生成的公钥> = cryptopp_string_GetText(pPublic) ;
+        @ cryptopp_string_delete (pPrivate);
+        @ cryptopp_string_delete (pPublic);
+        返回 (真)
+    }
+
+    方法 _密码学_RSA_PKCS1v15_公钥加密 <静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 公钥 <类型 = 文本型>
+    参数 要加密的文本 <类型 = 文本型>
+    参数 加密后的文本 <类型 = 文本型>
+    参数 是否BASE64编码 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 临时文本 <类型 = 字节集类>
+        变量 临时公钥 <类型 = 字节集类>
+        临时文本 = 文本到多字节 (要加密的文本)
+        临时公钥 = 文本到多字节 (公钥)
+        @ void* lpszEncrypt = cryptopp_string_new();
+        @ bool bOk = RSA_PKCS1v15_PublicKey_Encrypt( (const char*)@<临时公钥>.GetPtr(), (const char*)@<临时文本>.GetPtr(), lpszEncrypt, @<是否BASE64编码>);
+        @ if(bOk)
+        @   @<加密后的文本> = cryptopp_string_GetText(lpszEncrypt);
+        @ cryptopp_string_delete(lpszEncrypt);
+        @ return bOk;
+
+    }
+
+    方法 密码学_RSA_PKCS1v15_公钥加密 <公开 静态 类型 = 逻辑型>
+    参数 公钥 <类型 = 文本型>
+    参数 要加密的文本 <类型 = 文本型>
+    参数 加密后的文本 <类型 = 文本型>
+    参数 密钥长度 <类型 = 整数 注释 = "密码学_RSA_PKCS1v15_生成公钥私钥" @默认值 = 1024>
+    参数 是否BASE64编码 <类型 = 逻辑型 @默认值 = 真>
+    {
+        如果 (密钥长度 % 8 != 0)
+        {
+            调试输出 ("密钥长度必须为8的倍数", 取当前语句位置 ())
+            返回 (假)
+        }
+        加密后的文本 = ""
+
+
+        变量 实际能加密的数据长度 <类型 = 整数>
+        实际能加密的数据长度 = 密钥长度 / 8 - 11  // 关于这行代码的解释 https://www.cnblogs.com/isyaya/p/11073149.html
+
+        变量 分割后的文本 <类型 = 文本数组类>
+        文本_分割文本_指定长度 (要加密的文本, 实际能加密的数据长度, 分割后的文本)
+
+        // 调试输出 (分割后的文本)
+        // 调试输出 (取文本长度 (分割后的文本.取成员 (0)))
+
+        变量 i <类型 = 整数>
+        变量 键值列表 <类型 = 键值列表>
+
+        循环 (0, 分割后的文本.取成员数 (), i)
+        {
+            变量 临时加密后的文本 <类型 = 文本型>
+            _密码学_RSA_PKCS1v15_公钥加密 (公钥, 分割后的文本.取成员 (i), 临时加密后的文本, 是否BASE64编码)
+            键值列表.添加文本 (临时加密后的文本)
+
+        }
+        加密后的文本 = 键值列表.到文本 ()
+        返回 (真)
+
+    }
+
+    方法 _密码学_RSA_PKCS1v15_私钥解密 <静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 私钥 <类型 = 文本型>
+    参数 要解密的文本 <类型 = 文本型>
+    参数 解密后的文本 <类型 = 文本型>
+    参数 私钥是否PEM格式 <类型 = 逻辑型 @默认值 = 假>
+    参数 是否BASE64编码 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 临时文本 <类型 = 字节集类>
+        变量 临时私钥 <类型 = 字节集类>
+        临时文本 = 文本到多字节 (要解密的文本)
+        临时私钥 = 文本到多字节 (私钥)
+        @ void* lpszDecrypt = cryptopp_string_new();
+        @ bool bok = RSA_PKCS1v15_PrivateKey_Decrypt( (const char*)@<临时私钥>.GetPtr(), (const char*)@<临时文本>.GetPtr(), lpszDecrypt, @<是否BASE64编码>, @<私钥是否PEM格式>);
+        @ if(bok)
+        @   @<解密后的文本> = cryptopp_string_GetText(lpszDecrypt);
+        @ cryptopp_string_delete(lpszDecrypt);
+        @ return bok;
+
+    }
+
+    方法 密码学_RSA_PKCS1v15_私钥解密 <公开 静态 折叠>
+    参数 私钥 <类型 = 文本型>
+    参数 要解密的文本 <类型 = 文本型>
+    参数 解密后的文本 <类型 = 文本型>
+    参数 私钥是否PEM格式 <类型 = 逻辑型 @默认值 = 假>
+    参数 是否BASE64编码 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 要解密的数据 <类型 = 键值列表>
+        变量 i <类型 = 整数>
+        要解密的数据.从文本载入 (要解密的文本)
+        解密后的文本 = ""
+        循环 (0, 要解密的数据.取成员数 (), i)
+        {
+
+            变量 临时解密后的文本 <类型 = 文本型>
+            _密码学_RSA_PKCS1v15_私钥解密 (私钥, 要解密的数据.取文本 (i), 临时解密后的文本, 私钥是否PEM格式, 是否BASE64编码)
+            解密后的文本 = 解密后的文本 + 临时解密后的文本
+
+        }
+
+
+
+    }
+}
+
+类 AES加密常量 <公开 折叠 @常量类 = 整数>
+{
+    常量 CBC <公开 值 = @AES_CRYPT_MODE_CBC>
+    常量 CFB <公开 值 = @AES_CRYPT_MODE_CFB>
+    常量 CFB_FIPS <公开 值 = @AES_CRYPT_MODE_CFB_FIPS>
+    常量 OFB <公开 值 = @AES_CRYPT_MODE_OFB>
+    常量 CTR <公开 值 = @AES_CRYPT_MODE_CTR>
+    常量 ECB <公开 值 = @AES_CRYPT_MODE_ECB>
+    常量 CBC_CTS <公开 值 = @AES_CRYPT_MODE_CBC_CTS>
+
+    #
+}
+
+类 AES填充常量 <公开 折叠 @常量类 = 整数>
+{
+    常量 无 <公开 值 = @CRYPTOPP_PADDING_NO>
+    常量 零 <公开 值 = @CRYPTOPP_PADDING_ZEROS>
+    常量 PKCS <公开 值 = @CRYPTOPP_PADDING_PKCS>
+    常量 零和一 <公开 值 = @CRYPTOPP_PADDING_ONE_AND_ZEROS>
+    常量 W3C <公开 值 = @CRYPTOPP_PADDING_W3C>
+    常量 默认 <公开 值 = @CRYPTOPP_PADDING_DEFAULT>
+
+    #
+    #
+}
+
+类 DES加密常量 <公开 折叠 @常量类 = 整数>
+{
+    常量 CBC <公开 值 = @DES_CRYPT_MODE_CBC>
+    常量 CFB <公开 值 = @DES_CRYPT_MODE_CFB>
+    常量 CFB_FIPS <公开 值 = @DES_CRYPT_MODE_CFB_FIPS>
+    常量 OFB <公开 值 = @DES_CRYPT_MODE_OFB>
+    常量 CTR <公开 值 = @DES_CRYPT_MODE_CTR>
+    常量 ECB <公开 值 = @DES_CRYPT_MODE_ECB>
+    常量 CBC_CTS <公开 值 = @DES_CRYPT_MODE_CBC_CTS>
+
+    #
+}
+
+类 DES填充常量 <公开 折叠 @常量类 = 整数>
+{
+    常量 无 <公开 值 = @CRYPTOPP_PADDING_NO>
+    常量 零 <公开 值 = @CRYPTOPP_PADDING_ZEROS>
+    常量 PKCS <公开 值 = @CRYPTOPP_PADDING_PKCS>
+    常量 零和一 <公开 值 = @CRYPTOPP_PADDING_ONE_AND_ZEROS>
+    常量 W3C <公开 值 = @CRYPTOPP_PADDING_W3C>
+    常量 默认 <公开 值 = @CRYPTOPP_PADDING_DEFAULT>
+
+    #
+}
+
+类 DES类型常量 <公开 折叠 @常量类 = 整数>
+{
+    常量 DES <公开 值 = @DES_CRYPT_TYPE_DES>
+    常量 EDE2 <公开 值 = @DES_CRYPT_TYPE_EDE2>
+    常量 EDE3 <公开 值 = @DES_CRYPT_TYPE_EDE3>
+    常量 XEX3 <公开 值 = @DES_CRYPT_TYPE_XEX3>
+
+    #
+}
+
+类 DES类 <公开 折叠>
+{
+    方法 加密 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 要加密的数据 <类型 = 字节集类>
+    参数 加密后的数据 <类型 = 字节集类>
+    参数 密钥 <类型 = 字节集类 注释 = "密钥长度 可以是 16 24 32">
+    参数 IV <类型 = 字节集类 注释 = "固定长度 16" @默认值 = 空对象>
+    参数 加密方式 <类型 = DES加密常量 @默认值 = DES加密常量.ECB>
+    参数 填充方式 <类型 = DES填充常量 @默认值 = DES填充常量.零>
+    参数 DES类型 <类型 = DES类型常量 @默认值 = DES类型常量.DES>
+    {
+        @ void* pSrcData = cryptopp_string_new();
+        @ cryptopp_string_SetData(pSrcData,@<要加密的数据>.GetPtr(),@<要加密的数据>.GetSize());
+        @ void* pOutEncryptData = cryptopp_string_new();
+        @ void* pKey = cryptopp_string_new();
+        @ cryptopp_string_SetData(pKey,@<密钥>.GetPtr(),@<密钥>.GetSize());
+        @ void* piv = cryptopp_string_new();
+        @ cryptopp_string_SetData(pKey,@<IV>.GetPtr(),@<IV>.GetSize());
+
+        @ bool bOk =  Cryptopp_DES_encrypt(pSrcData, pOutEncryptData,pKey, piv, @<加密方式>, @<填充方式>,@<DES类型>);
+
+        @ if(pOutEncryptData)
+        @ {
+        @   @<加密后的数据> = CVolMem( cryptopp_string_GetText(pOutEncryptData),cryptopp_string_GetSize(pOutEncryptData));
+        @ }
+        @ cryptopp_string_delete (pSrcData);
+        @ cryptopp_string_delete (pOutEncryptData);
+        @ cryptopp_string_delete (pKey);
+        @ cryptopp_string_delete (piv);
+        @ return bOk;
+
+    }
+
+    方法 解密 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 要解密的数据 <类型 = 字节集类>
+    参数 解密后的数据 <类型 = 字节集类>
+    参数 密钥 <类型 = 字节集类 注释 = "密钥长度 可以是 16 24 32">
+    参数 IV <类型 = 字节集类 注释 = "固定长度 16" @默认值 = 空对象>
+    参数 加密方式 <类型 = DES加密常量 @默认值 = DES加密常量.ECB>
+    参数 填充方式 <类型 = DES填充常量 @默认值 = DES填充常量.零>
+    参数 DES类型 <类型 = DES类型常量 @默认值 = DES类型常量.DES>
+    {
+        @ void* pSrcData = cryptopp_string_new();
+        @ cryptopp_string_SetData(pSrcData,@<要解密的数据>.GetPtr(),@<要解密的数据>.GetSize());
+        @ void* pOutEncryptData = cryptopp_string_new();
+        @ void* pKey = cryptopp_string_new();
+        @ cryptopp_string_SetData(pKey,@<密钥>.GetPtr(),@<密钥>.GetSize());
+        @ void* piv = cryptopp_string_new();
+        @ cryptopp_string_SetData(pKey,@<IV>.GetPtr(),@<IV>.GetSize());
+
+        @ bool bOk =  Cryptopp_DES_decrypt(pSrcData, pOutEncryptData,pKey, piv, @<加密方式>, @<填充方式>,@<DES类型>);
+
+        @ if(pOutEncryptData)
+        @ {
+        @   @<解密后的数据> = CVolMem( cryptopp_string_GetText(pOutEncryptData),cryptopp_string_GetSize(pOutEncryptData));
+        @ }
+        @ cryptopp_string_delete (pSrcData);
+        @ cryptopp_string_delete (pOutEncryptData);
+        @ cryptopp_string_delete (pKey);
+        @ cryptopp_string_delete (piv);
+        @ return bOk;
+
+    }
+
+    #
+}
+
+类 AES类 <公开>
+{
+    方法 加密 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 要加密的数据 <类型 = 字节集类>
+    参数 加密后的数据 <类型 = 字节集类>
+    参数 密钥 <类型 = 字节集类 注释 = "密钥长度 可以是 16 24 32">
+    参数 IV <类型 = 字节集类 注释 = "固定长度 16">
+    参数 加密方式 <类型 = AES加密常量 @默认值 = AES加密常量.CFB>
+    参数 填充方式 <类型 = AES填充常量 @默认值 = AES填充常量.零>
+    {
+        @ void* pSrcData = cryptopp_string_new();
+        @ cryptopp_string_SetData(pSrcData,@<要加密的数据>.GetPtr(),@<要加密的数据>.GetSize());
+        @ void* pOutEncryptData = cryptopp_string_new();
+        @ void* pKey = cryptopp_string_new();
+        @ cryptopp_string_SetData(pKey,@<密钥>.GetPtr(),@<密钥>.GetSize());
+        @ void* piv = cryptopp_string_new();
+        @ cryptopp_string_SetData(piv,@<IV>.GetPtr(),@<IV>.GetSize());
+
+        @ bool bOk =  Cryptopp_Aes_encrypt(pSrcData, pOutEncryptData,pKey, piv, @<加密方式>, @<填充方式>);
+
+        @ if(pOutEncryptData)
+        @ {
+        @   @<加密后的数据> = CVolMem( cryptopp_string_GetText(pOutEncryptData),cryptopp_string_GetSize(pOutEncryptData));
+        @ }
+        @ cryptopp_string_delete (pSrcData);
+        @ cryptopp_string_delete (pOutEncryptData);
+        @ cryptopp_string_delete (pKey);
+        @ cryptopp_string_delete (piv);
+        @ return bOk;
+
+    }
+
+    方法 解密 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 要解密的数据 <类型 = 字节集类>
+    参数 解密后的数据 <类型 = 字节集类>
+    参数 密钥 <类型 = 字节集类 注释 = "密钥长度 可以是 16 24 32">
+    参数 IV <类型 = 字节集类 注释 = "固定长度 16">
+    参数 加密方式 <类型 = AES加密常量 @默认值 = AES加密常量.CFB>
+    参数 填充方式 <类型 = AES填充常量 @默认值 = AES填充常量.零>
+    {
+        @ void* pSrcData = cryptopp_string_new();
+        @ cryptopp_string_SetData(pSrcData,@<要解密的数据>.GetPtr(),@<要解密的数据>.GetSize());
+
+        @ void* pOutEncryptData = cryptopp_string_new();
+        @ void* pKey = cryptopp_string_new();
+        @ cryptopp_string_SetData(pKey,@<密钥>.GetPtr(),@<密钥>.GetSize());
+        @ void* piv = cryptopp_string_new();
+        @ cryptopp_string_SetData(piv,@<IV>.GetPtr(),@<IV>.GetSize());
+
+        @ bool bOk =  Cryptopp_Aes_Decrypt(pSrcData, pOutEncryptData,pKey, piv, @<加密方式>, @<填充方式>);
+
+        @ if(pOutEncryptData)
+        @ {
+        @   @<解密后的数据> = CVolMem( cryptopp_string_GetText(pOutEncryptData),cryptopp_string_GetSize(pOutEncryptData));
+        @ }
+        @ cryptopp_string_delete (pSrcData);
+        @ cryptopp_string_delete (pOutEncryptData);
+        @ cryptopp_string_delete (pKey);
+        @ cryptopp_string_delete (piv);
+        @ return bOk;
+
+    }
+
+    方法 "//加密BASE64" <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 要加密的数据 <类型 = 字节集类>
+    参数 加密后的数据 <类型 = 字节集类>
+    参数 密钥 <类型 = 字节集类 注释 = "密钥长度 可以是 16 24 32">
+    参数 IV <类型 = 字节集类 注释 = "固定长度 16">
+    参数 加密方式 <类型 = AES加密常量 @默认值 = AES加密常量.CFB>
+    参数 填充方式 <类型 = AES填充常量 @默认值 = AES填充常量.零>
+    {
+        @ void* pSrcData = cryptopp_string_new();
+        @ cryptopp_string_SetData(pSrcData,@<要加密的数据>.GetPtr(),@<要加密的数据>.GetSize());
+        @ void* pOutEncryptData = cryptopp_string_new();
+        @ void* pKey = cryptopp_string_new();
+        @ cryptopp_string_SetData(pKey,@<密钥>.GetPtr(),@<密钥>.GetSize());
+        @ void* piv = cryptopp_string_new();
+        @ cryptopp_string_SetData(pKey,@<IV>.GetPtr(),@<IV>.GetSize());
+
+        @ bool bOk =  Cryptopp_Aes_encrypt_BASE64(pSrcData, pOutEncryptData,pKey, piv, @<加密方式>, @<填充方式>);
+
+        @ if(pOutEncryptData)
+        @ {
+        @   @<加密后的数据> = CVolMem( cryptopp_string_GetText(pOutEncryptData),cryptopp_string_GetSize(pOutEncryptData));
+        @ }
+        @ cryptopp_string_delete (pSrcData);
+        @ cryptopp_string_delete (pOutEncryptData);
+        @ cryptopp_string_delete (pKey);
+        @ cryptopp_string_delete (piv);
+        @ return bOk;
+
+    }
+
+    方法 "//解密BASE64" <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 要解密的数据 <类型 = 字节集类>
+    参数 解密后的数据 <类型 = 字节集类>
+    参数 密钥 <类型 = 字节集类 注释 = "密钥长度 可以是 16 24 32">
+    参数 IV <类型 = 字节集类 注释 = "固定长度 16">
+    参数 加密方式 <类型 = AES加密常量 @默认值 = AES加密常量.CFB>
+    参数 填充方式 <类型 = AES填充常量 @默认值 = AES填充常量.零>
+    {
+        @ void* pSrcData = cryptopp_string_new();
+        @ cryptopp_string_SetData(pSrcData,@<要解密的数据>.GetPtr(),@<要解密的数据>.GetSize());
+
+        @ void* pOutEncryptData = cryptopp_string_new();
+
+        @ void* pKey = cryptopp_string_new();
+        @ cryptopp_string_SetData(pKey,@<密钥>.GetPtr(),@<密钥>.GetSize());
+        @ void* piv = cryptopp_string_new();
+        @ cryptopp_string_SetData(piv,@<IV>.GetPtr(),@<IV>.GetSize());
+
+        @ bool bOk =  Cryptopp_Aes_Decrypt_BASE64(pSrcData, pOutEncryptData,pKey, piv, @<加密方式>, @<填充方式>);
+
+        @ if(pOutEncryptData)
+        @ {
+        @   @<解密后的数据> = CVolMem( cryptopp_string_GetText(pOutEncryptData),cryptopp_string_GetSize(pOutEncryptData));
+        @ }
+
+        @ cryptopp_string_delete (pSrcData);
+        @ cryptopp_string_delete (pOutEncryptData);
+        @ cryptopp_string_delete (pKey);
+        @ cryptopp_string_delete (piv);
+        @ return bOk;
+
+    }
+
+    #
+}
+
+类 ______MD5系列函数 <公开 @全局类 = 真>
+{
+    方法 校验_取文件MD <公开 静态 类型 = 文本型 注释 = "注意，犹豫开源库内部有问题，再x64下面是无错误的，再x86 下面会异常" 折叠 @禁止流程检查 = 真>
+    参数 文件名 <类型 = 文本型>
+    参数 是否大写 <类型 = 逻辑型 @默认值 = 假>
+    参数 md类型 <类型 = 整数 注释 = "可选值 5 4 2 分别代表 MD5 MD4 MD2" @默认值 = 5>
+    {
+        @ void* pOutData = cryptopp_string_new();
+        @ Cryptopp_GetFileMdNW(@<文件名>,@<md类型>,@<是否大写>,pOutData);
+        @ CVolString szRet(cryptopp_string_GetText(pOutData));
+        @ cryptopp_string_delete (pOutData);
+        @ return szRet;
+    }
+
+    方法 校验_取字节集MD <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 要取校验数据 <类型 = 字节集类>
+    参数 是否大写 <类型 = 逻辑型 @默认值 = 假>
+    参数 md类型 <类型 = 整数 注释 = "可选值 5 4 2 分别代表 MD5 MD4 MD2" @默认值 = 5>
+    {
+        @ void* pInputData = cryptopp_string_new();
+        @ void* pOutData = cryptopp_string_new();
+        @ cryptopp_string_SetData(pInputData,@<要取校验数据>.GetPtr(),@<要取校验数据>.GetSize());
+        @ Cryptopp_GetBinMdN(pInputData,@<md类型>,@<是否大写>,pOutData);
+        @ CVolString szRet(cryptopp_string_GetText(pOutData));
+        @ cryptopp_string_delete (pInputData);
+        @ cryptopp_string_delete (pOutData);
+        @ return szRet;
+    }
+
+    #
+}
+
+类 ______SHA系列函数 <公开 @全局类 = 真>
+{
+    方法 校验_取文件SHA <公开 静态 类型 = 文本型 注释 = "注意，犹豫开源库内部有问题，再x64下面是无错误的，再x86 下面会异常" 编辑时信息 = "40FFB, 0, 0, 0" @禁止流程检查 = 真>
+    参数 文件名 <类型 = 文本型 编辑时信息 = "40FFB, 0, 0, 0">
+    参数 是否大写 <类型 = 逻辑型 编辑时信息 = "40FFB, 0, 0, 0" @默认值 = 假>
+    参数 类型 <类型 = 整数 注释 = "//1  SHA1" 注释 = "//224  SHA224" 注释 = "//256  SHA256" 注释 = "//384  SHA384" 注释 = "//512  SHA512"
+            注释 = "//3224  SHA3_224" 注释 = "//3256  SHA3_256" 注释 = "//3384  SHA3_384" 注释 = "//3512  SHA3_512" 编辑时信息 = "40FFB, 0, 0, 0"
+            @默认值 = 1>
+    {
+        @ void* pOutData = cryptopp_string_new();
+        @ Cryptopp_GetFileSHAW(@<文件名>,@<类型>,@<是否大写>,pOutData);
+        @ CVolString szRet(cryptopp_string_GetText(pOutData));
+        @ cryptopp_string_delete (pOutData);
+        @ return szRet;
+    }
+
+    方法 校验_取字节集SHA <公开 静态 类型 = 文本型 @禁止流程检查 = 真>
+    参数 要取校验数据 <类型 = 字节集类>
+    参数 是否大写 <类型 = 逻辑型 @默认值 = 假>
+    参数 类型 <类型 = 整数 注释 = "//1  SHA1" 注释 = "//224  SHA224" 注释 = "//256  SHA256" 注释 = "//384  SHA384" 注释 = "//512  SHA512"
+            注释 = "//3224  SHA3_224" 注释 = "//3256  SHA3_256" 注释 = "//3384  SHA3_384" 注释 = "//3512  SHA3_512" @默认值 = 1>
+    {
+        @ void* pInputData = cryptopp_string_new();
+        @ void* pOutData = cryptopp_string_new();
+        @ cryptopp_string_SetData(pInputData,@<要取校验数据>.GetPtr(),@<要取校验数据>.GetSize());
+        @ Cryptopp_GetBinSHA(pInputData,@<类型>,@<是否大写>,pOutData);
+        @ CVolString szRet(cryptopp_string_GetText(pOutData));
+        @ cryptopp_string_delete (pInputData);
+        @ cryptopp_string_delete (pOutData);
+        @ return szRet;
+    }
+
+    #
+}

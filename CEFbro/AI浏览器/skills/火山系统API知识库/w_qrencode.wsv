@@ -1,0 +1,79 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.数据处理
+
+类 二维码生成类 <公开 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "封装自libqrencode 4.1.1版,提供对二维码生成的支持." 编辑时信息 = "11D543, 0, 0, 0"
+        @视窗.需求VS版本.static = "16-" @视窗.使用静态运行时库.static = 真 "" "// @视窗.外部头文件" = "lib\\include\\qrencode.h"
+        "// @视窗.外部库.static" = "lib\\$(p)\\qrencode-static-$(d).lib" "// @视窗.外部库.non_static" = "lib\\$(p)\\qrencode.lib"
+        "// @视窗.附属文件.non_static" = "lib\\$(p)\\qrencode.dll" "" @视窗.外部头文件 = "lib2\\include\\qrencode.h"
+        @视窗.外部库.non_static = "lib2\\$(p)\\qrencode.lib" @视窗.附属文件.non_static = "lib2\\$(p)\\qrencode.dll"
+        "@视窗.外部库.static-debug" = "lib2\\$(p)\\qrencode.lib" "@视窗.附属文件.static-debug" = "lib2\\$(p)\\qrencode.dll"
+        "@视窗.外部库.static-release" = "lib2\\$(p)\\qrencode-release.lib">
+{
+
+    # @begin
+    #
+    # <> <include>
+    # static void QRcode2Bmp(const QRcode* qrCode, @dt<增强位图类>& bmp, INT backgroundColor, INT pixelColor, INT nZoom);
+    # <> </include>
+    #
+    # void @sn<current_class>::QRcode2Bmp(const QRcode* qrCode, @dt<增强位图类>& bmp, INT backgroundColor, INT pixelColor, INT nZoom)
+    # {
+    #     if (!qrCode) return;
+    #     nZoom = MAX (1, nZoom);
+    #     const INT qrWidth = (qrCode->width > 0 ? qrCode->width : 1);
+    #     bmp.CreateBitmap(qrWidth * nZoom, qrWidth * nZoom, 24);
+    #     bmp.FillBG(backgroundColor);    //白色底图
+    #     for ( int y = 0; y < qrWidth; y++)
+    #     {
+    #         for (int x = 0; x < qrWidth; x++)
+    #         {
+    #             unsigned char b = qrCode->data[y * qrWidth + x];
+    #             if (b & 0x01)    //深色,反之留底色
+    #             {
+    #                 for (int x2 = 0; x2 < nZoom; x2++)
+    #                     for (int y2 = 0; y2 < nZoom; y2++)
+    #                         bmp.SetPixel(x * nZoom + x2, y * nZoom + y2, pixelColor);
+    #             }
+    #         }
+    #     }    
+    # }
+    #
+    # @end
+
+    方法 生成文本二维码 <公开 静态 类型 = 增强位图类 注释 = "以指定文本内容生成二维码图像." 返回值注释 = "生成失败返回空白图像." @禁止流程检查 = 真>
+    参数 内容 <类型 = 文本型 注释 = "二维码所包含的文本内容.">
+    参数 等级 <类型 = 整数 注释 = "提供所欲使用的生成等级,1-40之间,值越大像素点越多,能表示的内容越多." @默认值 = 10>
+    参数 容错 <类型 = 整数 注释 = "提供所生成二维码的容错等级,0-3之间." @默认值 = 3>
+    参数 底色 <类型 = 整数 注释 = "提供所生成二维码图像的底图颜色." @默认值 = 颜色类.白色>
+    参数 码颜色 <类型 = 整数 注释 = "提供所生成二维码图像的二维码像素点颜色." @默认值 = 颜色类.黑色>
+    参数 放大倍数 <类型 = 整数 注释 = "提供所生成二维码图像的放大倍数" @默认值 = 1>
+    {
+        @ @dt<增强位图类> bmp;
+        @ CU8String inData(@<内容>.GetText());
+        @ QRcode * qrCode = QRcode_encodeString(inData.GetText(), @<等级>, (QRecLevel)@<容错>, QR_MODE_8, 1);
+        @ QRcode2Bmp(qrCode, bmp, @<底色>, @<码颜色>, @<放大倍数>);
+        @ QRcode_free(qrCode);
+        @ return bmp;
+    }
+
+    方法 生成数据二维码 <公开 静态 类型 = 增强位图类 注释 = "以指定数据内容生成二维码图像." 返回值注释 = "生成失败返回空白图像." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "二维码所包含的数据.">
+    参数 等级 <类型 = 整数 注释 = "提供所欲使用的生成等级,1-40之间,值越大像素点越多,能表示的数据越多." @默认值 = 10>
+    参数 容错 <类型 = 整数 注释 = "提供所生成二维码的容错等级,0-3之间." @默认值 = 3>
+    参数 底色 <类型 = 整数 注释 = "提供所生成二维码图像的底图颜色." @默认值 = 颜色类.白色>
+    参数 码颜色 <类型 = 整数 注释 = "提供所生成二维码图像的二维码像素点颜色." @默认值 = 颜色类.黑色>
+    参数 放大倍数 <类型 = 整数 注释 = "提供所生成二维码图像的放大倍数" @默认值 = 1>
+    {
+        @ @dt<增强位图类> bmp;
+        @ QRcode * qrCode = QRcode_encodeData((INT)@<数据>.GetSize(), (const unsigned char *)@<数据>.GetPtr(), @<等级>, (QRecLevel)@<容错>);
+        @ QRcode2Bmp(qrCode, bmp, @<底色>, @<码颜色>, @<放大倍数>);
+        @ QRcode_free(qrCode);
+        @ return bmp;
+    }
+
+    方法 取版本信息 <公开 静态 类型 = 文本型 注释 = "获取该库的版本信息." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> (QRcode_APIVersionString())
+    }
+}

@@ -1,0 +1,481 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.网络库.kcp\"" @视窗.外部头文件 = "kcp\\ikcp.h" @视窗.外部源文件 = "kcp\\ikcp.c">
+
+类 ______KCP全局类 <公开 注释 = "一个udp 可靠通讯的库" @全局类 = 真>
+{
+
+    #
+    # // create a new kcp control object, 'conv' must equal in two endpoint
+    # // from the same connection. 'user' will be passed to the output callback
+    # // output callback can be setup like this: 'kcp->output = my_udp_output'
+    # ikcpcb* ikcp_create(IUINT32 conv, void *user);
+    #
+    #
+
+    方法 ikcp_create <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 会话编号 <类型 = 整数 注释 = "同一个连接，必须编号相同">
+    参数 用户数据 <类型 = 变整数>
+    {
+        @ (INT_P)ikcp_create( (IUINT32)@<会话编号>,(void *)@<用户数据>)
+    }
+
+    # // release kcp control object
+    # void ikcp_release(ikcpcb *kcp);
+
+    方法 ikcp_release <公开 静态 折叠 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    {
+        @ ikcp_release( (ikcpcb *) @<连接句柄>)
+    }
+
+    # // set output callback, which will be invoked by kcp
+    # void ikcp_setoutput(ikcpcb *kcp, int (*output)(const char *buf, int len, 
+    #  ikcpcb *kcp, void *user));
+    #
+
+    方法 ikcp_setoutput <公开 静态 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 回调函数 <@匹配方法 = "输出回调">
+    {
+        @ ikcp_setoutput( (ikcpcb *)@<连接句柄>,(  int (*)(const char *buf, int len, ikcpcb *kcp, void *user)  )  @<回调函数> )
+
+    }
+
+    方法 输出回调 <公开 静态 类型 = 整数>
+    参数 缓冲区指针 <类型 = 变整数>
+    参数 缓冲区大小 <类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 用户数据 <类型 = 变整数>
+    {
+
+        返回 (0)
+    }
+
+    # // user/upper level recv: returns size, returns below zero for EAGAIN
+    # int ikcp_recv(ikcpcb *kcp, char *buffer, int len);
+    #
+
+    方法 ikcp_recv <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    参数 连接句柄 <类型 = 变整数>
+    参数 数据 <类型 = 字节集类 注释 = "比如首先调用 取空白字节集()">
+    {
+        @ return ikcp_recv( (ikcpcb *)@<连接句柄>, (char *)@<数据>.GetPtr(), (int)@<数据>.GetSize());
+    }
+
+    #
+    #
+    #
+    # // user/upper level send, returns below zero for error
+    # int ikcp_send(ikcpcb *kcp, const char *buffer, int len);
+
+    方法 ikcp_send <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    参数 连接句柄 <类型 = 变整数>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ return ikcp_send( (ikcpcb *)@<连接句柄>, (char *)@<数据>.GetPtr(), (int)@<数据>.GetSize());
+    }
+
+    #
+    #
+    #
+    # // update state (call it repeatedly, every 10ms-100ms), or you can ask 
+    # // ikcp_check when to call it again (without ikcp_input/_send calling).
+    # // 'current' - current timestamp in millisec. 
+    # void ikcp_update(ikcpcb *kcp, IUINT32 current);
+
+    方法 ikcp_update <公开 静态 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 当前时间戳 <类型 = 整数>
+    {
+        @ ikcp_update( (ikcpcb *)@<连接句柄>, (IUINT32)@<当前时间戳> )
+    }
+
+    #
+    # // Determine when should you invoke ikcp_update:
+    # // returns when you should invoke ikcp_update in millisec, if there 
+    # // is no ikcp_input/_send calling. you can call ikcp_update in that
+    # // time, instead of call update repeatly.
+    # // Important to reduce unnacessary ikcp_update invoking. use it to 
+    # // schedule ikcp_update (eg. implementing an epoll-like mechanism, 
+    # // or optimize ikcp_update when handling massive kcp connections)
+    # IUINT32 ikcp_check(const ikcpcb *kcp, IUINT32 current);
+    #
+
+    方法 ikcp_check <公开 静态 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 当前时间戳 <类型 = 整数>
+    {
+        @ ikcp_check( (ikcpcb *)@<连接句柄>, (IUINT32)@<当前时间戳> )
+    }
+
+    #
+    #
+    # // when you received a low level packet (eg. UDP packet), call it
+    # int ikcp_input(ikcpcb *kcp, const char *data, long size);
+    #
+
+    方法 ikcp_input <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    参数 连接句柄 <类型 = 变整数>
+    参数 数据 <类型 = 字节集类 注释 = "比如首先调用 取空白字节集()">
+    {
+        @ return ikcp_input( (ikcpcb *)@<连接句柄>, (char *)@<数据>.GetPtr(),(long) @<数据>.GetSize());
+    }
+
+    # // flush pending data
+    # void ikcp_flush(ikcpcb *kcp);
+
+    方法 ikcp_flush <公开 静态 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 数据 <类型 = 字节集类 注释 = "比如首先调用 取空白字节集()">
+    {
+        @ ikcp_flush( (ikcpcb *)@<连接句柄>)
+    }
+
+    #
+    # // check the size of next message in the recv queue
+    # int ikcp_peeksize(const ikcpcb *kcp);
+
+    方法 ikcp_peeksize <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    {
+        @ ikcp_peeksize( (ikcpcb *)@<连接句柄>)
+    }
+
+    #
+    #
+    # // change MTU size, default is 1400
+    # int ikcp_setmtu(ikcpcb *kcp, int mtu);
+    #
+
+    方法 ikcp_setmtu <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 mtu <类型 = 整数>
+    {
+        @ ikcp_setmtu( (ikcpcb *)@<连接句柄>, @<mtu>)
+    }
+
+    #
+    # // set maximum window size: sndwnd=32, rcvwnd=32 by default
+    # int ikcp_wndsize(ikcpcb *kcp, int sndwnd, int rcvwnd);
+
+    方法 ikcp_wndsize <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 sndwnd <类型 = 整数>
+    参数 rcvwnd <类型 = 整数>
+    {
+        @ ikcp_wndsize( (ikcpcb *)@<连接句柄>, @<sndwnd>,@<rcvwnd>)
+    }
+
+    #
+    # // get how many packet is waiting to be sent
+    # int ikcp_waitsnd(const ikcpcb *kcp);
+
+    方法 ikcp_waitsnd <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    {
+        @ ikcp_waitsnd( (ikcpcb *)@<连接句柄> )
+    }
+
+    #
+    # // fastest: ikcp_nodelay(kcp, 1, 20, 2, 1)
+    # // nodelay: 0:disable(default), 1:enable
+    # // interval: internal update timer interval in millisec, default is 100ms 
+    # // resend: 0:disable fast resend(default), 1:enable fast resend
+    # // nc: 0:normal congestion control(default), 1:disable congestion control
+    # int ikcp_nodelay(ikcpcb *kcp, int nodelay, int interval, int resend, int nc);
+    #
+
+    方法 ikcp_nodelay <公开 静态 类型 = 整数 注释 = "普通模式： ikcp_nodelay(kcp, 0, 40, 0, 0);" 注释 = "极速模式： ikcp_nodelay(kcp, 1, 10, 2, 1);"
+            @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 nodelay <类型 = 整数 注释 = "nodelay ：是否启用 nodelay模式，0不启用；1启用。">
+    参数 interval <类型 = 整数 注释 = "interval ：协议内部工作的 interval，单位毫秒，比如 10ms或者 20ms">
+    参数 resend <类型 = 整数 注释 = "resend ：快速重传模式，默认0关闭，可以设置2（2次ACK跨越将会直接重传）">
+    参数 nc <类型 = 整数 注释 = "nc ：是否关闭流控，默认是0代表不关闭，1代表关闭。">
+    {
+        @ ikcp_nodelay( (ikcpcb *)@<连接句柄>, @<nodelay>,@<interval>,@<resend>,@<nc>)
+    }
+
+    # void ikcp_log(ikcpcb *kcp, int mask, const char *fmt, ...);
+
+    方法 "//ikcp_log"
+    {
+
+    }
+
+    #
+    # // setup allocator
+    # void ikcp_allocator(void* (*new_malloc)(size_t), void (*new_free)(void*));
+
+    方法 "//ikcp_allocator"
+    {
+
+    }
+
+    #
+    # // read conv
+    # IUINT32 ikcp_getconv(const void *ptr);
+
+    方法 "//ikcp_getconv" <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    {
+        @ ikcp_getconv( (ikcpcb *)@<连接句柄> )
+    }
+
+    #
+    # static inline IINT64 iclock64(void)
+    # {
+    #  long s, u;
+    #  IINT64 value;
+    #  itimeofday(&s, &u);
+    #  value = ((IINT64)s) * 1000 + (u / 1000);
+    #  return value;
+    # }
+    #
+
+    方法 iclock64 <公开 静态 类型 = 长整数 @禁止流程检查 = 真>
+    {
+        @  long s, u;
+        @  IINT64 value;
+        @  itimeofday(&s, &u);
+        @  value = ((IINT64)s) * 1000 + (u / 1000);
+        @  return value;
+
+    }
+
+    #
+    # static inline IUINT32 iclock()
+    # {
+    #  return (IUINT32)(iclock64() & 0xfffffffful);
+    # }
+    #
+    # @begin
+    # #include <time.h>
+    #
+    # /* get system time */
+    # static inline void itimeofday(long *sec, long *usec)
+    # {
+    #  #if defined(__unix)
+    #  struct timeval time;
+    #  gettimeofday(&time, NULL);
+    #  if (sec) *sec = time.tv_sec;
+    #  if (usec) *usec = time.tv_usec;
+    #  #else
+    #  static long mode = 0, addsec = 0;
+    #  BOOL retval;
+    #  static IINT64 freq = 1;
+    #  IINT64 qpc;
+    #  if (mode == 0) {
+    #   retval = QueryPerformanceFrequency((LARGE_INTEGER*)&freq);
+    #   freq = (freq == 0)? 1 : freq;
+    #   retval = QueryPerformanceCounter((LARGE_INTEGER*)&qpc);
+    #   addsec = (long)time(NULL);
+    #   addsec = addsec - (long)((qpc / freq) & 0x7fffffff);
+    #   mode = 1;
+    #  }
+    #  retval = QueryPerformanceCounter((LARGE_INTEGER*)&qpc);
+    #  retval = retval * 2;
+    #  if (sec) *sec = (long)(qpc / freq) + addsec;
+    #  if (usec) *usec = (long)((qpc % freq) * 1000000 / freq);
+    #  #endif
+    # }
+    # @end
+
+    方法 iclock <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @  long s, u;
+        @  IINT64 value;
+        @  itimeofday(&s, &u);
+        @  value = ((IINT64)s) * 1000 + (u / 1000);
+        @  return  (INT)(value & 0xfffffffful);
+
+    }
+
+    方法 isleep <公开 静态 @禁止流程检查 = 真>
+    参数 延时时长 <类型 = 整数>
+    {
+        @  unsigned long millisecond = (unsigned long)@<延时时长>;
+        @  #ifdef __unix  /* usleep( time * 1000 ); */
+        @  struct timespec ts;
+        @  ts.tv_sec = (time_t)(millisecond / 1000);
+        @  ts.tv_nsec = (long)((millisecond % 1000) * 1000000);
+        @  /*nanosleep(&ts, NULL);*/
+        @  usleep((millisecond << 10) - (millisecond << 4) - (millisecond << 3));
+        @  #elif defined(_WIN32)
+        @  Sleep(millisecond);
+        @  #endif
+
+    }
+
+    #
+}
+
+类 CKcpHandle <@禁止创建对象 = 真>
+{
+    方法 类_清理
+    {
+        关闭 ()
+    }
+
+    方法 关闭 <公开>
+    {
+        如果 (句柄 != 0)
+        {
+            ikcp_release (句柄)
+            句柄 = 0
+        }
+    }
+
+    变量 句柄 <公开 类型 = 变整数 值 = 0>
+    变量 用户数据 <公开 类型 = 变整数 值 = 0>
+    变量 用户对象 <公开 类型 = 对象类>
+    变量 "// 是否一直循环" <公开 类型 = 逻辑型>
+    变量 "// 接收缓冲区大小" <公开 类型 = 整数 值 = 4096>
+}
+
+类 CKcp <公开 基础类 = 参考对象模板类 @模板实现类 = "CKcpHandle">
+{
+    变量 "//成员_线程" <类型 = 线程类f>
+
+    方法 _内部静态组包完成中转函数 <静态 类型 = 整数 注释 = "这个只是一个中转函数">
+    参数 缓冲区指针 <类型 = 变整数>
+    参数 缓冲区大小 <类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 用户数据 <类型 = 变整数>
+    {
+        指针_到自定义类型 (CKcp, 用户数据).组包完成 (缓冲区指针, 缓冲区大小, 连接句柄)
+        返回 (0)
+    }
+
+    方法 组包完成 <公开 定义事件 类型 = 整数 注释 = "这个函数的触发 是由 CKcp.组包() 触发的" 注释 = "再这个回调函数中 调用 自己的udp发送函数">
+    参数 缓冲区指针 <类型 = 变整数>
+    参数 缓冲区大小 <类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    {
+
+    }
+
+    方法 创建 <公开 类型 = 逻辑型 注释 = "使用kcp的时候，第一步必须创建">
+    参数 会话编号 <类型 = 整数 注释 = "同一个连接，必须编号相同" 折叠>
+    参数 用户数据 <类型 = 变整数 @默认值 = 0>
+    {
+        参考数据.句柄 = ikcp_create (会话编号, 指针_取变量指针 (本对象))
+        参考数据.用户数据 = 用户数据
+        ikcp_setoutput (参考数据.句柄, _内部静态组包完成中转函数)
+        如果 (参考数据.句柄 != 0)
+        {
+            返回 (真)
+        }
+        返回 (假)
+    }
+
+    方法 "//启动" <公开 类型 = 逻辑型 折叠>
+    参数 接收缓冲区大小 <类型 = 整数 注释 = "这个缓冲区决定了 事件中 收到数据 调用的次数" 注释 = "例如，当您设置的缓冲区是 4096，但是数据大小是 4097，那么就会调用两次 收到数据 函数"
+            注释 = "假如您设置的缓冲区大小是 8192 ，实际数据大小是 4097，那么就只会调用一次 收到数据 函数" @默认值 = 4096>
+    {
+        参考数据.接收缓冲区大小 = 接收缓冲区大小
+        返回 (成员_线程.创建线程 (参考数据.句柄, ))
+    }
+
+    方法 "//停止" <公开 折叠>
+    {
+        参考数据.是否一直循环 = 假
+        成员_线程.等待 (100)
+    }
+
+    方法 "//线程类f_工作函数" <接收事件 类型 = 整数 折叠>
+    参数 来源对象 <类型 = 线程类f 注释 = "提供事件产生的具体来源对象">
+    参数 标记值 <类型 = 整数 注释 = "用户调用\"挂接事件\"命令时所提供的\"标记值\"参数值,非此方式挂接事件则本参数值固定为0.">
+    参数 线程参数 <类型 = 变整数>
+    {
+        如果 (来源对象 == 成员_线程)
+        {
+            分包线程 ()
+        }
+        返回 (0)
+
+    }
+
+    方法 "//分包线程被启动" <公开 定义事件 类型 = 整数 注释 = "内部启动一个线程，因为外部当您自己调用您自己的udp接收函数后，得到一个数据包，然后调用分包后，需要一个线程来实时"
+            注释 = "检测分包完成，然后调用更新，然后调用 抓取分包数据 来提取可靠的udp数据" 折叠 折叠2>
+    参数 收到的数据 <类型 = 字节集类>
+    {
+
+        // 一下代码为样例代码。仅供参考
+
+        参考数据.是否一直循环 = 真
+        变量 缓冲区 <类型 = 字节集类>
+        缓冲区 = 取空白字节集 (参考数据.4096) // 4096 这个是自定义的，您可以根据您的数据包大小
+        判断循环 (参考数据.是否一直循环)
+        {
+            延时F (50)
+            更新 (iclock ())
+            如果 (抓取分包数据 (缓冲区) >= 0)
+            {
+                // 这里填写您的工作代码 来处理 抓取到的数据
+
+            }
+        }
+
+        返回 (0)
+    }
+
+    方法 更新 <公开 注释 = "update state (call it repeatedly, every 10ms-100ms), or you can ask"
+            注释 = "ikcp_check when to call it again (without ikcp_input/_send calling)."
+            注释 = "\'current\' - current timestamp in millisec." 折叠 折叠2>
+    参数 当前时间戳 <类型 = 整数 注释 = "可以调用 iclock () 函数">
+    {
+        ikcp_update (参考数据.句柄, 当前时间戳)
+    }
+
+    方法 抓取分包数据 <公开 类型 = 整数 注释 = "首先再 分包线程被启动 事件函数中，用循环的方式 首先调用更新，然后调用抓取数据" 注释 = "来达到抓取分包数据" 返回值注释 = "大于等于0 表示抓取成功" 折叠 折叠2>
+    参数 抓取到的数据 <类型 = 字节集类>
+    {
+        返回 (ikcp_recv (参考数据.句柄, 抓取到的数据))
+    }
+
+    方法 组包 <公开 类型 = 整数 注释 = "调用此api时，并没有真正的发送，只是调用kcp算法来组合成一个特定的包，然后您" 注释 = "需要再 发送回调 中，调用自己的udp api 来真正的发送数据" 折叠 折叠2>
+    参数 要发送的数据 <类型 = 字节集类>
+    {
+        返回 (ikcp_send (参考数据.句柄, 要发送的数据))
+    }
+
+    方法 分包 <公开 类型 = 整数 注释 = "您自行用自己的udp收到一段数据后，调用 分包 后，ckp内部会解包，校验包等等操作" 注释 = "然后会调用 分包完成，传递一个真实的数据包给用户"
+            注释 = "kcp的原理就是一个算法，实际用什么udp api您需要自己选择一个udp模块" 折叠 折叠2>
+    参数 数据 <类型 = 字节集类>
+    {
+        返回 (ikcp_input (参考数据.句柄, 数据))
+
+    }
+
+    方法 置窗口数量 <公开 类型 = 整数 注释 = "而考虑到丢包重发,设置最大收发窗口为128" 折叠>
+    参数 发送窗口数量 <类型 = 整数 折叠>
+    参数 接收窗口数量 <类型 = 整数>
+    {
+        // 而考虑到丢包重发,设置最大收发窗口为128
+        返回 (ikcp_wndsize (参考数据.句柄, 发送窗口数量, 接收窗口数量))
+    }
+
+    方法 置规则 <公开 类型 = 整数 注释 = "普通模式： ikcp_nodelay(kcp, 0, 40, 0, 0);" 注释 = "极速模式： ikcp_nodelay(kcp, 1, 10, 2, 1);" 折叠2>
+    参数 nodelay <类型 = 整数 注释 = "nodelay ：是否启用 nodelay模式，0不启用；1启用。">
+    参数 interval <类型 = 整数 注释 = "interval ：协议内部工作的 interval，单位毫秒，比如 10ms或者 20ms">
+    参数 resend <类型 = 整数 注释 = "resend ：快速重传模式，默认0关闭，可以设置2（2次ACK跨越将会直接重传）">
+    参数 nc <类型 = 整数 注释 = "nc ：是否关闭流控，默认是0代表不关闭，1代表关闭。">
+    {
+        // 调试输出 (参考数据.句柄)
+        返回 (ikcp_nodelay (参考数据.句柄, nodelay, interval, resend, nc))
+    }
+
+    方法 取待发送包数量 <公开 类型 = 整数 折叠>
+    {
+        返回 (ikcp_waitsnd (参考数据.句柄))
+
+    }
+
+    方法 取下一个待接收数据包大小 <公开 类型 = 整数 注释 = "check the size of next message in the recv queue" 折叠>
+    {
+        返回 (ikcp_peeksize (参考数据.句柄))
+
+    }
+}

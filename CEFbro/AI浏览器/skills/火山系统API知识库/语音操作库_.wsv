@@ -1,0 +1,167 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <注释 = "本库改自于“老黑”的模块" @文档 = "category = \"语音操作库\"">
+
+类 语音合成类_TTS <公开 注释 = "SpVoice类是支持语音合成(TTS)的核心类。通过SpVoice对象调用TTS引擎，从而实现朗读功能。" 折叠>
+{
+    变量 tts <类型 = COM对象类>
+    变量 线程 <类型 = 线程类>
+    变量 播放内容 <类型 = 文本型>
+
+    方法 类_初始化 <折叠>
+    {
+        COM初始化类.初始化COM ()
+        tts.创建 ("SAPI.SpVoice")
+    }
+
+    方法 类_清理 <折叠>
+    {
+        tts.清除 ()
+        COM初始化类.清理COM ()
+    }
+
+    方法 置语速 <公开 折叠>
+    参数 速度 <类型 = 整数 注释 = "-10~10" @默认值 = 1>
+    {
+        tts.写属性 ("Rate", 选择 (速度 < -10 || 速度 > 10, 1, 速度))
+    }
+
+    方法 置声音大小 <公开 折叠>
+    参数 大小 <类型 = 整数 @默认值 = 100>
+    {
+        tts.写属性 ("Volume", 选择 (大小 > 100 || 大小 < 0, 100, 大小))
+    }
+
+    方法 机读文本 <公开 折叠>
+    参数 内容 <类型 = 文本型>
+    {
+        播放内容 = 内容
+        线程.启动 ()
+    }
+
+    方法 机读文本_ <折叠>
+    参数 内容 <类型 = 文本型>
+    {
+        变量 InputWordPosition <类型 = 整数 注释 = "朗读位置">
+        变量 InputWordLength <类型 = 整数 注释 = "朗读长度">
+        tts.无返回值方法 ("Speak", 内容, 1)  // 朗读,异步
+        判断循环 (tts.读无参数属性 ("Status", COM对象类).读无参数属性 ("RunningState", 整数) != 1)
+        {
+            如果真 (InputWordPosition != tts.读无参数属性 ("Status", COM对象类).读无参数属性 ("InputWordPosition", 整数) || InputWordLength != tts.读无参数属性 ("Status", COM对象类).读无参数属性 ("InputWordLength", 整数))
+            {
+                InputWordPosition = tts.读无参数属性 ("Status", COM对象类).读无参数属性 ("InputWordPosition", 整数)
+                InputWordLength = tts.读无参数属性 ("Status", COM对象类).读无参数属性 ("InputWordLength", 整数)
+                语音事件类 (假, InputWordPosition, InputWordLength)
+            }
+        }
+        语音事件类 (真, InputWordPosition, InputWordLength)
+    }
+
+    方法 语音事件类 <公开 定义事件 类型 = 整数 折叠>
+    参数 是否结束 <类型 = 逻辑型>
+    参数 朗读位置 <类型 = 整数>
+    参数 朗读长度 <类型 = 整数>
+
+    方法 暂停发音 <公开 折叠>
+    {
+        tts.写无参数属性 ("Pause")
+    }
+
+    方法 恢复发音 <公开 折叠>
+    {
+        tts.写无参数属性 ("Resume")
+    }
+
+    方法 停止发音 <公开 折叠>
+    {
+        如果真 (tts.读无参数属性 ("Status", COM对象类).读无参数属性 ("RunningState", 整数) == 2)  // 如果当前正在播放,那么就播放一个空字符串,并且使用挂断之前的模式
+        {
+            tts.无返回值方法 ("Speak", "", 2)
+        }
+    }
+
+    方法 列举语音库 <公开 类型 = 文本数组类 折叠>
+    {
+        变量 库列表 <类型 = COM对象类>
+        变量 库数量 <类型 = 整数>
+        变量 返回结果 <类型 = 文本数组类>
+        库列表 = tts.读无参数对象型属性 ("GetVoices", COM对象类)
+        库数量 = 库列表.读无参数属性 ("Count", 整数)
+        计次循环 (库数量)
+        {
+            变量 库 <类型 = COM对象类>
+            变量 描述 <类型 = COM变体型>
+            库 = 库列表.读对象型属性 ("Item", COM对象类, 取循环索引 ())
+            描述 = 库.读无参数属性 ("GetDescription", COM变体型)
+            返回结果.加入成员 (描述.取值 (文本型))
+        }
+        返回 (返回结果)
+    }
+
+    方法 置语音库 <公开 折叠>
+    参数 语音库名称 <类型 = 文本型>
+    {
+        变量 库列表 <类型 = COM对象类>
+        变量 库数量 <类型 = 整数>
+        库列表 = tts.读无参数对象型属性 ("GetVoices", COM对象类)
+        库数量 = 库列表.读无参数属性 ("Count", 整数)
+        计次循环 (库数量)
+        {
+            变量 库 <类型 = COM对象类>
+            变量 描述 <类型 = COM变体型>
+            库 = 库列表.读对象型属性 ("Item", COM对象类, 取循环索引 ())
+            描述 = 库.读无参数属性 ("GetDescription", COM变体型)
+            如果真 (描述.取值 (文本型) == 语音库名称)
+            {
+                tts.写属性 ("Voice", 库)
+            }
+        }
+    }
+
+    方法 输出到WAV <公开 注释 = "将文本内容转成语音文件" 折叠>
+    参数 待转内容 <类型 = 文本型>
+    参数 保存路径 <类型 = 文本型 注释 = "默认为桌面路径，名为“语音.wav”" @默认值 = "">
+    参数 语速 <类型 = 整数 注释 = "-10~10" @默认值 = 1>
+    参数 音量 <类型 = 整数 @默认值 = 100>
+    参数 频率 <类型 = 整数 注释 = "SAFT8kHz8BitMono = 4" 注释 = "SAFT8kHz8BitStereo = 5" 注释 = "SAFT8kHz16BitMono = 6"
+            注释 = "SAFT8kHz16BitStereo = 7" 注释 = "SAFT11kHz8BitMono = 8" 注释 = "SAFT11kHz8BitStereo = 9" 注释 = "SAFT11kHz16BitMono = 10"
+            注释 = "SAFT11kHz16BitStereo = 11" 注释 = "SAFT12kHz8BitMono = 12" 注释 = "SAFT12kHz8BitStereo = 13"
+            注释 = "SAFT12kHz16BitMono = 14" 注释 = "SAFT12kHz16BitStereo = 15" 注释 = "SAFT16kHz8BitMono = 16"
+            注释 = "SAFT16kHz8BitStereo = 17" 注释 = "SAFT16kHz16BitMono = 18" 注释 = "SAFT16kHz16BitStereo = 19"
+            注释 = "SAFT22kHz8BitMono = 20" 注释 = "SAFT22kHz8BitStereo = 21" 注释 = "SAFT22kHz16BitMono = 22"
+            注释 = "SAFT22kHz16BitStereo = 23" 注释 = "SAFT24kHz8BitMono = 24" 注释 = "SAFT24kHz8BitStereo = 25"
+            注释 = "SAFT24kHz16BitMono = 26" 注释 = "SAFT24kHz16BitStereo = 27" 注释 = "SAFT32kHz8BitMono = 28"
+            注释 = "SAFT32kHz8BitStereo = 29" 注释 = "SAFT32kHz16BitMono = 30" 注释 = "SAFT32kHz16BitStereo = 31"
+            注释 = "SAFT44kHz8BitMono = 32" 注释 = "SAFT44kHz8BitStereo = 33" 注释 = "SAFT44kHz16BitMono = 34"
+            注释 = "SAFT44kHz16BitStereo = 35" 注释 = "SAFT48kHz8BitMono = 36" 注释 = "SAFT48kHz8BitStereo = 37"
+            注释 = "SAFT48kHz16BitMono = 38" 注释 = "SAFT48kHz16BitStereo = 39" 注释 = "" 折叠2 @默认值 = 20>
+    {
+        变量 语音 <类型 = COM对象类>
+        变量 文件流 <类型 = COM对象类>
+        变量 音频 <类型 = COM对象类>
+        保存路径 = 选择 (保存路径 == "", 系统_取桌面路径 () + "语音.wav", 保存路径)
+        语音.创建 ("SAPI.SpVoice")
+        语音.写属性 ("Rate", 选择 (语速 < -10 || 语速 > 10, 1, 语速))
+        语音.写属性 ("Volume", 选择 (音量 > 100 || 音量 < 0, 100, 音量))
+        文件流.创建 ("SAPI.SpFileStream")
+        音频.创建 ("SAPI.SpAudioFormat")
+        音频.写属性 ("Type", 频率)
+        文件流.写属性 ("Format", 音频)
+        文件流.无返回值方法 ("Open", 保存路径, 3, 假)
+        语音.写属性 ("AudioOutputStream", 文件流)
+        语音.无返回值方法 ("Speak", 待转内容, 1)
+        语音.无返回值方法 ("WaitUntilDone", -1)
+        文件流.无参数及返回值方法 ("Close")
+        语音.清除 ()
+        文件流.清除 ()
+        音频.清除 ()
+    }
+
+    方法 线程类_线程运行 <接收事件 类型 = 整数 折叠>
+    参数 来源对象 <类型 = 线程类>
+    参数 标记值 <类型 = 整数>
+    {
+        机读文本_ (播放内容)
+        返回 (0)
+    }
+}

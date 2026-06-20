@@ -1,0 +1,443 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.程序 <注释 = "模块魔改于 https://bbs.125.la/forum.php?mod=viewthread&tid=14694299&extra=page%3D1 k大的模块"
+        @文档 = "category = \"开源库.ZipUtils\"" @视窗.外部头文件 = "ZipUtils\\ZipUtilsTool.h"
+        @视窗.外部库.win32 = "ZipUtils\\ZipUtilsToolx86.lib" @视窗.附属文件.win32 = "ZipUtils\\ZipUtilsToolx86.dll"
+        @视窗.外部库.x64 = "ZipUtils\\ZipUtilsToolx64.lib" @视窗.附属文件.x64 = "ZipUtils\\ZipUtilsToolx64.dll">
+
+类 ZIP项目信息类F <公开 折叠 @文档 = "category = \"辅助类\"">
+{
+
+    # @begin
+    # <> <include>
+    #
+    # void SetData(void* pData)
+    # {
+    #     m_data = pData;
+    # }
+    # void* GetData()
+    # {
+    #     return m_data;
+    # }
+    # void* m_data;
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化
+    {
+        @ SetData(ZipUtils_ZIPENTRY_New());
+    }
+
+    方法 类_清理
+    {
+        @ ZipUtils_ZIPENTRY_Delete(GetData());
+    }
+
+    方法 取索引 <公开 类型 = 整数 注释 = "此文件在 zip 中的索引" @嵌入式方法 = "">
+    {
+        @ ZipUtils_ZIPENTRY_GetIndex(@sn<this>.GetData())
+    }
+
+    方法 取名称 <公开 类型 = 文本型 注释 = "zip 中的文件名" @嵌入式方法 = "">
+    {
+        @ CVolString(ZipUtils_ZIPENTRY_GetFileName(@sn<this>.GetData()))
+    }
+
+    方法 取文件属性 <公开 类型 = 整数 注释 = "就像在 GetFileAttributes 中一样。" @嵌入式方法 = "">
+    {
+        @ ZipUtils_ZIPENTRY_GetAttributes(@sn<this>.GetData())
+    }
+
+    方法 取访问时间 <公开 类型 = 小数 折叠 @禁止流程检查 = 真>
+    {
+        @ FILETIME atime;
+        @ ZipUtils_GetAccessTime(GetData(),&atime,dwLowDateTime,&atime,dwHighDateTime);
+        @ SYSTEMTIME sysTime;
+        @ FILETIME localTime;
+        @ double varTime;
+
+        @ FileTimeToLocalFileTime(&atime, &localTime);
+        @ FileTimeToSystemTime(&localTime, &sysTime);
+        @ SystemTimeToVariantTime(&sysTime, &varTime);
+
+        @ return varTime;
+    }
+
+    方法 取创建时间 <公开 类型 = 小数 折叠 @禁止流程检查 = 真>
+    {
+        @ FILETIME ctime;
+        @ ZipUtils_GetCreateTime(GetData(),&ctime,dwLowDateTime,&ctime,dwHighDateTime);
+
+        @ SYSTEMTIME sysTime;
+        @ FILETIME localTime;
+        @ double varTime;
+
+        @ FileTimeToLocalFileTime(&ctime, &localTime);
+        @ FileTimeToSystemTime(&localTime, &sysTime);
+        @ SystemTimeToVariantTime(&sysTime, &varTime);
+
+        @ return varTime;
+
+    }
+
+    方法 取修改时间 <公开 类型 = 小数 折叠 @禁止流程检查 = 真>
+    {
+        @ FILETIME mtime;
+        @ ZipUtils_GetModifyTime(GetData(),&mtime,dwLowDateTime,&mtime,dwHighDateTime);
+
+
+        @ SYSTEMTIME sysTime;
+        @ FILETIME localTime;
+        @ double varTime;
+
+        @ FileTimeToLocalFileTime(&mtime, &localTime);
+        @ FileTimeToSystemTime(&localTime, &sysTime);
+        @ SystemTimeToVariantTime(&sysTime, &varTime);
+
+        @ return varTime;
+
+    }
+
+    方法 取压缩大小 <公开 类型 = 整数 注释 = "如果尚不知道，这些可能是 -1（例如，正在流式传输）" @嵌入式方法 = "">
+    {
+        @ ZipUtils_GetCompressedSize(@sn<this>.GetData())
+    }
+
+    方法 取解压大小 <公开 类型 = 整数 注释 = "如果尚不知道，这些可能是 -1（例如，正在流式传输）" @嵌入式方法 = "">
+    {
+        @ ZipUtils_GetUnCompressedSize(@sn<this>.GetData())
+    }
+
+    #
+    #
+}
+
+类 ZIP返回值_常量类 <公开 @文档 = "category = \"辅助类\"">
+{
+    常量 成功 <公开 类型 = 整数 值 = @ZipUtils_ZR_OK 注释 = "0x00000000">
+    常量 最近 <公开 类型 = 整数 值 = @ZipUtils_ZR_RECENT 注释 = "0x00000001 永远不会返回的伪错误代码">
+    常量 生成掩码 <公开 类型 = 整数 值 = @ZipUtils_ZR_GENMASK 注释 = "0x0000FF00">
+    常量 无法复制 <公开 类型 = 整数 值 = @ZipUtils_ZR_NODUPH 注释 = "0x00000100 无法复制句柄">
+    常量 无文件 <公开 类型 = 整数 值 = @ZipUtils_ZR_NOFILE 注释 = "0x00000200 无法 创建/打开 文件">
+    常量 无法分配 <公开 类型 = 整数 值 = @ZipUtils_ZR_NOALLOC 注释 = "0x00000300 未能分配一些资源">
+    常量 写入 <公开 类型 = 整数 值 = @ZipUtils_ZR_WRITE 注释 = "0x00000400 写入文件的一般错误">
+    常量 未找到 <公开 类型 = 整数 值 = @ZipUtils_ZR_NOTFOUND 注释 = "0x00000500 在 zip 中找不到该文件">
+    常量 更多 <公开 类型 = 整数 值 = @ZipUtils_ZR_MORE 注释 = "0x00000600 还有更多数据需要解压">
+    常量 读取 <公开 类型 = 整数 值 = @ZipUtils_ZR_READ 注释 = "0x00000800 读取文件的一般错误">
+    常量 密码 <公开 类型 = 整数 值 = @ZipUtils_ZR_PASSWORD 注释 = "0x00001000 我们没有得到正确的密码来解压文件">
+    常量 调用掩码 <公开 类型 = 整数 值 = @ZipUtils_ZR_CALLERMASK 注释 = "0x00FF0000">
+    常量 参数 <公开 类型 = 整数 值 = @ZipUtils_ZR_ARGS 注释 = "0x00010000 参数的一般错误">
+    常量 非映射文件 <公开 类型 = 整数 值 = @ZipUtils_ZR_NOTMMAP 注释 = "0x00020000 尝试使用 ZipGetMemory，但这仅适用于 mmap zipfile，而您的则不是">
+    常量 内存大小 <公开 类型 = 整数 值 = @ZipUtils_ZR_MEMSIZE 注释 = "0x00030000 内存太小">
+    常量 失败 <公开 类型 = 整数 值 = @ZipUtils_ZR_FAILED 注释 = "0x00040000 当你调用这个函数时，事情已经失败了">
+    常量 关闭 <公开 类型 = 整数 值 = @ZipUtils_ZR_ENDED 注释 = "0x00050000 zip创建已关闭">
+    常量 错误大小 <公开 类型 = 整数 值 = @ZipUtils_ZR_MISSIZE 注释 = "0x00060000 指示的输入文件大小结果是错误的">
+    常量 部分解压 <公开 类型 = 整数 值 = @ZipUtils_ZR_PARTIALUNZ 注释 = "0x00070000 该文件已经部分解压">
+    常量 模式 <公开 类型 = 整数 值 = @ZipUtils_ZR_ZMODE 注释 = "0x00080000 尝试混合 创建/打开 zip">
+    常量 BUG掩码 <公开 类型 = 整数 值 = @ZipUtils_ZR_BUGMASK 注释 = "0xFF000000">
+    常量 无法初始化 <公开 类型 = 整数 值 = @ZipUtils_ZR_NOTINITED 注释 = "0x01000000 初始化不起作用">
+    常量 寻找 <公开 类型 = 整数 值 = @ZipUtils_ZR_SEEK 注释 = "0x02000000 试图在一个不可搜索的文件中寻找">
+    常量 不能改变 <公开 类型 = 整数 值 = @ZipUtils_ZR_NOCHANGE 注释 = "0x04000000 在存储上改变了主意，但不允许">
+    常量 内部 <公开 类型 = 整数 值 = @ZipUtils_ZR_FLATE 注释 = "0x05000000 de/inflation 代码中的内部错误">
+
+    #
+}
+
+类 ZIP压缩类F <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const
+    # {
+    #     return m_data == objCompare.m_data;
+    # }
+    # void @an<_OnInitExtra> ()
+    # {
+    #     m_data = NULL;
+    # }
+    # void @an<_OnCleanupExtra> ()
+    # {
+    #     if(m_data) {
+    #       ZipUtils_CloseZip(m_data);
+    #       m_data = NULL;
+    #     }
+    # }
+    #
+    # void* m_data;
+    # <> </include>
+    # @end
+
+    方法 创建自文件 <公开 类型 = 逻辑型 注释 = "创建一个压缩包自一个文件名" 返回值注释 = "ZIP返回值 中的常量" @禁止流程检查 = 真>
+    参数 参数_文件名 <类型 = 文本型 注释 = "压缩包文件名。">
+    参数 参数_密码 <类型 = 文本型 注释 = "压缩包密码" @默认值 = 空对象>
+    {
+        @ if(m_data) {
+        @     ZipUtils_CloseZip(m_data);
+        @     m_data = NULL;
+        @ }
+        @ @an<CVolMem> memBuf;
+        @ INT_P npResultTextLength;
+        @ const CHAR* ps = GetMbsText (@<参数_密码>.GetText (), memBuf, &npResultTextLength);
+        @ m_data = ZipUtils_CreateZipFile(@<参数_文件名>.GetText(), ps);
+        @ return m_data != NULL;
+    }
+
+    方法 创建自内存 <公开 类型 = 逻辑型 注释 = "zip 不能超过 <参数_内存大小> 字节数" 返回值注释 = "ZIP返回值 中的常量" @禁止流程检查 = 真>
+    参数 参数_缓冲区地址 <类型 = 变整数 注释 = "如果为 0 则在页面文件中创建。">
+    参数 参数_内存大小 <类型 = 整数>
+    参数 参数_密码 <类型 = 文本型 注释 = "压缩包密码" @默认值 = 空对象>
+    {
+        @ if(m_data) {
+        @     ZipUtils_CloseZip(m_data);
+        @     m_data = NULL;
+        @ }
+        @ @an<CVolMem> memBuf;
+        @ INT_P npResultTextLength;
+        @ const CHAR* ps = GetMbsText (@<参数_密码>.GetText (), memBuf, &npResultTextLength);
+        @ m_data = ZipUtils_CreateZipMemory((void *)@<参数_缓冲区地址>, (unsigned int)@<参数_内存大小>, ps);
+        @ return m_data != NULL;
+
+    }
+
+    方法 创建自句柄 <公开 类型 = 逻辑型 注释 = "创建一个压缩包自文件句柄(hFile)或管道句柄(hPipe)" 返回值注释 = "ZIP返回值 中的常量" @禁止流程检查 = 真>
+    参数 参数_句柄 <类型 = 变整数 注释 = "文件句柄或管道句柄。">
+    参数 参数_密码 <类型 = 文本型 注释 = "压缩包密码" @默认值 = 空对象>
+    {
+        @ if(m_data) {
+        @     ZipUtils_CloseZip(m_data);
+        @     m_data = NULL;
+        @ }
+        @ @an<CVolMem> memBuf;
+        @ INT_P npResultTextLength;
+        @ const CHAR* ps = GetMbsText (@<参数_密码>.GetText (), memBuf, &npResultTextLength);
+        @ m_data = ZipUtils_CreateZipHandle((HANDLE)@<参数_句柄>, ps);
+        @ return m_data != NULL;
+    }
+
+    方法 添加文件 <公开 类型 = 整数 注释 = "向压缩包添加项目" 返回值注释 = "ZIP返回值 中的常量" @禁止流程检查 = 真>
+    参数 参数_名称 <类型 = 文本型 注释 = "压缩包内的项目名。">
+    参数 参数_文件名 <类型 = 文本型 注释 = "要添加到压缩包的本地文件路径">
+    {
+        @ return ZipUtils_ZipAddFile(m_data, @<参数_名称>.GetText(), @<参数_文件名>.GetText());
+    }
+
+    方法 添加字节集 <公开 类型 = 整数 注释 = "向压缩包添加项目" 返回值注释 = "ZIP返回值 中的常量" @禁止流程检查 = 真>
+    参数 参数_名称 <类型 = 文本型 注释 = "压缩包内的项目名。">
+    参数 参数_字节集 <类型 = 字节集类 注释 = "要添加到压缩包的字节集数据">
+    {
+        @ void *src = (void*)@<参数_字节集>.GetPtr();
+        @ unsigned int len = (unsigned int)@<参数_字节集>.GetSize();
+        @ return ZipUtils_ZipAddMemory(m_data, @<参数_名称>.GetText(), src, len);
+
+
+    }
+
+    方法 添加句柄 <公开 类型 = 整数 注释 = "向压缩包添加项目" 返回值注释 = "ZIP返回值 中的常量" @禁止流程检查 = 真>
+    参数 参数_名称 <类型 = 文本型 注释 = "压缩包内的项目名。">
+    参数 参数_句柄 <类型 = 变整数 注释 = "文件句柄或管道句柄。">
+    {
+        @ return ZipUtils_ZipAddHandle(m_data, @<参数_名称>.GetText(), (HANDLE)@<参数_句柄>);
+
+
+    }
+
+    方法 添加句柄2 <公开 类型 = 整数 注释 = "向压缩包添加项目" 返回值注释 = "ZIP返回值 中的常量" @禁止流程检查 = 真>
+    参数 参数_名称 <类型 = 文本型 注释 = "压缩包内的项目名。">
+    参数 参数_句柄 <类型 = 变整数 注释 = "文件句柄或管道句柄。">
+    参数 参数_长度 <类型 = 整数>
+    {
+        @ return ZipUtils_ZipAddHandleLen(m_data, @<参数_名称>.GetText(), (HANDLE)@<参数_句柄>, (unsigned int)@<参数_长度>);
+
+
+    }
+
+    方法 添加目录 <公开 类型 = 整数 注释 = "向压缩包添加一个空目录" 返回值注释 = "ZIP返回值 中的常量" @禁止流程检查 = 真>
+    参数 参数_目录 <类型 = 文本型 注释 = "压缩包中的目录名">
+    {
+        @ return ZipUtils_ZipAddFolder(m_data, @<参数_目录>.GetText());
+
+
+    }
+
+    方法 取字节集 <公开 类型 = 字节集类 @禁止流程检查 = 真>
+    {
+        @ void* pData = NULL;
+        @ int nLen = 0;
+        @ ZipUtils_ZipGetMemory(m_data,&pData,&nLen)
+        @ if(pData)
+        @    return CVolMem(pData,nLen);
+        @ return CVolMem();
+    }
+
+    方法 关闭 <公开 类型 = 整数 注释 = "类_清理 时会自动关闭" 返回值注释 = "ZIP返回值 中的常量" @禁止流程检查 = 真>
+    {
+        @ int ret = 0;
+        @ if(m_data) {
+        @     ret = ZipUtils_CloseZip(m_data);
+        @     m_data = NULL;
+        @ }
+        @ return ret;
+
+    }
+
+    方法 取错误信息 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    参数 错误代码 <类型 = 整数>
+    {
+        @ TCHAR Buffer[256] = {0};
+        @ ZipUtils_FormatZipMessage(m_data,Buffer,256);
+        @ return Buffer;
+    }
+}
+
+类 ZIP解压类F <公开>
+{
+
+    # @begin
+    # <> <include>
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const
+    # {
+    #     return m_data == objCompare.m_data;
+    # }
+    # void @an<_OnInitExtra> ()
+    # {
+    #     m_data = NULL;
+    # }
+    # void @an<_OnCleanupExtra> ()
+    # {
+    #     if(m_data) {
+    #       ZipUtils_CloseZip(m_data);
+    #       m_data = NULL;
+    #     }
+    # }
+    #
+    # void* m_data;
+    # <> </include>
+    # @end
+
+    方法 打开自文件 <公开 类型 = 逻辑型 注释 = "打开压缩包自一个文件名。" @禁止流程检查 = 真>
+    参数 参数_文件名 <类型 = 文本型 注释 = "压缩包文件名">
+    参数 参数_密码 <类型 = 文本型 注释 = "压缩包密码" @默认值 = 空对象>
+    {
+        @ if(m_data) {
+        @     ZipUtils_CloseZip(m_data);
+        @     m_data = NULL;
+        @ }
+        @ @an<CVolMem> memBuf;
+        @ INT_P npResultTextLength;
+        @ const CHAR* ps = GetMbsText (@<参数_密码>.GetText (), memBuf, &npResultTextLength);
+        @ m_data = ZipUtils_OpenZipFile(@<参数_文件名>.GetText(), ps);
+        @ return m_data != NULL;
+    }
+
+    方法 打开自字节集 <公开 类型 = 逻辑型 注释 = "打开压缩包自字节集, 注意 <参数_字节集数据> 的生命周期如果结束了, 此类的方法也不能用了" @禁止流程检查 = 真>
+    参数 参数_字节集数据 <类型 = 字节集类 注释 = "压缩包字节集数据。">
+    参数 参数_密码 <类型 = 文本型 注释 = "压缩包密码" @默认值 = 空对象>
+    {
+        @ if(m_data) {
+        @     ZipUtils_CloseZip(m_data);
+        @     m_data = NULL;
+        @ }
+        @ void* buf = @<参数_字节集数据>.GetPtr();
+        @ @an<CVolMem> memBuf;
+        @ INT_P npResultTextLength;
+        @ const CHAR* ps = GetMbsText (@<参数_密码>.GetText (), memBuf, &npResultTextLength);
+        @ m_data = ZipUtils_OpenZipMemory(buf, (unsigned int)@<参数_字节集数据>.GetSize(), ps);
+        @ return m_data != NULL;
+
+    }
+
+    方法 打开自句柄 <公开 类型 = 逻辑型 注释 = "打开压缩包自一个文件句柄(hFile) 或 管道句柄(hPipe)。" @禁止流程检查 = 真>
+    参数 参数_句柄 <类型 = 变整数 注释 = "文件句柄或管道句柄。">
+    参数 参数_密码 <类型 = 文本型 注释 = "压缩包密码" @默认值 = 空对象>
+    {
+        @ if(m_data) {
+        @     ZipUtils_CloseZip(m_data);
+        @     m_data = NULL;
+        @ }
+        @ @an<CVolMem> memBuf;
+        @ INT_P npResultTextLength;
+        @ const CHAR* ps = GetMbsText (@<参数_密码>.GetText (), memBuf, &npResultTextLength);
+        @ m_data = ZipUtils_OpenZipHandle((HANDLE)@<参数_句柄>, ps);
+        @ return m_data != NULL;
+    }
+
+    方法 取项目数 <公开 类型 = 整数 注释 = "获取压缩包内的项目总数" 返回值注释 = "项目总数" @嵌入式方法 = "">
+    {
+        @ ZipUtils_GetZipItemCount(@sn<this>.m_data)
+    }
+
+    方法 取项目信息 <公开 类型 = 整数 注释 = "获取压缩包内的项目信息。" 返回值注释 = "ZIP返回值 中的常量" @嵌入式方法 = "">
+    参数 参数_索引 <类型 = 整数 注释 = "压缩包项目索引, 索引从0开始。">
+    参数 参数_项目 <类型 = ZIP项目信息类F 注释 = "返回的项目信息">
+    {
+        @ ZipUtils_GetZipItem(@sn<this>.m_data, @<参数_索引>, @<参数_项目>.m_data)
+
+    }
+
+    方法 寻找项目 <公开 类型 = 整数 注释 = "根据项目名寻找指定项目。" 返回值注释 = "ZIP返回值 中的常量" @嵌入式方法 = "">
+    参数 参数_名称 <类型 = 文本型 注释 = "要寻找的项目名。">
+    参数 参数_项目 <类型 = ZIP项目信息类F 注释 = "返回的项目信息">
+    参数 参数_忽略大小写 <类型 = 逻辑型 注释 = "寻找匹配时是否不区分大小写。" @默认值 = 假>
+    {
+        @ ZipUtils_FindZipItemEx(@sn<this>.m_data, @<参数_名称>.GetText(), @<参数_忽略大小写>,@<参数_项目>.m_data)
+
+    }
+
+    方法 解压项目到文件 <公开 类型 = 整数 注释 = "解压指定索引项目" 返回值注释 = "ZIP返回值 中的常量" @嵌入式方法 = "">
+    参数 参数_索引 <类型 = 整数 注释 = "索引从0开始。">
+    参数 参数_文件名 <类型 = 文本型 注释 = "解压后文件名。">
+    {
+        @ ZipUtils_UnzipItemFile(@sn<this>.m_data,@<参数_索引>, @<参数_文件名>.GetText())
+    }
+
+    方法 解压项目到字节集 <公开 类型 = 整数 注释 = "解压指定项目到字节集" 返回值注释 = "ZIP返回值 中的常量" 折叠 @禁止流程检查 = 真>
+    参数 参数_索引 <类型 = 整数 注释 = "索引从0开始。">
+    参数 输出_返回值 <类型 = 字节集类 注释 = "解压到此字节集。">
+    {
+        变量 项目信息 <类型 = ZIP项目信息类F>
+        变量 错误代码 <类型 = 整数>
+        变量 解压后的大小 <类型 = 整数>
+        错误代码 = 取项目信息 (参数_索引, 项目信息)
+        如果 (错误代码 != 0)
+        {
+            返回 (错误代码)
+        }
+        解压后的大小 = 项目信息.取解压大小 ()
+        输出_返回值.分配字节集 (解压后的大小, 真)
+        @ return ZipUtils_UnzipItemMemory(m_data,@<参数_索引>, (void*)@<输出_返回值>.GetPtr(), (unsigned int)@<解压后的大小>);
+    }
+
+    方法 解压项目到句柄 <公开 类型 = 整数 注释 = "解压指定项目到文件句柄或管道句柄" 返回值注释 = "ZIP返回值 中的常量" @嵌入式方法 = "">
+    参数 参数_索引 <类型 = 整数 注释 = "索引从0开始。">
+    参数 参数_句柄 <类型 = 变整数 注释 = "文件句柄或管道句柄。">
+    {
+        @ ZipUtils_UnzipItemHandle(@sn<this>.m_data, @<参数_索引>, (HANDLE)@<参数_句柄>)
+    }
+
+    方法 置解压根目录 <公开 类型 = 整数 注释 = "设置解压项目的根目录" 返回值注释 = "ZIP返回值 中的常量" @嵌入式方法 = "">
+    参数 参数_目录 <类型 = 文本型 注释 = "解压的文件名相对于此目录。">
+    {
+        @  ZipUtils_SetUnzipBaseDir(@sn<this>.m_data,@<参数_目录>.GetText());
+    }
+
+    方法 关闭 <公开 类型 = 整数 注释 = "类_清理 时会自动关闭" 返回值注释 = "ZIP返回值 中的常量" 折叠 @禁止流程检查 = 真>
+    {
+        @ ZRESULT ret = ZR_OK;
+        @ if(m_data) {
+        @     ret = ZipUtils_CloseZip(m_data);
+        @     m_data = NULL;
+        @ }
+        @ return ret;
+
+    }
+
+    方法 取错误信息 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 错误代码 <类型 = 整数>
+    {
+        @ TCHAR Buffer[256] = {0};
+        @ ZipUtils_FormatZipMessage(m_data,Buffer,256);
+        @ return Buffer;
+    }
+}

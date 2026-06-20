@@ -1,0 +1,71 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 FBrowser.辅助 <注释 = "浏览器辅助合集">
+
+类 类_FBrowser_设置资源处理器 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefResourceHandler> m_resourcehandler=nullptr;
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 设置 <公开 类型 = 长整数 注释 = "注意：静态事件和动态事件只能设置一个，优先静态事件有效；采用动态事件可实现事件的动态多态操作，更加灵活；" @禁止流程检查 = 真>
+    参数 资源处理器回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowser_资源处理器”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<资源处理器回调>.GetPtr(),ResourceHandlerType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsResourceHandler> tempclass=static_cast<FBroHsResourceHandler*>(@<资源处理器回调>.GetPtr());
+        @ m_resourcehandler = FBroHsResourceHandler_Create(tempclass);
+        @ return (INT64)((HANDLE)m_resourcehandler.get());
+    }
+}
+
+类 类_FBrowser_设置资源过滤器 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefResponseFilter> m_responsefilter=nullptr;
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 设置 <公开 类型 = 长整数 注释 = "注意：静态事件和动态事件只能设置一个，优先静态事件有效；采用动态事件可实现事件的动态多态操作，更加灵活；" 返回值注释 = "返回创建的事件的标识，和事件中的第一个参数\"标识ID\"对应"
+            @禁止流程检查 = 真>
+    参数 资源过滤器回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowser_资源过滤器”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<资源过滤器回调>.GetPtr(),ResponseFilterType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsResponseFilter> tempclass = static_cast<FBroHsResponseFilter*>(@<资源过滤器回调>.GetPtr());
+        @ m_responsefilter = FBroHsResponseFilter_Create(tempclass);
+        @ return (INT64)((HANDLE)m_responsefilter.get());
+    }
+}
+
+类 类_FBrowser_设置V8值 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefV8Value> m_class=nullptr;
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 设置 <公开 @禁止流程检查 = 真>
+    参数 V8值 <类型 = 类_FBrowser_V8值>
+    {
+        @ m_class=@<V8值>.m_class;
+
+
+    }
+}

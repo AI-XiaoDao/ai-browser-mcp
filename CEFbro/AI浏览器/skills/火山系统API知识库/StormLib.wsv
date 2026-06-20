@@ -1,0 +1,179 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.暴雪MPQ编辑\"" @视窗.外部头文件 = "StormLib\\StormLibTool.h"
+        @视窗.外部库.win32 = "StormLib\\StormLibToolx86.lib" @视窗.附属文件.win32 = "StormLib\\StormLibToolx86.dll"
+        @视窗.外部库.x64 = "StormLib\\StormLibToolx64.lib" @视窗.附属文件.x64 = "StormLib\\StormLibToolx64.dll">
+
+类 暴雪MPQ常量类 <公开 注释 = "// nCreateFlag 可选值"
+        注释 = "// 例如 MPQ_CREATE_LISTFILE | MPQ_CREATE_ATTRIBUTES | MPQ_CREATE_SIGNATURE | MPQ_CREATE_ARCHIVE_V1;"
+        注释 = "//#define MPQ_CREATE_LISTFILE         0x00100000  // Also add the (listfile) file"
+        注释 = "//#define MPQ_CREATE_ATTRIBUTES       0x00200000  // Also add the (attributes) file"
+        注释 = "//#define MPQ_CREATE_SIGNATURE        0x00400000  // Also add the (signature) file" 注释 = "//"
+        注释 = "//#define MPQ_CREATE_ARCHIVE_V1       0x00000000  // Creates archive of version 1 (size up to 4GB)"
+        注释 = "//#define MPQ_CREATE_ARCHIVE_V2       0x01000000  // Creates archive of version 2 (larger than 4 GB)"
+        注释 = "//#define MPQ_CREATE_ARCHIVE_V3       0x02000000  // Creates archive of version 3"
+        注释 = "//#define MPQ_CREATE_ARCHIVE_V4       0x03000000  // Creates archive of version 4" @全局类 = 真>
+{
+    常量 MPQ_CREATE_LISTFILE <公开 类型 = 整数 值 = 0x00100000>
+    常量 MPQ_CREATE_ATTRIBUTES <公开 类型 = 整数 值 = 0x00200000>
+    常量 MPQ_CREATE_SIGNATURE <公开 类型 = 整数 值 = 0x00400000>
+    常量 MPQ_CREATE_ARCHIVE_V1 <公开 类型 = 整数 值 = 0x00000000>
+    常量 MPQ_CREATE_ARCHIVE_V2 <公开 类型 = 整数 值 = 0x01000000>
+    常量 MPQ_CREATE_ARCHIVE_V3 <公开 类型 = 整数 值 = 0x02000000>
+    常量 MPQ_CREATE_ARCHIVE_V4 <公开 类型 = 整数 值 = 0x03000000>
+
+    #
+}
+
+类 暴雪MPQ类 <公开 注释 = "作用，可以自己添加很多文件到资源包里面，用到的时候直接读取">
+{
+
+    # @begin
+    # <> <include>
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     StormLibTool_CopyConstruct(m_pData,objCopyFrom.m_pData);
+    # }
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void * pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ SetData( StormLibTool_new());
+    }
+
+    方法 类_清理
+    {
+        @ StormLibTool_delete(GetData());
+    }
+
+    方法 打开 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 资源包文件 <类型 = 文本型>
+    参数 创建标志 <类型 = 整数 注释 = "// nCreateFlag 可选值"
+            注释 = "// 例如 MPQ_CREATE_LISTFILE | MPQ_CREATE_ATTRIBUTES | MPQ_CREATE_SIGNATURE | MPQ_CREATE_ARCHIVE_V1;"
+            注释 = "//#define MPQ_CREATE_LISTFILE         0x00100000  // Also add the (listfile) file"
+            注释 = "//#define MPQ_CREATE_ATTRIBUTES       0x00200000  // Also add the (attributes) file"
+            注释 = "//#define MPQ_CREATE_SIGNATURE        0x00400000  // Also add the (signature) file" 注释 = "//"
+            注释 = "//#define MPQ_CREATE_ARCHIVE_V1       0x00000000  // Creates archive of version 1 (size up to 4GB)"
+            注释 = "//#define MPQ_CREATE_ARCHIVE_V2       0x01000000  // Creates archive of version 2 (larger than 4 GB)"
+            注释 = "//#define MPQ_CREATE_ARCHIVE_V3       0x02000000  // Creates archive of version 3"
+            注释 = "//#define MPQ_CREATE_ARCHIVE_V4       0x03000000  // Creates archive of version 4" 注释 = "//" @默认值 = -1>
+    参数 最大存储文件数量 <类型 = 整数 @默认值 = 1000000>
+    {
+        @ StormLibTool_Open(@sn<this>.GetData(),@<资源包文件>,@<创建标志>,@<最大存储文件数量>)
+    }
+
+    方法 关闭 <公开 @嵌入式方法 = "">
+    {
+        @ StormLibTool_Close(@sn<this>.GetData())
+    }
+
+    方法 强制保存 <公开 @嵌入式方法 = "">
+    {
+        @ StormLibTool_Flush(@sn<this>.GetData())
+    }
+
+    #
+
+    方法 是否存在 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 资源文件名称 <类型 = 文本型>
+    {
+        变量 name <类型 = 字节集类>
+        name = 文本到多字节 (资源文件名称)
+        @ return StormLibTool_IsFileExist(GetData(),(const char *)@<name>.GetPtr());
+    }
+
+    #
+
+    方法 重命名 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 原名称 <类型 = 文本型>
+    参数 新名称 <类型 = 文本型>
+    {
+        变量 old <类型 = 字节集类>
+        变量 new <类型 = 字节集类>
+        old = 文本到多字节 (原名称)
+        new = 文本到多字节 (新名称)
+        @ return StormLibTool_RenameFile(GetData(),(const char *)@<old>.GetPtr(),(const char *)@<new>.GetPtr());
+    }
+
+    方法 删除文件 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 资源文件名称 <类型 = 文本型>
+    {
+        变量 name <类型 = 字节集类>
+        name = 文本到多字节 (资源文件名称)
+        @ return StormLibTool_RemoveFile(GetData(),@<name>.GetPtr());
+    }
+
+    方法 添加内存文件 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 要添加的资源名称 <类型 = 文本型>
+    参数 要添加的资源数据 <类型 = 字节集类>
+    {
+        变量 name <类型 = 字节集类>
+        name = 文本到多字节 (要添加的资源名称)
+
+        @ return StormLibTool_AddMemFile(GetData(),(const char *)@<name>.GetPtr(),(const char*)@<要添加的资源数据>.GetPtr(),(INT)@<要添加的资源数据>.GetSize());
+    }
+
+    #
+
+    方法 添加本地文件 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 本地文件路径 <类型 = 文本型>
+    参数 资源文件名称 <类型 = 文本型>
+    {
+        变量 name <类型 = 字节集类>
+        name = 文本到多字节 (资源文件名称)
+        @ return StormLibTool_AddFile(GetData(),(const wchar_t*)@<本地文件路径>,(const char*)@<name>.GetPtr());
+    }
+
+    方法 释放文件到本地 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 要释放的资源文件名称 <类型 = 文本型>
+    参数 本地文件路径 <类型 = 文本型>
+    {
+        变量 name <类型 = 字节集类>
+        name = 文本到多字节 (要释放的资源文件名称)
+        @ return StormLibTool_ExtraFile(GetData(),(const char *)@<name>.GetPtr(),(const wchar_t*)@<本地文件路径>);
+    }
+
+    方法 读文件到内存 <公开 类型 = 字节集类 @禁止流程检查 = 真>
+    参数 资源文件名称 <类型 = 文本型>
+    {
+        变量 name <类型 = 字节集类>
+        name = 文本到多字节 (资源文件名称)
+        @ void* pData = NULL;
+        @ int nDataSize = 0;
+        @ StormLibTool_ReadFileToMem(GetData(),(const char *)@<name>.GetPtr(),&pData,&nDataSize);
+        @ CVolMem mem((const char*)pData,nDataSize);
+        @ 
+        @ StormLibTool_FreeMem(pData);
+        @ return mem;
+    }
+
+    方法 _取文件列表 <类型 = 字节集类 @禁止流程检查 = 真>
+    {
+        @ void* pData = NULL;
+        @ int nDataSize = 0;
+        @ StormLibTool_GetFileListText(GetData(),&pData,&nDataSize);
+        @ CVolMem mem((const char*)pData,nDataSize);
+        @ StormLibTool_FreeMem(pData);
+        @ return mem;
+
+    }
+
+    方法 取文件列表 <公开 类型 = 文本型>
+    {
+        变量 文件列表数据 <类型 = 字节集类>
+        文件列表数据 = _取文件列表 ()
+        返回 (多字节到文本 (文件列表数据))
+
+
+    }
+}

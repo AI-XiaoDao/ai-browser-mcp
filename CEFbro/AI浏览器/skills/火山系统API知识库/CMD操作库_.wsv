@@ -1,0 +1,317 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <@文档 = "category = \"CMD操作库\"">
+
+类 CMD代码页编码类_ <公开 折叠 折叠2 @文档 = "category = \"CMD操作库.CMD编码\"" @全局类 = 真>
+{
+    方法 置CMD编码_ <公开 静态 类型 = 逻辑型 注释 = "修改cmd的编码格式即当前活动代码页编号" 折叠>
+    参数 代码页编号 <类型 = 文本型 @默认值 = 代码页编号类.GB2312>
+    参数 是否还原默认 <类型 = 逻辑型 @默认值 = 假>
+    {
+        如果 (是否还原默认)
+        {
+            返回 (注册表删除键值_ (3, "SOFTWARE\\Microsoft\\Command Processor", "autorun", 系统_是否为64位系统 ()))
+        }
+        返回 (注册表写文本_ (3, "SOFTWARE\\Microsoft\\Command Processor", "autorun", 代码页编号, 系统_是否为64位系统 ()))
+    }
+}
+
+类 代码页编号类 <公开 折叠 @文档 = "category = \"CMD操作库.编码.附加参数\"">
+{
+    常量 GB2312 <公开 类型 = 文本型 值 = "936" 注释 = "简体中文（GB2312，也可以理解为 ANSI）">
+    常量 UTF7 <公开 类型 = 文本型 值 = "65000" 注释 = "Unicode (UTF-7)">
+    常量 UTF8 <公开 类型 = 文本型 值 = "65001" 注释 = "Unicode (UTF-8)">
+}
+
+类 CMD类_ <公开 折叠 折叠2 @文档 = "category = \"CMD操作库.CMD\"" @全局类 = 真 @视窗.外部头文件 = "cmd\\Processes.h"
+        @视窗.外部源文件 = "cmd\\Processes.cpp">
+{
+    方法 运行_ <公开 静态 类型 = 逻辑型 折叠>
+    参数 欲运行的命令行 <类型 = 文本型>
+    参数 是否等待执行完毕 <类型 = 逻辑型 @默认值 = 假>
+    参数 是否显示 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 显示方式 <类型 = 整数>
+        如果 (是否显示 == 真)
+        {
+            显示方式 = 5
+        }
+        否则
+        {
+            显示方式 = 0
+        }
+        返回 (运行命令 (欲运行的命令行, 是否等待执行完毕, 显示方式))
+    }
+
+    方法 运行命令 <静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 欲运行的命令行 <类型 = 文本型>
+    参数 是否等待执行完毕 <类型 = 逻辑型 @默认值 = 假>
+    参数 显示方式 <类型 = 整数>
+    {
+        @ RunExe(@<欲运行的命令行>,@<是否等待执行完毕>,@<显示方式>)
+    }
+}
+
+类 CMD回显类_ <公开 折叠 @文档 = "category = \"CMD操作库.CMD回显\"">
+{
+    方法 执行命令_ <公开 类型 = 逻辑型 注释 = "例如;" 注释 = "ping www.baidu.com -t" 折叠 折叠2>
+    参数 要执行的命令 <类型 = 文本型>
+    参数 是否显示 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 显示方式 <类型 = 短整数>
+        如果 (是否显示 == 真)
+        {
+            显示方式 = 5
+        }
+        否则
+        {
+            显示方式 = 0
+        }
+        如果 (取文本长度 (要执行的命令) < 1)
+        {
+            返回 (假)
+        }
+
+        @  TCHAR szCMDBuffer[4096] = {0};
+        @  lstrcpyn(szCMDBuffer,@<要执行的命令>,4096);
+        @ 
+        @  HANDLE hReadPipe = NULL;
+        @  HANDLE hWritePipe = NULL;
+        @  SECURITY_ATTRIBUTES sa;
+        @  sa.nLength = sizeof(SECURITY_ATTRIBUTES); // 结构体的大小,可用SIZEOF取得
+        @  sa.lpSecurityDescriptor = NULL;//安全描述符
+        @  sa.bInheritHandle = TRUE;; // 安全描述的对象能否被新创建??的进程继承
+        @  
+        @  // Create anoymous pipe:
+        @  if (CreatePipe(&hReadPipe, &hWritePipe, &sa, 0) == NULL)
+        @  {
+        @   //printf("Create anoymous pipe failed\n");
+        @  return FALSE;
+        @  }
+        @  
+        @  // Create Child Process:
+        @  PROCESS_INFORMATION pInfo = { 0 };
+        @  STARTUPINFO stInfo = { 0 };
+        @  stInfo.cb = sizeof(STARTUPINFO);
+        @  stInfo.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
+        @  stInfo.hStdOutput = hWritePipe;
+        @  stInfo.hStdError = hWritePipe;
+        @  stInfo.wShowWindow = (WORD)@<显示方式>;
+        @  // get 
+        @  if (!CreateProcess(NULL,szCMDBuffer, NULL, NULL, TRUE, 0, NULL, NULL, &stInfo, &pInfo))
+        @  {
+        @ //  printf("Create child process failed!\n");
+        @   CloseHandle(hWritePipe);
+        @   CloseHandle(hReadPipe);
+        @  return FALSE;
+        @  }
+        @  CloseHandle(hWritePipe);
+        @  
+        @  // command buffer
+        @  char lpBuffer[4096];
+        @  DWORD lpBytesRead = 0;
+        @  while (PeekNamedPipe(hReadPipe, lpBuffer, 4096, &lpBytesRead, NULL, NULL))
+        @  {
+        @   if (lpBytesRead)
+        @   {
+        @    ReadFile(hReadPipe, lpBuffer, lpBytesRead, &lpBytesRead, NULL);
+        @    lpBuffer[lpBytesRead] = '\0';
+        @    @an<CVolMem> memBuf(lpBuffer,lpBytesRead);
+        @    @<回显数据事件>(memBuf);
+        @   }
+        @  }
+        @  WaitForSingleObject(pInfo.hProcess, INFINITE);
+        @  CloseHandle(hReadPipe);
+        返回 (真)
+
+    }
+
+    方法 回显数据事件 <公开 定义事件 类型 = 整数 折叠>
+    参数 收到的字节集 <类型 = 字节集类>
+    {
+
+    }
+}
+
+类 匿名管道类_ <公开 注释 = "启动一个命令行提示符进程,通过匿名管道让当前进程和命令行之间交互传递输出输入信息" 折叠 折叠2 @文档 = "category = \"CMD操作库.匿名管道\""
+        @视窗.外部头文件 = "namedpipeapi.h">
+{
+    方法 类_初始化 <折叠>
+    {
+        初始化_ (200)
+    }
+
+    方法 类_清理 <折叠>
+    {
+        关闭命令_ ()
+    }
+
+    方法 是否已启动 <公开 属性读 类型 = 逻辑型 注释 = "返回当前是否已启动命令行控制台" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_hProcess != NULL
+    }
+
+    方法 是否空闲 <公开 属性读 类型 = 逻辑型 注释 = "返回当前是否处于空闲状态,返回假表示正在执行命令." 注释 = "  注意: 本方法通过检查最后输出的字符是否为\'>\'来判断命令是否执行完毕,"
+            注释 = "如果命令在执行的过程中输出了\'>\'字符,将可能无法获取正确的结果." 折叠 折叠2 @嵌入式方法 = "">
+    {
+        @ !@sn<this>.m_bRunning
+    }
+
+    方法 输出信息事件 <公开 定义事件 类型 = 整数 注释 = "启动命令行提示符或执行命令后,在此返回命令的输出信息" 返回值注释 = "此返回值无意义" 折叠>
+    参数 输出信息 <类型 = 字节集类 注释 = "  命令行提示符打印在屏幕上的文本,请根据命令行的编码" 注释 = "使用\"多字节到文本\"或\"UTF8到文本\"等命令转换到文本型.">
+
+    方法 初始化_ <公开 类型 = 整数 注释 = "类初始化时会自动初始化，除非你执行过\"关闭命令行\",否则不需要手动调用本方法" 返回值注释 = "成功返回进程ID" 折叠 @禁止流程检查 = 真>
+    参数 刷新时间 <类型 = 整数 注释 = "读取屏幕信息的间隔" @默认值 = 200>
+    {
+        @ if (m_hProcess) { return FALSE; } // 避免重复启动CMD
+        @ // 设定管道的安全属性
+        @ m_bRunning = FALSE;
+        @ SECURITY_ATTRIBUTES sa { 0 };
+        @ sa.bInheritHandle = TRUE;
+        @ sa.nLength = sizeof(sa);
+        @ sa.lpSecurityDescriptor = NULL;
+        @ STARTUPINFOW si = { sizeof(STARTUPINFO) };
+        @ PROCESS_INFORMATION pi = { 0 };
+        @ // 创建第一条匿名管道
+        @ if (!::CreatePipe (&m_hReadPipeHandle, &m_hWritePipeShell, &sa, 0))
+        @     goto Fail;
+        @ // 创建第二条匿名管道
+        @ if (!::CreatePipe (&m_hReadPipeShell, &m_hWritePipeHandle, &sa, 0))
+        @     goto Fail;
+        @ // 设置进程的信息
+        @ GetStartupInfoW (&si);
+        @ si.hStdError = m_hWritePipeShell; // 设置命令行错误输出管道
+        @ si.hStdOutput = m_hWritePipeShell; // 设置命令行信息输出管道
+        @ si.hStdInput = m_hReadPipeShell; // 设置命令行输入管道
+        @ si.wShowWindow = SW_HIDE; // 隐藏命令行窗口
+        @ si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
+        @ // 设置命令行提示符的文件路径
+        @ WCHAR strShellPath[MAX_PATH] { 0 };
+        @ GetSystemDirectoryW (strShellPath, MAX_PATH);
+        @ wcscat (strShellPath, L"\\cmd.exe");
+        @ // 创建命令行提示符进程
+        @ if (!::CreateProcessW (strShellPath, NULL, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi))
+        @     goto Fail;
+        @ m_hProcess = pi.hProcess; // 保存进程句柄
+        @ if (pi.hThread) { ::CloseHandle (pi.hThread); } // 因为后续不需要使用,先关闭命令行的线程句柄
+        @ m_dwTime = (DWORD)@<刷新时间>; // 读取屏显文本的时间间隔
+        @ m_hEvent = ::CreateEventW (0, FALSE, FALSE, NULL); // 该事件用来通知回调函数退出
+        @ ::ResetEvent (m_hEvent);
+        @ // 创建回调线程
+        @ m_hThread = ::CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE)&@<读屏显>, this, 0, NULL);
+        @ if (m_hThread == NULL) { goto Fail; }
+        @ m_ProcessId = pi.dwProcessId;
+        @ return m_ProcessId;
+        @ Fail:
+        @     if (m_hProcess) { ::CloseHandle (m_hProcess); m_hProcess = NULL; }
+        @     if (m_hReadPipeHandle) { ::CloseHandle (m_hReadPipeHandle); m_hReadPipeHandle = NULL; }
+        @     if (m_hWritePipeShell) { ::CloseHandle (m_hWritePipeShell); m_hWritePipeShell = NULL; }
+        @     if (m_hReadPipeShell) { ::CloseHandle (m_hReadPipeShell); m_hReadPipeShell = NULL; }
+        @     if (m_hWritePipeHandle) { ::CloseHandle (m_hWritePipeHandle); m_hWritePipeHandle = NULL; }
+        @ return -1;
+    }
+
+    方法 读屏显 <静态 类型 = 整数 注释 = "内部函数,线程获取命令行提示符的屏幕显示内容" 折叠 @禁止流程检查 = 真>
+    参数 对象指针 <类型 = 变整数>
+    {
+        @ @sn<current_class>* pThis = (@sn<current_class>*)@<对象指针>;
+        @ DWORD BytesRead = 0;
+        @ DWORD TotalBytesAvail;
+        @ // 用等待事件来无限循环尝试读取屏显文本,读取间隔为等待事件的第二个参数
+        @ // 如果等待的事件发出信息,即结束循环,退出本线程
+        @ while (::WaitForSingleObject (pThis->m_hEvent, pThis->m_dwTime) != WAIT_OBJECT_0)
+        @ {
+        @     // 尝试读取匿名管道中的数据,读取的数据不会从管道中删除
+        @     // 这里只用来返回管道中是否有可供读取的数据
+        @     ::PeekNamedPipe (pThis->m_hReadPipeHandle, NULL, NULL, NULL, &TotalBytesAvail, NULL);
+        @     if (TotalBytesAvail) // 如果管道中有数据
+        @     {
+        @         @an<CVolMem> ReadData;
+        @         // 从管道中读取数据,数据读取后会在管道中删除
+        @         if (::ReadFile (pThis->m_hReadPipeHandle, ReadData.Alloc (TotalBytesAvail, TRUE), TotalBytesAvail, &BytesRead, NULL))
+        @         {
+        @             if (ReadData.Get_S_BYTE(BytesRead - 1) == '>')
+        @             {
+        @                 pThis->m_bRunning = FALSE;
+        @             }
+        @             pThis->@<输出信息事件> (ReadData);
+        @         }
+        @     }
+        @ }
+        @ return 0; // 结束线程
+    }
+
+    方法 执行命令_ <公开 类型 = 逻辑型 注释 = "在命令行提示符中执行一条命令,如果当前有正在运行的命令,执行会失败." 折叠 @禁止流程检查 = 真>
+    参数 执行命令 <类型 = 文本型 注释 = "例如：ping www.baidu.com">
+    参数 是否为UTF8 <类型 = 逻辑型 注释 = "是否以UTF-8编码要执行的命令,否则为ANSI本地多字节编码" @默认值 = 假>
+    {
+        // @ if (m_bRunning) return FALSE;
+        变量 命令行 <类型 = 字节集类>
+        如果 (是否为UTF8)
+        {
+            命令行 = 文本到UTF8 (执行命令 + "\r\n", 假)
+        }
+        否则
+        {
+            命令行 = 文本到多字节 (执行命令 + "\r\n", 假)
+
+        }
+        @ DWORD BytesWrite = 0;
+        @ ::WriteFile (m_hWritePipeHandle, @<命令行>.GetPtr(), (DWORD)@<命令行>.GetSize(), &BytesWrite, NULL);
+        @ if (BytesWrite)
+        @ {
+        @     m_bRunning = TRUE;
+        @     return TRUE;
+        @ }
+        @ return FALSE;
+    }
+
+    方法 终止命令_ <公开 注释 = "在命令行提示符中发出CTRL+C信号,终止正在执行的命令" 折叠>
+    {
+        @ if (!m_ProcessId) return;
+        @ ::AttachConsole (m_ProcessId);
+        @ ::GenerateConsoleCtrlEvent (CTRL_C_EVENT, m_ProcessId);
+        @ ::FreeConsole ();
+    }
+
+    方法 关闭命令_ <公开 折叠 @禁止流程检查 = 真>
+    {
+        终止命令_ ()
+        @ if (m_hEvent) { ::SetEvent (m_hEvent); } 
+        @ if (m_hThread)
+        @ {
+        @     ::WaitForSingleObject (m_hThread, INFINITE);
+        @     ::CloseHandle (m_hThread); m_hThread = NULL;
+        @ }
+        执行命令_ ("exit")
+        @ if (m_hProcess)
+        @ { 
+        @     if (::WaitForSingleObject (m_hThread, 1000) == WAIT_TIMEOUT)
+        @     {
+        @         ::TerminateProcess (m_hProcess, 0);
+        @     }
+        @     ::CloseHandle (m_hProcess); m_hProcess = NULL;
+        @ }
+        @ m_bRunning = FALSE;
+        @ if (m_hReadPipeHandle) { ::CloseHandle (m_hReadPipeHandle); m_hReadPipeHandle = NULL; }
+        @ if (m_hWritePipeShell) { ::CloseHandle (m_hWritePipeShell); m_hWritePipeShell = NULL; }
+        @ if (m_hReadPipeShell) { ::CloseHandle (m_hReadPipeShell); m_hReadPipeShell = NULL; }
+        @ if (m_hWritePipeHandle) { ::CloseHandle (m_hWritePipeHandle); m_hWritePipeHandle = NULL; }
+    }
+
+    # ---
+    # @begin
+    # <> <include>
+    #     HANDLE m_hReadPipeHandle = NULL;
+    #     HANDLE m_hWritePipeShell = NULL;
+    #     HANDLE m_hReadPipeShell = NULL;
+    #     HANDLE m_hWritePipeHandle = NULL;
+    #     HANDLE m_hProcess = NULL;
+    #     HANDLE m_hThread = NULL;
+    #     HANDLE m_hEvent = NULL;
+    #     DWORD m_dwTime;
+    #     DWORD m_ProcessId;
+    #     BOOL m_bRunning = FALSE;
+    # <> </include>
+    # @end
+}

@@ -1,0 +1,15 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"windows.硬件特征\"" "" @视窗.外部头文件 = "Diskid\\DiskidTool.h"
+        @视窗.外部库.win32 = "Diskid\\DiskidToolx86.lib" @视窗.附属文件.win32 = "Diskid\\DiskidToolx86.dll"
+        @视窗.外部库.x64 = "Diskid\\DiskidToolx64.lib" @视窗.附属文件.x64 = "Diskid\\DiskidToolx64.dll">
+
+类 ______硬件特征 <公开 @全局类 = 真>
+{
+    方法 系统_取硬件特征F <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT)getHardDriveComputerID()
+    }
+
+    #
+}

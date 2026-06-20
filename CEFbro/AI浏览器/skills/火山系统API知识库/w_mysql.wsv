@@ -1,0 +1,1216 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.MYSQL数据库
+
+类 Mysql_SSL模式 <公开 注释 = "定义Mysql协议类型." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 禁用加密模式 <公开 值 = 1 注释 = "客户端禁用加密连接。">
+    常量 默认连接模式 <公开 值 = 2 注释 = "默认值首选">
+    常量 启用加密模式 <公开 值 = 3 注释 = "客户端需要加密连接，如果无法建立连接则失败。">
+    常量 证书加密模式 <公开 值 = 4 注释 = "客户端需要加密连接，并且还针对服务器 CA 证书">
+    常量 服务器证书模式 <公开 值 = 5
+            注释 = "针对其证书中的服务器主机名执行验证。 不适用于由服务器自动创建或使用mysql_ssl_rsa_setup手动创建的自签名证书。此类自签名证书不包含服务器名称作为 Common Name 值。">
+}
+
+类 Mysql数据库类 <公开 注释 = "★ 本类由\"飞翔的企鹅\"封装."
+        注释 = "如果用户程序中调用了本类中的\"使用新版本\"方法,将使用 mysql 最新 8.0.40 版进行编译,支持火山模块的静态链接方式,否则将使用 6.1.11 版进行编译." 编辑时信息 = "2E1527, 0, 0, 0"
+        @视窗.外部头文件 = "vol_mysql.h" "" "@视窗.头文件搜寻目录.d:!_VOL_MYSQL_VER2" = "..\\..\\shared\\extern_lib\\common\\mysql\\1\\include"
+        "@视窗.附属文件.d:!_VOL_MYSQL_VER2" = "..\\..\\shared\\extern_lib\\common\\mysql\\1\\$(p)\\libmysql.dll"
+        "@视窗.外部库.d:!_VOL_MYSQL_VER2" = "..\\..\\shared\\extern_lib\\common\\mysql\\1\\$(p)\\libmysql.lib" ""
+        "@视窗.头文件搜寻目录.d:_VOL_MYSQL_VER2" = "..\\..\\shared\\extern_lib\\common\\mysql\\2\\include"
+        "@视窗.附属文件.non_static-x64 - d:_VOL_MYSQL_VER2" = "..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\dll\\libmysql.dll\r\n..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\dll\\libcrypto-3-x64.dll\r\n..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\dll\\libssl-3-x64.dll\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\dll\\zlib1.dll\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\dll\\zstd.dll"
+        "@视窗.附属文件.non_static-win32 - d:_VOL_MYSQL_VER2" = "..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\dll\\libmysql.dll\r\n..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\dll\\libcrypto-3.dll\r\n..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\dll\\libssl-3.dll\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\dll\\zlib1.dll\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\dll\\zstd.dll"
+        "@视窗.外部库.non_static - d:_VOL_MYSQL_VER2" = "..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\dll\\libmysql.lib" ""
+        "@视窗.附属文件.static-debug-x64 - d:_VOL_MYSQL_VER2" = "..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\dll\\libmysql.dll\r\n..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\dll\\libcrypto-3-x64.dll\r\n..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\dll\\libssl-3-x64.dll\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\dll\\zlib1.dll\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\dll\\zstd.dll"
+        "@视窗.附属文件.static-debug-win32 - d:_VOL_MYSQL_VER2" = "..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\dll\\libmysql.dll\r\n..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\dll\\libcrypto-3.dll\r\n..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\dll\\libssl-3.dll\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\dll\\zlib1.dll\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\dll\\zstd.dll"
+        "@视窗.外部库.static-debug - d:_VOL_MYSQL_VER2" = "..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\dll\\libmysql.lib" ""
+        "@视窗.外部库.static-release - d:_VOL_MYSQL_VER2" = "..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\lib\\mysqlclient.lib\r\n..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\lib\\libcrypto.lib\r\n..\\..\\shared\\extern_lib\\common\\mysql\\2\\$(p)\\lib\\libssl.lib\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\zlib-$(d).lib\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\zstd.lib\r\ncrypt32.lib"
+        "@视窗.需求VS版本.static - d:_VOL_MYSQL_VER2" = "16-" "@视窗.使用静态运行时库.static - d:_VOL_MYSQL_VER2" = 真>
+{
+    方法 使用新版本 <公开 静态 注释 = "调用本方法指示编译器使用 mysql 最新 8.0.40 版进行编译,同时支持火山模块的静态链接方式,如果不调用本方法,将使用 6.1.11 版进行编译."
+            注释 = "注意: 本方法为编译时处理方法,系统在编译时只要检测到用户程序实际执行流程中任意位置调用了此方法,就启用对应的编译特性,和方法本身是否被执行到没有任何关系." @视窗.预定义宏 = "_VOL_MYSQL_VER2"
+            @视窗.编译信息 = "基于 MYSQL 8.0.40 版本编译">
+    {
+
+    }
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CMysqlWraper)
+    #
+    # @ <include>
+    # @ inline_ MYSQL* GetMysql ()  { return data().GetData(); }
+    # @ </include>
+    #
+    # 静态方法 ---
+
+    方法 取客户端版本名 <公开 静态 类型 = 文本型 注释 = "获取当前客户端的版本名称." @禁止流程检查 = 真>
+    {
+        @ const char* infoStr = mysql_get_client_info();
+        @ if (infoStr != NULL) return @an<CVolString> (infoStr);
+        @ return _T ("");
+    }
+
+    方法 取客户端版本号 <公开 静态 类型 = 整数 注释 = "获取当前客户端的版本号." @嵌入式方法 = "">
+    {
+        @ (INT)mysql_get_client_version()
+    }
+
+    # options属性 ---
+
+    方法 SSL模式 <公开 属性写 注释 = "指定需要连接使用的ssl模式类型." 注释 = "注意:必须在\"连接()\"方法之前调用生效.">
+    参数 类型 <类型 = Mysql_SSL模式>
+    {
+        @ if (GetMysql())
+        @ {
+        @     mysql_ssl_mode mode = SSL_MODE_PREFERRED;
+        @     if (@<类型> == 1)
+        @         mode = SSL_MODE_DISABLED;
+        @     else if (@<类型> == 3)
+        @         mode = SSL_MODE_REQUIRED;
+        @     else if (@<类型> == 4)
+        @         mode = SSL_MODE_VERIFY_CA;
+        @     else if (@<类型> == 5)
+        @         mode = SSL_MODE_VERIFY_IDENTITY;
+        @     mysql_options(GetMysql(), MYSQL_OPT_SSL_MODE, &mode);
+        @ }
+    }
+
+    方法 线程安全 <公开 属性读 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return (INT)mysql_thread_safe();
+    }
+
+    方法 连接超时 <公开 属性写 注释 = "设置连接超时时长." 注释 = "注意:必须在\"连接()\"方法之前调用生效.">
+    参数 超时 <类型 = 整数 注释 = "单位:秒.">
+    {
+        @ if (GetMysql()) mysql_options(GetMysql(), MYSQL_OPT_CONNECT_TIMEOUT, &@<超时>);
+    }
+
+    方法 连接超时 <公开 属性读 类型 = 整数 注释 = "获取当前配置的连接超时时长." 返回值注释 = "单位:秒">
+    {
+        变量 超时 <类型 = 整数 值 = 0>
+        @ if (GetMysql()) mysql_get_option(GetMysql(), MYSQL_OPT_CONNECT_TIMEOUT, &@<超时>);
+        返回 (超时)
+    }
+
+    方法 读取超时 <公开 属性写 注释 = "设置读取信息的超时时长." 注释 = "注意:必须在\"连接()\"方法之前调用生效.">
+    参数 超时 <类型 = 整数 注释 = "单位:秒.">
+    {
+        @ if (GetMysql()) mysql_options(GetMysql(), MYSQL_OPT_READ_TIMEOUT, &@<超时>);
+    }
+
+    方法 读取超时 <公开 属性读 类型 = 整数 注释 = "获取当前配置的读取超时时长." 返回值注释 = "单位:秒">
+    {
+        变量 超时 <类型 = 整数 值 = 0>
+        @ if (GetMysql()) mysql_get_option(GetMysql(), MYSQL_OPT_READ_TIMEOUT, &@<超时>);
+        返回 (超时)
+    }
+
+    方法 写入超时 <公开 属性写 注释 = "设置写入数据的超时时长." 注释 = "注意:必须在\"连接()\"方法之前调用生效.">
+    参数 超时 <类型 = 整数 注释 = "单位:秒.">
+    {
+        @ if (GetMysql()) mysql_options(GetMysql(), MYSQL_OPT_WRITE_TIMEOUT, &@<超时>);
+    }
+
+    方法 写入超时 <公开 属性读 类型 = 整数 注释 = "获取当前配置的写入超时时长." 返回值注释 = "单位:秒">
+    {
+        变量 超时 <类型 = 整数 值 = 0>
+        @ if (GetMysql()) mysql_get_option(GetMysql(), MYSQL_OPT_WRITE_TIMEOUT, &@<超时>);
+        返回 (超时)
+    }
+
+    方法 通报数据截断错误 <公开 属性写 注释 = "指定对于预处理语句是否允许通报数据截断错误." 注释 = "注意:必须在\"连接()\"方法之前调用生效.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ if (GetMysql())
+        @ {
+        @     my_bool value = (my_bool)@<启用>;
+        @     mysql_options(GetMysql(), MYSQL_REPORT_DATA_TRUNCATION, &value);
+        @ }
+    }
+
+    方法 通报数据截断错误 <公开 属性读 类型 = 逻辑型 注释 = "获取对于预处理语句是否允许通报数据截断错误." @禁止流程检查 = 真>
+    {
+        @ my_bool value = 0;
+        @ if (GetMysql()) mysql_get_option(GetMysql(), MYSQL_REPORT_DATA_TRUNCATION, &value);
+        @ return (BOOL)value;
+    }
+
+    方法 自动提交事务 <公开 属性写 注释 = "指定是否将当前事务提交模式设为自动.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ if (GetMysql()) mysql_autocommit(GetMysql(), (CHAR)@<启用>);
+    }
+
+    方法 自动重连 <公开 属性写 注释 = "如果与服务器连接被断开,是否进行自动重连." 注释 = "注意:必须在\"连接()\"方法之前调用生效.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ if (GetMysql()) 
+        @ {
+        @     my_bool value = (my_bool)@<启用>;
+        @     mysql_options(GetMysql(), MYSQL_OPT_RECONNECT, &value);
+        @ }
+    }
+
+    方法 自动重连 <公开 属性读 类型 = 逻辑型 注释 = "获取是否已启用自动重连属性." @禁止流程检查 = 真>
+    {
+        @ my_bool value = 0;
+        @ if (GetMysql()) mysql_get_option(GetMysql(), MYSQL_OPT_RECONNECT, &value);
+        @ return (BOOL)value;
+    }
+
+    方法 连接后命令 <公开 属性写 注释 = "设置一个在连接成功后立即执行的命令,如再次连接将会再次执行该命令." 注释 = "注意:必须在\"连接()\"方法之前调用生效.">
+    参数 命令内容 <类型 = 文本型>
+    {
+        @ if (GetMysql()) mysql_options(GetMysql(), MYSQL_INIT_COMMAND, GetMbsText (@<命令内容>, CVolMem (), NULL));
+    }
+
+    方法 命名选项文件 <公开 属性写 注释 = "指定从命名选项文件而不是从my.cnf读取选项配置." 注释 = "注意:必须在\"连接()\"方法之前调用生效.">
+    参数 文件 <类型 = 文本型>
+    {
+        @ if (GetMysql()) mysql_options(GetMysql(), MYSQL_READ_DEFAULT_FILE, GetMbsText (@<文件>, CVolMem (), NULL));
+    }
+
+    方法 命名选项组 <公开 属性写 注释 = "指定从my.cnf或用\"命名选项文件\"属性指定的文件中的命名组读取选项配置." 注释 = "注意:必须在\"连接()\"方法之前调用生效.">
+    参数 命名组 <类型 = 文本型>
+    {
+        @ if (GetMysql()) mysql_options(GetMysql(), MYSQL_READ_DEFAULT_GROUP, GetMbsText (@<命名组>, CVolMem (), NULL));
+    }
+
+    方法 字符集定义文件 <公开 属性写 注释 = "指定包含字符集定义文件的目录的路径名." 注释 = "注意:必须在\"连接()\"方法之前调用生效.">
+    参数 文件 <类型 = 文本型>
+    {
+        @ if (GetMysql()) mysql_options(GetMysql(), MYSQL_SET_CHARSET_DIR, GetMbsText (@<文件>, CVolMem (), NULL));
+    }
+
+    方法 协议类型 <公开 属性写 注释 = "指定需要连接使用的协议类型." 注释 = "注意:必须在\"连接()\"方法之前调用生效.">
+    参数 类型 <类型 = Mysql协议类型>
+    {
+        @ if (GetMysql()) 
+        @ {
+        @     mysql_protocol_type type = MYSQL_PROTOCOL_DEFAULT;
+        @     if (@<类型> == 1)
+        @         type = MYSQL_PROTOCOL_TCP;
+        @     else if (@<类型> == 2)
+        @         type = MYSQL_PROTOCOL_SOCKET;
+        @     else if (@<类型> == 3)
+        @         type = MYSQL_PROTOCOL_PIPE;
+        @     else if (@<类型> == 4) 
+        @         type = MYSQL_PROTOCOL_MEMORY;
+        @     mysql_options(GetMysql(), MYSQL_OPT_PROTOCOL, &type);
+        @ }
+    }
+
+    方法 共享内存对象名称 <公开 属性写 注释 = "命名为与服务器进行通信的共享内存对象." 注释 = "注意:必须在\"连接()\"方法之前调用生效.">
+    参数 名称 <类型 = 文本型>
+    {
+        @ if (GetMysql()) mysql_options(GetMysql(), MYSQL_SHARED_MEMORY_BASE_NAME, GetMbsText (@<名称>, CVolMem (), NULL));
+    }
+
+    方法 多个查询结果 <公开 属性读 类型 = 逻辑型 注释 = "检查当前所执行的查询是否存在多个结果集." 返回值注释 = "如果返回真,获取查询的记录集之前必须调用\"到下一个记录集()\"来获取多个记录集." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return (BOOL)mysql_more_results(GetMysql());
+        @ return FALSE;
+    }
+
+    # ---
+
+    方法 启用SSL <公开 类型 = 整数 注释 = "启用SSL以建立数据库的安全连接." 注释 = "注意:必须在\"连接()\"方法之前调用生效." 返回值注释 = "返回0表示初始化SSL环境成功." @禁止流程检查 = 真>
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件(key文件)路径.">
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件(cert)路径.">
+    参数 授权文件 <类型 = 文本型 注释 = "提供所欲使用的证书授权文件(ca)路径.">
+    参数 目录名称 <类型 = 文本型 注释 = "提供pem格式的SSL CA证书目录路径.">
+    参数 允许密码列表 <类型 = 文本型 注释 = "允许密码的列表,用于SSL加密.">
+    {
+        @ if (GetMysql()) return mysql_ssl_set(GetMysql(), GetMbsText (@<私钥文件>, CVolMem (), NULL), GetMbsText (@<证书文件>, CVolMem (), NULL), GetMbsText (@<授权文件>, CVolMem (), NULL), GetMbsText (@<目录名称>, CVolMem (), NULL), GetMbsText (@<允许密码列表>, CVolMem (), NULL));
+        @ return -1;
+    }
+
+    方法 取SSL允许密码列表 <公开 类型 = 文本型 注释 = "获取SSL允许密码列表." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) {
+        @     const char* str = mysql_get_ssl_cipher(GetMysql());  //可能会返回NULL.
+        @      if (str != NULL) return @an<CVolString> (str);
+        @ }
+        @ return _T ("");
+    }
+
+    方法 连接 <公开 类型 = 逻辑型 注释 = "连接至指定Mysql服务器." 返回值注释 = "返回是否连接成功." @禁止流程检查 = 真>
+    参数 地址 <类型 = 文本型 注释 = "提供所欲连接数据库的地址.">
+    参数 用户名 <类型 = 文本型 注释 = "提供所欲连接数据库的用户名.">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲连接数据库的连接密码.">
+    参数 数据库名 <类型 = 文本型 注释 = "提供所欲连接数据库的名称.">
+    参数 端口 <类型 = 整数 注释 = "提供所欲连接数据库的端口." @默认值 = 3306>
+    参数 套接字 <类型 = 文本型 注释 = "该字符串描述了应使用的套接字或命名管道." @默认值 = 空对象>
+    参数 配置位 <类型 = 整数 注释 = "请参考\"Mysql连接配置\"所提供的常量,该参数接受其中单个或多个组合的值." @默认值 = 0>
+    {
+        @ if (GetMysql()) return mysql_real_connect(GetMysql(), GetMbsText (@<地址>, CVolMem (), NULL), GetMbsText (@<用户名>, CVolMem (), NULL), GetMbsText (@<密码>, CVolMem (), NULL), GetMbsText (@<数据库名>, CVolMem (), NULL), @<端口>, (BOOL)@<套接字>.IsNullObject () ? NULL : GetMbsText (@<套接字>, CVolMem (), NULL), @<配置位>) != 0;
+        @ return FALSE;
+    }
+
+    方法 修改用户 <公开 类型 = 逻辑型 注释 = "更改用户以及当前的默认数据库(即当前所操作的库)." 返回值注释 = "返回是否更换用户成功." @禁止流程检查 = 真>
+    参数 数据库名 <类型 = 文本型 注释 = "提供新的数据库名称.">
+    参数 用户名 <类型 = 文本型 注释 = "提供新的数据库用户名.">
+    参数 密码 <类型 = 文本型 注释 = "提供新的数据库密码.">
+    {
+        @ if (GetMysql()) return !(BOOL)mysql_change_user(GetMysql(), GetMbsText (@<用户名>, CVolMem (), NULL), GetMbsText (@<密码>, CVolMem (), NULL), GetMbsText (@<数据库名>, CVolMem (), NULL));
+        @ return FALSE;
+    }
+
+    方法 选择库 <公开 类型 = 逻辑型 注释 = "更改当前的默认数据库(即当前所操作的库)." @禁止流程检查 = 真>
+    参数 数据库名 <类型 = 文本型 注释 = "提供新的数据库名称.">
+    {
+        @ if (GetMysql()) return !(BOOL)mysql_select_db(GetMysql(), GetMbsText (@<数据库名>, CVolMem (), NULL));
+        @ return FALSE;
+    }
+
+    方法 执行SQL语句 <公开 类型 = 逻辑型 注释 = "执行一条SQL语句,执行成功后可通过\"取记录集\"命令获取记录集."
+            注释 = "注意:如果所欲执行的SQL语句中包含二进制数据,请使用命令\"执行SQL语句_二进制\",否则有可能执行出错." 返回值注释 = "执行成功返回真,否则返回假." @禁止流程检查 = 真>
+    参数 语句内容 <类型 = 文本型 注释 = "提供所欲查询当前数据库的SQL语句.">
+    {
+        @ if (GetMysql()) return !(BOOL)mysql_query(GetMysql(), GetMbsText (@<语句内容>, CVolMem (), NULL));
+        @ return FALSE;
+    }
+
+    方法 执行SQL语句_二进制 <公开 类型 = 逻辑型 注释 = "执行一条SQL语句,执行成功后可通过\"取记录集\"命令获取记录集." 返回值注释 = "执行成功返回真,否则返回假." @禁止流程检查 = 真>
+    参数 语句内容 <类型 = 字节集类 注释 = "提供所欲查询当前数据库的SQL语句.">
+    {
+        @ if (GetMysql()) return !(BOOL)mysql_real_query(GetMysql(), (CHAR*)@<语句内容>.GetPtr(), (unsigned long)(INT)@<语句内容>.GetSize());
+        @ return FALSE;
+    }
+
+    # ---
+
+    方法 到下一个记录集 <公开 类型 = 整数 注释 = "如果当前所执行的查询存在多个记录集,需调用本方法后去获取结果集." 返回值注释 = "如果返回0,表示后续还有结果未取完,返回-1表示已取完所有结果." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return mysql_next_result(GetMysql());
+        @ return -1;
+    }
+
+    方法 取记录集 <公开 类型 = Mysql记录集类 注释 = "在使用\"执行SQL语句()\"获取一些需要返回数据的查询后,如果查询成功本方法将返回一个有效记录集." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql())
+        @ {
+        @     INT_P resPtr = (INT_P)mysql_store_result(GetMysql());
+        @     return resPtr != 0 ? @dt<Mysql记录集类>(resPtr) : @dt<Mysql记录集类>();
+        @ }
+        @ return @dt<Mysql记录集类>();
+    }
+
+    方法 取临时记录集 <公开 类型 = Mysql记录集类 注释 = "获取一个临时记录集." 注释 = "注意:所返回的记录集实际上没有储存信息,每一行的数据必须通过\"到下一行()\"从服务器上读取后才可获取数据."
+            注释 = "本方法与\"取记录集\"方法相比占用内存更低效率更高,但不支持使用\"到指定行()\"命令." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql())
+        @ {
+        @     INT_P resPtr = (INT_P)mysql_use_result(GetMysql());
+        @     return resPtr != 0 ? @dt<Mysql记录集类>(resPtr) : @dt<Mysql记录集类>();
+        @ }
+        @ return @dt<Mysql记录集类>();
+    }
+
+    方法 取所有表 <公开 类型 = Mysql记录集类 注释 = "返回由当前数据库内的表名称组成的结果集,即等同于执行\"HOW tables [LIKE 通配符]\"." 返回值注释 = "如果执行成功将返回包含所有表信息的结果集."
+            @禁止流程检查 = 真>
+    参数 通配符 <类型 = 文本型 @默认值 = 空对象>
+    {
+        @ if (GetMysql())
+        @ {
+        @     INT_P resPtr = (INT_P)mysql_list_tables(GetMysql(), (BOOL)@<通配符>.IsEmpty() ? NULL : GetMbsText (@<通配符>, CVolMem (), NULL));
+        @     return resPtr != 0 ? @dt<Mysql记录集类>(resPtr) : @dt<Mysql记录集类>();
+        @ }
+        @ return @dt<Mysql记录集类>();
+    }
+
+    方法 取所有库 <公开 类型 = Mysql记录集类 注释 = "返回由服务器上的数据库名称组成的结果集,等同于执行\"SHOW database [LIKE 通配符]\"." 返回值注释 = "如果执行成功将返回包含所有库信息的结果集."
+            @禁止流程检查 = 真>
+    参数 通配符 <类型 = 文本型 @默认值 = 空对象>
+    {
+        @ if (GetMysql())
+        @ {
+        @     INT_P resPtr = (INT_P)mysql_list_dbs(GetMysql(), (BOOL)@<通配符>.IsEmpty() ? NULL : GetMbsText (@<通配符>, CVolMem (), NULL));
+        @     return resPtr != 0 ? @dt<Mysql记录集类>(resPtr) : @dt<Mysql记录集类>();
+        @ }
+        @ return @dt<Mysql记录集类>();
+    }
+
+    方法 取所有线程 <公开 类型 = Mysql记录集类 注释 = "返回描述当前服务器线程的结果集,即等同于执行\"SHOW PROCESSLIST\"." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql())
+        @ {
+        @     INT_P resPtr = (INT_P)mysql_list_processes(GetMysql());
+        @     return resPtr != 0 ? @dt<Mysql记录集类>(resPtr) : @dt<Mysql记录集类>();
+        @ }
+        @ return @dt<Mysql记录集类>();
+    }
+
+    方法 取指定表字段 <公开 类型 = Mysql记录集类 注释 = "返回指定表中字段名称组成的结果集,等同于执行\"SHOW COLUMNS FROM 表 [LIKE 通配符]\"." @禁止流程检查 = 真>
+    参数 表名 <类型 = 文本型 注释 = "提供所欲获取字段名称集的表.">
+    参数 通配符 <类型 = 文本型 @默认值 = 空对象>
+    {
+        执行SQL语句 (选择 (文本是否为空对象 (通配符), "SHOW COLUMNS FROM " + 表名, "SHOW COLUMNS FROM " + 表名 + " [LIKE " + 通配符 + "]"))
+        返回 (取记录集 ())
+    }
+
+    方法 取影响行数 <公开 类型 = 长整数 注释 = "获取在执行了指定SQL语句后所影响到的记录数." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return (INT64)mysql_affected_rows(GetMysql());
+        @ return 0;
+    }
+
+    方法 取查询列数 <公开 类型 = 整数 注释 = "获取最近一次查询语句所取得的列数." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return (INT)mysql_field_count(GetMysql());
+        @ return 0;
+    }
+
+    方法 取自增值 <公开 类型 = 长整数 注释 = "获取最近一次由insert或update语句为auto_increment列所生成的自增ID值." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return (INT64)mysql_insert_id(GetMysql());
+        @ return 0;
+    }
+
+    方法 取最近错误码 <公开 类型 = 整数 注释 = "获取最近一次调用失败的错误码." 返回值注释 = "0表示无错误." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return (INT)mysql_errno(GetMysql());
+        @ return 0;
+    }
+
+    方法 取最近错误描述 <公开 类型 = 文本型 注释 = "获取最近一次调用失败的错误描述内容." 返回值注释 = "如无错误则返回空文本." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return @an<CVolString> (mysql_error(GetMysql()));
+        @ return _T ("");
+    }
+
+    方法 取当前SQL状态 <公开 类型 = 文本型 注释 = "获取包含关于上次错误的SQL_STATE错误代码." 返回值注释 = "返回00000表示无错误." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return @an<CVolString> (mysql_sqlstate(GetMysql()));
+        @ return _T ("");
+    }
+
+    方法 取语句告警数目 <公开 类型 = 整数 注释 = "获取执行上一次SQL语句期间所生成的告警数目." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return (INT)mysql_warning_count(GetMysql());
+        @ return 0;
+    }
+
+    方法 取最近查询信息 <公开 类型 = 文本型 注释 = "获取最近对数据库执行查询的信息." 注释 = "注意:仅会返回对数据库执行insert/update/alter的语句信息,其他情况会返回空文本." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql())
+        @ {
+        @     const char* infoStr = mysql_info(GetMysql());  //可能会返回NULL.
+        @     if (infoStr != NULL) return @an<CVolString> (infoStr);
+        @ }
+        @ return _T ("");
+    }
+
+    方法 取当前连接线程ID <公开 类型 = 整数 注释 = "获取当前用于连接数据库的线程PID." 返回值注释 = "所返回的线程ID可使用\"停止线程()\"杀死." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return (INT)mysql_thread_id(GetMysql());
+        @ return 0;
+    }
+
+    方法 取当前字符集 <公开 类型 = 文本型 注释 = "获取当前数据库连接所使用的默认字符集." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return @an<CVolString> (mysql_character_set_name(GetMysql()));
+        @ return _T ("");
+    }
+
+    方法 置当前字符集 <公开 类型 = 逻辑型 注释 = "设置当前数据库连接所使用的默认字符集." 返回值注释 = "返回字符集是否设置成功." @禁止流程检查 = 真>
+    参数 字符集 <类型 = 文本型 注释 = "例如:latin1">
+    {
+        @ if (GetMysql()) return mysql_set_character_set(GetMysql(), GetMbsText (@<字符集>, CVolMem (), NULL)) == 0;
+        @ return FALSE;
+    }
+
+    方法 取字符集信息 <公开 类型 = Mysql字符集信息类 注释 = "获取当前默认字符集的详细信息.">
+    {
+        变量 信息 <类型 = Mysql字符集信息类>
+        @ if (GetMysql())
+        @ {
+        @     MY_CHARSET_INFO info;
+        @     mysql_get_character_set_info(GetMysql(), &info);
+        @     @<信息>.@n<Mysql字符集信息类.序号> = (INT)info.number;
+        @     @<信息>.@n<Mysql字符集信息类.状态> = (INT)info.state;
+        @     if (info.csname != NULL) @<信息>.@n<Mysql字符集信息类.排序名>.SetText(info.csname);
+        @     if (info.name != NULL) @<信息>.@n<Mysql字符集信息类.字符集>.SetText(info.name);
+        @     if (info.comment != NULL) @<信息>.@n<Mysql字符集信息类.注释>.SetText(info.comment);
+        @     if (info.dir != NULL) @<信息>.@n<Mysql字符集信息类.字符集目录>.SetText(info.comment);
+        @     @<信息>.@n<Mysql字符集信息类.多字节最小长度> = (INT)info.mbminlen;
+        @     @<信息>.@n<Mysql字符集信息类.多字节最大长度> = (INT)info.mbmaxlen;
+        @ }
+        返回 (信息)
+    }
+
+    方法 写入调试日志 <公开 类型 = 逻辑型 注释 = "指示服务器将一些调试信息写入日志." 注释 = "注意:连接数据库用户必须具有SUPER权限." 返回值注释 = "返回是否执行成功." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return mysql_dump_debug_info(GetMysql()) == 0;
+        @ return FALSE;
+    }
+
+    方法 刷新 <公开 类型 = 逻辑型 注释 = "用于刷新表,高速缓冲或复位数据库服务器信息." 注释 = "注意:连接数据库用户必须具有RELOAD权限." 返回值注释 = "返回是否刷新成功." @禁止流程检查 = 真>
+    参数 配置位 <类型 = 整数 注释 = "请参考\"Mysql刷新配置\"所提供的常量,该参数接受其中单个或多个组合的值.">
+    {
+        @ if (GetMysql()) return mysql_refresh(GetMysql(), @<配置位>) == 0;
+        @ return FALSE;
+    }
+
+    方法 关闭线程 <公开 类型 = 逻辑型 注释 = "杀死指定线程." @禁止流程检查 = 真>
+    参数 线程ID <类型 = 整数>
+    {
+        @ if (GetMysql()) return mysql_kill(GetMysql(), @<线程ID>) == 0;
+        @ return FALSE;
+    }
+
+    方法 检测连接状态 <公开 类型 = 整数 注释 = "检查与服务器的连接是否正常,如果连接异常断开将会尝试重连." 返回值注释 = "返回0表示连接正常." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return mysql_ping(GetMysql());
+    }
+
+    方法 取服务器信息 <公开 类型 = 文本型 注释 = "获取数据库服务器的信息,包括以秒为单位的正常运行时间,以及运行线程的数目,问题数,再加载次数,以及打开的表数目." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) 
+        @ {
+        @     const char* infoStr = mysql_stat(GetMysql());  //可能会返回NULL.
+        @     if (infoStr != NULL) return @an<CVolString> (infoStr);
+        @ }
+        @ return _T ("");
+    }
+
+    方法 取服务器版本名 <公开 类型 = 文本型 注释 = "获取数据库服务器的版本名称." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) 
+        @ {
+        @     const char* infoStr = mysql_get_server_info(GetMysql());  //可能会返回NULL.
+        @     if (infoStr != NULL) return @an<CVolString> (infoStr);
+        @ }
+        @ return _T ("");
+    }
+
+    方法 取服务器版本号 <公开 类型 = 整数 注释 = "获取数据库服务器的版本号." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return (INT)mysql_get_server_version(GetMysql());
+        @ return 0;
+    }
+
+    方法 取主机信息 <公开 类型 = 文本型 注释 = "获取描述所使用连接类型的文本以及服务器主机名." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) 
+        @ {
+        @     const char* infoStr = mysql_get_host_info(GetMysql());
+        @     if (infoStr != NULL) return @an<CVolString> (infoStr);
+        @ }
+        @ return _T ("");
+    }
+
+    方法 取协议版本号 <公开 类型 = 整数 注释 = "获取当前所使用的连接协议版本号." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return (INT)mysql_get_proto_info(GetMysql());
+        @ return 0;
+    }
+
+    方法 到Mysql数据 <公开 类型 = 字节集类 注释 = "将指定数据转换至Mysql可识别的数据后返回." @禁止流程检查 = 真>
+    参数 欲转换数据 <类型 = 字节集类 注释 = "提供所欲转换数据.">
+    {
+        @ CVolMem mem;  //缓冲区至少分配 *2+1尺寸
+        @ if (GetMysql())
+        @ {
+        @     mysql_real_escape_string(GetMysql(), (CHAR*)mem.Alloc(((INT)@<欲转换数据>.GetSize()) * 2 + 1, TRUE), (CHAR*)@<欲转换数据>.GetPtr(), (INT)@<欲转换数据>.GetSize());
+        @ }
+        @ return mem;
+    }
+
+    方法 重置当前连接 <公开 类型 = 逻辑型 注释 = "重新初始化连接资源." 返回值注释 = "执行成功返回真,否则返回假." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return mysql_reset_connection(GetMysql()) == 0;
+        @ return FALSE;
+    }
+
+    方法 开始提交事务 <公开 类型 = 逻辑型 注释 = "提交当前事务." 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return !(BOOL)mysql_commit(GetMysql());
+        @ return FALSE;
+    }
+
+    方法 回滚事务 <公开 类型 = 逻辑型 注释 = "回滚当前事务." 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    {
+        @ if (GetMysql()) return !(BOOL)mysql_rollback(GetMysql());
+        @ return FALSE;
+    }
+
+    方法 关闭 <公开 注释 = "关闭当前数据库,释放所占用资源,关闭后当前对象不可用.">
+    {
+        @ if (GetMysql()) pdata()->Close();
+    }
+
+    方法 转义SQL语句 <公开 类型 = 文本型 注释 = "如果所欲执行的SQL语句中包含特殊字符,可使用本方法对该语句进行转义后确保语句安全执行." 返回值注释 = "成功返回转义后的内容,否则返回空文本." @禁止流程检查 = 真>
+    参数 原内容 <类型 = 文本型 注释 = "提供所欲转义的文本内容.">
+    {
+        @ if (GetMysql())
+        @ {
+        @     INT_P fromLen;
+        @     CVolMem memBuf[2];
+        @     const char* from = GetMbsText(@<原内容>.GetText(), memBuf[0], &fromLen);
+        @     if (mysql_real_escape_string(GetMysql(), (char*)memBuf[1].Alloc(fromLen * 2 + 1, TRUE), from, fromLen) > 0)
+        @     {
+        @         CVolMem wideBuf;
+        @         INT_P toLen;
+        @         const WCHAR* pws = GetWideText ((const CHAR*)memBuf[1].GetPtr(), wideBuf, &toLen);    //to必定以Null结尾.
+        @         return @an<CVolString> (pws, toLen);
+        @     }
+        @ }
+        @ return _T("");
+    }
+}
+
+类 Mysql记录集类 <公开 注释 = "本类实例表示一次SQL查询所得到的结果集." 注释 = "记录集实际为一个链表结构,移动其行(即\"到下一行\"/\"到指定行\"方法)的索引取出当前值." @强制依赖 = "Mysql数据库类">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CMysqlResWraper)
+    #
+    # @ <include>
+    # @ inline_ @dt<Mysql记录集类> (INT_P ptr) : @dt<Mysql记录集类>()  { data().SetData(ptr); }
+    # @ inline_ MYSQL_RES* GetMyRes ()  { return data ().GetData (); }
+    # @ </include>
+
+    方法 是否有效 <公开 属性读 类型 = 逻辑型 注释 = "判断该结果集是否为有效结果集." 返回值注释 = "返回假则该结果集将无法取出任何内容." @禁止流程检查 = 真>
+    {
+        @ return GetMyRes() != NULL;
+    }
+
+    方法 行数 <公开 属性读 类型 = 长整数 注释 = "返回该记录集所包含的行数." @禁止流程检查 = 真>
+    {
+        @ if (GetMyRes()) return (INT64)mysql_num_rows(GetMyRes());
+        @ return 0;
+    }
+
+    方法 列数 <公开 属性读 类型 = 整数 注释 = "返回该记录集所包含的列(字段)总数." @禁止流程检查 = 真>
+    {
+        @ if (GetMyRes()) return mysql_num_fields(GetMyRes());
+        @ return 0;
+    }
+
+    方法 列长度 <公开 属性读 类型 = 整数 注释 = "获取当前所处位置列(字段)的长度,为NULL时返回0." @禁止流程检查 = 真>
+    {
+        @ if (GetMyRes())
+        @ {
+        @     unsigned long * len = mysql_fetch_lengths(GetMyRes());
+        @     if (len) return (INT)*len;
+        @ }
+        @ return 0;
+    }
+
+    方法 取字段列表 <公开 类型 = Mysql字段信息数组类 注释 = "获取该记录集中所有列信息(即所有字段)." 返回值注释 = "一个成员对应一个列(字段),其成员数与列数(字段数)对应.">
+    {
+        变量 结果 <类型 = Mysql字段信息数组类>
+        @ if (!GetMyRes()) return @<结果>;
+        @ MYSQL_FIELD* fields = mysql_fetch_fields(GetMyRes());
+        @ if (fields)
+        @ {
+        @     for (INT i = 0; i < (INT)mysql_num_fields(GetMyRes()); i++)
+        @         @<结果>.Add (@dt<Mysql字段信息类>(&fields[i]), NULL);
+        @ }
+        返回 (结果)
+    }
+
+    方法 取当前行数据 <公开 类型 = 字节集数组类 注释 = "读出当前行的原始数据,包括所有列." 注释 = "注意:如果数据为文本,需使用\"多字节到文本()\"转换数据."
+            返回值注释 = "一个成员对应一个列(字段),其成员数与列数(字段数)对应.">
+    {
+        变量 结果 <类型 = 字节集数组类>
+        @ if (!GetMyRes()) return @<结果>;
+        @ char** current_row = GetMyRes()->current_row;
+        @ unsigned long *lengths = mysql_fetch_lengths(GetMyRes());    //unsigned long *lengths = GetMyRes()->lengths;
+        @ if (current_row && lengths)    //修复空表引发异常.
+        @ {
+        @     for (INT i = 0; i < mysql_num_fields(GetMyRes()); i++)
+        @     {
+        @         if (current_row[i] == NULL)
+        @             @<结果>.Add (CVolMem (), NULL);
+        @         else
+        @             @<结果>.Add (CVolMem (current_row[i], lengths[i]), NULL);    //@<结果>.Add (CVolMem (current_row[i], strlen(current_row[i])), NULL);
+        @     }
+        @ }
+        返回 (结果)
+    }
+
+    方法 取当前行文本数据 <公开 类型 = 文本数组类 注释 = "以文本内容形式读出当前行的数据,包括所有列." 返回值注释 = "一个成员对应一个列(字段),其成员数与列数对应.">
+    {
+        变量 结果 <类型 = 文本数组类>
+        @ if (!GetMyRes()) return @<结果>;
+        @ char** current_row = GetMyRes()->current_row;
+        @ if (current_row)    //修复空表引发异常.
+        @ {
+        @     for (INT i = 0; i < (INT)mysql_num_fields(GetMyRes()); i++)
+        @     {
+        @         if (current_row[i] == NULL)  //字段内容为NULL?
+        @             @<结果>.data ().Add ("");
+        @         else 
+        @             @<结果>.data ().Add (GetWideText (current_row[i], CVolMem (), NULL));
+        @     }
+        @ }
+        返回 (结果)
+    }
+
+    方法 取当前行整数数据 <公开 类型 = 整数数组类 注释 = "按十进制整数形式读出当前行的数据,包括所有列." 返回值注释 = "一个成员对应一个列(字段),其成员数与列数对应.">
+    {
+        变量 结果 <类型 = 整数数组类>
+        @ if (!GetMyRes()) return @<结果>;
+        @ char** current_row = GetMyRes()->current_row;
+        @ if (current_row)    //修复空表引发异常.
+        @ {
+        @     for (INT i = 0; i < mysql_num_fields(GetMyRes()); i++)
+        @     {
+        @         if (current_row[i] == NULL)  //字段内容为NULL?
+        @             @<结果>.data ().Add (0);
+        @         else 
+        @             @<结果>.data ().Add (atoi(current_row[i]));
+        @     }
+        @ }
+        返回 (结果)
+    }
+
+    方法 到下一行 <公开 类型 = 逻辑型 注释 = "移动到下一行去读数据." 返回值注释 = "如果移动成功返回真,否则返回假(通常为无数据)." @禁止流程检查 = 真>
+    {
+        @ if (GetMyRes()) return mysql_fetch_row(GetMyRes()) != NULL;
+        @ return FALSE;
+    }
+
+    方法 到指定行 <公开 类型 = 逻辑型 注释 = "将当前记录指针移动到指定行,移动后调用\"取当前行XX()\"获取数据." 注释 = "注意:使用\"取临时结果集\"所返回的记录集不支持使用."
+            返回值注释 = "移动成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 行 <类型 = 长整数 注释 = "提供所欲跳转到的行索引.">
+    {
+        如果 (行 >= 行数)
+        {
+            返回 (假)
+        }
+        @ if (GetMyRes())
+        @ {
+        @     mysql_data_seek(GetMyRes(), @<行>);
+        @     return TRUE;
+        @ }
+        @ return FALSE;
+    }
+
+    方法 关闭 <公开 注释 = "关闭记录集,释放所占用资源.">
+    {
+        @ if (GetMyRes()) pdata()->Close();
+    }
+
+    方法 读字节集数据 <公开 类型 = 字节集类 注释 = "提供指定字段(列)名称,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据." @禁止流程检查 = 真>
+    参数 字段名 <类型 = 文本型 注释 = "提供所欲读出数据对应的字段名称.">
+    {
+        @ if (GetMyRes())
+        @ {
+        @     char** current_row = GetMyRes()->current_row;
+        @     MYSQL_FIELD* fields = GetMyRes()->fields;
+        @     unsigned long *lengths = mysql_fetch_lengths(GetMyRes());    //unsigned long *lengths = GetMyRes()->lengths;
+        @     if (current_row && fields && lengths)
+        @     {
+        @         CVolMem memBuf;
+        @         char* fieldName = (char*)GetMbsText(@<字段名>, memBuf, NULL);
+        @         for (INT i = 0; i < (INT)mysql_num_fields(GetMyRes()); i++)
+        @             if (!strcmp(fieldName, fields[i].name)) return CVolMem(current_row[i], lengths[i]);
+        @     }
+        @ }
+        @ return CVolMem();
+    }
+
+    方法 读索引字节集数据 <公开 类型 = 字节集类 注释 = "提供指定字段(列)的索引,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据." @禁止流程检查 = 真>
+    参数 字段索引 <类型 = 整数 注释 = "提供所欲读出数据对应的字段索引位置.">
+    {
+        @ if (GetMyRes() && @<字段索引> < mysql_num_fields(GetMyRes()))
+        @ {
+        @     char** current_row = GetMyRes()->current_row;
+        @     unsigned long *lengths = mysql_fetch_lengths(GetMyRes());    //unsigned long *lengths = GetMyRes()->lengths;
+        @     if (current_row && lengths)
+        @         return CVolMem(current_row[@<字段索引>], lengths[@<字段索引>]);
+        @ }
+        @ return CVolMem();
+    }
+
+    方法 读文本数据 <公开 类型 = 文本型 注释 = "提供指定字段(列)名称,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段名 <类型 = 文本型 注释 = "提供所欲读出数据对应的字段名称.">
+    {
+        返回 (多字节到文本 (读字节集数据 (字段名)))
+    }
+
+    方法 读索引文本数据 <公开 类型 = 文本型 注释 = "提供指定字段(列)的索引,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段索引 <类型 = 整数 注释 = "提供所欲读出数据对应的字段索引位置.">
+    {
+        返回 (多字节到文本 (读索引字节集数据 (字段索引)))
+    }
+
+    方法 读整数数据 <公开 类型 = 整数 注释 = "提供指定字段(列)名称,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段名 <类型 = 文本型 注释 = "提供所欲读出数据对应的字段名称.">
+    {
+        返回 (文本到整数 (读文本数据 (字段名)))
+    }
+
+    方法 读索引整数数据 <公开 类型 = 整数 注释 = "提供指定字段(列)的索引,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段索引 <类型 = 整数 注释 = "提供所欲读出数据对应的字段索引位置.">
+    {
+        返回 (文本到整数 (读索引文本数据 (字段索引)))
+    }
+
+    方法 读短整数数据 <公开 类型 = 短整数 注释 = "提供指定字段(列)名称,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段名 <类型 = 文本型 注释 = "提供所欲读出数据对应的字段名称.">
+    {
+        返回 ((短整数)文本到整数 (读文本数据 (字段名)))
+    }
+
+    方法 读索引短整数数据 <公开 类型 = 短整数 注释 = "提供指定字段(列)的索引,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段索引 <类型 = 整数 注释 = "提供所欲读出数据对应的字段索引位置.">
+    {
+        返回 ((短整数)文本到整数 (读索引文本数据 (字段索引)))
+    }
+
+    方法 读长整数数据 <公开 类型 = 长整数 注释 = "提供指定字段(列)名称,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段名 <类型 = 文本型 注释 = "提供所欲读出数据对应的字段名称.">
+    {
+        返回 (文本到长整数 (读文本数据 (字段名)))
+    }
+
+    方法 读索引长整数数据 <公开 类型 = 长整数 注释 = "提供指定字段(列)的索引,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段索引 <类型 = 整数 注释 = "提供所欲读出数据对应的字段索引位置.">
+    {
+        返回 (文本到长整数 (读索引文本数据 (字段索引)))
+    }
+
+    方法 读逻辑型数据 <公开 类型 = 逻辑型 注释 = "提供指定字段(列)名称,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段名 <类型 = 文本型 注释 = "提供所欲读出数据对应的字段名称.">
+    {
+        返回 (文本到逻辑值 (读文本数据 (字段名)))
+    }
+
+    方法 读索引逻辑型数据 <公开 类型 = 逻辑型 注释 = "提供指定字段(列)的索引,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段索引 <类型 = 整数 注释 = "提供所欲读出数据对应的字段索引位置.">
+    {
+        返回 (文本到逻辑值 (读索引文本数据 (字段索引)))
+    }
+
+    方法 读字节数据 <公开 类型 = 字节 注释 = "提供指定字段(列)名称,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段名 <类型 = 文本型 注释 = "提供所欲读出数据对应的字段名称.">
+    {
+        返回 ((字节)文本到整数 (读文本数据 (字段名)))
+    }
+
+    方法 读索引字节数据 <公开 类型 = 字节 注释 = "提供指定字段(列)的索引,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段索引 <类型 = 整数 注释 = "提供所欲读出数据对应的字段索引位置.">
+    {
+        返回 ((字节)文本到整数 (读索引文本数据 (字段索引)))
+    }
+
+    方法 读字符数据 <公开 类型 = 字符 注释 = "提供指定字段(列)名称,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段名 <类型 = 文本型 注释 = "提供所欲读出数据对应的字段名称.">
+    {
+        返回 ((字符)文本到整数 (读文本数据 (字段名)))
+    }
+
+    方法 读索引字符数据 <公开 类型 = 字符 注释 = "提供指定字段(列)的索引,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段索引 <类型 = 整数 注释 = "提供所欲读出数据对应的字段索引位置.">
+    {
+        返回 ((字符)文本到整数 (读索引文本数据 (字段索引)))
+    }
+
+    方法 读小数数据 <公开 类型 = 小数 注释 = "提供指定字段(列)名称,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段名 <类型 = 文本型 注释 = "提供所欲读出数据对应的字段名称.">
+    {
+        返回 (文本到小数 (读文本数据 (字段名)))
+    }
+
+    方法 读索引小数数据 <公开 类型 = 小数 注释 = "提供指定字段(列)的索引,读出记录集当前行该字段对应的数据内容." 返回值注释 = "返回所读到的数据.">
+    参数 字段索引 <类型 = 整数 注释 = "提供所欲读出数据对应的字段索引位置.">
+    {
+        返回 (文本到小数 (读索引文本数据 (字段索引)))
+    }
+}
+
+类 Mysql连接配置 <公开 注释 = "提供Mysql连接时所欲启用的(多个)功能." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 启用压缩协议 <公开 值 = @CLIENT_COMPRESS 注释 = "使用压缩协议.">
+    常量 返回发现行数 <公开 值 = @CLIENT_FOUND_ROWS 注释 = "返回发现的行数(匹配的),而不是受影响的行数.">
+    常量 允许函数空格 <公开 值 = @CLIENT_IGNORE_SPACE 注释 = "允许在函数名后使用空格,使所有的函数名成为保留字.">
+    常量 当前为ODBC <公开 值 = @CLIENT_ODBC 注释 = "表明当前客户端为ODBC客户端.">
+    常量 交互超时处理 <公开 值 = @CLIENT_INTERACTIVE>
+    常量 加载本地数据 <公开 值 = @CLIENT_LOCAL_FILES 注释 = "允许加载本地数据功能.">
+    常量 多语句支持 <公开 值 = @CLIENT_MULTI_STATEMENTS 注释 = "通知服务器,客户端可能在单个字符串内发送多条语句(由分号\';\'隔开),如果未设置该标志,将禁止多语句执行.">
+    常量 多结果集支持 <公开 值 = @CLIENT_MULTI_RESULTS 注释 = "通知服务器,客户端能够处理来自多语句执行或存储程序的多个结果集.">
+    常量 禁用SCHEMA <公开 值 = @CLIENT_NO_SCHEMA 注释 = "禁止db_name.tbl_name.col_name语法,仅适用于ODBC.">
+    常量 加密协议支持 <公开 值 = @CLIENT_SSL 注释 = "使用SSL(加密协议).">
+    常量 超长密码 <公开 值 = @CLIENT_LONG_PASSWORD 注释 = "支持新的安全密码.">
+    常量 忽略信号管 <公开 值 = @CLIENT_IGNORE_SIGPIPE>
+}
+
+类 Mysql刷新配置 <公开 注释 = "提供刷新Mysql的可选(多个)功能." @文档 = "category = \"辅助类\"">
+{
+    常量 刷新授权表 <公开 类型 = 整数 值 = @REFRESH_GRANT>
+    常量 刷新日志 <公开 类型 = 整数 值 = @REFRESH_LOG>
+    常量 刷新表 <公开 类型 = 整数 值 = @REFRESH_TABLES>
+    常量 刷新主机 <公开 类型 = 整数 值 = @REFRESH_HOSTS>
+    常量 刷新复位状态 <公开 类型 = 整数 值 = @REFRESH_STATUS>
+    常量 刷新线程 <公开 类型 = 整数 值 = @REFRESH_THREADS>
+    常量 复位并重启 <公开 类型 = 整数 值 = @REFRESH_SLAVE 注释 = "在从复制服务器上,复位主服务器信息,并重新启动从服务器.">
+    常量 删除二进制日志 <公开 类型 = 整数 值 = @REFRESH_MASTER 注释 = "在主复制服务器上,删除二进制日志索引中列出的二进制日志文件,并截断索引文件.">
+    常量 刷新错误日志 <公开 类型 = 整数 值 = @REFRESH_ERROR_LOG 注释 = "仅刷新错误的日志.">
+    常量 刷新引擎日志 <公开 类型 = 整数 值 = @REFRESH_ENGINE_LOG 注释 = "刷新所有储存引擎的日志.">
+    常量 刷新二进制日志 <公开 类型 = 整数 值 = @REFRESH_BINARY_LOG>
+    常量 刷新中继日志 <公开 类型 = 整数 值 = @REFRESH_RELAY_LOG>
+    常量 刷新常规日志 <公开 类型 = 整数 值 = @REFRESH_GENERAL_LOG>
+    常量 刷新慢查询日志 <公开 类型 = 整数 值 = @REFRESH_SLOW_LOG>
+}
+
+类 Mysql字符集信息类 <公开 注释 = "本类实例表示Mysql的字符集信息." @文档 = "category = \"辅助类\"">
+{
+    变量 序号 <公开 类型 = 整数>
+    变量 状态 <公开 类型 = 整数>
+    变量 排序名 <公开 类型 = 文本型>
+    变量 字符集 <公开 类型 = 文本型>
+    变量 注释 <公开 类型 = 文本型>
+    变量 字符集目录 <公开 类型 = 文本型>
+    变量 多字节最小长度 <公开 类型 = 整数>
+    变量 多字节最大长度 <公开 类型 = 整数>
+}
+
+类 Mysql协议类型 <公开 注释 = "定义Mysql协议类型." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 默认 <公开 值 = 0>
+    常量 TCP协议 <公开 值 = 1>
+    常量 SOCKET协议 <公开 值 = 2>
+    常量 PIPE协议 <公开 值 = 3>
+    常量 内存协议 <公开 值 = 4>
+}
+
+类 Mysql字段信息类 <公开 注释 = "本类实例表示数据表中的一个字段对象." @文档 = "category = \"辅助类\"">
+{
+    变量 类型 <公开 类型 = Mysql字段类型 注释 = "该字段的具体类型.">
+    变量 名称 <公开 类型 = 文本型 注释 = "该字段的名称文本.">
+    变量 原始名称 <公开 类型 = 文本型 注释 = "如果名称有别名,该属性可取出其原始名称.">
+    变量 表名 <公开 类型 = 文本型 注释 = "返回所处的表名称.">
+    变量 原始表名 <公开 类型 = 文本型 注释 = "返回所处原始表名称.">
+    变量 库名 <公开 类型 = 文本型 注释 = "返回该字段所处的库名称.">
+    变量 目录名 <公开 类型 = 文本型 注释 = "返回所处表目录名称.">
+    变量 默认值 <公开 类型 = 字节集类 注释 = "返回该字段预设的默认值.">
+    变量 长度 <公开 类型 = 整数 注释 = "返回该字段定义的长度.">
+    变量 最大长度 <公开 类型 = 整数 注释 = "返回该字段的最大长度.">
+    变量 DIV标志位 <公开 类型 = 整数>
+    变量 小数位数 <公开 类型 = 整数 注释 = "字段中小数的位数.">
+    变量 字符集索引 <公开 类型 = 整数 注释 = "该字段的字符集类型.">
+    变量 扩展内容 <公开 类型 = 变整数>
+
+    # @ <include>
+    # @ inline_ @dt<Mysql字段信息类> (MYSQL_FIELD* field) : @dt<Mysql字段信息类>()  //MYSQL_FIELD跟随MYSQL_RES生命周期.
+    # @ {
+    # @     if (field != NULL)
+    # @     {
+    # @         @<类型> = (INT)field->type;
+    # @         @<名称>.SetText(GetWideText (field->name, CVolMem (), NULL));
+    # @         @<原始名称>.SetText(GetWideText (field->org_name, CVolMem (), NULL));
+    # @         @<表名>.SetText(GetWideText (field->table, CVolMem (), NULL));
+    # @         @<原始表名>.SetText(GetWideText (field->org_table, CVolMem (), NULL));
+    # @         @<库名>.SetText(GetWideText (field->db, CVolMem (), NULL));
+    # @         @<目录名>.SetText(GetWideText (field->catalog, CVolMem (), NULL));
+    # @         @<默认值> = CVolMem (field->def, field->def_length);
+    # @         @<长度> = (INT)field->length;
+    # @         @<最大长度> = (INT)field->max_length;
+    # @         @<DIV标志位> = (INT)field->flags;
+    # @         @<小数位数> = (INT)field->decimals;
+    # @         @<字符集索引> = (INT)field->charsetnr;
+    # @         @<扩展内容> = (INT_P)field->extension;
+    # @     }
+    # @ }
+    # @ </include>
+}
+
+类 Mysql字段类型 <公开 注释 = "表示一个字段的类型." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 未压缩浮点数型 <公开 值 = @MYSQL_TYPE_DECIMAL>
+    常量 短整型 <公开 值 = @MYSQL_TYPE_TINY>
+    常量 短整数型 <公开 值 = @MYSQL_TYPE_SHORT>
+    常量 整数型 <公开 值 = @MYSQL_TYPE_LONG>
+    常量 浮点型 <公开 值 = @MYSQL_TYPE_FLOAT>
+    常量 双精度浮点型 <公开 值 = @MYSQL_TYPE_DOUBLE>
+    常量 空值 <公开 值 = @MYSQL_TYPE_NULL>
+    常量 时间戳型 <公开 值 = @MYSQL_TYPE_TIMESTAMP>
+    常量 长整数型 <公开 值 = @MYSQL_TYPE_LONGLONG>
+    常量 整数型_24位 <公开 值 = @MYSQL_TYPE_INT24>
+    常量 日期型 <公开 值 = @MYSQL_TYPE_DATE>
+    常量 时间型 <公开 值 = @MYSQL_TYPE_TIME>
+    常量 日期时间型 <公开 值 = @MYSQL_TYPE_DATETIME>
+    常量 年份型 <公开 值 = @MYSQL_TYPE_YEAR>
+    常量 新日期型 <公开 值 = @MYSQL_TYPE_NEWDATE>
+    常量 变长字节型 <公开 值 = @MYSQL_TYPE_VARCHAR>
+    常量 比特型 <公开 值 = @MYSQL_TYPE_BIT>
+    常量 时间戳型_2 <公开 值 = @MYSQL_TYPE_TIMESTAMP2>
+    常量 日期时间型_2 <公开 值 = @MYSQL_TYPE_DATETIME2>
+    常量 时间型_2 <公开 值 = @MYSQL_TYPE_TIME2>
+    常量 JSON型 <公开 值 = @MYSQL_TYPE_JSON>
+    常量 新未压缩浮点数型 <公开 值 = @MYSQL_TYPE_NEWDECIMAL>
+    常量 枚举型 <公开 值 = @MYSQL_TYPE_ENUM>
+    常量 集合型 <公开 值 = @MYSQL_TYPE_SET>
+    常量 字节型 <公开 值 = @MYSQL_TYPE_BLOB>
+    常量 短字节型 <公开 值 = @MYSQL_TYPE_TINY_BLOB>
+    常量 长字节型 <公开 值 = @MYSQL_TYPE_MEDIUM_BLOB>
+    常量 巨字节型 <公开 值 = @MYSQL_TYPE_LONG_BLOB>
+    常量 变长文本型 <公开 值 = @MYSQL_TYPE_VAR_STRING>
+    常量 文本类型 <公开 值 = @MYSQL_TYPE_STRING>
+    常量 几何型 <公开 值 = @MYSQL_TYPE_GEOMETRY>
+}
+
+类 Mysql字段信息数组类 <公开 基础类 = 对象数组模板类 @文档 = "category = \"辅助类\"" @模板实现类 = "Mysql字段信息类">
+
+类 Mysql连接池类 <公开 注释 = "提供一个线程安全的Mysql连接池.">
+{
+
+    # @begin
+    # <> <include>
+    # protected:
+    #     CMMutex m_mutex;
+    #     CMSemaphore m_semap;
+    #     INT m_maxSize;    //最大连接数
+    #     BOOL isInit;
+    #     CVolObjectArray m_mysqlList;
+    #     CVolMem memBuf[6];
+    #     char* m_host;
+    #     char* m_user;
+    #     char* m_password;
+    #     char* m_dbname;
+    #     char* m_unix_socket;
+    #     char* m_character;
+    #     INT m_port;
+    #     unsigned long m_clientflag;
+    #
+    #     inline_ void @an<_OnInitExtra> ()  { isInit = FALSE; m_character = NULL; }
+    # public:
+    #     INT GetActCount();
+    #     INT InitConnectPool(CVolString& host, CVolString& user, CVolString& password, CVolString& dbname, INT port, CVolString& unix_socket, unsigned long clientflag, INT maxSize, INT initSize);
+    #     BOOL CreateMysql(INT* pIndex);
+    #     BOOL GetListActivityMysql(@dt<Mysql数据库类>& objResult, INT timeout);
+    #     void DestroyMysql(@dt<Mysql数据库类>& obj);
+    #     void ReleaseMysql(@dt<Mysql数据库类>& obj);
+    #     void ReleaseAll();
+    #     void SetCharacter(CVolString& str);
+    # <> </include>
+    #     
+    # INT @sn<current_class>::GetActCount()
+    # {
+    #     CMutexLocker locker (m_mutex);
+    #     INT ret = 0;
+    #     INT nCount = (INT)m_mysqlList.GetCount();
+    #     for (INT i = 0; i < nCount; i++)
+    #         if (m_mysqlList.GetAt(i).m_npUserValue == 0) ret++;
+    #     return ret;
+    # }
+    #
+    # INT @sn<current_class>::InitConnectPool(CVolString& host, CVolString& user, CVolString& password, CVolString& dbname, INT port, CVolString& unix_socket, unsigned long clientflag, INT maxSize, INT initSize)
+    # {
+    #     CMutexLocker locker (m_mutex);
+    #     m_host = (char*)GetMbsText (host, memBuf[0], NULL);
+    #     m_user = (char*)GetMbsText (user, memBuf[1], NULL);
+    #     m_password = (char*)GetMbsText (password, memBuf[2], NULL);
+    #     m_dbname = (char*)GetMbsText (dbname, memBuf[3], NULL);
+    #     m_unix_socket = (BOOL)unix_socket.IsNullObject() ? NULL : (char*)GetMbsText (unix_socket, memBuf[4], NULL);
+    #     m_port = port;
+    #     m_clientflag = clientflag;
+    #     m_maxSize = MAX (10, maxSize);
+    #     if (initSize > m_maxSize) initSize = m_maxSize;
+    #     m_mysqlList.RemoveAll();
+    #     m_mysqlList.AddNewObjects(@dt<Mysql数据库类>::sGetRuntimeClass(), 0, initSize);  // 0:未使用,1:正在使用.
+    #     isInit = TRUE;
+    #
+    #     for (INT i = (INT)m_mysqlList.GetCount() - 1; i >= 0; i--)
+    #     {
+    #         MYSQL* pMysql = ((@dt<Mysql数据库类>&)m_mysqlList.GetAt(i)).GetMysql();
+    #         ASSERT(pMysql != NULL);
+    #         BOOL reconnect = TRUE;
+    #         mysql_options(pMysql, MYSQL_OPT_RECONNECT, &reconnect);
+    #         if (!mysql_real_connect(pMysql, m_host, m_user, m_password, m_dbname, m_port, m_unix_socket, m_clientflag))  // 未成功连接?
+    #             m_mysqlList.RemoveAt(i);
+    #         else if (m_character != NULL)
+    #             mysql_set_character_set(pMysql, m_character);
+    #     }
+    #     m_semap.post();
+    #     return (INT)m_mysqlList.GetCount();
+    # }
+    #
+    # BOOL @sn<current_class>::CreateMysql(INT* pIndex)
+    # {
+    #     CMutexLocker locker (m_mutex);
+    #     if (isInit == FALSE)  return FALSE;
+    #     if ((INT)m_mysqlList.GetCount() >= m_maxSize)  return FALSE;
+    #     INT nNewIndex;
+    #     MYSQL* pMysql = ((@dt<Mysql数据库类>&)m_mysqlList.AddNewObject(@dt<Mysql数据库类>::sGetRuntimeClass(), 0, (pIndex == NULL ? &nNewIndex : pIndex))).GetMysql();
+    #     ASSERT(pMysql != NULL);
+    #     BOOL reconnect = TRUE;
+    #     mysql_options(pMysql, MYSQL_OPT_RECONNECT, &reconnect);
+    #     if (!mysql_real_connect(pMysql, m_host, m_user, m_password, m_dbname, m_port, m_unix_socket, m_clientflag))
+    #     {
+    #         m_mysqlList.RemoveAt ((pIndex == NULL ? nNewIndex : *pIndex), 1);  // 未成功连接
+    #         return FALSE;
+    #     }
+    #     if (m_character != NULL) mysql_set_character_set(pMysql, m_character);
+    #     m_semap.post();
+    #     return TRUE;
+    # }
+    #
+    # BOOL @sn<current_class>::GetListActivityMysql(@dt<Mysql数据库类>& objResult, INT timeout)
+    # {
+    #     while (isInit)
+    #     {
+    #         {
+    #             CMutexLocker locker (m_mutex);
+    #             for (INT i = 0; i < (INT)m_mysqlList.GetCount(); i++)
+    #             {
+    #                 if (m_mysqlList.GetAt(i).m_npUserValue == 0)
+    #                 {
+    #                     m_mysqlList.GetAt(i).m_npUserValue = 1;
+    #                     objResult.CopyFrom ((@dt<Mysql数据库类>&)m_mysqlList.GetAt(i));
+    #                     return TRUE;
+    #                 }
+    #             }
+    #
+    #             // 无余量,尝试创建
+    #             INT createIndex;
+    #             if (CreateMysql(&createIndex))
+    #             {
+    #                 m_mysqlList.GetAt(createIndex).m_npUserValue = 1;
+    #                 objResult.CopyFrom ((@dt<Mysql数据库类>&)m_mysqlList.GetAt(createIndex));
+    #                 return TRUE;
+    #             }
+    #         }
+    #
+    #         if (timeout ==  0)
+    #             break;
+    #         else if (timeout <  0)
+    #             m_semap.wait (FALSE);
+    #         else
+    #         {
+    #             DWORD dwEntryTime = ::GetTickCount ();
+    #             if (m_semap.wait_timeout (timeout) == FALSE)
+    #                 break;
+    #             timeout -= (INT)(::GetTickCount () - dwEntryTime);
+    #             if (timeout < 0)  timeout = 0;
+    #         }
+    #     }
+    #
+    #     return FALSE;
+    # }
+    #
+    # void @sn<current_class>::DestroyMysql(@dt<Mysql数据库类>& obj)
+    # {
+    #     CMutexLocker locker (m_mutex);
+    #     for (INT i = 0; i < (INT)m_mysqlList.GetCount(); i++)
+    #     {
+    #         if (((@dt<Mysql数据库类>&)m_mysqlList.GetAt(i)).GetMysql() == obj.GetMysql())
+    #         {
+    #             m_mysqlList.RemoveAt(i, 1);
+    #             break;                
+    #         }
+    #     }
+    # }
+    #     
+    # void @sn<current_class>::ReleaseMysql(@dt<Mysql数据库类>& obj)
+    # {
+    #     CMutexLocker locker (m_mutex);
+    #     for (INT i = 0; i < (INT)m_mysqlList.GetCount(); i++)
+    #     {
+    #         if (((@dt<Mysql数据库类>&)m_mysqlList.GetAt(i)).GetMysql() == obj.GetMysql())
+    #         {
+    #             m_mysqlList.GetAt(i).m_npUserValue = 0;
+    #             m_semap.post();
+    #             break;
+    #         }
+    #     }
+    # }
+    #
+    # void @sn<current_class>::ReleaseAll()
+    # {
+    #     CMutexLocker locker (m_mutex);
+    #     for (INT i = 0; i < (INT)m_mysqlList.GetCount(); i++)
+    #         m_mysqlList.GetAt(i).m_npUserValue = 0;
+    #     m_semap.post();
+    # }
+    #
+    # void @sn<current_class>::SetCharacter(CVolString& str)
+    # { 
+    #     CVolMem tempBuf;
+    #     char* temp = (char*)GetMbsText (str, tempBuf, NULL);
+    #     CMutexLocker locker (m_mutex);
+    #     if (m_character != NULL && !strcmp(temp, m_character)) return;
+    #     memBuf[5].CopyFrom (temp, (strlen (temp) + 1) * sizeof (char));
+    #     m_character = (char*)memBuf [5].GetPtr ();
+    #
+    #     for (INT i = 0; i < (INT)m_mysqlList.GetCount(); i++)
+    #     {
+    #         MYSQL* pMysql = ((@dt<Mysql数据库类>&)m_mysqlList.GetAt(i)).GetMysql();
+    #         ASSERT(pMysql != NULL);
+    #         mysql_set_character_set(pMysql, m_character);
+    #     }
+    # }
+    # @end
+
+    方法 初始化 <公开 类型 = 整数 注释 = "初始化Mysql连接池并连接至指定Mysql服务器" 返回值注释 = "返回该连接池中所创建成功的连接数" @嵌入式方法 = "">
+    参数 地址 <类型 = 文本型 注释 = "提供所欲连接数据库的地址.">
+    参数 用户名 <类型 = 文本型 注释 = "提供所欲连接数据库的用户名.">
+    参数 密码 <类型 = 文本型 注释 = "提供所欲连接数据库的连接密码.">
+    参数 数据库名 <类型 = 文本型 注释 = "提供所欲连接数据库的名称.">
+    参数 端口 <类型 = 整数 注释 = "提供所欲连接数据库的端口." @默认值 = 3306>
+    参数 套接字 <类型 = 文本型 注释 = "该字符串描述了应使用的套接字或命名管道." @默认值 = 空对象>
+    参数 配置位 <类型 = 整数 注释 = "请参考\"Mysql连接配置\"所提供的常量,该参数接受其中单个或多个组合的值." @默认值 = 0>
+    参数 最大连接数 <类型 = 整数 注释 = "连接池中所能创建的最大连接数量." @默认值 = 50>
+    参数 初始连接数 <类型 = 整数 注释 = "初始化时所欲创建的可用连接数." @默认值 = 10>
+    {
+        @ @sn<this>.InitConnectPool(@<地址>, @<用户名>, @<密码>, @<数据库名>, @<端口>, @<套接字>, @<配置位>, @<最大连接数>, @<初始连接数>)
+    }
+
+    方法 取连接 <公开 类型 = 逻辑型 注释 = "  从Mysql连接池中取出一个可用的连接. 成功返回真,失败返回假." 注释 = "  如果当前连接池中暂无可用连接,将会新建一个连接,如果已达到最大连接数限制时将会等待指定时长,"
+            注释 = "超时后将会返回假." 注释 = "  注意:取出的连接使用完毕后务必调用\"释放连接\"方法,否则所取出的连接将一直处于占用状态." 返回值注释 = "返回本次获取的连接是否有效." @嵌入式方法 = "">
+    参数 结果连接 <类型 = Mysql数据库类 注释 = "如果本方法成功,则所获得连接将填入此结果变量中.">
+    参数 繁忙等待时间 <类型 = 整数 注释 = "指定在所有连接都已用尽时所欲等待的时长,提供-1表示无限等待,0表示不等待.单位:毫秒." @默认值 = 10000>
+    {
+        @ @sn<this>.GetListActivityMysql(@<结果连接>, @<繁忙等待时间>)
+    }
+
+    方法 释放连接 <公开 注释 = "释放从连接池中所取出的连接对象,使其在连接池中恢复空闲状态等待被获取." 注释 = "注意:取出的连接使用完毕后务必调用本方法释放,否则所取出的连接将一直处于占用状态." @嵌入式方法 = "">
+    参数 连接对象 <类型 = Mysql数据库类 注释 = "提供所欲释放的连接对象,必须确认此连接目前不再使用.">
+    {
+        @ @sn<this>.ReleaseMysql(@<连接对象>)
+    }
+
+    方法 释放所有连接 <公开 注释 = "释放连接池中所有的连接对象,使其在连接池中恢复空闲状态等待被获取." 注释 = "调用本方法时必须确认所有连接目前不再使用." @嵌入式方法 = "">
+    {
+        @ @sn<this>.ReleaseAll()
+    }
+
+    方法 销毁连接 <公开 注释 = "销毁连接池中的指定连接,该连接将会从连接池中被移除并断开释放." @嵌入式方法 = "">
+    参数 连接对象 <类型 = Mysql数据库类 注释 = "提供所欲销毁的连接对象,必须确认此连接不再使用.">
+    {
+        @ @sn<this>.DestroyMysql(@<连接对象>)
+    }
+
+    方法 创建连接 <公开 类型 = 逻辑型 注释 = "在该连接池中新建一个连接,返回创建的结果." 返回值注释 = "如果当前连接池中连接已达最大连接数将会返回失败." @嵌入式方法 = "">
+    {
+        @ @sn<this>.CreateMysql(NULL)
+    }
+
+    方法 取空闲连接数 <公开 类型 = 整数 注释 = "获取当前连接池中空闲的可用连接数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetActCount()
+    }
+
+    方法 置字符集 <公开 注释 = "设置该连接池中所有连接所欲使用的默认字符集,支持在\"初始化\"方法之前调用." @嵌入式方法 = "">
+    参数 字符集 <类型 = 文本型 注释 = "提供所欲使用的字符集.">
+    {
+        @ @sn<this>.SetCharacter(@<字符集>)
+    }
+
+    方法 执行SQL语句 <公开 类型 = 逻辑型 注释 = "使用连接池当前空闲的连接执行一条SQL语句" 返回值注释 = "执行成功返回真,否则返回假." @禁止流程检查 = 真>
+    参数 语句内容 <类型 = 文本型 注释 = "提供所欲查询当前数据库的SQL语句.">
+    参数 繁忙等待时间 <类型 = 整数 注释 = "指定在所有连接都已用尽时所欲等待的时长,提供-1表示无限等待,0表示不等待.单位:毫秒." @默认值 = 10000>
+    {
+        变量 临时连接 <类型 = Mysql数据库类>
+        变量 返回结果 <类型 = 逻辑型>
+        如果 (取连接 (临时连接, 繁忙等待时间))  // 判定所取出连接是否有效
+        {
+            返回结果 = 临时连接.执行SQL语句 (语句内容)
+            释放连接 (临时连接)
+        }
+        返回 (返回结果)
+    }
+}

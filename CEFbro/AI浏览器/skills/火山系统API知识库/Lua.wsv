@@ -1,0 +1,1422 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.lua\"" "" @视窗.外部头文件 = "Lua\\include\\lua.hpp" ""
+        @视窗.外部库.win32 = "Lua\\win32\\LuaToolx86.lib" @视窗.附属文件.win32 = "Lua\\win32\\LuaToolx86.dll" ""
+        @视窗.外部库.x64 = "Lua\\x64\\LuaToolx64.lib" @视窗.附属文件.x64 = "Lua\\x64\\LuaToolx64.dll" "" "">
+
+类 ______lua基础函数 <公开 @全局类 = 真>
+{
+
+    # /*
+    # ** RCS ident string
+    # */
+    # extern const char lua_ident[];
+    #
+    #
+    # /*
+    # ** state manipulation
+    # */
+    # LUA_API lua_State *(lua_newstate) (lua_Alloc f, void *ud);
+    # LUA_API void       (lua_close) (lua_State *L);
+    # LUA_API lua_State *(lua_newthread) (lua_State *L);
+    # LUA_API int        (lua_resetthread) (lua_State *L);
+    #
+    # LUA_API lua_CFunction (lua_atpanic) (lua_State *L, lua_CFunction panicf);
+    #
+    #   
+    # LUA_API lua_Number (lua_version) (lua_State *L);
+
+    方法 lua_newstate <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 lua_Alloc <类型 = 变整数>
+    参数 ud <类型 = 变整数>
+    {
+        @ (@dt<变整数>)lua_newstate((lua_Alloc)@<lua_Alloc>,(void*)@<ud>)
+    }
+
+    方法 lua_close <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    {
+        @ lua_close((lua_State*)@<句柄>)
+    }
+
+    方法 lua_newthread <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    {
+        @ (@dt<变整数>lua_newthread((lua_State*)@<句柄>)
+    }
+
+    方法 lua_resetthread <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    {
+        @ lua_resetthread((lua_State*)@<句柄>)
+    }
+
+    方法 lua_atpanic <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 panicf <类型 = 变整数>
+    {
+        @ (@dt<变整数>)lua_atpanic((lua_State *)@<句柄>,(lua_CFunction)@<panicf>)
+    }
+
+    方法 lua_version <公开 静态 类型 = 长整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    {
+        @ (@dt<长整数>)lua_version((lua_State *)@<句柄>)
+    }
+
+    #
+    #
+    #
+    # /*
+    # ** basic stack manipulation
+    # */
+    # LUA_API int   (lua_absindex) (lua_State *L, int idx);
+    # LUA_API int   (lua_gettop) (lua_State *L);
+    # LUA_API void  (lua_settop) (lua_State *L, int idx);
+    # LUA_API void  (lua_pushvalue) (lua_State *L, int idx);
+    # LUA_API void  (lua_rotate) (lua_State *L, int idx, int n);
+    # LUA_API void  (lua_copy) (lua_State *L, int fromidx, int toidx);
+    # LUA_API int   (lua_checkstack) (lua_State *L, int n);
+    #
+    # LUA_API void  (lua_xmove) (lua_State *from, lua_State *to, int n);
+    #
+
+    方法 lua_absindex <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_version((lua_State *)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_gettop <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    {
+        @ lua_gettop((lua_State *)@<句柄>)
+    }
+
+    方法 lua_settop <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_settop((lua_State *)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_pushvalue <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_pushvalue((lua_State *)@<句柄>,@<栈索引>)
+
+    }
+
+    方法 lua_rotate <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    参数 n <类型 = 整数>
+    {
+        @ lua_rotate((lua_State *)@<句柄>,@<栈索引>,@<n>)
+    }
+
+    方法 lua_copy <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 源栈索引 <类型 = 整数>
+    参数 目标栈索引 <类型 = 整数>
+    {
+        @ lua_copy((lua_State *)@<句柄>,@<源栈索引>,@<目标栈索引>)
+    }
+
+    方法 lua_checkstack <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 n <类型 = 整数>
+    {
+        @ lua_checkstack((lua_State *)@<句柄>,@<n>)
+    }
+
+    方法 lua_xmove <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 源句柄 <类型 = 变整数>
+    参数 目标句柄 <类型 = 变整数>
+    参数 n <类型 = 整数>
+    {
+        @ lua_xmove((lua_State *)@<源句柄>,(lua_State *)@<目标句柄>,@<n>)
+    }
+
+    # /*
+    # ** access functions (stack -> C)
+    # */
+    #
+    # LUA_API int             (lua_isnumber) (lua_State *L, int idx);
+    # LUA_API int             (lua_isstring) (lua_State *L, int idx);
+    # LUA_API int             (lua_iscfunction) (lua_State *L, int idx);
+    # LUA_API int             (lua_isinteger) (lua_State *L, int idx);
+    # LUA_API int             (lua_isuserdata) (lua_State *L, int idx);
+    # LUA_API int             (lua_type) (lua_State *L, int idx);
+    # LUA_API const char     *(lua_typename) (lua_State *L, int tp);
+    #
+
+    方法 lua_isnumber <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_isnumber((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_isstring <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_isstring((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_iscfunction <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_iscfunction((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_isinteger <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_isinteger((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_isuserdata <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_isuserdata((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_type <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_type((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_typename <公开 静态 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_type((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    # LUA_API lua_Number      (lua_tonumberx) (lua_State *L, int idx, int *isnum);
+    # LUA_API lua_Integer     (lua_tointegerx) (lua_State *L, int idx, int *isnum);
+    # LUA_API int             (lua_toboolean) (lua_State *L, int idx);
+    # LUA_API const char     *(lua_tolstring) (lua_State *L, int idx, size_t *len);
+    # LUA_API lua_Unsigned    (lua_rawlen) (lua_State *L, int idx);
+    # LUA_API lua_CFunction   (lua_tocfunction) (lua_State *L, int idx);
+    # LUA_API void        *(lua_touserdata) (lua_State *L, int idx);
+    # LUA_API lua_State      *(lua_tothread) (lua_State *L, int idx);
+    # LUA_API const void     *(lua_topointer) (lua_State *L, int idx);
+    #
+
+    方法 lua_tonumberx <公开 静态 类型 = 小数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    参数 返回值_是否数值 <类型 = 整数>
+    {
+        @ lua_tonumberx((lua_State*)@<句柄>,@<栈索引>,&@<返回值_是否数值>)
+    }
+
+    方法 lua_tointegerx <公开 静态 类型 = 长整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    参数 返回值_是否数值 <类型 = 整数>
+    {
+        @ lua_tointegerx((lua_State*)@<句柄>,@<栈索引>,&@<返回值_是否数值>)
+    }
+
+    方法 lua_toboolean <公开 静态 类型 = 小数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_toboolean((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_tolstring <公开 静态 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    参数 返回值_文本长度 <类型 = 整数>
+    {
+        @ lua_tolstring((lua_State*)@<句柄>,@<栈索引>,&@<返回值_文本长度>)
+    }
+
+    方法 lua_rawlen <公开 静态 类型 = 长整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ (@dt<长整数>)lua_rawlen((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_tocfunction <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ (@dt<变整数>)lua_tocfunction((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_touserdata <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ (@dt<变整数>)lua_touserdata((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_tothread <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ (@dt<变整数>)lua_tothread((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_topointer <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ (@dt<变整数>)lua_topointer((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    # /*
+    # ** Comparison and arithmetic functions
+    # */
+    #
+    # #define LUA_OPADD 0 /* ORDER TM, ORDER OP */
+    # #define LUA_OPSUB 1
+    # #define LUA_OPMUL 2
+    # #define LUA_OPMOD 3
+    # #define LUA_OPPOW 4
+    # #define LUA_OPDIV 5
+    # #define LUA_OPIDIV 6
+    # #define LUA_OPBAND 7
+    # #define LUA_OPBOR 8
+    # #define LUA_OPBXOR 9
+    # #define LUA_OPSHL 10
+    # #define LUA_OPSHR 11
+    # #define LUA_OPUNM 12
+    # #define LUA_OPBNOT 13
+    #
+    # LUA_API void  (lua_arith) (lua_State *L, int op);
+    #
+    # #define LUA_OPEQ 0
+    # #define LUA_OPLT 1
+    # #define LUA_OPLE 2
+    #
+    # LUA_API int   (lua_rawequal) (lua_State *L, int idx1, int idx2);
+    # LUA_API int   (lua_compare) (lua_State *L, int idx1, int idx2, int op);
+    #
+
+    方法 lua_arith <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 操作码 <类型 = 整数 注释 = "#define LUA_OPADD 0 /* ORDER TM, ORDER OP */" 注释 = "#define LUA_OPSUB 1" 注释 = "#define LUA_OPMUL 2"
+            注释 = "#define LUA_OPMOD 3" 注释 = "#define LUA_OPPOW 4" 注释 = "#define LUA_OPDIV 5" 注释 = "#define LUA_OPIDIV 6"
+            注释 = "#define LUA_OPBAND 7" 注释 = "#define LUA_OPBOR 8" 注释 = "#define LUA_OPBXOR 9" 注释 = "#define LUA_OPSHL 10"
+            注释 = "#define LUA_OPSHR 11" 注释 = "#define LUA_OPUNM 12" 注释 = "#define LUA_OPBNOT 13" 折叠2>
+    {
+        @ lua_arith((lua_State*)@<句柄>,@<操作码>)
+    }
+
+    方法 lua_rawequal <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引1 <类型 = 整数 注释 = "#define LUA_OPADD 0 /* ORDER TM, ORDER OP */" 注释 = "#define LUA_OPSUB 1" 注释 = "#define LUA_OPMUL 2"
+            注释 = "#define LUA_OPMOD 3" 注释 = "#define LUA_OPPOW 4" 注释 = "#define LUA_OPDIV 5" 注释 = "#define LUA_OPIDIV 6"
+            注释 = "#define LUA_OPBAND 7" 注释 = "#define LUA_OPBOR 8" 注释 = "#define LUA_OPBXOR 9" 注释 = "#define LUA_OPSHL 10"
+            注释 = "#define LUA_OPSHR 11" 注释 = "#define LUA_OPUNM 12" 注释 = "#define LUA_OPBNOT 13" 折叠2>
+    参数 栈索引2 <类型 = 整数>
+    {
+        @ lua_rawequal((lua_State*)@<句柄>,@<栈索引1>,@<栈索引2>)
+    }
+
+    方法 lua_compare <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引1 <类型 = 整数 注释 = "#define LUA_OPADD 0 /* ORDER TM, ORDER OP */" 注释 = "#define LUA_OPSUB 1" 注释 = "#define LUA_OPMUL 2"
+            注释 = "#define LUA_OPMOD 3" 注释 = "#define LUA_OPPOW 4" 注释 = "#define LUA_OPDIV 5" 注释 = "#define LUA_OPIDIV 6"
+            注释 = "#define LUA_OPBAND 7" 注释 = "#define LUA_OPBOR 8" 注释 = "#define LUA_OPBXOR 9" 注释 = "#define LUA_OPSHL 10"
+            注释 = "#define LUA_OPSHR 11" 注释 = "#define LUA_OPUNM 12" 注释 = "#define LUA_OPBNOT 13" 折叠2>
+    参数 栈索引2 <类型 = 整数>
+    参数 操作码 <类型 = 整数>
+    {
+        @ lua_compare((lua_State*)@<句柄>,@<栈索引1>,@<栈索引2>,@<操作码>)
+    }
+
+    # /*
+    # ** push functions (C -> stack)
+    # */
+    # LUA_API void        (lua_pushnil) (lua_State *L);
+    # LUA_API void        (lua_pushnumber) (lua_State *L, lua_Number n);
+    # LUA_API void        (lua_pushinteger) (lua_State *L, lua_Integer n);
+    # LUA_API const char *(lua_pushlstring) (lua_State *L, const char *s, size_t len);
+    # LUA_API const char *(lua_pushstring) (lua_State *L, const char *s);
+    #
+    # LUA_API const char *(lua_pushvfstring) (lua_State *L, const char *fmt, va_list argp);
+    # LUA_API const char *(lua_pushfstring) (lua_State *L, const char *fmt, ...);
+    #
+    # LUA_API void  (lua_pushcclosure) (lua_State *L, lua_CFunction fn, int n);
+    # LUA_API void  (lua_pushboolean) (lua_State *L, int b);
+    # LUA_API void  (lua_pushlightuserdata) (lua_State *L, void *p);
+    # LUA_API int   (lua_pushthread) (lua_State *L);
+    #
+
+    方法 lua_pushnil <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    {
+        @ lua_pushnil((lua_State*)@<句柄>)
+    }
+
+    方法 lua_pushnumber <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 数据 <类型 = 小数>
+    {
+        @ lua_pushnumber((lua_State*)@<句柄>,@<数据>)
+    }
+
+    方法 lua_pushinteger <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 数据 <类型 = 长整数>
+    {
+        @ lua_pushinteger((lua_State*)@<句柄>,@<数据>)
+    }
+
+    方法 lua_pushlstring <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 变整数>
+    {
+        @ lua_pushlstring((lua_State*)@<句柄>,@<数据指针>,@<数据大小>)
+    }
+
+    方法 lua_pushstring <公开 静态>
+    参数 句柄 <类型 = 变整数>
+    参数 内容 <类型 = 文本型 注释 = "utf8文本指针">
+    {
+        变量 临时文本 <类型 = 字节集类>
+        临时文本 = 文本到UTF8 (内容)
+        @ lua_pushstring((lua_State*)@<句柄>,(const char*)@<临时文本>.GetPtr());
+
+    }
+
+    方法 lua_pushcclosure <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 函数指针 <类型 = 变整数 注释 = "utf8文本指针">
+    参数 n <类型 = 整数>
+    {
+        @ lua_pushstring((lua_State*)@<句柄>,@<函数指针>,@<n>)
+
+    }
+
+    方法 lua_pushboolean <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 数据 <类型 = 整数>
+    {
+        @ lua_pushboolean((lua_State*)@<句柄>,@<数据>)
+    }
+
+    方法 lua_pushlightuserdata <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 数据 <类型 = 变整数>
+    {
+        @ lua_pushlightuserdata((lua_State*)@<句柄>,@<数据>)
+    }
+
+    方法 lua_pushthread <公开 静态 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    {
+        @ lua_pushthread((lua_State*)@<句柄>)
+    }
+
+    # /*
+    # ** get functions (Lua -> stack)
+    # */
+    # LUA_API int (lua_getglobal) (lua_State *L, const char *name);
+    # LUA_API int (lua_gettable) (lua_State *L, int idx);
+    # LUA_API int (lua_getfield) (lua_State *L, int idx, const char *k);
+    # LUA_API int (lua_geti) (lua_State *L, int idx, lua_Integer n);
+    # LUA_API int (lua_rawget) (lua_State *L, int idx);
+    # LUA_API int (lua_rawgeti) (lua_State *L, int idx, lua_Integer n);
+    # LUA_API int (lua_rawgetp) (lua_State *L, int idx, const void *p);
+    #
+    # LUA_API void  (lua_createtable) (lua_State *L, int narr, int nrec);
+    # LUA_API void *(lua_newuserdatauv) (lua_State *L, size_t sz, int nuvalue);
+    # LUA_API int   (lua_getmetatable) (lua_State *L, int objindex);
+    # LUA_API int  (lua_getiuservalue) (lua_State *L, int idx, int n);
+    #
+    #
+
+    方法 lua_getglobal <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    参数 句柄 <类型 = 变整数>
+    参数 名称 <类型 = 文本型>
+    {
+        变量 临时文本 <类型 = 字节集类>
+        临时文本 = 文本到UTF8 (名称)
+        @ return lua_getglobal((lua_State*)@<句柄>,(const char*)@<临时文本>.GetPtr());
+    }
+
+    方法 lua_gettable <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_gettable((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_getfield <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    参数 名称 <类型 = 字节集类>
+    {
+        @ lua_getfield((lua_State*)@<句柄>,@<栈索引>,@<名称>.GetPtr())
+    }
+
+    方法 lua_geti <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    参数 n <类型 = 长整数>
+    {
+        @ lua_geti((lua_State*)@<句柄>,@<栈索引>,@<n>)
+    }
+
+    方法 lua_rawget <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_rawget((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_rawgeti <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    参数 n <类型 = 长整数>
+    {
+        @ lua_rawgeti((lua_State*)@<句柄>,@<栈索引>,@<n>)
+    }
+
+    方法 lua_rawgetp <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    参数 名称 <类型 = 字节集类>
+    {
+        @ lua_rawgetp((lua_State*)@<句柄>,@<栈索引>,@<名称>.GetPtr())
+    }
+
+    方法 lua_createtable <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 narr <类型 = 整数>
+    参数 nrec <类型 = 整数>
+    {
+        @ lua_rawgetp((lua_State*)@<句柄>,@<narr>,@<nrec>)
+    }
+
+    方法 lua_newuserdatauv <公开 静态 类型 = 变整数 注释 = "LUA_API void *(lua_newuserdatauv) (lua_State *L, size_t sz, int nuvalue);" 折叠
+            @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 sz <类型 = 变整数>
+    参数 nuvalue <类型 = 整数>
+    {
+        @ @ct<变整数>lua_newuserdatauv((lua_State*)@<句柄>,(size_t)@<sz>,@<nuvalue>)
+    }
+
+    方法 lua_getmetatable <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 objindex <类型 = 整数>
+    {
+        @ lua_getmetatable((lua_State*)@<句柄>,@<objindex>)
+    }
+
+    方法 lua_getiuservalue <公开 静态 类型 = 整数 注释 = "LUA_API int  (lua_getiuservalue) (lua_State *L, int idx, int n);" 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    参数 n <类型 = 整数>
+    {
+        @ lua_getiuservalue((lua_State*)@<句柄>,@<栈索引>,@<n>)
+    }
+
+    # /*
+    # ** set functions (stack -> Lua)
+    # */
+    # LUA_API void  (lua_setglobal) (lua_State *L, const char *name);
+    # LUA_API void  (lua_settable) (lua_State *L, int idx);
+    # LUA_API void  (lua_setfield) (lua_State *L, int idx, const char *k);
+    # LUA_API void  (lua_seti) (lua_State *L, int idx, lua_Integer n);
+    # LUA_API void  (lua_rawset) (lua_State *L, int idx);
+    # LUA_API void  (lua_rawseti) (lua_State *L, int idx, lua_Integer n);
+    # LUA_API void  (lua_rawsetp) (lua_State *L, int idx, const void *p);
+    # LUA_API int   (lua_setmetatable) (lua_State *L, int objindex);
+    # LUA_API int   (lua_setiuservalue) (lua_State *L, int idx, int n);
+
+    方法 lua_setglobal <公开 静态 注释 = "LUA_API void  (lua_setglobal) (lua_State *L, const char *name);" 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 名称 <类型 = 变整数>
+    {
+        @ lua_getglobal((lua_State*)@<句柄>,@<名称>)
+    }
+
+    方法 lua_settable <公开 静态 注释 = "LUA_API void  (lua_settable) (lua_State *L, int idx);" 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_settable((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_setfield <公开 静态 注释 = "LUA_API void  (lua_setfield) (lua_State *L, int idx, const char *k);" 折叠>
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    参数 k <类型 = 文本型>
+    {
+        变量 临时文本 <类型 = 字节集类>
+        临时文本 = 文本到UTF8 (k)
+        @ lua_setfield((lua_State*)@<句柄>,@<栈索引>,@<临时文本>.GetPtr());
+    }
+
+    方法 lua_seti <公开 静态 注释 = "LUA_API void  (lua_seti) (lua_State *L, int idx, lua_Integer n);" 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    参数 n <类型 = 长整数>
+    {
+        @ lua_seti((lua_State*)@<句柄>,@<栈索引>,@<n>)
+    }
+
+    方法 lua_rawset <公开 静态 注释 = "LUA_API void  (lua_rawset) (lua_State *L, int idx);" 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_rawset((lua_State*)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_rawseti <公开 静态 注释 = "LUA_API void  (lua_rawseti) (lua_State *L, int idx, lua_Integer n);" 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    参数 n <类型 = 长整数>
+    {
+        @ lua_rawseti((lua_State*)@<句柄>,@<栈索引>,@<n>)
+    }
+
+    方法 lua_rawsetp <公开 静态 注释 = "LUA_API void  (lua_rawsetp) (lua_State *L, int idx, const void *p);" 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    参数 p <类型 = 变整数>
+    {
+        @ lua_rawsetp((lua_State*)@<句柄>,@<栈索引>,@<p>)
+    }
+
+    方法 lua_setmetatable <公开 静态 类型 = 整数 注释 = "LUA_API int   (lua_setmetatable) (lua_State *L, int objindex);" 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 objindex <类型 = 整数>
+    {
+        @ lua_setmetatable((lua_State*)@<句柄>,@<objindex>)
+    }
+
+    方法 lua_setiuservalue <公开 静态 类型 = 整数 注释 = "LUA_API int   (lua_setiuservalue) (lua_State *L, int idx, int n);" @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    参数 n <类型 = 整数>
+    {
+        @ lua_setiuservalue((lua_State*)@<句柄>,@<栈索引>,@<n>)
+    }
+
+    #
+    #
+    # /*
+    # ** 'load' and 'call' functions (load and run Lua code)
+    # */
+    # LUA_API void  (lua_callk) (lua_State *L, int nargs, int nresults,
+    #                            lua_KContext ctx, lua_KFunction k);
+    # #define lua_call(L,n,r)  lua_callk(L, (n), (r), 0, NULL)
+    #
+    # LUA_API int   (lua_pcallk) (lua_State *L, int nargs, int nresults, int errfunc,
+    #                             lua_KContext ctx, lua_KFunction k);
+
+    方法 lua_pcallk <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 nargs <类型 = 整数 注释 = "参数数量">
+    参数 nresults <类型 = 整数 注释 = "返回值个数">
+    参数 errfunc <类型 = 整数>
+    参数 ctx <类型 = 变整数 注释 = "lua_KFunction">
+    参数 k <类型 = 变整数 注释 = "lua_KFunction">
+    {
+        @ lua_pcallk( (lua_State *)@<句柄> ,@<nargs>,@<nresults>,@<errfunc>,(lua_KFunction)@<ctx>,(lua_KFunction)@<k>)
+    }
+
+    # #define lua_pcall(L,n,r,f) lua_pcallk(L, (n), (r), (f), 0, NULL)
+
+    方法 lua_pcall <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 nargs <类型 = 整数 注释 = "参数数量">
+    参数 nresults <类型 = 整数 注释 = "返回值个数">
+    参数 errfunc <类型 = 整数>
+    {
+        @ lua_pcall( (lua_State *)@<句柄> ,@<nargs>,@<nresults>,@<errfunc>)
+
+    }
+
+    #
+    #
+    # LUA_API int   (lua_load) (lua_State *L, lua_Reader reader, void *dt,
+    #                           const char *chunkname, const char *mode);
+    #
+    # LUA_API int (lua_dump) (lua_State *L, lua_Writer writer, void *data, int strip);
+    #
+    #
+    # /*
+    # ** coroutine functions
+    # */
+    # LUA_API int  (lua_yieldk)     (lua_State *L, int nresults, lua_KContext ctx,
+    #                                lua_KFunction k);
+    # LUA_API int  (lua_resume)     (lua_State *L, lua_State *from, int narg,
+    #                                int *nres);
+    # LUA_API int  (lua_status)     (lua_State *L);
+    # LUA_API int (lua_isyieldable) (lua_State *L);
+    #
+    # #define lua_yield(L,n)  lua_yieldk(L, (n), 0, NULL)
+    #
+    #
+    # /*
+    # ** Warning-related functions
+    # */
+    # LUA_API void (lua_setwarnf) (lua_State *L, lua_WarnFunction f, void *ud);
+    # LUA_API void (lua_warning)  (lua_State *L, const char *msg, int tocont);
+    #
+    #
+    # /*
+    # ** garbage-collection function and options
+    # */
+    #
+    # #define LUA_GCSTOP  0
+    # #define LUA_GCRESTART  1
+    # #define LUA_GCCOLLECT  2
+    # #define LUA_GCCOUNT  3
+    # #define LUA_GCCOUNTB  4
+    # #define LUA_GCSTEP  5
+    # #define LUA_GCSETPAUSE  6
+    # #define LUA_GCSETSTEPMUL 7
+    # #define LUA_GCISRUNNING  9
+    # #define LUA_GCGEN  10
+    # #define LUA_GCINC  11
+    #
+    # LUA_API int (lua_gc) (lua_State *L, int what, ...);
+    #
+    #
+    # /*
+    # ** miscellaneous functions
+    # */
+    #
+    # LUA_API int   (lua_error) (lua_State *L);
+    #
+    # LUA_API int   (lua_next) (lua_State *L, int idx);
+    #
+    # LUA_API void  (lua_concat) (lua_State *L, int n);
+    # LUA_API void  (lua_len)    (lua_State *L, int idx);
+    #
+    # LUA_API size_t   (lua_stringtonumber) (lua_State *L, const char *s);
+    #
+    # LUA_API lua_Alloc (lua_getallocf) (lua_State *L, void **ud);
+    # LUA_API void      (lua_setallocf) (lua_State *L, lua_Alloc f, void *ud);
+    #
+    # LUA_API void  (lua_toclose) (lua_State *L, int idx);
+    #
+    #
+    # /*
+    # ** {==============================================================
+    # ** some useful macros
+    # ** ===============================================================
+    # */
+    #
+    # #define lua_getextraspace(L) ((void *)((char *)(L) - LUA_EXTRASPACE))
+
+    方法 lua_getextraspace <公开 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    {
+        @ lua_getextraspace((lua_State *)@<句柄>)
+    }
+
+    # #define lua_tonumber(L,i) lua_tonumberx(L,(i),NULL)
+    # #define lua_tointeger(L,i) lua_tointegerx(L,(i),NULL)
+
+    方法 lua_tonumber <公开 静态 类型 = 小数 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_tonumber((lua_State *)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_tointeger <公开 静态 类型 = 长整数 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_tointeger((lua_State *)@<句柄>,@<栈索引>)
+    }
+
+    # #define lua_pop(L,n)  lua_settop(L, -(n)-1)
+
+    方法 lua_pop <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 弹出数 <类型 = 整数>
+    {
+        @ lua_pop((lua_State *)@<句柄>,@<弹出数>)
+    }
+
+    # #define lua_newtable(L)  lua_createtable(L, 0, 0)
+
+    方法 lua_newtable <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    {
+        @ lua_newtable((lua_State *)句柄)
+    }
+
+    # #define lua_register(L,n,f) (lua_pushcfunction(L, (f)), lua_setglobal(L, (n)))
+
+    方法 lua_register <公开 静态>
+    参数 句柄 <类型 = 变整数>
+    参数 名称 <类型 = 文本型>
+    参数 函数 <类型 = 变整数>
+    {
+        变量 临时名称 <类型 = 字节集类>
+        临时名称 = 文本到UTF8 (名称)
+        @ lua_register((lua_State *)@<句柄>,(const char*)@<临时名称>.GetPtr(),(lua_CFunction)@<函数>);
+    }
+
+    # #define lua_pushcfunction(L,f) lua_pushcclosure(L, (f), 0)
+
+    方法 lua_pushcfunction <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 函数 <类型 = 变整数>
+    {
+        @ lua_pushcfunction((lua_State *)@<句柄>,(lua_CFunction)@<函数>)
+    }
+
+    # #define lua_isfunction(L,n) (lua_type(L, (n)) == LUA_TFUNCTION)
+    # #define lua_istable(L,n) (lua_type(L, (n)) == LUA_TTABLE)
+    # #define lua_islightuserdata(L,n) (lua_type(L, (n)) == LUA_TLIGHTUSERDATA)
+    # #define lua_isnil(L,n)  (lua_type(L, (n)) == LUA_TNIL)
+    # #define lua_isboolean(L,n) (lua_type(L, (n)) == LUA_TBOOLEAN)
+    # #define lua_isthread(L,n) (lua_type(L, (n)) == LUA_TTHREAD)
+    # #define lua_isnone(L,n)  (lua_type(L, (n)) == LUA_TNONE)
+    # #define lua_isnoneornil(L, n) (lua_type(L, (n)) <= 0)
+
+    方法 lua_isfunction <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_isfunction((lua_State *)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_istable <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_istable((lua_State *)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_islightuserdata <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_islightuserdata((lua_State *)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_isnil <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_isnil((lua_State *)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_isboolean <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_isboolean((lua_State *)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_isthread <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_isthread((lua_State *)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_isnone <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_isnone((lua_State *)@<句柄>,@<栈索引>)
+    }
+
+    方法 lua_isnoneornil <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_isnoneornil((lua_State *)@<句柄>,@<栈索引>)
+    }
+
+    # #define lua_pushliteral(L, s) lua_pushstring(L, "" s)
+
+    方法 lua_pushliteral <公开 静态 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 文本指针 <类型 = 变整数>
+    {
+        @ lua_pushliteral((lua_State *)@<句柄>,(const char*)@<文本指针>)
+    }
+
+    # #define lua_pushglobaltable(L)  \
+    #  ((void)lua_rawgeti(L, LUA_REGISTRYINDEX, LUA_RIDX_GLOBALS))
+
+    方法 lua_pushglobaltable <公开 静态 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    {
+        @ lua_pushglobaltable((lua_State *)@<句柄>)
+    }
+
+    # #define lua_tostring(L,i) lua_tolstring(L, (i), NULL)
+
+    方法 lua_tostring <公开 静态 类型 = 文本型 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ CVolString( lua_tostring((lua_State *)@<句柄>,@<栈索引>))
+    }
+
+    # #define lua_insert(L,idx) lua_rotate(L, (idx), 1)
+
+    方法 lua_insert <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_insert((lua_State *)@<句柄>,@<栈索引>)
+    }
+
+    # #define lua_remove(L,idx) (lua_rotate(L, (idx), -1), lua_pop(L, 1))
+
+    方法 lua_remove <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_remove((lua_State *)@<句柄>,@<栈索引>)
+    }
+
+    # #define lua_replace(L,idx) (lua_copy(L, -1, (idx)), lua_pop(L, 1))
+
+    方法 lua_replace <公开 静态 折叠 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ lua_replace((lua_State *)@<句柄>,@<栈索引>)
+    }
+
+    # /* }============================================================== */
+    #
+    #
+    # /*
+    # ** {==============================================================
+    # ** compatibility macros
+    # ** ===============================================================
+    # */
+    # #if defined(LUA_COMPAT_APIINTCASTS)
+    #
+    # #define lua_pushunsigned(L,n) lua_pushinteger(L, (lua_Integer)(n))
+    # #define lua_tounsignedx(L,i,is) ((lua_Unsigned)lua_tointegerx(L,i,is))
+    # #define lua_tounsigned(L,i) lua_tounsignedx(L,(i),NULL)
+    #
+    # #endif
+    #
+    # #define lua_newuserdata(L,s) lua_newuserdatauv(L,s,1)
+    # #define lua_getuservalue(L,idx) lua_getiuservalue(L,idx,1)
+    # #define lua_setuservalue(L,idx) lua_setiuservalue(L,idx,1)
+    #
+    # #define LUA_NUMTAGS  LUA_NUMTYPES
+    #
+    # /* }============================================================== */
+    #
+    # /*
+    # ** {======================================================================
+    # ** Debug API
+    # ** =======================================================================
+    # */
+    #
+    #
+    # /*
+    # ** Event codes
+    # */
+    # #define LUA_HOOKCALL 0
+    # #define LUA_HOOKRET 1
+    # #define LUA_HOOKLINE 2
+    # #define LUA_HOOKCOUNT 3
+    # #define LUA_HOOKTAILCALL 4
+    #
+    #
+    # /*
+    # ** Event masks
+    # */
+    # #define LUA_MASKCALL (1 << LUA_HOOKCALL)
+    # #define LUA_MASKRET (1 << LUA_HOOKRET)
+    # #define LUA_MASKLINE (1 << LUA_HOOKLINE)
+    # #define LUA_MASKCOUNT (1 << LUA_HOOKCOUNT)
+    #
+    # typedef struct lua_Debug lua_Debug;  /* activation record */
+    #
+    #
+    # /* Functions to be called by the debugger in specific events */
+    # typedef void (*lua_Hook) (lua_State *L, lua_Debug *ar);
+    #
+    #
+    # LUA_API int (lua_getstack) (lua_State *L, int level, lua_Debug *ar);
+    # LUA_API int (lua_getinfo) (lua_State *L, const char *what, lua_Debug *ar);
+    # LUA_API const char *(lua_getlocal) (lua_State *L, const lua_Debug *ar, int n);
+    # LUA_API const char *(lua_setlocal) (lua_State *L, const lua_Debug *ar, int n);
+    # LUA_API const char *(lua_getupvalue) (lua_State *L, int funcindex, int n);
+    # LUA_API const char *(lua_setupvalue) (lua_State *L, int funcindex, int n);
+    #
+    # LUA_API void *(lua_upvalueid) (lua_State *L, int fidx, int n);
+    # LUA_API void  (lua_upvaluejoin) (lua_State *L, int fidx1, int n1,
+    #                                                int fidx2, int n2);
+    #
+    # LUA_API void (lua_sethook) (lua_State *L, lua_Hook func, int mask, int count);
+    # LUA_API lua_Hook (lua_gethook) (lua_State *L);
+    # LUA_API int (lua_gethookmask) (lua_State *L);
+    # LUA_API int (lua_gethookcount) (lua_State *L);
+    #
+    # LUA_API int (lua_setcstacklimit) (lua_State *L, unsigned int limit);
+    #
+    # struct lua_Debug {
+    #   int event;
+    #   const char *name; /* (n) */
+    #   const char *namewhat; /* (n) 'global', 'local', 'field', 'method' */
+    #   const char *what; /* (S) 'Lua', 'C', 'main', 'tail' */
+    #   const char *source; /* (S) */
+    #   size_t srclen; /* (S) */
+    #   int currentline; /* (l) */
+    #   int linedefined; /* (S) */
+    #   int lastlinedefined; /* (S) */
+    #   unsigned char nups; /* (u) number of upvalues */
+    #   unsigned char nparams;/* (u) number of parameters */
+    #   char isvararg;        /* (u) */
+    #   char istailcall; /* (t) */
+    #   unsigned short ftransfer;   /* (r) index of first value transferred */
+    #   unsigned short ntransfer;   /* (r) number of transferred values */
+    #   char short_src[LUA_IDSIZE]; /* (S) */
+    #   /* private part */
+    #   struct CallInfo *i_ci;  /* active function */
+    # };
+    #
+    #
+}
+
+类 ______luaL基础函数 <公开 @全局类 = 真>
+{
+
+    # /* global table */
+    # #define LUA_GNAME "_G"
+    #
+    #
+    # typedef struct luaL_Buffer luaL_Buffer;
+    #
+    #
+    # /* extra error code for 'luaL_loadfilex' */
+    # #define LUA_ERRFILE     (LUA_ERRERR+1)
+    #
+    #
+    # /* key, in the registry, for table of loaded modules */
+    # #define LUA_LOADED_TABLE "_LOADED"
+    #
+    #
+    # /* key, in the registry, for table of preloaded loaders */
+    # #define LUA_PRELOAD_TABLE "_PRELOAD"
+    #
+    #
+    # typedef struct luaL_Reg {
+    #   const char *name;
+    #   lua_CFunction func;
+    # } luaL_Reg;
+    #
+    #
+    # #define LUAL_NUMSIZES (sizeof(lua_Integer)*16 + sizeof(lua_Number))
+    #
+    # LUALIB_API void (luaL_checkversion_) (lua_State *L, lua_Number ver, size_t sz);
+    # #define luaL_checkversion(L)  \
+    #    luaL_checkversion_(L, LUA_VERSION_NUM, LUAL_NUMSIZES)
+
+    方法 luaL_checkversion <公开 静态 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    {
+        @ luaL_checkversion((lua_State *)@<句柄>)
+    }
+
+    #
+    #
+    # LUALIB_API int (luaL_getmetafield) (lua_State *L, int obj, const char *e);
+    # LUALIB_API int (luaL_callmeta) (lua_State *L, int obj, const char *e);
+    # LUALIB_API const char *(luaL_tolstring) (lua_State *L, int idx, size_t *len);
+    # LUALIB_API int (luaL_argerror) (lua_State *L, int arg, const char *extramsg);
+    # LUALIB_API int (luaL_typeerror) (lua_State *L, int arg, const char *tname);
+    # LUALIB_API const char *(luaL_checklstring) (lua_State *L, int arg,
+    #                                                           size_t *l);
+    # LUALIB_API const char *(luaL_optlstring) (lua_State *L, int arg,
+    #                                           const char *def, size_t *l);
+    # LUALIB_API lua_Number (luaL_checknumber) (lua_State *L, int arg);
+    # LUALIB_API lua_Number (luaL_optnumber) (lua_State *L, int arg, lua_Number def);
+    #
+    # LUALIB_API lua_Integer (luaL_checkinteger) (lua_State *L, int arg);
+    # LUALIB_API lua_Integer (luaL_optinteger) (lua_State *L, int arg,
+    #                                           lua_Integer def);
+    #
+    # LUALIB_API void (luaL_checkstack) (lua_State *L, int sz, const char *msg);
+    # LUALIB_API void (luaL_checktype) (lua_State *L, int arg, int t);
+    # LUALIB_API void (luaL_checkany) (lua_State *L, int arg);
+    #
+    # LUALIB_API int   (luaL_newmetatable) (lua_State *L, const char *tname);
+    # LUALIB_API void  (luaL_setmetatable) (lua_State *L, const char *tname);
+    # LUALIB_API void *(luaL_testudata) (lua_State *L, int ud, const char *tname);
+    # LUALIB_API void *(luaL_checkudata) (lua_State *L, int ud, const char *tname);
+    #
+    # LUALIB_API void (luaL_where) (lua_State *L, int lvl);
+    # LUALIB_API int (luaL_error) (lua_State *L, const char *fmt, ...);
+    #
+    # LUALIB_API int (luaL_checkoption) (lua_State *L, int arg, const char *def,
+    #                                    const char *const lst[]);
+    #
+    # LUALIB_API int (luaL_fileresult) (lua_State *L, int stat, const char *fname);
+    # LUALIB_API int (luaL_execresult) (lua_State *L, int stat);
+    #
+    #
+    # /* predefined references */
+    # #define LUA_NOREF       (-2)
+    # #define LUA_REFNIL      (-1)
+    #
+    # LUALIB_API int (luaL_ref) (lua_State *L, int t);
+    # LUALIB_API void (luaL_unref) (lua_State *L, int t, int ref);
+    #
+    # LUALIB_API int (luaL_loadfilex) (lua_State *L, const char *filename,
+    #                                                const char *mode);
+
+    方法 luaL_loadfilex <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 句柄 <类型 = 变整数>
+    参数 脚本文件 <类型 = 文本型 注释 = "d:\\\\aa.lua">
+    参数 模式 <类型 = 文本型>
+    {
+        变量 临时数据 <类型 = 字节集类>
+        变量 临时模式 <类型 = 字节集类>
+        临时数据 = 文本到UTF8 (脚本文件)
+        临时模式 = 文本到UTF8 (模式)
+        @ return luaL_loadfilex((lua_State *)@<句柄>,@<临时数据>.GetPtr(),@<临时模式>.GetPtr());
+    }
+
+    # #define luaL_loadfile(L,f) luaL_loadfilex(L,f,NULL)
+
+    方法 luaL_loadfile <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 句柄 <类型 = 变整数>
+    参数 脚本文件 <类型 = 文本型 注释 = "d:\\\\aa.lua">
+    {
+        变量 临时数据 <类型 = 字节集类>
+        临时数据 = 文本到UTF8 (脚本文件)
+        @ luaL_loadfile((lua_State *)@<句柄>,@<临时数据>.GetPtr());
+    }
+
+    # LUALIB_API int (luaL_loadbufferx) (lua_State *L, const char *buff, size_t sz,
+    #                                    const char *name, const char *mode);
+
+    方法 luaL_loadbufferx <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 句柄 <类型 = 变整数>
+    参数 缓冲区 <类型 = 字节集类>
+    参数 名称 <类型 = 文本型>
+    参数 模式 <类型 = 文本型>
+    {
+        变量 临时名称 <类型 = 字节集类>
+        变量 临时模式 <类型 = 字节集类>
+        临时名称 = 文本到UTF8 (名称)
+        临时模式 = 文本到UTF8 (模式)
+        @ return luaL_loadbufferx((lua_State *)@<句柄>,@<缓冲区>.GetPtr(),@<缓冲区>.GetSize(),@<临时名称>.GetPtr(),@<临时模式>.GetPtr());
+    }
+
+    # LUALIB_API int (luaL_loadstring) (lua_State *L, const char *s);
+
+    方法 luaL_loadstring <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 句柄 <类型 = 变整数>
+    参数 脚本内容 <类型 = 文本型>
+    {
+        变量 临时字节集 <类型 = 字节集类>
+        临时字节集 = 文本到UTF8 (脚本内容)
+        @ return luaL_loadstring( (lua_State *)@<句柄>,@<临时字节集>.GetPtr());
+    }
+
+    # LUALIB_API lua_State *(luaL_newstate) (void);
+
+    方法 luaL_newstate <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>)luaL_newstate()
+    }
+
+    # LUALIB_API lua_Integer (luaL_len) (lua_State *L, int idx);
+
+    方法 luaL_len <公开 静态 类型 = 长整数 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 栈索引 <类型 = 整数>
+    {
+        @ luaL_loadfile((lua_State *)@<句柄>,@<栈索引>)
+
+    }
+
+    #
+    # LUALIB_API void luaL_addgsub (luaL_Buffer *b, const char *s,
+    #                                      const char *p, const char *r);
+    # LUALIB_API const char *(luaL_gsub) (lua_State *L, const char *s,
+    #                                     const char *p, const char *r);
+    #
+    # LUALIB_API void (luaL_setfuncs) (lua_State *L, const luaL_Reg *l, int nup);
+    #
+    # LUALIB_API int (luaL_getsubtable) (lua_State *L, int idx, const char *fname);
+    #
+    # LUALIB_API void (luaL_traceback) (lua_State *L, lua_State *L1,
+    #                                   const char *msg, int level);
+    #
+    # LUALIB_API void (luaL_requiref) (lua_State *L, const char *modname,
+    #                                  lua_CFunction openf, int glb);
+
+    方法 luaL_requiref <公开 静态>
+    参数 句柄 <类型 = 变整数>
+    参数 模块名称 <类型 = 文本型>
+    参数 注册函数 <类型 = 变整数>
+    参数 是否注册到全局 <类型 = 整数 @默认值 = 1>
+    {
+        变量 临时文本 <类型 = 字节集类>
+        临时文本 = 文本到UTF8 (模块名称)
+        @ luaL_requiref((lua_State *)@<句柄>,@<临时文本>.GetPtr(),(lua_CFunction)@<注册函数>,@<是否注册到全局>);
+
+
+    }
+
+    #
+    # /*
+    # ** ===============================================================
+    # ** some useful macros
+    # ** ===============================================================
+    # */
+    #
+    #
+    # #define luaL_newlibtable(L,l) \
+    #   lua_createtable(L, 0, sizeof(l)/sizeof((l)[0]) - 1)
+    #
+    # #define luaL_newlib(L,l)  \
+    #   (luaL_checkversion(L), luaL_newlibtable(L,l), luaL_setfuncs(L,l,0))
+    #
+
+    方法 luaL_newlib <公开 静态 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    参数 参数数组 <类型 = 变整数>
+    {
+        @ luaL_newlib((lua_State *)@<句柄>,(luaL_Reg*)@<参数数组>)
+    }
+
+    #
+    #
+    # #define luaL_argcheck(L, cond,arg,extramsg) \
+    #   ((void)((cond) || luaL_argerror(L, (arg), (extramsg))))
+    #
+    # #define luaL_argexpected(L,cond,arg,tname) \
+    #   ((void)((cond) || luaL_typeerror(L, (arg), (tname))))
+    #
+    # #define luaL_checkstring(L,n) (luaL_checklstring(L, (n), NULL))
+    # #define luaL_optstring(L,n,d) (luaL_optlstring(L, (n), (d), NULL))
+    #
+    # #define luaL_typename(L,i) lua_typename(L, lua_type(L,(i)))
+    #
+    # #define luaL_dofile(L, fn) \
+    #  (luaL_loadfile(L, fn) || lua_pcall(L, 0, LUA_MULTRET, 0))
+
+    方法 luaL_dofile <公开 静态 类型 = 整数 注释 = "加载，并且执行文本" @禁止流程检查 = 真>
+    参数 句柄 <类型 = 变整数>
+    参数 文件名 <类型 = 文本型>
+    {
+        变量 临时字节集 <类型 = 字节集类>
+        临时字节集 = 文本到多字节 (文件名)
+        @ return luaL_dofile((lua_State *)@<句柄>,(const char*)@<临时字节集>.GetPtr());
+
+    }
+
+    # #define luaL_dostring(L, s) \
+    #  (luaL_loadstring(L, s) || lua_pcall(L, 0, LUA_MULTRET, 0))
+
+    方法 luaL_dostring <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    参数 句柄 <类型 = 变整数>
+    参数 脚本内容 <类型 = 文本型>
+    {
+        变量 临时文本 <类型 = 字节集类>
+        临时文本 = 文本到UTF8 (脚本内容)
+        @ return luaL_dostring((lua_State *)@<句柄>,(const char*)@<临时文本>.GetPtr());
+
+    }
+
+    #
+    # #define luaL_getmetatable(L,n) (lua_getfield(L, LUA_REGISTRYINDEX, (n)))
+    #
+    # #define luaL_opt(L,f,n,d) (lua_isnoneornil(L,(n)) ? (d) : f(L,(n)))
+    #
+    # #define luaL_loadbuffer(L,s,sz,n) luaL_loadbufferx(L,s,sz,n,NULL)
+    #
+    #
+    # /* push the value used to represent failure/error */
+    # #define luaL_pushfail(L) lua_pushnil(L)
+    #
+    #
+    # /*
+    # ** {======================================================
+    # ** Generic Buffer manipulation
+    # ** =======================================================
+    # */
+    #
+    # struct luaL_Buffer {
+    #   char *b;  /* buffer address */
+    #   size_t size;  /* buffer size */
+    #   size_t n;  /* number of characters in buffer */
+    #   lua_State *L;
+    #   union {
+    #     LUAI_MAXALIGN;  /* ensure maximum alignment for buffer */
+    #     char b[LUAL_BUFFERSIZE];  /* initial buffer */
+    #   } init;
+    # };
+    #
+    #
+    # #define luaL_bufflen(bf) ((bf)->n)
+    # #define luaL_buffaddr(bf) ((bf)->b)
+    #
+    #
+    # #define luaL_addchar(B,c) \
+    #   ((void)((B)->n < (B)->size || luaL_prepbuffsize((B), 1)), \
+    #    ((B)->b[(B)->n++] = (c)))
+    #
+    # #define luaL_addsize(B,s) ((B)->n += (s))
+    #
+    # #define luaL_buffsub(B,s) ((B)->n -= (s))
+    #
+    # LUALIB_API void (luaL_buffinit) (lua_State *L, luaL_Buffer *B);
+    # LUALIB_API char *(luaL_prepbuffsize) (luaL_Buffer *B, size_t sz);
+    # LUALIB_API void (luaL_addlstring) (luaL_Buffer *B, const char *s, size_t l);
+    # LUALIB_API void (luaL_addstring) (luaL_Buffer *B, const char *s);
+    # LUALIB_API void (luaL_addvalue) (luaL_Buffer *B);
+    # LUALIB_API void (luaL_pushresult) (luaL_Buffer *B);
+    # LUALIB_API void (luaL_pushresultsize) (luaL_Buffer *B, size_t sz);
+    # LUALIB_API char *(luaL_buffinitsize) (lua_State *L, luaL_Buffer *B, size_t sz);
+    #
+    # #define luaL_prepbuffer(B) luaL_prepbuffsize(B, LUAL_BUFFERSIZE)
+    #
+    # /* }====================================================== */
+    #
+    #
+    #
+    # /*
+    # ** {======================================================
+    # ** File handles for IO library
+    # ** =======================================================
+    # */
+    #
+    # /*
+    # ** A file handle is a userdata with metatable 'LUA_FILEHANDLE' and
+    # ** initial structure 'luaL_Stream' (it may contain other fields
+    # ** after that initial structure).
+    # */
+    #
+    # #define LUA_FILEHANDLE          "FILE*"
+    #
+    #
+    # typedef struct luaL_Stream {
+    #   FILE *f;  /* stream (NULL for incompletely created streams) */
+    #   lua_CFunction closef;  /* to close stream (NULL for closed streams) */
+    # } luaL_Stream;
+    #
+    # /* }====================================================== */
+    #
+    # /*
+    # ** {==================================================================
+    # ** "Abstraction Layer" for basic report of messages and errors
+    # ** ===================================================================
+    # */
+    #
+    # /* print a string */
+    # #if !defined(lua_writestring)
+    # #define lua_writestring(s,l)   fwrite((s), sizeof(char), (l), stdout)
+    # #endif
+    #
+    # /* print a newline and flush the output */
+    # #if !defined(lua_writeline)
+    # #define lua_writeline()        (lua_writestring("\n", 1), fflush(stdout))
+    # #endif
+    #
+    # /* print an error message */
+    # #if !defined(lua_writestringerror)
+    # #define lua_writestringerror(s,p) \
+    #         (fprintf(stderr, (s), (p)), fflush(stderr))
+    # #endif
+    #
+    # /* }================================================================== */
+    #
+    #
+    # /*
+    # ** {============================================================
+    # ** Compatibility with deprecated conversions
+    # ** =============================================================
+    # */
+    # #if defined(LUA_COMPAT_APIINTCASTS)
+    #
+    # #define luaL_checkunsigned(L,a) ((lua_Unsigned)luaL_checkinteger(L,a))
+    # #define luaL_optunsigned(L,a,d) \
+    #  ((lua_Unsigned)luaL_optinteger(L,a,(lua_Integer)(d)))
+    #
+    # #define luaL_checkint(L,n) ((int)luaL_checkinteger(L, (n)))
+    # #define luaL_optint(L,n,d) ((int)luaL_optinteger(L, (n), (d)))
+    #
+    # #define luaL_checklong(L,n) ((long)luaL_checkinteger(L, (n)))
+    # #define luaL_optlong(L,n,d) ((long)luaL_optinteger(L, (n), (d)))
+    #
+    # #endif
+    # /* }============================================================ */
+    #
+    #
+    #
+    #
+    #
+}
+
+类 ______lualib基础函数 <公开 折叠 @全局类 = 真>
+{
+
+    # LUAMOD_API int (luaopen_base) (lua_State *L);
+    #
+    # #define LUA_COLIBNAME "coroutine"
+    # LUAMOD_API int (luaopen_coroutine) (lua_State *L);
+    #
+    # #define LUA_TABLIBNAME "table"
+    # LUAMOD_API int (luaopen_table) (lua_State *L);
+    #
+    # #define LUA_IOLIBNAME "io"
+    # LUAMOD_API int (luaopen_io) (lua_State *L);
+    #
+    # #define LUA_OSLIBNAME "os"
+    # LUAMOD_API int (luaopen_os) (lua_State *L);
+    #
+    # #define LUA_STRLIBNAME "string"
+    # LUAMOD_API int (luaopen_string) (lua_State *L);
+    #
+    # #define LUA_UTF8LIBNAME "utf8"
+    # LUAMOD_API int (luaopen_utf8) (lua_State *L);
+    #
+    # #define LUA_MATHLIBNAME "math"
+    # LUAMOD_API int (luaopen_math) (lua_State *L);
+    #
+    # #define LUA_DBLIBNAME "debug"
+    # LUAMOD_API int (luaopen_debug) (lua_State *L);
+    #
+    # #define LUA_LOADLIBNAME "package"
+    # LUAMOD_API int (luaopen_package) (lua_State *L);
+    #
+    #
+    # /* open all previous libraries */
+    # LUALIB_API void (luaL_openlibs) (lua_State *L);
+
+    方法 luaL_openlibs <公开 静态 @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数>
+    {
+        @ luaL_openlibs((lua_State *)@<句柄>)
+    }
+
+    #
+    #
+}

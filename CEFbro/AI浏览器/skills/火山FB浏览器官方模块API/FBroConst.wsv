@@ -1,0 +1,774 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 FBrowser.常量 <注释 = "浏览器各固定常量参数合集">
+
+类 状态 <公开 "">
+{
+    常量 默认 <公开 类型 = 整数 值 = 0>
+    常量 启用 <公开 类型 = 整数 值 = 1>
+    常量 禁用 <公开 类型 = 整数 值 = 2>
+    常量 ""
+}
+
+类 日志级别 <公开>
+{
+    常量 默认 <公开 类型 = 整数 值 = 0>
+    常量 详细 <公开 类型 = 整数 值 = 1>
+    常量 调试 <公开 类型 = 整数 值 = 2>
+    常量 信息 <公开 类型 = 整数 值 = 3>
+    常量 警告 <公开 类型 = 整数 值 = 4>
+    常量 错误 <公开 类型 = 整数 值 = 5>
+    常量 致命 <公开 类型 = 整数 值 = 6>
+    常量 禁用 <公开 类型 = 整数 值 = 99>
+}
+
+类 PDF打印_边框 <公开>
+{
+    常量 默认 <公开 类型 = 整数 值 = 0>
+    常量 无 <公开 类型 = 整数 值 = 1>
+    常量 最小 <公开 类型 = 整数 值 = 2>
+    常量 CUSTOM <公开 类型 = 整数 值 = 3>
+}
+
+类 按键事件 <公开>
+{
+    常量 单击 <公开 类型 = 整数 值 = 0>
+    常量 按下 <公开 类型 = 整数 值 = 1>
+    常量 放开 <公开 类型 = 整数 值 = 2>
+    常量 字符型 <公开 类型 = 整数 值 = 3>
+}
+
+类 触摸事件 <公开>
+{
+    常量 释放 <公开 类型 = 整数 值 = 0>
+    常量 按压 <公开 类型 = 整数 值 = 1>
+    常量 移动 <公开 类型 = 整数 值 = 2>
+    常量 取消 <公开 类型 = 整数 值 = 3>
+}
+
+类 事件标识 <公开>
+{
+    常量 无 <公开 类型 = 整数 值 = 0>
+    常量 CAPS_LOCK_ON <公开 类型 = 整数 值 = 1>
+    常量 shift按键 <公开 类型 = 整数 值 = 2>
+    常量 ctrl键 <公开 类型 = 整数 值 = 4>
+    常量 ALT按键 <公开 类型 = 整数 值 = 8>
+    常量 鼠标左键 <公开 类型 = 整数 值 = 16>
+    常量 鼠标中键 <公开 类型 = 整数 值 = 32>
+    常量 鼠标右键 <公开 类型 = 整数 值 = 64>
+    常量 COMMAND_DOWN <公开 类型 = 整数 值 = 128>
+    常量 NUMLOCK键 <公开 类型 = 整数 值 = 256>
+    常量 IS_KEY_PAD <公开 类型 = 整数 值 = 512>
+    常量 IS_LEFT <公开 类型 = 整数 值 = 1024>
+    常量 IS_RIGHT <公开 类型 = 整数 值 = 2048>
+    常量 ALTGR_DOWN <公开 类型 = 整数 值 = 4096>
+}
+
+类 鼠标按键类型 <公开>
+{
+    常量 左键 <公开 类型 = 整数 值 = 0>
+    常量 中键 <公开 类型 = 整数 值 = 1>
+    常量 右键 <公开 类型 = 整数 值 = 2>
+}
+
+类 值类型 <公开>
+{
+    常量 无效 <公开 类型 = 整数 值 = 0 注释 = "VTYPE_INVALID">
+    常量 空 <公开 类型 = 整数 值 = 1 注释 = "VTYPE_NULL">
+    常量 逻辑 <公开 类型 = 整数 值 = 2 注释 = "VTYPE_BOOL">
+    常量 整数型 <公开 类型 = 整数 值 = 3 注释 = "VTYPE_INT">
+    常量 双精度小数型 <公开 类型 = 整数 值 = 4 注释 = "VTYPE_DOUBLE">
+    常量 文本 <公开 类型 = 整数 值 = 5 注释 = "VTYPE_STRING">
+    常量 字节集型 <公开 类型 = 整数 值 = 6 注释 = "VTYPE_BINARY">
+    常量 字典值型 <公开 类型 = 整数 值 = 7 注释 = "VTYPE_DICTIONARY">
+    常量 列表型 <公开 类型 = 整数 值 = 8 注释 = "VTYPE_LIST">
+
+    #
+}
+
+类 资源类型 <公开>
+{
+    常量 主框架 <公开 类型 = 整数 值 = 0 注释 = "RT_MAIN_FRAME">
+    常量 子框架 <公开 类型 = 整数 值 = 1 注释 = "RT_SUB_FRAME">
+    常量 样式表 <公开 类型 = 整数 值 = 2 注释 = "RT_STYLESHEET">
+    常量 脚本 <公开 类型 = 整数 值 = 3 注释 = "RT_SCRIPT">
+    常量 图片 <公开 类型 = 整数 值 = 4 注释 = "RT_IMAGE">
+    常量 字体资源 <公开 类型 = 整数 值 = 5 注释 = "RT_FONT_RESOURCE">
+    常量 其他子资源 <公开 类型 = 整数 值 = 6 注释 = "RT_SUB_RESOURCE">
+    常量 对象 <公开 类型 = 整数 值 = 7 注释 = "RT_OBJECT">
+    常量 媒体 <公开 类型 = 整数 值 = 8 注释 = "RT_MEDIA">
+    常量 WORKER <公开 类型 = 整数 值 = 9 注释 = "RT_WORKER">
+    常量 共享_WORKER <公开 类型 = 整数 值 = 10 注释 = "RT_SHARED_WORKER">
+    常量 预先载入 <公开 类型 = 整数 值 = 11 注释 = "RT_PREFETCH">
+    常量 图标 <公开 类型 = 整数 值 = 12 注释 = "RT_FAVICON">
+    常量 XHR <公开 类型 = 整数 值 = 13 注释 = "RT_XHR">
+    常量 PING <公开 类型 = 整数 值 = 14 注释 = "RT_PING">
+    常量 服务_WORKER <公开 类型 = 整数 值 = 15 注释 = "RT_SERVICE_WORKER">
+    常量 CSP_报告 <公开 类型 = 整数 值 = 16 注释 = "RT_CSP_REPORT">
+    常量 插件资源 <公开 类型 = 整数 值 = 17 注释 = "RT_PLUGIN_RESOURCE">
+
+    #
+}
+
+类 来路策略 <公开>
+{
+    常量 默认 <公开 类型 = 整数 值 = 0 注释 = "REFERRER_POLICY_DEFAULT">
+    常量 同源发送完整请求 <公开 类型 = 整数 值 = 1 注释 = "REFERRER_POLICY_REDUCE_REFERRER_GRANULARITY_ON_TRANSITION_CROSS_ORIGIN">
+    常量 异源合并请求 <公开 类型 = 整数 值 = 2 注释 = "REFERRER_POLICY_ORIGIN_ONLY_ON_TRANSITION_CROSS_ORIGIN">
+    常量 不改变请求 <公开 类型 = 整数 值 = 3 注释 = "REFERRER_POLICY_NEVER_CLEAR_REFERRER">
+    常量 原点请求 <公开 类型 = 整数 值 = 4 注释 = "REFERRER_POLICY_ORIGIN">
+    常量 跨源清除请求 <公开 类型 = 整数 值 = 5 注释 = "REFERRER_POLICY_CLEAR_REFERRER_ON_TRANSITION_CROSS_ORIGIN">
+    常量 删除请求到源 <公开 类型 = 整数 值 = 6 注释 = "REFERRER_POLICY_ORIGIN_CLEAR_ON_TRANSITION_FROM_SECURE_TO_INSECURE">
+    常量 清除请求 <公开 类型 = 整数 值 = 7 注释 = "REFERRER_POLICY_NO_REFERRER">
+    常量 最后值 <公开 类型 = 整数 值 = 7 注释 = "REFERRER_POLICY_LAST_VALUE">
+
+    #
+}
+
+类 进程 <公开>
+{
+    常量 浏览器 <公开 类型 = 整数 值 = 0 注释 = "PID_BROWSER">
+    常量 渲染 <公开 类型 = 整数 值 = 1 注释 = "PID_RENDERER">
+
+    #
+}
+
+类 线程ID <公开>
+{
+    常量 UI <公开 类型 = 整数 值 = 0 注释 = "TID_UI">
+    常量 文件背景 <公开 类型 = 整数 值 = 1 注释 = "TID_FILE_BACKGROUND">
+    常量 文件 <公开 类型 = 整数 值 = 1 注释 = "TID_FILE">
+    常量 文件用户可见 <公开 类型 = 整数 值 = 2 注释 = "TID_FILE_USER_VISIBLE">
+    常量 文件用户屏蔽 <公开 类型 = 整数 值 = 3 注释 = "TID_FILE_USER_BLOCKING">
+    常量 流程启动 <公开 类型 = 整数 值 = 4 注释 = "TID_PROCESS_LAUNCHER">
+    常量 IO <公开 类型 = 整数 值 = 5 注释 = "TID_IO">
+    常量 渲染 <公开 类型 = 整数 值 = 6 注释 = "TID_RENDERER">
+}
+
+类 文件对话框 <公开 注释 = "位操作">
+{
+    常量 打开 <公开 类型 = 整数 值 = 0 注释 = "要求文件在允许用户选择它之前存在。">
+    常量 打开_多文件 <公开 类型 = 整数 值 = 1 注释 = "类似打开，但允许选择多个文件打开。">
+    常量 打开_文件夹 <公开 类型 = 整数 值 = 2 注释 = "与打开类似，但选择要打开的文件夹。">
+    常量 保存 <公开 类型 = 整数 值 = 3 注释 = "允许选择一个不存在的文件，如果该文件已经存在，则提示覆盖">
+
+    #
+}
+
+类 JS对话框类型 <公开>
+{
+    常量 警告 <公开 类型 = 整数 值 = 0 注释 = "JSDIALOGTYPE_ALERT">
+    常量 确认 <公开 类型 = 整数 值 = 1 注释 = "JSDIALOGTYPE_CONFIRM">
+    常量 提示 <公开 类型 = 整数 值 = 2 注释 = "JSDIALOGTYPE_PROMPT">
+
+    #
+}
+
+类 焦点 <公开>
+{
+    常量 导航 <公开 类型 = 整数 值 = 0>
+    常量 系统 <公开 类型 = 整数 值 = 1>
+
+    #
+}
+
+类 拖动操作 <公开 注释 = "多种类型叠加位或">
+{
+    常量 无 <公开 类型 = 整数 值 = 0 注释 = "DRAG_OPERATION_NONE">
+    常量 复制 <公开 类型 = 整数 值 = 1 注释 = "DRAG_OPERATION_COPY">
+    常量 链接 <公开 类型 = 整数 值 = 2 注释 = "DRAG_OPERATION_LINK">
+    常量 泛型 <公开 类型 = 整数 值 = 4 注释 = "DRAG_OPERATION_GENERIC">
+    常量 私有 <公开 类型 = 整数 值 = 8 注释 = "DRAG_OPERATION_PRIVATE">
+    常量 移动 <公开 类型 = 整数 值 = 16 注释 = "DRAG_OPERATION_MOVE">
+    常量 删除 <公开 类型 = 整数 值 = 32 注释 = "DRAG_OPERATION_DELETE">
+    常量 任何 <公开 类型 = 整数 值 = -1 注释 = "DRAG_OPERATION_EVERY">
+
+    #
+}
+
+类 JSON解析 <公开>
+{
+    常量 RFC <公开 类型 = 整数 值 = 0
+            注释 = "JSON_PARSER_RFC：Parses the input strictly according to RFC 4627. See comments in Chromium\'s base/json/json_reader.h file for known limitations/deviations from the RFC.">
+    常量 允许逗号 <公开 类型 = 整数 值 = 1
+            注释 = "JSON_PARSER_ALLOW_TRAILING_COMMAS：Allows commas to exist after the last element in structures.">
+
+    #
+}
+
+类 资源过滤器 <公开>
+{
+    常量 需要更多数据 <公开 类型 = 整数 值 = 0>
+    常量 完成 <公开 类型 = 整数 值 = 1>
+    常量 错误 <公开 类型 = 整数 值 = 2>
+
+    #
+}
+
+类 菜单类型 <公开 注释 = "多种类型叠加位或">
+{
+    常量 无 <公开 类型 = 整数 值 = 0 注释 = "CM_TYPEFLAG_NONE">
+    常量 页面 <公开 类型 = 整数 值 = 1 注释 = "CM_TYPEFLAG_PAGE">
+    常量 框架 <公开 类型 = 整数 值 = 2 注释 = "CM_TYPEFLAG_FRAME">
+    常量 链接 <公开 类型 = 整数 值 = 4 注释 = "CM_TYPEFLAG_LINK">
+    常量 媒体 <公开 类型 = 整数 值 = 8 注释 = "CM_TYPEFLAG_MEDIA">
+    常量 文本 <公开 类型 = 整数 值 = 16 注释 = "CM_TYPEFLAG_SELECTION">
+    常量 编辑框 <公开 类型 = 整数 值 = 32 注释 = "CM_TYPEFLAG_EDITABLE">
+
+    #
+}
+
+类 媒体类型 <公开>
+{
+    常量 空 <公开 类型 = 整数 值 = 0>
+    常量 图片 <公开 类型 = 整数 值 = 1>
+    常量 视频 <公开 类型 = 整数 值 = 2>
+    常量 音频 <公开 类型 = 整数 值 = 3>
+    常量 文件 <公开 类型 = 整数 值 = 4>
+    常量 插件 <公开 类型 = 整数 值 = 5>
+
+    #
+}
+
+类 媒体标识 <公开>
+{
+    常量 空 <公开 类型 = 整数 值 = 0>
+    常量 错误 <公开 类型 = 整数 值 = 1>
+    常量 暂停 <公开 类型 = 整数 值 = 2>
+    常量 静音 <公开 类型 = 整数 值 = 4>
+    常量 循环播放 <公开 类型 = 整数 值 = 8>
+    常量 可以保存 <公开 类型 = 整数 值 = 16>
+    常量 存在音频 <公开 类型 = 整数 值 = 32>
+    常量 存在视频 <公开 类型 = 整数 值 = 64>
+    常量 控制根元素 <公开 类型 = 整数 值 = 128>
+    常量 可以打印 <公开 类型 = 整数 值 = 256>
+    常量 可以循环 <公开 类型 = 整数 值 = 512>
+
+    #
+}
+
+类 编辑框标识 <公开>
+{
+    常量 空 <公开 类型 = 整数 值 = 0>
+    常量 可以取消 <公开 类型 = 整数 值 = 1>
+    常量 可以重做 <公开 类型 = 整数 值 = 2>
+    常量 可以剪切 <公开 类型 = 整数 值 = 4>
+    常量 可以复制 <公开 类型 = 整数 值 = 8>
+    常量 可以粘贴 <公开 类型 = 整数 值 = 16>
+    常量 可以删除 <公开 类型 = 整数 值 = 32>
+    常量 可以选择全部 <公开 类型 = 整数 值 = 64>
+    常量 可以翻译 <公开 类型 = 整数 值 = 128>
+
+    #
+}
+
+类 V8性能属性 <公开>
+{
+    常量 无 <公开 类型 = 整数 值 = 0 注释 = "V8_PROPERTY_ATTRIBUTE_NONE">
+    常量 只读 <公开 类型 = 整数 值 = 1 注释 = "V8_PROPERTY_ATTRIBUTE_READONLY">
+    常量 不能枚举 <公开 类型 = 整数 值 = 2 注释 = "V8_PROPERTY_ATTRIBUTE_DONTENUM">
+    常量 不能删除 <公开 类型 = 整数 值 = 4 注释 = "V8_PROPERTY_ATTRIBUTE_DONTDELETE">
+
+    #
+}
+
+类 V8访问控制 <公开>
+{
+    常量 默认 <公开 类型 = 整数 值 = 0 注释 = "V8_ACCESS_CONTROL_DEFAULT">
+    常量 可读 <公开 类型 = 整数 值 = 1 注释 = "V8_ACCESS_CONTROL_ALL_CAN_READ">
+    常量 可写 <公开 类型 = 整数 值 = 2 注释 = "V8_ACCESS_CONTROL_ALL_CAN_WRITE">
+    常量 禁止覆盖 <公开 类型 = 整数 值 = 4 注释 = "V8_ACCESS_CONTROL_PROHIBITS_OVERWRITING">
+
+    #
+}
+
+类 节点类型 <公开>
+{
+    常量 无支持 <公开 类型 = 整数 值 = 0 注释 = "DOM_NODE_TYPE_UNSUPPORTED">
+    常量 元素 <公开 类型 = 整数 值 = 1 注释 = "DOM_NODE_TYPE_ELEMENT">
+    常量 属性 <公开 类型 = 整数 值 = 2 注释 = "DOM_NODE_TYPE_ATTRIBUTE">
+    常量 文本 <公开 类型 = 整数 值 = 3 注释 = "DOM_NODE_TYPE_TEXT">
+    常量 CDATA_SECTION <公开 类型 = 整数 值 = 4 注释 = "DOM_NODE_TYPE_CDATA_SECTION">
+    常量 处理指令 <公开 类型 = 整数 值 = 5 注释 = "DOM_NODE_TYPE_PROCESSING_INSTRUCTIONS">
+    常量 注释 <公开 类型 = 整数 值 = 6 注释 = "DOM_NODE_TYPE_COMMENT">
+    常量 文档 <公开 类型 = 整数 值 = 7 注释 = "DOM_NODE_TYPE_DOCUMENT">
+    常量 文档_类型 <公开 类型 = 整数 值 = 8 注释 = "DOM_NODE_TYPE_DOCUMENT_TYPE">
+    常量 文档_碎片 <公开 类型 = 整数 值 = 9 注释 = "DOM_NODE_TYPE_DOCUMENT_FRAGMENT">
+
+    #
+}
+
+类 节点文档类型 <公开>
+{
+    常量 未知 <公开 类型 = 整数 值 = 0 注释 = "DOM_DOCUMENT_TYPE_UNKNOWN">
+    常量 HTML <公开 类型 = 整数 值 = 1 注释 = "DOM_DOCUMENT_TYPE_HTML">
+    常量 XHTML <公开 类型 = 整数 值 = 2 注释 = "DOM_DOCUMENT_TYPE_XHTML">
+    常量 插件 <公开 类型 = 整数 值 = 3 注释 = "DOM_DOCUMENT_TYPE_PLUGIN">
+
+    #
+}
+
+类 SEEK <公开>
+{
+    常量 CUR <公开 类型 = 整数 值 = 1 注释 = "SEEK_CUR">
+    常量 END <公开 类型 = 整数 值 = 2 注释 = "SEEK_END">
+    常量 SET <公开 类型 = 整数 值 = 0 注释 = "SEEK_SET">
+
+    #
+}
+
+类 JS返回值类型 <公开>
+{
+    常量 无效 <公开 类型 = 整数 值 = -1>
+    常量 空值 <公开 类型 = 整数 值 = 0>
+    常量 整数值 <公开 类型 = 整数 值 = 1>
+    常量 文本值 <公开 类型 = 整数 值 = 2>
+    常量 逻辑值 <公开 类型 = 整数 值 = 3>
+    常量 双精度小数值 <公开 类型 = 整数 值 = 4>
+    常量 时间文本值 <公开 类型 = 整数 值 = 5>
+    常量 数组值 <公开 类型 = 整数 值 = 6>
+    常量 数组缓存值 <公开 类型 = 整数 值 = 7>
+    常量 方法值 <公开 类型 = 整数 值 = 8>
+    常量 类值 <公开 类型 = 整数 值 = 9>
+
+    #
+}
+
+类 文本输入类型 <公开>
+{
+    常量 默认 <公开 类型 = 整数 值 = 0 注释 = "CEF_TEXT_INPUT_MODE_DEFAULT">
+    常量 无 <公开 类型 = 整数 值 = 1 注释 = "CEF_TEXT_INPUT_MODE_NONE">
+    常量 文本 <公开 类型 = 整数 值 = 2 注释 = "CEF_TEXT_INPUT_MODE_TEXT">
+    常量 电话 <公开 类型 = 整数 值 = 3 注释 = "CEF_TEXT_INPUT_MODE_TEL">
+    常量 链接 <公开 类型 = 整数 值 = 4 注释 = "CEF_TEXT_INPUT_MODE_URL">
+    常量 邮件 <公开 类型 = 整数 值 = 5 注释 = "CEF_TEXT_INPUT_MODE_EMAIL">
+    常量 数值 <公开 类型 = 整数 值 = 6 注释 = "CEF_TEXT_INPUT_MODE_NUMERIC">
+    常量 小数位 <公开 类型 = 整数 值 = 7 注释 = "CEF_TEXT_INPUT_MODE_DECIMAL">
+    常量 搜索 <公开 类型 = 整数 值 = 8 注释 = "CEF_TEXT_INPUT_MODE_SEARCH">
+    常量 最大 <公开 类型 = 整数 值 = 8 注释 = "CEF_TEXT_INPUT_MODE_MAX">
+
+    #
+}
+
+类 绘制元素类型 <公开>
+{
+    常量 视图 <公开 类型 = 整数 值 = 0 注释 = "PET_VIEW">
+    常量 弹窗 <公开 类型 = 整数 值 = 1 注释 = "PET_POPUP">
+
+    #
+}
+
+类 清理缓存 <公开>
+{
+    常量 Appcache <公开 类型 = 长整数 值 = 1 注释 = "REMOVE_DATA_MASK_APPCACHE 应用缓存">
+    常量 Cookies <公开 类型 = 长整数 值 = 2 注释 = "REMOVE_DATA_MASK_COOKIES">
+    常量 FileSystem <公开 类型 = 长整数 值 = 4 注释 = "REMOVE_DATA_MASK_FILE_SYSTEMS 文件系统">
+    常量 IndexedDB <公开 类型 = 长整数 值 = 8 注释 = "REMOVE_DATA_MASK_INDEXEDDB 索引数据库">
+    常量 LocalStorage <公开 类型 = 长整数 值 = 16 注释 = "REMOVE_DATA_MASK_LOCAL_STORAGE 本地存储">
+    常量 ShaderCache <公开 类型 = 长整数 值 = 32 注释 = "REMOVE_DATA_MASK_SHADER_CACHE">
+    常量 WebSql <公开 类型 = 长整数 值 = 64 注释 = "REMOVE_DATA_MASK_WEBSQL">
+    常量 ServiceWorkers <公开 类型 = 长整数 值 = 128 注释 = "REMOVE_DATA_MASK_SERVICE_WORKERS">
+    常量 CacheStorage <公开 类型 = 长整数 值 = 256 注释 = "REMOVE_DATA_MASK_CACHE_STORAGE">
+    常量 PluginPrivateData <公开 类型 = 长整数 值 = 512 注释 = "REMOVE_DATA_MASK_PLUGIN_PRIVATE_DATA">
+    常量 BackGroundFetch <公开 类型 = 长整数 值 = 1024 注释 = "REMOVE_DATA_MASK_BACKGROUND_FETCH">
+    常量 Conversions <公开 类型 = 长整数 值 = 2048 注释 = "REMOVE_DATA_MASK_CONVERSIONS">
+    常量 全部 <公开 类型 = 长整数 值 = 4294967295 注释 = "REMOVE_DATA_MASK_ALL">
+
+    #
+}
+
+类 缓存类型 <公开>
+{
+    常量 临时 <公开 类型 = 长整数 值 = 1 注释 = "QUOTA_MANAGED_STORAGE_MASK_TEMPORARY 临时缓存">
+    常量 永久 <公开 类型 = 长整数 值 = 2 注释 = "QUOTA_MANAGED_STORAGE_MASK_PERSISTENT 永久缓存">
+    常量 可用 <公开 类型 = 长整数 值 = 4 注释 = "QUOTA_MANAGED_STORAGE_MASK_SYNCABLE 可用缓存">
+    常量 全部 <公开 类型 = 长整数 值 = 4294967295 注释 = "QUOTA_MANAGED_STORAGE_MASK_ALL 全部缓存">
+
+    #
+}
+
+类 URI保留规则 <公开>
+{
+    常量 无 <公开 类型 = 整数 值 = 0>
+    常量 正常 <公开 类型 = 整数 值 = 1>
+    常量 空格 <公开 类型 = 整数 值 = 2>
+    常量 路径分隔符 <公开 类型 = 整数 值 = 3>
+    常量 Url特殊字符 <公开 类型 = 整数 值 = 8>
+    常量 空格代替加号 <公开 类型 = 整数 值 = 16>
+
+    #
+}
+
+类 颜色类型 <公开>
+{
+    常量 RGBA <公开 类型 = 整数 值 = 0 注释 = "RGBA with 8 bits per pixel (32bits total)">
+    常量 BGRA <公开 类型 = 整数 值 = 1 注释 = "BGRA with 8 bits per pixel (32bits total)">
+
+    #
+}
+
+类 透明类型 <公开>
+{
+    常量 OPAQUE <公开 类型 = 整数 值 = 0 注释 = "没有透明度。忽略alpha组件">
+    常量 PREMULTIPLIED <公开 类型 = 整数 值 = 1 注释 = "Transparency with pre-multiplied alpha component">
+    常量 POSTMULTIPLIED <类型 = 整数 值 = 2 注释 = "Transparency with post-multiplied alpha component">
+
+    #
+}
+
+类 请求标识 <公开>
+{
+    常量 无 <公开 类型 = 整数 值 = 0 注释 = "UR_FLAG_NONE">
+    常量 跳过缓存 <公开 类型 = 整数 值 = 1 注释 = "UR_FLAG_SKIP_CACHE">
+    常量 只使用缓存 <公开 类型 = 整数 值 = 2 注释 = "UR_FLAG_ONLY_FROM_CACHE">
+    常量 禁用缓存 <公开 类型 = 整数 值 = 4 注释 = "UR_FLAG_DISABLE_CACHE">
+    常量 允许存储凭证 <公开 类型 = 整数 值 = 8 注释 = "UR_FLAG_ALLOW_STORED_CREDENTIALS">
+    常量 上载进度报告 <公开 类型 = 整数 值 = 16 注释 = "UR_FLAG_REPORT_UPLOAD_PROGRESS">
+    常量 无下载数据 <公开 类型 = 整数 值 = 32 注释 = "UR_FLAG_NO_DOWNLOAD_DATA">
+    常量 NO_RETRY_ON_5XX <公开 类型 = 整数 值 = 64 注释 = "UR_FLAG_NO_RETRY_ON_5XX">
+    常量 停止重定向 <公开 类型 = 整数 值 = 128 注释 = "UR_FLAG_STOP_ON_REDIRECT">
+
+    #
+}
+
+类 过渡类型 <公开>
+{
+    常量 LINK <公开 类型 = 整数 值 = 0>
+    常量 EXPLICIT <公开 类型 = 整数 值 = 1>
+    常量 AUTO_SUBFRAME <公开 类型 = 整数 值 = 3>
+    常量 MANUAL_SUBFRAME <公开 类型 = 整数 值 = 4>
+    常量 FORM_SUBMIT <公开 类型 = 整数 值 = 7>
+    常量 RELOAD <公开 类型 = 整数 值 = 8>
+    常量 SOURCE_MASK <公开 类型 = 整数 值 = 255>
+    常量 BLOCKED_FLAG <公开 类型 = 整数 值 = 8388608>
+    常量 FORWARD_BACK_FLAG <公开 类型 = 整数 值 = 16777216>
+    常量 DIRECT_LOAD_FLAG <公开 类型 = 整数 值 = 33554432>
+    常量 CHAIN_START_FLAG <公开 类型 = 整数 值 = 268435456>
+    常量 CHAIN_END_FLAG <公开 类型 = 整数 值 = 536870912>
+    常量 CLIENT_REDIRECT_FLAG <公开 类型 = 整数 值 = 1073741824>
+    常量 SERVER_REDIRECT_FLAG <公开 类型 = 整数 值 = -2147483648>
+    常量 IS_REDIRECT_MASK <公开 类型 = 整数 值 = -1073741824>
+    常量 QUALIFIER_MASK <公开 类型 = 整数 值 = -256>
+
+    #
+}
+
+类 音频通道布局 <公开>
+{
+    常量 无 <公开 类型 = 整数 值 = 0>
+    常量 UNSUPPORTED <公开 类型 = 整数 值 = 1>
+    常量 MONO <公开 类型 = 整数 值 = 2>
+    常量 STEREO <公开 类型 = 整数 值 = 3>
+    常量 _2_1 <公开 类型 = 整数 值 = 4>
+    常量 SURROUND <公开 类型 = 整数 值 = 5>
+    常量 _4_0 <公开 类型 = 整数 值 = 6>
+    常量 _2_2 <公开 类型 = 整数 值 = 7>
+    常量 QUAD <公开 类型 = 整数 值 = 8>
+    常量 _5_0 <公开 类型 = 整数 值 = 9>
+    常量 _5_1 <公开 类型 = 整数 值 = 10>
+    常量 _5_0_BACK <公开 类型 = 整数 值 = 11>
+    常量 _5_1_BACK <公开 类型 = 整数 值 = 12>
+    常量 _7_0 <公开 类型 = 整数 值 = 13>
+    常量 _7_1 <公开 类型 = 整数 值 = 14>
+    常量 _7_1_WIDE <公开 类型 = 整数 值 = 15>
+    常量 STEREO_DOWNMIX <公开 类型 = 整数 值 = 16>
+    常量 _2POINT1 <公开 类型 = 整数 值 = 17>
+    常量 _3_1 <公开 类型 = 整数 值 = 18>
+    常量 _4_1 <公开 类型 = 整数 值 = 19>
+    常量 _6_0 <公开 类型 = 整数 值 = 20>
+    常量 _6_0_FRONT <公开 类型 = 整数 值 = 21>
+    常量 HEXAGONAL <公开 类型 = 整数 值 = 22>
+    常量 _6_1 <公开 类型 = 整数 值 = 23>
+    常量 _6_1_BACK <公开 类型 = 整数 值 = 24>
+    常量 _6_1_FRONT <公开 类型 = 整数 值 = 25>
+    常量 _7_0_FRONT <公开 类型 = 整数 值 = 26>
+    常量 _7_1_WIDE_BACK <公开 类型 = 整数 值 = 27>
+    常量 OCTAGONAL <公开 类型 = 整数 值 = 28>
+    常量 DISCRETE <公开 类型 = 整数 值 = 29>
+    常量 STEREO_AND_KEYBOARD_MIC <公开 类型 = 整数 值 = 30>
+    常量 _4_1_QUAD_SIDE <公开 类型 = 整数 值 = 31>
+    常量 BITSTREAM <公开 类型 = 整数 值 = 32>
+    常量 _5_1_4_DOWNMIX <公开 类型 = 整数 值 = 33>
+
+    #  
+}
+
+类 快捷菜单_编辑类型 <公开>
+{
+    常量 无 <公开 类型 = 整数 值 = 0 注释 = "QuickMenuEditStateFlags  QM_EDITFLAG_NONE = 0,">
+    常量 可省略 <公开 类型 = 整数 值 = 1 注释 = "QM_EDITFLAG_CAN_ELLIPSIS = 1 << 0,">
+    常量 可剪切 <公开 类型 = 整数 值 = 2 注释 = "QM_EDITFLAG_CAN_CUT = 1 << 1,">
+    常量 可复制 <公开 类型 = 整数 值 = 4 注释 = "QM_EDITFLAG_CAN_COPY = 1 << 2,">
+    常量 可粘贴 <公开 类型 = 整数 值 = 8 注释 = "QM_EDITFLAG_CAN_PASTE = 1 << 3,">
+
+    #  
+    #
+}
+
+类 快捷菜单_事件标识 <公开>
+{
+    常量 无 <公开 类型 = 整数 值 = 0 注释 = "EVENTFLAG_NONE = 0,">
+    常量 CAPS_LOCK <公开 类型 = 整数 值 = 1 注释 = "EVENTFLAG_CAPS_LOCK_ON = 1 << 0,">
+    常量 SHIFT <公开 类型 = 整数 值 = 2 注释 = "EVENTFLAG_SHIFT_DOWN = 1 << 1,">
+    常量 CONTROL <公开 类型 = 整数 值 = 4 注释 = "EVENTFLAG_CONTROL_DOWN = 1 << 2,">
+    常量 ALT <公开 类型 = 整数 值 = 8 注释 = "EVENTFLAG_ALT_DOWN = 1 << 3,">
+    常量 鼠标左键 <公开 类型 = 整数 值 = 16 注释 = "EVENTFLAG_LEFT_MOUSE_BUTTON = 1 << 4,">
+    常量 鼠标中键 <公开 类型 = 整数 值 = 32 注释 = "EVENTFLAG_MIDDLE_MOUSE_BUTTON = 1 << 5,">
+    常量 鼠标右键 <公开 类型 = 整数 值 = 64 注释 = "EVENTFLAG_RIGHT_MOUSE_BUTTON = 1 << 6,">
+
+    #  
+    #
+}
+
+类 窗口打开配置 <公开>
+{
+    常量 未知 <公开 类型 = 整数 值 = 0>
+    常量 当前选项卡 <公开 类型 = 整数 值 = 1>
+    常量 相同选项卡 <公开 类型 = 整数 值 = 2 注释 = "">
+    常量 新前台选项卡 <公开 类型 = 整数 值 = 3>
+    常量 新后台选项卡 <公开 类型 = 整数 值 = 4>
+    常量 新弹窗 <公开 类型 = 整数 值 = 5>
+    常量 新窗口 <公开 类型 = 整数 值 = 6>
+    常量 保存到桌面 <公开 类型 = 整数 值 = 7>
+    常量 匿名窗口 <公开 类型 = 整数 值 = 8>
+    常量 忽略执行 <公开 类型 = 整数 值 = 9>
+    常量 切换到选项卡 <公开 类型 = 整数 值 = 10>
+    常量 新图片 <公开 类型 = 整数 值 = 11>
+
+    #  
+    #
+}
+
+类 媒体许可 <公开>
+{
+    常量 无 <公开 类型 = 整数 值 = 0 注释 = "CEF_MEDIA_PERMISSION_NONE No permission.">
+    常量 设备音频捕捉 <公开 类型 = 整数 值 = 1 注释 = "CEF_MEDIA_PERMISSION_DEVICE_AUDIO_CAPTURE = 1 << 0, Device audio capture permission.">
+    常量 设备视频捕捉 <公开 类型 = 整数 值 = 2 注释 = "CEF_MEDIA_PERMISSION_DEVICE_VIDEO_CAPTURE = 1 << 1, Device video capture permission.">
+    常量 桌面音频捕捉 <公开 类型 = 整数 值 = 4 注释 = "CEF_MEDIA_PERMISSION_DESKTOP_AUDIO_CAPTURE = 1 << 2,Desktop audio capture permission">
+    常量 桌面视频捕捉 <公开 类型 = 整数 值 = 8 注释 = "CEF_MEDIA_PERMISSION_DESKTOP_VIDEO_CAPTURE = 1 << 3,Desktop video capture permission.">
+
+    #  
+    #
+}
+
+类 许可反馈 <公开>
+{
+    常量 通过 <公开 类型 = 整数 值 = 0>
+    常量 否决 <公开 类型 = 整数 值 = 1>
+    常量 驳回 <公开 类型 = 整数 值 = 2 注释 = "">
+    常量 忽略 <公开 类型 = 整数 值 = 3>
+
+    #  
+    #
+}
+
+类 菜单颜色类型 <公开>
+{
+    常量 文本 <公开 类型 = 整数 值 = 0>
+    常量 文本_激活 <公开 类型 = 整数 值 = 1>
+    常量 文本_快捷键 <公开 类型 = 整数 值 = 2 注释 = "">
+    常量 文本_快捷键_激活 <公开 类型 = 整数 值 = 3>
+    常量 背景 <公开 类型 = 整数 值 = 4>
+    常量 背景_激活 <公开 类型 = 整数 值 = 5>
+    常量 计数 <公开 类型 = 整数 值 = 6>
+
+    #  
+    #
+}
+
+类 进程类型 <公开>
+{
+    常量 浏览器进程 <公开 类型 = 整数 值 = 0 注释 = "BrowserProcess">
+    常量 渲染进程 <公开 类型 = 整数 值 = 1 注释 = "RendererProcess">
+    常量 GPU进程 <公开 类型 = 整数 值 = 2 注释 = "GpuProcess">
+    常量 插件进程 <公开 类型 = 整数 值 = 3 注释 = "PpapiProcess">
+    常量 功能进程 <公开 类型 = 整数 值 = 4 注释 = "UtilityProcess">
+    常量 合子进程 <公开 类型 = 整数 值 = 5 注释 = "ZygoteProcess">
+    常量 其他进程 <公开 类型 = 整数 值 = 6 注释 = "OtherProcess">
+
+    #
+}
+
+类 VIP过滤器 <公开>
+{
+    常量 修改匹配数据 <公开 类型 = 整数 值 = 0 注释 = "修改匹配数据，只会修改找到的第一个">
+    常量 修改全部匹配数据 <公开 类型 = 整数 值 = 1 注释 = "修改全部匹配的数据">
+    常量 插入匹配数据 <公开 类型 = 整数 值 = 2 注释 = "在匹配的数据后加入数据，只会加入一个">
+    常量 插入全部匹配数据 <公开 类型 = 整数 值 = 3 注释 = "在全部匹配的数据后面加入数据">
+}
+
+类 VIP过滤器地址 <公开>
+{
+    常量 完全匹配 <公开 类型 = 整数 值 = 0 注释 = "和目标地址完全相等">
+    常量 模糊匹配 <公开 类型 = 整数 值 = 1 注释 = "完全模糊，注意还是要区分大小写">
+    常量 模糊头匹配 <公开 类型 = 整数 值 = 2 注释 = "头部模糊，资源地址只匹配尾部是否相同，注意还是要区分大小写">
+    常量 模糊尾匹配 <公开 类型 = 整数 值 = 3 注释 = "尾部模糊，资源地址的只匹配头部是否相同，注意还是要区分大小写">
+    常量 正则匹配 <公开 类型 = 整数 值 = 4 注释 = "正则匹配，使用正则匹配，查找的地址需是正则表达式">
+
+    #
+}
+
+类 窗口风格 <公开>
+{
+    常量 风格 <公开 类型 = 整数 值 = @GWL_STYLE>
+    常量 扩展风格 <公开 类型 = 整数 值 = @GWL_EXSTYLE>
+
+    #
+}
+
+类 链接打开方式 <公开>
+{
+    常量 未知 <公开 类型 = 整数 值 = 0>
+    常量 当前标签 <公开 类型 = 整数 值 = 1 注释 = "Current tab. This is the default in most cases.">
+    常量 单例标签 <公开 类型 = 整数 值 = 2 注释 = "Indicates that only one tab with the url should exist in the same window.">
+    常量 新前景标签 <公开 类型 = 整数 值 = 3 注释 = "Shift key + Middle mouse button or meta/ctrl key while clicking.">
+    常量 新背景标签 <公开 类型 = 整数 值 = 4 注释 = "Middle mouse button or meta/ctrl key while clicking.">
+    常量 新弹窗 <公开 类型 = 整数 值 = 5 注释 = "New popup window.">
+    常量 新窗口 <公开 类型 = 整数 值 = 6 注释 = "Shift key while clicking.">
+    常量 保存到硬盘 <公开 类型 = 整数 值 = 7 注释 = "Alt key while clicking.">
+    常量 非公开 <公开 类型 = 整数 值 = 8 注释 = "New off-the-record (incognito) window.">
+    常量 忽略执行 <公开 类型 = 整数 值 = 9 注释 = "Special case error condition from the renderer.">
+    常量 切换标签 <公开 类型 = 整数 值 = 10 注释 = "Activates an existing tab containing the url, rather than navigating."
+            注释 = "This is similar to SINGLETON_TAB, but searches across all windows from"
+            注释 = "the current profile and anonymity (instead of just the current one);"
+            注释 = "closes the current tab on switching if the current tab was the NTP with"
+            注释 = "no session history; and behaves like CURRENT_TAB instead of"
+            注释 = "NEW_FOREGROUND_TAB when no existing tab is found.">
+    常量 画中画 <公开 类型 = 整数 值 = 11 注释 = "Creates a new document picture-in-picture window showing a child WebView.">
+
+    #  
+}
+
+类 VIP授权类型 <公开>
+{
+    常量 永久 <公开 类型 = 整数 值 = 1>
+    常量 月卡 <公开 类型 = 整数 值 = 2>
+
+    #
+}
+
+类 VIP授权功能 <公开>
+{
+    常量 FingerPrint <公开 类型 = 整数 值 = 1>
+    常量 wss <公开 类型 = 整数 值 = 2>
+    常量 高级功能 <公开 类型 = 整数 值 = 4>
+
+    #
+}
+
+类 Cookie同站 <公开>
+{
+    常量 未指明 <公开 类型 = 整数 值 = 0 注释 = "CEF_COOKIE_SAME_SITE_UNSPECIFIED">
+    常量 无限制 <公开 类型 = 整数 值 = 1 注释 = "CEF_COOKIE_SAME_SITE_NO_RESTRICTION">
+    常量 宽松模式 <公开 类型 = 整数 值 = 2 注释 = "CEF_COOKIE_SAME_SITE_LAX_MODE">
+    常量 严格模式 <公开 类型 = 整数 值 = 3 注释 = "CEF_COOKIE_SAME_SITE_STRICT_MODE">
+
+    #
+}
+
+类 Cookie优先级 <公开>
+{
+    常量 低 <公开 类型 = 整数 值 = -1 注释 = "CEF_COOKIE_PRIORITY_LOW">
+    常量 中 <公开 类型 = 整数 值 = 0 注释 = "CEF_COOKIE_PRIORITY_MEDIUM">
+    常量 高 <公开 类型 = 整数 值 = 1 注释 = "CEF_COOKIE_PRIORITY_HIGH">
+
+    #
+}
+
+类 事件数据类型 <公开 @常量类 = 整数>
+{
+    常量 资源处理器 <公开 值 = @"@FBroBaseEventType::ResourceHandlerType">
+    常量 资源过滤器 <公开 值 = @"@FBroBaseEventType::ResponseFilterType">
+    常量 初始化事件 <公开 值 = @"@FBroBaseEventType::InitEventType">
+    常量 浏览器事件 <公开 值 = @"@FBroBaseEventType::BroEventType">
+    常量 下载图片回调 <公开 值 = @"@FBroBaseEventType::DownloadImageCallbackType">
+    常量 打开文件对话框回调 <公开 值 = @"@FBroBaseEventType::FileDialogCallbackType">
+    常量 打印为PDF回调 <公开 值 = @"@FBroBaseEventType::PdfPrintCallbackType">
+    常量 字符串回调 <公开 值 = @"@FBroBaseEventType::StringVisitorType">
+    常量 JS回调 <公开 值 = @"@FBroBaseEventType::JsCallbackType">
+    常量 DOM回调 <公开 值 = @"@FBroBaseEventType::DOMVisitorType">
+    常量 任务回调 <公开 值 = @"@FBroBaseEventType::TaskType">
+    常量 Cookie回调 <公开 值 = @"@FBroBaseEventType::CookieVisitorType">
+    常量 JS交换回调 <公开 值 = @"@FBroBaseEventType::QueryHandlerType">
+    常量 V8处理程序 <公开 值 = @"@FBroBaseEventType::V8HandlerType">
+    常量 V8存取器 <公开 值 = @"@FBroBaseEventType::V8AccessorType">
+    常量 V8拦截器 <公开 值 = @"@FBroBaseEventType::V8InterceptorType">
+    常量 服务器事件 <公开 值 = @"@FBroBaseEventType::ServerHandleType">
+    常量 扩展插件事件 <公开 值 = @"@FBroBaseEventType::ExtensionHandlerType">
+    常量 清理缓存回调 <公开 值 = @"@FBroBaseEventType::ClearCacheCallbackType">
+    常量 开发者消息事件 <公开 值 = @"@FBroBaseEventType::DevToolsMessageObserverType">
+    常量 VIP通用回调 <公开 值 = @"@FBroBaseEventType::GeneralResultCallbackType">
+    常量 URL请求事件 <公开 值 = @"@FBroBaseEventType::URLRequestClientType">
+
+    #
+    #
+}
+
+类 TLS版本 <公开 @常量类 = 整数>
+{
+    常量 空 <公开 值 = 0>
+    常量 Version_1 <公开 值 = 769>
+    常量 Version_1_1 <公开 值 = 790>
+    常量 Version_1_2 <公开 值 = 791>
+    常量 Version_1_3 <公开 值 = 792>
+
+    #
+}
+
+类 URL请求状态 <公开 @常量类 = 整数>
+{
+    常量 未知 <公开 值 = 0 注释 = "UR_UNKNOWN">
+    常量 成功 <公开 值 = 1 注释 = "UR_SUCCESS">
+    常量 IO等待 <公开 值 = 2 注释 = "UR_IO_PENDING">
+    常量 取消 <公开 值 = 3 注释 = "UR_CANCELED">
+    常量 失败 <公开 值 = 4 注释 = "UR_FAILED">
+
+    #
+}
+
+类 进程异常 <公开 @常量类 = 整数>
+{
+    常量 非0退出 <公开 值 = 0 注释 = "TS_ABNORMAL_TERMINATION  Non-zero exit status">
+    常量 被终止 <公开 值 = 1 注释 = "TS_PROCESS_WAS_KILLED SIGKILL or task manager kill.">
+    常量 段错误 <公开 值 = 2 注释 = "TS_PROCESS_CRASHED Segmentation fault.">
+    常量 内存超限 <公开 值 = 3 注释 = "TS_PROCESS_OOM Out of memory. Some platforms may use TS_PROCESS_CRASHED instead.">
+
+    #
+}
+
+类 屏幕方向类型 <公开 @常量类 = 整数>
+{
+    常量 默认 <公开 值 = 0 注释 = "不做修改">
+    常量 竖屏16_9 <公开 值 = 1 注释 = "kPortraitPrimary">
+    常量 竖屏4_3 <公开 值 = 2 注释 = "kPortraitSecondary">
+    常量 横屏16_9 <公开 值 = 3 注释 = "kLandscapePrimary">
+    常量 横屏4_3 <公开 值 = 4 注释 = "kLandscapeSecondary">
+
+    #
+}
+
+类 窗口运行风格 <公开 @常量类 = 整数>
+{
+    常量 默认 <公开 值 = 0 注释 = "CEF_RUNTIME_STYLE_DEFAULT 默认为谷歌风格">
+    常量 谷歌 <公开 值 = 1 注释 = "CEF_RUNTIME_STYLE_CHROME 谷歌风格">
+    常量 经典 <公开 值 = 2 注释 = "CEF_RUNTIME_STYLE_ALLOY  CEF经典风格">
+
+    #
+}
+
+类 DPI模式 <公开 @常量类 = 整数>
+{
+    常量 无感知 <公开 值 = -1 注释 = "DPI_AWARENESS_CONTEXT_UNAWARE"
+            注释 = "程处于“DPI 无感知”模式，系统会将应用 UI 按 96 DPI（100% 缩放）渲染，然后拉伸至高 DPI 显示器。这种方式会导致界面模糊（尤其是文字和矢量图形），但能兼容旧应用">
+    常量 系统感知 <公开 值 = -2 注释 = "DPI_AWARENESS_CONTEXT_SYSTEM_AWARE"
+            注释 = "进程处于“系统 DPI 感知”模式，系统会根据当前显示器的 DPI 缩放 UI（如 125%、150%），但不会响应 DPI 变化（如窗口跨显示器移动时不会自动调整）。适合不需要动态适配的简单应用">
+    常量 按显示器感知 <公开 值 = -3 注释 = "DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE"
+            注释 = "进程处于“每显示器 DPI 感知”模式，系统不会缩放 UI，应用需通过处理 WM_DPICHANGED 消息（窗口跨显示器移动时触发）手动调整布局。适合需要动态适配但不需要处理子窗口的应用">
+    常量 按显示器感知V2 <公开 值 = -4 注释 = "DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2" 注释 = "进程处于“Per-Monitor V2”模式，是推荐的 DPI 感知模式。"
+            注释 = "相比 V1，它支持：① 动态 DPI 变化时自动缩放非客户区（标题栏、边框）；" 注释 = "② 向所有子窗口发送 WM_DPICHANGED 消息（减少主窗口调整子控件的复杂度）；"
+            注释 = "③ 自动缩放公用对话框（如文件选择框）。适合需要完善高 DPI 支持的现代应用">
+    常量 GDI缩放 <公开 值 = -5 注释 = "DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED"
+            注释 = "类似 UNAWARE，但系统会通过 GDI 缩放 UI（而非位图拉伸），减少模糊。但此模式已逐渐被 PER_MONITOR_AWARE_V2 取代，不建议新应用使用">
+
+    #
+}

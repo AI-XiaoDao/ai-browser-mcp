@@ -1,0 +1,634 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.libwebsockets\"" @视窗.外部头文件 = "LibWebsockets\\LibWebsocketsTool.h"
+        @视窗.外部库.win32 = "LibWebsockets\\LibWebsocketsToolx86.lib" @视窗.附属文件.win32 = "LibWebsockets\\LibWebsocketsToolx86.dll"
+        @视窗.外部库.x64 = "LibWebsockets\\LibWebsocketsToolx64.lib" @视窗.附属文件.x64 = "LibWebsockets\\LibWebsocketsToolx64.dll" "">
+
+类 WebSocketMsgType <公开 注释 = "消息类型" 折叠 @常量类 = 整数>
+{
+    常量 文本 <公开 值 = @FCWEBSOCKET_MSGTYPE_TEXT>
+    常量 字节集 <公开 值 = @FCWEBSOCKET_MSGTYPE_BINARY>
+    常量 PING <公开 值 = @FCWEBSOCKET_MSGTYPE_PING 注释 = "  WebSocket为了保持客户端、服务端的实时双向通信，需要确保客户端、服务端之间的TCP通道保持连接没有断开。"
+            注释 = "然而，对于长时间没有数据往来的连接，如果依旧长时间保持着，可能会浪费包括的连接资源。" 注释 = "但不排除有些场景，客户端、服务端虽然长时间没有数据往来，但仍需要保持连接。这个时候，可以采用心跳来实现。"
+            注释 = "  发送方->接收方：ping；" 注释 = "  接收方->发送方：pong；">
+    常量 PONG <公开 值 = @FCWEBSOCKET_MSGTYPE_PONG>
+
+    #
+}
+
+类 WebSocketHttpHeader <公开 注释 = "协议头" 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     CFCWSHttpHeader_CopyConstruct(m_pData,objCopyFrom.m_pData);
+    # }
+    # void* m_pData;
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void* pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ SetData(CFCWSHttpHeader_new());
+    }
+
+    方法 类_清理
+    {
+        @ CFCWSHttpHeader_Delete(GetData());
+    }
+
+    方法 置文本 <公开 @嵌入式方法 = "">
+    参数 键名称 <类型 = 文本型>
+    参数 键值 <类型 = 文本型>
+    {
+        @ CFCWSHttpHeader_SetHeader(@sn<this>.GetData(),GetMbsText(@<键名称>, CVolMem(), NULL),GetMbsText(@<键值>, CVolMem(), NULL))
+    }
+
+    方法 取文本 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 键名称 <类型 = 文本型>
+    {
+        @ CVolString( CFCWSHttpHeader_GetHeader(@sn<this>.GetData(),GetMbsText(@<键名称>) )
+    }
+
+    方法 是否存在 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 键名称 <类型 = 文本型>
+    {
+        @ CFCWSHttpHeader_IsExist(@sn<this>.GetData(),GetMbsText(@<键名称>) 
+    }
+
+    方法 清空 <公开 @嵌入式方法 = "">
+    {
+        @ CFCWSHttpHeader_Clear(@sn<this>.GetData())
+    }
+
+    #
+    #
+}
+
+类 WebSocketServerFC <公开 折叠 @视窗.后缀文本 = "CFCLibWebSocketEvent">
+{
+
+    # @begin
+    #
+    # <> <include>
+    # virtual void onConnect(size_t socketID)
+    # {
+    #     @<客户连接>((INT_P)socketID);
+    # }
+    # virtual void onMessage(size_t socketID,int nMsgType, const char* data, size_t nDataSize)
+    # {
+    #     CVolMem bin(data,nDataSize);
+    #     @<收到消息>((INT_P)socketID,(@dt<WebSocketMsgType>)nMsgType, bin);
+    # }
+    # virtual void onClose(size_t socketID)
+    # {
+    #     @<连接关闭>((INT_P)socketID);
+    # }
+    # virtual void onError(size_t socketID, const char* szErrorText)
+    # {
+    #     @<连接错误>((INT_P)socketID,CVolString(szErrorText));
+    # }
+    #
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void * pData)
+    # {
+    #     m_pData = pData;
+    # }
+    #
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 客户连接 <公开 定义事件 类型 = 整数 注释 = "有客户连接时才会收到此事件">
+    参数 连接ID <类型 = 变整数>
+    {
+
+    }
+
+    方法 收到消息 <公开 定义事件 类型 = 整数>
+    参数 连接ID <类型 = 变整数>
+    参数 消息类型 <类型 = WebSocketMsgType>
+    参数 数据 <类型 = 字节集类>
+    {
+
+    }
+
+    方法 连接错误 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接ID <类型 = 变整数>
+    参数 错误信息 <类型 = 文本型>
+    {
+
+    }
+
+    方法 连接关闭 <公开 定义事件 类型 = 整数>
+    参数 连接ID <类型 = 变整数>
+    {
+
+    }
+
+    #
+
+    方法 类_初始化
+    {
+        @ SetData(CFCWSServer_new());
+        @ CFCWSServer_BindEventClass(GetData(),this);
+    }
+
+    方法 类_清理
+    {
+        @ CFCWSServer_Delete(GetData());
+    }
+
+    方法 创建 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 端口 <类型 = 整数>
+    参数 证书路径 <类型 = 文本型 @默认值 = "">
+    参数 密钥路径 <类型 = 文本型 @默认值 = "">
+    {
+        @ CFCWSServer_Create(@sn<this>.GetData(), @<端口>,GetMbsText(@<证书路径>, CVolMem(), NULL), GetMbsText(@<密钥路径>, CVolMem(), NULL))
+    }
+
+    方法 销毁 <公开 @嵌入式方法 = "">
+    {
+        @ CFCWSServer_Destory(@sn<this>.GetData())
+    }
+
+    方法 发送 <公开 注释 = "因为是异步发送的，所以，无返回值" @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数>
+    参数 消息类型 <类型 = WebSocketMsgType>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ CFCWSServer_Send(GetData(),@<连接ID>,@<消息类型>,(const char *)@<数据>.GetPtr(),@<数据>.GetSize());
+
+    }
+
+    方法 断开连接 <公开>
+    参数 连接ID <类型 = 变整数>
+    参数 断开原因 <类型 = 文本型 @默认值 = "用户手动断开">
+    {
+        变量 数据 <类型 = 字节集类>
+        数据 = 文本到UTF8 (断开原因)
+        @ CFCWSServer_DisConnect(GetData(),(void*)@<数据>.GetPtr(),@<数据>.GetSize());
+    }
+
+    方法 置连接附加数据 <公开 @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    参数 附加数据 <类型 = 变整数>
+    {
+        @ CFCWSServer_SetUserData(@sn<this>.GetData(),@<连接ID>, (void*)@<附加数据>)
+    }
+
+    方法 取连接附加数据 <公开 类型 = 变整数 @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @  (INT_P)CFCWSServer_GetUserData(@sn<this>.GetData(),@<连接ID>)
+    }
+
+    方法 广播 <公开 "">
+    参数 消息类型 <类型 = WebSocketMsgType>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ CFCWSServer_Broadcast(GetData(),@<消息类型>, (const char* )@<数据>.GetPtr(),@<数据>.GetSize());
+    }
+
+    方法 设置连接分组名称 <公开 @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    参数 分组名称 <类型 = 文本型>
+    {
+        @ CFCWSServer_SetGrounpName(@sn<this>.GetData(),@<连接ID>, CU8String(@<分组名称>.GetText ()).GetText ());
+    }
+
+    方法 分组广播 <公开 注释 = "通过分组名称向 分组内所有连接发送数据">
+    参数 消息类型 <类型 = WebSocketMsgType>
+    参数 分组名称 <类型 = 文本型>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ CFCWSServer_BroadcastByGrounpName(GetData(),@<消息类型>, CU8String(@<分组名称>.GetText ()).GetText (),(const char* )@<数据>.GetPtr(),@<数据>.GetSize());
+    }
+
+    方法 置连接附加文本 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    参数 键名称 <类型 = 文本型>
+    参数 键值 <类型 = 文本型>
+    {
+        @ CVolString( CFCWSServer_SetConnectExtraText(@sn<this>.GetData(),@<连接ID>, CU8String(@<键名称>.GetText ()).GetText (), CU8String(@<键值>.GetText ()).GetText ()))
+    }
+
+    方法 取连接附加文本 <公开 @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    参数 键名称 <类型 = 文本型>
+    {
+        @ CFCWSServer_GetConnectExtraText(@sn<this>.GetData(),@<连接ID>, CU8String(@<键名称>.GetText ()).GetText ())
+    }
+
+    方法 取连接数量 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ CFCWSServer_getNumberOfConnections(@sn<this>.GetData())
+    }
+
+    #
+}
+
+类 WebSocketClientFC <公开 注释 = "WebSocketClientFC 是单线程异步构架" 注释 = "一根线程管理所有的连接" 折叠 @视窗.后缀文本 = "CFCLibWebSocketEvent">
+{
+
+    # @begin
+    #
+    # <> <include>
+    # virtual void onConnect(size_t socketID)
+    # {
+    #     @<连接成功>((INT_P)socketID);
+    # }
+    # virtual void onMessage(size_t socketID,int nMsgType, const char* data, size_t nDataSize)
+    # {
+    #     CVolMem bin(data,nDataSize);
+    #     @<收到消息>((INT_P)socketID,(@dt<WebSocketMsgType>)nMsgType, bin);
+    # }
+    #
+    # virtual void onClose(size_t socketID)
+    # {
+    #     @<连接关闭>((INT_P)socketID);
+    # }
+    # virtual void onError(size_t socketID, const char* szErrorText)
+    # {
+    #     @<连接错误>((INT_P)socketID,CVolString(szErrorText));
+    # }
+    #
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void * pData)
+    # {
+    #     m_pData = pData;
+    # }
+    #
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 连接成功 <公开 定义事件 类型 = 整数 注释 = "连接服务器成功后才会收到此事件" 折叠>
+    参数 连接ID <类型 = 变整数>
+    {
+
+    }
+
+    方法 收到消息 <公开 定义事件 类型 = 整数>
+    参数 连接ID <类型 = 变整数>
+    参数 消息类型 <类型 = WebSocketMsgType>
+    参数 数据 <类型 = 字节集类>
+    {
+
+    }
+
+    方法 连接错误 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接ID <类型 = 变整数>
+    参数 错误信息 <类型 = 文本型>
+    {
+
+    }
+
+    方法 连接关闭 <公开 定义事件 类型 = 整数>
+    参数 连接ID <类型 = 变整数>
+    {
+
+    }
+
+    #
+
+    方法 类_初始化
+    {
+        @ SetData(CFCWSClient_new());
+        @ CFCWSClient_BindEventClass(GetData(),this);
+    }
+
+    方法 类_清理
+    {
+        @ CFCWSClient_Delete(GetData());
+    }
+
+    方法 创建 <公开 类型 = 变整数 返回值注释 = "返回连接ID" @嵌入式方法 = "">
+    参数 URL <类型 = 文本型 注释 = "例如 ws://echo.websocket.org/">
+    参数 协议头 <类型 = WebSocketHttpHeader @默认值 = 空对象>
+    参数 代理类型 <类型 = 整数 注释 = "0 表示无代理 1表示http 2 表示soocket5" @默认值 = 0>
+    参数 代理IP <类型 = 文本型 注释 = "只有当 代理类型 不为0时才生效" @默认值 = "">
+    参数 代理端口 <类型 = 整数 注释 = "只有当 代理类型 不为0时才生效" @默认值 = 0>
+    参数 证书路径 <类型 = 文本型 @默认值 = "">
+    参数 密钥路径 <类型 = 文本型 @默认值 = "">
+    {
+        @ CFCWSClient_Create(@sn<this>.GetData(), @<协议头>.GetData(), @<代理类型>,GetMbsText(@<代理IP>, CVolMem(), NULL),@<代理端口> ,GetMbsText(@<URL>, CVolMem(), NULL), GetMbsText(@<证书路径>, CVolMem(), NULL), GetMbsText(@<密钥路径>, CVolMem(), NULL))
+
+    }
+
+    方法 创建简易 <公开 类型 = 变整数 返回值注释 = "返回连接ID">
+    参数 URL <类型 = 文本型 注释 = "例如 ws://echo.websocket.org/">
+    参数 协议头文本 <类型 = 文本型 注释 = "例如" 注释 = "Accept-Encoding: gzip, deflate, br"
+            注释 = "Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6" 注释 = "Cache-Control: no-cache"
+            注释 = "Connection: Upgrade" 注释 = "这样的，记得，结尾没有换行符" 折叠2>
+    参数 代理类型 <类型 = 整数 注释 = "0 表示无代理 1表示http 2 表示soocket5" @默认值 = 0>
+    参数 代理IP <类型 = 文本型 注释 = "只有当 代理类型 不为0时才生效" @默认值 = "">
+    参数 代理端口 <类型 = 整数 注释 = "只有当 代理类型 不为0时才生效" @默认值 = 0>
+    参数 证书路径 <类型 = 文本型 @默认值 = "">
+    参数 密钥路径 <类型 = 文本型 @默认值 = "">
+    {
+        变量 协议头 <类型 = WebSocketHttpHeader>
+        变量 协议头数组 <类型 = 文本数组类>
+        变量 i <类型 = 整数>
+        分割子文本 (协议头文本, "\r\n", 协议头数组)
+        循环 (0, 协议头数组.取成员数 (), i)
+        {
+            变量 临时文本 <类型 = 文本型>
+            变量 键名称 <类型 = 文本型>
+            变量 键值 <类型 = 文本型>
+            临时文本 = 协议头数组.取成员 (i)
+            键名称 = 文本_取左边_从左往右查找 (临时文本, ":")
+            键值 = 删首尾空 (文本_取右边_从左往右查找 (临时文本, ":"))
+            协议头.置文本 (键名称, 键值)
+
+        }
+        返回 (创建 (URL, 协议头, 代理类型, 代理IP, 代理端口, 证书路径, 密钥路径))
+
+
+    }
+
+    方法 销毁 <公开 @嵌入式方法 = "">
+    {
+        @ CFCWSClient_Destory(@sn<this>.GetData())
+    }
+
+    方法 发送 <公开 类型 = 整数 注释 = "注意，要连接成功以后，才能调用此函数，否则会发送不成功" @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数>
+    参数 消息类型 <类型 = WebSocketMsgType>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ return CFCWSClient_Send(GetData(),@<连接ID>,@<消息类型>,(const char *)@<数据>.GetPtr(),@<数据>.GetSize());
+
+    }
+
+    方法 断开连接 <公开>
+    参数 连接ID <类型 = 变整数>
+    参数 断开原因 <类型 = 文本型 @默认值 = "用户手动断开">
+    {
+        变量 数据 <类型 = 字节集类>
+        数据 = 文本到UTF8 (断开原因)
+        @ CFCWSClient_DisConnect(GetData(),(void*)@<数据>.GetPtr(),@<数据>.GetSize());
+    }
+
+    方法 置连接附加数据 <公开 @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    参数 附加数据 <类型 = 变整数>
+    {
+        @ CFCWSClient_SetUserData(@sn<this>.GetData(),@<连接ID>, (void*)@<附加数据>)
+    }
+
+    方法 取连接附加数据 <公开 类型 = 变整数 @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @  (INT_P)CFCWSClient_GetUserData(@sn<this>.GetData(),@<连接ID>)
+    }
+
+    方法 广播 <公开 "">
+    参数 消息类型 <类型 = WebSocketMsgType>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ CFCWSClient_Broadcast(GetData(),@<消息类型>, (const char* )@<数据>.GetPtr(),@<数据>.GetSize());
+    }
+
+    方法 设置连接分组名称 <公开 @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    参数 分组名称 <类型 = 文本型>
+    {
+        @ CFCWSClient_SetGrounpName(@sn<this>.GetData(),@<连接ID>, CU8String(@<分组名称>.GetText ()).GetText ());
+    }
+
+    方法 分组广播 <公开 注释 = "通过分组名称向 分组内所有连接发送数据">
+    参数 消息类型 <类型 = WebSocketMsgType>
+    参数 分组名称 <类型 = 文本型>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ CFCWSClient_BroadcastByGrounpName(GetData(),@<消息类型>, CU8String(@<分组名称>.GetText ()).GetText (),(const char* )@<数据>.GetPtr(),@<数据>.GetSize());
+    }
+
+    方法 置连接附加文本 <公开 @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    参数 键名称 <类型 = 文本型>
+    参数 键值 <类型 = 文本型>
+    {
+        @ CFCWSClient_SetConnectExtraText(@sn<this>.GetData(),@<连接ID>, CU8String(@<键名称>.GetText ()).GetText (), CU8String(@<键值>.GetText ()).GetText ());
+
+    }
+
+    方法 取连接附加文本 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    参数 键名称 <类型 = 文本型>
+    {
+        @ CVolString( CFCWSClient_GetConnectExtraText(@sn<this>.GetData(),@<连接ID>, CU8String(@<键名称>.GetText ()).GetText ()))
+    }
+
+    方法 取连接数量 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ CFCWSClient_getNumberOfConnections(@sn<this>.GetData())
+    }
+}
+
+类 WebSocketSimpleClientFC <公开 注释 = "WebSocketSimpleClientFC 这个主要是多线程异步构架" 注释 = "一个客户端对应一个线程处理"
+        @视窗.后缀文本 = "CFCLibWebSocketEvent">
+{
+
+    # @begin
+    #
+    # <> <include>
+    #
+    # virtual void onConnect(size_t socketID)
+    # {
+    #     @<连接成功>((INT_P)socketID);
+    # }
+    # virtual void onMessage(size_t socketID,int nMsgType, const char* data, size_t nDataSize)
+    # {
+    #     CVolMem bin(data,nDataSize);
+    #     @<收到消息>((INT_P)socketID,(@dt<WebSocketMsgType>)nMsgType, bin);
+    # }
+    #
+    # virtual void onClose(size_t socketID)
+    # {
+    #     @<连接关闭>((INT_P)socketID);
+    # }
+    # virtual void onError(size_t socketID, const char* szErrorText)
+    # {
+    #     @<连接错误>((INT_P)socketID,CVolString(szErrorText));
+    # }
+    #
+    #
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void * pData)
+    # {
+    #     m_pData = pData;
+    # }
+    #
+    # void* m_pData;
+    # <> </include>
+    # @end
+    #
+
+    方法 连接成功 <公开 定义事件 类型 = 整数 注释 = "连接服务器成功后才会收到此事件" 折叠>
+    参数 连接ID <类型 = 变整数>
+    {
+
+    }
+
+    方法 收到消息 <公开 定义事件 类型 = 整数>
+    参数 连接ID <类型 = 变整数>
+    参数 消息类型 <类型 = WebSocketMsgType>
+    参数 数据 <类型 = 字节集类>
+    {
+
+    }
+
+    方法 连接错误 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接ID <类型 = 变整数>
+    参数 错误信息 <类型 = 文本型>
+    {
+
+    }
+
+    方法 连接关闭 <公开 定义事件 类型 = 整数>
+    参数 连接ID <类型 = 变整数>
+    {
+
+    }
+
+    #
+
+    方法 类_初始化
+    {
+        @ SetData(CFCWSSimpleClient_new());
+    }
+
+    方法 类_清理
+    {
+        @ CFCWSSimpleClient_Delete(GetData());
+    }
+
+    方法 置单个协议头 <公开 注释 = "如果想偷懒，可以直接用置协议头" @嵌入式方法 = "">
+    参数 键名称 <类型 = 文本型>
+    参数 键值 <类型 = 文本型>
+    {
+        @ CFCWSSimpleClient_SetRequestHeader(@sn<this>.GetData(),GetMbsText(@<键名称>, CVolMem(), NULL),GetMbsText(@<键值>, CVolMem(), NULL))
+    }
+
+    方法 置协议头 <公开 注释 = "必须再连接前">
+    参数 协议头 <类型 = 文本型 注释 = "一行一个 例如" 注释 = "aa: bb" 注释 = "cc: ddd">
+    {
+        变量 协议头数组 <类型 = 文本数组类>
+        变量 i <类型 = 整数>
+        分割子文本 (协议头, "\r\n", 协议头数组)
+        循环 (0, 协议头数组.取成员数 (), i)
+        {
+            变量 临时文本 <类型 = 文本型>
+            变量 键名称 <类型 = 文本型>
+            变量 键值 <类型 = 文本型>
+            临时文本 = 协议头数组.取成员 (i)
+            键名称 = 文本_取左边_从左往右查找 (临时文本, ":")
+            键值 = 删首尾空 (文本_取右边_从左往右查找 (临时文本, ":"))
+            置单个协议头 (键名称, 键值)
+        }
+
+    }
+
+    方法 置代理 <公开 注释 = "必须再连接前" @嵌入式方法 = "">
+    参数 代理类型 <类型 = 整数 注释 = "0表示不设置代理， 1 表示http代理 2 表示socket5代理" @默认值 = 1>
+    参数 代理IP <类型 = 文本型>
+    参数 代理端口 <类型 = 整数>
+    {
+        @ CFCWSSimpleClient_SetProxy(@sn<this>.GetData(),@<代理类型>, GetMbsText(@<代理IP>, CVolMem(), NULL),@<代理端口>)
+
+    }
+
+    方法 置证书文件 <公开 注释 = "必须再连接前" @嵌入式方法 = "">
+    参数 文件 <类型 = 文本型>
+    {
+        @ CFCWSSimpleClient_SetCertFilePath(@sn<this>.GetData(),GetMbsText(@<文件>, CVolMem(), NULL))
+    }
+
+    方法 置密钥文件 <公开 注释 = "必须再连接前" @嵌入式方法 = "">
+    参数 文件 <类型 = 文本型>
+    {
+        @ CFCWSSimpleClient_SetPrivateKeyFilePath(@sn<this>.GetData(),GetMbsText(@<文件>, CVolMem(), NULL))
+    }
+
+    方法 连接 <公开 类型 = 变整数 返回值注释 = "返回连接ID" @禁止流程检查 = 真>
+    参数 URL <类型 = 文本型 注释 = "例如 ws://echo.websocket.org/">
+    {
+        @ CFCWSSimpleClient_BindEventClass(GetData(),this);
+        @ return CFCWSSimpleClient_Create(GetData(), GetMbsText(@<URL>, CVolMem(), NULL));
+
+    }
+
+    方法 销毁 <公开 @嵌入式方法 = "">
+    {
+        @ CFCWSSimpleClient_Destory(@sn<this>.GetData())
+    }
+
+    方法 发送 <公开 类型 = 整数 注释 = "注意，要连接成功以后，才能调用此函数，否则会发送不成功" @禁止流程检查 = 真>
+    参数 消息类型 <类型 = WebSocketMsgType>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ return CFCWSSimpleClient_Send(GetData(),@<消息类型>,(const char *)@<数据>.GetPtr(),@<数据>.GetSize());
+
+    }
+
+    方法 断开连接 <公开>
+    参数 断开原因 <类型 = 文本型 @默认值 = "用户手动断开">
+    {
+        变量 数据 <类型 = 字节集类>
+        数据 = 文本到UTF8 (断开原因)
+        @ CFCWSSimpleClient_DisConnect(GetData(),(void*)@<数据>.GetPtr(),@<数据>.GetSize());
+    }
+
+    方法 置连接附加数据 <公开 @嵌入式方法 = "">
+    参数 附加数据 <类型 = 变整数>
+    {
+        @ CFCWSSimpleClient_SetUserData(@sn<this>.GetData(), (void*)@<附加数据>)
+    }
+
+    方法 取连接附加数据 <公开 类型 = 变整数 @嵌入式方法 = "">
+    {
+        @  (INT_P)CFCWSSimpleClient_GetUserData(@sn<this>.GetData())
+    }
+
+    方法 置连接附加文本 <公开 @嵌入式方法 = "">
+    参数 键名称 <类型 = 文本型>
+    参数 键值 <类型 = 文本型>
+    {
+        @ CFCWSSimpleClient_SetConnectExtraText(@sn<this>.GetData(), CU8String(@<键名称>.GetText ()).GetText (), CU8String(@<键值>.GetText ()).GetText ());
+
+    }
+
+    方法 取连接附加文本 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 键名称 <类型 = 文本型>
+    {
+        @ CVolString( CFCWSSimpleClient_GetConnectExtraText(@sn<this>.GetData(), CU8String(@<键名称>.GetText ()).GetText ()))
+    }
+
+    方法 取连接数量 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ CFCWSSimpleClient_getNumberOfConnections(@sn<this>.GetData())
+    }
+
+    #
+}

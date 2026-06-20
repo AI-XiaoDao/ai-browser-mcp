@@ -1,0 +1,316 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.变声\"" @视窗.外部头文件 = "SoundTouch\\SoundTouchTool.h"
+        @视窗.外部库.win32 = "SoundTouch\\SoundTouchToolx86.lib" @视窗.附属文件.win32 = "SoundTouch\\SoundTouchToolx86.dll"
+        @视窗.外部库.x64 = "SoundTouch\\SoundTouchToolx64.lib" @视窗.附属文件.x64 = "SoundTouch\\SoundTouchToolx64.dll">
+
+类 变声类 <公开 注释 = "本类库主要用于处理pcm音频数据" 注释 = "注意音频数据必须16位的" 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void* pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 类_初始化 <公开>
+    {
+        @ SetData( SoundTouchTool_New() );
+    }
+
+    方法 类_清理
+    {
+        @ SoundTouchTool_Delete(GetData());
+    }
+
+    方法 置速率 <公开 注释 = "/// Sets new rate control value. Normal rate = 1.0, smaller values"
+            注释 = "/// represent slower rate, larger faster rates." 注释 = "///设置新的速率控制值。正常速率=1.0，较小值" 注释 = "///代表较慢的速度，较大的较快的速度。"
+            @嵌入式方法 = "">
+    参数 值 <类型 = 小数>
+    {
+        @ SoundTouchTool_setRate(@sn<this>.GetData(),@<值>)
+    }
+
+    方法 置节奏 <公开 注释 = "/// Sets new tempo control value. Normal tempo = 1.0, smaller values"
+            注释 = "/// represent slower tempo, larger faster tempo." 注释 = "///设置新的速度控制值。正常速度=1.0，较小的值" 注释 = "///代表慢节奏，大节奏，快节奏。"
+            @嵌入式方法 = "">
+    参数 值 <类型 = 小数>
+    {
+        @ SoundTouchTool_setTempo(@sn<this>.GetData(),@<值>)
+    }
+
+    方法 置速率百分比 <公开 注释 = "/// Sets new rate control value as a difference in percents compared"
+            注释 = "/// to the original rate (-50 .. +100 %)" 注释 = "///设置新的速度控制值。正常速度=1.0，较小的值" 注释 = "///代表慢节奏，大节奏，快节奏。" @嵌入式方法 = "">
+    参数 值 <类型 = 小数>
+    {
+        @ SoundTouchTool_setRateChange(@sn<this>.GetData(),@<值>)
+    }
+
+    方法 置节奏百分比 <公开 注释 = "/// Sets new tempo control value as a difference in percents compared"
+            注释 = "/// to the original tempo (-50 .. +100 %)" @嵌入式方法 = "">
+    参数 值 <类型 = 小数>
+    {
+        @ SoundTouchTool_setTempoChange(@sn<this>.GetData(),@<值>)
+    }
+
+    方法 置音调 <公开 注释 = "/// Sets new pitch control value. Original pitch = 1.0, smaller values"
+            注释 = "/// represent lower pitches, larger values higher pitch." 注释 = "///设置新的俯仰控制值。 原始音高= 1.0，较小的值"
+            注释 = "///表示较低的音高，较大的值表示较高的音高。" @嵌入式方法 = "">
+    参数 值 <类型 = 小数>
+    {
+        @ SoundTouchTool_setPitch(@sn<this>.GetData(),@<值>)
+    }
+
+    方法 置八度高音 <公开 注释 = "/// Sets pitch change in octaves compared to the original pitch" 注释 = "/// (-1.00 .. +1.00)"
+            注释 = "///设置与原始音高相比的八度音高变化" 注释 = "/// (-1.00 .. +1.00)" @嵌入式方法 = "">
+    参数 值 <类型 = 小数>
+    {
+        @ SoundTouchTool_setPitchOctaves(@sn<this>.GetData(),@<值>)
+    }
+
+    方法 置半音音高 <公开 注释 = "/// Sets pitch change in semi-tones compared to the original pitch" 注释 = "/// (-12 .. +12)"
+            注释 = "///设置与原始音高相比的半音音高变化" 注释 = "///（-12 .. +12）" @嵌入式方法 = "">
+    参数 值 <类型 = 小数>
+    {
+        @ SoundTouchTool_setPitchSemiTones(@sn<this>.GetData(),@<值>)
+    }
+
+    方法 置声道数 <公开 @嵌入式方法 = "">
+    参数 值 <类型 = 整数>
+    {
+        @ SoundTouchTool_setChannels(@sn<this>.GetData(),@<值>)
+    }
+
+    方法 置采样率 <公开 @嵌入式方法 = "">
+    参数 值 <类型 = 整数>
+    {
+        @ SoundTouchTool_setSampleRate(@sn<this>.GetData(),@<值>)
+    }
+
+    方法 取样本倍率 <公开 类型 = 小数 注释 = "/// Example: if processing with parameters \"-tempo=15 -pitch=-3\", the function"
+            注释 = "/// will return value 0.8695652... Now, if processing an audio stream whose duration"
+            注释 = "/// is exactly one million audio samples, then you can expect the processed"
+            注释 = "/// output duration  be 0.869565 * 1000000 = 869565 samples."
+            注释 = "///示例：如果使用参数“ -tempo = 15 -pitch = -3”进行处理，则该函数" 注释 = "///将返回值0.8695652 ...现在，如果处理音频流，其持续时间"
+            注释 = "///恰好是一百万个音频样本，那么您可以期望已处理" 注释 = "///输出持续时间为0.869565 * 1000000 = 869565个样本。" @嵌入式方法 = "">
+    {
+        @ SoundTouchTool_getInputOutputSampleRatio(@sn<this>.GetData())
+    }
+
+    方法 刷新最后一个样本 <公开 注释 = "/// Flushes the last samples from the processing pipeline to the output."
+            注释 = "/// Clears also the internal processing buffers." 注释 = "//"
+            注释 = "/// Note: This function is meant for extracting the last samples of a sound"
+            注释 = "/// stream. This function may introduce additional blank samples in the end"
+            注释 = "/// of the sound stream, and thus it\'s not recommended to call this function"
+            注释 = "/// in the middle of a sound stream." 注释 = "将最后一个样本从处理管道中冲洗到输出。" 注释 = "还清除内部处理缓冲区。" 注释 = "注意：此函数用于提取声音的最后一个样本流。"
+            注释 = " 此功能可能最终会引入其他空白样品声音流，因此不建议调用此函数" 注释 = "在声音流的中间。" @嵌入式方法 = "">
+    {
+        @ SoundTouchTool_flush(@sn<this>.GetData())
+    }
+
+    方法 变声从指针 <公开 类型 = 字节集类 注释 = "此类的核心方法" 注释 = "注意 pcm采样位数最低支持16位的" @禁止流程检查 = 真>
+    参数 音频数据指针 <类型 = 变整数>
+    参数 音频数据大小 <类型 = 整数>
+    参数 采样位数 <类型 = 整数>
+    参数 声道数 <类型 = 整数>
+    {
+        @   void* pSoundTouch = GetData();
+        @   int nSamples = SoundTouchTool_CalcSamples(@<音频数据大小>, @<采样位数>, @<声道数>);
+        @   SoundTouchTool_PutSampleShort(pSoundTouch, (short*)@<音频数据指针>, nSamples);
+        @   CVolMem re;
+        @   int k = 0;
+        @   do
+        @   {
+        @    short buf[2048] = { 0 };
+        @    k = (int)SoundTouchTool_GetSampleShort(pSoundTouch, buf, 2048);
+        @    CVolMem mem((char*)buf,k* @<声道数>* sizeof(short));
+        @    re.Append(mem);
+        @   } while (k > 0);
+        @   return re;
+
+    }
+
+    方法 变声 <公开 类型 = 字节集类>
+    参数 音频数据 <类型 = 字节集类>
+    参数 采样位数 <类型 = 整数>
+    参数 声道数 <类型 = 整数>
+    {
+        返回 (变声从指针 (取字节集指针 (音频数据), 取字节集长度 (音频数据), 采样位数, 声道数))
+
+    }
+
+    #
+    #
+}
+
+类 wave读取类 <公开 注释 = "只支持 8位和16位采样率的 wav音频">
+{
+
+    # @begin
+    # <> <include>
+    #
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void* pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 打开 <公开 折叠>
+    参数 文件名称 <类型 = 文本型>
+    {
+        变量 txt <类型 = 字节集类>
+        txt = 文本到多字节 (文件名称)
+        @ SetData(WaveInFileTool_Open((const char*)@<txt>.GetPtr()));
+    }
+
+    方法 关闭 <公开 折叠>
+    {
+        @ WaveInFileTool_Close((void*)GetData());
+    }
+
+    方法 读取 <公开 类型 = 字节集类 折叠>
+    参数 要读取的采样数 <类型 = 整数>
+    {
+        变量 返回值 <类型 = 字节集类>
+        变量 实际读取采样数 <类型 = 整数>
+        返回值 = 取空白字节集 (要读取的采样数 * 2)
+        实际读取采样数 = 读取到缓冲区 (取字节集指针 (返回值), 取字节集长度 (返回值))
+        如果 (实际读取采样数 < 要读取的采样数)
+        {
+            如果 (实际读取采样数 > 0)
+            {
+                返回值.重分配字节集 (实际读取采样数 * 2)
+            }
+            否则
+            {
+                返回值.清空字节集 ()
+            }
+
+        }
+        返回 (返回值)
+    }
+
+    方法 读取到缓冲区 <公开 类型 = 整数 返回值注释 = "返回实际读取字节数" @嵌入式方法 = "">
+    参数 缓冲区指针 <类型 = 变整数>
+    参数 缓冲区大小 <类型 = 整数 注释 = "">
+    {
+        @ WaveInFileTool_Read(@sn<this>.GetData(),(void*)@<缓冲区指针>,@<缓冲区大小>)
+
+    }
+
+    方法 是否读到文件尾 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ WaveInFileTool_IsEndofFile(@sn<this>.GetData())
+    }
+
+    方法 取采样字节数 <公开 类型 = 整数 注释 = "采样位数 * 声道数 / 8" @嵌入式方法 = "">
+    {
+        @ WaveInFileTool_getBytesPerSample(@sn<this>.GetData())
+    }
+
+    方法 取音频大小 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ WaveInFileTool_getDataSizeInBytes(@sn<this>.GetData())
+    }
+
+    方法 取已读取音频毫秒 <公开 类型 = 整数 注释 = "Returns how many milliseconds of audio have so far been read from the file" @嵌入式方法 = "">
+    {
+        @ WaveInFileTool_getElapsedMS(@sn<this>.GetData())
+    }
+
+    #
+
+    方法 取音频时长 <公开 类型 = 整数 注释 = "以毫秒为单位" @嵌入式方法 = "">
+    {
+        @ WaveInFileTool_getLengthMS(@sn<this>.GetData())
+    }
+
+    方法 取采样位数 <公开 类型 = 整数 返回值注释 = "8位 16位之类的" @嵌入式方法 = "">
+    {
+        @ WaveInFileTool_getNumBits(@sn<this>.GetData())
+    }
+
+    方法 取声道数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ WaveInFileTool_getNumChannels(@sn<this>.GetData())
+    }
+
+    方法 取采样数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ WaveInFileTool_getNumSamples(@sn<this>.GetData())
+    }
+
+    方法 取采样率 <公开 类型 = 整数 返回值注释 = "8000 44100之类的" @嵌入式方法 = "">
+    {
+        @ WaveInFileTool_getSampleRate(@sn<this>.GetData())
+    }
+
+    #
+    #
+}
+
+类 wave保存类 <公开 注释 = "只支持 8位和16位采样率的 wav音频">
+{
+
+    # @begin
+    # <> <include>
+    #
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void* pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+    #
+
+    方法 打开 <公开 注释 = "const char* lpszWaveFile, int sampleRate, int bits, int channels">
+    参数 文件名称 <类型 = 文本型>
+    参数 采样率 <类型 = 整数 @默认值 = 8000>
+    参数 采样位数 <类型 = 整数 @默认值 = 16>
+    参数 声道数 <类型 = 整数 @默认值 = 1>
+    {
+        变量 txt <类型 = 字节集类>
+        txt = 文本到多字节 (文件名称)
+        @ SetData(WaveOutFileTool_Open((const char* )@<txt>.GetPtr(),@<采样率>,@<采样位数>,@<声道数>));
+    }
+
+    方法 关闭 <公开>
+    {
+        @ WaveOutFileTool_Close(GetData());
+    }
+
+    方法 写出数据 <公开 类型 = 整数>
+    参数 音频数据 <类型 = 字节集类>
+    {
+        返回 (写出指针数据 (取字节集指针 (音频数据), 取字节集长度 (音频数据)))
+    }
+
+    方法 写出指针数据 <公开 类型 = 整数 返回值注释 = "返回写出的字节数" @嵌入式方法 = "">
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+        @ WaveOutFileTool_Write(@sn<this>.GetData(),(void*) @<数据指针>,@<数据大小>)
+
+    }
+
+    #
+}

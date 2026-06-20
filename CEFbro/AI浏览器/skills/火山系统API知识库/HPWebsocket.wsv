@@ -1,0 +1,143 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.hpsocket\"" @视窗.外部头文件 = "HPWebsocket\\HPWebsocketTool.h"
+        @视窗.外部库.win32 = "HPWebsocket\\HPWebsocketToolx86.lib" @视窗.附属文件.win32 = "HPWebsocket\\HPWebsocketToolx86.dll"
+        @视窗.外部库.x64 = "HPWebsocket\\HPWebsocketToolx64.lib" @视窗.附属文件.x64 = "HPWebsocket\\HPWebsocketToolx64.dll" "">
+
+类 HPWebsocketClientFC <公开 @视窗.后缀文本 = "public HPWebsocketEvent">
+{
+
+    # @begin
+    # <> <include>
+    # virtual void OnConnect(void* pClient,size_t ConnectID)
+    # {
+    #     @<连接成功>((INT_P)pClient,ConnectID);
+    # }
+    # virtual void OnMessage(void* pClient,size_t ConnectID, int nDataType,void* pData,size_t nDataSize)
+    # {
+    #     CVolMem mem(pData,nDataSize);
+    #     @<收到消息>((INT_P)pClient,ConnectID,nDataType,mem);
+    # }
+    # virtual void OnClose(void* pClient,size_t ConnectID,const char* lpszText)
+    # {
+    #     CVolString str(lpszText);
+    #     @<连接断开>((INT_P)pClient,ConnectID,str);
+    # }
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void* pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 连接成功 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    {
+
+    }
+
+    方法 收到消息 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 消息类型 <类型 = 整数>
+    参数 消息 <类型 = 字节集类>
+    {
+
+    }
+
+    方法 连接断开 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 原因 <类型 = 文本型>
+    {
+
+
+
+    }
+
+    方法 _置协议头 <注释 = "内部使用" 折叠 @嵌入式方法 = "">
+    参数 键名称 <类型 = 文本型>
+    参数 键值 <类型 = 文本型>
+    {
+        @ HPWSClient_SetRequestHeader(@sn<this>.GetData(),GetMbsText(@<键名称>, CVolMem(), NULL),GetMbsText(@<键值>, CVolMem(), NULL))
+
+    }
+
+    方法 连接 <公开 类型 = 逻辑型 注释 = "采用异步连接" @禁止流程检查 = 真>
+    参数 url <类型 = 文本型>
+    参数 协议头文本 <类型 = 文本型 注释 = "例如" 注释 = "Accept-Encoding: gzip, deflate, br"
+            注释 = "Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6" 注释 = "Cache-Control: no-cache"
+            注释 = "Connection: Upgrade" 注释 = "这样的，记得，结尾没有换行符" @默认值 = "">
+    参数 请求超时 <类型 = 整数 注释 = "15秒 只有当 是否异步 = 真时，才有效" @默认值 = 15000>
+    参数 连接超时 <类型 = 整数 注释 = "15秒 只有当 是否异步 = 真时，才有效" @默认值 = 15000>
+    {
+        @ SetData(HPWSClient_Create(FALSE,GetMbsText(@<url>, CVolMem(), NULL),this));
+        @ HPWSClient_SetTimout(GetData(), @<请求超时>, @<连接超时>);
+        变量 协议头数组 <类型 = 文本数组类>
+        变量 i <类型 = 整数>
+        分割子文本 (协议头文本, "\r\n", 协议头数组)
+        循环 (0, 协议头数组.取成员数 (), i)
+        {
+            变量 临时文本 <类型 = 文本型>
+            变量 键名称 <类型 = 文本型>
+            变量 键值 <类型 = 文本型>
+            临时文本 = 协议头数组.取成员 (i)
+            键名称 = 文本_取左边_从左往右查找 (临时文本, ":")
+            键值 = 删首尾空 (文本_取右边_从左往右查找 (临时文本, ":"))
+            _置协议头 (键名称, 键值)
+
+        }
+        @ return HPWSClient_Start(GetData());
+    }
+
+    方法 断开 <公开>
+    {
+        @ HPWSClient_Stop(GetData());
+        @ HPWSClient_Destroy(GetData());
+
+    }
+
+    方法 _发送 <类型 = 逻辑型 注释 = "内部使用" @禁止流程检查 = 真>
+    参数 操作码 <类型 = 字节 注释 = "1 文本,2 字节集,8 断开连接 9 ping,10 pong">
+    参数 数据 <类型 = 字节集类>
+    {
+        @ BYTE lpszMask[4] = {1,2,3,4};
+        @ return HPWSClient_SendWSMessage(GetData(),@<操作码>,lpszMask,(void *)@<数据>.GetPtr(),@<数据>.GetSize());
+    }
+
+    方法 发送文本 <公开 类型 = 逻辑型>
+    参数 数据 <类型 = 文本型>
+    {
+        变量 临时数据 <类型 = 字节集类>
+        临时数据 = 文本到UTF8 (数据)
+        返回 (_发送 (1, 临时数据))
+
+
+    }
+
+    方法 发送字节集 <公开 类型 = 逻辑型>
+    参数 数据 <类型 = 字节集类>
+    {
+        返回 (_发送 (2, 数据))
+    }
+
+    方法 发送Ping <公开 类型 = 逻辑型>
+    参数 数据 <类型 = 字节集类>
+    {
+        返回 (_发送 (9, 数据))
+    }
+
+    方法 发送Pong <公开 类型 = 逻辑型>
+    参数 数据 <类型 = 字节集类>
+    {
+        返回 (_发送 (10, 数据))
+    }
+
+    #
+}

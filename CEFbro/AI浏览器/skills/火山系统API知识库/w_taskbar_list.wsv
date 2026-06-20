@@ -1,0 +1,375 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.任务栏 <@视窗.外部头文件 = "<shobjidl_core.h>">
+
+类 选项卡属性 <公开 折叠 @常量类 = 整数>
+{
+    常量 无 <公开 值 = @"@ STPFLAG::STPF_NONE" 注释 = "未指定任何特定属性值.使用默认行为:选项卡窗口根据需要提供实时或静态的缩略图和预览图像.">
+    常量 始终启用缩略图 <公开 值 = @"@ STPFLAG::STPF_USEAPPTHUMBNAILALWAYS"
+            注释 = "始终使用应用程序框架主窗口提供的缩略图,而不是单个选项卡窗口提供的缩略图.不要将此值与\"活动时启用缩略图\"组合在一起;这样做将导致错误.">
+    常量 活动时启用缩略图 <公开 值 = @"@ STPFLAG::STPF_USEAPPTHUMBNAILWHENACTIVE"
+            注释 = "当应用程序选项卡处于活动状态并且其窗口的实时表示形式可用时,请使用主应用程序的框架窗口缩略图.在其他时候,请使用选项卡窗口缩略图.不要将此值与\"始终启用缩略图\"组合在一起;这样做将导致错误.">
+    常量 始终启用预览图像 <公开 值 = @"@ STPFLAG::STPF_USEAPPPEEKALWAYS"
+            注释 = "始终使用应用程序框架主窗口提供的预览图像,而不是单个选项卡窗口提供的预览图像.不要将此值与\"活动时启用预览图像\"组合在一起;这样做将导致错误.">
+    常量 活动时启用预览图像 <公开 值 = @"@ STPFLAG::STPF_USEAPPPEEKWHENACTIVE"
+            注释 = "当应用程序选项卡处于活动状态并且其窗口的实时表示形式可用时,请在预览功能中显示主应用程序框架.在其他时间,请使用选项卡窗口.不要将此值与\"始终启用预览图像\"组合在一起;这样做将导致错误.">
+}
+
+类 任务栏进度状态 <公开 折叠 @常量类 = 整数>
+{
+    常量 通常 <公开 值 = @"@ TBPFLAG::TBPF_NOPROGRESS" 注释 = "停止显示进度,并将按钮返回到其正常状态.使用此标志调用此方法,以在操作完成或取消时消除进度栏.">
+    常量 预测 <公开 值 = @"@ TBPFLAG::TBPF_INDETERMINATE"
+            注释 = "进度指示器的大小不会增长,而是重复沿任务栏按钮的长度循环.这表示没有指定进度完成比例的活动.正在进行进度,但没有关于操作需要多长时间的预测.">
+    常量 正常 <公开 值 = @"@ TBPFLAG::TBPF_NORMAL" 注释 = "进度指示器的大小从左到右增长,与完成的操作的估计量成比例.这是确定进度指示器;正在对操作的持续时间进行预测.">
+    常量 错误 <公开 值 = @"@ TBPFLAG::TBPF_ERROR"
+            注释 = "进度指示器变为红色,显示某个正在广播进度的窗口中出错.这是一个确定状态.如果进度指示器处于不确定状态,它将切换到泛型百分比的红色确定显示,而不是指示实际进度.">
+    常量 暂停 <公开 值 = @"@ TBPFLAG::TBPF_PAUSED"
+            注释 = "进度指示器变为黄色,显示进度当前已停止在某个窗口中,但用户可恢复.不存在错误条件,不会阻止进度继续.这是一个确定状态.如果进度指示器处于不确定状态,它将切换到一个黄色确定显示,表示实际进度的泛型百分比.">
+}
+
+类 缩略图按钮掩码 <公开 折叠 @常量类 = 整数>
+{
+    常量 位图索引 <公开 值 = @"@ THUMBBUTTONMASK::THB_BITMAP" 注释 = "表示当前缩略图按钮对象中\"位图索引\"成员包含有效信息">
+    常量 图标资源 <公开 值 = @"@ THUMBBUTTONMASK::THB_ICON" 注释 = "表示当前缩略图按钮对象中\"图标资源\"成员包含有效信息">
+    常量 提示文本 <公开 值 = @"@ THUMBBUTTONMASK::THB_TOOLTIP" 注释 = "表示当前缩略图按钮对象中\"提示文本\"成员包含有效信息">
+    常量 选项标志 <公开 值 = @"@ THUMBBUTTONMASK::THB_FLAGS" 注释 = "表示当前缩略图按钮对象中\"选项标志\"成员包含有效信息">
+}
+
+类 缩略图按钮标志 <公开 折叠 @常量类 = 整数>
+{
+    常量 启用 <公开 值 = @"@ THUMBBUTTONFLAGS::THBF_ENABLED" 注释 = "按钮处于活动状态,可供用户使用.">
+    常量 禁用 <公开 值 = @"@ THUMBBUTTONFLAGS::THBF_DISABLED" 注释 = "该按钮已被禁用.它存在,但具有指示它不会响应用户操作的视觉状态.">
+    常量 点击关闭 <公开 值 = @"@ THUMBBUTTONFLAGS::THBF_DISMISSONCLICK" 注释 = "单击按钮时,任务栏按钮的浮出控件会立即关闭.">
+    常量 无背景 <公开 值 = @"@ THUMBBUTTONFLAGS::THBF_NOBACKGROUND" 注释 = "不要绘制按钮边框,仅使用图像.">
+    常量 隐藏 <公开 值 = @"@ THUMBBUTTONFLAGS::THBF_HIDDEN" 注释 = "该按钮未向用户显示.">
+    常量 无交互 <公开 值 = @"@ THUMBBUTTONFLAGS::THBF_NONINTERACTIVE" 注释 = "该按钮已启用,但不是交互式按钮;未绘制按下的按钮状态.此值适用于在通知中使用按钮的实例.">
+}
+
+类 任务栏列表 <公开 基础类 = 对象类 注释 = "最低受支持的客户端:Windows 2000 Professional、Windows XP [仅限桌面应用]"
+        注释 = "最低受支持的服务器:Windows 2000 Server [仅限桌面应用]" 折叠 折叠2>
+{
+
+    # @ @m<任务栏列表.DECLARE_ITASKBARLIST_HRINIT>(IID_ITaskbarList, this->m_pTaskbarList)
+
+    方法 初始化 <公开 类型 = 逻辑型 注释 = "初始化任务栏列表对象.必须先调用此方法,然后才能调用任何其他ITaskbarList方法" 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @嵌入式方法 = "">
+    {
+        @ SUCCEEDED(@sn<this>.HrInit())
+    }
+
+    方法 激活任务栏 <公开 类型 = 逻辑型 注释 = "激活任务栏上的项.窗口实际上未激活;任务栏上的窗口项仅显示为活动状态." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要显示为活动的任务栏上的窗口的句柄.">
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(this->m_pTaskbarList->ActivateTab((HWND)@<窗口句柄>));
+    }
+
+    方法 活动任务栏 <公开 类型 = 逻辑型 注释 = "将任务栏项标记为活动,但不直观地激活它." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要标记为活动的窗口的句柄.">
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(this->m_pTaskbarList->SetActiveAlt((HWND)@<窗口句柄>));
+    }
+
+    方法 删除任务栏 <公开 类型 = 逻辑型 注释 = "从任务栏中删除项." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要从任务栏中删除的窗口的句柄.">
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(this->m_pTaskbarList->DeleteTab((HWND)@<窗口句柄>));
+    }
+
+    方法 添加任务栏 <公开 类型 = 逻辑型 注释 = "将项添加到任务栏." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要添加到任务栏的窗口的句柄.">
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(this->m_pTaskbarList->AddTab((HWND)@<窗口句柄>));
+    }
+
+    # @ <include>
+    # @     void @an<_OnCleanupExtra>(){
+    # @         if(this->m_pTaskbarList){
+    # @             this->m_pTaskbarList->Release();
+    # @             this->m_pTaskbarList = nullptr;
+    # @         }
+    # @     }
+    # @     ITaskbarList  *m_pTaskbarList = nullptr;
+    # @ </include>
+    # @ @def_macro DECLARE_ITASKBARLIST_HRINIT(iid, pTaskbarList)                                                        \
+    # @ <include>                                                                                                        \
+    # @     virtual HRESULT HrInit(){                                                                                    \
+    # @         HRESULT hr = S_FALSE;                                                                                    \
+    # @         if(!pTaskbarList){                                                                                       \
+    # @             hr = ::CoCreateInstance(CLSID_TaskbarList, NULL, CLSCTX_INPROC_SERVER, iid, (LPVOID*)&pTaskbarList); \
+    # @             if(SUCCEEDED(hr)){                                                                                   \
+    # @                 return pTaskbarList->HrInit();                                                                   \
+    # @             }                                                                                                    \
+    # @         }                                                                                                        \
+    # @         return hr;                                                                                               \
+    # @     }                                                                                                            \
+    # @ </include>
+}
+
+类 任务栏列表2 <公开 基础类 = 任务栏列表 注释 = "最低受支持的客户端:Windows XP [仅限桌面应用]" 注释 = "最低受支持的服务器:Windows Server 2003 [仅限桌面应用]" 折叠 折叠2>
+{
+
+    # @ @m<任务栏列表.DECLARE_ITASKBARLIST_HRINIT>(IID_ITaskbarList2, this->m_pTaskbarList)
+
+    方法 标记全屏窗口 <公开 类型 = 逻辑型 注释 = "将窗口标记为全屏." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要标记的窗口的句柄.">
+    参数 全屏模式 <类型 = 逻辑型 注释 = "一个布尔值,该值标记窗口的所需全屏状态." @默认值 = 假>
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(((ITaskbarList2*)this->m_pTaskbarList)->MarkFullscreenWindow((HWND)@<窗口句柄>, (BOOL)@<全屏模式>));
+    }
+}
+
+类 任务栏列表3 <公开 基础类 = 任务栏列表2 注释 = "最低受支持的客户端 Windows 7 [仅限桌面应用]" 注释 = "最低受支持的服务器 Windows Server 2008 R2 [仅限桌面应用]" 折叠2>
+{
+
+    # @ @m<任务栏列表.DECLARE_ITASKBARLIST_HRINIT>(IID_ITaskbarList3, this->m_pTaskbarList)
+
+    方法 置进度条值 <公开 类型 = 逻辑型 注释 = "显示或更新任务栏按钮中托管的进度栏,以显示完成完整操作的特定百分比." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "其关联的任务栏按钮用作进度指示器的窗口的句柄.">
+    参数 当前位置 <类型 = 长整数 注释 = "一个应用程序定义值,该值指示在调用方法时已完成的操作的比例.">
+    参数 最大位置 <类型 = 长整数 注释 = "一个应用程序定义的值,该值指定操作完成后将具有值\"当前位置\".">
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(((ITaskbarList3*)this->m_pTaskbarList)->SetProgressValue((HWND)@<窗口句柄>, (ULONGLONG)@<当前位置>, (ULONGLONG)@<最大位置>));
+    }
+
+    方法 置进度条状态 <公开 类型 = 逻辑型 注释 = "设置任务栏按钮上显示的进度指示器的类型和状态." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "显示操作进度的窗口的句柄.此窗口的关联任务栏按钮将显示进度栏.">
+    参数 当前状态 <类型 = 任务栏进度状态 注释 = "控制进度按钮当前状态的标志.仅指定以下标志之一;所有状态都是相互排斥的.">
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(((ITaskbarList3*)this->m_pTaskbarList)->SetProgressState((HWND)@<窗口句柄>, (TBPFLAG)@<当前状态>));
+    }
+
+    方法 注册选项卡 <公开 类型 = 逻辑型 注释 = "通知任务栏,已提供新的选项卡或文档缩略图,以便在应用程序的任务栏组浮出控件中显示." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "选项卡或文档窗口的句柄.此值是必需的,不能为NULL.">
+    参数 主窗口句柄 <类型 = 变整数 注释 = "应用程序的主窗口的句柄.此值告知任务栏要将新缩略图附加到哪个应用程序的预览组.此值是必需的,不能为NULL.">
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(((ITaskbarList3*)this->m_pTaskbarList)->RegisterTab((HWND)@<窗口句柄>, (HWND)@<主窗口句柄>));
+    }
+
+    方法 激活选项卡 <公开 类型 = 逻辑型 注释 = "通知任务栏选项卡或文档窗口已成为活动窗口." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "活动选项卡窗口的句柄.此句柄必须已通过[注册选项卡]命令进行注册.如果没有任何选项卡处于活动状态,则此值可以为NULL.">
+    参数 主窗口句柄 <类型 = 变整数 注释 = "应用程序的主窗口的句柄.此值告知任务栏缩略图所属的组.此值是必需的,不能为NULL.">
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(((ITaskbarList3*)this->m_pTaskbarList)->SetTabActive((HWND)@<窗口句柄>, (HWND)@<主窗口句柄>, 0));
+    }
+
+    方法 卸载选项卡 <公开 类型 = 逻辑型 注释 = "在应用程序中关闭该选项卡或文档时,从应用程序的预览组中删除缩略图." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "正在删除其缩略图的选项卡窗口的句柄.此值与缩略图通过[注册选项卡]命令注册为组的一部分的值相同.此值是必需的,不能为NULL.">
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(((ITaskbarList3*)this->m_pTaskbarList)->UnregisterTab((HWND)@<窗口句柄>));
+    }
+
+    方法 置选项卡位置 <公开 类型 = 逻辑型 注释 = "将新缩略图插入选项卡式文档界面,(TDI)或多文档界面(MDI)应用程序的组浮出控件或将现有缩略图移动到应用程序组中的新位置."
+            返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要放置其缩略图的选项卡窗口的句柄.此值是必需的,必须已通过[注册选项卡]命令注册,并且不能为NULL.">
+    参数 前窗口句柄 <类型 = 变整数 注释 = "选项卡窗口的句柄,其缩略图\"窗口句柄\"插入到左侧.必须已通过[注册选项卡]命令注册此句柄.如果此值为NULL,则新缩略图将添加到列表末尾." @默认值 = 0>
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(((ITaskbarList3*)this->m_pTaskbarList)->SetTabOrder((HWND)@<窗口句柄>, (HWND)@<前窗口句柄>));
+    }
+
+    方法 置覆盖图标 <公开 类型 = 逻辑型 注释 = "将覆盖应用于任务栏按钮,以指示应用程序状态或给用户的通知." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "关联的任务栏按钮接收覆盖的窗口的句柄.此句柄必须属于与按钮的应用程序关联的调用进程,并且必须是有效的 HWND 或忽略调用.">
+    参数 图标资源 <类型 = 图标资源 注释 = "要用作覆盖的图标的句柄.这应该是一个小图标,以96dpi分辨率测量16x16像素.如果覆盖图标已应用于任务栏按钮,则会替换现有覆盖."
+            注释 = "此值可以为NULL.如何处理NULL值取决于任务栏按钮是表示单个窗口还是一组窗口." 注释 = "  1.如果任务栏按钮表示单个窗口,则会从显示中删除覆盖图标."
+            注释 = "  2.如果任务栏按钮表示一组窗口,并且以前的覆盖层仍可用,(早于当前覆盖区接收,但尚未由NULL值)释放,则会显示上一个覆盖层代替当前覆盖." 折叠2>
+    参数 描述文本 <类型 = 文本型 注释 = "指向字符串的指针,该字符串提供覆盖所传达信息的替换文字版本,以提供辅助功能." @默认值 = 空对象>
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ HICON hIcon = (HICON)g_objVolApp.LoadResImage(VRIT_ICON, @<图标资源>);
+        @ HRESULT hr = ((ITaskbarList3*)this->m_pTaskbarList)->SetOverlayIcon((HWND)@<窗口句柄>, hIcon, @<描述文本>.GetText());
+        @ if(hIcon) ::DestroyIcon(hIcon); // 调用应用程序在不再需要"图标资源"时负责释放它.这通常可以在调用"置覆盖图标"后完成,因为任务栏创建并使用其自己的图标副本.
+        @ return SUCCEEDED(hr);
+    }
+
+    方法 置缩略图区域 <公开 类型 = 逻辑型 注释 = "选择窗口工作区的一部分,以在任务栏中显示为该窗口的缩略图." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "其缩略图显示工具提示的窗口的句柄.此句柄必须属于调用进程.">
+    参数 区域矩形 <类型 = 矩形类 注释 = "指向\"矩形类\"结构,该结构指定窗口工作区中相对于该工作区左上角的选择.若要清除已到位的剪辑并返回到缩略图的默认显示,请将此参数设置为NULL." @默认值 = 空对象>
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(((ITaskbarList3*)this->m_pTaskbarList)->SetThumbnailClip((HWND)@<窗口句柄>, @<区域矩形>.ToRect().IsEmpty() ? NULL : (RECT*)&@<区域矩形>.ToRect()));
+    }
+
+    方法 置缩略图提示文本 <公开 类型 = 逻辑型 注释 = "指定或更新当鼠标指针停留在任务栏按钮浮出控件中单个预览缩略图时显示的工具提示的文本." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "其缩略图显示工具提示的窗口的句柄.此句柄必须属于调用进程.">
+    参数 提示文本 <类型 = 文本型 注释 = "指向工具提示中显示的文本的指针.此值可以为NULL,在这种情况下,\"窗口句柄\"指定的窗口标题用作工具提示." @默认值 = 空对象>
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(((ITaskbarList3*)this->m_pTaskbarList)->SetThumbnailTooltip((HWND)@<窗口句柄>, (LPCWSTR)@<提示文本>));
+    }
+
+    方法 置按钮图片组 <公开 类型 = 变整数 注释 = "指定一个图像列表,其中包含任务栏按钮浮出控件中窗口缩略图中嵌入工具栏的按钮图像." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "其缩略图表示形式包含要更新的工具栏的窗口的句柄.此句柄必须属于调用进程.">
+    参数 所欲设置的图片组 <类型 = 图片组资源 注释 = "包含工具栏中使用的所有按钮图像的图像列表的句柄.">
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ HIMAGELIST himl = (HIMAGELIST)g_objVolApp.LoadResImage(VRIT_IMAGE_LIST, @<所欲设置的图片组>);
+        @ HRESULT hr = ((ITaskbarList3*)this->m_pTaskbarList)->ThumbBarSetImageList((HWND)@<窗口句柄>, himl);
+        @ if(himl) ::ImageList_Destroy(himl);
+        @ return SUCCEEDED(hr);
+    }
+
+    方法 置按钮图片组2 <公开 类型 = 变整数 注释 = "指定一个图像列表,其中包含任务栏按钮浮出控件中窗口缩略图中嵌入工具栏的按钮图像." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "其缩略图表示形式包含要更新的工具栏的窗口的句柄.此句柄必须属于调用进程.">
+    参数 所欲设置的图片组 <类型 = 图片组对象类 注释 = "包含工具栏中使用的所有按钮图像的图像列表">
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED (((ITaskbarList3*)this->m_pTaskbarList)->ThumbBarSetImageList((HWND)@<窗口句柄>, (HIMAGELIST)@<所欲设置的图片组>.GetGDIHandle ()));
+    }
+
+    方法 添加按钮 <公开 类型 = 逻辑型 注释 = "将具有指定按钮集的缩略图工具栏添加到任务栏按钮浮出控件中窗口的缩略图图像." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "其缩略图表示形式将接收工具栏的窗口的句柄.此句柄必须属于调用进程.">
+    参数 按钮数量 <类型 = 整数 注释 = "\"结构数组\"指向的数组中定义的按钮数.允许的最大按钮数为7.">
+    参数 结构数组 <类型 = 缩略图按钮数组
+            注释 = "指向[缩略图按钮]结构的数组的指针.每个[缩略图按钮]定义要添加到工具栏中的单个按钮.以后无法添加或删除按钮,因此必须是完整的定义集.按钮也不能重新排序,因此它们在数组中的顺序(即它们从左到右显示的顺序)将是其永久顺序.">
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(this->ThumbBarAddButtons((HWND)@<窗口句柄>, @<按钮数量>, @<结构数组>));
+    }
+
+    方法 更新按钮 <公开 类型 = 逻辑型 注释 = "根据窗口的当前状态,显示、启用、禁用或隐藏缩略图工具栏中的按钮.缩略图工具栏是嵌入任务栏按钮浮出控件中窗口缩略图中的工具栏." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假."
+            折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "其缩略图表示形式包含工具栏的窗口的句柄.">
+    参数 按钮数量 <类型 = 整数 注释 = "\"结构数组\"指向的数组中定义的按钮数.允许的最大按钮数为 7.此数组仅包含表示正在更新的现有按钮的结构.">
+    参数 结构数组 <类型 = 缩略图按钮数组 注释 = "指向[缩略图按钮]结构的数组的指针.每个[缩略图按钮]定义单个按钮.如果按钮已存在,(\"按钮标识\"值已定义),则会使用结构中提供的信息更新现有按钮.">
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(this->ThumbBarUpdateButtons((HWND)@<窗口句柄>, @<按钮数量>, @<结构数组>));
+    }
+
+    方法 消息值_按钮被创建 <公开 属性读 类型 = 整数 注释 = "当应用程序显示窗口时,系统会创建其任务栏按钮.当按钮已到位时,任务栏会将当前消息值发送到窗口.应用程序应调用[消息值_按钮被创建]命令获取并在其消息过滤事件中处理该消息."
+            注释 = "注意:在调用任何[任务栏列表3]方法之前,应用程序必须收到该消息." 折叠 折叠2 @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.m_nTaskbarButtonCreated
+    }
+
+    方法 是否为按钮单击消息 <公开 类型 = 整数 注释 = "当单击缩略图工具栏中的按钮时,其中消息参数一的高位设置为THBN_CLICKED,可调用此命令判断是否为缩略图单击消息."
+            返回值注释 = "成功返回按钮标识ID(即添加按钮时的\"标识符\"),失败返回-1;" 折叠 @禁止流程检查 = 真>
+    参数 消息值 <类型 = 整数 注释 = "提供窗口消息的具体值">
+    参数 消息参数 <类型 = 变整数 注释 = "提供窗口消息所附带的参数1的值">
+    {
+        @ if(@<消息值> == WM_COMMAND && HIWORD(@<消息参数>) == THBN_CLICKED)
+        @     return (@dt<整数>)LOWORD(@<消息参数>);
+        @ return -1;
+    }
+
+    # @begin
+    # <> <include>
+    #     const UINT m_nTaskbarButtonCreated = ::RegisterWindowMessage(_T("TaskbarButtonCreated"));
+    # <> </include>
+    # @m<DECLARE_ITASKBARLIST_THUMBBAR_BUTTONS_ADD_OR_UPDATE_FUNCTION>(ThumbBarAddButtons)
+    # @m<DECLARE_ITASKBARLIST_THUMBBAR_BUTTONS_ADD_OR_UPDATE_FUNCTION>(ThumbBarUpdateButtons)
+    # @def_macro DECLARE_ITASKBARLIST_THUMBBAR_BUTTONS_ADD_OR_UPDATE_FUNCTION(function)                            \
+    # <> <include>                                                                                                    \
+    #     HRESULT ##function(HWND hwnd, @dt<整数> cButtons, @dt<缩略图按钮数组> pButton);                          \
+    # <> </include>                                                                                                   \
+    #     HRESULT @sn<current_class>::##function(HWND hwnd, @dt<整数> cButtons, @dt<缩略图按钮数组> pButton){      \
+    #         const int nButtonsNum = (int)cButtons != -1 ? cButtons : pButton.GetCount();                         \
+    #         LPTHUMBBUTTON pThumbButtons = (LPTHUMBBUTTON)::malloc(sizeof(THUMBBUTTON) * nButtonsNum);            \
+    #         for(int i = 0; i < nButtonsNum; i++){                                                                \
+    #             ::memcpy(&pThumbButtons[i], ((@dt<缩略图按钮>&)pButton.GetAt(i)).pdata(), sizeof(THUMBBUTTON));  \
+    #         }                                                                                                    \
+    #         HRESULT hr = ((ITaskbarList3*)this->m_pTaskbarList)->##function(hwnd, nButtonsNum, pThumbButtons);   \
+    #         ::free(pThumbButtons);                                                                               \
+    #         return hr;                                                                                           \
+    #     }
+    # @end
+}
+
+类 任务栏列表4 <公开 基础类 = 任务栏列表3 注释 = "最低受支持的客户端 Windows 7 [仅限桌面应用]" 注释 = "最低受支持的服务器 Windows Server 2008 R2 [仅限桌面应用]" 折叠 折叠2>
+{
+
+    # @ @m<任务栏列表.DECLARE_ITASKBARLIST_HRINIT>(IID_ITaskbarList4, this->m_pTaskbarList)
+
+    方法 置选项卡属性 <公开 类型 = 逻辑型 注释 = "允许选项卡指定主应用程序框架窗口或选项卡窗口是否应用作缩略图或在某些情况下的预览功能."
+            注释 = "如果应用程序无法为选项卡生成自己的缩略图,也无法为实时显示其活动选项卡内容(如动画),则应用程序可能希望使用其关联父窗口的缩略图或预览表示形式." 返回值注释 = "如果此方法成功,则返回真.否则,它将返回假." 折叠 折叠2
+            @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要设置属性的选项卡窗口的句柄.此句柄必须已通过[注册选项卡]选项卡注册..">
+    参数 属性标志 <类型 = 选项卡属性 注释 = "[选项卡属性]的一个或多个成员,这些成员指定显示的缩略图和选项卡缩略图的预览图像源.">
+    {
+        @ if(this->m_pTaskbarList == nullptr || @<窗口句柄> == 0) return FALSE;
+        @ return SUCCEEDED(((ITaskbarList4*)this->m_pTaskbarList)->SetTabProperties((HWND)@<窗口句柄>, (STPFLAG)@<属性标志>));
+    }
+}
+
+类 缩略图按钮 <公开 基础类 = 结构基础类 折叠>
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS>(THUMBBUTTON)
+
+    方法 掩码 <公开 属性读 类型 = 缩略图按钮掩码 注释 = "[缩略图按钮掩码]值的组合,指定此结构的成员包含有效数据;其他成员将被忽略,但\"标识符\"除外,这始终是必需的." 折叠 @嵌入式方法 = "">
+    {
+        @ (@dt<缩略图按钮掩码>)@sn<this>.pdata()->dwMask
+    }
+
+    方法 掩码 <公开 属性写 注释 = "[缩略图按钮掩码]值的组合,指定此结构的成员包含有效数据;其他成员将被忽略,但\"标识符\"除外,这始终是必需的." 折叠>
+    参数 掩码标志 <类型 = 缩略图按钮掩码>
+    {
+        @ this->pdata()->dwMask = (THUMBBUTTONMASK)@<掩码标志>;
+    }
+
+    方法 标识符 <公开 属性读 类型 = 整数 注释 = "按钮的应用程序定义标识符,在工具栏中是唯一的." 折叠 @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.pdata()->iId
+    }
+
+    方法 标识符 <公开 属性写 注释 = "按钮的应用程序定义标识符,在工具栏中是唯一的." 折叠>
+    参数 标识符 <类型 = 整数>
+    {
+        @ this->pdata()->iId = @<标识符>;
+    }
+
+    方法 位图索引 <公开 属性读 类型 = 整数 注释 = "按钮的应用程序定义标识符,在工具栏中是唯一的." 折叠 @嵌入式方法 = "">
+    {
+        @ (@dt<整数>)@sn<this>.pdata()->iBitmap
+    }
+
+    方法 位图索引 <公开 属性写 注释 = "按钮的应用程序定义标识符,在工具栏中是唯一的." 折叠>
+    参数 图标索引 <类型 = 整数>
+    {
+        @ this->pdata()->iBitmap = @<图标索引>;
+    }
+
+    方法 图标资源 <公开 属性读 类型 = 图标资源 注释 = "用作按钮图像的图标的句柄." 折叠 @嵌入式方法 = "">
+    {
+        @ (@dt<图标资源>)@sn<this>.pdata()->hIcon
+    }
+
+    方法 图标资源 <公开 属性写 注释 = "用作按钮图像的图标的句柄." 折叠>
+    参数 图标资源 <类型 = 图标资源>
+    {
+        @ this->pdata()->hIcon = (HICON)g_objVolApp.LoadResImage(VRIT_ICON, @<图标资源>);
+    }
+
+    方法 提示文本 <公开 属性读 类型 = 文本型 注释 = "包含按钮工具提示文本的宽字符数组,当鼠标指针悬停在按钮上时显示." 折叠 @嵌入式方法 = "">
+    {
+        @ @dt<文本型>(@sn<this>.pdata()->szTip)
+    }
+
+    方法 提示文本 <公开 属性写 注释 = "包含按钮工具提示文本的宽字符数组,当鼠标指针悬停在按钮上时显示." 折叠>
+    参数 提示文本 <类型 = 文本型>
+    {
+        @ _tcsncpy_z(this->pdata()->szTip, @<提示文本>.GetText(), NUM_ELEMENTS_OF(this->pdata()->szTip) - 1);
+    }
+
+    方法 选项标志 <公开 属性读 类型 = 缩略图按钮标志 注释 = "[缩略图按钮标志]值的组合,用于控制按钮的特定状态和行为." 折叠 @嵌入式方法 = "">
+    {
+        @ (@dt<缩略图按钮标志>)@sn<this>.pdata()->dwFlags
+    }
+
+    方法 选项标志 <公开 属性写 注释 = "[缩略图按钮标志]值的组合,用于控制按钮的特定状态和行为." 折叠>
+    参数 标志 <类型 = 缩略图按钮标志>
+    {
+        @ this->pdata()->dwFlags = (THUMBBUTTONFLAGS)@<标志>;
+    }
+}
+
+类 缩略图按钮数组 <公开 基础类 = 对象数组模板类 @模板实现类 = "缩略图按钮">

@@ -1,0 +1,1258 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.CVolPy <注释 = "  整体与火山安卓相似,由于系统平台的差异原因,所以,还是有部分与安卓不一样的." 注释 = ""
+        注释 = "  请注意: 凡是直接从Py文件中加载的模块/成员,其引用计数都会大于1,您必须在使用完毕该对象之" 注释 = "后,手动将其引用计数清空,或设为1,否则,将会造成内存垃圾. 通过火山Pyxxx类.创建() 的对象,不需"
+        注释 = "要您自行清空." 注释 = "" 注释 = "关于Py库体积说明:" 注释 = "  本模块所附带的Py库,为Python3.9所有自带的库,体积可能稍微大了一下,如果您对体积比较在意,可以"
+        注释 = "通过删减一些用不到的库来降低尺寸,比如 网络模块,数据库模块等.这些库,动态库部分在Dlls文件夹中," 注释 = "Py库在Python3.9.zip中." 注释 = "" 注释 = "二次封装请注意:"
+        注释 = "   本库集成了一个叫做“CVolPy\"的模块,用于将Python的数据通过火山调试输出.如果您想要更改模块名称," 注释 = "请替换所有\"CVolPy\"." 注释 = ""
+        注释 = "  请千万千万切记,如果不熟悉指针,引用, 引用计数等概念,千万不要尝试修改所有嵌入的代码.不然可" 注释 = "能会由于错误的修改,导致出现空指针,野指针等,直接导致您的程序发生崩溃." 注释 = ""
+        注释 = "  如果您想要对本模块进行升级,请千万千万要注意,一定要区分好Py返回的引用类型." 注释 = "  一种是原始引用(表示 此对象及Py内的对象 两个对象指针是指向一个地址的), 一种是新引用,即 返回的是克"
+        注释 = "隆副本,在第一种情况下,如果您不熟悉指针概念, 引用概念,请千万不要对该对象进行引用计数的操作.也不要" 注释 = "尝试释放该对象,否则,一定会引起数据错误." 折叠2>
+
+# // 所有Py对象类的子类,都需要实现此宏,来完成该类对象的建立..
+# @begin
+#  @def_macro PyObjectDefaultConstructor                                                          \
+# <>      <include>                                                                                  \
+#          PyObject * GetPyObj() {                                                                \
+#              if (pdata () == NULL) return NULL;                                                 \
+#              return pdata ()->GetPyObj();                                                       \
+#          }                                                                                      \
+#          BOOL  IsRefObj() {                                                                     \
+#              if (pdata () == NULL) return FALSE;                                                \
+#              return pdata ()->GetIsRef();                                                       \
+#          }                                                                                      \
+#          void SetPyObj (PyObject * obj, BOOL bRef) {                                            \
+#              if (pdata () == NULL) return;                                                      \
+#              pdata ()->SetPyObj(obj, bRef);                                                     \
+#          }                                                                                      \
+#          @sn<current_class> (PyObject * pObject, bool bRef) : @sn<current_class> () {           \  // 必须先调用默认构造,进行创建参考计数容器,
+#              SetPyObj (pObject, bRef);                                                          \
+#          }                                                                                      \ 
+# <>      </include>
+# // py=检查的Py对象, ret=检查失败返回的数据, method=成功则返回此可以是方法, 也可以是数据.
+#  @def_macro PyObjectCheckAndReturn(py, ret, method)        \
+#     if (py == NULL || py->ob_refcnt <= 0)                  \
+#         return ret;                                        \
+#     return method;
+# // 检查执行, 比支持返回值.
+#  @def_macro PyObjectCheckAndExec(py, method)               \
+#     if (py != NULL && py->ob_refcnt > 0)                   \
+#         method;
+# @end
+
+类 火山Python <公开 注释 = "火山Python支持." 注释 = "本类封装了Python较重要的方法,可以直接使用本类,快速完成Py代码的编译,加载以及执行等."
+        @视窗.外部库 = "..\\..\\shared\\extern_lib\\common\\python\\1\\Python3_9\\$(p)\\python39.lib"
+        @视窗.附属文件 = "..\\..\\shared\\extern_lib\\common\\python\\1\\Python3_9\\$(p)\\python39.dll"
+        @视窗.附属文件 = "..\\..\\shared\\extern_lib\\common\\python\\1\\Py3_9Libs\\$(p)"
+        @视窗.附属文件 = "..\\..\\shared\\extern_lib\\common\\python\\1\\Py3_9Libs\\Python3_9.zip"
+        @视窗.头文件搜寻目录 = "..\\..\\shared\\extern_lib\\common\\python\\1\\Python3_9\\Include\\" @视窗.外部头文件 = "Python.h"
+        @视窗.外部头文件 = "CVolPyWraper.h">
+{
+
+    # @begin
+    # typedef void(WINAPI * OnPyCallback) (INT_P);
+    #
+    # static PyObject * PyOn_DebugPrint (PyObject* self, PyObject* args) {
+    # #ifdef _DEBUG
+    #     if ( PyTuple_Check (args) ) {
+    #         for (Py_ssize_t i = 0; i < PyTuple_Size(args); i++ ) {
+    #             PyObject * pItem = PyTuple_GetItem (args, i);
+    #             PyObject * pStr = PyObject_Str (pItem);
+    #             const CHAR* pws =  PyUnicode_AsUTF8 ( pStr );
+    #             TRACE0 ( _CT("PyPrint：") + CVolString( (const CHAR*) pws ).GetText() );
+    #             Py_CLEAR (pStr);
+    #         }
+    #     }
+    # #endif
+    #     Py_RETURN_NONE;
+    # }
+    #
+    # static PyObject * PyOn_Call (PyObject* self, PyObject* args) { // args[0] = 回调地址. args[1..N] 为参数.
+    #     if (!PyTuple_Check (args))
+    #         Py_RETURN_NONE;    
+    #     INT iLen = PyTuple_Size(args);
+    #     PyObject * pItem = PyTuple_GetItem(args, 0);
+    #     OnPyCallback pCallback = (OnPyCallback) PyLong_AsSize_t (pItem);
+    #     pCallback (  (INT_P) &@dt<Py元组类>( PyTuple_GetSlice(args, 1, iLen), FALSE ) );
+    #     Py_RETURN_NONE;
+    # }
+    #
+    # static PyMethodDef VolPCLogMethods[] = { 
+    #     {"DebugPrint", PyOn_DebugPrint, METH_VARARGS, "docs"}, 
+    #     {"Call",  PyOn_Call,  METH_VARARGS, "docs"}, 
+    #     {NULL, NULL, 0, NULL}
+    # };
+    #
+    # static struct PyModuleDef VolPCLogModule = {
+    #      PyModuleDef_HEAD_INIT, "CVolPy",  "docs", -1, VolPCLogMethods
+    # }; 
+    #
+    # PyMODINIT_FUNC PyInit_VolPCLog(void) {
+    #     return PyModule_Create(&VolPCLogModule);
+    # }
+    # @end
+
+    方法 添加定义成员 <公开 静态 类型 = 逻辑型 注释 = "向\"CVolPy\"模块内添加一个任意类型的成员变量."
+            注释 = "您可在Py中通过该成员名称进行访问该成员数据,例如\"CVolPy.Var1\",如果所指定成员名已存在,则更新值,如果不存在,则添加."
+            返回值注释 = "添加成功返回真, 失败返回假,如果返回假,可使用\"检查异常\"进行异常检查." @禁止流程检查 = 真>
+    参数 成员名称 <类型 = 文本型 注释 = "所欲设置此成员名称.">
+    参数 成员对象 <类型 = 变整数 注释 = "所欲设置成员数据,可以为任意对象/数据或静态方法的指针." "">
+    {
+        @ return CVolPyWraper::AddMacroObject ( (const char *) CU8String(@<成员名称>).GetText(), PyLong_FromSize_t(@<成员对象>) );
+    }
+
+    方法 Py到文本 <公开 静态 类型 = 文本型 注释 = "将任意火山Py对象,转化为文本并返回." 注释 = "请注意: 如果所提供的Py对象无效,或其引用计数已被归零(其实就是无效),本方法将返回空文本." @禁止流程检查 = 真>
+    参数 欲转换对象 <类型 = Py对象类 注释 = "所欲转换为文本的Py对象">
+    {
+        @ if (@<欲转换对象>.GetPyObj() == NULL || @<欲转换对象>.GetPyObj()->ob_refcnt <= 0)
+        @     return _CT("");
+        @ PyObject * pStr = PyObject_Str( @<欲转换对象>.GetPyObj() );
+        @ if (pStr == NULL) return _CT("");
+        @ if (!PyUnicode_Check (pStr)) {
+        @     Py_CLEAR(pStr);
+        @     return _CT("");
+        @ }
+        @ const CHAR* pws =  PyUnicode_AsUTF8 ( pStr );
+        @ @an<CVolString> pRet( (const CHAR*) pws );
+        @ Py_CLEAR (pStr);
+        @ return pRet;
+    }
+
+    方法 初始化 <公开 静态 类型 = 逻辑型 注释 = "  初始化Py解释器引擎,初始化成功返回真,失败返回假." 注释 = "  请注意: 在您的应用生命周期内(从开始到结束),只需要初始化一次即可.无需多次初始化,除非"
+            注释 = "您自行通过\"释放\"将其释放掉,才需要再次初始化.初始化结果,可使用属性\"是否已初始化\"获得." @禁止流程检查 = 真>
+    {
+        @ if (Py_IsInitialized()) return TRUE;
+        @ PyImport_AppendInittab("CVolPy", PyInit_VolPCLog);
+        @ Py_Initialize ();
+        如果 (火山Python.检查异常 ())
+        {
+            @ ::MessageBoxA (0, "", "", 0);
+        }
+        @ CVolPyWraper::SetVolPyEvent ();
+        @ return Py_IsInitialized();
+    }
+
+    方法 卸载 <公开 静态 注释 = "释放当前Python解释器引擎." 注释 = "请注意:" 注释 = "  1.释放过后,您将不得再次使用,如欲再次使用,请先进行初始化."
+            注释 = "  2.本方法为全局方法,即,只要您执行了此方法进行卸载Py解释器引擎,则您程序内的所有\"火山Python\"" 注释 = "变量对象,都将被清理,无法再次使用." @嵌入式方法 = "">
+    {
+        @ Py_Finalize()
+    }
+
+    方法 是否已初始化 <公开 静态 类型 = 逻辑型 注释 = "取得Python引擎是否已经初始化." 返回值注释 = "已初始化返回真,未初始化返回假." @禁止流程检查 = 真>
+    {
+        @ return Py_IsInitialized();
+    }
+
+    方法 置库路径 <公开 静态 注释 = "  设置Python库路径, 此方法可在初始化之前使用." 注释 = "  请注意: 此路径下必须包含Python的库文件,也可以是一个包含py库的压缩包文件."
+            注释 = "且该路径下,必须有\"Dlls\"目录,该目录下为Py的动态库,可以包含多个路径,Windows" 注释 = "平台下,路径使用\";\"进行分隔,其他系统,如 Linux下,使用\":\"进行分隔.设置成功之"
+            注释 = "后,Py引擎默认从设置的路径中搜索需求的Py库文件.">
+    参数 所欲设置路径 <类型 = 文本型>
+    {
+        @ Py_SetPath (@<所欲设置路径>.GetText());
+    }
+
+    方法 运行代码行 <公开 静态 类型 = 逻辑型 注释 = "载入一段Py代码运行,运行成功返回真,失败返回假." 注释 = "请注意: 请一定要注意Py代码中的缩进格式,如果格式不正确,会导致执行失败." @嵌入式方法 = "">
+    参数 所欲运行Py代码 <类型 = 文本型 注释 = "请注意,是运行Py代码,而不是直接载入Py文件.">
+    {
+        @ PyRun_SimpleString((const char *)CU8String(@<所欲运行Py代码>).GetText()) == 0
+    }
+
+    方法 加载Py文件 <公开 静态 类型 = Py模块类 注释 = "载入并编译一个Py代码文件," 注释 = "请注意:"
+            注释 = "  1.请不要让文件名称,与Py核心库的文件名重名,否则,将会加载核心库中的py.比如,test就存在于核心库中."
+            注释 = "  2.请一定要确保,所加载的Py代码中的引入库,在您所设置的路径中可以找到,如果您引入了无法找到的库,则无法执行."
+            注释 = "  3.所欲加载的Py代码文件,千万不要使用 \"路径\\\\VolCpTest.py.py\"这种方式,只能给出Py代码文件名(不包括扩展名 .Py)," 注释 = "路径,只能在所设置的环境路径目录下."
+            @禁止流程检查 = 真>
+    参数 py代码文件 <类型 = 文本型 注释 = "所欲加载的Py代码文件.">
+    {
+        @ PyObject* pModule = PyImport_ImportModule ((const char *)CU8String(@<py代码文件>).GetText());
+        @ if (pModule == NULL) return @dt<Py模块类> ();
+        @ if (PyErr_Occurred() != NULL || !PyModule_Check(pModule)) {
+        @     Py_CLEAR (pModule);
+        @     return @dt<Py模块类> ();
+        @ }
+        @ return @dt<Py模块类> (pModule, PYREF_FALSE);
+    }
+
+    方法 添加模块路径 <公开 静态 类型 = 逻辑型 注释 = "将指定路径的Py文件添加到搜索路径中." "">
+    参数 所欲添加路径 <类型 = 文本型 注释 = "所欲添加的文件路径.">
+    {
+        返回 (运行代码行 ("sys.path.append(r'" + 所欲添加路径 + "')"))
+    }
+
+    方法 加载Py代码 <公开 静态 类型 = Py模块类 注释 = "将指定的代码文本转换为Py模块对象." 注释 = "请注意:" 注释 = "  1.如果该代码文本中,依赖了其他模块(import了其他模块或类),则您需要将其模块路径"
+            注释 = "加载至系统路径中(使用方法 \"添加模块路径\"),否则运行时,会报找不到模块名的错误." 注释 = "  2.请一定要确保,代码的正确性(主要是代码索引),如果代码书写有误,则会加载为模块时"
+            注释 = ",报代码书写错误的信息." 注释 = "  3.代码别名参数,这个参数,是在加载为模块时,为这个模块指定一个别名,您可以通过这个" 注释 = "别名,来直接访问模块中的代码,在代码运行错误时,报错中也会提示这个别名哪一行错误."
+            @禁止流程检查 = 真>
+    参数 py代码文本 <类型 = 文本型 注释 = "所欲创建模块的代码文本.">
+    参数 运行别名 <类型 = 文本型 注释 = "所欲指定的代码别名." @默认值 = "CVolPyTestCode">
+    {
+        @ PyObject * pCode = Py_CompileString  ((const char *)CU8String(@<py代码文本>).GetText(), (const char *)CU8String (@<运行别名>).GetText(), Py_file_input);
+        @ if (pCode == NULL) return @dt<Py模块类> ();
+        @ if (PyErr_Occurred() != NULL || !PyCode_Check(pCode)) {
+        @     Py_CLEAR (pCode);
+        @     return @dt<Py模块类> ();
+        @ }
+        @ PyObject * pModule = PyImport_ExecCodeModule((const char *)CU8String (@<运行别名>).GetText(), pCode);
+        @ if (pModule == NULL) {
+        @     Py_CLEAR (pCode);
+        @     return @dt<Py模块类> ();
+        @ }
+        @ if (PyErr_Occurred() != NULL || !PyModule_Check(pModule)) {
+        @     Py_CLEAR (pCode);
+        @     Py_CLEAR (pModule);
+        @     return @dt<Py模块类> ();
+        @ }
+        @ Py_CLEAR (pCode);
+        @ return @dt<Py模块类> (pModule, PYREF_FALSE);
+    }
+
+    方法 检查异常 <公开 静态 类型 = 逻辑型 注释 = "  检查是否有异常代码." 注释 = "  请注意: 本方法仅可检查到运行处为止,是否捕获过异常,如果有,则可以通过\"打印异常\"或\"取异常文本\""
+            注释 = "进行异常输出,如果多次捕获异常,则只记录最后一次异常信息." @禁止流程检查 = 真>
+    {
+        @ return PyErr_Occurred() != NULL;
+    }
+
+    方法 打印异常 <公开 静态 注释 = "将当前所捕获的异常信息,输出至火山输出窗口.">
+    {
+        @ PyErr_Print();
+        @ PyErr_Clear();
+    }
+
+    方法 取异常文本 <公开 静态 类型 = 文本型 注释 = "检查并获得Py代码异常文本." 注释 = "当代码执行失败后,您可通过此方法,获取最后一次触发的异常信息." @禁止流程检查 = 真>
+    {
+        @ return CVolPyWraper::GetExceptionString();
+    }
+
+    # 本地代码======
+}
+
+类 Py对象类 <公开 注释 = "本类为所有Py类的基础类,为其提供基础方法." 注释 = "Py对象基础类" @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CVolPyWraper)
+    # @ @m<PyObjectDefaultConstructor>
+
+    方法 是否有效 <公开 属性读 类型 = 逻辑型 注释 = "返回当前Py对象是否为有效对象." @禁止流程检查 = 真>
+    {
+        @ return (GetPyObj() != NULL && GetPyObj()->ob_refcnt > 0);
+    }
+
+    方法 创建格式化对象 <公开 静态 类型 = Py对象类 注释 = "通过指定的格式化字符串与参数,创建所指定的Py对象类或其子类实例对象." 注释 = "请注意:"
+            注释 = "  1.此方法不会检查您传入的对象是否为有效对象,如果您传递的对象为无效对象,或替换符与替换数据类型不匹配,则会直接引发崩溃."
+            注释 = "  2.使用此方法,请确保\"格式文本\"替换符数据量,与参数数量一致,且,替换符与实际提供参数,必须匹配.以下简介中,\"/\"代表或,\"#\"号"
+            注释 = "代表, 该替换符需要同时传入长度参数, 例如, 文本长度, 字节集长度." 注释 = ""
+            注释 = "以下为常用的格式替换符,详细信息,请参阅: https://docs.python.org/3/c-api/arg.html?highlight=py_buildvalue#c.Py_BuildValue" 注释 = ""
+            注释 = "  s/s#/z/z# 创建Py文本类对象,使用此替换符,替换数据参数,必须为UTF8文本(实际为字节集)."
+            注释 = "  u/u#      创建Py文本类对象,使用此替换符,替换数据参数,可以直接填入文本型数据(UTF-16 或 UCS-4)."
+            注释 = "  y/y#      创建Py字节序列类对象.使用此替换符,替换数据参数,应为字节集指针." 注释 = "  i         创建Py数值类对象,使用此替换符,替换数据参数,应为整数型."
+            注释 = "  b         创建Py字符对象,使用此替换符,替换数据参数,应为字符型数据." 注释 = "  h         创建Py数值类对象,使用此替换符,替换数据参数,应为短整数型."
+            注释 = "  l         创建Py数值类对象,使用此替换符,替换数据参数,应为变整数." 注释 = "  L         创建Py数值类对象,使用此替换符,替换数据参数,应为长整数."
+            注释 = "  d         创建Py数值类对象,使用此替换符,替换数据参数,应为小数型."
+            注释 = "  O/S       创建Py对象类对象,使用此替换符,替换数据参数,应为Py对象类实例,或其子类实例.使用本替换符,所传入对象,将会导致该对象" 注释 = "引用计数增加1个."
+            注释 = "  N         创建Py对象类对象,使用此替换符,替换数据参数,应为Py对象类实例,或其子类实例,与\"O/S\"不同的是,本替换符不会增加所传入" 注释 = "Py对象的引用计数."
+            注释 = "  O&        创建Py对象类对象,使用此替换符,替换数据参数,可以为任意类型(火山任意类对象,基本数据类型,Py任意类对象).使用此替换"
+            注释 = "符您需要注意,如果在火山中将该火山对象释放,则传入py的火山对象会变成无效对象,您不得再次使用该对象,否则将会引发崩溃." 注释 = "" 注释 = "请注意: 以上带有#号的替换符,表示需要传入该文本或字节集长度参数."
+            注释 = "示例:" 注释 = "  Py文本对象 = 创建格式化对象(\"s#\", 文本参数, 取文本长度(文本参数))" 注释 = "" 注释 = "示例:"
+            注释 = "  Py数值对象 = 创建格式化对象(\"i\", 整数值: 1)" 注释 = "  Py文本对象 = 创建格式化对象(\"s\", 整数值: 1)" 注释 = ""
+            注释 = "请注意: 以下所介绍的符号,不可单独使用,需要在括号,或中括号中,包含上述几种替换符方可."
+            注释 = "  ()/xx     创建Py元组类对象,使用此符号,替换数据参数,可以为任意类型,但是要与替换符相匹配,其中XX表示任意类型."
+            注释 = "  []        创建Py列表类对象,使用此符号,替换数据参数,可以为任意类型,但是要与替换符相匹配."
+            注释 = "  {}        创建Py字典类对象,使用此符号,替换数据参数,可以为任意类型,但是要与替换符相匹配." 注释 = "示例:"
+            注释 = "  元组对象 = 创建格式化对象(\"(ibhl)\", 整数值: 1, 字符值: \'C\', 短整数值: 2, 变整数值: 123)"
+            注释 = "  列表对象 = 创建格式化对象(\"[ibhl]\", 整数值: 1, 字符值: \'C\', 短整数值: 2, 变整数值: 123)"
+            注释 = "  字典对象 = 创建格式化对象(\"{ibhl}\", 整数值: 1, 字符值: \'C\', 短整数值: 2, 变整数值: 123)" @嵌入式方法 = "req_str_param_text_pointer = true">
+    参数 格式文本 <类型 = 文本型 注释 = "所欲使用的替换符文本,替换符只可使用本方法注释中的替换符.不可与火山的格式化替换符混合使用.">
+    参数 替换数据 <注释 = "所欲设置的替换数据,本方法会根据您传入的替换符文本,将数据替换为指定的Py对象类型." 注释 = "请注意: 本方法仅支持火山基本数据类型,不支持任何类对象." @匹配类型 = 通用基本型 @可扩展 = "">
+    {
+        @ @dt<Py对象类>(Py_BuildValue(CU8String(@<格式文本>).GetText(), @<替换数据>), FALSE)
+    }
+
+    方法 到文本 <公开 类型 = 文本型 注释 = "将任意火山Py对象,转化为文本并返回." 注释 = "请注意: 如果所提供的Py对象无效,或其引用计数已被归零(其实就是无效),本方法将返回空文本." @虚拟方法 = 可覆盖>
+    {
+        返回 (火山Python.Py到文本 (本对象))
+    }
+
+    方法 清空引用计数 <公开 注释 = "将当前Py对象清空引用计数." 注释 = "请注意: 这是相当危险的操作,如果您不熟悉引用,指针,计数的概念,请不要使用此方法.">
+    {
+        @ @m<PyObjectCheckAndExec> (pdata()->GetPyObj(), pdata()->SafeClearRef() );
+    }
+
+    方法 增加引用计数 <公开 注释 = "为当前对象增加一个引用计数." 注释 = "请注意: 这是相当危险的操作,如果您不熟悉引用,指针,计数的概念,请不要使用此方法.">
+    {
+        @ @m<PyObjectCheckAndExec> (pdata()->GetPyObj(), pdata()->SafeIncRef() );
+    }
+
+    方法 减少引用计数 <公开 注释 = "为当前对象减少一个引用计数." 注释 = "请注意: 这是相当危险的操作,如果您不熟悉引用,指针,计数的概念,请不要使用此方法.">
+    {
+        @ @m<PyObjectCheckAndExec> (pdata()->GetPyObj(), pdata()->SafeDecRef() );
+    }
+
+    方法 重置引用计数 <公开 静态>
+    参数 本类对象 <类型 = Py对象类>
+    参数 欲设新计数 <类型 = 整数>
+    {
+        @ if (@<本类对象>.GetPyObj() == NULL || @<本类对象>.GetPyObj()->ob_refcnt <= 0)
+        @     return ;
+        @ @<本类对象>.GetPyObj()->ob_refcnt = @<欲设新计数>;
+    }
+
+    方法 对象引用计数 <公开 静态 属性读 类型 = 整数 注释 = "  取得当前火山Py对象引用计数." 注释 = "  请注意: 当此对象的引用计数小于等于0的时候,则证明则对象已经被弃用,即将进行回收,"
+            注释 = "此时,您不应该继续使用此对象." @禁止流程检查 = 真>
+    参数 本类对象 <类型 = Py对象类>
+    {
+        @ if (@<本类对象>.GetPyObj() == NULL || @<本类对象>.GetPyObj()->ob_refcnt <= 0)
+        @     return 0;
+        @ return (INT)@<本类对象>.GetPyObj()->ob_refcnt;
+    }
+
+    方法 类型 <公开 属性读 类型 = 文本型 注释 = "取得当前对象的类型文本,成功返回其类型文本,失败返回空文本." 注释 = "请注意: 该方法取得的类型,是Py定义的类型文本,例如\"str\",\"tuple\"等."
+            @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), _CT (""), @an<CVolString> ((const CHAR*) GetPyObj()->ob_type->tp_name))
+    }
+
+    # 本地代码======
+    # @begin
+    # <> <include>
+    # #define PYREF_TRUE  TRUE
+    # #define PYREF_FALSE FALSE
+    # static @dt<Py对象类> AnyVolType2PyType (BOOL bRef, char type, ...);
+    # static PyObject * _PyObject_CallMethod (PyObject* pCallObj, const char * types, ...);
+    # static BOOL CopyPyObject (PyObject* srcObj, @dt<Py对象类>& destObj);
+    # <> </include>
+    #
+    # static PyObject* sCreatePyObject (char type, va_list& va)
+    # {
+    #     PyObject * pObj = NULL;
+    #     switch (type)
+    #     {
+    #     case _C_VOL_STRING:  {
+    #         @an<CVolString> * pStr = va_arg (va, @an<CVolString> *);
+    #         pObj = PyUnicode_FromWideChar(pStr->GetText(), pStr->GetLength());
+    #         break;  }
+    #     case _C_VOL_SBYTE :
+    #         pObj = PyLong_FromLong ((INT)va_arg (va, S_BYTE));
+    #         break;
+    #     case _C_VOL_SHORT :
+    #         pObj = PyLong_FromLong ((INT)va_arg (va, SHORT));
+    #         break;
+    #     case _C_VOL_WCHAR :
+    #         pObj = PyLong_FromLong ((INT)va_arg (va, TCHAR));
+    #         break;
+    #     case _C_VOL_INT :
+    #         pObj = PyLong_FromLong (va_arg (va, INT));
+    #         break;
+    #     case _C_VOL_LONG :
+    #         pObj = PyLong_FromLongLong (va_arg (va, INT64));
+    #         break;
+    #     case _C_VOL_FLOAT :  // FLOAT在VC中是使用DOUBLE方式传递的.
+    #     case _C_VOL_DOUBLE :
+    #         pObj = PyFloat_FromDouble (va_arg (va, DOUBLE));
+    #         break;
+    #     case _C_VOL_BOOL :
+    #         pObj = PyBool_FromLong ((INT)va_arg (va, BOOL));
+    #         break;
+    #     default : {
+    #         if (type == _C_VOL_CLASS) {
+    #             @an<CVolObject> * p1 = va_arg (va, @an<CVolObject> *);
+    #             if (P_IS_VOL_INSTANCE_OF (p1, @dt<Py对象类>)) {
+    #                 pObj = ((@dt<Py对象类> *)p1)->GetPyObj(); 
+    #                 if (pObj != NULL)
+    #                     Py_INCREF( pObj ); 
+    #                 break;
+    #             }
+    #         }
+    #         TRACE0 (_T ("不支持的数据类型,仅支持基本数据类型/\"Py对象类\"及其子类实例对象."));
+    #         break;  }
+    #     }
+    #     return pObj;
+    # }
+    #
+    # @dt<Py对象类> @sn<current_class>::AnyVolType2PyType (BOOL bRef, char type, ...) {
+    #     va_list va;
+    #     va_start(va, type);
+    #     PyObject * pObj = sCreatePyObject (type, va);
+    #     va_end(va);
+    #     return (pObj == NULL ? @dt<Py对象类>(NULL, PYREF_FALSE) : @dt<Py对象类>(pObj, bRef));
+    # }
+    #
+    # PyObject * @sn<current_class>::_PyObject_CallMethod (PyObject* pCallObj, const char * types, ...) {
+    #         if (pCallObj == NULL || pCallObj->ob_refcnt <= 0) {
+    #             TRACE0 (_T ("Py方法类.调用() 方法对象或类型对象无效."));
+    #             return NULL;
+    #         }
+    #         PyObject * pTuple = NULL;
+    #         va_list va;
+    #         va_start (va, types);
+    #         for (size_t i=1; i < strlen(types); i++) {
+    #             PyObject * param = sCreatePyObject (types[i], va);
+    #             if (param == NULL) {
+    #                 if (pTuple != NULL)
+    #                     Py_CLEAR (pTuple);
+    #                 return NULL;
+    #             }
+    #             if (pTuple == NULL)
+    #                 pTuple = PyTuple_New (strlen(types) - 1);
+    #             PyTuple_SetItem (pTuple, i - 1, param);   
+    #         }
+    #         va_end (va);
+    #         PyObject * pRet = PyObject_CallObject(pCallObj, pTuple);    
+    #         Py_CLEAR (pTuple);
+    #         return pRet;
+    #     }
+    #
+    # // 将srcObj 复制到destObj中. 
+    # BOOL @sn<current_class>::CopyPyObject (PyObject* srcObj, @dt<Py对象类>& destObj) { 
+    #     if (srcObj == NULL || srcObj->ob_refcnt <= 0)
+    #         return FALSE;
+    #     destObj = @dt<Py对象类> (srcObj, PYREF_FALSE);
+    #     return TRUE;
+    # }
+    # @end
+}
+
+类 Py模块类 <公开 基础类 = Py对象类 注释 = "Py模块类." 注释 = "本类的主要作用,就是加载代码片段/文件/以及从压缩模块文件中加载指定的模块." 注释 = "加载模块后,就可以通过火山来调用其中的方法或类."
+        @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<PyObjectDefaultConstructor>
+
+    方法 模块名 <公开 属性读 类型 = Py对象类 注释 = "取得当前模块对象的名称." @禁止流程检查 = 真>
+    {
+        @ if (GetPyObj() == NULL || GetPyObj()->ob_refcnt <= 0  || !PyModule_Check(GetPyObj())) {
+        @     return @dt<Py字典类> ();
+        @ }
+        @ PyObject * pName = PyModule_GetNameObject(GetPyObj());
+        @ if (PyErr_Occurred() != NULL || pName == NULL) {
+        @     return @dt<Py对象类> ();
+        @ }
+        @ return @dt<Py对象类> (pName, PYREF_FALSE);
+    }
+
+    方法 文件名 <公开 属性读 类型 = Py对象类 注释 = "取得当前模块文件名称." @禁止流程检查 = 真>
+    {
+        @ if (GetPyObj() == NULL || GetPyObj()->ob_refcnt <= 0  || !PyModule_Check(GetPyObj())) {
+        @     return @dt<Py字典类> ();
+        @ }
+        @ PyObject * pName = PyModule_GetFilenameObject(GetPyObj());
+        @ if (PyErr_Occurred() != NULL || pName == NULL) {
+        @     return @dt<Py对象类> ();
+        @ }
+        @ return @dt<Py对象类> (pName, PYREF_FALSE);
+    }
+
+    方法 取字典 <公开 类型 = Py字典类 注释 = "从当前模块中取得字典对象." 注释 = "请注意: 本方法所取得字典对象,其中包括了该模块中的所有方法/变量成员名称." @禁止流程检查 = 真>
+    {
+        @ if (GetPyObj() == NULL || GetPyObj()->ob_refcnt <= 0  || !PyModule_Check(GetPyObj())) {
+        @     return @dt<Py字典类> ();
+        @ }
+        @ PyObject * dict = PyModule_GetDict(GetPyObj());
+        @ if (PyErr_Occurred() != NULL || dict == NULL || !PyDict_Check(dict)) {
+        @     return @dt<Py字典类> ();
+        @ }
+        @ return @dt<Py字典类> (dict, PYREF_TRUE);
+    }
+
+    方法 成员是否存在 <公开 类型 = 逻辑型 注释 = "查询当前模块内,是否有指定名称的成员." 注释 = "请注意: 此名称,可以为方法名称,也可以是变量名称或类名." 返回值注释 = "如果该成员存在,则返回真,否则返回假."
+            @禁止流程检查 = 真>
+    参数 所指定成员名称 <类型 = 文本型 注释 = "所欲查询的成员名称.">
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), FALSE, PyObject_HasAttrString(GetPyObj(), (const char *)CU8String(@<所指定成员名称>).GetText()))
+    }
+
+    方法 取成员 <公开 类型 = Py对象类 注释 = "从当前模块中取得指定成员对象." 注释 = "请注意:" 注释 = "  1.本方法所取得对象,可以为变量成员,也可以为方法成员或类成员."
+            注释 = "  2.如果您通过本方法所取得成员为类型/类,请切记,该对象不可直接操作,因为它只是一个类,而并" 注释 = "非实例对象,只有您将其创建,成为实例对象后,才可继续操作."
+            注释 = "  2.如果该模块对象中,并不存在您所指定的名称成员,那么本方法将会返回一个空的Py对象类对象," 注释 = "您可使用方法\"成员是否存在\"查询当前模块中是否具有指定名称的成员." @禁止流程检查 = 真>
+    参数 所指定成员名称 <类型 = 文本型 注释 = "所欲查询的成员名称.">
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), @dt<Py对象类>(), @dt<Py对象类>(PyObject_GetAttrString(GetPyObj(), (const char *)CU8String(@<所指定成员名称>).GetText()), PYREF_FALSE))
+    }
+
+    方法 取方法 <公开 类型 = Py方法类 注释 = "从当前模块中取得指定名称的方法对象." @禁止流程检查 = 真>
+    参数 所欲指定方法名 <类型 = 文本型 注释 = "所欲获取的方法对象名称.">
+    {
+        变量 返回方法 <类型 = Py方法类>
+        返回方法 = (Py方法类)取成员 (所欲指定方法名)
+        如果 (返回方法.检查类型 ())
+        {
+            返回 (返回方法)
+        }
+        返回 ((Py方法类)新建对象 (Py方法类))
+    }
+
+    方法 创建自系统模块 <公开 静态 类型 = Py模块类 注释 = "加载Py核心库或您指定的路径中的Py模块." 返回值注释 = "加载成功返回一个有效的模块对象,如果失败,您可通过火山Python类方法\"检查异常\"获取异常信息."
+            @禁止流程检查 = 真>
+    参数 模块名称 <类型 = 文本型 注释 = "所欲加载的模块名称.">
+    {
+        @ PyObject * moudle = PyImport_ImportModule((const char *)CU8String(@<模块名称>).GetText());
+        @ if (PyErr_Occurred () != NULL || moudle == NULL) {
+        @     PyErr_Print();
+        @     PyErr_Clear();
+        @     if (moudle != NULL)
+        @         Py_CLEAR (moudle);
+        @     return @sn<current_class> ();
+        @ }
+        @ return @sn<current_class> (moudle, PYREF_TRUE);
+    }
+
+    方法 检查类型 <公开 类型 = 逻辑型 注释 = "检查当前对象,是否为模块对象." 注释 = "成功返回真, 失败返回假,如果失败,可用\"类型\"获得实际类型文本." @虚拟方法 = 可覆盖 @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), FALSE, PyModule_Check (GetPyObj()))
+    }
+}
+
+类 Py类型类 <公开 基础类 = Py对象类 注释 = "Py类型类,对应着Python中的类/类型(type)." 注释 = "Python中,一切数据皆为对象,所以,本类可以创建/调用任何Python类型对象.">
+{
+
+    # @ @m<PyObjectDefaultConstructor>
+
+    方法 创建实例 <公开 静态 类型 = Py类型类 注释 = "  创建指定Python类型实例." 注释 = "  请注意: 通过\"Py字典对象\"或\"Py模块对象\"取得的本类对象,实际上只是一个类,而并非实例,需要通过此方法,"
+            注释 = "来创建该类的实例对象." 返回值注释 = "本方法执行成功,则返回该Py类实例对象,否则将返回空的Py对象." @嵌入式方法 = "req_obj_param_pointer=true">
+    参数 类型对象 <类型 = Py类型类 注释 = "当前类对象.">
+    参数 构造参数 <注释 = "所欲提供构造的参数,参数类型可以为火山基本数据类型或Py对象类对象." 注释 = "支持类型:" 注释 = "   1. Py对象类以及其子类对象."
+            注释 = "   2. 火山基本数据类型(数值{整数, 长整数, 小数}, 逻辑型, 文本型)" @匹配类型 = 通用型 @可扩展 = "">
+    {
+        @ @dt<Py类型类>(@dt<Py对象类>::_PyObject_CallMethod(@<类型对象>.GetPyObj(), @sn<pm_types>, @<构造参数>, NULL), PYREF_FALSE)
+    }
+
+    方法 创建空参实例 <公开 静态 类型 = Py类型类 注释 = "  创建指定Python类型实例." 注释 = "  请注意: 通过方法\"Py字典对象\"或\"Py模块对象\"取得的本类对象,实际上只是一个类,而并非实例,需要通过此方法,"
+            注释 = "来创建该类的实例对象." 返回值注释 = "本方法执行成功,则返回该Py类实例对象,否则将返回空的Py对象." @嵌入式方法 = "req_obj_param_pointer=true">
+    参数 类型对象 <类型 = Py类型类 注释 = "当前类对象.">
+    {
+        @ @dt<Py类型类>(PyObject_CallObject(@<类型对象>.GetPyObj(), NULL), PYREF_FALSE)
+    }
+
+    方法 调用无参方法 <公开 静态 类型 = Py对象类 注释 = "调用当前Py类型实例对象内的指定无参方法.." 返回值注释 = "如果所欲调用的Py方法具有返回值,且本方法执行成功,则本方法返回Py的返回值,否则返回空的Py对象."
+            @嵌入式方法 = "req_obj_param_pointer=true">
+    参数 本类对象 <类型 = Py类型类 注释 = "当前类型实例对象.">
+    参数 方法名称 <类型 = 文本型 注释 = "所欲调用的Py方法名称.">
+    {
+        @ @dt<Py对象类>(PyObject_CallMethodNoArgs (@<本类对象>.GetPyObj(), @dt<Py文本类>::AnyVolType2PyType(PYREF_FALSE, @pdt_ch<方法名称>, @<方法名称>).GetPyObj()), PYREF_FALSE)
+    }
+
+    方法 调用格式化参数方法 <公开 静态 类型 = Py对象类 注释 = "通过格式化参数,将您所提供的参数转变为Py可变参数,然后调用目标Py方法." 注释 = "请注意:"
+            注释 = "  1.本方法会将元组类型参数\"替换符为 (xxxx)\"解释为可变参数,如果您所欲调用的目标py方法参数不为" 注释 = "可变参数,则调用失败."
+            注释 = "  1.本方法仅支持火山基本类型参数,例如, 文本型, 整数型等,不支持类对象,本方法不会对数据进行检查," 注释 = "请您一定要确保,\"参数替换符\"与\"参数替换数据\"数量一致,且类型匹配." 注释 = ""
+            注释 = "替换符:" 注释 = "  s/s#/z/z# 创建Py文本类对象,使用此替换符,替换数据参数,必须为UTF8文本(实际为字节集)."
+            注释 = "  u/u#      创建Py文本类对象,使用此替换符,替换数据参数,可以直接填入文本型数据(UTF-16 或 UCS-4)."
+            注释 = "  y/y#      创建Py字节序列类对象.使用此替换符,替换数据参数,应为字节集指针." 注释 = "  i         创建Py数值类对象,使用此替换符,替换数据参数,应为整数型."
+            注释 = "  b         创建Py字符对象,使用此替换符,替换数据参数,应为字符型数据." 注释 = "  h         创建Py数值类对象,使用此替换符,替换数据参数,应为短整数型."
+            注释 = "  l         创建Py数值类对象,使用此替换符,替换数据参数,应为变整数." 注释 = "  L         创建Py数值类对象,使用此替换符,替换数据参数,应为长整数."
+            注释 = "  d         创建Py数值类对象,使用此替换符,替换数据参数,应为小数型." 注释 = "" 注释 = "请注意: 以下所介绍的符号,不可单独使用,需要在括号,或中括号中,包含上述几种替换符方可."
+            注释 = "  (xxx)/xx     可变参数替换符." 注释 = "  [xxx]        列表参数替换符." 注释 = "  {xxx}        字典参数替换符."
+            返回值注释 = "如果所欲调用的Py方法具有返回值,且本方法执行成功,则本方法返回Py的返回值,否则返回空的Py对象." 编辑时信息 = "BAA9F, 0, 0, 0"
+            @嵌入式方法 = "req_obj_param_pointer = true\r\nreq_str_param_text_pointer = true">
+    参数 本类对象 <类型 = Py类型类 注释 = "当前类型实例对象." 编辑时信息 = "BAA9F, 0, 0, 0">
+    参数 方法名称 <类型 = 文本型 注释 = "所欲调用的Py方法名称." 编辑时信息 = "BAA9F, 0, 0, 0">
+    参数 参数替换符 <类型 = 文本型 注释 = "所欲使用参数替换符." 编辑时信息 = "BAA9F, 0, 0, 0">
+    参数 参数替换数据 <注释 = "所欲提供的参数,请注意,此参数数量,与类型,必须与\"参数替换符\"保持一致." 注释 = "支持类型: 火山基本数据类型(数值{整数, 长整数, 小数}, 逻辑型, 文本型)"
+            编辑时信息 = "BAA9F, 0, 0, 0" @匹配类型 = 通用型 @可扩展 = "">
+    {
+        @ @dt<Py对象类>( PyObject_CallMethod(@<本类对象>.GetPyObj(), CU8String(@<方法名称>).GetText(), CU8String(@<参数替换符>).GetText(), @<参数替换数据>), PYREF_FALSE)
+    }
+
+    方法 调用方法 <公开 静态 类型 = Py对象类 注释 = "  调用当前Py类型实例对象内的任意方法." 注释 = "  请注意: 本方法无法自动将火山基本数据类型转为Py类型,您只能使用Py对象类或其子类的对象来传递参数."
+            注释 = "如果您需要使用火山基本数据类型作为参数,请使用方法\"调用格式化参数方法\"." 返回值注释 = "如果所欲调用的Py方法具有返回值,且本方法执行成功,则本方法返回Py的返回值,否则返回空的Py对象."
+            编辑时信息 = "F2A9B, 0, 0, 0" @嵌入式方法 = "req_obj_param_pointer=true">
+    参数 本类对象 <类型 = Py类型类 注释 = "当前类型实例对象." 编辑时信息 = "F2A9B, 0, 0, 0">
+    参数 方法名称 <类型 = 文本型 注释 = "所欲调用的Py方法名称." 编辑时信息 = "F2A9B, 0, 0, 0">
+    参数 传递参数 <注释 = "所欲提供的Py参数对象,可以为Py对象类或其子类的实例对象." 注释 = "请注意: 本方法参数,不支持提供火山基本数据类型." 编辑时信息 = "F2A9B, 0, 0, 0" @匹配类型 = 通用型
+            @可扩展 = "">
+    {
+        @ @dt<Py对象类>(PyObject_CallMethodObjArgs (@<本类对象>.GetPyObj(),  @dt<Py文本类>::AnyVolType2PyType(PYREF_FALSE, @pdt_ch<方法名称>, @<方法名称>).GetPyObj(), @<传递参数>.GetPyObj(), NULL), PYREF_FALSE)
+    }
+
+    方法 检查类型 <公开 类型 = 逻辑型 注释 = "检查当前对象,是否为类型对象." 注释 = "成功返回真, 失败返回假,如果失败,可用\"类型\"获得实际类型文本." @虚拟方法 = 可覆盖 @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), FALSE, PyType_Check (GetPyObj()) == 0)
+    }
+}
+
+类 Py方法类 <公开 基础类 = Py对象类 注释 = "Py方法类,对应着Python中function与method类型."
+        注释 = "Py方法类对象,本身就是一个方法的实例对象了,所以,想要调用它,直接通过\"调用/调用空参\"即可,无需指定方法名称." @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<PyObjectDefaultConstructor>
+
+    方法 注释 <公开 属性读 类型 = Py对象类 注释 = "取得该方法的注释文本." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), @dt<Py对象类>(), @dt<Py对象类>(PyFunction_GetAnnotations (GetPyObj()), PYREF_FALSE) )
+    }
+
+    方法 代码 <公开 属性读 类型 = Py对象类 注释 = "取得该方法的代码文本." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), @dt<Py对象类>(), @dt<Py对象类>(PyFunction_GetCode (GetPyObj()), PYREF_FALSE) )
+    }
+
+    方法 调用无参 <公开 静态 类型 = Py对象类 注释 = "调用当前方法." 注释 = "请注意:" 注释 = "  1.请您确保,您所调用的方法确实为无参数方法,如果该方法具有参数,则本方法将执行失败."
+            注释 = "  2.此方法不会对当前方法对象进行有效检查,您应该确保,当前的方法对象是有效的, 可通过属性\"是否有效\"获得有效状态."
+            返回值注释 = "如果所调用的Py方法具有返回值,则此方法将返回其返回值,否则,将返回一个空的的火山Py对象." @嵌入式方法 = "">
+    参数 本类对象 <类型 = Py方法类 注释 = "当前类型实例对象.">
+    {
+        @ @dt<Py对象类>(PyObject_CallNoArgs(@<本类对象>.GetPyObj()), PYREF_FALSE)
+    }
+
+    方法 调用格式化参数 <公开 静态 类型 = Py对象类 注释 = "将指定的火山基本类型数据格式化为Py参数,并且调用当前方法." 注释 = "请注意:"
+            注释 = "  1.本方法不会对当前的方法对象,以及传入的参数进行检查,如果您当前使用的方法对象无效,或者传入的参数不正确,都会应发崩溃."
+            注释 = "  2.本方法仅支持火山基本类型数据,不可传入任意的火山类对象,且,格式替换符与实际参数类型必须一致,本方法使用与\"创建格式化" 注释 = "对象\"类似,只是不可使用对象替换符." 注释 = ""
+            注释 = "以下为常用的格式替换符,详细信息,请参阅: https://docs.python.org/3/c-api/arg.html?highlight=py_buildvalue#c.Py_BuildValue" 注释 = ""
+            注释 = "  s/s#/z/z# 创建Py文本类对象,使用此替换符,替换数据参数,必须为UTF8文本(实际为字节集)."
+            注释 = "  u/u#      创建Py文本类对象,使用此替换符,替换数据参数,可以直接填入文本型数据(UTF-16 或 UCS-4)."
+            注释 = "  y/y#      创建Py字节序列类对象.使用此替换符,替换数据参数,应为字节集指针." 注释 = "  i         创建Py数值类对象,使用此替换符,替换数据参数,应为整数型."
+            注释 = "  b         创建Py字符对象,使用此替换符,替换数据参数,应为字符型数据." 注释 = "  h         创建Py数值类对象,使用此替换符,替换数据参数,应为短整数型."
+            注释 = "  l         创建Py数值类对象,使用此替换符,替换数据参数,应为变整数." 注释 = "  L         创建Py数值类对象,使用此替换符,替换数据参数,应为长整数."
+            注释 = "  d         创建Py数值类对象,使用此替换符,替换数据参数,应为小数型." 注释 = "" 注释 = "请注意: 以下所介绍的符号,不可单独使用,需要在括号,或中括号中,包含上述几种替换符方可."
+            注释 = "  (xxx)/xx     可变参数替换符." 注释 = "  [xxx]        列表参数替换符." 注释 = "  {xxx}        字典参数替换符." 注释 = ""
+            注释 = "  传递字节集数据时,请您注意,一定要传递字节集变量的数据指针,不要直接传递字节集变量,例如,可以使用 字节集变量.取字节集指针()."
+            注释 = "  使用时文本替换符(\"s\"-\"u\")时,请您一定要注意文本编码问题,使用\"u\"替换符,您直接传入火山文本即可,如果使用\"s/s#/z/z#\",请一定要"
+            注释 = "将火山文本转为UTF8文本后,在传入.否则,会因为编码不正确,导致文本乱码或文本内容不完整." 注释 = ""
+            返回值注释 = "如果所欲调用的Py方法具有返回值,且本方法执行成功,则本方法返回Py的返回值,否则返回空的Py对象." 编辑时信息 = "123FED, 0, 0, 0"
+            @嵌入式方法 = "req_obj_param_pointer = true\r\nreq_str_param_text_pointer = true">
+    参数 本类对象 <类型 = Py方法类 注释 = "当前方法对象." 编辑时信息 = "123FED, 0, 0, 0">
+    参数 参数替换符 <类型 = 文本型 注释 = "所欲传入的替换符参数,必须为上述的替换字符,可以组合使用." 编辑时信息 = "123FED, 0, 0, 0">
+    参数 替换数据 <注释 = "所欲使用的替换数据,请您一定要确保,此数据与\"参数替换符\"数量以及类型是匹配的." 编辑时信息 = "123FED, 0, 0, 0" @匹配类型 = 通用型 @可扩展 = "">
+    {
+        @  @dt<Py对象类>(PyObject_CallFunction (@<本类对象>.GetPyObj(), CU8String(@<参数替换符>).GetText(), @<替换数据>), PYREF_FALSE)
+    }
+
+    方法 调用 <公开 静态 类型 = Py对象类 注释 = "调用当前方法." 注释 = "请注意:在调用前,您应该先检查该方法是否有效."
+            返回值注释 = "如果所欲调用的Py方法具有返回值,且本方法执行成功,则本方法返回Py的返回值,否则返回空的Py对象." @嵌入式方法 = "req_obj_param_pointer = true">
+    参数 本类对象 <类型 = Py方法类 注释 = "当前方法对象.">
+    参数 方法参数 <注释 = "支持类型:" 注释 = "   1. Py对象类以及其子类对象." 注释 = "   2. 火山基本数据类型(数值{整数, 长整数, 小数}, 逻辑型, 文本型)" @匹配类型 = 通用型 @可扩展 = "">
+    {
+        @ @dt<Py对象类>(@dt<Py对象类>::_PyObject_CallMethod (@<本类对象>.GetPyObj(), @sn<pm_types>, @<方法参数>), PYREF_FALSE)
+    }
+
+    方法 检查类型 <公开 类型 = 逻辑型 注释 = "检查当前对象,是否为方法对象." 注释 = "成功返回真, 失败返回假,如果失败,可用\"类型\"获得实际类型文本." @虚拟方法 = 可覆盖 @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), FALSE, PyFunction_Check (GetPyObj()) || PyMethod_Check(GetPyObj()) )
+    }
+}
+
+类 Py逻辑类 <公开 基础类 = Py对象类 注释 = "对应Python中的Bool类型." @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<PyObjectDefaultConstructor>
+
+    方法 创建 <公开 静态 类型 = Py逻辑类 注释 = "根据给定的逻辑参数,创建一个Py逻辑对象." @禁止流程检查 = 真>
+    参数 逻辑参数 <类型 = 逻辑型>
+    {
+        @ return @sn<current_class>(PyBool_FromLong (@<逻辑参数>), PYREF_FALSE);
+    }
+
+    方法 逻辑值 <公开 属性读 类型 = 逻辑型 注释 = "取得该对象逻辑值." 注释 = "请注意: 如果该对象为空对象,或引用计数小于等于0,则返回假,否则,将返回该逻辑对象的值." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), FALSE, (BOOL) PyLong_AsLong (GetPyObj()))
+    }
+
+    方法 检查类型 <公开 类型 = 逻辑型 注释 = "检查当前对象,是否为逻辑对象." 注释 = "成功返回真, 失败返回假,如果失败,可用\"类型\"获得实际类型文本." @虚拟方法 = 可覆盖 @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), FALSE, PyBool_Check (GetPyObj()))
+    }
+}
+
+类 Py文本类 <公开 基础类 = Py对象类 注释 = "Python中的文本类型(3.x中,被称之为UnIcode对象)." 注释 = "请注意:"
+        注释 = "  1.py的一些文本操作,并没有封装进来,因为火山已经具备了这些方法,比如,编解码等.此类工作." 注释 = "请使用火山文本类提供的方法进行完成." @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<PyObjectDefaultConstructor>
+
+    方法 创建 <公开 静态 类型 = Py文本类 注释 = "根据指定的文本内容参数,创建Py文本类对象." @禁止流程检查 = 真>
+    参数 文本参数 <类型 = 文本型 注释 = "基于此文本创建Py文本对象.">
+    {
+        @ return @sn<current_class>( PyUnicode_FromWideChar (   (const wchar_t *) @<文本参数>.GetText(), @<文本参数>.GetLength()  ), PYREF_FALSE);
+    }
+
+    方法 创建自UTF8文本 <公开 静态 类型 = Py文本类 注释 = "根据指定的文本内容参数,创建Py文本类对象."
+            注释 = "请注意: 本方法会自动将火山文本内容转为UTF8后,使用此方法创建的文本对象,需要使用\"UTF8内容\"属性获取文本内容." @禁止流程检查 = 真>
+    参数 文本参数 <类型 = 文本型 注释 = "基于此文本创建Py文本对象.">
+    参数 加入文本长度 <类型 = 整数 注释 = "所欲加入文本长度,如果小于等于0,则将\"文本参数\"全部加入,大于零,则截取此长度加入." @默认值 = -1>
+    {
+        @ if(@<加入文本长度> <= 0)
+        @     return @sn<current_class>(PyUnicode_FromString ( (const char *) CU8String(@<文本参数>).GetText()   ), PYREF_FALSE);
+        @ else
+        @     return @sn<current_class>(PyUnicode_FromStringAndSize ( (const char *) CU8String(@<文本参数>).GetText(), @<加入文本长度>   ), PYREF_FALSE);
+    }
+
+    方法 UTF8内容 <公开 属性读 类型 = 文本型 注释 = "  取得UTF8文本内容" 注释 = "  请注意: 如果您使用\"创建\"创建的此对象,那么,您应该使用\"内容\"属性获得文本内容,如果使用此属性取,"
+            注释 = "那么会造成内容乱码." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), @an<CVolString> (), @an<CVolString> ( (const CHAR*)PyUnicode_AsUTF8 (GetPyObj()) ) )
+    }
+
+    方法 内容 <公开 属性读 类型 = 文本型 注释 = "  取得本对象内的文本内容." 注释 = "  请注意: 如果您使用\"创建自UTF8文本\"创建的此对象,那么,您应该使用\"UTF8文本\"属性取得文本内容,如果使用此属性取,"
+            注释 = "那么会造成其中的中文乱码." @禁止流程检查 = 真>
+    {
+        @ if (GetPyObj() == NULL || GetPyObj()->ob_refcnt <= 0)
+        @     return _CT("");
+        @ Py_ssize_t iLen = 0;
+        @ wchar_t * pBuff = PyUnicode_AsWideCharString (GetPyObj(), &iLen);
+        @ @an<CVolString> sRet = @an<CVolString> ( (const wchar_t *) pBuff, iLen);
+        @ PyMem_Del (pBuff);
+        @ return sRet;
+    }
+
+    方法 文本长度 <公开 属性读 类型 = 变整数 注释 = "取得当前Py文本对象内的文本长度." 注释 = "成功返回文本长度,失败则返回-1,如果失败,您可以检查当前文本对象是否为有效对象." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), -1, PyUnicode_GetLength(GetPyObj()))
+    }
+
+    方法 检查类型 <公开 类型 = 逻辑型 注释 = "检查当前对象,是否为文本对象." 注释 = "成功返回真, 失败返回假,如果失败,可用\"类型\"获得实际类型文本." @虚拟方法 = 可覆盖 @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), FALSE, PyUnicode_Check (GetPyObj()))
+    }
+}
+
+类 Py数值类 <公开 基础类 = Py对象类 注释 = "Py数值类." 注释 = "本类包含了常用数值的管理,如 小数,长整数,整数等." @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<PyObjectDefaultConstructor>
+
+    方法 创建 <公开 静态 类型 = Py数值类 注释 = "根据指定的整数数值,创建Py数值对象." @嵌入式方法 = "">
+    参数 整数值 <类型 = 整数>
+    {
+        @ @dt<Py数值类>(PyLong_FromLong (@<整数值>), PYREF_FALSE)
+    }
+
+    方法 创建自长整数 <公开 静态 类型 = Py数值类 注释 = "根据指定的长整数数值,创建Py数值对象." @嵌入式方法 = "">
+    参数 长整数值 <类型 = 长整数>
+    {
+        @ @dt<Py数值类> (PyLong_FromLongLong (@<长整数值>), PYREF_FALSE)
+    }
+
+    方法 创建自小数 <公开 静态 类型 = Py数值类 注释 = "根据指定的小数数值,创建Py数值对象." @嵌入式方法 = "">
+    参数 小整数值 <类型 = 小数>
+    {
+        @ @dt<Py数值类> (PyLong_FromDouble (@<小整数值>), PYREF_FALSE)
+    }
+
+    方法 创建小数 <公开 静态 类型 = Py数值类 注释 = "根据指定的小数数值,创建一个Py中的小数(Float)对象." 注释 = "请注意: 本方法为创建一个Py小数类型的实例,与\"创建自小数\"不同." @嵌入式方法 = "">
+    参数 小整数值 <类型 = 小数>
+    {
+        @ @dt<Py数值类> (PyFloat_FromDouble (@<小整数值>), PYREF_FALSE)
+    }
+
+    方法 创建自变整数 <公开 静态 类型 = Py数值类 注释 = "根据指定的变整数数值,创建Py数值对象." 注释 = "请注意: 变整数在Win32下,为整数型,在Win64下位长整数型." @嵌入式方法 = "">
+    参数 变整数值 <类型 = 变整数>
+    {
+        @ @dt<Py数值类> (PyLong_FromSize_t (@<变整数值>), PYREF_FALSE)
+    }
+
+    方法 整数值 <公开 属性读 类型 = 整数 注释 = "取得该数值对象内的整数数值." 注释 = "成功将返回该数值,失败则返回-1." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), -1, PyLong_AsLong (GetPyObj()))
+    }
+
+    方法 长整数值 <公开 属性读 类型 = 长整数 注释 = "取得该数值对象内的长整数数值." 注释 = "成功将返回该数值,失败则返回-1." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), -1, PyLong_AsLongLong (GetPyObj()))
+    }
+
+    方法 小数值 <公开 属性读 类型 = 小数 注释 = "取得该数值对象内的小数数值." 注释 = "成功将返回该数值,失败则返回-1." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), -1, PyFloat_AsDouble (GetPyObj()))
+    }
+
+    方法 变整数值 <公开 属性读 类型 = 变整数 注释 = "取得该数值对象内的变整数数值." 注释 = "成功将返回该数值,失败则返回-1." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), -1, (INT_P)PyLong_AsSize_t (GetPyObj()))
+    }
+
+    方法 检查类型 <公开 类型 = 逻辑型 注释 = "检查当前对象,是否为数值对象." 注释 = "成功返回真, 失败返回假,如果失败,可用\"类型\"获得实际类型文本." @虚拟方法 = 可覆盖 @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), FALSE, PyLong_Check (GetPyObj()) || PyFloat_Check(GetPyObj()))
+    }
+}
+
+类 Py字典类 <公开 基础类 = Py对象类 注释 = "对应Python中的字典类(Dict)." 注释 = "字典类与火山的某某键值对列表类相似,允许以键名/键值的方式,管理内容."
+        注释 = "请注意: 本类无法自动创建实例对象,您需要自行通过\"Py字典类.创建()\"方法进行创建实例对象." @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<PyObjectDefaultConstructor>
+
+    方法 创建 <公开 静态 类型 = Py字典类 注释 = "创建字典对象" @禁止流程检查 = 真>
+    {
+        @ return @sn<current_class> (PyDict_New (), PYREF_TRUE);
+    }
+
+    方法 成员数 <公开 属性读 类型 = 整数 注释 = "取得当前字典对象内的成员数量." 注释 = "成功返回字典成员数,失败返回-1,如果失败,您可检查当前字典对象是否合法(使用 类型检查 或 否有效)." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), -1, (INT)PyDict_Size(GetPyObj()))
+    }
+
+    方法 添加键值对 <公开 静态 类型 = 逻辑型 注释 = "  向当前字典对象内添加一对键值数据." 注释 = "  成功返回真,失败返回假,如果执行失败,您可以对键名,键值对象进行检查,检查是否都为有效Py对象."
+            注释 = "如果所添加的键名与字典内的键名有重复,则会将新的键值替换旧的键值." @嵌入式方法 = "req_obj_param_pointer=true">
+    参数 本类对象 <类型 = Py字典类 注释 = "当前字典对象.">
+    参数 所欲置键名 <注释 = "所欲置入键名,可以为任意Py类对象,或火山基本类型数据." @匹配类型 = 通用型>
+    参数 所欲置键值 <注释 = "所欲置入键值,可以为任意Py类对象,或火山基本类型数据." @匹配类型 = 通用型>
+    {
+        @ @<本类对象>.Append (@dt<Py字典类>::AnyVolType2PyType(PYREF_FALSE, @pdt_ch<所欲置键名>, @<所欲置键名>), @dt<Py字典类>::AnyVolType2PyType(PYREF_FALSE, @pdt_ch<所欲置键值>, @<所欲置键值>))
+    }
+
+    方法 是否包含 <公开 静态 类型 = 逻辑型 注释 = "查询当前字典对象内,是否包含指定的键名." 返回值注释 = "如果找到该键名,则返回真,否则返回假." @嵌入式方法 = "req_obj_param_pointer=true">
+    参数 本类对象 <类型 = Py字典类 注释 = "当前字典对象.">
+    参数 所欲查询键名 <注释 = "所欲指定键名对象.可以为任意Py对象和火山基本数据." @匹配类型 = 通用型>
+    {
+        @ @<本类对象>.Query (@dt<Py字典类>::AnyVolType2PyType(PYREF_FALSE, @pdt_ch<所欲查询键名>, @<所欲查询键名>))
+    }
+
+    方法 取键值 <公开 静态 类型 = Py对象类 注释 = "  取得当前字典对象内,指定键名的值." 注释 = "  请注意:如果您通过本方法所取得成员为类型/类,请切记,该对象不可直接操作,因为它只是一个类,而并"
+            注释 = "非实例对象,只有您将其创建,成为实例对象后,才可继续操作.创建可通过\"Py类型类.创建实例/创建空参实" 注释 = "例\"进行创建." @嵌入式方法 = "req_obj_param_pointer=true">
+    参数 本类对象 <类型 = Py字典类 注释 = "当前字典对象.">
+    参数 所欲指定键名 <注释 = "所欲指定键名对象.可以为任意Py对象和火山基本数据." @匹配类型 = 通用型>
+    {
+        @ @<本类对象>.GetItem (@dt<Py字典类>::AnyVolType2PyType(PYREF_FALSE, @pdt_ch<所欲指定键名>, @<所欲指定键名>))
+    }
+
+    方法 取键名列表 <公开 类型 = Py列表类 注释 = "取得当前字典对象内的键名列表." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), @dt<Py列表类>(), @dt<Py列表类>(PyDict_Keys (GetPyObj()), PYREF_FALSE))
+    }
+
+    方法 取键值对列表 <公开 类型 = Py列表类 注释 = "取得当前字典对象的键值对列表." 注释 = "请注意: 本方法会取得键名与键值列表." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), @dt<Py列表类>(), @dt<Py列表类>(PyDict_Items (GetPyObj()), PYREF_FALSE))
+    }
+
+    方法 取键值列表 <公开 类型 = Py列表类 注释 = "取得当前Py字典对象的值列表." 注释 = "请注意: 本方法只会取得当前字典内的值列表." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), @dt<Py列表类>(), @dt<Py列表类>(PyDict_Values (GetPyObj()), PYREF_FALSE))
+    }
+
+    方法 检查类型 <公开 类型 = 逻辑型 注释 = "检查当前对象,是否为字典对象." 注释 = "成功返回真, 失败返回假,如果失败,可用\"类型\"获得实际类型文本." @虚拟方法 = 可覆盖 @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), FALSE, PyDict_Check (GetPyObj()))
+    }
+
+    # 本地代码======
+    # @begin
+    # <> <include>
+    # BOOL Query(@dt<Py对象类>& pKey);
+    # BOOL Append (@dt<Py对象类>& pKey, @dt<Py对象类>& pValue);
+    # @dt<Py对象类> GetItem (@dt<Py对象类>& pKey);
+    # <> </include>
+    #
+    # BOOL @sn<current_class>::Query(@dt<Py对象类>& pKey) {
+    #     if (GetPyObj() == NULL || GetPyObj()->ob_refcnt <= 0 ||  pKey.GetPyObj() == NULL || pKey.GetPyObj()->ob_refcnt <= 0  )
+    #         return FALSE;
+    #     return PyDict_GetItem(GetPyObj(), pKey.GetPyObj()) != NULL ;
+    # }
+    #
+    # BOOL @sn<current_class>::Append (@dt<Py对象类>& pKey, @dt<Py对象类>& pValue) {
+    #     if (GetPyObj() == NULL || GetPyObj()->ob_refcnt <= 0 || 
+    #         pKey.GetPyObj() == NULL || pKey.GetPyObj()->ob_refcnt <= 0 ||
+    #         pValue.GetPyObj() == NULL || pValue.GetPyObj()->ob_refcnt <= 0 ) {
+    #         return FALSE;
+    #     }
+    #     return PyDict_SetItem (GetPyObj(), pKey.GetPyObj(), pValue.GetPyObj()) == 0;
+    # }
+    #
+    # @dt<Py对象类> @sn<current_class>::GetItem (@dt<Py对象类>& pKey) {
+    #     if (GetPyObj() == NULL || GetPyObj()->ob_refcnt <= 0 ||  pKey.GetPyObj() == NULL || pKey.GetPyObj()->ob_refcnt <= 0)
+    #         return @dt<Py对象类> ();
+    #     return @dt<Py对象类> (PyDict_GetItem(GetPyObj(), pKey.GetPyObj()), PYREF_TRUE);
+    # }
+    # @end
+}
+
+类 Py元组类 <公开 基础类 = Py对象类 注释 = "  Python中的元组类(Tuple),此类与Py列表类相似.不同的是,此类对象传入至Python中以后,用户将不得再次修改此对象"
+        注释 = "的成员(不可在Python代码中修改)." 注释 = "请注意:" 注释 = "  1.本类对象,无法自动创建,需要自行通过\"创建\"方法创建实例."
+        注释 = "  2.置入的条目,需要保证该条目Py对象,不会在元组对象有效的时候(生命周期内)被释放.不然会造成条目数据为野指针." @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<PyObjectDefaultConstructor>
+
+    方法 创建 <公开 静态 类型 = Py元组类 注释 = "创建一个具有指定成员数量的元组对象." @禁止流程检查 = 真>
+    参数 元组成员数 <类型 = 整数 注释 = "所欲设置成员数量.">
+    {
+        @ return @sn<current_class> (PyTuple_New (@<元组成员数>), PYREF_FALSE);
+    }
+
+    方法 成员数 <公开 属性读 类型 = 整数 注释 = "取得当前元组对象的成员数量." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), -1, (INT)PyTuple_Size(GetPyObj()))
+    }
+
+    方法 取成员 <公开 类型 = Py对象类 注释 = "取得当前元组对象内指定索引处的对象数据." 注释 = "请注意: 如果您所指定的索引,超出了成员数,则本方法执行失败,并且返回一个空Py对象." @禁止流程检查 = 真>
+    参数 成员索引 <类型 = 整数 注释 = "所欲取成员索引,不得超过当前元组对象的成员数.">
+    {
+        @ @m<PyObjectCheckAndReturn>( GetPyObj(), @dt<Py对象类>(), @dt<Py对象类>(PyTuple_GetItem(GetPyObj(), @<成员索引>), PYREF_TRUE) )
+    }
+
+    方法 置成员 <公开 静态 类型 = 逻辑型 注释 = "设置当前元组对象内指定索引处的数据." 注释 = "请注意:如果该索引已存在数据,则本方法将会替换该数据为您新设置的数据对象." 返回值注释 = "设置成功返回真,失败返回假."
+            @嵌入式方法 = "req_obj_param_pointer=true">
+    参数 本类对象 <类型 = Py元组类 注释 = "本类对象.">
+    参数 成员索引 <类型 = 整数 注释 = "所欲设置的成员索引.">
+    参数 所欲添加对象 <注释 = "所欲设置进入的对象,可以为火山基本数据类型和任意Py对象." @匹配类型 = 通用型>
+    {
+        @ @<本类对象>.Append (@<成员索引>, @dt<Py对象类>::AnyVolType2PyType(PYREF_TRUE, @pdt_ch<所欲添加对象>, @<所欲添加对象>))
+    }
+
+    方法 检查类型 <公开 类型 = 逻辑型 注释 = "检查当前对象,是否为元组对象." 注释 = "成功返回真, 失败返回假,如果失败,可用\"类型\"获得实际类型文本." @禁止流程检查 = 真 @虚拟方法 = 可覆盖>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), FALSE, PyTuple_Check (GetPyObj()) )
+    }
+
+    # 本地代码======
+    # @begin
+    # <> <include>
+    # BOOL Append (int index, @dt<Py对象类>& p);
+    # <> </include>
+    #
+    # BOOL @sn<current_class>::Append (int index, @dt<Py对象类>& p) { 
+    #     if ( GetPyObj() == NULL || GetPyObj()->ob_refcnt <= 0 || p.GetPyObj() == NULL || p.GetPyObj()->ob_refcnt <= 0 )
+    #         return FALSE;
+    #     if (GetPyObj()->ob_refcnt > 1) 
+    #         GetPyObj()->ob_refcnt = 1; // 添加数据时,Python会检查Tuple的引用计数,如果引用计数大于1,则会导致添加失败.
+    #
+    #     return PyTuple_SetItem(GetPyObj(), index, p.GetPyObj()) == 0;
+    # }
+    # @end
+}
+
+类 Py列表类 <公开 基础类 = Py对象类 注释 = "  对应着Python中的列表类(List)." 注释 = "  列表的使用方法,与火山的某某某列表相似,允许添加/删除成员,但是不同的是,此列表,允许插入不同类型的数据."
+        注释 = "  请注意: 本类无法自动创建实例对象,您需要自行通过\"Py列表类.创建()\"方法进行创建实例对象,成员数可以为0或" 注释 = "大于0的数字." @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<PyObjectDefaultConstructor>
+
+    方法 创建 <公开 静态 类型 = Py列表类 注释 = "  创建一个具有指定成员数量的列表实例对象."
+            注释 = "  请注意: 通过本方法所创建的列表对象,并不是固定成员数量,您依然可以通过\"添加成员\"与\"插入成员\"进行成员数扩充,"
+            注释 = "使用本方法创建列表对象后,会分配指定数量的成员,这些成员默认是NULL(空成员,没有类型,没有数据),需要您使用\"置成员\"" 注释 = "为其设置数据." @禁止流程检查 = 真>
+    参数 列表成员数 <类型 = 整数 注释 = "所欲用于创建列表的成员数量.">
+    {
+        @ return @sn<current_class> (PyList_New (@<列表成员数>), PYREF_FALSE);
+    }
+
+    方法 成员数 <公开 属性读 类型 = 整数 注释 = "取得此对象内的成员数量." 注释 = "请注意:如果方法执行失败,则返回-1,否则必定返回一个正整数表示成员数量." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), -1, (INT)PyList_Size(GetPyObj()))
+    }
+
+    方法 取成员 <公开 类型 = Py对象类 注释 = "取得指定索引的成员对象." 注释 = "请注意:" 注释 = "  1.如果您所指定的\"成员索引\"超出了列表成员数量,则此方法执行失败,并且返回一个空的Py对象."
+            注释 = "  2.本方法所取得成员对象,为引用列表内数据的对象,即 您取得对象,实际上就是列表内的成员对象,如果您将其释放掉." 注释 = "则会引起列表内出现野指针." @禁止流程检查 = 真>
+    参数 成员索引 <类型 = 整数 注释 = "所欲取成员的索引,此索引不可大于当前列表的成员数量.">
+    {
+        @ @m<PyObjectCheckAndReturn>( GetPyObj(), @dt<Py对象类>(), @dt<Py对象类>(PyList_GetItem(GetPyObj(), @<成员索引>), PYREF_TRUE) )
+    }
+
+    方法 置成员 <公开 静态 类型 = 逻辑型 注释 = "设置指定索引位置的成员对象." 注释 = "请注意: 如果该索引处已存在数据,则本方法将会使用新数据替换旧数据."
+            返回值注释 = "设置成员成功返回真,失败返回假,如果成功,可使用火山Python类方法\"检查异常\"获得信息." @嵌入式方法 = "req_obj_param_pointer=true">
+    参数 本类对象 <类型 = Py列表类 注释 = "本类对象.">
+    参数 成员索引 <类型 = 整数 注释 = "所欲设置成员的索引,此索引不可大于当前列表的成员数量.">
+    参数 所欲插入对象 <注释 = "所欲设置的对象,可以为任意Py对象,或火山基本类型数据." @匹配类型 = 通用型>
+    {
+        @ @<本类对象>.SetItem (@<成员索引>, @dt<Py对象类>::AnyVolType2PyType(PYREF_TRUE, @pdt_ch<所欲插入对象>, @<所欲插入对象>), FALSE)
+    }
+
+    方法 插入成员 <公开 静态 类型 = 逻辑型 注释 = "向当前列表对象内,插入一条数据." 返回值注释 = "成功返回真,失败返回假.如果失败,可使用火山Python类方法\"检查异常\"获得信息."
+            @嵌入式方法 = "req_obj_param_pointer=true">
+    参数 本类对象 <类型 = Py列表类 注释 = "本类对象.">
+    参数 成员索引 <类型 = 整数 注释 = "所欲插入成员的索引,此索引不可大于当前列表的成员数量.">
+    参数 所欲插入对象 <注释 = "所欲插入的成员对象,可以是火山基本数据类型,也可以是任意有效的Py对象." @匹配类型 = 通用型>
+    {
+        @ @<本类对象>.SetItem (@<成员索引>, @dt<Py对象类>::AnyVolType2PyType(PYREF_FALSE, @pdt_ch<所欲插入对象>, @<所欲插入对象>), TRUE)
+    }
+
+    方法 添加成员 <公开 静态 类型 = 逻辑型 注释 = "向当前列表对象内添加成员." 返回值注释 = "添加成功返回真,失败返回假.如果失败,可使用火山Python类方法\"检查异常\"获得信息."
+            @嵌入式方法 = "req_obj_param_pointer=true">
+    参数 本类对象 <类型 = Py列表类 注释 = "本类对象.">
+    参数 所欲添加对象 <注释 = "所欲添加的成员对象,可以是火山基本数据类型,也可以是任意有效的Py对象." @匹配类型 = 通用型>
+    {
+        @ @<本类对象>.Append(@dt<Py对象类>::AnyVolType2PyType(PYREF_FALSE, @pdt_ch<所欲添加对象>, @<所欲添加对象>))
+    }
+
+    方法 排序 <公开 类型 = 逻辑型 注释 = "将当前列表内的数据进行排序." 注释 = "排序成功返回真,失败返回假." 注释 = "请注意: 排序只支持统一数据类型,例如,全部为文本型,或全部为整数型." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>( GetPyObj(), FALSE, PyList_Sort(GetPyObj()) == 0 )
+    }
+
+    方法 反转 <公开 类型 = 逻辑型 注释 = "反转列表内的成员(将底部成员移至上面, 上面成员移至下面),成功返回真,失败返回假." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>( GetPyObj(), FALSE, PyList_Reverse(GetPyObj()) == 0 )
+    }
+
+    方法 取范围成员 <公开 类型 = Py列表类 注释 = "取得指定范围内的成员列表." 注释 = "取得\"开始位置\"至\"结束位置\"之间的所有成员." @禁止流程检查 = 真>
+    参数 开始位置 <类型 = 整数 注释 = "所欲设置开始位置,此参数不可超过当前列表对象的成员数量.">
+    参数 结束位置 <类型 = 整数 注释 = "所欲设置结束位置,此参数不可超过当前列表对象的成员数量,且应大于\"开始位置\".">
+    {
+        @ @m<PyObjectCheckAndReturn>( GetPyObj(), @dt<Py列表类>(), @dt<Py列表类>(PyList_GetSlice(GetPyObj(), @<开始位置>, @<结束位置>), PYREF_FALSE) )
+    }
+
+    方法 到元组 <公开 类型 = Py元组类 注释 = "将当前列表对象,转为元组对象." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>( GetPyObj(), @dt<Py元组类>(), @dt<Py元组类>(PyList_AsTuple(GetPyObj()), PYREF_FALSE) )
+    }
+
+    方法 检查类型 <公开 类型 = 逻辑型 注释 = "检查当前对象,是否为列表对象." 注释 = "成功返回真, 失败返回假,如果失败,可用\"类型\"获得实际类型文本." @禁止流程检查 = 真 @虚拟方法 = 可覆盖>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), FALSE, PyList_Check (GetPyObj()) )
+    }
+
+    # 本地代码======
+    # @begin
+    # <> <include>
+    # BOOL Append (@dt<Py对象类>& pValue);
+    # BOOL SetItem (INT index, @dt<Py对象类>& pValue, BOOL bInsert);   // bInsert = 是否为插入. 真则插入, 假为设置成员.
+    # <> </include>
+    #
+    # BOOL @sn<current_class>::Append (@dt<Py对象类>& pValue) {
+    #     if (GetPyObj() == NULL || GetPyObj()->ob_refcnt <= 0 || pValue.GetPyObj() == NULL || pValue.GetPyObj()->ob_refcnt <= 0)
+    #         return FALSE;
+    #     return PyList_Append (GetPyObj(), pValue.GetPyObj()) == 0;
+    # }
+    #
+    # BOOL @sn<current_class>::SetItem (INT index, @dt<Py对象类>& pValue, BOOL bInsert) {
+    #     if (GetPyObj() == NULL || GetPyObj()->ob_refcnt <= 0 || pValue.GetPyObj() == NULL || pValue.GetPyObj()->ob_refcnt <= 0)
+    #         return FALSE;
+    #     if (index >= PyList_Size (GetPyObj()))
+    #         return FALSE;
+    #         
+    #     return bInsert ? PyList_Insert (GetPyObj(), index, pValue.GetPyObj()) == 0 : PyList_SetItem (GetPyObj(), index, pValue.GetPyObj()) == 0;
+    # }
+    # @end
+}
+
+类 Py集合类 <公开 基础类 = Py对象类 注释 = "对应Python中的集合类(Set(,))." 注释 = "集合类,允许用户插入不同数据类型的成员,但是最后输出内容时,会将值重复的成员删除." 注释 = "请注意:"
+        注释 = "  1.本类无法自动创建实例对象,您需要自行通过\"Py集合类.创建()/创建自迭代器()\"方法进行创建实例对象."
+        注释 = "  2.在您取成员时,请不要以添加成员时的顺序进行取,因为集合会自动去重和排序,导致成员位置发生了变换." @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<PyObjectDefaultConstructor>
+
+    方法 创建 <公开 静态 类型 = Py集合类 注释 = "创建集合对象." @禁止流程检查 = 真>
+    {
+        @ return @sn<current_class> (PySet_New (NULL), PYREF_FALSE);
+    }
+
+    方法 创建自迭代器 <公开 静态 类型 = Py集合类 注释 = "通过指定的Py迭代器对象创建集合实例." 注释 = "请注意:请确保您指定的迭代器对象是有效的,且迭代器对象内是有数据的,否则,本方法将无法创建集合实例."
+            @禁止流程检查 = 真>
+    参数 指定迭代器 <类型 = Py迭代器类 注释 = "所指定的迭代器对象,">
+    {
+        如果 (指定迭代器.检查类型 () == 假)
+        {
+            返回 ((Py集合类)新建对象 (Py集合类))
+        }
+        @ return @sn<current_class> (PySet_New (@<指定迭代器>.GetPyObj()), PYREF_FALSE);
+    }
+
+    方法 创建冻结集合 <公开 静态 类型 = Py集合类 注释 = "创建一个不可改变的集合." 注释 = "请注意: 通过此方法所创建的集合对象,不可在Py代码内动态更改/加入成员."
+            返回值注释 = "创建成功返回集合对象,创建失败,则返回空的火山Py集合对象." @禁止流程检查 = 真>
+    参数 指定迭代器 <类型 = Py迭代器类 注释 = "所指定的迭代器对象," @默认值 = 空对象>
+    {
+        如果 (指定迭代器.检查类型 () == 假)
+        {
+            返回 ((Py集合类)新建对象 (Py集合类))
+        }
+        @ return @sn<current_class> (PyFrozenSet_New (@<指定迭代器>.GetPyObj()), PYREF_FALSE);
+    }
+
+    方法 成员数 <公开 属性读 类型 = 整数 注释 = "  取得此对象内的成员数量." 注释 = "  请注意:千万不要直接使用此属性,当做循环目标值,因为,当您在循环体内执行\"弹出成员\"时,会影响"
+            注释 = "成员数,每弹出一个成员,成员数量都会-1,您可在循环开始前,使用整数变量,记录当前的成员数,然后使" 注释 = "用该整数变量,当做循环目标值."
+            返回值注释 = "如果方法执行失败,则返回-1,否则必定返回一个正整数表示成员数量." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), -1, (INT)PySet_Size(GetPyObj()))
+    }
+
+    方法 添加成员 <公开 静态 类型 = 逻辑型 注释 = "  添加一个成员至当前集合对象内." 注释 = "  请注意: 所以添加的成员类型包括(文本型, 整数型, 小数型, 长整数型, 逻辑型以及任意Py对象类型)."
+            注释 = "请不要添加其他类型数据,以免导致添加失败." 返回值注释 = "添加成功返回真,失败返回假,如果所添加的成员类型不为上述几种类型,也会导致添加失败." @嵌入式方法 = "req_obj_param_pointer=true">
+    参数 本类对象 <类型 = Py集合类 注释 = "当前集合对象.">
+    参数 所欲添加成员 <注释 = "所欲添加的成员,可以是火山基本数据类型,也可以是任意Py对象类型(Py对象类的子类实例)." @匹配类型 = 通用型>
+    {
+        @ @<本类对象>.Append ( @dt<Py对象类>::AnyVolType2PyType(PYREF_FALSE, @pdt_ch<所欲添加成员>, @<所欲添加成员>) )
+    }
+
+    方法 清空 <公开 类型 = 逻辑型 注释 = "清空该集合内的所有成员." 注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>( GetPyObj(), FALSE, PySet_Clear(GetPyObj())==0 )
+    }
+
+    方法 是否包含 <公开 静态 类型 = 整数 注释 = "在此集合内查找指定成员,查找到返回1,未找到返回0,如果出错则返回-1." @嵌入式方法 = "req_obj_param_pointer=true">
+    参数 本类对象 <类型 = Py集合类 注释 = "当前集合对象.">
+    参数 所欲查找成员 <注释 = "所欲查找的成员对象" @匹配类型 = 通用型>
+    {
+        @ @<本类对象>.IsContains ( @dt<Py对象类>::AnyVolType2PyType(PYREF_FALSE, @pdt_ch<所欲查找成员>, @<所欲查找成员>) )
+    }
+
+    方法 查找并删除 <公开 静态 类型 = 整数 注释 = "在此集合内查找指定成员,查找到则将其删除,并返回1,未找到返回0,如果出错则返回-1." @嵌入式方法 = "req_obj_param_pointer=true">
+    参数 本类对象 <类型 = Py集合类 注释 = "当前集合对象.">
+    参数 所欲查找成员 <注释 = "所欲查找的成员对象" @匹配类型 = 通用型>
+    {
+        @ @<本类对象>.Discard ( @dt<Py对象类>::AnyVolType2PyType(PYREF_FALSE, @pdt_ch<所欲查找成员>, @<所欲查找成员>) )
+    }
+
+    方法 弹出成员 <公开 类型 = Py对象类 注释 = "取得集合内的第一个成员,并将其从集合内删除." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>( GetPyObj(), @dt<Py对象类>(), @dt<Py对象类>( PySet_Pop(GetPyObj()), PYREF_FALSE) )
+    }
+
+    方法 检查类型 <公开 类型 = 逻辑型 注释 = "检查当前对象,是否为集合对象." 注释 = "成功返回真, 失败返回假,如果失败,可用\"类型\"获得实际类型文本." @禁止流程检查 = 真 @虚拟方法 = 可覆盖>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), FALSE, PySet_Check (GetPyObj()) || PyFrozenSet_Check(GetPyObj()) )
+    }
+
+    # 本地代码======
+    # @begin
+    # <> <include>
+    # BOOL @sn<current_class>::Append (@dt<Py对象类>& pValue);
+    # INT @sn<current_class>::IsContains (@dt<Py对象类>& pValue);
+    # INT @sn<current_class>::Discard (@dt<Py对象类>& pValue);
+    # <> </include>
+    #     
+    # BOOL @sn<current_class>::Append (@dt<Py对象类>& pValue) {
+    #     if (GetPyObj() == NULL || GetPyObj()->ob_refcnt <= 0 || pValue.GetPyObj() == NULL || pValue.GetPyObj()->ob_refcnt <= 0)
+    #         return FALSE;
+    #     return PySet_Add (GetPyObj(), pValue.GetPyObj()) == 0;
+    # }
+    #
+    # INT @sn<current_class>::IsContains (@dt<Py对象类>& pValue) {
+    #     if (GetPyObj() == NULL || GetPyObj()->ob_refcnt <= 0 || pValue.GetPyObj() == NULL || pValue.GetPyObj()->ob_refcnt <= 0)
+    #         return -1;
+    #     return PySet_Contains (GetPyObj(), pValue.GetPyObj());
+    # }
+    #
+    # INT @sn<current_class>::Discard (@dt<Py对象类>& pValue) {
+    #     if (GetPyObj() == NULL || GetPyObj()->ob_refcnt <= 0 || pValue.GetPyObj() == NULL || pValue.GetPyObj()->ob_refcnt <= 0)
+    #         return -1;
+    #     return PySet_Discard (GetPyObj(), pValue.GetPyObj());
+    # }
+    # @end
+}
+
+类 Py字节数组类 <公开 基础类 = Py对象类 注释 = "Py字节数组类." 注释 = "本类可以将Python的字节数组,与火山的字节集类进行互转." @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<PyObjectDefaultConstructor>
+
+    方法 创建自对象 <公开 静态 类型 = Py字节数组类 注释 = "通过指定的Py对象(可以是任意类型的Py对象)创建Py字节数组对象."
+            注释 = "请注意:您需要保证\"所基于Py对象\"是有效的对象,否则,本方法将执行失败,并且返回一个无效的字节数组对象." @禁止流程检查 = 真>
+    参数 所欲提供对象 <类型 = Py对象类 注释 = "所基于Py对象,本对象可以是任意Py类型对象.">
+    {
+        @ @m<PyObjectCheckAndReturn>(@<所欲提供对象>.GetPyObj(), @sn<current_class>(),  @sn<current_class>(PyByteArray_FromObject(@<所欲提供对象>.GetPyObj()), PYREF_FALSE) )
+    }
+
+    方法 创建自字节集 <公开 静态 类型 = Py字节数组类 注释 = "通过指定的字节集对象,创建Py字节数组对象." @禁止流程检查 = 真>
+    参数 所基于字节集 <类型 = 字节集类 注释 = "所基于字节集数据.">
+    {
+        @ return  @sn<current_class>( PyByteArray_FromStringAndSize((const char *)@<所基于字节集>.GetPtr(), @<所基于字节集>.GetSize()), PYREF_FALSE );
+    }
+
+    方法 到字节集 <公开 属性读 类型 = 字节集类 注释 = "将Py字节序列转为火山字节集对象." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), @an<CVolString>(),  @an<CVolString>( (const CHAR*) PyByteArray_AsString(GetPyObj()) ) )
+    }
+
+    方法 到文本 <公开 类型 = 文本型 注释 = "将字节数组对象转为文本内容." @虚拟方法 = 可覆盖 @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), @an<CVolString>(),  @an<CVolString>( (const CHAR*) PyByteArray_AsString(GetPyObj()) ) )
+    }
+
+    方法 合并 <公开 静态 类型 = Py字节数组类 注释 = "将两个字节数组对象合并为一个,并且返回合并后的字节数组类对象."
+            注释 = "请注意: 您需要保证,\"所欲合并对象1/2\"均为有效的Py字节数组类对象,否则,本方法将执行失败,并且返回一个无效的字节数组对象." @禁止流程检查 = 真>
+    参数 所欲合并对象1 <类型 = Py字节数组类 注释 = "所欲合并的字节数组对象.">
+    参数 所欲合并对象2 <类型 = Py字节数组类 注释 = "所欲合并的字节数组对象.">
+    {
+        @ @m<PyObjectCheckAndReturn>( @<所欲合并对象1>.GetPyObj(), @sn<current_class>(),  @sn<current_class> (PyByteArray_Concat(@<所欲合并对象1>.GetPyObj(), @<所欲合并对象2>.GetPyObj()), PYREF_FALSE) )
+    }
+
+    方法 成员数 <公开 属性读 类型 = 变整数 注释 = "取得字节数组对象内字节成员数." 注释 = "请注意: 如果字节数组对象无效,则此方法返回-1,否则将返回一个正整数." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), -1, PyByteArray_Size(GetPyObj()))
+    }
+
+    方法 重定义成员数 <公开 类型 = 整数 注释 = "重新设置该字节数组的成员数." 注释 = "" @禁止流程检查 = 真>
+    参数 新成员数量 <类型 = 整数>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), -1, PyByteArray_Resize(GetPyObj(), @<新成员数量>))
+    }
+
+    方法 检查类型 <公开 类型 = 逻辑型 注释 = "检查当前对象,是否为字节数组对象." 注释 = "成功返回真, 失败返回假,如果失败,可用\"类型\"获得实际类型文本." @禁止流程检查 = 真 @虚拟方法 = 可覆盖>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), FALSE, PyByteArray_Check (GetPyObj()))
+    }
+}
+
+类 Py字节序列类 <公开 基础类 = Py对象类 注释 = "  Py字节序列类." 注释 = "  本类可以将Python的字节数组,与火山的字节集类进行互转.与\"Py字节数组类\"不同的是."
+        注释 = "本类实例对象,在Py代码中,不允许修改成员." @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<PyObjectDefaultConstructor>
+
+    方法 创建自对象 <公开 静态 类型 = Py字节序列类 注释 = "通过指定的Py对象(可以是任意类型的Py对象)创建Py字节序列对象."
+            注释 = "请注意:您需要保证\"所基于Py对象\"是有效的对象,否则,本方法将执行失败,并且返回一个无效的字节序列对象." @禁止流程检查 = 真>
+    参数 所基于Py对象 <类型 = Py对象类 注释 = "所基于Py对象,本对象可以是任意Py类型对象.">
+    {
+        @ @m<PyObjectCheckAndReturn>(@<所基于Py对象>.GetPyObj(), @sn<current_class> (), @sn<current_class> (PyBytes_FromObject (@<所基于Py对象>.GetPyObj()), PYREF_FALSE))
+    }
+
+    方法 创建自字节集 <公开 静态 类型 = Py字节序列类 注释 = "通过指定的字节集对象,创建Py字节序列对象." @禁止流程检查 = 真>
+    参数 所基于字节集 <类型 = 字节集类 注释 = "所基于字节集数据.">
+    {
+        @ return @sn<current_class>( PyBytes_FromString((const char *)@<所基于字节集>.GetPtr()), PYREF_FALSE);
+    }
+
+    方法 到字节集 <公开 属性读 类型 = 字节集类 注释 = "将Py字节序列转为火山字节集对象." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), @an<CVolString>(),  @an<CVolString>( (const CHAR*) PyBytes_AsString(GetPyObj()) ) )
+    }
+
+    方法 检查类型 <公开 类型 = 逻辑型 注释 = "检查当前对象,是否为字节序列对象." 注释 = "成功返回真, 失败返回假,如果失败,可用\"类型\"获得实际类型文本." @禁止流程检查 = 真 @虚拟方法 = 可覆盖>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), FALSE, PyBytes_Check (GetPyObj()))
+    }
+
+    方法 成员数 <公开 属性读 类型 = 变整数 注释 = "取得字节序列对象内字节成员数." 注释 = "请注意: 如果字节序列对象无效,则此方法返回-1,否则将返回一个正整数." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), -1, PyBytes_Size(GetPyObj()))
+    }
+
+    方法 到文本 <公开 类型 = 文本型 注释 = "将字节序列对象转为文本内容." @虚拟方法 = 可覆盖 @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), @an<CVolString>(),  @an<CVolString>( (const CHAR*) PyBytes_AsString(GetPyObj()) ) )
+    }
+
+    方法 添加 <公开 注释 = "将指定字节序列对象,合并到自身中.">
+    参数 所欲合并对象 <类型 = Py字节序列类>
+    {
+        @ PyObject * pObj = GetPyObj();
+        @ if (pObj == NULL || pObj->ob_refcnt <= 0 || @<所欲合并对象>.GetPyObj() == NULL || @<所欲合并对象>.GetPyObj()->ob_refcnt <= 0)
+        @     return ;
+        @ PyBytes_Concat(&pObj, @<所欲合并对象>.GetPyObj());
+    }
+}
+
+# ======
+# // 迭代器循环宏. iter=迭代器对象, outvolpy=接受迭代数据的火山Py对象
+# @ @def_macro PyIterWhile(iter,outvolpy)  while (@dt<Py对象类>::CopyPyObject(PyIter_Next(iter.GetPyObj()), outvolpy))
+
+类 Py迭代器类 <公开 基础类 = Py对象类 注释 = "  Py迭代器类,此类可获得( Py列表类, Py元组类, Py集合类, Py字典类, Py字节数组类, Py字节序列类, Py文本类)等Py"
+        注释 = "对象的成员数据,也可以通过此迭代器,创建上述几种Py对象." 注释 = "  请注意: 如果您取得迭代器对象之后,将其数据消费掉(直接或间接使用 下一项 方法,或 迭代循环),那么,该迭代器对象"
+        注释 = "将会清空迭代器内的已消费的数据.也就是说,此迭代器是一次性的,使用完毕,就无法再次使用." @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<PyObjectDefaultConstructor>
+
+    方法 创建 <公开 静态 类型 = Py迭代器类 注释 = "从指定的Py对象创建迭代器." 注释 = "可用于创建迭代器的对象有: Py列表类, Py元组类, Py集合类, Py字典类, Py字节数组类, Py字节序列类, Py文本类."
+            @禁止流程检查 = 真>
+    参数 Py对象 <类型 = Py对象类 注释 = "基于此对象创建迭代器.">
+    {
+        @ @m<PyObjectCheckAndReturn>(@<Py对象>.GetPyObj(), @sn<current_class>(),  @sn<current_class>(PyObject_GetIter(@<Py对象>.GetPyObj()), PYREF_FALSE) )
+    }
+
+    方法 下一项 <公开 类型 = Py对象类 注释 = "获取迭代器下一项数据." 注释 = "获取成功返回真,失败返回假." @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), @dt<Py对象类>(),  @dt<Py对象类>(PyIter_Next(GetPyObj()), PYREF_FALSE) )
+    }
+
+    方法 迭代循环 <公开 静态 注释 = "开始循环迭代." 注释 = "本方法的\"输出Py对象\"为循环迭代时,将数据写入到该对象中,您可在循环体中,通过该对象获得数据." @嵌入式方法 = "has_body = true">
+    参数 本类对象 <类型 = Py迭代器类 注释 = "迭代器对象">
+    参数 输出Py对象 <类型 = Py对象类 注释 = "输出对象">
+    {
+        @ @m<PyIterWhile> (@<本类对象>, @<输出Py对象>)
+    }
+
+    方法 检查类型 <公开 类型 = 逻辑型 注释 = "检查当前对象,是否为迭代器." 注释 = "成功返回真, 失败返回假,如果失败,可用\"类型\"获得实际类型文本." @虚拟方法 = 可覆盖 @禁止流程检查 = 真>
+    {
+        @ @m<PyObjectCheckAndReturn>(GetPyObj(), FALSE,  PyIter_Check (GetPyObj()) )
+    }
+}

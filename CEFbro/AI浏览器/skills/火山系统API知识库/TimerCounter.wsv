@@ -1,0 +1,55 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" @文档 = "category = \"windows.计时器\"">
+
+类 计时器类F <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    #     LARGE_INTEGER freq_;
+    #     LARGE_INTEGER begin_time_;
+    #     long long elapsed_;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ QueryPerformanceFrequency(&freq_);
+    }
+
+    方法 类_清理
+    {
+
+    }
+
+    方法 开始 <公开>
+    {
+        @ elapsed_ = 0;
+        @ QueryPerformanceCounter(&begin_time_);
+    }
+
+    方法 停止 <公开>
+    {
+        @         LARGE_INTEGER end_time;
+        @         QueryPerformanceCounter(&end_time);
+        @         elapsed_ += (end_time.QuadPart - begin_time_.QuadPart) * 1000000 / freq_.QuadPart;
+    }
+
+    方法 取微妙 <公开 类型 = 小数 @禁止流程检查 = 真>
+    {
+        @ return static_cast<double>(elapsed_);
+    }
+
+    方法 取毫秒 <公开 类型 = 小数 @禁止流程检查 = 真>
+    {
+        @ return elapsed_ / 1000.0;
+    }
+
+    方法 取秒 <公开 类型 = 小数 @禁止流程检查 = 真>
+    {
+        @ return elapsed_ / 1000000.0;
+    }
+
+    #
+}

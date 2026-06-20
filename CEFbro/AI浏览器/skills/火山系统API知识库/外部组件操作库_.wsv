@@ -1,0 +1,1366 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <@文档 = "category = \"外部组件操作库\"">
+
+类 外部选择夹类_ <公开 折叠 折叠2 @文档 = "category = \"外部组件操作库.选择夹\"" @视窗.外部头文件 = "string">
+{
+
+    # @begin
+    # #define TAB_TOP    0  // 表头在上方
+    # #define TAB_BOTTOM 1  // 表头在下方
+    # #define TAB_LEFT   2  // 表头在左侧
+    # #define TAB_RIGHT  3  // 表头在右侧
+    #
+    # // 获取子夹数量
+    # int GetTabItemCount(HWND hTab) {
+    #     if (!hTab) return -1;
+    #     return (int)SendMessageW(hTab, TCM_GETITEMCOUNT, 0, 0);
+    # }
+    #
+    # // 获取子夹名称
+    # std::wstring GetTabItemText(HWND hTab, int index) {
+    #     if (!hTab || index < 0) return L"";
+    #
+    #     wchar_t buffer[256] = {0};
+    #     TCITEMW item = {0};
+    #     item.mask = TCIF_TEXT;
+    #     item.pszText = buffer;
+    #     item.cchTextMax = 256;
+    #
+    #     if (SendMessageW(hTab, TCM_GETITEMW, (WPARAM)index, (LPARAM)&item)) {
+    #         return buffer;
+    #     }
+    #     return L"";
+    # }
+    #
+    # // 设置子夹名称
+    # bool SetTabItemText(HWND hTab, int index, const std::wstring& newText) {
+    #     if (!hTab || index < 0) return false;
+    #
+    #     TCITEMW item = {0};
+    #     item.mask = TCIF_TEXT;
+    #     item.pszText = (LPWSTR)newText.c_str();
+    #
+    #     return SendMessageW(hTab, TCM_SETITEMW, (WPARAM)index, (LPARAM)&item) != FALSE;
+    # }
+    #
+    # // 获取当前选中的子夹索引
+    # int GetCurrentTabIndex(HWND hTab) {
+    #     if (!hTab) return -1;
+    #     return (int)SendMessageW(hTab, TCM_GETCURSEL, 0, 0);
+    # }
+    #
+    # // 设置当前选中的子夹
+    # bool SetCurrentTabIndex(HWND hTab, int index) {
+    #     if (!hTab || index < 0) return false;
+    #     return SendMessageW(hTab, TCM_SETCURSEL, (WPARAM)index, 0) != -1;
+    # }
+    #
+    # // 删除指定子夹
+    # bool DeleteTabItem(HWND hTab, int index) {
+    #     if (!hTab || index < 0) return false;
+    #     return SendMessageW(hTab, TCM_DELETEITEM, (WPARAM)index, 0) != FALSE;
+    # }
+    #
+    # // 删除所有子夹
+    # bool ClearAllTabItems(HWND hTab) {
+    #     if (!hTab) return false;
+    #     while (GetTabItemCount(hTab) > 0) {
+    #         if (!DeleteTabItem(hTab, 0)) return false;
+    #     }
+    #     return true;
+    # }
+    #
+    # // 在末尾添加子夹
+    # int AddTabItem(HWND hTab, const std::wstring& text, LPARAM lParam = 0) {
+    #     if (!hTab) return -1;
+    #
+    #     TCITEMW item = {0};
+    #     item.mask = TCIF_TEXT | (lParam ? TCIF_PARAM : 0);
+    #     item.pszText = (LPWSTR)text.c_str();
+    #     item.lParam = lParam;
+    #
+    #     int index = (int)SendMessageW(hTab, TCM_GETITEMCOUNT, 0, 0);
+    #     if (SendMessageW(hTab, TCM_INSERTITEMW, (WPARAM)index, (LPARAM)&item) == -1) {
+    #         return -1;
+    #     }
+    #     return index;
+    # }
+    #
+    # // 在指定位置插入子夹
+    # int InsertTabItem(HWND hTab, int index, const std::wstring& text, LPARAM lParam = 0) {
+    #     if (!hTab || index < 0) return -1;
+    #
+    #     TCITEMW item = {0};
+    #     item.mask = TCIF_TEXT | (lParam ? TCIF_PARAM : 0);
+    #     item.pszText = (LPWSTR)text.c_str();
+    #     item.lParam = lParam;
+    #
+    #     int newIndex = (int)SendMessageW(hTab, TCM_INSERTITEMW, (WPARAM)index, (LPARAM)&item);
+    #     return newIndex;
+    # }
+    #
+    # // 设置表头方向 (0-3)
+    # bool SetTabDirection(HWND hTab, int direction) {
+    #     if (!hTab || direction < 0 || direction > 3) return false;
+    #
+    #     LONG style = GetWindowLongW(hTab, GWL_STYLE);
+    #     style &= ~(TCS_BOTTOM | TCS_VERTICAL | TCS_RIGHT); // 清除原有方向样式
+    #
+    #     switch (direction) {
+    #     case TAB_BOTTOM: style |= TCS_BOTTOM; break;
+    #     case TAB_LEFT:   style |= TCS_VERTICAL; break;
+    #     case TAB_RIGHT:  style |= TCS_VERTICAL | TCS_RIGHT; break;
+    #     case TAB_TOP: 
+    #     default:         break;
+    #     }
+    #
+    #     SetWindowLongW(hTab, GWL_STYLE, style);
+    #     
+    #     RECT rc;
+    #     GetWindowRect(hTab, &rc);
+    #     SetWindowPos(hTab, NULL, 0, 0, rc.right-rc.left, rc.bottom-rc.top, 
+    #                 SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+    #     InvalidateRect(hTab, NULL, TRUE);
+    #     
+    #     return true;
+    # }
+    #
+    # // 获取当前表头方向 (返回0-3)
+    # int GetTabDirection(HWND hTab) {
+    #     if (!hTab) return -1;
+    #     
+    #     LONG style = GetWindowLongW(hTab, GWL_STYLE);
+    #     if (style & TCS_BOTTOM) return TAB_BOTTOM;
+    #     if ((style & TCS_VERTICAL) && (style & TCS_RIGHT)) return TAB_RIGHT;
+    #     if (style & TCS_VERTICAL) return TAB_LEFT;
+    #     return TAB_TOP;
+    # }
+    #
+    # // 设置多行表头
+    # bool SetTabMultiLine(HWND hTab, bool multiLine) {
+    #     if (!hTab) return false;
+    #     
+    #     LONG style = GetWindowLongW(hTab, GWL_STYLE);
+    #     if (multiLine) {
+    #         style |= TCS_MULTILINE;
+    #     } else {
+    #         style &= ~TCS_MULTILINE;
+    #     }
+    #     SetWindowLongW(hTab, GWL_STYLE, style);
+    #     InvalidateRect(hTab, NULL, TRUE);
+    #     return true;
+    # }
+    # @end
+
+    方法 取子夹数目 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 选择夹句柄 <类型 = 变整数>
+    {
+        @ return GetTabItemCount((HWND)@<选择夹句柄>);
+    }
+
+    方法 取现行子夹 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 选择夹句柄 <类型 = 变整数>
+    {
+        @ return GetCurrentTabIndex((HWND)@<选择夹句柄>);
+    }
+
+    方法 置现行子夹 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 选择夹句柄 <类型 = 变整数>
+    参数 索引 <类型 = 整数>
+    {
+        @ return SetCurrentTabIndex((HWND)@<选择夹句柄>,@<索引>);
+    }
+
+    方法 取子夹名称 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 选择夹句柄 <类型 = 变整数>
+    参数 索引 <类型 = 整数>
+    {
+        @ std::wstring str = GetTabItemText((HWND)@<选择夹句柄>,@<索引>);
+        @ return str.c_str();
+    }
+
+    方法 置子夹名称 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 选择夹句柄 <类型 = 变整数>
+    参数 索引 <类型 = 整数>
+    参数 名称 <类型 = 文本型>
+    {
+        @ return SetTabItemText((HWND)@<选择夹句柄>,@<索引>,@<名称>.GetText());
+    }
+
+    方法 置表头方向 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 选择夹句柄 <类型 = 变整数>
+    参数 方向 <类型 = 整数 注释 = "0、上 1、下  2、左  3、右">
+    {
+        @ return SetTabDirection((HWND)@<选择夹句柄>,@<方向>);
+    }
+
+    方法 取表头方向 <公开 类型 = 整数 返回值注释 = "0、上 1、下  2、左  3、右" 折叠 @禁止流程检查 = 真>
+    参数 选择夹句柄 <类型 = 变整数>
+    {
+        @ return GetTabDirection((HWND)@<选择夹句柄>);
+    }
+
+    方法 允许多行表头 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 选择夹句柄 <类型 = 变整数>
+    参数 是否允许 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ return SetTabMultiLine((HWND)@<选择夹句柄>,@<是否允许> ? true:false);
+    }
+
+    方法 添加子夹 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 选择夹句柄 <类型 = 变整数>
+    参数 名称 <类型 = 文本型>
+    {
+        @ return AddTabItem((HWND)@<选择夹句柄>,@<名称>.GetText());
+    }
+
+    方法 插入子夹 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 选择夹句柄 <类型 = 变整数>
+    参数 索引 <类型 = 整数>
+    参数 名称 <类型 = 文本型>
+    {
+        @ return InsertTabItem((HWND)@<选择夹句柄>,@<索引>,@<名称>.GetText());
+    }
+
+    方法 删除子夹 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 选择夹句柄 <类型 = 变整数>
+    参数 索引 <类型 = 整数>
+    {
+        @ return DeleteTabItem((HWND)@<选择夹句柄>,@<索引>);
+    }
+
+    方法 删除所有子夹 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 选择夹句柄 <类型 = 变整数>
+    {
+        @ return ClearAllTabItems((HWND)@<选择夹句柄>);
+    }
+}
+
+类 外部按钮类_ <公开 折叠 折叠2 @文档 = "category = \"外部组件操作库.按钮\"" @视窗.外部头文件 = "string">
+{
+
+    # @begin
+    # // 修改按钮标题
+    # bool SetButtonText(HWND hButton, const std::wstring& newText) {
+    #     if (hButton == NULL) return false;
+    #     return SetWindowTextW(hButton, newText.c_str());
+    # }
+    #
+    # // 获取按钮标题
+    # std::wstring GetButtonText(HWND hButton) {
+    #     if (hButton == NULL) return L"";
+    #     
+    #     int length = GetWindowTextLengthW(hButton) + 1;
+    #     WCHAR* buffer = new WCHAR[length];
+    #     GetWindowTextW(hButton, buffer, length);
+    #     
+    #     std::wstring text(buffer);
+    #     delete[] buffer;
+    #     return text;
+    # }
+    #
+    # // 发送标准点击消息
+    # bool ClickButton(HWND hButton) {
+    #     if (!hButton) return false;
+    #     
+    #     SendMessageW(hButton, BM_CLICK, 0, 0);
+    #     return true;
+    # }
+    #
+    # // 发送右键点击消息
+    # bool RightClickButton(HWND hButton) {
+    #     if (!hButton) return false;
+    #     
+    #     RECT rect;
+    #     GetClientRect(hButton, &rect);
+    #     LPARAM lParam = MAKELPARAM(rect.right/2, rect.bottom/2);
+    #     
+    #     SendMessageW(hButton, WM_RBUTTONDOWN, MK_RBUTTON, lParam);
+    #     Sleep(20);
+    #     SendMessageW(hButton, WM_RBUTTONUP, 0, lParam);
+    #     
+    #     return true;
+    # }
+    # @end
+
+    方法 置标题 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 按钮句柄 <类型 = 变整数>
+    参数 标题 <类型 = 文本型>
+    {
+        @ return SetButtonText((HWND)@<按钮句柄>, @<标题>.GetText());
+    }
+
+    方法 取标题 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 按钮句柄 <类型 = 变整数>
+    {
+        @ std::wstring str = GetButtonText((HWND)@<按钮句柄>);
+        @ return str.c_str();
+    }
+
+    方法 单击按钮 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 按钮句柄 <类型 = 变整数>
+    {
+        @ return ClickButton((HWND)@<按钮句柄>);
+    }
+
+    方法 右键单击 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 按钮句柄 <类型 = 变整数>
+    {
+        @ return RightClickButton((HWND)@<按钮句柄>);
+    }
+}
+
+类 外部组合框类_ <公开 折叠 折叠2 @文档 = "category = \"外部组件操作库.组合框\"" @视窗.外部头文件 = "string">
+{
+
+    # @begin
+    # int GetComboBoxSelection(HWND hCombo);
+    # bool SetComboBoxSelection(HWND hCombo, int index);
+    #
+    #     // 添加项目
+    # int AddComboBoxItem(HWND hCombo, const std::wstring& item, DWORD_PTR data = 0) {
+    #     if (hCombo == NULL) return -1;
+    #     
+    #     int index = (int)SendMessageW(hCombo, CB_ADDSTRING, 0, (LPARAM)item.c_str());
+    #     if (index == CB_ERR) return -1;
+    #     
+    #     if (SendMessageW(hCombo, CB_SETITEMDATA, (WPARAM)index, (LPARAM)data) == CB_ERR) {
+    #         SendMessageW(hCombo, CB_DELETESTRING, (WPARAM)index, 0);
+    #         return -1;
+    #     }
+    #     
+    #     return index; 
+    # }
+    #
+    # // 插入项目
+    # int InsertComboBoxItem(HWND hCombo, int index, const std::wstring& item, DWORD_PTR data = 0) {
+    #     if (hCombo == NULL) return -1;
+    #     
+    #     // 插入项目文本
+    #     int newIndex = (int)SendMessageW(hCombo, CB_INSERTSTRING, (WPARAM)index, (LPARAM)item.c_str());
+    #     if (newIndex == CB_ERR) return -1;
+    #     
+    #     if (SendMessageW(hCombo, CB_SETITEMDATA, (WPARAM)newIndex, (LPARAM)data) == CB_ERR) {
+    #         SendMessageW(hCombo, CB_DELETESTRING, (WPARAM)newIndex, 0);
+    #         return -1;
+    #     }
+    #     
+    #     return newIndex;
+    # }
+    #
+    # // 设置组合框编辑区的内容（适用于可编辑组合框）
+    # bool SetComboBoxEditText(HWND hCombo, const std::wstring& text) {
+    #     if (hCombo == NULL) return false;
+    #     
+    #     LONG style = GetWindowLongW(hCombo, GWL_STYLE);
+    #     if (!(style & CBS_DROPDOWN)) {
+    #         return SetWindowTextW(hCombo, text.c_str());
+    #     }
+    #     
+    #     return SetWindowTextW(hCombo, text.c_str());
+    # }
+    #
+    # // 获取组合框编辑区的内容（适用于所有类型组合框）
+    # std::wstring GetComboBoxEditText(HWND hCombo) {
+    #     if (hCombo == NULL) return L"";
+    #     
+    #     int length = GetWindowTextLengthW(hCombo) + 1;
+    #     std::wstring text;
+    #     text.resize(length);
+    #     
+    #     GetWindowTextW(hCombo, &text[0], length);
+    #     text.resize(length - 1); 
+    #     
+    #     return text;
+    # }
+    #
+    # // 获取项目数量
+    # int GetComboBoxItemCount(HWND hCombo) {
+    #     if (hCombo == NULL) return -1;
+    #     return (int)SendMessageW(hCombo, CB_GETCOUNT, 0, 0);
+    # }
+    #
+    # // 获取指定项目的文本
+    # std::wstring GetComboBoxItemText(HWND hCombo, int index) {
+    #     if (hCombo == NULL) return L"";
+    #     
+    #     int length = (int)SendMessageW(hCombo, CB_GETLBTEXTLEN, (WPARAM)index, 0);
+    #     if (length == CB_ERR || length <= 0) return L"";
+    #     
+    #     std::wstring text;
+    #     text.resize(length + 1);
+    #     SendMessageW(hCombo, CB_GETLBTEXT, (WPARAM)index, (LPARAM)&text[0]);
+    #     text.resize(length); 
+    #     
+    #     return text;
+    # }
+    #
+    # // 设置指定项目的文本
+    # bool SetComboBoxItemText(HWND hCombo, int index, const std::wstring& newText) {
+    #     if (hCombo == NULL) return false;
+    #     
+    #     int currentSel = GetComboBoxSelection(hCombo);
+    #     
+    #     if (SendMessageW(hCombo, CB_DELETESTRING, (WPARAM)index, 0) == CB_ERR) {
+    #         return false;
+    #     }
+    #     
+    #     bool result = InsertComboBoxItem(hCombo, index, newText);
+    #     
+    #     if (currentSel != CB_ERR) {
+    #         SetComboBoxSelection(hCombo, currentSel >= index ? currentSel + 1 : currentSel);
+    #     }
+    #     
+    #     return result;
+    # }
+    #
+    # // 删除指定项目
+    # bool DeleteComboBoxItem(HWND hCombo, int index) {
+    #     if (hCombo == NULL) return false;
+    #     return SendMessageW(hCombo, CB_DELETESTRING, (WPARAM)index, 0) != CB_ERR;
+    # }
+    #
+    # // 清空所有项目
+    # bool ClearComboBox(HWND hCombo) {
+    #     if (hCombo == NULL) return false;
+    #     return SendMessageW(hCombo, CB_RESETCONTENT, 0, 0) != CB_ERR;
+    # }
+    #
+    # // 弹出下拉列表
+    # bool ShowComboBoxDropdown(HWND hCombo, bool show) {
+    #     if (hCombo == NULL) return false;
+    #     return SendMessageW(hCombo, CB_SHOWDROPDOWN, (WPARAM)(show ? TRUE : FALSE), 0) != CB_ERR;
+    # }
+    #
+    # // 设置当前选中项
+    # bool SetComboBoxSelection(HWND hCombo, int index) {
+    #     if (hCombo == NULL) return false;
+    #     return SendMessageW(hCombo, CB_SETCURSEL, (WPARAM)index, 0) != CB_ERR;
+    # }
+    #
+    # // 获取当前选中项
+    # int GetComboBoxSelection(HWND hCombo) {
+    #     if (hCombo == NULL) return -1;
+    #     return (int)SendMessageW(hCombo, CB_GETCURSEL, 0, 0);
+    # }
+    #
+    # // 修改组合框控件本身的高度（不是下拉列表的高度）
+    # bool SetComboBoxControlHeight(HWND hCombo, int newHeight) {
+    #     if (hCombo == NULL || newHeight <= 0) return false;
+    #     
+    #     RECT rect;
+    #     if (!GetWindowRect(hCombo, &rect)) return false;
+    #     
+    #     HWND hParent = GetParent(hCombo);
+    #     if (hParent == NULL) return false;
+    #     
+    #     POINT pt = {rect.left, rect.top};
+    #     if (!ScreenToClient(hParent, &pt)) return false;
+    #     
+    #     int width = rect.right - rect.left;
+    #     
+    #     if (!SetWindowPos(hCombo, NULL, 
+    #                      pt.x, pt.y, 
+    #                      width, newHeight, 
+    #                      SWP_NOZORDER | SWP_NOACTIVATE)) {
+    #         return false;
+    #     }
+    #     
+    #     // 对于某些组合框，可能需要额外设置编辑框部分的高度
+    #     SendMessageW(hCombo, CB_SETITEMHEIGHT, (WPARAM)-1, (LPARAM)newHeight);
+    #     
+    #     return true;
+    # }
+    #
+    # // 修改组合框控件本身的高度
+    # bool SetComboBoxHeight(HWND hCombo, int newHeight) {
+    #     if (hCombo == NULL || newHeight <= 0) return false;
+    #     
+    #     RECT rect;
+    #     if (!GetWindowRect(hCombo, &rect)) return false;
+    #     
+    #     HWND hParent = GetParent(hCombo);
+    #     POINT pt = {rect.left, rect.top};
+    #     if (!ScreenToClient(hParent, &pt)) return false;
+    #     
+    #     int width = rect.right - rect.left;
+    #     
+    #     return SetWindowPos(hCombo, NULL, pt.x, pt.y, width, newHeight, 
+    #                        SWP_NOZORDER | SWP_NOACTIVATE) != FALSE;
+    # }
+    #
+    # // 获取组合框项目关联的数值
+    # DWORD_PTR GetComboBoxItemData(HWND hCombo, int index) {
+    #     if (hCombo == NULL || index < 0 || index >= GetComboBoxItemCount(hCombo)) {
+    #         return (DWORD_PTR)CB_ERR;
+    #     }
+    #     return (DWORD_PTR)SendMessageW(hCombo, CB_GETITEMDATA, (WPARAM)index, 0);
+    # }
+    #
+    # // 设置组合框项目关联的数值
+    # bool SetComboBoxItemData(HWND hCombo, int index, DWORD_PTR data) {
+    #     if (hCombo == NULL || index < 0 || index >= GetComboBoxItemCount(hCombo)) {
+    #         return false;
+    #     }
+    #     
+    #     int prevSel = GetComboBoxSelection(hCombo);
+    #     
+    #     LRESULT result = SendMessageW(hCombo, CB_SETITEMDATA, (WPARAM)index, (LPARAM)data);
+    #     
+    #     if (prevSel != -1) {
+    #         SetComboBoxSelection(hCombo, prevSel);
+    #     }
+    #     
+    #     return result != CB_ERR;
+    # }
+    # @end
+
+    方法 添加项目 <公开 类型 = 整数 返回值注释 = "返回索引" 折叠 @禁止流程检查 = 真>
+    参数 组合框句柄 <类型 = 变整数>
+    参数 内容 <类型 = 文本型>
+    参数 数值 <类型 = 整数 @默认值 = 0>
+    {
+        @ return AddComboBoxItem((HWND)@<组合框句柄>,@<内容>.GetText(),@<数值>);
+    }
+
+    方法 插入项目 <公开 类型 = 整数 返回值注释 = "返回索引" 折叠 @禁止流程检查 = 真>
+    参数 组合框句柄 <类型 = 变整数>
+    参数 插入位置 <类型 = 整数>
+    参数 内容 <类型 = 文本型>
+    参数 数值 <类型 = 整数 @默认值 = 0>
+    {
+        @ return InsertComboBoxItem((HWND)@<组合框句柄>,@<插入位置>,@<内容>.GetText(),@<数值>);
+    }
+
+    方法 取项目数 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 组合框句柄 <类型 = 变整数>
+    {
+        @ return GetComboBoxItemCount((HWND)@<组合框句柄>);
+    }
+
+    方法 置项目文本 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 组合框句柄 <类型 = 变整数>
+    参数 项目位置 <类型 = 整数>
+    参数 内容 <类型 = 文本型>
+    {
+        @ return SetComboBoxItemText((HWND)@<组合框句柄>,@<项目位置>,@<内容>.GetText());
+    }
+
+    方法 取项目文本 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 组合框句柄 <类型 = 变整数>
+    参数 项目位置 <类型 = 整数>
+    {
+        @ std::wstring str = GetComboBoxItemText((HWND)@<组合框句柄>,@<项目位置>);
+        @ return str.c_str();
+    }
+
+    方法 置内容 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 组合框句柄 <类型 = 变整数>
+    参数 内容 <类型 = 文本型>
+    {
+        @ return SetComboBoxEditText((HWND)@<组合框句柄>,@<内容>.GetText());
+    }
+
+    方法 取内容 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 组合框句柄 <类型 = 变整数>
+    {
+        @ std::wstring str = GetComboBoxEditText((HWND)@<组合框句柄>);
+        @ return str.c_str();
+    }
+
+    方法 取项目数值 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 组合框句柄 <类型 = 变整数>
+    参数 项目位置 <类型 = 整数>
+    {
+        @ return GetComboBoxItemData((HWND)@<组合框句柄>,@<项目位置>);
+    }
+
+    方法 置项目数值 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 组合框句柄 <类型 = 变整数>
+    参数 项目位置 <类型 = 整数>
+    参数 数值 <类型 = 整数>
+    {
+        @ return SetComboBoxItemData((HWND)@<组合框句柄>,@<项目位置>,@<数值>);
+    }
+
+    方法 删除项目 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 组合框句柄 <类型 = 变整数>
+    参数 项目位置 <类型 = 整数>
+    {
+        @ return DeleteComboBoxItem((HWND)@<组合框句柄>,@<项目位置>);
+    }
+
+    方法 清空 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 组合框句柄 <类型 = 变整数>
+    {
+        @ return ClearComboBox((HWND)@<组合框句柄>);
+    }
+
+    方法 弹出下拉列表 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 组合框句柄 <类型 = 变整数>
+    参数 是否弹出 <类型 = 逻辑型 @默认值 = 真>
+    参数 是否定时关闭 <类型 = 逻辑型 @默认值 = 真>
+    参数 定时时间 <类型 = 整数 注释 = "单位毫秒" @默认值 = 2000>
+    {
+        @ bool jg =ShowComboBoxDropdown((HWND)@<组合框句柄>,@<是否弹出> ? true:false);
+        @ if(@<是否定时关闭>) {
+        @  Sleep(@<定时时间>);
+        @ ShowComboBoxDropdown((HWND)@<组合框句柄>,false);
+        @ }
+        @ return jg;
+    }
+
+    方法 现行选中项 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 组合框句柄 <类型 = 变整数>
+    参数 选中项 <类型 = 整数>
+    {
+        @ return SetComboBoxSelection((HWND)@<组合框句柄>,@<选中项>);
+    }
+
+    方法 置列表高度 <公开 类型 = 逻辑型 注释 = "下拉列表" 折叠 @禁止流程检查 = 真>
+    参数 组合框句柄 <类型 = 变整数>
+    参数 高度 <类型 = 整数>
+    {
+        @ return SetComboBoxDropdownHeight((HWND)@<组合框句柄>,@<高度>);
+    }
+
+    方法 置高度 <公开 类型 = 逻辑型 注释 = "组合框本身高度" 折叠 @禁止流程检查 = 真>
+    参数 组合框句柄 <类型 = 变整数>
+    参数 高度 <类型 = 整数>
+    {
+        @ return SetComboBoxControlHeight((HWND)@<组合框句柄>,@<高度>);
+    }
+}
+
+类 外部单选框类_ <公开 折叠 折叠2 @文档 = "category = \"外部组件操作库.单选框\"" @视窗.外部头文件 = "string">
+{
+
+    # @begin
+    # // 选中单选框
+    # bool SelectRadioButton(HWND hRadio) {
+    #     if (hRadio == NULL) return false;
+    #     
+    #     LONG style = GetWindowLongW(hRadio, GWL_STYLE);
+    #     if ((style & BS_RADIOBUTTON) == 0 && (style & BS_AUTORADIOBUTTON) == 0) {
+    # //        不是单选框
+    #         return false;
+    #     }
+    #     
+    #     SendMessageW(hRadio, BM_CLICK, 0, 0);
+    #     return true;
+    # }
+    #
+    # // 获取单选框选中状态
+    # bool GetRadioButtonState(HWND hRadio) {
+    #     if (hRadio == NULL) return false;
+    #     return SendMessageW(hRadio, BM_GETCHECK, 0, 0) == BST_CHECKED;
+    # }
+    #
+    # // 修改单选框标题
+    # bool SetRadioButtonText(HWND hRadio, const std::wstring& newText) {
+    #     if (hRadio == NULL) return false;
+    #     return SetWindowTextW(hRadio, newText.c_str());
+    # }
+    #
+    # // 获取单选框标题
+    # std::wstring GetRadioButtonText(HWND hRadio) {
+    #     if (hRadio == NULL) return L"";
+    #     
+    #     int length = GetWindowTextLengthW(hRadio) + 1;
+    #     WCHAR* buffer = new WCHAR[length];
+    #     GetWindowTextW(hRadio, buffer, length);
+    #     
+    #     std::wstring text(buffer);
+    #     delete[] buffer;
+    #     return text;
+    # }
+    #
+    # // 取消选中指定单选框（同时取消同组其他单选框）
+    # bool UncheckRadioButton(HWND hRadio) {
+    #     if (hRadio == NULL) return false;
+    #     
+    #     LONG style = GetWindowLongW(hRadio, GWL_STYLE);
+    #     if ((style & BS_RADIOBUTTON) == 0 && (style & BS_AUTORADIOBUTTON) == 0) {
+    #         return false;
+    #     }
+    #     
+    #     HWND hParent = GetParent(hRadio);
+    #     if (hParent == NULL) return false;
+    #     
+    #     HWND hChild = NULL;
+    #     while ((hChild = FindWindowExW(hParent, hChild, L"Button", NULL))) {
+    #         LONG childStyle = GetWindowLongW(hChild, GWL_STYLE);
+    #         if ((childStyle & BS_RADIOBUTTON) || (childStyle & BS_AUTORADIOBUTTON)) {
+    #             SendMessageW(hChild, BM_SETCHECK, BST_UNCHECKED, 0);
+    #         }
+    #     }
+    #     return true;
+    # }
+    # @end
+
+    方法 取标题 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 单选框句柄 <类型 = 变整数>
+    {
+        @ std::wstring str = GetRadioButtonText((HWND)@<单选框句柄>);
+        @ return str.c_str();
+    }
+
+    方法 置标题 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 单选框句柄 <类型 = 变整数>
+    参数 标题 <类型 = 文本型>
+    {
+        @ return SetRadioButtonText((HWND)@<单选框句柄>, @<标题>.GetText());
+    }
+
+    方法 选中 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 单选框句柄 <类型 = 变整数>
+    参数 是否选中 <类型 = 逻辑型>
+    {
+        @ return SelectRadioButton((HWND)@<单选框句柄>);
+    }
+
+    方法 取消选中 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 单选框句柄 <类型 = 变整数>
+    {
+        @ return UncheckRadioButton((HWND)@<单选框句柄>);
+    }
+
+    方法 取状态 <公开 类型 = 逻辑型 注释 = "取选中状态" 折叠 @禁止流程检查 = 真>
+    参数 单选框句柄 <类型 = 变整数>
+    {
+        @ return GetRadioButtonState((HWND)@<单选框句柄>);
+    }
+}
+
+类 外部选择框类_ <公开 折叠 折叠2 @文档 = "category = \"外部组件操作库.选择框\"" @视窗.外部头文件 = "string">
+{
+
+    # @begin
+    # // 选中或取消选中复选框
+    # bool SetCheckBoxState(HWND hCheckBox, bool checked) {
+    #     if (hCheckBox == NULL) return false;
+    #     
+    #     WCHAR className[256];
+    #     GetClassNameW(hCheckBox, className, 256);
+    #     if (wcscmp(className, L"Button") != 0) {
+    # //        不是按钮/复选框
+    #         return false;
+    #     }
+    #     
+    #     LONG style = GetWindowLongW(hCheckBox, GWL_STYLE);
+    #     if ((style & BS_CHECKBOX) == 0 && (style & BS_AUTOCHECKBOX) == 0) {
+    # //        不是按钮/复选框
+    #         return false;
+    #     }
+    #     
+    #     SendMessageW(hCheckBox, BM_SETCHECK, checked ? BST_CHECKED : BST_UNCHECKED, 0);
+    #     return true;
+    # }
+    #
+    # // 获取复选框选中状态
+    # bool GetCheckBoxState(HWND hCheckBox) {
+    #     if (hCheckBox == NULL) return false;
+    #     return SendMessageW(hCheckBox, BM_GETCHECK, 0, 0) == BST_CHECKED;
+    # }
+    #
+    # // 修改复选框标题
+    # bool SetCheckBoxText(HWND hCheckBox, const std::wstring& newText) {
+    #     if (hCheckBox == NULL) return false;
+    #     return SetWindowTextW(hCheckBox, newText.c_str());
+    # }
+    #
+    # // 获取复选框标题
+    # std::wstring GetCheckBoxText(HWND hCheckBox) {
+    #     if (hCheckBox == NULL) return L"";
+    #     
+    #     int length = GetWindowTextLengthW(hCheckBox) + 1;
+    #     WCHAR* buffer = new WCHAR[length];
+    #     GetWindowTextW(hCheckBox, buffer, length);
+    #     
+    #     std::wstring text(buffer);
+    #     delete[] buffer;
+    #     return text;
+    # }
+    # @end
+
+    方法 取标题 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 选择框句柄 <类型 = 变整数>
+    {
+        @ std::wstring str = GetCheckBoxText((HWND)@<选择框句柄>);
+        @ return str.c_str();
+    }
+
+    方法 置标题 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 选择框句柄 <类型 = 变整数>
+    参数 标题 <类型 = 文本型>
+    {
+        @ return SetCheckBoxText((HWND)@<选择框句柄>, @<标题>.GetText());
+    }
+
+    方法 选中 <公开 类型 = 逻辑型 注释 = "设置选中状态" 折叠 @禁止流程检查 = 真>
+    参数 选择框句柄 <类型 = 变整数>
+    参数 是否选中 <类型 = 逻辑型>
+    {
+        @ return SetCheckBoxState((HWND)@<选择框句柄>, @<是否选中> ? true:false);
+    }
+
+    方法 取状态 <公开 类型 = 逻辑型 注释 = "取选中状态" 折叠 @禁止流程检查 = 真>
+    参数 选择框句柄 <类型 = 变整数>
+    {
+        @ return GetCheckBoxState((HWND)@<选择框句柄>);
+    }
+}
+
+类 外部列表框类_ <公开 折叠 @文档 = "category = \"外部组件操作库.列表框\"">
+{
+    方法 置滚动条状态 <公开 类型 = 逻辑型 注释 = "显示隐藏滚动条" 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 类型 <类型 = 整数 注释 = "0、横向滚动条 1、纵向滚动条 3、横纵向滚动条">
+    参数 是否显示 <类型 = 逻辑型 注释 = "真：显示  假：隐藏" "">
+    {
+        @ return ShowScrollBar((HWND)@<窗口句柄>, @<类型>, @<是否显示>);
+    }
+
+    方法 清空列表 <公开 折叠 @禁止流程检查 = 真>
+    参数 列表框句柄 <类型 = 变整数>
+    {
+        @ SendMessageW((HWND)@<列表框句柄>, LB_RESETCONTENT, 0, 0);
+    }
+
+    方法 取项目数 <公开 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    参数 列表框句柄 <类型 = 变整数>
+    {
+        @ return SendMessageW((HWND)@<列表框句柄>, LB_GETCOUNT, 0, 0);
+    }
+
+    方法 加入项目 <公开 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    参数 列表框句柄 <类型 = 变整数>
+    参数 项目文本 <类型 = 文本型>
+    {
+        @ return SendMessageW((HWND)@<列表框句柄>, LB_INSERTSTRING, -1, (LPARAM)@<项目文本>.GetText());
+    }
+
+    方法 插入项目 <公开 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    参数 列表框句柄 <类型 = 变整数>
+    参数 项目索引 <类型 = 整数 注释 = "0表示第一项">
+    参数 项目文本 <类型 = 文本型>
+    {
+        @ return SendMessageW((HWND)@<列表框句柄>, LB_INSERTSTRING, -1, (LPARAM)@<项目文本>.GetText());
+    }
+
+    方法 删除项目 <公开 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    参数 列表框句柄 <类型 = 变整数>
+    参数 项目索引 <类型 = 整数 注释 = "0表示第一项">
+    {
+        @ return SendMessageW((HWND)@<列表框句柄>, LB_DELETESTRING, @<项目索引>, 0);
+    }
+
+    方法 取选中项 <公开 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    参数 列表框句柄 <类型 = 变整数>
+    {
+        @ return SendMessageW((HWND)@<列表框句柄>, LB_GETCURSEL, 0, 0);
+    }
+
+    方法 置选中项 <公开 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    参数 列表框句柄 <类型 = 变整数>
+    参数 项目索引 <类型 = 整数 注释 = "0表示第一项">
+    {
+        @ return SendMessageW((HWND)@<列表框句柄>, LB_SETCURSEL, 0, 0);
+    }
+
+    方法 取项目文本 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 列表框句柄 <类型 = 变整数>
+    参数 项目索引 <类型 = 整数 注释 = "0表示第一项">
+    {
+        变量 Buffer <类型 = 文本型>
+        @ HWND hWnd = (HWND)@<列表框句柄>;
+        @ INT_PTR dwLen = SendMessageW(hWnd, LB_GETTEXTLEN, @<项目索引>, 0);
+        @ dwLen++;
+        @ LPWSTR Buffer = new TCHAR[dwLen]();
+        @ SendMessageW(hWnd, LB_GETTEXT, @<项目索引>, (LPARAM)Buffer);
+        @ @<Buffer> = Buffer;
+        @ delete[] Buffer;
+        @ return @<Buffer>.GetText();
+    }
+}
+
+类 外部超级列表框类_ <公开 折叠 @文档 = "category = \"外部组件操作库.超级列表框\"">
+{
+
+    # @begin
+    # int GetColumnCountExternal(HWND hListView);
+    #
+    # // 向外部ListView插入列
+    # BOOL InsertColumnIntoExternalListView(HWND hListView, int index, LPCTSTR pszText, int width, int format = LVCFMT_LEFT)
+    # {
+    #     DWORD dwProcessId;
+    #     GetWindowThreadProcessId(hListView, &dwProcessId);
+    #     
+    #     HANDLE hProcess = OpenProcess(PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE, FALSE, dwProcessId);
+    #     if (hProcess == NULL) return FALSE;
+    #     
+    #     LPVOID pRemoteColumn = VirtualAllocEx(hProcess, NULL, sizeof(LVCOLUMN), MEM_COMMIT, PAGE_READWRITE);
+    #     if (pRemoteColumn == NULL)
+    #     {
+    #         CloseHandle(hProcess);
+    #         return FALSE;
+    #     }
+    #     
+    #     size_t textLen = (_tcslen(pszText) + 1) * sizeof(TCHAR);
+    #     LPVOID pRemoteText = VirtualAllocEx(hProcess, NULL, textLen, MEM_COMMIT, PAGE_READWRITE);
+    #     if (pRemoteText == NULL)
+    #     {
+    #         VirtualFreeEx(hProcess, pRemoteColumn, 0, MEM_RELEASE);
+    #         CloseHandle(hProcess);
+    #         return FALSE;
+    #     }
+    #     
+    #     WriteProcessMemory(hProcess, pRemoteText, pszText, (SIZE_T)textLen, NULL);
+    #     
+    #     LVCOLUMN lvColumn = {0};
+    #     lvColumn.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_FMT;
+    #     lvColumn.fmt = format;
+    #     lvColumn.cx = width;
+    #     lvColumn.pszText = (LPTSTR)pRemoteText;
+    #     
+    #     WriteProcessMemory(hProcess, pRemoteColumn, &lvColumn, (SIZE_T)sizeof(LVCOLUMN), NULL);
+    #     
+    #     int columnIndex = (int)SendMessage(hListView, LVM_INSERTCOLUMN, (WPARAM)index, (LPARAM)pRemoteColumn);
+    #     
+    #     VirtualFreeEx(hProcess, pRemoteText, 0, MEM_RELEASE);
+    #     VirtualFreeEx(hProcess, pRemoteColumn, 0, MEM_RELEASE);
+    #     CloseHandle(hProcess);
+    #     
+    #     return columnIndex >= 0;
+    # }
+    #
+    # // 设置列标题
+    # BOOL SetColumnHeaderTextExternal(HWND hListView, int columnIndex, LPCTSTR pszText)
+    # {
+    #     DWORD dwProcessId;
+    #     GetWindowThreadProcessId(hListView, &dwProcessId);
+    #     
+    #     HANDLE hProcess = OpenProcess(PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE, FALSE, dwProcessId);
+    #     if (hProcess == NULL) return FALSE;
+    #     
+    #     LPVOID pRemoteColumn = VirtualAllocEx(hProcess, NULL, sizeof(LVCOLUMN), MEM_COMMIT, PAGE_READWRITE);
+    #     if (pRemoteColumn == NULL)
+    #     {
+    #         CloseHandle(hProcess);
+    #         return FALSE;
+    #     }
+    #     
+    #     size_t textLen = (_tcslen(pszText) + 1) * sizeof(TCHAR);
+    #     LPVOID pRemoteText = VirtualAllocEx(hProcess, NULL, textLen, MEM_COMMIT, PAGE_READWRITE);
+    #     if (pRemoteText == NULL)
+    #     {
+    #         VirtualFreeEx(hProcess, pRemoteColumn, 0, MEM_RELEASE);
+    #         CloseHandle(hProcess);
+    #         return FALSE;
+    #     }
+    #     
+    #     WriteProcessMemory(hProcess, pRemoteText, pszText, textLen, NULL);
+    #     
+    #     LVCOLUMN lvColumn = {0};
+    #     lvColumn.mask = LVCF_TEXT;
+    #     lvColumn.pszText = (LPTSTR)pRemoteText;
+    #     
+    #     WriteProcessMemory(hProcess, pRemoteColumn, &lvColumn, sizeof(LVCOLUMN), NULL);
+    #     
+    #     BOOL result = (BOOL)SendMessage(hListView, LVM_SETCOLUMN, (WPARAM)columnIndex, (LPARAM)pRemoteColumn);
+    #     
+    #     VirtualFreeEx(hProcess, pRemoteText, 0, MEM_RELEASE);
+    #     VirtualFreeEx(hProcess, pRemoteColumn, 0, MEM_RELEASE);
+    #     CloseHandle(hProcess);
+    #     
+    #     return result;
+    # }
+    #
+    # // 设置列宽
+    # BOOL SetColumnWidthExternal(HWND hListView, int columnIndex, int width)
+    # {
+    #     return (BOOL)SendMessage(hListView, LVM_SETCOLUMNWIDTH, (WPARAM)columnIndex, (LPARAM)width);
+    # }
+    #
+    # // 获取列宽
+    # int GetColumnWidthExternal(HWND hListView, int columnIndex)
+    # {
+    #     return (int)SendMessage(hListView, LVM_GETCOLUMNWIDTH, (WPARAM)columnIndex, 0);
+    # }
+    #
+    # // 获取列标题
+    # BOOL GetColumnHeaderTextExternal(HWND hListView, int columnIndex, LPTSTR pszText, int bufferSize)
+    # {
+    #     DWORD dwProcessId;
+    #     GetWindowThreadProcessId(hListView, &dwProcessId);
+    #     
+    #     HANDLE hProcess = OpenProcess(PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE, FALSE, dwProcessId);
+    #     if (hProcess == NULL) return FALSE;
+    #     
+    #     LPVOID pRemoteColumn = VirtualAllocEx(hProcess, NULL, sizeof(LVCOLUMN), MEM_COMMIT, PAGE_READWRITE);
+    #     if (pRemoteColumn == NULL)
+    #     {
+    #         CloseHandle(hProcess);
+    #         return FALSE;
+    #     }
+    #     
+    #     LPVOID pRemoteText = VirtualAllocEx(hProcess, NULL, (SIZE_T)(bufferSize * sizeof(TCHAR)), MEM_COMMIT, PAGE_READWRITE);
+    #     if (pRemoteText == NULL)
+    #     {
+    #         VirtualFreeEx(hProcess, pRemoteColumn, 0, MEM_RELEASE);
+    #         CloseHandle(hProcess);
+    #         return FALSE;
+    #     }
+    #     
+    #     LVCOLUMN lvColumn = {0};
+    #     lvColumn.mask = LVCF_TEXT;
+    #     lvColumn.pszText = (LPTSTR)pRemoteText;
+    #     lvColumn.cchTextMax = bufferSize;
+    #     
+    #     WriteProcessMemory(hProcess, pRemoteColumn, &lvColumn, (SIZE_T)sizeof(LVCOLUMN), NULL);
+    #     
+    #     BOOL result = (BOOL)SendMessage(hListView, LVM_GETCOLUMN, (WPARAM)columnIndex, (LPARAM)pRemoteColumn);
+    #     
+    #     if (result)
+    #     {
+    #         ReadProcessMemory(hProcess, pRemoteText, pszText, (SIZE_T)(bufferSize * sizeof(TCHAR)), NULL);
+    #     }
+    #     
+    #     VirtualFreeEx(hProcess, pRemoteText, 0, MEM_RELEASE);
+    #     VirtualFreeEx(hProcess, pRemoteColumn, 0, MEM_RELEASE);
+    #     CloseHandle(hProcess);
+    #     
+    #     return result;
+    # }
+    #
+    # // 刷新指定表项
+    # BOOL RedrawItemExternal(HWND hListView, int itemIndex)
+    # {
+    #     return (BOOL)SendMessage(hListView, LVM_REDRAWITEMS, (WPARAM)itemIndex, (LPARAM)itemIndex);
+    # }
+    #
+    # // 刷新整个列表
+    # void RedrawListViewExternal(HWND hListView)
+    # {
+    #     SendMessage(hListView, WM_SETREDRAW, (WPARAM)FALSE, 0);
+    #     SendMessage(hListView, WM_SETREDRAW, (WPARAM)TRUE, 0);
+    #     InvalidateRect(hListView, NULL, TRUE);
+    # }
+    #
+    # // 删除外部ListView列
+    # BOOL DeleteColumnFromExternalListView(HWND hListView, int columnIndex)
+    # {
+    #     return (BOOL)SendMessage(hListView, LVM_DELETECOLUMN, (WPARAM)columnIndex, 0);
+    # }
+    #
+    # // 获取外部ListView列数
+    # int GetColumnCountExternal(HWND hListView)
+    # {
+    #     HWND hHeader = (HWND)SendMessage(hListView, LVM_GETHEADER, 0, 0);
+    #     if (hHeader == NULL) return 0;
+    #     
+    #     return (int)SendMessage(hHeader, HDM_GETITEMCOUNT, 0, 0);
+    # }
+    #
+    # // 向外部ListView插入项目
+    # BOOL InsertItemIntoExternalListView(HWND hListView, int index, LPCTSTR pszText, int imageIndex = -1)
+    # {
+    #     DWORD dwProcessId;
+    #     GetWindowThreadProcessId(hListView, &dwProcessId);
+    #     
+    #     HANDLE hProcess = OpenProcess(PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE, FALSE, dwProcessId);
+    #     if (hProcess == NULL) return FALSE;
+    #     
+    #     LPVOID pRemoteItem = VirtualAllocEx(hProcess, NULL, sizeof(LVITEM), MEM_COMMIT, PAGE_READWRITE);
+    #     if (pRemoteItem == NULL)
+    #     {
+    #         CloseHandle(hProcess);
+    #         return FALSE;
+    #     }
+    #     
+    #     size_t textLen = (_tcslen(pszText) + 1) * sizeof(TCHAR);
+    #     LPVOID pRemoteText = VirtualAllocEx(hProcess, NULL, textLen, MEM_COMMIT, PAGE_READWRITE);
+    #     if (pRemoteText == NULL)
+    #     {
+    #         VirtualFreeEx(hProcess, pRemoteItem, 0, MEM_RELEASE);
+    #         CloseHandle(hProcess);
+    #         return FALSE;
+    #     }
+    #     
+    #     WriteProcessMemory(hProcess, pRemoteText, pszText, (SIZE_T)textLen, NULL);
+    #     
+    #     LVITEM lvItem = {0};
+    #     lvItem.mask = LVIF_TEXT | LVIF_IMAGE;
+    #     lvItem.iItem = index;
+    #     lvItem.iSubItem = 0;
+    #     lvItem.pszText = (LPTSTR)pRemoteText;
+    #     lvItem.iImage = imageIndex;
+    #     
+    #     WriteProcessMemory(hProcess, pRemoteItem, &lvItem, (SIZE_T)sizeof(LVITEM), NULL);
+    #     
+    #     int itemIndex = (int)SendMessage(hListView, LVM_INSERTITEM, 0, (LPARAM)pRemoteItem);
+    #     
+    #     VirtualFreeEx(hProcess, pRemoteText, 0, MEM_RELEASE);
+    #     VirtualFreeEx(hProcess, pRemoteItem, 0, MEM_RELEASE);
+    #     CloseHandle(hProcess);
+    #     
+    #     return itemIndex >= 0;
+    # }
+    #
+    # // 删除外部ListView表项
+    # BOOL DeleteItemFromExternalListView(HWND hListView, int itemIndex)
+    # {
+    #     return (BOOL)SendMessage(hListView, LVM_DELETEITEM, (WPARAM)itemIndex, 0);
+    # }
+    #
+    # // 删除外部ListView所有表项
+    # BOOL DeleteAllItemsFromExternalListView(HWND hListView)
+    # {
+    #     return (BOOL)SendMessage(hListView, LVM_DELETEALLITEMS, 0, 0);
+    # }
+    #
+    # // 删除外部ListView所有列
+    # BOOL DeleteAllColumnsFromExternalListView(HWND hListView)
+    # {
+    #     int columnCount = GetColumnCountExternal(hListView);
+    #     BOOL result = TRUE;
+    #     
+    #     for (int i = columnCount - 1; i >= 0; i--)
+    #     {
+    #         if (!DeleteColumnFromExternalListView(hListView, i))
+    #         {
+    #             result = FALSE;
+    #         }
+    #     }
+    #     
+    #     return result;
+    # }
+    #
+    # // 清空外部ListView（删除所有列和所有项目）
+    # BOOL ClearExternalListView(HWND hListView)
+    # {
+    #     DeleteAllItemsFromExternalListView(hListView);
+    #     return DeleteAllColumnsFromExternalListView(hListView);
+    # }
+    #
+    # // 设置外部ListView子项文本
+    # BOOL SetSubItemTextExternal(HWND hListView, int itemIndex, int subItemIndex, LPCTSTR pszText)
+    # {
+    #     DWORD dwProcessId;
+    #     GetWindowThreadProcessId(hListView, &dwProcessId);
+    #     
+    #     HANDLE hProcess = OpenProcess(PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE, FALSE, dwProcessId);
+    #     if (hProcess == NULL) return FALSE;
+    #     
+    #     size_t textLen = (_tcslen(pszText) + 1) * sizeof(TCHAR);
+    #     LPVOID pRemoteText = VirtualAllocEx(hProcess, NULL, textLen, MEM_COMMIT, PAGE_READWRITE);
+    #     if (pRemoteText == NULL)
+    #     {
+    #         CloseHandle(hProcess);
+    #         return FALSE;
+    #     }
+    #     
+    #     WriteProcessMemory(hProcess, pRemoteText, pszText, (SIZE_T)textLen, NULL);
+    #     
+    #     LVITEM lvItem = {0};
+    #     lvItem.mask = LVIF_TEXT;
+    #     lvItem.iItem = itemIndex;
+    #     lvItem.iSubItem = subItemIndex;
+    #     lvItem.pszText = (LPTSTR)pRemoteText;
+    #     
+    #     LPVOID pRemoteItem = VirtualAllocEx(hProcess, NULL, sizeof(LVITEM), MEM_COMMIT, PAGE_READWRITE);
+    #     if (pRemoteItem == NULL)
+    #     {
+    #         VirtualFreeEx(hProcess, pRemoteText, 0, MEM_RELEASE);
+    #         CloseHandle(hProcess);
+    #         return FALSE;
+    #     }
+    #     
+    #     WriteProcessMemory(hProcess, pRemoteItem, &lvItem, (SIZE_T)sizeof(LVITEM), NULL);
+    #     
+    #     BOOL result = (BOOL)SendMessage(hListView, LVM_SETITEM, 0, (LPARAM)pRemoteItem);
+    #     
+    #     VirtualFreeEx(hProcess, pRemoteItem, 0, MEM_RELEASE);
+    #     VirtualFreeEx(hProcess, pRemoteText, 0, MEM_RELEASE);
+    #     CloseHandle(hProcess);
+    #     
+    #     return result;
+    # }
+    #
+    # // 获取外部ListView表项数
+    # int GetItemCountExternal(HWND hListView)
+    # {
+    #     return (int)SendMessage(hListView, LVM_GETITEMCOUNT, 0, 0);
+    # }
+    #
+    # // 获取外部ListView子项文本
+    # BOOL GetSubItemTextExternal(HWND hListView, int itemIndex, int subItemIndex, LPTSTR pszText, int bufferSize)
+    # {
+    #     DWORD dwProcessId;
+    #     GetWindowThreadProcessId(hListView, &dwProcessId);
+    #     
+    #     HANDLE hProcess = OpenProcess(PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE, FALSE, dwProcessId);
+    #     if (hProcess == NULL) return FALSE;
+    #     
+    #     LPVOID pRemoteItem = VirtualAllocEx(hProcess, NULL, sizeof(LVITEM), MEM_COMMIT, PAGE_READWRITE);
+    #     if (pRemoteItem == NULL)
+    #     {
+    #         CloseHandle(hProcess);
+    #         return FALSE;
+    #     }
+    #     
+    #     LPVOID pRemoteText = VirtualAllocEx(hProcess, NULL, (SIZE_T)(bufferSize * sizeof(TCHAR)), MEM_COMMIT, PAGE_READWRITE);
+    #     if (pRemoteText == NULL)
+    #     {
+    #         VirtualFreeEx(hProcess, pRemoteItem, 0, MEM_RELEASE);
+    #         CloseHandle(hProcess);
+    #         return FALSE;
+    #     }
+    #     
+    #     LVITEM lvItem = {0};
+    #     lvItem.mask = LVIF_TEXT;
+    #     lvItem.iItem = itemIndex;
+    #     lvItem.iSubItem = subItemIndex;
+    #     lvItem.pszText = (LPTSTR)pRemoteText;
+    #     lvItem.cchTextMax = bufferSize;
+    #     
+    #     WriteProcessMemory(hProcess, pRemoteItem, &lvItem, (SIZE_T)sizeof(LVITEM), NULL);
+    #     
+    #     BOOL result = (BOOL)SendMessage(hListView, LVM_GETITEMTEXT, (WPARAM)itemIndex, (LPARAM)pRemoteItem);
+    #     
+    #     if (result)
+    #     {
+    #         ReadProcessMemory(hProcess, pRemoteText, pszText, (SIZE_T)(bufferSize * sizeof(TCHAR)), NULL);
+    #     }
+    #     
+    #     VirtualFreeEx(hProcess, pRemoteText, 0, MEM_RELEASE);
+    #     VirtualFreeEx(hProcess, pRemoteItem, 0, MEM_RELEASE);
+    #     CloseHandle(hProcess);
+    #     
+    #     return result;
+    # }
+    # @end
+
+    方法 取表项数 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 列表句柄 <类型 = 变整数>
+    {
+        @  return GetItemCountExternal((HWND)@<列表句柄>);
+    }
+
+    方法 取列数 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 列表句柄 <类型 = 变整数>
+    {
+        @  return GetColumnCountExternal((HWND)@<列表句柄>);
+    }
+
+    方法 置标题 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 列表句柄 <类型 = 变整数>
+    参数 行号 <类型 = 整数>
+    参数 列号 <类型 = 整数>
+    参数 标题 <类型 = 文本型>
+    {
+        @  return SetSubItemTextExternal((HWND)@<列表句柄>,@<行号>,@<列号>,@<标题>);
+    }
+
+    方法 取标题 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 列表句柄 <类型 = 变整数>
+    参数 行号 <类型 = 整数>
+    参数 列号 <类型 = 整数>
+    {
+        @ TCHAR szText[256];
+        @  GetSubItemTextExternal((HWND)@<列表句柄>,@<行号>,@<列号>,szText, 256);
+        @ return szText;
+    }
+
+    方法 取列标题 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 列表句柄 <类型 = 变整数>
+    参数 列号 <类型 = 整数>
+    {
+        @ TCHAR szText[256];
+        @  GetColumnHeaderTextExternal((HWND)@<列表句柄>,@<列号>,szText, 256);
+        @ return szText;
+    }
+
+    方法 置列标题 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 列表句柄 <类型 = 变整数>
+    参数 列号 <类型 = 整数>
+    参数 标题 <类型 = 文本型>
+    {
+        @ return SetColumnHeaderTextExternal((HWND)@<列表句柄>,@<列号>,@<标题>);
+    }
+
+    方法 取列宽 <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 列表句柄 <类型 = 变整数>
+    参数 列号 <类型 = 整数>
+    {
+        @ return GetColumnWidthExternal((HWND)@<列表句柄>,@<列号>);
+    }
+
+    方法 置列宽 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 列表句柄 <类型 = 变整数>
+    参数 列号 <类型 = 整数>
+    参数 列宽 <类型 = 整数>
+    {
+        @ return SetColumnWidthExternal((HWND)@<列表句柄>,@<列号>,@<列宽>);
+    }
+
+    方法 刷新列表 <公开 折叠 @禁止流程检查 = 真>
+    参数 列表句柄 <类型 = 变整数>
+    {
+        @ RedrawListViewExternal((HWND)@<列表句柄>);
+    }
+
+    方法 插入表项 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 列表句柄 <类型 = 变整数>
+    参数 插入位置 <类型 = 整数 注释 = "默认-1为插入到尾部" @默认值 = -1>
+    参数 标题 <类型 = 文本型 @默认值 = "">
+    {
+        @ int hs ;
+        @ hs=@<插入位置>;
+        @ if(@<插入位置>==-1) {
+        @ hs = GetItemCountExternal((HWND)@<列表句柄>);
+        @ }
+        @  return InsertItemIntoExternalListView((HWND)@<列表句柄>, hs, @<标题>);
+    }
+
+    方法 插入列 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 列表句柄 <类型 = 变整数>
+    参数 插入位置 <类型 = 整数 注释 = "默认-1为插入到尾部" @默认值 = -1>
+    参数 标题 <类型 = 文本型 @默认值 = "">
+    参数 列宽 <类型 = 整数 @默认值 = 50>
+    {
+        @ int ls ;
+        @ ls=@<插入位置>;
+        @ if(@<插入位置>==-1) {
+        @ ls = GetColumnCountExternal((HWND)@<列表句柄>);
+        @ }
+        @ return InsertColumnIntoExternalListView((HWND)@<列表句柄>, ls,@<标题>, @<列宽>);
+    }
+
+    方法 删除列 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 列表句柄 <类型 = 变整数>
+    参数 列号 <类型 = 整数>
+    {
+        @ return DeleteColumnFromExternalListView((HWND)@<列表句柄>, @<列号>);
+    }
+
+    方法 删除表项 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 列表句柄 <类型 = 变整数>
+    参数 行号 <类型 = 整数>
+    {
+        @ return DeleteItemFromExternalListView((HWND)@<列表句柄>, @<行号>);
+    }
+
+    方法 全部删除 <公开 类型 = 逻辑型 注释 = "删除所有行列" 折叠 @禁止流程检查 = 真>
+    参数 列表句柄 <类型 = 变整数>
+    {
+        @ return ClearExternalListView((HWND)@<列表句柄>);
+    }
+
+    方法 删除所有表项 <公开 类型 = 逻辑型 注释 = "只删除表项，保留表头" 折叠 @禁止流程检查 = 真>
+    参数 列表句柄 <类型 = 变整数>
+    {
+        @ return DeleteAllItemsFromExternalListView((HWND)@<列表句柄>);
+    }
+}

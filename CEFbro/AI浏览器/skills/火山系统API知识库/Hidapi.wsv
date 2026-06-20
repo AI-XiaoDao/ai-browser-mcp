@@ -1,0 +1,233 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.HidApi\"" @视窗.外部头文件 = "Hidapi\\HidapiTool.h" @视窗.外部库.win32 = "Hidapi\\HidapiToolx86.lib"
+        @视窗.附属文件.win32 = "Hidapi\\HidapiToolx86.dll" @视窗.外部库.x64 = "Hidapi\\HidapiToolx64.lib"
+        @视窗.附属文件.x64 = "Hidapi\\HidapiToolx64.dll">
+
+类 HID设备枚举类 <公开 @视窗.后缀文本 = "public IHidEnumEvent">
+{
+
+    # @begin
+    # <> <include>
+    #  virtual bool OnEnum(
+    #   char* path,     /** Platform-specific device path */
+    #   unsigned short vendor_id, /** Device Vendor ID */
+    #   unsigned short product_id, /** Device Product ID */
+    #   wchar_t* serial_number,  /** Serial Number */
+    #   unsigned short release_number, /** Device Release Number in binary-coded decimal,also known as Device Version Number */
+    #   wchar_t* manufacturer_string, /** Manufacturer String */
+    #   wchar_t* product_string,  /** Product string */
+    #   unsigned short usage_page,  /** Usage Page for this Device/Interface(Windows/Mac/hidraw only) */
+    #   unsigned short usage,   /** Usage for this Device/Interface(Windows/Mac/hidraw only) */
+    #   /** The USB interface which this logical device
+    #   represents.
+    #   * Valid on both Linux implementations in all cases.
+    #   * Valid on the Windows implementation only if the device contains more than one interface.
+    #   * Valid on the Mac implementation if and only if the device is a USB HID device. */
+    #   int interface_number
+    #  )
+    # {
+    #     return @<枚举回调>(CVolString(path),vendor_id,product_id,CVolString(serial_number),release_number,CVolString(manufacturer_string),CVolString(product_string),usage_page,usage,interface_number);
+    # }
+    # <> </include>
+    # @end
+
+    方法 枚举回调 <公开 定义事件 类型 = 整数>
+    参数 路径 <类型 = 文本型>
+    参数 vendor_id <类型 = 短整数>
+    参数 product_id <类型 = 短整数>
+    参数 序列号 <类型 = 文本型>
+    参数 发布序号 <类型 = 短整数>
+    参数 制造商 <类型 = 文本型>
+    参数 型号 <类型 = 文本型>
+    参数 使用页 <类型 = 短整数>
+    参数 使用号 <类型 = 短整数>
+    参数 接口号 <类型 = 整数>
+    {
+
+    }
+
+    方法 开始枚举 <公开 @嵌入式方法 = "">
+    {
+        @ HidapiTool_EnumUsb1(&@sn<this>)
+    }
+
+    #
+}
+
+类 HID设备初始化类 <公开 注释 = "再启动方法里面定义一个变量即可，这样就能初始化hid设备，后面才可以调用" 注释 = "hid设备操作类的各种方法">
+{
+    方法 类_初始化
+    {
+        @ HidapiTool_Init();
+    }
+
+    方法 类_清理
+    {
+        @ HidapiTool_UnInit();
+    }
+
+    #
+}
+
+类 HID设备操作类 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     HidapiTool_CopyConsturct(m_pData,objCopyFrom.m_pData);
+    # }
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void * pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ SetData( HidapiTool_new());
+    }
+
+    方法 类_清理
+    {
+        @ HidapiTool_delete(GetData());
+    }
+
+    #
+
+    方法 打开 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 vendor_id <类型 = 整数>
+    参数 product_id <类型 = 整数>
+    参数 序列号 <类型 = 文本型 @默认值 = "">
+    {
+        @ HidapiTool_Open(GetData(),@<vendor_id>,@<product_id>,@<序列号>)
+    }
+
+    方法 打开从路径 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 路径 <类型 = 文本型>
+    {
+        变量 path <类型 = 字节集类>
+        path = 文本到多字节 (路径)
+        @ return HidapiTool_OpenPath(GetData(),path.GetPtr());
+    }
+
+    方法 关闭 <公开 @嵌入式方法 = "">
+    {
+        @ HidapiTool_Close(@sn<this>.GetData())
+    }
+
+    方法 取错误信息 <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString(HidapiTool_GetErrorText(@sn<this>.GetData()))
+    }
+
+    方法 取制造商 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ const  wchar_t* pString =  HidapiTool_GetProductCompanyString(GetData());
+        @ CVolString str;
+        @ if(pString)
+        @  str = pString;
+        @ HidapiTool_FreeString(pString);
+        @ return str;
+    }
+
+    方法 取型号 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ const  wchar_t* pString =  HidapiTool_GetProductString(GetData());
+        @ CVolString str;
+        @ if(pString)
+        @  str = pString;
+        @ HidapiTool_FreeString(pString);
+        @ return str;
+
+    }
+
+    方法 取序列号 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ const  wchar_t* pString =  HidapiTool_GetSerialNumberString(GetData());
+        @ CVolString str;
+        @ if(pString)
+        @  str = pString;
+        @ HidapiTool_FreeString(pString);
+        @ return str;
+
+    }
+
+    方法 取索引文本 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数 @默认值 = 1>
+    {
+        @ const  wchar_t* pString =  HidapiTool_GetIndexedString(GetData(),@<索引>);
+        @ CVolString str;
+        @ if(pString)
+        @  str = pString;
+        @ HidapiTool_FreeString(pString);
+        @ return str;
+
+    }
+
+    方法 置读配置 <@嵌入式方法 = "">
+    参数 类型 <类型 = 整数 注释 = "//nType 可选值 1 2 3">
+    参数 值 <类型 = 整数 注释 = "//当nType == 1 (读取功能  同步 或者 异步)" 注释 = "//      nValue == 0 表示同步" 注释 = "//      nValue == 1 表示异步"
+            注释 = "//当nType == 2 （设置 读取超时）" 注释 = "//      nValue == -1     表示 一直等待" 注释 = "//      nValue == 其他值 表示 读取超时值"
+            注释 = "//当nType == 3 （取消 读取超时）">
+    {
+        @ HidapiTool_SetSetting(@sn<this>.GetData(),@<类型>,@<值>)
+    }
+
+    方法 置读异步 <公开 折叠>
+    参数 是否异步 <类型 = 逻辑型>
+    {
+        如果 (是否异步)
+        {
+            置读配置 (1, 1)
+        }
+        否则
+        {
+            置读配置 (1, 0)
+            置读配置 (3, 0)
+        }
+
+    }
+
+    方法 置读超时 <公开 折叠>
+    参数 置超时毫秒 <类型 = 整数>
+    {
+        置读配置 (1, 0)
+        置读配置 (2, 置超时毫秒)
+
+    }
+
+    方法 读取到指针 <公开 类型 = 整数 返回值注释 = "//-1 表示 错误 大于0 表示读取的字节数" @嵌入式方法 = "">
+    参数 读取类型 <类型 = 整数 注释 = "* nType 可选值 0 或者1" 注释 = "* 0 表示   hid_read 或者 hid_read_timeout"
+            注释 = "* 1 表示   hid_get_feature_report" @默认值 = 0>
+    参数 缓冲区指针 <类型 = 变整数>
+    参数 缓冲区大小 <类型 = 整数>
+    {
+        @ HidapiTool_Read(@sn<this>.GetData(),@<读取类型>,(unsigned char* )@<缓冲区指针>,@<缓冲区大小>)
+    }
+
+    方法 写入指针 <公开 类型 = 整数 返回值注释 = "-1 表示错误 其他值表示实际写入数" @嵌入式方法 = "">
+    参数 写入类型 <类型 = 整数 注释 = "* nType 可选值 0 或者1" 注释 = "* 0 表示   hid_write" 注释 = "* 1 表示   hid_send_feature_report" @默认值 = 0>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+        @ HidapiTool_Write(@sn<this>.GetData(),@<写入类型>,@<数据指针>,@<数据大小>)
+    }
+
+    方法 写入 <公开 类型 = 整数>
+    参数 写入类型 <类型 = 整数 注释 = "* nType 可选值 0 或者1" 注释 = "* 0 表示   hid_write" 注释 = "* 1 表示   hid_send_feature_report" @默认值 = 0>
+    参数 数据 <类型 = 字节集类>
+    {
+        返回 (写入指针 (写入类型, 取字节集指针 (数据), 取字节集长度 (数据)))
+    }
+
+    #
+}

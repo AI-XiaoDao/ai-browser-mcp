@@ -1,0 +1,111 @@
+doc_format_version = 1
+project_identifier = "wutao.vproject.pc.win.1"
+
+root_filter
+{
+    child_filter
+    {
+        filter1
+        {
+            child_filter
+            {
+                filter1
+                {
+                    collapsed = true
+                    files.num_files = 16
+                    group_file_name = "*plugins\\vprj_win\\classlib\\sys\\base\\base.vgrp"
+                    name = 视窗基本类
+                }
+
+                filter2
+                {
+                    collapsed = true
+                    files.num_files = 4
+                    group_file_name = "*plugins\\vprj_win\\classlib\\sys\\mfc_ui_base\\mfc_ui_base.vgrp"
+                    name = MFC界面基本类
+                }
+
+                filter3
+                {
+                    collapsed = true
+                    files.num_files = 8
+                    group_file_name = "*plugins\\vprj_win\\classlib\\sys\\FBrowser\\FBrowserSimple.vgrp"
+                    name = FBrowser浏览器
+                }
+
+                filter4
+                {
+                    collapsed = true
+                    files.num_files = 1
+                    group_file_name = "*plugins\\vprj_win\\classlib\\sys\\yyjson\\w_yyjson.vgrp"
+                    name = yyJSON
+                }
+
+                filter5
+                {
+                    collapsed = true
+                    files.num_files = 61
+                    group_file_name = "*plugins\\vprj_win\\classlib\\user\\yw\\yw.vgrp"
+                    name = 仰望模块
+                }
+
+                filter6
+                {
+                    collapsed = true
+                    files.num_files = 4
+                    group_file_name = "*plugins\\vprj_win\\classlib\\sys\\hp_socket\\w_hp_socket.vgrp"
+                    name = HPSocket网络通讯支持
+                }
+
+                filter7
+                {
+                    collapsed = true
+                    files.num_files = 1
+                    group_file_name = "*plugins\\vprj_win\\classlib\\sys\\mfc_control_ext1\\mfc_control_ext1.vgrp"
+                    name = MFC扩展界面支持类库1
+                }
+
+                filter8
+                {
+                    collapsed = true
+                    files.num_files = 1
+                    group_file_name = "*plugins\\vprj_win\\classlib\\sys\\mfc_ui_grid\\mfc_ui_grid.vgrp"
+                    name = MFC表格组件
+                }
+
+                filter9
+                {
+                    collapsed = true
+                    files.num_files = 1
+                    group_file_name = "*plugins\\vprj_win\\classlib\\sys\\sqlite3\\w_sqlite3.vgrp"
+                    name = SQLite数据库
+                }
+
+                num_child_filters = 9
+            }
+
+            name = 模块
+        }
+
+        num_child_filters = 1
+    }
+
+    files
+    {
+        file1.file_name = "src\\main.wsv"
+        file10.file_name = "src\\MCP_Server_System.wsv"
+        file11.file_name = "src\\MCP_Server_Workflow.wsv"
+        file2.file_name = "src\\MCP_Server.wsv"
+        file3.file_name = "src\\MCP_Stdio.wsv"
+        file4.file_name = "src\\MCP_BrowserEvents.wsv"
+        file5.file_name = "src\\MCP_Callbacks.wsv"
+        file6.file_name = "src\\MCP_Server_VIP.wsv"
+        file7.file_name = "src\\MCP_Server_HTTP.wsv"
+        file8.file_name = "src\\MCP_Server_Core.wsv"
+        file9.file_name = "src\\MCP_Server_Form.wsv"
+        num_files = 11
+    }
+
+    name = AI浏览器
+    type = project
+}

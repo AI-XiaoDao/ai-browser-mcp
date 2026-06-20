@@ -1,0 +1,264 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.基本 <注释 = "本包中的内容用作提供火山程序启动代码" @文档 = "category = \"启动\"">
+
+类 程序基础类 <公开 @别名 = "@an<CVolUserApp>" @禁止创建对象 = 真>
+
+类 程序类 <公开 基础类 = 程序基础类 注释 = "用户定义的启动类必须直接或间接以此类作为基础类" @全局类 = 真 @禁止创建对象 = 真>
+{
+    方法 取程序 <公开 静态 类型 = 启动类 注释 = "返回系统自动建立的全局唯一的用户启动类实例对象" @嵌入式方法 = "" @视窗.返回参考 = 真>
+    {
+        @ (@dt<启动类>&)g_objVolApp.GetVolApp ()
+    }
+
+    方法 取全局对象 <公开 静态 类型 = 对象类 注释 = "  获取指定类型对象类的唯一性全局实例." 注释 = "  如果该类型的全局对象尚不存在,则自动创建一个新对象并记录到系统数组中返回,否则直接"
+            注释 = "返回在系统数组中的已有全局类对象." 注释 = "  本方法支持在多线程环境中运行. 当用户程序退出时,系统将自动释放所有已有的全局对象." @嵌入式方法 = "" @视窗.返回参考 = 真>
+    参数 所欲获取对象类型 <类型 = 对象类 注释 = "提供所欲获取全局对象的类型" @需求类型 = 数据类型>
+    {
+        @ g_objVolApp.GetRefGlobalObject (VOL_RUNTIME_CLASS (@<所欲获取对象类型>))
+    }
+
+    方法 投递退出消息 <公开 静态 注释 = "  向Windows消息队列发送一个退出消息,通知其退出消息队列处理." 注释 = "  如果使用系统所提供的各种界面库,不需要调用本方法,否则在程序主窗口关闭的时候,"
+            注释 = "需要调用本方法退出消息队列处理,否则程序将不会结束." @嵌入式方法 = "">
+    参数 退出码 <类型 = 整数>
+    {
+        @ ::PostQuitMessage (@<退出码>)
+    }
+
+    方法 取用户程序名称 <公开 静态 类型 = 文本型 注释 = "返回在项目设置里面所设置的程序名称" @嵌入式方法 = "">
+    {
+        @ CVolConstString (_T_VOL_USER_APP_NAME)
+    }
+
+    方法 取用户程序版本号 <公开 静态 类型 = 小数 注释 = "返回在项目设置里面所设置的程序版本号" @嵌入式方法 = "">
+    {
+        @ _VOL_USER_APP_VERSION_NUMBER
+    }
+
+    方法 取用户程序次版本号 <公开 静态 类型 = 小数 注释 = "返回在项目设置里面所设置的程序次版本号" @嵌入式方法 = "">
+    {
+        @ _VOL_USER_APP_MINOR_VERSION_NUMBER
+    }
+
+    方法 取用户程序版本名 <公开 静态 类型 = 文本型 注释 = "返回在项目设置里面所设置的程序版本名称文本" @嵌入式方法 = "">
+    {
+        @ CVolConstString (_T_USER_APP_VERSION_NAME)
+    }
+
+    方法 取火山平台版本号 <公开 静态 类型 = 整数 注释 = "返回编译此程序时所使用的火山平台版本号" @嵌入式方法 = "">
+    {
+        @ _VOL_DEV_VERSION_NUMBER
+    }
+
+    # --
+    # @begin
+    #
+    # <> <include>
+    # virtual const CVolRuntimeClass** GetSpecialUserRuntimeClasses () const override;
+    # <> </include>
+    #
+    # const CVolRuntimeClass** @sn<current_class>::GetSpecialUserRuntimeClasses  () const
+    # {
+    #     static const CVolRuntimeClass* cs_aRuntimeClasses [] =
+    #     {
+    #         VOL_RUNTIME_CLASS (@dt<字节类>),
+    #         VOL_RUNTIME_CLASS (@dt<短整数类>),
+    #         VOL_RUNTIME_CLASS (@dt<字符类>),
+    #         VOL_RUNTIME_CLASS (@dt<整数类>),
+    #         VOL_RUNTIME_CLASS (@dt<变整数类>),
+    #         VOL_RUNTIME_CLASS (@dt<长整数类>),
+    #         VOL_RUNTIME_CLASS (@dt<单精度小数类>),
+    #         VOL_RUNTIME_CLASS (@dt<小数类>),
+    #         VOL_RUNTIME_CLASS (@dt<逻辑型类>)
+    #     };
+    #     COMPILE_TIME_ASSERT (SUCT_PKG_SBYTE == 0 && SUCT_PKG_SHORT == 1 && SUCT_PKG_WCHAR == 2 && SUCT_PKG_INT == 3 &&
+    #             SUCT_PKG_VINT == 4 && SUCT_PKG_LONG == 5 && SUCT_PKG_FLOAT == 6 && SUCT_PKG_DOUBLE == 7 && SUCT_PKG_BOOL == 8 && SUCT_PKG_BOOL + 1 == _NUM_SPEC_USER_CLASS_TYPES &&
+    #             _NUM_SPEC_USER_CLASS_TYPES == NUM_ELEMENTS_OF (cs_aRuntimeClasses));
+    #     return cs_aRuntimeClasses;
+    # }
+    # @end
+}
+
+# ===
+
+类 窗口程序类 <公开 基础类 = 程序类 注释 = "基于窗口的用户程序的启动类可以选择以此类作为基础类" @禁止创建对象 = 真>
+{
+    方法 消息过滤 <公开 类型 = 逻辑型 注释 = "用户的启动类可以覆盖此方法以过滤处理程序中所有窗口的消息" 返回值注释 = "返回真表示允许消息继续向后传递并处理,返回假表示取消掉该消息的后续处理." @虚拟方法 = 可覆盖>
+    参数 窗口句柄 <类型 = 变整数 注释 = "提供消息所对应的窗口句柄(HWND)">
+    参数 消息值 <类型 = 整数 注释 = "提供消息的具体值">
+    参数 消息参数1 <类型 = 变整数 注释 = "提供消息所附带的参数1的值">
+    参数 消息参数2 <类型 = 变整数 注释 = "提供消息所附带的参数2的值">
+    参数 消息地址 <类型 = 变整数 注释 = "提供消息的具体 MSG* 地址指针,用作备用.">
+    {
+        返回 (真)
+    }
+
+    方法 空闲 <公开 类型 = 逻辑型 注释 = "当系统正处于空闲状态时调用此方法,用户的启动类可以覆盖此方法以做一些后台处理工作."
+            返回值注释 = "返回假,在此次空闲期间系统将不再调用本方法(可以降低 CPU 占用率),返回真则将继续调用." @虚拟方法 = 可覆盖>
+    参数 已空闲时间 <类型 = 整数 注释 = "  提供自系统本次进入空闲状态后到现在所经过的空闲时间,单位为毫秒.用户程序在空闲状态" 注释 = "下所进行的大工作量操作最好等到此值较大时进行.">
+    {
+        返回 (假)
+    }
+
+    方法 即将退出 <公开 注释 = "用户的启动类可以覆盖此方法以在窗口程序退出前做一些清理工作" @虚拟方法 = 可覆盖>
+}
+
+# ---
+
+类 动态库程序类 <公开 基础类 = 程序类 注释 = "动态链接库用户程序的启动类可以选择以此类作为基础类" @禁止创建对象 = 真>
+{
+    方法 入口通知 <公开 类型 = 逻辑型 注释 = "动态库的 DllMain 入口函数通知" @虚拟方法 = 可覆盖>
+    参数 模块句柄 <类型 = 变整数 注释 = "动态库自身的模块句柄">
+    参数 调用原因 <类型 = 整数>
+    参数 保留指针 <类型 = 变整数>
+    {
+        返回 (真)
+    }
+
+    方法 将被卸载 <公开 注释 = "用户的启动类可以覆盖此方法以在动态链接库被卸载前做一些清理工作" @虚拟方法 = 可覆盖>
+
+    方法 _调试入口 <公开 静态 注释 = "当使用火山DLL默认调试启动程序直接调试DLL时,本方法将在DLL加载后被自动调用." @编译条件 = "_VOL_DEBUG" @视窗.输出 = 真
+            @输出名 = "_VolDllDebugEntry">
+    {
+        @ #if @n<启动类._调试入口方法, b>  // 用户程序中定义了"启动类._调试入口方法"?
+        @     ((@sn<startup_class>&)g_objVolApp.GetVolApp ()).@n<启动类._调试入口方法, e> ();  // 调用该方法以进行功能测试
+        @ #else
+        调试输出 ("提示: 未找到欲调用的\"启动类._调试入口方法\". 可以使用\"编辑->插入->插入特定内容\"菜单功能,插入其中的\"方法->_调试入口方法\"到动态链接库程序的\"启动类\"中,然后将调试用代码放置进去. 调试启动后,此方法将被自动调用以进行相关功能测试,在编译项目发布版本时,此方法会被自动忽略.")
+        @ #endif
+    }
+}
+
+# ===
+#
+# @begin
+# <> <global>  // 将下面内容置入全局命名空间中
+#
+# <> <include>
+# int gCallStartupMethod ();
+# CVolRuntimeClass* gGetStartupRuntimeClass ();
+# <> </include>
+#
+# CVolRuntimeClass* gGetStartupRuntimeClass ()
+# {
+#     return VOL_RUNTIME_CLASS (@sn<startup_class>);
+# }
+#
+# int gCallStartupMethod ()  // 调用用户启动类中的启动方法
+# {
+#     if (IsDebuggerPresent () == FALSE)  // 不处于被调试状态?
+#     {
+#         try
+#         {
+#             return ((@sn<startup_class>&)g_objVolApp.GetVolApp ()).@sn<startup_method> ();  // 调用用户程序启动类的启动方法
+#         }
+#         catch (CVolException& e)
+#         {
+#             CVolString str;
+#             str.Format (_T ("俘获到异常,代码值为: %d, 描述为: %s"), e.m_nCode, e.m_strDesc.GetText ());
+#             ::MessageBox (NULL, str.GetText (), _T ("运行时异常"), (MB_OK | MB_ICONERROR));
+#         }
+#         catch (...)
+#         {
+#             ::MessageBox (NULL, _T ("程序在运行时抛出了未被管理的异常"), _T ("运行时异常"), (MB_OK | MB_ICONERROR));
+#         }
+#     
+#         exit (-1);
+#         return 0;
+#     }
+#     else
+#     {
+#         // 调试时依靠调试器来定位并报告异常
+#         return ((@sn<startup_class>&)g_objVolApp.GetVolApp ()).@sn<startup_method> ();  // 调用用户程序启动类的启动方法
+#     }
+# }
+#
+# #ifndef _VOL_DISABLE_STANDARD_STARTUP  // 标准启动代码未被禁止?
+#
+# #if (defined (_CONSOLE) || defined (@an<_VOL_CONSOLE_EXE>))  // 控制台应用程序
+#
+# int _tmain (int argc, _TCHAR* argv [])
+# {
+#     setlocale (LC_CTYPE, "");
+#     g_objVolApp.init (GetModuleHandle (NULL), argc, (const TCHAR**)argv, gGetStartupRuntimeClass ());  // 初始化程序信息
+#     const int nResult = gCallStartupMethod ();  // 调用用户程序启动类中的启动方法
+#     g_objVolApp.OnBeforeExit ();
+#     return nResult;
+# }
+#
+# #elif (defined (_USRDLL) || defined (@an<_VOL_DLL>))  // 动态链接库
+#
+# BOOL APIENTRY DllMain (HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
+# {
+#     if  (ul_reason_for_call == DLL_PROCESS_ATTACH)
+#     {
+#         g_objVolApp.init (hModule, 0, NULL, gGetStartupRuntimeClass ());  // 初始化程序信息
+#         if (gCallStartupMethod () == 0)  // 调用用户程序启动类的启动方法失败?
+#             return FALSE;
+#     }
+#
+#     CVolUserApp& objUserApp = g_objVolApp.GetVolApp ();
+#     const BOOL_P blpIsDllApp = IS_VOL_INSTANCE_OF (objUserApp, @fdt<动态库程序类>);  // 获得是否为基于火山动态库程序类
+#     const BOOL blResult = (blpIsDllApp ? ((@fdt<动态库程序类>&)objUserApp).@n<动态库程序类.入口通知> ((INT_P)hModule, (INT)ul_reason_for_call, (INT_P)lpReserved) : TRUE);
+#
+#     if (ul_reason_for_call == DLL_PROCESS_DETACH)
+#     {
+#         if (blpIsDllApp)  // 基于火山动态库程序类?
+#             ((@fdt<动态库程序类>&)objUserApp).@n<动态库程序类.将被卸载> ();  // 通知用户程序
+#         g_objVolApp.OnBeforeExit ();
+#     }
+#
+#     return blResult;
+# }
+#
+# #else  // 应用程序
+#
+# int APIENTRY _tWinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
+# {
+#     // 初始化程序信息
+#     g_objVolApp.init (hInstance, __argc, (const TCHAR**)__targv, gGetStartupRuntimeClass ());
+#
+#     // 调用用户程序启动类的启动方法
+#     if (gCallStartupMethod () == 0)  // 启动方法返回失败0值?
+#     {
+#         g_objVolApp.OnBeforeExit ();
+#         return -1;
+#     }
+#
+#     if (IsCurrentProcessHasTopWindow (NULL))  // 存在顶层窗口?
+#     {
+#         // 检查用户程序的启动类实例对象是否为基于火山窗口程序类
+#         @fdt<窗口程序类>* pobjWinApp;
+#         if (IS_VOL_INSTANCE_OF (g_objVolApp.GetVolApp (), @fdt<窗口程序类>))  // 基于火山窗口程序类?
+#             pobjWinApp = (@fdt<窗口程序类>*)&g_objVolApp.GetVolApp ();
+#         else
+#             pobjWinApp = NULL;
+#
+#         // 主消息循环
+#         MSG msg;
+#         while (GetMessage (&msg, NULL, 0, 0))
+#         {
+#             if (pobjWinApp == NULL ||  // 不为基于火山窗口程序类?
+#                     pobjWinApp->@n<窗口程序类.消息过滤> ((INT_P)msg.hwnd, (INT)msg.message,
+#                         (INT_P)msg.wParam, (INT_P)msg.lParam, (INT_P)&msg))  // 未被消息过滤方法过滤掉?
+#             {
+#                 if (CVolAppInstance::sVolPreFilterInputMessage (&msg) == FALSE)  // 过滤处理输入信息
+#                 {
+#                     TranslateMessage (&msg);
+#                     DispatchMessage (&msg);
+#                 }
+#             }
+#         }
+#
+#         if (pobjWinApp != NULL)  // 为基于火山窗口程序类?
+#             pobjWinApp->@n<窗口程序类.即将退出> ();  // 通知用户程序
+#     }
+#
+#     g_objVolApp.OnBeforeExit ();
+#     return 0;
+# }
+#
+# #endif
+# #endif
+#
+# <> </global>
+# @end

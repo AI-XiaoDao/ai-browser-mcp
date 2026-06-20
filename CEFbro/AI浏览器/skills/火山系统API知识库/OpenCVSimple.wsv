@@ -1,0 +1,1112 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <编辑时信息 = "246FDB, 0, 0, 0" @文档 = "category = \"开源库.OpenCV\"" "" "" @视窗.外部头文件 = "OpenCVSimple\\OpenCVTool.h"
+        @视窗.外部库.win32 = "OpenCVSimple\\OpenCVSimplex86.lib" @视窗.附属文件.win32 = "OpenCVSimple\\OpenCVSimplex86.dll" "" ""
+        @视窗.外部库.x64 = "OpenCVSimple\\OpenCVSimplex64.lib" @视窗.附属文件.x64 = "OpenCVSimple\\OpenCVSimplex64.dll" "" "" "">
+
+类 视频设备类型常量类 <公开 注释 = "       CAP_ANY          = 0,            //!< Auto detect == 0"
+        注释 = "       CAP_VFW          = 200,          //!< Video For Windows (obsolete, removed)"
+        注释 = "       CAP_V4L          = 200,          //!< V4L/V4L2 capturing support"
+        注释 = "       CAP_V4L2         = CAP_V4L,      //!< Same as CAP_V4L"
+        注释 = "       CAP_FIREWIRE     = 300,          //!< IEEE 1394 drivers"
+        注释 = "       CAP_FIREWARE     = CAP_FIREWIRE, //!< Same value as CAP_FIREWIRE"
+        注释 = "       CAP_IEEE1394     = CAP_FIREWIRE, //!< Same value as CAP_FIREWIRE"
+        注释 = "       CAP_DC1394       = CAP_FIREWIRE, //!< Same value as CAP_FIREWIRE"
+        注释 = "       CAP_CMU1394      = CAP_FIREWIRE, //!< Same value as CAP_FIREWIRE"
+        注释 = "       CAP_QT           = 500,          //!< QuickTime (obsolete, removed)"
+        注释 = "       CAP_UNICAP       = 600,          //!< Unicap drivers (obsolete, removed)"
+        注释 = "       CAP_DSHOW        = 700,          //!< DirectShow (via videoInput)"
+        注释 = "       CAP_PVAPI        = 800,          //!< PvAPI, Prosilica GigE SDK"
+        注释 = "       CAP_OPENNI       = 900,          //!< OpenNI (for Kinect)"
+        注释 = "       CAP_OPENNI_ASUS  = 910,          //!< OpenNI (for Asus Xtion)"
+        注释 = "       CAP_ANDROID      = 1000,         //!< Android - not used"
+        注释 = "       CAP_XIAPI        = 1100,         //!< XIMEA Camera API"
+        注释 = "       CAP_AVFOUNDATION = 1200,         //!< AVFoundation framework for iOS (OS X Lion will have the same API)"
+        注释 = "       CAP_GIGANETIX    = 1300,         //!< Smartek Giganetix GigEVisionSDK"
+        注释 = "       CAP_MSMF         = 1400,         //!< Microsoft Media Foundation (via videoInput)"
+        注释 = "       CAP_WINRT        = 1410,         //!< Microsoft Windows Runtime using Media Foundation"
+        注释 = "       CAP_INTELPERC    = 1500,         //!< RealSense (former Intel Perceptual Computing SDK)"
+        注释 = "       CAP_REALSENSE    = 1500,         //!< Synonym for CAP_INTELPERC"
+        注释 = "       CAP_OPENNI2      = 1600,         //!< OpenNI2 (for Kinect)"
+        注释 = "       CAP_OPENNI2_ASUS = 1610,         //!< OpenNI2 (for Asus Xtion and Occipital Structure sensors)"
+        注释 = "       CAP_GPHOTO2      = 1700,         //!< gPhoto2 connection"
+        注释 = "       CAP_GSTREAMER    = 1800,         //!< GStreamer"
+        注释 = "       CAP_FFMPEG       = 1900,         //!< Open and record video file or stream using the FFMPEG library"
+        注释 = "       CAP_IMAGES       = 2000,         //!< OpenCV Image Sequence (e.g. img_%02d.jpg)"
+        注释 = "       CAP_ARAVIS       = 2100,         //!< Aravis SDK"
+        注释 = "       CAP_OPENCV_MJPEG = 2200,         //!< Built-in OpenCV MotionJPEG codec"
+        注释 = "       CAP_INTEL_MFX    = 2300,         //!< Intel MediaSDK"
+        注释 = "       CAP_XINE         = 2400,         //!< XINE engine (Linux)" 折叠2 @常量类 = 整数>
+{
+    常量 任意设备 <公开 值 = 0 注释 = "">
+
+    #
+}
+
+类 视频操作类 <公开 折叠>
+{
+
+    #
+    # @begin
+    # <> <include>
+    # public:
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ m_pData = cv_VideoCapture_Create();
+    }
+
+    方法 类_清理
+    {
+        @ cv_VideoCapture_Destory(m_pData);
+    }
+
+    方法 关闭 <公开 @嵌入式方法 = "">
+    {
+        @ cv_VideoCapture_Close(@sn<this>.m_pData)
+    }
+
+    方法 打开视频 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 视频地址 <类型 = 文本型 注释 = "可以是一个视频，或者是一个网络视频地址" 注释 = "protocol: //host:port/script_name?script_params|auth">
+    参数 设备类型 <类型 = 视频设备类型常量类 @默认值 = 视频设备类型常量类.任意设备>
+    {
+        变量 地址 <类型 = 字节集类>
+        地址 = 文本到多字节 (视频地址)
+        @ return cv_VideoCapture_OpenFromUrl(m_pData,(const char*)@<地址>.GetPtr(),@<设备类型>);
+    }
+
+    方法 打开摄像头 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 摄像头索引 <类型 = 整数>
+    参数 设备类型 <类型 = 视频设备类型常量类 @默认值 = 视频设备类型常量类.任意设备>
+    {
+        @ cv_VideoCapture_OpenFromCamera(@sn<this>.m_pData,@<摄像头索引>,@<设备类型>)
+    }
+
+    方法 是否已打开 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ cv_VideoCapture_IsOpen(@sn<this>.m_pData)
+    }
+
+    方法 取下一帧 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 当前帧图片 <类型 = 图片操作类>
+    {
+        @ cv_VideoCapture_read(@sn<this>.m_pData,@<当前帧图片>.m_pData)
+    }
+
+    方法 ""
+    {
+        // enum VideoCaptureProperties {
+        // CAP_PROP_POS_MSEC       =0, //!< Current position of the video file in milliseconds.
+        // CAP_PROP_POS_FRAMES     =1, //!< 0-based index of the frame to be decoded/captured next.
+        // CAP_PROP_POS_AVI_RATIO  =2, //!< Relative position of the video file: 0=start of the film, 1=end of the film.
+        // CAP_PROP_FRAME_WIDTH    =3, //!< Width of the frames in the video stream.
+        // CAP_PROP_FRAME_HEIGHT   =4, //!< Height of the frames in the video stream.
+        // CAP_PROP_FPS            =5, //!< Frame rate.
+        // CAP_PROP_FOURCC         =6, //!< 4-character code of codec. see VideoWriter::fourcc .
+        // CAP_PROP_FRAME_COUNT    =7, //!< Number of frames in the video file.
+        // CAP_PROP_FORMAT         =8, //!< Format of the %Mat objects (see Mat::type()) returned by VideoCapture::retrieve().
+        // //!< Set value -1 to fetch undecoded RAW video streams (as Mat 8UC1).
+        // CAP_PROP_MODE           =9, //!< Backend-specific value indicating the current capture mode.
+        // CAP_PROP_BRIGHTNESS    =10, //!< Brightness of the image (only for those cameras that support).
+        // CAP_PROP_CONTRAST      =11, //!< Contrast of the image (only for cameras).
+        // CAP_PROP_SATURATION    =12, //!< Saturation of the image (only for cameras).
+        // CAP_PROP_HUE           =13, //!< Hue of the image (only for cameras).
+        // CAP_PROP_GAIN          =14, //!< Gain of the image (only for those cameras that support).
+        // CAP_PROP_EXPOSURE      =15, //!< Exposure (only for those cameras that support).
+        // CAP_PROP_CONVERT_RGB   =16, //!< Boolean flags indicating whether images should be converted to RGB. <br/>
+        // //!< *GStreamer note*: The flag is ignored in case if custom pipeline is used. It's user responsibility to interpret pipeline output.
+        // CAP_PROP_WHITE_BALANCE_BLUE_U =17, //!< Currently unsupported.
+        // CAP_PROP_RECTIFICATION =18, //!< Rectification flag for stereo cameras (note: only supported by DC1394 v 2.x backend currently).
+        // CAP_PROP_MONOCHROME    =19,
+        // CAP_PROP_SHARPNESS     =20,
+        // CAP_PROP_AUTO_EXPOSURE =21, //!< DC1394: exposure control done by camera, user can adjust reference level using this feature.
+        // CAP_PROP_GAMMA         =22,
+        // CAP_PROP_TEMPERATURE   =23,
+        // CAP_PROP_TRIGGER       =24,
+        // CAP_PROP_TRIGGER_DELAY =25,
+        // CAP_PROP_WHITE_BALANCE_RED_V =26,
+        // CAP_PROP_ZOOM          =27,
+        // CAP_PROP_FOCUS         =28,
+        // CAP_PROP_GUID          =29,
+        // CAP_PROP_ISO_SPEED     =30,
+        // CAP_PROP_BACKLIGHT     =32,
+        // CAP_PROP_PAN           =33,
+        // CAP_PROP_TILT          =34,
+        // CAP_PROP_ROLL          =35,
+        // CAP_PROP_IRIS          =36,
+        // CAP_PROP_SETTINGS      =37, //!< Pop up video/camera filter dialog (note: only supported by DSHOW backend currently. The property value is ignored)
+        // CAP_PROP_BUFFERSIZE    =38,
+        // CAP_PROP_AUTOFOCUS     =39,
+        // CAP_PROP_SAR_NUM       =40, //!< Sample aspect ratio: num/den (num)
+        // CAP_PROP_SAR_DEN       =41, //!< Sample aspect ratio: num/den (den)
+        // CAP_PROP_BACKEND       =42, //!< Current backend (enum VideoCaptureAPIs). Read-only property
+        // CAP_PROP_CHANNEL       =43, //!< Video input or Channel Number (only for those cameras that support)
+        // CAP_PROP_AUTO_WB       =44, //!< enable/ disable auto white-balance
+        // CAP_PROP_WB_TEMPERATURE=45, //!< white-balance color temperature
+        // CAP_PROP_CODEC_PIXEL_FORMAT =46,    //!< (read-only) codec's pixel format. 4-character code - see VideoWriter::fourcc . Subset of [AV_PIX_FMT_*](https://github.com/FFmpeg/FFmpeg/blob/master/libavcodec/raw.c) or -1 if unknown
+        // CAP_PROP_BITRATE       =47, //!< (read-only) Video bitrate in kbits/s
+        // #ifndef CV_DOXYGEN
+        // CV__CAP_PROP_LATEST
+        // #endif
+        // };
+    }
+
+    #
+    #
+
+    方法 当前帧时间戳 <公开 属性读 类型 = 整数 注释 = "视频当前点的毫秒值或视频捕捉的时间戳" @嵌入式方法 = "">
+    {
+        @ cv_VideoCapture_Get(@sn<this>.m_pData,0)        //CAP_PROP_POS_MSEC       =0, //!< Current position of the video file in milliseconds.
+    }
+
+    方法 总帧数 <公开 属性读 类型 = 整数 注释 = "下次将被捕获的0基索引的帧" @嵌入式方法 = "">
+    {
+        @ cv_VideoCapture_Get(@sn<this>.m_pData,7)  //       CAP_PROP_FRAME_COUNT    =7, //!< Number of frames in the video file.
+    }
+
+    方法 帧率 <公开 属性读 类型 = 小数 @嵌入式方法 = "">
+    {
+        @ cv_VideoCapture_Get(@sn<this>.m_pData,5) // CAP_PROP_FPS            =5, //!< Frame rate.
+    }
+
+    方法 宽度 <公开 属性读 类型 = 整数 注释 = "视频流帧的宽度" @嵌入式方法 = "">
+    {
+        @ cv_VideoCapture_Get(@sn<this>.m_pData,3)   //CAP_PROP_FRAME_WIDTH    =3, //!< Width of the frames in the video stream.
+    }
+
+    方法 高度 <公开 属性读 类型 = 整数 注释 = "视频流帧的高." @嵌入式方法 = "">
+    {
+        @ cv_VideoCapture_Get(@sn<this>.m_pData,4) //CAP_PROP_FRAME_HEIGHT   =4, //!< Height of the frames in the video stream.
+    }
+
+    方法 亮度 <公开 属性读 类型 = 整数 注释 = "只对摄像头" @嵌入式方法 = "">
+    {
+        @ cv_VideoCapture_Get(@sn<this>.m_pData,10)  //CAP_PROP_BRIGHTNESS    =10, //!< Brightness of the image (only for those cameras that support).
+    }
+
+    方法 对比度 <公开 属性读 类型 = 整数 注释 = "只对摄像头" @嵌入式方法 = "">
+    {
+        @ cv_VideoCapture_Get(@sn<this>.m_pData,11)  // CAP_PROP_CONTRAST      =11, //!< Contrast of the image (only for cameras).
+    }
+
+    方法 饱和度 <公开 属性读 类型 = 整数 注释 = "只对摄像头" @嵌入式方法 = "">
+    {
+        @ cv_VideoCapture_Get(@sn<this>.m_pData,12);  //CAP_PROP_SATURATION    =12, //!< Saturation of the image (only for cameras).
+    }
+
+    方法 色调 <公开 属性读 类型 = 整数 注释 = "只对摄像头" @嵌入式方法 = "">
+    {
+        @ cv_VideoCapture_Get(@sn<this>.m_pData,13)  //CAP_PROP_HUE           =13, //!< Hue of the image (only for cameras).
+    }
+
+    方法 增益 <公开 属性读 类型 = 整数 注释 = "只对摄像头" @嵌入式方法 = "">
+    {
+        @ cv_VideoCapture_Get(@sn<this>.m_pData,14)  //CAP_PROP_GAIN          =14, //!< Gain of the image (only for those cameras that support).
+    }
+
+    方法 曝光 <公开 属性读 类型 = 整数 注释 = "只对摄像头" @嵌入式方法 = "">
+    {
+        @ cv_VideoCapture_Get(@sn<this>.m_pData,15)  //CAP_PROP_EXPOSURE      =15, //!< Exposure (only for those cameras that support).
+    }
+
+    #
+}
+
+类 视频保存类 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # public:
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 类_初始化 <折叠>
+    {
+        @ m_pData = cv_VideoWriter_Create();
+    }
+
+    方法 类_清理 <折叠>
+    {
+        @ cv_VideoWriter_Destory(m_pData);
+    }
+
+    方法 是否已经打开 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ cv_VideoWriter_IsOpen(@sn<this>.m_pData)
+    }
+
+    方法 打开 <公开 类型 = 逻辑型 注释 = "注意，首先要装解码器的，如何判断系统中已经安装解码器 https://jingyan.baidu.com/article/27fa7326e7108907f9271f18.html"
+            注释 = "一般得到的文件为空，一般都是解码器出问题了，一般用微软自带的 DIVX 编码器" @禁止流程检查 = 真>
+    参数 欲保存的文件路径 <类型 = 文本型 注释 = "例如  c:\\\\aa.mp4">
+    参数 视频类型 <类型 = 文本型 注释 = "X264 DIVX 只能四个字符。。。等等" @默认值 = "DIVX">
+    参数 帧率 <类型 = 小数 @默认值 = 15>
+    参数 视频宽度 <类型 = 整数>
+    参数 视频高度 <类型 = 整数>
+    参数 是否彩色 <类型 = 逻辑型 注释 = "如果为真表示是彩色的，否则就是灰色的" @默认值 = 真>
+    {
+        变量 临时文件路径 <类型 = 字节集类>
+        变量 文件路径指针 <类型 = 变整数>
+        临时文件路径 = 文本到多字节 (欲保存的文件路径)
+        文件路径指针 = 临时文件路径.取字节集指针 ()
+        变量 临时视频类型 <类型 = 字节集类>
+        变量 视频类型长度 <类型 = 整数>
+        变量 视频类型指针 <类型 = 变整数>
+        变量 类型字节1 <类型 = 字节>
+        变量 类型字节2 <类型 = 字节>
+        变量 类型字节3 <类型 = 字节>
+        变量 类型字节4 <类型 = 字节>
+        变量 ""
+        @ int fourcc = -1;
+        如果 (视频类型 != "" || 取文本长度 (视频类型) == 4)
+        {
+
+            临时视频类型 = 文本到多字节 (视频类型)
+            视频类型长度 = 取文本长度 (视频类型)
+            视频类型指针 = 临时视频类型.取字节集指针 ()
+
+            如果 (视频类型长度 >= 1)
+            {
+                类型字节1 = 临时视频类型.取字节集数据 (0, 字节)
+            }
+            如果 (视频类型长度 >= 2)
+            {
+                类型字节2 = 临时视频类型.取字节集数据 (1, 字节)
+            }
+            如果 (视频类型长度 >= 3)
+            {
+                类型字节3 = 临时视频类型.取字节集数据 (2, 字节)
+            }
+            如果 (视频类型长度 >= 4)
+            {
+                类型字节4 = 临时视频类型.取字节集数据 (3, 字节)
+
+            }
+            @  fourcc = cv_VideoWriter_fourcc(@<类型字节1>,@<类型字节2>,@<类型字节3>,@<类型字节4>);
+
+        }
+        @ return cv_VideoWriter_Open (m_pData,(const char*)@<文件路径指针>,fourcc,@<帧率>,@<视频宽度>,@<视频高度>,@<是否彩色>);
+
+
+    }
+
+    方法 写入图片 <公开 注释 = "如果得到的视频文件出错，那么请 把图片转换成BGR模式，只支持三通道，不支持BGRA四通道" @嵌入式方法 = "">
+    参数 图片 <类型 = 图片操作类>
+    {
+        @ cv_VideoWriter_write(@sn<this>.m_pData, @<图片>.m_pData)
+    }
+
+    方法 关闭 <公开 @嵌入式方法 = "">
+    {
+        @ cv_VideoWriter_Close(@sn<this>.m_pData)
+    }
+
+    #
+}
+
+类 图片操作类 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # virtual void GetDumpString (CVolString& strDump, INT nMaxDumpSize)
+    # {
+    #     void* pText = FImage_ToString((void*)GetData());
+    #     if(pText)
+    #     {
+    #          strDump = (const char*)pText;
+    #          FImage_FreeString(pText);
+    #      }else
+    #     {
+    #         strDump = _T("图片操作类 内容为空");
+    #     }
+    # }
+    #
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     FImage_RefConstruct(m_pData,objCopyFrom.m_pData);
+    # }
+    # public:
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化 <公开>
+    {
+        @ m_pData = FImage_New();
+    }
+
+    方法 类_清理 <公开>
+    {
+        @ FImage_Delete (m_pData);
+    }
+
+    方法 取像素数据指针 <公开 类型 = 变整数 @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>)FImage_GetRawPixPoint((void*)@sn<this>.GetData())
+    }
+
+    方法 取像素数据 <公开 类型 = 字节集类>
+    {
+        返回 (指针到字节集 (取像素数据指针 (), 宽度 * 高度 * 通道数))
+
+    }
+
+    方法 取感性区 <公开 @嵌入式方法 = "">
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    参数 宽度 <类型 = 整数>
+    参数 高度 <类型 = 整数>
+    参数 感性区域 <类型 = 图片操作类 注释 = "用来保存感性区域">
+    {
+        @ FImage_GetRoi((void*)@sn<this>.GetData(),@<横坐标>,@<纵坐标>,@<宽度>,@<高度>,(void*)@<感性区域>.GetData())
+    }
+
+    方法 到文本 <公开 类型 = 文本型 注释 = "将图片格式化成  [ 255 255 255 ] 这样格式的文本">
+    {
+        变量 返回值 <类型 = 文本型>
+        @ void* pText = FImage_ToString((void*)GetData());
+        @ if(pText)
+        @ {
+        @     @<返回值> = (const char*)pText;
+        @     FImage_FreeString(pText);
+        @ }
+        返回 (返回值)
+    }
+
+    方法 从文件载入 <公开 类型 = 逻辑型 编辑时信息 = "44FFB, 0, 0, 0" @禁止流程检查 = 真>
+    参数 文件路径 <类型 = 文本型 编辑时信息 = "44FFB, 0, 0, 0">
+    参数 读入方式 <类型 = 整数
+            注释 = "       IMREAD_UNCHANGED            = -1, //!< If set, return the loaded image as is (with alpha channel, otherwise it gets cropped). Ignore EXIF orientation."
+            注释 = "       IMREAD_GRAYSCALE            = 0,  //!< If set, always convert image to the single channel grayscale image (codec internal conversion)."
+            注释 = "       IMREAD_COLOR                = 1,  //!< If set, always convert image to the 3 channel BGR color image."
+            注释 = "       IMREAD_ANYDEPTH             = 2,  //!< If set, return 16-bit/32-bit image when the input has the corresponding depth, otherwise convert it to 8-bit."
+            注释 = "       IMREAD_ANYCOLOR             = 4,  //!< If set, the image is read in any possible color format."
+            注释 = "       IMREAD_LOAD_GDAL            = 8,  //!< If set, use the gdal driver for loading the image."
+            注释 = "       IMREAD_REDUCED_GRAYSCALE_2  = 16, //!< If set, always convert image to the single channel grayscale image and the image size reduced 1/2."
+            注释 = "       IMREAD_REDUCED_COLOR_2      = 17, //!< If set, always convert image to the 3 channel BGR color image and the image size reduced 1/2."
+            注释 = "       IMREAD_REDUCED_GRAYSCALE_4  = 32, //!< If set, always convert image to the single channel grayscale image and the image size reduced 1/4."
+            注释 = "       IMREAD_REDUCED_COLOR_4      = 33, //!< If set, always convert image to the 3 channel BGR color image and the image size reduced 1/4."
+            注释 = "       IMREAD_REDUCED_GRAYSCALE_8  = 64, //!< If set, always convert image to the single channel grayscale image and the image size reduced 1/8."
+            注释 = "       IMREAD_REDUCED_COLOR_8      = 65, //!< If set, always convert image to the 3 channel BGR color image and the image size reduced 1/8."
+            注释 = "       IMREAD_IGNORE_ORIENTATION   = 128 //!< If set, do not rotate the image according to EXIF\'s orientation flag."
+            编辑时信息 = "44FFB, 0, 0, 0" @默认值 = 1>
+    {
+        变量 bin <类型 = 字节集类>
+        bin = 文本到多字节 (文件路径)
+        @ return FImage_LoadFile((void*)GetData() ,(const char*)@<bin>.GetPtr(),@<读入方式>);
+    }
+
+    方法 到文件 <公开 类型 = 逻辑型 注释 = "保存到文件" @禁止流程检查 = 真>
+    参数 文件路径 <类型 = 文本型>
+    {
+        变量 bin <类型 = 字节集类>
+        bin = 文本到多字节 (文件路径)
+        @ return FImage_SaveToFile((void*)GetData(),(const char*)@<bin>.GetPtr());
+
+    }
+
+    方法 到文件Ex <公开 类型 = 逻辑型 注释 = "保存到文件" @禁止流程检查 = 真>
+    参数 文件路径 <类型 = 文本型>
+    参数 类型 <类型 = 整数
+            注释 = "       IMWRITE_JPEG_QUALITY        = 1,  //!< For JPEG, it can be a quality from 0 to 100 (the higher is the better). Default value is 95."
+            注释 = "       IMWRITE_JPEG_PROGRESSIVE    = 2,  //!< Enable JPEG features, 0 or 1, default is False."
+            注释 = "       IMWRITE_JPEG_OPTIMIZE       = 3,  //!< Enable JPEG features, 0 or 1, default is False."
+            注释 = "       IMWRITE_JPEG_RST_INTERVAL   = 4,  //!< JPEG restart interval, 0 - 65535, default is 0 - no restart."
+            注释 = "       IMWRITE_JPEG_LUMA_QUALITY   = 5,  //!< Separate luma quality level, 0 - 100, default is 0 - don\'t use."
+            注释 = "       IMWRITE_JPEG_CHROMA_QUALITY = 6,  //!< Separate chroma quality level, 0 - 100, default is 0 - don\'t use."
+            注释 = "       IMWRITE_PNG_COMPRESSION     = 16, //!< For PNG, it can be the compression level from 0 to 9. A higher value means a smaller size and longer compression time. If specified, strategy is changed to IMWRITE_PNG_STRATEGY_DEFAULT (Z_DEFAULT_STRATEGY). Default value is 1 (best speed setting)."
+            注释 = "       IMWRITE_PNG_STRATEGY        = 17, //!< One of cv::ImwritePNGFlags, default is IMWRITE_PNG_STRATEGY_RLE."
+            注释 = "       IMWRITE_PNG_BILEVEL         = 18, //!< Binary level PNG, 0 or 1, default is 0."
+            注释 = "       IMWRITE_PXM_BINARY          = 32, //!< For PPM, PGM, or PBM, it can be a binary format flag, 0 or 1. Default value is 1."
+            注释 = "       IMWRITE_EXR_TYPE            = (3 << 4) + 0, /* 48 */ //!< override EXR storage type (FLOAT (FP32) is default)"
+            注释 = "       IMWRITE_WEBP_QUALITY        = 64, //!< For WEBP, it can be a quality from 1 to 100 (the higher is the better). By default (without any parameter) and for quality above 100 the lossless compression is used."
+            注释 = "       IMWRITE_PAM_TUPLETYPE       = 128,//!< For PAM, sets the TUPLETYPE field to the corresponding string value that is defined for the format"
+            注释 = "       IMWRITE_TIFF_RESUNIT = 256,//!< For TIFF, use to specify which DPI resolution unit to set; see libtiff documentation for valid values"
+            注释 = "       IMWRITE_TIFF_XDPI = 257,//!< For TIFF, use to specify the X direction DPI"
+            注释 = "       IMWRITE_TIFF_YDPI = 258, //!< For TIFF, use to specify the Y direction DPI"
+            注释 = "       IMWRITE_TIFF_COMPRESSION = 259, //!< For TIFF, use to specify the image compression scheme. See libtiff for integer constants corresponding to compression formats. Note, for images whose depth is CV_32F, only libtiff\'s SGILOG compression scheme is used. For other supported depths, the compression scheme can be specified by this flag; LZW compression is the default."
+            注释 = "       IMWRITE_JPEG2000_COMPRESSION_X1000 = 272 //!< For JPEG2000, use to specify the target compression rate (multiplied by 1000). The value can be from 0 to 1000. Default is 1000."
+            "">
+    参数 参数2 <类型 = 整数>
+    {
+        变量 bin <类型 = 字节集类>
+        bin = 文本到多字节 (文件路径)
+        @ return cv_imwriteEx((void*)GetData(),(const char*)@<bin>.GetPtr(),@<类型>,@<参数2>);
+
+    }
+
+    方法 到字节集 <公开 类型 = 字节集类>
+    参数 文件格式 <类型 = 文本型 注释 = ".png  .jpg">
+    {
+        变量 后缀 <类型 = 字节集类>
+        后缀 = 文本到多字节 (文件格式)
+        @ void * pBuffer = NULL;
+        @ __int64 nBufferLen = 0;
+        调试输出 ("00000")
+        @ bool bOk = FImage_SaveToBuffer((void*)GetData(),(const char*)@<后缀>.GetPtr(),&pBuffer,&nBufferLen);
+        @ if(bOk)
+        @ {
+        调试输出 ("11111")
+
+        @     CVolMem mem(pBuffer,nBufferLen);
+        调试输出 ("2222")
+        @     FImage_FreeBuffer(pBuffer);
+        @     return mem;
+        @ }
+        变量 空字节集 <类型 = 字节集类>
+        返回 (空字节集)
+    }
+
+    方法 到字节集扩展 <公开 类型 = 字节集类>
+    参数 文件格式 <类型 = 文本型 注释 = ".png  .jpg">
+    参数 类型 <类型 = 整数
+            注释 = "       IMWRITE_JPEG_QUALITY        = 1,  //!< For JPEG, it can be a quality from 0 to 100 (the higher is the better). Default value is 95."
+            注释 = "       IMWRITE_JPEG_PROGRESSIVE    = 2,  //!< Enable JPEG features, 0 or 1, default is False."
+            注释 = "       IMWRITE_JPEG_OPTIMIZE       = 3,  //!< Enable JPEG features, 0 or 1, default is False."
+            注释 = "       IMWRITE_JPEG_RST_INTERVAL   = 4,  //!< JPEG restart interval, 0 - 65535, default is 0 - no restart."
+            注释 = "       IMWRITE_JPEG_LUMA_QUALITY   = 5,  //!< Separate luma quality level, 0 - 100, default is 0 - don\'t use."
+            注释 = "       IMWRITE_JPEG_CHROMA_QUALITY = 6,  //!< Separate chroma quality level, 0 - 100, default is 0 - don\'t use."
+            注释 = "       IMWRITE_PNG_COMPRESSION     = 16, //!< For PNG, it can be the compression level from 0 to 9. A higher value means a smaller size and longer compression time. If specified, strategy is changed to IMWRITE_PNG_STRATEGY_DEFAULT (Z_DEFAULT_STRATEGY). Default value is 1 (best speed setting)."
+            注释 = "       IMWRITE_PNG_STRATEGY        = 17, //!< One of cv::ImwritePNGFlags, default is IMWRITE_PNG_STRATEGY_RLE."
+            注释 = "       IMWRITE_PNG_BILEVEL         = 18, //!< Binary level PNG, 0 or 1, default is 0."
+            注释 = "       IMWRITE_PXM_BINARY          = 32, //!< For PPM, PGM, or PBM, it can be a binary format flag, 0 or 1. Default value is 1."
+            注释 = "       IMWRITE_EXR_TYPE            = (3 << 4) + 0, /* 48 */ //!< override EXR storage type (FLOAT (FP32) is default)"
+            注释 = "       IMWRITE_WEBP_QUALITY        = 64, //!< For WEBP, it can be a quality from 1 to 100 (the higher is the better). By default (without any parameter) and for quality above 100 the lossless compression is used."
+            注释 = "       IMWRITE_PAM_TUPLETYPE       = 128,//!< For PAM, sets the TUPLETYPE field to the corresponding string value that is defined for the format"
+            注释 = "       IMWRITE_TIFF_RESUNIT = 256,//!< For TIFF, use to specify which DPI resolution unit to set; see libtiff documentation for valid values"
+            注释 = "       IMWRITE_TIFF_XDPI = 257,//!< For TIFF, use to specify the X direction DPI"
+            注释 = "       IMWRITE_TIFF_YDPI = 258, //!< For TIFF, use to specify the Y direction DPI"
+            注释 = "       IMWRITE_TIFF_COMPRESSION = 259, //!< For TIFF, use to specify the image compression scheme. See libtiff for integer constants corresponding to compression formats. Note, for images whose depth is CV_32F, only libtiff\'s SGILOG compression scheme is used. For other supported depths, the compression scheme can be specified by this flag; LZW compression is the default."
+            注释 = "       IMWRITE_JPEG2000_COMPRESSION_X1000 = 272 //!< For JPEG2000, use to specify the target compression rate (multiplied by 1000). The value can be from 0 to 1000. Default is 1000.">
+    参数 参数2 <类型 = 整数 注释 = "质量。。。">
+    {
+        变量 后缀 <类型 = 字节集类>
+        后缀 = 文本到多字节 (文件格式)
+        @ void * pBuffer = NULL;
+        @ __int64 nBufferLen = 0;
+        @ bool bOk = FImage_SaveToBufferEx((void*)GetData(),(const char*)@<后缀>.GetPtr(),&pBuffer,&nBufferLen,@<类型>,@<参数2>);
+        @ if(bOk)
+        @ {
+        @     CVolMem mem(pBuffer,nBufferLen);
+        @     FImage_FreeBuffer(pBuffer);
+        @     return mem;
+        @ }
+        变量 空字节集 <类型 = 字节集类>
+        返回 (空字节集)
+
+
+    }
+
+    方法 到JPG <公开 类型 = 字节集类>
+    参数 质量 <类型 = 整数 注释 = "1 - 100" @默认值 = 95>
+    {
+        返回 (到字节集扩展 (".jpg", 1, 质量))
+    }
+
+    方法 到PNG <公开 类型 = 字节集类>
+    参数 质量 <类型 = 整数 注释 = "0-9 数字越大，图片越小" @默认值 = 9>
+    {
+        返回 (到字节集扩展 (".png", 16, 质量))
+    }
+
+    方法 到WEBP <公开 类型 = 字节集类>
+    参数 质量 <类型 = 整数 注释 = "0-100 数字越大，图片质量越好" @默认值 = 95>
+    {
+        返回 (到字节集扩展 (".webp", 64, 质量))
+    }
+
+    方法 从指针载入 <公开 类型 = 逻辑型 注释 = "从内存图片的指针载入" @嵌入式方法 = "">
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    参数 读入模式 <类型 = 整数
+            注释 = "       IMREAD_UNCHANGED            = -1, //!< If set, return the loaded image as is (with alpha channel, otherwise it gets cropped). Ignore EXIF orientation."
+            注释 = "       IMREAD_GRAYSCALE            = 0,  //!< If set, always convert image to the single channel grayscale image (codec internal conversion)."
+            注释 = "       IMREAD_COLOR                = 1,  //!< If set, always convert image to the 3 channel BGR color image."
+            注释 = "       IMREAD_ANYDEPTH             = 2,  //!< If set, return 16-bit/32-bit image when the input has the corresponding depth, otherwise convert it to 8-bit."
+            注释 = "       IMREAD_ANYCOLOR             = 4,  //!< If set, the image is read in any possible color format."
+            注释 = "       IMREAD_LOAD_GDAL            = 8,  //!< If set, use the gdal driver for loading the image."
+            注释 = "       IMREAD_REDUCED_GRAYSCALE_2  = 16, //!< If set, always convert image to the single channel grayscale image and the image size reduced 1/2."
+            注释 = "       IMREAD_REDUCED_COLOR_2      = 17, //!< If set, always convert image to the 3 channel BGR color image and the image size reduced 1/2."
+            注释 = "       IMREAD_REDUCED_GRAYSCALE_4  = 32, //!< If set, always convert image to the single channel grayscale image and the image size reduced 1/4."
+            注释 = "       IMREAD_REDUCED_COLOR_4      = 33, //!< If set, always convert image to the 3 channel BGR color image and the image size reduced 1/4."
+            注释 = "       IMREAD_REDUCED_GRAYSCALE_8  = 64, //!< If set, always convert image to the single channel grayscale image and the image size reduced 1/8."
+            注释 = "       IMREAD_REDUCED_COLOR_8      = 65, //!< If set, always convert image to the 3 channel BGR color image and the image size reduced 1/8."
+            注释 = "       IMREAD_IGNORE_ORIENTATION   = 128 //!< If set, do not rotate the image according to EXIF\'s orientation flag."
+            @默认值 = 1>
+    {
+        @ FImage_LoadFromBuffer((void*)@sn<this>.GetData(),(void *)@<数据指针>, @<数据大小>,@<读入模式>)
+    }
+
+    方法 从字节集载入 <公开 类型 = 逻辑型>
+    参数 字节集 <类型 = 字节集类>
+    参数 图片读入模式常量 <类型 = 整数
+            注释 = "       IMREAD_UNCHANGED            = -1, //!< If set, return the loaded image as is (with alpha channel, otherwise it gets cropped). Ignore EXIF orientation."
+            注释 = "       IMREAD_GRAYSCALE            = 0,  //!< If set, always convert image to the single channel grayscale image (codec internal conversion)."
+            注释 = "       IMREAD_COLOR                = 1,  //!< If set, always convert image to the 3 channel BGR color image."
+            注释 = "       IMREAD_ANYDEPTH             = 2,  //!< If set, return 16-bit/32-bit image when the input has the corresponding depth, otherwise convert it to 8-bit."
+            注释 = "       IMREAD_ANYCOLOR             = 4,  //!< If set, the image is read in any possible color format."
+            注释 = "       IMREAD_LOAD_GDAL            = 8,  //!< If set, use the gdal driver for loading the image."
+            注释 = "       IMREAD_REDUCED_GRAYSCALE_2  = 16, //!< If set, always convert image to the single channel grayscale image and the image size reduced 1/2."
+            注释 = "       IMREAD_REDUCED_COLOR_2      = 17, //!< If set, always convert image to the 3 channel BGR color image and the image size reduced 1/2."
+            注释 = "       IMREAD_REDUCED_GRAYSCALE_4  = 32, //!< If set, always convert image to the single channel grayscale image and the image size reduced 1/4."
+            注释 = "       IMREAD_REDUCED_COLOR_4      = 33, //!< If set, always convert image to the 3 channel BGR color image and the image size reduced 1/4."
+            注释 = "       IMREAD_REDUCED_GRAYSCALE_8  = 64, //!< If set, always convert image to the single channel grayscale image and the image size reduced 1/8."
+            注释 = "       IMREAD_REDUCED_COLOR_8      = 65, //!< If set, always convert image to the 3 channel BGR color image and the image size reduced 1/8."
+            注释 = "       IMREAD_IGNORE_ORIENTATION   = 128 //!< If set, do not rotate the image according to EXIF\'s orientation flag."
+            @默认值 = 1>
+    {
+        返回 (从指针载入 (字节集.取字节集指针 (), 字节集.取字节集长度 ()))
+
+    }
+
+    方法 从像素数据载入 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 像素数据 <类型 = 字节集类>
+    参数 宽度 <类型 = 整数>
+    参数 高度 <类型 = 整数>
+    参数 通道数 <类型 = 整数 注释 = "最后一个参数 可选值 CV_8UC1 0  CV_8UC2 8  CV_8UC3 16 CV_8UC4 24" @默认值 = 3>
+    {
+        变量 数据指针 <类型 = 变整数>
+        数据指针 = 像素数据.取字节集指针 ()
+        // 最后一个参数 可选值 CV_8UC1 0  CV_8UC2 8  CV_8UC3 16 CV_8UC4 24
+        @ return FImage_LoadFromRawPix((void*)GetData(), (void*)@<数据指针>,@<宽度>, @<高度>, @<通道数>, (@<通道数> - 1)*8 );
+
+    }
+
+    方法 从像素字节数组载入 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 行数 <类型 = 整数>
+    参数 列数 <类型 = 整数>
+    参数 图片类型 <类型 = 整数 注释 = "默认  CV_8UC3 八位三通道  一个通道占用一个字节(八位)" 注释 = "CV_8UC1 0" 注释 = "CV_8UC2 8" 注释 = "CV_8UC3 16"
+            注释 = "CV_8UC4 24">
+    参数 行字节数 <类型 = 整数 注释 = "如果不足，那么就补齐,一般可以不用填写，自动计算" @默认值 = 0>
+    参数 像素数据 <@匹配类型 = 通用数值型数组>
+    {
+        // bool FUCTIONTYPE FImage_LoadFromPix2DArray(void* pMat, int rows, int cols, int type, void* data, size_t step = 0);
+        @ FImage_LoadFromPix2DArray(@sn<this>.GetData(),@<行数>,@<列数>,@<图片类型>,(void*)@<像素数据>,@<行字节数>)
+
+    }
+
+    方法 从像素数据指针载入 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 像素数据指针 <类型 = 变整数>
+    参数 宽度 <类型 = 整数>
+    参数 高度 <类型 = 整数>
+    参数 通道数 <类型 = 整数 @默认值 = 3>
+    {
+        @ return FImage_LoadFromRawPix((void*)GetData(), (void*)@<像素数据指针>,@<宽度>, @<高度>, @<通道数>, (@<通道数> - 1)*8 );
+    }
+
+    方法 创建 <公开 注释 = "调用此函数之后，才会有像素数据，否则是空图片的" @嵌入式方法 = "">
+    参数 宽度 <类型 = 整数>
+    参数 高度 <类型 = 整数>
+    参数 图片类型 <类型 = 整数 注释 = "默认  CV_8UC3 八位三通道  一个通道占用一个字节(八位)" 注释 = "CV_8UC1 0" 注释 = "CV_8UC2 8" 注释 = "CV_8UC3 16"
+            注释 = "CV_8UC4 24" @默认值 = 16>
+    {
+        @ FImage_Create((void*)@sn<this>.GetData(),@<宽度>,@<高度>,@<图片类型>);
+
+    }
+
+    方法 填充零 <公开 @嵌入式方法 = "">
+    参数 宽度 <类型 = 整数>
+    参数 高度 <类型 = 整数>
+    参数 图片类型 <类型 = 整数 注释 = "#define CV_8U   0" 注释 = "#define CV_8S   1" 注释 = "#define CV_16U  2" 注释 = "#define CV_16S  3"
+            注释 = "#define CV_32S  4" 注释 = "#define CV_32F  5" 注释 = "#define CV_64F  6" 注释 = "#define CV_16F  7">
+    {
+        @ FImage_zeros(@sn<this>.GetData(),@<宽度>,@<高度>,@<图片类型>)
+    }
+
+    方法 填充一 <公开 折叠 @嵌入式方法 = "">
+    参数 宽度 <类型 = 整数>
+    参数 高度 <类型 = 整数>
+    参数 图片类型 <类型 = 整数 注释 = "#define CV_8U   0" 注释 = "#define CV_8S   1" 注释 = "#define CV_16U  2" 注释 = "#define CV_16S  3"
+            注释 = "#define CV_32S  4" 注释 = "#define CV_32F  5" 注释 = "#define CV_64F  6" 注释 = "#define CV_16F  7">
+    {
+        @ FImage_ones(@sn<this>.GetData(),@<宽度>,@<高度>,@<图片类型>)
+    }
+
+    方法 宽度 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ FImage_GetCols((void*)@sn<this>.GetData())
+    }
+
+    方法 高度 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ FImage_GetRows((void*)@sn<this>.GetData())
+
+    }
+
+    方法 是否为空 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ FImage_IsEmpty((void*)@sn<this>.GetData())
+    }
+
+    方法 通道数 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ FImage_GetChannels((void*)@sn<this>.GetData())
+    }
+
+    方法 行字节数 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ FImage_GetStep((void*)@sn<this>.GetData())
+    }
+
+    方法 创建窗口 <公开 @嵌入式方法 = "">
+    参数 窗口名称 <类型 = 文本型>
+    参数 窗口类型 <类型 = 整数 注释 = "0 表示常规" 注释 = "1 表示自动大小 此时不能设置窗口大小" @默认值 = 0>
+    {
+        @ FImage_namedWindow(GetMbsText(@<窗口名称>, CVolMem(), NULL),@<窗口类型>)
+    }
+
+    方法 置窗口大小 <公开 @嵌入式方法 = "">
+    参数 窗口名称 <类型 = 文本型>
+    参数 宽度 <类型 = 整数>
+    参数 高度 <类型 = 整数>
+    {
+        @ FImage_resizeWindow(GetMbsText(@<窗口名称>, CVolMem(), NULL),@<宽度>,@<高度>)
+    }
+
+    方法 显示 <公开 @嵌入式方法 = "">
+    参数 窗口名称 <类型 = 文本型 @默认值 = "图片">
+    {
+        @ FImage_Show((void*)@sn<this>.GetData(),GetMbsText(@<窗口名称>, CVolMem(), NULL))
+    }
+
+    方法 等待按键 <公开 类型 = 整数 返回值注释 = "返回 键代码  也就是按键代码值" @嵌入式方法 = "">
+    参数 等待时间 <类型 = 整数 @默认值 = 1>
+    {
+        @ FImage_WaitKey(@<等待时间>)
+    }
+
+    方法 赋值 <公开 注释 = "将图片2赋值给本图片类 实现的功能是 Mat = Mat" @嵌入式方法 = "">
+    参数 图片2 <类型 = 图片操作类>
+    {
+        @ FImage_assignment((void*)@sn<this>.GetData(),@<图片2>.GetData())
+    }
+
+    方法 克隆 <公开 @嵌入式方法 = "">
+    参数 新图片 <类型 = 图片操作类>
+    {
+        @ FImage_Clone((void*)@sn<this>.GetData(),@<新图片>.GetData())
+    }
+
+    方法 图片类型 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ FImage_GetType((void*)@sn<this>.GetData())
+    }
+
+    方法 算数运算 <公开 注释 = "两个图片算数运算 加减乘除" 注释 = "例如 图片1 [1,0,0]" 注释 = "     参与运算的图片 [2,0,0]" 注释 = "图片1 + 参与运算的图片 等于 [3,0,0]"
+            @嵌入式方法 = "">
+    参数 参与运算的图片 <类型 = 图片操作类>
+    参数 运算方式 <类型 = 整数 注释 = "//nOperate 运算类型 可选值 1 2 3 4" 注释 = "//1 == +" 注释 = "//2 == -" 注释 = "//3 == *" 注释 = "//4 == /">
+    参数 运算后的图片 <类型 = 图片操作类>
+    {
+        @ FImage_ArithmeticOperation((void*)@sn<this>.GetData(),@<参与运算的图片>.GetData(),@<运算方式>,@<运算后的图片>.GetData())
+    }
+
+    方法 像素运算 <公开 注释 = "像素运算" @嵌入式方法 = "">
+    参数 参与运算的数值 <类型 = 小数>
+    参数 运算方式 <类型 = 整数 注释 = "//nOperate 运算类型 可选值 1 2 3 4" 注释 = "//1 == +" 注释 = "//2 == -" 注释 = "//3 == *" 注释 = "//4 == /">
+    参数 运算后的图片 <类型 = 图片操作类>
+    {
+        @ FImage_PixelOperation((void*)@sn<this>.GetData(),@<参与运算的数值>,@<运算方式>,@<运算后的图片>.GetData())
+    }
+
+    方法 位运算 <公开 @嵌入式方法 = "">
+    参数 参与运算的图片 <类型 = 图片操作类 注释 = "当运算方式为 位取反的时候，这个参数是不需要的，可以填空对象">
+    参数 运算方式 <类型 = 整数 注释 = "//位运算" 注释 = "// 1 位与" 注释 = "// 2 位或" 注释 = "// 3 异或" 注释 = "// 4 位取反">
+    参数 运算后的图片 <类型 = 图片操作类>
+    {
+        @ FImage_BitOperation((void*)@sn<this>.GetData(),@<参与运算的图片>.GetData(),@<运算方式>,@<运算后的图片>.GetData())
+    }
+
+    方法 颜色模型转换 <公开 注释 = "针对图像不同颜色模型的相互转换" 注释 = "比如可以从 rgb 或者 bgr 转换为灰度图 等等" 折叠2 @嵌入式方法 = "">
+    参数 处理后的图片 <类型 = 图片操作类>
+    参数 转换方式 <类型 = 整数 注释 = "    COLOR_BGR2BGRA     = 0, //!< add alpha channel to RGB or BGR image"
+            注释 = "    COLOR_RGB2RGBA     = COLOR_BGR2BGRA," 注释 = ""
+            注释 = "    COLOR_BGRA2BGR     = 1, //!< remove alpha channel from RGB or BGR image"
+            注释 = "    COLOR_RGBA2RGB     = COLOR_BGRA2BGR," 注释 = ""
+            注释 = "    COLOR_BGR2RGBA     = 2, //!< convert between RGB and BGR color spaces (with or without alpha channel)"
+            注释 = "    COLOR_RGB2BGRA     = COLOR_BGR2RGBA," 注释 = "" 注释 = "    COLOR_RGBA2BGR     = 3,"
+            注释 = "    COLOR_BGRA2RGB     = COLOR_RGBA2BGR," 注释 = "" 注释 = "    COLOR_BGR2RGB      = 4,"
+            注释 = "    COLOR_RGB2BGR      = COLOR_BGR2RGB," 注释 = "" 注释 = "    COLOR_BGRA2RGBA    = 5,"
+            注释 = "    COLOR_RGBA2BGRA    = COLOR_BGRA2RGBA," 注释 = ""
+            注释 = "    COLOR_BGR2GRAY     = 6, //!< convert between RGB/BGR and grayscale, @ref color_convert_rgb_gray \"color conversions\""
+            注释 = "    COLOR_RGB2GRAY     = 7," 注释 = "    COLOR_GRAY2BGR     = 8," 注释 = "    COLOR_GRAY2RGB     = COLOR_GRAY2BGR,"
+            注释 = "    COLOR_GRAY2BGRA    = 9," 注释 = "    COLOR_GRAY2RGBA    = COLOR_GRAY2BGRA," 注释 = "    COLOR_BGRA2GRAY    = 10,"
+            注释 = "    COLOR_RGBA2GRAY    = 11," 注释 = ""
+            注释 = "    COLOR_BGR2BGR565   = 12, //!< convert between RGB/BGR and BGR565 (16-bit images)"
+            注释 = "    COLOR_RGB2BGR565   = 13," 注释 = "    COLOR_BGR5652BGR   = 14," 注释 = "    COLOR_BGR5652RGB   = 15,"
+            注释 = "    COLOR_BGRA2BGR565  = 16," 注释 = "    COLOR_RGBA2BGR565  = 17," 注释 = "    COLOR_BGR5652BGRA  = 18,"
+            注释 = "    COLOR_BGR5652RGBA  = 19," 注释 = ""
+            注释 = "    COLOR_GRAY2BGR565  = 20, //!< convert between grayscale to BGR565 (16-bit images)"
+            注释 = "    COLOR_BGR5652GRAY  = 21," 注释 = ""
+            注释 = "    COLOR_BGR2BGR555   = 22,  //!< convert between RGB/BGR and BGR555 (16-bit images)"
+            注释 = "    COLOR_RGB2BGR555   = 23," 注释 = "    COLOR_BGR5552BGR   = 24," 注释 = "    COLOR_BGR5552RGB   = 25,"
+            注释 = "    COLOR_BGRA2BGR555  = 26," 注释 = "    COLOR_RGBA2BGR555  = 27," 注释 = "    COLOR_BGR5552BGRA  = 28,"
+            注释 = "    COLOR_BGR5552RGBA  = 29," 注释 = ""
+            注释 = "    COLOR_GRAY2BGR555  = 30, //!< convert between grayscale and BGR555 (16-bit images)"
+            注释 = "    COLOR_BGR5552GRAY  = 31," 注释 = ""
+            注释 = "    COLOR_BGR2XYZ      = 32, //!< convert RGB/BGR to CIE XYZ, @ref color_convert_rgb_xyz \"color conversions\""
+            注释 = "    COLOR_RGB2XYZ      = 33," 注释 = "    COLOR_XYZ2BGR      = 34," 注释 = "    COLOR_XYZ2RGB      = 35," 注释 = ""
+            注释 = "    COLOR_BGR2YCrCb    = 36, //!< convert RGB/BGR to luma-chroma (aka YCC), @ref color_convert_rgb_ycrcb \"color conversions\""
+            注释 = "    COLOR_RGB2YCrCb    = 37," 注释 = "    COLOR_YCrCb2BGR    = 38," 注释 = "    COLOR_YCrCb2RGB    = 39," 注释 = ""
+            注释 = "    COLOR_BGR2HSV      = 40, //!< convert RGB/BGR to HSV (hue saturation value), @ref color_convert_rgb_hsv \"color conversions\""
+            注释 = "    COLOR_RGB2HSV      = 41," 注释 = ""
+            注释 = "    COLOR_BGR2Lab      = 44, //!< convert RGB/BGR to CIE Lab, @ref color_convert_rgb_lab \"color conversions\""
+            注释 = "    COLOR_RGB2Lab      = 45," 注释 = ""
+            注释 = "    COLOR_BGR2Luv      = 50, //!< convert RGB/BGR to CIE Luv, @ref color_convert_rgb_luv \"color conversions\""
+            注释 = "    COLOR_RGB2Luv      = 51,"
+            注释 = "    COLOR_BGR2HLS      = 52, //!< convert RGB/BGR to HLS (hue lightness saturation), @ref color_convert_rgb_hls \"color conversions\""
+            注释 = "    COLOR_RGB2HLS      = 53," 注释 = "" 注释 = "    COLOR_HSV2BGR      = 54, //!< backward conversions to RGB/BGR"
+            注释 = "    COLOR_HSV2RGB      = 55," 注释 = "" 注释 = "    COLOR_Lab2BGR      = 56," 注释 = "    COLOR_Lab2RGB      = 57,"
+            注释 = "    COLOR_Luv2BGR      = 58," 注释 = "    COLOR_Luv2RGB      = 59," 注释 = "    COLOR_HLS2BGR      = 60,"
+            注释 = "    COLOR_HLS2RGB      = 61," 注释 = "" 注释 = "    COLOR_BGR2HSV_FULL = 66," 注释 = "    COLOR_RGB2HSV_FULL = 67,"
+            注释 = "    COLOR_BGR2HLS_FULL = 68," 注释 = "    COLOR_RGB2HLS_FULL = 69," 注释 = "" 注释 = "    COLOR_HSV2BGR_FULL = 70,"
+            注释 = "    COLOR_HSV2RGB_FULL = 71," 注释 = "    COLOR_HLS2BGR_FULL = 72," 注释 = "    COLOR_HLS2RGB_FULL = 73," 注释 = ""
+            注释 = "    COLOR_LBGR2Lab     = 74," 注释 = "    COLOR_LRGB2Lab     = 75," 注释 = "    COLOR_LBGR2Luv     = 76,"
+            注释 = "    COLOR_LRGB2Luv     = 77," 注释 = "" 注释 = "    COLOR_Lab2LBGR     = 78," 注释 = "    COLOR_Lab2LRGB     = 79,"
+            注释 = "    COLOR_Luv2LBGR     = 80," 注释 = "    COLOR_Luv2LRGB     = 81," 注释 = ""
+            注释 = "    COLOR_BGR2YUV      = 82, //!< convert between RGB/BGR and YUV" 注释 = "    COLOR_RGB2YUV      = 83,"
+            注释 = "    COLOR_YUV2BGR      = 84," 注释 = "    COLOR_YUV2RGB      = 85," 注释 = "" 注释 = "    //! YUV 4:2:0 family to RGB"
+            注释 = "    COLOR_YUV2RGB_NV12  = 90," 注释 = "    COLOR_YUV2BGR_NV12  = 91," 注释 = "    COLOR_YUV2RGB_NV21  = 92,"
+            注释 = "    COLOR_YUV2BGR_NV21  = 93," 注释 = "    COLOR_YUV420sp2RGB  = COLOR_YUV2RGB_NV21,"
+            注释 = "    COLOR_YUV420sp2BGR  = COLOR_YUV2BGR_NV21," 注释 = "" 注释 = "    COLOR_YUV2RGBA_NV12 = 94,"
+            注释 = "    COLOR_YUV2BGRA_NV12 = 95," 注释 = "    COLOR_YUV2RGBA_NV21 = 96," 注释 = "    COLOR_YUV2BGRA_NV21 = 97,"
+            注释 = "    COLOR_YUV420sp2RGBA = COLOR_YUV2RGBA_NV21," 注释 = "    COLOR_YUV420sp2BGRA = COLOR_YUV2BGRA_NV21," 注释 = ""
+            注释 = "    COLOR_YUV2RGB_YV12  = 98," 注释 = "    COLOR_YUV2BGR_YV12  = 99," 注释 = "    COLOR_YUV2RGB_IYUV  = 100,"
+            注释 = "    COLOR_YUV2BGR_IYUV  = 101," 注释 = "    COLOR_YUV2RGB_I420  = COLOR_YUV2RGB_IYUV,"
+            注释 = "    COLOR_YUV2BGR_I420  = COLOR_YUV2BGR_IYUV," 注释 = "    COLOR_YUV420p2RGB   = COLOR_YUV2RGB_YV12,"
+            注释 = "    COLOR_YUV420p2BGR   = COLOR_YUV2BGR_YV12," 注释 = "" 注释 = "    COLOR_YUV2RGBA_YV12 = 102,"
+            注释 = "    COLOR_YUV2BGRA_YV12 = 103," 注释 = "    COLOR_YUV2RGBA_IYUV = 104," 注释 = "    COLOR_YUV2BGRA_IYUV = 105,"
+            注释 = "    COLOR_YUV2RGBA_I420 = COLOR_YUV2RGBA_IYUV," 注释 = "    COLOR_YUV2BGRA_I420 = COLOR_YUV2BGRA_IYUV,"
+            注释 = "    COLOR_YUV420p2RGBA  = COLOR_YUV2RGBA_YV12," 注释 = "    COLOR_YUV420p2BGRA  = COLOR_YUV2BGRA_YV12," 注释 = ""
+            注释 = "    COLOR_YUV2GRAY_420  = 106," 注释 = "    COLOR_YUV2GRAY_NV21 = COLOR_YUV2GRAY_420,"
+            注释 = "    COLOR_YUV2GRAY_NV12 = COLOR_YUV2GRAY_420," 注释 = "    COLOR_YUV2GRAY_YV12 = COLOR_YUV2GRAY_420,"
+            注释 = "    COLOR_YUV2GRAY_IYUV = COLOR_YUV2GRAY_420," 注释 = "    COLOR_YUV2GRAY_I420 = COLOR_YUV2GRAY_420,"
+            注释 = "    COLOR_YUV420sp2GRAY = COLOR_YUV2GRAY_420," 注释 = "    COLOR_YUV420p2GRAY  = COLOR_YUV2GRAY_420," 注释 = ""
+            注释 = "    //! YUV 4:2:2 family to RGB" 注释 = "    COLOR_YUV2RGB_UYVY = 107," 注释 = "    COLOR_YUV2BGR_UYVY = 108,"
+            注释 = "    //COLOR_YUV2RGB_VYUY = 109," 注释 = "    //COLOR_YUV2BGR_VYUY = 110,"
+            注释 = "    COLOR_YUV2RGB_Y422 = COLOR_YUV2RGB_UYVY," 注释 = "    COLOR_YUV2BGR_Y422 = COLOR_YUV2BGR_UYVY,"
+            注释 = "    COLOR_YUV2RGB_UYNV = COLOR_YUV2RGB_UYVY," 注释 = "    COLOR_YUV2BGR_UYNV = COLOR_YUV2BGR_UYVY," 注释 = ""
+            注释 = "    COLOR_YUV2RGBA_UYVY = 111," 注释 = "    COLOR_YUV2BGRA_UYVY = 112," 注释 = "    //COLOR_YUV2RGBA_VYUY = 113,"
+            注释 = "    //COLOR_YUV2BGRA_VYUY = 114," 注释 = "    COLOR_YUV2RGBA_Y422 = COLOR_YUV2RGBA_UYVY,"
+            注释 = "    COLOR_YUV2BGRA_Y422 = COLOR_YUV2BGRA_UYVY," 注释 = "    COLOR_YUV2RGBA_UYNV = COLOR_YUV2RGBA_UYVY,"
+            注释 = "    COLOR_YUV2BGRA_UYNV = COLOR_YUV2BGRA_UYVY," 注释 = "" 注释 = "    COLOR_YUV2RGB_YUY2 = 115,"
+            注释 = "    COLOR_YUV2BGR_YUY2 = 116," 注释 = "    COLOR_YUV2RGB_YVYU = 117," 注释 = "    COLOR_YUV2BGR_YVYU = 118,"
+            注释 = "    COLOR_YUV2RGB_YUYV = COLOR_YUV2RGB_YUY2," 注释 = "    COLOR_YUV2BGR_YUYV = COLOR_YUV2BGR_YUY2,"
+            注释 = "    COLOR_YUV2RGB_YUNV = COLOR_YUV2RGB_YUY2," 注释 = "    COLOR_YUV2BGR_YUNV = COLOR_YUV2BGR_YUY2," 注释 = ""
+            注释 = "    COLOR_YUV2RGBA_YUY2 = 119," 注释 = "    COLOR_YUV2BGRA_YUY2 = 120," 注释 = "    COLOR_YUV2RGBA_YVYU = 121,"
+            注释 = "    COLOR_YUV2BGRA_YVYU = 122," 注释 = "    COLOR_YUV2RGBA_YUYV = COLOR_YUV2RGBA_YUY2,"
+            注释 = "    COLOR_YUV2BGRA_YUYV = COLOR_YUV2BGRA_YUY2," 注释 = "    COLOR_YUV2RGBA_YUNV = COLOR_YUV2RGBA_YUY2,"
+            注释 = "    COLOR_YUV2BGRA_YUNV = COLOR_YUV2BGRA_YUY2," 注释 = "" 注释 = "    COLOR_YUV2GRAY_UYVY = 123,"
+            注释 = "    COLOR_YUV2GRAY_YUY2 = 124," 注释 = "    //CV_YUV2GRAY_VYUY    = CV_YUV2GRAY_UYVY,"
+            注释 = "    COLOR_YUV2GRAY_Y422 = COLOR_YUV2GRAY_UYVY," 注释 = "    COLOR_YUV2GRAY_UYNV = COLOR_YUV2GRAY_UYVY,"
+            注释 = "    COLOR_YUV2GRAY_YVYU = COLOR_YUV2GRAY_YUY2," 注释 = "    COLOR_YUV2GRAY_YUYV = COLOR_YUV2GRAY_YUY2,"
+            注释 = "    COLOR_YUV2GRAY_YUNV = COLOR_YUV2GRAY_YUY2," 注释 = "" 注释 = "    //! alpha premultiplication"
+            注释 = "    COLOR_RGBA2mRGBA    = 125," 注释 = "    COLOR_mRGBA2RGBA    = 126," 注释 = ""
+            注释 = "    //! RGB to YUV 4:2:0 family" 注释 = "    COLOR_RGB2YUV_I420  = 127," 注释 = "    COLOR_BGR2YUV_I420  = 128,"
+            注释 = "    COLOR_RGB2YUV_IYUV  = COLOR_RGB2YUV_I420," 注释 = "    COLOR_BGR2YUV_IYUV  = COLOR_BGR2YUV_I420," 注释 = ""
+            注释 = "    COLOR_RGBA2YUV_I420 = 129," 注释 = "    COLOR_BGRA2YUV_I420 = 130,"
+            注释 = "    COLOR_RGBA2YUV_IYUV = COLOR_RGBA2YUV_I420," 注释 = "    COLOR_BGRA2YUV_IYUV = COLOR_BGRA2YUV_I420,"
+            注释 = "    COLOR_RGB2YUV_YV12  = 131," 注释 = "    COLOR_BGR2YUV_YV12  = 132," 注释 = "    COLOR_RGBA2YUV_YV12 = 133,"
+            注释 = "    COLOR_BGRA2YUV_YV12 = 134," 注释 = "" 注释 = "    //! Demosaicing" 注释 = "    COLOR_BayerBG2BGR = 46,"
+            注释 = "    COLOR_BayerGB2BGR = 47," 注释 = "    COLOR_BayerRG2BGR = 48," 注释 = "    COLOR_BayerGR2BGR = 49," 注释 = ""
+            注释 = "    COLOR_BayerBG2RGB = COLOR_BayerRG2BGR," 注释 = "    COLOR_BayerGB2RGB = COLOR_BayerGR2BGR,"
+            注释 = "    COLOR_BayerRG2RGB = COLOR_BayerBG2BGR," 注释 = "    COLOR_BayerGR2RGB = COLOR_BayerGB2BGR," 注释 = ""
+            注释 = "    COLOR_BayerBG2GRAY = 86," 注释 = "    COLOR_BayerGB2GRAY = 87," 注释 = "    COLOR_BayerRG2GRAY = 88,"
+            注释 = "    COLOR_BayerGR2GRAY = 89," 注释 = "" 注释 = "    //! Demosaicing using Variable Number of Gradients"
+            注释 = "    COLOR_BayerBG2BGR_VNG = 62," 注释 = "    COLOR_BayerGB2BGR_VNG = 63," 注释 = "    COLOR_BayerRG2BGR_VNG = 64,"
+            注释 = "    COLOR_BayerGR2BGR_VNG = 65," 注释 = "" 注释 = "    COLOR_BayerBG2RGB_VNG = COLOR_BayerRG2BGR_VNG,"
+            注释 = "    COLOR_BayerGB2RGB_VNG = COLOR_BayerGR2BGR_VNG," 注释 = "    COLOR_BayerRG2RGB_VNG = COLOR_BayerBG2BGR_VNG,"
+            注释 = "    COLOR_BayerGR2RGB_VNG = COLOR_BayerGB2BGR_VNG," 注释 = "" 注释 = "    //! Edge-Aware Demosaicing"
+            注释 = "    COLOR_BayerBG2BGR_EA  = 135," 注释 = "    COLOR_BayerGB2BGR_EA  = 136," 注释 = "    COLOR_BayerRG2BGR_EA  = 137,"
+            注释 = "    COLOR_BayerGR2BGR_EA  = 138," 注释 = "" 注释 = "    COLOR_BayerBG2RGB_EA  = COLOR_BayerRG2BGR_EA,"
+            注释 = "    COLOR_BayerGB2RGB_EA  = COLOR_BayerGR2BGR_EA," 注释 = "    COLOR_BayerRG2RGB_EA  = COLOR_BayerBG2BGR_EA,"
+            注释 = "    COLOR_BayerGR2RGB_EA  = COLOR_BayerGB2BGR_EA," 注释 = "" 注释 = "    //! Demosaicing with alpha channel"
+            注释 = "    COLOR_BayerBG2BGRA = 139," 注释 = "    COLOR_BayerGB2BGRA = 140," 注释 = "    COLOR_BayerRG2BGRA = 141,"
+            注释 = "    COLOR_BayerGR2BGRA = 142," 注释 = "" 注释 = "    COLOR_BayerBG2RGBA = COLOR_BayerRG2BGRA,"
+            注释 = "    COLOR_BayerGB2RGBA = COLOR_BayerGR2BGRA," 注释 = "    COLOR_BayerRG2RGBA = COLOR_BayerBG2BGRA,"
+            注释 = "    COLOR_BayerGR2RGBA = COLOR_BayerGB2BGRA," 注释 = "" 注释 = "    COLOR_COLORCVT_MAX  = 143" "">
+    参数 通道数 <类型 = 整数 注释 = "转换后的图片 通道数，必须填，如果原来的通道是 ARGB，您想要转换成rgb 那么这里就填3" @默认值 = 0>
+    {
+        @ FImage_cvtColor((void*)@sn<this>.GetData(),@<处理后的图片>.GetData(),@<转换方式>,@<通道数>)
+    }
+
+    方法 取颜色分量 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    参数 颜色分量索引 <类型 = 整数 注释 = "可选值 0 1 2 3" 注释 = "当通道数为1 时，这个只能填0" 注释 = "当通道数为2 时  这个可以填 0 或者 1"
+            注释 = "当通道数为3 时  这个可以填 0 或者 1 或者 2" 注释 = "当通道数为4 时  这个可以填 0 或者 1 或者 2 或者 4" 注释 = "注意，opencv默认颜色模型为 b g r a"
+            注释 = "当通道数 大于等于3 时  索引0 取出来的是 颜色分量 b(blue  蓝色)" 注释 = "                       索引1 取出来的是 颜色分量 g(green 绿色)"
+            注释 = "                       索引2 取出来的是 颜色分量 r(red   红色)" 注释 = "这个只有当通道数为4    索引3 取出来的是 颜色分量 a(alpha 透明度)" 注释 = ""
+            注释 = "如果您自己转换过颜色模型，那么请根据实际情况来取颜色分量" @默认值 = 0>
+    {
+        @ FImage_GetColor((void*)@sn<this>.GetData(),@<横坐标>,@<纵坐标>,@<颜色分量索引>)
+
+    }
+
+    方法 取索引颜色分量 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    参数 颜色分量索引 <类型 = 整数 注释 = "可选值 0 1 2 3" 注释 = "当通道数为1 时，这个只能填0" 注释 = "当通道数为2 时  这个可以填 0 或者 1"
+            注释 = "当通道数为3 时  这个可以填 0 或者 1 或者 2" 注释 = "当通道数为4 时  这个可以填 0 或者 1 或者 2 或者 4" 注释 = "注意，opencv默认颜色模型为 b g r a"
+            注释 = "当通道数 大于等于3 时  索引0 取出来的是 颜色分量 b(blue  蓝色)" 注释 = "                       索引1 取出来的是 颜色分量 g(green 绿色)"
+            注释 = "                       索引2 取出来的是 颜色分量 r(red   红色)" 注释 = "这个只有当通道数为4    索引3 取出来的是 颜色分量 a(alpha 透明度)" 注释 = ""
+            注释 = "如果您自己转换过颜色模型，那么请根据实际情况来取颜色分量" @默认值 = 0>
+    {
+        @ FImage_GetIndexColor((void*)@sn<this>.GetData(),@<索引>,@<颜色分量索引>)
+
+    }
+
+    方法 置颜色分量 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    参数 颜色分量索引 <类型 = 整数 注释 = "可选值 0 1 2 3" 注释 = "当通道数为1 时，这个只能填0" 注释 = "当通道数为2 时  这个可以填 0 或者 1"
+            注释 = "当通道数为3 时  这个可以填 0 或者 1 或者 2" 注释 = "当通道数为4 时  这个可以填 0 或者 1 或者 2 或者 3" 注释 = "注意，opencv默认颜色模型为 b g r a"
+            注释 = "当通道数 大于等于3 时  索引0 取出来的是 颜色分量 b(blue  蓝色)" 注释 = "                       索引1 取出来的是 颜色分量 g(green 绿色)"
+            注释 = "                       索引2 取出来的是 颜色分量 r(red   红色)" 注释 = "这个只有当通道数为4    索引3 取出来的是 颜色分量 a(alpha 透明度)" 注释 = ""
+            注释 = "如果您自己转换过颜色模型，那么请根据实际情况来取颜色分量" @默认值 = 0>
+    参数 颜色分量值 <类型 = 整数>
+    {
+        @ FImage_SetColor((void*)@sn<this>.GetData(),@<横坐标>,@<纵坐标>,@<颜色分量索引>,@<颜色分量值>)
+    }
+
+    方法 翻转 <公开 @嵌入式方法 = "">
+    参数 翻转后的图片 <类型 = 图片操作类>
+    参数 翻转方式 <类型 = 整数 注释 = "大于 0: 沿y-轴翻转," 注释 = "等于 0: 沿x-轴翻转," 注释 = "小于 0: x、y轴同时翻转" @默认值 = 0>
+    {
+        @ FImage_flip((void*)@sn<this>.GetData(),(void*)@<翻转后的图片>.GetData(),@<翻转方式>)
+    }
+
+    方法 填充 <公开 折叠 @嵌入式方法 = "">
+    参数 颜色分量1 <类型 = 整数 @默认值 = 0>
+    参数 颜色分量2 <类型 = 整数 @默认值 = 0>
+    参数 颜色分量3 <类型 = 整数 @默认值 = 0>
+    参数 颜色分量4 <类型 = 整数 @默认值 = 0>
+    {
+        @ FImage_Fill((void*)@sn<this>.GetData(),@<颜色分量1>,@<颜色分量2>,@<颜色分量3>,@<颜色分量4>)
+    }
+
+    方法 画矩形 <公开 折叠 @嵌入式方法 = "">
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    参数 宽度 <类型 = 整数>
+    参数 高度 <类型 = 整数>
+    参数 线条粗细 <类型 = 整数 @默认值 = 2>
+    参数 红色 <类型 = 整数 注释 = "0-255" @默认值 = 0>
+    参数 绿色 <类型 = 整数 注释 = "0-255" @默认值 = 0>
+    参数 蓝色 <类型 = 整数 注释 = "0-255" @默认值 = 255>
+    参数 透明度 <类型 = 整数 @默认值 = 0>
+    {
+        @ FImage_rectangle((void*)@sn<this>.GetData(), @<横坐标>, @<纵坐标>, @<宽度>, @<高度>,@<红色>, @<绿色>, @<蓝色>,@<透明度>,@<线条粗细>)
+    }
+
+    方法 画文本 <公开 注释 = "不支持中文" 折叠>
+    参数 要绘制的文本 <类型 = 文本型>
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    参数 字体类型 <类型 = 整数 注释 = "    FONT_HERSHEY_SIMPLEX        = 0, //!< normal size sans-serif font"
+            注释 = "    FONT_HERSHEY_PLAIN          = 1, //!< small size sans-serif font"
+            注释 = "    FONT_HERSHEY_DUPLEX         = 2, //!< normal size sans-serif font (more complex than FONT_HERSHEY_SIMPLEX)"
+            注释 = "    FONT_HERSHEY_COMPLEX        = 3, //!< normal size serif font"
+            注释 = "    FONT_HERSHEY_TRIPLEX        = 4, //!< normal size serif font (more complex than FONT_HERSHEY_COMPLEX)"
+            注释 = "    FONT_HERSHEY_COMPLEX_SMALL  = 5, //!< smaller version of FONT_HERSHEY_COMPLEX"
+            注释 = "    FONT_HERSHEY_SCRIPT_SIMPLEX = 6, //!< hand-writing style font"
+            注释 = "    FONT_HERSHEY_SCRIPT_COMPLEX = 7, //!< more complex variant of FONT_HERSHEY_SCRIPT_SIMPLEX"
+            注释 = "    FONT_ITALIC                 = 16 //!< flag for italic font" @默认值 = 0>
+    参数 字体缩放 <类型 = 小数 @默认值 = 1>
+    参数 粗细 <类型 = 整数 @默认值 = 1>
+    参数 线条类型 <类型 = 整数 注释 = "    FILLED  = -1," 注释 = "    LINE_4  = 4, //!< 4-connected line"
+            注释 = "    LINE_8  = 8, //!< 8-connected line" 注释 = "    LINE_AA = 16 //!< antialiased line" @默认值 = 4>
+    参数 是否从右下角开始 <类型 = 逻辑型 @默认值 = 假>
+    参数 红色 <类型 = 整数 注释 = "0-255" @默认值 = 0>
+    参数 绿色 <类型 = 整数 注释 = "0-255" @默认值 = 0>
+    参数 蓝色 <类型 = 整数 注释 = "0-255" @默认值 = 255>
+    参数 透明度 <类型 = 整数 @默认值 = 0>
+    {
+        变量 txt <类型 = 字节集类>
+        txt = 文本到UTF8 (要绘制的文本)
+        @ FImage_putText((void*)GetData(),(const char*)@<txt>.GetPtr(), @<横坐标>, @<纵坐标>, @<红色>, @<绿色>, @<蓝色>,@<透明度>,@<字体类型>,@<字体缩放>,@<粗细>,@<线条类型>,@<是否从右下角开始>);
+    }
+
+    方法 画文本2 <公开 类型 = 整数 注释 = "支持中文" 返回值注释 = "返回文本宽度" @禁止流程检查 = 真>
+    参数 要绘制的文本 <类型 = 文本型>
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    参数 字体文件 <类型 = 文本型 @默认值 = "C:\\Windows\\Fonts\\simhei.ttf">
+    参数 字体宽度 <类型 = 整数 @默认值 = 20>
+    参数 字体高度 <类型 = 整数 注释 = "0 自动计算" @默认值 = 0>
+    参数 字体透明度 <类型 = 小数 @默认值 = 1.0>
+    参数 红色 <类型 = 整数 注释 = "0-255" @默认值 = 0>
+    参数 绿色 <类型 = 整数 注释 = "0-255" @默认值 = 0>
+    参数 蓝色 <类型 = 整数 注释 = "0-255" @默认值 = 255>
+    参数 透明度 <类型 = 整数 @默认值 = 0>
+    {
+        变量 font <类型 = 字节集类>
+        font = 文本到多字节 (字体文件)
+        @ return FImage_putText2((void*)GetData(),@<要绘制的文本>.GetText(), @<横坐标>, @<纵坐标>, @<红色>, @<绿色>, @<蓝色>,@<透明度>,(const char*)@<font>.GetPtr(),@<字体宽度>,@<字体高度>,@<字体透明度>);
+
+    }
+
+    方法 缩放 <公开 折叠 @嵌入式方法 = "">
+    参数 处理后的图片 <类型 = 图片操作类>
+    参数 缩放后的宽度 <类型 = 整数>
+    参数 缩放后的高度 <类型 = 整数>
+    参数 缩放插值方式 <类型 = 整数 注释 = "enum InterpolationFlags{" 注释 = "    /** nearest neighbor interpolation */"
+            注释 = "    INTER_NEAREST        = 0," 注释 = "    /** bilinear interpolation */" 注释 = "    INTER_LINEAR         = 1,"
+            注释 = "    /** bicubic interpolation */" 注释 = "    INTER_CUBIC          = 2,"
+            注释 = "    /** resampling using pixel area relation. It may be a preferred method for image decimation, as"
+            注释 = "    it gives moire\'-free results. But when the image is zoomed, it is similar to the INTER_NEAREST"
+            注释 = "    method. */" 注释 = "    INTER_AREA           = 3," 注释 = "    /** Lanczos interpolation over 8x8 neighborhood */"
+            注释 = "    INTER_LANCZOS4       = 4," 注释 = "    /** Bit exact bilinear interpolation */"
+            注释 = "    INTER_LINEAR_EXACT = 5," 注释 = "    /** mask for interpolation codes */" 注释 = "    INTER_MAX            = 7,"
+            注释 = "    /** flag, fills all of the destination image pixels. If some of them correspond to outliers in the"
+            注释 = "    source image, they are set to zero */" 注释 = "    WARP_FILL_OUTLIERS   = 8,"
+            注释 = "    /** flag, inverse transformation" 注释 = "" 注释 = "    For example, #linearPolar or #logPolar transforms:"
+            注释 = "    - flag is __not__ set: \\f$dst( \\rho , \\phi ) = src(x,y)\\f$"
+            注释 = "    - flag is set: \\f$dst(x,y) = src( \\rho , \\phi )\\f$" 注释 = "    */" 注释 = "    WARP_INVERSE_MAP     = 16"
+            注释 = "};" 折叠2 @默认值 = 1>
+    参数 横向缩放比例 <类型 = 小数 @默认值 = 0>
+    参数 纵向缩放比例 <类型 = 小数 @默认值 = 0>
+    {
+        @ FImage_resize((void*)@sn<this>.GetData(), @<处理后的图片>.GetData(),@<缩放后的宽度>,@<缩放后的高度>,@<横向缩放比例>,@<纵向缩放比例>,@<缩放插值方式>)
+    }
+
+    方法 旋转 <公开 @嵌入式方法 = "">
+    参数 处理后的图片 <类型 = 图片操作类>
+    参数 旋转角度 <类型 = 整数>
+    {
+        @ FImage_Rotate((void*)@sn<this>.GetData(), @<处理后的图片>.GetData(),@<旋转角度>)
+    }
+
+    方法 统计行 <公开 注释 = "可以计算" @嵌入式方法 = "">
+    参数 处理后的图片 <类型 = 图片操作类>
+    参数 运算方式 <类型 = 整数 注释 = "0 相加" 注释 = "1 平均" 注释 = "2 最大" 注释 = "3 最小" 折叠2>
+    参数 输出图片的类型 <类型 = 整数 注释 = "// -1 表示 输出图片类型和 输入类型一样，但是当 你调用了 REDUCE_SUM 相加的时候，数据类型肯定会变" 注释 = "// 此时要手动指定输出类型，可以设置为 CV_32SC1"
+            注释 = "#define CV_8UC1 CV_MAKETYPE(CV_8U,1)" 注释 = "#define CV_8UC2 CV_MAKETYPE(CV_8U,2)"
+            注释 = "#define CV_8UC3 CV_MAKETYPE(CV_8U,3)" 注释 = "#define CV_8UC4 CV_MAKETYPE(CV_8U,4)"
+            注释 = "#define CV_8UC(n) CV_MAKETYPE(CV_8U,(n))" 注释 = "" 注释 = "#define CV_8SC1 CV_MAKETYPE(CV_8S,1)"
+            注释 = "#define CV_8SC2 CV_MAKETYPE(CV_8S,2)" 注释 = "#define CV_8SC3 CV_MAKETYPE(CV_8S,3)"
+            注释 = "#define CV_8SC4 CV_MAKETYPE(CV_8S,4)" 注释 = "#define CV_8SC(n) CV_MAKETYPE(CV_8S,(n))" 注释 = ""
+            注释 = "#define CV_16UC1 CV_MAKETYPE(CV_16U,1)" 注释 = "#define CV_16UC2 CV_MAKETYPE(CV_16U,2)"
+            注释 = "#define CV_16UC3 CV_MAKETYPE(CV_16U,3)" 注释 = "#define CV_16UC4 CV_MAKETYPE(CV_16U,4)"
+            注释 = "#define CV_16UC(n) CV_MAKETYPE(CV_16U,(n))" 折叠2 @默认值 = -1>
+    {
+        @ FImage_reduce((void*)@sn<this>.GetData(), @<处理后的图片>.GetData(),0,@<运算方式>,@<输出图片的类型>)
+    }
+
+    方法 统计列 <公开 折叠 @嵌入式方法 = "">
+    参数 处理后的图片 <类型 = 图片操作类>
+    参数 运算方式 <类型 = 整数 注释 = "0 相加" 注释 = "1 平均" 注释 = "2 最大" 注释 = "3 最小">
+    参数 输出图片的类型 <类型 = 整数 注释 = "// -1 表示 输出图片类型和 输入类型一样，但是当 你调用了 REDUCE_SUM 相加的时候，数据类型肯定会变" 注释 = "// 此时要手动指定输出类型，可以设置为 CV_32SC1"
+            注释 = "#define CV_8UC1 CV_MAKETYPE(CV_8U,1)" 注释 = "#define CV_8UC2 CV_MAKETYPE(CV_8U,2)"
+            注释 = "#define CV_8UC3 CV_MAKETYPE(CV_8U,3)" 注释 = "#define CV_8UC4 CV_MAKETYPE(CV_8U,4)"
+            注释 = "#define CV_8UC(n) CV_MAKETYPE(CV_8U,(n))" 注释 = "" 注释 = "#define CV_8SC1 CV_MAKETYPE(CV_8S,1)"
+            注释 = "#define CV_8SC2 CV_MAKETYPE(CV_8S,2)" 注释 = "#define CV_8SC3 CV_MAKETYPE(CV_8S,3)"
+            注释 = "#define CV_8SC4 CV_MAKETYPE(CV_8S,4)" 注释 = "#define CV_8SC(n) CV_MAKETYPE(CV_8S,(n))" 注释 = ""
+            注释 = "#define CV_16UC1 CV_MAKETYPE(CV_16U,1)" 注释 = "#define CV_16UC2 CV_MAKETYPE(CV_16U,2)"
+            注释 = "#define CV_16UC3 CV_MAKETYPE(CV_16U,3)" 注释 = "#define CV_16UC4 CV_MAKETYPE(CV_16U,4)"
+            注释 = "#define CV_16UC(n) CV_MAKETYPE(CV_16U,(n))" @默认值 = -1>
+    {
+        @ FImage_reduce((void*)@sn<this>.GetData(), @<处理后的图片>.GetData(),1,@<运算方式>,@<输出图片的类型>)
+    }
+
+    方法 取整体最大外接矩形 <公开 类型 = 逻辑型 注释 = "解释说明：" 注释 = "srcMat=" 注释 = "[  0,   0,   0,   0,   0;" 注释 = "   0,  44,  12,  22,   0;"
+            注释 = "   0,  25,  26,  33,   0;" 注释 = "   0,  11,  22,  44,   0;" 注释 = "   0,   0,   0,   0,   0]" 注释 = "处理后"
+            注释 = "desMat=" 注释 = "[ 44,  12,  22;" 注释 = "  25,  26,  33;" 注释 = "  11,  22,  44]" 注释 = "调用代码" 注释 = " cv::Mat output;"
+            注释 = " int x1, y1, x2, y2;" 注释 = " if (FImage_reduceImage(&srcMat, &x1, &y1, &x2, &y2))" 注释 = " {"
+            注释 = "  FImage_GetRoi(&srcMat, x1, y1, x2 - x1+1, y2 - y1+1, &output);" 注释 = " }" 返回值注释 = "返回真，则有最大外接矩形，返回假则没有，"
+            @嵌入式方法 = "">
+    参数 开始横坐标 <类型 = 整数>
+    参数 开始纵坐标 <类型 = 整数>
+    参数 结束横坐标 <类型 = 整数>
+    参数 结束纵坐标 <类型 = 整数>
+    {
+        @ FImage_reduceImage(@sn<this>.GetData(), &@<开始横坐标>, &@<开始纵坐标>,&@<结束横坐标>,&@<结束纵坐标>)
+
+    }
+
+    方法 分离通道 <公开 @嵌入式方法 = "">
+    参数 通道1 <类型 = 图片操作类 @默认值 = 空对象>
+    参数 通道2 <类型 = 图片操作类 @默认值 = 空对象>
+    参数 通道3 <类型 = 图片操作类 @默认值 = 空对象>
+    参数 通道4 <类型 = 图片操作类 @默认值 = 空对象>
+    {
+        @ FImage_SplitChannel(@sn<this>.GetData(),@<通道1>.GetData(),@<通道2>.GetData(),@<通道3>.GetData(),@<通道4>.GetData())
+    }
+
+    方法 合并通道 <公开 @嵌入式方法 = "">
+    参数 通道1 <类型 = 图片操作类 @默认值 = 空对象>
+    参数 通道2 <类型 = 图片操作类 @默认值 = 空对象>
+    参数 通道3 <类型 = 图片操作类 @默认值 = 空对象>
+    参数 通道4 <类型 = 图片操作类 @默认值 = 空对象>
+    {
+        @ FImage_MergeChannel(@sn<this>.GetData(),@<通道1>.GetData(),@<通道2>.GetData(),@<通道3>.GetData(),@<通道4>.GetData())
+    }
+
+    方法 "//查找轮廓矩形数组" <公开 类型 = 逻辑型 注释 = "对于屏幕传输效果不理想" @嵌入式方法 = "">
+    参数 输出_轮廓矩形数组 <类型 = 轮廓矩形数组类>
+    {
+        @ CVContours_FindContours(@sn<this>.GetData(),@<输出_轮廓矩形数组>.GetData())
+    }
+
+    方法 "//融合" <公开 注释 = "暂时丢弃" 折叠 @嵌入式方法 = "">
+    参数 本类图片权重 <类型 = 小数>
+    参数 要融合的图片 <类型 = 图片操作类>
+    参数 要融合的图片权重 <类型 = 小数>
+    参数 合成后的图片 <类型 = 图片操作类>
+    参数 融合后添加的数值 <类型 = 小数 @默认值 = 0>
+    参数 深度 <类型 = 整数 @默认值 = -1>
+    {
+        @ FImage_addWeighted((void*)@sn<this>.GetData(),@<本类图片权重>,(void*)@<要融合的图片>.GetData(),@<要融合的图片权重>,@<融合后添加的数值>,(void*)@<合成后的图片>.GetData(),@<深度>)
+    }
+}
+
+类 轮廓矩形数组类 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # public:
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ m_pData = CVRectArray_new();
+    }
+
+    方法 类_清理
+    {
+        @ CVRectArray_delete(m_pData);
+    }
+
+    方法 取数量 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ CVRectArray_GetCount(@sn<this>.GetData())
+    }
+
+    方法 取矩形坐标 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    参数 左边 <类型 = 整数>
+    参数 顶边 <类型 = 整数>
+    参数 右边 <类型 = 整数>
+    参数 底边 <类型 = 整数>
+    {
+        @ CVRectArray_GekRect(@sn<this>.GetData(),@<索引>,&@<左边>,&@<顶边>,&@<右边>,&@<底边>)
+    }
+
+    #
+}

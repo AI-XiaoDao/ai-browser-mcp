@@ -1,0 +1,956 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 xc.gui <@文档 = "category = \"炫彩常量\"">
+
+类 元素类型 <公开 注释 = "XC_OBJECT_TYPE" 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 错误类型 <公开 类型 = 整数 值 = -1 注释 = "XC_ERROR">
+    常量 窗口 <公开 类型 = 整数 值 = 1 注释 = "XC_WINDOW">
+    常量 模态窗口 <公开 类型 = 整数 值 = 2 注释 = "XC_MODALWINDOW">
+    常量 框架窗口 <公开 类型 = 整数 值 = 3 注释 = "XC_FRAMEWND">
+    常量 浮动窗口 <公开 类型 = 整数 值 = 4 注释 = "XC_FLOATWND">
+    常量 组合框弹出下拉列表窗口 <公开 类型 = 整数 值 = 11 注释 = "XC_COMBOBOXWINDOW">
+    常量 弹出菜单主窗口 <公开 类型 = 整数 值 = 12 注释 = "XC_POPUPMENUWINDOW">
+    常量 弹出菜单子窗口 <公开 类型 = 整数 值 = 13 注释 = "XC_POPUPMENUCHILDWINDOW">
+    常量 对象UI <公开 类型 = 整数 值 = 19 注释 = "XC_OBJECT_UI">
+    常量 基础元素 <公开 类型 = 整数 值 = 21 注释 = "XC_ELE">
+    常量 按钮 <公开 类型 = 整数 值 = 22 注释 = "XC_BUTTON">
+    常量 富文本编辑框 <公开 类型 = 整数 值 = 23 注释 = "XC_RICHEDIT">
+    常量 下拉组合框 <公开 类型 = 整数 值 = 24 注释 = "XC_COMBOBOX">
+    常量 滚动条 <公开 类型 = 整数 值 = 25 注释 = "XC_SCROLLBAR">
+    常量 滚动视图 <公开 类型 = 整数 值 = 26 注释 = "XC_SCROLLVIEW">
+    常量 列表 <公开 类型 = 整数 值 = 27 注释 = "XC_LIST">
+    常量 列表框 <公开 类型 = 整数 值 = 28 注释 = "XC_LISTBOX">
+    常量 列表视图 <公开 类型 = 整数 值 = 29 注释 = "XC_LISTVIEW">
+    常量 树元素 <公开 类型 = 整数 值 = 30 注释 = "XC_TREE">
+    常量 菜单条 <公开 类型 = 整数 值 = 31 注释 = "XC_MENUBAR">
+    常量 滑动条 <公开 类型 = 整数 值 = 32 注释 = "XC_SLIDERBAR">
+    常量 进度条 <公开 类型 = 整数 值 = 33 注释 = "XC_PROGRESSBAR">
+    常量 工具条 <公开 类型 = 整数 值 = 34 注释 = "XC_TOOLBAR">
+    常量 月历框 <公开 类型 = 整数 值 = 35 注释 = "XC_MONTHCAL">
+    常量 日期框 <公开 类型 = 整数 值 = 36 注释 = "XC_DATETIME">
+    常量 属性网格 <公开 类型 = 整数 值 = 37 注释 = "XC_PROPERTYGRID">
+    常量 颜色选择框 <公开 类型 = 整数 值 = 38 注释 = "XC_EDIT_COLOR">
+    常量 富文本框 <公开 类型 = 整数 值 = 39 注释 = "XC_EDIT_SET">
+    常量 tab条 <公开 类型 = 整数 值 = 40 注释 = "XC_TABBAR">
+    常量 文本链接按钮 <公开 类型 = 整数 值 = 41 注释 = "XC_TEXTLINK">
+    常量 窗格 <公开 类型 = 整数 值 = 42 注释 = "XC_PANE">
+    常量 窗格拖动分割条 <公开 类型 = 整数 值 = 43 注释 = "XC_PANE_SPLIT">
+    常量 菜单条上的按钮 <公开 类型 = 整数 值 = 44 注释 = "XC_MENUBAR_BUTTON">
+    常量 编辑框 <公开 类型 = 整数 值 = 45 注释 = "XC_EDIT">
+    常量 代码编辑框 <公开 类型 = 整数 值 = 46 注释 = "XC_EDITOR">
+    常量 文件选择编辑框 <公开 类型 = 整数 值 = 50 注释 = "XC_EDIT_FILE">
+    常量 文件夹选择编辑框 <公开 类型 = 整数 值 = 51 注释 = "XC_EDIT_FOLDER">
+    常量 列表头 <公开 类型 = 整数 值 = 52 注释 = "XC_LIST_HEADER">
+    常量 布局元素 <公开 类型 = 整数 值 = 53 注释 = "XC_ELE_LAYOUT">
+    常量 布局框架 <公开 类型 = 整数 值 = 54 注释 = "XC_LAYOUT_FRAME">
+    常量 形状对象 <公开 类型 = 整数 值 = 61 注释 = "XC_SHAPE">
+    常量 形状对象_文本 <公开 类型 = 整数 值 = 62 注释 = "XC_SHAPE_TEXT">
+    常量 形状对象_图片 <公开 类型 = 整数 值 = 63 注释 = "XC_SHAPE_PICTURE">
+    常量 形状对象_矩形 <公开 类型 = 整数 值 = 64 注释 = "XC_SHAPE_RECT">
+    常量 形状对象_圆 <公开 类型 = 整数 值 = 65 注释 = "XC_SHAPE_ELLIPSE">
+    常量 形状对象_直线 <公开 类型 = 整数 值 = 66 注释 = "XC_SHAPE_LINE">
+    常量 形状对象_组框 <公开 类型 = 整数 值 = 67 注释 = "XC_SHAPE_GROUPBOX">
+    常量 形状对象_GIF <公开 类型 = 整数 值 = 68 注释 = "XC_SHAPE_GIF">
+    常量 形状对象_表格 <公开 类型 = 整数 值 = 69 注释 = "XC_SHAPE_TABLE">
+    常量 弹出菜单 <公开 类型 = 整数 值 = 81 注释 = "XC_MENU">
+    常量 图片 <公开 类型 = 整数 值 = 82 注释 = "XC_IMAGE XC_IMAGE_TEXTURE">
+    常量 绘图操作 <公开 类型 = 整数 值 = 83 注释 = "XC_HDRAW">
+    常量 炫彩字体 <公开 类型 = 整数 值 = 84 注释 = "XC_FONT">
+    常量 FLASH <类型 = 整数 值 = 85 注释 = "XC_FLASH">
+    常量 CELL <类型 = 整数 值 = 86 注释 = "XC_PANE_CELL">
+    常量 WEB <类型 = 整数 值 = 87 注释 = "XC_WEB">
+    常量 图片帧 <公开 类型 = 整数 值 = 88 注释 = "XC_IMAGE_FRAME">
+    常量 SVG <公开 类型 = 整数 值 = 89 注释 = "XC_SVG">
+    常量 布局对象 <公开 类型 = 整数 值 = 101 注释 = "XC_LAYOUT_OBJECT">
+    常量 适配器_基础 <公开 类型 = 整数 值 = 102 注释 = "XC_ADAPTER">
+    常量 适配器_列表项 <公开 类型 = 整数 值 = 103 注释 = "XC_ADAPTER_TABLE">
+    常量 适配器_树元素 <公开 类型 = 整数 值 = 104 注释 = "XC_ADAPTER_TREE">
+    常量 适配器_列表视元素 <公开 类型 = 整数 值 = 105 注释 = "XC_ADAPTER_LISTVIEW">
+    常量 适配器_列表头 <公开 类型 = 整数 值 = 106 注释 = "XC_ADAPTER_MAP">
+    常量 布局视图 <公开 类型 = 整数 值 = 111 注释 = "XC_LAYOUT_LISTVIEW">
+    常量 布局列表 <公开 类型 = 整数 值 = 112 注释 = "XC_LAYOUT_LIST">
+    常量 布局对象群 <公开 类型 = 整数 值 = 113 注释 = "XC_LAYOUT_OBJECT_GROUP">
+    常量 布局对象项 <公开 类型 = 整数 值 = 114 注释 = "XC_LAYOUT_OBJECT_ITEM">
+    常量 布局面板 <公开 类型 = 整数 值 = 115 注释 = "XC_LAYOUT_PANEL">
+    常量 背景管理器 <公开 类型 = 整数 值 = 116 注释 = "XC_BKINFOM">
+    常量 列表项 <公开 类型 = 整数 值 = 121 注释 = "XC_LIST_ITEM">
+    常量 列表视图组 <公开 类型 = 整数 值 = 122 注释 = "XC_LISTVIEW_GROUP">
+    常量 列表视图项 <公开 类型 = 整数 值 = 123 注释 = "XC_LISTVIEW_ITEM">
+}
+
+类 元素事件 <公开 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 处理过程 <公开 类型 = 整数 值 = 1 注释 = "XE_ELEPROCE">
+    常量 绘制 <公开 类型 = 整数 值 = 2 注释 = "XE_PAINT">
+    常量 绘制完成 <公开 类型 = 整数 值 = 3 注释 = "XE_PAINT_END,元素及子元素绘制完成后触发,启用该功能需要调用:启用_绘制完成事件()方法">
+    常量 绘制滚动视图 <公开 类型 = 整数 值 = 4 注释 = "XE_PAINT_SCROLLVIEW">
+    常量 鼠标移动 <公开 类型 = 整数 值 = 5 注释 = "XE_MOUSEMOVE">
+    常量 鼠标进入 <公开 类型 = 整数 值 = 6 注释 = "XE_MOUSESTAY">
+    常量 鼠标悬停 <公开 类型 = 整数 值 = 7 注释 = "XE_MOUSEHOVER">
+    常量 鼠标离开 <公开 类型 = 整数 值 = 8 注释 = "XE_MOUSELEAVE">
+    常量 鼠标滚轮滚动 <公开 类型 = 整数 值 = 9 注释 = "XE_MOUSEWHEEL,如果非滚动视图需要调用:启用_鼠标滚轮事件()方法">
+    常量 鼠标左键按下 <公开 类型 = 整数 值 = 10 注释 = "XE_LBUTTONDOWN">
+    常量 鼠标左键弹起 <公开 类型 = 整数 值 = 11 注释 = "XE_LBUTTONUP">
+    常量 鼠标右键按下 <公开 类型 = 整数 值 = 12 注释 = "XE_RBUTTONDOWN">
+    常量 鼠标右键弹起 <公开 类型 = 整数 值 = 13 注释 = "XE_RBUTTONUP">
+    常量 鼠标左键双击 <公开 类型 = 整数 值 = 14 注释 = "XE_LBUTTONDBCLICK">
+    常量 鼠标右键双击 <公开 类型 = 整数 值 = 15 注释 = "XE_RBUTTONDBCLICK">
+    常量 定时器炫彩 <公开 类型 = 整数 值 = 16 注释 = "XE_XC_TIMER">
+    常量 布局调整 <公开 类型 = 整数 值 = 17 注释 = "XE_ADJUSTLAYOUT,暂停使用">
+    常量 布局调整完毕 <公开 类型 = 整数 值 = 18 注释 = "XE_ADJUSTLAYOUT_END">
+    常量 获取焦点 <公开 类型 = 整数 值 = 31 注释 = "XE_SETFOCUS">
+    常量 失去焦点 <公开 类型 = 整数 值 = 32 注释 = "XE_KILLFOCUS">
+    常量 销毁 <公开 类型 = 整数 值 = 33 注释 = "XE_DESTROY">
+    常量 按钮_点击 <公开 类型 = 整数 值 = 34 注释 = "XE_BNCLICK">
+    常量 按钮_选中 <公开 类型 = 整数 值 = 35 注释 = "XE_BUTTON_CHECK">
+    常量 大小改变 <公开 类型 = 整数 值 = 36 注释 = "XE_SIZE">
+    常量 显示 <公开 类型 = 整数 值 = 37 注释 = "XE_SHOW">
+    常量 置字体 <公开 类型 = 整数 值 = 38 注释 = "XE_SETFONT">
+    常量 按键按下 <公开 类型 = 整数 值 = 39 注释 = "XE_KEYDOWN">
+    常量 按键弹起 <公开 类型 = 整数 值 = @XE_KEYUP 注释 = "XE_KEYUP">
+    常量 输入字符 <公开 类型 = 整数 值 = 41 注释 = "XE_CHAR 通过TranslateMessage函数翻译的字符事件。">
+    常量 销毁完成 <公开 类型 = 整数 值 = 42 注释 = "XE_DESTROY_END">
+    常量 置鼠标捕获 <公开 类型 = 整数 值 = 51 注释 = "XE_SETCAPTURE">
+    常量 失去鼠标捕获 <公开 类型 = 整数 值 = 52 注释 = "XE_KILLCAPTURE">
+    常量 置鼠标光标 <公开 类型 = 整数 值 = 53 注释 = "XE_SETCURSOR">
+    常量 滚动视图_水平滚动 <公开 类型 = 整数 值 = 54 注释 = "XE_SCROLLVIEW_SCROLL_H">
+    常量 滚动视图_垂直滚动 <公开 类型 = 整数 值 = 55 注释 = "XE_SCROLLVIEW_SCROLL_V">
+    常量 滚动条_滚动 <公开 类型 = 整数 值 = 56 注释 = "XE_SBAR_SCROLL">
+    常量 菜单_弹出 <公开 类型 = 整数 值 = 57 注释 = "XE_MENU_POPUP">
+    常量 菜单_弹出窗口 <公开 类型 = 整数 值 = 58 注释 = "XE_MENU_POPUP_WND">
+    常量 菜单_项选择 <公开 类型 = 整数 值 = 59 注释 = "XE_MENU_SELECT">
+    常量 菜单_绘制背景 <公开 类型 = 整数 值 = 60 注释 = "XE_MENU_DRAW_BACKGROUND">
+    常量 菜单_项绘制 <公开 类型 = 整数 值 = 61 注释 = "XE_MENU_DRAWITEM">
+    常量 菜单_退出 <公开 类型 = 整数 值 = 62 注释 = "XE_MENU_EXIT">
+    常量 ""
+    常量 滑动条_位置改变 <公开 类型 = 整数 值 = 63 注释 = "XE_SLIDERBAR_CHANGE">
+    常量 进度条_位置改变 <公开 类型 = 整数 值 = 64 注释 = "XE_PROGRESSBAR_CHANGE">
+    常量 ""
+    常量 组合框_项选择 <公开 类型 = 整数 值 = 71 注释 = "XE_COMBOBOX_SELECT">
+    常量 组合框_弹出列表 <公开 类型 = 整数 值 = 72 注释 = "XE_COMBOBOX_POPUP_LIST">
+    常量 组合框_退出列表 <公开 类型 = 整数 值 = 73 注释 = "XE_COMBOBOX_EXIT_LIST">
+    常量 组合框_项选择完成 <公开 类型 = 整数 值 = 74 注释 = "XE_COMBOBOX_SELECT_END">
+    常量 组合框_下拉列表即将弹出 <公开 类型 = 整数 值 = @XE_COMBOBOX_POPUP>
+    常量 ""
+    常量 列表框_项模板创建 <公开 类型 = 整数 值 = 81 注释 = "XE_LISTBOX_TEMP_CREATE">
+    常量 列表框_项模板创建完成 <公开 类型 = 整数 值 = 82 注释 = "XE_LISTBOX_TEMP_CREATE_END">
+    常量 列表框_项模板销毁 <公开 类型 = 整数 值 = 83 注释 = "XE_LISTBOX_TEMP_DESTROY">
+    常量 列表框_项绘制 <公开 类型 = 整数 值 = 85 注释 = "XE_LISTBOX_DRAWITEM">
+    常量 列表框_项选择 <公开 类型 = 整数 值 = 86 注释 = "XE_LISTBOX_SELECT">
+    常量 ""
+    常量 列表_项模板创建 <公开 类型 = 整数 值 = 101 注释 = "XE_LIST_TEMP_CREATE">
+    常量 列表_项模板创建完成 <公开 类型 = 整数 值 = 102 注释 = "XE_LIST_TEMP_CREATE_END">
+    常量 列表_项模板销毁 <公开 类型 = 整数 值 = 103 注释 = "XE_LIST_TEMP_DESTROY">
+    常量 列表_项绘制 <公开 类型 = 整数 值 = 105 注释 = "XE_LIST_DRAWITEM">
+    常量 列表_项选择 <公开 类型 = 整数 值 = 106 注释 = "XE_LIST_SELECT">
+    常量 列表头_项绘制 <公开 类型 = 整数 值 = 107 注释 = "XE_LIST_HEADER_DRAWITEM,需要取列表头,事件才有效(注新版已修复)">
+    常量 列表头_项点击 <公开 类型 = 整数 值 = 108 注释 = "XE_LIST_HEADER_CLICK">
+    常量 列表头_项宽度改变 <公开 类型 = 整数 值 = 109 注释 = "XE_LIST_HEADER_WIDTH_CHANGE">
+    常量 列表头_项模板创建 <公开 类型 = 整数 值 = 110 注释 = "XE_LIST_HEADER_TEMP_CREATE">
+    常量 列表头_项模板创建完成 <公开 类型 = 整数 值 = 111 注释 = "XE_LIST_HEADER_TEMP_CREATE_END">
+    常量 列表头_项模板销毁 <公开 类型 = 整数 值 = 112 注释 = "XE_LIST_HEADER_TEMP_DESTROY">
+    常量 列表头_项模板调整坐标 <类型 = 整数 值 = 113 注释 = "XE_LIST_HEADER_TEMP_ADJUST_COORDINATE">
+    常量 ""
+    常量 列表树_项模板创建 <公开 类型 = 整数 值 = 121 注释 = "XE_TREE_TEMP_CREATE">
+    常量 列表树_项模板创建完成 <公开 类型 = 整数 值 = 122 注释 = "XE_TREE_TEMP_CREATE_END">
+    常量 列表树_项模板销毁 <公开 类型 = 整数 值 = 123 注释 = "XE_TREE_TEMP_DESTROY">
+    常量 列表树_项绘制 <公开 类型 = 整数 值 = 125 注释 = "XE_TREE_DRAWITEM">
+    常量 列表树_项选择 <公开 类型 = 整数 值 = 126 注释 = "XE_TREE_SELECT">
+    常量 列表树_项展开 <公开 类型 = 整数 值 = 127 注释 = "XE_TREE_EXPAND">
+    常量 列表树_项正在拖动 <公开 类型 = 整数 值 = 128 注释 = "XE_TREE_DRAG_ITEM_ING">
+    常量 列表树_项拖动完毕 <公开 类型 = 整数 值 = 129 注释 = "XE_TREE_DRAG_ITEM">
+    常量 ""
+    常量 列表视图_项模板创建 <公开 类型 = 整数 值 = 141 注释 = "XE_LISTVIEW_TEMP_CREATE">
+    常量 列表视图_项模板创建完成 <公开 类型 = 整数 值 = 142 注释 = "XE_LISTVIEW_TEMP_CREATE_END">
+    常量 列表视图_项模板销毁 <公开 类型 = 整数 值 = 143 注释 = "XE_LISTVIEW_TEMP_DESTROY">
+    常量 列表视图_项模板调整坐标 <类型 = 整数 值 = 144 注释 = "XE_LISTVIEW_TEMP_ADJUST_COORDINATE">
+    常量 列表视图_项绘制 <公开 类型 = 整数 值 = 145 注释 = "XE_LISTVIEW_DRAWITEM">
+    常量 列表视图_项选择 <公开 类型 = 整数 值 = 146 注释 = "XE_LISTVIEW_SELECT">
+    常量 列表视图_项展开 <公开 类型 = 整数 值 = 147 注释 = "XE_LISTVIEW_EXPAND">
+    常量 ""
+    常量 属性框_项值改变 <公开 类型 = 整数 值 = 151 注释 = "XE_PGRID_VALUE_CHANGE">
+    常量 属性框_项设置 <公开 类型 = 整数 值 = 152 注释 = "XE_PGRID_ITEM_SET">
+    常量 属性框_项选择 <公开 类型 = 整数 值 = 153 注释 = "XE_PGRID_ITEM_SELECT">
+    常量 属性框_项调整坐标 <公开 类型 = 整数 值 = 154 注释 = "XE_PGRID_ITEM_ADJUST_COORDINATE">
+    常量 属性框_项销毁 <公开 类型 = 整数 值 = 155 注释 = "XE_PGRID_ITEM_DESTROY">
+    常量 属性框_项展开 <公开 类型 = 整数 值 = 156 注释 = "XE_PGRID_ITEM_EXPAND">
+    常量 ""
+    常量 编辑框_置内容 <公开 类型 = 整数 值 = 180 注释 = "XE_EDIT_SET">
+    常量 编辑框_内容更改 <公开 类型 = 整数 值 = 182 注释 = "XE_EDIT_CHANGED">
+    常量 编辑框_绘制行 <类型 = 整数 值 = 181 注释 = "XE_EDIT_DRAWROW">
+    常量 编辑框_位置改变 <公开 类型 = 整数 值 = 183 注释 = "XE_EDIT_POS_CHANGED">
+    常量 编辑框_样式改变 <公开 类型 = 整数 值 = 184 注释 = "XE_EDIT_STYLE_CHANGED">
+    常量 编辑框_回车TAB对齐 <公开 类型 = 整数 值 = 185 注释 = "XE_EDIT_ENTER_GET_TABALIGN,回车TAB对齐,返回需要TAB数量">
+    常量 编辑框_交换行 <公开 类型 = 整数 值 = 186 注释 = "XE_EDIT_SWAPROW">
+    常量 ""
+    常量 代码框_多行内容改变 <公开 类型 = 整数 值 = 190 注释 = "XE_EDITOR_MODIFY_ROWS">
+    常量 代码框_设置断点 <公开 类型 = 整数 值 = 191 注释 = "XE_EDITOR_SETBREAKPOINT">
+    常量 代码框_移除断点 <公开 类型 = 整数 值 = 192 注释 = "XE_EDITOR_REMOVEBREAKPOINT">
+    常量 代码框_断点改变 <公开 类型 = 整数 值 = 193 注释 = "XE_EDITOR_BREAKPOINT_CHANGED">
+    常量 代码框_自动选择 <公开 类型 = 整数 值 = 194 注释 = "XE_EDITOR_AUTOMATCH_SELECT">
+    常量 代码框_设置书签 <公开 类型 = 整数 值 = @XE_EDITOR_SETBOOKMARK>
+    常量 Tab条_项选择 <公开 类型 = 整数 值 = 221 注释 = "XE_TABBAR_SELECT">
+    常量 Tab条_项删除 <公开 类型 = 整数 值 = 222 注释 = "XE_TABBAR_DELETE">
+    常量 ""
+    常量 月历框_日期改变 <公开 类型 = 整数 值 = 231 注释 = "XE_MONTHCAL_CHANGE">
+    常量 日期框_内容改变 <公开 类型 = 整数 值 = 241 注释 = "XE_DATETIME_CHANGE">
+    常量 日期框_弹出月历 <公开 类型 = 整数 值 = 242 注释 = "XE_DATETIME_POPUP_MONTHCAL">
+    常量 日期框_退出月历 <公开 类型 = 整数 值 = 243 注释 = "XE_DATETIME_EXIT_MONTHCAL">
+    常量 弹出工具提示 <公开 类型 = 整数 值 = @XE_TOOLTIP_POPUP>
+    常量 文件拖入 <公开 类型 = 整数 值 = 250 注释 = "XE_DROPFILES">
+}
+
+类 窗口事件 <公开 折叠 @文档 = "category = \"炫彩常量.窗口常量\"">
+{
+    常量 托盘图标 <公开 类型 = 整数 值 = @XWM_TRAYICON 注释 = "int CALLBACK OnWndTrayIcon(WPARAM wParam, LPARAM lParam, BOOL *pbHandled)">
+    常量 框架窗口码头弹出窗格 <公开 类型 = 整数 值 = @XWM_DOCK_POPUP>
+    常量 浮动窗口拖动 <公开 类型 = 整数 值 = @XWM_FLOATWND_DRAG>
+    常量 窗格显示隐藏 <公开 类型 = 整数 值 = @XWM_PANE_SHOW>
+    常量 自定义事件 <公开 类型 = 整数 值 = 10001>
+    常量 处理过程 <公开 类型 = 整数 值 = 28674 注释 = "XWM_WINDPROC">
+    常量 绘制完成并已显示 <公开 类型 = 整数 值 = @XWM_PAINT_DISPLAY 注释 = "窗口绘制完成并且已经显示到屏幕">
+    常量 定时器炫彩 <公开 类型 = 整数 值 = 28677 注释 = "XWM_XC_TIMER,炫彩定时器,非系统定时器,注册消息 XWM_TIMER 接收">
+    常量 菜单弹出 <公开 类型 = 整数 值 = 28683 注释 = "XWM_MENU_POPUP">
+    常量 菜单弹出窗口 <公开 类型 = 整数 值 = 28684 注释 = "XWM_MENU_POPUP_WND">
+    常量 菜单选择 <公开 类型 = 整数 值 = 28685 注释 = "XWM_MENU_SELECT">
+    常量 菜单退出 <公开 类型 = 整数 值 = 28686 注释 = "XWM_MENU_EXIT">
+    常量 绘制菜单背景 <公开 类型 = 整数 值 = 28687 注释 = "XWM_MENU_DRAW_BACKGROUND 绘制菜单背景, 启用该功能需要调用 绘制背景()。">
+    常量 绘制菜单项 <公开 类型 = 整数 值 = 28688 注释 = "XWM_MENU_DRAWITEM 绘制菜单项事件, 启用该功能需要调用 是否绘制菜单项().">
+    常量 窗格浮动 <公开 类型 = 整数 值 = 28690 注释 = "XWM_FLOAT_PANE 窗格从框架窗口中弹出，变成浮动窗格。">
+    常量 绘制完成 <公开 类型 = 整数 值 = 28691 注释 = "XWM_PAINT_END">
+    常量 托盘 <公开 类型 = 整数 值 = 1025 注释 = "WM_USER+1">
+    常量 销毁 <公开 类型 = 整数 值 = 2 注释 = "WM_DESTROY">
+    常量 尺寸改变 <公开 类型 = 整数 值 = 5 注释 = "WM_SIZE">
+    常量 获得焦点 <公开 类型 = 整数 值 = 7 注释 = "WM_SETFOCUS">
+    常量 失去焦点 <公开 类型 = 整数 值 = 8 注释 = "WM_KILLFOCUS">
+    常量 绘制 <公开 类型 = 整数 值 = 15 注释 = "WM_PAINT">
+    常量 关闭 <公开 类型 = 整数 值 = 16 注释 = "WM_CLOSE">
+    常量 设置鼠标光标 <公开 类型 = 整数 值 = 32 注释 = "WM_SETCURSOR">
+    常量 位置改变 <公开 类型 = 整数 值 = @WM_MOVE 注释 = "">
+    常量 销毁非客户区 <公开 类型 = 整数 值 = 130 注释 = "WM_NCDESTROY">
+    常量 按键按下 <公开 类型 = 整数 值 = @WM_KEYDOWN>
+    常量 按键弹起 <公开 类型 = 整数 值 = @WM_KEYUP>
+    常量 输入字符 <公开 类型 = 整数 值 = 258 注释 = "WM_CHAR">
+    常量 定时器 <公开 类型 = 整数 值 = 275 注释 = "WM_TIMER">
+    常量 鼠标移动 <公开 类型 = 整数 值 = 512 注释 = "WM_MOUSEMOVE">
+    常量 鼠标左键按下 <公开 类型 = 整数 值 = 513 注释 = "WM_LBUTTONDOWN">
+    常量 鼠标左键弹起 <公开 类型 = 整数 值 = 514 注释 = "WM_LBUTTONUP">
+    常量 鼠标左键双击 <公开 类型 = 整数 值 = 515 注释 = "WM_LBUTTONDBLCLK">
+    常量 鼠标右键按下 <公开 类型 = 整数 值 = 516 注释 = "WM_RBUTTONDOWN">
+    常量 鼠标右键弹起 <公开 类型 = 整数 值 = 517 注释 = "WM_RBUTTONUP">
+    常量 鼠标右键双击 <公开 类型 = 整数 值 = 518 注释 = "WM_RBUTTONDBLCLK">
+    常量 鼠标滚轮滚动 <公开 类型 = 整数 值 = 522 注释 = "WM_MOUSEWHEEL">
+    常量 鼠标捕获改变 <公开 类型 = 整数 值 = 533 注释 = "WM_CAPTURECHANGED">
+    常量 退出移动 <公开 类型 = 整数 值 = 562 注释 = "WM_EXITSIZEMOVE">
+    常量 文件拖放 <公开 类型 = 整数 值 = 563 注释 = "WM_DROPFILES">
+    常量 鼠标进入 <公开 类型 = 整数 值 = 673 注释 = "WM_MOUSEHOVER">
+    常量 鼠标离开 <公开 类型 = 整数 值 = 675 注释 = "WM_MOUSELEAVE">
+    常量 系统按键按下 <公开 类型 = 整数 值 = @WM_SYSKEYDOWN 注释 = "当用户按下 F10 键 (激活菜单栏) 或按住 Alt 键，然后按另一个键时，发布到具有键盘焦点的窗口">
+    常量 获得焦点_元素 <公开 类型 = 整数 值 = @XWM_SETFOCUS_ELE 注释 = "XWM_SETFOCUS_ELE">
+    常量 主视图坐标改变 <公开 类型 = 整数 值 = @XWM_BODYVIEW_RECT 注释 = "XWM_BODYVIEW_RECT">
+}
+
+类 窗口样式 <公开 折叠 @文档 = "category = \"炫彩常量.窗口常量\"">
+{
+    常量 无 <公开 类型 = 整数 值 = 0 注释 = "window_style_nothing">
+    常量 标题元素 <公开 类型 = 整数 值 = 1 注释 = "window_style_caption 如果指定该属性，默认为绑定标题栏元素。">
+    常量 边框 <公开 类型 = 整数 值 = 2 注释 = "window_style_border 指定默认上下左右布局大小，如果没有指定，那么边框布局大小为 0 。">
+    常量 居中 <公开 类型 = 整数 值 = 4 注释 = "window_style_center">
+    常量 拖动边框 <公开 类型 = 整数 值 = 8 注释 = "window_style_drag_border">
+    常量 拖动窗口 <公开 类型 = 整数 值 = 16 注释 = "window_style_drag_window">
+    常量 允许最大 <公开 类型 = 整数 值 = 32 注释 = "window_style_allow_maxWindow">
+    常量 模态控制按钮 <公开 类型 = 整数 值 = 1223 注释 = "window_style_modal=( 窗口_样式_布局 | 窗口_样式_边框 |  窗口_样式_居中 )">
+    常量 默认 <公开 类型 = 整数 值 = @window_style_default
+            注释 = "window_style_default=( 窗口样式_布局 | 窗口样式_边框 | 窗口样式_居中 | 窗口样式_拖动边框 | 窗口样式_允许最大 )">
+    常量 图标 <公开 类型 = 整数 值 = @window_style_icon>
+    常量 标题 <公开 类型 = 整数 值 = @window_style_title>
+    常量 控制钮_最小化 <公开 类型 = 整数 值 = @window_style_btn_min>
+    常量 控制钮_最大化 <公开 类型 = 整数 值 = @window_style_btn_max>
+    常量 控制钮_关闭 <公开 类型 = 整数 值 = @window_style_btn_close>
+    常量 简单 <公开 类型 = 整数 值 = @window_style_simple>
+    常量 弹出窗口 <公开 类型 = 整数 值 = @window_style_pop 注释 = "图标, 标题, 关闭按钮">
+    常量 模态简单 <公开 类型 = 整数 值 = @window_style_modal_simple>
+    常量 子窗口 <公开 类型 = 整数 值 = @WS_CHILD>
+}
+
+类 炫彩托盘标识 <公开 折叠>
+{
+    常量 无图标 <公开 类型 = 整数 值 = @trayIcon_flag_icon_none>
+    常量 信息图标 <公开 类型 = 整数 值 = @trayIcon_flag_icon_info>
+    常量 警告图标 <公开 类型 = 整数 值 = @trayIcon_flag_icon_warning>
+    常量 错误图标 <公开 类型 = 整数 值 = @trayIcon_flag_icon_error>
+    常量 用户指定图标 <公开 类型 = 整数 值 = @trayIcon_flag_icon_user>
+    常量 禁止播放气泡声音 <公开 类型 = 整数 值 = @trayIcon_flag_nosound>
+}
+
+类 位置标识 <公开 折叠>
+{
+    常量 左 <公开 类型 = 整数 值 = @position_flag_left>
+    常量 上 <公开 类型 = 整数 值 = @position_flag_top>
+    常量 下 <公开 类型 = 整数 值 = @position_flag_bottom>
+    常量 右 <公开 类型 = 整数 值 = @position_flag_right>
+    常量 左上角 <公开 类型 = 整数 值 = @position_flag_leftTop>
+    常量 左下角 <公开 类型 = 整数 值 = @position_flag_leftBottom>
+    常量 右上角 <公开 类型 = 整数 值 = @position_flag_rightTop>
+    常量 右下角 <公开 类型 = 整数 值 = @position_flag_rightBottom>
+    常量 中心 <公开 类型 = 整数 值 = @position_flag_center>
+}
+
+类 显示方式 <公开 折叠 @文档 = "category = \"炫彩常量.窗口常量\"">
+{
+    常量 隐藏 <公开 类型 = 整数 值 = 0 注释 = "SW_HIDE">
+    常量 原来状态显示激活 <公开 类型 = 整数 值 = 1 注释 = "SW_SHOWNORMAL,用最近的大小和位置显示, 激活">
+    常量 最小化 <公开 类型 = 整数 值 = 2 注释 = "SW_SHOWMINIMIZED, 激活">
+    常量 最大化 <公开 类型 = 整数 值 = 3 注释 = "SW_SHOWMAXIMIZED, 激活">
+    常量 原来状态显示不激活 <公开 类型 = 整数 值 = 4 注释 = "SW_SHOWNOACTIVATE,用最近的大小和位置显示, 不激活">
+    常量 显示 <公开 类型 = 整数 值 = 5 注释 = "SW_SHOW(同1)">
+}
+
+类 窗口透明类型 <公开 折叠 @文档 = "category = \"炫彩常量.窗口常量\"">
+{
+    常量 默认 <公开 类型 = 整数 值 = 0 注释 = "window_transparent_false　默认窗口，不透明。">
+    常量 异型 <公开 类型 = 整数 值 = 1 注释 = "window_transparent_shaped　透明窗口，带透明通道，异型。">
+    常量 阴影 <公开 类型 = 整数 值 = 2 注释 = "window_transparent_shadow　阴影窗口，带透明通道，边框阴影，窗口透明或半透明。">
+    常量 简单 <公开 类型 = 整数 值 = 3 注释 = "window_transparent_simple　透明窗口，不带透明通道，指定半透明度，指定透明色。">
+    常量 玻璃 <公开 类型 = 整数 值 = 4 注释 = "window_transparent_win7　WIN7玻璃窗口，需要WIN7开启特效。  注：当前未启用">
+}
+
+类 列表树项状态 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 鼠标离开 <公开 类型 = 整数 值 = 0 注释 = "tree_item_state_leave">
+    常量 鼠标停留 <公开 类型 = 整数 值 = 1 注释 = "tree_item_state_stay">
+    常量 鼠标选择 <公开 类型 = 整数 值 = 2 注释 = "tree_item_state_select">
+}
+
+类 组合框状态 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 鼠标离开 <公开 类型 = 整数 值 = 0 注释 = "comboBox_state_leave">
+    常量 鼠标停留 <公开 类型 = 整数 值 = 1 注释 = "comboBox_state_stay">
+    常量 鼠标按下 <公开 类型 = 整数 值 = 2 注释 = "comboBox_state_down">
+}
+
+类 组合状态 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 窗口_无 <公开 类型 = 整数 值 = 0 注释 = "window_state_flag_nothing">
+    常量 窗口_全部 <公开 类型 = 整数 值 = 1 注释 = "window_state_flag_leave">
+    常量 窗口_中间 <公开 类型 = 整数 值 = 2 注释 = "window_state_flag_body_leave">
+    常量 窗口_顶边 <公开 类型 = 整数 值 = 4 注释 = "window_state_flag_top_leave">
+    常量 窗口_底边 <公开 类型 = 整数 值 = 8 注释 = "window_state_flag_bottom_leave">
+    常量 窗口_左边 <公开 类型 = 整数 值 = 16 注释 = "window_state_flag_left_leave">
+    常量 窗口_右边 <公开 类型 = 整数 值 = 32 注释 = "window_state_flag_right_leave">
+    常量 ""
+    常量 按钮_鼠标离开 <公开 类型 = 整数 值 = 16 注释 = "button_state_flag_leave">
+    常量 按钮_鼠标停留 <公开 类型 = 整数 值 = 32 注释 = "button_state_flag_stay">
+    常量 按钮_鼠标按下 <公开 类型 = 整数 值 = 64 注释 = "button_state_flag_down">
+    常量 按钮_鼠标选中 <公开 类型 = 整数 值 = 128 注释 = "button_state_flag_check">
+    常量 按钮_鼠标未选 <公开 类型 = 整数 值 = 256 注释 = "button_state_flag_check_no">
+    常量 按钮_窗口还原 <公开 类型 = 整数 值 = 512 注释 = "button_state_flag_WindowRestore">
+    常量 按钮_窗口最大 <公开 类型 = 整数 值 = 1024 注释 = "button_state_flag_WindowMaximize">
+    常量 ""
+    常量 月历_鼠标离开 <公开 类型 = 整数 值 = 16 注释 = "monthCal_state_flag_leave">
+    常量 月历_项鼠标离开 <公开 类型 = 整数 值 = 128 注释 = "monthCal_state_flag_item_leave">
+    常量 月历_项鼠标停留 <公开 类型 = 整数 值 = 256 注释 = "monthCal_state_flag_item_stay">
+    常量 月历_项鼠标按下 <公开 类型 = 整数 值 = 512 注释 = "monthCal_state_flag_item_down">
+    常量 月历_项鼠标选择 <公开 类型 = 整数 值 = 1024 注释 = "monthCal_state_flag_item_select">
+    常量 月历_项鼠标未选 <公开 类型 = 整数 值 = 2048 注释 = "monthCal_state_flag_item_select_no">
+    常量 月历_项选择今天 <公开 类型 = 整数 值 = 4096 注释 = "monthCal_state_flag_item_today">
+    常量 "//月历_项选择其他" <公开 类型 = 整数 值 = 8192 注释 = "monthCal_state_flag_item_other">
+    常量 月历_项选择上月 <公开 类型 = 整数 值 = 8192 注释 = "monthCal_state_flag_item_last_month">
+    常量 月历_项选择当月 <公开 类型 = 整数 值 = 16384 注释 = "monthCal_state_flag_item_cur_month">
+    常量 月历_项选择下月 <公开 类型 = 整数 值 = 32768 注释 = "monthCal_state_flag_item_next_month">
+    常量 ""
+    常量 窗格_鼠标离开 <公开 类型 = 整数 值 = 16 注释 = "pane_state_flag_leave">
+    常量 窗格_鼠标停留 <公开 类型 = 整数 值 = 32 注释 = "pane_state_flag_stay">
+    常量 窗格_标题栏 <公开 类型 = 整数 值 = 128 注释 = "pane_state_flag_caption">
+    常量 窗格_窗体 <公开 类型 = 整数 值 = 256 注释 = "pane_state_flag_body">
+    常量 ""
+    常量 组合框_鼠标离开 <公开 类型 = 整数 值 = 16 注释 = "comboBox_state_flag_leave">
+    常量 组合框_鼠标停留 <公开 类型 = 整数 值 = 32 注释 = "comboBox_state_flag_stay">
+    常量 组合框_鼠标按下 <公开 类型 = 整数 值 = 64 注释 = "comboBox_state_flag_down">
+    常量 ""
+    常量 列表_项鼠标离开 <公开 类型 = 整数 值 = 128 注释 = "list_state_flag_item_leave">
+    常量 列表_项鼠标停留 <公开 类型 = 整数 值 = 256 注释 = "list_state_flag_item_stay">
+    常量 列表_项被选择 <公开 类型 = 整数 值 = 512 注释 = "list_state_flag_item_select">
+    常量 列表_项未选择 <公开 类型 = 整数 值 = 1024 注释 = "list_state_flag_item_select_no">
+    常量 ""
+    常量 列表头_鼠标离开 <公开 类型 = 整数 值 = 128 注释 = "listHeader_state_flag_item_leave,需要取列表头,事件才有效">
+    常量 列表头_鼠标停留 <公开 类型 = 整数 值 = 256 注释 = "listHeader_state_flag_item_stay,需要取列表头,事件才有效">
+    常量 列表头_鼠标按下 <公开 类型 = 整数 值 = 512 注释 = "listHeader_state_flag_item_down,需要取列表头,事件才有效">
+    常量 ""
+    常量 列表框_项鼠标离开 <公开 类型 = 整数 值 = 128 注释 = "listBox_state_flag_item_leave">
+    常量 列表框_项鼠标停留 <公开 类型 = 整数 值 = 256 注释 = "listBox_state_flag_item_stay">
+    常量 列表框_项被选择 <公开 类型 = 整数 值 = 512 注释 = "listBox_state_flag_item_select">
+    常量 列表框_项未选择 <公开 类型 = 整数 值 = 1024 注释 = "listBox_state_flag_item_select_no">
+    常量 ""
+    常量 列表视图_项鼠标离开 <公开 类型 = 整数 值 = 128 注释 = "listView_state_flag_item_leave">
+    常量 列表视图_项鼠标停留 <公开 类型 = 整数 值 = 256 注释 = "listView_state_flag_item_stay">
+    常量 列表视图_项被选择 <公开 类型 = 整数 值 = 512 注释 = "listView_state_flag_item_select">
+    常量 列表视图_项未选择 <公开 类型 = 整数 值 = 1024 注释 = "listView_state_flag_item_select_no">
+    常量 列表视图_组鼠标离开 <公开 类型 = 整数 值 = 2048 注释 = "listView_state_flag_group_leave">
+    常量 列表视图_组鼠标停留 <公开 类型 = 整数 值 = 4096 注释 = "listView_state_flag_group_stay">
+    常量 列表视图_组被选择 <公开 类型 = 整数 值 = 8192 注释 = "listView_state_flag_group_select">
+    常量 列表视图_组未选择 <公开 类型 = 整数 值 = 16384 注释 = "listView_state_flag_group_select_no">
+    常量 ""
+    常量 属性框_项鼠标离开 <公开 类型 = 整数 值 = 128 注释 = "propertyGrid_state_flag_item_leave">
+    常量 属性框_项鼠标停留 <公开 类型 = 整数 值 = 256 注释 = "propertyGrid_state_flag_item_stay">
+    常量 属性框_项鼠标选择 <公开 类型 = 整数 值 = 512 注释 = "propertyGrid_state_flag_item_select">
+    常量 属性框_项鼠标未选 <公开 类型 = 整数 值 = 1024 注释 = "propertyGrid_state_flag_item_select_no">
+    常量 属性框_组鼠标离开 <公开 类型 = 整数 值 = 2048 注释 = "propertyGrid_state_flag_group_leave">
+    常量 属性框_组展开 <公开 类型 = 整数 值 = 4096 注释 = "propertyGrid_state_flag_group_expand">
+    常量 属性框_组收缩 <公开 类型 = 整数 值 = 8192 注释 = "propertyGrid_state_flag_group_expand_no">
+    常量 ""
+    常量 列表树_项鼠标离开 <公开 类型 = 整数 值 = 128 注释 = "tree_state_flag_item_leave">
+    常量 列表树_项鼠标停留 <公开 类型 = 整数 值 = 256 注释 = "tree_state_flag_item_stay">
+    常量 列表树_项鼠标选择 <公开 类型 = 整数 值 = 512 注释 = "tree_state_flag_item_select">
+    常量 列表树_项鼠标未选 <公开 类型 = 整数 值 = 1024 注释 = "tree_state_flag_item_select_no">
+    常量 列表树_项为组 <公开 类型 = 整数 值 = 2048 注释 = "tree_state_flag_group">
+    常量 列表树_项非组 <公开 类型 = 整数 值 = 4096 注释 = "tree_state_flag_group_no">
+    常量 ""
+    常量 元素_无 <公开 类型 = 整数 值 = 0 注释 = "element_state_flag_nothing">
+    常量 元素_启用 <公开 类型 = 整数 值 = 1 注释 = "element_state_flag_enable,背景">
+    常量 元素_禁用 <公开 类型 = 整数 值 = 2 注释 = "element_state_flag_disable">
+    常量 元素_有焦点 <公开 类型 = 整数 值 = 4 注释 = "element_state_flag_focus">
+    常量 元素_无焦点 <公开 类型 = 整数 值 = 8 注释 = "element_state_flag_focus_no">
+    常量 元素_鼠标离开 <公开 类型 = 整数 值 = 16 注释 = "element_state_flag_leave">
+    常量 元素_鼠标停留 <公开 类型 = 整数 值 = 32 注释 = "element_state_flag_stay">
+    常量 元素_鼠标按下 <公开 类型 = 整数 值 = 64 注释 = "element_state_flag_down">
+    常量 元素_有焦点Ex <公开 类型 = 整数 值 = @element_state_flag_focusEx 注释 = "该元素或该元素的子元素拥有焦点">
+    常量 元素_无焦点Ex <公开 类型 = 整数 值 = @element_state_flag_focusEx_no 注释 = "无焦点Ex">
+    常量 ""
+    常量 布局_内容区 <公开 类型 = 整数 值 = @layout_state_flag_body 注释 = "布局内容区">
+    常量 布局_无 <公开 类型 = 整数 值 = @layout_state_flag_nothing>
+    常量 布局_完整背景 <公开 类型 = 整数 值 = @layout_state_flag_full>
+}
+
+类 按钮图标对齐 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 左边 <公开 类型 = 整数 值 = 0 注释 = "button_icon_align_left">
+    常量 上边 <公开 类型 = 整数 值 = 1 注释 = "button_icon_align_top">
+    常量 右边 <公开 类型 = 整数 值 = 2 注释 = "button_icon_align_right">
+    常量 下边 <公开 类型 = 整数 值 = 3 注释 = "button_icon_align_bottom">
+}
+
+类 按钮状态 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 离开 <公开 类型 = 整数 值 = 0 注释 = "button_state_leave">
+    常量 停留 <公开 类型 = 整数 值 = 1 注释 = "button_state_stay">
+    常量 按下 <公开 类型 = 整数 值 = 2 注释 = "button_state_down">
+    常量 选中 <公开 类型 = 整数 值 = 3 注释 = "button_state_check">
+    常量 禁用 <公开 类型 = 整数 值 = 4 注释 = "button_state_disable">
+}
+
+类 按钮类型标识 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 默认 <公开 类型 = 整数 值 = 0 注释 = "button_type_default">
+    常量 单选 <公开 类型 = 整数 值 = 1 注释 = "button_type_radio">
+    常量 复选 <公开 类型 = 整数 值 = 2 注释 = "button_type_check">
+    常量 窗口关闭 <公开 类型 = 整数 值 = 3 注释 = "button_type_close">
+    常量 窗口最小化 <公开 类型 = 整数 值 = 4 注释 = "button_type_min">
+    常量 窗口最大化 <公开 类型 = 整数 值 = 5 注释 = "button_type_max">
+    常量 ""
+    常量 月历_今天 <公开 类型 = 整数 值 = 0 注释 = "monthCal_button_type_today">
+    常量 月历_上一年 <公开 类型 = 整数 值 = 1 注释 = "monthCal_button_type_last_year">
+    常量 月历_下一年 <公开 类型 = 整数 值 = 2 注释 = "monthCal_button_type_next_year">
+    常量 月历_上一月 <公开 类型 = 整数 值 = 3 注释 = "monthCal_button_type_last_month">
+    常量 月历_下一月 <公开 类型 = 整数 值 = 4 注释 = "monthCal_button_type_next_month">
+}
+
+类 按钮样式 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 "//炫彩样式_默认" <公开 类型 = 整数 值 = 0 注释 = "xc_style_default">
+    常量 默认 <公开 类型 = 整数 值 = @button_style_default 注释 = "button_style_default">
+    常量 复选 <公开 类型 = 整数 值 = @button_style_check 注释 = "button_style_radio">
+    常量 单选 <公开 类型 = 整数 值 = @button_style_radio 注释 = "button_style_check">
+    常量 图标 <公开 类型 = 整数 值 = @button_style_icon>
+    常量 展开 <公开 类型 = 整数 值 = @button_style_expand 注释 = "button_style_expand">
+    常量 关闭 <公开 类型 = 整数 值 = @button_style_close>
+    常量 最大化 <公开 类型 = 整数 值 = @button_style_max>
+    常量 最小化 <公开 类型 = 整数 值 = @button_style_min>
+    常量 滚动条_水平左按钮 <公开 类型 = 整数 值 = @button_style_scrollbar_left 注释 = "button_style_scrollbar_left">
+    常量 滚动条_水平右按钮 <公开 类型 = 整数 值 = @button_style_scrollbar_right 注释 = "button_style_scrollbar_right">
+    常量 滚动条_垂直上按钮 <公开 类型 = 整数 值 = @button_style_scrollbar_up 注释 = "button_style_scrollbar_up">
+    常量 滚动条_垂直下按钮 <公开 类型 = 整数 值 = @button_style_scrollbar_down 注释 = "button_style_scrollbar_down">
+    常量 滚动条_水平滑块 <公开 类型 = 整数 值 = @button_style_scrollbar_slider_h 注释 = "button_style_scrollbar_slider_h">
+    常量 滚动条_垂直滑块 <公开 类型 = 整数 值 = @button_style_scrollbar_slider_v 注释 = "button_style_scrollbar_slider_v">
+    常量 Tab条_按钮 <公开 类型 = 整数 值 = @button_style_tabBar>
+    常量 滑动条_滑块 <公开 类型 = 整数 值 = @button_style_slider>
+    常量 工具条_按钮 <公开 类型 = 整数 值 = @button_style_toolBar 注释 = "button_style_tabBar_button">
+    常量 工具条_左滚动 <公开 类型 = 整数 值 = @button_style_toolBar_left 注释 = "button_style_toolBar_left">
+    常量 工具条_右滚动 <公开 类型 = 整数 值 = @button_style_toolBar_right 注释 = "button_style_toolBar_right">
+    常量 窗格关闭 <公开 类型 = 整数 值 = @button_style_pane_close 注释 = "button_style_pane_close">
+    常量 窗格锁定 <公开 类型 = 整数 值 = @button_style_pane_lock 注释 = "button_style_pane_lock">
+    常量 窗格菜单 <公开 类型 = 整数 值 = @button_style_pane_menu 注释 = "button_style_pane_menu">
+    常量 窗格码头左 <公开 类型 = 整数 值 = @button_style_pane_dock_left 注释 = "">
+    常量 窗格码头上 <公开 类型 = 整数 值 = @button_style_pane_dock_top>
+    常量 窗格码头右 <公开 类型 = 整数 值 = @button_style_pane_dock_right>
+    常量 窗格码头下 <公开 类型 = 整数 值 = @button_style_pane_dock_bottom>
+    常量 框架窗口_停靠左边 <公开 类型 = 整数 值 = @element_style_frameWnd_dock_left>
+    常量 框架窗口_停靠顶部 <公开 类型 = 整数 值 = @element_style_frameWnd_dock_top>
+    常量 框架窗口_停靠右边 <公开 类型 = 整数 值 = @element_style_frameWnd_dock_right>
+    常量 框架窗口_停靠底部 <公开 类型 = 整数 值 = @element_style_frameWnd_dock_bottom>
+    常量 工具条_分割线 <公开 类型 = 整数 值 = @element_style_toolBar_separator>
+    常量 组合框_下拉列表框 <公开 类型 = 整数 值 = @listBox_style_comboBox 注释 = "组合框-下拉列表框 ,下拉组合框弹出的ListBox">
+}
+
+类 普通状态 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 鼠标离开 <公开 类型 = 整数 值 = 0 注释 = "common_state3_leave">
+    常量 鼠标停留 <公开 类型 = 整数 值 = 1 注释 = "common_state3_stay">
+    常量 鼠标按下 <公开 类型 = 整数 值 = 2 注释 = "common_state3_down">
+}
+
+类 表格标识 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 铺满组合单元格 <公开 类型 = 整数 值 = 0 注释 = "table_flag_full">
+    常量 正常最小单元格 <公开 类型 = 整数 值 = 1 注释 = "table_flag_none">
+    常量 ""
+    常量 线左边 <公开 类型 = 整数 值 = 1 注释 = "table_line_flag_left">
+    常量 线顶边 <公开 类型 = 整数 值 = 2 注释 = "table_line_flag_top">
+    常量 线右边 <公开 类型 = 整数 值 = 4 注释 = "table_line_flag_right">
+    常量 线下边 <公开 类型 = 整数 值 = 8 注释 = "table_line_flag_bottom">
+    常量 线左边2 <公开 类型 = 整数 值 = 16 注释 = "table_line_flag_left2">
+    常量 线顶边2 <公开 类型 = 整数 值 = 32 注释 = "table_line_flag_top2">
+    常量 线右边2 <公开 类型 = 整数 值 = 64 注释 = "table_line_flag_right2">
+    常量 线下边2 <公开 类型 = 整数 值 = 128 注释 = "table_line_flag_bottom2">
+}
+
+类 Z序位置 <公开 折叠>
+{
+    常量 最上面 <公开 类型 = 整数 值 = @zorder_top 注释 = "0">
+    常量 最下面 <公开 类型 = 整数 值 = @zorder_bottom 注释 = "1">
+    常量 指定目标下面 <公开 类型 = 整数 值 = @zorder_before 注释 = "2">
+    常量 指定目标上面 <公开 类型 = 整数 值 = @zorder_after 注释 = "3">
+}
+
+类 消息框标识 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 其他 <公开 类型 = 整数 值 = 0 注释 = "messageBox_flag_other">
+    常量 确定按钮 <公开 类型 = 整数 值 = 1 注释 = "messageBox_flag_ok">
+    常量 取消按钮 <公开 类型 = 整数 值 = 2 注释 = "messageBox_flag_cancel">
+    常量 图标_应用图标 <公开 类型 = 整数 值 = 4096 注释 = "messageBox_flag_icon_appicon">
+    常量 图标_信息 <公开 类型 = 整数 值 = 8192 注释 = "messageBox_flag_icon_info">
+    常量 图标_问询_帮助_提问 <公开 类型 = 整数 值 = 16384 注释 = "messageBox_flag_icon_qustion">
+    常量 图标_错误_禁止_拒绝 <公开 类型 = 整数 值 = 32768 注释 = "messageBox_flag_icon_error">
+    常量 图标_警告 <公开 类型 = 整数 值 = 65536 注释 = "messageBox_flag_icon_warning">
+    常量 图标_盾牌_安全 <公开 类型 = 整数 值 = 131072 注释 = "messageBox_flag_icon_shield">
+}
+
+类 文本标识 <公开 折叠>
+{
+    常量 对齐_左对齐 <公开 类型 = 整数 值 = 0 注释 = "textAlignFlag edit_textAlign_flag_">
+    常量 对齐_水平居中 <公开 类型 = 整数 值 = 1 注释 = "textAlignFlag">
+    常量 对齐_右对齐 <公开 类型 = 整数 值 = 2 注释 = "textAlignFlag">
+    常量 对齐_顶对齐 <公开 类型 = 整数 值 = 0 注释 = "textAlignFlag">
+    常量 对齐_垂直居中 <公开 类型 = 整数 值 = @textAlignFlag_vcenter 注释 = "textAlignFlag">
+    常量 对齐_底对齐 <公开 类型 = 整数 值 = 8 注释 = "textAlignFlag">
+    常量 ""
+    常量 对齐_水平居中_编辑框 <公开 类型 = 整数 值 = 2 注释 = "edit_textAlign_flag_">
+    常量 对齐_右对齐_编辑框 <公开 类型 = 整数 值 = 1 注释 = "edit_textAlign_flag_">
+    常量 对齐_垂直居中_编辑框 <公开 类型 = 整数 值 = 8 注释 = "textAlignFlag">
+    常量 对齐_底对齐_编辑框 <公开 类型 = 整数 值 = 4 注释 = "textAlignFlag">
+    常量 ""
+    常量 格式_从右向左 <公开 类型 = 整数 值 = 16 注释 = "textFormatFlag_DirectionRightToLeft 从右向左顺序显示文本">
+    常量 格式_禁止换行 <公开 类型 = 整数 值 = 32 注释 = "textFormatFlag_NoWrap 禁止换行">
+    常量 格式_垂直显示 <公开 类型 = 整数 值 = 64 注释 = "textFormatFlag_DirectionVertical 垂直显示文本">
+    常量 格式_突破布局 <公开 类型 = 整数 值 = 128 注释 = "textFormatFlag_NoFitBlackBox 允许部分字符延伸该字符串的布局矩形。默认情况下，将重新定位字符以避免任何延伸">
+    常量 格式_显示格式 <公开 类型 = 整数 值 = 256 注释 = "textFormatFlag_DisplayFormatControl 控制字符（如从左到右标记）随具有代表性的标志符号一起显示在输出中。">
+    常量 格式_禁用恢复字体 <公开 类型 = 整数 值 = 512
+            注释 = "textFormatFlag_NoFontFallback 对于请求的字体中不支持的字符，禁用回退到可选字体。缺失的任何字符都用缺失标志符号的字体显示，通常是一个空的方块">
+    常量 格式_包含尾随空格 <公开 类型 = 整数 值 = 1024
+            注释 = "textFormatFlag_MeasureTrailingSpaces 包括每一行结尾处的尾随空格。在默认情况下，MeasureString 方法返回的边框都将排除每一行结尾处的空格。设置此标记以便在测定时将空格包括进去">
+    常量 格式_线条限制 <公开 类型 = 整数 值 = 2048 注释 = "textFormatFlag_LineLimit">
+    常量 格式_突破边框 <公开 类型 = 整数 值 = 4096 注释 = "textFormatFlag_NoClip 允许显示标志符号的伸出部分和延伸到边框外的未换行文本。在默认情况下，延伸到边框外侧的所有文本和标志符号部分都被剪裁">
+    常量 ""
+    常量 整理_不去尾 <公开 类型 = 整数 值 = 0 注释 = "textTrimming_None 不使用去尾">
+    常量 整理_去尾部字符 <公开 类型 = 整数 值 = 262144 注释 = "textTrimming_Character 以字符为单位去尾">
+    常量 整理_去尾部单词 <公开 类型 = 整数 值 = 524288 注释 = "textTrimming_Word 以单词为单位去尾">
+    常量 整理_省略显示省略号 <公开 类型 = 整数 值 = 32768 注释 = "textTrimming_EllipsisCharacter 省略部分使用且略号表示">
+    常量 整理_省略文本 <公开 类型 = 整数 值 = 65536 注释 = "textTrimming_EllipsisWord">
+    常量 整理_显示首尾 <公开 类型 = 整数 值 = 131072 注释 = "textTrimming_EllipsisPath 略去字符串中间部分，保证字符的首尾都能够显示">
+}
+
+类 布局标识 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 调整_无 <公开 类型 = 整数 值 = 0 注释 = "adjustLayout_no,不调整布局">
+    常量 调整_全部 <公开 类型 = 整数 值 = 1 注释 = "adjustLayout_all,强制调整自身和子对象布局.">
+    常量 调整_自身 <公开 类型 = 整数 值 = 2 注释 = "adjustLayout_self,只调整自身布局,不调整子对象布局.">
+    常量 ""
+    常量 对齐_左边 <公开 类型 = 整数 值 = 0 注释 = "layout_align_left">
+    常量 对齐_顶边 <公开 类型 = 整数 值 = 1 注释 = "layout_align_top">
+    常量 对齐_右边 <公开 类型 = 整数 值 = 2 注释 = "layout_align_right">
+    常量 对齐_底边 <公开 类型 = 整数 值 = 3 注释 = "layout_align_bottom">
+    常量 对齐_居中 <公开 类型 = 整数 值 = 4 注释 = "layout_align_center">
+    常量 对齐_等距 <公开 类型 = 整数 值 = 5 注释 = "layout_align_equidistant">
+    常量 ""
+    常量 尺寸_固定 <公开 类型 = 整数 值 = 0 注释 = "layout_size_fixed">
+    常量 尺寸_填充父 <公开 类型 = 整数 值 = 1 注释 = "layout_size_fill">
+    常量 尺寸_自动 <公开 类型 = 整数 值 = 2 注释 = "layout_size_auto,根据内容计算大小">
+    常量 尺寸_比例 <公开 类型 = 整数 值 = 3 注释 = "layout_size_weight,按照比例分配剩余空间">
+    常量 尺寸_百分比 <公开 类型 = 整数 值 = 4 注释 = "layout_size_percent">
+    常量 尺寸_禁用 <公开 类型 = 整数 值 = 5 注释 = "layout_size_disable">
+    常量 ""
+    常量 对齐轴_自动 <公开 类型 = 整数 值 = 0 注释 = "layout_align_axis_auto">
+    常量 对齐轴_左顶 <公开 类型 = 整数 值 = 1 注释 = "layout_align_axis_start,水平布局(顶部), 垂直布局(左侧)">
+    常量 对齐轴_居中 <公开 类型 = 整数 值 = 2 注释 = "layout_align_axis_center">
+    常量 对齐轴_右底 <公开 类型 = 整数 值 = 3 注释 = "layout_align_axis_end,水平布局(底部), 垂直布局(右侧)">
+}
+
+类 数据适配器类型 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 错误 <公开 类型 = 整数 值 = -1 注释 = "adapter_date_type_error">
+    常量 整数型 <公开 类型 = 整数 值 = 0 注释 = "adapter_date_type_int">
+    常量 小数型 <公开 类型 = 整数 值 = 1 注释 = "adapter_date_type_float">
+    常量 字符串 <公开 类型 = 整数 值 = 2 注释 = "adapter_date_type_string">
+    常量 图片 <公开 类型 = 整数 值 = 3 注释 = "adapter_date_type_image">
+}
+
+类 元素位置 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 无效 <公开 类型 = 整数 值 = 0 注释 = "element_position_no">
+    常量 左边 <公开 类型 = 整数 值 = 1 注释 = "element_position_left">
+    常量 顶边 <公开 类型 = 整数 值 = 2 注释 = "element_position_top">
+    常量 右边 <公开 类型 = 整数 值 = 4 注释 = "element_position_right">
+    常量 底边 <公开 类型 = 整数 值 = 8 注释 = "element_position_bottom">
+}
+
+类 D2D文本渲染模式 <公开 折叠>
+{
+    常量 默认 <公开 类型 = 整数 值 = @XC_DWRITE_RENDERING_MODE_DEFAULT 注释 = "指定根据字体和大小自动确定呈现模式" 编辑时信息 = "0, 70CC5, 0, 0">
+    常量 不抗锯齿 <公开 类型 = 整数 值 = @XC_DWRITE_RENDERING_MODE_ALIASED 注释 = "指定不执行抗锯齿。每个像素要么设置为文本的前景色，要么保留背景的颜色"
+            编辑时信息 = "0, 70CC5, 0, 0">
+    常量 GDI_CLASSIC <公开 类型 = 整数 值 = @XC_DWRITE_RENDERING_MODE_CLEARTYPE_GDI_CLASSIC
+            注释 = "使用与别名文本相同的度量指定 ClearType 呈现,字形只能定位在整个像素的边界上" 编辑时信息 = "0, 70CC5, 0, 0">
+    常量 GDI_NATURAL <公开 类型 = 整数 值 = @XC_DWRITE_RENDERING_MODE_CLEARTYPE_GDI_NATURAL
+            注释 = "使用使用 CLEARTYPE_NATURAL_QUALITY 创建的字体，使用与使用 GDI 的文本呈现相同的指标指定 ClearType 呈现。 与使用别名文本相比，字形度量更接近其理想值，但字形仍然位于整个像素的边界上"
+            编辑时信息 = "0, 70CC5, 0, 0">
+    常量 NATURAL <公开 类型 = 整数 值 = @XC_DWRITE_RENDERING_MODE_CLEARTYPE_NATURAL
+            注释 = "仅在水平维度中指定具有抗锯齿功能的 ClearType 渲染。 这通常用于中小字体大小（最多 16 ppem）" 编辑时信息 = "0, 70CC5, 0, 0">
+    常量 NATURAL_SYMMETRIC <公开 类型 = 整数 值 = @XC_DWRITE_RENDERING_MODE_CLEARTYPE_NATURAL_SYMMETRIC
+            注释 = "指定在水平和垂直维度上具有抗锯齿的 ClearType 渲染。这通常用于较大的尺寸，以使曲线和对角线看起来更平滑，但会牺牲一些柔和度" 编辑时信息 = "0, 70CC5, 0, 0">
+    常量 OUTLINE <公开 类型 = 整数 值 = @XC_DWRITE_RENDERING_MODE_OUTLINE 注释 = "指定渲染应绕过光栅化器并直接使用轮廓。 这通常用于非常大的尺寸"
+            编辑时信息 = "0, 70CC5, 0, 0">
+}
+
+类 绘制类型 <公开 折叠>
+{
+    常量 图片默认 <公开 类型 = 整数 值 = 0 注释 = "image_draw_type_default">
+    常量 图片拉伸 <公开 类型 = 整数 值 = @image_draw_type_stretch 注释 = "image_draw_type_stretch">
+    常量 图片自适应_九宫格 <公开 类型 = 整数 值 = 2 注释 = "image_draw_type_adaptive">
+    常量 图片平铺 <公开 类型 = 整数 值 = 3 注释 = "image_draw_type_tile">
+    常量 图片固定比例 <公开 类型 = 整数 值 = 4 注释 = "image_draw_type_fixed_ratio">
+    常量 图片九宫格不绘制中间区域 <公开 类型 = 整数 值 = 5 注释 = "image_draw_type_adaptive_border">
+}
+
+类 列表状态 <公开 注释 = "适用于(列表,列表框,列表视图)" 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 项_鼠标离开 <公开 类型 = 整数 值 = 0 注释 = "list_item_state_leave">
+    常量 项_鼠标停留 <公开 类型 = 整数 值 = 1 注释 = "list_item_state_stay">
+    常量 项_选择状态 <公开 类型 = 整数 值 = 2 注释 = "list_item_state_select">
+    常量 项_缓存的项 <公开 类型 = 整数 值 = 3 注释 = "list_item_state_cache">
+}
+
+类 菜单标识 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 项_正常 <公开 类型 = 整数 值 = 0 注释 = "menu_item_flags_normal">
+    常量 项_选择 <公开 类型 = 整数 值 = 1 注释 = "停留或选择">
+    常量 项_勾选 <公开 类型 = 整数 值 = 2 注释 = "menu_item_flags_check">
+    常量 项_弹出 <公开 类型 = 整数 值 = 4 注释 = "menu_item_flags_popup">
+    常量 项_弹出选择 <公开 类型 = 整数 值 = 5>
+    常量 项_分隔栏 <公开 类型 = 整数 值 = 8 注释 = "menu_item_flags_separator “ID号任意，ID号被忽略”">
+    常量 项_禁用 <公开 类型 = 整数 值 = 16 注释 = "menu_item_flags_disable">
+}
+
+类 菜单方向 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 弹出_左上角 <公开 类型 = 整数 值 = 0 注释 = "menu_popup_position_left_top">
+    常量 弹出_左下角 <公开 类型 = 整数 值 = 1 注释 = "menu_popup_position_left_bottom">
+    常量 弹出_右上角 <公开 类型 = 整数 值 = 2 注释 = "menu_popup_position_right_top">
+    常量 弹出_右下角 <公开 类型 = 整数 值 = 3 注释 = "menu_popup_position_right_bottom">
+    常量 弹出_左居中 <公开 类型 = 整数 值 = 4 注释 = "menu_popup_position_center_left">
+    常量 弹出_上居中 <公开 类型 = 整数 值 = 5 注释 = "menu_popup_position_center_top">
+    常量 弹出_右居中 <公开 类型 = 整数 值 = 6 注释 = "menu_popup_position_center_right">
+    常量 弹出_下居中 <公开 类型 = 整数 值 = 7 注释 = "menu_popup_position_center_bottom">
+}
+
+类 菜单ID <公开 折叠>
+{
+    常量 剪切 <公开 类型 = 整数 值 = @IDM_CLIP>
+    常量 复制 <公开 类型 = 整数 值 = @IDM_COPY>
+    常量 粘贴 <公开 类型 = 整数 值 = @IDM_PASTE>
+    常量 删除 <公开 类型 = 整数 值 = @IDM_DELETE>
+    常量 全选 <公开 类型 = 整数 值 = @IDM_SELECTALL>
+    常量 清空 <公开 类型 = 整数 值 = @IDM_DELETEALL>
+}
+
+类 炫彩ID <公开 折叠>
+{
+    常量 根节点 <公开 类型 = 整数 值 = 0 注释 = "XC_ID_ROOT">
+    常量 错误 <公开 类型 = 整数 值 = -1 注释 = "XC_ID_ERROR">
+    常量 开始 <公开 类型 = 整数 值 = -2 注释 = "XC_ID_FIRST">
+    常量 末尾 <公开 类型 = 整数 值 = -3 注释 = "XC_ID_LAST">
+}
+
+类 字体风格 <公开 折叠>
+{
+    常量 正常 <公开 类型 = 整数 值 = 0 注释 = "fontStyle_regular">
+    常量 粗体 <公开 类型 = 整数 值 = 1 注释 = "fontStyle_bold">
+    常量 斜体 <公开 类型 = 整数 值 = 2 注释 = "fontStyle_italic">
+    常量 粗斜体 <公开 类型 = 整数 值 = 3 注释 = "fontStyle_boldItalic">
+    常量 下划线 <公开 类型 = 整数 值 = 4 注释 = "fontStyle_underline">
+    常量 删除线 <公开 类型 = 整数 值 = 8 注释 = "fontStyle_strikeout">
+}
+
+类 操作方式 <公开 折叠>
+{
+    常量 填充黑色 <公开 类型 = 整数 值 = 66 注释 = "BLACKNESS 用黑色填充目标矩形区域。">
+    常量 填充白色 <公开 类型 = 整数 值 = 16711778 注释 = "WHITENESS 用白色填充目标矩形区域。">
+    常量 目标取反 <公开 类型 = 整数 值 = 5570569 注释 = "DSTINVERT 将目标矩形区域颜色取反。">
+    常量 与运算 <公开 类型 = 整数 值 = 12583114 注释 = "MERGECOPY 使用（与）运算将源矩形区域的颜色与特定模式组合。">
+    常量 或运算 <公开 类型 = 整数 值 = 15597702 注释 = "SRCPAINT 使用（或）运算将源和目标矩形区域的颜色组合。">
+    常量 异或运算 <公开 类型 = 整数 值 = 6684742 注释 = "SRCINVERT 使用（异或）运算将源和目标矩形区域的颜色组合。">
+    常量 与运算_取反目标 <公开 类型 = 整数 值 = 4457256 注释 = "SRCERASE 使用（与）运算将目标矩形区域颜色取反后与源矩形区域的颜色组合。">
+    常量 或运算_取反源 <公开 类型 = 整数 值 = 12255782 注释 = "MERGEPAINT 使用（或）运算将源矩形区域的颜色取反与目标矩形区域的颜色组合。">
+    常量 或运算_取反结果 <公开 类型 = 整数 值 = 1114278 注释 = "NOTSRCERASE 使用（或）运算将源和目标矩形区域的颜色组合，将组合的颜色取反。">
+    常量 或运算_指定模式 <公开 类型 = 整数 值 = 16452105 注释 = "PATPAINT 通过（或）运算将源矩形区域取反后的颜色值与特定模式的颜色组合。然后使用（或）运算将该操作的结果与目标矩形区域内的颜色组合。">
+    常量 异或运算_指定模式 <公开 类型 = 整数 值 = 5898313 注释 = "PATINVERT 使用（异或）运算将源特定模式的颜色和目标矩形区域内的颜色组合。">
+    常量 复制全部 <公开 类型 = 整数 值 = 13369376 注释 = "SRCCOPY 将源矩形区域直接复制到目标矩形区域。">
+    常量 复制指定 <公开 类型 = 整数 值 = 15728673 注释 = "PATCOPY 将指定的模式复制到目标矩形。">
+    常量 复制取反 <公开 类型 = 整数 值 = 3342344 注释 = "NOTSRCCOPY 将源矩形颜色取反后复制到目标矩形。">
+}
+
+类 缓动类型 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 慢到快 <公开 类型 = 整数 值 = 0 注释 = "easeIn,从慢到快">
+    常量 快到慢 <公开 类型 = 整数 值 = 1 注释 = "easeOut,从快到慢">
+    常量 慢到快再到慢 <公开 类型 = 整数 值 = 2 注释 = "easeInOut,从慢到快再到慢">
+}
+
+类 项模板类型 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 树形框 <公开 类型 = 整数 值 = 1 注释 = "listItemTemp_type_tree">
+    常量 列表框 <公开 类型 = 整数 值 = @listItemTemp_type_listBox 注释 = "listItemTemp_type_listBox">
+    常量 列表头 <公开 类型 = 整数 值 = 4 注释 = "listItemTemp_type_list_head">
+    常量 列表项 <公开 类型 = 整数 值 = 8 注释 = "listItemTemp_type_list_item">
+    常量 列表视图组 <公开 类型 = 整数 值 = 16 注释 = "listItemTemp_type_listView_group">
+    常量 列表视图项 <公开 类型 = 整数 值 = 32 注释 = "listItemTemp_type_listView_item">
+    常量 组合_列表头列表项 <公开 类型 = 整数 值 = 12 注释 = "listItemTemp_type_list">
+    常量 组合_列表视图组视图项 <公开 类型 = 整数 值 = 48 注释 = "listItemTemp_type_listView">
+}
+
+类 聊天气泡 <公开 注释 = "编辑框聊天气泡" 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 对齐_左边 <公开 类型 = 整数 值 = 1 注释 = "chat_flag_left">
+    常量 对齐_右边 <公开 类型 = 整数 值 = 2 注释 = "chat_flag_right">
+    常量 对齐_中间 <公开 类型 = 整数 值 = 4 注释 = "chat_flag_center">
+    常量 对齐_下一行显示气泡 <公开 类型 = 整数 值 = 8 注释 = "chat_flag_next_row_bubble">
+}
+
+类 编辑框类型 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 普通 <公开 类型 = 整数 值 = 0 注释 = "edit_type_none">
+    常量 代码框 <公开 类型 = 整数 值 = @edit_type_editor 注释 = "edit_type_editor">
+    常量 富文本 <公开 类型 = 整数 值 = @edit_type_richedit 注释 = "edit_type_richedit">
+    常量 聊天气泡 <公开 类型 = 整数 值 = @edit_type_chat 注释 = "edit_type_chat">
+    常量 代码表格 <公开 类型 = 整数 值 = @edit_type_codeTable 注释 = "edit_type_codeTable">
+}
+
+类 窗格状态 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 锁定 <公开 类型 = 整数 值 = @pane_state_lock 注释 = "pane_state_lock">
+    常量 停靠码头 <公开 类型 = 整数 值 = @pane_state_dock>
+    常量 浮动 <公开 类型 = 整数 值 = @pane_state_float>
+}
+
+类 窗格对齐 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 错误 <公开 类型 = 整数 值 = @pane_align_error>
+    常量 左边 <公开 类型 = 整数 值 = @pane_align_left>
+    常量 顶边 <公开 类型 = 整数 值 = @pane_align_top>
+    常量 右边 <公开 类型 = 整数 值 = @pane_align_right>
+    常量 底边 <公开 类型 = 整数 值 = @pane_align_bottom>
+    常量 居中 <公开 类型 = 整数 值 = @pane_align_center>
+}
+
+类 框架窗口单元格类型 <公开 注释 = "框架窗口单元格类型" 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 无 <公开 类型 = 整数 值 = @frameWnd_cell_type_no>
+    常量 窗格 <公开 类型 = 整数 值 = @frameWnd_cell_type_pane>
+    常量 窗格组 <公开 类型 = 整数 值 = @frameWnd_cell_type_group>
+    常量 主视图区 <公开 类型 = 整数 值 = @frameWnd_cell_type_bodyView>
+    常量 左右布局 <公开 类型 = 整数 值 = @frameWnd_cell_type_left_right>
+    常量 上下布局 <公开 类型 = 整数 值 = @frameWnd_cell_type_top_bottom>
+}
+
+类 项背景绘制标志 <公开 注释 = "List,ListBox,ListView,Tree" 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 不绘制 <公开 类型 = 整数 值 = 0 注释 = "list_drawItemBk_flags_nothing">
+    常量 项鼠标离开状态 <公开 类型 = 整数 值 = 1 注释 = "list_drawItemBk_flags_leave">
+    常量 项鼠标停留状态 <公开 类型 = 整数 值 = 2 注释 = "list_drawItemBk_flags_stay">
+    常量 项鼠标选择状态 <公开 类型 = 整数 值 = 4 注释 = "list_drawItemBk_flags_select">
+    常量 组鼠标离开状态 <公开 类型 = 整数 值 = 8 注释 = "list_drawItemBk_flags_group_leave">
+    常量 组鼠标停留状态 <公开 类型 = 整数 值 = 10 注释 = "list_drawItemBk_flags_group_stay">
+    常量 水平分割线 <公开 类型 = 整数 值 = @list_drawItemBk_flag_line>
+    常量 垂直分割线 <公开 类型 = 整数 值 = @list_drawItemBk_flag_lineV>
+}
+
+类 画笔样式 <公开 折叠>
+{
+    常量 实线 <公开 类型 = 整数 值 = 0 注释 = "PS_SOLID">
+    常量 段线 <公开 类型 = 整数 值 = 1 注释 = "PS_DASH">
+    常量 点线 <公开 类型 = 整数 值 = 2>
+    常量 段线_点线 <公开 类型 = 整数 值 = 3>
+    常量 段线_点_点 <公开 类型 = 整数 值 = 4>
+    常量 空 <公开 类型 = 整数 值 = 5>
+    常量 实线_笔宽是向里扩展 <公开 类型 = 整数 值 = 6>
+}
+
+类 渐变填充 <公开 折叠>
+{
+    常量 水平 <公开 类型 = 整数 值 = 0 注释 = "GRADIENT_FILL_RECT_H">
+    常量 垂直 <公开 类型 = 整数 值 = 1 注释 = "GRADIENT_FILL_RECT_V">
+    常量 三角 <公开 类型 = 整数 值 = 2 注释 = "GRADIENT_FILL_TRIANGLE">
+}
+
+类 图标绘制 <公开 折叠>
+{
+    常量 MASK <公开 类型 = 整数 值 = 1 注释 = "DI_MASK 绘图时使用图标的MASK部分（如单独使用，可获得图标的掩模）">
+    常量 没有透明 <公开 类型 = 整数 值 = 2 注释 = "DI_IMAGE 绘图时使用图标的XOR部分（即图标没有透明区域）">
+    常量 常规方式 <公开 类型 = 整数 值 = 3 注释 = "DI_NORMAL 用常规方式绘图（合并 DI_IMAGE 和 DI_MASK）">
+    常量 标准指针 <公开 类型 = 整数 值 = 4 注释 = "DI_COMPAT 描绘标准的系统指针，而不是指定的图象">
+    常量 原始大小 <公开 类型 = 整数 值 = 8 注释 = "DI_DEFAULTSIZE 忽略cxWidth和cyWidth设置，并采用原始的图标大小">
+}
+
+类 文本渲染模式 <公开 折叠 @常量类 = 整数>
+{
+    常量 系统默认 <公开 值 = 0>
+    常量 符号位图和hinting技术 <公开 值 = 1>
+    常量 符号位图 <公开 值 = 2>
+    常量 抗锯齿和hinting技术 <公开 值 = 3>
+    常量 抗锯齿 <公开 值 = 4>
+    常量 ClearType文本和hinting技术 <公开 值 = 5>
+}
+
+类 属性框项类型 <公开 折叠 @文档 = "category = \"炫彩常量.组件常量\"">
+{
+    常量 文本 <公开 类型 = 整数 值 = 0 注释 = "propertyGrid_item_type_text">
+    常量 编辑框 <公开 类型 = 整数 值 = 1 注释 = "propertyGrid_item_type_edit">
+    常量 颜色选择 <公开 类型 = 整数 值 = 2 注释 = "propertyGrid_item_type_edit_color">
+    常量 文件选择 <公开 类型 = 整数 值 = 3 注释 = "propertyGrid_item_type_edit_file">
+    常量 设置 <公开 类型 = 整数 值 = 4 注释 = "propertyGrid_item_type_edit_set">
+    常量 组合框 <公开 类型 = 整数 值 = 5 注释 = "propertyGrid_item_type_comboBox">
+    常量 组 <公开 类型 = 整数 值 = 6 注释 = "propertyGrid_item_type_group">
+    常量 面板 <公开 类型 = 整数 值 = 7 注释 = "propertyGrid_item_type_panel">
+}
+
+类 菜单窗格 <公开 折叠>
+{
+    常量 锁定 <公开 类型 = 整数 值 = 1000000006 注释 = "IDM_LOCK">
+    常量 停靠 <公开 类型 = 整数 值 = 1000000007 注释 = "IDM_DOCK">
+    常量 浮动 <公开 类型 = 整数 值 = 1000000008 注释 = "IDM_FLOAT">
+    常量 隐藏 <公开 类型 = 整数 值 = 1000000009 注释 = "IDM_HIDE">
+}
+
+类 托盘标识 <公开 折叠 "">
+{
+    常量 气泡_无图标 <公开 类型 = 整数 值 = 0>
+    常量 气泡_信息图标 <公开 类型 = 整数 值 = 1 注释 = "“消息”图标（蓝色的“i”）">
+    常量 气泡_警告图标 <公开 类型 = 整数 值 = 2 注释 = "“警告”图标（黄色的“！”）">
+    常量 气泡_错误图标 <公开 类型 = 整数 值 = 3 注释 = "“错误”图标（红色的“X”）">
+    常量 ""
+    常量 事件_气泡开始弹出 <公开 类型 = 整数 值 = 1026>
+    常量 事件_气泡用户销毁 <公开 类型 = 整数 值 = 1027>
+    常量 事件_气泡系统回收 <公开 类型 = 整数 值 = 1028>
+}
+
+类 鼠标指针 <公开 折叠>
+{
+    常量 标准型 <公开 类型 = 整数 值 = 32512 注释 = "IDC_ARROW">
+    常量 文本编辑型 <公开 类型 = 整数 值 = 32513 注释 = "IDC_IBEAM">
+    常量 沙漏型 <公开 类型 = 整数 值 = 32514 注释 = "IDC_WAIT">
+    常量 十字型 <公开 类型 = 整数 值 = 32515 注释 = "IDC_CROSS">
+    常量 手型 <公开 类型 = 整数 值 = 32649 注释 = "IDC_HAND">
+    常量 禁止型 <公开 类型 = 整数 值 = 32648 注释 = "IDC_NO">
+    常量 东北西南箭头 <公开 类型 = 整数 值 = 32643 注释 = "指向东北和西南的双向箭头">
+    常量 南北箭头 <公开 类型 = 整数 值 = 32645 注释 = "指向南和北的双向箭头">
+    常量 十字箭头 <公开 类型 = 整数 值 = 32646 注释 = "四向箭头指向东西南北">
+    常量 西北东南箭头 <公开 类型 = 整数 值 = 32642 注释 = "指向西北和东南的双向箭头">
+    常量 东西箭头 <公开 类型 = 整数 值 = 32644 注释 = "指向东西的双向箭头">
+    常量 帮助 <公开 类型 = 整数 值 = 32651 注释 = "IDC_HELP">
+    常量 上箭头 <公开 类型 = 整数 值 = 32516 注释 = "IDC_UPARROW">
+    常量 箭头沙漏 <公开 类型 = 整数 值 = 32650 注释 = "IDC_APPSTARTING">
+}
+
+类 缓动标识 <公开 折叠>
+{
+    常量 线性 <公开 类型 = 整数 值 = @ease_flag_linear 注释 = "直线">
+    常量 二次方曲线 <公开 类型 = 整数 值 = @ease_flag_quad>
+    常量 三次方曲线 <公开 类型 = 整数 值 = @ease_flag_cubic 注释 = "圆弧">
+    常量 四次方曲线 <公开 类型 = 整数 值 = @ease_flag_quart>
+    常量 五次方曲线 <公开 类型 = 整数 值 = @ease_flag_quint>
+    常量 正弦 <公开 类型 = 整数 值 = @ease_flag_sine 注释 = "在末端变化">
+    常量 突击 <公开 类型 = 整数 值 = @ease_flag_expo 注释 = "突然一下">
+    常量 圆环 <公开 类型 = 整数 值 = @ease_flag_circ 注释 = "好比绕过一个圆环">
+    常量 强力回弹 <公开 类型 = 整数 值 = @ease_flag_elastic>
+    常量 回弹 <公开 类型 = 整数 值 = @ease_flag_back>
+    常量 弹跳 <公开 类型 = 整数 值 = @ease_flag_bounce 注释 = "模拟小球落地弹跳">
+    常量 从慢到快 <公开 类型 = 整数 值 = @ease_flag_in>
+    常量 从快到慢 <公开 类型 = 整数 值 = @ease_flag_out>
+    常量 从慢到快再到慢 <公开 类型 = 整数 值 = @ease_flag_inOut>
+}
+
+类 动画移动标识 <公开 折叠>
+{
+    常量 X轴移动 <公开 类型 = 整数 值 = @animation_move_x>
+    常量 Y轴移动 <公开 类型 = 整数 值 = @animation_move_y>
+}
+
+类 通知消息皮肤 <公开>
+{
+    常量 默认 <公开 类型 = 整数 值 = @notifyMsg_skin_no>
+    常量 成功 <公开 类型 = 整数 值 = @notifyMsg_skin_success>
+    常量 警告 <公开 类型 = 整数 值 = @notifyMsg_skin_warning>
+    常量 消息 <公开 类型 = 整数 值 = @notifyMsg_skin_message>
+    常量 错误 <公开 类型 = 整数 值 = @notifyMsg_skin_error>
+}
+
+类 背景对象对齐方式 <公开 折叠>
+{
+    常量 无 <公开 类型 = 整数 值 = @bkObject_align_flag_no>
+    常量 左对齐 <公开 类型 = 整数 值 = @bkObject_align_flag_left 注释 = "当设置此标识时,外间距(margin.left)代表左侧间距; 当right未设置时,那么外间距(margin.right)代表宽度">
+    常量 顶对齐 <公开 类型 = 整数 值 = @bkObject_align_flag_top 注释 = "当设置此标识时,外间距(margin.top)代表顶部间距; 当bottom未设置时,那么外间距(margin.bottom)代表高度">
+    常量 右对齐 <公开 类型 = 整数 值 = @bkObject_align_flag_right 注释 = "当设置此标识时,外间距(margin.right)代表右侧间距; 当left未设置时,那么外间距(margin.left)代表宽度">
+    常量 底对齐 <公开 类型 = 整数 值 = @bkObject_align_flag_bottom 注释 = "当设置此标识时,外间距(margin.bottom)代表底部间距; 当top未设置时,那么外间距(margin.top)代表高度">
+    常量 水平居中 <公开 类型 = 整数 值 = @bkObject_align_flag_center 注释 = "当设置此标识时,外间距(margin.left)代表宽度">
+    常量 垂直居中 <公开 类型 = 整数 值 = @bkObject_align_flag_center_v 注释 = "当设置此标识时,外间距(margin.top)代表高度">
+}
+
+类 形状表格标识 <公开>
+{
+    常量 正常最小单元格 <公开 类型 = 整数 值 = @table_flag_none>
+    常量 铺满组合单元格 <公开 类型 = 整数 值 = @table_flag_full>
+    常量 支持编辑文本 <公开 类型 = 整数 值 = @table_flag_editable>
+    常量 支持自动匹配 <公开 类型 = 整数 值 = @table_flag_automatch>
+}
+
+类 形状表格线标识 <公开 折叠>
+{
+    常量 左边 <公开 类型 = 整数 值 = @table_line_flag_left>
+    常量 顶边 <公开 类型 = 整数 值 = @table_line_flag_top>
+    常量 右边 <公开 类型 = 整数 值 = @table_line_flag_right>
+    常量 底边 <公开 类型 = 整数 值 = @table_line_flag_bottom>
+    常量 左边2 <公开 类型 = 整数 值 = @table_line_flag_left2>
+    常量 顶边2 <公开 类型 = 整数 值 = @table_line_flag_top2>
+    常量 右边2 <公开 类型 = 整数 值 = @table_line_flag_right2>
+    常量 底边2 <公开 类型 = 整数 值 = @table_line_flag_bottom2>
+}
+
+类 虚拟键码 <公开 折叠 @常量类 = 整数>
+{
+    常量 Shift <公开 值 = @VK_SHIFT>
+    常量 Ctrl <公开 值 = @VK_CONTROL>
+    常量 Alt <公开 值 = @VK_MENU>
+    常量 Esc <公开 值 = @VK_ESCAPE>
+
+    #
+}

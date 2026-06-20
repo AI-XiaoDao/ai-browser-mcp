@@ -1,0 +1,112 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" @文档 = "category = \"STL.基础共用模板\"" "">
+
+#
+
+类 _标准模板基础类 <公开 @模板基础类 = 真 @视窗.外部头文件 = "<algorithm>">
+{
+
+    # @begin
+    # <> <include>
+    # @def_macro DECLARE_VOL_STD_DEFAULT_FUCTION(std_type )                 \
+    #     @sn<current_class>(const std_type& m_data)                        \
+    #     {                                                                 \
+    #         SetData(m_data);                                              \
+    #     }                                                                 \
+    #     std_type& GetData()                                               \
+    #     {                                                                 \
+    #         return m_data;                                                \
+    #     }                                                                 \
+    #     const std_type& GetData() const                                   \
+    #     {                                                                 \
+    #         return m_data;                                                \
+    #     }                                                                 \
+    #     void SetData(const std_type& m_data)                              \
+    #     {                                                                 \
+    #       this->m_data = m_data;                                          \
+    #     }                                                                 \
+    #     std_type m_data;                                           
+    #
+    #
+    # #define CFVol_FOR_FORWARD_ITERATOR(type, data)  for(type::iterator it = data.begin(); it !=data.end(); it++)
+    # #define CFVol_FOR_REVERSE_ITERATOR(type,data)   for(type::reverse_iterator it = data.rbegin(); it != data.rend(); it++)
+    #
+    #
+    # <> </include>
+    # @end
+    #
+}
+
+类 _vector_deque_list_公有模板 <公开 基础类 = _标准模板基础类 注释 = "//http://www.cplusplus.com/reference/stl/" @模板基础类 = 真>
+{
+    方法 取成员数 <公开 类型 = 整数 注释 = "取数组成员数量" @嵌入式方法 = "">
+    {
+        @  @sn<this>.GetData().size()
+    }
+
+    方法 取最大容纳 <公开 类型 = 变整数 注释 = "取能容纳的最大元素个数" @嵌入式方法 = "">
+    {
+        @  @sn<this>.GetData().max_size()
+    }
+
+    方法 是否为空 <公开 类型 = 逻辑型 注释 = "测试容器里面是否有成员" @嵌入式方法 = "">
+    {
+        @  @sn<this>.GetData().empty()
+    }
+
+    方法 重置尺寸 <公开 类型 = 逻辑型 注释 = "重新定义成员数量" @嵌入式方法 = "">
+    参数 成员数 <类型 = 整数>
+    {
+        @  @sn<this>.GetData().resize(@<成员数>)
+    }
+
+    方法 取首成员 <公开 类型 = 模板类型1 @嵌入式方法 = "">
+    {
+        @ @dt<模板类型1>( *@sn<this>.GetData().front() )
+    }
+
+    方法 取尾成员 <公开 类型 = 模板类型1 @嵌入式方法 = "">
+    {
+        @ @dt<模板类型1>( *@sn<this>.GetData().back() )
+
+    }
+
+    方法 加入尾成员 <公开 注释 = "加入一个数据到容器的尾部" @嵌入式方法 = "">
+    参数 要加入的成员 <类型 = 模板类型1>
+    {
+        @   @sn<this>.GetData().push_back(@<要加入的成员>)
+    }
+
+    方法 删除尾成员 <公开 @嵌入式方法 = "">
+    {
+        @  @sn<this>.GetData().pop_back()
+    }
+
+    方法 清空 <公开 注释 = "清空容器里面的所有成员，清空后 调用取数量得到的结果是0" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetData().clear();
+    }
+
+    方法 交换成员 <公开 注释 = "两个容器，相互交换成员">
+    参数 vt <类型 = _vector_deque_list_公有模板>
+    {
+        @ GetData().swap(@<vt>.GetData())
+
+
+    }
+}
+
+类 _deque_list_公有模板 <公开 基础类 = _vector_deque_list_公有模板 注释 = "vector deque" 折叠 @模板基础类 = 真>
+{
+    方法 加入首成员 <公开 注释 = "根据索引取值" @嵌入式方法 = "">
+    参数 数据 <类型 = 模板类型1>
+    {
+        @ @sn<this>.GetData().push_front(@<数据>)
+    }
+
+    方法 删除首成员 <公开 类型 = 模板类型1 @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetData().pop_front()
+    }
+}

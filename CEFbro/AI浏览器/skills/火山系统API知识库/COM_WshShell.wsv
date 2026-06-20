@@ -1,0 +1,512 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"windows.硬件特征\"" "" @视窗.外部头文件 = "COM_WshShell\\wshom.tlh">
+
+类 IWshCollection <公开>
+{
+
+    # @  @m<vol_define_IDispatchPtr_Construct>(IWshRuntimeLibrary::IWshCollectionPtr,IWshRuntimeLibrary::IWshCollectionPtr) 
+
+    方法 Item <公开 类型 = COM变体型 返回值注释 = "_variant_t" @禁止流程检查 = 真>
+    参数 Index <类型 = COM变体型 注释 = "VARIANT * Index">
+    {
+        @ CVolComVariant vt;
+        @ vt.SetVariant(&GetComObjPtr()->Item(&@<Index>.m_var),-1);
+        @ return vt;
+    }
+
+    方法 Count <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Count()
+    }
+
+    方法 Getlength <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Getlength()
+    }
+
+    方法 "//_NewEnum" <公开 类型 = IUnknown 返回值注释 = "IUnknownPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IUnknown>( @sn<this>.GetComObjPtr()->_NewEnum() )
+    }
+
+    #
+}
+
+类 IWshEnvironment <公开 折叠>
+{
+
+    # @  @m<vol_define_IDispatchPtr_Construct>(IWshRuntimeLibrary::IWshEnvironment,IWshRuntimeLibrary::IWshEnvironment) 
+
+    方法 GetItem <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 Name <类型 = 文本型 注释 = "_bstr_t Name">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetItem(@<Name>.GetText()))
+    }
+
+    方法 PutItem <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 Name <类型 = 文本型 注释 = "_bstr_t Name">
+    参数 out_Value <类型 = 文本型 注释 = "_bstr_t out_Value">
+    {
+        @ @sn<this>.GetComObjPtr()->PutItem(@<Name>.GetText(),@<out_Value>.GetText())
+    }
+
+    方法 Count <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Count()
+    }
+
+    方法 Getlength <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Getlength()
+    }
+
+    方法 "//_NewEnum" <公开 类型 = IUnknown 返回值注释 = "IUnknownPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IUnknown>( @sn<this>.GetComObjPtr()->_NewEnum() )
+    }
+
+    方法 Remove <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Name <类型 = 文本型 注释 = "_bstr_t Name">
+    {
+        @ @sn<this>.GetComObjPtr()->Remove(@<Name>.GetText())
+    }
+
+    #
+}
+
+类 IWshExec <公开 折叠 "">
+{
+
+    # @  @m<vol_define_IDispatchPtr_Construct>(IWshRuntimeLibrary::IWshExecPtr,IWshRuntimeLibrary::IWshExecPtr) 
+
+    方法 GetStatus <公开 类型 = 整数 返回值注释 = "WshExecStatus" 返回值注释 = "WshRunning  0" 返回值注释 = "WshFinished 1" 返回值注释 = "WshFailed   2" 折叠
+            @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetStatus()
+    }
+
+    方法 GetStdIn <公开 类型 = ITextStream 返回值注释 = "ITextStreamPtr" @嵌入式方法 = "">
+    {
+        @  @dt<ITextStream>( @sn<this>.GetComObjPtr()->GetStdIn() )
+    }
+
+    方法 GetStdOut <公开 类型 = ITextStream 返回值注释 = "ITextStreamPtr" @嵌入式方法 = "">
+    {
+        @  @dt<ITextStream>( @sn<this>.GetComObjPtr()->GetStdOut() )
+    }
+
+    方法 GetStdErr <公开 类型 = ITextStream 返回值注释 = "ITextStreamPtr" @嵌入式方法 = "">
+    {
+        @  @dt<ITextStream>( @sn<this>.GetComObjPtr()->GetStdErr() )
+    }
+
+    方法 GetProcessID <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetProcessID()
+    }
+
+    方法 GetExitCode <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetExitCode()
+    }
+
+    方法 Terminate <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Terminate()
+    }
+
+    #
+}
+
+类 IWshNetwork <@模板基础类 = 真>
+{
+    方法 GetUserDomain <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetUserDomain())
+    }
+
+    方法 GetUserName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetUserName())
+    }
+
+    方法 GetUserProfile <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetUserProfile())
+    }
+
+    方法 GetComputerName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetComputerName())
+    }
+
+    方法 GetOrganization <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetOrganization())
+    }
+
+    方法 GetSite <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetSite())
+    }
+
+    方法 MapNetworkDrive <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 LocalName <类型 = 文本型 注释 = "_bstr_t LocalName">
+    参数 RemoteName <类型 = 文本型 注释 = "_bstr_t RemoteName">
+    参数 UpdateProfile <类型 = COM变体型 注释 = "VARIANT * UpdateProfile">
+    参数 UserName <类型 = COM变体型 注释 = "VARIANT * UserName">
+    参数 Password <类型 = COM变体型 注释 = "VARIANT * Password">
+    {
+        @ @sn<this>.GetComObjPtr()->MapNetworkDrive(@<LocalName>.GetText(),@<RemoteName>.GetText(),&@<UpdateProfile>.m_var,&@<UserName>.m_var,&@<Password>.m_var)
+    }
+
+    方法 RemoveNetworkDrive <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Name <类型 = 文本型 注释 = "_bstr_t Name">
+    参数 Force <类型 = COM变体型 注释 = "VARIANT * Force">
+    参数 UpdateProfile <类型 = COM变体型 注释 = "VARIANT * UpdateProfile">
+    {
+        @ @sn<this>.GetComObjPtr()->RemoveNetworkDrive(@<Name>.GetText(),&@<Force>.m_var,&@<UpdateProfile>.m_var)
+    }
+
+    方法 EnumNetworkDrives <公开 类型 = IWshCollection 返回值注释 = "IWshCollectionPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IWshCollection>( @sn<this>.GetComObjPtr()->EnumNetworkDrives() )
+    }
+
+    方法 AddPrinterConnection <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 LocalName <类型 = 文本型 注释 = "_bstr_t LocalName">
+    参数 RemoteName <类型 = 文本型 注释 = "_bstr_t RemoteName">
+    参数 UpdateProfile <类型 = COM变体型 注释 = "VARIANT * UpdateProfile">
+    参数 UserName <类型 = COM变体型 注释 = "VARIANT * UserName">
+    参数 Password <类型 = COM变体型 注释 = "VARIANT * Password">
+    {
+        @ @sn<this>.GetComObjPtr()->AddPrinterConnection(@<LocalName>.GetText(),@<RemoteName>.GetText(),&@<UpdateProfile>.m_var,&@<UserName>.m_var,&@<Password>.m_var)
+    }
+
+    方法 RemovePrinterConnection <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Name <类型 = 文本型 注释 = "_bstr_t Name">
+    参数 Force <类型 = COM变体型 注释 = "VARIANT * Force">
+    参数 UpdateProfile <类型 = COM变体型 注释 = "VARIANT * UpdateProfile">
+    {
+        @ @sn<this>.GetComObjPtr()->RemovePrinterConnection(@<Name>.GetText(),&@<Force>.m_var,&@<UpdateProfile>.m_var)
+    }
+
+    方法 EnumPrinterConnections <公开 类型 = IWshCollection 返回值注释 = "IWshCollectionPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IWshCollection>( @sn<this>.GetComObjPtr()->EnumPrinterConnections() )
+    }
+
+    方法 SetDefaultPrinter <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Name <类型 = 文本型 注释 = "_bstr_t Name">
+    {
+        @ @sn<this>.GetComObjPtr()->SetDefaultPrinter(@<Name>.GetText())
+    }
+
+    #
+}
+
+类 IWshNetwork2 <公开 基础类 = IWshNetwork 折叠 @模板实现类 = "">
+{
+
+    # //第一个参数也可以填  "WScript.Shell.1"
+    # @ @m<define_vol_use_System_com_ProgID>(__uuidof(IWshRuntimeLibrary::WshNetwork),IWshRuntimeLibrary::IWshNetwork2Ptr)
+    #
+
+    方法 AddWindowsPrinterConnection <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 PrinterName <类型 = 文本型 注释 = "_bstr_t PrinterName">
+    参数 DriverName <类型 = 文本型 注释 = "_bstr_t DriverName">
+    参数 Port <类型 = 文本型 注释 = "_bstr_t Port">
+    {
+        @ @sn<this>.GetComObjPtr()->AddWindowsPrinterConnection(@<PrinterName>.GetText(),@<DriverName>.GetText(),@<Port>.GetText())
+    }
+
+    #
+}
+
+类 IWshShell <公开 @模板基础类 = 真>
+{
+    方法 GetSpecialFolders <公开 类型 = IWshCollection 返回值注释 = "IWshCollectionPtr" @嵌入式方法 = "">
+    {
+        @  @dt<IWshCollection>( @sn<this>.GetComObjPtr()->GetSpecialFolders() )
+    }
+
+    方法 GetEnvironment <公开 类型 = IWshEnvironment 返回值注释 = "IWshEnvironmentPtr" @嵌入式方法 = "">
+    参数 Type <类型 = COM变体型 注释 = "VARIANT * Type">
+    {
+        @  @dt<IWshEnvironment>( @sn<this>.GetComObjPtr()->GetEnvironment(&@<Type>.m_var) )
+    }
+
+    方法 Run <公开 类型 = 整数 返回值注释 = "int" @嵌入式方法 = "">
+    参数 Command <类型 = 文本型 注释 = "_bstr_t Command">
+    参数 WindowStyle <类型 = COM变体型 注释 = "VARIANT * WindowStyle">
+    参数 WaitOnReturn <类型 = COM变体型 注释 = "VARIANT * WaitOnReturn">
+    {
+        @ @sn<this>.GetComObjPtr()->Run(@<Command>.GetText(),&@<WindowStyle>.m_var,&@<WaitOnReturn>.m_var)
+    }
+
+    方法 Popup <公开 类型 = 整数 返回值注释 = "int" @嵌入式方法 = "">
+    参数 Text <类型 = 文本型 注释 = "_bstr_t Text">
+    参数 SecondsToWait <类型 = COM变体型 注释 = "VARIANT * SecondsToWait">
+    参数 Title <类型 = COM变体型 注释 = "VARIANT * Title">
+    参数 Type <类型 = COM变体型 注释 = "VARIANT * Type">
+    {
+        @ @sn<this>.GetComObjPtr()->Popup(@<Text>.GetText(),&@<SecondsToWait>.m_var,&@<Title>.m_var,&@<Type>.m_var)
+    }
+
+    方法 CreateShortcut <公开 类型 = IWshShortcut 注释 = "https://blog.csdn.net/weixin_33860528/article/details/89983838"
+            返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    参数 PathLink <类型 = 文本型 注释 = "_bstr_t PathLink">
+    {
+        @  @dt<IWshShortcut>( @sn<this>.GetComObjPtr()->CreateShortcut(@<PathLink>.GetText()) )
+
+    }
+
+    方法 CreateURLShortcut <公开 类型 = IWshURLShortcut 注释 = "https://blog.csdn.net/weixin_33860528/article/details/89983838"
+            返回值注释 = "IDispatchPtr" @嵌入式方法 = "">
+    参数 PathLink <类型 = 文本型 注释 = "_bstr_t PathLink">
+    {
+        @  @dt<IWshURLShortcut>( @sn<this>.GetComObjPtr()->CreateShortcut(@<PathLink>.GetText()) )
+
+    }
+
+    方法 ExpandEnvironmentStrings <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 Src <类型 = 文本型 注释 = "_bstr_t Src">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->ExpandEnvironmentStrings(@<Src>.GetText()))
+    }
+
+    方法 RegRead <公开 类型 = COM变体型 返回值注释 = "_variant_t" @禁止流程检查 = 真>
+    参数 Name <类型 = 文本型 注释 = "_bstr_t Name">
+    {
+        @ CVolComVariant vt;
+        @ vt.SetVariant(&GetComObjPtr()->RegRead(@<Name>.GetText()),-1);
+        @ return vt;
+    }
+
+    方法 RegWrite <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Name <类型 = 文本型 注释 = "_bstr_t Name">
+    参数 Value <类型 = COM变体型 注释 = "VARIANT * Value">
+    参数 Type <类型 = COM变体型 注释 = "VARIANT * Type">
+    {
+        @ @sn<this>.GetComObjPtr()->RegWrite(@<Name>.GetText(),&@<Value>.m_var,&@<Type>.m_var)
+    }
+
+    方法 RegDelete <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Name <类型 = 文本型 注释 = "_bstr_t Name">
+    {
+        @ @sn<this>.GetComObjPtr()->RegDelete(@<Name>.GetText())
+    }
+
+    #
+}
+
+类 IWshShell2 <公开 基础类 = IWshShell 折叠 @模板基础类 = 真>
+{
+    方法 LogEvent <公开 类型 = 逻辑型 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    参数 Type <类型 = COM变体型 注释 = "VARIANT * Type">
+    参数 Message <类型 = 文本型 注释 = "_bstr_t Message">
+    参数 Target <类型 = 文本型 注释 = "_bstr_t Target">
+    {
+        @ @sn<this>.GetComObjPtr()->LogEvent(&@<Type>.m_var,@<Message>.GetText(),@<Target>.GetText())
+    }
+
+    方法 AppActivate <公开 类型 = 逻辑型 返回值注释 = "VARIANT_BOOL" @嵌入式方法 = "">
+    参数 App <类型 = COM变体型 注释 = "VARIANT * App">
+    参数 Wait <类型 = COM变体型 注释 = "VARIANT * Wait">
+    {
+        @ @sn<this>.GetComObjPtr()->AppActivate(&@<App>.m_var,&@<Wait>.m_var)
+    }
+
+    方法 SendKeys <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 Keys <类型 = 文本型 注释 = "_bstr_t Keys">
+    参数 Wait <类型 = COM变体型 注释 = "VARIANT * Wait">
+    {
+        @ @sn<this>.GetComObjPtr()->SendKeys(@<Keys>.GetText(),&@<Wait>.m_var)
+    }
+
+    #
+}
+
+类 IWshShell3 <公开 基础类 = IWshShell2 @模板实现类 = "">
+{
+
+    # //第一个参数也可以填  "WScript.Shell.1"
+    # @ @m<define_vol_use_System_com_ProgID>(__uuidof(IWshRuntimeLibrary::WshShell),IWshRuntimeLibrary::IWshShell3Ptr)
+
+    方法 类_初始化
+    {
+        变量 是否创建成功 <类型 = 逻辑型>
+        @ @<是否创建成功> = Init();
+        如果 (是否创建成功 == 假)
+        {
+            调试输出 ("初始化 IFileSystem3 失败")
+        }
+
+    }
+
+    方法 类_清理
+    {
+        @ Unit();
+    }
+
+    方法 Exec <公开 类型 = IWshExec 注释 = "异步的" 返回值注释 = "IWshExecPtr" @嵌入式方法 = "">
+    参数 Command <类型 = 文本型 注释 = "_bstr_t Command">
+    {
+        @  @dt<IWshExec>( @sn<this>.GetComObjPtr()->Exec(@<Command>.GetText()) )
+    }
+
+    方法 GetCurrentDirectory <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetCurrentDirectory())
+    }
+
+    方法 PutCurrentDirectory <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 out_Directory <类型 = 文本型 注释 = "_bstr_t out_Directory">
+    {
+        @ @sn<this>.GetComObjPtr()->PutCurrentDirectory(@<out_Directory>.GetText())
+    }
+
+    #
+}
+
+类 IWshShortcut <公开 折叠>
+{
+
+    # @  @m<vol_define_IDispatchPtr_Construct>(IWshRuntimeLibrary::IWshShortcut,IDispatchPtr) 
+
+    方法 GetFullName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetFullName())
+    }
+
+    方法 GetArguments <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetArguments())
+    }
+
+    方法 PutArguments <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 out_Arguments <类型 = 文本型 注释 = "_bstr_t out_Arguments">
+    {
+        @ @sn<this>.GetComObjPtr()->PutArguments(@<out_Arguments>.GetText())
+    }
+
+    方法 GetDescription <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetDescription())
+    }
+
+    方法 PutDescription <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 out_Description <类型 = 文本型 注释 = "_bstr_t out_Description">
+    {
+        @ @sn<this>.GetComObjPtr()->PutDescription(@<out_Description>.GetText())
+    }
+
+    方法 GetHotkey <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetHotkey())
+    }
+
+    方法 PutHotkey <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 out_HotKey <类型 = 文本型 注释 = "_bstr_t out_HotKey">
+    {
+        @ @sn<this>.GetComObjPtr()->PutHotkey(@<out_HotKey>.GetText())
+    }
+
+    方法 GetIconLocation <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetIconLocation())
+    }
+
+    方法 PutIconLocation <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 out_IconPath <类型 = 文本型 注释 = "_bstr_t out_IconPath">
+    {
+        @ @sn<this>.GetComObjPtr()->PutIconLocation(@<out_IconPath>.GetText())
+    }
+
+    方法 PutRelativePath <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 _arg1 <类型 = 文本型 注释 = "_bstr_t _arg1">
+    {
+        @ @sn<this>.GetComObjPtr()->PutRelativePath(@<_arg1>.GetText())
+    }
+
+    方法 GetTargetPath <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetTargetPath())
+    }
+
+    方法 PutTargetPath <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 out_Path <类型 = 文本型 注释 = "_bstr_t out_Path">
+    {
+        @ @sn<this>.GetComObjPtr()->PutTargetPath(@<out_Path>.GetText())
+    }
+
+    方法 GetWindowStyle <公开 类型 = 整数 返回值注释 = "int" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetWindowStyle()
+    }
+
+    方法 PutWindowStyle <公开 返回值注释 = "void" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->PutWindowStyle()
+    }
+
+    方法 GetWorkingDirectory <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetWorkingDirectory())
+    }
+
+    方法 PutWorkingDirectory <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 out_WorkingDirectory <类型 = 文本型 注释 = "_bstr_t out_WorkingDirectory">
+    {
+        @ @sn<this>.GetComObjPtr()->PutWorkingDirectory(@<out_WorkingDirectory>.GetText())
+    }
+
+    方法 Load <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 PathLink <类型 = 文本型 注释 = "_bstr_t PathLink">
+    {
+        @ @sn<this>.GetComObjPtr()->Load(@<PathLink>.GetText())
+    }
+
+    方法 Save <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Save()
+    }
+
+    #
+}
+
+类 IWshURLShortcut <公开>
+{
+
+    # @  @m<vol_define_IDispatchPtr_Construct>(IWshRuntimeLibrary::IWshURLShortcut,IDispatchPtr) 
+
+    方法 GetFullName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetFullName())
+    }
+
+    方法 GetTargetPath <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetTargetPath())
+    }
+
+    方法 PutTargetPath <公开 返回值注释 = "void" @嵌入式方法 = "">
+    参数 out_Path <类型 = 文本型 注释 = "_bstr_t out_Path">
+    {
+        @ @sn<this>.GetComObjPtr()->PutTargetPath(@<out_Path>.GetText())
+    }
+
+    方法 Load <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 PathLink <类型 = 文本型 注释 = "_bstr_t PathLink">
+    {
+        @ @sn<this>.GetComObjPtr()->Load(@<PathLink>.GetText())
+    }
+
+    方法 Save <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Save()
+    }
+
+    #
+}

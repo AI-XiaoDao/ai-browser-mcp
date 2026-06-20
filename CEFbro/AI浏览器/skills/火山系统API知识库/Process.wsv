@@ -1,0 +1,593 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"windows.进程操作\"" "" @视窗.外部头文件 = "Process\\ProcessTool.h"
+        @视窗.外部库.win32 = "Process\\ProcessToolx86.lib" @视窗.附属文件.win32 = "Process\\ProcessToolx86.dll"
+        @视窗.外部库.x64 = "Process\\ProcessToolx64.lib" @视窗.附属文件.x64 = "Process\\ProcessToolx64.dll" @视窗.外部头文件 = "<Psapi.h>"
+        @视窗.外部库 = "Psapi.lib" "">
+
+类 ______进程操作辅助函数_全局类 <公开 @全局类 = 真>
+{
+    方法 运行f <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 欲运行的命令行 <类型 = 文本型>
+    参数 是否等待执行完毕 <类型 = 逻辑型 @默认值 = 假>
+    参数 显示方式 <类型 = 整数 注释 = "SW_SHOW=5 b表示显示" 注释 = "SW_HIDE=0 表示隐藏" @默认值 = 5>
+    {
+        @ ProcessTool_RunExe(@<欲运行的命令行>,@<是否等待执行完毕>,@<显示方式>)
+    }
+
+    方法 执行f <公开 静态 @嵌入式方法 = "">
+    参数 要执行的文件名称 <类型 = 文本型>
+    参数 显示方式 <类型 = 整数 注释 = "SW_SHOW=5 b表示显示" 注释 = "SW_HIDE=0 表示隐藏" @默认值 = 5>
+    {
+        @ ::ShellExecute(NULL,_T("open"), _T("explorer"), @<要执行的文件名称>, NULL, @<显示方式>)
+    }
+
+    方法 WinExec <静态 折叠 @嵌入式方法 = "">
+    参数 命令行文本指针 <类型 = 变整数>
+    参数 显示方式 <类型 = 整数 注释 = "5表示显示" 注释 = "0表示隐藏" @默认值 = 5>
+    {
+        @ ::WinExec((LPCSTR)@<命令行文本指针>,@<显示方式>)
+    }
+
+    方法 _CMD <静态 类型 = 字节集类 注释 = "只能用作执行完命令就会返回数据" 注释 = "不能用来实时获取数据命令，例如" 注释 = "ping www.baidu.com -t 这种一直执行" 注释 = "的命令" 折叠2>
+    参数 要执行的命令 <类型 = 文本型 注释 = "tree /f c:\\a">
+    参数 是否启用CMDC <类型 = 逻辑型 注释 = "是否以 cmd /C 开头，如果为真，则完整的运行命令为  cmd /C tree /f c:\\a" @默认值 = 真>
+    {
+        变量 a <类型 = 字节集类>
+        @ int nDataSize = 0;
+        @ const char* pText =  ProcessTool_RunCmd(@<要执行的命令>,&nDataSize,@<是否启用CMDC>);
+        @ if (pText)
+        @ {
+        @   CVolMem mem(pText,nDataSize);
+        @   ProcessTool_FreeString(pText);
+        @   return mem;
+        @ }
+        返回 (a)
+
+
+    }
+
+    方法 CMD <公开 静态 类型 = 文本型>
+    参数 要执行的命令 <类型 = 文本型 注释 = "tree /f c:\\\\a">
+    参数 是否UTF8解码 <类型 = 逻辑型 @默认值 = 假>
+    参数 是否启用CMDC <类型 = 逻辑型 注释 = "是否以 cmd /C 开头，如果为真，则完整的运行命令为  cmd /C tree /f c:\\a" @默认值 = 真>
+    {
+        变量 数据 <类型 = 字节集类>
+        数据 = _CMD (要执行的命令, 是否启用CMDC)
+        如果 (是否UTF8解码 == 真)
+        {
+            返回 (UTF8到文本 (数据))
+        }
+        返回 (多字节到文本 (数据))
+
+
+
+    }
+
+    # //=====
+    #
+
+    方法 DLL_加载 <公开 静态 类型 = 变整数 返回值注释 = "返回模块句柄" @嵌入式方法 = "">
+    参数 DLL路径 <类型 = 文本型>
+    {
+        @ (INT_P)LoadLibrary(@<DLL路径>)
+    }
+
+    方法 DLL_取函数地址 <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 模块句柄 <类型 = 变整数>
+    参数 函数名称 <类型 = 文本型>
+    {
+        @ (INT_P)GetProcAddress((HMODULE)@<模块句柄>,GetMbsText(@<函数名称>, CVolMem(), NULL) )
+    }
+
+    方法 DLL_卸载 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 模块句柄 <类型 = 变整数>
+    {
+        @ FreeLibrary((HMODULE)@<模块句柄>)
+    }
+
+    方法 DLL_是否存在函数 <公开 静态 类型 = 逻辑型>
+    参数 DLL名称 <类型 = 文本型>
+    参数 函数名称 <类型 = 文本型>
+    {
+        变量 模块句柄 <类型 = 变整数>
+        变量 函数地址 <类型 = 变整数>
+        模块句柄 = DLL_加载 (DLL名称)
+        函数地址 = DLL_取函数地址 (模块句柄, 函数名称)
+        DLL_卸载 (模块句柄)
+        返回 (选择 (模块句柄 != 0, 真, 假))
+    }
+
+    #
+    #
+    # //=====
+
+    方法 进程_提权F <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ ProcessTool_GetPrivileges()
+    }
+
+    方法 进程_创建F <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 命令行参数 <类型 = 文本型>
+    参数 存放进程句柄 <类型 = 变整数 注释 = "创建成功后，此参数会保存着进程句柄">
+    参数 存放线程局部 <类型 = 变整数>
+    参数 存放进程ID <类型 = 整数>
+    参数 存放线程ID <类型 = 整数>
+    参数 是否挂起 <类型 = 逻辑型 @默认值 = 假>
+    参数 显示方式 <类型 = 整数 注释 = "5 表示显示" 注释 = "0 表示隐藏" @默认值 = 5>
+    {
+        @ ProcessTool_CreateProcess(@<命令行参数>,@<是否挂起>,@<显示方式>,(HANDLE*)&@<存放进程句柄>,(HANDLE*)&@<存放线程局部>,(DWORD*)&@<存放进程ID>,(DWORD*)&@<存放线程ID>)
+
+    }
+
+    方法 进程_结束F <公开 静态>
+    参数 进程句柄 <类型 = 变整数>
+    {
+        @ TerminateProcess((HANDLE)@<进程句柄>,0);
+        @ ::CloseHandle((HANDLE)@<进程句柄>);
+
+    }
+
+    方法 进程_等待F <公开 静态 折叠 @嵌入式方法 = "">
+    参数 进程句柄 <类型 = 变整数>
+    参数 等待时间 <类型 = 整数 注释 = "-1表示一直等待，" @默认值 = -1>
+    {
+        @ ::WaitForSingleObject((HANDLE)@<进程句柄>,(DWORD)@<等待时间>)
+
+    }
+
+    方法 进程_关闭句柄F <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 进程句柄 <类型 = 变整数>
+    {
+        @ ::CloseHandle((HANDLE)@<进程句柄>)
+    }
+
+    方法 进程_取优先级F <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 进程句柄 <类型 = 变整数>
+    {
+        @     char sz1[10] = "NORMAL";
+        @     char sz2[10] = "IDLE";
+        @     char sz3[10] = "REALTIME";
+        @     char sz4[10] = "HIGH";
+        @     char sz5[10] = "NULL";
+        @     char sz6[15] = "ABOVENORMAL";
+        @     char sz7[15] = "BELOWNORMAL";
+        @    
+        @     //进程优先级返回
+        @     if(GetPriorityClass((HANDLE)@<进程句柄>) == NORMAL_PRIORITY_CLASS)
+        @         return sz1;
+        @     if(GetPriorityClass((HANDLE)@<进程句柄>) == IDLE_PRIORITY_CLASS)
+        @         return sz2;
+        @     if(GetPriorityClass((HANDLE)@<进程句柄>) == REALTIME_PRIORITY_CLASS)
+        @         return sz3;
+        @     if(GetPriorityClass((HANDLE)@<进程句柄>) == HIGH_PRIORITY_CLASS)
+        @         return sz4;
+        @     if(GetPriorityClass((HANDLE)@<进程句柄>) == ABOVE_NORMAL_PRIORITY_CLASS)
+        @         return sz6;
+        @     if(GetPriorityClass((HANDLE)@<进程句柄>) == BELOW_NORMAL_PRIORITY_CLASS)
+        @         return sz7;
+        @     else
+        @         return sz5;
+
+
+
+    }
+
+    方法 进程_结束进程 <公开 静态 折叠>
+    参数 ID <类型 = 整数>
+    {
+        进程_提权F ()
+        @     HANDLE hProcess = NULL;
+        @     //打开进程句柄
+        @     hProcess = OpenProcess(PROCESS_TERMINATE,FALSE,@<ID>);
+        @     if(hProcess != NULL)
+        @     {
+        @         //终止进程
+        @         TerminateProcess(hProcess,0);
+        @         ::CloseHandle(hProcess);
+        @     }
+
+    }
+
+    方法 进程_取路径通过ID <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 ID <类型 = 整数>
+    参数 是否全路径 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @   TCHAR buffer[4096]={0};
+        @    // 打开进程句柄
+        @     HANDLE hProcess = OpenProcess( PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, @<ID> );
+        @     if( NULL != hProcess )
+        @     {
+        @         HMODULE hMod;
+        @         DWORD cbNeeded;
+        @         // 获取路径
+        @         if( EnumProcessModules( hProcess, &hMod, sizeof( hMod ), &cbNeeded ) )
+        @         {
+        @           if(@<是否全路径>)
+        @           {
+        @             DWORD dw = GetModuleFileNameEx( hProcess, hMod, buffer, 4096 );
+        @            }
+        @           else
+        @           {
+        @              GetModuleBaseName( hProcess, hMod, buffer, 4096 );
+        @            }
+        @         }
+        @         CloseHandle( hProcess );
+        @     }
+        @     return  buffer;
+
+    }
+
+    方法 进程_打开F <公开 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 访问标志 <类型 = 整数 注释 = "进程打开_常量类 开头的 ，可以用位操作 例如 位或( PROCESS_QUERY_INFORMATION , PROCESS_VM_READ,)">
+    参数 是否继承权限 <类型 = 逻辑型>
+    参数 进程ID <类型 = 整数>
+    {
+        @ (INT_P)OpenProcess((DWORD)@<访问标志>,@<是否继承权限>,(DWORD)@<进程ID>)
+    }
+
+    方法 进程_置工作集大小 <公开 类型 = 逻辑型 注释 = "将程序使用内存移至交换页面  间接释放物理内存" 折叠 @嵌入式方法 = "">
+    参数 进程句柄 <类型 = 变整数>
+    参数 最小值 <类型 = 变整数>
+    参数 最大值 <类型 = 变整数>
+    {
+        @ SetProcessWorkingSetSize((HANDLE)@<进程句柄>,@<最小值>,@<最大值>)
+    }
+
+    方法 进程_读内存F <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 进程句柄 <类型 = 变整数>
+    参数 内存基址 <类型 = 变整数>
+    参数 缓冲区指针 <类型 = 变整数 注释 = "这个是提供一个缓冲区，用来保存读取到的数据">
+    参数 缓冲区指针大小 <类型 = 变整数>
+    参数 实际读取字节数 <类型 = 变整数>
+    {
+        @ ::ReadProcessMemory((HANDLE)@<进程句柄>,(LPCVOID)@<内存基址>,(LPVOID)@<缓冲区指针>,(SIZE_T)@<缓冲区指针大小>,(SIZE_T *)&@<实际读取字节数>)
+
+    }
+
+    方法 进程_写内存F <公开 折叠>
+    参数 进程句柄 <类型 = 变整数>
+    参数 内存基址 <类型 = 变整数>
+    参数 缓冲区指针 <类型 = 变整数 注释 = "要写到内存的数据指针">
+    参数 缓冲区指针大小 <类型 = 变整数>
+    参数 实际读取字节数 <类型 = 变整数>
+    {
+        @ ::WriteProcessMemory((HANDLE)@<进程句柄>,(LPCVOID)@<内存基址>,(LPVOID)@<缓冲区指针>,(SIZE_T)@<缓冲区指针大小>,(SIZE_T *)&@<实际读取字节数>)
+    }
+
+    方法 进程_枚举进程模块 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程进程ID <类型 = 整数 注释 = "如果等于0表示枚举自身进程" @默认值 = 0>
+    参数 模块数组 <类型 = 文本数组类>
+    参数 是否全路径 <类型 = 逻辑型 @默认值 = 真>
+    参数 枚举标志 <类型 = 整数 注释 = "默认枚举所有模块" 注释 = "1 枚举 32位模块" 注释 = "2 枚举 64位模块" 注释 = "3 枚举 所有模块" 注释 = "4 默认枚举方式"
+            注释 = "LIST_MODULES_32BIT  0x01  List the 32-bit modules." 注释 = "LIST_MODULES_64BIT  0x02  List the 64-bit modules."
+            注释 = "LIST_MODULES_ALL    0x03  List all modules." 注释 = "LIST_MODULES_DEFAULT 0x0  Use the default behavior." @默认值 = 3>
+    {
+        模块数组.删除所有成员 ()
+        @ typedef BOOL(WINAPI* PEnumProcessModulesEx)(HANDLE  hProcess,HMODULE * lphModule,DWORD   cb,LPDWORD lpcbNeeded,DWORD   dwFilterFlag);
+        @  HMODULE hDLL = LoadLibraryA("Kernel32.dll");
+        @  PEnumProcessModulesEx pEnumProcessModulesEx = (PEnumProcessModulesEx)GetProcAddress(hDLL, "K32EnumProcessModulesEx");
+        @  FreeLibrary(hDLL);
+        @  HANDLE hProcess = NULL;
+        @  if(@<进程进程ID> == 0)
+        @     hProcess = GetCurrentProcess();
+        @  else
+        @     hProcess = OpenProcess( PROCESS_QUERY_INFORMATION |PROCESS_VM_READ,FALSE,(DWORD)@<进程进程ID> );
+        @  if (NULL == hProcess)
+        @        return FALSE;
+        @  DWORD size = 0, ret = 0;
+        @  if(pEnumProcessModulesEx)
+        @  {
+        @      pEnumProcessModulesEx(hProcess, NULL, size, &ret, @<枚举标志>);
+        @  }
+        @  else
+        @  {
+        @    EnumProcessModules(hProcess, NULL, size, &ret);
+        @  }
+        @  HMODULE* parry = (HMODULE*)malloc(ret+4);
+        @  if (parry == NULL)
+        @  {
+        @   CloseHandle(hProcess);
+        @   return FALSE;
+        @  }
+        @  if(pEnumProcessModulesEx)
+        @     pEnumProcessModulesEx(hProcess, parry, ret + 4, &ret, @<枚举标志>);
+        @  else
+        @     EnumProcessModules(hProcess, parry, ret + 4, &ret);
+        @  size_t nModuleCount = ret / sizeof(HMODULE);
+        @  for (size_t i = 0; i < nModuleCount; i++)
+        @  {
+        @   TCHAR path[MAX_PATH] = { 0 };
+        @   if(@<是否全路径>)
+        @   {
+        @      GetModuleFileNameEx(hProcess, *(parry+i), path, MAX_PATH);
+        @   }else{
+        @      GetModuleBaseName(hProcess, *(parry+i), path, MAX_PATH);
+        @   }
+        @   
+        @   @<模块数组>.data ().Add2 (path);
+        @  }
+        @  free(parry);
+        @  CloseHandle(hProcess);
+        @ return TRUE;
+
+
+    }
+
+    方法 进程_枚举进程ID <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 输出_进程ID数组 <类型 = 整数数组类 注释 = "用来保存枚举到的进程id数组">
+    {
+        变量 实际进程数量 <类型 = 整数>
+        变量 数组指针 <类型 = 变整数>
+        输出_进程ID数组.重置数组 (2048)  // 进程不可能两千多个的,所以这里2048个足够了。。。。。不够那是以后的事情了
+        数组指针 = 输出_进程ID数组.取数组指针 ()
+        @ BOOL bOK = EnumProcesses((DWORD *)@<数组指针>,8192,(DWORD *)&@<实际进程数量>);
+        输出_进程ID数组.重置数组 (实际进程数量 / 4, 假)
+        @ return bOK;
+    }
+
+    方法 进程_是否与系统位数一致 <公开 静态 类型 = 逻辑型 注释 = "64-bit process on 64-bit Windows : FALSE"
+            注释 = "32-bit process on 64-bit Windows : TRUE" 注释 = "32-bit process on 32-bit Windows : FALSE" 返回值注释 = "调用函数 成功真，失败假"
+            @禁止流程检查 = 真>
+    参数 进程句柄 <类型 = 变整数>
+    {
+        @ BOOL bWow64 = FALSE;
+        @ BOOL bRet = IsWow64Process((HANDLE)@<进程句柄>,&bWow64);
+        @ if(!bRet)
+        @ if(bRet && bWow64)
+        @    return TRUE;
+        @ return FALSE;
+
+
+    }
+
+    方法 进程_是否为64位 <公开 静态 类型 = 逻辑型>
+    参数 PID <类型 = 整数>
+    {
+        变量 进程句柄 <类型 = 变整数>
+        变量 返回值 <类型 = 逻辑型>
+        @ @<进程句柄> = (INT_P)OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, (DWORD)@<PID>);
+
+        如果 (系统_是否64位 () && 进程_是否与系统位数一致 (进程句柄) == 假)
+        {
+
+            返回值 = 真
+
+        }
+        否则
+        {
+
+            返回值 = 假
+
+        }
+
+        如果 (进程句柄 != 0)
+        {
+            @ CloseHandle((HANDLE)@<进程句柄>);
+        }
+
+        返回 (返回值)
+
+    }
+
+    方法 进程_取命令行 <公开 静态 类型 = 文本型 注释 = "如果失败了，可能就需要管理员权限"
+            @视窗.附属文件 = "Process\\GetProcessCommandLinex64.exe\nProcess\\GetProcessCommandLinex86.exe">
+    参数 PID <类型 = 整数>
+    {
+        变量 进程句柄 <类型 = 变整数>
+        变量 命令行 <类型 = 文本型>
+        变量 返回值 <类型 = 文本型>
+        @ @<进程句柄> = (INT_P)OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, (DWORD)@<PID>);
+
+        如果 (系统_是否64位 () && 进程_是否与系统位数一致 (进程句柄) == 假)
+        {
+            命令行 = "\"" + 取运行目录 () + "GetProcessCommandLinex64.exe\" " + 到文本 (PID)
+            调试输出 ("64")
+
+
+        }
+        否则
+        {
+            命令行 = "\"" + 取运行目录 () + "GetProcessCommandLinex86.exe\" " + 到文本 (PID)
+            调试输出 ("32")
+
+        }
+
+        返回值 = CMD (命令行)
+        如果 (进程句柄 != 0)
+        {
+            @ CloseHandle((HANDLE)@<进程句柄>);
+        }
+
+        返回 (返回值)
+    }
+
+    方法 进程_枚举进程名称F <公开 静态 折叠>
+    参数 用来保存_进程名称数组 <类型 = 文本数组类>
+    参数 是否全路径 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 进程ID <类型 = 整数数组类>
+        进程_枚举进程ID (进程ID)
+        用来保存_进程名称数组.预分配尺寸 = 进程ID.取成员数 ()
+        进程ID.枚举循环 ()
+        {
+            用来保存_进程名称数组.加入成员 (进程_取路径通过ID (进程ID.取枚举值 (), 是否全路径))
+        }
+
+    }
+
+    方法 进程_取指定进程名称ID数组 <公开 静态 注释 = "比如有两个 ie.exe 能得到两个ie.exe 的id数组" 折叠>
+    参数 进程名称 <类型 = 文本型 注释 = "例如id.exe">
+    参数 用来保存ID的数组 <类型 = 整数数组类>
+    参数 是否只查找一次 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 进程ID <类型 = 整数数组类>
+        进程_枚举进程ID (进程ID)
+        进程ID.枚举循环 ()
+        {
+            如果 (进程_取路径通过ID (进程ID.取枚举值 (), 假) == 进程名称)
+            {
+                用来保存ID的数组.加入成员 (进程ID.取枚举值 ())
+                如果 (是否只查找一次)
+                {
+                    跳出循环
+                }
+            }
+        }
+
+    }
+
+    方法 进程_进程ID是否存在 <公开 静态 类型 = 逻辑型 折叠>
+    参数 参数_进程ID <类型 = 整数>
+    {
+        变量 进程ID数组 <类型 = 整数数组类>
+        进程_枚举进程ID (进程ID数组)
+        进程ID数组.枚举循环 ()
+        {
+            如果 (进程ID数组.取枚举值 () == 参数_进程ID)
+            {
+                返回 (真)
+            }
+        }
+        返回 (假)
+    }
+
+    方法 进程_进程名称是否存在 <公开 静态 类型 = 逻辑型 折叠>
+    参数 要查找的进程名称 <类型 = 文本型>
+    {
+        变量 进程ID <类型 = 整数数组类>
+        进程_枚举进程ID (进程ID)
+        进程ID.枚举循环 ()
+        {
+            如果 (进程_取路径通过ID (进程ID.取枚举值 (), 假) == 要查找的进程名称)
+            {
+                返回 (真)
+            }
+        }
+        返回 (假)
+
+    }
+
+    方法 进程_取ID通过进程名称 <公开 静态 类型 = 整数 注释 = "比如有两个 ie.exe 只会返回第一个找到的，如果您要同时找到两个id ，可以用 进程_取指定进程名称ID数组" 注释 = "如果找到，返回进程id 否则返回 -1"
+            折叠>
+    参数 进程名称 <类型 = 文本型 注释 = "例如id.exe">
+    {
+        变量 进程ID <类型 = 整数数组类>
+        进程_枚举进程ID (进程ID)
+        进程ID.枚举循环 ()
+        {
+            如果 (进程_取路径通过ID (进程ID.取枚举值 (), 假) == 进程名称)
+            {
+                返回 (进程ID.取枚举值 ())
+            }
+        }
+        返回 (-1)
+    }
+}
+
+类 进程打开_常量类 <公开 折叠>
+{
+    常量 全部权限 <公开 类型 = 整数 值 = @PROCESS_ALL_ACCESS>
+    常量 创建进程 <公开 类型 = 整数 值 = @PROCESS_CREATE_PROCESS>
+    常量 创建线程 <公开 类型 = 整数 值 = @PROCESS_CREATE_THREAD>
+    常量 取真实句柄 <公开 类型 = 整数 值 = @PROCESS_DUP_HANDLE>
+    常量 查询进程信息 <公开 类型 = 整数 值 = @PROCESS_QUERY_INFORMATION>
+    常量 SET_QUOTA <公开 类型 = 整数 值 = @PROCESS_SET_QUOTA>
+    常量 设置进程信息 <公开 类型 = 整数 值 = @PROCESS_SET_INFORMATION>
+    常量 结束进程 <公开 类型 = 整数 值 = @PROCESS_TERMINATE>
+    常量 打打开虚拟内存 <公开 类型 = 整数 值 = @PROCESS_VM_OPERATION>
+    常量 读虚拟内存 <公开 类型 = 整数 值 = @PROCESS_VM_READ>
+    常量 写虚拟内存 <公开 类型 = 整数 值 = @PROCESS_VM_WRITE>
+    常量 SYNCHRONIZE <公开 类型 = 整数 值 = @SYNCHRONIZE
+            注释 = "Enables using the process handle in any of the wait functions to wait for the process to terminate.">
+
+    #
+}
+
+类 CMD回显类 <公开 @视窗.后缀文本 = "public CProcessToolCMDEchoBase">
+{
+
+    # @begin
+    # <> <include>
+    #  virtual void Echo(const char* pBuffer, int nBufferLen);
+    # <> </include>
+    # void @sn<current_class>::Echo(const char* pBuffer, int nBufferLen)
+    # {
+    #     CVolMem mem(pBuffer,nBufferLen);
+    #     @<收到数据>(mem);
+    # }
+    # @end
+
+    方法 执行命令 <公开 类型 = 逻辑型 注释 = "可以执行实时回显的命令，例如" 注释 = "ping www.baidu.com -t" @嵌入式方法 = "">
+    参数 要执行的命令 <类型 = 文本型 注释 = "例如 tree /f c:\\a">
+    参数 是否使用CMD <类型 = 逻辑型 注释 = "是否以 cmd /C 开头，如果为真，则完整的运行命令为  cmd /C tree /f c:\\a" @默认值 = 真>
+    {
+        @ ProcessTool_RunCmdEcho(@<要执行的命令>,&@sn<this>)
+
+    }
+
+    方法 收到数据 <公开 定义事件 类型 = 整数>
+    参数 收到的字节集 <类型 = 字节集类>
+    {
+
+
+
+    }
+}
+
+类 "//CMD回显扩展类" <公开 折叠 @视窗.后缀文本 = "public CProcessToolCMDEchoBaseEx">
+{
+
+    # @begin
+    # <> <include>
+    #  virtual void Echo(void* hWrite,const char* pBuffer, int nBufferLen);
+    # <> </include>
+    # void @sn<current_class>::Echo(void* hWrite,const char* pBuffer, int nBufferLen)
+    # {
+    #     CVolMem mem(pBuffer,nBufferLen);
+    #     @<收到数据>((INT_P)hWrite,mem);
+    # }
+    # @end
+
+    方法 启动进程 <公开 类型 = 逻辑型 注释 = "可以执行实时回显的命令，例如 telent" 折叠 @嵌入式方法 = "">
+    参数 要启动的进程 <类型 = 文本型 注释 = "telent">
+    {
+        @ ProcessTool_RunCmdEchoEx(@<要启动的进程>,&@sn<this>)
+
+    }
+
+    方法 _执行命令 <类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 写句柄 <类型 = 变整数>
+    参数 命令指针 <类型 = 变整数>
+    参数 命令大小 <类型 = 整数>
+    {
+        @ ProcessTool_WriteEchoEx((void*)@<写句柄>,(const char*)@<命令指针>,@<命令大小>)
+
+    }
+
+    方法 执行命令 <公开 类型 = 逻辑型 折叠>
+    参数 写句柄 <类型 = 变整数>
+    参数 命令文本 <类型 = 文本型>
+    参数 是否UTF8编码 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 命令 <类型 = 字节集类>
+        如果 (是否UTF8编码)
+        {
+            命令 = 文本到UTF8 (命令文本)
+        }
+        否则
+        {
+            命令 = 文本到多字节 (命令文本)
+        }
+
+        返回 (_执行命令 (写句柄, 取字节集指针 (命令), 取字节集长度 (命令) - 1))
+
+    }
+
+    方法 收到数据 <公开 定义事件 类型 = 整数>
+    参数 写句柄 <类型 = 变整数>
+    参数 收到的字节集 <类型 = 字节集类>
+    {
+
+    }
+}

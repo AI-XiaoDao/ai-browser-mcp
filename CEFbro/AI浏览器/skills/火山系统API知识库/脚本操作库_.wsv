@@ -1,0 +1,2027 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <@文档 = "category = \"脚本操作库\"">
+
+类 JS脚本类_ <公开 注释 = "微软ChakraCore" 折叠 折叠2 @文档 = "category = \"脚本操作库.JS脚本\"" @视窗.头文件搜寻目录 = "JavaScript\\include"
+        @视窗.库文件搜寻目录 = "JavaScript\\$(p)" @视窗.外部头文件 = "ChakraCore.h" @视窗.外部库 = "ChakraCore.lib"
+        @视窗.附属文件 = "JavaScript\\$(p)\\ChakraCore.dll" @输出名 = "JavaScript">
+{
+
+    # @begin
+    #      JsRuntimeHandle runtime;
+    #      JsContextRef context;
+    #      unsigned currentSourceContext = 0;
+    # @end
+
+    方法 Eval_ <公开 类型 = 变整数 注释 = "运行JS代码" 折叠 @禁止流程检查 = 真>
+    参数 表达式 <类型 = 文本型>
+    参数 URL <类型 = 文本型>
+    {
+        @ JsValueRef result;
+        @ JsRunScript(@<表达式>,currentSourceContext++,@<URL>,&result);
+        @ bool bIsExcep;
+        @ JsHasException(&bIsExcep);
+        @ if (bIsExcep) return 0;
+        @ if(!result) return 0;
+        @ return (INT_P)result;
+    }
+
+    方法 AddCode_ <公开 类型 = 逻辑型 注释 = "执行指定的代码文本" 返回值注释 = "返回真为执行正常，返回假为出错," 返回值注释 = "错误信息 用 取错误() 取出" 折叠 @禁止流程检查 = 真>
+    参数 脚本代码 <类型 = 文本型>
+    参数 URL <类型 = 文本型>
+    {
+        @ JsValueRef result;
+        // @ JsValueRef resultError;
+        @ JsRunScript(@<脚本代码>,currentSourceContext++,@<URL>,&result);
+        @ bool bIsExcep;
+        @ JsHasException(&bIsExcep);
+        @ return !bIsExcep;
+    }
+
+    方法 初始化_ <公开 折叠>
+    {
+        @     JsCreateRuntime(JsRuntimeAttributeNone, nullptr, &runtime);
+        @     JsEnableRuntimeExecution(runtime);
+        @     JsCreateContext(runtime, &context);
+        @     // Now set the current execution context.
+        @     JsSetCurrentContext(context);
+    }
+
+    方法 运行函数_ <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 表达式 <类型 = 文本型>
+    参数 URL <类型 = 文本型>
+    {
+        @ JsValueRef result;
+        @ JsRunScript(@<表达式>.GetText(),currentSourceContext++,@<URL>,&result);
+        @ bool bIsExcep;
+        @ JsHasException(&bIsExcep);
+        @ if (bIsExcep) return L"";
+        @ if(!result) return L"";
+        @ JsValueRef resultJSString;
+        @ JsConvertValueToString(result, &resultJSString);
+        @ const wchar_t *resultWC;
+        @ size_t stringLength;
+        @ JsStringToPointer(resultJSString, &resultWC, &stringLength);
+        @ return resultWC;
+    }
+
+    方法 取文本_ <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 返回的结果指针 <类型 = 变整数 注释 = "返回的结果，取变量地址 ()">
+    {
+        如果真 (返回的结果指针 <= 0)
+        {
+            返回 ("")
+        }
+        @ JsValueRef resultJSString;
+        @ JsConvertValueToString((JsValueRef)@<返回的结果指针>, &resultJSString);
+        @ const wchar_t *resultWC;
+        @ size_t stringLength;
+        @ JsStringToPointer(resultJSString, &resultWC, &stringLength);
+        @ return resultWC;
+    }
+
+    方法 取类型_ <公开 类型 = 整数 返回值注释 = "0.Undefined 1.Null 2.Number 3.String 4.Boolen 5.Objec 6.Function"
+            返回值注释 = "7.Error 8.Array 9.Symbol 10.ArrayBuffer 11.TypedArray 12.JsDataView" 折叠 @禁止流程检查 = 真>
+    参数 返回的结果指针 <类型 = 变整数 注释 = "返回的结果，取变量地址 ()">
+    {
+        如果真 (返回的结果指针 <= 0)
+        {
+            返回 (0)
+        }
+        @ JsValueType resultJSString;
+        @ JsGetValueType((JsValueRef)@<返回的结果指针>, &resultJSString);
+        @ return (int)resultJSString;
+    }
+
+    方法 取整数_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 返回的结果指针 <类型 = 变整数 注释 = "返回的结果，取变量地址 ()">
+    {
+        如果真 (返回的结果指针 <= 0)
+        {
+            返回 (0)
+        }
+        @ JsValueRef resultJSString;
+        @ JsConvertValueToNumber((JsValueRef)@<返回的结果指针>, &resultJSString);
+        @ int bRes;
+        @ JsNumberToInt(resultJSString,&bRes);
+        @ return bRes;
+    }
+
+    方法 取数值_ <公开 类型 = 小数 折叠 @禁止流程检查 = 真>
+    参数 返回的结果指针 <类型 = 变整数 注释 = "返回的结果，取变量地址 ()">
+    {
+        如果真 (返回的结果指针 <= 0)
+        {
+            返回 (-1)
+        }
+        @ JsValueRef resultJSString;
+        @ JsConvertValueToNumber((JsValueRef)@<返回的结果指针>, &resultJSString);
+        @ double bRes;
+        @ JsNumberToDouble(resultJSString,&bRes);
+        @ return bRes;
+    }
+
+    方法 取逻辑_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 返回的结果指针 <类型 = 变整数 注释 = "返回的结果，取变量地址 ()">
+    {
+        如果真 (返回的结果指针 < 1)
+        {
+            返回 (假)
+        }
+        @ JsValueRef resultJSString;
+        @ JsConvertValueToBoolean((JsValueRef)@<返回的结果指针>, &resultJSString);
+        @ bool bRes;
+        @ JsBooleanToBool(resultJSString,&bRes);
+        @ return bRes;
+    }
+
+    方法 取错误_ <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        @ JsValueRef resultError;
+        @ JsGetAndClearExceptionWithMetadata(&resultError);
+        @ if(!resultError) return L"";
+        @ const char *content ="exception";
+        @ JsValueRef pStr;
+        @ JsCreateString(content,strlen(content),&pStr);
+        @ if(!pStr) return L"创建错误字符失败";
+        @ JsValueRef pRes;
+        @ JsObjectGetProperty(resultError,pStr,&pRes);
+        @ if(!pRes) return L"读取错误指针失败";
+        @ JsValueRef resultJSString;
+        @ JsConvertValueToString(pRes, &resultJSString);
+        @ if(!resultJSString) return L"读取错误文本失败";
+        @ const wchar_t *resultWC;
+        @ size_t stringLength;
+        @ JsStringToPointer(resultJSString, &resultWC, &stringLength);
+        @ return resultWC;
+    }
+
+    方法 清除_ <公开 折叠 @禁止流程检查 = 真>
+    {
+        @   JsRelease(context,0);
+        @   JsSetCurrentContext(JS_INVALID_REFERENCE);
+        @   JsDisposeRuntime(runtime);
+        @   runtime = NULL ;
+        @   context = NULL ;
+        @   currentSourceContext = 0;
+    }
+}
+
+# //==========
+
+类 JS脚本类2_ <公开 折叠 折叠2 @文档 = "category = \"脚本操作库.JS脚本\"" @视窗.需求目标平台 = @"32位平台">
+{
+    变量 脚本对象 <类型 = COM对象类>
+
+    方法 类_初始化 <折叠>
+    {
+        COM初始化类.初始化COM ()
+        脚本对象.创建 ("ScriptControl", )
+        脚本对象.写属性 ("Language", "JScript")
+    }
+
+    方法 类_清理 <折叠>
+    {
+        脚本对象.清除 ()
+        COM初始化类.清理COM ()
+    }
+
+    方法 执行 <公开 类型 = 逻辑型 注释 = "执行指定的代码文本" 返回值注释 = "返回真为执行正常，返回假为出错，错误信息可以从“取错误”命令中取得" 折叠>
+    参数 脚本代码 <类型 = 文本型>
+    {
+        变量 脚本代码_变体型 <类型 = COM变体型>
+        脚本对象.方法 ("ExecuteStatement", COM对象类, 脚本代码)
+        返回 (脚本对象.取错误 () == COM方法调用结果.成功)
+    }
+
+    方法 计算表达式 <公开 类型 = 文本型 注释 = "计算表达式并返回结果" 折叠>
+    参数 表达式 <类型 = 文本型>
+    {
+        返回 (脚本对象.方法 ("Eval", 文本型, 表达式))
+    }
+
+    方法 清除 <公开 折叠>
+    {
+        脚本对象.无参数方法 ("Reset", COM对象类)
+    }
+
+    方法 取错误 <公开 类型 = COM方法调用结果 注释 = "返回错误信息" 折叠>
+    {
+        返回 (脚本对象.取错误 ())
+    }
+
+    方法 取脚本对象 <公开 类型 = COM对象类 折叠>
+    {
+        返回 (脚本对象)
+    }
+
+    方法 运行 <公开 类型 = 文本型 注释 = "在添加的代码中运行指定的过程，如有返回值返回相应文本，否则返回空文本。" 返回值注释 = "在添加的代码中运行指定的过程，如有返回值返回相应文本，否则返回空文本" 折叠>
+    参数 过程或函数名 <类型 = 文本型>
+    参数 参数1 <类型 = 文本型 @默认值 = "">
+    参数 参数2 <类型 = 文本型 @默认值 = "">
+    参数 参数3 <类型 = 文本型 @默认值 = "">
+    参数 参数4 <类型 = 文本型 @默认值 = "">
+    参数 参数5 <类型 = 文本型 @默认值 = "">
+    参数 参数6 <类型 = 文本型 @默认值 = "">
+    {
+        如果 (文本_是否为空文本 (参数1) == 假 && 文本_是否为空文本 (参数2) == 假 && 文本_是否为空文本 (参数3) == 假 && 文本_是否为空文本 (参数4) == 假 && 文本_是否为空文本 (参数5) == 假 && 文本_是否为空文本 (参数6) == 假)
+        {
+            返回 (脚本对象.方法 ("Run", 文本型, 过程或函数名, 参数1, 参数2, 参数3, 参数4, 参数5, 参数6))
+        }
+        否则 (文本_是否为空文本 (参数1) == 假 && 文本_是否为空文本 (参数2) == 假 && 文本_是否为空文本 (参数3) == 假 && 文本_是否为空文本 (参数4) == 假 && 文本_是否为空文本 (参数5) == 假)
+        {
+            返回 (脚本对象.方法 ("Run", 文本型, 过程或函数名, 参数1, 参数2, 参数3, 参数4, 参数5))
+        }
+        否则 (文本_是否为空文本 (参数1) == 假 && 文本_是否为空文本 (参数2) == 假 && 文本_是否为空文本 (参数3) == 假 && 文本_是否为空文本 (参数4) == 假)
+        {
+            返回 (脚本对象.方法 ("Run", 文本型, 过程或函数名, 参数1, 参数2, 参数3, 参数4))
+        }
+        否则 (文本_是否为空文本 (参数1) == 假 && 文本_是否为空文本 (参数2) == 假 && 文本_是否为空文本 (参数3) == 假)
+        {
+            返回 (脚本对象.方法 ("Run", 文本型, 过程或函数名, 参数1, 参数2, 参数3))
+        }
+        否则 (文本_是否为空文本 (参数1) == 假 && 文本_是否为空文本 (参数2) == 假)
+        {
+            返回 (脚本对象.方法 ("Run", 文本型, 过程或函数名, 参数1, 参数2))
+        }
+        否则 (文本_是否为空文本 (参数1) == 假)
+        {
+            返回 (脚本对象.方法 ("Run", 文本型, 过程或函数名, 参数1))
+        }
+        返回 (脚本对象.方法 ("Run", 文本型, 过程或函数名))
+    }
+
+    方法 属性_语言 <公开 类型 = 文本型 注释 = "设置或返回正在使用的脚本语言名称" 折叠>
+    参数 新语言属性 <类型 = 整数 注释 = "默认为为 JScript   0. JScript   1. VBScript" @默认值 = 0>
+    {
+        如果 (新语言属性 == 0)
+        {
+            脚本对象.写属性 ("Language", "JScript")
+        }
+        否则 (新语言属性 == 1)
+        {
+            脚本对象.写属性 ("Language", "vbs")
+        }
+        返回 (脚本对象.读无参数属性 ("Language", 文本型))
+    }
+
+    方法 属性_超时 <公开 类型 = 整数 注释 = "设置或返回时间（毫秒），此时间后用户可选择中止脚本代码的执行或允许代码继续执行。" 折叠>
+    参数 新超时属性值 <类型 = 整数 注释 = "默认为-1，执行无超时" @默认值 = -1>
+    {
+        脚本对象.写属性 ("Timeout", 新超时属性值)
+        返回 (脚本对象.读无参数属性 ("Timeout", 整数))
+    }
+
+    方法 属性_状态 <公开 类型 = 整数 折叠>
+    参数 新状态值 <类型 = 整数 注释 = "参数值为以下值之一： 0、Initialized； 1、Connected" @默认值 = 0>
+    {
+        如果 (新状态值 != 0)
+        {
+            脚本对象.写属性 ("State", 新状态值)
+        }
+        返回 (脚本对象.读无参数属性 ("State", 整数))
+    }
+
+    方法 属性_是否使用图形界面 <公开 类型 = 逻辑型 折叠>
+    参数 新是否使用图形界面属性 <类型 = 逻辑型 @默认值 = 假>
+    {
+        如果真 (新是否使用图形界面属性 == 假)
+        {
+            脚本对象.写属性 ("AllowUI", 新是否使用图形界面属性)
+        }
+        返回 (脚本对象.读无参数属性 ("AllowUI", 逻辑型))
+    }
+
+    方法 属性_图形界面父窗口句柄 <公开 类型 = 变整数 折叠>
+    参数 新父窗口句柄 <类型 = 变整数 @默认值 = 0>
+    {
+        如果真 (新父窗口句柄 != 0)
+        {
+            脚本对象.写属性 ("SitehWnd", 新父窗口句柄)
+        }
+        返回 (脚本对象.读无参数属性 ("SitehWnd", 变整数))
+    }
+
+    方法 添加代码 <公开 折叠>
+    参数 代码文本 <类型 = 文本型>
+    {
+        脚本对象.方法 ("AddCode", COM对象类, 代码文本)
+    }
+}
+
+# //==========
+
+类 LUA脚本 <公开 基础类 = 脚本常量类 注释 = "当前版本：5.4.8" 注释 = "本静态库是2019编译" 折叠 折叠2 @视窗.需求VS版本 = "16-" @全局类 = 真 @禁止创建对象 = 真
+        "@视窗.外部库.x64-debug" = "lua\\lua548_static_64debug.lib" "@视窗.外部库.x64-release" = "lua\\lua548_static_64release.lib"
+        "@视窗.外部库.win32-debug" = "lua\\lua548_static_32debug.lib" "@视窗.外部库.win32-release" = "lua\\lua548_static_32release.lib"
+        @视窗.外部头文件 = "lua\\lua.hpp" @输出名 = "Lua" @视窗.附加编译参数 = "cpp:/EHa">
+{
+
+    #
+    #
+    # LUA脚本开发的优势
+    #
+    # 1 免编译
+    # 告别频繁的编译、发布、漫长的打开程序等待，而且每次打开程序要注册，加载资源。有了脚本，您一个启动按钮就可以搞定。
+    #
+    # 2 速度快
+    # LUA不同于其它脚本，如PYTHON、V8、PHP等。这些都是可独立闯江湖的语言，拥有强大的功能包。但缺点也十分明显。代码包十分臃肿、速度慢。兼容性差。产品定位比较单一。
+    # 而LUA天生用来于其它语言交互，LUA可以通过栈堆与C语言高效互访。这是一出生就带来的天赋技能。LUA的支持库非常小巧。WIN32下。只需要一个100多KB的DLL就可以搞定。因此LUA安装非常方便、的速度非常快。可以媲美VC、DELPHI,你甚至感觉不到它是脚本。这是其它脚本语言无法做到的。
+    #
+    # 3 功能强大
+    # 不要以为LUA是脚本语言，就认为LUA功能很差。LUA并不是一门主打语言，而是寄生于强大语言的脚本语言。产品定位和功能取决于宿主语言。（宿主语言可以是 VC、DELPHI、VB、PB、易语言、火山视窗）因此，我们可以通过宿主语言为LUA定制功能。用什么就加什么，比如多线程和读COM组件的功能。这种灵活的定制也是LUA高效的原因。
+    #
+    # 4 简单易学
+    # 此库封装的是标准的LUA5.4.6语法。支持全中文，不用花大量时间学习陌生的语言。即使没学过LUA也不要紧。LUA是一门及其容易上手的语言。再也不用花大量时间去研究VC、DELPHI、VB。需要什么LUA没有的功能。只要引擎封装成LUA语法就可以搞定。LUA已成为游戏界的新宠。众所周知，天龙八部、剑网3、魔兽世界、愤怒的小鸟很早就采用了LUA。著名的游戏框架，COCOS2D也已经支持LUA。
+    #
+
+    方法 脚本函数 <静态 类型 = 整数 注释 = "提供脚本函数的模板方法，32位必须设置前缀文本，64位可以忽略此操作" 编辑时信息 = "7EAA2, 0, 0, 0" @视窗.前缀文本 = "@__cdecl">
+    参数 必须参数 <类型 = 变整数 注释 = "必须参数就是解释器指针，多指针调用传递该参数即可" 编辑时信息 = "7EAA2, 0, 0, 0">
+    {
+        返回 (0)
+    }
+
+    方法 脚本函数2 <静态 类型 = 整数 注释 = "提供脚本函数的模板方法，此方法32位不需要设置前缀文本，由于不带参数，多指针调用会比较呆板">
+    {
+        返回 (0)
+    }
+
+    方法 lua_setfield <公开 静态 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    参数 索引 <类型 = 整数 @输出名 = "Indexes">
+    参数 名称 <类型 = 文本型 @输出名 = "name">
+    {
+        @ @an<CVolMem> memBuf;
+        @ INT_P npResultTextLength;
+        @ const CHAR* ps = GetMbsText (name.GetText (), memBuf, &npResultTextLength);
+        @ CVolMem set = @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @ lua_setfield((lua_State*)L, Indexes, (const char*)set.GetPtr());
+    }
+
+    方法 脚本_设置表字段 <公开 静态 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    参数 索引 <类型 = 整数 @输出名 = "Indexes">
+    参数 名称 <类型 = 文本型 @输出名 = "name">
+    {
+        @ @an<CVolMem> memBuf;
+        @ INT_P npResultTextLength;
+        @ const CHAR* ps = GetMbsText (name.GetText (), memBuf, &npResultTextLength);
+        @ CVolMem set = @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @ lua_setfield((lua_State*)L, Indexes, (const char*)set.GetPtr());
+    }
+
+    方法 lua_rawseti <公开 静态 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    参数 索引 <类型 = 整数 @输出名 = "index">
+    参数 成员索引 <类型 = 整数 @输出名 = "key">
+    {
+        @ lua_rawseti((lua_State*)L, index,key);
+    }
+
+    方法 脚本_压入栈顶字节集 <公开 静态 类型 = 变整数 注释 = "lua_pushstring" 返回值注释 = "返回指针" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 欲压入的字节集 <类型 = 字节集类 注释 = "提供所欲压入的UTF8编码数据，0结束" @输出名 = "value">
+    {
+        @     return (INT_P)lua_pushstring( (lua_State*)L,(const char *)value.GetPtr ());
+
+    }
+
+    方法 脚本_取栈顶字节集 <公开 静态 类型 = 字节集类 注释 = "lua_tostring" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈位置 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "position">
+    参数 数据尺寸 <类型 = 整数 注释 = "提供所欲加入数据的尺寸(单位字节),默认0结束" 折叠2 @默认值 = 0 @输出名 = "Datasize">
+    {
+        变量 ret <类型 = 字节集类 值 = 空对象>
+        @     const char* address = lua_tostring((lua_State*)L,(LUA_INTEGER)position);
+        @     if (Datasize == NULL)
+        @     {
+        @           CVolMem ByTe;
+        @           int i = NULL;
+        @           do
+        @           {
+        @               i++;
+        @               ByTe = CVolMem ((void*)address, i);
+        @           }
+        @           while (ByTe.GetBinRight (1) != CVolMem ().AddManyBytes (NUM_CHARS_OF_TEXT ("n"), NULL));
+        @          try{
+        @           return CVolMem ((void*)address, i);
+        @          }
+        @          catch (...)
+        @           {
+        @           return ret;
+        @           }
+        @     }
+        @     else
+        @     {
+        @          try{
+        @          return CVolMem ((void*)address, Datasize);
+        @          }
+        @          catch (...)
+        @           {
+        @             return ret;
+        @           }
+        @     }
+
+
+    }
+
+    方法 luaL_newstate <公开 静态 类型 = 变整数 注释 = "luaL_newstate" 折叠 @禁止流程检查 = 真>
+    {
+        @  return (INT_P)luaL_newstate();
+    }
+
+    方法 脚本_初始化 <公开 静态 类型 = 变整数 注释 = "luaL_newstate" 折叠 编辑时信息 = "67FF9, 0, 0, 0" @禁止流程检查 = 真>
+    {
+
+        @  return (INT_P)luaL_newstate();
+    }
+
+    方法 luaopen_base <公开 静态 类型 = 逻辑型 注释 = "luaopen_base" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @   return  (BOOL)luaopen_base((lua_State*)L);
+
+    }
+
+    方法 脚本_加载基础库 <公开 静态 类型 = 逻辑型 注释 = "luaopen_base" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @   return  (BOOL)luaopen_base((lua_State*)L);
+
+    }
+
+    方法 luaL_openlibs <公开 静态 注释 = "luaL_openlibs" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @     luaL_openlibs((lua_State*)L);
+    }
+
+    方法 脚本_加载扩展库 <公开 静态 注释 = "luaL_openlibs" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @     luaL_openlibs((lua_State*)L);
+    }
+
+    方法 lua_register <公开 静态 注释 = "lua_register" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 lua函数名 <类型 = 文本型 注释 = "自定义接口名称" @输出名 = "Functionname">
+    参数 本地函数 <类型 = 变整数 注释 = "方法名地址,32位程序需要把本地函数的调用约定改为__cdecl" @输出名 = "function">
+    {
+        @        @an<CVolMem> memBuf;
+        @        INT_P npResultTextLength;
+        @        const CHAR* ps = GetMbsText (Functionname.GetText (), memBuf, &npResultTextLength);
+        @        CVolMem set =  @an<CVolMem> (ps, (npResultTextLength + (TRUE ? 1 : LUA_OPADD)) * sizeof (CHAR));
+        @        lua_register((lua_State*)L, (const char*)set.GetPtr(),(lua_CFunction) function);
+    }
+
+    方法 脚本_注册函数 <公开 静态 注释 = "lua_register" 折叠 编辑时信息 = "A7FF5, 0, 0, 0" @嵌入式方法 = "">
+    参数 解释器指针 <类型 = 变整数 注释 = "解释器指针" 编辑时信息 = "A7FF5, 0, 0, 0" @输出名 = "L">
+    参数 lua函数名 <类型 = 文本型 注释 = "自定义接口名称" 编辑时信息 = "A7FF5, 0, 0, 0" @输出名 = "Functionname">
+    参数 本地函数 <注释 = "提供所欲执行的脚本函数" 注释 = "模板不需要公开" 编辑时信息 = "A7FF5, 0, 0, 0" @输出名 = "function" @匹配方法 = "脚本函数">
+    {
+        @ (*@<LUA脚本.脚本_注册函数3>)(@<解释器指针>,@<lua函数名>,(@dt<变整数>)&@<本地函数>);
+
+    }
+
+    方法 脚本_注册函数2 <公开 静态 注释 = "lua_register" 折叠 @嵌入式方法 = "">
+    参数 解释器指针 <类型 = 变整数 注释 = "解释器指针" 编辑时信息 = "A7FF5, 0, 0, 0" @输出名 = "L">
+    参数 lua函数名 <类型 = 文本型 注释 = "自定义接口名称" 编辑时信息 = "A7FF5, 0, 0, 0" @输出名 = "Functionname">
+    参数 本地函数 <注释 = "提供所欲执行的脚本函数" 注释 = "模板不需要公开" 折叠2 编辑时信息 = "A7FF5, 0, 0, 0" @输出名 = "function" @匹配方法 = "脚本函数2">
+    {
+        @ (*@<LUA脚本.脚本_注册函数3>)(@<解释器指针>,@<lua函数名>,(@dt<变整数>)&@<本地函数>);
+
+    }
+
+    方法 脚本_注册函数3 <公开 静态 注释 = "lua_register" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "解释器指针" @输出名 = "L">
+    参数 lua函数名 <类型 = 文本型 注释 = "自定义接口名称" @输出名 = "Functionname">
+    参数 本地函数 <类型 = 变整数 注释 = "方法名地址,如果是32位程序并且带参数，需要把本地函数的调用约定改为__cdecl," 注释 = "否则第一个参数得到的数据并不是解释器指针,不带参数直接无视调用约定" 折叠2
+            @输出名 = "function">
+    {
+        @        @an<CVolMem> memBuf;
+        @        INT_P npResultTextLength;
+        @        const CHAR* ps = GetMbsText (Functionname.GetText (), memBuf, &npResultTextLength);
+        @        CVolMem set =  @an<CVolMem> (ps, (npResultTextLength + (TRUE ? 1 : LUA_OPADD)) * sizeof (CHAR));
+        @        lua_register((lua_State*)L, (const char*)set.GetPtr(),(lua_CFunction) function);
+    }
+
+    方法 luaL_dostring <公开 静态 类型 = 整数 注释 = "luaL_dostring" 返回值注释 = "非0失败" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 lua文本 <类型 = 文本型 注释 = "lua代码" @输出名 = "text">
+    {
+        @ if(luaL_loadstring((lua_State*)L , (const char *) CU8String(text).GetText()) == 0)
+        @ {
+        @       @an<CVolMem> memBuf;
+        @       INT_P npResultTextLength;
+        @       const CHAR* ps = GetMbsText (text.GetText (), memBuf, &npResultTextLength);
+        @       CVolMem set =  @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @       return luaL_dostring((lua_State*)L, (const char*)set.GetPtr());
+        @ }
+        @ else
+        @ {
+        @       return -1;
+        @ }
+    }
+
+    方法 脚本_执行文本 <公开 静态 类型 = 整数 注释 = "luaL_dostring" 返回值注释 = "非0失败" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 lua文本 <类型 = 文本型 注释 = "lua代码" @输出名 = "text">
+    {
+        @ if(luaL_loadstring((lua_State*)L , (const char *) CU8String(text).GetText()) == 0)
+        @ {
+        @       @an<CVolMem> memBuf;
+        @       INT_P npResultTextLength;
+        @       const CHAR* ps = GetMbsText (text.GetText (), memBuf, &npResultTextLength);
+        @       CVolMem set =  @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @       return luaL_dostring((lua_State*)L, (const char*)set.GetPtr());
+        @ }
+        @ else
+        @ {
+        @       return -1;
+        @ }
+    }
+
+    方法 luaL_dofile <公开 静态 类型 = 整数 注释 = "luaL_dofile" 返回值注释 = "0：成功,非0：失败" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 lua文件 <类型 = 文本型 注释 = "lua代码所在文件，提供文件路径即可,编码为ANSI" @输出名 = "file">
+    {
+        @          @an<CVolMem> memBuf; INT_P npResultTextLength;
+        @          const CHAR* ps = GetMbsText (file.GetText (), memBuf, &npResultTextLength);
+        @          CVolMem set = @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @          return  luaL_dofile ((lua_State*)L, (const char *) set.GetPtr());
+    }
+
+    方法 脚本_执行文件 <公开 静态 类型 = 整数 注释 = "luaL_dofile" 返回值注释 = "0：成功,非0：失败" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 lua文件 <类型 = 文本型 注释 = "lua代码所在文件，提供文件路径即可,编码为ANSI" @输出名 = "file">
+    {
+        @          @an<CVolMem> memBuf; INT_P npResultTextLength;
+        @          const CHAR* ps = GetMbsText (file.GetText (), memBuf, &npResultTextLength);
+        @          CVolMem set = @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @          return  luaL_dofile ((lua_State*)L, (const char *) set.GetPtr());
+    }
+
+    方法 lua_close <公开 静态 注释 = "lua_close" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+
+        @   lua_close((lua_State*)L);
+
+    }
+
+    方法 脚本_销毁 <公开 静态 注释 = "lua_close" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+
+        @   lua_close((lua_State*)L);
+
+    }
+
+    方法 lua_newthread <公开 静态 类型 = 变整数 注释 = "lua_newthread" 返回值注释 = "返回一个新的解释器指针" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ return (INT_P)lua_newthread((lua_State*)L);
+
+    }
+
+    方法 脚本_新建解释器 <公开 静态 类型 = 变整数 注释 = "lua_newthread" 返回值注释 = "返回一个新的解释器指针" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ return (INT_P)lua_newthread((lua_State*)L);
+
+    }
+
+    方法 lua_tolstring <公开 静态 类型 = 文本型 注释 = "lua_tolstring" 返回值注释 = "失败返回 \"-1\"" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 注释 = "要取的栈位置" 折叠2 编辑时信息 = "9AAA1, 0, 0, 0" @默认值 = LUA_TNONE @输出名 = "parameter">
+    {
+        @ const char* Pointer = lua_tolstring((lua_State*)L,parameter,(size_t *)NULL);
+        @ if (Pointer != NULL)
+        @ {
+        @ return CVolString(GetWideText(Pointer,CVolMem(),NULL));
+        @ }
+        @ else
+        @ {
+        @  return _T("栈出错");
+        @ }
+    }
+
+    方法 脚本_取栈顶文本 <公开 静态 类型 = 文本型 注释 = "lua_tolstring" 折叠 编辑时信息 = "9AAA1, 0, 0, 0" @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 注释 = "要取的栈位置" 折叠2 编辑时信息 = "9AAA1, 0, 0, 0" @默认值 = LUA_TNONE @输出名 = "parameter">
+    {
+        @ const char* Pointer = lua_tolstring((lua_State*)L,parameter,(size_t *)NULL);
+        @ if (Pointer != NULL)
+        @ {
+        @ return CVolString(GetWideText(Pointer,CVolMem(),NULL));
+        @ }
+        @ else
+        @ {
+        @  return _T("栈出错");
+        @ }
+    }
+
+    方法 lua_tointeger <公开 静态 类型 = 整数 注释 = "lua_tointeger" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 注释 = "要取的栈位置" 折叠2 @默认值 = LUA_TNONE @输出名 = "parameter">
+    {
+        @  return (int)lua_tointeger((lua_State*)L,parameter);
+
+
+
+
+    }
+
+    方法 脚本_取栈顶整数 <公开 静态 类型 = 整数 注释 = "lua_tointeger" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 注释 = "要取的栈位置" 折叠2 @默认值 = LUA_TNONE @输出名 = "parameter">
+    {
+        @  return (int)lua_tointeger((lua_State*)L,parameter);
+
+
+
+
+    }
+
+    方法 lua_tointeger_长整数 <公开 静态 类型 = 长整数 注释 = "lua_tointeger" 注释 = "此函数取决于lua内部代码决定" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 注释 = "要取的栈位置" 折叠2 @默认值 = LUA_TNONE @输出名 = "parameter">
+    {
+        @  return (__int64)lua_tointeger((lua_State*)L,parameter);
+
+
+
+
+    }
+
+    方法 脚本_取栈顶长整数 <公开 静态 类型 = 长整数 注释 = "lua_tointeger" 注释 = "此函数取决于lua内部代码决定" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 注释 = "要取的栈位置" 折叠2 @默认值 = LUA_TNONE @输出名 = "parameter">
+    {
+        @  return (__int64)lua_tointeger((lua_State*)L,parameter);
+
+
+
+
+    }
+
+    方法 lua_tointeger_变整数 <公开 静态 类型 = 变整数 注释 = "lua_tointeger" 注释 = "此函数取决于lua内部代码决定" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 注释 = "要取的栈位置" 折叠2 @默认值 = LUA_TNONE @输出名 = "parameter">
+    {
+        @  return (INT_P)lua_tointeger((lua_State*)L,parameter);
+
+    }
+
+    方法 脚本_取栈顶变整数 <公开 静态 类型 = 变整数 注释 = "lua_tointeger" 注释 = "此函数取决于lua内部代码决定" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 注释 = "要取的栈位置" 折叠2 @默认值 = LUA_TNONE @输出名 = "parameter">
+    {
+        @  return (INT_P)lua_tointeger((lua_State*)L,parameter);
+
+    }
+
+    方法 lua_toboolean <公开 静态 类型 = 逻辑型 注释 = "lua_toboolean" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 注释 = "要取的栈位置" 折叠2 @默认值 = LUA_TNONE @输出名 = "parameter">
+    {
+        @ return (bool)lua_toboolean ((lua_State*)L, parameter);
+    }
+
+    方法 脚本_取栈顶逻辑 <公开 静态 类型 = 逻辑型 注释 = "lua_toboolean" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 注释 = "要取的栈位置" 折叠2 @默认值 = LUA_TNONE @输出名 = "parameter">
+    {
+        @ return (bool)lua_toboolean ((lua_State*)L, parameter);
+    }
+
+    方法 lua_tonumber_单精度小数 <公开 静态 类型 = 单精度小数 注释 = "lua_tonumber" 返回值注释 = "返回单精度小数" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "parameter">
+    {
+        @  return (float)lua_tonumber((lua_State*)L,parameter);
+
+    }
+
+    方法 脚本_取栈顶单精度小数 <公开 静态 类型 = 单精度小数 注释 = "lua_tonumber" 返回值注释 = "返回单精度小数" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "parameter">
+    {
+        @  return (float)lua_tonumber((lua_State*)L,parameter);
+
+    }
+
+    方法 lua_tonumber <公开 静态 类型 = 小数 注释 = "lua_tonumber" 返回值注释 = "返回双精度小数" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "parameter">
+    {
+        @  return lua_tonumber((lua_State*)L,parameter);
+
+    }
+
+    方法 脚本_取栈顶小数 <公开 静态 类型 = 小数 注释 = "lua_tonumber" 返回值注释 = "返回双精度小数" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "parameter">
+    {
+        @  return lua_tonumber((lua_State*)L,parameter);
+
+    }
+
+    方法 luaL_checknumber <公开 静态 类型 = 小数 注释 = "luaL_checknumber" 返回值注释 = "返回双精度类型的实浮点数" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 注释 = "从左到右" 折叠2 @默认值 = LUA_TNONE @输出名 = "pointer">
+    {
+        // 检查栈中的参数是否合法,1表示Lua调用时的第一个参数(从左到右),依此类推.
+        // 如果Lua代码在调用时传递的参数不为number,该函数将报错并终止程序的执行.
+        @ return  luaL_checknumber((lua_State*)L,pointer);
+
+
+
+    }
+
+    方法 脚本_取栈顶数值 <公开 静态 类型 = 小数 注释 = "luaL_checknumber" 返回值注释 = "返回双精度类型的实浮点数" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 注释 = "从左到右" 折叠2 @默认值 = LUA_TNONE @输出名 = "pointer">
+    {
+        // 检查栈中的参数是否合法,1表示Lua调用时的第一个参数(从左到右),依此类推.
+        // 如果Lua代码在调用时传递的参数不为number,该函数将报错并终止程序的执行.
+        @ return  luaL_checknumber((lua_State*)L,pointer);
+
+
+
+    }
+
+    方法 lua_tonumberx2 <公开 静态 类型 = 小数 注释 = "lua_tonumberx" 返回值注释 = "返回双精度小数" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 @输出名 = "parameter">
+    参数 类型指针 <类型 = 变整数 注释 = "提供一个指针" 注释 = "用于接收返回值" 折叠2 @输出名 = "Type" @默认值 = LUA_OPADD>
+    {
+        @ return lua_tonumberx((lua_State*)L,parameter,(int*)Type);
+    }
+
+    方法 脚本_取栈顶小数2 <公开 静态 类型 = 小数 注释 = "lua_tonumberx" 返回值注释 = "返回双精度小数" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 @输出名 = "parameter">
+    参数 类型指针 <类型 = 变整数 注释 = "提供一个指针" 注释 = "用于接收返回值" 折叠2 @输出名 = "Type" @默认值 = LUA_OPADD>
+    {
+        @ return lua_tonumberx((lua_State*)L,parameter,(int*)Type);
+    }
+
+    方法 lua_tonumberx单精度小数2 <公开 静态 类型 = 单精度小数 注释 = "lua_tonumberx" 返回值注释 = "返回单精度小数" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 @输出名 = "parameter">
+    参数 类型指针 <类型 = 变整数 注释 = "提供一个指针" 注释 = "用于接收返回值" 折叠2 @输出名 = "Type" @默认值 = LUA_OPADD>
+    {
+        @ return (float)lua_tonumberx((lua_State*)L,parameter,(int*)Type);
+    }
+
+    方法 脚本_取栈顶单精度小数2 <公开 静态 类型 = 单精度小数 注释 = "lua_tonumberx" 返回值注释 = "返回单精度小数" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 取第几个参数 <类型 = 整数 @输出名 = "parameter">
+    参数 类型指针 <类型 = 变整数 注释 = "提供一个指针" 注释 = "用于接收返回值" 折叠2 @输出名 = "Type" @默认值 = LUA_OPADD>
+    {
+        @ return (float)lua_tonumberx((lua_State*)L,parameter,(int*)Type);
+    }
+
+    方法 lua_settop <公开 静态 注释 = "lua_settop" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 参数数量 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "idx">
+    {
+        @  lua_settop((lua_State*)L, -(idx - 1));
+    }
+
+    方法 脚本_取栈顶元素 <公开 静态 注释 = "lua_settop" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 参数数量 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "idx">
+    {
+        @  lua_settop((lua_State*)L, -(idx - 1));
+    }
+
+    方法 脚本_设置栈顶元素 <公开 静态 注释 = "lua_settop" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 参数数量 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "idx">
+    {
+        @  lua_settop((lua_State*)L, -(idx - 1));
+    }
+
+    方法 lua_resume <公开 静态 类型 = 整数 注释 = "lua_resume" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 继续参数 <类型 = 整数 注释 = "可以传lua指针或者留空" 折叠2 编辑时信息 = "7BFF8, 0, 0, 0" @输出名 = "from" @默认值 = LUA_OPADD>
+    参数 参数个数 <类型 = 整数 编辑时信息 = "7BFF8, 0, 0, 0" @输出名 = "narg">
+    参数 nres <类型 = 变整数 折叠2 @输出名 = "nres" @默认值 = LUA_OPADD>
+    {
+        @ return lua_resume ((lua_State*)L,((lua_State*)L *)from,narg,(LUA_INTEGER*)&nres);
+
+    }
+
+    方法 脚本_协程继续 <公开 静态 类型 = 整数 注释 = "lua_resume" 折叠 编辑时信息 = "7BFF8, 0, 0, 0" @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 继续参数 <类型 = 整数 注释 = "可以传lua指针或者留空" 折叠2 编辑时信息 = "7BFF8, 0, 0, 0" @输出名 = "from" @默认值 = LUA_OPADD>
+    参数 参数个数 <类型 = 整数 编辑时信息 = "7BFF8, 0, 0, 0" @输出名 = "narg">
+    参数 nres <类型 = 变整数 折叠2 @输出名 = "nres" @默认值 = LUA_OPADD>
+    {
+        @ return lua_resume ((lua_State*)L,(lua_State*)from,narg,(int *)nres);
+
+    }
+
+    方法 lua_yieldk <公开 静态 类型 = 整数 注释 = "lua_yieldk" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 继续参数 <类型 = 整数 @输出名 = "nresults">
+    参数 ctx <类型 = 变整数 折叠2 @输出名 = "ctx" @默认值 = LUA_OPADD>
+    参数 k <类型 = 变整数 折叠2 @输出名 = "k" @默认值 = LUA_OPADD>
+    {
+        @ return lua_yieldk ((lua_State*)L,nresults,(lua_KContext)ctx,(lua_KFunction)k);
+    }
+
+    方法 脚本_协程暂停 <公开 静态 类型 = 整数 注释 = "lua_yieldk" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 继续参数 <类型 = 整数 @输出名 = "nresults">
+    参数 ctx <类型 = 变整数 折叠2 @输出名 = "ctx" @默认值 = LUA_OPADD>
+    参数 k <类型 = 变整数 折叠2 @输出名 = "k" @默认值 = LUA_OPADD>
+    {
+        @ return lua_yieldk ((lua_State*)L,nresults,(lua_KContext)ctx,(lua_KFunction)k);
+    }
+
+    方法 lua_isyieldable <公开 静态 类型 = 整数 注释 = "lua_isyieldable" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ return lua_isyieldable((lua_State*)L);
+    }
+
+    方法 脚本_协程是否暂停 <公开 静态 类型 = 整数 注释 = "lua_isyieldable" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ return lua_isyieldable((lua_State*)L);
+    }
+
+    方法 lua_status <公开 静态 类型 = 整数 注释 = "lua_status" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ return lua_status((lua_State*)L);
+    }
+
+    方法 脚本_协程取状态 <公开 静态 类型 = 整数 注释 = "lua_status" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ return lua_status((lua_State*)L);
+    }
+
+    方法 luaL_取错误信息 <公开 静态 类型 = 整数 注释 = "luaL_loadstring"
+            返回值注释 = "0：没有错误，1：运行错误，2：文件错误，3：预编译时句法错误，4：内存分配错误，5：LUA_ERRERR，其他：未知返回类型。" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 lua代码 <类型 = 文本型 注释 = "lua文本代码" @输出名 = "code">
+    {
+        @      @an<CVolMem> memBuf;
+        @      INT_P npResultTextLength;
+        @      const CHAR* ps = GetMbsText (code.GetText (), memBuf, &npResultTextLength);
+        @      CVolMem set =  @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @      return luaL_loadstring((lua_State*)L, (const char*)set.GetPtr());
+    }
+
+    方法 脚本_取错误信息 <公开 静态 类型 = 整数 注释 = "luaL_loadstring"
+            返回值注释 = "0：没有错误，1：运行错误，2：文件错误，3：预编译时句法错误，4：内存分配错误，5：LUA_ERRERR，其他：未知返回类型。" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 lua代码 <类型 = 文本型 注释 = "lua文本代码" @输出名 = "code">
+    {
+        @      @an<CVolMem> memBuf;
+        @      INT_P npResultTextLength;
+        @      const CHAR* ps = GetMbsText (code.GetText (), memBuf, &npResultTextLength);
+        @      CVolMem set =  @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @      return luaL_loadstring((lua_State*)L, (const char*)set.GetPtr());
+    }
+
+    方法 lua_gettop <公开 静态 类型 = 整数 注释 = "lua_gettop" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ return lua_gettop ((lua_State*)L);
+    }
+
+    方法 脚本_取栈顶元素个数 <公开 静态 类型 = 整数 注释 = "lua_gettop" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ return lua_gettop ((lua_State*)L);
+    }
+
+    方法 lua_pushstring <公开 静态 类型 = 变整数 注释 = "lua_pushstring" 注释 = "" 返回值注释 = "返回指针" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 欲压入的文本 <类型 = 文本型 注释 = "编码为UTF16" @输出名 = "value">
+    {
+        @ @an<CVolMem> memBuf;
+        @ INT_P npResultTextLength;
+        @ const char* trajectory = GetMbsText(value.GetText (),memBuf,&npResultTextLength);
+        @ return (INT_P)lua_pushstring ( (lua_State*)L, trajectory);
+
+
+    }
+
+    方法 脚本_压入栈顶文本 <公开 静态 类型 = 变整数 注释 = "lua_pushstring" 注释 = "" 返回值注释 = "返回指针" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 欲压入的文本 <类型 = 文本型 注释 = "编码为UTF16" @输出名 = "value">
+    {
+        @ @an<CVolMem> memBuf;
+        @ INT_P npResultTextLength;
+        @ const char* trajectory = GetMbsText(value.GetText (),memBuf,&npResultTextLength);
+        @ return (INT_P)lua_pushstring ( (lua_State*)L, trajectory);
+
+
+
+
+    }
+
+    方法 lua_pushinteger <公开 静态 注释 = "lua_pushinteger" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 欲压入的整数 <类型 = 整数 @输出名 = "value">
+    {
+        @  lua_pushinteger ((lua_State*)L, (LUA_INTEGER)value);
+    }
+
+    方法 脚本_压入栈顶整数 <公开 静态 注释 = "lua_pushinteger" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 欲压入的整数 <类型 = 整数 @输出名 = "value">
+    {
+        @  lua_pushinteger ((lua_State*)L, (LUA_INTEGER)value);
+    }
+
+    方法 lua_pushboolean <公开 静态 注释 = "lua_pushboolean" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 欲压入的逻辑值 <类型 = 逻辑型 @输出名 = "value">
+    {
+        @ return lua_pushboolean  ((lua_State*)L, (LUA_INTEGER)value);
+    }
+
+    方法 脚本_压入栈顶逻辑 <公开 静态 注释 = "lua_pushboolean" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 欲压入的逻辑值 <类型 = 逻辑型 @输出名 = "value">
+    {
+        @ return lua_pushboolean  ((lua_State*)L, (LUA_INTEGER)value);
+    }
+
+    方法 lua_pushnumber变整数 <公开 静态 注释 = "lua_pushnumber" 注释 = "此函数取决于lua内部代码决定" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 欲压入的变整数 <类型 = 变整数 @输出名 = "value">
+    {
+        @  lua_pushnumber ((lua_State*)L, (lua_Number)value);
+    }
+
+    方法 脚本_压入栈顶变整数 <公开 静态 注释 = "lua_pushnumber" 注释 = "此函数取决于lua内部代码决定" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 欲压入的变整数 <类型 = 变整数 @输出名 = "value">
+    {
+        @  lua_pushnumber ((lua_State*)L, (lua_Number)value);
+    }
+
+    方法 lua_pushnumber长整数 <公开 静态 注释 = "lua_pushnumber" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 欲压入的变整数 <类型 = 长整数 @输出名 = "value">
+    {
+        @  lua_pushnumber ((lua_State*)L, value);
+
+
+
+    }
+
+    方法 脚本_压入栈顶长整数 <公开 静态 注释 = "lua_pushnumber" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 欲压入的变整数 <类型 = 长整数 @输出名 = "value">
+    {
+        @  lua_pushnumber ((lua_State*)L, (lua_Number)value);
+
+
+
+    }
+
+    方法 lua_pushnumber <公开 静态 注释 = "lua_pushnumber" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 欲压入的小数 <类型 = 小数 注释 = "双精度小数，占用八字节" @输出名 = "value">
+    {
+        @  lua_pushnumber ((lua_State*)L, value);
+    }
+
+    方法 脚本_压入栈顶小数 <公开 静态 注释 = "lua_pushnumber" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 欲压入的小数 <类型 = 小数 注释 = "双精度小数，占用八字节" @输出名 = "value">
+    {
+        @  lua_pushnumber ((lua_State*)L, value);
+    }
+
+    方法 lua_pushnumber_单精度小数 <公开 静态 注释 = "lua_pushnumber" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 欲压入的小数 <类型 = 单精度小数 注释 = "单精度小数，占用四字节" @输出名 = "value">
+    {
+        @  lua_pushnumber ((lua_State*)L, value);
+    }
+
+    方法 脚本_压入栈顶单精度小数 <公开 静态 注释 = "lua_pushnumber" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 欲压入的小数 <类型 = 单精度小数 注释 = "单精度小数，占用四字节" @输出名 = "value">
+    {
+        @  lua_pushnumber ((lua_State*)L, value);
+    }
+
+    方法 lua_getglobal <公开 静态 类型 = 整数 注释 = "lua_getglobal" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 变量名 <类型 = 文本型 注释 = "UTF-8编码" @输出名 = "Text">
+    {
+        @    @an<CVolMem> memBuf;
+        @    INT_P npResultTextLength;
+        @    const CHAR* ps = GetMbsText (Text.GetText (), memBuf, &npResultTextLength);
+        @    CVolMem set = @an<CVolMem> (ps, (npResultTextLength + (TRUE ? 1 : 0)) * sizeof (CHAR));
+        @    return lua_getglobal((lua_State*)L,(const char *) set.GetPtr ());
+    }
+
+    方法 脚本_加载全局变量 <公开 静态 类型 = 整数 注释 = "lua_getglobal" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 变量名 <类型 = 文本型 注释 = "UTF-8编码" @输出名 = "Text">
+    {
+        @    @an<CVolMem> memBuf;
+        @    INT_P npResultTextLength;
+        @    const CHAR* ps = GetMbsText (Text.GetText (), memBuf, &npResultTextLength);
+        @    CVolMem set = @an<CVolMem> (ps, (npResultTextLength + (TRUE ? 1 : 0)) * sizeof (CHAR));
+        @    return lua_getglobal((lua_State*)L,(const char *) set.GetPtr ());
+    }
+
+    方法 lua_pcall <公开 静态 类型 = 整数 注释 = "lua_pcall,对比上一个版本不再处理错误函数,由使用者自己设置" 返回值注释 = "lua执行函数，非0失败" 返回值注释 = "2：运行时错误"
+            返回值注释 = "4：内存分配错误，对于这种错,Lua 调用不了错误处理函数。" 返回值注释 = "5：在运行错误处理函数时发生的错误。" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 参数个数 <类型 = 整数 注释 = "压入的参数数量" 折叠2 @输出名 = "nargs" @默认值 = LUA_OPADD>
+    参数 返回值个数 <类型 = 整数 注释 = "返回值的数量" 折叠2 @输出名 = "nresults" @默认值 = LUA_OPADD>
+    参数 错误处理函数 <类型 = 变整数 注释 = "" 注释 = "0表示无，表示错误处理函数在栈中的索引" 折叠2 @输出名 = "errfunc" @默认值 = LUA_OPADD>
+    {
+        @   return lua_pcall((lua_State*)L,nargs,nresults,(int)errfunc );
+
+
+
+    }
+
+    方法 脚本_执行函数2 <公开 静态 类型 = 整数 注释 = "lua_pcall,对比上一个版本不再处理错误函数,由使用者自己设置" 返回值注释 = "lua执行函数，非0失败" 返回值注释 = "2：运行时错误"
+            返回值注释 = "4：内存分配错误，对于这种错,Lua 调用不了错误处理函数。" 返回值注释 = "5：在运行错误处理函数时发生的错误。" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 参数个数 <类型 = 整数 注释 = "压入的参数数量" 折叠2 @输出名 = "nargs" @默认值 = LUA_OPADD>
+    参数 返回值个数 <类型 = 整数 注释 = "返回值的数量" 折叠2 @输出名 = "nresults" @默认值 = LUA_OPADD>
+    参数 错误处理函数 <类型 = 变整数 注释 = "" 注释 = "0表示无，表示错误处理函数在栈中的索引" 折叠2 @输出名 = "errfunc" @默认值 = LUA_OPADD>
+    {
+        @   return lua_pcall((lua_State*)L,nargs,nresults,(int)errfunc );
+
+
+
+    }
+
+    方法 lua_replace <公开 静态 注释 = "lua_replace" 折叠>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    参数 栈位置 <类型 = 整数 @输出名 = "index">
+    {
+        @ lua_replace ((lua_State*)L,index);
+    }
+
+    方法 脚本_置栈值位置 <公开 静态 注释 = "lua_replace" 折叠>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    参数 栈位置 <类型 = 整数 @输出名 = "index">
+    {
+        @ lua_replace ((lua_State*)L,index);
+    }
+
+    方法 lua_tostring <公开 静态 类型 = 文本型 注释 = "lua_tostring" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈位置 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "position">
+    {
+        @ const char* msg = lua_tostring((lua_State*)L,(LUA_INTEGER)position);
+        @ return CVolString(GetWideText(msg,CVolMem(),NULL));
+    }
+
+    方法 脚本_取栈顶文本2 <公开 静态 类型 = 文本型 注释 = "lua_tostring" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈位置 <类型 = 整数 @默认值 = LUA_TNONE @输出名 = "position">
+    {
+        @ const char* msg = lua_tostring((lua_State*)L,(LUA_INTEGER)position);
+        @ if (msg != NULL)
+        @ {
+        @ return CVolString(GetWideText(msg,CVolMem(),NULL));
+        @ }
+        @ else
+        @ {
+        @  return _T("栈出错");
+        @ }
+
+
+
+
+    }
+
+    方法 lua_pop <公开 静态 注释 = "lua_pop" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 弹出数量 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "quantity">
+    {
+        @  lua_pop((lua_State*)L,quantity);
+    }
+
+    方法 脚本_恢复栈 <公开 静态 注释 = "lua_pop" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 弹出数量 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "quantity">
+    {
+        @  lua_pop((lua_State*)L,quantity);
+    }
+
+    方法 lua_setglobal <公开 静态 注释 = "lua_setglobal" 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 变量名 <类型 = 文本型 @输出名 = "Variable">
+    {
+        @      @an<CVolMem> memBuf;
+        @      INT_P npResultTextLength;
+        @      const CHAR* ps = GetMbsText (Variable.GetText (), memBuf, &npResultTextLength);
+        @      CVolMem set =  @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @      lua_setglobal((lua_State*)L, (const char*)set.GetPtr());
+
+    }
+
+    方法 脚本_设置全局变量 <公开 静态 注释 = "lua_setglobal" 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 变量名 <类型 = 文本型 @输出名 = "Variable">
+    {
+        @      @an<CVolMem> memBuf;
+        @      INT_P npResultTextLength;
+        @      const CHAR* ps = GetMbsText (Variable.GetText (), memBuf, &npResultTextLength);
+        @      CVolMem set =  @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @      lua_setglobal((lua_State*)L, (const char*)set.GetPtr());
+
+
+
+
+
+    }
+
+    方法 lua_type <公开 静态 类型 = 整数 注释 = "lua_type" 注释 = "" 返回值注释 = "-1：无效" 返回值注释 = "0：\"nil\"" 返回值注释 = "1：bool"
+            返回值注释 = "2：轻量级userdata" 返回值注释 = "3：数值" 返回值注释 = "4：字符串" 返回值注释 = "5：table" 返回值注释 = "6：函数" 返回值注释 = "7：userdata"
+            返回值注释 = "8：线程" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈索引 <类型 = 整数 折叠2 @输出名 = "Indexes" @默认值 = LUA_TNONE>
+    {
+        //  lua没有整数,只有小数,无论小数还是整数都按小数计算
+        // 返回的类型是一些个在lua.h 中定义的常量:LUA_TNIL , LUA_TNUMBER , LUA_TBOOLEAN , LUA_TSTRING , LUA_TTABLE , LUA_TFUNCTION , LUA_TUSERDATA , LUA_TTHREAD , LUA_TLIGHTUSERDATA .
+        // * #define LUA_TNONE               无效
+        // * #define LUA_TNIL               "nil"
+        // * #define LUA_TBOOLEAN           "bool"
+        // * #define LUA_TLIGHTUSERDATA      轻量级"userdata"
+        // * #define LUA_TNUMBER             数值
+        // * #define LUA_TSTRING             字符串
+        // * #define LUA_TTABLE             "table"
+        // * #define LUA_TFUNCTION           函数
+        // * #define LUA_TUSERDATA          "userdata"
+        // * #define LUA_TTHREAD             线程
+
+        @ return lua_type((lua_State*)L, (int)Indexes);
+
+    }
+
+    方法 脚本_取栈值类型 <公开 静态 类型 = 整数 注释 = "lua_type" 注释 = "" 返回值注释 = "-1：无效" 返回值注释 = "0：\"nil\"" 返回值注释 = "1：bool"
+            返回值注释 = "2：轻量级userdata" 返回值注释 = "3：数值" 返回值注释 = "4：字符串" 返回值注释 = "5：table" 返回值注释 = "6：函数" 返回值注释 = "7：userdata"
+            返回值注释 = "8：线程" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈索引 <类型 = 整数 折叠2 @输出名 = "Indexes" @默认值 = LUA_TNONE>
+    {
+        //  lua没有整数,只有小数,无论小数还是整数都按小数计算
+        // 返回的类型是一些个在lua.h 中定义的常量:LUA_TNIL , LUA_TNUMBER , LUA_TBOOLEAN , LUA_TSTRING , LUA_TTABLE , LUA_TFUNCTION , LUA_TUSERDATA , LUA_TTHREAD , LUA_TLIGHTUSERDATA .
+        // * #define LUA_TNONE               无效
+        // * #define LUA_TNIL               "nil"
+        // * #define LUA_TBOOLEAN           "bool"
+        // * #define LUA_TLIGHTUSERDATA      轻量级"userdata"
+        // * #define LUA_TNUMBER             数值
+        // * #define LUA_TSTRING             字符串
+        // * #define LUA_TTABLE             "table"
+        // * #define LUA_TFUNCTION           函数
+        // * #define LUA_TUSERDATA          "userdata"
+        // * #define LUA_TTHREAD             线程
+
+        @ return lua_type((lua_State*)L, (int)Indexes);
+
+    }
+
+    方法 lua_typename <公开 静态 类型 = 文本型 注释 = "lua_typename"
+            返回值注释 = "number：实数，string：字符串，nil 全局变量，boolean：false 和nil为假 ，其它都为真；function 函数，table：数组，userdata：类，thread：线程" 折叠
+            @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈索引 <类型 = 整数 注释 = "参数必须是脚本_取栈值类型返回值之一" 折叠2 @输出名 = "Indexes" @默认值 = LUA_TNONE>
+    {
+        // number 实数 ,可以是整数,浮点数,Lua 默认只有一种 number 类型 -- double(双精度)类型(默认类型可以修改 luaconf.h 里的定义)
+        // string 字符串,一旦赋值不能被修改,可以通过方法string.gsub()来修改
+        // nil 全局变量没被赋值默认为nil,删除变量就赋值为 nil
+        // boolean(bool) false 和nil为假 ,其它都为真
+        // function 函数
+        // table 数组、容器
+        // userdata (类,其它语言转换过来就变成userdata类型)
+        // thread 线程
+        @     CVolMem name;INT_P i = NULL;INT_P lName;
+        @     const char* text = lua_typename((lua_State*)L, Indexes);
+        @     i = strlen(text);name.Alloc ((i + LUA_OPSUB), TRUE);
+        @     lName = (INT_P)name.GetPtr ();strcpy((char*)lName,text);
+        @     CVolMem memBuf (name);memBuf.AddDWord (NULL);
+        @     return CVolString ((const CHAR*)memBuf.GetPtr ());
+
+    }
+
+    方法 脚本_取栈值类型名 <公开 静态 类型 = 文本型 注释 = "lua_typename"
+            返回值注释 = "number：实数，string：字符串，nil 全局变量，boolean：false 和nil为假 ，其它都为真；function 函数，table：数组，userdata：类，thread：线程" 折叠
+            @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈索引 <类型 = 整数 注释 = "参数必须是脚本_取栈值类型返回值之一" 折叠2 @输出名 = "Indexes" @默认值 = LUA_TNONE>
+    {
+        // number 实数 ,可以是整数,浮点数,Lua 默认只有一种 number 类型 -- double(双精度)类型(默认类型可以修改 luaconf.h 里的定义)
+        // string 字符串,一旦赋值不能被修改,可以通过方法string.gsub()来修改
+        // nil 全局变量没被赋值默认为nil,删除变量就赋值为 nil
+        // boolean(bool) false 和nil为假 ,其它都为真
+        // function 函数
+        // table 数组、容器
+        // userdata (类,其它语言转换过来就变成userdata类型)
+        // thread 线程
+        @     CVolMem name;INT_P i = NULL;INT_P lName;
+        @     const char* text = lua_typename((lua_State*)L, Indexes);
+        @     i = strlen(text);name.Alloc ((i + LUA_OPSUB), TRUE);
+        @     lName = (INT_P)name.GetPtr ();strcpy((char*)lName,text);
+        @     CVolMem memBuf (name);memBuf.AddDWord (NULL);
+        @     return CVolString ((const CHAR*)memBuf.GetPtr ());
+
+    }
+
+    方法 lua_pushcfunction2 <公开 静态 注释 = "lua_pushcfunction" 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 函数指针 <类型 = 变整数 注释 = "int function(int (lua_State*)L)" @输出名 = "pointer">
+    {
+        @ lua_pushcfunction((lua_State*)L, (lua_CFunction)pointer);
+    }
+
+    方法 脚本_压入函数2 <公开 静态 注释 = "lua_pushcfunction" 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 函数指针 <类型 = 变整数 注释 = "int function(int (lua_State*)L)" @输出名 = "pointer">
+    {
+        @ lua_pushcfunction((lua_State*)L, (lua_CFunction)pointer);
+    }
+
+    方法 lua_pushcfunction <公开 静态 注释 = "lua_pushcfunction" 折叠 @嵌入式方法 = "">
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 本地函数 <注释 = "int function(int (lua_State*)L)" 折叠2 @输出名 = "pointer" @匹配方法 = "">
+    {
+        @ (*@<LUA脚本.脚本_压入函数2>)(@<解释器指针>,(@dt<变整数>)@<本地函数>);
+
+    }
+
+    方法 脚本_压入函数 <公开 静态 注释 = "lua_pushcfunction" 折叠 @嵌入式方法 = "">
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 本地函数 <注释 = "int function(int (lua_State*)L)" @输出名 = "pointer" @匹配方法 = "脚本函数">
+    {
+        @ (*@<LUA脚本.脚本_压入函数2>)(@<解释器指针>,(@dt<变整数>)@<本地函数>);
+    }
+
+    方法 lua_rawlen <公开 静态 类型 = 整数 注释 = "lua_rawlen" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    参数 栈索引 <类型 = 整数 @输出名 = "Indexes">
+    {
+        @ return lua_rawlen((lua_State*)L, Indexes);
+    }
+
+    方法 脚本_元取长度 <公开 静态 类型 = 整数 注释 = "lua_rawlen" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    参数 栈索引 <类型 = 整数 @输出名 = "Indexes">
+    {
+        // lua_Number
+        @ return (int)lua_rawlen((lua_State*)L, Indexes);
+    }
+
+    方法 lua_getfield <公开 静态 类型 = 整数 注释 = "lua_getfield" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 索引 <类型 = 整数 @输出名 = "Indexes">
+    参数 名称 <类型 = 文本型 @输出名 = "name">
+    {
+
+
+        @ @an<CVolMem> memBuf;
+        @ INT_P npResultTextLength;
+        @ const CHAR* ps = GetMbsText (name.GetText (), memBuf, &npResultTextLength);
+        @ CVolMem set = @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @ return lua_getfield((lua_State*)L, Indexes, (const char*)set.GetPtr());
+
+
+
+
+    }
+
+    方法 脚本_取表值_键值 <公开 静态 类型 = 整数 注释 = "lua_getfield" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 索引 <类型 = 整数 @输出名 = "Indexes">
+    参数 名称 <类型 = 文本型 @输出名 = "name">
+    {
+        @ @an<CVolMem> memBuf;
+        @ INT_P npResultTextLength;
+        @ const CHAR* ps = GetMbsText (name.GetText (), memBuf, &npResultTextLength);
+        @ CVolMem set = @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @ return lua_getfield((lua_State*)L, Indexes, (const char*)set.GetPtr());
+
+
+
+    }
+
+    方法 lua_geti <公开 静态 类型 = 整数 注释 = "lua_geti" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 索引 <类型 = 整数 @输出名 = "Indexes">
+    参数 序号 <类型 = 整数 @输出名 = "Serial">
+    {
+        @ return lua_geti((lua_State*)L,Indexes, Serial);
+    }
+
+    方法 脚本_取表值_序号 <公开 静态 类型 = 整数 注释 = "lua_geti" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 索引 <类型 = 整数 @输出名 = "Indexes">
+    参数 序号 <类型 = 整数 @输出名 = "Serial">
+    {
+        @ return lua_geti((lua_State*)L,Indexes, Serial);
+    }
+
+    方法 lua_newtable <公开 静态 注释 = "lua_newtable" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ lua_newtable((lua_State*)L);
+    }
+
+    方法 脚本_创建表 <公开 静态 注释 = "lua_newtable" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ lua_newtable((lua_State*)L);
+    }
+
+    方法 lua_newuserdata <公开 静态 类型 = 变整数 注释 = "lua_newuserdata" 返回值注释 = "指针地址" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 长度 <类型 = 整数 编辑时信息 = "3B137, 0, 0, 0" @输出名 = "length">
+    {
+        @ return (INT_P)lua_newuserdata((lua_State*)L, length);
+
+    }
+
+    方法 tf脚本_创建数据 <公开 静态 类型 = 变整数 注释 = "lua_newuserdata" 返回值注释 = "指针地址" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 长度 <类型 = 整数 编辑时信息 = "3B137, 0, 0, 0" @输出名 = "length">
+    {
+        @ return (INT_P)lua_newuserdata((lua_State*)L, length);
+
+    }
+
+    方法 lua_pushthread <公开 静态 类型 = 整数 注释 = "lua_pushthread" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ return lua_pushthread((lua_State*)L);
+    }
+
+    方法 脚本_栈压入线程 <公开 静态 类型 = 整数 注释 = "lua_pushthread" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ return lua_pushthread((lua_State*)L);
+    }
+
+    方法 lua_pushnil <公开 静态 注释 = "lua_pushnil" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ lua_pushnil((lua_State*)L);
+    }
+
+    方法 脚本_压入栈顶空数值 <公开 静态 注释 = "lua_pushnil" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ lua_pushnil((lua_State*)L);
+    }
+
+    方法 lua_tointegerx <公开 静态 类型 = 整数 注释 = "lua_tointegerx" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈索引 <类型 = 整数 @输出名 = "Indexes">
+    参数 类型指针 <类型 = 变整数 注释 = "提供指针" 注释 = "接收返回值" 折叠2 @输出名 = "type" @默认值 = LUA_OPADD>
+    {
+        @ return lua_tointegerx((lua_State*)L, Indexes, (INT_P*)type);
+    }
+
+    方法 脚本_取栈顶整数2 <公开 静态 类型 = 整数 注释 = "lua_tointegerx" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈索引 <类型 = 整数 @输出名 = "Indexes">
+    参数 类型指针 <类型 = 变整数 注释 = "提供指针" 注释 = "接收返回值" 折叠2 @输出名 = "type" @默认值 = LUA_OPADD>
+    {
+        @ return lua_tointegerx((lua_State*)L, Indexes, (INT_P*)type);
+    }
+
+    方法 lua_touserdata <公开 静态 类型 = 变整数 注释 = "lua_touserdata" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈索引 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "Indexes">
+    {
+        @ void * address = (void *)lua_touserdata((lua_State*)L, Indexes);
+        @ return (@dt<变整数>)address;
+    }
+
+    方法 脚本_取栈顶数据 <公开 静态 类型 = 变整数 注释 = "lua_touserdata" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈索引 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "Indexes">
+    {
+        @ void * address = (void *)lua_touserdata((lua_State*)L, Indexes);
+        @ return (@dt<变整数>)address;
+    }
+
+    方法 lua_pushvalue <公开 静态 注释 = "lua_pushvalue" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈索引 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "Indexes">
+    {
+        @ lua_pushvalue((lua_State*)L, Indexes);
+
+    }
+
+    方法 脚本_复制值 <公开 静态 注释 = "lua_pushvalue" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈索引 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "Indexes">
+    {
+        @ lua_pushvalue((lua_State*)L, Indexes);
+
+    }
+
+    方法 lua_remove <公开 静态 注释 = "lua_remove" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈索引 <类型 = 整数 @输出名 = "Indexes">
+    {
+        @  lua_remove((lua_State*)L, Indexes);
+    }
+
+    方法 脚本_清空栈 <公开 静态 注释 = "lua_remove" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈索引 <类型 = 整数 @输出名 = "Indexes">
+    {
+        @  lua_remove((lua_State*)L, Indexes);
+    }
+
+    方法 lua_copy <公开 静态 注释 = "lua_copy" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈索引 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "Indexes">
+    参数 到栈索引 <类型 = 整数 折叠2 @输出名 = "Tostack" @默认值 = LUA_TNONE>
+    {
+
+        @ lua_copy((lua_State*)L, Indexes, Tostack);
+    }
+
+    方法 脚本_复制栈 <公开 静态 注释 = "lua_copy" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 栈索引 <类型 = 整数 折叠2 @默认值 = LUA_TNONE @输出名 = "Indexes">
+    参数 到栈索引 <类型 = 整数 折叠2 @输出名 = "Tostack" @默认值 = LUA_TNONE>
+    {
+
+        @ lua_copy((lua_State*)L, Indexes, Tostack);
+    }
+
+    方法 lua_xmove <公开 静态 注释 = "lua_xmove" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 到指针 <类型 = 整数 @输出名 = "Pointer">
+    参数 个数 <类型 = 整数 折叠2 @输出名 = "number" @默认值 = LUA_OPSUB>
+    {
+        @ lua_xmove((lua_State*)L, (lua_State*)Pointer, number);
+    }
+
+    方法 脚本_协程交换栈 <公开 静态 注释 = "lua_xmove" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 到指针 <类型 = 整数 @输出名 = "Pointer">
+    参数 个数 <类型 = 整数 折叠2 @输出名 = "number" @默认值 = LUA_OPSUB>
+    {
+        @ lua_xmove((lua_State*)L, (lua_State*)Pointer, number);
+    }
+
+    方法 lua_lock <公开 静态 注释 = "lua_lock" 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ lua_lock((lua_State*)L);
+    }
+
+    方法 脚本_线程上锁 <公开 静态 注释 = "lua_lock" 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ lua_lock((lua_State*)L);
+    }
+
+    方法 lua_unlock <公开 静态 注释 = "lua_unlock" 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ lua_unlock((lua_State*)L);
+    }
+
+    方法 脚本_线程解锁 <公开 静态 注释 = "lua_unlock" 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        @ lua_unlock((lua_State*)L);
+    }
+
+    方法 lua_call <公开 静态 注释 = "lua_call" 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 参数个数 <类型 = 整数 折叠2 编辑时信息 = "62AA4, 0, 0, 0" @输出名 = "number" @默认值 = LUA_OPADD>
+    参数 返回值个数 <类型 = 整数 折叠2 编辑时信息 = "62AA4, 0, 0, 0" @输出名 = "values" @默认值 = LUA_OPADD>
+    {
+
+        @  lua_call((lua_State*)L,number,values);
+    }
+
+    方法 脚本_执行函数 <公开 静态 注释 = "lua_call" 折叠 编辑时信息 = "62AA4, 0, 0, 0">
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 参数个数 <类型 = 整数 折叠2 编辑时信息 = "62AA4, 0, 0, 0" @输出名 = "number" @默认值 = LUA_OPADD>
+    参数 返回值个数 <类型 = 整数 折叠2 编辑时信息 = "62AA4, 0, 0, 0" @输出名 = "values" @默认值 = LUA_OPADD>
+    {
+
+        @  lua_call((lua_State*)L,number,values);
+
+
+    }
+
+    方法 脚本_错误 <公开 静态 类型 = 整数 注释 = "lua_error" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    {
+        @ return lua_error((lua_State *)L);
+    }
+
+    方法 lua_error <公开 静态 类型 = 整数 注释 = "lua_error" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    {
+        @ return lua_error((lua_State *)L);
+    }
+
+    方法 luaL_loadfile <公开 静态 类型 = 整数 注释 = "luaL_loadfile" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 脚本文件 <类型 = 文本型 注释 = "编码为ANSI" @输出名 = "text">
+    {
+        @      @an<CVolMem> memBuf;
+        @      INT_P npResultTextLength;
+        @      const CHAR* ps = GetMbsText (text.GetText (), memBuf, &npResultTextLength);
+        @      CVolMem set =  @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @      return luaL_loadfile((lua_State*)L, (const char *)set.GetPtr());
+
+
+    }
+
+    方法 脚本_载入文件 <公开 静态 类型 = 整数 注释 = "luaL_loadfile" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 脚本文件 <类型 = 文本型 注释 = "编码为ANSI" @输出名 = "text">
+    {
+        @      @an<CVolMem> memBuf;
+        @      INT_P npResultTextLength;
+        @      const CHAR* ps = GetMbsText (text.GetText (), memBuf, &npResultTextLength);
+        @      CVolMem set =  @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @      return luaL_loadfile((lua_State*)L, (const char *)set.GetPtr());
+
+    }
+
+    方法 luaL_loadstring <公开 静态 类型 = 整数 注释 = "luaL_loadstring" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 文本数据 <类型 = 文本型 @输出名 = "text">
+    {
+
+
+        @      @an<CVolMem> memBuf;
+        @      INT_P npResultTextLength;
+        @      const CHAR* ps = GetMbsText (text.GetText (), memBuf, &npResultTextLength);
+        @      CVolMem set =  @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @      return luaL_loadstring((lua_State*)L, (const char *)set.GetPtr());
+
+    }
+
+    方法 脚本_载入文本 <公开 静态 类型 = 整数 注释 = "luaL_loadstring" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 文本数据 <类型 = 文本型 @输出名 = "text">
+    {
+        @      @an<CVolMem> memBuf;
+        @      INT_P npResultTextLength;
+        @      const CHAR* ps = GetMbsText (text.GetText (), memBuf, &npResultTextLength);
+        @      CVolMem set =  @an<CVolMem> (ps, (npResultTextLength + (true ? 1 : 0)) * sizeof (CHAR));
+        @      return luaL_loadstring((lua_State*)L, (const char *)set.GetPtr());
+    }
+
+    方法 lua_isnumber <公开 静态 类型 = 整数 注释 = "lua_isnumber 当给定索引的值是一个数字，或是一个可转换为数字的字符串时，返回 1 ，否则返回 0 。" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 索引值 <类型 = 整数 @输出名 = "index">
+    {
+        @ return lua_isnumber((lua_State*)L,index);
+    }
+
+    方法 脚本_可否为数字 <公开 静态 类型 = 整数 注释 = "lua_isnumber 当给定索引的值是一个数字，或是一个可转换为数字的字符串时，返回 1 ，否则返回 0 。" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 索引值 <类型 = 整数 @输出名 = "index">
+    {
+        @ return lua_isnumber((lua_State*)L,index);
+    }
+
+    方法 lua_isstring <公开 静态 类型 = 整数 注释 = "lua_isstring 当给定索引的值是一个字符串或是一个数字（数字总能转换成字符串）时，返回 1 ，否则返回 0 。" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 索引值 <类型 = 整数 @输出名 = "index">
+    {
+        @ return lua_isstring((lua_State*)L,index);
+    }
+
+    方法 脚本_可否为数字2 <公开 静态 类型 = 整数 注释 = "lua_isstring 当给定索引的值是一个字符串或是一个数字（数字总能转换成字符串）时，返回 1 ，否则返回 0 。" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 索引值 <类型 = 整数 @输出名 = "index">
+    {
+        @ return lua_isstring((lua_State*)L,index);
+    }
+
+    方法 脚本_取栈顶整数_数组 <公开 静态 类型 = 整数数组类 注释 = "失败返回空数组" 返回值注释 = "提供一个变整数数组，类似易语言的参考属性" 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        变量 参数个数 <类型 = 整数 @输出名 = "arity">
+        变量 参数数组 <类型 = 整数数组类 @输出名 = "params">
+        变量 计次 <类型 = 整数 @输出名 = "i">
+
+        参数个数 = 脚本_取栈顶元素个数 (解释器指针)
+        循环 (脚本常量类.LUA_OPADD, 参数个数, 计次, 1)
+        {
+            参数数组.加入成员 (脚本_取栈顶整数 (解释器指针, 计次 + LUA_OPSUB))
+        }
+        脚本_取栈顶元素 (解释器指针, 参数个数)
+        返回 (参数数组)
+    }
+
+    方法 脚本_取栈顶长整数_数组 <公开 静态 类型 = 长整数数组类 注释 = "失败返回空数组" 返回值注释 = "提供一个变整数数组，类似易语言的参考属性" 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        变量 参数个数 <类型 = 整数 @输出名 = "arity">
+        变量 参数数组 <类型 = 长整数数组类 @输出名 = "params">
+        变量 计次 <类型 = 整数 @输出名 = "i">
+
+        参数个数 = 脚本_取栈顶元素个数 (解释器指针)
+        循环 (脚本常量类.LUA_OPADD, 参数个数, 计次, 1)
+        {
+            参数数组.加入成员 (脚本_取栈顶长整数 (解释器指针, 计次 + LUA_OPSUB))
+        }
+        脚本_取栈顶元素 (解释器指针, 参数个数)
+        返回 (参数数组)
+    }
+
+    方法 脚本_取栈顶文本_数组 <公开 静态 类型 = 文本数组类 注释 = "失败返回空数组" 返回值注释 = "提供一个文本型数组，类似易语言的参考属性">
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 文本2 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 参数个数 <类型 = 整数 @输出名 = "arity">
+        变量 参数数组 <类型 = 文本数组类 @输出名 = "params">
+        变量 计次 <类型 = 整数 @输出名 = "i">
+        参数个数 = 脚本_取栈顶元素个数 (解释器指针)
+        循环 (脚本常量类.LUA_OPADD, 参数个数, 计次, 1)
+        {
+            如果 (文本2 == 假)
+            {
+                参数数组.加入成员 (脚本_取栈顶文本 (解释器指针, 计次 + LUA_OPSUB))
+            }
+            否则
+            {
+                参数数组.加入成员 (脚本_取栈顶文本2 (解释器指针, 计次 + LUA_OPSUB))
+            }
+        }
+        脚本_取栈顶元素 (解释器指针, 参数个数)
+        返回 (参数数组)
+    }
+
+    方法 脚本_取栈顶逻辑_数组 <公开 静态 类型 = 逻辑型数组类 注释 = "失败返回空数组" 返回值注释 = "提供一个逻辑型数组，类似易语言的参考属性" 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        变量 参数个数 <类型 = 整数 @输出名 = "arity">
+        变量 参数数组 <类型 = 逻辑型数组类 @输出名 = "params">
+        变量 计次 <类型 = 整数 @输出名 = "i">
+
+        参数个数 = 脚本_取栈顶元素个数 (解释器指针)
+        循环 (脚本常量类.LUA_OPADD, 参数个数, 计次, 1)
+        {
+            参数数组.加入成员 (脚本_取栈顶逻辑 (解释器指针, 计次 + LUA_OPSUB))
+        }
+        脚本_取栈顶元素 (解释器指针, 参数个数)
+        返回 (参数数组)
+    }
+
+    方法 脚本_取栈顶小数_数组 <公开 静态 类型 = 小数数组类 注释 = "失败返回空数组" 返回值注释 = "提供一个变小数数组，类似易语言的参考属性" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 小数2 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 参数个数 <类型 = 整数 @输出名 = "arity">
+        变量 参数数组 <类型 = 小数数组类 @输出名 = "params">
+        变量 计次 <类型 = 整数 @输出名 = "i">
+
+        参数个数 = 脚本_取栈顶元素个数 (解释器指针)
+        循环 (脚本常量类.LUA_OPADD, 参数个数, 计次, 1)
+        {
+            如果 (小数2 == 假)
+            {
+                参数数组.加入成员 (脚本_取栈顶小数 (解释器指针, 计次 + LUA_OPSUB))
+            }
+            否则
+            {
+                参数数组.加入成员 (脚本_取栈顶小数2 (解释器指针, 计次 + LUA_OPSUB))
+
+            }
+        }
+        脚本_取栈顶元素 (解释器指针, 参数个数)
+        返回 (参数数组)
+    }
+
+    方法 脚本_取栈顶单精度小数_数组 <公开 静态 类型 = 小数数组类 注释 = "失败返回空数组" 返回值注释 = "提供一个变小数数组，类似易语言的参考属性" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 小数2 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 参数个数 <类型 = 整数 @输出名 = "arity">
+        变量 参数数组 <类型 = 小数数组类 @输出名 = "params">
+        变量 计次 <类型 = 整数 @输出名 = "i">
+
+        参数个数 = 脚本_取栈顶元素个数 (解释器指针)
+        循环 (脚本常量类.LUA_OPADD, 参数个数, 计次, 1)
+        {
+            如果 (小数2 == 假)
+            {
+                参数数组.加入成员 (脚本_取栈顶单精度小数 (解释器指针, 计次 + LUA_OPSUB))
+            }
+            否则
+            {
+                参数数组.加入成员 (脚本_取栈顶单精度小数2 (解释器指针, 计次 + LUA_OPSUB, ))
+
+            }
+        }
+        脚本_取栈顶元素 (解释器指针, 参数个数)
+        返回 (参数数组)
+    }
+
+    方法 逻辑到文本 <公开 静态 类型 = 文本型 注释 = "易语言的逻辑型风格" 折叠 @禁止流程检查 = 真>
+    参数 逻辑值 <类型 = 逻辑型 注释 = "lua解释器指针" @输出名 = "Logical">
+    {
+        @ if (Logical == TRUE){return _T("真");}return _T("假");
+
+    }
+
+    方法 脚本_取当前版本号 <公开 静态 类型 = 文本型 注释 = "能取到版本号就是正常的" 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针">
+    {
+        脚本_加载全局变量 (解释器指针, "_VERSION")
+        返回 (脚本_取栈顶文本 (解释器指针, -1))
+
+    }
+
+    方法 脚本_写日志文件 <公开 静态 类型 = 逻辑型 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 日志内容 <类型 = 文本型>
+    参数 日志文件路径 <类型 = 文本型 折叠2 @输出名 = "path" @默认值 = 空对象>
+    {
+        如果真 (日志文件路径 == 取运行目录 () || 日志文件路径 == 空对象)
+        {
+            日志文件路径 = 日志文件路径 + "日志信息.lua"
+        }
+        脚本_执行文本 (解释器指针, 脚本常量类.写到文件)  // 先执行lua字串
+        脚本_加载全局变量 (解释器指针, "写到文件")  // 加载lua函数名,同样lua调用火山方法也是一样的,先注册函数
+        脚本_压入栈顶文本 (解释器指针, 日志文件路径)  // 压入第二个参数
+        脚本_压入栈顶文本 (解释器指针, 日志内容)  // 压入第一个参数,这个按顺序压入参数,不能写反了,否则栈位置不对
+        脚本_执行函数2 (解释器指针, 2, 1, )  // 执行函数
+        计次循环 (脚本_取栈顶元素个数 (解释器指针))
+        {
+            脚本_清空栈 (解释器指针, -(取循环索引 () + 1))
+        }
+        返回 (脚本_取栈顶逻辑 (解释器指针, -1))  // 取函数返回值
+    }
+
+    方法 脚本_文件是否存在 <公开 静态 类型 = 逻辑型 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    参数 文件路径 <类型 = 文本型>
+    {
+        //      火山调用lua函数例子
+        //      声明一个名称为"文件是否存在"的lua函数
+        //      function 文件是否存在 (文件路径)
+        //             local f = io.open(文件路径,"r")
+        //             if(f == nil )then
+        //                return false
+        //             end
+        //        f:close()
+        //      return true
+        //     end
+        // 本想删掉,想想还是留下作为例子参考
+        脚本_执行文本 (解释器指针, 脚本常量类.文件是否存在)  // 先执行lua字串
+        脚本_加载全局变量 (解释器指针, "文件是否存在")  // 加载lua函数名,同样lua调用火山方法也是一样的,先注册函数
+        脚本_压入栈顶文本 (解释器指针, 文件路径)  // 压入参数,这个按顺序压入参数,不能写反了,否则栈位置不对
+        脚本_执行函数2 (解释器指针, 脚本常量类.LUA_OPSUB, 脚本常量类.LUA_OPSUB)  // 执行函数
+        返回 (脚本_取栈顶逻辑 (解释器指针, 脚本常量类.LUA_TNONE))  // 取函数返回值
+    }
+
+    方法 脚本_取现行时间 <公开 静态 类型 = 文本型 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        常量 现行时间 <类型 = 文本型 值 = "local 现行时间 = os.date(\"%Y-%m-%d %H:%M:%S\")\r\nreturn  现行时间">
+        // 本想删掉,想想还是留下作为例子参考
+        脚本_执行文本 (解释器指针, 现行时间)
+        返回 (脚本_取栈顶文本 (解释器指针, 脚本常量类.LUA_TNONE))
+
+    }
+
+    方法 脚本_是否为64位系统 <公开 静态 类型 = 逻辑型 折叠>
+    参数 解释器指针 <类型 = 变整数 注释 = "lua解释器指针" @输出名 = "L">
+    {
+        常量 是否为64位系统 <类型 = 文本型
+                值 = "function 是否为64位系统 ()\r\n    if (0xfffffffff == 0xffffffff) then \r\n        return false \r\n    else\r\n        return true\r\n    end\r\nend\r\nreturn 是否为64位系统 ()">
+        // 本想删掉,想想还是留下作为例子参考
+        脚本_执行文本 (解释器指针, 是否为64位系统)
+        返回 (脚本_取栈顶逻辑 (解释器指针, 脚本常量类.LUA_TNONE))
+
+
+    }
+
+    方法 脚本_获取 <公开 静态 注释 = "lua_gettable" 折叠>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    参数 栈位置 <类型 = 整数 @输出名 = "index">
+    {
+        @ lua_gettable((lua_State* )L, (int)index );
+
+
+
+
+    }
+
+    方法 lua_gettable <公开 静态 注释 = "lua_gettable" 折叠>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    参数 栈位置 <类型 = 整数 @输出名 = "index">
+    {
+        @ lua_gettable((lua_State* )L, (int)index );
+
+
+
+
+    }
+
+    方法 脚本_设置 <公开 静态 注释 = "lua_settable" 折叠>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    参数 栈位置 <类型 = 整数 @输出名 = "idx">
+    {
+        @ lua_settable ((lua_State *)L,  idx);
+
+    }
+
+    方法 脚本_设置表元素 <公开 静态 注释 = "lua_settable" 折叠>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    参数 栈位置 <类型 = 整数 @输出名 = "idx">
+    {
+        @ lua_settable ((lua_State *)L,  idx);
+
+    }
+
+    方法 lua_settable <公开 静态 注释 = "lua_settable" 折叠>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    参数 栈位置 <类型 = 整数 @输出名 = "idx">
+    {
+        @ lua_settable ((lua_State *)L,  idx);
+
+    }
+
+    方法 luaL_checkinteger <公开 静态 类型 = 变整数 注释 = "luaL_checkinteger" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    参数 栈位置 <类型 = 整数 @输出名 = "narg">
+    {
+        @ return luaL_checkinteger((lua_State *)L,  narg);
+
+
+
+    }
+
+    方法 脚本_校验整数 <公开 静态 类型 = 变整数 注释 = "luaL_checkinteger" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 @输出名 = "L">
+    参数 栈位置 <类型 = 整数 @输出名 = "narg">
+    {
+        @ return luaL_checkinteger((lua_State *)L,  narg);
+
+
+
+    }
+
+    方法 luaL_loadbufferx <公开 静态 类型 = 整数 注释 = "luaL_loadbufferx" 返回值注释 = "非0失败" 折叠 @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "解释器指针" 编辑时信息 = "6D896, 0, 0, 0" @输出名 = "L">
+    参数 lua代码 <类型 = 文本型 注释 = "lua代码" 编辑时信息 = "6D896, 0, 0, 0" @输出名 = "buff">
+    参数 名称 <类型 = 文本型 注释 = "模块名称" 编辑时信息 = "6D896, 0, 0, 0" @输出名 = "name">
+    参数 模式 <类型 = 文本型 注释 = "执行模式" 编辑时信息 = "6D896, 0, 0, 0" @输出名 = "mode">
+    参数 长度 <类型 = 整数 注释 = "留空默认是第一个参数转字节集的长度" @输出名 = "sz" @默认值 = -1>
+    {
+        @      @an<CVolMem> memBuf;
+        @      INT_P npResultTextLength;
+        @      const CHAR* ps = GetMbsText (buff.GetText (), memBuf, &npResultTextLength);
+        @      CVolMem set1 =  @an<CVolMem> (ps, (npResultTextLength + (false ? 1 : 0)) * sizeof (CHAR));
+        @      const CHAR* ps1 = GetMbsText (name.GetText (), memBuf, &npResultTextLength);
+        @      CVolMem set2 =  @an<CVolMem> (ps1, (npResultTextLength + (false ? 1 : 0)) * sizeof (CHAR));
+        @      const CHAR* ps2 = GetMbsText (mode.GetText (), memBuf, &npResultTextLength);
+        @      CVolMem set3 =  @an<CVolMem> (ps2, (npResultTextLength + (false ? 1 : 0)) * sizeof (CHAR));
+        @      if (sz == -1)
+        @          {
+        @              return luaL_loadbufferx((lua_State *)L,(const char *)set1.GetPtr (),set1.GetSize (),(const char *)set2.GetPtr (),(const char *)set3.GetPtr ());
+        @          }
+        @          else
+        @          {
+        @             return luaL_loadbufferx((lua_State *)L,(const char *)set1.GetPtr (),sz,(const char *)set2.GetPtr (),(const char *)set3.GetPtr ());
+        @          }
+
+
+
+
+    }
+
+    方法 脚本_负载缓冲器 <公开 静态 类型 = 整数 注释 = "luaL_loadbufferx" 返回值注释 = "非0失败" 折叠 编辑时信息 = "6D896, 0, 0, 0" @禁止流程检查 = 真>
+    参数 解释器指针 <类型 = 变整数 注释 = "解释器指针" 编辑时信息 = "6D896, 0, 0, 0" @输出名 = "L">
+    参数 lua代码 <类型 = 文本型 注释 = "lua代码" 编辑时信息 = "6D896, 0, 0, 0" @输出名 = "buff">
+    参数 名称 <类型 = 文本型 注释 = "模块名称" 编辑时信息 = "6D896, 0, 0, 0" @输出名 = "name">
+    参数 模式 <类型 = 文本型 注释 = "执行模式" 编辑时信息 = "6D896, 0, 0, 0" @输出名 = "mode">
+    参数 长度 <类型 = 整数 注释 = "留空默认是第一个参数转字节集的长度" @输出名 = "sz" @默认值 = -1>
+    {
+        @      @an<CVolMem> memBuf;
+        @      INT_P npResultTextLength;
+        @      const CHAR* ps = GetMbsText (buff.GetText (), memBuf, &npResultTextLength);
+        @      CVolMem set1 =  @an<CVolMem> (ps, (npResultTextLength + (false ? 1 : 0)) * sizeof (CHAR));
+        @      const CHAR* ps1 = GetMbsText (name.GetText (), memBuf, &npResultTextLength);
+        @      CVolMem set2 =  @an<CVolMem> (ps1, (npResultTextLength + (false ? 1 : 0)) * sizeof (CHAR));
+        @      const CHAR* ps2 = GetMbsText (mode.GetText (), memBuf, &npResultTextLength);
+        @      CVolMem set3 =  @an<CVolMem> (ps2, (npResultTextLength + (false ? 1 : 0)) * sizeof (CHAR));
+        @      if (sz == -1)
+        @          {
+        @              return luaL_loadbufferx((lua_State *)L,(const char *)set1.GetPtr (),set1.GetSize (),(const char *)set2.GetPtr (),(const char *)set3.GetPtr ());
+        @          }
+        @          else
+        @          {
+        @             return luaL_loadbufferx((lua_State *)L,(const char *)set1.GetPtr (),sz,(const char *)set2.GetPtr (),(const char *)set3.GetPtr ());
+        @          }
+
+
+
+
+    }
+
+    方法 脚本_加载代码并执行 <公开 静态 类型 = 逻辑型 折叠>
+    参数 参_L <类型 = 变整数>
+    参数 参_代码 <类型 = 文本型>
+    参数 参_名称 <类型 = 文本型>
+    {
+        如果 (脚本_负载缓冲器 (参_L, 参_代码, 参_名称, "t") == 0)
+        {
+            如果 (脚本_执行函数2 (参_L) == 0)
+            {
+                返回 (真)
+            }
+            信息框_ (脚本_取栈顶文本 (参_L), , "执行 - " + 参_名称)
+            返回 (假)
+        }
+        否则
+        {
+            信息框_ (脚本_取栈顶文本 (参_L), , "加载 - " + 参_名称)
+            返回 (假)
+        }
+    }
+}
+
+类 脚本常量类 <公开 折叠 折叠2 @全局类 = 真 @输出名 = "Constantclass">
+{
+
+    #
+    #
+    #
+    #
+    #
+    # //  常量类可以直接引用，不喜欢的可以忽略掉，这里只是做个例子而已
+
+    常量 WM_USER <公开 类型 = 变整数 值 = @WM_USER 注释 = "1024">
+    常量 WM_QUIT <公开 类型 = 变整数 值 = @WM_QUIT 注释 = "18">
+    常量 WM_CLOSE <公开 类型 = 变整数 值 = @WM_CLOSE>
+    常量 WM_KEYDOWN <公开 类型 = 变整数 值 = @WM_KEYDOWN>
+    常量 WM_KEYUP <公开 类型 = 变整数 值 = @WM_KEYUP>
+    常量 PM_REMOVE <公开 类型 = 变整数 值 = @PM_REMOVE>
+    常量 WH_KEYBOARD <公开 类型 = 变整数 值 = @WH_KEYBOARD>
+    常量 WH_GETMESSAGE <公开 类型 = 变整数 值 = @WH_GETMESSAGE>
+    常量 WH_CALLWNDPROC <公开 类型 = 变整数 值 = @WH_CALLWNDPROC>
+    常量 PAGE_EXECUTE_READWRITE <公开 类型 = 变整数 值 = @PAGE_EXECUTE_READWRITE>
+    常量 PAGE_READWRITE <公开 类型 = 变整数 值 = @PAGE_READWRITE>
+    常量 PROCESS_ALL_ACCESS <公开 类型 = 变整数 值 = @PROCESS_ALL_ACCESS "">
+    常量 INFINITE <公开 类型 = 变整数 值 = @INFINITE "">
+    常量 SW_HIDE <公开 类型 = 变整数 值 = @SW_HIDE "">
+    常量 SW_SHOW <公开 类型 = 变整数 值 = @SW_SHOW "">
+    常量 nullptr <公开 类型 = 变整数 值 = @nullptr>
+    常量 SW_MAXIMIZE <公开 类型 = 变整数 值 = @SW_MAXIMIZE "">
+    常量 SW_MINIMIZE <公开 类型 = 变整数 值 = @SW_MINIMIZE "">
+    常量 TH32CS_SNAPHEAPLIST <公开 类型 = 变整数 值 = @TH32CS_SNAPHEAPLIST "">
+    常量 TH32CS_SNAPPROCESS <公开 类型 = 变整数 值 = @TH32CS_SNAPPROCESS "">
+    常量 TH32CS_SNAPTHREAD <公开 类型 = 变整数 值 = @TH32CS_SNAPTHREAD "">
+    常量 TH32CS_SNAPMODULE <公开 类型 = 变整数 值 = @TH32CS_SNAPMODULE "">
+    常量 TH32CS_SNAPALL <公开 类型 = 变整数 值 = @TH32CS_SNAPALL "">
+    常量 TH32CS_INHERIT <公开 类型 = 变整数 值 = @TH32CS_INHERIT "">
+    常量 SDT_SIZE_整型 <公开 类型 = 整数 值 = @"@(int)4" "">
+    常量 SDT_SIZE_短整型 <公开 类型 = 短整数 值 = @"@(short)4" "">
+    常量 SDT_SIZE_长整型 <公开 类型 = 长整数 值 = @"@(__int64)8" "">
+    常量 SDT_SIZE_单浮点 <公开 类型 = 单精度小数 值 = @"@(float)4">
+    常量 SDT_SIZE_双浮点 <公开 类型 = 小数 值 = @"@(double)8" "">
+    常量 SDT_SIZE_字节型 <公开 类型 = 字节 值 = @"@(byte)1" "">
+    常量 LUA_TNONE <公开 类型 = 整数 值 = -1 注释 = "-1">
+    常量 LUA_OPADD <公开 类型 = 整数 值 = 0 注释 = "0">
+    常量 LUA_OPSUB <公开 类型 = 整数 值 = 1 注释 = "1">
+    常量 LUA_OPMUL <公开 类型 = 整数 值 = @LUA_OPMUL 注释 = "2">
+    常量 LUA_OPMOD <公开 类型 = 整数 值 = @LUA_OPMOD 注释 = "3">
+    常量 LUA_OPPOW <公开 类型 = 整数 值 = @LUA_OPPOW 注释 = "4">
+    常量 LUA_OPDIV <公开 类型 = 整数 值 = @LUA_OPDIV 注释 = "5">
+    常量 LUA_OPIDIV <公开 类型 = 整数 值 = @LUA_OPIDIV 注释 = "6">
+    常量 LUA_OPBAND <公开 类型 = 整数 值 = @LUA_OPBAND 注释 = "7">
+    常量 LUA_OPBOR <公开 类型 = 整数 值 = @LUA_OPBOR 注释 = "8">
+    常量 LUA_OPBXOR <公开 类型 = 整数 值 = @LUA_OPBXOR 注释 = "9">
+    常量 LUA_OPSHL <公开 类型 = 整数 值 = @LUA_OPSHL 注释 = "10">
+    常量 LUA_OPSHR <公开 类型 = 整数 值 = @LUA_OPSHR 注释 = "11">
+    常量 LUA_OPUNM <公开 类型 = 整数 值 = @LUA_OPUNM 注释 = "12">
+    常量 LUA_OPBNOT <公开 类型 = 整数 值 = @LUA_OPBNOT 注释 = "13">
+    常量 写到文件 <公开 类型 = 文本型
+            值 = "function 写到文件 (文件目录,文件路径)\r\n       local time = os.date(\"%Y-%m-%d %H:%M:%S：\");\r\n       gFile = io.open(文件目录 ,\"a\");\r\n       gFile:write(\"\\n\"..time..文件路径)\r\n       gFile:close()\r\n    return  true;\r\nend">
+    常量 文件是否存在 <公开 类型 = 文本型
+            值 = "function 文件是否存在 (文件路径) \r\n \r\n        local f = io.open(文件路径,\"r\")\r\n               if(f == nil )then\r\n                return false\r\n              end\r\n       f:close()\r\n  return true\r\n\r\nend\r\n">
+
+    #
+}

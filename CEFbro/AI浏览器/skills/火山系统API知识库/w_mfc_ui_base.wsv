@@ -1,0 +1,1883 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.MFC界面.基本 <注释 = "本程序提供视窗项目的MFC界面基本支持功能." 注释 = "注意: 除非特别说明,本模块中所使用的所有显示单位均为像素." 注释 = "本模块默认采用静态链接方式,同时支持动态链接方式."
+        编辑时信息 = "16553F, 0, 0, 0" @文档 = "category = \"基础类\"" "@视窗.外部头文件.全局-300" = "src\\mfc_ui_base.h"
+        @视窗.外部资源文件 = "src\\res\\mfc_ui_base.rc" @视窗.外部源文件 = "src\\mfc_ui_base.cpp\r\nsrc\\mfc_ui_functions.cpp\r\n"
+        @视窗.预定义宏.dynamic = "_AFXDLL" "@视窗.附加编译参数.debug-dynamic" = "cpp: /MDd" "@视窗.附加编译参数.release-dynamic" = "cpp: /MD">
+
+类 组件边框类型 <公开 注释 = "提供组件的各种边框类型" @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 无边框 <公开 值 = 0>
+    常量 凹入式 <公开 值 = 1>
+    常量 凸出式 <公开 值 = 2>
+    常量 浅凹入式 <公开 值 = 3>
+    常量 镜框式 <公开 值 = 4>
+    常量 单线边框式 <公开 值 = 5>
+}
+
+类 组件层次 <公开 注释 = "提供窗口组件的各种显示层次" @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 顶层 <公开 值 = 0 注释 = "将组件放置在具有相同父组件的其它组件的顶层,如果为窗口(无父组件),则放置在其它窗口的顶层. HWND_TOP">
+    常量 底层 <公开 值 = 1 注释 = "将组件放置在具有相同父组件的其它组件的底层,如果为窗口(无父组件),则放置在其它窗口的底层. HWND_BOTTOM">
+    常量 最高层 <公开 值 = -1 注释 = "将窗口放置在其它所有非最高层窗口的上方,即使窗口不再被激活依旧保持保留在此层次上. HWND_TOPMOST">
+    常量 次高层 <公开 值 = -2 注释 = "将窗口放置在其它所有非最高层窗口的上方. HWND_NOTOPMOST">
+}
+
+类 输入框输入方式 <公开 注释 = "提供输入框的各种输入方式" @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 输入文本 <公开 值 = 1>
+    常量 输入整数 <公开 值 = 2>
+    常量 输入小数 <公开 值 = 3>
+    常量 输入密码 <公开 值 = 4>
+}
+
+类 所执行命令类型 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 默认 <公开 值 = 0 注释 = "系统将首先搜寻注册表以获取对应于欲操作文件的一个合适命令类型,如果未找到将使用\"打开文件\"命令.">
+    常量 编辑文档 <公开 值 = 1 注释 = "启动编辑软件打开\"欲操作文件名\"参数所指定的文档文件进行编辑">
+    常量 浏览文件夹 <公开 值 = 2 注释 = "打开\"欲操作文件名\"参数所指定的文件夹进行浏览">
+    常量 寻找文件 <公开 值 = 3 注释 = "打开\"欲操作文件名\"参数所指定的文件夹进行文件寻找操作">
+    常量 打开文件 <公开 值 = 4 注释 = "打开\"欲操作文件名\"参数所指定的文件,该文件可以是可执行文件/文档文件或文件夹.">
+    常量 打印文档 <公开 值 = 5 注释 = "打印\"欲操作文件名\"参数所指定的文档文件,注意该文档的编辑软件可能不支持本命令,故使用前需要先测试是否可用.">
+}
+
+类 窗口组件 <公开 基础类 = 参考对象类 注释 = "所有窗口组件的基础类" @文档 = "category = \"窗口组件.基础类\"" @视窗.外部头文件 = "src\\mfc_ui_base_controls.h"
+        @视窗.外部源文件 = "src\\mfc_ui_base_controls.cpp" @输出名 = "@CVolWinControl">
+{
+    方法 鼠标左键被按下 <公开 定义事件 类型 = 整数 注释 = "当鼠标左键被按下时事件被触发" 返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续处理.">
+    参数 横向位置 <类型 = 整数 注释 = "事件触发时的鼠标横向坐标位置,相对所处用户区的左边.">
+    参数 纵向位置 <类型 = 整数 注释 = "事件触发时的鼠标纵向坐标位置,相对所处用户区的顶边.">
+    参数 辅助键状态 <类型 = 整数 注释 = "事件触发时的辅助键组合状态,为\"辅助键状态\"类中各常量值的组合.">
+
+    方法 鼠标左键被放开 <公开 定义事件 类型 = 整数 注释 = "当鼠标左键被放开时事件被触发" 返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续处理.">
+    参数 横向位置 <类型 = 整数 注释 = "事件触发时的鼠标横向坐标位置,相对所处用户区的左边.">
+    参数 纵向位置 <类型 = 整数 注释 = "事件触发时的鼠标纵向坐标位置,相对所处用户区的顶边.">
+    参数 辅助键状态 <类型 = 整数 注释 = "事件触发时的辅助键组合状态,为\"辅助键状态\"类中各常量值的组合.">
+
+    方法 被双击 <公开 定义事件 类型 = 整数 注释 = "当鼠标左键被双击时事件被触发" 返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续处理.">
+    参数 横向位置 <类型 = 整数 注释 = "事件触发时的鼠标横向坐标位置,相对所处用户区的左边.">
+    参数 纵向位置 <类型 = 整数 注释 = "事件触发时的鼠标纵向坐标位置,相对所处用户区的顶边.">
+    参数 辅助键状态 <类型 = 整数 注释 = "事件触发时的辅助键组合状态,为\"辅助键状态\"类中各常量值的组合.">
+
+    方法 鼠标右键被按下 <公开 定义事件 类型 = 整数 注释 = "当鼠标右键被按下时事件被触发" 返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续处理.">
+    参数 横向位置 <类型 = 整数 注释 = "事件触发时的鼠标横向坐标位置,相对所处用户区的左边.">
+    参数 纵向位置 <类型 = 整数 注释 = "事件触发时的鼠标纵向坐标位置,相对所处用户区的顶边.">
+    参数 辅助键状态 <类型 = 整数 注释 = "事件触发时的辅助键组合状态,为\"辅助键状态\"类中各常量值的组合.">
+
+    方法 鼠标右键被放开 <公开 定义事件 类型 = 整数 注释 = "当鼠标右键被放开时事件被触发" 返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续处理.">
+    参数 横向位置 <类型 = 整数 注释 = "事件触发时的鼠标横向坐标位置,相对所处用户区的左边.">
+    参数 纵向位置 <类型 = 整数 注释 = "事件触发时的鼠标纵向坐标位置,相对所处用户区的顶边.">
+    参数 辅助键状态 <类型 = 整数 注释 = "事件触发时的辅助键组合状态,为\"辅助键状态\"类中各常量值的组合.">
+
+    方法 鼠标中键被按下 <公开 定义事件 类型 = 整数 注释 = "当鼠标中键被按下时事件被触发" 返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续处理.">
+    参数 横向位置 <类型 = 整数 注释 = "事件触发时的鼠标横向坐标位置,相对所处用户区的左边.">
+    参数 纵向位置 <类型 = 整数 注释 = "事件触发时的鼠标纵向坐标位置,相对所处用户区的顶边.">
+    参数 辅助键状态 <类型 = 整数 注释 = "事件触发时的辅助键组合状态,为\"辅助键状态\"类中各常量值的组合.">
+
+    方法 鼠标中键被放开 <公开 定义事件 类型 = 整数 注释 = "当鼠标中键被放开时事件被触发" 返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续处理.">
+    参数 横向位置 <类型 = 整数 注释 = "事件触发时的鼠标横向坐标位置,相对所处用户区的左边.">
+    参数 纵向位置 <类型 = 整数 注释 = "事件触发时的鼠标纵向坐标位置,相对所处用户区的顶边.">
+    参数 辅助键状态 <类型 = 整数 注释 = "事件触发时的辅助键组合状态,为\"辅助键状态\"类中各常量值的组合.">
+
+    方法 鼠标位置被移动 <公开 定义事件 类型 = 整数 注释 = "当鼠标位置被移动时事件被触发" 返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续处理.">
+    参数 横向位置 <类型 = 整数 注释 = "事件触发时的鼠标横向坐标位置,相对所处用户区的左边.">
+    参数 纵向位置 <类型 = 整数 注释 = "事件触发时的鼠标纵向坐标位置,相对所处用户区的顶边.">
+    参数 辅助键状态 <类型 = 整数 注释 = "事件触发时的辅助键组合状态,为\"辅助键状态\"类中各常量值的组合.">
+
+    方法 滚轮被滚动 <公开 定义事件 类型 = 整数 注释 = "当鼠标滚轮被滚动时事件被触发" 返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续处理.">
+    参数 滚动距离 <类型 = 整数 注释 = "表明鼠标滚轮所滚动的距离,大于零表示向前滚动,小于零表示向后滚动.">
+    参数 辅助键状态 <类型 = 整数 注释 = "事件触发时的辅助键组合状态,为\"辅助键状态\"类中各常量值的组合.">
+
+    方法 按下某键 <公开 定义事件 类型 = 整数 注释 = "当用户按下某个按键时事件被触发" 返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续处理.">
+    参数 键代码 <类型 = 整数 注释 = "为\"按键码\"类中的常量值,注意不包括辅助键组合状态值.">
+    参数 辅助键状态 <类型 = 整数 注释 = "事件触发时的辅助键组合状态,为\"辅助键状态\"类中各常量值的组合.">
+
+    方法 放开某键 <公开 定义事件 类型 = 整数 注释 = "当用户按下某个按键时事件被触发" 返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续处理.">
+    参数 键代码 <类型 = 整数 注释 = "为\"按键码\"类中的常量值,注意不包括辅助键组合状态值.">
+    参数 辅助键状态 <类型 = 整数 注释 = "事件触发时的辅助键组合状态,为\"辅助键状态\"类中各常量值的组合.">
+
+    方法 获得焦点 <公开 定义事件 类型 = 整数 注释 = "  当本组件获得输入焦点后发送此事件." 注释 = "  所谓\"输入焦点\",即当前用户按键操作所对应的目标组件. 譬如: 用户正在编辑框中输入文本,"
+            注释 = "那么此编辑框就具有输入焦点,因为它将获得目前用户所进行的所有按键操作. 所谓\"获得\"或者" 注释 = "\"失去\"输入焦点,即当前用户按键操作所对应的目标对象发生转移. 譬如: 用户现在正在编辑框1"
+            注释 = "中输入文本,突然使用鼠标或其它方法切换到了编辑框2上去继续输入,那么此时编辑框1就\"失去\"" 注释 = "了输入焦点,编辑框2就\"获得\"了输入焦点,因为在此以后用户所进行的所有按键操作都将被"
+            注释 = "编辑框2所获得." 返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续处理.">
+
+    方法 失去焦点 <公开 定义事件 类型 = 整数 注释 = "  当本组件失去输入焦点后发送此事件." 注释 = "  所谓\"输入焦点\",即当前用户按键操作所对应的目标组件. 譬如: 用户正在编辑框中输入文本,"
+            注释 = "那么此编辑框就具有输入焦点,因为它将获得目前用户所进行的所有按键操作. 所谓\"获得\"或者" 注释 = "\"失去\"输入焦点,即当前用户按键操作所对应的目标对象发生转移. 譬如: 用户现在正在编辑框1"
+            注释 = "中输入文本,突然使用鼠标或其它方法切换到了编辑框2上去继续输入,那么此时编辑框1就\"失去\"" 注释 = "了输入焦点,编辑框2就\"获得\"了输入焦点,因为在此以后用户所进行的所有按键操作都将被"
+            注释 = "编辑框2所获得." 返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续处理.">
+
+    方法 字符输入 <公开 定义事件 类型 = 整数 注释 = "  当用户输入一个字符后发生此事件,字符键包括任何可打印的键盘字符及回车(Enter)" 注释 = "和退格(BackSpace)键."
+            返回值注释 = "  本事件的处理方法返回值如果小于0,表明事件已经得到处理且不再需要后续处理,如果" 返回值注释 = "大于0,则将该值作为新的替代字符代码继续进行后续处理.如果等于0,则使用原字符值继"
+            返回值注释 = "续进行后续处理.">
+    参数 字符代码 <类型 = 字符 注释 = "提供所输入的字符">
+
+    方法 组件消息过滤 <公开 定义事件 类型 = 整数 注释 = "当用户组件接收到任何Windows消息在其被实际处理前,本事件被发送." 返回值注释 = "  返回0表示允许该Windows消息继续向后传递并处理,返回1表示该Windows"
+            返回值注释 = "消息已经被处理且无需后续处理.">
+    参数 窗口句柄 <类型 = 变整数 注释 = "提供消息所对应的本组件窗口句柄(HWND)">
+    参数 消息值 <类型 = 整数 注释 = "提供消息的具体值">
+    参数 消息参数1 <类型 = 变整数 注释 = "提供消息所附带的参数1的值">
+    参数 消息参数2 <类型 = 变整数 注释 = "提供消息所附带的参数2的值">
+    参数 消息地址 <类型 = 变整数 注释 = "提供消息的具体 MSG* 地址指针,用作备用.">
+
+    方法 组件创建完毕 <公开 定义事件 类型 = 整数 注释 = "当组件被创建完毕后发送此事件">
+    参数 父组件 <类型 = 窗口组件 注释 = "  提供组件所处的父组件,必定有效且已经成功创建." 注释 = "  可以使用\"属于\"操作符判断具体的父组件数据类型,如: \"如果 (父组件 属于 窗口容器组件)\","
+            注释 = "\"如果 (父组件 属于 图片框)\" 等. 判断清楚具体数据类型后,可以使用强制转换将其转换到具体的" 注释 = "窗口组件类对象,如: \"(窗口容器组件)父组件\"">
+    参数 组件ID <类型 = 整数 注释 = "提供组件在所处父组件中的ID值">
+
+    方法 文件被拖放 <公开 定义事件 类型 = 整数 注释 = "当文件被拖放到本窗口组件上后,将发送本事件." 注释 = "注意: 仅当\"允许文件拖放\"属性被设置为真时,本事件才会被发送.">
+    参数 所拖放文件 <类型 = 文本数组类 注释 = "提供所有被拖放到本组件上的文件名,数组成员数必定大于0.">
+
+    # --
+
+    方法 标题 <公开 属性读 类型 = 文本型 注释 = "返回本组件的当前标题文本" @禁止流程检查 = 真>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd  ();
+        @ if (pWnd != NULL)
+        @ {
+        @     CString strCaption;
+        @     pWnd->GetWindowText (strCaption);
+        @     return (LPCTSTR)strCaption;
+        @ }
+        @ return GetMfcWndObject ()->m_strAttrCaption;
+    }
+
+    方法 标题 <公开 属性写 注释 = "  设置本组件的当前标题文本." 注释 = "  注意: 在某些组件中(譬如标签,按钮,选择框,单选框,分组框等),\'&\'字符本身不会被显示,"
+            注释 = "而会导致其后方紧接的一个字符以下划线方式显示,表示Alt加该字符为此组件的快捷访问键." 注释 = "这种情况下如果需要显示\'&\'字符本身,需要使用连续两个该字符,即\"&&\"." @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的标题 <类型 = 文本型 注释 = "提供所欲设置的标题文本">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     pWnd->SetWindowText (@<所欲设置的标题>);
+        @     if (P_IS_VOL_INSTANCE_OF (this, @dt<组件布局器>) == FALSE)
+        @         pWnd->Invalidate ();
+        @ }
+        @ else
+        @     GetMfcWndObject ()->m_strAttrCaption = @<所欲设置的标题>;
+    }
+
+    方法 标题字符串 <公开 属性写 注释 = "以字符串资源的方式设置本组件的当前标题文本" @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置的标题 <类型 = 字符串资源>
+    {
+        标题 = 载入字符串资源 (所欲设置的标题)
+    }
+
+    方法 可视 <公开 属性读 类型 = 逻辑型 注释 = "返回本组件当前是否可视" @禁止流程检查 = 真>
+    {
+        @ #ifndef @an<_VOL_FOR_UI_DESIGNER>  // 不为编译设计器版本(编译设计器版本时不允许真实修改可视属性)?
+        @     CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @     if (pWnd != NULL)
+        @         return IsVolControlVisible (pWnd->m_hWnd);
+        @ #endif
+        @ return ((GetMfcWndObject ()->m_dwAttrInitialStyle & WS_VISIBLE) != 0);
+    }
+
+    方法 是否初始可视 <公开 类型 = 逻辑型 注释 = "返回本组件在实际创建前被设置的初始可视状态" 返回值注释 = "可视返回真,不可视返回假." @嵌入式方法 = "">
+    {
+        @ (@sn<this>.GetMfcWndObject ()->m_dwAttrInitialStyle & WS_VISIBLE) != 0
+    }
+
+    方法 可视 <公开 属性写 注释 = "设置本组件当前是否可视" @视窗.设置时机 = 组件创建前后>
+    参数 是否可视 <类型 = 逻辑型 注释 = "指定本组件是否可视">
+    {
+        @ #ifndef @an<_VOL_FOR_UI_DESIGNER>  // 不为编译设计器版本(编译设计器版本时不允许真实修改可视属性)?
+        @     CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @     if (pWnd != NULL)
+        @     {
+        @         ::ShowVolControl (pWnd->m_hWnd, @<是否可视>);
+        @         return;
+        @     }
+        @ #endif
+        @ if (@<是否可视>)
+        @     GetMfcWndObject ()->m_dwAttrInitialStyle |= WS_VISIBLE;
+        @ else
+        @     GetMfcWndObject ()->m_dwAttrInitialStyle &= ~WS_VISIBLE;
+    }
+
+    方法 禁止 <公开 属性读 类型 = 逻辑型 注释 = "返回本组件当前是否被禁止操作" @禁止流程检查 = 真>
+    {
+        @ #ifndef @an<_VOL_FOR_UI_DESIGNER>  // 不为编译设计器版本(编译设计器版本时不允许真实修改可视属性)?
+        @     CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @     if (pWnd != NULL)
+        @         return (pWnd->IsWindowEnabled () == FALSE);
+        @ #endif
+        @ return ((GetMfcWndObject ()->m_dwAttrInitialStyle & WS_DISABLED) != 0);
+    }
+
+    方法 禁止 <公开 属性写 注释 = "设置本组件当前是否被禁止操作" @视窗.设置时机 = 组件创建前后>
+    参数 是否禁止 <类型 = 逻辑型 注释 = "指定本组件是否被禁止">
+    {
+        @ #ifndef @an<_VOL_FOR_UI_DESIGNER>  // 不为编译设计器版本(编译设计器版本时不允许真实修改可视属性)?
+        @     CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @     if (pWnd != NULL)
+        @     {
+        @         pWnd->EnableWindow (@<是否禁止> == FALSE);
+        @         return;
+        @     }
+        @ #endif
+        @ if (@<是否禁止>)
+        @     GetMfcWndObject ()->m_dwAttrInitialStyle |= WS_DISABLED;
+        @ else
+        @     GetMfcWndObject ()->m_dwAttrInitialStyle &= ~WS_DISABLED;
+    }
+
+    方法 首组件 <公开 属性读 类型 = 逻辑型 注释 = "  返回本组件是否为一组组件的首组件.同一组内组件之间的输入焦点可以使用光标键移动," 注释 = "其中所有单选框组件将被自动只选中一个." @嵌入式方法 = "">
+    {
+        @ (@sn<this>.GetControlStyle () & WS_GROUP) != 0
+    }
+
+    方法 首组件 <公开 属性写 注释 = "设置本组件为一组组件的首组件,本组件及后续所有本属性值为假的兄弟组件均被认为在同一组中." 注释 = "同一组内组件之间的输入焦点可以使用光标键移动,其中所有单选框组件将被自动只选中一个."
+            注释 = "如果同一父组件中的所有子组件均位于同一组中,则不需要设置本属性." 注释 = "注意本属性对\"窗口\"类对象不起作用." @视窗.设置时机 = 组件创建前后>
+    参数 是否为组内的首组件 <类型 = 逻辑型>
+    {
+        如果 (本对象 属于 窗口)
+        {
+            返回
+        }
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->ModifyStyle (WS_GROUP, (@<是否为组内的首组件> ? WS_GROUP : 0), (SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE));
+        @ else
+        @ {
+        @     if (@<是否为组内的首组件>)
+        @         GetMfcWndObject ()->m_dwAttrInitialStyle |= WS_GROUP;
+        @     else
+        @         GetMfcWndObject ()->m_dwAttrInitialStyle &= ~WS_GROUP;
+        @ }
+    }
+
+    方法 可停留焦点 <公开 属性读 类型 = 逻辑型 注释 = "返回当用户使用TAB键在组件之间移动输入焦点时是否允许在本组件上停留" @嵌入式方法 = "">
+    {
+        @ (@sn<this>.GetControlStyle () & WS_TABSTOP) != 0
+    }
+
+    方法 可停留焦点 <公开 属性写 注释 = "设置当用户使用TAB键在组件之间移动输入焦点时是否允许在本组件上停留." 注释 = "注意:" 注释 = "    1. 对于编辑框,按钮之类可以接收按键输入的组件,本属性值默认为真;"
+            注释 = "    2. 本属性对\"窗口\"类对象不起作用;" 注释 = "    3. 如欲设置各个组件之间的焦点停留顺序,请在界面布局设计器中的" 注释 = "布局内容树中拖动改变组件的创建顺序,也可在源程序中直接调整窗口类中"
+            注释 = "组件成员变量的定义顺序;" 注释 = "    4(内部): 封装本属性时必须将本属性的设置时机置为\"组件创建后\"," 注释 = "以支持对本属性默认值(前面第一条决定)的覆盖修改."
+            "// @视窗.设置时机" = 组件创建前后>
+    参数 是否可停留焦点 <类型 = 逻辑型>
+    {
+        如果 (本对象 属于 窗口)
+        {
+            返回
+        }
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->ModifyStyle (WS_TABSTOP, (@<是否可停留焦点> ? WS_TABSTOP : 0), (SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE));
+        @ else
+        @ {
+        @     if (@<是否可停留焦点>)
+        @         GetMfcWndObject ()->m_dwAttrInitialStyle |= WS_TABSTOP;
+        @     else
+        @         GetMfcWndObject ()->m_dwAttrInitialStyle &= ~WS_TABSTOP;
+        @ }
+    }
+
+    方法 标准鼠标指针 <公开 属性写 注释 = "设置当鼠标指针移动到本组件上时的标准鼠标指针形状类型." 注释 = "注意: 使用\"自定义鼠标指针\"所设置的鼠标指针形状将被覆盖." @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置指针类型 <类型 = 标准鼠标指针类型>
+    {
+        @ if ((GetMfcWndObject ()->m_hAttrCustomCursur = ::LoadCursor (NULL, MAKEINTRESOURCE (@<所欲设置指针类型>))) != NULL)
+        @ {
+        @     AttachEventListenerIfNone ();
+        @     POINT pt;
+        @     ::GetCursorPos (&pt);
+        @     ::SetCursorPos (pt.x, pt.y);
+        @  }
+    }
+
+    方法 自定义鼠标指针 <公开 属性写 注释 = "设置当鼠标指针移动到本组件上时的自定义鼠标指针形状类型." 注释 = "注意: 使用\"标准鼠标指针\"所设置的鼠标指针形状将被覆盖." @视窗.设置时机 = 组件创建前后>
+    参数 所欲设置指针形状 <类型 = 鼠标指针资源 注释 = "提供所欲设置的鼠标指针资源,如果该资源值为\"空资源.空鼠标指针\",则将取消自定义鼠标指针.">
+    {
+        @ if ((GetMfcWndObject ()->m_hAttrCustomCursur = (HCURSOR)g_objVolApp.LoadResImage (VRIT_CURSOR, @<所欲设置指针形状>)) != NULL)
+        @ {
+        @     AttachEventListenerIfNone ();
+        @     POINT pt;
+        @     ::GetCursorPos (&pt);
+        @     ::SetCursorPos (pt.x, pt.y);
+        @ }
+    }
+
+    方法 字体 <公开 属性写 注释 = "设置本组件显示文本时所使用的字体" @视窗.设置时机 = 组件创建前后 @值细节类型 = 字体>
+    参数 字体描述文本 <类型 = 文本型 注释 = "  本参数的格式为: \"字体名, 字体尺寸, 是否为粗体, 是否为斜体, 是否有下划线, 是否有删除线, 旋转角度\","
+            注释 = "其中\"是否\"字段,用1代表真,0代表假,可以被省略.字体尺寸单位为磅, 旋转角度单位为1/10度." 注释 = "  例子: \"宋体, 10\", \"宋体, 10, 0, 1, 1, 0, 100\"." "">
+    {
+        @ LOGFONT infFont;
+        @ GetFontDescTextInfo (@<字体描述文本>, &infFont);
+        @ CMfcWndObject* pMfcWndObject = GetMfcWndObject ();
+        @ const HFONT hOldFont = pMfcWndObject->m_hFont;
+        @ pMfcWndObject->m_hFont = ::CreateFontIndirect (&infFont);
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->SendMessage (WM_SETFONT, (WPARAM)pMfcWndObject->m_hFont, MAKELPARAM (TRUE, 0));
+        @ if (hOldFont != NULL)
+        @     ::DeleteObject (hOldFont);
+    }
+
+    方法 字体 <公开 属性读 类型 = 文本型 注释 = "返回本组件显示文本时所使用的字体,如果未设置则为空文本." @禁止流程检查 = 真>
+    {
+        @ CVolString strFontDesc;
+        @ CMfcWndObject* pWndObject = GetMfcWndObject ();
+        @ HFONT hFont = pWndObject->m_hFont;
+        @ if (hFont == NULL)
+        @ {
+        @     CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @     if (pWnd != NULL)
+        @         hFont = (HFONT)pWnd->SendMessage (WM_GETFONT, 0, 0);
+        @ }
+        @ if (hFont != NULL)
+        @ {
+        @     LOGFONT infFont;
+        @     if (::GetObject (hFont, sizeof (LOGFONT), &infFont) != 0)
+        @         GetFontDescText (infFont, strFontDesc);
+        @ }
+        @ return strFontDesc;
+    }
+
+    方法 组件边框 <公开 属性写 注释 = "设置组件的边框类型." 注释 = "注意本属性对\"窗口\"类对象不起作用,窗口类对象请使用\"窗口边框\"属性." @视窗.设置时机 = 组件创建后>
+    参数 所设置边框类型 <类型 = 组件边框类型 注释 = "提供所欲设置的组件边框类型">
+    {
+        如果 (本对象 属于 窗口)
+        {
+            返回
+        }
+        @ DWORD dwStyle = 0, dwExStyle = 0;
+        @ switch (@<所设置边框类型>)
+        @ {
+        @ case 1:  dwExStyle = WS_EX_CLIENTEDGE;  break;
+        @ case 2:  dwExStyle = WS_EX_DLGMODALFRAME;  break;
+        @ case 3:  dwExStyle = WS_EX_STATICEDGE;  break;
+        @ case 4:  dwExStyle = (WS_EX_CLIENTEDGE | WS_EX_DLGMODALFRAME);  break;
+        @ case 5:  dwStyle = WS_BORDER;  break;
+        @ }
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     pWnd->ModifyStyle (WS_BORDER, dwStyle, (SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED | SWP_DRAWFRAME));
+        @     pWnd->ModifyStyleEx (WS_EX_STATICEDGE | WS_EX_CLIENTEDGE | WS_EX_DLGMODALFRAME, dwExStyle,
+        @             (SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED | SWP_DRAWFRAME));
+        @ }
+    }
+
+    方法 组件位置 <公开 属性读 类型 = 矩形类 注释 = "获取并返回当前组件在所处父组件用户区或屏幕(当无父组件时,譬如为顶层窗口)中的所处矩形位置"
+            返回值注释 = "如果当前组件存在父组件,所返回位置矩形基于其用户区左上角,否则基于屏幕左上角.">
+    {
+        变量 矩形变量1 <类型 = 矩形类>
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     RECT rt;
+        @     pWnd->GetWindowRect (&rt);
+        @     CWnd* pParent = pWnd->GetParent ();
+        @     if (pParent != NULL && (pWnd->GetStyle () & WS_POPUP) == 0)
+        @         pParent->ScreenToClient (&rt);
+        @     @<矩形变量1>.Copy (&rt);  // 取回所获得的位置矩形
+        @ }
+        返回 (矩形变量1)
+    }
+
+    方法 组件位置 <公开 属性写 注释 = "设置当前组件在所处父组件用户区或屏幕(当无父组件时,譬如为顶层窗口)中的所处矩形位置">
+    参数 所欲设置的矩形 <类型 = 矩形类 注释 = "如果当前组件存在父组件,为基于其用户区左上角,否则为基于屏幕左上角.">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     pWnd->SetWindowPos (NULL, @<所欲设置的矩形.左边>, @<所欲设置的矩形.顶边>, @<所欲设置的矩形.宽度> (), @<所欲设置的矩形.高度> (),
+        @     #ifndef @an<_VOL_FOR_UI_DESIGNER>  // 不为编译设计器版本?
+        @         (SWP_NOACTIVATE | SWP_NOZORDER));
+        @     #else
+        @         (SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER));
+        @     #endif
+        @ }
+    }
+
+    方法 左边 <公开 属性读 类型 = 整数 注释 = "  返回当前组件在所处父组件用户区或屏幕(当无父组件时,譬如为顶层窗口)" 注释 = "中的左边位置,如果组件尚未被创建,将始终返回0." @设计时隐藏 = 真 @禁止流程检查 = 真>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     RECT rt;
+        @     pWnd->GetWindowRect (&rt);
+        @     CWnd* pParent = pWnd->GetParent ();
+        @     if (pParent != NULL && (pWnd->GetStyle () & WS_POPUP) == 0)
+        @         pParent->ScreenToClient (&rt);
+        @     return rt.left;
+        @ }
+        @ return 0;
+    }
+
+    方法 左边 <公开 属性写 注释 = "设置当前组件在所处父组件用户区或屏幕(当无父组件时,譬如为顶层窗口)中的左边位置" @设计时隐藏 = 真>
+    参数 所欲设置的位置 <类型 = 整数>
+    {
+        @ #ifndef @an<_VOL_FOR_UI_DESIGNER>  // 不为编译设计器版本?
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     RECT rt;
+        @     pWnd->GetWindowRect (&rt);
+        @     CWnd* pParent = pWnd->GetParent ();
+        @     if (pParent != NULL && (pWnd->GetStyle () & WS_POPUP) == 0)
+        @         pParent->ScreenToClient (&rt);
+        @     pWnd->SetWindowPos (NULL, @<所欲设置的位置>, rt.top, 0, 0, (SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOZORDER));
+        @ }
+        @ #endif
+    }
+
+    方法 顶边 <公开 属性读 类型 = 整数 注释 = "  返回当前组件在所处父组件用户区或屏幕(当无父组件时,譬如为顶层窗口)" 注释 = "中的顶边位置,如果组件尚未被创建,将始终返回0." @设计时隐藏 = 真 @禁止流程检查 = 真>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     RECT rt;
+        @     pWnd->GetWindowRect (&rt);
+        @     CWnd* pParent = pWnd->GetParent ();
+        @     if (pParent != NULL && (pWnd->GetStyle () & WS_POPUP) == 0)
+        @         pParent->ScreenToClient (&rt);
+        @     return rt.top;
+        @ }
+        @ return 0;
+    }
+
+    方法 顶边 <公开 属性写 注释 = "设置当前组件在所处父组件用户区或屏幕(当无父组件时,譬如为顶层窗口)中的顶边位置" @设计时隐藏 = 真>
+    参数 所欲设置的位置 <类型 = 整数>
+    {
+        @ #ifndef @an<_VOL_FOR_UI_DESIGNER>  // 不为编译设计器版本?
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     RECT rt;
+        @     pWnd->GetWindowRect (&rt);
+        @     CWnd* pParent = pWnd->GetParent ();
+        @     if (pParent != NULL && (pWnd->GetStyle () & WS_POPUP) == 0)
+        @         pParent->ScreenToClient (&rt);
+        @     pWnd->SetWindowPos (NULL, rt.left, @<所欲设置的位置>,  0, 0, (SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOZORDER));
+        @ }
+        @ #endif
+    }
+
+    方法 宽度 <公开 属性读 类型 = 整数 注释 = "返回当前组件的宽度,如果组件尚未被创建,将始终返回0." @设计时隐藏 = 真 @禁止流程检查 = 真>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     RECT rt;
+        @     pWnd->GetWindowRect (&rt);
+        @     return rt.right - rt.left;
+        @ }
+        @ return 0;
+    }
+
+    方法 宽度 <公开 属性写 注释 = "设置当前组件的宽度" @设计时隐藏 = 真>
+    参数 所欲设置的宽度 <类型 = 整数>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     RECT rt;
+        @     pWnd->GetWindowRect (&rt);
+        @     pWnd->SetWindowPos (NULL, 0, 0, @<所欲设置的宽度>, rt.bottom - rt.top, (SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER));
+        @ }
+    }
+
+    方法 高度 <公开 属性读 类型 = 整数 注释 = "返回当前组件的高度,如果组件尚未被创建,将始终返回0." @设计时隐藏 = 真 @禁止流程检查 = 真>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     RECT rt;
+        @     pWnd->GetWindowRect (&rt);
+        @     return rt.bottom - rt.top;
+        @ }
+        @ return 0;
+    }
+
+    方法 高度 <公开 属性写 注释 = "设置当前组件的高度" @设计时隐藏 = 真>
+    参数 所欲设置的高度 <类型 = 整数>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     RECT rt;
+        @     pWnd->GetWindowRect (&rt);
+        @     pWnd->SetWindowPos (NULL, 0, 0, rt.right - rt.left, @<所欲设置的高度>, (SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER));
+        @ }
+    }
+
+    方法 允许文件拖放 <公开 属性写 注释 = "  设置是否允许将文件拖放到本窗口组件上." 注释 = "  如果本属性被设置为真,则允许文件被拖放到本窗口组件上," 注释 = "当文件被拖放上来后,将发送\"文件被拖放\"事件.">
+    参数 是否允许 <类型 = 逻辑型 注释 = "指定是否允许文件被拖放到本窗口组件上">
+    {
+        @ :: MyDragAcceptFiles (GetMfcWndHandle (), @<是否允许>);
+    }
+
+    方法 提示信息 <公开 属性写 注释 = "设置当鼠标移动到本组件上时所显示的提示文本信息">
+    参数 提示文本内容 <类型 = 文本型 注释 = "提供具体的提示文本内容,为空文本清除已有提示文本.">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     CVWnd_Container::sSetToolTip (pWnd, @<提示文本内容>.GetText ());
+    }
+
+    方法 禁止系统主题 <公开 属性写 注释 = "设置本组件是否禁止使用所处应用程序对应的Windows主题." 注释 = "禁止使用Windows主题可以保证本组件的一些外观属性(譬如颜色/字体等)显示正常.">
+    参数 是否禁止 <类型 = 逻辑型>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     if (@<是否禁止>)
+        @         ::SetWindowTheme (pWnd->m_hWnd, _T (""), _T (""));
+        @     else
+        @         ::SetWindowTheme (pWnd->m_hWnd, NULL, NULL);
+        @ }
+    }
+
+    变量 标记 <公开 类型 = 文本型 注释 = "用作在组件中保存一个用户自定义标记文本值" @属性变量 = 真>
+
+    # --
+
+    方法 创建组件 <公开 类型 = 逻辑型 注释 = "创建本类的窗口组件" 返回值注释 = "返回是否成功" @嵌入式方法 = "">
+    参数 父窗口容器组件 <类型 = 窗口容器组件 注释 = "提供所创建组件所处的父窗口容器组件">
+    参数 左边位置 <类型 = 整数 注释 = "提供所创建组件在所处父窗口容器组件中的左边横向坐标位置">
+    参数 顶边位置 <类型 = 整数 注释 = "提供所创建组件在所处父窗口容器组件中的顶边纵向坐标位置">
+    参数 宽度 <类型 = 整数 注释 = "提供所创建组件的宽度值">
+    参数 高度 <类型 = 整数 注释 = "提供所创建组件的高度值">
+    参数 ID值 <类型 = 整数 注释 = "指定所创建组件在其父窗口容器组件中的ID值" @默认值 = 0xFFFF>
+    参数 所处分组编号 <类型 = 整数 注释 = "指定所创建组件所处的设计时分组编号" @默认值 = -1>
+    {
+        @ @sn<this>.@an<CreateVolControl> (&@<父窗口容器组件>, @<左边位置>, @<顶边位置>, @<宽度>, @<高度>, @<ID值>, @<所处分组编号>)
+    }
+
+    方法 取窗口句柄 <公开 类型 = 变整数 注释 = "返回当前窗口组件的句柄,如果尚未创建或创建失败,则返回0." @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.GetMfcWndPtr ()->m_hWnd
+    }
+
+    方法 取父窗口句柄 <公开 类型 = 变整数 注释 = "返回当前窗口组件的父窗口句柄,如果不存在则返回0." @禁止流程检查 = 真>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ return (INT_P)(pWnd != NULL ? pWnd->GetParent ()->GetSafeHwnd () : NULL);
+    }
+
+    方法 取所有者窗口句柄 <公开 类型 = 变整数 注释 = "返回当前窗口组件的所有者窗口的句柄,如果不存在则返回0." 注释 = "如果当前窗口组件没有所有者窗口,则默认返回其父窗口句柄." @禁止流程检查 = 真>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ return (INT_P)(pWnd != NULL ? pWnd->GetOwner ()->GetSafeHwnd () : NULL);
+    }
+
+    方法 是否为空 <公开 类型 = 逻辑型 注释 = "返回当前组件是否尚未成功创建" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetMfcWndPtr ()->m_hWnd == NULL
+    }
+
+    方法 销毁 <公开 注释 = "销毁本窗口组件,本方法调用后如欲继续使用本对象,必须再次创建.">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->DestroyWindow ();
+    }
+
+    方法 信息框 <公开 类型 = 返回按钮类型 注释 = "显示一个信息框(本组件为其拥有窗口),等待用户单击按钮." 返回值注释 = "返回一个值告诉用户单击哪一个按钮."
+            返回值注释 = "如果信息框有\"取消\"按钮,则按下 ESC 键与单击\"取消\"按钮的效果相同." @禁止流程检查 = 真>
+    参数 提示信息 <类型 = 文本型 注释 = "提供具体的提示文本">
+    参数 按钮 <类型 = 整数 注释 = "由\"信息框按钮\"类中的各组常量值相加后的值,具体请见该类中的说明." @默认值 = 0>
+    参数 窗口标题 <类型 = 文本型 注释 = "指定显示在信息框标题栏中的文本" @默认值 = "信息:">
+    {
+        @ const HWND hOldFocusWnd = ::GetFocus ();
+        @ const INT nResult = ::MessageBox (GetMfcWndPtr ()->m_hWnd, @<提示信息>.GetText (), @<窗口标题>.GetText (), @<按钮>);
+        @ if (hOldFocusWnd != NULL && ::IsWindow (hOldFocusWnd))
+        @     ::SetFocus (hOldFocusWnd);
+        @ return nResult;
+    }
+
+    方法 询问信息框 <公开 类型 = 逻辑型 注释 = "用户点击\"是\"按钮将返回真,点击\"否\"按钮将返回假.">
+    参数 询问信息 <类型 = 文本型 注释 = "提供具体的询问提示文本">
+    参数 窗口标题 <类型 = 文本型 注释 = "指定显示在信息框标题栏中的文本" @默认值 = "询问:">
+    {
+        返回 (信息框 (询问信息, 信息框按钮.询问图标 + 信息框按钮.是否钮, 窗口标题) == 返回按钮类型.是钮)
+    }
+
+    方法 错误信息框 <公开>
+    参数 提示信息 <类型 = 文本型 注释 = "提供具体的提示文本">
+    参数 窗口标题 <类型 = 文本型 注释 = "指定显示在信息框标题栏中的文本" @默认值 = "错误:">
+    {
+        信息框 (提示信息, 信息框按钮.错误图标 + 信息框按钮.确认钮, 窗口标题)
+    }
+
+    方法 警告信息框 <公开>
+    参数 提示信息 <类型 = 文本型 注释 = "提供具体的提示文本">
+    参数 窗口标题 <类型 = 文本型 注释 = "指定显示在信息框标题栏中的文本" @默认值 = "警告:">
+    {
+        信息框 (提示信息, 信息框按钮.警告图标 + 信息框按钮.确认钮, 窗口标题)
+    }
+
+    方法 输入框 <公开 类型 = 逻辑型 注释 = "在对话框中显示提示,等待用户输入正文并按下按钮." 注释 = "如果用户在确认输入后(按下\"确认输入\"按钮或回车键)退出,返回真,否则返回假."
+            编辑时信息 = "BAA9F, 0, 0, 0" @禁止流程检查 = 真 @视窗.外部资源文件 = "src\\res\\input_box.rc">
+    参数 存放输入内容的变量 <类型 = 文本型 注释 = "如果用户在确认输入后,相关输入内容将被填入到此文本变量中.">
+    参数 提示信息 <类型 = 文本型 注释 = "提供输入提示信息,可以中间加入回车换行\"\\r\\n\"以包括多行." 注释 = "如果提示信息太长或行数过多,超过部分将不会被显示出来." @默认值 = "">
+    参数 窗口标题 <类型 = 文本型 注释 = "指定显示在对话框标题栏中的文本.如果为空文本,默认为\"请输入：\"." @默认值 = "">
+    参数 初始文本 <类型 = 文本型 注释 = "指定初始设置到对话框输入文本框中的内容" @默认值 = "">
+    参数 输入方式 <类型 = 输入框输入方式 注释 = "用作指定具体的输入方式" @默认值 = 输入框输入方式.输入文本>
+    {
+        @ CVDlg_Input dlg (GetMfcWndPtrWithValidHWnd (), (@<提示信息>.IsEmpty () ? _IDD_VOL_INPUT_DLG2 : _IDD_VOL_INPUT_DLG1));
+        @ dlg.m_strCaption = @<窗口标题>;
+        @ dlg.m_strTip = @<提示信息>;
+        @ dlg.m_strInitialText = @<初始文本>;
+        @ dlg.m_npInputMode = CLIP (@<输入方式>, 1, 4);
+        @ if (dlg.DoModal () == IDOK)
+        @ {
+        @     @<存放输入内容的变量>.SetText ((const TCHAR*)dlg.m_strResult);
+        @     return TRUE;
+        @ }
+        @ else
+        @ {
+        @     @<存放输入内容的变量>.Empty ();
+        @     return FALSE;
+        @ }
+    }
+
+    方法 置字体 <公开 注释 = "设置本窗口组件所使用的字体">
+    参数 所欲设置的字体 <类型 = 字体对象类>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->SendMessage (WM_SETFONT, (WPARAM)@<所欲设置的字体.取字体句柄> (), MAKELPARAM (TRUE, 0));
+    }
+
+    方法 取字体 <公开 类型 = 字体对象类 注释 = "返回本窗口组件所使用的字体">
+    {
+        变量 变量1 <类型 = 字体对象类>
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     @<变量1.置字体句柄值> ((INT_P)::SendMessage (pWnd->m_hWnd, WM_GETFONT, 0, 0), FALSE);
+        返回 (变量1)
+    }
+
+    方法 获取焦点 <公开 注释 = "将当前输入焦点设置到本组件上" "">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->SetFocus ();
+    }
+
+    方法 可有焦点 <公开 类型 = 逻辑型 注释 = "返回当前窗口组件是否具有输入焦点" @禁止流程检查 = 真>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd != NULL ? ::GetFocus () == pWnd->m_hWnd : FALSE);
+    }
+
+    方法 取用户区宽度 <公开 类型 = 整数 注释 = "  返回窗口或窗口组件用户区域的宽度,对窗口而言,用户区域" 注释 = "为窗口区域减去标题栏+菜单栏+边框后的区域." @禁止流程检查 = 真>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     CRect rtClient;
+        @     pWnd->GetClientRect (&rtClient);
+        @     return rtClient.Width ();
+        @ }
+        @ return 0;
+    }
+
+    方法 取用户区高度 <公开 类型 = 整数 注释 = "  返回窗口或窗口组件用户区域的高度,对窗口而言,用户区域为" 注释 = "窗口区域减去标题栏+菜单栏+边框后的区域." @禁止流程检查 = 真>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     CRect rtClient;
+        @     pWnd->GetClientRect (&rtClient);
+        @     return rtClient.Height ();
+        @ }
+        @ return 0;
+    }
+
+    方法 取用户区矩形 <公开 类型 = 矩形类 注释 = "  获取并返回当前组件的用户区矩形位置,对窗口而言,用户区域为" 注释 = "窗口区域减去标题栏+菜单栏+边框后的区域.">
+    {
+        变量 矩形变量1 <类型 = 矩形类>
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     RECT rt;
+        @     pWnd->GetClientRect (&rt);
+        @     @<矩形变量1>.Copy (&rt);  // 取回所获得的位置矩形
+        @ }
+        返回 (矩形变量1)
+    }
+
+    方法 取屏幕位置 <公开 类型 = 矩形类 注释 = "获取并返回当前组件在屏幕中的所处矩形位置">
+    {
+        变量 矩形变量1 <类型 = 矩形类>
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     RECT rt;
+        @     pWnd->GetWindowRect (&rt);
+        @     @<矩形变量1>.Copy (&rt);  // 取回所获得的位置矩形
+        @ }
+        返回 (矩形变量1)
+    }
+
+    方法 屏幕矩形到用户区 <公开 注释 = "将所指定的屏幕矩形位置转换到基于本组件用户区左上角">
+    参数 待转换矩形 <类型 = 矩形类 注释 = "提供待转换的屏幕矩形位置,转换完毕后的结果将写回此对象中.">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     CMRect rt (@<待转换矩形>.ToRect ());
+        @     pWnd->ScreenToClient (&rt);
+        @     @<待转换矩形>.Copy (&rt);  // 取回所获得的位置矩形
+        @ }
+    }
+
+    方法 用户区矩形到屏幕 <公开 注释 = "将所指定的用户区矩形位置(基于本组件用户区左上角)转换到基于屏幕左上角">
+    参数 待转换矩形 <类型 = 矩形类 注释 = "提供待转换的屏幕矩形位置,转换完毕后的结果将写回此对象中.">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     CMRect rt (@<待转换矩形>.ToRect ());
+        @     pWnd->ClientToScreen (&rt);
+        @     @<待转换矩形>.Copy (&rt);  // 取回所获得的位置矩形
+        @ }
+    }
+
+    方法 屏幕位置到用户区 <公开 注释 = "将所指定的屏幕位置转换到基于本组件用户区左上角">
+    参数 待转换位置 <类型 = 位置类 注释 = "提供待转换的屏幕位置,转换完毕后的结果将写回此对象中.">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     CMPoint pt (@<待转换位置>.ToPoint ());
+        @     pWnd->ScreenToClient (&pt);
+        @     @<待转换位置>.Copy (&pt);  // 取回所获得的位置
+        @ }
+    }
+
+    方法 用户区位置到屏幕 <公开 注释 = "将所指定的用户区位置(基于本组件用户区左上角)转换到基于屏幕左上角">
+    参数 待转换位置 <类型 = 位置类 注释 = "提供待转换的屏幕位置,转换完毕后的结果将写回此对象中.">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     CMPoint pt (@<待转换位置>.ToPoint ());
+        @     pWnd->ClientToScreen (&pt);
+        @     @<待转换位置>.Copy (&pt);  // 取回所获得的位置
+        @ }
+    }
+
+    方法 禁止重画 <公开 注释 = "禁止本窗口组件重画,以避免当频繁进行操作时引起闪烁." 注释 = "注意调用本命令后必须调用\"允许重画\"命令进行恢复.">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->SetRedraw (FALSE);
+    }
+
+    方法 允许重画 <公开 注释 = "如果本组件先前调用过\"禁止重画\"方法禁止了重画,调用本方法可以重新将其允许.">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     pWnd->SetRedraw (TRUE);
+        @     pWnd->Invalidate ();
+        @ }
+    }
+
+    方法 重画 <公开 注释 = "通知Windows系统本窗口组件上的显示内容需要被全部重画">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->Invalidate ();
+    }
+
+    方法 部分重画 <公开 注释 = "通知Windows系统本窗口组件上所指定用户区域内的显示内容需要被重画">
+    参数 欲重画区域的左边 <类型 = 整数 注释 = "相对于本组件用户区域的左边">
+    参数 欲重画区域的顶边 <类型 = 整数 注释 = "相对于本组件用户区域的顶边">
+    参数 欲重画区域的宽度 <类型 = 整数>
+    参数 欲重画区域的高度 <类型 = 整数>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->InvalidateRect (&CRect (@<欲重画区域的左边>, @<欲重画区域的顶边>, @<欲重画区域的左边> + @<欲重画区域的宽度>, @<欲重画区域的顶边> + @<欲重画区域的高度>));
+    }
+
+    方法 取消重画 <公开 注释 = "通知Windows系统本窗口组件不再需要被重画,保留现有的全部显示内容.">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->ValidateRect (NULL);
+    }
+
+    方法 刷新显示 <公开 注释 = "  一般情况下,如果本窗口组件上的显示内容需要被全部或部分重画," 注释 = "Windows系统会等到下一次系统空闲时刷新显示,但是这样无法满足一"
+            注释 = "些需要即时更新的场合,此时执行本方法可以立即对本窗口组件进行重" 注释 = "画更新.">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->UpdateWindow ();
+    }
+
+    方法 移动 <公开 注释 = "改变窗口组件的位置或尺寸">
+    参数 左边 <类型 = 整数 注释 = "  提供新的左边位置,如果当前组件为顶层窗口,则相对屏幕左边位置," 注释 = "否则相对其所处父组件的用户区左边位置." 注释 = "  为\"数值范围.最小整数值\"常量值表示保持原有左边位置不变."
+            @默认值 = 数值范围.最小整数值>
+    参数 顶边 <类型 = 整数 注释 = "  提供新的顶边位置,如果当前组件为顶层窗口,则相对屏幕顶边位置," 注释 = "否则相对其所处父组件的用户区顶边位置." 注释 = "  为\"数值范围.最小整数值\"常量值表示保持原有顶边位置不变."
+            @默认值 = 数值范围.最小整数值>
+    参数 宽度 <类型 = 整数 注释 = "提供组件新的宽度,如果为-1则保持原有宽度不变." @默认值 = -1>
+    参数 高度 <类型 = 整数 注释 = "提供组件新的高度,如果为-1则保持原有高度不变." @默认值 = -1>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @ {
+        @     CRect rt;
+        @     pWnd->GetWindowRect (&rt);
+        @     CWnd* pParentWnd = pWnd->GetParent ();
+        @     if (pParentWnd != NULL && (pWnd->GetStyle () & WS_POPUP) == 0)
+        @         pParentWnd->ScreenToClient (&rt);
+        @     CRect rtOld (rt);
+        @     if (@<左边> != INT_MIN)  { rt.right = @<左边> + rt.Width ();  rt.left = @<左边>;  }
+        @     if (@<顶边> != INT_MIN)  { rt.bottom = @<顶边> + rt.Height ();  rt.top = @<顶边>;  }
+        @     if (@<宽度> != -1)  rt.right = rt.left + @<宽度>;
+        @     if (@<高度> != -1)  rt.bottom = rt.top + @<高度>;
+        @     if (rtOld != rt)
+        @         pWnd->MoveWindow (&rt);
+        @ }
+    }
+
+    方法 移动2 <公开 注释 = "改变窗口组件的位置或尺寸">
+    参数 新位置 <类型 = 矩形类>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->MoveWindow (&@<新位置>.ToRect ());
+    }
+
+    方法 调整层次 <公开 注释 = "改变窗口组件的当前所处显示层次">
+    参数 欲调整到的层次 <类型 = 组件层次>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     ::SetWindowPos (pWnd->m_hWnd, (HWND)@<欲调整到的层次>, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+    }
+
+    方法 发送信息 <公开 类型 = 变整数 注释 = "将指定信息发送到本窗口组件,并等待且取回信息反馈值." @禁止流程检查 = 真>
+    参数 信息值 <类型 = 整数>
+    参数 参数1 <类型 = 变整数 @默认值 = 0>
+    参数 参数2 <类型 = 变整数 @默认值 = 0>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd != NULL ? (INT_P)pWnd->SendMessage ((UINT)@<信息值>, (WPARAM)@<参数1>, (LPARAM)@<参数2>) : 0);
+    }
+
+    方法 投递信息 <公开 类型 = 逻辑型 注释 = "将指定信息发送到本窗口组件,不等待直接返回." 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 信息值 <类型 = 整数>
+    参数 参数1 <类型 = 变整数 @默认值 = 0>
+    参数 参数2 <类型 = 变整数 @默认值 = 0>
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd != NULL ? pWnd->PostMessage ((UINT)@<信息值>, (WPARAM)@<参数1>, (LPARAM)@<参数2>) : FALSE);
+    }
+
+    方法 置父窗口 <公开 注释 = "设置本窗口组件的父窗口组件">
+    参数 所欲设置的父组件 <类型 = 窗口组件 注释 = "可以是窗口或窗口组件">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ CWnd* pParentWnd = @<所欲设置的父组件>.GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL && pParentWnd != NULL && pWnd->m_hWnd != pParentWnd->m_hWnd)
+        @     pWnd->SetParent (pParentWnd);
+    }
+
+    方法 用户区截图 <公开 类型 = 逻辑型 注释 = "取回本组件上用户区内所有现有显示内容的图片对象" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 所取回图片 <类型 = 位图对象类 注释 = "组件上用户区内所有现有显示内容将被填入到此对象中">
+    参数 输出宽度 <类型 = 整数 注释 = "  指定图片的输出宽度. 如果小于0,参数值指定的是最终图片输出宽度相对于" 注释 = "所取得图片宽度的百分比(最小为10%); 如果等于0,则按图片原宽度输出; 如"
+            注释 = "果大于0,指定输出图片的绝对宽度." @默认值 = 0>
+    参数 输出高度 <类型 = 整数 注释 = "  指定图片的输出高度. 如果小于0,参数值指定的是最终图片输出高度相对于" 注释 = "所取得图片高度的百分比(最小为10%); 如果等于0,则按图片原高度输出; 如"
+            注释 = "果大于0,指定输出图片的绝对高度." @默认值 = 0>
+    {
+        @ @<所取回图片.置位图句柄值> ((INT_P)CatchClientBitmap (@sn<this>.GetMfcWndPtr ()->m_hWnd, @<输出宽度>, @<输出高度>), TRUE)
+    }
+
+    方法 组件截图 <公开 类型 = 逻辑型 注释 = "取回本组件上整体(包括用户区与非用户区)所有现有显示内容的图片对象" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 所取回图片 <类型 = 位图对象类 注释 = "组件上整体所有现有显示内容将被填入到此对象中">
+    参数 输出宽度 <类型 = 整数 注释 = "  指定图片的输出宽度. 如果小于0,参数值指定的是最终图片输出宽度相对于" 注释 = "所取得图片宽度的百分比(最小为10%); 如果等于0,则按图片原宽度输出; 如"
+            注释 = "果大于0,指定输出图片的绝对宽度." @默认值 = 0>
+    参数 输出高度 <类型 = 整数 注释 = "  指定图片的输出高度. 如果小于0,参数值指定的是最终图片输出高度相对于" 注释 = "所取得图片高度的百分比(最小为10%); 如果等于0,则按图片原高度输出; 如"
+            注释 = "果大于0,指定输出图片的绝对高度." @默认值 = 0>
+    {
+        @ @<所取回图片.置位图句柄值> ((INT_P)CatchWindowBitmap (@sn<this>.GetMfcWndPtr ()->m_hWnd, @<输出宽度>, @<输出高度>), TRUE)
+    }
+
+    方法 提到前方 <公开 注释 = "将本窗口的叠放位置提到其它窗口的前方">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->BringWindowToTop ();
+    }
+
+    方法 激活 <公开 注释 = "将本窗口设置为当前活动窗口. 仅用作本对象的实际类型为\"窗口\"或\"MDI主窗口\"的情况.">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->SetActiveWindow ();
+    }
+
+    方法 置为前台窗口 <公开 注释 = "将本窗口设置为系统前台窗口. 仅用作本对象的实际类型为\"窗口\"或\"MDI主窗口\"的情况.">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ if (pWnd != NULL)
+        @     pWnd->SetForegroundWindow ();
+    }
+
+    方法 执行 <公开 注释 = "执行所指定的命令行. 仅用作本对象的实际类型为\"窗口\"或\"MDI主窗口\"的情况.">
+    参数 欲操作文件名 <类型 = 文本型 注释 = "提供欲操作文件或文件夹的名称">
+    参数 命令类型 <类型 = 所执行命令类型 注释 = "本参数提供欲执行命令的类型" @默认值 = 所执行命令类型.默认>
+    参数 命令行 <类型 = 文本型 注释 = "  如果欲进行操作的类型为\"打开文件\"且被打开文件为可执行文件,本参数提供" 注释 = "启动该可执行文件时欲附加的命令行文本,其它情况下本参数将被忽略." @默认值 = "">
+    参数 默认当前目录 <类型 = 文本型 注释 = "提供命令执行时的默认当前目录" @默认值 = "">
+    {
+        @ ::ShellExecute (GetMfcWndHandle (), (@<命令类型> == 1 ? _T ("edit") : @<命令类型> == 2 ? _T ("explore") : @<命令类型> == 3 ? _T ("find") :
+        @          @<命令类型> == 4 ? _T ("open") : @<命令类型> == 5 ? _T ("print") : NULL),
+        @          @<欲操作文件名>.GetText (), @<命令行>.GetText (), @<默认当前目录>.GetText (), SW_SHOW);
+    }
+
+    方法 删除到回收站 <公开 类型 = 逻辑型 注释 = "将一个或一批文件删除到Windows系统回收站中. 仅用作本对象的实际类型为\"窗口\"或\"MDI主窗口\"的情况." 返回值注释 = "成功返回真,失败或被用户中止删除操作返回假."
+            @禁止流程检查 = 真>
+    参数 欲删除文件 <类型 = 文本型 注释 = "提供所欲删除的文件名(注意必须是全路径),支持使用通配字符\"*\"和\"?\".">
+    参数 删除选项 <类型 = 整数 注释 = "本参数提供删除操作选项,可以为以下值之一或之和: 1.不询问删除; 2.不提示错误; 4.不显示进度." @默认值 = 0>
+    {
+        如果 (文本是否为空 (欲删除文件))
+        {
+            返回 (假)
+        }
+        @ CVolMem mem;
+        @ mem.AddString (@<欲删除文件>.GetText ());
+        @ mem.AddChar ('\0');
+        @ SHFILEOPSTRUCT inf;
+        @ ZERO_MEM (&inf, sizeof (inf));
+        @ inf.hwnd = GetMfcWndHandle ();
+        @ inf.wFunc = FO_DELETE;
+        @ inf.pFrom = (LPCTSTR)mem.GetPtr ();
+        @ inf.fFlags = FOF_ALLOWUNDO;
+        @ if ((@<删除选项> & 1) != 0)  inf.fFlags |= FOF_NOCONFIRMATION;
+        @ if ((@<删除选项> & 2) != 0)  inf.fFlags |= FOF_NOERRORUI;
+        @ if ((@<删除选项> & 4) != 0)  inf.fFlags |= FOF_SILENT;
+        @ return (SHFileOperation (&inf) == 0 && inf.fAnyOperationsAborted == FALSE);
+    }
+
+    方法 进度复制文件 <公开 类型 = 逻辑型 注释 = "将所指定文件复制或移动到另一个目录中,并同时显示一个进度对话框." 注释 = "仅用作本对象的实际类型为\"窗口\"或\"MDI主窗口\"的情况."
+            返回值注释 = "成功返回真,失败或被用户中止删除操作返回假." @禁止流程检查 = 真>
+    参数 目的目录 <类型 = 文本型 注释 = "本参数提供目的目录路径,如果该目录不存在,系统将自动询问是否创建.">
+    参数 源文件 <类型 = 文本型 注释 = "提供所欲复制的文件名(注意必须是全路径),支持使用通配字符\"*\"和\"?\".">
+    参数 是否为移动 <类型 = 逻辑型 注释 = "为真则移动文件,为假则复制文件." @默认值 = 假>
+    {
+        如果 (文本是否为空 (目的目录) || 文本是否为空 (源文件))
+        {
+            返回 (假)
+        }
+        @ CVolMem memDest, memSrc;
+        @ memDest.AddString (@<目的目录>.GetText ());
+        @ memDest.AddChar ('\0');
+        @ memSrc.AddString (@<源文件>.GetText ());
+        @ memSrc.AddChar ('\0');
+        @ SHFILEOPSTRUCT inf;
+        @ ZERO_MEM (&inf, sizeof (inf));
+        @ inf.hwnd = GetMfcWndHandle ();
+        @ inf.wFunc = (@<是否为移动> ? FO_MOVE : FO_COPY);
+        @ inf.pFrom = (LPCTSTR)memSrc.GetPtr ();
+        @ inf.pTo = (LPCTSTR)memDest.GetPtr ();
+        @ return (SHFileOperation (&inf) == 0 && inf.fAnyOperationsAborted == FALSE);
+    }
+
+    方法 批量删除到回收站 <公开 类型 = 逻辑型 注释 = "将一个或一批文件删除到Windows系统回收站中. 仅用作本对象的实际类型为\"窗口\"或\"MDI主窗口\"的情况."
+            返回值注释 = "成功返回真,失败或被用户中止删除操作返回假." @禁止流程检查 = 真>
+    参数 欲删除文件数组 <类型 = 文本数组类 注释 = "提供所欲删除的所有文件名(注意必须是全路径),支持使用通配字符\"*\"和\"?\".">
+    参数 删除选项 <类型 = 整数 注释 = "本参数提供删除操作选项,可以为以下值之一或之和: 1.不询问删除; 2.不提示错误; 4.不显示进度." @默认值 = 0>
+    {
+        如果 (欲删除文件数组.是否为空 ())
+        {
+            返回 (假)
+        }
+        @ CVolMem mem;
+        @ const INT_P npCount = @<欲删除文件数组>.data ().GetCount ();
+        @ for (INT_P npIndex = 0; npIndex < npCount; npIndex++)
+        {
+            @ mem.AddString (@<欲删除文件数组>.data ().GetAt (npIndex));
+        }
+        @ mem.AddChar ('\0');
+        @ SHFILEOPSTRUCT inf;
+        @ ZERO_MEM (&inf, sizeof (inf));
+        @ inf.hwnd = GetMfcWndHandle ();
+        @ inf.wFunc = FO_DELETE;
+        @ inf.pFrom = (LPCTSTR)mem.GetPtr ();
+        @ inf.fFlags = FOF_ALLOWUNDO;
+        @ if ((@<删除选项> & 1) != 0)  inf.fFlags |= FOF_NOCONFIRMATION;
+        @ if ((@<删除选项> & 2) != 0)  inf.fFlags |= FOF_NOERRORUI;
+        @ if ((@<删除选项> & 4) != 0)  inf.fFlags |= FOF_SILENT;
+        @ return (SHFileOperation (&inf) == 0 && inf.fAnyOperationsAborted == FALSE);
+    }
+
+    方法 批量进度复制文件 <公开 类型 = 逻辑型 注释 = "将一个或一批文件复制或移动到另一个目录中,并同时显示一个进度对话框." 注释 = "仅用作本对象的实际类型为\"窗口\"或\"MDI主窗口\"的情况."
+            返回值注释 = "成功返回真,失败或被用户中止删除操作返回假." @禁止流程检查 = 真>
+    参数 目的目录 <类型 = 文本型 注释 = "本参数提供目的目录路径,如果该目录不存在,系统将自动询问是否创建.">
+    参数 源文件数组 <类型 = 文本数组类 注释 = "提供所有欲复制的文件名(注意必须是全路径),支持使用通配字符\"*\"和\"?\".">
+    参数 是否为移动 <类型 = 逻辑型 注释 = "为真则移动文件,为假则复制文件." @默认值 = 假>
+    {
+        如果 (文本是否为空 (目的目录) || 源文件数组.是否为空 ())
+        {
+            返回 (假)
+        }
+        @ CVolMem memDest, memSrc;
+        @ memDest.AddString (@<目的目录>.GetText ());
+        @ memDest.AddChar ('\0');
+        @ const INT_P npCount = @<源文件数组>.data ().GetCount ();
+        @ for (INT_P npIndex = 0; npIndex < npCount; npIndex++)
+        {
+            @ memSrc.AddString (@<源文件数组>.data ().GetAt (npIndex));
+        }
+        @ memSrc.AddChar ('\0');
+        @ SHFILEOPSTRUCT inf;
+        @ ZERO_MEM (&inf, sizeof (inf));
+        @ inf.hwnd = GetMfcWndHandle ();
+        @ inf.wFunc = (@<是否为移动> ? FO_MOVE : FO_COPY);
+        @ inf.pFrom = (LPCTSTR)memSrc.GetPtr ();
+        @ inf.pTo = (LPCTSTR)memDest.GetPtr ();
+        @ return (SHFileOperation (&inf) == 0 && inf.fAnyOperationsAborted == FALSE);
+    }
+
+    方法 浏览文件夹 <公开 类型 = 文本型 注释 = "  打开一个对话框,浏览系统中存在的所有文件夹,返回被选定" 注释 = "文件夹的路径名,如果未选中任何文件夹,则返回空文本."
+            注释 = "  仅用作本对象的实际类型为\"窗口\"或\"MDI主窗口\"的情况.">
+    参数 标题 <类型 = 文本型 注释 = "提供显示在对话框上部的标题文本">
+    参数 是否包含文件 <类型 = 逻辑型 注释 = "指定是否在浏览框中同时列出文件名" @默认值 = 假>
+    {
+        变量 结果变量 <类型 = 文本型>
+        @ BROWSEINFO inf;
+        @ ZERO_MEM (&inf, sizeof (inf));
+        @ inf.hwndOwner = GetMfcWndHandle ();
+        @ TCHAR path [MAX_PATH];
+        @ path [0] = '\0';
+        @ inf.pszDisplayName = path;
+        @ inf.lpszTitle = @<标题>.GetText ();
+        @ inf.ulFlags = BIF_EDITBOX;
+        @ if (@<是否包含文件>)
+        @     inf.ulFlags |= BIF_BROWSEINCLUDEFILES;
+        @ LPITEMIDLIST pItem = SHBrowseForFolder (&inf);
+        @ if (pItem != NULL)
+        @ {
+        @     path [0] = '\0';
+        @     if (SHGetPathFromIDList (pItem, path))
+        @         @<结果变量>.SetText (path);
+        @     IMalloc* pMalloc;
+        @     if (SUCCEEDED (SHGetMalloc (&pMalloc)))
+        @     {
+        @         pMalloc->Free (pItem);
+        @         pMalloc->Release ();
+        @     }
+        @ }
+        返回 (结果变量)
+    }
+
+    方法 弹出菜单 <公开 类型 = 逻辑型 注释 = "在屏幕上指定位置弹出所指定的子菜单,用户点击该子菜单中菜单项所产生的命令将由本窗口组件接收处理." 返回值注释 = "返回是否成功" @嵌入式方法 = "">
+    参数 所欲弹出的菜单 <类型 = 菜单类 注释 = "提供所欲弹出菜单类的数据类型,应该为\"菜单类\"的继承类.所实际弹出的菜单为该菜单的第一个子菜单." @需求类型 = 数据类型>
+    参数 横向位置 <类型 = 整数 注释 = "指定所弹出子菜单的左边在屏幕上的横向位置,为\"数值范围.最小整数值\"常量值则使用当前鼠标在屏幕上的横向位置." @默认值 = 数值范围.最小整数值>
+    参数 纵向位置 <类型 = 整数 注释 = "指定所弹出子菜单的顶边在屏幕上的纵向位置,为\"数值范围.最小整数值\"常量值则使用当前鼠标在屏幕上的纵向位置." @默认值 = 数值范围.最小整数值>
+    参数 子菜单位置 <类型 = 整数 注释 = "指定所欲弹出子菜单在所提供菜单内顶层菜单项中的索引位置" @默认值 = 0>
+    {
+        @ @sn<this>.PopupSubMenuClass (@<横向位置>, @<纵向位置>, VOL_RUNTIME_CLASS (@<所欲弹出的菜单>), FALSE, @<子菜单位置>)
+    }
+
+    方法 弹出实例菜单 <公开 类型 = 逻辑型 注释 = "在屏幕上指定位置弹出所指定的子菜单,用户点击该子菜单中菜单项所产生的命令将由本窗口组件接收处理." 返回值注释 = "返回是否成功" @嵌入式方法 = "">
+    参数 所欲弹出的菜单 <类型 = 菜单类 注释 = "提供所欲弹出的菜单类对象,所实际弹出的菜单为该菜单的第一个子菜单.">
+    参数 横向位置 <类型 = 整数 注释 = "指定所弹出子菜单的左边在屏幕上的横向位置,为\"数值范围.最小整数值\"常量值则使用当前鼠标在屏幕上的横向位置." @默认值 = 数值范围.最小整数值>
+    参数 纵向位置 <类型 = 整数 注释 = "指定所弹出子菜单的顶边在屏幕上的纵向位置,为\"数值范围.最小整数值\"常量值则使用当前鼠标在屏幕上的纵向位置." @默认值 = 数值范围.最小整数值>
+    参数 子菜单位置 <类型 = 整数 注释 = "指定所欲弹出子菜单在所提供菜单内顶层菜单项中的索引位置" @默认值 = 0>
+    {
+        @ @<所欲弹出的菜单>.GetVolMenu ()->PopupSubMenu (@<横向位置>, @<纵向位置>, FALSE, @sn<this>.GetMfcWndHandle (), @<子菜单位置>)
+    }
+
+    方法 弹出托盘菜单 <公开 类型 = 逻辑型 注释 = "在当前鼠标位置弹出指定菜单,本方法一般用作支持托盘菜单的弹出." 返回值注释 = "返回是否成功" @嵌入式方法 = "">
+    参数 所欲弹出的菜单 <类型 = 菜单类 注释 = "提供所欲弹出菜单类的数据类型,应该为\"菜单类\"的继承类.所实际弹出的菜单为该菜单的第一个子菜单." @需求类型 = 数据类型>
+    参数 子菜单位置 <类型 = 整数 注释 = "指定所欲弹出子菜单在所提供菜单内顶层菜单项中的索引位置" @默认值 = 0>
+    {
+        @ @sn<this>.PopupSubMenuClass (INT_MIN, INT_MIN, VOL_RUNTIME_CLASS (@<所欲弹出的菜单>), TRUE, @<子菜单位置>)
+    }
+
+    方法 弹出托盘实例菜单 <公开 类型 = 逻辑型 注释 = "在当前鼠标位置弹出指定菜单,本方法一般用作支持托盘菜单的弹出." 返回值注释 = "返回是否成功" @嵌入式方法 = "">
+    参数 所欲弹出的菜单 <类型 = 菜单类 注释 = "提供所欲弹出得菜单类对象,所实际弹出的菜单为该菜单的第一个子菜单.">
+    参数 子菜单位置 <类型 = 整数 注释 = "指定所欲弹出子菜单在所提供菜单内顶层菜单项中的索引位置" @默认值 = 0>
+    {
+        @ @<所欲弹出的菜单>.GetVolMenu ()->PopupSubMenu (INT_MIN, INT_MIN, TRUE, @sn<this>.GetMfcWndHandle (), @<子菜单位置>)
+    }
+
+    方法 置窗口属性 <公开 类型 = 逻辑型 注释 = "设置关联到窗口句柄的一个命名属性值." 注释 = "注意: 当不再使用该属性时,需要调用\"删除窗口属性\"将其删除." 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 属性名称 <类型 = 文本型 注释 = "提供所欲设置的属性名称,不能为空文本.">
+    参数 属性值 <类型 = 变整数 注释 = "提供所欲设置的属性值">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd != NULL ? ::SetProp (pWnd->m_hWnd, @<属性名称>.GetText (), (HANDLE)@<属性值>) : FALSE);
+    }
+
+    方法 取窗口属性 <公开 类型 = 变整数 注释 = "读取并返回关联到窗口句柄的指定命名属性值." 注释 = "该属性为使用\"置窗口属性\"方法设置." 返回值注释 = "成功返回所对应的属性值,失败返回0(注意也有可能本身属性值就为0)."
+            @禁止流程检查 = 真>
+    参数 属性名称 <类型 = 文本型 注释 = "提供所欲读取属性的名称,不能为空文本.">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd != NULL ? (INT_P)::GetProp (pWnd->m_hWnd, @<属性名称>.GetText ()) : 0);
+    }
+
+    方法 删除窗口属性 <公开 类型 = 变整数 注释 = "删除通过使用\"置窗口属性\"方法所设置到窗口句柄上的关联属性" 返回值注释 = "成功返回该被删除属性所对应的属性值,失败返回0(注意也有可能本身属性值就为0)."
+            @禁止流程检查 = 真>
+    参数 属性名称 <类型 = 文本型 注释 = "提供所欲删除属性的名称,不能为空文本.">
+    {
+        @ CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+        @ return (pWnd != NULL ? (INT_P)::RemoveProp (pWnd->m_hWnd, @<属性名称>.GetText ()) : 0);
+    }
+
+    方法 取分组编号 <公开 类型 = 整数 注释 = "返回本组件在设计时的分组编号,为-1表示无.">
+    {
+        返回 (取组件分组编号 (取窗口句柄 ()))
+    }
+
+    方法 取组件分组编号 <公开 静态 类型 = 整数 注释 = "返回所指定窗口句柄的组件在设计时的分组编号,为-1表示该组件设计时未分组或所提供窗口句柄不对应一个火山窗口组件." @嵌入式方法 = "">
+    参数 组件窗口句柄值 <类型 = 变整数 注释 = "提供所欲获取其设计时分组编号的组件窗口句柄">
+    {
+        @ ::GetVolControlGroupNumber ((HWND)@<组件窗口句柄值>)
+    }
+
+    方法 置组件分组编号 <公开 静态 类型 = 逻辑型 注释 = "设置所指定窗口句柄的组件在设计时的分组编号" 返回值注释 = "成功返回真,失败返回假." @嵌入式方法 = "">
+    参数 组件窗口句柄值 <类型 = 变整数 注释 = "提供所欲设置其设计时分组编号的组件窗口句柄">
+    参数 新分组编号 <类型 = 整数 注释 = "提供所欲设置的新分组编号">
+    {
+        @ ::SetVolControlGroupNumber ((HWND)@<组件窗口句柄值>, @<新分组编号>)
+    }
+
+    # --
+    #
+    # @begin
+    #
+    # <> <include>
+    #
+    # // 返回对应的MFC窗口对象的记录对象,必定不为NULL.
+    # inline_ CMfcWndObject* GetMfcWndObject ()
+    # {
+    #     ASSERT (ASSER_P_IS_INSTANCE_OF (GetRefObject (), CMfcWndObject) &&
+    #             ((CMfcWndObject*)GetRefObject ())->GetRefWndPtr () != NULL);  // 在初始化时直接置入了
+    #     return (CMfcWndObject*)GetRefObject ();
+    # }
+    #
+    # // 返回所设置的具有有效窗口句柄的本地MFC窗口对象(即该本地窗口已经被创建),不存在返回NULL.
+    # inline_ CWnd* GetMfcWndPtrWithValidHWnd ()
+    # {
+    #     return GetMfcWndObject ()->SafeGetRefWndPtrWithValidHWnd ();
+    # }
+    # inline_ CWnd* GetMfcWndPtrWithValidHWndNotNullObject ()
+    # {
+    #     return (IsNullObject () ? NULL : GetMfcWndObject ()->SafeGetRefWndPtrWithValidHWnd ());
+    # }
+    # inline_ CWnd* SafeGetMfcWndPtrWithValidHWnd ()
+    # {
+    #     return (this == NULL ? NULL : GetMfcWndPtrWithValidHWnd ());
+    # }
+    #
+    # // 返回所对应的窗口句柄,不存在返回NULL.
+    # inline_ HWND GetMfcWndHandle ()
+    # {
+    #     return GetMfcWndObject ()->SafeGetRefWndHandle ();
+    # }
+    # inline_ HWND SafeGetMfcWndHandle ()
+    # {
+    #     return (this == NULL ? NULL : GetMfcWndHandle ());
+    # }
+    #
+    # // 返回所设置的本地MFC窗口对象,必定不为NULL.
+    # inline_ CWnd* GetMfcWndPtr ()
+    # {
+    #     return GetMfcWndObject ()->GetRefWndPtr ();
+    # }
+    #
+    # // 如果当前组件已经创建,返回其实时风格,否则返回其初始风格.
+    # inline_ DWORD GetControlStyle ()
+    # {
+    #     CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+    #     return (pWnd == NULL ? GetMfcWndObject ()->m_dwAttrInitialStyle : pWnd->GetStyle ());
+    # }
+    #
+    # // 如果当前组件已经创建,返回其实时扩展风格,否则返回其初始扩展风格.
+    # inline_ DWORD GetControlExStyle ()
+    # {
+    #     CWnd* pWnd = GetMfcWndPtrWithValidHWnd ();
+    #     return (pWnd == NULL ? GetMfcWndObject ()->m_dwAttrInitialExStyle : pWnd->GetExStyle ());
+    # }
+    #
+    # // 在组件类中如果需要构造初始化其自身的数据,需要重写本方法而不是使用"_OnInitExtra",因为其在DECLARE_MFC_CONTROL中已经被定义使用.
+    # inline_ void _OnInitControl ()  {  }
+    #
+    # // 定义额外的对象事件挂接处理方法,本方法会在本对象中的事件被挂接/取消挂接后被调用.
+    # inline_ void @an<_OnAfterEventAttached> (BOOL blAttach)
+    # {
+    #     if (blAttach) AttachEventListener (); else DetachEventListener ();
+    # }
+    #
+    # // 窗口内成员组件的创建方法,必须定义具有此名称的方法,用作提供给编译器调用.
+    # BOOL @an<CreateVolControl> (@dt<窗口组件>* pParentControl, INT nLeft, INT nTop, INT nWidth, INT nHeight, INT nID, INT nGroupNumber = -1)
+    # {
+    #     CWnd* pParentWnd = pParentControl->SafeGetMfcWndPtrWithValidHWnd ();
+    #     CVolNativeWndCreateParam param (pParentWnd, nLeft, nTop, nWidth, nHeight, nID, nGroupNumber);
+    #     if (pParentWnd != NULL)  param.m_pParentWndObject = pParentControl;
+    #     return CreateMfcControl (&param);
+    # }
+    #
+    # // 本MFC界面库所使用的组件创建方法(继承类将其实现)
+    # //   pCreateParam: 提供组件创建信息,必定不为NULL,注意其可能会被修改.
+    # virtual BOOL CreateMfcControl (CVolNativeWndCreateParam* pCreateParam)
+    # {
+    #     ASSERT (pCreateParam != NULL);
+    #     return FALSE;  // 直接返回失败
+    # }
+    #
+    # // 用作在创建组件对应本地窗口前修改其创建参数(一般用作处理支持在所处组件创建前设置的组件属性)或进行一些额外处理
+    # //   pCreateParam: 创建参数,必定不为NULL,可以对其中的内容进行修改.
+    # virtual void OnBeforeNativeWndCreate (CVolNativeWndCreateParam* pCreateParam);
+    #
+    # // 用作在创建组件对应本地窗口前计算填写组件的相关位置创建参数,本调用之前必定已经调用了OnBeforeNativeWndCreate.
+    # virtual void OnCalcNativeWndPos (CVolNativeWndCreateParam* pCreateParam)  {  }
+    #
+    # // 用作在创建组件对应本地窗口后进行相关处理
+    # //   pWnd: 所已经创建的组件对应本地窗口,必定不为NULL且存在有效窗口句柄.
+    # //   pCreateParam: 所使用的创建参数,必定不为NULL.
+    # virtual void OnAfterNativeWndCreate (CWnd* pWnd, const CVolNativeWndCreateParam* pCreateParam);
+    #
+    # // 用作接收来自本地窗口组件的消息,返回是否已经将其处理,已处理则不再向后传递.
+    # virtual BOOL OnProcessNativeWndMsg (MSG* pMsg);
+    #
+    # // 用作在本组件对象的内容被覆盖之前取消事件挂接
+    # virtual void OnBeforeDataOverwrite () override
+    # {
+    #     DetachEventListener ();
+    # }
+    #
+    # // 用作实现挂接或取消事件挂接
+    # virtual void AttachEventListener ()  {  }
+    # virtual void DetachEventListener ()  {  }
+    # virtual BOOL_P IsEventAttached ()  { return FALSE; }
+    # void AttachEventListenerIfNone ()  { if (IsEventAttached () == FALSE)  AttachEventListener (); }
+    #
+    # BOOL PopupSubMenuClass (INT xPos, INT yPos, CVolRuntimeClass* pVolMenuRuntimeClass, BOOL_P blpIsTrayMenu, INT_P npSubMenuIndex);
+    # <> </include>
+    #
+    # //--
+    #
+    # void @sn<current_class>::OnBeforeNativeWndCreate (CVolNativeWndCreateParam* pCreateParam)
+    # {
+    #     const CMfcWndObject* pMfcWndObject = GetMfcWndObject ();
+    #
+    #     pCreateParam->m_szCaption = pMfcWndObject->m_strAttrCaption.GetText ();
+    #     pCreateParam->m_dwStyle = pMfcWndObject->m_dwAttrInitialStyle;
+    #     pCreateParam->m_dwExStyle = pMfcWndObject->m_dwAttrInitialExStyle;
+    #
+    #     #ifdef @an<_VOL_FOR_UI_DESIGNER>  // 为编译设计器版本?
+    #         pCreateParam->m_dwStyle |= WS_VISIBLE;  // 始终可视
+    #     #endif
+    #
+    #     if (pCreateParam->m_pParentWnd != NULL && (pCreateParam->m_dwStyle & WS_POPUP) == 0)
+    #         pCreateParam->m_dwStyle |= WS_CHILD;
+    #     else
+    #         pCreateParam->m_dwStyle &= ~WS_CHILD;
+    #
+    #     pCreateParam->m_hFont = GetMfcWndObject ()->CheckGetFont ();
+    # }
+    #
+    # void @sn<current_class>::OnAfterNativeWndCreate (CWnd* pWnd, const CVolNativeWndCreateParam* pCreateParam)
+    # {
+    #     if (pCreateParam->m_hFont != NULL)
+    #         pWnd->SendMessage (WM_SETFONT, (WPARAM)pCreateParam->m_hFont, MAKELPARAM (TRUE, 0));
+    #
+    #     if ((pCreateParam->m_dwStyle & WS_TABSTOP) == 0)  // 未设定需要停留焦点?
+    #     {
+    #         const DWORD dwCode = (DWORD)pWnd->SendMessage (WM_GETDLGCODE, 0, 0);
+    #         if ((dwCode & (DLGC_WANTALLKEYS | DLGC_WANTARROWS | DLGC_WANTCHARS | DLGC_WANTMESSAGE | DLGC_WANTTAB)) != 0)  // 需要进行键盘输入?
+    #              pWnd->ModifyStyle (0, WS_TABSTOP, (SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE));  // 初始设置为需要停留焦点
+    #     }
+    #
+    #     pCreateParam->CheckBorderStyle (pWnd);
+    #     ::SendMessage (pWnd->m_hWnd, MWM_RECORD_WND_VISIBLE_STATE, (WPARAM)((::GetWindowLong (pWnd->m_hWnd, GWL_STYLE) & WS_VISIBLE) != 0), _VOL_MSG_ACK);
+    #
+    #     if (pCreateParam->m_pParentWndObject != NULL)
+    #     {
+    #         ASSER_P_IS_VOL_INSTANCE_OF (pCreateParam->m_pParentWndObject, @dt<窗口组件>);
+    #         if (((@dt<窗口组件>*)pCreateParam->m_pParentWndObject)->GetMfcWndPtrWithValidHWnd () != NULL)
+    #             @<组件创建完毕> ((@dt<窗口组件>&)*pCreateParam->m_pParentWndObject, (INT)pCreateParam->m_nID);
+    #     }
+    # }
+    #
+    # BOOL @sn<current_class>::PopupSubMenuClass (INT xPos, INT yPos, CVolRuntimeClass* pVolMenuRuntimeClass, BOOL_P blpIsTrayMenu, INT_P npSubMenuIndex)
+    # {
+    #     if (pVolMenuRuntimeClass == NULL)
+    #         return FALSE;
+    #
+    #     @dt<菜单类>* pVolMenuObject = (@dt<菜单类>*)pVolMenuRuntimeClass->CreateObject ();
+    #     ASSERT (P_IS_VOL_INSTANCE_OF (pVolMenuObject, @dt<菜单类>));  // pVolMenuRuntimeClass必须为菜单类或其继承类的运行时类型
+    #     CVolObjectDestroyer destroyer (pVolMenuObject);
+    #
+    #     return pVolMenuObject->GetVolMenu ()->PopupSubMenu (xPos, yPos, blpIsTrayMenu, GetMfcWndHandle (), npSubMenuIndex);
+    # }
+    #
+    # BOOL @sn<current_class>::OnProcessNativeWndMsg (MSG* pMsg)
+    # {
+    #     if (@<组件消息过滤> ((INT_P)pMsg->hwnd, (INT)pMsg->message, (INT_P)pMsg->wParam, (INT_P)pMsg->lParam, (INT_P)pMsg) != 0)
+    #         return TRUE;
+    #
+    #     switch (pMsg->message)
+    #     {
+    #     case WM_LBUTTONDOWN:
+    #     case WM_LBUTTONUP:
+    #     case WM_LBUTTONDBLCLK:
+    #     case WM_RBUTTONDOWN:
+    #     case WM_RBUTTONUP:
+    #     case WM_MBUTTONDOWN:
+    #     case WM_MBUTTONUP:
+    #     case WM_MOUSEMOVE:  {
+    #         const INT xPos = (INT)GET_X_LPARAM (pMsg->lParam);
+    #         const INT yPos = (INT)GET_Y_LPARAM (pMsg->lParam);
+    #
+    #         INT nKeyState = 0;
+    #         if ((pMsg->wParam & MK_CONTROL) != 0)
+    #             nKeyState |= KYS_CONTROL;
+    #         if ((pMsg->wParam & MK_SHIFT) != 0)
+    #             nKeyState |= KYS_SHIFT;
+    #         if (GetKeyState (VK_MENU) < 0)
+    #             nKeyState |= KYS_ALT;
+    #
+    #         switch (pMsg->message)
+    #         {
+    #         case WM_LBUTTONDOWN:  if (@<鼠标左键被按下> (xPos, yPos, nKeyState) != 0)  return TRUE;  break;
+    #         case WM_LBUTTONUP:  if (@<鼠标左键被放开> (xPos, yPos, nKeyState) != 0)  return TRUE;  break;
+    #         case WM_LBUTTONDBLCLK:  if (@<被双击> (xPos, yPos, nKeyState) != 0)  return TRUE;  break;
+    #         case WM_RBUTTONDOWN:  if (@<鼠标右键被按下> (xPos, yPos, nKeyState) != 0)  return TRUE;  break;
+    #         case WM_RBUTTONUP:  if (@<鼠标右键被放开> (xPos, yPos, nKeyState) != 0)  return TRUE;  break;
+    #         case WM_MBUTTONDOWN:  if (@<鼠标中键被按下> (xPos, yPos, nKeyState) != 0)  return TRUE;  break;
+    #         case WM_MBUTTONUP:  if (@<鼠标中键被放开> (xPos, yPos, nKeyState) != 0)  return TRUE;  break;
+    #         case WM_MOUSEMOVE:  if (@<鼠标位置被移动> (xPos, yPos, nKeyState) != 0)  return TRUE;  break;
+    #         DEFAULT_FAIL
+    #         }
+    #         break;  }
+    #
+    #     case WM_MOUSEWHEEL:  {
+    #         INT nKeyState = 0;
+    #         if ((pMsg->wParam & MK_CONTROL) != 0)
+    #             nKeyState |= KYS_CONTROL;
+    #         if ((pMsg->wParam & MK_SHIFT) != 0)
+    #             nKeyState |= KYS_SHIFT;
+    #         if (GetKeyState (VK_MENU) < 0)
+    #             nKeyState |= KYS_ALT;
+    #
+    #         if (@<滚轮被滚动> ((INT)(SHORT)HIWORD (pMsg->wParam) / WHEEL_DELTA, nKeyState) != 0)
+    #             return TRUE;
+    #         break;  }
+    #
+    #     case WM_KEYDOWN:
+    #     case WM_SYSKEYDOWN:  {
+    #         const UINT_P upKeyCode = GetKeyCodeFromKeyMessageWParam (pMsg->wParam);
+    #         if (@<按下某键> ((INT)(upKeyCode & ~(KYS_CONTROL | KYS_SHIFT | KYS_ALT)), (INT)(upKeyCode & (KYS_CONTROL | KYS_SHIFT | KYS_ALT))) != 0)
+    #             return TRUE;
+    #         break;  }
+    #
+    #     case WM_KEYUP:
+    #     case WM_SYSKEYUP:  {
+    #         const UINT_P upKeyCode = GetKeyCodeFromKeyMessageWParam (pMsg->wParam);
+    #         if (@<放开某键> ((INT)(upKeyCode & ~(KYS_CONTROL | KYS_SHIFT | KYS_ALT)), (INT)(upKeyCode & (KYS_CONTROL | KYS_SHIFT | KYS_ALT))) != 0)
+    #             return TRUE;
+    #         break;  }
+    #
+    #     case WM_SETFOCUS:
+    #         if (@<获得焦点> () != 0)
+    #             return TRUE;
+    #         break;
+    #
+    #     case WM_KILLFOCUS:
+    #         if (@<失去焦点> () != 0)
+    #             return TRUE;
+    #         break;
+    #
+    #     case WM_CHAR:  {
+    #         const INT_P npResult = @<字符输入> ((TCHAR)pMsg->wParam);
+    #         if (npResult < 0)
+    #             return TRUE;
+    #         if (npResult > 0)
+    #             pMsg->wParam = (WPARAM)npResult;
+    #         break;  }
+    #
+    #     case WM_SETCURSOR:
+    #         if (GetMfcWndObject ()->m_hAttrCustomCursur != NULL)
+    #         {
+    #             ::SetCursor (GetMfcWndObject ()->m_hAttrCustomCursur);
+    #             return TRUE;
+    #         }
+    #         break;
+    #
+    #     case WM_DROPFILES:  {
+    #         const HDROP hDrop = (HDROP)pMsg->wParam;
+    #         const UINT uFileNum = ::DragQueryFile (hDrop, 0xFFFFFFFF, NULL, 0);
+    #         @dt<文本数组类> saryFileNames;
+    #         CMStringArray& sary = saryFileNames.data ();
+    #         TCHAR path [MAX_PATH];
+    #         for (UINT i = 0; i < uFileNum; i++)
+    #         {
+    #             ::DragQueryFile (hDrop, i, path, MAX_PATH);
+    #             sary.Add (path);
+    #         }
+    #         ::DragFinish (hDrop);
+    #         if (sary.IsEmpty () == FALSE)
+    #             @<文件被拖放> (saryFileNames);
+    #         break;  }
+    #     }
+    #
+    #     return FALSE;
+    # }
+    #
+    # @end
+}
+
+# ===
+
+类 窗口容器组件 <公开 基础类 = 窗口组件 注释 = "所有窗口容器组件的基础类" @文档 = "category = \"窗口组件.基础类\"" @输出名 = "@CVolWinContainer">
+{
+    方法 创建容器组件 <公开 类型 = 逻辑型 注释 = "使用调用本方法的本类实际继承类的设计时尺寸创建对应的窗口组件." 注释 = "如果调用本方法的继承类未被设计过布局,所创建的组件尺寸将为0." 返回值注释 = "返回是否成功"
+            @嵌入式方法 = "">
+    参数 父窗口容器组件 <类型 = 窗口容器组件 注释 = "提供所创建组件所处的父窗口容器组件">
+    参数 左边位置 <类型 = 整数 注释 = "提供所创建组件在所处父窗口容器组件中的左边横向坐标位置">
+    参数 顶边位置 <类型 = 整数 注释 = "提供所创建组件在所处父窗口容器组件中的顶边纵向坐标位置">
+    参数 ID值 <类型 = 整数 注释 = "指定所创建组件在其父窗口容器组件中的ID值" @默认值 = 0xFFFF>
+    参数 所处分组编号 <类型 = 整数 注释 = "指定所创建组件所处的设计时分组编号" @默认值 = -1>
+    {
+        @ @sn<this>.@an<CreateVolControl> (&@<父窗口容器组件>, @<左边位置>, @<顶边位置>, INT_MIN, INT_MIN, @<ID值>, @<所处分组编号>)
+    }
+
+    方法 创建时宽度 <公开 属性读 类型 = 整数 注释 = "返回本组件创建时的宽度" @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_nCreateWidth
+    }
+
+    方法 创建时高度 <公开 属性读 类型 = 整数 注释 = "返回本组件创建时的高度" @嵌入式方法 = "">
+    {
+        @ @sn<this>.m_nCreateHeight
+    }
+
+    方法 取所有子组件句柄 <公开 类型 = 整数 注释 = "获取本容器组件所有直接子组件的窗口句柄值" 返回值注释 = "返回填入到\"结果数组\"参数数组中的窗口句柄数目">
+    参数 结果句柄数组 <类型 = 变整数数组类 注释 = "用作存储所获得的所有直接子组件的窗口句柄值">
+    {
+        结果句柄数组.删除所有成员 ()
+        @ const HWND hParentWnd = GetMfcWndHandle ();
+        @ if (hParentWnd != NULL)
+        @ {
+        @     for (HWND hWndChild = ::GetWindow (hParentWnd, GW_CHILD); hWndChild != NULL; hWndChild = ::GetWindow (hWndChild, GW_HWNDNEXT))
+        @         @<结果句柄数组>.data ().Add ((INT_P)hWndChild);
+        @ }
+        返回 (结果句柄数组.取成员数 ())
+    }
+
+    方法 显示子组件组 <公开 注释 = "显示或隐藏本容器组件中的一组设计时指定的子组件(仅限直接子组件)" @嵌入式方法 = "">
+    参数 子组件分组编号 <类型 = 整数 注释 = "提供需处理子组件位于的设计时分组编号,为-1表示没有进行分组的所有子组件.">
+    参数 是否显示 <类型 = 逻辑型 注释 = "为真则显示位于该分组内的所有子组件,为假则隐藏." @默认值 = 真>
+    参数 处理其它组子组件 <类型 = 逻辑型 注释 = "为真则处理所有位于其它分组内的子组件,处理方式为相反,即: \"是否显示\"参数为真则隐藏,否则显示." @默认值 = 真>
+    参数 处理未分组子组件 <类型 = 逻辑型 注释 = "为真则处理所有未进行分组的子组件,处理方式为相反,即: \"是否显示\"参数为真则隐藏,否则显示." @默认值 = 假>
+    {
+        @ @sn<this>.ProcessChildControlGroup (@<子组件分组编号>, 0, @<是否显示>, @<处理其它组子组件>, @<处理未分组子组件>)
+    }
+
+    方法 禁止子组件组 <公开 注释 = "禁止或允许对本容器组件中的一组设计时指定的子组件(仅限直接子组件)进行操作" @嵌入式方法 = "">
+    参数 子组件分组编号 <类型 = 整数 注释 = "提供需处理子组件位于的设计时分组编号,为-1表示没有进行分组的所有子组件.">
+    参数 是否禁止 <类型 = 逻辑型 注释 = "为真则禁止位于该分组内的所有子组件,为假则允许." @默认值 = 真>
+    参数 处理其它组子组件 <类型 = 逻辑型 注释 = "为真则处理所有位于其它分组内的子组件,处理方式为相反,即: \"是否禁止\"参数为真则允许,否则禁止." @默认值 = 真>
+    参数 处理未分组子组件 <类型 = 逻辑型 注释 = "为真则处理所有未进行分组的子组件,处理方式为相反,即: \"是否禁止\"参数为真则允许,否则禁止." @默认值 = 假>
+    {
+        @ @sn<this>.ProcessChildControlGroup (@<子组件分组编号>, 1, (@<是否禁止> == FALSE), @<处理其它组子组件>, @<处理未分组子组件>)
+    }
+
+    # --
+    #
+    # @begin
+    #
+    # <> <include>
+    # virtual INT @an<GetDesignClientWidth> () const  {  return 0;  }  // 所有被用户设计过布局的本类继承类编译器都会自动生成本方法的覆盖方法以返回正确的布局用户区宽度.
+    # virtual INT @an<GetDesignClientHeight> () const  {  return 0;  }  // 同上
+    # virtual void @an<OnWinContainerCreated> ()  {  }  // 同上
+    # virtual void OnBeforeNativeWndCreate (CVolNativeWndCreateParam* pCreateParam) override;
+    # virtual void OnCalcNativeWndPos (CVolNativeWndCreateParam* pCreateParam) override;
+    # void ProcessChildControlGroup (INT_P npReqGroupNumber, INT_P npOperType, BOOL_P blpParam, BOOL_P blpProcessNotMatchChilds, BOOL_P blpProcessNotInsideGroupChilds);
+    # INT m_nCreateWidth = 0, m_nCreateHeight = 0;
+    # <> </include>
+    #
+    # void @sn<current_class>::ProcessChildControlGroup (INT_P npReqGroupNumber, INT_P npOperType, BOOL_P blpParam, BOOL_P blpProcessNotMatchChilds, BOOL_P blpProcessNotInsideGroupChilds)
+    # {
+    #     const HWND hParentWnd = GetMfcWndHandle ();
+    #     if (hParentWnd == NULL)  return;
+    #     for (HWND hWndChild = ::GetWindow (hParentWnd, GW_CHILD); hWndChild != NULL; hWndChild = ::GetWindow (hWndChild, GW_HWNDNEXT))
+    #     {
+    #         const INT_P npGroupNumber = ::GetVolControlGroupNumber (hWndChild);
+    #         if (npGroupNumber != npReqGroupNumber && ((npGroupNumber < 0 ? blpProcessNotInsideGroupChilds : blpProcessNotMatchChilds) == FALSE))  continue;
+    #         const BOOL_P blpValue = (npGroupNumber == npReqGroupNumber ? blpParam : !blpParam);
+    #         switch (npOperType)
+    #         {
+    #         case 0: ::ShowWindow (hWndChild, (blpValue ? SW_SHOWNA : SW_HIDE));  break;
+    #         case 1: ::EnableWindow (hWndChild, (BOOL)blpValue);  break;
+    #         }
+    #     }
+    # }
+    #
+    # void @sn<current_class>::OnBeforeNativeWndCreate (CVolNativeWndCreateParam* pCreateParam)
+    # {
+    #     BaseClass::OnBeforeNativeWndCreate (pCreateParam);
+    #     pCreateParam->m_dwExStyle |= WS_EX_CONTROLPARENT;
+    # }
+    #
+    # void @sn<current_class>::OnCalcNativeWndPos (CVolNativeWndCreateParam* pCreateParam)
+    # {
+    #     BaseClass::OnCalcNativeWndPos (pCreateParam);
+    #     
+    # #ifndef @an<_VOL_FOR_UI_DESIGNER>  // 不为编译设计器版本?
+    #     if (pCreateParam->m_nWidth == INT_MIN || pCreateParam->m_nHeight == INT_MIN)  // 需要使用设计时尺寸?
+    #     {
+    #         // 由于设计时尺寸为用户区尺寸,因此此处要转换为窗口尺寸.
+    #         CMRect rt (0, 0, @an<GetDesignClientWidth> (), @an<GetDesignClientHeight> ());
+    # #else
+    #     {
+    #         // 在设计器版本中,始终为用户区尺寸.
+    #         CMRect rt (0, 0, pCreateParam->m_nWidth, pCreateParam->m_nHeight);
+    # #endif
+    #         if (rt.right > 0 && rt.bottom > 0 &&  // 存在有效设计尺寸?
+    #                 AdjustWindowRectEx (&rt, pCreateParam->m_dwStyle,
+    #                     (pCreateParam->m_pParentWnd == NULL && pCreateParam->m_pVolMenu != NULL && pCreateParam->m_pVolMenu->IsEmpty () == FALSE),
+    #                     pCreateParam->m_dwExStyle))
+    #         {
+    #             pCreateParam->m_nWidth = rt.Width ();
+    #             pCreateParam->m_nHeight = rt.Height ();
+    #         }
+    #         else
+    #             pCreateParam->m_nWidth = pCreateParam->m_nHeight = 0;
+    #     }
+    #     m_nCreateWidth = pCreateParam->m_nWidth;
+    #     m_nCreateHeight = pCreateParam->m_nHeight;
+    # }
+    #
+    # @end
+}
+
+# ===
+
+类 消息过滤器类 <公开 注释 = "用作接收所挂接窗口组件的消息" @视窗.后缀文本 = "public IVolWindowProcFilter">
+{
+    变量 所挂接窗口句柄 <公开 类型 = 变整数 注释 = "提供当前所已经挂接到窗口组件的句柄值,为0表示尚未被挂接.">
+
+    方法 类_清理
+    {
+        取消挂接 ()
+    }
+
+    方法 消息过滤 <公开 定义事件 类型 = 整数 注释 = "当接收到所挂接窗口组件的消息后,本事件被发送." 返回值注释 = "返回0表示允许消息继续向后传递并处理,返回1表示取消掉该消息的后续处理.">
+    参数 窗口句柄 <类型 = 变整数 注释 = "提供消息所对应的窗口句柄(HWND)">
+    参数 消息值 <类型 = 整数 注释 = "提供消息的具体值">
+    参数 消息参数1 <类型 = 变整数 注释 = "提供消息所附带的参数1的值">
+    参数 消息参数2 <类型 = 变整数 注释 = "提供消息所附带的参数2的值">
+    参数 返回值 <类型 = 变整数类 注释 = "当本方法返回假时用作提供具体的返回值,默认为0.">
+
+    方法 挂接 <公开 类型 = 逻辑型 注释 = "  将本消息过滤器挂接到所指定的窗口组件,挂接后该窗口组件的" 注释 = "所有Windows消息都会首先调用本类的\"消息过滤\"事件进行过滤."
+            返回值注释 = "挂接成功返回真,失败返回假.">
+    参数 欲挂接的组件 <类型 = 窗口组件 注释 = "提供欲将本消息过滤器挂接到的窗口组件">
+    {
+        返回 (挂接2 (欲挂接的组件.取窗口句柄 ()))
+    }
+
+    方法 挂接2 <公开 类型 = 逻辑型 注释 = "  将本消息过滤器挂接到所指定的窗口组件,挂接后该窗口组件的" 注释 = "所有Windows消息都会首先调用本类的\"消息过滤\"事件进行过滤."
+            返回值注释 = "挂接成功返回真,失败返回假.">
+    参数 欲挂接组件的句柄 <类型 = 变整数 注释 = "提供欲将本消息过滤器挂接到窗口组件的句柄值">
+    {
+        取消挂接 ()  // 取消先前可能已有的挂接
+        @ if (@<欲挂接组件的句柄> != 0 && CVolWindowProcFilters::sRegisterFilter ((HWND)@<欲挂接组件的句柄>, this))
+        {
+            所挂接窗口句柄 = 欲挂接组件的句柄
+            返回 (真)
+        }
+        返回 (假)
+    }
+
+    方法 取消挂接 <公开 注释 = "如果本消息过滤器已经挂接到窗口组件,取消其挂接." 注释 = "本方法调用不是必需的,本类对象被销毁时,将自动调用本方法.">
+    {
+        如果 (所挂接窗口句柄 != 0)
+        {
+            @ CVolWindowProcFilters::sUnregisterFilter ((HWND)@<所挂接窗口句柄>, this);
+            所挂接窗口句柄 = 0
+        }
+    }
+
+    # --
+    # @begin
+    # <> <include>
+    # virtual BOOL_P FilterBeforeDefProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) override;
+    # <> </include>
+    # BOOL_P @sn<current_class>::FilterBeforeDefProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult)
+    # {
+    #     @dt<变整数类> r;
+    #     if (@<消息过滤> ((INT_P)hWnd, (INT)message, (INT_P)wParam, (INT_P)lParam, r) != 0)
+    #     {
+    #         lResult = (LRESULT)r.@n<变整数类.值>;
+    #         return TRUE;
+    #     }
+    #     return FALSE;
+    # }
+    # @end
+}
+
+# ===
+
+类 常用界面功能类 <公开 @文档 = "category = \"常用功能\"" @全局类 = 真>
+{
+    方法 处理事件 <公开 静态 注释 = "暂时转让控制权,以便让 Windows 操作系统有机会处理其它的如用户键盘或鼠标输入等事件." 注释 = "直到操作系统处理并发送完程序消息队列中的所有事件后,本方法才会返回.">
+    {
+        @ CWinThread* pWinThread = AfxGetThread ();
+        @ if (pWinThread != NULL)
+        @ {
+        @     MSG msg;
+        @     while (::PeekMessage (&msg, NULL, NULL, NULL, PM_NOREMOVE) && msg.message != WM_QUIT)
+        @         AfxGetThread ()->PumpMessage ();
+        @ }
+    }
+
+    方法 界面延时 <公开 静态 注释 = "延时所指定的时间,本方法不影响界面更新.">
+    参数 所欲延迟的时间 <类型 = 整数 注释 = "提供所欲延迟的时间周期,单位毫秒.">
+    {
+        @ const HANDLE hTimer = ::CreateWaitableTimer (NULL, FALSE, NULL);
+        @ if (hTimer == NULL)  return;
+        @ LARGE_INTEGER liDueTime;
+        @ liDueTime.QuadPart = (LONGLONG)-10000 * (LONGLONG)MAX (1, @<所欲延迟的时间>);
+        @ if (::SetWaitableTimer (hTimer, &liDueTime, 0, NULL, NULL, FALSE))
+        @ {
+        @     while (TRUE)
+        @     {
+        @         const DWORD dwResult = ::MsgWaitForMultipleObjects (1, &hTimer, FALSE, INFINITE, QS_ALLEVENTS);
+        @         if (dwResult == WAIT_FAILED || dwResult == WAIT_OBJECT_0)
+        @             break;
+        @         @<处理事件> ();
+        @     }
+        @ }
+        @ ::CloseHandle (hTimer);
+    }
+}
+
+# ===
+
+类 菜单类 <公开 基础类 = 可设计类 注释 = "  用作记录MFC菜单对象,提供有对应的菜单设计器,用户可以在" 注释 = "所有本类的继承类上点击右键,在弹出菜单中选择打开该设计器" 注释 = "进行菜单设计."
+        编辑时信息 = "16153F, 0, 0, 0" @文档 = "category = \"常用功能\""
+        @设计器 = "name = \"菜单设计器\"\r\ndll_file_name\r\n{\r\n    x64 = \"designer\\mfc_designer_x64.dll\"\r\n    win32 = \"designer\\mfc_designer_win32.dll\"\r\n}\r\nauto_generate_mark = \"mfc\"\r\nuser_param = 1"
+        @可插入程序类 = "icon=\"res\\menu.bmp\"\r\nexplain=\"在所插入新菜单类上单击鼠标右键,选择\\\"打开菜单设计器\\\"菜单项即可设计该菜单的内容.\""
+        @视窗.外部源文件 = "..\\base\\libs\\win_base\\cpp\\vol_menu.cpp">
+{
+    方法 重载 <公开 注释 = "如果本菜单的内容被修改,执行本方法可以将其重置到设计时状态.">
+    {
+        @ if (m_pRefObject != NULL)
+        @     ((CRefVolMenu*)m_pRefObject)->LoadFromDesignContent (NULL);
+    }
+
+    方法 删除菜单项 <公开 类型 = 逻辑型 注释 = "删除所指定ID的菜单项,返回是否成功." @嵌入式方法 = "">
+    参数 所欲删除菜单项ID <类型 = 整数>
+    {
+        @ (BOOL)@sn<this>.GetVolMenu ()->DeleteMenuItem ((UINT_P)@<所欲删除菜单项ID>)
+    }
+
+    方法 插入菜单项 <公开 类型 = 整数 注释 = "插入一个新的菜单项目" 返回值注释 = "成功返回所插入菜单项的ID值,失败或插入分隔条返回0." @嵌入式方法 = "">
+    参数 新菜单项ID <类型 = 整数 注释 = "指定所欲插入新菜单项的ID值,必须尚不存在,否则将插入失败.如果为0,则自动计算使用一个不重复的ID值." @默认值 = 0>
+    参数 新菜单项标题 <类型 = 文本型 注释 = "提供新菜单项的标题文本,如果为空文本,则插入一个分隔条.">
+    参数 插入位置菜单项ID <类型 = 整数 注释 = "如果\"是否插入在尾部\"参数值为假,新菜单项将插入在为该ID的已有菜单项前面.">
+    参数 是否插入在尾部 <类型 = 逻辑型 注释 = "如果本参数值为真,则将始终插入到\"插入位置菜单项ID\"参数所指定菜单项所处子菜单的尾部." @默认值 = 假>
+    参数 新菜单项提示文本 <类型 = 文本型 注释 = "提供新菜单项的提示文本" @默认值 = "">
+    参数 是否选中 <类型 = 逻辑型 注释 = "是否选中所插入的新菜单项" @默认值 = 假>
+    参数 是否禁止 <类型 = 逻辑型 注释 = "是否禁止所插入的新菜单项" @默认值 = 假>
+    参数 图标索引位置 <类型 = 整数 注释 = "提供菜单项的图标索引位置,为-1表示无." 注释 = "注意: 基本菜单类并不支持设置菜单项图标,此特性需要菜单继承类支持." @默认值 = -1>
+    {
+        @ (INT)@sn<this>.GetVolMenu ()->InsertNewMenuItem ((UINT_P)@<插入位置菜单项ID>, @<是否插入在尾部>, (UINT_P)@<新菜单项ID>, @<新菜单项标题>.GetText (), @<新菜单项提示文本>.GetText (), @<是否选中>, @<是否禁止>, @<图标索引位置>)
+    }
+
+    方法 选中菜单项 <公开 类型 = 逻辑型 注释 = "设置或取消所指定ID菜单项目的选中状态,返回是否成功." @禁止流程检查 = 真>
+    参数 所欲操作菜单项ID <类型 = 整数>
+    参数 是否选中 <类型 = 逻辑型>
+    {
+        @ return GetVolMenu ()->SetMenuItemFlags ((UINT_P)@<所欲操作菜单项ID>, (@<是否选中> ? VOLMF_CHECKED : 0), (@<是否选中> ? 0 : VOLMF_CHECKED), 0);
+    }
+
+    方法 翻转菜单项选中状态 <公开 类型 = 逻辑型 注释 = "翻转所指定ID菜单项目的当前选中状态,返回是否成功." @嵌入式方法 = "">
+    参数 所欲操作菜单项ID <类型 = 整数>
+    {
+        @ @sn<this>.GetVolMenu ()->SetMenuItemFlags ((UINT_P)@<所欲操作菜单项ID>, 0, 0, VOLMF_CHECKED)
+    }
+
+    方法 允许菜单项 <公开 类型 = 逻辑型 注释 = "设置或取消所指定ID菜单项的操作允许状态,返回是否成功." @禁止流程检查 = 真>
+    参数 所欲操作菜单项ID <类型 = 整数>
+    参数 是否允许操作 <类型 = 逻辑型 注释 = "指定是否允许用户操作菜单项">
+    {
+        @ return GetVolMenu ()->SetMenuItemFlags ((UINT_P)@<所欲操作菜单项ID>, (@<是否允许操作> ? 0 : VOLMF_DISABLED), (@<是否允许操作> ? VOLMF_DISABLED : 0), 0);
+    }
+
+    方法 是否被选中 <公开 类型 = 逻辑型 注释 = "返回所指定ID菜单项是否处于被选中状态,如果所指定菜单项不存在,将始终返回假." @禁止流程检查 = 真>
+    参数 所欲操作菜单项ID <类型 = 整数>
+    {
+        @ return ((GetVolMenu ()->GetMenuItemFlags ((UINT_P)@<所欲操作菜单项ID>) & VOLMF_CHECKED) != 0);
+    }
+
+    方法 是否被允许 <公开 类型 = 逻辑型 注释 = "返回所指定ID菜单项是否处于被允许操作状态,如果所指定菜单项不存在,将始终返回假." @禁止流程检查 = 真>
+    参数 所欲操作菜单项ID <类型 = 整数>
+    {
+        @ return ((GetVolMenu ()->GetMenuItemFlags ((UINT_P)@<所欲操作菜单项ID>) & VOLMF_DISABLED) == 0);
+    }
+
+    方法 取菜单项标题 <公开 类型 = 文本型 注释 = "返回所指定ID菜单项目的标题文本,如果所指定菜单项不存在,将返回空文本." @嵌入式方法 = "">
+    参数 所欲操作菜单项ID <类型 = 整数>
+    {
+        @ @sn<this>.GetVolMenu ()->GetMenuItemCaption ((UINT_P)@<所欲操作菜单项ID>)
+    }
+
+    方法 置菜单项标题 <公开 类型 = 逻辑型 注释 = "设置所指定ID菜单项目的标题文本,返回是否成功." @嵌入式方法 = "">
+    参数 所欲操作菜单项ID <类型 = 整数>
+    参数 所欲设置的标题 <类型 = 文本型>
+    {
+        @ @sn<this>.GetVolMenu ()->SetMenuItemCaption ((UINT_P)@<所欲操作菜单项ID>, @<所欲设置的标题>.GetText ())
+    }
+
+    方法 取菜单项提示 <公开 类型 = 文本型 注释 = "返回所指定ID菜单项目的提示文本,如果所指定菜单项不存在,将返回空文本." @嵌入式方法 = "">
+    参数 所欲操作菜单项ID <类型 = 整数>
+    {
+        @ @an<CVolString> (@sn<this>.GetVolMenu ()->GetMenuItemTip ((UINT_P)@<所欲操作菜单项ID>))
+    }
+
+    方法 置菜单项提示 <公开 类型 = 逻辑型 注释 = "设置所指定ID菜单项目的提示文本,返回是否成功." @嵌入式方法 = "">
+    参数 所欲操作菜单项ID <类型 = 整数>
+    参数 所欲设置的提示文本 <类型 = 文本型>
+    {
+        @ (BOOL)@sn<this>.GetVolMenu ()->SetMenuItemTip ((UINT_P)@<所欲操作菜单项ID>, @<所欲设置的提示文本>.GetText ())
+    }
+
+    方法 取菜单项图标索引 <公开 类型 = 整数 注释 = "返回所指定ID菜单项目的图标索引位置,如果所指定菜单项不存在,将返回-1." @嵌入式方法 = "">
+    参数 所欲操作菜单项ID <类型 = 整数>
+    {
+        @ @sn<this>.GetVolMenu ()->GetMenuItemImageIndex ((UINT_P)@<所欲操作菜单项ID>)
+    }
+
+    方法 置菜单项图标索引 <公开 类型 = 逻辑型 注释 = "设置所指定ID菜单项目的图标索引位置,返回是否成功." 注释 = "注意: 基本菜单类并不支持设置菜单项图标,此特性及所使用到的图片组需要由菜单继承类支持." @嵌入式方法 = "">
+    参数 所欲操作菜单项ID <类型 = 整数>
+    参数 所欲设置的图标索引 <类型 = 整数 注释 = "提供所欲设置的图标索引位置,为-1表示无.">
+    {
+        @ (BOOL)@sn<this>.GetVolMenu ()->SetMenuItemImageIndex ((UINT_P)@<所欲操作菜单项ID>, @<所欲设置的图标索引>)
+    }
+
+    # --
+    #
+    # @begin
+    #
+    # <> <include>
+    # @ inline_ @sn<current_class> (CRefVolMenu* pVolMenu) : @dt<可设计类> ()  { SetRefObject (pVolMenu); }
+    # inline_ CRefVolMenu* SafeGetVolMenu ()  { return (this == NULL ? NULL : GetVolMenu ()); }
+    # inline_ CRefVolMenu* GetVolMenuCheckNull ()  { return (IsNullObject () ? NULL : GetVolMenu ()); }
+    # CRefVolMenu* GetVolMenu (BOOL_P blpIsMDIMenu = FALSE);  // 返回对应的菜单对象,必定不为NULL.
+    # virtual CRefVolMenu* NewVolMenuObject ()  { return new CRefVolMenu; }
+    # <> </include>
+    #
+    # CRefVolMenu* @sn<current_class>::GetVolMenu (BOOL_P blpIsMDIMenu)
+    # {
+    #     if (m_pRefObject == NULL)
+    #         TakeOverNewRefObject (NewVolMenuObject ());
+    #     ((CRefVolMenu*)m_pRefObject)->LoadFromDesignContent (@an<VolGetDesignContent> (), blpIsMDIMenu);
+    #     return (CRefVolMenu*)m_pRefObject;
+    # }
+    #
+    # @end
+}
+
+# ===
+#
+# @begin
+#
+# // 用作定义组件类
+# //   control_native_class_name: 窗口组件所使用的本地类名
+# //   remove_style, remove_ex_style: 删除的默认窗口风格和扩展风格
+# //   add_style, add_ex_style: 加入的默认窗口风格和扩展风格
+# //   wnd_will_auto_delete: 提供所指定的control_native_class_name类MFC窗口在销毁时是否会自动删除自身(在PostNcDestroy中)
+# // 注: 由于_OnInitExtra和_OnCleanupExtra为从构造和析构函数中调用过来的,而在这两个函数中类的虚拟机制是不起作用的,因此其初始化代码必须写在此处.
+# @def_macro BASE_DECLARE_MFC_CONTROL(control_native_class_name, remove_style, remove_ex_style, add_style, add_ex_style, wnd_will_auto_delete)  \
+# <>         <include>  \
+#         void @an<_OnInitExtra> ();  \
+#         inline_ void @an<_OnCleanupExtra> ()  {  DetachEventListener ();  }  \
+#         virtual BOOL CreateMfcControl (CVolNativeWndCreateParam* pCreateParam) override;  \
+#         virtual BOOL OnNativeWndMsg (MSG* pMsg) override  {  return OnProcessNativeWndMsg (pMsg);  }  \
+#         virtual void AttachEventListener () override;  \
+#         virtual void DetachEventListener () override;  \
+#         virtual BOOL_P IsEventAttached () override;  \
+# <>         </include>  \
+#         void @sn<current_class>::@an<_OnInitExtra> ()  \
+#         {  \
+#             CMfcWndObject* pMfcWndObject = new CMfcWndObject (new control_native_class_name (), wnd_will_auto_delete);  \
+#             pMfcWndObject->m_dwAttrInitialStyle = (pMfcWndObject->m_dwAttrInitialStyle & ~(remove_style)) | add_style;  \
+#             pMfcWndObject->m_dwAttrInitialExStyle = (pMfcWndObject->m_dwAttrInitialExStyle & ~(remove_ex_style)) | add_ex_style;  \
+#             TakeOverNewRefObject (pMfcWndObject);  \
+#             _OnInitControl ();  \
+#         }  \
+#         BOOL @sn<current_class>::CreateMfcControl (CVolNativeWndCreateParam* pCreateParam)  \
+#         {  \
+#             ASSERT (pCreateParam != NULL);  \
+#             control_native_class_name* pWnd = (control_native_class_name*)GetMfcWndPtr ();  \
+#             ASSERT (pWnd != NULL);  \
+#             pWnd->m_nGroupNumber = pCreateParam->m_nGroupNumber;  \
+#             if (pWnd->m_hWnd == NULL)  \
+#             {  \
+#                 OnBeforeNativeWndCreate (pCreateParam);  \
+#                 OnCalcNativeWndPos (pCreateParam);  \
+#                 if (pWnd->CreateControl (pCreateParam))  \
+#                 {  \
+#                     if (pWnd->m_hWnd != NULL)  \
+#                         OnAfterNativeWndCreate (pWnd, pCreateParam);  \
+#                     return TRUE;  \
+#                 }  \
+#             }  \
+#             return FALSE;  \
+#         }
+#
+# // 用作定义组件类(设置/取回事件监听器基于所指定名称的方法)
+# //   event_interface_class_name: 窗口组件的本地类所使用的事件监听接口类名
+# //   md_get_event_listener: 窗口组件的本地类中取事件监听接口对象的方法名
+# //   md_set_event_listener: 窗口组件的本地类中设置事件监听接口对象的方法名
+# //   其它参数的解析见 BASE_DECLARE_MFC_CONTROL
+# // 注意: 使用本宏的组件类必须继承并实现了 event_interface_class_name 事件接口类.
+# @def_macro DECLARE_MFC_CONTROL(control_native_class_name, event_interface_class_name, md_get_event_listener, md_set_event_listener, remove_style, remove_ex_style, add_style, add_ex_style, wnd_will_auto_delete)  \
+#     @m<BASE_DECLARE_MFC_CONTROL> (control_native_class_name, remove_style, remove_ex_style, add_style, add_ex_style, wnd_will_auto_delete)  \ 
+#     void @sn<current_class>::AttachEventListener ()  \
+#     {  \
+#         control_native_class_name* pwndControl = (control_native_class_name*)GetMfcWndPtr ();  \
+#         if (pwndControl->md_get_event_listener () != (event_interface_class_name*)this)  \
+#             pwndControl->md_set_event_listener ((event_interface_class_name*)this);  \
+#     }  \
+#     void @sn<current_class>::DetachEventListener ()  \
+#     {  \
+#         control_native_class_name* pwndControl = (control_native_class_name*)GetMfcWndPtr ();  \
+#         if (pwndControl->md_get_event_listener () == (event_interface_class_name*)this)  \
+#             pwndControl->md_set_event_listener (NULL);  \
+#     }  \
+#     BOOL_P @sn<current_class>::IsEventAttached ()  \
+#     {  \
+#         return (((control_native_class_name*)GetMfcWndPtr ())->md_get_event_listener () != NULL);  \
+#     }
+#
+# // 用作定义组件类(设置/取回事件监听器基于所指定名称的成员变量)
+# //   var_event_listener: 窗口组件的本地类中保存事件监听接口对象的成员变量名
+# // 注意: 使用本宏的组件类必须继承并实现了 event_interface_class_name 事件接口类.
+# @def_macro DECLARE_MFC_CONTROL_V(control_native_class_name, event_interface_class_name, var_event_listener, remove_style, remove_ex_style, add_style, add_ex_style, wnd_will_auto_delete)  \
+#     @m<BASE_DECLARE_MFC_CONTROL> (control_native_class_name, remove_style, remove_ex_style, add_style, add_ex_style, wnd_will_auto_delete)  \ 
+#     void @sn<current_class>::AttachEventListener ()  \
+#     {  \
+#         ((control_native_class_name*)GetMfcWndPtr ())->var_event_listener = (event_interface_class_name*)this;  \
+#     }  \
+#     void @sn<current_class>::DetachEventListener ()  \
+#     {  \
+#         control_native_class_name* pwndControl = (control_native_class_name*)GetMfcWndPtr ();  \
+#         if (pwndControl->var_event_listener == (event_interface_class_name*)this)  \
+#             pwndControl->var_event_listener = NULL;  \
+#     }  \
+#     BOOL_P @sn<current_class>::IsEventAttached ()  \
+#     {  \
+#         return (((control_native_class_name*)GetMfcWndPtr ())->var_event_listener != NULL);  \
+#     }
+#
+# // 用作定义具有事件的组件类(设置/取回事件监听器基于所指定默认名称的成员变量),并且auto_delete_while_destroyed参数始终为假.
+# @def_macro DECLARE_MFC_CONTROL_DEFAULT(control_native_class_name, event_interface_class_name, remove_style, remove_ex_style, add_style, add_ex_style)  \
+#     @m<DECLARE_MFC_CONTROL_V> (control_native_class_name, event_interface_class_name, m_pEventListener, remove_style, remove_ex_style, add_style, add_ex_style, FALSE)
+#
+# @end
+#

@@ -1,0 +1,228 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件
+
+类 文件搜索标志常量 <公开 @常量类 = 整数>
+{
+    常量 文件名 <公开 值 = @EVERYTHING_REQUEST_FILE_NAME>
+    常量 路径 <公开 值 = @EVERYTHING_REQUEST_PATH>
+    常量 "//完整路径" <公开 值 = @EVERYTHING_REQUEST_FULL_PATH_AND_FILE_NAME>
+    常量 扩展名 <公开 值 = @EVERYTHING_REQUEST_EXTENSION>
+    常量 文件大小 <公开 值 = @EVERYTHING_REQUEST_SIZE>
+    常量 "//创建日期" <公开 值 = @EVERYTHING_REQUEST_DATE_CREATED 注释 = "这些注释的没有封装对应的api">
+    常量 "//修改日期" <公开 值 = @EVERYTHING_REQUEST_DATE_MODIFIED>
+    常量 "//访问日期" <公开 值 = @EVERYTHING_REQUEST_DATE_ACCESSED>
+    常量 属性 <公开 值 = @EVERYTHING_REQUEST_ATTRIBUTES>
+    常量 "//文件列表与名称" <公开 值 = @EVERYTHING_REQUEST_FILE_LIST_FILE_NAME 注释 = "1.4.1">
+    常量 "//链接数" <公开 值 = @EVERYTHING_REQUEST_RUN_COUNT>
+    常量 "//运行日期" <公开 值 = @EVERYTHING_REQUEST_DATE_RUN>
+    常量 "//最近修改日期" <公开 值 = @EVERYTHING_REQUEST_DATE_RECENTLY_CHANGED>
+    常量 "//高亮文件名" <值 = @EVERYTHING_REQUEST_HIGHLIGHTED_FILE_NAME>
+    常量 "//高亮路径" <值 = @EVERYTHING_REQUEST_HIGHLIGHTED_PATH>
+    常量 "//高亮全路径" <值 = @EVERYTHING_REQUEST_HIGHLIGHTED_FULL_PATH_AND_FILE_NAME>
+
+    #
+}
+
+类 文件搜索类 <公开 @视窗.外部头文件 = "Everything\\Everything.h" @视窗.附属文件.win32 = "Everything\\Everything32.dll"
+        @视窗.外部库.win32 = "Everything\\Everything32.lib" @视窗.附属文件.x64 = "Everything\\Everything64.dll"
+        @视窗.外部库.x64 = "Everything\\Everything64.lib" ""
+        @视窗.附属文件.win32 = "Everything\\x86\\Everything.exe\nEverything\\x86\\Everything.lng"
+        @视窗.附属文件.x64 = "Everything\\x64\\Everything.exe\nEverything\\x64\\Everything.lng">
+{
+    方法 类_初始化
+    {
+        如果 (进程_进程名称是否存在 ("Everything.exe") == 假)
+        {
+            运行f (取运行目录 () + "Everything.exe", 假, 0)
+        }
+
+    }
+
+    方法 置搜索关键字 <公开 @嵌入式方法 = "">
+    参数 关键字 <类型 = 文本型>
+    {
+        @ Everything_SetSearchW(@<关键字>.GetText())
+    }
+
+    变量 文件搜索标志 <类型 = 整数 值 = 0>
+
+    方法 添加搜索标志 <公开>
+    参数 标志 <类型 = 文件搜索标志常量>
+    {
+        文件搜索标志 = 位或 (文件搜索标志, (整数)标志)
+    }
+
+    # EVERYTHINGUSERAPI void EVERYTHINGAPI Everything_SetOffset(DWORD dwOffset);
+    #
+
+    方法 匹配路径 <公开 属性写 注释 = "是否只匹配路径" 折叠>
+    参数 是否只匹配路径 <类型 = 逻辑型>
+    {
+        @ Everything_SetMatchPath(@<是否只匹配路径>);
+    }
+
+    方法 匹配路径 <公开 属性读 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ Everything_GetMatchPath()
+    }
+
+    方法 区分大小写 <公开 属性写 折叠>
+    参数 是否区分 <类型 = 逻辑型>
+    {
+        @ Everything_SetMatchCase(@<是否区分>);
+    }
+
+    方法 区分大小写 <公开 属性读 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ Everything_GetMatchCase()
+    }
+
+    方法 完整匹配 <公开 属性写 折叠>
+    参数 是否完整匹配 <类型 = 逻辑型>
+    {
+        @ Everything_SetMatchWholeWord(是否完整匹配);
+    }
+
+    方法 完整匹配 <公开 属性读 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ Everything_GetMatchWholeWord()
+    }
+
+    方法 正则匹配 <公开 属性写 折叠>
+    参数 是否正则匹配 <类型 = 逻辑型>
+    {
+        @ Everything_SetRegex(@<是否正则匹配>);
+    }
+
+    方法 正则匹配 <公开 属性读 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ Everything_GetRegex()
+    }
+
+    方法 最大匹配数 <公开 属性写>
+    参数 数量 <类型 = 整数>
+    {
+        @ Everything_SetMax((DWORD)数量);
+    }
+
+    方法 最大匹配数 <公开 属性读 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (整数)Everything_GetMax()
+    }
+
+    #
+    #
+    #
+    #
+    # 查询相关---
+
+    方法 搜索 <公开 类型 = 文件搜索结果类>
+    参数 是否查询 <类型 = 逻辑型 @默认值 = 真>
+    {
+        如果 (文件搜索标志 == 0)
+        {
+            添加搜索标志 (文件搜索标志常量.文件名)
+            添加搜索标志 (文件搜索标志常量.路径)
+            添加搜索标志 (文件搜索标志常量.文件大小)
+        }
+        @ Everything_SetRequestFlags(@<文件搜索标志>);
+        @ Everything_QueryW(@<是否查询>);
+        变量 结果 <类型 = 文件搜索结果类>
+        返回 (结果)
+    }
+
+    #
+
+    方法 重置 <公开 @嵌入式方法 = "">
+    {
+        @ Everything_Reset()
+    }
+
+    方法 清空 <公开 @嵌入式方法 = "">
+    {
+        @ Everything_CleanUp()
+    }
+
+    #
+    #
+}
+
+类 文件搜索结果类 <公开>
+{
+    方法 取成员数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ Everything_GetNumResults()
+    }
+
+    方法 取文件大小 <公开 类型 = 长整数 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数>
+    {
+        @   LARGE_INTEGER size;
+        @   Everything_GetResultSize(@<索引>,&size);
+        @  return  size.QuadPart;
+    }
+
+    方法 取文件名 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ CVolString(Everything_GetResultFileNameW((DWORD)@<索引>))
+    }
+
+    方法 取路径 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ CVolString(Everything_GetResultPathW((DWORD)@<索引>))
+    }
+
+    方法 是否盘符 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ Everything_IsVolumeResult((DWORD)@<索引>)
+    }
+
+    方法 是否文件夹 <公开 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ Everything_IsFolderResult((DWORD)@<索引>)
+
+    }
+
+    方法 是否文件 <公开 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ Everything_IsFileResult((DWORD)@<索引>)
+
+    }
+
+    方法 取文件数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT)Everything_GetNumFileResults()
+    }
+
+    方法 取文件夹数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT)Everything_GetNumFolderResults()
+
+    }
+
+    方法 取总文件夹数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT)Everything_GetTotFolderResults()
+
+    }
+
+    方法 取总文件数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT)Everything_GetTotFileResults()
+
+    }
+
+    方法 取总结果数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT)Everything_GetTotResults()
+    }
+
+    #
+    #
+}

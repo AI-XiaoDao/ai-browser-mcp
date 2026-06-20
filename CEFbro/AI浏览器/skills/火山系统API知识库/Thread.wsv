@@ -1,0 +1,588 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" @文档 = "category = \"windows.线程\"">
+
+类 ______线程辅助函数 <公开 @全局类 = 真>
+{
+
+    # //等待函数 Wait Function ===
+
+    方法 WaitForSingleObject <公开 静态 类型 = 整数 返回值注释 = "具体查看 等待对象常量 这个里面的值" @嵌入式方法 = "">
+    参数 句柄 <类型 = 变整数 注释 = "对象的句柄 handle to object">
+    参数 等待超时 <类型 = 整数 注释 = "-1表示一直等待 超时 time-out interval" @默认值 = -1>
+    {
+        @ ::WaitForSingleObject((HANDLE)@<句柄>,@<等待超时>)
+    }
+
+    方法 CreateEvent <公开 静态 类型 = 变整数 返回值注释 = "返回创建的事件句柄" 折叠 @嵌入式方法 = "">
+    参数 是否手动设置信号 <类型 = 逻辑型>
+    参数 是否置有信号 <类型 = 逻辑型 注释 = "如果为真，则设置信号，否则为无信号状态">
+    参数 事件名称 <注释 = "事件名称，如果为不填写，默认值表示创建" 注释 = "匿名事件" @匹配类型 = 通用基本型 @默认值 = 0>
+    {
+        @ (@dt<变整数>)::CreateEvent(NULL,@<是否手动设置信号>,@<是否置有信号>,@<事件名称>)
+    }
+
+    方法 CloseHandle <公开 静态 折叠 @嵌入式方法 = "">
+    参数 内核对象句柄 <类型 = 变整数>
+    {
+        @ ::CloseHandle((HANDLE)@<内核对象句柄>)
+    }
+
+    方法 OpenEvent <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 事件名称 <类型 = 文本型>
+    参数 访问权限 <类型 = OpenEvent常量 @默认值 = OpenEvent常量.EVENT_ALL_ACCESS>
+    参数 是否可继承句柄 <类型 = 逻辑型 @默认值 = 假>
+    {
+        @ (@dt<变整数>)::OpenEvent(@<访问权限>,@<是否可继承句柄>,@<事件名称>)
+    }
+
+    方法 ResetEvent <公开 静态 注释 = "置事件无信号" 折叠 编辑时信息 = "47FFB, 0, 0, 0" @嵌入式方法 = "">
+    参数 事件句柄 <类型 = 变整数 编辑时信息 = "47FFB, 0, 0, 0">
+    {
+        @ ::ResetEvent((HANDLE)@<事件句柄>)
+    }
+
+    方法 SetEvent <公开 静态 注释 = "设置事件有信号" 折叠 @嵌入式方法 = "">
+    参数 事件句柄 <类型 = 变整数>
+    {
+        @ ::SetEvent((HANDLE)@<事件句柄>)
+    }
+
+    方法 PulseEvent <公开 静态 类型 = 逻辑型 注释 = "The PulseEvent function sets the specified event object"
+            注释 = "to the signaled state and then resets it to the nonsignaled state"
+            注释 = "after releasing the appropriate number of waiting threads." 折叠 @嵌入式方法 = "">
+    参数 事件句柄 <类型 = 变整数>
+    {
+        @ ::PulseEvent((HANDLE)@<事件句柄>)
+    }
+
+    #
+}
+
+类 OpenEvent常量 <公开 折叠 @常量类 = 整数>
+{
+    常量 EVENT_ALL_ACCESS <公开 值 = @EVENT_ALL_ACCESS 注释 = "所有权限">
+    常量 EVENT_MODIFY_STATE <公开 值 = @EVENT_MODIFY_STATE 注释 = "修改信号状态权限">
+    常量 SYNCHRONIZE <公开 值 = @SYNCHRONIZE>
+}
+
+类 等待对象常量 <公开 折叠>
+{
+    常量 WAIT_ABANDONED <公开 类型 = 整数 值 = @WAIT_ABANDONED>
+    常量 WAIT_OBJECT_0 <公开 类型 = 整数 值 = @WAIT_OBJECT_0>
+    常量 WAIT_TIMEOUT <公开 类型 = 整数 值 = @WAIT_TIMEOUT>
+}
+
+类 ______线程基础函数 <公开 折叠 @全局类 = 真>
+{
+    方法 多线程_创建 <公开 静态 类型 = 变整数 返回值注释 = "返回线程句柄" 折叠 @嵌入式方法 = "">
+    参数 回调函数 <类型 = 变整数 注释 = "一个参数 原型如右边   整数 WINAPI 回调函数(变整数 参数)  定义的时候注意设置前缀">
+    参数 参数 <类型 = 变整数>
+    参数 线程ID <类型 = 整数 注释 = "这个是返回值，，传递一个变量，返回一个线程ID" "">
+    参数 是否挂起 <类型 = 逻辑型 注释 = "创建的时候是否挂起状态，默认创建了就运行" @默认值 = 假>
+    {
+        @ (@dt<变整数>)::CreateThread(NULL,0,(LPTHREAD_START_ROUTINE)@<回调函数>,(LPVOID)@<参数>,@<是否挂起>?CREATE_SUSPENDED:0,(LPDWORD)&@<线程ID>)
+    }
+
+    方法 "//线程回调函数原型" <类型 = 整数 折叠 @视窗.前缀文本 = "WINAPI">
+    参数 参数 <类型 = 变整数>
+    {
+
+    }
+
+    方法 多线程_投递消息 <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 线程ID <类型 = 整数>
+    参数 消息值 <类型 = 整数>
+    参数 参数1 <类型 = 变整数>
+    参数 参数2 <类型 = 变整数>
+    {
+        @ PostThreadMessage ((DWORD)@<线程ID>,(UINT)@<消息值>,(WPARAM)@<参数1>,(LPARAM)@<参数2>)
+    }
+
+    方法 多线程_等待 <公开 静态 类型 = 整数 注释 = "可以设置一个时间，然后等待线程执行，调用此函数会等待线程执行完毕" 返回值注释 = "具体查看 等待对象常量" 折叠>
+    参数 线程句柄 <类型 = 变整数>
+    参数 等待时间 <类型 = 整数 注释 = "-1表示一直等待" @默认值 = -1>
+    {
+        返回 (WaitForSingleObject (线程句柄, 等待时间))
+    }
+
+    方法 多线程_暂停 <公开 静态 类型 = 整数 注释 = "暂停一个正在工作的线程" 折叠 @嵌入式方法 = "">
+    参数 线程句柄 <类型 = 变整数>
+    {
+        @ ::SuspendThread(@<线程句柄>)
+    }
+
+    方法 多线程_继续 <注释 = "恢复一个被暂停的线程" 折叠 @嵌入式方法 = "">
+    参数 线程句柄 <类型 = 变整数>
+    {
+        @ ::ResumeThread(@<线程句柄>)
+    }
+
+    方法 多线程_取线程ID <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT)GetCurrentThreadId()
+    }
+
+    #
+}
+
+类 线程消息类f <公开>
+{
+    方法 线程创建完毕 <公开 定义事件 类型 = 整数 注释 = "这个只会在线程创建完毕时被调用一次">
+    参数 线程参数 <类型 = 变整数>
+    {
+
+    }
+
+    方法 线程退出 <公开 定义事件 类型 = 整数 注释 = "线程退出时调用">
+    参数 线程参数 <类型 = 变整数>
+    {
+
+
+    }
+
+    方法 收到消息 <公开 定义事件 类型 = 整数>
+    参数 消息 <类型 = 整数>
+    参数 参数1 <类型 = 变整数>
+    参数 参数2 <类型 = 变整数>
+    {
+
+    }
+
+    方法 工作函数 <公开 定义事件 类型 = 整数 注释 = "此函数会被调用多次" 注释 = "此函数会不停的被调用，一般如果没什么事情，不要卡住此线程，否则消息" 注释 = "循环收不到消息">
+    参数 参数 <类型 = 变整数>
+
+    #
+    # @begin
+    # <> <include>
+    #
+    # typedef struct _tagThreadParam
+    # {
+    #     @sn<current_class>* pThis;
+    #     INT_P ThreadParam;
+    # }ThreadParam,*LPThreadParam;
+    #
+    #
+    # BOOL m_bExitMessageLoop;
+    # static DWORD WINAPI ThreadProc(  LPVOID lpParameter) // thread data
+    # {
+    #
+    #     ThreadParam* param = (ThreadParam*)lpParameter;
+    #     DWORD dwExitCode = 0;
+    #     if(param)
+    #     {
+    #         dwExitCode = (DWORD)param->pThis->OnWork(param->ThreadParam);
+    #         delete param;
+    #         param = NULL;
+    #     }
+    #     return dwExitCode;
+    # }
+    # virtual int OnWork (INT_P pParam) 
+    # {
+    #         @<线程创建完毕>(pParam);
+    #         BOOL bRet;
+    #         MSG msg;
+    #         @<成员退出消息循环> = FALSE;
+    #         while(!@<成员退出消息循环>)
+    #         {
+    #             if(::PeekMessage(&msg, NULL,  0, 0, PM_REMOVE)) 
+    #             {
+    #                     if(msg.message == WM_QUIT)
+    #                     {
+    #                         break;
+    #                     }
+    #                     else
+    #                     {
+    #                         if(@<收到消息>((INT)msg.message-WM_USER,(INT_P)msg.wParam,(INT_P)msg.lParam) != 0)
+    #                                 break;
+    #                     }
+    #                 
+    #              }else
+    #             {
+    #                     if(@<工作函数>(pParam) != 0)
+    #                             break;
+    #                      
+    #             }
+    #             
+    #         }
+    #     @<线程退出>(pParam);
+    #     return 0;
+    # }
+    # <> </include>
+    # @end
+    #
+
+    变量 成员线程ID <类型 = 整数 值 = 0>
+    变量 成员线程句柄 <类型 = 变整数 值 = 0>
+    变量 成员退出消息循环 <类型 = 逻辑型 值 = 假>
+
+    方法 创建线程 <公开 类型 = 逻辑型>
+    参数 线程参数 <类型 = 变整数 @默认值 = 0>
+    参数 是否立即启动 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ ThreadParam* pParam = new ThreadParam;
+        @ pParam->ThreadParam = @<线程参数>;
+        @ pParam->pThis = this;
+        @ if(@<是否立即启动>)
+        @ {
+        @    @<成员线程句柄> = (@dt<变整数>)::CreateThread(NULL,0,@sn<current_class>::ThreadProc,pParam,0,(LPDWORD)&@<成员线程ID>);
+        @ }
+        @ else
+        @ {
+        @    @<成员线程句柄> = (@dt<变整数>)::CreateThread(NULL,0,@sn<current_class>::ThreadProc,pParam,CREATE_SUSPENDED,(LPDWORD)&@<成员线程ID>);
+        @ }
+        @ if( @<成员线程句柄> == 0 )  return FALSE;
+        返回 (真)
+    }
+
+    方法 投递消息 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 消息值 <类型 = 整数>
+    参数 参数1 <类型 = 变整数>
+    参数 参数2 <类型 = 变整数>
+    {
+        @ return PostThreadMessage ((DWORD)@<成员线程ID>,(UINT)@<消息值>+WM_USER,(WPARAM )@<参数1>,(LPARAM )@<参数2>);
+    }
+
+    方法 投递退出消息 <公开 类型 = 逻辑型 注释 = "发送退出消息循环消息 线程内部会维护者一个消息队列" 注释 = "如果队列中还有其他消息没有执行完毕，此时退出消息不会被"
+            注释 = "处理，当消息队列中没有其他消息时，只有有退出消息时，" 注释 = "线程会退出" 折叠 折叠2 @禁止流程检查 = 真>
+    {
+        @ return PostThreadMessage ((DWORD)@<成员线程ID>,WM_QUIT,NULL,NULL);
+
+    }
+
+    方法 "//退出" <公开 注释 = "设置退出标志，下一次判断循环标志时，直接退出消息循环" 折叠>
+    {
+        成员退出消息循环 = 真
+    }
+
+    方法 等待 <公开 类型 = 整数 注释 = "可以设置一个时间，然后等待线程执行，调用此函数会等待线程执行完毕" 返回值注释 = "具体查看 等待对象常量" 折叠>
+    参数 等待时间 <类型 = 整数 注释 = "-1表示一直等待" @默认值 = -1>
+    {
+        返回 (WaitForSingleObject (成员线程句柄, 等待时间))
+    }
+
+    方法 暂停 <公开 类型 = 整数 注释 = "暂停一个正在工作的线程" 折叠 @禁止流程检查 = 真>
+    {
+        @ return ::SuspendThread((HANDLE)@<成员线程句柄>);
+    }
+
+    方法 继续 <公开 注释 = "恢复一个被暂停的线程" 折叠>
+    {
+        @ ::ResumeThread((HANDLE)@<成员线程句柄>);
+    }
+}
+
+类 线程类f <公开 "">
+{
+
+    # @begin
+    # <> <include>
+    # typedef struct _tagThreadParam
+    # {
+    #     @sn<current_class>* pThis;
+    #     INT_P ThreadParam;
+    # }ThreadParam,*LPThreadParam;
+    # static DWORD WINAPI ThreadProc(  LPVOID lpParameter); // thread data
+    # DWORD m_dwThreadID;
+    # HANDLE m_hThread;
+    # <> </include>
+    #
+    # DWORD WINAPI @sn<current_class>::ThreadProc(  LPVOID lpParameter) // thread data
+    # {
+    #     ThreadParam* param = (ThreadParam*)lpParameter;
+    #     DWORD dwExitCode = 0;
+    #     if(param)
+    #     {
+    #         dwExitCode = (DWORD) param->pThis->@<工作函数>((@dt<变整数>)param->ThreadParam);
+    #         delete param;
+    #         param = NULL;
+    #     }
+    #     return dwExitCode;
+    # }
+    #
+    # @end
+
+    方法 类_初始化
+    {
+        @ m_dwThreadID = 0;
+        @ m_hThread = NULL;
+    }
+
+    方法 类_清理
+    {
+        @ m_dwThreadID = 0;
+        @ m_hThread = NULL;
+    }
+
+    方法 创建线程 <公开 类型 = 逻辑型>
+    参数 线程参数 <类型 = 变整数 @默认值 = 0>
+    参数 是否立即启动 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ ThreadParam* pParam = new ThreadParam;
+        @ pParam->ThreadParam = @<线程参数>;
+        @ pParam->pThis = this;
+        @ if(@<是否立即启动>)
+        @ {
+        @    m_hThread = ::CreateThread(NULL,0,@sn<current_class>::ThreadProc,pParam,0,&m_dwThreadID);
+        @ }
+        @ else
+        @ {
+        @    m_hThread = ::CreateThread(NULL,0,@sn<current_class>::ThreadProc,pParam,CREATE_SUSPENDED,&m_dwThreadID);
+        @ }
+        @ if( m_hThread == 0 )  return FALSE;
+
+        返回 (真)
+    }
+
+    方法 工作函数 <公开 定义事件 类型 = 整数>
+    参数 线程参数 <类型 = 变整数>
+    {
+
+
+    }
+
+    方法 等待 <公开 类型 = 整数 注释 = "可以设置一个时间，然后等待线程执行，调用此函数会等待线程执行完毕" 返回值注释 = "具体查看 等待对象常量" @嵌入式方法 = "">
+    参数 等待时间 <类型 = 整数 注释 = "-1表示一直等待" @默认值 = -1>
+    {
+        @ ::WaitForSingleObject(@sn<this>.m_hThread,@<等待时间>)
+    }
+
+    方法 暂停 <公开 类型 = 整数 注释 = "暂停一个正在工作的线程" @嵌入式方法 = "">
+    {
+        @ ::SuspendThread(@sn<this>.m_hThread)
+    }
+
+    方法 继续 <公开 注释 = "恢复一个被暂停的线程" @嵌入式方法 = "">
+    {
+        @ ::ResumeThread( @sn<this>.m_hThread)
+    }
+
+    方法 强制结束 <公开 @嵌入式方法 = "">
+    参数 返回值 <类型 = 整数 注释 = "线程返回值" @默认值 = 0>
+    {
+        @ ::TerminateThread( @sn<this>.m_hThread ,@<返回值>)
+    }
+
+    方法 取状态 <公开 类型 = 整数 返回值注释 = "返回值等于  STILL_ACTIVE  == 0x103 表示还在运行" @禁止流程检查 = 真>
+    {
+        @ DWORD dwExitCode = 0;
+        @ GetExitCodeThread(m_hThread ,&dwExitCode);
+        @ return (int)dwExitCode;
+    }
+}
+
+类 线程数组类 <基础类 = 对象数组模板类 注释 = "最基本的对象类数组" @模板实现类 = "线程类f">
+
+类 多线程类F <公开 折叠>
+{
+    变量 成员_线程数组 <类型 = 线程数组类>
+    变量 成员_锁 <类型 = 临界区类f>
+
+    方法 创建线程 <公开 类型 = 逻辑型 折叠>
+    参数 线程参数 <类型 = 变整数 @默认值 = 0>
+    参数 是否立即启动 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 索引 <类型 = 整数>
+        成员_锁.进入许可区 ()
+        索引 = 成员_线程数组.加入新成员 (线程类f)
+        挂接事件 (成员_线程数组.取成员 (索引))
+        成员_锁.离开许可区 ()
+        返回 (成员_线程数组.取成员 (索引).创建线程 (线程参数, 是否立即启动))
+
+
+    }
+
+    方法 结束线程 <公开 折叠>
+    参数 索引 <类型 = 整数>
+    {
+        成员_锁.进入许可直到子程序结束离开许可 ()
+        成员_线程数组.取成员 (索引).强制结束 ()
+        成员_线程数组.删除成员 (索引)
+
+    }
+
+    方法 暂停线程 <公开 折叠>
+    参数 索引 <类型 = 整数>
+    {
+        成员_锁.进入许可直到子程序结束离开许可 ()
+        成员_线程数组.取成员 (索引).暂停 ()
+    }
+
+    方法 恢复线程 <公开 注释 = "恢复暂停的线程">
+    参数 索引 <类型 = 整数>
+    {
+        成员_锁.进入许可直到子程序结束离开许可 ()
+        成员_线程数组.取成员 (索引).继续 ()
+    }
+
+    方法 恢复所有线程 <公开 注释 = "恢复暂停的线程" 折叠>
+    {
+        成员_锁.进入许可直到子程序结束离开许可 ()
+        成员_线程数组.枚举循环 ()
+        {
+            成员_线程数组.取枚举值 ().继续 ()
+        }
+
+    }
+
+    方法 强制结束所有线程 <公开 折叠>
+    参数 线程返回值 <类型 = 整数>
+    {
+        成员_锁.进入许可直到子程序结束离开许可 ()
+        成员_线程数组.枚举循环 ()
+        {
+            成员_线程数组.取枚举值 ().强制结束 (线程返回值)
+        }
+    }
+
+    方法 取线程数 <公开 类型 = 整数 折叠>
+    {
+        成员_锁.进入许可直到子程序结束离开许可 ()
+        返回 (成员_线程数组.取成员数 ())
+    }
+
+    方法 "//取线程" <公开 类型 = 线程类f 折叠>
+    参数 索引 <类型 = 整数>
+    {
+        成员_锁.进入许可直到子程序结束离开许可 ()
+        返回 (成员_线程数组.取成员 (索引))
+    }
+
+    方法 线程类f_工作函数 <接收事件 类型 = 整数>
+    参数 来源对象 <类型 = 线程类f 注释 = "提供事件产生的具体来源对象">
+    参数 标记值 <类型 = 整数 注释 = "用户调用\"挂接事件\"命令时所提供的\"标记值\"参数值,非此方式挂接事件则本参数值固定为0.">
+    参数 线程参数 <类型 = 变整数>
+    {
+        工作函数 (来源对象, 线程参数)
+        成员_锁.进入许可直到子程序结束离开许可 ()
+        变量 i <类型 = 整数>
+        循环 (0, 成员_线程数组.取成员数 (), i)
+        {
+            如果 (成员_线程数组.取成员 (i) == 来源对象)
+            {
+                成员_线程数组.删除成员 (i)
+                跳出循环
+
+            }
+        }
+
+        返回 (0)
+    }
+
+    方法 工作函数 <公开 定义事件 类型 = 整数 折叠>
+    参数 线程 <类型 = 线程类f>
+    参数 线程参数 <类型 = 变整数>
+    {
+
+    }
+}
+
+类 临界区类f <公开>
+{
+
+    # @begin
+    # <> <include>
+    # CRITICAL_SECTION m_CriticalSection; 
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ InitializeCriticalSection(&m_CriticalSection); 
+    }
+
+    方法 类_清理 <折叠>
+    {
+        @ DeleteCriticalSection(&m_CriticalSection);
+    }
+
+    方法 进入许可直到子程序结束离开许可 <公开 @嵌入式方法 = "" @视窗.外部头文件 = "Thread\\CVolFCThread.h">
+    {
+        @ CEnter_Leave_CriticalSection ELCS(&@sn<this>.m_CriticalSection)
+    }
+
+    方法 进入许可区 <公开 "">
+    {
+        @ EnterCriticalSection(&m_CriticalSection); 
+    }
+
+    方法 离开许可区 <公开 "">
+    {
+        @ LeaveCriticalSection(&m_CriticalSection);
+    }
+}
+
+类 原子锁_全局类 <公开 注释 = "https://docs.microsoft.com/en-us/windows/win32/sync/interlocked-variable-access" 折叠>
+{
+    方法 自增长整数 <公开 静态 类型 = 长整数 注释 = "功能，锁住一个变量，值增加1" 返回值注释 = "返回自增后的值" 折叠 @嵌入式方法 = "">
+    参数 要自增的变量 <类型 = 长整数>
+    {
+        @ InterlockedIncrement64(&@<要自增的变量>)
+    }
+
+    方法 自减长整数 <公开 静态 类型 = 长整数 返回值注释 = "返回自减后的值" 折叠 @嵌入式方法 = "">
+    参数 要自减的变量 <类型 = 长整数>
+    {
+        @ InterlockedDecrement64(&@<要自减的变量>)
+    }
+
+    方法 自增整数 <公开 静态 类型 = 整数 注释 = "功能，锁住一个变量，值增加1" 返回值注释 = "返回自增后的值" 折叠 @嵌入式方法 = "">
+    参数 要自增的变量 <类型 = 整数>
+    {
+        @ InterlockedIncrement((unsigned int*)&@<要自增的变量>)
+    }
+
+    方法 自减整数 <公开 静态 类型 = 长整数 返回值注释 = "返回自减后的值" 折叠 @嵌入式方法 = "">
+    参数 要子减的变量 <类型 = 长整数>
+    {
+        @ InterlockedDecrement(&@<要子减的变量>)
+    }
+
+    方法 置整数 <公开 静态 类型 = 整数 返回值注释 = "返回 欲操作的变量 未运算前的值" 折叠 @嵌入式方法 = "">
+    参数 欲操作的变量 <类型 = 整数>
+    参数 参与运算的值 <类型 = 整数>
+    {
+        @ InterlockedExchange((unsigned int*)&@<欲操作的变量>,(unsigned int)@<参与运算的值>)
+    }
+
+    方法 置长整数 <公开 静态 类型 = 长整数 返回值注释 = "返回 欲操作的变量 未运算前的值" 折叠 @嵌入式方法 = "">
+    参数 欲操作的变量 <类型 = 整数>
+    参数 参与运算的值 <类型 = 整数>
+    {
+        @ InterlockedExchange((LONG64 *)&@<欲操作的变量>,(LONG64)@<参与运算的值>)
+    }
+
+    方法 加整数 <公开 静态 类型 = 整数 返回值注释 = "返回 欲操作的变量 未运算前的值" 折叠 @嵌入式方法 = "">
+    参数 欲操作的变量 <类型 = 整数>
+    参数 参与运算的值 <类型 = 整数>
+    {
+        @ InterlockedExchangeAdd((LONG64 *)&@<欲操作的变量>,(LONG64)@<参与运算的值>)
+    }
+
+    方法 加长整数 <公开 静态 类型 = 长整数 返回值注释 = "返回 欲操作的变量 未运算前的值" 折叠 @嵌入式方法 = "">
+    参数 欲操作的变量 <类型 = 长整数>
+    参数 参与运算的值 <类型 = 长整数>
+    {
+        @ InterlockedExchangeAdd64((LONG64 *)&@<欲操作的变量>,(LONG64)@<参与运算的值>)
+    }
+
+    方法 异或整数 <公开 静态 类型 = 整数 返回值注释 = "返回 欲操作的变量 未运算前的值" 折叠 @嵌入式方法 = "">
+    参数 欲操作的变量 <类型 = 整数>
+    参数 参与运算的值 <类型 = 整数>
+    {
+        @ InterlockedXor((LONG64 *)&@<欲操作的变量>,(LONG64)@<参与运算的值>)
+    }
+
+    方法 异或长整数 <公开 静态 类型 = 长整数 返回值注释 = "返回 欲操作的变量 未运算前的值" 折叠 @嵌入式方法 = "">
+    参数 欲操作的变量 <类型 = 长整数>
+    参数 参与运算的值 <类型 = 长整数>
+    {
+        @ InterlockedXor64((LONG64 *)&@<欲操作的变量>,(LONG64)@<参与运算的值>)
+    }
+
+    #
+    #
+    #
+    #
+    #
+}

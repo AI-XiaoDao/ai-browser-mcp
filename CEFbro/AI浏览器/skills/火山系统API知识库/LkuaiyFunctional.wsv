@@ -1,0 +1,4492 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 LkuaiyHttp.com
+
+类 类_高速日志 <公开 折叠>
+{
+    方法 写出日志 <公开 类型 = 逻辑型 折叠>
+    参数 标识名称_ <类型 = 文本型>
+    参数 标识内容_ <类型 = 文本型>
+    参数 文件目录_ <类型 = 文本型 注释 = "【文件目录全路径】默认为空，空代表运行目录，否则以该目录为准" 注释 = "注意：目录后面一定要有\\，注意火山有转义符，\\\\=\\"
+            注释 = "正确格式 C:\\\\PerfLogs\\\\" 注释 = "错误格式：C:\\\\PerfLogs" 折叠2 @默认值 = "">
+    参数 文件名称_ <类型 = 文本型 注释 = "默认为空，空代表直接生成日期文件  例如：2021-04-07" 注释 = "如果不为空则按照本参数创建文件名  例如：XXX.txt" 折叠2 @默认值 = "">
+    {
+        变量 当前日期 <类型 = 小数>
+        变量 日志文件 <类型 = 文本型>
+        变量 文件句柄 <类型 = 文件读写类>
+        变量 是否打开文件正常 <类型 = 逻辑型>
+        当前日期 = 取现行时间 ()
+        加入格式文本 (日志文件, "%u-", 取年份 (当前日期))
+        加入格式文本 (日志文件, 选择 (取月份 (当前日期) < 10, "0%u-", "%u-"), 取月份 (当前日期))
+        加入格式文本 (日志文件, 选择 (取日 (当前日期) < 10, "0%u.txt", "%u.txt"), 取日 (当前日期))
+        如果 (文件是否存在 (文件目录_) == 假)
+        {
+            如果 (创建目录 (文件目录_) == 假)
+            {
+                是否打开文件正常 = 假
+
+            }
+
+        }
+        如果 (文件名称_ != "")
+        {
+            如果 (文件是否存在 (文件目录_ + 文件名称_) == 假)
+            {
+                如果 (文件目录_ == "")
+                {
+                    是否打开文件正常 = 文件句柄.打开文件 (取运行目录 () + 文件名称_, 文件打开方式.改写)
+                }
+                否则
+                {
+                    是否打开文件正常 = 文件句柄.打开文件 (文件目录_ + 文件名称_, 文件打开方式.改写)
+
+                }
+
+            }
+            否则
+            {
+                如果 (文件目录_ == "")
+                {
+                    是否打开文件正常 = 文件句柄.打开文件 (取运行目录 () + 文件名称_, 文件打开方式.读写)
+                }
+                否则
+                {
+                    是否打开文件正常 = 文件句柄.打开文件 (文件目录_ + 文件名称_, 文件打开方式.读写)
+
+                }
+
+
+                如果 (是否打开文件正常 == 真)
+                {
+                    文件句柄.移到文件尾 ()
+
+                }
+
+            }
+
+
+        }
+        否则
+        {
+            如果 (文件是否存在 (文件目录_ + 日志文件) == 假)
+            {
+                如果 (文件目录_ == "")
+                {
+                    是否打开文件正常 = 文件句柄.打开文件 (取运行目录 () + 日志文件, 文件打开方式.改写)
+                }
+                否则
+                {
+                    是否打开文件正常 = 文件句柄.打开文件 (文件目录_ + 日志文件, 文件打开方式.改写)
+
+                }
+
+            }
+            否则
+            {
+                如果 (文件目录_ == "")
+                {
+                    是否打开文件正常 = 文件句柄.打开文件 (取运行目录 () + 日志文件, 文件打开方式.读写)
+                }
+                否则
+                {
+                    是否打开文件正常 = 文件句柄.打开文件 (文件目录_ + 日志文件, 文件打开方式.读写)
+
+                }
+
+
+                如果 (是否打开文件正常 == 真)
+                {
+                    文件句柄.移到文件尾 ()
+
+                }
+
+            }
+
+
+        }
+
+
+        变量 是否写出成功 <类型 = 逻辑型>
+        如果 (是否打开文件正常 == 真)
+        {
+            变量 日期 <类型 = 小数>
+            日期 = 取现行时间 ()
+            变量 标识内容 <类型 = 文本型 值 = "{\"名称替换\":\"内容替换\"}">
+            变量 格式文本 <类型 = 文本型>
+            加入格式文本 (格式文本, 选择 (取小时 (日期) < 10, "0%u:", "%u:"), 取小时 (日期))
+            加入格式文本 (格式文本, 选择 (取分钟 (日期) < 10, "0%u:", "%u:"), 取分钟 (日期))
+            子文本替换 (标识内容, "名称替换", 标识名称_)
+            子文本替换 (标识内容, "内容替换", 标识内容_)
+            加入格式文本 (格式文本, 选择 (取秒 (日期) < 10, "0%u >%s\r\n", "%u >%s\r\n"), 取秒 (日期), 标识内容)
+            是否写出成功 = 文件句柄.写出字节集 (文本到UTF8 (格式文本, 假))
+            文件句柄.关闭文件 ()
+            返回 (是否写出成功)
+
+        }
+
+        返回 (假)
+    }
+}
+
+类 类_全局 <公开 折叠 折叠2 @文档 = "category = \"程序调试\"" @全局类 = 真>
+{
+    方法 全_信息框2 <公开 静态 类型 = 返回按钮类型 注释 = "显示一个信息框,等待用户单击按钮." 返回值注释 = "返回一个值告诉用户单击哪一个按钮."
+            返回值注释 = "如果信息框有\"取消\"按钮,则按下 ESC 键与单击\"取消\"按钮的效果相同." 折叠 @禁止流程检查 = 真>
+    参数 提示信息 <类型 = 文本型 注释 = "提供具体的提示文本">
+    参数 按钮 <类型 = 整数 注释 = "由\"信息框按钮\"类中的各组常量值相加后的值,具体请见该类中的说明." @默认值 = 0>
+    参数 窗口标题 <类型 = 文本型 注释 = "指定显示在信息框标题栏中的文本" @默认值 = "信息:">
+    {
+        @ const HWND hOldFocusWnd = ::GetFocus ();
+        @ const INT nResult = ::MessageBox (NULL, @<提示信息>, @<窗口标题>, @<按钮>);
+        @ if (hOldFocusWnd != NULL && ::IsWindow (hOldFocusWnd))
+        @     ::SetFocus (hOldFocusWnd);
+        @ return nResult;
+    }
+
+    方法 字节集到集合文本 <公开 静态 类型 = 文本型 折叠>
+    参数 调试内容 <类型 = 字节集类>
+    {
+        变量 文本 <类型 = 文本型>
+        计次循环 (取字节集长度 (调试内容))
+        {
+            变量 临时 <类型 = 文本型>
+            临时 = 到文本 (调试内容.取字节集数据 (取循环索引 (), 字节))
+            加入文本 (文本, 临时)
+            加入文本 (文本, ",")
+
+        }
+
+        文本 = 取文本左边 (文本, 取文本长度 (文本) - 1)
+        返回 (文本)
+    }
+
+    方法 集合文本到字节集 <公开 静态 类型 = 字节集类 折叠>
+    参数 字节集文本 <类型 = 文本型>
+    {
+        变量 临时文本 <类型 = 文本型>
+        临时文本 = 字节集文本
+        如果 (取文本左边 (临时文本, 1) == "{")
+        {
+            临时文本 = 取文本右边 (临时文本, 取文本长度 (临时文本) - 1)
+        }
+        如果 (取文本右边 (临时文本, 1) == "{")
+        {
+            临时文本 = 取文本左边 (临时文本, 取文本长度 (临时文本) - 1)
+
+        }
+
+        变量 储存 <类型 = 文本数组类>
+        分割文本 (临时文本, ",", 储存)
+        变量 临时字节 <类型 = 字节集类>
+        计次循环 (储存.取成员数 ())
+        {
+            临时字节.添加值到字节集 (文本到整数 (储存.取成员 (取循环索引 ())))
+            临时字节 = 取字节集左边 (临时字节, 取字节集长度 (临时字节) - 3)
+
+        }
+
+        返回 (临时字节)
+
+
+    }
+
+    方法 输出调试文本_新版 <公开 静态 折叠>
+    参数 所欲输出的数据 <类型 = 文本型 注释 = "" 编辑时信息 = "B554A, 0, 0, 0">
+    {
+        调试输出 (所欲输出的数据)
+        调试输出 ("注意：输出调试文本_新版为老版本命令。你在看课程的时候可以使用【调试输出】这个命令来替代【输出调试文本_新版】这个命令")
+    }
+
+    方法 取出内置资源文件_ <公开 静态 类型 = 字节集类 折叠 @禁止流程检查 = 真>
+    参数 资源文件 <类型 = 视窗文件资源>
+    {
+        @ CVolMem memRes;
+        @ do
+        @     {
+        @         const HRSRC hSrc = FindResource (GetModuleHandle (NULL), MAKEINTRESOURCE (@<资源文件>), RT_RCDATA);
+        @         if (hSrc == NULL)
+        @             break;
+        @         const HGLOBAL hResData = LoadResource (NULL, hSrc);
+        @         if (hResData == NULL)
+        @             break;
+        @ 
+        @         const BYTE* pb = (const BYTE*)LockResource (hResData);
+        @         if (pb != NULL)
+        @         {
+        @             memRes.CopyFrom (pb, (INT_P)SizeofResource (NULL, hSrc));
+        @         }
+        @ 
+        @         UnlockResource (hResData);
+        @         FreeResource (hResData);
+        @     }
+        @     while (FALSE);
+        @  return memRes;
+
+
+    }
+}
+
+类 类_全局锁 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # @ CRITICAL_SECTION m_CriticalSection; 
+    # <> </include>
+    # @end
+
+    方法 类_初始化 <折叠>
+    {
+        @ InitializeCriticalSection(&m_CriticalSection); 
+    }
+
+    方法 类_清理 <折叠>
+    {
+        @ DeleteCriticalSection(&m_CriticalSection);
+    }
+
+    方法 进入许可区 <公开 折叠 "">
+    {
+        @ EnterCriticalSection(&m_CriticalSection);
+    }
+
+    方法 离开许可区 <公开 折叠 "">
+    {
+        @ LeaveCriticalSection(&m_CriticalSection);
+    }
+}
+
+类 类_密码处理 <公开 折叠 折叠2 @视窗.外部头文件 = "lib\\md5\\Lkymd5_.h" @视窗.外部源文件 = "lib\\md5\\Lkymd5_.cpp">
+{
+    方法 校验_取字节集MD5 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 缓冲区数据 <类型 = 字节集类 "">
+    参数 是否小写 <类型 = 逻辑型 注释 = "默认小写" @默认值 = 真>
+    {
+        变量 缓冲区长度 <类型 = 整数>
+        缓冲区长度 = 取字节集长度 (缓冲区数据)
+        @ TCHAR buffer[33]= {0};
+        @ MD5MakeW_FOF(@<缓冲区数据>.GetPtr(),(unsigned int)@<缓冲区数据>.GetSize(),buffer,33,@<是否小写>);
+        变量 文本_ <类型 = 文本型>
+        @ @<文本_>=buffer;
+        如果 (是否小写 == 真)
+        {
+            文本_ = 到小写 (文本_)
+
+        }
+
+        返回 (文本_)
+    }
+
+    方法 密码强度检测 <公开 类型 = 文本型 折叠>
+    参数 pw <类型 = 文本型>
+    {
+        变量 len <类型 = 整数>
+        变量 jg <类型 = "整数[4]">
+        变量 bz <类型 = 整数>
+        变量 bzsz <类型 = "文本型[3]">
+        变量 temp <类型 = 整数>
+        bzsz [0] = "弱"
+        bzsz [1] = "中"
+        bzsz [2] = "强"
+        len = 取文本长度 (pw)
+        如果 (len < 6)
+        {
+            返回 (bzsz [0])
+
+        }
+        变量 循环变量 <类型 = "整数 [2]">
+        循环 (0, len, 循环变量 [0], 1)
+        {
+            变量 系统 <类型 = 类_系统杂项>
+            temp = 系统.取代码 (取文本中间 (pw, 循环变量 [0], 1))
+            如果 (temp >= 48 && temp <= 57)
+            {
+                jg [0] = jg [0] + 1
+            }
+            否则 (temp >= 65 && temp <= 90)
+            {
+                jg [1] = jg [1] + 1
+            }
+            否则 (temp >= 97 && temp <= 122)
+            {
+                jg [2] = jg [2] + 1
+            }
+            否则 (temp >= 97 && temp <= 122)
+            {
+                jg [3] = jg [3] + 1
+            }
+            否则
+            {
+                jg [3] = jg [3] + 1
+
+            }
+
+        }
+
+        循环 (0, 4, 循环变量 [1], 1)
+        {
+            如果 (jg [循环变量 [1]] > 0)
+            {
+                bz = bz + 1
+
+            }
+
+        }
+        返回 (bzsz [bz])
+
+    }
+}
+
+类 类_剪辑版 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # #define Clipboard_for(hWnd,out_nfomat) \
+    # for(OpenClipboard((HWND)hWnd),out_nfomat = EnumClipboardFormats(0);(!out_nfomat?CloseClipboard():0) ,out_nfomat; out_nfomat = EnumClipboardFormats(out_nfomat) )
+    # <> </include>
+    # @end
+    #
+
+    方法 剪辑版_打开 <类型 = 逻辑型 注释 = "暂时用不到" 折叠 @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数 @默认值 = 0>
+    {
+        @ OpenClipboard((HWND)@<窗口句柄>)
+    }
+
+    方法 剪辑版_关闭 <类型 = 逻辑型 注释 = "暂时用不到" 折叠 @嵌入式方法 = "">
+    {
+        @ CloseClipboard()
+    }
+
+    方法 剪辑版_删除监视器 <公开 注释 = "函数从剪贴板查看器链中删除指定的窗口。" 折叠 @嵌入式方法 = "">
+    参数 要删除的窗口句柄 <类型 = 变整数>
+    参数 下一个窗口句柄 <类型 = 变整数>
+    {
+        @ ChangeClipboardChain((HWND)@<要删除的窗口句柄>,(HWND)@<下一个窗口句柄>)
+    }
+
+    方法 剪辑版_取格式数量 <公开 类型 = 整数 注释 = "可以不用调用 剪辑版_打开" 折叠 @嵌入式方法 = "">
+    {
+        @ CountClipboardFormats()
+    }
+
+    方法 剪辑版_清空 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 要清空的窗口句柄 <类型 = 变整数 @默认值 = 0>
+    {
+        @ OpenClipboard((HWND)@<要清空的窗口句柄>);
+        @ EmptyClipboard();
+        @ CloseClipboard()
+    }
+
+    方法 剪辑版_枚举格式 <公开 折叠 @嵌入式方法 = "name = Clipboard_for\nhas_body = true">
+    参数 用来保存当前剪辑版可用格式 <类型 = 整数 "" = 用来保存可用剪辑版格式>
+    参数 指定剪辑版窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        @ Clipboard_for(@<指定剪辑版窗口句柄>,@<用来保存当前剪辑版可用格式>)
+    }
+
+    方法 剪辑版_取所属窗口句柄 <公开 类型 = 变整数 注释 = "取剪贴板当前所有者的窗口句柄" 返回值注释 = "返回 剪辑版 当前所属的窗口句柄" 折叠 @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>) GetClipboardOwner()
+    }
+
+    方法 剪辑版_取监视窗口句柄 <公开 注释 = "返回监视窗口链中的 第一个窗口句柄" 折叠 @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>)GetClipboardViewer()
+    }
+
+    方法 剪辑版_取队列号 <公开 类型 = 整数 注释 = "函数检索当前窗口站的剪贴板序列号。" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT)GetClipboardSequenceNumber()
+    }
+
+    方法 剪辑版_取格式名称 <公开 类型 = 文本型 注释 = "可以不用调用 剪辑版_打开" @禁止流程检查 = 真>
+    参数 剪辑版格式 <类型 = 整数>
+    {
+        @ TCHAR *StrClipboardFormats[18]={
+        @ _T ("CF_UNKONW"),
+        @  _T("CF_TEXT"),
+        @  _T("CF_BITMAP"),
+        @  _T("CF_METAFILEPICT"),
+        @  _T("CF_SYLK"),
+        @  _T("CF_DIF"),
+        @  _T("CF_TIFF"),
+        @  _T("CF_OEMTEXT"),
+        @  _T("CF_DIB"),
+        @  _T("CF_PALETTE"),
+        @  _T("CF_PENDATA"),
+        @  _T("CF_RIFF"),
+        @  _T("CF_WAVE"),
+        @  _T("CF_UNICODETEXT"),
+        @  _T("CF_ENHMETAFILE"),
+        @  _T("CF_HDROP"),
+        @  _T("CF_LOCALE"),
+        @ _T ("CF_DIBV5")
+        @ };
+        @ if(@<剪辑版格式> <= 18)
+        @   return StrClipboardFormats[@<剪辑版格式>];
+        // #define CF_OWNERDISPLAY     0x0080
+        // #define CF_DSPTEXT          0x0081
+        // #define CF_DSPBITMAP        0x0082
+        // #define CF_DSPMETAFILEPICT  0x0083
+        // #define CF_DSPENHMETAFILE   0x008E
+        @ if(@<剪辑版格式> == CF_OWNERDISPLAY)
+        @   return _T("CF_OWNERDISPLAY");
+        @ else if(@<剪辑版格式> == CF_DSPTEXT)
+        @   return _T("CF_DSPTEXT");
+        @ else if(@<剪辑版格式> == CF_DSPBITMAP)
+        @   return _T("CF_DSPBITMAP");
+        @ else if(@<剪辑版格式> == CF_DSPMETAFILEPICT)
+        @   return _T("CF_DSPMETAFILEPICT");
+        @ else if(@<剪辑版格式> == CF_DSPENHMETAFILE)
+        @   return _T("CF_DSPENHMETAFILE");
+
+        @ TCHAR buffer[1024] = {0};
+        @ GetClipboardFormatName(@<剪辑版格式>,buffer,1024);
+        @ return buffer;
+    }
+
+    方法 剪辑版_取打开剪辑版窗口句柄 <公开 类型 = 变整数 注释 = "当前打开剪贴板的窗口的句柄。" 折叠 @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>) GetOpenClipboardWindow();
+    }
+
+    方法 剪辑版_是否存在指定格式数据 <公开 类型 = 整数 注释 = "如果存在 则返回指定格式的 整数标记，否则返回0" 折叠>
+    参数 格式文本 <类型 = 文本型 注释 = "例如 \"VolNEPrgClipFormat\"  或者 \"CF_UNICODETEXT\" 等等">
+    参数 剪辑版窗口句柄 <类型 = 变整数 @默认值 = 0>
+    {
+        变量 当前剪辑版可用格式 <类型 = 整数>
+        剪辑版_枚举格式 (当前剪辑版可用格式, 剪辑版窗口句柄)
+        {
+            如果 (剪辑版_取格式名称 (当前剪辑版可用格式) == 格式文本)
+            {
+                返回 (当前剪辑版可用格式)
+            }
+        }
+        返回 (0)
+    }
+
+    方法 剪辑版_取火山格式字节集 <公开 类型 = 字节集类 折叠>
+    {
+        变量 剪辑版格式 <类型 = 整数>
+        变量 返回值 <类型 = 字节集类>
+        剪辑版格式 = 剪辑版_是否存在指定格式数据 ("VolNEPrgClipFormat")
+        如果 (剪辑版格式 == 0)
+        {
+            返回 (返回值)
+        }
+        返回 (剪辑版_取字节集 (剪辑版格式))
+
+    }
+
+    方法 剪辑版_置火山格式字节集 <公开 类型 = 逻辑型 折叠>
+    参数 要设置的字节集 <类型 = 字节集类>
+    {
+        变量 剪辑版格式 <类型 = 整数>
+        剪辑版格式 = 剪辑版_注册自定义格式 ("VolNEPrgClipFormat")
+        返回 (剪辑版_置字节集 (要设置的字节集, 剪辑版格式))
+
+
+
+
+    }
+
+    方法 剪辑版_注册自定义格式 <公开 类型 = 整数 注释 = "可以不用调用 剪辑版_打开" 折叠 @嵌入式方法 = "">
+    参数 自定义格式文本 <类型 = 文本型>
+    {
+        @ RegisterClipboardFormat(@<自定义格式文本>)
+
+    }
+
+    方法 剪辑版_置监视窗口 <公开 类型 = 变整数 注释 = "如果函数成功，返回值将标识剪贴板查看器链中的下一个窗口。" 注释 = "如果发生错误或剪贴板查看器链中没有其他窗口，则返回值为空。"
+            注释 = "要获取扩展错误信息，请调用GetLastError。" 折叠 折叠2 @嵌入式方法 = "">
+    参数 新监视窗口句柄 <类型 = 变整数>
+    {
+        @ (@dt<变整数>)SetClipboardViewer((HWND)@<新监视窗口句柄>)
+    }
+
+    方法 剪辑版_取字节集 <公开 类型 = 字节集类 折叠 @禁止流程检查 = 真>
+    参数 剪辑版格式 <类型 = 整数 注释 = "如果不填写格式，则使用 CVolMem 格式的数据" @默认值 = 0>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        变量 空字节集 <类型 = 字节集类>
+        如果 (剪辑版_打开 (窗口句柄) == 假)
+        {
+            返回 (空字节集)
+        }
+        如果 (剪辑版格式 == 0)
+        {
+            剪辑版格式 = 剪辑版_注册自定义格式 ("CVolMem")
+        }
+        @ HGLOBAL hObj = GetClipboardData(@<剪辑版格式>);
+        @  if(hObj == NULL) return @an<CVolMem>();
+        @ LPVOID lpBuffer =  GlobalLock(hObj);
+        @ if(lpBuffer == NULL) return @an<CVolMem>();
+        @ SIZE_T memSize = LocalSize(hObj);
+        @ @an<CVolMem> memBuf((BYTE*)lpBuffer,memSize);
+        @ GlobalUnlock(hObj);
+        剪辑版_关闭 ()
+        @ return memBuf;
+
+    }
+
+    方法 剪辑版_取文本A <公开 类型 = 字节集类 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        变量 空字节集 <类型 = 字节集类>
+        如果 (剪辑版_打开 (窗口句柄) == 假)
+        {
+            返回 (空字节集)
+        }
+        @ HGLOBAL hObj = GetClipboardData(CF_TEXT);
+        @  if(hObj == NULL) return @an<CVolMem>();
+        @ LPVOID lpBuffer =  GlobalLock(hObj);
+        @ if(lpBuffer == NULL) return @<空字节集>;
+        @ UINT memSize = LocalSize(hObj);
+        @ @an<CVolMem> memBuf((BYTE*)lpBuffer,memSize);
+        @ GlobalUnlock(hObj);
+        剪辑版_关闭 ()
+        @ return memBuf;
+
+    }
+
+    方法 剪辑版_取文本 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        如果 (剪辑版_打开 (窗口句柄) == 假)
+        {
+            返回 ("")
+        }
+        @ HGLOBAL hObj = GetClipboardData(CF_UNICODETEXT);
+        @  if(hObj == NULL) return @an<CVolString>(_T(""));
+        @ LPVOID lpBuffer =  GlobalLock(hObj);
+        @ if(lpBuffer == NULL) return @an<CVolString>(_T(""));
+        // @ UINT memSize = LocalSize(hObj);
+        @ @an<CVolString> str((LPCTSTR)lpBuffer);
+        @ GlobalUnlock(hObj);
+        剪辑版_关闭 ()
+        @ return str;
+
+    }
+
+    方法 剪辑版_置字节集 <公开 类型 = 逻辑型 折叠>
+    参数 要设置的内容 <类型 = 字节集类>
+    参数 剪辑版格式 <类型 = 整数 注释 = "如果不填写，则会注册默认 CVolMem格式 的剪辑版数据" @默认值 = 0>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" @默认值 = 0>
+    {
+        如果 (剪辑版格式 == 0)
+        {
+            剪辑版格式 = 剪辑版_注册自定义格式 ("CVolMem")
+        }
+        @ SIZE_T memSize =  @<要设置的内容>.GetSize();
+        @ HANDLE hGlobalMemory = GlobalAlloc(GHND,memSize); // 分配内存
+        @ if(hGlobalMemory == NULL) return FALSE;
+        @ LPBYTE lpGlobalMemory = (LPBYTE)GlobalLock(hGlobalMemory); // 锁定内存
+        @ CopyMemory(lpGlobalMemory,@<要设置的内容>.GetPtr(),@<要设置的内容>.GetSize());
+        @ GlobalUnlock(hGlobalMemory); // 锁定内存块解锁
+        如果 (剪辑版_打开 (窗口句柄) == 假)
+        {
+            返回 (假)
+        }
+        // 剪辑版_清空 ()
+        @ ::SetClipboardData(@<剪辑版格式>, hGlobalMemory); // 将内存中的数据放置到剪贴板
+        剪辑版_关闭 ()
+        返回 (真)
+
+
+    }
+
+    方法 剪辑版_置文本A <公开 类型 = 逻辑型 折叠>
+    参数 要设置的内容 <类型 = 字节集类 注释 = "用户自行确保 是以0结尾的 多字节集文本">
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" 折叠2 @默认值 = 0>
+    {
+        @ SIZE_T memSize =  @<要设置的内容>.GetSize();
+        @ HANDLE hGlobalMemory = GlobalAlloc(GHND,memSize); // 分配内存
+        @ if(hGlobalMemory == NULL) return FALSE;
+        @ LPBYTE lpGlobalMemory = (LPBYTE)GlobalLock(hGlobalMemory); // 锁定内存
+        @ CopyMemory(lpGlobalMemory,@<要设置的内容>.GetPtr(),@<要设置的内容>.GetSize());
+        @ GlobalUnlock(hGlobalMemory); // 锁定内存块解锁
+        @ if(@<窗口句柄> == 0)
+        @ {
+        @   @<窗口句柄> = (@dt<变整数>)::GetDesktopWindow ();
+        @ }
+        如果 (剪辑版_打开 (窗口句柄) == 假)
+        {
+            返回 (假)
+        }
+        @ ::SetClipboardData( CF_TEXT, hGlobalMemory); // 将内存中的数据放置到剪贴板
+        剪辑版_关闭 ()
+        返回 (真)
+
+    }
+
+    方法 剪辑版_置文本 <公开 类型 = 逻辑型 折叠>
+    参数 要设置的内容 <类型 = 文本型>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要与打开的剪贴板关联的窗口的句柄。" 注释 = "如果此参数为空，则打开的剪贴板与当前任务关联。" 折叠2 @默认值 = 0>
+    {
+        变量 临时字节集 <类型 = 字节集类>
+        临时字节集 = 文本到字节集 (要设置的内容)
+        @ SIZE_T memSize =  @<临时字节集>.GetSize() +2;
+        @ HANDLE hGlobalMemory = GlobalAlloc(GHND,memSize); // 分配内存
+        @ if(hGlobalMemory == NULL) return FALSE;
+        @ LPBYTE lpGlobalMemory = (LPBYTE)GlobalLock(hGlobalMemory); // 锁定内存
+        @ CopyMemory(lpGlobalMemory,@<临时字节集>.GetPtr(),@<临时字节集>.GetSize());
+        @ GlobalUnlock(hGlobalMemory); // 锁定内存块解锁
+        @ if(@<窗口句柄> == 0)
+        @ {
+        @   @<窗口句柄> = (@dt<变整数>)::GetDesktopWindow ();
+        @ }
+        如果 (剪辑版_打开 (窗口句柄) == 假)
+        {
+            返回 (假)
+        }
+        @ ::SetClipboardData(CF_UNICODETEXT, hGlobalMemory); // 将内存中的数据放置到剪贴板
+        剪辑版_关闭 ()
+        返回 (真)
+
+    }
+
+    #
+}
+
+类 类_随机数 <公开 折叠 @输出名 = "FRadom">
+{
+
+    # @begin
+    # const double MinProb=1.0/(RAND_MAX+1);
+    # bool happened(double probability)//probability 0~1
+    # {
+    #     if(probability<=0)
+    #     {
+    #   return false;
+    #     }
+    #     if(probability<MinProb)
+    #     {
+    #         return rand()==0&&happened(probability*(RAND_MAX+1));
+    #     }
+    #     if(rand()<=probability*(RAND_MAX+1))
+    #     {
+    #         return true;
+    #     }
+    #     return false;
+    # }
+    # long myrandom(long n)//产生0~n-1之间的等概率随机数
+    # {
+    #     long t=0;
+    #     if(n<=RAND_MAX)
+    #     {
+    #         long r=RAND_MAX-(RAND_MAX+1)%n;//尾数
+    #         t = rand();
+    #         while ( t > r )
+    #           {
+    #             t = rand();
+    #           }
+    #         return t % n;
+    #     }
+    #     else
+    #     {
+    #         long r = n%(RAND_MAX+1);//余数
+    #         if( happened( (double)r/n ) )//取到余数的概率
+    #           {
+    #             return n-r+myrandom(r);
+    #           }
+    #         else
+    #           {
+    #             return rand()+myrandom(n/(RAND_MAX+1))*(RAND_MAX+1);
+    #           }
+    #     }
+    # }
+    # @end
+    #
+
+    方法 随机_置随机种子 <公开 折叠>
+    参数 种子 <类型 = 整数 @默认值 = 0>
+    {
+        变量 初始值 <类型 = 整数>
+        变量 系统 <类型 = 类_系统杂项>
+        如果 (种子 <= 0)
+        {
+            初始值 = 系统.取启动时间 ()
+
+        }
+
+        @ srand(@<初始值>);
+    }
+
+    方法 随机_取随机数 <公开 类型 = 整数 注释 = "使用效果 最小值0 最大值10 ，那么将产生0-9之间的随机数" 折叠 @禁止流程检查 = 真>
+    参数 最小数 <类型 = 整数 @默认值 = 0>
+    参数 最大数 <类型 = 整数 @默认值 = 0x7fffff>
+    {
+        @ return myrandom(@<最大数>-@<最小数> + 1) + @<最小数>;
+    }
+
+    方法 随机_取零到九 <公开 类型 = 文本型 折叠>
+    参数 位数 <类型 = 整数>
+    参数 首位不为零 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 返回值 <类型 = 文本型>
+        变量 模板 <类型 = "字符 [10]" 值 = {'0','1','2','3','4','5','6','7','8','9'}>
+        如果 (位数 < 1)
+        {
+            如果 (首位不为零)
+            {
+                加入字符 (返回值, 模板 [取随机数 (1, 9)])
+            }
+            否则
+            {
+                加入字符 (返回值, 模板 [取随机数 (0, 9)])
+            }
+
+        }
+        循环 (0, 位数)
+        {
+            加入字符 (返回值, 模板 [取随机数 (0, 9)])
+
+        }
+        返回 (返回值)
+
+    }
+
+    方法 随机_取大小写 <公开 类型 = 文本型 折叠>
+    参数 位数 <类型 = 整数>
+    {
+        变量 返回值 <类型 = 文本型>
+        变量 模板 <类型 = "字符 [52]"
+                值 = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'}>
+        如果 (位数 < 1)
+        {
+            加入字符 (返回值, 模板 [取随机数 (0, 51)])
+        }
+        循环 (0, 位数)
+        {
+            加入字符 (返回值, 模板 [取随机数 (0, 51)])
+        }
+        返回 (返回值)
+
+
+
+    }
+
+    方法 随机_取大小写数字 <公开 类型 = 文本型 折叠>
+    参数 位数 <类型 = 整数>
+    {
+        变量 返回值 <类型 = 文本型>
+        变量 模板 <类型 = "字符 [62]"
+                值 = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'}>
+        如果 (位数 < 1)
+        {
+            加入字符 (返回值, 模板 [取随机数 (0, 61)])
+        }
+        循环 (0, 位数)
+        {
+            加入字符 (返回值, 模板 [取随机数 (0, 61)])
+        }
+        返回 (返回值)
+
+    }
+
+    方法 随机_取大写 <公开 类型 = 文本型 折叠>
+    参数 位数 <类型 = 整数>
+    {
+        变量 返回值 <类型 = 文本型>
+        变量 模板 <类型 = "字符 [26]"
+                值 = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'}>
+        如果 (位数 < 1)
+        {
+            加入字符 (返回值, 模板 [取随机数 (0, 25)])
+        }
+        循环 (0, 位数)
+        {
+            加入字符 (返回值, 模板 [取随机数 (0, 25)])
+        }
+        返回 (返回值)
+
+    }
+
+    方法 随机_取小写 <公开 类型 = 文本型 折叠>
+    参数 位数 <类型 = 整数>
+    {
+        变量 返回值 <类型 = 文本型>
+        变量 模板 <类型 = "字符 [26]"
+                值 = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'}>
+        如果 (位数 < 1)
+        {
+            加入字符 (返回值, 模板 [取随机数 (0, 25)])
+        }
+        循环 (0, 位数)
+        {
+            加入字符 (返回值, 模板 [取随机数 (0, 25)])
+        }
+        返回 (返回值)
+
+    }
+}
+
+类 类_指针操作 <公开 折叠>
+{
+    方法 指针_memcpy <公开 折叠 @嵌入式方法 = "">
+    参数 内存指针 <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+        @ memcpy((void*)@<内存指针>,(const void*)@<数据指针>,@<数据大小>)
+
+    }
+
+    方法 指针_memcmp <公开 折叠 @嵌入式方法 = "">
+    参数 内存指针 <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+        @ memcmp((void*)@<内存指针>,(const void*)@<数据指针>,@<数据大小>)
+
+
+    }
+
+    方法 指针_拷贝 <公开 折叠 @嵌入式方法 = "">
+    参数 目标指针 <类型 = 变整数>
+    参数 要拷贝的指针 <类型 = 变整数>
+    参数 拷贝的大小 <类型 = 整数>
+    {
+        @ CopyMemory ((void*)@<目标指针>,(const void *)@<要拷贝的指针>,@<拷贝的大小>)
+
+    }
+
+    方法 指针_取数据指针 <公开 类型 = 变整数 注释 = "指针_到自定义类型 (测试类, 指针_取数据指针 (aa)).打印方法 ()" 折叠 @嵌入式方法 = "">
+    参数 对象 <@匹配类型 = 所有类型>
+    {
+        @ (@dt<变整数>)&@<对象>
+    }
+
+    方法 指针_到自定义类型 <公开 注释 = "指针_到自定义类型 (测试类, 指针_取数据指针 (aa)).打印方法 ()" 折叠 @嵌入式方法 = "">
+    参数 要强制转换的类型 <@需求类型 = 数据类型 @匹配类型 = 所有类型 @返回值类型 = 0>
+    参数 参数 <类型 = 变整数>
+    {
+        @ *(@<要强制转换的类型>*)@<参数>
+    }
+
+    方法 指针_字节集智能指针添加 <公开 注释 = "智能指针" 注释 = "参考案例：https://www.lkuaiy.com/rsdetails?id=16114965486005"
+            注释 = "案例中的方法名叫做智能指针，这里改成了字节集智能指针添加" 注释 = "你们参考案例的时候自行更改一下名称即可" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 欲操作字节集地址 <类型 = 变整数 注释 = "文本到多字节 (\"随便插入几个数据进去！\", 假)  必须填写假，不能含有结束符！！！" 注释 = "格式：取变量地址（XXX字节集）" 折叠2>
+    参数 字节集指针 <类型 = 变整数 @默认值 = 0>
+    参数 字节集长度 <类型 = 整数 @默认值 = 0>
+    参数 释放内存 <类型 = 逻辑型 @默认值 = 假>
+    {
+        如果真 (释放内存 == 真)  // 释放内存空间
+        {
+            @  ((@an<CVolMem>*)@<欲操作字节集地址>)->Free(); 
+            返回
+        }
+        如果真 (字节集指针 == 0 || 字节集长度 == 0)  // 约束条件
+        {
+            返回
+        }
+        @  ((@an<CVolMem>*)@<欲操作字节集地址>)->Append((void *)@<字节集指针>, (INT_P)@<字节集长度>);    //追加数据.
+
+    }
+
+    方法 指针_通用文本数组类 <公开 注释 = "通用文本数组类" 注释 = "参考案例：https://www.lkuaiy.com/rsdetails?id=16114969308238" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 欲操作文本数组地址 <类型 = 变整数 注释 = "文本到多字节 (\"随便插入几个数据进去！\", 假)  必须填写假，不能含有结束符！！！" 注释 = "格式：取文本数组数据地址（XXX文本数组类）" 折叠2>
+    参数 文本指针 <类型 = 变整数 @默认值 = 0>
+    参数 释放空间 <类型 = 逻辑型 @默认值 = 假>
+    {
+        如果真 (释放空间 == 真)  // 释放内存空间
+        {
+            @  ((CMStringArray *)@<欲操作文本数组地址>)->RemoveAll(); 
+            返回
+        }
+        如果真 (文本指针 == 0)  // 约束条件
+        {
+            返回
+        }
+        @  ((CMStringArray *)@<欲操作文本数组地址>)->Add2 (GetWideText ((char *)@<文本指针>, CVolMem(), NULL));
+    }
+
+    方法 指针_取文本数组数据地址 <公开 类型 = 变整数 注释 = "参考案例：https://www.lkuaiy.com/rsdetails?id=16114969308238" 折叠 @禁止流程检查 = 真>
+    参数 欲操作文本数组类 <类型 = 文本数组类>
+    {
+        @ return (@dt<变整数>) &@<欲操作文本数组类>.data ();
+    }
+
+    方法 指针_通用整数数组类 <公开 注释 = "通用整数数组类" 注释 = "参考案例：https://www.lkuaiy.com/rsdetails?id=16114969308238" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 欲操作整数数组地址 <类型 = 变整数>
+    参数 欲加入数据 <类型 = 整数 @默认值 = 0>
+    参数 释放空间 <类型 = 逻辑型 @默认值 = 假>
+    {
+        如果真 (释放空间 == 真)  // 释放内存空间
+        {
+            @ ( *(@dt<整数数组类>*)@<欲操作整数数组地址>).data ().RemoveAll();
+            返回
+        }
+        @ ( *(@dt<整数数组类>*)@<欲操作整数数组地址>).data ().Add2(@<欲加入数据>);
+    }
+
+    #
+}
+
+类 类_系统功能 <公开 折叠 折叠2 @视窗.外部头文件 = "nb30.h" @视窗.外部头文件 = "time.h" @视窗.外部头文件 = "stdio.h" @视窗.外部头文件 = "stdlib.h"
+        @视窗.外部库 = "netapi32.lib" @视窗.外部头文件 = "windows.h">
+{
+
+    # //获取本机MAC地址
+    # @begin
+    # <> <include>
+    # int GetMac(char * mac)
+    # {
+    #     NCB ncb;
+    #     typedef struct _ASTAT_
+    #     {
+    #         ADAPTER_STATUS   adapt;
+    #         NAME_BUFFER   NameBuff   [30];
+    #     }ASTAT,*PASTAT;
+    #
+    #     ASTAT Adapter;
+    #
+    #     typedef struct _LANA_ENUM
+    #     {
+    #         UCHAR   length;
+    #         UCHAR   lana[MAX_LANA];
+    #     }LANA_ENUM;
+    #
+    #     LANA_ENUM lana_enum;
+    #     UCHAR uRetCode;
+    #     memset(&ncb, 0, sizeof(ncb));
+    #     memset(&lana_enum, 0, sizeof(lana_enum));
+    #     ncb.ncb_command = NCBENUM;
+    #     ncb.ncb_buffer = (unsigned char *)&lana_enum;
+    #     ncb.ncb_length = sizeof(LANA_ENUM);
+    #     uRetCode = Netbios(&ncb);
+    #
+    #     if(uRetCode != NRC_GOODRET)
+    #         return uRetCode;
+    #
+    #     for(int lana=0; lana<lana_enum.length; lana++)
+    #     {
+    #         ncb.ncb_command = NCBRESET;
+    #         ncb.ncb_lana_num = lana_enum.lana[lana];
+    #         uRetCode = Netbios(&ncb);
+    #         if(uRetCode == NRC_GOODRET)
+    #             break;
+    #     }
+    #
+    #     if(uRetCode != NRC_GOODRET)
+    #         return uRetCode;
+    #
+    #     memset(&ncb, 0, sizeof(ncb));
+    #     ncb.ncb_command = NCBASTAT;
+    #     ncb.ncb_lana_num = lana_enum.lana[0];
+    #     strcpy((char*)ncb.ncb_callname, "*");
+    #     ncb.ncb_buffer = (unsigned char *)&Adapter;
+    #     ncb.ncb_length = sizeof(Adapter);
+    #     uRetCode = Netbios(&ncb);
+    #
+    #     if(uRetCode != NRC_GOODRET)
+    #         return uRetCode;
+    #
+    #     sprintf(mac,"%02X-%02X-%02X-%02X-%02X-%02X",
+    #         Adapter.adapt.adapter_address[0],
+    #         Adapter.adapt.adapter_address[1],
+    #         Adapter.adapt.adapter_address[2],
+    #         Adapter.adapt.adapter_address[3],
+    #         Adapter.adapt.adapter_address[4],
+    #         Adapter.adapt.adapter_address[5]);
+    #
+    #     return 0;
+    # }
+    #
+    # <> </include>
+    # @end
+    # //取本机IP地址
+    # @begin
+    # <> <include>
+    # char* GetLocalIP()  
+    # {  
+    #     WSADATA wsaData;  
+    #     int ret=WSAStartup(MAKEWORD(2,2),&wsaData);  
+    #     if (ret!=0)  
+    #     {  
+    #         return "";  
+    #     }  
+    #     char hostname[256];  
+    #     ret=gethostname(hostname,sizeof(hostname));  
+    #     if (ret==SOCKET_ERROR)  
+    #     {  
+    #         return "";  
+    #     }  
+    #     HOSTENT* host=gethostbyname(hostname);  
+    #     if (host==NULL)  
+    #     {  
+    #         return "";  
+    #     }  
+    #     return inet_ntoa(*(in_addr*)*host->h_addr_list);  
+    # } 
+    # <> </include>
+    # @end
+
+    方法 立即重启自身 <公开 注释 = "注意:请务必编译成EXE后在进行测试!" 折叠>
+    {
+        变量 引号 <类型 = 文本型 值 = "\"">
+        运行 ("cmd /c " + "taskkill /f /im " + 引号 + 取执行文件名 () + 引号 + " &start " + 引号 + 引号 + " " + 引号 + 取执行文件名 () + 引号 + " &exit", 假)
+    }
+
+    方法 是否隐藏系统桌面 <公开 类型 = 变整数 折叠>
+    参数 是否隐藏任务栏 <类型 = 逻辑型>
+    {
+        变量 桌面句柄 <类型 = 变整数>
+        @ HWND hWnd = ::FindWindow(TEXT("progman"),NULL);
+        @      hWnd = ::FindWindowEx (hWnd, 0,TEXT("shelldll_defview"),NULL);
+        @      hWnd = ::FindWindowEx (hWnd, 0,TEXT("SysListView32"), NULL);
+        如果 (是否隐藏任务栏 == 真)
+        {
+            @ ::ShowWindow (hWnd, 0);
+        }
+        否则
+        {
+            @ ::ShowWindow (hWnd, 1);
+
+        }
+        @ @<桌面句柄>=(long)hWnd;
+        返回 (桌面句柄)
+
+
+    }
+
+    方法 窗口最大化显示任务栏 <公开>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ int cx = GetSystemMetrics(SM_CXFULLSCREEN);
+        @ int cy = GetSystemMetrics(SM_CYFULLSCREEN);
+        @ CRect rt;
+        @ SystemParametersInfo(SPI_GETWORKAREA,0,&rt,0);
+        @ cy = rt.bottom;
+        @ MoveWindow((HWND)@<窗口句柄>,0,0,cx,cy,TRUE);
+
+    }
+
+    方法 隐藏任务栏图标 <公开 折叠>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ SetWindowLong((HWND)@<窗口句柄>,-8, WS_EX_TOOLWINDOW);
+    }
+
+    方法 创建快捷方式 <公开 类型 = 逻辑型 折叠>
+    参数 快捷方式名称 <类型 = 文本型 注释 = "存放快捷方式的路径和名称">
+    参数 指向程序路径 <类型 = 文本型 注释 = "该程序的存放路径">
+    {
+        变量 文件名 <类型 = 文本型>
+        变量 配置数据 <类型 = 文本型>
+        文件名 = 取文本右边 (快捷方式名称, 取文本长度 (快捷方式名称) - 倒找文本 (快捷方式名称, "\\", , 假))
+        配置数据 = "[InternetShortcut]" + "\n\r\n\r" + "URL=" + 指向程序路径 + "\n\r\n\r" + "IconIndex=0" + "\n\r\n\r" + "IconFile=" + 指向程序路径
+        返回 (写到文件 (快捷方式名称 + ".url", 文本到多字节 (配置数据)))
+
+    }
+
+    方法 取程序路径_ <公开 类型 = 文本型 注释 = "取自身完整路径" 折叠>
+    {
+        变量 返回值 <类型 = 文本型>
+        @  TCHAR lpBuffer[1024] = {0};
+        @  GetModuleFileName(NULL,lpBuffer,1024);
+        @ @<返回值> = lpBuffer;
+        返回 (返回值)
+
+
+
+    }
+
+    方法 取特定目录_ <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 目录类型 <类型 = 整数 注释 = "#define CSIDL_DESKTOP                   0x0000        // <desktop>"
+            注释 = "#define CSIDL_INTERNET                  0x0001        // Internet Explorer (icon on desktop)"
+            注释 = "#define CSIDL_PROGRAMS                  0x0002        // Start Menu\\Programs"
+            注释 = "#define CSIDL_CONTROLS                  0x0003        // My Computer\\Control Panel"
+            注释 = "#define CSIDL_PRINTERS                  0x0004        // My Computer\\Printers"
+            注释 = "#define CSIDL_PERSONAL                  0x0005        // My Documents"
+            注释 = "#define CSIDL_FAVORITES                 0x0006        // <user name>\\Favorites"
+            注释 = "#define CSIDL_STARTUP                   0x0007        // Start Menu\\Programs\\Startup"
+            注释 = "#define CSIDL_RECENT                    0x0008        // <user name>\\Recent"
+            注释 = "#define CSIDL_SENDTO                    0x0009        // <user name>\\SendTo"
+            注释 = "#define CSIDL_BITBUCKET                 0x000a        // <desktop>\\Recycle Bin"
+            注释 = "#define CSIDL_STARTMENU                 0x000b        // <user name>\\Start Menu"
+            注释 = "#define CSIDL_MYDOCUMENTS               CSIDL_PERSONAL //  Personal was just a silly name for My Documents"
+            注释 = "#define CSIDL_MYMUSIC                   0x000d        // \"My Music\" folder"
+            注释 = "#define CSIDL_MYVIDEO                   0x000e        // \"My Videos\" folder"
+            注释 = "#define CSIDL_DESKTOPDIRECTORY          0x0010        // <user name>\\Desktop"
+            注释 = "#define CSIDL_DRIVES                    0x0011        // My Computer"
+            注释 = "#define CSIDL_NETWORK                   0x0012        // Network Neighborhood (My Network Places)"
+            注释 = "#define CSIDL_NETHOOD                   0x0013        // <user name>\\nethood"
+            注释 = "#define CSIDL_FONTS                     0x0014        // windows\\fonts"
+            注释 = "#define CSIDL_TEMPLATES                 0x0015"
+            注释 = "#define CSIDL_COMMON_STARTMENU          0x0016        // All Users\\Start Menu"
+            注释 = "#define CSIDL_COMMON_PROGRAMS           0X0017        // All Users\\Start Menu\\Programs"
+            注释 = "#define CSIDL_COMMON_STARTUP            0x0018        // All Users\\Startup"
+            注释 = "#define CSIDL_COMMON_DESKTOPDIRECTORY   0x0019        // All Users\\Desktop"
+            注释 = "#define CSIDL_APPDATA                   0x001a        // <user name>\\Application Data"
+            注释 = "#define CSIDL_PRINTHOOD                 0x001b        // <user name>\\PrintHood" 折叠2 "">
+    {
+        @  TCHAR lpBuffer[1024] = {0};
+        @ SHGetSpecialFolderPath(NULL,lpBuffer,@<目录类型>,false);
+        @ return lpBuffer;
+
+    }
+
+    方法 获取MAC地址 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        @ char mac[200]; 
+        @ GetMac(mac);   
+        @ return (CWString)mac;
+    }
+
+    方法 获取本机IP地址 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        @ return GetLocalIP();
+    }
+
+    方法 选择文件夹 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 对话框标题 <类型 = 文本型 @默认值 = "选择文件夹">
+    {
+        @ BROWSEINFO  bi;
+        @  bi.hwndOwner=NULL;
+        @  bi.pidlRoot=NULL;
+        @  bi.pszDisplayName=NULL;
+        @  bi.lpszTitle=@<对话框标题>;
+        @  bi.ulFlags=0;
+        @  bi.lpfn =NULL;
+        @  bi.iImage =0;
+        @  LPCITEMIDLIST pidl=SHBrowseForFolder(&bi);
+        @  if(!pidl)
+        @   return "";
+        @  TCHAR  szDisplayName[255];
+        @  SHGetPathFromIDList(pidl,szDisplayName);
+        @  CWString str(szDisplayName);
+        @ return str;
+
+
+
+    }
+
+    方法 选择文件夹_高级 <公开 类型 = 文本型 返回值注释 = "失败返回空文本" 折叠 @禁止流程检查 = 真>
+    参数 初始目录 <类型 = 文本型 @默认值 = "">
+    {
+        @  CWString workingDirectory;
+        @ if(@<初始目录>!=_T("")){workingDirectory=@<初始目录>;}
+        @  CString m_strFolderPath;
+        @  CFolderPickerDialog dlg(workingDirectory, 0, NULL, 0); 
+        @  if (dlg.DoModal()) 
+        @  {
+        @     m_strFolderPath = dlg.GetPathName() ;
+        @     return m_strFolderPath;
+        @  }
+        @     return _T("");
+    }
+
+    方法 调用关机界面 <公开 折叠>
+    {
+        @ HWND hWnd = ::FindWindow(TEXT("Progman"),TEXT("Program Manager"));
+        变量 句柄 <类型 = 变整数>
+        @ @<句柄>=(long)hWnd;
+        SendMessageW (句柄, 16, 0, 0)
+    }
+
+    方法 窗口圆角化 <公开 折叠>
+    参数 窗口句柄 <类型 = 变整数>
+    参数 宽度 <类型 = 整数>
+    参数 高度 <类型 = 整数>
+    参数 椭圆宽度 <类型 = 整数>
+    参数 椭圆高度 <类型 = 整数>
+    {
+        变量 句柄 <类型 = 变整数>
+        句柄 = CreateRoundRectRgn (0, 0, 宽度, 高度, 椭圆宽度, 椭圆高度)
+        SetWindowRgn (窗口句柄, 句柄, 真)
+        DeleteObject (窗口句柄)
+
+    }
+
+    方法 禁止重复运行 <公开 折叠>
+    参数 软件标记 <类型 = 文本型 注释 = "请用英文字母标记" @默认值 = "lky">
+    {
+        如果 (OpenEventA (2031619, 假, 软件标记) != 0)
+        {
+            结束 ()
+        }
+        否则
+        {
+            CreateEventA (0, 假, 假, 软件标记)
+        }
+    }
+
+    方法 CreateEventA <公开 静态 折叠 @输出名 = "CreateEventA" @视窗.输入 = "kernel32">
+    参数 lpEventAttributes <类型 = 整数>
+    参数 bManualReset <类型 = 逻辑型>
+    参数 bInitialState <类型 = 逻辑型>
+    参数 lpName <类型 = 文本型>
+    {
+
+    }
+
+    方法 OpenEventA <公开 静态 类型 = 整数 折叠 @输出名 = "OpenEventA" @视窗.输入 = "kernel32">
+    参数 dwDesiredAccess <类型 = 整数>
+    参数 bInheritHandle <类型 = 逻辑型>
+    参数 bInitialState <类型 = 文本型>
+    {
+
+    }
+
+    方法 CreateRoundRectRgn <公开 静态 类型 = 变整数 折叠 @输出名 = "CreateRoundRectRgn" @视窗.输入 = "gdi32">
+    参数 左边 <类型 = 整数>
+    参数 顶边 <类型 = 整数>
+    参数 右边 <类型 = 整数>
+    参数 底边 <类型 = 整数>
+    参数 椭圆宽度 <类型 = 整数>
+    参数 椭圆高度 <类型 = 整数>
+    {
+
+    }
+
+    方法 SetWindowRgn <公开 静态 类型 = 整数 折叠 @输出名 = "SetWindowRgn" @视窗.输入 = "user32">
+    参数 hWnd <类型 = 变整数>
+    参数 hRgn <类型 = 变整数>
+    参数 bRedraw <类型 = 逻辑型>
+    {
+
+    }
+
+    方法 DeleteObject <公开 静态 类型 = 整数 折叠 @输出名 = "DeleteObject" @视窗.输入 = "gdi32">
+    参数 hObject <类型 = 变整数>
+    {
+
+    }
+
+    方法 SendMessageW <公开 静态 类型 = 变整数 折叠 @输出名 = "SendMessageW" @视窗.输入 = "User32.dll">
+    参数 hWnd <类型 = 变整数>
+    参数 Msg <类型 = 整数>
+    参数 wParam <类型 = 变整数>
+    参数 lParam <类型 = 变整数>
+
+    方法 PostMessageW <公开 静态 类型 = 逻辑型 折叠 @输出名 = "PostMessageW" @视窗.输入 = "User32.dll">
+    参数 hWnd <类型 = 变整数>
+    参数 Msg <类型 = 整数>
+    参数 wParam <类型 = 变整数>
+    参数 lParam <类型 = 变整数>
+
+    #
+}
+
+类 类_系统杂项 <公开 折叠 折叠2 @视窗.外部头文件 = "nb30.h" @视窗.外部头文件 = "time.h" @全局类 = 真>
+{
+    方法 打开指定目录 <公开 折叠>
+    参数 指定目录 <类型 = 文本型>
+    {
+        @  ShellExecute( NULL, _T("open"), (LPCTSTR)@<指定目录>, NULL, NULL, SW_SHOWNORMAL );
+        // edit 用编辑器打开 lpFile 指定的文档,如果 lpFile 不是文档,则会失败
+        // explore 浏览 lpFile 指定的文件夹
+        // find 搜索 lpDirectory 指定的目录
+        // open 打开 lpFile 文件,lpFile 可以是文件或文件夹
+        // print 打印 lpFile,如果 lpFile 不是文档,则函数失败
+        // properties 显示属性
+        // runas 请求以管理员权限运行,比如以管理员权限运行某个exe
+        // NULL 执行默认”open”动作
+    }
+
+    方法 取代码 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 文本 <类型 = 文本型>
+    参数 位置 <类型 = 整数 注释 = "从0开始" @默认值 = 0>
+    {
+        @  (INT)(@<文本>.GetText ()[@<位置>])
+
+    }
+
+    方法 取字符 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 代码 <类型 = 整数>
+    {
+        @ return  (wchar_t)@<代码>;
+    }
+
+    方法 延时 <公开 折叠 @嵌入式方法 = "">
+    参数 时长 <类型 = 整数>
+    {
+        @ Sleep(@<时长>)
+    }
+
+    方法 超级延时 <公开 折叠>
+    参数 时长 <类型 = 长整数 注释 = "微妙">
+    {
+        @     HANDLE hEvent = ::CreateWaitableTimer(NULL,FALSE,NULL);
+        @     LARGE_INTEGER ltm;
+        @     ltm.QuadPart =-10*@<时长>;
+        @     ::SetWaitableTimer(hEvent,&ltm,0,NULL,NULL,FALSE);
+        @     while(MsgWaitForMultipleObjects(1, &hEvent, FALSE, INFINITE,QS_ALLEVENTS ) != WAIT_OBJECT_0)
+        @     {
+        @         MSG msg;
+        @         while ( ::PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) != 0 ) 
+        @         {
+        @              DispatchMessage(&msg);
+        @              TranslateMessage(&msg);
+        @         }
+        @     }
+        @     CloseHandle(hEvent);
+
+    }
+
+    方法 取运行目录 <公开 类型 = 文本型 折叠>
+    {
+        变量 返回值 <类型 = 文本型>
+        @  TCHAR lpBuffer[1024] = {0};
+        @  GetModuleFileName(NULL,lpBuffer,1024);
+        @  PathRemoveFileSpec(lpBuffer);
+        @ @<返回值> = lpBuffer;
+        返回 (返回值)
+    }
+
+    方法 程序_取运行目录 <公开 类型 = 文本型 折叠>
+    {
+        变量 返回值 <类型 = 文本型>
+        @  TCHAR lpBuffer[1024] = {0};
+        @  GetModuleFileName(NULL,lpBuffer,1024);
+        @  PathRemoveFileSpec(lpBuffer);
+        @ @<返回值> = lpBuffer;
+        返回 (返回值)
+
+    }
+
+    方法 程序_取名称与后缀 <公开 类型 = 文本型 折叠>
+    {
+        变量 返回值 <类型 = 文本型>
+        @  TCHAR lpBuffer[1024] = {0};
+        @  GetModuleFileName(NULL,lpBuffer,1024);
+        @  PathStripPath(lpBuffer);
+        @ @<返回值> = lpBuffer;
+        返回 (返回值)
+
+    }
+
+    方法 程序_取完整路径 <公开 类型 = 文本型 注释 = "取自身完整路径" 折叠>
+    {
+        变量 返回值 <类型 = 文本型>
+        @  TCHAR lpBuffer[1024] = {0};
+        @  GetModuleFileName(NULL,lpBuffer,1024);
+        @ @<返回值> = lpBuffer;
+        返回 (返回值)
+    }
+
+    方法 取启动时间 <公开 类型 = 整数 注释 = "WinBase.h" 折叠 @嵌入式方法 = "">
+    {
+        @  (INT)GetTickCount()
+    }
+
+    方法 取启动时间64 <公开 类型 = 长整数 注释 = "WinBase.h" 折叠 @嵌入式方法 = "">
+    {
+        @  (INT64)GetTickCount64()
+    }
+
+    方法 取DLL函数地址 <公开 类型 = 长整数 折叠 @嵌入式方法 = "">
+    参数 DLL名称 <类型 = 文本型>
+    参数 函数名称 <@匹配类型 = 所有类型>
+    {
+        @ (INT64)GetProcAddress (LoadLibrary (@<DLL名称>),@<函数名称>)
+
+
+    }
+
+    方法 程序_是否64位 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @ return (sizeof(int*) == 4 )?false:true;
+
+
+    }
+
+    方法 取实例句柄 <公开 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    参数 模块名称 <类型 = 文本型 注释 = "模块名称 如果为空，则取当前程序的实例句柄" @默认值 = "">
+    {
+        如果 (模块名称 == "")
+        {
+            @ return (@dt<变整数>)::GetModuleHandle (0)
+        }
+
+        @ return (@dt<变整数>)::GetModuleHandle (@<模块名称>)
+
+    }
+
+    方法 系统_是否64位 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @ #ifndef PROCESSOR_ARCHITECTURE_AMD64
+        @  #define PROCESSOR_ARCHITECTURE_AMD64 9
+        @ #endif
+        @  typedef void (WINAPI *LPGetNativeSystemInfo)(LPSYSTEM_INFO); 
+        @  LPGetNativeSystemInfo pGetNativeSystemInfo = (LPGetNativeSystemInfo)GetProcAddress(GetModuleHandle(TEXT("kernel32.dll")),"GetNativeSystemInfo"); 
+        @  SYSTEM_INFO cur_system_info;
+        @  pGetNativeSystemInfo(&cur_system_info);
+        @  WORD system_str= cur_system_info.wProcessorArchitecture;
+        @  //判断是否为64位系统
+        @  if (system_str == PROCESSOR_ARCHITECTURE_IA64 || system_str == PROCESSOR_ARCHITECTURE_AMD64)
+        @  {
+        @   return true;
+        @  }
+        @  return false;
+
+
+    }
+
+    方法 隐藏系统桌面 <公开 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    参数 是否隐藏任务栏 <类型 = 逻辑型>
+    {
+        @ HWND hWnd = ::FindWindow(TEXT("progman"),NULL);
+        @ hWnd = ::FindWindowEx (hWnd, 0,TEXT("shelldll_defview"),NULL);
+        @ hWnd = ::FindWindowEx (hWnd, 0,TEXT("SysListView32"), NULL);
+        @ if(@<是否隐藏任务栏>==true){::ShowWindow (hWnd, 0);}else{::ShowWindow (hWnd, 1);}
+        @ return (long)hWnd;
+
+    }
+
+    方法 隐藏系统任务栏 <公开 折叠>
+    参数 是否隐藏任务栏 <类型 = 逻辑型>
+    {
+        @ HWND hWnd = ::FindWindow(TEXT("Shell_traywnd"),TEXT(""));
+        @ if(@<是否隐藏任务栏>==true){::SetWindowPos(hWnd,0,0,0,0,0,SWP_HIDEWINDOW);}else{::SetWindowPos(hWnd,0,0,0,0,0,SWP_SHOWWINDOW);}
+    }
+
+    方法 取屏幕宽度_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ HDC hdc = GetDC(NULL);
+        @ int client_width = GetDeviceCaps(hdc, DESKTOPHORZRES);
+        @ int client_height = GetDeviceCaps(hdc, DESKTOPVERTRES);
+        @  ReleaseDC(NULL, hdc);
+        @ return client_width;
+
+    }
+
+    方法 取屏幕高度_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ HDC hdc = GetDC(NULL);
+        @ int client_width = GetDeviceCaps(hdc, DESKTOPHORZRES);
+        @ int client_height = GetDeviceCaps(hdc, DESKTOPVERTRES);
+        @  ReleaseDC(NULL, hdc);
+        @ return client_height;
+
+    }
+
+    方法 快照截图 <公开 静态 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 窗口 注释 = "默认为0，0代表截屏整个屏幕，否则截取固定窗口" @默认值 = 空对象>
+    参数 保存地址 <类型 = 文本型>
+    参数 截取区域 <类型 = 矩形类 注释 = "注意：本参数只有在截取全屏时才有效" @默认值 = 空对象>
+    参数 保存格式 <类型 = 整数 注释 = "默认为1，1等于BMP" 注释 = "2等于PNG" 注释 = "3等于JPEG" 折叠2 @默认值 = 1>
+    {
+        变量 X坐标 <类型 = 整数>
+        变量 Y坐标 <类型 = 整数>
+        变量 宽度 <类型 = 整数>
+        变量 高度 <类型 = 整数>
+        变量 指针 <类型 = 变整数>
+        变量 字节集 <类型 = 字节集类>
+        字节集 = 文本到多字节 (保存地址)
+        指针 = 取字节集指针 (字节集)
+        如果 (窗口句柄 == 空对象)
+        {
+            如果 (截取区域 != 空对象)
+            {
+                宽度 = 截取区域.右边 - 截取区域.左边
+                高度 = 截取区域.底边 - 截取区域.顶边
+                X坐标 = 截取区域.左边
+                Y坐标 = 截取区域.顶边
+                @ if(@<宽度>==0 || @<高度>==0){HDC hdc = GetDC(NULL);int client_width = GetDeviceCaps(hdc, DESKTOPHORZRES);int client_height = GetDeviceCaps(hdc, DESKTOPVERTRES);ReleaseDC(NULL, hdc);@<宽度>=client_width;@<高度>=client_height;};
+                @ char * a=(char *)@<指针>;
+                @ ScreenShot(NULL,a,@<宽度>,@<高度>,@<X坐标>,@<Y坐标>,@<保存格式>);
+            }
+            否则
+            {
+                @ char * a=(char *)@<指针>;
+                @ HDC hdc = GetDC(NULL);
+                @ int client_width = GetDeviceCaps(hdc, DESKTOPHORZRES);
+                @ int client_height = GetDeviceCaps(hdc, DESKTOPVERTRES);
+                @  ReleaseDC(NULL, hdc);
+
+                @ ScreenShot(NULL,a,client_width,client_height,0,0,@<保存格式>);
+
+            }
+
+        }
+        否则
+        {
+            宽度 = 窗口句柄.宽度
+            高度 = 窗口句柄.高度
+
+            @ char * a=(char *)@<指针>;
+            变量 句柄 <类型 = 变整数>
+            句柄 = 窗口句柄.取窗口句柄 ()
+            @ ScreenShot((HWND)@<句柄>,a,@<宽度>,@<高度>,0,0,@<保存格式>);
+
+        }
+
+
+    }
+
+    方法 快照截图2 <公开 静态 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "默认为0，0代表截屏整个屏幕，否则截取固定窗口" @默认值 = 0>
+    参数 窗口宽度 <类型 = 整数>
+    参数 窗口高度 <类型 = 整数>
+    参数 保存地址 <类型 = 文本型>
+    参数 截取区域 <类型 = 矩形类 注释 = "注意：本参数只有在截取全屏时才有效" @默认值 = 空对象>
+    参数 保存格式 <类型 = 整数 注释 = "默认为1，1等于BMP" 注释 = "2等于PNG" 注释 = "3等于JPEG" 折叠2 @默认值 = 1>
+    {
+        变量 X坐标 <类型 = 整数>
+        变量 Y坐标 <类型 = 整数>
+        变量 宽度 <类型 = 整数>
+        变量 高度 <类型 = 整数>
+        变量 指针 <类型 = 变整数>
+        变量 字节集 <类型 = 字节集类>
+        字节集 = 文本到多字节 (保存地址)
+        指针 = 取字节集指针 (字节集)
+        如果 (窗口句柄 == 0)
+        {
+            如果 (截取区域 != 空对象)
+            {
+                宽度 = 截取区域.右边 - 截取区域.左边
+                高度 = 截取区域.底边 - 截取区域.顶边
+                X坐标 = 截取区域.左边
+                Y坐标 = 截取区域.顶边
+                @ if(@<宽度>==0 || @<高度>==0){HDC hdc = GetDC(NULL);int client_width = GetDeviceCaps(hdc, DESKTOPHORZRES);int client_height = GetDeviceCaps(hdc, DESKTOPVERTRES);ReleaseDC(NULL, hdc);@<宽度>=client_width;@<高度>=client_height;};
+                @ char * a=(char *)@<指针>;
+                @ ScreenShot(NULL,a,@<宽度>,@<高度>,@<X坐标>,@<Y坐标>,@<保存格式>);
+            }
+            否则
+            {
+                @ char * a=(char *)@<指针>;
+                @ HDC hdc = GetDC(NULL);
+                @ int client_width = GetDeviceCaps(hdc, DESKTOPHORZRES);
+                @ int client_height = GetDeviceCaps(hdc, DESKTOPVERTRES);
+                @  ReleaseDC(NULL, hdc);
+
+                @ ScreenShot(NULL,a,client_width,client_height,0,0,@<保存格式>);
+
+            }
+
+        }
+        否则
+        {
+            宽度 = 窗口宽度
+            高度 = 窗口高度
+
+            @ char * a=(char *)@<指针>;
+            变量 句柄 <类型 = 变整数>
+            句柄 = 窗口句柄
+            @ ScreenShot((HWND)@<句柄>,a,@<宽度>,@<高度>,0,0,@<保存格式>);
+
+        }
+
+
+    }
+
+    # @begin
+    # <> <include>
+    # static void ScreenShot(HWND hwnd_,const char *lpszPath,int KWidth,int KHeight,int X,int Y,int format)
+    # {
+    #     HDC hDCScreen;
+    #     if(hwnd_==NULL){hDCScreen = ::GetDC(NULL);}else{hDCScreen = ::GetDC(hwnd_);}//首先获取到屏幕的句柄
+    #     int nBitPerPixel = GetDeviceCaps(hDCScreen, BITSPIXEL);//获取到每个像素的bit数目
+    #     int nWidthScreen;
+    #     int nHeightScreen;
+    #     if(KWidth==0 || KHeight==0){nWidthScreen = GetDeviceCaps(hDCScreen, HORZRES);nHeightScreen = GetDeviceCaps(hDCScreen, VERTRES);}else{nWidthScreen=KWidth;nHeightScreen=KHeight;}
+    #     //创建一个CImage的对象
+    #     CImage m_MyImage;
+    #     //Create实例化CImage，使得其内部的画布大小与屏幕一致
+    #     m_MyImage.Create(nWidthScreen, nHeightScreen, nBitPerPixel);
+    #     //获取到CImage的 HDC,但是需要手动ReleaseDC操作,下面是MSDN的说明
+    #     //Because only one bitmap can be selected into a device context at a time, 
+    #     //you must call ReleaseDC for each call to GetDC.
+    #     HDC hDCImg = m_MyImage.GetDC();
+    #     //使用bitblt 将屏幕的DC画布上的内容 拷贝到CImage上
+    #     BitBlt(hDCImg, 0, 0, nWidthScreen, nHeightScreen, hDCScreen, X, Y, SRCCOPY);
+    #     //直接保存吧
+    #     CString strFileName(lpszPath);
+    #     if(format==1){m_MyImage.Save(strFileName, Gdiplus::ImageFormatBMP);};
+    #     if(format==2){m_MyImage.Save(strFileName, Gdiplus::ImageFormatPNG);}
+    #     if(format==3){m_MyImage.Save(strFileName, Gdiplus::ImageFormatJPEG);}
+    #     //前面调用了GetDC所以需要调用ReleaseDC释放掉
+    #     //详情请参见MSDN
+    #     //
+    #     m_MyImage.ReleaseDC();
+    #     //
+    # }
+    # <> </include>
+    # @end
+    #
+    #
+}
+
+类 类_字节集操作 <公开 折叠 "">
+{
+    方法 字节集_字节集取整数 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 字节集 <类型 = 字节集类>
+    参数 要取的成员 <类型 = 整数>
+    {
+        @ (int)@<字节集>.GetPtr()[@<要取的成员>]
+    }
+
+    方法 字节集_字节集取整数2 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 字节集 <类型 = 字节集类>
+    参数 成员 <类型 = 整数 "">
+    参数 最小宽度 <类型 = 整数>
+    {
+        @ int pt;
+        @ &pt(整数)@<字节集>.GetPtr()[@<成员>];
+        @ TCHAR buf [64];
+        @ return CVolString (DWordToHexStr ((DWORD)&pt, @<最小宽度>, buf, NUM_ELEMENTS_OF (buf)));
+
+    }
+
+    方法 字节集_字节集是否相等 <公开 类型 = 逻辑型 折叠>
+    参数 字节集1 <类型 = 字节集类>
+    参数 字节集2 <类型 = 字节集类>
+    {
+        如果 (取字节集哈希值 (字节集1) == 取字节集哈希值 (字节集2))
+        {
+            返回 (真)
+
+        }
+        否则
+        {
+            返回 (假)
+
+        }
+
+
+    }
+
+    方法 字节集_UTF8去首零 <公开 类型 = 字节集类 折叠>
+    参数 UTF8数据 <类型 = 字节集类>
+    {
+        变量 临时字节集 <类型 = 字节集类>
+        临时字节集 = 文本到UTF8 ("")
+        如果 (取字节集长度 (UTF8数据) >= 1)
+        {
+            如果 (取字节集长度 (UTF8数据) >= 取字节集长度 (临时字节集))
+            {
+                如果 (取字节集左边 (UTF8数据, 取字节集长度 (临时字节集)) == 临时字节集)
+                {
+                    临时字节集 = 取字节集右边 (UTF8数据, 取字节集长度 (UTF8数据) - 取字节集长度 (临时字节集))
+                }
+                否则
+                {
+                    临时字节集 = UTF8数据
+
+                }
+
+            }
+
+            返回 (临时字节集)
+        }
+        否则
+        {
+            临时字节集 = UTF8数据
+            返回 (临时字节集)
+
+        }
+    }
+
+    方法 字节集_UTF8去尾零 <公开 类型 = 字节集类 折叠>
+    参数 UTF8数据 <类型 = 字节集类>
+    {
+        变量 临时字节集 <类型 = 字节集类>
+        临时字节集 = 文本到UTF8 ("")
+        如果 (取字节集长度 (UTF8数据) >= 1)
+        {
+            变量 长度 <类型 = 整数>
+            长度 = 取字节集长度 (临时字节集)
+            变量 UTF8长度 <类型 = 整数>
+            UTF8长度 = 取字节集长度 (UTF8数据)
+            如果 (UTF8长度 >= 长度)
+            {
+                如果 (取字节集右边 (UTF8数据, 长度) == 临时字节集)
+                {
+                    临时字节集 = 取字节集左边 (UTF8数据, UTF8长度 - 长度)
+                }
+                否则
+                {
+                    临时字节集 = UTF8数据
+
+                }
+
+
+            }
+
+            返回 (临时字节集)
+        }
+        否则
+        {
+            临时字节集 = UTF8数据
+            返回 (临时字节集)
+
+        }
+    }
+
+    方法 字节集_字节集分割 <公开 折叠>
+    参数 待分割字节集 <类型 = 字节集类>
+    参数 用作分割字节集 <类型 = 字节集类>
+    参数 结果字节集 <类型 = 字节集数组类>
+    {
+        变量 临时字节集 <类型 = 字节集数组类>
+        变量 字节集 <类型 = 字节集类>
+        字节集 = 待分割字节集
+        字节集.添加字节集 (用作分割字节集)
+        字节集.添加字节集 (文本到字节集 ("fengezijiejimengmengda"))
+        分割字节集 (字节集, 用作分割字节集, 临时字节集)
+        如果 (字节集_字节集是否相等 (临时字节集.取成员 (临时字节集.取成员数 () - 1), 文本到字节集 ("fengezijiejimengmengda")) == 真)
+        {
+            临时字节集.删除成员 (临时字节集.取成员数 () - 1)
+
+        }
+
+        结果字节集 = 临时字节集
+    }
+
+    方法 字节集_替换 <公开 类型 = 字节集类 折叠>
+    参数 原始内容 <类型 = 字节集类>
+    参数 要替换的文本 <类型 = 字节集类>
+    参数 用作替换的文本 <类型 = 字节集类>
+    {
+        变量 替换后的内容 <类型 = 字节集类>
+        替换后的内容 = 原始内容
+        子字节集替换 (替换后的内容, 要替换的文本, 用作替换的文本)
+        返回 (替换后的内容)
+    }
+
+    方法 字节集_寻找取右 <公开 类型 = 字节集类
+            注释 = "从字节集的右边按 欲寻找的字节集 开始寻找  如 字节集_取右边({105,108,121,13,10,83,101},{13,10}) 将返回 {83,101}，如果没有找到将会返回空" 折叠>
+    参数 被查找的字节集 <类型 = 字节集类 注释 = "被查找的字节集">
+    参数 欲查找的字节集 <类型 = 字节集类 注释 = "欲寻找的字节集">
+    参数 起始位置 <类型 = 整数 注释 = "默认从最右边寻找,欲寻找的字节集的起始寻找位置,一般情况都留空" @默认值 = 0>
+    {
+        变量 结果字节集 <类型 = 字节集类>
+        变量 起始寻找位置 <类型 = 整数>
+        如果 (起始位置 <= 0)
+        {
+            起始寻找位置 = 取字节集长度 (被查找的字节集)
+        }
+        否则
+        {
+            起始寻找位置 = 起始位置
+
+        }
+
+        如果 (倒找字节集 (被查找的字节集, 欲查找的字节集, 起始寻找位置) == -1)
+        {
+            变量 空字节 <类型 = 字节集类>
+            返回 (空字节)
+
+        }
+
+        变量 查找位置 <类型 = 整数>
+        查找位置 = 取字节集长度 (被查找的字节集) - 取字节集长度 (欲查找的字节集) - 倒找字节集 (被查找的字节集, 欲查找的字节集, 起始寻找位置)
+        如果 (取字节集长度 (被查找的字节集) >= 查找位置)
+        {
+            结果字节集 = 取字节集右边 (被查找的字节集, 查找位置)
+            返回 (结果字节集)
+        }
+        否则
+        {
+            变量 空字节 <类型 = 字节集类>
+            返回 (空字节)
+
+        }
+
+    }
+
+    方法 字节集_寻找取左 <公开 类型 = 字节集类
+            注释 = "从字节集的右边按 欲寻找的字节集 开始寻找  如 字节集_取右边({105,108,121,13,10,83,101},{13,10}) 将返回 {105,108,121}，如果没有找到将会返回空" 折叠>
+    参数 被查找的字节集 <类型 = 字节集类 注释 = "被查找的字节集">
+    参数 欲查找的字节集 <类型 = 字节集类 注释 = "欲寻找的字节集">
+    参数 起始位置 <类型 = 整数 注释 = "默认从最左边寻找,欲寻找的字节集的起始寻找位置,一般情况都留空，注意：必须大于0" @默认值 = 0>
+    {
+        变量 结果字节集 <类型 = 字节集类>
+        如果 (寻找字节集 (被查找的字节集, 欲查找的字节集, 起始位置) == -1)
+        {
+            变量 空字节 <类型 = 字节集类>
+            返回 (空字节)
+
+        }
+
+
+        变量 查找位置 <类型 = 整数>
+        查找位置 = 寻找字节集 (被查找的字节集, 欲查找的字节集, 起始位置)
+        如果 (取字节集长度 (被查找的字节集) >= 查找位置)
+        {
+            结果字节集 = 取字节集左边 (被查找的字节集, 查找位置)
+            返回 (结果字节集)
+        }
+        否则
+        {
+            变量 空字节 <类型 = 字节集类>
+            返回 (空字节)
+
+
+        }
+
+    }
+
+    方法 字节集_寻找取右_从左开始 <公开 类型 = 字节集类
+            注释 = "从字节集的左边按 欲寻找的字节集 开始寻找  如 字节集_取右边({105,108,121,13,10,83,101},{13,10}) 将返回 {83,101}，如果没有找到将会返回空" 折叠>
+    参数 被查找的字节集 <类型 = 字节集类 注释 = "被查找的字节集">
+    参数 欲查找的字节集 <类型 = 字节集类 注释 = "欲寻找的字节集">
+    参数 起始位置 <类型 = 整数 注释 = "默认从最右边寻找,欲寻找的字节集的起始寻找位置,一般情况都留空" @默认值 = 0>
+    {
+        变量 临时字节集 <类型 = 字节集类>
+        临时字节集 = 字节集_寻找取左 (被查找的字节集, 欲查找的字节集)
+        变量 长度 <类型 = 整数>
+        长度 = 取字节集长度 (被查找的字节集) - 取字节集长度 (欲查找的字节集) - 取字节集长度 (临时字节集)
+        如果 (取字节集长度 (被查找的字节集) >= 长度)
+        {
+            临时字节集 = 取字节集右边 (被查找的字节集, 长度)
+
+        }
+        返回 (临时字节集)
+
+    }
+
+    方法 字节集_寻找取左_从右开始 <公开 类型 = 字节集类
+            注释 = "从字节集的右边按 欲寻找的字节集 开始寻找  如 字节集_取右边({105,108,121,13,10,83,101},{13,10}) 将返回 {105,108,121}，如果没有找到将会返回空" 折叠>
+    参数 被查找的字节集 <类型 = 字节集类 注释 = "被查找的字节集">
+    参数 欲查找的字节集 <类型 = 字节集类 注释 = "欲寻找的字节集">
+    参数 起始位置 <类型 = 整数 注释 = "默认从最左边寻找,欲寻找的字节集的起始寻找位置,一般情况都留空，注意：必须大于0" @默认值 = 0>
+    {
+        变量 临时字节集 <类型 = 字节集类>
+        临时字节集 = 字节集_寻找取右 (被查找的字节集, 欲查找的字节集)
+        变量 长度 <类型 = 整数>
+        长度 = 取字节集长度 (被查找的字节集) - 取字节集长度 (欲查找的字节集) - 取字节集长度 (临时字节集)
+        如果 (取字节集长度 (被查找的字节集) >= 长度)
+        {
+            临时字节集 = 取字节集左边 (被查找的字节集, 长度)
+
+        }
+
+        返回 (临时字节集)
+
+    }
+
+    方法 字节集_反转字节集 <公开 类型 = 字节集类 折叠>
+    参数 字节集数据 <类型 = 字节集类>
+    {
+        变量 反转后字节集 <类型 = 字节集类>
+        变量 长度 <类型 = 整数>
+        长度 = 取字节集长度 (字节集数据)
+        反转后字节集 = 字节集数据
+        计次循环 (长度)
+        {
+            反转后字节集.置字节集值 (取循环索引 (), 字节集数据.取字节集数据 (长度 - 取循环索引 () - 1, 字节))
+
+        }
+        返回 (反转后字节集)
+    }
+
+    方法 字节集_取中间 <公开 类型 = 字节集类 折叠>
+    参数 要操作的字节集 <类型 = 字节集类>
+    参数 前面字节集 <类型 = 字节集类>
+    参数 后面字节集 <类型 = 字节集类>
+    {
+        变量 结果字节集 <类型 = 字节集类>
+        变量 位置变量 <类型 = 整数>
+        位置变量 = 寻找字节集 (要操作的字节集, 前面字节集)
+        如果 (位置变量 == -1)
+        {
+            返回 (文本到字节集 (""))
+
+        }
+        变量 长度 <类型 = 整数>
+        长度 = 取字节集长度 (要操作的字节集) - 位置变量 - 取字节集长度 (前面字节集)
+        如果 (取字节集长度 (要操作的字节集) < 长度)
+        {
+            返回 (文本到字节集 (""))
+
+        }
+
+        结果字节集 = 取字节集右边 (要操作的字节集, 长度)
+        位置变量 = 倒找字节集 (结果字节集, 后面字节集)
+        如果 (位置变量 == -1)
+        {
+            返回 (文本到字节集 (""))
+
+        }
+        如果 (取字节集长度 (结果字节集) >= 位置变量)
+        {
+            结果字节集 = 取字节集左边 (结果字节集, 位置变量)
+            返回 (结果字节集)
+
+        }
+        否则
+        {
+            返回 (文本到字节集 (""))
+
+        }
+
+
+
+    }
+}
+
+类 类_文本数组独有 <公开 注释 = "使用方法参考本案例：https://www.lkuaiy.com/rsdetails?id=13811608625019" 折叠>
+{
+    变量 内_文本数组独有 <类型 = 文本独有数组类>
+    变量 内_文本数组 <类型 = 文本数组类>
+    变量 内_可重复数据 <类型 = 文本数组类>
+
+    方法 初始化数据 <公开 折叠>
+    {
+        内_文本数组独有.删除所有成员 ()
+        内_文本数组.删除所有成员 ()
+        内_可重复数据.删除所有成员 ()
+
+    }
+
+    方法 定义可重复数据 <公开 折叠>
+    参数 重复数据 <类型 = 文本数组类>
+    {
+        内_可重复数据 = 重复数据
+    }
+
+    方法 添加数据 <公开 折叠>
+    参数 添加的文本数据 <类型 = 文本型>
+    {
+        变量 是否可以重复 <类型 = 逻辑型>
+        变量 循环变量 <类型 = 整数>
+        循环 (0, 内_可重复数据.取成员数 (), 循环变量)
+        {
+            如果 (内_可重复数据.取成员 (循环变量) == 添加的文本数据)
+            {
+                是否可以重复 = 真
+                跳出循环
+
+            }
+
+        }
+
+        如果 (是否可以重复 == 真)
+        {
+            内_文本数组.加入成员 (添加的文本数据)
+            内_文本数组独有.加入成员 (添加的文本数据)
+
+        }
+        否则
+        {
+            变量 是否已经重复 <类型 = 逻辑型>
+            循环 (0, 内_文本数组独有.取成员数 (), 循环变量)
+            {
+                如果 (内_文本数组独有.取成员 (循环变量) == 添加的文本数据)
+                {
+                    是否已经重复 = 真
+                    跳出循环
+
+                }
+
+            }
+
+            如果 (是否已经重复 == 假)
+            {
+                内_文本数组.加入成员 (添加的文本数据)
+                内_文本数组独有.加入成员 (添加的文本数据)
+
+            }
+
+        }
+
+    }
+
+    方法 获取数据 <公开 属性读 类型 = 文本数组类 折叠>
+    {
+        返回 (内_文本数组)
+    }
+}
+
+类 类_文本操作 <公开>
+{
+    方法 文本_XSS防注入处理 <公开 类型 = 文本型 返回值注释 = "返回防止注入后的值" 折叠>
+    参数 XSS处理 <类型 = 文本型>
+    参数 自身域名 <类型 = 文本型 注释 = "例如：lkuaiy.com" 注释 = "不需要带www" 折叠2 "">
+    参数 是否严格模式 <类型 = 逻辑型 注释 = "如果启用了严格模式，则以下符号会被替换为空。" 注释 = "<" 注释 = ">" 注释 = "\"" 注释 = "\'" 注释 = "(" 注释 = ")" 注释 = "&" 注释 = "/"
+            折叠2 @默认值 = 假>
+    参数 是否替换点号 <类型 = 逻辑型 注释 = "是否将小写.替换成大写。" @默认值 = 真>
+    参数 是否替换http <类型 = 逻辑型 注释 = "是否http://替换成http：/ /" @默认值 = 真>
+    {
+        变量 XSS检测文本 <类型 = 文本型>
+        XSS检测文本 = XSS处理
+        如果 (是否严格模式 == 真)
+        {
+            子文本替换 (XSS检测文本, "<", "")
+            子文本替换 (XSS检测文本, ">", "")
+            变量 双引号 <类型 = 文本型 值 = "\"">
+            变量 单引号 <类型 = 文本型 值 = "\'">
+            子文本替换 (XSS检测文本, 双引号, "")
+            子文本替换 (XSS检测文本, 单引号, "")
+            子文本替换 (XSS检测文本, "`", "")
+            子文本替换 (XSS检测文本, "(", "")
+            子文本替换 (XSS检测文本, ")", "")
+            子文本替换 (XSS检测文本, "&", "")
+            子文本替换 (XSS检测文本, "/", "")
+
+
+        }
+        子文本替换 (XSS检测文本, "<script", "")
+        子文本替换 (XSS检测文本, "/script>", "")
+        子文本替换 (XSS检测文本, "alert", "")
+        子文本替换 (XSS检测文本, 自身域名, "KKKKLKUAIY")
+        如果 (是否替换http == 真)
+        {
+            子文本替换 (XSS检测文本, "http://", "http：/ /")
+
+        }
+
+        如果 (是否替换点号 == 真)
+        {
+            子文本替换 (XSS检测文本, ".", "。")
+            内部_安全文件内容处理 (XSS检测文本)
+
+        }
+
+        子文本替换 (XSS检测文本, "KKKKLKUAIY", 自身域名)
+        // ===
+
+        返回 (XSS检测文本)
+
+    }
+
+    方法 内部_安全文件内容处理 <折叠>
+    参数 内容 <类型 = 文本型 注释 = "例如：css、html等">
+    {
+        如果 (寻找文本 (内容, "。css") != -1)
+        {
+            子文本替换 (内容, "。css", ".css")
+
+        }
+        如果 (寻找文本 (内容, "。html") != -1)
+        {
+            子文本替换 (内容, "。html", ".html")
+
+        }
+        如果 (寻找文本 (内容, "。htm") != -1)
+        {
+            子文本替换 (内容, "。htm", ".htm")
+
+        }
+        如果 (寻找文本 (内容, "。xhtml") != -1)
+        {
+            子文本替换 (内容, "。xhtml", ".xhtml")
+
+        }
+        如果 (寻找文本 (内容, "。ico") != -1)
+        {
+            子文本替换 (内容, "。ico", ".ico")
+
+        }
+        如果 (寻找文本 (内容, "。txt") != -1)
+        {
+            子文本替换 (内容, "。txt", ".txt")
+
+        }
+        如果 (寻找文本 (内容, "。doc") != -1)
+        {
+            子文本替换 (内容, "。doc", ".doc")
+
+        }
+        如果 (寻找文本 (内容, "。doc") != -1)
+        {
+            子文本替换 (内容, "。doc", ".doc")
+
+        }
+        如果 (寻找文本 (内容, "。bmp") != -1)
+        {
+            子文本替换 (内容, "。bmp", ".bmp")
+
+        }
+        如果 (寻找文本 (内容, "。gif") != -1)
+        {
+            子文本替换 (内容, "。gif", ".gif")
+
+        }
+        如果 (寻找文本 (内容, "。ief") != -1)
+        {
+            子文本替换 (内容, "。ief", ".ief")
+
+        }
+        如果 (寻找文本 (内容, "。jpeg") != -1)
+        {
+            子文本替换 (内容, "。jpeg", ".jpeg")
+
+        }
+        如果 (寻找文本 (内容, "。jpg") != -1)
+        {
+            子文本替换 (内容, "。jpg", ".jpg")
+
+        }
+        如果 (寻找文本 (内容, "。jpe") != -1)
+        {
+            子文本替换 (内容, "。jpe", ".jpe")
+
+        }
+        如果 (寻找文本 (内容, "。png") != -1)
+        {
+            子文本替换 (内容, "。png", ".png")
+
+        }
+        如果 (寻找文本 (内容, "。exe") != -1)
+        {
+            子文本替换 (内容, "。exe", ".exe")
+
+        }
+        如果 (寻找文本 (内容, "。avi") != -1)
+        {
+            子文本替换 (内容, "。avi", ".avi")
+
+        }
+        如果 (寻找文本 (内容, "。movie") != -1)
+        {
+            子文本替换 (内容, "。movie", ".movie")
+
+        }
+        如果 (寻找文本 (内容, "。ice") != -1)
+        {
+            子文本替换 (内容, "。ice", ".ice")
+
+        }
+        如果 (寻找文本 (内容, "。xsl") != -1)
+        {
+            子文本替换 (内容, "。xsl", ".xsl")
+
+        }
+        如果 (寻找文本 (内容, "。json") != -1)
+        {
+            子文本替换 (内容, "。json", ".json")
+
+        }
+        如果 (寻找文本 (内容, "。xml") != -1)
+        {
+            子文本替换 (内容, "。xml", ".xml")
+
+        }
+        如果 (寻找文本 (内容, "。mpeg") != -1)
+        {
+            子文本替换 (内容, "。mpeg", ".mpeg")
+
+        }
+        如果 (寻找文本 (内容, "。mpg") != -1)
+        {
+            子文本替换 (内容, "。mpg", ".mpg")
+
+        }
+        如果 (寻找文本 (内容, "。mpe") != -1)
+        {
+            子文本替换 (内容, "。mpe", ".mpe")
+
+        }
+        如果 (寻找文本 (内容, "。pdf") != -1)
+        {
+            子文本替换 (内容, "。pdf", ".pdf")
+
+        }
+        如果 (寻找文本 (内容, "。ez") != -1)
+        {
+            子文本替换 (内容, "。ez", ".ez")
+
+        }
+        如果 (寻找文本 (内容, "。hqx") != -1)
+        {
+            子文本替换 (内容, "。hqx", ".hqx")
+
+        }
+        如果 (寻找文本 (内容, "。cpt") != -1)
+        {
+            子文本替换 (内容, "。cpt", ".cpt")
+
+        }
+        如果 (寻找文本 (内容, "。bin") != -1)
+        {
+            子文本替换 (内容, "。bin", ".bin")
+
+        }
+        如果 (寻找文本 (内容, "。dms") != -1)
+        {
+            子文本替换 (内容, "。dms", ".dms")
+
+        }
+        如果 (寻找文本 (内容, "。lha") != -1)
+        {
+            子文本替换 (内容, "。lha", ".lha")
+
+        }
+        如果 (寻找文本 (内容, "。lzh") != -1)
+        {
+            子文本替换 (内容, "。lzh", ".lzh")
+
+        }
+        如果 (寻找文本 (内容, "。class") != -1)
+        {
+            子文本替换 (内容, "。class", ".class")
+
+        }
+        如果 (寻找文本 (内容, "。so") != -1)
+        {
+            子文本替换 (内容, "。so", ".so")
+
+        }
+        如果 (寻找文本 (内容, "。dll") != -1)
+        {
+            子文本替换 (内容, "。dll", ".dll")
+
+        }
+        如果 (寻找文本 (内容, "。oda") != -1)
+        {
+            子文本替换 (内容, "。oda", ".oda")
+
+        }
+        如果 (寻找文本 (内容, "。pdf") != -1)
+        {
+            子文本替换 (内容, "。pdf", ".pdf")
+
+        }
+        如果 (寻找文本 (内容, "。ai") != -1)
+        {
+            子文本替换 (内容, "。ai", ".ai")
+
+        }
+        如果 (寻找文本 (内容, "。eps") != -1)
+        {
+            子文本替换 (内容, "。eps", ".eps")
+
+        }
+        如果 (寻找文本 (内容, "。ps") != -1)
+        {
+            子文本替换 (内容, "。ps", ".ps")
+
+        }
+        如果 (寻找文本 (内容, "。smil") != -1)
+        {
+            子文本替换 (内容, "。smil", ".smil")
+
+        }
+        如果 (寻找文本 (内容, "。smi") != -1)
+        {
+            子文本替换 (内容, "。smi", ".smi")
+
+        }
+        如果 (寻找文本 (内容, "。ppt") != -1)
+        {
+            子文本替换 (内容, "。ppt", ".ppt")
+
+        }
+        如果 (寻找文本 (内容, "。wbxml") != -1)
+        {
+            子文本替换 (内容, "。wbxml", ".wbxml")
+
+        }
+        如果 (寻找文本 (内容, "。wmlc") != -1)
+        {
+            子文本替换 (内容, "。wmlc", ".wmlc")
+
+        }
+        如果 (寻找文本 (内容, "。wmlsc") != -1)
+        {
+            子文本替换 (内容, "。wmlsc", ".wmlsc")
+
+        }
+        如果 (寻找文本 (内容, "。wmlsc") != -1)
+        {
+            子文本替换 (内容, "。wmlsc", ".wmlsc")
+
+        }
+        如果 (寻找文本 (内容, "。bcpio") != -1)
+        {
+            子文本替换 (内容, "。bcpio", ".bcpio")
+
+        }
+        如果 (寻找文本 (内容, "。vcd") != -1)
+        {
+            子文本替换 (内容, "。vcd", ".vcd")
+
+        }
+        如果 (寻找文本 (内容, "。pgn") != -1)
+        {
+            子文本替换 (内容, "。pgn", ".pgn")
+
+        }
+        如果 (寻找文本 (内容, "。cpio") != -1)
+        {
+            子文本替换 (内容, "。cpio", ".cpio")
+
+        }
+        如果 (寻找文本 (内容, "。csh") != -1)
+        {
+            子文本替换 (内容, "。csh", ".csh")
+
+        }
+        如果 (寻找文本 (内容, "。dcr") != -1)
+        {
+            子文本替换 (内容, "。dcr", ".dcr")
+
+        }
+        如果 (寻找文本 (内容, "。dir") != -1)
+        {
+            子文本替换 (内容, "。dir", ".dir")
+
+        }
+        如果 (寻找文本 (内容, "。dxr") != -1)
+        {
+            子文本替换 (内容, "。dxr", ".dxr")
+
+        }
+        如果 (寻找文本 (内容, "。dvi") != -1)
+        {
+            子文本替换 (内容, "。dvi", ".dvi")
+
+        }
+        如果 (寻找文本 (内容, "。spl") != -1)
+        {
+            子文本替换 (内容, "。spl", ".spl")
+
+        }
+        如果 (寻找文本 (内容, "。gtar") != -1)
+        {
+            子文本替换 (内容, "。gtar", ".gtar")
+
+        }
+        如果 (寻找文本 (内容, "。hdf") != -1)
+        {
+            子文本替换 (内容, "。hdf", ".hdf")
+
+        }
+        如果 (寻找文本 (内容, "。js") != -1)
+        {
+            子文本替换 (内容, "。js", ".js")
+
+        }
+        如果 (寻找文本 (内容, "。skp") != -1)
+        {
+            子文本替换 (内容, "。skp", ".skp")
+
+        }
+        如果 (寻找文本 (内容, "。skd") != -1)
+        {
+            子文本替换 (内容, "。skd", ".skd")
+
+        }
+        如果 (寻找文本 (内容, "。skt") != -1)
+        {
+            子文本替换 (内容, "。skt", ".skt")
+
+        }
+        如果 (寻找文本 (内容, "。skm") != -1)
+        {
+            子文本替换 (内容, "。skm", ".skm")
+
+        }
+        如果 (寻找文本 (内容, "。latex") != -1)
+        {
+            子文本替换 (内容, "。latex", ".latex")
+
+        }
+        如果 (寻找文本 (内容, "。nc") != -1)
+        {
+            子文本替换 (内容, "。nc", ".nc")
+
+        }
+        如果 (寻找文本 (内容, "。cdf") != -1)
+        {
+            子文本替换 (内容, "。cdf", ".cdf")
+
+        }
+        如果 (寻找文本 (内容, "。sh") != -1)
+        {
+            子文本替换 (内容, "。sh", ".sh")
+
+        }
+        如果 (寻找文本 (内容, "。shar") != -1)
+        {
+            子文本替换 (内容, "。shar", ".shar")
+
+        }
+        如果 (寻找文本 (内容, "。swf") != -1)
+        {
+            子文本替换 (内容, "。swf", ".swf")
+
+        }
+        如果 (寻找文本 (内容, "。sit") != -1)
+        {
+            子文本替换 (内容, "。sit", ".sit")
+
+        }
+        如果 (寻找文本 (内容, "。sv4cpio") != -1)
+        {
+            子文本替换 (内容, "。sv4cpio", ".sv4cpio")
+
+        }
+        如果 (寻找文本 (内容, "。tex") != -1)
+        {
+            子文本替换 (内容, "。tex", ".tex")
+
+        }
+        如果 (寻找文本 (内容, "。tcl") != -1)
+        {
+            子文本替换 (内容, "。tcl", ".tcl")
+
+        }
+        如果 (寻找文本 (内容, "。tar") != -1)
+        {
+            子文本替换 (内容, "。tar", ".tar")
+
+        }
+        如果 (寻找文本 (内容, "。sv4crc") != -1)
+        {
+            子文本替换 (内容, "。sv4crc", ".sv4crc")
+
+        }
+        如果 (寻找文本 (内容, "。texinfo") != -1)
+        {
+            子文本替换 (内容, "。texinfo", ".texinfo")
+
+        }
+        如果 (寻找文本 (内容, "。texi") != -1)
+        {
+            子文本替换 (内容, "。texi", ".texi")
+
+        }
+        如果 (寻找文本 (内容, "。texi") != -1)
+        {
+            子文本替换 (内容, "。texi", ".texi")
+
+        }
+        如果 (寻找文本 (内容, "。tr") != -1)
+        {
+            子文本替换 (内容, "。tr", ".tr")
+
+        }
+        如果 (寻找文本 (内容, "。roff") != -1)
+        {
+            子文本替换 (内容, "。roff", ".roff")
+
+        }
+        如果 (寻找文本 (内容, "。man") != -1)
+        {
+            子文本替换 (内容, "。man", ".man")
+
+        }
+        如果 (寻找文本 (内容, "。me") != -1)
+        {
+            子文本替换 (内容, "。me", ".me")
+
+        }
+        如果 (寻找文本 (内容, "。ms") != -1)
+        {
+            子文本替换 (内容, "。ms", ".ms")
+
+        }
+        如果 (寻找文本 (内容, "。ustar") != -1)
+        {
+            子文本替换 (内容, "。ustar", ".ustar")
+
+        }
+        如果 (寻找文本 (内容, "。src") != -1)
+        {
+            子文本替换 (内容, "。src", ".src")
+
+        }
+        如果 (寻找文本 (内容, "。xht") != -1)
+        {
+            子文本替换 (内容, "。xht", ".xht")
+
+        }
+        如果 (寻找文本 (内容, "。zip") != -1)
+        {
+            子文本替换 (内容, "。zip", ".zip")
+
+        }
+        如果 (寻找文本 (内容, "。au") != -1)
+        {
+            子文本替换 (内容, "。au", ".au")
+
+        }
+        如果 (寻找文本 (内容, "。snd") != -1)
+        {
+            子文本替换 (内容, "。snd", ".snd")
+
+        }
+        如果 (寻找文本 (内容, "。mid") != -1)
+        {
+            子文本替换 (内容, "。mid", ".mid")
+
+        }
+        如果 (寻找文本 (内容, "。midi") != -1)
+        {
+            子文本替换 (内容, "。midi", ".midi")
+
+        }
+        如果 (寻找文本 (内容, "。kar") != -1)
+        {
+            子文本替换 (内容, "。kar", ".kar")
+
+        }
+        如果 (寻找文本 (内容, "。mpga") != -1)
+        {
+            子文本替换 (内容, "。mpga", ".mpga")
+
+        }
+        如果 (寻找文本 (内容, "。mp2") != -1)
+        {
+            子文本替换 (内容, "。mp2", ".mp2")
+
+        }
+        如果 (寻找文本 (内容, "。mp3") != -1)
+        {
+            子文本替换 (内容, "。mp3", ".mp3")
+
+        }
+        如果 (寻找文本 (内容, "。aif") != -1)
+        {
+            子文本替换 (内容, "。aif", ".aif")
+
+        }
+        如果 (寻找文本 (内容, "。aiff") != -1)
+        {
+            子文本替换 (内容, "。aiff", ".aiff")
+
+        }
+        如果 (寻找文本 (内容, "。aifc") != -1)
+        {
+            子文本替换 (内容, "。aifc", ".aifc")
+
+        }
+        如果 (寻找文本 (内容, "。m3u") != -1)
+        {
+            子文本替换 (内容, "。m3u", ".m3u")
+
+        }
+        如果 (寻找文本 (内容, "。ram") != -1)
+        {
+            子文本替换 (内容, "。ram", ".ram")
+
+        }
+        如果 (寻找文本 (内容, "。rm") != -1)
+        {
+            子文本替换 (内容, "。rm", ".rm")
+
+        }
+        如果 (寻找文本 (内容, "。rpm") != -1)
+        {
+            子文本替换 (内容, "。rpm", ".rpm")
+
+        }
+        如果 (寻找文本 (内容, "。ra") != -1)
+        {
+            子文本替换 (内容, "。ra", ".ra")
+
+        }
+        如果 (寻找文本 (内容, "。wav") != -1)
+        {
+            子文本替换 (内容, "。wav", ".wav")
+
+        }
+        如果 (寻找文本 (内容, "。pdb") != -1)
+        {
+            子文本替换 (内容, "。pdb", ".pdb")
+
+        }
+        如果 (寻找文本 (内容, "。rm") != -1)
+        {
+            子文本替换 (内容, "。rm", ".rm")
+
+        }
+        如果 (寻找文本 (内容, "。tiff") != -1)
+        {
+            子文本替换 (内容, "。tiff", ".tiff")
+
+        }
+        如果 (寻找文本 (内容, "。tif") != -1)
+        {
+            子文本替换 (内容, "。tif", ".tif")
+
+        }
+        如果 (寻找文本 (内容, "。djvu") != -1)
+        {
+            子文本替换 (内容, "。djvu", ".djvu")
+
+        }
+        如果 (寻找文本 (内容, "。djv") != -1)
+        {
+            子文本替换 (内容, "。djv", ".djv")
+
+        }
+        如果 (寻找文本 (内容, "。wbmp") != -1)
+        {
+            子文本替换 (内容, "。wbmp", ".wbmp")
+
+        }
+        如果 (寻找文本 (内容, "。ras") != -1)
+        {
+            子文本替换 (内容, "。ras", ".ras")
+
+        }
+        如果 (寻找文本 (内容, "。pnm") != -1)
+        {
+            子文本替换 (内容, "。pnm", ".pnm")
+
+        }
+        如果 (寻找文本 (内容, "。pbm") != -1)
+        {
+            子文本替换 (内容, "。pbm", ".pbm")
+
+        }
+        如果 (寻找文本 (内容, "。pgm") != -1)
+        {
+            子文本替换 (内容, "。pgm", ".pgm")
+
+        }
+        如果 (寻找文本 (内容, "。ppm") != -1)
+        {
+            子文本替换 (内容, "。ppm", ".ppm")
+
+        }
+        如果 (寻找文本 (内容, "。rgb") != -1)
+        {
+            子文本替换 (内容, "。rgb", ".rgb")
+
+        }
+        如果 (寻找文本 (内容, "。xbm") != -1)
+        {
+            子文本替换 (内容, "。xbm", ".xbm")
+
+        }
+        如果 (寻找文本 (内容, "。xpm") != -1)
+        {
+            子文本替换 (内容, "。xpm", ".xpm")
+
+        }
+        如果 (寻找文本 (内容, "。xwd") != -1)
+        {
+            子文本替换 (内容, "。xwd", ".xwd")
+
+        }
+        如果 (寻找文本 (内容, "。igs") != -1)
+        {
+            子文本替换 (内容, "。igs", ".igs")
+
+        }
+        如果 (寻找文本 (内容, "。iges") != -1)
+        {
+            子文本替换 (内容, "。iges", ".iges")
+
+        }
+        如果 (寻找文本 (内容, "。msh") != -1)
+        {
+            子文本替换 (内容, "。msh", ".msh")
+
+        }
+        如果 (寻找文本 (内容, "。mesh") != -1)
+        {
+            子文本替换 (内容, "。mesh", ".mesh")
+
+        }
+        如果 (寻找文本 (内容, "。silo") != -1)
+        {
+            子文本替换 (内容, "。silo", ".silo")
+
+        }
+        如果 (寻找文本 (内容, "。wrl") != -1)
+        {
+            子文本替换 (内容, "。wrl", ".wrl")
+
+        }
+        如果 (寻找文本 (内容, "。vrml") != -1)
+        {
+            子文本替换 (内容, "。vrml", ".vrml")
+
+        }
+        如果 (寻找文本 (内容, "。asc") != -1)
+        {
+            子文本替换 (内容, "。asc", ".asc")
+
+        }
+        如果 (寻找文本 (内容, "。rtx") != -1)
+        {
+            子文本替换 (内容, "。rtx", ".rtx")
+
+        }
+        如果 (寻找文本 (内容, "。rtf") != -1)
+        {
+            子文本替换 (内容, "。rtf", ".rtf")
+
+        }
+        如果 (寻找文本 (内容, "。sgml") != -1)
+        {
+            子文本替换 (内容, "。sgml", ".sgml")
+
+        }
+        如果 (寻找文本 (内容, "。sgml") != -1)
+        {
+            子文本替换 (内容, "。sgml", ".sgml")
+
+        }
+        如果 (寻找文本 (内容, "。sgm") != -1)
+        {
+            子文本替换 (内容, "。sgm", ".sgm")
+
+        }
+        如果 (寻找文本 (内容, "。tsv") != -1)
+        {
+            子文本替换 (内容, "。tsv", ".tsv")
+
+        }
+        如果 (寻找文本 (内容, "。wml") != -1)
+        {
+            子文本替换 (内容, "。wml", ".wml")
+
+        }
+        如果 (寻找文本 (内容, "。wmls") != -1)
+        {
+            子文本替换 (内容, "。wmls", ".wmls")
+
+        }
+        如果 (寻找文本 (内容, "。etx") != -1)
+        {
+            子文本替换 (内容, "。etx", ".etx")
+
+        }
+        如果 (寻找文本 (内容, "。qt") != -1)
+        {
+            子文本替换 (内容, "。qt", ".qt")
+
+        }
+        如果 (寻找文本 (内容, "。mov") != -1)
+        {
+            子文本替换 (内容, "。mov", ".mov")
+
+        }
+        如果 (寻找文本 (内容, "。mxu") != -1)
+        {
+            子文本替换 (内容, "。mxu", ".mxu")
+
+        }
+        如果 (寻找文本 (内容, "。mp4") != -1)
+        {
+            子文本替换 (内容, "。mp4", ".mp4")
+
+        }
+        如果 (寻找文本 (内容, "。flv") != -1)
+        {
+            子文本替换 (内容, "。flv", ".flv")
+
+        }
+        如果 (寻找文本 (内容, "。wmv") != -1)
+        {
+            子文本替换 (内容, "。wmv", ".wmv")
+
+        }
+        如果 (寻找文本 (内容, "。ini") != -1)
+        {
+            子文本替换 (内容, "。ini", ".ini")
+
+        }
+        如果 (寻找文本 (内容, "。svg") != -1)
+        {
+            子文本替换 (内容, "。svg", ".svg")
+
+        }
+        如果 (寻找文本 (内容, "。woff") != -1)
+        {
+            子文本替换 (内容, "。woff", ".woff")
+
+        }
+        如果 (寻找文本 (内容, "。woff2") != -1)
+        {
+            子文本替换 (内容, "。woff2", ".woff2")
+
+        }
+        如果 (寻找文本 (内容, "。woff2") != -1)
+        {
+            子文本替换 (内容, "。woff2", ".woff2")
+
+        }
+        如果 (寻找文本 (内容, "。rar") != -1)
+        {
+            子文本替换 (内容, "。rar", ".rar")
+
+        }
+        如果 (寻找文本 (内容, "。7z") != -1)
+        {
+            子文本替换 (内容, "。7z", ".7z")
+
+        }
+        变量 图片格式分割 <类型 = 文本型 值 = "bmp，jpg，png，tif，gif，pcx，tga，exif，fpx，svg，psd，cdr，pcd，dxf，ufo，eps，ai，raw，WMF，webp，avif，apng">
+        变量 临时文本数组 <类型 = 文本数组类>
+        分割子文本 (图片格式分割, "，", 临时文本数组)
+        变量 循环变量 <类型 = 整数>
+        循环 (0, 临时文本数组.取成员数 (), 循环变量)
+        {
+            子文本替换 (内容, "。" + 临时文本数组.取成员 (循环变量), "." + 临时文本数组.取成员 (循环变量))
+
+        }
+    }
+
+    方法 文本_取文本长度_易语言 <公开 类型 = 整数 注释 = "火山的取文本长度中文和英文都是1长度，本命令可以实现类似易语言的取文本长度  中文2  英文1" 折叠 @禁止流程检查 = 真>
+    参数 文本 <类型 = 文本型>
+    {
+        @ DWORD dwNum = WideCharToMultiByte(CP_OEMCP,NULL,@<文本>,-1,NULL,NULL,0,NULL); 
+        @ char *c = new char[dwNum]; 
+        @ WideCharToMultiByte(CP_OEMCP,NULL,@<文本>,-1,c,dwNum,0,NULL);
+
+        @ char* cha=c;
+        @    int count{};   //定义返回的长度
+        @    for (int i = 0; cha[i]; i++)
+        @    {
+        @        count++;
+        @    }
+        @    return count;
+
+    }
+
+    方法 文本_取文本中间_批量 <公开 类型 = 文本数组类 折叠>
+    参数 文本内容 <类型 = 文本型>
+    参数 开始文本 <类型 = 文本型>
+    参数 结束文本 <类型 = 文本型>
+    参数 开始搜索位置 <类型 = 整数 @默认值 = 0>
+    {
+        变量 中间文本 <类型 = 文本型>
+        变量 开始位置 <类型 = 整数>
+        变量 结束位置 <类型 = 整数>
+        变量 数组1 <类型 = 文本数组类>
+        判断循环 (真)
+        {
+            如果 (取文本长度 (文本内容) >= 开始搜索位置)
+            {
+                开始位置 = 寻找文本 (文本内容, 开始文本, 开始搜索位置)
+
+            }
+            否则
+            {
+                跳出循环
+
+            }
+
+
+            如果 (开始位置 == -1)
+            {
+                跳出循环
+            }
+
+            开始搜索位置 = 开始位置 + 取文本长度 (开始文本)
+            开始位置 = 开始搜索位置
+
+            如果 (取文本长度 (文本内容) >= 开始搜索位置 + 取文本长度 (中间文本))
+            {
+                结束位置 = 寻找文本 (文本内容, 结束文本, 开始搜索位置 + 取文本长度 (中间文本))
+                如果 (结束位置 == -1)
+                {
+                    跳出循环
+                }
+
+            }
+            否则
+            {
+                跳出循环
+
+            }
+
+            如果 (取文本长度 (文本内容) >= 开始位置)
+            {
+                中间文本 = 取文本中间 (文本内容, 开始位置, 结束位置 - 开始位置)
+                数组1.加入成员 (中间文本)
+
+            }
+            否则
+            {
+                跳出循环
+
+            }
+
+        }
+
+        返回 (数组1)
+
+    }
+
+    方法 文本_取出中间文本 <公开 类型 = 文本型 折叠>
+    参数 欲取全文本 <类型 = 文本型>
+    参数 前面文本 <类型 = 文本型>
+    参数 后面文本 <类型 = 文本型>
+    参数 起始搜寻位置 <类型 = 整数 @默认值 = 0>
+    参数 是否不区分大小写 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 局_位置 <类型 = 整数>
+        变量 局_位置1 <类型 = 整数>
+        变量 局_前面文本 <类型 = 文本型>
+        变量 局_后面文本 <类型 = 文本型>
+        局_前面文本 = 前面文本
+        局_后面文本 = 后面文本
+        局_位置 = 寻找文本 (欲取全文本, 局_前面文本, 起始搜寻位置, 是否不区分大小写)
+        如果真 (局_位置 != -1)
+        {
+            局_位置 = 局_位置 + 取文本长度 (局_前面文本)
+
+        }
+
+        局_位置1 = 寻找文本 (欲取全文本, 局_后面文本, 局_位置, 是否不区分大小写)
+        如果真 (局_位置 == -1 || 局_位置1 == -1)
+        {
+            返回 ("")
+
+        }
+
+        返回 (取文本中间 (欲取全文本, 局_位置, 局_位置1 - 局_位置))
+    }
+
+    方法 文本_随机文本 <公开 类型 = "文本型 ">
+    参数 随机文本数量 <类型 = 整数 @默认值 = 36>
+    {
+        变量 a <类型 = "文本型 []"
+                值 = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" }>
+        变量 temp <类型 = 文本型>
+        循环 (0, 随机文本数量, , 1)
+        {
+            temp = temp + a [取随机数 (0, 35)]
+
+        }
+
+        返回 ("a" + temp)
+    }
+
+    方法 文本_分割文本_ <公开 折叠>
+    参数 所欲操作的文本 <类型 = 文本型>
+    参数 待文本_分割文本 <类型 = 文本型>
+    参数 结果存放数组 <类型 = 文本数组类 注释 = ".">
+    {
+        变量 字节集分割 <类型 = 类_字节集操作>
+        变量 临时字节集 <类型 = 字节集数组类>
+        变量 临时文本数组 <类型 = 文本数组类>
+        字节集分割.字节集_字节集分割 (文本到字节集 (所欲操作的文本), 文本到字节集 (待文本_分割文本), 临时字节集)
+
+        // 早期的火山分割命令有BUG,所以进行排错处理======
+        如果 (临时字节集.取成员数 () <= 0)
+        {
+            结果存放数组 = 临时文本数组
+            返回
+
+        }
+
+        // 早期的火山分割命令有BUG,所以进行排错处理======
+
+        变量 变量 <类型 = 整数>
+        循环 (0, 临时字节集.取成员数 (), 变量, 1)
+        {
+            变量 文本 <类型 = 文本型>
+            文本 = 字节集到文本 (临时字节集.取成员 (变量))
+            临时文本数组.加入成员 (文本)
+
+        }
+
+        结果存放数组 = 临时文本数组
+    }
+
+    方法 文本_取汉字 <公开 类型 = 文本型 折叠>
+    参数 字符串 <类型 = 文本型>
+    {
+        变量 临时字符串 <类型 = 文本数组类>
+        变量 最后文本 <类型 = 文本型>
+        临时字符串 = 文本_按字数分割 (字符串, 1)
+        变量 循环变量 <类型 = 整数>
+        循环 (0, 临时字符串.取成员数 (), 循环变量, 1)
+        {
+            如果 (文本_是否全中文 (临时字符串.取成员 (循环变量)) == 真)
+            {
+                最后文本 = 最后文本 + 临时字符串.取成员 (循环变量)
+
+            }
+
+        }
+
+        返回 (最后文本)
+    }
+
+    方法 文本_打乱数组 <公开 类型 = 文本数组类 折叠>
+    参数 欲打乱的文本数组 <类型 = 文本数组类 "">
+    {
+        变量 变量 <类型 = "整数 [2]">
+        变量 临时数组 <类型 = 文本数组类>
+        循环 (0, 欲打乱的文本数组.取成员数 (), 变量 [0], 1)
+        {
+            临时数组.加入成员 (欲打乱的文本数组.取成员 (变量 [0]))
+
+        }
+
+        循环 (0, 临时数组.取成员数 (), 变量 [1], 1)
+        {
+            变量 随机 <类型 = 类_随机数>
+            随机.随机_置随机种子 ()
+            变量 临时随机 <类型 = 整数>
+            临时随机 = 临时数组.取成员数 () - 1
+            临时数组.交换成员 (0, 随机.随机_取随机数 (1, 临时随机))
+
+        }
+
+        返回 (临时数组)
+
+    }
+
+    方法 文本_是否全数字 <公开 类型 = 逻辑型 折叠>
+    参数 字符串 <类型 = 文本型>
+    {
+        变量 Len <类型 = 整数>
+        变量 asc <类型 = 整数>
+        Len = 取文本长度 (字符串)
+        如果 (Len == 0)
+        {
+            返回 (假)
+
+        }
+
+        变量 循环变量 <类型 = 整数>
+        循环 (0, Len, 循环变量, 1)
+        {
+            变量 系统 <类型 = 类_系统杂项>
+            asc = 系统.取代码 (字符串, 循环变量)
+            如果 (asc < 48)  // 0=48
+            {
+                返回 (假)
+
+            }
+            如果 (asc > 57)  // 9-57
+            {
+                返回 (假)
+
+            }
+
+
+        }
+
+        返回 (真)
+
+    }
+
+    方法 文本_取中间高级 <公开 类型 = 文本型 折叠>
+    参数 待取内容 <类型 = 文本型>
+    参数 起始查找位置 <类型 = 整数 @默认值 = 0>
+    参数 起始文本1 <类型 = 文本型 @默认值 = "">
+    参数 起始文本2 <类型 = 文本型 @默认值 = "">
+    参数 结束文本 <类型 = 文本型 @默认值 = "">
+    参数 不区分大小写 <类型 = 逻辑型 @默认值 = 真>
+    参数 是否包含起始文本 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 结束位置 <类型 = 整数>
+        变量 起始查找位置1 <类型 = 整数>
+        如果 (取文本长度 (待取内容) >= 起始查找位置)
+        {
+            起始查找位置1 = 寻找文本 (待取内容, 起始文本1, 起始查找位置, 不区分大小写)
+            如果 (起始查找位置1 < 0)
+            {
+                返回 ("")
+
+            }
+
+        }
+        否则
+        {
+            返回 ("")
+
+        }
+
+
+        如果 (起始文本2 == "")
+        {
+            如果 (取文本长度 (待取内容) >= 起始查找位置)
+            {
+                起始查找位置1 = 寻找文本 (待取内容, 起始文本2, 起始查找位置, 不区分大小写)
+
+            }
+            否则
+            {
+                返回 ("")
+
+            }
+
+        }
+        否则
+        {
+            起始查找位置1 = 起始查找位置
+            起始文本2 = 起始文本1
+
+        }
+        如果 (起始查找位置1 < 0)
+        {
+            起始查找位置 = -1
+            返回 ("")
+
+        }
+
+        如果 (结束文本 == "")
+        {
+            结束位置 = 取文本长度 (待取内容) + 1
+        }
+        否则
+        {
+            如果 (取文本长度 (待取内容) >= 起始查找位置1 + 取文本长度 (起始文本2))
+            {
+                结束位置 = 寻找文本 (待取内容, 结束文本, 起始查找位置1 + 取文本长度 (起始文本2), 不区分大小写)
+                如果 (结束位置 < 0)
+                {
+                    返回 ("")
+
+                }
+
+
+            }
+            否则
+            {
+                返回 ("")
+
+            }
+
+        }
+
+        如果 (是否包含起始文本 == 假)
+        {
+            起始查找位置 = 起始查找位置1 + 取文本长度 (起始文本2)
+
+        }
+
+        如果 (取文本长度 (待取内容) >= 起始查找位置)
+        {
+            返回 (取文本中间 (待取内容, 起始查找位置, 结束位置 - 起始查找位置))
+
+        }
+        否则
+        {
+            返回 ("")
+
+        }
+
+    }
+
+    方法 文本_取右边 <公开 类型 = 文本型 折叠>
+    参数 被查找的文本 <类型 = 文本型>
+    参数 欲寻找的文本 <类型 = 文本型>
+    参数 是否不区分大小写 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 找到的位置 <类型 = 整数>
+        变量 结果文本 <类型 = 文本型>
+        找到的位置 = 倒找文本 (被查找的文本, 欲寻找的文本, , 是否不区分大小写)
+        如果 (找到的位置 == -1)
+        {
+            返回 ("")
+
+        }
+
+        结果文本 = 取文本右边 (被查找的文本, 取文本长度 (被查找的文本) - 取文本长度 (欲寻找的文本) - 找到的位置)
+        返回 (结果文本)
+
+    }
+
+    方法 文本_按字数分割 <公开 类型 = 文本数组类 折叠>
+    参数 需要分割的文本 <类型 = 文本型>
+    参数 分割的字数 <类型 = 整数 注释 = "需要分割的字数,默认11字手机号" @默认值 = 11>
+    {
+        变量 l <类型 = 整数>
+        变量 m <类型 = 文本型>
+        变量 字数 <类型 = 整数>
+        变量 返回的文本 <类型 = 文本数组类>
+        如果 (分割的字数 <= 0)
+        {
+            字数 = 11
+
+        }
+        否则
+        {
+            字数 = 分割的字数
+
+        }
+
+        m = 需要分割的文本
+        l = 取文本长度 (m)
+        判断循环 (l > 字数)
+        {
+            返回的文本.加入成员 (取文本左边 (m, 字数))
+            m = 取文本右边 (m, l - 字数)
+            l = 取文本长度 (m)
+
+        }
+
+        返回的文本.加入成员 (m)
+        返回 (返回的文本)
+    }
+
+    方法 文本是否小写字母 <公开 类型 = 逻辑型 折叠>
+    参数 字符串 <类型 = 文本型>
+    {
+        变量 Len <类型 = 整数>
+        变量 asc <类型 = 整数>
+        Len = 取文本长度 (字符串)
+        如果 (Len == 0)
+        {
+            返回 (假)
+
+        }
+
+
+        变量 循环变量 <类型 = 整数>
+        循环 (0, Len, 循环变量, 1)
+        {
+            变量 系统 <类型 = 类_系统杂项>
+            asc = 系统.取代码 (字符串, 循环变量)
+            如果 (asc < 97)
+            {
+                返回 (假)
+
+            }
+            如果 (asc > 122)
+            {
+                返回 (假)
+
+            }
+
+
+        }
+
+        返回 (真)
+
+    }
+
+    方法 文本是否大写字母 <公开 类型 = 逻辑型 折叠>
+    参数 字符串 <类型 = 文本型>
+    {
+        变量 Len <类型 = 整数>
+        变量 asc <类型 = 整数>
+        Len = 取文本长度 (字符串)
+        如果 (Len == 0)
+        {
+            返回 (假)
+
+        }
+
+        变量 循环变量 <类型 = 整数>
+        循环 (0, Len, 循环变量, 1)
+        {
+            变量 系统 <类型 = 类_系统杂项>
+            asc = 系统.取代码 (字符串, 循环变量)
+            如果 (asc < 65)
+            {
+                返回 (假)
+
+            }
+            如果 (asc > 90)
+            {
+                返回 (假)
+
+            }
+
+
+        }
+
+        返回 (真)
+
+    }
+
+    方法 文本是否字母 <公开 类型 = 逻辑型 折叠>
+    参数 字符串 <类型 = 文本型>
+    {
+        变量 Len <类型 = 整数>
+        变量 asc <类型 = 整数>
+        Len = 取文本长度 (字符串)
+        如果 (Len == 0)
+        {
+            返回 (假)
+
+        }
+
+        变量 循环变量 <类型 = 整数>
+        循环 (0, Len, 循环变量, 1)
+        {
+            变量 系统 <类型 = 类_系统杂项>
+            asc = 系统.取代码 (字符串, 循环变量)
+            如果 (asc >= 65 && asc <= 90)
+            {
+
+            }
+            否则 (asc >= 97 && asc <= 122)
+            {
+
+            }
+            否则
+            {
+                返回 (假)
+
+            }
+
+
+        }
+
+        返回 (真)
+
+    }
+
+    方法 文本_是否有中文 <公开 类型 = 逻辑型 折叠>
+    参数 字符串 <类型 = 文本型>
+    {
+        变量 n <类型 = 整数>
+        循环 (0, 取文本长度 (字符串), n, 1)
+        {
+            变量 系统 <类型 = 类_系统杂项>
+            如果 (系统.取代码 (字符串, n) > 0x80)  // 如果大于0x80,就有中文
+            {
+                返回 (真)
+
+            }
+
+        }
+        返回 (假)
+
+    }
+
+    方法 文本_是否全中文 <公开 类型 = 逻辑型 折叠>
+    参数 字符串 <类型 = 文本型>
+    {
+        变量 n <类型 = 整数>
+        循环 (0, 取文本长度 (字符串), n, 1)
+        {
+            变量 系统 <类型 = 类_系统杂项>
+            如果 (系统.取代码 (字符串, n) < 0x80)  // 如果大于0x80,就有中文
+            {
+                返回 (假)
+
+            }
+
+        }
+
+        返回 (真)
+
+    }
+
+    方法 文本_取左边 <公开 类型 = 文本型 折叠>
+    参数 被查找的文本 <类型 = 文本型>
+    参数 欲寻找的文本 <类型 = 文本型>
+    参数 起始寻找位置 <类型 = 整数 @默认值 = 0>
+    参数 是否不区分大小写 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 找到的位置 <类型 = 整数>
+        变量 结果文本 <类型 = 文本型>
+        如果 (取文本长度 (被查找的文本) >= 起始寻找位置)
+        {
+            找到的位置 = 寻找文本 (被查找的文本, 欲寻找的文本, 起始寻找位置, 是否不区分大小写)
+            如果 (找到的位置 == -1)
+            {
+                返回 ("")
+
+            }
+
+            如果 (取文本长度 (被查找的文本) >= 找到的位置)
+            {
+                结果文本 = 取文本左边 (被查找的文本, 找到的位置)
+                返回 (结果文本)
+
+            }
+            否则
+            {
+                返回 ("")
+
+            }
+
+        }
+        否则
+        {
+            返回 ("")
+
+        }
+
+    }
+
+    方法 文本_替换 <公开 类型 = 文本型 折叠>
+    参数 原始内容 <类型 = 文本型>
+    参数 要替换的文本 <类型 = 文本型>
+    参数 用作替换的文本 <类型 = 文本型>
+    {
+        变量 替换后的内容 <类型 = 文本型>
+        替换后的内容 = 原始内容
+        子文本替换 (替换后的内容, 要替换的文本, 用作替换的文本)
+        返回 (替换后的内容)
+    }
+
+    方法 文本_寻找文本 <公开 类型 = 整数 注释 = "失败返回 -1 成功 从0开始" 返回值注释 = "返回找到的位置" 折叠 "">
+    参数 原始文本 <类型 = 文本型>
+    参数 要查找的文本 <类型 = 文本型>
+    参数 起始搜索位置 <类型 = 整数 注释 = "可以被省略。位置值从 0 开始。如果本参数被省略，默认为从被搜寻文本的首部开始。" @默认值 = 0>
+    参数 是否区分大小写 <类型 = 逻辑型 注释 = "默认不区分大小写" @默认值 = 假>
+    {
+        如果 (取文本长度 (原始文本) >= 起始搜索位置)
+        {
+            返回 (寻找文本 (原始文本, 要查找的文本, 起始搜索位置, 是否区分大小写))
+
+        }
+        否则
+        {
+            返回 (-1)
+
+        }
+
+    }
+
+    方法 文本_倒找文本 <公开 类型 = 整数 注释 = "此函数不区分大小写" 返回值注释 = "没有找到返回-1" 折叠 "">
+    参数 原始文本 <类型 = 文本型>
+    参数 要查找的文本 <类型 = 文本型>
+    参数 起始搜索位置 <类型 = 整数 注释 = "可以被省略。位置值从 0 开始。如果本参数被省略，默认为从被搜寻文本的尾部开始。" @默认值 = -1>
+    参数 是否区分大小写 <类型 = 逻辑型 注释 = "默认不区分大小写" @默认值 = 假>
+    {
+        如果 (取文本长度 (原始文本) >= 起始搜索位置)
+        {
+            返回 (倒找文本 (原始文本, 要查找的文本, 起始搜索位置, 是否区分大小写))
+
+        }
+        否则
+        {
+            返回 (-1)
+
+        }
+
+    }
+
+    方法 文本_取左边_从左往右查找 <公开 类型 = 文本型 注释 = "默认从左边开始查找" 折叠 "">
+    参数 原始文本 <类型 = 文本型>
+    参数 要查找的文本 <类型 = 文本型>
+    参数 搜索起始位置 <类型 = 整数 @默认值 = 0>
+    参数 是否不区分大小写 <类型 = 逻辑型 注释 = "默认不区分大小写" @默认值 = 假>
+    参数 如果找不到返回原始文本 <类型 = 逻辑型 注释 = "默认找不到就返回空文本" @默认值 = 假>
+    {
+        变量 找到位置 <类型 = 整数>
+        变量 找到的文本 <类型 = 文本型>
+        找到位置 = 文本_寻找文本 (原始文本, 要查找的文本)
+        如果 (找到位置 != -1)
+        {
+            如果 (取文本长度 (原始文本) >= 找到位置)
+            {
+                找到的文本 = 取文本左边 (原始文本, 找到位置)
+
+            }
+            否则
+            {
+                找到的文本 = ""
+
+            }
+        }
+        否则
+        {
+            如果 (如果找不到返回原始文本 == 真)
+            {
+                返回 (原始文本)
+            }
+
+        }
+
+        返回 (找到的文本)
+    }
+
+    方法 文本_取右边_从左往右查找 <公开 类型 = 文本型 折叠>
+    参数 原始文本 <类型 = 文本型>
+    参数 要查找的文本 <类型 = 文本型>
+    {
+
+        变量 找到位置 <类型 = 整数>
+        变量 找到的文本 <类型 = 文本型>
+        找到位置 = 文本_寻找文本 (原始文本, 要查找的文本)
+        如果 (找到位置 != -1)
+        {
+            找到位置 = 取文本长度 (原始文本) - 找到位置 - 取文本长度 (要查找的文本)
+            如果 (取文本长度 (原始文本) >= 找到位置)
+            {
+                找到的文本 = 取文本右边 (原始文本, 找到位置)
+
+            }
+            否则
+            {
+                找到的文本 = ""
+
+            }
+
+        }
+        返回 (找到的文本)
+
+
+    }
+
+    方法 文本_取右边_从右往左查找 <公开 类型 = 文本型 折叠>
+    参数 原始文本 <类型 = 文本型>
+    参数 要查找的文本 <类型 = 文本型>
+    参数 开始搜索位置 <类型 = 整数 注释 = "默认从尾部开始寻找" @默认值 = -1>
+    {
+        变量 找到位置 <类型 = 整数>
+        变量 找到的文本 <类型 = 文本型>
+        变量 文本长度 <类型 = 整数>
+        找到位置 = 文本_倒找文本 (原始文本, 要查找的文本, 开始搜索位置)
+        如果 (找到位置 != -1)
+        {
+            找到位置 = 找到位置 + 取文本长度 (要查找的文本)
+            文本长度 = 取文本长度 (原始文本) - 找到位置
+            如果 (取文本长度 (原始文本) >= 文本长度)
+            {
+                找到的文本 = 取文本右边 (原始文本, 文本长度)
+            }
+            否则
+            {
+                找到的文本 = ""
+
+            }
+
+        }
+
+        返回 (找到的文本)
+    }
+
+    方法 文本_取左边_从右往左查找 <公开 类型 = 文本型 折叠>
+    参数 原始文本 <类型 = 文本型>
+    参数 要查找的文本 <类型 = 文本型>
+    参数 开始查找位置 <类型 = 整数 注释 = "-1表示从尾部开始查找，必须小于原始文本长度；否则崩溃" @默认值 = -1>
+    参数 是否不区分大小写 <类型 = 逻辑型 注释 = "默认不取分大小写" @默认值 = 假>
+    参数 如果找不到返回原始文本 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 找到位置 <类型 = 整数>
+        如果 (取文本长度 (原始文本) >= 开始查找位置)
+        {
+            找到位置 = 倒找文本 (原始文本, 要查找的文本, 开始查找位置, 是否不区分大小写)
+            如果 (找到位置 == -1)
+            {
+                如果 (如果找不到返回原始文本)
+                {
+                    返回 (原始文本)
+                }
+                否则
+                {
+                    返回 ("")
+
+                }
+
+            }
+            否则
+            {
+                如果 (取文本长度 (原始文本) >= 找到位置)
+                {
+                    返回 (取文本左边 (原始文本, 找到位置))
+                }
+                否则
+                {
+                    返回 ("")
+
+                }
+
+            }
+
+        }
+        否则
+        {
+            返回 ("")
+
+        }
+
+
+    }
+}
+
+类 类_鼠键处理 <公开
+        注释 = "具体案例课程参考：https://www.lkuaiy.com/VideoInsidePage?id=52481603076167&SingleSetVideoLink=55861603941560&Recommend=&page=1"
+        折叠>
+{
+
+    # @ #define KEY_DOWN(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 1:0)
+
+    方法 是否按下鼠标左键 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @  if(KEY_DOWN(VK_LBUTTON))return true;
+        @  else return false;
+
+    }
+
+    方法 是否按下鼠标右键 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @  if(KEY_DOWN(VK_RBUTTON))return true;
+        @  else return false;
+
+    }
+
+    方法 是否按下鼠标滚轮 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @  if(KEY_DOWN(VK_MBUTTON))return true;
+        @  else return false;
+
+    }
+
+    方法 全局热键监控 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 按键代码 <类型 = 整数>
+    {
+        @  if(KEY_DOWN(@<按键代码>))return true;
+        @  else return false;
+
+    }
+}
+
+类 类_键鼠钩子类 <公开 折叠>
+{
+    变量 键盘钩子句柄 <静态 类型 = 变整数>
+    变量 鼠标钩子句柄 <静态 类型 = 变整数>
+    变量 拦截按键码 <静态 类型 = JSONCPP对象类>
+
+    # @begin
+    #
+    # <> <include>
+    # typedef struct CODEFOF {
+    #  DWORD     vkCode;  // 按键代号
+    #  DWORD     scanCode;  // 硬件扫描代号，同 vkCode 也可以作为按键的代号。
+    #  DWORD     flags;  // 事件类型，一般按键按下为 0 抬起为 128。
+    #  DWORD     time;   // 消息时间戳
+    #  ULONG_PTR dwExtraInfo; // 消息附加信息，一般为 0。
+    #  };
+    #
+    # static void* ObjThis(void* ThisV)
+    # {
+    #      static void* Pointer_=NULL;
+    #      if(ThisV==NULL)
+    #      {
+    #         return Pointer_;
+    #      }else
+    #      {
+    #         Pointer_=ThisV;
+    #         return Pointer_;
+    #      }    
+    # }
+    # static LRESULT __stdcall CodeMsg(int nCode, WPARAM wParam, LPARAM lParam)
+    # {       
+    #     CODEFOF *ks = (CODEFOF*)lParam;
+    #     DWORD code = ks->vkCode;
+    #      if(ObjThis(NULL)!=NULL)
+    #      {
+    #         @sn<current_class> *pTimer=(@sn<current_class> *)ObjThis(NULL);    
+    #         pTimer-> @<内部回调方法>(code,wParam,ks->scanCode,ks->flags);
+    #      }    
+    #      if(@<内部_成员是否存在>(code)==1)
+    #      {
+    #         @sn<current_class> *pTimer=(@sn<current_class> *)ObjThis(NULL);    
+    #         pTimer-> @<拦截按键事件>(code);
+    #         return 1;
+    #      }
+    #      return CallNextHookEx((HHOOK)@<鼠标钩子句柄>,nCode,wParam,lParam);
+    # }
+    # <> </include>
+    # @end
+    #
+
+    方法 内部_成员是否存在 <静态 类型 = 整数 返回值注释 = "存在返回1，否则返回0" 折叠>
+    参数 按键码 <类型 = 整数>
+    {
+        如果 (拦截按键码.成员是否存在 (到文本 (按键码)) == 真)
+        {
+            返回 (1)
+        }
+        否则
+        {
+            返回 (0)
+
+        }
+
+    }
+
+    方法 定义拦截按键码 <公开 折叠>
+    参数 参数_拦截按键码 <类型 = JSONCPP对象类 注释 = "键名和值都是按键码" 注释 = "例如：JSON对象类.置入整数值 (到文本 (按键码.F1键), 按键码.F1键)" 折叠2>
+    {
+        拦截按键码 = 参数_拦截按键码
+    }
+
+    方法 获取按键状态 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 按键码 <类型 = 整数>
+    {
+        @ return GetKeyState(VK_CONTROL) & @<按键码>;
+    }
+
+    方法 拦截按键事件 <公开 定义事件 类型 = 整数 折叠>
+    参数 按键码 <类型 = 整数>
+    {
+
+    }
+
+    方法 键盘放开按键回调事件 <公开 定义事件 类型 = 整数 折叠>
+    参数 放开按键 <类型 = 整数>
+    {
+
+    }
+
+    方法 键盘按下按键回调事件 <公开 定义事件 类型 = 整数 折叠>
+    参数 按下按键 <类型 = 整数>
+    {
+
+    }
+
+    方法 鼠标放开按键回调事件 <公开 定义事件 类型 = 整数 折叠>
+    参数 放开按键 <类型 = 整数 注释 = "1代表左键，2代表右键，3代表中建">
+    {
+
+    }
+
+    方法 鼠标按下按键回调事件 <公开 定义事件 类型 = 整数 折叠>
+    参数 按下按键 <类型 = 整数 注释 = "1代表左键，2代表右键，3代表中建">
+    {
+
+    }
+
+    方法 鼠标移动回调事件 <公开 定义事件 类型 = 整数 折叠>
+    {
+
+    }
+
+    方法 组合回调事件 <公开 定义事件 类型 = 整数 折叠>
+    参数 按键码_ <类型 = 整数>
+    参数 是否按下Ctrl <类型 = 逻辑型>
+    参数 是否按下Alt <类型 = 逻辑型>
+    参数 是否按下Shift <类型 = 逻辑型>
+    参数 是否按下WIN键 <类型 = 逻辑型>
+    参数 放开还是按下 <类型 = 逻辑型 注释 = "真放开，假按下">
+    {
+
+    }
+
+    方法 内部回调方法 <公开 折叠 @禁止流程检查 = 真>
+    参数 按键码 <类型 = 整数>
+    参数 消息值 <类型 = 整数>
+    参数 scanCode <类型 = 整数>
+    参数 flags <类型 = 整数>
+    {
+        变量 是否按下Ctrl <静态 类型 = 逻辑型>
+        变量 是否按下Alt <静态 类型 = 逻辑型>
+        变量 是否按下Shift <静态 类型 = 逻辑型>
+        变量 是否按下WIN键 <静态 类型 = 逻辑型>
+        变量 放开还是按下 <静态 类型 = 逻辑型>
+        如果 (消息值 == 512)
+        {
+            鼠标移动回调事件 ()
+        }
+        如果 (消息值 > 512)
+        {
+            如果 (消息值 == 522)
+            {
+                如果 (flags >= 0)
+                {
+                    滚轮是否转动 (1)
+                }
+                否则
+                {
+                    滚轮是否转动 (2)
+
+                }
+
+            }
+
+            如果 (消息值 == 513)
+            {
+                // 鼠标左键按下
+                鼠标按下按键回调事件 (1)
+            }
+            如果 (消息值 == 514)
+            {
+                // 鼠标左键放开
+                鼠标放开按键回调事件 (1)
+            }
+            如果 (消息值 == 516)
+            {
+                // 鼠标右键按下
+                鼠标按下按键回调事件 (2)
+            }
+            如果 (消息值 == 517)
+            {
+                // 鼠标右键放开
+                鼠标放开按键回调事件 (2)
+            }
+            如果 (消息值 == 519)
+            {
+                // 鼠标中键按下
+                鼠标按下按键回调事件 (3)
+            }
+            如果 (消息值 == 520)
+            {
+                // 鼠标中键按下
+                鼠标放开按键回调事件 (3)
+
+            }
+
+        }
+        如果 (消息值 == 256)
+        {
+            键盘按下按键回调事件 (按键码)
+            放开还是按下 = 假
+            如果 (按键码 == 160)
+            {
+                是否按下Shift = 真
+
+            }
+            如果 (按键码 == 162)
+            {
+                是否按下Ctrl = 真
+
+            }
+            如果 (按键码 == 164)
+            {
+                是否按下Alt = 真
+
+            }
+            如果 (按键码 == 91)
+            {
+                是否按下WIN键 = 真
+
+            }
+
+        }
+        如果 (消息值 == 257)
+        {
+            键盘放开按键回调事件 (按键码)
+            放开还是按下 = 真
+            如果 (按键码 == 160)
+            {
+                是否按下Shift = 假
+            }
+            如果 (按键码 == 162)
+            {
+                是否按下Ctrl = 假
+
+            }
+            如果 (按键码 == 164)
+            {
+                是否按下Alt = 假
+
+            }
+            如果 (按键码 == 91)
+            {
+                是否按下WIN键 = 假
+
+            }
+
+        }
+
+        如果 (消息值 == 260 || 消息值 == 164 || 消息值 == 165)  // 消息值
+        {
+            键盘按下按键回调事件 (按键码)
+
+        }
+
+        如果 (是否按下Shift == 真 && 是否按下Ctrl == 真 && 按键码 != 160 && 按键码 != 162 && 按键码 != 164 && 按键码 != 91)
+        {
+            组合回调事件 (按键码, 是否按下Ctrl, 是否按下Alt, 是否按下Shift, 是否按下WIN键, 放开还是按下)
+
+        }
+        如果 (是否按下Shift == 真 && 是否按下Alt == 真 && 按键码 != 160 && 按键码 != 162 && 按键码 != 164 && 按键码 != 91)
+        {
+            组合回调事件 (按键码, 是否按下Ctrl, 是否按下Alt, 是否按下Shift, 是否按下WIN键, 放开还是按下)
+
+        }
+        如果 (是否按下Alt == 真 && 是否按下Ctrl == 真 && 按键码 != 160 && 按键码 != 162 && 按键码 != 164 && 按键码 != 91)
+        {
+            组合回调事件 (按键码, 是否按下Ctrl, 是否按下Alt, 是否按下Shift, 是否按下WIN键, 放开还是按下)
+
+        }
+        如果 (是否按下WIN键 == 真 && 是否按下Ctrl == 真 && 按键码 != 160 && 按键码 != 162 && 按键码 != 164 && 按键码 != 91)
+        {
+            组合回调事件 (按键码, 是否按下Ctrl, 是否按下Alt, 是否按下Shift, 是否按下WIN键, 放开还是按下)
+
+        }
+        如果 (是否按下WIN键 == 真 && 是否按下Shift == 真 && 按键码 != 160 && 按键码 != 162 && 按键码 != 164 && 按键码 != 91)
+        {
+            组合回调事件 (按键码, 是否按下Ctrl, 是否按下Alt, 是否按下Shift, 是否按下WIN键, 放开还是按下)
+
+        }
+        如果 (是否按下WIN键 == 真 && 是否按下Alt == 真 && 按键码 != 160 && 按键码 != 162 && 按键码 != 164 && 按键码 != 91)
+        {
+            组合回调事件 (按键码, 是否按下Ctrl, 是否按下Alt, 是否按下Shift, 是否按下WIN键, 放开还是按下)
+
+        }
+
+        如果 (是否按下Shift == 真 && 是否按下Ctrl == 假 && 是否按下Alt == 假 && 是否按下WIN键 == 假 && 按键码 != 160 && 按键码 != 162 && 按键码 != 164 && 按键码 != 91)
+        {
+            组合回调事件 (按键码, 是否按下Ctrl, 是否按下Alt, 是否按下Shift, 是否按下WIN键, 放开还是按下)
+
+        }
+        如果 (是否按下Shift == 假 && 是否按下Ctrl == 真 && 是否按下Alt == 假 && 是否按下WIN键 == 假 && 按键码 != 160 && 按键码 != 162 && 按键码 != 164 && 按键码 != 91)
+        {
+            组合回调事件 (按键码, 是否按下Ctrl, 是否按下Alt, 是否按下Shift, 是否按下WIN键, 放开还是按下)
+
+        }
+        如果 (是否按下Shift == 假 && 是否按下Ctrl == 假 && 是否按下Alt == 真 && 是否按下WIN键 == 假 && 按键码 != 160 && 按键码 != 162 && 按键码 != 164 && 按键码 != 91)
+        {
+            组合回调事件 (按键码, 是否按下Ctrl, 是否按下Alt, 是否按下Shift, 是否按下WIN键, 放开还是按下)
+
+        }
+        如果 (是否按下Shift == 假 && 是否按下Ctrl == 假 && 是否按下WIN键 == 真 && 是否按下Alt == 假 && 按键码 != 160 && 按键码 != 162 && 按键码 != 164 && 按键码 != 91)
+        {
+            组合回调事件 (按键码, 是否按下Ctrl, 是否按下Alt, 是否按下Shift, 是否按下WIN键, 放开还是按下)
+
+        }
+
+
+    }
+
+    方法 滚轮是否转动 <公开 定义事件 类型 = 整数 折叠>
+    参数 转动方向 <类型 = 整数>
+    {
+
+    }
+
+    方法 类_清理 <折叠>
+    {
+        @ UnhookWindowsHookEx ((HHOOK)@<键盘钩子句柄>);
+        @ UnhookWindowsHookEx ((HHOOK)@<鼠标钩子句柄>);
+    }
+
+    方法 类_初始化 <折叠>
+    {
+        @ ObjThis(this);
+        @ @<鼠标钩子句柄>=(@dt<变整数>)SetWindowsHookEx(14,(HOOKPROC)(INT_P)&CodeMsg,GetModuleHandle(NULL),0);
+        @ @<键盘钩子句柄>=(@dt<变整数>)SetWindowsHookEx(13,(HOOKPROC)(INT_P)&CodeMsg,GetModuleHandle(NULL),0);
+    }
+
+    #
+}
+
+类 类_进程操作 <公开 注释 = "具体用法参考：https://www.lkuaiy.com/rsdetails?id=16118451579772" 注释 = "注意：案例中的类名可能改变，只是名称改变，参考案例是自行对比即可" 折叠
+        折叠2 @视窗.外部头文件 = "tlhelp32.h\r\ntchar.h\r\nstdio.h\r\nstdint.h\r\nvector\r\niostream\r\nconio.h\r\nwinsvc.h">
+{
+
+    # @begin 
+    # BOOL GetProcessList_LKY( );
+    # BOOL ListProcessModules_LKY( DWORD dwPID );
+    # BOOL ListProcessThreads_LKY( DWORD dwOwnerPID );
+    # void printError_LKY( TCHAR* msg );
+    # void printError_LKY( TCHAR* msg )
+    # {
+    #   DWORD eNum;
+    #   TCHAR sysMsg[256];
+    #   TCHAR* p;
+    #   eNum = GetLastError( );
+    #   FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+    #          NULL, eNum,
+    #          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+    #          sysMsg, 256, NULL );
+    #   p = sysMsg;
+    #   while( ( *p > 31 ) || ( *p == 9 ) )
+    #     ++p;
+    #   do { *p-- = 0; } while( ( p >= sysMsg ) &&
+    #                           ( ( *p == '.' ) || ( *p < 33 ) ) );
+    # }
+    # BOOL ListProcessModules_LKY( DWORD dwPID )
+    # {
+    #   HANDLE hModuleSnap = INVALID_HANDLE_VALUE;
+    #   MODULEENTRY32 me32;
+    #   hModuleSnap = CreateToolhelp32Snapshot( TH32CS_SNAPMODULE, dwPID );
+    #   if( hModuleSnap == INVALID_HANDLE_VALUE )
+    #   {
+    #     return( FALSE );
+    #   }
+    #   me32.dwSize = sizeof( MODULEENTRY32 );
+    #   if( !Module32First( hModuleSnap, &me32 ) )
+    #   {
+    #     CloseHandle( hModuleSnap );
+    #     return( FALSE );
+    #   }
+    #   do
+    #   {
+    #
+    #   } while( Module32Next( hModuleSnap, &me32 ) );
+    #   CloseHandle( hModuleSnap );
+    #   return( TRUE );
+    # }
+    # BOOL ListProcessThreads_LKY( DWORD dwOwnerPID ) 
+    # { 
+    #   HANDLE hThreadSnap = INVALID_HANDLE_VALUE; 
+    #   THREADENTRY32 te32; 
+    #   hThreadSnap = CreateToolhelp32Snapshot( TH32CS_SNAPTHREAD, 0 ); 
+    #   if( hThreadSnap == INVALID_HANDLE_VALUE ) 
+    #     return( FALSE ); 
+    #   te32.dwSize = sizeof(THREADENTRY32); 
+    #   if( !Thread32First( hThreadSnap, &te32 ) ) 
+    #   {
+    #     CloseHandle( hThreadSnap );          // clean the snapshot object
+    #     return( FALSE );
+    #   }
+    #   do 
+    #   { 
+    #     if( te32.th32OwnerProcessID == dwOwnerPID )
+    #     {
+    #     }
+    #   } while( Thread32Next(hThreadSnap, &te32 ) ); 
+    #   CloseHandle( hThreadSnap );
+    #   return( TRUE );
+    # }
+    #
+    #
+    # @end
+    #
+    # @begin 
+    # //枚举窗口ID
+    # typedef struct EnumHWndsArg
+    # {
+    #     std::vector<HWND> *vecHWnds;
+    #     DWORD dwProcessId;
+    # }EnumHWndsArg, *LPEnumHWndsArg;
+    # BOOL CALLBACK lpEnumFunc_LKY(HWND hwnd, LPARAM lParam)
+    # {
+    #     EnumHWndsArg *pArg = (LPEnumHWndsArg)lParam;
+    #     DWORD  processId;
+    #     GetWindowThreadProcessId(hwnd, &processId);
+    #     if (processId == pArg->dwProcessId)
+    #     {
+    #         pArg->vecHWnds->push_back(hwnd);
+    #     }
+    #     return TRUE;
+    # }
+    # void GetHWndsByProcessID_LKY(DWORD processID, std::vector<HWND> &vecHWnds)
+    # {
+    #     EnumHWndsArg wi;
+    #     wi.dwProcessId = processID;
+    #     wi.vecHWnds = &vecHWnds;
+    #     EnumWindows(lpEnumFunc_LKY, (LPARAM)&wi);
+    # }
+    # bool CloseWindowsService_LKY(TCHAR* service) //服务名
+    # {
+    #     SC_HANDLE hSC = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+    #     if (hSC == NULL)
+    #     {
+    #         printf("OpenSCManager fail(%ld)", GetLastError());
+    #         return false;
+    #     }
+    #
+    #     // open service
+    #     SC_HANDLE hSvc = ::OpenService(hSC, service,
+    #         SERVICE_START | SERVICE_QUERY_STATUS | SERVICE_STOP);
+    #     if (hSvc == NULL)
+    #     {
+    #         ::CloseServiceHandle(hSC);
+    #         return false;
+    #     }
+    #     // get service status
+    #     SERVICE_STATUS status;
+    #     if (::QueryServiceStatus(hSvc, &status) == FALSE)
+    #     {
+    #         ::CloseServiceHandle(hSvc);
+    #         ::CloseServiceHandle(hSC);
+    #         return false;
+    #     }
+    #
+    #     //if status == running, stop the service
+    #     if (status.dwCurrentState == SERVICE_RUNNING)
+    #     {
+    #         if (::ControlService(hSvc,
+    #             SERVICE_CONTROL_STOP, &status) == FALSE)
+    #         {
+    #             ::CloseServiceHandle(hSvc);
+    #             ::CloseServiceHandle(hSC);
+    #             return false;
+    #         }
+    #         //wait the stop operation
+    #         while (::QueryServiceStatus(hSvc, &status) == TRUE)
+    #         {
+    #             ::Sleep(status.dwWaitHint);
+    #             if (status.dwCurrentState == SERVICE_STOPPED)
+    #             {
+    #                 ::CloseServiceHandle(hSvc);
+    #                 ::CloseServiceHandle(hSC);
+    #                 return true;
+    #             }
+    #         }
+    #     }
+    #
+    #     ::CloseServiceHandle(hSvc);
+    #     ::CloseServiceHandle(hSC);
+    #     return true;
+    # }
+    #
+    # @end
+
+    方法 关闭服务 <公开 折叠>
+    参数 服务名称 <类型 = 文本型>
+    {
+        变量 UTF8 <类型 = "字节集类 ">
+        变量 UTF8指针 <类型 = 变整数>
+        UTF8 = 文本到UTF8 (服务名称, 假)
+        UTF8指针 = 取字节集指针 (UTF8)
+        @ CloseWindowsService_LKY((TCHAR*)@<UTF8指针>);
+    }
+
+    方法 结束进程_ <公开 类型 = 逻辑型 注释 = "结束单个进程" 折叠 @禁止流程检查 = 真>
+    参数 进程名 <类型 = 文本型>
+    {
+        变量 进程ID <类型 = 变整数>
+        变量 进程句柄 <类型 = 变整数>
+        变量 结果 <类型 = 逻辑型>
+        进程ID = 取指定进程ID_ (进程名)
+        @ @<进程句柄> =(DWORD)OpenProcess(1, 0, @<进程ID>);
+        @ @<结果>=TerminateProcess((HANDLE)@<进程句柄>,0);
+        @ CloseHandle((HANDLE)@<进程句柄>);
+        返回 (结果)
+    }
+
+    方法 结束进程2_ <公开 注释 = "结束多个同名进程" 折叠 @禁止流程检查 = 真>
+    参数 进程名 <类型 = 文本型>
+    {
+        判断循环 (进程是否存在 (进程名) == 真)
+        {
+            结束进程_ (进程名)
+        }
+
+    }
+
+    方法 取指定进程ID_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 进程名 <类型 = 文本型>
+    {
+        @ HANDLE hProcessSnap = ::CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS,NULL);
+        @ PROCESSENTRY32 pe32;CWString ProcessName = @<进程名>,sProcessName;
+        @ ProcessName.MakeLower ();
+        @ if (hProcessSnap == INVALID_HANDLE_VALUE)
+        @ { return -1; }
+        @ pe32.dwSize = sizeof(pe32);
+        @ BOOL bRet = ::Process32First(hProcessSnap,&pe32);
+        @ while(bRet)
+        @ {
+        @ sProcessName=pe32.szExeFile;
+        @ sProcessName.MakeLower();
+        @ if (sProcessName == ProcessName)
+        @ { ::CloseHandle(hProcessSnap); return pe32.th32ProcessID; }
+        @ bRet = ::Process32Next(hProcessSnap,&pe32);
+        @ }
+        @ ::CloseHandle(hProcessSnap);
+        @ return 0;
+    }
+
+    方法 进程是否存在 <公开 类型 = 逻辑型 折叠>
+    参数 进程名 <类型 = 文本型>
+    {
+        返回 (取指定进程ID_ (进程名) != 0)
+    }
+
+    方法 枚举所有进程 <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 返回的进程信息 <类型 = 类_进程信息数组>
+    {
+        变量 临时进程 <类型 = 类_进程信息数据>
+        @  HANDLE hProcessSnap;
+        @  HANDLE hProcess;
+        @  PROCESSENTRY32 pe32;
+        @  DWORD dwPriorityClass;
+        @  hProcessSnap = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
+        @  if( hProcessSnap == INVALID_HANDLE_VALUE ){return(FALSE);}
+        @  pe32.dwSize = sizeof( PROCESSENTRY32 );
+        @  if( !Process32First( hProcessSnap, &pe32 ) ){CloseHandle( hProcessSnap );return(FALSE);}
+        @  do
+        @  {
+        @    dwPriorityClass = 0;
+        @    hProcess = OpenProcess( PROCESS_ALL_ACCESS, FALSE, pe32.th32ProcessID );
+        @    @<临时进程.进程文件名>.SetText (pe32.szExeFile);
+        @    if(pe32.th32ProcessID!=0 && @<临时进程.进程文件名>!=_T(""))
+        @    {
+        临时进程 = (类_进程信息数据)新建对象 (类_进程信息数据)
+        @        @<临时进程.进程ID>=pe32.th32ProcessID;
+        @        @<临时进程.线程计数>=pe32.cntThreads;
+        @        @<临时进程.父进程ID>=pe32.th32ParentProcessID;
+        @        @<临时进程.线程优先权>=pe32.pcPriClassBase;
+        @        @<临时进程.进程引用计数>=pe32.cntUsage;
+        @        @<临时进程.结构的大小>=pe32.dwSize;
+        @        @<临时进程.进程默认堆ID>=(@dt<整数>)pe32.th32DefaultHeapID;
+        @        @<临时进程.进程模块ID>=pe32.th32ModuleID;
+        @        @<临时进程.保留>=pe32.dwFlags;
+        @        @<临时进程.进程文件名>=pe32.szExeFile;
+        返回的进程信息.加入成员 (临时进程)
+        @    ListProcessModules_LKY( pe32.th32ProcessID );
+        @    ListProcessThreads_LKY( pe32.th32ProcessID );
+        @    }
+        @  } while( Process32Next( hProcessSnap, &pe32 ) );
+        @  CloseHandle( hProcessSnap );
+        @  return(TRUE);
+    }
+
+    方法 枚举进程ID下所有窗口句柄 <公开 类型 = 变整数数组类 返回值注释 = "返回该进程ID下的所有窗口" 折叠>
+    参数 进程ID <类型 = 变整数>
+    {
+        变量 窗口句柄数组 <类型 = 变整数数组类>
+        @ std::vector<HWND> vecHWnds;
+        @ GetHWndsByProcessID_LKY(@<进程ID>, vecHWnds);
+        @ for (const HWND &h : vecHWnds)
+        @ {
+        @     HWND parent = GetParent(h);
+        @     if (parent != NULL)
+        @     {
+        变量 窗口ID <类型 = 变整数>
+        @        @<窗口ID>=(@dt<变整数>)parent;
+        窗口句柄数组.加入成员 (窗口ID)
+        @     }
+        @ }
+        返回 (窗口句柄数组)
+
+    }
+
+    方法 窗口句柄取标题 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ char text[1024];
+        @ GetWindowTextA((HWND)@<窗口句柄>, (LPSTR)text, 1024); // 必须含有标题文字
+        @ return CVolString (GetWideText( text, CVolMem (), NULL)); 
+
+    }
+
+    方法 结束进程 <公开 折叠>
+    参数 进程ID <类型 = 整数>
+    {
+        @ TerminateProcess(OpenProcess(1, 0, @<进程ID>),0);
+    }
+
+    方法 根据进程名取进程路径 <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 进程名称 <类型 = 文本型>
+    {
+        变量 临时数据 <类型 = 文本型>
+        @ CU8String u8str (@<进程名称>.GetText ());
+        @ const U8CHAR* szProcessName = u8str.GetText ();
+        @ _getch();
+        @    PROCESSENTRY32 pe32;
+        @    pe32.dwSize = sizeof(pe32);
+        @    HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+        @    if (hSnapShot == INVALID_HANDLE_VALUE)
+        @    {
+        @        return "";
+        @    }
+        @    BOOL bRet = Process32First(hSnapShot, &pe32);
+        @    while(bRet)
+        @    {
+        @         CU8String szExeFile (pe32.szExeFile);
+        @         const U8CHAR* szExeFileName = szExeFile.GetText ();
+        @        if (_strnicmp(szProcessName, szExeFileName, strlen(szProcessName)) == 0)
+        @        {
+        @            hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pe32.th32ProcessID);
+        @            if (hSnapShot == INVALID_HANDLE_VALUE)
+        @            {
+        @                DWORD dwErr = GetLastError();
+        @                return "";
+        @            }
+        @            MODULEENTRY32 me32;
+        @            me32.dwSize = sizeof(MODULEENTRY32);
+        @            if (!Module32First(hSnapShot, &me32))
+        @            {
+        @                DWORD dwErr = GetLastError();
+        @                return "";
+        @            }
+        @            @<临时数据>.SetText (me32.szExePath);
+        @            return @<临时数据>;
+        @        }
+        @        bRet = ::Process32Next(hSnapShot, &pe32);
+        @    }
+        @ return CVolString (GetWideText( szProcessName, CVolMem (), NULL)); 
+
+
+    }
+
+    方法 结束进程2 <公开 折叠>
+    参数 进程名称 <类型 = 文本型>
+    {
+        变量 返回的进程信息 <类型 = 类_进程信息数组>
+        枚举所有进程 (返回的进程信息)
+        变量 循环变量 <类型 = 整数>
+        循环 (0, 返回的进程信息.取成员数 (), 循环变量, 1)
+        {
+            变量 数据 <类型 = 类_进程信息数据>
+            数据 = 返回的进程信息.取成员 (循环变量)
+            如果 (数据.进程文件名 == 进程名称)
+            {
+                结束进程 (数据.进程ID)
+
+
+            }
+
+        }
+
+    }
+}
+
+类 类_鼠键相关 <公开
+        注释 = "具体案例课程参考：https://www.lkuaiy.com/VideoInsidePage?id=52481603076167&SingleSetVideoLink=55861603941560&Recommend=&page=1"
+        折叠>
+{
+    方法 鼠标_鼠标显示隐藏lky <公开 静态 注释 = "鼠标_显示隐藏" 返回值注释 = "仰望星空" 折叠 @禁止流程检查 = 真>
+    参数 隐藏类型 <类型 = 逻辑型 注释 = "假 = 隐藏；真 = 显示；">
+    {
+        @ ShowCursor (@<隐藏类型>);
+    }
+
+    方法 鼠标_左右键交换lky <公开 静态 注释 = "鼠标左右键交换" 返回值注释 = "仰望星空" 折叠 @禁止流程检查 = 真>
+    参数 是否交替 <类型 = 逻辑型 注释 = "是否左右交替">
+    {
+        @ SwapMouseButton (@<是否交替>);
+    }
+
+    方法 鼠标_取双击间隔时间lky <公开 静态 类型 = 整数 注释 = "取鼠标双击间隔时间" 返回值注释 = "仰望星空" 折叠 @禁止流程检查 = 真>
+    {
+        变量 反 <类型 = 整数>
+        @ @<反> = GetDoubleClickTime ();
+        返回 (反)
+    }
+
+    方法 鼠标_移动到指定位置lky <公开 静态 类型 = 逻辑型 注释 = "移动鼠标位置,真成功,假失败" 返回值注释 = "利快云@仰望星空" 折叠 @禁止流程检查 = 真>
+    参数 x <类型 = 整数 注释 = "坐标">
+    参数 y <类型 = 整数 注释 = "坐标">
+    {
+        变量 结果 <类型 = 逻辑型>
+        @ @<结果> = SetCursorPos(@<x>,@<y>);
+        返回 (结果)
+    }
+
+    方法 鼠标_模拟左键点击lky <静态 类型 = 逻辑型 注释 = "鼠标模拟点击" 返回值注释 = "利快云@仰望星空" 折叠 @禁止流程检查 = 真>
+    参数 x <类型 = 整数 注释 = "坐标">
+    参数 y <类型 = 整数 注释 = "坐标">
+    {
+        变量 结果 <类型 = 逻辑型>
+        @ @<结果> = SetCursorPos(@<x>,@<y>);
+        @ mouse_event(MOUSEEVENTF_LEFTDOWN|MOUSEEVENTF_LEFTUP,0,0,0,0);
+        返回 (结果)
+    }
+
+    方法 鼠标_模拟左键双击lky <公开 静态 类型 = 逻辑型 注释 = "鼠标双击" 返回值注释 = "利快云@仰望星空" 折叠 @禁止流程检查 = 真>
+    参数 x <类型 = 整数 注释 = "坐标,被双击的坐标">
+    参数 y <类型 = 整数 注释 = "坐标,被双击的坐标">
+    {
+        变量 结果 <类型 = 逻辑型>
+        @ @<结果> = SetCursorPos(@<x>,@<y>);
+        @ mouse_event (MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, 0 );
+        @ mouse_event (MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, 0 );
+        返回 (结果)
+    }
+
+    方法 鼠标_模拟右键点击lky <公开 静态 类型 = 逻辑型 注释 = "鼠标右击" 返回值注释 = "利快云@仰望星空" 折叠 @禁止流程检查 = 真>
+    参数 x <类型 = 整数 注释 = "右击的坐标" @默认值 = 0>
+    参数 y <类型 = 整数 注释 = "右击的坐标" @默认值 = 0>
+    {
+        变量 结果 <类型 = 逻辑型>
+        @ @<结果> = SetCursorPos(@<x>,@<y>);
+        @ mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0 );
+        返回 (结果)
+
+    }
+
+    方法 键盘_模拟快捷键 <公开 静态 注释 = "可以单键也可以组合键" 折叠 @禁止流程检查 = 真>
+    参数 键代码 <类型 = 整数 注释 = "例如：按键码.V键" "">
+    参数 Ctrl <类型 = 逻辑型 @默认值 = 假>
+    参数 Alt <类型 = 逻辑型 @默认值 = 假>
+    参数 Shift <类型 = 逻辑型 @默认值 = 假>
+    参数 Win <类型 = 逻辑型 @默认值 = 假>
+    {
+        如果真 (Ctrl == 真)
+        {
+            @ keybd_event (17, 0, 0, 0);
+        }
+        如果真 (Shift == 真)
+        {
+            @ keybd_event (16, 0, 0, 0);
+        }
+        如果真 (Alt == 真)
+        {
+            @ keybd_event (18, 0, 0, 0);
+        }
+        如果真 (Win == 真)
+        {
+            @ keybd_event (91, 0, 0, 0);
+
+        }
+        @ keybd_event (@<键代码>, 0, 0, 0);
+        如果真 (Ctrl == 真)
+        {
+            @ keybd_event (17, 0, 2, 0);
+        }
+        如果真 (Shift == 真)
+        {
+            @ keybd_event (16, 0, 2, 0);
+        }
+        如果真 (Alt == 真)
+        {
+            @ keybd_event (18, 0, 2, 0);
+        }
+        如果真 (Win == 真)
+        {
+            @ keybd_event (91, 0, 2, 0);
+
+        }
+
+        @ keybd_event (@<键代码>, 0, 2, 0);
+    }
+
+    方法 键盘_键盘点击lky <公开 静态 注释 = "前台模拟键盘操作" 返回值注释 = "仰望星空" 折叠 @禁止流程检查 = 真>
+    参数 键代码 <类型 = 整数>
+    参数 状态 <类型 = 整数 注释 = "1按下,2放开" @默认值 = 1>
+    {
+        如果 (状态 == 1)
+        {
+            @ keybd_event (@<键代码>, 0, 0, 0);
+        }
+        否则 (状态 == 2)
+        {
+            @ keybd_event (@<键代码>, 0, 2, 0);
+        }
+
+    }
+
+    方法 键盘_取大小写状态lky <公开 静态 类型 = 逻辑型 注释 = "取当前的输入状态,返回真为大写,0小写,1大写" 返回值注释 = "仰望星空" 折叠 @禁止流程检查 = 真>
+    {
+        变量 结果 <类型 = 逻辑型>
+        @ @<结果> = GetKeyState(20);
+        返回 (结果)
+    }
+
+    方法 键盘_取小键盘状态lky <公开 静态 类型 = 逻辑型 注释 = "取当前的输入状态,返回真为开返回1,返回假则为关返回0" 返回值注释 = "仰望星空" 折叠 @禁止流程检查 = 真>
+    {
+        变量 结果 <类型 = 逻辑型>
+        @ @<结果> = GetKeyState(144);
+        返回 (结果)
+
+    }
+
+    方法 键盘_模拟按下回车键lky <公开 静态 注释 = "模拟按下回车键" 返回值注释 = "利快云@仰望星空" 折叠 @禁止流程检查 = 真>
+    {
+        @ keybd_event(VK_RETURN,0,0,0);
+        @ keybd_event(VK_RETURN,0,KEYEVENTF_KEYUP,0);
+
+    }
+
+    #
+}
+
+类 类_进程信息数组 <公开 基础类 = 对象数组模板类 注释 = "具体用法参考：https://www.lkuaiy.com/rsdetails?id=16118451579772"
+        注释 = "注意：案例中的类名可能改变，只是名称改变，参考案例是自行对比即可" 折叠2 @模板实现类 = "类_进程信息数据">
+
+类 类_进程信息数据 <公开 注释 = "具体用法参考：https://www.lkuaiy.com/rsdetails?id=16118451579772" 注释 = "注意：案例中的类名可能改变，只是名称改变，参考案例是自行对比即可" 折叠
+        折叠2>
+{
+    变量 结构的大小 <公开 类型 = 整数 注释 = "dwSize">
+    变量 进程引用计数 <公开 类型 = 整数 注释 = "cntUsage">
+    变量 进程ID <公开 类型 = 整数 注释 = "th32ProcessID">
+    变量 进程默认堆ID <公开 类型 = 整数 注释 = "th32DefaultHeapID">
+    变量 进程模块ID <公开 类型 = 整数 注释 = "th32ModuleID">
+    变量 线程计数 <公开 类型 = 整数 注释 = "cntThreads">
+    变量 父进程ID <公开 类型 = 整数 注释 = "th32ParentProcessID">
+    变量 线程优先权 <公开 类型 = 整数 注释 = "pcPriClassBase">
+    变量 保留 <公开 类型 = 整数 注释 = "dwFlags">
+    变量 进程文件名 <公开 类型 = 文本型 注释 = "szExeFile">
+
+    #
+}
+
+类 类_内存类 <公开 折叠>
+{
+    方法 内存_申请lky <公开 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 内存大小 <类型 = 整数>
+    {
+        @ (INT64)new byte[@<内存大小>]
+    }
+
+    方法 内存_释放lky <公开 折叠 @嵌入式方法 = "">
+    参数 内存指针 <类型 = 变整数>
+    {
+        @ delete [] (BYTE*)@<内存指针>
+    }
+
+    方法 内存_写文本lky <公开 折叠>
+    参数 内存指针 <类型 = 变整数>
+    参数 内容 <类型 = 文本型>
+    {
+        @ memcpy(@<内存指针>,@<内容>,@<内容>.Lenth())
+
+    }
+
+    #
+}

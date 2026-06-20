@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "ai-browser": {
+      "command": "node",
+      "args": ["CEFbro/AI浏览器/mcp_bridge.js"],
+      "env": {
+        "AI_BROWSER_MCP_HOST": "127.0.0.1",
+        "AI_BROWSER_MCP_PORT": "9222",
+        "AI_BROWSER_MCP_HTTP_POST": "http://127.0.0.1:9222/mcp"
+      }
+    }
+  }
+}

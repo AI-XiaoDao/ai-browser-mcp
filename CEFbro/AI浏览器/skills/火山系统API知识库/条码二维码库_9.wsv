@@ -1,0 +1,348 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <@文档 = "category = \"条码二维码库\"">
+
+类 条码解析类_ <公开 注释 = "版本：0.23.90" 注释 = "zbar使用了GNU LGPL 2.1许可" 折叠 折叠2 编辑时信息 = "105836, 0, 0, 0"
+        @文档 = "category = \"条码二维码库.条码二维码解析\"" @视窗.外部头文件 = "..\\tml\\zbar\\include\\zbar.h"
+        @视窗.外部库 = "..\\tml\\zbar\\lib\\$(p)\\zbar.lib\r\n..\\tml\\zbar\\lib\\$(p)\\iconv.lib\r\n..\\tml\\zbar\\lib\\$(p)\\charset.lib"
+        @视窗.外部库 = "winmm.lib">
+{
+    方法 解析图片 <公开 类型 = 逻辑型 注释 = "支持解析二维码及条形码" 返回值注释 = "识别成功返回真" 折叠 @禁止流程检查 = 真>
+    参数 条码数据 <类型 = 字节集类 注释 = "图片数据" @输出名 = "picBin">
+    参数 返回的解码信息 <类型 = 文本型 注释 = "集合的信息" @默认值 = "">
+    参数 返回的解码信息组 <类型 = 解析结果组 注释 = "分组信息" @输出名 = "retArray" @默认值 = 空对象>
+    {
+        @ static ULONG_PTR token=[]()->ULONG_PTR{Gdiplus::GdiplusStartupInput gsInput;gsInput.GdiplusVersion = 1;ULONG_PTR token;Gdiplus::Status state = Gdiplus::GdiplusStartup(&token, &gsInput, nullptr);return token;}();
+        @ retArray.RemoveAll ();
+        @ Gdiplus::GpBitmap *bitmap = NULL;
+        @ auto stream=[](const CVolMem& bytes)-> IStream*
+        @ {
+        @     INT_P len = bytes.GetSize();
+        @    HGLOBAL hMem = ::GlobalAlloc( GMEM_ZEROINIT | GMEM_MOVEABLE, len);
+        @     if(!hMem) { return NULL; }
+        @     IStream* spStream = NULL;
+        @     HRESULT hr = ::CreateStreamOnHGlobal(hMem,TRUE,&spStream);
+        @     if(hr < 0){
+        @         ::GlobalFree(hMem);
+        @         return NULL;
+        @     }
+        @     if(len != 0)
+        @     {
+        @         void* ptr = GlobalLock(hMem);
+        @         if(!ptr)
+        @         {
+        @             ::GlobalFree(hMem);
+        @             return NULL;  
+        @         }
+        @         memcpy(ptr, bytes.GetPtr(), len);
+        @         ::GlobalUnlock(hMem);
+        @     }
+        @     return spStream;
+        @ }(picBin);
+        @ if(stream==NULL){return 0;}
+        @ auto lastResult = Gdiplus::DllExports::GdipCreateBitmapFromStream(stream, &bitmap);
+        @ if (lastResult != Gdiplus::Ok){ if(stream)stream->Release();if(bitmap)Gdiplus::DllExports::GdipDisposeImage(bitmap);return 0;}
+        @ UINT width,height;
+        @ lastResult=Gdiplus::DllExports::GdipGetImageWidth(bitmap, &width);
+        @ if (lastResult != Gdiplus::Ok){ if(stream)stream->Release();if(bitmap)Gdiplus::DllExports::GdipDisposeImage(bitmap);return 0;}
+        @ lastResult=Gdiplus::DllExports::GdipGetImageHeight(bitmap, &height);
+        @ if (lastResult != Gdiplus::Ok){ if(stream)stream->Release();if(bitmap)Gdiplus::DllExports::GdipDisposeImage(bitmap);return 0;}
+        @ if(width<=0 || height<=0){  if(stream)stream->Release();if(bitmap)Gdiplus::DllExports::GdipDisposeImage(bitmap);return 0; }
+        @ Gdiplus::Rect rect(0,0,width,height);
+        @ Gdiplus::BitmapData  bitmapData;
+        @ lastResult=Gdiplus::DllExports::GdipBitmapLockBits(bitmap, &rect, 3, PixelFormat32bppARGB, &bitmapData);
+        @ if (lastResult != Gdiplus::Ok){ if(stream)stream->Release();if(bitmap)Gdiplus::DllExports::GdipDisposeImage(bitmap);return 0;}
+        @ zbar::ImageScanner scanner;
+        @ scanner.set_config(zbar::ZBAR_NONE, zbar::ZBAR_CFG_ENABLE, 1);
+        @ zbar::Image imageZbar(bitmapData.Width, bitmapData.Height, "RGB4", bitmapData.Scan0, bitmapData.Width* bitmapData.Height*4);
+        @ zbar::Image image = imageZbar.convert( *((long *)"Y800"));
+        @ int ret = scanner.scan(image);
+        @ retArray.SetAlignElementCount (ret);
+        @ for(zbar::Image::SymbolIterator symbol = image.symbol_begin();symbol != image.symbol_end();++symbol) {
+        @     auto& obj= (@dt<解码结果类>&)retArray.AddNewObject (VOL_RUNTIME_CLASS(@dt<解码结果类>),NULL,NULL);
+        @     obj.content=CVolString(symbol->get_data().c_str());
+        @     obj.type=CVolString(symbol->get_type_name().c_str());
+        @     obj.orientation=CVolString(zbar::zbar_get_orientation_name((zbar::zbar_orientation_t) symbol->get_orientation()));
+        @     int _Left=9999999;int _Top=9999999;
+        @     int _Right=-9999999;int _Botom=-9999999;
+        @     for(int i=0;i<symbol->get_location_size();++i){
+        @        int x=symbol->get_location_x(i);
+        @        int y=symbol->get_location_y(i);
+        @        if(_Left>x)_Left=x;
+        @        if(_Right<x)_Right=x;
+        @        if(_Top>y)_Top=y;
+        @        if(_Botom<y)_Botom=y;
+        @     }
+        @     obj.rect.@n<矩形类.设置>(_Left,_Top,_Right,_Botom);
+        @ }
+        @ imageZbar.set_data(NULL, 0);
+        @ image.set_data(NULL, 0);
+        @ Gdiplus::DllExports::GdipBitmapUnlockBits(bitmap,&bitmapData );
+        @ if(stream)stream->Release();
+        @ if(bitmap)Gdiplus::DllExports::GdipDisposeImage(bitmap);
+        返回的解码信息组.枚举循环 ()
+        {
+            加入文本 (返回的解码信息, "类型：" + 返回的解码信息组.取枚举值 ().类型 + " 方向：" + 返回的解码信息组.取枚举值 ().方向 + " 位置：" + 到文本 (返回的解码信息组.取枚举值 ().矩形.左边) + "," + 到文本 (返回的解码信息组.取枚举值 ().矩形.顶边) + "," + 到文本 (返回的解码信息组.取枚举值 ().矩形.宽度) + "," + 到文本 (返回的解码信息组.取枚举值 ().矩形.高度) + " 条码内容：" + 返回的解码信息组.取枚举值 ().条码内容 + "\r\n")
+
+        }
+        如果真 (取文本长度 (返回的解码信息) > 2)
+        {
+            返回的解码信息 = 取文本左边 (返回的解码信息, 取文本长度 (返回的解码信息) - 2)
+        }
+        @ return(ret>0);
+    }
+}
+
+类 解析结果组 <公开 基础类 = 对象数组模板类 折叠2 @文档 = "category = \"条码二维码库.条码二维码解析.附加类\"" @模板实现类 = "解码结果类">
+
+类 解码结果类 <公开 基础类 = 扩展对象类 折叠 @文档 = "category = \"条码二维码库.条码二维码解析.附加类\"">
+{
+    变量 条码内容 <公开 类型 = 文本型 @输出名 = "content">
+    变量 矩形 <公开 类型 = 矩形类 @输出名 = "rect">
+    变量 类型 <公开 类型 = 文本型 @输出名 = "type">
+    变量 方向 <公开 类型 = 文本型 @输出名 = "orientation">
+}
+
+# //======
+
+类 二维码类_ <公开 注释 = "qrencode4.1.1版" 折叠 折叠2 @视窗.外部头文件 = "..\\tml\\qrencode.h"
+        @视窗.外部库.non_static = "..\\tml\\lib\\$(p)\\qrencode.lib">
+{
+    变量 位图对象 <类型 = 位图对象类>
+    变量 二维数据 <类型 = 字节集类>
+    变量 令牌 <类型 = 变整数>
+    变量 全局Logo数据 <类型 = 字节集类>
+    变量 全局是否圆化Logo <类型 = 逻辑型>
+    变量 全局是否自动计算Logo <类型 = 逻辑型>
+    变量 全局Logo宽度 <类型 = 小数>
+    变量 全局Logo高度 <类型 = 小数>
+
+    方法 类_初始化 <折叠>
+    {
+        令牌 = Gdiplus.初始化 ()
+    }
+
+    方法 类_清理 <折叠>
+    {
+        Gdiplus.卸载 (令牌)
+    }
+
+    方法 生成二维码_ <公开 类型 = 字节集类 折叠 @禁止流程检查 = 真>
+    参数 二维码内容 <类型 = 文本型>
+    参数 缩放大小 <类型 = 整数 注释 = "二维码大小随数字大小而变化" @默认值 = 4>
+    参数 QR码版本 <类型 = 整数 注释 = "数字越大,QR码的容量越大，如果指定为0，则库将选择适合输入数据的最小版本" @默认值 = 0>
+    参数 容错级别 <类型 = 整数 注释 = "0、7%　1、15%　2、25%　3、30%" @默认值 = 3>
+    参数 红色比例 <类型 = 小数 注释 = "-1 到 1 之间" @默认值 = 0>
+    参数 绿色比例 <类型 = 小数 注释 = "-1 到 1 之间" @默认值 = 0>
+    参数 蓝色比例 <类型 = 小数 注释 = "-1 到 1 之间" @默认值 = 0>
+    参数 Logo数据 <类型 = 字节集类 注释 = "二维码中间的Logo图标" @默认值 = 空对象>
+    参数 是否圆化Logo <类型 = 逻辑型 @默认值 = 真>
+    参数 是否自动计算Logo <类型 = 逻辑型 注释 = "自动计算Logo尺寸，按二维码总尺寸占比显示" @默认值 = 真>
+    参数 Logo宽度 <类型 = 小数 注释 = "是否自动Logo为真时，本参数失效" @默认值 = 50>
+    参数 Logo高度 <类型 = 小数 注释 = "是否自动Logo为真时，本参数失效" @默认值 = 50>
+    {
+        变量 位图数据 <类型 = 字节集类>
+        @ CU8String inData(@<二维码内容>.GetText());
+        @  if (QRcode* qrcode = QRcode_encodeString(inData.GetText(), @<QR码版本>, (QRecLevel)@<容错级别>, QR_MODE_8, 1))
+        @  {
+        @   unsigned int  unWidth, x, y, l, n, unWidthAdjusted, unDataBytes, size;
+        @   unsigned char* pSourceData, *pDestData, *pRGBData;
+        @   unWidth = qrcode->width;
+        @   pSourceData = qrcode->data;
+        @   size = unWidth * (unsigned int)@<缩放大小>;
+        @   unWidthAdjusted = size * 4;
+        @   unDataBytes = unWidthAdjusted * size;
+        @   pRGBData = (unsigned char*)HeapAlloc(GetProcessHeap(), 0, unDataBytes);
+        @   if (pRGBData)
+        @   {
+        @    memset(pRGBData, 0xff, unDataBytes);
+        @    for (y = 0; y < unWidth; y++)
+        @    {
+        @     pDestData = pRGBData + unWidthAdjusted * y * (unsigned int)@<缩放大小>;
+        @     for (x = 0; x < unWidth; x++)
+        @     {
+        @      if (*pSourceData & 1)
+        @      {
+        @       for (l = 0; l < (unsigned int)@<缩放大小>; l++)
+        @       {
+        @        for (n = 0; n < (unsigned int)@<缩放大小>; n++)
+        @        {
+        @         *(pDestData + n * 4 + unWidthAdjusted * l) = 0;
+        @         *(pDestData + 1 + n * 4 + unWidthAdjusted * l) = 0;
+        @         *(pDestData + 2 + n * 4 + unWidthAdjusted * l) = 0;
+        @        }
+        @       }
+        @      }
+        @      pDestData += 4 * (unsigned int)@<缩放大小>;
+        @      pSourceData++;
+        @     }
+        @    }
+        @    HBITMAP BMP = CreateBitmap(size, size, 4, 8, pRGBData);
+        @    @<位图对象>=@dt<位图对象类> ((HBITMAP)BMP, GOADT_DELETE_OBJECT);
+        位图对象.取图片数据 (位图数据, , )
+        @   }else{
+        @    size = 0;
+        @   }
+        @   QRcode_free(qrcode);
+        @  }
+        二维数据 = 处理颜色 (位图数据, 红色比例, 绿色比例, 蓝色比例, Logo数据, 是否圆化Logo, 是否自动计算Logo, Logo宽度, Logo高度)
+        返回 (二维数据)
+    }
+
+    方法 取二维码尺寸_ <公开 类型 = 尺寸类 折叠>
+    {
+        返回 (位图对象.取图片尺寸 ())
+    }
+
+    方法 保存二维码_ <公开 类型 = 逻辑型 注释 = "只保存原图(无Logo和改色后的)，“保存二维码2_”命令可保存带Logo和改色后的二维码" 折叠>
+    参数 保存路径 <类型 = 文本型 注释 = "提供所欲写到的BMP文件名，例如“C:\\\\二维码.bmp”">
+    参数 输出宽度 <类型 = 整数 注释 = "  指定图片的输出宽度. 如果小于0,参数值指定的是最终图片输出宽度相对于" 注释 = "当前图片宽度的百分比(最小为10%); 如果等于0,则按图片原宽度输出; 如果"
+            注释 = "大于0,指定输出图片的绝对宽度." @默认值 = 0>
+    参数 输出高度 <类型 = 整数 注释 = "  指定图片的输出高度. 如果小于0,参数值指定的是最终图片输出高度相对于" 注释 = "当前图片高度的百分比(最小为10%); 如果等于0,则按图片原高度输出; 如果"
+            注释 = "大于0,指定输出图片的绝对高度." @默认值 = 0>
+    {
+        返回 (位图对象.写图片文件 (保存路径, 输出宽度, 输出高度))
+    }
+
+    方法 保存二维码2_ <公开 类型 = 逻辑型 注释 = "与“保存二维码_”差别，本命令可保存带Logo和改色后的二维码" 折叠>
+    参数 保存路径 <类型 = 文本型 注释 = "提供所欲写到的BMP文件名，例如“C:\\\\二维码.bmp”">
+    {
+        返回 (写到文件 (保存路径, 二维数据))
+    }
+
+    方法 修改二维码颜色 <公开 类型 = 字节集类 注释 = "在“生成二维码_”如有设置Logo，执行本命令时也将自动处理" 折叠>
+    参数 图片数据 <类型 = 字节集类 注释 = "为空时修改内部生成的图片，不为空时则修改提供的图片" @默认值 = 空对象>
+    参数 红色比例 <类型 = 小数 注释 = "-1 到 1 之间" @默认值 = 0>
+    参数 绿色比例 <类型 = 小数 注释 = "-1 到 1 之间" @默认值 = 0>
+    参数 蓝色比例 <类型 = 小数 注释 = "-1 到 1 之间" @默认值 = 0>
+    {
+        变量 位图数据 <类型 = 字节集类>
+        如果 (图片数据.取字节集长度 () > 0)
+        {
+            位图数据 = 图片数据
+        }
+        否则
+        {
+            位图对象.取图片数据 (位图数据)
+        }
+        二维数据 = 处理颜色 (位图数据, 红色比例, 绿色比例, 蓝色比例, 全局Logo数据, 全局是否圆化Logo, 全局是否自动计算Logo, 全局Logo宽度, 全局Logo高度)
+        返回 (二维数据)
+    }
+
+    方法 处理颜色 <类型 = 字节集类 折叠>
+    参数 图片数据 <类型 = 字节集类>
+    参数 红色比例 <类型 = 小数 注释 = "-1 到 1 之间" @默认值 = 0>
+    参数 绿色比例 <类型 = 小数 注释 = "-1 到 1 之间" @默认值 = 0>
+    参数 蓝色比例 <类型 = 小数 注释 = "-1 到 1 之间" @默认值 = 0>
+    参数 Logo数据 <类型 = 字节集类 注释 = "二维码中间的Logo图标" @默认值 = 空对象>
+    参数 是否圆化Logo <类型 = 逻辑型 @默认值 = 真>
+    参数 是否自动计算Logo <类型 = 逻辑型 注释 = "自动计算Logo尺寸，按二维码总尺寸占比显示" @默认值 = 真>
+    参数 Logo宽度 <类型 = 小数 注释 = "是否自动Logo为真时，本参数失效" @默认值 = 50>
+    参数 Logo高度 <类型 = 小数 注释 = "是否自动Logo为真时，本参数失效" @默认值 = 50>
+    {
+        变量 图形 <类型 = GP图形类>
+        变量 图像 <类型 = GP图像类>
+        变量 图像2 <类型 = GP图像类>
+        变量 结果 <类型 = 字节集类>
+        变量 编码器 <类型 = GP编码器参数集>
+        变量 图像属性 <类型 = GP图像属性类>
+        变量 颜色矩阵 <类型 = GP颜色矩阵类>
+        变量 Logo数据2 <类型 = 字节集类>
+        变量 临时宽 <类型 = 整数>
+        变量 临时高 <类型 = 整数>
+        变量 临时宽2 <类型 = 整数>
+        变量 临时高2 <类型 = 整数>
+        图像.创建自字节集 (图片数据)
+        图形.置平滑模式 (GP平滑模式.抗锯齿)
+        图形.置算法模式 (GP算法模式.高质量双线性)
+        图形.创建自图像 (图像)
+        图像属性.创建 ()
+        颜色矩阵.置红色 (红色比例)
+        颜色矩阵.置绿色 (绿色比例)
+        颜色矩阵.置蓝色 (蓝色比例)
+        图像属性.置颜色矩阵 (颜色矩阵)
+        临时宽 = 图像.取宽度 ()
+        临时高 = 图像.取高度 ()
+        图形.画图像缩放部分 (图像, 0, 0, 临时宽, 临时高, 0, 0, 临时宽, 临时高, , 图像属性)
+        全局Logo数据 = Logo数据
+        全局是否圆化Logo = 是否圆化Logo
+        全局是否自动计算Logo = 是否自动计算Logo
+        全局Logo宽度 = Logo宽度
+        全局Logo高度 = Logo高度
+        如果真 (Logo数据.取字节集长度 () > 0)
+        {
+            如果真 (是否自动计算Logo)
+            {
+                Logo宽度 = (小数)临时宽 / 4
+                Logo高度 = Logo宽度
+            }
+            Logo数据2 = 处理Logo (Logo数据, Logo宽度, Logo高度, 是否圆化Logo)
+            图像2.创建自字节集 (Logo数据2)
+            临时宽2 = 图像2.取宽度 ()
+            临时高2 = 图像2.取高度 ()
+            Logo宽度 = 临时宽2
+            Logo高度 = 临时高2
+        }
+        图形.画图像 (图像2, (临时宽 - Logo宽度) / 2, (临时高 - Logo高度) / 2)
+        编码器.创建 ()
+        编码器.置参数整数 (0, GP编码器.品质, 100)
+        图像.保存到字节集 (结果, GP图像格式.BMP, 编码器)
+        图像.销毁 ()
+        如果真 (Logo数据2.取字节集长度 () > 0)
+        {
+            图像2.销毁 ()
+        }
+        图像属性.销毁 ()
+        图形.销毁 ()
+        编码器.销毁 ()
+        返回 (结果)
+    }
+
+    方法 处理Logo <类型 = 字节集类 折叠>
+    参数 图片数据 <类型 = 字节集类 @默认值 = 空对象>
+    参数 宽度 <类型 = 小数 @默认值 = 50>
+    参数 高度 <类型 = 小数 @默认值 = 50>
+    参数 是否圆形 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 位图 <类型 = GP位图类>
+        变量 位图2 <类型 = GP位图类>
+        变量 图像 <类型 = GP图像类>
+        变量 图像2 <类型 = GP图像类>
+        变量 图形 <类型 = GP图形类>
+        变量 图形2 <类型 = GP图形类>
+        变量 画刷 <类型 = GP纹理画刷类>
+        变量 位图数据 <类型 = 字节集类>
+        变量 图像数据 <类型 = 字节集类>
+        图像.创建自字节集 (图片数据)
+        位图.创建自像素格式 ((整数)宽度, (整数)高度)
+        图形.置平滑模式 (GP平滑模式.抗锯齿)
+        图形.置算法模式 (GP算法模式.高质量双线性)
+        图形.创建自图像 (位图)
+        图形.画图像缩放 (图像, 0, 0, 宽度, 高度)
+        位图.保存到字节集 (位图数据, GP图像格式.PNG)
+        图像2.创建自字节集 (位图数据)
+        画刷.创建 (图像2, GP环绕模式.固定)
+        位图2.创建自像素格式 ((整数)宽度, (整数)高度)
+        图形2.置平滑模式 (GP平滑模式.抗锯齿)
+        图形2.置算法模式 (GP算法模式.高质量双线性)
+        图形2.创建自图像 (位图2)
+        图形2.置平滑模式 (GP平滑模式.抗锯齿)
+        如果 (是否圆形)
+        {
+            图形2.填充椭圆 (画刷, 0, 0, 宽度, 高度)
+        }
+        否则
+        {
+            图形2.填充矩形 (画刷, 0, 0, 宽度, 高度)
+        }
+        位图2.保存到字节集 (图像数据, GP图像格式.PNG)
+        位图.销毁 ()
+        图像.销毁 ()
+        图形.销毁 ()
+        画刷.销毁 ()
+        位图2.销毁 ()
+        图像2.销毁 ()
+        图形2.销毁 ()
+        返回 (图像数据)
+    }
+}

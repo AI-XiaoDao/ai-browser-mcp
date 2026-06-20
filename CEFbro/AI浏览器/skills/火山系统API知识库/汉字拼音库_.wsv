@@ -1,0 +1,1913 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <@文档 = "category = \"汉字拼音库\"">
+
+类 拼音检索库_简体 <公开 注释 = "1、简体版27KB (gzip ≈ 19KB)，繁体版86KB (gzip ≈ 60KB)" 注释 = "2、支持多音字、繁体字、拼音首字母匹配,具备分词功能"
+        注释 = "3、返回位置信息，可用于高亮匹配字符" 注释 = "4、在长多音字串下依然有高性能" 折叠 折叠2 @文档 = "category = \"汉字拼音库.拼音检索\"" "">
+{
+    方法 类_初始化 <折叠>
+    {
+        初始化 ()
+    }
+
+    方法 初始化 <折叠 折叠2 @禁止流程检查 = 真 @视窗.外部头文件 = "map" @视窗.外部头文件 = "vector">
+    {
+        @ for (int i = 0; i < sizeof(g_PinYin) / sizeof(g_PinYin[0]); i++){
+        @     this->m_AllPinYin.push_back(g_PinYin[i].full);
+        @     for(int n = 0; n < ::wcslen(g_PinYin[i].words); n++){
+        @         @dt<文本型> szKey(g_PinYin[i].words[n]);
+        @         @dt<文本型> szValue(g_PinYin[i].full);
+        @         if(m_NoTone.find(szKey) != m_NoTone.end()) // 是否存在?
+        @             szValue = this->m_NoTone[szKey] + _CT(" ") + szValue;
+        @         this->m_NoTone[szKey] = szValue;
+        @     }
+        @ }
+    }
+
+    方法 检索数据_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 匹配的文本 <类型 = 文本型>
+    参数 搜寻的文本 <类型 = 文本型>
+    参数 返回的起始索引 <类型 = 整数类 @默认值 = 空对象>
+    参数 返回的结束索引 <类型 = 整数类 @默认值 = 空对象>
+    {
+        @ @<返回的起始索引.值> = @<返回的结束索引.值> = -1;
+        @ if (@<匹配的文本>.IsEmpty() || @<搜寻的文本>.IsEmpty())
+        @     return FALSE;
+        @ @dt<文本型> Input = @dt<文本型>(@<匹配的文本>).MakeLower();
+        @ @dt<文本型> Keys = @dt<文本型>(@<搜寻的文本>).MakeLower();
+        @ Keys.ReplaceSubText(_CT(" "), _CT(""), 0, -1, TRUE);
+        @ size_t IndexOf = Input.SearchText (Keys.GetText (), 0, TRUE, FALSE);
+        @ if (IndexOf != -1) {
+        @     @<返回的起始索引.值> = (@dt<整数>)IndexOf;
+        @     @<返回的结束索引.值> = (@dt<整数>)(IndexOf + (size_t)Keys.GetLength() - 1);
+        @     return TRUE;
+        @ }
+        @ std::vector< std::vector<@dt<文本型>>> Keyss;
+        @ Keyss.push_back(this->Split(Keys, _T('\0')));
+        @ std::vector<@dt<整数>> NoPyIndex = this->GetIndex(this->Split(Input, _T('\0')), Keyss, Keys);
+        @ if (NoPyIndex.size() == 0){
+        @     std::vector<@dt<文本型>> py = this->GetPinYin(Input);
+        @     std::vector<std::vector<@dt<文本型>>> FullString = (m_Storage.find(Keys) != m_Storage.end ()) ? m_Storage[Keys] : this->GetFullKey(Keys);
+        @     NoPyIndex = this->GetIndex(py, FullString, Keys);
+        @ }
+        @ if(NoPyIndex.size() >= 2){
+        @     @<返回的起始索引.值> = (@dt<整数>)NoPyIndex[0];
+        @     @<返回的结束索引.值> = (@dt<整数>)NoPyIndex[1];
+        @     return TRUE;
+        @ }
+        @ return FALSE;
+    }
+
+    # @begin
+    # <> <include>
+    # private:
+    #     std::vector<@dt<文本型>> Split(@dt<文本型> Text, const TCHAR Sep);
+    #     std::vector<@dt<文本型>> GetPinYin(@dt<文本型> Chinese); // 获取汉字拼音
+    #     std::vector<@dt<文本型>> WordBreak(@dt<文本型> Chinese); // 对输入拼音进行切分
+    #     VOID GetAllSolutions(size_t Start, @dt<文本型>& Chinese, std::vector<@dt<文本型>>& Result, std::vector<@dt<文本型>>& Solutions, std::vector<@dt<逻辑型>>& Possible); // 获取所有组合方案
+    #     std::vector<std::vector<@dt<文本型>>> GetFullKey(@dt<文本型> Key);
+    #     @dt<逻辑型> PointToPoint(@dt<文本型> Test, @dt<文本型> Key, @dt<逻辑型> Last, @dt<逻辑型> Extend);
+    #     std::vector<@dt<整数>> GetIndex(std::vector<@dt<文本型>> py, std::vector<std::vector<@dt<文本型>>> FullString, @dt<文本型> Keys);
+    #
+    #     @dt<文本型> OutVector(std::vector<@dt<整数>> vec){ @dt<文本型> str; for (auto res : vec) { str.AddText(str.IsEmpty() ? L"[" : L", "); str.AddChar(L'\"'); str.AddText(res); str.AddChar(L'\"'); } str.AddText(L"]"); return str; }
+    #     @dt<文本型> OutVector(std::vector<@dt<文本型>> vec){ @dt<文本型> str; for (auto res : vec) { str.AddText(str.IsEmpty() ? L"[" : L", "); str.AddChar(L'\"'); str.AddText(res); str.AddChar(L'\"'); } str.AddText(L"]"); return str; }
+    #     @dt<文本型> OutVector(std::vector<std::vector<@dt<文本型>>> vec){ @dt<文本型> str; for (auto res : vec) { str.AddText(str.IsEmpty() ? L"[" : L", "); str.AddText(OutVector(res)); } str.AddText(L"]"); return str; }
+    #     @dt<文本型> OutMap(std::map<@dt<文本型>, @dt<文本型>> map){ @dt<文本型> str; for (auto it = map.begin();  it != map.end (); it++) { str.AddText(str.IsEmpty() ? L"[" : L", "); str.AddChar(L'\"'); str.AddText(it->first + _CT("\": \"") + it->second); str.AddChar(L'\"'); } str.AddText(L"]"); return str; }
+    # private:
+    #     std::vector<@dt<文本型>> m_AllPinYin; // ["a", "ai" ...]
+    #     std::map<@dt<文本型>, @dt<文本型>> m_NoTone; // {"和": "he huo", "平": "ping" ...}
+    #     std::map<@dt<文本型>, std::vector<std::vector<@dt<文本型>>>> m_Storage;
+    # <> </include>
+    #     std::vector<@dt<文本型>> @sn<current_class>::Split(@dt<文本型> Text, const TCHAR Sep){
+    #         std::vector<@dt<文本型>> Result;
+    #         if(Text.IsEmpty() == FALSE){
+    #             if(Sep == _T('\0')){
+    #                 for (size_t i = 0; i < (size_t)Text.GetLength(); i++)
+    #                     Result.push_back(Text.Middle(i, 1));
+    #             }else{
+    #                 @dt<文本型> Temp(Text);
+    #                 Temp.AddChar(Sep);
+    #                 size_t Index = 0;
+    #                 size_t Pos = (size_t)Temp.FindChar(Sep, Index);
+    #                 while(Pos != -1){
+    #                     Result.push_back(Temp.Middle(Index, Pos - Index));
+    #                     Index = Pos + 1;
+    #                     Pos = (size_t)Temp.FindChar(Sep, Index);
+    #                 }
+    #             }
+    #         }
+    #         return Result;
+    #     }
+    #     std::vector<@dt<文本型>> @sn<current_class>::GetPinYin(@dt<文本型> Chinese){
+    #         std::vector<@dt<文本型>> Result;
+    #         for (size_t i = 0, len = (size_t)Chinese.GetLength(); i < len; i++) {
+    #             @dt<文本型> szKey(Chinese.GetCharAt(i));
+    #             @dt<文本型> szValue(m_NoTone[szKey]);
+    #             Result.push_back(szValue.IsEmpty() ? szKey : szValue);
+    #         }
+    #         return Result;
+    #     }
+    #     std::vector<@dt<文本型>> @sn<current_class>::WordBreak(@dt<文本型> Chinese){
+    #         std::vector<@dt<文本型>> Result;
+    #         std::vector<@dt<文本型>> Solutions;
+    #         std::vector<@dt<逻辑型>> Possible;
+    #         for(size_t i = 0; i <= (size_t)Chinese.GetLength(); i++)
+    #             Possible.push_back(TRUE);
+    #         this->GetAllSolutions(0, Chinese, Result, Solutions, Possible);
+    #         return Solutions;
+    #     }
+    #     VOID @sn<current_class>::GetAllSolutions(size_t Start, @dt<文本型>& Chinese, std::vector<@dt<文本型>>& Result, std::vector<@dt<文本型>>& Solutions, std::vector<@dt<逻辑型>>& Possible){
+    #         size_t Length = (size_t)Chinese.GetLength();
+    #         if (Start == Length) {
+    #             @dt<文本型> szJoin;
+    #             for(std::vector<@dt<文本型>>::iterator it = Result.begin(); it != Result.end(); it++){
+    #                 if(szJoin.IsEmpty() == FALSE)
+    #                     szJoin.AddChar(L' ');
+    #                 szJoin.AddText(*it);
+    #             }
+    #             Solutions.push_back(szJoin);
+    #             return;
+    #         }
+    #         for(size_t i = Start; i < Length; i++){
+    #             @dt<文本型> Piece = Chinese.Middle(Start, (i + 1) - Start);
+    #             @dt<逻辑型> Match = FALSE;
+    #             @dt<逻辑型> IsExist = FALSE;
+    #             for(std::vector<@dt<文本型>>::iterator it = m_AllPinYin.begin(); it != m_AllPinYin.end(); it++){
+    #                 if((*it).SearchText(Piece.GetText (), 0, FALSE, FALSE) == 0){
+    #                     IsExist = TRUE;
+    #                     break;
+    #                 }
+    #             }
+    #             if(IsExist && (i + 1 >= Length || Chinese.GetCharAt(i + 1) == NULL) && Possible[i + 1] == TRUE) {
+    #                 if (Piece.GetLength() == 1){
+    #                     Result.push_back(Piece);
+    #                 } else {
+    #                     @dt<文本型> szTemp;
+    #                     for(std::vector<@dt<文本型>>::iterator it = m_AllPinYin.begin(); it != m_AllPinYin.end(); it++){
+    #                         if((*it).SearchText(Piece.GetText (), 0, FALSE, FALSE) == 0){
+    #                             if(szTemp.IsEmpty() == FALSE)
+    #                                 szTemp.AddChar(_T(','));
+    #                             szTemp.AddText((*it));
+    #                         }
+    #                     }
+    #                     Result.push_back(szTemp);
+    #                 }
+    #                 Match = TRUE;
+    #             } else {
+    #                 @dt<逻辑型> IsExist = FALSE;
+    #                 for(std::vector<@dt<文本型>>::iterator it = m_AllPinYin.begin(); it != m_AllPinYin.end(); it++){
+    #                     if (*it == Piece) {
+    #                         IsExist = TRUE;
+    #                         break;
+    #                     }
+    #                 }
+    #                 if(IsExist && Possible[i + 1]){
+    #                     Result.push_back(Piece);
+    #                     Match = true;
+    #                 }
+    #             }
+    #             if(Match){
+    #                 size_t BeforeChange = Solutions.size();
+    #                 this->GetAllSolutions(i + 1, Chinese, Result, Solutions, Possible);
+    #                 if (Solutions.size() == BeforeChange) {
+    #                     Possible[i + 1] = FALSE;
+    #                 }
+    #                 Result.pop_back();
+    #             }
+    #         }
+    #     }
+    #     std::vector<std::vector<@dt<文本型>>> @sn<current_class>::GetFullKey(@dt<文本型> Key){
+    #         std::vector<std::vector<@dt<文本型>>> Result;
+    #         std::vector<@dt<文本型>> szBreaks = this->WordBreak(Key);
+    #         for(std::vector<@dt<文本型>>::iterator it = szBreaks.begin(); it != szBreaks.end(); it++){
+    #             std::vector<@dt<文本型>> szBreak = this->Split(*it, _T(' '));
+    #             size_t Last = szBreak.size() - 1;
+    #             if (szBreak[Last].FindChar(_T(','), 0)) { // != 0
+    #                 std::vector<@dt<文本型>> Keys = this->Split(szBreak[Last], _T(','));
+    #                 for(std::vector<@dt<文本型>>::iterator itr = Keys.begin(); itr != Keys.end(); itr++){
+    #                     szBreak[Last] = *itr;
+    #                     Result.push_back(szBreak);
+    #                 }
+    #             } else {
+    #                 Result.push_back(szBreak);
+    #             }
+    #         }
+    #         if (Result.size() == 0 || Result[0].size() != Key.GetLength()) {
+    #             Result.push_back(this->Split(Key, _T('\0')));
+    #         }
+    #         m_Storage[Key] = Result; // 缓存当前结果 避免重复计算
+    #         return Result;
+    #     }
+    #     @dt<逻辑型> @sn<current_class>::PointToPoint(@dt<文本型> Test, @dt<文本型> Key, @dt<逻辑型> Last, @dt<逻辑型> Extend){
+    #         if(Test.IsEmpty())
+    #             return FALSE;
+    #         std::vector<@dt<文本型>> Temp = this->Split(Test, _T(' '));
+    #         size_t Size = Temp.size();
+    #         for (size_t i = 0; i < Size; i++){
+    #             if (Temp[i].GetLength() > 0 && Extend) {
+    #                 Temp.push_back(Temp[i].Left(1));
+    #             }
+    #         }
+    #         if(Last == FALSE){
+    #             @dt<逻辑型> IsExist = FALSE;
+    #             for(std::vector<@dt<文本型>>::iterator it = Temp.begin(); it != Temp.end(); it++){
+    #                 if (*it == Key) {
+    #                     IsExist = TRUE;
+    #                     break;
+    #                 }
+    #             }
+    #             return IsExist;
+    #         }
+    #         @dt<逻辑型> IsExist = FALSE;
+    #         for(std::vector<@dt<文本型>>::iterator it = Temp.begin(); it != Temp.end(); it++){
+    #             if ((*it).SearchText(Key.GetText (), 0, FALSE, FALSE) == 0){
+    #                 IsExist = TRUE;
+    #                 break;
+    #             }
+    #         }
+    #         return IsExist;
+    #     }
+    #     std::vector<@dt<整数>> @sn<current_class>::GetIndex(std::vector<@dt<文本型>> PY, std::vector<std::vector<@dt<文本型>>> FullString, @dt<文本型> Keys){
+    #         std::vector<@dt<整数>> Result;
+    #         for (int p = 0; p < PY.size(); p++) {
+    #             for (int k = 0; k < FullString.size(); k++) {
+    #                 std::vector<@dt<文本型>> Key = FullString[k];
+    #                 size_t KeyLength = Key.size();
+    #                 @dt<逻辑型> Extend = (KeyLength == Keys.GetLength());
+    #                 @dt<逻辑型> IsMatch = TRUE;
+    #                 int i = 0;
+    #                 int PreSpaceNum = 0;
+    #                 int SpaceNum = 0;
+    #                 if (KeyLength <= PY.size()) {
+    #                     for (; i < Key.size(); i++) {
+    #                         if (i == 0 && (p + i + PreSpaceNum) < PY.size() && PY[p + i + PreSpaceNum] == _CT(" ")) {
+    #                             PreSpaceNum += 1;
+    #                             i -= 1;
+    #                         } else {
+    #                             if ((p + i + SpaceNum) < PY.size() &&   PY[p + i + SpaceNum] == _CT(" ")) {
+    #                                 SpaceNum += 1;
+    #                                 i -= 1;
+    #                             } else {
+    #                                 if ((p + i + SpaceNum) >= PY.size() || !this->PointToPoint(PY[p + i + SpaceNum], Key[i], ((PY.size() > p + i + 1) && (Key.size() > i + 1)) ? false : true, Extend)) {
+    #                                     IsMatch = FALSE;
+    #                                     break;
+    #                                 }
+    #                             }
+    #                         }
+    #                     }
+    #                     if (IsMatch) {
+    #                         Result.push_back(p + PreSpaceNum);
+    #                         Result.push_back(SpaceNum + p + i - 1);
+    #                         return Result;
+    #                     }
+    #                 }
+    #             }
+    #         }
+    #         return Result;
+    #     }
+    # <> <include>
+    # <> <global>
+    # struct PinYinTable // 拼音
+    # {
+    #     const wchar_t *full;  // 全拼
+    #     const wchar_t *words; // 汉字
+    # };
+    # static const PinYinTable g_PinYin[] =
+    # {
+    #     {L"a", L"阿啊呵腌嗄吖锕"},
+    #     {L"e", L"额阿俄恶鹅遏鄂厄饿峨扼娥鳄哦蛾噩愕讹锷垩婀鹗萼谔莪腭锇颚呃阏屙苊轭"},
+    #     {L"ai", L"爱埃艾碍癌哀挨矮隘蔼唉皑哎霭捱暧嫒嗳瑷嗌锿砹"},
+    #     {L"ei", L"诶"},
+    #     {L"xi", L"系西席息希习吸喜细析戏洗悉锡溪惜稀袭夕洒晰昔牺腊烯熙媳栖膝隙犀蹊硒兮熄曦禧嬉玺奚汐徙羲铣淅嘻歙熹矽蟋郗唏皙隰樨浠忾蜥檄郄翕阋鳃舾屣葸螅咭粞觋欷僖醯鼷裼穸饩舄禊诶菥蓰"},
+    #     {L"yi", L"一以已意议义益亿易医艺食依移衣异伊仪宜射遗疑毅谊亦疫役忆抑尾乙译翼蛇溢椅沂泄逸蚁夷邑怡绎彝裔姨熠贻矣屹颐倚诣胰奕翌疙弈轶蛾驿壹猗臆弋铱旖漪迤佚翊诒怿痍懿饴峄揖眙镒仡黟肄咿翳挹缢呓刈咦嶷羿钇殪荑薏蜴镱噫癔苡悒嗌瘗衤佾埸圯舣酏劓"},
+    #     {L"an", L"安案按岸暗鞍氨俺胺铵谙庵黯鹌桉埯犴揞厂广"},
+    #     {L"han", L"厂汉韩含旱寒汗涵函喊憾罕焊翰邯撼瀚憨捍酣悍鼾邗颔蚶晗菡旰顸犴焓撖"},
+    #     {L"ang", L"昂仰盎肮"},
+    #     {L"ao", L"奥澳傲熬凹鳌敖遨鏖袄坳翱嗷拗懊岙螯骜獒鏊艹媪廒聱"},
+    #     {L"wa", L"瓦挖娃洼袜蛙凹哇佤娲呙腽"},
+    #     {L"yu", L"于与育余预域予遇奥语誉玉鱼雨渔裕愈娱欲吁舆宇羽逾豫郁寓吾狱喻御浴愉禹俞邪榆愚渝尉淤虞屿峪粥驭瑜禺毓钰隅芋熨瘀迂煜昱汩於臾盂聿竽萸妪腴圄谕觎揄龉谀俣馀庾妤瘐鬻欤鹬阈嵛雩鹆圉蜮伛纡窬窳饫蓣狳肀舁蝓燠"},
+    #     {L"niu", L"牛纽扭钮拗妞忸狃"},
+    #     {L"o", L"哦噢喔"},
+    #     {L"ba", L"把八巴拔伯吧坝爸霸罢芭跋扒叭靶疤笆耙鲅粑岜灞钯捌菝魃茇"},
+    #     {L"pa", L"怕帕爬扒趴琶啪葩耙杷钯筢"},
+    #     {L"pi", L"被批副否皮坏辟啤匹披疲罢僻毗坯脾譬劈媲屁琵邳裨痞癖陂丕枇噼霹吡纰砒铍淠郫埤濞睥芘蚍圮鼙罴蜱疋貔仳庀擗甓陴"},
+    #     {L"bi", L"比必币笔毕秘避闭佛辟壁弊彼逼碧鼻臂蔽拂泌璧庇痹毙弼匕鄙陛裨贲敝蓖吡篦纰俾铋毖筚荸薜婢哔跸濞秕荜愎睥妣芘箅髀畀滗狴萆嬖襞舭"},
+    #     {L"bai", L"百白败摆伯拜柏佰掰呗擘捭稗"},
+    #     {L"bo", L"波博播勃拨薄佛伯玻搏柏泊舶剥渤卜驳簿脖膊簸菠礴箔铂亳钵帛擘饽跛钹趵檗啵鹁擗踣"},
+    #     {L"bei", L"北被备倍背杯勃贝辈悲碑臂卑悖惫蓓陂钡狈呗焙碚褙庳鞴孛鹎邶鐾"},
+    #     {L"ban", L"办版半班般板颁伴搬斑扮拌扳瓣坂阪绊钣瘢舨癍"},
+    #     {L"pan", L"判盘番潘攀盼拚畔胖叛拌蹒磐爿蟠泮袢襻丬"},
+    #     {L"bin", L"份宾频滨斌彬濒殡缤鬓槟摈膑玢镔豳髌傧"},
+    #     {L"bang", L"帮邦彭旁榜棒膀镑绑傍磅蚌谤梆浜蒡"},
+    #     {L"pang", L"旁庞乓磅螃彷滂逄耪"},
+    #     {L"beng", L"泵崩蚌蹦迸绷甭嘣甏堋"},
+    #     {L"bao", L"报保包宝暴胞薄爆炮饱抱堡剥鲍曝葆瀑豹刨褒雹孢苞煲褓趵鸨龅勹"},
+    #     {L"bu", L"不部步布补捕堡埔卜埠簿哺怖钚卟瓿逋晡醭钸"},
+    #     {L"pu", L"普暴铺浦朴堡葡谱埔扑仆蒲曝瀑溥莆圃璞濮菩蹼匍噗氆攵镨攴镤"},
+    #     {L"mian", L"面棉免绵缅勉眠冕娩腼渑湎沔黾宀眄"},
+    #     {L"po", L"破繁坡迫颇朴泊婆泼魄粕鄱珀陂叵笸泺皤钋钷"},
+    #     {L"fan", L"反范犯繁饭泛翻凡返番贩烦拚帆樊藩矾梵蕃钒幡畈蘩蹯燔"},
+    #     {L"fu", L"府服副负富复福夫妇幅付扶父符附腐赴佛浮覆辅傅伏抚赋辐腹弗肤阜袱缚甫氟斧孚敷俯拂俘咐腑孵芙涪釜脯茯馥宓绂讣呋罘麸蝠匐芾蜉跗凫滏蝮驸绋蚨砩桴赙菔呒趺苻拊阝鲋怫稃郛莩幞祓艴黻黼鳆"},
+    #     {L"ben", L"本体奔苯笨夯贲锛畚坌"},
+    #     {L"feng", L"风丰封峰奉凤锋冯逢缝蜂枫疯讽烽俸沣酆砜葑唪"},
+    #     {L"bian", L"变便边编遍辩鞭辨贬匾扁卞汴辫砭苄蝙鳊弁窆笾煸褊碥忭缏"},
+    #     {L"pian", L"便片篇偏骗翩扁骈胼蹁谝犏缏"},
+    #     {L"zhen", L"镇真针圳振震珍阵诊填侦臻贞枕桢赈祯帧甄斟缜箴疹砧榛鸩轸稹溱蓁胗椹朕畛浈"},
+    #     {L"biao", L"表标彪镖裱飚膘飙镳婊骠飑杓髟鳔灬瘭"},
+    #     {L"piao", L"票朴漂飘嫖瓢剽缥殍瞟骠嘌莩螵"},
+    #     {L"huo", L"和活或货获火伙惑霍祸豁嚯藿锪蠖钬耠镬夥灬劐攉"},
+    #     {L"bie", L"别鳖憋瘪蹩"},
+    #     {L"min", L"民敏闽闵皿泯岷悯珉抿黾缗玟愍苠鳘"},
+    #     {L"fen", L"分份纷奋粉氛芬愤粪坟汾焚酚吩忿棼玢鼢瀵偾鲼"},
+    #     {L"bing", L"并病兵冰屏饼炳秉丙摒柄槟禀枋邴冫"},
+    #     {L"geng", L"更耕颈庚耿梗埂羹哽赓绠鲠"},
+    #     {L"fang", L"方放房防访纺芳仿坊妨肪邡舫彷枋鲂匚钫"},
+    #     {L"xian", L"现先县见线限显险献鲜洗宪纤陷闲贤仙衔掀咸嫌掺羡弦腺痫娴舷馅酰铣冼涎暹籼锨苋蚬跹岘藓燹鹇氙莶霰跣猃彡祆筅"},
+    #     {L"fou", L"不否缶"},
+    #     {L"ca", L"拆擦嚓礤"},
+    #     {L"cha", L"查察差茶插叉刹茬楂岔诧碴嚓喳姹杈汊衩搽槎镲苴檫馇锸猹"},
+    #     {L"cai", L"才采财材菜彩裁蔡猜踩睬"},
+    #     {L"can", L"参残餐灿惨蚕掺璨惭粲孱骖黪"},
+    #     {L"shen", L"信深参身神什审申甚沈伸慎渗肾绅莘呻婶娠砷蜃哂椹葚吲糁渖诜谂矧胂"},
+    #     {L"cen", L"参岑涔"},
+    #     {L"san", L"三参散伞叁糁馓毵"},
+    #     {L"cang", L"藏仓苍沧舱臧伧"},
+    #     {L"zang", L"藏脏葬赃臧奘驵"},
+    #     {L"chen", L"称陈沈沉晨琛臣尘辰衬趁忱郴宸谌碜嗔抻榇伧谶龀肜"},
+    #     {L"cao", L"草操曹槽糙嘈漕螬艚屮"},
+    #     {L"ce", L"策测册侧厕栅恻"},
+    #     {L"ze", L"责则泽择侧咋啧仄箦赜笮舴昃迮帻"},
+    #     {L"zhai", L"债择齐宅寨侧摘窄斋祭翟砦瘵哜"},
+    #     {L"dao", L"到道导岛倒刀盗稻蹈悼捣叨祷焘氘纛刂帱忉"},
+    #     {L"ceng", L"层曾蹭噌"},
+    #     {L"zha", L"查扎炸诈闸渣咋乍榨楂札栅眨咤柞喳喋铡蚱吒怍砟揸痄哳齄"},
+    #     {L"chai", L"差拆柴钗豺侪虿瘥"},
+    #     {L"ci", L"次此差词辞刺瓷磁兹慈茨赐祠伺雌疵鹚糍呲粢"},
+    #     {L"zi", L"资自子字齐咨滋仔姿紫兹孜淄籽梓鲻渍姊吱秭恣甾孳訾滓锱辎趑龇赀眦缁呲笫谘嵫髭茈粢觜耔"},
+    #     {L"cuo", L"措错磋挫搓撮蹉锉厝嵯痤矬瘥脞鹾"},
+    #     {L"chan", L"产单阐崭缠掺禅颤铲蝉搀潺蟾馋忏婵孱觇廛谄谗澶骣羼躔蒇冁"},
+    #     {L"shan", L"山单善陕闪衫擅汕扇掺珊禅删膳缮赡鄯栅煽姗跚鳝嬗潸讪舢苫疝掸膻钐剡蟮芟埏彡骟"},
+    #     {L"zhan", L"展战占站崭粘湛沾瞻颤詹斩盏辗绽毡栈蘸旃谵搌"},
+    #     {L"xin", L"新心信辛欣薪馨鑫芯锌忻莘昕衅歆囟忄镡"},
+    #     {L"lian", L"联连练廉炼脸莲恋链帘怜涟敛琏镰濂楝鲢殓潋裢裣臁奁莶蠊蔹"},
+    #     {L"chang", L"场长厂常偿昌唱畅倡尝肠敞倘猖娼淌裳徜昶怅嫦菖鲳阊伥苌氅惝鬯"},
+    #     {L"zhang", L"长张章障涨掌帐胀彰丈仗漳樟账杖璋嶂仉瘴蟑獐幛鄣嫜"},
+    #     {L"chao", L"超朝潮炒钞抄巢吵剿绰嘲晁焯耖怊"},
+    #     {L"zhao", L"着照招找召朝赵兆昭肇罩钊沼嘲爪诏濯啁棹笊"},
+    #     {L"zhou", L"调州周洲舟骤轴昼宙粥皱肘咒帚胄绉纣妯啁诌繇碡籀酎荮"},
+    #     {L"che", L"车彻撤尺扯澈掣坼砗屮"},
+    #     {L"ju", L"车局据具举且居剧巨聚渠距句拒俱柜菊拘炬桔惧矩鞠驹锯踞咀瞿枸掬沮莒橘飓疽钜趄踽遽琚龃椐苣裾榘狙倨榉苴讵雎锔窭鞫犋屦醵"},
+    #     {L"cheng", L"成程城承称盛抢乘诚呈净惩撑澄秤橙骋逞瞠丞晟铛埕塍蛏柽铖酲裎枨"},
+    #     {L"rong", L"容荣融绒溶蓉熔戎榕茸冗嵘肜狨蝾"},
+    #     {L"sheng", L"生声升胜盛乘圣剩牲甸省绳笙甥嵊晟渑眚"},
+    #     {L"deng", L"等登邓灯澄凳瞪蹬噔磴嶝镫簦戥"},
+    #     {L"zhi", L"制之治质职只志至指织支值知识直致执置止植纸拓智殖秩旨址滞氏枝芝脂帜汁肢挚稚酯掷峙炙栉侄芷窒咫吱趾痔蜘郅桎雉祉郦陟痣蛭帙枳踯徵胝栀贽祗豸鸷摭轵卮轾彘觯絷跖埴夂黹忮骘膣踬"},
+    #     {L"zheng", L"政正证争整征郑丁症挣蒸睁铮筝拯峥怔诤狰徵钲"},
+    #     {L"tang", L"堂唐糖汤塘躺趟倘棠烫淌膛搪镗傥螳溏帑羰樘醣螗耥铴瑭"},
+    #     {L"chi", L"持吃池迟赤驰尺斥齿翅匙痴耻炽侈弛叱啻坻眙嗤墀哧茌豉敕笞饬踟蚩柢媸魑篪褫彳鸱螭瘛眵傺"},
+    #     {L"shi", L"是时实事市十使世施式势视识师史示石食始士失适试什泽室似诗饰殖释驶氏硕逝湿蚀狮誓拾尸匙仕柿矢峙侍噬嗜栅拭嘘屎恃轼虱耆舐莳铈谥炻豕鲥饣螫酾筮埘弑礻蓍鲺贳"},
+    #     {L"qi", L"企其起期气七器汽奇齐启旗棋妻弃揭枝歧欺骑契迄亟漆戚岂稽岐琦栖缉琪泣乞砌祁崎绮祺祈凄淇杞脐麒圻憩芪伎俟畦耆葺沏萋骐鳍綦讫蕲屺颀亓碛柒啐汔綮萁嘁蛴槭欹芑桤丌蜞"},
+    #     {L"chuai", L"揣踹啜搋膪"},
+    #     {L"tuo", L"托脱拓拖妥驼陀沱鸵驮唾椭坨佗砣跎庹柁橐乇铊沲酡鼍箨柝"},
+    #     {L"duo", L"多度夺朵躲铎隋咄堕舵垛惰哆踱跺掇剁柁缍沲裰哚隳"},
+    #     {L"xue", L"学血雪削薛穴靴谑噱鳕踅泶彐"},
+    #     {L"chong", L"重种充冲涌崇虫宠忡憧舂茺铳艟"},
+    #     {L"chou", L"筹抽绸酬愁丑臭仇畴稠瞅踌惆俦瘳雠帱"},
+    #     {L"qiu", L"求球秋丘邱仇酋裘龟囚遒鳅虬蚯泅楸湫犰逑巯艽俅蝤赇鼽糗"},
+    #     {L"xiu", L"修秀休宿袖绣臭朽锈羞嗅岫溴庥馐咻髹鸺貅"},
+    #     {L"chu", L"出处础初助除储畜触楚厨雏矗橱锄滁躇怵绌搐刍蜍黜杵蹰亍樗憷楮"},
+    #     {L"tuan", L"团揣湍疃抟彖"},
+    #     {L"zhui", L"追坠缀揣椎锥赘惴隹骓缒"},
+    #     {L"chuan", L"传川船穿串喘椽舛钏遄氚巛舡"},
+    #     {L"zhuan", L"专转传赚砖撰篆馔啭颛"},
+    #     {L"yuan", L"元员院原源远愿园援圆缘袁怨渊苑宛冤媛猿垣沅塬垸鸳辕鸢瑗圜爰芫鼋橼螈眢箢掾"},
+    #     {L"cuan", L"窜攒篡蹿撺爨汆镩"},
+    #     {L"chuang", L"创床窗闯幢疮怆"},
+    #     {L"zhuang", L"装状庄壮撞妆幢桩奘僮戆"},
+    #     {L"chui", L"吹垂锤炊椎陲槌捶棰"},
+    #     {L"chun", L"春纯醇淳唇椿蠢鹑朐莼肫蝽"},
+    #     {L"zhun", L"准屯淳谆肫窀"},
+    #     {L"cu", L"促趋趣粗簇醋卒蹴猝蹙蔟殂徂"},
+    #     {L"dun", L"吨顿盾敦蹲墩囤沌钝炖盹遁趸砘礅"},
+    #     {L"qu", L"区去取曲趋渠趣驱屈躯衢娶祛瞿岖龋觑朐蛐癯蛆苣阒诎劬蕖蘧氍黢蠼璩麴鸲磲"},
+    #     {L"xu", L"需许续须序徐休蓄畜虚吁绪叙旭邪恤墟栩絮圩婿戌胥嘘浒煦酗诩朐盱蓿溆洫顼勖糈砉醑"},
+    #     {L"chuo", L"辍绰戳淖啜龊踔辶"},
+    #     {L"zu", L"组族足祖租阻卒俎诅镞菹"},
+    #     {L"ji", L"济机其技基记计系期际及集级几给积极己纪即继击既激绩急奇吉季齐疾迹鸡剂辑籍寄挤圾冀亟寂暨脊跻肌稽忌饥祭缉棘矶汲畸姬藉瘠骥羁妓讥稷蓟悸嫉岌叽伎鲫诘楫荠戟箕霁嵇觊麂畿玑笈犄芨唧屐髻戢佶偈笄跽蒺乩咭赍嵴虮掎齑殛鲚剞洎丌墼蕺彐芰哜"},
+    #     {L"cong", L"从丛匆聪葱囱琮淙枞骢苁璁"},
+    #     {L"zong", L"总从综宗纵踪棕粽鬃偬枞腙"},
+    #     {L"cou", L"凑辏腠楱"},
+    #     {L"cui", L"衰催崔脆翠萃粹摧璀瘁悴淬啐隹毳榱"},
+    #     {L"wei", L"为位委未维卫围违威伟危味微唯谓伪慰尾魏韦胃畏帷喂巍萎蔚纬潍尉渭惟薇苇炜圩娓诿玮崴桅偎逶倭猥囗葳隗痿猬涠嵬韪煨艉隹帏闱洧沩隈鲔軎"},
+    #     {L"cun", L"村存寸忖皴"},
+    #     {L"zuo", L"作做座左坐昨佐琢撮祚柞唑嘬酢怍笮阼胙"},
+    #     {L"zuan", L"钻纂攥缵躜"},
+    #     {L"da", L"大达打答搭沓瘩惮嗒哒耷鞑靼褡笪怛妲"},
+    #     {L"dai", L"大代带待贷毒戴袋歹呆隶逮岱傣棣怠殆黛甙埭诒绐玳呔迨"},
+    #     {L"tai", L"台太态泰抬胎汰钛苔薹肽跆邰鲐酞骀炱"},
+    #     {L"ta", L"他它她拓塔踏塌榻沓漯獭嗒挞蹋趿遢铊鳎溻闼"},
+    #     {L"dan", L"但单石担丹胆旦弹蛋淡诞氮郸耽殚惮儋眈疸澹掸膻啖箪聃萏瘅赕"},
+    #     {L"lu", L"路六陆录绿露鲁卢炉鹿禄赂芦庐碌麓颅泸卤潞鹭辘虏璐漉噜戮鲈掳橹轳逯渌蓼撸鸬栌氇胪镥簏舻辂垆"},
+    #     {L"tan", L"谈探坦摊弹炭坛滩贪叹谭潭碳毯瘫檀痰袒坍覃忐昙郯澹钽锬"},
+    #     {L"ren", L"人任认仁忍韧刃纫饪妊荏稔壬仞轫亻衽"},
+    #     {L"jie", L"家结解价界接节她届介阶街借杰洁截姐揭捷劫戒皆竭桔诫楷秸睫藉拮芥诘碣嗟颉蚧孑婕疖桀讦疥偈羯袷哜喈卩鲒骱"},
+    #     {L"yan", L"研严验演言眼烟沿延盐炎燕岩宴艳颜殷彦掩淹阎衍铅雁咽厌焰堰砚唁焉晏檐蜒奄俨腌妍谚兖筵焱偃闫嫣鄢湮赝胭琰滟阉魇酽郾恹崦芫剡鼹菸餍埏谳讠厣罨"},
+    #     {L"dang", L"当党档荡挡宕砀铛裆凼菪谠"},
+    #     {L"tao", L"套讨跳陶涛逃桃萄淘掏滔韬叨洮啕绦饕鼗"},
+    #     {L"tiao", L"条调挑跳迢眺苕窕笤佻啁粜髫铫祧龆蜩鲦"},
+    #     {L"te", L"特忑忒铽慝"},
+    #     {L"de", L"的地得德底锝"},
+    #     {L"dei", L"得"},
+    #     {L"di", L"的地第提低底抵弟迪递帝敌堤蒂缔滴涤翟娣笛棣荻谛狄邸嘀砥坻诋嫡镝碲骶氐柢籴羝睇觌"},
+    #     {L"ti", L"体提题弟替梯踢惕剔蹄棣啼屉剃涕锑倜悌逖嚏荑醍绨鹈缇裼"},
+    #     {L"tui", L"推退弟腿褪颓蜕忒煺"},
+    #     {L"you", L"有由又优游油友右邮尤忧幼犹诱悠幽佑釉柚铀鱿囿酉攸黝莠猷蝣疣呦蚴莸莜铕宥繇卣牖鼬尢蚰侑"},
+    #     {L"dian", L"电点店典奠甸碘淀殿垫颠滇癫巅惦掂癜玷佃踮靛钿簟坫阽"},
+    #     {L"tian", L"天田添填甜甸恬腆佃舔钿阗忝殄畋栝掭"},
+    #     {L"zhu", L"主术住注助属逐宁著筑驻朱珠祝猪诸柱竹铸株瞩嘱贮煮烛苎褚蛛拄铢洙竺蛀渚伫杼侏澍诛茱箸炷躅翥潴邾槠舳橥丶瘃麈疰"},
+    #     {L"nian", L"年念酿辗碾廿捻撵拈蔫鲶埝鲇辇黏"},
+    #     {L"diao", L"调掉雕吊钓刁貂凋碉鲷叼铫铞"},
+    #     {L"yao", L"要么约药邀摇耀腰遥姚窑瑶咬尧钥谣肴夭侥吆疟妖幺杳舀窕窈曜鹞爻繇徭轺铫鳐崾珧"},
+    #     {L"die", L"跌叠蝶迭碟爹谍牒耋佚喋堞瓞鲽垤揲蹀"},
+    #     {L"she", L"设社摄涉射折舍蛇拾舌奢慑赦赊佘麝歙畲厍猞揲滠"},
+    #     {L"ye", L"业也夜叶射野液冶喝页爷耶邪咽椰烨掖拽曳晔谒腋噎揶靥邺铘揲"},
+    #     {L"xie", L"些解协写血叶谢械鞋胁斜携懈契卸谐泄蟹邪歇泻屑挟燮榭蝎撷偕亵楔颉缬邂鲑瀣勰榍薤绁渫廨獬躞"},
+    #     {L"zhe", L"这者着著浙折哲蔗遮辙辄柘锗褶蜇蛰鹧谪赭摺乇磔螫"},
+    #     {L"ding", L"定订顶丁鼎盯钉锭叮仃铤町酊啶碇腚疔玎耵"},
+    #     {L"diu", L"丢铥"},
+    #     {L"ting", L"听庭停厅廷挺亭艇婷汀铤烃霆町蜓葶梃莛"},
+    #     {L"dong", L"动东董冬洞懂冻栋侗咚峒氡恫胴硐垌鸫岽胨"},
+    #     {L"tong", L"同通统童痛铜桶桐筒彤侗佟潼捅酮砼瞳恸峒仝嗵僮垌茼"},
+    #     {L"zhong", L"中重种众终钟忠仲衷肿踵冢盅蚣忪锺舯螽夂"},
+    #     {L"dou", L"都斗读豆抖兜陡逗窦渎蚪痘蔸钭篼"},
+    #     {L"du", L"度都独督读毒渡杜堵赌睹肚镀渎笃竺嘟犊妒牍蠹椟黩芏髑"},
+    #     {L"duan", L"断段短端锻缎煅椴簖"},
+    #     {L"dui", L"对队追敦兑堆碓镦怼憝"},
+    #     {L"rui", L"瑞兑锐睿芮蕊蕤蚋枘"},
+    #     {L"yue", L"月说约越乐跃兑阅岳粤悦曰钥栎钺樾瀹龠哕刖"},
+    #     {L"tun", L"吞屯囤褪豚臀饨暾氽"},
+    #     {L"hui", L"会回挥汇惠辉恢徽绘毁慧灰贿卉悔秽溃荟晖彗讳诲珲堕诙蕙晦睢麾烩茴喙桧蛔洄浍虺恚蟪咴隳缋哕"},
+    #     {L"wu", L"务物无五武午吴舞伍污乌误亡恶屋晤悟吾雾芜梧勿巫侮坞毋诬呜钨邬捂鹜兀婺妩於戊鹉浯蜈唔骛仵焐芴鋈庑鼯牾怃圬忤痦迕杌寤阢"},
+    #     {L"ya", L"亚压雅牙押鸭呀轧涯崖邪芽哑讶鸦娅衙丫蚜碣垭伢氩桠琊揠吖睚痖疋迓岈砑"},
+    #     {L"he", L"和合河何核盖贺喝赫荷盒鹤吓呵苛禾菏壑褐涸阂阖劾诃颌嗬貉曷翮纥盍"},
+    #     {L"wo", L"我握窝沃卧挝涡斡渥幄蜗喔倭莴龌肟硪"},
+    #     {L"en", L"恩摁蒽"},
+    #     {L"n", L"嗯唔"},
+    #     {L"er", L"而二尔儿耳迩饵洱贰铒珥佴鸸鲕"},
+    #     {L"fa", L"发法罚乏伐阀筏砝垡珐"},
+    #     {L"quan", L"全权券泉圈拳劝犬铨痊诠荃醛蜷颧绻犭筌鬈悛辁畎"},
+    #     {L"fei", L"费非飞肥废菲肺啡沸匪斐蜚妃诽扉翡霏吠绯腓痱芾淝悱狒榧砩鲱篚镄"},
+    #     {L"pei", L"配培坏赔佩陪沛裴胚妃霈淠旆帔呸醅辔锫"},
+    #     {L"ping", L"平评凭瓶冯屏萍苹乒坪枰娉俜鲆"},
+    #     {L"fo", L"佛"},
+    #     {L"hu", L"和护户核湖互乎呼胡戏忽虎沪糊壶葫狐蝴弧瑚浒鹄琥扈唬滹惚祜囫斛笏芴醐猢怙唿戽槲觳煳鹕冱瓠虍岵鹱烀轷"},
+    #     {L"ga", L"夹咖嘎尬噶旮伽尕钆尜"},
+    #     {L"ge", L"个合各革格歌哥盖隔割阁戈葛鸽搁胳舸疙铬骼蛤咯圪镉颌仡硌嗝鬲膈纥袼搿塥哿虼"},
+    #     {L"ha", L"哈蛤铪"},
+    #     {L"xia", L"下夏峡厦辖霞夹虾狭吓侠暇遐瞎匣瑕唬呷黠硖罅狎瘕柙"},
+    #     {L"gai", L"改该盖概溉钙丐芥赅垓陔戤"},
+    #     {L"hai", L"海还害孩亥咳骸骇氦嗨胲醢"},
+    #     {L"gan", L"干感赶敢甘肝杆赣乾柑尴竿秆橄矸淦苷擀酐绀泔坩旰疳澉"},
+    #     {L"gang", L"港钢刚岗纲冈杠缸扛肛罡戆筻"},
+    #     {L"jiang", L"将强江港奖讲降疆蒋姜浆匠酱僵桨绛缰犟豇礓洚茳糨耩"},
+    #     {L"hang", L"行航杭巷夯吭桁沆绗颃"},
+    #     {L"gong", L"工公共供功红贡攻宫巩龚恭拱躬弓汞蚣珙觥肱廾"},
+    #     {L"hong", L"红宏洪轰虹鸿弘哄烘泓訇蕻闳讧荭黉薨"},
+    #     {L"guang", L"广光逛潢犷胱咣桄"},
+    #     {L"qiong", L"穷琼穹邛茕筇跫蛩銎"},
+    #     {L"gao", L"高告搞稿膏糕镐皋羔锆杲郜睾诰藁篙缟槁槔"},
+    #     {L"hao", L"好号毫豪耗浩郝皓昊皋蒿壕灏嚎濠蚝貉颢嗥薅嚆"},
+    #     {L"li", L"理力利立里李历例离励礼丽黎璃厉厘粒莉梨隶栗荔沥犁漓哩狸藜罹篱鲤砺吏澧俐骊溧砾莅锂笠蠡蛎痢雳俪傈醴栎郦俚枥喱逦娌鹂戾砬唳坜疠蜊黧猁鬲粝蓠呖跞疬缡鲡鳢嫠詈悝苈篥轹"},
+    #     {L"jia", L"家加价假佳架甲嘉贾驾嫁夹稼钾挟拮迦伽颊浃枷戛荚痂颉镓笳珈岬胛袈郏葭袷瘕铗跏蛱恝哿"},
+    #     {L"luo", L"落罗络洛逻螺锣骆萝裸漯烙摞骡咯箩珞捋荦硌雒椤镙跞瘰泺脶猡倮蠃"},
+    #     {L"ke", L"可科克客刻课颗渴壳柯棵呵坷恪苛咳磕珂稞瞌溘轲窠嗑疴蝌岢铪颏髁蚵缂氪骒钶锞"},
+    #     {L"qia", L"卡恰洽掐髂袷咭葜"},
+    #     {L"gei", L"给"},
+    #     {L"gen", L"根跟亘艮哏茛"},
+    #     {L"hen", L"很狠恨痕哏"},
+    #     {L"gou", L"构购够句沟狗钩拘勾苟垢枸篝佝媾诟岣彀缑笱鞲觏遘"},
+    #     {L"kou", L"口扣寇叩抠佝蔻芤眍筘"},
+    #     {L"gu", L"股古顾故固鼓骨估谷贾姑孤雇辜菇沽咕呱锢钴箍汩梏痼崮轱鸪牯蛊诂毂鹘菰罟嘏臌觚瞽蛄酤牿鲴"},
+    #     {L"pai", L"牌排派拍迫徘湃俳哌蒎"},
+    #     {L"gua", L"括挂瓜刮寡卦呱褂剐胍诖鸹栝呙"},
+    #     {L"tou", L"投头透偷愉骰亠"},
+    #     {L"guai", L"怪拐乖"},
+    #     {L"kuai", L"会快块筷脍蒯侩浍郐蒉狯哙"},
+    #     {L"guan", L"关管观馆官贯冠惯灌罐莞纶棺斡矜倌鹳鳏盥掼涫"},
+    #     {L"wan", L"万完晚湾玩碗顽挽弯蔓丸莞皖宛婉腕蜿惋烷琬畹豌剜纨绾脘菀芄箢"},
+    #     {L"ne", L"呢哪呐讷疒"},
+    #     {L"gui", L"规贵归轨桂柜圭鬼硅瑰跪龟匮闺诡癸鳜桧皈鲑刽晷傀眭妫炅庋簋刿宄匦"},
+    #     {L"jun", L"军均俊君峻菌竣钧骏龟浚隽郡筠皲麇捃"},
+    #     {L"jiong", L"窘炯迥炅冂扃"},
+    #     {L"jue", L"决绝角觉掘崛诀獗抉爵嚼倔厥蕨攫珏矍蹶谲镢鳜噱桷噘撅橛孓觖劂爝"},
+    #     {L"gun", L"滚棍辊衮磙鲧绲丨"},
+    #     {L"hun", L"婚混魂浑昏棍珲荤馄诨溷阍"},
+    #     {L"guo", L"国过果郭锅裹帼涡椁囗蝈虢聒埚掴猓崞蜾呙馘"},
+    #     {L"hei", L"黑嘿嗨"},
+    #     {L"kan", L"看刊勘堪坎砍侃嵌槛瞰阚龛戡凵莰"},
+    #     {L"heng", L"衡横恒亨哼珩桁蘅"},
+    #     {L"mo", L"万没么模末冒莫摩墨默磨摸漠脉膜魔沫陌抹寞蘑摹蓦馍茉嘿谟秣蟆貉嫫镆殁耱嬷麽瘼貊貘"},
+    #     {L"peng", L"鹏朋彭膨蓬碰苹棚捧亨烹篷澎抨硼怦砰嘭蟛堋"},
+    #     {L"hou", L"后候厚侯猴喉吼逅篌糇骺後鲎瘊堠"},
+    #     {L"hua", L"化华划话花画滑哗豁骅桦猾铧砉"},
+    #     {L"huai", L"怀坏淮徊槐踝"},
+    #     {L"huan", L"还环换欢患缓唤焕幻痪桓寰涣宦垸洹浣豢奂郇圜獾鲩鬟萑逭漶锾缳擐"},
+    #     {L"xun", L"讯训迅孙寻询循旬巡汛勋逊熏徇浚殉驯鲟薰荀浔洵峋埙巽郇醺恂荨窨蕈曛獯"},
+    #     {L"huang", L"黄荒煌皇凰慌晃潢谎惶簧璜恍幌湟蝗磺隍徨遑肓篁鳇蟥癀"},
+    #     {L"nai", L"能乃奶耐奈鼐萘氖柰佴艿"},
+    #     {L"luan", L"乱卵滦峦鸾栾銮挛孪脔娈"},
+    #     {L"qie", L"切且契窃茄砌锲怯伽惬妾趄挈郄箧慊"},
+    #     {L"jian", L"建间件见坚检健监减简艰践兼鉴键渐柬剑尖肩舰荐箭浅剪俭碱茧奸歼拣捡煎贱溅槛涧堑笺谏饯锏缄睑謇蹇腱菅翦戬毽笕犍硷鞯牮枧湔鲣囝裥踺搛缣鹣蒹谫僭戋趼楗"},
+    #     {L"nan", L"南难男楠喃囡赧腩囝蝻"},
+    #     {L"qian", L"前千钱签潜迁欠纤牵浅遣谦乾铅歉黔谴嵌倩钳茜虔堑钎骞阡掮钤扦芊犍荨仟芡悭缱佥愆褰凵肷岍搴箝慊椠"},
+    #     {L"qiang", L"强抢疆墙枪腔锵呛羌蔷襁羟跄樯戕嫱戗炝镪锖蜣"},
+    #     {L"xiang", L"向项相想乡象响香降像享箱羊祥湘详橡巷翔襄厢镶飨饷缃骧芗庠鲞葙蟓"},
+    #     {L"jiao", L"教交较校角觉叫脚缴胶轿郊焦骄浇椒礁佼蕉娇矫搅绞酵剿嚼饺窖跤蛟侥狡姣皎茭峤铰醮鲛湫徼鹪僬噍艽挢敫"},
+    #     {L"zhuo", L"着著缴桌卓捉琢灼浊酌拙茁涿镯淖啄濯焯倬擢斫棹诼浞禚"},
+    #     {L"qiao", L"桥乔侨巧悄敲俏壳雀瞧翘窍峭锹撬荞跷樵憔鞘橇峤诮谯愀鞒硗劁缲"},
+    #     {L"xiao", L"小效销消校晓笑肖削孝萧俏潇硝宵啸嚣霄淆哮筱逍姣箫骁枭哓绡蛸崤枵魈"},
+    #     {L"si", L"司四思斯食私死似丝饲寺肆撕泗伺嗣祀厮驷嘶锶俟巳蛳咝耜笥纟糸鸶缌澌姒汜厶兕"},
+    #     {L"kai", L"开凯慨岂楷恺揩锴铠忾垲剀锎蒈"},
+    #     {L"jin", L"进金今近仅紧尽津斤禁锦劲晋谨筋巾浸襟靳瑾烬缙钅矜觐堇馑荩噤廑妗槿赆衿卺"},
+    #     {L"qin", L"亲勤侵秦钦琴禽芹沁寝擒覃噙矜嗪揿溱芩衾廑锓吣檎螓"},
+    #     {L"jing", L"经京精境竞景警竟井惊径静劲敬净镜睛晶颈荆兢靖泾憬鲸茎腈菁胫阱旌粳靓痉箐儆迳婧肼刭弪獍"},
+    #     {L"ying", L"应营影英景迎映硬盈赢颖婴鹰荧莹樱瑛蝇萦莺颍膺缨瀛楹罂荥萤鹦滢蓥郢茔嘤璎嬴瘿媵撄潆"},
+    #     {L"jiu", L"就究九酒久救旧纠舅灸疚揪咎韭玖臼柩赳鸠鹫厩啾阄桕僦鬏"},
+    #     {L"zui", L"最罪嘴醉咀蕞觜"},
+    #     {L"juan", L"卷捐圈眷娟倦绢隽镌涓鹃鄄蠲狷锩桊"},
+    #     {L"suan", L"算酸蒜狻"},
+    #     {L"yun", L"员运云允孕蕴韵酝耘晕匀芸陨纭郧筠恽韫郓氲殒愠昀菀狁"},
+    #     {L"qun", L"群裙逡麇"},
+    #     {L"ka", L"卡喀咖咔咯佧胩"},
+    #     {L"kang", L"康抗扛慷炕亢糠伉钪闶"},
+    #     {L"keng", L"坑铿吭"},
+    #     {L"kao", L"考靠烤拷铐栲尻犒"},
+    #     {L"ken", L"肯垦恳啃龈裉"},
+    #     {L"yin", L"因引银印音饮阴隐姻殷淫尹荫吟瘾寅茵圻垠鄞湮蚓氤胤龈窨喑铟洇狺夤廴吲霪茚堙"},
+    #     {L"kong", L"空控孔恐倥崆箜"},
+    #     {L"ku", L"苦库哭酷裤枯窟挎骷堀绔刳喾"},
+    #     {L"kua", L"跨夸垮挎胯侉"},
+    #     {L"kui", L"亏奎愧魁馈溃匮葵窥盔逵睽馗聩喟夔篑岿喹揆隗傀暌跬蒉愦悝蝰"},
+    #     {L"kuan", L"款宽髋"},
+    #     {L"kuang", L"况矿框狂旷眶匡筐邝圹哐贶夼诳诓纩"},
+    #     {L"que", L"确却缺雀鹊阙瘸榷炔阕悫"},
+    #     {L"kun", L"困昆坤捆琨锟鲲醌髡悃阃"},
+    #     {L"kuo", L"扩括阔廓蛞"},
+    #     {L"la", L"拉落垃腊啦辣蜡喇剌旯砬邋瘌"},
+    #     {L"lai", L"来莱赖睐徕籁涞赉濑癞崃疠铼"},
+    #     {L"lan", L"兰览蓝篮栏岚烂滥缆揽澜拦懒榄斓婪阑褴罱啉谰镧漤"},
+    #     {L"lin", L"林临邻赁琳磷淋麟霖鳞凛拎遴蔺吝粼嶙躏廪檩啉辚膦瞵懔"},
+    #     {L"lang", L"浪朗郎廊狼琅榔螂阆锒莨啷蒗稂"},
+    #     {L"liang", L"量两粮良辆亮梁凉谅粱晾靓踉莨椋魉墚"},
+    #     {L"lao", L"老劳落络牢捞涝烙姥佬崂唠酪潦痨醪铑铹栳耢"},
+    #     {L"mu", L"目模木亩幕母牧莫穆姆墓慕牟牡募睦缪沐暮拇姥钼苜仫毪坶"},
+    #     {L"le", L"了乐勒肋叻鳓嘞仂泐"},
+    #     {L"lei", L"类累雷勒泪蕾垒磊擂镭肋羸耒儡嫘缧酹嘞诔檑"},
+    #     {L"sui", L"随岁虽碎尿隧遂髓穗绥隋邃睢祟濉燧谇眭荽"},
+    #     {L"lie", L"列烈劣裂猎冽咧趔洌鬣埒捩躐"},
+    #     {L"leng", L"冷愣棱楞塄"},
+    #     {L"ling", L"领令另零灵龄陵岭凌玲铃菱棱伶羚苓聆翎泠瓴囹绫呤棂蛉酃鲮柃"},
+    #     {L"lia", L"俩"},
+    #     {L"liao", L"了料疗辽廖聊寥缪僚燎缭撂撩嘹潦镣寮蓼獠钌尥鹩"},
+    #     {L"liu", L"流刘六留柳瘤硫溜碌浏榴琉馏遛鎏骝绺镏旒熘鹨锍"},
+    #     {L"lun", L"论轮伦仑纶沦抡囵"},
+    #     {L"lv", L"率律旅绿虑履吕铝屡氯缕滤侣驴榈闾偻褛捋膂稆"},
+    #     {L"lou", L"楼露漏陋娄搂篓喽镂偻瘘髅耧蝼嵝蒌"},
+    #     {L"mao", L"贸毛矛冒貌茂茅帽猫髦锚懋袤牦卯铆耄峁瑁蟊茆蝥旄泖昴瞀"},
+    #     {L"long", L"龙隆弄垄笼拢聋陇胧珑窿茏咙砻垅泷栊癃"},
+    #     {L"nong", L"农浓弄脓侬哝"},
+    #     {L"shuang", L"双爽霜孀泷"},
+    #     {L"shu", L"术书数属树输束述署熟殊蔬舒疏鼠淑叔暑枢墅俞曙抒竖蜀薯梳戍恕孰沭赎庶漱塾倏澍纾姝菽黍腧秫毹殳疋摅"},
+    #     {L"shuai", L"率衰帅摔甩蟀"},
+    #     {L"lve", L"略掠锊"},
+    #     {L"ma", L"么马吗摩麻码妈玛嘛骂抹蚂唛蟆犸杩"},
+    #     {L"me", L"么麽"},
+    #     {L"mai", L"买卖麦迈脉埋霾荬劢"},
+    #     {L"man", L"满慢曼漫埋蔓瞒蛮鳗馒幔谩螨熳缦镘颟墁鞔嫚"},
+    #     {L"mi", L"米密秘迷弥蜜谜觅靡泌眯麋猕谧咪糜宓汨醚嘧弭脒冖幂祢縻蘼芈糸敉"},
+    #     {L"men", L"们门闷瞒汶扪焖懑鞔钔"},
+    #     {L"mang", L"忙盲茫芒氓莽蟒邙硭漭"},
+    #     {L"meng", L"蒙盟梦猛孟萌氓朦锰檬勐懵蟒蜢虻黾蠓艨甍艋瞢礞"},
+    #     {L"miao", L"苗秒妙描庙瞄缪渺淼藐缈邈鹋杪眇喵"},
+    #     {L"mou", L"某谋牟缪眸哞鍪蛑侔厶"},
+    #     {L"miu", L"缪谬"},
+    #     {L"mei", L"美没每煤梅媒枚妹眉魅霉昧媚玫酶镁湄寐莓袂楣糜嵋镅浼猸鹛"},
+    #     {L"wen", L"文问闻稳温纹吻蚊雯紊瘟汶韫刎璺玟阌"},
+    #     {L"mie", L"灭蔑篾乜咩蠛"},
+    #     {L"ming", L"明名命鸣铭冥茗溟酩瞑螟暝"},
+    #     {L"na", L"内南那纳拿哪娜钠呐捺衲镎肭"},
+    #     {L"nei", L"内那哪馁"},
+    #     {L"nuo", L"难诺挪娜糯懦傩喏搦锘"},
+    #     {L"ruo", L"若弱偌箬"},
+    #     {L"nang", L"囊馕囔曩攮"},
+    #     {L"nao", L"脑闹恼挠瑙淖孬垴铙桡呶硇猱蛲"},
+    #     {L"ni", L"你尼呢泥疑拟逆倪妮腻匿霓溺旎昵坭铌鲵伲怩睨猊"},
+    #     {L"nen", L"嫩恁"},
+    #     {L"neng", L"能"},
+    #     {L"nin", L"您恁"},
+    #     {L"niao", L"鸟尿溺袅脲茑嬲"},
+    #     {L"nie", L"摄聂捏涅镍孽捻蘖啮蹑嗫臬镊颞乜陧"},
+    #     {L"niang", L"娘酿"},
+    #     {L"ning", L"宁凝拧泞柠咛狞佞聍甯"},
+    #     {L"nu", L"努怒奴弩驽帑孥胬"},
+    #     {L"nv", L"女钕衄恧"},
+    #     {L"ru", L"入如女乳儒辱汝茹褥孺濡蠕嚅缛溽铷洳薷襦颥蓐"},
+    #     {L"nuan", L"暖"},
+    #     {L"nve", L"虐疟"},
+    #     {L"re", L"热若惹喏"},
+    #     {L"ou", L"区欧偶殴呕禺藕讴鸥瓯沤耦怄"},
+    #     {L"pao", L"跑炮泡抛刨袍咆疱庖狍匏脬"},
+    #     {L"pou", L"剖掊裒"},
+    #     {L"pen", L"喷盆湓"},
+    #     {L"pie", L"瞥撇苤氕丿"},
+    #     {L"pin", L"品贫聘频拼拚颦姘嫔榀牝"},
+    #     {L"se", L"色塞瑟涩啬穑铯槭"},
+    #     {L"qing", L"情青清请亲轻庆倾顷卿晴氢擎氰罄磬蜻箐鲭綮苘黥圊檠謦"},
+    #     {L"zan", L"赞暂攒堑昝簪糌瓒錾趱拶"},
+    #     {L"shao", L"少绍召烧稍邵哨韶捎勺梢鞘芍苕劭艄筲杓潲"},
+    #     {L"sao", L"扫骚嫂梢缫搔瘙臊埽缲鳋"},
+    #     {L"sha", L"沙厦杀纱砂啥莎刹杉傻煞鲨霎嗄痧裟挲铩唼歃"},
+    #     {L"xuan", L"县选宣券旋悬轩喧玄绚渲璇炫萱癣漩眩暄煊铉楦泫谖痃碹揎镟儇"},
+    #     {L"ran", L"然染燃冉苒髯蚺"},
+    #     {L"rang", L"让壤攘嚷瓤穰禳"},
+    #     {L"rao", L"绕扰饶娆桡荛"},
+    #     {L"reng", L"仍扔"},
+    #     {L"ri", L"日"},
+    #     {L"rou", L"肉柔揉糅鞣蹂"},
+    #     {L"ruan", L"软阮朊"},
+    #     {L"run", L"润闰"},
+    #     {L"sa", L"萨洒撒飒卅仨脎"},
+    #     {L"suo", L"所些索缩锁莎梭琐嗦唆唢娑蓑羧挲桫嗍睃"},
+    #     {L"sai", L"思赛塞腮噻鳃"},
+    #     {L"shui", L"说水税谁睡氵"},
+    #     {L"sang", L"桑丧嗓搡颡磉"},
+    #     {L"sen", L"森"},
+    #     {L"seng", L"僧"},
+    #     {L"shai", L"筛晒"},
+    #     {L"shang", L"上商尚伤赏汤裳墒晌垧觞殇熵绱"},
+    #     {L"xing", L"行省星腥猩惺兴刑型形邢饧醒幸杏性姓陉荇荥擤悻硎"},
+    #     {L"shou", L"收手受首售授守寿瘦兽狩绶艏扌"},
+    #     {L"shuo", L"说数硕烁朔铄妁槊蒴搠"},
+    #     {L"su", L"速素苏诉缩塑肃俗宿粟溯酥夙愫簌稣僳谡涑蔌嗉觫"},
+    #     {L"shua", L"刷耍唰"},
+    #     {L"shuan", L"栓拴涮闩"},
+    #     {L"shun", L"顺瞬舜吮"},
+    #     {L"song", L"送松宋讼颂耸诵嵩淞怂悚崧凇忪竦菘"},
+    #     {L"sou", L"艘搜擞嗽嗖叟馊薮飕嗾溲锼螋瞍"},
+    #     {L"sun", L"损孙笋荪榫隼狲飧"},
+    #     {L"teng", L"腾疼藤滕誊"},
+    #     {L"tie", L"铁贴帖餮萜"},
+    #     {L"tu", L"土突图途徒涂吐屠兔秃凸荼钍菟堍酴"},
+    #     {L"wai", L"外歪崴"},
+    #     {L"wang", L"王望往网忘亡旺汪枉妄惘罔辋魍"},
+    #     {L"weng", L"翁嗡瓮蓊蕹"},
+    #     {L"zhua", L"抓挝爪"},
+    #     {L"yang", L"样养央阳洋扬杨羊详氧仰秧痒漾疡泱殃恙鸯徉佯怏炀烊鞅蛘"},
+    #     {L"xiong", L"雄兄熊胸凶匈汹芎"},
+    #     {L"yo", L"哟唷"},
+    #     {L"yong", L"用永拥勇涌泳庸俑踊佣咏雍甬镛臃邕蛹恿慵壅痈鳙墉饔喁"},
+    #     {L"za", L"杂扎咱砸咋匝咂拶"},
+    #     {L"zai", L"在再灾载栽仔宰哉崽甾"},
+    #     {L"zao", L"造早遭枣噪灶燥糟凿躁藻皂澡蚤唣"},
+    #     {L"zei", L"贼"},
+    #     {L"zen", L"怎谮"},
+    #     {L"zeng", L"增曾综赠憎锃甑罾缯"},
+    #     {L"zhei", L"这"},
+    #     {L"zou", L"走邹奏揍诹驺陬楱鄹鲰"},
+    #     {L"zhuai", L"转拽"},
+    #     {L"zun", L"尊遵鳟樽撙"},
+    #     {L"dia", L"嗲"},
+    #     {L"nou", L"耨"}
+    # };
+    # <> </global>
+    # <> </include>
+    # @end
+}
+
+类 拼音检索库_繁体 <公开 注释 = "1、简体版27KB (gzip ≈ 19KB)，繁体版86KB (gzip ≈ 60KB)" 注释 = "2、支持多音字、繁体字、拼音首字母匹配,具备分词功能"
+        注释 = "3、返回位置信息，可用于高亮匹配字符" 注释 = "4、在长多音字串下依然有高性能" 折叠 折叠2 @文档 = "category = \"汉字拼音库.拼音检索\"" "">
+{
+    方法 类_初始化 <折叠>
+    {
+        初始化 ()
+    }
+
+    方法 初始化 <折叠 折叠2 @禁止流程检查 = 真 @视窗.外部头文件 = "map" @视窗.外部头文件 = "vector">
+    {
+        @ for (int i = 0; i < sizeof(g_PinYin) / sizeof(g_PinYin[0]); i++){
+        @     this->m_AllPinYin.push_back(g_PinYin[i].full);
+        @     for(int n = 0; n < ::wcslen(g_PinYin[i].words); n++){
+        @         @dt<文本型> szKey(g_PinYin[i].words[n]);
+        @         @dt<文本型> szValue(g_PinYin[i].full);
+        @         if(m_NoTone.find(szKey) != m_NoTone.end()) // 是否存在?
+        @             szValue = this->m_NoTone[szKey] + _CT(" ") + szValue;
+        @         this->m_NoTone[szKey] = szValue;
+        @     }
+        @ }
+    }
+
+    方法 检索数据_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 匹配的文本 <类型 = 文本型>
+    参数 搜寻的文本 <类型 = 文本型>
+    参数 返回的起始索引 <类型 = 整数类 @默认值 = 空对象>
+    参数 返回的结束索引 <类型 = 整数类 @默认值 = 空对象>
+    {
+        @ @<返回的起始索引.值> = @<返回的结束索引.值> = -1;
+        @ if (@<匹配的文本>.IsEmpty() || @<搜寻的文本>.IsEmpty())
+        @     return FALSE;
+        @ @dt<文本型> Input = @dt<文本型>(@<匹配的文本>).MakeLower();
+        @ @dt<文本型> Keys = @dt<文本型>(@<搜寻的文本>).MakeLower();
+        @ Keys.ReplaceSubText(_CT(" "), _CT(""), 0, -1, TRUE);
+        @ size_t IndexOf = Input.SearchText (Keys.GetText (), 0, TRUE, FALSE);
+        @ if (IndexOf != -1) {
+        @     @<返回的起始索引.值> = (@dt<整数>)IndexOf;
+        @     @<返回的结束索引.值> = (@dt<整数>)(IndexOf + (size_t)Keys.GetLength() - 1);
+        @     return TRUE;
+        @ }
+        @ std::vector< std::vector<@dt<文本型>>> Keyss;
+        @ Keyss.push_back(this->Split(Keys, _T('\0')));
+        @ std::vector<@dt<整数>> NoPyIndex = this->GetIndex(this->Split(Input, _T('\0')), Keyss, Keys);
+        @ if (NoPyIndex.size() == 0){
+        @     std::vector<@dt<文本型>> py = this->GetPinYin(Input);
+        @     std::vector<std::vector<@dt<文本型>>> FullString = (m_Storage.find(Keys) != m_Storage.end ()) ? m_Storage[Keys] : this->GetFullKey(Keys);
+        @     NoPyIndex = this->GetIndex(py, FullString, Keys);
+        @ }
+        @ if(NoPyIndex.size() >= 2){
+        @     @<返回的起始索引.值> = (@dt<整数>)NoPyIndex[0];
+        @     @<返回的结束索引.值> = (@dt<整数>)NoPyIndex[1];
+        @     return TRUE;
+        @ }
+        @ return FALSE;
+    }
+
+    # @begin
+    # <> <include>
+    # private:
+    #     std::vector<@dt<文本型>> Split(@dt<文本型> Text, const TCHAR Sep);
+    #     std::vector<@dt<文本型>> GetPinYin(@dt<文本型> Chinese); // 获取汉字拼音
+    #     std::vector<@dt<文本型>> WordBreak(@dt<文本型> Chinese); // 对输入拼音进行切分
+    #     VOID GetAllSolutions(size_t Start, @dt<文本型>& Chinese, std::vector<@dt<文本型>>& Result, std::vector<@dt<文本型>>& Solutions, std::vector<@dt<逻辑型>>& Possible); // 获取所有组合方案
+    #     std::vector<std::vector<@dt<文本型>>> GetFullKey(@dt<文本型> Key);
+    #     @dt<逻辑型> PointToPoint(@dt<文本型> Test, @dt<文本型> Key, @dt<逻辑型> Last, @dt<逻辑型> Extend);
+    #     std::vector<@dt<整数>> GetIndex(std::vector<@dt<文本型>> py, std::vector<std::vector<@dt<文本型>>> FullString, @dt<文本型> Keys);
+    #
+    #     @dt<文本型> OutVector(std::vector<@dt<整数>> vec){ @dt<文本型> str; for (auto res : vec) { str.AddText(str.IsEmpty() ? L"[" : L", "); str.AddChar(L'\"'); str.AddText(res); str.AddChar(L'\"'); } str.AddText(L"]"); return str; }
+    #     @dt<文本型> OutVector(std::vector<@dt<文本型>> vec){ @dt<文本型> str; for (auto res : vec) { str.AddText(str.IsEmpty() ? L"[" : L", "); str.AddChar(L'\"'); str.AddText(res); str.AddChar(L'\"'); } str.AddText(L"]"); return str; }
+    #     @dt<文本型> OutVector(std::vector<std::vector<@dt<文本型>>> vec){ @dt<文本型> str; for (auto res : vec) { str.AddText(str.IsEmpty() ? L"[" : L", "); str.AddText(OutVector(res)); } str.AddText(L"]"); return str; }
+    #     @dt<文本型> OutMap(std::map<@dt<文本型>, @dt<文本型>> map){ @dt<文本型> str; for (auto it = map.begin();  it != map.end (); it++) { str.AddText(str.IsEmpty() ? L"[" : L", "); str.AddChar(L'\"'); str.AddText(it->first + _CT("\": \"") + it->second); str.AddChar(L'\"'); } str.AddText(L"]"); return str; }
+    # private:
+    #     std::vector<@dt<文本型>> m_AllPinYin; // ["a", "ai" ...]
+    #     std::map<@dt<文本型>, @dt<文本型>> m_NoTone; // {"和": "he huo", "平": "ping" ...}
+    #     std::map<@dt<文本型>, std::vector<std::vector<@dt<文本型>>>> m_Storage;
+    # <> </include>
+    #     std::vector<@dt<文本型>> @sn<current_class>::Split(@dt<文本型> Text, const TCHAR Sep){
+    #         std::vector<@dt<文本型>> Result;
+    #         if(Text.IsEmpty() == FALSE){
+    #             if(Sep == _T('\0')){
+    #                 for (size_t i = 0; i < (size_t)Text.GetLength(); i++)
+    #                     Result.push_back(Text.Middle(i, 1));
+    #             }else{
+    #                 @dt<文本型> Temp(Text);
+    #                 Temp.AddChar(Sep);
+    #                 size_t Index = 0;
+    #                 size_t Pos = (size_t)Temp.FindChar(Sep, Index);
+    #                 while(Pos != -1){
+    #                     Result.push_back(Temp.Middle(Index, Pos - Index));
+    #                     Index = Pos + 1;
+    #                     Pos = (size_t)Temp.FindChar(Sep, Index);
+    #                 }
+    #             }
+    #         }
+    #         return Result;
+    #     }
+    #     std::vector<@dt<文本型>> @sn<current_class>::GetPinYin(@dt<文本型> Chinese){
+    #         std::vector<@dt<文本型>> Result;
+    #         for (size_t i = 0, len = (size_t)Chinese.GetLength(); i < len; i++) {
+    #             @dt<文本型> szKey(Chinese.GetCharAt(i));
+    #             @dt<文本型> szValue(m_NoTone[szKey]);
+    #             Result.push_back(szValue.IsEmpty() ? szKey : szValue);
+    #         }
+    #         return Result;
+    #     }
+    #     std::vector<@dt<文本型>> @sn<current_class>::WordBreak(@dt<文本型> Chinese){
+    #         std::vector<@dt<文本型>> Result;
+    #         std::vector<@dt<文本型>> Solutions;
+    #         std::vector<@dt<逻辑型>> Possible;
+    #         for(size_t i = 0; i <= (size_t)Chinese.GetLength(); i++)
+    #             Possible.push_back(TRUE);
+    #         this->GetAllSolutions(0, Chinese, Result, Solutions, Possible);
+    #         return Solutions;
+    #     }
+    #     VOID @sn<current_class>::GetAllSolutions(size_t Start, @dt<文本型>& Chinese, std::vector<@dt<文本型>>& Result, std::vector<@dt<文本型>>& Solutions, std::vector<@dt<逻辑型>>& Possible){
+    #         size_t Length = (size_t)Chinese.GetLength();
+    #         if (Start == Length) {
+    #             @dt<文本型> szJoin;
+    #             for(std::vector<@dt<文本型>>::iterator it = Result.begin(); it != Result.end(); it++){
+    #                 if(szJoin.IsEmpty() == FALSE)
+    #                     szJoin.AddChar(L' ');
+    #                 szJoin.AddText(*it);
+    #             }
+    #             Solutions.push_back(szJoin);
+    #             return;
+    #         }
+    #         for(size_t i = Start; i < Length; i++){
+    #             @dt<文本型> Piece = Chinese.Middle(Start, (i + 1) - Start);
+    #             @dt<逻辑型> Match = FALSE;
+    #             @dt<逻辑型> IsExist = FALSE;
+    #             for(std::vector<@dt<文本型>>::iterator it = m_AllPinYin.begin(); it != m_AllPinYin.end(); it++){
+    #                 if((*it).SearchText(Piece.GetText (), 0, FALSE, FALSE) == 0){
+    #                     IsExist = TRUE;
+    #                     break;
+    #                 }
+    #             }
+    #             if(IsExist && (i + 1 >= Length || Chinese.GetCharAt(i + 1) == NULL) && Possible[i + 1] == TRUE) {
+    #                 if (Piece.GetLength() == 1){
+    #                     Result.push_back(Piece);
+    #                 } else {
+    #                     @dt<文本型> szTemp;
+    #                     for(std::vector<@dt<文本型>>::iterator it = m_AllPinYin.begin(); it != m_AllPinYin.end(); it++){
+    #                         if((*it).SearchText(Piece.GetText (), 0, FALSE, FALSE) == 0){
+    #                             if(szTemp.IsEmpty() == FALSE)
+    #                                 szTemp.AddChar(_T(','));
+    #                             szTemp.AddText((*it));
+    #                         }
+    #                     }
+    #                     Result.push_back(szTemp);
+    #                 }
+    #                 Match = TRUE;
+    #             } else {
+    #                 @dt<逻辑型> IsExist = FALSE;
+    #                 for(std::vector<@dt<文本型>>::iterator it = m_AllPinYin.begin(); it != m_AllPinYin.end(); it++){
+    #                     if (*it == Piece) {
+    #                         IsExist = TRUE;
+    #                         break;
+    #                     }
+    #                 }
+    #                 if(IsExist && Possible[i + 1]){
+    #                     Result.push_back(Piece);
+    #                     Match = true;
+    #                 }
+    #             }
+    #             if(Match){
+    #                 size_t BeforeChange = Solutions.size();
+    #                 this->GetAllSolutions(i + 1, Chinese, Result, Solutions, Possible);
+    #                 if (Solutions.size() == BeforeChange) {
+    #                     Possible[i + 1] = FALSE;
+    #                 }
+    #                 Result.pop_back();
+    #             }
+    #         }
+    #     }
+    #     std::vector<std::vector<@dt<文本型>>> @sn<current_class>::GetFullKey(@dt<文本型> Key){
+    #         std::vector<std::vector<@dt<文本型>>> Result;
+    #         std::vector<@dt<文本型>> szBreaks = this->WordBreak(Key);
+    #         for(std::vector<@dt<文本型>>::iterator it = szBreaks.begin(); it != szBreaks.end(); it++){
+    #             std::vector<@dt<文本型>> szBreak = this->Split(*it, _T(' '));
+    #             size_t Last = szBreak.size() - 1;
+    #             if (szBreak[Last].FindChar(_T(','), 0)) { // != 0
+    #                 std::vector<@dt<文本型>> Keys = this->Split(szBreak[Last], _T(','));
+    #                 for(std::vector<@dt<文本型>>::iterator itr = Keys.begin(); itr != Keys.end(); itr++){
+    #                     szBreak[Last] = *itr;
+    #                     Result.push_back(szBreak);
+    #                 }
+    #             } else {
+    #                 Result.push_back(szBreak);
+    #             }
+    #         }
+    #         if (Result.size() == 0 || Result[0].size() != Key.GetLength()) {
+    #             Result.push_back(this->Split(Key, _T('\0')));
+    #         }
+    #         m_Storage[Key] = Result; // 缓存当前结果 避免重复计算
+    #         return Result;
+    #     }
+    #     @dt<逻辑型> @sn<current_class>::PointToPoint(@dt<文本型> Test, @dt<文本型> Key, @dt<逻辑型> Last, @dt<逻辑型> Extend){
+    #         if(Test.IsEmpty())
+    #             return FALSE;
+    #         std::vector<@dt<文本型>> Temp = this->Split(Test, _T(' '));
+    #         size_t Size = Temp.size();
+    #         for (size_t i = 0; i < Size; i++){
+    #             if (Temp[i].GetLength() > 0 && Extend) {
+    #                 Temp.push_back(Temp[i].Left(1));
+    #             }
+    #         }
+    #         if(Last == FALSE){
+    #             @dt<逻辑型> IsExist = FALSE;
+    #             for(std::vector<@dt<文本型>>::iterator it = Temp.begin(); it != Temp.end(); it++){
+    #                 if (*it == Key) {
+    #                     IsExist = TRUE;
+    #                     break;
+    #                 }
+    #             }
+    #             return IsExist;
+    #         }
+    #         @dt<逻辑型> IsExist = FALSE;
+    #         for(std::vector<@dt<文本型>>::iterator it = Temp.begin(); it != Temp.end(); it++){
+    #             if ((*it).SearchText(Key.GetText (), 0, FALSE, FALSE) == 0){
+    #                 IsExist = TRUE;
+    #                 break;
+    #             }
+    #         }
+    #         return IsExist;
+    #     }
+    #     std::vector<@dt<整数>> @sn<current_class>::GetIndex(std::vector<@dt<文本型>> PY, std::vector<std::vector<@dt<文本型>>> FullString, @dt<文本型> Keys){
+    #         std::vector<@dt<整数>> Result;
+    #         for (int p = 0; p < PY.size(); p++) {
+    #             for (int k = 0; k < FullString.size(); k++) {
+    #                 std::vector<@dt<文本型>> Key = FullString[k];
+    #                 size_t KeyLength = Key.size();
+    #                 @dt<逻辑型> Extend = (KeyLength == Keys.GetLength());
+    #                 @dt<逻辑型> IsMatch = TRUE;
+    #                 int i = 0;
+    #                 int PreSpaceNum = 0;
+    #                 int SpaceNum = 0;
+    #                 if (KeyLength <= PY.size()) {
+    #                     for (; i < Key.size(); i++) {
+    #                         if (i == 0 && (p + i + PreSpaceNum) < PY.size() && PY[p + i + PreSpaceNum] == _CT(" ")) {
+    #                             PreSpaceNum += 1;
+    #                             i -= 1;
+    #                         } else {
+    #                             if ((p + i + SpaceNum) < PY.size() &&   PY[p + i + SpaceNum] == _CT(" ")) {
+    #                                 SpaceNum += 1;
+    #                                 i -= 1;
+    #                             } else {
+    #                                 if ((p + i + SpaceNum) >= PY.size() || !this->PointToPoint(PY[p + i + SpaceNum], Key[i], ((PY.size() > p + i + 1) && (Key.size() > i + 1)) ? false : true, Extend)) {
+    #                                     IsMatch = FALSE;
+    #                                     break;
+    #                                 }
+    #                             }
+    #                         }
+    #                     }
+    #                     if (IsMatch) {
+    #                         Result.push_back(p + PreSpaceNum);
+    #                         Result.push_back(SpaceNum + p + i - 1);
+    #                         return Result;
+    #                     }
+    #                 }
+    #             }
+    #         }
+    #         return Result;
+    #     }
+    # <> <include>
+    # <> <global>
+    # struct PinYinTable // 拼音
+    # {
+    #     const wchar_t *full;  // 全拼
+    #     const wchar_t *words; // 汉字
+    # };
+    # static const PinYinTable g_PinYin[] =
+    # {
+    # {L"yi", L"一丿乁乂义乙也亄亦亿仡以仪伇伊伿佁佗佚佾侇依俋倚偯儀億儗兿冝刈劓劮勚勩匇匜医印叆叕台叹吚听呓呭呹咦咿唈嗌噎噫囈圛圪圯坄坨垼埶埸墿壱壹夁夕失夷奇奕妷姨姬媐嫕嫛嬄嬑嬟孴它宐宜宧寱寲射尾屹峄峓崎崺嶧嶬嶷已巳巸帟帠幆庡廙异弈弋弌弬彛彜彝彞彵役忆忔怈怠怡怿恞悒悘悥意憶懌懿戺扅扆扡抑择拸挹掎掜揖搋搤撎擇攺敡敼斁施旑旖易昳晹暆曀曎曵杙杝枍枻柂栘栧栺桋棭椅椬椸榏槷槸樴檍檥檹櫂欥欭欹歖歝殔殪殹毅毉汽沂沶治泄泆洢洩洫浂浥浳渫湙溢漪潩澤澺瀷炈焉焬焱焲熈熙熠熤熪熼燚燡燱犄狋狏猗獈玴珆瑿瓵畩異疑疙疫痍痬瘗瘞瘱癔益眙睪瞖矣硪礒礙祎禕秇移稦穓竩笖箷簃籎紲絏維綺縊繄繶繹绁绎绮维缢羛羠羡羨義羿翊翌翳翼耛耴肄肊胰膉臆舣艗艤艺艾芅苅苡苢荑萓萟蓺薏藙藝蘙虉蚁蛇蛜蛡蛦蛾蜴螔螘螠蟻衣衤衪衵袂袆袘袣裔裛裿褘褹襗襼觺訑訲訳詍詑詒詣誃誒誼謚謻譩譯議譺讉讛议译诒诣诶谊谥豙豛豷貖貤貽賹贀贻跇跠踦軼輗輢轙轶辥辷迆迤迭迱迻逘逸遗遺邑郼酏醫醳醷释釋釔釴釶鈘鈠鉇鉈鉯銕銥錡鎰鏔鐿钀钇铊铱锜镒镱阣阤陁陭隶隿雉霅霬靉靾頉頤頥顊顗颐食飴饐饴駅驛驿骮鮧鮨鯣鳦鴺鶂鶃鶍鷁鷊鷖鷧鷾鸃鹝鹢鹥黓黝黟黳齮齸"},
+    # {L"ding", L"丁仃叮啶奠奵定嵿帄忊掟椗汀濎灯玎町甼疔盯矴碇碠磸耵聢腚艼萣葶薡虰訂订酊釘鋌錠鐤钉铤锭靪頂顁顶飣饤鼎"},
+    # {L"zheng", L"丁丞争伥佂倀凧埥埩塣姃媜峥崝崢嶒帧幀征徎徰徴徵怔愸憕承抍拯挣掙掟揁撜政敞整晸止正氶浧湞炡烝爭狰猙町症癥眐睁睜瞠筝箏篜糽綪聇脀蒸証諍證证诤趟踭郑鄭鉦錚钲铮鬇鮏鯖鯹鲭鴊"},
+    # {L"kao", L"丂尻嵪彀拷挢搞撟攷栲槀槁洘烤焅熇燺犒稾考薧藳訄銬铐靠髛鮳鯌鲓"},
+    # {L"yu", L"丂与予于亏亐伃伛余俁俞俣俼偊傴僪儥兪匬叞吁吳吾唷唹喁喅喐喩喻噊噢噳圄圉圫域堉堣堬墺夕奥妤妪娛娪娯娱婾媀媮嫗嬩宇宛寓寙尉屿峪峿崛崳嵎嵛嶎嶼庽庾彧御忬悆悇惌惐愈愉愚慾懊懙或戫扜扵拗挧捓揄敔斔斞於旟昙昱杅栩栯桙梧棛棜棫楀楡楰榆櫲欎欝欤欲歈歟歶毓汙汚污汩浴淢淤淯渔渝湡滪漁澚澞澦澳灪灹焴煜煨熨燏燠燰爩牏狱狳獄獝玉王玗玙琙琟瑀瑜璵畬畭痏瘀瘉瘐癒盂盓睮矞砡硢礇礖礜祤禦禹禺秗稢稶穥穻窬窳竽箊篽籅籞籲粥紆緎繘纡罭羭羽翑聿肀育腧腴臾舁舆與舒艅芋芌苑茟茰荢菀菸萭萮萸蒮蓣蓹蔚蕍蕷薁藇蘌蘛虞虶蜍蜟蜮蝓蝺螸蟈衘衙衧袬裕褕覦觎誉語諛諭謣譽语谀谕谷豫貍貐貗踰軉輍輿轝迂迃逳逾遇遹邘郁郚鄅酑醧釪鈺銉鋊鋙錥鍝鐍鐭钰铻閼閾阈阏陓隃隅隩雓雨雩霱預頨顒预颙飫餘饇饫馀馭騟驈驭骬髃鬰鬱鬻魊魚魣鮽鯲鰅鱊鱮鱼鳿鴥鴧鴪鵒鷠鷸鸆鸒鹆鹬麌齬齵龉"},
+    # {L"qi", L"七丌乞亓亝亟企伎俟倛偈傶僛其凄切刺剘勤吃启吱呇呮咠唘唭啓啔啟喰嘁噐器圻埼夡奇契妻娸婍宿屺岂岐岓崎嵜己帺弃忔忮忯忾恓恝悽愒愭愾慼慽憇憩懠戚扢扱扺技抵拞挈捿掑揭摖支攲敧斉斊旂旗晵暣朞期杞枝柒栔栖桤桼梩棄棊棋棨棲榿槭檱櫀欫欹欺歧毄气気氣汔汽沏泣洓济淇淒済渍渏湆湇滊漆漬濝濟炁焏猉玂玘琦琪璂甈甭畦畸疧盀盵矵砌碁碕碛碶磎磜磧磩礘示祁祇祈祗祺禥禨稘稽竒簯簱籏粸紪絜綥綦綨綮綺緀緕緝纃绮缉缼罊耆肐肵脐臍舙艩芑芞芪荠萁萋萕葺蕲薺藄蘄蚑蚔蚚蛴蜝蜞螇螧蟣蟿蠐衹袳裿褀褄觭訖諆諬諿讫豈起趞趿跂踑踖踦蹊躤躩軙軝迄迉逗邔郪鄿釮錡鏚鐖锜闙隑霋頎颀饑騎騏騹骐骑鬐鬾鬿魌魕鮨鯕鰭鲯鳍鵸鶀鶈麒麡鼜齊齐齮"},
+    # {L"shang", L"丄上仩伤傷商场垧埫場塲墒尙尚恦愓慯扄晌殇殤汤湯滳漡熵禓緔绱蔏螪蠰裳觞觴謪賞赏踼鑜鞝鬺"},
+    # {L"xia", L"丅下侠俠假傄匣厦叚吓呀呷哧唬嗄嗑嚇圷埉夏夓夾岈峡峽廈徦懗押捾搳敮昰暇柙梺欱歃毳浃浹溊炠烚煆狎狭狹珨瑕疜疨瘕睱瞎硖硤碬磍祫笚筪給縀縖给罅翈舝舺芐葭蕸虾蝦螛諕謑谺赮轄辖遐郃鍜鎋鏬閕閜陜陿霞颬騢魻鰕鶷黠"},
+    # {L"mo", L"万么伯佰冒劘劰勿嗼嘿嚤嚩圽塻墨妺嫫嫼嬷寞尛帓帕帞怽懡戂抚抹摩摸摹撫擵攠无昧昩暯末枺模橅歾歿殁沒没沫漠瀎無爅狢瘼百皌眜眽眿瞐瞙砞磨礳秣粖糢絈絔縸纆耱脉膜艒茉莈莫蓦藐藦蘑蛨蟆蟔袜袹謨謩譕谟貃貈貉貊貌貘銆鏌镆陌靺鞨饃饝馍驀髍魔魩魹麼麽麿默黙"},
+    # {L"wan", L"万丸乛倇免关刓剜卍卐唍园埦塆壪夗夘妧娩婉婠孯完宛岏帵弯彎忨惋惌抏挽捖捥掔晚晩晼朊杤梚椀槾汍涴湾潫澫灣烷玩琓琬畹皖盌睕碗笂箢紈絻綄綩綰纨绾翫脕脘腕芄苋莞莧莬菀萖萬蔓薍蚖蜿豌貦貫贃贎贯踠輐輓邜鄤鋄鋔鋺錽鍐鎫関闗關頑顽骩骪骫魭"},
+    # {L"zhang", L"丈仉仗仧傽墇嫜嶂帐帳幛幥张弡張彰慞扙承掌暲杖樟涨涱漲漳獐璋痮瘬瘴瞕礃章粀粻胀脹蔁蟑賬账遧鄣鏱鐣長镸长障鞝餦騿鱆麞"},
+    # {L"san", L"三伞俕傘傪厁叁参參叄叅壭帴弎彡散橵毵毶毿氵潵犙糁糂糝糣糤繖蔘謲鏒鏾閐霰饊馓鬖"},
+    # {L"ji", L"丌丮乁乩亟亼伋伎佶倚偈偮僟其兾冀几击刉刏剂剞剤劑勣卙卟即卽厝及叝叽吇吉呰咭哜唧喞嗘嘰嚌圾坖垍基堲塉墍墼奇妀妓姞姬姼嫉季寂寄尐居屐屰岋岌峜嵆嵇嵴嶯己帺幾庴廭彐彑彶徛忌忣急悸惎愱憿懠懻戟戢技挤掎揖揤撃撠撽擊擠攲敧旡既旣暨暩曁期机极枅梞棋棘楖楫極槉槣樭機橶檕檝檵櫅櫭殛毄汥汲泲洁洎济淁済湒漃漈潗激濈濟瀱焏犄犱狤猗玑璂璣璾畟畸畿疵疾痵瘠瘵癠癪皀皍睽瞉瞿矶磯祭禝禨积秸稘稩稷稽穄穊積穖穧笄笈筓箕箿簊簎籍粢糭系紀紒級結給継緝縘績繋繫繼级纪结给继绩缉罽羁羇羈耤耭肌胔脊脔脨膌臮艥艻芨芰芶苙茍茤荠莋萁萕葪蒩蒺蓟蔇蕀蕲蕺薊薺藉蘄蘎蘮蘻虀虮蜡蝍螏蟣蟻蟿蠀裚褀襀襋覉覊覘覬覿觇觊觌觙觭計訐記誋諅諔譏譤计讥讦记诘谻谿賫賷赍趌趞跂跡跻跽踑踖踦蹐蹟躋躤躸輯轚辑迹郅郆鄿銈銡錤鍓鏶鐖鑇鑙际隔際隮集雞雦雧霁霵霽革鞊鞿韲颳飢饑饥騎驥骑骥髻鬾魝魢魥鮆鯚鯯鯽鰶鰿鱀鱭鱾鲚鲫鳮鵋鶏鶺鷄鷑鸄鸡鹡麂齊齌齍齎齏齐齑"},
+    # {L"bu", L"不佈僕勏卜卟吥咘哺埔埗埠堡婄尃峬布庯廍怖悑抪拊捕捗捬撲擈晡柨步歨歩溥獛瓿秿箁篰簿荹蔀薄补補誧踄輹轐逋部郶醭鈈鈽钚钸附陠鞴餔餢鯆鳪鵏鸔"},
+    # {L"dun", L"不伅俊吨噸囤墩墪壿庉忳惇憞撉撴敦楯橔沌潡炖燉犜獤盹盾砘碷礅腞腯蜳豚趸踲蹲蹾躉逇遁遯鈍鐓鐜钝镦頓顿驐"},
+    # {L"fou", L"不否垺妚炰紑缶缹缻芣衃雬鴀"},
+    # {L"fu", L"不乀仅付伏伕佛俌俘俛俯偩偪傅冨冹凫刜副包匐呋呒咈咐哹哺嘸坿垘垺報复夫妇妋姇娐婏婦媍嬎嬔孚孵宓富尃岪峊巿市帗幅幞府弗弣彳彿復怀怤怫懯扶抙抚拂拊捊捬掊撫敷斧旉服枎枹柎柫柭栿桴棴椨椱榑氟汱沕沸泭洑浮涪溥滏澓炥烰焤父玞玸琈璷甫甶畉畐畗癁盙砆砩祓祔福禣秿稃稪竎符笰筟箁箙簠粰糐紨紱紼絥綍綒緮縛纀绂绋缚罘罦翇肤胕脯腐腑腹膚艀艴芙芣芾苻茀茯荂荴莆莩菔萉萯葍蓲蕧虙蚥蚨蚹蛗蜅蜉蝜蝠蝮衭袚袝袱複褔襆襥覄覆訃詂諨讣豧負費賦賻负费赋赙赴趺跗踾軵輔輹輻辅辐还邚邞郍郙郛鄜酜酻釜釡鈇鉘鉜錇鍑鍢锫阜阝附陚鞴韍韛韨頫颫颰馥駙驸髴鬴鮄鮒鮲鰒鲋鳆鳧鳬鳺鴔鵩鶝麩麬麱麸黻黼"},
+    # {L"mian", L"丏俛偭免冕冥勉勔厸喕娩婂媔嬵宀愐棉檰櫋汅沔泯渑湎湣澠牑眄眠瞑矈矊矏糆絻綿緍緜緡緬绵缅缗腼臱芇莬葂蝒蠠面靣靦鮸麪麫麵麺黽黾"},
+    # {L"gai", L"丐乢侅匃匄咳垓姟峐忋戤摡改晐杚核概槩槪汽溉漑瓂畡盖磑祴絠絯胲芥荄葢蓋該该豥賅賌赅郂鈣鎅钙閡阂阣陔隑骸"},
+    # {L"chou", L"丑丒仇侴俦偢儔吜嚋圳妯婤媿嬦帱幬怞惆愁懤扭抽掫揄搊擣杻杽栦椆檮殠溴燽牰犨犫畤畴疇瘳皗盩眣瞅矁稠筹篘籌紬絒綢绸臭臰菗薵裯詶謅譸讎讐诌诪跾踌躊遚酧酬醔醜醻鈕钮雔雠魗鮘鯈鲋"},
+    # {L"zhuan", L"专传傳僎僝剸叀啭囀堟塼嫥孨専專恮抟摶撰沌湍漙灷瑑瑼甎砖磚竱篆篹篿簨籑縳耑腞膞蒃蟤襈諯譔賺赚転轉转鄟顓颛饌馔鱄"},
+    # {L"cu", L"且促卆卒噈娕娖媨徂怚憱戚捽殂猝瘄瘯皻簇粗縐縬绉脨蔍蔖蔟觕誎趋趗趣趥趨踀踓踤踧蹙蹴蹵酢醋錯错顣麁麄麆麤鼀"},
+    # {L"ju", L"且举仇伡佝侷俥俱倨倶僪具冣凥剧劇勮匊句告咀圧坥埧埾壉姐姖娵娶婅婮寠局居屦屨岠岨崌巈巨弆忂怇怐怚惧愳懅懼抅拒拘拠拱挙挶捄据掬揈揟據擧昛枸柜桔梮椇椈椐榉榘橘檋櫸欅歫毩毱沮泃泦洰涺淗渠湨澽炬焗焣爠犋犑狊狙珇琚疽痀眗瞿矩砠租秬窭窶筥篓簍簴籧粔粷罝耟聚聥腒臄舉艍苣苴莒菊菹萭葅蒌蒟蒩蓻蔞蘜蘧處虡蚷蛆蜛螶袓裾襷詎諊讵豦貗趄趉趜趡足跔跙距跼踘踞踽蹫蹻躆躹軥輂车遽邭邹郥郰郹鄒鄹醵鉅鉏鋤鋦鋸鐻钜锄锔锯閰陱雎雏雛鞠鞫颶飓駏駒駶驕驧驹骄鬻鮈鮍鮔鲏鴡鵙鵴鶋鶪鼰鼳齟龃"},
+    # {L"qie", L"且伽倢倿偼切匧厒唼喋契妾婕媫帹怯悏惬愜慊挈捷朅椄沏洯淁漆疌癿砌稧穕窃竊笡箧篋籡緁聺脞苆茄蕺藒蛣蛪詧趄跙踥郄鍥鐑锲魥鯜鰈鲽"},
+    # {L"pi", L"丕仳伓伾俾僻副劈匹卑吡否啤噼噽嚊嚭圮坏坯埤培壀妚媲嫓屁岯崥嶏帔庀庇庳怶悂憵扑批披抷拂揊擗旇朇枇枈椑榌比毗毘毞淠渒潎澼濞炋焷狉狓猈琵甓疈疋疲痞痦痺癖皮睤睥砒磇礔礕秛秠稫笓箆篦篺簲粃紕纰罴罷羆翍耚肶脴脾腗膍芘苉苤萆蕃蚌蚍蚽蚾蜱螕螷蠯被裨諀譬豼豾貔辟邳郫鄱釽鈈鈚鈲鈹鉟銔銢錃錍鎞钚铍闢阰陂陴隦霹鞞頗顖颇駓髬魮魾鮍鲏鴄鵧鷿鸊鼙"},
+    # {L"shi", L"世丗乨亊事什仕似佀佦使侍兘冟势勢匙十卋厔叓史呞呩咶唑啇嗜嘘噓噬埘埶堤塒士失奭始姼媞嬕实実室宩宲寔實寺尸屍屎峕峙崼嵵市师師式弑弒彖徥忕忯恀恃惿戺拭拾提揓斯施时旹是昰時枾柹柿栻楴榁榯檡殖氏汁沶洂浉液湜湤湿溡溮溼澤澨濕炻烒煶狧狮狶獅瑡畤痑眂眎眡睗矢石示礻祏禵秲竍笶笹筛筮箷篒篩簭籂籭絁繹绎耆肢胑舍舐舓莳葹蒒蒔蓍虱蚀蝕蝨螫褆褷襫襹視视觢訑試詩誓諟諡謚識识试诗谥豕貰贳赫跩軾轼辻适逝遈遞適遰遾邿郝酾醳釃釈释釋釶鈰鉂鉃鉇鉈鉐鉽銴鍉鍦鎩铈铊铩食飠飭飾餙餝饣饬饰馶駛驶魳鮖鯴鰘鰣鰤鲥鲺鳲鳾鶳鸤鼫鼭齛齥"},
+    # {L"qiu", L"丘丠仇俅区厹叴唒囚团坵媝宿寈崷巯巰恘惆愀扏捄搝朹梂楸櫹殏毬氽氿求汓泅浗渞湫湬湭煪牫犰玌球璆皳盚秋秌穐篍糗紌絿緧肍艽莍萩蓲蘒虬虯蚯蛷蝤蝵蟗蠤裘觓觩訄訅賕赇趜趥逎逑遒邱邺酋醔釓釚釻銶钆鞦鞧馗鮂鯄鰌鰍鰽鱃鳅鳩鵭鶖鸠鹙鼽龜龝龟"},
+    # {L"bing", L"丙並仌併倂偋傡兵冫冰垪寎屏平并幷庰怲抦拼掤摒昞昺枋柄栟栤梹棅槟檳氷炳燷燹琕疒病痭癛癝眪禀秉稟窉竝絣綆绠苪蛃誁跰邴鈵鉼鋲陃靐鞆鞞鞸餅餠饼鮩"},
+    # {L"ye", L"业也亪亱倻偞僷冶叶吔咽啘喝嘢噎嚈埜堨墅墷壄夜射峫嶪嶫懕抴拽捓捙掖揞揲揶擖擛擨擪擫斜晔暍曄曅曗曳枒枼枽椰楪業歋殕殗洂洇涂液漜潱澲烨煠熀燁爗爷爺瓛痷皣瞱瞸礏窫緤耶聂聶腋荼葉虵蠮蠱謁谒邪邺鄓鄴野釶釾鋣鍱鎁鎑鐷铘靥靨頁页餘餣饁饐馀馌驜鵺鸈黦"},
+    # {L"cong", L"丛从偬匆叢囪囱婃孮従徖從忩怱悤悰慒憁暰枞棇楤樅樬樷欉淙漎漗潀潈潨灇焧熜燪爜琮瑽璁瞛碂窗篵総緫縦縱總繱纵聡聦聪聰苁茐菆葱蓯蔥藂蟌誴謥賨賩鏦騘驄骢"},
+    # {L"dong", L"东侗倲働冬冻凍动動勭咚垌埬墥夂姛娻嬞岽峒峝崠崬恫懂戙挏揰昸東栋桐棟氡氭洞涷湩烔燑狫甬硐笗筒筩箽絧胨胴腖苳菄董蕫蝀衕詷諌迵酮霘駧騆鮗鯟鶇鶫鸫鼕"},
+    # {L"si", L"丝亖以伺似佀佁価俟俬偲傂儩兕凘厕厠厮厶台司咝嗣嘶噝四姒娰媤孠寺巳廝徙思恖愢撕斯杫析枱柶梩楒榹死汜泀泗泤洍涘澌瀃灬燍牭磃祀祠禗禠禩私竢笥簛糸糹絲緦缌罒罳耜肂肄肆菥蕬蕼虒蛳蜤螄螔蟖蟴覗謕貄逘釲鈶鈻鉰銉銯鋖鍶鐁锶雉颸飔食飤飴飼饲饴駟騃騦驷鷉鷥鸶麗鼶"},
+    # {L"cheng", L"丞乗乘伥侱倀偁僜净呈呛嗆噌城埕埩堘塍塖娍宬峸嵊庱徎徴徵悜惩憆憕懲成承抢挰掁搶摚摤撐撑撜敞晟朾枨柽棖棦椉槍樘橕橖橙檉檙氶泟洆浈浧浾淨溗澂澄瀓瀞爯牚珵珹琤瑲畻盛盯睈瞠矃碀秤称程稱穪窚竀筬絾緽脀脭荿虰蛏蟶裎觕誠诚赪赬趟踜蹦逞郕郢酲醒鋮鎗鏳鏿鐺铖铛阷靗頳饓騁騬骋鯎黨"},
+    # {L"sheng", L"丞乗乘偗冼剩剰勝升呏圣垩墭声姓娍媵嵊憴斘昇晟晠曻枡榺橳殅殸泩渑渻湦澠焺牲狌珄琞生甥甸盛省眚竔笙箵縄繩绳聖聲胜苼蕂譝貹賸鉎鍟阩陞陹鱦鵿鼪"},
+    # {L"diu", L"丟丢銩铥颩"},
+    # {L"liang", L"両两亮俍俩倆倞兩冫凉哴唡啢喨墚悢惊掚晾梁椋樑涼湸煷簗粮粱糧綡緉脼良莨蜋蜽裲諒谅踉蹒蹣輌輛輬辆辌量鍄閬阆靓靚駺魉魎"},
+    # {L"you", L"丣亴优佑侑偤優冘卣又友右叹呦哊唀嚘囿坳奥妋姷孧宥尢尣尤峟峳幼幽庮忧怞怣怮悠憂懮戭扰揂揄攸斿有柚栯梄梎楢槱櫌櫾汓汼沋油泅泈泑浟游湵滺瀀牖牗牰犹狖猶猷獶由甴疣痏祐禉秞糿繇纋羐羑羗耰聈聱肬脜脩苃莜莠莤莸蒏蕕蚘蚰蚴蜏蝣蝤褎褏訧誘诱貁輏輶迶逌逰遊邎邮郵鄾酉酭釉鈾銪銹铀铕锈駀魷鮋鱿鲉麀黝鼬"},
+    # {L"yan", L"严乵但俨俺偃偐偣傿儼兖兗円剡剦匽厂厃厌厣厭厳厴咽唁唌喦喭噞嚥嚴囐埏埯堰塩墕壛壧夏夵奄妍妟姲姸娫娮媕嫣嬊嬐嬮嬿孍宴屵岩崄崦嵃嵒嵓嶖嶮巌巖巗巘巚巡广庵廵延弇彥彦恹愝懕戭扊抁挩挻捝掞掩揅揜揞敥昖晏晻暥曕曮棪椻椼楌樮橪檐檿櫩欕殗殷氤沇沿洇洝涎淊淡淫淹渰渷湮湺溎滟演漹灎灔灧灩炎炏烟烻焉焔焰焱煙熖燄燕爓牪狠狿猒珚琂琰瓛甗盐眼研砚硏硯硽碞礹筵篶簷綖縯罨羡羨胭腌膁臙艳艶艷芫莚莶菴菸萒葊葕蔅蔫薟虤蜒蝘衍裺褗覃覎觃觾言訁訮詽諺讌讞讠谚谳豓豔豜豣贋贗赝趼躽軅这這遃郔郾鄢酀酓酽醃醶醼釅鉛錟铅锬閆閹閻閼闫阉阎阏阭阽险陰隁隒險雁靥靨顏顑顔顩颜餍饜騐験騴驗驠验鬳魇魘鰋鳫鳱鴈鴳鶠鷃鷰鹽麙麣麲黡黤黫黬黭黰黶鼴鼹齗齞齴龂龑"},
+    # {L"ban", L"並伴分办半坂坢埿姅岅彬怑扮扳拌搫搬攽斑斒昄朌板柈湴版班瓣瓪瘢癍秚籓粄絆绊肦舨般蝂螁螌褩覂豳跘辦辧辨辩辬辯鈑鉡钣闆阪靽頒颁魬鳻"},
+    # {L"bang", L"並傍嗙垹埲塝嫎峀崗帮幇幚幫彭徬挷捠搒旁梆棒棓榜浜牓玤硥磅稖紡綁縍纺绑膀艕蒡蚄蚌蛖蜯螃謗谤邦邫鎊镑鞤騯髈"},
+    # {L"sang", L"丧喪嗓搡桑桒槡磉纕褬鎟顙颡"},
+    # {L"gun", L"丨惃棍棞浑混渾滚滾琯璭睔睴磙緄緷绲蓘蔉衮袞裷謴輥辊錕锟鮌鯀鰥鲧鳏"},
+    # {L"shu", L"丨书侸俆俞俶倏倐儵兪叔咰售嗽塾墅姝娶婌孎孰尌尗属屬庶庻忄忬怷恕悆戍抒捈捒掓揄摅攄数數暏暑曙書朮术朱束杸杼枢柕树梳樞樹橾殊殳毹毺氀沭涑淑漱潄潏潻澍濖瀭焂熟瑹璹疋疎疏癙秫稌竖竪籔糬紓紵絉綀纾署翛腧舒荗荼菽蒁蒣蔬薥薮薯藪藷虪蜀蠴蠾術裋襡襩謶豎豫贖赎跾踈軗輸输述透鄃野鉥錰鏣鐲镯陎除隃鮛鱪鱰鵨鶐鷸鸀鹬黍鼠鼡"},
+    # {L"jiu", L"丩久乆九乣倃僦剹勼匓匛匶厩咎啾噍奺就廄廏廐愁慦捄揂揪揫摎救旧朻杦柩柾桕樛橚殧氿汣湫湬灸牞玖畂疚稵穋究窌糺糾紤繆纠缪臼舅舊舏萛蝤赳蹴酒镹阄韭韮鬏鬮鯦鳩鷲鸠鹫麔齨"},
+    # {L"gan", L"个乹乾亁仠佄倝凎凲咁坩奸尲尴尶尷干幹忓感扞捍擀攼敢旰杆柑桿榦橄檊汗汵泔浛淦漧澉灨玕玵甘疳皯盰矸秆稈竿笴筸篢簳粓紺绀肝芉苷虷衦詌諴豃贑贛赣赶趕迀酐釬錎飦骭魐鰔鱤鳡鳱"},
+    # {L"ge", L"个介仡佫佮個割匌可各合吤呄咯哥哿嗝嘅嘢噶圪塥屹彁愅戈戓戨扢挌搁搿擱敋杚格槅櫊歌浩滆滒澔牫牱犵猲獦疙盖砝硌秴箇紇纥肐胳膈臈臵舸茖菏葛蓋虼蛒蛤袼裓觡詥諽謌輵轕鉀鉻鉿鎑鎘鎶钾铪铬镉閘閣閤闸阁隔革鞈鞷韐韚頜颌騔骼髂鬲魺鮥鮯鰪鲄鴐鴚鴿鵅鸽"},
+    # {L"ya", L"丫乛亚亜亞伢俹倻劜厊压厌厓厭吖吾呀呾哑唖啞圔圠圧垭埡堊堐壓姶娅婭孲岈崕崖庌庘御押拁挜掗揠札枒桠椏椻歇氩氬浥涯漄潝烏牙犽猚猰玡琊瑘疋疨痖瘂睚砑碣磍稏穵窫笌聐芽蕥蚜衙襾訝讶軋輅輵轧辂迓邪釾錏鐚铔閘闸雅顔颜鴉鴨鵪鵶鶕鸦鸭鹌鼼齖齾"},
+    # {L"zhuang", L"丬僮壮壯壵奘妆妝娤幢庄庒憧戅戆戇撞桩梉樁湷漴焋状狀獞粧糚艟荘莊装裝贑贛赣"},
+    # {L"zhong", L"中乑仲伀众偅冢刣喠堹塚夂妐妕媑尰幒彸徸忠忪柊歱汷泈潼炂煄狆瘇盅眾祌种種穜童筗籦終緟终肿腫舂舯茽董蔠蚛蚣蝩螤螽蟲衆衳衶衷褈諥踵蹱迚重鈆鈡銿鍾鐘钟锺鴤鼨"},
+    # {L"jie", L"丯亥介价借倢假偈偼傑價刦刧刼劫劼卩卪吤唧唶啑喈嗟嚌圾堦堺契她妎姐婕媎媘媫嫅孑家尐屆届岊岕崨嵑嵥嶰嶻巀幯庎徣忦悈戒截扢担拮拾捷接掲揭搩擑擮擳斺昅暨曁杰桀桔桝椄楐楬楶楷概榤構檞櫭毑洁洯渇渴湝滐潔煯犗狤獬玠琾界畍疌疖疥痎癤皆睫砎砝碣礍祖秸稭竭節籍紇紒結絜繲纥结羯耤脻艐节芥莭菨蓵藉蚧蛣蛶蜐蝍蝔蠘蠞蠽街衱衸袓袷袺裓褯解觧訐詰誡誱謯讦诘诫趌跲踕迼鉣鍇鍻锴阶階雃鞂鞊頡颉飷骱髫魝魪鮚鲒鶛"},
+    # {L"feng", L"丰仹俸偑僼冯凤凨凬凮唪埄堸夆奉妦寷封峯峰崶捀捧摓枫桻楓檒沣沨泛浲渢湗溄漨灃炐烽焨煈熢犎猦琒甮疯瘋盽砜碸篈綘縫缝肨舽艂莑葑蘕蘴蚌蜂覂覅諷讽豊豐賵赗逄逢鄷酆鋒鎽鏠锋靊風飌风馮鳯鳳鴌鵬鹏麷"},
+    # {L"guan", L"丱串倌关冠卝婠官悹悺惯慣懽掼摜斡果桄棺樌櫬權毌沦泴涫淉淪潅灌爟琯瓘痯瘝癏盥矔矜礶祼窤筦管綸纶罆罐舘莞菅萖蒄覌観觀观貫贯躀輨遦錧鏆鑵閞関闗關雚館馆鰥鱞鱹鳏鳤鵍鸛鹳"},
+    # {L"kuang", L"丱儣兄况劻匡匩卝哐圹壙夼岲廣忹恇懬懭抂旷昿曠枉框況洭湟爌狂狅眖眶矌矿砿硄磺礦穬筐筺絋絖纊纩誆誑诓诳貺贶軖軠軦軭迋逛邝邼鄺鉱鋛鑛鵟黋"},
+    # {L"chuan", L"串传傳僢剶喘圌堾巛川惴掾暷椽歂氚汌猭玔瑏甎穿篅膞舛舡舩船荈賗踳踹輲遄釧钏镩鶨"},
+    # {L"chan", L"丳产亶佔僝僤儃儳兎兔冁刬剗剷劖单単厘啴單嘽嚵囅團墠壥婵嬋嬗孱崭嵼嶃嶄巉幝幨廛忏憚懴懺掸掺搀摌摲摻撣攙斺旵梴棎榐欃毚沾浐渐湹滻漸潹潺澶瀍瀺灛煘燀獑產産硟磛禅禪簅緂緾繟繵纏纒缠羼胀脠艬苫蒇蕆蝉螹蟬蟺蟾袩裣裧襌襜襝覘觇誗諂譂讇讒讖谄谗谶蹍躔辿鄽酁醦鉆鋋鋓鏟鑱铲镡镵閳闡阐韂顫颤饞馋骣"},
+    # {L"lin", L"临亃任伈僯凛凜厸吝啉壣崊嶙廩廪恡悋惏懍懔拎撛斴晽暽林橉檁檩涁淋渗滲潾澟瀶焛燐獜玪琳璘甐疄痳癛癝瞵碄磷稟箖粦粼繗翷膦臨菻蔺藺賃赁蹸躏躙躪轔轥辚遴邻鄰鏻閵阴隣霖顲驎魿鱗鳞麐麟"},
+    # {L"zhuo", L"丵倬剢劅勺卓叕啄啅啜噣圴坧墌妰娺彴拙捉捔掇撯擆擢斀斫斮斱斲斵晫杓桌梲棁棳棹椓槕櫡汋浊浞涿淖準濁濯灂灼炪烵焯犳狵琢琸着矠硺禚穛穱窡窧箸篧籗籱繳缴罬聉肫茁著蓔蕞藋蝃蠗蠿諁諑謶诼趠趵踔蹠躅酌鉵鋜鐯鐲镯鵫鷟"},
+    # {L"dian", L"丶佃佔傎典厧唸坫垫埝墊壂奌奠婝婰嵮巅巓巔店惦扂拈掂攧敁敟椣槇槙橂橝殿沾涎淀湺滇澱点玷琔电甸痶瘨癜癫癲碘磹簟腍蒧蕇蜓蜔詀踮蹎鈿钿阽電靛頕顚顛颠驔點齻"},
+    # {L"zhu", L"丶主予伫佇住侏劅劚助劯咮嗻嘱噣囑坾墸壴孎宁宔尌属屬嵀庶拄搊敱斀斗斸曯朝术朱杼枓柠柱柷株楮槠樦橥櫡櫧櫫欘殶泏泞注洙渚潴澍濐瀦灟炢炷烛煑煮燭爥猪珠疰瘃眝瞩矚砫硃磩祝祩秼窋竚竹竺笁笜筑筯箸築篫篴紵紸絑纻罜羜翥舳芧苎苧茁茱茿莇著蓫蕏薥藷藸蚰蛀蛛蝫蠋蠩蠾袾褚註詝誅諸诛诸豬貯贮跓跙跦躅軴迬逐逗逫邾鉏鉒銖鋳鑄钃铢铸阻除陼霔飳馵駐駯騶驺驻鮢鯺鱁鴸鸀麆麈鼄"},
+    # {L"ha", L"丷吓呵哈奤妎為獬虾蛤蝦鉿铪"},
+    # {L"dan", L"丹丼亶亻伔但倓僤儃儋冄冉刐勯匰单単卩呾唌啖啗啿單嘾噉噡嚪坛壇妉娊媅帎弹弾彈忱怛惔惮愖憚憺憾抌担掸撢撣擔旦柦檐欿殚殫氮沊泹淡湛潭澶澸澹燀狚玬瓭甔疍疸瘅癉癚皽眈石砃禫窞箪簞紞繵耼耽聃聸胆腅膻膽萏蛋蜑蜒蟺衴褝襌襜覘觇觛訑詹誕譂诞贉贍赕赡蹛躭郸鄲酖醈霮頕餤饏馾駳髧鴠黕黮黵"},
+    # {L"wei", L"为亹伟伪位倭偉偎偽僞儰卫危厃叞味哙唩唯喂喡喴噲囗围圍圩堤墛壝委威娓媁媙媦寪尉尾岿峗峞崣崴嵔嵬嶶巋巍帏帷幃廆徫微恑惟愄愇慰懀捤捼揋揻撝撱斖暐有未机桅梶椲椳楲欈沇沩洈洧浘涠渨渭湋溈溦潍潙潿濊濰濻瀢炜為烓煀煒煟煨熨熭燰爲犚犩猗猚猥猬玮琟瑋璏瓗畏痏痿癐癓眭瞶硊硙碨磈磑立維緭緯縅纬维罻胃腲艉芛芟苇苿茟荱荽菋萎萏葦葨葳蒍蓶蔚蔿薇薳藯蘶蜲蜹蜼蝛蝟螱衛衞褽覣覹觹觽觿詴諉謂讆讏诿谓趡踒踓躗躛軎轊违逶違遗遺鄬醀錗鍏鍡鏏闈闱阢隇隈隗隹霨霺韋韑韙韡韦韪頠颹餧餵饖骩骪骫魏鮇鮠鮪鰃鰄鰖鲔鳂鳚"},
+    # {L"jing", L"丼井京亰仱俓倞傹儆儬兢净凈刭剄劤劲勁坓坕坙境妌婙婛婧宑巠幜弪弳径徑惊憬憼擏敬旌旍晟景晶暻曔桱梷橸檠殑氏汫汬泾浄涇淨濪瀞烃烴燝猄獍獷璄璟璥痉痙睛秔稉穽竞竟竧竫競竸箐粇粳精経經经聙肼胫脛腈茎荆荊莖菁葝蜻蟼誩警踁迳逕醒鋞鏡镜阱陉陘靑青靓靖靘静靚靜頚頴頸颈颕驚鯨鲸鵛鶁鶄麖麠鼱"},
+    # {L"li", L"丽仂位例俐俚俪傈儮儷凓刕列利剓剺劙力励勵历厉厘厤厯厲叓叕叻吏呖哩唎唳喱嚟嚦囄囇坜塛壢娌娳婯嫠孋孷屴岦峛峲巁廲悝悡悧悷慄戾扐扚捩搮擽攊攦攭斄暦曆曞朸李枥柂栃栎栗栛栵梨梸棃棙樆檪櫔櫟櫪欐欚歴歷氂沥沴沵泣浬涖淚溧漓澧濼濿瀝灑灕爄爏犁犂犛犡狸猁珕珞理琍瑮璃瓅瓈瓑瓥疠疬痢癘癧皪盠盭睝矖砅砬砺砾硌磿礪礫礰礼禮禲离秝穲立竰笠筣篥篱籬粒粚粝粴糎糲綟縭纅纚缡罹翮脷艃苈苙茘荔荲莅莉菞蒚蒞蓠蔾藜藶蘺蚸蛎蛠蜊蜧蝕蝷蟍蟸蠇蠡蠣蠫裏裡褵觻詈謧讈豊貍赲跞躒轢轣轹逦邌邐郦酈醨醴釃里釐鉝銐鋫鋰錅錑鎘鏫鑗鑠铄锂镉隶隷隸離雳霾靂靋颯飒驪骊鬁鬲鬴鯉鯏鯬鱧鱱鱳鱺鲡鲤鳢鳨鴗鵹鷅鸝鹂麗麜黎黧"},
+    # {L"pie", L"丿嫳撆撇暼氕潎瞥肺苤蔽覕鐅"},
+    # {L"ai", L"乂乃伌僾儗凒剀剴叆呃呆呝哀哎唉啀嗌嗳嘊噫噯埃堨塧壒奇娭娾嫒嬡崖嵦愛懓懝挨捱敱敳昹暧曖欬欸毐溰溾濭烠焥爱瑷璦癌皑皚皧瞹矮砹硋碍磑礙絠艾蔼薆藹諰譪譺賹躷醷鎄鑀锿閡阂阨阸隑隘霭靄靉餲馤騃鯦鱫鴱"},
+    # {L"nai", L"乃佴倷哪奈奶妳嬭孻廼掜搱摨柰氖渿熋疓耏耐能腉艿萘螚褦迺釢錼鼐"},
+    # {L"wu", L"乄乌五亡亾仡仵伆伍侉侮俉倵儛兀兦剭务務勿午吳吴吾呉呜唔啎喔嗚噁圬坞垭埡堥塢墲奦妩娒娪娬婺嫵寤屋屼岉峿嵍嵨巫幠庑廡弙御忢忤怃恶悞悟悮惡憮戊扜扝扤捂揾摀敄於旄无旿晤杅杇杌柮梧橆歍武毋母汙汚污沕洖洿浯渞渥溩潕烏焐無熃熓物牾玝珷珸瑦璑甒痦瞀瞴矹碔祦禑窏窹笏箼粅膴舞芜芴茣莁莫蕪蘁蜈蝥螐蟱誈誣誤譕诬误趶躌迕逜邬郚鄔釫鋈鋘鋙錻鎢钨铻阢陚隖雺雾霚霧霿靰騖骛鯃鰞鴮鵐鵡鶩鷡鹀鹉鹜鼯鼿齀齬龉"},
+    # {L"tuo", L"乇他仛佗侂侻咃唾啴嘽坨堶妥媠嫷它岮庹彵惰托扡拓拕拖挩捝撱杔杝柁柝棁椭楕槖橐橢毤毻汑池沰沱涶牠狏砣砤碢磚稅税箨籜紽脫脱舃舄舵莌萚蘀蛇蟺袉袘袥訑託詑說説讬说跅跎踻軃迆迤迱酡鉈鋖铊阤陀陁隋飥饦馱馲駄駝駞騨驒驝驮驼魄魠鮀鰖鱓鴕鵎鸵鼉鼍鼧"},
+    # {L"zhe", L"喆乇仛厇哲啠喆嗫嗻嘀嚞囁埑堵嫬庶悊慹扸折摂摄摺攝斥晢晣杔柘棏樀樜歽浙淛潪着矺砓磔籷粍者耷聂聑聶著蔗虴蛰蜇蟄蟅袩褚褶襵詟謫謶謺讁讋谪赭軼輒輙轍轶辄辙这這適遮銸鍺锗陬馲驝鮿鷓鷙鸷鹧"},
+    # {L"ma", L"么亇傌吗呐唛嗎嘛嘜妈媽嫲嬤嬷孖尛抹摩杩榪溤犘犸獁玛瑪痲睰码碼礣祃禡罵蓦蔴蚂螞蟆蟇貉貊遤鎷閁靡馬駡驀马骂鬕鰢鷌麻麼麽"},
+    # {L"me", L"么嚒嚜嚰孭庅濹癦麼麽"},
+    # {L"yao", L"么乐仸侥倄偠傜僥匋吆咬啮喓嗂噛嚙垚堯夭妖姚娆婹媱嬈宎尧尭岆峣崾嶢嶤幺幼徭徺怮恌愮抭揺搖摇摿撽暚曜曣杳枖柼楆榚榣樂殀殽洮淫溔滛瀹烄烑熎燿爻狕猶猺獟玅珧瑤瑶由疟眑矅磘祅穾窅窈窑窔窯窰筄箹約繇纅约耀肴腰舀艞苭荛药葯葽蓔蕘薬藥蘨袎要覞訞詏謠謡讑谣趯踰軺轺遙遥邀銚鎐鑰钥铫闄陶隃靿顤颻飖餆餚騕驁骜鰩鳐鴁鴢鷂鷕鹞鼼齩"},
+    # {L"xi", L"义习係俙傒僖兮凞匸卌卥卻厀吚吸呬呰咥咦咭唏唽喜嘻噏嚊嚱塈壐夕奊奚娭媐媳嬆嬉宩屃屎屖屣屭嵠嶍嶲巂巇希席廗徆徙徯忔忚忥怬怸恄息悉悕惁惜愾慀憘憙戏戯戱戲扱扸摡撕擊既昔晞晰晳暿曦杫析枲栖桸棲椞椺榽槢樨橀橲檄欪欯欷歖歙氣氥汐洒洗浠淅渓湿溪滊漇漝潝潟澙濕灑烯焁焈焟焬煕熂熄熈熙熹熺熻燍燨爔牺犀犔犠犧狶猎獡獻玺琋璽瓕瘜皙盻睎瞦矖矽硒碏磶礂禊禧稀稧穸窸粞糦系細綌緆縘縰繥繫纚细绤羛義羲習翕翖肸肹胁脅脇脋腊膝舃舄舾茜莃莔菥葈葸蒠蒵蓆蓰蔇蕮薂虩蜤蜥蜴蝷螅螇蟋蟢蠵衋袭裼褶襲西覀覡覤觋觹觽觿訢詑誒諰謑謚謵譆诶谥谿豀豨豯貕赥赩趇趘蹊蹝躧遟郄郋郗郤鄎酅醯釐釳釸鈒鈢鉨鉩銑錫錯鎴鏭鑴钑铣错锡闟阋隙隟隰隵雟雭霫霼飁餏餙餼饩饻騱騽驨鬩鯑鰓鰼鱚鳃鳛鵗鸂黖鼰鼳鼷"},
+    # {L"zhi", L"之乿亊伎侄俧倁値值偫傂儨凪制剬劕劧卮厔只吱咥咫嚔址坁坧垁埃埴執墆墌夂多夛妷姪娡媞嬂实寘實峙崻巵帋帙帜幟庢庤廌彘徏徔徝徴徵志忮恃恉慹憄懥懫戠执扺扻抧抵拓拞挃指挚捗掷搘搱摕摨摭摯擲擳擿支斦旘旨昵晊智杝杫枝枳柣栀栉栺栽桎梔梽植椥楖榰槜樀樲樴櫍櫛止歭殖氏氐汁汥汦沚治泜洔洷淽滍滞滯漐潌潪瀄炙熫犆狾猘瓆瓡畤疐疷疻痔痣瘈直眰知砋礩示祁祇祉祑祗祬禃禔禵秇秓秖秩秪积秲秷稙稚稺穉窒筫紙紩絷絺綕緻縶織纸织置翐耆聀职職肢胑胝胵脂膣膱至致臷臸芖芝芷茋茝菭薙藢蘵虒蚔蛭蜘螲蟙衹衼袟袠製襧覟觗觝觯觶訨誌謢識识豑豒豸貭質贄质贽趾跖跱踬踯踶蹛蹠蹢躑躓軄軹軽輊轵轾迟迣遟遲郅郦酈酯釞鉄銍銴鋕鑕铁铚锧阤阯陁陟隲隻雉馶馽駤騭騺驇骘鯯鳩鳷鴙鴲鶨鷙鸠鸷黹鼅"},
+    # {L"zha", L"乍偞偧冊册剳劄厏吒咋咤哆哳喋喥喳囃奓宱怍扎扠抯拃挓挿插揷揸搩搾摣擖札柞柤查柵栅楂榨樝渣渫溠潳灹炸煠牐猹甴痄皶皻眨砟笮箑箚紥紮耫膪苲苴蔖蕏藸蚱蚻蜡觰詐諎謯譇譗诈踷蹅軋轧迊醡鍘铡閘闸霅鞢馇鮓鮺鰈鲊鲝鲽齄齇齟齰龃"},
+    # {L"zuo", L"乍佐作侳做凿咗唑嘬坐岝岞左座怍挫捽撮昨柞柮椊琢砟祚秨稓笮筰糳繓胙苲莋葃葄蓙袏諎酢醋鈼鑿阝阼飵"},
+    # {L"hu", L"乎乕互俿冱冴匢匫呼和唬唿喖嗀嗃嘑嘝嚛囫垀壶壷壺姱婟媩嫭嫮寣岵帍幠弖弧忽怘怙恗惚戏戯戱戲戶户戸戽扈抇护搰摢擭斛昈昒曶枑核楛楜槲槴歑殻汩汻沍沪泘洿浒淈淲淴湖滬滸滹濩瀫烀焀煳熩狐猢琥瑚瓠瓡瓳礐祜穫笏箎箶簄粐糊絗綔縎縏縠羽胍胡膴舗芐芔芦芴苦苸萀葫蔛蔰虍虎虖虝蝴螜衚觳觷許謼護许豰軤轷鄠醐鈷鋘錿鍙鍸钴隺雇雐雽韄頀頶餬鬍魱鯱鰗鱯鳠鳸鴩鵠鶘鶦鶮鶻鸌鹄鹕鹘鹱"},
+    # {L"fa", L"乏伐佱傠发垡姂廢彂拔拨撥栰橃汎沷法泛灋珐琺疺発發瞂砝笩筏罚罰罸茷蕟藅貶贬醗醱鍅閥阀髪髮"},
+    # {L"le", L"乐了仂勒叻嘞忇扐楽樂氻泐牞玏砳竻簕肋艻阞韷餎饹鰳鳓"},
+    # {L"luo", L"乐倮儸儽剆咯啰囉峈挼捋捰摞攎攞攭曪果格椤樂橐櫟欏欙泺洛漯濼烁烙爍犖猓猡玀珞瘰癳皪砢硌硦碌礫笿箩籮絡纙络罗羅脶腡臝茖荦萝落蓏蘿蛒蜾蝸螺蠃蠡袼裸覶覼詻跞路躒躶逻邏鉻鎯鏍鑼铬锣镙雒頱饠駱騾驘骆骡鮥鱳鵅鸁"},
+    # {L"yue", L"乐刖哕哾噦囝块妁妜嬳岄岳嶽彟彠恱悅悦戉扚抈捳擽曰曱月枂栎樾櫟汋瀹烁焆爍爚玥矆矱礿禴箹篗籆籥籰粤粵約约臒药蘥蚎蚏蛻蜕蠖說説说越趯跀跃跞躍躒軏鈅鉞銳鋭鑠钥钺铄锐閱閲阅髺鸑鸙黦龠龥"},
+    # {L"pan", L"乑伴冸判半卞叛坢姍姗媻审宷審幋弁彦扳拌拚搫攀柈槃沜泮洀湴溿潘瀊瀋炍爿片牉牓畔畨番皤盘盤盻盼眅眫碆磐磻籓縏繁胖膰般蒰螌蟠袢褩襻詊跘踫蹒蹣鄱鋬鎜鑻闆鞶頖鵥"},
+    # {L"yin", L"乑乚伒众侌傿冘凐印吟听吲唫喑噖噾嚚囙因圁圻垔垠垦垽堙堷壹夤姻婣婬寅尹峾崟崯嶾币廕引愔慇慭憖憗懚斦朄栶梀檃檭檼櫽欭欽歅殥殷氤沂泿洇洕浔淫淾湚溵滛潭潯濥濦烎烟犾狺猌玪珢璌瘖瘾癊癮硍碒磤禋秵窨筃粌絪緸縯胤芩苂茚茵荫荶蒑蔩蔭蘟蚓螾蟫裀言訔訚訡訢誾諲讔赺趛輑鄞酓酳釿鈏鈝銀銦铟银闇闉阥阴陰陻隂隐隠隱霒霠霪靷鞇音韾飮飲饮駰骃鮣鷣齗齦龂龈"},
+    # {L"ping", L"乒俜倗冖冯凭凴呯坪塀娉娦屏屛岼帡帲幈平慿憑枰檘泙洴涄淜焩玶瓶甁甹砯砰硑秤竮箳簈缾聠胓艵苹荓萍蓱蘋蚲蛢評评軿輧郱鉼頩馮鮃鲆"},
+    # {L"pang", L"乓仿傍厐嗙夆嫎尨庞彭彷徬房方旁汸沗滂炐磅篣耪肨胖胮膀膖舽蒡螃蠭覫趽逄逢鎊镑雱霶髈鰟鳑龎龐"},
+    # {L"jiao", L"乔交佼侥侨僑僥僬儌剿劋勦勪却卻叫呌咬喬嘂嘄嘐嘦噍噭嚼妖姣娇嫶嬌嬓孂学學峤峧嵺嶕嶠嶣徼恔悎憍憢憿挍挢捁搅摷撟撹攪敎教敥敫敽敿斠晈暞曒校椒樔橋櫵浇湫湬滘漖潐澆激灂灚烄焦焳煍燋狡獥珓璬皎皦皭矫矯礁稾穚窌窖笅筊簥糾絞繳纐纟纠绞缴胶脚腳膠膲臫艽芁茭茮菽萩蕉蕎藠虠蛟蟜蟭覐覚覺觉角訆譑譥賋趫趭跤踋蹻較轇轎轿较郊鄗酵醮釂釥鉸鐎铰餃饺驕骄骹鮫鱎鲛鵁鵤鷦鷮鹪"},
+    # {L"qiao", L"乔侨俏偢僑僺削劁勪喬喿嘺噭塙墝墧墽壳嫶峤峭嵪嶠巧帩幓幧悄愀愁憔招捎搞摮撬撽敫敲校桥槗樵橇橋橾殼毃毳潐焦焳燆燋犞癄睄瞧硗硚硝碻磝磽礄礉窍窯竅箾繑繰缲翘翹茭荍荞菬蕉蕎藮蟜誚譑譙诮谯趫趬跤跷踃踍蹺蹻躈郻鄗鄡鄥醮釥銚鍫鍬鏒鐈鐰铫锹陗雀鞒鞘鞩鞽韒頝顤顦驕骄骹髚髜"},
+    # {L"guai", L"乖叏哙噲夬怪恠拐掴枴柺箉罫"},
+    # {L"jue", L"乙亅倔傕决刔劂勪匷厥叏吷啳嗟噘噱嚼埆壆夬妜孒孓屈屩屫崛崫嶡嶥弡彏憠憰戄抉挗捔掘撅撧攫斍柽桷橛橜欔欮殌氒決泬潏灍焆焳熦燋爑爝爴爵狂獗玃玦玨珏瑴璚疦瘚矍矞矡砄穱穴絕絶繑繘绝脚腳臄芵蕝蕞蕨虳蚗蛙蟨蟩蠼袦覐覚覺觉角觖觼訣誳譎诀谲貜赽趉趹蹶蹷蹻躩較较逫鈌鐍鐝钁镢镼闋闕阕阙鞒鞽駃騤骙髉鱖鳜鴂鴃鶌鷢龣"},
+    # {L"mie", L"乜吀咩咪哶孭幭懱搣櫗滅瀎灭眜篾蔑薎蠛衊覕谂鑖鱴鴓"},
+    # {L"nie", L"乜倪啮喦嗫噛嚙囁囐囓囡圼埝孼孽峊嵒嵲嶭巕帇幸惗捏捻掜揑摂摄摰攝敜枿棿槷櫱涅痆篞籋糱糵聂聶肀臬臲苶菍蘖蠥褹諗讘踂踗踙蹑躡鉨鉩銸鋷錜鎳鑈鑷钀镊镍闑陧隉顳颞齧"},
+    # {L"xiang", L"乡亨享亯佭傢像儴勨勷厢向响啌啍嚮姠嶑巷庠廂忀想攘晑曏栙楿橡欀洋湘潒珦瓖瓨相祥箱絴緗纕缃缿羏翔膷舡芗萫葙薌蘘蚃蟓蠁衖襄襐詳详象跭迒郷鄉鄊鄕銄銗鋞鐌鑲镶閧闀闂降響項项飨餉饗饟饷香驤骧鬨鮝鯗鱌鱜鱶鲞鴹麘"},
+    # {L"dou", L"乧侸兜兠凟剅吺唗投抖斗斣枓梪橷毭氀浢渎瀆痘瞗窦窬竇篼脰艔荳蔸蚪讀读豆逗逾郖都酘酡鈄鋀钭閗闘阧陡餖饾鬥鬦鬪鬬鬭"},
+    # {L"nang", L"乪儾哝噥嚢囊囔崀憹搑擃攮曩欜涳瀼灢蘘蠰譨饢馕鬞齉"},
+    # {L"mai", L"买佅劢勱卖咪哩唛嘪埋売派脈脉荬蕒薶衇貍買賣迈邁霡霢霾鷶麥麦"},
+    # {L"luan", L"乱乿亂卵圝圞奱娈孌孪孿峦巒挛攣曫栾欒滦灓灤癴癵羉脔脟臠臡薍虊覶釠銮鑾鵉鸞鸾"},
+    # {L"ru", L"乳侞偄儒入吺咮嗕嚅女如媷嬬孺嶿帤扖挐擩曘月杁桇檽汝洳渪溽濡燸獳筎縟繻缛肉肗臑茹蒘蓐蕠薷蠕袽褥襦辱込邚鄏醹銣鑐铷需顬颥鱬鳰鴑鴽"},
+    # {L"xue", L"乴决削勪吷哮噱嚯坹壆学學岤峃嶨怴斈桖梋樰決泧泬泶滈澩瀥炔烕燢狘疦疶瞲穴膤艝茓蒆薛血袕觷謔谑趐踅轌辥雤雪靴鞾韡鱈鳕鷽鸴"},
+    # {L"sha", L"乷倽傻儍刹剎厦唦唼啑啥喢嗄噎帹廈挱挲接摂摄摋攝杀杉榝樧歃殺沙濈煞猀痧砂硰箑粆紗繌繺纱翜翣莎菨萐蔱裟賒賖赊鎩铩閯閷霅霎魦鯊鯋鲨"},
+    # {L"na", L"乸內内南吶呐呶哪嗱妠娜抐拏拿挐捺淰秅笚笝箬篛納絮纳肭蒘蒳衲袦訤詉誽豽貀蹃軜那郍鈉鎿钠镎雫靹魶"},
+    # {L"qian", L"乹乾仟仱伣佥俔倩偂傔僉儙凄凵刋前千厱唊嗛圱圲堑塹墘壍奷婜媊嬱孅孯寨岍岒嵌嵰廞忏忴悓悭愆慊慳扦扲拑拪挳掔掮揃揵搴摼撁撍撖攐攑攓朁杄杴柑棈椠榩槏槧橬檶櫏欠欦欿歁歉歬汘汧浅涔淒淺渐湔漸潛潜濳濽灊灒炶煔熑燂燫牵牽犍皘竏筋签箝箞篏篟簽籖籤粁綪縴繾纤缱羟羥羬肷脥腱膁臤艌芊芡苂茜茾荕荨葥葴蒨蔳蕁藖虔蚈蚙蜸褰諐謙譴谦谴谸赶軡輤迁遣遷釺鈆鈐鉆鉗鉛銭鋟錎錢鍼鎆鏲鐱鑓鑯钎钤钱钳铅锓開阡雃靬韆顅馯騚騝騫骞鬜鬝鰜鰬鳒鳽鵮鶼鹐鹣黔黚齦龈"},
+    # {L"cui", L"乼伜倅催凗啐啛墔察崒崔崪嶉忰悴慛摧椊榱槯毳淬漼濢焠熣獕琗璀疩瘁皠磪竁粋粹紣綷縗繀缞翆翠脃脆脺膬膵臎萃衰襊趡踤鏙隹顇"},
+    # {L"gui", L"亀伪佹偽傀僞刽刿劊劌匦匭匮匱厬哇圭垝妫姽娃媯嫢嬀宄嶡嶲巂帰庋庪廆归恑摫撌攰攱昋晷朹柜桂桅桧椝椢概槣槶槻槼檜櫃櫰櫷歸氿沩洼湀溎潙炅炔珪瑰璝瓌癐癸皈瞆瞡瞶硅硊祈祪禬窐筀簂簋絵繪绘胿膭茥蓕蘬蛫螝蟡袿襘規规觖觤詭謉诡貴贵赽趹跪蹶軌轨邽郌閨闺陒隗雟鞼騩鬶鬹鬼鮭鱖鱥鲑鳜鳺鴂鴃龜龟"},
+    # {L"liao", L"了佬僇僚劳勞嘹嫽寥寮尞尥尦屪嵺嶚嶛廖廫憀憭摎撂撩敹料暸樛漻潦炓燎爎爒獠璙疗療瞭窷竂簝繚缭聊膋膫蓼蟉蟟蟧豂賿蹘蹽轑辽遼鄝釕鏐鐐钌镠镣镽飂飉髎鷯鹩"},
+    # {L"zi", L"事仔倳兹剚吇吱呰呲咨啙嗞姉姊姕姿子孖字孜孳孶崰嵫恣杍栥梓椔榟橴次沝泚洓淄渍湽滋滓漬澬牸玆璾甾疵眥眦矷禌秄秭秶稵穧笫籽粢紎紫緇缁耔胏胔胾自芓茈茊茡茲菑葘蓻薋虸觜訾訿諮谘貲資赀资赼趑趦跐載輜輺载辎鄑釨鈭鋅錙鍿鎡锌锱镃頾頿髭鯔鰦鲻鶅鼒齊齍齐齜龇"},
+    # {L"er", L"二佴侕儿児兒刵咡唲嬭尒尓尔峏弍弐杒栭栮樲毦洏洱渪濡爾珥粫而耏耳聏胹臑荋薾衈袻誀貮貳贰趰輀輭轜迩邇鉺铒陑陾隭餌饵駬髵髶鮞鲕鴯鸸"},
+    # {L"chu", L"亍俶傗储儊儲処出刍初助厨嘼埱处媰屮岀幮廚怵慉憷懨拀搐摢摴敊斶杵柠椘楚楮榋槒樗橱橻檚櫉櫖櫥欪歜涂淑滀滁濋炪犓珿琡璴畜矗础硫礎祝禇竌竐篨絀絮绌耝耡臅芻菆著蒢蒭蓫蕏藸處蜍蟵蠩褚觕触觸詘諔諸诎诸豖豠貙趎跦踀踰蹰躇躕鄐鉏鋤锄閦除雏雛鶵鸀黜齣齭齼"},
+    # {L"xu", L"于亐伃休伵余侐俆偦冔勖勗卹叙吁呕呴呼咻喣嗅嘔嘘嘼噓圩垿墟壻妶姁姐婿媭嬃幁序徐怴怵恓恤惐慉戌掝揟敍敘旭旮旴昫晇暊朂朐栩楈槒欨欰欻歔歘殈汿沀洫浒淢湑溆滀滸漵潊烅烼煦獝珝珬畜疞盢盨盱眗瞁瞲矞砉稰稸窢籲糈絮続緒緖緰縃繻續绪续聟肷胊胥芋芌芧蒣蓄蓲蓿蕦藇藚虗虚虛蚼蛡蝑規规訏許訹詡諝諿謣謳譃讴许诩谞賉邪鄦酗醑鉥銊鑐雩需須頊须顼馘驉鬚魆魖魣鱮"},
+    # {L"kui", L"亏傀刲匮匱卼喟喹嘳夔奎媿嬇尯岿巋巙悝愦愧憒戣揆晆暌楏楑樻櫆欳歸殨溃潰煃盔睽瞶磈窥窺篑簣籄缺聧聩聭聵胿腃膭臾葵蒉蒍蕢藈蘬蘷虁虧蝰觖謉跬踩蹞躨逵鄈鍨鍷鐀鑎闋闚阕隗頃頄頍頯顝顷餽饋馈馗騤骙魁"},
+    # {L"yun", L"云伝傊允勻匀叞呍员員喗囩均夽奫妘媪媼孕尉尹怨恽惲愠愪慍抎抣昀晕暈枟榅樂橒殒殞氲氳沄涒涢温溳澐煇煴煾熅熉熨狁玧畇瘟盾眃磒秐筍筠筼篔紜緷緼縕縜繧纭缊耘耺腪芸苑荺菀蒀蒕蒷蕓蕰蕴薀藴蘊蜵蝹褞貟賱贇贠赟輼轀辒运運郓郧鄆鄖酝醖醞鈗鋆阭陨隕雲霣韗韞韫韵韻頵餫馧馻齫齳"},
+    # {L"sui", L"亗倠哸嗺埣夊娞嬘尿岁嵗挼旞檖歲歳毸浽滖澻濉瀡煫熣燧璲瓍眭睟睢砕碎祟禭穂穗穟簑粋粹綏縗繀繐繸绥缞脺膸芕荽荾莎葰蓑虽襚誶譢谇賥遀遂遗遺邃鏸鐆鐩陏隊隋随隧隨雖靃鞖韢髄髓"},
+    # {L"gen", L"亘哏揯搄根艮茛跟"},
+    # {L"xuan", L"亘儇券吅咺喛喧塇夐妶姰媗嫙嬛宣弲怰悬愃愋懁懸揈揎撰擐旋昍昡晅暄暅暖暶梋楥楦檈泫洵涓渲漩澴炫烜煊煖狟獧玄玆玹琁琄瑄璇璿瓊痃癣癬盤眩眴睻矎碹禤箮絃絢絹縣縼繏绚绢翧翾萱萲蓒蔙蕿藼蘐蜁蜎蝖蠉衒袨諠諼譞讂谖贙軒轋轩选選還鉉鋗鍹鏇鐶铉镟镮鞙颴饌馔駨駽鰚"},
+    # {L"geng", L"亙亢刯哽埂堩峺庚恆挭掶暅更梗椩浭焿畊硬絙絚綆緪縆绠羮羹耕耿莄菮賡赓邢郉郠頸颈骾鯁鲠鶊鹒"},
+    # {L"e", L"亚亜亞伪佮侉俄偔偽僞僫匎匼卾厄吪呃呝咢咹哑哦唖啈啊啐啞噁噩囐囮垩垭埡堊堨堮妸妿姶娥娾娿婀媕屙屵岋峉峨峩崿庵廅恶悪惡愕戹扼搕搤搹擜曷枙椏櫮欸歞歹歺洝涐湂玀珴琧痷皒睋砈砐砨砵硆硪磀礘胺腭苊莪萼蒍蕚蘁蚅蛾蝁覨訛詻誐諤譌讍讹谔豟軛軶輵轭迗遌遏遻邑鄂鈋鋨鍔鑩锇锷閜閼阏阨阸阿隘頞頟額顎颚额餓餩饿騀鬲魤魥鰐鰪鱷鳄鴳鵈鵝鵞鶚鹅鹗齃齶齾"},
+    # {L"suo", L"些傞唆唢嗍嗦嗩娑嫅岁嵗惢所抄挱挲摍暛桫梭歲沙溑溹牺犧獻琐琑瑣璅睃簑簔索縒縮缩羧莎莏葰蓑蜶衰褨趖逡逤鎈鎍鎖鎻鏁锁霍靃髿魦鮻"},
+    # {L"xie", L"些亵伳偕偞偰僁儶写冩劦勰协協卨卸叶吤唏喈嗋噧垥塮夑夾奊契娎媟孈寫屑屓屜屟屧屭峫嶰廨徢恊愶慀懈拹挟挾接揳搚携摺撷擕擷攜斜旪暬枻桔械楔榍榝榭槷欸歇歙殺汁泄泻洩渫湝溃溉滊潰澥瀉瀣灺炧炨烲焎熁燮燲爕猲獬瑎眭碿祄禼糏紲絏絜絬綊緤緳繲纈绁缬缷翓耶胁脅脇脋膎薢薤藛蝎蝑蝢蟹蠍蠏血衺裌褉褻襭觟解觧諜諧謝譮讗谍谐谢豫跬躞躠迦邂邪鍱鐷隰鞋鞢鞵韰頁頡页颉骱鬹魼鮭鲑齂齘齛齥龤"},
+    # {L"zhai", L"亝侧债側債厇厏啇嚌夈宅寨度抧择捚摘擇擿斋斎柴榸檡牴疵瘵砦祭窄箦簀粂翟膪責责鉙駘骀骴齋"},
+    # {L"tou", L"亠偷偸埱头妵婾媮愉投敨斢殕紏綉緰绣蘣褕諭諳谕谙透逗鋀鍮钭頭飳骰黈"},
+    # {L"wen", L"亠免刎吻呅呚呡問塭妏娩彣忞忟愠慍抆揾搵文昧昷桽榅榲歾殁殟汶渂温溫炆煴珳瑥璺瘒瘟眼砇稳穏穩笏紊紋絻緼縕纹缊聞肳脕脗芠莬蕰蕴薀藴蘊蚉蚊螡蟁褞豱輼轀辒鈫鎾閺閿闅闦问闻阌限雯韞韫顐饂馼魰鰛鰮鳁鳼鴍鴖鼤"},
+    # {L"wang", L"亡亾仼兦匡妄尢尣尩尪尫彺往徃徍忘忹惘抂旺暀朚望朢枉棢汪瀇焹王琞皇盳網网罔芒莣菵蚟蛧蝄誷輞辋迋迬魍"},
+    # {L"gang", L"亢伉冈冮刚剛堈堽岗岡崗戅戆戇扛抗掆杠棡槓港溝焵牨犅犺疘矼碙筻綱纲缸罁罓罡肛肮釭鋼鎠钢阬頏颃"},
+    # {L"kang", L"亢伉匟囥坑奋嫝嵻康忼慷扛抗摃杭槺沆漮炕犺砊穅粇糠荒躿邟鈧鏮钪閌闶阬骯鱇"},
+    # {L"da", L"亣剳匒呾咑哒嗒噠垯塌塔墶大妲怛憚打搨搭撘橽毼汏沓溚炟燵畗畣疸瘩眔矺笚笪答繨羍耷胆荅荙薘蟽褡觰詚跶躂达迏迖迭逹達鎉鎝鐽靼鞑韃龖龘"},
+    # {L"hai", L"亥侅咍咳咴嗐嗨嘿嚡塰孩害拸欬氦海烸猲絯胲还還郂酼醢閡阂頦颏餀饚駭駴骇骸"},
+    # {L"heng", L"亨佷哼啈堼姮恆恒悙桁横橫涥烆狟珩胻脝蘅行衡訇鑅鴴鵆鸻"},
+    # {L"peng", L"亨倗傍傰剻匉嘭堋塜塳庄弸彭怦恲憉抨挷捧掽搒摓旁朋梈棚椖椪槰樥泙淎淜滂漨漰澎烹熢痭皏砰硑硼碰磞稝竼篣篷絣纄胓膨芃苹荓莑蓬蟚蟛踫軯軿輣輧迸逢逬錋鑝閛韸韼駍騯髼鬅鬔鵬鹏"},
+    # {L"mu", L"亩仫凩募呒嘿坶墓墲姆姥娒婺峔幕幙慔慕拇暮木朷楘模樢母毣毪氁沐炑牟牡牧牳狇獏畆畒畝畞畮目睦砪穆縸繆缪胟艒苜茻莯萺蚞踇鉧鉬钼雮霂鞪"},
+    # {L"ting", L"亭侱侹停厅厛听圢奠奵娗婷嵉庁庍庭廰廳廷忊挺桯梃楟榳汀涏渟濎烃烴烶珵珽町筳綎耓聤聴聼聽脡艇艼莛葶蜓蝏誔諪邒鋌铤閮霆鞓頲颋鼮"},
+    # {L"qin", L"亲侵儭勤厪吢吣唚嗪噙坅埁埐堇墐媇嫀寑寝寢寴嵚嶔嶜庈廑廞忴慬懃懄扲抋捦揿搇撳擒斳昑梫槿橬檎櫬欽沁浸涁渗溱滲澿濅瀙珡琴琹瘽矜矝禽秦笉綅耹肣臤芩芹菣菦菳蓁蕲藽蘄蚙螓螼蠄衾衿覃親誛赺赾鈂鈊鈙鋟钦锓雂靲頜顉顩颌駸骎鬵鮼鳹"},
+    # {L"qing", L"亲倩倾傾儬凊剠勍卿啨圊埥声夝媇寈庆庼廎情慶掅擎擏晴暒棾樈檠檾櫦殑殸氢氫氰涇淸清渹漀濪玪甠硘硜碃磬箐精綪綮罄胜苘莔葝蜻請謦请軽輕轻郬鑋靑青靘頃顷鯖鲭鶄黥"},
+    # {L"bo", L"亳仢伯佛侼僠僰剝剥勃募博卜哱啵噃嚗壆妭孛孹嶓帗帛彴怕愽懪拍拔拨挬掰搏撥播擗擘暴服柏柭桲榑檗檘欂殕泊波泼浡淿渤湐潑潘瀑煿爆牔犦犻狛猼玻瓝瓟番癶發白百皪盋砵碆磻礡礴秡穛笩箔箥簙簸簿糪紴缽肑胉脖膊般舶艊艴苩茀茷菠菩葧蒲蔔蔢蕃薄薜蘖蘗蚾袚袯袹襎襏襮詙譒豰趵跑跛踣蹳郣鈸鉑鉢鋍鎛鑮钵钹铂镈餑餺饽馎馛馞駁駮驋驳髆髉魄鮁鮊鱍鲅鲌鵓鹁"},
+    # {L"zhan", L"亶佔偡占噡嫸展崭嵁嶃嶄嶘嶦怗惉战戦戰拃搌斩斬旃旜栈栴桟棧椾榐橏欃毡氈氊沾湔湛澶琖皽盏盞瞻碊站粘綻绽菚薝蘸虥虦蛅袒襢覱詀詹謙譧譫讝谦谵趈跕蹍躔輚輾轏辗邅醆醮閚霑颤颭飐飦餰饘驏驙骣魙鱣鳣鳽鸇鹯點黵"},
+    # {L"lian", L"亷令僆劆匲匳嗹噒堜奁奩娈媡嫾嬚孌帘廉怜恋慩憐戀挛搛摙撿攣敛斂梿楝槏槤櫣欄歛殓殮浰涟湅溓漣潋澰濂濓瀲炼煉熑燫琏瑓璉瞵磏稴簾籢籨練縺纞练羷羸翴联聨聫聮聯脸膦臁臉苓莲莶萰蓮蔹薕薟蘝蘞螊蠊裢裣褳襝覝謰譧蹥连連鄻醶錬鍊鎌鏈鐮链镧镰零鬑鰊鰱鱄鲢"},
+    # {L"duo", L"亸仛兊兌兑凙刴剁剟剫吋咄哆哚喥嚉嚲垛垜埵堕墮墯多夛夺奪奲媠嫷尮崜嶞度惰憜挅挆捶掇揣敓敚敠敪朵朶杂杕枤柁柂柮桗棰椯橢毲沰沱沲澤痥硾綞缍舵茤袳裰詑誃貀趓跢跥跺跿踱躱躲軃郸鄲鈬錞鍺鐸铎锗陀陊陏隋隓飿饳馱駄驮鬌鮵鵽點"},
+    # {L"men", L"亹们們怋悗悶惛懑懣扪捫暪椚殙汶満满滿焖燜玟玣玧璊瞞穈菛虋鍆钔門閅门闷鞔"},
+    # {L"ren", L"人亻仁仞仭任儿刃刄壬妊姙屻忈忍忎恁扨朲杒栠栣梕棯涊牣秂秹稔紉紝絍綛纫纴肕腍芢荏荵菍葚衽袵訒認认讱躵軔轫釰鈓銋靭靱韌韧飪餁饪魜鵀"},
+    # {L"shen", L"什伔伸侁侺信兟参參叄叅吲呻哂嘇堔妽姺娠婶嫀嬸孞审宷審屾峷幓弞愼慎扟抌抻搷昚曋柛棯椮椹榊槮氠沈涁淰深渖渗滲瀋燊珅甚甡甧申瘆瘮眒眘瞋瞫矤矧砷神祳穼籶籸糁紳綝绅罙罧肾胂脤腎莘葚葠蓡蔘薓蜃蜄裑覾訠訷詵諗讅诜谂谉身邥鉮鋠震頣駪魫鯅鯓鯵鰰鰺鲹鵢黮"},
+    # {L"ze", L"仄伬侧側则則厕厠咋唶啧啫嘖夨嫧崱帻幘庂廁択择捑措擇昃昗柞樍歵汄沢泎泽溭滜澤灂皟睪瞔矠礋稄稷笮箦簀耫舴萚葃蔶蘀蠌襗諎謫謮讁谪責賾责赜迮飵鸅齚齰"},
+    # {L"jin", L"仅今伒侭僅僸儘兓凚劤劲勁卺厪吟唫噤嚍埐堇堻墐壗妗婜嫤嬐嬧寖尽嶜巹巾廑惍慬搢斤斳晉晋枃榗槿歏殣津浕浸溍漌濅濜烬煡燼珒琎琻瑨瑾璡璶盡矜砛祲禁竻笒筋紟紧紾緊縉缙肋臸荕荩菫菳蓳藎衿襟覲觐觔訡謹谨賮贐赆近进進金釒釿鋟錦钅锓锦靳饉馑馸鹶黅齽"},
+    # {L"nu", L"仅伖伮傉努呶奴孥帑弩怒搙擩砮笯胬褥詉駑驽"},
+    # {L"pu", L"仆僕剝剥匍卜噗圃圑圤埔堡墣巬巭扑扶抪捗撲擈攴攵普暜暴曝朴柨樸檏氆浦溥潽濮瀑炇烳獛璞甫痡瞨砲秿穙箁纀脯舖舗苻荹莆菐菩葡蒱蒲蜅襆襥諩譜谱豧贌蹼酺鋪鏷鐠铺镤镨陠駇鯆鵏"},
+    # {L"ba", L"仈伯八叐叭吧哱哵坝坺垻墢壩夿妭岜峇巴弝扒把抜抪拔捌捭朳杷柭欛湃灞炦爸犮玐疤癹皅矲笆笩粑紦罢罷羓耙胈芭茇茷菝萆蚆覇詙豝跁跋軷釛釟鈀钯霸靶颰魃魞鮁鮊鲃鲅鲌鼥"},
+    # {L"fo", L"仏仸佛坲梻"},
+    # {L"tao", L"仐匋叨咷啕夲夵套姚嫍幍弢慆抭挑掏搯桃梼槄檮洮涛涭淘滔濤焘燾瑫祹筹籌絛綢綯縚縧绦绸绹萄蜪裪討詜謟讨跳轁迯逃醄鋾錭陶鞀鞉鞱韜韬頫飸饀饕駣騊鼗"},
+    # {L"lun", L"仑伦侖倫囵圇埨婨崘崙惀抡掄棆沦淪溣睔碖磮稐綸纶耣腀菕蜦論论踚輪轮錀陯鯩"},
+    # {L"cang", L"仓仺伧倉傖凔匨嵢欌沧滄濸獊瑲篬罉臧舱艙苍蒼蔵藏螥賶鑶鶬鸧"},
+    # {L"chuang", L"仓仺倉傸刅创刱剏剙創噇囪囱幢床怆愴戧摐朣橦漴漺牀牎牕疮瘡磢窓窗窻膧舂葱蔥闖闯"},
+    # {L"zai", L"仔傤儎再哉在宰崽才扗栽洅渽溨災灾烖甾睵縡菑賳載载酨"},
+    # {L"ta", L"他侤傝呾咜嗒嚃嚺塌塔墖太她它崉拓挞搨搭撘撻榙榻毾沓涾湿溚溻漯澾濌濕牠狧獭獺祂禢荅褟誻譶趿踏蹋蹹躢达迏迖逹達遝遢鉈錔鎉鎑铊闒闟闥闼阘鞈鞑鞜鞳韃鮙鰨鳎"},
+    # {L"xian", L"仙仚伣伭佡俔僊僩僲僴先冼县咁咞咸哯唌啣嗛嘕垷埳堿壏奾妗妶姍姗姭姺娊娨娴娹婱嫌嫺嫻嬐孅宪寰尟尠屳岘峴崄嶮幰廯弦忺慊慳憪憲憸懢挦捍掀探揱搚搟撊撏攇攕显晛暹杴枮梘槏橌櫶欦毨氙洒洗涀涎湺溓澖濂瀗灑灦烍燹狝猃献獫獮獻玁现玹珗現甉痫癇癎盷省県睍瞯矣硍碱礆礥祆禒禰秈稴笕筅筧箲籼粯糮絃絤綅綖綫線縣縿繊纎纖纤线缐羡羨羬肩胁胘脅脇脋腺膁臔臤臽舷苋苮莧莶蔹薟藓藖蘚蘝蘞蚬蚿蛝蜆衔衘褼襳見见誢誸諴譀譣豏賢贒贤赻跣跹蹮躚軐軒輱轩酰醎醶釤銑銛銜鋧錎錟鍁鍌鏾鑦钐铣铦锨锬閑閒闞闲阚限陥险陷険險霰韅韯韱顈顕顯餡饀馅馦鮮鰔鱻鲜鶱鷳鷴鷼鹇鹹麙麲黹鼸"},
+    # {L"cha", L"仛侘偛刹剎叉喳嗏嚓土垞奼姹察岎岔嵖差扠扱挿捈捷接插揷搽摖斜杈查査梌楂槎檫汊猹疀碴秅紁肞臿艖芆苴茬茶荖荼衩褨訍詧詫诧蹅釵銟鍤鎈鑔钗锸镲靫餷馇"},
+    # {L"hong", L"仜厷叿吰吽哄哅唝嗊嚝垬妅娂宏宖屸巆弘彋愩揈撔晎汪汯泓洪浤浲港渱渹潂澋澒灴烘焢玒玜瓨硔硡竑竤篊粠紅紘紭綋红纮羾翃翝耾舼苰荭葒葓蕻薨虹訇訌謍讧谹谼谾軣輷轟轰鈜鉷銾鋐鍧閎閧闀闂闳霐霟鞃鬨魟鴻鸿黉黌"},
+    # {L"tong", L"仝佟侗偅僮冂劏勭同哃嗵囲垌峂峒峝庝彤恫恸恿慟憅捅晍曈朣桐桶樋橦氃洞浵湩潼炵烔熥燑爞犝狪獞痌痛眮瞳砼硐硧秱穜童筒筩粡絧統綂统膧艟茼蓪蚒蜼蟲衕詷赨通酮重鉖鉵銅铜餇鮦鲖"},
+    # {L"han", L"仠佄傼兯函凾厂厈含咁哻唅喊嚂圅垾娢嫨寒屽崡嵅嵌忓悍感憨憾扞捍撖撼攼旰旱晗晘晥暵桿梒椷榦欦歛汉汗汵泔浛浫涆涵淊淦滩漢澉澏澣瀚灘焊焓熯爳猂琀甘甝皔睅矸笒筨糮罕翰肣莟菡蔊蘫虷蚶蛿蜬蜭螒譀谽豃軒轩邗邯酣釬鈐銲鋎鋡钤閈闞闬阚雗靬韓韩頇頜頷顄顩顸颔馠馯駻鬫魽鳱鶾鼾"},
+    # {L"dai", L"代侢傣叇呆呔嘚垈埭大岱帒带帯帶廗待怠懛戴曃柋棣歹殆毒汏瀻獃玳瑇甙箉簤紿緿绐艜蔕蚮蝳螮袋襶詒诒貸贷跢蹛軑軚軩轪迨逮逯遞遰隶霴靆馱駄駘驮骀鮘鴏黛黱"},
+    # {L"ling", L"令伶倰冷凌刢另呤囹坽夌姈婈孁岭岺崚嶺彾怜拎掕昤朎柃棂棱櫺欞泠淩澪瀮灵炩燯爧狑玲琌瓴皊砱磷祾秢竛笭紷綾绫羚翎聆舲苓菱蓤蔆蕶蘦蛉衑袊裬詅跉軨輘酃醽釘鈴錂钉铃閝阾陵零霊霗霛霝靇靈領领駖魿鯪鲮鴒鸰鹷麢齡齢龄龗"},
+    # {L"chao", L"仦仯剿劋勦吵唠嘮嘲巐巢巣弨怊抄摷晁朝槱樔欩涛漅潮濤炒焣焯煼牊眧窲粆紹綤綽縐繛绉绍绰罺耖觘訬謅謿诌超趠趫轈鄛鈔钞麨鼂鼌"},
+    # {L"chang", L"仧伥倀倘倡偿僘償儻兏厂厰唱嘗嚐场場塲娼嫦尙尚尝常廠徜怅悵惝敞昌昶晿暢棖椙氅淌淐焻猖玚琩瑒瑺瓺甞畅畼肠脹腸膓苌菖萇蟐裮裳誯鋹鋿錩鏛锠長镸长閶闛阊韔鬯鯧鱨鲳鲿鼚"},
+    # {L"sa", L"仨卅挲摋撒攃桬檫櫒殺泧洒潵灑纚脎萨蔡蕯薩訯躠鈒鎝鏾钑隡霅靸鞈颯飒馺"},
+    # {L"fan", L"仮伋凡凢凣勫匥反噃墦奿婏嬎嬏嬔帆幡忛憣払拚攵旙旛杋柉梵棥楓樊橎氾汎泛渢滼瀪瀿烦煩燔犭犯犿璠畈畨番盕矾礬笲笵範籓籵緐繁繙羳翻膰舤舧舩范蕃薠藩蘩蟠蠜袢襎訉販贩蹯軓軬轓辺返釩鐇钒颿飜飯飰饭鱕鷭"},
+    # {L"miao", L"仯吵喵妙媌嫹庙庿廟彯描杪淼渺猫玅眇瞄秒竗篎紗緢緲纱缈缪苗藐蜱訬邈鱙鶓鹋"},
+    # {L"ang", L"仰卬岇昂昻枊盎肮醃醠骯"},
+    # {L"yang", L"仰佒佯傟养劷勜卬咉坱垟央奍姎婸將岟崵崸徉怏恙慃懩扬抰揚攁敭旸昂昜映暘杨柍样楊楧様樣歍殃氜氧氱泱洋湯漾潒瀁炀炴烊煬珜瑒疡痒瘍癢眏眻礢禓秧紻羊羏羕羘羪胦英蛘詇詳諹详軮輰鉠鍈鍚鐊钖阦阳陽雵霙霷鞅颺飏飬養駚鰑鴦鴹鸉鸯"},
+    # {L"bi", L"仳佊佖佛俾偪匂匕卑吡咇哔啚嗶坒埤堛壁复夶奰妣妼娝婢媲嬖嬶屄崥币幅幣幤庀庇庳廦弊弻弼彃彼必怭怶悂愊愎拂捭敝斃旇服朼枇枈柀柲梐椑楅檗殍比毕毖毙毴沘泌波湢滗滭潷濞煏熚狴獘獙珌璧畀畁畐畢疕疪痹痺皀皕瞥碧禆秕秘稫笓笔筆筚箃箄箅箆篦篳粃粊紕紴綼縪繴纰罷罼翍聛肶肸胇脾腗腷臂舭芘苾荜荸萆萞蓖蓽蔽薜蘗虑蜌螕袐被裨襅襞襣觱詖诐豍貏貱費賁贔贲费赑跛跸踾蹕躃躄辟逼避邲鄙鄨鄪鈚鉍錍鎞鏎鐴鐾铋閇閈閉閟闬闭陂陛陴鞁鞞鞸韠飶饆馝馥駜驆髀髲魓魮鮅鮩鰏鲾鴓鵖鶝鷝鷩鸊鼊鼻"},
+    # {L"wo", L"仴倭偓卧唩喔嗌噁嚄埚堝夭婐婑媉媪媼幄我挝捰捼捾握撾擭斡杌枂楃沃涡涴涹渥渦濄濣焥猧瓁瘟瞃矆硪窝窩肟腛臒臥艧莴萵蒦薶蜗蝸踒踠雘馧齷龌龏"},
+    # {L"jian", L"件侟俭俴倹偂健傔僣僭儉兼冿减前剑剣剪剱劍劎劒劔喊囏囝坚堅堑堿塹墹奸姦姧孱寋尖帴幵廴建弿彅徤惤戋戔戩戬拣挸捡揀揃揵搛撿擶攕旔暕朁枧柙柬栫梘检検椷椾楗榗槛樫橌橏橺檢檻櫼歼殱殲毽洊浅涀涧淺渐減湔湕溅滥漸澗濫濺瀐瀳瀸瀽煎熞熸牋牮犍猏玪珔瑊瑐监監睑睷瞯瞷瞼硷碊碱磵礀礆礛稴笕笺筧简箋箭箴篯簡籈籛糋絸緘縑繝繭纎纖纤缄缣翦聻肩腱臶舰艦艰艱茛茧荐菅菺葌葏葥蒹蔪蕑蕳薦藆虃螹蠒袸裥襇襉襺見覵覸见詃諓諫謇謭譖譼譾谏谫谮豜豣賎賤贱趝趼跈践踐踺蹇轞醎醶釰釼鈃鉴銒銭鋄鋑鋻錢錬錽鍊鍳鍵鎫鏩鐗鐧鐱鑑鑒鑬鑯鑳钘钱锏键閒間间险險靬鞬鞯韀韉餞餰饯馢騫骞鬋鰎鰔鰜鰹鲣鳒鳽鵳鶼鹣鹸鹹鹻鹼麉黚黬"},
+    # {L"mou", L"件侔劺厶呣哞堥婺恈敄某桙毋洠牟眸瞴繆缪蛑蝥蟱袤謀谋鉾鍪鞪鴾麰"},
+    # {L"jia", L"价伽佳假傢價加叚呷咖唊嘉嘏圿埉夏夓夹夾婽嫁宊家岬幏徦忦恝戛戞扴抸押拁拮挈挟挾揩揳擖斚斝暇架枷梜椵榎榢槚檟毠泇浃浹犌猰猳玾珈甲痂瘕稼笳筴糘耞胛脥腵茄荚莢葭蛱蛺蝦袈袷裌豭貑賈贾跏跲迦郏郟鉀鉫鉿鋏鎵钾铗铪镓頡頬頰颉颊餄饸駕駱驾骆骱鴶鵊麚"},
+    # {L"bin", L"份傧儐宾彬摈擯斌椕槟殡殯氞汃浜滨濒濱濵瀕玢瑸璸砏繽缤膑臏虨蠙訜豩豳賓賔贇赟邠鑌镔霦頻顮频髌髕髩鬂鬓鬢"},
+    # {L"fen", L"份偾僨分匪吩喷噴坆坋坟墳奋奔奮妢岎帉幩弅忿愍愤憤扮拚敃昐朆朌枌梤棻棼橨歕氛汾濆瀵炃焚燌燓燔獖玢盼瞓砏秎竕粉粪糞紛纷羒羵翂肦膹芬葐蒶蕡蚠蚡衯訜豮豶賁贲躮轒酚鈖錀鐼隫雰頒颁餴饙馚馩魵鱝鲼鳻黂黺鼖鼢"},
+    # {L"di", L"仾低俤偙僀儥勺厎呧唙啇啲啻嘀嚁地坔坘坻埅埊埞堤墆墑墬奃娣媂嫡嵽嶳帝底廸弔弚弟弤彽怟慸扚抵拞掋提揥摕敌敵旳杓杕枤柢梊梑棣楴樀氐浟涤渧滌滴焍牴狄玓珶甋疐的眱睇砥碮碲磾祶禘笛第篴籴糴約締约缔羝翟聜肑胝腣芍苐苖荻莜菂菧蒂蓧蔋蔐蔕藋藡蚳蝃螮袛覿觌觝詆諟諦诋谛豴赿趆踧踶蹄蹏蹢軧迪逐递逓逮遞適遰邸釱鉪鍉鏑镝阺隄隶靮鞮頔題题馰骶髢鬄魡鯳鸐"},
+    # {L"fang", L"仿倣匚坊埅堏妨彷房放方旊昉昘昞枋汸淓牥瓬眆眪祊紡纺肪舫芳蚄訪访趽邡鈁錺钫防雱髣魴鰟鲂鳑鴋鶭"},
+    # {L"pei", L"伂佩俖倍呸啡坏垺培妃妚姵婄媐嶏帔怌抷掊攈斾旆昢柸棑毰沛浿淠犻珮琣琲笩肧胚艴茇茷蓜蜚衃裴裵賠赔轡辔配醅錇锫阫陪陫霈馷駍"},
+    # {L"diao", L"伄佻倜凋刀刁刟叼吊奝嬥屌弔弴彫扚挑掉椆殦汈淍琱瘹瞗矵碉稠窎窵竨簓粜糶絩綢绸莜蓧藋虭蛁蜩訋誂調调貂赵趙跳踔軺轺釣鈟銱鋽錭鑃钓铞铫雕雿颩骠魡鮉鯛鲷鳥鳭鵃鵰鸟鸼鼦"},
+    # {L"xin", L"伈伩信俽兴噷噺囟妡姰嬜孞寻尋庍廞心忻惞愖憖撢新昕杺枔橝欣欵款歀歆潃炘焮盺礥脪興舋芯莘薪衅襑訢訫軐辛邤釁鈊鋅鐔鑫锌镡阠顖馨馫馸鬵"},
+    # {L"xiu", L"休俢修咻嗅嚊宿岫庥朽樇櫹溴滫烋烌煦珛琇璓秀糔綇綉繍繡绣羞脙脩臭臰臹苬茠莠蓨螑袖裦褎褏貅銝銹鎀鏅鏥鏽锈飍饈馐髤髹鮴鱃鵂鸺齅"},
+    # {L"tang", L"伖倘偒傏傥儻劏唐啺嘡坣堂塘嵣帑弹愓戃扩搪摥擴攩曭棠榶樘橖欓汤淌湯溏漟漡烫煻燙爣瑭矘磄禟篖簜糃糖糛羰耥膅膛荡蓎蕩薚蘯蝪螗螳赯趟踼蹚躺逿鄌醣鎕鎲鏜鐋鐺钂铛铴镋镗閶闛闣阊隚鞺餳餹饄饧鶶黨鼞"},
+    # {L"huo", L"伙佸俰剨劐化吙咊和咟嗀嚄嚯嚿夥奯姡惑或扮捇掝搉擭攉旤曤楇檴沎活湱漷濊濩瀖火灬焃獲瓠癨眓矆矐礊祸禍秮秳穫篧耠耯腘膕臛艧获萿蒦藿蠖諕謋豁豰貨货越趏過邩鈥鍃鑊钬锪镬閄隻雘霍靃騞魊"},
+    # {L"hui", L"会佪僡儶匯卉叀咴哕喙嘒噅噕噦嚖囘回囬圚堕墮壞婎媈孈寭屷幑廆廻廽彗彙彚徊徻徽恚恛恢恵悔惠慧憓懳拻挥揮撝晖晦暉暳會桧椲楎槥橞檅檓檜櫘毀毁毇汇沬泋洃洄浍涣湏溃滙潓澮濊瀈灰灳烜烠烣烩煇煒燬燴獩珲琿璤璯痐瘣皓眭睢睳瞺禈秽穢篲絵繢繪绘缋翙翚翬翽芔茴荟蒐蔧蕙薈薉藱蘬蘳虫虺蚘蛔蛕蜖螝蟪袆褘襘詯詼誨諱譓譭譮譿讳诙诲豗賄贿輝輠辉违迴逥違銊鏸鐬闠阓隓隳靧鞼韋韢韦頮顪餯鮰鰴麾鼿齀"},
+    # {L"kuai", L"会侩傀儈凷哙噲圦块塊墤巜廥快擓旝會浍澮狯獪璯筷糩脍膾蒉蒯蕢郐鄶駃鬠魁鱠鲙"},
+    # {L"kuo", L"会刳哙噋噲廓懖扩拡括挄擴會栝桰漷濶燭爥秳筈萿葀蛞适邝鄺闊阔霩鞟鞹韕頢髺鬠"},
+    # {L"zu", L"伜伹俎倅傶卆卒哫啐嘁岨崒崪徂怚族柤沮淬爼珇砠祖租稡箤紣組綷组苴菹葅蒩詛謯诅趱趲足踤踿蹴鉃鉏鉐錊鎐鎺鏃鑿镞阻靻顇駔驵"},
+    # {L"che", L"伡俥偖勶呫唓喢坼多夛奲宅尺屮彻徹扯掣揊摰撤撦斥池澈烢烲焎爡瞮砗硨硩聅莗蛼詀謵車车迠頙"},
+    # {L"chen", L"伧侲傖儭嗔嚫堪塡填塵墋夦宸尘帘忱愖抻捵揨敐晨曟枕桭棧棽榇樄橙櫬沈沉湛瀋烥煁琛疢疹瘎瘨眈瞋硶碜磣秤称稱綝縝缜肜胂臣茞莀莐蔯薼螴衬襯訦諃諶謓謲讖谌谶賝贂趁趂趻跈踸軙辰迧郴醦鈂鍖闖闯陈陳霃鷐麎齓齔龀"},
+    # {L"xun", L"伨侚偱勋勛勲勳卂咰噀噚嚑坃埙塤壎壦奞姰孙孫寻尋峋巡巽廵彐徇循恂悛愻揗撏攳旬曛杊栒桪梭樳殉殾毥汛洒洵浔浚潭潯濬灥焄煇熏燂燅燖燻爋爓狥狻獯珣璕眴矄稄窨筍筼篔紃絢纁绚臐荀荤荨葷蔒蕁蕈薫薰蘍蟫蟳襑訊訓訙詢训讯询賐迅迿逊逡遁遜郇鄩醺鑂鑫顨馴駨驯鱏鱘鲟鶽"},
+    # {L"bai", L"伯佰呗唄庍扒拜拝挀捭排掰摆擺敗柏栢派猈白百稗竡粨粺絔薜薭襬贁败鞁鞴韛"},
+    # {L"gu", L"估傦僱凅劷古告呱咕哌唂唃啒嗀嗗嘏固堌夃姑嫴孤尳峠崓崮怘愲扢抇故枯柧梏棝榖榾橭櫎毂汩沽泒淈滑濲瀔焸牯牿瓠痼皋皷盬瞽硲磆祻稒穀笟箍箛篐糓縎罛罟羖股胍脵臌臯苦苽菇菰蓇薣蛄蛊蛌蠱角觚詁诂谷賈贾軱軲轂轱辜逧酤鈲鈷錮钴锢雇頋顧顾餶馉骨骰鮕鯝鲴鴣鵠鶻鸪鹄鹘鼓鼔"},
+    # {L"ni", L"伱伲你倪儗儞児兒匿呢坭埿堄妮妳婗嫟嬭嬺孨孴尼屔屰嶷彌怩惄愵慝懝抐抳拟掜擬旎昵晲暱柅棿檷氼泥淣溺滠濔濘瀰灄狔猊痆眤睨祢禰秜籾縌聻胒腝腻膩臡苨薿蚭蛪蜺袮觬誽譺貎跜輗迡逆郳鈮鉨鑈铌镾隬霓馜鯢鲵麑齯"},
+    # {L"zhou", L"伷侏侜倜僽冑周呪咒咮啁啄喌喙噣嚋妯婤宙州帚府徟扭掫昼晝晭柚椆注洀洲淍炿烐珘甃疛皱皺盩睭矪碡祝箒籀籒籕粙粥紂紬縐繇纣绉翢肘胄胕舟舳荮菷葤薵詋詶調諏謅譸诌诪诹调賙赒軸輈輖轴辀逐週郮酎鈾銂铀霌駎駲騆騶驟驺骤鬻鯞鵃鸼"},
+    # {L"qu", L"伹佉佢刞劬匚匤匷区區厺去取句呿坥娶屈岖岨岴嶇巨弆忂怚憈戌戵抾敺斪曲朐欋欪毆氍浀淭渠灈焌璖璩癯瞿磲祛竘竬筁籧粬紶組絇组翑翵耝胊胠脥臞苣菃葋蕖蘧蚼蛆蛐蜡蝺螶蟝蠷蠼衐衢袪覰覷覻觑詓詘誇誳诎趋趍趜趣趨跔跙跼躣躯軀軥迲遽郥鉤鐻鑺閴闃阒阹鞠鞫駆駈騶驅驱驺髷魼鮈鰸鱋鴝鶌鸜鸲麮麯麴麹黢鼁鼩齲龋"},
+    # {L"ci", L"伺佌佽偨兹刺刾厕厠司呰呲啙垐堲姕嬨嵯嵳差庛廁慈措朿枱柌柴栜栨次此泚滋澬濨玼珁瓷甆疵皉磁礠祠粢糍絘縒胔茈茦茨茲荠莿萕薋薺蚝蛓螅螆蠀詞词賜赐赼趀趑跐辝辞辤辭鈶雌飺餈骴髊鮆鴜鶿鷀鹚齹"},
+    # {L"beng", L"伻俸傍傰唪嗙嘣埄埲堋塴奟崩嵭平抨挷搒旁榜泵漨熢琣琫甏甭痭祊絣綳繃绷菶蚌跰蹦迸逬錋鏰镚閍鞛"},
+    # {L"ga", L"伽呷咖嘎嘠噶夹尕尜尬旮玍胳軋轧釓錷钆魀"},
+    # {L"chi", L"佁侈侙俿傺剟勅匙卙卶叱叺吃呎呬呮呹哆哧啸啻喜喫嗤嘨嘯噄噭坘坻垑墀奓她妛媸尺屟岻弛彨彲彳徲恜恥慗慸憏懘扡抬抶拆拕拖拸持捇提搋摛摴攡敕斥杘柅柢樆欼歗歭歯汖池沱沶治泜淔湁滞滯漦灻炽烾熾狋瓻痓痴痸瘈瘛癡眙眵瞝祇离移竾笞筂箈箎篪粚糦絺翄翅翤翨耛耻肔胝胣胵脪腟芪茌茬荎莉菭蚇蚩蚳蛇蝭螭袲袳裭褫訵誀誃誺謘謻豉貾赤赿趍趐趩跅跢跮踅踟踶軧迟迡迣遅遟遫遲邌郗鉓鉹銐鍉離雴飭飾餝饎饬饰馳騺驪驰骊魑鳷鴟鵄鵣鶒鶗鶙鷘鸱麶黐齒齝齿"},
+    # {L"tian", L"佃倎兲典吞呑唺嗔塡填天娗婖寘屇忝恬悿捵掭搷晪栝殄沺沾淟添湉滇琠瑱璳甛甜田甸町畇畋畑畠痶盷睓睼瞋碵磌窴紾緂胋腆舑舔舚苫菾蚕蚺覥觍賟酟鈿銛錪鍩鎭鎮钿铦锘镇闐阗靔靝靦顚顛颠餂鴫鷆鷏黇"},
+    # {L"tan", L"但倓傝僋儃叹啴嗿嘆嘽嘾坍坛坦埮墰墵壇壜婒弹弾彈忐怹惔憛憳憻探掸摊撢撣擹攤昙暺曇榃橝檀歎毯沈淡湛湠滩漢潬潭澹灘炎炭璮痑痰瘫癉癱碳禪緂繵罈罎胆舑舔舕荨菼蕁蕈藫袒裧襢覃談譚譠谈谭貚貪賧贪赕郯醈醓醰鉭錟钽锬镡顃餤鷤黮"},
+    # {L"qia", L"佉價冾卡咭圶客帢恰愘抲拤挈掐揢搳擖楬殎洽疴矻硈磍絜葜袷跒酠鞐髂鮚鲒"},
+    # {L"shao", L"佋削劭勺卲召哨娋少弰招捎搜旓杓柖梢溲潲烧焼燒燿玿睄稍笤筲紹綃綤绍绡艄芍苕莦萔萷蕱蛸袑輎邵鞘鞩韒韶颵髾鮹"},
+    # {L"zhao", L"佋兆召啁啅嘲垗妱巶找招旐昭晁曌朝枛桃棹櫂沼淖濯炤照燳爪爫狣瑵皽盄着瞾窼笊箌罀罩羄肁肇肈菬著蚤詔謿诏赵趙釗釽鉊鍣钊駋鮡鳭鼂鼌"},
+    # {L"ben", L"倴喯坌夯夲奔奙捹撪本桳楍泍渀炃燌犇獖畚笨翉苯蟦賁贲輽逩錛鐼锛"},
+    # {L"ti", L"体俶倜偍剃剔厗啑啼嗁嚏嚔奃姼媂媞屉屜崹嵜弚弟徥徲悌悐惕惖惿戻扌折挮掦提揥擿是替桋梯棣楴歒殢洟涕渧漽狄珶瑅瓋睇碮磃禵稊穉籊綈緹绨缇罤肆苐荑蕛薙虒蝭蟬衹裼褅褆詆諦謕诋谛趧趯跃踢踶蹄蹏躍躰軆达迏迖逖逷遆適醍銻錫鍗鐟锑锡題题騠骵體髢髰鬀鬄鮧鮷鯷鳀鴺鵜鶗鶙鷈鷉鷤鹈"},
+    # {L"he", L"何佫劾合吓呙呵呼咊和咼哈哬啝喛喝嗃嗑嗬噈嚇垎壑姀害寉峆惒愒抲挌揭敆曷柇核格楁欱毼河洽涸渇渮渴湼澕焃煂熆熇燺爀犵狢癋皬盇盉盍盒硅碋礉禾秴篕籺粭紇繳纥缴翮翯苛荷菏萂藃藿蚵蝎螛蠚袔褐覈訶訸詥謞诃貈貉賀贺赫輅轄辂辖郃鉌鑉閡闔阂阋阖隺霍靍靎靏鞨頜颌餄餲饸鬩魺鲄鵠鶡鶮鶴鸖鹄鹖鹤麧齃齕龁龢"},
+    # {L"she", L"佘厍厙奓奢射弽慑慴懾折抴拾挕捨揲摂摄摵攝檨欇歙涉涻渉滠灄猞畬畲睫碟磼社聂聶舌舍舎葉蔎虵蛇蛞蛥蠂設设賒賖赊赦輋闍阇鞨韘騇麝"},
+    # {L"tu", L"余兎兔凃凸吐唋啚図图圖圗土圡堍堗塗墿宊屠峹嵞嶀庩廜徒怢悇捈捸揬摕斁杜梌檡汢涂涋湥潳瑹痜瘏禿秃稌突筡腞腯荼莵菟葖蒤趃跌跿迌途酴釷鈯鋀鋵鍎钍馟駼鵌鵚鵵鶟鷋鷵鼵"},
+    # {L"die", L"佚叠咥哋啑喋垤堞峌崼嵽幉怢恎惵戜挃挕揲昳曡柣楪槢殜氎泆涉渉渫爹牃牒瓞畳疂疉疊眣眰碟窒絰绖耊耋胅至臷艓苵蜨蝶螲褋褶褺詄諜谍趃跌跕跮踢踮蹀蹛軼轶迭鐡鐵镻鞢鮙鰈鰨鲽鳎"},
+    # {L"gou", L"佝傋冓勾区區句呴坸垢够夠姤媾岣彀抅拘搆撀构枸構沟泃溝煹狗玽笱篝簼緱缑耇耈耉苟茩蚼袧褠覯觏訽詬诟豰豿購购軥遘鈎鉤钩雊鞲韝鮈鴝鸜鸲"},
+    # {L"kou", L"佝冦剾劶口叩妪嫗宼寇彄怐扣抠挎摳敂毆溝滱眍眗瞉瞘窛竘筘簆芤茠蔲蔻釦鏂鷇"},
+    # {L"ning", L"佞侫儜冰凝咛嚀嬣宁寍寕寗寜寧年拧擰攘柠橣檸泞澝濘狞獰甯疑矃聍聹苧薴鑏鬡鬤鸋"},
+    # {L"yong", L"佣俑傛傭勇勈咏喁嗈噰埇塎墉壅嫞容嵱庸廱彮怺恿悀惥愑愹慂慵拥揘擁柡栐槦永泳涌湧滽澭灉牅用甬痈癕癰砽硧禜筩臃臾苚蒏蕹蛹詠踊踴遇邕郺鄘醟銿鏞镛雍雝顒颙饔鯒鰫鱅鲬鳙鷛"},
+    # {L"wa", L"佤凹劸咓哇唲啘嗗嗢姽娃娲媧屲帓徍挖搲攨汙汚污洼溛漥瓦瓲畖砙穵窊窐窪聉腽膃蛙袜襪譁邷靺鞋韈韎韤鮭鲑黳鼃"},
+    # {L"ka", L"佧卡呿咔咖咯喀垰珈胩衉裃鉲"},
+    # {L"bao", L"佨保儤刨剝剥勹勽包呆嘐嚗堡堢報媬嫑孢宀宝寚寳寶忁怉报抱暴曓枹瀑炮煲爆珤砲窇笣簿緥胞苞菢葆蕔薄藵虣蚫袌袍裒裦褒褓襃豹賲趵鉋鑤铇闁雹靌靤飹飽饱駂骲髱鮑鲍鳵鴇鸨齙龅"},
+    # {L"huai", L"佪划咶喟嘳圳坏坯壊壞徊怀懐懷槐櫰淮瀤耲蘹蘾褢褱踝"},
+    # {L"lao", L"佬僗僚劳労勞咾哰唠嗠嘐嘮姥嫪崂嶗恅憥憦捞撈撩朥栳橑橯浶涝潦澇烙牢狫獠珯痨癆硓磱窂簩粩絡络老耢耮荖落蓼蛯蟧軂轑酪醪銠鐒铑铹顟髝鮱"},
+    # {L"ming", L"佲冥凕名命姳嫇慏掵明暝朙榠洺溟猽盟眀眳瞑茗萌蓂螟覭詺鄍酩銘铭鳴鸣"},
+    # {L"hen", L"佷哏噷很恨拫掀狠痕艮詪鞎"},
+    # {L"quan", L"佺全券劝勧勸卷啳圈圏圳埢姾婘孉峑巏巻弮恮悛惓拳拴捲搼权栒桊棬椦楾槫権權汱泉洤湶灥烇牶牷犈犬犭獾琯瑔甽畎痊矔硂筌純絟綣縓纯绻腃荃葲虇蜷蠸觠詮謜譔诠跧踡輇辁酄醛銓鐉铨闎韏顴颧駩騡鬈鰁鳈鸛鹳齤"},
+    # {L"tiao", L"佻儵咷啁姚嬥宨岧岹庣恌挑斢旫晀朓朷条桃條樤眺祒祧稠窕窱笤粜糶絩聎脁脩艞芀苕萔蓚蓧蓨蜩螩覜誂調调超趒趠跳踔迢銚鋚鎥铫鞗頫髫鯈鰷鲦齠龆"},
+    # {L"xiao", L"佼侾俏俲傚削効叜叟号呺呼咲咻哓哨哮唠唬啋啸嗃嘋嘐嘨嘮嘯嘵嚣嚻囂姣婋孝宯宵小崤庨彇恔恷憢挠捎揱搜撓撨效敩斅斆晓暁曉枭枵校梟梢橚櫹歊歒歗殽毊洨消涍淆滧漻潇潚澩瀟灱灲烋焇熇熽燆燺爻狡猇獟獢痚痟皛皢睄硝硣穘窙笑笹筱筿箫箾篠簘簫絞綃縿绞绡翛肖胶脩膮芍茭莦萧萷蕭薂藃虈虓蛸蟂蟏蟰蠨訤詨誟誵謏謞謼譊踃較轇较逍郩銷销霄颵騷驍驕骁骄骚骹髇髐魈鴞鴵鵁鷍鷕鸮"},
+    # {L"xing", L"侀倖兴刑哘坓坙型垶塂姓娙婞嫈嬹巠幸形性悻惺擤星曐杏洐涬滎煋熒狌猩瑆皨省睲研硎硏箵篂緈胜腥臖興荇荥莕蛵行裄觪觲謃邢郉醒鈃鉶銒鋞钘铏陉陘餳饧騂骍鮏鯹"},
+    # {L"kan", L"侃偘冚凵刊勘喊坎埳堪堿塪墈崁嵁嵌惂戡扻栞槛檻欿歁監看瞰矙砍碪磡竷莰莶薟衎譼輡輱轁轗闞阚靬顑餡馅龕龛"},
+    # {L"lai", L"來俫倈勑厲唻娕婡崃崍庲徕徠懶攋来梾棶櫴涞淶濑瀨瀬猍琜癞癩睐睞筙箂籁籟莱萊藾襰誺賚賴赉赖逨郲釐錸铼頼顂騋鯠鵣鶆麳黧"},
+    # {L"hua", L"侉划劃劐化华吪哇哗嘩埖姡婲婳嫿嬅学學崋找搳摦撶敌杹桦椛槬樺檴浍滑澅澮猾獪璍画畫畵砉硴磆稞粿糀繣腂舙花芲華蒍蕐蘤蘳螖觟話誮諙諣譁譮话豁輠釪釫鋘錵鏵铧驊骅魤鮭鲑鷨黊"},
+    # {L"kua", L"侉咵垮夸姱恗挎晇楇絓胯舿華蕐袔誇跨銙錁锞顝骻髁"},
+    # {L"guang", L"侊俇僙光咣垙姯广広廣恍扩挄撗擴桄横櫎欟洸潢灮炗炚炛烡犷獷珖硄胱臦臩茪趪輄迋逛銧黆"},
+    # {L"lie", L"例倈儠冽列劣劦劽咧哷埒埓奊姴峢巁巤忚挒挘捩擸栗棙櫑毟洌浖烈烮煭燤爄爉犣猎猟獵睙綟聗脟膊臘茢蛚裂趔躐迾邋颲鬛鬣鮤鱲鴷"},
+    # {L"mi", L"侎冖冞冪劘咪哋嘧塓孊宓宻密尒尓尔峚幂幎幦幺弥弭彌戂摩摵擟擵攠敉榓樒檷櫁汨沕沵泌洣淧渳溟滵漞濔濗瀰灖熐爢爾猕獯獼瓕眫眯眽瞇瞴祕祢禰秘穈簚籋米粎糜糸縻罙羃羋脒芈苾葞蒾蓂蔝蔤藌蘼蜜蝆袮覓覔覛觅詸謎謐谜谧辟迷醚醾醿釄銤鑖镾靡鸍麊麋麛鼏"},
+    # {L"an", L"侒俺儑匼厂厈咹唵啽垵垾埯堓婩媕安屽岸峖干广庵按揞晻暗案桉氨洝犴玵痷盒盦盫碪罯胺腤荌菴萻葊蓭裺誝諳谙豻貋遃鉗銨錌钳铵闇陰隂隌雸鞌鞍韽頇頞顸馣鮟鴳鵪鶕鹌黯"},
+    # {L"lu", L"侓僇六剹勎勠卢卤嗠噜嚕嚧圥坴垆塶塷壚娽峍庐廘廬彔录戮挔捋捛掳摅摝撸擄擼攄攎枦栌椂樐樚橹櫓櫨氇氌泸淕淥渌滤滷漉漊潞澛濾瀂瀘炉熝爐獹玈琭璐璷瓐甪瘳盝盧睩矑硉硵碌磠祿禄稑穋箓簏簬簵簶籙籚粶緑纑绿罏翏肤胪膔膚膟臚舮舻艣艪艫芦菉蓼蓾蔍蕗蘆虂虏虜螰蠦角觮觻谷賂赂趢路踛蹗輅轆轤轳辂辘逯鄜酪醁鈩錄録錴鏀鏕鏴鐪鑥鑪镥陆陸露顱颅騄騼髗魯魲鯥鱳鱸鲁鲈鴼鵦鵱鷺鸕鸬鹭鹵鹿麓黸"},
+    # {L"mao", L"侔冃冇冐冒勖務卯堥夘媢峁嵍帽愗懋戼描旄昴暓枆楙毛毣毷氂泖渵牟牦犛猫獏瑁皃眊瞀矛秏笷緢罞耄耗芼茂茅茆萺蓩蛑蝐蝥蟊袤覒貇貌貓貿贸軞鄚鄮酕鉚鉾錨铆锚霿髦髳鶜"},
+    # {L"gong", L"供公共功匑匔厷咣唝嗊塨宫宮工巩幊廾弓恭愩慐拱拲攻杛杠栱汞渱熕珙碽篢糼紅红羾肱虹蚣蛩觥觵貢贑贛贡赣躬躳輁銾鞏髸魟龏龔龚"},
+    # {L"cun", L"侟刌吋墫存寸忖拵村洊浚澊皴竴籿踆蹲邨"},
+    # {L"lv", L"侣侶偻儢勴卛卢吕呂哷垏壘娄婁寠寽屡屢履嵂庐廬律慮慺捋旅曥梠榈樓櫖櫚櫨氀氯滤焒爈率瘻盧瞜祣稆穞穭箻篓簍累絽綠緑縷繂绿缕膂膐膢葎蒌蔞藘虑褛褸謱軁郘鋁録鏤鑢铝镂閭闾馿驢驴魯鲁鷜鹿"},
+    # {L"zhen", L"侦侲偵唇圳坫塡塦填姫嫃寊屒帧帪弫慎戡抮挋振揕搸敒敶斟昣朕朾枕枮栕栚桢桭椹楨榐榛槇樼殝沴沵浈湞溱滇潧澵獉珍珎瑧甄畛疹眕眞真眹砧碪祯禎禛稹竧箴籈紖紾絼縝縥纼缜聄胗臻萙葴蒖蓁薽蜄袗裖覙診誫謓诊貞賑贞赈趁趂軫轃轸辴迧遉酖酙針鈂鉁鋴錱鍖鍼鎭鎮针镇阵陣陳震靕駗鬒鮝鱵鲞鴆鸩黮黰鼎鼑"},
+    # {L"ce", L"侧側冊册刂厕厠墄嫧帻幘廁恻惻憡拺敇柵栅测測畟笧策筞筴箣簎粣荝萗萴蓛赦齰"},
+    # {L"chai", L"侪儕勑叉喍囆差扠拆搓查柴犲瘥祡茈茝蔕虿蠆袃訍豺釵钗齜龇"},
+    # {L"nong", L"侬儂农咔哝噥廾弄憹挊挵欁浓濃癑禯秾穠繷脓膿莀蕽襛農辳醲齈"},
+    # {L"hou", L"侯候厚后吼吽呴喉垕堠帿後洉犼猴瘊睺矦篌糇翭翵腄葔詬诟豞逅郈鄇銗鍭餱骺鮜鯸鱟鲎鲘齁"},
+    # {L"jiong", L"侰僒冂冋冏囧坰垧埛宭扃扄昋泂浻澃瀅炅炯烱煚煛熒熲燑燛窘絅綗臦臩蘏蘔褧迥逈銄鎣顈颎駉駫"},
+    # {L"tui", L"侻俀僓啍墤娧尵弚弟忒怢推橔煺稅税穨聉脫脮脱腿蓷藬蘈蛻蜕褪謉讉蹆蹪追退隤頹頺頽颓饋馈駾騩骽魋"},
+    # {L"nan", L"侽南喃囝囡妠娚婻嫨弇戁抩揇摊攤暔枏枬柟楠湳滩灘煵男畘腩莮萳蝻諵赧遖难難颌"},
+    # {L"bian", L"便匾卞变変封峅弁徧忭惼扁抃拚揙昪汳汴炞煸牑猵獱甂疺砭碥稨稹窆笾箯籩糄編緶缏编臱艑苄萹藊蝙褊覍覵變豍貶贬辡辦辧辨辩辫辮辯边遍邉邊邲釆鍽閞鞕鞭頨髟鯾鯿鳊鴘鶣"},
+    # {L"pian", L"便偏囨媥平徧扁楄楩片犏猵璸篇緶缏翩胼腁萹蝙褊覑諚諞谝貵賆跰蹁辩辯駢騈騗騙骈骗骿魸鶣"},
+    # {L"chuo", L"促吷啜嚽娕娖婥婼孎惙戳拺擉斫歠涰淖焯磭箹簇綴綽繛绰缀腏荃蔟趠趵跿踔踱躇輟辍辵辶逴酫醛鋜錣鏃鑡镞齪齱龊"},
+    # {L"ku", L"俈刳古哭喾嚳圐圣堀崫库庫扝挎捁掘搰朏枯桍楛泏焅狜瘔矻硞秙窋窟絝绔胐苦袴裤褲趶跍跨郀酷骷鮬齁"},
+    # {L"jun", L"俊儁军勻匀君呁均埈姰寯峻懏捃攈旬晙桾汮浚濬焌焞燇狻珺畯皲皸皹碅竣筠箘箟莙菌葰蔨蚐蜠袀覠訇軍郡鈞銁銞鋆鍕钧陖隽雋餕馂駿骏鮶鲪鵔鵕鵘麇麏麕龜龟"},
+    # {L"shun", L"俊吮巛巡廵恂楯橓眴瞚瞤瞬舜蕣輴順顺鬊"},
+    # {L"lang", L"俍勆哴唥啷埌塱嫏崀廊悢朖朗朤桹榔樃樠欴浪烺狼琅瑯硠稂筤羮羹脼艆莨蒗蓈蓢蜋螂誏踉躴郎郒郞鋃鎯锒閬阆駺"},
+    # {L"hun", L"俒倱圂婚婫忶惛惽慁挥捆掍揮昆昏昬梡梱棍棔殙浑涽混渾湣湷溷焄焝珲琿眃睧睯緄緍緡繉绲缗荤葷蔒觨諢诨轋閽阍顐餛餫馄魂鼲"},
+    # {L"ying", L"俓偀僌哽啨営嘤噟嚶塋夃央婴媖媵嫈嬰嬴孆孾嵤巆巊应廮影応愥應摬撄攍攖攚旲映景暎朠柍桜桯梬楹樱櫻櫿泂浧渶溁溋滎滢潁潆濙濚濴瀅瀛瀠瀯瀴灐灜焸煐熒營珱瑛瑩璎瓔甇甖甸瘿癭盁盈眏矨硬碤礯穎籝籯緓縄縈繩纓绬绳缨罂罃罌耺膡膺英茔荥荧莖莹莺萤营萦萾蓥藀蘡蛍蝇蝧蝿螢蠅蠳褮覮謍譍譻賏贏赢軈迎逞郢鎣鐛鑍锳霙鞕韹韺頴颍颕颖鱦鴬鶧鶯鷪鷹鸎鸚鹦鹰"},
+    # {L"su", L"俗傃僁僳卹嗉嗖囌圱圲埣塐塑夙嫊宿愫愬憟捽搬摵梀棴榡樎樕橚櫯殐泝洬涑溯溸潚潥玊珟璛甦碿稡稣稤穌窣簌粛粟素縤縮缩肃肅膆苏莤蔌藗蘇蘓觫訴謖诉谡趚蹜速遡遬酥鋉餗驌骕鯂鱐鷫鹔"},
+    # {L"dao", L"俦倒儔刀刂到受叨啁嘄噵壔宲导導屶岛島嶋嶌嶹帱幬忉忑悼惆捣捯搗擣朷椡槝檤檮氘洮涛濤焘燾瓙盗盜祷禂禱稲稻箌絩纛翢翿舠菿薵虭衜衟裯蹈軇道醻釖陦陶隝隯魛鱽鳥鸟"},
+    # {L"lia", L"俩倆"},
+    # {L"pai", L"俳哌啡徘拍排棑椑派湃牌犤猅箄簰脾腗蒎輫迫鎃"},
+    # {L"biao", L"俵僄儦剽墂婊嫖幖彪徱摽杓标標檦淲滮漂瀌灬熛爂猋瘭穮篻脿膔膘臕苞蔈藨表裱褾諘謤贆錶鏖鏢鑣镖镳颮颷飆飇飈飊飑飙飚驃驫骉骠髟鰾鳔麃"},
+    # {L"fei", L"俷剕匪厞吠啡墢奜妃婓婔屝废廃廢怫悱扉拂斐昲暃曊朏杮柹棐榧橃橨櫠沸淝渄濷犻狒猆琲疿痱癈砩祓笰篚紼緋绋绯翡肥肺胇胏胐腓芾茀茇菲萉蕜蕟蕡蜚蜰蟦裴裵裶襏誹诽費费鐨镄陫霏靅非靟飛飝飞餥馡騑騛髴鯡鲱鼣鼥"},
+    # {L"bei", L"俻俾倍偝偹備僃北卑呗哱唄喺垻埤备孛怫悖悲惫愂憊揹昁杮杯柸桮梖棑棓椑波焙牬犕狈狽珼琲痺盃碑碚禙箃糒背臂苝茀菩萆萯葡蓓藣蛽蜚被褙襬誖諀貝贝跋軰輩辈邶鄁鉳鋇錍鐴鐾钡陂鞴骳鵯鹎"},
+    # {L"zong", L"倊倧偬傯堫宗嵏嵕嵸從总惣惾愡捴揔搃摠昮朡枞棕椶樅潀潈潨熜熧燪猔猣疭瘲碂磫稯粽糉綜緃総緫緵縂縦縱總纵综翪腙艐葼蓗蓯蝬豵踨踪蹤錝鍯鏓鑁騌騣骔鬃鬉鬷鯮鯼"},
+    # {L"chui", L"倕吹圌垂埀惙捶搥桘棰椎槌炊箠腄菙郵錘鎚锤陲顀鬌魋龡"},
+    # {L"zhui", L"倕坠垂埀墜娷惴揣椎槌沝甀畷硾磓礈笍箠綴縋缀缒腏膇致萑諈贅赘轛追醀醊錐錗錣鎚鑆锥隊隧隹餟騅骓鵻"},
+    # {L"kong", L"倥埪孔宆崆恐悾控椌涳矼硿穹空箜羫腔躻錓鞚鵼"},
+    # {L"juan", L"倦劵勌勬卷呟圈圏埍埢奆姢娟嶲巂帣弮悁惓慻捐捲擐朘桊梋棬泫涓淃焆狷獧瓹甄眩眷睃睊睠絭絹縳绢罥羂脧腃臇菤萒蔨蕊蕋蜷蠲裐襈讂踡身鄄鋑鋗錈鎸鐫锩镌闂隽雋雟鞙韏飬餋鵍鵑鹃"},
+    # {L"song", L"倯傱凇吅娀宋崧嵩嵷庺忪怂悚愯慫憁憽捒捴揔摗松枀枩柗梥棇楤檧淞漎濍硹竦耸聳菘蓯蘴蜙訟誦讼诵送鍶鎹锶頌颂餸駷鬆"},
+    # {L"cai", L"倸偲啋埰婇寀彩戝才扐採揌材棌猜睬綵縩纔菜蔡裁財财跴踩采"},
+    # {L"ruan", L"偄堧壖媆嫰愞撋朊檽渪濡燸瑌瓀碝礝緛耎腝蝡軟輭软阮需"},
+    # {L"chong", L"偅傭僮充冲喠嘃埫宠寵崇崈徸忡憃憧揰摏樁沖浺涌漴潼烛爞珫痋盅祌种種緟罿翀舂艟茧茺虫蝩蟲衝褈蹖蹱酮重銃铳隀"},
+    # {L"chun", L"偆僢唇堾媋惷旾春暙朐杶椿楯槆橁櫄沌浱淳湻滣漘犉瑃睶箺純纯肫胊脣膞芚莼萅萶蒓蓴蝽蠢賰踳輇輴辁醇醕錞陙鯙鰆鶉鶞鹑"},
+    # {L"re", L"偌喏惹捼渃热熱若蹃"},
+    # {L"ruo", L"偌叒婼嵶弱惹挼捼撋楉渃溺焫爇箬篛芮若蒻鄀鰙鰯鶸"},
+    # {L"dang", L"偒儅党凼噹圵场垱場壋婸宕崵嵣当愓挡擋攩档檔欓氹潒澢灙烫燙珰瑒璗璫瓽當瘍盪瞊砀碭礑筜簜簹艡荡菪蕩蘯蟷裆襠譡讜谠趤逿鐺铛闣雼黨"},
+    # {L"huang", L"偟兤凰喤堭塃墴奛媓宺崲巟幌徨怳恍惶愰慌揘晃晄曂朚楻榥櫎汻洸湟滉潢炾煌熀熿爌獚瑝璜癀皇皝皩磺穔篁簧縨肓艎芒茫荒葟蝗蟥衁詤諻謊谎趪遑鍠鎤鐄锽隍韹餭騜鰉鱑鳇鷬黃黄"},
+    # {L"zou", L"偢奏媰掫揍搊族棷棸楱箃緅芻菆諏诹走赱辶邹郰鄒鄹陬騶驺鯐鯫鲰黀齱齺"},
+    # {L"duan", L"偳剬塅媏彖断斷椴段毈煅瑖短碫端篅簖籪緞缎耑腶葮褍踹躖鍛鍴锻"},
+    # {L"ou", L"偶区區吘吽呕嘔塸怄慪抠握摳敺櫙欧歐殴毆沤渥漚澫熰瓯甌紆纡耦腢膒蓲蕅藕藲謳讴遇醧鏂鴎鷗鸥齵"},
+    # {L"zan", L"偺儧儹兂咱喒囋寁拶揝撍攒攢昝暂暫桚涔湔濺濽灒瓉瓒瓚禶穳篸簪簮糌臢襸讃讚賛贊赞趱趲蹔鄼酂酇錾鏨鏩鐕鐟饡"},
+    # {L"liu", L"偻僂六刘劉嚠塯媹嬼嵧廇懰抡斿旈旒柳栁桞桺榴橊橮沠泖泵流浏游溜漻澑瀏熘熮珋琉瑠瑬璢畂畄留畱疁瘤癅硫碌磂磟綹绺罶羀翏聊膢蒌蒥蓅蓼蔞藰蟉裗蹓遛鉚鋶鎏鎦鏐鐂铆锍镏镠陆陸雡霤飀飂飅飗餾馏駠駵騮驑骝鬸鰡鶹鷚鹠鹨麍"},
+    # {L"lou", L"偻僂喽嘍塿娄婁寠屚嵝嶁廔慺搂摟楼樓溇漊漏熡牢甊瘘瘺瘻瞜窶篓簍耧耬膢艛蒌蔞蝼螻謱軁遱鏤镂陋露鞻髅髏"},
+    # {L"sou", L"傁凁叜叟嗖嗽嗾廀廋捒捜搜摗撨擞擻敕族棷櫢欶涑溲潚獀瘶瞍籔艘蒐蓃薮藪螋謏鄋醙鎪鏉锼颼颾飕餿馊騪"},
+    # {L"yuan", L"傆允元冤剈原厡厵员咽員喛噮囦园圆圎園圓圜垣垸塬夗妧妴媛媴嫄嫚嬽宛寃弲怨悁惌愿捐掾援杬棩楥榞榬橼櫞沅涓涴淵渁渆渊渕湲源溒灁焆爰猨猿獂瑗盶眢禐穿笎箢緣縁缘羱肙芫苑葾蒝蒬薗薳蚖蜎蜵蝝蝯螈衏袁裫裷褑褤謜貟贠輐轅辕远逺遠邍邧酛鈨鋺鎱阮院陨隕願駌騵魭鳶鴛鵷鶢鶰鸢鸳鹓黿鼋鼘鼝"},
+    # {L"rong", L"傇傛冗坈媶嫆嬫宂容峵嵘嵤嶸巆戎搈搑摉曧栄榕榮榵毧氄溶瀜烿熔爃狨瑢穁穃絨縙縟绒缛羢肜茙茸荣蓉蝾融螎蠑褣軵鎔镕隔頌颂駥髶"},
+    # {L"jiang", L"傋僵勥匞匠塂壃夅奖奨奬姜将將嵹弜弶強强彊摪摾杢桨槳橿櫤殭江洚浆滰漿犟獎畕畺疅疆礓糡糨紅絳繮红绛缰翞耩膙茳葁蒋蔃蔣薑虹螀螿袶講謽讲豇酱醤醬降韁顜鱂鳉"},
+    # {L"hao", L"傐儫号呺哠唬嗥嘷噑嚆嚎壕好妞恏悎昊昦晧暠暤暭曍椃毫浩淏滈滜澔濠灏灝獆獋皋皓皜皞皡皥睾秏竓籇翯耗聕膠臯茠蒿薃薅薧藃號虠蚝蠔諕譹豪貉郝鄗鎒鎬鐞镐顥颢鰝"},
+    # {L"shan", L"傓僐僤儃儋凵删刪剡剼单単善單嘇圸埏墠墡壇姍姗嬗山嶦幓彡扇挻掞掸掺搀搧摻擅擔攙敾晱曏曑杉杣柵栅椫樿檀檆櫼汕潬潸澘澹灗炶烻煔煽熌狦猭珊疝痁睒磰禅禪穇笘笧縿繕纔缮羴羶脠膳膻舢芟苫葠蔪蟬蟮蟺衫襂襳覢訕謆譱讪贍赡赸跚軕邓邖鄯釤銏鐥钐閃閄閊闪陕陝顃顫颤饍騸骟髟鯅鱓鱔鱣鳝鳣"},
+    # {L"que", L"傕决却卻埆塙墧屈崅悫愨慤搉攉敠榷殻毃汋決炔燩猎獡瘸皵硞确碏確碻礐礭缺舃舄芍蒛蚗趞踖躤闋闕阕阙隺雀鳥鵲鹊"},
+    # {L"nuo", L"傩儺吶呐哪喏堧娜媠嫷愞懦懧挪掉掿搙搦搻梛榒橠毭渪稬穤糑糥糯耎袲袳諾诺蹃逽那郍鍩锘难難需"},
+    # {L"ca", L"傪嚓囃拆擦攃橴磣礤礸蔡遪"},
+    # {L"can", L"傪儏参參叄叅喰嘇噆囋嬠嬱孱嵾惨惭慘慙慚憯戔掺摲朁残殘淺湌澯灿燦爘璨穇篸粲薒蚕蝅蠶蠺謲蹔鏒飡飱餐驂骖鯵鰺鲹黪黲"},
+    # {L"lei", L"傫儡儽勒卢厽咧嘞垒塁壘壨嫘擂攂樏檑櫐櫑欙泪洡涙淚漯灅瓃畾瘣癗盧矋磊磥礌礧礨祱禷类累絫縲纇纍纝缧罍羸耒肋脷腂蔂蕌蕾藟蘱蘲蘽虆蠝誄讄诔轠郲酹銇錑鐳鑘鑸镭雷靁頛頪類颣鱩鸓鼺"},
+    # {L"cao", L"傮嘈屮嶆愺慅慒懆撡操曹曺槽漕澡糙肏艚艸艹草蓸螬褿襙造鄵鏪鐰騲鼜"},
+    # {L"zao", L"傮凿唕唣喿噪慥早枣栆梍棗槽澡灶煰燥璅璪皁皂窖竃竈簉糟繅繰缫缲艁草薻藻蚤謲譟趮蹧躁造遭醩鑿"},
+    # {L"shuang", L"傱双塽孀孇慡樉欆泷淙滝漺瀧灀爽礵縔艭鏯雙霜騻驦骦鷞鸘鹴"},
+    # {L"ao", L"傲凹厫嗷嗸噢嚣嚻囂坳垇墺墽奡奥奧媪媼嫯岙岰嶅嶴廒慠懊扷抝拗摮擙敖柪梎棍泑浇滶澆澚澳熝熬爊獒獓璈眑磝磽礉翱翶翺聱芺蔜蝹螯袄襖謷謸軪遨郩鏊鏕鏖镺隞驁骜鰲鳌鴁鴢鷔鼇"},
+    # {L"piao", L"僄剽勡嘌嫖彯徱慓摽旚朴殍漂潎犥瓢皫瞟磦票篻縹缥翲膘莩蔈薸螵謤醥闝顠飃飄飘驃驫骉骠髟魒"},
+    # {L"man", L"僈埋墁姏嫚屘幔幕悗慢慲摱曼槾樠満满滿漫澫澷熳獌睌瞒瞞矕絻縵缦蔄蔓蘰蛮螨蟃蟎蠻襔謾谩蹒蹣鄤鏋鏝镘鞔顢颟饅馒鬗鬘鰻鳗"},
+    # {L"lan", L"僋儖兰厱啉嚂囒坔壈壏婪嬾孄孏岚嵐幱廩廪惏懒懔懢懶拦揽擥攔攬斓斕暕栏榄欄欖欗浨涟湅滥漣漤澜濫瀾灆灠灡炼烂煉燗燣爁爛爤爦璼瓓礷篮籃籣糷繿纜缆罱葻蓝藍蘫蘭褴襕襤襴襽覧覽览諫譋讕谏谰躝郴醂鑭钄镧闌阑韊顲"},
+    # {L"zun", L"僎僔噂墫奠尊嶟拵捘捽撙栫樽瀳繜罇袸譐跧踆蹲遵銌鐏鱒鳟鶎鷷"},
+    # {L"cuan", L"僔巑撺攅攒攛攢昕櫕欑殩汆濽灒熶爨穳窜窾竄篡篹簒菆襸蹿躥鋑鑹镩"},
+    # {L"deng", L"僜凳噔墱嬁嶝憕戥橙櫈澄灯燈璒登瞪磴竳等簦艠覴豋蹬邓鄧鐙镫隥"},
+    # {L"teng", L"僜儯幐滕漛疼痋籐籘縢腾膯藤虅螣誊謄邆霯駦騰驣鰧鼟"},
+    # {L"tie", L"僣占呫帖怗惵聑萜蛈蝶貼贴跕鉄鉆銕鋨鐡鐵铁锇飻餮驖鴩"},
+    # {L"ceng", L"僧噌增层層嶒曾橧竲繒缯蹭驓"},
+    # {L"seng", L"僧鬙"},
+    # {L"zen", L"僭囎怎撍譖譛谮"},
+    # {L"min", L"僶冧冺刡勄呡垊姄岷崏忞怋悯愍慜憫抿捪敃敏敯旻旼暋民汶泯渂湏湣潣玟珉琘琝瑉痻皿盷盿眠砇碈笢笽簢緍緡繩绳缗罠苠蠠賯鈱錉鍲閔閩闵闽鰵鳘鴖黽黾"},
+    # {L"sai", L"僿嗮嘥噻塞思愢揌毢毸簑簺腮賽赛顋鰓鳃"},
+    # {L"tai", L"儓冭台呔咍囼坮大太夳奤嬯孡忕忲态態抬擡斄旲枱檯汰泰溙漦炱炲燤珆箈籉粏肽胎能臺舦苔菭薹詒诒跆軚邰酞釐鈦鈶钛颱駘骀鮐鲐"},
+    # {L"meng", L"儚冡勐夢夣嫇孟尨幪庬懜懞懵掹擝明曚朦梦橗檬氋氓溕濛猛獴瓾甍甿盟瞑瞢矇矒礞罞艋艨莔萌萠蒙蕄虻蜢蝱蟊蟒蠓鄳鄸鋂錳锰雺霚霥霧霿靀顭饛髳鯍鯭鱦鸏鹲黽黾鼆"},
+    # {L"qiong", L"儝卭嬛宆惸憌桏橩焪焭煢熍琁琼璚瓊瓗睘瞏穷穹窮竆笻筇舼茕藑藭蛩蛬赹跫邛銎鞠"},
+    # {L"la", L"儠剌啦喇嚹垃拉揦揧搚摺擸攋旯柆楋櫴溂爉瓎瘌癞癩砬磖翋腊臈臘菈落蓝藞蜡蝋蝲蠟辢辣邋鑞镴鞡鬎鯻鱲"},
+    # {L"du", L"儥凟剢剫匵厾嘟噣土堵塗妒妬嬻宅帾度斁晵暏杜椟樚樞橐櫝殬殰毒涜渎渡瀆牍牘犊犢独獨琽瓄皾督睪睹秺竇竺笁笃篤纛肚芏荰蝳螙蠧蠹裻襡襩覩詫読讀讟诧读豄賭贕赌都醏錖鍍鍺鑟锗镀闍阇陼靯韇韣韥頓顿騳髑黩黷"},
+    # {L"long", L"儱厐咙哢嚨垄垅壟壠宠寵屸嶐巃巄庞弄徿总拢攏昽曨朧栊梇槞櫳泷湰滝漋瀧爖珑瓏癃眬矓砻硦礱礲窿竉竜笼篢篭籠聋聾胧茏蕯蘢蝕蠪蠬衖襱谾豅贚躘鏧鑨陇隆隴霳靇驡鸗龍龐龒龓龙"},
+    # {L"rang", L"儴勷嚷壌壤孃忀懹攘欀瀼爙獽瓤禳穣穰纕蘘蠰譲讓让躟鑲镶鬤"},
+    # {L"xiong", L"兄兇凶匈哅夐宪忷恟敻昫汹洶焸熊胷胸芎訩詗詾讻诇賯赨雄"},
+    # {L"dui", L"兊兌兑垖埻堆塠夺奪对対對嵟怼憝憞懟搥敦杸濧濻瀢瀩痽碓磓祋綐膭薱謉譈譵追鈗銳鋭錞鎚鐓鐜锐镦队陮隊頧鴭"},
+    # {L"rui", L"兊兌兑內内叡壡婑惢抐撋枘桵棁橤汭瑞甤睿笍綏緌繠绥芮苼蕊蕋蕤蘂蘃蚋蜹踒鈉銳鋭鏸钠锐"},
+    # {L"ke", L"克刻剋勀勊匼可呵咳喀嗑坷堁壳娔客尅岢峇嵑嵙嶱恪悈愘愙揢搕敤柯棵榼樖欬歁殻毼氪渇渴溘濭炣牁犐珂疴痾盍瞌砢硞碣碦磆磕礊礚科稞窠窼簻緙缂翗胢艐苛萪薖蚵蝌衉袔課课趷軻轲醘鈳鉿錁錒钶铪锕锞頦顆颏颗騍骒髁龕"},
+    # {L"nei", L"內内哪娞婑氝浽脮腇那錗餒餧馁鮾鯘"},
+    # {L"shou", L"兽収受售嘼垨壽夀守寿手扌授掱收敊涛涭濤熟狩獣獸痩瘦綬绶膄艏醻鏉首"},
+    # {L"ran", L"冄冉卪呥嘫姌媣染柟橪然熯燃珃繎肰舑苒蒅蚦蚺衻袇袡蹨髥髯"},
+    # {L"gua", L"冎刮剐剮劀卦叧呱咶咼啩坬寡惴括挂掛栝歄焻煱瓜絓緺罣罫胍舌苽褂詿諣诖趏踻銛銽铦颪颳騧鴰鸹"},
+    # {L"mei", L"凂呅味嚜坆坶堳塺墨妹媄媒媚媺嬍寐嵄嵋徾抺挴攗攟昧枚某栂梅楣楳槑櫗毎每氼沒没沫沬浼渼湄湈溦煝煤燘猸玫珻瑂痗眉眊眛睂睸矀祙禖篃糜美羙脄脢腜膴苺莓葿蘪蝞袂谜跊躾郿酶鋂鎂鎇镁镅霉韎鬽魅鶥鹛黣黴"},
+    # {L"zhun", L"准凖啍圫埻宒屯忳旽淳湻準甽盹稕窀純綧纯肫胗衠訰諄谆迍飩饨黱"},
+    # {L"cou", L"凑奏揍族楱湊玼簇腠蔟薮藪趋趣趨輳辏"},
+    # {L"kai", L"凯凱剀剴劾勓喝喫嘅噄垲塏奒嵦幆开忾恺愒愷愾慨揩暟核楷欬欯渇渴溘濭炌炏烗蒈衉豈輆鍇鎎鎧鐦铠锎锴開闓闿雉颽"},
+    # {L"guo", L"划呙咶咼唬啯嘓囗囯囶囻国圀國埚埻堝墎崞帼幗彉彍惈慖掴搓摑敋果枸椁楇槨櫎活涡淉渦漍濄猓瘑矌簂粿綶聒聝腂腘膕菓蔮虢蜮蜾蝈蝸蟈蠃裹褁輠过過郭鈛錁鍋鐹锅锞餜馃馘"},
+    # {L"bie", L"別别咇彆徶憋扒拔捌撆撇柭柲猰瘪癟秘穪苾莂蔽虌蛂蟞襒蹩鱉鳖鼈龞"},
+    # {L"pao", L"刨包匏咆嚗垉奅庖抛抱拋摽泡炮炰爮犥狍瓟疱皰砲礟礮穮窌胞脟脬苞萢藨蚫袌袍褜謈跑軳鉋铇鞄颮飑鮑鲍麃麅麭"},
+    # {L"shua", L"刷唆唰涮耍誜选選"},
+    # {L"cuo", L"剉剒厝夎嵯嵳庴挫措搓摧撮昔最棤澨營瑳痤瘥睉矬磋縒脞莝莡蒫蓌蔖虘襊諎蹉躜躦逪遳酂酇醝銼錯锉错髊鹺鹾齹"},
+    # {L"pou", L"剖吥咅哣垺培堷婄抔抙抱捊掊棓涪犃箁裒裦褒襃踣部郶錇锫颒"},
+    # {L"tuan", L"剬剸团団圕團塼墥嫥專彖慱抟摶敦槫檲湍湪漙煓猯畽疃磚稅税篿糰蓴褍褖貒鏄鱄鶉鷒鷻鹑"},
+    # {L"qiang", L"創勥呛哐唴啌嗆嗴墏墙墻嫱嬙将將嶈庆廧強强彊慶戕戗戧抢控搶摤摪斨枪椌槍樯檣殻溬漒炝熗爿牄牆猐獇玱琷瑲矼箐篬繈繦羌羗羟羥羫羻腔艢蔃蔷薔蘠蜣襁親謒跄跫蹌蹡錆鎗鏘鏹锖锵镪顩鶬鸧"},
+    # {L"zuan", L"劗揝撮攒攢攥欑篹籫繤纂纉纘缵賺赚躜躦鑚鑽钻"},
+    # {L"keng", L"劥吭坈坑奟妔忐挳揁摼殸牼硁硍硎硜硻胫脛誙踁鉺銵鍞鏗铒铿阬"},
+    # {L"gao", L"勂吿告咎夰峼搞暠杲槀槁槔槹橰檺櫜浩滜澔獋獔皋皐睪睾祮祰禞稁稾稿筶篙糕縞缟羔羙膏臯菒蒿藁藳誥诰郜鋯鎬锆镐韟餻高髙鷎鷱鼛"},
+    # {L"weng", L"勜嗡塕壅奣嵡暡滃瓮甕瞈罋翁聬蒙蓊蕹螉鎓鶲鹟齆"},
+    # {L"pin", L"匕品嚬姘娉嫔嬪拚拼朩榀汖泵牝玭琕矉砏礗穦聘薲蘋貧贫頻顰频颦馪驞"},
+    # {L"nao", L"匘呶垴堖夒婥嫐孬峱嶩巎巙怓恼悩惱憹挠撓橈檂浇淖澆猱獶獿瑙硇碙碯脑脳腝腦臑蛲蝚蟯詉譊鐃铙閙闹鬧"},
+    # {L"za", L"匝咂咋咱啈啐喒嘁噈囃囋囐帀扎拶杂桚沞沯濽灒砸磼籴紥紮臜臢襍鉔雑雜雥韴魳"},
+    # {L"zang", L"匨塟奘弉戕牂牫羘脏臓臟臧葬蔵藏賍賘贓贜赃銺駔驡驵髒"},
+    # {L"suan", L"匴撰狻痠祘笇筭算篹蒜选選酸"},
+    # {L"nian", L"卄哖唸埝姩年廿念拈捵捻撚撵攆榐涊淰溓痆碾秊秥簐粘艌蔫趁趂跈蹍蹨躎輦輾辇辗鮎鯰鲇鲶鵇黏"},
+    # {L"shuai", L"卛帅帥摔率甩綏縗绥缞蟀衰"},
+    # {L"kun", L"卵困坤堃堒壸壼婫尡崐崑悃捆昆晜梱涃混潉焜熴猑琨瑻睏硱祵稇稛綑罤臗菎蜫裈裍裩褌豤貇醌錕锟閫閸阃頑顽餛馄騉髠髡髨鯤鰥鲲鳏鵾鶤鹍齦龈"},
+    # {L"mang", L"厖吂哤壾娏尨庬忙恾朚朦杗杧氓汒浝漭牤牻狵甿痝盲盳瞢硥硭笀芒茫茻莽莾蘉蛖蟒蠎邙釯鋩铓駹鸏鹲龍龒龙"},
+    # {L"zui", L"厜咀嗺嘴噿堆嫢嶉嶊嶵摧撮晬最朘枠栬槯樶檇檌欈濢璻睟祽稡穝絊纗罪羧脧蕞蟕觜辠酔酨酻醉鋷錊雋"},
+    # {L"rou", L"厹媃宍揉柔楺渘煣瑈瓇禸粈糅肉腬莥葇蝚蹂輮鍒鑐鞣韖騥髳鰇鶔"},
+    # {L"cen", L"参參叄叅岑嵾梣汵涔硶穇笒篸膥"},
+    # {L"pa", L"叭吧啪妑帊帕怕扒把掱杷汃派潖爬琶皅筢耙舥芭苩葩袙趴跁鈀钯"},
+    # {L"po", L"叵哱嘙坡奤娝婆尀尃屰岥岶巿廹搫攴敀昢朴桲椺櫇泊泺泼洦淿湐溌溥潑濼烞猼珀皛皤破砶笸粕繁翍膊蒪蔢謈跛迫鄱酦醱釙鉕鏺钋钷陂霸頗颇馞駊髆魄"},
+    # {L"a", L"吖呵啊嗄腌錒锕阿"},
+    # {L"tun", L"吞吨吴呑啍噋囤坉屯庉忳憞旽暾朜氽汭沌涒炖焞燉畽窀純纯肫膯臀臋芚蜳褪豘豚軘逐錪霕飩饨魨鲀黗"},
+    # {L"pen", L"吩呠喯喷噴本歕汾湓濆瓫盆翉翸葐衯"},
+    # {L"hang", L"吭垳夯妔巷忼斻杭桁沆炕狼珩笐筕絎绗肮航苀蚢行貥迒邟酐頏颃魧"},
+    # {L"ne", L"吶呐呢哪抐疒疔眲訥讷那"},
+    # {L"wai", L"呙咼喎外夭崴歪瀤竵顡"},
+    # {L"n", L"咹哏嗯"},
+    # {L"dei", L"哋得"},
+    # {L"yo", L"哟唷喲嚛育"},
+    # {L"o", L"哦喔噢筽"},
+    # {L"sao", L"哨埽嫂慅懆扫掃掻搔梢橾氉溞煰燥瘙矂縿繅繰缫缲臊鄵鐰颾騒騷骚髞鯵鰠鰺鱢鲹鳋"},
+    # {L"shuo", L"哾嗍嗽妁搠数朔槊欶汋洬溯濯烁燿爍獡療矟硕碩箾药萷蒴藥說説说銏鎙鑠铄"},
+    # {L"en", L"唔嗯奀峎恩摁煾蒽饐"},
+    # {L"huan", L"唤喚喛嚾圂圜垸堚奂奐孉宦寏寰峘嵈巜幻患愌懁懽换換援擐攌桓梙槵欢欥歓歡汍洹浣涣渙漶潅澣澴灌烉焕煥犿狟獾环瑍瑗環瓛痪瘓皖眩睆睔瞏瞣糫絙綄緩繯缓缳羦肒脘荁萈萑蒝藧螌蠸讙豢豩豲貆貛輐轘还逭還郇酄鉮鍰鐶锾镮闤阛雈雚驩鬟鯇鯶鰀鲩鴅鵍鸛鹮鹳"},
+    # {L"nou", L"啂嬬搙擩槈檽獳羺耨譨譳鎒鐞"},
+    # {L"ken", L"啃垠垦墾恳懇掯狠珢硍肎肯肻裉褃豤貇錹頎颀齦龈"},
+    # {L"chuai", L"啜嘬揣搋欼腄膗膪踹"},
+    # {L"se", L"啬嗇塞寨廧愬懎拺擌栜槭歮歰泣洓涩渋渍溹漬澀澁濇濏瀒琗瑟璱瘷穑穡穯粣繬色蔷薔虩譅轖鉍銫鎍鎩鏼铋铩铯闟雭飋"},
+    # {L"sun", L"喰孙孫巺扻损損搎摌树榫槂潠狲猻畃笋筍箰簨荪蓀蕵薞跣鎨隼飧飱餐鶽"},
+    # {L"hei", L"嗨嘿嬒潶黑黒"},
+    # {L"dia", L"嗲"},
+    # {L"de", L"嘚地底得徳德恴悳惪棏淂登的鍀锝陟"},
+    # {L"zhuai", L"嘬尵拽捙睉跩转顡"},
+    # {L"nin", L"囜恁您拰脌"},
+    # {L"qun", L"囷夋宭峮帬歏箘羣群裙裠踆輑逡遁麇麏麕"},
+    # {L"ri", L"囸日氜釰鈤馹驲"},
+    # {L"zeng", L"増增憎曽曾橧熷璔甑矰磳綜縡繒综缯罾譄贈赠鄫鋥锃鬷鱛"},
+    # {L"nv", L"女恧朒沑狃籹絮聏肭衂衄釹钕"},
+    # {L"nuan", L"奻暖渜湪濡煖煗餪"},
+    # {L"niu", L"妞忸怓扭抝拗杻汼沑炄牛牜狃紐纽莥蚴鈕钮靵"},
+    # {L"rao", L"娆嬈扰挠撓擾桡橈犪穘繚繞绕缭荛蕘蟯襓遶隢饒饶"},
+    # {L"shui", L"娷帨挩捝水氵氺涗涚睡祱稅税脽裞說説誰说谁閖"},
+    # {L"nve", L"婩疟瘧虐"},
+    # {L"nen", L"媆嫩嫰恁枘腝臑"},
+    # {L"niao", L"嫋嬝嬲尥尦尿樢溺脲茑茮蔦袅裊褭鳥鸟"},
+    # {L"kuan", L"完宽寛寬梡棵欵款歀窽窾鑧顆颗髋髖"},
+    # {L"shuan", L"專拴栒栓槫汕涮腨踹閂闩"},
+    # {L"zhua", L"抓挝摣撾檛爪簻膼髽"},
+    # {L"sen", L"掺摻森槮渗滲篸襂"},
+    # {L"shai", L"摋攦晒曬殺筛篩簁簛籭繺色術諰酾閷"},
+    # {L"run", L"撋橍润潤閏閠闰"},
+    # {L"neng", L"竜而耐能螚"},
+    # {L"miu", L"繆缪謬谬"},
+    # {L"gei", L"给"},
+    # {L"zei", L"蠈賊贼鯽鰂鱡鲗鲫"}
+    # };
+    # <> </global>
+    # <> </include>
+    # @end
+}
+
+# //=====
+
+类 拼音类_ <公开 折叠 折叠2 @文档 = "category = \"汉字拼音库.拼音首\"" @全局类 = 真>
+{
+    方法 拼音_取拼音首 <公开 静态 类型 = 文本型 折叠>
+    参数 内容 <类型 = 文本型>
+    参数 是否大写 <类型 = 逻辑型 @默认值 = 假>
+    参数 发音索引 <类型 = 整数 注释 = "多音字时选择发音" @默认值 = 0>
+    参数 返回的发音数量 <类型 = 整数数组类 @默认值 = 空对象>
+    {
+        变量 汉字 <类型 = 汉字拼音类2_>
+        变量 结果 <类型 = 文本型>
+        变量 结果2 <类型 = 文本型>
+        变量 长度 <类型 = 整数>
+        变量 i <类型 = 整数>
+        长度 = 取文本长度 (内容)
+        置文本预分配字符数 (结果, 长度)
+        返回的发音数量.预分配尺寸 = 1024 * 1024 * 7
+        循环 (, 长度, i)
+        {
+            结果2 = 取文本左边 (汉字.取声母_ (取文本中间 (内容, i, 1), 发音索引), 1)
+            加入文本 (结果, 选择 (是否大写, 到大写 (结果2), 结果2))
+            返回的发音数量.加入成员 (汉字.取发音数量_ (取文本中间 (内容, i, 1)))
+        }
+        返回 (结果)
+    }
+
+    方法 拼音_取拼音首2 <公开 静态 类型 = 文本型 折叠 折叠2 @禁止流程检查 = 真 @视窗.外部头文件 = "<string>">
+    参数 内容 <类型 = 文本型>
+    参数 是否大写 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 ret <类型 = 文本型>
+        @ LPCTSTR strName=(LPCTSTR)@<内容>;
+        @ static int li_SecPosValue[] = { 
+        @ 1601, 1637, 1833, 2078, 2274, 2302, 2433, 2594, 2787, 3106, 3212, 
+        @ 3472, 3635, 3722, 3730, 3858, 4027, 4086, 4390, 4558, 4684, 4925, 5249 
+        @ }; 
+        @ static char* lc_FirstLetter[] = { 
+        @ "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "O", 
+        @ "P", "Q", "R", "S", "T", "W", "X", "Y", "Z" 
+        @ }; 
+        @ static char* ls_SecondSecTable = 
+        @ "CJWGNSPGCGNE[Y[BTYYZDXYKYGT[JNNJQMBSGZSCYJSYY[PGKBZGY[YWJKGKLJYWKPJQHY[W[DZLSGMRYPYWWCCKZNKYYGTTNJJNYKKZYTCJNMCYLQLYPYQFQRPZSLWBTGKJFYXJWZLTBNCXJJJJTXDTTSQZYCDXXHGCK[PHFFSS[YBGXLPPBYLL[HLXS[ZM[JHSOJNGHDZQYKLGJHSGQZHXQGKEZZWYSCSCJXYEYXADZPMDSSMZJZQJYZC[J[WQJBYZPXGZNZCPWHKXHQKMWFBPBYDTJZZKQHY" 
+        @ "LYGXFPTYJYYZPSZLFCHMQSHGMXXSXJ[[DCSBBQBEFSJYHXWGZKPYLQBGLDLCCTNMAYDDKSSNGYCSGXLYZAYBNPTSDKDYLHGYMYLCXPY[JNDQJWXQXFYYFJLEJPZRXCCQWQQSBNKYMGPLBMJRQCFLNYMYQMSQYRBCJTHZTQFRXQHXMJJCJLXQGJMSHZKBSWYEMYLTXFSYDSWLYCJQXSJNQBSCTYHBFTDCYZDJWYGHQFRXWCKQKXEBPTLPXJZSRMEBWHJLBJSLYYSMDXLCLQKXLHXJRZJMFQHXHWY" 
+        @ "WSBHTRXXGLHQHFNM[YKLDYXZPYLGG[MTCFPAJJZYLJTYANJGBJPLQGDZYQYAXBKYSECJSZNSLYZHSXLZCGHPXZHZNYTDSBCJKDLZAYFMYDLEBBGQYZKXGLDNDNYSKJSHDLYXBCGHXYPKDJMMZNGMMCLGWZSZXZJFZNMLZZTHCSYDBDLLSCDDNLKJYKJSYCJLKWHQASDKNHCSGANHDAASHTCPLCPQYBSDMPJLPZJOQLCDHJJYSPRCHN[NNLHLYYQYHWZPTCZGWWMZFFJQQQQYXACLBHKDJXDGMMY" 
+        @ "DJXZLLSYGXGKJRYWZWYCLZMSSJZLDBYD[FCXYHLXCHYZJQ[[QAGMNYXPFRKSSBJLYXYSYGLNSCMHZWWMNZJJLXXHCHSY[[TTXRYCYXBYHCSMXJSZNPWGPXXTAYBGAJCXLY[DCCWZOCWKCCSBNHCPDYZNFCYYTYCKXKYBSQKKYTQQXFCWCHCYKELZQBSQYJQCCLMTHSYWHMKTLKJLYCXWHEQQHTQH[PQ[QSCFYMNDMGBWHWLGSLLYSDLMLXPTHMJHWLJZYHZJXHTXJLHXRSWLWZJCBXMHZQXSDZP" 
+        @ "MGFCSGLSXYMJSHXPJXWMYQKSMYPLRTHBXFTPMHYXLCHLHLZYLXGSSSSTCLSLDCLRPBHZHXYYFHB[GDMYCNQQWLQHJJ[YWJZYEJJDHPBLQXTQKWHLCHQXAGTLXLJXMSL[HTZKZJECXJCJNMFBY[SFYWYBJZGNYSDZSQYRSLJPCLPWXSDWEJBJCBCNAYTWGMPAPCLYQPCLZXSBNMSGGFNZJJBZSFZYNDXHPLQKZCZWALSBCCJX[YZGWKYPSGXFZFCDKHJGXDLQFSGDSLQWZKXTMHSBGZMJZRGLYJB" 
+        @ "PMLMSXLZJQQHZYJCZYDJWBMYKLDDPMJEGXYHYLXHLQYQHKYCWCJMYYXNATJHYCCXZPCQLBZWWYTWBQCMLPMYRJCCCXFPZNZZLJPLXXYZTZLGDLDCKLYRZZGQTGJHHGJLJAXFGFJZSLCFDQZLCLGJDJCSNZLLJPJQDCCLCJXMYZFTSXGCGSBRZXJQQCTZHGYQTJQQLZXJYLYLBCYAMCSTYLPDJBYREGKLZYZHLYSZQLZNWCZCLLWJQJJJKDGJZOLBBZPPGLGHTGZXYGHZMYCNQSYCYHBHGXKAMTX" 
+        @ "YXNBSKYZZGJZLQJDFCJXDYGJQJJPMGWGJJJPKQSBGBMMCJSSCLPQPDXCDYYKY[CJDDYYGYWRHJRTGZNYQLDKLJSZZGZQZJGDYKSHPZMTLCPWNJAFYZDJCNMWESCYGLBTZCGMSSLLYXQSXSBSJSBBSGGHFJLYPMZJNLYYWDQSHZXTYYWHMZYHYWDBXBTLMSYYYFSXJC[DXXLHJHF[SXZQHFZMZCZTQCXZXRTTDJHNNYZQQMNQDMMG[YDXMJGDHCDYZBFFALLZTDLTFXMXQZDNGWQDBDCZJDXBZGS" 
+        @ "QQDDJCMBKZFFXMKDMDSYYSZCMLJDSYNSBRSKMKMPCKLGDBQTFZSWTFGGLYPLLJZHGJ[GYPZLTCSMCNBTJBQFKTHBYZGKPBBYMTDSSXTBNPDKLEYCJNYDDYKZDDHQHSDZSCTARLLTKZLGECLLKJLQJAQNBDKKGHPJTZQKSECSHALQFMMGJNLYJBBTMLYZXDCJPLDLPCQDHZYCBZSCZBZMSLJFLKRZJSNFRGJHXPDHYJYBZGDLQCSEZGXLBLGYXTWMABCHECMWYJYZLLJJYHLG[DJLSLYGKDZPZXJ" 
+        @ "YYZLWCXSZFGWYYDLYHCLJSCMBJHBLYZLYCBLYDPDQYSXQZBYTDKYXJY[CNRJMPDJGKLCLJBCTBJDDBBLBLCZQRPPXJCJLZCSHLTOLJNMDDDLNGKAQHQHJGYKHEZNMSHRP[QQJCHGMFPRXHJGDYCHGHLYRZQLCYQJNZSQTKQJYMSZSWLCFQQQXYFGGYPTQWLMCRNFKKFSYYLQBMQAMMMYXCTPSHCPTXXZZSMPHPSHMCLMLDQFYQXSZYYDYJZZHQPDSZGLSTJBCKBXYQZJSGPSXQZQZRQTBDKYXZK" 
+        @ "HHGFLBCSMDLDGDZDBLZYYCXNNCSYBZBFGLZZXSWMSCCMQNJQSBDQSJTXXMBLTXZCLZSHZCXRQJGJYLXZFJPHYMZQQYDFQJJLZZNZJCDGZYGCTXMZYSCTLKPHTXHTLBJXJLXSCDQXCBBTJFQZFSLTJBTKQBXXJJLJCHCZDBZJDCZJDCPRNPQCJPFCZLCLZXZDMXMPHJSGZGSZZQLYLWTJPFSYASMCJBTZKYCWMYTCSJJLJCQLWZMALBXYFBPNLSFHTGJWEJJXXGLLJSTGSHJQLZFKCGNNNSZFDEQ" 
+        @ "FHBSAQTGYLBXMMYGSZLDYDQMJJRGBJTKGDHGKBLQKBDMBYLXWCXYTTYBKMRTJZXQJBHLMHMJJZMQASLDCYXYQDLQCAFYWYXQHZ"; 
+        @ //将unicode编码转换成ANSI编码   
+        @ int nSecondSecTable =(int) strlen(ls_SecondSecTable); 
+        @ int stringlen =(int) wcslen(strName); 
+        @ char   *buffer = NULL; 
+        @ buffer = new char[stringlen * sizeof(TCHAR)+1]; 
+        @ ZeroMemory(buffer, stringlen * sizeof(TCHAR)+1); 
+        @ WideCharToMultiByte(CP_ACP, NULL, strName, stringlen, buffer, stringlen * sizeof(TCHAR)+1, NULL, NULL); 
+        @ //   
+        @ std::string result; 
+        @ int nHigh, nLow, nCode; 
+        @ int i, j; 
+        @ for (i = 0; i < stringlen*sizeof(TCHAR); i++) 
+        @ { 
+        @ //找到汉字的机内码   
+        @ nHigh = (UCHAR)(buffer[i + 0]); 
+        @ nLow = (UCHAR)(buffer[i + 1]); 
+        @ 
+        @ 
+        @ if (nHigh < 0xA1 || nLow < 0xA1)    //非汉字保留   
+        @ { 
+        @ result += buffer[i]; 
+        @ continue; 
+        @ } 
+        @ else 
+        @ { 
+        @ //一级汉字机内码与区位码的关系   
+        @ //机内码高字节 = 区码 + 0XA0;   
+        @ //机内码低字节 = 位码 + 0XA0;   
+        @ //区位码 = (机内码高字节 - 0XA0) * 100 + 机内码低字节 - 0XA0;   
+        @ nCode = (nHigh - 0XA0) * 100 + nLow - 0XA0; 
+        @ } 
+        @ if (nCode > 1600 && nCode < 5590)       //一级汉字 16-55区       
+        @ { 
+        @ for (j = 22; j >= 0; j--) 
+        @ { 
+        @ if (nCode >= li_SecPosValue[j]) 
+        @ { 
+        @ result += lc_FirstLetter[j]; 
+        @ i++; 
+        @ break; 
+        @ } 
+        @ } 
+        @ continue; 
+        @ } 
+        @ else  //二级汉字通过查表  56-87区;将二级汉字拼音的首字母放在ls_SecondSecTable表中   
+        @ { 
+        @ i++; 
+        @ //根据机内码转换成ls_SecondSecTable表的下标   
+        @ nCode = (nHigh - 0XA0 - 56) * 94 + nLow - 0XA0 - 1; 
+        @ if (nCode >= 0 && nCode < nSecondSecTable) 
+        @ result += ls_SecondSecTable[nCode]; 
+        @ else 
+        @ { 
+        @ result += (char)nHigh; 
+        @ result += (char)nLow; 
+        @ } 
+        @ } 
+        @ } 
+        @ //将ANSI编码转换成unicode编码   
+        @ TCHAR *pwcsTemp = new TCHAR[stringlen + 1]; 
+        @ ZeroMemory(pwcsTemp, (stringlen + 1) * sizeof(TCHAR)); 
+        @ MultiByteToWideChar(CP_ACP, NULL, result.c_str(), (int)result.length(), pwcsTemp, stringlen); 
+        @ CWString str = pwcsTemp; 
+        @ delete[]pwcsTemp; 
+        @ pwcsTemp = NULL; 
+        @ delete[]buffer; 
+        @ buffer = NULL; 
+        @ @<ret>= str; 
+        如果 (是否大写 == 假)
+        {
+            ret = 到小写 (ret)
+        }
+        返回 (ret)
+    }
+}
+
+# //=====
+
+类 汉字拼音类_ <公开 折叠 折叠2 @文档 = "category = \"汉字拼音库.拼音库\"" @全局类 = 真>
+{
+    常量 汉码资源 <类型 = 视窗文件资源 值 = "bml\\拼音\\汉码.bin" 折叠>
+    常量 拼音索引资源 <类型 = 视窗文件资源 值 = "bml\\拼音\\拼音索引.bin">
+    常量 拼音表 <类型 = "文本型 []"
+            值 = {"ling","qiu","tian","xi","wu","yin","jiu","ru","ding","shi","tu","yi","zhao","wen","nu","dong","ke","xiang","ye","lao","mi","dou","you","chou","ju","qi","fei","nuo","fu","ku","chu","xu","xing","xiong","liu","lin","xin","zhen","mian","qian","zhong","nei","zheng","yuan","tai","pang","ao","zuo","zhou","su","qiong","lei","nao","zhu","lan","shen","jie","yong","long","ying","peng","miao","li","ji","yu","luo","chai","hui","rao","zha","jun","ma","tang","yao","yun","zhuo","er","ran","yan","han","se","tan","xun","kui","pu","ta","shu","ou","diao","wa","niao","xie","she","quan","meng","cai","liang","gu","mao","xuan","dian","man","wang","kou","huo","gong","qin","jiong","lu","nan","bie","pi","qia","bai","ci","lang","he","hua","tou","pian","ruan","e","qie","rui","jian","chong","chi","qing","xiao","zan","po","dan","shui","xian","jia","bo","jue","yang","xue","bei","heng","lou","le","sun","zou","que","zhi","hu","la","ai","kun","wei","huan","can","shua","shuang","nou","fan","zhang","fang","song","bi","ne","chen","ng","fa","hao","si","hou","qu","ti","hong","tun","nie","wai","shou","sou","guo","lun","fen","chun","rou","mou","zei","sheng","kai","ya","lve","gou","xiu","cu","kuo","sai","xia","ruo","leng","rong","weng","jing","bu","zang","na","dui","bao","duo","kuai","men","gun","liao","da","kan","zhan","rang","zong","gao","tao","shan","lai","ban","chuo","nai","qiao","pao","sao","suo","tong","beng","qiang","sha","mang","mu","lian","cao","an","mo","yue","mei","dang","huai","zi","hai","wan","run","luan","ning","ming","zui","kang","cui","de","bian","jin","zhui","tui","nian","pa","zhe","cen","dai","min","huang","sui","zu","cuo","tuo","tiao","zhai","pou","gang","biao","dao","jiao","wo","ni","cuan","lv","ren","ge","kua","zhun","chuang","ben","chan","cha","jiang","juan","di","pei","ceng","hang","lie","kuang","san","te","die","shun","dun","hun","ze","feng","mai","zai","guai","gui","bing","ce","shai","den","tuan","piao","mie","chui","qun","chuai","shao","duan","gen","che","reng","bang","pai","ang","guan","kuan","shuo","hen","chuan","nen","zao","pin","du","cheng","neng","ping","deng","cang","ba","nang","chao","nong","zuan","kao","kong","ting","niu","zen","cong","sa","gan","geng","pen","gai","tie","pan","en","zeng","zhuan","nin","cun","bin","teng","ri","gua","zun","za","niang","nve","chang","ka","zhuang","sang","keng","shuai","pie","shuan","chua","fou","shang","dei","ca","diu","fo","guang","seng","cou","kei","suan","m","ha","yo","o","hng","ken","a","re","hei","dia","ga","me","nuan","nv","zhua","zhuai","sen","ei","miu","eng","hol","Chal","bun","ppun","mas","keos","phos","ram","yixi","phas","gi","eos","mù","saeng","kasei","myeong","ceon","ceok","kweok","neus","sal","fiao","phdeng","nun"}>
+    常量 拼音表2 <类型 = "文本型 []"
+            值 = {"líng","qiū","tiàn","xǐ","wǔ","yǐn","jiǔ","rù","dīng","shì","tǔ","yí","zhǎo","wén","nú","dōng","zhào","kě","xiǎng","yè","lǎo","mǐ","dòu","wú","yòu","chóu","jū","qí","fēi","nuò","fú","kù","qiú","chú","jǔ","xù","xíng","xiōng","liú","lǐn","xìn","zhěn","wù","mián","qiàn","yì","zhòng","nèi","zhěng","yuàn","tài","páng","ǎo","zuò","zhòu","dòng","sù","qióng","lèi","nǎo","zhù","lǎn","xǔ","shēn","jiè","yǒng","nuó","lòng","yìng","pěng","lán","miáo","lì","jì","yǔ","luó","chái","huì","rǎo","zhǎ","xì","yóu","jùn","mà","táng","yáo","yùn","zhuó","èr","rǎn","qǐ","yàn","hàn","tǎng","sè","lěi","tàn","xùn","kuǐ","pú","tà","shǔ","ǒu","tái","wěn","diào","wà","niǎo","xiè","shè","luǒ","quán","mèng","cái","liǎng","gǔ","mào","xuán","diān","mán","lí","wǎng","kòu","zhà","zhèn","huò","gòng","qìn","jiǒng","lù","xìng","nán","bié","pí","diàn","fǔ","luò","qià","bāi","yǎn","cì","lǎng","hé","huà","tóu","piàn","ruǎn","è","qiè","ruì","jiàn","chòng","chóng","chí","qíng","lín","pì","xiào","zàn","pō","zhú","dǎn","làn","zhá","shuì","xí","xiàn","jiā","fèi","chù","péng","kǒu","jié","bó","wàng","jiá","jué","shěn","yǎng","xuè","bèi","lǔ","héng","xuǎn","lòu","lè","pī","sǔn","yǒu","zòu","què","yín","zhì","jiǎ","hù","lá","yǐ","kè","fū","qín","ài","kǔn","xiě","wěi","huàn","cān","shǐ","shuā","kuì","shuāng","nǒu","xī","fàn","zhàng","fǎng","sòng","bì","nè","hè","yíng","chén","ňg","fá","háo","tòu","sì","xiǎo","lìn","hòu","qǔ","ér","tí","hóng","tǔn","niè","wāi","shòu","hán","dǒng","sǒu","guó","tiǎn","lún","xué","fèn","chǔn","róu","móu","zéi","xié","shěng","yìn","màn","hú","kài","ya","lüè","qì","hóu","bài","gòu","dàn","bǎi","fù","zhōu","xiù","tì","cù","kuò","láo","ǎi","zhā","jí","tǎ","yán","sǎi","guō","xià","cí","ruò","lēng","xián","róng","jù","hǎn","mì","xiá","wěng","yuán","hào","jǐng","ào","jú","bù","zàng","liù","nà","duì","bǎo","duō","duǒ","yě","kuí","kuài","lǒng","xīng","bǔ","mén","gǔn","liáo","dā","kǎn","zhàn","zhí","méng","qù","ráng","lóng","zōng","kāi","huǒ","gǎo","tào","shǎn","lǎi","bàn","yù","chuò","jǐ","xiáo","yú","xún","bǐ","shàn","nǎi","sī","mǎo","jī","qiǎo","páo","nuǒ","yī","duò","sǎo","càn","suō","pò","shèn","tǒng","bèng","yún","mǎn","qiǎng","zhóu","miǎn","fà","shù","pián","shà","máng","mù","zhǎn","pó","dá","lián","cáo","xuàn","àn","rán","mó","xín","yuè","nái","xiǎn","měi","dāng","huái","qú","liàn","zǐ","hái","wǎn","rùn","chún","luán","shǒu","dìng","yào","níng","láng","yóng","yā","míng","zuì","yá","kāng","dǐng","xǐng","cuì","qiáo","qǐn","wán","dé","biàn","nóu","jǐn","yū","zhuǐ","zuǒ","tuǐ","guǒ","niǎn","pá","zhé","tún","niào","sóng","cén","náo","zǒu","dài","yòng","dǒu","mǐn","huáng","suì","zú","mǔ","xiáng","yáng","huá","cuǒ","tuǒ","mǎng","tiáo","zhái","mí","pǒu","xiàng","gǎng","mín","tū","mǐng","yǎo","da","lóu","áo","biǎo","dǎo","jiù","tóng","jiào","wò","nì","cuán","lú","lǜ","gū","rèn","huāng","fán","gé","cǐ","kuà","wèn","qiǎn","yé","mèi","zhūn","chuáng","xuě","zhèng","qiān","nié","huán","zhǐ","běn","liào","chì","zì","chǐ","chán","tuí","chá","yǐng","zǒng","qiào","chǎn","jiǎng","gē","juàn","dì","biè","ěr","pèi","jìng","cèng","dí","sōng","zhǒng","wéi","zhān","nìng","rěn","chà","fáng","yōu","bèn","háng","liè","hài","kuáng","běi","huǎng","lǔn","sàn","tè","mèn","tuì","dié","cǎi","wèi","shùn","dūn","fěi","hùn","fěn","zé","féng","tàng","diē","jìn","biǎn","miǎo","mái","cǎn","qián","jiān","wǒ","zāi","shuàng","tián","yà","gāng","sǒng","guài","wǎ","kuǎi","yīn","guǐ","gǒng","sǎn","zhuò","tùn","biào","bǐng","duǐ","rǔ","ruán","péi","hún","wài","huàng","dōu","cè","jiǎn","yàng","shāi","chōu","yǔn","xiāo","dèn","huǐ","tuán","zhài","piǎo","miè","qǐng","xiǔ","nǐng","qī","zhī","chuí","dǐ","guì","qún","ní","chuái","tán","tǒu","liǎn","chuǎi","shǎo","lǒu","suò","duàn","shí","gèn","hū","tǎn","bào","nǎn","zhǒu","kùn","chàn","huǎn","piào","chè","céng","shài","pù","nàn","hǒng","dùn","réng","jiǎo","bàng","qū","pài","zuǐ","tú","áng","ruí","nài","ròu","guàn","suǒ","kuǎn","shuò","hén","chuán","nèn","pào","zāo","piáo","pín","kàng","wá","luǎn","chuài","mò","xiē","chuǎn","pǐ","kū","dú","ái","zǎi","chéng","sháo","nèng","pìng","shā","rǒng","máo","hě","zào","dēng","léi","zè","fǎ","chài","chōng","zǎn","miàn","tāo","yōng","néng","dān","shé","cuǐ","píng","báo","suí","zhǔ","cáng","sòu","qìng","zhū","bà","nǎng","zuó","chǎo","nóng","hòng","fén","zuǎn","fēng","juǎn","shào","diǎn","kào","cuàn","kàn","wàn","lǐ","kòng","bǎn","tiǎo","tuó","liáng","shèng","pǔ","jiāng","táo","zhōng","tíng","gǒu","chī","niǔ","méi","jiú","lǐng","là","pìn","zēn","yuǎn","něi","póu","pèng","bái","cóng","shuǎng","sà","gàn","bēi","cuó","cào","niú","gù","liàng","gěng","lài","pén","piān","zhuì","sào","biě","yǎ","gāi","dǔ","xuān","lōu","kǎi","duó","chèng","kuàng","zhè","qiāo","tiè","gùn","jiē","pán","gǎn","pàn","pái","é","quàn","liǎo","diǎo","nián","dù","juān","tǐng","ǎn","lái","càng","ěn","dào","zī","làng","kǔ","zèng","féi","shāo","wēng","léng","liǔ","rǎng","zhuàn","qiǔ","quǎn","duī","sǎ","chǔ","rú","zhēng","nín","òu","tǐ","cài","shī","rén","zhǎi","cùn","mǒu","zòng","xú","cán","cāo","xiòng","guǎn","zhuǎn","ná","měng","bìn","chēn","sōu","tǎi","dàng","chā","gōu","téng","mìng","pǎng","cǎo","rì","děng","guā","cú","hěn","zǔ","gāo","chòu","pā","shū","zǔn","chuì","lǘ","zá","niàng","nüè","zǎo","zhuō","wā","kūn","hǔ","cháng","bìng","má","něng","zuī","kā","diāo","nǐ","shān","jīn","běng","chuāng","zhuàng","dǎi","sāi","fǎn","lào","huī","mài","án","tuǎn","chèn","hāo","gú","shǔn","chēng","cāi","jiàng","qūn","juě","dián","hàng","liě","fěng","qiù","còng","chǎng","xiā","dèng","kǎng","sǎng","kěng","rǒu","jiāo","shuài","chū","gōng","dǎng","mǎ","zuàn","piě","cuò","záo","tiě","gè","niàn","shuàn","xióng","yuān","gèng","wèng","mǒ","chàng","chěng","suī","chǒu","gǎi","gěn","chuà","zèn","ráo","fǒu","ǎng","shǎng","èn","shě","suǐ","tù","àng","lèng","děi","kāo","huó","kuā","kǎo","chǎ","xiū","jiū","shén","cháo","bā","shéng","xū","mú","guī","bá","fóu","chǒng","ōu","jīng","tī","shú","tuō","qiàng","xiān","tuān","tǎo","nǒng","zài","cà","qiǎ","chuī","shàng","sān","gài","zhuān","qiě","diū","sàng","chuàn","yāo","wū","pīng","pāng","guāi","xiāng","náng","mǎi","luàn","nǎ","zhě","mā","kuī","zhāi","dà","pēng","ye","wáng","zhǎng","bīng","fó","cāng","tā","lìng","chào","sā","jià","dī","xǐn","shāng","chāng","chen","nǔ","bēng","qié","hān","zhāo","kǎ","bāo","huí","tiāo","kuǎ","ān","lǚ","ta","zhēn","qīn","guàng","pěi","sú","fèng","xīn","guān","juè","kǒng","wō","yē","qīng","yīng","wēi","chě","cī","bī","duān","tōu","zán","nù","bīn","cuī","chuǎng","shǎ","zhāng","guāng","bō","sēng","jie","sài","kuǎng","biāo","nàng","zān","han","tiān","jiōng","guǎ","jūn","lěng","fā","zhǔn","còu","gān","dāo","kān","cǔn","chuàng","gēng","shuà","xuē","kēi","pōu","wān","yān","piāo","kōu","tāng","huō","zuān","kēng","kuāng","gào","xūn","lēi","fān","cōng","shi","fāng","zā","zāng","suǎn","shēng","guà","tīng","dū","shōu","guái","pǒ","miē","tūn","fēn","huā","hǒu","dāi","hōng","ḿ","bei","pěn","kē","pēi","hāi","zuo","mī","ké","āi","pǐn","hà","diè","yuě","mōu","yō","ò","hng","chē","dóu","tuò","kěn","hèng","à","qiāng","qi","yuē","shá","lā","bo","lāng","lǎ","rě","pèn","sūn","miāo","hēi","hē","zi","gě","diǎ","tōng","gǎ","dēi","lei","zuō","tān","ě","zūn","cēng","pū","juē","lū","ō","gá","ǒ","mē","mō","mè","sū","nāng","nān","tāi","quān","huài","pǎn","bāng","kōng","wēn","hǎi","chěn","zēng","qiáng","ruǐ","san","cún","yāng","hāng","ēn","zhuǎng","shē","yūn","nuán","hǎo","zhuāng","miào","niū","nī","ē","jiě","pīn","niáng","hūn","nào","chūn","biáo","zhē","piè","bí","nāo","bò","kuān","wāng","gà","pǐng","bū","cēn","rū","chuān","chāi","pà","guǎng","nòng","chāo","yi","tuàn","tìng","tuī","zěn","zū","nǜ","hèn","tòng","lùn","sǐ","sāo","biē","ràng","huān","chuō","dǎ","rēng","káng","bān","bǎ","zhuā","pāo","niù","qiā","niān","pāi","līn","guǎi","nǐn","shuān","zùn","zhuài","ruó","niē","lāo","dáo","pǎi","kèn","mēng","zhuī","chān","chuāi","cuō","shǎi","sùn","shuāi","piē","cuān","cā","pān","fàng","gā","zhùn","nuǎn","cūn","gàng","gēn","sāng","sēn","zōu","mēn","pi","nòu","chu","èi","pēn","shuǐ","tu","hēng","pàng","quē","biān","rè","liū","tēng","āo","zhuǎ","bǎng","māng","bēn","suān","shuǎi","béng","qué","bǒ","de","dǔn","tiào","duǎn","cǎ","suàn","ròng","o","nǚ","cū","hā","ruàn","rào","shuǎ","āng","shuí","guò","qiē","xiú","chǎi","tiē","zí","há","shang","piǎn","miù","zhán","shuō","pǎo","zhuǎi","liāo","bú","ā","xiǎ","tèng","la","ēng","luō","mān","le","zǎng","chi","hōu","hol","Chal","būn","ppun","mas","keos","phos","ram","yixi","phas","gi","eos","saeng","kasei","myeong","ceon","ceok","kweok","sě","neus","sal","e","fiào","ke","phdeng","nún"}
+            注释 = "带音调">
+
+    变量 汉码集 <类型 = 字节集类 折叠>
+    变量 拼音索引集 <类型 = 字节集类>
+    变量 哈希汉字拼索表 <类型 = 整数到整数无序哈希表>
+    变量 多音模板 <类型 = "字符 [13]" 值 = {'省','港','齐','宁','单','阿','解','艾','术','暴','否','被','调'}>
+    变量 无调模板 <类型 = "文本型 [13]" 值 = {"sheng","gang","qi","ning","dan","a","jie","ai","shu","bao","fou","bei","diao"}>
+    变量 有调模板 <类型 = "文本型 [13]" 值 = {"shěng","gǎng","qí","níng","dān","ā","jiě","ài","shù","bào","fǒu","bèi","diào"}>
+
+    方法 类_初始化 <折叠>
+    {
+        文件资源到字节集 (汉码资源, 汉码集)
+        文件资源到字节集 (拼音索引资源, 拼音索引集)
+        变量 成员数 <类型 = 整数>
+        成员数 = 汉码集.取字节集长度 () / 2
+        计次循环 (成员数)
+        {
+            哈希汉字拼索表.插入 (无符号短整数到整数 (汉码集.取字节集数据 (取循环索引 () * 2, 短整数)), 拼音索引集.取字节集数据 (取循环索引 () * 4, 整数))
+        }
+        汉码集.释放字节集 ()
+        拼音索引集.释放字节集 ()
+    }
+
+    方法 取拼音_ <公开 类型 = 文本型 注释 = "批量取拼音" 折叠>
+    参数 待取内容 <类型 = 文本型 注释 = "内容中可以有汉字、数字、字母、符号等任何字符">
+    参数 首字母是否大写 <类型 = 逻辑型 注释 = "拼音的第一个字母转为大写" @默认值 = 假>
+    参数 是否带音调 <类型 = 逻辑型 @默认值 = 假>
+    参数 转换方式 <类型 = 整数 注释 = "0、将汉字转成拼音，其它保持原样　1、剔除非汉字　2、汉字[拼音]" @默认值 = 0>
+    参数 拼音间隔符 <类型 = 文本型 注释 = "两个拼音之间的间隔符" @默认值 = " ">
+    {
+        变量 结果 <类型 = 文本型>
+        变量 长度 <类型 = 整数>
+        变量 单字 <类型 = 文本型>
+        变量 拼音 <类型 = 文本型>
+        变量 i <类型 = 整数>
+        如果真 (转换方式 < 0)
+        {
+            转换方式 = 0
+        }
+        如果真 (转换方式 > 2)
+        {
+            转换方式 = 2
+        }
+        长度 = 取文本长度 (待取内容)
+        置文本预分配字符数 (结果, 长度 * 2)
+        循环 (, 长度, i)
+        {
+            如果真 (转换方式 == 0)
+            {
+                单字 = 取文本中间 (待取内容, i, 1)
+                拼音 = 取拼音2_ (单字, 首字母是否大写, 是否带音调, 假)
+                加入文本 (结果, 拼音)
+                如果真 (拼音 != 单字)
+                {
+                    加入文本 (结果, 拼音间隔符)
+                }
+            }
+            如果真 (转换方式 == 1)
+            {
+                拼音 = 取拼音2_ (取文本中间 (待取内容, i, 1), 首字母是否大写, 是否带音调, 真)
+                加入文本 (结果, 拼音)
+                如果真 (文本是否为空 (拼音) == 假)
+                {
+                    加入文本 (结果, 拼音间隔符)
+                }
+            }
+            如果真 (转换方式 == 2)
+            {
+                单字 = 取文本中间 (待取内容, i, 1)
+                拼音 = 取拼音2_ (单字, 首字母是否大写, 是否带音调, 真)
+                如果真 (文本是否为空 (拼音) == 假)
+                {
+                    加入文本 (结果, 单字 + "[" + 拼音 + "]")
+                }
+                如果真 (文本是否为空 (拼音) == 假)
+                {
+                    加入文本 (结果, 拼音间隔符)
+                }
+            }
+        }
+        如果真 (取文本右边 (结果, 取文本长度 (拼音间隔符)) == 拼音间隔符)
+        {
+            结果 = 取文本左边 (结果, 取文本长度 (结果) - 取文本长度 (拼音间隔符))
+        }
+        返回 (结果)
+    }
+
+    方法 取拼音2_ <公开 类型 = 文本型 注释 = "取单个汉字的拼音" 折叠>
+    参数 待取内容 <类型 = 文本型>
+    参数 首字母是否大写 <类型 = 逻辑型 @默认值 = 假>
+    参数 是否带音调 <类型 = 逻辑型 @默认值 = 假>
+    参数 无拼音是否回返空 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 单字 <类型 = 字符>
+        变量 i <类型 = 整数>
+        单字 = 取字符 (待取内容, 0)
+        循环 (, 取数组成员数 (多音模板), i)
+        {
+            如果真 (多音模板 [i] == 单字)
+            {
+                如果 (首字母是否大写)
+                {
+                    返回 (选择 (是否带音调 == 真, 首字母转大写 (有调模板 [i]), 首字母转大写 (无调模板 [i])))
+                }
+                否则
+                {
+                    返回 (选择 (是否带音调 == 真, 有调模板 [i], 无调模板 [i]))
+                }
+            }
+        }
+        如果 (哈希汉字拼索表.是否存在 (单字))
+        {
+            如果 (是否带音调)
+            {
+                i = 整数分离2 (哈希汉字拼索表.取值 (单字))
+                如果 (首字母是否大写)
+                {
+                    返回 (首字母转大写 (拼音表2 [i]))
+                }
+                否则
+                {
+                    返回 (拼音表2 [i])
+                }
+            }
+            否则
+            {
+                i = 整数分离1 (哈希汉字拼索表.取值 (单字))
+                如果 (首字母是否大写)
+                {
+                    返回 (首字母转大写 (拼音表 [i]))
+                }
+                否则
+                {
+                    返回 (拼音表 [i])
+                }
+            }
+        }
+        否则
+        {
+            如果 (无拼音是否回返空 == 真)
+            {
+                返回 ("")
+            }
+            否则
+            {
+                返回 (到文本 (单字))
+            }
+        }
+    }
+
+    方法 是否有拼音_ <公开 类型 = 逻辑型 注释 = "判断给定的单个文字是否有拼音。" 折叠>
+    参数 单字 <类型 = 字符 注释 = "例如：\'望\'">
+    {
+        返回 (哈希汉字拼索表.是否存在 (单字))
+    }
+
+    方法 首字母转大写 <类型 = 文本型 注释 = "将拼音的第一个字母转成大写。如果是是否带音调的拼音，第一个字母又是带调的，则无法转为大写" 折叠>
+    参数 拼音 <类型 = 文本型>
+    {
+        变量 拼音2 <类型 = 文本型>
+        变量 单字 <类型 = 字符>
+        拼音2 = 拼音
+        如果真 (文本是否为空 (拼音2) == 假)
+        {
+            单字 = 取字符 (拼音2, 0)
+            如果真 (单字 >= 'a' && 单字 <= 'z')
+            {
+                文本替换 (拼音2, 0, 1, 到文本 ((字符)(单字 - 32)))
+            }
+        }
+        返回 (拼音2)
+    }
+
+    方法 整数分离1 <类型 = 整数 注释 = "从合并后的整数中取出第一个整数" 折叠>
+    参数 整数值 <类型 = 整数>
+    {
+        返回 (位与 (整数值, 65535))
+    }
+
+    方法 整数分离2 <类型 = 整数 注释 = "从合并后的整数中取出第二个整数" 折叠 @嵌入式方法 = "">
+    参数 整数值 <类型 = 整数>
+    {
+        @  @<整数值> >> 16
+    }
+}
+
+类 汉字拼音类2_ <公开 折叠 折叠2 @文档 = "category = \"汉字拼音库.拼音库\"" @全局类 = 真 @视窗.外部头文件 = "..\\..\\sys\\py\\src\\vol_py_processor.h"
+        @视窗.外部源文件 = "..\\..\\sys\\py\\src\\vol_py_processor.cpp" @视窗.外部资源文件 = "..\\..\\sys\\py\\src\\res\\vol_py_res.rc">
+{
+    方法 取拼音_ <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 待取汉字 <类型 = 文本型>
+    参数 发音索引 <类型 = 整数 注释 = "多音字时选择发音" @默认值 = 0>
+    {
+        @ @sn<this>.m_objPY.GetPY (@<待取汉字>.GetText (), @<发音索引>, 0, CVolString ())
+    }
+
+    方法 取所有拼音_ <公开 类型 = 整数 返回值注释 = "返回总数" 折叠 @嵌入式方法 = "">
+    参数 待取汉字 <类型 = 文本型>
+    参数 返回的结果 <类型 = 文本数组类>
+    {
+        @ @sn<this>.m_objPY.GetAllPY (@<待取汉字>.GetText (), @<返回的结果>.data ())
+    }
+
+    方法 取发音数量_ <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 待取汉字 <类型 = 文本型>
+    {
+        @ @sn<this>.m_objPY.GetNumPYs (@<待取汉字>.GetText ())
+    }
+
+    方法 取声母_ <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 待取汉字 <类型 = 文本型>
+    参数 发音索引 <类型 = 整数 注释 = "多音字时选择发音" @默认值 = 0>
+    {
+        @ @sn<this>.m_objPY.GetPY (@<待取汉字>.GetText (), @<发音索引>, 1, CVolString ())
+    }
+
+    方法 取韵母_ <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 待取汉字 <类型 = 文本型>
+    参数 发音索引 <类型 = 整数 注释 = "多音字时选择发音" @默认值 = 0>
+    {
+        @ @sn<this>.m_objPY.GetPY (@<待取汉字>.GetText (), @<发音索引>, 2, CVolString ())
+    }
+
+    # @ <include>
+    # @ CVolPYComparator m_objPY;
+    # @ </include>
+}
+
+类 拼音信息类_ <公开 注释 = "本库共有6724左右的字量，包含简体没有繁体." 注释 = "支持取拼音，可带声调和不带声调，可取笔画顺序和笔画数" 折叠 折叠2 @文档 = "category = \"汉字拼音库.拼音笔画声调\"">
+{
+    变量 数据包 <类型 = 视窗文件资源 值 = "IP\\简体.txt" 折叠>
+    变量 数据包2 <类型 = 字节集类>
+    变量 JSON对象 <类型 = JSON对象类_>
+    变量 是否初始化 <类型 = 逻辑型>
+
+    方法 初始化_ <公开 类型 = 逻辑型 折叠>
+    {
+        变量 结果 <类型 = 逻辑型>
+        文件资源到字节集 (数据包, 数据包2)
+        结果 = JSON对象.创建自字节集 (数据包2)
+        如果真 (结果)
+        {
+            是否初始化 = 真
+        }
+        返回 (结果)
+    }
+
+    方法 取拼音信息_ <公开 类型 = 逻辑型 返回值注释 = "未找到返回假" 折叠>
+    参数 待取的汉字 <类型 = 文本型>
+    参数 返回的拼音 <类型 = 文本型 注释 = "不带声的原拼音" @默认值 = "">
+    参数 返回的数字拼音 <类型 = 文本型 注释 = "带数字声调的拼音" @默认值 = "">
+    参数 返回的声调拼音 <类型 = 文本型 注释 = "原声调拼音" @默认值 = "">
+    参数 返回的笔画 <类型 = 文本型 注释 = "笔画顺序" @默认值 = "">
+    参数 返回的笔画数 <类型 = 整数类 @默认值 = 空对象>
+    参数 返回的发音数 <类型 = 整数类 注释 = "该字的读音数量" @默认值 = 空对象>
+    {
+        变量 JSON数组 <类型 = JSON数组类_>
+        如果真 (是否初始化 == 假)
+        {
+            初始化_ ()
+        }
+        JSON对象.取数组值 (待取的汉字, JSON数组)
+        如果真 (JSON数组.成员数 == 6)
+        {
+            返回的拼音 = JSON数组.取文本值 (0)
+            返回的数字拼音 = JSON数组.取文本值 (1)
+            返回的声调拼音 = JSON数组.取文本值 (2)
+            返回的笔画 = JSON数组.取文本值 (3)
+            返回的笔画数.值 = JSON数组.取整数值 (4)
+            返回的发音数.值 = JSON数组.取整数值 (5)
+            返回 (真)
+        }
+        返回 (假)
+    }
+}
+
+类 拼音信息类2_ <公开 注释 = "本库共有20697左右的字量，包含简体和繁体." 注释 = "支持取拼音，可带声调和不带声调，可取笔画顺序和笔画数" 折叠 折叠2 @文档 = "category = \"汉字拼音库.拼音笔画声调\"">
+{
+    变量 数据包 <类型 = 视窗文件资源 值 = "IP\\简繁体.txt" 折叠>
+    变量 数据包2 <类型 = 字节集类>
+    变量 JSON对象 <类型 = JSON对象类_>
+    变量 是否初始化 <类型 = 逻辑型>
+
+    方法 初始化_ <公开 类型 = 逻辑型 折叠>
+    {
+        变量 结果 <类型 = 逻辑型>
+        文件资源到字节集 (数据包, 数据包2)
+        结果 = JSON对象.创建自字节集 (数据包2)
+        如果真 (结果)
+        {
+            是否初始化 = 真
+        }
+        返回 (结果)
+    }
+
+    方法 取拼音信息_ <公开 类型 = 逻辑型 返回值注释 = "未找到返回假" 折叠>
+    参数 待取的汉字 <类型 = 文本型>
+    参数 返回的拼音 <类型 = 文本型 注释 = "不带声的原拼音" @默认值 = "">
+    参数 返回的数字拼音 <类型 = 文本型 注释 = "带数字声调的拼音" @默认值 = "">
+    参数 返回的声调拼音 <类型 = 文本型 注释 = "原声调拼音" @默认值 = "">
+    参数 返回的笔画 <类型 = 文本型 注释 = "笔画顺序" @默认值 = "">
+    参数 返回的笔画数 <类型 = 整数类 @默认值 = 空对象>
+    参数 返回的发音数 <类型 = 整数类 注释 = "该字的读音数量" @默认值 = 空对象>
+    {
+        变量 JSON数组 <类型 = JSON数组类_>
+        如果真 (是否初始化 == 假)
+        {
+            初始化_ ()
+        }
+        JSON对象.取数组值 (待取的汉字, JSON数组)
+        如果真 (JSON数组.成员数 == 6)
+        {
+            返回的拼音 = JSON数组.取文本值 (0)
+            返回的数字拼音 = JSON数组.取文本值 (1)
+            返回的声调拼音 = JSON数组.取文本值 (2)
+            返回的笔画 = JSON数组.取文本值 (3)
+            返回的笔画数.值 = JSON数组.取整数值 (4)
+            返回的发音数.值 = JSON数组.取整数值 (5)
+            返回 (真)
+        }
+        返回 (假)
+    }
+}
+
+# //=====
+
+类 五笔编码查询类_ <公开 注释 = "本库共有6629左右的字量，包含86版及98版编码" 折叠 @文档 = "category = \"汉字拼音库.五笔查询\"">
+{
+    变量 数据包 <类型 = 视窗文件资源 值 = "IP\\五笔.txt">
+    变量 数据包2 <类型 = 字节集类>
+    变量 JSON对象 <类型 = JSON对象类_>
+    变量 是否初始化 <类型 = 逻辑型>
+
+    方法 初始化_ <公开 类型 = 逻辑型 折叠>
+    {
+        变量 结果 <类型 = 逻辑型>
+        文件资源到字节集 (数据包, 数据包2)
+        结果 = JSON对象.创建自字节集 (数据包2)
+        如果真 (结果)
+        {
+            是否初始化 = 真
+        }
+        返回 (结果)
+    }
+
+    方法 取五笔编码_ <公开 类型 = 文本型 返回值注释 = "返回86版+98版组合，如果两版一样，则返回一个，未找到返回空" 折叠>
+    参数 待取的汉字 <类型 = 文本型>
+    {
+        变量 临时编码 <类型 = 文本型>
+        如果真 (是否初始化 == 假)
+        {
+            初始化_ ()
+        }
+        如果 (JSON对象.键名是否存在 (待取的汉字))
+        {
+            临时编码 = JSON对象.取文本值 (待取的汉字)
+            返回 (临时编码)
+        }
+        返回 (临时编码)
+    }
+}
+
+# //=====
+
+类 简繁体类_ <公开 折叠 折叠2 @文档 = "category = \"汉字拼音库.简繁体转换\"" @全局类 = 真>
+{
+    方法 编码_简繁体互转 <公开 静态 类型 = 文本型 折叠>
+    参数 待转内容 <类型 = 文本型>
+    参数 类型 <类型 = 整数 注释 = "1、简体转繁体　2、繁体转简体" @默认值 = 1>
+    {
+        常量 匹配数据1 <类型 = 文本型
+                值 = "皑蔼碍爱袄奥坝罢摆败颁办绊帮绑镑谤剥饱宝报鲍辈贝钡狈备惫绷笔毕毙币闭边编贬变辩辫标鳖别瘪濒滨宾摈饼并拨钵铂驳卜补财参蚕残惭惨灿苍舱仓沧厕侧册测层诧搀掺蝉馋谗缠铲产阐颤场尝长偿肠厂畅钞车彻尘陈衬撑称惩诚骋痴迟驰耻齿炽冲虫宠畴踌筹绸丑橱厨锄雏础储触处传疮闯创锤纯绰辞词赐聪葱囱从丛凑蹿窜错达带贷担单郸掸胆惮诞弹当挡党荡档捣岛祷导盗灯邓敌涤递缔颠点垫电淀钓调谍叠钉顶锭订丢东动栋冻斗犊独读赌镀锻断缎兑队对吨顿钝夺堕鹅额讹恶饿儿尔饵贰发罚阀珐矾钒烦范贩饭访纺飞诽废费纷坟奋愤粪丰枫锋风疯冯缝讽凤肤辐抚辅赋复负讣妇缚该钙盖干赶秆赣冈刚钢纲岗镐搁鸽阁铬个给龚宫巩贡钩沟构购够蛊顾剐挂关观馆惯贯广规硅归龟闺轨诡柜贵刽辊滚锅国过骇韩汉号阂鹤贺横轰鸿红后壶护沪户哗华画划话怀坏欢环还缓换唤痪焕涣黄谎挥辉毁贿秽会烩汇讳诲绘荤浑伙获货祸击机积饥迹讥鸡绩缉极辑级挤几蓟剂济计记际继纪夹荚颊贾钾价驾歼监坚笺间艰缄茧检碱硷拣捡简俭减荐槛鉴践贱见键舰剑饯渐溅涧将浆蒋桨奖讲酱胶浇骄娇搅铰矫侥脚饺缴绞轿较阶节杰洁结诫届紧锦仅谨进晋烬尽劲荆茎鲸惊经颈静镜径痉竞净纠厩旧驹举据锯惧剧鹃绢觉决诀绝钧军骏开凯颗壳课垦恳抠库裤夸块侩宽矿旷况亏岿窥馈溃扩阔蜡腊莱来赖蓝栏拦篮阑兰澜谰揽览懒缆烂滥捞劳涝乐镭垒类泪篱离里鲤礼丽厉励砾历沥隶俩联莲连镰怜涟帘敛脸链恋炼练粮凉两辆谅疗辽镣猎临邻鳞凛赁龄铃凌灵岭领馏刘龙聋咙笼垄拢陇楼娄搂篓芦卢颅庐炉掳卤虏鲁赂禄录陆驴吕铝侣屡缕虑滤绿峦挛孪滦乱抡轮伦仑沦纶论萝罗逻锣箩骡骆络妈玛码蚂马骂吗买麦卖迈脉瞒馒蛮满谩猫锚铆贸么霉没镁门闷们锰梦谜弥觅幂绵缅庙灭悯闽鸣铭谬谋亩钠纳难挠脑恼闹馁内拟腻撵捻酿鸟聂啮镊镍柠狞宁拧泞钮纽脓浓农疟诺欧鸥殴呕沤盘庞抛赔喷鹏骗飘频贫苹凭评泼颇扑铺仆朴谱栖凄脐齐骑岂启气弃讫牵扦钎铅迁签谦钱钳潜浅谴堑枪呛墙蔷强抢锹桥乔侨翘窍窃钦亲寝轻氢倾顷请庆琼穷趋区躯驱龋颧权劝却鹊确让饶扰绕热韧认纫荣绒软锐闰润洒萨鳃赛三伞丧骚扫涩杀纱筛晒删闪陕赡缮伤赏烧绍赊摄慑设绅审婶肾渗声绳胜圣师狮湿诗尸时蚀实识驶势适释饰视试寿兽枢输书赎属术树竖数帅双谁税顺说硕烁丝饲耸怂颂讼诵擞苏诉肃虽随绥岁孙损笋缩琐锁獭挞态摊贪瘫滩坛谭谈叹汤烫涛绦讨腾誊锑题体屉条贴铁厅听烃铜统头秃图涂团颓蜕脱鸵驮驼椭洼袜弯湾顽万网韦违围为潍维苇伟伪纬谓卫温闻纹稳问瓮挝蜗涡窝卧呜钨乌污诬无芜吴坞雾务误锡牺袭习铣戏细虾辖峡侠狭厦吓锨鲜纤咸贤衔闲显险现献县馅羡宪线厢镶乡详响项萧嚣销晓啸蝎协挟携胁谐写泻谢锌衅兴汹锈绣虚嘘须许叙绪续轩悬选癣绚学勋询寻驯训讯逊压鸦鸭哑亚讶阉烟盐严颜阎艳厌砚彦谚验鸯杨扬疡阳痒养样瑶摇尧遥窑谣药爷页业叶医铱颐遗仪蚁艺亿忆义诣议谊译异绎荫阴银饮隐樱婴鹰应缨莹萤营荧蝇赢颖哟拥佣痈踊咏涌优忧邮铀犹诱舆鱼渔娱与屿语吁御狱誉预驭鸳渊辕园员圆缘远愿约跃钥岳粤悦阅云郧匀陨运蕴酝晕韵杂灾载攒暂赞赃脏凿枣责择则泽贼赠扎札轧铡闸栅诈斋债毡盏斩辗崭栈战绽张涨帐账胀赵蛰辙锗这贞针侦诊镇阵挣睁狰争帧郑证织职执纸挚掷帜质滞钟终种肿众诌轴皱昼骤猪诸诛烛瞩嘱贮铸筑驻专砖转赚桩庄装妆壮状锥赘坠缀谆着浊兹资渍踪综总纵邹诅组钻亘鼗芈啬厍厣厮靥赝匦匮赜刭刿剀伛伥伧伫侪侬俦俨俪俣偾偬偻傥傧傩佥籴黉冁凫兖衮亵脔禀冢讠讦讧讪讴讵讷诂诃诋诏诎诒诓诔诖诘诙诜诟诠诤诨诩诮诰诳诶诹诼诿谀谂谄谇谌谏谑谒谔谕谖谙谛谘谝谟谠谡谥谧谪谫谮谯谲谳谵谶卺陉陧邝邬邺郏郐郄郓郦刍奂劢勐凼巯垩圹坜坂垅垆垭垲垧垴埘埚埙埯埝塬艹芗苈苋苌苁苎茏苘茑茔茕荛荜荞荟荠荦荥荨荩荬荪荭荮莳莴莜莅莶莸莺莼萦蒇蒉蒌蓦蓠蓥蓣蔹蔺蕲薮藓藁奁尴扪抟挢掴掼揸揿摅撄撷撸撺叽呒呓呖呗呙吣咔咛咝咴哒哓哔哕哌哙哜咤哝唛唠唢唣啧啭唿喽喾嗫嗬嗳辔嘤噜噼嚯囵帏帱帻帼幞岖岘岙岚岽峄峤峥崂崃嵘嵛嵝嵴巅徕犭犷犸狍狯狲猃猡猕猬饧饨饩饪饫饬饴饷饽馀馄馇馊馍馐馑馓馔馕庑赓廪忏怃怄忾怅怆怿恸恹恻恺恽悭惬愠愦憷懔闩闫闱闳闵闶闼闾阃阄阆阈阊阋阌阍阏阒阕阖阗阙阚丬沣沩泷泸泺泾浃浈浍浏浒浔涞涠渎渑渖渌溆滟滠滢滗潆潇漤潋潴濑灏骞迩迳逦屦弪妩妪妫姗娅娆娈娲娴婵媪嫒嫔嫱嬷驵驷驸驺驿驽骀骁骅骈骊骐骒骓骖骘骛骜骝骟骠骢骣骥骧纟纡纣纥纨纩纭纰纾绀绁绂绉绋绌绐绔绗绛绠绡绨绫绮绯绱绲缍绶绺绻绾缁缂缃缇缈缋缌缏缑缒缗缙缜缛缟缡缢缣缤缥缦缧缪缫缬缭缯缰缱缲缳缵幺玑玮珏珑珉顼玺珲琏瑷璎璇瓒韪韫韬杩枥枧枨枞枭栉栊栌栀栎柽桠桡桢桤桦桧栾桊棂椟椠椤椁榄榇榈榉槟槠樯橥橹橼檐檩殁殇殒殓殚殡轫轭轱轲轳轵轶轸轷轹轺轼轾辁辂辄辇辋辍辎辏辘辚戋戗戬瓯昙晔晖暧贲贳贶贻贽赀赅赆赈赉赇赍赕赙觇觊觋觌觎觏觐觑犟牦毵氇氩氲牍肷胧胨胪胫脍脶腌腼腽腭膑欤飑飒飓飕飙飚毂齑斓炀炜炖炝烨焖煳煅煺熘焘祢祯禅怼悫愍懑戆沓泶矶砀砗砜砺砻硖硗碛碜碹磙龛眍眦睐睑畲罴羁钆钇钋钊钌钍钏钐钔钗钕钚钛钣钤钫钪钭钬钯钰钲钴钶钷钸钹钺钼钽钿铄铈铉铊铋铌铍铎铐铑铒铕铖铗铙铘铛铞铟铠铢铤铥铧铨铪铩铫铮铯铳铴铵铷铹铼铽铿锃锂锆锇锉锊锍锎锏锒锓锔锕锖锘锛锝锞锟锢锪锫锩锬锱锲锴锶锷锸锼锾锿镂锵镄镅镆镉镌镎镏镒镓镔镖镗镘镙镛镞镟镝镡镢镤镥镦镧镨镩镪镫镬镯镱镲镳锺稆穑鸠鸢鸨鸩鸪鸫鸬鸲鸱鸶鸸鸷鸹鸺鸾鹁鹂鹄鹆鹇鹈鹉鹋鹌鹎鹑鹕鹗鹚鹛鹜鹞鹣鹦鹧鹨鹩鹪鹫鹬鹱鹭鹳疖疠疬疴疱痖痨痫瘅瘗瘘瘿瘾癞癫癯窦窭裆裢裣裥褛褴襁皲耢耧聍聩顸颀颃颉颌颍颏颔颚颛颞颟颡颢颥颦虬虮虿蚬蚝蛎蛏蛱蛲蛳蛴蝈蝾蝼螨罂笃笕笾筚筝箦箧箨箪箫篑簖籁舣舻袅羟籼粝粜糁糇絷麸趱酰酽酾鹾趸跄跖跞跷跸跹跻踬踯蹑蹒蹰躏躜觞觯靓雳霁霭龀龃龅龆龇龈龉龊龌黾鼋鼍隽雠銮錾鱿鲂鲅鲆鲇鲈稣鲋鲎鲐鲑鲒鲔鲕鲚鲛鲞鲟鲠鲡鲢鲣鲥鲦鲧鲨鲩鲫鲭鲮鲰鲱鲲鲳鲴鲵鲶鲷鲺鲻鲼鲽鳄鳅鳆鳇鳊鳋鳌鳍鳎鳏鳐鳓鳔鳕鳗鳘鳙鳜鳝鳟鳢鞑鞒鞯鞴鹘髅髋髌魇魉飨餍鬓黩黪鼹齄勚叆叇啰啴壸屃嵚庼彟挜挦浉浐浕涢溇滪亸刬唝唡垯垱塆婳峃峣崄慭旸昽梼梾槚沨沵狝玙玚玱珰琎瘆眬硁硙硚祎秾筜箓纮纴纻纼绖绤绬绹缊缐缞翙翚腘臜荙萚螀蟏"
+                编辑时信息 = "0, 17CCB5, 0, 0">
+        常量 匹配数据2 <类型 = 文本型
+                值 = "皚藹礙愛襖奧壩罷擺敗頒辦絆幫綁鎊謗剝飽寶報鮑輩貝鋇狽備憊繃筆畢斃幣閉邊編貶變辯辮標鱉別癟瀕濱賓擯餅並撥缽鉑駁蔔補財參蠶殘慚慘燦蒼艙倉滄廁側冊測層詫攙摻蟬饞讒纏鏟產闡顫場嘗長償腸廠暢鈔車徹塵陳襯撐稱懲誠騁癡遲馳恥齒熾沖蟲寵疇躊籌綢醜櫥廚鋤雛礎儲觸處傳瘡闖創錘純綽辭詞賜聰蔥囪從叢湊躥竄錯達帶貸擔單鄲撣膽憚誕彈當擋黨蕩檔搗島禱導盜燈鄧敵滌遞締顛點墊電澱釣調諜疊釘頂錠訂丟東動棟凍鬥犢獨讀賭鍍鍛斷緞兌隊對噸頓鈍奪墮鵝額訛惡餓兒爾餌貳發罰閥琺礬釩煩範販飯訪紡飛誹廢費紛墳奮憤糞豐楓鋒風瘋馮縫諷鳳膚輻撫輔賦複負訃婦縛該鈣蓋幹趕稈贛岡剛鋼綱崗鎬擱鴿閣鉻個給龔宮鞏貢鉤溝構購夠蠱顧剮掛關觀館慣貫廣規矽歸龜閨軌詭櫃貴劊輥滾鍋國過駭韓漢號閡鶴賀橫轟鴻紅後壺護滬戶嘩華畫劃話懷壞歡環還緩換喚瘓煥渙黃謊揮輝毀賄穢會燴匯諱誨繪葷渾夥獲貨禍擊機積饑跡譏雞績緝極輯級擠幾薊劑濟計記際繼紀夾莢頰賈鉀價駕殲監堅箋間艱緘繭檢堿鹼揀撿簡儉減薦檻鑒踐賤見鍵艦劍餞漸濺澗將漿蔣槳獎講醬膠澆驕嬌攪鉸矯僥腳餃繳絞轎較階節傑潔結誡屆緊錦僅謹進晉燼盡勁荊莖鯨驚經頸靜鏡徑痙競淨糾廄舊駒舉據鋸懼劇鵑絹覺決訣絕鈞軍駿開凱顆殼課墾懇摳庫褲誇塊儈寬礦曠況虧巋窺饋潰擴闊蠟臘萊來賴藍欄攔籃闌蘭瀾讕攬覽懶纜爛濫撈勞澇樂鐳壘類淚籬離裏鯉禮麗厲勵礫曆瀝隸倆聯蓮連鐮憐漣簾斂臉鏈戀煉練糧涼兩輛諒療遼鐐獵臨鄰鱗凜賃齡鈴淩靈嶺領餾劉龍聾嚨籠壟攏隴樓婁摟簍蘆盧顱廬爐擄鹵虜魯賂祿錄陸驢呂鋁侶屢縷慮濾綠巒攣孿灤亂掄輪倫侖淪綸論蘿羅邏鑼籮騾駱絡媽瑪碼螞馬罵嗎買麥賣邁脈瞞饅蠻滿謾貓錨鉚貿麼黴沒鎂門悶們錳夢謎彌覓冪綿緬廟滅憫閩鳴銘謬謀畝鈉納難撓腦惱鬧餒內擬膩攆撚釀鳥聶齧鑷鎳檸獰甯擰濘鈕紐膿濃農瘧諾歐鷗毆嘔漚盤龐拋賠噴鵬騙飄頻貧蘋憑評潑頗撲鋪僕樸譜棲淒臍齊騎豈啟氣棄訖牽扡釺鉛遷簽謙錢鉗潛淺譴塹槍嗆牆薔強搶鍬橋喬僑翹竅竊欽親寢輕氫傾頃請慶瓊窮趨區軀驅齲顴權勸卻鵲確讓饒擾繞熱韌認紉榮絨軟銳閏潤灑薩鰓賽叁傘喪騷掃澀殺紗篩曬刪閃陝贍繕傷賞燒紹賒攝懾設紳審嬸腎滲聲繩勝聖師獅濕詩屍時蝕實識駛勢適釋飾視試壽獸樞輸書贖屬術樹豎數帥雙誰稅順說碩爍絲飼聳慫頌訟誦擻蘇訴肅雖隨綏歲孫損筍縮瑣鎖獺撻態攤貪癱灘壇譚談歎湯燙濤絛討騰謄銻題體屜條貼鐵廳聽烴銅統頭禿圖塗團頹蛻脫鴕馱駝橢窪襪彎灣頑萬網韋違圍為濰維葦偉偽緯謂衛溫聞紋穩問甕撾蝸渦窩臥嗚鎢烏汙誣無蕪吳塢霧務誤錫犧襲習銑戲細蝦轄峽俠狹廈嚇鍁鮮纖鹹賢銜閑顯險現獻縣餡羨憲線廂鑲鄉詳響項蕭囂銷曉嘯蠍協挾攜脅諧寫瀉謝鋅釁興洶鏽繡虛噓須許敘緒續軒懸選癬絢學勳詢尋馴訓訊遜壓鴉鴨啞亞訝閹煙鹽嚴顏閻豔厭硯彥諺驗鴦楊揚瘍陽癢養樣瑤搖堯遙窯謠藥爺頁業葉醫銥頤遺儀蟻藝億憶義詣議誼譯異繹蔭陰銀飲隱櫻嬰鷹應纓瑩螢營熒蠅贏穎喲擁傭癰踴詠湧優憂郵鈾猶誘輿魚漁娛與嶼語籲禦獄譽預馭鴛淵轅園員圓緣遠願約躍鑰嶽粵悅閱雲鄖勻隕運蘊醞暈韻雜災載攢暫贊贓髒鑿棗責擇則澤賊贈紮劄軋鍘閘柵詐齋債氈盞斬輾嶄棧戰綻張漲帳賬脹趙蟄轍鍺這貞針偵診鎮陣掙睜猙爭幀鄭證織職執紙摯擲幟質滯鐘終種腫眾謅軸皺晝驟豬諸誅燭矚囑貯鑄築駐專磚轉賺樁莊裝妝壯狀錐贅墜綴諄著濁茲資漬蹤綜總縱鄒詛組鑽亙鞀羋嗇厙厴廝靨贗匭匱賾剄劌剴傴倀傖佇儕儂儔儼儷俁僨傯僂儻儐儺僉糴黌囅鳧兗袞褻臠稟塚訁訐訌訕謳詎訥詁訶詆詔詘詒誆誄詿詰詼詵詬詮諍諢詡誚誥誑誒諏諑諉諛諗諂誶諶諫謔謁諤諭諼諳諦諮諞謨讜謖諡謐謫譾譖譙譎讞譫讖巹陘隉鄺鄔鄴郟鄶郤鄆酈芻奐勱猛氹巰堊壙壢阪壟壚埡塏坰堖塒堝塤垵墊原艸薌藶莧萇蓯苧蘢檾蔦塋煢蕘蓽蕎薈薺犖滎蕁藎蕒蓀葒葤蒔萵蓧蒞薟蕕鶯蓴縈蕆蕢蔞驀蘺鎣蕷蘞藺蘄藪蘚槁奩尷捫摶撟摑摜摣撳攄攖擷擼攛嘰嘸囈嚦唄咼唚哢嚀噝噅噠嘵嗶噦呱噲嚌吒噥嘜嘮嗩唕嘖囀呼嘍嚳囁呵噯轡嚶嚕劈謔圇幃幬幘幗襆嶇峴嶴嵐崠嶧嶠崢嶗崍嶸崳嶁脊巔徠犬獷獁麅獪猻獫玀獼蝟餳飩餼飪飫飭飴餉餑餘餛餷餿饃饈饉饊饌饢廡賡廩懺憮慪愾悵愴懌慟懨惻愷惲慳愜慍憒怵懍閂閆闈閎閔閌闥閭閫鬮閬閾閶鬩閿閽閼闃闋闔闐闕闞爿灃溈瀧瀘濼涇浹湞澮瀏滸潯淶潿瀆澠瀋淥漵灩灄瀅潷瀠瀟濫瀲瀦瀨灝騫邇逕邐屨弳嫵嫗媯姍婭嬈孌媧嫻嬋媼嬡嬪嬙嬤駔駟駙騶驛駑駘驍驊駢驪騏騍騅驂騭騖驁騮騸驃驄驏驥驤糸紆紂紇紈纊紜紕紓紺絏紱縐紼絀紿絝絎絳綆綃綈綾綺緋緔緄綞綬綹綣綰緇緙緗緹緲繢緦緶緱縋緡縉縝縟縞縭縊縑繽縹縵縲繆繅纈繚繒韁繾繰繯纘么璣瑋玨瓏瑉頊璽琿璉璦瓔璿瓚韙韞韜榪櫪梘棖樅梟櫛櫳櫨梔櫟檉椏橈楨榿樺檜欒棬欞櫝槧欏槨欖櫬櫚櫸檳櫧檣櫫櫓櫞簷檁歿殤殞殮殫殯軔軛軲軻轤軹軼軫軤轢軺軾輊輇輅輒輦輞輟輜輳轆轔戔戧戩甌曇曄暉曖賁貰貺貽贄貲賅贐賑賚賕齎賧賻覘覬覡覿覦覯覲覷強犛毿氌氬氳牘膁朧腖臚脛膾腡醃靦膃齶臏歟颮颯颶颼飆飆轂齏斕煬煒燉熗燁燜糊煆退溜燾禰禎禪懟愨湣懣戇遝澩磯碭硨碸礪礱硤磽磧磣镟滾龕瞘眥睞瞼佘羆羈釓釔釙釗釕釷釧釤鍆釵釹鈈鈦鈑鈐鈁鈧鈄鈥鈀鈺鉦鈷鈳鉕鈽鈸鉞鉬鉭鈿鑠鈰鉉鉈鉍鈮鈹鐸銬銠鉺銪鋮鋏鐃鋣鐺銱銦鎧銖鋌銩鏵銓鉿鎩銚錚銫銃鐋銨銣鐒錸鋱鏗鋥鋰鋯鋨銼鋝鋶鉲鐧鋃鋟鋦錒錆鍩錛鍀錁錕錮鍃錇錈錟錙鍥鍇鍶鍔鍤鎪鍰鎄鏤鏘鐨鋂鏌鎘鐫錼鎦鎰鎵鑌鏢鏜鏝鏍鏞鏃鏇鏑鐔钁鏷鑥鐓鑭鐠鑹鏹鐙鑊鐲鐿鑔鑣鍾穭穡鳩鳶鴇鴆鴣鶇鸕鴝鴟鷥鴯鷙鴰鵂鸞鵓鸝鵠鵒鷳鵜鵡鶓鵪鵯鶉鶘鶚鶿鶥鶩鷂鶼鸚鷓鷚鷯鷦鷲鷸鸌鷺鸛癤癘鬁屙皰瘂癆癇癉瘞瘺癭癮癩癲臒竇窶襠褳襝襇褸襤繈皸耮耬聹聵頇頎頏頡頜潁頦頷顎顓顳顢顙顥顬顰虯蟣蠆蜆蠔蠣蟶蛺蟯螄蠐蟈蠑螻蟎罌篤筧籩篳箏簀篋籜簞簫簣籪籟艤艫嫋羥秈糲糶糝餱縶麩趲醯釅釃鹺躉蹌蹠躒蹺蹕躚躋躓躑躡蹣躕躪躦觴觶靚靂霽靄齔齟齙齠齜齦齬齪齷黽黿鼉雋讎鑾鏨魷魴鮁鮃鯰鱸穌鮒鱟鮐鮭鮚鮪鮞鱭鮫鯗鱘鯁鱺鰱鰹鰣鰷鯀鯊鯇鯽鯖鯪鯫鯡鯤鯧鯝鯢鯰鯛鯴鯔鱝鰈鱷鰍鰒鰉鯿鰠鼇鰭鰨鰥鰩鰳鰾鱈鰻鰵鱅鱖鱔鱒鱧韃鞽韉韝鶻髏髖髕魘魎饗饜鬢黷黲鼴齇勩靉靆囉嘽壼屭嶔廎彠掗撏溮滻濜溳漊澦嚲剗嗊啢墶壋壪嫿嶨嶢嶮憖暘曨檮棶檟渢濔獮璵瑒瑲璫璡瘮矓硜磑礄禕穠簹籙紘紝紵紖絰綌緓綯縕線縗翽翬膕臢薘蘀螿蠨"
+                编辑时信息 = "0, 17CCB5, 0, 0">
+        变量 总长度 <类型 = 整数>
+        变量 位序 <类型 = 整数>
+        变量 结果组 <类型 = 文本型>
+        变量 匹配值 <类型 = 文本型>
+        变量 i <类型 = 整数>
+        置文本预分配字符数 (结果组, 取文本长度 (待转内容))
+        总长度 = 取文本长度 (待转内容)
+        循环 (, 总长度, i)
+        {
+            匹配值 = 取文本中间 (待转内容, i, 1)
+            如果 (类型 == 1)
+            {
+                位序 = 寻找文本 (匹配数据1, 匹配值, , 假)
+            }
+            否则
+            {
+                位序 = 寻找文本 (匹配数据2, 匹配值, , 假)
+            }
+            如果 (位序 != -1)
+            {
+                如果 (类型 == 1)
+                {
+                    加入文本 (结果组, 取文本中间 (匹配数据2, 位序, 1))
+                }
+                否则
+                {
+                    加入文本 (结果组, 取文本中间 (匹配数据1, 位序, 1))
+                }
+            }
+            否则
+            {
+                加入文本 (结果组, 匹配值)
+            }
+        }
+        返回 (结果组)
+    }
+}

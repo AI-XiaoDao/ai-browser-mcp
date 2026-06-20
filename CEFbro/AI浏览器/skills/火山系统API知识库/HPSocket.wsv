@@ -1,0 +1,1707 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "" 注释 = "" 注释 = "" 注释 = "" 注释 = "" @文档 = "category = \"开源库.hpsocket\"" ""
+        @视窗.外部头文件 = "HPSocket\\HPSocketTool.h" @视窗.外部库.win32 = "HPSocket\\HPSocketToolx86.lib"
+        @视窗.附属文件.win32 = "HPSocket\\HPSocketToolx86.dll" @视窗.外部库.x64 = "HPSocket\\HPSocketToolx64.lib"
+        @视窗.附属文件.x64 = "HPSocket\\HPSocketToolx64.dll">
+
+# //---
+#
+#
+
+类 ______客户端通用函数 <公开 注释 = "支持 websocket tcp tcppull" 注释 = "这些函数必须再客户端创建后调用" 折叠 @全局类 = 真>
+{
+    方法 HPClient_SetUserDataPVOID <静态 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "总共可以设置30个 从0 - 29">
+    参数 附加数据 <类型 = 变整数>
+    {
+        @ HPClient_SetUserDataPVOID((void*)@<通讯句柄>,@<附加数据索引>,(void*)@<附加数据>)
+        // VOID __HP_CALL HPClient_WebsocketSetUserDataPVOID(void* pClient, int nIndex, void* pData);
+    }
+
+    方法 HPClient_GetUserDataPVOID <静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "总共可以设置30个 从0 - 29">
+    {
+        // VOID* __HP_CALL HPClient_WebsocketGetUserDataPVOID(void* pClient, int nIndex);
+        @ (@dt<变整数>) HPClient_GetUserDataPVOID((void*)@<通讯句柄>,@<附加数据索引>)
+
+    }
+
+    方法 HPClient_SetUserData <静态 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "总共可以设置30个 从0 - 29">
+    参数 附加数据指针 <类型 = 变整数>
+    参数 附加数据大小 <类型 = 整数>
+    {
+        // VOID __HP_CALL HPClient_WebsocketSetUserData(void* pClient, int nIndex, void* pData, int nDataSize);
+        @ HPClient_SetUserData((void*)@<通讯句柄>,@<附加数据索引>,(void*)@<附加数据指针>,@<附加数据大小>)
+    }
+
+    方法 HPClient_GetUserDataSize <静态 类型 = 整数 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "总共可以设置30个 从0 - 29">
+    {
+        @ (INT)HPClient_GetUserDataSize((void*)@<通讯句柄>,@<附加数据索引>)
+        // size_t __HP_CALL HPClient_WebsocketGetUserDataSize(void* pClient, int nIndex);
+    }
+
+    方法 HPClient_GetUserData <静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "总共可以设置30个 从0 - 29">
+    {
+        @ (@dt<变整数>) HPClient_GetUserData((void*)@<通讯句柄>,@<附加数据索引>)
+        // void* __HP_CALL HPClient_WebsocketGetUserData(void* pClient, int nIndex);
+    }
+
+    方法 客户端_置附加数据指针 <公开 静态 折叠>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "总共可以设置30个 从0 - 29">
+    参数 附加数据 <类型 = 变整数>
+    {
+        HPClient_SetUserDataPVOID (通讯句柄, 附加数据索引, 附加数据)
+    }
+
+    方法 客户端_取附加数据指针 <公开 静态 类型 = 变整数 折叠>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "总共可以设置30个 从0 - 29">
+    {
+        返回 (HPClient_GetUserDataPVOID (通讯句柄, 附加数据索引))
+    }
+
+    方法 客户端_置附加数据字节集 <公开 静态 折叠>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "总共可以设置30个 从0 - 29">
+    参数 附加数据 <类型 = 字节集类>
+    {
+        HPClient_SetUserData (通讯句柄, 附加数据索引, 附加数据.取字节集指针 (), 附加数据.取字节集长度 ())
+    }
+
+    方法 客户端_取附加数据字节集 <公开 静态 类型 = 字节集类 折叠>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "总共可以设置30个 从0 - 29">
+    {
+        变量 附加数据指针 <类型 = 变整数>
+        变量 附加数据长度 <类型 = 整数>
+        附加数据长度 = HPClient_GetUserDataSize (通讯句柄, 附加数据索引)
+        附加数据指针 = HPClient_GetUserData (通讯句柄, 附加数据索引)
+        返回 (指针到字节集 (附加数据指针, 附加数据长度))
+
+    }
+}
+
+类 ______服务器通用函数 <公开 折叠 @全局类 = 真>
+{
+    方法 HPServer_SetUserDataPVOID <公开 静态 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "0-29">
+    参数 附加数据 <类型 = 变整数>
+    {
+        // VOID __HP_CALL HPServer_SetUserDataPVOID(void* pServer, ULONG_PTR dwConnID, int nIndex, void* pData);
+        @ HPServer_SetUserDataPVOID((void*)@<通讯句柄>,@<连接ID>,@<附加数据索引>,@<附加数据>)
+    }
+
+    方法 HPServer_GetUserDataPVOID <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "0-29">
+    {
+        // HPServer_GetUserDataPVOID(void* pServer, ULONG_PTR dwConnID, int nIndex)
+        @ (@dt<变整数>)HPServer_GetUserDataPVOID( (void*)@<通讯句柄>,@<连接ID>,@<附加数据索引> )
+    }
+
+    方法 HPServer_SetUserDataBin <公开 静态>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "0-29">
+    参数 附加数据 <类型 = 字节集类>
+    {
+        HPServer_SetUserData (通讯句柄, 连接ID, 附加数据索引, 附加数据.取字节集指针 (), 附加数据.取字节集长度 ())
+    }
+
+    方法 HPServer_GetUserDataBin <公开 静态 类型 = 字节集类>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "0-29">
+    参数 附加数据 <类型 = 字节集类>
+    {
+        变量 附加数据指针 <类型 = 变整数>
+        变量 附加数据大小 <类型 = 变整数>
+        变量 返回数据 <类型 = 字节集类>
+        附加数据指针 = HPServer_GetUserData (通讯句柄, 连接ID, 附加数据索引)
+        附加数据大小 = HPServer_GetUserDataSize (通讯句柄, 连接ID, 附加数据索引)
+        返回数据 = 指针到字节集 (附加数据指针, (整数)附加数据大小)
+        返回 (返回数据)
+
+    }
+
+    方法 HPServer_SetUserData <公开 静态 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "总共可以设置30个 从0 - 29">
+    参数 附加数据指针 <类型 = 变整数>
+    参数 附加数据大小 <类型 = 整数>
+    {
+        // VOID __HP_CALL HPServer_SetUserData(void* pServer, ULONG_PTR dwConnID, int nIndex, void* pData, int nDataSize);
+        @ HPServer_SetUserData((void*)@<通讯句柄>,(ULONG_PTR)@<连接ID>,@<附加数据索引>,(void*)@<附加数据指针>,@<附加数据大小>)
+    }
+
+    方法 HPServer_GetUserDataSize <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "总共可以设置30个 从0 - 29">
+    {
+        @ HPServer_GetUserDataSize((void*)@<通讯句柄>,(ULONG_PTR)@<连接ID>,@<附加数据索引>)
+        // size_t __HP_CALL HPServer_GetUserDataSize(void* pServer, ULONG_PTR dwConnID, int nIndex);
+    }
+
+    方法 HPServer_GetUserData <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "总共可以设置30个 从0 - 29">
+    {
+        @ (@dt<变整数>) HPServer_GetUserData((void*)@<通讯句柄>,(ULONG_PTR)@<连接ID>,@<附加数据索引>)
+        // void* __HP_CALL HPServer_GetUserData(void* pServer, ULONG_PTR dwConnID, int nIndex);
+    }
+
+    方法 服务器_置附加数据指针 <公开 静态>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "0-29">
+    参数 附加数据 <类型 = 变整数>
+    {
+        HPServer_SetUserDataPVOID (通讯句柄, 连接ID, 附加数据索引, 附加数据)
+    }
+
+    方法 服务器_取附加数据指针 <公开 类型 = 变整数>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "0-29">
+    {
+        返回 (HPServer_GetUserDataPVOID (通讯句柄, 连接ID, 附加数据索引))
+    }
+
+    方法 服务器_置附加数据字节集 <公开 静态>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "0-29">
+    参数 附加数据 <类型 = 字节集类>
+    {
+        HPServer_SetUserData (通讯句柄, 连接ID, 附加数据索引, 附加数据.取字节集指针 (), 附加数据.取字节集长度 ())
+    }
+
+    方法 服务器_取附加数据字节集 <公开 静态 类型 = 字节集类>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 附加数据索引 <类型 = 整数 注释 = "0-29">
+    参数 附加数据 <类型 = 字节集类>
+    {
+        变量 附加数据指针 <类型 = 变整数>
+        变量 附加数据大小 <类型 = 变整数>
+        变量 返回数据 <类型 = 字节集类>
+        附加数据指针 = HPServer_GetUserData (通讯句柄, 连接ID, 附加数据索引)
+        附加数据大小 = HPServer_GetUserDataSize (通讯句柄, 连接ID, 附加数据索引)
+        返回数据 = 指针到字节集 (附加数据指针, (整数)附加数据大小)
+        返回 (返回数据)
+    }
+
+    方法 服务器_取连接地址 <公开 静态 类型 = 文本型 注释 = "获取客户端连接地址 例如 127.0.0.1:19730" 折叠>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数 "">
+    {
+        变量 端口 <类型 = 短整数>
+        变量 IP <类型 = 文本型>
+        变量 缓冲区长度 <类型 = 整数>
+        缓冲区长度 = 20
+        @ char buffer[20] = {0};
+        @ HPServer_GetRemoteAddress((void*)@<连接句柄>,(ULONG_PTR)@<连接ID>,(char*)buffer,&@<缓冲区长度>,&(USHORT)@<端口>);
+        @ @<IP> = buffer;
+        IP = IP + ":"
+        IP = IP + 到文本 (端口)
+        返回 (IP)
+
+    }
+
+    方法 服务器_断开客户 <公开 静态 类型 = 逻辑型 注释 = ";" 折叠 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数 "">
+    {
+        @ HPServer_Disconnect ((void*)@<连接句柄>,@<连接ID>);
+
+    }
+
+    #
+}
+
+# //---
+#
+
+类 客户端事件类_WebSocket <公开 折叠 @视窗.后缀文本 = "public IClient_Http_WebSocket_Event">
+{
+
+    # @begin
+    # <> <include> 
+    #
+    #  virtual int OnConnect(void* pSender, ULONG_PTR dwConnID)
+    # {
+    #     @<连接成功>( (@dt<变整数>)pSender,(INT)dwConnID );
+    #     return 0;
+    # }
+    # virtual int OnUpgrade(void* pSender, ULONG_PTR dwConnID)
+    # {
+    #     @<协议升级>( (@dt<变整数>)pSender,(INT)dwConnID );
+    #     return 0;
+    # }
+    #
+    #  virtual int OnMessage(void* pSender, ULONG_PTR dwConnID, BYTE iOperationCode, void* lpBuffer, size_t nSize)
+    # {
+    #     CVolMem mem(lpBuffer,nSize);
+    #     @<收到消息>((@dt<变整数>)pSender,(INT)dwConnID,iOperationCode,mem);
+    #     return 0;
+    # }
+    #  virtual int OnClose(void* pSender, ULONG_PTR dwConnID,int enOperation, int iErrorCode)
+    # {
+    #     @<连接关闭>( (@dt<变整数>)pSender,(INT)dwConnID,(int)enOperation,iErrorCode);
+    #     return 0;
+    # }
+    #
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化
+    {
+        @ HPClient_Websocket_BindEventClass (this);
+    }
+
+    #
+
+    方法 连接成功 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    {
+
+    }
+
+    方法 协议升级 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    {
+
+    }
+
+    方法 收到消息 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 操作码 <类型 = 字节>
+    参数 收到的数据 <类型 = 字节集类>
+    {
+
+    }
+
+    方法 连接关闭 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 操作码 <类型 = 整数>
+    参数 错误代码 <类型 = 整数>
+    {
+
+    }
+
+    #
+}
+
+类 ______客户端监听器_Http_Websocket <折叠>
+{
+    变量 监听器句柄 <公开 类型 = 变整数>
+
+    方法 类_初始化
+    {
+        监听器句柄 = Listener_CreateHttpClient ()
+        // 调试输出 ("______HPHttp客户端监听器  构造")
+    }
+
+    方法 类_清理
+    {
+        Listener_DestroyHttpClient (监听器句柄)
+        // 调试输出 ("______HPHttp客户端监听器  析构")
+    }
+
+    方法 Listener_CreateHttpClient <静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>) Listener_CreateHttpClient()
+    }
+
+    方法 Listener_DestroyHttpClient <静态 折叠 @嵌入式方法 = "">
+    参数 参数监听器句柄 <类型 = 变整数>
+    {
+        @ Listener_DestroyHttpClient((void*)@<参数监听器句柄>)
+
+    }
+}
+
+类 ______客户端_Http_WebSocket_基础函数 <公开 折叠 @全局类 = 真>
+{
+    变量 监听器 <静态 类型 = ______客户端监听器_Http_Websocket>
+
+    方法 "//客户端_websocket_挂接事件" <公开 静态 注释 = "必须在客户端创建前" 折叠 @嵌入式方法 = "">
+    参数 事件类 <类型 = 客户端事件类_WebSocket>
+    {
+
+    }
+
+    方法 _HPClient_Websocket_Create <静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 事件监听器句柄 <类型 = 变整数>
+    参数 是否异步 <类型 = 逻辑型>
+    参数 要连接的url <类型 = 变整数>
+    参数 加密套件 <类型 = 变整数 "">
+    {
+        @ (@dt<变整数>) HPClient_Websocket_Create( (void*)@<事件监听器句柄>,@<是否异步>,(LPCSTR)@<要连接的url>,(LPCSTR)@<加密套件>)
+
+    }
+
+    方法 客户端_websocket_创建 <公开 静态 类型 = 变整数 返回值注释 = "返回通讯句柄" 折叠 @禁止流程检查 = 真>
+    参数 要连接的url <类型 = 文本型>
+    参数 是否异步 <类型 = 逻辑型 @默认值 = 假>
+    参数 加密套件 <类型 = 文本型 @默认值 = "">
+    {
+
+        变量 url <类型 = 字节集类>
+        变量 SSLCipherList <类型 = 字节集类>
+        url = 文本到多字节 (要连接的url)
+        如果 (加密套件 != "")
+        {
+            SSLCipherList = 文本到多字节 (加密套件)
+        }
+        返回 (_HPClient_Websocket_Create (监听器.监听器句柄, 是否异步, url.取字节集指针 (), SSLCipherList.取字节集指针 ()))
+
+
+
+
+    }
+
+    方法 _HPClient_WebsocketSetRequestHeader <静态 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 键名称文本指针 <类型 = 变整数>
+    参数 键值文本指针 <类型 = 变整数>
+    {
+        @ HPClient_Websocket_SetRequestHeader((void*)@<通讯句柄>,(LPCSTR)@<键名称文本指针>,(LPCSTR)@<键值文本指针>)
+
+    }
+
+    方法 客户端_websocket_置协议头 <公开 静态 注释 = "请再 客户端_websocket_创建 后使用" 注释 = "并且要再 客户端_websocket_启动之前" 折叠 折叠2>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 键名称 <类型 = 文本型>
+    参数 键值 <类型 = 文本型>
+    {
+        变量 key <类型 = 字节集类>
+        变量 value <类型 = 字节集类>
+        key = 文本到多字节 (键名称)
+        value = 文本到多字节 (键值)
+        _HPClient_WebsocketSetRequestHeader (通讯句柄, key.取字节集指针 (), value.取字节集指针 ())
+    }
+
+    方法 客户端_websocket_启动 <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ HPClient_Websocket_Start ((void*)@<通讯句柄>)
+
+    }
+
+    方法 客户端_websocket_停止 <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    {
+        @ HPClient_Websocket_Stop((void*)@<通讯句柄>)
+    }
+
+    方法 客户端_websocket_销毁 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    {
+        @ HPClient_Websocket_Destroy ((void*)@<客户端句柄>)
+    }
+
+    方法 客户端_websocket_发送字节集 <公开 静态 类型 = 逻辑型 折叠>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 要发送的数据 <类型 = 字节集类>
+    {
+        返回 (_HPClient_Websocket_SendWSMessage (通讯句柄, 2, 要发送的数据.取字节集指针 (), 要发送的数据.取字节集长度 ()))
+    }
+
+    方法 客户端_websocket_发送文本 <公开 静态 类型 = 逻辑型>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 要发送的数据 <类型 = 文本型>
+    {
+        变量 文本utf8 <类型 = 字节集类>
+        文本utf8 = 编码_Unicode转Utf8 (要发送的数据, 取文本长度 (要发送的数据))
+        返回 (_HPClient_Websocket_SendWSMessage (通讯句柄, 1, 文本utf8.取字节集指针 (), 文本utf8.取字节集长度 ()))
+
+
+    }
+
+    方法 客户端_websocket_置超时 <公开 静态 注释 = "只有再异步的时候有用" @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 请求超时 <类型 = 整数>
+    参数 连接超时 <类型 = 整数>
+    {
+        @ HPClient_Websocket_SetTimout((void*)@<通讯句柄>,(DWORD)@<请求超时>,(DWORD)@<连接超时>)
+
+    }
+
+    方法 _HPClient_Websocket_SendWSMessage <静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 操作码 <类型 = 字节 注释 = "1 文本,2 字节集,8 断开连接 9 ping,10 pong">
+    参数 要发送数据指针 <类型 = 变整数>
+    参数 要发送的数据大小 <类型 = 整数>
+    {
+        @ BYTE lpszMask[4] = {1,2,3,4};
+        @ return HPClient_Websocket_SendWSMessage((void*)@<通讯句柄>,@<操作码>,lpszMask,(const BYTE *)@<要发送数据指针>,@<要发送的数据大小>);
+    }
+}
+
+# //---
+# // 这里是 http_websocket相关的
+
+类 服务器事件类_WebSocket <公开 折叠 @视窗.后缀文本 = "public IServer_Http_WebSocket_Event">
+{
+
+    # @begin
+    # <> <include> 
+    #
+    #  virtual void OnConnect(void* pSender, ULONG_PTR dwConnID)
+    # {
+    #     @<连接成功>( (@dt<变整数>)pSender,(INT)dwConnID );
+    # }
+    #  virtual void OnMessage(void* pSender, ULONG_PTR dwConnID, BYTE iOperationCode, void* lpBuffer, size_t nSize)
+    # {
+    #     CVolMem mem(lpBuffer,nSize);
+    #     @<收到消息>((@dt<变整数>)pSender,(INT)dwConnID,iOperationCode,mem);
+    # }
+    #  virtual void OnClose(void* pSender, ULONG_PTR dwConnID)
+    # {
+    #     @<连接关闭>( (@dt<变整数>)pSender,(INT)dwConnID );
+    # }
+    #
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ HPServer_Websocket_BindEventClass(this);
+    }
+
+    方法 连接成功 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    {
+
+
+    }
+
+    方法 收到消息 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 操作码 <类型 = 字节>
+    参数 收到的数据 <类型 = 字节集类>
+    {
+
+    }
+
+    方法 连接关闭 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    {
+
+    }
+
+    #
+}
+
+类 ______服务器监听器_Http_Websocket <折叠>
+{
+    变量 监听器句柄 <公开 类型 = 变整数>
+
+    方法 类_初始化
+    {
+        监听器句柄 = Listener_CreateHttpServer ()
+        调试输出 ("______HPHttp服务器监听器  构造")
+
+
+    }
+
+    方法 类_清理
+    {
+        Listener_DestroyHttpServer (监听器句柄)
+        调试输出 ("______HPHttp服务器监听器  析构")
+    }
+
+    方法 Listener_CreateHttpServer <公开 静态 类型 = 变整数 注释 = "void*Listener __HP_CALL Listener_CreateHttpServer();" @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>)::Listener_CreateHttpServer()
+    }
+
+    方法 Listener_DestroyHttpServer <公开 静态 注释 = "void __HP_CALL Listener_DestroyServer(void*Listener hListener);" @嵌入式方法 = "">
+    参数 参数监听器句柄 <类型 = 变整数>
+    {
+        @ ::Listener_DestroyHttpServer((void*)@<参数监听器句柄>)
+    }
+
+    #
+}
+
+类 ______服务器_Http_WebSocket_基础函数 <公开 注释 = "注意，暂时不支持wss" 折叠 @全局类 = 真>
+{
+    变量 监听器 <静态 类型 = ______服务器监听器_Http_Websocket>
+
+    方法 _HPServer_Websocket_SendWSMessage <静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 操作码 <类型 = 字节>
+    参数 要发送的数据指针 <类型 = 变整数>
+    参数 要发送的数据大小 <类型 = 整数>
+    {
+        // BOOL __HP_CALL HPServer_Websocket_SendWSMessage(void* pServer, ULONG_PTR dwConnID, BYTE iOperationCode, const BYTE* pData, int iLength);
+        @ HPServer_Websocket_SendWSMessage((void*)@<通讯句柄>,(ULONG_PTR)@<连接ID>,@<操作码>,(const BYTE*)@<要发送的数据指针>,@<要发送的数据大小>)
+
+
+    }
+
+    方法 "//服务器_Websocket_挂接事件" <公开 静态 注释 = "VOID __HP_CALL HPServer_Websocket_BindEventClass(IWebSocket_Server_Event* pEvent);"
+            折叠 @嵌入式方法 = "">
+    参数 事件类 <类型 = 服务器事件类_WebSocket>
+    {
+
+    }
+
+    方法 _HPServer_Websocket_Create <静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 监听器句柄 <类型 = 变整数>
+    参数 是否WSS <类型 = 逻辑型 注释 = "______HPHttp服务器监听器" @默认值 = 假>
+    {
+        @ (@dt<变整数>)HPServer_Websocket_Create((void*)@<监听器句柄>,@<是否WSS>)
+
+    }
+
+    方法 服务器_Websocket_创建 <公开 静态 类型 = 变整数 注释 = "void* __HP_CALL HPServer_Websocket_Create(void*Listener hListener,BOOL bHttps);">
+    参数 是否WSS <类型 = 逻辑型 @默认值 = 假>
+    {
+        返回 (_HPServer_Websocket_Create (监听器.监听器句柄, 是否WSS))
+    }
+
+    方法 _HPServer_Websocket_Start <静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 监听地址指针 <类型 = 变整数>
+    参数 监听端口 <类型 = 整数>
+    {
+        @ HPServer_Websocket_Start((void*)@<连接句柄>,(LPCSTR)@<监听地址指针>,@<监听端口>)
+    }
+
+    方法 服务器_Websocket_启动 <公开 静态 类型 = 逻辑型>
+    参数 连接句柄 <类型 = 变整数>
+    参数 监听地址 <类型 = 文本型 @默认值 = "0.0.0.0">
+    参数 监听端口 <类型 = 整数 @默认值 = 19730>
+    {
+        变量 临时地址 <类型 = 字节集类>
+        临时地址 = 文本到多字节 (监听地址)
+        返回 (_HPServer_Websocket_Start (连接句柄, 临时地址.取字节集指针 (), 监听端口))
+    }
+
+    方法 服务器_Websocket_停止 <公开 静态 类型 = 逻辑型 注释 = "BOOL __HP_CALL HPServer_Websocket_Stop(void* pServer);" @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    {
+        @ HPServer_Websocket_Stop((void*)@<连接句柄>)
+    }
+
+    方法 服务器_websocket_销毁 <公开 静态 @嵌入式方法 = "">
+    参数 服务器句柄 <类型 = 变整数>
+    {
+        @ HPServer_Websocket_Destroy((void*)@<服务器句柄>)
+    }
+
+    方法 服务器_Websocket_发送字节集 <公开 静态 类型 = 逻辑型>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 要发送的数据 <类型 = 字节集类>
+    {
+        返回 (_HPServer_Websocket_SendWSMessage (通讯句柄, 连接ID, 2, 要发送的数据.取字节集指针 (), 要发送的数据.取字节集长度 ()))
+
+    }
+
+    方法 服务器_Websocket_发送文本 <公开 静态 类型 = 逻辑型>
+    参数 通讯句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 要发送的数据 <类型 = 文本型>
+    {
+        变量 文本utf8 <类型 = 字节集类>
+        文本utf8 = 文本到UTF8 (要发送的数据)
+        返回 (_HPServer_Websocket_SendWSMessage (通讯句柄, 连接ID, 1, 文本utf8.取字节集指针 (), 文本utf8.取字节集长度 ()))
+
+
+    }
+}
+
+# //---
+# // 下面的是TCP 相关的
+
+类 客户端事件类_HPTcpPull <公开 @视窗.后缀文本 = "public IClient_TcpPull_Event">
+{
+
+    # @begin
+    #
+    # <> <include>
+    #
+    #
+    #  virtual int  OnConnect(void* pSender, ULONG_PTR dwConnID)
+    # {
+    #     @<连接成功>( (@dt<变整数>)pSender,(int) dwConnID);
+    #     return 0;
+    # }
+    #  virtual int  OnHandShake(void* pSender, ULONG_PTR dwConnID)
+    # {
+    #     @<握手成功>((@dt<变整数>)pSender,(int) dwConnID);
+    #     return 0;
+    # }
+    #  virtual int OnSend(void* pSender, ULONG_PTR dwConnID, const BYTE* pData, int iLength) 
+    # {
+    #
+    #     @<发送数据>((@dt<变整数>)pSender,(@dt<变整数>) dwConnID,(@dt<变整数>)pData,iLength);
+    #     return 0;
+    #
+    # }
+    # virtual int  OnReceive(void* pSender, ULONG_PTR dwConnID, int iLength)
+    # {
+    #     @<收到数据>( (@dt<变整数>)pSender,(@dt<变整数>) dwConnID ,iLength);
+    #     return 0;
+    # }
+    #  virtual int  OnClose(void* pSender, ULONG_PTR dwConnID, int enOperation, int iErrorCode)
+    # {
+    #     @<连接关闭>( (@dt<变整数>)pSender,(@dt<变整数>)dwConnID,(int)enOperation,iErrorCode);
+    #     return 0;
+    # }
+    #
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化
+    {
+        @ HPClient_TcpPull_BindEventClass(this);
+    }
+
+    #
+    #
+
+    方法 连接成功 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    {
+
+    }
+
+    方法 握手成功 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    {
+
+
+
+    }
+
+    方法 发送数据 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+
+    }
+
+    方法 收到数据 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 收到的数据长度 <类型 = 整数>
+    {
+
+    }
+
+    方法 连接关闭 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 操作码 <类型 = 整数>
+    参数 错误代码 <类型 = 整数>
+    {
+
+    }
+
+    #
+    #
+    #
+}
+
+类 ______客户端_TcpPull_监听器 <折叠>
+{
+    变量 监听器句柄 <公开 类型 = 变整数>
+
+    方法 类_初始化 <折叠>
+    {
+        监听器句柄 = Listener_CreateTcpPullClient ()
+    }
+
+    方法 类_销毁 <折叠>
+    {
+        Listener_DestoryTcpPullClient (监听器句柄)
+
+    }
+
+    方法 Listener_CreateTcpPullClient <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ (@dt<变整数>)Listener_CreateTcpPullClient()
+    }
+
+    方法 Listener_DestoryTcpPullClient <公开 静态 折叠 @嵌入式方法 = "">
+    参数 参数监听器句柄 <类型 = 变整数>
+    {
+        @ Listener_DestoryTcpPullClient((void*)@<参数监听器句柄>)
+    }
+
+    #
+    #
+}
+
+类 ______客户端_TcpPull_基础函数 <公开 折叠 @全局类 = 真>
+{
+    变量 监听器 <静态 类型 = ______客户端_TcpPull_监听器>
+
+    方法 _HPClient_TcpPull_Create <静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 监听器句柄 <类型 = 变整数>
+    参数 是否SSL <类型 = 逻辑型>
+    参数 加密协议类型指针 <类型 = 变整数>
+    {
+        @ (@dt<变整数>)HPClient_TcpPull_Create( (void*)@<监听器句柄>, @<是否SSL>, (LPCSTR)@<加密协议类型指针>)
+    }
+
+    方法 客户端_TcpPull_创建 <公开 静态 类型 = 变整数 折叠>
+    参数 是否SSL <类型 = 逻辑型>
+    参数 加密协议类型 <类型 = 文本型 @默认值 = "">
+    {
+        变量 加密协议 <类型 = 字节集类>
+        加密协议 = 文本到多字节 (加密协议类型)
+        返回 (_HPClient_TcpPull_Create (监听器.监听器句柄, 是否SSL, 加密协议.取字节集指针 ()))
+    }
+
+    方法 _HPClient_TcpPull_Start <静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    参数 IP地址指针 <类型 = 变整数>
+    参数 端口 <类型 = 短整数>
+    参数 是否异步 <类型 = 逻辑型>
+    {
+        @ HPClient_TcpPull_Start((void*)@<客户端句柄>,(LPCSTR)@<IP地址指针>,(USHORT)@<端口>,@<是否异步>)
+
+    }
+
+    方法 客户端_TcpPull_启动 <公开 静态 类型 = 逻辑型 折叠>
+    参数 客户端句柄 <类型 = 变整数>
+    参数 IP地址 <类型 = 文本型>
+    参数 端口 <类型 = 短整数>
+    参数 是否异步 <类型 = 逻辑型 @默认值 = 真>
+    {
+        // void* pClient, LPCSTR lpszIP, USHORT uPort, BOOL bAsyncConnect
+        变量 临时IP <类型 = 字节集类>
+        临时IP = 文本到多字节 (IP地址)
+        返回 (_HPClient_TcpPull_Start (客户端句柄, 临时IP.取字节集指针 (), 端口, 是否异步))
+
+
+
+    }
+
+    方法 客户端_TcpPull_停止 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    {
+        @ HPClient_TcpPull_Stop((void*)@<客户端句柄>)
+    }
+
+    方法 HPClient_TcpPull_Send_ptr <静态 折叠 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据长度 <类型 = 整数>
+    {
+        @ HPClient_TcpPull_Send( (void*)@<客户端句柄>,(const BYTE* )@<数据指针>,@<数据长度>)
+
+    }
+
+    方法 客户端_TcpPull_发送 <公开 静态 折叠>
+    参数 客户端句柄 <类型 = 变整数>
+    参数 要发送的数据 <类型 = 字节集类>
+    {
+        HPClient_TcpPull_Send_ptr (客户端句柄, 要发送的数据.取字节集指针 (), 要发送的数据.取字节集长度 ())
+
+
+    }
+
+    方法 _HPClient_TcpPull_Fetch <公开 静态 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    参数 缓冲区指针 <类型 = 变整数>
+    参数 缓冲区长度 <类型 = 整数>
+    {
+        @ HPClient_TcpPull_Fetch((void*)@<客户端句柄>,(BYTE*)@<缓冲区指针>,@<缓冲区长度>)
+    }
+
+    方法 客户端_TcpPull_抓取数据 <公开 静态 类型 = 字节集类 折叠>
+    参数 客户端句柄 <类型 = 变整数>
+    参数 要抓取的长度 <类型 = 整数>
+    {
+        变量 缓冲区 <类型 = 字节集类>
+        变量 抓取结果 <类型 = 整数>
+        缓冲区.分配字节集 (要抓取的长度)
+        抓取结果 = _HPClient_TcpPull_Fetch (客户端句柄, 缓冲区.取字节集指针 (), 缓冲区.取字节集长度 ())
+        如果 (抓取结果 == 0)
+        {
+            返回 (缓冲区)
+        }
+
+        缓冲区.清空字节集 ()
+        如果 (抓取结果 == 1)
+        {
+            调试输出 ("错误: 客户端_TcpPull_抓取数据 抓取数据过大")
+        }
+
+        如果 (抓取结果 == 2)
+        {
+            调试输出 ("错误: 客户端_TcpPull_抓取数据 客户端句柄 不正确")
+        }
+
+        返回 (缓冲区)
+
+
+    }
+}
+
+# //---
+
+类 服务器事件类_HPTcpPull <公开 折叠 @视窗.后缀文本 = "public IServer_TcpPull_Event">
+{
+
+    # @begin
+    # <> <include>
+    #
+    #  virtual int  OnPrepareListen(void* pSender, SOCKET soListen)
+    # {
+    #      @<开始监听>( (@dt<变整数>)pSender,(@dt<变整数>)soListen);
+    #      return 0;
+    # }
+    #  virtual int  OnAccept(void* pSender, ULONG_PTR dwConnID, SOCKET soClient)
+    # {
+    #       @<客户到达>(   (@dt<变整数>)pSender,(@dt<变整数>)dwConnID ,(@dt<变整数>)soClient  );
+    #       return 0;
+    # }
+    #  virtual int  OnSend(void* pSender, ULONG_PTR dwConnID, const BYTE* pData,int iLength)
+    # {
+    #      @<发送数据>(   (@dt<变整数>)pSender,(@dt<变整数>)dwConnID ,(@dt<变整数>)pData ,iLength );
+    #      return 0;
+    # }
+    #  virtual int  OnReceive(void* pSender, ULONG_PTR dwConnID, int iLength)
+    # {
+    #      @<收到数据>(   (@dt<变整数>)pSender,(@dt<变整数>)dwConnID ,iLength  );
+    #      return 0;
+    # }
+    #  virtual int  OnClose(void* pSender, ULONG_PTR dwConnID, int enOperation, int iErrorCode)
+    # {
+    #      @<连接断开>( (@dt<变整数>)pSender,(@dt<变整数>)dwConnID ,enOperation,iErrorCode );
+    #      return 0;
+    # }
+    #  virtual int  OnShutdown(void* pSender)
+    # {
+    #      @<服务器关闭>((@dt<变整数>)pSender);
+    #      return 0;
+    # }
+    #
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化
+    {
+        @ HPServer_TcpPull_BindEventClass(this);
+    }
+
+    方法 开始监听 <公开 定义事件 类型 = 整数>
+    参数 服务器句柄 <类型 = 变整数>
+    参数 监听套接字 <类型 = 变整数>
+
+    方法 客户到达 <公开 定义事件 类型 = 整数>
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 客户套接字 <类型 = 变整数>
+
+    方法 发送数据 <公开 定义事件 类型 = 整数 注释 = "当调用 客户端 发送 的时候，这里会给一个机会，看您最终组包的数据">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+
+    }
+
+    方法 收到数据 <公开 定义事件 类型 = 整数>
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+
+    }
+
+    方法 连接断开 <公开 定义事件 类型 = 整数>
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 操作码 <类型 = 整数>
+    参数 错误代码 <类型 = 整数>
+    {
+
+
+
+    }
+
+    方法 服务器关闭 <公开 定义事件 类型 = 整数>
+    参数 服务器句柄 <类型 = 变整数>
+    {
+
+    }
+
+    #
+}
+
+类 ______服务器_TcpPull_监听器 <折叠>
+{
+    变量 监听器句柄 <公开 类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ @<监听器句柄> = (@dt<变整数>) Listener_CreateTcpPullServer();
+    }
+
+    方法 类_清理
+    {
+        @ Listener_DestoryTcpPullServer((void*)@<监听器句柄>);
+    }
+
+    #
+}
+
+类 ______服务器_TcpPull_基础函数 <公开 折叠 @全局类 = 真>
+{
+    变量 监听器 <静态 类型 = ______服务器_TcpPull_监听器>
+
+    方法 "//服务器_TcpPull_挂接事件" <公开 静态 @嵌入式方法 = "">
+    参数 事件 <类型 = 服务器事件类_HPTcpPull>
+    {
+
+    }
+
+    方法 _HPServer_TcpPull_Create <静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 监听器句柄 <类型 = 变整数>
+    参数 是否SSL <类型 = 逻辑型>
+    参数 加密协议 <类型 = 变整数>
+    {
+        @ (@dt<变整数>) HPServer_TcpPull_Create( (void*)@<监听器句柄> ,@<是否SSL> ,(LPCSTR)@<加密协议>)
+    }
+
+    方法 服务器_TcpPull_创建 <公开 静态 类型 = 变整数>
+    参数 是否SSL <类型 = 逻辑型 @默认值 = 假>
+    参数 加密协议 <类型 = 文本型 @默认值 = "">
+    {
+        变量 临时数据 <类型 = 字节集类>
+        临时数据 = 文本到多字节 (加密协议)
+        返回 (_HPServer_TcpPull_Create (监听器.监听器句柄, 是否SSL, 临时数据.取字节集指针 ()))
+
+    }
+
+    方法 服务器_TcpPull_销毁 <公开 静态 折叠 @嵌入式方法 = "">
+    参数 服务器句柄 <类型 = 变整数>
+    {
+        @ HPServer_TcpPull_Destory((void*)@<服务器句柄>)
+
+
+    }
+
+    方法 _HPServer_TcpPull_Start <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 绑定地址 <类型 = 变整数>
+    参数 端口 <类型 = 短整数>
+    {
+        @ HPServer_TcpPull_Start((void*)@<服务器句柄>,(const char*)@<绑定地址> ,@<端口>)
+
+    }
+
+    方法 服务器_TcpPull_启动 <公开 静态 类型 = 逻辑型>
+    参数 服务器句柄 <类型 = 变整数 注释 = "void* pServer, const char* lpBindAddr, USHORT uPort">
+    参数 绑定地址 <类型 = 文本型>
+    参数 端口 <类型 = 短整数>
+    {
+        变量 临时数据 <类型 = 字节集类>
+        临时数据 = 文本到多字节 (绑定地址)
+        返回 (_HPServer_TcpPull_Start (服务器句柄, 临时数据.取字节集指针 (), 端口))
+    }
+
+    方法 服务器_TcpPull_停止 <公开 静态 @嵌入式方法 = "">
+    参数 服务器句柄 <类型 = 变整数>
+    {
+        @ HPServer_TcpPull_Stop((void*)@<服务器句柄>)
+    }
+
+    方法 _HPServer_TcpPull_Fetch <静态 类型 = 整数 @嵌入式方法 = "">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 缓冲区指针 <类型 = 变整数>
+    参数 缓冲区大小 <类型 = 整数>
+    {
+        @ HPServer_TcpPull_Fetch( (void*)@<服务器句柄>,(ULONG_PTR) @<连接ID>,(BYTE* ) @<缓冲区指针>,@<缓冲区大小>)
+
+    }
+
+    方法 服务器_TcpPull_抓取数据 <公开 静态 类型 = 字节集类 "">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 抓取数据大小 <类型 = 整数>
+    {
+        变量 返回数据 <类型 = 字节集类>
+        返回数据.分配字节集 (抓取数据大小)
+        如果 (_HPServer_TcpPull_Fetch (服务器句柄, 连接ID, 返回数据.取字节集指针 (), 抓取数据大小) != 0)
+        {
+            返回数据.清空字节集 ()
+
+        }
+        返回 (返回数据)
+    }
+
+    方法 _HPServer_TcpPull_Send <静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+        // (void* pServer, ULONG_PTR dwConnID, const BYTE* pBuffer, int iLength);
+        @ HPServer_TcpPull_Send((void*)@<服务器句柄>,(ULONG_PTR)@<连接ID>,(const BYTE*)@<数据指针>,@<数据大小>)
+    }
+
+    方法 服务器_TcpPull_发送 <公开 静态 类型 = 逻辑型>
+    参数 服务器句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 要发送的数据 <类型 = 字节集类>
+    {
+        返回 (_HPServer_TcpPull_Send (服务器句柄, 连接ID, 要发送的数据.取字节集指针 (), 要发送的数据.取字节集长度 ()))
+
+    }
+
+    #
+}
+
+# //---
+
+类 客户端事件类_HPTcp <公开 折叠 @视窗.后缀文本 = "public IClient_Tcp_Event">
+{
+
+    # @begin
+    # <> <include>
+    #  
+    # virtual int  OnConnect(void* pSender, ULONG_PTR dwConnID)
+    # {
+    #     @<连接成功>( (@dt<变整数>)pSender,(int) dwConnID);
+    #     return 0;
+    # }
+    # virtual int  OnHandShake(void* pSender, ULONG_PTR dwConnID)
+    # {
+    #     @<握手成功>((@dt<变整数>)pSender,(int) dwConnID);
+    #     return 0;
+    # }
+    #  virtual int  OnReceive(void* pSender, ULONG_PTR dwConnID, const BYTE* pData, int iLength)
+    # {
+    #     CVolMem mem(pData,iLength);
+    #     @<收到数据>( (@dt<变整数>)pSender,(int) dwConnID ,mem);
+    #     return 0;
+    #
+    # }
+    #  virtual int  OnClose(void* pSender, ULONG_PTR dwConnID, int enOperation, int iErrorCode)
+    # {
+    #     @<连接关闭>( (@dt<变整数>)pSender,(INT)dwConnID,(int)enOperation,iErrorCode);
+    #     return 0;
+    #
+    # }
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ HPClient_Tcp_BindEventClass(this);
+    }
+
+    方法 连接成功 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    {
+
+    }
+
+    方法 握手成功 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+
+    方法 收到数据 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 数据 <类型 = 字节集类>
+
+    方法 连接关闭 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 整数>
+    参数 操作码 <类型 = 整数>
+    参数 错误代码 <类型 = 整数>
+    {
+
+    }
+
+    #
+}
+
+类 ______客户端_Tcp_监听器 <折叠>
+{
+    变量 成员_监听器句柄 <公开 类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ @<成员_监听器句柄> = (@dt<变整数>)Listener_CreateTcpClient();
+    }
+
+    方法 类_清理
+    {
+        @ Listener_DestoryTcpClient((void*)@<成员_监听器句柄>);
+    }
+}
+
+类 ______客户端_Tcp_基础函数 <公开 折叠 @全局类 = 真>
+{
+    变量 监听器 <静态 类型 = ______客户端_Tcp_监听器>
+
+    方法 _HPClient_Tcp_Create <静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    参数 是否SSL <类型 = 逻辑型>
+    参数 加密协议类型 <类型 = 变整数>
+    {
+        @ (@dt<变整数>)HPClient_Tcp_Create((void*)@<客户端句柄>,@<是否SSL>,(LPCSTR)@<加密协议类型>)
+
+
+    }
+
+    方法 "//客户端_Tcp_绑定事件" <公开 静态 @嵌入式方法 = "">
+    参数 事件 <类型 = 客户端事件类_HPTcp>
+    {
+
+    }
+
+    方法 客户端_Tcp_创建 <公开 静态 类型 = 变整数 折叠>
+    参数 是否SSL <类型 = 逻辑型 @默认值 = 假>
+    参数 加密协议类型 <类型 = 文本型 注释 = "\"DEFAULT:!aNULL:!eNULL:!SSLv23\"" @默认值 = "">
+    {
+        如果 (加密协议类型 == "")
+        {
+            返回 (_HPClient_Tcp_Create (监听器.成员_监听器句柄, 是否SSL, 0))
+
+        }
+
+        变量 临时文本 <类型 = 字节集类>
+        临时文本 = 文本到多字节 (加密协议类型)
+        返回 (_HPClient_Tcp_Create (监听器.成员_监听器句柄, 是否SSL, 临时文本.取字节集指针 ()))
+
+    }
+
+    方法 _HPClient_Tcp_Start <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    参数 IP地址指针 <类型 = 变整数>
+    参数 端口 <类型 = 短整数>
+    参数 是否异步 <类型 = 逻辑型>
+    {
+        @ HPClient_Tcp_Start ((void*)@<客户端句柄>,(LPCSTR)@<IP地址指针>,@<端口>,@<是否异步>)
+
+    }
+
+    方法 客户端_Tcp_启动 <公开 静态 类型 = 逻辑型>
+    参数 客户端句柄 <类型 = 变整数>
+    参数 IP地址 <类型 = 文本型>
+    参数 端口 <类型 = 短整数>
+    参数 是否异步 <类型 = 逻辑型 @默认值 = 真>
+    {
+
+        变量 临时IP <类型 = 字节集类>
+        临时IP = 文本到多字节 (IP地址)
+        返回 (_HPClient_Tcp_Start (客户端句柄, 临时IP.取字节集指针 (), 端口, 是否异步))
+    }
+
+    方法 客户端_Tcp_停止 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    {
+        @ HPClient_Tcp_Stop((void*)@<客户端句柄>)
+    }
+
+    方法 客户端_Tcp_销毁 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    {
+        @ HPClient_Tcp_Destory((void*)@<客户端句柄>)
+    }
+
+    方法 _HPClient_Tcp_Send <静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    参数 缓冲区指针 <类型 = 变整数>
+    参数 缓冲区大小 <类型 = 整数>
+    {
+        @ HPClient_Tcp_Send((void*)@<客户端句柄>,(const BYTE*)@<缓冲区指针>,@<缓冲区大小>)
+
+    }
+
+    方法 客户端_Tcp_发送 <公开 静态 类型 = 逻辑型>
+    参数 客户端句柄 <类型 = 变整数>
+    参数 要发送的数据 <类型 = 字节集类>
+    {
+        返回 (_HPClient_Tcp_Send (客户端句柄, 要发送的数据.取字节集指针 (), 要发送的数据.取字节集长度 ()))
+
+    }
+
+    方法 客户端_Tcp_置接收缓冲区大小 <公开 静态 @嵌入式方法 = "">
+    参数 客户端句柄 <类型 = 变整数>
+    参数 缓冲区大小 <类型 = 整数>
+    {
+        @ HPClient_Tcp_SetSocketBufferSize((void*)@<客户端句柄>,(DWORD)@<缓冲区大小>)
+    }
+
+    #
+}
+
+# //======
+
+类 事件类_HPUdpNode <公开 注释 = "udp没有客户端和服务器之说，都是同一个组件，但是为了命名统一" 注释 = "所以，还是做了兼容" 折叠 @视窗.后缀文本 = "public IUdpNode_Event">
+{
+
+    # @begin
+    # <> <include>
+    #
+    #  virtual int UdpNode_OnPrepareListen(void* pSender, UINT_PTR soListen)
+    # {
+    #     @<开始监听>( (@dt<变整数>)pSender,(@dt<变整数>) soListen);
+    #     return 0;
+    # }
+    #  virtual int UdpNode_OnSend(void* pSender, LPCSTR lpszRemoteAddress, USHORT usRemotePort, const BYTE* pData, int iLength)
+    # {
+    #     CVolString str = lpszRemoteAddress;
+    #     @<将要发送>((@dt<变整数>)pSender,str,(INT)usRemotePort,(@dt<变整数>)pData, iLength );
+    #     return 0;
+    # }
+    #  virtual int UdpNode_OnReceive(void* pSender, LPCSTR lpszRemoteAddress, USHORT usRemotePort, const BYTE* pData, int iLength)
+    # {
+    #     CVolString str = lpszRemoteAddress;
+    #     CVolMem  bin(pData,iLength);
+    #     @<收到数据>((@dt<变整数>)pSender,str,(INT)usRemotePort,bin);
+    #     return 0;
+    # }
+    #  virtual int UdpNode_OnError(void* pSender, int enOperation, int iErrorCode, LPCTSTR lpszRemoteAddress, USHORT usRemotePort, const BYTE* pData, int iLength)
+    # {
+    #     CVolString str = lpszRemoteAddress;
+    #     @<错误>( (@dt<变整数>)pSender, (INT)enOperation ,iErrorCode , str , (INT)usRemotePort ,(@dt<变整数>)pData , iLength );
+    #     return 0;
+    # }
+    #  virtual int UdpNode_OnShutdown(void* pSender)
+    # {
+    #     @<关闭>((@dt<变整数>)pSender);
+    #     return 0;
+    # }
+    #
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ UdpNode_BindEventClass(this);
+    }
+
+    方法 开始监听 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接句柄 <类型 = 变整数>
+    参数 soListen <类型 = 变整数 注释 = "暂时不知道做什么用。。。">
+    {
+
+    }
+
+    方法 将要发送 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接句柄 <类型 = 变整数>
+    参数 远程地址 <类型 = 文本型>
+    参数 远程端口 <类型 = 整数>
+    参数 将要发送的数据指针 <类型 = 变整数>
+    参数 将要发送的数据大小 <类型 = 整数>
+    {
+
+    }
+
+    方法 收到数据 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接句柄 <类型 = 变整数>
+    参数 远程地址 <类型 = 文本型>
+    参数 远程端口 <类型 = 整数>
+    参数 收到的数据 <类型 = 字节集类>
+    {
+
+    }
+
+    方法 错误 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    参数 操作码 <类型 = 整数>
+    参数 错误代码 <类型 = 整数>
+    参数 远程地址 <类型 = 文本型>
+    参数 远程端口 <类型 = 整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+
+    }
+
+    方法 关闭 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接句柄 <类型 = 变整数>
+    {
+
+    }
+
+    #
+}
+
+类 ______HPUdpNode_监听器 <折叠>
+{
+    变量 成员_监听器句柄 <公开 类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ @<成员_监听器句柄> = (@dt<变整数>)UdpNode_CreateListener();
+    }
+
+    方法 类_清理
+    {
+        @ UdpNode_DestroyListener((void*)@<成员_监听器句柄>);
+
+    }
+}
+
+类 ______HPUdpNode_全局函数 <公开 折叠 @全局类 = 真>
+{
+    变量 监听器 <静态 类型 = ______HPUdpNode_监听器>
+
+    方法 _UdpNode_Create <静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 监听器句柄 <类型 = 变整数>
+    {
+        @ (@dt<变整数>)UdpNode_Create((void*)@<监听器句柄>)
+    }
+
+    方法 "//HPUdpNode_挂接事件" <公开 静态 @嵌入式方法 = "">
+    参数 事件 <类型 = 事件类_HPUdpNode>
+    {
+
+    }
+
+    方法 HPUdpNode_创建 <公开 静态 类型 = 变整数>
+    {
+        // 调试输出 (监听器.成员_监听器句柄)
+        返回 (_UdpNode_Create (监听器.成员_监听器句柄))
+    }
+
+    方法 _UdpNode_Start <静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 绑定地址指针 <类型 = 变整数>
+    参数 绑定端口 <类型 = 整数>
+    {
+        @ UdpNode_Start(  (void*)@<连接句柄> ,(LPCSTR)@<绑定地址指针>,@<绑定端口>)
+    }
+
+    方法 HPUdpNode_启动 <公开 静态 类型 = 逻辑型>
+    参数 连接句柄 <类型 = 变整数>
+    参数 绑定地址 <类型 = 文本型>
+    参数 绑定端口 <类型 = 整数>
+    {
+        变量 BindAddr <类型 = 字节集类>
+        BindAddr = 文本到多字节 (绑定地址)
+        返回 (_UdpNode_Start (连接句柄, BindAddr.取字节集指针 (), 绑定端口))
+    }
+
+    方法 _UdpNode_Send <静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 远程地址指针 <类型 = 变整数>
+    参数 远程端口 <类型 = 整数>
+    参数 要发送的数据指针 <类型 = 变整数>
+    参数 要发送的数据大小 <类型 = 整数>
+    {
+        @ UdpNode_Send(  (void*)@<连接句柄>,(LPCSTR) @<远程地址指针> ,@<远程端口> ,(const BYTE*) @<要发送的数据指针> ,@<要发送的数据大小>)
+    }
+
+    方法 HPUdpNode_发送 <公开 静态 类型 = 逻辑型 注释 = "" 注释 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 远程地址 <类型 = 文本型>
+    参数 远程端口 <类型 = 整数>
+    参数 要发送的数据 <类型 = 字节集类>
+    {
+        变量 addr <类型 = 字节集类>
+        addr = 文本到多字节 (远程地址)
+        返回 (_UdpNode_Send (连接句柄, addr.取字节集指针 (), 远程端口, 要发送的数据.取字节集指针 (), 要发送的数据.取字节集长度 ()))
+
+    }
+
+    #
+}
+
+类 事件类_HPTcpPullAgent <公开 折叠 @视窗.后缀文本 = "public ITcpPullAgent_Event">
+{
+
+    # @begin
+    # <> <include>
+    #  virtual int OnConnect(void* pSender, ULONG_PTR m_dwConnID)
+    # {
+    #     return @<连接成功>( (INT_P)pSender,(INT_P)m_dwConnID);
+    # }
+    #  virtual int OnSend(void* pSender, ULONG_PTR m_dwConnID, const BYTE* pData, int iLength)
+    # {
+    #     return @<将要发送>((INT_P)pSender,(INT_P)m_dwConnID,(INT_P)pData,iLength);
+    # }
+    #  virtual int OnReceive(void* pSender, ULONG_PTR m_dwConnID, int iLength)
+    # {
+    #     return @<收到数据>((INT_P)pSender,(INT_P)m_dwConnID,iLength);
+    # }
+    #  virtual int OnClose(void* pSender, ULONG_PTR m_dwConnID, int enOperation, int iErrorCode)
+    # {
+    #     return @<连接断开>((INT_P)pSender,(INT_P)m_dwConnID,enOperation,iErrorCode);
+    # }
+    #  virtual int OnShutdown(void* pSender)
+    # {
+    #     return @<关闭>((INT_P)pSender);
+    # }
+    # <> </include>
+    # @end
+
+    方法 连接成功 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    {
+
+    }
+
+    方法 将要发送 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+
+    }
+
+    方法 收到数据 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 数据长度 <类型 = 整数>
+    {
+
+    }
+
+    方法 连接断开 <公开 定义事件 类型 = 整数 折叠>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 操作码 <类型 = 整数>
+    参数 错误码 <类型 = 整数>
+    {
+
+    }
+
+    方法 关闭 <公开 定义事件 类型 = 整数>
+    参数 连接句柄 <类型 = 变整数>
+    {
+
+    }
+
+    方法 类_初始化
+    {
+        @ HPTcpPullAgent_BindEventClass(this);
+    }
+
+    #
+}
+
+类 ______HPTcpPullAgent_监听器 <折叠>
+{
+    变量 成员_监听器句柄 <公开 类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ @<成员_监听器句柄> = (@dt<变整数>)Listener_CreateTcpPullAgentListener();
+    }
+
+    方法 类_清理
+    {
+        @ Listener_DestoryTcpPullAgentListener((void*)@<成员_监听器句柄>);
+
+    }
+}
+
+类 ______HPTcpPullAgent_全局函数 <公开 @全局类 = 真>
+{
+    变量 监听器 <静态 类型 = ______HPTcpPullAgent_监听器>
+
+    方法 _HPTcpPullAgent_Create <静态 类型 = 变整数 @嵌入式方法 = "">
+    参数 监听器句柄 <类型 = 变整数>
+    {
+        @ (@dt<变整数>)HPTcpPullAgent_Create((void*)@<监听器句柄>)
+    }
+
+    方法 HPTcpPullAgent_创建 <公开 静态 类型 = 变整数>
+    {
+        返回 (_HPTcpPullAgent_Create (监听器.成员_监听器句柄))
+    }
+
+    方法 HPTcpPullAgent_销毁 <公开 静态 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    {
+        @ HPTcpPullAgent_Destory((void*)@<连接句柄>)
+
+    }
+
+    方法 HPTcpPullAgent_启动 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 绑定地址 <类型 = 文本型>
+    参数 是否异步 <类型 = 逻辑型>
+    {
+        @ HPTcpPullAgent_Start((void*)@<连接句柄>, GetMbsText(@<绑定地址>, CVolMem(), NULL), @<是否异步>)
+
+
+    }
+
+    方法 HPTcpPullAgent_连接 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 地址 <类型 = 文本型>
+    参数 端口 <类型 = 整数>
+    参数 输出_连接ID <类型 = 变整数>
+    {
+        @ HPTcpPullAgent_Connect( (void*)@<连接句柄>, GetMbsText(@<地址>, CVolMem(), NULL), @<端口>, (ULONG_PTR*)&@<输出_连接ID>)
+
+    }
+
+    方法 HPTcpPullAgent_断开连接 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 是否强制断开 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ HPTcpPullAgent_DisConnect((void*)@<连接句柄>, (ULONG_PTR)@<连接ID>, @<是否强制断开>)
+    }
+
+    方法 HPTcpPullAgent_停止 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    {
+        @ HPTcpPullAgent_Stop((void*)@<连接句柄>)
+    }
+
+    方法 _HPTcpPullAgent_取本地地址 <静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 缓冲区指针 <类型 = 变整数>
+    参数 缓冲区大小 <类型 = 整数>
+    参数 端口 <类型 = 整数>
+    {
+        @ HPTcpPullAgent_GetLocalAddress((void*)@<连接句柄>,(ULONG_PTR)@<连接ID>,( void* )@<缓冲区指针>,&@<缓冲区大小>,&@<端口>)
+    }
+
+    方法 HPTcpPullAgent_取本地地址 <公开 静态 类型 = 文本型 折叠>
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    {
+        变量 返回文本 <类型 = 文本型>
+        变量 缓冲区 <类型 = 字节集类>
+        变量 缓冲区大小 <类型 = 整数>
+        变量 端口 <类型 = 整数>
+        缓冲区 = 取空白字节集 (50)
+        缓冲区大小 = 缓冲区.取字节集长度 ()
+        如果 (_HPTcpPullAgent_取本地地址 (连接句柄, 连接ID, 缓冲区.取字节集指针 (), 缓冲区大小, 端口))
+        {
+            返回文本 = 多字节到文本 (缓冲区)
+            返回文本 = 返回文本 + ":" + 到文本 (端口)
+        }
+        返回 (返回文本)
+    }
+
+    方法 HPTcpPullAgent_置连接附加数据 <公开 静态 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 附加数据 <类型 = 变整数>
+    {
+        @ HPTcpPullAgent_SetConnectionExtra((void*)@<连接句柄>, (ULONG_PTR)@<连接ID>,(void*)@<附加数据>)
+    }
+
+    方法 HPTcpPullAgent_取连接附加数据 <公开 静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    {
+        @ (INT_P)HPTcpPullAgent_GetConnectionExtra((void*)@<连接句柄>, (ULONG_PTR)@<连接ID>)
+
+    }
+
+    方法 HPTcpPullAgent_取错误文本 <公开 静态 类型 = 文本型 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    {
+        @ CVolString( HPTcpPullAgent_GetLastErrorText((void*)@<连接句柄>) )
+    }
+
+    方法 HPTcpPullAgent_取当前连接数 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    {
+        @ HPTcpPullAgent_GetConnectionCount((void*)@<连接句柄>) 
+
+    }
+
+    方法 _HPTcpPullAgent_抓取数据 <静态 类型 = 整数 返回值注释 = "返回0表示成功" @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 缓冲区指针 <类型 = 变整数>
+    参数 缓冲区大小 <类型 = 整数>
+    {
+        @ HPTcpPullAgent_Fetch((void*)@<连接句柄>, (ULONG_PTR)@<连接ID>, (void*)@<缓冲区指针>,@<缓冲区大小>)
+    }
+
+    方法 HPTcpPullAgent_抓取数据 <公开 静态 类型 = 字节集类 返回值注释 = "返回0表示成功">
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 抓取大小 <类型 = 整数>
+    {
+        变量 缓冲区 <类型 = 字节集类>
+        缓冲区.重分配字节集 (抓取大小)
+        如果 (_HPTcpPullAgent_抓取数据 (连接句柄, 连接ID, 取字节集指针 (缓冲区), 抓取大小) == 0)
+        {
+            返回 (缓冲区)
+        }
+        缓冲区.清空字节集 ()
+        返回 (缓冲区)
+
+
+
+
+
+
+    }
+
+    方法 HPTcpPullAgent_发送指针数据 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 要发送的数据指针 <类型 = 变整数>
+    参数 要发送的数据大小 <类型 = 整数>
+    {
+        @ HPTcpPullAgent_Send((void*)@<连接句柄>, (ULONG_PTR)@<连接ID>, (const BYTE*)@<要发送的数据指针>, @<要发送的数据大小>)
+    }
+
+    方法 HPTcpPullAgent_发送 <公开 静态 类型 = 逻辑型 注释 = "" 注释 = "">
+    参数 连接句柄 <类型 = 变整数>
+    参数 连接ID <类型 = 变整数>
+    参数 要发送的数据 <类型 = 字节集类>
+    {
+        返回 (HPTcpPullAgent_发送指针数据 (连接句柄, 连接ID, 要发送的数据.取字节集指针 (), 要发送的数据.取字节集长度 ()))
+
+
+    }
+
+    #
+}
+
+#

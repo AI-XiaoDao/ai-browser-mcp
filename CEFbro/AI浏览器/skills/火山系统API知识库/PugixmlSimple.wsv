@@ -1,0 +1,266 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.pugixml简易类\"" @视窗.外部头文件 = "PugixmlSimple\\pugixmlTool.h"
+        @视窗.外部库.win32 = "PugixmlSimple\\pugixmlToolx86.lib" @视窗.附属文件.win32 = "PugixmlSimple\\pugixmlToolx86.dll"
+        @视窗.外部库.x64 = "PugixmlSimple\\pugixmlToolx64.lib" @视窗.附属文件.x64 = "PugixmlSimple\\pugixmlToolx64.dll">
+
+类 xml格式常量 <公开 @常量类 = 整数>
+{
+    常量 标准格式 <公开 值 = 0x01
+            注释 = " // Indent the nodes that are written to output stream with as many indentation strings as deep the node is in DOM tree. This flag is on by default.">
+    常量 写入bom头 <公开 值 = 0x02 注释 = " // Write encoding-specific BOM to the output stream. This flag is off by default.">
+    常量 原始格式 <公开 值 = 0x04
+            注释 = "// Use raw output mode (no indentation and no line breaks are written). This flag is off by default.">
+    常量 不保存声明 <公开 值 = 0x08
+            注释 = " // Omit default XML declaration even if there is no declaration in the document. This flag is off by default.">
+    常量 没有空格 <公开 值 = 0x10 注释 = " // Don\'t escape attribute values and PCDATA contents. This flag is off by default.">
+    常量 文本格式 <公开 值 = 0x20
+            注释 = " // Open file using text mode in xml_document::save_file. This enables special character (i.e. new-line) conversions on some systems. This flag is off by default.">
+    常量 标准属性 <公开 值 = 0x40
+            注释 = " // Write every attribute on a new line with appropriate indentation. This flag is off by default.">
+    常量 不保存空元素标签 <公开 值 = 0x80
+            注释 = "// Don\'t output empty element tags, instead writing an explicit start and end tag even if there are no children. This flag is off by default.">
+    常量 忽略控制字符 <公开 值 = 0x100
+            注释 = " // Skip characters belonging to range [0; 32) instead of \"&#xNN;\" encoding. This flag is off by default.">
+    常量 属性单引号 <公开 值 = 0x200
+            注释 = " // Use single quotes \' instead of double quotes \" for enclosing attribute values. This flag is off by default.">
+
+    #
+}
+
+类 xml编码常量 <公开 折叠 @常量类 = 整数>
+{
+    常量 自动 <公开 值 = 0 注释 = "// Auto-detect input encoding using BOM or < / <? detection; use UTF8 if BOM is not found">
+    常量 utf8 <公开 值 = 1 注释 = "// UTF8 encoding">
+    常量 utf16_le <公开 值 = 2 注释 = "// Little-endian UTF16">
+    常量 utf16_be <公开 值 = 3 注释 = "// Big-endian UTF16">
+    常量 utf16 <公开 值 = 4 注释 = " // UTF16 with native endianness">
+    常量 utf32_le <公开 值 = 5 注释 = "// Little-endian UTF32">
+    常量 utf32_be <公开 值 = 6 注释 = "// Big-endian UTF32">
+    常量 utf32 <公开 值 = 7 注释 = "// UTF32 with native endianness">
+    常量 wchar <公开 值 = 8 注释 = "// The same encoding wchar_t has (either UTF16 or UTF32)">
+    常量 latin1 <公开 值 = 9>
+
+    #
+}
+
+类 xml解析常量 <公开 注释 = " // Parsing options" 注释 = ""
+        注释 = " // Minimal parsing mode (equivalent to turning all other flags off)."
+        注释 = " // Only elements and PCDATA sections are added to the DOM tree, no text conversions are performed."
+        注释 = " const unsigned int parse_minimal = 0x0000;" 注释 = ""
+        注释 = " // This flag determines if processing instructions (node_pi) are added to the DOM tree. This flag is off by default."
+        注释 = " const unsigned int parse_pi = 0x0001;" 注释 = ""
+        注释 = " // This flag determines if comments (node_comment) are added to the DOM tree. This flag is off by default."
+        注释 = " const unsigned int parse_comments = 0x0002;" 注释 = ""
+        注释 = " // This flag determines if CDATA sections (node_cdata) are added to the DOM tree. This flag is on by default."
+        注释 = " const unsigned int parse_cdata = 0x0004;" 注释 = ""
+        注释 = " // This flag determines if plain character data (node_pcdata) that consist only of whitespace are added to the DOM tree."
+        注释 = " // This flag is off by default; turning it on usually results in slower parsing and more memory consumption."
+        注释 = " const unsigned int parse_ws_pcdata = 0x0008;" 注释 = ""
+        注释 = " // This flag determines if character and entity references are expanded during parsing. This flag is on by default."
+        注释 = " const unsigned int parse_escapes = 0x0010;" 注释 = ""
+        注释 = " // This flag determines if EOL characters are normalized (converted to #xA) during parsing. This flag is on by default."
+        注释 = " const unsigned int parse_eol = 0x0020;" 注释 = ""
+        注释 = " // This flag determines if attribute values are normalized using CDATA normalization rules during parsing. This flag is on by default."
+        注释 = " const unsigned int parse_wconv_attribute = 0x0040;" 注释 = ""
+        注释 = " // This flag determines if attribute values are normalized using NMTOKENS normalization rules during parsing. This flag is off by default."
+        注释 = " const unsigned int parse_wnorm_attribute = 0x0080;" 注释 = ""
+        注释 = " // This flag determines if document declaration (node_declaration) is added to the DOM tree. This flag is off by default."
+        注释 = " const unsigned int parse_declaration = 0x0100;" 注释 = ""
+        注释 = " // This flag determines if document type declaration (node_doctype) is added to the DOM tree. This flag is off by default."
+        注释 = " const unsigned int parse_doctype = 0x0200;" 注释 = ""
+        注释 = " // This flag determines if plain character data (node_pcdata) that is the only child of the parent node and that consists only"
+        注释 = " // of whitespace is added to the DOM tree."
+        注释 = " // This flag is off by default; turning it on may result in slower parsing and more memory consumption."
+        注释 = " const unsigned int parse_ws_pcdata_single = 0x0400;" 注释 = ""
+        注释 = " // This flag determines if leading and trailing whitespace is to be removed from plain character data. This flag is off by default."
+        注释 = " const unsigned int parse_trim_pcdata = 0x0800;" 注释 = ""
+        注释 = " // This flag determines if plain character data that does not have a parent node is added to the DOM tree, and if an empty document"
+        注释 = " // is a valid document. This flag is off by default." 注释 = " const unsigned int parse_fragment = 0x1000;" 注释 = ""
+        注释 = " // This flag determines if plain character data is be stored in the parent element\'s value. This significantly changes the structure of"
+        注释 = " // the document; this flag is only recommended for parsing documents with many PCDATA nodes in memory-constrained environments."
+        注释 = " // This flag is off by default." 注释 = " const unsigned int parse_embed_pcdata = 0x2000;" 注释 = ""
+        注释 = " // The default parsing mode."
+        注释 = " // Elements, PCDATA and CDATA sections are added to the DOM tree, character/reference entities are expanded,"
+        注释 = " // End-of-Line characters are normalized, attribute values are normalized using CDATA normalization rules."
+        注释 = " const unsigned int parse_default = parse_cdata | parse_escapes | parse_wconv_attribute | parse_eol;" 注释 = ""
+        注释 = " // The full parsing mode."
+        注释 = " // Nodes of all types are added to the DOM tree, character/reference entities are expanded,"
+        注释 = " // End-of-Line characters are normalized, attribute values are normalized using CDATA normalization rules."
+        注释 = " const unsigned int parse_full = parse_default | parse_pi | parse_comments | parse_declaration | parse_doctype;"
+        注释 = "" 折叠2 @常量类 = 整数>
+{
+    常量 默认 <公开 值 = 116 注释 = "parse_default">
+    常量 全部 <公开 值 = 887 注释 = "parse_full">
+    常量 "" <注释 = "其他没有声明，自己用到了自己声明一下">
+
+    #
+}
+
+类 xml简易类 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const
+    # {
+    #     if(pugixmlTool_equal(this->m_data,objCompare.m_data))
+    #         return TRUE;
+    # return FALSE;
+    # }
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     pugixmlTool_CopyConstruct(this->m_data,objCopyFrom.m_data);
+    # }
+    # void SetData(void* data)
+    # {
+    #   this->m_data = data;
+    # }
+    # void* GetData()
+    # {
+    #     return m_data;
+    # }
+    # void* m_data;
+    # <> </include>
+    # @end
+
+    方法 类_初始化 <返回值注释 = "void *">
+    {
+        @ SetData(pugixmlTool_new());
+    }
+
+    方法 类_清理 <返回值注释 = "void">
+    {
+        @ pugixmlTool_delete(GetData());
+    }
+
+    方法 关闭 <公开 返回值注释 = "void" @嵌入式方法 = "">
+    {
+        @ pugixmlTool_Close(@sn<this>.GetData())
+    }
+
+    方法 从文本加载 <公开 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 lpszXml <类型 = 文本型 注释 = "const int *">
+    参数 nOption <类型 = xml解析常量 注释 = "int" @默认值 = xml解析常量.默认>
+    {
+        @ pugixmlTool_LoadString(@sn<this>.GetData(),@<lpszXml>,@<nOption>)
+    }
+
+    方法 从文件加载 <公开 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 lpszXmlFile <类型 = 文本型 注释 = "const int *">
+    参数 nOption <类型 = xml解析常量 注释 = "int" @默认值 = xml解析常量.默认>
+    {
+        @ pugixmlTool_LoadFile(@sn<this>.GetData(),@<lpszXmlFile>,@<nOption>)
+    }
+
+    方法 到文件 <公开 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 lpszXmlFile <类型 = 文本型 注释 = "const int *">
+    参数 indent <类型 = 文本型 @默认值 = "\t">
+    参数 nFormat <类型 = xml格式常量 注释 = "int" @默认值 = xml格式常量.标准格式>
+    参数 nEncoding <类型 = xml编码常量 注释 = "int" @默认值 = xml编码常量.自动>
+    {
+        @ pugixmlTool_SaveToFile(@sn<this>.GetData(),@<lpszXmlFile>,@<indent>,@<nFormat>,@<nEncoding>)
+    }
+
+    方法 到文本 <公开 类型 = 文本型 返回值注释 = "int *">
+    参数 indent <类型 = 文本型 注释 = "const int *" @默认值 = "\t">
+    参数 nFormat <类型 = xml格式常量 注释 = "int" @默认值 = xml格式常量.标准格式>
+    参数 nEncoding <类型 = xml编码常量 注释 = "int" @默认值 = xml编码常量.wchar>
+    {
+        变量 text <类型 = 文本型>
+        @  wchar_t* pText= pugixmlTool_SaveToString(GetData(),@<indent>,@<nFormat>,@<nEncoding>);
+        @ if(pText)
+        @ {
+        @   CVolString str(pText);
+        @   pugixmlTool_FreeString(pText);
+        @   return str;
+        @  }
+        返回 (text)
+    }
+
+    方法 置逻辑值 <公开 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 lpszPath <类型 = 文本型 注释 = "直接使用路径方式" 注释 = "属性值方式  \"/Profile/Tools/Tool/@Filename\"" 注释 = "节点文本属性 \"/Profile/Tools/Tool"
+            注释 = "节点文本属性 \"/Profile/Tools[1]/Tool" 注释 = "注意 [索引] 中的索引是从 1开始" 注释 = "注意！！！末尾无斜杠哦" 注释 = "路径不存在则直接创建路径">
+    参数 value <类型 = 逻辑型 注释 = "bool">
+    {
+        @ pugixmlTool_SetValue_bool(@sn<this>.GetData(),@<lpszPath>,@<value>)
+    }
+
+    方法 置整数 <公开 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 lpszPath <类型 = 文本型 注释 = "直接使用路径方式" 注释 = "属性值方式 L \"/Profile/Tools/Tool/@Filename\"" 注释 = "节点文本属性 \"/Profile/Tools/Tool"
+            注释 = "节点文本属性 \"/Profile/Tools[1]/Tool" 注释 = "注意 [索引] 中的索引是从 1开始" 注释 = "注意！！！末尾无斜杠哦" 注释 = "路径不存在则直接创建路径">
+    参数 value <类型 = 整数 注释 = "int">
+    {
+        @ pugixmlTool_SetValue_int(@sn<this>.GetData(),@<lpszPath>,@<value>)
+    }
+
+    方法 置长整数 <公开 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 lpszPath <类型 = 文本型 注释 = "直接使用路径方式" 注释 = "属性值方式 L \"/Profile/Tools/Tool/@Filename\"" 注释 = "节点文本属性 \"/Profile/Tools/Tool"
+            注释 = "节点文本属性 \"/Profile/Tools[1]/Tool" 注释 = "注意 [索引] 中的索引是从 1开始" 注释 = "注意！！！末尾无斜杠哦" 注释 = "路径不存在则直接创建路径">
+    参数 value <类型 = 长整数 注释 = "long long">
+    {
+        @ pugixmlTool_SetValue_int64(@sn<this>.GetData(),@<lpszPath>,(long long)@<value>)
+    }
+
+    方法 置小数 <公开 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 lpszPath <类型 = 文本型 注释 = "直接使用路径方式" 注释 = "属性值方式 L \"/Profile/Tools/Tool/@Filename\"" 注释 = "节点文本属性 \"/Profile/Tools/Tool"
+            注释 = "节点文本属性 \"/Profile/Tools[1]/Tool" 注释 = "注意 [索引] 中的索引是从 1开始" 注释 = "注意！！！末尾无斜杠哦" 注释 = "路径不存在则直接创建路径">
+    参数 value <类型 = 小数 注释 = "double">
+    {
+        @ pugixmlTool_SetValue_double(@sn<this>.GetData(),@<lpszPath>,(double)@<value>)
+    }
+
+    方法 置文本 <公开 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 lpszPath <类型 = 文本型 注释 = "直接使用路径方式" 注释 = "属性值方式 L \"/Profile/Tools/Tool/@Filename\"" 注释 = "节点文本属性 \"/Profile/Tools/Tool"
+            注释 = "节点文本属性 \"/Profile/Tools[1]/Tool" 注释 = "注意 [索引] 中的索引是从 1开始" 注释 = "注意！！！末尾无斜杠哦" 注释 = "路径不存在则直接创建路径">
+    参数 value <类型 = 文本型 注释 = "const int *">
+    {
+        @ pugixmlTool_SetValue_Text(@sn<this>.GetData(),@<lpszPath>,@<value>)
+    }
+
+    方法 是否存在 <公开 类型 = 逻辑型 注释 = "检查路径是否存在" @嵌入式方法 = "">
+    参数 路径 <类型 = 文本型 注释 = "直接使用路径方式" 注释 = "属性值方式 L \"/Profile/Tools/Tool/@Filename\"" 注释 = "节点文本属性 \"/Profile/Tools/Tool"
+            注释 = "节点文本属性 \"/Profile/Tools[1]/Tool" 注释 = "注意 [索引] 中的索引是从 1开始" 注释 = "注意！！！末尾无斜杠哦" 注释 = "路径不存在则直接创建路径">
+    {
+        @ pugixmlTool_IsPathExist(@sn<this>.GetData(),@<路径>)
+    }
+
+    方法 取逻辑值 <公开 类型 = 逻辑型 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 lpszPath <类型 = 文本型 注释 = "直接使用路径方式" 注释 = "属性值方式 L \"/Profile/Tools/Tool/@Filename\"" 注释 = "节点文本属性 \"/Profile/Tools/Tool"
+            注释 = "节点文本属性 \"/Profile/Tools[1]/Tool" 注释 = "注意 [索引] 中的索引是从 1开始" 注释 = "注意！！！末尾无斜杠哦" 注释 = "如果路径不存在返回 0">
+    {
+        @ pugixmlTool_GetValue_bool(@sn<this>.GetData(),@<lpszPath>)
+    }
+
+    方法 取整数 <公开 类型 = 整数 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 lpszPath <类型 = 文本型 注释 = "直接使用路径方式" 注释 = "属性值方式 L \"/Profile/Tools/Tool/@Filename\"" 注释 = "节点文本属性 \"/Profile/Tools/Tool"
+            注释 = "节点文本属性 \"/Profile/Tools[1]/Tool" 注释 = "注意 [索引] 中的索引是从 1开始" 注释 = "注意！！！末尾无斜杠哦" 注释 = "失败返回0">
+    {
+        @ pugixmlTool_GetValue_int(@sn<this>.GetData(),@<lpszPath>)
+    }
+
+    方法 取长整数 <公开 类型 = 长整数 返回值注释 = "失败返回0" @嵌入式方法 = "">
+    参数 lpszPath <类型 = 文本型 注释 = "直接使用路径方式" 注释 = "属性值方式 L \"/Profile/Tools/Tool/@Filename\"" 注释 = "节点文本属性 \"/Profile/Tools/Tool"
+            注释 = "节点文本属性 \"/Profile/Tools[1]/Tool" 注释 = "注意 [索引] 中的索引是从 1开始" 注释 = "注意！！！末尾无斜杠哦">
+    {
+        @ pugixmlTool_GetValue_int64(@sn<this>.GetData(),@<lpszPath>)
+    }
+
+    方法 取小数 <公开 类型 = 小数 返回值注释 = "bool" @嵌入式方法 = "">
+    参数 lpszPath <类型 = 文本型 注释 = "直接使用路径方式" 注释 = "属性值方式 L \"/Profile/Tools/Tool/@Filename\"" 注释 = "节点文本属性 \"/Profile/Tools/Tool"
+            注释 = "节点文本属性 \"/Profile/Tools[1]/Tool" 注释 = "注意 [索引] 中的索引是从 1开始" 注释 = "注意！！！末尾无斜杠哦">
+    {
+        @ pugixmlTool_GetValue_double(@sn<this>.GetData(),@<lpszPath>)
+    }
+
+    方法 取文本 <公开 类型 = 文本型 返回值注释 = "失败返回空文本" @嵌入式方法 = "">
+    参数 lpszPath <类型 = 文本型 注释 = "直接使用路径方式" 注释 = "属性值方式 L \"/Profile/Tools/Tool/@Filename\"" 注释 = "节点文本属性 \"/Profile/Tools/Tool"
+            注释 = "节点文本属性 \"/Profile/Tools[1]/Tool" 注释 = "注意 [索引] 中的索引是从 1开始" 注释 = "注意！！！末尾无斜杠哦">
+    {
+        @ CVolString( pugixmlTool_GetValue_Text(@sn<this>.GetData(),@<lpszPath>))
+    }
+
+    #
+    #
+    #
+}

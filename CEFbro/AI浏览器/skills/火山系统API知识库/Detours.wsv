@@ -1,0 +1,154 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "" 注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" @文档 = "category = \"开源库.detours\"" ""
+        @视窗.外部头文件 = "Detours\\src\\detours.h" @视窗.外部源文件 = "Detours\\src\\detours.cpp" "" @视窗.外部头文件 = "Detours\\src\\detver.h"
+        @视窗.外部源文件 = "Detours\\src\\creatwth.cpp" @视窗.外部源文件 = "Detours\\src\\disasm.cpp" @视窗.外部源文件 = "Detours\\src\\image.cpp"
+        @视窗.外部源文件 = "Detours\\src\\modules.cpp">
+
+类 HOOK类 <公开 "">
+{
+    方法 开始HOOK代码 <折叠 @虚拟方法 = 可覆盖>
+    {
+        // DetourAttach(&(PVOID&)TrueSleepEx, TimedSleepEx);
+
+    }
+
+    方法 结束HOOK代码 <折叠 @虚拟方法 = 可覆盖>
+    {
+        // DetourDetach(&(PVOID&)TrueSleepEx, TimedSleepEx);
+
+    }
+
+    方法 开始Hook <公开 折叠 @输出名 = "BeginHook">
+    {
+        @         if (DetourIsHelperProcess()) { 
+        @                 return ;
+        @         }
+        @ 
+        @         LONG error;
+        @         DetourRestoreAfterWith();
+        @ 
+        @         printf("simple" DETOURS_STRINGIFY(DETOURS_BITS) ".dll:"
+        @                " Starting.\n");
+        @         fflush(stdout);
+        @ 
+        @         DetourTransactionBegin();
+        @         DetourUpdateThread(GetCurrentThread());
+        // @         @<重定向事件>();
+        @         @<开始HOOK代码>();
+        @         //DetourAttach(&(PVOID&)TrueSleepEx, TimedSleepEx);
+        @         error = DetourTransactionCommit();
+        @ 
+        @         if (error == NO_ERROR) {
+        @             printf("simple" DETOURS_STRINGIFY(DETOURS_BITS) ".dll:"
+        @                    " Detoured SleepEx().\n");
+        @         }
+        @         else {
+        @             printf("simple" DETOURS_STRINGIFY(DETOURS_BITS) ".dll:"
+        @                    " Error detouring SleepEx(): %d\n", error);
+        @         }
+
+    }
+
+    方法 结束hook <公开 折叠 @输出名 = "EndHook">
+    {
+        @     if (DetourIsHelperProcess()) {
+        @         return;
+        @     }
+        @         LONG error;
+        @         DetourTransactionBegin();
+        @         DetourUpdateThread(GetCurrentThread());
+        @         @<结束HOOK代码>();
+        // @         @<取消重定向事件>();
+        @         error = DetourTransactionCommit();
+        @         printf("simple" DETOURS_STRINGIFY(DETOURS_BITS) ".dll: Removed SleepEx() (result=%d)\n", error);
+        @ 
+
+    }
+}
+
+类 HOOK测试 <公开 基础类 = HOOK类>
+{
+    变量 TrueSleepEx <静态 类型 = 长整数>
+
+    方法 类_初始化 <折叠>
+    {
+        开始Hook ()
+    }
+
+    方法 类_清理 <折叠>
+    {
+        结束hook ()
+    }
+
+    方法 自定义时钟函数 <公开 静态 类型 = 整数 折叠 @视窗.前缀文本 = "@WINAPI">
+    参数 dwMilliseconds <类型 = 整数>
+    参数 bAlertable <类型 = 逻辑型>
+    {
+        // DWORD WINAPI TimedSleepEx(DWORD dwMilliseconds, BOOL bAlertable)
+        调试输出 ("SleepEx被拦截")
+        @ typedef DWORD (WINAPI *PTimedSleepEx)(DWORD dwMilliseconds, BOOL bAlertable);
+        @  return ((PTimedSleepEx)@<HOOK测试.TrueSleepEx>)(@<dwMilliseconds>,@<bAlertable>);
+        返回 (0)
+    }
+
+    方法 开始HOOK代码 <折叠 @虚拟方法 = 可覆盖>
+    {
+        调试输出 ("///////////////////////////////////开始HOOK代码 ")
+        @ @<TrueSleepEx> = (INT64) GetProcAddress( LoadLibrary(_T("kernel32.dll")),"SleepEx");
+        // 调用这个直接 HOOK函数
+        @ DetourAttach(&(PVOID&)@<TrueSleepEx>, @<自定义时钟函数>);
+
+    }
+
+    方法 结束HOOK代码 <@虚拟方法 = 可覆盖>
+    {
+        调试输出 ("///////////////////////////////////结束HOOK代码 ")
+        @ DetourDetach(&(PVOID&)@<TrueSleepEx>,@<自定义时钟函数>);
+    }
+}
+
+类 HOOK测试_写法2 <公开 基础类 = HOOK类>
+{
+
+    # @begin
+    # static DWORD(WINAPI* SysSleepEx)(DWORD dwMilliseconds, BOOL bAlertable) = SleepEx;
+    # @end
+
+    方法 类_清理 <折叠>
+    {
+        结束hook ()
+
+    }
+
+    方法 类_初始化 <折叠>
+    {
+        开始Hook ()
+
+    }
+
+    方法 自定义时钟函数 <公开 静态 类型 = 整数 @视窗.前缀文本 = "@WINAPI">
+    参数 dwMilliseconds <类型 = 整数>
+    参数 bAlertable <类型 = 逻辑型>
+    {
+        // DWORD WINAPI TimedSleepEx(DWORD dwMilliseconds, BOOL bAlertable)
+        调试输出 ("SleepEx被拦截")
+        @ return SysSleepEx(@<dwMilliseconds>,@<bAlertable>);
+        返回 (0)
+    }
+
+    方法 开始HOOK代码 <@虚拟方法 = 可覆盖>
+    {
+        调试输出 ("///////////////////////////////////开始HOOK代码 ")
+        // @ @<TrueSleepEx> = (INT64) GetProcAddress( LoadLibrary(_T("kernel32.dll")),"SleepEx");
+        // 调用这个直接 HOOK函数
+        @ DetourAttach(&(PVOID&)SysSleepEx, @<自定义时钟函数>);
+
+    }
+
+    方法 结束HOOK代码 <@虚拟方法 = 可覆盖>
+    {
+        调试输出 ("///////////////////////////////////结束HOOK代码 ")
+        @ DetourDetach(&(PVOID&)SysSleepEx,@<自定义时钟函数>);
+    }
+}

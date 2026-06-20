@@ -1,0 +1,664 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.基本 <注释 = "微软文档：https://learn.microsoft.com/zh-cn/windows/win32/directshow" 注释 = "" @视窗.外部库 = "strmiids.lib"
+        @视窗.外部头文件 = "include\\w_directshow.h" @视窗.外部源文件 = "include\\w_directshow.cpp">
+
+类 播放器状态 <公开 折叠 @常量类 = 整数>
+{
+    常量 未开启 <公开 值 = -1 注释 = "视频播放器出现了错误">
+    常量 已停止 <公开 值 = @"@ FILTER_STATE::State_Stopped" 注释 = "视频播放器出于停止状态">
+    常量 已暂停 <公开 值 = @"@ FILTER_STATE::State_Paused" 注释 = "视频播放器出于暂停状态">
+    常量 正在播放 <公开 值 = @"@ FILTER_STATE::State_Running" 注释 = "视频播放器出于播放状态">
+}
+
+类 视频播放器 <公开 基础类 = 对象类 注释 = "视频播放窗口操作类" 折叠 @禁止创建对象 = 真>
+{
+    方法 宽度 <公开 属性读 类型 = 整数 注释 = "检索当前窗口宽度" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pVideoWindow){
+        @     long nWidth = 0;
+        @     m_pVideoWindow->get_Width(&nWidth);
+        @     return (@dt<整数>)nWidth;
+        @ }
+        @ return 0;
+    }
+
+    方法 宽度 <公开 属性写 注释 = "设置当前窗口宽度" 折叠 @禁止流程检查 = 真>
+    参数 宽度 <类型 = 整数 注释 = "欲设置的窗口宽度">
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->put_Width((long)@<宽度>);
+    }
+
+    方法 高度 <公开 属性读 类型 = 整数 注释 = "检索当前窗口高度" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pVideoWindow){
+        @     long nHeight = 0;
+        @     m_pVideoWindow->get_Height(&nHeight);
+        @     return (@dt<整数>)nHeight;
+        @ }
+        @ return 0;
+    }
+
+    方法 高度 <公开 属性写 注释 = "设置当前窗口高度" 折叠 @禁止流程检查 = 真>
+    参数 高度 <类型 = 整数 注释 = "欲设置的窗口高度">
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->put_Height((long)@<高度>);
+    }
+
+    方法 左边 <公开 属性读 类型 = 整数 注释 = "检索当前窗口左边坐标" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pVideoWindow){
+        @     long nLeft = 0;
+        @     m_pVideoWindow->get_Left(&nLeft);
+        @     return (@dt<整数>)nLeft;
+        @ }
+        @ return 0;
+
+    }
+
+    方法 左边 <公开 属性写 注释 = "设置当前窗口左边坐标" 折叠 @禁止流程检查 = 真>
+    参数 左边 <类型 = 整数 注释 = "欲设置的窗口左边位置">
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->put_Left((long)@<左边>);
+    }
+
+    方法 顶边 <公开 属性读 类型 = 整数 注释 = "检索当前窗口顶边坐标" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pVideoWindow){
+        @     long nTop = 0;
+        @     m_pVideoWindow->get_Top(&nTop);
+        @     return (@dt<整数>)nTop;
+        @ }
+        @ return 0;
+    }
+
+    方法 顶边 <公开 属性写 注释 = "设置当前窗口顶边坐标" 折叠 @禁止流程检查 = 真>
+    参数 顶边 <类型 = 整数 注释 = "欲设置的窗口顶边位置">
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->put_Top((long)@<顶边>);
+    }
+
+    方法 可视 <公开 属性读 类型 = 逻辑型 注释 = "检索当前窗口可见性" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pVideoWindow){
+        @     long nVisible = 0;
+        @     m_pVideoWindow->get_Visible(&nVisible);
+        @     return (@dt<逻辑型>)nVisible;
+        @ }
+        @ return FALSE;
+    }
+
+    方法 可视 <公开 属性写 注释 = "设置当前窗口可见性" 折叠 @禁止流程检查 = 真>
+    参数 可视 <类型 = 逻辑型 注释 = "欲设置的窗口可见性(真=隐藏,假=可视)">
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->put_Visible((long)@<可视>);
+    }
+
+    方法 标题 <公开 属性读 类型 = 文本型 注释 = "检索当前窗口标题" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pVideoWindow){
+        @     BSTR szCaption;
+        @     m_pVideoWindow->get_Caption(&szCaption);
+        @     return @dt<文本型>(szCaption);
+        @ }
+        @ return @dt<文本型>();
+    }
+
+    方法 标题 <公开 属性写 注释 = "设置当前窗口标题" 折叠 @禁止流程检查 = 真>
+    参数 标题 <类型 = 文本型 注释 = "当前窗口标题">
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->put_Caption((BSTR)@<标题>.GetText());
+    }
+
+    方法 自动显示 <公开 属性读 类型 = 逻辑型 注释 = "检索当前的自动显示状态标志" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pVideoWindow){
+        @     long nAutoShow = 0;
+        @     m_pVideoWindow->get_AutoShow(&nAutoShow);
+        @     return (@dt<逻辑型>)nAutoShow;
+        @ }
+        @ return FALSE;
+    }
+
+    方法 自动显示 <公开 属性写 注释 = "设置当前的自动显示状态标志" 折叠 @禁止流程检查 = 真>
+    参数 自动显示 <类型 = 逻辑型 注释 = "如果此参数设置为真,则筛选器暂停或运行时,通常会在筛选器连接后隐藏的窗口将自动显示.但是筛选器停止时,不应隐藏窗口."
+            注释 = "如果此参数设置为假,则仅当应用程序使用相应参数调用\"可视\"或\"窗口状态\"时,窗口才会可见." 折叠2>
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->put_AutoShow((long)@<自动显示>);
+    }
+
+    方法 全屏模式 <公开 属性读 类型 = 逻辑型 注释 = "检索呈现器的全屏模式" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pVideoWindow){
+        @     long nFullScreenMode = 0;
+        @     m_pVideoWindow->get_FullScreenMode(&nFullScreenMode);
+        @     return (@dt<逻辑型>)nFullScreenMode;
+        @ }
+        @ return FALSE;
+    }
+
+    方法 全屏模式 <公开 属性写 注释 = "设置呈现器的全屏模式" 折叠 @禁止流程检查 = 真>
+    参数 是否全屏 <类型 = 逻辑型 注释 = "要应用的全屏模式.">
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->put_FullScreenMode((long)@<是否全屏>);
+    }
+
+    方法 窗口状态 <公开 属性读 类型 = 整数 注释 = "检索窗口状态" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pVideoWindow){
+        @     long nWindowState = 0;
+        @     m_pVideoWindow->get_WindowState(&nWindowState);
+        @     return (@dt<整数>)nWindowState;
+        @ }
+        @ return 0;
+    }
+
+    方法 窗口状态 <公开 属性写 注释 = "设置窗口状态" 折叠 @禁止流程检查 = 真>
+    参数 窗口状态 <类型 = 整数 注释 = "新建窗口状态" 注释 = "此成员函数采用与\"ShowWindow\"函数相同的参数(例如:WS_SHOWNORMAL,WS_SHOWMINNOACTIVATE和WS_SHOWMAXIMIZED)"
+            折叠2>
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->put_WindowState((long)@<窗口状态>);
+    }
+
+    方法 窗口风格 <公开 属性读 类型 = 整数 注释 = "检索标准窗口样式" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pVideoWindow){
+        @     long nWindowStyle = 0;
+        @     m_pVideoWindow->get_WindowStyle(&nWindowStyle);
+        @     return (@dt<整数>)nWindowStyle;
+        @ }
+        @ return 0;
+    }
+
+    方法 窗口风格 <公开 属性写 注释 = "设置标准窗口样式" 折叠 @禁止流程检查 = 真>
+    参数 窗口风格 <类型 = 整数 注释 = "欲设置的窗口风格样式">
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->put_WindowStyle((long)@<窗口风格>);
+    }
+
+    方法 窗口扩展风格 <公开 属性读 类型 = 整数 注释 = "检索扩展窗口样式" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pVideoWindow){
+        @     long nWindowStyle = 0;
+        @     m_pVideoWindow->get_WindowStyleEx(&nWindowStyle);
+        @     return (@dt<整数>)nWindowStyle;
+        @ }
+        @ return 0;
+    }
+
+    方法 窗口扩展风格 <公开 属性写 注释 = "设置扩展窗口样式" 折叠 @禁止流程检查 = 真>
+    参数 窗口扩展风格 <类型 = 整数 注释 = "欲设置的扩展窗口风格样式">
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->put_WindowStyleEx((long)@<窗口扩展风格>);
+    }
+
+    方法 背景调色板 <公开 属性读 类型 = 逻辑型 注释 = "检索一个标志,用于在后台实现调色板" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pVideoWindow){
+        @     long nTop = 0;
+        @     m_pVideoWindow->get_BackgroundPalette(&nTop);
+        @     return (@dt<逻辑型>)nTop;
+        @ }
+        @ return 0;
+    }
+
+    方法 背景调色板 <公开 属性写 注释 = "设置一个标志,用于在后台实现调色板" 折叠 @禁止流程检查 = 真>
+    参数 背景调色板 <类型 = 逻辑型 注释 = "如果视频将在另一个应用程序或文档中播放,则应用程序可能想要使用自己的调色板.它可以通过将此标志设置为\"真\"来要求视频使用当前的前台调色板,而不是使用自己的面板."
+            注释 = "如果设置为 0,窗口将安装并实现自己的首选调色板.请注意,要求窗口使用不同的调色板将导致严重的性能损失." 折叠2>
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->put_BackgroundPalette((long)@<背景调色板>);
+    }
+
+    方法 边框颜色 <公开 属性读 类型 = 整数 注释 = "检索当前边框颜色" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pVideoWindow){
+        @     long nTop = 0;
+        @     m_pVideoWindow->get_BorderColor(&nTop);
+        @     return (@dt<整数>)nTop;
+        @ }
+        @ return 0;
+    }
+
+    方法 边框颜色 <公开 属性写 注释 = "设置当前边框颜色" 折叠 @禁止流程检查 = 真>
+    参数 边框颜色 <类型 = 整数 注释 = "指向当前边框的颜色">
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->put_BorderColor((long)@<边框颜色>);
+    }
+
+    方法 隐藏光标 <公开 属性读 类型 = 逻辑型 注释 = "检索当鼠标放置在视频窗口上时显示或隐藏光标" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pVideoWindow){
+        @     long nCursorHidden = 0;
+        @     m_pVideoWindow->IsCursorHidden(&nCursorHidden);
+        @     return (@dt<逻辑型>)nCursorHidden;
+        @ }
+        @ return 0;
+    }
+
+    方法 隐藏光标 <公开 属性写 注释 = "设置当鼠标放置在视频窗口上时显示或隐藏光标" 折叠 @禁止流程检查 = 真>
+    参数 是否隐藏 <类型 = 逻辑型 注释 = "指定视频窗口是否是否隐藏隐藏光标" @默认值 = 真>
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->HideCursor(@<是否隐藏> ? OATRUE : OAFALSE);
+    }
+
+    方法 所有者窗口句柄 <公开 属性读 类型 = 变整数 注释 = "检索当前窗口所有者" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pVideoWindow){
+        @     OAHWND hWnd = NULL;
+        @     m_pVideoWindow->get_Owner(&hWnd);
+        @     return (@dt<变整数>)hWnd;
+        @ }
+        @ return 0;
+    }
+
+    方法 所有者窗口句柄 <公开 属性写 注释 = "设置当前窗口所有者" 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "指向窗口所有者的句柄">
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->put_Owner((OAHWND)@<窗口句柄>);
+    }
+
+    方法 获取焦点 <公开 注释 = "将视频窗口移动到前台,并选择性地为其提供焦点" 折叠 @禁止流程检查 = 真>
+    参数 是否获得焦点 <类型 = 逻辑型 注释 = "指定视频窗口是否获得焦点的值.值为真表示窗口焦点,假表示不提供" @默认值 = 真>
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->SetWindowForeground((long)@<是否获得焦点>);
+    }
+
+    方法 置父窗口 <公开 类型 = 逻辑型 注释 = "将预览视频窗口置入到某个窗口组件当中" 折叠 @禁止流程检查 = 真>
+    参数 父窗口句柄 <类型 = 变整数 注释 = "提供所创建窗口的父窗口组件,如果该窗口组件尚未被创建,则认为无父窗口组件." @默认值 = 0>
+    参数 左边 <类型 = 整数 注释 = "提供所创建窗口左边在屏幕上的横向坐标位置,为\"数值范围.最小整数值\"表示使用父组件的左边." @默认值 = 数值范围.最小整数值>
+    参数 顶边 <类型 = 整数 注释 = "提供所创建窗口左边在屏幕上的纵向坐标位置,为\"数值范围.最小整数值\"表示使用父组件的顶边." @默认值 = 数值范围.最小整数值>
+    参数 宽度 <类型 = 整数 注释 = "提供所创建窗口的宽度,为\"数值范围.最小整数值\"表示使用父组件的宽度." @默认值 = 数值范围.最小整数值>
+    参数 高度 <类型 = 整数 注释 = "提供所创建窗口的高度,为\"数值范围.最小整数值\"表示使用父组件的高度." @默认值 = 数值范围.最小整数值>
+    {
+        @ if(m_pVideoWindow){
+        @     OAHWND hWnd = (OAHWND)@<父窗口句柄>;
+        @     if(hWnd){
+        @         m_pVideoWindow->put_Owner(hWnd);
+        @         m_pVideoWindow->put_WindowStyle(WS_CHILD | WS_CLIPSIBLINGS);
+        @         m_pVideoWindow->put_MessageDrain(hWnd);
+        @         RECT rect;
+        @         ::GetClientRect((HWND)hWnd, &rect);
+        @         if(@<左边> != @<火山.基本.数值范围.最小整数值>)
+        @             rect.left = @<左边>;
+        @         if(@<顶边> != @<火山.基本.数值范围.最小整数值>)
+        @             rect.top = @<顶边>;
+        @         if(@<宽度> != @<火山.基本.数值范围.最小整数值>)
+        @             rect.right = rect.left + @<宽度>;
+        @         if(@<高度> != @<火山.基本.数值范围.最小整数值>)
+        @             rect.bottom = rect.top + @<高度>;
+        @         m_pVideoWindow->SetWindowPosition(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+        @     }
+        @     return TRUE;
+        @ }
+        @ return FALSE;
+    }
+
+    方法 取窗口矩形 <公开 类型 = 矩形类 注释 = "获取视频预览窗口的矩形" 折叠 @禁止流程检查 = 真>
+    {
+        变量 矩形 <类型 = 矩形类>
+        @ if(m_pVideoWindow){
+        @     long pLeft = 0;
+        @     long pTop = 0;
+        @     long pWidth = 0;
+        @     long pHeight = 0;
+        @     m_pVideoWindow->GetWindowPosition(&pLeft, &pTop, &pWidth, &pHeight);
+        @     @<矩形.设置>(pLeft, pTop, pWidth, pHeight);
+        @ }
+        返回 (矩形)
+    }
+
+    方法 置窗口尺寸 <公开 注释 = "设置视频预览窗口的尺寸;注意:\"打开预览\"命令执行后调用" 折叠 @禁止流程检查 = 真>
+    参数 左边位置 <类型 = 整数 注释 = "提供所创建窗口左边在屏幕上的横向坐标位置" @默认值 = 0>
+    参数 顶边位置 <类型 = 整数 注释 = "提供所创建窗口左边在屏幕上的纵向坐标位置" @默认值 = 0>
+    参数 宽度 <类型 = 整数 注释 = "提供所创建窗口的宽度" @默认值 = 500>
+    参数 高度 <类型 = 整数 注释 = "提供所创建窗口的高度" @默认值 = 500>
+    {
+        @ if(m_pVideoWindow)
+        @     m_pVideoWindow->SetWindowPosition(@<左边位置>, @<顶边位置>, @<宽度>, @<高度>);
+    }
+
+    方法 取最小分辨率 <公开 类型 = 尺寸类 注释 = "获取视频图像最小尺寸" 折叠 @禁止流程检查 = 真>
+    {
+        变量 尺寸 <类型 = 尺寸类>
+        @ if(m_pVideoWindow){
+        @     long pWidth = 0;
+        @     long pHeight = 0;
+        @     m_pVideoWindow->GetMinIdealImageSize(&pWidth, &pHeight);
+        @     @<尺寸.设置>(pWidth, pHeight);
+        @ }
+        返回 (尺寸)
+    }
+
+    方法 取最大分辨率 <公开 类型 = 尺寸类 注释 = "获取视频图形最大尺寸" 折叠 @禁止流程检查 = 真>
+    {
+        变量 尺寸 <类型 = 尺寸类>
+        @ if(m_pVideoWindow){
+        @     long pWidth = 0;
+        @     long pHeight = 0;
+        @     m_pVideoWindow->GetMaxIdealImageSize(&pWidth, &pHeight);
+        @     @<尺寸.设置>(pWidth, pHeight);
+        @ }
+        返回 (尺寸)
+    }
+
+    # @begin
+    # <> <include>
+    #     @sn<current_class>(IVideoWindow* pVideoWindow){
+    #         m_pVideoWindow = pVideoWindow;
+    #     }
+    #     IVideoWindow* m_pVideoWindow = nullptr;
+    # <> </include>
+    # @end
+}
+
+类 音视频操作类 <公开 基础类 = 对象类 注释 = "摄像头及麦克风相关操作" 折叠 @禁止创建对象 = 真>
+{
+    方法 枚举摄像头 <公开 静态 注释 = "枚举本地已存在的摄像头设备" 折叠
+            @嵌入式方法 = "name = enum_videos\r\nhas_loop_body = true\r\nbody_header = \"@none\"\r\nbody_tail = \"DSHOW_ENUM_DEVICES_END()\"">
+    {
+        @ DSHOW_ENUM_DEVICES_GET_INFORMATION(CLSID_VideoInputDeviceCategory)
+    }
+
+    方法 枚举麦克风 <公开 静态 注释 = "枚举本地已存在的麦克风设备" 折叠 隐藏值属性 = "0"
+            @嵌入式方法 = "name = enum_audios\r\nhas_loop_body = true\r\nbody_header = \"@none\"\r\nbody_tail = \"DSHOW_ENUM_DEVICES_END()\"">
+    {
+        @ DSHOW_ENUM_DEVICES_GET_INFORMATION(CLSID_AudioInputDeviceCategory)
+    }
+
+    方法 取设备名称 <公开 静态 类型 = 文本型 注释 = "取已枚举到的设备名称" 折叠 隐藏值属性 = "0" @嵌入式方法 = "parent = \"enum_videos, enum_audios\"">
+    {
+        @ szFriendlyName
+    }
+
+    方法 取设备路径 <公开 静态 类型 = 文本型 注释 = "取已枚举到的设备路径" 折叠 隐藏值属性 = "0" @嵌入式方法 = "parent = \"enum_videos, enum_audios\"">
+    {
+        @ szDevicePath
+    }
+
+    方法 取波形标识 <公开 静态 类型 = 整数 注释 = "取已枚举到的麦克风波形ID" 折叠 隐藏值属性 = "0" @嵌入式方法 = "parent = \"enum_audios\"">
+    {
+        @ nWaveInID
+    }
+}
+
+类 视频采样器 <公开 基础类 = 对象类 注释 = "用于采集视频图像帧" 折叠 @视窗.后缀文本 = "public ISampleGrabberCB">
+{
+    方法 得到数据 <公开 定义事件 类型 = 整数 注释 = "采取到视频图像时响应当前事件" 返回值注释 = "保留" 折叠>
+    参数 数据指针 <类型 = 变整数 注释 = "图像帧数据指针">
+    参数 数据长度 <类型 = 整数 注释 = "图像帧数据长度">
+
+    # @begin
+    # <> <include>
+    #     STDMETHODIMP SampleCB(double Time, IMediaSample *pSample){
+    #         return E_NOTIMPL;
+    #     }
+    #     STDMETHODIMP BufferCB(double Time, BYTE *pBuffer, long BufferLen){
+    #         this->@<得到数据>((@dt<变整数>)pBuffer, (@dt<整数>)BufferLen);
+    #         return S_OK;
+    #     }
+    #     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObject){
+    #         if(NULL == ppvObject)
+    #             return E_POINTER;
+    #         if (riid == __uuidof(IUnknown)){
+    #             *ppvObject = static_cast<IUnknown*>(this);
+    #             return S_OK;
+    #         }
+    #         if(riid == IID_ISampleGrabberCB){
+    #             *ppvObject = static_cast<ISampleGrabberCB*>(this);
+    #              return S_OK;
+    #         }
+    #         return E_NOTIMPL;
+    #     }
+    #     STDMETHODIMP_(ULONG) AddRef(){
+    #         return 1;
+    #     }
+    #     STDMETHODIMP_(ULONG) Release(){
+    #         return 2;
+    #     }
+    # <> </include>
+    # @end
+}
+
+类 摄像头类 <公开 基础类 = 对象类 注释 = "摄像头相关操作">
+{
+    方法 类_清理 <折叠>
+    {
+        关闭设备 ()
+    }
+
+    方法 播放器 <公开 属性读 类型 = 视频播放器 注释 = "取播放器对象实例" 折叠 @禁止流程检查 = 真>
+    {
+        @ return @dt<视频播放器>(m_pVideoWindow);
+    }
+
+    方法 打开设备 <公开 类型 = 逻辑型 注释 = "选择指定摄像头" 返回值注释 = "成功返回真,失败或已存在打开的设备则返回假." 折叠 @禁止流程检查 = 真>
+    参数 设备索引 <类型 = 整数 注释 = "当前视频设备索引,可使用\"音视频操作.枚举摄像头\"命令定位确认设备索引.">
+    {
+        @ if(!m_pBaseFilter && !m_pGraphBuilder && !m_pMediaControl && !m_pVideoWindow && !m_pSampleGrabber && !m_pCaptureGraphBuilder2){
+        @     IMoniker *pMoniker = nullptr;
+        @     if(SUCCEEDED(SelectedDevices(CLSID_VideoInputDeviceCategory, (ULONG)@<设备索引>, &pMoniker))){
+        @         if(SUCCEEDED(pMoniker->BindToObject(0, 0, IID_IBaseFilter, (void **)&m_pBaseFilter))){
+        @             if(SUCCEEDED(CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void **)&m_pGraphBuilder))){
+        @                 if(FAILED(m_pGraphBuilder->AddFilter(m_pBaseFilter, L"Video Capture")))
+        @                     goto __Failed;
+        @             }
+        @             if(SUCCEEDED(CoCreateInstance(CLSID_CaptureGraphBuilder2, NULL, CLSCTX_INPROC_SERVER, IID_ICaptureGraphBuilder2, (void **)&m_pCaptureGraphBuilder2))){
+        @                 if(FAILED(m_pCaptureGraphBuilder2->SetFiltergraph(m_pGraphBuilder)))
+        @                     goto __Failed;
+        @             }
+        @             if(FAILED(m_pGraphBuilder->QueryInterface(IID_IMediaControl, (void **)&m_pMediaControl)))
+        @                 goto __Failed;
+        @             pMoniker->Release(); 
+        @             return TRUE;
+        @         }
+        @ __Failed:
+        @         m_pBaseFilter->Release();
+        @         m_pBaseFilter = nullptr;
+        @     }
+        @     pMoniker->Release();
+        @ }
+        @ this->@<关闭设备>();
+        @ return FALSE;
+    }
+
+    方法 关闭设备 <公开 注释 = "关闭已打开的摄像头" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pCaptureGraphBuilder2){
+        @     m_pCaptureGraphBuilder2->Release();
+        @     m_pCaptureGraphBuilder2 = nullptr;
+        @ }
+        @ if(m_pSampleGrabber){
+        @     m_pSampleGrabber->Release();
+        @     m_pSampleGrabber = nullptr;
+        @ }
+        @ if(m_pVideoWindow){
+        @     m_pVideoWindow->Release();
+        @     m_pVideoWindow = nullptr;
+        @ }
+        @ if(m_pMediaControl){
+        @     m_pMediaControl->Release();
+        @     m_pMediaControl = nullptr;
+        @ }
+        @ if(m_pGraphBuilder){
+        @     m_pGraphBuilder->Release();
+        @     m_pGraphBuilder = nullptr;
+        @ }
+        @ if(m_pBaseFilter){
+        @     m_pBaseFilter->Release();
+        @     m_pBaseFilter = nullptr;
+        @ }
+    }
+
+    方法 启用采样 <公开 类型 = 逻辑型 注释 = "启用视频采样;注意:必须在\"打开设备\"命令执行后,\"启用预览\"命令执行前调用" @禁止流程检查 = 真>
+    参数 采样器对象 <类型 = 视频采样器 注释 = "用于接收采样数据的对实例化对象" "">
+    参数 快照模式 <类型 = 逻辑型 注释 = "如果启用则获取到第一张图像时将自动停止" @默认值 = 假>
+    {
+        @ if(!m_pVideoWindow && !m_pSampleGrabber){
+        @     HRESULT hr = 0;
+        @     IBaseFilter *pSG_Filter = nullptr;
+        @     if(SUCCEEDED(CoCreateInstance(CLSID_SampleGrabber, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pSG_Filter)))){
+        @         hr = m_pGraphBuilder->AddFilter(pSG_Filter, L"Sample Grabber");
+        @         if(SUCCEEDED(pSG_Filter->QueryInterface(IID_ISampleGrabber, (void **)&m_pSampleGrabber))){
+        @             hr = m_pSampleGrabber->SetOneShot(@<快照模式>);
+        @             hr = m_pSampleGrabber->SetBufferSamples(TRUE); // 必须开启缓冲区,否则无法拍照
+        @             hr = m_pSampleGrabber->SetCallback((ISampleGrabberCB*)&@<采样器对象>, 1L);
+        @             pSG_Filter->Release();
+        @             return TRUE;
+        @         }
+        @         pSG_Filter->Release();
+        @     }
+        @ }
+        @ return FALSE;
+    }
+
+    方法 启用预览 <公开 类型 = 逻辑型 注释 = "启用预览视频;注意:必须在\"打开设备\"命令执行后,\"运行\"命令执行前调用" @禁止流程检查 = 真>
+    参数 父窗口句柄 <类型 = 变整数 注释 = "提供所创建窗口的父窗口组件,如果该窗口组件尚未被创建,则认为无父窗口组件." @默认值 = 0>
+    参数 左边 <类型 = 整数 注释 = "提供所创建窗口左边在屏幕上的横向坐标位置,为\"数值范围.最小整数值\"表示使用父组件的左边." @默认值 = 数值范围.最小整数值>
+    参数 顶边 <类型 = 整数 注释 = "提供所创建窗口左边在屏幕上的纵向坐标位置,为\"数值范围.最小整数值\"表示使用父组件的顶边." @默认值 = 数值范围.最小整数值>
+    参数 宽度 <类型 = 整数 注释 = "提供所创建窗口的宽度,为\"数值范围.最小整数值\"表示使用父组件的宽度." @默认值 = 数值范围.最小整数值>
+    参数 高度 <类型 = 整数 注释 = "提供所创建窗口的高度,为\"数值范围.最小整数值\"表示使用父组件的高度." @默认值 = 数值范围.最小整数值>
+    {
+        @ if(m_pBaseFilter && m_pGraphBuilder && m_pCaptureGraphBuilder2 && !m_pVideoWindow){
+        @     HRESULT hr = m_pCaptureGraphBuilder2->RenderStream(&PIN_CATEGORY_PREVIEW, &MEDIATYPE_Video, m_pBaseFilter, NULL, NULL);
+        @     if(SUCCEEDED(hr) || hr == VFW_S_NOPREVIEWPIN)
+        @         if(SUCCEEDED(m_pGraphBuilder->QueryInterface(IID_IVideoWindow, (void **)&m_pVideoWindow))){
+        @             this->@<播放器>().@n<视频播放器.置父窗口>(@<父窗口句柄>, @<左边>, @<顶边>, @<宽度>, @<高度>);
+        @             return TRUE;
+        @         }
+        @ }
+        @ return FALSE;
+    }
+
+    方法 启用录制 <公开 类型 = 逻辑型 注释 = "启用录制视频;注意:必须在\"打开设备\"命令执行后,\"运行\"命令执行前调用" 折叠 @禁止流程检查 = 真>
+    参数 文件名称 <类型 = 文本型 注释 = "录制后视频储存的文件名称;如\"c:\\video.avi\"">
+    {
+        @ if(m_pBaseFilter && m_pCaptureGraphBuilder2){
+        @     IBaseFilter *pBaseFilter;
+        @     if(SUCCEEDED(m_pCaptureGraphBuilder2->SetOutputFileName(&MEDIASUBTYPE_Avi, @<文件名称>, &pBaseFilter, NULL))){ 
+        @         if(SUCCEEDED(m_pCaptureGraphBuilder2->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video, m_pBaseFilter, NULL, pBaseFilter))){
+        @             m_pCaptureGraphBuilder2->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Audio, m_pBaseFilter, NULL, pBaseFilter);
+        @             pBaseFilter->Release();
+        @             return TRUE;
+        @         }
+        @         pBaseFilter->Release();
+        @     }
+        @ }
+        @ return FALSE;
+    }
+
+    方法 采样拍照 <公开 类型 = 字节集类 注释 = "获取当前采集器中的图像;注意:必须在\"启用采样\"和\"运行\"命令执行后调用" @禁止流程检查 = 真>
+    {
+        @ @an<CVolMem> memBuffer;
+        @ if(m_pSampleGrabber){
+        @     long lBufferSize = 0;
+        @     if (SUCCEEDED (m_pSampleGrabber->GetCurrentBuffer(&lBufferSize,NULL)))  {
+        @         if (SUCCEEDED (m_pSampleGrabber->GetCurrentBuffer(&lBufferSize, (long *)memBuffer.Realloc ((INT_P)lBufferSize))))
+        @             memBuffer.Realloc ((INT_P)lBufferSize);
+        @         else
+        @             memBuffer.Free ();
+        @     }
+        @ }
+        @ return memBuffer;
+    }
+
+    方法 运行 <公开 类型 = 逻辑型 注释 = "开始视频预览或录制;注意:\"启用预览\"或\"启用录制\"或\"启用采样\"命令执行后调用" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pMediaControl){
+        @     m_pMediaControl->Run();
+        @     return TRUE;
+        @ }
+        @ return FALSE;
+    }
+
+    方法 暂停 <公开 类型 = 逻辑型 注释 = "暂停视频预览或录制;注意:\"启用预览\"或\"启用录制\"或\"启用采样\"命令执行后调用" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pMediaControl){
+        @     m_pMediaControl->Pause();
+        @     return TRUE;
+        @ }
+        @ return FALSE;
+    }
+
+    方法 停止 <公开 类型 = 逻辑型 注释 = "停止视频预览或录制;注意:\"启用预览\"或\"启用录制\"或\"启用采样\"命令执行后调用" 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pMediaControl){
+        @     m_pMediaControl->Stop();
+        @     return TRUE;
+        @ }
+        @ return FALSE;
+    }
+
+    方法 取状态 <公开 类型 = 播放器状态 注释 = "取当前视频预览或录制状态;注意:\"启用预览\"或\"启用录制\"或\"启用采样\"命令执行后调用" 折叠 @禁止流程检查 = 真>
+    参数 超时持续时间 <类型 = 整数 注释 = "超时持续时间(以毫秒为单位)或-1表示指定无限超时.">
+    {
+        @ if(m_pMediaControl){
+        @     OAFilterState fs;
+        @     m_pMediaControl->GetState(@<超时持续时间>, &fs);
+        @     return (@dt<播放器状态>)fs;
+        @ }
+        返回 (播放器状态.未开启)
+    }
+
+    方法 异步停止 <公开 类型 = 逻辑型 注释 = "停止视频预览或录制;注意:\"启用预览\"或\"启用录制\"或\"启用采样\"命令执行后调用;如果要在停止图形时查找筛选器图,此方法非常有用." 折叠 @禁止流程检查 = 真>
+    {
+        @ if(m_pMediaControl){
+        @     return m_pMediaControl->StopWhenReady() == S_OK;
+        @ }
+        @ return FALSE;
+    }
+
+    方法 显示属性窗口 <公开 注释 = "显示摄像头属性设置窗口;注意:只有摄像头支持的时候才会显示" 折叠 @禁止流程检查 = 真>
+    {
+        @ if (m_pBaseFilter == nullptr)  return;
+        @ HRESULT hr;
+        @ IEnumPins  *pEnum;
+        @ IPin       *pPin;
+        @ if (FAILED(m_pBaseFilter->EnumPins(&pEnum)))  return;
+        @ while(pEnum->Next(1, &pPin, 0) == S_OK) {
+        @     PIN_DIRECTION PinDirThis; 
+        @     pPin->QueryDirection(&PinDirThis);
+        @     if (PINDIR_OUTPUT == PinDirThis){
+        @         ISpecifyPropertyPages *pSpecify;
+        @         hr = pPin->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pSpecify);
+        @         if (SUCCEEDED(hr)) {
+        @             CAUUID caGUID;
+        @             pSpecify->GetPages(&caGUID);
+        @             pSpecify->Release();
+        @             OleCreatePropertyFrame(NULL, 0, 0, NULL, 1, (IUnknown **)&pPin, caGUID.cElems, caGUID.pElems, 0, 0, NULL);
+        @             CoTaskMemFree(caGUID.pElems);
+        @         }
+        @         pPin->Release();
+        @         break;
+        @     }
+        @     pPin->Release();
+        @ }
+        @ pEnum->Release();
+    }
+
+    # @begin
+    # <> <include>
+    #     IBaseFilter           *m_pBaseFilter           = nullptr;
+    #     IGraphBuilder         *m_pGraphBuilder         = nullptr;
+    #     IMediaControl         *m_pMediaControl         = nullptr;
+    #     IVideoWindow          *m_pVideoWindow          = nullptr;
+    #     ISampleGrabber        *m_pSampleGrabber        = nullptr;
+    #     ICaptureGraphBuilder2 *m_pCaptureGraphBuilder2 = nullptr;
+    # <> </include>
+    # @end
+}

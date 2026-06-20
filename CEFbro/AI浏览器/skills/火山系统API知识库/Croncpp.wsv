@@ -1,0 +1,66 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.时间表达式\"" @视窗.外部头文件 = "Croncpp\\CroncppTool.h"
+        @视窗.外部库.win32 = "Croncpp\\CroncppToolx86.lib" @视窗.附属文件.win32 = "Croncpp\\CroncppToolx86.dll"
+        @视窗.外部库.x64 = "Croncpp\\CroncppToolx64.lib" @视窗.附属文件.x64 = "Croncpp\\CroncppToolx64.dll">
+
+类 时间表达式类 <公开 注释 = "帮助文档  https://github.com/mariusbancila/croncpp">
+{
+
+    # @begin
+    # <> <include>
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     CroncppTool_CopyConstruct(m_data,objCopyFrom.m_data);
+    # }
+    # void* GetData()
+    # {
+    #     return m_data;
+    # }
+    # void SetData(void* pdata)
+    # {
+    #     m_data = pdata;
+    # }
+    # void* m_data;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ SetData(CroncppTool_New());
+    }
+
+    方法 类_清理
+    {
+        @ CroncppTool_delete(GetData());
+    }
+
+    方法 解析 <公开 类型 = 逻辑型 注释 = "解析表达式 https://github.com/mariusbancila/croncpp" @禁止流程检查 = 真>
+    参数 时间表达式 <类型 = 文本型 注释 = "注意 总共只有6个字段" 注释 = ""
+            注释 = "Field         Required Allowed value * Allowed value (alternative 1) ** Allowed value (alternative 2) *** Allowed special characters"
+            注释 = "seconds       yes      0-59 0-59 0-59 * , -" 注释 = "minutes       yes      0-59 0-59 0-59 * , -"
+            注释 = "hours         yes      0-23 0-23 0-23 * , -" 注释 = "days of month 1-31     1-31 1-31 1-31 * , - ? L W"
+            注释 = "months        yes      1-12 0-11 1-12 * , -" 注释 = "days of week  yes      0-6 1-7 1-7 * , - ? L #"
+            注释 = "years         no       1970-2099 1970-2099 1970-2099 * , -" 注释 = "" 注释 = "* * * * * *   Every second"
+            注释 = "*/5 * * * * ? Every 5 seconds" 注释 = "0 */5 */2 * * ? Every 5 minutes, every 2 hours"
+            注释 = "0 */2 */2 ? */2 */2 Every 2 minutes, every 2 hours, every 2 days of the week, every 2 months"
+            注释 = "0 15 10 * * ? * 10:15 AM every day"
+            注释 = "0 0/5 14 * * ? Every 5 minutes starting at 2 PM and ending at 2:55 PM, every day"
+            注释 = "0 10,44 14 ? 3 WED 2:10 PM and at 2:44 PM every Wednesday of March"
+            注释 = "0 15 10 ? * MON-FRI 10:15 AM every Monday, Tuesday, Wednesday, Thursday and Friday"
+            注释 = "0 15 10 L * ? 10:15 AM on the last day of every month"
+            注释 = "0 0 12 1/5 * ? 12 PM every 5 days every month, starting on the first day of the month"
+            注释 = "0 11 11 11 11 ? Every November 11th at 11:11 AM">
+    {
+        变量 exp <类型 = 字节集类>
+        exp = 文本到多字节 (时间表达式)
+        @ return CroncppTool_Parase(GetData(),(const char*)@<exp>.GetPtr());
+    }
+
+    方法 取下一个时间 <公开 类型 = 长整数 @嵌入式方法 = "">
+    参数 起始时间戳 <类型 = 长整数 注释 = "只支持10位的时间戳">
+    {
+        @ CroncppTool_GetNext(@sn<this>.GetData(),@<起始时间戳>)
+
+    }
+}

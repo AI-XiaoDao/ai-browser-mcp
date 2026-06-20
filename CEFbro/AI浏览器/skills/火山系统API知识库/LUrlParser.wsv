@@ -1,0 +1,104 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.URL解析\"">
+
+类 URL解析类 <公开 @视窗.外部头文件 = "LUrlParser\\LUrlParserTool.h" @视窗.外部库.win32 = "LUrlParser\\LUrlParserToolx86.lib"
+        @视窗.附属文件.win32 = "LUrlParser\\LUrlParserToolx86.dll" @视窗.外部库.x64 = "LUrlParser\\LUrlParserToolx64.lib"
+        @视窗.附属文件.x64 = "LUrlParser\\LUrlParserToolx64.dll">
+{
+
+    # @begin
+    # <> <include>
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     UrlTool_CopyConstruct(m_pData,objCopyFrom.m_pData);
+    # }
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void * pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ SetData(UrlTool_New());
+    }
+
+    方法 类_清理
+    {
+        @ UrlTool_Delete(GetData());
+    }
+
+    方法 解析 <公开 类型 = 逻辑型 注释 = "例如 https://John:Dow@github.com:80/corporateshark/LUrlParser/?&query=ssl#q=frag"
+            注释 = "Scheme    : https" 注释 = "Host      : github.com" 注释 = "Port      : 80"
+            注释 = "Path      : corporateshark/LUrlParser/" 注释 = "Query     : &query=ssl" 注释 = "Fragment  : q=frag"
+            注释 = "User name : John" 注释 = "Password  : Dow" 折叠 折叠2 @嵌入式方法 = "">
+    参数 网址 <类型 = 文本型>
+    {
+        变量 "// 解码后的网址" <类型 = 文本型>
+        // 如果 (是否URL解码)
+        {
+            // 解码后的网址 = 编码_URL解码 (网址)
+        }
+        // 否则
+        {
+            // 解码后的网址 = 网址
+        }
+        @ UrlTool_Parse(@sn<this>.GetData(),GetMbsText(@<网址>, CVolMem(), NULL))
+    }
+
+    方法 取字段 <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 字段类型 <类型 = 整数 注释 = "0:scheme_" 注释 = "1:host_" 注释 = "2:port_" 注释 = "3:path_" 注释 = "4:query_" 注释 = "5:fragment_"
+            注释 = "6:userName_" 注释 = "7:password_">
+    {
+        @ CVolString( UrlTool_Getter(@sn<this>.GetData(), @<字段类型>) )
+    }
+
+    方法 取scheme <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ CVolString( UrlTool_Getter(@sn<this>.GetData(),0) )
+    }
+
+    方法 取host <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ CVolString( UrlTool_Getter(@sn<this>.GetData(),1) )
+    }
+
+    方法 取port <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ CVolString( UrlTool_Getter(@sn<this>.GetData(),2) )
+    }
+
+    方法 取path <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ CVolString( UrlTool_Getter(@sn<this>.GetData(),3) )
+
+    }
+
+    方法 取query <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( UrlTool_Getter(@sn<this>.GetData(),4) )
+    }
+
+    方法 取fragment <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( UrlTool_Getter(@sn<this>.GetData(),5) )
+    }
+
+    方法 取用户名 <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( UrlTool_Getter(@sn<this>.GetData(),6) )
+    }
+
+    方法 取密码 <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( UrlTool_Getter(@sn<this>.GetData(),7) )
+
+    }
+}

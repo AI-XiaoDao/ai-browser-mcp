@@ -1,0 +1,1024 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" 编辑时信息 = "2FFFD0, 0, 0, 0" @文档 = "category = \"开源库.curl\"">
+
+#
+
+类 ______网页表单辅助 <公开 折叠 @全局类 = 真 @禁止创建对象 = 真>
+{
+    方法 表单_到键值表 <公开 静态>
+    参数 表单数据 <类型 = 文本型>
+    参数 解析后的键值表 <类型 = 键值表>
+    参数 是否URL解码 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 解码后的表单数据 <类型 = 文本型>
+        变量 分割后的文本数组 <类型 = 文本数组类>
+        变量 i <类型 = 整数>
+        变量 单条文本 <类型 = 文本型>
+        变量 键名称 <类型 = 文本型>
+        变量 键值 <类型 = 文本型>
+        如果 (是否URL解码)
+        {
+            解码后的表单数据 = 编码_URL解码 (表单数据)
+        }
+        否则
+        {
+            解码后的表单数据 = 表单数据
+
+        }
+        调试输出 (解码后的表单数据)
+
+
+        文本_分割文本F (解码后的表单数据, "&", 分割后的文本数组)
+        循环 (0, 分割后的文本数组.取成员数 (), i)
+        {
+            单条文本 = 分割后的文本数组.取成员 (i)
+            键名称 = 文本_取左边_从左往右查找 (单条文本, "=")
+            键值 = 文本_取右边_从左往右查找 (单条文本, "=")
+            解析后的键值表.置文本 (键名称, 键值)
+        }
+
+
+
+    }
+
+    方法 键值表_到表单 <公开 静态 类型 = 文本型>
+    参数 数据键值表 <类型 = 键值表>
+    参数 URL编码方式 <类型 = 整数 注释 = "默认 3 只 编码键名称和键值" 注释 = "0 不使用url编码" 注释 = "1 只编码 键名称" 注释 = "2 只编码 键值" 注释 = "3 只编码 名称和键值"
+            注释 = "4 整体url编码" @默认值 = 3>
+    {
+
+        变量 键数组 <类型 = 文本数组类>
+        变量 键数量 <类型 = 整数>
+        变量 i <类型 = 整数>
+        变量 键名称 <类型 = 文本型>
+        变量 键值 <类型 = 文本型>
+        变量 组合后的内容 <类型 = 文本型>
+        数据键值表.取键数组 (键数组)
+        键数量 = 键数组.取成员数 ()
+
+
+
+        如果 (URL编码方式 == 0)  // 不编码
+        {
+
+            循环 (0, 键数量, i)
+            {
+                键名称 = 键数组.取成员 (i)
+                键值 = 数据键值表.取文本 (键名称)
+                组合后的内容 = 组合后的内容 + 键名称 + "=" + 键值
+                如果 (i != 键数量 - 1)
+                {
+                    组合后的内容 = 组合后的内容 + "&"
+                }
+            }
+
+
+        }
+        否则 (URL编码方式 == 1)  // 只编码 键名称
+        {
+
+            循环 (0, 键数量, i)
+            {
+                键名称 = 键数组.取成员 (i)
+                键值 = 数据键值表.取文本 (键名称)
+                组合后的内容 = 组合后的内容 + 编码_URL编码 (键名称) + "=" + 键值
+                如果 (i != 键数量 - 1)
+                {
+                    组合后的内容 = 组合后的内容 + "&"
+                }
+            }
+
+
+        }
+        否则 (URL编码方式 == 2)  // 键值
+        {
+
+            循环 (0, 键数量, i)
+            {
+                键名称 = 键数组.取成员 (i)
+                键值 = 数据键值表.取文本 (键名称)
+                组合后的内容 = 组合后的内容 + 键名称 + "=" + 编码_URL编码 (键值)
+                如果 (i != 键数量 - 1)
+                {
+                    组合后的内容 = 组合后的内容 + "&"
+                }
+            }
+
+
+        }
+        否则 (URL编码方式 == 3)  // 名称和键值
+        {
+
+            循环 (0, 键数量, i)
+            {
+                键名称 = 键数组.取成员 (i)
+                键值 = 数据键值表.取文本 (键名称)
+                组合后的内容 = 组合后的内容 + 编码_URL编码 (键名称) + "=" + 编码_URL编码 (键值)
+                如果 (i != 键数量 - 1)
+                {
+                    组合后的内容 = 组合后的内容 + "&"
+                }
+            }
+
+
+
+        }
+        否则 (URL编码方式 == 4)  // 整体url编码
+        {
+
+            循环 (0, 键数量, i)
+            {
+                键名称 = 键数组.取成员 (i)
+                键值 = 数据键值表.取文本 (键名称)
+                组合后的内容 = 组合后的内容 + 键名称 + "=" + 键值
+                如果 (i != 键数量 - 1)
+                {
+                    组合后的内容 = 组合后的内容 + "&"
+                }
+            }
+
+            返回 (编码_URL编码 (组合后的内容))
+
+
+        }
+
+        返回 (组合后的内容)
+
+
+
+
+    }
+
+    #
+    #
+}
+
+类 表单对比类f <公开 折叠>
+{
+    变量 成员_表单列表 <类型 = 键值列表>
+
+    方法 清空 <公开 折叠>
+    {
+        成员_表单列表.清空 ()
+    }
+
+    方法 添加表单 <公开>
+    参数 表单文本 <类型 = 文本型>
+    参数 是否解码 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 解析后的键值表 <类型 = 键值表>
+        表单_到键值表 (表单文本, 解析后的键值表, 是否解码)
+        成员_表单列表.添加键值表 (解析后的键值表)
+    }
+
+    方法 对比 <公开>
+    {
+
+        变量 表格样式 <类型 = 文本型
+                值 = "<style>\r\n    table,table tr th, table tr td { border:1px solid #e4e7e8; }\r\n    table { width: 200px; min-height: 25px; line-height: 25px; text-align: center; border-collapse: collapse; padding:2px;}\r\n</style>">
+        变量 生成的文本 <类型 = 文本型>
+        变量 表头数组 <类型 = 文本数组类>
+        变量 i <类型 = 整数>
+        变量 ""
+        // 提取表头
+        _对比_提取表头 (表头数组)
+
+        // 调试输出 (表头数组)
+        // 调试输出 (成员_表单列表)
+
+
+
+        // 生成表头
+        生成的文本 = "<html>\r\n<body>\r\n" + 表格样式 + "<table>\r\n<tr>\r\n"
+        循环 (0, 表头数组.取成员数 (), i)
+        {
+            生成的文本 = 生成的文本 + "<th>" + 表头数组.取成员 (i) + "</th>\r\n"
+        }
+        生成的文本 = 生成的文本 + "</tr>\r\n"
+
+
+
+        变量 表头对应索引 <类型 = 键值表>
+        变量 索引对应表头 <类型 = 键值表>
+        变量 列是是否高亮 <类型 = 逻辑型数组类>
+        // 第二步 把表头和索引对应起来
+        循环 (0, 表头数组.取成员数 (), i)
+        {
+            表头对应索引.置整数 (表头数组.取成员 (i), i)
+            索引对应表头.置文本 (到文本 (i), 表头数组.取成员 (i))
+            // 首先设置列都是没有颜色的,只有不同,才会设置颜色
+            列是是否高亮.加入成员 (假)
+        }
+
+
+
+
+        _对比_分析列是否需要高亮 (表头数组, 列是是否高亮)
+
+        变量 列文本开始_有颜色 <类型 = 文本型 值 = "<td><font color=\"red\">">
+        变量 列文本结束_有颜色 <类型 = 文本型 值 = "</font></td>">
+        变量 列文本开始_无颜色 <类型 = 文本型 值 = "<td>">
+        变量 列文本结束_无颜色 <类型 = 文本型 值 = "</td>">
+        变量 行索引 <类型 = 整数>
+        变量 列索引 <类型 = 整数>
+
+        // 开始生成行
+        循环 (0, 成员_表单列表.取数量 (), 行索引)
+        {
+
+            生成的文本 = 生成的文本 + "<tr>\r\n"
+
+            变量 临时行 <类型 = 键值表>
+            变量 列标题 <类型 = 文本型>
+            成员_表单列表.取键值表 (行索引, 临时行)
+            循环 (0, 表头数组.取成员数 (), 列索引)
+            {
+                列标题 = 表头数组.取成员 (列索引)
+
+                如果 (临时行.是否存在 (列标题))
+                {
+
+                    如果 (列是是否高亮.取成员 (列索引))
+                    {
+
+                        生成的文本 = 生成的文本 + 列文本开始_有颜色 + 临时行.取文本 (列标题) + 列文本结束_有颜色
+
+                    }
+                    否则
+                    {
+
+                        生成的文本 = 生成的文本 + 列文本开始_无颜色 + 临时行.取文本 (列标题) + 列文本结束_无颜色
+
+                    }
+
+
+                }
+                否则
+                {
+
+                    生成的文本 = 生成的文本 + 列文本开始_有颜色 + 列文本结束_有颜色
+
+
+
+                }
+
+
+
+            }
+
+            生成的文本 = 生成的文本 + "</tr>\r\n"
+
+        }
+
+
+        生成的文本 = 生成的文本 + "</table>\r\n</body>\r\n</html>"
+
+        变量 文件名 <类型 = 文本型>
+        文件名 = 取运行目录f () + "\\index " + 时间_取年月日 ("%u_%u_%u") + ".html"
+        写到文件f (文件名, 文本到UTF8 (生成的文本, 假))
+
+        执行f (文件名)
+        // 调试输出 (生成的文本)
+
+
+
+
+
+
+        // <table>
+        // <tr>
+        // <th>Heading</th>
+        // <th>Another Heading</th>
+        // </tr>
+        // <tr>
+        // <td>row 1, cell 1</td>
+        // <td>row 1, cell 2</td>
+        // </tr>
+        // <tr>
+        // <td>row 2, cell 1</td>
+        // <td>row 2, cell 2</td>
+        // </tr>
+        // </table>
+
+
+
+    }
+
+    方法 _对比_分析列是否需要高亮
+    参数 表头数组 <类型 = 文本数组类>
+    参数 列是是否高亮 <类型 = 逻辑型数组类>
+    {
+        变量 i <类型 = 整数>
+        变量 表头文本 <类型 = 文本型>
+        变量 行索引 <类型 = 整数>
+        变量 临时记录 <类型 = 文本型>
+
+        循环 (0, 表头数组.取成员数 (), i)
+        {
+            临时记录 = ""
+            表头文本 = 表头数组.取成员 (i)
+            // 遍历所有行的 表头对应列,看数据是否都相同,如果不同,设置列高亮
+            循环 (0, 成员_表单列表.取数量 (), 行索引)
+            {
+                变量 临时行 <类型 = 键值表>
+                成员_表单列表.取键值表 (行索引, 临时行)
+                调试输出 (临时行)
+
+
+                如果 (临时行.是否存在 (表头文本) == 假)
+                {
+                    // 只要有一行不能存在列标题,这列就直接高亮了
+                    列是是否高亮.置成员值 (i, 真)
+                    跳出循环
+                }
+
+                如果 (临时记录 == "")
+                {
+                    临时记录 = 临时行.取文本 (表头文本)
+                    到循环尾
+
+                }
+
+                如果 (临时行.取文本 (表头文本) != 临时记录)
+                {
+                    列是是否高亮.置成员值 (i, 真)
+                    跳出循环
+
+                }
+
+
+
+            }
+
+
+        }
+
+
+    }
+
+    方法 _对比_生成一行
+    {
+
+    }
+
+    方法 _对比_提取表头
+    参数 表头数组 <类型 = 文本数组类>
+    {
+        变量 i <类型 = 整数>
+        变量 表头 <类型 = 键值表>
+        循环 (0, 成员_表单列表.取成员数 (), i)
+        {
+            变量 单个表单 <类型 = 键值表>
+            变量 键数组 <类型 = 文本数组类>
+            变量 j <类型 = 整数>
+            变量 列标题 <类型 = 文本型>
+            成员_表单列表.取键值表 (i, 单个表单)
+            单个表单.取键数组 (键数组)
+            循环 (0, 键数组.取成员数 (), j)
+            {
+
+                列标题 = 键数组.取成员 (j)
+                如果 (表头.是否存在 (列标题) == 假)
+                {
+                    表头.置逻辑值 (列标题, 真)
+                }
+
+            }
+
+        }
+        表头.取键数组 (表头数组)
+
+
+
+    }
+
+    #
+    #
+}
+
+# //-----
+
+类 ______curl辅助函数 <公开 折叠 @全局类 = 真>
+{
+    方法 网络测速 <公开 静态 类型 = 长整数>
+    参数 url <类型 = 文本型>
+    {
+        变量 r <类型 = CURL>
+        r.Open ("GET", url)
+        r.Send ()
+        返回 (r.取下载速度 ())
+    }
+
+    #
+}
+
+类 CURL <公开 @视窗.后缀文本 = "public CCurTransmissionClassBase" @视窗.外部头文件 = "curl\\curlTool.h"
+        @视窗.外部库.win32 = "curl\\curlToolx86.lib" @视窗.附属文件.win32 = "curl\\curlToolx86.dll" @视窗.外部库.x64 = "curl\\curlToolx64.lib"
+        @视窗.附属文件.x64 = "curl\\curlToolx64.dll">
+{
+
+    # @begin
+    # <> <include>
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     curlHttp_CopyConstruct(m_data,objCopyFrom.m_data);
+    # }
+    # void SetData(void* pData)
+    # {
+    #     m_data = pData;
+    # }
+    # void* GetData()
+    # {
+    #     return m_data;
+    # }
+    # void* m_data;
+    #
+    # virtual int OnProgress(__int64 dltotal, __int64 dlnow, __int64 ultotal, __int64 ulnow)
+    # {
+    #     return @<传输进度>(dltotal,dlnow,ultotal,ulnow);
+    # }
+    # virtual void OnWrite(void* pData, __int64 nDataSize)
+    # {
+    #     @<收到数据>((INT_P)pData,nDataSize);
+    # }
+    # <> </include>
+    # @end
+
+    方法 收到数据 <公开 定义事件 类型 = 整数 注释 = "如果您要自己处理接收到的数据，我建议您调用 禁用内置接收数据保存功能(真)" 注释 = "这样可以防止内部再次保存数据，也就是同一份数据保存两次，占用不必须的内存">
+    参数 收到的数据指针 <类型 = 变整数>
+    参数 收到的数据大小 <类型 = 长整数>
+    {
+
+    }
+
+    方法 传输进度 <公开 定义事件 类型 = 整数 注释 = "如果这个要有数据，必须调用 启用传输进度，才会有哦" 返回值注释 = "返回0表示继续，返回1表示停止传输">
+    参数 总下载大小 <类型 = 长整数>
+    参数 当前下载大小 <类型 = 长整数>
+    参数 总上传大小 <类型 = 长整数>
+    参数 当前上传大小 <类型 = 长整数>
+    {
+
+    }
+
+    方法 启用传输进度 <公开 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ curlHttp_EnableProgress (@sn<this>.GetData(),@<是否启用>)
+    }
+
+    方法 禁用内置接收数据保存功能 <公开 注释 = "如果你调用了这个函数，那么当你 调用 GetResponsBody的时候，" 注释 = "就不会有返回数据了，此时，您要自己处理接收到的数据， 再回调函数" 注释 = "收到数据 中自行处理"
+            @嵌入式方法 = "">
+    参数 是否禁用 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ curlHttp_DisableDefaultDataWriteFunction (@sn<this>.GetData(),@<是否禁用>)
+
+    }
+
+    方法 类_初始化
+    {
+        @ SetData(curlHttp_new ());
+        @ curlHttp_SetTransmissionClass(GetData(),this);
+    }
+
+    方法 类_清理
+    {
+        @ curlHttp_delete(GetData());
+
+    }
+
+    方法 SetTcpFastOpen <公开 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型>
+    {
+        @ curlHttp_SetTcpFastOpen(@sn<this>.GetData(),@<是否启用>)
+    }
+
+    方法 SetKeepAlive <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型>
+    参数 保持连接时间 <类型 = 整数 注释 = "秒" @默认值 = 120>
+    参数 心跳时间 <类型 = 整数 注释 = "秒" @默认值 = 60>
+    {
+        @ curlHttp_SetKeepAlive(@sn<this>.GetData(), @<是否启用>,@<保持连接时间>, @<心跳时间>)
+    }
+
+    方法 SetUserAgent <公开 @嵌入式方法 = "">
+    参数 代理头 <类型 = 文本型
+            注释 = "\"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3741.400 QQBrowser/10.5.3863.400\"">
+    {
+        @ curlHttp_SetUserAgent(@sn<this>.GetData(), GetMbsText(@<代理头>, CVolMem(), NULL))
+    }
+
+    方法 SetSSLCertFile <公开 注释 = "设置证书文件" @嵌入式方法 = "">
+    参数 证书文件路径 <类型 = 文本型>
+    参数 密钥文件 <类型 = 文本型>
+    参数 证书密码 <类型 = 文本型>
+    {
+        @ curlHttp_SetSSLCertW(@sn<this>.GetData(),@<证书文件路径>,@<密钥文件>,@<证书密码>)
+    }
+
+    方法 "//SetCertFileMem" <注释 = "//这个函数已经封装了，但是火山里面还未声明">
+    {
+
+
+    }
+
+    方法 SetSSLVerifyPeer <公开 折叠 @嵌入式方法 = "">
+    参数 是否验证 <类型 = 逻辑型>
+    {
+        @ curlHttp_SetSSLVerifyPeer(@sn<this>.GetData(),@<是否验证>)
+    }
+
+    方法 SetSSLVerifyHost <公开 折叠 @嵌入式方法 = "">
+    参数 是否验证 <类型 = 逻辑型>
+    {
+        @ curlHttp_SetSSLVerifyHost(@sn<this>.GetData(),@<是否验证>)
+    }
+
+    方法 SetAcceptEncoding <公开 注释 = "可以直接使用 SetRequestHeaders" 编辑时信息 = "46AA6, 0, 0, 0" @嵌入式方法 = "">
+    参数 Encoding <类型 = 文本型 注释 = "gzip, deflate, br" 编辑时信息 = "46AA6, 0, 0, 0">
+    {
+        @ curlHttp_SetEncoding(@sn<this>.GetData(),GetMbsText(@<Encoding>, CVolMem(), NULL))
+    }
+
+    方法 SetReferer <公开 注释 = "可以直接使用 SetRequestHeaders" @嵌入式方法 = "">
+    参数 ref <类型 = 文本型 注释 = "Referer: https://www.cnbeta.com/">
+    {
+        @ curlHttp_SetReferer(@sn<this>.GetData(),GetMbsText(@<ref>, CVolMem(), NULL))
+    }
+
+    方法 置连接超时 <公开 @嵌入式方法 = "">
+    参数 超时时间 <类型 = 整数 注释 = "连接超时 毫秒">
+    {
+        @ curlHttp_SetConnectTimeOut(@sn<this>.GetData(),@<超时时间>)
+    }
+
+    方法 AppendRequestHeader <注释 = "//设置单条协议" 注释 = "// 参数格式 Shoesize: 10" 注释 = "// 注意，末尾不需要您添加换行符"
+            注释 = "注意，每个用到的地方，都必须每次添加，在send之前" @嵌入式方法 = "" "">
+    参数 协议头 <类型 = 文本型 注释 = "\"key: value\"">
+    {
+        @ curlHttp_AppendRequestHeader(@sn<this>.GetData(),GetMbsText(@<协议头>, CVolMem(), NULL))
+    }
+
+    方法 SetRequestHeader <公开 注释 = "//设置单条协议" 注释 = "// 参数格式 Shoesize: 10" 注释 = "// 注意，末尾不需要您添加换行符"
+            注释 = "注意，每个用到的地方，都必须每次添加，在send之前" 编辑时信息 = "3EFFC, 0, 0, 0" @嵌入式方法 = "" "">
+    参数 协议头 <类型 = 文本型 注释 = "\"key: value\"" 编辑时信息 = "3EFFC, 0, 0, 0">
+    {
+        @ curlHttp_AppendRequestHeader(@sn<this>.GetData(),GetMbsText(@<协议头>, CVolMem(), NULL))
+
+    }
+
+    方法 ClearRequestHeader <公开 注释 = "清空协议头" @嵌入式方法 = "">
+    {
+        @ curlHttp_ClearRequestHeader(@sn<this>.GetData())
+
+    }
+
+    方法 SetRequestHeaders <公开 注释 = "//设置多条协议头，用换行符(\\r\\n)分开" 注释 = "注意，每个用到的地方，都必须每次添加，在send之前" 注释 = "一行一个 例如" 注释 = "aaa: bbbb"
+            注释 = "ccc: dddd">
+    参数 协议头内容 <类型 = 文本型 注释 = "可以多行 也可以单行 例如："
+            注释 = "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
+            注释 = "Accept-Encoding: gzip, deflate, br" 注释 = "Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6">
+    {
+        变量 文本数组 <类型 = 文本数组类>
+        变量 i <类型 = 整数>
+        文本_分割文本F (协议头内容, "\r\n", 文本数组, 真)
+        循环 (0, 文本数组.取成员数 (), i)
+        {
+            变量 键名称 <类型 = 文本型>
+            键名称 = 到小写 (文本_取左边_从左往右查找 (文本数组.取成员 (i), ": "))
+            如果 (键名称 == "accept-encoding")
+            {
+                变量 键值 <类型 = 文本型>
+                键值 = 删首空 (文本_取右边_从左往右查找 (文本数组.取成员 (i), ":"))
+                SetAcceptEncoding (键值)
+            }
+            否则 (键名称 == "referer")
+            {
+                变量 键值 <类型 = 文本型>
+                键值 = 删首空 (文本_取右边_从左往右查找 (文本数组.取成员 (i), ":"))
+                SetReferer (键值)
+            }
+            否则 (键名称 == "user-agent")
+            {
+                变量 键值 <类型 = 文本型>
+                键值 = 删首空 (文本_取右边_从左往右查找 (文本数组.取成员 (i), ":"))
+                SetUserAgent (键值)
+            }
+            否则
+            {
+                AppendRequestHeader (文本数组.取成员 (i))
+
+            }
+        }
+
+    }
+
+    方法 AppendProxyHeader <公开 注释 = "注意，每个用到的地方，都必须每次添加，在send之前" 注释 = "// 参数格式 Shoesize: 10" 注释 = "// 注意，末尾不需要您添加换行符" @嵌入式方法 = "">
+    参数 协议头 <类型 = 文本型>
+    {
+        @ curlHttp_AppendProxyHeaderW( @sn<this>.GetData(),@<协议头>)
+    }
+
+    方法 EnableLocation <公开 @嵌入式方法 = "">
+    参数 最大重定向次数 <类型 = 整数 注释 = "大于0 启用重定向 小于等于0 关闭重定向" @默认值 = 5>
+    {
+        @ curlHttp_EnableLocation(@sn<this>.GetData(),@<最大重定向次数>)
+    }
+
+    方法 EnableCookie <公开 注释 = "启用Cookies ，如果启用则会记录到文件。" @嵌入式方法 = "">
+    参数 Cookes路径 <类型 = 文本型 注释 = "如果设置了 \"\"空文本 则只是启用，如果设置了文件名 则会保存cookies，启动的时候也会加载这个 cookies" @默认值 = "">
+    {
+        @ curlHttp_EnableCookie( @sn<this>.GetData(),GetMbsText(@<Cookes路径>, CVolMem(), NULL))
+    }
+
+    方法 SetNoBody <公开 注释 = "不需要页面内容" @嵌入式方法 = "">
+    {
+        @ curlHttp_SetNobody( @sn<this>.GetData() )
+    }
+
+    方法 SetHttpProxy <公开 @嵌入式方法 = "">
+    参数 代理 <类型 = 文本型 注释 = "格式 127.0.0.1:8080">
+    参数 用户名密码 <类型 = 文本型 注释 = "格式 帐号:密码" @默认值 = "">
+    {
+        @ curlHttp_SetHttpProxyW( @sn<this>.GetData() ,@<代理>,@<用户名密码>)
+    }
+
+    方法 SetSock5Proxy <公开 @嵌入式方法 = "">
+    参数 代理 <类型 = 文本型 注释 = "格式 127.0.0.1:8080">
+    参数 用户名密码 <类型 = 文本型 注释 = "格式 帐号:密码" @默认值 = "">
+    {
+        @ curlHttp_SetSock5ProxyW( @sn<this>.GetData() ,@<代理>,@<用户名密码>)
+    }
+
+    方法 取重定向次数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ curlHttp_GetRedirectCount(@sn<this>.GetData())
+    }
+
+    方法 取重定向地址 <公开 类型 = 文本型 注释 = "取重定向连接。。301 302 ，这个要能取到，函数 启用重定向(0) 必须这样用 和 GetLocation 类似" @嵌入式方法 = "">
+    {
+        @  CVolString(curlHttp_GetRedirectURL(@sn<this>.GetData()))
+    }
+
+    方法 GetLocation <公开 类型 = 文本型 注释 = "取重定向连接。。301 302 ，这个要能取到，函数 启用重定向(0) 必须这样用" @嵌入式方法 = "">
+    {
+        @  CVolString(curlHttp_GetLocation(@sn<this>.GetData()))
+    }
+
+    方法 GetContentType <公开 类型 = 文本型 注释 = "再发送后调用" @嵌入式方法 = "">
+    {
+        @  CVolString(curlHttp_GetContentType(@sn<this>.GetData()))
+    }
+
+    方法 GetUrl <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @  CVolString(curlHttp_GetUrl(@sn<this>.GetData()))
+    }
+
+    方法 GetRemoteIPAddress <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @  CVolString(curlHttp_GetRemoteIPAddress(@sn<this>.GetData()))
+    }
+
+    方法 GetRemotePort <公开 类型 = 整数 注释 = "取远程地址" @嵌入式方法 = "">
+    {
+        @ curlHttp_GetRemotePort(@sn<this>.GetData())
+    }
+
+    方法 GetStatusCode <公开 类型 = 整数 注释 = "取状态码" @嵌入式方法 = "">
+    {
+        @ curlHttp_GetStatusCode(@sn<this>.GetData())
+    }
+
+    方法 取状态码 <公开 类型 = 整数 注释 = "同 GetStatusCode 一样" @嵌入式方法 = "">
+    {
+        @ curlHttp_GetStatusCode(@sn<this>.GetData())
+    }
+
+    方法 取错误信息 <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @  CVolString(curlHttp_GetError(@sn<this>.GetData()))
+    }
+
+    方法 GetAllResponHeader <公开 类型 = 文本型 注释 = "取响应头" @嵌入式方法 = "">
+    {
+        @  CVolString(curlHttp_GetResponHead(@sn<this>.GetData()))
+    }
+
+    方法 GetResponsBody <公开 类型 = 字节集类 折叠 @禁止流程检查 = 真>
+    {
+        @ const char* lpBuffer = curlHttp_GetResponBody(GetData());
+        @ size_t nBufferSize = curlHttp_GetResponBodySize(GetData());
+        @ return @an<CVolMem>(lpBuffer, nBufferSize);
+    }
+
+    方法 GetResponsBodyText <公开 类型 = 文本型>
+    参数 是否utf8解码 <类型 = 逻辑型 注释 = "是否从 utf8 直接转换成 unicode 16" @默认值 = 真>
+    {
+        变量 数据 <类型 = 字节集类>
+        变量 返回值 <类型 = 文本型>
+        数据 = GetResponsBody ()
+        如果 (是否utf8解码)
+        {
+            返回值 = UTF8到文本 (数据)
+        }
+        否则
+        {
+            返回值 = 多字节到文本 (数据)
+        }
+        返回 (返回值)
+
+    }
+
+    方法 GetOriginalCookie <公开 类型 = 文本型 注释 = "获取原始cookies格式文本" @嵌入式方法 = "">
+    {
+        @  CVolString(curlHttp_GetOriginalCookie(@sn<this>.GetData()))
+    }
+
+    方法 GetCookies <公开 类型 = 文本型 注释 = "aaa=bbb; ccc=ddd; eee=fff" @嵌入式方法 = "">
+    {
+        @  CVolString(curlHttp_GetCookies(@sn<this>.GetData()))
+    }
+
+    方法 SetCookies <公开 @嵌入式方法 = "">
+    参数 cookies内容 <类型 = 文本型 注释 = "格式 name1=var1; name2=var2;">
+    {
+        @ curlHttp_SetCookie( @sn<this>.GetData(),GetMbsText(@<cookies内容>, CVolMem(), NULL) )
+    }
+
+    方法 置DNS超时 <公开 类型 = 整数类 返回值注释 = "0成功" @嵌入式方法 = "">
+    参数 超时时间 <类型 = 整数 @默认值 = 2>
+    {
+        @  curlHttp_SetDnsCacheTimeout(@sn<this>.GetData(),@<超时时间>)
+    }
+
+    方法 置超时 <公开 类型 = 整数类 注释 = "读取超时 易模块里面叫做请求超时" 返回值注释 = "0成功" @嵌入式方法 = "">
+    参数 超时时间 <类型 = 整数 注释 = "秒" @默认值 = 15>
+    {
+        @  curlHttp_SetTimeout(@sn<this>.GetData(),@<超时时间>)
+    }
+
+    方法 SetTimeout <公开 类型 = 整数类 注释 = "读取超时 易模块里面叫做请求超时" 返回值注释 = "0成功" @嵌入式方法 = "">
+    参数 超时时间 <类型 = 整数 注释 = "秒" @默认值 = 15>
+    {
+        @  curlHttp_SetTimeout(@sn<this>.GetData(),@<超时时间>)
+
+    }
+
+    方法 启用使用全局DNS缓存 <公开 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型 @默认值 = 假>
+    {
+        @  curlHttp_SetDnsUseGlobalCache(@sn<this>.GetData(),@<是否启用>)
+    }
+
+    方法 取最后一次传输所消耗的时间 <公开 类型 = 长整数 注释 = "取所有时间，包括 dns解析 连接 等等的时间总和" 编辑时信息 = "25FFD, 0, 0, 0" @嵌入式方法 = "">
+    {
+        @ curlHttp_GetTotalTimeT( @sn<this>.GetData())
+
+    }
+
+    方法 取域名解析时间 <公开 类型 = 长整数 @嵌入式方法 = "">
+    {
+        @ curlHttp_GetNameLookupTimeT( @sn<this>.GetData())
+    }
+
+    方法 取建立连接所消耗的时间 <公开 类型 = 长整数 @嵌入式方法 = "">
+    {
+        @ curlHttp_GetConnectTimeT( @sn<this>.GetData())
+    }
+
+    方法 取建立连接到准备传输所使用的时间 <公开 类型 = 长整数 @嵌入式方法 = "">
+    {
+        @ curlHttp_GetPretransferTimeT( @sn<this>.GetData())
+    }
+
+    方法 取建立连接到传输开始所使用的时间 <公开 类型 = 长整数 @嵌入式方法 = "">
+    {
+        @ curlHttp_GetStartTransferTimeT( @sn<this>.GetData())
+    }
+
+    方法 取重定向所使用的时间 <公开 类型 = 长整数 @嵌入式方法 = "">
+    {
+        @ curlHttp_GetRedirectTimeT( @sn<this>.GetData())
+    }
+
+    方法 取下载速度 <公开 类型 = 长整数 @嵌入式方法 = "">
+    {
+        @ curlHttp_GetDownloadSpeed( @sn<this>.GetData())
+    }
+
+    方法 Open <公开 @嵌入式方法 = "">
+    参数 打开方式 <类型 = 文本型 注释 = "\"GET POST\"" @默认值 = "GET">
+    参数 要打开的网址 <类型 = 文本型 注释 = "\"www.baidu.com\"">
+    {
+        @ curlHttp_Open( @sn<this>.GetData(),GetMbsText(@<打开方式>, CVolMem(), NULL) ,GetMbsText(@<要打开的网址>, CVolMem(), NULL))
+    }
+
+    方法 Send <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 要发送的数据 <类型 = 字节集类 @默认值 = 空对象>
+    {
+        如果 (要发送的数据 == 空对象)
+        {
+            @ return curlHttp_Send(GetData(),NULL,0);
+        }
+        否则
+        {
+            @ return curlHttp_Send(GetData(),(void*)@<要发送的数据>.GetPtr(),(int)@<要发送的数据>.GetSize());
+        }
+
+    }
+}
+
+类 ______Curl测试类 <公开 "">
+{
+    变量 r <类型 = CURL>
+
+    方法 开始测试 <公开>
+    {
+        调试输出 ("----测试curl开始")
+        r.EnableCookie ("Cookies.txt")  // 启用cookie 并且保存到文件,下次启动的时候会读取
+        // r.EnableCookie ()  // 只是启用cookie
+        // r.EnableHttpFastOpen ()
+        // r.EnableLocation ()
+        // r.SetCookie ("aaaa,bbbb")
+
+        r.SetRequestHeaders ("User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3741.400 QQBrowser/10.5.3863.400")
+        // r.Open ("GET", "http://127.0.0.1:19730/intdex.html")
+        r.Open ("GET", "https://www.baidu.com")
+        r.Send ()
+
+        // 调试输出 (r.GetLocation())
+        调试输出 (r.GetStatusCode ())
+        // 调试输出 (r.GetResponHead ())
+
+        调试输出 (r.GetCookies ())
+
+
+
+        // 调试输出 (r.GetResponHead ())
+
+        变量 返回数据 <类型 = 字节集类>
+        变量 返回文本 <类型 = 文本型>
+        返回数据 = r.GetResponsBody ()
+        返回文本 = r.GetResponsBodyText ()
+
+        // 注意,如果数据太大,输出调试文本就不会显示了
+        // 调试输出 (返回文本)
+        // 调试输出 (取字节集长度 (返回数据))
+        // 信息框f (多字节到文本 (返回数据))
+
+        写到文件f (取运行目录f () + "\\baidu.html", 返回数据)
+
+
+
+
+        // 如果 (文件操作.打开 ("d:\\test.html", 文件打开方式.OPEN_ALWAYS) == 假)
+        {
+            // 调试输出 (取最后一次错误信息 ())
+        }
+        // 文件操作.写出文本 ("dasemimi")
+        // 文件操作.关闭 ()
+
+        // 文件操作.打开 (取运行目录f () + "\\index.html", 文件打开方式.OPEN_ALWAYS)
+        // 文件操作.写出字节集 (返回数据)
+        // 文件操作.写文本 (返回文本)
+        // 文件操作.关闭 ()
+        // 调试输出 (r.GetStatusCode ())
+        // 调试输出 (r.GetRemoteIPAddress ())
+        // 调试输出 (r.GetRemotePort ())
+        // 调试输出 (r.GetCookie ())
+        // 调试输出 (r.取错误信息 ())
+        调试输出 ("----测试curl结束")
+
+    }
+
+    方法 开始测试2 <公开>
+    {
+        调试输出 ("----测试curl开始")
+        r.EnableCookie ()  // 只是启用内存cookies
+
+        r.SetRequestHeaders ("User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3741.400 QQBrowser/10.5.3863.400")
+        r.SetCookies ("aaaa:bbb")
+        r.Open ("GET", "http://127.0.0.1:19730/intdex.html")
+        r.Send ()
+
+        调试输出 (r.GetStatusCode ())
+        // 调试输出 (r.GetCookie ())
+        调试输出 (r.取错误信息 ())
+
+        调试输出 ("1111111111111111111")
+
+
+        r.SetCookies ("ccc:dddd")
+        r.Open ("GET", "http://127.0.0.1:19730/intdex.html")
+        r.Send ()
+
+        调试输出 (r.GetStatusCode ())
+        调试输出 (r.GetCookies ())
+
+
+        调试输出 ("----测试curl结束")
+
+    }
+
+    方法 开始测试_gzip <公开>
+    {
+        调试输出 ("----测试curl开始")
+        r.EnableCookie ()  // 只是启用内存cookies
+        r.EnableLocation (5)
+
+        r.SetRequestHeaders ("User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3741.400 QQBrowser/10.5.3863.400")
+        r.Open ("GET", "http://tool.chinaz.com")
+        // r.SetEncoding ("gzip")
+
+        r.Send ()
+
+        调试输出 (r.GetAllResponHeader ())
+        调试输出 (r.GetStatusCode ())
+        调试输出 (r.取错误信息 ())
+        调试输出 (r.GetResponsBodyText ())
+
+        // 如果 (写到文件f (取运行目录f () + "\\index.html", r.GetResponsBody ()) == 假)
+        {
+            // 调试输出 (取最后一次错误信息 ())
+        }
+
+        调试输出 (r.GetCookies ())
+
+
+        调试输出 ("----测试curl结束")
+
+    }
+
+    方法 开始测试_数组 <公开>
+    {
+        调试输出 ("----测试curl始")
+
+
+
+
+
+
+        r.EnableCookie ()  // 只是启用内存cookies
+        r.EnableLocation (5)
+
+        r.SetRequestHeaders ("User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3741.400 QQBrowser/10.5.3863.400")
+        r.Open ("GET", "http://tool.chinaz.com")
+        // r.SetEncoding ("gzip")
+
+        r.Send ()
+
+        调试输出 (r.GetAllResponHeader ())
+        调试输出 (r.GetStatusCode ())
+        调试输出 (r.取错误信息 ())
+        调试输出 (r.GetResponsBodyText ())
+
+        // 如果 (写到文件f (取运行目录f () + "\\index.html", r.GetResponsBody ()) == 假)
+        {
+            // 调试输出 (取最后一次错误信息 ())
+        }
+
+        调试输出 (r.GetCookies ())
+
+
+        调试输出 ("----测试curl结束")
+
+    }
+
+    #
+}
+
+类 ______Curl多线程测试类 <公开>
+{
+    变量 线程数组 <类型 = "线程类f [5]">
+
+    方法 开始测试 <公开>
+    {
+
+        变量 i <类型 = 整数>
+        循环 (0, 5, i)
+        {
+            挂接事件 (线程数组 [i])
+            // 调试输出 (i)
+            线程数组 [i].创建线程 ()
+            // 延时f (5)
+
+        }
+        循环 (0, 5, i)
+        {
+            线程数组 [i].等待 ()
+        }
+
+    }
+
+    方法 线程类f_工作函数 <接收事件 类型 = 整数>
+    参数 来源对象 <类型 = 线程类f>
+    参数 标记值 <类型 = 整数>
+    参数 线程参数 <类型 = 变整数>
+    {
+
+        变量 test <类型 = ______Curl测试类>
+        test.开始测试 ()
+        返回 (0)
+    }
+}

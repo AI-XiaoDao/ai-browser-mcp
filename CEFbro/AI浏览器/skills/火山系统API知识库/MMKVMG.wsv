@@ -1,0 +1,799 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "采用 腾讯开源的  MMKV  组件" @文档 = "category = \"开源库.MMKV\"" @视窗.外部头文件 = "MMKVMG\\MMKVToolMG.h"
+        @视窗.外部库.win32 = "MMKVMG\\MMKVToolMGx86.lib" @视窗.附属文件.win32 = "MMKVMG\\MMKVToolMGx86.dll"
+        @视窗.外部库.x64 = "MMKVMG\\MMKVToolMGx64.lib" @视窗.附属文件.x64 = "MMKVMG\\MMKVToolMGx64.dll">
+
+类 腾讯键值表事件 <公开 注释 = "全局只能定义一个" 折叠 @视窗.后缀文本 = "CMMKVMGEventBase">
+{
+
+    # @begin
+    # <> <include>
+    #
+    #  virtual void ContentChangeHandler(const char* lpszmmapID)
+    # {
+    #     CVolString str(lpszmmapID);
+    #     @<内容变化>(str);
+    # }
+    # virtual int ErrorHandler(const char* lpszmmapID, int errorType)
+    # {
+    #     CVolString str(lpszmmapID);
+    #     return @<遇到错误>(str,errorType);
+    # }
+    # virtual void LogHandler(int level, const char* file, int line, const char* function, const char* message)
+    # {
+    #     CVolString szFile(file);
+    #     CVolString szFunction(file);
+    #     CVolString szMessage(file);
+    #     @<日志内容>(level,szFile,line,szFunction,szMessage);
+    # }
+    #
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ MMKVMGTool_BindEventClass(this);
+
+
+    }
+
+    方法 内容变化 <公开 定义事件 类型 = 整数>
+    参数 表名称 <类型 = 文本型>
+    {
+
+    }
+
+    方法 遇到错误 <公开 定义事件 类型 = 整数 注释 = "返回值 0 或者1 0表示终止 1表示恢复">
+    参数 表名称 <类型 = 文本型>
+    参数 错误类型 <类型 = 整数>
+    {
+
+    }
+
+    方法 日志内容 <公开 定义事件 类型 = 整数>
+    参数 日志等级 <类型 = 整数 注释 = "    MMKVLogDebug = 0, // not available for release/product build"
+            注释 = "    MMKVLogInfo = 1,  // default level" 注释 = "    MMKVLogWarning," 注释 = "    MMKVLogError,"
+            注释 = "    MMKVLogNone, // special level used to disable all log messages">
+    参数 文件名称 <类型 = 文本型>
+    参数 行号 <类型 = 整数>
+    参数 函数名称 <类型 = 文本型>
+    参数 消息内容 <类型 = 文本型>
+    {
+
+    }
+
+    #
+    #
+}
+
+类 腾讯键值表 <公开>
+{
+
+    #
+    #
+    # @begin
+    #
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CVolMMKVMGWapper)
+    #
+    # <> <include>
+    #
+    # void* GetData()
+    # {
+    #     return data().GetData();
+    # }
+    # void SetData(void * pData)
+    # {
+    #     data().SetData(pData);
+    # }
+    #
+    #
+    # <> </include>
+    # @end
+
+    方法 启用事件 <公开 @嵌入式方法 = "">
+    参数 事件类型 <类型 = 整数 注释 = "可选值 1 2 4" 注释 = "1 表示 启用日志函数" 注释 = "2 表示 启用遇到错误" 注释 = "4 表示 启用内容变化" 注释 = ""
+            注释 = "如果要同时启用三个事件 可以  1+2+4" @默认值 = 1>
+    参数 是否启用 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ MMKVMGTool_EnableEvent(@sn<this>.GetData(),@<事件类型>,@<是否启用>)
+    }
+
+    方法 打开 <公开 注释 = "const char* lpszID, int mode, const char* lpszCryptKey">
+    参数 表名称 <类型 = 文本型>
+    参数 目录 <类型 = 文本型 注释 = "如果目录为空表示打开的是内存数据库" @默认值 = "">
+    参数 模式 <类型 = 整数 注释 = "可选值 1 或 2" 注释 = "1表示 单进程模式" 注释 = "2表示 多进程模式" @默认值 = 1>
+    参数 加密密码 <类型 = 文本型 @默认值 = "">
+    {
+        变量 id <类型 = 字节集类>
+        id = 文本到UTF8 (表名称)
+        如果 (加密密码 == "")
+        {
+            如果 (目录 == "")
+            {
+                @ SetData( MMKVMGTool_Open((const char*)@<id>.GetPtr(),@<模式>,NULL,NULL) );
+
+            }
+            否则
+            {
+
+                @ SetData( MMKVMGTool_Open((const char*)@<id>.GetPtr(),@<模式>,NULL,@<目录>.GetText()) );
+            }
+
+        }
+        否则
+        {
+            变量 crypt <类型 = 字节集类>
+            crypt = 文本到UTF8 (加密密码)
+
+            如果 (目录 == "")
+            {
+                @ SetData( MMKVMGTool_Open((const char*)@<id>.GetPtr(),@<模式>,(const char*)@<crypt>.GetPtr(),NULL) );
+
+            }
+            否则
+            {
+                @ SetData( MMKVMGTool_Open((const char*)@<id>.GetPtr(),@<模式>,(const char*)@<crypt>.GetPtr(),@<目录>.GetText()) );
+            }
+
+        }
+
+
+    }
+
+    方法 关闭 <公开 注释 = "注意，不能再两个不同的线程中，同时来关闭 同一个 腾讯键值表，否则会蹦，，，如果你要两个线程都用关闭" 注释 = "那么你必须加锁" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Close()
+
+    }
+
+    方法 强制保存 <公开 @嵌入式方法 = "">
+    {
+        @ MMKVMGTool_Flush(@sn<this>.GetData())
+    }
+
+    方法 取键数量 <公开 类型 = 长整数 @嵌入式方法 = "">
+    {
+        @ MMKVMGTool_Count(@sn<this>.GetData())
+    }
+
+    方法 取总大小 <公开 类型 = 长整数 @嵌入式方法 = "">
+    {
+        @ MMKVMGTool_TotalSize(@sn<this>.GetData())
+    }
+
+    方法 取实际大小 <公开 类型 = 长整数 @嵌入式方法 = "">
+    {
+        @ MMKVMGTool_ActualSize(@sn<this>.GetData())
+    }
+
+    方法 文件是否有效 <公开 类型 = 逻辑型 注释 = "检测一下表对应的数据文件是否有效" @禁止流程检查 = 真>
+    参数 表名称 <类型 = 文本型>
+    参数 相对路径 <类型 = 文本型 @默认值 = "">
+    {
+        变量 txt <类型 = 字节集类>
+        txt = 文本到UTF8 (表名称)
+        如果 (相对路径 == "")
+        {
+            @ return  MMKVMGTool_isFileValid((const char*)@<txt>.GetPtr(),NULL);
+        }
+        否则
+        {
+            @ return  MMKVMGTool_isFileValid((const char*)@<txt>.GetPtr(),@<相对路径>.GetText());
+        }
+
+    }
+
+    方法 是否存在键 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 键名称 <类型 = 文本型>
+    {
+        变量 key <类型 = 字节集类>
+        key = 文本到UTF8 (键名称)
+        @ return  MMKVMGTool_IsExist(GetData(),@<key>.GetPtr());
+    }
+
+    #
+
+    方法 删除键值 <公开>
+    参数 键名称 <类型 = 文本型>
+    {
+        变量 key <类型 = 字节集类>
+        key = 文本到UTF8 (键名称)
+        @ MMKVMGTool_RemoveValue(GetData(),@<key>.GetPtr());
+    }
+
+    方法 清空 <公开 注释 = "功能待确认" @嵌入式方法 = "">
+    {
+        @ MMKVMGTool_ClearALL(@sn<this>.GetData())
+    }
+
+    方法 重建 <公开 注释 = "因为多次使用删除之后，数据库文件会不断增大，此时，调用这个函数" 注释 = "会重新整理一遍，清理垃圾数据，释放空间" @嵌入式方法 = "">
+    {
+        @ MMKVMGTool_Trim(@sn<this>.GetData())
+    }
+
+    方法 取键数组 <公开 @嵌入式方法 = "">
+    参数 数组 <类型 = 腾讯文本数组>
+    {
+        @ MMKVMGTool_GetAllKey(@sn<this>.GetData(),@<数组>.GetData())
+    }
+
+    方法 锁定 <公开 @嵌入式方法 = "">
+    {
+        @ MMKVMGTool_Lock(@sn<this>.GetData())
+    }
+
+    方法 解锁 <公开 @嵌入式方法 = "">
+    {
+        @ MMKVMGTool_UnLock(@sn<this>.GetData())
+    }
+
+    方法 置逻辑值 <公开 类型 = 逻辑型 返回值注释 = "返回是否成功" @禁止流程检查 = 真>
+    参数 键名称 <类型 = 文本型>
+    参数 值 <类型 = 逻辑型>
+    {
+        变量 key <类型 = 字节集类>
+        key = 文本到UTF8 (键名称)
+        @ return MMKVMGTool_SetBool(GetData(),(const char*)@<key>.GetPtr(),@<值>);
+    }
+
+    方法 取逻辑值 <公开 类型 = 逻辑型 返回值注释 = "返回是否成功" @禁止流程检查 = 真>
+    参数 键名称 <类型 = 文本型>
+    {
+        变量 key <类型 = 字节集类>
+        key = 文本到UTF8 (键名称)
+        @ return MMKVMGTool_GetBool(GetData(),(const char*)@<key>.GetPtr());
+    }
+
+    方法 置整数 <公开 类型 = 逻辑型 返回值注释 = "返回是否成功" @禁止流程检查 = 真>
+    参数 键名称 <类型 = 文本型>
+    参数 值 <类型 = 整数>
+    {
+        变量 key <类型 = 字节集类>
+        key = 文本到UTF8 (键名称)
+        @ return MMKVMGTool_SetInt32(GetData(),(const char*)@<key>.GetPtr(),@<值>);
+    }
+
+    方法 取整数 <公开 类型 = 整数 返回值注释 = "返回是否成功" @禁止流程检查 = 真>
+    参数 键名称 <类型 = 文本型>
+    {
+        变量 key <类型 = 字节集类>
+        key = 文本到UTF8 (键名称)
+        @ return MMKVMGTool_GetInt32(GetData(),(const char*)@<key>.GetPtr());
+    }
+
+    #
+
+    方法 置长整数 <公开 类型 = 逻辑型 返回值注释 = "返回是否成功" @禁止流程检查 = 真>
+    参数 键名称 <类型 = 文本型>
+    参数 值 <类型 = 长整数>
+    {
+        变量 key <类型 = 字节集类>
+        key = 文本到UTF8 (键名称)
+        @ return MMKVMGTool_SetInt64(GetData(),(const char*)@<key>.GetPtr(),@<值>);
+    }
+
+    方法 取长整数 <公开 类型 = 长整数 返回值注释 = "返回是否成功" @禁止流程检查 = 真>
+    参数 键名称 <类型 = 文本型>
+    {
+        变量 key <类型 = 字节集类>
+        key = 文本到UTF8 (键名称)
+        @ return MMKVMGTool_GetInt64(GetData(),(const char*)@<key>.GetPtr());
+    }
+
+    方法 置小数 <公开 类型 = 逻辑型 返回值注释 = "返回是否成功" @禁止流程检查 = 真>
+    参数 键名称 <类型 = 文本型>
+    参数 值 <类型 = 小数>
+    {
+        变量 key <类型 = 字节集类>
+        key = 文本到UTF8 (键名称)
+        @ return MMKVMGTool_SetDouble(GetData(),(const char*)@<key>.GetPtr(),@<值>);
+    }
+
+    方法 取小数 <公开 类型 = 小数 返回值注释 = "返回是否成功" @禁止流程检查 = 真>
+    参数 键名称 <类型 = 文本型>
+    {
+        变量 key <类型 = 字节集类>
+        key = 文本到UTF8 (键名称)
+        @ return MMKVMGTool_GetDouble(GetData(),(const char*)@<key>.GetPtr());
+    }
+
+    #
+
+    方法 置文本 <公开 类型 = 逻辑型 返回值注释 = "返回是否成功" @禁止流程检查 = 真>
+    参数 键名称 <类型 = 文本型>
+    参数 值 <类型 = 文本型>
+    {
+        变量 key <类型 = 字节集类>
+        变量 value <类型 = 字节集类>
+        key = 文本到UTF8 (键名称)
+        value = 文本到UTF8 (值)
+        @ return MMKVMGTool_SetString(GetData(),(const char*)@<key>.GetPtr(),(const char*)@<value>.GetPtr());
+
+
+    }
+
+    方法 取句柄 <公开 类型 = 变整数 @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.GetData ()
+
+    }
+
+    方法 取文本 <公开 类型 = 文本型 返回值注释 = "返回是否成功">
+    参数 键名称 <类型 = 文本型>
+    {
+        变量 key <类型 = 字节集类>
+        变量 返回值 <类型 = 文本型>
+        key = 文本到UTF8 (键名称)
+        @ const char * pText = MMKVMGTool_GetString(GetData(),(const char*)@<key>.GetPtr());
+        @ if(pText)
+        @ {
+        @   @<返回值> = pText;
+        @   MMKVMGTool_FreeString(pText);
+        @ }
+        返回 (返回值)
+    }
+
+    方法 置字节集 <公开 类型 = 逻辑型 返回值注释 = "返回是否成功" @禁止流程检查 = 真>
+    参数 键名称 <类型 = 文本型>
+    参数 值 <类型 = 字节集类>
+    {
+        变量 key <类型 = 字节集类>
+        key = 文本到UTF8 (键名称)
+        @ return MMKVMGTool_SetBin(GetData(),(const char*)@<key>.GetPtr(),(void*)@<值>.GetPtr(),(int)@<值>.GetSize());
+    }
+
+    方法 取字节集 <公开 类型 = 字节集类 返回值注释 = "返回是否成功">
+    参数 键名称 <类型 = 文本型>
+    {
+        变量 key <类型 = 字节集类>
+        变量 返回值 <类型 = 字节集类>
+        key = 文本到UTF8 (键名称)
+        @ int nDataSize = 0;
+        @ const char * pText = MMKVMGTool_GetBin(GetData(),(const char*)@<key>.GetPtr(),&nDataSize);
+        @ if(pText)
+        @ {
+        @   CVolMem mem(pText,nDataSize);
+        @   MMKVMGTool_FreeBin(pText);
+        @   return mem;
+        @ }
+        返回 (返回值)
+    }
+
+    #
+
+    方法 置文本数组 <公开 类型 = 逻辑型 返回值注释 = "返回是否成功" @禁止流程检查 = 真>
+    参数 键名称 <类型 = 文本型>
+    参数 值 <类型 = 腾讯文本数组>
+    {
+        变量 key <类型 = 字节集类>
+        key = 文本到UTF8 (键名称)
+        @ return MMKVMGTool_SetVectorString(GetData(),(const char*)@<key>.GetPtr(),@<值>.GetData());
+    }
+
+    方法 取文本数组 <公开 返回值注释 = "返回是否成功" @禁止流程检查 = 真>
+    参数 键名称 <类型 = 文本型>
+    参数 用来保存文本数组 <类型 = 腾讯文本数组>
+    {
+        变量 key <类型 = 字节集类>
+        key = 文本到UTF8 (键名称)
+        @ MMKVMGTool_GetVectorString(GetData(),(const char*)@<key>.GetPtr(),@<用来保存文本数组>.GetData());
+    }
+}
+
+类 腾讯文本数组 <公开 注释 = "这个是 高性能键值表 配套组件，暂时也不建议用到其他地方，当然也可以用的" 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     MMKVMGVectorStringTool_CopyConstruct(m_pData,objCopyFrom.m_pData);
+    # }
+    # public:
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化 <公开>
+    {
+        @ m_pData = MMKVMGVectorStringTool_New();
+    }
+
+    方法 类_清理 <公开>
+    {
+        @ MMKVMGVectorStringTool_Delete(m_pData);
+    }
+
+    方法 取成员数 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ MMKVMGVectorStringTool_GetCount(@sn<this>.GetData())
+    }
+
+    方法 取成员 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ CVolString( MMKVMGVectorStringTool_GetString(@sn<this>.GetData(),@<索引>))
+    }
+
+    方法 加入成员 <公开>
+    参数 要加入的内容 <类型 = 文本型>
+    {
+        变量 bin <类型 = 字节集类>
+        bin = 文本到UTF8 (要加入的内容)
+        @ MMKVMGVectorStringTool_PushString(GetData(),(const char*)@<bin>.GetPtr());
+    }
+
+    方法 删除成员 <公开 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数>
+    {
+        @ MMKVMGVectorStringTool_Erase(@sn<this>.GetData(),@<索引>)
+    }
+
+    方法 清空 <公开 @嵌入式方法 = "">
+    {
+        @ MMKVMGVectorStringTool_Clear(@sn<this>.GetData())
+    }
+
+    #
+}
+
+类 __腾讯键值表测试 <公开>
+{
+    变量 日志 <类型 = 腾讯键值表事件>
+    变量 线程1 <类型 = 线程类f>
+    变量 线程2 <类型 = 线程类f>
+    变量 成员键值表 <类型 = 腾讯键值表>
+
+    方法 开始测试 <公开>
+    {
+        // 日志.启用事件 (7)
+
+
+
+        // 普通测试 ("test1", 真)
+        普通测试 ("test1", 假)
+
+        // 赋值测试 ()
+
+        // 多目录测试 ()
+
+        // 多线程测试 ()
+        // 同目录多个键值表测试 ()
+        // 内存数据库测试 ()
+
+
+
+
+
+    }
+
+    方法 内存数据库测试 <折叠>
+    {
+        变量 kv <类型 = 腾讯键值表>
+        kv.打开 ("aaaa")
+        kv.置文本 ("a", "b  ")
+
+        调试输出 (kv.取文本 ("a"))
+        kv.关闭 ()
+
+
+
+
+    }
+
+    方法 多线程测试 <折叠>
+    {
+        成员键值表.打开 ("test1", 取运行目录 () + "test1\\")
+
+        线程1.创建线程 (指针_取变量指针 (成员键值表))
+        线程2.创建线程 (指针_取变量指针 (成员键值表))
+
+
+        线程1.等待 ()
+        线程2.等待 ()
+
+
+        成员键值表.关闭 ()
+        成员键值表.关闭 ()
+        调试输出 ("主程序执行完毕")
+    }
+
+    方法 多目录测试 <公开 折叠>
+    {
+        变量 kv <类型 = 腾讯键值表>
+        变量 kv2 <类型 = 腾讯键值表>
+        变量 ""
+
+        kv.打开 ("tt1", 取运行目录 () + "tt1\\")
+
+        调试输出 (kv.取逻辑值 ("bool"))
+        // kv.置逻辑值 ("bool", 真)
+        kv.关闭 ()
+
+        kv2.打开 ("tt2", 取运行目录 () + "tt2\\")
+        调试输出 (kv2.取文本 ("bool"))
+
+
+        // kv2.置文本 ("bool", "tttt")
+        kv.关闭 ()
+
+
+    }
+
+    方法 同目录多个键值表测试 <公开 折叠>
+    {
+        变量 kv <类型 = 腾讯键值表>
+        变量 kv2 <类型 = 腾讯键值表>
+        变量 ""
+
+        kv.打开 ("tt1", 取运行目录 () + "tt1\\")
+        kv.置逻辑值 ("bool", 真)
+        kv.关闭 ()
+
+        kv.打开 ("tt1", 取运行目录 () + "tt1\\")
+        调试输出 (kv.取逻辑值 ("bool"))
+        kv.关闭 ()
+
+        kv2.打开 ("tt2", 取运行目录 () + "tt1\\")
+        kv2.置文本 ("bool", "tttt")
+        kv2.关闭 ()
+
+        kv2.打开 ("tt2", 取运行目录 () + "tt1\\")
+        调试输出 (kv2.取文本 ("bool"))
+        kv2.关闭 ()
+
+
+
+    }
+
+    方法 赋值测试 <公开 折叠>
+    {
+
+        变量 kv <类型 = 腾讯键值表>
+        变量 ""
+        变量 kv2 <类型 = 腾讯键值表>
+
+        kv.打开 ("test", 取运行目录 ())
+        kv.置文本 ("txt", "bbb")
+        调试输出 ("--")
+        kv2 = kv
+        // kv.关闭 ()
+
+        调试输出 (kv2.取句柄 ())
+
+        调试输出 ("-------------")
+
+        调试输出 (kv2.取文本 ("txt"))
+
+        调试输出 ("-------------")
+
+
+
+
+    }
+
+    方法 普通测试
+    参数 表名称 <类型 = 文本型>
+    参数 是否写 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 kv <类型 = 腾讯键值表>
+        如果 (是否写)
+        {
+
+            kv.打开 (表名称, 取运行目录 ())
+            kv.置逻辑值 ("bool", 真)
+            如果 (kv.取逻辑值 ("bool") != 真)
+            {
+                调试输出 ("bool 测试不通过")
+            }
+
+            kv.置整数 ("int", 10)
+            如果 (kv.取整数 ("int") != 10)
+            {
+                调试输出 ("int 测试不通过")
+            }
+
+            kv.置长整数 ("int64", 230)
+            如果 (kv.取整数 ("int64") != 230)
+            {
+                调试输出 ("int64 测试不通过")
+            }
+
+            kv.置文本 ("txt", "111111")
+            如果 (kv.取文本 ("txt") != "111111")
+            {
+                调试输出 ("txt 测试不通过")
+            }
+
+            变量 aa <类型 = 字节集类>
+            变量 bb <类型 = 字节集类>
+            aa = 文本到字节集 ("12")
+            kv.置字节集 ("bin", aa)
+            bb = kv.取字节集 ("bin")
+            如果 (bb != aa)
+            {
+                调试输出 ("bin 测试不通过")
+            }
+
+
+
+            变量 v <类型 = 腾讯文本数组>
+            变量 t <类型 = 腾讯文本数组>
+            v.加入成员 ("a")
+            v.加入成员 ("b")
+            kv.置文本数组 ("vtxt", v)
+            kv.取文本数组 ("vtxt", t)
+
+            如果 (t.取成员数 () != 2)
+            {
+                调试输出 ("取文本数组失败")
+            }
+
+            如果 (t.取成员 (0) != "a")
+            {
+                调试输出 ("取文本数组失败1")
+
+            }
+            如果 (t.取成员 (1) != "b")
+            {
+                调试输出 ("取文本数组失败2")
+            }
+
+            调试输出 ("写完毕")
+
+
+        }
+        否则
+        {
+
+            调试输出 ("读取模式")
+            kv.打开 (表名称, 取运行目录 ())
+
+
+            调试输出 (kv.取键数量 ())
+            调试输出 (kv.取总大小 ())
+            调试输出 (kv.取实际大小 ())
+
+            如果 (kv.取逻辑值 ("bool") != 真)
+            {
+                调试输出 ("bool 测试不通过")
+            }
+
+            如果 (kv.取整数 ("int") != 10)
+            {
+                调试输出 ("int 测试不通过")
+            }
+
+
+            如果 (kv.取整数 ("int64") != 230)
+            {
+                调试输出 ("int64 测试不通过")
+            }
+
+
+            如果 (kv.取文本 ("txt") != "111111")
+            {
+                调试输出 ("txt 测试不通过")
+            }
+
+            调试输出 ("读完毕")
+
+        }
+
+
+
+
+    }
+
+    方法 腾讯键值表事件_内容变化 <接收事件 类型 = 整数 折叠>
+    参数 来源对象 <类型 = 腾讯键值表事件>
+    参数 标记值 <类型 = 整数>
+    参数 表名称 <类型 = 文本型>
+    {
+        调试输出 ("高性能键值表 内容变化")
+        返回 (0)
+    }
+
+    方法 腾讯键值表事件_遇到错误 <接收事件 类型 = 整数 折叠>
+    参数 来源对象 <类型 = 腾讯键值表事件>
+    参数 标记值 <类型 = 整数>
+    参数 表名称 <类型 = 文本型>
+    参数 错误类型 <类型 = 整数>
+    {
+
+        调试输出 ("高性能键值表 遇到错误")
+
+        返回 (0)
+    }
+
+    方法 腾讯键值表事件_日志内容 <接收事件 类型 = 整数 折叠>
+    参数 来源对象 <类型 = 腾讯键值表事件>
+    参数 标记值 <类型 = 整数>
+    参数 日志等级 <类型 = 整数>
+    参数 文件名称 <类型 = 文本型>
+    参数 行号 <类型 = 整数>
+    参数 函数名称 <类型 = 文本型>
+    参数 消息内容 <类型 = 文本型>
+    {
+
+        如果 (日志等级 == 0)
+        {
+            调试输出 ("日志 等级 调试")
+        }
+        否则 (日志等级 == 1)
+        {
+            调试输出 ("日志 等级 信息 " + 文件名称)
+        }
+        否则 (日志等级 == 2)
+        {
+            调试输出 ("日志 等级 警告")
+        }
+        否则 (日志等级 == 3)
+        {
+            调试输出 ("日志 等级 错误")
+        }
+        否则 (日志等级 == 4)
+        {
+            调试输出 ("日志 等级 空")
+        }
+
+
+
+        返回 (0)
+    }
+
+    #
+
+    方法 线程类f_工作函数 <接收事件 类型 = 整数>
+    参数 来源对象 <类型 = 线程类f 注释 = "提供事件产生的具体来源对象">
+    参数 标记值 <类型 = 整数 注释 = "用户调用\"挂接事件\"命令时所提供的\"标记值\"参数值,非此方式挂接事件则本参数值固定为0.">
+    参数 线程参数 <类型 = 变整数>
+    {
+
+        如果 (来源对象 == 线程1)
+        {
+            变量 i <类型 = 整数>
+            循环 (0, 100, i)
+            {
+                // 调试输出 ("->1", i)
+                成员键值表.置文本 ("aaa", "bbbb")
+                // 调试输出 ("1<-", i)
+
+
+            }
+
+
+            调试输出 ("1 end")
+
+        }
+        否则 (来源对象 == 线程2)
+        {
+            变量 i <类型 = 整数>
+
+            循环 (0, 100, i)
+            {
+                // 调试输出 ("->2", i)
+                成员键值表.置文本 ("aaa", "bbbb")
+                // 调试输出 (i)
+                // 调试输出 ("2<-", i)
+
+            }
+
+            调试输出 ("2 end")
+
+        }
+
+
+
+        调试输出 ("线程退出")
+
+
+        返回 (0)
+    }
+}

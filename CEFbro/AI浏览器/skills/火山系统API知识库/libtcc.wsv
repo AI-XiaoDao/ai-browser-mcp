@@ -1,0 +1,266 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"windows.硬件特征\"" "" @视窗.外部头文件 = "libtcc\\libtcc.h" ""
+        @视窗.外部库.win32 = "libtcc\\x86\\libtcc.lib" @视窗.附属文件.win32 = "libtcc\\x86\\libtcc.dll"
+        @视窗.附属文件.win32 = "libtcc\\x86\\tcc_system_header" "" @视窗.外部库.x64 = "libtcc\\x64\\libtcc.lib"
+        @视窗.附属文件.x64 = "libtcc\\x64\\libtcc.dll" @视窗.附属文件.x64 = "libtcc\\x64\\tcc_system_header">
+
+类 快脚本输出类型常量 <公开>
+{
+    常量 内存 <公开 类型 = 整数 值 = 1 注释 = "输出到内存">
+    常量 EXE <公开 类型 = 整数 值 = 2>
+    常量 DLL <公开 类型 = 整数 值 = 3>
+    常量 OBJ <公开 类型 = 整数 值 = 4>
+    常量 预处理 <公开 类型 = 整数 值 = 5>
+
+    # 1 输出到内存 2 输出 exe文件 3 输出dll 4 输出obj 5 输出预处理
+}
+
+类 ______快脚本全局类 <公开 @全局类 = 真>
+{
+    方法 快脚本_创建 <公开 静态 类型 = 变整数 @嵌入式方法 = "">
+    {
+        @ (INT_P)tcc_new()
+    }
+
+    方法 快脚本_销毁 <公开 静态 @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数>
+    {
+        @ tcc_delete( (TCCState *)@<脚本句柄>)
+    }
+
+    方法 快脚本_置库目录 <公开 静态 @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数>
+    参数 lib库目录 <类型 = 文本型>
+    {
+        @ tcc_set_lib_path( (TCCState *)@<脚本句柄>, GetMbsText(@<lib库目录>, CVolMem(), NULL) )
+    }
+
+    方法 "//快脚本_置错误回调函数" <公开 静态 @嵌入式方法 = "">
+    {
+        /* set error/warning display callback */
+        LIBTCCAPI void tcc_set_error_func(TCCState *s, void *error_opaque,
+            void (*error_func)(void *opaque, const char *msg));
+
+    }
+
+    # /* set options as from command line (multiple supported) */
+    # LIBTCCAPI void tcc_set_options(TCCState *s, const char *str);
+
+    方法 快脚本_置命令行参数 <公开 静态 @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数>
+    参数 命令行参数 <类型 = 文本型>
+    {
+        @ tcc_set_options(  (TCCState *)@<脚本句柄>, GetMbsText(@<命令行参数>, CVolMem(), NULL))
+    }
+
+    # // /* add include path */
+    # // LIBTCCAPI int tcc_add_include_path(TCCState *s, const char *pathname);
+
+    方法 快脚本_添加头文件目录 <公开 @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数>
+    参数 目录 <类型 = 文本型>
+    {
+        @ tcc_add_include_path(  (TCCState *)@<脚本句柄>, GetMbsText(@<目录>, CVolMem(), NULL))
+    }
+
+    # /* add in system include path */
+    # LIBTCCAPI int tcc_add_sysinclude_path(TCCState *s, const char *pathname);
+
+    方法 快脚本_添加系统头文件目录 <公开 @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数>
+    参数 目录 <类型 = 文本型>
+    {
+        @ tcc_add_sysinclude_path(  (TCCState *)@<脚本句柄>, GetMbsText(@<目录>, CVolMem(), NULL))
+    }
+
+    # /* define preprocessor symbol 'sym'. Can put optional value */
+    # LIBTCCAPI void tcc_define_symbol(TCCState *s, const char *sym, const char *value);
+
+    方法 快脚本_添加符号 <公开 静态 @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数>
+    参数 符号名称 <类型 = 文本型>
+    参数 符号值 <类型 = 文本型>
+    {
+        @ tcc_define_symbol(  (TCCState *)@<脚本句柄>, GetMbsText(@<符号名称>, CVolMem(), NULL),GetMbsText(@<符号值>, CVolMem(), NULL) )
+    }
+
+    # // /* undefine preprocess symbol 'sym' */
+    # // LIBTCCAPI void tcc_undefine_symbol(TCCState *s, const char *sym);
+
+    方法 快脚本_删除符号 <公开 静态 @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数>
+    参数 符号名称 <类型 = 文本型>
+    {
+        @ tcc_undefine_symbol(  (TCCState *)@<脚本句柄>, GetMbsText(@<符号名称>, CVolMem(), NULL) )
+    }
+
+    # /* add a file (C file, dll, object, library, ld script). Return -1 if error. */
+    # LIBTCCAPI int tcc_add_file(TCCState *s, const char *filename);
+
+    方法 快脚本_添加脚本文件 <公开 静态 @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数>
+    参数 文件名称 <类型 = 文本型>
+    {
+        @ tcc_add_file( (TCCState *)@<脚本句柄>, GetMbsText(@<文件名称>, CVolMem(), NULL) )
+    }
+
+    # /* compile a string containing a C source. Return -1 if error. */
+    # LIBTCCAPI int tcc_compile_string(TCCState *s, const char *buf);
+
+    方法 快脚本_编译脚本文本 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数>
+    参数 脚本文本 <类型 = 文本型>
+    {
+        @ tcc_compile_string( (TCCState *)@<脚本句柄>, GetMbsText(@<脚本文本>, CVolMem(), NULL) )
+    }
+
+    #
+    # //连接相关
+    #
+    # /* set output type. MUST BE CALLED before any compilation */
+    # LIBTCCAPI int tcc_set_output_type(TCCState *s, int output_type);
+    # #define TCC_OUTPUT_MEMORY   1 /* output will be run in memory (default) */
+    # #define TCC_OUTPUT_EXE      2 /* executable file */
+    # #define TCC_OUTPUT_DLL      3 /* dynamic library */
+    # #define TCC_OUTPUT_OBJ      4 /* object file */
+    # #define TCC_OUTPUT_PREPROCESS 5 /* only preprocess (used internally) */
+    #
+
+    方法 快脚本_置输出类型 <公开 静态 @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数>
+    参数 类型 <类型 = 整数 注释 = "参考 快脚本输出类型常量  1 输出到内存 2 输出 exe文件 3 输出dll 4 输出obj 5 输出预处理">
+    {
+        @ tcc_set_output_type(  (TCCState *)@<脚本句柄>,@<类型> )
+    }
+
+    # /* equivalent to -Lpath option */
+    # LIBTCCAPI int tcc_add_library_path(TCCState *s, const char *pathname);
+
+    方法 快脚本_添加库目录 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数>
+    参数 目录 <类型 = 文本型>
+    {
+        @ tcc_add_library_path( (TCCState *)@<脚本句柄>, GetMbsText(@<目录>, CVolMem(), NULL))
+    }
+
+    # /* the library name is the same as the argument of the '-l' option */
+    # LIBTCCAPI int tcc_add_library(TCCState *s, const char *libraryname);
+
+    方法 快脚本_添加库 <公开 静态 @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数>
+    参数 库名称 <类型 = 文本型>
+    {
+        @ tcc_add_library( (TCCState *)@<脚本句柄>, GetMbsText(@<库名称>, CVolMem(), NULL) )
+    }
+
+    # /* add a symbol to the compiled program */
+    # LIBTCCAPI int tcc_add_symbol(TCCState *s, const char *name, const void *val);
+
+    方法 快脚本_添加函数 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数>
+    参数 函数名称 <类型 = 文本型>
+    参数 所欲处理的方法 <注释 = "指定欲获取其地址的类静态方法" @匹配方法 = "">
+    {
+        @ tcc_add_symbol(  (TCCState *)@<脚本句柄>,  GetMbsText(@<函数名称>, CVolMem(), NULL) , (const void *)&@<所欲处理的方法> )
+    }
+
+    # /* output an executable, library or object file. DO NOT call
+    #    tcc_relocate() before. */
+    # LIBTCCAPI int tcc_output_file(TCCState *s, const char *filename);
+
+    方法 快脚本_输出到文件 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数>
+    参数 文件名称 <类型 = 文本型>
+    {
+        @ tcc_output_file(   (TCCState *)@<脚本句柄>,  GetMbsText(@<文件名称>, CVolMem(), NULL) )
+    }
+
+    #
+    # /* link and run main() function and return its value. DO NOT call
+    #    tcc_relocate() before. */
+    # LIBTCCAPI int tcc_run(TCCState *s, int argc, char **argv);
+
+    方法 快脚本_运行 <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    参数 脚本句柄 <类型 = 变整数>
+    参数 命令行数组 <类型 = 文本数组类>
+    {
+        变量 数组 <类型 = const_char_point_array类>
+        变量 命令行数量 <类型 = 整数>
+        变量 命令行指针 <类型 = 变整数>
+        数组.从文本数组载入 (命令行数组)
+        命令行数量 = 数组.取成员数 ()
+        命令行指针 = 数组.取数组指针 ()
+        @ return tcc_run(   (TCCState *)@<脚本句柄>,@<命令行数量> ,(char **)@<命令行指针> );
+    }
+
+    #
+    #
+    # /* do all relocations (needed before using tcc_get_symbol()) */
+    # LIBTCCAPI int tcc_relocate(TCCState *s1, void *ptr);
+    # /* possible values for 'ptr':
+    #    - TCC_RELOCATE_AUTO : Allocate and manage memory internally
+    #    - NULL              : return required memory size for the step below
+    #    - memory address    : copy code to memory passed by the caller
+    #    returns -1 if error. */
+    # #define TCC_RELOCATE_AUTO (void*)1
+
+    方法 快脚本_重分配内存 <公开 静态 类型 = 整数 注释 = "/* do all relocations (needed before using tcc_get_symbol()) */" 返回值注释 = "返回-1表示错误"
+            编辑时信息 = "4BFFB, 0, 0, 0" @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数 编辑时信息 = "4BFFB, 0, 0, 0">
+    参数 内存地址 <类型 = 变整数 注释 = "1 表示自动分配 0 返回需要的内存大小  如果是传递的是一个内存指针，则会把代码复制到这个指针地址" 编辑时信息 = "4BFFB, 0, 0, 0" @默认值 = 1>
+    {
+        @ tcc_relocate( (TCCState *)@<脚本句柄> ,(void *) @<内存地址> )
+    }
+
+    #
+    #
+    # /* return symbol value or NULL if not found */
+    # LIBTCCAPI void *tcc_get_symbol(TCCState *s, const char *name);
+
+    方法 快脚本_取函数指针 <公开 静态 类型 = 变整数 返回值注释 = "如果为0 表示找不到函数" @嵌入式方法 = "">
+    参数 脚本句柄 <类型 = 变整数>
+    参数 函数名称 <类型 = 文本型>
+    {
+        @ (INT_P)tcc_get_symbol(  (TCCState *)@<脚本句柄> , GetMbsText(@<函数名称>, CVolMem(), NULL))
+    }
+
+    #
+
+    方法 "//快脚本_调用主函数" <公开 静态 类型 = 整数 注释 = "比如你的主函数的写法必须这样" 注释 = "int main()" 注释 = "{" 注释 = "}" 返回值注释 = "成功1，失败0">
+    参数 脚本句柄 <类型 = 变整数>
+    {
+        变量 需要的内存大小 <类型 = 整数>
+        需要的内存大小 = 快脚本_重分配内存 (脚本句柄, 0)
+        如果 (需要的内存大小 == -1)
+        {
+            调试输出 ("[快脚本_调用主函数] 获取需求内存大小失败 ")
+            返回 (0)
+        }
+
+        变量 内存指针 <类型 = 变整数>
+        内存指针 = 分配内存 (需要的内存大小)
+        // 将要调用的函数代码拷贝到内存
+        如果 (快脚本_重分配内存 (脚本句柄, 内存指针) == -1)
+        {
+            调试输出 ("[快脚本_调用主函数] 分配内存失败")
+            返回 (0)
+        }
+
+        变量 函数指针 <类型 = 变整数>
+        函数指针 = 快脚本_取函数指针 (脚本句柄, "main")
+        // 这里写调用函数
+        如果 (函数指针 == 0)
+        {
+            调试输出 ("[快脚本_调用主函数] 找不到main函数")
+            返回 (0)
+
+        }
+        @  ((int (*)()) @<函数指针>) (); //调用main函数
+        释放内存 (内存指针)
+        返回 (1)
+
+    }
+
+    #
+}

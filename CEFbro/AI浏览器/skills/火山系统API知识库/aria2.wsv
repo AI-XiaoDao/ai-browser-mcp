@@ -1,0 +1,213 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.下载器aria2\"">
+
+类 下载器aria2类 <公开 注释 = "备注：所有参数可以通过 下载器网页控制台抓取 http://aria2c.com/" 注释 = "http://aria2.net/#!/status"
+        @视窗.附属文件.win32 = "aria2\\win32" @视窗.附属文件.x64 = "aria2\\x64">
+{
+    变量 下载器监听端口 <类型 = 文本型>
+    变量 成员_Aria2访问密码 <类型 = 文本型>
+    变量 成员_文件保存目录 <类型 = 文本型>
+    变量 成员_会话标识 <类型 = 长整数 值 = 1>
+
+    方法 关闭 <公开>
+    {
+        变量 提交的数据 <类型 = 文本型 值 = "{\"jsonrpc\":\"2.0\",\"method\":\"aria2.shutdown\",\"params\":[\"token:123\"],\"id\":1}">
+        // {"jsonrpc":"2.0","method":"aria2.shutdown","params":["token:123"],"id":1}
+        _内部_网页访问 (提交的数据)
+    }
+
+    方法 打开 <公开 类型 = 变整数>
+    参数 下载保存目录 <类型 = 文本型 注释 = "不能中文路径，，一般用英文的，如果为空，则保存在软件目录下 DownLoad目录" @默认值 = "">
+    参数 Aria2监听端口 <类型 = 文本型 @默认值 = "6800">
+    参数 BT下载监听端口 <类型 = 文本型 @默认值 = "51413">
+    参数 DHT监听端口 <类型 = 文本型 @默认值 = "6881-6999">
+    参数 访问密码 <类型 = 文本型 @默认值 = "123">
+    参数 是否显示控制台 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 下载器根目录 <类型 = 文本型>
+        变量 命令行参数 <类型 = 文本型>
+        变量 进程句柄 <类型 = 变整数>
+        变量 线程句柄 <类型 = 变整数>
+        变量 进程ID <类型 = 整数>
+        变量 线程ID <类型 = 整数>
+        成员_文件保存目录 = 下载保存目录
+        如果 (成员_文件保存目录 == "")
+        {
+            成员_文件保存目录 = 取运行目录 () + "DownLoad"
+
+        }
+        调试输出 (成员_文件保存目录)
+
+        如果 (文件是否存在 (成员_文件保存目录) == 假)
+        {
+            目录_创建_强制创建 (成员_文件保存目录)
+
+        }
+
+
+
+        下载器根目录 = 取运行目录 () + "Aria2"
+
+        命令行参数 = 下载器根目录 + "\\Aria2c.exe"
+
+        命令行参数 = 命令行参数 + " --conf-path=" + 下载器根目录 + "\\aria2.conf"
+        命令行参数 = 命令行参数 + " --save-session=" + 下载器根目录 + "\\aria2.session"
+        命令行参数 = 命令行参数 + " --input-file=" + 下载器根目录 + "\\aria2.session"
+        命令行参数 = 命令行参数 + " --enable-rpc=true"
+        命令行参数 = 命令行参数 + " --rpc-listen-port=" + Aria2监听端口
+        命令行参数 = 命令行参数 + " --rpc-allow-origin-all=true"
+        命令行参数 = 命令行参数 + " --disable-ipv6=false"
+        命令行参数 = 命令行参数 + " --listen-port=" + BT下载监听端口
+        命令行参数 = 命令行参数 + " --enable-dht=true"
+        命令行参数 = 命令行参数 + " --dht-listen-port=" + DHT监听端口
+        命令行参数 = 命令行参数 + " --dht-file-path=" + 下载器根目录 + "\\dht.dat"
+        命令行参数 = 命令行参数 + " --enable-dht6=true"
+        命令行参数 = 命令行参数 + " --dht-file-path6=" + 下载器根目录 + "\\dht6.dat"
+        调试输出 (命令行参数)
+        成员_Aria2访问密码 = 访问密码
+        // "    --rpc-secret=" + RPC访问密码 + "  "
+        // " --bt-external-ip=" + Aria2内_取外网IP () + " --stop-with-process=" + 到文本 (GetCurrentProcessId ())
+
+        如果 (是否显示控制台)
+        {
+            进程_创建F (命令行参数, 进程句柄, 线程句柄, 进程ID, 线程ID, 假, 5)
+        }
+        否则
+        {
+            进程_创建F (命令行参数, 进程句柄, 线程句柄, 进程ID, 线程ID, 假, 0)
+        }
+        进程_关闭句柄F (线程句柄)
+        返回 (进程句柄)
+    }
+
+    方法 _内部_网页访问 <类型 = 文本型>
+    参数 提交数据 <类型 = 文本型>
+    {
+        变量 r <类型 = CURL>
+        变量 要发送的数据 <类型 = 字节集类>
+        r.Open ("POST", "http://127.0.0.1:" + 下载器监听端口 + "/jsonrpc?tm=" + 时间_取现行时间戳13位_文本 ())
+        要发送的数据 = 文本到UTF8 (提交数据, 假)
+        调试输出 ("提交的数据", 提交数据)
+        r.Send (要发送的数据)
+        调试输出 (r.GetResponsBodyText ())
+        返回 (r.GetResponsBodyText ())
+
+
+
+    }
+
+    方法 获取正在下载 <公开 类型 = 文本型>
+    {
+        变量 提交的数据 <类型 = 文本型 值 = "{\"jsonrpc\":\"2.0\",\"method\":\"aria2.tellActive\",\"params\":[\"token:123\"],\"id\":1}">
+        // {"jsonrpc":"2.0","method":"aria2.tellActive","params":["token:123"],"id":1}
+        返回 (_内部_网页访问 (提交的数据))
+
+    }
+
+    方法 添加任务 <公开>
+    参数 下载链接 <类型 = 文本型>
+    参数 欲保存的文件名 <类型 = 文本型 @默认值 = "">
+    {
+        变量 "//提交的数据" <类型 = 文本型
+                值 = "{\"jsonrpc\":\"2.0\",\"method\":\"aria2.addUri\",\"id\":1,\"params\":[\"token:123\",[\"任务\"],{\"out\":\"文件名\",\"split\":\"16\",\"dir\":\"保存路径\",\"max-connection-per-server\":\"16\"}]}">
+        变量 普通任务 <类型 = 文本型 值 = "{\"jsonrpc\":\"2.0\",\"method\":\"aria2.addUri\",\"id\":标记,\"params\":[[\"下载链接\"],{}]}">
+        变量 会话标识 <类型 = 文本型>
+        // {"jsonrpc":"2.0","method":"aria2.addUri","id":1,"params":["token:123",["任务"],{"out":"文件名","split":"16","dir":"保存路径","max-connection-per-server":"16"}]}
+        会话标识 = 到文本 (成员_会话标识)
+        子文本替换 (普通任务, "标记", 会话标识)
+        子文本替换 (普通任务, "下载链接", 下载链接)
+        _内部_网页访问 (普通任务)
+
+        // 子文本替换 (提交的数据, "任务", 下载链接)
+        // 子文本替换 (提交的数据, "文件名", 欲保存的文件名)
+        // 子文本替换 (提交的数据, "保存路径", 成员_文件保存目录)
+        // _内部_网页访问 (提交的数据)
+        成员_会话标识 = 成员_会话标识 + 1
+
+
+    }
+
+    方法 获取已经停止 <公开>
+    {
+        变量 提交的数据 <类型 = 文本型 值 = "{\"jsonrpc\":\"2.0\",\"method\":\"aria2.tellStopped\",\"id\":1,\"params\":[0,1000]}: ">
+        // {"jsonrpc":"2.0","method":"aria2.tellStopped","id":1,"params":[0,1000]}:
+
+        _内部_网页访问 (提交的数据)
+        // {"id":1,"jsonrpc":"2.0","result":[{"completedLength":"0","connections":"0","dir":"D:CloudStationgchuoshanProject_intaria2Testdebugx64linkerDownLoad","downloadSpeed":"0","errorCode":"3","errorMessage":"Resource not found","files":[{"completedLength":"0","index":"1","length":"0","path":"D:CloudStationgchuoshanProject_intaria2Testdebugx64linkerDownLoad\/test.mp3","selected":"true","uris":[{"status":"used","uri":"http:\/\/i.oppsu.cn\/link\/448147038.mp3"}]}],"gid":"e5b278e28fc25c2a","numPieces":"0","pieceLength":"1048576","status":"error","totalLength":"0","uploadLength":"0","uploadSpeed":"0"}]}
+
+    }
+
+    方法 获取版本 <公开>
+    {
+        变量 提交的数据 <类型 = 文本型 值 = "{\"jsonrpc\":\"2.0\",\"method\":\"aria2.getVersion\",\"id\":1,\"params\":[]}">
+        // {"jsonrpc":"2.0","method":"aria2.getVersion","id":1,"params":[]}
+        _内部_网页访问 (提交的数据)
+    }
+
+    方法 获取全局状态 <公开>
+    {
+        变量 提交的数据 <类型 = 文本型 值 = "{\"jsonrpc\":\"2.0\",\"method\":\"aria2.getGlobalStat\",\"id\":1,\"params\":[]}">
+        // {"jsonrpc":"2.0","method":"aria2.getGlobalStat","id":1,"params":[]}
+        _内部_网页访问 (提交的数据)
+    }
+
+    方法 获取正在等待 <公开>
+    {
+        变量 提交的数据 <类型 = 文本型 值 = "{\"jsonrpc\":\"2.0\",\"method\":\"aria2.tellWaiting\",\"id\":1,\"params\":[0,1000]}:">
+        // {"jsonrpc":"2.0","method":"aria2.tellWaiting","id":1,"params":[0,1000]}:
+        _内部_网页访问 (提交的数据)
+    }
+
+    方法 删除下载记录 <公开>
+    参数 任务标记 <类型 = 文本型 注释 = "下载器_aria2_添加任务 会返回这个任务标记">
+    {
+        变量 提交的数据 <类型 = 文本型
+                值 = "[{\"jsonrpc\":\"2.0\",\"method\":\"aria2.removeDownloadResult\",\"id\":1,\"params\":[\"e5b278e28fc25c2a\"]}]">
+        // [{"jsonrpc":"2.0","method":"aria2.removeDownloadResult","id":1,"params":["e5b278e28fc25c2a"]}]
+        _内部_网页访问 (提交的数据)
+    }
+
+    方法 暂停任务 <公开>
+    参数 任务标记 <类型 = 文本型 注释 = "下载器_aria2_添加任务 会返回这个任务标记">
+    {
+        变量 提交的数据 <类型 = 文本型
+                值 = "{\"jsonrpc\":\"2.0\",\"method\":\"aria2.pause\",\"id\":1,\"params\":[\"token:123\",\"e5b278e28fc25c2a\"]}">
+        // {"jsonrpc":"2.0","method":"aria2.pause","id":1,"params":["token:123","e5b278e28fc25c2a"]}
+        _内部_网页访问 (提交的数据)
+    }
+
+    方法 继续任务 <公开>
+    参数 任务标记 <类型 = 文本型 注释 = "下载器_aria2_添加任务 会返回这个任务标记">
+    {
+        变量 提交的数据 <类型 = 文本型
+                值 = "{\"jsonrpc\":\"2.0\",\"method\":\"aria2.unpause\",\"id\":1,\"params\":[\"token:123\",\"e5b278e28fc25c2a\"]}">
+        // {"jsonrpc":"2.0","method":"aria2.unpause","id":1,"params":["token:123","e5b278e28fc25c2a"]}
+        _内部_网页访问 (提交的数据)
+    }
+
+    方法 全部暂停 <公开>
+    {
+        变量 提交的数据 <类型 = 文本型 值 = "{\"jsonrpc\":\"2.0\",\"method\":\"aria2.pauseAll\",\"id\":1,\"params\":[\"token:123\"]}">
+        // {"jsonrpc":"2.0","method":"aria2.pauseAll","id":1,"params":["token:123"]}:
+        _内部_网页访问 (提交的数据)
+    }
+
+    方法 全部继续 <公开>
+    {
+        变量 提交的数据 <类型 = 文本型 值 = "{\"jsonrpc\":\"2.0\",\"method\":\"aria2.unpauseAll\",\"id\":1,\"params\":[\"token:123\"]}">
+        // {"jsonrpc":"2.0","method":"aria2.unpauseAll","id":1,"params":["token:123"]}:
+        _内部_网页访问 (提交的数据)
+    }
+
+    方法 添加BT任务 <公开>
+    参数 bt文件路径 <类型 = 文本型>
+    {
+        变量 提交的数据 <类型 = 文本型 值 = "{\"jsonrpc\":\"2.0\",\"method\":\"aria2.addTorrent\",\"params\":[\"token:123\",\"本地BT\"],\"id\":1}">
+        // {"jsonrpc":"2.0","method":"aria2.addTorrent","params":["token:123","本地BT"],"id":1}
+        提交的数据 = 文本_替换 (提交的数据, "本地BT", bt文件路径)
+        _内部_网页访问 (提交的数据)
+    }
+
+    #
+}

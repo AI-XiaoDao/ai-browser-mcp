@@ -1,0 +1,1865 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 xc.gui <注释 = "" 注释 = "请确保此目录dll文件存在,所以报错" @文档 = "category = \"炫彩WEB组件\""
+        @视窗.附属文件 = "..\\..\\sys\\vMiniblink\\lib\\$(p)\\node.dll">
+
+类 炫彩MB浏览器 <公开 基础类 = 元素基类 注释 = "请自行下载\"node.dll\"文件" @视窗.外部头文件 = "<vector>">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (XCmbWebWiewWrapper)
+    # @begin
+    # <>     <include>
+    # //HELE   m_hEleView;
+    # //wkeWebView m_webView;
+    # //void* m_pixels;
+    # //HDC m_hDC;
+    #         int OnDraw(HELE hEle,HDRAW hDraw,BOOL *pbHandled);//2
+    #         int OnMouseWheel(HELE hEle,UINT nFlags,POINT *pPt,BOOL *pbHandled);
+    #         bool OnMouseEvent(HELE hEle,UINT message,UINT nFlags,POINT *pPt);
+    #         int OnLButtonDown(HELE hEle,UINT nFlags, POINT *pPt,BOOL *pbHandled);
+    #         int OnLButtonUp(HELE hEle,UINT nFlags, POINT *pPt,BOOL *pbHandled);
+    #         int OnRButtonDown (HELE hEle,UINT nFlags, POINT *pPt,BOOL *pbHandled);//12
+    #         int OnRButtonUp(HELE hEle,UINT nFlags, POINT *pPt,BOOL *pbHandled);
+    #         int OnMouseMove(HELE hEle,UINT nFlags, POINT *pPt,BOOL *pbHandled);
+    #         int OnSetFocus(HELE hEle,BOOL *pbHandled);
+    #         int OnKillFocus(HELE hEle,BOOL *pbHandled);
+    #         int OnEleSize(HELE hEle,BOOL *pbHandled);
+    #        // int OnEleXCTimer(HELE hEle,UINT nTimerID,BOOL *pbHandled);
+    #         int OnKeyDown(HELE hEle,WPARAM wParam,LPARAM lParam,BOOL *pbHandled);
+    #         int OnKeyUp(HELE hEle,WPARAM wParam,LPARAM lParam,BOOL *pbHandled);
+    #         int OnChar(HELE hEle,WPARAM wParam,LPARAM lParam,BOOL *pbHandled);
+    #         int OnImeStartComposition(HELE hEle,WPARAM wParam,LPARAM lParam,BOOL *pbHandled) ;
+    #         int OnDestroy(HELE hEle,BOOL *pbHandled);
+    #         int OnSetCursor(HELE hEle,WPARAM wParam,LPARAM lParam,BOOL *pbHandled);
+    #         void OnPaintUpdatedCallback(const HDC hdc, int x, int y, int cx, int cy);
+    # public:
+    #     inline_ @sn<current_class>(wkeWebView webView):@sn<current_class>()    {
+    #         data().SetwebView(webView);  
+    #     }
+    #     inline_ wkeWebView GetwebView()     { 
+    #         wkeWebView webView = data().GetwebView();
+    #         return webView;
+    #     }
+    #     inline_ void SetwebView(wkeWebView webView)     { 
+    #         data().SetwebView(webView);  
+    #     }
+    # <>     </include>
+    # int @dt<炫彩MB浏览器>::OnSetCursor (HELE hEle,WPARAM wParam, LPARAM lParam, BOOL *pbHandled) {
+    #     int nResult = wkeGetCursorInfoType (data().GetwebView()) ; // 获取当前光标
+    # //    int arrCursType[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43 };
+    # //    LPWSTR arrCurs[]={IDC_ARROW,IDC_CROSS,IDC_HAND,IDC_IBEAM,IDC_WAIT,IDC_HELP,IDC_SIZEWE,IDC_SIZENS,IDC_SIZENESW,IDC_SIZENWSE,       IDC_SIZENS,IDC_SIZENWSE,IDC_SIZENESW,IDC_SIZEWE,IDC_SIZENS,IDC_SIZEWE,IDC_SIZENESW,IDC_SIZENWSE,IDC_SIZEWE,IDC_SIZENS,IDC_SIZE,IDC_SIZEWE,IDC_SIZEWE,IDC_SIZENESW,IDC_SIZENWSE,IDC_SIZENS,IDC_SIZENWSE,IDC_SIZENESW,IDC_SIZEWE,IDC_SIZEALL,IDC_IBEAM,IDC_ARROW,IDC_ARROW,IDC_ARROW,IDC_APPSTARTING,IDC_NO,IDC_ARROW,(LPWSTR)-1,IDC_NO,IDC_CROSS,IDC_SIZEALL,IDC_ARROW,IDC_ARROW,IDC_ARROW};
+    # //int length =sizeof(arrCursType)/sizeof(arrCursType[0]);
+    # std::vector<INT> arrCurs = { 0, 32512, 1, 32515, 2, 32649, 3, 32513, 4, 32514, 5, 32651, 6, 32644, 7, 32645, 8, 32643, 9, 32642, 10, 32645, 11, 32642, 12, 32643, 13, 32644, 14, 32645, 15, 32644, 16, 32643, 17, 32642, 18, 32644, 19, 32645, 20, 32640, 21, 32644, 22, 32644, 23, 32643, 24, 32642, 25, 32645, 26, 32642, 27, 32643, 28, 32644, 29, 32646, 30, 32513, 31, 32512, 32, 32512, 33, 32512, 34, 32650, 35, 32648, 36, 32512, 37, -1, 38, 32648, 39, 32515, 40, 32646, 41, 32512, 42, 32512, 43, 32512 };
+    #     LPWSTR hCursor = NULL;
+    #     for(int i = 0;i < arrCurs.size() / 2; i++){
+    #         if(nResult == arrCurs [i*2]){
+    #         hCursor = MAKEINTRESOURCE(arrCurs [i*2+1]);
+    #         //DebugTrace (FALSE, 0, 0, _T ("nnn"),  nResult,hCursor,length);
+    #         break;
+    #         }
+    #     }
+    #     if((int)hCursor == -1 ){  
+    #         hCursor=(LPWSTR)0;
+    #     }
+    #     if((int)hCursor != 0) {
+    #         //DebugTrace (FALSE, 0, 0, _T ("n"),  hCursor);
+    #          HCURSOR Cursor = LoadCursorW (0, hCursor);
+    #          SetCursor (Cursor);
+    #     }else {
+    #         hCursor=(LPWSTR)0;
+    #     }
+    #    *pbHandled = TRUE;
+    #     return 0;
+    # }
+    # int @dt<炫彩MB浏览器>::OnDestroy (HELE hEle,BOOL *pbHandled) {
+    #     //XEle_KillXCTimer(hEle,5195);
+    #     wkeDestroyWebView(data().GetwebView());
+    #    // delete @<this>; //释放扩展类
+    # return 0;
+    # }
+    # int @dt<炫彩MB浏览器>::OnKeyUp (HELE hEle,WPARAM wParam,LPARAM lParam,BOOL *pbHandled) {
+    #   unsigned int virtualKeyCode = wParam;
+    #   unsigned int flags = 0;
+    #   if (HIWORD(lParam) & KF_REPEAT)
+    #    flags |= WKE_REPEAT;
+    #   if (HIWORD(lParam) & KF_EXTENDED)
+    #    flags |= WKE_EXTENDED;
+    #   //flags = HIWORD(lParam);
+    #   if (wkeFireKeyUpEvent(data().GetwebView(), virtualKeyCode, flags, false))  {
+    #    *pbHandled = TRUE;
+    #   }
+    #   return 0;
+    # }
+    # int @dt<炫彩MB浏览器>::OnChar (HELE hEle,WPARAM wParam,LPARAM lParam,BOOL *pbHandled) {
+    #   unsigned int charCode = wParam;
+    #   unsigned int flags = 0;
+    #   if (HIWORD(lParam) & KF_REPEAT)
+    #    flags |= WKE_REPEAT;
+    #   if (HIWORD(lParam) & KF_EXTENDED)
+    #    flags |= WKE_EXTENDED;
+    #   //flags = HIWORD(lParam);
+    #   if (wkeFireKeyPressEvent(data().GetwebView(), charCode, flags, false))  {
+    #    *pbHandled = TRUE;
+    #   }
+    #   return 0;
+    # }
+    # int @dt<炫彩MB浏览器>::OnKeyDown (HELE hEle,WPARAM wParam,LPARAM lParam,BOOL *pbHandled) {
+    #  OnImeStartComposition(hEle,wParam,lParam,pbHandled) ;
+    #   unsigned int virtualKeyCode = wParam;
+    #   unsigned int flags = 0;
+    #   if (HIWORD(lParam) & KF_REPEAT)
+    #    flags |= WKE_REPEAT;
+    #   if (HIWORD(lParam) & KF_EXTENDED)
+    #    flags |= WKE_EXTENDED;
+    #   //flags = HIWORD(lParam);
+    #   if (wkeFireKeyDownEvent(data().GetwebView(), virtualKeyCode, flags, false))  {
+    #    *pbHandled = TRUE;
+    #   }
+    #       return 0;
+    # }
+    # int @dt<炫彩MB浏览器>::OnEleSize (HELE hEle,BOOL *pbHandled) {
+    # if (data().GetwebView() )  {
+    #    int cx = XEle_GetWidth(hEle);
+    #    int cy = XEle_GetHeight(hEle);
+    #    wkeResize(data().GetwebView(), cx, cy);
+    # //    wkeSetDirty(m_webView,true);
+    #   }
+    #       return 0;
+    # }
+    # int @dt<炫彩MB浏览器>::OnKillFocus (HELE hEle,BOOL *pbHandled) {
+    #    wkeKillFocus(data().GetwebView());
+    #   *pbHandled = TRUE;
+    #    return 0;
+    # }
+    # int @dt<炫彩MB浏览器>::OnSetFocus (HELE hEle,BOOL *pbHandled) {
+    #    wkeSetFocus(data().GetwebView());
+    #   *pbHandled = TRUE;
+    #    return 0;
+    # }
+    # int @dt<炫彩MB浏览器>::OnDraw(HELE hEle,HDRAW hDraw,BOOL *pbHandled) {
+    #     *pbHandled =TRUE;
+    #     int cx = XEle_GetWidth(hEle);
+    #     int cy = XEle_GetHeight(hEle);
+    #   //  m_hDC = CreateCompatibleDC(0);
+    #  //   BITMAPINFO bi;
+    # //    memset(&bi, 0, sizeof(bi));
+    # //    bi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    # //    bi.bmiHeader.biWidth     = int(cx);
+    # //    bi.bmiHeader.biHeight    = -int(cy);
+    #  //   bi.bmiHeader.biPlanes    = 1;
+    # //    bi.bmiHeader.biBitCount = 32;
+    # //    bi.bmiHeader.biCompression   = BI_RGB;
+    # //    HBITMAP hbmp = ::CreateDIBSection(0, &bi, DIB_RGB_COLORS, &m_pixels, NULL, 0);
+    # //    SelectObject(m_hDC, hbmp);
+    # //    wkePaint(data().GetwebView(), m_pixels, 0);
+    #     //XDraw_GDI_BitBlt(hDraw,0, 0, cx, cy, m_hDC, 0, 0, SRCCOPY);
+    # //   DeleteDC(m_hDC);
+    # HDC hdcWke = wkeGetViewDC(data().GetwebView());
+    # XDraw_GDI_BitBlt(hDraw,0, 0, cx, cy, hdcWke, 0, 0, SRCCOPY);
+    # //DeleteDC(hdcWke);
+    #     return 0;
+    #     }
+    # int @dt<炫彩MB浏览器>::OnMouseWheel (HELE hEle,UINT nFlags, POINT *pPt,BOOL *pbHandled) {
+    #   HWND hWnd = XWidget_GetHWND(hEle);
+    #   POINT pt;
+    #   pt.x = pPt->x;
+    #   pt.y = pPt->y;
+    #   ScreenToClient(hWnd, &pt);
+    #   int delta = GET_WHEEL_DELTA_WPARAM(nFlags);
+    #   unsigned int flags = 0;
+    #   if (nFlags & MK_CONTROL)
+    #    flags |= WKE_CONTROL;
+    #   if (nFlags & MK_SHIFT)
+    #    flags |= WKE_SHIFT;
+    #   if (nFlags & MK_LBUTTON)
+    #    flags |= WKE_LBUTTON;
+    #   if (nFlags & MK_MBUTTON)
+    #    flags |= WKE_MBUTTON;
+    #   if (nFlags & MK_RBUTTON)
+    #    flags |= WKE_RBUTTON;
+    #   //flags = wParam;
+    #   if (wkeFireMouseWheelEvent(data().GetwebView(), pt.x, pt.y, delta, flags)) {
+    #    *pbHandled = TRUE;
+    #   }
+    #         return 0;
+    #     }
+    # int @dt<炫彩MB浏览器>::OnLButtonDown (HELE hEle,UINT nFlags, POINT *pPt,BOOL *pbHandled) {
+    #     if (OnMouseEvent(hEle,WM_LBUTTONDOWN,nFlags,pPt))  {
+    #        *pbHandled = TRUE;
+    #       }
+    #       return 0;
+    # }
+    # int @dt<炫彩MB浏览器>::OnLButtonUp (HELE hEle,UINT nFlags, POINT *pPt,BOOL *pbHandled) {
+    #     if (OnMouseEvent(hEle,WM_LBUTTONUP,nFlags,pPt))  {
+    #        *pbHandled = TRUE;
+    #       }
+    #       return 0;
+    # }
+    # int @dt<炫彩MB浏览器>::OnRButtonDown (HELE hEle,UINT nFlags, POINT *pPt,BOOL *pbHandled) {
+    #     if (OnMouseEvent(hEle,WM_RBUTTONDOWN,nFlags,pPt))  {
+    #        *pbHandled = TRUE;
+    #       }
+    #       return 0;
+    # }
+    # int @dt<炫彩MB浏览器>::OnRButtonUp (HELE hEle,UINT nFlags, POINT *pPt,BOOL *pbHandled) {
+    #     if (OnMouseEvent(hEle,WM_RBUTTONUP,nFlags,pPt))  {
+    #        *pbHandled = TRUE;
+    #       }
+    #       return 0;
+    # }
+    # int @dt<炫彩MB浏览器>::OnMouseMove (HELE hEle,UINT nFlags, POINT *pPt,BOOL *pbHandled) {
+    #     if (OnMouseEvent(hEle,WM_MOUSEMOVE,nFlags,pPt))  {
+    #        *pbHandled = TRUE;
+    #       }
+    #       return 0;
+    # }
+    # bool @dt<炫彩MB浏览器>::OnMouseEvent(HELE hEle,UINT message,UINT nFlags,POINT *pPt){
+    # // @ DebugTrace (FALSE, 0, 0, _T ("pnn"),  hWnd,message,nFlags);
+    #  if (message == WM_LBUTTONDOWN || message == WM_MBUTTONDOWN || message == WM_RBUTTONDOWN)  {
+    #    XWnd_SetFocusEle(XWidget_GetHWINDOW(hEle),hEle);
+    #    XEle_SetCapture(hEle,TRUE);
+    # //   SetCapture(hWnd);
+    #   }
+    #   else if (message == WM_LBUTTONUP || message == WM_MBUTTONUP || message == WM_RBUTTONUP)  {
+    #    XEle_SetCapture(hEle,FALSE);
+    # //   ReleaseCapture();
+    #   }
+    #   int x = pPt->x;
+    #   int y = pPt->y;
+    #   unsigned int flags = 0;
+    #   if (nFlags & MK_CONTROL)
+    #    flags |= WKE_CONTROL;
+    #   if (nFlags & MK_SHIFT)
+    #    flags |= WKE_SHIFT;
+    #   if (nFlags & MK_LBUTTON)
+    #    flags |= WKE_LBUTTON;
+    #   if (nFlags & MK_MBUTTON)
+    #    flags |= WKE_MBUTTON;
+    #   if (nFlags & MK_RBUTTON)
+    #    flags |= WKE_RBUTTON;
+    #   //flags = wParam;
+    #   return wkeFireMouseEvent(data().GetwebView(), message, x, y, flags);
+    #  }
+    #  int @dt<炫彩MB浏览器>::OnImeStartComposition(HELE hEle,WPARAM wParam,LPARAM lParam,BOOL *pbHandled) {
+    #   HWND hWnd = XWidget_GetHWND(hEle);
+    #   wkeRect caret = wkeGetCaretRect(data().GetwebView());
+    #   CANDIDATEFORM form;
+    #    RECT rc ;
+    #  XEle_GetRect(hEle,&rc);
+    #   form.dwIndex = 0;
+    #   form.dwStyle = CFS_EXCLUDE;
+    #   form.ptCurrentPos.x = caret.x + rc.left;
+    #   form.ptCurrentPos.y = caret.y + caret.h +rc.top;
+    #   form.rcArea.top = caret.y +rc.top;
+    #   form.rcArea.bottom = caret.y + caret.h  + rc.top + 65;
+    #   form.rcArea.left = caret.x+ rc.left;
+    #   form.rcArea.right = caret.x + caret.w+ rc.left;
+    #   COMPOSITIONFORM comfrom;
+    #   comfrom.dwStyle = CFS_EXCLUDE;
+    #   comfrom.ptCurrentPos = form.ptCurrentPos;
+    #   comfrom.rcArea = form.rcArea;
+    #   HIMC hIMC = ImmGetContext(hWnd);
+    #   ImmSetCandidateWindow(hIMC, &form);
+    #   ImmSetCompositionWindow (hIMC, &comfrom);
+    #   ImmReleaseContext(hWnd, hIMC);
+    #   *pbHandled = TRUE;
+    #   return 0;
+    #  }
+    # // 回调1：文档就绪
+    #  void handleDocumentReady(wkeWebView webWindow, void* param){
+    #     @sn<current_class>* pThis = (@sn<current_class>*)param;
+    #     pThis->@<文档就绪>();  
+    # }
+    # // 回调2：文档就绪2
+    #  void handleDocumentReady2(wkeWebView webWindow, void* param, wkeWebFrameHandle frameId){
+    #     @sn<current_class>* pThis = (@sn<current_class>*)param;
+    #     pThis->@<文档就绪2>((INT_P)frameId); 
+    # }
+    # // 回调3：页面标题改变
+    # void handleTitleChanged(wkeWebView webWindow, void* param, const wkeString title){
+    #     wkeSetWindowTitleW(webWindow, wkeGetStringW(title)); //const wchar_t*
+    #     CVolString str = CVolString(wkeGetString(title)); //const char_t*
+    #     @sn<current_class>* pThis = (@sn<current_class>*)param;
+    #     pThis->@<标题被改变>( str);   
+    # }
+    # //回调4：开始加载Url
+    # bool handleLoadUrlBegin(wkeWebView webView, void* param, const char* url, void* job){
+    #     @sn<current_class>* pThis = (@sn<current_class>*)param;
+    #     CVolString urlStr(url);
+    #     @dt<炫彩MB网络工作> net ;
+    #     net.@n<炫彩MB网络工作.绑定>((INT_P)job);
+    #     return pThis->@<开始加载Url>(urlStr,(INT_P)job, net);
+    # }
+    # //回调5：结束加载Url
+    # void handleLoadUrlEnd(wkeWebView webView, void* param, const char* url, void* job, void* buf, int len) {
+    #     @sn<current_class>* pThis = (@sn<current_class>*)param;
+    #     CVolString urlStr(url);
+    #     CVolMem memBuf(buf, len);
+    #     @dt<炫彩MB网络工作> net ;
+    #     net.@n<炫彩MB网络工作.绑定>((INT_P)job);
+    #     pThis->@<结束加载Url>(urlStr, (INT_P)job, net, memBuf, len);
+    # }
+    # //回调6：Url被改变
+    # void handleURLChanged(wkeWebView webView, void* param, const wkeString url){
+    #     @sn<current_class>* pThis = (@sn<current_class>*)param;
+    #     CVolString str(wkeGetString(url));
+    #     pThis->@<Url被改变>(str);
+    # }
+    # //回调7：Url被改变2
+    # void handleURLChanged2(wkeWebView webView, void* param, wkeWebFrameHandle frameId, const wkeString url){
+    #     @sn<current_class>* pThis = (@sn<current_class>*)param;
+    #     CVolString str(wkeGetString(url));
+    #      pThis->@<Url被改变2>((INT_P)frameId,str);
+    # }
+    # //回调8：载入完成
+    # void handleLoadingFinish(wkeWebView webView, void* param, const wkeString url, wkeLoadingResult result, const wkeString failedReason){
+    #     @sn<current_class>* pThis = (@sn<current_class>*)param;
+    #     CVolString strUrl(wkeGetString(url));
+    #     CVolString strFailedReasonl(wkeGetString(failedReason));
+    #     pThis->@<载入完成>(strUrl,(@dt<整数>)result,strFailedReasonl);
+    # }
+    # //回调9：Alert
+    # void handleAlertBoxCallback(wkeWebView webView, void* param, const wkeString msg){
+    #  @sn<current_class>* pThis = (@sn<current_class>*)param;
+    #  CVolString strMsg(wkeGetString(msg));
+    #  pThis->@<Alert被调用>(strMsg);
+    # }
+    # //回调10： Confirm 
+    # bool handleConfirmBoxCallback(wkeWebView webView, void* param, const wkeString msg){
+    #  @sn<current_class>* pThis = (@sn<current_class>*)param;
+    #  CVolString strMsg(wkeGetString(msg));
+    #  return pThis->@<Confirm被调用>(strMsg);
+    # }
+    # //回调11： Prompt
+    # bool handlePromptBoxCallback(wkeWebView webView, void* param, const wkeString msg, const wkeString defaultResult, wkeString result){
+    #  @sn<current_class>* pThis = (@sn<current_class>*)param;
+    #  CVolString strMsg(wkeGetString(msg));
+    #  CVolString strDefaultResult(wkeGetString(defaultResult));
+    #  CVolString strResult(wkeGetString(result));
+    #  return pThis->@<Prompt被调用>(strMsg,strDefaultResult,strResult);
+    # }
+    # //回调12： 即将导航 
+    # bool handleNavigationCallback (wkeWebView webView, void* param, wkeNavigationType navigationType, wkeString url){
+    #     @sn<current_class>* pThis = (@sn<current_class>*)param;
+    #     CVolString urlStr(wkeGetString(url));
+    #     int r = pThis->@<即将导航>(navigationType,urlStr);
+    #     if(r ==0) return 1;
+    #     return 0;
+    # }
+    # void OnWkePaintUpdatedCallback(wkeWebView webView, void* param, const HDC hdc, int x, int y, int cx, int cy) {
+    #     @sn<current_class>* pThis = (@sn<current_class>*)param;
+    #     pThis->OnPaintUpdatedCallback(hdc,x,y,cx,cy);
+    # }
+    #
+    # void @dt<炫彩MB浏览器>::OnPaintUpdatedCallback(const HDC hdc, int x, int y, int cx, int cy){
+    #    if (!IsIconic(XWidget_GetHWND((HELE)get())) && wkeIsDirty(data().GetwebView()) && XWidget_IsShow((HELE)get()))   {
+    #     XEle_Redraw((HELE)get(),FALSE);
+    #    }
+    #
+    # }
+    #  @end
+
+    方法 文档就绪 <公开 定义事件 类型 = 整数 注释 = "当前页面文档就绪时触发此事件" "">
+
+    方法 文档就绪2 <公开 定义事件 类型 = 整数 注释 = "当前页面文档就绪时触发此事件" 折叠 "">
+    参数 框架ID <类型 = 变整数 注释 = "触发当前事件的页面框架ID">
+
+    方法 标题被改变 <公开 定义事件 类型 = 整数 注释 = "当浏览器标题被改变时触发此事件" 折叠>
+    参数 页面标题 <类型 = 文本型 注释 = "被改变页面的标题">
+
+    方法 开始加载Url <公开 定义事件 类型 = 整数 注释 = "浏览器在开始一个请求时触发此事件,本事件中封装了一个类型为\"MB网络工作\"的对象,可对此次请求进行修改或拦截操作" 折叠>
+    参数 链接地址 <类型 = 文本型 注释 = "开始请求的url地址">
+    参数 网络工作指针 <类型 = 变整数 注释 = "网络工作指针">
+    参数 网络工作 <类型 = 炫彩MB网络工作 注释 = "MB浏览器网络相关操作">
+
+    方法 结束加载Url <公开 定义事件 类型 = 整数 注释 = "在 \"开始加载Url\" 事件中调用 \"网络工作.Hook请求()\"方法 在本事件中触发 并获得此次请求响应的数据" 折叠>
+    参数 链接地址 <类型 = 文本型 注释 = "请求的url地址">
+    参数 网络工作指针 <类型 = 变整数 注释 = "MB网络工作指针">
+    参数 网络工作 <类型 = 炫彩MB网络工作 注释 = "MB浏览器网络相关操作">
+    参数 响应数据 <类型 = 字节集类 注释 = "拦截到的响应数据">
+    参数 数据长度 <类型 = 整数 注释 = "数据长度">
+
+    方法 Url被改变 <公开 定义事件 类型 = 整数 注释 = "当浏览器Url被改变时触发此事件" 折叠>
+    参数 链接地址 <类型 = 文本型 注释 = "当前浏览器的url地址">
+
+    方法 Url被改变2 <公开 定义事件 类型 = 整数 注释 = "当浏览器Url被改变时触发此事件" 折叠>
+    参数 框架ID <类型 = 变整数 注释 = "触发此事件所在的框架ID">
+    参数 链接地址 <类型 = 文本型 注释 = "当前浏览器的url地址">
+
+    方法 载入完成 <公开 定义事件 类型 = 整数 注释 = "  当浏览器载入完成触发此事件,由于现代网页大多采用动态加载,多框架等原因,"
+            注释 = "本事件返回的加载完成并不等于\"网页已全部加载完成\",只表示MB已接收了服务器本次传回的全部数据." 折叠 折叠2>
+    参数 链接地址 <类型 = 文本型 注释 = "当前载入页面的url">
+    参数 返回状态 <类型 = 整数 注释 = "返回状态 0:载入成功(SUCCEEDED)  1:载入失败(FAILED)  2:取消载入(CANCELED)">
+    参数 失败原因 <类型 = 文本型 注释 = "失败原因">
+
+    方法 Alert被调用 <公开 定义事件 类型 = 整数 注释 = "页面中js调用alert()方法 弹出信息框" 折叠>
+    参数 提示文本 <类型 = 文本型 注释 = "信息框提示文本">
+
+    方法 Confirm被调用 <公开 定义事件 类型 = 整数 注释 = "页面中js调用confirm()方法 弹出信息框" 折叠>
+    参数 提示文本 <类型 = 文本型 注释 = "信息框提示文本">
+
+    方法 Prompt被调用 <公开 定义事件 类型 = 整数 注释 = "页面中js调用prompt()方法 弹出对话框" 折叠>
+    参数 提示文本 <类型 = 文本型 注释 = "对话框中显示的提示文本 网页prompt 函数的第1个参数">
+    参数 默认输入文本 <类型 = 文本型 注释 = "默认输入文本 调用prompt 函数的第二个参数">
+    参数 输入文本 <类型 = 文本型 注释 = "输入的文本">
+
+    方法 即将导航 <公开 定义事件 类型 = 整数 注释 = "浏览器即将跳转时触发此事件" 返回值注释 = "返回非0将拦截本次导航" 折叠 "">
+    参数 导航类型 <类型 = 炫彩MB导航类型 注释 = "MB导航类型常量">
+    参数 链接地址 <类型 = 文本型 注释 = "即将导航的链接地址">
+
+    方法 事件_文档就绪 <公开 折叠>
+    {
+        @ wkeOnDocumentReady(GetwebView(), handleDocumentReady, this);
+    }
+
+    方法 事件_文档就绪2 <公开 折叠>
+    {
+        @ wkeOnDocumentReady2(GetwebView(), handleDocumentReady2, this);
+    }
+
+    方法 事件_标题被改变 <公开 折叠>
+    {
+        @ wkeOnTitleChanged(GetwebView(), handleTitleChanged, this);
+    }
+
+    方法 事件_开始加载Url <公开 折叠>
+    {
+        @ wkeOnLoadUrlBegin(GetwebView(), handleLoadUrlBegin, this);
+    }
+
+    方法 事件_结束加载Url <公开 折叠>
+    {
+        @ wkeOnLoadUrlEnd(GetwebView(),  handleLoadUrlEnd, this);
+    }
+
+    方法 事件_即将导航 <公开 折叠>
+    {
+        @ wkeOnNavigation(GetwebView(), handleNavigationCallback, this);
+    }
+
+    方法 创建 <公开 注释 = "MiniBlink 创建窗口">
+    参数 x <类型 = 整数>
+    参数 y <类型 = 整数>
+    参数 cx <类型 = 整数>
+    参数 cy <类型 = 整数>
+    参数 hParent <类型 = 变整数>
+    参数 DllPath <类型 = 文本型 注释 = "MiniBlink动态库名称默认为\"node.dll\"用户可通过此参数修改调用动态库dll名称,请将改名后的dll库放置在编译目录." @默认值 = "node.dll">
+    {
+        @  wkeSetWkeDllPath(@<DllPath>);
+        @  wkeInitialize();
+        @  set((INT_P) XEle_Create(@<x>,@<y>,@<cx>,@<cy>,(HXCGUI)@<hParent>));
+        @  SetwebView ( wkeCreateWebView());
+        @ wkeOnPaintUpdated(GetwebView(), OnWkePaintUpdatedCallback,this);
+        @  wkeResize(GetwebView(), @<cx>, @<cy>);
+        @  XEle_RegEventCPP1((HELE)get(),XE_SETCURSOR,&@dt<炫彩MB浏览器>::OnSetCursor);
+        // @  XEle_RegEventCPP1((HELE)get(),XE_XC_TIMER,&@dt<炫彩MB浏览器>::OnEleXCTimer);
+        // @  XEle_SetXCTimer((HELE)get(),5195,100);
+        @  XEle_RegEventCPP1((HELE)get(),XE_SIZE,&@dt<炫彩MB浏览器>::OnEleSize);
+        @  XEle_RegEventCPP1((HELE)get(),XE_PAINT,&@dt<炫彩MB浏览器>::OnDraw);
+        @  XEle_EnableEvent_XE_MOUSEWHEEL((HELE)get(),TRUE);   
+        @  XEle_RegEventCPP1((HELE)get(),XE_MOUSEWHEEL,&@dt<炫彩MB浏览器>::OnMouseWheel);
+        @  XEle_RegEventCPP1((HELE)get(),XE_LBUTTONDOWN,&@dt<炫彩MB浏览器>::OnLButtonDown);
+        @  XEle_RegEventCPP1((HELE)get(),XE_LBUTTONUP,&@dt<炫彩MB浏览器>::OnLButtonUp);
+        @  XEle_RegEventCPP1((HELE)get(),XE_RBUTTONDOWN,&@dt<炫彩MB浏览器>::OnRButtonDown);
+        @  XEle_RegEventCPP1((HELE)get(),XE_RBUTTONUP,&@dt<炫彩MB浏览器>::OnRButtonUp);
+        @  XEle_RegEventCPP1((HELE)get(),XE_MOUSEMOVE,&@dt<炫彩MB浏览器>::OnMouseMove);
+        @  XEle_RegEventCPP1((HELE)get(),XE_SETFOCUS,&@dt<炫彩MB浏览器>::OnSetFocus);
+        @  XEle_RegEventCPP1((HELE)get(),XE_KILLFOCUS,&@dt<炫彩MB浏览器>::OnKillFocus);
+        @  XEle_RegEventCPP1((HELE)get(),XE_KEYDOWN,&@dt<炫彩MB浏览器>::OnKeyDown);
+        @  XEle_RegEventCPP1((HELE)get(),XE_KEYUP,&@dt<炫彩MB浏览器>::OnKeyUp);
+        @  XEle_RegEventCPP1((HELE)get(),XE_CHAR,&@dt<炫彩MB浏览器>::OnChar);
+        @  XEle_RegEventCPP1((HELE)get(),XE_DESTROY,&@dt<炫彩MB浏览器>::OnDestroy);
+        // @ _XC_SetType((HELE)get(),XC_WEB); //设置类型
+        // @  _XC_AddType((HELE)get(),XC_WEB); //增加类型
+        // @  @dt<炫彩MB浏览器>* pWeb = new @dt<炫彩MB浏览器>;
+        // @  _XC_BindData((HELE)get(), (int)pWeb); //绑定关联
+
+    }
+
+    方法 链接地址 <公开 属性写 注释 = "将当前网页主框架跳转载入到所指定的链接地址" 折叠>
+    参数 欲载入的链接地址 <类型 = 文本型 注释 = "欲跳转到的链接地址">
+    {
+        @ wkeLoadURLW(GetwebView(),@<欲载入的链接地址>.GetText());
+    }
+
+    方法 链接地址 <公开 属性读 类型 = 文本型 注释 = "返回主框架所浏览页面的链接地址" 折叠 @嵌入式方法 = "">
+    {
+        @ CVolString(wkeGetURL(@sn<this>.GetwebView()))
+    }
+
+    方法 取浏览器句柄 <公开 类型 = 变整数 注释 = "取MB浏览器句柄" 返回值注释 = "返回MB浏览器句柄" @嵌入式方法 = "">
+    {
+        @ (INT_P)@sn<this>.GetwebView()
+    }
+
+    方法 载入URL_UTF8 <公开 注释 = "使浏览器载入一个URL地址" 折叠 @嵌入式方法 = "">
+    参数 URL <类型 = 字节集类 注释 = "提供为utf8编码格式的URL网址">
+    {
+        @ wkeLoadURL(@sn<this>.GetwebView(), (const utf8*)@<URL>.GetPtr())
+    }
+
+    方法 载入HTML <公开 注释 = "使浏览器载入一段HTML文档" @嵌入式方法 = "">
+    参数 html文本 <类型 = 文本型 注释 = "HTML文档">
+    {
+        @ wkeLoadHTMLW(@sn<this>.GetwebView(),@<html文本>)
+    }
+
+    方法 载入HTML_UTF8 <公开 注释 = "使浏览器载入一段HTML文件" 折叠 @嵌入式方法 = "">
+    参数 html文本 <类型 = 字节集类 注释 = "提供为utf8编码格式的HTML文本字节集">
+    {
+        @ wkeLoadHTML(@sn<this>.GetwebView(), (const utf8*)@<html文本>.GetPtr())
+    }
+
+    方法 载入HTML基于URL <公开 注释 = "使浏览器载基于一个URL地址载入一段HTML" 折叠 @嵌入式方法 = "">
+    参数 html文本 <类型 = 文本型 注释 = "HTML文本">
+    参数 基于url <类型 = 文本型 注释 = "所基于URL地址">
+    {
+        @ wkeLoadHtmlWithBaseUrl(@sn<this>.GetwebView(),CU8String (@<html文本>).GetText (), CU8String (@<基于url>).GetText ())
+    }
+
+    方法 载入文件 <公开 注释 = "使浏览器载入一个文件" 折叠 @嵌入式方法 = "">
+    参数 文件名 <类型 = 文本型 注释 = "提供一个文件名">
+    {
+        @ wkeLoadFileW(@sn<this>.GetwebView(),@<文件名>)
+    }
+
+    方法 载入文件UTF8 <公开 注释 = "使浏览器载入一个文件" 折叠 @嵌入式方法 = "">
+    参数 文件名 <类型 = 字节集类 注释 = "提供一个utf8编码格式的文件名">
+    {
+        @ wkeLoadFile(@sn<this>.GetwebView(), (const utf8*)@<文件名>.GetPtr())
+    }
+
+    方法 Post访问 <公开 注释 = "以Post方式访问所指定的URL" 折叠>
+    参数 链接地址 <类型 = 文本型 注释 = "提供所欲访问的链接地址">
+    参数 所欲传递数据 <类型 = 字节集类 注释 = "提供所有欲传递过去的数据">
+    {
+        @ wkePostURLW(GetwebView(),@<链接地址>.GetText(), (const char *)@<所欲传递数据>.GetPtr(), (int)@<所欲传递数据>.GetSize ());
+    }
+
+    方法 取框架Url <公开 类型 = 文本型 注释 = "取浏览器页面某框架载入的url地址" 返回值注释 = "对应框架url地址" 折叠 @嵌入式方法 = "">
+    参数 框架ID <类型 = 变整数 注释 = "提供一个框架ID">
+    {
+        @ CVolString(wkeGetFrameUrl(@sn<this>.GetwebView(),(wkeWebFrameHandle)@<框架ID>))
+    }
+
+    方法 是否载入中 <公开 类型 = 逻辑型 注释 = "判断浏览器当前是否正在载入中" 返回值注释 = "浏览器载入状态" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeIsLoading(@sn<this>.GetwebView())
+    }
+
+    方法 是否载入成功 <公开 类型 = 逻辑型 注释 = "判断浏览器当前是否已经载入成功" 返回值注释 = "是否载入成功" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeIsLoadingSucceeded(@sn<this>.GetwebView())
+    }
+
+    方法 是否载入失败 <公开 类型 = 逻辑型 注释 = "判断浏览器当前是否已经载入失败" 返回值注释 = "是否载入失败" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeIsLoadingFailed(@sn<this>.GetwebView())
+    }
+
+    方法 是否载入完成 <公开 类型 = 逻辑型 注释 = "判断浏览器页面当前是否已经载入完成,由于现代网页大多采用动态加载 多框架等原因,本接口"
+            注释 = "返回的加载完成并不等于\"网页已全部加载完成\",只表示MB已接收了服务器本次传回的全部数据." 返回值注释 = "是否载入完成" 折叠 折叠2 @嵌入式方法 = "">
+    {
+        @ wkeIsLoadingCompleted(@sn<this>.GetwebView())
+    }
+
+    方法 是否文档已就绪 <公开 类型 = 逻辑型 注释 = "判断浏览器页面当前文档是否已就绪,由于现代网页大多采用动态加载,多框架等原因,本接口"
+            注释 = "返回的加载完成并不等于\"网页已全部已就绪\",只表示MB已接收了服务器本次传回的全部数据." 返回值注释 = "文档是否已就绪" 折叠 折叠2 @嵌入式方法 = "">
+    {
+        @ wkeIsDocumentReady(@sn<this>.GetwebView())
+    }
+
+    方法 停止载入 <公开 注释 = "强制停止加载当前页面" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeStopLoading(@sn<this>.GetwebView())
+    }
+
+    方法 重新载入 <公开 注释 = "刷新页面,重新加载当前页面,从服务器重新拉取内容而不仅仅是重新渲染,相当于按ctrl+F5强刷." 折叠 @嵌入式方法 = "">
+    {
+        @ wkeReload(@sn<this>.GetwebView())
+    }
+
+    方法 取标题 <公开 类型 = 文本型 注释 = "取浏览器当前页面标题宽字符版" 返回值注释 = "页面标题" 折叠 @嵌入式方法 = "">
+    {
+        @ CVolString(wkeGetTitleW(@sn<this>.GetwebView()))
+    }
+
+    方法 取源码 <公开 类型 = 文本型 注释 = "取浏览器当前页面源码" 返回值注释 = "页面源码" 折叠 @嵌入式方法 = "">
+    {
+        @ CVolString(wkeGetSource(@sn<this>.GetwebView()))
+    }
+
+    方法 置尺寸 <公开 注释 = "重新设置浏览器显示区域尺寸" 折叠 @嵌入式方法 = "">
+    参数 宽度 <类型 = 整数 注释 = "像素宽度">
+    参数 高度 <类型 = 整数 注释 = "像素高度">
+    {
+        @ wkeResize(@sn<this>.GetwebView(),@<宽度>,@<高度>)
+    }
+
+    方法 置窗口标题 <公开 注释 = "设置MB浏览器窗口的标题" 折叠 @嵌入式方法 = "">
+    参数 标题 <类型 = 文本型 注释 = "欲设置的窗口标题">
+    {
+        @ wkeSetWindowTitleW(@sn<this>.GetwebView(),@<标题>)
+    }
+
+    方法 置UserAgent <公开 注释 = "设置浏览器UserAgent" 折叠 @嵌入式方法 = "">
+    参数 UA文本 <类型 = 文本型
+            注释 = "提供一个UserAgent文本,如:\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36 Edg/89.0.774.57\".">
+    {
+        @ wkeSetUserAgentW(@sn<this>.GetwebView(),@<UA文本>)
+    }
+
+    方法 取UserAgent <公开 类型 = 文本型 注释 = "取浏览器UserAgent" 返回值注释 = "返回浏览器UserAgent" 折叠 @嵌入式方法 = "">
+    {
+        @ CVolString(wkeGetUserAgent(@sn<this>.GetwebView()))
+    }
+
+    方法 置语言 <公开 注释 = "设置其他语言,默认跟随系统设定." 折叠 @嵌入式方法 = "">
+    参数 语言类型 <类型 = 文本型 注释 = "语言类型">
+    {
+        @ wkeSetLanguage(@sn<this>.GetwebView(), CU8String (@<语言类型>).GetText ())
+    }
+
+    方法 可否后退 <公开 属性读 类型 = 逻辑型 注释 = "判断浏览器当前页面加载状态是否可以后退" 返回值注释 = "返回真代表当前页面可以后退" 折叠 @嵌入式方法 = "">
+    {
+        @ (BOOL)wkeCanGoBack(@sn<this>.GetwebView())
+    }
+
+    方法 后退 <公开 类型 = 逻辑型 注释 = "后退到前一页" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeGoBack(@sn<this>.GetwebView())
+    }
+
+    方法 可否前进 <公开 属性读 类型 = 逻辑型 注释 = "判断浏览器当前页面加载状态是否可以前进" 返回值注释 = "返回真代表当前页面可以前进" 折叠 @嵌入式方法 = "">
+    {
+        @ (BOOL)wkeCanGoForward(@sn<this>.GetwebView())
+    }
+
+    方法 前进 <公开 类型 = 逻辑型 注释 = "前进一页" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeGoForward(@sn<this>.GetwebView())
+    }
+
+    方法 编辑_全选 <公开 注释 = "页面编辑内容全选" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeEditorSelectAll(@sn<this>.GetwebView())
+    }
+
+    方法 编辑_取消选择 <公开 注释 = "页面编辑内容全选取消" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeEditorUnSelect(@sn<this>.GetwebView())
+    }
+
+    方法 编辑_复制 <公开 注释 = "页面编辑内容复制" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeEditorCopy(@sn<this>.GetwebView())
+    }
+
+    方法 编辑_剪切 <公开 注释 = "页面编辑内容剪切" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeEditorCut(@sn<this>.GetwebView())
+    }
+
+    方法 编辑_粘贴 <公开 注释 = "页面编辑内容粘贴" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeEditorPaste(@sn<this>.GetwebView())
+    }
+
+    方法 编辑_删除 <公开 注释 = "页面编辑内容删除" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeEditorDelete(@sn<this>.GetwebView())
+    }
+
+    方法 编辑_撤销 <公开 注释 = "页面编辑内容撤销" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeEditorUndo(@sn<this>.GetwebView())
+    }
+
+    方法 编辑_重做 <公开 注释 = "页面编辑内容重做" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeEditorRedo(@sn<this>.GetwebView())
+    }
+
+    方法 取Cookie <公开 类型 = 文本型 注释 = "取浏览器Cookie" 返回值注释 = "成功返回Cookie文本" 折叠 @嵌入式方法 = "">
+    {
+        @ CVolString(wkeGetCookieW(@sn<this>.GetwebView()))
+    }
+
+    方法 枚举Cookie <公开 注释 = "枚举所有现有Cookie,调用此方法触发\"获得Cookie\"事件中获得所有Cookie." 折叠>
+    {
+        @ wkeVisitAllCookie(GetwebView(), this, (wkeCookieVisitor)onCookieVisitor);
+    }
+
+    方法 取Cookie_UTF8 <公开 类型 = 字节集类 注释 = "取浏览器Cookie" 返回值注释 = "成功返回Cookie UTF8类型" 折叠 @禁止流程检查 = 真>
+    {
+        @ return wkeGetCookie(GetwebView());
+    }
+
+    方法 置Cookie <公开 注释 = "向浏览器写入一段Cookie" 折叠 @嵌入式方法 = "">
+    参数 链接地址 <类型 = 文本型 注释 = "写入Cookie对应的url">
+    参数 cookie文本 <类型 = 文本型 注释 = "  cookie格式必须是类似:"
+            注释 = "cna=4UvTFE12fEECAXFKf4SFW5eo; expires=Tue, 23-Jan-2029 13:17:21 GMT; path=/; domain=.youku.com">
+    {
+        @ wkeSetCookie(@sn<this>.GetwebView(),CU8String (@<链接地址>).GetText (),CU8String (@<cookie文本>).GetText ())
+    }
+
+    方法 清除Cookie <公开 注释 = "清除Cookie,由于缓存等因素,直接删cookie.dat可能更有效.另外有的网站可能有服务端缓存,所以会存在清理无效的情况." 折叠 @嵌入式方法 = "">
+    {
+        @ wkeClearCookie(@sn<this>.GetwebView())
+    }
+
+    方法 执行Cookie命令 <公开 注释 = "执行一个COOKIE操作命令" 折叠 @嵌入式方法 = "">
+    参数 COOKIE命令 <类型 = 炫彩MBCookie命令 注释 = "提供MBCookie命令类型" @默认值 = 炫彩MBCookie命令.全部清除>
+    {
+        @ wkePerformCookieCommand(@sn<this>.GetwebView(),(wkeCookieCommand)@<COOKIE命令>)
+    }
+
+    方法 置Cookie文件路径 <公开 注释 = "设置Cookie文件的目录,默认情况下文件名是 cookies.dat" 折叠 @嵌入式方法 = "">
+    参数 文件目录 <类型 = 文本型 注释 = "文件目录路径,不包括文件名,不能自动新建不存在的目录.">
+    {
+        @ wkeSetCookieJarPath(@sn<this>.GetwebView(),@<文件目录>)
+    }
+
+    方法 置Cookie文件全路径 <公开 注释 = "设置Cookie文件的全路径包括文件名,默认是程序运行的当前目录,默认文件名为cookie.dat。" 折叠 @嵌入式方法 = "">
+    参数 文件目录 <类型 = 文本型 注释 = "全路径,包括cookie文件名,不能自动新建不存在的目录.">
+    {
+        @ wkeSetCookieJarFullPath(@sn<this>.GetwebView(),@<文件目录>)
+    }
+
+    方法 置LocalStorage路径 <公开 注释 = "设置LocalStorage本地存储文件的路径" 折叠 @嵌入式方法 = "">
+    参数 文件目录 <类型 = 文本型 注释 = "如c:\\mb\\LocalStorage,必须且只能是目录,默认是当前目录.">
+    {
+        @ wkeSetLocalStorageFullPath(@sn<this>.GetwebView(),@<文件目录>)
+    }
+
+    方法 添加插件目录 <公开 注释 = "设置插件目录,默认情况下为plugins目录" 折叠 @嵌入式方法 = "">
+    参数 文件目录 <类型 = 文本型 注释 = "如c:\\mb\\plugins,必须且只能是目录,默认是当前目录">
+    {
+        @ wkeAddPluginDirectory(@sn<this>.GetwebView(), @<文件目录>)
+    }
+
+    方法 媒体音量 <公开 属性写 注释 = "设置浏览器的媒体音量">
+    参数 音量 <类型 = 单精度小数 注释 = "媒体音量值默认为1">
+    {
+        @ wkeSetMediaVolume(GetwebView(),@<音量>);
+    }
+
+    方法 媒体音量 <公开 属性读 类型 = 单精度小数 注释 = "取浏览器的媒体音量" 返回值注释 = "媒体音量值" @嵌入式方法 = "">
+    {
+        @ wkeGetMediaVolume(@sn<this>.GetwebView())
+    }
+
+    方法 启用Cookie <公开 属性写 注释 = "设置Cookie是否可用" 折叠>
+    参数 是否启用 <类型 = 逻辑型 注释 = "真为启用" @默认值 = 真>
+    {
+        @ wkeSetCookieEnabled(GetwebView(),@<是否启用>);
+    }
+
+    方法 启用Cookie <公开 属性读 类型 = 逻辑型 注释 = "判断是否启用Cookie" 返回值注释 = "真为启用" 折叠 @嵌入式方法 = "">
+    {
+        @ (BOOL)wkeIsCookieEnabled(@sn<this>.GetwebView())
+    }
+
+    方法 启用高分辨率支持 <公开 静态 注释 = "本质是通过设置ZOOM并且关闭系统默认缩放来实现的,所以再使用\"缩放系数\"会发现值可能不为1。" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeEnableHighDPISupport()
+    }
+
+    方法 启用鼠标 <公开 注释 = "开启或关闭鼠标消息,可以在开启触屏后,关闭鼠标消息" 折叠 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型 注释 = "真为开启" @默认值 = 真>
+    {
+        @ wkeSetMouseEnabled(@sn<this>.GetwebView(),@<是否启用>)
+    }
+
+    方法 启用触摸 <公开 注释 = "开启或关闭触屏" 折叠 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型 注释 = "真为开启" @默认值 = 真>
+    {
+        @ wkeSetTouchEnabled(@sn<this>.GetwebView(),@<是否启用>)
+    }
+
+    方法 启用系统触摸 <公开 注释 = "开启或关闭系统触屏" 折叠 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型 注释 = "真为开启" @默认值 = 真>
+    {
+        @ wkeSetSystemTouchEnabled(@sn<this>.GetwebView(),@<是否启用>)
+    }
+
+    方法 启用拖入文件 <公开 注释 = "可启用或关闭拖拽文件加载网页" 折叠 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型 注释 = "真为开启" @默认值 = 真>
+    {
+        @ wkeSetDragEnable(@sn<this>.GetwebView(),@<是否启用>)
+    }
+
+    方法 启用拖拽元素 <公开 注释 = "可启用或关闭元素拖拽或拖拽到其他进程" 折叠 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型 注释 = "真为开启" @默认值 = 真>
+    {
+        @ wkeSetDragDropEnable(@sn<this>.GetwebView(),@<是否启用>)
+    }
+
+    方法 启用内存缓存 <公开 注释 = "可启用或关闭内存缓存" 折叠 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型 注释 = "真为开启" @默认值 = 真>
+    {
+        @ wkeSetMemoryCacheEnable(@sn<this>.GetwebView(),@<是否启用>)
+    }
+
+    方法 保存内存缓存 <公开 注释 = "保存当前浏览器内存缓存" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeSaveMemoryCache(@sn<this>.GetwebView())
+    }
+
+    方法 启用Npapi插件 <公开 注释 = "可启用或关闭Npapi插件" 折叠 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型 注释 = "真为开启" @默认值 = 真>
+    {
+        @ wkeSetNpapiPluginsEnabled(@sn<this>.GetwebView(),@<是否启用>)
+    }
+
+    方法 启用无头模式 <公开 注释 = "开启或关闭无头模式,开启后页面不会被渲染上屏,直接内存运行,大幅提升性能." 折叠 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型 注释 = "真为开启" @默认值 = 真>
+    {
+        @ wkeSetHeadlessEnabled(@sn<this>.GetwebView(),@<是否启用>)
+    }
+
+    方法 启用默认菜单 <公开 注释 = "设置是否允许右键弹出MB浏览器默认菜单,默认状态下为开启." 折叠 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型 注释 = "真为开启" @默认值 = 真>
+    {
+        @ wkeSetContextMenuEnabled(@sn<this>.GetwebView(),@<是否启用>)
+    }
+
+    方法 置默认菜单项显示 <公开 注释 = "设置MB浏览器某菜单项是否显示" 折叠 @嵌入式方法 = "">
+    参数 菜单项 <类型 = 炫彩MB默认菜单项 注释 = "MB默认菜单项常量">
+    参数 是否显示 <类型 = 逻辑型 注释 = "真为显示,假为隐藏">
+    {
+        @ wkeSetContextMenuItemShow(@sn<this>.GetwebView(),(wkeMenuItemId)@<菜单项>,@<是否显示>)
+    }
+
+    方法 启用导航到新窗口 <公开 注释 = "当有新页面需要打开时,是否在新窗口打开,默认是当前窗口,如开启,则会触发\"即将创建新窗口\"事件." 折叠 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型 注释 = "真为启用,假为关闭." @默认值 = 真>
+    {
+        @ wkeSetNavigationToNewWindowEnable(@sn<this>.GetwebView(),@<是否启用>)
+    }
+
+    方法 启用跨域检查 <公开 注释 = "设置是否开启csp跨域检查,默认状态下为开启,如需进行跨域操作,如跨域ajax,跨域设置iframe等,则需要先关闭此开关." 折叠 @嵌入式方法 = "">
+    参数 是否检查 <类型 = 逻辑型>
+    {
+        @ wkeSetCspCheckEnable(@sn<this>.GetwebView(),@<是否检查>)
+    }
+
+    方法 置设备参数 <公开 注释 = "设置webView模拟硬件设备环境" @嵌入式方法 = "">
+    参数 设备参数名 <类型 = 文本型 注释 = "为\"navigator.maxTouchPoints\"时，需设置\"整数参数\"，表示touch的点数。"
+            注释 = "为\"navigator.platform\"时，需设置\"文本参数\"，表示js里获取的navigator.platform字符串。"
+            注释 = "为\"navigator.hardwareConcurrency\"时，需设置\"整数参数\"，表示js里获取的navigator.hardwareConcurrency整数值。"
+            注释 = "为\"screen.width\"时，需设置\"整数参数\"，表示js里获取的screen.width整数值。"
+            注释 = "为\"screen.height\"时，需设置\"整数参数\"，表示js里获取的screen.height整数值。"
+            注释 = "为\"screen.availWidth\"时，需设置\"整数参数\"，表示js里获取的screen.availWidth整数值。"
+            注释 = "为\"screen.availHeight\"时，需设置\"整数参数\"，表示js里获取的screen.availHeight整数值。"
+            注释 = "为\"screen.pixelDepth\"时，需设置\"整数参数\"，表示js里获取的screen.pixelDepth整数值。" 折叠2>
+    参数 文本参数 <类型 = 文本型 @默认值 = "">
+    参数 整数参数 <类型 = 整数 @默认值 = 0>
+    参数 浮点参数 <类型 = 单精度小数 @默认值 = 0>
+    {
+        @ wkeSetDeviceParameter (@sn<this>.GetwebView(), CU8String  (@<设备参数名>).GetText (), CU8String (@<文本参数>).GetText (), @<整数参数>, @<浮点参数>)
+    }
+
+    方法 置代理 <公开 注释 = "置当前浏览器代理设置" 折叠>
+    参数 代理类型 <类型 = 炫彩MB代理类型 注释 = "提供MB代理类型" 编辑时信息 = "7AAA3, 0, 0, 0" @默认值 = 炫彩MB代理类型.HTTP>
+    参数 服务器 <类型 = 文本型 注释 = "代理服务器地址" 编辑时信息 = "7AAA3, 0, 0, 0">
+    参数 端口 <类型 = 短整数 注释 = "代理服务器端口" 编辑时信息 = "7AAA3, 0, 0, 0">
+    参数 用户名 <类型 = 文本型 注释 = "代理服务器用户" 编辑时信息 = "7AAA3, 0, 0, 0" @默认值 = "">
+    参数 密码 <类型 = 文本型 注释 = "代理服务器密码" 编辑时信息 = "7AAA3, 0, 0, 0" @默认值 = "">
+    {
+        @ wkeProxy  Proxy;
+        @ Proxy.type=(wkeProxyType)@<代理类型>;
+        @ strncpy_z(Proxy.hostname, CU8String (@<服务器>).GetText(), NUM_ELEMENTS_OF (Proxy.hostname) - 1);
+        @ strncpy_z(Proxy.username, CU8String (@<用户名>).GetText(), NUM_ELEMENTS_OF (Proxy.username) - 1);
+        @ strncpy_z(Proxy.password, CU8String (@<密码>).GetText(), NUM_ELEMENTS_OF (Proxy.password) - 1);
+        @ Proxy.port=@<端口>;
+        @ wkeSetViewProxy (GetwebView(), &Proxy);
+    }
+
+    方法 置全局代理 <公开 静态 注释 = "设置MB浏览器代理全局生效" 折叠>
+    参数 代理类型 <类型 = 炫彩MB代理类型 注释 = "提供MB代理类型" @默认值 = 炫彩MB代理类型.HTTP>
+    参数 服务器 <类型 = 文本型 注释 = "代理服务器地址">
+    参数 端口 <类型 = 短整数 注释 = "代理服务器端口">
+    参数 用户名 <类型 = 文本型 注释 = "代理服务器用户" @默认值 = "">
+    参数 密码 <类型 = 文本型 注释 = "代理服务器密码" @默认值 = "">
+    {
+        @ wkeProxy  Proxy;
+        @ Proxy.type=(wkeProxyType)@<代理类型>;
+        @ strncpy_z(Proxy.hostname, CU8String (@<服务器>).GetText(), NUM_ELEMENTS_OF (Proxy.hostname) - 1);
+        @ strncpy_z(Proxy.username, CU8String (@<用户名>).GetText(), NUM_ELEMENTS_OF (Proxy.username) - 1);
+        @ strncpy_z(Proxy.password, CU8String (@<密码>).GetText(), NUM_ELEMENTS_OF (Proxy.password) - 1);
+        @ Proxy.port=@<端口>;
+        @ wkeSetProxy (&Proxy);
+    }
+
+    方法 置调试配置 <公开 注释 = "设置一些实验性选项,配置项目前支持:"
+            注释 = "showDevTools:开启开发者工具,此时参数值要填写开发者工具的资源路径,如file:///c:/miniblink-release/front_end/inspector.html 必须是全路径,并且不能有中文."
+            注释 = "wakeMinInterval:设置帧率,默认值是10值越大帧率越低;" 注释 = "drawMinInterval:设置帧率,默认值是3,值越大帧率越低;"
+            注释 = "antiAlias:设置抗锯齿渲染,参数值必须设置为\"1\";" 注释 = "minimumFontSize:最小字体;" 注释 = "minimumLogicalFontSize:最小逻辑字体;"
+            注释 = "defaultFontSize:默认字号;" 注释 = "defaultFixedFontSize:默认Fixed字号;" 注释 = "imageEnable:是否打开无图模式,参数值为\"0\"表示开启无图模式;"
+            注释 = "jsEnable:是否禁用js,参数值为\"0\"表示禁用;" 注释 = "enableNodejs:是否开启nodejs 支持,参数值为\"1\"表示开启.(目前仅支持32位)" 折叠 折叠2 @嵌入式方法 = "">
+    参数 配置项 <类型 = 文本型 注释 = "配置项名">
+    参数 参数值 <类型 = 文本型 注释 = "配置项参数值">
+    {
+        @ wkeSetDebugConfig(@sn<this>.GetwebView(),CU8String (@<配置项>).GetText(),CU8String (@<参数值>).GetText())
+    }
+
+    方法 执行JS脚本 <公开 类型 = 炫彩MBjs值
+            注释 = "执行一段js代码，由于js是弱类型语言 返回值 jsValue其实是一个指向封装了v8内部各种类型的类指针,这里封装成了一个基于\"jsValue类\"的\"js值\"对象,方便获得返回值."
+            返回值注释 = "返回js值对象,使用方法 如: js值对象.取文本值() 或 mb实例.执行JS脚本(\"return document.title\").取文本值()">
+    参数 JS文本 <类型 = 文本型 注释 = "若要获得js运行结果返回值 脚本中加\"return\"关键字 如: \"return document.title\"">
+    {
+        变量 jv <类型 = 变整数>
+        变量 es <类型 = 变整数>
+        变量 js <类型 = 炫彩MBjs值>
+        @ @<jv>=(INT_P)wkeRunJSW(GetwebView(), @<JS文本>.GetText ());
+        @ @<es>=(INT_P)wkeGlobalExec(GetwebView());
+        返回 (js.绑定 (es, jv))
+    }
+
+    方法 执行JS脚本UTF8 <公开 类型 = 炫彩MBjs值
+            注释 = "执行一段js代码，由于js是弱类型语言 返回值 jsValue其实是一个指向封装了v8内部各种类型的类指针,这里封装成了一个基于\"jsValue类\"的\"js值\"对象,方便获得返回值."
+            返回值注释 = "返回js值对象,使用方法 如: js值对象.取文本值() 或 mb实例.执行JS脚本(\"return document.title\").取文本值()" 折叠>
+    参数 JS文本UTF8 <类型 = 字节集类 注释 = "若要获得js运行结果返回值 脚本中加\"return\"关键字 如: \"return document.title\"">
+    {
+        变量 jv <类型 = 变整数>
+        变量 es <类型 = 变整数>
+        变量 jsValue <类型 = 炫彩MBjs值>
+        @ @<jv>=(INT_P)wkeRunJS(GetwebView(), (const utf8*)@<JS文本UTF8>.GetPtr());
+        @ @<es>=(INT_P)wkeGlobalExec(GetwebView());
+        返回 (jsValue.绑定 (es, jv))
+    }
+
+    方法 执行JS脚本自框架 <公开 类型 = 炫彩MBjs值
+            注释 = "在指定框架中执行一段js代码,返回js执行返回值类实例 使用方法 如: 变量.取文本值() 或 mb实例.执行JS脚本(\"return document.title\").取文本值()"
+            返回值注释 = "返回js值对象,用于js执行结果取值操作." 折叠>
+    参数 框架ID <类型 = 变整数 注释 = "提供一个框架ID" 折叠>
+    参数 JS文本 <类型 = 文本型 注释 = "若要获得js运行结果返回值 脚本中加\"return\"关键字 如: \"return document.title\"">
+    参数 是否闭包 <类型 = 逻辑型 注释 = "如为真,则MB会将这段js代码放到一个function(){ script }中执行,以避免变量名和页面中的js变量重名导致的错误.">
+    {
+        变量 jv <类型 = 变整数>
+        变量 es <类型 = 变整数>
+        变量 js <类型 = 炫彩MBjs值>
+        @ @<jv>=(INT_P)wkeRunJsByFrame(GetwebView(),(wkeWebFrameHandle)@<框架ID>,CU8String (@<JS文本>).GetText(),@<是否闭包>);
+        @ @<es>=(INT_P)wkeGetGlobalExecByFrame(GetwebView(),(wkeWebFrameHandle)@<框架ID>);
+        返回 (js.绑定 (es, jv))
+    }
+
+    方法 取主框架 <公开 类型 = 变整数 注释 = "取页面主框架ID" 返回值注释 = "返回页面主框架ID" 折叠 @嵌入式方法 = "">
+    {
+        @ (INT_P)wkeWebFrameGetMainFrame (@sn<this>.GetwebView())
+    }
+
+    方法 是否为主框架 <公开 类型 = 逻辑型 注释 = "判断页面中的某个框架是否为远程框架" 返回值注释 = "如果为主框架则返回真" 折叠 @嵌入式方法 = "">
+    参数 框架ID <类型 = 变整数 注释 = "提供一个框架ID">
+    {
+        @ wkeIsMainFrame(@sn<this>.GetwebView(),(wkeWebFrameHandle)@<框架ID>)
+    }
+
+    方法 是否为远程框架 <公开 类型 = 逻辑型 注释 = "判断页面中的某个框架是否为远程框架" 返回值注释 = "如果为远程框架则返回真" 折叠 @嵌入式方法 = "">
+    参数 框架ID <类型 = 变整数 注释 = "提供一个框架ID">
+    {
+        @ wkeIsWebRemoteFrame(@sn<this>.GetwebView(),(wkeWebFrameHandle)@<框架ID>)
+    }
+
+    方法 取JS执行状态 <公开 类型 = 变整数 注释 = "获取页面主框架的js执行状态,js执行状态可以理解为一个句柄,js相关接口会频繁使用该句柄,使用完立刻就失效,再次使用需重新获取.。" 返回值注释 = "主框架js执行状态" 折叠
+            @嵌入式方法 = "">
+    {
+        @ (INT_P)wkeGlobalExec(@sn<this>.GetwebView())
+    }
+
+    方法 取JS执行状态_框架 <公开 类型 = 变整数 注释 = "获取页面的js执行状态,js执行状态可以理解为一个句柄,js相关接口会频繁使用该句柄,使用完立刻就失效,再次使用需重新获取." 返回值注释 = "js执行状态" 折叠
+            @嵌入式方法 = "">
+    参数 框架ID <类型 = 变整数 注释 = "提供页面框架ID">
+    {
+        @ (INT_P)wkeGetGlobalExecByFrame(@sn<this>.GetwebView(),(wkeWebFrameHandle)@<框架ID>)
+    }
+
+    方法 JS绑定函数 <公开 静态 注释 = "绑定全局JS函数,须在窗口创建前调用." 折叠 "">
+    参数 函数名称 <类型 = 文本型 注释 = "提供该js方法的函数名称,全局生效,请注意方法名的唯一性.">
+    参数 参数个数 <类型 = 整数 注释 = "提供该js方法的参数个数">
+    参数 回调方法指针 <类型 = 变整数 注释 = "指定一个静态方法指针值" 注释 = "属性:@视窗.前缀文本 值为:@CDECL;" 注释 = "返回值类型:整数 即调用jsValue类成员方法生成的js值;"
+            注释 = "参数1 类型:js执行状态;" 注释 = "如不指定此方法默认会在本类各实例对象的\"JS绑定方法被执行\"事件中触发" @默认值 = 0>
+    {
+        @ wkeJsBindFunction(CU8String (@<函数名称>).GetText (), (@<回调方法指针> == 0 ? (wkeJsNativeFunction)handlewkeJsNativeFunction : (wkeJsNativeFunction)@<回调方法指针>), (void *)@<函数名称>.GetText (), (unsigned int)@<参数个数>);
+    }
+
+    方法 插入CSS到框架 <公开 注释 = "插入一段CSS到页面框架中" 折叠 @嵌入式方法 = "">
+    参数 框架ID <类型 = 变整数 注释 = "提供页面框架ID">
+    参数 CSS文本 <类型 = 文本型 注释 = "提供CSS文本">
+    {
+        @ wkeInsertCSSByFrame (@sn<this>.GetwebView(), (wkeWebFrameHandle)@<框架ID>,CU8String (@<CSS文本>).GetText ())
+    }
+
+    方法 显示窗口 <公开 注释 = "显示或隐藏浏览器窗口" 折叠 @嵌入式方法 = "">
+    参数 是否显示 <类型 = 逻辑型 注释 = "是否显示浏览器窗口">
+    {
+        @ wkeShowWindow(@sn<this>.GetwebView() ,  @<是否显示>)
+    }
+
+    方法 获取焦点 <公开 注释 = "如果浏览器绑定了窗口,窗口也会获得焦点." 折叠 @嵌入式方法 = "">
+    {
+        @ wkeSetFocus(@sn<this>.GetwebView())
+    }
+
+    方法 失去焦点 <公开 注释 = "让浏览器失去焦点" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeKillFocus(@sn<this>.GetwebView())
+    }
+
+    方法 启动开发工具 <公开 注释 = "打开浏览器开发者工具Devtools,须配合对应的页面文档使用" 折叠 @视窗.附属文件 = "data\\front_end > front_end">
+    参数 开发工具文件目录 <类型 = 文本型 注释 = "开发者工具目录,例如:\"file:///\"＋取运行目录 ()＋\"\\front_end\\inspector.html\"" @默认值 = "">
+    {
+        如果真 (开发工具文件目录 == "")
+        {
+            开发工具文件目录 = "file:///" + 取运行目录 () + "/front_end/inspector.html"
+        }
+        @ wkeShowDevtools(GetwebView() , @<开发工具文件目录>,0,0);
+    }
+
+    方法 缩放级别 <公开 属性写 注释 = "浏览器的缩放系数">
+    参数 缩放级别 <类型 = 单精度小数 注释 = "缩放系数,正常为1.">
+    {
+        @ wkeSetZoomFactor(GetwebView() ,  @<缩放级别>);
+    }
+
+    方法 缩放级别 <公开 属性读 类型 = 单精度小数 注释 = "浏览器缩放系数" 返回值注释 = "返回缩放系数" @嵌入式方法 = "">
+    {
+        @ wkeGetZoomFactor(@sn<this>.GetwebView())
+    }
+
+    方法 取高度 <公开 类型 = 整数 注释 = "取浏览器窗口高度" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeGetHeight(@sn<this>.GetwebView())
+    }
+
+    方法 取宽度 <公开 类型 = 整数 注释 = "取浏览器窗口宽度" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeGetWidth(@sn<this>.GetwebView())
+    }
+
+    方法 取内容高度 <公开 类型 = 整数 注释 = "取浏览器当前的内容区域高度" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeGetContentHeight(@sn<this>.GetwebView() )
+    }
+
+    方法 取内容宽度 <公开 类型 = 整数 注释 = "取浏览器当前的内容区域宽度" 返回值注释 = "内容区域宽度" 折叠 @嵌入式方法 = "">
+    {
+        @ wkeGetContentWidth(@sn<this>.GetwebView() )
+    }
+
+    方法 垃圾回收 <公开 注释 = " 延迟让MB垃圾回收" 折叠 @嵌入式方法 = "">
+    参数 延迟毫秒 <类型 = 整数 注释 = "时间单位为毫秒">
+    {
+        @ wkeGC(@sn<this>.GetwebView(), @<延迟毫秒>)
+    }
+
+    方法 置资源回收间隔 <公开 注释 = "设置浏览器资源回收间隔" 折叠 @嵌入式方法 = "">
+    参数 时间间隔 <类型 = 整数 注释 = "时间单位为秒">
+    {
+        @ wkeSetResourceGc(@sn<this>.GetwebView(), @<时间间隔>)
+    }
+
+    方法 工具_截图 <公开 类型 = 字节集类 注释 = "将页面打印到位图,返回位图字节集数据." 返回值注释 = "成功返回页面截图数据" 折叠 @禁止流程检查 = 真>
+    参数 框架ID <类型 = 变整数 注释 = "欲截图的框架ID">
+    {
+        @ wkeScreenshotSettings sst;
+        @ const wkeMemBuf * buf;
+        @ buf = wkePrintToBitmap(GetwebView(), (wkeWebFrameHandle) @<框架ID>, &sst);
+        @ CVolMem data(buf->data ,buf->length);
+        @ return data;
+    }
+
+    方法 工具_打印到PDF <公开 类型 = 字节集类 注释 = "将页面生产PDF文件" 返回值注释 = "成功返回PDF文件" 折叠 @禁止流程检查 = 真>
+    参数 框架ID <类型 = 变整数 注释 = "提供欲生成PDF的框架ID">
+    参数 分辨率 <类型 = 整数 注释 = "设置PDF的分辨率(50倍数)" @默认值 = 100>
+    参数 打印背景 <类型 = 逻辑型 注释 = "是否打印背景" @默认值 = 真>
+    参数 宽度 <类型 = 整数 注释 = "设置PDF页面宽度" @默认值 = 842>
+    参数 高度 <类型 = 整数 注释 = "设施PDF页面高度" @默认值 = 595>
+    参数 顶边距 <类型 = 整数 注释 = "设置PDF页面顶边边距" @默认值 = 0>
+    参数 底边距 <类型 = 整数 注释 = "设置PDF页面底边边距" @默认值 = 0>
+    参数 左边距 <类型 = 整数 注释 = "设置PDF页面左边边距" @默认值 = 0>
+    参数 右边距 <类型 = 整数 注释 = "设置PDF页面右边边距" @默认值 = 0>
+    {
+        // 打印设置
+        @ wkePrintSettings pst;
+        @ pst.structSize = sizeof(wkePrintSettings);
+        @ pst.dpi = @<分辨率>;
+        @ pst.width = @<宽度>;
+        @ pst.height = @<高度>;
+        @ pst.marginTop=@<顶边距>;
+        @ pst.marginBottom=@<底边距>;
+        @ pst.marginLeft=@<左边距>;
+        @ pst.marginRight=@<右边距>;
+        @ pst.isPrintPageHeadAndFooter = 0;
+        @ pst.isPrintBackgroud =@<打印背景>;
+        @ pst.isLandscape = 0;
+        @ pst.isPrintToMultiPage = 0;
+        // pdf结构
+        @ const wkePdfDatas* pdf;
+        @ pdf = wkeUtilPrintToPdf(GetwebView(),(wkeWebFrameHandle) @<框架ID>, &pst);
+        @ size_t size = *(pdf->sizes);
+        @ const  void * data =*(pdf->datas);
+        @ CVolMem rdata((char *)data, size);
+        @ wkeUtilRelasePrintPdfDatas(pdf);
+        @ return rdata;
+    }
+
+    方法 工具_序列化到MHTML <公开 类型 = 字节集类 注释 = "序列化到MHTML文档,返回UTF8字节集." 返回值注释 = "成功返回MHTML文档字节集" 折叠 @禁止流程检查 = 真>
+    {
+        @ return wkeUtilSerializeToMHTML(GetwebView());
+    }
+
+    方法 URLEscape编码 <公开 静态 类型 = 文本型 注释 = "将一串URL地址转化成Escape编码" 返回值注释 = "成功返回Escape编码文本" 折叠 @嵌入式方法 = "">
+    参数 URL文本 <类型 = 文本型 注释 = "提供将要编码的URL文本">
+    {
+        @ CVolString( wkeUtilEncodeURLEscape(CU8String(@<URL文本>).GetText()))
+    }
+
+    方法 URLEscape解码 <公开 静态 类型 = 文本型 注释 = "将一串Escape编码的URL地址解码" 返回值注释 = "成功返回解码后的URL文本" 折叠 @嵌入式方法 = "">
+    参数 Escape编码文本 <类型 = 文本型 注释 = "提供将要解码Escape编码文本">
+    {
+        @ CVolString(wkeUtilDecodeURLEscape(CU8String(@<Escape编码文本>).GetText()))
+    }
+
+    方法 Base64编码 <公开 静态 类型 = 文本型 注释 = "将一段文本转化成Base64编码" 返回值注释 = "成功返回Base64编码文本" 折叠 @嵌入式方法 = "">
+    参数 欲编码文本 <类型 = 文本型 注释 = "提供将要编码的文本">
+    {
+        @ CVolString(wkeUtilBase64Encode(CU8String(@<欲编码文本>).GetText()))
+    }
+
+    方法 Base64解码 <公开 静态 类型 = 文本型 注释 = "将一段Base64编码文本解码" 返回值注释 = "成功返回解码后文本" 折叠 @嵌入式方法 = "">
+    参数 欲解码文本 <类型 = 文本型 注释 = "提供将要解码文本">
+    {
+        @ CVolString(wkeUtilBase64Decode(CU8String(@<欲解码文本>).GetText()))
+    }
+
+    方法 取网站图标 <公开 类型 = 整数 注释 = "获取网站的favicon图标,此接口需在\"载入完成\"事件里调用后触发\"获得网站图标\"事件,得到图标文件." 折叠 @禁止流程检查 = 真>
+    {
+        @ return wkeNetGetFavicon(GetwebView(), onNetGetFaviconCallback, this);
+    }
+
+    方法 发送鼠标事件 <公开 注释 = "发送所指定的鼠标事件到浏览器" 折叠 @嵌入式方法 = "">
+    参数 横向位置 <类型 = 整数 注释 = "提供当前鼠标位置在浏览器窗口中的横向坐标">
+    参数 纵向位置 <类型 = 整数 注释 = "提供当前鼠标位置在浏览器窗口中的纵向坐标">
+    参数 鼠标键状态 <类型 = 整数 注释 = "提供鼠标按键的按下状态,为\"MB鼠标键类型\"类中各常量值." "">
+    参数 辅助键状态 <类型 = 整数 注释 = "提供辅助键组合状态,为\"辅助键状态\"类中各常量值的组合." @默认值 = 0>
+    {
+        @ wkeFireMouseEvent(@sn<this>.GetwebView(), @<鼠标键状态>, @<横向位置>, @<纵向位置>, @<辅助键状态>)
+    }
+
+    方法 发送鼠标单击事件 <公开 注释 = "触发一个鼠标点击事件,横坐标和纵坐标为相对窗口左上角的像素坐标." 折叠>
+    参数 横坐标 <类型 = 整数 注释 = "横坐标">
+    参数 纵坐标 <类型 = 整数 注释 = "纵坐标">
+    {
+        @ wkeFireMouseEvent(GetwebView(),WKE_MSG_LBUTTONDOWN,@<横坐标>, @<纵坐标>,WKE_LBUTTON);
+        @ wkeFireMouseEvent(GetwebView(),WKE_MSG_LBUTTONUP,@<横坐标>, @<纵坐标>,WKE_LBUTTON);
+    }
+
+    方法 发送鼠标移动事件 <公开 注释 = "发送所指定的鼠标移动事件到浏览器" 折叠 "">
+    参数 横向位置 <类型 = 整数 注释 = "提供当前鼠标位置在浏览器窗口中的横向坐标">
+    参数 纵向位置 <类型 = 整数 注释 = "提供当前鼠标位置在浏览器窗口中的纵向坐标">
+    参数 辅助键状态 <类型 = 整数 注释 = "提供辅助键组合状态,为\"辅助键状态\"类中各常量值的组合." @默认值 = 0>
+    参数 鼠标键状态 <类型 = 整数 注释 = "提供鼠标按键的按下状态,为\"MB鼠标键类型\"类中各常量值." @默认值 = 0>
+    {
+        @ wkeFireMouseEvent(GetwebView(), WKE_MSG_MOUSEMOVE, @<横向位置>, @<纵向位置>, @<辅助键状态>);
+        如果 (鼠标键状态 != 0)
+        {
+            @ wkeFireMouseEvent(GetwebView(), @<鼠标键状态>, @<横向位置>, @<纵向位置>, @<辅助键状态>);
+        }
+    }
+
+    方法 发送按键事件 <公开 注释 = "发送所指定的按键事件到MB浏览器" 折叠>
+    参数 键代码 <类型 = 整数 注释 = "为\"按键码\"类中的常量值,注意不包括辅助键组合状态值.">
+    参数 辅助键状态 <类型 = 整数 注释 = "提供辅助键组合状态,为\"辅助键状态\"类中各常量值的组合." @默认值 = 0>
+    参数 为按键放开事件 <类型 = 逻辑型 注释 = "  为真表示发送按键放开事件(WM_SYSKEYUP/WM_KEYUP),否则将发送" 注释 = "按键按下事件(WM_SYSKEYDOWN/WM_KEYDOWN)." @默认值 = 假>
+    参数 为系统按键事件 <类型 = 逻辑型 注释 = "  为真表示发送系统按键事件(WM_SYSKEYDOWN/WM_SYSKEYUP),否则将" 注释 = "发送非系统按键事件(WM_KEYDOWN/WM_KEYUP)" @默认值 = 假>
+    {
+        如果 (为按键放开事件)
+        {
+            @ wkeFireKeyUpEvent( GetwebView(), @<键代码>,@<辅助键状态>,@<为系统按键事件>);
+        }
+        否则
+        {
+            @ wkeFireKeyDownEvent( GetwebView(),@<键代码>, @<辅助键状态>,@<为系统按键事件>);
+        }
+    }
+
+    方法 发送字符事件 <公开 注释 = "向MB浏览器发送一个字符消息" 折叠 @嵌入式方法 = "">
+    参数 字符编码 <类型 = 字符 注释 = "提供所欲发送的字符">
+    {
+        @ SendMessageW((HWND)wkeGetHostHWND(@sn<this>.GetwebView()), WM_IME_CHAR, (WPARAM)(@<字符编码>), 0)
+    }
+
+    方法 发送字符串事件 <公开 注释 = "向MB浏览器发送一个字符串消息" 折叠>
+    参数 字符串文本 <类型 = 文本型 注释 = "提供所欲发送的字符串文本">
+    {
+        计次循环 (取文本长度 (字符串文本))
+        {
+            发送字符事件 (取字符 (字符串文本, 取循环索引 ()))
+        }
+    }
+
+    方法 发送窗口移动事件 <公开 注释 = "鼠标捕获移动MB窗口,一般用于通过js控制窗口移动." 折叠>
+    {
+        @ ReleaseCapture ();//鼠标释放
+        @ SendMessage ((HWND)wkeGetHostHWND(GetwebView()), 161, 2, 0);
+    }
+
+    方法 发送窗口最大化事件 <公开 注释 = "发送消息使MB窗口最大化,再次调用还原窗口位置." 折叠>
+    {
+        @ HWND hWnd = wkeGetHostHWND(GetwebView());
+        @ SendMessage(hWnd, WM_SYSCOMMAND, (IsZoomed(hWnd) ? SC_RESTORE : SC_MAXIMIZE), 0);
+    }
+
+    方法 发送窗口最小化事件 <公开 注释 = "发送消息使MB窗口最小化" 折叠 @嵌入式方法 = "">
+    {
+        @ SendMessage((HWND)wkeGetHostHWND(@sn<this>.GetwebView()), WM_SYSCOMMAND, SC_MINIMIZE, 0)
+    }
+
+    方法 发送消息 <公开 类型 = 长整数 注释 = "向浏览器窗口发送一个window消息" 折叠 @禁止流程检查 = 真>
+    参数 message <类型 = 整数 注释 = "消息值" "">
+    参数 wParam <类型 = 整数 注释 = "消息附加参数wParam">
+    参数 IParam <类型 = 整数 注释 = "消息附加参数IParam">
+    {
+        @ HWND hWnd = wkeGetHostHWND(GetwebView());
+        @ LRESULT result;
+        @ wkeFireWindowsMessage(GetwebView(), hWnd, @<message>, @<wParam>, @<IParam>, &result); 
+        @ return result;
+    }
+
+    方法 网页_点击 <公开 注释 = "执行JS查找并执行元素点击事件" 折叠>
+    参数 css选择器 <类型 = 文本型 注释 = "提供一个 css选择器 如: #id  .css  div p 等">
+    参数 元素索引 <类型 = 整数 注释 = "元素索引从0开始默认为第一个" @默认值 = 0>
+    {
+        执行JS脚本 ("document.querySelectorAll('" + css选择器 + "')[" + 到文本 (元素索引) + "].click()")
+    }
+
+    方法 网页_取元素文本 <公开 类型 = 文本型 注释 = "执行JS查找并返回元素的textContent" 返回值注释 = "返回元素的textContent文本" 折叠>
+    参数 css选择器 <类型 = 文本型 注释 = "提供一个 css选择器 如: #id  .css  div p 等">
+    参数 框架ID <类型 = 变整数 注释 = "默认为主框架" @默认值 = 0>
+    参数 元素索引 <类型 = 整数 注释 = "元素索引从0开始默认为第一个" @默认值 = 0>
+    {
+        如果 (框架ID == 0)
+        {
+            框架ID = 取主框架 ()
+        }
+        返回 (执行JS脚本自框架 (框架ID, "return document.querySelectorAll('" + css选择器 + "')[" + 到文本 (元素索引) + "].textContent", 真).取文本值 ())
+    }
+
+    方法 网页_取元素outerHTML <公开 类型 = 文本型 注释 = "执行JS查找并返回元素的outerHTML文本" 返回值注释 = "返回元素的outerHTML文本" 折叠>
+    参数 css选择器 <类型 = 文本型 注释 = "提供一个 css选择器 如: #id  .css  div p 等">
+    参数 框架ID <类型 = 变整数 注释 = "默认为主框架" @默认值 = 0>
+    参数 元素索引 <类型 = 整数 注释 = "元素索引从0开始默认为第一个" @默认值 = 0>
+    {
+        如果 (框架ID == 0)
+        {
+            框架ID = 取主框架 ()
+        }
+        返回 (执行JS脚本自框架 (框架ID, "return document.querySelectorAll('" + css选择器 + "')[" + 到文本 (元素索引) + "].outerHTML", 真).取文本值 ())
+    }
+
+    方法 网页_取元素innerHTML <公开 类型 = 文本型 注释 = "执行JS查找并返回元素的innerHTML文本" 返回值注释 = "返回元素的innerHTML文本" 折叠>
+    参数 css选择器 <类型 = 文本型 注释 = "提供一个 css选择器 如: #id  .css  div p 等">
+    参数 框架ID <类型 = 变整数 注释 = "默认为主框架" @默认值 = 0>
+    参数 元素索引 <类型 = 整数 注释 = "元素索引从0开始默认为第一个" @默认值 = 0>
+    {
+        如果 (框架ID == 0)
+        {
+            框架ID = 取主框架 ()
+        }
+        返回 (执行JS脚本自框架 (框架ID, "return document.querySelectorAll('" + css选择器 + "')[" + 到文本 (元素索引) + "].innerHTML", 真).取文本值 ())
+    }
+
+    方法 网页_取元素文本2 <公开 类型 = 文本型 注释 = "执行JS查找并返回元素的innerText" 返回值注释 = "返回元素的innerText文本" 折叠>
+    参数 css选择器 <类型 = 文本型 注释 = "提供一个 css选择器 如: #id  .css  div p 等">
+    参数 框架ID <类型 = 变整数 注释 = "默认为主框架" @默认值 = 0>
+    参数 元素索引 <类型 = 整数 注释 = "元素索引从0开始默认为第一个" @默认值 = 0>
+    {
+        如果 (框架ID == 0)
+        {
+            框架ID = 取主框架 ()
+        }
+        返回 (执行JS脚本自框架 (框架ID, "return document.querySelectorAll('" + css选择器 + "')[" + 到文本 (元素索引) + "].innerText", 真).取文本值 ())
+    }
+
+    方法 网页_取或置元素属性 <公开 类型 = 文本型 注释 = "执行JS查找并对属性进行取值或置值操作" 返回值注释 = "成功返回对应的属性文本" 折叠>
+    参数 css选择器 <类型 = 文本型 注释 = "提供一个 css选择器 如: #id  .css  div p 等">
+    参数 属性名 <类型 = 文本型 注释 = "提供要取或置的属性名及值文本,例:取属性 type,class,value ,hidden 等等 置属性,style.color=\'red\',value=\'百度一下\'.">
+    参数 框架ID <类型 = 变整数 注释 = "默认为主框架" @默认值 = 0>
+    参数 元素索引 <类型 = 整数 注释 = "元素索引从0开始默认为第一个" @默认值 = 0>
+    参数 是否闭包 <类型 = 逻辑型 注释 = "如为真.则MB会将这段js代码放到一个function(){ script }中执行.以避免变量名和页面中的js变量重名导致的错误." @默认值 = 真>
+    {
+        如果 (框架ID == 0)
+        {
+            框架ID = 取主框架 ()
+        }
+        返回 (执行JS脚本自框架 (框架ID, "return document.querySelectorAll('" + css选择器 + "')[" + 到文本 (元素索引) + "]." + 属性名, 是否闭包).取文本值 ())
+    }
+
+    方法 网页_取元素值 <公开 类型 = 文本型 注释 = "执行JS查找并返回元素的value" 返回值注释 = "成功返回元素的文本值,失败返回js错误文本." 折叠>
+    参数 css选择器 <类型 = 文本型 注释 = "提供一个 css选择器 如: #id  .css  div p 等">
+    参数 框架ID <类型 = 变整数 注释 = "默认为主框架" @默认值 = 0>
+    参数 元素索引 <类型 = 整数 注释 = "元素索引从0开始默认为第一个" @默认值 = 0>
+    参数 是否闭包 <类型 = 逻辑型 注释 = "如为真.则MB会将这段js代码放到一个function(){ script }中执行.以避免变量名和页面中的js变量重名导致的错误." @默认值 = 真>
+    {
+        如果 (框架ID == 0)
+        {
+            框架ID = 取主框架 ()
+        }
+        返回 (执行JS脚本自框架 (框架ID, "return document.querySelectorAll('" + css选择器 + "')[" + 到文本 (元素索引) + "].value", 是否闭包).取文本值 ())
+    }
+
+    方法 网页_填表 <公开 类型 = 文本型 注释 = "执行JS查找元素并赋值" 返回值注释 = "成功返回执行结果文本,失败返回js错误文本." 折叠>
+    参数 css选择器 <类型 = 文本型 注释 = "提供一个 css选择器 如: #id  .css  div p 等">
+    参数 填入内容 <类型 = 文本型 注释 = "填表内容" @默认值 = "">
+    参数 元素索引 <类型 = 整数 注释 = "元素索引从0开始默认为第一个" @默认值 = 0>
+    {
+        返回 (执行JS脚本 ("return document.querySelectorAll('" + css选择器 + "')[" + 到文本 (元素索引) + "].value='" + 填入内容 + "'").取文本值 ())
+    }
+
+    方法 网页_点击_框架 <公开 注释 = "执行JS查找并执行元素点击事件" 折叠>
+    参数 css选择器 <类型 = 文本型 注释 = "提供一个 css选择器 如: #id  .css  div p 等" 编辑时信息 = "2A5A3, 0, 0, 0">
+    参数 框架ID <类型 = 变整数 注释 = "默认为主框架" 编辑时信息 = "2A5A3, 0, 0, 0" @默认值 = 0>
+    参数 元素索引 <类型 = 整数 注释 = "元素索引从0开始默认为第一个" 编辑时信息 = "2A5A3, 0, 0, 0" @默认值 = 0>
+    参数 是否闭包 <类型 = 逻辑型 注释 = "如为真.则MB会将这段js代码放到一个function(){ script }中执行.以避免变量名和页面中的js变量重名导致的错误." 编辑时信息 = "2A5A3, 0, 0, 0"
+            @默认值 = 真>
+    {
+        如果 (框架ID == 0)
+        {
+            框架ID = 取主框架 ()
+        }
+        执行JS脚本自框架 (框架ID, "document.querySelectorAll('" + css选择器 + "')[" + 到文本 (元素索引) + "].click()", 是否闭包)
+    }
+
+    方法 网页_触发输入事件 <公开 注释 = "执行JS查找并执行元素输入事件,在填表时有些页面监听文本框的输入行为,此时需要先触发该元素的输入事件,再执行填表操作." 折叠>
+    参数 css选择器 <类型 = 文本型 注释 = "提供一个 css选择器 如: #id  .css  input 等">
+    参数 框架ID <类型 = 变整数 注释 = "默认为主框架" @默认值 = 0>
+    参数 元素索引 <类型 = 整数 注释 = "元素索引从0开始默认为第一个" @默认值 = 0>
+    参数 是否闭包 <类型 = 逻辑型 注释 = "如为真.则MB会将这段js代码放到一个function(){ script }中执行.以避免变量名和页面中的js变量重名导致的错误." @默认值 = 真>
+    {
+        如果 (框架ID == 0)
+        {
+            框架ID = 取主框架 ()
+        }
+        执行JS脚本自框架 (框架ID, "document.querySelectorAll('" + css选择器 + "')[" + 到文本 (元素索引) + "].dispatchEvent(new Event('input'))", 是否闭包)
+    }
+
+    方法 网页_复选框选中 <公开 注释 = "执行JS查找元素,设置复选框的选中状态." 折叠>
+    参数 css选择器 <类型 = 文本型 注释 = "提供一个 css选择器 如: #id  .css  input 等">
+    参数 是否选中 <类型 = 逻辑型 注释 = "真为选中,假为取消选中状态." @默认值 = 真>
+    参数 框架ID <类型 = 变整数 注释 = "默认为主框架" @默认值 = 0>
+    参数 元素索引 <类型 = 整数 注释 = "元素索引从0开始默认为第一个" @默认值 = 0>
+    参数 是否闭包 <类型 = 逻辑型 注释 = "如为真.则MB会将这段js代码放到一个function(){ script }中执行.以避免变量名和页面中的js变量重名导致的错误." @默认值 = 真>
+    {
+        如果 (框架ID == 0)
+        {
+            框架ID = 取主框架 ()
+        }
+        执行JS脚本自框架 (框架ID, "document.querySelectorAll('" + css选择器 + "')[" + 到文本 (元素索引) + "].checked=" + 选择 (是否选中, "true", "false"), 是否闭包)
+    }
+
+    方法 网页_填表_框架 <公开 类型 = 文本型 注释 = "执行JS查找元素并赋值" 返回值注释 = "成功返回执行结果文本 ,失败返回js错误文本." 折叠>
+    参数 css选择器 <类型 = 文本型 注释 = "提供一个 css选择器 如: #id  .css  div p 等">
+    参数 填入内容 <类型 = 文本型 注释 = "填表内容" @默认值 = "">
+    参数 框架ID <类型 = 变整数 注释 = "默认为主框架" @默认值 = 0>
+    参数 元素索引 <类型 = 整数 注释 = "元素索引从0开始默认为第一个" @默认值 = 0>
+    参数 是否闭包 <类型 = 逻辑型 注释 = "如为真,则MB会将这段js代码放到一个function(){ script }中执行,以避免变量名和页面中的js变量重名导致的错误." @默认值 = 假>
+    {
+        如果 (框架ID == 0)
+        {
+            框架ID = 取主框架 ()
+        }
+        返回 (执行JS脚本自框架 (框架ID, "return document.querySelectorAll('" + css选择器 + "')[" + 到文本 (元素索引) + "].value='" + 填入内容 + "'", 是否闭包).取文本值 ())
+    }
+
+    方法 网页_查找元素 <公开 类型 = 整数 注释 = "执行JS查找元素,成功返回查找到元素数量." 返回值注释 = "找到的元素数量" 折叠>
+    参数 css选择器 <类型 = 文本型 注释 = "提供一个 css选择器 如: #id  .css  div p 等">
+    参数 框架ID <类型 = 变整数 注释 = "默认为主框架" @默认值 = 0>
+    {
+        如果 (框架ID == 0)
+        {
+            框架ID = 取主框架 ()
+        }
+        返回 (执行JS脚本自框架 (框架ID, "return document.querySelectorAll('" + css选择器 + "').length", 真).取整数值 ())
+    }
+
+    #
+}
+
+类 炫彩MB网络工作 <公开 注释 = "MB网络工作类,用于获得或处理MB网络请求相关操作" 折叠 "">
+{
+    变量 _job <类型 = 变整数>
+
+    方法 绑定 <公开 类型 = 炫彩MB网络工作 注释 = "初始化绑网络工作指针封装层内部使用" 返回值注释 = "返回MB网络工作对象" "">
+    参数 网络工作指针 <类型 = 变整数>
+    {
+        _job = 网络工作指针
+        返回 (本对象)
+    }
+
+    方法 置MIMEType <公开 注释 = "设置网络响应的的MIMEType" 折叠>
+    参数 MIME类型 <类型 = 文本型 注释 = "MIME类型 如:\"image/jpeg\"">
+    {
+        变量 mime <类型 = 字节集类>
+        mime = 文本到字节集 (MIME类型)
+        @ wkeNetSetMIMEType((wkeNetJob)@<_job>,(const utf8 *)@<mime>.GetPtr());
+    }
+
+    方法 取MIMEType <公开 类型 = 文本型 注释 = "获取网络响应的的MIMEType" @禁止流程检查 = 真>
+    参数 MIME类型 <类型 = 文本型 注释 = "MIME类型 如:\"image/jpeg\"" @默认值 = "">
+    {
+        变量 mime <类型 = 字节集类>
+        mime = 文本到字节集 (MIME类型)
+        @ wkeString str =wkeCreateString((const utf8 *)@<mime>.GetPtr(),@<mime>.GetSize ());
+        @ return wkeNetGetMIMEType((wkeNetJob)@<_job>,str);
+    }
+
+    方法 取HTTP头某字段 <公开 类型 = 文本型 注释 = "根据参数名获取http请求头" 返回值注释 = "http头字段的值" @禁止流程检查 = 真>
+    参数 http头字段名 <类型 = 文本型 注释 = "http头字段名如:\"method\",\"user-agent\"等等.">
+    {
+        @ return wkeNetGetHTTPHeaderField((wkeNetJob)@<_job>,CU8String (@<http头字段名>).GetText());
+    }
+
+    方法 置HTTP头某字段 <公开 注释 = "设置http请求（或者file:///协议）的http请求头" "">
+    参数 http头字段名 <类型 = 文本型 注释 = "http头字段名如:\"method\",\"user-agent\"等等.">
+    参数 http头字段值 <类型 = 文本型 注释 = "http头字段值">
+    {
+        @ wkeNetSetHTTPHeaderField((wkeNetJob)@<_job>, @<http头字段名>, @<http头字段值>, 0);
+    }
+
+    方法 取HTTP响应头某字段 <公开 类型 = 文本型 注释 = "获取http响应头" 返回值注释 = "http头字段的值" @禁止流程检查 = 真>
+    参数 http头字段名 <类型 = 文本型 注释 = "http头字段名如:\"method\",\"user-agent\"等等.">
+    {
+        @ return wkeNetGetHTTPHeaderFieldFromResponse((wkeNetJob)@<_job>,CU8String (@<http头字段名>).GetText());
+    }
+
+    方法 置数据 <公开 注释 = "  调用此方法后,网络层收到数据会存储在一个内存缓冲区内,接收数据完成后触发\"结束加载Url\"事件.并允许次方法修改网络数据,"
+            注释 = "此接口一般在\"开始加载Url\"事件中使用,在网络访问执行前,设置指定的数据到网络层,数据内容可以为js代码,图片,字符串,数据块等任意类型.">
+    参数 数据 <类型 = 字节集类 注释 = "欲修改的网络数据">
+    {
+        @ wkeNetSetData((wkeNetJob)@<_job>,(void*)@<数据>.GetPtr(),(int)@<数据>.GetSize ());
+    }
+
+    方法 Hook请求 <公开 注释 = "此方法一般在\"开始加载Url\"事件中使用,调用此方法会在接收数据完成后响应\"结束加载Url\"事件中获得拦截到的数据.">
+    {
+        @ wkeNetHookRequest((wkeNetJob)@<_job>);
+    }
+
+    方法 取请求方法 <公开 类型 = 整数 注释 = "取当前http请求类型" 返回值注释 = "请求类型 0:无效; 1:Get; 2:Post; 3:Put." @禁止流程检查 = 真>
+    {
+        @ return (int)wkeNetGetRequestMethod((wkeNetJob)@<_job>);
+    }
+
+    方法 取Url <公开 类型 = 文本型 注释 = "获取当前请求的链接地址" 返回值注释 = "前请求的链接地址" @禁止流程检查 = 真>
+    {
+        @ return wkeNetGetUrlByJob((wkeNetJob)@<_job>);
+    }
+
+    方法 取消请求 <公开 注释 = "取消本次网络请求,此方法需要在\"开始载入Ulr\"事件中使用.">
+    {
+        @ wkeNetCancelRequest((wkeNetJob)@<_job>);
+    }
+
+    方法 修改请求URL <公开 注释 = "修改当前请求的url,使请求指向另外一个url,此方法需要在\"开始载入Ulr\"事件中使用.">
+    参数 链接地址 <类型 = 文本型 注释 = "欲修改的url">
+    {
+        @ wkeNetChangeRequestUrl((wkeNetJob)@<_job>,CU8String (@<链接地址>).GetText ());
+    }
+
+    方法 取HTTP请求头 <公开 注释 = "用于获得当前载入链接的请求头信息">
+    参数 请求头数据 <类型 = 文本数组类 注释 = "提供文本数组变量,用于存放获得的请求头信息,每个成员代表一个字段.">
+    {
+        @ const wkeSlist* psHeadList = wkeNetGetRawHttpHead((wkeNetJob)@<_job>);
+        @ while (psHeadList != nullptr)
+        @ {
+        @     @<请求头数据>.data ().Add2 (psHeadList->data);
+        @     psHeadList = psHeadList->next;
+        @ }
+    }
+
+    方法 取HTTP响应头 <公开 注释 = "用于获得当前载入链接的响应头信息">
+    参数 响应头数据 <类型 = 文本数组类 注释 = "提供文本数组变量,用于存放获得的响应头信息,每个成员代表一个字段.">
+    {
+        @ const wkeSlist* psHeadList = wkeNetGetRawResponseHead((wkeNetJob)@<_job>);
+        @ while (psHeadList != nullptr)
+        @ {
+        @     @<响应头数据>.data ().Add2 (psHeadList->data);
+        @     psHeadList = psHeadList->next;
+        @ }
+    }
+
+    方法 取POST数据 <公开 类型 = 整数 注释 = "取当前POST请求数据,当前请求类型为POST时有效." 返回值注释 = "成功返回提交数据(文件)个数,否则返回0." @禁止流程检查 = 真>
+    参数 POST数据 <类型 = 字节集数组类 注释 = "提供一个字节集数组,用来接收POST数据集.">
+    {
+        @ wkePostBodyElements* pPostDatas = wkeNetGetPostBody((wkeNetJob)@<_job>);
+        @ if(pPostDatas == nullptr) return 0;
+        @ wkePostBodyElement* pElement;
+        @ for (int i = 0; i< pPostDatas->elementSize; i++)
+        @ {
+        @     if (pPostDatas->element != nullptr)
+        @     {
+        @         pElement =(pPostDatas->element)[i];
+        @         if (pElement->type == wkeHttBodyElementTypeData)
+        @         {
+        @             if(pElement->data != NULL ) 
+        @                @<POST数据>.Add (CVolMem((BYTE*)pElement->data->data, pElement->data->length) , NULL);
+        @         } else {
+        @            @<POST数据>.Add (CVolMem(wkeGetString( pElement->filePath)) , NULL); //@<POST数据>.Add (CVolMem((BYTE*)pElement->fileStart, pElement->fileLength) , NULL); //
+        @         }
+        @     } 
+        @ }
+        @ return (int)pPostDatas->elementSize; 
+    }
+}
+
+类 炫彩MB代理类型 <公开 注释 = "MB代理类型常量" 折叠 折叠2 @文档 = "category = \"炫彩WEB组件.辅助类\"" @常量类 = 整数>
+{
+    常量 不使用代理 <公开 值 = @"@wkeProxyType::WKE_PROXY_NONE" 注释 = "不使用代理">
+    常量 HTTP <公开 值 = @"@wkeProxyType::WKE_PROXY_HTTP" 注释 = "HTTP代理">
+    常量 SOCKS4 <公开 值 = @"@wkeProxyType::WKE_PROXY_SOCKS4" 注释 = "SOCKS4代理">
+    常量 SOCKS4A <公开 值 = @"@wkeProxyType::WKE_PROXY_SOCKS4A" 注释 = "SOCKS4A代理">
+    常量 SOCKS5 <公开 值 = @"@wkeProxyType::WKE_PROXY_SOCKS5" 注释 = "SOCKS5代理">
+    常量 SOCKS5HOSTNAME <公开 值 = @"@wkeProxyType::WKE_PROXY_SOCKS5HOSTNAME" 注释 = "SOCKS5HOSTNAME代理">
+}
+
+类 炫彩MB默认菜单项 <公开 注释 = "MB默认菜单项常量" 折叠 折叠2 @文档 = "category = \"炫彩WEB组件.辅助类\"" @常量类 = 整数>
+{
+    常量 全选 <公开 值 = @"@wkeMenuItemId::kWkeMenuSelectedAllId" 注释 = "内容全选">
+    常量 选择文本 <公开 值 = @"@wkeMenuItemId::kWkeMenuSelectedTextId" 注释 = "选择文本">
+    常量 撤销 <公开 值 = @"@wkeMenuItemId::kWkeMenuUndoId" 注释 = "撤销">
+    常量 复制图片 <公开 值 = @"@wkeMenuItemId::kWkeMenuCopyImageId" 注释 = "复制图片">
+    常量 审查元素 <公开 值 = @"@wkeMenuItemId::kWkeMenuInspectElementAtId" 注释 = "审查元素">
+    常量 剪切 <公开 值 = @"@wkeMenuItemId::kWkeMenuCutId" 注释 = "剪切">
+    常量 粘贴 <公开 值 = @"@wkeMenuItemId::kWkeMenuPasteId" 注释 = "粘贴">
+    常量 打印 <公开 值 = @"@wkeMenuItemId::kWkeMenuPrintId" 注释 = "打印">
+    常量 前进 <公开 值 = @"@wkeMenuItemId::kWkeMenuGoForwardId" 注释 = "前进">
+    常量 后退 <公开 值 = @"@wkeMenuItemId::kWkeMenuGoBackId" 注释 = "后退">
+    常量 刷新 <公开 值 = @"@wkeMenuItemId::kWkeMenuReloadId" 注释 = "刷新">
+    常量 图片另存为 <公开 值 = @"@wkeMenuItemId::kWkeMenuSaveImageId" 注释 = "图片另存为">
+}
+
+类 炫彩MBCookie命令 <公开 注释 = "执行Cookie命令常量" 折叠 折叠2 @文档 = "category = \"炫彩WEB组件.辅助类\"" @常量类 = 整数>
+{
+    常量 全部清除 <公开 值 = @"@wkeCookieCommand::wkeCookieCommandClearAllCookies" 注释 = "清楚所有Cookies">
+    常量 清除会话Cookies <公开 值 = @"@wkeCookieCommand::wkeCookieCommandClearSessionCookies" 注释 = "清除会话Cookies">
+    常量 刷新到文件 <公开 值 = @"@wkeCookieCommand::wkeCookieCommandFlushCookiesToFile" 注释 = "更新默认为\"cookies.dat\"文件">
+    常量 从文件重新载入 <公开 值 = @"@wkeCookieCommand::wkeCookieCommandReloadCookiesFromFile" 注释 = "从默认为\"cookies.dat\"中重新载入Cookies">
+}
+
+类 炫彩MB导航类型 <公开 注释 = "MB导航类型常量,用户通过以下几种方式导航到当前页面." 折叠 折叠2 @文档 = "category = \"炫彩WEB组件.辅助类\"" @常量类 = 整数>
+{
+    常量 点击链接 <公开 值 = @"@wkeNavigationType::WKE_NAVIGATION_TYPE_LINKCLICK" 注释 = "用户通过点击连接方式导航到当前页面">
+    常量 表单提交 <公开 值 = @"@wkeNavigationType::WKE_NAVIGATION_TYPE_FORMSUBMITTE" 注释 = "用户通过表单提交方式导航到当前页面">
+    常量 后退 <公开 值 = @"@wkeNavigationType::WKE_NAVIGATION_TYPE_BACKFORWARD" 注释 = "用户通过点击后退按钮方式导航到当前页面">
+    常量 重新载入 <公开 值 = @"@wkeNavigationType::WKE_NAVIGATION_TYPE_RELOAD" 注释 = "用户通过刷新页面方式导航到当前页面">
+    常量 表单重新提交 <公开 值 = @"@wkeNavigationType::WKE_NAVIGATION_TYPE_FORMRESUBMITT" 注释 = "用户通过表单重新提交方式导航到当前页面">
+    常量 其他 <公开 值 = @"@wkeNavigationType::WKE_NAVIGATION_TYPE_OTHER" 注释 = "用户通过其他方式导航到当前页面">
+}
+
+类 炫彩MBjsValue类 <公开 注释 = "js取值相关操作类,由于js是弱类型语言jsValue其实是一个指向封装了v8内部各种类型的类指针,可以理解成一个代表js中各种类型的句柄." @禁止创建对象 = 真>
+{
+    方法 js垃圾回收 <公开 静态 注释 = "js垃圾回收" 折叠 @嵌入式方法 = "">
+    {
+        @ jsGC();
+    }
+
+    方法 js执行 <公开 静态 类型 = 炫彩MBjs值
+            注释 = "执行一段js代码,代码会在MB内部自动被包裹在一个function(){}中,所以使用的变量会作为局部变量以避免同页面js代码中的其他变量重名导致运行出错,要获取返回值,请加return."
+            返回值注释 = "返回一个js返回值对象用于取值操作" 折叠>
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态句柄">
+    参数 JS文本 <类型 = 文本型 注释 = "js代码脚本">
+    参数 是否闭包 <类型 = 逻辑型 注释 = "设定是否闭包运行js" @默认值 = 真>
+    {
+        变量 jv <类型 = 变整数>
+        变量 js <类型 = 炫彩MBjs值>
+        @ @<jv>=(INT_P)jsEvalExW((jsExecState)@<js执行状态>, @<JS文本>,@<是否闭包>);
+        返回 (js.绑定 (js执行状态, jv))
+    }
+
+    方法 js执行状态是否有效 <公开 静态 类型 = 逻辑型 注释 = "判断js执行状态是否有效" 返回值注释 = "返回真代表有效" 折叠 @嵌入式方法 = "">
+    参数 js执行状态 <类型 = 长整数 注释 = " js执行状态句柄">
+    {
+        @ jsIsValidExecState(( jsExecState)@<js执行状态>)
+    }
+
+    方法 jsValue是否有效 <公开 静态 类型 = 逻辑型 注释 = "判断jsValue句柄是否有效" 返回值注释 = "返回真代表有效" @嵌入式方法 = "">
+    参数 js执行状态 <类型 = 长整数 注释 = "js执行状态句柄">
+    参数 jsValue句柄 <类型 = 长整数 注释 = "jsValue句柄">
+    {
+        @ jsIsJsValueValid(( jsExecState)@<js执行状态>,( jsValue)@<jsValue句柄>)
+    }
+
+    方法 js取浏览器句柄 <公开 静态 类型 = 变整数 注释 = "通过js执行状态取浏览器句柄" 返回值注释 = "返回浏览器起句柄" @嵌入式方法 = "">
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态句柄">
+    {
+        @ (INT_P)jsGetWebView((jsExecState)@<js执行状态>)
+    }
+
+    方法 js到整数 <公开 静态 类型 = 整数 注释 = "将jsValue代表的js值转换为整数" 返回值注释 = "整数js值" @嵌入式方法 = "">
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态">
+    参数 jsValue句柄 <类型 = 变整数 注释 = "js执行状态">
+    {
+        @ jsToInt((jsExecState)@<js执行状态>, ( jsValue)@<jsValue句柄>)
+    }
+
+    方法 js到文本 <静态 类型 = 文本型 注释 = "将jsValue代表的js值转换为文本" 返回值注释 = "文本js值" @嵌入式方法 = "">
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态">
+    参数 jsValue句柄 <类型 = 变整数 注释 = "jsValue句柄">
+    {
+        @ CVolString(jsToString((jsExecState)@<js执行状态>, @<jsValue句柄>))
+    }
+
+    方法 js到浮点数 <静态 类型 = 小数 注释 = "将jsValue代表的js值转换为浮点数" 返回值注释 = "js浮点数值" @嵌入式方法 = "">
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态">
+    参数 jsValue句柄 <类型 = 变整数 注释 = "jsValue句柄">
+    {
+        @ jsToFloat((jsExecState)@<js执行状态>, @<jsValue句柄>)
+    }
+
+    方法 js到小数 <静态 类型 = 小数 注释 = "将jsValue代表的js值转换为小数" 返回值注释 = "js小数值" @嵌入式方法 = "">
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态">
+    参数 jsValue句柄 <类型 = 变整数 注释 = "jsValue句柄">
+    {
+        @ jsToDouble((jsExecState)@<js执行状态>, @<jsValue句柄>)
+    }
+
+    方法 js到逻辑 <静态 类型 = 逻辑型 注释 = "将jsValue代表的js值转换为小数" 返回值注释 = "js逻辑值" @嵌入式方法 = "">
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态">
+    参数 jsValue句柄 <类型 = 变整数 注释 = "jsValue句柄">
+    {
+        @ jsToBoolean((jsExecState)@<js执行状态>, @<jsValue句柄>)
+    }
+
+    方法 js取类型 <静态 类型 = 炫彩MBjs数据类型 注释 = "取js值类型返回JS数据类型常量" 返回值注释 = "返回JS数据类型 0:数值; 1:文本; 2:逻辑; 3:对象; 4:方法; 5:未定义; 6:数组; 7:空" 折叠
+            @嵌入式方法 = "">
+    参数 jsValue句柄 <类型 = 变整数 注释 = "jsValue句柄">
+    {
+        @ jsTypeOf(@<jsValue句柄>)
+    }
+
+    方法 js参数类型 <静态 类型 = 炫彩MBjs数据类型 返回值注释 = "js数据类型常量 0:数值; 1:文本; 2:逻辑; 3:对象; 4:方法; 5:未定义; 6:数组; 7:空" @禁止流程检查 = 真>
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态">
+    参数 参数索引 <类型 = 整数 注释 = "参数索引从0开始">
+    {
+        @ return jsArgType((jsExecState)@<js执行状态>,@<参数索引>);
+    }
+
+    方法 js取参数 <静态 类型 = 变整数 注释 = "取js绑定方法参数,返回一个代表js参数的jsValue句柄用于后续的取值操作." 返回值注释 = "代表js参数的jsValue句柄" @嵌入式方法 = "">
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态">
+    参数 参数索引 <类型 = 整数 注释 = "参数索引从0开始">
+    {
+        @ (INT_P)jsArg((jsExecState)@<js执行状态>,@<参数索引>)
+    }
+
+    方法 js取参数个数 <静态 类型 = 整数 注释 = "取js绑定方法的参数个数" 返回值注释 = "返回参数个数" @嵌入式方法 = "">
+    参数 js执行状态 <类型 = 变整数>
+    {
+        @ jsArgCount ((jsExecState)@<js执行状态>)
+    }
+
+    方法 js空 <公开 静态 类型 = 整数 注释 = "创建一个值为Null的jsValue句柄 用于程序向js返回数据" 返回值注释 = "返回jsValue句柄" @嵌入式方法 = "">
+    {
+        @ (int)jsNull ()
+    }
+
+    方法 js未定义 <公开 静态 类型 = 整数 注释 = "创建一个值为Undefined的jsValue句柄 用于程序向js返回数据" 返回值注释 = "返回jsValue句柄" @嵌入式方法 = "">
+    {
+        @ (int)jsUndefined ()
+    }
+
+    方法 js真 <公开 静态 类型 = 整数 注释 = "创建一个值为True的jsValue句柄 用于程序向js返回数据" 返回值注释 = "返回jsValue句柄" @嵌入式方法 = "">
+    {
+        @ (int)jsTrue ()
+    }
+
+    方法 js假 <公开 静态 类型 = 整数 注释 = "创建一个值为False的jsValue句柄 用于程序向js返回数据" 返回值注释 = "返回jsValue句柄" @嵌入式方法 = "">
+    {
+        @ (int)jsFalse ()
+    }
+
+    方法 js整数 <公开 静态 类型 = 整数 注释 = "创建一个值为数值型的jsValue句柄 用于程序向js返回数据" 返回值注释 = "返回jsValue句柄" @嵌入式方法 = "">
+    参数 整数值 <类型 = 整数 注释 = "整数返回值">
+    {
+        @ (int)jsInt (@<整数值>)
+    }
+
+    方法 js浮点数 <公开 静态 类型 = 整数 注释 = "创建一个值为Float型的jsValue句柄 用于程序向js返回数据" 返回值注释 = "返回jsValue句柄" @嵌入式方法 = "">
+    参数 小数型值 <类型 = 单精度小数 注释 = "浮点数返回值">
+    {
+        @ (int)jsFloat (@<小数型值>)
+    }
+
+    方法 js双精度 <公开 静态 类型 = 整数 注释 = "创建一个值为Double型的jsValue句柄 用于程序向js返回数据" 返回值注释 = "返回jsValue句柄" @嵌入式方法 = "">
+    参数 小数型值 <类型 = 小数 注释 = "双精度小数返回值" "">
+    {
+        @ (int)jsDouble (@<小数型值>)
+    }
+
+    方法 js逻辑 <公开 静态 类型 = 整数 注释 = "创建一个值为逻辑型的jsValue句柄 用于程序向js返回数据" 返回值注释 = "jsValue句柄" @嵌入式方法 = "">
+    参数 逻辑值 <类型 = 逻辑型 注释 = "逻辑型返回值" "">
+    {
+        @ (int)jsBoolean (@<逻辑值>)
+    }
+
+    方法 js字符串 <公开 静态 类型 = 整数 注释 = "创建一个值为js字符串型的jsValue句柄 用于程序向js返回数据" 返回值注释 = "返回jsValue句柄" @嵌入式方法 = "">
+    参数 文本内容 <类型 = 文本型 注释 = "文本内容">
+    {
+        @ (int)jsDoubleString (CU8String (@<文本内容>).GetText())
+    }
+
+    方法 js文本 <公开 静态 类型 = 整数 注释 = "创建一个值为js字符串型的jsValue句柄 用于程序向js返回数据" 返回值注释 = "返回jsValue句柄" @嵌入式方法 = "">
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态">
+    参数 文本内容 <类型 = 文本型 注释 = "文本内容">
+    {
+        @ (int)jsStringW ((jsExecState)@<js执行状态>,@<文本内容>)
+    }
+
+    方法 js数组缓冲区 <公开 静态 类型 = 整数 注释 = "创建一个表示jsArrayBuffer型的jsValue句柄主要用来处理一些二进制数据" 返回值注释 = "返回jsValue句柄" @嵌入式方法 = "">
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态">
+    参数 二进制数据 <类型 = 字节集类 注释 = "欲向js中加入的字节集数据">
+    参数 数据长度 <类型 = 变整数 注释 = "数据尺寸">
+    {
+        @ (int)jsArrayBuffer ((jsExecState)@<js执行状态>,(const char*)@<二进制数据>.GetPtr(), (size_t)@<数据长度>)
+    }
+
+    方法 js取数组缓冲区 <公开 静态 类型 = 字节集类 注释 = "将代表jsArrayBuffer的数据转成字节集" 返回值注释 = "返回内存数据字节集" @禁止流程检查 = 真>
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态">
+    参数 jsValue句柄 <类型 = 变整数 注释 = "jsValue句柄">
+    {
+        @ wkeMemBuf* buf = jsGetArrayBuffer((jsExecState)@<js执行状态>, (jsValue)@<jsValue句柄>);
+        @ if (buf == NULL)  return CVolMem();
+        @ return CVolMem(buf->data, buf->length);
+    }
+
+    方法 js空对象 <公开 静态 类型 = 整数 注释 = "创建一个空对象的jsValue句柄 用于程序向js返回数据" 返回值注释 = "返回jsValue句柄" @嵌入式方法 = "">
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态">
+    {
+        @ (int)jsEmptyObject ((jsExecState)@<js执行状态>)
+    }
+
+    方法 js空数组 <公开 静态 类型 = 整数 注释 = "创建一个表示空数组的jsValue句柄用于程序向js返回数据" 返回值注释 = "返回jsValue句柄" @嵌入式方法 = "">
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态">
+    {
+        @ (int)jsEmptyArray ((jsExecState)@<js执行状态>)
+    }
+
+    方法 js对象 <静态 类型 = 整数 注释 = "创建一个表示js对象型的jsValue句柄用于程序向js返回数据" 返回值注释 = "返回jsValue句柄" @禁止流程检查 = 真>
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态">
+    {
+        @ jsData* data = new jsData();
+        @ memset(data, 0, sizeof(jsData));
+        @ strcpy(data->typeName, "Object");
+        @ return (int)jsObject ((jsExecState)@<js执行状态>, data);
+    }
+}
+
+类 炫彩MBjs值 <公开 基础类 = 炫彩MBjsValue类 注释 = "用于获得执行JS脚本的返回值以及获得js参数值" 折叠>
+{
+    变量 _jv <类型 = 变整数>
+    变量 _es <类型 = 变整数>
+
+    方法 绑定 <公开 类型 = 炫彩MBjs值 注释 = "绑定jsValue句柄和js执行状态" 返回值注释 = "返回js值对象用于后续的取值操作">
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态">
+    参数 jsValue句柄 <类型 = 变整数 注释 = "jsValue句柄">
+    {
+        _jv = jsValue句柄
+        _es = js执行状态
+        返回 (本对象)
+    }
+
+    方法 jsValue句柄 <公开 属性读 类型 = 变整数 注释 = "取代表当前js值的jsValue句柄" 折叠>
+    {
+        返回 (_jv)
+    }
+
+    方法 js执行状态 <公开 属性读 类型 = 变整数 注释 = "取当前js值的执行状态句柄">
+    {
+        返回 (_es)
+    }
+
+    方法 取文本值 <公开 类型 = 文本型 注释 = "将js返回的值转换成文本" 返回值注释 = "返回js返回的文本值">
+    {
+        返回 (js到文本 (_es, _jv))
+    }
+
+    方法 取整数值 <公开 类型 = 整数 注释 = "将js返回的值转换成整数" 返回值注释 = "返回js返回的整数值">
+    {
+        返回 (js到整数 (_es, _jv))
+    }
+
+    方法 取小数值 <公开 类型 = 小数 注释 = "将js返回的值转换成小数" 返回值注释 = "js返回的小数值">
+    {
+        返回 (js到小数 (_es, _jv))
+    }
+
+    方法 取浮点数值 <公开 类型 = 小数 注释 = "将js返回的值转换成小数" 返回值注释 = "返回js返回的浮点数,这里使用小数表示">
+    {
+        返回 (js到浮点数 (_es, _jv))
+    }
+
+    方法 取逻辑值 <公开 类型 = 逻辑型 注释 = "将js返回的值转换成逻辑值" 返回值注释 = "返回js返回的逻辑值">
+    {
+        返回 (js到逻辑 (_es, _jv))
+    }
+
+    方法 取字节集值 <公开 类型 = 字节集类 注释 = "将js返回的ArrayBuffer类型值转为字节集" 返回值注释 = "失败返回空字节集" 折叠>
+    {
+        返回 (js取数组缓冲区 (_es, _jv))
+    }
+
+    方法 取值类型 <公开 类型 = 炫彩MBjs数据类型 注释 = "取js值的类型,与js数据类型常量进行比较判断值的类型"
+            返回值注释 = "js数据类型常量 0:数值; 1:文本; 2:逻辑; 3:对象; 4:方法; 5:未定义; 6:数组; 7:空">
+    {
+        返回 (js取类型 (_jv))
+    }
+}
+
+类 炫彩MBjs参数 <公开 基础类 = 炫彩MBjsValue类 注释 = "用于获得js绑定方法被执行时提供的的参数" 折叠>
+{
+    变量 _es <类型 = 变整数>
+
+    方法 绑定 <公开 类型 = 炫彩MBjs参数 注释 = "绑定设置js执行状态" 返回值注释 = "返回js参数对象">
+    参数 js执行状态 <类型 = 变整数 注释 = "js执行状态,可以理解成一个句柄.">
+    {
+        _es = js执行状态
+        返回 (本对象)
+    }
+
+    方法 js执行状态 <公开 属性读 类型 = 变整数 注释 = "取当前js参数的执行状态句柄" 折叠>
+    {
+        返回 (_es)
+    }
+
+    方法 取参数 <公开 类型 = 炫彩MBjs值 注释 = "取绑定js方法的参数" 返回值注释 = "返回js值对象">
+    参数 参数索引 <类型 = 整数 注释 = "参数索引 从0开始第几个参数">
+    {
+        变量 jr <类型 = 炫彩MBjs值>
+        jr.绑定 (_es, js取参数 (_es, 参数索引))
+        返回 (jr)
+    }
+
+    方法 取参数类型 <公开 类型 = 炫彩MBjs数据类型 注释 = "取绑定js方法的参数类型" 返回值注释 = "返回js数据类型常量 0:数值; 1:文本; 2:逻辑; 3:对象; 4:方法; 5:未定义; 6:数组; 7:空">
+    参数 参数索引 <类型 = 整数 注释 = "参数索引 从0开始第几个参数">
+    {
+        返回 (js参数类型 (_es, 参数索引))
+    }
+
+    方法 取参数个数 <公开 类型 = 整数 注释 = "取绑定js方法的参数个数" 返回值注释 = "返回js方法的参数个数" 折叠>
+    {
+        返回 (js取参数个数 (_es))
+    }
+}
+
+类 炫彩MBjs数据类型 <公开 注释 = "js数据类型常量" 折叠 @文档 = "category = \"炫彩WEB组件.辅助类\"" @常量类 = 整数>
+{
+    常量 数值 <公开 值 = @"@jsType::JSTYPE_NUMBER" 注释 = "js数值类型">
+    常量 文本 <公开 值 = @"@jsType::JSTYPE_STRING" 注释 = "js字符串类型">
+    常量 逻辑 <公开 值 = @"@jsType::JSTYPE_BOOLEAN" 注释 = "js布尔类型">
+    常量 对象 <公开 值 = @"@jsType::JSTYPE_OBJECT" 注释 = "js对象类型">
+    常量 方法 <公开 值 = @"@jsType::JSTYPE_FUNCTION" 注释 = "js方法类型">
+    常量 未定义 <公开 值 = @"@jsType::JSTYPE_UNDEFINED" 注释 = "jsUNDEFINED">
+    常量 数组 <公开 值 = @"@jsType::JSTYPE_ARRAY" 注释 = "js数组">
+    常量 空 <公开 值 = @"@jsType::JSTYPE_NULL" 注释 = "jsNULL">
+}
+
+#

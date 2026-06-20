@@ -1,0 +1,48 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件
+
+类 ______Blat全局类 <公开 注释 = "https://blog.csdn.net/qiming_zhang/article/details/6065824"
+        注释 = "https://www.itdaan.com/blog/2012/05/31/cd78a4bd817caf3ecf9254ceb1ae35bb.html" @全局类 = 真>
+{
+    方法 发送邮件Blat <公开 静态 类型 = 整数 @嵌入式方法 = "" @视窗.外部头文件 = "Blat\\X64\\blatdll.h" @视窗.外部库.win32 = "Blat\\X86\\blat.lib"
+            @视窗.外部库.x64 = "Blat\\X64\\blat.lib" @视窗.附属文件.win32 = "Blat\\X86\\blat.dll" @视窗.附属文件.x64 = "Blat\\X64\\blat.dll" "">
+    参数 命令行 <类型 = 文本型>
+    {
+        @ SendW(@<命令行>.GetText())
+    }
+
+    方法 "//发送邮件Blat2" <公开 静态 类型 = 整数 @禁止流程检查 = 真 @视窗.外部头文件 = "Blat\\X64\\blatdll.h" @视窗.外部库.win32 = "Blat\\X86\\blat.lib"
+            @视窗.外部库.x64 = "Blat\\X64\\blat.lib" @视窗.附属文件.win32 = "Blat\\X86\\blat.dll" @视窗.附属文件.x64 = "Blat\\X64\\blat.dll" "">
+    参数 命令行 <类型 = 文本型>
+    {
+        @ int  nCount = 0;
+        @ LPWSTR * lpCmd =  CommandLineToArgvW(@<命令行>.GetText(),&nCount);
+        @ int nCode = BlatW(nCount,lpCmd);
+        @ if(lpCmd) GlobalFree((HGLOBAL)lpCmd);
+        @ return nCode;
+
+    }
+
+    方法 "//发送邮件Blat_CMD" <公开 静态 类型 = 文本型 @视窗.附属文件.win32 = "Blat\\X86\\blat.exe" @视窗.附属文件.x64 = "Blat\\X64\\blat.exe">
+    参数 命令行 <类型 = 文本型>
+    {
+        返回 (CMD (命令行, 真))
+    }
+
+    #
+
+    方法 发送邮件Blat设置回调 <公开 静态 @嵌入式方法 = "">
+    参数 参数 <@匹配方法 = "发送邮件Blat回调">
+    {
+        @ SetPrintFuncW( (void (__stdcall *)(LPTSTR)) @<参数> )
+    }
+
+    方法 发送邮件Blat回调 <公开 静态>
+    参数 文本指针 <类型 = 变整数>
+    {
+
+    }
+
+    #
+}

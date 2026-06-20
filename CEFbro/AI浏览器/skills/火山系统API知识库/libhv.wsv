@@ -1,0 +1,1370 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "网络库" @文档 = "category = \"开源库.libhv\"" "" "">
+
+类 空模板 <折叠 折叠2 @模板基础类 = 真 @视窗.外部头文件 = "libhv\\libhvTool.h" @视窗.头文件搜寻目录 = "libhv\\x64-windows-static\\include\\hv"
+        "//@视窗.头文件搜寻目录" = "libhv\\$(p)\\include\\hv" "" "//默认连接方式"
+        "@视窗.外部库.win32-default-debug" = "libhv\\x86-windows-static\\debug\\lib\\hv_static.lib"
+        "//@视窗.附属文件.win32-default-debug" = "libhv\\x86-windows\\debug\\bin\\hv.dll" ""
+        "@视窗.外部库.win32-default-release" = "libhv\\x86-windows-static\\lib\\hv_static.lib"
+        "//@视窗.附属文件.win32-default-release" = "libhv\\x86-windows\\bin\\hv.dll" "" ""
+        "@视窗.外部库.win32-dynamic-debug" = "libhv\\x86-windows\\debug\\lib\\hv.lib"
+        "@视窗.附属文件.win32-dynamic-debug" = "libhv\\x86-windows\\debug\\bin\\hv.dll" ""
+        "@视窗.外部库.win32-dynamic-release" = "libhv\\x86-windows\\lib\\hv.lib"
+        "@视窗.附属文件.win32-dynamic-release" = "libhv\\x86-windows\\bin\\hv.dll" ""
+        "@视窗.外部库.win32-static-debug" = "libhv\\x86-windows-static\\debug\\lib\\hv_static.lib"
+        "@视窗.外部库.win32-static-release" = "libhv\\x86-windows-static\\lib\\hv_static.lib" "" "" ""
+        "@视窗.外部库.x64-default-debug" = "libhv\\x64-windows-static\\debug\\lib\\hv_static.lib"
+        "//@视窗.附属文件.x64-default-debug" = "libhv\\x64-windows\\debug\\bin\\hv.dll" ""
+        "@视窗.外部库.x64-default-release" = "libhv\\x64-windows-static\\lib\\hv_static.lib"
+        "//@视窗.附属文件.x64-default-release" = "libhv\\x64-windows\\bin\\hv.dll" "" "" ""
+        "@视窗.外部库.x64-dynamic-debug" = "libhv\\x64-windows\\debug\\lib\\hv.lib"
+        "@视窗.附属文件.x64-dynamic-debug" = "libhv\\x64-windows\\debug\\bin\\hv.dll" ""
+        "@视窗.外部库.x64-dynamic-release" = "libhv\\x64-windows\\lib\\hv.lib"
+        "@视窗.附属文件.x64-dynamic-release" = "libhv\\x64-windows\\bin\\hv.dll" ""
+        "@视窗.外部库.x64-static-debug" = "libhv\\x64-windows-static\\debug\\lib\\hv_static.lib"
+        "@视窗.外部库.x64-static-release" = "libhv\\x64-windows-static\\lib\\hv_static.lib" "">
+{
+
+    #
+}
+
+类 HV循环事件 <公开 基础类 = 空模板 注释 = "基础事件" 折叠 @模板基础类 = 真>
+{
+
+    # @begin
+    # <> <include>
+    #
+    # typedef struct loopUserData
+    # {
+    #     @sn<current_class>* pThis;
+    #     INT_P               userData;
+    #     INT_P               wParam;
+    #     INT_P               lParam;
+    # }LOOP_USER_DATA;
+    #
+    # hloop_t* m_loop;
+    # hloop_t* GetData()
+    # {
+    #     return m_loop;
+    # }
+    # void SetData(hloop_t* loop)
+    # {
+    #     m_loop = loop;
+    # }
+    # hloop_t** GetPointerPointer()
+    # {
+    #     return &m_loop;
+    # }
+    # struct loopUserData m_UserData;
+    # <> </include>
+    # @end
+    #
+
+    方法 创建 <公开>
+    参数 标志 <类型 = 整数 注释 = "可选值有三个" 注释 = "0 默认 用户需手动释放" 注释 = "1 运行一次" 注释 = "2 运行完毕自动销毁" 注释 = "4 没有事件时自动退出" @默认值 = 0>
+    {
+        @  SetData( hloop_new(@<标志>));
+    }
+
+    方法 销毁 <公开 @嵌入式方法 = "">
+    {
+        @ hloop_free(@sn<this>.GetPointerPointer())
+    }
+
+    方法 运行 <公开 @嵌入式方法 = "">
+    {
+        @ hloop_run(@sn<this>.GetData())
+    }
+
+    方法 停止 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ hloop_stop(@sn<this>.GetData())
+    }
+
+    方法 暂停 <公开 类型 = 整数 注释 = "可以调用 继续() 继续工作" @嵌入式方法 = "">
+    {
+        @ hloop_pause(@sn<this>.GetData())
+    }
+
+    方法 继续 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ hloop_resume(@sn<this>.GetData())
+    }
+
+    方法 唤醒 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ hloop_wakeup(@sn<this>.GetData())
+    }
+
+    方法 取状态 <公开 类型 = 整数 返回值注释 = "typedef enum {" 返回值注释 = "    HLOOP_STATUS_STOP," 返回值注释 = "    HLOOP_STATUS_RUNNING,"
+            返回值注释 = "    HLOOP_STATUS_PAUSE" 返回值注释 = "} hloop_status_e;" 返回值注释 = "0 停止" 返回值注释 = "1 运行中" 返回值注释 = "1 暂停中" 折叠
+            @嵌入式方法 = "">
+    {
+        @ (int)hloop_status(@sn<this>.GetData())
+    }
+
+    方法 更新时间 <公开 @嵌入式方法 = "">
+    {
+        @ hloop_update_time(@sn<this>.GetData())
+    }
+
+    方法 取当前时间秒 <公开 类型 = 长整数 @嵌入式方法 = "">
+    {
+        @ hloop_now(@sn<this>.GetData())
+    }
+
+    方法 取当前时间毫秒 <公开 类型 = 长整数 @嵌入式方法 = "">
+    {
+        @ hloop_now_ms(@sn<this>.GetData())
+    }
+
+    方法 取当前时间微秒 <公开 类型 = 长整数 @嵌入式方法 = "">
+    {
+        @ hloop_now_hrtime(@sn<this>.GetData())
+    }
+
+    方法 取进程标识 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ hloop_pid(@sn<this>.GetData())
+    }
+
+    方法 取线程标识 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ hloop_tid(@sn<this>.GetData())
+    }
+
+    #
+}
+
+类 变整数到变整数哈希表 <公开 基础类 = 通用哈希表模板类 @模板实现类 = "变整数, 变整数">
+
+类 HV事件回调模板 <基础类 = HV循环事件 折叠 @模板基础类 = 真>
+{
+
+    # @begin
+    # @def_macro  Create_Loop_CallBack(data_type) \
+    # <> <include> \ 
+    # static void Loop_CalBack(data_type hHandle); \ 
+    # inline data_type ToHandle(INT_P data) {    return (data_type)data; } \
+    # <> </include> \
+    # void @sn<current_class>::Loop_CalBack(data_type hHandle) \
+    # { \
+    #     @sn<current_class>::LOOP_USER_DATA* pExtra = (@sn<current_class>::LOOP_USER_DATA*)hevent_userdata(hHandle); \
+    #     if(pExtra && pExtra->pThis) \
+    #     { \
+    #         pExtra->pThis->@<任务回调>((INT_P)hHandle,(INT_P)pExtra->userData); \
+    #     } \
+    # } 
+    #
+    # @end
+
+    方法 任务回调 <公开 定义事件 类型 = 整数>
+    参数 任务句柄 <类型 = 变整数>
+    参数 用户参数 <类型 = 变整数>
+
+    方法 置附加数据 <公开>
+    参数 任务句柄 <类型 = 变整数>
+    参数 用户数据 <类型 = 变整数>
+    {
+        @ LOOP_USER_DATA* pExtra = hevent_userdata( ToHandle(@<任务句柄>) );
+        @ if(pExtra)
+        @ {
+        @ pExtra->userData = @<用户数据>;
+        @ hevent_set_userdata( ToHandle(@<任务句柄>), (void*)pExtra);
+        @  }
+    }
+
+    方法 取附加数据 <公开 类型 = 变整数 @禁止流程检查 = 真>
+    参数 任务句柄 <类型 = 变整数>
+    {
+        @ LOOP_USER_DATA* pExtra = hevent_userdata( ToHandle(@<任务句柄>) );
+        @ if(pExtra)
+        @ {
+        @     return pExtra->userData;
+        @  }
+        @ return 0;
+
+    }
+
+    #
+}
+
+类 HV计划任务 <公开 基础类 = HV事件回调模板 折叠 @模板实现类 = "">
+{
+    变量 成员_任务句柄数组 <类型 = 变整数数组类>
+    变量 成员_锁 <类型 = 临界区类f>
+
+    # @ @m<Create_Loop_CallBack>(htimer_t*)
+    #
+
+    方法 添加任务 <公开 类型 = 变整数 注释 = "/*" 注释 = " * minute   hour    day     week    month       cb"
+            注释 = " * 0~59     0~23    1~31    0~6     1~12" 注释 = " *  30      -1      -1      -1      -1          cron.hourly"
+            注释 = " *  30      1       -1      -1      -1          cron.daily"
+            注释 = " *  30      1       15      -1      -1          cron.monthly"
+            注释 = " *  30      1       -1       5      -1          cron.weekly"
+            注释 = " *  30      1        1      -1      10          cron.yearly" 注释 = " */" 返回值注释 = "返回任务句柄" 折叠2>
+    参数 分钟 <类型 = 字节 @默认值 = 0>
+    参数 小时 <类型 = 字节 注释 = "-1 表示不使用" @默认值 = -1>
+    参数 天 <类型 = 字节 注释 = "-1 表示不使用" @默认值 = -1>
+    参数 周 <类型 = 字节 注释 = "-1 表示不使用" @默认值 = -1>
+    参数 月 <类型 = 字节 注释 = "-1 表示不使用" @默认值 = -1>
+    参数 重复次数 <类型 = 整数 注释 = "-1 表示一直重复" @默认值 = -1>
+    {
+        变量 任务句柄 <类型 = 变整数>
+        @ LOOP_USER_DATA* pExtra = new LOOP_USER_DATA; 
+        @ memset(pExtra,0,sizeof(*pExtra));
+        @ pExtra->pThis = this;
+        @ @<任务句柄> = (INT_P)htimer_add_period(GetData(), @sn<current_class>::Loop_CalBack, @<分钟>, @<小时>, @<天>, @<周>,@<月>,@<重复次数>);
+        @ hevent_set_userdata(ToHandle(@<任务句柄>),pExtra);
+        成员_锁.进入许可区 ()
+        成员_任务句柄数组.加入成员 (任务句柄)
+        成员_锁.离开许可区 ()
+        返回 (任务句柄)
+    }
+
+    方法 删除任务 <公开 折叠>
+    参数 任务句柄 <类型 = 变整数>
+    {
+        如果 (成员_任务句柄数组.所指定值是否存在 (任务句柄))
+        {
+            成员_锁.进入许可区 ()
+            成员_任务句柄数组.查找删除成员 (任务句柄)
+            成员_锁.离开许可区 ()
+            @ LOOP_USER_DATA* pExtra = hevent_userdata( ToHandle(@<任务句柄>) );
+            @ if(pExtra) delete pExtra;
+            @ htimer_del(@<任务句柄>);
+        }
+
+    }
+
+    方法 是否存在 <公开 类型 = 逻辑型 折叠>
+    参数 任务句柄 <类型 = 变整数>
+    {
+        变量 是否存在 <类型 = 逻辑型>
+        成员_锁.进入许可区 ()
+        是否存在 = 成员_任务句柄数组.所指定值是否存在 (任务句柄)
+        成员_锁.离开许可区 ()
+        返回 (是否存在)
+    }
+
+    方法 删除所有 <公开 折叠>
+    {
+        变量 i <类型 = 整数>
+        成员_锁.进入许可区 ()
+        循环 (0, 成员_任务句柄数组.取成员数 (), i)
+        {
+            变量 任务句柄 <类型 = 变整数>
+            任务句柄 = 成员_任务句柄数组.取成员 (i)
+            @ LOOP_USER_DATA* pExtra = hevent_userdata( ToHandle(@<任务句柄>) );
+            @ if(pExtra) delete pExtra;
+            @ htimer_del(@<任务句柄>);
+        }
+        成员_任务句柄数组.删除所有成员 ()
+        成员_锁.离开许可区 ()
+
+    }
+
+    方法 重置 <公开 折叠 @嵌入式方法 = "">
+    参数 任务句柄 <类型 = 变整数>
+    {
+        @ htimer_reset((htimer_t*)@<任务句柄>)
+    }
+
+    #
+}
+
+类 HV任务优先级常量 <公开 注释 = "#define HEVENT_LOWEST_PRIORITY    (-5)" 注释 = "#define HEVENT_LOW_PRIORITY       (-3)"
+        注释 = "#define HEVENT_NORMAL_PRIORITY      0" 注释 = "#define HEVENT_HIGH_PRIORITY        3"
+        注释 = "#define HEVENT_HIGHEST_PRIORITY     5" 折叠 折叠2>
+{
+    常量 超低 <公开 类型 = 整数 值 = @HEVENT_LOWEST_PRIORITY>
+    常量 低 <公开 类型 = 整数 值 = @HEVENT_LOW_PRIORITY>
+    常量 正常 <公开 类型 = 整数 值 = @HEVENT_NORMAL_PRIORITY>
+    常量 高 <公开 类型 = 整数 值 = @HEVENT_HIGH_PRIORITY>
+    常量 超高 <公开 类型 = 整数 值 = @HEVENT_HIGHEST_PRIORITY>
+
+    #
+}
+
+类 HV重复任务 <公开 基础类 = HV事件回调模板 折叠 @模板实现类 = "">
+{
+    变量 成员_任务句柄数组 <类型 = 变整数数组类>
+    变量 成员_锁 <类型 = 临界区类f>
+
+    # @  @m<Create_Loop_CallBack>(hidle_t*)
+
+    方法 添加任务 <公开 类型 = 变整数 返回值注释 = "返回任务句柄">
+    参数 重复次数 <类型 = 整数 注释 = "-1 表示一直重复" @默认值 = -1>
+    {
+        变量 任务句柄 <类型 = 变整数>
+        @ LOOP_USER_DATA* pExtra = new LOOP_USER_DATA; 
+        @ memset(pExtra,0,sizeof(*pExtra));
+        @ pExtra->pThis = this;
+        @ @<任务句柄> = (INT_P)hidle_add(GetData(), @sn<current_class>::Loop_CalBack,(uint32_t)@<重复次数>);
+        @ hevent_set_userdata(ToHandle(@<任务句柄>),pExtra);
+        成员_锁.进入许可区 ()
+        成员_任务句柄数组.加入成员 (任务句柄)
+        成员_锁.离开许可区 ()
+        返回 (任务句柄)
+
+    }
+
+    方法 删除任务 <公开 折叠>
+    参数 任务句柄 <类型 = 变整数>
+    {
+        如果 (成员_任务句柄数组.所指定值是否存在 (任务句柄))
+        {
+            成员_锁.进入许可区 ()
+            成员_任务句柄数组.查找删除成员 (任务句柄)
+            成员_锁.离开许可区 ()
+            @ LOOP_USER_DATA* pExtra = hevent_userdata( ToHandle(@<任务句柄>) );
+            @ if(pExtra) delete pExtra;
+            @ hidle_del(@<任务句柄>);
+        }
+
+    }
+
+    方法 是否存在 <公开 类型 = 逻辑型 折叠>
+    参数 任务句柄 <类型 = 变整数>
+    {
+        变量 是否存在 <类型 = 逻辑型>
+        成员_锁.进入许可区 ()
+        是否存在 = 成员_任务句柄数组.所指定值是否存在 (任务句柄)
+        成员_锁.离开许可区 ()
+        返回 (是否存在)
+    }
+
+    方法 删除所有 <公开 注释 = "注意，在不用之后，必须全部删除，否则会造成内存泄漏" 折叠>
+    {
+        变量 i <类型 = 整数>
+        成员_锁.进入许可区 ()
+        循环 (0, 成员_任务句柄数组.取成员数 (), i)
+        {
+            变量 任务句柄 <类型 = 变整数>
+            任务句柄 = 成员_任务句柄数组.取成员 (i)
+            @ LOOP_USER_DATA* pExtra = hevent_userdata( ToHandle(@<任务句柄>) );
+            @ if(pExtra) delete pExtra;
+            @ hidle_del(@<任务句柄>);
+        }
+        成员_任务句柄数组.删除所有成员 ()
+        成员_锁.离开许可区 ()
+    }
+
+    方法 置优先级 <公开 折叠 @嵌入式方法 = "">
+    参数 任务句柄 <类型 = 变整数>
+    参数 优先级 <类型 = 整数 注释 = "HV任务优先级常量 可以用 HV任务优先级常量.超低+1" @默认值 = HV任务优先级常量.超低>
+    {
+        @ hevent_set_priority((hidle_t*)@<任务句柄>,@<优先级>)
+    }
+
+    #
+}
+
+类 HV时钟 <公开 基础类 = HV事件回调模板 折叠 @模板实现类 = "">
+{
+    变量 成员_任务句柄数组 <类型 = 变整数数组类>
+    变量 成员_锁 <类型 = 临界区类f>
+
+    # @ @m<Create_Loop_CallBack>(htimer_t*)
+
+    方法 添加任务 <公开 类型 = 变整数 返回值注释 = "返回任务句柄" 折叠>
+    参数 周期 <类型 = 整数 注释 = "毫秒 每隔多少毫秒执行一次">
+    参数 重复次数 <类型 = 整数 注释 = "-1 表示一直重复" @默认值 = -1>
+    {
+        变量 任务句柄 <类型 = 变整数>
+        @ LOOP_USER_DATA* pExtra = new LOOP_USER_DATA; 
+        @ memset(pExtra,0,sizeof(*pExtra));
+        @ pExtra->pThis = this;
+        @ @<任务句柄> = (INT_P)htimer_add(GetData(), @sn<current_class>::Loop_CalBack,(uint32_t)@<周期>,(uint32_t)@<重复次数>);
+        @ hevent_set_userdata(ToHandle(@<任务句柄>),pExtra);
+        成员_锁.进入许可区 ()
+        成员_任务句柄数组.加入成员 (任务句柄)
+        成员_锁.离开许可区 ()
+        返回 (任务句柄)
+    }
+
+    方法 删除任务 <公开 折叠>
+    参数 任务句柄 <类型 = 变整数>
+    {
+        如果 (成员_任务句柄数组.所指定值是否存在 (任务句柄))
+        {
+            成员_锁.进入许可区 ()
+            成员_任务句柄数组.查找删除成员 (任务句柄)
+            成员_锁.离开许可区 ()
+            @ LOOP_USER_DATA* pExtra = hevent_userdata( ToHandle(@<任务句柄>) );
+            @ if(pExtra) delete pExtra;
+            @ htimer_del(@<任务句柄>);
+        }
+
+    }
+
+    方法 是否存在 <公开 类型 = 逻辑型 折叠>
+    参数 任务句柄 <类型 = 变整数>
+    {
+        变量 是否存在 <类型 = 逻辑型>
+        成员_锁.进入许可区 ()
+        是否存在 = 成员_任务句柄数组.所指定值是否存在 (任务句柄)
+        成员_锁.离开许可区 ()
+        返回 (是否存在)
+    }
+
+    方法 删除所有 <公开 注释 = "注意，在不用之后，必须全部删除，否则会造成内存泄漏" 折叠>
+    {
+        变量 i <类型 = 整数>
+        成员_锁.进入许可区 ()
+        循环 (0, 成员_任务句柄数组.取成员数 (), i)
+        {
+            变量 任务句柄 <类型 = 变整数>
+            任务句柄 = 成员_任务句柄数组.取成员 (i)
+            @ LOOP_USER_DATA* pExtra = hevent_userdata( ToHandle(@<任务句柄>) );
+            @ if(pExtra) delete pExtra;
+            @ htimer_del(@<任务句柄>);
+        }
+        成员_任务句柄数组.删除所有成员 ()
+        成员_锁.离开许可区 ()
+
+    }
+
+    方法 重置 <公开 折叠 @嵌入式方法 = "">
+    参数 任务句柄 <类型 = 变整数>
+    {
+        @ htimer_reset((htimer_t*)@<任务句柄>)
+    }
+
+    #
+}
+
+类 HV事件池 <公开 基础类 = HV循环事件 折叠 @模板实现类 = "">
+{
+
+    # @begin
+    # <> <include> 
+    # static void Loop_CalBack(hevent_t* hHandle);
+    # inline hevent_t* ToHandle(INT_P data) {    return (hevent_t*)data; } 
+    # <> </include> 
+    # void @sn<current_class>::Loop_CalBack(hevent_t* ev) 
+    # { 
+    #     @sn<current_class>::LOOP_USER_DATA* pExtra = (@sn<current_class>::LOOP_USER_DATA*)ev->userdata; 
+    #     if(pExtra && pExtra->pThis) 
+    #     { 
+    #         pExtra->pThis->@<任务回调>((INT)ev->event_type-HEVENT_TYPE_CUSTOM,(INT_P)pExtra->userData,(INT_P)pExtra->wParam,(INT_P)pExtra->lParam); 
+    #         delete pExtra;
+    #     } 
+    # } 
+    #
+    # @end
+
+    方法 任务回调 <公开 定义事件 类型 = 整数>
+    参数 用户标记 <类型 = 整数>
+    参数 用户参数 <类型 = 变整数>
+    参数 用户参数2 <类型 = 变整数>
+    参数 用户参数3 <类型 = 变整数>
+
+    方法 投递事件 <公开>
+    参数 标记值 <类型 = 整数>
+    参数 用户参数 <类型 = 变整数>
+    参数 用户参数2 <类型 = 变整数>
+    参数 用户参数3 <类型 = 变整数>
+    {
+        @ LOOP_USER_DATA* pExtra = new LOOP_USER_DATA; 
+        @ memset(pExtra,0,sizeof(*pExtra));
+        @ pExtra->pThis = this;
+        @ pExtra->userData = @<用户参数>;
+        @ pExtra->wParam = @<用户参数2>;
+        @ pExtra->lParam = @<用户参数3>;
+        @ hevent_t ev;
+        @ memset(&ev, 0, sizeof(ev));
+        @ ev.event_type = (hevent_type_e)(HEVENT_TYPE_CUSTOM + @<标记值>);
+        @ ev.cb = @sn<current_class>::Loop_CalBack;
+        @ ev.userdata = (void*)pExtra;
+        @ hloop_post_event(GetData(), &ev);
+
+
+    }
+
+    #
+}
+
+类 HVWSMsgType <公开 注释 = "    WS_OPCODE_CONTINUE = 0x0," 注释 = "    WS_OPCODE_TEXT     = 0x1,"
+        注释 = "    WS_OPCODE_BINARY   = 0x2," 注释 = "    WS_OPCODE_CLOSE    = 0x8," 注释 = "    WS_OPCODE_PING     = 0x9,"
+        注释 = "    WS_OPCODE_PONG     = 0xA," 折叠 "">
+{
+    常量 继续 <公开 类型 = 整数 值 = @WS_OPCODE_CONTINUE>
+    常量 文本 <公开 类型 = 整数 值 = @WS_OPCODE_TEXT>
+    常量 字节集 <公开 类型 = 整数 值 = @WS_OPCODE_BINARY>
+    常量 关闭 <公开 类型 = 整数 值 = @WS_OPCODE_CLOSE>
+    常量 PING <公开 类型 = 整数 值 = @WS_OPCODE_PING>
+    常量 PONG <公开 类型 = 整数 值 = @WS_OPCODE_PONG>
+
+    #
+}
+
+#
+
+类 HVWSClient <公开 基础类 = 空模板 注释 = "websocket 客户端" 折叠 @模板实现类 = "">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (hv::WebSocketClient)
+    # <> <include>
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @     data().onopen = [this]() {
+        @         this->@<连接成功>();
+        @     };
+        @     data().onclose = [this]() {
+        @         this->@<连接断开>();
+        @     };
+        @     data().onmessage = [this](const std::string& msg) {
+        @         CVolMem bin(msg.data(),msg.size());
+        @        this->@<收到数据>(bin);
+        @     };
+
+    }
+
+    方法 类_清理
+    {
+
+    }
+
+    方法 连接成功 <公开 定义事件 类型 = 整数>
+    {
+
+    }
+
+    方法 连接断开 <公开 定义事件 类型 = 整数>
+    {
+
+
+    }
+
+    方法 收到数据 <公开 定义事件 类型 = 整数>
+    参数 数据 <类型 = 字节集类>
+    {
+
+    }
+
+    方法 发送数据 <公开 类型 = 整数 @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ return data().send((void*)@<数据>.GetPtr(),(int)@<数据>.GetSize())
+    }
+
+    方法 置重连
+    参数 最小延时 <类型 = 整数>
+    参数 最大延时 <类型 = 整数>
+    参数 重连次数 <类型 = 整数>
+    {
+        @     hv::ReconnectInfo reconn;
+        @     reconn.min_delay = @<最小延时>;
+        @     reconn.max_delay = @<最大延时>;
+        @     reconn.delay_policy = @<重连次数>;
+        @     ws.setReconnect(&reconn);
+
+    }
+
+    方法 置心跳时间 <公开 @嵌入式方法 = "">
+    参数 超时时间 <类型 = 整数>
+    {
+        @ @sn<this>.data().setPingInterval(@<超时时间>)
+    }
+
+    方法 连接 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 url <类型 = 文本型>
+    {
+        @ @sn<this>.data().open(GetMbsText(@<url>, CVolMem(), NULL))
+    }
+
+    方法 "//连接2" <公开 类型 = 整数 注释 = "这个是1.2.2以后的版本才支持" @禁止流程检查 = 真>
+    参数 url <类型 = 文本型>
+    参数 协议头 <类型 = 文本型 @默认值 = "">
+    {
+        变量 协议头数组 <类型 = 文本数组类>
+        变量 i <类型 = 整数>
+        分割子文本 (协议头, "\r\n", 协议头数组)
+        循环 (0, 协议头数组.取成员数 (), i)
+        {
+            变量 临时文本 <类型 = 文本型>
+            变量 键名称 <类型 = 文本型>
+            变量 键值 <类型 = 文本型>
+            临时文本 = 协议头数组.取成员 (i)
+            键名称 = 文本_取左边_从左往右查找 (临时文本, ":")
+            键值 = 删首尾空 (文本_取右边_从左往右查找 (临时文本, ":"))
+            // 置单个协议头 (键名称, 键值)
+            // http_headers headers;
+            // headers["Host"] = "82.157.123.54:9010";
+            // headers["Origin"] = "http://coolaf.com";
+
+            @ http_headers headers;
+            @ headers[GetMbsText(@<键名称>, CVolMem(), NULL)] = GetMbsText(@<键值>, CVolMem(), NULL);
+            @ return data().open(GetMbsText(@<url>, CVolMem(), NULL),headers);
+        }
+
+        @ return data().open(GetMbsText(@<url>, CVolMem(), NULL))
+    }
+
+    #
+
+    方法 断开 <公开 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().close()
+    }
+
+    #
+}
+
+类 HVChannel <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # @sn<current_class>(const WebSocketChannelPtr& channel)
+    # {
+    #     m_channel = channel;
+    # }
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_channel = objCopyFrom.m_channel;
+    # }
+    # WebSocketChannelPtr m_channel;
+    # <> </include>
+    # @end
+    #
+
+    方法 发送 <公开 类型 = 整数 @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类>
+    参数 类型 <类型 = 整数 注释 = "HVWSMsgType 开头的">
+    参数 是否最后一帧 <类型 = 逻辑型 注释 = "一般不用管" @默认值 = 真>
+    {
+        @ return m_channel->send( (const char*)@<数据>.GetPtr(),(int)@<数据>.GetSize(),(enum ws_opcode)@<类型>, @<是否最后一帧>);
+    }
+
+    #
+}
+
+类 HVWSServer <公开 基础类 = 空模板 注释 = "websocket 客户端" 折叠 @模板基础类 = 真>
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (WebSocketService)
+    # <> <include>
+    # websocket_server_t server;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ data().onopen = [this](const WebSocketChannelPtr& channel, const std::string& url) 
+        @ {
+        @         @dt<模板类型1>* ctx = channel->newContext<@dt<模板类型1>>();
+        @         @dt<HVChannel> ch(channel); 
+        @              this->@<连接成功>(ch,CVolString(url.c_str()),*ctx);
+        @  };
+
+        @ data().onmessage = [this](const WebSocketChannelPtr& channel, const std::string& msg)
+        @ {
+        @         @dt<模板类型1>* ctx = channel->getContext<@dt<模板类型1>>();
+        @         @dt<HVChannel> ch(channel); 
+        @         CVolMem bin(msg.data(),msg.size());
+        @         this->@<收到数据>(ch,bin,*ctx);
+        @  };
+        @ data().onclose = [this](const WebSocketChannelPtr& channel)
+        @ {
+        @         @dt<模板类型1>* ctx = channel->getContext<@dt<模板类型1>>();
+        @         @dt<HVChannel> ch(channel); 
+        @         this->@<连接断开>(ch,*ctx);
+        @         channel->deleteContext<@dt<模板类型1>>();
+        @  };
+    }
+
+    方法 连接成功 <公开 定义事件 类型 = 整数>
+    参数 通道 <类型 = HVChannel>
+    参数 网址 <类型 = 文本型>
+    参数 附加数据 <类型 = 模板类型1>
+    {
+
+    }
+
+    方法 连接断开 <公开 定义事件 类型 = 整数>
+    参数 通道 <类型 = HVChannel>
+    参数 附加数据 <类型 = 模板类型1>
+    {
+
+    }
+
+    方法 收到数据 <公开 定义事件 类型 = 整数>
+    参数 通道 <类型 = HVChannel>
+    参数 数据 <类型 = 字节集类>
+    参数 附加数据 <类型 = 模板类型1>
+    {
+
+
+    }
+
+    #
+
+    方法 启动 <公开 注释 = "暂时不支持wss">
+    参数 端口 <类型 = 整数>
+    参数 是否阻塞 <类型 = 逻辑型 注释 = "默认不阻塞，不阻塞模式，可以丢到窗口，阻塞模式一般用在没界面的情况下" @默认值 = 假>
+    {
+        @     server.port = @<端口>;
+        @ #if TEST_WSS
+        @     server.https_port = port + 1;
+        @     hssl_ctx_init_param_t param;
+        @     memset(&param, 0, sizeof(param));
+        @     param.crt_file = "cert/server.crt";
+        @     param.key_file = "cert/server.key";
+        @     param.endpoint = HSSL_SERVER;
+        @     if (hssl_ctx_init(&param) == NULL) {
+
+        @     }
+        @ #endif
+        @     server.ws = pdata();
+        @     websocket_server_run(&server,@<是否阻塞>);
+
+    }
+
+    方法 停止 <公开 @嵌入式方法 = "">
+    {
+        @ http_server_stop(@sn<this>.server)
+    }
+}
+
+类 "//我的附加数据" <公开 折叠>
+{
+    变量 测试值 <公开 类型 = 整数>
+
+    #
+}
+
+类 "//我的服务器" <公开 基础类 = HVWSServer 注释 = "必须先从模板制造出一个具体的类型，，，" 注释 = "为什么要造？因为你 这个可以填写附加数据，，，" 注释 = "这些附加数据都是我自己设计的，"
+        注释 = "设计好这些以后，，，再下面我的主窗口中才能使用" 折叠2 @模板实现类 = "我的附加数据" @视窗.头文件搜寻目录 = "libhv\\x64-windows-static\\include\\hv">
+{
+
+    #
+    #
+}
+
+#
+#
+# //=========
+
+类 HVHttp请求 <公开 基础类 = 空模板 折叠 @模板实现类 = "">
+{
+
+    # @begin
+    # <> <include>
+    # @sn<current_class>(HttpRequest* req)
+    # {
+    #     m_req = req;
+    # }
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_req = objCopyFrom.m_req;
+    # }
+    # HttpRequest* m_req;
+    # <> </include>
+    # @end
+    #
+
+    方法 取所有请求头 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ std::string str;
+        @ m_req->DumpHeaders(str);
+        @ return str.c_str();
+
+    }
+
+    方法 取请求头 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 键 <类型 = 文本型>
+    {
+        @ CVolString( @sn<this>.m_req->GetHeader(GetMbsText(@<键>, CVolMem(), NULL)).c_str() )
+    }
+
+    方法 取路径参数 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 键 <类型 = 文本型>
+    {
+        @ CVolString( @sn<this>.m_req->GetParam(GetMbsText(@<键>, CVolMem(), NULL)).c_str() )
+    }
+
+    方法 取HOST <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( @sn<this>.m_req->Host() )
+    }
+
+    方法 取cookies <公开 类型 = 文本型 @禁止流程检查 = 真>
+    参数 键 <类型 = 文本型>
+    {
+        @ HttpCookie cookie;
+        @ m_req->GetCookie(cookie);
+        @ return CVolString( cookie.dump().c_str() );
+
+    }
+
+    方法 保存到文件 <公开 @嵌入式方法 = "">
+    参数 路径 <类型 = 文本型>
+    {
+        @ @sn<this>.m_req->SaveFile( GetMbsText(@<路径>, CVolMem(), NULL))
+    }
+
+    #
+}
+
+类 HVHttp响应 <公开 基础类 = 空模板 折叠 @模板实现类 = "">
+{
+
+    # @begin
+    # <> <include>
+    # @sn<current_class>(HttpResponse* resp)
+    # {
+    #     m_resp = resp;
+    # }
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_resp = objCopyFrom.m_resp;
+    # }
+    # HttpResponse* m_resp;
+    # <> </include>
+    # @end
+
+    方法 置响应头 <公开 @嵌入式方法 = "">
+    参数 键名称 <类型 = 文本型>
+    参数 键值 <类型 = 文本型>
+    {
+        @ @sn<this>.m_resp->headers[GetMbsText(@<键名称>, CVolMem(), NULL)]=GetMbsText(@<键值>, CVolMem(), NULL)
+    }
+
+    方法 发送文本 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 要发送的文本 <类型 = 文本型>
+    {
+        @  @sn<this>.m_resp->String(CU8String(@<要发送的文本>.GetText ()).GetText ());
+    }
+
+    方法 发送字节集 <公开 类型 = 整数 @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ return m_resp->Data((void*)@<数据>.GetPtr(),(int)@<数据>.GetSize());
+    }
+
+    方法 发送文件 <公开 @嵌入式方法 = "">
+    参数 文件路径 <类型 = 文本型>
+    {
+        @ @sn<this>.m_resp-> File(GetMbsText(@<文件路径>, CVolMem(), NULL))
+    }
+
+    方法 添加cookies <公开>
+    参数 内容 <类型 = 文本型>
+    {
+        @ HttpCookie cookie;
+        @ cookie.parse( CU8String(@<内容>.GetText ()).GetText () );
+        @ m_resp->AddCookie(cookie)
+    }
+
+    #
+    #
+}
+
+类 HV请求响应 <公开 基础类 = 空模板 折叠 @模板实现类 = "">
+{
+
+    # @begin
+    # <> <include>
+    # @sn<current_class>(HttpContextPtr ctx)
+    # {
+    #     m_ctx = ctx;
+    # }
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_ctx = objCopyFrom.m_ctx;
+    # }
+    # HttpContextPtr m_ctx;
+    # <> </include>
+    # @end
+
+    方法 取用户提交数据 <公开 类型 = 字节集类 @禁止流程检查 = 真>
+    {
+        @ std::string& str = m_ctx->body();
+        @ CVolMem mem(str.data(),str.size());
+        @ return mem;
+    }
+
+    方法 取请求头 <公开 类型 = 文本型 @嵌入式方法 = "">
+    参数 键 <类型 = 文本型>
+    {
+        @ CVolString( @sn<this>.m_ctx->header(GetMbsText(@<键>, CVolMem(), NULL)).c_str() )
+    }
+
+    方法 取请求路径参数 <公开 @嵌入式方法 = "">
+    参数 键 <类型 = 文本型>
+    {
+        @ CVolString( @sn<this>.m_ctx->param(  CU8String(@<键>.GetText ()).GetText ()  )
+    }
+
+    方法 置响应头 <公开 @嵌入式方法 = "">
+    参数 键 <类型 = 文本型>
+    参数 值 <类型 = 文本型>
+    {
+        @ @sn<this>.m_ctx->setHeader( GetMbsText(@<键>, CVolMem(), NULL),GetMbsText(@<值>, CVolMem(), NULL) )
+    }
+
+    方法 置响应文本 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 要发送的文本 <类型 = 文本型>
+    {
+        @  @sn<this>.m_ctx->sendString(CU8String(@<要发送的文本>.GetText ()).GetText ());
+    }
+
+    方法 置响应字节集 <公开 类型 = 整数 @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ return m_ctx->sendData((void*)@<数据>.GetPtr(),(int)@<数据>.GetSize());
+    }
+
+    方法 置响应文件 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 文件路径 <类型 = 文本型>
+    {
+        @ @sn<this>.m_resp-> sendFile(GetMbsText(@<文件路径>, CVolMem(), NULL))
+    }
+
+    #
+}
+
+类 HVHttpServer <公开 基础类 = 空模板 折叠 @模板实现类 = "">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (HttpService)
+    # <> <include>
+    # http_server_t server;
+    # <> </include>
+    # @end
+
+    变量 成员_证书路径 <类型 = 文本型>
+    变量 成员_密钥路径 <类型 = 文本型>
+
+    方法 定义GET请求 <公开
+            @嵌入式方法 = "name = \"volhvget\"\r\nbody_header = \"@none\"\r\nbody_tail = \"return nRespons;  });\"\r\nhas_body = true\r\n">
+    参数 输入_路径 <类型 = 文本型 注释 = "比如 /index.html">
+    {
+        @     @sn<this>.data().GET(CU8String(@<输入_路径>.GetText ()).GetText (), [&](HttpRequest* req, HttpResponse* resp) {
+        @       @dt<HVHttp请求> request(req);
+        @       @dt<HVHttp响应> response(resp);
+        @       int nRespons = 200;
+
+
+    }
+
+    方法 定义POST请求 <公开
+            @嵌入式方法 = "name = \"volhvpost\"\r\nbody_header = \"@none\"\r\nbody_tail = \"return nRespons; });\"\r\nhas_body = true">
+    参数 输入_路径 <类型 = 文本型 注释 = "比如 /index.html">
+    {
+        @     @sn<this>.data().POST(CU8String(@<输入_路径>.GetText ()).GetText (), [&](const HttpContextPtr& ctx) {
+        @       @dt<HV请求响应> TmpCtx(ctx);
+        @       int nRespons = 200;
+    }
+
+    方法 取请求响应 <公开 类型 = HV请求响应 注释 = "只能用在 定义POST请求 流程线包围的范围内" @嵌入式方法 = "parent = \"volhvpost\"">
+    {
+        @ TmpCtx
+
+    }
+
+    方法 置响应状态码 <公开 @嵌入式方法 = "parent = \"volhvpost,volhvget\"">
+    参数 状态码 <类型 = 整数>
+    {
+        @ nRespons = @<状态码>
+    }
+
+    方法 取请求 <公开 类型 = HVHttp请求 注释 = "只能用在  定义GET请求 流程线包围的范围内" @嵌入式方法 = "parent = \"volhvget\"">
+    {
+        @ request
+    }
+
+    方法 取响应 <公开 类型 = HVHttp响应 注释 = "只能用在  定义GET请求 流程线包围的范围内" @嵌入式方法 = "parent = \"volhvget\"">
+    {
+        @ response
+    }
+
+    #
+
+    方法 置证书与密钥 <公开 注释 = "如果设置了证书和密钥,那么 启动() 方法的参数 是否HTTPS 必须设置为真哦">
+    参数 证书 <类型 = 文本型>
+    参数 密钥 <类型 = 文本型>
+    {
+        成员_证书路径 = 证书
+        成员_密钥路径 = 密钥
+    }
+
+    #
+
+    方法 启动 <公开 注释 = "暂时不支持wss">
+    参数 端口 <类型 = 整数>
+    参数 是否HTTPS <类型 = 逻辑型 @默认值 = 假>
+    参数 是否阻塞 <类型 = 逻辑型 注释 = "默认不阻塞，不阻塞模式，可以丢到窗口，阻塞模式一般用在没界面的情况下" @默认值 = 假>
+    {
+        @   if(@<是否HTTPS> = FALSE)
+        @   {
+        @      server.port = @<端口>;
+        @   }else
+        @   {
+        @     server.https_port = @<端口>;
+        @     hssl_ctx_init_param_t param;
+        @     memset(&param, 0, sizeof(param));
+        如果 (成员_密钥路径 != "" && 成员_证书路径 != "")
+        @    {
+        @      param.crt_file = GetMbsText(@<成员_证书路径>, CVolMem(), NULL);
+        @      param.key_file = GetMbsText(@<成员_密钥路径>, CVolMem(), NULL);
+        @    }
+        @     param.endpoint = HSSL_SERVER;
+        @     if (hssl_ctx_init(&param) == NULL) 
+        @    {
+        @     }
+        @   }
+        @     server.service = pdata();
+        @     http_server_run(&server,@<是否阻塞>);
+
+
+    }
+
+    方法 停止 <公开 @嵌入式方法 = "">
+    {
+        @ http_server_stop(&@sn<this>.server)
+
+
+
+    }
+}
+
+# //=========
+
+类 HV套接字通道 <公开 基础类 = 空模板 注释 = "套接字通道" 折叠 @模板实现类 = "">
+{
+
+    # @begin
+    # <> <include>
+    # @sn<current_class>(const hv::SocketChannelPtr& channel)
+    # {
+    #     m_channel = channel;
+    # }
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_channel = objCopyFrom.m_channel;
+    # }
+    # hv::SocketChannelPtr m_channel;
+    # <> </include>
+    # @end
+    #
+
+    方法 发送 <公开 类型 = 整数 @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ return m_channel->write( (const void*)@<数据>.GetPtr(),(int)@<数据>.GetSize());
+    }
+
+    方法 启用SSL <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @   @sn<this>.m_channel->enableSSL()
+    }
+
+    方法 置超时 <公开>
+    参数 连接超时 <类型 = 整数 注释 = "毫秒">
+    参数 KeeepAlive超时 <类型 = 整数 注释 = "毫秒">
+    参数 关闭超时 <类型 = 整数 注释 = "毫秒">
+    {
+        @   m_channel->setConnectTimeout(@<连接超时>);
+        @   m_channel->setCloseTimeout(@<关闭超时>);
+        @   m_channel->setKeepaliveTimeout(@<KeeepAlive超时>);
+    }
+
+    方法 连接 <公开 @嵌入式方法 = "">
+    参数 IP地址 <类型 = 文本型>
+    参数 端口 <类型 = 整数>
+    {
+        @   @sn<this>.m_channel->startConnect(@<端口>,GetMbsText(@<IP地址>, CVolMem(), NULL))
+
+    }
+
+    方法 重连 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @   @sn<this>.m_channel->startConnect()
+    }
+
+    方法 是否已连接 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @   @sn<this>.m_channel->isConnected()
+    }
+
+    #
+
+    方法 取对等地址 <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @  CVolString(  @sn<this>.m_channel->peeraddr().c_str() )
+    }
+
+    方法 取本地地址 <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @  CVolString(  @sn<this>.m_channel->localaddr().c_str() )
+
+    }
+
+    #
+    #
+}
+
+类 HVTcpServer <公开 基础类 = 空模板 折叠 @模板实现类 = "">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (hv::TcpServer)
+    # @begin
+    # <> <include>
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化
+    {
+        @     data().onConnection = [this](const hv::SocketChannelPtr& channel)
+        @     {
+        @         @dt<HV套接字通道> ch(channel);
+        @         if (channel->isConnected()) 
+        @         {
+        @             this->@<连接成功>(ch);
+        @         } else 
+        @         {
+        @             this->@<断开连接>(ch);
+        @         }
+        @     };
+
+        @     data().onMessage = [this](const hv::SocketChannelPtr& channel, hv::Buffer* buf) 
+        @     {
+        @         @dt<HV套接字通道> ch(channel);
+        @         CVolMem mem(buf->data(),buf->size());
+        @        this-> @<收到消息>(ch,mem);
+        @     };
+
+        @     data().onWriteComplete = [this](const hv::SocketChannelPtr& channel, hv::Buffer* buf)
+        @    {
+        @         @dt<HV套接字通道> ch(channel);
+        @         CVolMem mem(buf->data(),buf->size());
+        @         this->@<发送成功>(ch,mem);
+        @     };
+
+    }
+
+    方法 连接成功 <公开 定义事件 类型 = 整数 折叠>
+    参数 通道 <类型 = HV套接字通道>
+    {
+
+    }
+
+    方法 断开连接 <公开 定义事件 类型 = 整数 折叠>
+    参数 通道 <类型 = HV套接字通道>
+    {
+
+    }
+
+    方法 收到消息 <公开 定义事件 类型 = 整数 折叠>
+    参数 通道 <类型 = HV套接字通道>
+    参数 数据 <类型 = 字节集类>
+    {
+
+    }
+
+    方法 发送成功 <公开 定义事件 类型 = 整数>
+    参数 通道 <类型 = HV套接字通道>
+    参数 数据 <类型 = 字节集类>
+    {
+
+    }
+
+    方法 置线程数 <公开 注释 = "必须要再启动前设置" @嵌入式方法 = "">
+    参数 线程数 <类型 = 整数>
+    {
+        @    @sn<this>.data().setThreadNum(@<线程数>)
+
+    }
+
+    方法 创建 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 IP <类型 = 文本型>
+    参数 端口 <类型 = 整数>
+    {
+        @    @sn<this>.data().createsocket(@<端口>,GetMbsText(@<IP>, CVolMem(), NULL));
+    }
+
+    方法 启动 <公开 @嵌入式方法 = "">
+    {
+        @    @sn<this>.data().start()
+    }
+
+    方法 停止 <公开 @嵌入式方法 = "">
+    参数 是否等待线程退出 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @  @sn<this>.data().stop(@<是否等待线程退出>)
+    }
+
+    方法 置证书 <公开 @嵌入式方法 = "">
+    参数 证书 <类型 = 文本型>
+    参数 密钥 <类型 = 文本型>
+    {
+        @  @sn<this>.data().withTLS(GetMbsText(@<证书>, CVolMem(), NULL),GetMbsText(@<密钥>, CVolMem(), NULL))
+    }
+
+    #
+
+    方法 广播 <公开 @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ return  data().stop( @<数据>.GetPtr(),@<数据>.GetSize() );
+    }
+
+    方法 枚举通道 <公开 @嵌入式方法 = "name = \"volhvforeachChannel\"\r\nbody_header = \"@none\"\r\nbody_tail = \"});\"\r\nhas_body = true">
+    {
+        @ @sn<this>.data().foreachChannel( [](const SocketChannelPtr& channel)
+        @ {
+        @    @dt<HV套接字通道> ch(channel);
+    }
+
+    方法 取通道 <公开 类型 = HV套接字通道 注释 = "只能再 枚举通道 的流程线包围的位置中使用" @嵌入式方法 = "parent = \"volhvforeachChannel\"">
+    {
+        @ ch
+    }
+
+    #
+}
+
+类 HVTcpClient <公开 基础类 = 空模板 折叠 @模板实现类 = "">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (hv::TcpClient)
+    # @begin
+    # <> <include>
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化
+    {
+        @     data().onConnection = [this](const hv::SocketChannelPtr& channel)
+        @     {
+        @         @dt<HV套接字通道> ch(channel);
+        @         if (channel->isConnected()) 
+        @         {
+        @             this->@<连接成功>(ch);
+        @         } else 
+        @         {
+        @             this->@<断开连接>(ch);
+        @         }
+        @     };
+
+        @     data().onMessage = [this](const hv::SocketChannelPtr& channel, hv::Buffer* buf) 
+        @     {
+        @         @dt<HV套接字通道> ch(channel);
+        @         CVolMem mem(buf->data(),buf->size());
+        @        this-> @<收到消息>(ch,mem);
+        @     };
+
+        @     data().onWriteComplete = [this](const hv::SocketChannelPtr& channel, hv::Buffer* buf)
+        @    {
+        @         @dt<HV套接字通道> ch(channel);
+        @         CVolMem mem(buf->data(),buf->size());
+        @         this->@<发送成功>(ch,mem);
+        @     };
+
+    }
+
+    方法 连接成功 <公开 定义事件 类型 = 整数 折叠>
+    参数 通道 <类型 = HV套接字通道>
+    {
+
+    }
+
+    方法 断开连接 <公开 定义事件 类型 = 整数>
+    参数 通道 <类型 = HV套接字通道>
+    {
+
+    }
+
+    方法 收到消息 <公开 定义事件 类型 = 整数 折叠>
+    参数 通道 <类型 = HV套接字通道>
+    参数 数据 <类型 = 字节集类>
+    {
+
+    }
+
+    方法 发送成功 <公开 定义事件 类型 = 整数>
+    参数 通道 <类型 = HV套接字通道>
+    参数 数据 <类型 = 字节集类>
+    {
+
+
+    }
+
+    方法 置超时 <公开 @嵌入式方法 = "">
+    参数 连接超时 <类型 = 整数>
+    {
+        @ @sn<this>.data().setConnectTimeout(@<连接超时>)
+
+    }
+
+    方法 置重连 <公开>
+    参数 最小时间 <类型 = 整数>
+    参数 最大时间 <类型 = 整数>
+    参数 重连次数 <类型 = 整数>
+    {
+        @     hv::ReconnectInfo reconn;
+        @     reconn.min_delay = @<最小时间>;
+        @     reconn.max_delay = @<最大时间>;
+        @     reconn.delay_policy = @<重连次数>;
+        @     data().setReconnect(&reconn);
+
+    }
+
+    方法 创建 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 IP <类型 = 文本型>
+    参数 端口 <类型 = 整数>
+    {
+        @    @sn<this>.data().createsocket(@<端口>,GetMbsText(@<IP>, CVolMem(), NULL));
+
+    }
+
+    方法 "//连接" <公开 类型 = 整数 注释 = "这个不知道用在什么情况。。。。。" @嵌入式方法 = "">
+    {
+        @    @sn<this>.data().startConnect()
+    }
+
+    方法 启动 <公开 @嵌入式方法 = "">
+    {
+        @    @sn<this>.data().start()
+    }
+
+    方法 停止 <公开 @嵌入式方法 = "">
+    参数 是否等待线程退出 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @  @sn<this>.data().stop(@<是否等待线程退出>)
+    }
+
+    方法 置证书 <公开 @嵌入式方法 = "">
+    参数 证书 <类型 = 文本型>
+    参数 密钥 <类型 = 文本型>
+    参数 是否验证 <类型 = 逻辑型 @默认值 = 假>
+    {
+        @  @sn<this>.data().withTLS(GetMbsText(@<证书>, CVolMem(), NULL),GetMbsText(@<密钥>, CVolMem(), NULL),@<是否验证>)
+    }
+
+    方法 发送 <公开 类型 = 整数 @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ return data().send( (const void*)@<数据>.GetPtr(),(int)@<数据>.GetSize());
+    }
+
+    方法 是否已连接 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @   @sn<this>.data().isConnected()
+    }
+
+    #
+    #
+}

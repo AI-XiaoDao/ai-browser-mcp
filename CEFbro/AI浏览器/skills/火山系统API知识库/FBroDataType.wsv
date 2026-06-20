@@ -1,0 +1,1946 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 FBrowser.数据类型 <注释 = "浏览器各数据类型合集，对应C++结构体和易的自定义变量" @视窗.外部头文件 = "<shared_mutex>\r\n<unordered_map>">
+
+#
+
+类 FBrowser_初始化配置 <公开 "">
+{
+    变量 无沙箱 <公开 类型 = 逻辑型>
+    变量 执行进程 <公开 类型 = 文本型>
+    变量 框架文件目录 <公开 类型 = 文本型>
+    变量 主bundle路径 <公开 类型 = 文本型>
+    变量 启用系统消息循环 <公开 类型 = 逻辑型>
+    变量 启用外部消息 <公开 类型 = 逻辑型>
+    变量 启用离屏渲染 <公开 类型 = 逻辑型>
+    变量 禁用命令参数 <公开 类型 = 逻辑型>
+    变量 缓存目录 <公开 类型 = 文本型>
+    变量 保留Session <公开 类型 = 逻辑型>
+    变量 浏览器标识 <公开 类型 = 文本型>
+    变量 浏览器标识版本 <公开 类型 = 文本型 注释 = "user_agent_product">
+    变量 本地化语言 <公开 类型 = 文本型>
+    变量 日志目录 <公开 类型 = 文本型>
+    变量 日志模式 <公开 类型 = 整数>
+    变量 日志元素 <公开 类型 = 整数 注释 = "log_items，cef_log_items_t">
+    变量 javascript_flags <公开 类型 = 文本型>
+    变量 资源路径 <公开 类型 = 文本型>
+    变量 本地语言路径 <公开 类型 = 文本型>
+    变量 远程端口 <公开 类型 = 整数>
+    变量 uncaught_exception_stack_size <公开 类型 = 整数>
+    变量 背景颜色 <公开 类型 = 整数>
+    变量 接收语言清单 <公开 类型 = 文本型>
+    变量 启用cookie计划清单参数 <公开 类型 = 文本型>
+    变量 启用cookie计划_排除默认参数 <公开 类型 = 逻辑型>
+    变量 Chrome策略id <公开 类型 = 文本型>
+    变量 Chrome应用图标id <公开 类型 = 整数>
+    变量 禁用信号处理程序 <公开 类型 = 整数>
+    变量 启用自动多例模式 <公开 类型 = 逻辑型 注释 = "enable_auto_multiple 启用自动多例模式，启用后多exe运行会自动在缓存目录下创建以temp开头的子缓存目录，避免缓存文件冲突">
+
+    # @begin
+    # <> <include>
+    #  ~@sn<current_class>(){ Release();};//释放结构只能写在头里面
+    # FBroInitSettings* ToFBroData();
+    # void Release();
+    # FBroInitSettings tempdata;//存储类型
+    # <> </include>
+    #
+    # FBroInitSettings* @sn<current_class>::ToFBroData(){
+    #   Release();
+    #   tempdata.no_sandbox=@<无沙箱>; //沙箱
+    #   tempdata.browser_subprocess_path=FBroUnit::UnicodeToAnsi(@<执行进程>.GetText()); //子进程启动的独立可执行文件的路径
+    #   tempdata.framework_dir_path=FBroUnit::UnicodeToAnsi(@<框架文件目录>.GetText());//CEF框架目录的路径
+    #   tempdata.main_bundle_path=FBroUnit::UnicodeToAnsi(@<主bundle路径>.GetText());//主包的路径
+    #   tempdata.multi_threaded_message_loop=@<启用系统消息循环>;  //消息循环
+    #   tempdata.external_message_pump=@<启用外部消息>; //外部消息泵
+    #   tempdata.windowless_rendering_enabled=@<启用离屏渲染>; //离屏渲染
+    #   tempdata.command_line_args_disabled=@<禁用命令参数>;  //禁用命令参数
+    #   tempdata.cache_path=FBroUnit::UnicodeToAnsi(@<缓存目录>.GetText());  //缓存路径
+    #   tempdata.persist_session_cookies=@<保留Session>;  //保持cookie
+    #   tempdata.user_agent=FBroUnit::UnicodeToAnsi(@<浏览器标识>.GetText()); //UA
+    #   tempdata.user_agent_product=FBroUnit::UnicodeToAnsi(@<浏览器标识版本>.GetText()); //UA
+    #   tempdata.locale=FBroUnit::UnicodeToAnsi(@<本地化语言>.GetText()); //语言环境
+    #   tempdata.log_file=FBroUnit::UnicodeToAnsi(@<日志目录>.GetText());//日志目录
+    #   tempdata.log_severity=@<日志模式>; //日志模式
+    #   tempdata.log_items=@<日志元素>; //日志模式
+    #   tempdata.javascript_flags=FBroUnit::UnicodeToAnsi(@<javascript_flags>.GetText()); //
+    #   tempdata.resources_dir_path=FBroUnit::UnicodeToAnsi(@<资源路径>.GetText()); //资源路径
+    #   tempdata.locales_dir_path=FBroUnit::UnicodeToAnsi(@<本地语言路径>.GetText());  //语言路径
+    #   tempdata.remote_debugging_port=@<远程端口>; //远程端口
+    #   tempdata.uncaught_exception_stack_size=@<uncaught_exception_stack_size>;
+    #   tempdata.background_color=@<背景颜色>; //背景颜色
+    #   tempdata.accept_language_list=FBroUnit::UnicodeToAnsi(@<接收语言清单>.GetText()); //语言清单
+    #   tempdata.cookieable_schemes_list=FBroUnit::UnicodeToAnsi(@<启用cookie计划清单参数>.GetText());  
+    #   tempdata.cookieable_schemes_exclude_defaults=@<启用cookie计划_排除默认参数>;
+    #   tempdata.chrome_policy_id=FBroUnit::UnicodeToAnsi(@<Chrome策略id>.GetText());  
+    #   tempdata.chrome_app_icon_id=@<Chrome应用图标id>;
+    #   tempdata.disable_signal_handlers=@<禁用信号处理程序>;
+    #   tempdata.enable_auto_multiple=@<启用自动多例模式>;
+    #
+    #   return &tempdata;
+    # }
+    # void @sn<current_class>::Release(){
+    #    FBroUnit::FreeCharArray(tempdata.browser_subprocess_path);
+    #    FBroUnit::FreeCharArray(tempdata.framework_dir_path);//CEF框架目录的路径
+    #    FBroUnit::FreeCharArray(tempdata.main_bundle_path);//主包的路径
+    #    FBroUnit::FreeCharArray(tempdata.cache_path);  //缓存路径
+    #    FBroUnit::FreeCharArray(tempdata.user_agent_product);
+    #    FBroUnit::FreeCharArray(tempdata.user_agent); //UA
+    #    FBroUnit::FreeCharArray(tempdata.locale); //语言环境
+    #    FBroUnit::FreeCharArray(tempdata.log_file);//日志目录
+    #    FBroUnit::FreeCharArray(tempdata.javascript_flags); //
+    #    FBroUnit::FreeCharArray(tempdata.resources_dir_path); //资源路径
+    #    FBroUnit::FreeCharArray(tempdata.locales_dir_path);  //语言路径
+    #    FBroUnit::FreeCharArray(tempdata.accept_language_list); //语言清单
+    #    FBroUnit::FreeCharArray(tempdata.cookieable_schemes_list); 
+    #    FBroUnit::FreeCharArray(tempdata.chrome_policy_id);
+    # }
+    #
+    # @end
+    #
+}
+
+类 FBrowser_弹出功能 <公开>
+{
+    变量 x <公开 类型 = 整数>
+    变量 xSet <公开 类型 = 整数>
+    变量 y <公开 类型 = 整数>
+    变量 ySet <公开 类型 = 整数>
+    变量 width <公开 类型 = 整数>
+    变量 widthSet <公开 类型 = 整数>
+    变量 height <公开 类型 = 整数>
+    变量 heightSet <公开 类型 = 整数>
+    变量 isPopup <公开 类型 = 整数>
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){release();} //销毁构析函数
+    # cef_popup_features_t* ToFBroData();
+    # void ToHsData();
+    # void release();
+    # cef_popup_features_t m_data;
+    # <> </include>
+    # cef_popup_features_t* @sn<current_class>::ToFBroData(){
+    #   release();
+    #   m_data.x=@<x>;
+    #   m_data.xSet=@<xSet>;
+    #   m_data.y=@<y>;
+    #   m_data.ySet=@<ySet>;
+    #   m_data.width=@<width>;
+    #   m_data.widthSet=@<widthSet>;
+    #   m_data.height=@<height>;
+    #   m_data.heightSet=@<heightSet>;
+    #
+    #   m_data.isPopup=@<isPopup>;
+    #   
+    #   return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){
+    #   @<x>=m_data.x;
+    #   @<xSet>=m_data.xSet;
+    #   @<y>=m_data.y;
+    #   @<ySet>=m_data.ySet;
+    #   @<width>=m_data.width;
+    #   @<widthSet>= m_data.widthSet;
+    #   @<height>=m_data.height;
+    #   @<heightSet>=m_data.heightSet;
+    #
+    #   @<isPopup>=m_data.isPopup;
+    # }
+    #
+    # void @sn<current_class>::release(){}
+    #
+    # @end
+    #
+}
+
+类 FBrowser_窗口信息 <公开>
+{
+    变量 额外风格 <公开 类型 = 整数 注释 = "ex_style">
+    变量 窗口名 <公开 类型 = 文本型 注释 = "window_name">
+    变量 风格 <公开 类型 = 整数 注释 = "style">
+    变量 横坐标 <公开 类型 = 整数 注释 = "x">
+    变量 纵坐标 <公开 类型 = 整数 注释 = "y">
+    变量 宽度 <公开 类型 = 整数 注释 = "width">
+    变量 高度 <公开 类型 = 整数 注释 = "height">
+    变量 父窗口句柄 <公开 类型 = 变整数 注释 = "parent_window">
+    变量 菜单句柄 <公开 类型 = 变整数 注释 = "menu">
+    变量 启用离屏渲染模式 <公开 类型 = 逻辑型 注释 = "windowless_rendering_enabled">
+    变量 启用共享结构 <公开 类型 = 逻辑型 注释 = "shared_texture_enabled">
+    变量 启用外部框架 <公开 类型 = 逻辑型 注释 = "external_begin_frame_enabled">
+    变量 窗口句柄 <公开 类型 = 变整数 注释 = "window">
+    变量 父窗口名 <公开 类型 = 文本型 注释 = "浏览器附属所在窗口名，如果父窗口为0，此设置无效">
+    变量 运行风格 <公开 类型 = 整数 注释 = "runtime_style,参考：窗口运行风格.窗口运行风格">
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){release();} //销毁构析函数
+    # PTELIB_WINDOWS_INFO ToFBroData();
+    # void release();
+    # E_WINDOWS_INFO m_data;
+    # <> </include>
+    #
+    # PTELIB_WINDOWS_INFO @sn<current_class>::ToFBroData(){
+    #   release();
+    #    m_data.is_null=false;
+    #    m_data.ex_style=@<额外风格>;
+    #    m_data.window_name=FBroUnit::UnicodeToAnsi(@<窗口名>.GetText());
+    #    m_data.style=@<风格>;
+    #    m_data.x=@<横坐标>;
+    #    m_data.y=@<纵坐标>;
+    #    m_data.width=@<宽度>;
+    #    m_data.height=@<高度>;
+    #    m_data.parent_window=(HWND)@<父窗口句柄>; //父窗口句柄
+    #    m_data.menu=(HMENU)@<菜单句柄>; //菜单句柄
+    #    m_data.windowless_rendering_enabled=@<启用离屏渲染模式>;
+    #    m_data.shared_texture_enabled=@<启用共享结构>;
+    #    m_data.external_begin_frame_enabled=@<启用外部框架>;
+    #    m_data.window=(HWND)@<窗口句柄>; //窗口句柄
+    #    m_data.parent_window_name=FBroUnit::UnicodeToAnsi(@<父窗口名>); //父窗口名
+    #    m_data.runtime_style=@<运行风格>;
+    #   return &m_data;
+    # }
+    #
+    # void @sn<current_class>::release(){
+    #   FBroUnit::FreeCharArray(m_data.window_name);
+    #   FBroUnit::FreeCharArray(m_data.parent_window_name);
+    # }
+    #
+    # @end
+    #
+}
+
+类 FBrowser_浏览器配置 <公开>
+{
+    变量 离屏渲染帧率 <公开 类型 = 整数 注释 = "windowless_frame_rate">
+    变量 标准字体类型 <公开 类型 = 文本型 注释 = "standard_font_family">
+    变量 固定字体类型 <公开 类型 = 文本型 注释 = "fixed_font_family">
+    变量 衬线字体类型 <公开 类型 = 文本型 注释 = "serif_font_family">
+    变量 无衬线字体类型 <公开 类型 = 文本型 注释 = "sans_serif_font_family">
+    变量 草书字体类型 <公开 类型 = 文本型 注释 = "cursive_font_family">
+    变量 幻想字体类型 <公开 类型 = 文本型 注释 = "fantasy_font_family">
+    变量 默认字体大小 <公开 类型 = 整数 注释 = "default_font_size">
+    变量 默认固定字体大小 <公开 类型 = 整数>
+    变量 最小字体大小 <公开 类型 = 整数>
+    变量 最小逻辑字体大小 <公开 类型 = 整数>
+    变量 默认编码 <公开 类型 = 文本型>
+    变量 远程字体 <公开 类型 = 整数>
+    变量 启用JS <公开 类型 = 整数>
+    变量 启用JS关闭窗口 <公开 类型 = 整数 注释 = "参考 状态.">
+    变量 启用JS访问剪切板 <公开 类型 = 整数 注释 = "参考 状态.">
+    变量 启用JSDOM粘贴 <公开 类型 = 整数 注释 = "参考 状态.">
+    变量 启用图片加载 <公开 类型 = 整数 注释 = "参考 状态.">
+    变量 启用图片自适合 <公开 类型 = 整数 注释 = "参考 状态.">
+    变量 启用文本区域调整 <公开 类型 = 整数 注释 = "参考 状态.">
+    变量 启用选项卡链接 <公开 类型 = 整数 注释 = "参考 状态.">
+    变量 启用本地存储 <公开 类型 = 整数 注释 = "参考 状态.">
+    变量 启用数据库 <公开 类型 = 整数 注释 = "参考 状态.">
+    变量 启用WebGL <公开 类型 = 整数 注释 = "参考 状态.">
+    变量 背景颜色 <公开 类型 = 整数>
+    变量 状态气泡 <公开 类型 = 整数 注释 = "chrome_status_bubble">
+    变量 缩放气泡 <公开 类型 = 整数 注释 = "chrome_zoom_bubble">
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){release();} //销毁构析函数
+    # void release();
+    # FBroBrowserSetting* ToFBroData();
+    # FBroBrowserSetting m_data;
+    # <> </include>
+    #
+    # FBroBrowserSetting* @sn<current_class>::ToFBroData(){
+    #   release();
+    #    m_data.is_null=false;
+    #    m_data.windowless_frame_rate=@<离屏渲染帧率>;
+    #    m_data.standard_font_family=FBroUnit::UnicodeToAnsi(@<标准字体类型>);
+    #    m_data.fixed_font_family=FBroUnit::UnicodeToAnsi(@<固定字体类型>);
+    #    m_data.serif_font_family=FBroUnit::UnicodeToAnsi(@<衬线字体类型>);
+    #    m_data.sans_serif_font_family=FBroUnit::UnicodeToAnsi(@<无衬线字体类型>);
+    #    m_data.cursive_font_family=FBroUnit::UnicodeToAnsi(@<草书字体类型>);
+    #    m_data.fantasy_font_family=FBroUnit::UnicodeToAnsi(@<幻想字体类型>);
+    #    m_data.default_font_size=@<默认字体大小>;
+    #    m_data.default_fixed_font_size=@<默认固定字体大小>;
+    #    m_data.minimum_font_size=@<最小字体大小>;
+    #    m_data.minimum_logical_font_size=@<最小逻辑字体大小>;
+    #    m_data.default_encoding=FBroUnit::UnicodeToAnsi(@<默认编码>);
+    #    m_data.remote_fonts=@<远程字体>;//-1 STATE_DISABLED 0 STATE_DEFAULT 1 STATE_ENABLED
+    #    m_data.javascript=@<启用JS>;
+    #    m_data.javascript_close_windows=@<启用JS关闭窗口>;
+    #    m_data.javascript_access_clipboard=@<启用JS访问剪切板>;
+    #    m_data.javascript_dom_paste=@<启用JSDOM粘贴>;
+    #    m_data.image_loading=@<启用图片加载>;
+    #    m_data.image_shrink_standalone_to_fit=@<启用图片自适合>;
+    #    m_data.text_area_resize=@<启用文本区域调整>;
+    #    m_data.tab_to_links=@<启用选项卡链接>;
+    #    m_data.local_storage=@<启用本地存储>;
+    #    m_data.databases=@<启用数据库>;
+    #
+    #    m_data.webgl=@<启用WebGL>;
+    #    m_data.background_color=@<背景颜色>;
+    #    m_data.chrome_status_bubble=@<状态气泡>;
+    #    m_data.chrome_zoom_bubble=@<缩放气泡>;
+    #   return &m_data;
+    # }
+    #
+    #
+    # void @sn<current_class>::release(){
+    #    FBroUnit::FreeCharArray(m_data.standard_font_family);
+    #    FBroUnit::FreeCharArray(m_data.fixed_font_family);
+    #    FBroUnit::FreeCharArray(m_data.serif_font_family);
+    #    FBroUnit::FreeCharArray(m_data.sans_serif_font_family);
+    #    FBroUnit::FreeCharArray(m_data.cursive_font_family);
+    #    FBroUnit::FreeCharArray(m_data.fantasy_font_family);
+    #    FBroUnit::FreeCharArray(m_data.default_encoding);
+    # }
+    #
+    # @end
+    #
+    #
+}
+
+类 FBrowser_请求环境配置 <公开>
+{
+    变量 缓存文件夹名 <公开 类型 = 文本型 注释 = "需要设置的独立缓存的文件夹名，设置成功后会在缓存目录下创建一个子目录，注意：这里设置的不是目录">
+    变量 保留session <公开 类型 = 逻辑型>
+    变量 接收语言清单 <公开 类型 = 文本型>
+    变量 启用cookie计划清单参数 <公开 类型 = 文本型 注释 = "cookieable_schemes_list">
+    变量 启用cookie计划_排除默认参数 <公开 类型 = 整数 注释 = "cookieable_schemes_exclude_defaults">
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){release();} //销毁构析函数
+    # void release();
+    # POINT_REQUSETCONTEXT_SET @sn<current_class>::ToFBroData();
+    # E_REQUSETCONTEXT_SET m_requestcontextset;
+    # <> </include>
+    # POINT_REQUSETCONTEXT_SET @sn<current_class>::ToFBroData(){
+    #   release();
+    #    m_requestcontextset.cache_path=FBroUnit::UnicodeToAnsi(@<缓存文件夹名>);
+    #    m_requestcontextset.persist_session_cookies=@<保留session>;
+    #    m_requestcontextset.accept_language_list=FBroUnit::UnicodeToAnsi(@<接收语言清单>);
+    #    m_requestcontextset.cookieable_schemes_list=FBroUnit::UnicodeToAnsi(@<启用cookie计划清单参数>);
+    #    m_requestcontextset.cookieable_schemes_exclude_defaults=@<启用cookie计划_排除默认参数>;
+    #   return &m_requestcontextset;
+    # }
+    # void @sn<current_class>::release(){
+    #   FBroUnit::FreeCharArray(m_requestcontextset.cache_path);
+    #   FBroUnit::FreeCharArray(m_requestcontextset.accept_language_list);
+    #   FBroUnit::FreeCharArray(m_requestcontextset.cookieable_schemes_list);
+    # }
+    # @end
+    #
+    #
+}
+
+类 FBrowser_位置 <公开>
+{
+    变量 X <公开 类型 = 整数>
+    变量 Y <公开 类型 = 整数>
+
+    # @begin
+    # <> <include>
+    # @sn<current_class>(PTELIB_ELEMENT_AT inData){ToFBroData(inData);ToHsData();} //构析函数
+    # ~@sn<current_class>(){} //销毁构析函数
+    # void ToHsData();
+    # void ToFBroData(PTELIB_ELEMENT_AT inData);
+    # PTELIB_ELEMENT_AT ToFBroData();
+    # E_ELEMENT_AT m_data;
+    # <> </include>
+    # void @sn<current_class>::ToFBroData(PTELIB_ELEMENT_AT inData){
+    #    m_data.x=inData->x;
+    #    m_data.y=inData->y;
+    # }
+    # PTELIB_ELEMENT_AT @sn<current_class>::ToFBroData(){
+    #    m_data.x=@<X>;
+    #    m_data.y=@<Y>;
+    #   return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){
+    #   @<X>=m_data.x;
+    #   @<Y>=m_data.y;
+    # }
+    #
+    # @end
+    #
+}
+
+类 FBrowser_尺寸 <公开>
+{
+    变量 高度 <公开 类型 = 整数>
+    变量 宽度 <公开 类型 = 整数>
+
+    # @begin
+    # <> <include>
+    # @sn<current_class>(E_SIZE inData){
+    #     m_data = inData;
+    #     ToHsData();
+    # } 
+    # @sn<current_class>(POINT_SIZE inData){
+    #     if(inData){
+    #         m_data.height = inData->height;
+    #         m_data.width = inData->width;       
+    #         ToHsData(); 
+    #     }
+    # }
+    # ~@sn<current_class>(){} //销毁构析函数
+    #
+    # void ToHsData();
+    # POINT_SIZE ToFBroData();
+    # E_SIZE m_data;
+    # <> </include>
+    #
+    # POINT_SIZE @sn<current_class>::ToFBroData(){
+    #     m_data.height = @<高度>;
+    #     m_data.width = @<宽度>;
+    #     return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){
+    #     @<高度> = m_data.height;
+    #     @<宽度> = m_data.width;
+    # }
+    #
+    # @end
+    #
+}
+
+类 FBrowser_矩形位置 <公开>
+{
+    变量 横坐标 <公开 类型 = 整数>
+    变量 纵坐标 <公开 类型 = 整数>
+    变量 宽度 <公开 类型 = 整数>
+    变量 高度 <公开 类型 = 整数>
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){} //销毁构析函数
+    # @sn<current_class> (E_RECT data) : @sn<current_class> () { m_data = data;ToHsData();}
+    # POINT_RECT ToFBroData();
+    # void ToHsData();
+    # E_RECT m_data;
+    # <> </include>
+    # POINT_RECT @sn<current_class>::ToFBroData(){
+    #   m_data.x=@<横坐标>;
+    #   m_data.y=@<纵坐标>;
+    #   m_data.width=@<宽度>;
+    #   m_data.height=@<高度>;
+    #   return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){
+    #   @<横坐标>=m_data.x;
+    #   @<纵坐标>=m_data.y;
+    #   @<宽度>=m_data.width;
+    #   @<高度>=m_data.height;
+    # }
+    #
+    # @end
+    #
+    #
+}
+
+类 FBrowser_矩形位置数组 <公开 "">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<FBroRectValueList> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<FBroRectValueList> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set(CefRefPtr<FBroRectValueList> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    方法 创建 <公开>
+    {
+        @ m_class=FBroRectValueList_Creat();
+    }
+
+    方法 取个数 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return FBroRectValueList_Size(m_class);//.size();
+    }
+
+    方法 加入成员 <公开>
+    参数 成员 <类型 = FBrowser_矩形位置>
+    {
+        @ if(!IsEmpty()) FBroRectValueList_Add(m_class,@<成员>.ToFBroData());
+    }
+
+    方法 到数组首 <公开 注释 = "当前指向数组第一个数据">
+    {
+        @ if(!IsEmpty()) FBroRectValueList_ToBegin(m_class);
+    }
+
+    方法 到下一个 <公开 类型 = 逻辑型 注释 = "第一次使用前要使用“到数组首”使指针指向第一个值，读取完毕再执行将会返回假" @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return FBroRectValueList_ToNext(m_class);
+        返回 (假)
+    }
+
+    方法 取当前位置数据 <公开 类型 = FBrowser_矩形位置 @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return @dt<FBrowser_矩形位置>(FBroRectValueList_GetCurrentData_Value(m_class));
+        @ return @dt<FBrowser_矩形位置>();
+
+    }
+
+    方法 取数据 <公开 类型 = FBrowser_矩形位置 @禁止流程检查 = 真>
+    参数 ID <类型 = 整数>
+    {
+        @ if(!IsEmpty()) return @dt<FBrowser_矩形位置>(FBroRectValueList_GetValue(m_class,@<ID>));
+        @ return @dt<FBrowser_矩形位置>();
+
+    }
+
+    方法 清空 <公开>
+    {
+        @ if(!IsEmpty()) FBroRectValueList_Clear(m_class);
+    }
+
+    #
+}
+
+类 FBrowser_拖拽位置 <公开>
+{
+    变量 矩形位置 <公开 类型 = FBrowser_矩形位置>
+    变量 可拖拽 <公开 类型 = 整数>
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){} //销毁构析函数
+    # @sn<current_class> (E_DRAGGABLEREGION data) : @sn<current_class> () { m_data = data;ToHsData();}
+    # POINT_DRAGGABLEREGION ToFBroData();
+    # void ToHsData();
+    # E_DRAGGABLEREGION m_data;
+    # <> </include>
+    # POINT_DRAGGABLEREGION @sn<current_class>::ToFBroData(){
+    #   m_data.rect.x=@<矩形位置.横坐标>;
+    #   m_data.rect.y=@<矩形位置.纵坐标>;
+    #   m_data.rect.width=@<矩形位置.宽度>;
+    #   m_data.rect.height=@<矩形位置.高度>;
+    #   m_data.draggable=@<可拖拽>;
+    #   return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){
+    #   @<矩形位置.横坐标>=m_data.rect.x;
+    #   @<矩形位置.纵坐标>=m_data.rect.y;
+    #   @<矩形位置.宽度>=m_data.rect.width;
+    #   @<矩形位置.高度>=m_data.rect.height;
+    #   @<可拖拽>=m_data.draggable;  
+    # }
+    #
+    # @end
+    #
+}
+
+类 FBrowser_拖拽位置数组 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<FBroDraggableRegion> m_data;
+    # inline_ @sn<current_class> (CefRefPtr<FBroDraggableRegion> object) : @sn<current_class> () { m_data = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_data = objCopyFrom.m_data; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_data.get () == objCompare.m_data.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_data.get () == nullptr; }
+    # inline_ void Set (CefRefPtr<FBroDraggableRegion> object) { m_data = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 创建 <公开>
+    {
+        @ m_data=FBroDraggableRegion_Creat();
+    }
+
+    方法 取个数 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return FBroDraggableRegion_Size(m_data);//.size();
+    }
+
+    方法 加入成员 <公开>
+    参数 成员 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroDraggableRegion_Add(m_data, @<成员>.GetText());
+    }
+
+    方法 到数组首 <公开 注释 = "当前指向数组第一个数据">
+    {
+        @ if(!IsEmpty()) FBroDraggableRegion_ToBegin(m_data);
+    }
+
+    方法 到下一个 <公开 类型 = 逻辑型 注释 = "第一次使用前要使用“到数组首”使指针指向第一个值，读取完毕再执行将会返回假" @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return FBroDraggableRegion_ToNext(m_data);
+        返回 (假)
+
+    }
+
+    方法 取数据 <公开 类型 = FBrowser_拖拽位置 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数 注释 = "0开始">
+    {
+        变量 retclass <类型 = FBrowser_拖拽位置>
+        @ if(!IsEmpty()) FBroDraggableRegion_GetValue(m_data,@<索引>,&@<retclass>.m_data);
+        @ @<retclass>.ToHsData();
+        返回 (retclass)
+    }
+
+    方法 取当前位置数据 <公开 类型 = FBrowser_拖拽位置 @禁止流程检查 = 真>
+    {
+        变量 retclass <类型 = FBrowser_拖拽位置>
+        @ if(!IsEmpty()) FBroDraggableRegion_GetCurrentData_Value(m_data,&@<retclass>.m_data);
+        @ @<retclass>.ToHsData();
+        返回 (retclass)
+
+    }
+
+    方法 清空 <公开>
+    {
+        @ if(!IsEmpty()) FBroDraggableRegion_Clear(m_data);
+
+    }
+}
+
+#
+
+类 FBrowser_按键事件 <公开>
+{
+    变量 类型 <公开 类型 = 整数 注释 = "英文名：type  参考：按键事件">
+    变量 修饰位 <公开 类型 = 整数 注释 = "英文名：modifiers 参考：事件标识">
+    变量 系统按键 <公开 类型 = 整数 注释 = "英文名：windows_key_code  说明：按键代码">
+    变量 机器按键 <公开 类型 = 整数 注释 = "英文名：native_key_code    待验证">
+    变量 是否系统按键 <公开 类型 = 整数 注释 = "英文名：is_system_key">
+    变量 字符值 <公开 类型 = 字符 注释 = "英文名：character      待验证">
+    变量 修改字符 <公开 类型 = 字符 注释 = "英文名：unmodified_character   待验证">
+    变量 是否可编辑 <公开 类型 = 整数 注释 = "英文名：focus_on_editable_field 待验证">
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){} 
+    # @sn<current_class> (E_KEYEVENT data) : @sn<current_class> () { 
+    #   m_data = data;
+    #   ToHsData();
+    # }
+    # PTELIB_KEYEVENT ToFBroData();
+    # void ToHsData();
+    # E_KEYEVENT m_data;
+    # <> </include>
+    # PTELIB_KEYEVENT @sn<current_class>::ToFBroData(){
+    #   m_data.type=@<类型>;
+    #   m_data.modifiers=@<修饰位>;
+    #   m_data.windows_key_code=@<系统按键>;
+    #   m_data.native_key_code=@<机器按键>;
+    #   m_data.is_system_key=@<是否系统按键>;
+    #
+    #   m_data.h_character= @<字符值> >> 8;
+    #   m_data.character=@<字符值> & 0xff ;
+    #
+    #   m_data.h_unmodified_character=@<修改字符> >> 8;
+    #   m_data.unmodified_character=@<修改字符> & 0xff;
+    #
+    #   m_data.focus_on_editable_field=@<是否可编辑>;
+    #   return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){
+    #   @<类型>= m_data.type;
+    #   @<修饰位>=m_data.modifiers;
+    #   @<系统按键>=m_data.windows_key_code;
+    #   @<机器按键>=m_data.native_key_code;
+    #   @<是否系统按键>=m_data.is_system_key;
+    #   @<字符值>=(m_data.h_character << 8) | (m_data.character & 0xff);//  m_data.character;
+    #   @<修改字符>=(m_data.h_unmodified_character << 8) | (m_data.unmodified_character & 0xff);// m_data.unmodified_character;
+    #   @<是否可编辑>=m_data.focus_on_editable_field;
+    # }
+    #
+    # @end
+    #
+    #
+}
+
+类 FBrowser_系统事件 <公开>
+{
+    变量 句柄 <公开 类型 = 变整数>
+    变量 消息 <公开 类型 = 整数>
+    变量 wParam <公开 类型 = 长整数>
+    变量 lParam <公开 类型 = 长整数>
+    变量 时间 <公开 类型 = 整数>
+    变量 位置 <公开 类型 = FBrowser_位置>
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){} 
+    # @sn<current_class> (E_OSEVENT data) : @sn<current_class> () { 
+    #   m_data = data;
+    #   ToHsData();
+    # }
+    # POINT_OSEVENT ToFBroData();
+    # void ToHsData();
+    # E_OSEVENT m_data;
+    # <> </include>
+    # POINT_OSEVENT @sn<current_class>::ToFBroData(){
+    #   m_data.hwnd=(HWND)@<句柄>;
+    #   m_data.message=@<消息>;
+    #   m_data.wParam=(WPARAM)@<wParam>;
+    #   m_data.lParam=(LPARAM)@<lParam>;
+    #   m_data.time=@<时间>;
+    #   m_data.point.x=@<位置.X>;
+    #   m_data.point.y=@<位置.Y>;
+    #   return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){
+    #   @<句柄>=(@dt<变整数>)m_data.hwnd;
+    #   @<消息>=m_data.message;
+    #   @<wParam>=m_data.wParam;
+    #   @<lParam>=m_data.lParam;
+    #   @<时间>=m_data.time;
+    #   @<位置.X>=m_data.point.x;
+    #   @<位置.Y>=m_data.point.y;
+    # }
+    #
+    # @end
+    #
+}
+
+类 FBrowser_鼠标事件 <公开>
+{
+    变量 横坐标 <公开 类型 = 整数>
+    变量 纵坐标 <公开 类型 = 整数>
+    变量 修饰键 <公开 类型 = 整数 注释 = "参考:事件标识.xxx">
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){} 
+    # POINT_MOUSEEVENT @sn<current_class>::ToFBroData();
+    # E_MOUSEEVENT m_data;
+    # <> </include>
+    # POINT_MOUSEEVENT @sn<current_class>::ToFBroData(){
+    #   m_data.x=@<横坐标>;
+    #   m_data.y=@<纵坐标>;
+    #   m_data.modifiers=@<修饰键>;
+    #   return &m_data;
+    # }
+    # @end
+    #
+    #
+    #
+    #
+}
+
+类 FBrowser_触摸事件 <公开>
+{
+    变量 类型 <公开 类型 = 整数>
+    变量 修饰位 <公开 类型 = 整数>
+    变量 按键类型 <公开 类型 = 整数>
+    变量 ID <公开 类型 = 整数>
+    变量 横坐标 <公开 类型 = 小数>
+    变量 纵坐标 <公开 类型 = 小数>
+    变量 横坐标半径 <公开 类型 = 小数>
+    变量 纵坐标半径 <公开 类型 = 小数>
+    变量 旋转角 <公开 类型 = 小数>
+    变量 压力 <公开 类型 = 小数>
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){} 
+    # PTELIB_TOUCH_EVENT @sn<current_class>::ToFBroData();
+    # E_TOUCH_EVENT m_data;
+    # <> </include>
+    # PTELIB_TOUCH_EVENT @sn<current_class>::ToFBroData(){
+    #   m_data.type=@<类型>;
+    #   m_data.modifiers=@<修饰位>;
+    #   m_data.pointer_type=@<按键类型>;
+    #   m_data.id=@<ID>;
+    #   m_data.x=(float)@<横坐标>;
+    #   m_data.y=(float)@<纵坐标>;
+    #   m_data.radius_x=(float)@<横坐标半径>;
+    #   m_data.radius_y=(float)@<纵坐标半径>;
+    #   m_data.rotation_angle=(float)@<旋转角>;
+    #   m_data.pressure=(float)@<压力>;
+    #   return &m_data;
+    # }
+    # @end
+    #
+}
+
+类 FBrowser_双文本 <公开>
+{
+    变量 name <公开 类型 = 文本型>
+    变量 value <公开 类型 = 文本型>
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){release();} 
+    # PTELIB_STRING_STRING @sn<current_class>::ToFBroData();
+    # void release();
+    # E_STRING_STRING m_data;
+    # <> </include>
+    # PTELIB_STRING_STRING @sn<current_class>::ToFBroData(){
+    #   release();
+    #   m_data.first=FBroUnit::UnicodeToAnsi(@<name>);
+    #   m_data.second=FBroUnit::UnicodeToAnsi(@<value>);
+    #   return &m_data;
+    # }
+    # void @sn<current_class>::release(){
+    #   FBroUnit::FreeCharArray(m_data.first);
+    #   FBroUnit::FreeCharArray(m_data.second);
+    # }
+    # @end
+    #
+    #
+}
+
+类 FBrowser_双文本数组 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<FBroDoubleString> m_data;
+    # inline_ @sn<current_class> (CefRefPtr<FBroDoubleString> object) : @sn<current_class> () { m_data = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_data = objCopyFrom.m_data; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_data.get () == objCompare.m_data.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_data.get () == nullptr; }
+    # inline_ void Set (CefRefPtr<FBroDoubleString> object) { m_data = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return @dt<逻辑型>(IsEmpty());
+    }
+
+    #
+
+    方法 创建 <公开>
+    {
+        @ m_data=FBroDoubleString_Creat();
+    }
+
+    #
+
+    方法 取个数 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()?0:FBroDoubleString_Size(m_data);//.size();
+    }
+
+    方法 加入成员 <公开>
+    参数 成员 <类型 = FBrowser_双文本>
+    {
+        @ if(!IsEmpty()) FBroDoubleString_Add(m_data,@<成员.name>.GetText(), @<成员.value>.GetText());
+    }
+
+    方法 到数组首 <公开 注释 = "当前指向数组第一个数据">
+    {
+        @ if(!IsEmpty()) FBroDoubleString_ToBegin(m_data);
+    }
+
+    方法 到下一个 <公开 类型 = 逻辑型 注释 = "第一次使用前要使用“到数组首”使指针指向第一个值，读取完毕再执行将会返回假" @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return FBroDoubleString_ToNext(m_data);
+        返回 (假)
+
+
+
+    }
+
+    方法 取当前位置数据 <公开 类型 = FBrowser_双文本>
+    {
+        变量 temp <类型 = FBrowser_双文本>
+        temp.name = 取当前位置数据_关键字 ()
+        temp.value = 取当前位置数据_数据 ()
+        返回 (temp)
+    }
+
+    方法 取当前位置数据_关键字 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroDoubleString_GetCurrentData_Key(m_data);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取当前位置数据_数据 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroDoubleString_GetCurrentData_Value(m_data);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+
+    }
+
+    方法 置当前位置数据 <公开 注释 = "通过到首位置、下一个控制当前位置后设置当前的值" @禁止流程检查 = 真>
+    参数 值 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return;
+        @ FBroDoubleString_SetCurrentData(m_data,@<值>.GetText());
+
+    }
+
+    方法 查找数据 <公开 类型 = 文本型 注释 = "通过KEY查找value，查找到返回value，否则返回\"\"" @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroDoubleString_FindKeyValue(m_data,@<关键字>.GetText());
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 删除数据 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 关键字 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroDoubleString_Delete(m_data,@<关键字>.GetText());
+
+    }
+
+    方法 清空 <公开>
+    {
+        @ if(!IsEmpty()) FBroDoubleString_Clear(m_data);
+
+
+
+    }
+}
+
+类 FBrowser_文本 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<FBroString> m_data;
+    # inline_ @sn<current_class> (CefRefPtr<FBroString> object) : @sn<current_class> () { m_data = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_data = objCopyFrom.m_data; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_data.get () == objCompare.m_data.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_data.get () == nullptr; }
+    # inline_ void Set (CefRefPtr<FBroString> object) { m_data = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 创建 <公开>
+    参数 值 <类型 = 文本型>
+    {
+        @ m_data=FBroString_Creat(@<值>.GetText());
+
+    }
+
+    方法 设置值 <公开>
+    参数 值 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroString_SetData(m_data,@<值>.GetText());
+    }
+
+    方法 取值 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return FBroUnit::FBroStringToCWString(m_data);
+        返回 ("")
+    }
+
+    #
+}
+
+类 FBrowser_文本数组 <公开>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<FBroCefStringList> m_data;
+    # inline_ @sn<current_class> (CefRefPtr<FBroCefStringList> object) : @sn<current_class> () { m_data = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_data = objCopyFrom.m_data; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_data.get () == objCompare.m_data.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_data.get () == nullptr; }
+    # inline_ void Set (CefRefPtr<FBroCefStringList> object) { m_data = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    #
+
+    方法 创建 <公开>
+    {
+        @ m_data=FBroCefStringList_Creat();
+    }
+
+    #
+
+    方法 取个数 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return FBroCefStringList_Size(m_data);//.size();
+    }
+
+    方法 加入成员 <公开>
+    参数 成员 <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroCefStringList_Add(m_data, @<成员>.GetText());
+    }
+
+    方法 到数组首 <公开 注释 = "当前指向数组第一个数据">
+    {
+        @ if(!IsEmpty()) FBroCefStringList_ToBegin(m_data);
+    }
+
+    方法 到下一个 <公开 类型 = 逻辑型 注释 = "第一次使用前要使用“到数组首”使指针指向第一个值，读取完毕再执行将会返回假" @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return FBroCefStringList_ToNext(m_data);
+        返回 (假)
+
+    }
+
+    方法 取数据 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    参数 索引 <类型 = 整数 注释 = "0开始">
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroCefStringList_GetValue(m_data,@<索引>);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+
+    }
+
+    方法 取当前位置数据 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroCefStringList_GetCurrentData_Value(m_data);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+
+    }
+
+    方法 置当前位置数据 <公开 注释 = "通过到首位置、下一个控制当前位置后设置当前的值" @禁止流程检查 = 真>
+    参数 值 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return;
+        @ FBroCefStringList_SetCurrentData(m_data,@<值>.GetText());
+
+    }
+
+    方法 删除数据 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 值 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroCefStringList_Delete(m_data,@<值>.GetText());
+
+    }
+
+    方法 清空 <公开>
+    {
+        @ if(!IsEmpty()) FBroCefStringList_Clear(m_data);
+
+
+
+    }
+
+    方法 到火山文本数组 <公开 类型 = 文本数组类 @禁止流程检查 = 真>
+    {
+        变量 tempret <类型 = 文本数组类>
+        如果真 (取个数 () > 0)
+        {
+            到数组首 ()
+            循环判断首 ()
+            {
+                tempret.加入成员 (取当前位置数据 ())
+            }
+            循环判断尾 (到下一个 ())
+
+        }
+
+        返回 (tempret)
+
+    }
+}
+
+类 FBrowser_光标信息 <公开>
+{
+    变量 横坐标 <公开 类型 = 整数>
+    变量 纵坐标 <公开 类型 = 整数>
+    变量 图像比例因子 <公开 类型 = 小数>
+    变量 缓存指针 <公开 类型 = 变整数>
+    变量 尺寸宽度 <公开 类型 = 整数>
+    变量 尺寸高度 <公开 类型 = 整数>
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){release();} 
+    # CefCursorInfo* @sn<current_class>::ToFBroData();
+    # void release();
+    # CefCursorInfo m_data;
+    # @sn<current_class> (CefCursorInfo data) : @sn<current_class> () { m_data = data; }
+    # <> </include>
+    # CefCursorInfo* @sn<current_class>::ToFBroData(){
+    #   release();
+    #   m_data.hotspot.x=@<横坐标>;
+    #   m_data.hotspot.y=@<纵坐标>;
+    #   m_data.image_scale_factor=(float)@<图像比例因子>;
+    #   m_data.buffer=(void *)@<缓存指针>;
+    #   m_data.size.width=@<尺寸宽度>;
+    #   m_data.size.height=@<尺寸高度>;
+    #   
+    #   return &m_data;
+    # }
+    # void @sn<current_class>::release(){
+    # }
+    # @end
+    #
+}
+
+类 FBrowser_时间类型 <公开>
+{
+    变量 年 <公开 类型 = 整数 值 = 0 注释 = "year">
+    变量 月 <公开 类型 = 整数 值 = 0 注释 = "month">
+    变量 日 <公开 类型 = 整数 值 = 0 注释 = "day">
+    变量 时 <公开 类型 = 整数 值 = 0 注释 = "hour">
+    变量 分 <公开 类型 = 整数 值 = 0 注释 = "minute">
+    变量 秒 <公开 类型 = 整数 值 = 0 注释 = "second">
+    变量 毫秒 <公开 类型 = 整数 值 = 0 注释 = "millisecond">
+
+    # @begin
+    # <> <include>
+    # @sn<current_class> (E_TIMEDATA data) : @sn<current_class> () { ToHsData(m_data); }
+    # ~@sn<current_class>(){release();} 
+    # POINT_TIMEDATA ToFBroData();
+    # void ToHsData(E_TIMEDATA data);
+    # void release();
+    # E_TIMEDATA m_data;
+    # <> </include>
+    #
+    # POINT_TIMEDATA @sn<current_class>::ToFBroData(){
+    #   release();
+    #   m_data.year=@<年>;
+    #   m_data.month=@<月>;
+    #   m_data.day=@<日>;
+    #   m_data.hour=@<时>;
+    #   m_data.minute=@<分>;
+    #   m_data.second=@<秒>;
+    #   m_data.millisecond=@<毫秒>;
+    #   return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(E_TIMEDATA data){
+    #   m_data=data;
+    #   @<年>=m_data.year;
+    #   @<月>=m_data.month;
+    #   @<日>=m_data.day;
+    #   @<时>=m_data.hour;
+    #   @<分>=m_data.minute;
+    #   @<秒>=m_data.second;
+    #   @<毫秒>=m_data.millisecond;
+    # }
+    # void @sn<current_class>::release(){
+    # }
+    #
+    # @end
+    #
+}
+
+类 FBrowser_Cookie数据 <公开>
+{
+    变量 名 <公开 类型 = 文本型 注释 = "name">
+    变量 值 <公开 类型 = 文本型 注释 = "value">
+    变量 域 <公开 类型 = 文本型 注释 = "domain，注，如不设置则使用默认域名，置入那个网站就使用哪个网站的默认域名">
+    变量 路径 <公开 类型 = 文本型 注释 = "path">
+    变量 是否只有http <公开 类型 = 逻辑型 注释 = "httponly">
+    变量 是否有过期时间 <公开 类型 = 逻辑型 注释 = "has_expires">
+    变量 过期时间 <公开 类型 = FBrowser_时间类型>
+    变量 访问时间 <公开 类型 = FBrowser_时间类型>
+    变量 安全传输 <公开 类型 = 逻辑型 注释 = "secure If |secure| is true the cookie will only be sent for HTTPS requests.">
+    变量 同站 <公开 类型 = 整数 注释 = "same_site   参考：Cookie同站.">
+    变量 优先级 <公开 类型 = 整数 注释 = "priority 参考：Cookie优先级.">
+
+    # @begin
+    # <> <include>
+    # @sn<current_class> (E_COOKIEDATA data) : @sn<current_class> () { FBroUnit::CopyFBroData(data,&m_data);ToHsData();}
+    # ~@sn<current_class>(){release();} 
+    # POINT_COOKIEDATA ToFBroData();
+    # void ToHsData();
+    # void release();
+    # E_COOKIEDATA m_data;
+    # <> </include>
+    #
+    # POINT_COOKIEDATA @sn<current_class>::ToFBroData(){
+    #   release();
+    #   m_data.name = FBroUnit::UnicodeToAnsi(@<名>.GetText());
+    #   m_data.value = FBroUnit::UnicodeToAnsi(@<值>.GetText());
+    #   m_data.domain = FBroUnit::UnicodeToAnsi(@<域>.GetText());
+    #   m_data.path = FBroUnit::UnicodeToAnsi(@<路径>.GetText());
+    #   m_data.httponly = @<是否只有http>;
+    #   m_data.has_expires = @<是否有过期时间>;
+    #
+    #   @<过期时间>.ToFBroData();
+    #   m_data.expires_time = @<过期时间>.m_data;
+    #   @<访问时间>.ToFBroData();
+    #   m_data.last_access_time = @<访问时间>.m_data;
+    #
+    #   m_data.secure=@<安全传输>;
+    #   m_data.same_site=@<同站>;
+    #   m_data.priority=@<优先级>;
+    #
+    #   return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){
+    #   @<名>=FBroUnit::ToCWString(m_data.name);
+    #   @<值>=FBroUnit::ToCWString(m_data.value);
+    #   @<域>=FBroUnit::ToCWString(m_data.domain);
+    #   @<路径>=FBroUnit::ToCWString(m_data.path);
+    #
+    #   @<是否只有http> = m_data.httponly;
+    #   @<是否有过期时间> = m_data.has_expires;
+    #
+    #   @<过期时间>.ToHsData(m_data.expires_time);
+    #   @<访问时间>.ToHsData(m_data.last_access_time);
+    #
+    #   @<安全传输> = m_data.secure;
+    #   @<同站> = m_data.same_site;
+    #   @<优先级> = m_data.priority;
+    # }
+    #
+    #
+    # void @sn<current_class>::release(){
+    #   FBroUnit::FreeCharArray(m_data.name);
+    #   FBroUnit::FreeCharArray(m_data.value);
+    #   FBroUnit::FreeCharArray(m_data.domain);
+    #   FBroUnit::FreeCharArray(m_data.path);
+    # }
+    #
+    # @end
+    #
+    #
+    #
+}
+
+类 FBrowser_屏幕信息 <公开>
+{
+    变量 设备比例因子 <公开 类型 = 小数 值 = 0
+            注释 = "device_scale_factor: Device scale factor. Specifies the ratio between physical and logical pixels.">
+    变量 深度 <公开 类型 = 整数 值 = 0 注释 = "depth:The screen depth in bits per pixel.">
+    变量 深度或组件 <公开 类型 = 整数 值 = 0
+            注释 = "depth_per_component:The bits per color component. This assumes that the colors are balanced equally.">
+    变量 is_monochrome <公开 类型 = 整数 值 = 0 注释 = "is_monochrome:This can be true for black and white printers.">
+    变量 矩形位置 <公开 类型 = FBrowser_矩形位置 注释 = "rect">
+    变量 可用矩形 <公开 类型 = FBrowser_矩形位置 注释 = "available_rect">
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){} //销毁构析函数
+    # @sn<current_class> (E_SCREENINFO data) : @sn<current_class> () { m_data = data;ToHsData();}
+    # POINT_SCREENINFO ToFBroData();
+    # void ToHsData();
+    # E_SCREENINFO m_data;
+    # <> </include>
+    # POINT_SCREENINFO @sn<current_class>::ToFBroData(){
+    #      m_data.device_scale_factor=(float)@<设备比例因子>;
+    #      m_data.depth=@<深度>;
+    #      m_data.depth_per_component=@<深度或组件>;
+    #      m_data.is_monochrome=@<is_monochrome>;
+    #
+    #      m_data.rect.x=@<矩形位置.横坐标>;
+    #      m_data.rect.y=@<矩形位置.纵坐标>;
+    #      m_data.rect.width=@<矩形位置.宽度>;
+    #      m_data.rect.height=@<矩形位置.高度>;
+    #
+    #      m_data.available_rect.x=@<可用矩形.横坐标>;
+    #      m_data.available_rect.y=@<可用矩形.纵坐标>;
+    #      m_data.available_rect.width=@<可用矩形.宽度>;
+    #      m_data.available_rect.height=@<可用矩形.高度>; 
+    #      return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){
+    #     @<设备比例因子> = m_data.device_scale_factor;
+    #     @<深度> = m_data.depth;
+    #     @<深度或组件> = m_data.depth_per_component;
+    #     @<is_monochrome> = m_data.is_monochrome;
+    #
+    #     @<矩形位置.横坐标> = m_data.rect.x;
+    #     @<矩形位置.纵坐标> = m_data.rect.y;
+    #     @<矩形位置.宽度> = m_data.rect.width;
+    #     @<矩形位置.高度> = m_data.rect.height;
+    #
+    #     @<可用矩形.横坐标> = m_data.available_rect.x;
+    #     @<可用矩形.纵坐标> = m_data.available_rect.y;
+    #     @<可用矩形.宽度> = m_data.available_rect.width;
+    #     @<可用矩形.高度> = m_data.available_rect.height; 
+    # }
+    #
+    # @end
+    #
+}
+
+类 FBrowser_范围 <公开>
+{
+    变量 来源 <公开 类型 = 整数 注释 = "from">
+    变量 目标 <公开 类型 = 整数 注释 = "to">
+
+    #
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){} //销毁构析函数
+    # @sn<current_class> (E_RANGE data) : @sn<current_class> () { m_data = data;ToHsData();}
+    # POINT_RANGE ToFBroData();
+    # void ToHsData();
+    # E_RANGE m_data;
+    # <> </include>
+    # POINT_RANGE @sn<current_class>::ToFBroData(){
+    #      m_data.from=@<来源>;
+    #      m_data.to=@<目标>;
+    #      return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){
+    #     @<来源> = m_data.from;
+    #     @<目标> = m_data.to;
+    # }
+    #
+    # @end
+    #
+}
+
+类 FBrowser_下划线组成 <公开>
+{
+    变量 范围 <公开 类型 = FBrowser_范围 注释 = "range">
+    变量 颜色 <公开 类型 = 整数 注释 = "color">
+    变量 背景颜色 <公开 类型 = 整数 注释 = "background_color">
+    变量 厚粗 <公开 类型 = 整数 注释 = "thick">
+    变量 类型 <公开 类型 = 整数 注释 = "style">
+
+    #
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){} //销毁构析函数
+    # @sn<current_class> (E_COMUNDERLINE data) : @sn<current_class> () { m_data = data;ToHsData();}
+    # POINT_COMUNDERLINE ToFBroData();
+    # void ToHsData();
+    # E_COMUNDERLINE m_data;
+    # <> </include>
+    # POINT_COMUNDERLINE @sn<current_class>::ToFBroData(){
+    #     m_data.range.from = @<范围.来源>;
+    #     m_data.range.to = @<范围.目标>;
+    #     m_data.color = @<颜色>;
+    #     m_data.background_color = @<背景颜色>;
+    #     m_data.thick = @<厚粗>;
+    #     m_data.style = @<类型>;
+    #     return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){
+    #     @<范围.来源> = m_data.range.from;
+    #     @<范围.目标> = m_data.range.to;
+    #     @<颜色> = m_data.color;
+    #     @<背景颜色> = m_data.background_color;
+    #     @<厚粗> = m_data.thick;
+    #     @<类型> = m_data.style;
+    # }
+    #
+    # @end
+    #
+}
+
+类 FBrowser_下划线组成数组 <公开 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<FBroCompositionUnderlineList> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<FBroCompositionUnderlineList> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set(CefRefPtr<FBroCompositionUnderlineList> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    方法 创建 <公开>
+    {
+        @ m_class=FBroCompositionUnderlineList_Creat();
+    }
+
+    方法 取个数 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return FBroCompositionUnderlineList_Size(m_class);//.size();
+    }
+
+    方法 加入成员 <公开>
+    参数 成员 <类型 = FBrowser_下划线组成>
+    {
+        @ if(!IsEmpty()) FBroCompositionUnderlineList_Add(m_class,@<成员>.ToFBroData());
+    }
+
+    方法 到数组首 <公开 注释 = "当前指向数组第一个数据">
+    {
+        @ if(!IsEmpty()) FBroCompositionUnderlineList_ToBegin(m_class);
+    }
+
+    方法 到下一个 <公开 类型 = 逻辑型 注释 = "第一次使用前要使用“到数组首”使指针指向第一个值，读取完毕再执行将会返回假" @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return FBroCompositionUnderlineList_ToNext(m_class);
+        返回 (假)
+    }
+
+    方法 取当前位置数据 <公开 类型 = FBrowser_下划线组成 @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return @dt<FBrowser_下划线组成>(FBroCompositionUnderlineList_GetCurrentData_Value(m_class));
+        @ return @dt<FBrowser_下划线组成>();
+
+    }
+
+    方法 取数据 <公开 类型 = FBrowser_下划线组成 @禁止流程检查 = 真>
+    参数 ID <类型 = 整数>
+    {
+        @ if(!IsEmpty()) return @dt<FBrowser_下划线组成>(FBroCompositionUnderlineList_GetValue(m_class,@<ID>));
+        @ return @dt<FBrowser_下划线组成>();
+
+    }
+
+    方法 清空 <公开>
+    {
+        @ if(!IsEmpty()) FBroCompositionUnderlineList_Clear(m_class);
+    }
+
+    #
+}
+
+类 FBrowser_截图边框数据 <公开>
+{
+    变量 横坐标 <公开 类型 = 整数 注释 = "x">
+    变量 纵坐标 <公开 类型 = 整数 注释 = "y">
+    变量 宽度 <公开 类型 = 整数 注释 = "width">
+    变量 高度 <公开 类型 = 整数 注释 = "heigth">
+    变量 缩放 <公开 类型 = 整数 注释 = "scale Page scale factor.">
+
+    #
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){} //销毁构析函数
+    # @sn<current_class> (VIEWPORT data) : @sn<current_class> () { m_data = data;ToHsData();}
+    # VIEWPORT_POINT ToFBroData();
+    # void ToHsData();
+    # VIEWPORT m_data;
+    # <> </include>
+    # VIEWPORT_POINT @sn<current_class>::ToFBroData(){
+    #     m_data.x = @<横坐标>;
+    #     m_data.y = @<纵坐标>;
+    #     m_data.width = @<宽度>;
+    #     m_data.height = @<高度>;
+    #     m_data.scale = @<缩放>;
+    #     return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){
+    #      @<横坐标> = m_data.x;
+    #      @<纵坐标> = m_data.y;
+    #      @<宽度> = m_data.width;
+    #      @<高度> = m_data.height;
+    #      @<缩放> = m_data.scale;
+    # }
+    #
+    # @end
+    #
+}
+
+类 FBrowser_预查找数据 <公开>
+{
+    变量 searchId <公开 类型 = 文本型>
+    变量 resultCount <公开 类型 = 整数>
+
+    #
+}
+
+类 FBrowser_VIP触摸事件 <公开>
+{
+    变量 横坐标 <公开 类型 = 整数>
+    变量 纵坐标 <公开 类型 = 整数>
+    变量 横半径 <公开 类型 = 整数 值 = 1 "">
+    变量 纵半径 <公开 类型 = 整数 值 = 1>
+    变量 旋转角度 <公开 类型 = 整数 值 = 0>
+    变量 压力 <公开 类型 = 整数 值 = 1>
+    变量 id <公开 类型 = 整数>
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){} //销毁构析函数
+    # @sn<current_class> (E_DEV_TOUCHPOINT data) : @sn<current_class> () { m_data = data;ToHsData();}
+    # E_DEV_TOUCHPOINT* ToFBroData();
+    # void ToHsData();
+    # E_DEV_TOUCHPOINT m_data;
+    # <> </include>
+    # E_DEV_TOUCHPOINT* @sn<current_class>::ToFBroData(){
+    #      m_data.x=@<横坐标>;//横坐标
+    #      m_data.y=@<纵坐标>;//纵坐标
+    #      m_data.radiusX=@<横半径>;//横半径
+    #      m_data.radiusY=@<纵半径>;//纵半径
+    #      m_data.rotationAngle=@<旋转角度>;//旋转角度
+    #      m_data.force=@<压力>;//压力
+    #      m_data.id=@<id>;
+    #     return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){
+    #      @<横坐标>=m_data.x;//横坐标
+    #      @<纵坐标>=m_data.y;//纵坐标
+    #      @<横半径>=m_data.radiusX;//横半径
+    #      @<纵半径>=m_data.radiusY;//纵半径
+    #      @<旋转角度>=m_data.rotationAngle;//旋转角度
+    #      @<压力>=m_data.force;//压力
+    #      @<id>=m_data.id;
+    # }
+    # @end
+    #
+    #
+}
+
+类 FBrowser_禁用事件 <公开>
+{
+    变量 禁用音频获取事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetAudioHandler 暂不只支持未使用">
+    变量 禁用命令事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetCommandHandler 控制“浏览器_即将执行Chrome命令”事件，暂不只支持未使用">
+    变量 禁用菜单事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetContextMenuHandler">
+    变量 禁用对话框事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetDialogHandler">
+    变量 禁用显示事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetDisplayHandler，主要控制状态栏显示,全屏显示等事件">
+    变量 禁用下载事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetDownloadHandler">
+    变量 禁用触摸事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetDragHandler">
+    变量 禁用查找事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetFindHandler">
+    变量 禁用焦点事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetFocusHandler">
+    变量 禁用框架事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetFrameHandler，暂不只支持未使用">
+    变量 禁用媒体许可事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetPermissionHandler，暂不只支持未使用">
+    变量 禁用JS对话框事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetJSDialogHandler">
+    变量 禁用键盘事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetKeyboardHandler">
+    变量 禁用生命周期事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetLifeSpanHandler，主要控制浏览器创建销毁等事件，不建议禁用">
+    变量 禁用加载事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetLoadHandler，主要控制即将加载资源等事件">
+    变量 禁用打印事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetPrintHandler linux平台才有用，这里设置没意义，无用保留格式而已">
+    变量 禁用离屏渲染事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetRenderHandler">
+    变量 禁用请求事件 <公开 类型 = 逻辑型 值 = 假 注释 = "disableGetRequestHandler，主要控制包含请求的事件">
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){} //销毁构析函数
+    # @sn<current_class> (Event_Disable_Control data) : @sn<current_class> () { m_data = data;ToHsData();}
+    # Event_Disable_Control* ToFBroData();
+    # void ToHsData();
+    # Event_Disable_Control m_data;
+    # <> </include>
+    # Event_Disable_Control* @sn<current_class>::ToFBroData(){
+    #     m_data.disableGetAudioHandler = @<禁用音频获取事件>;
+    #     m_data.disableGetCommandHandler = @<禁用命令事件>;
+    #     m_data.disableGetContextMenuHandler = @<禁用菜单事件>;
+    #     m_data.disableGetDialogHandler = @<禁用对话框事件>;
+    #     m_data.disableGetDisplayHandler = @<禁用显示事件>;
+    #     m_data.disableGetDownloadHandler = @<禁用下载事件>;
+    #     m_data.disableGetDragHandler = @<禁用触摸事件>;
+    #     m_data.disableGetFindHandler = @<禁用查找事件>;
+    #     m_data.disableGetFocusHandler = @<禁用焦点事件>;
+    #     m_data.disableGetFrameHandler = @<禁用框架事件>;
+    #     m_data.disableGetPermissionHandler = @<禁用媒体许可事件>;
+    #     m_data.disableGetJSDialogHandler = @<禁用JS对话框事件>;
+    #     m_data.disableGetKeyboardHandler = @<禁用键盘事件>;
+    #     m_data.disableGetLifeSpanHandler = @<禁用生命周期事件>;
+    #     m_data.disableGetLoadHandler = @<禁用加载事件>;
+    #     m_data.disableGetPrintHandler = @<禁用打印事件>;
+    #     m_data.disableGetRenderHandler = @<禁用离屏渲染事件>;
+    #     m_data.disableGetRequestHandler = @<禁用请求事件>;
+    #     return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){
+    #     @<禁用音频获取事件> = m_data.disableGetAudioHandler;
+    #     @<禁用命令事件> = m_data.disableGetCommandHandler;
+    #     @<禁用菜单事件> = m_data.disableGetContextMenuHandler;
+    #     @<禁用对话框事件> = m_data.disableGetDialogHandler;
+    #     @<禁用显示事件> = m_data.disableGetDisplayHandler;
+    #     @<禁用下载事件> = m_data.disableGetDownloadHandler;
+    #     @<禁用触摸事件> = m_data.disableGetDragHandler;
+    #     @<禁用查找事件> = m_data.disableGetFindHandler;
+    #     @<禁用焦点事件> = m_data.disableGetFocusHandler;
+    #     @<禁用框架事件> = m_data.disableGetFrameHandler;
+    #     @<禁用媒体许可事件> = m_data.disableGetPermissionHandler;
+    #     @<禁用JS对话框事件> = m_data.disableGetJSDialogHandler;
+    #     @<禁用键盘事件> = m_data.disableGetKeyboardHandler;
+    #     @<禁用生命周期事件> = m_data.disableGetLifeSpanHandler;
+    #     @<禁用加载事件> = m_data.disableGetLoadHandler;
+    #     @<禁用打印事件> = m_data.disableGetPrintHandler;
+    #     @<禁用离屏渲染事件> = m_data.disableGetRenderHandler;
+    #     @<禁用请求事件> = m_data.disableGetRequestHandler;
+    # }
+    # @end
+    #
+}
+
+类 FBrowser_音频参数 <公开>
+{
+    变量 通道布局 <公开 类型 = 整数 注释 = "参考：音频通道布局.">
+    变量 采样频率 <公开 类型 = 整数>
+    变量 帧缓冲 <公开 类型 = 整数 "">
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){} //销毁构析函数
+    # @sn<current_class> (E_AudioParameters data) : @sn<current_class> () { m_data = data;ToHsData();}
+    # @sn<current_class> (E_AudioParameters* data) : @sn<current_class> () { ToFBroData(data);ToHsData();}
+    # void ToFBroData(E_AudioParameters* data);
+    # E_AudioParameters* ToFBroData();
+    # void ToHsData();
+    # E_AudioParameters m_data;
+    # <> </include>
+    # void @sn<current_class>::ToFBroData(E_AudioParameters* data){
+    #      m_data.channel_layout=data->channel_layout;
+    #      m_data.sample_rate=data->sample_rate;
+    #      m_data.frames_per_buffer=data->frames_per_buffer;
+    # }
+    #
+    # E_AudioParameters* @sn<current_class>::ToFBroData(){
+    #      m_data.channel_layout=@<通道布局>;
+    #      m_data.sample_rate=@<采样频率>;
+    #      m_data.frames_per_buffer=@<帧缓冲>;
+    #     return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){    
+    #      @<通道布局>=m_data.channel_layout;
+    #      @<采样频率>=m_data.sample_rate;
+    #      @<帧缓冲>=m_data.frames_per_buffer;
+    # }
+    # @end
+    #
+    #
+}
+
+类 FBrowser_媒体硬件数组 <公开 折叠 "">
+{
+
+    # @begin
+    # <> <include>
+    # struct MediaDevice
+    # {
+    #  MediaDevice(const wchar_t* deviceId, const wchar_t* label, const wchar_t* groupId) {
+    #   deviceId_ = deviceId;
+    #   label_ = label;
+    #   groupId_ = groupId;
+    #  }
+    #
+    #  CWString deviceId_;
+    #  CWString label_;
+    #  CWString groupId_;
+    # };
+    #
+    #
+    # std::unordered_map<int, MediaDevice> media_device_map_;
+    # int id_ = 0;
+    # std::shared_mutex mutex_;
+    #
+    # inline int AddItem(const wchar_t* deviceId, const wchar_t* label, const wchar_t* groupId) {
+    #
+    #  std::unique_lock<std::shared_mutex> lock(mutex_);
+    #  MediaDevice temp(deviceId, label, groupId);
+    #  media_device_map_.insert(std::make_pair(id_, temp));
+    #  id_++;
+    #  return  id_++;
+    # }
+    #
+    # inline bool DeleteItem(int id) {
+    #  std::unique_lock<std::shared_mutex> lock(mutex_);
+    #  auto item = media_device_map_.find(id);
+    #  if (item != media_device_map_.end())
+    #  {
+    #   media_device_map_.erase(item);
+    #   return true;
+    #  }
+    #  return false;
+    # }
+    #
+    #
+    # inline CWString GetItemDeviceId(int id) {
+    #  std::shared_lock<std::shared_mutex> lock(mutex_);
+    #  auto item = media_device_map_.find(id);
+    #  if (item != media_device_map_.end())
+    #  {
+    #   CWString temp = item->second.deviceId_;
+    #   return temp;
+    #  }
+    #  return _CT("");
+    # }
+    #
+    # inline CWString GetItemLabel(int id) {
+    #  std::shared_lock<std::shared_mutex> lock(mutex_);
+    #  auto item = media_device_map_.find(id);
+    #  if (item != media_device_map_.end())
+    #  {
+    #   CWString temp = item->second.label_;
+    #   return temp;
+    #  }
+    #  return _CT("");
+    # }
+    #
+    # inline CWString GetItemGroupId(int id) {
+    #  std::shared_lock<std::shared_mutex> lock(mutex_);
+    #  auto item = media_device_map_.find(id);
+    #  if (item != media_device_map_.end())
+    #  {
+    #   CWString temp = item->second.groupId_;
+    #   return temp;
+    #  }
+    #  return _CT("");
+    # }
+    #
+    # inline void Clear() {
+    #  std::unique_lock<std::shared_mutex> lock(mutex_);
+    #  media_device_map_.clear();
+    # }
+    #
+    # inline size_t Size() {
+    #  std::shared_lock<std::shared_mutex> lock(mutex_);
+    #  return media_device_map_.size();
+    # }
+    #
+    # inline CWString MapToString() {
+    #  std::shared_lock<std::shared_mutex> lock(mutex_);
+    #  if (media_device_map_.size() <= 0)
+    #   return _CT("");
+    #  auto item = media_device_map_.begin();
+    #  auto end = media_device_map_.end();
+    #  CWString temp = _CT("{");
+    #  for (item; item != end; item++) {
+    #   temp = temp + _CT("[deviceId=\"") + item->second.deviceId_ + _CT("\",");
+    #   temp = temp + _CT("label=\"") + item->second.label_ + _CT("\",");
+    #   temp = temp + _CT("groupId=\"") + item->second.groupId_ + _CT("\"],");
+    #  }
+    #  temp + temp + _CT("}");
+    #  return temp;
+    # }
+    #
+    # <> </include>
+
+    方法 加入数据 <公开 类型 = 整数 注释 = "加入数据，并返回数据ID，ID为累加唯一标识" @禁止流程检查 = 真>
+    参数 驱动ID <类型 = 文本型>
+    参数 硬件名 <类型 = 文本型>
+    参数 分组ID <类型 = 文本型>
+    {
+        @ return AddItem(@<驱动ID>.GetText(),@<硬件名>.GetText(),@<分组ID>.GetText());
+    }
+
+    方法 删除数据 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 ID <类型 = 整数>
+    {
+        @ return DeleteItem(@<ID>);
+    }
+
+    方法 取驱动ID <公开 类型 = 文本型 @禁止流程检查 = 真>
+    参数 ID <类型 = 整数>
+    {
+        @ return GetItemDeviceId(@<ID>);
+    }
+
+    方法 取驱动名 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    参数 ID <类型 = 整数>
+    {
+        @ return GetItemLabel(@<ID>);
+    }
+
+    方法 取分组ID <公开 类型 = 文本型 @禁止流程检查 = 真>
+    参数 ID <类型 = 整数>
+    {
+        @ return GetItemGroupId(@<ID>);
+    }
+
+    方法 清空全部数据 <公开 @禁止流程检查 = 真>
+    {
+        @ Clear();
+    }
+
+    方法 取数量 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ return Size();
+    }
+
+    # @end
+}
+
+#
+
+类 FBrowser_PDF打印设置 <公开 折叠>
+{
+    变量 横向模式 <公开 类型 = 逻辑型 注释 = "英文名：landscape 说明：Set to true (1) for landscape mode or false (0) for portrait mode.">
+    变量 打印背景 <公开 类型 = 逻辑型 注释 = "英文名：print_background 说明：Set to true (1) to print background graphics.">
+    变量 缩放比例 <公开 类型 = 小数
+            注释 = "英文名：scale 说明：The percentage to scale the PDF by before printing (e.g. .5 is 50%).If this value is less than or equal to zero the default value of 1.0 will be used.">
+    变量 页面宽度 <公开 类型 = 小数
+            注释 = "英文名：paper_width 说明：Output paper size in inches. If either of these values is less than or equal to zero then the default paper size (letter, 8.5 x 11 inches) will be used.">
+    变量 页面高度 <公开 类型 = 小数
+            注释 = "英文名：paper_height 说明：Output paper size in inches. If either of these values is less than or equal to zero then the default paper size (letter, 8.5 x 11 inches) will be used.">
+    变量 首选CSS页面大小 <公开 类型 = 逻辑型
+            注释 = "英文名：prefer_css_page_size 说明：Set to true (1) to prefer page size as defined by css. Defaults to false (0), in which case the content will be scaled to fit the paper size.">
+    变量 边框类型 <公开 类型 = 整数 注释 = "英文名：margin_type 说明：Margin type.参考：#PDF打印_边框">
+    变量 边框顶点 <公开 类型 = 小数
+            注释 = "英文名：margin_top 说明：Margins in inches. Only used if |margin_type| is set to PDF_PRINT_MARGIN_CUSTOM.">
+    变量 边框右边 <公开 类型 = 小数
+            注释 = "英文名：margin_right 说明：Margins in inches. Only used if |margin_type| is set to PDF_PRINT_MARGIN_CUSTOM.">
+    变量 边框底部 <公开 类型 = 小数
+            注释 = "英文名：margin_bottom 说明：Margins in inches. Only used if |margin_type| is set to PDF_PRINT_MARGIN_CUSTOM.">
+    变量 边框左边 <公开 类型 = 小数
+            注释 = "英文名：margin_left 说明：Margins in inches. Only used if |margin_type| is set to PDF_PRINT_MARGIN_CUSTOM">
+    变量 页面范围 <公开 类型 = 文本型
+            注释 = "英文名：page_ranges 说明：Paper ranges to print, one based, e.g., \'1-5, 8, 11-13\'. Pages are printed in the document order, not in the order specified, and no more than once.Defaults to empty string, which implies the entire document is printed.">
+    变量 显示页眉页脚 <公开 类型 = 逻辑型
+            注释 = "英文名：display_header_footer 说明：Set to true (1) to display the header and/or footer. Modify |header_template| and/or |footer_template| to customize the display.">
+    变量 头模板 <公开 类型 = 文本型
+            注释 = "英文名：header_template 说明：HTML template for the print header. Only displayed if |display_header_footer| is true (1). Should be valid HTML markup with the following classes used to inject printing values into them:For example, \"<span class=title></span>\" would generate a span containing the title.">
+    变量 页脚模板 <公开 类型 = 文本型
+            注释 = "英文名：footer_template 说明：HTML template for the print footer. Only displayed if |display_header_footer| is true (1). Uses the same format as |header_template|.">
+    变量 生成带标签的PDF <公开 类型 = 逻辑型 注释 = "英文名：generate_tagged_pdf 说明：Set to true (1) to generate tagged (accessible) PDF.">
+    变量 生成文档大纲 <公开 类型 = 逻辑型 注释 = "英文名：generate_document_outline 说明：Set to true (1) to generate a document outline.">
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){release();} //销毁构析函数
+    # @sn<current_class> (FBroPdfPrintSettings data) : @sn<current_class> () { m_data = data;ToHsData();}
+    # FBroPdfPrintSettings* ToFBroData();
+    # void ToHsData();
+    # void release();
+    # FBroPdfPrintSettings m_data;
+    #
+    # <> </include>
+    # FBroPdfPrintSettings* @sn<current_class>::ToFBroData(){
+    #     m_data.landscape;
+    #     m_data.print_background;
+    #     m_data.scale;
+    #     m_data.paper_width;
+    #     m_data.paper_height;
+    #     m_data.prefer_css_page_size;
+    #     m_data.margin_type;
+    #
+    #     m_data.margin_top;
+    #     m_data.margin_right;
+    #     m_data.margin_bottom;
+    #     m_data.margin_left;
+    #
+    #     m_data.page_ranges=FBroUnit::UnicodeToAnsi(@<页面范围>.GetText());
+    #
+    #     m_data. display_header_footer;
+    #
+    #     m_data.header_template=FBroUnit::UnicodeToAnsi(@<头模板>.GetText());
+    #     m_data.footer_template=FBroUnit::UnicodeToAnsi(@<页脚模板>.GetText());
+    #
+    #     m_data.generate_tagged_pdf;
+    #     m_data.generate_document_outline;
+    #
+    #     return &m_data;
+    # }
+    # void @sn<current_class>::ToHsData(){
+    #     @<横向模式> = m_data.landscape;
+    #     @<打印背景> = m_data.print_background;
+    #     @<缩放比例> = m_data.scale;
+    #     @<页面宽度> = m_data.paper_width;
+    #     @<页面高度> = m_data.paper_height;
+    #     @<首选CSS页面大小> = m_data.prefer_css_page_size;
+    #     @<边框类型> = m_data.margin_type;
+    #     @<边框顶点> = m_data.margin_top;
+    #     @<边框右边> = m_data.margin_right;
+    #     @<边框底部> = m_data.margin_bottom;
+    #     @<边框左边> = m_data.margin_left;
+    #     @<页面范围> = FBroUnit::ToCWString(m_data.page_ranges);
+    #     @<显示页眉页脚> = m_data.display_header_footer;
+    #     @<头模板> = FBroUnit::ToCWString(m_data.header_template);
+    #     @<页脚模板> = FBroUnit::ToCWString(m_data.footer_template);
+    #     @<生成带标签的PDF> = m_data.generate_tagged_pdf;
+    #     @<生成文档大纲> = m_data.generate_document_outline;
+    # }
+    #
+    # void @sn<current_class>::release(){
+    #   FBroUnit::FreeCharArray(m_data.page_ranges);
+    #   FBroUnit::FreeCharArray(m_data.header_template);
+    #   FBroUnit::FreeCharArray(m_data.footer_template);
+    # }
+    #
+    # @end
+    #
+    #
+}
+
+类 FBrowser_加速绘制额外信息 <公开>
+{
+    变量 timestamp <公开 类型 = 长整数>
+    变量 coded_size <公开 类型 = FBrowser_尺寸>
+    变量 visible_rect <公开 类型 = FBrowser_矩形位置>
+    变量 content_rect <公开 类型 = FBrowser_矩形位置>
+    变量 source_size <公开 类型 = FBrowser_尺寸>
+    变量 capture_update_rect <公开 类型 = FBrowser_矩形位置>
+    变量 region_capture_rect <公开 类型 = FBrowser_矩形位置>
+    变量 capture_counter <公开 类型 = 长整数>
+    变量 has_capture_update_rect <公开 类型 = 整数>
+    变量 has_region_capture_rect <公开 类型 = 整数>
+    变量 has_source_size <公开 类型 = 整数>
+    变量 has_capture_counter <公开 类型 = 整数>
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){} //销毁构析函数
+    # @sn<current_class> (E_ACCELERATED_PAINT_INFO_COMMON data) : @sn<current_class> () { m_data = data;ToHsData();}
+    # void ToHsData();
+    # E_ACCELERATED_PAINT_INFO_COMMON m_data;
+    #
+    # <> </include>
+    # void @sn<current_class>::ToHsData(){
+    #      @<timestamp> = m_data.timestamp;
+    #
+    #      @<coded_size> = @dt<FBrowser_尺寸>(m_data.coded_size);
+    #
+    #      @<visible_rect> = @dt<FBrowser_矩形位置>(m_data.visible_rect);
+    #      @<content_rect> = @dt<FBrowser_矩形位置>(m_data.content_rect);
+    #
+    #      @<source_size> = @dt<FBrowser_尺寸>(m_data.source_size);
+    #
+    #      @<capture_update_rect> = @dt<FBrowser_矩形位置>(m_data.capture_update_rect);
+    #      @<region_capture_rect> = @dt<FBrowser_矩形位置>(m_data.region_capture_rect);
+    #
+    #      @<capture_counter> = m_data.capture_counter;
+    #      @<has_capture_update_rect> = m_data.has_capture_update_rect;
+    #      @<has_region_capture_rect> = m_data.has_region_capture_rect;
+    #      @<has_source_size> = m_data.has_source_size;
+    #      @<has_capture_counter> = m_data.has_capture_counter;
+    # }
+    # @end
+    #
+}
+
+类 FBrowser_加速绘制信息 <公开>
+{
+    变量 共享纹理句柄 <公开 类型 = 变整数 注释 = "shared_texture_handle指针">
+    变量 颜色类型 <公开 类型 = 整数 注释 = "0 CEF_COLOR_TYPE_RGBA_8888,1 CEF_COLOR_TYPE_BGRA_8888,2 CEF_COLOR_TYPE_NUM_VALUES,">
+    变量 额外信息 <公开 类型 = FBrowser_加速绘制额外信息 注释 = "extra">
+
+    # @begin
+    # <> <include>
+    # ~@sn<current_class>(){} //销毁构析函数
+    # @sn<current_class> (E_ACCELERATED_PAINT_INFO data) : @sn<current_class> () { m_data = data;ToHsData();}
+    # void ToHsData();
+    # E_ACCELERATED_PAINT_INFO m_data;
+    # <> </include>
+    #
+    # void @sn<current_class>::ToHsData(){
+    #      @<共享纹理句柄> = @dt<变整数>(m_data.shared_texture_handle);
+    #      @<颜色类型> = m_data.format;
+    #      @<额外信息> = @dt<FBrowser_加速绘制额外信息>(m_data.extra);
+    # }
+    # @end
+    #
+}
+
+#

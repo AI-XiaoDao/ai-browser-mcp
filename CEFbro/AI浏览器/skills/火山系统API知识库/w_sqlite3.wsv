@@ -1,0 +1,593 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.SQLite数据库
+
+类 SQLite数据库类 <公开 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "SQLite3数据库支持." 注释 = ""
+        注释 = "如果用户程序中调用了本类中的\"使用新版本\"静态方法,将使用 sqlite 3.49 版,且启用以下特性:" 注释 = "json1: 启用 SQLite 的 JSON 扩展模块（JSON1），支持对 JSON 数据的操作。"
+        注释 = "fts5: 启用 SQLite 的全文搜索模块（Full Text Search 5），用于高效的文本搜索功能。" 注释 = "" 注释 = "如果没有调用\"使用新版本\"静态方法,将使用 sqlite 3.35.4 版."
+        编辑时信息 = "287FD7, 0, 0, 0" @视窗.需求VS版本.static = "16-" @视窗.使用静态运行时库.static = 真 ""
+        "@视窗.头文件搜寻目录.d:!_VOL_SQLITE_VER2" = "..\\..\\shared\\extern_lib\\common\\sqlite3\\2\\include\\$(lm)"
+        "@视窗.外部头文件.d:!_VOL_SQLITE_VER2" = "..\\..\\shared\\extern_lib\\common\\sqlite3\\2\\include\\vol_sqlite3.h"
+        "@视窗.附属文件.non_static - d:!_VOL_SQLITE_VER2" = "..\\..\\shared\\extern_lib\\common\\sqlite3\\2\\$(p)\\sqlite3dllmt.dll"
+        "@视窗.外部库.non_static - d:!_VOL_SQLITE_VER2" = "..\\..\\shared\\extern_lib\\common\\sqlite3\\2\\$(p)\\sqlite3dllmt.lib"
+        "@视窗.外部库.static - d:!_VOL_SQLITE_VER2" = "..\\..\\shared\\extern_lib\\common\\sqlite3\\2\\$(p)\\sqlite3libmt-$(d).lib" ""
+        "@视窗.头文件搜寻目录.d:_VOL_SQLITE_VER2" = "..\\..\\shared\\extern_lib\\common\\sqlite3\\3\\include"
+        "@视窗.外部头文件.d:_VOL_SQLITE_VER2" = "..\\..\\shared\\extern_lib\\common\\sqlite3\\3\\include\\vol_sqlite3.h"
+        "@视窗.附属文件.non_static - d:_VOL_SQLITE_VER2" = "..\\..\\shared\\extern_lib\\common\\sqlite3\\3\\$(p)\\sqlite3.dll"
+        "@视窗.外部库.non_static - d:_VOL_SQLITE_VER2" = "..\\..\\shared\\extern_lib\\common\\sqlite3\\3\\$(p)\\sqlite3.lib"
+        "@视窗.外部库.static - d:_VOL_SQLITE_VER2" = "..\\..\\shared\\extern_lib\\common\\sqlite3\\3\\$(p)\\sqlite3-$(d).lib">
+{
+    方法 使用新版本 <公开 静态 注释 = "调用本方法指示编译器使用 sqlite 3.49 版,且启用以下特性:" 注释 = "json1: 启用 SQLite 的 JSON 扩展模块（JSON1），支持对 JSON 数据的操作。"
+            注释 = "fts5: 启用 SQLite 的全文搜索模块（Full Text Search 5），用于高效的文本搜索功能。" 注释 = "如果不调用本方法,将使用 sqlite 3.35.4 版进行编译."
+            注释 = "注意: 本方法为编译时处理方法,系统在编译时只要检测到用户程序实际执行流程中任意位置调用了此方法,就启用对应的编译特性,和方法本身是否被执行到没有任何关系." @视窗.预定义宏 = "_VOL_SQLITE_VER2"
+            @视窗.编译信息 = "基于 SQLite3[json1,fts5] 3.49 版本编译">
+    {
+
+    }
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CSqliteWraper)
+    #
+    # @ @def_macro DATA_NULL_ERROR(ERROR_CODE)  \
+    # @     if (GetSqlite () == NULL) return ERROR_CODE;
+    #
+    # @ @def_macro CONFIG_DATA_NULL_ERROR(CONFIG_NAME, CONFIG_VALUE)  \
+    # @     @m<DATA_NULL_ERROR> (-100)  \
+    # @     return sqlite3_db_config(GetSqlite(), CONFIG_NAME, CONFIG_VALUE, NULL);
+    #
+    # @ <include>
+    # @ inline_ sqlite3* GetSqlite ()  { return data().GetData (); }
+    # @ static int BusyCallBack(void* para, int count) { return ((@dt<SQLite数据库类>*)para)->@n<SQLite数据库类.等待数据库释放锁>(count); }
+    # @ </include>
+    #
+    # 静态方法 ---
+
+    方法 取库版本号 <公开 静态 类型 = 整数 注释 = "获取Sqlite库版本代号." @嵌入式方法 = "">
+    {
+        @ sqlite3_libversion_number()
+    }
+
+    方法 取库版本名称 <公开 静态 类型 = 文本型 注释 = "获取Sqlite库版本名称." @禁止流程检查 = 真>
+    {
+        @ const char* infoStr = sqlite3_libversion();
+        @ if (infoStr != NULL) return @an<CVolString> (infoStr);
+        @ return _T ("");
+    }
+
+    方法 取库来源信息 <公开 静态 类型 = 文本型 注释 = "获取Sqlite库来源信息." @禁止流程检查 = 真>
+    {
+        @ const char* infoStr = sqlite3_sourceid();
+        @ if (infoStr != NULL) return @an<CVolString> (infoStr);
+        @ return _T ("");
+    }
+
+    方法 是否线程安全 <公开 静态 类型 = 整数 注释 = "获取当前SQLite所使用的线程模式." 注释 = "注意:该方法返回的值与\"置线程模式\"不是对应的,本方法仅判断数据库是否线程安全."
+            返回值注释 = "返回0:表示未启用互斥锁,为单线程." 返回值注释 = "返回1:这种模式下,只要一个数据库连接不被多个线程同时使用就是线程安全的." 返回值注释 = "返回2:启用了所有锁,在多线程模式下保持线程安全."
+            @嵌入式方法 = "">
+    {
+        @ sqlite3_threadsafe()
+    }
+
+    方法 置线程模式 <公开 静态 类型 = 整数 注释 = "设置SQLite所欲使用的线程模式."
+            注释 = "注意:本方法为全局配置方法,即一次调用在程序中所有的SQLite数据对象都将遵循该设置,务必在\"初始化\"或\"打开\"数据库之前调用."
+            返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量." @嵌入式方法 = "">
+    参数 模式 <类型 = 整数 注释 = "1:单线程模式" 注释 = "2:多线程模式" 注释 = "3:串行模式">
+    {
+        @ sqlite3_config(@<模式>)
+    }
+
+    方法 初始化 <公开 静态 类型 = 整数 注释 = "初始化SQLite,分配一些必要的资源,数据结构等." 注释 = "注意:本命令全局仅需执行一次,且在执行\"打开\"时会自动初始化."
+            返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量." @嵌入式方法 = "">
+    {
+        @ sqlite3_initialize()
+    }
+
+    方法 释放资源 <公开 静态 类型 = 整数 注释 = "释放由\"初始化\"命令所分配的资源占用." 返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量." @嵌入式方法 = "">
+    {
+        @ sqlite3_shutdown()
+    }
+
+    方法 检查语句是否完整 <公开 静态 类型 = 整数 注释 = "检查一个文本内容是否为一个完整的SQL语句." @嵌入式方法 = "">
+    参数 内容 <类型 = 文本型 注释 = "提供所欲检查的SQL语句内容.">
+    {
+        @ sqlite3_complete((const char*)CU8String(@<内容>.GetText ()).GetText())
+    }
+
+    方法 取已使用内存 <公开 静态 类型 = 长整数 注释 = "获取SQLite当前所使用的内存量." 注释 = "注意:仅统计SQLite库所分配的内存." 返回值注释 = "以字节为单位." @嵌入式方法 = "">
+    {
+        @ sqlite3_memory_used()
+    }
+
+    方法 取指定错误描述 <公开 静态 类型 = 文本型 注释 = "根据所提供的错误码返回对应的错误描述文本." @嵌入式方法 = "">
+    参数 错误码 <类型 = 整数>
+    {
+        @ CVolString(sqlite3_errstr(@<错误码>))
+    }
+
+    # ---
+
+    方法 置主库名称 <公开 类型 = 整数 注释 = "更改\"main\"数据库模式的名称." 返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型>
+    {
+        @ @m<CONFIG_DATA_NULL_ERROR>(SQLITE_DBCONFIG_MAINDBNAME, (const char*)CU8String(@<名称>.GetText ()).GetText())
+    }
+
+    方法 启用外键约束 <公开 类型 = 整数 注释 = "设置是否启用外键约束." 返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量." @禁止流程检查 = 真>
+    参数 启用 <类型 = 逻辑型 注释 = "是否启用外键约束.">
+    {
+        @ @m<CONFIG_DATA_NULL_ERROR>(SQLITE_DBCONFIG_ENABLE_FKEY, (INT)@<启用>)
+    }
+
+    方法 启用触发器 <公开 类型 = 整数 注释 = "设置是否启用触发器." 返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量." @禁止流程检查 = 真>
+    参数 启用 <类型 = 逻辑型 注释 = "是否启用触发器.">
+    {
+        @ @m<CONFIG_DATA_NULL_ERROR>(SQLITE_DBCONFIG_ENABLE_TRIGGER, (INT)@<启用>)
+    }
+
+    方法 启用分词器 <公开 类型 = 整数 注释 = "设置是否启用分词器." 返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量." @禁止流程检查 = 真>
+    参数 启用 <类型 = 逻辑型 注释 = "是否启用分词器.">
+    {
+        @ @m<CONFIG_DATA_NULL_ERROR>(SQLITE_DBCONFIG_ENABLE_FTS3_TOKENIZER, (INT)@<启用>)
+    }
+
+    方法 启用扩展库 <公开 类型 = 整数 注释 = "设置是否启用SQLite扩展库." 返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量." @禁止流程检查 = 真>
+    参数 启用类型 <类型 = 整数 注释 = "提供0则禁用全部,1表示仅启用C-API的load_extension().">
+    {
+        @ @m<CONFIG_DATA_NULL_ERROR>(SQLITE_DBCONFIG_ENABLE_LOAD_EXTENSION, (INT)@<启用类型>)
+    }
+
+    方法 启用关闭检查点 <公开 类型 = 整数 注释 = "设置是否启用关闭检查点." 返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量." @禁止流程检查 = 真>
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ @m<CONFIG_DATA_NULL_ERROR>(SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, (INT)!@<启用>)
+    }
+
+    方法 启用触发器输出 <公开 类型 = 整数 注释 = "设置是否启用触发器程序的输出." 返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量." @禁止流程检查 = 真>
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ @m<CONFIG_DATA_NULL_ERROR>(SQLITE_DBCONFIG_TRIGGER_EQP, (INT)@<启用>)
+    }
+
+    方法 启用防御功能 <公开 类型 = 整数 注释 = "设置是否激活或禁用数据库连接的\"防御\"功能." 返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量." @禁止流程检查 = 真>
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ @m<CONFIG_DATA_NULL_ERROR>(SQLITE_DBCONFIG_DEFENSIVE, (INT)@<启用>)
+    }
+
+    方法 启用可写方案 <公开 类型 = 整数 注释 = "设置是否激活或停用数据库连接的\"writable_schema\"功能." 返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量."
+            @禁止流程检查 = 真>
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ @m<CONFIG_DATA_NULL_ERROR>(SQLITE_DBCONFIG_WRITABLE_SCHEMA, (INT)@<启用>)
+    }
+
+    方法 启用视图功能 <公开 类型 = 整数 注释 = "设置是否激活或停用视图功能." 返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量." @禁止流程检查 = 真>
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ @m<CONFIG_DATA_NULL_ERROR>(SQLITE_DBCONFIG_ENABLE_VIEW, (INT)@<启用>)
+    }
+
+    方法 启用旧文件兼容 <公开 类型 = 整数 注释 = "设置是否激活或停用兼容旧数据库文件格式(3.0以下)的功能." 返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量." @禁止流程检查 = 真>
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ @m<CONFIG_DATA_NULL_ERROR>(SQLITE_DBCONFIG_LEGACY_FILE_FORMAT, (INT)@<启用>)
+    }
+
+    方法 打开 <公开 类型 = 逻辑型 注释 = "打开或新建数据库." 返回值注释 = "返回打开(创建)数据库的结果." @禁止流程检查 = 真>
+    参数 文件名 <类型 = 文本型 注释 = "指定所欲打开的数据库文件完整路径,文件路径如果以\":memory:\"开头表示为内存数据库.">
+    参数 选项位 <类型 = 整数 注释 = "支持使用\"SQLite打开方式\"中的选项(多个组合)." @默认值 = -1>
+    参数 VFS对象 <类型 = 文本型 注释 = "指定所欲使用的VFS对象,提供空文本则使用默认VFS." @默认值 = 空对象>
+    {
+        @ CU8String str(@<VFS对象>.GetText ());
+        @ const char* vfs = (@<VFS对象>.IsEmpty() ? NULL : str.GetText());
+        @ sqlite3* mSqlite3 = NULL;
+        @ if (sqlite3_open_v2((const char*)CU8String(@<文件名>.GetText ()).GetText(), &mSqlite3, @<选项位> == -1 ? (SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE) : @<选项位>, vfs) == SQLITE_OK)
+        @ {
+        @     data().Close();
+        @     data().SetData(mSqlite3);
+        @     return TRUE;
+        @ }
+        @ return FALSE;
+    }
+
+    方法 执行SQL语句 <公开 类型 = 整数 注释 = "执行指定的一条或多条SQL语句,多个SQL语句之间请以半角分号\";\"隔开." 返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量."
+            @禁止流程检查 = 真>
+    参数 语句内容 <类型 = 文本型 注释 = "提供所欲执行的SQL语句.">
+    参数 错误内容 <类型 = 文本型 注释 = "如果本次执行出现错误,错误的具体内容将会写入至该变量." @默认值 = 空对象>
+    {
+        @ @m<DATA_NULL_ERROR>(-100)
+        @ char *ErrMsg = 0;
+        @ int result = sqlite3_exec(GetSqlite(), (const char*)CU8String(@<语句内容>.GetText ()).GetText(), NULL, NULL, &ErrMsg);
+        @ if (ErrMsg) @<错误内容>.SetText(ErrMsg);
+        @ sqlite3_free(ErrMsg);
+        @ return result;
+    }
+
+    方法 取记录集 <公开 类型 = SQLite记录集类 注释 = "以指定查询语句编译并创建一个记录集对象,通过该记录集获取所查询出来的数据." @禁止流程检查 = 真>
+    参数 语句内容 <类型 = 文本型 注释 = "提供所欲编译的SQL语句,其中可包含参数所对应的变量名称." 注释 = "例如带参数插入数据:INSERT INTO 表名称 VALUES (?,?,...).">
+    参数 内容偏移 <类型 = 整数 注释 = "指定所欲编译SQL语句内容的偏移位置,-1表示编译所有内容,>N表示编译从0至第N个字符,N必须大于0." @默认值 = -1>
+    {
+        @ sqlite3_stmt* pStmt = NULL;
+        @ if (GetSqlite()){
+        @     sqlite3_prepare_v2(GetSqlite(), (const char*)CU8String(@<语句内容>.GetText ()).GetText(), @<内容偏移>, &pStmt, NULL);
+        @ }
+        @ return @dt<SQLite记录集类>((INT_P)pStmt);
+    }
+
+    方法 取最后插入行 <公开 类型 = 长整数 注释 = "获取最后一次\"INSERT\"操作的行号." @禁止流程检查 = 真>
+    {
+        @ if (GetSqlite()) return sqlite3_last_insert_rowid(GetSqlite());
+        @ return 0;
+    }
+
+    方法 置最后插入行 <公开 注释 = "如果没有执行过\"INSERT\"操作,本方法可控制\"取最后插入行\"的返回值.">
+    参数 行号 <类型 = 长整数>
+    {
+        @ if (GetSqlite()) sqlite3_set_last_insert_rowid(GetSqlite(), @<行号>);
+    }
+
+    方法 计算修改行数 <公开 类型 = 整数 注释 = "计算查询操作所被修改的行数." @禁止流程检查 = 真>
+    {
+        @ if (GetSqlite()) return sqlite3_changes(GetSqlite());
+        @ return 0;
+    }
+
+    方法 取影响行数 <公开 类型 = 整数 注释 = "获取最后一次查询操作所影响到的行数." @禁止流程检查 = 真>
+    {
+        @ if (GetSqlite()) return sqlite3_total_changes(GetSqlite());
+        @ return 0;
+    }
+
+    方法 中止当前操作 <公开 注释 = "如果执行的SQL命令耗时较长,该命令可中断此过程尽快返回." @禁止流程检查 = 真>
+    {
+        @ if (GetSqlite()) sqlite3_interrupt(GetSqlite());
+    }
+
+    方法 启用繁忙等待监听 <公开 类型 = 整数 注释 = "程序运行过程中,如果有其他进程或者线程在读写数据库,\"等待数据库释放锁\"事件将会被触发,直到其他进程或者线程释放锁或返回失败." @禁止流程检查 = 真>
+    {
+        @ @m<DATA_NULL_ERROR>(-100)
+        @ return sqlite3_busy_handler(GetSqlite(), BusyCallBack, this);
+    }
+
+    方法 置繁忙等待超时 <公开 类型 = 整数 注释 = "程序运行过程中,如果有其他进程或者线程在读写数据库,\"等待数据库释放锁\"事件将会被触发,直到其他进程或者线程释放锁或返回失败."
+            返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量." @禁止流程检查 = 真>
+    参数 超时 <类型 = 整数 注释 = "单位:ms">
+    {
+        @ @m<DATA_NULL_ERROR>(-100)
+        @ return sqlite3_busy_timeout(GetSqlite(), @<超时>);
+    }
+
+    方法 取表内容 <公开 类型 = 整数 注释 = "同步获取指定表中所有的内容,该方法不会通过\"语句执行结果\"返回所查询的数据." 返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量."
+            @禁止流程检查 = 真>
+    参数 语句内容 <类型 = 文本型 注释 = "提供查询语句内容,例如:\"select * from VOL_TABLE\".">
+    参数 字段名称 <类型 = 文本数组类 注释 = "提供所欲储存本次查询列数据结果的数组变量,每个成员表示一个列(字段).">
+    参数 字段内容 <类型 = 文本数组类 注释 = "提供所欲储存本次查询行数据结果的数组变量,每个成员当前行列对应的字段值,注意如果字段内容非文本型数据可能会丢失部分数据.">
+    参数 错误内容 <类型 = 文本型 注释 = "如果本次执行出现错误,错误的具体内容将会写入至该变量." @默认值 = 空对象>
+    {
+        @ @m<DATA_NULL_ERROR>(-100)
+        @ CHAR** pazResult;
+        @ CHAR* ErrMsg = 0;
+        @ INT pnRow, pnColumn;
+        @ INT result = sqlite3_get_table(GetSqlite(), (const char*)CU8String(@<语句内容>.GetText ()).GetText(), &pazResult, &pnRow, &pnColumn, &ErrMsg);
+        @ if (ErrMsg && @<错误内容>.IsNullObject () == FALSE) @<错误内容>.SetText(ErrMsg);
+        @ if (result == SQLITE_OK)
+        @ {
+        @     for (INT i = 0; i < pnColumn; i++)
+        @     {
+        @         @<字段名称>.data().Add(pazResult[i] == NULL ? "" : pazResult[i]);
+        @     }
+        @     INT index = pnColumn;
+        @     for (INT i = 0; i < pnRow; i++)
+        @     {
+        @         for(INT j = 0; j < pnColumn; j++)
+        @         {
+        @             @<字段内容>.data().Add(pazResult[index] == NULL ? "" : pazResult[index]);
+        @             index++;
+        @         }
+        @     }
+        @ }
+        @ sqlite3_free(ErrMsg);
+        @ sqlite3_free_table(pazResult);
+        @ return result;
+    }
+
+    方法 关闭 <公开 类型 = 整数 注释 = "关闭已经打开的数据库,释放资源." 返回值注释 = "返回0表示执行成功,其他值请参考\"SQLite执行结果\"所提供的常量." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Close()
+    }
+
+    方法 取最近错误码 <公开 类型 = 整数 注释 = "获取最近一次调用失败的错误码." 返回值注释 = "0表示无错误." @禁止流程检查 = 真>
+    {
+        @ @m<DATA_NULL_ERROR>(-100)
+        @ return sqlite3_errcode(GetSqlite());
+    }
+
+    方法 取最近错误码_扩展 <公开 类型 = 整数 注释 = "获取最近一次调用失败的错误码." 返回值注释 = "0表示无错误." @禁止流程检查 = 真>
+    {
+        @ @m<DATA_NULL_ERROR>(-100)
+        @ return sqlite3_extended_errcode(GetSqlite());
+    }
+
+    方法 取最近错误描述 <公开 类型 = 文本型 注释 = "获取最近一次调用失败的错误描述内容." 返回值注释 = "如无错误则返回空文本." @禁止流程检查 = 真>
+    {
+        @ @m<DATA_NULL_ERROR>(_T (""))
+        @ const CHAR* info = sqlite3_errmsg(GetSqlite());
+        @ if (info != NULL) return @an<CVolString> (info);
+        @ return _T ("");
+    }
+
+    方法 置运行时限制 <公开 类型 = 整数 注释 = "为当前数据库设置运行时限制,多次调用本方法限制多个内容." 返回值注释 = "返回目标设置项被设置之前的值." @禁止流程检查 = 真>
+    参数 设置项 <类型 = SQLite运行时限制项 注释 = "提供所欲限制的功能项目.">
+    参数 新值 <类型 = 整数 注释 = "提供所欲设置的新限制值.">
+    {
+        @ @m<DATA_NULL_ERROR>(-100)
+        @ return sqlite3_limit(GetSqlite(), (INT)@<设置项>, @<新值>);
+    }
+
+    方法 等待数据库释放锁 <公开 定义事件 类型 = 整数 注释 = "如果SQLite数据库处于线程安全模式下且在操作数据库的过程中在等待锁(有其他进程或者线程在读写数据库),本事件将会被不断触发."
+            注释 = "注意:仅在执行\"启用繁忙等待监听\"后本事件才有效." 返回值注释 = "返回0将会放弃等待,此时的数据库操作将会返回\"库被锁定\"或I/0异常." 返回值注释 = "返回非0时将会继续尝试当前的数据库操作.">
+    参数 等待次数 <类型 = 整数 注释 = "记录当前等待锁的次数.">
+}
+
+类 SQLite打开方式 <公开 注释 = "在打开SQLite数据库时所支持的选项位." @文档 = "category = \"辅助类\"">
+{
+    常量 默认 <公开 类型 = 整数 值 = -1 注释 = "默认以读写方式打开,不存在文件则新建.">
+    常量 只读打开 <公开 类型 = 整数 值 = @SQLITE_OPEN_READONLY 注释 = "以只读方式打开数据库文件,如果所提供文件不存在,打开命令将会执行失败." 编辑时信息 = "2EAA7, 0, 0, 0">
+    常量 读写打开 <公开 类型 = 整数 值 = @SQLITE_OPEN_READWRITE
+            注释 = "以可读可写方式打开数据库文件,如果该数据库文件本身被操作系统设置为写保护状态,则以只读的方式打开,如果所提供文件不存在,打开命令将会执行失败.">
+    常量 新建打开 <公开 类型 = 整数 值 = @SQLITE_OPEN_CREATE 注释 = "如果所提供的数据库文件不存在,将会新建一个同名数据库文件.">
+    常量 资源标识符路径 <公开 类型 = 整数 值 = @SQLITE_OPEN_URI 注释 = "如果所提供的数据库文件为资源标识符路径,必须启用该标志位,否则会以普通文件路径方式打开数据库文件.">
+    常量 驻留内存 <公开 类型 = 整数 值 = @SQLITE_OPEN_MEMORY 注释 = "是否使数据库文件始终驻留在内存中,例如所提供的文件路径为空,将会在内存中生成一个临时数据库.">
+    常量 多线程模式 <公开 类型 = 整数 值 = @SQLITE_OPEN_NOMUTEX 注释 = "以多线程模式创建本次数据库连接.">
+    常量 串行模式 <公开 类型 = 整数 值 = @SQLITE_OPEN_FULLMUTEX 注释 = "以串行模式创建本次数据库连接.">
+    常量 共享缓存模式 <公开 类型 = 整数 值 = @SQLITE_OPEN_SHAREDCACHE 注释 = "以共享缓存模式创建本次数据库连接,注意采用该模式可能导致并发性能下降.">
+    常量 私有缓存模式 <公开 类型 = 整数 值 = @SQLITE_OPEN_PRIVATECACHE 注释 = "以私有缓存模式创建本次数据库连接.">
+    常量 不允许符号连接 <公开 类型 = 整数 值 = @SQLITE_OPEN_NOFOLLOW 注释 = "声明数据库文件名不是符号链接.">
+}
+
+类 SQLite执行结果 <公开 注释 = "SQLite方法的执行结果." @文档 = "category = \"辅助类\"">
+{
+    常量 成功 <公开 类型 = 整数 值 = @SQLITE_OK 注释 = "表示执行成功,无错误.">
+    常量 错误 <公开 类型 = 整数 值 = @SQLITE_ERROR 注释 = "执行失败,有错误,请使用取最近错误描述获取.">
+    常量 内部错误 <公开 类型 = 整数 值 = @SQLITE_INTERNAL 注释 = "SQLite内部逻辑出现错误.">
+    常量 拒绝访问 <公开 类型 = 整数 值 = @SQLITE_PERM 注释 = "拒绝访问权限.">
+    常量 回调中止 <公开 类型 = 整数 值 = @SQLITE_ABORT 注释 = "回调方法请求中止.">
+    常量 库被锁定 <公开 类型 = 整数 值 = @SQLITE_BUSY 注释 = "数据库文件已被锁定.">
+    常量 表被锁定 <公开 类型 = 整数 值 = @SQLITE_LOCKED 注释 = "数据库中的表被锁定.">
+    常量 无内存 <公开 类型 = 整数 值 = @SQLITE_NOMEM 注释 = "申请内存失败.">
+    常量 只读错误 <公开 类型 = 整数 值 = @SQLITE_READONLY 注释 = "尝试在只读权限下写入出现错误.">
+    常量 中止操作 <公开 类型 = 整数 值 = @SQLITE_INTERRUPT 注释 = "被\"中止查询\"方法中止.">
+    常量 IO错误 <公开 类型 = 整数 值 = @SQLITE_IOERR 注释 = "发生某种磁盘I/O错误.">
+    常量 映像不正确 <公开 类型 = 整数 值 = @SQLITE_CORRUPT 注释 = "数据库磁盘映像格式不正确.">
+    常量 未知操作码 <公开 类型 = 整数 值 = @SQLITE_NOTFOUND 注释 = "数据库文件操作中出现未知操作码.">
+    常量 数据库已满 <公开 类型 = 整数 值 = @SQLITE_FULL 注释 = "数据库已满导致写入失败.">
+    常量 无法打开 <公开 类型 = 整数 值 = @SQLITE_CANTOPEN 注释 = "无法打开数据库文件.">
+    常量 锁定协议错误 <公开 类型 = 整数 值 = @SQLITE_PROTOCOL 注释 = "数据库锁定协议错误.">
+    常量 结构已更改 <公开 类型 = 整数 值 = @SQLITE_SCHEMA 注释 = "数据库架构已被更改.">
+    常量 数据量超限 <公开 类型 = 整数 值 = @SQLITE_TOOBIG 注释 = "字符串或其他数据超出限制.">
+    常量 违法约束 <公开 类型 = 整数 值 = @SQLITE_CONSTRAINT 注释 = "由于违反约束而中止.">
+    常量 类型不匹配 <公开 类型 = 整数 值 = @SQLITE_MISMATCH 注释 = "数据类型不匹配.">
+    常量 使用错误 <公开 类型 = 整数 值 = @SQLITE_MISUSE 注释 = "未正确使用依赖库.">
+    常量 主机不支持 <公开 类型 = 整数 值 = @SQLITE_NOLFS 注释 = "使用主机不支持的操作系统功能.">
+    常量 授权错误 <公开 类型 = 整数 值 = @SQLITE_AUTH 注释 = "授权出现错误.">
+    常量 超出范围 <公开 类型 = 整数 值 = @SQLITE_RANGE 注释 = "绑定的数据超出范围.">
+    常量 非数据库文件 <公开 类型 = 整数 值 = @SQLITE_NOTADB 注释 = "所欲打开的不是数据库文件.">
+    常量 日志通知 <公开 类型 = 整数 值 = @SQLITE_NOTICE 注释 = "来自写出日志的通知.">
+    常量 日志警告 <公开 类型 = 整数 值 = @SQLITE_WARNING 注释 = "来自写出日志的警告.">
+    常量 下一行就绪 <公开 类型 = 整数 值 = @SQLITE_ROW 注释 = "下一行数据已准备就绪.">
+    常量 已提交完毕 <公开 类型 = 整数 值 = @SQLITE_DONE 注释 = "将指定参数绑定并提交执行成功.">
+    常量 未打开数据库 <公开 类型 = 整数 值 = -100 注释 = "表示当前未打开任何数据库,无法执行目标方法.">
+}
+
+类 SQLite运行时限制项 <公开 注释 = "提供\"置运行时限制\"方法可选的功能项." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 数据长度 <公开 值 = @SQLITE_LIMIT_LENGTH 注释 = "任何字符串,BLOB或表行的最大尺寸,以字节为单位.">
+    常量 SQL语句长度 <公开 值 = @SQLITE_LIMIT_SQL_LENGTH 注释 = "SQL语句的最大长度,以字节为单位.">
+    常量 最大列数 <公开 值 = @SQLITE_LIMIT_COLUMN 注释 = "表定义或查询结果集或索引中的最大列数.">
+    常量 表达式解析深度 <公开 值 = @SQLITE_LIMIT_EXPR_DEPTH 注释 = "任何表达式解析树的最大深度.">
+    常量 复合语句项数 <公开 值 = @SQLITE_LIMIT_COMPOUND_SELECT 注释 = "复合选择语句中的最大项数.">
+    常量 最大指令数 <公开 值 = @SQLITE_LIMIT_VDBE_OP 注释 = "虚拟机程序中的最大指令数.">
+    常量 函数参数数 <公开 值 = @SQLITE_LIMIT_FUNCTION_ARG 注释 = "函数的最大参数数.">
+    常量 关联数据库数 <公开 值 = @SQLITE_LIMIT_ATTACHED 注释 = "关联数据库的最大数量.">
+    常量 LIKE模式长度 <公开 值 = @SQLITE_LIMIT_LIKE_PATTERN_LENGTH 注释 = "LIKE或GLOB模式的表达式的字符长度.">
+    常量 占位符个数 <公开 值 = @SQLITE_LIMIT_VARIABLE_NUMBER 注释 = "单个SQL语句中的最大占位符个数.">
+    常量 触发递归深度 <公开 值 = @SQLITE_LIMIT_TRIGGER_DEPTH 注释 = "回调函数递归的深度.">
+    常量 工作线程数 <公开 值 = @SQLITE_LIMIT_WORKER_THREADS 注释 = "一个准备好的语句可以启动的辅助工作线程的最大数量.">
+}
+
+类 SQLite记录集类 <公开 注释 = "用于获取SQLite中所储存指定的值,且其中包含一个预编译语句,可对其进行执行." @强制依赖 = "SQLite数据库类">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CSqliteStmtWraper)
+    #
+    # @ <include>
+    # @ inline_ @dt<SQLite记录集类> (INT_P ptr) : @dt<SQLite记录集类>()
+    # @ {
+    # @     data().SetData(ptr);
+    # @ }
+    # @ inline_ sqlite3_stmt* GetStmt () { return data().GetData(); }
+    # @ </include>
+
+    方法 是否有效 <公开 属性读 类型 = 逻辑型 注释 = "判断该结果集是否为有效结果集." 返回值注释 = "返回假则该结果集将无法取出任何内容." @禁止流程检查 = 真>
+    {
+        @ return GetStmt() != NULL;
+    }
+
+    方法 列数 <公开 属性读 类型 = 整数 注释 = "返回该记录集所包含的列(字段)总数." @禁止流程检查 = 真>
+    {
+        @ if (GetStmt()) return sqlite3_column_count(GetStmt());
+        @ return 0;
+    }
+
+    方法 当前记录列数 <公开 属性读 类型 = 整数 注释 = "返回当前正在执行的语句的值列数,没有结果返回0,必须在\"执行语句\"方法后调用." @禁止流程检查 = 真>
+    {
+        @ if (GetStmt()) return sqlite3_data_count(GetStmt());
+        @ return 0;
+    }
+
+    方法 参数数量 <公开 属性读 类型 = 整数 注释 = "返回预编译语句中所包含的可绑定参数数量." @禁止流程检查 = 真>
+    {
+        @ if (GetStmt()) return sqlite3_bind_parameter_count(GetStmt());
+        @ return 0;
+    }
+
+    方法 执行语句 <公开 类型 = 整数 注释 = "将编译的SQL语句提交执行,例如在绑定完参数后,调用本方法以执行预编译的语句."
+            返回值注释 = "返回值请参考常量类\"SQLite执行结果\",如果返回\"下一行就绪\"表示当前执行的SQL有数据返回,即等同于到下一行的效果,可通过读数据系列方法获取." @禁止流程检查 = 真>
+    {
+        @ if (GetStmt()) return sqlite3_step(GetStmt());
+        @ return SQLITE_ERROR;
+    }
+
+    方法 取指定参数名 <公开 类型 = 文本型 注释 = "通过指定参数的索引位置获取预编译语句中参数名称." @禁止流程检查 = 真>
+    参数 参数索引 <类型 = 整数 注释 = "请注意参数索引从1开始.">
+    {
+        @ if (GetStmt()) return sqlite3_bind_parameter_name(GetStmt(), @<参数索引>);
+        @ return _T("");
+    }
+
+    方法 置小数参数数据 <公开 类型 = 整数 注释 = "设置指定绑定参数的小数值." @禁止流程检查 = 真>
+    参数 参数索引 <类型 = 整数 注释 = "欲设置参数所处的索引位置,请注意参数索引从1开始.">
+    参数 值 <类型 = 小数 注释 = "欲置入的值.">
+    {
+        @ if (GetStmt()) return sqlite3_bind_double(GetStmt(), @<参数索引>, @<值>);
+        @ return SQLITE_ERROR;
+    }
+
+    方法 置整数参数数据 <公开 类型 = 整数 注释 = "设置指定绑定参数的整数值." @禁止流程检查 = 真>
+    参数 参数索引 <类型 = 整数 注释 = "欲设置参数所处的索引位置,请注意参数索引从1开始.">
+    参数 值 <类型 = 整数 注释 = "欲置入的值.">
+    {
+        @ if (GetStmt()) return sqlite3_bind_int(GetStmt(), @<参数索引>, @<值>);
+        @ return SQLITE_ERROR;
+    }
+
+    方法 置长整数参数数据 <公开 类型 = 整数 注释 = "设置指定绑定参数的长整数值." @禁止流程检查 = 真>
+    参数 参数索引 <类型 = 整数 注释 = "欲设置参数所处的索引位置,请注意参数索引从1开始.">
+    参数 值 <类型 = 长整数 注释 = "欲置入的值.">
+    {
+        @ if (GetStmt()) return sqlite3_bind_int64(GetStmt(), @<参数索引>, @<值>);
+        @ return SQLITE_ERROR;
+    }
+
+    方法 置文本参数数据 <公开 类型 = 整数 注释 = "设置指定绑定参数的文本值." @禁止流程检查 = 真>
+    参数 参数索引 <类型 = 整数 注释 = "欲设置参数所处的索引位置,请注意参数索引从1开始.">
+    参数 值 <类型 = 文本型 注释 = "欲置入的值.">
+    {
+        @ CU8String u8str (@<值>.GetText ());
+        @ const U8CHAR* ps = u8str.GetText ();
+        @ if (GetStmt()) return sqlite3_bind_text(GetStmt(), @<参数索引>, ps, (INT)strlen(ps), SQLITE_TRANSIENT);
+        @ return SQLITE_ERROR;
+    }
+
+    方法 置字节集参数数据 <公开 类型 = 整数 注释 = "设置指定绑定参数的字节集." @禁止流程检查 = 真>
+    参数 参数索引 <类型 = 整数 注释 = "欲设置参数所处的索引位置,请注意参数索引从1开始.">
+    参数 值 <类型 = 字节集类 注释 = "欲置入的值.">
+    {
+        @ if (GetStmt()) return sqlite3_bind_blob(GetStmt(), @<参数索引>, @<值>.GetPtr(), (INT)@<值>.GetSize(), SQLITE_TRANSIENT);
+        @ return SQLITE_ERROR;
+    }
+
+    方法 置空参数数据 <公开 类型 = 整数 注释 = "将指定绑定参数的值置为NULL." @禁止流程检查 = 真>
+    参数 参数索引 <类型 = 整数 注释 = "欲设置参数所处的索引位置,请注意参数索引从1开始.">
+    {
+        @ if (GetStmt()) return sqlite3_bind_null(GetStmt(), @<参数索引>);
+        @ return SQLITE_ERROR;
+    }
+
+    方法 取指定参数索引 <公开 类型 = 整数 注释 = "通过指定参数的名称获取预编译语句中参数索引位置." 返回值注释 = "注意参数索引从1开始." @禁止流程检查 = 真>
+    参数 参数名称 <类型 = 文本型>
+    {
+        @ if (GetStmt()) return sqlite3_bind_parameter_index(GetStmt(), (const char*)CU8String(@<参数名称>.GetText ()).GetText());
+        @ return 0;
+    }
+
+    方法 置所有参数为空 <公开 类型 = 整数 注释 = "将所有绑定参数对应的值置为NULL." @禁止流程检查 = 真>
+    {
+        @ if (GetStmt()) return sqlite3_clear_bindings(GetStmt());
+        @ return SQLITE_ERROR;
+    }
+
+    方法 取指定列名 <公开 类型 = 文本型 注释 = "获取指定列索引的名称,即字段名称." @禁止流程检查 = 真>
+    参数 列索引 <类型 = 整数 注释 = "提供所欲获取列名的索引位置.">
+    {
+        @ if (GetStmt()) return sqlite3_column_name(GetStmt(), @<列索引>);
+        @ return _T("");
+    }
+
+    方法 取指定列原始名 <公开 类型 = 文本型 注释 = "获取指定列索引的原始名称." @禁止流程检查 = 真>
+    参数 列索引 <类型 = 整数 注释 = "提供该列所处的索引位置.">
+    {
+        @ if (GetStmt()) return sqlite3_column_origin_name(GetStmt(), @<列索引>);
+        @ return _T("");
+    }
+
+    方法 取指定列所处库名 <公开 类型 = 文本型 注释 = "获取指定列索引所处的数据库名称." @禁止流程检查 = 真>
+    参数 列索引 <类型 = 整数 注释 = "提供该列所处的索引位置.">
+    {
+        @ if (GetStmt()) return sqlite3_column_database_name(GetStmt(), @<列索引>);
+        @ return _T("");
+    }
+
+    方法 取指定列所处表名 <公开 类型 = 文本型 注释 = "获取指定列索引所处的表名称." @禁止流程检查 = 真>
+    参数 列索引 <类型 = 整数 注释 = "提供该列所处的索引位置.">
+    {
+        @ if (GetStmt()) return sqlite3_column_table_name(GetStmt(), @<列索引>);
+        @ return _T("");
+    }
+
+    方法 取指定列类型名称 <公开 类型 = 文本型 注释 = "以文本形式返回指定列(字段)的类型." 返回值注释 = "例如列定义类型为整数,将返回\"integer\"." @禁止流程检查 = 真>
+    参数 列索引 <类型 = 整数 注释 = "提供该列所处的索引位置.">
+    {
+        @ if (GetStmt()) return sqlite3_column_decltype(GetStmt(), @<列索引>);
+        @ return _T("");
+    }
+
+    方法 读小数数据 <公开 类型 = 小数 注释 = "读取当前行指定列索引的小数数据." @禁止流程检查 = 真>
+    参数 列索引 <类型 = 整数 注释 = "所欲读取值所处的列位置.">
+    {
+        @ if (GetStmt()) return sqlite3_column_double(GetStmt(), @<列索引>);
+        @ return 0;
+    }
+
+    方法 读整数数据 <公开 类型 = 整数 注释 = "读取当前行指定列索引的整数数据." @禁止流程检查 = 真>
+    参数 列索引 <类型 = 整数 注释 = "所欲读取值所处的列位置.">
+    {
+        @ if (GetStmt()) return sqlite3_column_int(GetStmt(), @<列索引>);
+        @ return 0;
+    }
+
+    方法 读长整数数据 <公开 类型 = 长整数 注释 = "读取当前行指定列索引的长整数数据." @禁止流程检查 = 真>
+    参数 列索引 <类型 = 整数 注释 = "所欲读取值所处的列位置.">
+    {
+        @ if (GetStmt()) return sqlite3_column_int64(GetStmt(), @<列索引>);
+        @ return 0;
+    }
+
+    方法 读文本数据 <公开 类型 = 文本型 注释 = "读取当前行指定列索引的文本数据." @禁止流程检查 = 真>
+    参数 列索引 <类型 = 整数 注释 = "所欲读取值所处的列位置.">
+    {
+        @ if (GetStmt())
+        @ {
+        @     const char* result = (const char *)sqlite3_column_text(GetStmt(), @<列索引>);
+        @     if (result != NULL) return result;
+        @ }
+        @ return _T("");
+    }
+
+    方法 读字节集数据 <公开 类型 = 字节集类 注释 = "读取当前行指定列索引的字节集数据." @禁止流程检查 = 真>
+    参数 列索引 <类型 = 整数 注释 = "所欲读取值所处的列位置.">
+    {
+        @ if (GetStmt()) return @an<CVolMem> (sqlite3_column_blob(GetStmt(), @<列索引>), sqlite3_column_bytes(GetStmt(), @<列索引>));
+        @ return @an<CVolMem>();
+    }
+
+    方法 重置 <公开 类型 = 整数 注释 = "将该记录集对象复位,以便下一轮的参数赋值." @禁止流程检查 = 真>
+    {
+        @ if (GetStmt()) return sqlite3_reset(GetStmt());
+        @ return SQLITE_ERROR;
+    }
+
+    方法 释放 <公开 注释 = "释放该记录集所占用资源.">
+    {
+        @ if (GetStmt()) data().Close();
+    }
+}

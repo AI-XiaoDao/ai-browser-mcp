@@ -1,0 +1,90 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" @文档 = "category = \"windows.时钟类\"">
+
+类 时钟类_多媒体时钟 <公开 @视窗.外部头文件 = "MMSYSTEM.H" @视窗.外部库 = "winmm.lib">
+{
+    方法 类_初始化
+    {
+        @ this->m_nIDTimer = 0;
+
+    }
+
+    方法 启动 <公开 @嵌入式方法 = "">
+    参数 时间 <类型 = 整数 注释 = "毫秒">
+    {
+        @ @sn<this>.SetTimer((UINT)@<时间>)
+
+    }
+
+    方法 停止 <公开 @嵌入式方法 = "">
+    {
+        @ @sn<this>.KillTimer()
+    }
+
+    #
+    # @begin 
+    # <> <include>
+    # private:
+    #     unsigned int  m_nIDTimer;
+    # public:
+    #     ~@sn<current_class>(){KillTimer();}
+    #     virtual void OnTimer(UINT uID, UINT uMsg, DWORD_PTR dw1, DWORD_PTR dw2){  @<时钟事件>(uID); }
+    #     unsigned int SetTimer(UINT uDelay);
+    #     void KillTimer();
+    #    // static void CALLBACK TimeProc(UINT uID,UINT uMsg,DWORD_PTR dwUser,DWORD_PTR dw1, DWORD_PTR dw2);
+    # static void CALLBACK TimeProc(UINT uID,UINT uMsg,DWORD_PTR dwUser,DWORD_PTR dw1, DWORD_PTR dw2)
+    #  {
+    #   @sn<current_class> *pTimer=(@sn<current_class> *)dwUser;
+    #    pTimer->OnTimer(uID, uMsg, dw1, dw2);
+    #  }
+    #
+    # //接管系统的类对象比较，因为是嵌入式方法，所以系统再内部类对象比较默认都是返回真
+    # //可以看每个类的实现cpp，大致可以看到
+    # //BOOL rg_shzhl_dmtshzh::_IsSelfEqual (const rg_shzhl_dmtshzh& objCompare) const
+    # //{
+    # //    return TRUE;
+    # //}
+    # // 如果不接管  那么比如你定义了 两个 多媒体时钟1和 多媒体时钟2
+    # // 伪代码 if(多媒体时钟1  == 多媒体时钟2) 这样相当于调用   _IsSelfEqual( return TRUE );
+    # // 这样就导致了这两个类比较永远是相等的，，
+    # //下面这个_IsSelfEqualExtra函数就是额外的比较函数 当定义了以后，再cpp文件就会默认生成如下代码
+    # // BOOL rg_shzhl_dmtshzh::_IsSelfEqual (const rg_shzhl_dmtshzh& objCompare) const
+    # // {
+    #     // if (_IsSelfEqualExtra (objCompare) == FALSE)
+    #         // return FALSE;
+    #     // return TRUE;
+    # // }
+    # // 这样我们内部其实比较的是时钟id，这样再次调用的时候，就能区别两个类了
+    #     inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const
+    #     {
+    #         return ( this->m_nIDTimer == objCompare.m_nIDTimer);
+    #     }
+    # <> </include>
+    #
+    # unsigned int @sn<current_class>::SetTimer(UINT uDelay)
+    # {
+    #     if (m_nIDTimer) timeKillEvent(m_nIDTimer);
+    #     m_nIDTimer=timeSetEvent(uDelay, 1, @sn<current_class>::TimeProc,(DWORD_PTR) this, TIME_PERIODIC | TIME_CALLBACK_FUNCTION);
+    #     return m_nIDTimer;
+    # }
+    #  
+    # void @sn<current_class>::KillTimer()
+    # {
+    #     if (m_nIDTimer)
+    #     {
+    #         timeKillEvent(m_nIDTimer);
+    #         m_nIDTimer=NULL;
+    #     }
+    # } 
+    # @end 
+
+    方法 时钟事件 <公开 定义事件 类型 = 整数>
+    参数 uID <类型 = 整数>
+    {
+
+    }
+
+    #
+    #
+}

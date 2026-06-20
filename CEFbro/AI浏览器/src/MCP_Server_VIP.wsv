@@ -1,0 +1,1349 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.程序
+
+# VIP 命令分派 — 从 MCP_Server.wsv 拆分 (L5/M10)
+
+类 MCP_VIP分派 <公开 @全局类 = 真>
+{
+
+    方法 分类分派_VIP操作 <公开 静态 类型 = 文本型>
+    参数 命令ID <类型 = 文本型>
+    参数 方法名 <类型 = 文本型>
+    参数 参数JSON <类型 = YYJSON只读对象类>
+    {
+        如果 (方法名 == "browser.vip_websocket_intercept" || 方法名 == "browser_vip_websocket_intercept")
+        {
+            变量 enableFlag <类型 = 逻辑型>
+            enableFlag = MCP命令服务器.yyjson取逻辑 (参数JSON, "enable")
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    如果 (enableFlag)
+                    {
+                        vip_ctrl.WebSocket_启用拦截 ()
+                        返回 (MCP命令服务器.命令成功 (命令ID, "WebSocket拦截已启用"))
+                    }
+                    否则
+                    {
+                        返回 (MCP命令服务器.命令失败 (命令ID, "WebSocket拦截不支持单独禁用, 请使用 browser_intercept action=clear 清除所有拦截"))
+                    }
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === v1.6 快速连通性检查 ===
+        // === VIP S5代理 ===
+        否则 (方法名 == "browser.set_s5_proxy" || 方法名 == "browser_set_s5_proxy")
+        {
+            变量 address <类型 = 文本型>
+            address = MCP命令服务器.yyjson取文本 (参数JSON, "address")
+            如果 (address == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "address " + MCP命令服务器.错误_缺少参数))
+            }
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.高级_设置代理 (address, MCP命令服务器.yyjson取文本 (参数JSON, "username"), MCP命令服务器.yyjson取文本 (参数JSON, "password"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "S5代理已设置: " + address))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === VIP 高级鼠标键盘 (CDP) ===
+        否则 (方法名 == "browser.vip_mouse_click" || 方法名 == "browser_vip_mouse_click")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.高级鼠标_单击 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"), MCP命令服务器.yyjson取整数 (参数JSON, "button"))
+                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP鼠标点击"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_mouse_move" || 方法名 == "browser_vip_mouse_move")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.高级鼠标_移动 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP鼠标移动"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_key_press" || 方法名 == "browser_vip_key_press")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.高级键盘_按下 (MCP命令服务器.yyjson取整数 (参数JSON, "key_code"))
+                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP键盘按下"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_key_release" || 方法名 == "browser_vip_key_release")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.高级键盘_放开 (MCP命令服务器.yyjson取整数 (参数JSON, "key_code"))
+                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP键盘放开"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === VIP 补充 ===
+        否则 (方法名 == "browser.vip_clear_s5_proxy" || 方法名 == "browser_vip_clear_s5_proxy")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.高级_清空代理 ()
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "S5代理已清除"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_enable_inspector" || 方法名 == "browser_vip_enable_inspector")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"))
+                    {
+                        MCP命令服务器.确保CDP观察者已注册 ()
+                    }
+                    否则
+                    {
+                        MCP命令服务器.注销CDP观察者 ()
+                    }
+                    返回 (MCP命令服务器.命令成功 (命令ID, "监管者事件已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_enable_js_env" || 方法名 == "browser_vip_enable_js_env")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.高级_启用执行环境 (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"))
+                    返回 (MCP命令服务器.命令成功 (命令ID, "JS执行环境已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_get_js_env_ids" || 方法名 == "browser_vip_get_js_env_ids")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    变量 ids <类型 = 类_FBrowser_列表值>
+                    ids = vip_ctrl.高级_取当前环境ID清单 ()
+                    如果 (ids.是否为空 () == 假)
+                    {
+                        返回 (MCP命令服务器.构建整数值JSON ("count", ids.取大小 ()))
+                    }
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_touch_cancel" || 方法名 == "browser_vip_touch_cancel")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.高级触摸_取消 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+                    返回 (MCP命令服务器.命令成功 (命令ID, "触摸取消"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === VIP 内核开关 ===
+        否则 (方法名 == "browser.vip_disable_debugger" || 方法名 == "browser_vip_disable_debugger")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.内核开关_禁用Debugger (MCP命令服务器.yyjson取逻辑 (参数JSON, "disable"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "Debugger开关已设置 | 内核开关修改, 需要刷新页面生效"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === VIP 指纹扩展 ===
+        否则 (方法名 == "browser.fingerprint_plugins" || 方法名 == "browser_fingerprint_plugins")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_虚拟Plugins (MCP命令服务器.yyjson取整数 (参数JSON, "type"), MCP命令服务器.yyjson取JSON文本 (参数JSON, "json"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "Plugins指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fingerprint_appname" || 方法名 == "browser_fingerprint_appname")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_虚拟AppName (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "AppName指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === 指纹补充: Cookie/Java/Online ===
+        否则 (方法名 == "browser.fingerprint_cookie_enabled" || 方法名 == "browser_fingerprint_cookie_enabled")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_虚拟CookieEnabled (MCP命令服务器.yyjson取逻辑 (参数JSON, "value"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "CookieEnabled指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fingerprint_java_enabled" || 方法名 == "browser_fingerprint_java_enabled")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_虚拟JavaEnabled (MCP命令服务器.yyjson取逻辑 (参数JSON, "value"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "JavaEnabled指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fingerprint_online" || 方法名 == "browser_fingerprint_online")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_虚拟OnLine (MCP命令服务器.yyjson取逻辑 (参数JSON, "value"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "OnLine指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === 指纹补充: AppCodeName/AppVersion/ProductSub/VendorSub ===
+        否则 (方法名 == "browser.fingerprint_appcodename" || 方法名 == "browser_fingerprint_appcodename")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_虚拟AppCodeName (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "AppCodeName指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fingerprint_appversion" || 方法名 == "browser_fingerprint_appversion")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_虚拟AppVersion (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "AppVersion指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fingerprint_product_sub" || 方法名 == "browser_fingerprint_product_sub")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_虚拟ProductSub (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "ProductSub指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fingerprint_vendor_sub" || 方法名 == "browser_fingerprint_vendor_sub")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_虚拟VendorSub (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "VendorSub指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === 指纹补充: Canvas/WebGL/Audio 定值 ===
+        否则 (方法名 == "browser.vip_fingerprint_canvas_fixed" || 方法名 == "browser_vip_fingerprint_canvas_fixed")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_虚拟Canvas_定值 (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "Canvas定值指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_fingerprint_webgl_fixed" || 方法名 == "browser_vip_fingerprint_webgl_fixed")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_虚拟WebGL_定值 (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "WebGL定值指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_fingerprint_audio_fixed" || 方法名 == "browser_vip_fingerprint_audio_fixed")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_虚拟Audio_定值 (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "Audio定值指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === 指纹补充: Rect/内核 ===
+        否则 (方法名 == "browser.vip_fingerprint_rect" || 方法名 == "browser_vip_fingerprint_rect")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_虚拟Rect (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"), MCP命令服务器.yyjson取整数 (参数JSON, "w"), MCP命令服务器.yyjson取整数 (参数JSON, "h"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "Rect指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fingerprint_pixel_ratio" || 方法名 == "browser_fingerprint_pixel_ratio")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_虚拟DevicePixelRatio (MCP命令服务器.yyjson取小数 (参数JSON, "value"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "像素比指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fingerprint_touch_enable" || 方法名 == "browser_fingerprint_touch_enable")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_启用触摸事件 (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"), MCP命令服务器.yyjson取整数 (参数JSON, "points"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "触摸事件指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === VIP 指纹补充 ===
+        否则 (方法名 == "browser.fingerprint_screen_xy" || 方法名 == "browser_fingerprint_screen_xy")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.指纹_虚拟屏幕XY (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "屏幕XY指纹已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === VIP CDP鼠标补充 ===
+        否则 (方法名 == "browser.vip_mouse_press" || 方法名 == "browser_vip_mouse_press")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.高级鼠标_按下 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP鼠标按下"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_mouse_release" || 方法名 == "browser_vip_mouse_release")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.高级鼠标_放开 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP鼠标放开"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_mouse_wheel" || 方法名 == "browser_vip_mouse_wheel")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.高级鼠标_滚轮滚动 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"), MCP命令服务器.yyjson取整数 (参数JSON, "delta_x"), MCP命令服务器.yyjson取整数 (参数JSON, "delta_y"))
+                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP鼠标滚轮"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === VIP 指纹补充 (v1.7) ===
+        否则 (方法名 == "browser.vip_fingerprint_webrtc" || 方法名 == "browser_vip_fingerprint_webrtc")
+        {
+            变量 vip1 <类型 = 类_FBrowserVIP_控制器>
+            vip1 = MCP命令服务器.取VIP控制器 ()
+            如果 (vip1.是否为空 () == 假)
+            {
+                vip1.指纹_虚拟WebrtcIP (MCP命令服务器.yyjson取文本 (参数JSON, "public_ip"), MCP命令服务器.yyjson取文本 (参数JSON, "local_ip"), MCP命令服务器.yyjson取文本 (参数JSON, "host"), MCP命令服务器.yyjson取逻辑 (参数JSON, "disable"))
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "WebRTC IP指纹已设置"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        否则 (方法名 == "browser.vip_fingerprint_timezone" || 方法名 == "browser_vip_fingerprint_timezone")
+        {
+            变量 vip2 <类型 = 类_FBrowserVIP_控制器>
+            vip2 = MCP命令服务器.取VIP控制器 ()
+            如果 (vip2.是否为空 () == 假)
+            {
+                vip2.指纹_虚拟Date时区 (MCP命令服务器.yyjson取整数 (参数JSON, "offset_h"), MCP命令服务器.yyjson取整数 (参数JSON, "offset_m"), MCP命令服务器.yyjson取文本 (参数JSON, "name"), MCP命令服务器.yyjson取文本 (参数JSON, "iana"))
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "时区指纹已设置"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        否则 (方法名 == "browser.vip_fingerprint_geolocation" || 方法名 == "browser_vip_fingerprint_geolocation")
+        {
+            变量 vipGeo <类型 = 类_FBrowserVIP_控制器>
+            vipGeo = MCP命令服务器.取VIP控制器 ()
+            如果 (vipGeo.是否为空 () == 假)
+            {
+                // 注: API参数顺序为 (经度, 纬度), 即 (lng, lat)
+                vipGeo.指纹_虚拟定位 (MCP命令服务器.yyjson取小数 (参数JSON, "lng"), MCP命令服务器.yyjson取小数 (参数JSON, "lat"), MCP命令服务器.yyjson取小数 (参数JSON, "accuracy"), -10000, -1, -1, -1)
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "定位指纹已设置"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        否则 (方法名 == "browser.vip_fingerprint_ssl" || 方法名 == "browser_vip_fingerprint_ssl")
+        {
+            变量 vipSSL <类型 = 类_FBrowserVIP_控制器>
+            vipSSL = MCP命令服务器.取VIP控制器 ()
+            如果 (vipSSL.是否为空 () == 假)
+            {
+                // 整数→TLS版本枚举映射 (规避火山 @常量类 模板限制)
+                变量 tls_min_int <类型 = 整数>
+                变量 tls_max_int <类型 = 整数>
+                tls_min_int = MCP命令服务器.yyjson取整数 (参数JSON, "tls_min")
+                tls_max_int = MCP命令服务器.yyjson取整数 (参数JSON, "tls_max")
+                变量 tls_min_enum <类型 = TLS版本>
+                变量 tls_max_enum <类型 = TLS版本>
+                如果 (tls_min_int == 769)
+                {
+                    tls_min_enum = TLS版本.Version_1
+                }
+                否则 (tls_min_int == 790)
+                {
+                    tls_min_enum = TLS版本.Version_1_1
+                }
+                否则 (tls_min_int == 791)
+                {
+                    tls_min_enum = TLS版本.Version_1_2
+                }
+                否则 (tls_min_int == 792)
+                {
+                    tls_min_enum = TLS版本.Version_1_3
+                }
+                否则
+                {
+                    tls_min_enum = TLS版本.Version_1_2
+                }
+                如果 (tls_max_int == 769)
+                {
+                    tls_max_enum = TLS版本.Version_1
+                }
+                否则 (tls_max_int == 790)
+                {
+                    tls_max_enum = TLS版本.Version_1_1
+                }
+                否则 (tls_max_int == 791)
+                {
+                    tls_max_enum = TLS版本.Version_1_2
+                }
+                否则 (tls_max_int == 792)
+                {
+                    tls_max_enum = TLS版本.Version_1_3
+                }
+                否则
+                {
+                    tls_max_enum = TLS版本.Version_1_3
+                }
+                vipSSL.指纹_设置SSL加密套件 (tls_min_enum, tls_max_enum, MCP命令服务器.yyjson取文本 (参数JSON, "ciphers"))
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "SSL加密套件已设置"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        否则 (方法名 == "browser.vip_fingerprint_canvas" || 方法名 == "browser_vip_fingerprint_canvas")
+        {
+            变量 vipCanvas <类型 = 类_FBrowserVIP_控制器>
+            vipCanvas = MCP命令服务器.取VIP控制器 ()
+            如果 (vipCanvas.是否为空 () == 假)
+            {
+                变量 canvas随机值 <类型 = 文本型>
+                canvas随机值 = vipCanvas.指纹_虚拟Canvas_随机 (MCP命令服务器.yyjson取整数 (参数JSON, "min"), MCP命令服务器.yyjson取整数 (参数JSON, "max"), MCP命令服务器.yyjson取整数 (参数JSON, "seed"))
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "Canvas指纹已设置, 随机值:" + canvas随机值))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        否则 (方法名 == "browser.vip_fingerprint_webgl" || 方法名 == "browser_vip_fingerprint_webgl")
+        {
+            变量 vipWebGL <类型 = 类_FBrowserVIP_控制器>
+            vipWebGL = MCP命令服务器.取VIP控制器 ()
+            如果 (vipWebGL.是否为空 () == 假)
+            {
+                变量 webgl随机值 <类型 = 文本型>
+                webgl随机值 = vipWebGL.指纹_虚拟WebGL_随机 (MCP命令服务器.yyjson取整数 (参数JSON, "min"), MCP命令服务器.yyjson取整数 (参数JSON, "max"), MCP命令服务器.yyjson取整数 (参数JSON, "seed"))
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "WebGL指纹已设置, 随机值:" + webgl随机值))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        否则 (方法名 == "browser.vip_fingerprint_audio" || 方法名 == "browser_vip_fingerprint_audio")
+        {
+            变量 vipAudio <类型 = 类_FBrowserVIP_控制器>
+            vipAudio = MCP命令服务器.取VIP控制器 ()
+            如果 (vipAudio.是否为空 () == 假)
+            {
+                变量 audio随机值 <类型 = 文本型>
+                audio随机值 = vipAudio.指纹_虚拟Audio_随机 (MCP命令服务器.yyjson取整数 (参数JSON, "min"), MCP命令服务器.yyjson取整数 (参数JSON, "max"), MCP命令服务器.yyjson取整数 (参数JSON, "seed"))
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "Audio指纹已设置, 随机值:" + audio随机值))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        否则 (方法名 == "browser.vip_fingerprint_font" || 方法名 == "browser_vip_fingerprint_font")
+        {
+            变量 vipFont <类型 = 类_FBrowserVIP_控制器>
+            vipFont = MCP命令服务器.取VIP控制器 ()
+            如果 (vipFont.是否为空 () == 假)
+            {
+                vipFont.指纹_虚拟CSS字体指纹 (MCP命令服务器.yyjson取文本 (参数JSON, "font_list"), MCP命令服务器.yyjson取整数 (参数JSON, "w_offset"), MCP命令服务器.yyjson取整数 (参数JSON, "h_offset"))
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "CSS字体指纹已设置"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        否则 (方法名 == "browser.vip_fingerprint_viewport" || 方法名 == "browser_vip_fingerprint_viewport")
+        {
+            变量 vipVP <类型 = 类_FBrowserVIP_控制器>
+            vipVP = MCP命令服务器.取VIP控制器 ()
+            如果 (vipVP.是否为空 () == 假)
+            {
+                vipVP.指纹_虚拟Viewport (MCP命令服务器.yyjson取整数 (参数JSON, "top"), MCP命令服务器.yyjson取整数 (参数JSON, "left"), MCP命令服务器.yyjson取整数 (参数JSON, "width"), MCP命令服务器.yyjson取整数 (参数JSON, "height"))
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "Viewport已虚拟"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        否则 (方法名 == "browser.vip_fingerprint_screen" || 方法名 == "browser_vip_fingerprint_screen")
+        {
+            变量 vipScreen <类型 = 类_FBrowserVIP_控制器>
+            vipScreen = MCP命令服务器.取VIP控制器 ()
+            如果 (vipScreen.是否为空 () == 假)
+            {
+                vipScreen.指纹_虚拟屏幕分辨率 (MCP命令服务器.yyjson取整数 (参数JSON, "height"), MCP命令服务器.yyjson取整数 (参数JSON, "width"))
+                vipScreen.指纹_虚拟屏幕可用高度和宽度 (MCP命令服务器.yyjson取整数 (参数JSON, "avail_h"), MCP命令服务器.yyjson取整数 (参数JSON, "avail_w"))
+                vipScreen.指纹_虚拟屏幕colorDepth (MCP命令服务器.yyjson取整数 (参数JSON, "depth"))
+                vipScreen.指纹_虚拟屏幕pixelDepth (MCP命令服务器.yyjson取整数 (参数JSON, "pixel_depth"))
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "屏幕分辨率指纹已设置"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        否则 (方法名 == "browser.vip_fingerprint_hardware" || 方法名 == "browser_vip_fingerprint_hardware")
+        {
+            变量 vipHW <类型 = 类_FBrowserVIP_控制器>
+            vipHW = MCP命令服务器.取VIP控制器 ()
+            如果 (vipHW.是否为空 () == 假)
+            {
+                vipHW.指纹_虚拟HardwareConcurrency (MCP命令服务器.yyjson取整数 (参数JSON, "concurrency"))
+                vipHW.指纹_虚拟DeviceMemory (MCP命令服务器.yyjson取整数 (参数JSON, "memory"))
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "硬件指纹已设置"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        否则 (方法名 == "browser.vip_fingerprint_product" || 方法名 == "browser_vip_fingerprint_product")
+        {
+            变量 vipProd <类型 = 类_FBrowserVIP_控制器>
+            vipProd = MCP命令服务器.取VIP控制器 ()
+            如果 (vipProd.是否为空 () == 假)
+            {
+                vipProd.指纹_虚拟Product (MCP命令服务器.yyjson取文本 (参数JSON, "product"))
+                vipProd.指纹_虚拟ProductSub (MCP命令服务器.yyjson取文本 (参数JSON, "product_sub"))
+                vipProd.指纹_虚拟Vendor (MCP命令服务器.yyjson取文本 (参数JSON, "vendor"))
+                vipProd.指纹_虚拟VendorSub (MCP命令服务器.yyjson取文本 (参数JSON, "vendor_sub"))
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "产品标识指纹已设置"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        否则 (方法名 == "browser.vip_fingerprint_battery" || 方法名 == "browser_vip_fingerprint_battery")
+        {
+            变量 vipBat <类型 = 类_FBrowserVIP_控制器>
+            vipBat = MCP命令服务器.取VIP控制器 ()
+            如果 (vipBat.是否为空 () == 假)
+            {
+                vipBat.指纹_虚拟BatteryManagerCharging (MCP命令服务器.yyjson取逻辑 (参数JSON, "charging"))
+                vipBat.指纹_虚拟BatteryManagerLevel (MCP命令服务器.yyjson取小数 (参数JSON, "level"))
+                vipBat.指纹_虚拟BatteryManagerChargingTime (MCP命令服务器.yyjson取小数 (参数JSON, "charging_time"))
+                vipBat.指纹_虚拟BatteryManagerDischargingTime (MCP命令服务器.yyjson取小数 (参数JSON, "discharging_time"))
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "电池指纹已设置"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        否则 (方法名 == "browser.vip_fingerprint_media_devices" || 方法名 == "browser_vip_fingerprint_media_devices")
+        {
+            变量 vipMD <类型 = 类_FBrowserVIP_控制器>
+            vipMD = MCP命令服务器.取VIP控制器 ()
+            如果 (vipMD.是否为空 () == 假)
+            {
+                变量 medTarget <类型 = 文本型>
+                medTarget = MCP命令服务器.yyjson取文本 (参数JSON, "target")
+                如果 (medTarget == "audio_input")
+                {
+                    vipMD.指纹_虚拟AudioInput设备 (MCP命令服务器.yyjson取整数 (参数JSON, "type"), )
+                }
+                否则 (medTarget == "audio_output")
+                {
+                    vipMD.指纹_虚拟AudioOutput设备 (MCP命令服务器.yyjson取整数 (参数JSON, "type"), )
+                }
+                否则 (medTarget == "video_input")
+                {
+                    vipMD.指纹_虚拟VideoInput设备 (MCP命令服务器.yyjson取整数 (参数JSON, "type"), )
+                }
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "媒体设备指纹已设置"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        // === VIP CDP键盘补充 ===
+        否则 (方法名 == "browser.vip_key_click" || 方法名 == "browser_vip_key_click")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.高级键盘_单击 (MCP命令服务器.yyjson取整数 (参数JSON, "key_code"))
+                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP键盘单击"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_key_input" || 方法名 == "browser_vip_key_input")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.高级键盘_输入字符 (MCP命令服务器.yyjson取文本 (参数JSON, "char_code"))
+                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP输入字符"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_key_type" || 方法名 == "browser_vip_key_type")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.高级键盘_输入文本 (MCP命令服务器.yyjson取文本 (参数JSON, "text"))
+                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP输入文本"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === VIP 内核开关扩展 ===
+        否则 (方法名 == "browser.vip_set_css_version" || 方法名 == "browser_vip_set_css_version")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.内核开关_设置CSS内核 (文本到整数 (MCP命令服务器.yyjson取文本 (参数JSON, "version")))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "CSS内核已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_set_web_version" || 方法名 == "browser_vip_set_web_version")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.内核开关_设置Web内核 (文本到整数 (MCP命令服务器.yyjson取文本 (参数JSON, "version")))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "Web内核已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_set_v8_version" || 方法名 == "browser_vip_set_v8_version")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.内核开关_设置V8内核 (文本到整数 (MCP命令服务器.yyjson取文本 (参数JSON, "version")))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "V8内核已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.vip_send_devtools_msg" || 方法名 == "browser_vip_send_devtools_msg")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    vip_ctrl.开发者消息_发送消息 (MCP命令服务器.yyjson取JSON文本 (参数JSON, "json"))
+                    返回 (MCP命令服务器.命令成功 (命令ID, "DevTools消息已发送"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === Cookie 补充 ===
+        否则 (方法名 == "browser.refresh_cookies" || 方法名 == "browser_refresh_cookies")
+        {
+            FBrowser_Cookie管理器_取全局 ().刷新Cookie ()
+            返回 (MCP命令服务器.命令成功 (命令ID, "Cookie已刷新到磁盘"))
+        }
+        否则 (方法名 == "browser.get_all_cookies" || 方法名 == "browser_get_all_cookies")
+        {
+            变量 异步CookieID <类型 = 文本型>
+            异步CookieID = MCP命令服务器.生成异步任务ID ()
+            变量 Cookie回调 <类型 = 类_FBrowser_事件智能指针>
+            Cookie回调.创建 (类_MCP_Cookie收集回调)
+            Cookie回调.取执行类 (类_MCP_Cookie收集回调).异步任务ID = 异步CookieID
+            FBrowser_Cookie管理器_取全局 ().取全部Cookie (Cookie回调)
+            返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步CookieID, "全部Cookie获取已提交, 通过mcp_result查询"))
+        }
+        // === 请求环境补充 ===
+        否则 (方法名 == "browser.set_preference" || 方法名 == "browser_set_preference")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 reqCtx <类型 = 类_FBrowser_请求环境>
+                reqCtx = browser.取请求环境 ()
+                如果 (reqCtx.是否为空 () == 假)
+                {
+                    变量 名称 <类型 = 文本型>
+                    变量 值文本 <类型 = 文本型>
+                    名称 = MCP命令服务器.yyjson取文本 (参数JSON, "name")
+                    值文本 = MCP命令服务器.yyjson取文本 (参数JSON, "value")
+                    如果 (名称 == "")
+                    {
+                        返回 (MCP命令服务器.命令失败 (命令ID, "缺少参数: name(首选项名)"))
+                    }
+                    如果 (值文本 == "")
+                    {
+                        返回 (MCP命令服务器.命令失败 (命令ID, "缺少参数: value(首选项值)"))
+                    }
+                    变量 设置值 <类型 = 类_FBrowser_值>
+                    设置值.创建 ()
+                    // 尝试解析为整数, 否则按文本值设置
+                    变量 整数结果 <类型 = 整数>
+                    整数结果 = 文本到整数 (值文本)
+                    设置值.置整数值 (整数结果)
+                    // 尝试逻辑值
+                    如果 (值文本 == "true")
+                    {
+                        设置值.置逻辑值 (真)
+                    }
+                    否则 (值文本 == "false")
+                    {
+                        设置值.置逻辑值 (假)
+                    }
+                    否则
+                    {
+                        设置值.置文本值 (值文本)
+                    }
+                    变量 错误文本 <类型 = 文本型>
+                    reqCtx.置首选项 (设置值, 名称, 错误文本)
+                    如果 (错误文本 != "")
+                    {
+                        返回 (MCP命令服务器.命令失败 (命令ID, "首选项设置失败: " + 错误文本))
+                    }
+                    返回 (MCP命令服务器.命令成功 (命令ID, "首选项 " + 名称 + " 已设置"))
+                }
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === VIP 插件管理 (v1.7) ===
+        否则 (方法名 == "browser.vip_load_extension" || 方法名 == "browser_vip_load_extension")
+        {
+            变量 extCRX <类型 = 文本型>
+            extCRX = MCP命令服务器.yyjson取文本 (参数JSON, "crx_path")
+            如果 (extCRX != "")
+            {
+                变量 reqEnv <类型 = 类_FBrowser_请求环境>
+                reqEnv = MCP命令服务器.取请求环境_安全 ()
+                如果 (reqEnv.是否为空 () == 假)
+                {
+                    reqEnv.VIP_高级_安装CRX插件包 (extCRX)
+                    返回 (MCP命令服务器.命令成功 (命令ID, "CRX插件包已提交安装: " + extCRX))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, "请求环境不可用"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, "需要crx_path参数"))
+        }
+        否则 (方法名 == "browser.vip_unload_extension" || 方法名 == "browser_vip_unload_extension")
+        {
+            变量 extID <类型 = 文本型>
+            extID = MCP命令服务器.yyjson取文本 (参数JSON, "extension_id")
+            如果 (extID != "")
+            {
+                变量 reqEnv2 <类型 = 类_FBrowser_请求环境>
+                reqEnv2 = MCP命令服务器.取请求环境_安全 ()
+                如果 (reqEnv2.是否为空 () == 假)
+                {
+                    reqEnv2.VIP_高级_卸载插件 (extID)
+                    返回 (MCP命令服务器.命令成功 (命令ID, "插件已卸载: " + extID))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, "请求环境不可用"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, "需要extension_id参数"))
+        }
+        否则 (方法名 == "browser.vip_extension_info" || 方法名 == "browser_vip_extension_info")
+        {
+            变量 extInfoID <类型 = 文本型>
+            extInfoID = MCP命令服务器.yyjson取文本 (参数JSON, "extension_id")
+            如果 (extInfoID != "")
+            {
+                变量 reqEnv3 <类型 = 类_FBrowser_请求环境>
+                reqEnv3 = MCP命令服务器.取请求环境_安全 ()
+                如果 (reqEnv3.是否为空 () == 假)
+                {
+                    变量 extPath <类型 = 文本型>
+                    变量 extURL <类型 = 文本型>
+                    extPath = reqEnv3.VIP_高级_取插件路径 (extInfoID)
+                    extURL = reqEnv3.VIP_高级_取插件地址 (extInfoID)
+                    变量 结果对象 <类型 = YYJSON对象类>
+                    结果对象.创建自文本 ("{}")
+                    结果对象.加入文本成员 ("id", extInfoID)
+                    结果对象.加入文本成员 ("path", extPath)
+                    结果对象.加入文本成员 ("url", extURL)
+                    返回 (MCP命令服务器.命令成功_原始JSON (命令ID, 结果对象.到可读文本 (YYJSON格式化选项.压缩)))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, "请求环境不可用"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, "需要extension_id参数"))
+        }
+        // === VIP 指定环境执行JS (v1.7) ===
+        否则 (方法名 == "browser.vip_execute_js_context" || 方法名 == "browser_vip_execute_js_context")
+        {
+            变量 jsCode <类型 = 文本型>
+            jsCode = MCP命令服务器.yyjson取文本 (参数JSON, "code")
+            如果 (jsCode != "")
+            {
+                变量 vipCtrl <类型 = 类_FBrowserVIP_控制器>
+                vipCtrl = MCP命令服务器.取VIP控制器 ()
+                如果 (vipCtrl.是否为空 () == 假)
+                {
+                    变量 ctxID <类型 = 整数>
+                    ctxID = MCP命令服务器.yyjson取整数 (参数JSON, "context_id")
+                    变量 frmID <类型 = 文本型>
+                    frmID = MCP命令服务器.yyjson取文本 (参数JSON, "frame_id")
+                    变量 异步VIPJSID <类型 = 文本型>
+                    异步VIPJSID = MCP命令服务器.生成异步任务ID ()
+                    变量 VIPJS回调 <类型 = 类_FBrowser_事件智能指针>
+                    VIPJS回调.创建 (类_MCP_VIP通用回调)
+                    VIPJS回调.取执行类 (类_MCP_VIP通用回调).任务ID = 异步VIPJSID
+                    如果 (frmID != "")
+                    {
+                        vipCtrl.高级_执行JS_框架ID (jsCode, frmID, 真, 假, 真, MCP命令服务器.URL请求默认超时, 假, 假, VIPJS回调)
+                    }
+                    否则
+                    {
+                        vipCtrl.高级_执行JS (jsCode, ctxID, 真, 假, 真, MCP命令服务器.URL请求默认超时, 假, 假, VIPJS回调)
+                    }
+                    返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步VIPJSID, "JS已提交到指定环境"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, "需要code参数"))
+        }
+        // === VIP CDP DOM文档获取 (v1.7) ===
+        否则 (方法名 == "browser.vip_dom_get_document" || 方法名 == "browser_vip_dom_get_document")
+        {
+            变量 vipDom <类型 = 类_FBrowserVIP_开发者DOM>
+            vipDom = MCP命令服务器.取开发者DOM_安全 ()
+            如果 (vipDom.是否为空 () == 假)
+            {
+                vipDom.启用 ("all")
+                变量 dDepth <类型 = 整数>
+                dDepth = MCP命令服务器.yyjson取整数 (参数JSON, "depth")
+                如果 (dDepth == 0)
+                {
+                    dDepth = 3
+                }
+                变量 异步DOMID <类型 = 文本型>
+                异步DOMID = MCP命令服务器.生成异步任务ID ()
+                变量 DOM回调 <类型 = 类_FBrowser_事件智能指针>
+                DOM回调.创建 (类_MCP_VIP通用回调)
+                DOM回调.取执行类 (类_MCP_VIP通用回调).任务ID = 异步DOMID
+                vipDom.枚举DOM (dDepth, 假, DOM回调)
+                返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步DOMID, "DOM文档已提交枚举, 通过mcp_result查询"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        否则 (方法名 == "browser.vip_dom_search" || 方法名 == "browser_vip_dom_search")
+        {
+            变量 searchQuery <类型 = 文本型>
+            searchQuery = MCP命令服务器.yyjson取文本 (参数JSON, "query")
+            如果 (searchQuery != "")
+            {
+                变量 vipDom2 <类型 = 类_FBrowserVIP_开发者DOM>
+                vipDom2 = MCP命令服务器.取开发者DOM_安全 ()
+                如果 (vipDom2.是否为空 () == 假)
+                {
+                    变量 sID <类型 = 文本型>
+                    sID = MCP命令服务器.yyjson取文本 (参数JSON, "search_id")
+                    如果 (sID != "")
+                    {
+                        变量 异步搜索ID <类型 = 文本型>
+                        异步搜索ID = MCP命令服务器.生成异步任务ID ()
+                        变量 搜索回调 <类型 = 类_FBrowser_事件智能指针>
+                        搜索回调.创建 (类_MCP_VIP通用回调)
+                        搜索回调.取执行类 (类_MCP_VIP通用回调).任务ID = 异步搜索ID
+                        vipDom2.取查找文本 (sID, 0, 100, 搜索回调)
+                        返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步搜索ID, "查找结果已提交, 通过mcp_result查询"))
+                    }
+                    否则
+                    {
+                        变量 异步预查ID <类型 = 文本型>
+                        异步预查ID = MCP命令服务器.生成异步任务ID ()
+                        变量 预查回调 <类型 = 类_FBrowser_事件智能指针>
+                        预查回调.创建 (类_MCP_VIP通用回调)
+                        预查回调.取执行类 (类_MCP_VIP通用回调).任务ID = 异步预查ID
+                        vipDom2.预查找文本 (searchQuery, 假, 预查回调)
+                        返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步预查ID, "预查找已提交, 通过mcp_result查询, 从结果中取searchId再query"))
+                    }
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, "需要query或search_id参数"))
+        }
+        否则 (方法名 == "browser.vip_enable_devtools_observer" || 方法名 == "browser_vip_enable_devtools_observer")
+        {
+            变量 enableObs <类型 = 逻辑型>
+            enableObs = MCP命令服务器.yyjson取逻辑 (参数JSON, "enable")
+            变量 vipObs <类型 = 类_FBrowserVIP_控制器>
+            vipObs = MCP命令服务器.取VIP控制器 ()
+            如果 (vipObs.是否为空 () == 假)
+            {
+                如果 (enableObs)
+                {
+                    MCP命令服务器.确保CDP观察者已注册 ()
+                    返回 (MCP命令服务器.命令成功 (命令ID, "DevTools消息监听已启用(MCP观察者)"))
+                }
+                否则
+                {
+                    MCP命令服务器.注销CDP观察者 ()
+                    返回 (MCP命令服务器.命令成功 (命令ID, "DevTools消息监听已关闭"))
+                }
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        // === VIP 触摸模拟 (v1.7) ===
+        否则 (方法名 == "browser.vip_touch_emulation" || 方法名 == "browser_vip_touch_emulation")
+        {
+            变量 vipTouch <类型 = 类_FBrowserVIP_控制器>
+            vipTouch = MCP命令服务器.取VIP控制器 ()
+            如果 (vipTouch.是否为空 () == 假)
+            {
+                vipTouch.指纹_启用触摸事件 (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"), MCP命令服务器.yyjson取整数 (参数JSON, "max_points"))
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "触摸模拟已设置"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        // === VIP UA完整指纹 (v1.7) ===
+        否则 (方法名 == "browser.fingerprint_ua" || 方法名 == "browser_fingerprint_ua")
+        {
+            变量 vipUA <类型 = 类_FBrowserVIP_控制器>
+            vipUA = MCP命令服务器.取VIP控制器 ()
+            如果 (vipUA.是否为空 () == 假)
+            {
+                变量 ua_data <类型 = 类_FBrowserVIP_UA数据>
+                ua_data.创建 ()
+                如果 (MCP命令服务器.yyjson取文本 (参数JSON, "ua") != "")
+                {
+                    ua_data.置UserAgent (MCP命令服务器.yyjson取文本 (参数JSON, "ua"))
+                }
+                如果 (MCP命令服务器.yyjson取文本 (参数JSON, "platform") != "")
+                {
+                    ua_data.置Platform (MCP命令服务器.yyjson取文本 (参数JSON, "platform"))
+                    ua_data.置HighPlatform (MCP命令服务器.yyjson取文本 (参数JSON, "platform"))
+                }
+                如果 (MCP命令服务器.yyjson取文本 (参数JSON, "accept_lang") != "")
+                {
+                    ua_data.置AcceptLanguage (MCP命令服务器.yyjson取文本 (参数JSON, "accept_lang"))
+                }
+                如果 (MCP命令服务器.yyjson取文本 (参数JSON, "architecture") != "")
+                {
+                    ua_data.置Architecture (MCP命令服务器.yyjson取文本 (参数JSON, "architecture"))
+                }
+                如果 (MCP命令服务器.yyjson取文本 (参数JSON, "bitness") != "")
+                {
+                    ua_data.置Bitness (MCP命令服务器.yyjson取文本 (参数JSON, "bitness"))
+                }
+                如果 (MCP命令服务器.yyjson取文本 (参数JSON, "model") != "")
+                {
+                    ua_data.置Model (MCP命令服务器.yyjson取文本 (参数JSON, "model"))
+                }
+                ua_data.置Mobile (MCP命令服务器.yyjson取逻辑 (参数JSON, "mobile"))
+                ua_data.置Wow64 (MCP命令服务器.yyjson取逻辑 (参数JSON, "wow64"))
+                vipUA.指纹_虚拟UserAgent (ua_data)
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "UA完整指纹已设置"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        // === VIP 屏幕方向 (v1.7) ===
+        否则 (方法名 == "browser.vip_orientation" || 方法名 == "browser_vip_orientation")
+        {
+            变量 vipOrient <类型 = 类_FBrowserVIP_控制器>
+            vipOrient = MCP命令服务器.取VIP控制器 ()
+            如果 (vipOrient.是否为空 () == 假)
+            {
+                // 整数→屏幕方向类型枚举映射 (规避火山 @常量类 模板限制)
+                变量 orient_int <类型 = 整数>
+                变量 angle_int <类型 = 整数>
+                orient_int = MCP命令服务器.yyjson取整数 (参数JSON, "type")
+                angle_int = MCP命令服务器.yyjson取整数 (参数JSON, "angle")
+                变量 orient_enum <类型 = 屏幕方向类型>
+                如果 (orient_int == 1)
+                {
+                    orient_enum = 屏幕方向类型.竖屏16_9
+                }
+                否则 (orient_int == 2)
+                {
+                    orient_enum = 屏幕方向类型.竖屏4_3
+                }
+                否则 (orient_int == 3)
+                {
+                    orient_enum = 屏幕方向类型.横屏16_9
+                }
+                否则 (orient_int == 4)
+                {
+                    orient_enum = 屏幕方向类型.横屏4_3
+                }
+                否则
+                {
+                    orient_enum = 屏幕方向类型.默认
+                }
+                vipOrient.指纹_虚拟屏幕方向 (orient_enum, angle_int)
+                返回 (MCP命令服务器.响应_需要刷新 (命令ID, "屏幕方向已设置"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+        }
+        // === 获取额外数据 (v1.7) ===
+        否则 (方法名 == "browser.get_extra_data" || 方法名 == "browser_get_extra_data")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 extraData <类型 = 类_FBrowser_字典值>
+                extraData = browser.取额外数据 ()
+                如果 (extraData.是否为空 () == 假)
+                {
+                    变量 extraKeys <类型 = FBrowser_文本数组>
+                    extraKeys = extraData.取关键字 ()
+                    变量 extraObj <类型 = YYJSON对象类>
+                    extraObj.创建自文本 ("{}")
+                    变量 keyCount <类型 = 整数>
+                    keyCount = extraKeys.取个数 ()
+                    计次循环 (keyCount)
+                    {
+                        变量 keyName <类型 = 文本型>
+                        keyName = extraKeys.取数据 (取循环索引 ())
+                        extraObj.加入文本成员 (keyName, extraData.取文本值 (keyName))
+                    }
+                    返回 (MCP命令服务器.命令成功_原始JSON (命令ID, extraObj.到可读文本 (YYJSON格式化选项.压缩)))
+                }
+                返回 (MCP命令服务器.命令成功 (命令ID, "额外数据为空"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === VIP 控制台禁用(完整) ===
+        否则 (方法名 == "browser.vip_disable_console" || 方法名 == "browser_vip_disable_console")
+        {
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip <类型 = 类_FBrowserVIP_控制器>
+                vip = browser.取VIP控制器 ()
+                如果 (vip.是否为空 () == 假)
+                {
+                    vip.内核开关_禁用ConsoleLog (MCP命令服务器.yyjson取逻辑 (参数JSON, "log"))
+                    vip.内核开关_禁用ConsoleWarn (MCP命令服务器.yyjson取逻辑 (参数JSON, "warn"))
+                    vip.内核开关_禁用ConsoleError (MCP命令服务器.yyjson取逻辑 (参数JSON, "error"))
+                    vip.内核开关_禁用ConsoleDebug (MCP命令服务器.yyjson取逻辑 (参数JSON, "debug"))
+                    vip.内核开关_禁用ConsoleInfo (MCP命令服务器.yyjson取逻辑 (参数JSON, "info"))
+                    vip.内核开关_禁用ConsoleTrace (MCP命令服务器.yyjson取逻辑 (参数JSON, "trace"))
+                    vip.内核开关_禁用ConsoleClear (MCP命令服务器.yyjson取逻辑 (参数JSON, "clear"))
+                    vip.内核开关_禁用ConsoleAssert (MCP命令服务器.yyjson取逻辑 (参数JSON, "assert"))
+                    vip.内核开关_禁用ConsoleDir (MCP命令服务器.yyjson取逻辑 (参数JSON, "dir"))
+                    vip.内核开关_禁用ConsoleTable (MCP命令服务器.yyjson取逻辑 (参数JSON, "table"))
+                    vip.内核开关_禁用ConsoleTime (MCP命令服务器.yyjson取逻辑 (参数JSON, "time"))
+                    vip.内核开关_禁用ConsoleCount (MCP命令服务器.yyjson取逻辑 (参数JSON, "count"))
+                    vip.内核开关_禁用ConsoleGroup (MCP命令服务器.yyjson取逻辑 (参数JSON, "group"))
+                    vip.内核开关_禁用ConsoleProfile (MCP命令服务器.yyjson取逻辑 (参数JSON, "profile"))
+                    vip.内核开关_禁用Performance检测 (MCP命令服务器.yyjson取逻辑 (参数JSON, "performance"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "Console/Performance禁用已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        // === VIP Event.isTrusted ===
+        否则 (方法名 == "browser.vip_set_is_trusted" || 方法名 == "browser_vip_set_is_trusted")
+        {
+            变量 br <类型 = 类_FBrowser_浏览器>
+            br = MCP命令服务器.取主浏览器 ()
+            如果 (br.是否为空 () == 假)
+            {
+                变量 vp <类型 = 类_FBrowserVIP_控制器>
+                vp = br.取VIP控制器 ()
+                如果 (vp.是否为空 () == 假)
+                {
+                    vp.内核开关_设置EventIsTrusted (MCP命令服务器.yyjson取逻辑 (参数JSON, "value"))
+                    返回 (MCP命令服务器.响应_需要刷新 (命令ID, "isTrusted已设置"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_VIP不可用))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        返回 ("")
+    }
+
+    #
+}

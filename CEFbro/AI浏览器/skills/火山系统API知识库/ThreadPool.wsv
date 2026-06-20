@@ -1,0 +1,392 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" @文档 = "category = \"windows.线程相关\"">
+
+类 ______线程池辅助函数 <@全局类 = 真 @视窗.外部头文件 = "ThreadPool\\ThreadPool_fne.h" @视窗.外部源文件 = "ThreadPool\\ThreadPool_fne.cpp">
+{
+    方法 线程池_创建 <公开 静态 类型 = 变整数 返回值注释 = "返回线程池句柄" @嵌入式方法 = "">
+    参数 线程数量 <类型 = 整数>
+    {
+        @ (INT64)_ThreadPool_Create(@<线程数量>)
+    }
+
+    方法 线程池_回调函数 <公开 静态 类型 = 整数>
+    参数 参数 <类型 = 变整数>
+    {
+
+        返回 (0)
+    }
+
+    方法 线程池_投递任务 <公开 静态 @嵌入式方法 = "">
+    参数 线程池句柄 <类型 = 变整数>
+    参数 工作函数指针 <@匹配方法 = "线程池_回调函数">
+    参数 参数 <类型 = 变整数>
+    {
+        @ _ThreadPool_PostWorkItem ((HTHREADPOOL)@<线程池句柄>,(WORKERPROC)@<工作函数指针>,(LPVOID)@<参数>)
+    }
+
+    方法 线程池_销毁 <公开 静态 @嵌入式方法 = "">
+    参数 线程池句柄 <类型 = 变整数>
+    参数 是否强制结束 <类型 = 逻辑型 注释 = "如果设置了真，那么无论是否线程还在工作，都会强制结束" @默认值 = 真>
+    {
+        @ _ThreadPool_Destroy((HTHREADPOOL)@<线程池句柄>,@<是否强制结束>)
+    }
+
+    方法 线程池_取任务总数 <公开 静态 类型 = 长整数 @嵌入式方法 = "">
+    参数 线程池句柄 <类型 = 变整数>
+    {
+        @ _ThreadPool_GetTotalTasks((HTHREADPOOL)@<线程池句柄>)
+    }
+
+    方法 线程池_取已完成任务数 <公开 静态 类型 = 长整数 @嵌入式方法 = "">
+    参数 线程池句柄 <类型 = 变整数>
+    {
+        @ _ThreadPool_GetComplateTask((HTHREADPOOL)@<线程池句柄>)
+    }
+
+    #
+}
+
+类 线程池类f <公开 折叠>
+{
+    变量 线程池句柄 <类型 = 变整数>
+
+    # @begin
+    # typedef struct _PoolParam
+    # {
+    #     @sn<current_class>* lpThis;
+    #     VOID*               data;
+    #     VOID*               wParam;
+    #     VOID*               lParam;
+    # }POOLPARAM,*LPPOOLPARAM;
+    # //线程池回调函数
+    # DWORD WINAPI ThreadPoolCallBack_(LPVOID lpParam)
+    # {
+    #     LPPOOLPARAM pData = (LPPOOLPARAM) lpParam;
+    #     @sn<current_class>* pThis = pData->lpThis;
+    #     pThis->@<线程池回调函数>( (@dt<变整数>)pData->data,(@dt<变整数>)pData->wParam,(@dt<变整数>)pData->lParam);
+    #     delete pData;
+    #     pData = NULL;
+    #  return 0;
+    # }
+    # @end
+
+    方法 线程池回调函数 <公开 定义事件 类型 = 整数>
+    参数 参数1 <类型 = 变整数>
+    参数 参数2 <类型 = 变整数>
+    参数 参数3 <类型 = 变整数>
+    {
+
+    }
+
+    方法 类_清理
+    {
+        线程池_销毁 (线程池句柄)
+    }
+
+    方法 创建 <公开>
+    参数 线程池数量 <类型 = 整数>
+    {
+        线程池句柄 = 线程池_创建 (线程池数量)
+    }
+
+    方法 投递任务 <公开 折叠>
+    参数 参数1 <类型 = 变整数 @默认值 = 0>
+    参数 参数2 <类型 = 变整数 @默认值 = 0>
+    参数 参数3 <类型 = 变整数 @默认值 = 0>
+    {
+        @ LPPOOLPARAM lpData = new POOLPARAM;
+        @ lpData->lpThis   = this;
+        @ lpData->data     = (void *)@<参数1>;
+        @ lpData->wParam   = (void *)@<参数2>;
+        @ lpData->lParam   = (void *)@<参数3>;
+        @ _ThreadPool_PostWorkItem ((HTHREADPOOL)@<线程池句柄>,ThreadPoolCallBack_,(LPVOID)lpData);
+    }
+
+    方法 取任务总数 <公开 类型 = 长整数>
+    {
+        返回 (线程池_取任务总数 (线程池句柄))
+    }
+
+    方法 取已完成任务数 <公开 类型 = 长整数>
+    {
+        返回 (线程池_取已完成任务数 (线程池句柄))
+    }
+
+    方法 取剩余任务数 <公开 类型 = 长整数>
+    {
+        返回 (线程池_取任务总数 (线程池句柄) - 线程池_取已完成任务数 (线程池句柄))
+    }
+}
+
+类 ______线程池测试 <公开>
+{
+    变量 线程池 <类型 = 线程池类f>
+
+    方法 开始测试 <公开>
+    {
+        变量 i <类型 = 整数>
+        线程池.创建 (10)
+        循环 (1, 20, i)
+        {
+            线程池.投递任务 (i)
+        }
+        延时 (10)
+    }
+
+    方法 线程池类f_线程池回调函数 <接收事件 类型 = 整数>
+    参数 来源对象 <类型 = 线程池类f>
+    参数 标记值 <类型 = 整数>
+    参数 参数1 <类型 = 变整数>
+    参数 参数2 <类型 = 变整数>
+    参数 参数3 <类型 = 变整数>
+    {
+        调试输出 (参数1)
+        返回 (0)
+
+
+    }
+
+    方法 开始测试2 <公开>
+    {
+
+        变量 线程池句柄 <类型 = 变整数>
+        变量 i <类型 = 整数>
+        线程池句柄 = 线程池_创建 (10)
+
+        循环 (0, 20, i)
+        {
+            线程池_投递任务 (线程池句柄, 回调函数, i)
+
+        }
+
+        线程池_销毁 (线程池句柄, 假)
+
+        返回
+
+    }
+
+    方法 回调函数 <公开 静态 类型 = 整数>
+    参数 参数 <类型 = 变整数>
+    {
+        延时 (1000)
+        调试输出 ("我是参数", 参数)
+
+        返回 (0)
+
+
+
+    }
+}
+
+类 线程池资源类 <公开 注释 = "注意 系统最低支持vista 服务器系统最低支持 2008" 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     WThreadPool_CopyConstruct(m_pData,objCopyFrom.m_pData);
+    # }
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void * pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ SetData( WThreadPool_new());
+    }
+
+    方法 类_清理
+    {
+        @ WThreadPool_delete(GetData());
+    }
+
+    方法 创建 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 最大线程池数量 <类型 = 整数 @默认值 = 1>
+    参数 最小线程池数量 <类型 = 整数 @默认值 = 1>
+    {
+        @ WThreadPool_Create(@sn<this>.GetData(),@<最大线程池数量>,@<最小线程池数量>)
+    }
+
+    方法 销毁 <公开 @嵌入式方法 = "">
+    参数 是否强制销毁 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ WThreadPool_Destory(@sn<this>.GetData(),@<是否强制销毁>)
+    }
+
+    方法 调整线程数 <公开 @嵌入式方法 = "">
+    参数 最大线程池数量 <类型 = 整数 @默认值 = 1>
+    参数 最小线程池数量 <类型 = 整数 @默认值 = 1>
+    {
+        @ WThreadPool_SetThreadCount(@sn<this>.GetData(),@<最大线程池数量>,@<最小线程池数量>)
+    }
+
+    #
+    #
+}
+
+类 线程池任务集类 <公开 注释 = "注意 系统最低支持vista 服务器系统最低支持 2008" @视窗.后缀文本 = "public CThreadPoolWorkBase"
+        @视窗.外部头文件 = "ThreadPool\\BTThreadPool.h" @视窗.外部库.win32 = "ThreadPool\\BTThreadPoolx86.lib"
+        @视窗.附属文件.win32 = "ThreadPool\\BTThreadPoolx86.dll" @视窗.外部库.x64 = "ThreadPool\\BTThreadPoolx64.lib"
+        @视窗.附属文件.x64 = "ThreadPool\\BTThreadPoolx64.dll">
+{
+
+    #
+    # @begin
+    # <> <include>
+    # virtual void OnWork(void* pParam1, void* pParam2)
+    # {
+    #     @<任务回调>( (INT_P)pParam1,(INT_P)pParam2);
+    # }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_pData= objCopyFrom.m_pData;
+    # }
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void * pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+    #
+
+    方法 创建 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 线程池资源 <类型 = 线程池资源类 注释 = "如果为空，表示使用的是系统的线程池" @默认值 = 空对象>
+    参数 任务参数1 <类型 = 变整数 @默认值 = 0>
+    参数 任务参数2 <类型 = 变整数 @默认值 = 0>
+    {
+        @ BOOL bOK = FALSE;
+        如果 (线程池资源 == 空对象)
+        {
+            @ bOK = WThreadPoolWork_CreateClass(&m_pData,NULL,this,(void*)@<任务参数1>,(void*)@<任务参数2>);
+        }
+        否则
+        {
+            @ bOK = WThreadPoolWork_CreateClass(&m_pData,@<线程池资源>.GetData(),this,(void*)@<任务参数1>,(void*)@<任务参数2>);
+        }
+        @ return bOK;
+        // BOOL FUCTIONTYPE WThreadPoolWork_CreateClass(void** hWork, void* hThreadPool, CThreadPoolWorkBase* pFCall, void* Param1, void* Param2);
+    }
+
+    方法 销毁 <公开 @嵌入式方法 = "">
+    {
+        @ WThreadPoolWork_Destory(@sn<this>.GetData())
+    }
+
+    方法 提交任务 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ WThreadPoolWork_Submit(@sn<this>.GetData())
+    }
+
+    方法 取剩余任务数 <公开 类型 = 长整数 折叠 @嵌入式方法 = "">
+    {
+        @ WThreadPoolWork_GetTotalWorks(@sn<this>.GetData())
+    }
+
+    方法 取当前执行任务数 <公开 类型 = 长整数 @嵌入式方法 = "">
+    {
+        @ WThreadPoolWork_GetCurrentWorks(@sn<this>.GetData())
+    }
+
+    方法 取消所有任务 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ WThreadPoolWork_CancelAllWork(@sn<this>.GetData())
+    }
+
+    方法 等待任务完成 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    {
+        @ WThreadPoolWork_WaitWorkDone(@sn<this>.GetData())
+    }
+
+    方法 任务回调 <公开 定义事件 类型 = 整数>
+    参数 参数1 <类型 = 变整数>
+    参数 参数2 <类型 = 变整数>
+    {
+
+    }
+}
+
+类 简易线程池类 <公开 注释 = "如果您的软件中，只存在一个线程池，那么我建议您用这个就行了">
+{
+    变量 成员_线程池 <类型 = 线程池资源类>
+    变量 成员_任务 <类型 = 线程池任务集类>
+
+    方法 创建 <公开>
+    参数 线程最大数量 <类型 = 整数 @默认值 = 8>
+    参数 线程最小数量 <类型 = 整数 @默认值 = 1>
+    {
+        成员_线程池.创建 (线程最大数量, 线程最小数量)
+        成员_任务.创建 (成员_线程池)
+    }
+
+    方法 销毁 <公开>
+    参数 是否强制销毁 <类型 = 逻辑型 @默认值 = 真>
+    {
+        成员_任务.销毁 ()
+        成员_线程池.销毁 (是否强制销毁)
+
+    }
+
+    方法 调整线程池 <公开>
+    参数 线程最大数 <类型 = 整数 注释 = "-1表示不调整" @默认值 = -1>
+    参数 线程最小数 <类型 = 整数 注释 = "-1表示不调整" @默认值 = -1>
+    {
+        成员_线程池.调整线程数 (线程最大数, 线程最小数)
+    }
+
+    方法 取消所有任务 <公开>
+    {
+        成员_任务.取消所有任务 ()
+    }
+
+    方法 等待任务完成 <公开>
+    {
+        成员_任务.等待任务完成 ()
+    }
+
+    方法 提交任务 <公开 注释 = "内部提交N次任务">
+    参数 任务数 <类型 = 整数 @默认值 = 1>
+    {
+        循环 (0, 任务数)
+        {
+            成员_任务.提交任务 ()
+        }
+
+    }
+
+    方法 取剩余任务数 <公开 类型 = 长整数>
+    {
+        返回 (成员_任务.取剩余任务数 ())
+    }
+
+    方法 取当前运行任务数 <公开 类型 = 长整数>
+    {
+        返回 (成员_任务.取当前执行任务数 ())
+    }
+
+    方法 线程池任务集类_任务回调 <接收事件 类型 = 整数>
+    参数 来源对象 <类型 = 线程池任务集类 注释 = "提供事件产生的具体来源对象">
+    参数 标记值 <类型 = 整数 注释 = "用户调用\"挂接事件\"命令时所提供的\"标记值\"参数值,非此方式挂接事件则本参数值固定为0.">
+    参数 参数1 <类型 = 变整数>
+    参数 参数2 <类型 = 变整数>
+    {
+        任务回调 ()
+        返回 (0)
+    }
+
+    方法 任务回调 <公开 定义事件 类型 = 整数>
+}

@@ -1,0 +1,43 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"基础函数.宏定义\"" "//@视窗.外部头文件.全局-999" = "Base_Global_Macro_FC\\VolBaseRefObjectTemplateFC.h">
+
+# @begin
+#
+# <> <global>
+# <> <include>
+# #include "Base_Global_Macro_FC/VolBaseRefObjectTemplateFC.h"
+# <> </include>
+# <> </global>
+#
+# //用作定义一个空的参考对象
+# @def_macro DECLARE_REF_OBJECT_CLASS_WITHOUT_DATA(value_data_type) \
+#     @m<DECLARE_REF_OBJECT_CLASS>(CRefObject,NULL) \
+#     @m<DECLARE_VOL_REF_DATA_GETTER> (value_data_type) 
+#
+# //用于动态创建一个参考对象，此参考对象可以携带构造函数
+# @def_macro NEW_REF_OBJECT_CLASS( value_data_type,new_object_class ) TakeOverNewRefObject(new CRefObjectWithDataParam<value_data_type>(new_object_class))
+#
+#
+# @end
+
+类 "//测试带构造函数的参考对象类" <公开 注释 = " 这个是用法例子" @视窗.外部头文件 = "VolTestRefClass.h">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITHOUT_DATA>(CVolTestRefClass)    //CVolTestRefClass 这个是外部C++ 类型
+
+    方法 创建带参数的构造函数 <公开>
+    {
+        @ @m<NEW_REF_OBJECT_CLASS>( CVolTestRefClass,new CVolTestRefClass(10) );  // (类型,new 类型(参数) ) //狗仔函数带参数的演示
+    }
+
+    方法 创建不带参数的构造函数 <公开>
+    {
+        @ @m<NEW_REF_OBJECT_CLASS>( CVolTestRefClass,new CVolTestRefClass );   // (类型,new 类型 )  //不带参数的演示 
+    }
+
+    #
+    #
+}
+
+#

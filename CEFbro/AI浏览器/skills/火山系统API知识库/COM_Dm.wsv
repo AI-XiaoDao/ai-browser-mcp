@@ -1,0 +1,2551 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"辅助.大漠\"" @视窗.外部头文件 = "COM_Dm\\dm.tlh" @视窗.附属文件 = "COM_Dm\\RegDm.bat"
+        @视窗.附属文件.x64 = "COM_Dm\\dm.dll">
+
+类 "//大漠最后一个免费版" <公开 基础类 = 免注册COM调用模板 注释 = "3.1233" 折叠 @模板实现类 = "">
+{
+
+    # @begin
+    # //random_class_name 随机名称 如果你的是大漠 你可以写 Dm
+    # //_REFCLSID   如果你的是大漠 你可以写 __uuidof(Dm::dmsoft)
+    # // _VOL_COM_SMARTPTR_ 智能指针 如果你的是大漠，你可以写 Dm::IdmsoftPtr 或者 Idmsoft* 建议一般写Dm::IdmsoftPtr 因为这个无需调用 realse(); 
+    # @m<define_vol_use_com_without_register>(Dm,__uuidof(Dm::dmsoft),Dm::IdmsoftPtr)
+    # @end
+
+    方法 类_初始化
+    {
+        变量 Com_Dll_路径 <类型 = 文本型>
+        Com_Dll_路径 = 取运行目录 () + "Dm.dll"
+        @ data().RegMemCOM(@<Com_Dll_路径>.GetText());
+    }
+
+    方法 Ver <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( (const TCHAR*)@sn<this>.data().GetPtr()->Ver() )
+    }
+
+    #
+    #
+}
+
+类 "//大漠最后一个免费版" <公开 注释 = "只能32位程序调用哦" 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # Dm::IdmsoftPtr pvObject;
+    # <> <include>
+    # @end
+
+    方法 类_初始化
+    {
+        // 运行 (取运行目录 () + "RegDm.bat")
+        @ if(  pvObject.CreateInstance(__uuidof(Dm::dmsoft)) != S_OK )
+        @ {
+        调试输出 ("注册大漠失败，请手动注册大漠哦 ")
+        @ }
+    }
+
+    方法 Ver <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( (const TCHAR*)@sn<this>.pvObject->Ver() )
+    }
+
+    #
+}
+
+类 大漠最后一个免费版 <公开>
+{
+
+    # @begin
+    # @m<define_vol_use_System_com_ProgID>(__uuidof(Dm::dmsoft),Dm::IdmsoftPtr)
+    # @end
+    #
+
+    方法 注册组件
+    {
+        变量 命令行 <类型 = 文本型>
+        @ #ifdef _VOL_X64
+        @ #else
+        命令行 = "regsvr32 \"" + 取运行目录 () + "dm.dll\""
+        运行 (命令行)
+        // 命令行 = "regsvr32 \"" + 取运行目录 () + "DebenuPDFLibraryAX1013.dll"
+        @ #endif
+    }
+
+    方法 类_初始化
+    {
+        变量 是否创建成功 <类型 = 逻辑型>
+        @ @<是否创建成功> = Init();
+
+        如果 (是否创建成功 == 假)
+        {
+            如果 (程序_是否64位 ())
+            {
+                调试输出 ("当前程序为64位的，不支持大漠哦")
+
+            }
+            否则
+            {
+                注册组件 ()
+                调试输出 (" 要用管理员权限启动，才能注册成功哦")
+
+
+            }
+
+        }
+
+    }
+
+    方法 类_清理
+    {
+        @ Unit();
+
+    }
+
+    方法 Ver <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->Ver())
+    }
+
+    方法 SetPath <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 path <类型 = 文本型 注释 = "_bstr_t path">
+    {
+        @ @sn<this>.GetComObjPtr()->SetPath(@<path>.GetText())
+    }
+
+    方法 Ocr <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->Ocr(@<x1>,@<y1>,@<x2>,@<y2>,@<color>.GetText(),@<sim>))
+    }
+
+    方法 "//FindStr" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ @sn<this>.GetComObjPtr()->FindStr(@<x1>,@<y1>,@<x2>,@<y2>,@<str>.GetText(),@<color>.GetText(),@<sim>,@<x>,@<y>)
+    }
+
+    方法 GetResultCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    {
+        @ @sn<this>.GetComObjPtr()->GetResultCount(@<str>.GetText())
+    }
+
+    方法 "//GetResultPos" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 index <类型 = 整数 注释 = "long index">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ @sn<this>.GetComObjPtr()->GetResultPos(@<str>.GetText(),@<index>,@<x>,@<y>)
+    }
+
+    方法 StrStr <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 s <类型 = 文本型 注释 = "_bstr_t s">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    {
+        @ @sn<this>.GetComObjPtr()->StrStr(@<s>.GetText(),@<str>.GetText())
+    }
+
+    方法 SendCommand <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 cmd <类型 = 文本型 注释 = "_bstr_t cmd">
+    {
+        @ @sn<this>.GetComObjPtr()->SendCommand(@<cmd>.GetText())
+    }
+
+    方法 UseDict <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 index <类型 = 整数 注释 = "long index">
+    {
+        @ @sn<this>.GetComObjPtr()->UseDict(@<index>)
+    }
+
+    方法 GetBasePath <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetBasePath())
+    }
+
+    方法 SetDictPwd <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 pwd <类型 = 文本型 注释 = "_bstr_t pwd">
+    {
+        @ @sn<this>.GetComObjPtr()->SetDictPwd(@<pwd>.GetText())
+    }
+
+    方法 OcrInFile <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 pic_name <类型 = 文本型 注释 = "_bstr_t pic_name">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->OcrInFile(@<x1>,@<y1>,@<x2>,@<y2>,@<pic_name>.GetText(),@<color>.GetText(),@<sim>))
+    }
+
+    方法 Capture <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    {
+        @ @sn<this>.GetComObjPtr()->Capture(@<x1>,@<y1>,@<x2>,@<y2>,@<file>.GetText())
+    }
+
+    方法 KeyPress <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 vk <类型 = 整数 注释 = "long vk">
+    {
+        @ @sn<this>.GetComObjPtr()->KeyPress(@<vk>)
+    }
+
+    方法 KeyDown <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 vk <类型 = 整数 注释 = "long vk">
+    {
+        @ @sn<this>.GetComObjPtr()->KeyDown(@<vk>)
+    }
+
+    方法 KeyUp <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 vk <类型 = 整数 注释 = "long vk">
+    {
+        @ @sn<this>.GetComObjPtr()->KeyUp(@<vk>)
+    }
+
+    方法 LeftClick <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->LeftClick()
+    }
+
+    方法 RightClick <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->RightClick()
+    }
+
+    方法 MiddleClick <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->MiddleClick()
+    }
+
+    方法 LeftDoubleClick <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->LeftDoubleClick()
+    }
+
+    方法 LeftDown <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->LeftDown()
+    }
+
+    方法 LeftUp <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->LeftUp()
+    }
+
+    方法 RightDown <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->RightDown()
+    }
+
+    方法 RightUp <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->RightUp()
+    }
+
+    方法 MoveTo <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    {
+        @ @sn<this>.GetComObjPtr()->MoveTo(@<x>,@<y>)
+    }
+
+    方法 MoveR <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 rx <类型 = 整数 注释 = "long rx">
+    参数 ry <类型 = 整数 注释 = "long ry">
+    {
+        @ @sn<this>.GetComObjPtr()->MoveR(@<rx>,@<ry>)
+    }
+
+    方法 GetColor <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetColor(@<x>,@<y>))
+    }
+
+    方法 GetColorBGR <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetColorBGR(@<x>,@<y>))
+    }
+
+    方法 RGB2BGR <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 rgb_color <类型 = 文本型 注释 = "_bstr_t rgb_color">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->RGB2BGR(@<rgb_color>.GetText()))
+    }
+
+    方法 BGR2RGB <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 bgr_color <类型 = 文本型 注释 = "_bstr_t bgr_color">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->BGR2RGB(@<bgr_color>.GetText()))
+    }
+
+    方法 UnBindWindow <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->UnBindWindow()
+    }
+
+    方法 CmpColor <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    {
+        @ @sn<this>.GetComObjPtr()->CmpColor(@<x>,@<y>,@<color>.GetText(),@<sim>)
+    }
+
+    方法 "//ClientToScreen" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ @sn<this>.GetComObjPtr()->ClientToScreen(@<hwnd>,@<x>,@<y>)
+    }
+
+    方法 "//ScreenToClient" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ @sn<this>.GetComObjPtr()->ScreenToClient(@<hwnd>,@<x>,@<y>)
+    }
+
+    方法 ShowScrMsg <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 msg <类型 = 文本型 注释 = "_bstr_t msg">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    {
+        @ @sn<this>.GetComObjPtr()->ShowScrMsg(@<x1>,@<y1>,@<x2>,@<y2>,@<msg>.GetText(),@<color>.GetText())
+    }
+
+    方法 SetMinRowGap <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 row_gap <类型 = 整数 注释 = "long row_gap">
+    {
+        @ @sn<this>.GetComObjPtr()->SetMinRowGap(@<row_gap>)
+    }
+
+    方法 SetMinColGap <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 col_gap <类型 = 整数 注释 = "long col_gap">
+    {
+        @ @sn<this>.GetComObjPtr()->SetMinColGap(@<col_gap>)
+    }
+
+    方法 "//FindColor" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ @sn<this>.GetComObjPtr()->FindColor(@<x1>,@<y1>,@<x2>,@<y2>,@<color>.GetText(),@<sim>,@<dir>,@<x>,@<y>)
+    }
+
+    方法 FindColorEx <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindColorEx(@<x1>,@<y1>,@<x2>,@<y2>,@<color>.GetText(),@<sim>,@<dir>))
+    }
+
+    方法 SetWordLineHeight <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 line_height <类型 = 整数 注释 = "long line_height">
+    {
+        @ @sn<this>.GetComObjPtr()->SetWordLineHeight(@<line_height>)
+    }
+
+    方法 SetWordGap <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 word_gap <类型 = 整数 注释 = "long word_gap">
+    {
+        @ @sn<this>.GetComObjPtr()->SetWordGap(@<word_gap>)
+    }
+
+    方法 SetRowGapNoDict <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 row_gap <类型 = 整数 注释 = "long row_gap">
+    {
+        @ @sn<this>.GetComObjPtr()->SetRowGapNoDict(@<row_gap>)
+    }
+
+    方法 SetColGapNoDict <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 col_gap <类型 = 整数 注释 = "long col_gap">
+    {
+        @ @sn<this>.GetComObjPtr()->SetColGapNoDict(@<col_gap>)
+    }
+
+    方法 SetWordLineHeightNoDict <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 line_height <类型 = 整数 注释 = "long line_height">
+    {
+        @ @sn<this>.GetComObjPtr()->SetWordLineHeightNoDict(@<line_height>)
+    }
+
+    方法 SetWordGapNoDict <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 word_gap <类型 = 整数 注释 = "long word_gap">
+    {
+        @ @sn<this>.GetComObjPtr()->SetWordGapNoDict(@<word_gap>)
+    }
+
+    方法 GetWordResultCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    {
+        @ @sn<this>.GetComObjPtr()->GetWordResultCount(@<str>.GetText())
+    }
+
+    方法 "//GetWordResultPos" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 index <类型 = 整数 注释 = "long index">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ @sn<this>.GetComObjPtr()->GetWordResultPos(@<str>.GetText(),@<index>,@<x>,@<y>)
+    }
+
+    方法 GetWordResultStr <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 index <类型 = 整数 注释 = "long index">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetWordResultStr(@<str>.GetText(),@<index>))
+    }
+
+    方法 GetWords <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetWords(@<x1>,@<y1>,@<x2>,@<y2>,@<color>.GetText(),@<sim>))
+    }
+
+    方法 GetWordsNoDict <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetWordsNoDict(@<x1>,@<y1>,@<x2>,@<y2>,@<color>.GetText()))
+    }
+
+    方法 SetShowErrorMsg <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 show <类型 = 整数 注释 = "long show">
+    {
+        @ @sn<this>.GetComObjPtr()->SetShowErrorMsg(@<show>)
+    }
+
+    方法 "//GetClientSize" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 width <注释 = "VARIANT * width">
+    参数 height <注释 = "VARIANT * height">
+    {
+        @ @sn<this>.GetComObjPtr()->GetClientSize(@<hwnd>,@<width>,@<height>)
+    }
+
+    方法 MoveWindow <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    {
+        @ @sn<this>.GetComObjPtr()->MoveWindow(@<hwnd>,@<x>,@<y>)
+    }
+
+    方法 GetColorHSV <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetColorHSV(@<x>,@<y>))
+    }
+
+    方法 GetAveRGB <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetAveRGB(@<x1>,@<y1>,@<x2>,@<y2>))
+    }
+
+    方法 GetAveHSV <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetAveHSV(@<x1>,@<y1>,@<x2>,@<y2>))
+    }
+
+    方法 GetForegroundWindow <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetForegroundWindow()
+    }
+
+    方法 GetForegroundFocus <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetForegroundFocus()
+    }
+
+    方法 GetMousePointWindow <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetMousePointWindow()
+    }
+
+    方法 GetPointWindow <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    {
+        @ @sn<this>.GetComObjPtr()->GetPointWindow(@<x>,@<y>)
+    }
+
+    方法 EnumWindow <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 parent <类型 = 整数 注释 = "long parent">
+    参数 title <类型 = 文本型 注释 = "_bstr_t title">
+    参数 class_name <类型 = 文本型 注释 = "_bstr_t class_name">
+    参数 filter <类型 = 整数 注释 = "long filter">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->EnumWindow(@<parent>,@<title>.GetText(),@<class_name>.GetText(),@<filter>))
+    }
+
+    方法 GetWindowState <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 flag <类型 = 整数 注释 = "long flag">
+    {
+        @ @sn<this>.GetComObjPtr()->GetWindowState(@<hwnd>,@<flag>)
+    }
+
+    方法 GetWindow <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 flag <类型 = 整数 注释 = "long flag">
+    {
+        @ @sn<this>.GetComObjPtr()->GetWindow(@<hwnd>,@<flag>)
+    }
+
+    方法 GetSpecialWindow <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 flag <类型 = 整数 注释 = "long flag">
+    {
+        @ @sn<this>.GetComObjPtr()->GetSpecialWindow(@<flag>)
+    }
+
+    方法 SetWindowText <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 text <类型 = 文本型 注释 = "_bstr_t text">
+    {
+        @ @sn<this>.GetComObjPtr()->SetWindowText(@<hwnd>,@<text>.GetText())
+    }
+
+    方法 SetWindowSize <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 width <类型 = 整数 注释 = "long width">
+    参数 height <类型 = 整数 注释 = "long height">
+    {
+        @ @sn<this>.GetComObjPtr()->SetWindowSize(@<hwnd>,@<width>,@<height>)
+    }
+
+    方法 "//GetWindowRect" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 x1 <注释 = "VARIANT * x1">
+    参数 y1 <注释 = "VARIANT * y1">
+    参数 x2 <注释 = "VARIANT * x2">
+    参数 y2 <注释 = "VARIANT * y2">
+    {
+        @ @sn<this>.GetComObjPtr()->GetWindowRect(@<hwnd>,@<x1>,@<y1>,@<x2>,@<y2>)
+    }
+
+    方法 GetWindowTitle <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetWindowTitle(@<hwnd>))
+    }
+
+    方法 GetWindowClass <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetWindowClass(@<hwnd>))
+    }
+
+    方法 SetWindowState <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 flag <类型 = 整数 注释 = "long flag">
+    {
+        @ @sn<this>.GetComObjPtr()->SetWindowState(@<hwnd>,@<flag>)
+    }
+
+    方法 CreateFoobarRect <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    参数 w <类型 = 整数 注释 = "long w">
+    参数 h <类型 = 整数 注释 = "long h">
+    {
+        @ @sn<this>.GetComObjPtr()->CreateFoobarRect(@<hwnd>,@<x>,@<y>,@<w>,@<h>)
+    }
+
+    方法 CreateFoobarRoundRect <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    参数 w <类型 = 整数 注释 = "long w">
+    参数 h <类型 = 整数 注释 = "long h">
+    参数 rw <类型 = 整数 注释 = "long rw">
+    参数 rh <类型 = 整数 注释 = "long rh">
+    {
+        @ @sn<this>.GetComObjPtr()->CreateFoobarRoundRect(@<hwnd>,@<x>,@<y>,@<w>,@<h>,@<rw>,@<rh>)
+    }
+
+    方法 CreateFoobarEllipse <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    参数 w <类型 = 整数 注释 = "long w">
+    参数 h <类型 = 整数 注释 = "long h">
+    {
+        @ @sn<this>.GetComObjPtr()->CreateFoobarEllipse(@<hwnd>,@<x>,@<y>,@<w>,@<h>)
+    }
+
+    方法 CreateFoobarCustom <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    参数 pic <类型 = 文本型 注释 = "_bstr_t pic">
+    参数 trans_color <类型 = 文本型 注释 = "_bstr_t trans_color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    {
+        @ @sn<this>.GetComObjPtr()->CreateFoobarCustom(@<hwnd>,@<x>,@<y>,@<pic>.GetText(),@<trans_color>.GetText(),@<sim>)
+    }
+
+    方法 FoobarFillRect <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    {
+        @ @sn<this>.GetComObjPtr()->FoobarFillRect(@<hwnd>,@<x1>,@<y1>,@<x2>,@<y2>,@<color>.GetText())
+    }
+
+    方法 FoobarDrawText <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    参数 w <类型 = 整数 注释 = "long w">
+    参数 h <类型 = 整数 注释 = "long h">
+    参数 text <类型 = 文本型 注释 = "_bstr_t text">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 align <类型 = 整数 注释 = "long align">
+    {
+        @ @sn<this>.GetComObjPtr()->FoobarDrawText(@<hwnd>,@<x>,@<y>,@<w>,@<h>,@<text>.GetText(),@<color>.GetText(),@<align>)
+    }
+
+    方法 FoobarDrawPic <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    参数 pic <类型 = 文本型 注释 = "_bstr_t pic">
+    参数 trans_color <类型 = 文本型 注释 = "_bstr_t trans_color">
+    {
+        @ @sn<this>.GetComObjPtr()->FoobarDrawPic(@<hwnd>,@<x>,@<y>,@<pic>.GetText(),@<trans_color>.GetText())
+    }
+
+    方法 FoobarUpdate <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    {
+        @ @sn<this>.GetComObjPtr()->FoobarUpdate(@<hwnd>)
+    }
+
+    方法 FoobarLock <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    {
+        @ @sn<this>.GetComObjPtr()->FoobarLock(@<hwnd>)
+    }
+
+    方法 FoobarUnlock <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    {
+        @ @sn<this>.GetComObjPtr()->FoobarUnlock(@<hwnd>)
+    }
+
+    方法 FoobarSetFont <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 font_name <类型 = 文本型 注释 = "_bstr_t font_name">
+    参数 size <类型 = 整数 注释 = "long size">
+    参数 flag <类型 = 整数 注释 = "long flag">
+    {
+        @ @sn<this>.GetComObjPtr()->FoobarSetFont(@<hwnd>,@<font_name>.GetText(),@<size>,@<flag>)
+    }
+
+    方法 FoobarTextRect <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    参数 w <类型 = 整数 注释 = "long w">
+    参数 h <类型 = 整数 注释 = "long h">
+    {
+        @ @sn<this>.GetComObjPtr()->FoobarTextRect(@<hwnd>,@<x>,@<y>,@<w>,@<h>)
+    }
+
+    方法 FoobarPrintText <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 text <类型 = 文本型 注释 = "_bstr_t text">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    {
+        @ @sn<this>.GetComObjPtr()->FoobarPrintText(@<hwnd>,@<text>.GetText(),@<color>.GetText())
+    }
+
+    方法 FoobarClearText <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    {
+        @ @sn<this>.GetComObjPtr()->FoobarClearText(@<hwnd>)
+    }
+
+    方法 FoobarTextLineGap <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 gap <类型 = 整数 注释 = "long gap">
+    {
+        @ @sn<this>.GetComObjPtr()->FoobarTextLineGap(@<hwnd>,@<gap>)
+    }
+
+    方法 Play <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    {
+        @ @sn<this>.GetComObjPtr()->Play(@<file>.GetText())
+    }
+
+    方法 FaqCapture <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 quality <类型 = 整数 注释 = "long quality">
+    参数 delay <类型 = 整数 注释 = "long delay">
+    参数 time <类型 = 整数 注释 = "long time">
+    {
+        @ @sn<this>.GetComObjPtr()->FaqCapture(@<x1>,@<y1>,@<x2>,@<y2>,@<quality>,@<delay>,@<time>)
+    }
+
+    方法 FaqRelease <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 handle <类型 = 整数 注释 = "long handle">
+    {
+        @ @sn<this>.GetComObjPtr()->FaqRelease(@<handle>)
+    }
+
+    方法 FaqSend <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 server <类型 = 文本型 注释 = "_bstr_t server">
+    参数 handle <类型 = 整数 注释 = "long handle">
+    参数 request_type <类型 = 整数 注释 = "long request_type">
+    参数 time_out <类型 = 整数 注释 = "long time_out">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FaqSend(@<server>.GetText(),@<handle>,@<request_type>,@<time_out>))
+    }
+
+    方法 Beep <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 fre <类型 = 整数 注释 = "long fre">
+    参数 delay <类型 = 整数 注释 = "long delay">
+    {
+        @ @sn<this>.GetComObjPtr()->Beep(@<fre>,@<delay>)
+    }
+
+    方法 FoobarClose <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    {
+        @ @sn<this>.GetComObjPtr()->FoobarClose(@<hwnd>)
+    }
+
+    方法 MoveDD <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 dx <类型 = 整数 注释 = "long dx">
+    参数 dy <类型 = 整数 注释 = "long dy">
+    {
+        @ @sn<this>.GetComObjPtr()->MoveDD(@<dx>,@<dy>)
+    }
+
+    方法 FaqGetSize <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 handle <类型 = 整数 注释 = "long handle">
+    {
+        @ @sn<this>.GetComObjPtr()->FaqGetSize(@<handle>)
+    }
+
+    方法 LoadPic <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 pic_name <类型 = 文本型 注释 = "_bstr_t pic_name">
+    {
+        @ @sn<this>.GetComObjPtr()->LoadPic(@<pic_name>.GetText())
+    }
+
+    方法 FreePic <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 pic_name <类型 = 文本型 注释 = "_bstr_t pic_name">
+    {
+        @ @sn<this>.GetComObjPtr()->FreePic(@<pic_name>.GetText())
+    }
+
+    方法 GetScreenData <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    {
+        @ @sn<this>.GetComObjPtr()->GetScreenData(@<x1>,@<y1>,@<x2>,@<y2>)
+    }
+
+    方法 FreeScreenData <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 handle <类型 = 整数 注释 = "long handle">
+    {
+        @ @sn<this>.GetComObjPtr()->FreeScreenData(@<handle>)
+    }
+
+    方法 WheelUp <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->WheelUp()
+    }
+
+    方法 WheelDown <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->WheelDown()
+    }
+
+    方法 SetMouseDelay <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 type <类型 = 文本型 注释 = "_bstr_t type">
+    参数 delay <类型 = 整数 注释 = "long delay">
+    {
+        @ @sn<this>.GetComObjPtr()->SetMouseDelay(@<type>.GetText(),@<delay>)
+    }
+
+    方法 SetKeypadDelay <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 type <类型 = 文本型 注释 = "_bstr_t type">
+    参数 delay <类型 = 整数 注释 = "long delay">
+    {
+        @ @sn<this>.GetComObjPtr()->SetKeypadDelay(@<type>.GetText(),@<delay>)
+    }
+
+    方法 GetEnv <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 index <类型 = 整数 注释 = "long index">
+    参数 name <类型 = 文本型 注释 = "_bstr_t name">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetEnv(@<index>,@<name>.GetText()))
+    }
+
+    方法 SetEnv <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 index <类型 = 整数 注释 = "long index">
+    参数 name <类型 = 文本型 注释 = "_bstr_t name">
+    参数 value <类型 = 文本型 注释 = "_bstr_t value">
+    {
+        @ @sn<this>.GetComObjPtr()->SetEnv(@<index>,@<name>.GetText(),@<value>.GetText())
+    }
+
+    方法 SendString <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    {
+        @ @sn<this>.GetComObjPtr()->SendString(@<hwnd>,@<str>.GetText())
+    }
+
+    方法 DelEnv <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 index <类型 = 整数 注释 = "long index">
+    参数 name <类型 = 文本型 注释 = "_bstr_t name">
+    {
+        @ @sn<this>.GetComObjPtr()->DelEnv(@<index>,@<name>.GetText())
+    }
+
+    方法 GetPath <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetPath())
+    }
+
+    方法 SetDict <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 index <类型 = 整数 注释 = "long index">
+    参数 dict_name <类型 = 文本型 注释 = "_bstr_t dict_name">
+    {
+        @ @sn<this>.GetComObjPtr()->SetDict(@<index>,@<dict_name>.GetText())
+    }
+
+    方法 "//FindPic" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 pic_name <类型 = 文本型 注释 = "_bstr_t pic_name">
+    参数 delta_color <类型 = 文本型 注释 = "_bstr_t delta_color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ @sn<this>.GetComObjPtr()->FindPic(@<x1>,@<y1>,@<x2>,@<y2>,@<pic_name>.GetText(),@<delta_color>.GetText(),@<sim>,@<dir>,@<x>,@<y>)
+    }
+
+    方法 FindPicEx <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 pic_name <类型 = 文本型 注释 = "_bstr_t pic_name">
+    参数 delta_color <类型 = 文本型 注释 = "_bstr_t delta_color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindPicEx(@<x1>,@<y1>,@<x2>,@<y2>,@<pic_name>.GetText(),@<delta_color>.GetText(),@<sim>,@<dir>))
+    }
+
+    方法 SetClientSize <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 width <类型 = 整数 注释 = "long width">
+    参数 height <类型 = 整数 注释 = "long height">
+    {
+        @ @sn<this>.GetComObjPtr()->SetClientSize(@<hwnd>,@<width>,@<height>)
+    }
+
+    方法 ReadInt <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr <类型 = 文本型 注释 = "_bstr_t addr">
+    参数 type <类型 = 整数 注释 = "long type">
+    {
+        @ @sn<this>.GetComObjPtr()->ReadInt(@<hwnd>,@<addr>.GetText(),@<type>)
+    }
+
+    方法 ReadFloat <公开 类型 = 小数 返回值注释 = "float" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr <类型 = 文本型 注释 = "_bstr_t addr">
+    {
+        @ @sn<this>.GetComObjPtr()->ReadFloat(@<hwnd>,@<addr>.GetText())
+    }
+
+    方法 ReadDouble <公开 类型 = 小数 返回值注释 = "double" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr <类型 = 文本型 注释 = "_bstr_t addr">
+    {
+        @ @sn<this>.GetComObjPtr()->ReadDouble(@<hwnd>,@<addr>.GetText())
+    }
+
+    方法 FindInt <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr_range <类型 = 文本型 注释 = "_bstr_t addr_range">
+    参数 int_value_min <类型 = 整数 注释 = "long int_value_min">
+    参数 int_value_max <类型 = 整数 注释 = "long int_value_max">
+    参数 type <类型 = 整数 注释 = "long type">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindInt(@<hwnd>,@<addr_range>.GetText(),@<int_value_min>,@<int_value_max>,@<type>))
+    }
+
+    方法 FindFloat <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr_range <类型 = 文本型 注释 = "_bstr_t addr_range">
+    参数 float_value_min <类型 = 小数 注释 = "float float_value_min">
+    参数 float_value_max <类型 = 小数 注释 = "float float_value_max">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindFloat(@<hwnd>,@<addr_range>.GetText(),(float)@<float_value_min>,(float)@<float_value_max>))
+    }
+
+    方法 FindDouble <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr_range <类型 = 文本型 注释 = "_bstr_t addr_range">
+    参数 double_value_min <类型 = 小数 注释 = "double double_value_min">
+    参数 double_value_max <类型 = 小数 注释 = "double double_value_max">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindDouble(@<hwnd>,@<addr_range>.GetText(),@<double_value_min>,@<double_value_max>))
+    }
+
+    方法 FindString <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr_range <类型 = 文本型 注释 = "_bstr_t addr_range">
+    参数 string_value <类型 = 文本型 注释 = "_bstr_t string_value">
+    参数 type <类型 = 整数 注释 = "long type">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindString(@<hwnd>,@<addr_range>.GetText(),@<string_value>.GetText(),@<type>))
+    }
+
+    方法 GetModuleBaseAddr <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 module_name <类型 = 文本型 注释 = "_bstr_t module_name">
+    {
+        @ @sn<this>.GetComObjPtr()->GetModuleBaseAddr(@<hwnd>,@<module_name>.GetText())
+    }
+
+    方法 MoveToEx <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    参数 w <类型 = 整数 注释 = "long w">
+    参数 h <类型 = 整数 注释 = "long h">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->MoveToEx(@<x>,@<y>,@<w>,@<h>))
+    }
+
+    方法 MatchPicName <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 pic_name <类型 = 文本型 注释 = "_bstr_t pic_name">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->MatchPicName(@<pic_name>.GetText()))
+    }
+
+    方法 AddDict <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 index <类型 = 整数 注释 = "long index">
+    参数 dict_info <类型 = 文本型 注释 = "_bstr_t dict_info">
+    {
+        @ @sn<this>.GetComObjPtr()->AddDict(@<index>,@<dict_info>.GetText())
+    }
+
+    方法 EnterCri <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->EnterCri()
+    }
+
+    方法 LeaveCri <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->LeaveCri()
+    }
+
+    方法 WriteInt <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr <类型 = 文本型 注释 = "_bstr_t addr">
+    参数 type <类型 = 整数 注释 = "long type">
+    参数 v <类型 = 整数 注释 = "long v">
+    {
+        @ @sn<this>.GetComObjPtr()->WriteInt(@<hwnd>,@<addr>.GetText(),@<type>,@<v>)
+    }
+
+    方法 WriteFloat <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr <类型 = 文本型 注释 = "_bstr_t addr">
+    参数 v <类型 = 小数 注释 = "float v">
+    {
+        @ @sn<this>.GetComObjPtr()->WriteFloat(@<hwnd>,@<addr>.GetText(),(float)@<v>)
+    }
+
+    方法 WriteDouble <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr <类型 = 文本型 注释 = "_bstr_t addr">
+    参数 v <类型 = 小数 注释 = "double v">
+    {
+        @ @sn<this>.GetComObjPtr()->WriteDouble(@<hwnd>,@<addr>.GetText(),@<v>)
+    }
+
+    方法 WriteString <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr <类型 = 文本型 注释 = "_bstr_t addr">
+    参数 type <类型 = 整数 注释 = "long type">
+    参数 v <类型 = 文本型 注释 = "_bstr_t v">
+    {
+        @ @sn<this>.GetComObjPtr()->WriteString(@<hwnd>,@<addr>.GetText(),@<type>,@<v>.GetText())
+    }
+
+    方法 AsmAdd <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 asm_ins <类型 = 文本型 注释 = "_bstr_t asm_ins">
+    {
+        @ @sn<this>.GetComObjPtr()->AsmAdd(@<asm_ins>.GetText())
+    }
+
+    方法 AsmClear <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->AsmClear()
+    }
+
+    方法 AsmCall <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 mode <类型 = 整数 注释 = "long mode">
+    {
+        @ @sn<this>.GetComObjPtr()->AsmCall(@<hwnd>,@<mode>)
+    }
+
+    方法 "//FindMultiColor" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 first_color <类型 = 文本型 注释 = "_bstr_t first_color">
+    参数 offset_color <类型 = 文本型 注释 = "_bstr_t offset_color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ @sn<this>.GetComObjPtr()->FindMultiColor(@<x1>,@<y1>,@<x2>,@<y2>,@<first_color>.GetText(),@<offset_color>.GetText(),@<sim>,@<dir>,@<x>,@<y>)
+    }
+
+    方法 FindMultiColorEx <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 first_color <类型 = 文本型 注释 = "_bstr_t first_color">
+    参数 offset_color <类型 = 文本型 注释 = "_bstr_t offset_color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindMultiColorEx(@<x1>,@<y1>,@<x2>,@<y2>,@<first_color>.GetText(),@<offset_color>.GetText(),@<sim>,@<dir>))
+    }
+
+    方法 AsmCode <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 base_addr <类型 = 整数 注释 = "long base_addr">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->AsmCode(@<base_addr>))
+    }
+
+    方法 Assemble <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 basm_code <类型 = 文本型 注释 = "_bstr_t asm_code">
+    参数 ase_addr <类型 = 整数 注释 = "long base_addr">
+    参数 is_upper <类型 = 整数 注释 = "long is_upper">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->Assemble(@<basm_code>.GetText(),@<ase_addr>,@<is_upper>))
+    }
+
+    方法 SetWindowTransparent <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 v <类型 = 整数 注释 = "long v">
+    {
+        @ @sn<this>.GetComObjPtr()->SetWindowTransparent(@<hwnd>,@<v>)
+    }
+
+    方法 ReadData <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr <类型 = 文本型 注释 = "_bstr_t addr">
+    参数 len <类型 = 整数 注释 = "long len">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->ReadData(@<hwnd>,@<addr>.GetText(),@<len>))
+    }
+
+    方法 WriteData <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr <类型 = 文本型 注释 = "_bstr_t addr">
+    参数 data <类型 = 文本型 注释 = "_bstr_t data">
+    {
+        @ @sn<this>.GetComObjPtr()->WriteData(@<hwnd>,@<addr>.GetText(),@<data>.GetText())
+    }
+
+    方法 FindData <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr_range <类型 = 文本型 注释 = "_bstr_t addr_range">
+    参数 data <类型 = 文本型 注释 = "_bstr_t data">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindData(@<hwnd>,@<addr_range>.GetText(),@<data>.GetText()))
+    }
+
+    方法 SetPicPwd <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 pwd <类型 = 文本型 注释 = "_bstr_t pwd">
+    {
+        @ @sn<this>.GetComObjPtr()->SetPicPwd(@<pwd>.GetText())
+    }
+
+    方法 Log <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 info <类型 = 文本型 注释 = "_bstr_t info">
+    {
+        @ @sn<this>.GetComObjPtr()->Log(@<info>.GetText())
+    }
+
+    方法 FindStrE <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindStrE(@<x1>,@<y1>,@<x2>,@<y2>,@<str>.GetText(),@<color>.GetText(),@<sim>))
+    }
+
+    方法 FindColorE <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindColorE(@<x1>,@<y1>,@<x2>,@<y2>,@<color>.GetText(),@<sim>,@<dir>))
+    }
+
+    方法 FindPicE <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 pic_name <类型 = 文本型 注释 = "_bstr_t pic_name">
+    参数 delta_color <类型 = 文本型 注释 = "_bstr_t delta_color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindPicE(@<x1>,@<y1>,@<x2>,@<y2>,@<pic_name>.GetText(),@<delta_color>.GetText(),@<sim>,@<dir>))
+    }
+
+    方法 FindMultiColorE <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 first_color <类型 = 文本型 注释 = "_bstr_t first_color">
+    参数 offset_color <类型 = 文本型 注释 = "_bstr_t offset_color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindMultiColorE(@<x1>,@<y1>,@<x2>,@<y2>,@<first_color>.GetText(),@<offset_color>.GetText(),@<sim>,@<dir>))
+    }
+
+    方法 SetExactOcr <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 exact_ocr <类型 = 整数 注释 = "long exact_ocr">
+    {
+        @ @sn<this>.GetComObjPtr()->SetExactOcr(@<exact_ocr>)
+    }
+
+    方法 ReadString <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr <类型 = 文本型 注释 = "_bstr_t addr">
+    参数 type <类型 = 整数 注释 = "long type">
+    参数 len <类型 = 整数 注释 = "long len">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->ReadString(@<hwnd>,@<addr>.GetText(),@<type>,@<len>))
+    }
+
+    方法 FoobarTextPrintDir <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    {
+        @ @sn<this>.GetComObjPtr()->FoobarTextPrintDir(@<hwnd>,@<dir>)
+    }
+
+    方法 OcrEx <类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->OcrEx(@<x1>,@<y1>,@<x2>,@<y2>,@<color>.GetText(),@<sim>))
+    }
+
+    方法 SetDisplayInput <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 mode <类型 = 文本型 注释 = "_bstr_t mode">
+    {
+        @ @sn<this>.GetComObjPtr()->SetDisplayInput(@<mode>.GetText())
+    }
+
+    方法 GetTime <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetTime()
+    }
+
+    方法 GetScreenWidth <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetScreenWidth()
+    }
+
+    方法 GetScreenHeight <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetScreenHeight()
+    }
+
+    方法 BindWindowEx <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 display <类型 = 文本型 注释 = "_bstr_t display">
+    参数 mouse <类型 = 文本型 注释 = "_bstr_t mouse">
+    参数 keypad <类型 = 文本型 注释 = "_bstr_t keypad">
+    参数 public_desc <类型 = 文本型 注释 = "_bstr_t public_desc">
+    参数 mode <类型 = 整数 注释 = "long mode">
+    {
+        @ @sn<this>.GetComObjPtr()->BindWindowEx(@<hwnd>,@<display>.GetText(),@<mouse>.GetText(),@<keypad>.GetText(),@<public_desc>.GetText(),@<mode>)
+    }
+
+    方法 GetDiskSerial <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetDiskSerial())
+    }
+
+    方法 Md5 <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->Md5(@<str>.GetText()))
+    }
+
+    方法 GetMac <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetMac())
+    }
+
+    方法 ActiveInputMethod <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 id <类型 = 文本型 注释 = "_bstr_t id">
+    {
+        @ @sn<this>.GetComObjPtr()->ActiveInputMethod(@<hwnd>,@<id>.GetText())
+    }
+
+    方法 CheckInputMethod <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 id <类型 = 文本型 注释 = "_bstr_t id">
+    {
+        @ @sn<this>.GetComObjPtr()->CheckInputMethod(@<hwnd>,@<id>.GetText())
+    }
+
+    方法 FindInputMethod <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 id <类型 = 文本型 注释 = "_bstr_t id">
+    {
+        @ @sn<this>.GetComObjPtr()->FindInputMethod(@<id>.GetText())
+    }
+
+    方法 "//GetCursorPos" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ @sn<this>.GetComObjPtr()->GetCursorPos(@<x>,@<y>)
+    }
+
+    方法 BindWindow <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 display <类型 = 文本型 注释 = "_bstr_t display">
+    参数 mouse <类型 = 文本型 注释 = "_bstr_t mouse">
+    参数 keypad <类型 = 文本型 注释 = "_bstr_t keypad">
+    参数 mode <类型 = 整数 注释 = "long mode">
+    {
+        @ @sn<this>.GetComObjPtr()->BindWindow(@<hwnd>,@<display>.GetText(),@<mouse>.GetText(),@<keypad>.GetText(),@<mode>)
+    }
+
+    方法 FindWindow <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 class_name <类型 = 文本型 注释 = "_bstr_t class_name">
+    参数 title_name <类型 = 文本型 注释 = "_bstr_t title_name">
+    {
+        @ @sn<this>.GetComObjPtr()->FindWindow(@<class_name>.GetText(),@<title_name>.GetText())
+    }
+
+    方法 GetScreenDepth <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetScreenDepth()
+    }
+
+    方法 SetScreen <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 width <类型 = 整数 注释 = "long width">
+    参数 height <类型 = 整数 注释 = "long height">
+    参数 depth <类型 = 整数 注释 = "long depth">
+    {
+        @ @sn<this>.GetComObjPtr()->SetScreen(@<width>,@<height>,@<depth>)
+    }
+
+    方法 ExitOs <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 type <类型 = 整数 注释 = "long type">
+    {
+        @ @sn<this>.GetComObjPtr()->ExitOs(@<type>)
+    }
+
+    方法 GetDir <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 type <类型 = 整数 注释 = "long type">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetDir(@<type>))
+    }
+
+    方法 GetOsType <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetOsType()
+    }
+
+    方法 FindWindowEx <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 parent <类型 = 整数 注释 = "long parent">
+    参数 class_name <类型 = 文本型 注释 = "_bstr_t class_name">
+    参数 title_name <类型 = 文本型 注释 = "_bstr_t title_name">
+    {
+        @ @sn<this>.GetComObjPtr()->FindWindowEx(@<parent>,@<class_name>.GetText(),@<title_name>.GetText())
+    }
+
+    方法 SetExportDict <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 index <类型 = 整数 注释 = "long index">
+    参数 dict_name <类型 = 文本型 注释 = "_bstr_t dict_name">
+    {
+        @ @sn<this>.GetComObjPtr()->SetExportDict(@<index>,@<dict_name>.GetText())
+    }
+
+    方法 GetCursorShape <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetCursorShape())
+    }
+
+    方法 DownCpu <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 rate <类型 = 整数 注释 = "long rate">
+    {
+        @ @sn<this>.GetComObjPtr()->DownCpu(@<rate>)
+    }
+
+    方法 GetCursorSpot <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetCursorSpot())
+    }
+
+    方法 SendString2 <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    {
+        @ @sn<this>.GetComObjPtr()->SendString2(@<hwnd>,@<str>.GetText())
+    }
+
+    方法 FaqPost <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 server <类型 = 文本型 注释 = "_bstr_t server">
+    参数 handle <类型 = 整数 注释 = "long handle">
+    参数 request_type <类型 = 整数 注释 = "long request_type">
+    参数 time_out <类型 = 整数 注释 = "long time_out">
+    {
+        @ @sn<this>.GetComObjPtr()->FaqPost(@<server>.GetText(),@<handle>,@<request_type>,@<time_out>)
+    }
+
+    方法 FaqFetch <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FaqFetch())
+    }
+
+    方法 FetchWord <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 word <类型 = 文本型 注释 = "_bstr_t word">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FetchWord(@<x1>,@<y1>,@<x2>,@<y2>,@<color>.GetText(),@<word>.GetText()))
+    }
+
+    方法 CaptureJpg <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    参数 quality <类型 = 整数 注释 = "long quality">
+    {
+        @ @sn<this>.GetComObjPtr()->CaptureJpg(@<x1>,@<y1>,@<x2>,@<y2>,@<file>.GetText(),@<quality>)
+    }
+
+    方法 "//FindStrWithFont" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 font_name <类型 = 文本型 注释 = "_bstr_t font_name">
+    参数 font_size <类型 = 整数 注释 = "long font_size">
+    参数 flag <类型 = 整数 注释 = "long flag">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ @sn<this>.GetComObjPtr()->FindStrWithFont(@<x1>,@<y1>,@<x2>,@<y2>,@<str>.GetText(),@<color>.GetText(),@<sim>,@<font_name>.GetText(),@<font_size>,@<flag>,@<x>,@<y>)
+    }
+
+    方法 FindStrWithFontE <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 font_name <类型 = 文本型 注释 = "_bstr_t font_name">
+    参数 font_size <类型 = 整数 注释 = "long font_size">
+    参数 flag <类型 = 整数 注释 = "long flag">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindStrWithFontE(@<x1>,@<y1>,@<x2>,@<y2>,@<str>.GetText(),@<color>.GetText(),@<sim>,@<font_name>.GetText(),@<font_size>,@<flag>))
+    }
+
+    方法 FindStrWithFontEx <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 font_name <类型 = 文本型 注释 = "_bstr_t font_name">
+    参数 font_size <类型 = 整数 注释 = "long font_size">
+    参数 flag <类型 = 整数 注释 = "long flag">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindStrWithFontEx(@<x1>,@<y1>,@<x2>,@<y2>,@<str>.GetText(),@<color>.GetText(),@<sim>,@<font_name>.GetText(),@<font_size>,@<flag>))
+    }
+
+    方法 GetDictInfo <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 font_name <类型 = 文本型 注释 = "_bstr_t font_name">
+    参数 font_size <类型 = 整数 注释 = "long font_size">
+    参数 flag <类型 = 整数 注释 = "long flag">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetDictInfo(@<str>.GetText(),@<font_name>.GetText(),@<font_size>,@<flag>))
+    }
+
+    方法 SaveDict <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 index <类型 = 整数 注释 = "long index">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    {
+        @ @sn<this>.GetComObjPtr()->SaveDict(@<index>,@<file>.GetText())
+    }
+
+    方法 GetWindowProcessId <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    {
+        @ @sn<this>.GetComObjPtr()->GetWindowProcessId(@<hwnd>)
+    }
+
+    方法 GetWindowProcessPath <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetWindowProcessPath(@<hwnd>))
+    }
+
+    方法 LockInput <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 lock <类型 = 整数 注释 = "long lock">
+    {
+        @ @sn<this>.GetComObjPtr()->LockInput(@<lock>)
+    }
+
+    方法 GetPicSize <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 pic_name <类型 = 文本型 注释 = "_bstr_t pic_name">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetPicSize(@<pic_name>.GetText()))
+    }
+
+    方法 GetID <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetID()
+    }
+
+    方法 CapturePng <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    {
+        @ @sn<this>.GetComObjPtr()->CapturePng(@<x1>,@<y1>,@<x2>,@<y2>,@<file>.GetText())
+    }
+
+    方法 CaptureGif <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    参数 delay <类型 = 整数 注释 = "long delay">
+    参数 time <类型 = 整数 注释 = "long time">
+    {
+        @ @sn<this>.GetComObjPtr()->CaptureGif(@<x1>,@<y1>,@<x2>,@<y2>,@<file>.GetText(),@<delay>,@<time>)
+    }
+
+    方法 ImageToBmp <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 pic_name <类型 = 文本型 注释 = "_bstr_t pic_name">
+    {
+        @ @sn<this>.GetComObjPtr()->ImageToBmp(@<pic_name>.GetText(),@<pic_name>.GetText())
+    }
+
+    方法 "//FindStrFast" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ @sn<this>.GetComObjPtr()->FindStrFast(@<x1>,@<y1>,@<x2>,@<y2>,@<str>.GetText(),@<color>.GetText(),@<sim>,@<x>,@<y>)
+    }
+
+    方法 FindStrFastEx <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindStrFastEx(@<x1>,@<y1>,@<x2>,@<y2>,@<str>.GetText(),@<color>.GetText(),@<sim>))
+    }
+
+    方法 FindStrFastE <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindStrFastE(@<x1>,@<y1>,@<x2>,@<y2>,@<str>.GetText(),@<color>.GetText(),@<sim>))
+    }
+
+    方法 EnableDisplayDebug <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 enable_debug <类型 = 整数 注释 = "long enable_debug">
+    {
+        @ @sn<this>.GetComObjPtr()->EnableDisplayDebug(@<enable_debug>)
+    }
+
+    方法 CapturePre <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    {
+        @ @sn<this>.GetComObjPtr()->CapturePre(@<file>.GetText())
+    }
+
+    方法 RegEx <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 code <类型 = 文本型 注释 = "_bstr_t code">
+    参数 Ver <类型 = 文本型 注释 = "_bstr_t Ver">
+    参数 ip <类型 = 文本型 注释 = "_bstr_t ip">
+    {
+        @ @sn<this>.GetComObjPtr()->RegEx(@<code>.GetText(),@<Ver>.GetText(),@<ip>.GetText())
+    }
+
+    方法 GetMachineCode <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetMachineCode())
+    }
+
+    方法 SetClipboard <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 data <类型 = 文本型 注释 = "_bstr_t data">
+    {
+        @ @sn<this>.GetComObjPtr()->SetClipboard(@<data>.GetText())
+    }
+
+    方法 GetClipboard <类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetClipboard())
+    }
+
+    方法 GetNowDict <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetNowDict()
+    }
+
+    方法 Is64Bit <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Is64Bit()
+    }
+
+    方法 GetColorNum <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    {
+        @ @sn<this>.GetComObjPtr()->GetColorNum(@<x1>,@<y1>,@<x2>,@<y2>,@<color>.GetText(),@<sim>)
+    }
+
+    方法 EnumWindowByProcess <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 process_name <类型 = 文本型 注释 = "_bstr_t process_name">
+    参数 title <类型 = 文本型 注释 = "_bstr_t title">
+    参数 class_name <类型 = 文本型 注释 = "_bstr_t class_name">
+    参数 filter <类型 = 整数 注释 = "long filter">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->EnumWindowByProcess(@<process_name>.GetText(),@<title>.GetText(),@<class_name>.GetText(),@<filter>))
+    }
+
+    方法 GetDictCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 index <类型 = 整数 注释 = "long index">
+    {
+        @ @sn<this>.GetComObjPtr()->GetDictCount(@<index>)
+    }
+
+    方法 GetLastError <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetLastError()
+    }
+
+    方法 GetNetTime <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetNetTime())
+    }
+
+    方法 EnableGetColorByCapture <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 en <类型 = 整数 注释 = "long en">
+    {
+        @ @sn<this>.GetComObjPtr()->EnableGetColorByCapture(@<en>)
+    }
+
+    方法 CheckUAC <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->CheckUAC()
+    }
+
+    方法 SetUAC <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 uac <类型 = 整数 注释 = "long uac">
+    {
+        @ @sn<this>.GetComObjPtr()->SetUAC(@<uac>)
+    }
+
+    方法 DisableFontSmooth <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->DisableFontSmooth()
+    }
+
+    方法 CheckFontSmooth <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->CheckFontSmooth()
+    }
+
+    方法 SetDisplayAcceler <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 level <类型 = 整数 注释 = "long level">
+    {
+        @ @sn<this>.GetComObjPtr()->SetDisplayAcceler(@<level>)
+    }
+
+    方法 FindWindowByProcess <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 process_name <类型 = 文本型 注释 = "_bstr_t process_name">
+    参数 class_name <类型 = 文本型 注释 = "_bstr_t class_name">
+    参数 title_name <类型 = 文本型 注释 = "_bstr_t title_name">
+    {
+        @ @sn<this>.GetComObjPtr()->FindWindowByProcess(@<process_name>.GetText(),@<class_name>.GetText(),@<title_name>.GetText())
+    }
+
+    方法 FindWindowByProcessId <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 process_id <类型 = 整数 注释 = "long process_id">
+    参数 class_name <类型 = 文本型 注释 = "_bstr_t class_name">
+    参数 title_name <类型 = 文本型 注释 = "_bstr_t title_name">
+    {
+        @ @sn<this>.GetComObjPtr()->FindWindowByProcessId(@<process_id>,@<class_name>.GetText(),@<title_name>.GetText())
+    }
+
+    方法 ReadIni <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 section <类型 = 文本型 注释 = "_bstr_t section">
+    参数 key <类型 = 文本型 注释 = "_bstr_t key">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->ReadIni(@<section>.GetText(),@<key>.GetText(),@<file>.GetText()))
+    }
+
+    方法 WriteIni <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 section <类型 = 文本型 注释 = "_bstr_t section">
+    参数 key <类型 = 文本型 注释 = "_bstr_t key">
+    参数 v <类型 = 文本型 注释 = "_bstr_t v">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    {
+        @ @sn<this>.GetComObjPtr()->WriteIni(@<section>.GetText(),@<key>.GetText(),@<v>.GetText(),@<file>.GetText())
+    }
+
+    方法 RunApp <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 path <类型 = 文本型 注释 = "_bstr_t path">
+    参数 mode <类型 = 整数 注释 = "long mode">
+    {
+        @ @sn<this>.GetComObjPtr()->RunApp(@<path>.GetText(),@<mode>)
+    }
+
+    方法 delay <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 mis <类型 = 整数 注释 = "long mis">
+    {
+        @ @sn<this>.GetComObjPtr()->delay(@<mis>)
+    }
+
+    方法 FindWindowSuper <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 spec1 <类型 = 文本型 注释 = "_bstr_t spec1">
+    参数 flag1 <类型 = 整数 注释 = "long flag1">
+    参数 type1 <类型 = 整数 注释 = "long type1">
+    参数 spec2 <类型 = 文本型 注释 = "_bstr_t spec2">
+    参数 flag2 <类型 = 整数 注释 = "long flag2">
+    参数 type2 <类型 = 整数 注释 = "long type2">
+    {
+        @ @sn<this>.GetComObjPtr()->FindWindowSuper(@<spec1>.GetText(),@<flag1>,@<type1>,@<spec2>.GetText(),@<flag2>,@<type2>)
+    }
+
+    方法 ExcludePos <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 all_pos <类型 = 文本型 注释 = "_bstr_t all_pos">
+    参数 type <类型 = 整数 注释 = "long type">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->ExcludePos(@<all_pos>.GetText(),@<type>,@<x1>,@<y1>,@<x2>,@<y2>))
+    }
+
+    方法 FindNearestPos <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 all_pos <类型 = 文本型 注释 = "_bstr_t all_pos">
+    参数 type <类型 = 整数 注释 = "long type">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindNearestPos(@<all_pos>.GetText(),@<type>,@<x>,@<y>))
+    }
+
+    方法 SortPosDistance <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 all_pos <类型 = 文本型 注释 = "_bstr_t all_pos">
+    参数 type <类型 = 整数 注释 = "long type">
+    参数 x <类型 = 整数 注释 = "long x">
+    参数 y <类型 = 整数 注释 = "long y">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->SortPosDistance(@<all_pos>.GetText(),@<type>,@<x>,@<y>))
+    }
+
+    方法 "//FindPicMem" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 pic_info <类型 = 文本型 注释 = "_bstr_t pic_info">
+    参数 delta_color <类型 = 文本型 注释 = "_bstr_t delta_color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ @sn<this>.GetComObjPtr()->FindPicMem(@<x1>,@<y1>,@<x2>,@<y2>,@<pic_info>.GetText(),@<delta_color>.GetText(),@<sim>,@<dir>,@<x>,@<y>)
+    }
+
+    方法 FindPicMemEx <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 pic_info <类型 = 文本型 注释 = "_bstr_t pic_info">
+    参数 delta_color <类型 = 文本型 注释 = "_bstr_t delta_color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindPicMemEx(@<x1>,@<y1>,@<x2>,@<y2>,@<pic_info>.GetText(),@<delta_color>.GetText(),@<sim>,@<dir>))
+    }
+
+    方法 FindPicMemE <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 pic_info <类型 = 文本型 注释 = "_bstr_t pic_info">
+    参数 delta_color <类型 = 文本型 注释 = "_bstr_t delta_color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindPicMemE(@<x1>,@<y1>,@<x2>,@<y2>,@<pic_info>.GetText(),@<delta_color>.GetText(),@<sim>,@<dir>))
+    }
+
+    方法 AppendPicAddr <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 pic_info <类型 = 文本型 注释 = "_bstr_t pic_info">
+    参数 addr <类型 = 整数 注释 = "long addr">
+    参数 size <类型 = 整数 注释 = "long size">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->AppendPicAddr(@<pic_info>.GetText(),@<addr>,@<size>))
+    }
+
+    方法 WriteFile <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    参数 content <类型 = 文本型 注释 = "_bstr_t content">
+    {
+        @ @sn<this>.GetComObjPtr()->WriteFile(@<file>.GetText(),@<content>.GetText())
+    }
+
+    方法 Stop <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 id <类型 = 整数 注释 = "long id">
+    {
+        @ @sn<this>.GetComObjPtr()->Stop(@<id>)
+    }
+
+    方法 SetDictMem <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 index <类型 = 整数 注释 = "long index">
+    参数 addr <类型 = 整数 注释 = "long addr">
+    参数 size <类型 = 整数 注释 = "long size">
+    {
+        @ @sn<this>.GetComObjPtr()->SetDictMem(@<index>,@<addr>,@<size>)
+    }
+
+    方法 GetNetTimeSafe <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetNetTimeSafe())
+    }
+
+    方法 ForceUnBindWindow <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    {
+        @ @sn<this>.GetComObjPtr()->ForceUnBindWindow(@<hwnd>)
+    }
+
+    方法 ReadIniPwd <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 section <类型 = 文本型 注释 = "_bstr_t section">
+    参数 key <类型 = 文本型 注释 = "_bstr_t key">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    参数 pwd <类型 = 文本型 注释 = "_bstr_t pwd">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->ReadIniPwd(@<section>.GetText(),@<key>.GetText(),@<file>.GetText(),@<pwd>.GetText()))
+    }
+
+    方法 WriteIniPwd <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 section <类型 = 文本型 注释 = "_bstr_t section">
+    参数 key <类型 = 文本型 注释 = "_bstr_t key">
+    参数 v <类型 = 文本型 注释 = "_bstr_t v">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    参数 pwd <类型 = 文本型 注释 = "_bstr_t pwd">
+    {
+        @ @sn<this>.GetComObjPtr()->WriteIniPwd(@<section>.GetText(),@<key>.GetText(),@<v>.GetText(),@<file>.GetText(),@<pwd>.GetText())
+    }
+
+    方法 DecodeFile <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    参数 pwd <类型 = 文本型 注释 = "_bstr_t pwd">
+    {
+        @ @sn<this>.GetComObjPtr()->DecodeFile(@<file>.GetText(),@<pwd>.GetText())
+    }
+
+    方法 KeyDownChar <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 key_str <类型 = 文本型 注释 = "_bstr_t key_str">
+    {
+        @ @sn<this>.GetComObjPtr()->KeyDownChar(@<key_str>.GetText())
+    }
+
+    方法 KeyUpChar <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 key_str <类型 = 文本型 注释 = "_bstr_t key_str">
+    {
+        @ @sn<this>.GetComObjPtr()->KeyUpChar(@<key_str>.GetText())
+    }
+
+    方法 KeyPressChar <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 key_str <类型 = 文本型 注释 = "_bstr_t key_str">
+    {
+        @ @sn<this>.GetComObjPtr()->KeyPressChar(@<key_str>.GetText())
+    }
+
+    方法 KeyPressStr <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 key_str <类型 = 文本型 注释 = "_bstr_t key_str">
+    参数 delay <类型 = 整数 注释 = "long delay">
+    {
+        @ @sn<this>.GetComObjPtr()->KeyPressStr(@<key_str>.GetText(),@<delay>)
+    }
+
+    方法 EnableKeypadPatch <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 en <类型 = 整数 注释 = "long en">
+    {
+        @ @sn<this>.GetComObjPtr()->EnableKeypadPatch(@<en>)
+    }
+
+    方法 EnableKeypadSync <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 en <类型 = 整数 注释 = "long en">
+    参数 time_out <类型 = 整数 注释 = "long time_out">
+    {
+        @ @sn<this>.GetComObjPtr()->EnableKeypadSync(@<en>,@<time_out>)
+    }
+
+    方法 EnableMouseSync <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 en <类型 = 整数 注释 = "long en">
+    参数 time_out <类型 = 整数 注释 = "long time_out">
+    {
+        @ @sn<this>.GetComObjPtr()->EnableMouseSync(@<en>,@<time_out>)
+    }
+
+    方法 DmGuard <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 en <类型 = 整数 注释 = "long en">
+    参数 type <类型 = 文本型 注释 = "_bstr_t type">
+    {
+        @ @sn<this>.GetComObjPtr()->DmGuard(@<en>,@<type>.GetText())
+    }
+
+    方法 FaqCaptureFromFile <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    参数 quality <类型 = 整数 注释 = "long quality">
+    {
+        @ @sn<this>.GetComObjPtr()->FaqCaptureFromFile(@<x1>,@<y1>,@<x2>,@<y2>,@<file>.GetText(),@<quality>)
+    }
+
+    方法 FindIntEx <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr_range <类型 = 文本型 注释 = "_bstr_t addr_range">
+    参数 int_value_min <类型 = 整数 注释 = "long int_value_min">
+    参数 int_value_max <类型 = 整数 注释 = "long int_value_max">
+    参数 type <类型 = 整数 注释 = "long type">
+    参数 step <类型 = 整数 注释 = "long step">
+    参数 multi_thread <类型 = 整数 注释 = "long multi_thread">
+    参数 mode <类型 = 整数 注释 = "long mode">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindIntEx(@<hwnd>,@<addr_range>.GetText(),@<int_value_min>,@<int_value_max>,@<type>,@<step>,@<multi_thread>,@<mode>))
+    }
+
+    方法 FindFloatEx <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr_range <类型 = 文本型 注释 = "_bstr_t addr_range">
+    参数 float_value_min <类型 = 小数 注释 = "float float_value_min">
+    参数 float_value_max <类型 = 小数 注释 = "float float_value_max">
+    参数 step <类型 = 整数 注释 = "long step">
+    参数 multi_thread <类型 = 整数 注释 = "long multi_thread">
+    参数 mode <类型 = 整数 注释 = "long mode">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindFloatEx(@<hwnd>,@<addr_range>.GetText(),(float)@<float_value_min>,(float)@<float_value_max>,@<step>,@<multi_thread>,@<mode>))
+    }
+
+    方法 FindDoubleEx <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr_range <类型 = 文本型 注释 = "_bstr_t addr_range">
+    参数 double_value_min <类型 = 小数 注释 = "double double_value_min">
+    参数 double_value_max <类型 = 小数 注释 = "double double_value_max">
+    参数 step <类型 = 整数 注释 = "long step">
+    参数 multi_thread <类型 = 整数 注释 = "long multi_thread">
+    参数 mode <类型 = 整数 注释 = "long mode">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindDoubleEx(@<hwnd>,@<addr_range>.GetText(),@<double_value_min>,@<double_value_max>,@<step>,@<multi_thread>,@<mode>))
+    }
+
+    方法 FindStringEx <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr_range <类型 = 文本型 注释 = "_bstr_t addr_range">
+    参数 string_value <类型 = 文本型 注释 = "_bstr_t string_value">
+    参数 type <类型 = 整数 注释 = "long type">
+    参数 step <类型 = 整数 注释 = "long step">
+    参数 multi_thread <类型 = 整数 注释 = "long multi_thread">
+    参数 mode <类型 = 整数 注释 = "long mode">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindStringEx(@<hwnd>,@<addr_range>.GetText(),@<string_value>.GetText(),@<type>,@<step>,@<multi_thread>,@<mode>))
+    }
+
+    方法 FindDataEx <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 addr_range <类型 = 文本型 注释 = "_bstr_t addr_range">
+    参数 data <类型 = 文本型 注释 = "_bstr_t data">
+    参数 step <类型 = 整数 注释 = "long step">
+    参数 multi_thread <类型 = 整数 注释 = "long multi_thread">
+    参数 mode <类型 = 整数 注释 = "long mode">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindDataEx(@<hwnd>,@<addr_range>.GetText(),@<data>.GetText(),@<step>,@<multi_thread>,@<mode>))
+    }
+
+    方法 EnableRealMouse <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 en <类型 = 整数 注释 = "long en">
+    参数 mousedelay <类型 = 整数 注释 = "long mousedelay">
+    参数 mousestep <类型 = 整数 注释 = "long mousestep">
+    {
+        @ @sn<this>.GetComObjPtr()->EnableRealMouse(@<en>,@<mousedelay>,@<mousestep>)
+    }
+
+    方法 EnableRealKeypad <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 en <类型 = 整数 注释 = "long en">
+    {
+        @ @sn<this>.GetComObjPtr()->EnableRealKeypad(@<en>)
+    }
+
+    方法 SendStringIme <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    {
+        @ @sn<this>.GetComObjPtr()->SendStringIme(@<str>.GetText())
+    }
+
+    方法 FoobarDrawLine <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 style <类型 = 整数 注释 = "long style">
+    参数 width <类型 = 整数 注释 = "long width">
+    {
+        @ @sn<this>.GetComObjPtr()->FoobarDrawLine(@<hwnd>,@<x1>,@<y1>,@<x2>,@<y2>,@<color>.GetText(),@<style>,@<width>)
+    }
+
+    方法 FindStrEx <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindStrEx(@<x1>,@<y1>,@<x2>,@<y2>,@<str>.GetText(),@<color>.GetText(),@<sim>))
+    }
+
+    方法 IsBind <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    {
+        @ @sn<this>.GetComObjPtr()->IsBind(@<hwnd>)
+    }
+
+    方法 SetDisplayDelay <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 t <类型 = 整数 注释 = "long t">
+    {
+        @ @sn<this>.GetComObjPtr()->SetDisplayDelay(@<t>)
+    }
+
+    方法 GetDmCount <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->GetDmCount()
+    }
+
+    方法 DisableScreenSave <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->DisableScreenSave()
+    }
+
+    方法 DisablePowerSave <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->DisablePowerSave()
+    }
+
+    方法 SetMemoryHwndAsProcessId <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 en <类型 = 整数 注释 = "long en">
+    {
+        @ @sn<this>.GetComObjPtr()->SetMemoryHwndAsProcessId(@<en>)
+    }
+
+    方法 "//FindShape" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 offset_color <类型 = 文本型 注释 = "_bstr_t offset_color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ @sn<this>.GetComObjPtr()->FindShape(@<x1>,@<y1>,@<x2>,@<y2>,@<offset_color>.GetText(),@<sim>,@<dir>,@<x>,@<y>)
+    }
+
+    方法 FindShapeE <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 offset_color <类型 = 文本型 注释 = "_bstr_t offset_color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindShapeE(@<x1>,@<y1>,@<x2>,@<y2>,@<offset_color>.GetText(),@<sim>,@<dir>))
+    }
+
+    方法 FindShapeEx <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 offset_color <类型 = 文本型 注释 = "_bstr_t offset_color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindShapeEx(@<x1>,@<y1>,@<x2>,@<y2>,@<offset_color>.GetText(),@<sim>,@<dir>))
+    }
+
+    方法 "//FindStrS" <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindStrS(@<x1>,@<y1>,@<x2>,@<y2>,@<str>.GetText(),@<color>.GetText(),@<sim>,@<x>,@<y>))
+    }
+
+    方法 FindStrExS <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindStrExS(@<x1>,@<y1>,@<x2>,@<y2>,@<str>.GetText(),@<color>.GetText(),@<sim>))
+    }
+
+    方法 "//FindStrFastS" <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindStrFastS(@<x1>,@<y1>,@<x2>,@<y2>,@<str>.GetText(),@<color>.GetText(),@<sim>,@<x>,@<y>))
+    }
+
+    方法 FindStrFastExS <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 str <类型 = 文本型 注释 = "_bstr_t str">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindStrFastExS(@<x1>,@<y1>,@<x2>,@<y2>,@<str>.GetText(),@<color>.GetText(),@<sim>))
+    }
+
+    方法 "//FindPicS" <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 pic_name <类型 = 文本型 注释 = "_bstr_t pic_name">
+    参数 delta_color <类型 = 文本型 注释 = "_bstr_t delta_color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    参数 x <注释 = "VARIANT * x">
+    参数 y <注释 = "VARIANT * y">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindPicS(@<x1>,@<y1>,@<x2>,@<y2>,@<pic_name>.GetText(),@<delta_color>.GetText(),@<sim>,@<dir>,@<x>,@<y>))
+    }
+
+    方法 FindPicExS <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 pic_name <类型 = 文本型 注释 = "_bstr_t pic_name">
+    参数 delta_color <类型 = 文本型 注释 = "_bstr_t delta_color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    参数 dir <类型 = 整数 注释 = "long dir">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FindPicExS(@<x1>,@<y1>,@<x2>,@<y2>,@<pic_name>.GetText(),@<delta_color>.GetText(),@<sim>,@<dir>))
+    }
+
+    方法 ClearDict <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 index <类型 = 整数 注释 = "long index">
+    {
+        @ @sn<this>.GetComObjPtr()->ClearDict(@<index>)
+    }
+
+    方法 GetMachineCodeNoMac <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetMachineCodeNoMac())
+    }
+
+    方法 "//GetClientRect" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 x1 <注释 = "VARIANT * x1">
+    参数 y1 <注释 = "VARIANT * y1">
+    参数 x2 <注释 = "VARIANT * x2">
+    参数 y2 <注释 = "VARIANT * y2">
+    {
+        @ @sn<this>.GetComObjPtr()->GetClientRect(@<hwnd>,@<x1>,@<y1>,@<x2>,@<y2>)
+    }
+
+    方法 EnableFakeActive <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 en <类型 = 整数 注释 = "long en">
+    {
+        @ @sn<this>.GetComObjPtr()->EnableFakeActive(@<en>)
+    }
+
+    方法 "//GetScreenDataBmp" <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 data <注释 = "VARIANT * data">
+    参数 size <注释 = "VARIANT * size">
+    {
+        @ @sn<this>.GetComObjPtr()->GetScreenDataBmp(@<x1>,@<y1>,@<x2>,@<y2>,@<data>,@<size>)
+    }
+
+    方法 EncodeFile <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    参数 pwd <类型 = 文本型 注释 = "_bstr_t pwd">
+    {
+        @ @sn<this>.GetComObjPtr()->EncodeFile(@<file>.GetText(),@<pwd>.GetText())
+    }
+
+    方法 GetCursorShapeEx <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 type <类型 = 整数 注释 = "long type">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetCursorShapeEx(@<type>))
+    }
+
+    方法 FaqCancel <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->FaqCancel()
+    }
+
+    方法 IntToData <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 int_value <类型 = 整数 注释 = "long int_value">
+    参数 type <类型 = 整数 注释 = "long type">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->IntToData(@<int_value>,@<type>))
+    }
+
+    方法 FloatToData <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 float_value <类型 = 小数 注释 = "float float_value">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->FloatToData((float)@<float_value>))
+    }
+
+    方法 DoubleToData <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 double_value <类型 = 小数 注释 = "double double_value">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->DoubleToData(@<double_value>))
+    }
+
+    方法 StringToData <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 string_value <类型 = 文本型 注释 = "_bstr_t string_value">
+    参数 type <类型 = 整数 注释 = "long type">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->StringToData(@<string_value>.GetText(),@<type>))
+    }
+
+    方法 SetMemoryFindResultToFile <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    {
+        @ @sn<this>.GetComObjPtr()->SetMemoryFindResultToFile(@<file>.GetText())
+    }
+
+    方法 EnableBind <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 en <类型 = 整数 注释 = "long en">
+    {
+        @ @sn<this>.GetComObjPtr()->EnableBind(@<en>)
+    }
+
+    方法 SetSimMode <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 mode <类型 = 整数 注释 = "long mode">
+    {
+        @ @sn<this>.GetComObjPtr()->SetSimMode(@<mode>)
+    }
+
+    方法 LockMouseRect <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    {
+        @ @sn<this>.GetComObjPtr()->LockMouseRect(@<x1>,@<y1>,@<x2>,@<y2>)
+    }
+
+    方法 SendPaste <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    {
+        @ @sn<this>.GetComObjPtr()->SendPaste(@<hwnd>)
+    }
+
+    方法 IsDisplayDead <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 t <类型 = 整数 注释 = "long t">
+    {
+        @ @sn<this>.GetComObjPtr()->IsDisplayDead(@<x1>,@<y1>,@<x2>,@<y2>,@<t>)
+    }
+
+    方法 GetKeyState <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 vk <类型 = 整数 注释 = "long vk">
+    {
+        @ @sn<this>.GetComObjPtr()->GetKeyState(@<vk>)
+    }
+
+    方法 CopyFile <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 src_file <类型 = 文本型 注释 = "_bstr_t src_file">
+    参数 dst_file <类型 = 文本型 注释 = "_bstr_t dst_file">
+    参数 over <类型 = 整数 注释 = "long over">
+    {
+        @ @sn<this>.GetComObjPtr()->CopyFile(@<src_file>.GetText(),@<dst_file>.GetText(),@<over>)
+    }
+
+    方法 IsFileExist <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    {
+        @ @sn<this>.GetComObjPtr()->IsFileExist(@<file>.GetText())
+    }
+
+    方法 DeleteFile <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    {
+        @ @sn<this>.GetComObjPtr()->DeleteFile(@<file>.GetText())
+    }
+
+    方法 MoveFile <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 src_file <类型 = 文本型 注释 = "_bstr_t src_file">
+    参数 dst_file <类型 = 文本型 注释 = "_bstr_t dst_file">
+    {
+        @ @sn<this>.GetComObjPtr()->MoveFile(@<src_file>.GetText(),@<dst_file>.GetText())
+    }
+
+    方法 CreateFolder <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 folder_name <类型 = 文本型 注释 = "_bstr_t folder_name">
+    {
+        @ @sn<this>.GetComObjPtr()->CreateFolder(@<folder_name>.GetText())
+    }
+
+    方法 DeleteFolder <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 folder_name <类型 = 文本型 注释 = "_bstr_t folder_name">
+    {
+        @ @sn<this>.GetComObjPtr()->DeleteFolder(@<folder_name>.GetText())
+    }
+
+    方法 GetFileLength <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    {
+        @ @sn<this>.GetComObjPtr()->GetFileLength(@<file>.GetText())
+    }
+
+    方法 ReadFile <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->ReadFile(@<file>.GetText()))
+    }
+
+    方法 WaitKey <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 key_code <类型 = 整数 注释 = "long key_code">
+    参数 time_out <类型 = 整数 注释 = "long time_out">
+    {
+        @ @sn<this>.GetComObjPtr()->WaitKey(@<key_code>,@<time_out>)
+    }
+
+    方法 DeleteIni <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 section <类型 = 文本型 注释 = "_bstr_t section">
+    参数 key <类型 = 文本型 注释 = "_bstr_t key">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    {
+        @ @sn<this>.GetComObjPtr()->DeleteIni(@<section>.GetText(),@<key>.GetText(),@<file>.GetText())
+    }
+
+    方法 DeleteIniPwd <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 section <类型 = 文本型 注释 = "_bstr_t section">
+    参数 key <类型 = 文本型 注释 = "_bstr_t key">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    参数 pwd <类型 = 文本型 注释 = "_bstr_t pwd">
+    {
+        @ @sn<this>.GetComObjPtr()->DeleteIniPwd(@<section>.GetText(),@<key>.GetText(),@<file>.GetText(),@<pwd>.GetText())
+    }
+
+    方法 EnableSpeedDx <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 en <类型 = 整数 注释 = "long en">
+    {
+        @ @sn<this>.GetComObjPtr()->EnableSpeedDx(@<en>)
+    }
+
+    方法 EnableIme <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 en <类型 = 整数 注释 = "long en">
+    {
+        @ @sn<this>.GetComObjPtr()->EnableIme(@<en>)
+    }
+
+    方法 Reg <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 code <类型 = 文本型 注释 = "_bstr_t code">
+    参数 Ver <类型 = 文本型 注释 = "_bstr_t Ver">
+    {
+        @ @sn<this>.GetComObjPtr()->Reg(@<code>.GetText(),@<Ver>.GetText())
+    }
+
+    方法 SelectFile <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->SelectFile())
+    }
+
+    方法 SelectDirectory <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->SelectDirectory())
+    }
+
+    方法 LockDisplay <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 lock <类型 = 整数 注释 = "long lock">
+    {
+        @ @sn<this>.GetComObjPtr()->LockDisplay(@<lock>)
+    }
+
+    方法 FoobarSetSave <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 hwnd <类型 = 整数 注释 = "long hwnd">
+    参数 file <类型 = 文本型 注释 = "_bstr_t file">
+    参数 en <类型 = 整数 注释 = "long en">
+    参数 header <类型 = 文本型 注释 = "_bstr_t header">
+    {
+        @ @sn<this>.GetComObjPtr()->FoobarSetSave(@<hwnd>,@<file>.GetText(),@<en>,@<header>.GetText())
+    }
+
+    方法 EnumWindowSuper <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 spec1 <类型 = 文本型 注释 = "_bstr_t spec1">
+    参数 flag1 <类型 = 整数 注释 = "long flag1">
+    参数 type1 <类型 = 整数 注释 = "long type1">
+    参数 spec2 <类型 = 文本型 注释 = "_bstr_t spec2">
+    参数 flag2 <类型 = 整数 注释 = "long flag2">
+    参数 type2 <类型 = 整数 注释 = "long type2">
+    参数 sort <类型 = 整数 注释 = "long sort">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->EnumWindowSuper(@<spec1>.GetText(),@<flag1>,@<type1>,@<spec2>.GetText(),@<flag2>,@<type2>,@<sort>))
+    }
+
+    方法 DownloadFile <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 url <类型 = 文本型 注释 = "_bstr_t url">
+    参数 save_file <类型 = 文本型 注释 = "_bstr_t save_file">
+    参数 timeout <类型 = 整数 注释 = "long timeout">
+    {
+        @ @sn<this>.GetComObjPtr()->DownloadFile(@<url>.GetText(),@<save_file>.GetText(),@<timeout>)
+    }
+
+    方法 EnableKeypadMsg <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 en <类型 = 整数 注释 = "long en">
+    {
+        @ @sn<this>.GetComObjPtr()->EnableKeypadMsg(@<en>)
+    }
+
+    方法 EnableMouseMsg <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 en <类型 = 整数 注释 = "long en">
+    {
+        @ @sn<this>.GetComObjPtr()->EnableMouseMsg(@<en>)
+    }
+
+    方法 RegNoMac <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 code <类型 = 文本型 注释 = "_bstr_t code">
+    参数 Ver <类型 = 文本型 注释 = "_bstr_t Ver">
+    {
+        @ @sn<this>.GetComObjPtr()->RegNoMac(@<code>.GetText(),@<Ver>.GetText())
+    }
+
+    方法 RegExNoMac <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 code <类型 = 文本型 注释 = "_bstr_t code">
+    参数 Ver <类型 = 文本型 注释 = "_bstr_t Ver">
+    参数 ip <类型 = 文本型 注释 = "_bstr_t ip">
+    {
+        @ @sn<this>.GetComObjPtr()->RegExNoMac(@<code>.GetText(),@<Ver>.GetText(),@<ip>.GetText())
+    }
+
+    方法 SetEnumWindowDelay <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 delay <类型 = 整数 注释 = "long delay">
+    {
+        @ @sn<this>.GetComObjPtr()->SetEnumWindowDelay(@<delay>)
+    }
+
+    方法 FindMulColor <公开 类型 = 整数 返回值注释 = "long" @嵌入式方法 = "">
+    参数 x1 <类型 = 整数 注释 = "long x1">
+    参数 y1 <类型 = 整数 注释 = "long y1">
+    参数 x2 <类型 = 整数 注释 = "long x2">
+    参数 y2 <类型 = 整数 注释 = "long y2">
+    参数 color <类型 = 文本型 注释 = "_bstr_t color">
+    参数 sim <类型 = 小数 注释 = "double sim">
+    {
+        @ @sn<this>.GetComObjPtr()->FindMulColor(@<x1>,@<y1>,@<x2>,@<y2>,@<color>.GetText(),@<sim>)
+    }
+
+    方法 GetDict <公开 类型 = 文本型 返回值注释 = "_bstr_t" @嵌入式方法 = "">
+    参数 index <类型 = 整数 注释 = "long index">
+    参数 font_index <类型 = 整数 注释 = "long font_index">
+    {
+        @ CVolString((const TCHAR*)@sn<this>.GetComObjPtr()->GetDict(@<index>,@<font_index>))
+    }
+
+    #
+}

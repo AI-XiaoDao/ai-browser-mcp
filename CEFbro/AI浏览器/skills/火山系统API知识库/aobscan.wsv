@@ -1,0 +1,63 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.字节集搜索\"" @视窗.外部头文件 = "aobscan\\aobscanTool.h"
+        @视窗.外部库.win32 = "aobscan\\aobscanToolx86.lib" @视窗.附属文件.win32 = "aobscan\\aobscanToolx86.dll"
+        @视窗.外部库.x64 = "aobscan\\aobscanToolx64.lib" @视窗.附属文件.x64 = "aobscan\\aobscanToolx64.dll">
+
+类 字节集搜索类 <公开 注释 = "支持通配符查找">
+{
+
+    # @begin
+    # <> <include>
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     aobTool_CopyConstruct(m_pData,objCopyFrom.m_pData);
+    # }
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void * pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ SetData( aobTool_new());
+    }
+
+    方法 类_清理
+    {
+        @ aobTool_delete(GetData());
+    }
+
+    方法 取成员数 <公开 类型 = 整数 注释 = "获得搜索的数量" @嵌入式方法 = "">
+    {
+        @ aobTool_GetCount(@sn<this>.GetData())
+    }
+
+    方法 取成员 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 索引 <类型 = 整数 注释 = "从0开始 到  成员数-1">
+    {
+        @ aobTool_GetStart( @sn<this>.GetData(),@<索引>)
+    }
+
+    方法 搜索指针 <公开 类型 = 整数 返回值注释 = "返回搜索到的数量" @嵌入式方法 = "">
+    参数 要所搜内存地址 <类型 = 变整数>
+    参数 要搜索的大小 <类型 = 整数>
+    参数 要搜索的内容 <类型 = 文本型 注释 = "支持通配符 类如 0304??0607">
+    {
+        @ aobTool_Search(GetData(),(void*)@<要所搜内存地址>,@<要搜索的大小>,(char*)GetMbsText(@<要搜索的内容>, CVolMem(), NULL))
+    }
+
+    方法 搜索字节集 <公开 类型 = 整数 返回值注释 = "返回搜索到的数量">
+    参数 被搜索的数据 <类型 = 字节集类>
+    参数 要搜索的内容 <类型 = 文本型 注释 = "支持通配符 类如 0304??0607">
+    {
+        返回 (搜索指针 (取字节集指针 (被搜索的数据), 取字节集长度 (被搜索的数据), 要搜索的内容))
+    }
+}

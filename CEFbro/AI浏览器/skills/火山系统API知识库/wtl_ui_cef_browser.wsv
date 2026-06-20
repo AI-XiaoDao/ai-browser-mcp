@@ -1,0 +1,1790 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.WTL界面.浏览器 <编辑时信息 = "192A91, 0, 0, 0">
+
+# @begin
+# @def_macro DECLARE_CEF_OBJECT_CLASS(cef_data_type)  \
+# <>     <include>  \
+#     CefRefPtr<cef_data_type> m_objCef;  \
+#     inline_ @sn<current_class> (CefRefPtr<cef_data_type> objCef) : @sn<current_class> ()  { m_objCef = objCef; }  \
+#     inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)  { m_objCef = objCopyFrom.m_objCef; }  \
+#     inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const  { return (m_objCef.get () == objCompare.m_objCef.get ()); }  \
+#     inline_ BOOL_P IsEmpty () const  { return (m_objCef.get () == NULL); }  \
+#     inline_ void Set (CefRefPtr<cef_data_type> objCef)  { m_objCef = objCef; }  \
+# <>     </include>
+# @end
+
+类 CEF字节集类 <公开 注释 = "用作在CEF中保存一段字节集数据">
+{
+
+    # @ @m<DECLARE_CEF_OBJECT_CLASS> (CefBinaryValue)
+
+    方法 创建 <公开 静态 类型 = CEF字节集类 注释 = "创建并返回一个本类对象实例" @禁止流程检查 = 真>
+    参数 欲复制数据 <类型 = 字节集类 注释 = "提供欲复制到本对象中的字节集数据">
+    {
+        @ return @sn<current_class> (CefBinaryValue::Create (@<欲复制数据>.GetPtr (), (size_t)@<欲复制数据>.GetSize ()));
+    }
+
+    方法 是否为空 <公开 类型 = 逻辑型 注释 = "返回本对象是否为空" @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () || m_objCef->IsValid () == false);
+    }
+
+    方法 复制 <公开 类型 = CEF字节集类 注释 = "建立并返回一个本对象的复制对象,该对象将复制本对象中的所有数据内容.">
+    {
+        变量 字节集1 <类型 = CEF字节集类>
+        @ if (IsEmpty () == FALSE && m_objCef->IsValid ())
+        @     @<字节集1>.Set (m_objCef->Copy ());
+        返回 (字节集1)
+    }
+
+    方法 取数据指针 <公开 类型 = 变整数 注释 = "返回本对象中数据的指针值,如不存在将返回0." @禁止流程检查 = 真>
+    {
+        @ return ((IsEmpty () || m_objCef->IsValid () == false) ? 0 : (INT_P)m_objCef->GetRawData ());
+    }
+
+    方法 取数据尺寸 <公开 类型 = 整数 注释 = "返回本对象中数据的尺寸" @禁止流程检查 = 真>
+    {
+        @ return ((IsEmpty () || m_objCef->IsValid () == false) ? 0 : (INT)m_objCef->GetSize ());
+    }
+
+    方法 取数据 <公开 注释 = "获取本对象中指定尺寸的数据">
+    参数 起始偏移 <类型 = 整数 注释 = "指定欲获取数据在本对象中的起始偏移位置,必须大于等于0." @默认值 = 0>
+    参数 欲获取数据尺寸 <类型 = 整数 注释 = "提供欲获取数据的尺寸,为-1表示获取起始偏移之后的所有数据." @默认值 = -1>
+    参数 保存到字节集 <类型 = 字节集类 注释 = "用作存储所获得的数据,必须大于等于0." @需求类型 = 可写入变量>
+    {
+        保存到字节集.清空字节集 ()
+        @ if (@<起始偏移> >= 0 && IsEmpty () == FALSE && m_objCef->IsValid ())
+        @ {
+        @     if (@<欲获取数据尺寸> < 0)
+        @         @<欲获取数据尺寸> = (INT)m_objCef->GetSize () - @<起始偏移>;
+        @     if (@<欲获取数据尺寸> > 0)
+        @     {
+        @         size_t stSize = m_objCef->GetData (@<保存到字节集>.Alloc (@<欲获取数据尺寸>), (size_t)@<欲获取数据尺寸>, (size_t)@<起始偏移>);
+        @         @<保存到字节集>.Realloc ((INT_P)stSize);
+        @     }
+        @ }
+    }
+}
+
+类 CEF颜色类型 <公开 注释 = "提供CEF颜色的具体类型" @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 RGBA8888 <公开 值 = @"@cef_color_type_t::CEF_COLOR_TYPE_RGBA_8888" 注释 = "32位像素格式,每个像素值使用4个字节保存,顺序为\"红/绿/蓝/透明度\"字节值."
+            注释 = "这是许多跨平台图形库和现代系统(如 macOS、iOS)中常见的格式.">
+    常量 BGRA8888 <公开 值 = @"@cef_color_type_t::CEF_COLOR_TYPE_BGRA_8888" 注释 = "32位像素格式,每个像素值使用4个字节保存,顺序为\"蓝/绿/红/透明度\"字节值.">
+}
+
+类 CEF透明度类型 <公开 注释 = "提供CEF透明度的具体类型" @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 不透明 <公开 值 = @"@cef_alpha_type_t::CEF_ALPHA_TYPE_OPAQUE" 注释 = "图像完全不透明，没有透明度。Alpha 通道（如果存在）将被忽略。整个图像被视为 100% 不透明。">
+    常量 预乘透明度 <公开 值 = @"@cef_alpha_type_t::CEF_ALPHA_TYPE_PREMULTIPLIED" 注释 = "像素的颜色分量（R, G, B）的值已经乘以了 Alpha (A) 值。"
+            注释 = "在存储时：R\' = R * A, G\' = G * A, B\' = B * A。" 注释 = "像素数据中存储的是 (R\', G\', B\', A)。">
+    常量 后乘透明度 <公开 值 = @"@cef_alpha_type_t::CEF_ALPHA_TYPE_POSTMULTIPLIED"
+            注释 = "颜色分量（R, G, B）和 Alpha 分量是独立存储的。颜色值是原始的，未经过 Alpha 缩放。" 注释 = "像素数据中直接存储原始颜色和透明度：(R, G, B, A)。"
+            注释 = "在渲染时，引擎需要先计算 R * A, G * A, B * A，然后再进行混合。" 注释 = "PNG 文件解码后的原始输出通常是这种格式。">
+}
+
+类 CEF图像 <公开 注释 = "对应CEF浏览器中处理的图像" "">
+{
+
+    # @ @m<DECLARE_CEF_OBJECT_CLASS> (CefImage)
+
+    方法 创建 <公开 静态 类型 = CEF图像 注释 = "创建并返回一个本类对象实例" @禁止流程检查 = 真>
+    {
+        @ return @sn<current_class> (CefImage::CreateImage ());
+    }
+
+    方法 是否为空 <公开 类型 = 逻辑型 注释 = "返回本对象是否为空" @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () || m_objCef->IsEmpty ());
+    }
+
+    方法 加入位图 <公开 类型 = 逻辑型 注释 = "将指定位图数据加入本对象中,返回是否成功." @禁止流程检查 = 真>
+    参数 图像宽度 <类型 = 整数 注释 = "指定\"图像数据\"参数中图像的实际宽度(单位像素)."
+            注释 = "注意: 这个尺寸是相对于\"设备缩放因子\"的。例如，设备缩放因子=2.0 且 图像宽度=32 意味着这个图像是为 2x 缩放设计的，其逻辑尺寸是 32 / 2.0 = 16。">
+    参数 图像高度 <类型 = 整数 注释 = "指定\"图像数据\"参数中图像的实际高度(单位像素).">
+    参数 图像数据 <类型 = 字节集类 注释 = "提供具体的图像数据,其格式及尺寸必须与本方法中的其它参数保持一致.">
+    参数 设备缩放因子 <类型 = 小数 注释 = "指定了这组像素数据所对应的设备缩放因子 (Device Scale Factor)。" 注释 = "作用: 允许一个本类对象存储同一图像的多个分辨率版本，以适应不同 DPI 的屏幕。"
+            注释 = "设备缩放因子 = 1.0: 对应 1x 分辨率 (标准 DPI)。" 注释 = "设备缩放因子 = 2.0: 对应 2x 分辨率 (如 Retina 屏幕)，图像尺寸是 1x 版本的两倍。"
+            注释 = "示例: 如果你想为一个逻辑尺寸为 16x16 的图标提供 1x 和 2x 支持：" 注释 = "调用 加入位图 (1.0, 16, 16, ...) 添加一个 16x16 的图像。"
+            注释 = "调用 加入位图 (2.0, 32, 32, ...) 添加一个 32x32 的高清版本。" 注释 = "CEF 会根据当前显示器的 DPI 自动选择最合适的版本。" @默认值 = 1.0>
+    参数 颜色类型 <类型 = CEF颜色类型 注释 = "指定\"图像数据\"参数中图像的颜色格式" @默认值 = CEF颜色类型.RGBA8888>
+    参数 透明度类型 <类型 = CEF透明度类型 注释 = "指定\"图像数据\"参数中图像的透明度格式" @默认值 = CEF透明度类型.不透明>
+    {
+        @ return (IsEmpty () ? FALSE : (BOOL)m_objCef->AddBitmap ((float)@<设备缩放因子>, @<图像宽度>, @<图像高度>, (cef_color_type_t)@<颜色类型>, (cef_alpha_type_t)@<透明度类型>, @<图像数据>.GetPtr (), (size_t)@<图像数据>.GetSize ()));
+    }
+
+    方法 加入PNG图像 <公开 类型 = 逻辑型 注释 = "将指定PNG格式图像数据加入本对象中,返回是否成功." @禁止流程检查 = 真>
+    参数 图像数据 <类型 = 字节集类 注释 = "提供具体的PNG格式图像数据">
+    参数 设备缩放因子 <类型 = 小数 注释 = "指定了这组像素数据所对应的设备缩放因子 (Device Scale Factor)." 注释 = "有关\"设备缩放因子\",参见\"加入位图\"方法的\"设备缩放因子\"参数解释."
+            @默认值 = 1.0>
+    {
+        @ return (IsEmpty () ? FALSE : (BOOL)m_objCef->AddPNG ((float)@<设备缩放因子>, @<图像数据>.GetPtr (), (size_t)@<图像数据>.GetSize ()));
+    }
+
+    方法 加入JPEG图像 <公开 类型 = 逻辑型 注释 = "将指定JPEG格式图像数据加入本对象中,返回是否成功." @禁止流程检查 = 真>
+    参数 图像数据 <类型 = 字节集类 注释 = "提供具体的JPEG格式图像数据">
+    参数 设备缩放因子 <类型 = 小数 注释 = "指定了这组像素数据所对应的设备缩放因子 (Device Scale Factor)." 注释 = "有关\"设备缩放因子\",参见\"加入位图\"方法的\"设备缩放因子\"参数解释."
+            @默认值 = 1.0>
+    {
+        @ return (IsEmpty () ? FALSE : (BOOL)m_objCef->AddJPEG ((float)@<设备缩放因子>, @<图像数据>.GetPtr (), (size_t)@<图像数据>.GetSize ()));
+    }
+
+    方法 宽度 <公开 属性读 类型 = 整数 注释 = "返回图像宽度" @禁止流程检查 = 真>
+    {
+        @ return (@<是否为空> () ? 0 : (INT)m_objCef->GetWidth ());
+    }
+
+    方法 高度 <公开 属性读 类型 = 整数 注释 = "返回图像高度" @禁止流程检查 = 真>
+    {
+        @ return (@<是否为空> () ? 0 : (INT)m_objCef->GetHeight ());
+    }
+
+    方法 是否有指定分辨率图像 <公开 类型 = 逻辑型 注释 = "返回本对象中是否已经为指定的设备缩放因子添加了图像数据."
+            注释 = "这是在处理高 DPI (HiDPI) 显示时非常重要的一个方法，因为它允许你在添加或使用图像数据之前，先查询其状态，避免重复添加或确保所需分辨率的数据已存在。" @禁止流程检查 = 真>
+    参数 设备缩放因子 <类型 = 小数 注释 = "提供所欲检查的设备缩放因子 (Device Scale Factor)." 注释 = "有关\"设备缩放因子\",参见\"加入位图\"方法的\"设备缩放因子\"参数解释.">
+    {
+        @ return (@<是否为空> () ? FALSE : (BOOL)m_objCef->HasRepresentation ((float)@<设备缩放因子>));
+    }
+
+    方法 删除指定分辨率图像 <公开 类型 = 逻辑型 注释 = "删除本对象中为指定的设备缩放因子所添加的图像数据,返回是否成功." @禁止流程检查 = 真>
+    参数 设备缩放因子 <类型 = 小数 注释 = "提供所欲处理的设备缩放因子 (Device Scale Factor)." 注释 = "有关\"设备缩放因子\",参见\"加入位图\"方法的\"设备缩放因子\"参数解释.">
+    {
+        @ return (@<是否为空> () ? FALSE : (BOOL)m_objCef->RemoveRepresentation ((float)@<设备缩放因子>));
+    }
+
+    方法 取指定分辨率信息 <公开 类型 = 逻辑型 注释 = "获取已添加到本对象中的匹配特定缩放因子表示的详细信息,返回是否成功." @禁止流程检查 = 真>
+    参数 期望缩放因子 <类型 = 小数 注释 = "指定希望匹配的设备缩放因子。" 注释 = "如: 1.0 (1x), 2.0 (2x HiDPI)。" 注释 = "作为查询的“提示”或“目标”。CEF 会尝试找到最接近这个值的已添加图像。">
+    参数 匹配缩放因子 <类型 = 小数类 注释 = "用作返回所实际匹配到的缩放因子."
+            注释 = "例如: 如果你请求 1.25 ，而图像只有 1.0 和 2.0 的表示，CEF 可以选择一个“最佳匹配”（例如 1.0），然后通过本参数告诉你：“你要 1.25，但我给了你 1.0 的版本”。" @需求类型 = 可写入变量>
+    参数 匹配图像宽度 <类型 = 整数类 注释 = "用作返回所实际匹配到图像的宽度(单位像素)." @需求类型 = 可写入变量>
+    参数 匹配图像高度 <类型 = 整数类 注释 = "用作返回所实际匹配到图像的高度(单位像素)." @需求类型 = 可写入变量>
+    {
+        @ if (@<是否为空> ())  return FALSE;
+        @ float actual_scale_factor = 1.0f;
+        @ if (m_objCef->GetRepresentationInfo ((float)@<期望缩放因子>, actual_scale_factor, @<匹配图像宽度.值>, @<匹配图像高度.值>) == false)  return FALSE;
+        @ @<匹配缩放因子.值> = (DOUBLE)actual_scale_factor;
+        @ return TRUE;
+    }
+
+    方法 取位图数据 <公开 类型 = CEF字节集类 注释 = "返回本对象中最匹配所要求分辨率的图像数据" 返回值注释 = "成功返回所获得的图像字节集,失败所返回对象的内容为空.">
+    参数 期望缩放因子 <类型 = 小数 注释 = "指定希望匹配的设备缩放因子。" 注释 = "如: 1.0 (1x), 2.0 (2x HiDPI)。" 注释 = "作为查询的“提示”或“目标”。CEF 会尝试找到最接近这个值的已添加图像。">
+    参数 期望颜色类型 <类型 = CEF颜色类型 注释 = "指定所期望输出的图像颜色格式" @默认值 = CEF颜色类型.RGBA8888>
+    参数 期望透明度类型 <类型 = CEF透明度类型 注释 = "指定所期望输出的图像透明度格式" @默认值 = CEF透明度类型.不透明>
+    参数 匹配图像宽度 <类型 = 整数类 注释 = "用作返回所实际匹配到图像的宽度(单位像素)." @需求类型 = 可写入变量>
+    参数 匹配图像高度 <类型 = 整数类 注释 = "用作返回所实际匹配到图像的高度(单位像素)." @需求类型 = 可写入变量>
+    {
+        变量 字节集1 <类型 = CEF字节集类>
+        如果 (是否为空 () == 假)
+        {
+            @ @<字节集1>.Set (m_objCef->GetAsBitmap ((float)@<期望缩放因子>, (cef_color_type_t)@<期望颜色类型>, (cef_alpha_type_t)@<期望透明度类型>, @<匹配图像宽度.值>, @<匹配图像高度.值>));
+        }
+        返回 (字节集1)
+    }
+
+    方法 取PNG位图数据 <公开 类型 = CEF字节集类 注释 = "返回本对象中最匹配所要求分辨率的PNG格式图像数据" 返回值注释 = "成功返回所获得的图像字节集,失败所返回对象的内容为空.">
+    参数 期望缩放因子 <类型 = 小数 注释 = "指定希望匹配的设备缩放因子。" 注释 = "如: 1.0 (1x), 2.0 (2x HiDPI)。" 注释 = "作为查询的“提示”或“目标”。CEF 会尝试找到最接近这个值的已添加图像。">
+    参数 是否包含透明度 <类型 = 逻辑型 注释 = "指定所输出的图像数据是否包含透明度通道值" @默认值 = 真>
+    参数 匹配图像宽度 <类型 = 整数类 注释 = "用作返回所实际匹配到图像的宽度(单位像素)." @需求类型 = 可写入变量>
+    参数 匹配图像高度 <类型 = 整数类 注释 = "用作返回所实际匹配到图像的高度(单位像素)." @需求类型 = 可写入变量>
+    {
+        变量 字节集1 <类型 = CEF字节集类>
+        如果 (是否为空 () == 假)
+        {
+            @ @<字节集1>.Set (m_objCef->GetAsPNG ((float)@<期望缩放因子>, (bool)@<是否包含透明度>, @<匹配图像宽度.值>, @<匹配图像高度.值>));
+        }
+        返回 (字节集1)
+    }
+
+    方法 取JPEG位图数据 <公开 类型 = CEF字节集类 注释 = "返回本对象中最匹配所要求分辨率的JPEG格式图像数据." 注释 = "注意: 由于JPEG格式不支持透明度,源位图中的透明度通道值将被抛弃."
+            返回值注释 = "成功返回所获得的图像字节集,失败所返回对象的内容为空.">
+    参数 期望缩放因子 <类型 = 小数 注释 = "指定希望匹配的设备缩放因子。" 注释 = "如: 1.0 (1x), 2.0 (2x HiDPI)。" 注释 = "作为查询的“提示”或“目标”。CEF 会尝试找到最接近这个值的已添加图像。">
+    参数 期望压缩级别 <类型 = 整数 注释 = "指定所输出JPEG图像数据的期望压缩级别,有效值从0(最低)到100(最高).">
+    参数 匹配图像宽度 <类型 = 整数类 注释 = "用作返回所实际匹配到图像的宽度(单位像素)." @需求类型 = 可写入变量>
+    参数 匹配图像高度 <类型 = 整数类 注释 = "用作返回所实际匹配到图像的高度(单位像素)." @需求类型 = 可写入变量>
+    {
+        变量 字节集1 <类型 = CEF字节集类>
+        如果 (是否为空 () == 假)
+        {
+            @ @<字节集1>.Set (m_objCef->GetAsJPEG ((float)@<期望缩放因子>, @<期望压缩级别>, @<匹配图像宽度.值>, @<匹配图像高度.值>));
+        }
+        返回 (字节集1)
+    }
+}
+
+类 CEF页面框架 <公开 注释 = "提供CEF页面中的一个框架">
+{
+
+    # @ @m<DECLARE_CEF_OBJECT_CLASS> (CefFrame)
+
+    方法 是否为空 <公开 类型 = 逻辑型 注释 = "返回本框架对象是否为空,为空则不能进行任何操作." @嵌入式方法 = "">
+    {
+        @ (BOOL)@sn<this>.IsEmpty ()
+    }
+
+    方法 是否为主框架 <公开 类型 = 逻辑型 注释 = "返回本框架是否为页面的主框架" @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () == FALSE && m_objCef->IsMain ());
+    }
+
+    方法 是否为焦点框架 <公开 类型 = 逻辑型 注释 = "返回本框架是否为页面的焦点框架" @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () == FALSE && m_objCef->IsFocused ());
+    }
+
+    方法 取框架名 <公开 类型 = 文本型 注释 = "返回本框架的名称" @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () ? CVolString () : GetCefVolString (m_objCef->GetName ()));
+    }
+
+    方法 取框架标识符 <公开 类型 = 文本型 注释 = "返回本框架的标识符文本" @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () ? CVolString () : GetCefVolString (m_objCef->GetIdentifier ()));
+    }
+
+    方法 取父框架 <公开 类型 = CEF页面框架 注释 = "返回本框架的父框架" 返回值注释 = "如果不存在父框架,所返回框架将为空(\"CEF页面框架.是否为空\"方法返回真)." @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () ? @dt<CEF页面框架> () : @dt<CEF页面框架> (m_objCef->GetParent ()));
+    }
+
+    方法 取链接地址 <公开 类型 = 文本型 注释 = "返回本框架中当前浏览内容的链接地址" @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () ?  CVolString () : GetCefVolString (m_objCef->GetURL ()));
+    }
+
+    方法 跳转 <公开 注释 = "设置本框架中当前浏览的链接地址">
+    参数 链接地址 <类型 = 文本型 注释 = "提供所欲跳转到的链接地址">
+    {
+        @ if (IsEmpty () == FALSE)
+        @     m_objCef->LoadURL (@<链接地址>.GetText ());
+    }
+
+    方法 载入内容 <公开 注释 = "设置本框架中当前浏览的页面内容">
+    参数 页面内容 <类型 = 文本型 注释 = "提供所欲浏览的HTML页面内容文本">
+    {
+        @ if (IsEmpty () == FALSE)
+        @     CVWnd_CefWebBrowser::sLoadHtmlString (m_objCef, @<页面内容>.GetText ());
+    }
+
+    方法 取源代码 <公开 类型 = 文本型 注释 = "返回本框架中当前所浏览页面内容的HTML源代码" @嵌入式方法 = "">
+    {
+        @ CVWnd_CefWebBrowser::sGetSource (@sn<this>.m_objCef)
+    }
+
+    方法 取显示文本 <公开 类型 = 文本型 注释 = "返回本框架中当前所浏览页面内容的可显示文本" @嵌入式方法 = "">
+    {
+        @ CVWnd_CefWebBrowser::sGetText (@sn<this>.m_objCef)
+    }
+
+    方法 查看源代码 <公开 注释 = "启动文本外部编辑器查看本框架中当前所浏览页面内容的HTML源代码">
+    {
+        @ if (IsEmpty () == FALSE)  m_objCef->ViewSource ();
+    }
+
+    方法 Post访问 <公开 注释 = "以Post方式访问所指定的URL" @嵌入式方法 = "req_obj_param_pointer = true">
+    参数 链接地址 <类型 = 文本型 注释 = "提供所欲访问的链接地址">
+    参数 访问头 <类型 = 文本型 注释 = "  每个项目为\"属性名=属性值\"格式,多个项目之间使用换行符\'\\n\'" 注释 = "分隔. 如: \"MyHead1=value\\nMyHead2=value\"."
+            注释 = "  无则为空文本.">
+    参数 所欲传递数据 <类型 = 字节集类 注释 = "提供所有欲传递过去的数据" @可扩展 = "">
+    {
+        @ CVWnd_CefWebBrowser::sPost (@sn<this>.m_objCef, @<链接地址>.GetText (), @<访问头>.GetText (), NUM_CHARS_OF_TEXT (@sn<pm_types>) - 2, @<所欲传递数据>)
+    }
+
+    方法 执行JS脚本 <公开 注释 = "执行所指定的JS脚本代码">
+    参数 JS代码 <类型 = 文本型 注释 = "提供所欲执行的JavaScript脚本内容">
+    参数 链接地址 <类型 = 文本型 注释 = "  提供脚本所对应的链接地址,当脚本执行遇到问题时,浏览器" 注释 = "将访问此地址为脚本开发者提供错误来源." @默认值 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供出错报告的基准行号" @默认值 = 1>
+    {
+        @ if (IsEmpty () == FALSE)
+        @     m_objCef->ExecuteJavaScript (@<JS代码>.GetText (), @<链接地址>.GetText (), @<起始行号>);
+    }
+
+    方法 全部选择 <公开 注释 = "选择本框架中的所有内容">
+    {
+        @ if (IsEmpty () == FALSE)  m_objCef->SelectAll ();
+    }
+
+    方法 复制 <公开 注释 = "将本框架中的被选择内容复制到剪贴板">
+    {
+        @ if (IsEmpty () == FALSE)  m_objCef->Copy ();
+    }
+
+    方法 撤销 <公开 注释 = "在本框架中执行\"撤销\"命令">
+    {
+        @ if (IsEmpty () == FALSE)  m_objCef->Undo ();
+    }
+
+    方法 重做 <公开 注释 = "在本框架中执行\"重做\"命令">
+    {
+        @ if (IsEmpty () == FALSE)  m_objCef->Redo ();
+    }
+
+    方法 剪切 <公开 注释 = "在本框架中执行\"剪切\"命令">
+    {
+        @ if (IsEmpty () == FALSE)  m_objCef->Cut ();
+    }
+
+    方法 粘贴 <公开 注释 = "在本框架中执行\"粘贴\"命令">
+    参数 是否匹配文本样式 <类型 = 逻辑型 注释 = "如果为真,则粘贴剪贴板内容时匹配目标位置的文本样式,而不是保留原始格式." @默认值 = 假>
+    {
+        @ if (IsEmpty () == FALSE)
+        @     if (@<是否匹配文本样式>)  m_objCef->PasteAndMatchStyle ();  else m_objCef->Paste ();
+    }
+
+    方法 删除 <公开 注释 = "在本框架中执行\"删除\"命令">
+    {
+        @ if (IsEmpty () == FALSE)  m_objCef->Delete ();
+    }
+}
+
+# ---
+
+类 CEF时间 <公开 @文档 = "category = \"辅助类\"">
+{
+    变量 年 <公开 类型 = 整数>
+    变量 月 <公开 类型 = 整数 注释 = "从1到12">
+    变量 日 <公开 类型 = 整数 注释 = "从1到31">
+    变量 星期几 <公开 类型 = 整数 注释 = "提供具体为星期几,从0开始,0代表星期天.">
+    变量 时 <公开 类型 = 整数 注释 = "从0到23">
+    变量 分 <公开 类型 = 整数 注释 = "从0到59">
+    变量 秒 <公开 类型 = 整数 注释 = "从0到59">
+    变量 毫秒 <公开 类型 = 整数 注释 = "从0到999">
+
+    # @begin
+    # <> <include>
+    # void FromCefTime (const cef_basetime_t base_time);
+    # cef_basetime_t ToCefTime ();
+    # <> </include>
+    # void @sn<current_class>::FromCefTime (const cef_basetime_t base_time)
+    # {
+    #     cef_time_t time;
+    #     if (cef_time_from_basetime (base_time, &time))
+    #     {
+    #         @<年> = time.year;  @<月> = time.month;  @<日> = time.day_of_month;  @<星期几> = time.day_of_week;
+    #         @<时> = time.hour;  @<分> = time.minute;  @<秒> = time.second;  @<毫秒> = time.millisecond;
+    #     }
+    # }
+    # cef_basetime_t @sn<current_class>::ToCefTime ()
+    # {
+    #     cef_time_t time;
+    #     time.year = @<年>;  time.month = @<月>;  time.day_of_month = @<日>;  time.day_of_week = @<星期几>;
+    #     time.hour = @<时>;  time.minute = @<分>;  time.second = @<秒>;  time.millisecond = @<毫秒>;
+    #     cef_basetime_t base_time;
+    #     base_time.val = 0;
+    #     cef_time_to_basetime (&time, &base_time);
+    #     return base_time;
+    # }
+    # @end
+}
+
+# ---
+
+类 CEFCookie信息 <公开 注释 = "提供CEF的Cookie信息" @文档 = "category = \"辅助类\"">
+{
+    变量 名称 <公开 类型 = 文本型 注释 = "提供Cookie的名称">
+    变量 值 <公开 类型 = 文本型 注释 = "提供Cookie的值">
+    变量 域名 <公开 类型 = 文本型 注释 = "  如果域名为空文本,则将创建一个主机Cookie来替换此域名Cookie." 注释 = "  域名Cookie存储时将以句点\'.\'字符为开头并对所有下属子域名可见,"
+            注释 = "而主机Cookie不会如此.">
+    变量 路径 <公开 类型 = 文本型 注释 = "如果路径非空,则只有在此路径下的链接地址网页才能获取此Cookie值.">
+    变量 仅安全链接使用 <公开 类型 = 逻辑型 注释 = "如果为真则本Cookie只在 Https 安全链接请求下才会发送">
+    变量 仅普通链接使用 <公开 类型 = 逻辑型 注释 = "如果为真则本Cookie只在 Http 请求下才会发送">
+    变量 是否会过期 <公开 类型 = 逻辑型 注释 = "指定本Cookie是否会过期">
+    变量 过期时间 <公开 类型 = CEF时间 注释 = "如果\"是否会过期\"为真,则提供具体的过期时间.">
+    变量 创建时间 <公开 类型 = CEF时间 注释 = "本成员由CEF自动维护(用户无需填写),用作提供本Cookie的创建时间.">
+    变量 最后访问时间 <公开 类型 = CEF时间 注释 = "本成员由CEF自动维护(用户无需填写),用作提供本Cookie的最后访问时间.">
+
+    # @begin
+    # <> <include>
+    # void FromCefCookie (const CefCookie& cookie);
+    # void ToCefCookie (CefCookie& cookie);
+    # <> </include>
+    # void @sn<current_class>::FromCefCookie (const CefCookie& cookie)
+    # {
+    #     GetCefStringText (CefString (&cookie.name), @<名称>);  GetCefStringText (CefString (&cookie.value), @<值>);  GetCefStringText (CefString (&cookie.domain), @<域名>);
+    #     GetCefStringText (CefString (&cookie.path), @<路径>); @<仅安全链接使用> = (cookie.secure != FALSE);  @<仅普通链接使用> = (cookie.httponly != FALSE);
+    #     @<是否会过期> = (cookie.has_expires != FALSE); @<过期时间>.FromCefTime (cookie.expires);  @<创建时间>.FromCefTime (cookie.creation); @<最后访问时间>.FromCefTime (cookie.last_access);
+    # }
+    # void @sn<current_class>::ToCefCookie (CefCookie& cookie)
+    # {
+    #     CefString (&cookie.name) = (const char16_t*)@<名称>.GetText ();  CefString (&cookie.value) = (const char16_t*)@<值>.GetText ();  CefString (&cookie.domain) = (const char16_t*)@<域名>.GetText ();
+    #     CefString (&cookie.path) = (const char16_t*)@<路径>.GetText (); cookie.secure = @<仅安全链接使用>;  cookie.httponly = @<仅普通链接使用>;  cookie.has_expires = @<是否会过期>;
+    #     cookie.expires = @<过期时间>.ToCefTime ();  cookie.creation = @<创建时间>.ToCefTime ();  cookie.last_access = @<最后访问时间>.ToCefTime ();
+    # }
+    # @end
+}
+
+# ---
+
+类 CEF日志记录级别 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 默认 <公开 值 = @"@cef_log_severity_t::LOGSEVERITY_DEFAULT">
+    常量 详细 <公开 值 = @"@cef_log_severity_t::LOGSEVERITY_VERBOSE">
+    常量 信息 <公开 值 = @"@cef_log_severity_t::LOGSEVERITY_INFO" 注释 = "指定仅记录\"信息\"及其以上级别的日志条目">
+    常量 警告 <公开 值 = @"@cef_log_severity_t::LOGSEVERITY_WARNING" 注释 = "指定仅记录\"警告\"及其以上级别的日志条目">
+    常量 错误 <公开 值 = @"@cef_log_severity_t::LOGSEVERITY_ERROR" 注释 = "指定仅记录\"错误\"及其以上级别的日志条目">
+    常量 禁止 <公开 值 = @"@cef_log_severity_t::LOGSEVERITY_DISABLE" 注释 = "指定禁止记录日志">
+}
+
+类 PDF打印边距类型 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 默认 <公开 值 = @"@cef_pdf_print_margin_type_t::PDF_PRINT_MARGIN_DEFAULT">
+    常量 无 <公开 值 = @"@cef_pdf_print_margin_type_t::PDF_PRINT_MARGIN_NONE">
+    常量 最小 <公开 值 = @"@cef_pdf_print_margin_type_t::PDF_PRINT_MARGIN_MINIMUM">
+    常量 自定义 <公开 值 = @"@cef_pdf_print_margin_type_t::PDF_PRINT_MARGIN_CUSTOM">
+}
+
+类 CEF许可状态 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 默认 <公开 值 = @"@cef_state_t::STATE_DEFAULT" 注释 = "允许还是禁止由对应默认值决定">
+    常量 允许 <公开 值 = @"@cef_state_t::STATE_ENABLED">
+    常量 禁止 <公开 值 = @"@cef_state_t::STATE_DISABLED">
+}
+
+类 CEF鼠标键类型 <公开 @文档 = "category = \"辅助类\"">
+{
+    常量 左键 <公开 类型 = 整数 值 = 1>
+    常量 中键 <公开 类型 = 整数 值 = 2>
+    常量 右键 <公开 类型 = 整数 值 = 4>
+}
+
+类 CEF缩放命令 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 放大 <公开 值 = @"@cef_zoom_command_t::CEF_ZOOM_COMMAND_OUT">
+    常量 重置 <公开 值 = @"@cef_zoom_command_t::CEF_ZOOM_COMMAND_RESET">
+    常量 缩小 <公开 值 = @"@cef_zoom_command_t::CEF_ZOOM_COMMAND_IN">
+}
+
+类 CEF下载结束原因 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 完成 <值 = @"@CVWnd_CefWebBrowser::CDER_COMPLETE" 注释 = "下载已经成功完成">
+    常量 被中止 <值 = @"@CVWnd_CefWebBrowser::CDER_CANCELED" 注释 = "下载被用户中止(调用\"CEF3浏览器.中止下载\"方法或在处理\"下载更新\"事件时返回-1.">
+    常量 被中断 <值 = @"@CVWnd_CefWebBrowser::CDER_INTERRUPTED" 注释 = "下载因为某种被中断,见\"CEF下载中断原因\"类.">
+    常量 超时 <值 = @"@CVWnd_CefWebBrowser::CDER_TIMEOUT" 注释 = "下载已经超时">
+}
+
+类 CEF下载中断原因 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 无 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_NONE" 注释 = "未中断">
+    常量 文件操作失败 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_FILE_FAILED">
+    常量 文件无访问权限 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_FILE_ACCESS_DENIED">
+    常量 磁盘空间不足 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_FILE_NO_SPACE">
+    常量 文件名太长 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_FILE_NAME_TOO_LONG" 注释 = "目录或文件名太长">
+    常量 文件太大 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_FILE_TOO_LARGE" 注释 = "文件太大超出了文件系统管理能力">
+    常量 文件包含病毒 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_FILE_VIRUS_INFECTED">
+    常量 打开太多的文件 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_FILE_TRANSIENT_ERROR">
+    常量 文件被阻塞 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_FILE_BLOCKED" 注释 = "文件操作被系统本地策略阻塞">
+    常量 安全检查失败 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_FILE_SECURITY_CHECK_FAILED">
+    常量 文件太短 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_FILE_TOO_SHORT"
+            注释 = "试图在打开文件时越过了文件的末尾（作为恢复先前中断的下载的一部分）">
+    常量 不匹配散列值 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_FILE_HASH_MISMATCH"
+            注释 = "部分文件内容与期望的散列值不匹配">
+    常量 源和目标相同 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_FILE_SAME_AS_SOURCE"
+            注释 = "所下载文件的源和目标地址相同">
+    常量 网络出错 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_NETWORK_FAILED">
+    常量 网络超时 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_NETWORK_TIMEOUT">
+    常量 网络连接断开 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_NETWORK_DISCONNECTED">
+    常量 服务器下线 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_NETWORK_SERVER_DOWN">
+    常量 无效的网络请求 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_NETWORK_INVALID_REQUEST"
+            注释 = "如: 不被支持的协议,无效的连接地址,被策略所禁止.">
+    常量 服务器操作失败 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_SERVER_FAILED" 注释 = "服务器通知操作已经失败">
+    常量 不支持范围请求 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_SERVER_NO_RANGE" 注释 = "服务器不支持范围请求">
+    常量 数据不存在 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_SERVER_BAD_CONTENT" 注释 = "服务器上不存在所请求的数据">
+    常量 无授权访问 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_SERVER_UNAUTHORIZED"
+            注释 = "所访问的资源在服务器上没有授权">
+    常量 证书问题 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_SERVER_CERT_PROBLEM" 注释 = "服务器证书问题">
+    常量 禁止访问服务器 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_SERVER_FORBIDDEN">
+    常量 服务器不可达 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_SERVER_UNREACHABLE">
+    常量 内容长度无效 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_SERVER_CONTENT_LENGTH_MISMATCH"
+            注释 = "  服务器发送过来的数据尺寸小于\"content-length\"头字段中指定的尺寸,这将导致连接过早关闭,"
+            注释 = "或者\"content-length\"头字段值无效. 下载仅当存在强力验证器时被中断,否则将视作下载完成.">
+    常量 重定向出错 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_SERVER_CROSS_ORIGIN_REDIRECT"
+            注释 = "发生了意外的跨域重定向">
+    常量 被用户中止 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_USER_CANCELED" 注释 = "下载操作被用户中止">
+    常量 浏览器被用户关闭 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_USER_SHUTDOWN">
+    常量 浏览器崩溃 <公开 值 = @"@cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_CRASH">
+}
+
+类 CEF下载项信息 <公开 注释 = "提供一个正在下载项目的相关信息." 注释 = "注意: 不能新建本类对象或对本类对象进行赋值,只能在处理\"下载更新\"事件时使用所提供的\"下载项\"参数." @禁止创建对象 = 真>
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<CefDownloadItem> m_item;
+    # inline_ @sn<current_class> (CefRefPtr<CefDownloadItem> item) : @sn<current_class> ()  { m_item = item; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)  { m_item = nullptr; }  // 禁止赋值
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const  { return FALSE; }
+    # inline_ BOOL_P IsEmpty () const  { return (m_item.get () == nullptr); }
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 注释 = "返回本对象是否为空,为空则不能取出任何信息." 注释 = "处理\"下载更新\"事件接收到的\"下载项\"参数必定不为空." @嵌入式方法 = "">
+    {
+        @ (BOOL)@sn<this>.IsEmpty ()
+    }
+
+    方法 是否正在下载 <公开 类型 = 逻辑型 注释 = "返回本项目是否正在下载中" @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () ? FALSE : (BOOL)m_item->IsInProgress ());
+    }
+
+    方法 是否已下载完毕 <公开 类型 = 逻辑型 注释 = "返回本项目是否已经下载完毕" @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () ? FALSE : (BOOL)m_item->IsComplete ());
+    }
+
+    方法 是否被中止 <公开 类型 = 逻辑型 注释 = "返回本项目的下载是否已经被中止" @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () ? FALSE : (BOOL)m_item->IsCanceled ());
+    }
+
+    方法 是否被中断 <公开 类型 = 逻辑型 注释 = "返回本项目的下载是否已经因为某种原因被中断" @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () ? FALSE : (BOOL)m_item->IsInterrupted ());
+    }
+
+    方法 取中断原因 <公开 类型 = CEF下载中断原因 注释 = "如果\"是否被中断\"方法返回真,则返回具体的中断原因." @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () ? (INT)cef_download_interrupt_reason_t::CEF_DOWNLOAD_INTERRUPT_REASON_NONE : (INT)m_item->GetInterruptReason ());
+    }
+
+    方法 取下载速度 <公开 类型 = 长整数 注释 = "返回当前下载速度,单位: 字节/秒." @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () ? 0 : (INT64)m_item->GetCurrentSpeed ());
+    }
+
+    方法 取下载进度 <公开 类型 = 整数 注释 = "返回当前已经下载的百分比,有效值在 0 到 100 之间,返回 -1 表示数据总尺寸未知,无法计算百分比." @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () ? -1 : m_item->GetPercentComplete ());
+    }
+
+    方法 取需下载总尺寸 <公开 类型 = 长整数 注释 = "返回欲下载数据的总尺寸,单位字节." @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () ? 0 : (INT64)m_item->GetTotalBytes ());
+    }
+
+    方法 取已下载尺寸 <公开 类型 = 长整数 注释 = "返回已经下载数据的尺寸,单位字节." @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () ? 0 : (INT64)m_item->GetReceivedBytes ());
+    }
+
+    方法 取起始时间 <公开 类型 = CEF时间 注释 = "返回下载操作的起始时间">
+    {
+        变量 时间值 <类型 = CEF时间>
+        @ if (IsEmpty () == FALSE)  @<时间值>.FromCefTime (m_item->GetStartTime ());
+        返回 (时间值)
+    }
+
+    方法 取结束时间 <公开 类型 = CEF时间 注释 = "返回下载操作的结束时间">
+    {
+        变量 时间值 <类型 = CEF时间>
+        @ if (IsEmpty () == FALSE)  @<时间值>.FromCefTime (m_item->GetEndTime ());
+        返回 (时间值)
+    }
+
+    方法 取文件保存路径 <公开 类型 = 文本型 注释 = "取文件已保存或正在保存的完整路径,为空文本表示下载尚未开始、被取消或路径不可用.">
+    {
+        变量 路径 <类型 = 文本型>
+        @ if (IsEmpty () == FALSE)  GetCefStringText (m_item->GetFullPath (), @<路径>);
+        返回 (路径)
+    }
+
+    方法 "// 取ID" <公开 类型 = 整数 注释 = "返回本下载项对应的\"下载项ID\"值" @禁止流程检查 = 真>
+    {
+        @ return (IsEmpty () ? 0 : (INT)m_item->GetId ());
+    }
+
+    方法 取当前地址 <公开 类型 = 文本型 注释 = "返回当前下载链接地址">
+    {
+        变量 地址 <类型 = 文本型>
+        @ if (IsEmpty () == FALSE)  GetCefStringText (m_item->GetURL (), @<地址>);
+        返回 (地址)
+    }
+
+    方法 取最初地址 <公开 类型 = 文本型 注释 = "返回在进行任何重定位操作前的最初下载链接地址">
+    {
+        变量 地址 <类型 = 文本型>
+        @ if (IsEmpty () == FALSE)  GetCefStringText (m_item->GetOriginalUrl (), @<地址>);
+        返回 (地址)
+    }
+
+    方法 取推荐文件名 <公开 类型 = 文本型 注释 = "返回本下载项推荐保存到的文件名">
+    {
+        变量 文件名 <类型 = 文本型>
+        @ if (IsEmpty () == FALSE)  GetCefStringText (m_item->GetSuggestedFileName (), @<文件名>);
+        返回 (文件名)
+    }
+
+    方法 取内容展示方式 <公开 类型 = 文本型 注释 = "返回 HTTP 响应头中的\"Content-Disposition\"字段值."
+            注释 = "\"Content-Disposition\"响应头指示回复的内容该以何种形式展示,主要有两种类型:" 注释 = "1. inline: 在页面内显示;"
+            注释 = "2. attachment: 作为附件下载,通常指定文件名. 其中\"filename\"字段提供所建议的文件名.">
+    {
+        变量 内容展示方式 <类型 = 文本型>
+        @ if (IsEmpty () == FALSE)  GetCefStringText (m_item->GetContentDisposition (), @<内容展示方式>);
+        返回 (内容展示方式)
+    }
+
+    方法 取媒体类型 <公开 类型 = 文本型 注释 = "返回下载项对应的媒体类型">
+    {
+        变量 媒体类型值 <类型 = 文本型>
+        @ if (IsEmpty () == FALSE)  GetCefStringText (m_item->GetMimeType (), @<媒体类型值>);
+        返回 (媒体类型值)
+    }
+}
+
+类 CEF窗口打开位置 <公开 注释 = "定义了用户点击链接或调用 window.open() 时,目标页面应如何被打开." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 未知 <公开 值 = @"@cef_window_open_disposition_t::CEF_WOD_UNKNOWN" 注释 = "未识别的位置，不应出现。">
+    常量 当前标签页 <公开 值 = @"@cef_window_open_disposition_t::CEF_WOD_CURRENT_TAB" 注释 = "在当前页面加载目标 URL。这是大多数链接点击的默认行为。">
+    常量 单例标签页 <公开 值 = @"@cef_window_open_disposition_t::CEF_WOD_SINGLETON_TAB"
+            注释 = "确保同一个窗口内只有一个该 URL 的标签页。如果已存在，则激活它；否则创建新标签页。">
+    常量 前台新标签页 <公开 值 = @"@cef_window_open_disposition_t::CEF_WOD_NEW_FOREGROUND_TAB"
+            注释 = "在前台（立即聚焦）打开一个新标签页。触发：Ctrl/Cmd + 点击链接 或 中键点击（部分配置）。">
+    常量 后台新标签页 <公开 值 = @"@cef_window_open_disposition_t::CEF_WOD_NEW_BACKGROUND_TAB"
+            注释 = "在后台（不聚焦）打开一个新标签页。触发：通常由程序逻辑指定，或某些扩展行为。">
+    常量 新弹出窗口 <公开 值 = @"@cef_window_open_disposition_t::CEF_WOD_NEW_POPUP" 注释 = "打开一个独立的弹出式窗口（通常无地址栏、工具栏等，由 window.open() 控制）。">
+    常量 新窗口 <公开 值 = @"@cef_window_open_disposition_t::CEF_WOD_NEW_WINDOW" 注释 = "打开一个全新的浏览器窗口。触发：Shift + 点击链接。">
+    常量 保存到磁盘 <公开 值 = @"@cef_window_open_disposition_t::CEF_WOD_SAVE_TO_DISK" 注释 = "不打开页面，而是下载链接指向的文件。触发：Alt + 点击链接。">
+    常量 无痕模式 <公开 值 = @"@cef_window_open_disposition_t::CEF_WOD_OFF_THE_RECORD" 注释 = "在新的隐私（Incognito）窗口中打开链接。">
+    常量 忽略操作 <公开 值 = @"@cef_window_open_disposition_t::CEF_WOD_IGNORE_ACTION" 注释 = "特殊错误状态，来自渲染进程，表示该操作应被忽略（如脚本阻止了默认行为）。">
+    常量 切换到标签页 <公开 值 = @"@cef_window_open_disposition_t::CEF_WOD_SWITCH_TO_TAB"
+            注释 = "搜索所有同配置文件（Profile）的窗口，如果找到相同 URL 的标签页，则激活它；否则退化为\"当前标签页\"或\"前台新标签页\"。比\"单例标签页\"范围更广。">
+    常量 新画中画窗口 <公开 值 = @"@cef_window_open_disposition_t::CEF_WOD_NEW_PICTURE_IN_PICTURE"
+            注释 = "创建一个新的画中画（PiP）窗口，用于显示视频或特定内容（现代特性）。">
+}
+
+类 CEF文本类 <公开 注释 = "用作代表一段在CEF中保存的文本数据" @文档 = "category = \"辅助类\"" @别名类型 = 本地类 @别名 = "CefString">
+{
+    方法 取文本 <公开 静态 类型 = 文本型 注释 = "获取其中保存的文本数据" @嵌入式方法 = "">
+    参数 CEF文本 <类型 = CEF文本类>
+    {
+        @ GetCefVolString (@<CEF文本>)
+    }
+}
+
+类 CEF头字段表 <公开 基础类 = 多值哈希表模板类 注释 = "用作提供CEF中的HTML头部信息中的字段列表" @文档 = "category = \"辅助类\"" @模板实现类 = "CEF文本类, CEF文本类">
+
+# ---
+
+类 CEF3浏览器 <公开 基础类 = 窗口组件 注释 = "基于CEF3最新版本(141.0.11)的 HTML 浏览器." 注释 = "注意:" 注释 = "1. 旧版本的\"CEF浏览器\"组件已经被放弃并从系统类库中删除,如果您需要,"
+        注释 = "请到 https://www.voldp.com/downloads/old_cef_browser_ctrl.rar 处下载后解压到火山系统安装目录下即可;"
+        注释 = "2. 本组件所使用的 CEF3 浏览器基于的是多进程机制,因此使用了本组件的应用程序会被启动多个进程实例,这是正" 注释 = "常的不会影响到用户程序的执行;" 注释 = "3. 不能在控制台程序和动态链接库程序中使用本组件."
+        编辑时信息 = "15BFEA, 0, 0, 0" @视窗.后缀文本 = "public ICefWebBrowserEventListener"
+        @视窗.窗口组件 = "icon=\"@64\"\r\ndefault_size = \"200, 200\"\r\npreview_unsupported"
+        @视窗.头文件搜寻目录 = "..\\mfc_ui_cef_browser\\src\\cef" @视窗.外部头文件.全局 = "src\\wtl_ui_cef_web_browser.h"
+        @视窗.外部源文件 = "src\\wtl_ui_cef_web_browser.cpp"
+        @视窗.外部库 = "..\\mfc_ui_cef_browser\\src\\cef\\lib\\$(p)_$(d)\\libcef.lib\r\n..\\mfc_ui_cef_browser\\src\\cef\\lib\\$(p)_$(d)\\libcef_dll_wrapper.lib"
+        @视窗.附属文件 = "..\\mfc_ui_cef_browser\\src\\cef\\client\\$(p)\\release" @视窗.需求VS版本 = "16-"
+        @视窗.编译信息.console = "err:由于cef浏览器需消息循环支持,不能在控制台程序项目中使用本组件." @视窗.编译信息.dll = "err:由于cef浏览器需要子进程支持,不能在动态链接库程序项目中使用本组件.">
+{
+
+    # @ @m<DECLARE_WTL_CONTROL_DEFAULT> (CVWnd_CefWebBrowser, ICefWebBrowserEventListener, 0, 0, WS_TABSTOP, WS_EX_CLIENTEDGE)
+    #
+    # 事件 --
+
+    方法 函数被执行 <公开 定义事件 类型 = 整数 注释 = "当使用\"函数\"属性登记的JS函数在网页中被执行时,本事件被触发.">
+    参数 函数名 <类型 = 文本型 注释 = "提供所执行函数的名称">
+    参数 参数表 <类型 = 文本数组类 注释 = "提供所有的调用参数">
+
+    方法 链接地址被改变 <公开 定义事件 类型 = 整数 注释 = "在当前所浏览页面链接地址被改变后,本事件被触发.">
+    参数 链接地址 <类型 = 文本型 注释 = "提供所改变到的链接地址">
+    参数 框架标识符 <类型 = 文本型 注释 = "提供其中链接地址被改变的框架标识符,为空文本表示为主框架.">
+
+    方法 标题被改变 <公开 定义事件 类型 = 整数 注释 = "在当前所浏览页面的窗口标题被改变后,本事件被触发.">
+    参数 标题 <类型 = 文本型 注释 = "提供所改变到的标题文本">
+
+    方法 收藏夹图标改变 <公开 定义事件 类型 = 整数 注释 = "  当网页加载过程中,浏览器解析到 <link rel=\"icon\"> 或 <link rel=\"shortcut icon\"> 标签,"
+            注释 = "从而发现网站的收藏夹图标的链接地址发生变化时,本事件被发送.">
+    参数 图标链接地址 <类型 = 文本数组类 注释 = "提供所有收藏夹图标的链接地址,至少有一个成员.">
+
+    方法 载入进度改变 <公开 定义事件 类型 = 整数 注释 = "当页面资源（如 HTML、CSS、JS、图片等）加载状态发生变化时,都会发送本事件,并传入一个表示整体加载进度的百分比数值.">
+    参数 载入进度 <类型 = 整数 注释 = "提供具体的载入进度百分比,值从0到100之间.">
+
+    方法 媒体访问权限改变 <公开 定义事件 类型 = 整数 注释 = "当网页对摄像头和/或麦克风的访问状态发生了改变后发送本事件">
+    参数 是否能捕获视频 <类型 = 逻辑型 注释 = "表示浏览器当前是否具有视频捕获权限(例如摄像头)">
+    参数 是否能捕获音频 <类型 = 逻辑型 注释 = "表示浏览器当前是否具有音频捕获权限(例如麦克风)">
+
+    方法 全屏模式被改变 <公开 定义事件 类型 = 整数 注释 = "在当前所浏览页面的全屏模式被改变后,本事件被触发.">
+    参数 是否全屏 <类型 = 逻辑型 注释 = "提供所切换到的全屏模式">
+
+    方法 显示提示文本 <公开 定义事件 类型 = 整数 注释 = "在需要显示提示文本时,本事件被触发." 返回值注释 = "返回0继续显示提示文本,返回1自行管理提示文本的显示禁止后续的自动显示.">
+    参数 提示文本 <类型 = 文本型 注释 = "提供所欲显示的提示文本,可以修改本参数值以改变所显示的提示文本.">
+
+    方法 显示状态信息 <公开 定义事件 类型 = 整数 注释 = "在需要显示状态信息时,本事件被触发.">
+    参数 状态信息 <类型 = 文本型>
+
+    方法 显示控制台信息 <公开 定义事件 类型 = 整数 注释 = "在需要显示控制台信息时,本事件被触发." 返回值注释 = "返回0允许显示,返回1禁止显示.">
+    参数 控制台信息 <类型 = 文本型>
+    参数 源文本 <类型 = 文本型>
+    参数 行号 <类型 = 整数>
+
+    方法 即将弹出窗口 <公开 定义事件 类型 = 整数 注释 = "在浏览器即将打开一个窗口前发送本事件."
+            注释 = "CEF将所有通过 window.open() 脚本或\"点击链接\"触发的目标页面加载行为,都抽象为一个统一的\"窗口打开请求\"." 注释 = "这个抽象不仅包括真正的新窗口/新标签页,也包括:"
+            注释 = "1. 在当前窗口打开 (\"CEF窗口打开位置.当前标签页\");" 注释 = "2. 在新窗口打开 (\"CEF窗口打开位置.新窗口\");" 注释 = "3. 在新标签页打开 (\"CEF窗口打开位置.前台新标签页\");"
+            注释 = "4. 在后台标签页打开 (\"CEF窗口打开位置.后台新标签页\")" 注释 = "5. 弹出窗口 (\"CEF窗口打开位置.新弹出窗口\")."
+            注释 = "因此,本事件的名字虽然叫\"即将弹出窗口\",但其实际职责是: 在任何\"窗口打开\"请求执行前,进行拦截和控制." 返回值注释 = "返回0允许打开,返回1改为在当前框架内部打开,返回-1禁止打开.">
+    参数 链接地址 <类型 = 文本型 注释 = "提供即将打开的弹出窗口所浏览的链接地址,注意可能为空文本(如调用 window.open 不传参).">
+    参数 源框架标识符 <类型 = 文本型 注释 = "提供发起弹出请求的源页面框架(即打开新窗口的那个\"父页面\"),为空文本表示为主框架.">
+    参数 弹窗ID <类型 = 整数 注释 = "为一个唯一标识值,用于在 CEF 内部唯一地标记本次弹窗请求.">
+    参数 目标框架名 <类型 = 文本型 注释 = "提供所弹出新窗口的目标框架名称(如 \"_blank\", \"myWindow\"等),也可能为空文本.">
+    参数 窗口打开位置 <类型 = CEF窗口打开位置 注释 = "提供新窗口的打开位置">
+    参数 是否为用户手动 <类型 = 逻辑型 注释 = "为真表示本操作为由于用户手动操作导致(譬如鼠标左键单击链接),为假表示为通过程序打开.">
+    参数 是否禁止JS访问 <类型 = 逻辑型类 注释 = "用作接收一个逻辑值,处理本事件时置入真则新窗口无法通过 window.opener 访问原窗口(更安全).">
+
+    方法 载入状态被改变 <公开 定义事件 类型 = 整数 注释 = "在当前页面的载入状态被改变时发送本事件." 注释 = "本事件在\"开始载入\"事件之前发送一次,在\"载入出错\"或\"载入完毕\"事件之后被发送一次.">
+    参数 是否正在载入 <类型 = 逻辑型 注释 = "提供是否还正在载入当前页面">
+    参数 能否后退 <类型 = 逻辑型 注释 = "提供当前页面是否能够后退">
+    参数 能否前进 <类型 = 逻辑型 注释 = "提供当前页面是否能够前进">
+
+    方法 开始载入 <公开 定义事件 类型 = 整数 注释 = "在当前页面内某个框架开始载入内容时发送本事件,所有子框架的本事件将在主框架的本事件之后发送.">
+    参数 框架标识符 <类型 = 文本型 注释 = "提供所开始载入的页面框架标识符,为空文本表示为主框架.">
+
+    方法 载入完毕 <公开 定义事件 类型 = 整数 注释 = "  在当前页面内某个框架成功载入完毕后发送本事件," 注释 = "所有子框架的本事件将在主框架的本事件之前发送.">
+    参数 HTTP状态码 <类型 = 整数 注释 = "提供对应的HTTP状态码">
+    参数 框架标识符 <类型 = 文本型 注释 = "提供所载入完毕的页面框架标识符,为空文本表示为主框架.">
+
+    方法 载入出错 <公开 定义事件 类型 = 整数 注释 = "在当前页面内某个框架载入失败后发送本事件" 返回值注释 = "返回0进行默认处理(显示出错信息),返回1禁止默认处理.">
+    参数 错误码 <类型 = 整数 注释 = "提供载入出错时的错误码">
+    参数 错误文本 <类型 = 文本型 注释 = "提供载入出错时的具体错误文本">
+    参数 出错链接地址 <类型 = 文本型 注释 = "提供载入出错时的链接地址">
+    参数 框架标识符 <类型 = 文本型 注释 = "提供载入出错的页面框架标识符,为空文本表示为主框架.">
+
+    方法 浏览器被创建 <公开 定义事件 类型 = 整数 注释 = "当CEF浏览器对象被创建后发送本事件">
+
+    方法 浏览器被关闭 <公开 定义事件 类型 = 整数 注释 = "当CEF浏览器对象被关闭后发送本事件">
+
+    方法 即将跳转 <公开 定义事件 类型 = 整数 注释 = "在某框架的当前浏览内容即将跳转前发送本事件" 返回值注释 = "返回0允许跳转,返回1禁止跳转.">
+    参数 链接地址 <类型 = 文本型 注释 = "提供即将跳转到的链接地址">
+    参数 跳转方法 <类型 = 文本型 注释 = "提供跳转时所使用的方法(POST/GET/...)">
+    参数 头字段表 <类型 = CEF头字段表 注释 = "提供跳转时所提供的HTML头字段列表">
+    参数 是否为用户手动 <类型 = 逻辑型 注释 = "为真表示本操作为由于用户手动操作导致(譬如鼠标左键单击链接),为假表示为通过程序打开.">
+    参数 是否重定位 <类型 = 逻辑型 注释 = "是否进行了重定位">
+    参数 框架标识符 <类型 = 文本型 注释 = "提供对应的页面框架标识符,为空文本表示为主框架.">
+
+    方法 即将跳转到新浏览器 <公开 定义事件 类型 = 整数 注释 = "当即将在某框架中打开并跳转一个新浏览器前本事件被发送,主要用作拦截和自定义网页中\"在新窗口/标签页中打开链接\"的行为."
+            返回值注释 = "返回0允许跳转,返回1禁止跳转.">
+    参数 链接地址 <类型 = 文本型 注释 = "提供即将跳转到的链接地址">
+    参数 是否为用户手动 <类型 = 逻辑型 注释 = "为真表示本操作为由于用户手动操作导致(譬如鼠标左键单击链接),为假表示为通过程序打开.">
+    参数 框架标识符 <类型 = 文本型 注释 = "提供对应的页面框架标识符,为空文本表示为主框架.">
+    参数 窗口打开位置 <类型 = CEF窗口打开位置 注释 = "提供窗口的打开位置">
+
+    方法 JS对话框 <公开 定义事件 类型 = 整数 注释 = "当需要显示JS对话框时,本事件被发送." 返回值注释 = "  返回0显示默认对话框,返回1表示显示了自己的替代对话框,返回2表示"
+            返回值注释 = "显示了自己的替代对话框且用户是通过单击\"确认\"按钮关闭该对话框的." 返回值注释 = "  注意: 如果欲显示自己的对话框,该对话框必须是模态的.">
+    参数 对话框类型 <类型 = 整数 注释 = "提供所欲显示JS对话框的类型: 0:警告对话框; 1:确认对话框; 2:提示对话框">
+    参数 来源链接地址 <类型 = 文本型 注释 = "提供对应的来源链接地址">
+    参数 来源链接地址显示文本 <类型 = 文本型 注释 = "提供来源链接地址的对应显示用文本">
+    参数 信息文本 <类型 = 文本型 注释 = "提供对应信息文本">
+    参数 默认提示文本 <类型 = 文本型 注释 = "本参数仅当对话框类型为提示对话框时有效,用作提供对应的默认提示文本.">
+    参数 用户输入结果 <类型 = 文本型 注释 = "  本参数仅当事件处理程序返回非0值(即显示自己的对话框)时有效,用作返回" 注释 = "用户在所显示自定义对话框中的输入内容到CEF浏览器.">
+
+    方法 离开对话框 <公开 定义事件 类型 = 整数 注释 = "当需要显示离开当前页面的确认对话框时,本事件被发送." 返回值注释 = "  返回0显示默认对话框,返回1表示显示了自己的替代对话框,返回2表示"
+            返回值注释 = "显示了自己的替代对话框且用户是通过单击\"确认\"按钮关闭该对话框的." 返回值注释 = "  注意: 如果欲显示自己的对话框,该对话框必须是模态的.">
+    参数 信息文本 <类型 = 文本型 注释 = "提供对应信息文本">
+    参数 是否为重载 <类型 = 逻辑型 注释 = "提供当前操作是否为重载现行页面">
+
+    方法 默认对话框被关闭 <公开 定义事件 类型 = 整数 注释 = "当CEF实现的默认对话框被关闭后,本事件被发送.">
+
+    方法 重置对话框状态 <公开 定义事件 类型 = 整数 注释 = "当需要取消任何正在等待的对话框并重置所有已保存的对话框状态时,会发送本事件."
+            注释 = "如果当前有文件选择对话框(或其他由 CEF 触发的对话框)正处于\"等待用户响应\"的状态(即已弹出但用户还未点击\"打开\"或\"取消\"),CEF 会尝试取消它."
+            注释 = "CEF 内部可能会为对话框保存一些临时状态(例如上次打开的目录、过滤器设置、窗口位置等),本事件通知这些内部状态将被重置或清除."
+            注释 = "无论当前是否有对话框正在等待,只要发生诸如页面导航之类的事件,就会发送本事件. 例如:"
+            注释 = "用户点击链接跳转到新页面; 执行了 window.location.href = \"...\"; 页面通过 history.pushState 或单页应用（SPA）路由发生了变化等."
+            注释 = "接收到本事件后,应该进行类似以下清理工作:" 注释 = "1. 清理你为该浏览器实例保存的任何与对话框相关的临时变量;" 注释 = "2. 重置 UI 标志(如\"等待文件选择\"指示器);"
+            注释 = "3. 取消与该页面关联的、依赖于对话框结果的异步任务.">
+
+    方法 PDF打印完毕 <公开 定义事件 类型 = 整数 注释 = "当调用\"开始打印到PDF\"方法返回真且\"等待打印完毕\"参数值为假时,打印完毕后将会发送本事件.">
+    参数 PDF文件名 <类型 = 文本型 注释 = "提供所打印到的PDF文件名">
+    参数 是否打印成功 <类型 = 逻辑型 注释 = "提供是否打印成功">
+
+    方法 获得Cookie <公开 定义事件 类型 = 整数 注释 = "当调用\"枚举Cookie\"方法后,每枚举到一个Cookie时,发送一次本事件." 返回值注释 = "返回1停止继续枚举;" 返回值注释 = "返回0继续枚举;"
+            返回值注释 = "返回-1删除当前cookie并继续枚举;" 返回值注释 = "返回-2删除当前cookie并停止继续枚举.">
+    参数 cookie <类型 = CEFCookie信息 注释 = "提供所枚举到的Cookie信息">
+    参数 为最后一个 <类型 = 逻辑型 注释 = "提供当前所所枚举到的Cookie是否为最后一个能枚举到的Cookie.">
+
+    方法 取验证信息 <公开 定义事件 类型 = 整数 注释 = "当浏览器需要用户提供验证信息时,本事件被发送." 返回值注释 = "返回1表示已经提供了有效的用户名和密码,返回0表示未提供且中止对应的网络请求.">
+    参数 来源链接地址 <类型 = 文本型 注释 = "提供对应的来源链接地址">
+    参数 主机 <类型 = 文本型 注释 = "提供欲访问主机的名称">
+    参数 端口号 <类型 = 整数 注释 = "提供欲访问端口号">
+    参数 是否为代理服务器 <类型 = 逻辑型 注释 = "为真表示欲访问的主机为代理服务器">
+    参数 域名 <类型 = 文本型 注释 = "本参数有可能为空文本">
+    参数 验证协议 <类型 = 文本型 注释 = "提供所使用的验证协议,譬如\"basic\"/\"digest\",有可能为空文本(如果所访问主机为FTP服务器).">
+    参数 用户名 <类型 = 文本型 注释 = "事件处理方法需要在本参数中填入所提供的访问授权用户名">
+    参数 密码 <类型 = 文本型 注释 = "事件处理方法需要在本参数中填入所提供的访问授权密码">
+
+    方法 证书验证错误 <公开 定义事件 类型 = 整数 注释 = "  当 CEF 尝试加载一个 HTTPS 资源（如网页、API 调用）时，如果服务器的 SSL 证书无法通过浏览器的"
+            注释 = "安全验证（例如，证书过期、自签名、域名不匹配、被吊销等），CEF 会发送此事件，让你有机会决定如何" 注释 = "处理这个安全风险，而不是直接中断连接并显示错误页面。"
+            返回值注释 = "返回0将使用默认行为(通常是显示一个\"您的连接不是私密连接\"的错误页面,并中断连接),返回1忽略此错误.">
+    参数 错误码 <类型 = 整数 注释 = "提供具体的CEF错误码值,有关证书验证失败的常见值有:" 注释 = "-200: 证书的通用名称 (CN) 或主题备用名称 (SAN) 与请求的域名不匹配;"
+            注释 = "-201: 证书已过期或尚未生效;" 注释 = "-202: 证书颁发机构 (CA) 不受信任(例如: 自签名证书);" 注释 = "-203: 证书本身包含错误;" 注释 = "-206: 证书已被吊销."
+            注释 = "还有很多其它错误值,具体请查阅相关CEF API文档.">
+    参数 所请求链接地址 <类型 = 文本型 注释 = "提供发生错误的 HTTPS 请求的完整链接地址">
+
+    方法 渲染视图已就绪 <公开 定义事件 类型 = 整数 注释 = "本事件将在以下情况下被发送:" 注释 = "1. 浏览器创建完成: 当你创建一个新浏览器后, CEF 会启动渲染进程,当这个进程初始化完毕,主渲染视图建立后,就会发送本事件;"
+            注释 = "2. 渲染进程重启: 如果渲染进程由于崩溃等原因被 CEF 重新启动,在新的渲染进程和视图准备就绪后,也会再次发送本事件."
+            注释 = "在 CEF 的架构中,浏览器进程和渲染进程是分离的,你在主进程中(浏览器进程)调用的许多方法(尤其是与 JavaScript 和 DOM 相关的),需要通过 IPC (进程间通信) 发送到渲染进程去执行."
+            注释 = "在接收到本事件之前,渲染进程可能尚未完全启动,或者主渲染视图还未创建. 此时调用\"执行JS脚本\"方法可能会失败或被静默丢弃,尝试注入 JavaScript 或访问 DOM 可能不会生效."
+            注释 = "一旦接收到本事件,你就有了一个可靠的保证: 渲染视图已经存在,可以安全地执行 JavaScript 和与页面内容交互,此时是执行初始化 JavaScript 代码和设置页面环境的最佳时机.">
+
+    方法 主框架文档已就绪 <公开 定义事件 类型 = 整数
+            注释 = "接收到本事件标志着一个关键的、比\"渲染视图已就绪\"事件更精确的页面加载阶段: 主页面框架的 HTML 文档对象 (Document Object) 已经在渲染进程中创建并可用."
+            注释 = "本事件在页面加载生命周期中的非常早期被发送,具体时机是:" 注释 = "1. 渲染进程已经启动(\"渲染视图已就绪\"事件已经或即将被调用);" 注释 = "2. 主框架的文档对象(即 window.document)已经创建."
+            注释 = "但是此时HTML文档可能尚未完全解析,\"<script>\"和\"<link>\"标签引用的外部资源(如 CSS、JavaScript 文件)可能还在下载中,DOM 树可能只构建了一部分."
+            注释 = "在 CEF 的架构中,本事件解决了一个长期存在的痛点:" 注释 = "1. \"渲染视图已就绪\"事件的局限性:"
+            注释 = "  该事件只保证渲染视图存在,可以接收 IPC 消息,但它不保证\"window.document\"对象已经创建,在此事件触发后立即执行: 执行JS脚本(\"document.getElementById(\'...\')\"),"
+            注释 = "可能会失败,因为 document 可能还不存在或为空." 注释 = "2. 本事件的优势:"
+            注释 = "  接收到本事件可以明确确定: document 对象现在存在了,这是最早可以安全地执行依赖于 document 对象的 JavaScript 的时机,它比\"载入状态被改变\"事件(\"是否正在载入\"参数为假)早得多,"
+            注释 = "允许你更早地介入页面加载过程。" 注释 = "主要用途: 本事件是执行最早期 JavaScript 注入(如: 注入\"启动器\"脚本,为后续的 JS 执行做准备)和修改页面初始环境的理想时机."
+            注释 = "各种相关事件特性对比(发送时机 / 是否保证 document 存在 / 用途):" 注释 = "\"浏览器被创建\": 在浏览器进程创建了浏览器对象后发送 / document不存在 / 用作初始化浏览器对象、窗口等;"
+            注释 = "\"渲染视图已就绪\": 在渲染进程已创建渲染视图后发送 / document不确定存在 / 可以发送 IPC,但 JS 执行可能失败;"
+            注释 = "\"主框架文档已就绪\": 主框架的 document 对象创建后发送 / document已存在 / 最早安全执行 JS 的时机;"
+            注释 = "\"载入状态被改变\"事件(\"是否正在载入\"参数为假): 页面(主框架)完全加载后发送 / document已存在 / 可以执行依赖完整资源和 DOM 的操作.">
+
+    方法 是否允许下载 <公开 定义事件 类型 = 整数 注释 = "当浏览器在下载指定URL前,本事件被发送." 返回值注释 = "返回0表示允许下载,返回1表示不允许下载.">
+    参数 下载链接地址 <类型 = 文本型 注释 = "提供对应的下载链接URL地址">
+    参数 请求方法 <类型 = 文本型 注释 = "提供对应的请求方法名称,如: \"GET\", \"POST\" 等.">
+
+    方法 即将下载 <公开 定义事件 类型 = 整数 注释 = "当浏览器即将下载指定URL时,本事件被发送." 返回值注释 = "返回0表示正常下载,返回1时进行如下默认处理: 浏览器为Alloy风格就取消下载,为Chrome风格就显示下载框架.">
+    参数 下载链接地址 <类型 = 文本型 注释 = "提供对应的下载链接URL地址">
+    参数 推荐文件名 <类型 = 文本型 注释 = "提供所推荐使用的下载数据保存到的本地文件名">
+    参数 保存到文件名 <类型 = 文本型 注释 = "用作接收保存到文件名." 注释 = "用户在处理本事件时,可以在其中填写一个全路径的本地文件名,下载数据将被保存到该文件中."
+            注释 = "如果未填写,则将把推荐文件名和系统临时目录组合起来建立默认文件名.">
+    参数 是否显示文件对话框 <类型 = 逻辑型类 注释 = "用作接收是否显示文件另存为对话框." 注释 = "用户在处理本事件时,将本参数设置为真将显示文件另存为对话框以获取保存到文件名,为假则不显示.">
+
+    方法 下载更新 <公开 定义事件 类型 = 整数 注释 = "当浏览器正在下载的项目进度或其它信息更新后,本事件被发送." 返回值注释 = "返回0表示继续下载,返回1表示暂停该项目下载,返回-1表示中止该项目下载.">
+    参数 下载项ID <类型 = 整数 注释 = "提供当前下载项的ID值,必定不为0. 可以将其保存起来在\"暂停下载\"/\"继续下载\"/\"中止下载\"/\"是否已下载结束\"等方法中使用.">
+    参数 下载项 <类型 = CEF下载项信息 注释 = "提供下载项的当前信息,必定不为空. 注意: 只能在处理本事件时使用,不能将其保存起来在以后使用.">
+    参数 刚开始下载 <类型 = 逻辑型 注释 = "提供本次更新是否为开始下载后的首次更新,用户可以在接收到此类型事件后进行一些初始化工作.">
+
+    方法 下载结束 <公开 定义事件 类型 = 整数 注释 = "当浏览器结束下载指定项目(下载完成/被中止/被中断/已超时)后,本事件被发送." 注释 = "发送本事件之前,必定已经发送了\"刚开始下载\"参数为真的\"下载更新\"事件.">
+    参数 下载项ID <类型 = 整数 注释 = "提供已结束下载项的ID值,必定不为0.">
+    参数 结束原因 <类型 = CEF下载结束原因 注释 = "提供下载结束的具体原因">
+    参数 中断原因 <类型 = CEF下载中断原因 注释 = "如果\"结束原因\"参数值为\"CEF下载结束原因.被中断\",提供具体中断原因.">
+
+    方法 图像下载完毕 <公开 定义事件 类型 = 整数 注释 = "当调用\"下载图像\"方法后,无论下载成功还是失败,都会被发送本事件,用作提供下载结果.">
+    参数 图像链接地址 <类型 = 文本型 注释 = "提供所下载的图像链接地址,与调用\"下载图像\"方法时所传入的对应参数一致.">
+    参数 响应状态码 <类型 = 整数 注释 = "HTTP响应状态码: 200: 成功; 404: 文件未找到; 403: 禁止访问; 其他非 200 值均表示失败.">
+    参数 所下载图像 <类型 = CEF图像 注释 = "提供下载并解码后的图像对象." 注释 = "如果下载成功且图像有效,这是一个有效不为空(\"是否为空\"方法返回假)的CEF图像实例."
+            注释 = "如果下载失败(网络错误、HTTP 错误、不是有效图像等),将返回为空的CEF图像实例.">
+
+    方法 获得查找结果 <公开 定义事件 类型 = 整数 注释 = "当调用\"查找\"方法后,将发送本事件以报告查找结果.">
+    参数 匹配项总数 <类型 = 整数 注释 = "提供页面中匹配项的总数." 注释 = "如果为 0，表示未找到任何匹配。" 注释 = "这个值可能在搜索过程中动态变化（例如，页面动态加载内容时）。">
+    参数 矩形位置 <类型 = 矩形类 注释 = "当前激活的匹配项(即被高亮显示的那个)在窗口坐标系下的矩形区域." 注释 = "注意: 是相对于整个浏览器窗口的位置，不是网页内的相对位置。">
+    参数 匹配项序号 <类型 = 整数 注释 = "当前激活的匹配项的序号,为从 1 到\"匹配项总数\"." 注释 = "如: 如果有 5 个匹配,当前高亮的是第 3 个,则本参数值为 3 .">
+    参数 是否为最终更新 <类型 = 逻辑型 注释 = "提供是否是本次搜索的最终结果更新." 注释 = "为假: 搜索仍在进行中,\"匹配项总数\"和\"匹配项序号\"参数值可能不完整,CEF 可能会在新内容加载后再次发送本事件."
+            注释 = "为真: 搜索已完成.\"匹配项总数\"和\"匹配项序号\"参数是最终的、完整的值."
+            注释 = "注意: 应该只在本参数值为真时更新 UI 的最终状态(如\"未找到\"或\"X/Y\"),在本参数值为假时,可以显示\"搜索中...\"或暂时性的计数.">
+
+    方法 框架被创建 <公开 定义事件 类型 = 整数 注释 = "当浏览器中的任意一个页面框架被成功创建后发送本事件">
+    参数 框架标识符 <类型 = 文本型 注释 = "提供对应的页面框架标识符,为空文本表示为主框架.">
+
+    方法 框架被销毁 <公开 定义事件 类型 = 整数 注释 = "当一个页面框架即将被销毁前(如页面关闭、<iframe> 被移除)发送本事件">
+    参数 框架标识符 <类型 = 文本型 注释 = "提供对应的页面框架标识符,为空文本表示为主框架.">
+
+    方法 框架被附加 <公开 定义事件 类型 = 整数 注释 = "当一个页面框架附加到浏览器的 DOM 树中时(例如动态添加 <iframe> 到页面)发送本事件">
+    参数 框架标识符 <类型 = 文本型 注释 = "提供对应的页面框架标识符,为空文本表示为主框架.">
+    参数 是否为重新挂接 <类型 = 逻辑型 注释 = "  参数值为假: 表示该框架是首次被附加到文档. 通常发生在: 页面初始加载时主框架的附加; 动态创建一个新的 <iframe> 并插入 DOM,这是一个\"从无到有\"的挂载过程;"
+            注释 = "  参数值为真: 表示该框架之前已被附加过,后来被移除,现在又被重新插入 DOM. 通常发生在: JavaScript 操作 DOM，如 appendChild() 一个之前被移除的 <iframe> 元素,"
+            注释 = "框架在 display:none 或从 DOM 移除后又被恢复,此时框架的内部状态（如 JavaScript 上下文）可能仍然存在.">
+
+    方法 框架被移除 <公开 定义事件 类型 = 整数 注释 = "当一个页面框架从浏览器的 DOM 树中被移除时(但尚未销毁)发送本事件">
+    参数 框架标识符 <类型 = 文本型 注释 = "提供对应的页面框架标识符,为空文本表示为主框架.">
+
+    方法 主框架改变 <公开 定义事件 类型 = 整数 注释 = "当浏览器的主页面框架发生变更时(例如页面跳转、历史记录导航导致主框架更换)发送本事件">
+    参数 原主框架标识符 <类型 = 文本型 注释 = "提供对应的页面框架标识符,为空文本表示为当前主框架.">
+    参数 新主框架标识符 <类型 = 文本型 注释 = "提供对应的页面框架标识符,为空文本表示为当前主框架.">
+
+    方法 浏览器按下某键1 <公开 定义事件 类型 = 整数 注释 = "当用户在浏览器上按下某个按键时,本事件将在页面中 JaveScript 脚本处理该按键事件之前发送,可以用作拦截JS中对该按键的处理."
+            返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续发送给页面中 JaveScript 脚本或进行系统默认处理.">
+    参数 键代码 <类型 = 整数 注释 = "为\"按键码\"类中的常量值,注意不包括辅助键组合状态值.">
+    参数 辅助键状态 <类型 = 整数 注释 = "事件触发时的辅助键组合状态,为\"辅助键状态\"类中各常量值的组合.">
+
+    方法 浏览器放开某键1 <公开 定义事件 类型 = 整数 注释 = "当用户在浏览器上放下某个按键时,本事件将在页面中 JaveScript 脚本处理该按键事件之前发送,可以用作拦截JS中对该按键的处理."
+            返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续发送给页面中 JaveScript 脚本或进行系统默认处理.">
+    参数 键代码 <类型 = 整数 注释 = "为\"按键码\"类中的常量值,注意不包括辅助键组合状态值.">
+    参数 辅助键状态 <类型 = 整数 注释 = "事件触发时的辅助键组合状态,为\"辅助键状态\"类中各常量值的组合.">
+
+    方法 浏览器按下某键2 <公开 定义事件 类型 = 整数 注释 = "当用户在浏览器上按下某个按键时,本事件将在页面中 JaveScript 脚本处理该按键事件之后发送."
+            返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续系统默认处理.">
+    参数 键代码 <类型 = 整数 注释 = "为\"按键码\"类中的常量值,注意不包括辅助键组合状态值.">
+    参数 辅助键状态 <类型 = 整数 注释 = "事件触发时的辅助键组合状态,为\"辅助键状态\"类中各常量值的组合.">
+
+    方法 浏览器放开某键2 <公开 定义事件 类型 = 整数 注释 = "当用户在浏览器上放下某个按键时,本事件将在页面中 JaveScript 脚本处理该按键事件之后发送."
+            返回值注释 = "本事件的处理方法如果返回非0整数值,表明事件已经得到处理且不再需要后续系统默认处理.">
+    参数 键代码 <类型 = 整数 注释 = "为\"按键码\"类中的常量值,注意不包括辅助键组合状态值.">
+    参数 辅助键状态 <类型 = 整数 注释 = "事件触发时的辅助键组合状态,为\"辅助键状态\"类中各常量值的组合.">
+
+    # 属性 --
+
+    方法 背景颜色 <公开 属性读 类型 = 整数 注释 = "返回当前所设置的本组件本身的背景颜色值" @嵌入式方法 = "">
+    {
+        @ (INT)((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->m_clrBack
+    }
+
+    方法 背景颜色 <公开 属性写 注释 = "设置本组件本身的背景颜色值" @值细节类型 = 颜色支持默认 @视窗.设置时机 = 组件创建前>
+    参数 所欲设置颜色值 <类型 = 整数 注释 = "可以使用\"颜色类\"所提供的颜色值">
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_clrBack = @<所欲设置颜色值>;
+    }
+
+    方法 链接地址 <公开 属性读 类型 = 文本型 注释 = "返回主框架所浏览页面的链接地址" @嵌入式方法 = "">
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->GetCurrentURL (_T (""))
+    }
+
+    方法 链接地址 <公开 属性写 注释 = "将当前网页主框架跳转到所指定的链接地址" @视窗.设置时机 = 组件创建前后>
+    参数 所欲跳转到的链接地址 <类型 = 文本型>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GotoURL (_T (""), @<所欲跳转到的链接地址>.GetText ());
+    }
+
+    方法 标准字体 <公开 属性写 注释 = "设置本组件所使用的标准字体家族名称" @视窗.设置时机 = 组件创建前>
+    参数 所欲设置字体家族名 <类型 = 文本型>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_strStandardFontFamily = @<所欲设置字体家族名>;
+    }
+
+    方法 定宽字体 <公开 属性写 注释 = "设置本组件所使用的定宽字体家族名称" @视窗.设置时机 = 组件创建前>
+    参数 所欲设置字体家族名 <类型 = 文本型>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_strFixedFontFamily = @<所欲设置字体家族名>;
+    }
+
+    方法 衬线字体 <公开 属性写 注释 = "设置本组件所使用的衬线字体家族名称" @视窗.设置时机 = 组件创建前>
+    参数 所欲设置字体家族名 <类型 = 文本型>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_strSerifFontFamily = @<所欲设置字体家族名>;
+    }
+
+    方法 无衬线字体 <公开 属性写 注释 = "设置本组件所使用的无衬线字体家族名称" @视窗.设置时机 = 组件创建前>
+    参数 所欲设置字体家族名 <类型 = 文本型>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_strSansSerifFontFamily = @<所欲设置字体家族名>;
+    }
+
+    方法 草书字体 <公开 属性写 注释 = "设置本组件所使用的草书字体家族名称" @视窗.设置时机 = 组件创建前>
+    参数 所欲设置字体家族名 <类型 = 文本型>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_strCursiveFontFamily = @<所欲设置字体家族名>;
+    }
+
+    方法 虚幻字体 <公开 属性写 注释 = "设置本组件所使用的虚幻字体家族名称" @视窗.设置时机 = 组件创建前>
+    参数 所欲设置字体家族名 <类型 = 文本型>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_strFantasyFontFamily = @<所欲设置字体家族名>;
+    }
+
+    方法 默认字体尺寸 <公开 属性写 注释 = "设置本组件所使用的默认字体尺寸" @视窗.设置时机 = 组件创建前>
+    参数 所欲设置字体尺寸 <类型 = 整数 注释 = "单位像素">
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_nDefaultFontSize = @<所欲设置字体尺寸>;
+    }
+
+    方法 默认定宽字体尺寸 <公开 属性写 注释 = "设置本组件所使用的默认定宽字体尺寸" @视窗.设置时机 = 组件创建前>
+    参数 所欲设置字体尺寸 <类型 = 整数 注释 = "单位像素">
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_nDefaultFixedFontSize = @<所欲设置字体尺寸>;
+    }
+
+    方法 最小字体尺寸 <公开 属性写 注释 = "设置本组件所使用的最小字体尺寸" @视窗.设置时机 = 组件创建前>
+    参数 所欲设置字体尺寸 <类型 = 整数 注释 = "单位像素">
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_nMinimumFontSize = @<所欲设置字体尺寸>;
+    }
+
+    方法 最小逻辑字体尺寸 <公开 属性写 注释 = "设置本组件所使用的最小逻辑字体尺寸" @视窗.设置时机 = 组件创建前>
+    参数 所欲设置字体尺寸 <类型 = 整数 注释 = "单位像素">
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_nMinimumLogicalFontSize = @<所欲设置字体尺寸>;
+    }
+
+    方法 禁止右键菜单 <公开 属性读 类型 = 逻辑型 注释 = "返回是否禁止在浏览器上弹出右键菜单" @嵌入式方法 = "">
+    {
+        @ (BOOL)((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->m_blpDisableContextMenu
+    }
+
+    方法 禁止右键菜单 <公开 属性写 注释 = "设置是否禁止在浏览器上弹出右键菜单" @视窗.设置时机 = 组件创建前后>
+    参数 是否禁止 <类型 = 逻辑型>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_blpDisableContextMenu = @<是否禁止>;
+    }
+
+    方法 缩放级别 <公开 属性读 类型 = 小数 注释 = "返回本浏览器的缩放级别" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ return ((((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL) ? browser->GetHost ()->GetZoomLevel () : 0);
+    }
+
+    方法 缩放级别 <公开 属性写 注释 = "设置本浏览器的缩放级别">
+    参数 所欲设置的缩放级别 <类型 = 小数 注释 = "必须大于等于0">
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     browser->GetHost ()->SetZoomLevel (MAX (0, @<所欲设置的缩放级别>));
+    }
+
+    方法 默认编码 <公开 属性读 类型 = 文本型 注释 = "返回所使用的网页内容默认编码,如果为空,则将使用\"ISO-8859-1\"." @嵌入式方法 = "">
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->m_strDefaultEncoding
+    }
+
+    方法 默认编码 <公开 属性写 注释 = "设置所使用的网页内容默认编码,如果为空,则将使用\"ISO-8859-1\"." @视窗.设置时机 = 组件创建前>
+    参数 所欲设置的编码类型 <类型 = 文本型>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_strDefaultEncoding.SetText (@<所欲设置的编码类型>);
+    }
+
+    方法 是否载入图像 <公开 属性读 类型 = CEF许可状态 注释 = "返回是否允许从网络上载入远程图像(本地缓存图像始终被允许)" @嵌入式方法 = "">
+    {
+        @ (INT)((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->m_image_loading
+    }
+
+    方法 是否载入图像 <公开 属性写 注释 = "设置是否允许从网络上载入远程图像(本地缓存图像始终被允许)" @视窗.设置时机 = 组件创建前>
+    参数 许可状态 <类型 = CEF许可状态>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_image_loading = (cef_state_t)@<许可状态>;
+    }
+
+    方法 是否允许JS <公开 属性读 类型 = CEF许可状态 注释 = "返回是否允许执行JavaScript脚本" @嵌入式方法 = "">
+    {
+        @ (INT)((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->m_javascript
+    }
+
+    方法 是否允许JS <公开 属性写 注释 = "设置是否允许执行JavaScript脚本" @视窗.设置时机 = 组件创建前>
+    参数 许可状态 <类型 = CEF许可状态>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_javascript = (cef_state_t)@<许可状态>;
+    }
+
+    方法 允许JS访问剪贴板 <公开 属性读 类型 = CEF许可状态 注释 = "返回是否允许JavaScript脚本访问系统剪贴板" @嵌入式方法 = "">
+    {
+        @ (INT)((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->m_javascript_access_clipboard
+    }
+
+    方法 允许JS访问剪贴板 <公开 属性写 注释 = "设置是否允许JavaScript脚本访问系统剪贴板" @视窗.设置时机 = 组件创建前>
+    参数 许可状态 <类型 = CEF许可状态>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_javascript_access_clipboard = (cef_state_t)@<许可状态>;
+    }
+
+    方法 是否允许使用WebGL <公开 属性读 类型 = CEF许可状态 注释 = "返回是否允许使用WebGL" @嵌入式方法 = "">
+    {
+        @ (INT)((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->m_webgl
+    }
+
+    方法 是否允许使用WebGL <公开 属性写 注释 = "设置是否允许使用WebGL." 注释 = "注意: WebGL需要对应计算机硬件支持,因此即使被许可使用,也有可能不会工作." @视窗.设置时机 = 组件创建前>
+    参数 许可状态 <类型 = CEF许可状态>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_webgl = (cef_state_t)@<许可状态>;
+    }
+
+    方法 允许远端字体 <公开 属性写 注释 = "设置是否允许从远端源处下载字体" @视窗.设置时机 = 组件创建前>
+    参数 许可状态 <类型 = CEF许可状态>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_remote_fonts = (cef_state_t)@<许可状态>;
+    }
+
+    方法 允许JS关闭窗口 <公开 属性写 注释 = "设置是否允许JavaScript脚本关闭不是通过JavaScript脚本打开的窗口."
+            注释 = "JavaScript脚本始终可以关闭通过JavaScript脚本打开的或者没有前进/回退历史的窗口." @视窗.设置时机 = 组件创建前>
+    参数 许可状态 <类型 = CEF许可状态>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_javascript_close_windows = (cef_state_t)@<许可状态>;
+    }
+
+    方法 允许缩小图片 <公开 属性写 注释 = "设置是否允许将过大的独立图片缩小到匹配页面" @视窗.设置时机 = 组件创建前>
+    参数 许可状态 <类型 = CEF许可状态>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_image_shrink_standalone_to_fit = (cef_state_t)@<许可状态>;
+    }
+
+    方法 允许调整编辑框尺寸 <公开 属性写 注释 = "设置是否允许用户通过拖拽多行编辑框(\"<textarea>\"元素)的右下角来调整其尺寸" @视窗.设置时机 = 组件创建前>
+    参数 许可状态 <类型 = CEF许可状态>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_text_area_resize = (cef_state_t)@<许可状态>;
+    }
+
+    方法 允许TAB键导航 <公开 属性写 注释 = "控制是否允许用户使用 Tab 键在网页上的链接之间进行导航" @视窗.设置时机 = 组件创建前>
+    参数 许可状态 <类型 = CEF许可状态>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_tab_to_links = (cef_state_t)@<许可状态>;
+    }
+
+    方法 允许本地存储 <公开 属性写 注释 = "控制是否启用浏览器的本地存储（localStorage）功能" @视窗.设置时机 = 组件创建前>
+    参数 许可状态 <类型 = CEF许可状态>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_local_storage = (cef_state_t)@<许可状态>;
+    }
+
+    方法 显示状态提示气泡 <公开 属性写 注释 = "控制是否显示浏览器底部的状态提示气泡(当鼠标悬停在链接上时显示URL提示)" @视窗.设置时机 = 组件创建前>
+    参数 许可状态 <类型 = CEF许可状态>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_chrome_status_bubble = (cef_state_t)@<许可状态>;
+    }
+
+    方法 显示缩放比例提示气泡 <公开 属性写 注释 = "控制当用户进行页面缩放操作时,是否显示缩放比例提示气泡." @视窗.设置时机 = 组件创建前>
+    参数 许可状态 <类型 = CEF许可状态>
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->m_chrome_zoom_bubble = (cef_state_t)@<许可状态>;
+    }
+
+    # 方法 --
+
+    方法 初始化 <公开 静态 注释 = "  默认情况下,类库会自动以默认参数初始化CEF运行时环境,如果需要以特定的方式初始化,可以" 注释 = "调用本方法进行手动初始化." 注释 = "  请注意:"
+            注释 = "  1. 本方法只能调用一次,后续再次调用将不起作用;" 注释 = "  2. 本方法并不必须一定要调用,如果没有调用,将自动以默认参数初始化CEF运行时环境." @嵌入式方法 = "">
+    参数 配置参数表 <类型 = 文本型 注释 = "  提供所需要指定的所有CEF配置参数,具体格式为: 每个参数之间使用换行符\'\\n\'分隔,参数如果存在值,"
+            注释 = "则名称和值之间使用等号\'=\'分隔. 如: \"disable-web-security\\nenable-system-flash=1\"" @默认值 = "">
+    参数 用户代理 <类型 = 文本型 注释 = "提供HTTP头中的\"User-Agent\"值,为空文本表示使用默认值." @默认值 = "">
+    参数 缓存目录 <类型 = 文本型 注释 = "提供缓存数据的存放目录,为空文本表示使用内存空间缓存(此时将不会持续化保存任何缓存数据,包括Cookie)." @默认值 = "">
+    参数 是否缓存会话Cookie <类型 = 逻辑型 注释 = "  指定是否在缓存目录中持续保存会话中所使用的临时Cookie,设置本参数为真则必须同时设置非" 注释 = "空文本的有效缓存目录." @默认值 = 假>
+    参数 背景颜色 <类型 = 整数 注释 = "提供浏览器的背景颜色" @默认值 = 0x383838>
+    参数 远程调试端口 <类型 = 整数 注释 = "提供远程调试端口号,为0表示禁用." @默认值 = 0>
+    参数 日志记录级别 <类型 = CEF日志记录级别 注释 = "提供具体日志记录级别" @默认值 = CEF日志记录级别.禁止>
+    参数 日志记录文件名 <类型 = 文本型 注释 = "提供日志记录文件名,为空文本表示使用默认文件名." @默认值 = "">
+    参数 代理服务器 <类型 = 文本型 注释 = "提供所使用的代理服务器地址,为空文本表示无." @默认值 = "">
+    {
+        @ CCefBrowserManager::sInitCef (@<配置参数表>.GetText (), @<用户代理>.GetText (), @<缓存目录>.GetText (), @<是否缓存会话Cookie>,
+        @         @<背景颜色>, @<远程调试端口>, @<日志记录级别>, @<日志记录文件名>.GetText (), @<代理服务器>.GetText ())
+    }
+
+    方法 使用线程消息循环 <公开 静态 注释 = "调用本方法指示编译CEF3时使用其线程方式的消息循环,如果不调用本方法,将会将CEF3的消息循环整合进当前程序自身的消息循环中(默认方式)."
+            注释 = "注意: 本方法为编译时处理方法,系统在编译时只要检测到用户程序实际执行流程中任意位置调用了此方法,就启用对应的编译特性,和方法本身是否被执行到没有任何关系."
+            @视窗.预定义宏 = "_VOL_CEF_MULTI_THREADED_MESSAGE_LOOP" @视窗.编译信息 = "基于线程消息循环版本编译CEF3浏览器">
+    {
+
+    }
+
+    方法 函数 <公开 属性读 类型 = 文本型 注释 = "返回所有欲在本浏览器中登记的JS函数名列表,多个函数名之间使用逗号分隔." @嵌入式方法 = "">
+    {
+        @ CVolString (((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->GetFunctionNames ())
+    }
+
+    方法 函数 <公开 属性写 注释 = "设置所有欲在本浏览器中登记的JS函数名列表,多个函数名之间使用逗号分隔." @视窗.设置时机 = 组件创建前>
+    参数 函数名列表 <类型 = 文本型 注释 = "提供所有欲在本浏览器中登记的JS函数名列表,多个函数名之间使用逗号分隔.">
+    {
+        @ ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->InitFunctionNames (@<函数名列表>.GetText ());
+    }
+
+    方法 是否初始化成功 <公开 静态 类型 = 逻辑型 注释 = "返回CEF运行时环境是否已经初始化成功" @嵌入式方法 = "">
+    {
+        @ CCefBrowserManager::sIsCefInitialized ()
+    }
+
+    方法 载入文本 <公开 注释 = "载入所指定的HTML文本内容" @嵌入式方法 = "">
+    参数 框架标识符 <类型 = 文本型 注释 = "提供欲置入内容的页面框架的标识符,为空文本表示为主框架." @默认值 = "">
+    参数 欲载入文本 <类型 = 文本型 注释 = "提供欲载入的HTML格式的文本内容">
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->LoadString (@<框架标识符>.GetText (), @<欲载入文本>.GetText ())
+    }
+
+    方法 能否后退 <公开 类型 = 逻辑型 注释 = "返回当前页面能否进行后退操作" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ return (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->CanGoBack ());
+    }
+
+    方法 后退 <公开 注释 = "后退当前页面">
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser))
+        @     browser->GoBack ();
+    }
+
+    方法 能否前进 <公开 类型 = 逻辑型 注释 = "返回当前页面能否进行前进操作" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ return (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->CanGoForward ());
+    }
+
+    方法 前进 <公开 注释 = "前进当前页面">
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser))
+        @     browser->GoForward ();
+    }
+
+    方法 是否正在载入 <公开 类型 = 逻辑型 注释 = "返回当前是否正在载入文档" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ return (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->IsLoading ());
+    }
+
+    方法 重载 <公开 注释 = "重新载入当前文档">
+    参数 是否忽略缓存 <类型 = 逻辑型 注释 = "指定是否不从当前缓存中载入文档" @默认值 = 假>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser))
+        @     if (@<是否忽略缓存>) browser->ReloadIgnoreCache (); else browser->Reload ();
+    }
+
+    方法 停止载入 <公开 注释 = "指定是否停止载入当前文档">
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser))
+        @     browser->StopLoad ();
+    }
+
+    方法 是否已载入 <公开 类型 = 逻辑型 注释 = "返回当前是否已经载入了一个文档" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ return (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->HasDocument ());
+    }
+
+    方法 取ID <公开 类型 = 整数 注释 = "返回本浏览器的全局唯一ID值" 返回值注释 = "如果本浏览器组件尚未创建,将返回0." @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ return (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) ? browser->GetIdentifier () : 0);
+    }
+
+    方法 为弹出窗口 <公开 类型 = 逻辑型 注释 = "返回本浏览器是否为弹出窗口" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ return (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->IsPopup ());
+    }
+
+    方法 取主框架 <公开 类型 = CEF页面框架 注释 = "返回当前页面中的主框架" 返回值注释 = "如果失败,所返回框架将为空(\"CEF页面框架.是否为空\"方法返回真)." @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ return (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) ? @dt<CEF页面框架> (browser->GetMainFrame ()) : @dt<CEF页面框架> ());
+    }
+
+    方法 取焦点框架 <公开 类型 = CEF页面框架 注释 = "返回当前页面中的焦点框架" 返回值注释 = "如果失败,所返回框架将为空(\"CEF页面框架.是否为空\"方法返回真)." @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ return (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) ? @dt<CEF页面框架> (browser->GetFocusedFrame ()) : @dt<CEF页面框架> ());
+    }
+
+    方法 取框架 <公开 类型 = CEF页面框架 注释 = "返回当前页面中具有指定ID的框架" 返回值注释 = "如果失败,所返回框架将为空(\"CEF页面框架.是否为空\"方法返回真)." @禁止流程检查 = 真>
+    参数 框架标识符 <类型 = 文本型 注释 = "提供所欲获取页面框架的标识符,为空文本表示为主框架.">
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser))
+        @     return (@<框架标识符>.IsEmpty () ? @dt<CEF页面框架> (browser->GetMainFrame ()) : @dt<CEF页面框架> (browser->GetFrameByIdentifier (CefString ((const char16_t*)@<框架标识符>.GetText ()))));
+        @ return @dt<CEF页面框架> ();
+    }
+
+    方法 取指定名称框架 <公开 类型 = CEF页面框架 注释 = "返回当前页面中具有指定名称的框架" 返回值注释 = "如果失败,所返回框架将为空(\"CEF页面框架.是否为空\"方法返回真)." @禁止流程检查 = 真>
+    参数 框架名称 <类型 = 文本型 注释 = "提供所欲获取页面框架的名称">
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ return (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) ? @dt<CEF页面框架> (browser->GetFrameByName (CefString ((const char16_t*)@<框架名称>.GetText ()))) : @dt<CEF页面框架> ());
+    }
+
+    方法 取框架数目 <公开 类型 = 整数 注释 = "返回当前页面中所有框架的数目" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ return (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) ? (INT)browser->GetFrameCount () : 0);
+    }
+
+    方法 取所有框架标识符 <公开 类型 = 整数 注释 = "获取当前页面中所有框架的标识符" 返回值注释 = "返回所获取框架的数目" @嵌入式方法 = "">
+    参数 结果存放参数 <类型 = 文本数组类 注释 = "获取的所有框架标识符将存放入此数组参数中">
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->GetAllFrameIdentifiers (@<结果存放参数>.data ())
+    }
+
+    方法 取所有框架名称 <公开 类型 = 整数 注释 = "获取当前页面中所有框架的名称" 返回值注释 = "返回所获取框架的数目" @嵌入式方法 = "">
+    参数 结果存放参数 <类型 = 文本数组类 注释 = "获取的所有框架名称将存放入此数组参数中">
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->GetAllFrameNames (@<结果存放参数>.data ())
+    }
+
+    方法 启动开发工具 <公开 注释 = "启动并显示开发工具窗口" @嵌入式方法 = "">
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->ShowDevTool ()
+    }
+
+    方法 结束开发工具 <公开 注释 = "如果当前已经启动显示了开发工具窗口,则将其退出.">
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     browser->GetHost ()->CloseDevTools ();
+    }
+
+    方法 开发工具是否启动 <公开 类型 = 逻辑型 注释 = "返回当前是否已经启动显示了开发工具窗口" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     return (BOOL)browser->GetHost ()->HasDevTools ();
+        @ return FALSE;
+    }
+
+    方法 开始下载 <公开 注释 = "开始下载所指定链接地址中的文件,本下载操作会触发本类中的所有下载相关事件.">
+    参数 下载链接地址 <类型 = 文本型>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     browser->GetHost ()->StartDownload (@<下载链接地址>.GetText ());
+    }
+
+    方法 下载图像 <公开 注释 = "下载一个图像(通常是网页中的图片或网站图标)并获取其数据." 注释 = "下载完毕会发送\"图像下载完毕\"事件(无论下载成功还是失败,都会被发送一次且仅一次)." @嵌入式方法 = "">
+    参数 图像链接地址 <类型 = 文本型 注释 = "提供要下载的图像的完整链接地址,必须是一个有效的、可访问的图像 URL.">
+    参数 图像最大尺寸 <类型 = 整数 注释 = "指定下载图像的最大尺寸(以像素为单位),这里指的是图像的宽度和高度,而不是文件大小." 注释 = "作用: CEF 会自动缩放下载的图像,确保其宽度和高度都不超过此值."
+            注释 = "例如: 如果一张图片是 2000x1500 像素，而本参数值等于512,那么 CEF 返回的图像数据将是缩放到 512x384 或更小的版本."
+            注释 = "目的: 防止加载过大的图片导致内存占用过高; 优化性能,特别是当最终显示尺寸很小时(如缩略图、图标)."
+            注释 = "建议值: 对于网站图标,通常设为 64 或 128; 对于普通图片预览,可根据 UI 设计设定(如 512, 1024).">
+    参数 是否为网站图标 <类型 = 逻辑型 注释 = "  当设置为真时,CEF 会应用一些针对网站图标的特殊处理逻辑: 可能会尝试从常见的路径(如 /favicon.ico)加载,"
+            注释 = "可能会对响应头进行更严格的检查,内部可能会使用不同的缓存策略." 注释 = "  如果你只是下载普通图片,应设置为假." @默认值 = 假>
+    参数 是否不使用缓存 <类型 = 逻辑型 注释 = "设置为真强制从网络重新下载,不使用任何缓存的副本." 注释 = "设置为假允许使用缓存,如果图像已缓存且未过期,将直接使用缓存版本,速度更快." @默认值 = 假>
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->DownloadImage (@<图像链接地址>.GetText (), @<图像最大尺寸>, @<是否为网站图标>, @<是否不使用缓存>)
+    }
+
+    方法 打印 <公开 注释 = "打印当前页面内容">
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     browser->GetHost ()->Print ();
+    }
+
+    方法 打印到PDF <公开 类型 = 逻辑型 注释 = "开始打印当前页面内容到指定的PDF文件" 返回值注释 = "返回是否开始打印成功" @嵌入式方法 = "">
+    参数 PDF文件名 <类型 = 文本型 注释 = "提供所欲打印到的PDF文件名">
+    参数 等待打印完毕 <类型 = 逻辑型 注释 = "  指定是否一直等待打印到PDF完毕后才返回,如果为假,则打印完毕后会发送\"PDF打印完毕\"事件."
+            注释 = "  注意: 如果本参数值为假,则本方法返回真只能说明开始打印成功,并不意味着打印本身已经成功," 注释 = "打印本身是否成功在接收到\"PDF打印完毕\"事件后由其\"是否打印成功\"参数值提供." @默认值 = 假>
+    参数 页眉模板 <类型 = 文本型 注释 = "提供显示在页面顶部的文本模板,支持特定的变量和简单的 HTML 标签.如果为空,则不显示页眉." 注释 = "支持的变量和类:" 注释 = "1. 页码相关:"
+            注释 = "当前页码: <span class=\'pageNumber\'></span> ;" 注释 = "总页数: <span class=\'totalPages\'></span> ." 注释 = "2. 日期时间相关:"
+            注释 = "打印日期: <span class=\'date\'></span> ;" 注释 = "打印时间: <span class=\'time\'></span> ;"
+            注释 = "页面标题: <span class=\'title\'></span> ." 注释 = "示例,设置包含多种信息的页眉:"
+            注释 = "  \"<div style=\'width: 100%; font-size: 8px; font-family: Arial; padding: 5px; border-bottom: 1px solid #ccc;\'>"
+            注释 = "<span style=\'float: left;\'><span class=\'title\'></span></span><span style=\'float: center;\'>第 <span class=\'pageNumber\'>"
+            注释 = "</span> 页 / 共 <span class=\'totalPages\'></span> 页</span><span style=\'float: right;\'>打印日期: <span class=\'date\'></span>"
+            注释 = "</span><div style=\'clear: both;\'></div></div>\" ." 注释 = "以下是几个常用的页眉和页脚模板示例:" 注释 = "1. 简洁商务风格:"
+            注释 = "  页眉: \"<div style=\'width: 100%; font-size: 9px; font-family: Arial; padding: 8px 0; border-bottom: 1px solid #ddd;\'>"
+            注释 = "<span style=\'float: left;\'><span class=\'title\'></span></span><span style=\'float: right;\'>机密文档</span>"
+            注释 = "<div style=\'clear: both;\'></div></div>\";"
+            注释 = "  页脚: \"<div style=\'width: 100%; font-size: 8px; font-family: Arial; padding: 8px 0; border-top: 1px solid #ddd; color: #666;\'>"
+            注释 = "<span style=\'float: left;\'>打印于: <span class=\'date\'></span></span><span style=\'float: center;\'>第 <span class=\'pageNumber\'>"
+            注释 = "</span> 页 / 共 <span class=\'totalPages\'></span> 页</span><span style=\'float: right;\'>© 2024 公司名称</span>"
+            注释 = "<div style=\'clear: both;\'></div></div>\"." 注释 = "2. 居中页码风格:"
+            注释 = "  页眉: \"<div style=\'text-align: center; font-size: 10px; color: #333; padding: 5px 0;\'><span class=\'title\'></span></div>\";"
+            注释 = "  页脚: \"<div style=\'text-align: center; font-size: 9px; color: #666; padding: 10px 0;\'>第 <span class=\'pageNumber\'></span> 页</div>\"."
+            注释 = "3. 报告文档风格:"
+            注释 = "  页眉: \"<div style=\'width: 100%; font-size: 8px; font-family: Arial; padding: 6px 0; background-color: #f5f5f5;\'>"
+            注释 = "<span style=\'float: left;\'>项目报告书</span><span style=\'float: center;\'>版本: 1.0</span><span style=\'float: right;\'>"
+            注释 = "<span class=\'date\'></span></span><div style=\'clear: both;\'></div></div>\";"
+            注释 = "  页脚: \"<div style=\'width: 100%; font-size: 8px; font-family: Arial; padding: 6px 0; color: #888;\'>"
+            注释 = "<span style=\'float: left;\'>部门: 技术部</span><span style=\'float: center;\'>第 <span class=\'pageNumber\'></span> 页 / 共 <span class=\'totalPages\'>"
+            注释 = "</span> 页</span><span style=\'float: right;\'>审批人: 张三</span><div style=\'clear: both;\'></div></div>\"."
+            注释 = "4. 极简风格:" 注释 = "  页眉 - 只有一条细线:  \"<div style=\'border-bottom: 0.5px solid #eee; height: 1px;\'></div>\";"
+            注释 = "  页脚: \"<div style=\'text-align: center; font-size: 8px; color: #999; padding: 5px;\'><span class=\'pageNumber\'>"
+            注释 = "</span> / <span class=\'totalPages\'></span></div>\"." 注释 = "5. 法律文档风格:"
+            注释 = "  页眉: \"<div style=\'width: 100%; font-size: 7px; font-family: Arial; padding: 4px 0; border-bottom: 1px solid #000;\'>"
+            注释 = "<span style=\'float: left;\'>合同编号: HT-2024-001</span><span style=\'float: right;\'>机密级别: 内部</span>"
+            注释 = "<div style=\'clear: both;\'></div></div>\";"
+            注释 = "  页脚: \"<div style=\'width: 100%; font-size: 7px; font-family: Arial; padding: 4px 0; border-top: 1px solid #000;\'>"
+            注释 = "<span style=\'float: left;\'>© 2024 律师事务所 版权所有</span><span style=\'float: center;\'>第 <span class=\'pageNumber\'></span> 页</span>"
+            注释 = "<span style=\'float: right;\'>打印时间: <span class=\'date\'></span> <span class=\'time\'></span></span><div style=\'clear: both;\'></div></div>\"."
+            注释 = "使用提示:" 注释 = "字体大小: 通常使用 7-10px;" 注释 = "颜色: 使用灰色系 (#666, #888, #999) 避免太醒目;"
+            注释 = "布局: 使用 float 进行左中右布局,最后用 clear: both 清除浮动." 注释 = "间距: 适当使用 padding 增加可读性;" 注释 = "边框: 使用细边框分隔内容区域." @默认值 = "">
+    参数 页脚模板 <类型 = 文本型 注释 = "提供显示在页面底部的文本模板,模板格式见\"页眉模板\"参数." @默认值 = "">
+    参数 页宽 <类型 = 整数 注释 = "提供输出页面宽度,单位为微米(0.001毫米).如果页宽或页高任一项小于等于0,则使用默认A4纸张尺寸." @默认值 = 0>
+    参数 页高 <类型 = 整数 注释 = "提供输出页面高度,单位为微米(0.001毫米).如果页宽或页高任一项小于等于0,则使用默认A4纸张尺寸." @默认值 = 0>
+    参数 边距类型 <类型 = PDF打印边距类型 注释 = "提供边距的打印类型" @默认值 = PDF打印边距类型.默认>
+    参数 自定义边距 <类型 = 矩形类 注释 = "当\"边距类型\"为\"PDF打印边距类型.自定义\"时提供对应的各边边距,单位为微米(0.001毫米)." @默认值 = 空对象>
+    参数 横向打印 <类型 = 逻辑型 注释 = "指定是否横向打印" @默认值 = 假>
+    参数 打印背景图 <类型 = 逻辑型 注释 = "指定是否打印页面的背景图" @默认值 = 假>
+    参数 缩放比例 <类型 = 小数 注释 = "指定打印时所使用的缩放比例,1表示100%,如果小于等于0则使用默认值1." @默认值 = 0>
+    参数 使用CSS定义尺寸 <类型 = 逻辑型 注释 = "控制打印时是否优先使用 CSS 中通过 @page 规则定义的页面尺寸,而不是用户设置的打印机页面尺寸." @默认值 = 假>
+    参数 打印范围 <类型 = 文本型 注释 = "控制在打印文档时只打印指定的页面范围,如果为空字符串,则打印所有页面. 格式示例:" 注释 = "\"1-5,8,10-12\": 打印第1-5页、第8页、第10-12页."
+            注释 = "\"1,3,5\": 打印第1、3、5页." 注释 = "\"2-\": 打印从第2页到最后一页." 注释 = "\"-5\": 打印从第1页到第5页." 注释 = "\"\": 打印所有页面(默认)." @默认值 = "">
+    参数 是否生成结构信息 <类型 = 逻辑型 注释 = "控制生成的 PDF 文件是否包含结构辅助标签(标题、段落、列表、表格等),以提升可访问性." @默认值 = 假>
+    参数 是否生成文档大纲 <类型 = 逻辑型 注释 = "控制生成的 PDF 文件是否包含基于文档标题结构的可导航大纲(书签)" @默认值 = 假>
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->PrintPDF (@<PDF文件名>.GetText (), @<页眉模板>.GetText (), @<页脚模板>.GetText (), @<页宽>, @<页高>, @<边距类型>, @<自定义边距>.ToRect (), @<横向打印>, @<打印背景图>, @<等待打印完毕>, @<缩放比例>, @<使用CSS定义尺寸>, @<打印范围>.GetText (), @<是否生成结构信息>, @<是否生成文档大纲>)
+    }
+
+    方法 枚举Cookie <公开 类型 = 逻辑型 注释 = "枚举所有现有Cookie,每枚举到一个Cookie,就发送一个对应的\"获得Cookie\"事件."
+            注释 = "Cookie枚举以其最长路径排序,如果路径相同,则以创建时间从早到晚排序." 返回值注释 = "返回真表示枚举操作启动成功,返回假表示无法访问Cookie." @嵌入式方法 = "">
+    参数 匹配链接地址 <类型 = 文本型 注释 = "如果不为空文本,则仅当匹配此链接地址的Cookie才会被枚举." @默认值 = "">
+    参数 仅普通链接 <类型 = 逻辑型 注释 = "如果为真,则仅枚举\"CEFCookie信息.仅普通链接使用\"成员值为真的Cookie." @默认值 = 假>
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->EnumAllCookies (@<匹配链接地址>.GetText (), @<仅普通链接>)
+    }
+
+    方法 置Cookie <公开 静态 类型 = 逻辑型 注释 = "设置所指定的Cookie" 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 链接地址 <类型 = 文本型 注释 = "提供所对应的链接地址">
+    参数 Cookie <类型 = CEFCookie信息 注释 = "提供对应的Cookie信息">
+    {
+        @ CefCookie cookie;
+        @ @<Cookie>.ToCefCookie (cookie);
+        @ CefRefPtr<CefCookieManager> manager = CefCookieManager::GetGlobalManager (nullptr);
+        @ return (manager->SetCookie (@<链接地址>.GetText (), cookie, nullptr) ? TRUE : FALSE);
+    }
+
+    方法 删除Cookie <公开 静态 类型 = 逻辑型 注释 = "删除所有匹配的Cookie" 返回值注释 = "成功返回真,失败返回假." @禁止流程检查 = 真>
+    参数 匹配链接地址 <类型 = 文本型 注释 = "提供用作匹配的链接地址">
+    参数 Cookie名称 <类型 = 文本型 注释 = "提供用作匹配的Cookie名称">
+    {
+        @ CefRefPtr<CefCookieManager> manager = CefCookieManager::GetGlobalManager (nullptr);
+        @ return (manager->DeleteCookies (@<匹配链接地址>.GetText (), @<Cookie名称>.GetText (), nullptr) ? TRUE : FALSE);
+    }
+
+    方法 刷新Cookie存储 <公开 静态 类型 = 逻辑型 注释 = "将所有后备Cookie数据刷新存储到磁盘" 返回值注释 = "成功返回真,无法访问Cookie返回假." @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefCookieManager> manager = CefCookieManager::GetGlobalManager (nullptr);
+        @ return (manager->FlushStore (nullptr) ? TRUE : FALSE);
+    }
+
+    方法 获取输入焦点 <公开 注释 = "将输入焦点设置到浏览器">
+    参数 是否获得焦点 <类型 = 逻辑型 注释 = "指定是否为获得焦点">
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     browser->GetHost ()->SetFocus (@<是否获得焦点>);
+    }
+
+    方法 取浏览器窗口句柄 <公开 类型 = 变整数 注释 = "获取浏览器窗口(注意不是本组件)的窗口句柄,不存在返回0" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     return (INT_P)browser->GetHost ()->GetWindowHandle ();
+        @ return 0;
+    }
+
+    方法 取父浏览器窗口句柄 <公开 类型 = 变整数 注释 = "获取打开本浏览器窗口的父浏览器的窗口句柄." 注释 = "如果本浏览器窗口不为弹出式窗口,将返回0." @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     return (INT_P)browser->GetHost ()->GetOpenerWindowHandle ();
+        @ return 0;
+    }
+
+    方法 能否缩放 <公开 类型 = 逻辑型 注释 = "返回本浏览器是否支持使用指定的缩放操作命令" @禁止流程检查 = 真>
+    参数 欲检测的缩放命令 <类型 = CEF缩放命令>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     return (BOOL)browser->GetHost ()->CanZoom ((cef_zoom_command_t)@<欲检测的缩放命令>);
+        @ return FALSE;
+    }
+
+    方法 缩放 <公开 注释 = "执行指定的缩放操作命令">
+    参数 欲执行的缩放命令 <类型 = CEF缩放命令>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     browser->GetHost ()->Zoom ((cef_zoom_command_t)@<欲执行的缩放命令>);
+    }
+
+    方法 取默认缩放级别 <公开 类型 = 小数 注释 = "返回浏览器中内容的默认缩放级别." 注释 = "缩放级别:" 注释 = "推荐范围为 -10.0 到 10.0, 典型缩放级别如:"
+            注释 = "  -10.0: 最小缩放 (约 10%);" 注释 = "  -5.0: 较小缩放;" 注释 = "  0.0: 原始大小 (100%);" 注释 = "  1.0: 约 110%;" 注释 = "  2.0: 约 125%;"
+            注释 = "  3.0: 约 150%;" 注释 = "  5.0: 约 200%;" 注释 = "  10.0: 最大缩放 (约 500%)." @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     return browser->GetHost ()->GetDefaultZoomLevel ();
+        @ return 0.0;
+    }
+
+    方法 取当前缩放级别 <公开 类型 = 小数 注释 = "返回浏览器中内容的当前缩放级别. 有关\"缩放级别\"的说明见\"取默认缩放级别\"方法." @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     return browser->GetHost ()->GetZoomLevel ();
+        @ return 0.0;
+    }
+
+    方法 置当前缩放级别 <公开 注释 = "设置浏览器中内容的当前缩放级别. 有关\"缩放级别\"的说明见\"取默认缩放级别\"方法.">
+    参数 欲设置缩放级别 <类型 = 小数>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     browser->GetHost ()->SetZoomLevel (@<欲设置缩放级别>);
+    }
+
+    方法 发送按键事件 <公开 注释 = "发送所指定的按键事件到浏览器" @嵌入式方法 = "">
+    参数 键代码 <类型 = 整数 注释 = "为\"按键码\"类中的常量值,注意不包括辅助键组合状态值.">
+    参数 辅助键状态 <类型 = 整数 注释 = "提供辅助键组合状态,为\"辅助键状态\"类中各常量值的组合." @默认值 = 0>
+    参数 为按键放开事件 <类型 = 逻辑型 注释 = "  为真表示发送按键放开事件(WM_SYSKEYUP/WM_KEYUP),否则将发送" 注释 = "按键按下事件(WM_SYSKEYDOWN/WM_KEYDOWN)." @默认值 = 假>
+    参数 为系统按键事件 <类型 = 逻辑型 注释 = "  为真表示发送系统按键事件(WM_SYSKEYDOWN/WM_SYSKEYUP),否则将" 注释 = "发送非系统按键事件(WM_KEYDOWN/WM_KEYUP)" @默认值 = 假>
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->SendKeyEvent ((@<键代码> | @<辅助键状态>), @<为按键放开事件>, @<为系统按键事件>)
+    }
+
+    方法 发送字符事件 <公开 注释 = "发送所指定的字符输入事件到浏览器" @嵌入式方法 = "">
+    参数 字符编码 <类型 = 字符 注释 = "提供所欲发送的字符">
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->SendCharEvent (@<字符编码>)
+    }
+
+    方法 发送字符串事件 <公开 注释 = "发送所指定的字符串文本输入事件到浏览器" @嵌入式方法 = "">
+    参数 字符串文本 <类型 = 文本型 注释 = "提供所欲发送的字符串文本">
+    参数 字符间隔时间 <类型 = 整数 注释 = "提供发送每个字符时的中间间隔时间,单位毫秒." @默认值 = 30>
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->SendCharsEvent (@<字符串文本>.GetText (), (DWORD)MAX (0, @<字符间隔时间>))
+    }
+
+    方法 发送鼠标单击事件 <公开 注释 = "发送所指定的鼠标键单击事件到浏览器" @嵌入式方法 = "">
+    参数 所单击按键类型 <类型 = 整数 注释 = "为\"CEF鼠标键类型\"类中的常量值之一">
+    参数 横向位置 <类型 = 整数 注释 = "提供所单击位置在浏览器窗口中的横向坐标">
+    参数 纵向位置 <类型 = 整数 注释 = "提供所单击位置在浏览器窗口中的纵向坐标">
+    参数 辅助键状态 <类型 = 整数 注释 = "提供辅助键组合状态,为\"辅助键状态\"类中各常量值的组合." @默认值 = 0>
+    参数 鼠标键状态 <类型 = 整数 注释 = "提供鼠标按键的按下状态,为\"CEF鼠标键类型\"类中各常量值的组合." @默认值 = 0>
+    参数 单击次数 <类型 = 整数 注释 = "提供所单击的次数" @默认值 = 1>
+    参数 是否为鼠标键放开 <类型 = 逻辑型 注释 = "为真表示为鼠标键放开,否则为鼠标键被按下." @默认值 = 假>
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->SendMouseClickEvent (@<所单击按键类型>, @<横向位置>, @<纵向位置>, @<辅助键状态>, @<鼠标键状态>, @<单击次数>, @<是否为鼠标键放开>)
+    }
+
+    方法 发送鼠标移动事件 <公开 注释 = "发送所指定的鼠标移动事件到浏览器" @嵌入式方法 = "">
+    参数 横向位置 <类型 = 整数 注释 = "提供当前鼠标位置在浏览器窗口中的横向坐标">
+    参数 纵向位置 <类型 = 整数 注释 = "提供当前鼠标位置在浏览器窗口中的纵向坐标">
+    参数 辅助键状态 <类型 = 整数 注释 = "提供辅助键组合状态,为\"辅助键状态\"类中各常量值的组合." @默认值 = 0>
+    参数 鼠标键状态 <类型 = 整数 注释 = "提供鼠标按键的按下状态,为\"CEF鼠标键类型\"类中各常量值的组合." @默认值 = 0>
+    参数 是否为鼠标离开 <类型 = 逻辑型 注释 = "提供是否为鼠标离开该位置" @默认值 = 假>
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->SendMouseMoveEvent (@<横向位置>, @<纵向位置>, @<辅助键状态>, @<鼠标键状态>, @<是否为鼠标离开>)
+    }
+
+    方法 发送鼠标滚轮事件 <公开 注释 = "发送所指定的鼠标滚轮事件到浏览器" @嵌入式方法 = "">
+    参数 横向位置 <类型 = 整数 注释 = "提供当前鼠标位置在浏览器窗口中的横向坐标">
+    参数 纵向位置 <类型 = 整数 注释 = "提供当前鼠标位置在浏览器窗口中的纵向坐标">
+    参数 辅助键状态 <类型 = 整数 注释 = "提供辅助键组合状态,为\"辅助键状态\"类中各常量值的组合." @默认值 = 0>
+    参数 鼠标键状态 <类型 = 整数 注释 = "提供鼠标按键的按下状态,为\"CEF鼠标键类型\"类中各常量值的组合." @默认值 = 0>
+    参数 横向滚动距离 <类型 = 整数 注释 = "提供滚轮横向滚动距离,小于0页面向左滚动,大于0页面向右滚动." @默认值 = 0>
+    参数 纵向滚动距离 <类型 = 整数 注释 = "提供滚轮纵向滚动距离,小于0页面向上滚动,大于0页面向下滚动." @默认值 = 0>
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->SendMouseWheelEvent (@<横向位置>, @<纵向位置>, @<辅助键状态>, @<鼠标键状态>, @<横向滚动距离>, @<纵向滚动距离>)
+    }
+
+    方法 暂停下载 <公开 类型 = 逻辑型 注释 = "暂停指定项目的下载" 返回值注释 = "找到所指定的下载项返回真,否则返回假." @嵌入式方法 = "">
+    参数 下载项ID <类型 = 整数 注释 = "指定欲处理下载项目的ID,该ID在\"下载更新\"事件中提供.">
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->ExecuteDownloadCommand (@<下载项ID>, CEF_DIDC_PAUSE)
+    }
+
+    方法 继续下载 <公开 类型 = 逻辑型 注释 = "继续下载先前被暂停的项目" 返回值注释 = "找到所指定的下载项返回真,否则返回假." @嵌入式方法 = "">
+    参数 下载项ID <类型 = 整数 注释 = "指定欲处理下载项目的ID,该ID在\"下载更新\"事件中提供.">
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->ExecuteDownloadCommand (@<下载项ID>, CEF_DIDC_RESUME)
+    }
+
+    方法 中止下载 <公开 类型 = 逻辑型 注释 = "中止指定项目的下载" 返回值注释 = "找到所指定的下载项返回真,否则返回假." @嵌入式方法 = "">
+    参数 下载项ID <类型 = 整数 注释 = "指定欲处理下载项目的ID,该ID在\"下载更新\"事件中提供.">
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->ExecuteDownloadCommand (@<下载项ID>, CEF_DIDC_CANCEL)
+    }
+
+    方法 下载是否已结束 <公开 类型 = 逻辑型 注释 = "返回指定的项目是否已经下载结束(该项目不存在/下载完成/被中止/被中断/已超时)" @嵌入式方法 = "">
+    参数 下载项ID <类型 = 整数 注释 = "指定欲处理下载项目的ID,该ID在\"下载更新\"事件中提供.">
+    {
+        @ ((CVWnd_CefWebBrowser*)@sn<this>.GetWtlControlPtr ())->IsDownloadEndOrTimeout (@<下载项ID>)
+    }
+
+    方法 查找 <公开 注释 = "在当前网页内容中执行文本搜索,并通过发送\"获得查找结果\"事件来获取匹配结果.">
+    参数 欲搜索文本 <类型 = 文本型 注释 = "提供要搜索的文本">
+    参数 区分大小写 <类型 = 逻辑型 注释 = "指定是否区分大小写" @默认值 = 真>
+    参数 正向搜寻 <类型 = 逻辑型 注释 = "指定搜索方向.为真表示向前(从当前位置到页面末尾)搜索,为假表示向后(从当前位置到页面开头)搜索." @默认值 = 真>
+    参数 查找下一项 <类型 = 逻辑型 注释 = "  本参数值为假或\"欲搜索文本\"和\"区分大小写\"参数值相对上一次调用发生改变: 清除之前的高亮开始"
+            注释 = "一次全新的搜索,否则继续搜索下一个(或上一个,取决于\"正向搜寻\"参数值)匹配项." @默认值 = 假>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (@<欲搜索文本>.IsEmpty () == FALSE && ((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     browser->GetHost ()->Find (@<欲搜索文本>.GetText (), (bool)@<正向搜寻>, (bool)@<区分大小写>, (bool)@<查找下一项>);
+    }
+
+    方法 停止查找 <公开 注释 = "停止当前正在进行的文本搜索并控制搜索高亮显示.它通常在用户关闭\"查找\"面板或按下\"Esc\"键时调用.">
+    参数 是否清除高亮 <类型 = 逻辑型 注释 = "控制停止搜索后,页面上的搜索高亮是否被清除." 注释 = "为真: 停止搜索并清除所有高亮. 页面恢复到搜索前的状态,所有匹配项的黄色/橙色背景消失."
+            注释 = "为假: 停止搜索但保留当前高亮. 当前激活的匹配项仍然保持高亮状态,方便用户继续查看." @默认值 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     browser->GetHost ()->StopFinding ((bool)@<是否清除高亮>);
+    }
+
+    方法 启用可访问状态 <公开 注释 = "本方法用于启用或禁用浏览器的可访问性支持." 注释 = "作用场景:" 注释 = "1. 屏幕阅读器支持 - 为视障用户提供内容朗读;" 注释 = "2. 辅助技术 - 支持其他可访问性工具和软件;"
+            注释 = "3. 自动化测试 - 某些自动化框架需要可访问性支持." 注释 = "注意事项:" 注释 = "1. 通常在浏览器创建后调用;" 注释 = "2. 改变状态可能会影响性能;"
+            注释 = "3. 只在确实需要时可启用,否则建议使用默认状态." 注释 = "这个方法让开发者能够根据应用程序的需求灵活控制可访问性功能的开关.">
+    参数 欲启用状态 <类型 = CEF许可状态>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     browser->GetHost ()->SetAccessibilityState ((cef_state_t)@<欲启用状态>);
+    }
+
+    方法 置静音静态 <公开 注释 = "设置浏览器的音频静音状态">
+    参数 是否静音 <类型 = 逻辑型>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     browser->GetHost ()->SetAudioMuted ((bool)@<是否静音>);
+    }
+
+    方法 是否静音 <公开 类型 = 逻辑型 注释 = "返回浏览器当前是否处于静音状态" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     return (BOOL)browser->GetHost ()->IsAudioMuted ();
+        @ return FALSE;
+    }
+
+    方法 是否全屏 <公开 类型 = 逻辑型 注释 = "返回浏览器当前是否处于全屏状态" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     return (BOOL)browser->GetHost ()->IsFullscreen ();
+        @ return FALSE;
+    }
+
+    方法 退出全屏 <公开 注释 = "强制浏览器退出全屏显示模式">
+    参数 是否导致尺寸变化 <类型 = 逻辑型 注释 = "指示退出全屏是否会导致尺寸变化:" 注释 = "为真: 退出全屏会导致浏览器窗口/视图调整大小;" 注释 = "为假: 退出全屏不会导致尺寸变化.">
+    {
+        @ CefRefPtr<CefBrowser> browser;
+        @ if (((CVWnd_CefWebBrowser*)GetWtlControlPtr ())->GetBrowser (browser) && browser->GetHost ().get () != NULL)
+        @     browser->GetHost ()->ExitFullscreen ((bool)@<是否导致尺寸变化>);
+    }
+
+    方法 执行JS脚本 <公开 注释 = "在浏览器的主页面框架内执行所指定的JS脚本代码">
+    参数 JS代码 <类型 = 文本型 注释 = "提供所欲执行的JavaScript脚本内容">
+    参数 链接地址 <类型 = 文本型 注释 = "  提供脚本所对应的链接地址,当脚本执行遇到问题时,浏览器" 注释 = "将访问此地址为脚本开发者提供错误来源." @默认值 = "">
+    参数 起始行号 <类型 = 整数 注释 = "提供出错报告的基准行号" @默认值 = 1>
+    {
+        取主框架 ().执行JS脚本 (JS代码, 链接地址, 起始行号)
+    }
+
+    # --
+    #
+    # @begin
+    #
+    # <> <include>
+    # #if (defined (_CONSOLE) || defined (@an<_VOL_CONSOLE_EXE>))  // 控制台应用程序
+    #     #error 不能在控制台程序中使用CEF浏览器组件
+    # #elif (defined (_USRDLL) || defined (@an<_VOL_DLL>))  // 动态链接库
+    #     #error 不能在动态链接库程序中使用CEF浏览器组件
+    # #endif
+    # // static void @an<_sOnBeforeAppInit> ()  { CCefBrowserManager::sAutoInitCef (); }
+    # // static void @an<_sOnAfterAppExit> ()  { CCefBrowserManager::sCleanupCef (); }
+    # static CefRect sToCefRect (const @dt<矩形类>& rt);
+    # static void sFillFromCefRect (const CefRect& rtCef, @dt<矩形类>* prt);
+    # virtual void OnFunctionCall (CVolString& strFucntionName, const CMStringArray& saryParams) override;
+    # virtual void OnAddressChange (const TCHAR* szURL, const TCHAR* szFrameIdentifier) override  { @<链接地址被改变> (CVolString (szURL), CVolString (szFrameIdentifier)); }
+    # virtual void OnTitleChange (const TCHAR* szTitle) override  { @<标题被改变> (CVolString (szTitle)); }
+    # virtual void OnFullScreenModeChange (BOOL_P blpFullscreen) override  { @<全屏模式被改变> ((BOOL)blpFullscreen); }
+    # virtual BOOL_P OnToolTip (CVolString& strToolTip) override  { return (@<显示提示文本> (strToolTip) != 0); }
+    # virtual void OnStatusMessage (const TCHAR* szStatus) override  { @<显示状态信息> (CVolString (szStatus)); }
+    # virtual BOOL_P OnConsoleMessage (const TCHAR* szMessage, const TCHAR* szSource, INT nLine)  { return (@<显示控制台信息> (CVolString (szMessage), CVolString (szSource), nLine) != 0); }
+    # virtual BOOL_P OnKeyDown1 (const UINT_P upKeyCode) override  { return (@<浏览器按下某键1> ((INT)(upKeyCode & ~(KYS_CONTROL | KYS_SHIFT | KYS_ALT)), (INT)(upKeyCode & (KYS_CONTROL | KYS_SHIFT | KYS_ALT))) != 0); }
+    # virtual BOOL_P OnKeyUp1 (const UINT_P upKeyCode) override  { return (@<浏览器放开某键1> ((INT)(upKeyCode & ~(KYS_CONTROL | KYS_SHIFT | KYS_ALT)), (INT)(upKeyCode & (KYS_CONTROL | KYS_SHIFT | KYS_ALT))) != 0); }
+    # virtual BOOL_P OnKeyDown2 (const UINT_P upKeyCode) override  { return (@<浏览器按下某键2> ((INT)(upKeyCode & ~(KYS_CONTROL | KYS_SHIFT | KYS_ALT)), (INT)(upKeyCode & (KYS_CONTROL | KYS_SHIFT | KYS_ALT))) != 0); }
+    # virtual BOOL_P OnKeyUp2 (const UINT_P upKeyCode) override  { return (@<浏览器放开某键2> ((INT)(upKeyCode & ~(KYS_CONTROL | KYS_SHIFT | KYS_ALT)), (INT)(upKeyCode & (KYS_CONTROL | KYS_SHIFT | KYS_ALT))) != 0); }
+    # virtual INT OnBeforePopup (const TCHAR* szTargetURL, const TCHAR* szSrcFrameIdentifier, INT nPopupID, const TCHAR* szTargetFrameName, INT nTargetDisposition, BOOL blUserGesture, BOOL* pblNoJavascriptAccess) override;
+    # virtual void OnLoadingStateChange (BOOL_P isLoading, BOOL_P canGoBack, BOOL_P canGoForward) override  { @<载入状态被改变> ((BOOL)isLoading, (BOOL)canGoBack, (BOOL)canGoForward); }
+    # virtual void OnLoadStart (const TCHAR* szFrameIdentifier) override  { @<开始载入> (CVolString (szFrameIdentifier)); }
+    # virtual void OnLoadEnd (INT httpStatusCode, const TCHAR* szFrameIdentifier) override  { @<载入完毕> (httpStatusCode, CVolString (szFrameIdentifier)); }
+    # virtual INT OnLoadError (INT nErrorCode, const TCHAR* szErrorText, const TCHAR* szFailedUrl, const TCHAR* szFrameIdentifier) override  { return @<载入出错> (nErrorCode, CVolString (szErrorText), CVolString (szFailedUrl), CVolString (szFrameIdentifier)); }
+    # virtual void OnBrowserCreated () override  { @<浏览器被创建> (); }
+    # virtual void OnBrowserClosed () override  { @<浏览器被关闭> (); }
+    # virtual BOOL_P OnBeforeBrowse (const TCHAR* szURL, const TCHAR* szMethod, CefRequest::HeaderMap& mapHead, BOOL_P blpUserGesture, BOOL_P blpIsRedirect, const TCHAR* szFrameIdentifier) override  {
+    #     return (@<即将跳转> (CVolString (szURL), CVolString (szMethod), mapHead, (BOOL)blpUserGesture, (BOOL)blpIsRedirect, CVolString (szFrameIdentifier)) != 0);
+    # }
+    # virtual BOOL_P OnOpenURLFromTab (const TCHAR* szURL, BOOL_P blpUserGesture, const TCHAR* szFrameIdentifier, INT nTargetDisposition) override  { return (@<即将跳转到新浏览器> (CVolString (szURL), (BOOL)blpUserGesture, CVolString (szFrameIdentifier), nTargetDisposition) != 0); }
+    # virtual INT OnJSDialog (INT nDialogType, const TCHAR* szOriginUrl, const TCHAR* szOriginUrlDisplayName,
+    #         const TCHAR* szMessageText, const TCHAR* szDefaultPromptText, CVolString& strUserInput) override  {
+    #     return @<JS对话框> (nDialogType, CVolString (szOriginUrl), CVolString (szOriginUrlDisplayName), CVolString (szMessageText), CVolString (szDefaultPromptText), strUserInput);
+    # }
+    # virtual INT OnBeforeUnloadDialog (const TCHAR* szMessageText, BOOL_P blpIsReload) override  { return @<离开对话框> (CVolString (szMessageText), (BOOL)blpIsReload); }
+    # virtual void OnDialogClosed () override  { @<默认对话框被关闭> (); }
+    # virtual void OnResetDialogState () override  { @<重置对话框状态> (); }
+    # virtual void OnPdfPrintFinished (const TCHAR* szPDFFileName, BOOL blPrintSucceeded) override  { @<PDF打印完毕> (CVolString (szPDFFileName), blPrintSucceeded); }
+    # virtual INT OnGotCookie (const CefCookie* pcookie, BOOL blIsLastCookie) override;
+    # virtual BOOL_P OnGetAuthCredentials (const TCHAR* szOriginUrl, BOOL_P blpIsProxy, const TCHAR* szHost, INT nPort, const TCHAR* szRealm, const TCHAR* szScheme, CVolString& strUserName, CVolString& strPassword) override {
+    #     return (@<取验证信息> (CVolString (szOriginUrl), CVolString (szHost), nPort, (BOOL)blpIsProxy, CVolString (szRealm), CVolString (szScheme), strUserName, strPassword) != 0);
+    # }
+    # virtual BOOL_P OnCertificateError (INT cert_error, const TCHAR* szRequestUrl) override  { return (@<证书验证错误> (cert_error, CVolString (szRequestUrl)) != 0); }
+    # virtual void OnRenderViewReady () override  { @<渲染视图已就绪> (); }
+    # virtual void OnDocumentAvailableInMainFrame () override  { @<主框架文档已就绪> (); }
+    # virtual INT CanDownload (const TCHAR* szURL, const TCHAR* szRequestMethod) override  { return @<是否允许下载> (CVolString (szURL), CVolString (szRequestMethod)); }
+    # virtual INT OnBeforeDownload (const TCHAR* szURL, const TCHAR* szSuggestedName, CVolString& strRetDownloadPath, bool* pblShowFileDialog) override;
+    # virtual INT OnDownloadUpdated (INT idDownloadingItem, CefRefPtr<CefDownloadItem> download_item, BOOL blBeginDownload) override;
+    # virtual void OnDownloadEnd (INT idDownloadingItem, INT nEndReason, INT nInterruptedReason) override  { @<下载结束> (idDownloadingItem, nEndReason, nInterruptedReason); }
+    # virtual void OnDownloadImageFinished (const TCHAR* szImageURL, INT http_status_code, CefRefPtr<CefImage> image) override;
+    # virtual void OnFindResult (int count, const CefRect& selectionRect, int activeMatchOrdinal, bool finalUpdate) override;
+    # virtual void OnFaviconURLChange (const std::vector<CefString>* pIconUrls) override;
+    # virtual void OnLoadingProgressChange (INT nProgress) override  { @<载入进度改变> (nProgress); }
+    # virtual void OnMediaAccessChange (BOOL has_video_access, BOOL has_audio_access) override  { @<媒体访问权限改变> (has_video_access, has_audio_access); }
+    # virtual void OnFrameCreated (const TCHAR* szFrameIdentifier) override  { @<框架被创建> (CVolString (szFrameIdentifier)); }
+    # virtual void OnFrameDestroyed (const TCHAR* szFrameIdentifier) override  { @<框架被销毁> (CVolString (szFrameIdentifier)); }
+    # virtual void OnFrameAttached (const TCHAR* szFrameIdentifier, BOOL blReattached) override  { @<框架被附加> (CVolString (szFrameIdentifier), blReattached); }
+    # virtual void OnFrameDetached (const TCHAR* szFrameIdentifier) override  { @<框架被移除> (CVolString (szFrameIdentifier)); }
+    # virtual void OnMainFrameChanged (const TCHAR* szOldFrameIdentifier, const TCHAR* szNewFrameIdentifier) override  { @<主框架改变> (CVolString (szOldFrameIdentifier), CVolString (szNewFrameIdentifier)); }
+    # <> </include>
+    #
+    # INT @sn<current_class>::OnBeforePopup (const TCHAR* szTargetURL, const TCHAR* szSrcFrameIdentifier, INT nPopupID, const TCHAR* szTargetFrameName, INT nTargetDisposition, BOOL blUserGesture, BOOL* pblNoJavascriptAccess)
+    # {
+    #     ASSERT (pblNoJavascriptAccess != NULL);
+    #     @dt<逻辑型类> blobjNoJavascriptAccess;
+    #     const INT nResult = @<即将弹出窗口> (CVolString (szTargetURL), CVolString (szSrcFrameIdentifier), nPopupID, CVolString (szTargetFrameName), nTargetDisposition, blUserGesture, blobjNoJavascriptAccess);
+    #     *pblNoJavascriptAccess = (blobjNoJavascriptAccess.@n<逻辑型类.值> != FALSE);
+    #     return nResult;
+    # }
+    #
+    # void @sn<current_class>::OnFaviconURLChange (const std::vector<CefString>* pIconUrls)
+    # {
+    #     ASSERT (pIconUrls != NULL);
+    #     const INT_P npCount = (INT_P)pIconUrls->size ();
+    #     if (npCount > 0)
+    #     {
+    #         @dt<文本数组类> sary;
+    #         CVolString strBuf;
+    #         for (INT_P npIndex = 0; npIndex < npCount; npIndex++)
+    #             sary.data ().Add (GetCefStringText (pIconUrls->at ((size_t)npIndex), strBuf));
+    #         @<收藏夹图标改变> (sary);
+    #     }
+    # }
+    #
+    # CefRect @sn<current_class>::sToCefRect (const @dt<矩形类>& rt)
+    # {
+    #     CefRect rtCef;
+    #     rtCef.x = rt.@n<矩形类.左边>;
+    #     rtCef.y = rt.@n<矩形类.顶边>;
+    #     rtCef.width = rt.@n<矩形类.右边> - rt.@n<矩形类.左边>;
+    #     rtCef.height = rt.@n<矩形类.底边> - rt.@n<矩形类.顶边>;
+    #     return rtCef;
+    # }
+    #
+    # void @sn<current_class>::sFillFromCefRect (const CefRect& rtCef, @dt<矩形类>* prt)
+    # {
+    #     ASSERT (prt != NULL);
+    #     prt->@n<矩形类.左边> = rtCef.x;
+    #     prt->@n<矩形类.顶边> = rtCef.y;
+    #     prt->@n<矩形类.右边> = prt->@n<矩形类.左边> + rtCef.width;
+    #     prt->@n<矩形类.底边> = prt->@n<矩形类.顶边> + rtCef.height;
+    # }
+    #
+    # void @sn<current_class>::OnFindResult (int count, const CefRect& selectionRect, int activeMatchOrdinal, bool finalUpdate)
+    # {
+    #     @dt<矩形类> rt;
+    #     sFillFromCefRect (selectionRect, &rt);
+    #     @<获得查找结果> (count, rt, activeMatchOrdinal, finalUpdate);
+    # }
+    #
+    # INT @sn<current_class>::OnDownloadUpdated (INT idDownloadingItem, CefRefPtr<CefDownloadItem> download_item, BOOL blBeginDownload)
+    # {
+    #     return @<下载更新> (idDownloadingItem, @dt<CEF下载项信息> (download_item), blBeginDownload);
+    # }
+    #
+    # INT @sn<current_class>::OnBeforeDownload (const TCHAR* szURL, const TCHAR* szSuggestedName, CVolString& strRetDownloadPath, bool* pblShowFileDialog)
+    # {
+    #     @dt<逻辑型类> blobjShowFileDialog;
+    #     const INT nResult = @<即将下载> (CVolString (szURL), CVolString (szSuggestedName), strRetDownloadPath, blobjShowFileDialog);
+    #     *pblShowFileDialog = (blobjShowFileDialog.@n<逻辑型类.值> != FALSE);
+    #     return nResult;
+    # }
+    #
+    # void @sn<current_class>::OnDownloadImageFinished (const TCHAR* szImageURL, INT http_status_code, CefRefPtr<CefImage> image)
+    # {
+    #     @<图像下载完毕> (CVolString (szImageURL), http_status_code, @dt<CEF图像> (image));
+    # }
+    #
+    # void @sn<current_class>::OnFunctionCall (CVolString& strFucntionName, const CMStringArray& saryParams)
+    # {
+    #     @dt<文本数组类> sary;
+    #     sary.data ().Copy (saryParams);
+    #     @<函数被执行> (strFucntionName, sary);
+    # }
+    #
+    # INT @sn<current_class>::OnGotCookie (const CefCookie* pcookie, BOOL blIsLastCookie)
+    # {
+    #     @dt<CEFCookie信息> inf;
+    #     inf.FromCefCookie (*pcookie);
+    #     return @<获得Cookie> (inf, blIsLastCookie);
+    # }
+    #
+    # @end
+}

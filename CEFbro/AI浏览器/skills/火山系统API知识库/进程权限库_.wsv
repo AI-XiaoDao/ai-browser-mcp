@@ -1,0 +1,2020 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <@文档 = "category = \"进程权限库\"">
+
+类 互斥体类_ <公开 折叠 @文档 = "category = \"进程权限库.互斥体\"">
+{
+    变量 线程 <类型 = 线程池类2_>
+    变量 互斥 <类型 = 许可锁类_>
+    变量 标记组 <类型 = 整数数组类>
+
+    方法 类_初始化 <折叠>
+    {
+        线程.创建_ ()
+    }
+
+    方法 关闭互斥体_路径 <公开 类型 = 逻辑型 注释 = "同时会运行该程序" 折叠>
+    参数 程序路径 <类型 = 文本型>
+    参数 互斥体名称 <类型 = 文本数组类>
+    {
+        变量 信息 <类型 = 互斥体信息类_>
+        变量 id <类型 = 整数>
+        变量 序号 <类型 = 整数>
+        变量 开始时间 <类型 = 长整数>
+        互斥.加锁 ()
+        序号 = 标记组.取成员数 ()
+        标记组.加入成员 (-1)
+        id = 进程_创建进程 (程序路径, , , 5)
+        信息.进程ID = id
+        信息.互斥体名称 = 互斥体名称
+        线程.投递对象_ (序号, 信息)
+        互斥.解锁 ()
+        开始时间 = 取启动时间 ()
+        判断循环 (标记组.取成员 (序号) == -1)
+        {
+            如果真 (取启动时间 () - 开始时间 > 2000)
+            {
+                跳出循环
+            }
+            处理事件_ ()
+        }
+        返回 (标记组.取成员 (序号) != -1)
+    }
+
+    方法 关闭互斥体_ID <公开 类型 = 逻辑型 注释 = "需要手动运行程序后再执行本命令" 折叠>
+    参数 进程ID <类型 = 整数>
+    参数 互斥体名称 <类型 = 文本数组类>
+    {
+        变量 信息 <类型 = 互斥体信息类_>
+        变量 序号 <类型 = 整数>
+        变量 开始时间 <类型 = 长整数>
+        互斥.加锁 ()
+        序号 = 标记组.取成员数 ()
+        标记组.加入成员 (-1)
+        信息.进程ID = 进程ID
+        信息.互斥体名称 = 互斥体名称
+        线程.投递对象_ (序号, 信息)
+        互斥.解锁 ()
+        开始时间 = 取启动时间 ()
+        判断循环 (标记组.取成员 (序号) == -1)
+        {
+            如果真 (取启动时间 () - 开始时间 > 2000)
+            {
+                跳出循环
+            }
+            处理事件_ ()
+        }
+        返回 (标记组.取成员 (序号) != -1)
+    }
+
+    方法 线程池类2__线程池事件_对象 <接收事件 类型 = 整数 折叠>
+    参数 来源对象 <类型 = 线程池类2_>
+    参数 标记值 <类型 = 整数>
+    参数 用户标记 <类型 = 整数>
+    参数 用户对象 <类型 = 对象类>
+    参数 用户数据 <类型 = 变整数>
+    {
+        如果 (互斥体api.关闭互斥 (((互斥体信息类_)用户对象).进程ID, ((互斥体信息类_)用户对象).互斥体名称))
+        {
+            标记组.置成员值 (用户标记, 1)
+        }
+        否则
+        {
+            标记组.置成员值 (用户标记, 0)
+        }
+        返回 (0)
+    }
+}
+
+类 互斥体类2_ <公开 折叠 折叠2 @文档 = "category = \"进程权限库.互斥体2\"" @全局类 = 真>
+{
+    方法 互斥_关闭互斥体运行程序 <公开 静态 类型 = 逻辑型 折叠 折叠2 @视窗.外部头文件 = "iostream" @禁止流程检查 = 真>
+    参数 程序路径 <类型 = 文本型>
+    参数 互斥体名称 <类型 = 文本型>
+    参数 运行数量 <类型 = 整数 @默认值 = 2>
+    {
+        @ const TCHAR* mutexName = @<互斥体名称>;
+        @ HANDLE hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, mutexName);
+        @ if (hMutex != NULL) {
+        @     CloseHandle(hMutex); //关闭互斥体
+        @ }
+        @ const TCHAR* programPath = @<程序路径>;
+        @ for (int i = 0; i < @<运行数量>; ++i) {
+        @     STARTUPINFO si = { sizeof(STARTUPINFO) };
+        @     PROCESS_INFORMATION pi;
+        @     if (CreateProcess(programPath, NULL, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
+        @     CloseHandle(pi.hProcess);
+        @     CloseHandle(pi.hThread);
+        @     } else {
+        @     return false;
+        @     }
+        @ }
+        @ return true;
+    }
+}
+
+类 互斥体api <折叠 @文档 = "category = \"进程权限库.互斥体.附加类\"">
+{
+    方法 关闭互斥 <公开 静态 类型 = 逻辑型 折叠>
+    参数 进程ID <类型 = 整数>
+    参数 互斥体名称 <类型 = 文本数组类>
+    {
+        变量 局_进程句柄 <类型 = 变整数>
+        变量 HandleCount <类型 = 整数>
+        变量 sHandle <类型 = 整数>
+        变量 tHandle <类型 = 变整数>
+        变量 buf <类型 = 字节集类>
+        变量 len <类型 = 整数>
+        变量 name <类型 = 文本型>
+        变量 i <类型 = 整数>
+        变量 n <类型 = 整数>
+        变量 临时句柄 <类型 = 变整数>
+        变量 结果 <类型 = 逻辑型>
+        局_进程句柄 = 互斥体api.OpenProcess (2035711, 假, 进程ID)
+        n = 互斥体名称.取成员数 ()
+        i = 0
+        如果真 (互斥体api.GetProcessHandleCount (局_进程句柄, 取变量地址 (HandleCount)))
+        {
+            判断循环 (HandleCount > i && sHandle < 65536)
+            {
+                sHandle = sHandle + 4
+                如果真 (互斥体api.DuplicateHandle (局_进程句柄, sHandle, 互斥体api.GetCurrentProcess (), 取变量地址 (tHandle), 0, 假, 2))
+                {
+                    i = i + 1
+                    buf = 取空白字节集 (8192)
+                    如果 (互斥体api.ZwQueryObject (tHandle, 1, buf.取字节集指针 (), 8192, 0) == 0)
+                    {
+                        len = buf.取字节集数据 (0, 短整数)
+                        如果真 (len > 0)
+                        {
+                            name = 字节集到文本 (buf.取字节集中间 (16, len))
+                            临时句柄 = 0
+                            计次循环 (n)
+                            {
+                                如果真 (寻找文本 (name, 互斥体名称.取成员 (取循环索引 ()), , ) != -1)
+                                {
+                                    如果真 (互斥体api.DuplicateHandle (局_进程句柄, sHandle, 互斥体api.GetCurrentProcess (), 取变量地址 (临时句柄), 0, 假, 1))
+                                    {
+                                        互斥体api.CloseHandle (临时句柄)
+                                        互斥体名称.删除成员 (取循环索引 (), 1)
+                                        n = 互斥体名称.取成员数 ()
+                                        结果 = 真
+                                    }
+                                    跳出循环
+                                }
+                            }
+                        }
+                    }
+                    互斥体api.CloseHandle (tHandle)
+                    如果真 (n <= 0)
+                    {
+                        跳出循环
+                    }
+                }
+            }
+        }
+        返回 (结果)
+    }
+
+    方法 OpenProcess <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "OpenProcess" @视窗.输入 = "Kernel32.dll">
+    参数 dwDesiredAccess <类型 = 变整数>
+    参数 bInheritHandle <类型 = 逻辑型>
+    参数 dwProcessId <类型 = 变整数>
+
+    方法 CloseHandle <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "CloseHandle" @视窗.输入 = "Kernel32.dll">
+    参数 hObject <类型 = 变整数>
+
+    方法 GetProcessHandleCount <公开 静态 类型 = 逻辑型 折叠 折叠2 @输出名 = "GetProcessHandleCount" @视窗.输入 = "Kernel32.dll">
+    参数 hProcess <类型 = 变整数>
+    参数 pdwHandleCount <类型 = 变整数>
+
+    方法 DuplicateHandle <公开 静态 类型 = 逻辑型 折叠 折叠2 @输出名 = "DuplicateHandle" @视窗.输入 = "kernel32.dll">
+    参数 hSourceProcessHandle <类型 = 变整数>
+    参数 hSourceHandle <类型 = 变整数>
+    参数 hTargetProcessHandle <类型 = 变整数>
+    参数 lpTargetHandle <类型 = 变整数>
+    参数 dwDesiredAccess <类型 = 整数>
+    参数 bInheritHandle <类型 = 逻辑型>
+    参数 dwOptions <类型 = 整数>
+
+    方法 GetCurrentProcess <公开 静态 类型 = 变整数 折叠2 @输出名 = "GetCurrentProcess" @视窗.输入 = "kernel32.dll">
+
+    方法 ZwQueryObject <公开 静态 类型 = 整数 折叠 折叠2 @输出名 = "ZwQueryObject" @视窗.输入 = "ntdll.dll">
+    参数 ObjectHandle <类型 = 变整数>
+    参数 ObjectInformationClass <类型 = 整数>
+    参数 ObjectInformation <类型 = 变整数>
+    参数 ObjectInformationLength <类型 = 整数>
+    参数 ReturnLength <类型 = 变整数>
+    {
+
+    }
+}
+
+类 互斥体信息类_ <折叠 @文档 = "category = \"进程权限库.互斥体.附加类\"">
+{
+    变量 进程ID <公开 类型 = 整数>
+    变量 互斥体名称 <公开 类型 = 文本数组类>
+
+    #
+}
+
+# //======
+
+类 进程注入类_ <公开 折叠 折叠2 @文档 = "category = \"进程权限库.进程注入\"" @视窗.外部头文件 = "<TlHelp32.h>">
+{
+    方法 注入1_ <公开 类型 = 逻辑型 注释 = "支持32位、64位。调用本命令的程序位数必须与DLL一致" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 DLL文件名 <类型 = 文本型 注释 = "完整来源路径">
+    {
+        变量 strtmp <类型 = 字节集类>
+        变量 strpoint <类型 = 变整数>
+        strtmp = 文本到多字节 (DLL文件名, )
+        strpoint = 取字节集指针 (strtmp)
+        @    LPCSTR DllPath = (LPCSTR)@<strpoint>;
+        @    DWORD hDllModule = 0;
+        @    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, @<进程ID>);
+        @    if (hProcess)
+        @    {
+        @        SIZE_T dwSize = strlen(DllPath)+1;
+        @        LPVOID pMem = VirtualAllocEx(hProcess, NULL, dwSize, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+        @        if (pMem)
+        @        {
+        @            WriteProcessMemory(hProcess, pMem, (LPVOID)DllPath, dwSize, NULL);
+        @            HANDLE hThread = CreateRemoteThread(hProcess,NULL,0,(LPTHREAD_START_ROUTINE)LoadLibraryA,pMem,0,NULL);
+        @            if (hThread)
+        @            {
+        @                WaitForSingleObject(hThread, INFINITE);
+        @                GetExitCodeThread(hThread, &hDllModule);    //GetExitCodeThread无法取回64位类型的返回码,只能取4位
+        @                CloseHandle(hThread);
+        @            }
+        @            VirtualFreeEx(hProcess, pMem, 0, MEM_RELEASE);
+        @        }
+        @        CloseHandle(hProcess);
+        @    }
+        @    return hDllModule != NULL;
+    }
+
+    方法 注入2_ <公开 类型 = 逻辑型 注释 = "支持32位、64位。调用本命令的程序位数必须与DLL一致" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 DLL文件名 <类型 = 文本型 注释 = "完整来源路径">
+    {
+        变量 szDllPath <类型 = 字节集类>
+        szDllPath = 到字节集 (DLL文件名)
+        @ DWORD hDllModule = 0;
+        @    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, @<进程ID>);
+        @    if (hProcess)
+        @    {
+        @        DWORD dwSize = (INT)@<szDllPath>.GetSize();
+        @        LPVOID pMem = VirtualAllocEx(hProcess, NULL, dwSize, MEM_COMMIT, PAGE_READWRITE);
+        @        if (pMem)
+        @        {
+        @            WriteProcessMemory(hProcess, pMem, @<szDllPath>.GetPtr(), dwSize, NULL);
+        @            LPVOID pFunc = LoadLibraryW;
+        @            HANDLE hThread = CreateRemoteThread(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)pFunc, pMem, 0, NULL);
+        @            if (hThread)
+        @            {
+        @                WaitForSingleObject(hThread, INFINITE);
+        @                GetExitCodeThread(hThread, &hDllModule);    //GetExitCodeThread无法取回64位类型的返回码,只能取4位
+        @                CloseHandle(hThread);
+        @            }
+        @            VirtualFreeEx(hProcess, pMem, 0, MEM_RELEASE);
+        @        }
+        @        CloseHandle(hProcess);
+        @    }
+        @    return hDllModule != NULL;
+    }
+
+    方法 注入3_ <公开 类型 = 逻辑型 注释 = "支持32位、64位。调用本命令的程序位数必须与DLL一致" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 DLL文件名 <类型 = 文本型 注释 = "完整来源路径">
+    {
+        变量 szDllPath <类型 = 字节集类>
+        szDllPath = 到字节集 (DLL文件名)
+        @ DWORD hDllModule = 0;
+        @    HANDLE ProcessHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, @<进程ID>);
+        @    if (ProcessHandle)
+        @    {
+        @        DWORD dwSize = (INT)@<szDllPath>.GetSize();
+        @        LPVOID pMem = VirtualAllocEx(ProcessHandle, NULL, dwSize, MEM_COMMIT, PAGE_READWRITE);
+        @        if (pMem)
+        @        {
+        @            WriteProcessMemory(ProcessHandle, pMem, @<szDllPath>.GetPtr(), dwSize, NULL);
+        @            PTHREAD_START_ROUTINE threatStartRoutineAddress = (PTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandle(TEXT("Kernel32")), "LoadLibraryW");
+        @            HANDLE hThread = CreateRemoteThread(ProcessHandle, NULL, 0, threatStartRoutineAddress, pMem, 0, NULL);
+        @            if (hThread)
+        @            {
+        @                WaitForSingleObject(hThread, INFINITE);
+        @                GetExitCodeThread(hThread, &hDllModule);
+        @                CloseHandle(hThread);
+        @            }
+        @        VirtualFreeEx(ProcessHandle, pMem, 0, MEM_RELEASE);
+        @        }
+        @        CloseHandle(ProcessHandle);
+        @    }
+        @    return hDllModule != NULL;
+    }
+
+    方法 卸载注入1_ <公开 类型 = 逻辑型 注释 = "FreeLibrary" 注释 = "支持32位、64位。调用本命令的程序位数必须与DLL一致" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 DLL文件名 <类型 = 文本型 注释 = "完整来源路径">
+    {
+        变量 DLL句柄 <类型 = 变整数>
+        DLL句柄 = 进程_取远程模块句柄 (进程ID, DLL文件名)
+        如果真 (DLL句柄 > 0)
+        {
+            @    DWORD dwExitCode = 0;
+            @    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, @<进程ID>);
+            @    if (hProcess)
+            @    {
+            @        HANDLE hThread = CreateRemoteThread(hProcess,NULL,0,(LPTHREAD_START_ROUTINE)FreeLibrary,(LPVOID)@<DLL句柄>,0,NULL);
+            @        if (hThread)
+            @        {
+            @            WaitForSingleObject(hThread, INFINITE);
+            @            GetExitCodeThread(hThread, &dwExitCode);    //GetExitCodeThread无法取回64位类型的返回码,只能取4位
+            @            CloseHandle(hThread);
+            @        }
+            @        CloseHandle(hProcess);
+            @        return dwExitCode == TRUE;
+            @    }
+
+        }
+        返回 (假)
+    }
+
+    方法 卸载注入2_ <公开 类型 = 逻辑型 注释 = "FreeLibraryAndExitThread" 注释 = "支持32位、64位。调用本命令的程序位数必须与DLL一致" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 DLL文件名 <类型 = 文本型 注释 = "完整来源路径">
+    {
+        变量 DLL句柄 <类型 = 变整数>
+        DLL句柄 = 进程_取远程模块句柄 (进程ID, DLL文件名)
+        如果真 (DLL句柄 > 0)
+        {
+            @    DWORD dwExitCode = 0;
+            @    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, @<进程ID>);
+            @    if (hProcess)
+            @    {
+            @        HANDLE hThread = CreateRemoteThread(hProcess,NULL,0,(LPTHREAD_START_ROUTINE)FreeLibraryAndExitThread,(LPVOID)@<DLL句柄>,0,NULL);
+            @        if (hThread)
+            @        {
+            @            WaitForSingleObject(hThread, INFINITE);
+            @            GetExitCodeThread(hThread, &dwExitCode);    //GetExitCodeThread无法取回64位类型的返回码,只能取4位
+            @            CloseHandle(hThread);
+            @        }
+            @        CloseHandle(hProcess);
+            @        return dwExitCode != NULL;
+            @    }
+
+        }
+        返回 (假)
+    }
+}
+
+类 进程注入类2_ <公开 注释 = "不落地注入" 折叠 @文档 = "category = \"进程权限库.进程注入\"">
+{
+    方法 注入_ <公开 类型 = 变整数 注释 = "64位专用，不落地注入" 返回值注释 = "返回非0表示成功" 折叠>
+    参数 进程ID <类型 = 整数>
+    参数 DLL数据 <类型 = 字节集类 注释 = "读入文件() 或 视窗文件资源　来加载DLL文件数据">
+    {
+        变量 局_param <类型 = param>
+        变量 进程句柄 <类型 = 变整数>
+        进程句柄 = 进程_打开进程_ID (进程ID)
+        局_param.Size = DLL数据.取字节集长度 ()
+        如果真 (局_param.Size > 0)
+        {
+            局_param.pFunc = 内存_申请内存2 (进程句柄, (整数)局_param.Size + 1280)  // 1280是给分配的Shellcode[参_数据集]注入的空间
+            如果真 (局_param.pFunc != 0)
+            {
+                局_param.LdrGetProcedureAddress = 取进程函数地址 ("ntdll.dll", "LdrGetProcedureAddress")
+                如果真 (局_param.LdrGetProcedureAddress != 0)
+                {
+                    局_param.NtAllocateVirtualMemory = 取进程函数地址 ("ntdll.dll", "NtAllocateVirtualMemory")
+                    如果真 (局_param.NtAllocateVirtualMemory != 0)
+                    {
+                        局_param.LdrLoadDll = 取进程函数地址 ("ntdll.dll", "LdrLoadDll")
+                        如果真 (局_param.LdrLoadDll != 0)
+                        {
+                            局_param.RtlInitAnsiString = 取进程函数地址 ("ntdll.dll", "RtlInitAnsiString")
+                            如果真 (局_param.RtlInitAnsiString != 0)
+                            {
+                                局_param.RtlAnsiStringToUnicodeString = 取进程函数地址 ("ntdll.dll", "RtlAnsiStringToUnicodeString")
+                                如果真 (局_param.RtlAnsiStringToUnicodeString != 0)
+                                {
+                                    局_param.RtlFreeUnicodeString = 取进程函数地址 ("ntdll.dll", "RtlFreeUnicodeString")
+                                    如果真 (局_param.RtlFreeUnicodeString != 0)
+                                    {
+                                        局_param.LdrUnloadDll = 取进程函数地址 ("ntdll.dll", "LdrUnloadDll")
+                                        如果真 (局_param.LdrUnloadDll != 0)
+                                        {
+                                            局_param.NtFreeVirtualMemory = 取进程函数地址 ("ntdll.dll", "NtFreeVirtualMemory")
+                                            如果真 (局_param.NtFreeVirtualMemory != 0)
+                                            {
+                                                变量 ShellCode <类型 = 字节集类>
+                                                ShellCode = 创建字节集 (64, 85, 83, 86, 87, 65, 84, 65, 86, 72, 141, 108, 36, 209, 72, 129, 236, 152, 0, 0, 0, 72, 139, 65, 32, 69, 51, 192, 68, 139, 73, 8, 72, 139, 121, 40, 76, 139, 113, 64, 72, 139, 25, 76, 139, 97, 16, 72, 139, 113, 24, 72, 137, 69, 215, 72, 139, 65, 48, 72, 137, 69, 207, 72, 139, 65, 56, 72, 137, 69, 223, 72, 139, 65, 72, 72, 137, 69, 239, 72, 137, 125, 127, 76, 137, 117, 231, 76, 137, 69, 103, 73, 131, 249, 64, 15, 134, 42, 4, 0, 0, 184, 77, 90, 0, 0, 102, 57, 3, 15, 133, 28, 4, 0, 0, 72, 99, 75, 60, 72, 141, 129, 8, 1, 0, 0, 76, 59, 200, 15, 130, 8, 4, 0, 0, 129, 60, 25, 80, 69, 0, 0, 76, 137, 172, 36, 144, 0, 0, 0, 76, 141, 44, 25, 15, 133, 231, 3, 0, 0, 65, 15, 183, 69, 22, 185, 2, 32, 0, 0, 102, 35, 193, 102, 59, 193, 15, 133, 209, 3, 0, 0, 184, 240, 0, 0, 0, 102, 65, 57, 69, 20, 15, 133, 193, 3, 0, 0, 69, 15, 183, 85, 6, 51, 210, 69, 133, 210, 15, 132, 130, 0, 0, 0, 73, 141, 141, 24, 1, 0, 0, 15, 31, 0, 139, 65, 4, 3, 1, 65, 59, 193, 15, 135, 153, 3, 0, 0, 255, 194, 72, 131, 193, 40, 65, 59, 210, 124, 231, 69, 139, 93, 56, 51, 210, 65, 139, 69, 84, 73, 139, 250, 255, 200, 77, 141, 149, 24, 1, 0, 0, 65, 3, 195, 65, 247, 243, 68, 139, 200, 69, 15, 175, 203, 15, 31, 64, 0, 65, 139, 74, 248, 65, 141, 67, 255, 65, 57, 10, 65, 15, 79, 10, 51, 210, 65, 3, 74, 252, 77, 141, 82, 40, 3, 193, 65, 247, 243, 65, 15, 175, 195, 68, 59, 200, 65, 15, 77, 193, 68, 139, 200, 72, 131, 239, 1, 117, 206, 72, 139, 125, 127, 235, 21, 65, 139, 77, 56, 65, 139, 69, 84, 255, 200, 3, 193, 247, 241, 68, 139, 200, 68, 15, 175, 201, 69, 133, 201, 15, 132, 17, 3, 0, 0, 73, 99, 193, 72, 141, 85, 103, 76, 141, 77, 199, 199, 68, 36, 40, 64, 0, 0, 0, 72, 199, 193, 255, 255, 255, 255, 72, 137, 69, 199, 199, 68, 36, 32, 0, 16, 0, 0, 255, 214, 76, 139, 69, 103, 77, 133, 192, 15, 132, 220, 2, 0, 0, 69, 15, 183, 77, 6, 69, 51, 219, 65, 139, 69, 84, 67, 141, 12, 137, 141, 12, 200, 72, 99, 209, 133, 201, 126, 36, 65, 139, 203, 15, 31, 132, 0, 0, 0, 0, 0, 15, 182, 4, 25, 66, 136, 4, 1, 72, 255, 193, 76, 139, 69, 103, 72, 59, 202, 124, 236, 69, 15, 183, 77, 6, 69, 139, 211, 102, 69, 59, 217, 115, 91, 73, 141, 149, 24, 1, 0, 0, 15, 31, 128, 0, 0, 0, 0, 139, 74, 252, 133, 201, 116, 53, 139, 2, 133, 192, 116, 47, 77, 141, 12, 8, 73, 139, 203, 15, 31, 64, 0, 15, 31, 132, 0, 0, 0, 0, 0, 139, 66, 4, 72, 3, 193, 15, 182, 4, 24, 66, 136, 4, 9, 72, 255, 193, 139, 2, 72, 59, 200, 114, 232, 76, 139, 69, 103, 65, 15, 183, 69, 6, 65, 255, 194, 72, 131, 194, 40, 68, 59, 208, 124, 179, 65, 139, 133, 176, 0, 0, 0, 76, 137, 188, 36, 136, 0, 0, 0, 133, 192, 15, 132, 184, 0, 0, 0, 65, 131, 189, 180, 0, 0, 0, 0, 15, 134, 170, 0, 0, 0, 65, 139, 12, 0, 77, 141, 20, 0, 69, 139, 74, 4, 73, 139, 216, 73, 43, 93, 48, 65, 3, 201, 15, 132, 142, 0, 0, 0, 185, 0, 48, 0, 0, 190, 0, 160, 0, 0, 65, 191, 0, 240, 0, 0, 102, 144, 65, 139, 193, 73, 139, 211, 72, 131, 232, 8, 72, 209, 232, 76, 99, 216, 133, 192, 126, 75, 15, 31, 64, 0, 15, 31, 132, 0, 0, 0, 0, 0, 69, 15, 183, 76, 82, 8, 65, 15, 183, 193, 102, 65, 35, 199, 102, 59, 193, 116, 5, 102, 59, 198, 117, 27, 65, 139, 10, 65, 129, 225, 255, 15, 0, 0, 75, 141, 4, 8, 72, 1, 28, 1, 185, 0, 48, 0, 0, 76, 139, 69, 103, 72, 255, 194, 73, 59, 211, 124, 197, 69, 139, 74, 4, 65, 139, 193, 65, 187, 0, 0, 0, 0, 76, 3, 208, 65, 139, 10, 69, 139, 74, 4, 65, 3, 201, 185, 0, 48, 0, 0, 117, 132, 65, 139, 133, 144, 0, 0, 0, 72, 133, 192, 15, 132, 83, 1, 0, 0, 78, 141, 60, 0, 76, 137, 93, 111, 65, 139, 7, 133, 192, 15, 132, 238, 0, 0, 0, 144, 65, 139, 87, 12, 72, 141, 77, 247, 69, 139, 119, 16, 73, 3, 208, 139, 240, 77, 3, 240, 73, 3, 240, 255, 215, 65, 176, 1, 72, 141, 85, 247, 72, 141, 77, 7, 255, 85, 207, 76, 141, 77, 111, 51, 210, 76, 141, 69, 7, 51, 201, 255, 85, 215, 72, 141, 77, 7, 255, 85, 223, 72, 139, 77, 111, 72, 133, 201, 15, 132, 241, 0, 0, 0, 72, 139, 6, 51, 210, 139, 218, 72, 133, 192, 116, 127, 139, 250, 15, 31, 132, 0, 0, 0, 0, 0, 72, 137, 85, 119, 72, 133, 192, 121, 17, 102, 133, 192, 15, 132, 201, 0, 0, 0, 68, 15, 183, 192, 51, 210, 235, 35, 76, 139, 69, 103, 73, 141, 80, 2, 72, 3, 208, 15, 132, 180, 0, 0, 0, 72, 141, 77, 247, 255, 85, 127, 72, 139, 77, 111, 72, 141, 85, 247, 69, 51, 192, 76, 141, 77, 119, 65, 255, 212, 72, 139, 69, 119, 72, 133, 192, 15, 132, 138, 0, 0, 0, 72, 255, 195, 73, 137, 4, 62, 72, 139, 4, 222, 72, 141, 60, 221, 0, 0, 0, 0, 72, 133, 192, 116, 8, 72, 139, 77, 111, 51, 210, 235, 143, 72, 139, 125, 127, 65, 139, 71, 20, 73, 131, 199, 20, 76, 139, 69, 103, 133, 192, 15, 133, 23, 255, 255, 255, 76, 139, 117, 231, 65, 139, 93, 40, 186, 1, 0, 0, 0, 77, 137, 69, 48, 51, 201, 76, 139, 69, 103, 73, 3, 216, 255, 211, 133, 192, 117, 50, 76, 139, 69, 103, 51, 210, 51, 201, 255, 211, 131, 248, 1, 117, 35, 72, 139, 77, 111, 65, 255, 214, 133, 192, 117, 24, 65, 185, 0, 128, 0, 0, 76, 141, 69, 199, 72, 141, 85, 103, 72, 199, 193, 255, 255, 255, 255, 255, 85, 239, 76, 139, 69, 103, 76, 139, 188, 36, 136, 0, 0, 0, 76, 139, 172, 36, 144, 0, 0, 0, 73, 139, 192, 72, 129, 196, 152, 0, 0, 0, 65, 94, 65, 92, 95, 94, 91, 93, 195)
+                                                变量 CodeSize <类型 = 整数>
+                                                CodeSize = ShellCode.取字节集长度 ()
+                                                如果真 (CodeSize >= 1024)
+                                                {
+                                                    如果真 (内存_写内存字节集3 (进程句柄, 局_param.pFunc + 局_param.Size, ShellCode))
+                                                    {
+                                                        如果真 (内存_写内存字节集3 (进程句柄, 局_param.pFunc + 局_param.Size + CodeSize, 取对象数据 (局_param)))
+                                                        {
+                                                            如果真 (内存_写内存字节集3 (进程句柄, 局_param.pFunc, DLL数据))
+                                                            {
+                                                                变量 局_线程ID <类型 = 整数>
+                                                                局_线程ID = MyNtCreateThreadEx (进程句柄, 局_param.pFunc + 局_param.Size, 局_param.pFunc + 局_param.Size + CodeSize)
+                                                                如果真 (局_线程ID != 0)
+                                                                {
+                                                                    等待线程结束 (局_线程ID, -1)
+                                                                    如果真 (内存_释放内存2 (进程句柄, 局_param.pFunc) == 假)
+                                                                    {
+                                                                        返回 (0)
+                                                                    }
+                                                                    变量 dExecCode <类型 = 变整数>
+                                                                    变量 i <类型 = 整数>
+                                                                    变量 ss <类型 = 算术运算类>
+                                                                    i = GetExitCodeThread (局_线程ID, 取变量地址 (dExecCode))
+                                                                    关闭对象 (局_线程ID)
+                                                                    如果真 (dExecCode < 0)
+                                                                    {
+                                                                        返回 (dExecCode)
+                                                                    }
+                                                                    dExecCode = dExecCode + 位左移 (位右移 (局_param.pFunc, 32), 32)
+                                                                    返回 (dExecCode)
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                内存_释放内存2 (进程句柄, 局_param.pFunc)
+            }
+        }
+        返回 (0)
+    }
+
+    方法 关闭对象 <类型 = 逻辑型 返回值注释 = "关闭成功返回真；失败返回假；" 折叠 @禁止流程检查 = 真>
+    参数 参_对象句柄 <类型 = 变整数>
+    {
+        @ return ::CloseHandle((HANDLE)@<参_对象句柄>);
+    }
+
+    方法 MyNtCreateThreadEx <静态 类型 = 整数 返回值注释 = "成功返回线程ID，失败返回0；" 折叠 @禁止流程检查 = 真>
+    参数 进程句柄 <类型 = 变整数>
+    参数 函数地址 <类型 = 变整数>
+    参数 附加参数 <类型 = 变整数>
+    {
+        @ #ifdef _AMD64_
+        @ typedef DWORD(WINAPI* PfnZwCreateThreadEx)(
+        @     PHANDLE ThreadHandle,
+        @     ACCESS_MASK DesiredAccess,
+        @     LPVOID ObjectAttributes,
+        @     HANDLE ProcessHandle,
+        @     LPTHREAD_START_ROUTINE lpStartAddress,
+        @     LPVOID lpParameter,
+        @     ULONG CreateThreadFlags,
+        @     SIZE_T ZeroBits,
+        @     SIZE_T StackSize,
+        @     SIZE_T MaximunStackSize,
+        @     LPVOID pUnkown);
+        @ #else
+        @ typedef DWORD(WINAPI *PfnZwCreateThreadEx)(
+        @     PHANDLE ThreadHandle,
+        @     ACCESS_MASK DesiredAccess,
+        @     LPVOID ObjectAttributes,
+        @     HANDLE ProcessHandle,
+        @     LPTHREAD_START_ROUTINE lpStartAddress,
+        @     LPVOID lpParameter,
+        @     BOOL CreateThreadFlags,
+        @     DWORD  ZeroBits,
+        @     DWORD  StackSize,
+        @     DWORD  MaximumStackSize,
+        @     LPVOID pUnkown);
+        @ #endif
+
+        @ if(@<进程句柄> != NULL)
+        @ {
+        @     HMODULE ntdll = NULL;
+        @     ntdll = LoadLibrary(TEXT("ntdll.dll"));
+        @     HANDLE hThreadHandle = NULL;
+        @     PfnZwCreateThreadEx m_ZwCreateThreadEx;
+        @     m_ZwCreateThreadEx = reinterpret_cast<PfnZwCreateThreadEx>(GetProcAddress(ntdll, "NtCreateThreadEx"));
+        @     m_ZwCreateThreadEx(&hThreadHandle, PROCESS_ALL_ACCESS, NULL,(HANDLE) @<进程句柄>, (LPTHREAD_START_ROUTINE)@<函数地址>, (LPVOID)@<附加参数>, NULL, NULL, NULL, NULL, NULL);
+        @     if(hThreadHandle != NULL)
+        @     {
+        @         return (int)hThreadHandle;
+        @     }
+        @ }
+        @ return 0;
+    }
+
+    方法 等待线程结束 <静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 线程句柄 <类型 = 整数>
+    参数 等待时长 <类型 = 整数 注释 = "单位：毫秒；默认为-1表示无限等待直到线程返回；" @默认值 = -1>
+    {
+        @ return ::WaitForSingleObject((HANDLE)@<线程句柄>,@<等待时长>);
+    }
+
+    方法 取进程函数地址 <静态 类型 = 变整数 返回值注释 = "成功返回函数地址；失败返回0；" 折叠 @禁止流程检查 = 真>
+    参数 模块名称 <类型 = 文本型 注释 = "如：USER32.dll">
+    参数 函数名称 <类型 = 文本型 注释 = "如：MessageBoxA">
+    {
+        变量 局_函数 <类型 = 字节集类>
+        变量 局_模块句柄 <类型 = 变整数>
+        局_函数 = 文本到多字节 (函数名称)
+        局_模块句柄 = 取模块句柄 (模块名称)
+        @ return (INT_P)::GetProcAddress ((HMODULE)@<局_模块句柄>,(LPCSTR)@<局_函数>.GetPtr());
+    }
+
+    方法 取模块句柄 <静态 类型 = 变整数 折叠 @嵌入式方法 = "">
+    参数 模块名称 <类型 = 文本型 注释 = "dll的名称">
+    {
+        @ (INT_P)::GetModuleHandleW (@<模块名称>)
+    }
+
+    方法 GetExitCodeThread <公开 静态 类型 = 整数 注释 = "获取一个已中止线程的退出代码；非零表示成功，零表示失败" 折叠 折叠2 @输出名 = "GetExitCodeThread"
+            @视窗.输入 = "kernel32.dll">
+    参数 参_线程句柄 <类型 = 整数>
+    参数 参_退出代码 <类型 = 变整数 注释 = "请使用：取变量地址(long) 传递进来；long为长整型变量；">
+    {
+
+    }
+}
+
+类 模块信息类_ <折叠 @文档 = "category = \"进程权限库.进程注入.附加类\"">
+{
+    变量 模块ID <公开 类型 = 整数>
+    变量 进程ID <公开 类型 = 整数>
+    变量 全局使用计数 <公开 类型 = 整数>
+    变量 模块使用计数 <公开 类型 = 整数>
+    变量 模块基址 <公开 类型 = 变整数>
+    变量 模块大小 <公开 类型 = 整数>
+    变量 模块句柄 <公开 类型 = 变整数>
+    变量 模块文件名 <公开 类型 = 文本型 "">
+    变量 模块完整路径 <公开 类型 = 文本型>
+}
+
+类 param <公开 折叠 折叠2 @文档 = "category = \"进程权限库.进程注入.附加类\"" "">
+{
+    变量 pFunc <公开 类型 = 变整数>
+    变量 Size <公开 类型 = 变整数>
+    变量 LdrGetProcedureAddress <公开 类型 = 变整数>
+    变量 NtAllocateVirtualMemory <公开 类型 = 变整数>
+    变量 LdrLoadDll <公开 类型 = 变整数>
+    变量 RtlInitAnsiString <公开 类型 = 变整数>
+    变量 RtlAnsiStringToUnicodeString <公开 类型 = 变整数>
+    变量 RtlFreeUnicodeString <公开 类型 = 变整数>
+    变量 LdrUnloadDll <公开 类型 = 变整数>
+    变量 NtFreeVirtualMemory <公开 类型 = 变整数>
+}
+
+# //====
+
+类 进程通讯类_ <公开 注释 = "支持跨程序、跨窗口、跨进程通讯" 折叠 折叠2 @文档 = "category = \"进程权限库.进程通讯\"" "">
+{
+    变量 共享内存 <类型 = 共享内存类_>
+    变量 线程 <类型 = 线程池类2_>
+    变量 状态 <类型 = 逻辑型>
+    变量 等待 <类型 = 逻辑型>
+    变量 当前标记 <类型 = 逻辑型>
+    变量 同步返回 <类型 = 逻辑型>
+    变量 本端名 <类型 = 文本型>
+    变量 同步中 <类型 = 逻辑型>
+
+    方法 开启消息等待_ <公开 注释 = "只需开启一次，后台将循环等待新消息，通过“通讯事件”回调取出" 折叠>
+    {
+        如果真 (等待 == 真)
+        {
+            返回
+        }
+        等待 = 真
+        处理事件_ ()
+        状态 = 假
+        线程.创建_ (1)
+        线程.投递任务_ ()
+    }
+
+    方法 关闭消息等待_ <公开 折叠>
+    {
+        等待 = 假
+        状态 = 真
+        线程.销毁_ ()
+    }
+
+    方法 释放句柄_ <公开 折叠>
+    {
+        状态 = 真
+        共享内存.释放句柄_ ()
+    }
+
+    方法 置本端名称_ <公开 注释 = "给本端设置一个名称，可用于接收指定通讯内容" 折叠>
+    参数 名称 <类型 = 文本型 注释 = "例如：程序A">
+    {
+        本端名 = 名称
+    }
+
+    方法 发送信息_ <公开 类型 = 逻辑型 注释 = "发送端不会接收到信息，发送端如要取信息内容，请按以下命令操作;" 注释 = "请用：取地址内容_()，取文本内容_()，取标记内容_()" 折叠 折叠2>
+    参数 地址内容 <类型 = 变整数 注释 = "提供该消息数据或对象的指针(此参数不支持跨程序间传指针);" 注释 = "1、直接赋整数值;" 注释 = "2、取文本指针、写指针处值、取变量地、取对象数据" 折叠2 @默认值 = 0>
+    参数 文本内容 <类型 = 文本型 @默认值 = "">
+    参数 字节集内容 <类型 = 字节集类 注释 = "可使用“取对象数据”命令填入本参数　；取出后使用“置对象数据”命令" @默认值 = 空对象>
+    参数 通讯标记 <类型 = 整数 @默认值 = 0>
+    参数 接收对象 <类型 = 文本型 注释 = "通过“置本端名称_”设置，指定名称端才能接收到，例如：命名“程序A”" @默认值 = "">
+    {
+        变量 临时数据 <类型 = 字节集类>
+        变量 状态值 <类型 = 整数>
+        变量 结果组 <类型 = "逻辑型 [6]">
+        变量 i <类型 = 整数>
+        如果真 (地址内容 == 0 || 字节集内容.取字节集长度 () == 0)
+        {
+            如果真 (文本内容 == "" && 通讯标记 == 0)
+            {
+                信息框_ ("内容不能为全空", 64)
+                返回 (假)
+            }
+        }
+        临时数据 = 共享内存.读共享数据_ ("yw状态")
+        状态值 = 取字节集数据 (临时数据, 0, 整数)
+        判断循环 (状态值 == 1)
+        {
+            状态值 = 取字节集数据 (临时数据, 0, 整数)
+            i = i + 1
+            如果真 (i > 500)
+            {
+                跳出循环
+            }
+            延迟2_ (1)
+        }
+        结果组 [0] = 共享内存.写共享数据_ ("yw对象", 文本到字节集 (接收对象))
+        结果组 [1] = 共享内存.写共享数据_ ("yw地内", 到字节集 (地址内容))
+        结果组 [2] = 共享内存.写共享数据_ ("yw字内", 字节集内容)
+        结果组 [3] = 共享内存.写共享数据_ ("yw文内", 文本到字节集 (文本内容))
+        结果组 [4] = 共享内存.写共享数据_ ("yw标记", 到字节集 (通讯标记))
+        结果组 [5] = 共享内存.写共享数据_ ("yw状态", 到字节集 (1))
+        当前标记 = 真
+        处理事件_ ()
+        如果真 (结果组 [0] == 真 && 结果组 [1] == 真 && 结果组 [2] == 真 && 结果组 [3] == 真 && 结果组 [4] == 真 && 结果组 [5] == 真)
+        {
+            返回 (真)
+        }
+        返回 (假)
+    }
+
+    方法 发送信息_同步 <公开 类型 = 逻辑型 注释 = "发送端不会接收到信息，发送端如要取信息内容，请按以下命令操作;" 注释 = "请用：取通讯地址内容_()，取通讯文本内容_()，取通讯标记内容_();"
+            注释 = "同步发送后，另一端直接执行发送信息即可，此命令处可直接取得返回的信息，不需要经过事件取得" 返回值注释 = "如果超时，会在“返回的标记内容”中返回“超时”" 折叠 折叠2>
+    参数 地址内容 <类型 = 变整数 注释 = "提供该消息数据或对象的指针(此参数不支持跨程序间传指针);" 注释 = "1、直接赋整数值;" 注释 = "2、取文本指针、写指针处值、取变量地、取对象数据" 折叠2 @默认值 = 0>
+    参数 文本内容 <类型 = 文本型 注释 = "本项适合用来标记数据类型，或也可以当文本内容项发送" @默认值 = "">
+    参数 字节集内容 <类型 = 字节集类 注释 = "可使用“取对象数据”命令填入本参数　；取出后使用“置对象数据”命令" @默认值 = 空对象>
+    参数 通讯标记 <类型 = 整数 @默认值 = 0>
+    参数 接收对象 <类型 = 文本型 注释 = "通过“置本端名称_”设置，指定名称端才能接收到，例如：命名“程序A”" @默认值 = "">
+    参数 返回的地址内容 <类型 = 变整数 @默认值 = 0>
+    参数 返回的文本内容 <类型 = 文本型 @默认值 = "">
+    参数 返回的字节集内容 <类型 = 字节集类 @默认值 = 空对象>
+    参数 返回的通讯标记 <类型 = 整数 @默认值 = 0>
+    参数 等待时间 <类型 = 整数 注释 = "单位：毫秒 ；1000毫秒＝1秒" @默认值 = 2000>
+    {
+        变量 发送结果 <类型 = 逻辑型>
+        变量 i <类型 = 整数>
+        如果 (同步中 == 假)
+        {
+            同步中 = 真
+            处理事件_ ()
+            发送结果 = 发送信息_ (地址内容, 文本内容, 字节集内容, 通讯标记, 接收对象)
+            同步返回 = 假
+            判断循环 (同步返回 == 假)
+            {
+                i = i + 1
+                如果真 (i > 等待时间)
+                {
+                    返回的文本内容 = "超时"
+                    跳出循环
+                }
+                延迟2_ (1)
+            }
+            返回的地址内容 = 取通讯地址内容_ ()
+            返回的文本内容 = 取通讯文本内容_ ()
+            返回的字节集内容 = 取通讯字节集内容_ ()
+            返回的通讯标记 = 取通讯标记内容_ ()
+            同步中 = 假
+            处理事件_ ()
+        }
+        否则
+        {
+            返回的文本内容 = "当前还有任务未完成"
+            返回 (假)
+        }
+        返回 (发送结果)
+    }
+
+    方法 取通讯地址内容_ <公开 类型 = 变整数 注释 = "返回的地址数据可使用：指针到文本、读指针处对象、读指针处值等命令还原数据" 折叠>
+    {
+        变量 临时数据 <类型 = 字节集类>
+        变量 对象名 <类型 = 文本型>
+        临时数据 = 共享内存.读共享数据_ ("yw对象")
+        对象名 = 字节集到文本 (临时数据)
+        如果 (对象名 == 本端名)
+        {
+            临时数据 = 共享内存.读共享数据_ ("yw地内")
+        }
+        否则
+        {
+            返回 (0)
+        }
+        返回 (取字节集数据 (临时数据, 0, 变整数))
+    }
+
+    方法 取通讯字节集内容_ <公开 类型 = 字节集类 注释 = "返回的地址数据可使用：置对象数据等命令还原数据" 折叠>
+    {
+        变量 临时数据 <类型 = 字节集类>
+        变量 对象名 <类型 = 文本型>
+        临时数据 = 共享内存.读共享数据_ ("yw对象")
+        对象名 = 字节集到文本 (临时数据)
+        如果 (对象名 == 本端名)
+        {
+            临时数据 = 共享内存.读共享数据_ ("yw字内")
+        }
+        否则
+        {
+            临时数据 = 字节集类.取空白字节集 (0)
+        }
+        返回 (临时数据)
+    }
+
+    方法 取通讯文本内容_ <公开 类型 = 文本型 折叠>
+    {
+        变量 临时数据 <类型 = 字节集类>
+        变量 对象名 <类型 = 文本型>
+        临时数据 = 共享内存.读共享数据_ ("yw对象")
+        对象名 = 字节集到文本 (临时数据)
+        如果 (对象名 == 本端名)
+        {
+            临时数据 = 共享内存.读共享数据_ ("yw文内")
+        }
+        否则
+        {
+            返回 ("")
+        }
+        返回 (字节集到文本 (临时数据))
+    }
+
+    方法 取通讯标记内容_ <公开 类型 = 整数 折叠>
+    {
+        变量 临时数据 <类型 = 字节集类>
+        变量 对象名 <类型 = 文本型>
+        临时数据 = 共享内存.读共享数据_ ("yw对象")
+        对象名 = 字节集到文本 (临时数据)
+        如果 (对象名 == 本端名)
+        {
+            临时数据 = 共享内存.读共享数据_ ("yw标记")
+        }
+        否则
+        {
+            返回 (0)
+        }
+        返回 (取字节集数据 (临时数据, 0, 整数))
+    }
+
+    方法 通讯事件 <公开 定义事件 类型 = 整数 注释 = "需要开启“开启消息等待_”才有事件触发" 折叠>
+    参数 地址内容 <类型 = 变整数 注释 = "根据数据或对象的指针，取数据内容；指针到文本、读指针处对象、读指针处值、置对象数据等">
+    参数 文本内容 <类型 = 文本型>
+    参数 字节集内容 <类型 = 字节集类 注释 = "可使用“置对象数据”命令">
+    参数 通讯标记 <类型 = 整数>
+
+    方法 类_清理 <折叠>
+    {
+        释放句柄_ ()
+    }
+
+    方法 线程池类2__线程池事件 <接收事件 类型 = 整数 折叠>
+    参数 来源对象 <类型 = 线程池类2_>
+    参数 标记值 <类型 = 整数>
+    参数 用户标记 <类型 = 整数>
+    参数 用户参数 <类型 = 长整数>
+    参数 用户数据 <类型 = 变整数>
+    {
+        变量 临时数据 <类型 = 字节集类>
+        变量 对象名 <类型 = 文本型>
+        变量 状态值 <类型 = 整数>
+        判断循环 (状态 == 假)
+        {
+            临时数据 = 共享内存.读共享数据_ ("yw状态")
+            状态值 = 取字节集数据 (临时数据, 0, 整数)
+            如果真 (状态值 == 1 && 当前标记 == 假)
+            {
+                同步返回 = 真
+                处理事件_ ()
+                临时数据 = 共享内存.读共享数据_ ("yw对象")
+                对象名 = 字节集到文本 (临时数据)
+                共享内存.写共享数据_ ("yw状态", 到字节集 (2))
+                处理事件_ ()
+                如果 (对象名 == 本端名)
+                {
+                    通讯事件 (取通讯地址内容_ (), 取通讯文本内容_ (), 取通讯字节集内容_ (), 取通讯标记内容_ ())
+                }
+            }
+            如果真 (当前标记 == 真)
+            {
+                当前标记 = 假
+            }
+            延迟2_ (1)
+        }
+        返回 (0)
+    }
+}
+
+# //====
+
+类 进程模块信息类_ <公开 折叠 折叠2 @文档 = "category = \"进程权限库.进程模块\"" @全局类 = 真>
+{
+    方法 进程_取所有进程模块 <公开 静态 类型 = 整数 注释 = "本命令有耗时操作，所以需要将本命令放在线程中执行，以免卡界面" 折叠 折叠2 @禁止流程检查 = 真
+            @视窗.外部头文件 = "windows.h\r\ntlhelp32.h\r\npsapi.h\r\niostream\r\niomanip\r\nmap" @视窗.外部库 = "psapi.lib">
+    参数 返回的信息组 <类型 = 进程信息组>
+    {
+        变量 临时DLL名称 <类型 = 文本型>
+        变量 临时DLL路径 <类型 = 文本型>
+        变量 信息类 <类型 = 进程信息类>
+        @         HANDLE hToken;
+        @         if (OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
+        @             TOKEN_PRIVILEGES tkp;
+        @             if (LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &tkp.Privileges[0].Luid)) {
+        @                 tkp.PrivilegeCount = 1;
+        @                 tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+        @                 AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, NULL, 0);
+        @             }
+        @             CloseHandle(hToken);
+        @         }
+        @     std::map<DWORD, std::wstring> processes;
+        @     {
+        @         PROCESSENTRY32W pe32;
+        @         pe32.dwSize = sizeof(PROCESSENTRY32W);
+        @         HANDLE hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+        @         if (hProcessSnap != INVALID_HANDLE_VALUE) {
+        @             if (Process32FirstW(hProcessSnap, &pe32)) {
+        @                 do {
+        @                     processes[pe32.th32ProcessID] = pe32.szExeFile;
+        @                 } while (Process32NextW(hProcessSnap, &pe32));
+        @             }
+        @             CloseHandle(hProcessSnap);
+        @         }
+        @     }
+        @     for (const auto& proc : processes) {
+        信息类.重置为空对象 ()
+        @         DWORD pid = proc.first;
+        @         std::wstring exeName = proc.second;
+        @         HANDLE hProcess = NULL;
+        @         hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid);
+        @         if (!hProcess) {
+        @             hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid);
+        @             if (!hProcess) continue;
+        @         }
+        @         WCHAR exePath[MAX_PATH] = { 0 };
+        @         if (!GetModuleFileNameExW(hProcess, NULL, exePath, MAX_PATH)) {
+        @             CloseHandle(hProcess);
+        @             continue;
+        @         }
+        @ @<信息类.进程ID>=pid;
+        @ @<信息类.进程名>=exeName.c_str();
+        @ @<信息类.进程路径>=exePath;
+        @         std::map<std::wstring, std::wstring> dependencies;
+        @         {
+        @             HMODULE hMods[1024];
+        @             DWORD cbNeeded;
+        @             if (EnumProcessModules(hProcess, hMods, sizeof(hMods), &cbNeeded)) {
+        @                 WCHAR mainModulePath[MAX_PATH] = { 0 };
+        @                 GetModuleFileNameExW(hProcess, hMods[0], mainModulePath, MAX_PATH);
+        @                 for (DWORD i = 0; i < (cbNeeded / sizeof(HMODULE)); i++) {
+        @                     WCHAR modName[MAX_PATH] = { 0 };
+        @                     WCHAR modPath[MAX_PATH] = { 0 };
+        @                     if (GetModuleBaseNameW(hProcess, hMods[i], modName, MAX_PATH) &&
+        @                         GetModuleFileNameExW(hProcess, hMods[i], modPath, MAX_PATH)) {
+        @                         if (wcscmp(modPath, mainModulePath) != 0) {
+        @                             dependencies[modName] = modPath;
+        @                         }
+        @                     }
+        @                 }
+        @             }
+        @         }
+        @         for (const auto& dll : dependencies) {
+        @ @<临时DLL名称>=dll.first.c_str();
+        信息类.DLL名称.加入成员 (临时DLL名称)
+        @ @<临时DLL路径>=dll.second.c_str();
+        信息类.DLL路径.加入成员 (临时DLL路径)
+        @         }
+        @         std::wcout << L"\n";
+        @         CloseHandle(hProcess);
+        返回的信息组.加入成员 (信息类)
+        @     }
+        @     return processes.size();
+    }
+}
+
+类 进程信息组 <公开 基础类 = 对象数组模板类 折叠2 @输出到部件 = 假 @模板实现类 = "进程信息类">
+
+类 进程信息类 <公开 折叠>
+{
+    变量 进程ID <公开 类型 = 整数>
+    变量 进程名 <公开 类型 = 文本型>
+    变量 进程路径 <公开 类型 = 文本型>
+    变量 DLL名称 <公开 类型 = 文本数组类>
+    变量 DLL路径 <公开 类型 = 文本数组类>
+}
+
+# //====
+
+类 进程提权类_ <公开 折叠 折叠2 @文档 = "category = \"进程权限库.进程提权\"" @全局类 = 真>
+{
+    方法 进程_进程提权 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数 注释 = "留空表示当前进程" @默认值 = 0>
+    参数 权限级别 <类型 = 权限常量类 注释 = "默认为提升程序调试权限" @默认值 = 权限常量类.调试程序>
+    {
+        @ HANDLE hToken;
+        @ HANDLE hProcess;
+        @ if (!@<进程ID>)
+        @     hProcess = GetCurrentProcess();
+        @ else
+        @     hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, @<进程ID>);
+        @ if (!hProcess) return FALSE;
+        @ if (!::OpenProcessToken (hProcess, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
+        @     CloseHandle(hProcess);
+        @     return FALSE;
+        @ }
+        @ TOKEN_PRIVILEGES tokenPrivilege{0};
+        @ if (!::LookupPrivilegeValueW (NULL, @<权限级别>.GetText(), &tokenPrivilege.Privileges[0].Luid)) {
+        @     return FALSE;
+        @ }
+        @ tokenPrivilege.PrivilegeCount = 1;
+        @ tokenPrivilege.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+        @ BOOL result = ::AdjustTokenPrivileges (hToken, FALSE, &tokenPrivilege, sizeof(TOKEN_PRIVILEGES), NULL, NULL);
+        @ ::CloseHandle(hToken);
+        @ CloseHandle(hProcess);
+        @ return result;
+    }
+}
+
+类 权限常量类 <公开 折叠 折叠2 @文档 = "category = \"进程权限库.进程提权.附加类\"" @常量类 = 文本型>
+{
+    常量 未经请求的输入 <公开 值 = "SeUnsolicitedInputPrivilege" 注释 = "允许从终端设备读取未经请求的输入" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_UNSOLICITED_INPUT_NAME">
+    常量 创建令牌对象 <公开 值 = "SeCreateTokenPrivilege" 注释 = "允许创建主令牌，该令牌可以在进程创建访问令牌时，用于获取任何本地资源的访问权限" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_CREATE_TOKEN_NAME">
+    常量 替换进程级令牌 <公开 值 = "SeAssignPrimaryTokenPrivilege" 注释 = "允许在进程中分配主令牌" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_ASSIGNPRIMARYTOKEN_NAME">
+    常量 锁定内存页 <公开 值 = "SeLockMemoryPrivilege" 注释 = "允许进程将数据保持在物理内存中，这样可防止系统将数据分页到磁盘上的虚拟内存中" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_LOCK_MEMORY_NAME">
+    常量 为进程调整内存配额 <公开 值 = "SeIncreaseQuotaPrivilege" 注释 = "允许更改进程可消耗的最大内存" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_INCREASE_QUOTA_NAME">
+    常量 将工作站添加到域 <公开 值 = "SeMachineAccountPrivilege" 注释 = "允许将工作站添加到域" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_MACHINE_ACCOUNT_NAME">
+    常量 以操作系统方式执行 <公开 值 = "SeTcbPrivilege" 注释 = "允许某个进程模拟任意用户而无须进行身份验证，因此该进程可以与该用户一样获得对本地资源的访问权限" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_TCB_NAME">
+    常量 管理审核和安全日志 <公开 值 = "SeSecurityPrivilege" 注释 = "允许指定文件，Active Directory对象和注册表项之类的单个资源的对象访问审核选项，还可以查看和清除安全日志"
+            编辑时信息 = "5EA30, 482B4, 0, 0" "" = "SE_SECURITY_NAME">
+    常量 取得文件或其他对象的所有权 <公开 值 = "SeTakeOwnershipPrivilege" 注释 = "允许取得系统中任何安全对象(包括Active Directory对象、文件和文件夹、打印机、注册表项、进程以及线程)的所有权"
+            编辑时信息 = "5EA30, 482B4, 0, 0" "" = "SE_TAKE_OWNERSHIP_NAME">
+    常量 获取同一会话中另一个用户的模拟令牌 <公开 值 = "SeDelegateSessionUserImpersonatePrivilege" 注释 = "获取同一个会话中以交互方式登录的其他用户的模拟令牌"
+            编辑时信息 = "5EA30, 482B4, 0, 0" "" = "SE_DELEGATE_SESSION_USER_IMPERSONATE_NAME">
+    常量 加载和卸载设备驱动程序 <公开 值 = "SeLoadDriverPrivilege" 注释 = "允许安装和卸载驱动程序" 编辑时信息 = "5EA30, 482B4, 0, 0" "" = "SE_LOAD_DRIVER_NAME">
+    常量 配置文件系统性能 <公开 值 = "SeSystemProfilePrivilege" 注释 = "允许使用性能监视工具来监视整个系统的性能信息" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_SYSTEM_PROFILE_NAME">
+    常量 更改系统时间 <公开 值 = "SeSystemtimePrivilege" 注释 = "允许更改计算机内部时钟上的日期和时间" 编辑时信息 = "5EA30, 482B4, 0, 0" "" = "SE_SYSTEMTIME_NAME">
+    常量 配置文件单一进程 <公开 值 = "SeProfileSingleProcessPrivilege" 注释 = "允许使用性能监视工具来监视非系统进程的性能" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_PROF_SINGLE_PROCESS_NAME">
+    常量 提高计划优先级 <公开 值 = "SeIncreaseBasePriorityPrivilege" 注释 = "允许提高分配给其他进程的执行优先级" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_INC_BASE_PRIORITY_NAME">
+    常量 创建页面文件 <公开 值 = "SeCreatePagefilePrivilege" 注释 = "允许创建页面文件和更改页面文件的大小" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_CREATE_PAGEFILE_NAME">
+    常量 创建永久共享对象 <公开 值 = "SeCreatePermanentPrivilege" 注释 = "允许利用对象管理器创建目录对象" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_CREATE_PERMANENT_NAME">
+    常量 备份文件和目录 <公开 值 = "SeBackupPrivilege" 注释 = "允许执行备份文件和目录" 编辑时信息 = "5EA30, 482B4, 0, 0" "" = "SE_BACKUP_NAME">
+    常量 还原文件和目录 <公开 值 = "SeRestorePrivilege" 注释 = "允许执行还原文件和目录" 编辑时信息 = "5EA30, 482B4, 0, 0" "" = "SE_RESTORE_NAME">
+    常量 关闭系统 <公开 值 = "SeShutdownPrivilege" 注释 = "允许关闭本地的计算机" 编辑时信息 = "5EA30, 482B4, 0, 0" "" = "SE_SHUTDOWN_NAME">
+    常量 调试程序 <公开 值 = "SeDebugPrivilege" 注释 = "允许调试程序调试和调整任何进程的内存，忽略进程的DACL" 编辑时信息 = "5EA30, 482B4, 0, 0" "" = "SE_DEBUG_NAME">
+    常量 生成安全审核 <公开 值 = "SeAuditPrivilege" 注释 = "允许进程将项目添加到安全日志中" 编辑时信息 = "5EA30, 482B4, 0, 0" "" = "SE_AUDIT_NAME">
+    常量 修改固件环境值 <公开 值 = "SeSystemEnvironmentPrivilege" 注释 = "允许修改固件环境值，固件环境变量是在非基于x86的计算机的稳定RAM中存储的设置，该设置的效果依赖于处理器"
+            编辑时信息 = "5EA30, 482B4, 0, 0" "" = "SE_SYSTEM_ENVIRONMENT_NAME">
+    常量 绕过遍历检查 <公开 值 = "SeChangeNotifyPrivilege" 注释 = "即使在不具有对已遍历目录的权限时也可以遍历目录树，此权限不允许用户列出目录的内容，仅允许遍历目录"
+            编辑时信息 = "5EA30, 482B4, 0, 0" "" = "SE_CHANGE_NOTIFY_NAME">
+    常量 从远程系统强制关机 <公开 值 = "SeRemoteShutdownPrivilege" 注释 = "允许从网络上的远程位置关闭计算机" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_REMOTE_SHUTDOWN_NAME">
+    常量 从扩展坞上移除计算机 <公开 值 = "SeUndockPrivilege" 注释 = "允许无需登录而从其扩展坞上移除便携式计算机" 编辑时信息 = "5EA30, 482B4, 0, 0" "" = "SE_UNDOCK_NAME">
+    常量 同步目录服务数据 <公开 值 = "SeSyncAgentPrivilege" 注释 = "允许同步所有目录服务数据，这也称为Active Directory同步" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_SYNC_AGENT_NAME">
+    常量 信任计算机和用户帐户可以执行委派 <公开 值 = "SeEnableDelegationPrivilege" 注释 = "允许将用户或计算机对象上设置\"已为委派信任\"设置" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_ENABLE_DELEGATION_NAME">
+    常量 执行卷维护任务 <公开 值 = "SeManageVolumePrivilege" 注释 = "允许在卷上运行维护任务，如远程碎片整理" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_MANAGE_VOLUME_NAME">
+    常量 身份验证后模拟客户端 <公开 值 = "SeImpersonatePrivilege" 注释 = "允许在身份验证后模拟客户端" 编辑时信息 = "5EA30, 482B4, 0, 0" "" = "SE_IMPERSONATE_NAME">
+    常量 创建全局对象 <公开 值 = "SeCreateGlobalPrivilege" 注释 = "允许创建所有会话都可以使用的全局对象" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_CREATE_GLOBAL_NAME">
+    常量 作为受信任的呼叫方访问凭据管理器 <公开 值 = "SeTrustedCredManAccessPrivilege" 注释 = "允许以受信任的呼叫方访问凭据管理器" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_TRUSTED_CREDMAN_ACCESS_NAME">
+    常量 修改对象标签 <公开 值 = "SeRelabelPrivilege" 注释 = "允许修改对象(例如文件、注册表项或其他用户所拥有的进程)的完整性标签" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_RELABEL_NAME">
+    常量 增加进程工作集 <公开 值 = "SeIncreaseWorkingSetPrivilege" 注释 = "允许增加或减小进程的工作集大小" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_INC_WORKING_SET_NAME">
+    常量 更改时区 <公开 值 = "SeTimeZonePrivilege" 注释 = "允许更改计算机用于显示本地时间(计算机的系统时间加上时区偏移)的时区" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_TIME_ZONE_NAME">
+    常量 创建符号链接 <公开 值 = "SeCreateSymbolicLinkPrivilege" 注释 = "允许创建符号链接" 编辑时信息 = "5EA30, 482B4, 0, 0"
+            "" = "SE_CREATE_SYMBOLIC_LINK_NAME">
+}
+
+# //====
+
+类 进程优先级类_ <公开 折叠 折叠2 @文档 = "category = \"进程权限库.进程优先级\"" @全局类 = 真>
+{
+    方法 进程_取进程优先级 <公开 静态 类型 = 整数 返回值注释 = "0、最高 1、高于标准 2、实时 3、标准 4、低于标准 5、低 -1、表示无权限访问进程" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数 注释 = "默认0则取自身进程" @默认值 = 0>
+    {
+        @ HANDLE hProcess;
+        @ if (!@<进程ID>) hProcess = GetCurrentProcess();
+        @ else hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, @<进程ID>);
+        @ if (!hProcess) return -1;
+        @ DWORD Class = GetPriorityClass(hProcess);
+        @ CloseHandle(hProcess);
+        @ int Type = 0;
+        @ if (Class == REALTIME_PRIORITY_CLASS) Type = 2;
+        @ else if (Class == HIGH_PRIORITY_CLASS) Type = 0;
+        @ else if (Class == ABOVE_NORMAL_PRIORITY_CLASS) Type = 1;
+        @ else if (Class == NORMAL_PRIORITY_CLASS) Type = 3;
+        @ else if (Class == BELOW_NORMAL_PRIORITY_CLASS) Type = 4;
+        @ else if (Class == IDLE_PRIORITY_CLASS) Type = 5;
+        @ return Type;
+    }
+
+    方法 进程_置进程优先级 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数 注释 = "默认0则取自身进程" @默认值 = 0>
+    参数 进程级别 <类型 = 整数 注释 = "0、最高 1、高于标准 2、实时 3、标准 4、低于标准 5、低" @默认值 = 0>
+    {
+        @ DWORD Type = HIGH_PRIORITY_CLASS;
+        @ if (@<进程级别> == 0) Type = HIGH_PRIORITY_CLASS;
+        @ else if (@<进程级别> == 1) Type = ABOVE_NORMAL_PRIORITY_CLASS;
+        @ else if (@<进程级别> == 2) Type = REALTIME_PRIORITY_CLASS;
+        @ else if (@<进程级别> == 3) Type = NORMAL_PRIORITY_CLASS;
+        @ else if (@<进程级别> == 4) Type = BELOW_NORMAL_PRIORITY_CLASS;
+        @ else if (@<进程级别> == 5) Type = IDLE_PRIORITY_CLASS;
+        @ HANDLE hProcess;
+        @ if (!@<进程ID>) hProcess = GetCurrentProcess();
+        @ else hProcess = OpenProcess(PROCESS_SET_INFORMATION, FALSE, @<进程ID>);
+        @ if (!hProcess) return FALSE;
+        @ BOOL bRet = SetPriorityClass(hProcess, Type);
+        @ CloseHandle(hProcess);
+        @ return bRet;
+    }
+}
+
+# //====
+
+类 进程类_ <公开 折叠 折叠2 @文档 = "category = \"进程权限库.进程操作\"" @全局类 = 真 @视窗.外部头文件 = "<iostream>\r\n<TlHelp32.h>"
+        @视窗.外部头文件 = "cmd\\Processes.h" @视窗.外部源文件 = "cmd\\Processes.cpp">
+{
+    方法 进程_创建进程 <公开 静态 类型 = 整数 返回值注释 = "返回进程ID" 折叠 @禁止流程检查 = 真>
+    参数 程序路径 <类型 = 文本型 "">
+    参数 命令行 <类型 = 文本型 @默认值 = 空对象>
+    参数 是否等待 <类型 = 逻辑型 @默认值 = 假>
+    参数 显示方式 <类型 = 整数 注释 = "2、隐藏　5、显示" @默认值 = 2>
+    参数 运行目录 <类型 = 文本型 @默认值 = 空对象>
+    {
+        @ std::wstring strDir = @<运行目录>.GetText();
+        @ if (@<运行目录>.IsEmpty())
+        @ {
+        @     strDir = @<程序路径>.GetText();
+        @     int index = strDir.rfind(L"\\");
+        @     if (index > -1)
+        @         strDir = strDir.substr(0, index + 1);
+        @ }
+        @ STARTUPINFOW si = { sizeof(STARTUPINFOW) };
+        @ switch (@<显示方式>)
+        @ {
+        @     case 1:
+        @         si.dwFlags = STARTF_USESHOWWINDOW;
+        @         si.wShowWindow = SW_HIDE;
+        @         break;
+        @     case 3:
+        @         si.dwFlags = STARTF_USESHOWWINDOW;
+        @         si.wShowWindow = SW_SHOWMINIMIZED;
+        @         break;
+        @     case 4:
+        @         si.dwFlags = STARTF_USESHOWWINDOW;
+        @         si.wShowWindow = SW_SHOWMAXIMIZED;
+        @         break;
+        @     case 5:
+        @         si.dwFlags = STARTF_USESHOWWINDOW;
+        @         si.wShowWindow = SW_SHOWNOACTIVATE;
+        @         break;
+        @     case 6:
+        @         si.dwFlags = STARTF_USESHOWWINDOW;
+        @         si.wShowWindow = SW_MINIMIZE;
+        @         break;
+        @     default:
+        @         si.dwFlags = STARTF_USESHOWWINDOW;
+        @         si.wShowWindow = SW_HIDE;
+        @         break;
+        @ }
+        @ PROCESS_INFORMATION pi = { 0 };
+        @ if (CreateProcessW(@<程序路径>.GetText(), (wchar_t*)@<命令行>.GetText(), NULL, NULL, FALSE, 0, NULL, strDir.c_str(), &si, &pi))
+        @ {
+        @     if (@<是否等待>)
+        @         WaitForSingleObject(pi.hProcess, INFINITE);
+        @     else
+        @         WaitForSingleObject(pi.hProcess, 1000);
+        @     CloseHandle(pi.hProcess);
+        @     CloseHandle(pi.hThread);
+        @ }
+        @ return pi.dwProcessId;
+    }
+
+    方法 进程_创建进程_管理员 <公开 静态 类型 = 逻辑型 注释 = "在Vista/Win7及更高系统上,以管理员模式创建进程;" 注释 = "注意：请勿放在“窗口创建完毕”及“首次被激活”死循环中" 折叠 折叠2 @禁止流程检查 = 真>
+    参数 进程路径 <类型 = 文本型 注释 = "留空默认启动自身进程" @默认值 = "">
+    参数 运行参数 <类型 = 文本型 注释 = "命令行参数" @默认值 = "">
+    {
+        变量 lpFile <类型 = 文本型>
+        @ SHELLEXECUTEINFOW ExecInfo;
+        @ memset(&ExecInfo, 0, sizeof(SHELLEXECUTEINFOW));
+        @ ExecInfo.cbSize = sizeof(SHELLEXECUTEINFOW);
+        @ if (@<进程路径>.IsEmpty())
+        @ {
+        lpFile = 取运行目录 () + 取执行文件名 ()
+        @ ExecInfo.lpFile = @<lpFile>.GetText();
+        @ }
+        @ else
+        @ {
+        @ ExecInfo.lpFile = @<进程路径>.GetText();
+        @ }
+        @ ExecInfo.lpParameters = @<运行参数>.GetText();
+        @ ExecInfo.lpVerb = L"runas";
+        @ ExecInfo.nShow = SW_SHOWDEFAULT;
+        @ ExecInfo.fMask = SEE_MASK_FLAG_DDEWAIT;
+        @ return ShellExecuteExW(&ExecInfo);
+    }
+
+    方法 进程_枚举进程 <公开 静态 类型 = 整数 返回值注释 = "返回进程数量" 折叠 折叠2 @视窗.外部头文件 = "<AclAPI.h>\r\n<TlHelp32.h>\r\n<Psapi.h>"
+            @视窗.外部库 = "AdvAPI32.Lib\r\nPsapi.lib" @禁止流程检查 = 真>
+    参数 返回的进程名称 <类型 = 文本数组类 @默认值 = 空对象>
+    参数 返回的进程ID <类型 = 整数数组类 @默认值 = 空对象>
+    参数 是否获取程序路径 <类型 = 逻辑型 @默认值 = 假>
+    参数 返回的程序路径 <类型 = 文本数组类 @默认值 = 空对象>
+    参数 指定进程名 <类型 = 文本型 注释 = "指定枚举某进程，不区分大小写" @默认值 = "">
+    {
+        变量 szPath <类型 = 文本型>
+        变量 dwProcessId <类型 = 整数>
+        返回的进程名称.删除所有成员 ()
+        返回的进程ID.删除所有成员 ()
+        返回的程序路径.删除所有成员 ()
+        @ GetPrivileges();
+        @ PROCESSENTRY32W pe;
+        @ memset(&pe, 0, sizeof(PROCESSENTRY32W));
+        @ pe.dwSize = sizeof(PROCESSENTRY32W);
+        @ HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, 0);
+        @ if (hSnapshot == INVALID_HANDLE_VALUE) return 0;
+        @ BOOL hRes = Process32FirstW(hSnapshot, &pe);
+        @ while (hRes)
+        @ {
+        @ @<szPath> =  pe.szExeFile;
+        @ @<dwProcessId> = pe.th32ProcessID;
+        如果 (指定进程名 == "")
+        {
+            返回的进程名称.加入成员 (szPath)
+            返回的进程ID.加入成员 (dwProcessId)
+            如果真 (是否获取程序路径 == 真)
+            {
+                返回的程序路径.加入成员 (进程_取进程路径_ID (dwProcessId))
+            }
+        }
+        否则 (到小写 (指定进程名) == 到小写 (szPath))
+        {
+            返回的进程名称.加入成员 (szPath)
+            返回的进程ID.加入成员 (dwProcessId)
+            如果真 (是否获取程序路径 == 真)
+            {
+                返回的程序路径.加入成员 (进程_取进程路径_ID (dwProcessId))
+            }
+        }
+        @ hRes = Process32NextW(hSnapshot, &pe);
+        @ }
+        @ CloseHandle(hSnapshot);
+        返回 (返回的进程名称.取成员数 ())
+    }
+
+    方法 进程_枚举进程模块 <公开 静态 类型 = 整数 注释 = "先执行“进程提权_”，否则一些系统进程无法获取" 注释 = "获取某个进程所有模块的基本信息" 返回值注释 = "成功返回进程的模块数量" 折叠 折叠2
+            @视窗.外部头文件 = "tlhelp32.h
+" @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数 注释 = "所欲取模块信息的进程ID,0为当前进程" @输出名 = "nPID">
+    参数 返回的模块基址 <类型 = 变整数数组类 @默认值 = 空对象>
+    参数 返回的模块大小 <类型 = 整数数组类 @默认值 = 空对象>
+    参数 返回的模块句柄 <类型 = 变整数数组类 @默认值 = 空对象>
+    参数 返回的模块名称 <类型 = 文本数组类 @默认值 = 空对象>
+    参数 返回的模块路径 <类型 = 文本数组类 @默认值 = 空对象>
+    {
+        变量 模块基址 <类型 = 变整数>
+        变量 模块大小 <类型 = 整数>
+        变量 模块句柄 <类型 = 变整数>
+        变量 模块名称 <类型 = 文本型>
+        变量 模块路径 <类型 = 文本型>
+        @ HANDLE hModuleSnap = ::CreateToolhelp32Snapshot (TH32CS_SNAPMODULE, (DWORD)nPID);
+        @ if (hModuleSnap == INVALID_HANDLE_VALUE) return 0;
+        @ MODULEENTRY32W me32;
+        @ memset (&me32, 0, sizeof (MODULEENTRY32W));
+        @ me32.dwSize = sizeof (me32);
+        @ if (::Module32FirstW (hModuleSnap, &me32) == FALSE) return 0;
+        @ do
+        @ {
+        @     @<模块基址> = (INT_P)me32.modBaseAddr;
+        @     @<模块大小> = (INT)me32.modBaseSize;
+        @     @<模块句柄> = (INT_P)me32.hModule;
+        @     @<模块名称>.SetText (me32.szModule);
+        @     @<模块路径>.SetText (me32.szExePath);
+        返回的模块基址.加入成员 (模块基址)
+        返回的模块大小.加入成员 (模块大小)
+        返回的模块句柄.加入成员 (模块句柄)
+        返回的模块名称.加入成员 (模块名称)
+        返回的模块路径.加入成员 (模块路径)
+        @ } while (::Module32NextW (hModuleSnap, &me32));
+        @ ::CloseHandle (hModuleSnap);
+        返回 (返回的模块基址.取成员数 ())
+    }
+
+    方法 进程_结束进程_名称 <公开 静态 类型 = 逻辑型 注释 = "结束单个进程" 折叠 @禁止流程检查 = 真>
+    参数 进程名 <类型 = 文本型>
+    {
+        变量 进程ID <类型 = 整数>
+        变量 结果 <类型 = 逻辑型>
+        进程ID = 进程_取指定进程ID (进程名)
+        如果真 (进程ID > 0)
+        {
+            结果 = 进程_结束进程_ID (进程ID)
+        }
+        返回 (结果)
+    }
+
+    方法 进程_结束进程_ID <公开 静态 类型 = 逻辑型 注释 = "结束单个进程" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    {
+        @ DWORD dwProcessId;
+        @ if (!@<进程ID>) dwProcessId = GetCurrentProcessId();
+        @ else dwProcessId = @<进程ID>;
+        @ HANDLE hProcess;
+        @ hProcess = OpenProcess(PROCESS_TERMINATE, false, dwProcessId);
+        @ bool bRes = TerminateProcess(hProcess, 0);
+        @ CloseHandle(hProcess);
+        @ return bRes;
+    }
+
+    方法 进程_结束进程_批量 <公开 静态 注释 = "结束多个同名进程" 折叠 @禁止流程检查 = 真>
+    参数 进程名 <类型 = 文本型>
+    {
+        变量 开始时间 <类型 = 长整数>
+        开始时间 = 取启动时间 ()
+        判断循环 (真)
+        {
+            如果真 (取启动时间 () - 开始时间 > 4000)
+            {
+                跳出循环
+            }
+            如果 (进程_进程是否存在 (进程名) == 真)
+            {
+                进程_结束进程_名称 (进程名)
+            }
+            否则
+            {
+                跳出循环
+            }
+        }
+    }
+
+    方法 进程_关闭进程 <公开 静态 类型 = 逻辑型 注释 = "关闭进程句柄" 折叠 @禁止流程检查 = 真>
+    参数 进程句柄 <类型 = 变整数>
+    {
+        @ return CloseHandle((HANDLE)@<进程句柄>);
+    }
+
+    方法 进程_取进程路径_名称 <公开 静态 类型 = 文本型 注释 = "返回指定进程路径" 折叠 "">
+    参数 进程名 <类型 = 文本型>
+    {
+        变量 id <类型 = 整数>
+        id = 进程_取指定进程ID (进程名)
+        如果真 (id == 0)
+        {
+            返回 ("")
+        }
+        返回 (进程_取进程路径_ID (id))
+    }
+
+    方法 进程_取进程路径_ID <公开 静态 类型 = 文本型 注释 = "返回指定进程路径" 折叠 折叠2 @视窗.外部头文件 = "<Psapi.h>" @视窗.外部库 = "Psapi.lib" @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数 @默认值 = 0>
+    {
+        变量 szFileName <类型 = 文本型>
+        @ HANDLE hProcess = !@<进程ID> ? GetCurrentProcess() : OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, @<进程ID>);
+        @ if (!hProcess) return @<szFileName>.GetText();
+        @ DWORD dwSize = 0;
+        @ wchar_t szFileName[MAX_PATH] = { 0 };
+        @ dwSize = GetProcessImageFileNameW(hProcess, szFileName, MAX_PATH);
+        @ CloseHandle(hProcess);
+        @ if (dwSize == 0) return @<szFileName>.GetText();
+        @ wchar_t szDeviceName[MAX_PATH] = L" :";
+        @ wchar_t szTargetPath[MAX_PATH] = { 0 };
+        @ for (int i = 0; i < 26; i++)
+        @ {
+        @     szDeviceName[0] = L'A' + i;
+        @     QueryDosDeviceW(szDeviceName, szTargetPath, MAX_PATH);
+        @     DWORD dwSize = wcslen(szTargetPath);
+        @     if (dwSize > 0 && wcsnicmp(szFileName, szTargetPath, dwSize) == 0)
+        @     {
+        @         wcscat(szDeviceName, szFileName + dwSize);
+        @         @<szFileName>.SetValueText(szDeviceName);
+        @         break;
+        @     }
+        @ }
+        @ return @<szFileName>.GetText();
+    }
+
+    方法 进程_取进程线程数 <公开 静态 类型 = 整数 返回值注释 = "成功返回进程的线程数量." 折叠 折叠2 @视窗.外部头文件 = "tlhelp32.h
+" @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数 注释 = "所欲取线程数量的进程ID" @输出名 = "nProcessID">
+    {
+        @ HANDLE hProcessSnap = ::CreateToolhelp32Snapshot (TH32CS_SNAPPROCESS, 0);
+        @ if (hProcessSnap == INVALID_HANDLE_VALUE) return 0;
+        @ PROCESSENTRY32W pe32;
+        @ memset (&pe32, 0, sizeof (PROCESSENTRY32W));
+        @ pe32.dwSize = sizeof (PROCESSENTRY32W);
+        @ if (::Process32FirstW (hProcessSnap, &pe32) == FALSE) return 0;
+        @ do
+        @ {
+        @     if (pe32.th32ProcessID == nProcessID)
+        @     {
+        @         ::CloseHandle (hProcessSnap);
+        @         return (INT)pe32.cntThreads;
+        @     }
+        @ } while (::Process32NextW (hProcessSnap, &pe32));
+        @ ::CloseHandle (hProcessSnap);
+        @ return 0;
+    }
+
+    方法 进程_打开进程_ID <公开 静态 类型 = 变整数 注释 = "返回进程句柄" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    {
+        @ return (INT_PTR)OpenProcess(PROCESS_ALL_ACCESS, FALSE, @<进程ID>);
+    }
+
+    方法 进程_打开进程_句柄 <公开 静态 类型 = 变整数 注释 = "返回进程句柄" 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ if (!IsWindow((HWND)@<窗口句柄>)) return 0;
+        @ DWORD dwProcessId;
+        @ GetWindowThreadProcessId((HWND)@<窗口句柄>, &dwProcessId);
+        @ return (INT_PTR)OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);
+    }
+
+    方法 进程_取进程句柄数 <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @ DWORD handleCount = 0;  
+        @ GetProcessHandleCount(hProcess,&handleCount);
+        @ ::CloseHandle(hProcess);
+        @ return handleCount;
+    }
+
+    方法 进程_取自身进程句柄 <公开 静态 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    {
+        @ int id = GetCurrentProcessId();
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,id);
+        @ return (INT_P)hProcess;
+    }
+
+    方法 进程_取指定进程句柄 <公开 静态 类型 = 变整数 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    {
+        @ HANDLE hProcess = ::OpenProcess (PROCESS_ALL_ACCESS,NULL,@<进程ID>);
+        @ return (INT_P)hProcess;
+    }
+
+    方法 进程_取自身进程ID <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        @ return GetCurrentProcessId();
+    }
+
+    方法 进程_取指定进程名称 <公开 静态 类型 = 文本型 注释 = "进程ID取进程名" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数 @输出名 = "nProcessID">
+    {
+        @ HANDLE hProcessSnap = ::CreateToolhelp32Snapshot (TH32CS_SNAPPROCESS, 0);
+        @ if (hProcessSnap == INVALID_HANDLE_VALUE) return 0;
+        @ PROCESSENTRY32W pe32 { sizeof (PROCESSENTRY32W) };
+        @ if (::Process32FirstW (hProcessSnap, &pe32) == FALSE) return 0;
+        @ do {
+        @     if (pe32.th32ProcessID == nProcessID) {
+        @         ::CloseHandle (hProcessSnap);
+        @         return @an<CVolString> (pe32.szExeFile);
+        @     }
+        @ } while (::Process32NextW (hProcessSnap, &pe32));
+        @ ::CloseHandle (hProcessSnap);
+        @ return _CT ("");
+    }
+
+    方法 进程_取指定进程ID <公开 静态 类型 = 整数 注释 = "进程名取进行ID" 折叠 @禁止流程检查 = 真>
+    参数 进程名 <类型 = 文本型>
+    {
+        @ HANDLE hProcessSnap = ::CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS,NULL);
+        @ PROCESSENTRY32 pe32;CWString ProcessName = @<进程名>,sProcessName;
+        @ ProcessName.MakeLower ();
+        @ if (hProcessSnap == INVALID_HANDLE_VALUE)
+        @ { return -1; }
+        @ pe32.dwSize = sizeof(pe32);
+        @ BOOL bRet = ::Process32First(hProcessSnap,&pe32);
+        @ while(bRet)
+        @ {
+        @ sProcessName=pe32.szExeFile;
+        @ sProcessName.MakeLower();
+        @ if (sProcessName == ProcessName)
+        @ { ::CloseHandle(hProcessSnap); return pe32.th32ProcessID; }
+        @ bRet = ::Process32Next(hProcessSnap,&pe32);
+        @ }
+        @ ::CloseHandle(hProcessSnap);
+        @ return 0;
+    }
+
+    方法 进程_取指定进程ID_批量 <公开 静态 类型 = 整数 注释 = "取相同名称进程" 折叠 折叠2 @视窗.外部头文件 = "<TlHelp32.h>\r\n<iphlpapi.h>" @视窗.外部库 = "Iphlpapi.lib"
+            @禁止流程检查 = 真>
+    参数 进程名 <类型 = 文本型>
+    参数 返回的ID组 <类型 = 整数数组类 "">
+    {
+        变量 szPath <类型 = 文本型>
+        变量 dwProcessId <类型 = 整数>
+        变量 result <类型 = 整数>
+        返回的ID组.删除所有成员 ()
+        @ PROCESSENTRY32W pe;
+        @ memset(&pe, 0, sizeof(PROCESSENTRY32W));
+        @ pe.dwSize = sizeof(PROCESSENTRY32W);
+        @ HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, 0);
+        @ if (hSnapshot == INVALID_HANDLE_VALUE) return -1;
+        @ BOOL hRes = Process32FirstW(hSnapshot, &pe);
+        @ while (hRes)
+        @ {
+        @ @<szPath> =  pe.szExeFile;
+        result = 文本比较 (到小写 (进程名), 到小写 (szPath), 假)
+        @ if (!@<result>)
+        @ {
+        @ @<dwProcessId> = pe.th32ProcessID;
+        返回的ID组.加入成员 (dwProcessId)
+        @ }
+        @ hRes = Process32NextW(hSnapshot, &pe);
+        @ }
+        @ CloseHandle(hSnapshot);
+        返回 (返回的ID组.取成员数 ())
+    }
+
+    方法 进程_端口取进程ID <公开 静态 类型 = 整数 注释 = "通过端口取出进程PID" 折叠 折叠2 @视窗.外部头文件 = "<iphlpapi.h>" @视窗.外部库 = "Iphlpapi.lib" @禁止流程检查 = 真>
+    参数 端口 <类型 = 整数>
+    {
+        @ DWORD dwSize = 0;
+        @ GetExtendedTcpTable(NULL, &dwSize, TRUE, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
+        @ if (!dwSize) return 0;
+        @ PMIB_TCPTABLE_OWNER_PID pTcpTable = (PMIB_TCPTABLE_OWNER_PID)malloc(dwSize);
+        @ DWORD dwRet = NO_ERROR, dwOwningPid = 0;
+        @ dwRet = GetExtendedTcpTable(pTcpTable, &dwSize, TRUE, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
+        @ if (dwRet == NO_ERROR && pTcpTable && pTcpTable->dwNumEntries)
+        @ {
+        @     for (int i = 0; i < pTcpTable->dwNumEntries; i++)
+        @     {
+        @         if (ntohs((u_short)pTcpTable->table[i].dwLocalPort) == @<端口>)
+        @         {
+        @             dwOwningPid = pTcpTable->table[i].dwOwningPid;
+        @             break;
+        @         }
+        @     }
+        @ }
+        @ else if (dwRet == ERROR_INSUFFICIENT_BUFFER)
+        @     dwOwningPid = 0;
+        @ else if (dwRet == ERROR_INVALID_PARAMETER)
+        @     dwOwningPid = 0;
+        @ free(pTcpTable);
+        @ return dwOwningPid;
+    }
+
+    方法 进程_进程ID取端口 <公开 静态 类型 = 整数 注释 = "通过进程PID取出端口" 折叠 折叠2 @视窗.外部头文件 = "<iphlpapi.h>" @视窗.外部库 = "Iphlpapi.lib" @禁止流程检查 = 真>
+    参数 PID <类型 = 整数>
+    {
+        @ DWORD dwSize = 0;
+        @ GetExtendedTcpTable(NULL, &dwSize, TRUE, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
+        @ if (!dwSize) return 0;
+        @ PMIB_TCPTABLE_OWNER_PID pTcpTable = (PMIB_TCPTABLE_OWNER_PID)malloc(dwSize);
+        @ DWORD dwRet = NO_ERROR, dwLocalPort = 0;
+        @ dwRet = GetExtendedTcpTable(pTcpTable, &dwSize, TRUE, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
+        @ if (dwRet == NO_ERROR && pTcpTable && pTcpTable->dwNumEntries)
+        @ {
+        @     for (int i = 0; i < pTcpTable->dwNumEntries; i++)
+        @     {
+        @         if (pTcpTable->table[i].dwOwningPid == @<PID>)
+        @         {
+        @             dwLocalPort = ntohs((u_short)(pTcpTable->table[i].dwLocalPort));
+        @             break;
+        @         }
+        @     }
+        @ }
+        @ else if (dwRet == ERROR_INSUFFICIENT_BUFFER) //为表分配的空间不足
+        @     dwLocalPort = 0;
+        @ else if (dwRet == ERROR_INVALID_PARAMETER) //传递给函数的参数无效
+        @     dwLocalPort = 0;
+        @ free(pTcpTable);
+        @ return dwLocalPort;
+    }
+
+    方法 进程_窗口句柄取进程路径 <公开 静态 类型 = 文本型 注释 = "通过窗口句柄取程序路径" 折叠 折叠2 @禁止流程检查 = 真 @视窗.外部头文件 = "<Psapi.h>" @视窗.外部库 = "Psapi.lib">
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        变量 szFileName <类型 = 文本型>
+        @ HWND hWnd = (HWND)@<窗口句柄>;
+        @ DWORD dwProcessId;
+        @ if (GetWindowThreadProcessId(hWnd, &dwProcessId) > 0)
+        @ {
+        @ HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, dwProcessId);
+        @ if (hProcess > 0)
+        @ {
+        @ HMODULE hModule[1];
+        @ DWORD cbNeeded;
+        @ if (EnumProcessModulesEx(hProcess, hModule, sizeof(hModule), &cbNeeded, LIST_MODULES_ALL))
+        @ {
+        @ WCHAR szFileName[MAX_PATH] = { 0 };
+        @ if (GetModuleFileNameExW(hProcess, hModule[0], szFileName, MAX_PATH))
+        @ {
+        @ @<szFileName>.SetValueText(szFileName);
+        子文本替换 (szFileName, "\\??\\", "")
+        @ }
+        @ }
+        @ CloseHandle(hProcess);
+        @ }
+        @ }
+        @ return @<szFileName>.GetText();
+    }
+
+    方法 进程_取指定进程窗口句柄_进程名 <公开 静态 类型 = 变整数 注释 = "通过进程名取窗口句柄" 折叠 @禁止流程检查 = 真>
+    参数 进程名 <类型 = 文本型>
+    参数 窗口标题 <类型 = 文本型 @默认值 = "">
+    参数 是否模糊 <类型 = 逻辑型 注释 = "配合参数二使用" @默认值 = 假>
+    参数 是否获取首句柄 <类型 = 逻辑型 注释 = "当参数二“窗口标题”为空时，本参数设置生效。不保证是主窗口句柄。真：获取首  假：获取尾" @默认值 = 真>
+    参数 返回的窗口句柄组 <类型 = 变整数数组类 注释 = "所有获取到的窗口句柄都保存在此数组中，并返回找到的第一个窗口句柄" @默认值 = 空对象>
+    {
+        变量 pid <类型 = 整数>
+        变量 句柄组 <类型 = 变整数数组类>
+        变量 临时句柄 <类型 = 变整数>
+        变量 句柄组2 <类型 = 整数数组类>
+        变量 结果 <类型 = 逻辑型>
+        进程_取指定进程ID_批量 (进程名, 句柄组2)
+        句柄组2.枚举循环 ()
+        {
+            pid = 句柄组2.取枚举值 ()
+            进程_取指定进程窗口句柄3_进程ID (pid, 句柄组)
+            如果真 (句柄组.取成员数 () > 0)
+            {
+                如果 (文本是否为空 (窗口标题))
+                {
+                    如果 (是否获取首句柄)
+                    {
+                        临时句柄 = 句柄组.取成员 (0)
+                    }
+                    否则
+                    {
+                        临时句柄 = 句柄组.取成员 (句柄组.取成员数 () - 1)
+                    }
+                    结果 = 真
+                }
+                否则
+                {
+                    句柄组.枚举循环 ()
+                    {
+                        临时句柄 = 句柄组.取枚举值 ()
+                        如果 (是否模糊)
+                        {
+                            如果真 (寻找文本 (窗口_取窗口组件标题 (临时句柄), 窗口标题, , 真) != -1)
+                            {
+                                结果 = 真
+                                跳出循环
+                            }
+                        }
+                        否则
+                        {
+                            如果真 (窗口_取窗口组件标题 (临时句柄) == 窗口标题)
+                            {
+                                结果 = 真
+                                跳出循环
+                            }
+                        }
+                    }
+                }
+                返回的窗口句柄组 = 句柄组
+                如果 (结果)
+                {
+                    跳出循环
+                }
+                否则
+                {
+                    临时句柄 = 0
+                }
+            }
+        }
+        返回 (临时句柄)
+    }
+
+    方法 进程_取指定进程窗口句柄_进程ID <公开 静态 类型 = 变整数 注释 = "通过进程ID取窗口句柄" 返回值注释 = "成功返回找到的第一个窗口句柄，不能保证是主窗口句柄，失败返回0" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数 注释 = "0为当前进程" @默认值 = 0>
+    {
+        @ HWND hWnd = ::GetTopWindow(NULL);
+        @ DWORD dwFindPID = @<进程ID> ? static_cast<DWORD>(@<进程ID>) : ::GetCurrentProcessId();
+        @ while (hWnd) {
+        @     DWORD dwPID = 0;
+        @     DWORD dwTheardId = ::GetWindowThreadProcessId(hWnd, &dwPID);
+        @     if (dwTheardId) {
+        @         if (dwPID == dwFindPID)
+        @             return (INT_P)hWnd;
+        @     }
+        @     hWnd = ::GetNextWindow(hWnd, GW_HWNDNEXT);
+        @ }
+        @ return 0;
+    }
+
+    方法 进程_取指定进程窗口句柄2_进程名 <公开 静态 类型 = 变整数 注释 = "通过进程名取窗口句柄" 折叠 @禁止流程检查 = 真>
+    参数 进程名 <类型 = 文本型>
+    {
+        变量 pid <类型 = 整数>
+        pid = 进程_取指定进程ID (进程名)
+        如果 (pid != 0)
+        {
+            返回 (进程_取指定进程窗口句柄2_进程ID (pid, 5000))
+        }
+        返回 (0)
+    }
+
+    方法 进程_取指定进程窗口句柄2_进程ID <公开 静态 类型 = 变整数 注释 = "通过进程ID窗口句柄" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 等待时限 <类型 = 整数 @默认值 = 5000>
+    {
+        变量 启动时间 <类型 = 长整数>
+        变量 句柄 <静态 类型 = 变整数>
+        变量 pid <类型 = 整数>
+        启动时间 = 取启动时间 ()
+        判断循环 (取启动时间 () - 启动时间 < 等待时限)
+        {
+            句柄 = 窗口_取窗口组件句柄 (, , 0, 句柄)
+            如果 (窗口_窗口是否可见 (句柄) == 假)
+            {
+                到循环尾
+            }
+            pid = 进程_窗口句柄取进程ID (句柄)
+            如果 (pid == 进程ID)
+            {
+                跳出循环
+            }
+        }
+        返回 (句柄)
+    }
+
+    方法 进程_取指定进程窗口句柄3_进程ID <公开 静态 类型 = 变整数 注释 = "通过进程ID取窗口句柄" 返回值注释 = "成功返回找到的第一个窗口句柄，不能保证是主窗口句柄，失败返回0" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数 注释 = "0为当前进程" @默认值 = 0>
+    参数 返回的窗口句柄组 <类型 = 变整数数组类 注释 = "所有获取到的窗口句柄都保存在此数组中，并返回找到的第一个窗口句柄" @默认值 = 空对象>
+    {
+        返回的窗口句柄组.删除所有成员 ()
+        @ HWND hWnd = ::GetTopWindow(NULL);
+        @ DWORD dwFindPID = @<进程ID> ? static_cast<DWORD>(@<进程ID>) : ::GetCurrentProcessId();
+        @ while (hWnd) {
+        @     DWORD dwPID = 0;
+        @     DWORD dwTheardId = ::GetWindowThreadProcessId(hWnd, &dwPID);
+        @     if (dwTheardId) {
+        @         if (dwPID == dwFindPID)
+        @             @<返回的窗口句柄组>.data().Add((INT_P)hWnd);
+        @     }
+        @     hWnd = ::GetNextWindow(hWnd, GW_HWNDNEXT);
+        @ }
+        返回 (选择 (返回的窗口句柄组.取成员数 () > 0, 返回的窗口句柄组.取成员 (0), (变整数)0))
+    }
+
+    方法 进程_窗口句柄取进程ID <公开 静态 类型 = 整数 注释 = "取出指定窗口句柄的进程ID" 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ DWORD dwProcessId;
+        @ GetWindowThreadProcessId((HWND)@<窗口句柄>, &dwProcessId);
+        @ return dwProcessId;
+    }
+
+    方法 进程_窗口句柄取线程ID <公开 静态 类型 = 整数 注释 = "取出指定窗口句柄的线程ID" 折叠 @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数>
+    {
+        @ DWORD dwProcessId;
+        @ return GetWindowThreadProcessId((HWND)@<窗口句柄>, &dwProcessId);
+    }
+
+    方法 进程_进程是否存在 <公开 静态 类型 = 逻辑型 折叠>
+    参数 进程名 <类型 = 文本型>
+    {
+        返回 (进程_取指定进程ID (进程名) != 0)
+    }
+
+    方法 进程_取远程函数地址 <公开 静态 类型 = 变整数 返回值注释 = "返回进程中指定DLL函数基址" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 DLL文件名 <类型 = 文本型 注释 = "完整来源路径">
+    参数 DLL函数输出名 <类型 = 文本型 注释 = "即DLL中，@输出名">
+    {
+        变量 函数地址 <类型 = 变整数>
+        变量 strtmp <类型 = 字节集类>
+        变量 strpoint <类型 = 变整数>
+        strtmp = 文本到多字节 (DLL文件名, )
+        strpoint = 取字节集指针 (strtmp)
+        @    LPCSTR DllFileName = (LPCSTR)@<strpoint>;
+        @    @an<CVolMem> memBuf;
+        @    INT_P npResultTextLength;
+        @    const char * DllFuncName = GetMbsText (@<DLL函数输出名>.GetText (), memBuf, &npResultTextLength);
+        @    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, @<进程ID>);
+        @    if (hProcess)
+        @    {
+        @        LPVOID pAddress = GetProcAddress(GetModuleHandleA(DllFileName), DllFuncName);
+        @        @<函数地址> = (@dt<变整数>)pAddress;
+        @        CloseHandle(hProcess);
+        如果真 (函数地址 > 0)
+        {
+            返回 (函数地址)
+        }
+        @    }
+        返回 (0)
+    }
+
+    方法 进程_取远程模块句柄 <公开 静态 类型 = 变整数 返回值注释 = "返回进程中DLL模块句柄" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 DLL文件名 <类型 = 文本型 注释 = "完整来源路径">
+    {
+        变量 DLL信息 <类型 = 模块信息类_>
+        @ HANDLE hSnapshort = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, @<进程ID>);
+        @ if (!hSnapshort) return 0;
+        @ MODULEENTRY32W me = { sizeof(MODULEENTRY32W) };
+        @ BOOL bRet = Module32FirstW(hSnapshort, &me);
+        @ while (bRet)
+        @ {
+        @     @<DLL信息.模块ID> = me.th32ModuleID;
+        @     @<DLL信息.进程ID> = me.th32ProcessID;
+        @     @<DLL信息.全局使用计数> = me.GlblcntUsage;
+        @     @<DLL信息.模块使用计数> = me.ProccntUsage;
+        @     @<DLL信息.模块基址> = (@dt<变整数>)me.modBaseAddr;
+        @     @<DLL信息.模块大小> = me.modBaseSize;
+        @     @<DLL信息.模块句柄> = (@dt<变整数>)me.hModule;
+        @     @<DLL信息.模块文件名>.SetValueText(me.szModule);
+        @     @<DLL信息.模块完整路径>.SetValueText(me.szExePath);
+        @     bRet = Module32NextW(hSnapshort, &me);
+        如果真 (到小写 (DLL信息.模块文件名) == 到小写 (DLL文件名) || 到小写 (DLL信息.模块完整路径) == 到小写 (DLL文件名))
+        {
+            返回 (DLL信息.模块句柄)
+        }
+        @ }
+        @ CloseHandle(hSnapshort);
+        返回 (0)
+    }
+
+    方法 进程_取进程模块基址 <公开 静态 类型 = 变整数 折叠 @视窗.外部头文件 = "TlHelp32.h">
+    参数 进程ID <类型 = 整数>
+    参数 模块名 <类型 = 文本型>
+    {
+        @ HANDLE hModuleSnap = INVALID_HANDLE_VALUE;  
+        @ MODULEENTRY32 me32;  
+        @ hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, @<进程ID>);  
+        @ if (hModuleSnap == INVALID_HANDLE_VALUE) {  
+        @    return(FALSE);  
+        @ }  
+        @ me32.dwSize = sizeof(MODULEENTRY32);   
+        @ if (!Module32First(hModuleSnap, &me32)) {  
+        @     CloseHandle(hModuleSnap);  
+        @     return 0;  
+        @ }  
+        @ do {  
+        @ if (wcscmp(me32.szModule, @<模块名>) == 0) {  
+        @ return ((@dt<变整数>)me32.modBaseAddr);  
+        @     }  
+        @ } while (Module32Next(hModuleSnap, &me32));  
+        @ CloseHandle(hModuleSnap);
+        @ return 0;
+        返回 (0)
+    }
+}
+
+# //====
+
+类 系统级权限类_ <公开 折叠 折叠2 @文档 = "category = \"进程权限库.系统权限\"" @视窗.外部头文件 = "<TlHelp32.h>" @全局类 = 真>
+{
+    方法 进程_以系统级权限运行程序 <公开 静态 类型 = 逻辑型 注释 = "将程序进程权限提升至SYSTEM级" 折叠>
+    参数 程序路径 <类型 = 文本型 注释 = "默认提权自身" @默认值 = "">
+    参数 隐藏窗口运行 <类型 = 逻辑型 注释 = "默认不隐藏窗口" @默认值 = 假>
+    {
+        变量 SystemProcessHandle <类型 = 变整数>
+        变量 SystemTokenHandle <类型 = 变整数>
+        变量 phNewToken <类型 = 变整数>
+        变量 自身获取权限 <类型 = 逻辑型>
+        如果真 (进程_进程提权 () == 假)
+        {
+            返回 (假)
+        }
+        如果真 (文本是否为空 (程序路径))
+        {
+            程序路径 = 取运行目录 () + 取执行文件名 ()
+            自身获取权限 = 真
+            如果真 (进程_取程序运行权限级别 () == 3)
+            {
+                返回 (真)
+            }
+        }
+        SystemProcessHandle = 进程提权API.OpenProcess (1024, 假, 内部取进程ID ("lsass.exe"))
+        如果真 (SystemProcessHandle == 0)
+        {
+            SystemProcessHandle = 进程提权API.OpenProcess (1024, 假, 内部取进程ID ("winlogon.exe"))
+        }
+        如果真 (SystemProcessHandle == 0)
+        {
+            返回 (假)
+        }
+        如果真 (进程提权API.OpenProcessToken (SystemProcessHandle, 2, 取变量地址 (SystemTokenHandle)))  // 取系统令牌
+        {
+            进程提权API.DuplicateTokenExW (SystemTokenHandle, 33554432, 0, 2, 1, 取变量地址 (phNewToken))  // 复制令牌
+        }
+        进程提权API.CloseHandle (SystemTokenHandle)
+        如果 (phNewToken == 0)
+        {
+            返回 (假)
+        }
+        变量 P1 <类型 = STARTUPINFO类_>
+        变量 P2 <类型 = PROCESS_INFORMATION类_>
+        变量 lpCommandLine <类型 = 文本型 值 = "winsta0\\default">
+        变量 提升权限是否成功 <类型 = 逻辑型>
+        P1.cb = 68
+        P1.lpDesktop = 取文本指针 (lpCommandLine)
+        如果真 (隐藏窗口运行)
+        {
+            P1.wShowWindow = 系统级权限常量.SW_HIDE
+            P1.dwFlags = 系统级权限常量.STARTF_USESHOWWINDOW
+        }
+        提升权限是否成功 = 进程提权API.CreateProcessWithTokenW (phNewToken, 系统级权限常量.LOGON_NETCREDENTIALS_ONLY, 0, 取文本指针 (程序路径), 系统级权限常量.NORMAL_PRIORITY_CLASS, 0, 0, P1, P2.取对象自身指针 ())
+        进程提权API.CloseHandle (phNewToken)
+        如果 (提升权限是否成功)
+        {
+            如果 (自身获取权限 == 真)
+            {
+                结束 ()
+            }
+            否则
+            {
+                返回 (提升权限是否成功)
+            }
+        }
+        否则
+        {
+            如果 (自身获取权限 == 真)
+            {
+                如果 (全局信息框 ("自身进程获取权限失败！是否重新获取？", 信息框按钮.询问图标 + 信息框按钮.是否钮, "错误：", 0) == 返回按钮类型.否钮)
+                {
+                    结束 ()
+                }
+                否则
+                {
+                    进程_以系统级权限运行程序 ()
+                }
+            }
+            否则
+            {
+                返回 (提升权限是否成功)
+            }
+        }
+        返回 (提升权限是否成功)
+    }
+
+    方法 进程_取程序运行权限级别 <公开 静态 类型 = 整数 注释 = "获取进程当前UAC的执行权限级别。0、低级 1、中级 2、高级 3、系统级 -1、未知" 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数 @默认值 = 0>
+    {
+        @ HANDLE hProcess = GetCurrentProcess();
+        @ if (@<进程ID> > 0)
+        @     hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, @<进程ID>);
+        @ if (!hProcess) return -1;
+        @ HANDLE hToken;
+        @ DWORD dwIntegrityLevel = -1;
+        @ if (OpenProcessToken(hProcess, TOKEN_QUERY | TOKEN_QUERY_SOURCE, &hToken))
+        @ {
+        @     DWORD dwByteLen = 0;
+        @     GetTokenInformation(hToken, TokenIntegrityLevel, NULL, 0, &dwByteLen);
+        @     TOKEN_MANDATORY_LABEL* pTIL = (TOKEN_MANDATORY_LABEL*)malloc(dwByteLen);
+        @     if (GetTokenInformation(hToken, TokenIntegrityLevel, pTIL, dwByteLen, &dwByteLen))
+        @     {
+        @         dwIntegrityLevel = *GetSidSubAuthority(pTIL->Label.Sid, (DWORD)(UCHAR)(*GetSidSubAuthorityCount(pTIL->Label.Sid) - 1));
+        @     }
+        @     free(pTIL);
+        @     CloseHandle(hToken);
+        @ }
+        @ CloseHandle(hProcess);
+        @ if (dwIntegrityLevel == SECURITY_MANDATORY_LOW_RID)
+        @     return 0;
+        @ else if (dwIntegrityLevel >= SECURITY_MANDATORY_MEDIUM_RID && dwIntegrityLevel < SECURITY_MANDATORY_HIGH_RID)
+        @     return 1;
+        @ else if (dwIntegrityLevel >= SECURITY_MANDATORY_HIGH_RID && dwIntegrityLevel < SECURITY_MANDATORY_SYSTEM_RID)
+        @     return 2;
+        @ else if (dwIntegrityLevel >= SECURITY_MANDATORY_SYSTEM_RID)
+        @     return 3;
+        @ else
+        @     return -1;
+    }
+
+    方法 内部取进程ID <静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 进程名 <类型 = 文本型>
+    {
+        @ HANDLE hProcessSnap = ::CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS,NULL);
+        @ PROCESSENTRY32 pe32;CWString ProcessName = @<进程名>,sProcessName;
+        @ ProcessName.MakeLower ();
+        @ if (hProcessSnap == INVALID_HANDLE_VALUE)
+        @ { return -1; }
+        @ pe32.dwSize = sizeof(pe32);
+        @ BOOL bRet = ::Process32First(hProcessSnap,&pe32);
+        @ while(bRet)
+        @ {
+        @ sProcessName=pe32.szExeFile;
+        @ sProcessName.MakeLower();
+        @ if (sProcessName == ProcessName)
+        @ { ::CloseHandle(hProcessSnap); return pe32.th32ProcessID; }
+        @ bRet = ::Process32Next(hProcessSnap,&pe32);
+        @ }
+        @ ::CloseHandle(hProcessSnap);
+        @ return 0;
+    }
+}
+
+类 进程提权API <折叠 @文档 = "category = \"进程权限库.系统权限.附加类\"">
+{
+    方法 CreateProcessWithTokenW <公开 静态 类型 = 逻辑型 折叠 折叠2 @输出名 = "CreateProcessWithTokenW" @视窗.输入 = "Advapi32.dll">
+    参数 hToken <类型 = 变整数>
+    参数 dwLogonFlags <类型 = 变整数>
+    参数 lpApplicationName <类型 = 变整数>
+    参数 lpCommandLine <类型 = 变整数>
+    参数 dwCreationFlags <类型 = 变整数>
+    参数 lpEnvironment <类型 = 变整数>
+    参数 lpCurrentDirectory <类型 = 变整数>
+    参数 lpStartupInfo <类型 = STARTUPINFO类_>
+    参数 lpProcessInformation <类型 = 变整数>
+
+    方法 DuplicateTokenExW <公开 静态 类型 = 逻辑型 折叠 折叠2 @输出名 = "DuplicateTokenEx" @视窗.输入 = "Advapi32.dll">
+    参数 hExistingToken <类型 = 变整数>
+    参数 dwDesiredAccess <类型 = 变整数>
+    参数 lpTokenAttributes <类型 = 变整数>
+    参数 ImpersonationLevel <类型 = 变整数>
+    参数 TokenType <类型 = 变整数>
+    参数 phNewToken <类型 = 变整数>
+
+    方法 OpenProcessToken <公开 静态 类型 = 逻辑型 折叠 折叠2 @输出名 = "OpenProcessToken" @视窗.输入 = "Advapi32.dll">
+    参数 Handle <类型 = 变整数>
+    参数 DesiredAccess <类型 = 变整数>
+    参数 TokenHandle <类型 = 变整数>
+
+    方法 CloseHandle <公开 静态 类型 = 逻辑型 折叠 折叠2 @输出名 = "CloseHandle" @视窗.输入 = "Kernel32.dll">
+    参数 hObject <类型 = 变整数>
+
+    方法 OpenProcess <公开 静态 类型 = 变整数 折叠 折叠2 @输出名 = "OpenProcess" @视窗.输入 = "Kernel32.dll">
+    参数 dwDesiredAccess <类型 = 变整数>
+    参数 bInheritHandle <类型 = 逻辑型>
+    参数 dwProcessId <类型 = 变整数>
+}
+
+类 STARTUPINFO类_ <折叠 折叠2 @文档 = "category = \"进程权限库.系统权限.附加类\"" @视窗.结构类 = 0>
+{
+    变量 cb <公开 类型 = 变整数>
+    变量 lpReserved <公开 类型 = 变整数>
+    变量 lpDesktop <公开 类型 = 变整数>
+    变量 lpTitle <公开 类型 = 变整数>
+    变量 dwX <公开 类型 = 变整数>
+    变量 dwY <公开 类型 = 变整数>
+    变量 dwXSize <公开 类型 = 变整数>
+    变量 dwYSize <公开 类型 = 变整数>
+    变量 dwXCountChars <公开 类型 = 变整数>
+    变量 dwYCountChars <公开 类型 = 变整数>
+    变量 dwFillAttribute <公开 类型 = 变整数>
+    变量 dwFlags <公开 类型 = 变整数>
+    变量 wShowWindow <公开 类型 = 整数>
+    变量 cbReserved2 <公开 类型 = 整数>
+    变量 lpReserved2 <公开 类型 = 变整数>
+    变量 hStdInput <公开 类型 = 变整数>
+    变量 hStdOutput <公开 类型 = 变整数>
+    变量 hStdError <公开 类型 = 变整数>
+
+    #
+    #
+}
+
+类 PROCESS_INFORMATION类_ <折叠 折叠2 @文档 = "category = \"进程权限库.系统权限.附加类\"" @视窗.结构类 = 0>
+{
+    变量 hProcess <公开 类型 = 变整数>
+    变量 hThread <公开 类型 = 变整数>
+    变量 dwProcessId <公开 类型 = 变整数>
+    变量 dwThreadId <公开 类型 = 变整数>
+
+    #
+}
+
+类 系统级权限常量 <折叠 @文档 = "category = \"进程权限库.系统权限.附加类\"">
+{
+    常量 SW_HIDE <公开 类型 = 整数 值 = 0>
+    常量 STARTF_USESHOWWINDOW <公开 类型 = 整数 值 = 1>
+    常量 LOGON_NETCREDENTIALS_ONLY <公开 类型 = 整数 值 = 2>
+    常量 NORMAL_PRIORITY_CLASS <公开 类型 = 整数 值 = 32>
+}

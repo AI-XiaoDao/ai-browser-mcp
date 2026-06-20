@@ -1,0 +1,1448 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <@文档 = "category = \"硬件操作库\"">
+
+类 硬件综合信息类_ <公开 折叠 折叠2 @文档 = "category = \"硬件操作库.硬件信息\"" @全局类 = 真>
+{
+    方法 CPU_取CPU信息 <公开 静态 类型 = 逻辑型 折叠 折叠2 @禁止流程检查 = 真 @视窗.外部头文件 = "windows.h\r\niostream\r\nwbemidl.h\r\ncomdef.h"
+            @视窗.外部库 = "wbemuuid.lib">
+    参数 返回的制造商 <类型 = 文本型 @默认值 = "">
+    参数 返回的产品名称 <类型 = 文本型 @默认值 = "">
+    参数 返回的序列号 <类型 = 文本型 注释 = "ID" @默认值 = "">
+    {
+        @ CoInitialize(NULL);
+        @  HRESULT hres = CoInitializeSecurity(
+        @         NULL, -1, NULL, NULL,
+        @         RPC_C_AUTHN_LEVEL_DEFAULT,
+        @         RPC_C_IMP_LEVEL_IMPERSONATE,
+        @         NULL, EOAC_NONE, NULL);
+        @     if (FAILED(hres)) {
+        @         CoUninitialize();
+        @         return false;
+        @     }
+        @     IWbemLocator* pLoc = NULL;
+        @     hres = CoCreateInstance(
+        @         CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
+        @         IID_IWbemLocator, (LPVOID*)&pLoc);
+        @     if (FAILED(hres)) {
+        @         CoUninitialize();
+        @         return false;
+        @     }
+        @     IWbemServices* pSvc = NULL;
+        @     hres = pLoc->ConnectServer(
+        @         _bstr_t(L"ROOT\\CIMV2"), NULL, NULL,
+        @         0, NULL, 0, 0, &pSvc);
+        @     if (FAILED(hres)) {
+        @         pLoc->Release();
+        @         CoUninitialize();
+        @         return false;
+        @     }
+        @     hres = CoSetProxyBlanket(
+        @         pSvc, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE,
+        @         NULL, RPC_C_AUTHN_LEVEL_CALL,
+        @         RPC_C_IMP_LEVEL_IMPERSONATE,
+        @         NULL, EOAC_NONE);
+        @     if (FAILED(hres)) {
+        @         pSvc->Release();
+        @         pLoc->Release();
+        @         CoUninitialize();
+        @         return false;
+        @     }
+        @     IEnumWbemClassObject* pEnumerator = NULL;
+        @     hres = pSvc->ExecQuery(
+        @         bstr_t("WQL"),
+        @         bstr_t("SELECT * FROM Win32_Processor"),
+        @         WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
+        @         NULL, &pEnumerator);
+        @     if (FAILED(hres)) {
+        @         pSvc->Release();
+        @         pLoc->Release();
+        @         CoUninitialize();
+        @         return false;
+        @     }
+        @     IWbemClassObject* pclsObj = NULL;
+        @     ULONG uReturn = 0;
+        @     while (pEnumerator) {
+        @         hres = pEnumerator->Next(WBEM_INFINITE, 1, &pclsObj, &uReturn);
+        @         if (0 == uReturn) break;
+        @         VARIANT vtProp;
+        @         hres = pclsObj->Get(L"Manufacturer", 0, &vtProp, 0, 0);
+        @         if (SUCCEEDED(hres) && (vtProp.vt != VT_NULL)) {
+        @ @<返回的制造商>=vtProp.bstrVal;
+        @             VariantClear(&vtProp);
+        @         }
+        @         hres = pclsObj->Get(L"Name", 0, &vtProp, 0, 0);
+        @         if (SUCCEEDED(hres) && (vtProp.vt != VT_NULL)) {
+        @             std::wstring cpuName = vtProp.bstrVal;
+        @             size_t pos;
+        @             while ((pos = cpuName.find(L"  ")) != std::wstring::npos) {
+        @                 cpuName.replace(pos, 2, L" ");
+        @             }
+        @ @<返回的产品名称>=cpuName.c_str();
+        @             VariantClear(&vtProp);
+        @         }
+        @         hres = pclsObj->Get(L"ProcessorId", 0, &vtProp, 0, 0);
+        @         if (SUCCEEDED(hres)) {
+        @ @<返回的序列号>=vtProp.bstrVal;
+        @             VariantClear(&vtProp);
+        @         }
+        @    }
+        @     pSvc->Release();
+        @     pLoc->Release();
+        @     if (pEnumerator) pEnumerator->Release();
+        @     CoUninitialize();
+        @     return true;
+    }
+
+    方法 主板_取BIOS信息 <公开 静态 类型 = 逻辑型 折叠 折叠2 @禁止流程检查 = 真 @视窗.外部头文件 = "windows.h\r\niostream\r\nwbemidl.h\r\ncomdef.h"
+            @视窗.外部库 = "wbemuuid.lib">
+    参数 返回的制造商 <类型 = 文本型 @默认值 = "">
+    参数 返回的产品名称 <类型 = 文本型 @默认值 = "">
+    参数 返回的序列号 <类型 = 文本型 @默认值 = "">
+    参数 返回的版本号 <类型 = 文本型 @默认值 = "">
+    参数 返回的发布日期 <类型 = 文本型 @默认值 = "">
+    {
+        @ CoInitialize(NULL);
+        @     HRESULT hres = CoInitializeSecurity(
+        @         NULL,
+        @         -1,
+        @         NULL,
+        @         NULL,
+        @         RPC_C_AUTHN_LEVEL_DEFAULT,
+        @         RPC_C_IMP_LEVEL_IMPERSONATE,
+        @         NULL,
+        @         EOAC_NONE,
+        @         NULL
+        @     );
+        @     if (FAILED(hres)) {
+        @         CoUninitialize();
+        @         return false;
+        @     }
+        @     IWbemLocator* pLoc = NULL;
+        @     hres = CoCreateInstance(
+        @         CLSID_WbemLocator,
+        @         0,
+        @         CLSCTX_INPROC_SERVER,
+        @         IID_IWbemLocator,
+        @         (LPVOID*)&pLoc
+        @     );
+        @     if (FAILED(hres)) {
+        @         CoUninitialize();
+        @         return false;
+        @     }
+        @     IWbemServices* pSvc = NULL;
+        @     hres = pLoc->ConnectServer(
+        @         _bstr_t(L"ROOT\\CIMV2"),
+        @         NULL,
+        @         NULL,
+        @         0,
+        @         NULL,
+        @         0,
+        @         0,
+        @         &pSvc
+        @     );
+        @     if (FAILED(hres)) {
+        @         pLoc->Release();
+        @         CoUninitialize();
+        @         return false;
+        @     }
+        @     hres = CoSetProxyBlanket(
+        @         pSvc,
+        @         RPC_C_AUTHN_WINNT,
+        @         RPC_C_AUTHZ_NONE,
+        @         NULL,
+        @         RPC_C_AUTHN_LEVEL_CALL,
+        @         RPC_C_IMP_LEVEL_IMPERSONATE,
+        @         NULL,
+        @         EOAC_NONE
+        @     );
+        @     if (FAILED(hres)) {
+        @         pSvc->Release();
+        @         pLoc->Release();
+        @         CoUninitialize();
+        @         return false;
+        @     }
+        @     IEnumWbemClassObject* pEnumerator = NULL;
+        @     hres = pSvc->ExecQuery(
+        @         bstr_t("WQL"),
+        @         bstr_t("SELECT * FROM Win32_BIOS"),
+        @         WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
+        @         NULL,
+        @         &pEnumerator
+        @     );
+        @     if (FAILED(hres)) {
+        @         pSvc->Release();
+        @         pLoc->Release();
+        @         CoUninitialize();
+        @         return false;
+        @     }
+        @     IWbemClassObject* pclsObj = NULL;
+        @     ULONG uReturn = 0;
+        @     while (pEnumerator) {
+        @         hres = pEnumerator->Next(WBEM_INFINITE, 1, &pclsObj, &uReturn);
+        @         if (0 == uReturn) break;
+        @         VARIANT vtProp;
+        @         hres = pclsObj->Get(L"Manufacturer", 0, &vtProp, 0, 0);
+        @         if (SUCCEEDED(hres) && (vtProp.vt != VT_NULL)) {
+        @ @<返回的制造商>=vtProp.bstrVal;
+        @             VariantClear(&vtProp);
+        @         }
+        @         hres = pclsObj->Get(L"Name", 0, &vtProp, 0, 0);
+        @         if (SUCCEEDED(hres) && (vtProp.vt != VT_NULL)) {
+        @ @<返回的产品名称>=vtProp.bstrVal;
+        @             VariantClear(&vtProp);
+        @         }
+        @         hres = pclsObj->Get(L"SerialNumber", 0, &vtProp, 0, 0);
+        @         if (SUCCEEDED(hres)) {
+        @             if (vtProp.vt == VT_NULL) {
+        @ @<返回的序列号>="";
+        @             } else {
+        @ @<返回的序列号>=vtProp.bstrVal;
+        @             }
+        @             VariantClear(&vtProp);
+        @         }
+        @         hres = pclsObj->Get(L"Version", 0, &vtProp, 0, 0);
+        @         if (SUCCEEDED(hres) && (vtProp.vt != VT_NULL)) {
+        @ @<返回的版本号>=vtProp.bstrVal;
+        @             VariantClear(&vtProp);
+        @         }
+        @         hres = pclsObj->Get(L"ReleaseDate", 0, &vtProp, 0, 0);
+        @         if (SUCCEEDED(hres) && (vtProp.vt != VT_NULL)) {
+        @             std::wstring releaseDate = vtProp.bstrVal;
+        @             std::wstring formattedDate = L"(格式错误)";
+        @             if (releaseDate.length() >= 8) {
+        @                 formattedDate = releaseDate.substr(0, 4) + L"-" +
+        @                                 releaseDate.substr(4, 2) + L"-" +
+        @                                 releaseDate.substr(6, 2);
+        @             }
+        @ @<返回的发布日期>=formattedDate.c_str();
+        @             VariantClear(&vtProp);
+        @         }
+        @         pclsObj->Release();
+        @         std::wcout << std::endl;
+        @     }
+        @     pSvc->Release();
+        @     pLoc->Release();
+        @     pEnumerator->Release();
+        @     CoUninitialize();
+        @     return true;
+    }
+
+    方法 主板_取主板信息 <公开 静态 类型 = 逻辑型 折叠 折叠2 @禁止流程检查 = 真 @视窗.外部头文件 = "windows.h\r\niostream\r\nwbemidl.h\r\ncomdef.h"
+            @视窗.外部库 = "wbemuuid.lib">
+    参数 返回的制造商 <类型 = 文本型 @默认值 = "">
+    参数 返回的产品名称 <类型 = 文本型 @默认值 = "">
+    参数 返回的序列号 <类型 = 文本型 @默认值 = "">
+    参数 返回的版本号 <类型 = 文本型 @默认值 = "">
+    {
+        @ CoInitialize(NULL);
+        @     HRESULT hres = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_DEFAULT,
+        @         RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE, NULL);
+        @     IWbemLocator* pLoc = NULL;
+        @     hres = CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
+        @         IID_IWbemLocator, (LPVOID*)&pLoc);
+        @     if (FAILED(hres)) {
+        @         CoUninitialize();
+        @         return false;
+        @     }
+        @     IWbemServices* pSvc = NULL;
+        @     hres = pLoc->ConnectServer(_bstr_t(L"ROOT\\CIMV2"), NULL, NULL, 0, NULL, 0, 0, &pSvc);
+        @     if (FAILED(hres)) {
+        @         pLoc->Release();
+        @         CoUninitialize();
+        @         return false;
+        @     }
+        @     hres = CoSetProxyBlanket(pSvc, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL,
+        @         RPC_C_AUTHN_LEVEL_CALL, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE);
+        @     IEnumWbemClassObject* pEnumerator = NULL;
+        @     hres = pSvc->ExecQuery(bstr_t("WQL"), bstr_t("SELECT * FROM Win32_BaseBoard"),
+        @         WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, NULL, &pEnumerator);
+        @     if (SUCCEEDED(hres)) {
+        @         IWbemClassObject* pclsObj = NULL;
+        @         ULONG uReturn = 0;
+        @         while (pEnumerator->Next(WBEM_INFINITE, 1, &pclsObj, &uReturn) == S_OK) {
+        @             VARIANT vtProp;
+        @             if (pclsObj->Get(L"Manufacturer", 0, &vtProp, 0, 0) == S_OK) {
+        @ @<返回的制造商>=vtProp.bstrVal;
+        @                 VariantClear(&vtProp);
+        @             }
+        @             if (pclsObj->Get(L"Product", 0, &vtProp, 0, 0) == S_OK) {
+        @ @<返回的产品名称>=vtProp.bstrVal;
+        @                 VariantClear(&vtProp);
+        @             }
+        @             if (pclsObj->Get(L"SerialNumber", 0, &vtProp, 0, 0) == S_OK) {
+        @ @<返回的序列号>=vtProp.bstrVal;
+        @                 VariantClear(&vtProp);
+        @             }
+        @ if (pclsObj->Get(L"Version", 0, &vtProp, 0, 0) == S_OK) {
+        @     if (vtProp.vt == VT_BSTR && wcslen(vtProp.bstrVal) > 0 && 
+        @         _wcsicmp(vtProp.bstrVal, L"Not Applicable") != 0) {
+        @ @<返回的版本号>=vtProp.bstrVal;
+        @     } else {
+        @ @<返回的版本号>="";
+        @     }
+        @     VariantClear(&vtProp);
+        @ }
+        @             pclsObj->Release();
+        @         }
+        @     }
+        @     pEnumerator->Release();
+        @     pSvc->Release();
+        @     pLoc->Release();
+        @     CoUninitialize();
+        @     return true;
+    }
+
+    方法 硬盘_枚举分区信息 <公开 静态 类型 = 整数 返回值注释 = "返回分区总数" 折叠 折叠2 @禁止流程检查 = 真
+            @视窗.外部头文件 = "windows.h\r\nwinioctl.h\r\niostream\r\nvector\r\niomanip\r\nsstream\r\nalgorithm\r\nstring">
+    参数 返回的分区 <类型 = 文本数组类 @默认值 = 空对象>
+    参数 返回的驱动器 <类型 = 文本数组类 编辑时信息 = "9EE4E, 0, 0, 0" @默认值 = 空对象>
+    参数 返回的卷名 <类型 = 文本数组类 @默认值 = 空对象>
+    参数 返回的分区名 <类型 = 文本数组类 编辑时信息 = "9EE4E, 0, 0, 0" @默认值 = 空对象>
+    参数 返回的序列号 <类型 = 文本数组类 编辑时信息 = "9EE4E, 0, 0, 0" @默认值 = 空对象>
+    参数 返回的总容量 <类型 = 文本数组类 @默认值 = 空对象>
+    参数 返回的已用空间 <类型 = 文本数组类 @默认值 = 空对象>
+    参数 返回的剩余空间 <类型 = 文本数组类 编辑时信息 = "9EE4E, 0, 0, 0" @默认值 = 空对象>
+    {
+        变量 临时信息 <类型 = 文本型>
+        @     DWORD drives = GetLogicalDrives();
+        @     if (drives == 0) {
+        @         return -1;
+        @     }
+        @     int partitionCount = 0;
+        @     std::vector<std::wstring> partitionDetails;
+        @     for (wchar_t drive = L'A'; drive <= L'Z'; drive++) {
+        @         if (drives & (1 << (drive - L'A'))) {
+        @             partitionCount++;
+        @             std::wstring driveLetter = std::wstring() + drive + L":";
+        @             std::wstring rootPath = driveLetter + L"\\";
+        @             WCHAR volumeLabel[MAX_PATH] = { 0 };
+        @             WCHAR volumeName[MAX_PATH] = { 0 };
+        @             DWORD serialNumber = 0;
+        @             ULARGE_INTEGER freeBytes, totalBytes;
+        @             BOOL labelResult = GetVolumeInformationW(
+        @                 rootPath.c_str(),
+        @                 volumeLabel, MAX_PATH,
+        @                 &serialNumber,
+        @                 NULL, NULL, NULL, 0);
+        @             std::wstring queryPath = L"\\\\?\\" + driveLetter + L"\\";
+        @             BOOL nameResult = GetVolumeNameForVolumeMountPointW(
+        @                 queryPath.c_str(),
+        @                 volumeName, MAX_PATH);
+        @             BOOL spaceResult = GetDiskFreeSpaceExW(
+        @                 rootPath.c_str(),
+        @                 &freeBytes, &totalBytes, NULL);
+        @             std::wstring volumeLabelStr = labelResult && wcslen(volumeLabel) > 0 ? 
+        @                 volumeLabel : (driveLetter + L"盘");
+        @             std::wstring volumeNameStr = nameResult ? 
+        @                 volumeName : L"N/A";
+        @             double totalSizeGB = 0, freeSizeGB = 0, usedSizeGB = 0;
+        @             if (spaceResult) {
+        @                 totalSizeGB = totalBytes.QuadPart / (1024.0 * 1024.0 * 1024.0);
+        @                 freeSizeGB = freeBytes.QuadPart / (1024.0 * 1024.0 * 1024.0);
+        @                 usedSizeGB = totalSizeGB - freeSizeGB;
+        @             }
+        @             std::stringstream serialStream;
+        @             if (labelResult) {
+        @                 serialStream << std::hex << std::setw(8) << std::setfill('0') << serialNumber;
+        @             } else {
+        @                 serialStream << "N/A";
+        @             }
+        @ std::ostringstream Temporary1;
+        @ Temporary1 << "#" << partitionCount ;
+        @ @<临时信息>=Temporary1.str().c_str();
+        返回的分区.加入成员 (临时信息)
+        @ @<临时信息>=driveLetter.c_str();
+        返回的驱动器.加入成员 (临时信息)
+        @ @<临时信息>=volumeNameStr.c_str();
+        返回的卷名.加入成员 (临时信息)
+        @ @<临时信息>=volumeLabelStr.c_str();
+        返回的分区名.加入成员 (临时信息)
+        @ @<临时信息>=serialStream.str().c_str();
+        返回的序列号.加入成员 (临时信息)
+        @     std::wostringstream Temporary2;
+        @     Temporary2 << std::fixed << std::setprecision(2) << totalSizeGB << L" GB";
+        @ @<临时信息>=Temporary2.str().c_str();
+        返回的总容量.加入成员 (临时信息)
+        @     std::wostringstream Temporary3;
+        @     Temporary3 << std::fixed << std::setprecision(2) << usedSizeGB << L" GB";
+        @ @<临时信息>=Temporary3.str().c_str();
+        返回的已用空间.加入成员 (临时信息)
+        @     std::wostringstream Temporary4;
+        @     Temporary4 << std::fixed << std::setprecision(2) << freeSizeGB << L" GB";
+        @ @<临时信息>=Temporary4.str().c_str();
+        返回的剩余空间.加入成员 (临时信息)
+        @         }
+        @     }
+        @     return partitionCount;
+    }
+
+    方法 硬盘_枚举硬盘信息 <公开 静态 类型 = 整数 返回值注释 = "返回硬盘总数" 折叠 折叠2 @禁止流程检查 = 真
+            @视窗.外部头文件 = "windows.h\r\nwinioctl.h\r\niostream\r\nvector\r\niomanip\r\nsstream\r\nalgorithm\r\nstring">
+    参数 返回的物理硬盘 <类型 = 文本数组类 @默认值 = 空对象>
+    参数 返回的设备路径 <类型 = 文本数组类 编辑时信息 = "9EE4E, 0, 0, 0" @默认值 = 空对象>
+    参数 返回的硬盘容量 <类型 = 文本数组类 编辑时信息 = "9EE4E, 0, 0, 0" @默认值 = 空对象>
+    参数 返回的序列号 <类型 = 文本数组类 编辑时信息 = "9EE4E, 0, 0, 0" @默认值 = 空对象>
+    参数 返回的型号 <类型 = 文本数组类 编辑时信息 = "9EE4E, 0, 0, 0" @默认值 = 空对象>
+    {
+        变量 临时信息 <类型 = 文本型>
+        @     const int MAX_DISKS = 16;
+        @     int physicalDiskCount = 0;
+        @     ULONGLONG totalCapacityGB = 0;
+        @     for (int i = 0; i < MAX_DISKS; i++) {
+        @         std::wstring devicePath = L"\\\\.\\PhysicalDrive" + std::to_wstring(i);
+        @         HANDLE hDevice = CreateFileW(devicePath.c_str(),0,FILE_SHARE_READ | FILE_SHARE_WRITE,NULL,OPEN_EXISTING,0,NULL);
+        @         if (hDevice == INVALID_HANDLE_VALUE) {
+        @             continue;
+        @         }
+        @         DISK_GEOMETRY_EX diskGeometry = { 0 };
+        @         DWORD bytesReturned = 0;
+        @         BOOL geometryResult = DeviceIoControl(hDevice,IOCTL_DISK_GET_DRIVE_GEOMETRY_EX,NULL,0,&diskGeometry,sizeof(diskGeometry),&bytesReturned,NULL);
+        @         STORAGE_PROPERTY_QUERY query{};
+        @         query.PropertyId = StorageDeviceProperty;
+        @         query.QueryType = PropertyStandardQuery;
+        @         STORAGE_DESCRIPTOR_HEADER header{};
+        @         BOOL propertyResult = DeviceIoControl(hDevice,IOCTL_STORAGE_QUERY_PROPERTY,&query,sizeof(query),&header,sizeof(header),&bytesReturned,NULL);
+        @         if (geometryResult || propertyResult) {
+        @             physicalDiskCount++;
+        @             double diskSizeGB = diskGeometry.DiskSize.QuadPart / (1024.0 * 1024.0 * 1024.0);
+        @             totalCapacityGB += diskGeometry.DiskSize.QuadPart;
+        @ std::ostringstream Temporary1;
+        @ Temporary1 << "#" << physicalDiskCount;
+        @ @<临时信息>=Temporary1.str().c_str();
+        返回的物理硬盘.加入成员 (临时信息)
+        @ std::ostringstream Temporary2;
+        @ Temporary2 << "\\\\.\\PhysicalDrive" << i;
+        @ @<临时信息>=Temporary2.str().c_str();
+        返回的设备路径.加入成员 (临时信息)
+        @ std::ostringstream Temporary3;
+        @ Temporary3 << std::fixed << std::setprecision(2) << diskSizeGB << " GB";
+        @ @<临时信息>=Temporary3.str().c_str();
+        返回的硬盘容量.加入成员 (临时信息)
+        @             if (propertyResult && header.Size > 0) {
+        @                 std::vector<BYTE> buffer(header.Size);
+        @                 if (DeviceIoControl(hDevice,IOCTL_STORAGE_QUERY_PROPERTY,&query,sizeof(query),buffer.data(),static_cast<DWORD>(buffer.size()),&bytesReturned,NULL)) {
+        @                     auto descriptor = reinterpret_cast<STORAGE_DEVICE_DESCRIPTOR*>(buffer.data());
+        @                     if (descriptor->ProductIdOffset > 0) {
+        @                         std::ostringstream Temporary4;
+        @                          Temporary4 << (char*)(buffer.data() + descriptor->ProductIdOffset);
+        @ @<临时信息>=Temporary4.str().c_str();
+        返回的型号.加入成员 (临时信息)
+        @                     }
+        @                     if (descriptor->SerialNumberOffset > 0) {
+        @                         std::string serial((char*)(buffer.data() + descriptor->SerialNumberOffset));
+        @                         serial.erase(std::remove_if(serial.begin(), serial.end(), [](char c) {
+        @                             return !isprint(c) || isspace(c);
+        @                             }), serial.end());
+        @ @<临时信息>=serial.c_str();
+        返回的序列号.加入成员 (临时信息)
+        @                     }
+        @                 }
+        @             }
+        @         }
+        @         CloseHandle(hDevice);
+        @     }
+        @     return physicalDiskCount;
+    }
+
+    方法 网卡_枚举网卡信息 <公开 静态 类型 = 整数 返回值注释 = "返回总数" 折叠 折叠2
+            @视窗.外部头文件 = "winsock2.h\r\niphlpapi.h\r\niostream\r\niomanip\r\nvector\r\nsstream" @视窗.外部库 = "iphlpapi.lib\r\nws2_32.lib"
+            @禁止流程检查 = 真>
+    参数 返回的网卡名称 <类型 = 文本数组类 编辑时信息 = "A2345, 0, 0, 0" @默认值 = 空对象>
+    参数 返回的网卡MAC <类型 = 文本数组类 编辑时信息 = "A2345, 0, 0, 0" @默认值 = 空对象>
+    参数 返回的网卡描述 <类型 = 文本数组类 编辑时信息 = "A2345, 0, 0, 0" @默认值 = 空对象>
+    {
+        变量 临时信息 <类型 = 文本型>
+        @     WSADATA wsaData;
+        @     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        @         return -1;
+        @     }
+        @     PIP_ADAPTER_ADDRESSES pAddresses = nullptr;
+        @     ULONG outBufLen = 0;
+        @     DWORD dwRetVal = 0;
+        @     int adapterCount = 0;
+        @     GetAdaptersAddresses(AF_UNSPEC, GAA_FLAG_INCLUDE_PREFIX, nullptr, pAddresses, &outBufLen);
+        @     pAddresses = (PIP_ADAPTER_ADDRESSES)malloc(outBufLen);
+        @     if (pAddresses == nullptr) {
+        @         WSACleanup();
+        @         return -1;
+        @     }
+        @     dwRetVal = GetAdaptersAddresses(AF_UNSPEC, GAA_FLAG_INCLUDE_PREFIX, nullptr, pAddresses, &outBufLen);
+        @     if (dwRetVal == NO_ERROR) {
+        @         PIP_ADAPTER_ADDRESSES pCurrAddresses = pAddresses;
+        @         while (pCurrAddresses) {
+        @             adapterCount++;
+        @ @<临时信息>=pCurrAddresses->FriendlyName;
+        返回的网卡名称.加入成员 (临时信息)
+        @ @<临时信息>=pCurrAddresses->Description;
+        返回的网卡描述.加入成员 (临时信息)
+        @             if (pCurrAddresses->PhysicalAddressLength > 0) {
+        @                 std::ostringstream macStream;
+        @                 macStream << std::hex << std::setfill('0');
+        @                 for (DWORD i = 0; i < pCurrAddresses->PhysicalAddressLength; i++) {
+        @                     if (i > 0) macStream << "-";
+        @                     macStream << std::setw(2) 
+        @                              << static_cast<int>(pCurrAddresses->PhysicalAddress[i]);
+        @                 }
+        @ @<临时信息>=macStream.str().c_str();
+        返回的网卡MAC.加入成员 (临时信息)
+        @             } else {
+        返回的网卡MAC.加入成员 ("N/A")
+        @             }
+        @             std::wcout << std::endl;
+        @             pCurrAddresses = pCurrAddresses->Next;
+        @         }
+        @     }
+        @     if (pAddresses) free(pAddresses);
+        @     WSACleanup();
+        @     return adapterCount;
+    }
+}
+
+# //=====
+
+类 磁盘空间类_ <公开 折叠 折叠2 @文档 = "category = \"硬件操作库.硬盘空间\"" @全局类 = 真>
+{
+    方法 磁盘_枚举磁盘 <公开 静态 类型 = 整数 注释 = "获取当前所有磁盘空间信息" 返回值注释 = "返回分区总数" 折叠>
+    参数 返回的盘符 <类型 = 文本数组类 @默认值 = 空对象>
+    参数 返回的分区大小 <类型 = 长整数数组类 注释 = "单位KB" @默认值 = 空对象>
+    参数 返回的剩余空间 <类型 = 长整数数组类 注释 = "单位KB" @默认值 = 空对象>
+    参数 返回的已用空间 <类型 = 长整数数组类 注释 = "单位KB" @默认值 = 空对象>
+    {
+        变量 分区组 <类型 = 文本数组类>
+        变量 总量 <类型 = 长整数>
+        变量 剩余 <类型 = 长整数>
+        磁盘_枚举盘符 (, 分区组)
+        返回的盘符 = 分区组
+        分区组.枚举循环 ()
+        {
+            总量 = 取磁盘总空间 (取字符 (分区组.取枚举值 (), 0))
+            剩余 = 取磁盘剩余空间 (取字符 (分区组.取枚举值 (), 0))
+            返回的分区大小.加入成员 (总量)
+            返回的剩余空间.加入成员 (剩余)
+            返回的已用空间.加入成员 (总量 - 剩余)
+        }
+        返回 (分区组.取成员数 ())
+    }
+
+    方法 磁盘_取磁盘空间 <公开 静态 注释 = "取指定磁盘空间信息" 折叠>
+    参数 指定盘符 <类型 = 文本型 注释 = "例如“C:\\\\”">
+    参数 返回的分区大小 <类型 = 长整数类 注释 = "单位KB  取值：返回的分区大小.值" @默认值 = 空对象>
+    参数 返回的剩余空间 <类型 = 长整数类 注释 = "单位KB" @默认值 = 空对象>
+    参数 返回的已用空间 <类型 = 长整数类 注释 = "单位KB" @默认值 = 空对象>
+    {
+        变量 总量 <类型 = 长整数>
+        变量 剩余 <类型 = 长整数>
+        总量 = 取磁盘总空间 (取字符 (指定盘符, 0))
+        剩余 = 取磁盘剩余空间 (取字符 (指定盘符, 0))
+        返回的分区大小.值 = 总量
+        返回的剩余空间.值 = 剩余
+        返回的已用空间.值 = 总量 - 剩余
+    }
+}
+
+# //=====
+
+类 CPU核心类_ <公开 折叠 @全局类 = 真>
+{
+    方法 CPU_取CPU核心数 <公开 静态 类型 = 整数 注释 = "逻辑线程数" 折叠 @禁止流程检查 = 真>
+    {
+        @     SYSTEM_INFO sysInfo;
+        @     GetSystemInfo(&sysInfo);
+        @     return sysInfo.dwNumberOfProcessors;
+    }
+
+    方法 CPU_取CPU核心数2 <公开 静态 类型 = 整数 注释 = "取出物理核心数和逻辑线程数" 返回值注释 = "返回物理核心数" 折叠 折叠2 @禁止流程检查 = 真
+            @视窗.外部头文件 = "windows.h\r\niostream\r\nvector\r\nWinBase.h" @视窗.预定义宏 = "_WIN32_WINNT=0x0601">
+    参数 返回的逻辑线程数 <类型 = 整数类 @默认值 = 空对象>
+    {
+        @ SYSTEM_INFO sysInfo;
+        @ GetSystemInfo(&sysInfo);
+        @ DWORD logicalCores = sysInfo.dwNumberOfProcessors;
+        @ DWORD physicalCores = 0;
+        @ DWORD size = 0;
+        @ GetLogicalProcessorInformationEx(RelationProcessorCore, NULL, &size);
+        @ if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+        @ std::vector<BYTE> buffer(size);
+        @ PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX ptr =
+        @ reinterpret_cast<PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX>(buffer.data());
+        @ if (GetLogicalProcessorInformationEx(RelationProcessorCore, ptr, &size)) {
+        @ while (size > 0) {
+        @ if (ptr->Relationship == RelationProcessorCore) {
+        @ physicalCores++;
+        @ }
+        @ size -= ptr->Size;
+        @ ptr = reinterpret_cast<PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX>(
+        @ reinterpret_cast<BYTE*>(ptr) + ptr->Size);
+        @ }
+        @ }
+        @ }
+        @ @<返回的逻辑线程数.值>=logicalCores;
+        @ return physicalCores;
+    }
+
+    方法 CPU_取CPU大小核数 <公开 静态 类型 = 整数 返回值注释 = "返回性能核(P-Core)，即大核" 折叠 折叠2 @禁止流程检查 = 真 @视窗.外部头文件 = "windows.h\r\niostream\r\nvector"
+            @视窗.预定义宏 = "_WIN32_WINNT=0x0A00">
+    参数 返回的能效核 <类型 = 整数类 注释 = "能效核(E-Core)，即小核" @默认值 = 空对象>
+    {
+        @ int pCores = 0, eCores = 0;
+        @ DWORD size = 0;
+        @ std::vector<BYTE> buffer;
+        @ if (!GetLogicalProcessorInformationEx(RelationAll, nullptr, &size) &&
+        @ GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+        @ buffer.resize(size);
+        @ if (GetLogicalProcessorInformationEx(RelationAll,
+        @ reinterpret_cast<PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX>(buffer.data()),
+        @ &size)) {
+        @ auto ptr = reinterpret_cast<PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX>(buffer.data());
+        @ while (size > 0 && ptr->Size > 0) {
+        @ if (ptr->Relationship == RelationProcessorCore) {
+        @ if (ptr->Processor.EfficiencyClass > 0) {
+        @ pCores++;
+        @ }
+        @ else {
+        @ eCores++;
+        @ }
+        @ }
+        @ size -= ptr->Size;
+        @ ptr = reinterpret_cast<PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX>(
+        @ reinterpret_cast<BYTE*>(ptr) + ptr->Size);
+        @ }
+        @ }
+        @ }
+        @ @<返回的能效核.值>=eCores;
+        @ return pCores;
+    }
+
+    方法 CPU_是否支持超线程 <公开 静态 类型 = 逻辑型 注释 = "Hyper-Threading" 折叠 折叠2 @视窗.外部头文件 = "windows.h\r\niostream\r\nvector\r\nWinBase.h"
+            @视窗.预定义宏 = "_WIN32_WINNT=0x0601" @禁止流程检查 = 真>
+    {
+        @ SYSTEM_INFO sysInfo;
+        @ GetSystemInfo(&sysInfo);
+        @ DWORD logicalCores = sysInfo.dwNumberOfProcessors;
+        @ DWORD physicalCores = 0;
+        @ DWORD size = 0;
+        @ GetLogicalProcessorInformationEx(RelationProcessorCore, NULL, &size);
+        @ if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+        @ std::vector<BYTE> buffer(size);
+        @ PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX ptr =
+        @ reinterpret_cast<PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX>(buffer.data());
+        @ if (GetLogicalProcessorInformationEx(RelationProcessorCore, ptr, &size)) {
+        @ for (DWORD offset = 0; offset < size; ) {
+        @ if (ptr->Relationship == RelationProcessorCore) {
+        @ physicalCores++;
+        @ }
+        @ offset += ptr->Size;
+        @ ptr = reinterpret_cast<PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX>(
+        @ reinterpret_cast<BYTE*>(ptr) + ptr->Size);
+        @ }
+        @ }
+        @ }
+        @ return physicalCores;
+    }
+
+    方法 CPU_是否有小核 <公开 静态 类型 = 逻辑型 注释 = "判断CPU是否存在能效核(E-Core)。适用win10-11之类较新系统" 折叠 折叠2
+            @视窗.外部头文件 = "windows.h\r\niostream\r\nvector\r\nWinBase.h" @视窗.预定义宏 = "_WIN32_WINNT=0x0601" @禁止流程检查 = 真>
+    {
+        @ bool isHybrid = false;
+        @ DWORD size = 0;
+        @ GetLogicalProcessorInformationEx(RelationAll, nullptr, &size);
+        @ if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+        @ std::vector<BYTE> buffer(size);
+        @ auto ptr = reinterpret_cast<PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX>(buffer.data());
+        @ if (GetLogicalProcessorInformationEx(RelationAll, ptr, &size)) {
+        @ while (size > 0) {
+        @ if (ptr->Relationship == RelationProcessorCore) {
+        @ if (ptr->Processor.EfficiencyClass > 0) {
+        @ isHybrid = true;
+        @ break;
+        @ }
+        @ }
+        @ size -= ptr->Size;
+        @ ptr = reinterpret_cast<PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX>(
+        @ reinterpret_cast<BYTE*>(ptr) + ptr->Size);
+        @ }
+        @ }
+        @ }
+        @ return isHybrid;
+    }
+
+    方法 CPU_是否有小核2 <公开 静态 类型 = 逻辑型 注释 = "判断CPU是否存在能效核(E-Core)。适用于旧系统" 折叠 折叠2
+            @视窗.外部头文件 = "windows.h\r\niostream\r\nstring\r\nintrin.h" @禁止流程检查 = 真>
+    参数 返回的型号 <类型 = 文本型 编辑时信息 = "5528F, 0, 0, 0" @默认值 = "">
+    {
+        @ int CPUInfo[4] = { -1 };
+        @ std::string brand;
+        @ __cpuid(CPUInfo, 0x80000002);
+        @ for (int i = 0; i < 4; i++) {
+        @ brand.append(reinterpret_cast<char*>(&CPUInfo[i]), 4);
+        @ }
+        @ __cpuid(CPUInfo, 0x80000003);
+        @ for (int i = 0; i < 4; i++) {
+        @ brand.append(reinterpret_cast<char*>(&CPUInfo[i]), 4);
+        @ }
+        @ __cpuid(CPUInfo, 0x80000004);
+        @ for (int i = 0; i < 4; i++) {
+        @ brand.append(reinterpret_cast<char*>(&CPUInfo[i]), 4);
+        @ }
+        @ bool isHybrid = (brand.find("i5-12") != std::string::npos ||
+        @ brand.find("i7-12") != std::string::npos ||
+        @ brand.find("i9-12") != std::string::npos ||
+        @ brand.find("i5-13") != std::string::npos ||
+        @ brand.find("i7-13") != std::string::npos ||
+        @ brand.find("i9-13") != std::string::npos ||
+        @ brand.find("i5-14") != std::string::npos ||
+        @ brand.find("i7-14") != std::string::npos ||
+        @ brand.find("i9-14") != std::string::npos);
+        @ @<返回的型号>=brand.c_str();
+        @ return isHybrid;
+    }
+}
+
+# //=====
+
+类 硬件序列号类_ <公开 折叠 折叠2 @文档 = "category = \"硬件操作库.硬件序列号\"" @全局类 = 真
+        @视窗.外部头文件 = "..\\..\\sys\\sysHardwareInfo\\include\\WinOperateModule.h"
+        @视窗.外部源文件 = "..\\..\\sys\\sysHardwareInfo\\include\\WinOperateModule.cpp">
+{
+    变量 全局长度限制 <静态 类型 = 整数>
+    变量 硬盘序列 <静态 类型 = 文本型>
+    变量 主板序列 <静态 类型 = 文本型>
+    变量 CPU序列 <静态 类型 = 文本型>
+    变量 BIOS序列 <静态 类型 = 文本型>
+    变量 网卡序列 <静态 类型 = 文本型>
+
+    方法 USB_取USB序列号 <公开 静态 类型 = 文本数组类 折叠 @禁止流程检查 = 真>
+    {
+        变量 wmi <类型 = COM对象类>
+        变量 server <类型 = COM对象类>
+        变量 object <类型 = COM对象类>
+        变量 i <类型 = 整数>
+        变量 properties <类型 = COM对象类>
+        变量 x <类型 = COM对象类>
+        变量 y <类型 = COM对象类>
+        变量 z <类型 = COM对象类>
+        变量 deviceID <类型 = 文本型>
+        变量 description <类型 = 文本型>
+        变量 sn <类型 = 文本型>
+        变量 snList <类型 = 文本数组类>
+        COM初始化类.初始化COM ()
+        wmi.创建 ("WbemScripting.SWbemLocator")
+        server = wmi.对象型方法 ("Connectserver", COM对象类, ".", "root\\CIMV2")
+        object = server.对象型方法 ("ExecQuery", COM对象类, "select * from Win32_USBHub")
+        循环 (0, object.读无参数属性 ("Count", 整数) - 1, i, 1)
+        {
+            x = object.对象型方法 ("ItemIndex", COM对象类, i)
+            properties = x.读无参数对象型属性 ("Properties_", COM对象类)
+            y = properties.对象型方法 ("item", COM对象类, "PnPDeviceID")
+            deviceID = y.读无参数属性 ("Value", 文本型)
+            z = properties.对象型方法 ("item", COM对象类, "Description")
+            description = z.读无参数属性 ("Value", 文本型)
+            如果真 (description == "USB 大容量存储设备" || description == "USB Mass Storage Device")
+            {
+                sn = 取文本右边 (deviceID, 取文本长度 (deviceID) - 倒找文本 (deviceID, "\\", , 假) - 1)
+                调试输出 (sn, deviceID, description)
+                snList.加入成员 (sn)
+            }
+        }
+        wmi.清除 ()
+        COM初始化类.清理COM ()
+        返回 (snList)
+    }
+
+    方法 机器码_取机器码 <公开 静态 类型 = 文本型 折叠>
+    参数 获取类型 <类型 = 整数 注释 = "1、硬盘　2、主板　3、CPU　4、BIOS　5、网卡　6、硬盘+主板　7、硬盘+主板+CPU."
+            注释 = "8、硬盘＋主板+CPU+BIOS　9、主板+CPU　10、主板+CPU+BIOS　11、CPU+BIOS　12、主板+BIOS" @默认值 = 1>
+    参数 长度限制 <类型 = 整数 注释 = "提供偶数，最小10位，最大20位" @默认值 = 12>
+    {
+        变量 i <类型 = 整数>
+        连续赋值 ("", 硬盘序列, 主板序列, CPU序列, BIOS序列, 网卡序列)
+        全局长度限制 = 长度限制
+        如果真 (全局长度限制 % 2 != 0)
+        {
+            全局长度限制 = 全局长度限制 + 1
+        }
+        如果真 (全局长度限制 < 10)
+        {
+            全局长度限制 = 10
+        }
+        如果真 (全局长度限制 > 20)
+        {
+            全局长度限制 = 20
+        }
+        如果真 (获取类型 == 1 || 获取类型 == 6 || 获取类型 == 7 || 获取类型 == 8)
+        {
+            启动线程 (取码线程, 1, )
+        }
+        如果真 (获取类型 == 2 || 获取类型 == 6 || 获取类型 == 7 || 获取类型 == 8 || 获取类型 == 9 || 获取类型 == 10 || 获取类型 == 12)
+        {
+            启动线程 (取码线程, 2, )
+        }
+        如果真 (获取类型 == 3 || 获取类型 == 7 || 获取类型 == 8 || 获取类型 == 9 || 获取类型 == 10 || 获取类型 == 11)
+        {
+            启动线程 (取码线程, 3, )
+        }
+        如果真 (获取类型 == 4 || 获取类型 == 8 || 获取类型 == 10 || 获取类型 == 11 || 获取类型 == 12)
+        {
+            启动线程 (取码线程, 4, )
+        }
+        如果真 (获取类型 == 5)
+        {
+            启动线程 (取码线程, 5, )
+        }
+        如果 (获取类型 == 1)
+        {
+            判断循环 (硬盘序列 == "")
+            {
+                i = i + 1
+                延迟_ (1)
+                如果真 (i > 3000)
+                {
+                    跳出循环
+                }
+            }
+        }
+        否则 (获取类型 == 2)
+        {
+            判断循环 (主板序列 == "")
+            {
+                i = i + 1
+                延迟_ (1)
+                如果真 (i > 3000)
+                {
+                    跳出循环
+                }
+            }
+        }
+        否则 (获取类型 == 3)
+        {
+            判断循环 (CPU序列 == "")
+            {
+                i = i + 1
+                延迟_ (1)
+                如果真 (i > 3000)
+                {
+                    跳出循环
+                }
+            }
+        }
+        否则 (获取类型 == 4)
+        {
+            判断循环 (BIOS序列 == "")
+            {
+                i = i + 1
+                延迟_ (1)
+                如果真 (i > 3000)
+                {
+                    跳出循环
+                }
+            }
+        }
+        否则 (获取类型 == 5)
+        {
+            判断循环 (网卡序列 == "")
+            {
+                i = i + 1
+                延迟_ (1)
+                如果真 (i > 3000)
+                {
+                    跳出循环
+                }
+            }
+        }
+        否则 (获取类型 == 6)
+        {
+            判断循环 (硬盘序列 == "" || 主板序列 == "")
+            {
+                i = i + 1
+                延迟_ (1)
+                如果真 (i > 3000)
+                {
+                    跳出循环
+                }
+            }
+        }
+        否则 (获取类型 == 7)
+        {
+            判断循环 (硬盘序列 == "" || 主板序列 == "" || CPU序列 == "")
+            {
+                i = i + 1
+                延迟_ (1)
+                如果真 (i > 3000)
+                {
+                    跳出循环
+                }
+            }
+        }
+        否则 (获取类型 == 8)
+        {
+            判断循环 (硬盘序列 == "" || 主板序列 == "" || CPU序列 == "" || BIOS序列 == "")
+            {
+                i = i + 1
+                延迟_ (1)
+                如果真 (i > 3000)
+                {
+                    跳出循环
+                }
+            }
+        }
+        否则 (获取类型 == 9)
+        {
+            判断循环 (主板序列 == "" || CPU序列 == "")
+            {
+                i = i + 1
+                延迟_ (1)
+                如果真 (i > 3000)
+                {
+                    跳出循环
+                }
+            }
+        }
+        否则 (获取类型 == 10)
+        {
+            判断循环 (主板序列 == "" || CPU序列 == "" || BIOS序列 == "")
+            {
+                i = i + 1
+                延迟_ (1)
+                如果真 (i > 3000)
+                {
+                    跳出循环
+                }
+            }
+        }
+        否则 (获取类型 == 11)
+        {
+            判断循环 (CPU序列 == "" || BIOS序列 == "")
+            {
+                i = i + 1
+                延迟_ (1)
+                如果真 (i > 3000)
+                {
+                    跳出循环
+                }
+            }
+        }
+        否则 (获取类型 == 12)
+        {
+            判断循环 (主板序列 == "" || BIOS序列 == "")
+            {
+                i = i + 1
+                延迟_ (1)
+                如果真 (i > 3000)
+                {
+                    跳出循环
+                }
+            }
+        }
+        返回 (文本_字母转整数 (组合数值 (硬盘序列 + 主板序列 + CPU序列 + BIOS序列 + 网卡序列)))
+    }
+
+    方法 硬盘_取硬盘特征字 <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 硬盘序号 <类型 = 整数 注释 = "默认取第一个硬盘" @默认值 = 0>
+    {
+        变量 驱动名 <类型 = 文本型 值 = "\\\\.\\PhysicalDrive">
+        驱动名 = 驱动名 + 到文本 (硬盘序号)
+        @ HANDLE hPhysicalDriveIOCTL = ::CreateFileW(@<驱动名>,0,FILE_SHARE_READ|FILE_SHARE_WRITE,NULL,OPEN_EXISTING,NULL,NULL);
+        @ if ( hPhysicalDriveIOCTL == INVALID_HANDLE_VALUE ) return 0;
+        变量 bufferSize <类型 = 整数 值 = 1024 @输出名 = "bufferSize">
+        变量 lpOutBuffer <类型 = 字节集类 @输出名 = "lpOutBuffer">
+        变量 lpInBuffer <类型 = 字节集类 @输出名 = "lpInBuffer">
+        lpInBuffer = 取空白字节集 (12)
+        lpOutBuffer = 取空白字节集 (bufferSize)
+        @ DWORD lpBytesReturned = 0;
+        @ BOOL st = ::DeviceIoControl(hPhysicalDriveIOCTL,2954240,lpInBuffer.GetPtr(),12,lpOutBuffer.GetPtr(),bufferSize,&lpBytesReturned,0);
+        @ ::CloseHandle(hPhysicalDriveIOCTL);
+        @ if (!st) return 0;
+        返回 (取整数绝对值 (取数据摘要_CRC32 (lpOutBuffer)))
+    }
+
+    方法 硬盘_取硬盘序列号 <公开 静态 类型 = 文本型 注释 = "获取存储设备磁盘驱动器信息，包括：硬盘、U盘、移动硬盘等多个或单个设备" 返回值注释 = "如果获取不到则返回系统所在盘的磁盘序列号(注：会受格式化影响变动)" 折叠
+            @禁止流程检查 = 真>
+    {
+        变量 硬盘 <类型 = 硬盘信息类_>
+        @ CoInitialize(NULL);
+        @ @<硬盘>=@dt<硬盘信息类_>(CWinHardwareInformation::GetIEnumWbemClassObject(1));
+        @ CoUninitialize();
+        如果真 (文本是否为空 (硬盘.序列号))
+        {
+            返回 (到文本 (取磁盘序列号 (取字符 (读环境变量 ("SystemDrive"), 0))))
+        }
+        返回 (硬盘.序列号)
+    }
+
+    方法 硬盘_取硬盘序列号所有 <公开 静态 类型 = 文本数组类 注释 = "获取存储设备磁盘驱动器信息，包括：硬盘、U盘、移动硬盘等多个或单个设备" 返回值注释 = "如果获取不到则返回系统所在盘的磁盘序列号(注：会受格式化影响变动)" 折叠
+            @禁止流程检查 = 真>
+    {
+        变量 硬盘 <类型 = 硬盘信息类_>
+        变量 硬盘组 <类型 = 文本数组类>
+        @ CoInitialize(NULL);
+        @ @<硬盘>=@dt<硬盘信息类_>(CWinHardwareInformation::GetIEnumWbemClassObject(1));
+        @ CoUninitialize();
+        硬盘组.加入成员 (硬盘.序列号)
+        判断循环 (硬盘.到下一个 ())
+        {
+            硬盘组.加入成员 (硬盘.序列号)
+        }
+        如果真 (硬盘组.取成员数 () == 0)
+        {
+            硬盘组.加入成员 (到文本 (取磁盘序列号 (取字符 (读环境变量 ("SystemDrive"), 0))))
+        }
+        返回 (硬盘组)
+    }
+
+    方法 硬盘_取硬盘序列号下一个 <公开 静态 类型 = 文本型 注释 = "获取存储设备磁盘驱动器信息，包括：硬盘、U盘、移动硬盘等多个或单个设备" 返回值注释 = "如果获取不到则返回系统所在盘的磁盘序列号(注：会受格式化影响变动)" 折叠
+            @禁止流程检查 = 真>
+    参数 是否有下一个 <类型 = 逻辑型 注释 = "当有多个硬盘时,成功将指向下一个硬盘,失败则继续返回当前盘" @默认值 = 假>
+    {
+        变量 硬盘 <类型 = 硬盘信息类_>
+        @ CoInitialize(NULL);
+        @ @<硬盘>=@dt<硬盘信息类_>(CWinHardwareInformation::GetIEnumWbemClassObject(1));
+        @ CoUninitialize();
+        是否有下一个 = 硬盘.到下一个 ()
+        如果真 (文本是否为空 (硬盘.序列号))
+        {
+            返回 (到文本 (取磁盘序列号 (取字符 (读环境变量 ("SystemDrive"), 0))))
+        }
+        返回 (硬盘.序列号)
+    }
+
+    方法 硬盘_取硬盘名称 <公开 静态 类型 = 文本型 返回值注释 = "如果获取不到则返回系统所在盘的磁盘序列号(注：会受格式化影响变动)" 折叠 @禁止流程检查 = 真>
+    {
+        变量 硬盘 <类型 = 硬盘信息类_>
+        @ CoInitialize(NULL);
+        @ @<硬盘>=@dt<硬盘信息类_>(CWinHardwareInformation::GetIEnumWbemClassObject(1));
+        @ CoUninitialize();
+        返回 (硬盘.名称)
+    }
+
+    方法 CPU_取CPU序列号 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        变量 CPU <类型 = CPU信息类_>
+        @ CoInitialize(NULL);
+        @ @<CPU>=@dt<CPU信息类_>(CWinHardwareInformation::GetIEnumWbemClassObject(0));
+        @ CoUninitialize();
+        返回 (CPU.硬件ID)
+    }
+
+    方法 CPU_取CPU序列号2 <公开 静态 类型 = 文本型 折叠>
+    {
+        变量 数据包 <类型 = 文本型>
+        变量 结果组 <类型 = 文本数组类>
+        变量 结果 <类型 = 文本型>
+        运行控制台程序 ("wmic cpu get processorid", 数据包)
+        分割文本 (数据包, "\n", 结果组)
+        如果真 (结果组.取成员数 () > 0)
+        {
+            结果 = 结果组.取成员 (结果组.取成员数 () - 1)
+        }
+        返回 (结果)
+    }
+
+    方法 CPU_取CPU名称 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        变量 CPU <类型 = CPU信息类_>
+        @ CoInitialize(NULL);
+        @ @<CPU>=@dt<CPU信息类_>(CWinHardwareInformation::GetIEnumWbemClassObject(0));
+        @ CoUninitialize();
+        返回 (CPU.名称)
+    }
+
+    方法 CPU_置CPU亲和性 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 进程ID <类型 = 整数>
+    参数 指定核心 <类型 = 整数 注释 = "从0开始" @默认值 = 0>
+    {
+        @     DWORD_PTR affinityMask =  static_cast<DWORD_PTR>(1) << @<指定核心>;
+        @     DWORD processId = @<进程ID>; 
+        @     HANDLE hProcess = OpenProcess(PROCESS_SET_INFORMATION, FALSE, processId);
+        @     if (hProcess == NULL) {
+        @         return false;
+        @     }
+        @     if (SetProcessAffinityMask(hProcess, affinityMask) == 0) {
+        @         CloseHandle(hProcess);
+        @         return false;
+        @     }
+        @     CloseHandle(hProcess);
+        @     return true;
+    }
+
+    方法 主板_取主板序列号 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        变量 主板 <类型 = 主板信息类_>
+        @ CoInitialize(NULL);
+        @ @<主板>=@dt<主板信息类_>(CWinHardwareInformation::GetIEnumWbemClassObject(2));
+        @ CoUninitialize();
+        返回 (主板.序列号)
+    }
+
+    方法 主板_取主板序列号2 <公开 静态 类型 = 文本型 折叠>
+    {
+        变量 数据包 <类型 = 文本型>
+        变量 结果组 <类型 = 文本数组类>
+        变量 结果 <类型 = 文本型>
+        运行控制台程序 ("wmic baseboard get serialnumber", 数据包)
+        分割文本 (数据包, "\n", 结果组)
+        如果真 (结果组.取成员数 () > 0)
+        {
+            结果 = 结果组.取成员 (结果组.取成员数 () - 1)
+        }
+        返回 (结果)
+    }
+
+    方法 主板_取主板名称 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        变量 主板 <类型 = 主板信息类_>
+        @ CoInitialize(NULL);
+        @ @<主板>=@dt<主板信息类_>(CWinHardwareInformation::GetIEnumWbemClassObject(2));
+        @ CoUninitialize();
+        返回 (主板.名称)
+    }
+
+    方法 BIOS_取BIOS序列号 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        变量 BIOS <类型 = BIOS信息类_>
+        @ CoInitialize(NULL);
+        @ @<BIOS>=@dt<BIOS信息类_>(CWinHardwareInformation::GetIEnumWbemClassObject(4));
+        @ CoUninitialize();
+        返回 (BIOS.序列号)
+    }
+
+    方法 BIOS_取BIOS序列号2 <公开 静态 类型 = 文本型 折叠>
+    {
+        变量 数据包 <类型 = 文本型>
+        变量 结果组 <类型 = 文本数组类>
+        变量 结果 <类型 = 文本型>
+        运行控制台程序 ("wmic bios get serialnumber", 数据包)
+        分割文本 (数据包, "\n", 结果组)
+        如果真 (结果组.取成员数 () > 0)
+        {
+            结果 = 结果组.取成员 (结果组.取成员数 () - 1)
+        }
+        返回 (结果)
+    }
+
+    方法 BIOS_取BIOS名称 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        变量 BIOS <类型 = BIOS信息类_>
+        @ CoInitialize(NULL);
+        @ @<BIOS>=@dt<BIOS信息类_>(CWinHardwareInformation::GetIEnumWbemClassObject(4));
+        @ CoUninitialize();
+        返回 (BIOS.名称)
+    }
+
+    方法 网卡_取网卡MAC <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        变量 网卡 <类型 = 网卡信息类_>
+        @ CoInitialize(NULL);
+        @ @<网卡>=@dt<网卡信息类_>(CWinHardwareInformation::GetAdaptersListInfo());
+        @ CoUninitialize();
+        返回 (网卡.MAC)
+    }
+
+    方法 网卡_取网卡MAC2 <公开 静态 类型 = 文本型 折叠>
+    {
+        变量 数据包 <类型 = 文本型>
+        变量 结果组 <类型 = 文本数组类>
+        运行控制台程序 ("wmic nicconfig get macaddress", 数据包)
+        分割文本 (数据包, "\n", 结果组)
+        如果 (结果组.取成员数 () > 1)
+        {
+            返回 (结果组.取成员 (1))
+        }
+        返回 ("")
+    }
+
+    方法 网卡_取网卡数量 <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    {
+        变量 网卡 <类型 = 网卡信息类_>
+        @ CoInitialize(NULL);
+        @ @<网卡>=@dt<网卡信息类_>(CWinHardwareInformation::GetAdaptersListInfo());
+        @ CoUninitialize();
+        返回 (网卡.网卡数量)
+    }
+
+    方法 网卡_取网卡MAC下一张 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        变量 网卡 <类型 = 网卡信息类_>
+        @ CoInitialize(NULL);
+        @ @<网卡>=@dt<网卡信息类_>(CWinHardwareInformation::GetAdaptersListInfo());
+        @ CoUninitialize();
+        网卡.到下一个 ()
+        返回 (网卡.MAC)
+    }
+
+    方法 网卡_取网卡名称 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        变量 网卡 <类型 = 网卡信息类_>
+        @ CoInitialize(NULL);
+        @ @<网卡>=@dt<网卡信息类_>(CWinHardwareInformation::GetAdaptersListInfo());
+        @ CoUninitialize();
+        返回 (网卡.名称)
+    }
+
+    方法 取码线程 <静态 类型 = 整数 折叠>
+    参数 用户标记 <类型 = 变整数>
+    {
+        如果 (用户标记 == 1)
+        {
+            硬盘序列 = 硬盘_取硬盘序列号 ()
+            加入文本 (硬盘序列, "1")
+        }
+        否则 (用户标记 == 2)
+        {
+            主板序列 = 主板_取主板序列号 ()
+            加入文本 (主板序列, "2")
+        }
+        否则 (用户标记 == 3)
+        {
+            CPU序列 = CPU_取CPU序列号2 ()
+            加入文本 (CPU序列, "3")
+        }
+        否则 (用户标记 == 4)
+        {
+            BIOS序列 = BIOS_取BIOS序列号 ()
+            加入文本 (BIOS序列, "4")
+        }
+        否则 (用户标记 == 5)
+        {
+            网卡序列 = 网卡_取网卡MAC ()
+            加入文本 (网卡序列, "5")
+        }
+        返回 (0)
+    }
+
+    方法 组合数值 <静态 类型 = 文本型 折叠>
+    参数 数据 <类型 = 文本型>
+    {
+        变量 临时数据 <类型 = 文本型>
+        变量 长度值 <类型 = 整数>
+        变量 临时值 <类型 = 整数>
+        变量 组合值 <类型 = 文本型>
+        变量 最终值 <类型 = 文本型>
+        变量 i <类型 = 整数>
+        临时数据 = 数据
+        长度值 = 取文本长度 (临时数据)
+        如果真 (长度值 < 全局长度限制)
+        {
+            加入文本 (临时数据, 数据)
+            加入文本 (临时数据, 数据)
+            长度值 = 取文本长度 (临时数据)
+            如果真 (长度值 < 全局长度限制)
+            {
+                全局长度限制 = 长度值
+            }
+        }
+        循环 (, 长度值, i)
+        {
+            临时值 = 文本到整数 (取文本中间 (临时数据, 长度值 - i - 1, 1))
+            加入整数文本 (组合值, 文本到整数 (取文本中间 (临时数据, i, 1)) + 临时值 * 临时值)
+        }
+        长度值 = 取文本长度 (组合值)
+        循环 (, 长度值 / 2, i)
+        {
+            加入整数文本 (最终值, 文本到整数 (取文本中间 (组合值, i, 1)))
+            加入整数文本 (最终值, 文本到整数 (取文本中间 (组合值, 长度值 / 2 + i, 1)))
+            如果真 (取文本长度 (最终值) >= 全局长度限制)
+            {
+                跳出循环
+            }
+        }
+        组合值 = ""
+        返回 (最终值)
+    }
+}
+
+# //=====
+
+类 CPU信息类_ <折叠 @文档 = "category = \"硬件操作库.CPU信息\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CWinCpuInfo)
+    # <> <include>
+    # @sn<current_class> (IEnumWbemClassObject* pAdapter) : @sn<current_class> ()  {
+    #      data().m_pFirsthEnumerator = pAdapter;
+    #      data().GetIWbemClassObject();
+    #  }
+    # <> </include>
+    # @end
+
+    方法 名称 <公开 属性读 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("name"))
+    }
+
+    方法 硬件ID <公开 属性读 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("ProcessorId"))
+    }
+}
+
+类 硬盘信息类_ <折叠 @文档 = "category = \"硬件操作库.硬盘信息\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CWinCpuInfo)
+    # <> <include>
+    # @sn<current_class> (IEnumWbemClassObject* pAdapter) : @sn<current_class> ()  {
+    #      data().m_pFirsthEnumerator = pAdapter;
+    #      data().GetIWbemClassObject();
+    #  }
+    # <> </include>
+    # @end
+
+    方法 名称 <公开 属性读 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("name"))
+    }
+
+    方法 到下一个 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetIWbemClassObject()
+    }
+
+    方法 序列号 <公开 属性读 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("SerialNumber"))
+    }
+}
+
+类 BIOS信息类_ <折叠 @文档 = "category = \"硬件操作库.BIOS信息\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CWinCpuInfo)
+    # <> <include>
+    # @sn<current_class> (IEnumWbemClassObject* pAdapter) : @sn<current_class> ()  {
+    #      data().m_pFirsthEnumerator = pAdapter;
+    #      data().GetIWbemClassObject();
+    #  }
+    # <> </include>
+    # @end
+
+    方法 名称 <公开 属性读 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Name"))
+    }
+
+    方法 序列号 <公开 属性读 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("SerialNumber"))
+    }
+}
+
+类 主板信息类_ <折叠 @文档 = "category = \"硬件操作库.主板信息\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CWinCpuInfo)
+    # <> <include>
+    # @sn<current_class> (IEnumWbemClassObject* pAdapter) : @sn<current_class> ()  {
+    #      data().m_pFirsthEnumerator = pAdapter;
+    #      data().GetIWbemClassObject();
+    #  }
+    # <> </include>
+    # @end
+
+    方法 名称 <公开 属性读 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Name"))
+    }
+
+    方法 序列号 <公开 属性读 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("SerialNumber"))
+    }
+}
+
+类 网卡信息类_ <折叠 @文档 = "category = \"硬件操作库.网上信息\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CWinAdaptersInfo)
+    # <> <include>
+    # @sn<current_class> (PIP_ADAPTER_INFO pAdapter) : @sn<current_class> ()  {
+    #      data().m_pAdapter = pAdapter;
+    #      data().m_pFirsthAdapter = pAdapter;
+    #  }
+    # <> </include>
+    # @end
+
+    方法 名称 <公开 属性读 类型 = 文本型 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetAdapterName()
+    }
+
+    方法 到下一个 <公开 注释 = "指向下一张网卡" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GoNext()
+    }
+
+    方法 到首网卡 <公开 注释 = "指向首张网卡" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GoFirsth()
+    }
+
+    方法 网卡数量 <公开 属性读 类型 = 整数 注释 = "返回网卡数量" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetAdapterCount()
+    }
+
+    方法 MAC <公开 属性读 类型 = 文本型 注释 = "返回当前位置网卡的MAC" 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetAddress()
+    }
+}
+
+# //======
+
+类 串口信息类_ <公开 折叠 @文档 = "category = \"硬件操作库.串口信息\"">
+{
+
+    # @begin
+    # #include <windows.h>
+    # #include <devguid.h>
+    # #include <setupapi.h>
+    # #pragma comment(lib, "Setupapi.lib")
+    # static const DWORD friendly_name_max_length = 256;
+    # static const DWORD hardware_id_max_length = 256;
+    # @end
+
+    方法 枚举串口 <公开 类型 = 整数 返回值注释 = "返回串口总数" 折叠>
+    参数 返回的名称组 <类型 = 文本数组类 @默认值 = 空对象>
+    参数 返回的硬件ID组 <类型 = 文本数组类 @默认值 = 空对象>
+    {
+        变量 名称 <类型 = 文本型>
+        变量 ID <类型 = 文本型>
+        变量 名称组 <类型 = 文本数组类>
+        变量 ID组 <类型 = 文本数组类>
+        @ HDEVINFO hDevInfo = SetupDiGetClassDevs( (const GUID *)&GUID_DEVCLASS_PORTS,NULL,NULL,DIGCF_PRESENT);
+        @   if(hDevInfo)
+        @   {
+        @     SP_DEVINFO_DATA SpDevInfo={sizeof(SP_DEVINFO_DATA)};
+        @   unsigned int device_info_set_index = 0;
+        @    while(SetupDiEnumDeviceInfo(hDevInfo, device_info_set_index,  &SpDevInfo))
+        @     {
+        @       TCHAR szName[512] = {0};
+        @        device_info_set_index++;
+        @        TCHAR friendly_name[friendly_name_max_length];
+        @        DWORD friendly_name_actual_length = 0;
+        @       if(SetupDiGetDeviceRegistryProperty(hDevInfo, &SpDevInfo, SPDRP_FRIENDLYNAME,
+        @         NULL, (PBYTE)szName, friendly_name_max_length, &friendly_name_actual_length))
+        @       {
+        @         _tprintf(_T("%s\n"), szName);
+        @         @<名称>=szName;
+        @       }
+        @ TCHAR hardware_id[hardware_id_max_length];
+        @  DWORD hardware_id_actual_length = 0;
+        @  BOOL got_hardware_id = SetupDiGetDeviceRegistryProperty(hDevInfo, &SpDevInfo,SPDRP_HARDWAREID,NULL,(PBYTE)hardware_id,hardware_id_max_length,&hardware_id_actual_length);
+        @ @<ID>=hardware_id;
+        名称组.加入成员 (名称)
+        ID组.加入成员 (ID)
+        @     }
+        @     SetupDiDestroyDeviceInfoList(hDevInfo);
+        @   }
+        返回的名称组 = 名称组
+        返回的硬件ID组 = ID组
+        返回 (名称组.取成员数 ())
+    }
+}

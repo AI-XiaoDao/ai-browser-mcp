@@ -1,0 +1,1948 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 浏览器.VIP
+
+类 FBrowserVIP注册 <公开 @全局类 = 真>
+{
+    方法 VIP注册_取机器码 <公开 静态 类型 = 文本型 注释 = "取当前电脑机器码" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<FBroString> temp = FBroHsBrowser_GetMachineCode();
+        @ return FBroUnit::FBroStringToCWString(temp);
+
+    }
+
+    方法 VIP注册_取开始时间 <公开 静态 类型 = 文本型 注释 = "取注册VIP开始时间" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<FBroString> temp = FBroHsOnlineLicenseControl_GetShowLicenseStartDate();
+        @ return FBroUnit::FBroStringToCWString(temp);
+
+    }
+
+    方法 VIP注册_取到期时间 <公开 静态 类型 = 文本型 注释 = "取VIP到期时间，永久版为空" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<FBroString> temp = FBroHsOnlineLicenseControl_GetShowLicenseEndDate();
+        @ return FBroUnit::FBroStringToCWString(temp);
+
+    }
+
+    方法 VIP注册_取注册功能 <公开 静态 类型 = 文本型 注释 = "取注册的功能" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<FBroString> temp = FBroHsOnlineLicenseControl_GetShowLicenseFunction();
+        @ return FBroUnit::FBroStringToCWString(temp);
+
+    }
+
+    方法 VIP注册_取注册版本 <公开 静态 类型 = 文本型 注释 = "取注册的版本" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<FBroString> temp = FBroHsOnlineLicenseControl_GetShowLicenseDevTool();
+        @ return FBroUnit::FBroStringToCWString(temp);
+
+    }
+
+    方法 VIP注册_取注册码类型 <公开 静态 类型 = 文本型 注释 = "取注册的版本" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<FBroString> temp = FBroHsOnlineLicenseControl_GetShowLicenseType();
+        @ return FBroUnit::FBroStringToCWString(temp);
+
+    }
+
+    方法 VIP注册_取目标系统平台 <公开 静态 类型 = 文本型 注释 = "取注册的版本" @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<FBroString> temp = FBroHsOnlineLicenseControl_GetShowLicenseSysVersion();
+        @ return FBroUnit::FBroStringToCWString(temp);
+
+
+    }
+
+    方法 VIP注册_取错误信息 <公开 静态 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ CefRefPtr<FBroString> temp = FBroHsOnlineLicenseControl_GetError();
+        @ return FBroUnit::FBroStringToCWString(temp);
+
+    }
+
+    方法 VIP注册_置授权码 <公开 静态 类型 = 逻辑型 注释 = "在浏览器初始化之前，否则将会出现功能异常">
+    参数 授权码 <类型 = 文本型>
+    {
+        @ if(FBroGetProcessType() != BrowserProcess) return true;//其他进程不处理直接返回真
+
+        变量 设置成功 <类型 = 逻辑型>
+        @ @<设置成功> = FBroHsOnlineLicenseControl_SetKey (@<授权码>.GetText());
+
+        如果真 (设置成功)
+        {
+            变量 VIP注册版本 <类型 = 文本型>
+            VIP注册版本 = VIP注册_取注册版本 ()
+            如果真 (寻找文本 (VIP注册版本, "火山", , ) != -1)
+            {
+                FBrowser初始化控制.是否为VIP = 真
+                返回 (真)
+            }
+
+        }
+
+        调试输出 ("【FBrowserVIP注册】尊敬的VIP用户：校验失败，已到期或许可KEY已失效，详情请联系作者")
+        返回 (假)
+
+    }
+
+    方法 VIP注册_生成本地授权文件 <静态 注释 = "弃用，仅永久版用户使用有效且仅调试模式下有效，在“VIP注册_置授权码”之前调用；" 注释 = "调试时会生成授权文件，用于控制发布版用户授权模式和到期时间；"
+            注释 = "使用该模式需要将本地授权文件一起拷贝给用户VIP功能才会生效，否则无效，不调用此功能则为不使用授权文件">
+    参数 授权码 <类型 = 文本型 注释 = "和“VIP注册_置授权码”保持一致，否则无效">
+    参数 授权类型 <类型 = 整数 注释 = "参考：VIP授权类型，设置为永久后到期时间无效">
+    参数 授权功能 <类型 = 整数 注释 = "参考：VIP授权功能，多个功能相加或位或，本身具有功能的授权才能设置，否则设置无效">
+    参数 授权开始时间 <类型 = 小数 注释 = "发布版开始时间，其实这个不起什么作用，最多发布的用户自己显示一下，如果设置了发布模式下调用“VIP注册_取开始时间”即该为设置的时间">
+    参数 授权到期时间 <类型 = 小数 注释 = "发布版到期时间，如果设置了发布模式下调用“VIP注册_取到期时间”即为该设置的时间">
+    {
+        变量 开始时间 <类型 = 文本型>
+        变量 到期时间 <类型 = 文本型>
+        开始时间 = 时间到格式文本 (授权开始时间, "%Y-%m-%d %H:%M:%S")
+        到期时间 = 时间到格式文本 (授权到期时间, "%Y-%m-%d %H:%M:%S")
+
+        @ FBroHsOnlineLicenseControl_SetLocalLicence (@<授权码>.GetText(),@<授权类型>,@<授权功能>,@<开始时间>.GetText(),@<到期时间>.GetText());
+
+    }
+}
+
+类 FBrowserVIP全局功能 <公开 注释 = "VIP功能，需要赞助后才能使用" @全局类 = 真>
+{
+    方法 FBrowser_VIP功能_启用插件高级功能 <公开 静态 注释 = "VIP功能，需赞助后才能使用,必须在加载插件前启用，启用插件的高级功能，默认CEF不支持插件content_scripts.js脚本执行，启用高级功能后才能支持">
+    {
+        @ FBroHsVIPRequestContext_EnableExtensionPlus();
+    }
+
+    方法 FBrowser_VIP过滤器_修改内容 <公开 静态 注释 = "VIP高级功能，需赞助后才能使用，非VIP用户可通过资源过滤器自行分包处理，此功能更方便更快；"
+            注释 = "对目标地址通过匹配目标文本修改内容，在资源加载前设置，也可在初始化后设置，使用该方法后对应请求目标地址的\"浏览器_获取资源过滤器\"事件将不会被触发；"
+            注释 = "如果同一个目标存在多个需要修改的数据，多次调用本方法即可，但要注意目标地址和匹配模式要保持一致，否则可能会出错">
+    参数 匹配模式 <类型 = 整数 注释 = "地址匹配模式，参考：VIP过滤器地址." @默认值 = VIP过滤器地址.完全匹配>
+    参数 目标地址 <类型 = 文本型 注释 = "要替换目标资源链接地址，地址要为完整地址">
+    参数 替换模式 <类型 = 整数 注释 = "VIP过滤器.xxx;如果模式为插入，将会在查找到的目标文本后面插入替换的文本；模式为修改，将会将目标文本删除替换为新文本；">
+    参数 目标文本 <类型 = 文本型 注释 = "要查找的文本">
+    参数 替换文本 <类型 = 文本型 注释 = "要替换或插入的文本">
+    {
+        @ FBroHsVIPResponseFilter_AddChangeData (@<匹配模式>,@<目标地址>.GetText(), @<替换模式>, @<目标文本>.GetText(), @<替换文本>.GetText());
+    }
+
+    方法 FBrowser_VIP过滤器_取消修改内容 <公开 静态 注释 = "在资源加载前设置，取消全局之前设置的对应目标地址的修改内容">
+    参数 目标地址 <类型 = 文本型 注释 = "和之前设置的目标地址一一对应">
+    {
+        @ FBroHsVIPResponseFilter_DeleteChangeData (@<目标地址>.GetText());
+
+    }
+
+    方法 FBrowser_VIP过滤器_取消全部修改内容 <公开 静态 注释 = "在资源加载前设置，取消全局所有的修改内容">
+    {
+        @ FBroHsVIPResponseFilter_DeleteAllData ();
+
+    }
+
+    方法 FBrowser_VIP过滤器_替换资源_数据 <公开 静态 注释 = "VIP高级功能，需赞助后才能使用，非VIP用户可通过资源处理器自行分包处理，此功能更方便更快；"
+            注释 = "用数据直接将整体链接资源替换，在资源加载前设置，也可在初始化后设置，使用该方法后对应请求目标地址的\"浏览器_获取资源处理器\"事件将不会被触发">
+    参数 匹配模式 <类型 = 整数 注释 = "地址匹配模式，参考：VIP过滤器地址." @默认值 = VIP过滤器地址.完全匹配>
+    参数 目标地址 <类型 = 文本型 注释 = "要替换目标资源链接地址，地址要为完整地址">
+    参数 MINI类型 <类型 = 文本型 注释 = "mini_type，资源类型，和协议头的content-type对应，例如：\"application/javascript\"或\"text/html\"，如果不设置默认为download">
+    参数 响应协议头 <类型 = FBrowser_双文本数组 注释 = "要设置的资源响应的协议头" @默认值 = 空对象>
+    参数 替换的数据 <类型 = 字节集类>
+    {
+        @ FBroHsVIPResourceHandler_AddChangeData (@<匹配模式>,@<目标地址>.GetText(), @<MINI类型>.GetText(), @<响应协议头>.m_data, @<替换的数据>.GetPtr (),@<替换的数据>.GetSize ());
+    }
+
+    方法 FBrowser_VIP过滤器_替换资源_文件 <公开 静态 注释 = "VIP高级功能，需赞助后才能使用，非VIP用户可通过资源处理器自行分包处理，此功能更方便更快；"
+            注释 = "用数据直接将整体链接资源替换，在资源加载前设置，也可在初始化后设置，使用该方法后对应请求目标地址的\"浏览器_获取资源处理器\"事件将不会被触发">
+    参数 匹配模式 <类型 = 整数 注释 = "地址匹配模式，参考：VIP过滤器地址." @默认值 = VIP过滤器地址.完全匹配>
+    参数 目标地址 <类型 = 文本型 注释 = "要替换目标资源链接地址，地址要为完整地址">
+    参数 MINI类型 <类型 = 文本型 注释 = "mini_type，资源类型，和协议头的content-type对应，例如：\"application/javascript\"或\"text/html\"，如果不设置默认为download">
+    参数 响应协议头 <类型 = FBrowser_双文本数组 注释 = "要设置的资源响应的协议头" @默认值 = 空对象>
+    参数 替换的文件 <类型 = 文本型 注释 = "完整的路径+文件名，例如：\"F:\\\\xxx\\\\xxx\\\\xxx.txt\"">
+    {
+        @ FBroHsVIPResourceHandler_AddChangeFile (@<匹配模式>,@<目标地址>.GetText(), @<MINI类型>.GetText(), @<响应协议头>.m_data,@<替换的文件>.GetText());
+    }
+
+    方法 FBrowser_VIP过滤器_取消替换资源 <公开 静态 注释 = "在资源加载前设置，取消之前设置的对应目标地址的替换资源">
+    参数 目标地址 <类型 = 文本型 注释 = "和之前设置的目标地址一一对应">
+    {
+        @ FBroHsVIPResourceHandler_DeleteChangeData (@<目标地址>.GetText());
+
+    }
+
+    方法 FBrowser_VIP过滤器_取消全部替换资源 <公开 静态 注释 = "在资源加载前设置，取消之前设置的所有替换的资源，包括通过浏览器设置的资源">
+    {
+        @ FBroHsVIPResourceHandler_DeleteAllData ();
+
+    }
+}
+
+类 类_FBrowserVIP_控制器 <公开 注释 = "VIP功能，需要赞助后才能使用">
+{
+
+    # @begin
+    # <> <include>
+    #     CefRefPtr<FBroVIPControl> m_class;
+    #     @sn<current_class> (CefRefPtr<FBroVIPControl> object) : @sn<current_class> () { m_class = object; }
+    #     void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    #     BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    #     BOOL IsEmpty () const { return m_class.get () == nullptr; }
+    #     void Set (CefRefPtr<FBroVIPControl> object) { m_class = object; }
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty() || FBroHsVIPControl_IsNULL(m_class);
+    }
+
+    方法 置空 <公开 注释 = "手动置空当前类包含的cef类指针，置空后该类将无法使用，如没有其他引用将自动释放cef类指针的资源数据">
+    {
+        @ m_class = nullptr;
+    }
+
+    方法 取浏览器 <公开 类型 = 类_FBrowser_浏览器 注释 = "取出当前控制器对应的浏览器，如果不存在或者已经关闭将返回空" @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty ()) return @dt<类_FBrowser_浏览器>(FBroHsVIPControl_GetBrowser(m_class));
+        @ return @dt<类_FBrowser_浏览器>();
+    }
+
+    方法 清理数据 <公开 注释 = "清理全部VIP设置的参数，包括指纹、代理、wss、debugger、isTrusted相关参数数据">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_ClearAllData(m_class);
+
+    }
+
+    方法 指纹_清空调用计数 <公开>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_ClearFingerCount(m_class);
+    }
+
+    方法 指纹_取调用计数 <公开 类型 = 文本型 注释 = "获取对应指纹被调用的次数，有的数据被调用不一定是为了指纹，仅供参考，返回类型为一个json文本" @禁止流程检查 = 真>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return CVolString();
+        @ auto fbrostring = FBroHsVIPControl_GetFingerCount(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+
+    }
+
+    方法 指纹_虚拟ProductSub <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 文本型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirProductSub(m_class,@<虚拟值>.GetText());
+    }
+
+    方法 指纹_虚拟Vendor <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 文本型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirVendor(m_class,@<虚拟值>.GetText());
+    }
+
+    方法 指纹_虚拟VendorSub <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 文本型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirVendorSub(m_class,@<虚拟值>.GetText());
+    }
+
+    方法 指纹_虚拟UserAgent <公开 注释 = "虚拟用户标识，在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 userAgent <类型 = 类_FBrowserVIP_UA数据 注释 = "UA数据">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirUserAgent(m_class,@<userAgent>.m_class);
+    }
+
+    方法 指纹_虚拟Languages <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 文本型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirLanguages(m_class,@<虚拟值>.GetText());
+    }
+
+    方法 指纹_虚拟AppCodeName <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 文本型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirAppCodeName(m_class,@<虚拟值>.GetText());
+    }
+
+    方法 指纹_虚拟AppName <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 文本型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirAppName(m_class,@<虚拟值>.GetText());
+    }
+
+    方法 指纹_虚拟AppVersion <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 文本型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirAppVersion(m_class,@<虚拟值>.GetText());
+    }
+
+    方法 指纹_虚拟Product <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 文本型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirProduct(m_class,@<虚拟值>.GetText());
+    }
+
+    方法 指纹_虚拟HardwareConcurrency <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 整数>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirHardwareConcurrency(m_class,@<虚拟值>);
+    }
+
+    方法 指纹_虚拟CookieEnabled <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 逻辑型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirCookieEnabled(m_class,@<虚拟值>);
+    }
+
+    方法 指纹_虚拟DeviceMemory <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 整数>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirDeviceMemory(m_class,@<虚拟值>);
+    }
+
+    方法 指纹_虚拟Canvas_随机 <公开 类型 = 文本型 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用" @禁止流程检查 = 真>
+    参数 最少噪点数 <类型 = 整数>
+    参数 最大噪点数 <类型 = 整数 注释 = "100以下">
+    参数 随机种子 <类型 = 整数>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsVIPControl_SetCanvasFingerPrint_random(m_class,@<最少噪点数>,@<最大噪点数>,@<随机种子>);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 指纹_虚拟WebGL_随机 <公开 类型 = 文本型 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用" @禁止流程检查 = 真>
+    参数 最少噪点数 <类型 = 整数>
+    参数 最大噪点数 <类型 = 整数 注释 = "100以下">
+    参数 随机种子 <类型 = 整数>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> && IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsVIPControl_SetWebGLFingerPrint_random(m_class,@<最少噪点数>,@<最大噪点数>,@<随机种子>);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+    }
+
+    方法 指纹_虚拟Audio_随机 <公开 类型 = 文本型 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用" @禁止流程检查 = 真>
+    参数 最少噪点数 <类型 = 整数 注释 = "最好不低于100个">
+    参数 最大噪点数 <类型 = 整数 注释 = "1000以下">
+    参数 随机种子 <类型 = 整数>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> && IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsVIPControl_SetAudioFingerPrint_random(m_class,@<最少噪点数>,@<最大噪点数>,@<随机种子>);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+    }
+
+    方法 指纹_虚拟Canvas_定值 <公开 注释 = "随机值和定值不能同时使用,在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 参数文本 <类型 = 文本型 注释 = "单个噪点格式：x:y:r:g:b:a，多个数据以,隔开，x和y是噪点坐标，rgba为噪点颜色值，都为正整数值;注意：文本不能太长，太长可能会崩，最好元素个数在100以下">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetCanvasFingerPrint_constant(m_class,@<参数文本>.GetText());
+    }
+
+    方法 指纹_虚拟WebGL_定值 <公开 注释 = "随机值和定值不能同时使用,在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 参数文本 <类型 = 文本型 注释 = "单个噪点格式:x:y, 多个以,隔开，x和y是噪点坐标,为1以下小数值，可为负数;注意：文本不能太长，太长可能会崩，最好元素个数在100以下">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetWebGLFingerPrint_constant(m_class,@<参数文本>.GetText());
+    }
+
+    方法 指纹_虚拟Audio_定值 <公开 注释 = "随机值和定值不能同时使用,在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 参数文本 <类型 = 文本型 注释 = "注意：文本不能太长，太长可能会崩，最好元素个数在1000以下">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetAudioFingerPrint_constant(m_class,@<参数文本>.GetText());
+    }
+
+    方法 指纹_虚拟Plugins <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 修改类型 <类型 = 整数 注释 = "0未不修改，1为添加，2为覆盖">
+    参数 JSON文本 <类型 = 文本型 注释 = "插件JSON格式文本，否则无效">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetPlugins(m_class,@<修改类型>,@<JSON文本>.GetText());
+    }
+
+    方法 指纹_虚拟JavaEnabled <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 逻辑型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirJavaEnabled(m_class,@<虚拟值>);
+    }
+
+    方法 指纹_虚拟Webdriver <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 逻辑型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirWebdriver(m_class,@<虚拟值>);
+    }
+
+    方法 指纹_虚拟OnLine <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 逻辑型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirOnLine(m_class,@<虚拟值>);
+    }
+
+    方法 指纹_虚拟Canvas字体指纹 <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 小数>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirCanvas2DFontFingerprint(m_class,@<虚拟值>);
+
+    }
+
+    方法 指纹_虚拟CSS字体指纹 <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 字体清单 <类型 = 文本型>
+    参数 宽偏移量 <类型 = 整数 注释 = "增加或减少字体的宽度">
+    参数 高偏移量 <类型 = 整数 注释 = "增加或减少字体的高度">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirCSSFontFingerprint(m_class,@<字体清单>.GetText(),@<宽偏移量>,@<高偏移量>);
+
+    }
+
+    方法 指纹_虚拟屏幕XY <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 X <类型 = 整数>
+    参数 Y <类型 = 整数>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirScreenXAndY(m_class,@<X>,@<Y>);
+
+
+    }
+
+    方法 指纹_虚拟屏幕分辨率 <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 高度 <类型 = 整数>
+    参数 宽度 <类型 = 整数>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirScreenHeightAndWidth(m_class,@<高度>,@<宽度>);
+
+
+    }
+
+    方法 指纹_虚拟屏幕可用高度和宽度 <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 高度 <类型 = 整数>
+    参数 宽度 <类型 = 整数>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirScreenavailHeightAndWidth(m_class,@<高度>,@<宽度>);
+
+
+    }
+
+    方法 指纹_虚拟屏幕pixelDepth <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 整数 注释 = "如果是模拟手机环境，这个值要设置大于1，否则可能会被检测">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirScreenpixelDepth(m_class,@<虚拟值>);
+
+
+    }
+
+    方法 指纹_虚拟屏幕colorDepth <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 整数 注释 = "如果是模拟手机环境，这个值要设置大于1，否则可能会被检测">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirScreencolorDepth(m_class,@<虚拟值>);
+
+
+    }
+
+    方法 指纹_虚拟DevicePixelRatio <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 小数>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirDevicePixelRatio(m_class,@<虚拟值>);
+
+
+    }
+
+    方法 指纹_虚拟Webglvendor <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 文本型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirWebglvendor(m_class,@<虚拟值>.GetText());
+
+
+    }
+
+    方法 指纹_虚拟Webglrenderer <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 文本型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirWebglrenderer(m_class,@<虚拟值>.GetText());
+
+
+    }
+
+    方法 指纹_虚拟Rect <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 X <类型 = 整数>
+    参数 Y <类型 = 整数>
+    参数 W <类型 = 整数>
+    参数 H <类型 = 整数>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirRectFingerprint(m_class,@<X>,@<Y>,@<W>,@<H>);
+
+
+    }
+
+    方法 指纹_虚拟WebrtcIP <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 当地IP <类型 = 文本型 注释 = "外网地址,设置为“”则为不修改,要和代理保持一致">
+    参数 本地IP <类型 = 文本型 注释 = "本地地址一般是192、127、10开头，设置为“”则为不修改，如不设置一般默认是host名" @默认值 = "">
+    参数 host <类型 = 文本型
+            注释 = "本地本机名，一般样式为924ce16d-52c7-42a3-a29d-b78004f9e534234.local，也可直接设置为本地地址，不设置则为默认本地机器名，有的代理存在代理主机名，最好设置为一致" @默认值 = "">
+    参数 是否禁用 <类型 = 逻辑型
+            注释 = "禁用webrtc功能，设置为真禁用，禁用后IP等参数将无效，网页也无法获取到对应的地址数据，注意禁用后可能会导致某些网页判断无法使用webrtc而直接风控，建议还是通过参数设置为代理地址进行模拟修改" @默认值 = 假>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirWebrtcIP(m_class,@<当地IP>.GetText(),@<本地IP>.GetText(),@<host>.GetText(),@<是否禁用>);
+
+
+
+    }
+
+    方法 指纹_虚拟Date时区 <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用"
+            注释 = "因时区环境特殊，同域名网页刷新不支持直接更换，只有当域名变更重新加载或新建浏览器时候才能真正的修改成功，请注意！！">
+    参数 时区小时 <类型 = 整数>
+    参数 时区分钟 <类型 = 整数>
+    参数 时区名 <类型 = 文本型>
+    参数 标准时区名 <类型 = 文本型 注释 = "采用国际标准时区格式，不能乱设置，否则无效，例如：Asia/Shanghai 最大长度不能超过100；"
+            注释 = "参考链接：http://791202.com/2020/10/08/java/1422/" 注释 = "JS查询方式：" 注释 = "var t=new Intl.DateTimeFormat();"
+            注释 = "t.resolvedOptions().timeZone;">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirTimeZone(m_class,@<时区小时>,@<时区分钟>,@<时区名>.GetText(),@<标准时区名>.GetText());
+    }
+
+    方法 指纹_虚拟Viewport <公开 注释 = "虚拟window.visualViewport值，此为VIP功能，需赞助后才能使用">
+    参数 OffsetTop <类型 = 整数>
+    参数 OffsetLeft <类型 = 整数>
+    参数 Height <类型 = 整数>
+    参数 Width <类型 = 整数>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirViewport (m_class, @<OffsetTop>, @<OffsetLeft>, @<Width>, @<Height>);
+    }
+
+    方法 指纹_启用触摸事件 <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 是否启用 <类型 = 逻辑型>
+    参数 最大触摸点数 <类型 = 整数>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetTouchEventEmulationEnabled(m_class,@<是否启用>,@<最大触摸点数>);
+
+    }
+
+    方法 指纹_虚拟内核功能 <注释 = "弃用，VIP功能，需要赞助后才能使用，通过内核版本号虚拟当前浏览器内核，"
+            注释 = "设置后会关闭超过内核版本号的相关JS和CSS功能，达到模拟当前设置内核版本的效果，防止部分网站通过抓取内核功能判断出真实的内核版本号；" 注释 = "注意："
+            注释 = "1.如果设置后网页显示不正常说明网页并不兼容你当前设置的内核版本，请重新设置；" 注释 = "2.不支持单进程模式，使用单进程模式会变为全局环境，浏览器单独设置无效">
+    参数 内核版本 <类型 = 整数 注释 = "建议设置范围为116-86,要和UA保持一致">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirKernel(m_class,@<内核版本>);
+
+    }
+
+    方法 指纹_设置SSL加密套件 <公开 注释 = "VIP功能，需要赞助后才能使用,用于TLS指纹，通过此设置即可控制对应的TLS协议，以达到修改TLS指纹的效果；" 注释 = "注意：协议如果设置错误可能会导致网页无法打开或者某些功能异常；">
+    参数 TLS最小版本 <类型 = TLS版本 注释 = "参考：TLS版本,不设置默认为1.2到1.3" @默认值 = TLS版本.空>
+    参数 TLS最大版本 <类型 = TLS版本 注释 = "参考：TLS版本,不设置默认为1.2到1.3" @默认值 = TLS版本.空>
+    参数 加密支持文本 <类型 = 文本型 注释 = "设置支持的加密方式，不设置当前浏览器默认值为“ALL:!aPSK:!ECDSA+SHA1:!3DES”，"
+            注释 = "可设置的值包括kRSA，kDHE，kECDHE，kPSK，kECDHE，kPSK，aRSA，aECDSA，aPSK，RSA，DHE，ECDHE，PSK，ECDSA，PSK，RSA，kRSA，aRSA，3DES，AES128，AES256，AES，AESGCM，CHACHA20，AES，AES128，AES256，SHA1，SHA；"
+            注释 = "多个值用小写的冒号隔开；" 注释 = "例如：“ALL:!AES128”其中ALL代表使用所有套件，带!的代表排除的项，因此这个意思就是包括全部套件除了AES128;"
+            注释 = "当然也可以不用ALL，直接指定可设置的值，例如：“AES128:AES256”">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetSSLCipher(m_class,@<TLS最小版本>,@<TLS最大版本>,@<加密支持文本>.GetText());
+
+    }
+
+    方法 指纹_虚拟BatteryManagerCharging <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 是否充电中 <类型 = 逻辑型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirBatteryManagerCharging(m_class,@<是否充电中>);
+    }
+
+    方法 指纹_虚拟BatteryManagerChargingTime <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 小数>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirBatteryManagerChargingTime(m_class,@<虚拟值>);
+
+
+    }
+
+    方法 指纹_虚拟BatteryManagerDischargingTime <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 小数>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirBatteryManagerDischargingTime(m_class,@<虚拟值>);
+
+
+    }
+
+    方法 指纹_虚拟BatteryManagerLevel <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用">
+    参数 虚拟值 <类型 = 小数>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirBatteryManagerLevel(m_class,@<虚拟值>);
+    }
+
+    方法 指纹_虚拟AudioInput设备 <公开 注释 = "VIP功能，需要赞助后才能使用，虚拟媒体输出设备硬件信息，如播放设备等信息，注意虚拟媒体设备可能会照成浏览器声音或麦克风异常无法获取到真实设备">
+    参数 类型 <类型 = 整数 注释 = "0为清空，1为添加，2为覆盖,如果为0，下面修改数据设不设置都不会生效">
+    参数 媒体硬件清单 <类型 = FBrowser_媒体硬件数组
+            注释 = "硬件信息中的驱动ID和分组ID，驱动ID除了设置成default和communications为，设置的ID值其实是硬件的ID，不是JS通过命令显示的ID，这个ID和下面的分组ID一样，可以在你的硬件驱动里面取查找，设置后JS所获取的也会改变;"
+            @默认值 = 空对象>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return;
+        @ CWString temp = @an<CVolString>(@<类型>) + _CT(";");
+        @ if(!@<媒体硬件清单>.IsNullObject()) temp += @<媒体硬件清单>.MapToString();
+        @ FBroHsVIPControl_SetVirAudioInput(m_class,temp.GetText());
+    }
+
+    方法 指纹_虚拟VideoInput设备 <公开 注释 = "VIP功能，需要赞助后才能使用，虚拟媒体输出设备硬件信息，如播放设备等信息，注意虚拟媒体设备可能会照成浏览器声音或麦克风异常无法获取到真实设备">
+    参数 类型 <类型 = 整数 注释 = "0为清空，1为添加，2为覆盖,如果为0，下面修改数据设不设置都不会生效">
+    参数 媒体硬件清单 <类型 = FBrowser_媒体硬件数组
+            注释 = "硬件信息中的驱动ID和分组ID，驱动ID除了设置成default和communications为，设置的ID值其实是硬件的ID，不是JS通过命令显示的ID，这个ID和下面的分组ID一样，可以在你的硬件驱动里面取查找，设置后JS所获取的也会改变;"
+            @默认值 = 空对象>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return;
+        @ CWString temp = @an<CVolString>(@<类型>) + _CT(";");
+        @ if(!@<媒体硬件清单>.IsNullObject()) temp += @<媒体硬件清单>.MapToString();
+        @ FBroHsVIPControl_SetVirVideoInput(m_class,temp.GetText());
+    }
+
+    方法 指纹_虚拟AudioOutput设备 <公开 注释 = "VIP功能，需要赞助后才能使用，虚拟媒体输出设备硬件信息，如播放设备等信息，注意虚拟媒体设备可能会照成浏览器声音或麦克风异常无法获取到真实设备">
+    参数 类型 <类型 = 整数 注释 = "0为清空，1为添加，2为覆盖,如果为0，下面修改数据设不设置都不会生效">
+    参数 媒体硬件清单 <类型 = FBrowser_媒体硬件数组
+            注释 = "硬件信息中的驱动ID和分组ID，驱动ID除了设置成default和communications为，设置的ID值其实是硬件的ID，不是JS通过命令显示的ID，这个ID和下面的分组ID一样，可以在你的硬件驱动里面取查找，设置后JS所获取的也会改变;"
+            @默认值 = 空对象>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return; 
+        @ CWString temp = @an<CVolString>(@<类型>) + _CT(";");
+        @ if(!@<媒体硬件清单>.IsNullObject()) temp += @<媒体硬件清单>.MapToString();
+        @ FBroHsVIPControl_SetVirAudioOutput(m_class,temp.GetText());
+
+
+    }
+
+    方法 指纹_虚拟定位 <公开 注释 = "虚拟Geolocation经纬度值，不设置此值默认CEF是获取不到经纬度的，本命令值支持实时设置；" 注释 = "注意：如还有通过外网IP判断定位，则要配合代理和webrtc一起使用，"
+            注释 = "可通过navigator.geolocation.getCurrentPosition(function(t){console.log(t);})命令查看是否设置成功">
+    参数 经度 <类型 = 小数 注释 = "longitude">
+    参数 维度 <类型 = 小数 注释 = "latitude">
+    参数 精确度 <类型 = 小数 注释 = "accuracy">
+    参数 海拔 <类型 = 小数 注释 = "altitude" @默认值 = -10000>
+    参数 海拔精确度 <类型 = 小数 注释 = "altitude_accuracy" @默认值 = -1>
+    参数 方向 <类型 = 小数 注释 = "heading 0到360" @默认值 = -1>
+    参数 速度 <类型 = 小数 注释 = "speed" @默认值 = -1>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return; 
+        @ FBroHsVIPControl_SetVirLongitudeAndLatitude(m_class,@<经度>, @<维度>, @<海拔>, @<精确度>, @<海拔精确度>, @<方向>, @<速度>);
+    }
+
+    方法 指纹_虚拟屏幕方向 <公开 注释 = "VIP功能，需赞助后才能使用，用于手机模式下虚拟屏幕为横屏或者竖屏，配合分辨率窗口大小一起使用">
+    参数 方向类型 <类型 = 屏幕方向类型 注释 = "设置方向类型，横屏或竖屏；参考:屏幕方向类型.，通过window.screen.orientation.type验证">
+    参数 角度 <类型 = 整数 注释 = "-90到180，一般0为横屏，90为竖屏，可通过window.orientation验证">
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return; 
+        @ FBroHsVIPControl_SetVirOrientation(m_class ,@<角度>,@<方向类型>);
+    }
+
+    方法 WebSocket_启用拦截 <公开>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_EnableWebsocketClientHook(m_class);
+
+    }
+
+    方法 高级_设置触发鼠标触摸事件 <公开 注释 = "在浏览器载入完成后调用,VIP功能，需要赞助后才能使用">
+    参数 启用 <类型 = 逻辑型>
+    参数 配置 <类型 = 整数 注释 = "默认为0，0为MOBILE模式，1为DESKTOP模式" @默认值 = 0>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetEmitTouchEventsForMouse(m_class,@<启用>,@<配置>);
+    }
+
+    方法 高级_设置代理 <公开 注释 = "设置当前浏览器代理，在\"浏览器_即将导航\"或\"浏览器_创建完毕\"事件中设置，也可在其他地方设置，但刷新后才会生效；"
+            注释 = "配合独立缓存一起使用设置的代理也会成为独立，否则还是全局，如果需要认证则需要设置账号密码；" 注释 = "带账号密码的S5代理，需赞助会员才可使用"
+            注释 = "注意：因为设置代理利用的首选项功能，如果启用了保留用户首选项，关闭的时候就要使用清理代理功能，否则可能再次打开浏览器还是使用的之前的代理，但又未手动设置账号密码或代理已经关闭而导致代理失败网页无法显示">
+    参数 代理地址 <类型 = 文本型 注释 = "要区分大小写，不要有空格，否则地址错误将会设置失败">
+    参数 代理账号 <类型 = 文本型 @默认值 = "">
+    参数 代理密码 <类型 = 文本型 @默认值 = "">
+    参数 关闭S5错误提示 <类型 = 逻辑型 注释 = "关闭S5代理错误弹窗提示，默认为假，为真关闭提示" @默认值 = 假>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty())
+        @ {
+        @    FBroHsVIPControl_SetS5Auth(m_class,@<代理地址>.GetText(),@<代理账号>.GetText(),@<代理密码>.GetText(),@<关闭S5错误提示>);
+        @ }
+    }
+
+    方法 高级_清空代理 <公开>
+    {
+        @ if(IsEmpty()) return;
+        @ FBroHsVIPControl_ClearS5Auth (m_class);
+
+    }
+
+    方法 开发者消息_发送消息 <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用"
+            注释 = "英文名：SendDevToolsMessage 说明：Send a method call message over the DevTools protocol"
+            注释 = "See the DevTools protocol documentation at https://chromedevtools.github.io/devtools-protocol/"
+            注释 = "for details of supported methods and the expected \"params\" dictionary contents."
+            注释 = "|message| will be copied if necessary. This method will return true if"
+            注释 = "called on the UI thread and the message was successfully submitted for"
+            注释 = "validation, otherwise false. Validation will be applied asynchronously and"
+            注释 = "any messages that fail due to formatting errors or missing parameters may"
+            注释 = "be discarded without notification. Prefer ExecuteDevToolsMethod if a more"
+            注释 = "structured approach to message formatting is desired." 注释 = ""
+            注释 = "Every valid method call will result in an asynchronous method result or"
+            注释 = "error message that references the sent message \"id\". Event messages are"
+            注释 = "received while notifications are enabled (for example, between method calls"
+            注释 = "for \"Page.enable\" and \"Page.disable\"). All received messages will be"
+            注释 = "delivered to the observer(s) registered with AddDevToolsMessageObserver."
+            注释 = "See CefDevToolsMessageObserver::OnDevToolsMessage documentation for details" 注释 = "of received message contents."
+            注释 = "" 注释 = "Usage of the SendDevToolsMessage, ExecuteDevToolsMethod and"
+            注释 = "AddDevToolsMessageObserver methods does not require an active DevTools"
+            注释 = "front-end or remote-debugging session. Other active DevTools sessions will"
+            注释 = "continue to function independently. However, any modification of global"
+            注释 = "browser state by one session may not be reflected in the UI of other" 注释 = "sessions." 注释 = ""
+            注释 = "Communication with the DevTools front-end (when displayed) can be logged"
+            注释 = "for development purposes by passing the" 注释 = "`--devtools-protocol-log-file=<path>` command-line flag." 注释 = "">
+    参数 消息文本 <类型 = 文本型
+            注释 = "|message| must be a UTF8-encoded JSON dictionary that contains \"id\" (int), \"method\" (string) and \"params\" (dictionary, optional) values">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SendDevToolsMessage(m_class,@<消息文本>.GetText());
+
+
+    }
+
+    方法 开发者消息_执行方法 <公开 注释 = "在浏览器创建成功事件中或刷新前调用，此为VIP功能，需赞助后才能使用"
+            注释 = "英文名：ExecuteDevToolsMethod 说明：Execute a method call over the DevTools protocol."
+            注释 = "This is a more structured version of SendDevToolsMessage；"
+            注释 = "This method will return the assigned message ID if called on the UI thread and the message was successfully submitted for validation, otherwise 0."
+            注释 = "See the SendDevToolsMessage documentation for additional usage information.">
+    参数 消息ID <类型 = 整数
+            注释 = "|message_id| is an incremental number that uniquely identifies the message (pass 0 to have the next number assigned automatically based on previous values)">
+    参数 方法文本 <类型 = 文本型 注释 = "|method| is the method name">
+    参数 参数 <类型 = 类_FBrowser_字典值
+            注释 = "|params| are the method parameters, which may be empty. See the DevTools protocol documentation (linked above) for details of supported methods and the expected |params| dictionary contents.">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_ExecuteDevToolsMethod(m_class,@<消息ID>,@<方法文本>.GetText(),@<参数>.m_class);
+
+    }
+
+    方法 开发者消息_启用监管者事件 <公开 类型 = 逻辑型 注释 = "启用后，事件中的开发者消息才会有效,创建成功返回真，已创建或者创建失败返回假" @禁止流程检查 = 真>
+    参数 消息事件 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowser_开发者消息事件”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<消息事件>.GetPtr(),DevToolsMessageObserverType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return false;
+        @ CefRefPtr<FBroHsDevToolsMessageObserver> event = static_cast<FBroHsDevToolsMessageObserver*>(@<消息事件>.GetPtr());
+        @ return FBroHsVIPControl_AddDevToolsMessageObserver(m_class,event);
+    }
+
+    方法 开发者消息_关闭监管者事件 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return false;
+        @ return FBroHsVIPControl_DeleteDevToolsMessageObserver(m_class);
+
+    }
+
+    方法 高级_网页截图 <公开 注释 = "执行截图后，数据在回调类\"类_FBrowser通用回调\"中的\"数据回调\"获取，可通过继承实现自定义回调类，执行成功返回标识ID，执行失败返回0"
+            注释 = "注意：静态回调和动态回调只能设置一个，优先静态回调有效；采用动态回调可实现回调的动态多态操作，更加灵活；" @禁止流程检查 = 真>
+    参数 格式类型 <类型 = 文本型 注释 = "图像压缩格式(默认为png)，取值范围:jpeg、png、webp">
+    参数 截图质量 <类型 = 整数 注释 = "压缩质量从范围[0..] 100) (jpeg)。">
+    参数 截图大小 <类型 = FBrowser_截图边框数据 注释 = "设置截图的坐标，大小，和缩放比例，宽度和高度不能为0">
+    参数 是否表面 <类型 = 逻辑型 注释 = "fromSurface：从表面而不是视图捕获截图">
+    参数 是否包括视窗以外 <类型 = 逻辑型 注释 = "captureBeyondViewport：捕获viewport之外的截图。">
+    参数 通用回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowser通用回调”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return;
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<通用回调>.GetPtr(),GeneralResultCallbackType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsGeneralResultCallback> tempclass = static_cast<FBroHsGeneralResultCallback*>(@<通用回调>.GetPtr());
+        @ FBroHsVIPControl_PageCaptureScreenshot(m_class,@<格式类型>.GetText(),@<截图质量>,@<截图大小>.ToFBroData(),@<是否表面>,@<是否包括视窗以外>,tempclass,nullptr,0);
+
+
+    }
+
+    方法 高级_启用执行环境 <公开 注释 = "执行高级JS功能之前需要先启用执行环境，否则无效，一个浏览器执行一次就行，如果关闭了需要重新开启才会有效，使用完毕后设置假关闭执行环境">
+    参数 是否启用 <类型 = 逻辑型 注释 = "真启用，假关闭">
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return;
+        @ FBroHsVIPControl_RuntimeEnable (m_class, @<是否启用>);
+    }
+
+    方法 高级_取当前环境ID清单 <公开 类型 = 类_FBrowser_列表值 注释 = " VIP高级功能，需赞助后才能使用，执行\"高级_启用执行环境\"启用后生效，"
+            注释 = "返回值为文本列表值，值为环境ID文本数据,如果网站还在加载获取的清单值也会因为加载状态的不同而不同" @禁止流程检查 = 真>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return @dt<类_FBrowser_列表值>();
+        @ return @dt<类_FBrowser_列表值>(FBroHsVIPControl_PageGetContextID(m_class));
+
+    }
+
+    方法 高级_执行JS <公开
+            注释 = "VIP高级功能，需赞助后才能使用，执行\"VIP_高级_启用执行环境\"启用后生效，执行JS代码，数据在回调类\"类_FBrowserVIP_通用回调\"中的\"数据回调\"获取，可通过继承实现自定义回调类"
+            注释 = "注意：静态回调和动态回调只能设置一个，优先静态回调有效；采用动态回调可实现回调的动态多态操作，更加灵活；" @禁止流程检查 = 真>
+    参数 JS文本 <类型 = 文本型 注释 = "expression">
+    参数 环境ID <类型 = 整数 注释 = "contextId 框架ID可通过\"VIP_高级_取当前环境ID清单\"获取,如果是第一次加载网页主框架就是1，刷新和重新载入新地址后动态ID会变更">
+    参数 包含命令行API <类型 = 逻辑型 注释 = "includeCommandLineAPI 确定在求值期间命令行API是否可用。" @默认值 = 真>
+    参数 静默 <类型 = 逻辑型 注释 = "silent 在静默模式下，计算期间抛出的异常不会被报告，也不会暂停执行" @默认值 = 假>
+    参数 用户手势 <类型 = 逻辑型 注释 = "userGesture 是否应该将执行视为用户在UI中发起的。" @默认值 = 真>
+    参数 超时 <类型 = 整数 注释 = "timeout 单位毫秒" @默认值 = 99999999>
+    参数 禁用断点 <类型 = 逻辑型 注释 = "disableBreaks 在执行过程中禁用断点。" @默认值 = 假>
+    参数 repl模式 <类型 = 逻辑型 注释 = "replMode 将该标志设置为true，允许重新声明和顶级等待。 请注意，只有当let变量来自于replMode本身时，才能重新声明它们。" @默认值 = 假>
+    参数 通用回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowserVIP_通用回调”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return ;
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<通用回调>.GetPtr(),GeneralResultCallbackType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsGeneralResultCallback> tempclass = static_cast<FBroHsGeneralResultCallback*>(@<通用回调>.GetPtr());
+        @ FBroHsVIPControl_RuntimeEvaluate(m_class,@<JS文本>.GetText(),@<包含命令行API>,@<环境ID>,@<静默>,@<用户手势>,@<超时>,@<禁用断点>,@<repl模式>,tempclass,nullptr,0);
+
+    }
+
+    方法 高级_执行JS_框架ID <公开
+            注释 = "VIP高级功能，需赞助后才能使用，执行\"VIP_高级_启用执行环境\"启用后生效，通过框架ID执行JS，框架ID只能通过\"VIP_高级_取当前环境ID清单\"获取中的frameID获取，不同于浏览器获取的框架ID"
+            注释 = "注意：静态回调和动态回调只能设置一个，优先静态回调有效；采用动态回调可实现回调的动态多态操作，更加灵活；" @禁止流程检查 = 真>
+    参数 JS文本 <类型 = 文本型 注释 = "expression，如果js语法或者逻辑存在错误，回调也会返回成功，错误信息可以在回调返回的JSON值中查看">
+    参数 框架ID <类型 = 文本型 注释 = "这个框架ID不同于浏览器获取的框架ID，该框架ID只能通过\"VIP_高级_取当前环境ID清单\"获取中的frameID获取,框架ID不会因为刷新而改变">
+    参数 包含命令行API <类型 = 逻辑型 注释 = "includeCommandLineAPI 确定在求值期间命令行API是否可用。" @默认值 = 真>
+    参数 静默 <类型 = 逻辑型 注释 = "silent 在静默模式下，计算期间抛出的异常不会被报告，也不会暂停执行" @默认值 = 假>
+    参数 用户手势 <类型 = 逻辑型 注释 = "userGesture 是否应该将执行视为用户在UI中发起的。" @默认值 = 真>
+    参数 超时 <类型 = 整数 注释 = "timeout 单位毫秒" @默认值 = 99999999>
+    参数 禁用断点 <类型 = 逻辑型 注释 = "disableBreaks 在执行过程中禁用断点。" @默认值 = 假>
+    参数 repl模式 <类型 = 逻辑型 注释 = "replMode 将该标志设置为true，允许重新声明和顶级等待。 请注意，只有当let变量来自于replMode本身时，才能重新声明它们。" @默认值 = 假>
+    参数 通用回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowserVIP_通用回调”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return ;
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<通用回调>.GetPtr(),GeneralResultCallbackType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsGeneralResultCallback> tempclass=static_cast<FBroHsGeneralResultCallback*>(@<通用回调>.GetPtr());
+        @ FBroHsVIPControl_RuntimeEvaluate_FrameID(m_class,@<JS文本>.GetText(),@<包含命令行API>,0,0,@<框架ID>.GetText(),@<静默>,@<用户手势>,@<超时>,@<禁用断点>,@<repl模式>,tempclass,NULL,0);
+    }
+
+    方法 高级_执行JS_主框架 <公开 注释 = "VIP高级功能，需赞助后才能使用，执行\"VIP_高级_启用执行环境\"启用后生效，在主框架/顶级框架执行JS"
+            注释 = "注意：静态回调和动态回调只能设置一个，优先静态回调有效；采用动态回调可实现回调的动态多态操作，更加灵活；" @禁止流程检查 = 真>
+    参数 JS文本 <类型 = 文本型 注释 = "expression，如果js语法或者逻辑存在错误，回调也会返回成功，错误信息可以在回调返回的JSON值中查看">
+    参数 包含命令行API <类型 = 逻辑型 注释 = "includeCommandLineAPI 确定在求值期间命令行API是否可用。" @默认值 = 真>
+    参数 静默 <类型 = 逻辑型 注释 = "silent 在静默模式下，计算期间抛出的异常不会被报告，也不会暂停执行" @默认值 = 假>
+    参数 用户手势 <类型 = 逻辑型 注释 = "userGesture 是否应该将执行视为用户在UI中发起的。" @默认值 = 真>
+    参数 超时 <类型 = 整数 注释 = "timeout 单位毫秒" @默认值 = 99999999>
+    参数 禁用断点 <类型 = 逻辑型 注释 = "disableBreaks 在执行过程中禁用断点。" @默认值 = 假>
+    参数 repl模式 <类型 = 逻辑型 注释 = "replMode 将该标志设置为true，允许重新声明和顶级等待。 请注意，只有当let变量来自于replMode本身时，才能重新声明它们。" @默认值 = 假>
+    参数 通用回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowserVIP_通用回调”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return ;
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<通用回调>.GetPtr(),GeneralResultCallbackType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsGeneralResultCallback> tempclass = static_cast<FBroHsGeneralResultCallback*>(@<通用回调>.GetPtr());
+        @ FBroHsVIPControl_RuntimeEvaluate_FrameID(m_class,@<JS文本>.GetText(),@<包含命令行API>,1,0,"",@<静默>,@<用户手势>,@<超时>,@<禁用断点>,@<repl模式>,tempclass,NULL,0);
+    }
+
+    方法 高级_执行JS_全部框架 <公开 注释 = "VIP高级功能，需赞助后才能使用，执行\"VIP_高级_启用执行环境\"启用后生效，在当前所有框架里面都执行JS代码，所有框架都会执行一遍，回调会被多次调取"
+            注释 = "注意：静态回调和动态回调只能设置一个，优先静态回调有效；采用动态回调可实现回调的动态多态操作，更加灵活；" @禁止流程检查 = 真>
+    参数 JS文本 <类型 = 文本型 注释 = "expression，如果js语法或者逻辑存在错误，回调也会返回成功，错误信息可以在回调返回的JSON值中查看">
+    参数 包含命令行API <类型 = 逻辑型 注释 = "includeCommandLineAPI 确定在求值期间命令行API是否可用。" @默认值 = 真>
+    参数 静默 <类型 = 逻辑型 注释 = "silent 在静默模式下，计算期间抛出的异常不会被报告，也不会暂停执行" @默认值 = 假>
+    参数 用户手势 <类型 = 逻辑型 注释 = "userGesture 是否应该将执行视为用户在UI中发起的。" @默认值 = 真>
+    参数 超时 <类型 = 整数 注释 = "timeout 单位毫秒" @默认值 = 99999999>
+    参数 禁用断点 <类型 = 逻辑型 注释 = "disableBreaks 在执行过程中禁用断点。" @默认值 = 假>
+    参数 repl模式 <类型 = 逻辑型 注释 = "replMode 将该标志设置为true，允许重新声明和顶级等待。 请注意，只有当let变量来自于replMode本身时，才能重新声明它们。" @默认值 = 假>
+    参数 通用回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowserVIP_通用回调”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return ;
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<通用回调>.GetPtr(),GeneralResultCallbackType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsGeneralResultCallback> tempclass=static_cast<FBroHsGeneralResultCallback*>(@<通用回调>.GetPtr());
+        @ FBroHsVIPControl_RuntimeEvaluate_FrameID(m_class,@<JS文本>.GetText(),@<包含命令行API>,2,0,"",@<静默>,@<用户手势>,@<超时>,@<禁用断点>,@<repl模式>,tempclass,NULL,0);
+
+    }
+
+    方法 高级_执行JS_框架序号 <公开
+            注释 = "VIP高级功能，需赞助后才能使用，执行\"VIP_高级_启用执行环境\"启用后生效，通过框架ID执行JS，框架ID只能通过\"VIP_高级_取当前环境ID清单\"获取中的frameID获取，不同于浏览器获取的框架ID"
+            注释 = "注意：静态回调和动态回调只能设置一个，优先静态回调有效；采用动态回调可实现回调的动态多态操作，更加灵活；" @禁止流程检查 = 真>
+    参数 JS文本 <类型 = 文本型 注释 = "expression，如果js语法或者逻辑存在错误，回调也会返回成功，错误信息可以在回调返回的JSON值中查看">
+    参数 框架序号 <类型 = 整数 注释 = "浏览器依次加载框架的序号，一般第一个为主框架，序号从0开始，超出框架个数将会执行失败，" 注释 = "注意这个序号和开发者工具显示的序号和浏览器取出的框架顺序不一定一样">
+    参数 包含命令行API <类型 = 逻辑型 注释 = "includeCommandLineAPI 确定在求值期间命令行API是否可用。" @默认值 = 真>
+    参数 静默 <类型 = 逻辑型 注释 = "silent 在静默模式下，计算期间抛出的异常不会被报告，也不会暂停执行" @默认值 = 假>
+    参数 用户手势 <类型 = 逻辑型 注释 = "userGesture 是否应该将执行视为用户在UI中发起的。" @默认值 = 真>
+    参数 超时 <类型 = 整数 注释 = "timeout 单位毫秒" @默认值 = 99999999>
+    参数 禁用断点 <类型 = 逻辑型 注释 = "disableBreaks 在执行过程中禁用断点。" @默认值 = 假>
+    参数 repl模式 <类型 = 逻辑型 注释 = "replMode 将该标志设置为true，允许重新声明和顶级等待。 请注意，只有当let变量来自于replMode本身时，才能重新声明它们。" @默认值 = 假>
+    参数 通用回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowserVIP_通用回调”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return ;
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<通用回调>.GetPtr(),GeneralResultCallbackType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsGeneralResultCallback> tempclass = static_cast<FBroHsGeneralResultCallback*>(@<通用回调>.GetPtr());
+        @ FBroHsVIPControl_RuntimeEvaluate_FrameID(m_class,@<JS文本>.GetText(),@<包含命令行API>,3,@<框架序号>,"",@<静默>,@<用户手势>,@<超时>,@<禁用断点>,@<repl模式>,tempclass,NULL,0);
+    }
+
+    方法 高级_发送触摸事件 <公开 注释 = "VIP高级功能，需赞助后才能使用，可不启用触摸模式发送触摸事件">
+    参数 类型 <类型 = 整数 注释 = "touchStart=0,touchMove=1,touchCancel=2,touchEnd=3，第一次执行要先touchStart,执行完操作后touchEnd">
+    参数 触摸事件 <类型 = FBrowser_VIP触摸事件>
+    参数 修饰符 <类型 = 整数 注释 = "Alt=1, Ctrl=2, Meta/Command=4, Shift=8 (default: 0)" @默认值 = 0>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return ;
+        @ FBroHsVIPControl_DispatchTouchEvent(m_class,@<类型>,@<触摸事件>.ToFBroData(),@<修饰符>);
+
+    }
+
+    方法 高级触摸_按下 <公开 注释 = "VIP高级功能，需赞助后才能使用，可不启用触摸模式发送触摸事件">
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    {
+        变量 触摸事件 <类型 = FBrowser_VIP触摸事件>
+        触摸事件.横坐标 = 横坐标
+        触摸事件.纵坐标 = 纵坐标
+        高级_发送触摸事件 (0, 触摸事件, )
+
+    }
+
+    方法 高级触摸_放开 <公开 注释 = "VIP高级功能，需赞助后才能使用，可不启用触摸模式发送触摸事件">
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    {
+        变量 触摸事件 <类型 = FBrowser_VIP触摸事件>
+        触摸事件.横坐标 = 横坐标
+        触摸事件.纵坐标 = 纵坐标
+        高级_发送触摸事件 (3, 触摸事件, )
+
+    }
+
+    方法 高级触摸_移动 <公开 注释 = "VIP高级功能，需赞助后才能使用，可不启用触摸模式发送触摸事件">
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    {
+        变量 触摸事件 <类型 = FBrowser_VIP触摸事件>
+        触摸事件.横坐标 = 横坐标
+        触摸事件.纵坐标 = 纵坐标
+        高级_发送触摸事件 (1, 触摸事件, )
+
+    }
+
+    方法 高级触摸_取消 <公开 注释 = "VIP高级功能，需赞助后才能使用，可不启用触摸模式发送触摸事件">
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    {
+        变量 触摸事件 <类型 = FBrowser_VIP触摸事件>
+        触摸事件.横坐标 = 横坐标
+        触摸事件.纵坐标 = 纵坐标
+        高级_发送触摸事件 (2, 触摸事件, )
+
+    }
+
+    方法 高级触摸_单击 <公开 注释 = "VIP高级功能，需赞助后才能使用，可不启用触摸模式发送触摸事件">
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    参数 单击延时 <类型 = 整数 注释 = "单位：毫秒；为空，默认为50毫秒" @默认值 = 50>
+    {
+        高级触摸_按下 (横坐标, 纵坐标)
+        @ FBroUnit::WaitUserTimer(@<单击延时>);
+        高级触摸_放开 (横坐标, 纵坐标)
+
+
+    }
+
+    方法 高级_发送键盘事件 <公开 注释 = "VIP高级功能，需赞助后才能使用，向浏览器发送键盘事件，支持后台操作">
+    参数 类型 <类型 = 文本型 注释 = "type:Type of the key event.Allowed Values: keyDown, keyUp, rawKeyDown, char."
+            注释 = "键事件的类型。允许的值:keyDown, keyUp, rawKeyDown, char">
+    参数 修饰键 <类型 = 整数
+            注释 = "modifiers:Bit field representing pressed modifier keys. Alt=1, Ctrl=2, Meta/Command=4, Shift=8 (default: 0)."
+            注释 = "表示按下的修饰键。Alt=1, Ctrl=2, Meta/Command=4, Shift=8(默认值:0)。" @默认值 = 0>
+    参数 文本 <类型 = 文本型
+            注释 = "text:Text as generated by processing a virtual key code with a keyboard layout. Not needed for for keyUp and rawKeyDown events (default: \"\")"
+            注释 = "通过处理带有键盘布局的虚拟键代码而生成的文本。对于keyUp和rawKeyDown事件不需要(默认值:\"\")。" @默认值 = "">
+    参数 未修饰文本 <类型 = 文本型
+            注释 = "unmodifiedText:Text that would have been generated by the keyboard if no modifiers were pressed (except for shift). Useful for shortcut (accelerator) key handling (default: \"\")."
+            注释 = "如果没有按下修饰符(shift除外)，将由键盘生成的文本。用于快捷键(加速器)处理(默认值:\"\")。" @默认值 = "">
+    参数 关键标识符 <类型 = 文本型 注释 = "keyIdentifier:Unique key identifier (e.g., \'U+0041\') (default: \"\")."
+            注释 = "唯一键标识符(例如，\'U+0041\')(默认值:\"\")。" @默认值 = "">
+    参数 代码 <类型 = 文本型 注释 = "code:Unique DOM defined string value for each physical key (e.g., \'KeyA\') (default: \"\")."
+            注释 = "每个物理键(例如\'KeyA\')的唯一DOM定义的字符串值(默认值:\"\")。" @默认值 = "">
+    参数 按键 <类型 = 文本型
+            注释 = "key:Unique DOM defined string value describing the meaning of the key in the context of active modifiers, keyboard layout, etc (e.g., \'AltGr\') (default: \"\")."
+            注释 = "唯一的DOM定义的字符串值，描述在活动修饰符、键盘布局等上下文中的键的含义(例如，\'AltGr\')(默认值:\"\")。" @默认值 = "">
+    参数 系统虚拟键代码 <类型 = 整数 注释 = "windowsVirtualKeyCode:Windows virtual key code (default: 0)." 注释 = "Windows虚拟按键代码(默认值:0)。"
+            @默认值 = 0>
+    参数 本机虚拟键代码 <类型 = 整数 注释 = "nativeVirtualKeyCode:Native virtual key code (default: 0)." 注释 = "本机虚拟键代码(默认值:0)。" @默认值 = 0>
+    参数 自动重复 <类型 = 逻辑型 注释 = "autoRepeat:Whether the event was generated from auto repeat (default: false)."
+            注释 = "事件是否由自动重复产生(默认值:false)" @默认值 = 假>
+    参数 是否为键盘 <类型 = 逻辑型 注释 = "isKeypad:Whether the event was generated from the keypad (default: false)." 注释 = "事件是否从键盘生成。"
+            @默认值 = 假>
+    参数 是否为系统 <类型 = 逻辑型 注释 = "isSystemKey:Whether the event was a system key event (default: false)." 注释 = "事件是否为系统按键事件。"
+            @默认值 = 假>
+    参数 键盘位置 <类型 = 整数
+            注释 = "location:Whether the event was from the left or right side of the keyboard. 1=Left, 2=Right (default: 0)."
+            注释 = "事件是来自键盘的左边还是右边。1=左，2=右(默认值:0)。" @默认值 = 0>
+    {
+        @ if(!@<FBrowser初始化控制.是否为VIP> || IsEmpty()) return ;
+        @ FBroHsVIPControl_DispatchKeyEvent(m_class, @<类型>.GetText(), @<修饰键>, @<文本>.GetText(), @<未修饰文本>.GetText(), @<关键标识符>.GetText(), @<代码>.GetText(), @<按键>.GetText(), @<系统虚拟键代码>, @<本机虚拟键代码>, @<自动重复>, @<是否为键盘>, @<是否为系统>, @<键盘位置>);
+
+    }
+
+    方法 高级键盘_按下 <公开 注释 = "VIP高级功能，需赞助后才能使用，向浏览器发送键盘事件，支持后台操作">
+    参数 键代码 <类型 = 整数>
+    参数 修饰键 <类型 = 整数 注释 = "Alt=1, Ctrl=2, Meta/Command=4, Shift=8" @默认值 = 0>
+    参数 是否为键盘 <类型 = 逻辑型 注释 = "事件是否从键盘生成" @默认值 = 假>
+    {
+        高级_发送键盘事件 ("keyDown", 修饰键, , , , , , 键代码, , , 是否为键盘, , )
+
+    }
+
+    方法 高级键盘_放开 <公开 注释 = "VIP高级功能，需赞助后才能使用，向浏览器发送键盘事件，支持后台操作">
+    参数 键代码 <类型 = 整数>
+    参数 修饰键 <类型 = 整数 注释 = "Alt=1, Ctrl=2, Meta/Command=4, Shift=8" @默认值 = 0>
+    参数 是否为键盘 <类型 = 逻辑型 注释 = "事件是否从键盘生成" @默认值 = 假>
+    {
+        高级_发送键盘事件 ("keyUp", 修饰键, , , , , , 键代码, , , 是否为键盘, , )
+
+    }
+
+    方法 高级键盘_单击 <公开 注释 = "VIP高级功能，需赞助后才能使用，向浏览器发送键盘事件，支持后台操作">
+    参数 键代码 <类型 = 整数>
+    参数 修饰键 <类型 = 整数 注释 = "Alt=1, Ctrl=2, Meta/Command=4, Shift=8" @默认值 = 0>
+    参数 单击延时 <类型 = 整数 注释 = "单位：毫秒；为空，默认为50毫秒" @默认值 = 50>
+    参数 是否为键盘 <类型 = 逻辑型 注释 = "事件是否从键盘生成" @默认值 = 假>
+    {
+        高级键盘_按下 (键代码, 修饰键, 是否为键盘)
+        @ FBroUnit::WaitUserTimer(@<单击延时>);
+        高级键盘_放开 (键代码, 修饰键, 是否为键盘)
+
+    }
+
+    方法 高级键盘_输入字符 <公开 注释 = "模拟输入单个字，只能输入一个字，可输入中文，VIP高级功能，需赞助后才能使用，向浏览器发送键盘事件，支持后台操作">
+    参数 文本 <类型 = 文本型 注释 = "输入文本，可以是中文，但只能输入一个字，否则会出错">
+    {
+        高级_发送键盘事件 ("char", , 文本, , , , , , , , , , )
+
+    }
+
+    方法 逐字分割
+    参数 待分割文本 <类型 = 文本型>
+    参数 返回数据 <类型 = 文本数组类>
+    {
+        @ std::wstring wstr(@<待分割文本>.GetText());
+        @ for(wchar_t ch: wstr){std::wstring temp(1, ch);@<返回数据>.data ().Add2(temp.c_str());}
+
+    }
+
+    方法 高级键盘_输入文本 <公开 注释 = "模拟输入连续的文本，可以是中文，VIP高级功能，需赞助后才能使用，向浏览器发送键盘事件，支持后台操作" "">
+    参数 文本 <类型 = 文本型 注释 = "输入文本，可以是中文，连续的文本">
+    参数 逐字输入延时 <类型 = 整数 注释 = "单位：毫秒；为空，默认为0，不延时" @默认值 = 0>
+    {
+        变量 listData <类型 = 文本数组类>
+        逐字分割 (文本, listData)
+        计次循环 (listData.取成员数 ())
+        {
+            变量 tempStr <类型 = 文本型>
+            tempStr = listData.取成员 (取循环索引 ())
+            高级键盘_输入字符 (tempStr)
+            @ FBroUnit::WaitUserTimer(@<逐字输入延时>);
+
+        }
+
+    }
+
+    方法 高级_发送鼠标事件 <公开 注释 = "VIP高级功能，需赞助后才能使用，向浏览器发送鼠标事件，支持后台发送">
+    参数 类型 <类型 = 文本型 注释 = "type:Type of the mouse event.Allowed Values: mousePressed, mouseReleased, mouseMoved, mouseWheel."
+            注释 = "鼠标事件类型。允许的值:mousePressed, mouserrelease, mouemoved, mouseWheel">
+    参数 横坐标 <类型 = 整数 注释 = "x:X coordinate of the event relative to the main frame\'s viewport in CSS pixels."
+            注释 = "事件相对于主帧视口的X坐标(CSS像素)。" "">
+    参数 纵坐标 <类型 = 整数
+            注释 = "y:Y coordinate of the event relative to the main frame\'s viewport in CSS pixels. 0 refers to the top of the viewport and Y increases as it proceeds towards the bottom of the viewport."
+            注释 = "y:在CSS像素中，事件相对于主帧视口的y坐标。0表示视口的顶部，Y则随着它向视口的底部移动而增加。">
+    参数 修饰键 <类型 = 整数
+            注释 = "modifiers:Bit field representing pressed modifier keys. Alt=1, Ctrl=2, Meta/Command=4, Shift=8 (default: 0)."
+            注释 = "表示按下的修饰键的位域。Alt=1, Ctrl=2, Meta/Command=4, Shift=8(默认值:0)。" @默认值 = 0>
+    参数 按键文本 <类型 = 文本型
+            注释 = "button:Allowed Values: none, left, middle, right, back, forward.允许值:none, left, middle, right, back, forward"
+            @默认值 = "">
+    参数 按键集 <类型 = 整数
+            注释 = "buttons:A number indicating which buttons are pressed on the mouse when a mouse event is triggered. Left=1, Right=2, Middle=4, Back=8, Forward=16, None=0."
+            注释 = "按钮:当触发鼠标事件时，指示按下鼠标上哪些按钮的数字。左=1，右=2，中=4，后=8，前=16，无=0" @默认值 = 0>
+    参数 点击次数 <类型 = 整数 注释 = "clickCount:Number of times the mouse button was clicked (default: 0)." 注释 = "点击鼠标按钮的次数(默认值:0)。"
+            @默认值 = 0>
+    参数 CSS像素横坐标 <类型 = 整数 注释 = "deltaX:X delta in CSS pixels for mouse wheel event (default: 0)."
+            注释 = "鼠标滚轮事件的CSS像素的X delta(默认值:0)。" @默认值 = 0>
+    参数 CSS像素纵坐标 <类型 = 整数 注释 = "deltaY:Y delta in CSS pixels for mouse wheel event (default: 0)."
+            注释 = "鼠标滚轮事件在CSS像素中的Y delta(默认值:0)。" @默认值 = 0>
+    参数 指针类型 <类型 = 文本型 注释 = "pointerType:Pointer type (default: \"mouse\").Allowed Values: mouse, pen."
+            注释 = "指针类型(默认:\"mouse\")。允许的值:mouse，pen" @默认值 = "">
+    {
+        @ FBroHsVIPControl_DispatchMouseEvent (m_class, @<类型>.GetText(), @<横坐标>, @<纵坐标>, @<修饰键>, @<按键文本>.GetText(), @<按键集>, @<点击次数>, @<CSS像素横坐标>, @<CSS像素纵坐标>, @<指针类型>.GetText());
+
+    }
+
+    方法 高级鼠标_按下 <公开 注释 = "VIP高级功能，需赞助后才能使用，向浏览器发送鼠标事件，支持后台发送，不占用鼠标">
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    参数 按键类型 <类型 = 整数 注释 = "0为左键，1为中间，2为右键，默认为0，左键" @默认值 = 0>
+    {
+        变量 按键文本 <类型 = 文本型>
+        如果 (按键类型 == 0)
+        {
+            按键文本 = "left"
+        }
+        否则 (按键类型 == 1)
+        {
+            按键文本 = "middle"
+        }
+        否则 (按键类型 == 2)
+        {
+            按键文本 = "right"
+
+        }
+        高级_发送鼠标事件 ("mousePressed", 横坐标, 纵坐标, , 按键文本, , 1, , , )
+    }
+
+    方法 高级鼠标_放开 <公开 注释 = "VIP高级功能，需赞助后才能使用，向浏览器发送鼠标事件，支持后台发送，不占用鼠标">
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    参数 按键类型 <类型 = 整数 注释 = "0为左键，1为中间，2为右键，默认为0，左键" @默认值 = 0>
+    {
+        变量 按键文本 <类型 = 文本型>
+        如果 (按键类型 == 0)
+        {
+            按键文本 = "left"
+        }
+        否则 (按键类型 == 1)
+        {
+            按键文本 = "middle"
+        }
+        否则 (按键类型 == 2)
+        {
+            按键文本 = "right"
+
+        }
+        高级_发送鼠标事件 ("mouseReleased", 横坐标, 纵坐标, , 按键文本, , 1, , , )
+    }
+
+    方法 高级鼠标_移动 <公开 注释 = "VIP高级功能，需赞助后才能使用，向浏览器发送鼠标事件，支持后台发送，不占用鼠标">
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    {
+        高级_发送鼠标事件 ("mouseMoved", 横坐标, 纵坐标, , , , , , , )
+    }
+
+    方法 高级鼠标_滚轮滚动 <公开 注释 = "VIP高级功能，需赞助后才能使用，向浏览器发送鼠标事件，支持后台发送，不占用鼠标">
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    参数 横向滚动 <类型 = 整数 注释 = "负数向左，正数向右，以像素点位单位">
+    参数 纵向滚动 <类型 = 整数 注释 = "负数向上，正数向下，以像素点位单位">
+    {
+        高级_发送鼠标事件 ("mouseWheel", 横坐标, 纵坐标, , , , , 横向滚动, 纵向滚动, )
+    }
+
+    方法 高级鼠标_单击 <公开 注释 = "VIP高级功能，需赞助后才能使用，向浏览器发送鼠标事件，支持后台发送，不占用鼠标">
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    参数 按键类型 <类型 = 整数 注释 = "0为左键，1为中间，2为右键，默认为0，左键">
+    参数 单击延时 <类型 = 整数 注释 = "单位：毫秒；为空，默认为50毫秒" @默认值 = 50>
+    {
+        高级鼠标_按下 (横坐标, 纵坐标, 按键类型)
+        @ FBroUnit::WaitUserTimer(@<单击延时>);
+        高级鼠标_放开 (横坐标, 纵坐标, 按键类型)
+
+    }
+
+    方法 过滤器_修改内容 <公开 注释 = "VIP高级功能，需赞助后才能使用，非VIP用户可通过资源过滤器自行分包处理，此功能更方便更快；"
+            注释 = "对目标地址通过匹配目标文本修改内容，在资源加载前设置，浏览器创建后设置，如果\"浏览器_获取资源过滤器\"事件中返回真自定义拦截此设置将不会生效；"
+            注释 = "如果同一个目标存在多个需要修改的数据，多次调用本方法即可，但要注意目标地址和匹配模式要保持一致，否则可能会出错">
+    参数 匹配模式 <类型 = 整数 注释 = "地址匹配模式，参考：VIP过滤器地址." @默认值 = VIP过滤器地址.完全匹配>
+    参数 目标地址 <类型 = 文本型 注释 = "要替换目标资源链接地址，地址要为完整地址">
+    参数 替换模式 <类型 = 整数 注释 = "VIP过滤器.xxx;如果模式为插入，将会在查找到的目标文本后面插入替换的文本；模式为修改，将会将目标文本删除替换为新文本；">
+    参数 目标文本 <类型 = 文本型 注释 = "要查找的文本">
+    参数 替换文本 <类型 = 文本型 注释 = "要替换或插入的文本">
+    {
+        @ if(IsEmpty()) return;
+        @ FBroHsVIPControl_AddResponseFilterChangeData (m_class,@<匹配模式>,@<目标地址>.GetText(), @<替换模式>, @<目标文本>.GetText(), @<替换文本>.GetText());
+    }
+
+    方法 过滤器_取消修改内容 <公开 注释 = "在资源加载前设置，取消当前浏览器设置的对应目标地址的修改内容">
+    参数 目标地址 <类型 = 文本型 注释 = "和之前设置的目标地址一一对应">
+    {
+        @ if(IsEmpty()) return;
+        @ FBroHsVIPControl_DeletResponseFiltereChangeData (m_class,@<目标地址>.GetText());
+
+    }
+
+    方法 过滤器_取消全部修改内容 <公开 注释 = "在资源加载前设置，取消当前浏览器设置的对应目标地址的修改内容">
+    {
+        @ if(IsEmpty()) return;
+        @ FBroHsVIPControl_DeleteResponseFilterAllData (m_class);
+
+    }
+
+    方法 过滤器_替换资源_数据 <公开 注释 = "VIP高级功能，需赞助后才能使用，非VIP用户可通过资源处理器自行分包处理，此功能更方便更快；"
+            注释 = "用数据直接将整体链接资源替换，在资源加载前设置，也可在浏览器创建后设置，如果\"浏览器_获取资源处理器\"事件中返回真自定义资源此设置将不会生效">
+    参数 匹配模式 <类型 = 整数 注释 = "地址匹配模式，参考：VIP过滤器地址." @默认值 = VIP过滤器地址.完全匹配>
+    参数 目标地址 <类型 = 文本型 注释 = "要替换目标资源链接地址，地址要为完整地址">
+    参数 MINI类型 <类型 = 文本型 注释 = "mini_type，资源类型，和协议头的content-type对应，例如：\"application/javascript\"或\"text/html\"，如果不设置默认为download">
+    参数 响应协议头 <类型 = FBrowser_双文本数组 注释 = "要设置的资源响应的协议头" @默认值 = 空对象>
+    参数 替换的数据 <类型 = 字节集类>
+    {
+        @ if(IsEmpty()) return;
+        @ FBroHsVIPControl_AddResourceHandlerChangeData (m_class,@<匹配模式>,@<目标地址>.GetText(), @<MINI类型>.GetText(), @<响应协议头>.m_data, @<替换的数据>.GetPtr (),@<替换的数据>.GetSize ());
+    }
+
+    方法 过滤器_替换资源_文件 <公开 注释 = "VIP高级功能，需赞助后才能使用，非VIP用户可通过资源处理器自行分包处理，此功能更方便更快；"
+            注释 = "用本地文件直接将整体链接资源替换，在资源加载前设置，也可在浏览器创建后设置，如果\"浏览器_获取资源处理器\"事件中返回真自定义资源此设置将不会生效">
+    参数 匹配模式 <类型 = 整数 注释 = "地址匹配模式，参考：VIP过滤器地址." @默认值 = VIP过滤器地址.完全匹配>
+    参数 目标地址 <类型 = 文本型 注释 = "要替换目标资源链接地址，地址要为完整地址">
+    参数 MINI类型 <类型 = 文本型 注释 = "mini_type，资源类型，和协议头的content-type对应，例如：\"application/javascript\"或\"text/html\"，如果不设置默认为download">
+    参数 响应协议头 <类型 = FBrowser_双文本数组 注释 = "要设置的资源响应的协议头" @默认值 = 空对象>
+    参数 替换的文件 <类型 = 文本型 注释 = "完整的路径+文件名，例如：\"F:\\\\xxx\\\\xxx\\\\xxx.txt\"">
+    {
+        @ if(IsEmpty()) return;
+        @ FBroHsVIPControl_AddResourceHandlerChangeFile (m_class,@<匹配模式>,@<目标地址>.GetText(), @<MINI类型>.GetText(), @<响应协议头>.m_data,@<替换的文件>.GetText());
+    }
+
+    方法 过滤器_取消替换资源 <公开 注释 = "在资源加载前设置，取消当前浏览器设置的对应目标地址的替换资源">
+    参数 目标地址 <类型 = 文本型 注释 = "和之前设置的目标地址一一对应">
+    {
+        @ if(IsEmpty()) return;
+        @ FBroHsVIPControl_DeleteResourceHandlerChangeData (m_class,@<目标地址>.GetText());
+
+    }
+
+    方法 过滤器_取消全部替换资源 <公开 注释 = "在资源加载前设置，取消当前浏览器设置的所有替换的资源">
+    {
+        @ if(IsEmpty()) return;
+        @ FBroHsVIPControl_DeleteResourceHandlerAllData (m_class);
+
+    }
+
+    方法 高级_创建标签浏览器 <公开 注释 = "VIP高级功能，需赞助后才能使用，谷歌模式下才可以使用，" 注释 = "在当前谷歌UI界面创建一个新的Tab标签浏览器，" 注释 = "设置了浏览器事件后即可和创建浏览器一样控制该标签浏览器">
+    参数 地址 <类型 = 文本型 注释 = "可以为空，为空会获取当前浏览器的地址">
+    参数 序号 <类型 = 整数 注释 = "UI上需要插入的序号位置，设置为-1为在末尾添加" @默认值 = -1>
+    参数 是否激活 <类型 = 逻辑型 注释 = "为真会激活并跳转标签，为假为不激活" @默认值 = 假>
+    参数 额外信息 <类型 = 类_FBrowser_字典值 注释 = "传递给事件的额外数据，可不设置，和创建浏览器不同的事这里不会传递给渲染进程" @默认值 = 空对象>
+    参数 浏览器事件 <类型 = 类_FBrowser_事件智能指针 注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowser_浏览器事件”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    参数 禁用事件 <类型 = FBrowser_禁用事件 注释 = "当前浏览器器事件开关，可关闭某些不必要的事件加载，合理设置可提高加载速度" @默认值 = 空对象>
+    参数 标识 <类型 = 文本型 注释 = "设置创建后的浏览器的用户标识，设置后可通过用户标识获取到对应的浏览器，注意用户标识不要重复" @默认值 = "">
+    {
+        @ if(IsEmpty()) return;
+        @ _FBRO_CHECK_EVENT_TYPE(@<浏览器事件>.GetPtr(),BroEventType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsBroEvent> hsbroevent = static_cast<FBroHsBroEvent*>(@<浏览器事件>.GetPtr());
+        @ FBroHsVIPControl_AddTabAt (m_class, @<地址>.GetText(), @<序号>, @<是否激活>, @<额外信息>.m_class,hsbroevent, @<禁用事件>.ToFBroData(), @<标识>.GetText());
+
+    }
+
+    方法 内核开关_禁用ConsoleDebug <公开 注释 = "VIP功能，需赞助后才能使用，禁用console.debug功能防止检测到开发者工具">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisableConsoleDebug(m_class,@<是否禁用>);
+
+    }
+
+    方法 内核开关_禁用ConsoleWarn <公开 注释 = "VIP功能，需赞助后才能使用，禁用console.warn功能防止检测到开发者工具，只是禁止该功能的执行返回输出，实际依然可调用">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisableConsoleWarn(m_class,@<是否禁用>);
+    }
+
+    方法 内核开关_禁用ConsoleError <公开 注释 = "VIP功能，需赞助后才能使用，禁用console.error功能防止检测到开发者工具，只是禁止该功能的执行返回输出，实际依然可调用">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisableConsoleError(m_class,@<是否禁用>);
+
+    }
+
+    方法 内核开关_禁用ConsoleInfo <公开 注释 = "VIP功能，需赞助后才能使用，禁用console.info功能防止检测到开发者工具，只是禁止该功能的执行返回输出，实际依然可调用">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisableConsoleInfo(m_class,@<是否禁用>);
+
+    }
+
+    方法 内核开关_禁用ConsoleLog <公开 注释 = "VIP功能，需赞助后才能使用，禁用console.log功能防止检测到开发者工具，只是禁止该功能的执行返回输出，实际依然可调用">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisableConsoleLog(m_class,@<是否禁用>);
+
+    }
+
+    方法 内核开关_禁用ConsoleAssert <公开 注释 = "VIP功能，需赞助后才能使用，禁用console.assert功能防止检测到开发者工具，只是禁止该功能的执行返回输出，实际依然可调用">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisableConsoleAssert(m_class,@<是否禁用>);
+
+    }
+
+    方法 内核开关_禁用ConsoleDir <公开 注释 = "VIP功能，需赞助后才能使用，禁用console.dir功能防止检测到开发者工具，只是禁止该功能的执行返回输出，实际依然可调用">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisableConsoleDir(m_class,@<是否禁用>);
+
+    }
+
+    方法 内核开关_禁用ConsoleTable <公开 注释 = "VIP功能，需赞助后才能使用，禁用console.table功能防止检测到开发者工具，只是禁止该功能的执行返回输出，实际依然可调用">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisableConsoleTable(m_class,@<是否禁用>);
+
+
+    }
+
+    方法 内核开关_禁用ConsoleGroup <公开 注释 = "VIP功能，需赞助后才能使用，禁用console.group功能防止检测到开发者工具，只是禁止该功能的执行返回输出，实际依然可调用">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisableConsoleGroup(m_class,@<是否禁用>);
+
+    }
+
+    方法 内核开关_禁用ConsoleTime <公开 注释 = "VIP功能，需赞助后才能使用，禁用console.time功能防止检测到开发者工具，只是禁止该功能的执行返回输出，实际依然可调用">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisableConsoleTime(m_class,@<是否禁用>);
+
+
+    }
+
+    方法 内核开关_禁用ConsoleProfile <公开 注释 = "VIP功能，需赞助后才能使用，禁用console.profile功能防止检测到开发者工具，只是禁止该功能的执行返回输出，实际依然可调用">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisableConsoleProfile(m_class,@<是否禁用>);
+
+    }
+
+    方法 内核开关_禁用ConsoleCount <公开 注释 = "VIP功能，需赞助后才能使用，禁用console.count功能防止检测到开发者工具，只是禁止该功能的执行返回输出，实际依然可调用">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisableConsoleCount(m_class,@<是否禁用>);
+
+    }
+
+    方法 内核开关_禁用ConsoleTrace <公开 注释 = "VIP功能，需赞助后才能使用，禁用console.trace功能防止检测到开发者工具，只是禁止该功能的执行返回输出，实际依然可调用">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisableConsoleTrace(m_class,@<是否禁用>);
+
+
+    }
+
+    方法 内核开关_禁用ConsoleClear <公开 注释 = "VIP功能，需赞助后才能使用，禁用console.debug功能防止检测到开发者工具，只是禁止该功能的执行返回输出，实际依然可调用">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisableConsoleClear(m_class,@<是否禁用>);
+
+    }
+
+    方法 内核开关_禁用Performance检测 <公开
+            注释 = "VIP功能需赞助后才可使用，不会直接关闭Performance功能，只会影响now，mark，measure用于检测执行速度的返回值（返回值将变成你所设置的最小值到最大值范围内的一个随机值），防止被探测到在调试网页，打了断点或者hook了函数，原理可自行百度">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    参数 最小值 <类型 = 小数 注释 = "默认值0.3，单位毫秒,间隔最小值，不能太小，太小太假" @默认值 = 0>
+    参数 最大值 <类型 = 小数 注释 = "默认值1，单位毫秒，间隔最大值，不能太大，太大你猜" @默认值 = 0>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisablePerformanceCheck(m_class,@<是否禁用>,@<最小值>,@<最大值>);
+
+    }
+
+    方法 内核开关_设置CSS内核 <公开 注释 = "VIP功能需赞助后才可使用，通过对应的内核版本号，结合谷歌功能关闭对应版本添加或删除的功能，达到模拟对应内核的效果，注意：如使用后出现网页异常说明你设置的内核不兼容当前网页">
+    参数 内核版本 <类型 = 整数 注释 = "支持设置值为135到116">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetCSSKernel(m_class,@<内核版本>);
+
+    }
+
+    方法 内核开关_设置Web内核 <公开 注释 = "VIP功能需赞助后才可使用，同“内核开关_设置CSS内核”功能，通过版本号关闭和添加浏览器对应功能API，达到模拟对应内核的效果，注意：如使用后出现网页异常说明你设置的内核不兼容当前网页">
+    参数 内核版本 <类型 = 整数 注释 = "支持设置值为135到116">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetWebFeatureKernel(m_class,@<内核版本>);
+    }
+
+    方法 内核开关_设置V8内核 <公开 注释 = "VIP功能需赞助后才可使用，同“内核开关_设置CSS内核”功能，通过版本号关闭和添加浏览器V8对应功能API，达到模拟对应内核的效果，注意：如使用后出现网页异常说明你设置的内核不兼容当前网页">
+    参数 内核版本 <类型 = 整数 注释 = "支持设置值为135到116">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetV8Kernel(m_class,@<内核版本>);
+    }
+
+    方法 内核开关_禁用Debugger <公开 注释 = "原名：高级_禁用Debugger，VIP功能，需要赞助后才能使用，禁用当前浏览器的debugger断点功能，禁用后开发者工具断点功能任然可以使用，方便调试">
+    参数 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetDisableDebugger(m_class,@<是否禁用>);
+    }
+
+    方法 内核开关_设置EventIsTrusted <公开 注释 = "原名：事件_虚拟isTrusted"
+            注释 = "是否信任，event.isTrusted 参考资料：https://blog.csdn.net/weixin_39871162/article/details/111605327">
+    参数 是否信任 <类型 = 逻辑型>
+    {
+        @ if(@<FBrowser初始化控制.是否为VIP> && !IsEmpty()) FBroHsVIPControl_SetVirisTrusted(m_class,@<是否信任>);
+
+    }
+}
+
+类 类_FBrowserVIP_WebSocket客户端 <公开 注释 = "只能在渲染进程中执行，VIP功能，需赞助后才能使用">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<FBroDOMWssClient> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<FBroDOMWssClient> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set (CefRefPtr<FBroDOMWssClient> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty()? true:FBroHsWSSClient_IsNull(m_class);
+
+    }
+
+    方法 置空 <公开 注释 = "手动置空当前类包含的cef类指针，置空后该类将无法使用，如没有其他引用将自动释放cef类指针的资源数据">
+    {
+        @ m_class = nullptr;
+    }
+
+    方法 是否相同 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return false;
+        @ return FBroHsWSSClient_IsSame(m_class);
+
+
+    }
+
+    方法 连接 <公开 @禁止流程检查 = 真>
+    参数 连接地址 <类型 = 文本型>
+    参数 连接端口 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return;
+        @ FBroHsWSSClient_Connect(m_class,@<连接地址>.GetText(),@<连接端口>.GetText());
+
+
+    }
+
+    方法 关闭 <公开 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return;
+        @ FBroHsWSSClient_Close(m_class);
+
+    }
+
+    方法 销毁 <公开 @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return;
+        @ FBroHsWSSClient_Destroy(m_class);
+
+    }
+
+    方法 取地址 <公开 类型 = 文本型 注释 = "只能在渲染进程中执行" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsWSSClient_GetAddress(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+    }
+
+    方法 取协议 <公开 类型 = 文本型 注释 = "只能在渲染进程中执行" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsWSSClient_GetProtocol(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+    }
+
+    方法 取插件 <公开 类型 = 文本型 注释 = "只能在渲染进程中执行" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsWSSClient_GetExtensions(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+    }
+
+    方法 取数据类型 <公开 类型 = 文本型 注释 = "只能在渲染进程中执行" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsWSSClient_GetBinaryType(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+    }
+
+    方法 发送文本 <公开 注释 = "只能在渲染进程中执行" @禁止流程检查 = 真>
+    参数 数据 <类型 = 文本型>
+    {
+        @ if(IsEmpty()) return;
+        @ FBroHsWSSClient_Send(m_class,@<数据>.GetText());
+    }
+
+    方法 发送数据 <公开 注释 = "只能在渲染进程中执行" @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ if(IsEmpty()) return; 
+        @ FBroHsWSSClient_SendData(m_class,(char *)@<数据>.GetPtr (),@<数据>.GetSize ());
+    }
+
+    #
+}
+
+类 类_FBrowserVIP_开发者DOM <公开 注释 = "VIP功能，需要赞助后才能使用" 折叠>
+{
+
+    # @begin
+    # <> <include>
+    #     CefRefPtr<CefBrowser> m_class;
+    #     inline_ @sn<current_class> (CefRefPtr<CefBrowser> object) : @sn<current_class> () { m_class = object; }
+    #     inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    #     inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    #     inline_ BOOL IsEmpty () const { return m_class.get () == nullptr; }
+    #     inline_ void Set (CefRefPtr<CefBrowser> object) { m_class = object; }
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 注释 = "为空返回真，不为空返回假" @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    方法 置空 <公开 注释 = "手动置空当前类包含的cef类指针，置空后该类将无法使用，如没有其他引用将自动释放cef类指针的资源数据">
+    {
+        @ m_class = nullptr;
+    }
+
+    方法 启用 <公开 注释 = "Enables DOM agent for the given page.">
+    参数 包括空格 <类型 = 文本型 注释 = "includeWhitespace:Whether to include whitespaces in the children array of returned Nodes."
+            注释 = "Allowed Values: none, all">
+    {
+        @ if(!IsEmpty()) FBroHsDevToolsDOM_enable(m_class,@<包括空格>.GetText());
+    }
+
+    方法 禁用 <公开 注释 = "Enables DOM agent for the given page.">
+    {
+        @ if(!IsEmpty()) FBroHsDevToolsDOM_disable(m_class);
+
+    }
+
+    方法 置焦点元素 <公开 注释 = "focusElement，nodeID必须是Element才会有效,执行失败或者错误信息可在开发者事件中获取">
+    参数 节点ID <类型 = 整数>
+    {
+        @ if(!IsEmpty()) FBroHsDevToolsDOM_focusElement(m_class,@<节点ID>);
+    }
+
+    方法 移除节点属性 <公开 注释 = "removeAttribute" 注释 = "移除节点\"attributes\"中的属性名,使用之前必选先枚举DOM获取到节点ID才会有效,移除属性后，可通过枚举DOM查看是否移除成功"
+            注释 = "执行失败或者错误信息可在开发者事件中获取">
+    参数 节点ID <类型 = 整数 注释 = "nodeID">
+    参数 属性名 <类型 = 文本型 注释 = "name">
+    {
+        @ if(!IsEmpty()) FBroHsDevToolsDOM_removeAttribute(m_class,@<节点ID>,@<属性名>.GetText());
+    }
+
+    方法 移除节点 <公开 注释 = "removeNode" 注释 = "移除当前节点已经当前节点下的子节点都会被删除,使用之前必选先枚举DOM获取到节点ID才会有效，不能是根节点," 注释 = "执行失败或者错误信息可在开发者事件中获取">
+    参数 节点ID <类型 = 整数 注释 = "nodeID">
+    {
+        @ if(!IsEmpty()) FBroHsDevToolsDOM_removeNode(m_class,@<节点ID>);
+    }
+
+    方法 置节点属性文本 <公开 注释 = "setAttributesAsText" 注释 = "使用之前必选先枚举DOM获取到节点ID才会有效,执行失败或者错误信息可在开发者事件中获取">
+    参数 节点ID <类型 = 整数 注释 = "nodeID">
+    参数 属性名 <类型 = 文本型 注释 = "name">
+    参数 文本 <类型 = 文本型 注释 = "text">
+    {
+        @ if(!IsEmpty()) FBroHsDevToolsDOM_setAttributesAsText(m_class,@<节点ID>,@<文本>.GetText(),@<属性名>.GetText());
+    }
+
+    方法 置节点属性值 <公开 注释 = "setAttributeValue" 注释 = "使用之前必选先枚举DOM获取到节点ID才会有效,执行失败或者错误信息可在开发者事件中获取">
+    参数 节点ID <类型 = 整数 注释 = "nodeID">
+    参数 属性名 <类型 = 文本型 注释 = "name">
+    参数 值 <类型 = 文本型 注释 = "value">
+    {
+        @ if(!IsEmpty()) FBroHsDevToolsDOM_setAttributeValue(m_class,@<节点ID>,@<属性名>.GetText(),@<值>.GetText());
+    }
+
+    方法 置节点值 <公开 注释 = "setNodeValue" 注释 = "Can only set value of text nodes" 注释 = "使用之前必选先枚举DOM获取到节点ID才会有效,执行失败或者错误信息可在开发者事件中获取">
+    参数 节点ID <类型 = 整数 注释 = "nodeID">
+    参数 值 <类型 = 文本型 注释 = "value">
+    {
+        @ if(!IsEmpty()) FBroHsDevToolsDOM_setNodeValue(m_class,@<节点ID>,@<值>.GetText());
+    }
+
+    方法 置节点源码 <公开 注释 = "setOuterHTML" 注释 = "使用之前必选先枚举DOM获取到节点ID才会有效,执行失败或者错误信息可在开发者事件中获取">
+    参数 节点ID <类型 = 整数 注释 = "nodeID">
+    参数 源码文本 <类型 = 文本型 注释 = "outerHTML">
+    {
+        @ if(!IsEmpty()) FBroHsDevToolsDOM_setOuterHTML(m_class,@<节点ID>,@<源码文本>.GetText());
+    }
+
+    方法 清除查找 <公开 注释 = "清除通过预查找文本查找的数据，释放资源,执行失败或者错误信息可在开发者事件中获取">
+    参数 查找ID <类型 = 文本型 注释 = "searchId">
+    {
+        @ if(!IsEmpty()) FBroHsDevToolsDOM_discardSearchResults(m_class,@<查找ID>.GetText());
+    }
+
+    方法 枚举DOM <公开 注释 = "getDocument,同步方法不能在事件中使用，否则可能会卡事件造成浏览器异常" 注释 = "注意：静态回调和动态回调只能设置一个，优先静态回调有效；采用动态回调可实现回调的动态多态操作，更加灵活；"
+            @禁止流程检查 = 真>
+    参数 深度 <类型 = 整数 注释 = "depth">
+    参数 穿透 <类型 = 逻辑型 注释 = "pierce">
+    参数 回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。" 注释 = "获取到的数据为JSON格式"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowserVIP_通用回调”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        @ if(IsEmpty()) return ;
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<回调>.GetPtr(),GeneralResultCallbackType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsGeneralResultCallback> callback = static_cast<FBroHsGeneralResultCallback*>(@<回调>.GetPtr());
+        @ FBroHsDevToolsDOM_getDocument(m_class,@<深度>,@<穿透>,callback,nullptr,0);
+
+
+    }
+
+    方法 取节点属性 <公开 注释 = "getAttributes,使用之前必选先枚举DOM获取到节点ID才会有效,节点必须是\"nodeType\": 1类型及Element类型"
+            注释 = "同步方法不能在事件中使用，否则可能会卡事件造成浏览器异常" 注释 = "注意：静态回调和动态回调只能设置一个，优先静态回调有效；采用动态回调可实现回调的动态多态操作，更加灵活；" @禁止流程检查 = 真>
+    参数 节点ID <类型 = 整数>
+    参数 回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。"
+            注释 = "获取到的数据格式：{\"attributes\":[\"http-equiv\",\"Content-Type\",\"content\",\"text/html;charset=utf-8\"]}"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowserVIP_通用回调”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        @ if(IsEmpty()) return ;
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<回调>.GetPtr(),GeneralResultCallbackType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsGeneralResultCallback> callback = static_cast<FBroHsGeneralResultCallback*>(@<回调>.GetPtr());
+        @ FBroHsDevToolsDOM_getAttributes(m_class, @<节点ID>,callback,nullptr,0);
+
+
+    }
+
+    方法 取节点源码 <公开 注释 = "getOuterHTML,使用之前必选先枚举DOM获取到节点ID才会有效" 注释 = "注意：静态回调和动态回调只能设置一个，优先静态回调有效；采用动态回调可实现回调的动态多态操作，更加灵活；"
+            @禁止流程检查 = 真>
+    参数 节点ID <类型 = 整数 注释 = "nodeId">
+    参数 回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。" 注释 = "获取到的数据格式：{\"outerHTML\":\"\"}"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowserVIP_通用回调”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        @ if(IsEmpty()) return;
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<回调>.GetPtr(),GeneralResultCallbackType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsGeneralResultCallback> callback = static_cast<FBroHsGeneralResultCallback*>(@<回调>.GetPtr());
+        @ FBroHsDevToolsDOM_getOuterHTML(m_class, @<节点ID>, callback, nullptr, 0);
+
+
+    }
+
+    方法 取节点_查询选择器 <公开 注释 = "querySelector,返回查找出来的节点ID,使用之前必选先枚举DOM获取到节点ID才会有效"
+            注释 = "注意：静态回调和动态回调只能设置一个，优先静态回调有效；采用动态回调可实现回调的动态多态操作，更加灵活；" @禁止流程检查 = 真>
+    参数 节点ID <类型 = 整数 注释 = "nodeId">
+    参数 选择器 <类型 = 文本型>
+    参数 回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。" 注释 = "获取到的数据格式：{\"nodeId\":139}"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowserVIP_通用回调”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        @ if(IsEmpty()) return;
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<回调>.GetPtr(),GeneralResultCallbackType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsGeneralResultCallback> callback = static_cast<FBroHsGeneralResultCallback*>(@<回调>.GetPtr());
+        @ FBroHsDevToolsDOM_querySelector(m_class, @<节点ID>,@<选择器>.GetText(), callback, nullptr, 0);
+
+
+    }
+
+    方法 取全部节点_查询选择器 <公开 注释 = "querySelectorAll,返回查找出来的全部节点ID,返回值保存在返回值，使用之前必选先枚举DOM获取到节点ID才会有效"
+            注释 = "注意：静态回调和动态回调只能设置一个，优先静态回调有效；采用动态回调可实现回调的动态多态操作，更加灵活；" @禁止流程检查 = 真>
+    参数 节点ID <类型 = 整数 注释 = "nodeId">
+    参数 选择器 <类型 = 文本型>
+    参数 回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。" 注释 = "获取到的数据格式： {\"nodeIds\":[140]}"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowserVIP_通用回调”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        @ if(IsEmpty()) return;
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<回调>.GetPtr(),GeneralResultCallbackType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsGeneralResultCallback> callback = static_cast<FBroHsGeneralResultCallback*>(@<回调>.GetPtr());
+        @ FBroHsDevToolsDOM_querySelectorAll(m_class, @<节点ID>,@<选择器>.GetText(), callback, nullptr, 0);
+
+
+    }
+
+    方法 置节点名 <公开 注释 = "返回设置后新节点ID,nodeID必须是Element才会有效,成功将会在回调中返回修改后的新节点ID"
+            注释 = "注意：静态回调和动态回调只能设置一个，优先静态回调有效；采用动态回调可实现回调的动态多态操作，更加灵活；" @禁止流程检查 = 真>
+    参数 节点ID <类型 = 整数 注释 = "nodeId">
+    参数 名 <类型 = 文本型>
+    参数 回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。" 注释 = "获取到的数据格式： {\"nodeId\":139}"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowserVIP_通用回调”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        @ if(IsEmpty()) return;
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<回调>.GetPtr(),GeneralResultCallbackType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsGeneralResultCallback> callback = static_cast<FBroHsGeneralResultCallback*>(@<回调>.GetPtr());
+        @ FBroHsDevToolsDOM_setNodeName(m_class, @<节点ID>,@<名>.GetText(), callback, nullptr, 0);
+
+
+    }
+
+    方法 取节点容器 <公开 注释 = "getContainerForNode：根据容器查询条件返回给定节点的容器。如果给定了containerName，它将查找最近的具有匹配名称的容器；否则，它将找到最近的容器，而不管其容器名称。,未测试"
+            注释 = "注意：静态回调和动态回调只能设置一个，优先静态回调有效；采用动态回调可实现回调的动态多态操作，更加灵活；" @禁止流程检查 = 真>
+    参数 节点ID <类型 = 整数 注释 = "nodeId">
+    参数 容器名 <类型 = 文本型 注释 = "containerName">
+    参数 回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。" 注释 = "获取到的数据格式： {\"nodeId\":139}"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowserVIP_通用回调”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        @ if(IsEmpty()) return;
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<回调>.GetPtr(),GeneralResultCallbackType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsGeneralResultCallback> callback = static_cast<FBroHsGeneralResultCallback*>(@<回调>.GetPtr());
+        @ FBroHsDevToolsDOM_getContainerForNode(m_class, @<节点ID>,@<容器名>.GetText(), callback, nullptr, 0);
+
+
+    }
+
+    方法 预查找文本 <公开 注释 = "返回数据{\"searchId\":\"4868.1\",\"resultCount\":1} searchId为查找id，resultCount为查找到的数量"
+            注释 = "注意：静态回调和动态回调只能设置一个，优先静态回调有效；采用动态回调可实现回调的动态多态操作，更加灵活；" @禁止流程检查 = 真>
+    参数 查询文本 <类型 = 文本型 注释 = "nodeId">
+    参数 includeUserAgentShadowDOM <类型 = 逻辑型 注释 = "includeUserAgentShadowDOM：True to search in user agent shadow DOM">
+    参数 回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。"
+            注释 = "获取到的数据格式： {\"searchId\":\"4868.1\",\"resultCount\":1}"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowserVIP_通用回调”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        @ if(IsEmpty()) return;
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<回调>.GetPtr(),GeneralResultCallbackType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsGeneralResultCallback> callback = static_cast<FBroHsGeneralResultCallback*>(@<回调>.GetPtr());
+        @ FBroHsDevToolsDOM_performSearch(m_class,@<查询文本>.GetText(),@<includeUserAgentShadowDOM>, callback, nullptr, 0);
+
+
+    }
+
+    方法 取查找文本 <公开 注释 = "通过\"预查找文本\"的searchId获取到查找的数据,数据存放在\"返回值\"参数中，" 注释 = "使用之前必选先枚举DOM获取到节点ID才会返回有效的ID值，不然全是0"
+            注释 = "注意：静态回调和动态回调只能设置一个，优先静态回调有效；采用动态回调可实现回调的动态多态操作，更加灵活；" @禁止流程检查 = 真>
+    参数 查找ID <类型 = 文本型 注释 = "searchId">
+    参数 开始索引 <类型 = 整数 注释 = "fromIndex">
+    参数 结束索引 <类型 = 整数 注释 = "toIndex 不能超过最大查找个数">
+    参数 回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。"
+            注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowserVIP_通用回调”的自定义类事件；"
+            注释 = "即可实现事件触发到你所自定义的类事件方法中；采用智能指针引用完毕后会自动释放，如不设置将不会触发；" @默认值 = 空对象>
+    {
+        @ if(IsEmpty()) return;
+        // 判断设置事件是否匹配,只在调试情况下生效
+        @ _FBRO_CHECK_EVENT_TYPE(@<回调>.GetPtr(),GeneralResultCallbackType,_CT(@sn<current_source_class>),_CT(@sn<current_source_method>));
+
+        @ CefRefPtr<FBroHsGeneralResultCallback> callback = static_cast<FBroHsGeneralResultCallback*>(@<回调>.GetPtr());
+        @ FBroHsDevToolsDOM_getSearchResults(m_class,@<查找ID>.GetText(),@<开始索引>,@<结束索引>, callback, nullptr, 0);
+
+    }
+}
+
+类 类_FBrowserVIP_UA数据 <公开 "" "">
+{
+
+    # @begin
+    # <> <include>
+    # CefRefPtr<FBroVIPUserAgentData> m_class;
+    # inline_ @sn<current_class> (CefRefPtr<FBroVIPUserAgentData> object) : @sn<current_class> () { m_class = object; }
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom) { m_class = objCopyFrom.m_class; }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const { return (m_class.get () == objCompare.m_class.get ()); }
+    # inline_ BOOL_P IsEmpty () const { return m_class.get () == nullptr; }
+    # inline_ void Set(CefRefPtr<FBroVIPUserAgentData> object) { m_class = object; }
+    # ~@sn<current_class>(){};
+    # <> </include>
+    # @end
+
+    方法 是否为空 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ return IsEmpty();
+    }
+
+    方法 创建 <公开>
+    {
+        @ m_class = FBroHsVIPUserAgentData_Create();
+    }
+
+    方法 置UserAgent <公开 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgent，在浏览器创建成功事件中或刷新前调用">
+    参数 userAgent <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsVIPUserAgentData_SetMainUserAgent(m_class, @<userAgent>.GetText());
+    }
+
+    方法 置AcceptLanguage <公开 注释 = "VIP指纹功能，需要赞助后才能使用；对应Accept-Language，在浏览器创建成功事件中或刷新前调用">
+    参数 acceptLanguage <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsVIPUserAgentData_SetMainAcceptLanguage(m_class, @<acceptLanguage>.GetText());
+    }
+
+    方法 置Platform <公开 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.platform，在浏览器创建成功事件中或刷新前调用">
+    参数 platform <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsVIPUserAgentData_SetMainPlatform(m_class, @<platform>.GetText());
+    }
+
+    方法 置HighPlatform <公开 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.platform，在浏览器创建成功事件中或刷新前调用">
+    参数 platform <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsVIPUserAgentData_SetPlatform(m_class, @<platform>.GetText());
+    }
+
+    方法 置Brands <公开 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.brands，在浏览器创建成功事件中或刷新前调用">
+    参数 brands <类型 = FBrowser_双文本数组 注释 = "双文本第一个值是brand，第二个值是version">
+    {
+        @ if(!IsEmpty()) FBroHsVIPUserAgentData_SetBrands(m_class, @<brands>.m_data);
+    }
+
+    方法 置FullVersionList <公开 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.fullVersionList，在浏览器创建成功事件中或刷新前调用">
+    参数 fullVersionList <类型 = FBrowser_双文本数组 注释 = "双文本第一个值是brand，第二个值是version">
+    {
+        @ if(!IsEmpty()) FBroHsVIPUserAgentData_SetFullVersionList(m_class, @<fullVersionList>.m_data);
+    }
+
+    方法 置FullVersion <公开 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.fullVersion，在浏览器创建成功事件中或刷新前调用">
+    参数 fullVersion <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsVIPUserAgentData_SetFullVersion(m_class, @<fullVersion>.GetText());
+    }
+
+    方法 置PlatformVersion <公开 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.platformVersion，在浏览器创建成功事件中或刷新前调用">
+    参数 platformVersion <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsVIPUserAgentData_SetPlatformVersion(m_class, @<platformVersion>.GetText());
+    }
+
+    方法 置Architecture <公开 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.architecture，在浏览器创建成功事件中或刷新前调用">
+    参数 architecture <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsVIPUserAgentData_SetArchitecture(m_class, @<architecture>.GetText());
+    }
+
+    方法 置Model <公开 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.model，在浏览器创建成功事件中或刷新前调用">
+    参数 model <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsVIPUserAgentData_SetModel(m_class, @<model>.GetText());
+    }
+
+    方法 置Mobile <公开 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.mobile，在浏览器创建成功事件中或刷新前调用">
+    参数 mobile <类型 = 逻辑型>
+    {
+        @ if(!IsEmpty()) FBroHsVIPUserAgentData_SetMobile(m_class, @<mobile>);
+    }
+
+    方法 置Bitness <公开 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.bitness，在浏览器创建成功事件中或刷新前调用">
+    参数 bitness <类型 = 文本型>
+    {
+        @ if(!IsEmpty()) FBroHsVIPUserAgentData_SetBitness(m_class, @<bitness>.GetText());
+    }
+
+    方法 置Wow64 <公开 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.wow64，在浏览器创建成功事件中或刷新前调用">
+    参数 wow64 <类型 = 逻辑型>
+    {
+        @ if(!IsEmpty()) FBroHsVIPUserAgentData_SetWow64(m_class, @<wow64>);
+    }
+
+    方法 置FormFactors <公开 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.formFactors，在浏览器创建成功事件中或刷新前调用">
+    参数 formFactors <类型 = FBrowser_文本数组>
+    {
+        @ if(!IsEmpty()) FBroHsVIPUserAgentData_SetFormFactors(m_class, @<formFactors>.m_data);
+
+    }
+
+    方法 取UserAgent <公开 类型 = 文本型 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgent，在浏览器创建成功事件中或刷新前调用" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsVIPUserAgentData_GetMainUserAgent(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取AcceptLanguage <公开 类型 = 文本型 注释 = "VIP指纹功能，需要赞助后才能使用；对应Accept-Language，在浏览器创建成功事件中或刷新前调用" 返回值注释 = "acceptLanguage"
+            @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsVIPUserAgentData_GetMainAcceptLanguage(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取Platform <公开 类型 = 文本型 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.platform，在浏览器创建成功事件中或刷新前调用" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsVIPUserAgentData_GetMainPlatform(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取HighPlatform <公开 类型 = 文本型 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.platform，在浏览器创建成功事件中或刷新前调用" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsVIPUserAgentData_GetPlatform(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取Brands <公开 类型 = FBrowser_双文本数组 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.brands，在浏览器创建成功事件中或刷新前调用" @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return @dt<FBrowser_双文本数组>(FBroHsVIPUserAgentData_GetBrands(m_class));
+        @ return @dt<FBrowser_双文本数组>();
+    }
+
+    方法 取FullVersionList <公开 类型 = FBrowser_双文本数组
+            注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.fullVersionList，在浏览器创建成功事件中或刷新前调用" 返回值注释 = "fullVersionList"
+            @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return @dt<FBrowser_双文本数组>(FBroHsVIPUserAgentData_GetFullVersionList(m_class));
+        @ return @dt<FBrowser_双文本数组>();
+    }
+
+    方法 取FullVersion <公开 类型 = 文本型 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.fullVersion，在浏览器创建成功事件中或刷新前调用"
+            返回值注释 = "fullVersion" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsVIPUserAgentData_GetFullVersion(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取PlatformVersion <公开 类型 = 文本型 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.platformVersion，在浏览器创建成功事件中或刷新前调用"
+            返回值注释 = "platformVersion" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsVIPUserAgentData_GetPlatformVersion(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取Architecture <公开 类型 = 文本型 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.architecture，在浏览器创建成功事件中或刷新前调用"
+            返回值注释 = "architecture" @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsVIPUserAgentData_GetArchitecture(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取Model <公开 类型 = 文本型 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.model，在浏览器创建成功事件中或刷新前调用" 返回值注释 = "model"
+            @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsVIPUserAgentData_GetModel(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取Mobile <公开 类型 = 逻辑型 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.mobile，在浏览器创建成功事件中或刷新前调用" 返回值注释 = "mobile"
+            @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return FBroHsVIPUserAgentData_GetMobile(m_class);
+        @ return false;
+    }
+
+    方法 取Bitness <公开 类型 = 文本型 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.bitness，在浏览器创建成功事件中或刷新前调用" 返回值注释 = "bitness"
+            @禁止流程检查 = 真>
+    {
+        @ if(IsEmpty()) return CVolString();
+        @ CefRefPtr<FBroString> fbrostring = FBroHsVIPUserAgentData_GetBitness(m_class);
+        @ return FBroUnit::FBroStringToCWString(fbrostring);
+
+    }
+
+    方法 取Wow64 <公开 类型 = 逻辑型 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.wow64，在浏览器创建成功事件中或刷新前调用" @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return FBroHsVIPUserAgentData_GetWow64(m_class);
+        @ return false;
+    }
+
+    方法 取FormFactors <公开 类型 = FBrowser_文本数组 注释 = "VIP指纹功能，需要赞助后才能使用；对应navigator.userAgentData.formFactors，在浏览器创建成功事件中或刷新前调用"
+            返回值注释 = "formFactors" @禁止流程检查 = 真>
+    {
+        @ if(!IsEmpty()) return @dt<FBrowser_文本数组>(FBroHsVIPUserAgentData_GetFormFactors(m_class));
+        @ return @dt<FBrowser_文本数组>();
+
+    }
+
+    #
+}
+
+#

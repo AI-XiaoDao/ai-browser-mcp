@@ -1,0 +1,872 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "\"category = \\\"windows.pdh\\\"\"" @文档 = "category = \"windows.防火墙\""
+        @视窗.外部头文件 = "ComBase\\FCComHelper.h">
+
+类 防火墙类型_常量类 <公开 @常量类 = 整数>
+{
+    常量 域 <公开 值 = @NET_FW_PROFILE2_DOMAIN>
+    常量 私有 <公开 值 = @NET_FW_PROFILE2_PRIVATE>
+    常量 公有 <公开 值 = @NET_FW_PROFILE2_PUBLIC>
+    常量 全部 <公开 值 = @NET_FW_PROFILE2_ALL>
+
+    #
+}
+
+类 防火墙动作_常量类 <公开 @常量类 = 整数>
+{
+    常量 阻止 <公开 值 = @NET_FW_ACTION_BLOCK>
+    常量 允许 <公开 值 = @NET_FW_ACTION_ALLOW>
+    常量 最大 <公开 值 = @NET_FW_ACTION_MAX>
+
+    #
+}
+
+类 防火墙本地策略修改状态_常量类 <公开 @常量类 = 整数>
+{
+    常量 正常 <公开 值 = @NET_FW_MODIFY_STATE_OK>
+    常量 覆盖 <公开 值 = @NET_FW_MODIFY_STATE_GP_OVERRIDE>
+    常量 入站被阻止 <公开 值 = @NET_FW_MODIFY_STATE_INBOUND_BLOCKED>
+
+    #
+    #
+}
+
+类 防火墙服务限制类F <公开>
+{
+
+    # @begin
+    # <> <include>
+    # @sn<current_class>(INetFwServiceRestriction* pData)
+    # {
+    #     SetData(pData);
+    # }
+    # INetFwServiceRestriction* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(INetFwServiceRestriction* pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_pData = objCopyFrom.m_pData;
+    # }
+    # INetFwServiceRestriction* m_pData;
+    # <> </include>
+    # @end
+    #
+
+    方法 限制服务 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 服务名称 <类型 = 文本型>
+    参数 程序名称 <类型 = 文本型>
+    参数 限制服务 <类型 = 逻辑型>
+    参数 服务SID被限制 <类型 = 逻辑型>
+    {
+        @ @sn<this>.GetData()->RestrictService(CFVolSysString(@<服务名称>.GetText()),CFVolSysString(@<程序名称>.GetText()),(VARIANT_BOOL)@<限制服务>,(VARIANT_BOOL)@<服务SID被限制>)
+        // virtual /* [id] */ HRESULT STDMETHODCALLTYPE RestrictService(
+        // /* [in] */ BSTR serviceName,
+        // /* [in] */ BSTR appName,
+        // /* [in] */ VARIANT_BOOL restrictService,
+        // /* [in] */ VARIANT_BOOL serviceSidRestricted) = 0;
+
+    }
+
+    方法 服务是否被限制 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 服务名称 <类型 = 文本型>
+    参数 程序名称 <类型 = 文本型>
+    参数 输出_服务是否被限制 <类型 = 逻辑型>
+    {
+        @ @sn<this>.GetData()->RestrictService(CFVolSysString(@<服务名称>.GetText()),CFVolSysString(@<程序名称>.GetText()),(VARIANT_BOOL*)&@<输出_服务是否被限制>)  
+        // virtual /* [id] */ HRESULT STDMETHODCALLTYPE ServiceRestricted(
+        // /* [in] */ BSTR serviceName,
+        // /* [in] */ BSTR appName,
+        // /* [retval][out] */ VARIANT_BOOL *serviceRestricted) = 0;
+
+    }
+
+    方法 取规则数组 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 输出_值 <类型 = 防火墙规则数组类F>
+    {
+        @ @sn<this>.GetData()->get_Rules((NET_FW_PROFILE_TYPE2)@<防火墙类型>,&@<输出_值>.GetData())
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Rules(
+        // /* [retval][out] */ INetFwRules **rules) = 0;
+
+    }
+
+    #
+    #         
+    #
+}
+
+类 防火墙规则定向_常量类F <公开 注释 = "enum NET_FW_RULE_DIRECTION_" 注释 = "    {" 注释 = "        NET_FW_RULE_DIR_IN = 1,"
+        注释 = "        NET_FW_RULE_DIR_OUT = ( NET_FW_RULE_DIR_IN + 1 ) ,"
+        注释 = "        NET_FW_RULE_DIR_MAX = ( NET_FW_RULE_DIR_OUT + 1 )" 注释 = "    }  NET_FW_RULE_DIRECTION;" @常量类 = 整数>
+{
+    常量 入 <公开 值 = @NET_FW_RULE_DIR_IN>
+    常量 出 <公开 值 = @NET_FW_RULE_DIR_OUT>
+    常量 最大 <公开 值 = @NET_FW_RULE_DIR_MAX>
+
+    #
+}
+
+类 防火墙规则类F <公开>
+{
+
+    # @begin
+    # <> <include>
+    # @sn<current_class>(INetFwPolicy2* pData)
+    # {
+    #     SetData(pData);
+    # }
+    # INetFwPolicy2* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(INetFwPolicy2* pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_pData = objCopyFrom.m_pData;
+    # }
+    # INetFwRule * m_pData;
+    # HRESULT hrComInit;
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化
+    {
+        @ m_pData = NULL;
+        @  // Create a new Firewall Rule object.
+        @     hr = CoCreateInstance(
+        @                 __uuidof(NetFwRule),
+        @                 NULL,
+        @                 CLSCTX_INPROC_SERVER,
+        @                 __uuidof(INetFwRule),
+        @                 (void**)&m_pData);
+        @     if (FAILED(hr))
+        @     {
+        调试输出 ("创建 防火墙规则 失败", 取当前语句位置 ())
+        @     }
+
+    }
+
+    方法 类_清理
+    {
+        @ if(GetData())
+        @         GetData()->Release();
+    }
+
+    #
+
+    方法 取名称 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ BSTR bstrVal;
+        @ GetData()->get_Name(&bstrVal);
+        @ return CVolString(bstrVal);
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Name(
+        // /* [retval][out] */ BSTR *name) = 0;
+
+    }
+
+    方法 置名称 <公开 @嵌入式方法 = "">
+    参数 名称 <类型 = 文本型>
+    {
+        @ @sn<this>.GetData()->get_Name(CFVolSysString(@<名称>.GetText()))
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Name(
+        // /* [in] */ BSTR name) = 0;
+    }
+
+    方法 取描述 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ BSTR bstrVal;
+        @ GetData()->get_Description(&bstrVal);
+        @ return CVolString(bstrVal);
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Description(
+        // /* [retval][out] */ BSTR *desc) = 0;
+    }
+
+    方法 置描述 <公开 @嵌入式方法 = "">
+    参数 名称 <类型 = 文本型>
+    {
+        @ @sn<this>.GetData()->put_Description(CFVolSysString(@<名称>.GetText()))
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Description(
+        // /* [in] */ BSTR desc) = 0;
+    }
+
+    #
+
+    方法 取程序名称 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ BSTR bstrVal;
+        @ GetData()->get_ApplicationName(&bstrVal);
+        @ return CVolString(bstrVal);
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ApplicationName(
+        // /* [retval][out] */ BSTR *imageFileName) = 0;
+    }
+
+    方法 置程序名称 <公开 @嵌入式方法 = "">
+    参数 名称 <类型 = 文本型>
+    {
+        @ @sn<this>.GetData()->put_ApplicationName(CFVolSysString(@<名称>.GetText()))
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_ApplicationName(
+        // /* [in] */ BSTR imageFileName) = 0;
+    }
+
+    # //未完成的函数
+    #
+
+    方法 取服务名称 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ BSTR bstrVal;
+        @ GetData()->get_ServiceName(&bstrVal);
+        @ return CVolString(bstrVal);
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ApplicationName(
+        // /* [retval][out] */ BSTR *imageFileName) = 0;
+    }
+
+    方法 置服务名称 <公开 @嵌入式方法 = "">
+    参数 名称 <类型 = 文本型>
+    {
+        @ @sn<this>.GetData()->put_ServiceName(CFVolSysString(@<名称>.GetText()))
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_ServiceName(
+        // /* [in] */ BSTR serviceName) = 0;
+
+    }
+
+    方法 取协议 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ LONG bstrVal = 0;
+        @ GetData()->get_ServiceName(&bstrVal);
+        @ return (INT)bstrVal;
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Protocol(
+        // /* [retval][out] */ LONG *protocol) = 0;
+    }
+
+    方法 置协议 <公开 @嵌入式方法 = "">
+    参数 名称 <类型 = 整数>
+    {
+        @ @sn<this>.GetData()->put_Protocol( (LONG)@<名称>)
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Protocol(
+        // /* [in] */ LONG protocol) = 0;
+    }
+
+    #
+
+    方法 取本地端口 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ BSTR bstrVal;
+        @ GetData()->get_LocalPorts(&bstrVal);
+        @ return CVolString(bstrVal);
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_LocalPorts(
+        // /* [retval][out] */ BSTR *portNumbers) = 0;
+    }
+
+    方法 置本地端口 <公开 @嵌入式方法 = "">
+    参数 名称 <类型 = 文本型>
+    {
+        @ @sn<this>.GetData()->put_LocalPorts(CFVolSysString(@<名称>.GetText()))
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_LocalPorts(
+        // /* [in] */ BSTR portNumbers) = 0;
+    }
+
+    #
+    #
+
+    方法 取远程端口 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ BSTR bstrVal;
+        @ GetData()->get_RemotePorts(&bstrVal);
+        @ return CVolString(bstrVal);
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_RemotePorts(
+        // /* [retval][out] */ BSTR *portNumbers) = 0;
+
+    }
+
+    方法 置远程端口 <公开 @嵌入式方法 = "">
+    参数 名称 <类型 = 文本型>
+    {
+        @ @sn<this>.GetData()->put_RemotePorts(CFVolSysString(@<名称>.GetText()))
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_RemotePorts(
+        // /* [in] */ BSTR portNumbers) = 0;
+    }
+
+    方法 取本地地址 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ BSTR bstrVal;
+        @ GetData()->get_LocalAddresses(&bstrVal);
+        @ return CVolString(bstrVal);
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_LocalAddresses(
+        // /* [retval][out] */ BSTR *localAddrs) = 0;
+    }
+
+    方法 置本地地址 <公开 @嵌入式方法 = "">
+    参数 名称 <类型 = 文本型>
+    {
+        @ @sn<this>.GetData()->put_LocalAddresses(CFVolSysString(@<名称>.GetText()))
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_LocalAddresses(
+        // /* [in] */ BSTR localAddrs) = 0;
+    }
+
+    方法 取远程地址 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ BSTR bstrVal;
+        @ GetData()->get_RemoteAddresses(&bstrVal);
+        @ return CVolString(bstrVal);
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_RemoteAddresses(
+        // /* [retval][out] */ BSTR *remoteAddrs) = 0;
+    }
+
+    方法 置远程地址 <公开 @嵌入式方法 = "">
+    参数 名称 <类型 = 文本型>
+    {
+        @ @sn<this>.GetData()->put_RemoteAddresses(CFVolSysString(@<名称>.GetText()))
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_RemoteAddresses(
+        // /* [in] */ BSTR remoteAddrs) = 0;
+    }
+
+    #
+
+    方法 取ICMP类型与代码 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ BSTR bstrVal;
+        @ GetData()->get_IcmpTypesAndCodes(&bstrVal);
+        @ return CVolString(bstrVal);
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_IcmpTypesAndCodes(
+        // /* [retval][out] */ BSTR *icmpTypesAndCodes) = 0;
+
+    }
+
+    方法 置ICMP类型与代码 <公开 @嵌入式方法 = "">
+    参数 名称 <类型 = 文本型>
+    {
+        @ @sn<this>.GetData()->put_IcmpTypesAndCodes(CFVolSysString(@<名称>.GetText()))
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_IcmpTypesAndCodes(
+        // /* [in] */ BSTR icmpTypesAndCodes) = 0;
+
+    }
+
+    方法 取定向 <公开 类型 = 整数 返回值注释 = "防火墙规则定向_常量类F 开头的" @禁止流程检查 = 真>
+    {
+        @ NET_FW_RULE_DIRECTION bstrVal;
+        @ GetData()->get_IcmpTypesAndCodes(&bstrVal);
+        @ return (INT)bstrVal;
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Direction(
+        // /* [retval][out] */ NET_FW_RULE_DIRECTION *dir) = 0;
+    }
+
+    方法 置定向 <公开 @嵌入式方法 = "">
+    参数 值 <类型 = 防火墙规则定向_常量类F>
+    {
+        @ @sn<this>.GetData()->put_IcmpTypesAndCodes((NET_FW_RULE_DIRECTION)@<值>)
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Direction(
+        // /* [in] */ NET_FW_RULE_DIRECTION dir) = 0;
+    }
+
+    #
+
+    方法 取接口 <公开 @嵌入式方法 = "">
+    参数 值 <类型 = 变体型_结构类>
+    {
+        @ @sn<this>.GetData()->put_Interfaces(@<值>.pdata())
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Interfaces(
+        // /* [retval][out] */ VARIANT *interfaces) = 0;
+
+    }
+
+    方法 置接口 <公开 @嵌入式方法 = "">
+    参数 值 <类型 = 变体型_结构类>
+    {
+        @ @sn<this>.GetData()->put_Interfaces(*@<值>.pdata())
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Interfaces(
+        // /* [in] */ VARIANT interfaces) = 0;
+    }
+
+    方法 取接口类型 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ BSTR bstrVal;
+        @ GetData()->get_InterfaceTypes(&bstrVal);
+        @ return CVolString(bstrVal);
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_InterfaceTypes(
+        // /* [retval][out] */ BSTR *interfaceTypes) = 0;
+    }
+
+    方法 置接口类型 <公开 @嵌入式方法 = "">
+    参数 名称 <类型 = 文本型>
+    {
+        @ @sn<this>.GetData()->put_InterfaceTypes(CFVolSysString(@<名称>.GetText()))
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_InterfaceTypes(
+        // /* [in] */ BSTR interfaceTypes) = 0;
+    }
+
+    #
+
+    方法 取启用 <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ VARIANT_BOOL bstrVal;
+        @ GetData()->get_InterfaceTypes(&bstrVal);
+        @ return (BOOL)bstrVal;
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Enabled(
+        // /* [retval][out] */ VARIANT_BOOL *enabled) = 0;
+    }
+
+    方法 置启用 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型>
+    {
+        @ @sn<this>.GetData()->put_InterfaceTypes( (VARIANT_BOOL)@<是否启用> )
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Enabled(
+        // /* [in] */ VARIANT_BOOL enabled) = 0;
+
+    }
+
+    方法 取分组 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    {
+        @ BSTR bstrVal;
+        @ GetData()->get_Grouping(&bstrVal);
+        @ return CVolString(bstrVal);
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Grouping(
+        // /* [retval][out] */ BSTR *context) = 0;
+    }
+
+    方法 置分组 <公开 @嵌入式方法 = "">
+    参数 名称 <类型 = 文本型>
+    {
+        @ @sn<this>.GetData()->put_Grouping(CFVolSysString(@<名称>.GetText()))
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Grouping(
+        // /* [in] */ BSTR context) = 0;
+    }
+
+    #
+
+    方法 取防火墙类型 <公开 类型 = 整数 返回值注释 = "防火墙类型_常量类" @禁止流程检查 = 真>
+    {
+        @ LONG bstrVal = 0;
+        @ GetData()->get_Profiles(&bstrVal);
+        @ return (INT)bstrVal;
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Profiles(
+        // /* [retval][out] */ long *profileTypesBitmask) = 0;
+
+    }
+
+    方法 置防火墙类型 <公开 @嵌入式方法 = "">
+    参数 名称 <类型 = 整数 注释 = "防火墙类型_常量类">
+    {
+        @ @sn<this>.GetData()->put_Profiles( (LONG)@<名称>)
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Profiles(
+        // /* [in] */ long profileTypesBitmask) = 0;
+
+    }
+
+    #
+    #
+
+    方法 取EdgeTraversal <公开 类型 = 逻辑型 @禁止流程检查 = 真>
+    {
+        @ VARIANT_BOOL bstrVal;
+        @ GetData()->get_EdgeTraversal(&bstrVal);
+        @ return (BOOL)bstrVal;
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_EdgeTraversal(
+        // /* [retval][out] */ VARIANT_BOOL *enabled) = 0;
+
+    }
+
+    方法 置EdgeTraversal <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型>
+    {
+        @ @sn<this>.GetData()->put_EdgeTraversal( (VARIANT_BOOL)@<是否启用> )
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_EdgeTraversal(
+        // /* [in] */ VARIANT_BOOL enabled) = 0;
+
+
+    }
+
+    #
+    #
+
+    方法 取动作 <公开 类型 = 整数 返回值注释 = "防火墙动作_常量类" @禁止流程检查 = 真>
+    {
+        @ NET_FW_ACTION action = 0;
+        @ GetData()->get_Action(&action);
+        @ return (INT)bstrVal;
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Action(
+        // /* [retval][out] */ NET_FW_ACTION *action) = 0;
+
+
+    }
+
+    方法 置动作 <@嵌入式方法 = "">
+    参数 动作 <类型 = 防火墙动作_常量类>
+    {
+        @ @sn<this>.GetData()->put_EdgeTraversal( (NET_FW_ACTION)@<动作> )
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Action(
+        // /* [in] */ NET_FW_ACTION action) = 0;
+
+    }
+
+    #
+    #
+    #
+}
+
+类 防火墙规则数组类F <公开 注释 = "https://docs.microsoft.com/zh-cn/previous-versions/windows/desktop/ics/c-adding-a-gre-rule">
+{
+
+    # @begin
+    # <> <include>
+    # @sn<current_class>(INetFwRules* pData)
+    # {
+    #     SetData(pData);
+    # }
+    # INetFwRules* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(INetFwRules* pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_pData = objCopyFrom.m_pData;
+    # }
+    # INetFwRules* m_pData;
+    # <> </include>
+    # @end
+    #
+
+    方法 取数量 <公开 类型 = 整数 @禁止流程检查 = 真>
+    {
+        @ long count = 0;
+        @ GetData()->get_Count(&count);
+        @ return (INT)count;
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Count(
+        // /* [retval][out] */ long *count) = 0;
+    }
+
+    方法 添加规则 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 规则 <类型 = 防火墙规则类F>
+    {
+        @ @sn<this>.GetData()->Add(@<规则>.GetData())
+        // virtual /* [id] */ HRESULT STDMETHODCALLTYPE Add(
+        // /* [in] */ INetFwRule *rule) = 0;
+
+    }
+
+    方法 删除规则 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 规则名称 <类型 = 文本型>
+    {
+        @ @sn<this>.GetData()->Remove(CFVolSysString(@<规则名称>.GetText()))
+        // virtual /* [id] */ HRESULT STDMETHODCALLTYPE Remove(
+        // /* [in] */ BSTR name) = 0;
+
+    }
+
+    方法 取成员 <公开 @嵌入式方法 = "">
+    参数 规则名称 <类型 = 文本型>
+    参数 输出_值 <类型 = 防火墙规则类F>
+    {
+        @ @sn<this>.GetData()->Item( CFVolSysString(@<规则名称>.GetText()),&@<输出_值>.GetData() )
+        // virtual /* [id] */ HRESULT STDMETHODCALLTYPE Item(
+        // /* [in] */ BSTR name,
+        // /* [retval][out] */ INetFwRule **rule) = 0;
+
+    }
+
+    方法 "//取枚举器"
+    {
+
+        // virtual /* [restricted][propget][id] */ HRESULT STDMETHODCALLTYPE get__NewEnum(
+        // /* [retval][out] */ IUnknown **newEnum) = 0;
+
+    }
+
+    #
+}
+
+类 防火墙类F <公开>
+{
+
+    # @begin
+    # <> <include>
+    # @sn<current_class>(INetFwPolicy2* pData)
+    # {
+    #     SetData(pData);
+    # }
+    # INetFwPolicy2* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(INetFwPolicy2* pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_pData = objCopyFrom.m_pData;
+    # }
+    # INetFwPolicy2* m_pData;
+    # HRESULT hrComInit;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        @ m_pData = NULL;
+        @ hrComInit = CoInitializeEx(0,COINIT_APARTMENTTHREADED);
+        @ if (hrComInit != RPC_E_CHANGED_MODE)
+        @ {
+        @    if (FAILED(hrComInit))
+        @    {
+        调试输出 ("CoInitializeEx 初始化失败")
+        @        return ;
+        @    }
+        @ }
+        @ HRESULT hr = CoCreateInstance(__uuidof(NetFwPolicy2),NULL,CLSCTX_INPROC_SERVER,__uuidof(INetFwPolicy2),(void**)&m_pData);
+        @ if (FAILED (hr))
+        @ {
+        调试输出 ("创建 INetFwPolicy2 失败")
+        @ }
+    }
+
+    方法 类_清理
+    {
+        @     // Release INetFwPolicy2
+        @     if (GetData() != NULL)
+        @     {
+        @         GetData()->Release();
+        @     }
+        @ 
+        @     // Uninitialize COM.
+        @     if (SUCCEEDED(hrComInit))
+        @     {
+        @         CoUninitialize();
+        @     }
+
+
+    }
+
+    方法 取当前配置类型 <公开 类型 = 整数 返回值注释 = "小于0代表失败 0成功 具体参考HRESULT 的值" @嵌入式方法 = "">
+    参数 输出_配置类型 <类型 = 整数>
+    {
+        @ @sn<this>.GetData()->get_CurrentProfileTypes(&输出_配置类型)
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_CurrentProfileTypes( /* [retval][out] */ long *profileTypesBitmask) = 0;
+    }
+
+    方法 是否启用防火墙 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 是否启用 <类型 = 逻辑型>
+    {
+        @ @sn<this>.GetData()->get_FirewallEnabled((NET_FW_PROFILE_TYPE2)@<防火墙类型>, (VARIANT_BOOL*)&@<是否启用>)
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_FirewallEnabled(
+        // /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        // /* [retval][out] */ VARIANT_BOOL *enabled) = 0;
+    }
+
+    方法 启用防火墙 <公开 类型 = 整数
+            注释 = "微软文档地址 https://docs.microsoft.com/zh-cn/previous-versions/windows/desktop/ics/c-disabling-windows-firewall"
+            返回值注释 = "小于0代表失败 0成功 具体参考HRESULT 的值" @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 是否启用 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ @sn<this>.GetData()->put_FirewallEnabled((NET_FW_PROFILE_TYPE2)@<防火墙类型>, @<是否启用>)
+    }
+
+    方法 恢复默认设置 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetData()->RestoreLocalFirewallDefaults()
+    }
+
+    方法 取包含接口 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 输出_值 <类型 = 变体型_结构类>
+    {
+        @ @sn<this>.GetData()->get_ExcludedInterfaces((NET_FW_PROFILE_TYPE2)@<防火墙类型>, @<输出_值>.pdata())
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ExcludedInterfaces(
+        // /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        // /* [retval][out] */ VARIANT *interfaces) = 0;
+    }
+
+    方法 置包含接口 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 输出_值 <类型 = 变体型_结构类>
+    {
+        @ @sn<this>.GetData()->put_ExcludedInterfaces((NET_FW_PROFILE_TYPE2)@<防火墙类型>, *@<输出_值>.pdata())
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_ExcludedInterfaces(
+        // /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        // /* [in] */ VARIANT interfaces) = 0;
+    }
+
+    方法 取是否阻止传入连接 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 输出_值 <类型 = 逻辑型>
+    {
+        @ @sn<this>.GetData()->get_BlockAllInboundTraffic((NET_FW_PROFILE_TYPE2)@<防火墙类型>,(VARIANT_BOOL *)&@<输出_值>)
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_BlockAllInboundTraffic(
+        // /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        // /* [retval][out] */ VARIANT_BOOL *Block) = 0;
+    }
+
+    方法 置是否阻止传入连接 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 值 <类型 = 逻辑型>
+    {
+        @ @sn<this>.GetData()->put_BlockAllInboundTraffic((NET_FW_PROFILE_TYPE2)@<防火墙类型>, (VARIANT_BOOL)@<值>)
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_BlockAllInboundTraffic(
+        // /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        // /* [in] */ VARIANT_BOOL Block) = 0;
+    }
+
+    方法 取是否禁用通知 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 输出_值 <类型 = 逻辑型>
+    {
+        @ @sn<this>.GetData()->get_NotificationsDisabled((NET_FW_PROFILE_TYPE2)@<防火墙类型>, (VARIANT_BOOL *)&@<输出_值>)
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_NotificationsDisabled(
+        // /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        // /* [retval][out] */ VARIANT_BOOL *disabled) = 0;
+    }
+
+    方法 置是否禁用通知 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 值 <类型 = 逻辑型>
+    {
+        @ @sn<this>.GetData()->put_NotificationsDisabled((NET_FW_PROFILE_TYPE2)@<防火墙类型>,(VARIANT_BOOL)@<值>)
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_NotificationsDisabled(
+        // /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        // /* [in] */ VARIANT_BOOL disabled) = 0;
+
+
+    }
+
+    方法 是否单播响应 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 输出_值 <类型 = 逻辑型>
+    {
+        @ @sn<this>.GetData()->get_UnicastResponsesToMulticastBroadcastDisabled((NET_FW_PROFILE_TYPE2)@<防火墙类型>, (VARIANT_BOOL *)&@<输出_值>)
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_UnicastResponsesToMulticastBroadcastDisabled(
+        // /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        // /* [retval][out] */ VARIANT_BOOL *disabled) = 0;
+
+    }
+
+    方法 启用单播响应 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 值 <类型 = 逻辑型>
+    {
+        @ @sn<this>.GetData()->put_UnicastResponsesToMulticastBroadcastDisabled((NET_FW_PROFILE_TYPE2)@<防火墙类型>,(VARIANT_BOOL)@<值>)
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_UnicastResponsesToMulticastBroadcastDisabled(
+        // /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        // /* [in] */ VARIANT_BOOL disabled) = 0;
+
+    }
+
+    方法 取规则数组 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 输出_值 <类型 = 防火墙规则数组类F>
+    {
+        @ @sn<this>.GetData()->get_Rules((NET_FW_PROFILE_TYPE2)@<防火墙类型>,&@<输出_值>.GetData())
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Rules(
+        // /* [retval][out] */ INetFwRules **rules) = 0;
+    }
+
+    方法 取服务限制 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 输出_值 <类型 = 防火墙服务限制类F>
+    {
+        @ @sn<this>.GetData()->get_ServiceRestriction(&@<输出_值>.GetData())
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ServiceRestriction(
+        // /* [retval][out] */ INetFwServiceRestriction **ServiceRestriction) = 0;
+
+    }
+
+    #
+    # // ==还有这些函数没封装===
+    #
+    #
+
+    方法 启用分组规则 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 分组名称 <类型 = 文本型>
+    参数 输出_是否启用 <类型 = 逻辑型 注释 = "这个应该放一个变量，用来保存值">
+    {
+        @ @sn<this>.GetData()->EnableRuleGroup((long)@<防火墙类型>,CFVolSysString(@<分组名称>.GetText()),(VARIANT_BOOL)@<输出_是否启用>)
+        // virtual /* [id] */ HRESULT STDMETHODCALLTYPE EnableRuleGroup(
+        // /* [in] */ long profileTypesBitmask,
+        // /* [in] */ BSTR group,
+        // /* [in] */ VARIANT_BOOL enable) = 0;
+    }
+
+    方法 是否启用分组规则 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 分组名称 <类型 = 文本型>
+    参数 输出_是否启用 <类型 = 逻辑型 注释 = "这个应该放一个变量，用来保存值">
+    {
+        @ @sn<this>.GetData()->IsRuleGroupEnabled((long)@<防火墙类型>,CFVolSysString(@<分组名称>.GetText()),@<输出_是否启用>)
+        // virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsRuleGroupEnabled(
+        // /* [in] */ long profileTypesBitmask,
+        // /* [in] */ BSTR group,
+        // /* [retval][out] */ VARIANT_BOOL *enabled) = 0;
+    }
+
+    方法 取默认入站动作 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 输出_规则 <类型 = 防火墙动作_常量类 @默认值 = 防火墙动作_常量类.允许>
+    {
+        @ @sn<this>.GetData()->get_DefaultInboundAction((NET_FW_PROFILE_TYPE2)@<防火墙类型>,(NET_FW_ACTION*)&@<输出_规则>)
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DefaultInboundAction(
+        // /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        // /* [retval][out] */ NET_FW_ACTION *action) = 0;
+    }
+
+    方法 置默认入站动作 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 规则 <类型 = 防火墙动作_常量类 @默认值 = 防火墙动作_常量类.允许>
+    {
+        @ @sn<this>.GetData()->put_DefaultInboundAction((NET_FW_PROFILE_TYPE2)@<防火墙类型>,(NET_FW_ACTION)&@<规则>)
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DefaultInboundAction(
+        // /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        // /* [in] */ NET_FW_ACTION action) = 0;
+    }
+
+    方法 取默认出站动作 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 输出_规则 <类型 = 防火墙动作_常量类 @默认值 = 防火墙动作_常量类.允许>
+    {
+        @ @sn<this>.GetData()->get_DefaultOutboundAction((NET_FW_PROFILE_TYPE2)@<防火墙类型>,(NET_FW_ACTION*)&@<输出_规则>)
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DefaultOutboundAction(
+        // /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        // /* [retval][out] */ NET_FW_ACTION *action) = 0;
+    }
+
+    方法 置默认出站动作 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 防火墙类型 <类型 = 防火墙类型_常量类 @默认值 = 防火墙类型_常量类.全部>
+    参数 规则 <类型 = 防火墙动作_常量类 @默认值 = 防火墙动作_常量类.允许>
+    {
+        @ @sn<this>.GetData()->put_DefaultOutboundAction((NET_FW_PROFILE_TYPE2)@<防火墙类型>,(NET_FW_ACTION)&@<规则>)
+        // virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DefaultOutboundAction(
+        // /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        // /* [in] */ NET_FW_ACTION action) = 0;
+    }
+
+    方法 是否分组规则当前启用 <公开 @嵌入式方法 = "">
+    参数 分组名称 <类型 = 文本型>
+    参数 输出_是否启用 <类型 = 逻辑型 注释 = "这个应该放一个变量，用来保存值">
+    {
+        @ @sn<this>.GetData()->IsRuleGroupEnabled(CFVolSysString(@<分组名称>.GetText()),@<输出_是否启用>)
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_IsRuleGroupCurrentlyEnabled(
+        // /* [in] */ BSTR group,
+        // /* [retval][out] */ VARIANT_BOOL *enabled) = 0;
+    }
+
+    方法 取本地策略修改状态 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 输出_值 <类型 = 防火墙本地策略修改状态_常量类>
+    {
+        @ @sn<this>.GetData()->get_LocalPolicyModifyState((NET_FW_MODIFY_STATE *)&@<输出_值>)
+        // virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_LocalPolicyModifyState(
+        // /* [retval][out] */ NET_FW_MODIFY_STATE *modifyState) = 0;
+    }
+}

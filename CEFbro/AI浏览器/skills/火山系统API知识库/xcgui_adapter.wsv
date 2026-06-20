@@ -1,0 +1,801 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 xc.gui <@文档 = "category = \"数据适配\"">
+
+类 数据适配器 <基础类 = 炫彩基类 折叠>
+{
+    方法 增加引用计数 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ XAd_AddRef((HXCGUI)@sn<this>.get())
+    }
+
+    方法 销毁 <公开 折叠 @嵌入式方法 = "">
+    {
+        @ XAd_Destroy((HXCGUI)@sn<this>.get())
+    }
+
+    方法 启用自动销毁 <公开 折叠 @嵌入式方法 = "">
+    参数 是否启用 <类型 = 逻辑型>
+    {
+        @ XAd_EnableAutoDestroy((HXCGUI)@sn<this>.get(), @<是否启用>)
+    }
+
+    方法 取引用计数 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ XAd_GetRefCount((HXCGUI)@sn<this>.get())
+    }
+
+    方法 释放引用计数 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ XAd_Release((HXCGUI)@sn<this>.get())
+    }
+}
+
+类 数据适配器_表格 <公开 基础类 = 数据适配器>
+{
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ @sn<current_class>(vint hxcgui):@sn<current_class>()    {
+    #         data().SetP(hxcgui);  
+    #     }
+    # <>  </include>
+    # @end
+
+    方法 添加列 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    {
+        @ XAdTable_AddColumn((HXCGUI)@sn<this>.get(), @<字段名>.GetText ())
+    }
+
+    方法 添加项图片 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 图片对象 <类型 = 炫彩图片>
+    {
+        @ XAdTable_AddItemImage((HXCGUI)@sn<this>.get(), @<图片对象>.GetP())
+    }
+
+    方法 添加项图片扩展 <公开 类型 = 整数 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    参数 图片对象 <类型 = 炫彩图片>
+    {
+        @ XAdTable_AddItemImageEx((HXCGUI)@sn<this>.get(), @<字段名>.GetText (), @<图片对象>.GetP())
+    }
+
+    方法 添加项文本 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 项文本 <类型 = 文本型>
+    {
+        @ XAdTable_AddItemText((HXCGUI)@sn<this>.get(), @<项文本>.GetText ())
+    }
+
+    方法 添加项文本扩展 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    参数 项文本 <类型 = 文本型>
+    {
+        @ XAdTable_AddItemTextEx((HXCGUI)@sn<this>.get(), @<字段名>.GetText (), @<项文本>.GetText ())
+    }
+
+    方法 创建 <公开 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.set((vint)XAdTable_Create())
+    }
+
+    方法 删除列全部 <公开 折叠 @嵌入式方法 = "">
+    {
+        @ XAdTable_DeleteColumnAll((HXCGUI)@sn<this>.get())
+    }
+
+    方法 删除项 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    {
+        @ XAdTable_DeleteItem((HXCGUI)@sn<this>.get(), @<项索引>)
+    }
+
+    方法 删除项全部 <公开 折叠 @嵌入式方法 = "">
+    {
+        @ XAdTable_DeleteItemAll((HXCGUI)@sn<this>.get())
+    }
+
+    方法 删除项扩展 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 项个数 <类型 = 整数>
+    {
+        @ XAdTable_DeleteItemEx((HXCGUI)@sn<this>.get(), @<项索引>, @<项个数>)
+    }
+
+    方法 取项数量 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ XAdTable_GetCount((HXCGUI)@sn<this>.get())
+    }
+
+    方法 取列数量 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ XAdTable_GetCountColumn((HXCGUI)@sn<this>.get())
+    }
+
+    方法 取项数据类型 <公开 类型 = 整数 返回值注释 = "适配器.数据类型_***" 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    {
+        @ (int)XAdTable_GetItemDataType((HXCGUI)@sn<this>.get(), @<项索引>, @<列索引>)
+    }
+
+    方法 取项数据类型扩展 <公开 类型 = 整数 返回值注释 = "适配器.数据类型_***" 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    {
+        @ (int)XAdTable_GetItemDataTypeEx((HXCGUI)@sn<this>.get(), @<项索引>, @<字段名>.GetText ())
+    }
+
+    方法 取项浮点值 <公开 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    参数 接收返还值 <类型 = 单精度小数 注释 = "接收的值(小数)">
+    {
+        // @ float  pOutValue  ;
+        @  XAdTable_GetItemFloat((HXCGUI)@sn<this>.get(), @<项索引>, @<列索引>, &@<接收返还值>)
+        // @ WRITE_POINTER_NUMBER (@<接收返还值>, @dt<小数>, pOutValue);
+        // @ @<接收返还值> = (@dt<小数>)pOutValue;
+    }
+
+    方法 取项浮点值扩展 <公开 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 接收返还值 <类型 = 单精度小数 注释 = "接收的值(小数)">
+    {
+        // @ float  pOutValue  ;
+        @  XAdTable_GetItemFloatEx((HXCGUI)@sn<this>.get(), @<项索引>, @<字段名>.GetText (), &@<接收返还值>)
+        // @ WRITE_POINTER_NUMBER (@<接收返还值>, @dt<小数>, pOutValue);
+        // @ @<接收返还值> = (@dt<小数>)pOutValue;
+        // @ return hr;
+    }
+
+    方法 取项图片 <公开 类型 = 炫彩图片 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    {
+        @ @dt<炫彩图片>(XAdTable_GetItemImage((HXCGUI)@sn<this>.get(), @<项索引>, @<列索引>))
+    }
+
+    方法 取项图片扩展 <公开 类型 = 炫彩图片 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    {
+        @ @dt<炫彩图片>(XAdTable_GetItemImageEx((HXCGUI)@sn<this>.get(), @<项索引>, @<字段名>))
+    }
+
+    方法 取项整数值 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    参数 接收返还值 <类型 = 整数 注释 = "接收的数值(整数)">
+    {
+        @ XAdTable_GetItemInt((HXCGUI)@sn<this>.get(), @<项索引>, @<列索引>, (int*)&@<接收返还值>)
+    }
+
+    方法 取项整数值扩展 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 接收返还值 <类型 = 整数 注释 = "接收的数值(整数)">
+    {
+        @ XAdTable_GetItemIntEx((HXCGUI)@sn<this>.get(), @<项索引>, @<字段名>, (int*)&@<接收返还值>)
+    }
+
+    方法 取项文本 <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    {
+        @  @an<CVolString>(XAdTable_GetItemText((HXCGUI)@sn<this>.get(), @<项索引>, @<列索引>))
+    }
+
+    方法 取项文本扩展 <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    {
+        @  @an<CVolString>( XAdTable_GetItemTextEx((HXCGUI)@sn<this>.get(), @<项索引>, @<字段名>.GetText ()))
+    }
+
+    方法 插入项图片 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 图片对象 <类型 = 炫彩图片>
+    {
+        @ XAdTable_InsertItemImage((HXCGUI)@sn<this>.get(), @<项索引>, @<图片对象>.GetP())
+    }
+
+    方法 插入项图片扩展 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 图片对象 <类型 = 变整数>
+    {
+        @ XAdTable_InsertItemImageEx((HXCGUI)@sn<this>.get(), @<项索引>, @<字段名>, @<图片对象>.GetP())
+    }
+
+    方法 插入项文本 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 项文本 <类型 = 文本型>
+    {
+        @ XAdTable_InsertItemText((HXCGUI)@sn<this>.get(), @<项索引>, @<项文本>.GetText ())
+    }
+
+    方法 插入项文本扩展 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 项文本 <类型 = 文本型>
+    {
+        @ XAdTable_InsertItemTextEx((HXCGUI)@sn<this>.get(), @<项索引>, @<字段名>.GetText (), @<项文本>.GetText ())
+    }
+
+    方法 置列 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 列名 <类型 = 文本型 注释 = "多个列名用逗号分开">
+    {
+        @ XAdTable_SetColumn((HXCGUI)@sn<this>.get(), @<列名>.GetText ())
+    }
+
+    方法 置项浮点值 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    参数 小数值 <类型 = 单精度小数>
+    {
+        @ XAdTable_SetItemFloat((HXCGUI)@sn<this>.get(), @<项索引>, @<列索引>, @<小数值>)
+    }
+
+    方法 置项浮点值扩展 <公开 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 小数值 <类型 = 单精度小数>
+    {
+        @ XAdTable_SetItemFloatEx((HXCGUI)@sn<this>.get(), @<项索引>, @<字段名>, @<小数值>)
+    }
+
+    方法 置项图片 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    参数 图片对象 <类型 = 炫彩图片>
+    {
+        @ XAdTable_SetItemImage((HXCGUI)@sn<this>.get(), @<项索引>, @<列索引>, @<图片对象>.GetP())
+    }
+
+    方法 置项图片扩展 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 图片对象 <类型 = 炫彩图片>
+    {
+        @ XAdTable_SetItemImageEx((HXCGUI)@sn<this>.get(), @<项索引>, @<字段名>.GetText (),@<图片对象>.GetP())
+    }
+
+    方法 置项整数值 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    参数 整数值 <类型 = 整数>
+    {
+        @ XAdTable_SetItemInt((HXCGUI)@sn<this>.get(), @<项索引>, @<列索引>, @<整数值>)
+    }
+
+    方法 置项整数值扩展 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 整数值 <类型 = 整数>
+    {
+        @ XAdTable_SetItemIntEx((HXCGUI)@sn<this>.get(), @<项索引>, @<字段名>.GetText (), @<整数值>)
+    }
+
+    方法 置项文本 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    参数 项文本 <类型 = 文本型>
+    {
+        @ XAdTable_SetItemText((HXCGUI)@sn<this>.get(), @<项索引>, @<列索引>, @<项文本>.GetText ())
+    }
+
+    方法 置项文本扩展 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 项索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 项文本 <类型 = 文本型>
+    {
+        @ XAdTable_SetItemTextEx((HXCGUI)@sn<this>.get(), @<项索引>, @<字段名>.GetText (), @<项文本>.GetText ())
+    }
+
+    方法 排序 <公开 折叠 @嵌入式方法 = "">
+    参数 列索引 <类型 = 整数>
+    参数 升序方式 <类型 = 逻辑型 注释 = "是否按照升序方式排序">
+    {
+        @ XAdTable_Sort((HXCGUI)@sn<this>.get(), @<列索引>, @<升序方式>)
+    }
+}
+
+类 数据适配器_列表视图 <公开 基础类 = 数据适配器>
+{
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ @sn<current_class>(vint hxcgui):@sn<current_class>()    {
+    #         data().SetP(hxcgui);  
+    #     }
+    # <>  </include>
+    # @end
+
+    方法 创建 <公开 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.set((vint)XAdListView_Create())
+    }
+
+    方法 删除全部 <公开 折叠 @嵌入式方法 = "">
+    {
+        @ XAdListView_DeleteAll((HXCGUI)@sn<this>.get())
+    }
+
+    方法 删除全部组 <公开 折叠 @嵌入式方法 = "">
+    {
+        @ XAdListView_DeleteAllGroup((HXCGUI)@sn<this>.get())
+    }
+
+    方法 删除全部项 <公开 折叠 @嵌入式方法 = "">
+    {
+        @ XAdListView_DeleteAllItem((HXCGUI)@sn<this>.get())
+    }
+
+    方法 组删除列 <公开 折叠 @嵌入式方法 = "">
+    参数 列索引 <类型 = 整数>
+    {
+        @ XAdListView_DeleteColumnGroup((HXCGUI)@sn<this>.get(), @<列索引>)
+    }
+
+    方法 项删除列 <公开 折叠 @嵌入式方法 = "">
+    参数 列索引 <类型 = 整数>
+    {
+        @ XAdListView_DeleteColumnItem((HXCGUI)@sn<this>.get(), @<列索引>)
+    }
+
+    方法 组添加列 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    {
+        @ XAdListView_Group_AddColumn((HXCGUI)@sn<this>.get(), @<字段名>.GetText ())
+    }
+
+    方法 添加组图片 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 图片对象 <类型 = 炫彩图片>
+    参数 插入位置 <类型 = 整数 注释 = "-1添加到末尾">
+    {
+        @ XAdListView_Group_AddItemImage((HXCGUI)@sn<this>.get(), @<图片对象>.GetP(), @<插入位置>)
+    }
+
+    方法 添加组图片扩展 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    参数 图片对象 <类型 = 炫彩图片>
+    参数 插入位置 <类型 = 整数>
+    {
+        @ XAdListView_Group_AddItemImageEx((HXCGUI)@sn<this>.get(), @<字段名>.GetText (), @<图片对象>.GetP(), @<插入位置>)
+    }
+
+    方法 添加组文本 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 文本值 <类型 = 文本型>
+    参数 插入位置 <类型 = 整数>
+    {
+        @ XAdListView_Group_AddItemText((HXCGUI)@sn<this>.get(), @<文本值>.GetText (), @<插入位置>)
+    }
+
+    方法 添加组文本扩展 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    参数 文本值 <类型 = 文本型>
+    参数 插入位置 <类型 = 整数>
+    {
+        @ XAdListView_Group_AddItemTextEx((HXCGUI)@sn<this>.get(), @<字段名>.GetText (), @<文本值>.GetText (), @<插入位置>)
+    }
+
+    方法 删除全部子项 <公开 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    {
+        @ XAdListView_Group_DeleteAllChildItem((HXCGUI)@sn<this>.get(), @<组索引>)
+    }
+
+    方法 组删除项 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    {
+        @ XAdListView_Group_DeleteItem((HXCGUI)@sn<this>.get(), @<组索引>)
+    }
+
+    方法 取组数量 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ XAdListView_Group_GetCount((HXCGUI)@sn<this>.get())
+    }
+
+    方法 组置图片 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    参数 图片对象 <类型 = 炫彩图片>
+    {
+        @ XAdListView_Group_SetImage((HXCGUI)@sn<this>.get(), @<组索引>, @<列索引>, @<图片对象>.GetP())
+    }
+
+    方法 组置图片扩展 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 图片对象 <类型 = 炫彩图片>
+    {
+        @ XAdListView_Group_SetImageEx((HXCGUI)@sn<this>.get(), @<组索引>, @<字段名>.GetText (), @<图片对象>.GetP())
+    }
+
+    方法 组置文本 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    参数 文本值 <类型 = 文本型>
+    {
+        @ XAdListView_Group_SetText((HXCGUI)@sn<this>.get(), @<组索引>, @<列索引>, @<文本值>.GetText ())
+    }
+
+    方法 组置文本扩展 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 文本值 <类型 = 文本型>
+    {
+        @ XAdListView_Group_SetTextEx((HXCGUI)@sn<this>.get(), @<组索引>, @<字段名>.GetText (), @<文本值>.GetText ())
+    }
+
+    方法 项添加列 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    {
+        @ XAdListView_Item_AddColumn((HXCGUI)@sn<this>.get(), @<字段名>.GetText ())
+    }
+
+    方法 添加项图片 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 图片对象 <类型 = 炫彩图片>
+    参数 插入位置 <类型 = 整数>
+    {
+        @ XAdListView_Item_AddItemImage((HXCGUI)@sn<this>.get(), @<组索引>, @<图片对象>.GetP(), @<插入位置>)
+    }
+
+    方法 添加项图片扩展 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 图片对象 <类型 = 炫彩图片>
+    参数 插入位置 <类型 = 整数>
+    {
+        @ XAdListView_Item_AddItemImageEx((HXCGUI)@sn<this>.get(), @<组索引>, @<字段名>.GetText (), @<图片对象>.GetP(), @<插入位置>)
+    }
+
+    方法 添加项文本 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 文本值 <类型 = 文本型>
+    参数 插入位置 <类型 = 整数>
+    {
+        @ XAdListView_Item_AddItemText((HXCGUI)@sn<this>.get(), @<组索引>, @<文本值>.GetText (), @<插入位置>)
+    }
+
+    方法 添加项文本扩展 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 文本值 <类型 = 文本型>
+    参数 插入位置 <类型 = 整数>
+    {
+        @ XAdListView_Item_AddItemTextEx((HXCGUI)@sn<this>.get(), @<组索引>, @<字段名>.GetText (), @<文本值>.GetText (), @<插入位置>)
+    }
+
+    方法 删除项 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 项索引 <类型 = 整数>
+    {
+        @ XAdListView_Item_DeleteItem((HXCGUI)@sn<this>.get(), @<组索引>, @<项索引>)
+    }
+
+    方法 取项数量 <公开 类型 = 整数 返回值注释 = "返回某个组中的项目数量" 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    {
+        @ XAdListView_Item_GetCount((HXCGUI)@sn<this>.get(), @<组索引>)
+    }
+
+    方法 项取图片扩展 <公开 类型 = 炫彩图片 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 项索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    {
+        @ @dt<炫彩图片>(XAdListView_Item_GetImageEx((HXCGUI)@sn<this>.get(), @<组索引>, @<项索引>, @<字段名>.GetText ()))
+    }
+
+    方法 项取文本扩展 <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 项索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    {
+        @  @an<CVolString>(XAdListView_Item_GetTextEx((HXCGUI)@sn<this>.get(), @<组索引>, @<项索引>, @<字段名>.GetText ()))
+    }
+
+    方法 项置图片 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 项索引 <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    参数 图片对象 <类型 = 炫彩图片>
+    {
+        @ XAdListView_Item_SetImage((HXCGUI)@sn<this>.get(), @<组索引>, @<项索引>, @<列索引>, @<图片对象>.GetP())
+    }
+
+    方法 项置图片扩展 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 项索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 图片对象 <类型 = 炫彩图片>
+    {
+        @ XAdListView_Item_SetImageEx((HXCGUI)@sn<this>.get(), @<组索引>, @<项索引>, @<字段名>.GetText (), @<图片对象>.GetP())
+    }
+
+    方法 项置文本 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 项索引 <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    参数 文本值 <类型 = 文本型>
+    {
+        @ XAdListView_Item_SetText((HXCGUI)@sn<this>.get(), @<组索引>, @<项索引>, @<列索引>, @<文本值>.GetText ())
+    }
+
+    方法 项置文本扩展 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 项索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 文本值 <类型 = 文本型>
+    {
+        @ XAdListView_Item_SetTextEx((HXCGUI)@sn<this>.get(), @<组索引>, @<项索引>, @<字段名>.GetText (), @<文本值>.GetText ())
+    }
+
+    方法 组取文本 <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    {
+        @ @an<CVolString>(XAdListView_Group_GetText((HXCGUI)@sn<this>.get(), @<组索引>, @<列索引>))
+    }
+
+    方法 组取文本扩展 <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    {
+        @ @an<CVolString>(XAdListView_Group_GetTextEx((HXCGUI)@sn<this>.get(), @<组索引>, @<字段名>.GetText ()))
+    }
+
+    方法 组取图片 <公开 类型 = 炫彩图片 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    {
+        @ @dt<炫彩图片>(XAdListView_Group_GetImage((HXCGUI)@sn<this>.get(), @<组索引>, @<列索引>))
+    }
+
+    方法 组取图片扩展 <公开 类型 = 炫彩图片 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    {
+        @ @dt<炫彩图片>(XAdListView_Group_GetImageEx((HXCGUI)@sn<this>.get(), @<组索引>, @<字段名>.GetText ()))
+    }
+
+    方法 项取文本 <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数 注释 = "组索引">
+    参数 项索引 <类型 = 整数 注释 = "项索引">
+    参数 列索引 <类型 = 整数 注释 = "列索引(也是子项索引)">
+    {
+        @  @an<CVolString>(XAdListView_Item_GetText((HXCGUI)@sn<this>.get(), @<组索引>, @<项索引>,@<列索引>))
+    }
+
+    方法 项取图片 <公开 类型 = 炫彩图片 @嵌入式方法 = "">
+    参数 组索引 <类型 = 整数>
+    参数 项索引 <类型 = 整数>
+    参数 例索引 <类型 = 整数>
+    {
+        @ @dt<炫彩图片>(XAdListView_Item_GetImage((HXCGUI)@sn<this>.get(), @<组索引>, @<项索引>,@<例索引>))
+    }
+}
+
+类 数据适配器_MAP <公开 基础类 = 数据适配器 折叠>
+{
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ @sn<current_class>(vint hxcgui):@sn<current_class>()    {
+    #         data().SetP(hxcgui);  
+    #     }
+    # <>  </include>
+    # @end
+
+    方法 添加项图片 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    参数 图片对象 <类型 = 炫彩图片>
+    {
+        @ XAdMap_AddItemImage((HXCGUI)@sn<this>.get(), @<字段名>.GetText (), @<图片对象>.GetP())
+    }
+
+    方法 添加项文本 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    参数 文本值 <类型 = 文本型>
+    {
+        @ XAdMap_AddItemText((HXCGUI)@sn<this>.get(), @<字段名>.GetText (), @<文本值>.GetText ())
+    }
+
+    方法 创建 <公开 类型 = 变整数 折叠 @嵌入式方法 = "">
+    {
+        @ @sn<this>.set((vint)XAdMap_Create())
+    }
+
+    方法 删除项 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    {
+        @ XAdMap_DeleteItem((HXCGUI)@sn<this>.get(), @<字段名>.GetText ())
+    }
+
+    方法 取项数量 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ XAdMap_GetCount((HXCGUI)@sn<this>.get())
+    }
+
+    方法 取项图片 <公开 类型 = 炫彩图片 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    {
+        @ @dt<炫彩图片>(XAdMap_GetItemImage((HXCGUI)@sn<this>.get(), @<字段名>.GetText ()))
+    }
+
+    方法 取项文本 <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    {
+        @  @an<CVolString>(XAdMap_GetItemText((HXCGUI)@sn<this>.get(), @<字段名>.GetText ()))
+    }
+
+    方法 置项图片 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    参数 图片对象 <类型 = 炫彩图片>
+    {
+        @ XAdMap_SetItemImage((HXCGUI)@sn<this>.get(), @<字段名>.GetText (), @<图片对象>.GetP())
+    }
+
+    方法 置项文本 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    参数 文本值 <类型 = 文本型>
+    {
+        @ XAdMap_SetItemText((HXCGUI)@sn<this>.get(), @<字段名>.GetText (), @<文本值>.GetText ())
+    }
+}
+
+类 数据适配器_列表树 <公开 基础类 = 数据适配器>
+{
+
+    # @begin
+    # <> <include>
+    # public:
+    #     inline_ @sn<current_class>(vint hxcgui):@sn<current_class>()    {
+    #         data().SetP(hxcgui);  
+    #     }
+    # <>  </include>
+    # @end
+
+    方法 添加列 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    {
+        @ XAdTree_AddColumn((HXCGUI)@sn<this>.get(), @<字段名>.GetText ())
+    }
+
+    方法 创建 <公开 类型 = 变整数 @嵌入式方法 = "">
+    {
+        @ @sn<this>.set((vint)XAdTree_Create())
+    }
+
+    方法 删除列全部 <公开 折叠 @嵌入式方法 = "">
+    {
+        @ XAdTree_DeleteColumnAll((HXCGUI)@sn<this>.get())
+    }
+
+    方法 删除项 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 项ID <类型 = 整数>
+    {
+        @ XAdTree_DeleteItem((HXCGUI)@sn<this>.get(), @<项ID>)
+    }
+
+    方法 删除项全部 <公开 折叠 @嵌入式方法 = "">
+    {
+        @ XAdTree_DeleteItemAll((HXCGUI)@sn<this>.get())
+    }
+
+    方法 取项数量 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ XAdTree_GetCount((HXCGUI)@sn<this>.get())
+    }
+
+    方法 取列数量 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    {
+        @ XAdTree_GetCountColumn((HXCGUI)@sn<this>.get())
+    }
+
+    方法 取项图片 <公开 类型 = 炫彩图片 折叠 @嵌入式方法 = "">
+    参数 项ID <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    {
+        @ @dt<炫彩图片>(XAdTree_GetItemImage((HXCGUI)@sn<this>.get(), @<项ID>, @<列索引>))
+    }
+
+    方法 取项图片扩展 <公开 类型 = 炫彩图片 折叠 @嵌入式方法 = "">
+    参数 项ID <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    {
+        @ @dt<炫彩图片>(XAdTree_GetItemImageEx((HXCGUI)@sn<this>.get(), @<项ID>, @<字段名>.GetText ()))
+    }
+
+    方法 取项文本 <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 项ID <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    {
+        @  @an<CVolString>(XAdTree_GetItemText((HXCGUI)@sn<this>.get(), @<项ID>, @<列索引>))
+    }
+
+    方法 取项文本扩展 <公开 类型 = 文本型 折叠 @嵌入式方法 = "">
+    参数 项ID <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    {
+        @  @an<CVolString>( XAdTree_GetItemTextEx((HXCGUI)@sn<this>.get(), @<项ID>, @<字段名>.GetText ()))
+    }
+
+    方法 插入项图片 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 图片对象 <类型 = 炫彩图片>
+    参数 父ID <类型 = 整数>
+    参数 插入位置ID <类型 = 整数>
+    {
+        @ XAdTree_InsertItemImage((HXCGUI)@sn<this>.get(), @<图片对象>.GetP(), @<父ID>, @<插入位置ID>)
+    }
+
+    方法 插入项图片扩展 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    参数 图片对象 <类型 = 炫彩图片>
+    参数 父ID <类型 = 整数>
+    参数 插入位置ID <类型 = 整数>
+    {
+        @ XAdTree_InsertItemImageEx((HXCGUI)@sn<this>.get(), @<字段名>.GetText (), @<图片对象>.GetP(), @<父ID>, @<插入位置ID>)
+    }
+
+    方法 插入项文本 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 文本值 <类型 = 文本型>
+    参数 父ID <类型 = 整数>
+    参数 插入位置ID <类型 = 整数>
+    {
+        @ XAdTree_InsertItemText((HXCGUI)@sn<this>.get(), @<文本值>.GetText (), @<父ID>, @<插入位置ID>)
+    }
+
+    方法 插入项文本扩展 <公开 类型 = 整数 折叠 @嵌入式方法 = "">
+    参数 字段名 <类型 = 文本型>
+    参数 文本值 <类型 = 文本型>
+    参数 父ID <类型 = 整数>
+    参数 插入位置ID <类型 = 整数>
+    {
+        @ XAdTree_InsertItemTextEx((HXCGUI)@sn<this>.get(), @<字段名>.GetText (), @<文本值>.GetText (), @<父ID>, @<插入位置ID>)
+    }
+
+    方法 置列 <公开 类型 = 整数 返回值注释 = "返回列数量" 折叠 @嵌入式方法 = "">
+    参数 列名 <类型 = 文本型 注释 = "多个列名用逗号分开">
+    {
+        @ XAdTree_SetColumn((HXCGUI)@sn<this>.get(), @<列名>.GetText ())
+    }
+
+    方法 置项图片 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 项ID <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    参数 图片对象 <类型 = 炫彩图片>
+    {
+        @ XAdTree_SetItemImage((HXCGUI)@sn<this>.get(), @<项ID>, @<列索引>, @<图片对象>.GetP())
+    }
+
+    方法 置项图片扩展 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 项ID <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 图片对象 <类型 = 炫彩图片>
+    {
+        @ XAdTree_SetItemImageEx((HXCGUI)@sn<this>.get(), @<项ID>, @<字段名>.GetText (), @<图片对象>.GetP())
+    }
+
+    方法 置项文本 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 项ID <类型 = 整数>
+    参数 列索引 <类型 = 整数>
+    参数 文本值 <类型 = 文本型>
+    {
+        @ XAdTree_SetItemText((HXCGUI)@sn<this>.get(), @<项ID>, @<列索引>, @<文本值>.GetText ())
+    }
+
+    方法 置项文本扩展 <公开 类型 = 逻辑型 折叠 @嵌入式方法 = "">
+    参数 项ID <类型 = 整数>
+    参数 字段名 <类型 = 文本型>
+    参数 文本值 <类型 = 文本型>
+    {
+        @ XAdTree_SetItemTextEx((HXCGUI)@sn<this>.get(), @<项ID>, @<字段名>.GetText (), @<文本值>.GetText ())
+    }
+}

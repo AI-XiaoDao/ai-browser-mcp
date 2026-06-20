@@ -1,0 +1,66 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.Snappy\"" @视窗.外部头文件 = "Snappy\\SnappyTool.h" @视窗.外部库.win32 = "Snappy\\SnappyToolx86.lib"
+        @视窗.附属文件.win32 = "Snappy\\SnappyToolx86.dll" @视窗.外部库.x64 = "Snappy\\SnappyToolx64.lib"
+        @视窗.附属文件.x64 = "Snappy\\SnappyToolx64.dll" "">
+
+类 压缩解压类_s <公开>
+{
+
+    # @begin
+    # <> <include>
+    # void* GetData()
+    # {
+    #     return m_pData;
+    # }
+    # void SetData(void * pData)
+    # {
+    #     m_pData = pData;
+    # }
+    # void* m_pData;
+    # <> </include>
+    # @end
+    #
+
+    方法 类_初始化
+    {
+        @ SetData(SnappyTool_new());
+    }
+
+    方法 类_清理
+    {
+        @ SnappyTool_delete(GetData());
+    }
+
+    方法 压缩字节集 <公开 类型 = 字节集类>
+    参数 数据 <类型 = 字节集类>
+    {
+        返回 (压缩指针数据 (数据.取字节集指针 (), 数据.取字节集长度 ()))
+    }
+
+    方法 解压字节集 <公开 类型 = 字节集类>
+    参数 数据 <类型 = 字节集类>
+    {
+        返回 (解压指针数据 (数据.取字节集指针 (), 数据.取字节集长度 ()))
+    }
+
+    方法 压缩指针数据 <公开 类型 = 字节集类 @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+        @ int nOutDataSize = 0;
+        @ const char* pOuData = SnappyTool_Compress(GetData(),(const char*)@<数据指针>,@<数据大小>,&nOutDataSize);
+        @ return CVolMem(pOuData,nOutDataSize);
+    }
+
+    方法 解压指针数据 <公开 类型 = 字节集类 @禁止流程检查 = 真>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据大小 <类型 = 整数>
+    {
+        @ int nOutDataSize = 0;
+        @ const char* pOuData = SnappyTool_Uncompress(GetData(),(const char*)@<数据指针>,@<数据大小>,&nOutDataSize);
+        @ return CVolMem(pOuData,nOutDataSize);
+    }
+
+    #
+}

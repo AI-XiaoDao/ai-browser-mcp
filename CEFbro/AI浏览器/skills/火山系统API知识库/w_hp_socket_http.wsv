@@ -1,0 +1,2735 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.网络 <注释 = "HTTP服务端/客户端支持">
+
+类 HPHTTP服务器基础类 <公开 基础类 = HPTCP服务器基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "HTTP服务器基础类." 编辑时信息 = "C5549, 0, 0, 0"
+        @文档 = "category = \"辅助类\"" @禁止创建对象 = 真>
+{
+
+    # @ @m<DECLARE_HPSOCKET_ABS>(IHttpServer, BaseHttpServer, GetSocketPtr)
+    #
+    # 属性 ---
+
+    方法 本地协议版本 <公开 属性写 注释 = "设置当前本地HTTP协议版本.">
+    参数 版本 <类型 = HPHTTP协议版本>
+    {
+        如果 (版本 == HPHTTP协议版本.HTTP1_0)
+        {
+            @ GetBaseHttpServer()->SetLocalVersion(HV_1_0);
+        }
+        否则
+        {
+            @ GetBaseHttpServer()->SetLocalVersion(HV_1_1);
+        }
+    }
+
+    方法 本地协议版本 <公开 属性读 类型 = HPHTTP协议版本 注释 = "获取当前本地所使用HTTP协议版本." @禁止流程检查 = 真>
+    {
+        @ return (GetBaseHttpServer()->GetLocalVersion() == HV_1_0 ? @<HPHTTP协议版本.HTTP1_0> : @<HPHTTP协议版本.HTTP1_1>);
+    }
+
+    方法 自动启动通信 <公开 属性读 类型 = 逻辑型 注释 = "获取HTTP的启动方式." 返回值注释 = "为真表示自动启动." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetBaseHttpServer()->IsHttpAutoStart()
+    }
+
+    方法 自动启动通信 <公开 属性写 注释 = "设置HTTP的启动方式.">
+    参数 自动 <类型 = 逻辑型 注释 = "为真表示自动启动.">
+    {
+        @ GetBaseHttpServer()->SetHttpAutoStart(@<自动>);
+    }
+
+    方法 释放延时 <公开 属性写 注释 = "设置连接释放延时.">
+    参数 时长 <类型 = 整数 注释 = "单位:毫秒,默认3000毫秒.">
+    {
+        @ GetBaseHttpServer()->SetReleaseDelay(@<时长>);
+    }
+
+    方法 释放延时 <公开 属性读 类型 = 整数 注释 = "获取连接释放延时." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetBaseHttpServer()->GetReleaseDelay()
+    }
+
+    # 方法 ---
+
+    方法 启动HTTP通信 <公开 类型 = 逻辑型 注释 = "启动HTTP通信." 注释 = "如当前组件设置为非自动启动HTTP通信时,需调用该方法启动." 返回值注释 = "返回是否启动成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ @sn<this>.GetBaseHttpServer()->StartHttp(@<连接ID>)
+    }
+
+    方法 发送分片数据 <公开 类型 = 逻辑型 注释 = "向对端发送Chunked数据分片." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "所欲向其发送数据的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "所欲发送的数据分片.">
+    参数 数据长度 <类型 = 整数 注释 = "所欲发送数据分片的长度.">
+    参数 扩展属性 <类型 = 文本型 注释 = "扩展属性.">
+    {
+        @ return GetBaseHttpServer()->SendChunkData(@<连接ID>, (const BYTE*)@<数据>.GetPtr (), @<数据长度>, GetMbsText (@<扩展属性>, CVolMem (), NULL));
+    }
+
+    方法 是否升级协议 <公开 类型 = 逻辑型 注释 = "检查是否升级协议." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ @sn<this>.GetBaseHttpServer()->IsUpgrade(@<连接ID>)
+    }
+
+    方法 是否为保持连接 <公开 类型 = 逻辑型 注释 = "  在http早期,每个http请求都要求打开一个tpc socket连接," 注释 = "并且使用一次之后就断开这个tcp连接,使用keep-alive可以改"
+            注释 = "善这种状态,即在一次TCP连接中可以持续发送多份数据而不会" 注释 = "断开连接.通过使用keep-alive机制,可以减少tcp连接建立次数" 注释 = ",也意味着可以减少TIME_WAIT状态连接,以此提高性能和提高ht"
+            注释 = "tpd服务器的吞吐率." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ @sn<this>.GetBaseHttpServer()->IsKeepAlive(@<连接ID>)
+    }
+
+    方法 取协议版本 <公开 类型 = 短整数 注释 = "获取协议版本." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ @sn<this>.GetBaseHttpServer()->GetVersion(@<连接ID>)
+    }
+
+    方法 取内容长度 <公开 类型 = 长整数 注释 = "获取内容长度." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ (INT64)@sn<this>.GetBaseHttpServer()->GetContentLength(@<连接ID>)
+    }
+
+    方法 取内容类型 <公开 类型 = 文本型 注释 = "获取内容类型." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ CVolString (@sn<this>.GetBaseHttpServer()->GetContentType(@<连接ID>))
+    }
+
+    方法 取内容编码 <公开 类型 = 文本型 注释 = "获取内容编码." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ CVolString (@sn<this>.GetBaseHttpServer()->GetContentEncoding(@<连接ID>))
+    }
+
+    方法 取传输编码 <公开 类型 = 文本型 注释 = "获取传输编码." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ CVolString (@sn<this>.GetBaseHttpServer()->GetTransferEncoding(@<连接ID>))
+    }
+
+    方法 取协议升级类型 <公开 类型 = HPHTTP协议升级类型 注释 = "获取协议升级类型." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ (INT)@sn<this>.GetBaseHttpServer()->GetUpgradeType(@<连接ID>)
+    }
+
+    方法 取解析错误代码 <公开 类型 = 短整数 注释 = "获取解析错误代码" @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数>
+    参数 错误描述 <类型 = 变整数 注释 = "提供获取错误描述内容的指针." @默认值 = 0>
+    {
+        @ return (SHORT)GetBaseHttpServer()->GetParseErrorCode(@<连接ID>, @<错误描述> == 0 ? nullptr : (LPCSTR*)@<错误描述>);
+    }
+
+    方法 取请求头值 <公开 类型 = 文本型 注释 = " 取得指定请求头的值." 注释 = "  取得请求头中指定的值,例如,取请求头值(当前连接ID, \"User-Agent\"),将取得当前客户" 注释 = "的浏览器类型."
+            注释 = "  请注意:如果您欲读的请求头名在请求头中不存在,或还未解析完毕,本方法将返回空对象." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲获取请求头的名称.">
+    {
+        @ LPCSTR str = "";
+        @ GetBaseHttpServer()->GetHeader(@<连接ID>, GetMbsText(@<名称>, CVolMem (), NULL), &str);
+        @ return CVolString (GetWideText (str, CVolMem (), NULL));
+    }
+
+    方法 取请求头多值 <公开 类型 = 文本数组类 注释 = "获取指定多值的请求头." 返回值注释 = "返回指定名称请求头对应的所有值.">
+    参数 连接ID <类型 = 变整数>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲获取请求头的名称.">
+    {
+        变量 结果 <类型 = 文本数组类>
+        @ DWORD count = 0;
+        @ GetBaseHttpServer()->GetHeaders(@<连接ID>, GetMbsText(@<名称>,CVolMem (), NULL), nullptr, count);
+        @ if ((INT)count <= 0)
+        @      return @<结果>;
+        @ LPCSTR *values = new LPCSTR[(INT)count];
+        @ GetBaseHttpServer()->GetHeaders(@<连接ID>, GetMbsText(@<名称>, CVolMem (), NULL), values, count);
+        @ for (INT i = 0; i < (INT)count; i++)
+        @     @<结果>.data ().Add (GetWideText (values[i], CVolMem (), NULL));
+        @ delete[] values;
+        返回 (结果)
+    }
+
+    方法 取所有请求头 <公开 类型 = HP请求头数组类 注释 = "获取所有请求头.">
+    参数 连接ID <类型 = 变整数>
+    {
+        变量 结果 <类型 = HP请求头数组类>
+        @ DWORD count = 0;
+        @ GetBaseHttpServer()->GetAllHeaders(@<连接ID>, nullptr, count);
+        @ if ((INT)count <= 0)
+        @     return @<结果>;
+        @ THeader *headers = new THeader[(INT)count];
+        @ GetBaseHttpServer()->GetAllHeaders(@<连接ID>, headers, count);
+        @ for (INT i = 0; i < (INT)count; i++)
+        @ {
+        @     @dt<HP请求头类> volHeader;
+        @     volHeader.@n<HP请求头类.名称>.SetText (GetWideText (headers[i].name, CVolMem (), NULL));
+        @     volHeader.@n<HP请求头类.值> .SetText (GetWideText (headers[i].value, CVolMem (), NULL));
+        @     @<结果>.Add (volHeader, NULL);
+        @ }
+        @ delete[] headers;
+        返回 (结果)
+    }
+
+    方法 取所有请求头名 <公开 类型 = 文本数组类 注释 = "获取所有请求头名称.">
+    参数 连接ID <类型 = 变整数>
+    {
+        变量 结果 <类型 = 文本数组类>
+        @ DWORD count = 0;
+        @ GetBaseHttpServer()->GetAllHeaderNames(@<连接ID>, nullptr, count);
+        @ if ((INT)count <= 0)
+        @     return @<结果>;
+        @ LPCSTR *values = new LPCSTR[(INT)count];
+        @ GetBaseHttpServer()->GetAllHeaderNames(@<连接ID>, values, count);
+        @ for (INT i = 0; i < (INT)count; i++)
+        @     @<结果>.data ().Add (GetWideText (values[i], CVolMem (), NULL));
+        @ delete[] values;
+        返回 (结果)
+    }
+
+    方法 取Cookie <公开 类型 = 文本型 注释 = "获取指定Cookie." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数>
+    参数 名称 <类型 = 文本型>
+    {
+        @ LPCSTR str = "";
+        @ GetBaseHttpServer()->GetCookie(@<连接ID>, GetMbsText(@<名称>, CVolMem (), NULL), &str);
+        @ return CVolString (GetWideText (str, CVolMem (), NULL));
+    }
+
+    方法 取所有Cookie <公开 类型 = HP请求头数组类 注释 = "获取所有Cookie.">
+    参数 连接ID <类型 = 变整数>
+    {
+        变量 结果 <类型 = HP请求头数组类>
+        @ DWORD count = 0;
+        @ GetBaseHttpServer()->GetAllCookies(@<连接ID>, nullptr, count);
+        @ if (count<= 0)
+        @     return @<结果>;
+        @ TCookie *cookies = new TCookie[(INT)count];
+        @ GetBaseHttpServer()->GetAllCookies(@<连接ID>, cookies, count);
+        @ for (INT i = 0; i < (INT)count; i++)
+        @ {
+        @     @dt<HP请求头类> volCookie;
+        @     volCookie.@n<HP请求头类.名称>.SetText (GetWideText (cookies[i].name, CVolMem (), NULL));
+        @     volCookie.@n<HP请求头类.值>.SetText (GetWideText (cookies[i].value, CVolMem (), NULL));
+        @     @<结果>.Add (volCookie, NULL);
+        @ }
+        @ delete[] cookies;
+        返回 (结果)
+    }
+
+    方法 取WebSocket消息 <公开 类型 = 逻辑型 注释 = "获取当前WebSocket消息状态." 返回值注释 = "是否获取成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    参数 结束帧 <类型 = 变整数 注释 = "是否结束帧.">
+    参数 保留 <类型 = 变整数 注释 = "RSV1/RSV2/RSV3各1位.">
+    参数 操作码 <类型 = 变整数 注释 = "操作码:0x0 - 0xF.">
+    参数 掩码 <类型 = 变整数>
+    参数 总长度 <类型 = 变整数>
+    参数 BodyRemain <类型 = 变整数>
+    {
+        @ @sn<this>.GetBaseHttpServer()->GetWSMessageState(@<连接ID>, (BOOL*)@<结束帧>, (BYTE*)@<保留>, (BYTE*)@<操作码>, (LPCBYTE*)@<掩码>, (ULONGLONG*)@<总长度>, (ULONGLONG*)@<BodyRemain>)
+    }
+
+    方法 发WebSocket消息 <公开 类型 = 逻辑型 注释 = "向对端发送WebSocket消息." 返回值注释 = "返回是否发送成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 结束帧 <类型 = 逻辑型 注释 = "是否结束帧.">
+    参数 保留 <类型 = 字节 注释 = "RSV1/RSV2/RSV3各1位.">
+    参数 操作码 <类型 = 字节 注释 = "操作码:0x0 - 0xF.">
+    参数 数据 <类型 = 字节集类 注释 = "提供消息体数据缓冲区.">
+    参数 数据长度 <类型 = 整数 注释 = "消息体数据长度.">
+    参数 消息长度 <类型 = 长整数 注释 = "消息总长度.">
+    {
+        @ @sn<this>.GetBaseHttpServer()->SendWSMessage(@<连接ID>, @<结束帧>, @<保留>, @<操作码>, (const BYTE*)@<数据>.GetPtr (), @<数据长度>, @<消息长度>)
+    }
+
+    方法 回复请求 <公开 类型 = 逻辑型 注释 = "向客户端回复HTTP请求." 返回值注释 = "返回是否回复成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 状态码 <类型 = 短整数 注释 = "HTTP状态码,参考\"HPHTTP状态码\"类.">
+    参数 状态描述 <类型 = 文本型 注释 = "HTTP状态描述.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "所欲回复的请求头内容,一个成员表示一个头.">
+    参数 请求体 <类型 = 字节集类 注释 = "所欲回复的请求体内容.">
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpServer()->SendResponse(@<连接ID>, @<状态码>, GetMbsText (@<状态描述>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount (), (const BYTE*)@<请求体>.GetPtr (), (INT)@<请求体>.GetSize ());
+    }
+
+    方法 发送本地文件 <公开 类型 = 逻辑型 注释 = "向客户端发送本地文件(4096KB以下)." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 文件路径 <类型 = 文本型 注释 = "提供所欲发送文件的路径.">
+    参数 状态码 <类型 = 短整数 注释 = "HTTP状态码,参考\"HPHTTP状态码\"类.">
+    参数 状态描述 <类型 = 文本型 注释 = "HTTP状态描述.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "所欲回复的请求头内容,一个成员表示一个头.">
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpServer()->SendLocalFile(@<连接ID>, GetMbsText (@<文件路径>, CVolMem (), NULL), @<状态码>, GetMbsText (@<状态描述>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount ());
+    }
+
+    方法 释放连接 <公开 类型 = 逻辑型 注释 = "把连接放入释放队列,等待指定时间(释放延时)后关闭该连接." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    {
+        @ @sn<this>.GetBaseHttpServer()->Release(@<连接ID>)
+    }
+
+    方法 取主机 <公开 类型 = 文本型 注释 = "取得请求数据中连接主机地址" 注释 = "本方法将取得客户请求中的Host主机地址." 注释 = "请注意:如果客户请求协议头中并无指定Host,本方法将返回当前服务器所监听地址和端口."
+            @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    {
+        @ LPCSTR str = GetBaseHttpServer()->GetHost(@<连接ID>);
+        @ return CVolString (GetWideText (str, CVolMem (), NULL));
+    }
+
+    方法 取请求行URL域掩码 <公开 类型 = 短整数 注释 = "获取请求行URL域掩码." 返回值注释 = "请参考\"HPURL字段\"." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    {
+        @ @sn<this>.GetBaseHttpServer()->GetUrlFieldSet(@<连接ID>)
+    }
+
+    方法 取请求URL域值 <公开 类型 = 文本型 注释 = " 取得当前请求的URL域值" 注释 = "  取得当前请求URL域值,例如,本机地址为192.168.0.103,客户发起GET请求如下请求:"
+            注释 = "    \"http://192.168.0.103/image.png\",那么您可以通过使用本方法\"取请求URL域值" 注释 = "(当前连接ID, HPURL字段.查询)\",取得\"/image.png\"Get参数."
+            @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 所欲取域 <类型 = HPURL字段>
+    {
+        @ LPCSTR str = GetBaseHttpServer()->GetUrlField(@<连接ID>, (EnHttpUrlField)@<所欲取域>);
+        @ return CVolString (GetWideText (str, CVolMem (), NULL));
+    }
+
+    方法 取请求方式 <公开 类型 = 文本型 注释 = "获取请求方法." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    {
+        @ LPCSTR str = GetBaseHttpServer()->GetMethod(@<连接ID>);
+        @ return CVolString (GetWideText (str, CVolMem (), NULL));
+    }
+}
+
+类 HP_HTTP服务器 <公开 基础类 = HPHTTP服务器基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "  HP-HTTP服务器类."
+        注释 = "  本类为HP-HTTP服务器类,通过本类,允许用户自行搭建HTTP服务器,在您使用本类时,请您注意以下问题:"
+        注释 = "    1.不得在服务器事件内执行HP系统方法,即\"断开连接\",\"停止\"等操作,否则将会造成线程崩溃." 编辑时信息 = "FBFF0, 0, 0, 0" @文档 = "category = \"HTTP服务器\""
+        @视窗.后缀文本 = "public IHttpServerListener">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (IHttpServer, HttpServer, IHttpServerListener)
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动服务器并且监听指定端口号." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 地址 <类型 = 文本型 注释 = "提供所欲监听的地址.">
+    参数 端口号 <类型 = 整数 注释 = "提供所欲监听的端口号. 有效端口号范围为从0到65535.">
+    {
+        @ @sn<this>.GetHttpServer()->Start(@<地址>, (USHORT)@<端口号>)
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "  当客户端通过事件\"客户进入\"后,将会立即触发本事件,只有通过本事件,才会进行握手动作." 返回值注释 = "可选返回值:"
+            返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手." 返回值注释 = "  1 = 忽略本次操作, 客户端可与服务器建立正式连接." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当服务器发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当服务器成功接收数据后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作."
+            返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 已接收数据 <类型 = 字节集类 注释 = "所接收到的数据.">
+    参数 已接收长度 <类型 = 整数 注释 = "已接收数据长度.">
+
+    方法 客户离开 <公开 定义事件 类型 = 整数 注释 = "当客户端主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 服务器被关闭 <公开 定义事件 类型 = 整数 注释 = "当服务器被关闭后,将会触发本事件.">
+
+    方法 启动完毕 <公开 定义事件 类型 = 整数 注释 = "服务器端启动完毕并开始监听后,将触发本事件.">
+
+    方法 客户进入 <公开 定义事件 类型 = 整数 注释 = "  当客户连接到服务器后,将会触发本事件,请注意,本事件下的连接并非是正式连接,"
+            注释 = "只有该连接通过\"完成握手\"事件,才可以与服务器建立正式连接,本事件返回值拥有具体意义,请参考返回值说明." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 将触发\"完成握手\"事件."
+            返回值注释 = "  1 = 忽略本次操作, 将触发\"完成握手\"事件." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 开始解析消息 <公开 定义事件 类型 = 整数 注释 = "  当客户请求数据时,将会首先触发本事件,本事件触发后,开始解析请求数据." 注释 = "  请注意:请不要再本事件中与客户进行数据发送,如果要向客户回复数据,请"
+            注释 = "在事件\"消息解析完毕\"中回复." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求行解析完毕 <公开 定义事件 类型 = 整数 注释 = "  当服务器接收到客户请求后,将触发本事件,本事件将指定" 注释 = "当前请求方式,和请求路径.例如:本机地址为192.168.0.103"
+            注释 = ",浏览器端访问\"http://192.168.0.103/image.png\",本事件" 注释 = "将解析出请求地址后面的\"/image.png\"." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 当前请求方式 <类型 = 文本型 注释 = "当前客户请求方式,例如GET或POST.">
+    参数 当前请求地址 <类型 = 文本型 注释 = "当前客户请求路径.为地址后面的参数.">
+
+    方法 状态行解析完成 <公开 定义事件 类型 = 整数 注释 = "状态行解析完成后本事件将被触发." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 状态码 <类型 = 短整数 注释 = "HTTP状态码,参考\"HPHTTP状态码\"类.">
+    参数 状态描述 <类型 = 文本型 注释 = "HTTP状态描述内容.">
+
+    方法 请求头进入 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析完毕请求后,将会通过本事件通知当前请求头." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件." 返回值注释 = "返回-1则认定为解析错误并关闭该连接." 折叠2>
+    参数 连接ID <类型 = 变整数>
+    参数 请求头名称 <类型 = 文本型>
+    参数 请求头值 <类型 = 文本型>
+
+    方法 请求头解析完毕 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析请求头完毕后,将通过本事件通知用户." 注释 = "  请注意:本事件只是通知用户请求头解析完毕,不提供所解析的请"
+            注释 = "求头数据,如果想要获取请求头数据,请添加事件\"请求头进入\",此事" 注释 = "件下将会提供请求头名称和请求头值." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求数据进入 <公开 定义事件 类型 = 整数 注释 = "  当接收到HTTP BODY报文时本事件将被触发." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类 注释 = "所收到的请求体数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所收到的请求体数据长度.">
+
+    方法 分块头进入 <公开 定义事件 类型 = 整数 注释 = "分块模式为HTTP1.1的特有模式,即在不确定长度时,将数据分块(Chunked)发送." 注释 = "  当接收到客户发送的分块请求头时,将会通过本事件通知用户,并且通过"
+            注释 = "参数\"当前请求头长度\"为用户提供请求头数据长度." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据长度 <类型 = 整数 注释 = "Chunked报文体数据长度.">
+
+    方法 分块头解析完成 <公开 定义事件 类型 = 整数 注释 = "  当接收到客户发送的(Chunked)分块请求头并且解析完毕后,将通过本事件通知用户." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 消息解析完毕 <公开 定义事件 类型 = 整数 注释 = "  客户请求解析完毕." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 协议升级 <公开 定义事件 类型 = 整数 注释 = "  当客户端主动升级协议后,将会触发本事件." 注释 = "  当客户端从HTTP1.0协议升级为HTTP1.1协议后,服务器将通过本事件通知" 注释 = "用户."
+            注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 协议类型 <类型 = HPHTTP协议升级类型>
+
+    方法 解析错误 <公开 定义事件 类型 = 整数 注释 = "  当解析客户请求数据出错后,将会通过本事件通知用户." 注释 = "  当解析客户请求数据出错后,将会触发本事件,触发本事件的原因大概如下:"
+            注释 = "    1. 在服务器解析事件中返回了-1或其他不正确的值." 注释 = "    2. 在服务器解析事件中主动与客户断开了连接." 注释 = "    3. 客户所发送的请求数据有误."
+            注释 = "  本事件返回值无具体意义,请返回默认值0." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 错误码 <类型 = HP错误码>
+    参数 错误描述 <类型 = 文本型>
+
+    方法 正在解析WS数据头 <公开 定义事件 类型 = 整数 注释 = "当解析WebSocket数据包头时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 结束帧 <类型 = 逻辑型 注释 = "是否结束帧.">
+    参数 保留 <类型 = 字节 注释 = "RSV1/RSV2/RSV3各1位.">
+    参数 操作码 <类型 = 字节 注释 = "操作码:0x0 - 0xF.">
+    参数 掩码 <类型 = 变整数 注释 = "4字节掩码,空指针则无掩码.">
+    参数 消息长度 <类型 = 长整数 注释 = "消息体长度.">
+
+    方法 收到WS数据体 <公开 定义事件 类型 = 整数 注释 = "当接收到WebSocket数据包体时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类>
+    参数 长度 <类型 = 整数>
+
+    方法 WS数据接收完成 <公开 定义事件 类型 = 整数 注释 = "当完整接收一个WebSocket数据包时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpServer* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }
+    # virtual EnHandleResult OnClose(ITcpServer* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<客户离开>(dwConnID, (INT)enOperation, (INT)iErrorCode); } 
+    # virtual EnHandleResult OnShutdown(ITcpServer* pSender) override { return (EnHandleResult)@<服务器被关闭>(); } 
+    # virtual EnHandleResult OnPrepareListen(ITcpServer* pSender, SOCKET soListen) override { return (EnHandleResult)@<启动完毕>(); }
+    # virtual EnHandleResult OnAccept(ITcpServer* pSender, CONNID dwConnID, UINT_PTR soClient) override { return (EnHandleResult)@<客户进入>(dwConnID); }
+    #
+    # virtual EnHttpParseResult OnMessageBegin(IHttpServer* pSender, CONNID dwConnID) override { return  (EnHttpParseResult)@<开始解析消息>(dwConnID); }
+    # virtual EnHttpParseResult OnRequestLine(IHttpServer* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl) override;
+    # virtual EnHttpParseResult OnStatusLine(IHttpServer* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc) override;
+    # virtual EnHttpParseResult OnHeader(IHttpServer* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue) override;
+    # virtual EnHttpParseResult OnHeadersComplete(IHttpServer* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<请求头解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnBody(IHttpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHttpParseResult)@<请求数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHttpParseResult OnChunkHeader(IHttpServer* pSender, CONNID dwConnID, int iLength) override { return (EnHttpParseResult)@<分块头进入>(dwConnID, iLength); }
+    # virtual EnHttpParseResult OnChunkComplete(IHttpServer* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<分块头解析完成>(dwConnID); }
+    # virtual EnHttpParseResult OnMessageComplete(IHttpServer* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<消息解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnUpgrade(IHttpServer* pSender, CONNID dwConnID, EnHttpUpgradeType enUpgradeType) override { return (EnHttpParseResult)@<协议升级>(dwConnID, (INT)enUpgradeType); }
+    # virtual EnHttpParseResult OnParseError(IHttpServer* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc) override;
+    # virtual EnHandleResult OnWSMessageHeader(IHttpServer* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen) override;
+    # virtual EnHandleResult OnWSMessageBody(IHttpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<收到WS数据体>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnWSMessageComplete(IHttpServer* pSender, CONNID dwConnID) override { return (EnHandleResult)@<WS数据接收完成>(dwConnID); }
+    #
+    # <> </include>
+    #
+    # EnHttpParseResult @sn<current_class>::OnParseError(IHttpServer* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc)
+    # {
+    #     return (EnHttpParseResult)@<解析错误>(dwConnID, (INT)iErrorCode, CVolString (GetWideText (lpszErrorDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnHeader(IHttpServer* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue)
+    # {
+    #     return (EnHttpParseResult)@<请求头进入>(dwConnID, CVolString (GetWideText (lpszName, CVolMem (), NULL)), CVolString (GetWideText (lpszValue, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnStatusLine(IHttpServer* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc)
+    # {
+    #     return (EnHttpParseResult)@<状态行解析完成>(dwConnID, usStatusCode, CVolString (GetWideText (lpszDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnRequestLine(IHttpServer* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl)
+    # {
+    #     return (EnHttpParseResult)@<请求行解析完毕>(dwConnID, CVolString (GetWideText (lpszMethod, CVolMem (), NULL)), CVolString (GetWideText (lpszUrl, CVolMem (), NULL)));
+    # }
+    # EnHandleResult @sn<current_class>::OnWSMessageHeader(IHttpServer* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen)
+    # {
+    #     return (EnHandleResult)@<正在解析WS数据头>(dwConnID, bFinal, iReserved, iOperationCode, (INT_P)lpszMask, ullBodyLen);
+    # }
+    #
+    # @end
+}
+
+类 HP_HTTP安全服务器 <公开 基础类 = HPHTTP服务器基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "  HP-HTTP安全服务器类."
+        注释 = "  本类为HP-HTTP安全服务器类,通过本类,允许用户自行搭建HTTPS服务器,在您使用本类时,请您注意下问题:"
+        注释 = "    1.不得在服务器事件内执行HP系统方法,即\"断开连接\",\"停止\"等操作,否则将会造成线程崩溃."
+        注释 = "    2.本服务器为安全服务器(HTTPS),在您启动服务器之前,请先执行方法\"初始化SSL\"环境,为服务器设置S" 注释 = "SL证书文件,初始化SSL,否则将会导致服务器启动失败."
+        @视窗.后缀文本 = "public IHttpServerListener" @文档 = "category = \"HTTP服务器\"">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (IHttpServer, HttpsServer, IHttpServerListener)
+    #
+    # 属性 ---
+
+    方法 握手模式 <公开 属性写 注释 = "设置通信组件SSL握手方式(默认为真,自动握手)">
+    参数 自动 <类型 = 逻辑型 注释 = "提供真则表示自动握手,否则需手动调用\"开始SSL握手\"方法.">
+    {
+        @ GetHttpsServer()->SetSSLAutoHandShake(@<自动>);
+    }
+
+    方法 握手模式 <公开 属性读 类型 = 逻辑型 注释 = "获取通信组件SSL握手方式." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetHttpsServer()->IsSSLAutoHandShake()
+    }
+
+    方法 加密算法列表 <公开 属性写 注释 = "设置SSL加密算法列表.">
+    参数 算法 <类型 = 文本型>
+    {
+        @ GetHttpsServer()->SetSSLCipherList(@<算法>);
+    }
+
+    方法 加密算法列表 <公开 属性读 类型 = 文本型 注释 = "获取SSL加密算法列表." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetHttpsServer()->GetSSLCipherList()
+    }
+
+    # ---
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动服务器并且监听指定端口号." 注释 = "注意:调用前请确保已初始化SSL环境成功,否则无法正确启动." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 地址 <类型 = 文本型 注释 = "提供所欲监听的地址.">
+    参数 端口号 <类型 = 整数 注释 = "提供所欲监听的端口号. 有效端口号范围为从0到65535.">
+    {
+        @ @sn<this>.GetHttpsServer()->Start(@<地址>, (USHORT)@<端口号>)
+    }
+
+    方法 初始化SSL环境 <公开 类型 = 逻辑型 注释 = "初始化通信组件 SSL 环境参数." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败." 返回值注释 = "返回是否操作成功."
+            @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件路径." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件路径." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书文件或目录(单向验证或客户端可选)" @默认值 = "">
+    参数 SNI回调 <类型 = 变整数 注释 = "SNI回调函数指针(可选,如果为0则使用SNI默认回调函数)." @默认值 = 0>
+    {
+        @ return GetHttpsServer()->SetupSSLContext((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : (LPCTSTR)@<证书文件>, @<私钥文件>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥文件>, @<私钥密码>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥密码>,@<CA证书>.IsEmpty() ? nullptr : (LPCTSTR)@<CA证书>,@<SNI回调> == 0 ? nullptr : (Fn_SNI_ServerNameCallback)@<SNI回调>);
+    }
+
+    方法 初始化SSL环境_内存 <公开 类型 = 逻辑型 注释 = "初始化通信组件SSL环境参数(从内存载入证书内容)." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败."
+            返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件内容." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件内容." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书内容." @默认值 = "">
+    参数 SNI回调 <类型 = 变整数 注释 = "SNI回调函数指针(可选,如果为0则使用SNI默认回调函数)." @默认值 = 0>
+    {
+        @ return GetHttpsServer()->SetupSSLContextByMemory((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : GetMbsText(@<证书文件>, CVolMem (), NULL), @<私钥文件>.IsEmpty() ? nullptr : GetMbsText(@<私钥文件>, CVolMem (), NULL), @<私钥密码>.IsEmpty() ? nullptr : GetMbsText(@<私钥密码>, CVolMem (), NULL),@<CA证书>.IsEmpty() ? nullptr : GetMbsText(@<CA证书>, CVolMem (), NULL), @<SNI回调> == 0 ? nullptr : (Fn_SNI_ServerNameCallback)@<SNI回调>);
+    }
+
+    方法 添加SNI主机证书 <公开 类型 = 整数 注释 = "增加SNI主机证书." 注释 = "注意:需在初始化SSL环境成功后调用,可增加多个证书." 返回值注释 = "返回大于0则添加成功,且该值为主机证书对应的索引,小于0则添加失败."
+            @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." 编辑时信息 = "AAAA0, 0, 0, 0" @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件路径." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件路径." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书文件或目录(单向验证可选)." @默认值 = "">
+    {
+        @ return GetHttpsServer()->AddSSLContext((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : (LPCTSTR)@<证书文件>, @<私钥文件>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥文件>, @<私钥密码>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥密码>,@<CA证书>.IsEmpty() ? nullptr : (LPCTSTR)@<CA证书>);
+    }
+
+    方法 添加SNI主机证书_内存 <公开 类型 = 整数 注释 = "增加SNI主机证书(从内存载入证书内容)." 注释 = "注意:需在初始化SSL环境成功后调用,可增加多个证书."
+            返回值注释 = "返回大于0则添加成功,且该值为主机证书对应的索引,小于0则添加失败." @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." 编辑时信息 = "AAAA0, 0, 0, 0" @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件内容." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件内容." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书内容." @默认值 = "">
+    {
+        @ return GetHttpsServer()->AddSSLContextByMemory((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : GetMbsText(@<证书文件>, CVolMem (), NULL), @<私钥文件>.IsEmpty() ? nullptr : GetMbsText(@<私钥文件>, CVolMem (), NULL), @<私钥密码>.IsEmpty() ? nullptr : GetMbsText(@<私钥密码>, CVolMem (), NULL), @<CA证书>.IsEmpty() ? nullptr : GetMbsText(@<CA证书>, CVolMem (), NULL));
+    }
+
+    方法 绑定SNI主机域名 <公开 类型 = 逻辑型 注释 = "将指定主机域名绑定至已添加成功的SNI主机证书." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 主机域名 <类型 = 文本型 注释 = "提供所欲绑定的主机域名." 编辑时信息 = "AAAA0, 0, 0, 0">
+    参数 证书索引 <类型 = 整数 注释 = "提供SNI证书对应的索引,即\"添加SNI主机证书\"成功所返回的索引值.">
+    {
+        @ @sn<this>.GetHttpsServer()->BindSSLServerName(@<主机域名>, @<证书索引>)
+    }
+
+    方法 清理SSL环境 <公开 注释 = "清理通信组件SSL运行环境,回收SSL相关内存." 注释 = "注意:当通信组件需要重设SSL信息时,请先调用该方法清空原有环境参数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetHttpsServer()->CleanupSSLContext()
+    }
+
+    方法 开始SSL握手 <公开 类型 = 逻辑型 注释 = "启动SSL握手." 注释 = "注意:如果当前通信组件的\"握手模式\"为假时,需调用该方法握手,否则将导致连接失败." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "指定所欲与其握手的连接ID.">
+    {
+        @ @sn<this>.GetHttpsServer()->StartSSLHandShake(@<连接ID>)
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "  当客户端通过事件\"客户进入\"后,将会立即触发本事件,只有通过本事件,才会进行握手动作." 返回值注释 = "可选返回值:"
+            返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手." 返回值注释 = "  1 = 忽略本次操作, 客户端可与服务器建立正式连接." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当服务器发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当服务器成功接收数据后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作."
+            返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 已接收数据 <类型 = 字节集类 注释 = "所接收到的数据.">
+    参数 已接收长度 <类型 = 整数 注释 = "已接收数据长度.">
+
+    方法 客户离开 <公开 定义事件 类型 = 整数 注释 = "当客户端主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 服务器被关闭 <公开 定义事件 类型 = 整数 注释 = "当服务器被关闭后,将会触发本事件.">
+
+    方法 启动完毕 <公开 定义事件 类型 = 整数 注释 = "服务器端启动完毕并开始监听后,将触发本事件.">
+
+    方法 客户进入 <公开 定义事件 类型 = 整数 注释 = "  当客户连接到服务器后,将会触发本事件,请注意,本事件下的连接并非是正式连接,"
+            注释 = "只有该连接通过\"完成握手\"事件,才可以与服务器建立正式连接,本事件返回值拥有具体意义,请参考返回值说明." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 将触发\"完成握手\"事件."
+            返回值注释 = "  1 = 忽略本次操作, 将触发\"完成握手\"事件." 返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 开始解析消息 <公开 定义事件 类型 = 整数 注释 = "  当客户请求数据时,将会首先触发本事件,本事件触发后,开始解析请求数据." 注释 = "  请注意:请不要再本事件中与客户进行数据发送,如果要向客户回复数据,请"
+            注释 = "在事件\"消息解析完毕\"中回复." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求行解析完毕 <公开 定义事件 类型 = 整数 注释 = "  当服务器接收到客户请求后,将触发本事件,本事件将指定" 注释 = "当前请求方式,和请求路径.例如:本机地址为192.168.0.103"
+            注释 = ",浏览器端访问\"http://192.168.0.103/image.png\",本事件" 注释 = "将解析出请求地址后面的\"/image.png\"." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 当前请求方式 <类型 = 文本型 注释 = "当前客户请求方式,例如GET或POST.">
+    参数 当前请求地址 <类型 = 文本型 注释 = "当前客户请求路径.为地址后面的参数.">
+
+    方法 状态行解析完成 <公开 定义事件 类型 = 整数 注释 = "状态行解析完成后本事件将被触发." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 状态码 <类型 = 短整数 注释 = "HTTP状态码,参考\"HPHTTP状态码\"类.">
+    参数 状态描述 <类型 = 文本型 注释 = "HTTP状态描述内容.">
+
+    方法 请求头进入 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析完毕请求后,将会通过本事件通知当前请求头." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 请求头名称 <类型 = 文本型>
+    参数 请求头值 <类型 = 文本型>
+
+    方法 请求头解析完毕 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析请求头完毕后,将通过本事件通知用户." 注释 = "  请注意:本事件只是通知用户请求头解析完毕,不提供所解析的请"
+            注释 = "求头数据,如果想要获取请求头数据,请添加事件\"请求头进入\",此事" 注释 = "件下将会提供请求头名称和请求头值.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求数据进入 <公开 定义事件 类型 = 整数 注释 = "  当接收到HTTP BODY报文时本事件将被触发." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类 注释 = "所收到的请求体数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所收到的请求体数据长度.">
+
+    方法 分块头进入 <公开 定义事件 类型 = 整数 注释 = "分块模式为HTTP1.1的特有模式,即在不确定长度时,将数据分块(Chunked)发送." 注释 = "  当接收到客户发送的分块请求头时,将会通过本事件通知用户,并且通过"
+            注释 = "参数\"当前请求头长度\"为用户提供请求头数据长度." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据长度 <类型 = 整数 注释 = "Chunked报文体数据长度.">
+
+    方法 分块头解析完成 <公开 定义事件 类型 = 整数 注释 = "  当接收到客户发送的(Chunked)分块请求头并且解析完毕后,将通过本事件通知用户." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 消息解析完毕 <公开 定义事件 类型 = 整数 注释 = "  客户请求解析完毕." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 协议升级 <公开 定义事件 类型 = 整数 注释 = "  当客户端主动升级协议后,将会触发本事件." 注释 = "  当客户端从HTTP1.0协议升级为HTTP1.1协议后,服务器将通过本事件通知" 注释 = "用户."
+            注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 协议类型 <类型 = HPHTTP协议升级类型>
+
+    方法 解析错误 <公开 定义事件 类型 = 整数 注释 = "  当解析客户请求数据出错后,将会通过本事件通知用户." 注释 = "  当解析客户请求数据出错后,将会触发本事件,触发本事件的原因大概如下:"
+            注释 = "    1. 在服务器解析事件中返回了-1或其他不正确的值." 注释 = "    2. 在服务器解析事件中主动与客户断开了连接." 注释 = "    3. 客户所发送的请求数据有误."
+            注释 = "  本事件返回值无具体意义,请返回默认值0." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 错误码 <类型 = HP错误码>
+    参数 错误描述 <类型 = 文本型>
+
+    方法 正在解析WS数据头 <公开 定义事件 类型 = 整数 注释 = "当解析WebSocket数据包头时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 结束帧 <类型 = 逻辑型 注释 = "是否结束帧.">
+    参数 保留 <类型 = 字节 注释 = "RSV1/RSV2/RSV3各1位.">
+    参数 操作码 <类型 = 字节 注释 = "操作码:0x0 - 0xF.">
+    参数 掩码 <类型 = 变整数 注释 = "4字节掩码,空指针则无掩码.">
+    参数 消息长度 <类型 = 长整数 注释 = "消息体长度.">
+
+    方法 收到WS数据体 <公开 定义事件 类型 = 整数 注释 = "当接收到WebSocket数据包体时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类>
+    参数 长度 <类型 = 整数>
+
+    方法 WS数据接收完成 <公开 定义事件 类型 = 整数 注释 = "当完整接收一个WebSocket数据包时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpServer* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpServer* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }
+    # virtual EnHandleResult OnClose(ITcpServer* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<客户离开>(dwConnID, (INT)enOperation, (INT)iErrorCode); } 
+    # virtual EnHandleResult OnShutdown(ITcpServer* pSender) override { return (EnHandleResult)@<服务器被关闭>(); } 
+    # virtual EnHandleResult OnPrepareListen(ITcpServer* pSender, SOCKET soListen) override { return (EnHandleResult)@<启动完毕>(); }
+    # virtual EnHandleResult OnAccept(ITcpServer* pSender, CONNID dwConnID, UINT_PTR soClient) override { return (EnHandleResult)@<客户进入>(dwConnID); }
+    #
+    # virtual EnHttpParseResult OnMessageBegin(IHttpServer* pSender, CONNID dwConnID) override { return  (EnHttpParseResult)@<开始解析消息>(dwConnID); }
+    # virtual EnHttpParseResult OnRequestLine(IHttpServer* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl) override;
+    # virtual EnHttpParseResult OnStatusLine(IHttpServer* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc) override;
+    # virtual EnHttpParseResult OnHeader(IHttpServer* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue) override;
+    # virtual EnHttpParseResult OnHeadersComplete(IHttpServer* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<请求头解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnBody(IHttpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHttpParseResult)@<请求数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHttpParseResult OnChunkHeader(IHttpServer* pSender, CONNID dwConnID, int iLength) override { return (EnHttpParseResult)@<分块头进入>(dwConnID, iLength); }
+    # virtual EnHttpParseResult OnChunkComplete(IHttpServer* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<分块头解析完成>(dwConnID); }
+    # virtual EnHttpParseResult OnMessageComplete(IHttpServer* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<消息解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnUpgrade(IHttpServer* pSender, CONNID dwConnID, EnHttpUpgradeType enUpgradeType) override { return (EnHttpParseResult)@<协议升级>(dwConnID, (INT)enUpgradeType); }
+    # virtual EnHttpParseResult OnParseError(IHttpServer* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc) override;
+    # virtual EnHandleResult OnWSMessageHeader(IHttpServer* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen) override;
+    # virtual EnHandleResult OnWSMessageBody(IHttpServer* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<收到WS数据体>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnWSMessageComplete(IHttpServer* pSender, CONNID dwConnID) override { return (EnHandleResult)@<WS数据接收完成>(dwConnID); }
+    #
+    # <> </include>
+    #
+    # EnHttpParseResult @sn<current_class>::OnParseError(IHttpServer* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc)
+    # {
+    #     return (EnHttpParseResult)@<解析错误>(dwConnID, (INT)iErrorCode, CVolString (GetWideText (lpszErrorDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnHeader(IHttpServer* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue)
+    # {
+    #     return (EnHttpParseResult)@<请求头进入>(dwConnID, CVolString (GetWideText (lpszName, CVolMem (), NULL)), CVolString (GetWideText (lpszValue, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnStatusLine(IHttpServer* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc)
+    # {
+    #     return (EnHttpParseResult)@<状态行解析完成>(dwConnID, usStatusCode, CVolString (GetWideText (lpszDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnRequestLine(IHttpServer* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl)
+    # {
+    #     return (EnHttpParseResult)@<请求行解析完毕>(dwConnID, CVolString (GetWideText (lpszMethod, CVolMem (), NULL)), CVolString (GetWideText (lpszUrl, CVolMem (), NULL)));
+    # }
+    # EnHandleResult @sn<current_class>::OnWSMessageHeader(IHttpServer* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen)
+    # {
+    #     return (EnHandleResult)@<正在解析WS数据头>(dwConnID, bFinal, iReserved, iOperationCode, (INT_P)lpszMask, ullBodyLen);
+    # }
+    #
+    # @end
+}
+
+类 HPHTTP代理基础类 <公开 基础类 = HPTCP代理基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "HTTP代理基础类." @文档 = "category = \"辅助类\"" @禁止创建对象 = 真>
+{
+
+    # @ @m<DECLARE_HPSOCKET_ABS>(IHttpAgent, BaseHttpAgent, GetSocketPtr)
+    #
+    # 属性 ---
+
+    方法 本地协议版本 <公开 属性写 注释 = "设置当前本地HTTP协议版本.">
+    参数 版本 <类型 = HPHTTP协议版本>
+    {
+        如果 (版本 == HPHTTP协议版本.HTTP1_0)
+        {
+            @ GetBaseHttpAgent()->SetLocalVersion(HV_1_0);
+        }
+        否则
+        {
+            @ GetBaseHttpAgent()->SetLocalVersion(HV_1_1);
+        }
+    }
+
+    方法 本地协议版本 <公开 属性读 类型 = HPHTTP协议版本 注释 = "获取当前本地所使用HTTP协议版本." @禁止流程检查 = 真>
+    {
+        @ return (GetBaseHttpAgent()->GetLocalVersion() == HV_1_0 ? @<HPHTTP协议版本.HTTP1_0> : @<HPHTTP协议版本.HTTP1_1>);
+    }
+
+    方法 自动启动通信 <公开 属性读 类型 = 逻辑型 注释 = "获取HTTP的启动方式." 返回值注释 = "为真表示自动启动." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetBaseHttpAgent()->IsHttpAutoStart()
+    }
+
+    方法 自动启动通信 <公开 属性写 注释 = "设置HTTP的启动方式.">
+    参数 自动 <类型 = 逻辑型 注释 = "为真表示自动启动.">
+    {
+        @ GetBaseHttpAgent()->SetHttpAutoStart(@<自动>);
+    }
+
+    方法 启用Cookie <公开 属性写 注释 = "设置是否使用Cookie,默认启用.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ GetBaseHttpAgent()->SetUseCookie(@<启用>);
+    }
+
+    方法 启用Cookie <公开 属性读 类型 = 逻辑型 注释 = "获取是否使用Cookie." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetBaseHttpAgent()->IsUseCookie()
+    }
+
+    # 方法 ---
+
+    方法 启动HTTP通信 <公开 类型 = 逻辑型 注释 = "启动HTTP通信." 注释 = "如当前组件设置为非自动启动HTTP通信时,需调用该方法启动." 返回值注释 = "返回是否启动成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ @sn<this>.GetBaseHttpAgent()->StartHttp(@<连接ID>)
+    }
+
+    方法 发送分片数据 <公开 类型 = 逻辑型 注释 = "向对端发送Chunked数据分片." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "所欲向其发送数据的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "所欲发送的数据分片.">
+    参数 数据长度 <类型 = 整数 注释 = "所欲发送数据分片的长度.">
+    参数 扩展属性 <类型 = 文本型 注释 = "扩展属性.">
+    {
+        @ return GetBaseHttpAgent()->SendChunkData(@<连接ID>, (const BYTE*)@<数据>.GetPtr (), @<数据长度>, GetMbsText(@<扩展属性>, CVolMem (), NULL));
+    }
+
+    方法 是否升级协议 <公开 类型 = 逻辑型 注释 = "检查是否升级协议." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ @sn<this>.GetBaseHttpAgent()->IsUpgrade(@<连接ID>)
+    }
+
+    方法 是否KeepAlive <公开 类型 = 逻辑型 注释 = "检查是否有Keep-Alive标识." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ @sn<this>.GetBaseHttpAgent()->IsKeepAlive(@<连接ID>)
+    }
+
+    方法 取协议版本 <公开 类型 = 短整数 注释 = "获取协议版本." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ @sn<this>.GetBaseHttpAgent()->GetVersion(@<连接ID>)
+    }
+
+    方法 取内容长度 <公开 类型 = 长整数 注释 = "获取内容长度." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ (INT64)@sn<this>.GetBaseHttpAgent()->GetContentLength(@<连接ID>)
+    }
+
+    方法 取内容类型 <公开 类型 = 文本型 注释 = "获取内容类型." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ CVolString (@sn<this>.GetBaseHttpAgent()->GetContentType(@<连接ID>))
+    }
+
+    方法 取内容编码 <公开 类型 = 文本型 注释 = "获取内容编码." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ CVolString (@sn<this>.GetBaseHttpAgent()->GetContentEncoding(@<连接ID>))
+    }
+
+    方法 取传输编码 <公开 类型 = 文本型 注释 = "获取传输编码." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ CVolString (@sn<this>.GetBaseHttpAgent()->GetTransferEncoding(@<连接ID>))
+    }
+
+    方法 取协议升级类型 <公开 类型 = HPHTTP协议升级类型 注释 = "获取协议升级类型." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ (INT)@sn<this>.GetBaseHttpAgent()->GetUpgradeType(@<连接ID>)
+    }
+
+    方法 取解析错误代码 <公开 类型 = 短整数 注释 = "获取解析错误代码" @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数>
+    参数 错误描述 <类型 = 变整数 注释 = "提供获取错误描述内容的指针." @默认值 = 0>
+    {
+        @ return (SHORT)GetBaseHttpAgent()->GetParseErrorCode(@<连接ID>, @<错误描述> == 0 ? nullptr : (LPCSTR*)@<错误描述>);
+    }
+
+    方法 取请求头值 <公开 类型 = 文本型 注释 = " 取得指定请求头的值." 注释 = "  取得请求头中指定的值,例如,取请求头值(当前连接ID, \"User-Agent\"),将取得当前客户" 注释 = "的浏览器类型."
+            注释 = "  请注意:如果您欲读的请求头名在请求头中不存在,或还未解析完毕,本方法将返回空对象." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数>
+    参数 名称 <类型 = 文本型>
+    {
+        @ LPCSTR str = "";
+        @ GetBaseHttpAgent()->GetHeader(@<连接ID>, GetMbsText(@<名称>, CVolMem (), NULL), &str);
+        @ return CVolString (GetWideText (str, CVolMem (), NULL));
+    }
+
+    方法 取请求头多值 <公开 类型 = 文本数组类 注释 = "获取指定多值的请求头." 返回值注释 = "返回指定名称请求头对应的所有值.">
+    参数 连接ID <类型 = 变整数>
+    参数 名称 <类型 = 文本型>
+    {
+        变量 结果 <类型 = 文本数组类>
+        @ DWORD count = 0;
+        @ GetBaseHttpAgent()->GetHeaders(@<连接ID>, GetMbsText(@<名称>, CVolMem (), NULL), nullptr, count);
+        @ if (count <= 0)
+        @     return @<结果>;
+        @ LPCSTR *values = new LPCSTR[(INT)count];
+        @ GetBaseHttpAgent()->GetHeaders(@<连接ID>, GetMbsText(@<名称>, CVolMem (), NULL), values, count);
+        @ for (INT i = 0; i < (INT)count; i++)
+        @     @<结果>.data ().Add (GetWideText (values[i], CVolMem (), NULL));
+        @ delete[] values;
+        返回 (结果)
+    }
+
+    方法 取所有请求头 <公开 类型 = HP请求头数组类 注释 = "获取所有请求头.">
+    参数 连接ID <类型 = 变整数>
+    {
+        变量 结果 <类型 = HP请求头数组类>
+        @ DWORD count = 0;
+        @ GetBaseHttpAgent()->GetAllHeaders(@<连接ID>, nullptr, count);
+        @ if (count <= 0)
+        @     return @<结果>;
+        @ THeader *headers = new THeader[(INT)count];
+        @ GetBaseHttpAgent()->GetAllHeaders(@<连接ID>, headers, count);
+        @ for (INT i = 0; i < (INT)count; i++)
+        @ {
+        @     @dt<HP请求头类> volHeader;
+        @     volHeader.@n<HP请求头类.名称>.SetText (GetWideText (headers[i].name, CVolMem (), NULL));
+        @     volHeader.@n<HP请求头类.值>.SetText (GetWideText (headers[i].value, CVolMem (), NULL));
+        @     @<结果>.Add (volHeader, NULL);
+        @ }
+        @ delete[] headers;
+        返回 (结果)
+    }
+
+    方法 取所有请求头名 <公开 类型 = 文本数组类 注释 = "获取所有请求头名称.">
+    参数 连接ID <类型 = 变整数>
+    {
+        变量 结果 <类型 = 文本数组类>
+        @ DWORD count = 0;
+        @ GetBaseHttpAgent()->GetAllHeaderNames(@<连接ID>, nullptr, count);
+        @ if (count <= 0)
+        @     return @<结果>;
+        @ LPCSTR *values = new LPCSTR[(INT)count];
+        @ GetBaseHttpAgent()->GetAllHeaderNames(@<连接ID>, values, count);
+        @ for (INT i = 0; i < (INT)count; i++)
+        @     @<结果>.data ().Add (GetWideText (values[i], CVolMem (), NULL));
+        @ delete[] values;
+        返回 (结果)
+    }
+
+    方法 取Cookie <公开 类型 = 文本型 注释 = "获取指定Cookie." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数>
+    参数 名称 <类型 = 文本型>
+    {
+        @ LPCSTR str = "";
+        @ GetBaseHttpAgent()->GetCookie(@<连接ID>, GetMbsText(@<名称>, CVolMem (), NULL), &str);
+        @ return CVolString (GetWideText (str, CVolMem (), NULL));
+    }
+
+    方法 取所有Cookie <公开 类型 = HP请求头数组类 注释 = "获取所有Cookie.">
+    参数 连接ID <类型 = 变整数>
+    {
+        变量 结果 <类型 = HP请求头数组类>
+        @ DWORD count = 0;
+        @ GetBaseHttpAgent()->GetAllCookies(@<连接ID>, nullptr, count);
+        @ if (count <= 0)
+        @     return @<结果>;
+        @ TCookie *cookies = new TCookie[(INT)count];
+        @ GetBaseHttpAgent()->GetAllCookies(@<连接ID>, cookies, count);
+        @ for (INT i = 0; i < (INT)count; i++)
+        @ {
+        @     @dt<HP请求头类> volCookie;
+        @     volCookie.@n<HP请求头类.名称>.SetText (GetWideText (cookies[i].name, CVolMem (), NULL));
+        @     volCookie.@n<HP请求头类.值>.SetText (GetWideText (cookies[i].value, CVolMem (), NULL));
+        @     @<结果>.Add (volCookie, NULL);
+        @ }
+        @ delete[] cookies;
+        返回 (结果)
+    }
+
+    方法 取WebSocket消息 <公开 类型 = 逻辑型 注释 = "获取当前WebSocket消息状态." 返回值注释 = "是否获取成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    参数 结束帧 <类型 = 变整数 注释 = "是否结束帧.">
+    参数 保留 <类型 = 变整数 注释 = "RSV1/RSV2/RSV3各1位.">
+    参数 操作码 <类型 = 变整数 注释 = "操作码:0x0 - 0xF.">
+    参数 掩码 <类型 = 变整数 注释 = "4个字节掩码.">
+    参数 总长度 <类型 = 变整数 注释 = "消息总长度.">
+    参数 BodyRemain <类型 = 变整数>
+    {
+        @ @sn<this>.GetBaseHttpAgent()->GetWSMessageState(@<连接ID>, (BOOL*)@<结束帧>, (BYTE*)@<保留>, (BYTE*)@<操作码>, (LPCBYTE*)@<掩码>, (ULONGLONG*)@<总长度>, (ULONGLONG*)@<BodyRemain>)
+    }
+
+    方法 发WebSocket消息 <公开 类型 = 逻辑型 注释 = "向指定连接发送WebSocket消息." 返回值注释 = "返回是否发送成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 结束帧 <类型 = 逻辑型 注释 = "是否结束帧.">
+    参数 保留 <类型 = 字节 注释 = "RSV1/RSV2/RSV3各1位.">
+    参数 操作码 <类型 = 字节 注释 = "操作码:0x0 - 0xF.">
+    参数 掩码 <类型 = 字节集类 注释 = "4字节掩码,空指针表示无掩码.">
+    参数 数据 <类型 = 字节集类 注释 = "提供消息体数据缓冲区.">
+    参数 数据长度 <类型 = 整数 注释 = "消息体数据长度.">
+    参数 消息长度 <类型 = 长整数 注释 = "消息总长度.">
+    {
+        @ @sn<this>.GetBaseHttpAgent()->SendWSMessage(@<连接ID>, @<结束帧>, @<保留>, @<操作码>, (const BYTE*)@<掩码>.GetPtr (), (const BYTE*)@<数据>.GetPtr (), @<数据长度>, @<消息长度>)
+    }
+
+    方法 发送请求 <公开 类型 = 逻辑型 注释 = "向服务端发送HTTP请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 请求方法 <类型 = 文本型 注释 = "提供所欲使用的请求方法.">
+    参数 请求路径 <类型 = 文本型 注释 = "提供请求路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "所欲发送的请求头内容,一个成员表示一个头." @默认值 = 空对象>
+    参数 请求体 <类型 = 字节集类 注释 = "所欲发送的请求体内容." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpAgent()->SendRequest(@<连接ID>, GetMbsText(@<请求方法>, CVolMem (), NULL), GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount (), (const BYTE*)@<请求体>.GetPtr (), (INT)@<请求体>.GetSize ());
+    }
+
+    方法 发送本地文件 <公开 类型 = 逻辑型 注释 = "向指定连接发送本地文件(4096KB以下)." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 文件路径 <类型 = 文本型 注释 = "提供所欲发送文件的路径.">
+    参数 请求方法 <类型 = 文本型 注释 = "提供所欲使用的请求方法.">
+    参数 请求路径 <类型 = 文本型 注释 = "提供请求路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "所欲回复的请求头内容,一个成员表示一个头." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpAgent()->SendLocalFile(@<连接ID>, GetMbsText(@<文件路径>, CVolMem (), NULL), GetMbsText(@<请求方法>, CVolMem (), NULL), GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount ());
+    }
+
+    方法 发送POST请求 <公开 类型 = 逻辑型 注释 = "向指定连接发送POST请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头." @默认值 = 空对象>
+    参数 提交数据 <类型 = 字节集类 注释 = "提供所欲提交的数据内容." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpAgent()->SendPost(@<连接ID>, GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount (), (const BYTE*)@<提交数据>.GetPtr (), (INT)@<提交数据>.GetSize ());
+    }
+
+    方法 发送PUT请求 <公开 类型 = 逻辑型 注释 = "向指定连接发送PUT请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头." @默认值 = 空对象>
+    参数 提交数据 <类型 = 字节集类 注释 = "提供所欲提交的数据内容." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpAgent()->SendPut(@<连接ID>, GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount (), (const BYTE*)@<提交数据>.GetPtr (), (INT)@<提交数据>.GetSize ());
+    }
+
+    方法 发送PATCH请求 <公开 类型 = 逻辑型 注释 = "向指定连接发送PATCH请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头." @默认值 = 空对象>
+    参数 提交数据 <类型 = 字节集类 注释 = "提供所欲提交的数据内容." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpAgent()->SendPatch(@<连接ID>, GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount (), (const BYTE*)@<提交数据>.GetPtr (), (INT)@<提交数据>.GetSize ());
+    }
+
+    方法 发送GET请求 <公开 类型 = 逻辑型 注释 = "向指定连接发送GET请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpAgent()->SendGet(@<连接ID>, GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount ());
+    }
+
+    方法 发送DELETE请求 <公开 类型 = 逻辑型 注释 = "向指定连接发送Delete请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpAgent()->SendDelete(@<连接ID>, GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount ());
+    }
+
+    方法 发送HEAD请求 <公开 类型 = 逻辑型 注释 = "向指定连接发送Head请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpAgent()->SendHead(@<连接ID>, GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount ());
+    }
+
+    方法 发送TRACE请求 <公开 类型 = 逻辑型 注释 = "向指定连接发送Trace请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpAgent()->SendTrace(@<连接ID>, GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount ());
+    }
+
+    方法 发送OPTIONS请求 <公开 类型 = 逻辑型 注释 = "向指定连接发送Options请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpAgent()->SendOptions(@<连接ID>, GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount ());
+    }
+
+    方法 发送CONNECT请求 <公开 类型 = 逻辑型 注释 = "向指定连接发送Connect请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 连接ID <类型 = 变整数 注释 = "提供对端连接ID.">
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpAgent()->SendConnect(@<连接ID>, GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount ());
+    }
+
+    方法 取状态码 <公开 类型 = 短整数 注释 = "获取HTTP状态码." 返回值注释 = "返回值参考\"HPHTTP状态码\"类." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数>
+    {
+        @ @sn<this>.GetBaseHttpAgent()->GetStatusCode(@<连接ID>)
+    }
+}
+
+类 HP_HTTP代理类 <公开 基础类 = HPHTTP代理基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." @文档 = "category = \"HTTP客户端\""
+        @视窗.后缀文本 = "public IHttpAgentListener">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (IHttpAgent, HttpAgent, IHttpAgentListener)
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动通信代理组件,启动完成后可开始连接远程服务器." 返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 绑定地址 <类型 = 文本型 注释 = "提供所欲绑定的地址,默认空绑定任意地址." @默认值 = "">
+    参数 异步连接 <类型 = 逻辑型 注释 = "是否采用异步连接方式." @默认值 = 真>
+    {
+        @ return GetHttpAgent()->Start(@<绑定地址>.IsEmpty() ? nullptr : (LPCTSTR)@<绑定地址>, @<异步连接>);
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "与服务端进行握手时将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当通信组件发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当通信组件成功接收数据后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作."
+            返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 已接收数据 <类型 = 字节集类 注释 = "所接收到的数据.">
+    参数 已接收长度 <类型 = 整数 注释 = "已接收数据长度.">
+
+    方法 通信发生错误 <公开 定义事件 类型 = 整数 注释 = "当通信组件主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 代理被关闭 <公开 定义事件 类型 = 整数 注释 = "当通信组件被关闭后,将会触发本事件.">
+
+    方法 准备连接 <公开 定义事件 类型 = 整数 注释 = "当通信组件启动之后,会触发一次本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行连接."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行连接." 返回值注释 = "  2 = 本次操作错误, 终止启动通信客户端组件.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 连接完成 <公开 定义事件 类型 = 整数 注释 = "与服务端成功建立连接时本事件将被触发." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行." 返回值注释 = "  2 = 本次操作错误, 如果为同步连接将终止启动通信客户端,为异步则会关闭连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 开始解析消息 <公开 定义事件 类型 = 整数 注释 = "  当客户请求数据时,将会首先触发本事件,本事件触发后,开始解析请求数据." 注释 = "  请注意:请不要再本事件中与客户进行数据发送,如果要向客户回复数据,请"
+            注释 = "在事件\"消息解析完毕\"中回复." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求行解析完毕 <公开 定义事件 类型 = 整数 注释 = "  当服务器接收到客户请求后,将触发本事件,本事件将指定" 注释 = "当前请求方式,和请求路径.例如:本机地址为192.168.0.103"
+            注释 = ",浏览器端访问\"http://192.168.0.103/image.png\",本事件" 注释 = "将解析出请求地址后面的\"/image.png\"." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 当前请求方式 <类型 = 文本型 注释 = "当前客户请求方式,例如GET或POST.">
+    参数 当前请求地址 <类型 = 文本型 注释 = "当前客户请求路径.为地址后面的参数.">
+
+    方法 状态行解析完成 <公开 定义事件 类型 = 整数 注释 = "状态行解析完成后本事件将被触发." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 状态码 <类型 = 短整数 注释 = "HTTP状态码,参考\"HPHTTP状态码\"类.">
+    参数 状态描述 <类型 = 文本型 注释 = "HTTP状态描述内容.">
+
+    方法 请求头进入 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析完毕请求后,将会通过本事件通知当前请求头." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 请求头名称 <类型 = 文本型>
+    参数 请求头值 <类型 = 文本型>
+
+    方法 请求头解析完毕 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析请求头完毕后,将通过本事件通知用户." 注释 = "  请注意:本事件只是通知用户请求头解析完毕,不提供所解析的请"
+            注释 = "求头数据,如果想要获取请求头数据,请添加事件\"请求头进入\",此事" 注释 = "件下将会提供请求头名称和请求头值.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求数据进入 <公开 定义事件 类型 = 整数 注释 = "  当接收到HTTP BODY报文时本事件将被触发." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类 注释 = "所收到的请求体数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所收到的请求体数据长度.">
+
+    方法 分块头进入 <公开 定义事件 类型 = 整数 注释 = "分块模式为HTTP1.1的特有模式,即在不确定长度时,将数据分块(Chunked)发送." 注释 = "  当接收到客户发送的分块请求头时,将会通过本事件通知用户,并且通过"
+            注释 = "参数\"当前请求头长度\"为用户提供请求头数据长度." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据长度 <类型 = 整数 注释 = "Chunked报文体数据长度.">
+
+    方法 分块头解析完成 <公开 定义事件 类型 = 整数 注释 = "  当接收到客户发送的(Chunked)分块请求头并且解析完毕后,将通过本事件通知用户." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 消息解析完毕 <公开 定义事件 类型 = 整数 注释 = "  客户请求解析完毕." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 协议升级 <公开 定义事件 类型 = 整数 注释 = "  当客户端主动升级协议后,将会触发本事件." 注释 = "  当客户端从HTTP1.0协议升级为HTTP1.1协议后,服务器将通过本事件通知" 注释 = "用户."
+            注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 协议类型 <类型 = HPHTTP协议升级类型>
+
+    方法 解析错误 <公开 定义事件 类型 = 整数 注释 = "  当解析客户请求数据出错后,将会通过本事件通知用户." 注释 = "  当解析客户请求数据出错后,将会触发本事件,触发本事件的原因大概如下:"
+            注释 = "    1. 在服务器解析事件中返回了-1或其他不正确的值." 注释 = "    2. 在服务器解析事件中主动与客户断开了连接." 注释 = "    3. 客户所发送的请求数据有误."
+            注释 = "  本事件返回值无具体意义,请返回默认值0." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 错误码 <类型 = HP错误码>
+    参数 错误描述 <类型 = 文本型>
+
+    方法 正在解析WS数据头 <公开 定义事件 类型 = 整数 注释 = "当解析WebSocket数据包头时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 结束帧 <类型 = 逻辑型 注释 = "是否结束帧.">
+    参数 保留 <类型 = 字节 注释 = "RSV1/RSV2/RSV3各1位.">
+    参数 操作码 <类型 = 字节 注释 = "操作码:0x0 - 0xF.">
+    参数 掩码 <类型 = 变整数 注释 = "4字节掩码,空指针则无掩码.">
+    参数 消息长度 <类型 = 长整数 注释 = "消息体长度.">
+
+    方法 收到WS数据体 <公开 定义事件 类型 = 整数 注释 = "当接收到WebSocket数据包体时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类>
+    参数 长度 <类型 = 整数>
+
+    方法 WS数据接收完成 <公开 定义事件 类型 = 整数 注释 = "当完整接收一个WebSocket数据包时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }
+    # virtual EnHandleResult OnClose(ITcpAgent* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<通信发生错误>(dwConnID, (INT)enOperation, (INT)iErrorCode); }
+    # virtual EnHandleResult OnShutdown(ITcpAgent* pSender) override { return (EnHandleResult)@<代理被关闭>(); }
+    # virtual EnHandleResult OnPrepareConnect(ITcpAgent* pSender, CONNID dwConnID, SOCKET socket) override { return (EnHandleResult)@<准备连接>(dwConnID); }
+    # virtual EnHandleResult OnConnect(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<连接完成>(dwConnID); } 
+    #
+    # virtual EnHttpParseResult OnMessageBegin(IHttpAgent* pSender, CONNID dwConnID) override { return  (EnHttpParseResult)@<开始解析消息>(dwConnID); }
+    # virtual EnHttpParseResult OnRequestLine(IHttpAgent* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl) override;
+    # virtual EnHttpParseResult OnStatusLine(IHttpAgent* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc) override;
+    # virtual EnHttpParseResult OnHeader(IHttpAgent* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue) override;
+    # virtual EnHttpParseResult OnHeadersComplete(IHttpAgent* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<请求头解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnBody(IHttpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHttpParseResult)@<请求数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHttpParseResult OnChunkHeader(IHttpAgent* pSender, CONNID dwConnID, int iLength) override { return (EnHttpParseResult)@<分块头进入>(dwConnID, iLength); }
+    # virtual EnHttpParseResult OnChunkComplete(IHttpAgent* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<分块头解析完成>(dwConnID); }
+    # virtual EnHttpParseResult OnMessageComplete(IHttpAgent* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<消息解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnUpgrade(IHttpAgent* pSender, CONNID dwConnID, EnHttpUpgradeType enUpgradeType) override { return (EnHttpParseResult)@<协议升级>(dwConnID, (INT)enUpgradeType); }
+    # virtual EnHttpParseResult OnParseError(IHttpAgent* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc) override;
+    # virtual EnHandleResult OnWSMessageHeader(IHttpAgent* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen) override;
+    # virtual EnHandleResult OnWSMessageBody(IHttpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<收到WS数据体>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnWSMessageComplete(IHttpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<WS数据接收完成>(dwConnID); }
+    #
+    # <> </include>
+    #
+    # EnHttpParseResult @sn<current_class>::OnParseError(IHttpAgent* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc)
+    # {
+    #     return (EnHttpParseResult)@<解析错误>(dwConnID, (INT)iErrorCode, CVolString (GetWideText (lpszErrorDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnHeader(IHttpAgent* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue)
+    # {
+    #     return (EnHttpParseResult)@<请求头进入>(dwConnID, CVolString (GetWideText (lpszName, CVolMem (), NULL)), CVolString (GetWideText (lpszValue, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnStatusLine(IHttpAgent* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc)
+    # {
+    #     return (EnHttpParseResult)@<状态行解析完成>(dwConnID, usStatusCode, CVolString (GetWideText (lpszDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnRequestLine(IHttpAgent* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl)
+    # {
+    #     return (EnHttpParseResult)@<请求行解析完毕>(dwConnID, CVolString (GetWideText (lpszMethod, CVolMem (), NULL)), CVolString (GetWideText (lpszUrl, CVolMem (), NULL)));
+    # }
+    # EnHandleResult @sn<current_class>::OnWSMessageHeader(IHttpAgent* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen)
+    # {
+    #     return (EnHandleResult)@<正在解析WS数据头>(dwConnID, bFinal, iReserved, iOperationCode, (INT_P)lpszMask, ullBodyLen);
+    # }
+    # @end
+}
+
+类 HP_HTTP安全代理类 <公开 基础类 = HPHTTP代理基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." @文档 = "category = \"HTTP客户端\""
+        @视窗.后缀文本 = "public IHttpAgentListener">
+{
+
+    # @ @m<DECLARE_HPSOCKET_SERVER_REF> (IHttpAgent, HttpsAgent, IHttpAgentListener)
+    #
+    # 属性 ---
+
+    方法 握手模式 <公开 属性写 注释 = "设置通信组件SSL握手方式(默认为真,自动握手)">
+    参数 自动 <类型 = 逻辑型 注释 = "提供真则表示自动握手,否则需手动调用\"开始SSL握手\"方法.">
+    {
+        @ GetHttpsAgent()->SetSSLAutoHandShake(@<自动>);
+    }
+
+    方法 握手模式 <公开 属性读 类型 = 逻辑型 注释 = "获取通信组件SSL握手方式." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetHttpsAgent()->IsSSLAutoHandShake()
+    }
+
+    方法 加密算法列表 <公开 属性写 注释 = "设置SSL加密算法列表.">
+    参数 算法 <类型 = 文本型>
+    {
+        @ GetHttpsAgent()->SetSSLCipherList(@<算法>);
+    }
+
+    方法 加密算法列表 <公开 属性读 类型 = 文本型 注释 = "获取SSL加密算法列表." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetHttpsAgent()->GetSSLCipherList()
+    }
+
+    # 方法 ---
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动通信代理组件,启动完成后可开始连接远程服务器." 注释 = "注意:调用前请确保已初始化SSL环境成功,否则无法正确启动." 返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 绑定地址 <类型 = 文本型 注释 = "提供所欲绑定的地址,默认空绑定任意地址." @默认值 = "">
+    参数 异步连接 <类型 = 逻辑型 注释 = "是否采用异步连接方式." @默认值 = 真>
+    {
+        @ return GetHttpsAgent()->Start(@<绑定地址>.IsEmpty() ? nullptr : (LPCTSTR)@<绑定地址>, @<异步连接>);
+    }
+
+    方法 初始化SSL环境 <公开 类型 = 逻辑型 注释 = "初始化通信组件 SSL 环境参数." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败." 返回值注释 = "返回是否操作成功."
+            @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件路径(客户端可选)." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件路径(客户端可选)." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书文件或目录(单向验证或客户端可选)." @默认值 = "">
+    {
+        @ return GetHttpsAgent()->SetupSSLContext((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : (LPCTSTR)@<证书文件>, @<私钥文件>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥文件>, @<私钥密码>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥密码>,@<CA证书>.IsEmpty() ? nullptr : (LPCTSTR)@<CA证书>);
+    }
+
+    方法 初始化SSL环境_内存 <公开 类型 = 逻辑型 注释 = "初始化通信组件SSL环境参数(从内存载入证书内容)." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败."
+            返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件内容." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件内容." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书内容." @默认值 = "">
+    {
+        @ return GetHttpsAgent()->SetupSSLContextByMemory((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : GetMbsText(@<证书文件>, CVolMem (), NULL), @<私钥文件>.IsEmpty() ? nullptr : GetMbsText(@<私钥文件>, CVolMem (), NULL), @<私钥密码>.IsEmpty() ? nullptr : GetMbsText(@<私钥密码>, CVolMem (), NULL),@<CA证书>.IsEmpty() ? nullptr : GetMbsText(@<CA证书>, CVolMem (), NULL));
+    }
+
+    方法 清理SSL环境 <公开 注释 = "清理通信组件SSL运行环境,回收SSL相关内存." 注释 = "注意:当通信组件需要重设SSL信息时,请先调用该方法清空原有环境参数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetHttpsAgent()->CleanupSSLContext()
+    }
+
+    方法 开始SSL握手 <公开 类型 = 逻辑型 注释 = "启动SSL握手." 注释 = "注意:如果当前通信组件的\"握手模式\"为假时,需调用该方法握手,否则将导致连接失败." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 连接ID <类型 = 变整数 注释 = "指定所欲与其握手的连接ID.">
+    {
+        @ @sn<this>.GetHttpsAgent()->StartSSLHandShake(@<连接ID>)
+    }
+
+    # 事件 ---
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "与服务端进行握手时将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当通信组件发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当通信组件成功接收数据后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作."
+            返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 已接收数据 <类型 = 字节集类 注释 = "所接收到的数据.">
+    参数 已接收长度 <类型 = 整数 注释 = "已接收数据长度.">
+
+    方法 通信发生错误 <公开 定义事件 类型 = 整数 注释 = "当通信组件主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 代理被关闭 <公开 定义事件 类型 = 整数 注释 = "当通信组件被关闭后,将会触发本事件.">
+
+    方法 准备连接 <公开 定义事件 类型 = 整数 注释 = "当通信组件启动之后,会触发一次本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行连接."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行连接." 返回值注释 = "  2 = 本次操作错误, 终止启动通信客户端组件.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 连接完成 <公开 定义事件 类型 = 整数 注释 = "与服务端成功建立连接时本事件将被触发." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行." 返回值注释 = "  2 = 本次操作错误, 如果为同步连接将终止启动通信客户端,为异步则会关闭连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 开始解析消息 <公开 定义事件 类型 = 整数 注释 = "  当客户请求数据时,将会首先触发本事件,本事件触发后,开始解析请求数据." 注释 = "  请注意:请不要再本事件中与客户进行数据发送,如果要向客户回复数据,请"
+            注释 = "在事件\"消息解析完毕\"中回复." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求行解析完毕 <公开 定义事件 类型 = 整数 注释 = "  当服务器接收到客户请求后,将触发本事件,本事件将指定" 注释 = "当前请求方式,和请求路径.例如:本机地址为192.168.0.103"
+            注释 = ",浏览器端访问\"http://192.168.0.103/image.png\",本事件" 注释 = "将解析出请求地址后面的\"/image.png\"." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 当前请求方式 <类型 = 文本型 注释 = "当前客户请求方式,例如GET或POST.">
+    参数 当前请求地址 <类型 = 文本型 注释 = "当前客户请求路径.为地址后面的参数.">
+
+    方法 状态行解析完成 <公开 定义事件 类型 = 整数 注释 = "状态行解析完成后本事件将被触发." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 状态码 <类型 = 短整数 注释 = "HTTP状态码,参考\"HPHTTP状态码\"类.">
+    参数 状态描述 <类型 = 文本型 注释 = "HTTP状态描述内容.">
+
+    方法 请求头进入 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析完毕请求后,将会通过本事件通知当前请求头." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 请求头名称 <类型 = 文本型>
+    参数 请求头值 <类型 = 文本型>
+
+    方法 请求头解析完毕 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析请求头完毕后,将通过本事件通知用户." 注释 = "  请注意:本事件只是通知用户请求头解析完毕,不提供所解析的请"
+            注释 = "求头数据,如果想要获取请求头数据,请添加事件\"请求头进入\",此事" 注释 = "件下将会提供请求头名称和请求头值.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求数据进入 <公开 定义事件 类型 = 整数 注释 = "  当接收到HTTP BODY报文时本事件将被触发." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类 注释 = "所收到的请求体数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所收到的请求体数据长度.">
+
+    方法 分块头进入 <公开 定义事件 类型 = 整数 注释 = "分块模式为HTTP1.1的特有模式,即在不确定长度时,将数据分块(Chunked)发送." 注释 = "  当接收到客户发送的分块请求头时,将会通过本事件通知用户,并且通过"
+            注释 = "参数\"当前请求头长度\"为用户提供请求头数据长度." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据长度 <类型 = 整数 注释 = "Chunked报文体数据长度.">
+
+    方法 分块头解析完成 <公开 定义事件 类型 = 整数 注释 = "  当接收到客户发送的(Chunked)分块请求头并且解析完毕后,将通过本事件通知用户." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 消息解析完毕 <公开 定义事件 类型 = 整数 注释 = "  客户请求解析完毕." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 协议升级 <公开 定义事件 类型 = 整数 注释 = "  当客户端主动升级协议后,将会触发本事件." 注释 = "  当客户端从HTTP1.0协议升级为HTTP1.1协议后,服务器将通过本事件通知" 注释 = "用户."
+            注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 协议类型 <类型 = HPHTTP协议升级类型>
+
+    方法 解析错误 <公开 定义事件 类型 = 整数 注释 = "  当解析客户请求数据出错后,将会通过本事件通知用户." 注释 = "  当解析客户请求数据出错后,将会触发本事件,触发本事件的原因大概如下:"
+            注释 = "    1. 在服务器解析事件中返回了-1或其他不正确的值." 注释 = "    2. 在服务器解析事件中主动与客户断开了连接." 注释 = "    3. 客户所发送的请求数据有误."
+            注释 = "  本事件返回值无具体意义,请返回默认值0." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 错误码 <类型 = HP错误码>
+    参数 错误描述 <类型 = 文本型>
+
+    方法 正在解析WS数据头 <公开 定义事件 类型 = 整数 注释 = "当解析WebSocket数据包头时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 结束帧 <类型 = 逻辑型 注释 = "是否结束帧.">
+    参数 保留 <类型 = 字节 注释 = "RSV1/RSV2/RSV3各1位.">
+    参数 操作码 <类型 = 字节 注释 = "操作码:0x0 - 0xF.">
+    参数 掩码 <类型 = 变整数 注释 = "4字节掩码,空指针则无掩码.">
+    参数 消息长度 <类型 = 长整数 注释 = "消息体长度.">
+
+    方法 收到WS数据体 <公开 定义事件 类型 = 整数 注释 = "当接收到WebSocket数据包体时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类>
+    参数 长度 <类型 = 整数>
+
+    方法 WS数据接收完成 <公开 定义事件 类型 = 整数 注释 = "当完整接收一个WebSocket数据包时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpAgent* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }
+    # virtual EnHandleResult OnClose(ITcpAgent* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<通信发生错误>(dwConnID, (INT)enOperation, (INT)iErrorCode); }
+    # virtual EnHandleResult OnShutdown(ITcpAgent* pSender) override { return (EnHandleResult)@<代理被关闭>(); }
+    # virtual EnHandleResult OnPrepareConnect(ITcpAgent* pSender, CONNID dwConnID, SOCKET socket) override { return (EnHandleResult)@<准备连接>(dwConnID); }
+    # virtual EnHandleResult OnConnect(ITcpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<连接完成>(dwConnID); } 
+    #
+    # virtual EnHttpParseResult OnMessageBegin(IHttpAgent* pSender, CONNID dwConnID) override { return  (EnHttpParseResult)@<开始解析消息>(dwConnID); }
+    # virtual EnHttpParseResult OnRequestLine(IHttpAgent* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl) override;
+    # virtual EnHttpParseResult OnStatusLine(IHttpAgent* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc) override;
+    # virtual EnHttpParseResult OnHeader(IHttpAgent* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue) override;
+    # virtual EnHttpParseResult OnHeadersComplete(IHttpAgent* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<请求头解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnBody(IHttpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHttpParseResult)@<请求数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHttpParseResult OnChunkHeader(IHttpAgent* pSender, CONNID dwConnID, int iLength) override { return (EnHttpParseResult)@<分块头进入>(dwConnID, iLength); }
+    # virtual EnHttpParseResult OnChunkComplete(IHttpAgent* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<分块头解析完成>(dwConnID); }
+    # virtual EnHttpParseResult OnMessageComplete(IHttpAgent* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<消息解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnUpgrade(IHttpAgent* pSender, CONNID dwConnID, EnHttpUpgradeType enUpgradeType) override { return (EnHttpParseResult)@<协议升级>(dwConnID, (INT)enUpgradeType); }
+    # virtual EnHttpParseResult OnParseError(IHttpAgent* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc) override;
+    # virtual EnHandleResult OnWSMessageHeader(IHttpAgent* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen) override;
+    # virtual EnHandleResult OnWSMessageBody(IHttpAgent* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<收到WS数据体>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnWSMessageComplete(IHttpAgent* pSender, CONNID dwConnID) override { return (EnHandleResult)@<WS数据接收完成>(dwConnID); }
+    #
+    # <> </include>
+    #
+    # EnHttpParseResult @sn<current_class>::OnParseError(IHttpAgent* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc)
+    # {
+    #     return (EnHttpParseResult)@<解析错误>(dwConnID, (INT)iErrorCode, CVolString (GetWideText (lpszErrorDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnHeader(IHttpAgent* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue)
+    # {
+    #     return (EnHttpParseResult)@<请求头进入>(dwConnID, CVolString (GetWideText (lpszName, CVolMem (), NULL)), CVolString (GetWideText (lpszValue, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnStatusLine(IHttpAgent* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc)
+    # {
+    #     return (EnHttpParseResult)@<状态行解析完成>(dwConnID, usStatusCode, CVolString (GetWideText (lpszDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnRequestLine(IHttpAgent* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl)
+    # {
+    #     return (EnHttpParseResult)@<请求行解析完毕>(dwConnID, CVolString (GetWideText (lpszMethod, CVolMem (), NULL)), CVolString (GetWideText (lpszUrl, CVolMem (), NULL)));
+    # }
+    # EnHandleResult @sn<current_class>::OnWSMessageHeader(IHttpAgent* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen)
+    # {
+    #     return (EnHandleResult)@<正在解析WS数据头>(dwConnID, bFinal, iReserved, iOperationCode, (INT_P)lpszMask, ullBodyLen);
+    # }
+    #
+    # @end
+}
+
+类 HPHTTP客户端基础类 <公开 基础类 = HPTCP客户端基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "HTTP客户端基类,请使用其子类." @文档 = "category = \"辅助类\""
+        @禁止创建对象 = 真>
+{
+
+    # @ @m<DECLARE_HPSOCKET_ABS>(IHttpClient, BaseHttpClient, GetClientPtr)
+    #
+    # 属性 ---
+
+    方法 是否升级协议 <公开 属性读 类型 = 逻辑型 注释 = "检查是否升级协议." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetBaseHttpClient()->IsUpgrade()
+    }
+
+    方法 是否保持连接 <公开 属性读 类型 = 逻辑型 注释 = "检查是否有Keep-Alive标识." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetBaseHttpClient()->IsKeepAlive()
+    }
+
+    方法 协议版本 <公开 属性读 类型 = 短整数 注释 = "获取协议版本." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetBaseHttpClient()->GetVersion()
+    }
+
+    方法 内容长度 <公开 属性读 类型 = 长整数 注释 = "获取内容长度." @嵌入式方法 = "">
+    {
+        @ (INT64)@sn<this>.GetBaseHttpClient()->GetContentLength()
+    }
+
+    方法 内容类型 <公开 属性读 类型 = 文本型 注释 = "获取内容类型." @嵌入式方法 = "">
+    {
+        @ CVolString (@sn<this>.GetBaseHttpClient()->GetContentType())
+    }
+
+    方法 内容编码 <公开 属性读 类型 = 文本型 注释 = "获取内容编码." @嵌入式方法 = "">
+    {
+        @ CVolString (@sn<this>.GetBaseHttpClient()->GetContentEncoding())
+    }
+
+    方法 传输编码 <公开 属性读 类型 = 文本型 注释 = "获取传输编码." @嵌入式方法 = "">
+    {
+        @ CVolString (@sn<this>.GetBaseHttpClient()->GetTransferEncoding())
+    }
+
+    方法 协议升级类型 <公开 属性读 类型 = HPHTTP协议升级类型 注释 = "获取协议升级类型." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetBaseHttpClient()->GetUpgradeType()
+    }
+
+    方法 当前状态码 <公开 类型 = 短整数 注释 = "获取HTTP状态码." 返回值注释 = "返回值参考\"HPHTTP状态码\"类." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetBaseHttpClient()->GetStatusCode()
+    }
+
+    方法 自动启动通信 <公开 属性读 类型 = 逻辑型 注释 = "获取HTTP的启动方式." 返回值注释 = "为真表示自动启动." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetBaseHttpClient()->IsHttpAutoStart()
+    }
+
+    方法 自动启动通信 <公开 属性写 注释 = "设置HTTP的启动方式.">
+    参数 自动 <类型 = 逻辑型 注释 = "为真表示自动启动.">
+    {
+        @ GetBaseHttpClient()->SetHttpAutoStart(@<自动>);
+    }
+
+    方法 启用Cookie <公开 属性写 注释 = "设置是否使用Cookie,默认启用.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ GetBaseHttpClient()->SetUseCookie(@<启用>);
+    }
+
+    方法 启用Cookie <公开 属性读 类型 = 逻辑型 注释 = "获取是否使用Cookie." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetBaseHttpClient()->IsUseCookie()
+    }
+
+    # 方法 ---
+
+    方法 取解析错误代码 <公开 类型 = 短整数 注释 = "获取解析错误代码" @禁止流程检查 = 真>
+    参数 错误描述 <类型 = 变整数 注释 = "提供获取错误描述内容的指针." @默认值 = 0>
+    {
+        @ return (SHORT)GetBaseHttpClient()->GetParseErrorCode(@<错误描述> == 0 ? nullptr : (LPCSTR*)@<错误描述>);
+    }
+
+    方法 发WebSocket消息 <公开 类型 = 逻辑型 注释 = "向对端发送WebSocket消息." 返回值注释 = "返回是否发送成功." @嵌入式方法 = "">
+    参数 结束帧 <类型 = 逻辑型 注释 = "是否结束帧.">
+    参数 保留 <类型 = 字节 注释 = "RSV1/RSV2/RSV3各1位.">
+    参数 操作码 <类型 = 字节 注释 = "操作码:0x0 - 0xF.">
+    参数 掩码 <类型 = 字节集类 注释 = "4字节掩码,空指针表示无掩码.">
+    参数 数据 <类型 = 字节集类 注释 = "提供消息体数据缓冲区.">
+    参数 数据长度 <类型 = 整数 注释 = "消息体数据长度.">
+    参数 消息长度 <类型 = 长整数 注释 = "消息总长度.">
+    {
+        @ @sn<this>.GetBaseHttpClient()->SendWSMessage(@<结束帧>, @<保留>, @<操作码>, (const BYTE*)@<掩码>.GetPtr (), (const BYTE*)@<数据>.GetPtr (), @<数据长度>, @<消息长度>)
+    }
+
+    方法 取WebSocket消息 <公开 类型 = 逻辑型 注释 = "获取当前WebSocket消息状态." 返回值注释 = "是否获取成功." @嵌入式方法 = "">
+    参数 结束帧 <类型 = 变整数 注释 = "是否结束帧.">
+    参数 保留 <类型 = 变整数 注释 = "RSV1/RSV2/RSV3各1位.">
+    参数 操作码 <类型 = 变整数 注释 = "操作码:0x0 - 0xF.">
+    参数 掩码 <类型 = 变整数 注释 = "4个字节掩码.">
+    参数 总长度 <类型 = 变整数 注释 = "消息总长度.">
+    参数 BodyRemain <类型 = 变整数>
+    {
+        @ @sn<this>.GetBaseHttpClient()->GetWSMessageState((BOOL*)@<结束帧>, (BYTE*)@<保留>, (BYTE*)@<操作码>, (LPCBYTE*)@<掩码>, (ULONGLONG*)@<总长度>, (ULONGLONG*)@<BodyRemain>)
+    }
+
+    方法 启动HTTP通信 <公开 类型 = 逻辑型 注释 = "启动HTTP通信." 注释 = "如当前组件设置为非自动启动HTTP通信时,需调用该方法启动." 返回值注释 = "返回是否启动成功." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetBaseHttpClient()->StartHttp()
+    }
+
+    方法 发送分片数据 <公开 类型 = 逻辑型 注释 = "向对端发送Chunked数据分片." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "所欲发送的数据分片.">
+    参数 数据长度 <类型 = 整数 注释 = "所欲发送数据分片的长度.">
+    参数 扩展属性 <类型 = 文本型 注释 = "扩展属性.">
+    {
+        @ return GetBaseHttpClient()->SendChunkData((const BYTE*)@<数据>.GetPtr (), @<数据长度>, GetMbsText(@<扩展属性>, CVolMem (), NULL));
+    }
+
+    方法 本地协议版本 <公开 属性写 注释 = "设置当前本地HTTP协议版本.">
+    参数 版本 <类型 = HPHTTP协议版本>
+    {
+        如果 (版本 == HPHTTP协议版本.HTTP1_0)
+        {
+            @ GetBaseHttpClient()->SetLocalVersion(HV_1_0);
+        }
+        否则
+        {
+            @ GetBaseHttpClient()->SetLocalVersion(HV_1_1);
+        }
+    }
+
+    方法 本地协议版本 <公开 属性读 类型 = HPHTTP协议版本 注释 = "获取当前本地所使用HTTP协议版本." @禁止流程检查 = 真>
+    {
+        @ return (GetBaseHttpClient()->GetLocalVersion() == HV_1_0 ? @<HPHTTP协议版本.HTTP1_0> : @<HPHTTP协议版本.HTTP1_1>);
+    }
+
+    方法 取请求头值 <公开 类型 = 文本型 注释 = " 取得指定请求头的值." 注释 = "  取得请求头中指定的值,例如,取请求头值(当前连接ID, \"User-Agent\"),将取得当前客户" 注释 = "的浏览器类型."
+            注释 = "  请注意:如果您欲读的请求头名在请求头中不存在,或还未解析完毕,本方法将返回空对象." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型 注释 = "提供所欲获取请求头的名称.">
+    {
+        @ LPCSTR str;
+        @ GetBaseHttpClient()->GetHeader(GetMbsText(@<名称>, CVolMem (), NULL), &str);
+        @ return CVolString (GetWideText (str, CVolMem (), NULL));
+    }
+
+    方法 取请求头多值 <公开 类型 = 文本数组类 注释 = "获取指定多值的请求头." 返回值注释 = "返回指定名称请求头对应的所有值.">
+    参数 名称 <类型 = 文本型 注释 = "提供所欲获取请求头的名称.">
+    {
+        变量 结果 <类型 = 文本数组类>
+        @ DWORD count = 0;
+        @ GetBaseHttpClient()->GetHeaders(GetMbsText(@<名称>, CVolMem (), NULL), nullptr, count);
+        @ if (count <= 0)
+        @     return @<结果>;
+        @ LPCSTR *values = new LPCSTR[(INT)count];
+        @ GetBaseHttpClient()->GetHeaders(GetMbsText(@<名称>, CVolMem (), NULL), values, count);
+        @ for (INT i = 0; i < (INT)count; i++)
+        @     @<结果>.data ().Add (GetWideText (values[i], CVolMem (), NULL));
+        @ delete[] values;
+        返回 (结果)
+    }
+
+    方法 取所有请求头 <公开 类型 = HP请求头数组类 注释 = "获取所有请求头.">
+    {
+        变量 结果 <类型 = HP请求头数组类>
+        @ DWORD count = 0;
+        @ GetBaseHttpClient()->GetAllHeaders(nullptr, count);
+        @ if (count <= 0)
+        @     return @<结果>;
+        @ THeader *headers = new THeader[(INT)count];
+        @ GetBaseHttpClient()->GetAllHeaders(headers, count);
+        @ for (INT i = 0; i < (INT)count; i++)
+        @ {
+        @     @dt<HP请求头类> volHeader;
+        @     volHeader.@n<HP请求头类.名称>.SetText (GetWideText (headers[i].name, CVolMem (), NULL));
+        @     volHeader.@n<HP请求头类.值>.SetText (GetWideText (headers[i].value, CVolMem (), NULL));
+        @     @<结果>.Add (volHeader, NULL);
+        @ }
+        @ delete[] headers;
+        返回 (结果)
+    }
+
+    方法 取所有请求头名 <公开 类型 = 文本数组类 注释 = "获取所有请求头名称.">
+    {
+        变量 结果 <类型 = 文本数组类>
+        @ DWORD count = 0;
+        @ GetBaseHttpClient()->GetAllHeaderNames(nullptr, count);
+        @ if (count <= 0)
+        @     return @<结果>;
+        @ LPCSTR *values = new LPCSTR[(INT)count];
+        @ GetBaseHttpClient()->GetAllHeaderNames(values, count);
+        @ for (INT i = 0; i < (INT)count; i++)
+        @     @<结果>.data ().Add (GetWideText (values[i], CVolMem (), NULL));
+        @ delete[] values;
+        返回 (结果)
+    }
+
+    方法 取Cookie <公开 类型 = 文本型 注释 = "获取指定Cookie." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型>
+    {
+        @ LPCSTR str = "";
+        @ GetBaseHttpClient()->GetCookie(GetMbsText(@<名称>, CVolMem (), NULL), &str);
+        @ return CVolString (GetWideText (str, CVolMem (), NULL));
+    }
+
+    方法 取所有Cookie <公开 类型 = HP请求头数组类 注释 = "获取所有Cookie.">
+    {
+        变量 结果 <类型 = HP请求头数组类>
+        @ DWORD count = 0;
+        @ GetBaseHttpClient()->GetAllCookies(nullptr, count);
+        @ if (count <= 0)
+        @     return @<结果>;
+        @ TCookie *cookies = new TCookie[(INT)count];
+        @ GetBaseHttpClient()->GetAllCookies(cookies, count);
+        @ for (INT i = 0; i < (INT)count; i++)
+        @ {
+        @     @dt<HP请求头类> volCookie;
+        @     volCookie.@n<HP请求头类.名称>.SetText (GetWideText (cookies[i].name, CVolMem (), NULL));
+        @     volCookie.@n<HP请求头类.值>.SetText (GetWideText (cookies[i].value, CVolMem (), NULL));
+        @     @<结果>.Add (volCookie, NULL);
+        @ }
+        @ delete[] cookies;
+        返回 (结果)
+    }
+
+    方法 发送请求 <公开 类型 = 逻辑型 注释 = "向服务端发送HTTP请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 请求方法 <类型 = 文本型 注释 = "提供所欲使用的请求方法.">
+    参数 请求路径 <类型 = 文本型 注释 = "提供请求路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "所欲发送的请求头内容,一个成员表示一个头." @默认值 = 空对象>
+    参数 请求体 <类型 = 字节集类 注释 = "所欲发送的请求体内容." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpClient()->SendRequest(GetMbsText(@<请求方法>, CVolMem (), NULL), GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount (), (const BYTE*)@<请求体>.GetPtr (), (INT)@<请求体>.GetSize ());
+    }
+
+    方法 发送本地文件 <公开 类型 = 逻辑型 注释 = "向服务端发送本地文件(4096KB以下)." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 文件路径 <类型 = 文本型 注释 = "提供所欲发送文件的路径.">
+    参数 请求方法 <类型 = 文本型 注释 = "提供所欲使用的请求方法.">
+    参数 请求路径 <类型 = 文本型 注释 = "提供请求路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "所欲回复的请求头内容,一个成员表示一个头.">
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpClient()->SendLocalFile(GetMbsText(@<文件路径>, CVolMem (), NULL), GetMbsText(@<请求方法>, CVolMem (), NULL), GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount ());
+    }
+
+    方法 发送POST请求 <公开 类型 = 逻辑型 注释 = "向服务端发送POST请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头.">
+    参数 提交数据 <类型 = 字节集类 注释 = "提供所欲提交的数据内容.">
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpClient()->SendPost(GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount (), (const BYTE*)@<提交数据>.GetPtr (), (INT)@<提交数据>.GetSize ());
+    }
+
+    方法 发送PUT请求 <公开 类型 = 逻辑型 注释 = "向服务端发送PUT请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头.">
+    参数 提交数据 <类型 = 字节集类 注释 = "提供所欲提交的数据内容.">
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpClient()->SendPut(GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount (), (const BYTE*)@<提交数据>.GetPtr (), (INT)@<提交数据>.GetSize ());
+    }
+
+    方法 发送PATCH请求 <公开 类型 = 逻辑型 注释 = "向服务端发送PATCH请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头.">
+    参数 提交数据 <类型 = 字节集类 注释 = "提供所欲提交的数据内容.">
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpClient()->SendPatch(GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount (), (const BYTE*)@<提交数据>.GetPtr (), (INT)@<提交数据>.GetSize ());
+    }
+
+    方法 发送GET请求 <公开 类型 = 逻辑型 注释 = "向服务端发送GET请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpClient()->SendGet(GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount ());
+    }
+
+    方法 发送DELETE请求 <公开 类型 = 逻辑型 注释 = "向服务端发送Delete请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpClient()->SendDelete(GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount ());
+    }
+
+    方法 发送HEAD请求 <公开 类型 = 逻辑型 注释 = "向服务端发送Head请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpClient()->SendHead(GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount ());
+    }
+
+    方法 发送TRACE请求 <公开 类型 = 逻辑型 注释 = "向服务端发送Trace请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpClient()->SendTrace(GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount ());
+    }
+
+    方法 发送OPTIONS请求 <公开 类型 = 逻辑型 注释 = "向服务端发送Options请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpClient()->SendOptions(GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount ());
+    }
+
+    方法 发送CONNECT请求 <公开 类型 = 逻辑型 注释 = "向服务端发送Connect请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 请求路径 <类型 = 文本型 注释 = "提供所欲发起请求的路径.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供发起请求所欲使用的请求头,一个成员表示一对请求头." @默认值 = 空对象>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpClient()->SendConnect(GetMbsText(@<请求路径>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount ());
+    }
+}
+
+类 HP_HTTP客户端 <公开 基础类 = HPHTTP客户端基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." @文档 = "category = \"HTTP客户端\""
+        @视窗.后缀文本 = "public IHttpClientListener">
+{
+
+    # @ @m<DECLARE_HPSOCKET_CLIENT_REF>(IHttpClient, HttpClient, IHttpClientListener)
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动客户端通信组件并连接至目标服务端." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 服务端地址 <类型 = 文本型 注释 = "提供远程服务端地址.">
+    参数 端口号 <类型 = 整数 注释 = "提供服务端端口. 有效端口号范围为从0到65535.">
+    参数 异步连接 <类型 = 逻辑型 注释 = "是否采用异步连接方式." @默认值 = 真>
+    {
+        @ @sn<this>.GetHttpClient()->Start(@<服务端地址>, (USHORT)@<端口号>, @<异步连接>)
+    }
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "当前客户端将与服务端握手时将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当客户端向当前连接发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当客户端成功接收数据后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作."
+            返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 已接收数据 <类型 = 字节集类 注释 = "所接收到的数据.">
+    参数 已接收长度 <类型 = 整数 注释 = "已接收数据长度.">
+
+    方法 通信发生错误 <公开 定义事件 类型 = 整数 注释 = "当客户端主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 准备连接 <公开 定义事件 类型 = 整数 注释 = "当客户端启动之后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行连接."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行连接." 返回值注释 = "  2 = 本次操作错误, 终止启动通信客户端组件.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 连接完成 <公开 定义事件 类型 = 整数 注释 = "与服务端成功建立连接时本事件将被触发." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行." 返回值注释 = "  2 = 本次操作错误, 如果为同步连接将终止启动通信客户端,为异步则会关闭连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 开始解析消息 <公开 定义事件 类型 = 整数 注释 = "  当客户请求数据时,将会首先触发本事件,本事件触发后,开始解析请求数据." 注释 = "  请注意:请不要再本事件中与客户进行数据发送,如果要向客户回复数据,请"
+            注释 = "在事件\"消息解析完毕\"中回复." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求行解析完毕 <公开 定义事件 类型 = 整数 注释 = "  当服务器接收到客户请求后,将触发本事件,本事件将指定" 注释 = "当前请求方式,和请求路径.例如:本机地址为192.168.0.103"
+            注释 = ",浏览器端访问\"http://192.168.0.103/image.png\",本事件" 注释 = "将解析出请求地址后面的\"/image.png\"." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 当前请求方式 <类型 = 文本型 注释 = "当前客户请求方式,例如GET或POST.">
+    参数 当前请求地址 <类型 = 文本型 注释 = "当前客户请求路径.为地址后面的参数.">
+
+    方法 状态行解析完成 <公开 定义事件 类型 = 整数 注释 = "状态行解析完成后本事件将被触发." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 状态码 <类型 = 短整数 注释 = "HTTP状态码,参考\"HPHTTP状态码\"类.">
+    参数 状态描述 <类型 = 文本型 注释 = "HTTP状态描述内容.">
+
+    方法 请求头进入 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析完毕请求后,将会通过本事件通知当前请求头." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 请求头名称 <类型 = 文本型>
+    参数 请求头值 <类型 = 文本型>
+
+    方法 请求头解析完毕 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析请求头完毕后,将通过本事件通知用户." 注释 = "  请注意:本事件只是通知用户请求头解析完毕,不提供所解析的请"
+            注释 = "求头数据,如果想要获取请求头数据,请添加事件\"请求头进入\",此事" 注释 = "件下将会提供请求头名称和请求头值.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求数据进入 <公开 定义事件 类型 = 整数 注释 = "  当接收到HTTP BODY报文时本事件将被触发." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类 注释 = "所收到的请求体数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所收到的请求体数据长度.">
+
+    方法 分块头进入 <公开 定义事件 类型 = 整数 注释 = "分块模式为HTTP1.1的特有模式,即在不确定长度时,将数据分块(Chunked)发送." 注释 = "  当接收到客户发送的分块请求头时,将会通过本事件通知用户,并且通过"
+            注释 = "参数\"当前请求头长度\"为用户提供请求头数据长度." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据长度 <类型 = 整数 注释 = "Chunked报文体数据长度.">
+
+    方法 分块头解析完成 <公开 定义事件 类型 = 整数 注释 = "  当接收到客户发送的(Chunked)分块请求头并且解析完毕后,将通过本事件通知用户." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 消息解析完毕 <公开 定义事件 类型 = 整数 注释 = "  客户请求解析完毕." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 协议升级 <公开 定义事件 类型 = 整数 注释 = "  当客户端主动升级协议后,将会触发本事件." 注释 = "  当客户端从HTTP1.0协议升级为HTTP1.1协议后,服务器将通过本事件通知" 注释 = "用户."
+            注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 协议类型 <类型 = HPHTTP协议升级类型>
+
+    方法 解析错误 <公开 定义事件 类型 = 整数 注释 = "  当解析客户请求数据出错后,将会通过本事件通知用户." 注释 = "  当解析客户请求数据出错后,将会触发本事件,触发本事件的原因大概如下:"
+            注释 = "    1. 在服务器解析事件中返回了-1或其他不正确的值." 注释 = "    2. 在服务器解析事件中主动与客户断开了连接." 注释 = "    3. 客户所发送的请求数据有误."
+            注释 = "  本事件返回值无具体意义,请返回默认值0." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 错误码 <类型 = HP错误码>
+    参数 错误描述 <类型 = 文本型>
+
+    方法 正在解析WS数据头 <公开 定义事件 类型 = 整数 注释 = "当解析WebSocket数据包头时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 结束帧 <类型 = 逻辑型 注释 = "是否结束帧.">
+    参数 保留 <类型 = 字节 注释 = "RSV1/RSV2/RSV3各1位.">
+    参数 操作码 <类型 = 字节 注释 = "操作码:0x0 - 0xF.">
+    参数 掩码 <类型 = 变整数 注释 = "4字节掩码,空指针则无掩码.">
+    参数 消息长度 <类型 = 长整数 注释 = "消息体长度.">
+
+    方法 收到WS数据体 <公开 定义事件 类型 = 整数 注释 = "当接收到WebSocket数据包体时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类>
+    参数 长度 <类型 = 整数>
+
+    方法 WS数据接收完成 <公开 定义事件 类型 = 整数 注释 = "当完整接收一个WebSocket数据包时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpClient* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); } 
+    # virtual EnHandleResult OnReceive(ITcpClient* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }  //忽略,仅在PULL模型下触发.
+    # virtual EnHandleResult OnClose(ITcpClient* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<通信发生错误>(dwConnID, (INT)enOperation, (INT)iErrorCode); }
+    # virtual EnHandleResult OnPrepareConnect(ITcpClient* pSender, CONNID dwConnID, SOCKET socket) override { return (EnHandleResult)@<准备连接>(dwConnID); }
+    # virtual EnHandleResult OnConnect(ITcpClient* pSender, CONNID dwConnID) override { return (EnHandleResult)@<连接完成>(dwConnID); }
+    #
+    # virtual EnHttpParseResult OnMessageBegin(IHttpClient* pSender, CONNID dwConnID) override { return  (EnHttpParseResult)@<开始解析消息>(dwConnID); }
+    # virtual EnHttpParseResult OnRequestLine(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl) override;
+    # virtual EnHttpParseResult OnStatusLine(IHttpClient* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc) override;
+    # virtual EnHttpParseResult OnHeader(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue) override;
+    # virtual EnHttpParseResult OnHeadersComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<请求头解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnBody(IHttpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHttpParseResult)@<请求数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHttpParseResult OnChunkHeader(IHttpClient* pSender, CONNID dwConnID, int iLength) override { return (EnHttpParseResult)@<分块头进入>(dwConnID, iLength); }
+    # virtual EnHttpParseResult OnChunkComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<分块头解析完成>(dwConnID); }
+    # virtual EnHttpParseResult OnMessageComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<消息解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnUpgrade(IHttpClient* pSender, CONNID dwConnID, EnHttpUpgradeType enUpgradeType) override { return (EnHttpParseResult)@<协议升级>(dwConnID, (INT)enUpgradeType); }
+    # virtual EnHttpParseResult OnParseError(IHttpClient* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc) override;
+    # virtual EnHandleResult OnWSMessageHeader(IHttpClient* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen) override;
+    # virtual EnHandleResult OnWSMessageBody(IHttpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<收到WS数据体>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnWSMessageComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHandleResult)@<WS数据接收完成>(dwConnID); }
+    #
+    # <> </include>
+    #
+    # EnHttpParseResult @sn<current_class>::OnParseError(IHttpClient* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc)
+    # {
+    #     return (EnHttpParseResult)@<解析错误>(dwConnID, (INT)iErrorCode, CVolString (GetWideText (lpszErrorDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnHeader(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue)
+    # {
+    #     return (EnHttpParseResult)@<请求头进入>(dwConnID, CVolString (GetWideText (lpszName, CVolMem (), NULL)), CVolString (GetWideText (lpszValue, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnStatusLine(IHttpClient* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc)
+    # {
+    #     return (EnHttpParseResult)@<状态行解析完成>(dwConnID, usStatusCode, CVolString (GetWideText (lpszDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnRequestLine(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl)
+    # {
+    #     return (EnHttpParseResult)@<请求行解析完毕>(dwConnID, CVolString (GetWideText (lpszMethod, CVolMem (), NULL)), CVolString (GetWideText (lpszUrl, CVolMem (), NULL)));
+    # }
+    # EnHandleResult @sn<current_class>::OnWSMessageHeader(IHttpClient* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen)
+    # {
+    #     return (EnHandleResult)@<正在解析WS数据头>(dwConnID, bFinal, iReserved, iOperationCode, (INT_P)lpszMask, ullBodyLen);
+    # }
+    # @end
+}
+
+类 HP_HTTP安全客户端类 <公开 基础类 = HPHTTP客户端基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." @文档 = "category = \"HTTP客户端\""
+        @视窗.后缀文本 = "public IHttpClientListener">
+{
+
+    # @ @m<DECLARE_HPSOCKET_CLIENT_REF>(IHttpClient, HttpsClient, IHttpClientListener)
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动客户端通信组件并连接至目标服务端." 注释 = "注意:调用前请确保已初始化SSL环境成功,否则无法正确启动." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 服务端地址 <类型 = 文本型 注释 = "提供远程服务端地址.">
+    参数 端口号 <类型 = 整数 注释 = "提供服务端端口. 有效端口号范围为从0到65535.">
+    参数 异步连接 <类型 = 逻辑型 注释 = "是否采用异步连接方式." @默认值 = 真>
+    {
+        @ @sn<this>.GetHttpsClient()->Start(@<服务端地址>, (USHORT)@<端口号>, @<异步连接>)
+    }
+
+    # 属性 ---
+
+    方法 握手模式 <公开 属性写 注释 = "设置通信组件SSL握手方式(默认为真,自动握手)">
+    参数 自动 <类型 = 逻辑型 注释 = "提供真则表示自动握手,否则需手动调用\"开始SSL握手\"方法.">
+    {
+        @ GetHttpsClient()->SetSSLAutoHandShake(@<自动>);
+    }
+
+    方法 握手模式 <公开 属性读 类型 = 逻辑型 注释 = "获取通信组件SSL握手方式." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetHttpsClient()->IsSSLAutoHandShake()
+    }
+
+    方法 加密算法列表 <公开 属性写 注释 = "设置SSL加密算法列表.">
+    参数 算法 <类型 = 文本型>
+    {
+        @ GetHttpsClient()->SetSSLCipherList(@<算法>);
+    }
+
+    方法 加密算法列表 <公开 属性读 类型 = 文本型 注释 = "获取SSL加密算法列表." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetHttpsClient()->GetSSLCipherList()
+    }
+
+    # 方法 ---
+
+    方法 初始化SSL环境 <公开 类型 = 逻辑型 注释 = "初始化通信组件 SSL 环境参数." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败." 返回值注释 = "返回是否操作成功."
+            @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件路径(客户端可选)." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件路径(客户端可选)." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书文件或目录(单向验证或客户端可选)." @默认值 = "">
+    {
+        @ return GetHttpsClient()->SetupSSLContext((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : (LPCTSTR)@<证书文件>, @<私钥文件>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥文件>, @<私钥密码>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥密码>,@<CA证书>.IsEmpty() ? nullptr : (LPCTSTR)@<CA证书>);
+    }
+
+    方法 初始化SSL环境_内存 <公开 类型 = 逻辑型 注释 = "初始化通信组件SSL环境参数(从内存载入证书内容)." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败."
+            返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件内容." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件内容." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书内容." @默认值 = "">
+    {
+        @ return GetHttpsClient()->SetupSSLContextByMemory((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : GetMbsText(@<证书文件>, CVolMem (), NULL), @<私钥文件>.IsEmpty() ? nullptr : GetMbsText(@<私钥文件>, CVolMem (), NULL), @<私钥密码>.IsEmpty() ? nullptr : GetMbsText(@<私钥密码>, CVolMem (), NULL),@<CA证书>.IsEmpty() ? nullptr : GetMbsText(@<CA证书>, CVolMem (), NULL));
+    }
+
+    方法 清理SSL环境 <公开 注释 = "清理通信组件SSL运行环境,回收SSL相关内存." 注释 = "注意:当通信组件需要重设SSL信息时,请先调用该方法清空原有环境参数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetHttpsClient()->CleanupSSLContext()
+    }
+
+    方法 开始SSL握手 <公开 类型 = 逻辑型 注释 = "启动SSL握手." 注释 = "注意:如果当前通信组件的\"握手模式\"为假时,需调用该方法握手,否则将导致连接失败." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetHttpsClient()->StartSSLHandShake()
+    }
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "当前客户端将与服务端握手时将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当客户端向当前连接发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当客户端成功接收数据后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作."
+            返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 已接收数据 <类型 = 字节集类 注释 = "所接收到的数据.">
+    参数 已接收长度 <类型 = 整数 注释 = "已接收数据长度.">
+
+    方法 通信发生错误 <公开 定义事件 类型 = 整数 注释 = "当客户端主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 准备连接 <公开 定义事件 类型 = 整数 注释 = "当客户端启动之后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行连接."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行连接." 返回值注释 = "  2 = 本次操作错误, 终止启动通信客户端组件.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 连接完成 <公开 定义事件 类型 = 整数 注释 = "与服务端成功建立连接时本事件将被触发." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行." 返回值注释 = "  2 = 本次操作错误, 如果为同步连接将终止启动通信客户端,为异步则会关闭连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 开始解析消息 <公开 定义事件 类型 = 整数 注释 = "  当客户请求数据时,将会首先触发本事件,本事件触发后,开始解析请求数据." 注释 = "  请注意:请不要再本事件中与客户进行数据发送,如果要向客户回复数据,请"
+            注释 = "在事件\"消息解析完毕\"中回复." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求行解析完毕 <公开 定义事件 类型 = 整数 注释 = "  当服务器接收到客户请求后,将触发本事件,本事件将指定" 注释 = "当前请求方式,和请求路径.例如:本机地址为192.168.0.103"
+            注释 = ",浏览器端访问\"http://192.168.0.103/image.png\",本事件" 注释 = "将解析出请求地址后面的\"/image.png\"." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 当前请求方式 <类型 = 文本型 注释 = "当前客户请求方式,例如GET或POST.">
+    参数 当前请求地址 <类型 = 文本型 注释 = "当前客户请求路径.为地址后面的参数.">
+
+    方法 状态行解析完成 <公开 定义事件 类型 = 整数 注释 = "状态行解析完成后本事件将被触发." 返回值注释 = "返回-1则认定为解析错误并关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 状态码 <类型 = 短整数 注释 = "HTTP状态码,参考\"HPHTTP状态码\"类.">
+    参数 状态描述 <类型 = 文本型 注释 = "HTTP状态描述内容.">
+
+    方法 请求头进入 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析完毕请求后,将会通过本事件通知当前请求头." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件.." 返回值注释 = "返回-1则认定为解析错误并关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 请求头名称 <类型 = 文本型>
+    参数 请求头值 <类型 = 文本型>
+
+    方法 请求头解析完毕 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析请求头完毕后,将通过本事件通知用户." 注释 = "  请注意:本事件只是通知用户请求头解析完毕,不提供所解析的请"
+            注释 = "求头数据,如果想要获取请求头数据,请添加事件\"请求头进入\",此事" 注释 = "件下将会提供请求头名称和请求头值.." 返回值注释 = "返回-1则认定为解析错误并关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求数据进入 <公开 定义事件 类型 = 整数 注释 = "  当接收到HTTP BODY报文时本事件将被触发." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类 注释 = "所收到的请求体数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所收到的请求体数据长度.">
+
+    方法 分块头进入 <公开 定义事件 类型 = 整数 注释 = "分块模式为HTTP1.1的特有模式,即在不确定长度时,将数据分块(Chunked)发送." 注释 = "  当接收到客户发送的分块请求头时,将会通过本事件通知用户,并且通过"
+            注释 = "参数\"当前请求头长度\"为用户提供请求头数据长度." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据长度 <类型 = 整数 注释 = "Chunked报文体数据长度.">
+
+    方法 分块头解析完成 <公开 定义事件 类型 = 整数 注释 = "  当接收到客户发送的(Chunked)分块请求头并且解析完毕后,将通过本事件通知用户." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 消息解析完毕 <公开 定义事件 类型 = 整数 注释 = "  客户请求解析完毕." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 协议升级 <公开 定义事件 类型 = 整数 注释 = "  当客户端主动升级协议后,将会触发本事件." 注释 = "  当客户端从HTTP1.0协议升级为HTTP1.1协议后,服务器将通过本事件通知" 注释 = "用户."
+            注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件." 返回值注释 = "返回-1则会关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 协议类型 <类型 = HPHTTP协议升级类型>
+
+    方法 解析错误 <公开 定义事件 类型 = 整数 注释 = "  当解析客户请求数据出错后,将会通过本事件通知用户." 注释 = "  当解析客户请求数据出错后,将会触发本事件,触发本事件的原因大概如下:"
+            注释 = "    1. 在服务器解析事件中返回了-1或其他不正确的值." 注释 = "    2. 在服务器解析事件中主动与客户断开了连接." 注释 = "    3. 客户所发送的请求数据有误."
+            注释 = "  本事件返回值无具体意义,请返回默认值0." 返回值注释 = "返回-1则会关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 错误码 <类型 = HP错误码>
+    参数 错误描述 <类型 = 文本型>
+
+    方法 正在解析WS数据头 <公开 定义事件 类型 = 整数 注释 = "当解析WebSocket数据包头时本事件将被触发." 返回值注释 = "返回-1则会关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 结束帧 <类型 = 逻辑型 注释 = "是否结束帧.">
+    参数 保留 <类型 = 字节 注释 = "RSV1/RSV2/RSV3各1位.">
+    参数 操作码 <类型 = 字节 注释 = "操作码:0x0 - 0xF.">
+    参数 掩码 <类型 = 变整数 注释 = "4字节掩码,空指针则无掩码.">
+    参数 消息长度 <类型 = 长整数 注释 = "消息体长度.">
+
+    方法 收到WS数据体 <公开 定义事件 类型 = 整数 注释 = "当接收到WebSocket数据包体时本事件将被触发." 返回值注释 = "返回-1则会关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类>
+    参数 长度 <类型 = 整数>
+
+    方法 WS数据接收完成 <公开 定义事件 类型 = 整数 注释 = "当完整接收一个WebSocket数据包时本事件将被触发." 返回值注释 = "返回-1则会关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpClient* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); } 
+    # virtual EnHandleResult OnReceive(ITcpClient* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }  //忽略,仅在PULL模型下触发.
+    # virtual EnHandleResult OnClose(ITcpClient* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<通信发生错误>(dwConnID, (INT)enOperation, (INT)iErrorCode); }
+    # virtual EnHandleResult OnPrepareConnect(ITcpClient* pSender, CONNID dwConnID, SOCKET socket) override { return (EnHandleResult)@<准备连接>(dwConnID); }
+    # virtual EnHandleResult OnConnect(ITcpClient* pSender, CONNID dwConnID) override { return (EnHandleResult)@<连接完成>(dwConnID); }
+    #
+    # virtual EnHttpParseResult OnMessageBegin(IHttpClient* pSender, CONNID dwConnID) override { return  (EnHttpParseResult)@<开始解析消息>(dwConnID); }
+    # virtual EnHttpParseResult OnRequestLine(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl) override;
+    # virtual EnHttpParseResult OnStatusLine(IHttpClient* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc) override;
+    # virtual EnHttpParseResult OnHeader(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue) override;
+    # virtual EnHttpParseResult OnHeadersComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<请求头解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnBody(IHttpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHttpParseResult)@<请求数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHttpParseResult OnChunkHeader(IHttpClient* pSender, CONNID dwConnID, int iLength) override { return (EnHttpParseResult)@<分块头进入>(dwConnID, iLength); }
+    # virtual EnHttpParseResult OnChunkComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<分块头解析完成>(dwConnID); }
+    # virtual EnHttpParseResult OnMessageComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<消息解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnUpgrade(IHttpClient* pSender, CONNID dwConnID, EnHttpUpgradeType enUpgradeType) override { return (EnHttpParseResult)@<协议升级>(dwConnID, (INT)enUpgradeType); }
+    # virtual EnHttpParseResult OnParseError(IHttpClient* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc) override;
+    # virtual EnHandleResult OnWSMessageHeader(IHttpClient* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen) override;
+    # virtual EnHandleResult OnWSMessageBody(IHttpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<收到WS数据体>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnWSMessageComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHandleResult)@<WS数据接收完成>(dwConnID); }
+    #
+    # <> </include>
+    #
+    # EnHttpParseResult @sn<current_class>::OnParseError(IHttpClient* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc)
+    # {
+    #     return (EnHttpParseResult)@<解析错误>(dwConnID, (INT)iErrorCode, CVolString (GetWideText (lpszErrorDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnHeader(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue)
+    # {
+    #     return (EnHttpParseResult)@<请求头进入>(dwConnID, CVolString (GetWideText (lpszName, CVolMem (), NULL)), CVolString (GetWideText (lpszValue, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnStatusLine(IHttpClient* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc)
+    # {
+    #     return (EnHttpParseResult)@<状态行解析完成>(dwConnID, usStatusCode, CVolString (GetWideText (lpszDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnRequestLine(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl)
+    # {
+    #     return (EnHttpParseResult)@<请求行解析完毕>(dwConnID, CVolString (GetWideText (lpszMethod, CVolMem (), NULL)), CVolString (GetWideText (lpszUrl, CVolMem (), NULL)));
+    # }
+    # EnHandleResult @sn<current_class>::OnWSMessageHeader(IHttpClient* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen)
+    # {
+    #     return (EnHandleResult)@<正在解析WS数据头>(dwConnID, bFinal, iReserved, iOperationCode, (INT_P)lpszMask, ullBodyLen);
+    # }
+    #
+    # @end
+}
+
+类 HPHTTP同步客户端基础类 <公开 基础类 = HPHTTP客户端基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "HTTP同步客户端基类,请使用其子类." @文档 = "category = \"辅助类\""
+        @禁止创建对象 = 真>
+{
+
+    # @ @m<DECLARE_HPSOCKET_ABS>(IHttpSyncClient, BaseHttpSyncClient, GetClientPtr)
+    #
+
+    方法 连接超时 <公开 属性写 注释 = "设置连接超时.">
+    参数 超时 <类型 = 整数 注释 = "默认5000毫秒.">
+    {
+        @ GetBaseHttpSyncClient()->SetConnectTimeout(@<超时>);
+    }
+
+    方法 请求超时 <公开 属性写 注释 = "设置请求超时.">
+    参数 超时 <类型 = 整数 注释 = "默认10000毫秒.">
+    {
+        @ GetBaseHttpSyncClient()->SetRequestTimeout(@<超时>);
+    }
+
+    方法 连接超时 <公开 属性读 类型 = 整数 注释 = "获取连接超时." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetBaseHttpSyncClient()->GetConnectTimeout()
+    }
+
+    方法 请求超时 <公开 属性读 类型 = 整数 注释 = "获取请求超时." @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.GetBaseHttpSyncClient()->GetRequestTimeout()
+    }
+
+    方法 取响应体 <公开 类型 = 字节集类 注释 = "获取响应体." @禁止流程检查 = 真>
+    {
+        @ LPCBYTE bytes;
+        @ int iLength;
+        @ GetBaseHttpSyncClient()->GetResponseBody(&bytes, &iLength);
+        @ return @an<CVolMem> (bytes, iLength);
+    }
+
+    方法 发送URL请求 <公开 类型 = 逻辑型 注释 = "向服务端发送HTTP URL请求." 返回值注释 = "返回是否发送成功." @禁止流程检查 = 真>
+    参数 请求方法 <类型 = 文本型 注释 = "提供所欲请求的方法.">
+    参数 请求地址 <类型 = 文本型 注释 = "提供所欲请求的URL地址.">
+    参数 请求头 <类型 = HP请求头数组类 注释 = "提供请求所欲提交的请求头." @默认值 = 空对象>
+    参数 请求体 <类型 = 字节集类 注释 = "提供请求所欲提交的请求体." @默认值 = 空对象>
+    参数 强制重连 <类型 = 逻辑型 注释 = "是否强制重新连接(默认为假:当请求URL的主机和端口与现有连接一致时,重用现有连接)." @默认值 = 假>
+    {
+        @ CHPHttpReqHeader header (@<请求头>);
+        @ return GetBaseHttpSyncClient()->OpenUrl(GetMbsText(@<请求方法>, CVolMem (), NULL), GetMbsText(@<请求地址>, CVolMem (), NULL), header.m_pHeaders, (INT)@<请求头>.GetCount (), (const BYTE*)@<请求体>.GetPtr (), (INT)@<请求体>.GetSize (), @<强制重连>);
+    }
+}
+
+类 HP_HTTP同步客户端 <公开 基础类 = HPHTTP同步客户端基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." @文档 = "category = \"HTTP客户端\""
+        @视窗.后缀文本 = "public IHttpClientListener">
+{
+
+    # @ @m<DECLARE_HPSOCKET_CLIENT_REF>(IHttpSyncClient, HttpsSyncClient, IHttpClientListener)
+    #
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动客户端通信组件并连接至目标服务端." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 服务端地址 <类型 = 文本型 注释 = "提供远程服务端地址.">
+    参数 端口号 <类型 = 整数 注释 = "提供服务端端口. 有效端口号范围为从0到65535.">
+    参数 异步连接 <类型 = 逻辑型 注释 = "是否采用异步连接方式." @默认值 = 真>
+    {
+        @ @sn<this>.GetHttpsSyncClient()->Start(@<服务端地址>, (USHORT)@<端口号>, @<异步连接>)
+    }
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "当前客户端将与服务端握手时将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当客户端向当前连接发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当客户端成功接收数据后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作."
+            返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 已接收数据 <类型 = 字节集类 注释 = "所接收到的数据.">
+    参数 已接收长度 <类型 = 整数 注释 = "已接收数据长度.">
+
+    方法 通信发生错误 <公开 定义事件 类型 = 整数 注释 = "当客户端主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 准备连接 <公开 定义事件 类型 = 整数 注释 = "当客户端启动之后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行连接."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行连接." 返回值注释 = "  2 = 本次操作错误, 终止启动通信客户端组件.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 连接完成 <公开 定义事件 类型 = 整数 注释 = "与服务端成功建立连接时本事件将被触发." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行." 返回值注释 = "  2 = 本次操作错误, 如果为同步连接将终止启动通信客户端,为异步则会关闭连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 开始解析消息 <公开 定义事件 类型 = 整数 注释 = "  当客户请求数据时,将会首先触发本事件,本事件触发后,开始解析请求数据." 注释 = "  请注意:请不要再本事件中与客户进行数据发送,如果要向客户回复数据,请"
+            注释 = "在事件\"消息解析完毕\"中回复." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求行解析完毕 <公开 定义事件 类型 = 整数 注释 = "  当服务器接收到客户请求后,将触发本事件,本事件将指定" 注释 = "当前请求方式,和请求路径.例如:本机地址为192.168.0.103"
+            注释 = ",浏览器端访问\"http://192.168.0.103/image.png\",本事件" 注释 = "将解析出请求地址后面的\"/image.png\"." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 当前请求方式 <类型 = 文本型 注释 = "当前客户请求方式,例如GET或POST.">
+    参数 当前请求地址 <类型 = 文本型 注释 = "当前客户请求路径.为地址后面的参数.">
+
+    方法 状态行解析完成 <公开 定义事件 类型 = 整数 注释 = "状态行解析完成后本事件将被触发." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 状态码 <类型 = 短整数 注释 = "HTTP状态码,参考\"HPHTTP状态码\"类.">
+    参数 状态描述 <类型 = 文本型 注释 = "HTTP状态描述内容.">
+
+    方法 请求头进入 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析完毕请求后,将会通过本事件通知当前请求头." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 请求头名称 <类型 = 文本型>
+    参数 请求头值 <类型 = 文本型>
+
+    方法 请求头解析完毕 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析请求头完毕后,将通过本事件通知用户." 注释 = "  请注意:本事件只是通知用户请求头解析完毕,不提供所解析的请"
+            注释 = "求头数据,如果想要获取请求头数据,请添加事件\"请求头进入\",此事" 注释 = "件下将会提供请求头名称和请求头值.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求数据进入 <公开 定义事件 类型 = 整数 注释 = "  当接收到HTTP BODY报文时本事件将被触发." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类 注释 = "所收到的请求体数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所收到的请求体数据长度.">
+
+    方法 分块头进入 <公开 定义事件 类型 = 整数 注释 = "分块模式为HTTP1.1的特有模式,即在不确定长度时,将数据分块(Chunked)发送." 注释 = "  当接收到客户发送的分块请求头时,将会通过本事件通知用户,并且通过"
+            注释 = "参数\"当前请求头长度\"为用户提供请求头数据长度." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接." 折叠>
+    参数 连接ID <类型 = 变整数>
+    参数 数据长度 <类型 = 整数 注释 = "Chunked报文体数据长度.">
+
+    方法 分块头解析完成 <公开 定义事件 类型 = 整数 注释 = "  当接收到客户发送的(Chunked)分块请求头并且解析完毕后,将通过本事件通知用户." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 消息解析完毕 <公开 定义事件 类型 = 整数 注释 = "  客户请求解析完毕." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 协议升级 <公开 定义事件 类型 = 整数 注释 = "  当客户端主动升级协议后,将会触发本事件." 注释 = "  当客户端从HTTP1.0协议升级为HTTP1.1协议后,服务器将通过本事件通知" 注释 = "用户."
+            注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 协议类型 <类型 = HPHTTP协议升级类型>
+
+    方法 解析错误 <公开 定义事件 类型 = 整数 注释 = "  当解析客户请求数据出错后,将会通过本事件通知用户." 注释 = "  当解析客户请求数据出错后,将会触发本事件,触发本事件的原因大概如下:"
+            注释 = "    1. 在服务器解析事件中返回了-1或其他不正确的值." 注释 = "    2. 在服务器解析事件中主动与客户断开了连接." 注释 = "    3. 客户所发送的请求数据有误."
+            注释 = "  本事件返回值无具体意义,请返回默认值0." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 错误码 <类型 = HP错误码>
+    参数 错误描述 <类型 = 文本型>
+
+    方法 正在解析WS数据头 <公开 定义事件 类型 = 整数 注释 = "当解析WebSocket数据包头时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 结束帧 <类型 = 逻辑型 注释 = "是否结束帧.">
+    参数 保留 <类型 = 字节 注释 = "RSV1/RSV2/RSV3各1位.">
+    参数 操作码 <类型 = 字节 注释 = "操作码:0x0 - 0xF.">
+    参数 掩码 <类型 = 变整数 注释 = "4字节掩码,空指针则无掩码.">
+    参数 消息长度 <类型 = 长整数 注释 = "消息体长度.">
+
+    方法 收到WS数据体 <公开 定义事件 类型 = 整数 注释 = "当接收到WebSocket数据包体时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类>
+    参数 长度 <类型 = 整数>
+
+    方法 WS数据接收完成 <公开 定义事件 类型 = 整数 注释 = "当完整接收一个WebSocket数据包时本事件将被触发." 返回值注释 = "返回-1则会关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpClient* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); } 
+    # virtual EnHandleResult OnReceive(ITcpClient* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }  //忽略,仅在PULL模型下触发.
+    # virtual EnHandleResult OnClose(ITcpClient* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<通信发生错误>(dwConnID, (INT)enOperation, (INT)iErrorCode); }
+    # virtual EnHandleResult OnPrepareConnect(ITcpClient* pSender, CONNID dwConnID, SOCKET socket) override { return (EnHandleResult)@<准备连接>(dwConnID); }
+    # virtual EnHandleResult OnConnect(ITcpClient* pSender, CONNID dwConnID) override { return (EnHandleResult)@<连接完成>(dwConnID); }
+    #
+    # virtual EnHttpParseResult OnMessageBegin(IHttpClient* pSender, CONNID dwConnID) override { return  (EnHttpParseResult)@<开始解析消息>(dwConnID); }
+    # virtual EnHttpParseResult OnRequestLine(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl) override;
+    # virtual EnHttpParseResult OnStatusLine(IHttpClient* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc) override;
+    # virtual EnHttpParseResult OnHeader(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue) override;
+    # virtual EnHttpParseResult OnHeadersComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<请求头解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnBody(IHttpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHttpParseResult)@<请求数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHttpParseResult OnChunkHeader(IHttpClient* pSender, CONNID dwConnID, int iLength) override { return (EnHttpParseResult)@<分块头进入>(dwConnID, iLength); }
+    # virtual EnHttpParseResult OnChunkComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<分块头解析完成>(dwConnID); }
+    # virtual EnHttpParseResult OnMessageComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<消息解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnUpgrade(IHttpClient* pSender, CONNID dwConnID, EnHttpUpgradeType enUpgradeType) override { return (EnHttpParseResult)@<协议升级>(dwConnID, (INT)enUpgradeType); }
+    # virtual EnHttpParseResult OnParseError(IHttpClient* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc) override;
+    # virtual EnHandleResult OnWSMessageHeader(IHttpClient* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen) override;
+    # virtual EnHandleResult OnWSMessageBody(IHttpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<收到WS数据体>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnWSMessageComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHandleResult)@<WS数据接收完成>(dwConnID); }
+    #
+    # <> </include>
+    # EnHttpParseResult @sn<current_class>::OnParseError(IHttpClient* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc)
+    # {
+    #     return (EnHttpParseResult)@<解析错误>(dwConnID, (INT)iErrorCode, CVolString (GetWideText (lpszErrorDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnHeader(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue)
+    # {
+    #     return (EnHttpParseResult)@<请求头进入>(dwConnID, CVolString (GetWideText (lpszName, CVolMem (), NULL)), CVolString (GetWideText (lpszValue, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnStatusLine(IHttpClient* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc)
+    # {
+    #     return (EnHttpParseResult)@<状态行解析完成>(dwConnID, usStatusCode, CVolString (GetWideText (lpszDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnRequestLine(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl)
+    # {
+    #     return (EnHttpParseResult)@<请求行解析完毕>(dwConnID, CVolString (GetWideText (lpszMethod, CVolMem (), NULL)), CVolString (GetWideText (lpszUrl, CVolMem (), NULL)));
+    # }
+    # EnHandleResult @sn<current_class>::OnWSMessageHeader(IHttpClient* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen)
+    # {
+    #     return (EnHandleResult)@<正在解析WS数据头>(dwConnID, bFinal, iReserved, iOperationCode, (INT_P)lpszMask, ullBodyLen);
+    # }
+    # @end
+}
+
+类 HP_HTTP同步安全客户端 <公开 基础类 = HPHTTP同步客户端基础类 注释 = "★ 本类由\"飞翔的企鹅\"封装." @文档 = "category = \"HTTP客户端\""
+        @视窗.后缀文本 = "public IHttpClientListener">
+{
+
+    # @ @m<DECLARE_HPSOCKET_CLIENT_REF>(IHttpSyncClient, HttpsSyncClient, IHttpClientListener)
+
+    方法 启动 <公开 类型 = 逻辑型 注释 = "启动客户端通信组件并连接至目标服务端." 注释 = "注意:调用前请确保已初始化SSL环境成功,否则无法正确启动." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    参数 服务端地址 <类型 = 文本型 注释 = "提供远程服务端地址.">
+    参数 端口号 <类型 = 整数 注释 = "提供服务端端口. 有效端口号范围为从0到65535.">
+    参数 异步连接 <类型 = 逻辑型 注释 = "是否采用异步连接方式." @默认值 = 真>
+    {
+        @ @sn<this>.GetHttpsSyncClient()->Start(@<服务端地址>, (USHORT)@<端口号>, @<异步连接>)
+    }
+
+    # 属性 ---
+
+    方法 握手模式 <公开 属性写 注释 = "设置通信组件SSL握手方式(默认为真,自动握手)">
+    参数 自动 <类型 = 逻辑型 注释 = "提供真则表示自动握手,否则需手动调用\"开始SSL握手\"方法.">
+    {
+        @ GetHttpsSyncClient()->SetSSLAutoHandShake(@<自动>);
+    }
+
+    方法 握手模式 <公开 属性读 类型 = 逻辑型 注释 = "获取通信组件SSL握手方式." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetHttpsSyncClient()->IsSSLAutoHandShake()
+    }
+
+    方法 加密算法列表 <公开 属性写 注释 = "设置SSL加密算法列表.">
+    参数 算法 <类型 = 文本型>
+    {
+        @ GetHttpsSyncClient()->SetSSLCipherList(@<算法>);
+    }
+
+    方法 加密算法列表 <公开 属性读 类型 = 文本型 注释 = "获取SSL加密算法列表." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetHttpsSyncClient()->GetSSLCipherList()
+    }
+
+    # 方法 ---
+
+    方法 初始化SSL环境 <公开 类型 = 逻辑型 注释 = "初始化通信组件 SSL 环境参数." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败." 返回值注释 = "返回是否操作成功."
+            @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件路径(客户端可选)." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件路径(客户端可选)." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书文件或目录(单向验证或客户端可选)." @默认值 = "">
+    {
+        @ return GetHttpsSyncClient()->SetupSSLContext((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : (LPCTSTR)@<证书文件>, @<私钥文件>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥文件>, @<私钥密码>.IsEmpty() ? nullptr : (LPCTSTR)@<私钥密码>,@<CA证书>.IsEmpty() ? nullptr : (LPCTSTR)@<CA证书>);
+    }
+
+    方法 初始化SSL环境_内存 <公开 类型 = 逻辑型 注释 = "初始化通信组件SSL环境参数(从内存载入证书内容)." 注释 = "注意:如果通信组件欲启用SSL,必须在调用该方法成功之后开始启动,否则将启动失败."
+            返回值注释 = "返回是否操作成功." @禁止流程检查 = 真>
+    参数 验证模式 <类型 = HPSSL验证模式 注释 = "指定当前SSL验证模式." @默认值 = HPSSL验证模式.无验证>
+    参数 证书文件 <类型 = 文本型 注释 = "提供所欲使用的证书文件内容." @默认值 = "">
+    参数 私钥文件 <类型 = 文本型 注释 = "提供所欲使用的私钥文件内容." @默认值 = "">
+    参数 私钥密码 <类型 = 文本型 注释 = "提供所欲使用的私钥密码,如无密码可为空." @默认值 = "">
+    参数 CA证书 <类型 = 文本型 注释 = "CA证书内容." @默认值 = "">
+    {
+        @ return GetHttpsSyncClient()->SetupSSLContextByMemory((En_HP_SSLVerifyMode)@<验证模式>, @<证书文件>.IsEmpty() ? nullptr : GetMbsText(@<证书文件>, CVolMem (), NULL), @<私钥文件>.IsEmpty() ? nullptr : GetMbsText(@<私钥文件>, CVolMem (), NULL), @<私钥密码>.IsEmpty() ? nullptr : GetMbsText(@<私钥密码>, CVolMem (), NULL),@<CA证书>.IsEmpty() ? nullptr : GetMbsText(@<CA证书>, CVolMem (), NULL));
+    }
+
+    方法 清理SSL环境 <公开 注释 = "清理通信组件SSL运行环境,回收SSL相关内存." 注释 = "注意:当通信组件需要重设SSL信息时,请先调用该方法清空原有环境参数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetHttpsSyncClient()->CleanupSSLContext()
+    }
+
+    方法 开始SSL握手 <公开 类型 = 逻辑型 注释 = "启动SSL握手." 注释 = "注意:如果当前通信组件的\"握手模式\"为假时,需调用该方法握手,否则将导致连接失败." 返回值注释 = "返回是否操作成功." @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetHttpsSyncClient()->StartSSLHandShake()
+    }
+
+    方法 开始握手 <公开 定义事件 类型 = 整数 注释 = "当前客户端将与服务端握手时将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 客户端将与服务器进行握手."
+            返回值注释 = "  1 = 忽略本次操作." 返回值注释 = "  2 = 本次操作错误, 握手动作失败, 主动断开与客户的连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 发送完毕 <公开 定义事件 类型 = 整数 注释 = "当客户端向当前连接发送数据成功后,将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收本次发送所对应的连接ID.">
+    参数 数据 <类型 = 字节集类 注释 = "本次所发送的数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所发送数据的长度.">
+
+    方法 数据进入 <公开 定义事件 类型 = 整数 注释 = "当客户端成功接收数据后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行." 返回值注释 = "  1 = 忽略本次操作."
+            返回值注释 = "  2 = 本次操作错误, 服务器主动与当前连接ID断开连接并触发关闭事件.">
+    参数 连接ID <类型 = 变整数 注释 = "接收到的数据由该连接ID发过来.">
+    参数 已接收数据 <类型 = 字节集类 注释 = "所接收到的数据.">
+    参数 已接收长度 <类型 = 整数 注释 = "已接收数据长度.">
+
+    方法 通信发生错误 <公开 定义事件 类型 = 整数 注释 = "当客户端主动或被动与服务器断开后将触发本事件.">
+    参数 连接ID <类型 = 变整数 注释 = "触发该事件的连接ID.">
+    参数 关闭原因 <类型 = HP操作类型 注释 = "返回导致连接被关闭的操作.">
+    参数 错误码 <类型 = HP错误码 注释 = "如果客户端为非正常退出,此参数为错误代码.">
+
+    方法 准备连接 <公开 定义事件 类型 = 整数 注释 = "当客户端启动之后将触发本事件." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行连接."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行连接." 返回值注释 = "  2 = 本次操作错误, 终止启动通信客户端组件.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 连接完成 <公开 定义事件 类型 = 整数 注释 = "与服务端成功建立连接时本事件将被触发." 返回值注释 = "可选返回值:" 返回值注释 = "  0 = 本次操作成功, 继续执行."
+            返回值注释 = "  1 = 忽略本次操作, 继续执行." 返回值注释 = "  2 = 本次操作错误, 如果为同步连接将终止启动通信客户端,为异步则会关闭连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 开始解析消息 <公开 定义事件 类型 = 整数 注释 = "  当客户请求数据时,将会首先触发本事件,本事件触发后,开始解析请求数据." 注释 = "  请注意:请不要再本事件中与客户进行数据发送,如果要向客户回复数据,请"
+            注释 = "在事件\"消息解析完毕\"中回复." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件.." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求行解析完毕 <公开 定义事件 类型 = 整数 注释 = "  当服务器接收到客户请求后,将触发本事件,本事件将指定" 注释 = "当前请求方式,和请求路径.例如:本机地址为192.168.0.103"
+            注释 = ",浏览器端访问\"http://192.168.0.103/image.png\",本事件" 注释 = "将解析出请求地址后面的\"/image.png\"." 返回值注释 = "返回-1则认定为解析错误并关闭该连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 当前请求方式 <类型 = 文本型 注释 = "当前客户请求方式,例如GET或POST.">
+    参数 当前请求地址 <类型 = 文本型 注释 = "当前客户请求路径.为地址后面的参数.">
+
+    方法 状态行解析完成 <公开 定义事件 类型 = 整数 注释 = "状态行解析完成后本事件将被触发." 返回值注释 = "返回-1则认定为解析错误并关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 状态码 <类型 = 短整数 注释 = "HTTP状态码,参考\"HPHTTP状态码\"类.">
+    参数 状态描述 <类型 = 文本型 注释 = "HTTP状态描述内容.">
+
+    方法 请求头进入 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析完毕请求后,将会通过本事件通知当前请求头." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件.." 返回值注释 = "返回-1则认定为解析错误并关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 请求头名称 <类型 = 文本型>
+    参数 请求头值 <类型 = 文本型>
+
+    方法 请求头解析完毕 <公开 定义事件 类型 = 整数 注释 = " 当服务器解析请求头完毕后,将通过本事件通知用户." 注释 = "  请注意:本事件只是通知用户请求头解析完毕,不提供所解析的请"
+            注释 = "求头数据,如果想要获取请求头数据,请添加事件\"请求头进入\",此事" 注释 = "件下将会提供请求头名称和请求头值.." 返回值注释 = "返回-1则认定为解析错误并关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 请求数据进入 <公开 定义事件 类型 = 整数 注释 = "  当接收到HTTP BODY报文时本事件将被触发." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类 注释 = "所收到的请求体数据.">
+    参数 数据长度 <类型 = 整数 注释 = "所收到的请求体数据长度.">
+
+    方法 分块头进入 <公开 定义事件 类型 = 整数 注释 = "  分块模式为HTTP1.1的特有模式,即在不确定长度时,将数据分块(Chunked)发送." 注释 = "  当接收到客户发送的分块请求头时,将会通过本事件通知用户,并且通过"
+            注释 = "参数\"当前请求头长度\"为用户提供请求头数据长度." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据长度 <类型 = 整数 注释 = "Chunked报文体数据长度.">
+
+    方法 分块头解析完成 <公开 定义事件 类型 = 整数 注释 = "  当接收到客户发送的分块(Chunked)请求头并且解析完毕后,将通过本事件通知用户." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:"
+            注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析"
+            注释 = "错误\"事件." 返回值注释 = "返回-1则认定为解析错误并关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 消息解析完毕 <公开 定义事件 类型 = 整数 注释 = "  客户请求解析完毕." 注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值."
+            注释 = "    -1 - 本次操作失败,主动与客户断开连接." 注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件."
+            返回值注释 = "返回-1则认定为解析错误并关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 协议升级 <公开 定义事件 类型 = 整数 注释 = "  当客户端主动升级协议后,将会触发本事件." 注释 = "  当客户端从HTTP1.0协议升级为HTTP1.1协议后,服务器将通过本事件通知" 注释 = "用户."
+            注释 = "  本事件返回值拥有具体意义,请您参考如下返回值:" 注释 = "    0  - 本次操作成功,默认返回值." 注释 = "    -1 - 本次操作失败,主动与客户断开连接."
+            注释 = "  请注意:如果本事件返回-1,将会触发事件\"解析错误\",您可以忽略本次\"解析" 注释 = "错误\"事件." 返回值注释 = "返回-1则会关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 协议类型 <类型 = HPHTTP协议升级类型>
+
+    方法 解析错误 <公开 定义事件 类型 = 整数 注释 = "  当解析客户请求数据出错后,将会通过本事件通知用户." 注释 = "  当解析客户请求数据出错后,将会触发本事件,触发本事件的原因大概如下:"
+            注释 = "    1. 在服务器解析事件中返回了-1或其他不正确的值." 注释 = "    2. 在服务器解析事件中主动与客户断开了连接." 注释 = "    3. 客户所发送的请求数据有误."
+            注释 = "  本事件返回值无具体意义,请返回默认值0." 返回值注释 = "返回-1则会关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 错误码 <类型 = HP错误码>
+    参数 错误描述 <类型 = 文本型>
+
+    方法 正在解析WS数据头 <公开 定义事件 类型 = 整数 注释 = "当解析WebSocket数据包头时本事件将被触发." 返回值注释 = "返回-1则会关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 结束帧 <类型 = 逻辑型 注释 = "是否结束帧.">
+    参数 保留 <类型 = 字节 注释 = "RSV1/RSV2/RSV3各1位.">
+    参数 操作码 <类型 = 字节 注释 = "操作码:0x0 - 0xF.">
+    参数 掩码 <类型 = 变整数 注释 = "4字节掩码,空指针则无掩码.">
+    参数 消息长度 <类型 = 长整数 注释 = "消息体长度.">
+
+    方法 收到WS数据体 <公开 定义事件 类型 = 整数 注释 = "当接收到WebSocket数据包体时本事件将被触发." 返回值注释 = "返回-1则会关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+    参数 数据 <类型 = 字节集类>
+    参数 长度 <类型 = 整数>
+
+    方法 WS数据接收完成 <公开 定义事件 类型 = 整数 注释 = "当完整接收一个WebSocket数据包时本事件将被触发." 返回值注释 = "返回-1则会关闭当前连接.">
+    参数 连接ID <类型 = 变整数>
+
+    方法 类_初始化
+    {
+        @ CreateSocket();
+    }
+
+    # @begin
+    # <> <include>
+    #
+    # virtual EnHandleResult OnHandShake(ITcpClient* pSender, CONNID dwConnID) override { return (EnHandleResult)@<开始握手>(dwConnID); }
+    # virtual EnHandleResult OnSend(ITcpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<发送完毕>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnReceive(ITcpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); } 
+    # virtual EnHandleResult OnReceive(ITcpClient* pSender, CONNID dwConnID, int iLength) override { return HR_IGNORE; }  //忽略,仅在PULL模型下触发.
+    # virtual EnHandleResult OnClose(ITcpClient* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode) override { return (EnHandleResult)@<通信发生错误>(dwConnID, (INT)enOperation, (INT)iErrorCode); }
+    # virtual EnHandleResult OnPrepareConnect(ITcpClient* pSender, CONNID dwConnID, SOCKET socket) override { return (EnHandleResult)@<准备连接>(dwConnID); }
+    # virtual EnHandleResult OnConnect(ITcpClient* pSender, CONNID dwConnID) override { return (EnHandleResult)@<连接完成>(dwConnID); }
+    #
+    # virtual EnHttpParseResult OnMessageBegin(IHttpClient* pSender, CONNID dwConnID) override { return  (EnHttpParseResult)@<开始解析消息>(dwConnID); }
+    # virtual EnHttpParseResult OnRequestLine(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl) override;
+    # virtual EnHttpParseResult OnStatusLine(IHttpClient* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc) override;
+    # virtual EnHttpParseResult OnHeader(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue) override;
+    # virtual EnHttpParseResult OnHeadersComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<请求头解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnBody(IHttpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHttpParseResult)@<请求数据进入>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHttpParseResult OnChunkHeader(IHttpClient* pSender, CONNID dwConnID, int iLength) override { return (EnHttpParseResult)@<分块头进入>(dwConnID, iLength); }
+    # virtual EnHttpParseResult OnChunkComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<分块头解析完成>(dwConnID); }
+    # virtual EnHttpParseResult OnMessageComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHttpParseResult)@<消息解析完毕>(dwConnID); }
+    # virtual EnHttpParseResult OnUpgrade(IHttpClient* pSender, CONNID dwConnID, EnHttpUpgradeType enUpgradeType) override { return (EnHttpParseResult)@<协议升级>(dwConnID, (INT)enUpgradeType); }
+    # virtual EnHttpParseResult OnParseError(IHttpClient* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc) override;
+    # virtual EnHandleResult OnWSMessageHeader(IHttpClient* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen) override;
+    # virtual EnHandleResult OnWSMessageBody(IHttpClient* pSender, CONNID dwConnID, const BYTE* pData, int iLength) override { return (EnHandleResult)@<收到WS数据体>(dwConnID, @an<CVolMem> (pData, iLength), iLength); }
+    # virtual EnHandleResult OnWSMessageComplete(IHttpClient* pSender, CONNID dwConnID) override { return (EnHandleResult)@<WS数据接收完成>(dwConnID); }
+    #
+    # <> </include>
+    # EnHttpParseResult @sn<current_class>::OnParseError(IHttpClient* pSender, CONNID dwConnID, int iErrorCode, LPCSTR lpszErrorDesc)
+    # {
+    #     return (EnHttpParseResult)@<解析错误>(dwConnID, (INT)iErrorCode, CVolString (GetWideText (lpszErrorDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnHeader(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszName, LPCSTR lpszValue)
+    # {
+    #     return (EnHttpParseResult)@<请求头进入>(dwConnID, CVolString (GetWideText (lpszName, CVolMem (), NULL)), CVolString (GetWideText (lpszValue, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnStatusLine(IHttpClient* pSender, CONNID dwConnID, USHORT usStatusCode, LPCSTR lpszDesc)
+    # {
+    #     return (EnHttpParseResult)@<状态行解析完成>(dwConnID, usStatusCode, CVolString (GetWideText (lpszDesc, CVolMem (), NULL)));
+    # }
+    # EnHttpParseResult @sn<current_class>::OnRequestLine(IHttpClient* pSender, CONNID dwConnID, LPCSTR lpszMethod, LPCSTR lpszUrl)
+    # {
+    #     return (EnHttpParseResult)@<请求行解析完毕>(dwConnID, CVolString (GetWideText (lpszMethod, CVolMem (), NULL)), CVolString (GetWideText (lpszUrl, CVolMem (), NULL)));
+    # }
+    # EnHandleResult @sn<current_class>::OnWSMessageHeader(IHttpClient* pSender, CONNID dwConnID, BOOL bFinal, BYTE iReserved, BYTE iOperationCode, const BYTE lpszMask[4], ULONGLONG ullBodyLen)
+    # {
+    #     return (EnHandleResult)@<正在解析WS数据头>(dwConnID, bFinal, iReserved, iOperationCode, (INT_P)lpszMask, ullBodyLen);
+    # }
+    # @end
+}

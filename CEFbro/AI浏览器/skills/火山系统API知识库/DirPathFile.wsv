@@ -1,0 +1,531 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" 编辑时信息 = "F8FF0, 0, 0, 0" @文档 = "category = \"windows.文件目录\"" ""
+        @视窗.外部头文件 = "<Shlwapi.h>" @视窗.外部库 = "Shlwapi.lib" @视窗.外部头文件 = "<Shlobj.h>" @视窗.外部头文件 = "DirPathFile\\DirPathFile.h">
+
+类 ____目录文件操作类 <公开 @全局类 = 真 @禁止创建对象 = 真>
+{
+
+    #
+
+    方法 文件_是否存在f <公开 静态 类型 = 逻辑型 注释 = "可以用作查询目录是否存在" @嵌入式方法 = "">
+    参数 文件名称 <类型 = 文本型>
+    {
+        @ PathFileExists(@<文件名称>)
+    }
+
+    方法 目录_是否存在f <公开 静态 类型 = 逻辑型 注释 = "可以用作查询目录是否存在" @嵌入式方法 = "">
+    参数 目录 <类型 = 文本型>
+    {
+        @ PathFileExists(@<目录>)
+    }
+
+    方法 目录_是否为目录F <公开 静态 类型 = 逻辑型 @禁止流程检查 = 真>
+    参数 文件名 <类型 = 文本型>
+    {
+        @   DWORD dwAttr = GetFileAttributes(@<文件名>.GetText());  //得到文件属性 
+        @   if (dwAttr == 0xFFFFFFFF)    // 文件或目录不存在
+        @     return false;
+        @   else if (dwAttr&FILE_ATTRIBUTE_DIRECTORY)  // 如果是目录
+        @     return true; 
+        @   else
+        @     return false;
+    }
+
+    方法 目录_是否系统目录f <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 目录 <类型 = 文本型>
+    {
+        @ PathIsSystemFolder(@<目录>,NULL)
+    }
+
+    方法 目录_创建_强制创建 <公开 静态 类型 = 逻辑型 注释 = "例如 c:\\\\aa\\\\bb\\\\cc\\\\dd 不存在这些目录只需要用这个函数，就能创建所有的目录了" @禁止流程检查 = 真>
+    参数 要创建的目录 <类型 = 文本型>
+    {
+        变量 错误信息 <类型 = 文本型>
+        @ int nCode = SHCreateDirectoryEx (GetDesktopWindow(), @<要创建的目录>, NULL);
+        @ if (nCode == ERROR_SUCCESS) return true;
+        @ if ( nCode == ERROR_BAD_PATHNAME) @<错误信息> = _T("路径错误");
+        @ else if(nCode == ERROR_FILENAME_EXCED_RANGE)  @<错误信息> = _T("文件路径过长");
+        @ else if(nCode == ERROR_FILE_EXISTS)  @<错误信息> = _T("目录已经存在");
+        @ else if(nCode == ERROR_ALREADY_EXISTS)  @<错误信息> = _T("目录已经存在");
+        @ else if(nCode == ERROR_CANCELLED)  @<错误信息> = _T("用户取消创建");
+        // 输出调试文本 (错误信息 + 要创建的目录)
+        @ return false;
+
+    }
+
+    方法 目录_创建 <公开 静态 类型 = 逻辑型 注释 = "如果 目录不存在则创建失败" 注释 = "比如 c:\\\\aa\\\\bb 如果aa目录不存在，则创建失败" @嵌入式方法 = "">
+    参数 要创建的目录 <类型 = 文本型>
+    {
+        @ CreateDirectory(@<要创建的目录>,NULL)
+    }
+
+    方法 文件_枚举F <公开 静态 注释 = "只会枚举指定目录下面的文件，不包含子目录" @嵌入式方法 = "name = FileEnumFile \nhas_body = true">
+    参数 要枚举的目录 <类型 = 文本型 注释 = "目录的化例如 c:\\\\a   注意，结尾不带双斜杠">
+    参数 文件类型 <类型 = 文本型 注释 = "*.* 或者 *.txt 或者其他 可以使用通配符">
+    参数 用来保存搜索到的文件名称 <类型 = 文本型>
+    {
+        // @ File_Enum(@<要枚举的目录>,@<文件类型>,@<用来保存搜索到的文件名称>,1,__LINE__)
+        @ CDirEnum @sn<rand_name0>(@<要枚举的目录>,@<文件类型>.GetText(),1);
+        @ for (@sn<rand_name0>.First();@<用来保存搜索到的文件名称>=@sn<rand_name0>.GetFileName(),@sn<rand_name0>.IsFind();@sn<rand_name0>.Next())
+
+
+    }
+
+    方法 文件_删除 <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 要删除的文件 <类型 = 文本型>
+    {
+        @ DeleteFile(@<要删除的文件>)
+    }
+
+    方法 文件_枚举目录和文件 <公开 静态 注释 = "只会枚举指定目录下面的文件，不包含子目录" @嵌入式方法 = "name = FileEnumFileAndDir \nhas_body = true">
+    参数 要枚举的目录 <类型 = 文本型 注释 = "目录的化例如 c:\\\\a   注意，结尾不带双斜杠">
+    参数 文件类型 <类型 = 文本型 注释 = "*.* 或者 *.txt 或者其他 可以使用通配符">
+    参数 用来保存搜索到的文件名称 <类型 = 文本型>
+    {
+        // @ File_Enum(@<要枚举的目录>,@<文件类型>,@<用来保存搜索到的文件名称>,3,__LINE__)
+        @ CDirEnum @sn<rand_name0>(@<要枚举的目录>,@<文件类型>,3);
+        @ for (@sn<rand_name0>.First();@<用来保存搜索到的文件名称>=@sn<rand_name0>.GetFileName(),@sn<rand_name0>.IsFind();@sn<rand_name0>.Next())
+
+    }
+
+    方法 文件_枚举目录和文件_包含所有子目录 <公开 静态 注释 = "包含子目录的文件都会被枚举到" 折叠>
+    参数 要枚举的目录 <类型 = 文本型>
+    参数 文件类型 <类型 = 文本型 注释 = "*.* 或者 *.txt 或者其他 可以使用通配符">
+    参数 用来存放所有文件 <类型 = 文本数组类>
+    参数 是否全路径 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 文件名称 <类型 = 文本型>
+        文件_枚举目录和文件 (要枚举的目录, 文件类型, 文件名称)
+        {
+            如果 (是否全路径)
+            {
+                用来存放所有文件.加入成员 (要枚举的目录 + "\\" + 文件名称)
+            }
+            否则
+            {
+                用来存放所有文件.加入成员 (文件名称)
+
+            }
+
+        }
+        变量 子目录全路径 <类型 = 文本型>
+        变量 找到的目录 <类型 = 文本型>
+        目录_枚举 (要枚举的目录, 找到的目录)
+        {
+            子目录全路径 = 要枚举的目录 + "\\" + 找到的目录
+            文件_枚举目录和文件_包含所有子目录 (子目录全路径, 文件类型, 用来存放所有文件, 是否全路径)
+        }
+
+    }
+
+    方法 文件_枚举_包含所有子目录 <公开 静态 注释 = "包含子目录的文件都会被枚举到" 折叠>
+    参数 要枚举的目录 <类型 = 文本型>
+    参数 文件类型 <类型 = 文本型 注释 = "*.* 或者 *.txt 或者其他 可以使用通配符">
+    参数 用来存放所有文件 <类型 = 文本数组类>
+    参数 是否全路径 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 文件名称 <类型 = 文本型>
+        文件_枚举F (要枚举的目录, 文件类型, 文件名称)
+        {
+            如果 (是否全路径)
+            {
+                用来存放所有文件.加入成员 (要枚举的目录 + "\\" + 文件名称)
+            }
+            否则
+            {
+                用来存放所有文件.加入成员 (文件名称)
+
+            }
+
+        }
+        变量 子目录全路径 <类型 = 文本型>
+        变量 找到的目录 <类型 = 文本型>
+        目录_枚举 (要枚举的目录, 找到的目录)
+        {
+            子目录全路径 = 要枚举的目录 + "\\" + 找到的目录
+            文件_枚举_包含所有子目录 (子目录全路径, 文件类型, 用来存放所有文件, 是否全路径)
+        }
+
+    }
+
+    方法 目录_枚举 <公开 静态 注释 = "只会枚举指定目录里面包含的目录列表，不会枚举所有包含的子目录" @嵌入式方法 = "name = DirEnumDir \nhas_body = true">
+    参数 要枚举的目录 <类型 = 文本型 注释 = "目录的化例如 c:\\\\a   注意，结尾不带双斜杠">
+    参数 用来保存搜索到的文件名称 <类型 = 文本型>
+    {
+        // @ File_Enum(@<要枚举的目录>,_T("*.*"),@<用来保存搜索到的文件名称>,3,__LINE__)
+        @ CDirEnum @sn<rand_name0>(@<要枚举的目录>,_T("*.*"),2);
+        @ for (@sn<rand_name0>.First();@<用来保存搜索到的文件名称>=@sn<rand_name0>.GetFileName(),@sn<rand_name0>.IsFind();@sn<rand_name0>.Next())
+
+    }
+
+    方法 目录_枚举所有子目录 <公开 静态>
+    参数 要枚举的目录 <类型 = 文本型>
+    参数 用来存放所有目录 <类型 = 文本数组类>
+    参数 是否全路径 <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 子目录全命名 <类型 = 文本型>
+        变量 子目录名称 <类型 = 文本型>
+        目录_枚举 (要枚举的目录, 子目录名称)
+        {
+            子目录全命名 = 要枚举的目录 + "\\" + 子目录名称
+            如果 (是否全路径)
+            {
+                用来存放所有目录.加入成员 (子目录全命名)
+            }
+            否则
+            {
+                用来存放所有目录.加入成员 (子目录名称)
+            }
+            目录_枚举所有子目录 (子目录全命名, 用来存放所有目录, 是否全路径)
+
+        }
+
+
+
+
+    }
+
+    方法 目录_枚举所有子目录_删除特定目录 <公开 静态 注释 = "从指定的目录里面搜索指定名称的目录删除" 注释 = "会删除子目录里面所有 用户指定名称的目录">
+    参数 要枚举的目录 <类型 = 文本型>
+    参数 要删除目录名称 <类型 = 文本型>
+    {
+        变量 子目录全命名 <类型 = 文本型>
+        变量 子目录名称 <类型 = 文本型>
+        目录_枚举 (要枚举的目录, 子目录名称)
+        {
+            子目录全命名 = 要枚举的目录 + "\\" + 子目录名称
+            如果 (子目录名称 == 要删除目录名称)
+            {
+                目录_删除 (子目录全命名)
+            }
+            否则
+            {
+                目录_枚举所有子目录_删除特定目录 (子目录全命名, 要删除目录名称)
+
+            }
+
+        }
+
+
+    }
+
+    方法 目录_枚举所有子目录_取特定目录完整路径数组 <公开 静态>
+    参数 要枚举的目录 <类型 = 文本型>
+    参数 特定目录名称 <类型 = 文本型>
+    参数 结果数组 <类型 = 文本数组类 注释 = "用来保存特定目录的完整名称 数组">
+    参数 是否只查找一次 <类型 = 逻辑型 注释 = "如果为假，会把所有特定名称的目录都会找出来" @默认值 = 假>
+    {
+        变量 子目录全命名 <类型 = 文本型>
+        变量 子目录名称 <类型 = 文本型>
+        目录_枚举 (要枚举的目录, 子目录名称)
+        {
+            子目录全命名 = 要枚举的目录 + "\\" + 子目录名称
+            如果 (子目录名称 == 特定目录名称)
+            {
+                如果 (是否只查找一次)
+                {
+                    返回
+                }
+                结果数组.加入成员 (子目录全命名)
+
+            }
+            否则
+            {
+                目录_枚举所有子目录_取特定目录完整路径数组 (子目录全命名, 特定目录名称, 结果数组, 是否只查找一次)
+
+            }
+
+        }
+
+
+    }
+
+    方法 目录_枚举所有子目录_取特定目录完整路径 <公开 静态 类型 = 文本型 注释 = "只会找第一个">
+    参数 要枚举的目录 <类型 = 文本型>
+    参数 特定目录名称 <类型 = 文本型>
+    {
+        变量 子目录全命名 <类型 = 文本型>
+        变量 子目录名称 <类型 = 文本型>
+        目录_枚举 (要枚举的目录, 子目录名称)
+        {
+            子目录全命名 = 要枚举的目录 + "\\" + 子目录名称
+            如果 (子目录名称 == 特定目录名称)
+            {
+                返回 (子目录全命名)
+            }
+            否则
+            {
+
+                子目录全命名 = 目录_枚举所有子目录_取特定目录完整路径 (子目录全命名, 特定目录名称)
+                如果 (子目录全命名 != "")
+                {
+                    返回 (子目录全命名)
+
+                }
+
+            }
+        }
+        返回 ("")
+
+    }
+
+    方法 目录_枚举所有子目录_删除多个特定目录 <公开 静态 注释 = "从指定的目录里面搜索指定名称的目录删除" 注释 = "会删除子目录里面所有 用户指定名称的目录" 注释 = "不用区分结尾是否带 \\">
+    参数 要枚举的目录 <类型 = 文本型>
+    参数 要删除目录名称 <类型 = 键值表>
+    {
+        变量 临时目录 <类型 = 文本型>
+        变量 子目录全命名 <类型 = 文本型>
+        变量 子目录名称 <类型 = 文本型>
+        如果 (要枚举的目录 == "")
+        {
+            返回
+        }
+
+
+        如果 (取文本右边 (要枚举的目录, 1) == "\\")
+        {
+            临时目录 = 取文本左边 (要枚举的目录, 取文本长度 (要枚举的目录) - 1)
+        }
+        否则
+        {
+            临时目录 = 要枚举的目录
+
+        }
+
+
+        目录_枚举 (临时目录, 子目录名称)
+        {
+            子目录全命名 = 临时目录 + "\\" + 子目录名称
+            如果 (要删除目录名称.是否存在 (子目录名称))
+            {
+                // 调试输出 ("要删除的文件夹", 子目录全命名)
+                目录_删除 (子目录全命名)
+            }
+            否则
+            {
+                目录_枚举所有子目录_删除多个特定目录 (子目录全命名, 要删除目录名称)
+
+            }
+
+        }
+
+    }
+
+    方法 目录_删除 <公开 静态 类型 = 逻辑型 注释 = "此功能可以删除非空目录" 折叠 @禁止流程检查 = 真>
+    参数 要删除的目录路径 <类型 = 文本型 注释 = "例如 c:\\\\a\\\\bb">
+    {
+        变量 临时数据 <类型 = 字节集类>
+        临时数据 = 文本到字节集 (要删除的目录路径)
+        临时数据.添加重复字符到字节集 ('\0', 2)
+        @ SHFILEOPSTRUCT FileOp = {0};
+        @ FileOp.fFlags = FOF_NOCONFIRMATION;
+        @ FileOp.pFrom = (PCZZWSTR)@<临时数据>.GetPtr();
+        @ FileOp.wFunc = FO_DELETE;
+        @ return SHFileOperation(&FileOp) == 0;
+
+    }
+
+    方法 目录_复制 <公开 静态 类型 = 逻辑型 注释 = "可以复制非空目录" 注释 = "原始路径 = c:\\\\aa" 注释 = "目标路径 = d:\\\\cc" 注释 = "把C盘目录下aa文件夹拷贝到 d盘cc目录下面"
+            @禁止流程检查 = 真>
+    参数 原始路径 <类型 = 文本型>
+    参数 目标路径 <类型 = 文本型>
+    {
+        变量 src <类型 = 字节集类>
+        变量 des <类型 = 字节集类>
+        src = 文本到字节集 (原始路径)
+        src.添加重复字符到字节集 ('\0', 2)
+        des = 文本到字节集 (目标路径)
+        des.添加重复字符到字节集 ('\0', 2)
+        @ SHFILEOPSTRUCT FileOp = {0};
+        @ FileOp.fFlags = FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_SILENT;//需要时直接创建一个文件夹,不需用户确定
+        @ FileOp.pFrom = (PCZZWSTR)@<src>.GetPtr();
+        @ FileOp.pTo = (PCZZWSTR)@<des>.GetPtr();
+        @ FileOp.wFunc = FO_COPY;
+        @ return SHFileOperation(&FileOp) == 0;
+
+
+
+    }
+
+    方法 目录_移动 <公开 静态 类型 = 逻辑型 注释 = "可以复制非空目录" 注释 = "原始路径 = c:\\\\aa" 注释 = "目标路径 = d:\\\\cc" 注释 = "把C盘目录下aa文件夹移动到 d盘cc目录下面" 折叠
+            @禁止流程检查 = 真>
+    参数 原始路径 <类型 = 文本型>
+    参数 目标路径 <类型 = 文本型>
+    {
+        变量 src <类型 = 字节集类>
+        变量 des <类型 = 字节集类>
+        src = 文本到字节集 (原始路径)
+        src.添加重复字符到字节集 ('\0', 2)
+        des = 文本到字节集 (目标路径)
+        des.添加重复字符到字节集 ('\0', 2)
+        @ SHFILEOPSTRUCT FileOp = {0};
+        @ FileOp.fFlags = FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR;//需要时直接创建一个文件夹,不需用户确定
+        @ FileOp.pFrom = (PCZZWSTR)@<src>.GetPtr();
+        @ FileOp.pTo = (PCZZWSTR)@<des>.GetPtr();
+        @ FileOp.wFunc = FO_MOVE;
+        @ return SHFileOperation(&FileOp) == 0;
+
+
+    }
+
+    方法 目录_重命名 <公开 静态 类型 = 逻辑型 注释 = "可以复制非空目录" 注释 = "原始路径 = c:\\\\aa" 注释 = "目标路径 = c:\\\\cc" 注释 = "把C盘目录下aa文件夹重命名为cc" 折叠
+            @禁止流程检查 = 真>
+    参数 原始路径 <类型 = 文本型>
+    参数 目标路径 <类型 = 文本型>
+    {
+        变量 src <类型 = 字节集类>
+        变量 des <类型 = 字节集类>
+        src = 文本到字节集 (原始路径)
+        src.添加重复字符到字节集 ('\0', 2)
+        des = 文本到字节集 (目标路径)
+        des.添加重复字符到字节集 ('\0', 2)
+        @ SHFILEOPSTRUCT FileOp = {0};
+        @ FileOp.fFlags = FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR;//需要时直接创建一个文件夹,不需用户确定
+        @ FileOp.pFrom = (PCZZWSTR)@<src>.GetPtr();
+        @ FileOp.pTo = (PCZZWSTR)@<des>.GetPtr();
+        @ FileOp.wFunc = FO_RENAME;
+        @ return SHFileOperation(&FileOp) == 0;
+
+
+    }
+
+    方法 取火山安装目录 <公开 静态 类型 = 文本型>
+    {
+        变量 火山路径 <类型 = 文本型>
+        // C:\voldev\voldev.exe "%1"
+        火山路径 = 注册表_取文本 (注册表根类型_常量类.HKEY_CURRENT_USER, "Software\\Classes\\vslnfile\\Shell\\Open\\Command", "")
+        返回 (文本_取左边_从右往左查找 (火山路径, "bin\\"))
+
+    }
+
+    方法 目录_取火山安装目录 <公开 类型 = 文本型>
+    {
+        变量 火山路径 <类型 = 文本型>
+        // C:\voldev\voldev.exe "%1"
+        火山路径 = 注册表_取文本 (注册表根类型_常量类.HKEY_CURRENT_USER, "Software\\Classes\\vslnfile\\Shell\\Open\\Command", "")
+        返回 (文本_取左边_从右往左查找 (火山路径, "bin\\"))
+
+    }
+
+    方法 目录_取特定目录 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 目录类型 <类型 = 整数 注释 = "#define CSIDL_DESKTOP                   0x0000        // <desktop>"
+            注释 = "#define CSIDL_INTERNET                  0x0001        // Internet Explorer (icon on desktop)"
+            注释 = "#define CSIDL_PROGRAMS                  0x0002        // Start Menu\\Programs"
+            注释 = "#define CSIDL_CONTROLS                  0x0003        // My Computer\\Control Panel"
+            注释 = "#define CSIDL_PRINTERS                  0x0004        // My Computer\\Printers"
+            注释 = "#define CSIDL_PERSONAL                  0x0005        // My Documents"
+            注释 = "#define CSIDL_FAVORITES                 0x0006        // <user name>\\Favorites"
+            注释 = "#define CSIDL_STARTUP                   0x0007        // Start Menu\\Programs\\Startup"
+            注释 = "#define CSIDL_RECENT                    0x0008        // <user name>\\Recent"
+            注释 = "#define CSIDL_SENDTO                    0x0009        // <user name>\\SendTo"
+            注释 = "#define CSIDL_BITBUCKET                 0x000a        // <desktop>\\Recycle Bin"
+            注释 = "#define CSIDL_STARTMENU                 0x000b        // <user name>\\Start Menu"
+            注释 = "#define CSIDL_MYDOCUMENTS               CSIDL_PERSONAL //  Personal was just a silly name for My Documents"
+            注释 = "#define CSIDL_MYMUSIC                   0x000d        // \"My Music\" folder"
+            注释 = "#define CSIDL_MYVIDEO                   0x000e        // \"My Videos\" folder"
+            注释 = "#define CSIDL_DESKTOPDIRECTORY          0x0010        // <user name>\\Desktop"
+            注释 = "#define CSIDL_DRIVES                    0x0011        // My Computer"
+            注释 = "#define CSIDL_NETWORK                   0x0012        // Network Neighborhood (My Network Places)"
+            注释 = "#define CSIDL_NETHOOD                   0x0013        // <user name>\\nethood"
+            注释 = "#define CSIDL_FONTS                     0x0014        // windows\\fonts"
+            注释 = "#define CSIDL_TEMPLATES                 0x0015"
+            注释 = "#define CSIDL_COMMON_STARTMENU          0x0016        // All Users\\Start Menu"
+            注释 = "#define CSIDL_COMMON_PROGRAMS           0X0017        // All Users\\Start Menu\\Programs"
+            注释 = "#define CSIDL_COMMON_STARTUP            0x0018        // All Users\\Startup"
+            注释 = "#define CSIDL_COMMON_DESKTOPDIRECTORY   0x0019        // All Users\\Desktop"
+            注释 = "#define CSIDL_APPDATA                   0x001a        // <user name>\\Application Data"
+            注释 = "#define CSIDL_PRINTHOOD                 0x001b        // <user name>\\PrintHood" "">
+    {
+        @  TCHAR lpBuffer[1024] = {0};
+        @ SHGetSpecialFolderPath(NULL,lpBuffer,@<目录类型>,false);
+        @ return lpBuffer;
+
+    }
+
+    方法 目录_取Windows目录 <公开 静态 注释 = "GetWindowsDirectory">
+    {
+        @  TCHAR lpBuffer[1024] = {0};
+        @  GetWindowsDirectory(lpBuffer,1024);
+        @  return lpBuffer;
+
+    }
+
+    方法 目录_取系统目录 <公开 静态 @禁止流程检查 = 真>
+    {
+        @  TCHAR lpBuffer[1024] = {0};
+        @  GetSystemDirectory(lpBuffer,1024);
+        @  return lpBuffer;
+
+    }
+
+    方法 目录_取当前目录 <公开 静态 @禁止流程检查 = 真>
+    {
+        @  TCHAR lpBuffer[1024] = {0};
+        @  GetCurrentDirectory(1024,lpBuffer);
+        @  return lpBuffer;
+    }
+
+    方法 目录_置当前目录F <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 新的目录 <类型 = 文本型>
+    {
+        @ SetCurrentDirectory(@<新的目录>.GetText())
+    }
+
+    方法 取当前目录f <公开 静态 类型 = 文本型 注释 = "GetCurrentDirectory" @禁止流程检查 = 真>
+    {
+        @  TCHAR lpBuffer[1024] = {0};
+        @  GetCurrentDirectory(1024,lpBuffer);
+        @  return lpBuffer;
+
+    }
+
+    方法 路径_取盘符 <公开 静态 类型 = 文本型 注释 = "例如  c:\\\\bb\\ccc 得到的是 c:" 编辑时信息 = "30FFC, 0, 0, 0">
+    参数 路径 <类型 = 文本型 编辑时信息 = "30FFC, 0, 0, 0">
+    {
+        返回 (文本_取左边_从左往右查找 (路径, ":") + ":")
+
+    }
+
+    方法 路径_取目录名称 <公开 静态 类型 = 文本型 注释 = "比如输入 c:\\a\\b 得到 b">
+    参数 完整路径 <类型 = 文本型>
+    {
+        返回 (文本_取右边_从右往左查找 (完整路径, "\\"))
+    }
+
+    方法 路径_取父路径 <公开 静态 类型 = 文本型 注释 = "比如输入 c:\\a\\b 得到 c:\\a">
+    参数 完整路径 <类型 = 文本型>
+    {
+        返回 (文本_取左边_从右往左查找 (完整路径, "\\"))
+    }
+
+    方法 路径_取文件名与后缀 <公开 静态 类型 = 文本型 注释 = "比如输入 c:\\a\\b.txt 得到 txt">
+    参数 完整路径 <类型 = 文本型>
+    {
+        返回 (文本_取右边_从右往左查找 (完整路径, "\\"))
+    }
+
+    方法 路径_取路径与文件名_不含后缀 <公开 静态 类型 = 文本型 注释 = "如果不是正常例如 c:\\\\a.txt" 注释 = "是 c:\\a 这种返回空" 折叠 折叠2>
+    参数 完整路径 <类型 = 文本型>
+    {
+        返回 (文本_取左边_从右往左查找 (完整路径, "."))
+    }
+
+    方法 路径_取后缀 <公开 静态 类型 = 文本型>
+    参数 完整路径 <类型 = 文本型>
+    {
+        返回 (文本_取右边_从右往左查找 (完整路径, "."))
+    }
+
+    方法 路径_取文件名_不含后缀 <公开 静态 类型 = 文本型>
+    参数 完整路径 <类型 = 文本型>
+    {
+        变量 文件名与后缀 <类型 = 文本型>
+        变量 文件名 <类型 = 文本型>
+        文件名与后缀 = 路径_取文件名与后缀 (完整路径)
+        文件名 = 文本_取左边_从左往右查找 (文件名与后缀, ".")
+        返回 (文件名)
+    }
+
+    #
+}

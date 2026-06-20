@@ -1,0 +1,448 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.Markdown <注释 = "本类库用作解析处理 Markdown 格式文本">
+
+类 Markdown解析器 <公开 注释 = "开源库:http://github.com/mity/md4c" @视窗.外部头文件 = "include\\Vol_md4c.h"
+        @视窗.外部源文件 = "include\\md4c\\entity.c\ninclude\\md4c\\md4c.c\ninclude\\md4c\\md4c-html.c"
+        @视窗.外部源文件 = "include\\Vol_md4c.cpp" @视窗.头文件搜寻目录 = "include\\md4c" @视窗.后缀文本 = "public IMD4CEventListener">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CMD4CWrapper)
+
+    方法 渲染到HTML <公开 类型 = 文本型 注释 = "将Markdown文本转换到HTML." @禁止流程检查 = 真>
+    参数 Markdown <类型 = 文本型 注释 = "欲解析的Markdown文本">
+    {
+        @ CU8String u8str (@<Markdown>.GetText ()); 
+        @ return data().parseToHtml ((const MD_CHAR*)u8str.GetText (), (MD_SIZE)u8str.GetLength());
+    }
+
+    方法 自定义渲染 <公开 类型 = 文本型 注释 = "调用本方法将触发\"解析xx元素\"及\"解析文本\"事件." 注释 = "用户可在事件中自定义html标签元素的渲染效果." @禁止流程检查 = 真>
+    参数 Markdown <类型 = 文本型 注释 = "欲解析的Markdown文本">
+    {
+        @ CU8String u8str (@<Markdown>.GetText ());
+        @ return data().parseCustom ((const MD_CHAR*)u8str.GetText (), (MD_SIZE)u8str.GetLength());
+    }
+
+    方法 置解析选项 <公开 注释 = "设置Markdown解析选项" @嵌入式方法 = "">
+    参数 解析选项 <类型 = 整数 注释 = "MD解析选项常量,可以用\"位或\"组合多个选项.">
+    {
+        @ @sn<this>.data().setParserFlags(@<解析选项>)
+    }
+
+    方法 置渲染选项 <公开 注释 = "设置Markdown渲染选项" @嵌入式方法 = "">
+    参数 渲染选项 <类型 = 整数 注释 = "MD渲染选项常量,可以用\"位或\"组合多个选项.">
+    {
+        @ @sn<this>.data().setRenderFlags(@<渲染选项>)
+    }
+
+    方法 取解析选项 <公开 类型 = 整数 注释 = "取当前解析选项" 返回值注释 = "对照\"MD解析选项\"常量" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().getParserFlags()
+    }
+
+    方法 取渲染选项 <公开 类型 = 整数 注释 = "取当前渲染选项" 返回值注释 = "对照\"MD渲染选项\"常量" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().getRenderFlags()
+    }
+
+    方法 类_初始化 <注释 = "绑定事件监听为当前火山对象">
+    {
+        @ data().pListener = this;
+    }
+
+    方法 解析进入块元素 <公开 定义事件 类型 = 整数 注释 = "自定义解析进入块级元素时的回调,处理诸如标题、段落、列表、代码块等块级元素的开始标签." 注释 = "例如遇到段落时输出 <p>.">
+    参数 块级元素类型 <类型 = 整数 注释 = "参考常量\"MD行内元素类型\"">
+    参数 元素指针 <类型 = 变整数 注释 = "使用类型为\"MD块级元素_xxx\"或\"MD行内元素_xxx\"对象的绑定方法获得元素对象." 注释 = "注意:需要根据参数1提供的元素类型使用对应的元素实例.">
+    参数 标签文本 <类型 = 文本型 注释 = "赋值此参数将改写默认的标签渲染文本实现自定义的渲染效果.例: 标签文本=\"<p style=\\\"color: red\\\">\"">
+
+    方法 解析离开块元素 <公开 定义事件 类型 = 整数 注释 = "自定义解析离开块级元素时的回调,处理块级元素的结束标签." 注释 = "例如离开段落时输出 </p>.">
+    参数 块级元素类型 <类型 = 整数 注释 = "参考常量\"MD行内元素类型\"">
+    参数 元素指针 <类型 = 变整数 注释 = "使用类型为\"MD块级元素_xxx\"或\"MD行内元素_xxx\"对象的绑定方法获得元素对象." 注释 = "注意:需要根据参数1提供的元素类型使用对应的元素实例.">
+    参数 标签文本 <类型 = 文本型 注释 = "赋值此参数将改写默认的标签渲染文本实现自定义的渲染效果.">
+
+    方法 解析进入行内元素 <公开 定义事件 类型 = 整数 注释 = "自定义解析进入行内元素时的回调,处理诸如强调、链接、代码等行内元素的开始标签." 注释 = "例如遇到强调时输出 <em>.">
+    参数 行内元素类型 <类型 = 整数 注释 = "参考常量\"MD行内元素类型\"">
+    参数 元素指针 <类型 = 变整数 注释 = "使用类型为\"MD块级元素_xxx\"或\"MD行内元素_xxx\"对象的绑定方法获得元素对象." 注释 = "注意:需要根据参数1提供的元素类型使用对应的元素实例.">
+    参数 标签文本 <类型 = 文本型 注释 = "赋值此参数将改写默认的标签渲染文本实现自定义的渲染效果.例: 标签文本=\"<em style=\\\"color: red\\\">\"">
+
+    方法 解析离开行内元素 <公开 定义事件 类型 = 整数 注释 = "自定义解析离开行内元素时的回调,处理行内元素的结束标签." 返回值注释 = "例如离开强调时输出 </em>.">
+    参数 行内元素类型 <类型 = 整数 注释 = "参考常量\"MD行内元素类型\"">
+    参数 元素指针 <类型 = 变整数 注释 = "使用类型为\"MD块级元素_xxx\"或\"MD行内元素_xxx\"对象的绑定方法获得元素对象." 注释 = "注意:需要根据参数1提供的元素类型使用对应的元素实例.">
+    参数 标签文本 <类型 = 文本型 注释 = "赋值此参数将改写默认的标签渲染文本实现自定义的渲染效果.">
+
+    方法 解析文本 <公开 定义事件 类型 = 整数 注释 = "自定义解析处理文本内容的回调,处理普通文本,HTML实体,换行符等." 注释 = "负责对文本进行转义和渲染.">
+    参数 文本类型 <类型 = 整数 注释 = "参考\"MD文本类型\"常量">
+    参数 文本内容 <类型 = 文本型 注释 = "待渲染的原始文本内容">
+    参数 渲染文本 <类型 = 文本型 注释 = "赋值此参数将改写默认的文本渲染结果,实现自定义渲染效果.">
+
+    # @begin
+    # <> <include>
+    # virtual int enterBlockCallback(MD_BLOCKTYPE type, void *detail, void *userdata) override {return @<解析进入块元素>(type, (INT_P)detail, *(CVolString*)userdata);};
+    # virtual int leaveBlockCallback(MD_BLOCKTYPE type, void *detail, void *userdata) override {return @<解析离开块元素>(type, (INT_P)detail, *(CVolString*)userdata);};
+    # virtual int enterSpanCallback(MD_SPANTYPE type, void *detail, void *userdata) override {return @<解析进入行内元素>(type, (INT_P)detail, *(CVolString*)userdata);};
+    # virtual int leaveSpanCallback(MD_SPANTYPE type, void *detail, void *userdata) override {return @<解析离开行内元素>(type, (INT_P)detail, *(CVolString*)userdata);};
+    # virtual int textCallback(MD_TEXTTYPE type, const MD_CHAR *text, MD_SIZE size, void *userdata) override {return @<解析文本>(type, CVolString(text,size), *(CVolString*)userdata);};
+    # <> </include>
+    # @end
+}
+
+类 MD解析选项 <公开 注释 = "用于控制Markdown解析行为的标志位,指定基于CommonMark规范,或允许一些特定规则." @文档 = "category = \"辅助类\"">
+{
+    常量 压缩空格 <公开 类型 = 整数 值 = @MD_FLAG_COLLAPSEWHITESPACE 注释 = "在普通文本中将连续的空白字符(空格、制表符等)压缩为单个空格">
+    常量 宽松标题 <公开 类型 = 整数 值 = @MD_FLAG_PERMISSIVEATXHEADERS 注释 = "允许ATX风格标题中井号(#)后无需空格,例如允许 ###header 而不必须是 ### header">
+    常量 宽松链接 <公开 类型 = 整数 值 = @MD_FLAG_PERMISSIVEURLAUTOLINKS
+            注释 = "允许识别不带尖括号的 URL 作为自动链接,例如直接识别 https://example.com 而不必须是 <https://example.com>">
+    常量 宽松邮箱 <公开 类型 = 整数 值 = @MD_FLAG_PERMISSIVEEMAILAUTOLINKS 注释 = "允许识别不带尖括号和 mailto: 前缀的邮箱地址作为自动链接,例如直接识别 user@example.com">
+    常量 禁止缩进代码 <公开 类型 = 整数 值 = @MD_FLAG_NOINDENTEDCODEBLOCKS 注释 = "禁用缩进式代码块,只允许使用围栏式代码块(```或~~~)">
+    常量 禁止HTML块 <公开 类型 = 整数 值 = @MD_FLAG_NOHTMLBLOCKS 注释 = "禁用原始 HTML 块(<h1>,<p>,<ul>,<table>,<div>等),将<和>转译成字符实体.">
+    常量 禁止行内HTML <公开 类型 = 整数 值 = @MD_FLAG_NOHTMLSPANS 注释 = "禁用行内原始 HTML (<b>,<td>,<a>,<img>,<span>等),将<和>转译成字符实体.">
+    常量 启用表格 <公开 类型 = 整数 值 = @MD_FLAG_TABLES 注释 = "启用表格扩展功能.">
+    常量 启用删除线 <公开 类型 = 整数 值 = @MD_FLAG_STRIKETHROUGH 注释 = "启用删除线扩展功能.">
+    常量 宽松网址 <公开 类型 = 整数 值 = @MD_FLAG_PERMISSIVEWWWAUTOLINKS 注释 = "启用以 www. 开头的网址自动链接,即使没有 http:// 前缀">
+    常量 任务列表 <公开 类型 = 整数 值 = @MD_FLAG_TASKLISTS 注释 = "启用任务列表扩展功能,例如 - [ ] 待办事项 或 - [x] 已完成">
+    常量 数学公式 <公开 类型 = 整数 值 = @MD_FLAG_LATEXMATHSPANS 注释 = "启用 LaTeX 数学公式支持(使用 $ 和 $$)">
+    常量 维基链接 <公开 类型 = 整数 值 = @MD_FLAG_WIKILINKS 注释 = "启用 Wiki 链接扩展功能">
+    常量 启用下划线 <公开 类型 = 整数 值 = @MD_FLAG_UNDERLINE 注释 = "启用下划线扩展功能,同时禁用使用下划线(_)作为强调(加粗)标记.">
+    常量 宽松自动链接 <公开 类型 = 整数 值 = @MD_FLAG_PERMISSIVEAUTOLINKS 注释 = "组合了选项\"宽松链接\"，\"宽松邮箱\"，\"宽松网址\".">
+    常量 禁止解析HTML <公开 类型 = 整数 值 = @MD_FLAG_NOHTML 注释 = "组合了\"禁止HTML块\"、\"禁止行内HTML\",不解析Markdown文本里的任何HTML元素,将<和>转译成字符实体.">
+    常量 CommonMark规范 <公开 类型 = 整数 值 = @MD_DIALECT_COMMONMARK 注释 = "默认使用CommonMark规范.">
+    常量 GitHub规范 <公开 类型 = 整数 值 = @MD_DIALECT_GITHUB 注释 = "GitHub规范,组合了\"宽松自动链接\"、\"启用表格\"、\"启用删除线\"、\"任务列表\".">
+}
+
+类 MD渲染选项 <公开 注释 = "这些是HTML渲染器的控制标志,可以用\"位或\"组合多个选项." @文档 = "category = \"辅助类\"">
+{
+    常量 调试输出 <公开 类型 = 整数 值 = @MD_HTML_FLAG_DEBUG 注释 = "调试模式,解析时调试信息会输出到标准错误流 (未实现)">
+    常量 原始实体 <公开 类型 = 整数 值 = @MD_HTML_FLAG_VERBATIM_ENTITIES 注释 = "不转译字符实体.即禁止将\"&copy;\"等字符实体转译成 ©"
+            注释 = "HTML的字符实体列表: https://www.w3school.com.cn/charsets/ref_html_8859.asp">
+    常量 跳过UTF8签名 <公开 类型 = 整数 值 = @MD_HTML_FLAG_SKIP_UTF8_BOM 注释 = "检查并跳过UTF-8的BOM签名,输入编码为UTF-8时应开启该选项.">
+    常量 严格XHTML <公开 类型 = 整数 值 = @MD_HTML_FLAG_XHTML 注释 = "使用更严格的XHTML规范,例如使用自闭合标签 <br /> 而不是 <br>."
+            注释 = "参考:https://www.w3school.com.cn/html/html_xhtml.asp">
+}
+
+类 MD文本类型 <公开 注释 = "用于表示Markdown文本中不同类型的文本内容" @文档 = "category = \"辅助类\"">
+{
+    常量 普通文本 <公开 类型 = 整数 值 = @MD_TEXT_NORMAL 注释 = "最基本的文本类型">
+    常量 NULL字符 <公开 类型 = 整数 值 = @MD_TEXT_NULLCHAR 注释 = "根据CommonMark规范,需要将NULL字符替换为Unicode字符U+FFFD">
+    常量 硬换行 <公开 类型 = 整数 值 = @MD_TEXT_BR 注释 = "对应HTML的<br>标签">
+    常量 软换行 <公开 类型 = 整数 值 = @MD_TEXT_SOFTBR 注释 = "源文本中的\'\\n\',换行不会在代码块或HTML块中出现">
+    常量 HTML实体 <公开 类型 = 整数 值 = @MD_TEXT_ENTITY 注释 = "包括三种类型：命名实体，如&nbsp;数字实体，如&#1234;十六进制实体，如&#x12AB."
+            注释 = "解析器不维护已知实体列表，任何匹配/&[A-Za-z][A-Za-z0-9]{1,47};/的内容都被视为命名实体">
+    常量 代码块内文本 <公开 类型 = 整数 值 = @MD_TEXT_CODE 注释 = "代码块内的文本（包括缩进空格和换行符\'\\n\'）也用于内联代码（用反引号包围的代码）">
+    常量 原始HTML文本 <公开 类型 = 整数 值 = @MD_TEXT_HTML 注释 = "原始HTML文本">
+    常量 数学公式内文本 <公开 类型 = 整数 值 = @MD_TEXT_LATEXMATH 注释 = "LaTeX数学公式内的文本,处理方式与内联代码相同">
+}
+
+类 MD块级元素类型 <公开 注释 = "用于表示Markdown文档层次结构中的块级元素" @文档 = "category = \"辅助类\"">
+{
+    常量 文档体 <公开 类型 = 整数 值 = @MD_BLOCK_DOC 注释 = "<body>...</body>">
+    常量 引用块 <公开 类型 = 整数 值 = @MD_BLOCK_QUOTE 注释 = "<blockquote>...</blockquote>">
+    常量 无序列表 <公开 类型 = 整数 值 = @MD_BLOCK_UL 注释 = "<ul>...</ul>">
+    常量 有序列表 <公开 类型 = 整数 值 = @MD_BLOCK_OL 注释 = "<ol>...</ol>">
+    常量 列表项 <公开 类型 = 整数 值 = @MD_BLOCK_LI 注释 = "<li>...</li>">
+    常量 水平线 <公开 类型 = 整数 值 = @MD_BLOCK_HR 注释 = "<hr>">
+    常量 标题 <公开 类型 = 整数 值 = @MD_BLOCK_H 注释 = "<h1>到<h6>的标题">
+    常量 代码块 <公开 类型 = 整数 值 = @MD_BLOCK_CODE 注释 = "<pre><code>...</code></pre> 注意代码块中的文本行使用\'\\n\'终止">
+    常量 HTML块 <公开 类型 = 整数 值 = @MD_BLOCK_HTML 注释 = "原始HTML块,内容将按原样输出到HTML">
+    常量 段落 <公开 类型 = 整数 值 = @MD_BLOCK_P 注释 = "<p>...</p>">
+    常量 表格 <公开 类型 = 整数 值 = @MD_BLOCK_TABLE 注释 = "<table>...</table>">
+    常量 表头 <公开 类型 = 整数 值 = @MD_BLOCK_THEAD 注释 = "<thead>">
+    常量 表体 <公开 类型 = 整数 值 = @MD_BLOCK_TBODY 注释 = "<tbody>">
+    常量 表行 <公开 类型 = 整数 值 = @MD_BLOCK_TR 注释 = "<tr>">
+    常量 表头单元格 <公开 类型 = 整数 值 = @MD_BLOCK_TH 注释 = "<th>">
+    常量 表格单元格 <公开 类型 = 整数 值 = @MD_BLOCK_TD 注释 = "<td>">
+}
+
+类 MD行内元素类型 <公开 注释 = "用于表示具有相同字体颜色等属性的行内元素" @文档 = "category = \"辅助类\"">
+{
+    常量 强调 <公开 类型 = 整数 值 = @MD_SPAN_EM 注释 = "<em>...</em>">
+    常量 加粗 <公开 类型 = 整数 值 = @MD_SPAN_STRONG 注释 = "<strong>...</strong>">
+    常量 超链接 <公开 类型 = 整数 值 = @MD_SPAN_A 注释 = "<a href=\"xxx\">...</a>">
+    常量 图片 <公开 类型 = 整数 值 = @MD_SPAN_IMG 注释 = "<img src=\"xxx\">...</img>">
+    常量 行内代码 <公开 类型 = 整数 值 = @MD_SPAN_CODE 注释 = "<code>...</code>">
+    常量 删除线 <公开 类型 = 整数 值 = @MD_SPAN_DEL 注释 = "<del>...</del>">
+    常量 行内数学公式 <公开 类型 = 整数 值 = @MD_SPAN_LATEXMATH 注释 = "行内LaTeX数学公式($)">
+    常量 显示数学公式 <公开 类型 = 整数 值 = @MD_SPAN_LATEXMATH_DISPLAY 注释 = "显示LaTeX数学公式($$)">
+    常量 维基链接 <公开 类型 = 整数 值 = @MD_SPAN_WIKILINK 注释 = "Wiki链接">
+    常量 下划线 <公开 类型 = 整数 值 = @MD_SPAN_U 注释 = "<u>...</u>">
+}
+
+类 MD对齐方式 <公开 注释 = "用于表示文本的对齐方式" @文档 = "category = \"辅助类\"">
+{
+    常量 默认对齐 <公开 类型 = 整数 值 = @MD_ALIGN_DEFAULT 注释 = "未指定时的默认对齐方式">
+    常量 左对齐 <公开 类型 = 整数 值 = @MD_ALIGN_LEFT 注释 = "左对齐">
+    常量 居中对齐 <公开 类型 = 整数 值 = @MD_ALIGN_CENTER 注释 = "居中对齐">
+    常量 右对齐 <公开 类型 = 整数 值 = @MD_ALIGN_RIGHT 注释 = "右对齐">
+}
+
+类 MD字符串属性 <公开 基础类 = 结构基础类 注释 = "用于处理Markdown中的特殊字符串属性,在正常文本流之外的字符串,比如链接URL,图片地址,标题等." @文档 = "category = \"辅助类\"">
+{
+
+    # @begin
+    # @m<DECLARE_STRUCT_CLASS> (MD_ATTRIBUTE)
+    # static size_t get_substr_types_size(const MD_ATTRIBUTE* attr) {
+    #    size_t count = 0;
+    #    while(attr->substr_offsets[count] < attr->size) {
+    #        count++;
+    #    }
+    #    return count;
+    # }
+    # @end
+
+    方法 文本内容 <公开 属性读 类型 = 文本型 注释 = "原始文本内容" @禁止流程检查 = 真>
+    {
+        @ return @an<CVolString>((const char*)this->pdata ()->text, this->pdata ()->size);
+    }
+
+    方法 文本长度 <公开 属性读 类型 = 整数 注释 = "原始文本的长度" @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->size
+    }
+
+    方法 文本类型组 <公开 属性读 类型 = 整数数组类 注释 = "子字符串类型数组,例如![alt text](http://example.org/image.png \'foo &quot; bar\')."
+            注释 = "对于标题文本\'foo &quot; bar\',会被解析为以下部分:\"foo \"(普通文本)\"&quot;\"(HTML实体)\" bar\"(普通文本)." 注释 = "本数组成员值参考\"MD文本类型\"常量."
+            @禁止流程检查 = 真>
+    {
+        变量 类型组 <类型 = 整数数组类>
+        @ size_t size = get_substr_types_size(this->pdata ());
+        @ @<类型组>.data ().Append ((int*)this->pdata ()->substr_types, size);
+        @ return @<类型组>;
+    }
+
+    方法 位置偏移组 <公开 属性读 类型 = 整数数组类 注释 = "子字符串偏移量数组,存储每个子字符串在原始文本中的起始位置." @禁止流程检查 = 真>
+    {
+        变量 组 <类型 = 整数数组类>
+        @ size_t size = get_substr_types_size(this->pdata ());
+        @ @<组>.data ().Append ((int*)this->pdata ()->substr_offsets, size+1);
+        @ return @<组>;
+    }
+}
+
+类 MD块级元素_无序列表 <公开 基础类 = 结构基础类 注释 = "用作封装MD块级元素,无序列表(ul)" @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (MD_BLOCK_UL_DETAIL)
+
+    方法 是否严格模式 <公开 属性读 类型 = 整数 注释 = "如果列表严格则非零,如果松散则为零." @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->is_tight
+    }
+
+    方法 标识符 <公开 属性读 类型 = 字符 注释 = "列表的 MarkDown 源中的项目符号字符,例如 \'-\'、\'+\'、\'*\'" @嵌入式方法 = "">
+    {
+        @ (char)@sn<this>.pdata ()->mark
+    }
+
+    方法 绑定 <公开 注释 = "从指针绑定MD块级元素对象" @嵌入式方法 = "">
+    参数 元素指针 <类型 = 变整数 注释 = "解析事件参数\"元素指针\"">
+    {
+        @ @sn<this>.Copy(*(MD_BLOCK_UL_DETAIL*)@<元素指针>)
+    }
+}
+
+类 MD块级元素_有序列表 <公开 基础类 = 结构基础类 注释 = "用作封装MD块级元素,有序列表(ol)" @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (MD_BLOCK_OL_DETAIL)
+
+    方法 是否严格模式 <公开 属性读 类型 = 整数 注释 = "如果列表严格则非零,如果松散则为零." @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->is_tight
+    }
+
+    方法 分隔字符 <公开 属性读 类型 = 字符 注释 = "列表项标记后的分隔符字符,可以是 . 或 ),例如：1. 或 1)" @嵌入式方法 = "">
+    {
+        @ (char)@sn<this>.pdata ()->mark_delimiter
+    }
+
+    方法 起始索引 <公开 属性读 类型 = 整数 注释 = "有序列表的起始数字,默认情况下是1" @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->start
+    }
+
+    方法 绑定 <公开 注释 = "从指针绑定MD块级元素对象" @嵌入式方法 = "">
+    参数 元素指针 <类型 = 变整数 注释 = "解析事件参数\"元素指针\"">
+    {
+        @ @sn<this>.Copy(*(MD_BLOCK_OL_DETAIL*)@<元素指针>)
+    }
+}
+
+类 MD块级元素_列表项 <公开 基础类 = 结构基础类 注释 = "用作封装MD块级元素,列表项(li)" @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (MD_BLOCK_LI_DETAIL)
+
+    方法 是否严格模式 <公开 属性读 类型 = 整数 注释 = "如果列表严格则非零,如果松散则为零." @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata ()->is_tight
+    }
+
+    方法 任务标记 <公开 属性读 类型 = 字符 注释 = "如果是任务则为 \'x\'、\'X\' 或 \' \' 中的一个,否则为 Undefined." @嵌入式方法 = "">
+    {
+        @ (char)@sn<this>.pdata ()->task_mark
+    }
+
+    方法 任务标记偏移 <公开 属性读 类型 = 整数 注释 = "如果是任务项,则为输入中\'[\'和\']\'之间字符的偏移量" @嵌入式方法 = "">
+    {
+        @ (char)@sn<this>.pdata ()->task_mark_offset
+    }
+
+    方法 绑定 <公开 注释 = "从指针绑定MD块级元素对象" @嵌入式方法 = "">
+    参数 元素指针 <类型 = 变整数 注释 = "解析事件参数\"元素指针\"">
+    {
+        @ @sn<this>.Copy(*(MD_BLOCK_LI_DETAIL*)@<元素指针>)
+    }
+}
+
+类 MD块级元素_标题 <公开 基础类 = 结构基础类 注释 = "用作封装MD块级元素,标题(h1-h6)" @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (MD_BLOCK_H_DETAIL)
+
+    方法 级别 <公开 属性读 类型 = 整数 注释 = "标题级别(1-6)" @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata()->level
+    }
+
+    方法 绑定 <公开 注释 = "从指针绑定MD块级元素对象" @嵌入式方法 = "">
+    参数 元素指针 <类型 = 变整数 注释 = "解析事件参数\"元素指针\"">
+    {
+        @ @sn<this>.Copy(*(MD_BLOCK_H_DETAIL*)@<元素指针>)
+    }
+}
+
+类 MD块级元素_代码块 <公开 基础类 = 结构基础类 注释 = "用作封装MD块级元素,代码块(code)" @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (MD_BLOCK_CODE_DETAIL)
+
+    方法 信息 <公开 属性读 类型 = MD字符串属性 注释 = "代码块的信息字符串" @禁止流程检查 = 真>
+    {
+        @ return @m<GET_STRUCT_MEMBER> (MD字符串属性, info); 
+    }
+
+    方法 语言 <公开 属性读 类型 = MD字符串属性 注释 = "代码块的语言标识" @禁止流程检查 = 真>
+    {
+        @ return @m<GET_STRUCT_MEMBER> (MD字符串属性, lang); 
+    }
+
+    方法 围栏字符 <公开 属性读 类型 = 字符 注释 = "用于围栏代码块的字符;如果是缩进代码块则为零" @嵌入式方法 = "">
+    {
+        @ (char)@sn<this>.pdata()->fence_char
+    }
+
+    方法 绑定 <公开 注释 = "从指针绑定MD块级元素对象" @嵌入式方法 = "">
+    参数 元素指针 <类型 = 变整数 注释 = "解析事件参数\"元素指针\"">
+    {
+        @ @sn<this>.Copy(*(MD_BLOCK_CODE_DETAIL*)@<元素指针>)
+    }
+}
+
+类 MD块级元素_表格 <公开 基础类 = 结构基础类 注释 = "用作封装MD块级元素,表格(table)" @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (MD_BLOCK_TABLE_DETAIL)
+
+    方法 列数 <公开 属性读 类型 = 整数 注释 = "表格中的列数" @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata()->col_count
+    }
+
+    方法 表头行数 <公开 属性读 类型 = 整数 注释 = "表格头部的行数(当前总是1)" @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata()->head_row_count
+    }
+
+    方法 表体行数 <公开 属性读 类型 = 整数 注释 = "表格主体的行数" @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata()->body_row_count
+    }
+
+    方法 绑定 <公开 注释 = "从指针绑定MD块级元素对象" @嵌入式方法 = "">
+    参数 元素指针 <类型 = 变整数 注释 = "解析事件参数\"元素指针\"">
+    {
+        @ @sn<this>.Copy(*(MD_BLOCK_TABLE_DETAIL*)@<元素指针>)
+    }
+}
+
+类 MD块级元素_表格单元格 <公开 基础类 = 结构基础类 注释 = "用作封装MD块级元素,表格单元格(td)" @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (MD_BLOCK_TD_DETAIL)
+
+    方法 对齐方式 <公开 属性读 类型 = 整数 注释 = "单元格内容的对齐方式,参考\"MD对齐方式\"常量" @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata()->align
+    }
+
+    方法 绑定 <公开 注释 = "从指针绑定MD块级元素对象" @嵌入式方法 = "">
+    参数 元素指针 <类型 = 变整数 注释 = "解析事件参数\"元素指针\"">
+    {
+        @ @sn<this>.Copy(*(MD_BLOCK_TD_DETAIL*)@<元素指针>)
+    }
+}
+
+类 MD行内元素_超链接 <公开 基础类 = 结构基础类 注释 = "用作封装MD行内元素,超链接(a)" @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (MD_SPAN_A_DETAIL)
+
+    方法 链接地址 <公开 属性读 类型 = MD字符串属性 注释 = "链接的href属性" @禁止流程检查 = 真>
+    {
+        @ return @m<GET_STRUCT_MEMBER> (MD字符串属性, href); 
+    }
+
+    方法 标题 <公开 属性读 类型 = MD字符串属性 注释 = "链接的title属性" @禁止流程检查 = 真>
+    {
+        @ return @m<GET_STRUCT_MEMBER> (MD字符串属性, title); 
+    }
+
+    方法 是否自动链接 <公开 属性读 类型 = 整数 注释 = "如果是自动链接则非零" @嵌入式方法 = "">
+    {
+        @ @sn<this>.pdata()->is_autolink
+    }
+
+    方法 绑定 <公开 注释 = "从指针绑定MD行内元素对象" @嵌入式方法 = "">
+    参数 元素指针 <类型 = 变整数 注释 = "解析事件参数\"元素指针\"">
+    {
+        @ @sn<this>.Copy(*(MD_SPAN_A_DETAIL*)@<元素指针>)
+    }
+}
+
+类 MD行内元素_图片 <公开 基础类 = 结构基础类 注释 = "用作封装MD行内元素,图片(img)" @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (MD_SPAN_IMG_DETAIL)
+
+    方法 源地址 <公开 属性读 类型 = MD字符串属性 注释 = "图片的src属性" @禁止流程检查 = 真>
+    {
+        @ return @m<GET_STRUCT_MEMBER> (MD字符串属性, src); 
+    }
+
+    方法 标题 <公开 属性读 类型 = MD字符串属性 注释 = "图片的title属性" @禁止流程检查 = 真>
+    {
+        @ return @m<GET_STRUCT_MEMBER> (MD字符串属性, title); 
+    }
+
+    方法 绑定 <公开 注释 = "从指针绑定MD行内元素对象" @嵌入式方法 = "">
+    参数 元素指针 <类型 = 变整数 注释 = "解析事件参数\"元素指针\"">
+    {
+        @ @sn<this>.Copy(*(MD_SPAN_IMG_DETAIL*)@<元素指针>)
+    }
+}
+
+类 MD行内元素_维基链接 <公开 基础类 = 结构基础类 注释 = "用作封装MD行内元素,维基链接." @文档 = "category = \"辅助类\"">
+{
+
+    # @ @m<DECLARE_STRUCT_CLASS> (MD_SPAN_WIKILINK_DETAIL)
+
+    方法 目标 <公开 属性读 类型 = MD字符串属性 注释 = "维基链接的目标" @禁止流程检查 = 真>
+    {
+        @ return @m<GET_STRUCT_MEMBER> (MD字符串属性, target); 
+    }
+
+    方法 绑定 <公开 注释 = "从指针绑定MD行内元素对象" @嵌入式方法 = "">
+    参数 元素指针 <类型 = 变整数 注释 = "解析事件参数\"元素指针\"">
+    {
+        @ @sn<this>.Copy(*(MD_SPAN_WIKILINK_DETAIL*)@<元素指针>)
+    }
+}

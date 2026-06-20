@@ -1,0 +1,531 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.仰望 <注释 = "本库修改自“到底为什么”的模块" @文档 = "category = \"FTP操作库\"">
+
+类 FTP类_ <公开 注释 = "LPWIN32_FIND_DATAW" 折叠 折叠2 @视窗.外部头文件 = "<Shlwapi.h>" @视窗.外部库 = "Shlwapi.lib" @视窗.外部头文件 = "<Shlobj.h>"
+        @视窗.外部头文件 = "ftp\\DirPathFile.h" @视窗.外部头文件 = "wininet.h" @视窗.外部库 = "wininet.lib">
+{
+
+    # @begin
+    # <> <include>
+    # HINTERNET hInstance=NULL;
+    # HINTERNET hConnect=NULL;
+    # <> </include>
+    # LONGLONG time_d(FILETIME ft)
+    # {
+    # LONGLONG ll=((LONGLONG)ft.dwHighDateTime << 32) + ft.dwLowDateTime;
+    # ULARGE_INTEGER ui; 
+    # ui.LowPart = ft.dwLowDateTime; 
+    # ui.HighPart = ft.dwHighDateTime;
+    # return ((LONGLONG)(ui.QuadPart - 116444736000000000)/10000000);
+    # } ;
+    # @end
+
+    方法 是否已连接_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @ return hInstance!=NULL && hConnect !=NULL;
+    }
+
+    方法 连接FTP服务器_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 FTP服务器地址 <类型 = 文本型>
+    参数 用户名 <类型 = 文本型 @默认值 = "anonymous">
+    参数 密码 <类型 = 文本型 @默认值 = "">
+    参数 端口号 <类型 = 整数 @默认值 = 21>
+    参数 是否被动模式 <类型 = 逻辑型 @默认值 = 假>
+    {
+        @ hInstance = InternetOpen(L"FTP", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);//INTERNET_OPEN_TYPE_DIRECT = 1
+        @ if(hInstance == NULL){ return false;}
+        @ hConnect = InternetConnect(hInstance, @<FTP服务器地址>.GetText(),@<端口号>, @<用户名>.GetText(), @<密码>.GetText(), INTERNET_SERVICE_FTP, @<是否被动模式> ? 0 :134217728, 0);// INTERNET_SERVICE_FTP = 1
+        @ if(hConnect == NULL){
+        @ InternetCloseHandle(hInstance);
+        @ hInstance = NULL;
+        @ return false;
+        @ }
+        @ return true;
+    }
+
+    方法 断开FTP服务器_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    {
+        @ return InternetCloseHandle(hConnect) && InternetCloseHandle(hInstance);
+    }
+
+    方法 创建目录_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 欲创建的目录名 <类型 = 文本型>
+    {
+        @ if (hConnect != NULL)
+        @ return FtpCreateDirectoryW(hConnect,@<欲创建的目录名>.GetText());
+        @ else 
+        @ return false;
+    }
+
+    方法 删除目录_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 欲删除的目录名 <类型 = 文本型>
+    {
+        @ if (hConnect != NULL)
+        @ return FtpRemoveDirectoryW(hConnect,@<欲删除的目录名>.GetText());
+        @ else 
+        @ return false; 
+    }
+
+    方法 枚举目录列表_ <公开 类型 = 整数 注释 = "枚举FTP指定目录里的所有文件,返回找到的文件总个数(包含文件和子文件夹) 不会设置参数条件而减少返回数" 折叠 @禁止流程检查 = 真>
+    参数 欲列出的文件类型 <类型 = 文本型 注释 = "留空取所有文件;或是指定文件类型,如：\"*.txt\"" @默认值 = "*.*">
+    参数 欲列出的文件属性 <类型 = 整数 注释 = "默认1+2+4+16+32+128  FTP文件属性_  16是子目录" @默认值 = 183>
+    参数 存放文件名的数组 <类型 = 文本数组类 注释 = "返回文件名数组    包含 文件和文件夹 可以用 文件属性来区分" @默认值 = 空对象>
+    参数 存放文件属性数组 <类型 = 整数数组类 注释 = "返回文件属性数组  FTP文件属性_.***" @默认值 = 空对象>
+    参数 存放文件大小数组 <类型 = 长整数数组类 注释 = "返回文件大小数组  单位 字节" @默认值 = 空对象>
+    参数 存放文件最后修改时间数组 <类型 = 整数数组类 注释 = "返回最后修改时间数组 单位长整数 时间戳  实测有点差距 日期大概是对的 点不准确" @默认值 = 空对象>
+    {
+        变量 局_目录名 <类型 = 文本型>
+        变量 局_文件属性 <类型 = 整数>
+        变量 局_文件尺寸 <类型 = 长整数>
+        变量 局_文件最后修改时间 <类型 = 整数 注释 = "">
+        @ if (hConnect == NULL)
+        @ return 0; 
+        @ WIN32_FIND_DATA  lpFindFileData;
+        @ HINTERNET hFind = FtpFindFirstFileW(hConnect, @<欲列出的文件类型>.GetText(), &lpFindFileData, INTERNET_FLAG_RELOAD, 0);//2147483648
+        @ if(hFind == NULL)
+        @ return 0; 
+        @ bool bFind = true;
+        @ int i=0;
+        @ while(bFind) {
+        @ i=i+1;
+        @ @<局_目录名> =lpFindFileData.cFileName;
+        @ @<局_文件属性>=lpFindFileData.dwFileAttributes;
+        @ @<局_文件尺寸>=lpFindFileData.nFileSizeLow+lpFindFileData.nFileSizeHigh*4294967296;
+        @ @<局_文件最后修改时间>=time_d(lpFindFileData.ftLastWriteTime);
+        @ bFind = InternetFindNextFileW(hFind, &lpFindFileData);
+        如果真 (连续位与 (局_文件属性, 欲列出的文件属性) != 0 && 取文本左边 (局_目录名, 1) != ".")
+        {
+            如果真 (存放文件名的数组 != 空对象)
+            {
+                存放文件名的数组.加入成员 (局_目录名)
+            }
+            如果真 (存放文件属性数组 != 空对象)
+            {
+                存放文件属性数组.加入成员 (局_文件属性)
+            }
+            如果真 (存放文件大小数组 != 空对象)
+            {
+                存放文件大小数组.加入成员 (局_文件尺寸)
+            }
+            如果真 (存放文件最后修改时间数组 != 空对象)
+            {
+                存放文件最后修改时间数组.加入成员 (局_文件最后修改时间)
+            }
+        }
+        @ }
+        @ InternetCloseHandle (hFind);
+        @ return i;
+    }
+
+    方法 下载目录_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 欲下载的FTP目录 <类型 = 文本型>
+    参数 本地目录 <类型 = 文本型 注释 = "本地目录必须存在,没有需创建">
+    参数 文件传输方式 <类型 = 变整数 注释 = "FTP传输方式_ (与 FTP缓存方式_ 组合)" @默认值 = 0>
+    参数 错误信息 <类型 = 文本数组类>
+    {
+        变量 文件 <类型 = 文本数组类>
+        变量 属性 <类型 = 整数数组类>
+        变量 i <类型 = 整数>
+        @ if (hConnect == NULL || PathIsDirectoryW (@<本地目录>.GetText()) != 16)
+        @ return false; 
+        计次循环 (枚举目录列表_ (欲下载的FTP目录, , 文件, 属性))
+        {
+            i = 取循环索引 ()
+            如果真 (连续位与 (属性.取成员 (i), 16) == 0)  // 16为目录 如何是文件 位与后 为0
+            {
+                如果真 (下载文件_ (欲下载的FTP目录 + "/" + 文件.取成员 (i), 本地目录 + "\\" + 文件.取成员 (i), 文件传输方式) == 假)
+                {
+                    错误信息.加入成员 (欲下载的FTP目录 + "/" + 文件.取成员 (i))
+                }
+                到循环尾
+            }
+            如果真 (文件.取成员 (i) == "." || 文件.取成员 (i) == "..")
+            {
+                到循环尾
+            }
+            如果真 (下载目录_ (欲下载的FTP目录 + "/" + 文件.取成员 (i), 本地目录 + "\\" + 文件.取成员 (i), 文件传输方式, 错误信息) == 假)
+            {
+                错误信息.加入成员 (欲下载的FTP目录 + "/" + 文件.取成员 (i))
+            }
+        }
+        返回 (i != 0 && 文件.取成员数 () == i)
+    }
+
+    方法 上传目录_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 欲上传的本地目录 <类型 = 文本型>
+    参数 FTP目录路径 <类型 = 文本型 注释 = "目录要存在">
+    参数 文件传输方式 <类型 = 变整数 注释 = "FTP传输方式_ (与 FTP缓存方式_ 组合)" @默认值 = 0>
+    {
+        变量 文本 <类型 = 文本型>
+        变量 文件 <类型 = 文本数组类>
+        @ if (hConnect == NULL || PathIsDirectoryW (@<欲上传的本地目录>.GetText()) != 16)
+        @ return false; 
+        FILE_枚举 (欲上传的本地目录, "*.*", 文本)
+        {
+            如果真 (上传文件_ (欲上传的本地目录 + "\\" + 文本, FTP目录路径 + "\\" + 文本, 文件传输方式) == 假)
+            {
+                返回 (假)
+            }
+        }
+        文本 = ""
+        Directory_枚举 (欲上传的本地目录, 文本)
+        {
+            变量 局路径 <类型 = 文本型>
+            局路径 = FTP目录路径 + "\\" + 文本
+            @ FtpCreateDirectoryW (hConnect, @<局路径>.GetText());
+            如果真 (上传目录_ (欲上传的本地目录 + "\\" + 文本, FTP目录路径 + "\\" + 文本, 文件传输方式) == 假)
+            {
+                返回 (假)
+            }
+        }
+        返回 (真)
+    }
+
+    方法 Directory_枚举 <静态 注释 = "只会枚举指定目录里面包含的枚举目录列表_，不会枚举所有包含的子目录" 折叠 @嵌入式方法 = "name = DirEnumDir \nhas_body = true">
+    参数 要枚举的目录 <类型 = 文本型 注释 = "目录的化例如 c:\\\\a   注意，结尾不带双斜杠">
+    参数 用来保存搜索到的文件名称 <类型 = 文本型>
+    {
+        // @ File_Enum(@<要枚举的目录>,_T("*.*"),@<用来保存搜索到的文件名称>,3,__LINE__)
+        @ CDirEnum @sn<rand_name0>(@<要枚举的目录>,_T("*.*"),2);
+        @ for (@sn<rand_name0>.First();@<用来保存搜索到的文件名称>=@sn<rand_name0>.GetFileName(),@sn<rand_name0>.IsFind();@sn<rand_name0>.Next())
+
+    }
+
+    方法 FILE_枚举 <静态 注释 = "只会枚举指定目录下面的文件，不包含子目录" 折叠 @嵌入式方法 = "name = FileEnumFile \nhas_body = true">
+    参数 要枚举的目录 <类型 = 文本型 注释 = "目录的化例如 c:\\\\a   注意，结尾不带双斜杠">
+    参数 文件类型 <类型 = 文本型 注释 = "*.* 或者 *.txt 或者其他 可以使用通配符">
+    参数 用来保存搜索到的文件名称 <类型 = 文本型>
+    {
+        @ CDirEnum @sn<rand_name0>(@<要枚举的目录>,@<文件类型>,1);
+        @ for (@sn<rand_name0>.First();@<用来保存搜索到的文件名称>=@sn<rand_name0>.GetFileName(),@sn<rand_name0>.IsFind();@sn<rand_name0>.Next())
+    }
+
+    方法 置现行目录_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 FTP目录路径 <类型 = 文本型>
+    {
+        @ if (hConnect != NULL)
+        @ return FtpSetCurrentDirectoryW(hConnect,@<FTP目录路径>.GetText());
+        @ else 
+        @ return false;
+    }
+
+    方法 取现行目录_ <公开 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    {
+        @ if (hConnect != NULL){
+        @ DWORD len=0;
+        @ wchar_t str[4096];
+        @ FtpGetCurrentDirectoryW(hConnect,str,&len);
+        @ FtpGetCurrentDirectoryW(hConnect,str,&len);
+        @ return str;
+        @ }
+        @ else 
+        @ return L"";
+    }
+
+    方法 删除文件_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 欲删除的FTP文件名 <类型 = 文本型>
+    {
+        @ if (hConnect != NULL)
+        @ return FtpDeleteFileW(hConnect,@<欲删除的FTP文件名>.GetText());
+        @ else 
+        @ return false;
+    }
+
+    方法 文件更名_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 欲改名的FTP文件名 <类型 = 文本型>
+    参数 新文件名称 <类型 = 文本型>
+    {
+        @ if (hConnect != NULL)
+        @ return FtpRenameFileW(hConnect,@<欲改名的FTP文件名>.GetText(),@<新文件名称>.GetText());
+        @ else 
+        @ return false;
+    }
+
+    方法 下载文件_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 欲下载的FTP文件 <类型 = 文本型>
+    参数 本地文件名_绝对路径 <类型 = 文本型>
+    参数 文件传输方式 <类型 = 变整数 注释 = "FTP传输方式_ (与 FTP缓存方式_ 组合)" @默认值 = 0>
+    {
+        @ DWORD style=@<文件传输方式>;
+        @ if (hConnect != NULL)
+        @ return FtpGetFileW(hConnect,@<欲下载的FTP文件>.GetText(),@<本地文件名_绝对路径>.GetText(),0,0,style,0);
+        @ else 
+        @ return false;
+    }
+
+    方法 上传文件_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 欲上传的本地文件 <类型 = 文本型 注释 = "如 C:\\012.txt">
+    参数 FTP文件路径 <类型 = 文本型 注释 = "FTP目录+文件名,包括后缀 如 /www/012.txt   请注意/ 别用成\\了">
+    参数 文件传输方式 <类型 = 变整数 注释 = "FTP传输方式_ (与 FTP缓存方式_ 组合)" @默认值 = 0>
+    {
+        @ DWORD style=(DWORD)@<文件传输方式>;
+        @ if (hConnect != NULL) 
+        @ return FtpPutFileW(hConnect,@<欲上传的本地文件>.GetText(),@<FTP文件路径>.GetText(),style,0);
+        @ else 
+        @ return false;
+    }
+
+    方法 取文件大小_ <公开 类型 = 长整数 注释 = "返回文件属性:大小 单位字节" 折叠 @禁止流程检查 = 真>
+    参数 FTP文件路径 <类型 = 文本型>
+    参数 文件传输方式 <类型 = 变整数 注释 = "FTP传输方式_ (与 FTP缓存方式_ 组合)" @默认值 = 0>
+    {
+        @ DWORD style=(DWORD)@<文件传输方式>;
+        @ if (hConnect == NULL) 
+        @ return 0;
+        @ HINTERNET filehandle=FtpOpenFileW(hConnect,@<FTP文件路径>.GetText(),GENERIC_READ,style,0);//GENERIC_READ或GENERIC_WRITE
+        @ if (filehandle == NULL) 
+        @ return 0;
+        @ DWORD FileSizeHigh;
+        @ DWORD size=FtpGetFileSize(filehandle,&FileSizeHigh);
+        @ InternetCloseHandle (filehandle);
+        @ return (size + FileSizeHigh * 4294967296);
+    }
+
+    方法 取目录大小_ <公开 类型 = 长整数 折叠 @禁止流程检查 = 真>
+    参数 FTP目录路径 <类型 = 文本型>
+    {
+        变量 文件 <类型 = 文本数组类>
+        变量 大小 <类型 = 长整数数组类>
+        变量 属性 <类型 = 整数数组类>
+        变量 结果 <类型 = 长整数>
+        变量 i <类型 = 整数>
+        @ if (hConnect == NULL) 
+        @ return 0;
+        计次循环 (枚举目录列表_ (FTP目录路径, , 文件, 属性, 大小))
+        {
+            i = 取循环索引 ()
+            如果真 (文件.取成员 (i) == "." || 文件.取成员 (i) == "..")
+            {
+                到循环尾
+            }
+            如果真 (位与 (属性.取成员 (i), 16) == 0)
+            {
+                结果 = 结果 + 大小.取成员 (i)
+                到循环尾
+            }
+            结果 = 结果 + 取目录大小_ (FTP目录路径 + "\\" + 文件.取成员 (i))
+        }
+        返回 (结果)
+    }
+
+    方法 取文件属性_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 FTP文件路径 <类型 = 文本型>
+    参数 区分大小写 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 文本 <类型 = 文本型>
+        @ if (hConnect == NULL) 
+        @ return 0;
+        如果 (区分大小写 == 假)
+        {
+            文本 = 到小写 (FTP文件路径)
+        }
+        否则
+        {
+            文本 = FTP文件路径
+        }
+        @ WIN32_FIND_DATA  lpFindFileData;
+        @ HINTERNET hFind=FtpFindFirstFileW (hConnect, @<文本>.GetText(), &lpFindFileData, INTERNET_FLAG_RELOAD, 0);//2147483648
+        @ if(hFind == NULL)
+        @ return 0; 
+        @ InternetCloseHandle(hFind);
+        @ return lpFindFileData.dwFileAttributes;//DWORD
+    }
+
+    方法 取目录属性_ <公开 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 FTP目录路径 <类型 = 文本型>
+    参数 区分大小写 <类型 = 逻辑型 注释 = "默认假   小写" @默认值 = 假>
+    {
+        变量 文本 <类型 = 文本型>
+        变量 文件名 <类型 = 文本数组类>
+        变量 属性 <类型 = 整数数组类>
+        @ if (hConnect == NULL) 
+        @ return 0;
+        @ @<文本> = PathFindFileNameW (@<FTP目录路径>.GetText());
+        如果真 (区分大小写 == 假)
+        {
+            文本 = 到小写 (文本)
+        }
+        枚举目录列表_ (FTP目录路径 + "/../*", 16, 文件名, 属性)
+        计次循环 (属性.取成员数 ())
+        {
+            调试输出 ("属性", 文本, 文件名.取成员 (取循环索引 ()), 属性.取成员 (取循环索引 ()))
+            如果 (区分大小写 == 假)
+            {
+                如果真 (到小写 (文件名.取成员 (取循环索引 ())) == 文本)
+                {
+                    返回 (属性.取成员 (取循环索引 ()))
+                }
+            }
+            否则
+            {
+                如果真 (文件名.取成员 (取循环索引 ()) == 文本)
+                {
+                    返回 (属性.取成员 (取循环索引 ()))
+                }
+            }
+        }
+        返回 (-1)
+    }
+
+    方法 取文件时间_ <公开 类型 = 整数 注释 = "返回最后修改时间的 时间戳" 折叠 @禁止流程检查 = 真>
+    参数 FTP文件路径 <类型 = 文本型>
+    参数 区分大小写 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 文本 <类型 = 文本型>
+        @ if (hConnect == NULL) 
+        @ return 0;
+        如果 (区分大小写 == 假)
+        {
+            文本 = 到小写 (FTP文件路径)
+        }
+        否则
+        {
+            文本 = FTP文件路径
+        }
+        @ WIN32_FIND_DATA  lpFindFileData;
+        @ HINTERNET hFind=FtpFindFirstFileW (hConnect, @<文本>.GetText(), &lpFindFileData, INTERNET_FLAG_RELOAD, 0);//2147483648
+        @ if(hFind == NULL)
+        @ return 0; 
+        @ InternetCloseHandle(hFind);
+        @ return (int)time_d(lpFindFileData.ftLastWriteTime);
+    }
+
+    方法 取目录时间_ <公开 类型 = 整数 注释 = "返回最后修改时间的 时间戳" 折叠 @禁止流程检查 = 真>
+    参数 FTP目录路径 <类型 = 文本型>
+    参数 区分大小写 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 文本 <类型 = 文本型>
+        变量 文件名 <类型 = 文本数组类>
+        变量 时间 <类型 = 整数数组类>
+        @ if (hConnect == NULL) 
+        @ return 0;
+        @ @<文本> = PathFindFileNameW (@<FTP目录路径>.GetText());
+        如果真 (区分大小写 == 假)
+        {
+            文本 = 到小写 (文本)
+        }
+        枚举目录列表_ (FTP目录路径 + "/../*", 16, 文件名, , , 时间)
+        计次循环 (时间.取成员数 ())
+        {
+            如果 (区分大小写 == 假)
+            {
+                如果真 (到小写 (文件名.取成员 (取循环索引 ())) == 文本)
+                {
+                    返回 (时间.取成员 (取循环索引 ()))
+                }
+            }
+            否则
+            {
+                如果真 (文件名.取成员 (取循环索引 ()) == 文本)
+                {
+                    返回 (时间.取成员 (取循环索引 ()))
+                }
+            }
+        }
+        返回 (-1)
+    }
+
+    方法 文件是否存在_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 FTP文件路径 <类型 = 文本型>
+    参数 区分大小写 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 文本 <类型 = 文本型>
+        @ if (hConnect == NULL) 
+        @ return false;
+        如果 (区分大小写 == 假)
+        {
+            文本 = 到小写 (FTP文件路径)
+        }
+        否则
+        {
+            文本 = FTP文件路径
+        }
+        @ WIN32_FIND_DATA  lpFindFileData;
+        @ HINTERNET hFind=FtpFindFirstFileW (hConnect, @<文本>.GetText(), &lpFindFileData, INTERNET_FLAG_RELOAD, 0);//2147483648
+        @ if(hFind == NULL)
+        @ return false; 
+        @ InternetCloseHandle(hFind);
+        @ return true;
+    }
+
+    方法 目录是否存在_ <公开 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 FTP目录路径 <类型 = 文本型>
+    参数 区分大小写 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 文本 <类型 = 文本型>
+        变量 目录 <类型 = 文本数组类>
+        @ if (hConnect == NULL) 
+        @ return false;
+        @ @<文本> = PathFindFileNameW (@<FTP目录路径>.GetText());
+        如果真 (区分大小写 == 假)
+        {
+            文本 = 到小写 (文本)
+        }
+        计次循环 (枚举目录列表_ (FTP目录路径 + "/../*", 16, 目录, , , ))
+        {
+            如果 (区分大小写 == 假)
+            {
+                如果真 (到小写 (目录.取成员 (取循环索引 ())) == 文本)
+                {
+                    返回 (真)
+                }
+            }
+            否则
+            {
+                如果真 (目录.取成员 (取循环索引 ()) == 文本)
+                {
+                    返回 (真)
+                }
+            }
+        }
+        返回 (假)
+    }
+}
+
+类 FTP传输方式_ <公开 折叠 @文档 = "category = \"FTP操作库.附加类\"">
+{
+    常量 FTP_TRANSFER_TYPE_ASCII <公开 类型 = 变整数 值 = 1 注释 = "使用FTP的ASCII（A型）传输方法传输文件。控制和格式设置信息将转换为本地等效项">
+    常量 FTP_TRANSFER_TYPE_BINARY <公开 类型 = 变整数 值 = 2 注释 = "使用FTP的图像（类型I）传输方法传输文件。该文件将完全按照其存在的状态进行传输，而不会进行任何更改。这是默认的传输方法">
+    常量 FTP_TRANSFER_TYPE_UNKNOWN <公开 类型 = 变整数 值 = 0 注释 = "默认为FTP_TRANSFER_TYPE_BINARY。">
+    常量 INTERNET_FLAG_TRANSFER_ASCII <公开 类型 = 变整数 值 = 1 注释 = "以ASCII格式传输文件">
+    常量 INTERNET_FLAG_TRANSFER_BINARY <公开 类型 = 变整数 值 = 2 注释 = "以二进制格式传输文件">
+}
+
+类 FTP缓存方式_ <公开 折叠 @文档 = "category = \"FTP操作库.附加类\"">
+{
+    常量 INTERNET_FLAG_HYPERLINK <公开 类型 = 变整数 值 = 1024 注释 = "在确定是否从网络重新加载项目时，如果没有过期时间并且没有从服务器返回LastModified时间，则强制重新加载">
+    常量 INTERNET_FLAG_NEED_FILE <公开 类型 = 变整数 值 = 16 注释 = "如果无法缓存该文件，则导致创建一个临时文件">
+    常量 INTERNET_FLAG_RELOAD <公开 类型 = 长整数 值 = 2147483648 注释 = "强制从源服务器（而不是从缓存）下载请求的文件，对象或枚举目录列表_">
+    常量 INTERNET_FLAG_RESYNCHRONIZE <公开 类型 = 变整数 值 = 2048 注释 = "如果自上次下载以来已对资源进行了修改，则重新加载HTTP资源。重新加载所有FTP资源">
+}
+
+类 FTP文件属性_ <公开 注释 = "没有全部公开 一般只用到一部分" 折叠 @文档 = "category = \"FTP操作库.附加类\"">
+{
+    常量 FILE_ATTRIBUTE_READONLY <公开 类型 = 整数 值 = 1 注释 = "只读文件. 应用程序可以读取文件，但不能对其进行写入或删除">
+    常量 FILE_ATTRIBUTE_HIDDEN <公开 类型 = 整数 值 = 2 注释 = "隐藏文件. 文件或目录被隐藏,它不包含在普通枚举目录列表_中">
+    常量 FILE_ATTRIBUTE_SYSTEM <公开 类型 = 整数 值 = 4 注释 = "系统文件. 操作系统使用一部分或专门使用的文件或目录">
+    常量 FILE_ATTRIBUTE_DIRECTORY <公开 类型 = 整数 值 = 16 注释 = "子目录.   标识目录的句柄">
+    常量 FILE_ATTRIBUTE_ARCHIVE <公开 类型 = 整数 值 = 32 注释 = "存档文件或目录的文件或目录. 应用程序通常使用此属性来标记文件以进行备份或删除" 编辑时信息 = "2FFFD, 5EAA4, 0, 0">
+    常量 FILE_ATTRIBUTE_DEVICE <类型 = 整数 值 = 64 注释 = "此值保留供系统使用">
+    常量 FILE_ATTRIBUTE_NORMAL <公开 类型 = 整数 值 = 128 注释 = "没有设置其他属性的文件。该属性仅在单独使用时才有效">
+    常量 FILE_ATTRIBUTE_TEMPORARY <公开 类型 = 整数 值 = 256
+            注释 = "用于临时存储的文件。如果有足够的高速缓存可用，文件系统避免将数据写回大容量存储，因为通常，应用程序在句柄关闭后会删除临时文件。在这种情况下，系统可以完全避免写入数据。否则，将在关闭句柄之后写入数据">
+    常量 FILE_ATTRIBUTE_SPARSE_FILE <类型 = 整数 值 = 512 注释 = "是稀疏文件的文件">
+    常量 FILE_ATTRIBUTE_REPARSE_POINT <类型 = 整数 值 = 1024 注释 = "具有关联的重新解析点的文件或目录，或者是符号链接的文件">
+    常量 FILE_ATTRIBUTE_COMPRESSED <类型 = 整数 值 = 2048 注释 = "压缩的文件或目录.对于文件,将压缩文件中的所有数据.对于目录,压缩是新创建的文件和子目录的默认设置"
+            编辑时信息 = "2FFFD, 5EAA4, 0, 0">
+    常量 FILE_ATTRIBUTE_OFFLINE <类型 = 整数 值 = 4096 注释 = "文件数据无法立即使用。此属性指示文件数据已物理移动到脱机存储中。远程存储（分层存储管理软件）使用此属性。应用程序不应随意更改此属性">
+    常量 FILE_ATTRIBUTE_NOT_CONTENT_INDEXED <类型 = 整数 值 = 8192 注释 = "内容索引服务不对文件或目录建立索引">
+    常量 FILE_ATTRIBUTE_ENCRYPTED <类型 = 整数 值 = 16384 注释 = "加密的文件或目录.对于文件,文件中的所有数据流均已加密.对于目录,加密是新创建的文件和子目录的默认设置"
+            编辑时信息 = "0, 5EAA4, 0, 0">
+    常量 FILE_ATTRIBUTE_INTEGRITY_STREAM <类型 = 整数 值 = 32768
+            注释 = "目录或用户数据流配置为具有完整性（仅ReFS卷支持）。它不包含在普通枚举目录列表_中。如果文件被重命名，完整性设置将与文件一起保留。如果复制了文件，那么如果源文件或目标目录都设置了完整性，则目标文件将设置完整性。"
+            注释 = "Windows Server2008R2，Windows7，Windows Server2008，WindowsVista，Windows Server2003和WindowsXP：直到Windows Server2012才支持此标志"
+            编辑时信息 = "0, 5EAA4, 0, 0">
+    常量 FILE_ATTRIBUTE_NO_SCRUB_DATA <类型 = 整数 值 = 131072
+            注释 = "后台数据完整性扫描程序（AKA洗涤器）不会读取用户数据流。在目录上设置时，它仅提供继承。仅在存储空间和ReFS卷上支持此标志。它不包含在普通枚举目录列表_中。"
+            注释 = "Windows Server2008R2，Windows7，Windows Server2008，WindowsVista，Windows Server2003和WindowsXP：直到Windows8和Windows Server2012才支持此标志"
+            编辑时信息 = "0, 5EAA4, 0, 0">
+    常量 FILE_ATTRIBUTE_VIRTUAL <类型 = 整数 值 = 65536 注释 = "该值保留供系统使用" 编辑时信息 = "0, 5EAA4, 0, 0">
+}

@@ -1,0 +1,2374 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 FBrowser.事件控制 <注释 = "浏览器各事件合集">
+
+类 类_FBrowser_应用事件 <公开 注释 = "FBroHsInitEvent,CVolObject,初始化时候设置的事件" @视窗.后缀文本 = "public FBroHsInitEvent" @禁止创建对象 = 真>
+{
+    方法 类_初始化
+    {
+        @ type_ = InitEventType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT (@sn<current_source_class>),0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT (@sn<current_source_class>),1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void OnBeforeCommandLineProcessing(const CefString& process_type,CefRefPtr<CefCommandLine> command_line) override;
+    #     virtual void OnRegisterCustomSchemes(CefRawPtr<CefSchemeRegistrar> registrar) override;
+    #     virtual void OnContextInitialized() override;
+    #     virtual void OnBeforeChildProcessLaunch(CefRefPtr<CefCommandLine> command_line) override;
+    #     virtual void OnScheduleMessagePumpWork(int64_t delay_ms) override;
+    #     //virtual void OnRenderThreadCreated(CefRefPtr<CefListValue> extra_info)override;/*override取消了待确认*/;
+    #     virtual void OnWebKitInitialized()override;
+    #     virtual void OnBrowserCreated(CefRefPtr<CefBrowser> browser, CefRefPtr<CefDictionaryValue> extra_info)override;
+    #     virtual void OnBrowserDestroyed(CefRefPtr<CefBrowser> browser) override;
+    #     virtual void OnContextCreated(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefV8Context> context) override;
+    #     virtual void OnContextReleased(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefV8Context> context) override;
+    #     virtual void OnUncaughtException(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefV8Context> context,CefRefPtr<CefV8Exception> exception,CefRefPtr<CefV8StackTrace> stackTrace)override;
+    #     virtual void OnFocusedNodeChanged(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefDOMNode> node) override;
+    #     virtual bool OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefProcessId source_process,CefRefPtr<CefProcessMessage> message)override;
+    #     virtual void OnLoadingStateChange(CefRefPtr<CefBrowser> browser,bool isLoading,bool canGoBack,bool canGoForward)override ;
+    #     virtual void OnLoadStart(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefLoadHandler::TransitionType transition_type)override ;
+    #     virtual void OnLoadEnd(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,int httpStatusCode)override ;
+    #     virtual void OnLoadError(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefLoadHandler::ErrorCode errorCode,const CefString& errorText,const CefString& failedUrl)override ;
+    #     virtual void ReceiveMainProcessMessage(CefRefPtr<CefBrowser> browser,const CefString& name,char* message, int size) override;
+    #
+    #     virtual void OnWebSocketClientCreate(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<FBroDOMWssClient> websocket) override;
+    #     virtual void OnWebSocketClientClose(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<FBroDOMWssClient> websocket) override;
+    #     virtual bool OnWebSocketClientMessage(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<FBroDOMWssClient> websocket, int type, HANDLE& data, int& size)override;
+    #     virtual void OnWebSocketClientConnect(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<FBroDOMWssClient> websocket, HANDLE& returl, HANDLE& protocols) override;
+    #
+    #     virtual bool OnWebSocketClientSend(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<FBroDOMWssClient> websocket, int type, HANDLE& retdata, int offsize, int& size) override;
+    #     
+    #     virtual void GetDefaultClient(CefRefPtr<CefBrowser> browser,const CefString& url,CefRefPtr<FBroUseExtraData> user_settings) override;
+    #
+    #     virtual void ClearData(HANDLE data) override{ if(data) delete[] data; }
+    #     virtual void FinishShutdown(BOOL& shutdown) override;
+    #
+    #     virtual void OnCreateExtension(CefRefPtr<CefRequestContext> requestContext,const CefString& extensionID) override;
+    #     virtual void OnCreateExtensionError(CefRefPtr<CefRequestContext> requestContext,const CefString& extensionID,const CefString& path,const CefString& error) override;
+    #     virtual void OnAddExtension(CefRefPtr<CefRequestContext> requestContext,const CefString& extensionID) override;
+    #     virtual void OnRemoveExtension(CefRefPtr<CefRequestContext> requestContext,const CefString& extensionID) override;
+    #     virtual void OnRequestContextInitialized(CefRefPtr<CefRequestContext> requestContext) override;
+    #
+    # <> </include>
+    #
+    # void @sn<current_class>::OnBeforeCommandLineProcessing(
+    #  const CefString& process_type,
+    #  CefRefPtr<CefCommandLine> command_line) {
+    #   @<即将处理命令行>(CWString(process_type.ToWString().c_str()),@dt<类_FBrowser_命令行>(command_line));
+    # }
+    # void @sn<current_class>::OnRegisterCustomSchemes(CefRawPtr<CefSchemeRegistrar> registrar) {
+    #    @<注册自定义方案>(@dt<类_FBrowser_方案注册>(registrar));
+    # }
+    # void @sn<current_class>::OnContextInitialized(){
+    #   @<浏览器_初始化完毕>();
+    # }
+    # void @sn<current_class>::OnBeforeChildProcessLaunch(CefRefPtr<CefCommandLine> command_line){
+    #   @<浏览器_即将启动子进程>(@dt<类_FBrowser_命令行>(command_line));
+    # }
+    # void @sn<current_class>::OnScheduleMessagePumpWork(int64_t delay_ms) {
+    #   @<浏览器_即将启动消息调度>(delay_ms);
+    # }
+    # //void @sn<current_class>::OnRenderThreadCreated(CefRefPtr<CefListValue> extra_info){};/*override取消了待确认*/;
+    # void @sn<current_class>::OnWebKitInitialized(){
+    #   @<渲染_即将初始化WebKit>();
+    # }
+    # void @sn<current_class>::OnBrowserCreated(CefRefPtr<CefBrowser> browser, CefRefPtr<CefDictionaryValue> extra_info){
+    #   @<渲染_浏览器创建>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_字典值>(extra_info));
+    # }
+    # void @sn<current_class>::OnBrowserDestroyed(CefRefPtr<CefBrowser> browser){
+    #   @<渲染_即将销毁浏览器>(@dt<类_FBrowser_浏览器>(browser));
+    # }
+    # void @sn<current_class>::OnContextCreated(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefRefPtr<CefV8Context> context){
+    #   @<渲染_即将创建V8环境>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowser_V8环境>(context));
+    # }
+    # void @sn<current_class>::OnContextReleased(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefRefPtr<CefV8Context> context){
+    #   @<渲染_即将释放V8环境>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowser_V8环境>(context));
+    # }
+    # void @sn<current_class>::OnUncaughtException(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefRefPtr<CefV8Context> context,
+    #  CefRefPtr<CefV8Exception> exception,
+    #  CefRefPtr<CefV8StackTrace> stackTrace){
+    #    @<渲染_即将捕获异常>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowser_V8环境>(context),
+    #               @dt<类_FBrowser_V8异常>(exception),@dt<类_FBrowser_V8堆栈踪迹>(stackTrace));
+    # }
+    # void @sn<current_class>::OnFocusedNodeChanged(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefRefPtr<CefDOMNode> node) {
+    #    @<渲染_焦点节点改变>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowser_DOM节点>(node));
+    # }
+    # bool @sn<current_class>::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefProcessId source_process,
+    #  CefRefPtr<CefProcessMessage> message){
+    #    return @<渲染_收到消息>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),source_process,@dt<类_FBrowser_进程消息>(message));
+    #  }
+    #  void @sn<current_class>::OnLoadingStateChange(CefRefPtr<CefBrowser> browser,
+    #  bool isLoading,
+    #  bool canGoBack,
+    #  bool canGoForward){
+    #   @<渲染_载入状态被改变>(@dt<类_FBrowser_浏览器>(browser),isLoading,canGoBack,canGoForward);
+    # }
+    #  void @sn<current_class>::OnLoadStart(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefLoadHandler::TransitionType transition_type){
+    #   @<渲染_载入开始>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),transition_type);
+    # }
+    #  void @sn<current_class>::OnLoadEnd(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  int httpStatusCode){
+    #    @<渲染_载入结束>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),httpStatusCode);
+    # }
+    #  void @sn<current_class>::OnLoadError(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefLoadHandler::ErrorCode errorCode,
+    #  const CefString& errorText,
+    #  const CefString& failedUrl){
+    #    @<渲染_载入错误>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),errorCode,CWString(errorText.ToWString().c_str()),CWString(failedUrl.ToWString().c_str()));
+    # }
+    # void @sn<current_class>::ReceiveMainProcessMessage(CefRefPtr<CefBrowser> browser,const CefString& name,char* message, int size)
+    # {
+    #     @<进程间消息_收到主进程消息>(@dt<类_FBrowser_浏览器>(browser),CWString(name.ToWString().c_str()),@an<CVolMem>((void*)message,size));
+    # }
+    # void @sn<current_class>::OnWebSocketClientCreate(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<FBroDOMWssClient> websocket) {
+    #     @<渲染_VIP_WebSocket客户端_创建>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowserVIP_WebSocket客户端>(websocket));
+    # }
+    #
+    # void @sn<current_class>::OnWebSocketClientClose(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<FBroDOMWssClient> websocket) {
+    #     @<渲染_VIP_WebSocket客户端_关闭>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowserVIP_WebSocket客户端>(websocket));
+    # }
+    # void @sn<current_class>::OnWebSocketClientConnect(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<FBroDOMWssClient> websocket, HANDLE& returl, HANDLE& protocols) {
+    #     CWString urlstr,urlstr1;
+    #     urlstr = urlstr1=FBroUnit::ToCWString((char *)returl);
+    #     CWString protocolsstr,protocolsstr1;
+    #     protocolsstr = protocolsstr1 = FBroUnit::ToCWString((char *)protocols);
+    #     @<渲染_VIP_WebSocket客户端_连接服务器>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowserVIP_WebSocket客户端>(websocket),urlstr,protocolsstr);    
+    #     if(urlstr != urlstr1)//存在修改
+    #         returl=(HANDLE)FBroUnit::UnicodeToAnsi(urlstr);
+    #     else
+    #         returl=NULL;
+    #     if(protocolsstr != protocolsstr1)//存在修改
+    #         protocols=(HANDLE)FBroUnit::UnicodeToAnsi(protocolsstr);
+    #     else
+    #         protocols=NULL;
+    # }
+    #
+    #
+    # bool @sn<current_class>::OnWebSocketClientMessage(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<FBroDOMWssClient> websocket, int type, HANDLE& data, int& size) {
+    #     CVolMem tempdata,tempdata1;tempdata=tempdata1=CVolMem((void*)data,size);
+    #     bool retbool= @<渲染_VIP_WebSocket客户端_接收数据>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowserVIP_WebSocket客户端>(websocket),type, tempdata);
+    #     if(tempdata!=tempdata1){
+    #         int newsize=(int)tempdata.GetSize ();
+    #         if(newsize>0){
+    #             char * rettempdata=new char[newsize];
+    #             memcpy_s(rettempdata,newsize,tempdata.GetPtr (),newsize);//会在回调释放中释放
+    #             data=rettempdata;size=newsize;
+    #         }
+    #     }
+    #     else
+    #         data=NULL;
+    #     return retbool;
+    #  }
+    #
+    #
+    # bool @sn<current_class>::OnWebSocketClientSend(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<FBroDOMWssClient> websocket, int type, HANDLE& retdata, int offsize, int& size) {
+    #     CVolMem tempdata,tempdata1;tempdata=tempdata1=CVolMem((void*)retdata,size);
+    #     bool retbool=@<渲染_VIP_WebSocket客户端_发送数据>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowserVIP_WebSocket客户端>(websocket),type,tempdata);  
+    #     if(tempdata!=tempdata1){
+    #         int newsize=(int)tempdata.GetSize ();
+    #         if(newsize>0){
+    #             char * rettempdata=new char[newsize];
+    #             memcpy_s(rettempdata,newsize,tempdata.GetPtr (),newsize);//会在回调释放中释放
+    #             retdata=rettempdata;size=newsize;
+    #         }
+    #     }
+    #     else
+    #         retdata=NULL;
+    #
+    #   return retbool;
+    #  }
+    #
+    #  void @sn<current_class>::FinishShutdown(BOOL& shutdown){
+    #    @dt<逻辑型类> boolclass;BOOL *boolstr=(BOOL *)boolclass.GetDataPtr();*boolstr=shutdown;
+    #    @<执行关闭完毕>(boolclass);
+    #    shutdown=*boolstr;
+    # }
+    #
+    # void @sn<current_class>::GetDefaultClient(CefRefPtr<CefBrowser> browser,const CefString& url,CefRefPtr<FBroUseExtraData> user_settings) {
+    #     @<获取默认事件>(@dt<类_FBrowser_浏览器>(browser),CWString(url.ToWString().c_str()),@dt<类_FBrowser_用户额外配置>(user_settings));
+    # }
+    #
+    # void @sn<current_class>::OnCreateExtension(CefRefPtr<CefRequestContext> requestContext,const CefString& extensionID) {
+    #     @<扩展插件_创建成功>(@dt<类_FBrowser_请求环境>(requestContext),CWString(extensionID.ToWString().c_str()));
+    # }
+    # void @sn<current_class>::OnCreateExtensionError(CefRefPtr<CefRequestContext> requestContext,const CefString& extensionID,const CefString& path,const CefString& error) {
+    #     @<扩展插件_创建失败>(@dt<类_FBrowser_请求环境>(requestContext),CWString(extensionID.ToWString().c_str()),CWString(path.ToWString().c_str()),CWString(error.ToWString().c_str()));
+    # }
+    # void @sn<current_class>::OnAddExtension(CefRefPtr<CefRequestContext> requestContext,const CefString& extensionID) {
+    #     @<扩展插件_载入成功>(@dt<类_FBrowser_请求环境>(requestContext),CWString(extensionID.ToWString().c_str()));
+    # }
+    # void @sn<current_class>::OnRemoveExtension(CefRefPtr<CefRequestContext> requestContext,const CefString& extensionID) {
+    #     @<扩展插件_卸载成功>(@dt<类_FBrowser_请求环境>(requestContext),CWString(extensionID.ToWString().c_str()));
+    # }
+    #
+    # void @sn<current_class>::OnRequestContextInitialized(CefRefPtr<CefRequestContext> requestContext) {
+    #     @<请求环境初始化完毕>(@dt<类_FBrowser_请求环境>(requestContext));
+    # }
+    # @end
+    #
+
+    方法 请求环境初始化完毕 <公开 注释 = "OnRequestContextInitialized,请求环境、缓存目录等初始化完成事件" @虚拟方法 = 可覆盖>
+    参数 请求环境 <类型 = 类_FBrowser_请求环境 注释 = "这里的环境不是全局，但可能是由全局分享而来，要注意判断">
+    {
+
+    }
+
+    #
+
+    方法 扩展插件_创建成功 <公开 注释 = "用户通过命令载入插件，插件在内核创建成功则触发本事件，注意此处调试断点不要断久了，会触发内核的超时而退出" @虚拟方法 = 可覆盖>
+    参数 请求环境 <类型 = 类_FBrowser_请求环境>
+    参数 插件ID <类型 = 文本型>
+    {
+
+    }
+
+    方法 扩展插件_创建失败 <公开 注释 = "创建插件失败则触发此事件，可通过参数获取到失败的原因，注意此处调试断点不要断久了，会触发内核的超时而退出" @虚拟方法 = 可覆盖>
+    参数 请求环境 <类型 = 类_FBrowser_请求环境>
+    参数 插件ID <类型 = 文本型 注释 = "这个有可能是空">
+    参数 插件路径 <类型 = 文本型>
+    参数 错误信息 <类型 = 文本型>
+    {
+
+    }
+
+    方法 扩展插件_载入成功 <公开 注释 = "浏览加载插件成功会触发此事件,注意这里浏览器内置默认插件加载成功也会触发此事件，不只是用户通过命令创建的插件，注意此处调试断点不要断久了，会触发内核的超时而退出" @虚拟方法 = 可覆盖>
+    参数 请求环境 <类型 = 类_FBrowser_请求环境>
+    参数 插件ID <类型 = 文本型>
+    {
+
+    }
+
+    方法 扩展插件_卸载成功 <公开 注释 = "用户卸载插件成功会触发此事件，注意此处调试断点不要断久了，会触发内核的超时而退出" @虚拟方法 = 可覆盖>
+    参数 请求环境 <类型 = 类_FBrowser_请求环境>
+    参数 插件ID <类型 = 文本型>
+    {
+
+    }
+
+    #
+
+    方法 获取默认事件 <公开 注释 = "OnGetDefaultClient，当谷歌模式下，内置某些谷歌功能需要调用事件的时候设置的默认事件，比如插件和某些设置的内置创建浏览器的请求" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "当前要获取默认事件的浏览器，注意：这里浏览器并没有完全创建成功，只能做一些简单的操作">
+    参数 地址 <类型 = 文本型 注释 = "当前要获取事件的地址">
+    参数 用户额外配置 <类型 = 类_FBrowser_用户额外配置 注释 = "这里面不单独设置事件即为使用内置默认不控制，要控制就需要自行设置浏览器事件">
+    {
+
+    }
+
+    #
+
+    方法 执行关闭完毕 <公开 注释 = "执行“FBrowser_关闭”成功后触发，框架所以资源释放完毕,这个事件是单独线程执行，如果要在这里面关闭窗口操控UI，最好投递到主线程或UI线程处理，否则可能会崩溃" @虚拟方法 = 可覆盖>
+    参数 是否结束程序 <类型 = 逻辑型类 注释 = "由“FBrowser_关闭”的“结束程序”参数传递而来，可直接修改">
+    {
+
+    }
+
+    #
+
+    方法 即将处理命令行 <公开 注释 = "英文名：OnBeforeCommandLineProcessing 说明：浏览器进程和渲染进程都会执行，即将处理命令行,在此次可以对命令行参数进行操作" @虚拟方法 = 可覆盖>
+    参数 进程类型 <类型 = 文本型 注释 = "The |process_type| value will be empty for the browser process，此参数只会在子进程中才会有值">
+    参数 命令行 <类型 = 类_FBrowser_命令行 "">
+
+    方法 注册自定义方案 <公开 注释 = "英文名：OnRegisterCustomSchemes 说明：使用“FBrowser_注册自定义方案处理”后调用，待验证" @虚拟方法 = 可覆盖>
+    参数 方案 <类型 = 类_FBrowser_方案注册>
+
+    方法 浏览器_初始化完毕 <公开 注释 = "英文名：OnContextInitialized 说明：在浏览器主进程中调用,browser的初始化工作已完成。" @虚拟方法 = 可覆盖>
+
+    方法 浏览器_即将启动子进程 <公开 注释 = "英文名：OnBeforeChildProcessLaunch 说明： 可在此处获取修改执行子程序命令行" @虚拟方法 = 可覆盖>
+    参数 命令行 <类型 = 类_FBrowser_命令行>
+
+    方法 浏览器_即将启动消息调度 <公开 注释 = "英文名：OnScheduleMessagePumpWork" @虚拟方法 = 可覆盖>
+    参数 延迟时间 <类型 = 长整数>
+
+    方法 渲染_即将初始化WebKit <公开 注释 = "英文名：OnWebKitInitialized 说明：只能在渲染进程中使用" @虚拟方法 = 可覆盖>
+
+    方法 渲染_浏览器创建 <公开 注释 = "英文名：OnBrowserCreated 说明：只能在渲染进程中使用，浏览器创建成功" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 额外信息 <类型 = 类_FBrowser_字典值>
+
+    方法 渲染_即将销毁浏览器 <公开 注释 = "英文名：OnBrowserDestroyed 说明：只能在渲染进程中使用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+
+    方法 渲染_即将创建V8环境 <公开 注释 = "英文名：OnContextCreated 说明：只能在渲染进程中使用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 V8环境 <类型 = 类_FBrowser_V8环境>
+
+    方法 渲染_即将释放V8环境 <公开 注释 = "英文名：OnContextReleased 说明：只能在渲染进程中使用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 V8环境 <类型 = 类_FBrowser_V8环境>
+
+    方法 渲染_即将捕获异常 <公开 注释 = "英文名：OnUncaughtException 说明：只能在渲染进程中使用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 V8环境 <类型 = 类_FBrowser_V8环境>
+    参数 V8异常 <类型 = 类_FBrowser_V8异常>
+    参数 V8堆栈踪迹 <类型 = 类_FBrowser_V8堆栈踪迹>
+
+    方法 渲染_焦点节点改变 <公开 注释 = "英文名：OnFocusedNodeChanged 说明：只能在渲染进程中使用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 DOM节点 <类型 = 类_FBrowser_DOM节点>
+
+    方法 渲染_收到消息 <公开 类型 = 逻辑型 注释 = "英文名：OnProcessMessageReceived 说明：只能在渲染进程中使用，返回真消息已被处理，消息不再保留" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 源进程 <类型 = 整数>
+    参数 消息 <类型 = 类_FBrowser_进程消息>
+    {
+        返回 (假)
+    }
+
+    方法 渲染_载入状态被改变 <公开 注释 = "英文名：Render_OnLoadingStateChange 说明：只能在渲染进程中使用，网页载入状态改变" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 是否读取中 <类型 = 逻辑型>
+    参数 可后退 <类型 = 逻辑型>
+    参数 可前进 <类型 = 逻辑型>
+
+    方法 渲染_载入开始 <公开 注释 = "英文名：Render_OnLoadStart 说明：只能在渲染进程中使用，网页载入开始" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 过渡类型 <类型 = 整数>
+
+    方法 渲染_载入结束 <公开 注释 = "英文名：Render_OnLoadEnd 说明：只能在渲染进程中使用，网页载入结束，有的网页含有多个框架，所以这里结束可能只是当前框架结束" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 状态码 <类型 = 整数>
+
+    方法 渲染_载入错误 <公开 注释 = "英文名： Render_OnLoadError 说明：只能在渲染进程中使用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 错误代码 <类型 = 整数>
+    参数 错误文本 <类型 = 文本型>
+    参数 失败地址 <类型 = 文本型>
+    {
+
+    }
+
+    方法 进程间消息_收到主进程消息 <公开 注释 = "扩展功能，非CEF自带消息，" 注释 = "在主进程中调用“类_FBrowser_浏览器”类中的“进程间消息_发送数据_到主进程”方法后，" 注释 = "在渲染进程中执行，实现进程间通信"
+            @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 消息名 <类型 = 文本型>
+    参数 消息内容 <类型 = 字节集类>
+    {
+
+    }
+
+    方法 渲染_VIP_WebSocket客户端_创建 <公开 注释 = "网页如果创建了websocket调用此事件，在渲染进程中执行，VIP功能，需注册VIP后才能使用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 websocket客户端 <类型 = 类_FBrowserVIP_WebSocket客户端>
+    {
+
+    }
+
+    方法 渲染_VIP_WebSocket客户端_关闭 <公开 注释 = "网页关闭websocket调用此事件，在渲染进程中执行，VIP功能，需注册VIP后才能使用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 websocket客户端 <类型 = 类_FBrowserVIP_WebSocket客户端>
+    {
+
+    }
+
+    #
+
+    方法 渲染_VIP_WebSocket客户端_连接服务器 <公开 注释 = "网页连接websocket服务器调用此事件，在渲染进程中执行，VIP功能，需注册VIP后才能使用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 websocket客户端 <类型 = 类_FBrowserVIP_WebSocket客户端>
+    参数 url <类型 = 文本型 注释 = "可修改，修改后会重定向新的连接地址">
+    参数 protocols <类型 = 文本型 注释 = "可修改">
+    {
+
+    }
+
+    方法 渲染_VIP_WebSocket客户端_接收数据 <公开 类型 = 逻辑型 注释 = "返回假继续，返回真拒绝接收此数据，网页接收到websocket服务器发送的文本消息调用此事件，在渲染进程中执行，VIP功能，需注册VIP后才能使用"
+            @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 websocket客户端 <类型 = 类_FBrowserVIP_WebSocket客户端>
+    参数 数据类型 <类型 = 整数 注释 = "0为文本，1为ArrayBuffer,2为Blob">
+    参数 数据 <类型 = 字节集类 注释 = "可修改，篡改当前发送数据,注意文本格式必须是UTF8">
+    {
+        返回 (假)
+
+    }
+
+    方法 渲染_VIP_WebSocket客户端_发送数据 <公开 类型 = 逻辑型 注释 = "返回假继续，返回真拒绝接收此数据，网页接收到websocket服务器发送的文本消息调用此事件，在渲染进程中执行，VIP功能，需注册VIP后才能使用"
+            @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 websocket客户端 <类型 = 类_FBrowserVIP_WebSocket客户端>
+    参数 数据类型 <类型 = 整数 注释 = "0为文本，1为ArrayBuffer,2为Blob">
+    参数 数据 <类型 = 字节集类 注释 = "可修改，篡改当前发送数据">
+    {
+        返回 (假)
+    }
+}
+
+#
+
+类 类_FBrowser_浏览器事件 <公开 @视窗.后缀文本 = "public FBroHsBroEvent" @禁止创建对象 = 真>
+{
+    方法 类_初始化
+    {
+        @ type_ = BroEventType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual bool OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefProcessId source_process,CefRefPtr<CefProcessMessage> message)override;
+    #     virtual bool OnBeforeBrowse(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefRequest> request,bool user_gesture,bool is_redirect)override;
+    #     virtual bool OnOpenURLFromTab(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,const CefString& target_url,CefRequestHandler::WindowOpenDisposition target_disposition,bool user_gesture)override;
+    #     virtual bool OnCertificateError(CefRefPtr<CefBrowser> browser,cef_errorcode_t cert_error,const CefString& request_url,CefRefPtr<CefSSLInfo> ssl_info,CefRefPtr<CefCallback> callback) override;
+    #     virtual bool OnSelectClientCertificate(CefRefPtr<CefBrowser> browser,bool isProxy,const CefString& host,int port, CefRefPtr<FBroX509CertificateList> certificates,CefRefPtr<CefSelectClientCertificateCallback> callback)override;
+    #     virtual void OnRenderViewReady(CefRefPtr<CefBrowser> browser)override;
+    #
+    #     virtual void OnRenderProcessTerminated(CefRefPtr<CefBrowser> browser,CefRequestHandler::TerminationStatus status, int error_code,const CefString& error_string)override;
+    #     virtual bool GetAuthCredentials(CefRefPtr<CefBrowser> browser,const CefString& origin_url,bool isProxy,const CefString& host,int port,const CefString& realm,const CefString& scheme,CefRefPtr<CefAuthCallback> callback)override;
+    #     virtual void OnAfterCreated(CefRefPtr<CefBrowser> browser,CefRefPtr<CefDictionaryValue> extrainfo)override;
+    #
+    #     virtual bool OnBeforePopup(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,int popup_id,const CefString& target_url,const CefString& target_frame_name,
+    #         CefLifeSpanHandler::WindowOpenDisposition target_disposition,bool user_gesture,const CefPopupFeatures& popupFeatures,CefWindowInfo& windowInfo,
+    #         CefBrowserSettings& settings,bool* no_javascript_access,CefRefPtr<FBroUseExtraData> user_settings) override;
+    #     
+    #     virtual void OnBeforePopupAborted(CefRefPtr<CefBrowser> browser,int popup_id) override;
+    #
+    #     virtual void OnBeforeDevToolsPopup(CefRefPtr<CefBrowser> browser,CefWindowInfo& windowInfo,
+    #         CefBrowserSettings& settings,bool* use_default_window,CefRefPtr<FBroUseExtraData> user_settings) override;
+    #
+    #
+    #     virtual bool DoClose(CefRefPtr<CefBrowser> browser) override;
+    #     virtual void OnBeforeClose(CefRefPtr<CefBrowser> browser) override;
+    #     virtual void OnAddressChange(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,const CefString& url)override;
+    #     virtual void OnTitleChange(CefRefPtr<CefBrowser> browser,const CefString& title)override;
+    #     virtual void OnFaviconURLChange(CefRefPtr<CefBrowser> browser,CefRefPtr<CefListValue> icon_urls) override;
+    #     virtual void OnFullscreenModeChange(CefRefPtr<CefBrowser> browser,bool fullscreen)override;
+    #     virtual bool OnTooltip(CefRefPtr<CefBrowser> browser,CefRefPtr<FBroString> text) override;
+    #     virtual void OnStatusMessage(CefRefPtr<CefBrowser> browser,const CefString& value)override;
+    #     virtual bool OnConsoleMessage(CefRefPtr<CefBrowser> browser,cef_log_severity_t level,const CefString& message,const CefString& source,int line)override;
+    #     virtual bool OnAutoResize(CefRefPtr<CefBrowser> browser,const CefSize& new_size)override;
+    #     virtual void OnLoadingProgressChange(CefRefPtr<CefBrowser> browser,double progress)override;
+    #     virtual bool OnCursorChange(CefRefPtr<CefBrowser> browser,CefCursorHandle cursor,cef_cursor_type_t type,const CefCursorInfo& custom_cursor_info) override;
+    #     virtual void OnMediaAccessChange(CefRefPtr<CefBrowser> browser,bool has_video_access,bool has_audio_access) override;
+    #     virtual CefResourceRequestHandler::ReturnValue OnBeforeResourceLoad(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefRequest> request,CefRefPtr<CefCallback> callback)override; 
+    #     virtual CefRefPtr<CefResourceHandler> GetResourceHandler(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefRequest> request)override;
+    #     virtual void OnResourceRedirect(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefRequest> request,CefRefPtr<CefResponse> response,CefRefPtr<FBroString> new_url)override;
+    #     virtual bool OnResourceResponse(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefRequest> request,CefRefPtr<CefResponse> response)override;
+    #     virtual CefRefPtr<CefResponseFilter> GetResourceResponseFilter(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefRequest> request,CefRefPtr<CefResponse> response)override;
+    #     virtual void OnResourceLoadComplete(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefRequest> request,CefRefPtr<CefResponse> response,CefResourceRequestHandler::URLRequestStatus status,int64_t received_content_length)override;
+    #     virtual void OnProtocolExecution(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefRequest> request,bool& allow_os_execution)override;
+    #     virtual void OnLoadingStateChange(CefRefPtr<CefBrowser> browser,bool isLoading,bool canGoBack,bool canGoForward)override;
+    #     virtual void OnLoadStart(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefLoadHandler::TransitionType transition_type) override;
+    #     virtual void OnLoadEnd(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,int httpStatusCode)override;
+    #     virtual void OnLoadError(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefLoadHandler::ErrorCode errorCode,const CefString& errorText,const CefString& failedUrl) override;
+    #     virtual void OnBeforeContextMenu(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefContextMenuParams> params,CefRefPtr<CefMenuModel> model)override;
+    #     virtual bool RunContextMenu(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefContextMenuParams> params,CefRefPtr<CefMenuModel> model,CefRefPtr<CefRunContextMenuCallback> callback)override;
+    #     virtual bool OnContextMenuCommand(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefContextMenuParams> params,int command_id,CefContextMenuHandler::EventFlags event_flags)override;
+    #     virtual void OnContextMenuDismissed(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame) override;
+    #
+    #     virtual bool RunQuickMenu(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,PTELIB_ELEMENT_AT location,POINT_SIZE size,int edit_state_flags,CefRefPtr<CefRunQuickMenuCallback> callback) override;
+    #     virtual bool OnQuickMenuCommand(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,int command_id,int event_flags) override;
+    #     virtual void OnQuickMenuDismissed(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame) override;
+    #     virtual bool CanDownload(CefRefPtr<CefBrowser> browser,const CefString& url,const CefString& request_method) override;
+    #
+    #     virtual bool OnBeforeDownload(CefRefPtr<CefBrowser> browser,CefRefPtr<CefDownloadItem> download_item,const CefString& suggested_name,CefRefPtr<CefBeforeDownloadCallback> callback)override;
+    #     virtual void OnDownloadUpdated(CefRefPtr<CefBrowser> browser,CefRefPtr<CefDownloadItem> download_item,CefRefPtr<CefDownloadItemCallback> callback)override;
+    #     virtual bool OnPreKeyEvent(CefRefPtr<CefBrowser> browser,PTELIB_KEYEVENT event,POINT_OSEVENT os_event,bool* is_keyboard_shortcut)override;
+    #     virtual bool OnKeyEvent(CefRefPtr<CefBrowser> browser,PTELIB_KEYEVENT event,POINT_OSEVENT os_event) override;
+    #     virtual bool OnFileDialog(CefRefPtr<CefBrowser> browser,CefDialogHandler::FileDialogMode mode,const CefString& title,const CefString& default_file_path,
+    # CefRefPtr<FBroCefStringList> accept_filters,CefRefPtr<FBroCefStringList> accept_extensions,CefRefPtr<FBroCefStringList> accept_descriptions,CefRefPtr<CefFileDialogCallback> callback) override;
+    #     virtual bool OnJSDialog(CefRefPtr<CefBrowser> browser,const CefString& origin_url,CefJSDialogHandler::JSDialogType dialog_type,const CefString& message_text,const CefString& default_prompt_text,CefRefPtr<CefJSDialogCallback> callback,bool& suppress_message)override;
+    #     virtual bool OnBeforeUnloadDialog(CefRefPtr<CefBrowser> browser,const CefString& message_text,bool is_reload,CefRefPtr<CefJSDialogCallback> callback) override;
+    #     virtual void OnResetDialogState(CefRefPtr<CefBrowser> browser)override;
+    #     virtual void OnDialogClosed(CefRefPtr<CefBrowser> browser)override;
+    #     virtual void OnTakeFocus(CefRefPtr<CefBrowser> browser, bool next) override;
+    #     virtual bool OnSetFocus(CefRefPtr<CefBrowser> browser, CefFocusHandler::FocusSource source) override;
+    #     virtual void OnGotFocus(CefRefPtr<CefBrowser> browser) override;
+    #     virtual void OnFindResult(CefRefPtr<CefBrowser> browser,int identifier,int count,POINT_RECT selectionRect,int activeMatchOrdinal,bool finalUpdate) override;
+    #     virtual bool OnDragEnter(CefRefPtr<CefBrowser> browser,CefRefPtr<CefDragData> dragData,CefDragHandler::DragOperationsMask mask) override;
+    #     virtual void OnDraggableRegionsChanged(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,const CefRefPtr<FBroDraggableRegion> regions)override;
+    #     virtual void ReceiveRenderProcessMessage(CefRefPtr<CefBrowser> browser,INT64 processid,const CefString& name,char* message, int size) override;
+    #
+    #     virtual bool GetRootScreenRect(CefRefPtr<CefBrowser> browser, CefRect& rect) override;
+    #     virtual void GetViewRect(CefRefPtr<CefBrowser> browser, CefRect& rect) override;
+    #     virtual bool GetScreenPoint(CefRefPtr<CefBrowser> browser,int viewX,int viewY,int& screenX,int& screenY)override;
+    #     virtual bool GetScreenInfo(CefRefPtr<CefBrowser> browser,CefScreenInfo& screen_info)override;
+    #     virtual void OnPopupShow(CefRefPtr<CefBrowser> browser, bool show) override;
+    #     virtual void OnPopupSize(CefRefPtr<CefBrowser> browser, const CefRect& rect) override;
+    #     virtual void OnPaint(CefRefPtr<CefBrowser> browser,CefRenderHandler::PaintElementType type,CefRefPtr<FBroRectValueList> dirtyRects,const void* buffer,int width,int height) override;
+    #     virtual void OnAcceleratedPaint(CefRefPtr<CefBrowser> browser,CefRenderHandler::PaintElementType type,CefRefPtr<FBroRectValueList> dirtyRects,const CefAcceleratedPaintInfo& info)override;
+    #     virtual bool StartDragging(CefRefPtr<CefBrowser> browser,CefRefPtr<CefDragData> drag_data,CefRenderHandler::DragOperationsMask allowed_ops,int x,int y)override;
+    #     virtual void UpdateDragCursor(CefRefPtr<CefBrowser> browser,CefRenderHandler::DragOperation operation) override;
+    #     virtual void OnScrollOffsetChanged(CefRefPtr<CefBrowser> browser,double x,double y) override;
+    #     virtual void OnImeCompositionRangeChanged(CefRefPtr<CefBrowser> browser,const CefRange& selected_range,CefRefPtr<FBroRectValueList> character_bounds)override;
+    #     virtual void OnTextSelectionChanged(CefRefPtr<CefBrowser> browser,const CefString& selected_text,const CefRange& selected_range)override;
+    #     virtual void OnVirtualKeyboardRequested(CefRefPtr<CefBrowser> browser,CefRenderHandler::TextInputMode input_mode) override;
+    #
+    #     virtual void OnDocumentAvailableInMainFrame(CefRefPtr<CefBrowser> browser) override;
+    #     virtual bool GetAudioParameters(CefRefPtr<CefBrowser> browser,CefAudioParameters& params) override;
+    #     virtual void OnAudioStreamStarted(CefRefPtr<CefBrowser> browser,const CefAudioParameters& params,int channels) override;
+    #     virtual void OnAudioStreamPacket(CefRefPtr<CefBrowser> browser,const float** data,int frames,int64_t pts) override;
+    #     virtual void OnAudioStreamStopped(CefRefPtr<CefBrowser> browser) override;
+    #     virtual void OnAudioStreamError(CefRefPtr<CefBrowser> browser,const CefString& message) override;
+    #     virtual bool OnChromeCommand(CefRefPtr<CefBrowser> browser,int command_id,cef_window_open_disposition_t disposition) override;
+    #     virtual void OnFrameCreated(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame) override;
+    #     virtual void OnFrameAttached(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,bool reattached) override;
+    #     virtual void OnFrameDetached(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame) override;
+    #     virtual void OnMainFrameChanged(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> old_frame,CefRefPtr<CefFrame> new_frame) override;
+    #     virtual bool OnRequestMediaAccessPermission(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,const CefString& requesting_origin,uint32_t requested_permissions,CefRefPtr<CefMediaAccessCallback> callback) override;
+    #     virtual bool OnShowPermissionPrompt(CefRefPtr<CefBrowser> browser,uint64_t prompt_id,const CefString& requesting_origin,uint32_t requested_permissions,CefRefPtr<CefPermissionPromptCallback> callback) override;
+    #     virtual void OnDismissPermissionPrompt(CefRefPtr<CefBrowser> browser,uint64_t prompt_id,cef_permission_request_result_t result) override;
+    #
+    # <> </include>
+    #
+    # bool @sn<current_class>::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefProcessId source_process,
+    #  CefRefPtr<CefProcessMessage> message){
+    #  return @<浏览器_收到消息>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),source_process,@dt<类_FBrowser_进程消息>(message));;
+    #  };
+
+    方法 浏览器_收到消息 <公开 类型 = 逻辑型 注释 = "英文名：OnProcessMessageReceived" 注释 = "说明：在浏览器主进程中调用 返回真消息已被处理,消息不再保留" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 源进程 <类型 = 整数>
+    参数 消息 <类型 = 类_FBrowser_进程消息>
+    {
+        返回 (假)
+    }
+
+    #
+    # bool @sn<current_class>::OnBeforeBrowse(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefRefPtr<CefRequest> request,
+    #  bool user_gesture,
+    #  bool is_redirect) {
+    #  return @<浏览器_即将导航>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowser_请求>(request),user_gesture,is_redirect);
+    #  };
+
+    方法 浏览器_即将导航 <公开 类型 = 逻辑型 注释 = "英文名：OnBeforeBrowse 说明：在浏览器主进程中调用，返回假继续，返回真阻止当前导航" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 请求 <类型 = 类_FBrowser_请求>
+    参数 用户动作 <类型 = 逻辑型>
+    参数 是否重定向 <类型 = 逻辑型>
+    {
+        返回 (假)
+    }
+
+    #
+    #  bool @sn<current_class>::OnOpenURLFromTab(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  const CefString& target_url,
+    #  CefRequestHandler::WindowOpenDisposition target_disposition,
+    #  bool user_gesture) {
+    #  return @<浏览器_从标签打开地址>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),CWString(target_url.ToWString().c_str()),target_disposition,user_gesture);
+    #  }
+
+    方法 浏览器_从标签打开地址 <公开 类型 = 逻辑型 注释 = "英文名：OnOpenURLFromTab 说明：在浏览器主进程中调用 待验证" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 目的地址 <类型 = 文本型>
+    参数 目的配置 <类型 = 整数 注释 = "参考:链接打开方式">
+    参数 用户行为 <类型 = 逻辑型>
+    {
+        返回 (假)
+    }
+
+    #
+    #
+    #
+    #  bool @sn<current_class>::OnCertificateError(CefRefPtr<CefBrowser> browser,
+    #  cef_errorcode_t cert_error,
+    #  const CefString& request_url,
+    #  CefRefPtr<CefSSLInfo> ssl_info,
+    #  CefRefPtr<CefCallback> callback){
+    #  return @<浏览器_请求证书错误>(@dt<类_FBrowser_浏览器>(browser),cert_error,CWString(request_url.ToWString().c_str()),@dt<类_FBrowser_SSL信息>(ssl_info),@dt<类_FBrowser_回调>(callback));
+    #  }
+
+    方法 浏览器_请求证书错误 <公开 类型 = 逻辑型 注释 = "英文名：OnCertificateError 说明：在浏览器主进程中调用 请求回调.继续 () 且 返回真跳转证书错误网站，返回假不跳转" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 错误代码 <类型 = 整数 注释 = "cert_error">
+    参数 目标地址 <类型 = 文本型 注释 = "request_url">
+    参数 SSL信息 <类型 = 类_FBrowser_SSL信息 注释 = "ssl_info">
+    参数 请求回调 <类型 = 类_FBrowser_回调>
+    {
+        返回 (假)
+    }
+
+    # bool @sn<current_class>::OnSelectClientCertificate(
+    #  CefRefPtr<CefBrowser> browser,
+    #  bool isProxy,
+    #  const CefString& host,
+    #  int port,
+    #  CefRefPtr<FBroX509CertificateList> certificates,
+    #  CefRefPtr<CefSelectClientCertificateCallback> callback) {
+    #  return @<浏览器_选择客户端证书>(@dt<类_FBrowser_浏览器>(browser),isProxy,CWString(host.ToWString().c_str()),port,@dt<类_FBrowser_X509证书数组>(certificates),@dt<类_FBrowser_选择证书回调>(callback));
+    #  };
+
+    方法 浏览器_选择客户端证书 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 是否为代理 <类型 = 逻辑型>
+    参数 主机地址 <类型 = 文本型>
+    参数 端口 <类型 = 整数>
+    参数 X509证书清单 <类型 = 类_FBrowser_X509证书数组>
+    参数 选择证书回调 <类型 = 类_FBrowser_选择证书回调>
+    {
+        返回 (假)
+    }
+
+    #
+    #
+    # void @sn<current_class>::OnRenderViewReady(CefRefPtr<CefBrowser> browser){
+    #   @<浏览器_渲染视图>(@dt<类_FBrowser_浏览器>(browser));
+    # }
+
+    方法 浏览器_渲染视图 <公开 注释 = "英文名：OnRenderViewReady 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    {
+
+    }
+
+    # void @sn<current_class>::OnRenderProcessTerminated(CefRefPtr<CefBrowser> browser,CefRequestHandler::TerminationStatus status, int error_code,const CefString& error_string){
+    #   @<浏览器_渲染意外终止>(@dt<类_FBrowser_浏览器>(browser),status,error_code,CWString(error_string.ToWString().c_str()));
+    # }
+
+    方法 浏览器_渲染意外终止 <公开 注释 = "英文名：OnRenderProcessTerminated 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 状态 <类型 = 整数 注释 = "参考：进程异常.">
+    参数 错误码 <类型 = 整数>
+    参数 错误文本 <类型 = 文本型>
+    {
+
+    }
+
+    # bool @sn<current_class>::GetAuthCredentials(CefRefPtr<CefBrowser> browser,const CefString& origin_url,bool isProxy,const CefString& host,int port,const CefString& realm,
+    #  const CefString& scheme,CefRefPtr<CefAuthCallback> callback) {
+    #  return @<浏览器_获得需授权证书>(@dt<类_FBrowser_浏览器>(browser),CWString(origin_url.ToWString().c_str()),isProxy,CWString(host.ToWString().c_str()),port,CWString(realm.ToWString().c_str()),CWString(scheme.ToWString().c_str()),@dt<类_FBrowser_授权回调>(callback));
+    #  };
+
+    方法 浏览器_获得需授权证书 <公开 类型 = 逻辑型 注释 = "英文名：GetAuthCredentials 说明：用于需要输入账号密码验证的证书，例如部分需验证的代理" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 源地址 <类型 = 文本型 注释 = "origin_url">
+    参数 是否为代理 <类型 = 逻辑型 注释 = "isProxy">
+    参数 主机 <类型 = 文本型 注释 = "host">
+    参数 端口 <类型 = 整数 注释 = "port">
+    参数 域名 <类型 = 文本型 注释 = "realm">
+    参数 认证方案 <类型 = 文本型 注释 = "scheme">
+    参数 授权回调 <类型 = 类_FBrowser_授权回调 注释 = "在这输入账号密码" "">
+    {
+        返回 (假)
+    }
+
+    #
+    # void @sn<current_class>::OnAfterCreated(CefRefPtr<CefBrowser> browser,CefRefPtr<CefDictionaryValue> extrainfo){
+    #   @<浏览器_创建完毕>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_字典值>(extrainfo));
+    # }
+
+    方法 浏览器_创建完毕 <公开 注释 = "英文名：OnAfterCreated 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 额外信息 <类型 = 类_FBrowser_字典值 注释 = "用于获取浏览器创建和即将打开新窗口设置的额外值">
+
+    # bool @sn<current_class>::OnBeforePopup(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,int popup_id,const CefString& target_url,const CefString& target_frame_name,
+    # CefLifeSpanHandler::WindowOpenDisposition target_disposition,bool user_gesture,const CefPopupFeatures& popupFeatures,CefWindowInfo& windowInfo,CefBrowserSettings& settings,bool* no_javascript_access,CefRefPtr<FBroUseExtraData> user_settings)
+    # {
+    #   @dt<FBrowser_弹出功能> fbropopupFeatures;FBroPopupFeaturesToEPopupFeatures((HANDLE)&popupFeatures, &(fbropopupFeatures.m_data));fbropopupFeatures.ToHsData();
+    #   @dt<FBrowser_窗口信息> fbrowindowssinfo;FBroWindowInfoToEWindowInfo((HANDLE)&windowInfo,&(fbrowindowssinfo.m_data));
+    #   @dt<FBrowser_浏览器配置> fbrobrowserset;//FBroHsEventClass* fbroclient=static_cast<FBroHsEventClass*>(client);
+    #   @dt<逻辑型类> boolclass;BOOL *boolstr=(BOOL *)boolclass.GetDataPtr();*boolstr=*no_javascript_access;
+    #   bool retbool=@<浏览器_即将打开新窗口>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),popup_id,
+    #   CWString(target_url.ToWString().c_str()),CWString(target_frame_name.ToWString().c_str()),
+    #   target_disposition,user_gesture,fbropopupFeatures,fbrowindowssinfo,fbrobrowserset,boolclass,
+    #   @dt<类_FBrowser_用户额外配置>(user_settings));
+    #   *no_javascript_access=*boolstr;
+    #   FBroEWindowInfoToWindowInfo((HANDLE)&windowInfo,fbrowindowssinfo.ToFBroData());
+    #   FBroEBrowserSetToBrowserSet((HANDLE)&settings,fbrobrowserset.ToFBroData());
+    #    return retbool;
+    #  }
+
+    方法 浏览器_即将打开新窗口 <公开 类型 = 逻辑型 注释 = "英文名：OnBeforePopup 说明：在浏览器主进程中调用" 返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 框架 <类型 = 类_FBrowser_框架 注释 = "frame">
+    参数 弹窗ID <类型 = 整数 注释 = "popup_id he |popup_id| value uniquely identifies the popup in the context of the opener browser">
+    参数 地址 <类型 = 文本型 注释 = "url">
+    参数 目标框架名称 <类型 = 文本型 注释 = "targetframename">
+    参数 目标类型 <类型 = 整数 注释 = "targetdisposition 参考：链接打开方式.xxx">
+    参数 用户手势 <类型 = 逻辑型 注释 = "usergesture">
+    参数 弹出功能 <类型 = FBrowser_弹出功能 注释 = "popupFeatures 只读">
+    参数 窗口信息 <类型 = FBrowser_窗口信息 注释 = "可设置">
+    参数 浏览器设置 <类型 = FBrowser_浏览器配置 注释 = "可设置">
+    参数 无JS访问 <类型 = 逻辑型类 注释 = "可设置，部分网站设置了会崩溃，建议直接在浏览器设置中配置">
+    参数 用户额外配置 <类型 = 类_FBrowser_用户额外配置 注释 = "可设置,可通过此类可以设置打开新浏览器的额外信息，包括额外信息、禁用事件、用户标识等，如果不设置默认继承当前浏览器的设置">
+    {
+        返回 (假)
+    }
+
+    #     void @sn<current_class>::OnBeforePopupAborted(CefRefPtr<CefBrowser> browser,int popup_id) {
+    #         @<浏览器_打开新窗口失败>(@dt<类_FBrowser_浏览器>(browser),popup_id);
+    #     }
+
+    方法 浏览器_打开新窗口失败 <公开 @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 弹窗ID <类型 = 整数 注释 = "popup_id he |popup_id| value uniquely identifies the popup in the context of the opener browser">
+    {
+
+    }
+
+    #
+    #     void @sn<current_class>::OnBeforeDevToolsPopup(CefRefPtr<CefBrowser> browser,CefWindowInfo& windowInfo,
+    #         CefBrowserSettings& settings,bool* use_default_window,CefRefPtr<FBroUseExtraData> user_settings)
+    #     {
+    #         @dt<FBrowser_窗口信息> fbrowindowssinfo;FBroWindowInfoToEWindowInfo((HANDLE)&windowInfo,&(fbrowindowssinfo.m_data));
+    #         @dt<FBrowser_浏览器配置> fbrobrowserset;//FBroHsEventClass* fbroclient=static_cast<FBroHsEventClass*>(client);
+    #         @dt<逻辑型类> boolclass;BOOL *boolstr=(BOOL *)boolclass.GetDataPtr();*boolstr=*use_default_window;
+    #         @<浏览器_即将打开开发者窗口>(@dt<类_FBrowser_浏览器>(browser),fbrowindowssinfo,fbrobrowserset,boolclass,@dt<类_FBrowser_用户额外配置>(user_settings));
+    #         *use_default_window=*boolstr;
+    #         FBroEWindowInfoToWindowInfo((HANDLE)&windowInfo,fbrowindowssinfo.ToFBroData());
+    #         FBroEBrowserSetToBrowserSet((HANDLE)&settings,fbrobrowserset.ToFBroData());
+    #     }
+    #
+
+    方法 浏览器_即将打开开发者窗口 <公开 注释 = "英文名：OnBeforeDevToolsPopup 说明：谷歌模式下非用户命令打开的开发者工具（例如：右键谷歌默认打开开发者菜单或者内置F12按键打开等）会触发此事件"
+            返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 窗口信息 <类型 = FBrowser_窗口信息 注释 = "可设置">
+    参数 浏览器设置 <类型 = FBrowser_浏览器配置 注释 = "可设置">
+    参数 使用默认窗口 <类型 = 逻辑型类 注释 = "待验证">
+    参数 用户额外配置 <类型 = 类_FBrowser_用户额外配置 注释 = "可设置,可通过此类可以设置打开新浏览器的额外信息，包括额外信息、禁用事件、用户标识等，如果不设置默认继承当前浏览器的设置">
+    {
+
+    }
+
+    #
+    #
+    #
+    #
+    # bool @sn<current_class>::DoClose(CefRefPtr<CefBrowser> browser){ return @<浏览器_执行关闭>(@dt<类_FBrowser_浏览器>(browser)); };
+
+    方法 浏览器_执行关闭 <公开 类型 = 逻辑型 注释 = "英文名：DoClose 说明：在浏览器主进程中调用" 返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    {
+        返回 (假)
+    }
+
+    #
+    # void @sn<current_class>::OnBeforeClose(CefRefPtr<CefBrowser> browser){@<浏览器_即将关闭>(@dt<类_FBrowser_浏览器>(browser));}
+
+    方法 浏览器_即将关闭 <公开 注释 = "英文名：OnBeforeClose 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    {
+
+    }
+
+    # void @sn<current_class>::OnAddressChange(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,const CefString& url) {
+    #   @<浏览器_地址被改变>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),CWString(url.ToWString().c_str()));
+    # }
+
+    方法 浏览器_地址被改变 <公开 注释 = "英文名：OnAddressChange 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 地址 <类型 = 文本型>
+    {
+
+    }
+
+    # void @sn<current_class>::OnTitleChange(CefRefPtr<CefBrowser> browser,const CefString& title) {
+    #   @<浏览器_标题被改变>(@dt<类_FBrowser_浏览器>(browser),CWString(title.ToWString().c_str()));
+    # }
+
+    方法 浏览器_标题被改变 <公开 注释 = "英文名：OnTitleChange 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 标题 <类型 = 文本型>
+    {
+
+    }
+
+    # void @sn<current_class>::OnFaviconURLChange(CefRefPtr<CefBrowser> browser,CefRefPtr<CefListValue> icon_urls) {
+    #   @<浏览器_网页图标被改变>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_列表值>(icon_urls));
+    # }
+
+    方法 浏览器_网页图标被改变 <公开 注释 = "英文名：OnFaviconURLChange 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 图标地址列表 <类型 = 类_FBrowser_列表值 注释 = "存放图标链接的列表清单，通过取文本值获取到具体的链接">
+
+    #
+    # void @sn<current_class>::OnFullscreenModeChange(CefRefPtr<CefBrowser> browser,bool fullscreen) {
+    #   @<浏览器_全屏模式被改变>(@dt<类_FBrowser_浏览器>(browser),fullscreen);
+    # }
+
+    方法 浏览器_全屏模式被改变 <公开 注释 = "英文名：OnFullscreenModeChange 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 全屏 <类型 = 逻辑型>
+
+    # bool @sn<current_class>::OnTooltip(CefRefPtr<CefBrowser> browser,CefRefPtr<FBroString> text) {
+    #   return @<浏览器_工具栏被改变>(@dt<类_FBrowser_浏览器>(browser),@dt<FBrowser_文本>(text));
+    # }
+
+    方法 浏览器_工具栏被改变 <公开 类型 = 逻辑型 注释 = "英文名：OnTooltip 说明：在浏览器主进程中调用，不知道这个tool导致指的什么？" 返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 内容 <类型 = FBrowser_文本>
+    {
+        返回 (假)
+    }
+
+    # void @sn<current_class>::OnStatusMessage(CefRefPtr<CefBrowser> browser,const CefString& value) {
+    #   return @<浏览器_状态栏被改变>(@dt<类_FBrowser_浏览器>(browser),CWString(value.ToWString().c_str()));
+    # }
+
+    方法 浏览器_状态栏被改变 <公开 注释 = "英文名：OnStatusMessage 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 内容 <类型 = 文本型>
+    {
+
+    }
+
+    # bool @sn<current_class>::OnConsoleMessage(CefRefPtr<CefBrowser> browser,cef_log_severity_t level,const CefString& message,const CefString& source,int line){
+    #   return @<浏览器_控制台消息>(@dt<类_FBrowser_浏览器>(browser),level,CWString(message.ToWString().c_str()),CWString(source.ToWString().c_str()),line);
+    # }
+
+    方法 浏览器_控制台消息 <公开 类型 = 逻辑型 注释 = "英文名：OnConsoleMessage 说明：在浏览器主进程中调用" 返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 日志级别 <类型 = 整数 注释 = "参考：日志级别.xxx">
+    参数 消息 <类型 = 文本型>
+    参数 内容 <类型 = 文本型>
+    参数 行 <类型 = 整数>
+    {
+        返回 (假)
+    }
+
+    # bool @sn<current_class>::OnAutoResize(CefRefPtr<CefBrowser> browser,const CefSize& new_size) {
+    #   return @<浏览器_自动调整尺寸>(@dt<类_FBrowser_浏览器>(browser), new_size.height, new_size.width);
+    # }
+
+    方法 浏览器_自动调整尺寸 <公开 类型 = 逻辑型 注释 = "英文名：OnAutoResize 说明：在浏览器主进程中调用 待验证，还不知道触发条件是什么？" 返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 高度 <类型 = 整数>
+    参数 宽度 <类型 = 整数>
+    {
+        返回 (假)
+    }
+
+    #
+    # void @sn<current_class>::OnLoadingProgressChange(CefRefPtr<CefBrowser> browser,double progress) {
+    #   @<浏览器_加载进度被改变>(@dt<类_FBrowser_浏览器>(browser),(int)(progress*100));
+    # }
+
+    方法 浏览器_加载进度被改变 <公开 注释 = "英文名：OnLoadingProgressChange 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 进度 <类型 = 整数>
+    {
+
+    }
+
+    #
+    # bool @sn<current_class>::OnCursorChange(CefRefPtr<CefBrowser> browser,CefCursorHandle cursor,cef_cursor_type_t type,
+    #  const CefCursorInfo& custom_cursor_info) {
+    #  return @<浏览器_光标被改变>(@dt<类_FBrowser_浏览器>(browser),(long long)(HANDLE)cursor,type,@dt<FBrowser_光标信息>(custom_cursor_info));
+    #  }
+
+    方法 浏览器_光标被改变 <公开 类型 = 逻辑型 注释 = "英文名：OnCursorChange 说明：启用离屏渲染功能后才会调用，87内核后该事件无需离屏" 返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 光标句柄 <类型 = 变整数>
+    参数 类型 <类型 = 整数>
+    参数 光标信息 <类型 = FBrowser_光标信息>
+    {
+        返回 (假)
+
+    }
+
+    # void @sn<current_class>::OnMediaAccessChange(CefRefPtr<CefBrowser> browser,bool has_video_access,bool has_audio_access) {
+    #     @<浏览器_即将改变媒体访问>(@dt<类_FBrowser_浏览器>(browser),has_video_access,has_audio_access);
+    # }
+
+    方法 浏览器_即将改变媒体访问 <公开
+            注释 = "On Media Access Change，Called when the browser\'s access to an audio and/or video source has changed. 待验证，未知触发条件"
+            @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 包含视频访问 <类型 = 逻辑型 注释 = "has_video_access">
+    参数 包含音频访问 <类型 = 逻辑型 注释 = "has_audio_access">
+    {
+
+    }
+
+    #
+    # //即将加载资源
+    # CefResourceRequestHandler::ReturnValue @sn<current_class>::OnBeforeResourceLoad(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefRequest> request,CefRefPtr<CefCallback> callback){
+    #   return @<浏览器_即将加载资源>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowser_请求>(request),@dt<类_FBrowser_回调>(callback))?RV_CANCEL:RV_CONTINUE;
+    # }
+
+    方法 浏览器_即将加载资源 <公开 类型 = 逻辑型 注释 = "英文名：OnBeforeResourceLoad 说明：在浏览器主进程中调用 最好吧开发者工具排除，否则因框架地址过长造成卡满" 返回值注释 = "返回真阻止当前操作，返回假继续"
+            @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 请求 <类型 = 类_FBrowser_请求 注释 = "将请求里面的地址进行修改，将会触发重定向事件">
+    参数 请求回调 <类型 = 类_FBrowser_回调>
+    {
+        返回 (假)
+    }
+
+    #
+    # CefRefPtr<CefResourceHandler> @sn<current_class>::GetResourceHandler(
+    #  CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefRefPtr<CefRequest> request){
+    #   @dt<类_FBrowser_设置资源处理器> set_resourcehandler;
+    #   @<浏览器_获取资源处理器>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowser_请求>(request),set_resourcehandler);
+    #   return set_resourcehandler.m_resourcehandler;
+    #  }
+
+    方法 浏览器_获取资源处理器 <公开 @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 请求 <类型 = 类_FBrowser_请求>
+    参数 设置资源处理器 <类型 = 类_FBrowser_设置资源处理器 注释 = "调用该类中的“设置”方法设置返回资源处理器，如果不需要则不设置,设置的资源处理器不能为局部变量">
+    {
+
+    }
+
+    # void @sn<current_class>::OnResourceRedirect(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefRefPtr<CefRequest> request,
+    #  CefRefPtr<CefResponse> response,
+    #  CefRefPtr<FBroString> new_url) {
+    #   @<浏览器_重定向资源>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowser_请求>(request),@dt<类_FBrowser_响应>(response),@dt<FBrowser_文本>(new_url));
+    # };
+
+    方法 浏览器_重定向资源 <公开 注释 = "英文名：OnResourceRedirect 说明：在浏览器主进程中调用 在“即将加载资源”修改请求才会触发" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 请求 <类型 = 类_FBrowser_请求>
+    参数 响应 <类型 = 类_FBrowser_响应>
+    参数 新地址 <类型 = FBrowser_文本 注释 = "可修改">
+
+    #
+    # bool @sn<current_class>::OnResourceResponse(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefRefPtr<CefRequest> request,
+    #  CefRefPtr<CefResponse> response) {
+    #  return @<浏览器_响应资源>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowser_请求>(request),@dt<类_FBrowser_响应>(response));
+    #  }
+
+    方法 浏览器_响应资源 <公开 类型 = 逻辑型 注释 = "英文名：OnResourceResponse 说明：在浏览器主进程中调用 注意这里如果是开发者工具，则取地址可能过长造成浏览器卡" 返回值注释 = "返回真阻止当前操作，返回假继续"
+            @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 请求 <类型 = 类_FBrowser_请求>
+    参数 响应 <类型 = 类_FBrowser_响应>
+    {
+        返回 (假)
+    }
+
+    # CefRefPtr<CefResponseFilter> @sn<current_class>::GetResourceResponseFilter(
+    #  CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefRefPtr<CefRequest> request,
+    #  CefRefPtr<CefResponse> response) {
+    #   @dt<类_FBrowser_设置资源过滤器> set_responsefilter;
+    #   @<浏览器_获取资源过滤器>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowser_请求>(request),@dt<类_FBrowser_响应>(response),set_responsefilter);
+    #   return set_responsefilter.m_responsefilter;
+    #  };
+
+    方法 浏览器_获取资源过滤器 <公开 @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 请求 <类型 = 类_FBrowser_请求>
+    参数 响应 <类型 = 类_FBrowser_响应>
+    参数 设置资源过滤器 <类型 = 类_FBrowser_设置资源过滤器 注释 = "调用该类中的“设置”方法设置返回资源过滤器，如果不需要则不设置,设置的资源过滤器不能为局部变量">
+    {
+
+    }
+
+    #  //资源加载完毕
+    # void @sn<current_class>::OnResourceLoadComplete(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefRequest> request,
+    # CefRefPtr<CefResponse> response,CefResourceRequestHandler::URLRequestStatus status,int64_t received_content_length) {
+    # @<浏览器_资源加载完毕>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowser_请求>(request),@dt<类_FBrowser_响应>(response),status,received_content_length);};
+
+    方法 浏览器_资源加载完毕 <公开 注释 = "英文名：OnResourceLoadComplete 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 请求 <类型 = 类_FBrowser_请求>
+    参数 响应 <类型 = 类_FBrowser_响应>
+    参数 状态 <类型 = 整数>
+    参数 资源大小 <类型 = 长整数>
+    {
+
+    }
+
+    # void @sn<current_class>::OnProtocolExecution(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefRefPtr<CefRequest> request,
+    #  bool& allow_os_execution) {
+    #   @dt<逻辑型类> boolclass;BOOL *boolstr=(BOOL *)boolclass.GetDataPtr();*boolstr=allow_os_execution;
+    #   @<浏览器_处理协议请求>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowser_请求>(request),boolclass);
+    #   allow_os_execution=*boolstr;
+    # };
+
+    方法 浏览器_处理协议请求 <公开 注释 = "英文名：OnProtocolExecution 说明：在浏览器调用外部程序时候调用，以处理对带有未知协议组件的url的请求" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 请求 <类型 = 类_FBrowser_请求>
+    参数 允许操作系统执行 <类型 = 逻辑型类 注释 = "allowosexecution 可设置值">
+    {
+
+    }
+
+    # void @sn<current_class>::OnLoadingStateChange(CefRefPtr<CefBrowser> browser,bool isLoading,bool canGoBack,bool canGoForward) {
+    # @<浏览器_载入状态被改变>(@dt<类_FBrowser_浏览器>(browser),isLoading,canGoBack,canGoForward);}
+
+    方法 浏览器_载入状态被改变 <公开 注释 = "英文名：OnLoadingStateChange 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 载入中 <类型 = 逻辑型>
+    参数 是否能后退 <类型 = 逻辑型>
+    参数 是否能前进 <类型 = 逻辑型>
+    {
+
+    }
+
+    # void @sn<current_class>::OnLoadStart(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefLoadHandler::TransitionType transition_type){@<浏览器_载入开始>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),transition_type);};
+
+    方法 浏览器_载入开始 <公开 注释 = "英文名：OnLoadStart 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 过渡类型 <类型 = 整数 注释 = "参考：过渡类型.xxx">
+    {
+
+    }
+
+    # void @sn<current_class>::OnLoadEnd(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,int httpStatusCode) {@<浏览器_载入结束>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),httpStatusCode);};
+
+    方法 浏览器_载入结束 <公开 注释 = "英文名：OnLoadEnd 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 状态码 <类型 = 整数>
+
+    #
+    # void @sn<current_class>::OnLoadError(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefLoadHandler::ErrorCode errorCode,
+    # const CefString& errorText,const CefString& failedUrl){@<浏览器_载入错误>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),errorCode,CWString(errorText.ToWString().c_str()),CWString(failedUrl.ToWString().c_str()));};
+
+    方法 浏览器_载入错误 <公开 注释 = "英文名：OnLoadError 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 错误码 <类型 = 整数>
+    参数 错误文本 <类型 = 文本型>
+    参数 失败地址 <类型 = 文本型>
+
+    #
+    # void @sn<current_class>::OnBeforeContextMenu(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefContextMenuParams> params,CefRefPtr<CefMenuModel> model){@<浏览器_即将打开菜单>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowser_菜单环境>(params),@dt<类_FBrowser_菜单模式>(model));};
+
+    方法 浏览器_即将打开菜单 <公开 注释 = "英文名：OnBeforeContextMenu" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 菜单环境 <类型 = 类_FBrowser_菜单环境>
+    参数 菜单模式 <类型 = 类_FBrowser_菜单模式>
+    {
+
+    }
+
+    #
+    #
+    # bool @sn<current_class>::RunContextMenu(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefRefPtr<CefContextMenuParams> params,
+    #  CefRefPtr<CefMenuModel> model,
+    #  CefRefPtr<CefRunContextMenuCallback> callback) {
+    #  return @<浏览器_菜单被调用>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowser_菜单环境>(params),@dt<类_FBrowser_菜单模式>(model),@dt<类_FBrowser_运行命令菜单回调>(callback));
+    #  };
+
+    方法 浏览器_菜单被调用 <公开 类型 = 逻辑型 注释 = "英文名：RunContextMenu" 返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 菜单环境 <类型 = 类_FBrowser_菜单环境>
+    参数 菜单模式 <类型 = 类_FBrowser_菜单模式>
+    参数 运行命令菜单回调 <类型 = 类_FBrowser_运行命令菜单回调>
+    {
+        返回 (假)
+    }
+
+    # bool @sn<current_class>::OnContextMenuCommand(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame,
+    #  CefRefPtr<CefContextMenuParams> params,
+    #  int command_id,
+    #  CefContextMenuHandler::EventFlags event_flags) {
+    #  return @<浏览器_菜单被点击>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<类_FBrowser_菜单环境>(params),command_id,event_flags);
+    #  };
+
+    方法 浏览器_菜单被点击 <公开 类型 = 逻辑型 注释 = "英文名：OnContextMenuCommand" 返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 菜单环境 <类型 = 类_FBrowser_菜单环境>
+    参数 命令ID <类型 = 整数 注释 = "command_id">
+    参数 事件标识 <类型 = 整数 注释 = "参考：事件标识.xxx 用位或判断">
+    {
+        返回 (假)
+    }
+
+    #
+    #
+    # void @sn<current_class>::OnContextMenuDismissed(CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefFrame> frame) {@<浏览器_菜单被关闭>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame));};
+
+    方法 浏览器_菜单被关闭 <公开 注释 = "英文名：OnContextMenuDismissed" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架 "">
+
+    #
+    # bool @sn<current_class>::RunQuickMenu(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,
+    # PTELIB_ELEMENT_AT location,POINT_SIZE size,
+    # int edit_state_flags,CefRefPtr<CefRunQuickMenuCallback> callback){
+    #     return @<浏览器_即将运行快捷菜单>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<FBrowser_位置>(location),@dt<FBrowser_尺寸>(size),edit_state_flags,@dt<类_FBrowser_快捷菜单回调>(callback));
+    # };
+
+    方法 浏览器_即将运行快捷菜单 <公开 类型 = 逻辑型 注释 = "RunQuickMenu 待验证，未知触发条件" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架 "">
+    参数 位置 <类型 = FBrowser_位置>
+    参数 尺寸 <类型 = FBrowser_尺寸>
+    参数 编辑状态标识 <类型 = 整数>
+    参数 回调 <类型 = 类_FBrowser_快捷菜单回调>
+    {
+        返回 (假)
+    }
+
+    #
+    # bool @sn<current_class>::OnQuickMenuCommand(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,int command_id,int event_flags) {
+    #     return @<浏览器_即将运行快捷菜单命令>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),command_id,event_flags);
+    # };
+
+    方法 浏览器_即将运行快捷菜单命令 <公开 类型 = 逻辑型 注释 = "OnQuickMenuCommand，待验证，未知触发条件" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架 "">
+    参数 命令ID <类型 = 整数>
+    参数 事件标识 <类型 = 整数>
+    {
+        返回 (假)
+    }
+
+    #
+    # void @sn<current_class>::OnQuickMenuDismissed(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame) {
+    #     @<浏览器_即将取消快捷菜单>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame));
+    # }
+
+    方法 浏览器_即将取消快捷菜单 <公开 注释 = "OnQuickMenuDismissed，待验证，未知触发条件" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架 "">
+
+    #
+    # bool @sn<current_class>::CanDownload(CefRefPtr<CefBrowser> browser,const CefString& url,const CefString& request_method) {
+    #     return @<浏览器_可下载>(@dt<类_FBrowser_浏览器>(browser),CWString(url.ToWString().c_str()),CWString(request_method.ToWString().c_str()));
+    # }
+    #
+
+    方法 浏览器_可下载 <公开 类型 = 逻辑型 注释 = "CanDownload，返回真继续下载，返回假取消下载" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 地址 <类型 = 文本型 "">
+    参数 请求方法 <类型 = 文本型>
+    {
+        返回 (真)
+    }
+
+    #
+    # bool @sn<current_class>::OnBeforeDownload(
+    #  CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefDownloadItem> download_item,
+    #  const CefString& suggested_name,
+    #  CefRefPtr<CefBeforeDownloadCallback> callback) {
+    # return @<浏览器_即将下载>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_下载>(download_item),CWString(suggested_name.ToWString().c_str()),@dt<类_FBrowser_即将下载回调>(callback));};
+
+    方法 浏览器_即将下载 <公开 类型 = 逻辑型 注释 = "英文名：OnBeforeDownload"
+            注释 = "说明：在浏览器主进程中调用，一般当下载文件的时候会调用一次“浏览器_正在下载”后才会调用该事件，可先暂停下载然后设置下载文件路径后再继续下载" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 下载 <类型 = 类_FBrowser_下载>
+    参数 推荐名 <类型 = 文本型>
+    参数 下载回调 <类型 = 类_FBrowser_即将下载回调>
+    {
+        返回 (假)
+    }
+
+    # void @sn<current_class>::OnDownloadUpdated(
+    #  CefRefPtr<CefBrowser> browser,
+    #  CefRefPtr<CefDownloadItem> download_item,
+    #  CefRefPtr<CefDownloadItemCallback> callback) {
+    # @<浏览器_正在下载>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_下载>(download_item),@dt<类_FBrowser_正在下载回调>(callback));};
+
+    方法 浏览器_正在下载 <公开 注释 = "英文名：OnDownloadUpdated 说明：在浏览器主进程中调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 下载 <类型 = 类_FBrowser_下载>
+    参数 下载回调 <类型 = 类_FBrowser_正在下载回调 注释 = "通过此回调控制下载暂停、继续、取消；">
+
+    # bool @sn<current_class>::OnPreKeyEvent(CefRefPtr<CefBrowser> browser,
+    #  PTELIB_KEYEVENT event,
+    #  POINT_OSEVENT os_event,
+    #  bool* is_keyboard_shortcut) {
+    #  return @<浏览器_按下某键>(@dt<类_FBrowser_浏览器>(browser),@dt<FBrowser_按键事件>(*event),@dt<FBrowser_系统事件>(*os_event),*is_keyboard_shortcut);
+    #  };
+
+    方法 浏览器_按下某键 <公开 类型 = 逻辑型 注释 = "英文名：OnPreKeyEvent" 返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 按键事件 <类型 = FBrowser_按键事件>
+    参数 系统事件 <类型 = FBrowser_系统事件>
+    参数 是否快捷键 <类型 = 逻辑型>
+    {
+        返回 (假)
+    }
+
+    #
+    # bool @sn<current_class>::OnKeyEvent(CefRefPtr<CefBrowser> browser,
+    #  PTELIB_KEYEVENT event,
+    #  POINT_OSEVENT os_event) {
+    #  return @<浏览器_按下某键后>(@dt<类_FBrowser_浏览器>(browser),@dt<FBrowser_按键事件>(*event),@dt<FBrowser_系统事件>(*os_event));
+    #  };
+
+    方法 浏览器_按下某键后 <公开 类型 = 逻辑型 注释 = "英文名：OnKeyEvent" 返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 按键事件 <类型 = FBrowser_按键事件>
+    参数 系统事件 <类型 = FBrowser_系统事件>
+    {
+        返回 (假)
+    }
+
+    # bool @sn<current_class>::OnFileDialog(CefRefPtr<CefBrowser> browser,
+    #  CefDialogHandler::FileDialogMode mode,const CefString& title,const CefString& default_file_path,
+    #  CefRefPtr<FBroCefStringList> accept_filters,CefRefPtr<FBroCefStringList> accept_extensions,CefRefPtr<FBroCefStringList> accept_descriptions,
+    #  CefRefPtr<CefFileDialogCallback> callback) {
+    #  return @<浏览器_即将打开对话框>(@dt<类_FBrowser_浏览器>(browser),mode,CWString(title.ToWString().c_str()),CWString(default_file_path.ToWString().c_str()),
+    #     @dt<FBrowser_文本数组>(accept_filters),@dt<FBrowser_文本数组>(accept_extensions),@dt<FBrowser_文本数组>(accept_descriptions),
+    #     @dt<类_FBrowser_对话框回调>(callback));
+    #  };
+
+    方法 浏览器_即将打开对话框 <公开 类型 = 逻辑型 注释 = "英文名：OnFileDialog 说明：一般用于选择文件上传对话框" 返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 模式 <类型 = 整数 注释 = "参考：文件对话框">
+    参数 标题 <类型 = 文本型>
+    参数 默认路径 <类型 = 文本型>
+    参数 过滤器 <类型 = FBrowser_文本数组 注释 = "accept_filters">
+    参数 扩展名 <类型 = FBrowser_文本数组 注释 = "accept_extensions">
+    参数 接受类型 <类型 = FBrowser_文本数组 注释 = "accept_descriptions">
+    参数 对话框回调 <类型 = 类_FBrowser_对话框回调>
+    {
+        返回 (假)
+    }
+
+    #
+    # bool @sn<current_class>::OnJSDialog(CefRefPtr<CefBrowser> browser,
+    #  const CefString& origin_url,
+    #  CefJSDialogHandler::JSDialogType dialog_type,
+    #  const CefString& message_text,
+    #  const CefString& default_prompt_text,
+    #  CefRefPtr<CefJSDialogCallback> callback,
+    #  bool& suppress_message) {
+    #   @dt<逻辑型类> boolclass;BOOL *boolstr=(BOOL *)boolclass.GetDataPtr();*boolstr=suppress_message;
+    #   bool retbool= @<浏览器_JS即将打开对话框>(@dt<类_FBrowser_浏览器>(browser),CWString(origin_url.ToWString().c_str()),dialog_type,CWString(message_text.ToWString().c_str()),CWString(default_prompt_text.ToWString().c_str()),@dt<类_FBrowser_JS对话框回调>(callback),boolclass);
+    #   suppress_message=*boolstr;
+    #   return retbool;
+    #  };
+
+    方法 浏览器_JS即将打开对话框 <公开 类型 = 逻辑型 注释 = "英文名：OnJSDialog" 返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 源地址 <类型 = 文本型>
+    参数 对话框类型 <类型 = 整数 注释 = "参考：JS对话框类型">
+    参数 消息文本 <类型 = 文本型>
+    参数 默认提示文本 <类型 = 文本型>
+    参数 回调 <类型 = 类_FBrowser_JS对话框回调 注释 = "使用回调完成自动点击，将不会再弹出对话框">
+    参数 禁止消息 <类型 = 逻辑型类 注释 = "可设置">
+    {
+        返回 (假)
+    }
+
+    #
+    # bool @sn<current_class>::OnBeforeUnloadDialog(CefRefPtr<CefBrowser> browser,
+    #  const CefString& message_text,
+    #  bool is_reload,
+    #  CefRefPtr<CefJSDialogCallback> callback) {
+    #  return @<浏览器_JS即将打开离开对话框>(@dt<类_FBrowser_浏览器>(browser),CWString(message_text.ToWString().c_str()),is_reload,@dt<类_FBrowser_JS对话框回调>(callback));
+    #  };
+
+    方法 浏览器_JS即将打开离开对话框 <公开 类型 = 逻辑型 注释 = "英文名：OnBeforeUnloadDialog 说明： 例如某些网页退出提示框" 返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 消息文本 <类型 = 文本型>
+    参数 重载 <类型 = 逻辑型>
+    参数 回调 <类型 = 类_FBrowser_JS对话框回调>
+    {
+        返回 (假)
+    }
+
+    # void @sn<current_class>::OnResetDialogState(CefRefPtr<CefBrowser> browser) {@<浏览器_JS重置对话框>(@dt<类_FBrowser_浏览器>(browser));};
+
+    方法 浏览器_JS重置对话框 <公开 注释 = "英文名：OnResetDialogState" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+
+    # void @sn<current_class>::OnDialogClosed(CefRefPtr<CefBrowser> browser) {@<浏览器_JS对话框关闭>(@dt<类_FBrowser_浏览器>(browser));};
+
+    方法 浏览器_JS对话框关闭 <公开 注释 = "英文名：OnDialogClosed" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+
+    # void @sn<current_class>::OnTakeFocus(CefRefPtr<CefBrowser> browser, bool next) {@<浏览器_即将失去焦点>(@dt<类_FBrowser_浏览器>(browser),next);};
+
+    方法 浏览器_即将失去焦点 <公开 注释 = "英文名：OnTakeFocus" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 下一个 <类型 = 逻辑型>
+
+    # bool @sn<current_class>::OnSetFocus(CefRefPtr<CefBrowser> browser, CefFocusHandler::FocusSource source) { return @<浏览器_请求焦点>(@dt<类_FBrowser_浏览器>(browser),source); };
+
+    方法 浏览器_请求焦点 <公开 类型 = 逻辑型 注释 = "英文名：OnSetFocus" 返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 源类型 <类型 = 整数 注释 = "参考：焦点.">
+    {
+        返回 (假)
+    }
+
+    # void @sn<current_class>::OnGotFocus(CefRefPtr<CefBrowser> browser) { @<浏览器_收到焦点>(@dt<类_FBrowser_浏览器>(browser));};
+
+    方法 浏览器_收到焦点 <公开 注释 = "英文名：OnGotFocus" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    {
+
+    }
+
+    #
+    # void @sn<current_class>::OnFindResult(CefRefPtr<CefBrowser> browser,int identifier,int count,POINT_RECT selectionRect,int activeMatchOrdinal,bool finalUpdate) {@<浏览器_查找返馈>(@dt<类_FBrowser_浏览器>(browser),identifier,count,@dt<FBrowser_矩形位置>(*selectionRect),activeMatchOrdinal,finalUpdate);};
+
+    方法 浏览器_查找返馈 <公开 注释 = "英文名：OnFindResult" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 ID <类型 = 整数>
+    参数 数量 <类型 = 整数>
+    参数 选择位置 <类型 = FBrowser_矩形位置>
+    参数 顺序 <类型 = 整数>
+    参数 最后更新 <类型 = 逻辑型>
+
+    #
+    # bool @sn<current_class>::OnDragEnter(CefRefPtr<CefBrowser> browser,CefRefPtr<CefDragData> dragData,CefDragHandler::DragOperationsMask mask)
+    # {
+    #   return @<浏览器_拖拽进入>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_拖拽数据>(dragData),mask);
+    # }
+
+    方法 浏览器_拖拽进入 <公开 类型 = 逻辑型 注释 = "英文名：OnDragEnter 说明：连续拖动文件或链接后调用此事件，返回“真“取消当前拖动，返回“假”继续，注意如果鼠标拖动动作未结束，返回真也还是会继续调用该事件"
+            返回值注释 = "返回真阻止当前操作，返回假继续" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 拖拽数据 <类型 = 类_FBrowser_拖拽数据>
+    参数 拖动类型 <类型 = 整数 注释 = "参考：拖动操作">
+    {
+        返回 (假)
+    }
+
+    #
+    # void @sn<current_class>::OnDraggableRegionsChanged(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<FBroDraggableRegion> regions)
+    # {
+    #   @<浏览器_拖拽区域改变>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),@dt<FBrowser_拖拽位置数组>(regions));
+    # }
+
+    方法 浏览器_拖拽区域改变 <公开 注释 = "英文名：OnDraggableRegionsChanged 说明：待验证" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 拖拽位置 <类型 = FBrowser_拖拽位置数组>
+
+    # void @sn<current_class>::ReceiveRenderProcessMessage(CefRefPtr<CefBrowser> browser,INT64 processid,const CefString& name,char* message, int size)
+    # {
+    #     @<进程间消息_收到渲染进程消息>(@dt<类_FBrowser_浏览器>(browser),(@dt<变整数>)processid,CWString(name.ToWString().c_str()),@an<CVolMem>((void*)message,size));
+    # }
+
+    方法 进程间消息_收到渲染进程消息 <公开 注释 = "扩展功能，非CEF自带消息，" 注释 = "在渲染进程中调用“类_FBrowser_浏览器”类中的“进程间消息_发送数据_到指定渲染进程”方法后,"
+            注释 = "在主进程中执行，实现进程间通信" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 渲染进程ID <类型 = 变整数>
+    参数 消息名 <类型 = 文本型>
+    参数 消息内容 <类型 = 字节集类>
+    {
+
+    }
+
+    #  bool @sn<current_class>::GetRootScreenRect(CefRefPtr<CefBrowser> browser, CefRect& rect) 
+    # {
+    #     E_RECT temprect;FBroPonitToERect((HANDLE)(&rect), &temprect);
+    #     @dt<FBrowser_矩形位置> hsrect(temprect);
+    #     bool retbool=@<离屏渲染_获取根屏幕矩形>(@dt<类_FBrowser_浏览器>(browser),hsrect);
+    #     FBroPonitToCefRect((HANDLE)hsrect.ToFBroData(),&rect);
+    #     return retbool; 
+    # };
+
+    方法 离屏渲染_获取根屏幕矩形 <公开 类型 = 逻辑型 注释 = "英文名：GetRootScreenRect 说明：启用离屏渲染功能后才会调用"
+            注释 = "在屏幕坐标中检索根窗口矩形。如果提供了矩形则返回true。如果该方法返回false，则使用GetViewRect的矩形。" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 矩形 <类型 = FBrowser_矩形位置 注释 = "可读可写">
+    {
+        返回 (假)
+    }
+
+    # void @sn<current_class>::GetViewRect(CefRefPtr<CefBrowser> browser, CefRect& rect) {
+    #     E_RECT temprect;
+    #     FBroPonitToERect ((HANDLE)(&rect), &temprect);
+    #     @dt<FBrowser_矩形位置> hsrect(temprect);
+    #     @<离屏渲染_获取视图矩形>(@dt<类_FBrowser_浏览器>(browser),hsrect);
+    #     FBroPonitToCefRect((HANDLE)hsrect.ToFBroData(),&rect);
+    #
+    # };
+
+    方法 离屏渲染_获取视图矩形 <公开 注释 = "英文名：GetViewRect 说明：启用离屏渲染功能后才会调用"
+            注释 = "在屏幕坐标中检索根窗口矩形。如果提供了矩形则返回true。如果该方法返回false，则使用GetViewRect的矩形。" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 矩形 <类型 = FBrowser_矩形位置 注释 = "可读可写">
+    {
+
+    }
+
+    #
+    #  bool @sn<current_class>::GetScreenPoint(CefRefPtr<CefBrowser> browser,int viewX,int viewY,int& screenX,int& screenY) {
+    #     @dt<整数类> screenX_class;int *screenX_temp=(int *)screenX_class.GetDataPtr();*screenX_temp=screenX;
+    #     @dt<整数类> screenY_class;int *screenY_temp=(int *)screenY_class.GetDataPtr();*screenY_temp=screenY;
+    #     bool retbool=@<离屏渲染_获取屏幕点>(@dt<类_FBrowser_浏览器>(browser),viewX,viewY,screenX_class,screenY_class);
+    #     screenX=*screenX_temp;screenY=*screenY_temp;
+    #     return retbool;
+    #  };
+
+    方法 离屏渲染_获取屏幕点 <公开 类型 = 逻辑型 注释 = "英文名：GetScreenPoint 说明：启用离屏渲染功能后才会调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 视图横坐标 <类型 = 整数>
+    参数 视图纵坐标 <类型 = 整数>
+    参数 屏幕横坐标 <类型 = 整数类 注释 = "设置值">
+    参数 屏幕纵坐标 <类型 = 整数类 注释 = "设置值">
+    {
+        返回 (假)
+    }
+
+    #
+    #  bool @sn<current_class>::GetScreenInfo(CefRefPtr<CefBrowser> browser,CefScreenInfo& screen_info) {
+    #     E_SCREENINFO tempscreeninfo;FBroPonitToEScreenInfo((HANDLE)&screen_info,&tempscreeninfo);
+    #     @dt<FBrowser_屏幕信息> fbroscreensinfo(tempscreeninfo);
+    #     bool retbool=@<离屏渲染_获取窗口信息>(@dt<类_FBrowser_浏览器>(browser),fbroscreensinfo);
+    #     FBroPonitToCefScreenInfo((HANDLE)(fbroscreensinfo.ToFBroData()),&screen_info);
+    #     return retbool;
+    #  };
+
+    方法 离屏渲染_获取窗口信息 <公开 类型 = 逻辑型 注释 = "英文名：GetScreenInfo 说明：启用离屏渲染功能后才会调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 屏幕信息 <类型 = FBrowser_屏幕信息 注释 = "可设置">
+    {
+        返回 (假)
+
+    }
+
+    #
+    # void @sn<current_class>::OnPopupShow(CefRefPtr<CefBrowser> browser, bool show) {
+    #     @<离屏渲染_即将显示弹窗>(@dt<类_FBrowser_浏览器>(browser),show);
+    # };
+
+    方法 离屏渲染_即将显示弹窗 <公开 注释 = "英文名：OnPopupShow 说明：启用离屏渲染功能后才会调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 显示 <类型 = 逻辑型>
+    {
+
+    }
+
+    #
+    #  void @sn<current_class>::OnPopupSize(CefRefPtr<CefBrowser> browser, const CefRect& rect/*只读*/) {
+    #     E_RECT temprect;
+    #     FBroPonitToERect ((HANDLE)(&rect), &temprect);
+    #     @<离屏渲染_移动调整弹窗>(@dt<类_FBrowser_浏览器>(browser),@dt<FBrowser_矩形位置>(temprect));
+    #
+    # };
+
+    方法 离屏渲染_移动调整弹窗 <公开 注释 = "英文名：OnPopupSize 说明：启用离屏渲染功能后才会调用"
+            注释 = "在屏幕坐标中检索根窗口矩形。如果提供了矩形则返回true。如果该方法返回false，则使用GetViewRect的矩形。" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 矩形 <类型 = FBrowser_矩形位置 注释 = "可读可写">
+    {
+
+    }
+
+    #
+    #  void @sn<current_class>::OnPaint(CefRefPtr<CefBrowser> browser,CefRenderHandler::PaintElementType type,CefRefPtr<FBroRectValueList> dirtyRects,const void* buffer,int width,int height) {
+    #     @<离屏渲染_将被绘制>(@dt<类_FBrowser_浏览器>(browser),type,@dt<FBrowser_矩形位置数组>(dirtyRects),(@dt<变整数>)buffer,width,height);
+    # };
+
+    方法 离屏渲染_将被绘制 <公开 注释 = "英文名：OnPaint 说明：启用离屏渲染功能后才会调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 类型 <类型 = 整数 注释 = "0为PET_VIEW 1为PET_POPUP">
+    参数 矩形清单 <类型 = FBrowser_矩形位置数组 注释 = "可设置">
+    参数 缓存指针 <类型 = 变整数 注释 = "渲染数据指针 将是width*height*4字节的大小">
+    参数 宽度 <类型 = 整数>
+    参数 高度 <类型 = 整数>
+    {
+
+    }
+
+    #
+    #  void @sn<current_class>::OnAcceleratedPaint(CefRefPtr<CefBrowser> browser,CefRenderHandler::PaintElementType type,CefRefPtr<FBroRectValueList> dirtyRects,const CefAcceleratedPaintInfo& info) {
+    #     E_ACCELERATED_PAINT_INFO temp_info;FBroPonitToEAcceleratedPaintInfo((HANDLE)&info,&temp_info);
+    #     @<离屏渲染_将被加速绘制>(@dt<类_FBrowser_浏览器>(browser),type,@dt<FBrowser_矩形位置数组>(dirtyRects),@dt<FBrowser_加速绘制信息>(temp_info));
+    # };
+
+    方法 离屏渲染_将被加速绘制 <公开 注释 = "英文名：OnAcceleratedPaint 说明：启用离屏渲染功能后才会调用，当一个元素被渲染到共享纹理句柄时调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 类型 <类型 = 整数 注释 = "0为PET_VIEW 1为PET_POPUP">
+    参数 矩形清单 <类型 = FBrowser_矩形位置数组 注释 = "dirtyRects 可设置">
+    参数 加速绘制信息 <类型 = FBrowser_加速绘制信息 注释 = "shared_handle是D3D11 Texture2D的句柄，可以通过ID3D11Device使用OpenSharedResource方法访问。">
+    {
+
+    }
+
+    #
+    #
+    #  bool @sn<current_class>::StartDragging(CefRefPtr<CefBrowser> browser,CefRefPtr<CefDragData> drag_data,CefRenderHandler::DragOperationsMask allowed_ops,int x,int y) {
+    #   return @<离屏渲染_开始拖拽>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_拖拽数据>(drag_data),allowed_ops,x,y);
+    #  };
+
+    方法 离屏渲染_开始拖拽 <公开 类型 = 逻辑型 注释 = "英文名：StartDragging 说明：启用离屏渲染功能后才会调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 拖拽数据 <类型 = 类_FBrowser_拖拽数据>
+    参数 拖拽操作类型 <类型 = 整数 注释 = "allowed_ops">
+    参数 横坐标 <类型 = 整数>
+    参数 纵坐标 <类型 = 整数>
+    {
+        返回 (假)
+    }
+
+    #
+    #  void @sn<current_class>::UpdateDragCursor(CefRefPtr<CefBrowser> browser,CefRenderHandler::DragOperation operation) {
+    #     @<离屏渲染_更新拖动光标>(@dt<类_FBrowser_浏览器>(browser),operation);
+    # };
+
+    方法 离屏渲染_更新拖动光标 <公开 注释 = "英文名：UpdateDragCursor 说明：启用离屏渲染功能后才会调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 拖拽操作类型 <类型 = 整数 注释 = "operation">
+    {
+
+    }
+
+    #  void @sn<current_class>::OnScrollOffsetChanged(CefRefPtr<CefBrowser> browser,double x,double y) {
+    #     @<离屏渲染_滚动偏移量改变>(@dt<类_FBrowser_浏览器>(browser),x,y);};
+
+    方法 离屏渲染_滚动偏移量改变 <公开 注释 = "英文名：OnScrollOffsetChanged 说明：启用离屏渲染功能后才会调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 横坐标 <类型 = 小数>
+    参数 纵坐标 <类型 = 小数>
+    {
+
+    }
+
+    #  void @sn<current_class>::OnImeCompositionRangeChanged(CefRefPtr<CefBrowser> browser,const CefRange& selected_range,CefRefPtr<FBroRectValueList> character_bounds) {
+    # E_RANGE temprange; FBroPonitToERange((HANDLE)&selected_range,&temprange);
+    # @<离屏渲染_IME范围改变>(@dt<类_FBrowser_浏览器>(browser),@dt<FBrowser_范围>(temprange),@dt<FBrowser_矩形位置数组>(character_bounds));};
+    #
+
+    方法 离屏渲染_IME范围改变 <公开 注释 = "英文名：OnImeCompositionRangeChanged  说明：启用离屏渲染功能后才会调用，IME组成范围改变" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 选择范围 <类型 = FBrowser_范围 注释 = "selected_range">
+    参数 字符范围 <类型 = FBrowser_矩形位置数组 注释 = "只读 character_bounds">
+    {
+
+
+    }
+
+    #  void @sn<current_class>::OnTextSelectionChanged(CefRefPtr<CefBrowser> browser,const CefString& selected_text,const CefRange& selected_range) {
+    # E_RANGE temprange; FBroPonitToERange((HANDLE)&selected_range,&temprange);
+    # @<离屏渲染_文本选择改变>(@dt<类_FBrowser_浏览器>(browser),CWString(selected_text.ToWString().c_str()),@dt<FBrowser_范围>(temprange));};
+
+    方法 离屏渲染_文本选择改变 <公开 注释 = "英文名：OnTextSelectionChanged 说明：启用离屏渲染功能后才会调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 选择文本 <类型 = 文本型>
+    参数 选择范围 <类型 = FBrowser_范围>
+    {
+
+    }
+
+    #  void @sn<current_class>::OnVirtualKeyboardRequested(CefRefPtr<CefBrowser> browser,CefRenderHandler::TextInputMode input_mode) {
+    #     @<离屏渲染_虚拟键盘请求>(@dt<类_FBrowser_浏览器>(browser),input_mode);
+    # };
+
+    方法 离屏渲染_虚拟键盘请求 <公开 注释 = "英文名：OnVirtualKeyboardRequested 说明：启用离屏渲染功能后才会调用" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 输入类型 <类型 = 整数 注释 = "input_mode 参考：文本输入类型.XXXXX">
+    {
+
+    }
+
+    # void @sn<current_class>::OnDocumentAvailableInMainFrame(CefRefPtr<CefBrowser> browser){
+    #     @<浏览器_即将创建主框架Document>(@dt<类_FBrowser_浏览器>(browser));
+    # }
+
+    方法 浏览器_即将创建主框架Document <公开 @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+
+    #
+    # bool @sn<current_class>::GetAudioParameters(CefRefPtr<CefBrowser> browser,CefAudioParameters& params) {
+    #     E_AudioParameters eParams;
+    #     FBroCefAudioParametersToEAudioParameters (&params, &eParams);
+    #     @dt<FBrowser_音频参数> tempHsparams(eParams);
+    #     bool retbool=@<浏览器_获取音频参数>(@dt<类_FBrowser_浏览器>(browser),tempHsparams);
+    #     FBroEAudioParametersToCefAudioParameters(tempHsparams.ToFBroData(),&params);
+    #     return retbool;};
+
+    方法 浏览器_获取音频参数 <公开 类型 = 逻辑型 注释 = "GetAudioParameters，返回真开始获取，获取后浏览器不会播放声音，声音数据需自行处理" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 参数 <类型 = FBrowser_音频参数 注释 = "可修改">
+    {
+        返回 (假)
+    }
+
+    # void @sn<current_class>::OnAudioStreamStarted(CefRefPtr<CefBrowser> browser,const CefAudioParameters& params,int channels) {
+    #     E_AudioParameters eParams;
+    #     FBroCefAudioParametersToEAudioParameters ((HANDLE)&params, &eParams);
+    #     @<浏览器_即将启动音频流>(@dt<类_FBrowser_浏览器>(browser), @dt<FBrowser_音频参数>(eParams),channels);
+    # };
+
+    方法 浏览器_即将启动音频流 <公开 注释 = "OnAudioStreamStarted" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 参数 <类型 = FBrowser_音频参数 注释 = "只读">
+    参数 通道 <类型 = 整数 注释 = "channels">
+
+    # void @sn<current_class>::OnAudioStreamPacket(CefRefPtr<CefBrowser> browser,const float** data,int frames,int64_t pts) {
+    # @<浏览器_收到音频流包>(@dt<类_FBrowser_浏览器>(browser),(@dt<变整数>)data,frames,pts);
+    # };
+
+    方法 浏览器_收到音频流包 <公开 注释 = "OnAudioStreamPacket" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 数据指针 <类型 = 变整数>
+    参数 帧数 <类型 = 整数>
+    参数 pts <类型 = 长整数>
+
+    #
+    # void @sn<current_class>::OnAudioStreamStopped(CefRefPtr<CefBrowser> browser) {
+    # @<浏览器_即将结束音频流>(@dt<类_FBrowser_浏览器>(browser));
+    # };
+
+    方法 浏览器_即将结束音频流 <公开 注释 = "OnAudioStreamStopped" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+
+    #
+    # void @sn<current_class>::OnAudioStreamError(CefRefPtr<CefBrowser> browser,const CefString& message) {
+    # @<浏览器_音频流出现错误>(@dt<类_FBrowser_浏览器>(browser),CWString(message.ToWString().c_str()));
+    # };
+
+    方法 浏览器_音频流出现错误 <公开 注释 = "OnAudioStreamError" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 错误信息 <类型 = 文本型>
+
+    #
+    # bool @sn<current_class>::OnChromeCommand(CefRefPtr<CefBrowser> browser,int command_id,cef_window_open_disposition_t disposition) {
+    # return @<浏览器_即将执行Chrome命令>(@dt<类_FBrowser_浏览器>(browser),command_id,disposition);};
+
+    方法 浏览器_即将执行Chrome命令 <公开 类型 = 逻辑型 注释 = "OnAudioStreamError" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 命令ID <类型 = 整数>
+    参数 配置 <类型 = 整数 注释 = "参考：窗口打开配置.">
+    {
+        返回 (假)
+    }
+
+    #
+    # void @sn<current_class>::OnFrameCreated(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame) {
+    # @<浏览器_即将创建框架>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame));};
+
+    方法 浏览器_即将创建框架 <公开 注释 = "OnFrameCreated" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 框架 <类型 = 类_FBrowser_框架>
+
+    #
+    # void @sn<current_class>::OnFrameAttached(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,bool reattached) {
+    # @<浏览器_即将连接框架>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),reattached);};
+
+    方法 浏览器_即将连接框架 <公开 注释 = "OnFrameAttached" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 再次连接 <类型 = 逻辑型 注释 = "reattached">
+
+    # void @sn<current_class>::OnFrameDetached(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame) {
+    # @<浏览器_即将拆离框架>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame));};
+
+    方法 浏览器_即将拆离框架 <公开 注释 = "OnFrameDetached" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 框架 <类型 = 类_FBrowser_框架>
+
+    # void @sn<current_class>::OnMainFrameChanged(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> old_frame,CefRefPtr<CefFrame> new_frame) {
+    # @<浏览器_即将改变主框架>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(old_frame),@dt<类_FBrowser_框架>(new_frame));};
+
+    方法 浏览器_即将改变主框架 <公开 注释 = "OnMainFrameChanged" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 旧框架 <类型 = 类_FBrowser_框架>
+    参数 新框架 <类型 = 类_FBrowser_框架>
+
+    # bool @sn<current_class>::OnRequestMediaAccessPermission(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,const CefString& requesting_origin,uint32_t requested_permissions,CefRefPtr<CefMediaAccessCallback> callback) {
+    # return @<浏览器_即将请求媒体访问许可>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),CWString(requesting_origin.ToWString().c_str()),requested_permissions,@dt<类_FBrowser_媒体接入回调>(callback));
+    # };
+
+    方法 浏览器_即将请求媒体访问许可 <公开 类型 = 逻辑型 注释 = "OnRequestMediaAccessPermission 待验证，未知触发条件" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 请求源 <类型 = 文本型>
+    参数 请求许可 <类型 = 整数>
+    参数 回调 <类型 = 类_FBrowser_媒体接入回调>
+    {
+        返回 (假)
+    }
+
+    #
+    # bool @sn<current_class>::OnShowPermissionPrompt(CefRefPtr<CefBrowser> browser,uint64_t prompt_id,const CefString& requesting_origin,uint32_t requested_permissions,CefRefPtr<CefPermissionPromptCallback> callback) {
+    # return @<浏览器_即将显示许可提示>(@dt<类_FBrowser_浏览器>(browser),prompt_id,CWString(requesting_origin.ToWString().c_str()),requested_permissions,@dt<类_FBrowser_权限提示回调>(callback));
+    # };
+
+    方法 浏览器_即将显示许可提示 <公开 类型 = 逻辑型 注释 = "OnShowPermissionPrompt 待验证，未知触发条件" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 提示ID <类型 = 长整数>
+    参数 请求源 <类型 = 文本型>
+    参数 请求许可 <类型 = 整数>
+    参数 回调 <类型 = 类_FBrowser_权限提示回调>
+    {
+        返回 (假)
+    }
+
+    #
+    # void @sn<current_class>::OnDismissPermissionPrompt(CefRefPtr<CefBrowser> browser,uint64_t prompt_id,cef_permission_request_result_t result) {
+    # @<浏览器_即将关闭许可提示>(@dt<类_FBrowser_浏览器>(browser),prompt_id,result);};
+
+    方法 浏览器_即将关闭许可提示 <公开 注释 = "OnShowPermissionPrompt 待验证，未知触发条件" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "browser">
+    参数 提示ID <类型 = 长整数>
+    参数 结果标识 <类型 = 整数 注释 = "result 参考：许可反馈.">
+
+    #
+    # @end
+    #
+}
+
+类 类_FBrowser_JS交互事件 <公开 @视窗.后缀文本 = "public FBroHsQueryHandler" @禁止创建对象 = 真>
+{
+    方法 类_初始化
+    {
+        @ type_ = QueryHandlerType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    #     virtual bool OnQuery(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,int64_t query_id,const CefString& request,bool persistent,CefRefPtr<CefMessageRouterBrowserSide::Handler::Callback> callback) override;
+    #     virtual void OnQueryCanceled(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,int64_t query_id) override;
+    # <> </include>
+    #
+    # bool @sn<current_class>::OnQuery(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,int64_t query_id,const CefString& request,bool persistent,CefRefPtr<CefMessageRouterBrowserSide::Handler::Callback> callback) {
+    # return @<即将查询>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),query_id,CWString(request.ToWString().c_str()),persistent,@dt<类_FBrowser_JS交互回调>(callback));}
+    # void @sn<current_class>::OnQueryCanceled(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,int64_t query_id){@<即将取消查询>(@dt<类_FBrowser_浏览器>(browser),@dt<类_FBrowser_框架>(frame),query_id);}
+    # @end
+
+    方法 即将查询 <公开 类型 = 逻辑型 注释 = " OnQuery" 注释 = "// Executed when a new query is received. |query_id| uniquely identifies the"
+            注释 = "// query for the life span of the router. Return true to handle the query"
+            注释 = "// or false to propagate the query to other registered handlers, if any. If"
+            注释 = "// no handlers return true from this method then the query will be"
+            注释 = "// automatically canceled with an error code of -1 delivered to the"
+            注释 = "// JavaScript onFailure callback. If this method returns true then a"
+            注释 = "// Callback method must be executed either in this method or asynchronously" 注释 = "// to complete the query."
+            编辑时信息 = "9332A, 0, 0, 0" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 编辑时信息 = "9332A, 0, 0, 0">
+    参数 框架 <类型 = 类_FBrowser_框架 编辑时信息 = "9332A, 0, 0, 0">
+    参数 查询ID <类型 = 长整数 编辑时信息 = "9332A, 0, 0, 0">
+    参数 请求文本 <类型 = 文本型 编辑时信息 = "9332A, 0, 0, 0">
+    参数 persistent <类型 = 逻辑型 编辑时信息 = "9332A, 0, 0, 0">
+    参数 JS交互回调 <类型 = 类_FBrowser_JS交互回调>
+    {
+        返回 (假)
+    }
+
+    方法 即将取消查询 <公开 注释 = "OnQueryCanceled" 注释 = "///"
+            注释 = "// Executed when a query has been canceled either explicitly using the"
+            注释 = "// JavaScript cancel function or implicitly due to browser destruction,"
+            注释 = "// navigation or renderer process termination. It will only be called for"
+            注释 = "// the single handler that returned true from OnQuery for the same"
+            注释 = "// |query_id|. No references to the associated Callback object should be"
+            注释 = "// kept after this method is called, nor should any Callback methods be" 注释 = "// executed." 注释 = "///"
+            编辑时信息 = "ABBB1, 0, 0, 0" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 框架 <类型 = 类_FBrowser_框架>
+    参数 查询ID <类型 = 长整数>
+    {
+
+    }
+
+    #
+    #
+    #
+}
+
+类 类_FBrowser_资源处理器 <公开 注释 = "" 注释 = "" @视窗.后缀文本 = "public FBroHsResourceHandler" @禁止创建对象 = 真>
+{
+    方法 类_初始化
+    {
+        @ type_ = ResourceHandlerType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void Start(int64_t flag) override{};
+    #     virtual bool Open(int64_t flag,CefRefPtr<CefRequest> request,bool& handle_request,CefRefPtr<CefCallback> callback) override;
+    #     virtual bool ProcessRequest(int64_t flag,CefRefPtr<CefRequest> request,CefRefPtr<CefCallback> callback) override;
+    #     virtual void GetResponseHeaders(int64_t flag,CefRefPtr<CefResponse> response,int64_t& response_length,CefRefPtr<FBroString> redirectUrl) override;
+    #     virtual bool Skip(int64_t flag,int64_t bytes_to_skip,int64_t& bytes_skipped,CefRefPtr<CefResourceSkipCallback> callback) override;
+    #     virtual bool Read(int64_t flag,void* data_out,int bytes_to_read,int& bytes_read,CefRefPtr<CefResourceReadCallback> callback) override;
+    #     virtual void Cancel(int64_t flag) override;
+    # <> </include>
+    #
+    #  bool @sn<current_class>::Open(int64_t flag,CefRefPtr<CefRequest> request,bool& handle_request,CefRefPtr<CefCallback> callback) {
+    #   @dt<逻辑型类> boolclass;BOOL *boolstr=(BOOL *)boolclass.GetDataPtr();*boolstr=handle_request;
+    #   bool retbool= @<打开>(flag,@dt<类_FBrowser_请求>(request),boolclass,@dt<类_FBrowser_回调>(callback));
+    #   handle_request=*boolstr;return retbool;
+    # }
+    #  bool @sn<current_class>::ProcessRequest(int64_t flag,CefRefPtr<CefRequest> request,CefRefPtr<CefCallback> callback) {
+    #   return @<处理请求>(flag,@dt<类_FBrowser_请求>(request),@dt<类_FBrowser_回调>(callback));}
+    #  void @sn<current_class>::GetResponseHeaders(int64_t flag,CefRefPtr<CefResponse> response,int64_t& response_length,CefRefPtr<FBroString> redirectUrl) {
+    #   @dt<长整数类> int64class;int64_t *inttemp=(int64_t *)int64class.GetDataPtr();*inttemp=response_length;
+    #   @<取响应头>(flag,@dt<类_FBrowser_响应>(response),int64class,@dt<FBrowser_文本>(redirectUrl));
+    #   response_length=*inttemp;
+    # }
+    #  bool @sn<current_class>::Skip(int64_t flag,int64_t bytes_to_skip,int64_t& bytes_skipped,CefRefPtr<CefResourceSkipCallback> callback) {
+    #   @dt<长整数类> int64class;int64_t *inttemp=(int64_t *)int64class.GetDataPtr();*inttemp=bytes_skipped;
+    #   bool retbool=@<忽略>(flag,bytes_to_skip,int64class,@dt<类_FBrowser_资源忽略回调>(callback));
+    #   bytes_skipped=*inttemp;return retbool;
+    # }
+    #  bool @sn<current_class>::Read(int64_t flag,void* data_out,int bytes_to_read,int& bytes_read,CefRefPtr<CefResourceReadCallback> callback) {
+    #   @dt<整数类> bytes_read_class;int *bytes_read_temp=(int *)bytes_read_class.GetDataPtr();*bytes_read_temp=bytes_read;
+    #   bool retbool=@<读取>(flag,(int64_t)data_out,bytes_to_read,bytes_read_class,@dt<类_FBrowser_资源读取回调>(callback));
+    #   bytes_read=*bytes_read_temp;return retbool;}
+    #  void @sn<current_class>::Cancel(int64_t flag) {@<退出>(flag);};
+    # @end
+
+    方法 打开 <公开 类型 = 逻辑型 注释 = "英文名：Open 说明：获取资源处理器或制定自定义方案后才会生效，返回假或者返回真且继续设置为真才会启用资源处理" @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 请求 <类型 = 类_FBrowser_请求>
+    参数 处理请求 <类型 = 逻辑型类 注释 = "可设置，设置为真才会启用事件“资源处理器_处理请求”">
+    参数 回调 <类型 = 类_FBrowser_回调 注释 = "函数返回值和此处都设置为真才会启用资源处理">
+    {
+        返回 (假)
+    }
+
+    方法 处理请求 <公开 类型 = 逻辑型 注释 = "英文名：ProcessRequest 说明：获取资源处理器或制定自定义方案后才会生效" @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 请求 <类型 = 类_FBrowser_请求>
+    参数 回调 <类型 = 类_FBrowser_回调>
+    {
+        返回 (假)
+    }
+
+    方法 取响应头 <公开 注释 = "英文名：GetResponseHeaders 说明：获取资源处理器或制定自定义方案后才会生效，设置了“重定向地址”设置“响应长度”无效，两者互斥" @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 响应 <类型 = 类_FBrowser_响应>
+    参数 响应长度 <类型 = 长整数类 注释 = "需修改的数据大小，大于0修改才会有效，后调用“资源处理器_读取”">
+    参数 重定向地址 <类型 = FBrowser_文本 注释 = "设置要重定向地址的地址，设置后会跳转新地址">
+    {
+
+    }
+
+    方法 忽略 <公开 类型 = 逻辑型 注释 = "英文名：ResourceHandler_Skip 说明：获取资源处理器或制定自定义方案后才会生效，设置需要忽略的大小，待验证，未知触发条件" @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 可忽略大小 <类型 = 长整数>
+    参数 被忽略大小 <类型 = 长整数类 注释 = "设置需要被忽略的大小">
+    参数 资源忽略回调 <类型 = 类_FBrowser_资源忽略回调>
+    {
+        返回 (假)
+    }
+
+    方法 读取 <公开 类型 = 逻辑型
+            注释 = "英文名：ResourceHandler_Read 说明：获取资源处理器或制定自定义方案后才会生效，该事件返回真继续读取，修改了数据必须返回真否则修改无效,返回假才会停止读取数据，可通过写入数据到输出数据指针，达到修改资源数据的目的"
+            @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 输出数据指针 <类型 = 变整数 注释 = "data_out">
+    参数 读取大小 <类型 = 整数 注释 = "bytes_to_read 可读取大小，由系统提供最大可写入的数据大小">
+    参数 读入大小 <类型 = 整数类 注释 = "bytes_read 写入数据大小，写入数据不能超过这个大小，超过要做分包处理">
+    参数 资源读取回调 <类型 = 类_FBrowser_资源读取回调>
+    {
+        返回 (假)
+    }
+
+    方法 退出 <公开 注释 = "英文名：ResourceHandler_Cancel 说明：获取资源处理器或制定自定义方案后才会生效，结束退出" @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    {
+
+
+    }
+
+    #
+}
+
+类 类_FBrowser_资源过滤器 <公开 注释 = "大数据网页或资源，会多次回调，分包" @视窗.后缀文本 = "public FBroHsResponseFilter" @禁止创建对象 = 真>
+{
+    方法 类_初始化
+    {
+        @ type_ = ResponseFilterType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void Start(INT64 flag) override{};
+    #     virtual void End(INT64 flag) override;
+    #     virtual bool InitFilter(INT64 flag) override;
+    #     virtual CefResponseFilter::FilterStatus Filter(INT64 flag,void* data_in,size_t data_in_size,size_t& data_in_read,void* data_out,size_t data_out_size,size_t& data_out_written)override;
+    # <> </include>
+    #
+    # void @sn<current_class>::End(INT64 flag) {@<结束>(flag);}
+    # bool @sn<current_class>::InitFilter(INT64 flag) {return @<初始化过滤器>(flag);}
+    #
+    #
+    #  CefResponseFilter::FilterStatus @sn<current_class>::Filter(INT64 flag,void* data_in,size_t data_in_size,size_t& data_in_read,
+    #  void* data_out,size_t data_out_size,size_t& data_out_written){
+    #   if (data_in_size > data_out_size) {
+    #     @<获取数据>(flag,(int64_t)data_in,@dt<整数>(data_out_size));
+    #   }
+    #   else{
+    #     @<获取数据>(flag,(int64_t)data_in,@dt<整数>(data_in_size));
+    #   }
+    #
+    #   @dt<整数类> data_in_read_class;int *data_in_read_temp=(int *)data_in_read_class.GetDataPtr();*data_in_read_temp=@dt<整数>(data_in_read);
+    #   @dt<整数类> data_out_written_class;int *data_out_written_temp=(int *)data_out_written_class.GetDataPtr();*data_out_written_temp=@dt<整数>(data_out_written);
+    #   int retint=@<修改数据>(flag,(int64_t)data_in,@dt<整数>(data_in_size),data_in_read_class,(int64_t)data_out,@dt<整数>(data_out_size),data_out_written_class);
+    #   data_in_read=*data_in_read_temp;
+    #   data_out_written=*data_out_written_temp;
+    #   return CefResponseFilter::FilterStatus(retint);
+    #  }
+    #
+    # @end
+
+    方法 结束 <公开 注释 = "1.如果是通过“FBrowser创建类指针”创建的本事件;" 注释 = "1.2.11.38版本后，采用智能指针这里无需在手动释放" @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    {
+
+    }
+
+    方法 初始化过滤器 <公开 类型 = 逻辑型 注释 = "返回假取消此次拦截" @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    {
+        返回 (真)
+
+    }
+
+    方法 获取数据 <公开 @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 数据指针 <类型 = 变整数 注释 = "传递过来的数据指针,数据类型为UTF8">
+    参数 数据大小 <类型 = 整数 注释 = "当前数据大小">
+    {
+
+        // UTF8到文本 (指针到字节集 (数据指针, 数据大小))
+
+
+
+
+    }
+
+    方法 修改数据 <公开 类型 = 整数 @虚拟方法 = 可覆盖>
+    参数 标识ID <类型 = 长整数>
+    参数 输入指针 <类型 = 变整数 注释 = "传入数据指针">
+    参数 输入大小 <类型 = 整数 注释 = "传入数据大小">
+    参数 输入读取大小 <类型 = 整数类 注释 = "传入数据回写大小，用作告诉来源已经接纳了多少数据">
+    参数 输出指针 <类型 = 变整数 注释 = "写回数据输出指针，写回后浏览器接收显示相应的数据">
+    参数 输出大小 <类型 = 整数 注释 = "写回数据缓存能容纳数据的最大值，输出数据都不能大于此值，否则浏览器崩溃，如大于必须做分包处理">
+    参数 输出写入大小 <类型 = 整数类 注释 = "写回数据会写大小，用作告诉浏览器我写入了多少数据">
+    {
+        // if (data_in_size > data_out_size) {
+        // data_in_read = data_out_size;
+        // data_out_written = data_out_size;
+        // memcpy_s(data_out, data_out_size, data_in, data_out_size);
+        // return RESPONSE_FILTER_NEED_MORE_DATA;
+        // }
+        // else {
+        // data_in_read = data_in_size;
+        // data_out_written = data_in_size;
+        // memcpy_s(data_out, data_in_size, data_in, data_in_size);
+        // return RESPONSE_FILTER_DONE;
+        // }
+        如果 (输入大小 > 输出大小)
+        {
+
+            输入读取大小.值 = 输出大小
+            输出写入大小.值 = 输出大小
+            内存复制 (输出指针, 输入指针, 输出大小)
+            返回 (资源过滤器.需要更多数据)
+        }
+        否则
+        {
+            输入读取大小.值 = 输入大小
+            输出写入大小.值 = 输入大小
+            内存复制 (输出指针, 输入指针, 输入大小)
+            返回 (资源过滤器.完成)
+
+        }
+
+        返回 (资源过滤器.错误)
+
+    }
+
+    #
+}
+
+类 类_FBrowser_服务器事件 <公开 注释 = "websocket服务器" @视窗.后缀文本 = "public FBroHsServerHandle" @禁止创建对象 = 真>
+{
+    方法 类_初始化
+    {
+        @ type_ = ServerHandleType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual void OnServerCreated(CefRefPtr<CefServer> server) override;
+    #     virtual void OnServerDestroyed(CefRefPtr<CefServer> server) override;
+    #     virtual void OnClientConnected(CefRefPtr<CefServer> server,int connection_id) override;
+    #     virtual void OnClientDisconnected(CefRefPtr<CefServer> server,int connection_id) override;
+    #     virtual void OnHttpRequest(CefRefPtr<CefServer> server,int connection_id,const CefString& client_address, CefRefPtr<CefRequest> request) override;
+    #     virtual void OnWebSocketRequest(CefRefPtr<CefServer> server,int connection_id,const CefString& client_address,CefRefPtr<CefRequest> request,CefRefPtr<CefCallback> callback) override;
+    #     virtual void OnWebSocketConnected(CefRefPtr<CefServer> server,int connection_id) override;
+    #     virtual void OnWebSocketMessage(CefRefPtr<CefServer> server,int connection_id,const void* data,size_t data_size) override;
+    # <> </include>
+    #
+    #  void @sn<current_class>::OnServerCreated(CefRefPtr<CefServer> server) {
+    #     @<服务器即将创建>(@dt<类_FBrowser_服务器>(server));
+    #  }
+
+    方法 服务器即将创建 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    {
+
+    }
+
+    #  void @sn<current_class>::OnServerDestroyed(CefRefPtr<CefServer> server) {
+    #     @<服务器即将销毁>(@dt<类_FBrowser_服务器>(server));
+    #  }
+
+    方法 服务器即将销毁 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    {
+
+    }
+
+    #
+    #  void @sn<current_class>::OnClientConnected(CefRefPtr<CefServer> server,int connection_id) {
+    #         @<收到客户端连接>(@dt<类_FBrowser_服务器>(server),connection_id);
+    #  }
+
+    方法 收到客户端连接 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    参数 连接ID <类型 = 整数>
+    {
+
+    }
+
+    #
+    #  void @sn<current_class>::OnClientDisconnected(CefRefPtr<CefServer> server,int connection_id) {
+    #      @<收到客户端断开连接>(@dt<类_FBrowser_服务器>(server),connection_id);
+    #  }
+
+    方法 收到客户端断开连接 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    参数 连接ID <类型 = 整数>
+
+    #  void @sn<current_class>::OnHttpRequest(CefRefPtr<CefServer> server,int connection_id,
+    #   const CefString& client_address,CefRefPtr<CefRequest> request) {
+    #     @<收到HTTP请求>(@dt<类_FBrowser_服务器>(server),connection_id,CWString(client_address.ToWString().c_str()),@dt<类_FBrowser_请求>(request));
+    #  }
+
+    方法 收到HTTP请求 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    参数 连接ID <类型 = 整数>
+    参数 客户端地址 <类型 = 文本型>
+    参数 请求 <类型 = 类_FBrowser_请求>
+
+    #
+    #  void @sn<current_class>::OnWebSocketRequest(CefRefPtr<CefServer> server,int connection_id,
+    #     const CefString& client_address,CefRefPtr<CefRequest> request,CefRefPtr<CefCallback> callback) {
+    #      @<收到WebSocket请求>(@dt<类_FBrowser_服务器>(server),connection_id,CWString(client_address.ToWString().c_str()),
+    #                                                             @dt<类_FBrowser_请求>(request),@dt<类_FBrowser_回调>(callback));
+    #  }
+
+    方法 收到WebSocket请求 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    参数 连接ID <类型 = 整数>
+    参数 客户端地址 <类型 = 文本型>
+    参数 请求 <类型 = 类_FBrowser_请求>
+    参数 回调 <类型 = 类_FBrowser_回调>
+
+    #
+    #
+    #  void @sn<current_class>::OnWebSocketConnected(CefRefPtr<CefServer> server,
+    #   int connection_id) {
+    #     @<收到WebSocket连接>(@dt<类_FBrowser_服务器>(server),connection_id);
+    #  }
+
+    方法 收到WebSocket连接 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    参数 连接ID <类型 = 整数>
+
+    #
+    #  void @sn<current_class>::OnWebSocketMessage(CefRefPtr<CefServer> server,int connection_id,
+    #   const void* data,size_t data_size) {
+    #     @<收到WebSocket消息>(@dt<类_FBrowser_服务器>(server),connection_id,(INT64)data,(@dt<整数>)data_size);
+    #  }
+
+    方法 收到WebSocket消息 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    参数 连接ID <类型 = 整数>
+    参数 数据指针 <类型 = 变整数 注释 = "注意数据转码,这里是UTF8编码">
+    参数 数据长度 <类型 = 整数>
+
+    # @end
+}
+
+类 类_FBrowser_开发者消息事件 <公开 @视窗.后缀文本 = "public FBroHsDevToolsMessageObserver" @禁止创建对象 = 真>
+{
+    方法 类_初始化 <折叠>
+    {
+        @ type_ = DevToolsMessageObserverType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #     virtual bool OnDevToolsMessage(CefRefPtr<CefBrowser> browser,const void* message,size_t message_size) override;
+    #     virtual void OnDevToolsMethodResult(CefRefPtr<CefBrowser> browser,int message_id,bool success,const void* result,size_t result_size) override;
+    #     virtual void OnDevToolsEvent(CefRefPtr<CefBrowser> browser,const CefString& method,const void* params,size_t params_size) override;
+    #     virtual void OnDevToolsAgentAttached(CefRefPtr<CefBrowser> browser) override;
+    #     virtual void OnDevToolsAgentDetached(CefRefPtr<CefBrowser> browser) override;
+    # <> </include>
+    #
+    #  bool @sn<current_class>::OnDevToolsMessage(CefRefPtr<CefBrowser> browser,const void* message,size_t message_size) {
+    #     return @<开发者消息_VIP_收到消息>(@dt<类_FBrowser_浏览器>(browser),(int64_t)message,(@dt<整数>)message_size);}
+
+    方法 开发者消息_VIP_收到消息 <公开 类型 = 逻辑型 注释 = "OnDevToolsMessage"
+            注释 = "Method that will be called on receipt of a DevTools protocol message." 返回值注释 = "返回假继续，返回真不再处理" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "|browser| is the originating browser instance">
+    参数 消息指针 <类型 = 变整数>
+    参数 消息大小 <类型 = 整数>
+    {
+        返回 (假)
+    }
+
+    #
+    #  void @sn<current_class>::OnDevToolsMethodResult(CefRefPtr<CefBrowser> browser,int message_id,bool success,const void* result,size_t result_size){
+    #     return @<开发者消息_VIP_执行完成>(@dt<类_FBrowser_浏览器>(browser),message_id,success,(int64_t)result,(@dt<整数>)result_size);}
+
+    方法 开发者消息_VIP_执行完成 <公开 注释 = "OnDevToolsMethodResult"
+            注释 = "Method that will be called after attempted execution of a DevTools protocol method" @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "|browser| is the originating browser instance">
+    参数 消息ID <类型 = 整数 注释 = "|message_id| is the \"id\" value that identifies the originating method call message">
+    参数 成功 <类型 = 逻辑型
+            注释 = "If the method succeeded |success| will be true，|result| will be the UTF8-encoded JSON \"result\" dictionary value (which may be empty)">
+    参数 结果指针 <类型 = 变整数
+            注释 = "If the method failed |success| will be false and |result| will be the UTF8-encoded JSON \"error\" dictionary value">
+    参数 结果大小 <类型 = 整数>
+    {
+
+    }
+
+    #  void @sn<current_class>::OnDevToolsEvent(CefRefPtr<CefBrowser> browser,const CefString& method,const void* params,size_t params_size){
+    #     @<开发者消息_VIP_收到事件>(@dt<类_FBrowser_浏览器>(browser),CWString(method.ToWString().c_str()),(int64_t)params,(@dt<整数>)params_size);}
+
+    方法 开发者消息_VIP_收到事件 <公开 注释 = "OnDevToolsEvent" 注释 = "Method that will be called on receipt of a DevTools protocol event"
+            @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "|browser| is the originating browser instance">
+    参数 方法名 <类型 = 文本型 注释 = "|method| is the \"method\" value">
+    参数 参数指针 <类型 = 变整数
+            注释 = "|params| is the UTF8-encoded JSON \"params\" dictionary value (which may be empty) |params| is only valid for the scope of this callback and should be copied if necessary">
+    参数 参数大小 <类型 = 整数>
+
+    #  void @sn<current_class>::OnDevToolsAgentAttached(CefRefPtr<CefBrowser> browser){ @<开发者消息_VIP_已附加>(@dt<类_FBrowser_浏览器>(browser));}
+
+    方法 开发者消息_VIP_已附加 <公开 注释 = "OnDevToolsAgentAttached：Method that will be called when the DevTools agent has attached"
+            @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "|browser| is the originating browser instance">
+
+    #  void @sn<current_class>::OnDevToolsAgentDetached(CefRefPtr<CefBrowser> browser){@<开发者消息_VIP_已分离>(@dt<类_FBrowser_浏览器>(browser));}
+
+    方法 开发者消息_VIP_已分离 <公开 注释 = "OnDevToolsAgentDetached：Method that will be called when the DevTools agent has detached"
+            @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "|browser| is the originating browser instance">
+
+    #
+    # @end
+}
+
+类 类_FBrowser_URL请求事件 <公开 @视窗.后缀文本 = "public FBroHsURLRequestClient" @禁止创建对象 = 真>
+{
+    方法 类_初始化
+    {
+        @ type_ = URLRequestClientType;
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 0);
+    }
+
+    方法 类_清理
+    {
+        @ _FBRO_SHOW_CLASS_TYPE(_CT(@sn<current_source_class>), 1);
+    }
+
+    # @begin
+    # <> <include>
+    #     _FBRO_NEW_DELETE_OVERRIDE();
+    # public:
+    #
+    #  virtual void Start(int64_t flag, CefRefPtr<CefURLRequest> request) override;
+    #  virtual void End(int64_t flag) override;
+    #
+    #  virtual void OnRequestComplete(int64_t flag, CefRefPtr<CefURLRequest> request) override;
+    #  virtual void OnUploadProgress(int64_t flag, CefRefPtr<CefURLRequest> request,int64_t current,int64_t total) override;
+    #  virtual void OnDownloadProgress(int64_t flag, CefRefPtr<CefURLRequest> request,int64_t current,int64_t total) override;
+    #  virtual void OnDownloadData(int64_t flag, CefRefPtr<CefURLRequest> request,const void* data,size_t data_length) override;
+    #  virtual bool GetAuthCredentials(int64_t flag, bool isProxy,const CefString& host,int port,const CefString& realm,const CefString& scheme,CefRefPtr<CefAuthCallback> callback) override;
+    # <> </include>
+    #  void @sn<current_class>::Start(int64_t flag, CefRefPtr<CefURLRequest> request){
+    #     @<开始创建>(flag,@dt<类_FBrowser_URL请求>(request));
+    #  }
+
+    方法 开始创建 <公开 @虚拟方法 = 可覆盖>
+    参数 标识 <类型 = 长整数>
+    参数 URL请求 <类型 = 类_FBrowser_URL请求>
+    {
+
+    }
+
+    #  void @sn<current_class>::End(int64_t flag){
+    #     @<读取结束>(flag);
+    #  }
+
+    方法 读取结束 <公开 @虚拟方法 = 可覆盖>
+    参数 标识 <类型 = 长整数>
+    {
+
+    }
+
+    #  void @sn<current_class>::OnRequestComplete(int64_t flag, CefRefPtr<CefURLRequest> request){
+    #     @<即将完成>(flag,@dt<类_FBrowser_URL请求>(request));
+    #  }
+
+    方法 即将完成 <公开 注释 = "英文名：OnRequestComplete 说明：通知客户端请求已经完成。使用CefURLRequest::GetRequestStatus方法用来判断请求是否成功。" @虚拟方法 = 可覆盖>
+    参数 标识 <类型 = 长整数>
+    参数 URL请求 <类型 = 类_FBrowser_URL请求>
+    {
+
+    }
+
+    #  void @sn<current_class>::OnUploadProgress(int64_t flag, CefRefPtr<CefURLRequest> request,int64_t current,int64_t total) {
+    #     @<上传进度>(flag,@dt<类_FBrowser_URL请求>(request),current,total);
+    #  }
+
+    方法 上传进度 <公开
+            注释 = "英文名：OnUploadProgress 说明：通知客户端上传进度。|current|表示目前发送的字节数；|total|表示上传数据的总大小（如果启用分块上传，则为-1）。只有在请求上设置了UR_FLAG_REPORT_UPLOAD_PROGRESS标志时，才会调用此方法。"
+            @虚拟方法 = 可覆盖>
+    参数 标识 <类型 = 长整数>
+    参数 URL请求 <类型 = 类_FBrowser_URL请求>
+    参数 当前大小 <类型 = 长整数>
+    参数 合计大小 <类型 = 长整数>
+    {
+
+    }
+
+    #  void @sn<current_class>::OnDownloadProgress(int64_t flag, CefRefPtr<CefURLRequest> request,int64_t current,int64_t total) {
+    #     @<下载进度>(flag,@dt<类_FBrowser_URL请求>(request),current,total);
+    #  }
+
+    方法 下载进度 <公开 注释 = "英文名：OnDownloadProgress 说明：通知客户端下载进度|当前|表示呼叫前接收到的字节数，|total|是预期的响应总大小（如果不确定，则为-1）。" @虚拟方法 = 可覆盖>
+    参数 标识 <类型 = 长整数>
+    参数 URL请求 <类型 = 类_FBrowser_URL请求>
+    参数 当前大小 <类型 = 长整数>
+    参数 合计大小 <类型 = 长整数>
+    {
+
+    }
+
+    #  void @sn<current_class>::OnDownloadData(int64_t flag, CefRefPtr<CefURLRequest> request,const void* data,size_t data_length) {
+    #     @<获取到数据>(flag,@dt<类_FBrowser_URL请求>(request),@an<CVolMem>(data, data_length));
+    #  }
+
+    方法 获取到数据 <公开
+            注释 = "英文名：OnDownloadData 说明：当读取响应的某些部分时调用|data|包含上次调用以来收到的currentbytes。如果请求设置了UR_FLAG_NO_DOWNLOAD_DATA标志，就不会调用该方法。"
+            @虚拟方法 = 可覆盖>
+    参数 标识 <类型 = 长整数>
+    参数 URL请求 <类型 = 类_FBrowser_URL请求>
+    参数 数据 <类型 = 字节集类>
+    {
+
+    }
+
+    #
+    # bool @sn<current_class>::GetAuthCredentials(int64_t flag,bool isProxy,const CefString& host,int port,const CefString& realm,const CefString& scheme,CefRefPtr<CefAuthCallback> callback) {
+    #  return @<获得需授权证书>(flag,isProxy,CWString(host.ToWString().c_str()),port,CWString(realm.ToWString().c_str()),CWString(scheme.ToWString().c_str()),@dt<类_FBrowser_授权回调>(callback));
+    #  };
+
+    方法 获得需授权证书 <公开 类型 = 逻辑型 注释 = "英文名：GetAuthCredentials 说明：用于需要输入账号密码验证的证书，例如部分需验证的代理；"
+            注释 = "如果是全局环境中同代理已经成功回调并设置的账号密码，这里则不会被调用，一样有效" @虚拟方法 = 可覆盖>
+    参数 标识 <类型 = 长整数>
+    参数 是否为代理 <类型 = 逻辑型 注释 = "isProxy">
+    参数 主机 <类型 = 文本型 注释 = "host">
+    参数 端口 <类型 = 整数 注释 = "port">
+    参数 域名 <类型 = 文本型 注释 = "realm">
+    参数 认证方案 <类型 = 文本型 注释 = "scheme">
+    参数 授权回调 <类型 = 类_FBrowser_授权回调 注释 = "在这输入账号密码" "">
+    {
+        返回 (假)
+    }
+
+    #
+    #
+}
+
+#

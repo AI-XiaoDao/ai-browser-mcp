@@ -1,0 +1,30 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"windows.快捷方式\"" "" @视窗.外部头文件 = "ShellLink\\ShellLinkTool.h"
+        @视窗.外部库.win32 = "ShellLink\\ShellLinkToolx86.lib" @视窗.附属文件.win32 = "ShellLink\\ShellLinkToolx86.dll"
+        @视窗.外部库.x64 = "ShellLink\\ShellLinkToolx64.lib" @视窗.附属文件.x64 = "ShellLink\\ShellLinkToolx64.dll">
+
+类 ______快捷方式 <公开 @全局类 = 真>
+{
+    方法 创建快捷方式F <公开 静态 类型 = 逻辑型 @嵌入式方法 = "">
+    参数 目标程序 <类型 = 文本型 注释 = "例如 C:\\vol.exe">
+    参数 快捷方式目录 <类型 = 文本型 注释 = "例如，你要建立再 d:\\快捷方式.lnk">
+    参数 工作目录 <类型 = 文本型 @默认值 = "">
+    参数 是否以管理员权限运行 <类型 = 逻辑型 @默认值 = 假>
+    参数 快捷键 <类型 = 短整数 注释 = "0表示无热键" @默认值 = 0>
+    参数 快捷方式描述 <类型 = 文本型 @默认值 = "">
+    参数 显示方式 <类型 = 整数 注释 = "0表示常规" @默认值 = 0>
+    {
+        @ CreateFileShortcut(@<目标程序>.GetText(),@<快捷方式目录>.GetText(),@<工作目录>.GetText(),@<是否以管理员权限运行>,(WORD)@<快捷键>,@<快捷方式描述>.GetText(),@<显示方式>)
+    }
+
+    # BOOL FUCTIONTYPE CreateFileShortcut(
+    #     LPCTSTR lpszFileName,
+    #     LPCTSTR lpszLinkFileFullPath,
+    #     LPCTSTR lpszWorkDir,
+    #     BOOL    bRunAsAdmin,
+    #     WORD wHotkey,
+    #     LPCTSTR lpszDescription,
+    #     int iShowCmd);
+    #
+}

@@ -1,0 +1,204 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.MFC界面.基本 <编辑时信息 = "116A99, 0, 0, 0" @文档 = "category = \"基础类\"" "@视窗.外部头文件.全局-100" = "src\\vol_mfc.h"
+        @视窗.外部源文件 = "src\\vol_mfc.cpp" @视窗.预定义宏 = "_VOL_DISABLE_STANDARD_STARTUP"
+        @视窗.附加编译参数.exe = "link: /ENTRY:wWinMainCRTStartup" @视窗.附加编译参数.console = "link: /ENTRY:wmainCRTStartup"
+        @视窗.需求系统头文件 = "afxwin.h | 当前 Visual Studio 本地编译环境未安装 MFC ,需要首先将其安装才能进行编译,安装方法请参考系统菜单\"工具->安装 Visual Studio 2019 生成工具\"功能对话框中的相关说明.">
+
+# @begin
+# <> <global>  // 将下面内容置入全局命名空间中
+# <> <include>
+#
+# #if (defined (_CONSOLE) || defined (@an<_VOL_CONSOLE_EXE>))  // 控制台应用程序
+#
+# #elif (defined (_USRDLL) || defined (@an<_VOL_DLL>))  // 动态链接库
+#
+# class CVolMFCApp : public CWinApp
+# {
+# public:
+#     inline_ CVolMFCApp ()  {  }
+#
+# public:
+#     virtual BOOL InitInstance () override;
+#     virtual int ExitInstance () override;
+# };
+#
+# #else  // 应用程序
+#
+# class CVolMFCApp : public CVolMfcAppBase
+# {
+# public:
+#     inline_ CVolMFCApp ()
+#     {
+#         m_pobjWinApp = NULL;
+#     }
+#
+# public:
+#     virtual BOOL InitInstance () override;
+#     virtual int ExitInstance () override;
+#     virtual BOOL PreTranslateMessage (MSG* pMsg) override;
+#     virtual BOOL OnIdle (LONG lCount) override;
+#
+# protected:
+#     @dt<窗口程序类>* m_pobjWinApp;
+# };
+#
+# #endif
+# <> </include>
+#
+# //---
+#
+# static void sInitMfcApp ()
+# {
+# #if (!defined (@an<_VOL_DLL>) || !defined (@an<_VOL_CLLM_DYNAMIC>))  // 不为以动态方式链接MFC模块?
+#     AfxOleInit ();
+#
+#     INITCOMMONCONTROLSEX InitCtrls;
+#     InitCtrls.dwSize = sizeof (InitCtrls);
+#     InitCtrls.dwICC = ICC_WIN95_CLASSES;
+#     InitCommonControlsEx (&InitCtrls);
+#
+#     AfxEnableControlContainer ();
+# #endif
+# }
+#
+# #if (defined (_CONSOLE) || defined (@an<_VOL_CONSOLE_EXE>))  // 控制台应用程序
+#
+# int _tmain (int argc, TCHAR* argv [])
+# {
+#     const HMODULE hModule = ::GetModuleHandle (NULL);
+#     ASSERT (hModule != NULL);
+#
+#     setlocale (LC_CTYPE, "");
+#     if (!AfxWinInit (hModule, NULL, ::GetCommandLine (), 0))  // 初始化MFC失败?
+#     {
+#         _tprintf (_T ("Error:  MFC initialize failed.\r\n"));
+#         return -1;
+#     }
+#     
+#     sInitMfcApp ();
+#
+#     g_objVolApp.init (hModule, argc, (const TCHAR**)argv, gGetStartupRuntimeClass ());  // 初始化程序信息
+#     const int nResult = gCallStartupMethod ();  // 调用用户程序启动类中的启动方法
+#     g_objVolApp.OnBeforeExit ();
+#
+#     return nResult;
+# }
+#
+# #elif (defined (_USRDLL) || defined (@an<_VOL_DLL>))  // 动态链接库
+#
+# CVolMFCApp theApp;
+#
+# BOOL CVolMFCApp::InitInstance ()
+# {
+#     sInitMfcApp ();
+#     CWinApp::InitInstance ();
+#
+#     g_objVolApp.init (m_hInstance, 0, NULL, gGetStartupRuntimeClass ());  // 初始化程序信息
+#     return (gCallStartupMethod () != 0);  // 调用用户程序启动类的启动方法
+# }
+#
+# int CVolMFCApp::ExitInstance ()
+# {
+#     if (IS_VOL_INSTANCE_OF (g_objVolApp.GetVolApp (), @dt<动态库程序类>))  // 基于火山动态库程序类?
+#         ((@dt<动态库程序类>&)g_objVolApp.GetVolApp ()).@n<动态库程序类.将被卸载> ();  // 通知用户程序
+#
+#     g_objVolApp.OnBeforeExit ();
+#     return CWinApp::ExitInstance ();
+# }
+#
+# #else  // 应用程序
+#
+# CVolMFCApp theApp;
+#
+# BOOL CVolMFCApp::InitInstance ()
+# {
+# #ifdef _VOL_UI_CEF_WEB_BROWSER  // 程序中使用了CEF浏览器组件?
+#     int nExitCode = CCefWebBrowserRenderApp::sCefCheckExecuteRenderProcess (m_hInstance);
+#     if (nExitCode >= 0) return nExitCode;
+# #endif
+#
+#     sInitMfcApp ();
+#     CVolMfcAppBase::InitInstance ();
+#
+#     COleMessageFilter* pMessageFilter = AfxOleGetMessageFilter ();
+#     if (pMessageFilter != NULL)
+#     {
+#         pMessageFilter->EnableBusyDialog (FALSE);
+#         pMessageFilter->SetBusyReply (SERVERCALL_RETRYLATER);
+#         pMessageFilter->EnableNotRespondingDialog (TRUE);
+#         pMessageFilter->SetMessagePendingDelay (-1);
+#     }
+#
+#     g_objVolApp.init (m_hInstance, __argc, (const TCHAR**)__targv, gGetStartupRuntimeClass ());  // 初始化程序信息
+#
+#     // 检查用户程序的启动类实例对象是否为基于火山窗口程序类
+#     if (IS_VOL_INSTANCE_OF (g_objVolApp.GetVolApp (), @dt<窗口程序类>))  // 基于火山窗口程序类?
+#         m_pobjWinApp = (@dt<窗口程序类>*)&g_objVolApp.GetVolApp ();  // 记录下来
+#
+#     return (gCallStartupMethod () != 0 &&  // 调用用户程序启动类的启动方法成功?
+#             m_pMainWnd != NULL);  // 设置了主窗口?
+# }
+#
+# BOOL CVolMFCApp::PreTranslateMessage (MSG* pMsg)
+# {
+# #if defined (_VOL_UI_CEF_WEB_BROWSER) && !defined (_VOL_CEF_MULTI_THREADED_MESSAGE_LOOP)  // 程序中使用了CEF浏览器组件且未使用线程消息循环?
+#     CefDoMessageLoopWork ();
+#     if (pMsg->hwnd == NULL ? (pMsg->message == MWM_CEF_BROWSER_WORK_MSG) : (::IsWindow (pMsg->hwnd) == FALSE))
+#         return TRUE;
+# #endif
+#     if (m_pobjWinApp != NULL &&  // 基于火山窗口程序类?
+#             m_pobjWinApp->@n<窗口程序类.消息过滤> ((INT_P)pMsg->hwnd, (INT)pMsg->message,
+#                 (INT_P)pMsg->wParam, (INT_P)pMsg->lParam, (INT_P)pMsg) == FALSE)  // 被消息过滤方法过滤掉了?
+#     {
+#         return TRUE;
+#     }
+#
+#     return CVolMfcAppBase::PreTranslateMessage (pMsg);
+# }
+#
+# BOOL CVolMFCApp::OnIdle (LONG lCount)
+# {
+#     if (m_pobjWinApp == NULL)
+#         return CVolMfcAppBase::OnIdle (lCount);
+#
+#     static BOOL_P s_blpMFCNeedIdle = TRUE;
+#     static DWORD s_dwTickCountEntry = 0;
+#
+#     if (lCount == 0)
+#     {
+#         s_blpMFCNeedIdle = TRUE;
+#         s_dwTickCountEntry = GetTickCount ();
+#     }
+#
+#     if (s_blpMFCNeedIdle)
+#     {
+#         s_blpMFCNeedIdle = CVolMfcAppBase::OnIdle (lCount);
+#         return TRUE;
+#     }
+#
+#     if (lCount < 2)
+#         return TRUE;
+#
+#     g_objVolApp.OnIdle ();
+#     return m_pobjWinApp->@n<窗口程序类.空闲> ((INT)(GetTickCount () - s_dwTickCountEntry));
+# }
+#
+# int CVolMFCApp::ExitInstance ()
+# {
+#     if (m_pobjWinApp != NULL)  // 基于火山窗口程序类?
+#         m_pobjWinApp->@n<窗口程序类.即将退出> ();  // 通知用户程序
+#     
+#     g_objVolApp.OnBeforeExit ();
+# #ifdef _VOL_UI_CEF_WEB_BROWSER  // 程序中使用了CEF浏览器组件?
+#     CCefBrowserManager::sCleanupCef ();
+# #endif
+#
+#     return CVolMfcAppBase::ExitInstance ();
+# }
+#
+# #endif
+#
+# <> </global>
+# @end
+#

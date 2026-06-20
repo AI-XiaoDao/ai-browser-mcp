@@ -1,0 +1,320 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.串口 <注释 = "封装自开源库：https://github.com/itas109/CSerialPort" 编辑时信息 = "224FDD, 0, 0, 0" @视窗.头文件搜寻目录 = "."
+        @视窗.外部头文件 = "CSerialPort\\SerialPort.h\r\nCSerialPort\\SerialPortInfo.h"
+        @视窗.外部源文件 = "CSerialPort\\SerialPort.cpp\r\nCSerialPort\\SerialPortBase.cpp\r\nCSerialPort\\SerialPortInfo.cpp\r\nCSerialPort\\SerialPortInfoBase.cpp\r\nCSerialPort\\SerialPortInfoWinBase.cpp\r\nCSerialPort\\SerialPortWinBase.cpp"
+        @视窗.外部库 = "setupapi.lib" @视窗.外部头文件 = "<vector>">
+
+类 串口通信类 <公开 基础类 = 参考对象类 注释 = "本类用于提供对串口数据收发支持." @视窗.后缀文本 = "public has_slots<>">
+{
+
+    # @begin
+    # @m<DECLARE_DERIVED_REF_OBJECT_CLASS_WITH_DATA> (itas109::CSerialPort)
+    #
+    # <> <include>
+    # inline_ std::string GetVesion ()
+    # {
+    #     return data ().getVersion();
+    # }
+    #
+    # BOOL m_blConnected = FALSE;
+    # inline_ bool Open (std::string portName, int baudRate, itas109::Parity parity, itas109::DataBits dataBits, itas109::StopBits stopbits, itas109::FlowControl flowControl, int64 readBufferSize)
+    # {
+    #     if (m_blConnected == FALSE)
+    #     {
+    #         m_blConnected = TRUE;
+    #         data ().readReady.connect (this, &@sn<current_class>::OnRecv);
+    #     }
+    #     data ().init(portName, baudRate, parity, dataBits, stopbits, flowControl, readBufferSize);
+    #     return data ().open();
+    # }
+    #
+    # inline_ bool isOpened()
+    # {
+    #     return data ().isOpened ();
+    # }
+    #
+    # inline_ void setOperateMode(int AsynchronousOperate)
+    # {
+    #     data ().setOperateMode ((itas109::OperateMode)AsynchronousOperate);
+    # }
+    #
+    # inline_ void Close ()
+    # {
+    #     data ().close ();
+    # }
+    # inline_ int SendData (const char* pdata, int maxSize)
+    # {
+    #     return data ().writeData(pdata, maxSize);
+    # }
+    # inline_ void OnRecv ()
+    # {
+    #     @<收到数据> ();
+    # }
+    # inline_ int ReadData (char* buffer, int nBufferSize)
+    # {
+    #     return  data ().readData (buffer, nBufferSize);
+    # }
+    # inline_ int ReadAllData (char* buffer)
+    # {
+    #     return data ().readAllData (buffer);
+    # }
+    # <> </include>
+    # @end
+
+    方法 打开 <公开 类型 = 逻辑型 注释 = "调用本方法可同时初始化并打开所指定串口设备,成功返回真,失败返回假." 注释 = "注意: 调用本方法前不需要调用\"初始化2\"方法." @禁止流程检查 = 真>
+    参数 串口名称 <类型 = 文本型 注释 = "提供串口名称">
+    参数 波特率 <类型 = 整数
+            注释 = "指定通信端口所使用的波特率,比较常用的波特率有：110,300,600,1200,2400,4800,9600,14400,19200,38400,56000,57600,115200,128000,256000."
+            @默认值 = 9600>
+    参数 数据位数 <类型 = 串口数据位 注释 = "提供串口数据位,默认为\"串口数据位.八\"." @默认值 = 串口数据位.八>
+    参数 校验方式 <类型 = 串口校验方式 注释 = "提供校验方式,默认为\"串口校验方式.无校验\"." @默认值 = 串口校验方式.无校验>
+    参数 停止位 <类型 = 串口停止位 注释 = "提供串口停止位,默认为\"串口停止位.一位\"." @默认值 = 串口停止位.一位>
+    参数 流控制 <类型 = 串口流控制 注释 = "提供串口流控制,默认为\"串口流控制.无\"." @默认值 = 串口流控制.无>
+    参数 读缓冲区大小 <类型 = 整数 注释 = "提供缓冲器大小,默认为512" @默认值 = 512>
+    {
+        @ return Open(GetMbsText(@<串口名称>, CVolMem(), NULL),@<波特率>,(itas109::Parity)@<校验方式>,(itas109::DataBits)@<数据位数>,(itas109::StopBits)@<停止位>,(itas109::FlowControl)@<流控制>,MAX (128, @<读缓冲区大小>));
+    }
+
+    方法 是否已打开 <公开 类型 = 逻辑型 注释 = "返回本对象是否已经打开了串口" @嵌入式方法 = "">
+    {
+        @ @sn<this>.isOpened()
+    }
+
+    方法 置操作方式 <公开 @嵌入式方法 = "">
+    参数 操作方式 <类型 = 串口操作方式>
+    {
+        @ @sn<this>.setOperateMode(@<操作方式>)
+    }
+
+    方法 置事件触发最小尺寸 <公开 @嵌入式方法 = "">
+    参数 最小尺寸 <类型 = 整数 注释 = "指定\"收到数据\"事件触发时所需要的最小接收到的数据尺寸,单位字节.">
+    {
+        @ @sn<this>.data().setMinByteReadNotify((unsigned int)@<最小尺寸>)
+    }
+
+    方法 取错误代码 <公开 类型 = 整数 注释 = "可以使用  串口错误代码 中的常量值来判断" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().getLastError()
+    }
+
+    方法 清除错误代码 <公开 注释 = "清除所有的错误代码" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().clearError()
+    }
+
+    方法 置串口名称 <公开>
+    参数 串口名称 <类型 = 文本型>
+    {
+        @ data().setPortName(GetMbsText(@<串口名称>, CVolMem(), NULL));
+    }
+
+    方法 取串口名称 <公开 类型 = 文本型 @嵌入式方法 = "">
+    {
+        @ CVolString( @sn<this>.data().getPortName().c_str())
+    }
+
+    方法 置波特率 <公开 @嵌入式方法 = "">
+    参数 波特率 <类型 = 整数>
+    {
+        @ @sn<this>.data().setBaudRate(@<波特率>)
+    }
+
+    方法 取波特率 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().getBaudRate()
+    }
+
+    方法 置校验位 <公开 @嵌入式方法 = "">
+    参数 校验位 <类型 = 串口校验方式>
+    {
+        @ @sn<this>.data().setParity((itas109::Parity)@<校验位>)
+    }
+
+    方法 取校验位 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.data().getParity()
+    }
+
+    方法 置数据位 <公开 @嵌入式方法 = "">
+    参数 数据位 <类型 = 串口数据位>
+    {
+        @ @sn<this>.data().setDataBits ((itas109::DataBits)@<数据位>)
+    }
+
+    方法 取数据位 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.data().getDataBits ()
+    }
+
+    方法 置停止位 <公开 @嵌入式方法 = "">
+    参数 数据位 <类型 = 串口停止位>
+    {
+        @ @sn<this>.data().setStopBits ((itas109::StopBits)@<数据位>)
+    }
+
+    方法 取停止位 <公开 类型 = 整数 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.data().getStopBits ()
+    }
+
+    方法 置流控制 <公开 @嵌入式方法 = "">
+    参数 流控制 <类型 = 串口流控制>
+    {
+        @ @sn<this>.data().setFlowControl ((itas109::FlowControl)@<流控制>)
+    }
+
+    方法 取流控制 <公开 类型 = 串口流控制 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.data().getFlowControl ()
+    }
+
+    方法 置DTR <公开 @嵌入式方法 = "">
+    参数 是否设置 <类型 = 逻辑型>
+    {
+        @ @sn<this>.data().setDtr (@<是否设置>)
+    }
+
+    方法 置RTS <公开 @嵌入式方法 = "">
+    参数 是否设置 <类型 = 逻辑型>
+    {
+        @ @sn<this>.data().setRts (@<是否设置>)
+    }
+
+    方法 置读缓冲区大小 <公开 @嵌入式方法 = "">
+    参数 大小 <类型 = 长整数>
+    {
+        @ @sn<this>.data().setReadBufferSize (@<大小>)
+    }
+
+    方法 取读缓冲区大小 <公开 类型 = 长整数 @嵌入式方法 = "">
+    {
+        @ (INT)@sn<this>.data().getReadBufferSize ()
+    }
+
+    方法 连接 <公开 注释 = " 本方法已经被废弃,保留仅用作兼容以前代码.">
+
+    方法 关闭 <公开 注释 = "关闭指定串口连接" @嵌入式方法 = "">
+    {
+        @ @sn<this>.Close ()
+    }
+
+    方法 发送指针数据 <公开 注释 = "发送指针数据到串口" @嵌入式方法 = "">
+    参数 数据指针 <类型 = 变整数 注释 = "提供要发送的数据指针">
+    参数 数据大小 <类型 = 整数 注释 = "提供要发送的数据大小">
+    {
+        @ @sn<this>.SendData ((const char* )@<数据指针>, @<数据大小>)
+    }
+
+    方法 发送数据 <公开 注释 = "发送字节集数据到串口">
+    参数 数据 <类型 = 字节集类 注释 = "提供要发送的字节集数据">
+    {
+        发送指针数据 (数据.取字节集指针 (), 数据.取字节集长度 ())
+    }
+
+    方法 取版本 <公开 类型 = 文本型 注释 = "取本地串口库版本号" @禁止流程检查 = 真>
+    {
+        @ return GetVesion().c_str();
+    }
+
+    方法 读取数据 <公开 类型 = 字节集类 注释 = "读取指定尺寸的数据,\"收到数据\"事件触发后才可使用本方法." @禁止流程检查 = 真>
+    参数 欲读取尺寸 <类型 = 整数>
+    {
+        @ CVolMem mem;
+        @ const int nReadSize = MAX (0, @<欲读取尺寸>);
+        @ int nRead = ReadData ((char*)mem.Alloc (nReadSize), nReadSize);
+        @ if (nRead <= 0)
+        @     mem.Free ();
+        @ else
+        @     mem.Realloc (nRead);
+        @ return mem;
+    }
+
+    方法 取可用串口 <公开 静态 类型 = 整数 注释 = "从注册表中获取系统中当前所有可用串口列表" 返回值注释 = "返回所获得串口名称的数目">
+    参数 结果存储参数 <类型 = 文本排序数组类 注释 = "本参数用作存储所有获得的串口名称">
+    {
+        结果存储参数.删除所有成员 ()
+        @ HKEY hkey;
+        @ if (SUCCEEDED (RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("Hardware\\DeviceMap\\SerialComm"), NULL, KEY_READ, &hkey)))
+        @ {
+        @     TCHAR portName [256], commName [256];
+        @     for (INT nIndex = 0; ; nIndex++)
+        @     {
+        @         DWORD dwSize = NUM_ELEMENTS_OF (portName);
+        @         DWORD dwLong = dwSize;
+        @         if (RegEnumValue (hkey, nIndex, portName, &dwLong, NULL, NULL, (LPBYTE)commName, &dwSize) != ERROR_SUCCESS)
+        @             break;
+        @         @<结果存储参数>.data ().Add (commName);
+        @     }
+        @     RegCloseKey (hkey);
+        @ }
+        返回 (结果存储参数.取成员数 ())
+    }
+
+    方法 枚举串口 <公开 注释 = "枚举并获取当前所有串口名称">
+    参数 结果存储参数 <类型 = 文本排序数组类 注释 = "本参数用作存储所有获得的串口名称">
+    {
+        @ std::vector<SerialPortInfo> m_availablePortsList = itas109::CSerialPortInfo::availablePortInfos();
+        @ for (int i = 0; i < m_availablePortsList.size(); i++)
+        @     @<结果存储参数>.data ().Add (m_availablePortsList[i].portName.c_str());
+    }
+
+    方法 收到数据 <公开 定义事件 类型 = 整数 注释 = " 当接收到串口发送的数据后,会触发本事件." 注释 = " 通过\"取所有数据\"方法可以读取收到的数据.">
+}
+
+类 串口操作方式 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 异步 <公开 值 = @"@itas109::OperateMode::AsynchronousOperate">
+    常量 同步 <公开 值 = @"@itas109::OperateMode::SynchronousOperate">
+}
+
+类 串口数据位 <公开 注释 = "提供串口数据位" @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 五 <公开 值 = 5>
+    常量 六 <公开 值 = 6>
+    常量 七 <公开 值 = 7>
+    常量 八 <公开 值 = 8>
+}
+
+类 串口流控制 <公开 注释 = "提供串口流控制" @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 无 <公开 值 = 0>
+    常量 硬件 <公开 值 = 1>
+    常量 软件 <公开 值 = 2>
+}
+
+类 串口停止位 <公开 注释 = "提供串口停止位" @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 一位 <公开 值 = 0 注释 = "1位停止位">
+    常量 一点五位 <公开 值 = 1 注释 = "1.5位停止位">
+    常量 二位 <公开 值 = 2 注释 = "2位停止位">
+}
+
+类 串口校验方式 <公开 注释 = "提供串口校验方式" @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 无校验 <公开 值 = 0>
+    常量 奇校验 <公开 值 = 1>
+    常量 偶校验 <公开 值 = 2>
+    常量 一校验 <公开 值 = 3>
+    常量 零校验 <公开 值 = 4>
+}
+
+类 串口错误代码 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 系统错误 <公开 值 = @"@itas109::SerialPortError::SystemError" 注释 = " 系统错误(如空指针、内存访问异常等)">
+    常量 无错误 <公开 值 = @"@itas109::SerialPortError::NoError">
+    常量 未找到设备 <公开 值 = @"@itas109::SerialPortError::DeviceNotFoundError">
+    常量 权限错误 <公开 值 = @"@itas109::SerialPortError::PermissionError">
+    常量 打开串口错误 <公开 值 = @"@itas109::SerialPortError::OpenError">
+    常量 校验位错误 <公开 值 = @"@itas109::SerialPortError::ParityError">
+    常量 数据帧错误 <公开 值 = @"@itas109::SerialPortError::FramingError">
+    常量 条件断点错误 <公开 值 = @"@itas109::SerialPortError::BreakConditionError">
+    常量 写数据错误 <公开 值 = @"@itas109::SerialPortError::WriteError">
+    常量 读数据错误 <公开 值 = @"@itas109::SerialPortError::ReadError">
+    常量 资源错误 <公开 值 = @"@itas109::SerialPortError::ResourceError">
+    常量 不支持操作 <公开 值 = @"@itas109::SerialPortError::UnsupportedOperationError">
+    常量 未知错误 <公开 值 = @"@itas109::SerialPortError::UnknownError">
+    常量 超时 <公开 值 = @"@itas109::SerialPortError::TimeoutError">
+    常量 串口未打开 <公开 值 = @"@itas109::SerialPortError::NotOpenError">
+    常量 无效参数 <公开 值 = @"@itas109::SerialPortError::InvalidParameterError">
+}

@@ -1,0 +1,53 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"开源库.纯真数据库\"" "" "" @视窗.附属文件 = "IPInfo\\IPInfoTool\\qqwry.dat"
+        @视窗.外部头文件 = "IPInfo\\IPInfoTool\\IPInfo.h" @视窗.外部源文件 = "IPInfo\\IPInfoTool\\IPInfo.cpp">
+
+类 纯真数据库类 <公开>
+{
+
+    # @begin
+    # <> <include>
+    #
+    # CIPInfo m_Info;
+    # <> </include>
+    # @end
+
+    方法 类_初始化
+    {
+        变量 目录 <类型 = 文本型>
+        目录 = 取运行目录f () + "\\qqwry.dat"
+        open (取文本指针 (目录))
+    }
+
+    方法 open
+    参数 文件目录 <类型 = 变整数>
+    {
+        @ m_Info.OpenW( (wchar_t*) @<文件目录> );
+    }
+
+    方法 类_清理
+    {
+        @ m_Info.Close();
+    }
+
+    方法 查询 <公开 类型 = 文本型 @禁止流程检查 = 真>
+    参数 IP地址 <类型 = 文本型>
+    {
+        变量 临时字节集 <类型 = 字节集类>
+        变量 文本指针 <类型 = 变整数>
+        变量 ""
+        变量 临时指针 <类型 = 变整数>
+        临时字节集 = 文本到多字节 (IP地址)
+        文本指针 = 临时字节集.取字节集指针 ()
+        @ char szAddr[100]={0};
+        @ m_Info.QueryIPA((char*)@<文本指针>,szAddr,100);
+        @ @<临时指针> = (INT_P)szAddr;
+        返回 (_编码_Ascii转Unicode_从指针 (临时指针))
+
+
+
+    }
+
+    #
+}

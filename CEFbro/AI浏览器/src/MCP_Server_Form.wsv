@@ -1,0 +1,258 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.程序
+
+# MCP_填表分派 — 从 MCP_Server.wsv 拆分 (L5)
+
+类 MCP_填表分派 <公开 @全局类 = 真>
+{
+    # === 分类分派: 填表操作 (FBrowser 官方填表框架 API) ===
+
+    方法 分类分派_填表操作 <公开 静态 类型 = 文本型>
+    参数 命令ID <类型 = 文本型>
+    参数 方法名 <类型 = 文本型>
+    参数 参数JSON <类型 = YYJSON只读对象类>
+    {
+        如果 (方法名 == "browser.fill_set_value" || 方法名 == "browser_fill_set_value")
+        {
+            变量 selector <类型 = 文本型>
+            selector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
+            变量 value <类型 = 文本型>
+            value = MCP命令服务器.yyjson取文本 (参数JSON, "value")
+            如果 (selector == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+            }
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 填表框架 <类型 = 类_FBrowser_填表框架>
+                填表框架 = browser.取主填表框架 ()
+                如果 (填表框架.是否有效 ())
+                {
+                    填表框架.置元素内容 (selector, 0, value)
+                    返回 (MCP命令服务器.命令成功 (命令ID, "已设置: " + selector))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, "填表框架无效"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fill_click" || 方法名 == "browser_fill_click")
+        {
+            变量 selector <类型 = 文本型>
+            selector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
+            如果 (selector == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+            }
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 填表框架 <类型 = 类_FBrowser_填表框架>
+                填表框架 = browser.取主填表框架 ()
+                如果 (填表框架.是否有效 ())
+                {
+                    填表框架.点击元素 (selector, 0)
+                    返回 (MCP命令服务器.命令成功 (命令ID, "已点击: " + selector))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, "填表框架无效"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fill_focus" || 方法名 == "browser_fill_focus")
+        {
+            变量 selector <类型 = 文本型>
+            selector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
+            如果 (selector == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+            }
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 填表框架 <类型 = 类_FBrowser_填表框架>
+                填表框架 = browser.取主填表框架 ()
+                如果 (填表框架.是否有效 ())
+                {
+                    填表框架.置元素焦点 (selector, 0, 真)
+                    返回 (MCP命令服务器.命令成功 (命令ID, "焦点已设置: " + selector))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, "填表框架无效"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fill_scroll" || 方法名 == "browser_fill_scroll")
+        {
+            变量 selector <类型 = 文本型>
+            selector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
+            如果 (selector == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+            }
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 填表框架 <类型 = 类_FBrowser_填表框架>
+                填表框架 = browser.取主填表框架 ()
+                如果 (填表框架.是否有效 ())
+                {
+                    填表框架.滚动到元素 (selector, 0, 真)
+                    返回 (MCP命令服务器.命令成功 (命令ID, "已滚动到: " + selector))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, "填表框架无效"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fill_exists" || 方法名 == "browser_fill_exists")
+        {
+            变量 selector <类型 = 文本型>
+            selector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
+            如果 (selector == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+            }
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 填表框架 <类型 = 类_FBrowser_填表框架>
+                填表框架 = browser.取主填表框架 ()
+                如果 (填表框架.是否有效 ())
+                {
+                    变量 异步存在ID <类型 = 文本型>
+                    异步存在ID = MCP命令服务器.生成异步任务ID ()
+                    变量 存在回调 <类型 = 类_FBrowser_事件智能指针>
+                    存在回调.创建 (类_MCP_JS异步回调)
+                    存在回调.取执行类 (类_MCP_JS异步回调).任务ID = 异步存在ID
+                    填表框架.元素是否存在 (selector, 0, 存在回调)
+                    返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步存在ID, "存在检查已提交, 通过mcp_result查询"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, "填表框架无效"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fill_attr_set" || 方法名 == "browser_fill_attr_set")
+        {
+            变量 selector <类型 = 文本型>
+            selector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
+            变量 attr <类型 = 文本型>
+            attr = MCP命令服务器.yyjson取文本 (参数JSON, "attribute")
+            变量 value <类型 = 文本型>
+            value = MCP命令服务器.yyjson取文本 (参数JSON, "value")
+            如果 (selector == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+            }
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 填表框架 <类型 = 类_FBrowser_填表框架>
+                填表框架 = browser.取主填表框架 ()
+                如果 (填表框架.是否有效 ())
+                {
+                    填表框架.置元素属性 (selector, 0, attr, value)
+                    返回 (MCP命令服务器.命令成功 (命令ID, "属性已设置: " + selector))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, "填表框架无效"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fill_attr_get" || 方法名 == "browser_fill_attr_get")
+        {
+            变量 selector <类型 = 文本型>
+            selector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
+            变量 attr <类型 = 文本型>
+            attr = MCP命令服务器.yyjson取文本 (参数JSON, "attribute")
+            如果 (selector == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+            }
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 填表框架 <类型 = 类_FBrowser_填表框架>
+                填表框架 = browser.取主填表框架 ()
+                如果 (填表框架.是否有效 ())
+                {
+                    变量 异步填表ID <类型 = 文本型>
+                    异步填表ID = MCP命令服务器.生成异步任务ID ()
+                    变量 填表回调 <类型 = 类_FBrowser_事件智能指针>
+                    填表回调.创建 (类_MCP_JS异步回调)
+                    填表回调.取执行类 (类_MCP_JS异步回调).任务ID = 异步填表ID
+                    填表框架.取元素属性 (selector, 0, attr, 填表回调)
+                    返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步填表ID, "属性获取已提交, 通过mcp_result查询"))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, "填表框架无效"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fill_trigger" || 方法名 == "browser_fill_trigger")
+        {
+            变量 selector <类型 = 文本型>
+            selector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
+            变量 eventType <类型 = 文本型>
+            eventType = MCP命令服务器.yyjson取文本 (参数JSON, "event")
+            如果 (eventType == "")
+            {
+                eventType = "click"
+            }
+            如果 (selector == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+            }
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 填表框架 <类型 = 类_FBrowser_填表框架>
+                填表框架 = browser.取主填表框架 ()
+                如果 (填表框架.是否有效 ())
+                {
+                    填表框架.触发元素事件 (selector, 0, eventType)
+                    返回 (MCP命令服务器.命令成功 (命令ID, "事件已触发: " + eventType + " -> " + selector))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, "填表框架无效"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fill_select" || 方法名 == "browser_fill_select")
+        {
+            变量 selector <类型 = 文本型>
+            selector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
+            变量 value <类型 = 文本型>
+            value = MCP命令服务器.yyjson取文本 (参数JSON, "value")
+            如果 (selector == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "selector " + MCP命令服务器.错误_缺少参数))
+            }
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 填表框架 <类型 = 类_FBrowser_填表框架>
+                填表框架 = browser.取主填表框架 ()
+                如果 (填表框架.是否有效 ())
+                {
+                    变量 选择状态 <类型 = 逻辑型>
+                    选择状态 = 真
+                    如果 (value == "false" || value == "0" || value == "off")
+                    {
+                        选择状态 = 假
+                    }
+                    填表框架.置元素选择框 (selector, 0, 选择状态)
+                    返回 (MCP命令服务器.命令成功 (命令ID, "select已设置: " + selector))
+                }
+                返回 (MCP命令服务器.命令失败 (命令ID, "填表框架无效"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, MCP命令服务器.错误_无浏览器))
+        }
+        返回 ("")
+    }
+    #
+}

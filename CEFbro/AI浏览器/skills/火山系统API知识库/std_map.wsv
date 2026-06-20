@@ -1,0 +1,276 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <注释 = "本模块来源于网络" 注释 = "切勿用作非法用途" @文档 = "category = \"STL.map\"" "">
+
+类 map <公开 @模板基础类 = 真 @视窗.外部头文件 = "<map>\n<algorithm>" "//@视窗.外部头文件" = "map\\mapTool.h">
+{
+
+    # @begin
+    #
+    #
+    # <> <include>
+    #
+    #          #define CFVol_map_FOR_ITERATOR(key,value, class_member_vecotr_data) \
+    #                     for(std::map<key,value>::iterator it = class_member_vecotr_data.begin(); it !=class_member_vecotr_data.end(); it++)
+    #          #define CFVol_map_FOR_REVERSE_ITERATOR(key,value,class_member_vecotr_data) \
+    #                     for(std::map<key,value>::reverse_iterator it = class_member_vecotr_data.rbegin(); it != class_member_vecotr_data.rend(); it++)
+    #
+    # inline_ void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     m_data = objCopyFrom.m_data;
+    # }
+    #
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const
+    # {
+    #     return m_data == objCompare.m_data;
+    # }
+    # std::map<@dt<模板类型1>, @dt<模板类型2>>& data()
+    # {
+    #  return m_data;
+    # }
+    #
+    # std::map<@dt<模板类型1>, @dt<模板类型2>> m_data;
+    #
+    # <> </include>
+    # @end
+
+    方法 取数量 <公开 类型 = 整数 注释 = "取数组成员数量" 折叠 @禁止流程检查 = 真>
+    {
+        @ return (INT)m_data.size();
+
+    }
+
+    方法 清空 <公开 注释 = "清空容器里面的所有成员，清空后 调用取数量得到的结果是0" 折叠 "">
+    {
+        @ m_data.clear();
+
+    }
+
+    方法 是否为空 <公开 类型 = 逻辑型 注释 = "测试容器里面是否有成员" 折叠 @禁止流程检查 = 真>
+    {
+        @ return m_data.empty();
+    }
+
+    方法 删除成员 <公开 类型 = 逻辑型 注释 = "删除 找到的 键    如果找到不到就不删除" 折叠>
+    参数 key <类型 = 模板类型1>
+    {
+        @ std::map<@dt<模板类型1>, @dt<模板类型2>>::iterator it = m_data.find (@<key>);
+        @ if (it != m_data.end ())
+        @ {
+        @     m_data.erase(it);
+        @     return true;
+        @ }
+        返回 (假)
+    }
+
+    方法 删除成员_从指定位置到结尾 <公开 类型 = 逻辑型 注释 = "如果找到 键对应的数据，则从此数据删除到末尾" 折叠>
+    参数 键 <类型 = 模板类型1>
+    {
+        @ std::map<@dt<模板类型1>, @dt<模板类型2>>::iterator it = m_data.find (@<键>);
+        @ if (it != m_data.end ())
+        @ {
+        @     m_data.erase(it,m_data.end());
+        @     return true;
+        @ }
+        返回 (假)
+
+
+    }
+
+    方法 是否存在 <公开 类型 = 逻辑型 注释 = "查找 键 是否存在" 折叠>
+    参数 键 <类型 = 模板类型1>
+    {
+        @ std::map<@dt<模板类型1>, @dt<模板类型2>>::iterator it = m_data.find (@<键>);
+        @ if (it != m_data.end ())
+        @ {
+        @     return true;
+        @ }
+        返回 (假)
+
+    }
+
+    方法 插入成员到尾部 <公开 注释 = "//在a的第1个元素（从第0个算起）的位置插入数值5，如a为1,2,3,4，插入元素后为1,5,2,3,4" 折叠>
+    参数 要加入的键 <类型 = 模板类型1>
+    参数 要加入的值 <类型 = 模板类型2>
+    {
+        @  m_data.insert (std::pair<@dt<模板类型1>, @dt<模板类型2>>(@<要加入的键>,@<要加入的值>) );
+
+    }
+
+    方法 加入成员 <公开>
+    参数 mp <类型 = map>
+    参数 加入到指定位置 <类型 = 整数 注释 = "-1表示加入到末尾，否则加入到指定位置 从0开始" @默认值 = -1>
+    {
+        @ m_data.insert(@<mp>.m_data.begin(),@<mp>.m_data.end());
+    }
+
+    方法 取值 <公开 类型 = 模板类型2 注释 = "根据键 取值" @禁止流程检查 = 真>
+    参数 索引 <类型 = 模板类型1>
+    {
+        @ return m_data[@<索引>];
+    }
+
+    方法 置值 <公开 折叠>
+    参数 键 <类型 = 模板类型1>
+    参数 值 <类型 = 模板类型2>
+    {
+        @ m_data[@<键>] = @<值>;
+    }
+
+    # //正向迭代方法----
+    #
+
+    方法 迭代正向 <公开 @嵌入式方法 = "name = FMap_Forward_Iterator\r\nhas_body = true">
+    {
+        @ CFVol_map_FOR_ITERATOR(@dt<模板类型1>,@dt<模板类型2>,@sn<this>.data())
+    }
+
+    方法 迭代反向 <公开 折叠 @嵌入式方法 = "name = FMap_Reverse_Iterator\r\nhas_body = true">
+    {
+        @ CFVol_map_FOR_REVERSE_ITERATOR(@dt<模板类型1>,@dt<模板类型2>,@sn<this>.data())
+
+    }
+
+    方法 迭代键 <公开 属性读 类型 = 模板类型1 @嵌入式方法 = "parent = \"FMap_Forward_Iterator,FMap_Reverse_Iterator\"">
+    {
+        @ it->first
+    }
+
+    方法 迭代值 <公开 属性读 类型 = 模板类型2 @嵌入式方法 = "parent = \"FMap_Forward_Iterator,FMap_Reverse_Iterator\"">
+    {
+        @ it->second
+    }
+
+    #
+
+    方法 替换 <公开 类型 = 整数 返回值注释 = "返回替换次数" 折叠 @禁止流程检查 = 真>
+    参数 欲查找的内容 <类型 = 模板类型1>
+    参数 用作替换的内容 <类型 = 模板类型1>
+    参数 查找开始位置 <类型 = 整数 注释 = "表示从首元素开始查找" @默认值 = 0>
+    参数 是否全部替换 <类型 = 逻辑型 @默认值 = 假>
+    {
+        @ std::vector< @dt<模板类型1> >::iterator it = m_data.end(); 
+        @ if(@<查找开始位置> <= 0)
+        @ {
+        @     it = std::find(m_data.begin(),m_data.end(),@<欲查找的内容>);
+        @ }else
+        @ {
+        @     it = std::find(m_data.begin()+@<查找开始位置>,m_data.end(),@<欲查找的内容>);
+        @ }
+        @ int nReplaceCount = 0;
+        @ do
+        @ {
+        @     if( it ==  m_data.end() )
+        @     {
+        @         return nReplaceCount;
+        @     }
+        @     *it = @<用作替换的内容>;
+        @     nReplaceCount++;
+        @     it++;
+        @     if(@<是否全部替换>)
+        @     {
+        @         it = std::find(it,m_data.end(),@<欲查找的内容>);
+        @     }
+        @ 
+        @ }while(@<是否全部替换>);
+        @ return nReplaceCount;
+
+    }
+
+    方法 交换 <公开 折叠>
+    参数 vt <类型 = map>
+    {
+        @ m_data.swap(@<vt>.m_data);
+    }
+
+    #
+    #
+    #
+}
+
+类 字典_文本型_文本型 <公开 基础类 = map @模板实现类 = "文本型,文本型">
+{
+
+    #
+}
+
+类 字典_整数型_整数型 <公开 基础类 = map @模板实现类 = "整数,整数">
+{
+
+    #
+}
+
+类 字典测试 <公开>
+{
+
+    #
+
+    方法 开始测试 <公开>
+    {
+
+        变量 kv <类型 = 字典_文本型_文本型>
+        // kv.是否为空 ()
+        kv.插入成员到尾部 ("name", "dasemimi")
+        kv.插入成员到尾部 ("name1", "dasemimi")
+        kv.置值 ("testkey", "testvalue")
+        调试输出 (kv.是否存在 ("name1"))
+
+        如果 (kv.是否存在 ("name1") == 假)
+        {
+            调试输出 (" 是否存在 函数测试未通过")
+        }
+
+        枚举字典 (kv, "-- 加入成员测试")
+        调试输出f (kv.删除成员_从指定位置到结尾 ("name1"))
+        枚举字典 (kv, "-- 删除 name1 指定成员和之后的值")
+
+        返回
+        // kv.反转 ()
+        枚举字典 (kv, "-- 反转字典顺序")
+
+        变量 kvz <类型 = 字典_整数型_整数型>
+        // kv.是否为空 ()
+        kvz.插入成员到尾部 (1, 2)
+        kvz.插入成员到尾部 (2, 3)
+        kvz.置值 (3, 4)
+
+        调试输出 (" 键 2 是否存在: " + 到文本 (kvz.是否存在 (2)))
+
+        枚举字典整数 (kvz, "-- 加入成员测试")
+        调试输出 (kv.删除成员_从指定位置到结尾 ("2"))
+        枚举字典整数 (kvz, "-- 删除 2 指定成员和之后的值")
+
+
+
+    }
+
+    方法 枚举字典
+    参数 map <类型 = 字典_文本型_文本型>
+    参数 要输出的内容 <类型 = 文本型 @默认值 = "">
+    {
+        调试输出f (要输出的内容)
+        map.迭代正向 ()
+        {
+            调试输出f (map.迭代键, map.迭代值)
+
+
+        }
+
+
+    }
+
+    方法 枚举字典整数
+    参数 map <类型 = 字典_整数型_整数型>
+    参数 要输出的内容 <类型 = 文本型 @默认值 = "">
+    {
+        调试输出 (要输出的内容)
+        map.迭代正向 ()
+        {
+            调试输出 (到文本 (map.迭代键) + " - " + 到文本 (map.迭代值))
+
+        }
+
+    }
+
+    #
+}

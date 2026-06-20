@@ -1,0 +1,3153 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.视窗.网络
+
+类 网络传输类 <公开 注释 = "★ 本类由\"飞翔的企鹅\"封装." 注释 = "" 注释 = "如果用户程序中调用了本类中的\"使用新版本\"静态方法,将使用 curl 8.15 版,其特性如下:"
+        注释 = "编译基于的相关库版本: curl 8.15.0-DEV (Windows) libcurl/8.15.0-DEV OpenSSL/3.5.0 zlib/1.3.1 brotli/1.1.0 zstd/1.5.7 WinIDN libssh2/1.11.1_DEV nghttp2/1.66.0 ;"
+        注释 = "所支持协议: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss ;"
+        注释 = "所支持特性: alt-svc AsynchDNS brotli HSTS HTTP2 HTTPS-proxy IDN IPv6 Largefile libz NTLM SSL threadsafe TLS-SRP Unicode UnixSockets zstd ."
+        注释 = "" 注释 = "如果用户程序中未调用本类中的\"使用新版本\"静态方法,将使用 curl 7.74 版,其特性如下:"
+        注释 = "编译基于的相关库版本: libcurl/7.74.0 OpenSSL/1.1.1h zlib/1.2.11 libssh2/1.9.0 ." 注释 = "" 编辑时信息 = "1E6A8C, 0, 0, 0"
+        @视窗.外部头文件 = "vol\\vol_curl.h" @视窗.外部源文件 = "vol\\vol_curl.cpp" @视窗.后缀文本 = "public IVolNoticeReceiver"
+        @视窗.使用静态运行时库.static = 真 @视窗.需求VS版本.static = "16-" "" "@视窗.头文件搜寻目录.d:!_VOL_CURL_VER2" = "lib\\curl_include"
+        "@视窗.附属文件.non_static - d:!_VOL_CURL_VER2" = "lib\\$(p)\\libcurl.dll\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\dll\\zlib1.dll"
+        "@视窗.外部库.non_static - d:!_VOL_CURL_VER2" = "lib\\$(p)\\libcurl.lib"
+        "@视窗.外部库.static - d:!_VOL_CURL_VER2" = "lib\\$(p)\\static\\libcurl-$(d).lib\r\nCrypt32.lib\r\nWldap32.lib\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\zlib-$(d).lib\r\nws2_32.lib"
+        "" "@视窗.头文件搜寻目录.d:_VOL_CURL_VER2" = "lib2\\curl_include"
+        "@视窗.附属文件.non_static - d:_VOL_CURL_VER2" = "lib2\\$(p)\\dll\\libcurl.dll"
+        "@视窗.外部库.non_static - d:_VOL_CURL_VER2" = "lib2\\$(p)\\dll\\libcurl.lib"
+        "@视窗.附属文件.static-debug - d:_VOL_CURL_VER2" = "lib2\\$(p)\\dll\\libcurl.dll"
+        "@视窗.外部库.static-debug - d:_VOL_CURL_VER2" = "lib2\\$(p)\\dll\\libcurl.lib"
+        "@视窗.外部库.static-release - d:_VOL_CURL_VER2" = "lib2\\$(p)\\lib\\libcurl-release.lib\r\nlib2\\$(p)\\lib\\brotlicommon.lib\r\nlib2\\$(p)\\lib\\brotlidec.lib\r\nlib2\\$(p)\\lib\\libcrypto.lib\r\nlib2\\$(p)\\lib\\libssh2.lib\r\nlib2\\$(p)\\lib\\libssl.lib\r\nlib2\\$(p)\\lib\\nghttp2.lib\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\zlib-$(d).lib\r\n..\\..\\shared\\extern_lib\\common\\zlib\\1\\$(p)\\zstd.lib\r\nwldap32.lib\r\nnormaliz.lib\r\nws2_32.lib\r\niphlpapi.lib\r\nbcrypt.lib\r\ncrypt32.lib\r\n">
+{
+    方法 使用新版本 <公开 静态 注释 = "调用本方法指示编译器使用curl最新8.15版进行编译(不支持静态火山模块链接方式),如果不调用本方法,将使用curl 7.74版进行编译. 具体参见\"网络传输类\"处的说明."
+            注释 = "注意: 本方法为编译时处理方法,系统在编译时只要检测到用户程序实际执行流程中任意位置调用了此方法,就启用对应的编译特性,和方法本身是否被执行到没有任何关系." 注释 = "" @视窗.预定义宏 = "_VOL_CURL_VER2"
+            @视窗.编译信息 = "基于 CURL 8.15 版本编译" "@视窗.预定义宏.static-release" = "CURL_STATICLIB">
+    {
+
+    }
+
+    常量 暂停数据写入 <公开 类型 = 整数 值 = @CURL_WRITEFUNC_PAUSE 注释 = "仅用于写入数据回调函数的返回值.">
+
+    # @begin
+    #
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CCurlWraper)
+    #
+    # //curl_easy_getinfo系列宏
+    # @ @def_macro GET_CHAR_INFO(info_type)                         \
+    #     @an<CVolString> volstr;                                   \
+    #     char * info = NULL;                                       \
+    #     curl_easy_getinfo(data().GetCurl(), info_type, &info);    \
+    #     if (info) volstr.SetText(info);                           \
+    #     return volstr;
+    #
+    # @ @def_macro GET_INT_INFO(info_type)                          \ 
+    #     long ret = 0;                                             \
+    #     curl_easy_getinfo(data().GetCurl(), info_type, &ret);     \
+    #     return (INT)ret;
+    #
+    # @ @def_macro GET_LONGLONG_INFO(info_type)                     \ 
+    #     curl_off_t ret = 0;                                       \
+    #     curl_easy_getinfo(data().GetCurl(), info_type, &ret);     \
+    #     return ret;
+    #
+    # @ @def_macro GET_DOUBLE_INFO(info_type)                       \ 
+    #     double ret = 0;                                           \
+    #     curl_easy_getinfo(data().GetCurl(), info_type, &ret);     \
+    #     return ret;
+    #
+    # <> <include>
+    # @ static void @an<_sOnBeforeAppInit> ()
+    # @ {
+    # @ #ifndef _VOL_DLL  // 在DLL中此处调用curl_global_init将可能死锁
+    # @     curl_global_init (CURL_GLOBAL_DEFAULT);
+    # @ #endif
+    # @ }
+    # @ static void @an<_sOnAfterAppExit> ()
+    # @ {
+    # @ #ifndef _VOL_DLL
+    # @     curl_global_cleanup ();
+    # @ #endif
+    # @ }
+    #
+    # inline_ static size_t WriteFn (char* data, size_t size, size_t nmemb, void * bin)  // 组装返回数据
+    # {
+    #     size_t realsize = size * nmemb;
+    #     ((@an<CVolMem>*)bin)->Append (data, (INT_P)realsize);  // 多次追加数据.
+    #     return realsize;
+    # }
+    #
+    # inline_ static size_t HeaderFn(char * buffer, size_t size, size_t nitems, void * arr)
+    # {
+    #     ((CMStringArray *)arr)->Add (GetWideText (buffer, CVolMem(), NULL));
+    #     return size * nitems;
+    # }
+    #
+    # typedef struct
+    # {
+    #     curl_off_t dltotal;
+    #     curl_off_t dlnow;
+    #     curl_off_t ultotal;
+    #     curl_off_t ulnow;
+    # } ProgressInfo;
+    #
+    # inline_ static int ProgressFn (void *clientp, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)
+    # {
+    #     ProgressInfo info = { dltotal, dlnow, ultotal, ulnow };
+    #     INT_P result;
+    #     ((@sn<current_class>*)clientp)->Notify (0, (INT_P)&info, 0, &result);
+    #     return (INT)result;
+    # }
+    #
+    # virtual INT_P OnNotify (INT_P npCode, INT_P npParam1, INT_P npParam2) override;
+    # <> </include>
+    #
+    # INT_P @sn<current_class>::OnNotify (INT_P npCode, INT_P npParam1, INT_P npParam2)
+    # {
+    #     const ProgressInfo* pInfo = (ProgressInfo*)npParam1;
+    #     return @<传输进度发生改变> (pInfo->dltotal, pInfo->dlnow, pInfo->ultotal, pInfo->ulnow);
+    # }
+    #
+    # @end
+
+    方法 传输进度发生改变 <公开 定义事件 类型 = 整数 注释 = "当传输进度发生改变时,本事件将被调用多次直到整个传输结束." 注释 = "本事件默认未被启用,如欲启用,请设置\"进度反馈\"属性值为真."
+            返回值注释 = "返回0继续传输,返回非0值中止传输.">
+    参数 下载总量 <类型 = 长整数 注释 = "预计需要下载的字节数">
+    参数 当前下载 <类型 = 长整数 注释 = "当前已下载的字节数">
+    参数 上传总量 <类型 = 长整数 注释 = "预计需要上传的字节数">
+    参数 当前上传 <类型 = 长整数 注释 = "当前已上传的字节数">
+
+    方法 全局初始化 <公开 静态 类型 = 整数 注释 = "该方法调用后将会初始化libcurl运行所需的程序环境." 注释 = "注意:" 注释 = "  1. 除非为编译DLL动态链接库,本方法不需要用户显式调用,系统类库会自动调用;"
+            注释 = "  2. 本方法必须与\"全局清理\"方法成对使用;" 注释 = "  3. 该方法非线程安全,请务必在程序主线程中主动调用,如果未主动调用,在使用任何功能时将会自动执行(不保证线程安全)."
+            返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @嵌入式方法 = "">
+    {
+        @ (INT)curl_global_init(CURL_GLOBAL_DEFAULT)
+    }
+
+    方法 全局清理 <公开 静态 注释 = "本方法调用后会释放libcurl所占用的资源,应该在程序退出前(不再使用该类进行网络访问时)调用." 注释 = "注意:"
+            注释 = "  1. 除非为编译DLL动态链接库,本方法不需要用户显式调用,系统类库会自动调用;" 注释 = "  2. 本方法必须与\"全局初始化\"方法成对使用;" 注释 = "  3. 该方法非线程安全,请务必在程序主线程中主动调用."
+            @嵌入式方法 = "">
+    {
+        @ curl_global_cleanup()
+    }
+
+    方法 取版本信息 <公开 静态 类型 = 文本型 注释 = "获取当前libcurl库的版本号信息." @嵌入式方法 = "">
+    {
+        @ @an<CVolString> (curl_version())
+    }
+
+    方法 取错误描述 <公开 静态 类型 = 文本型 注释 = "根据指定的返回值代码获取对应的描述内容." @嵌入式方法 = "">
+    参数 错误码 <类型 = 整数>
+    {
+        @ @an<CVolString> (curl_easy_strerror((CURLcode)@<错误码>))
+    }
+
+    # 属性 ---
+
+    方法 详细模式 <公开 属性写 注释 = "设置详细模式(通常在调试模式下启用,获取各种详细信息)的开关.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_VERBOSE, @<启用>);
+    }
+
+    方法 包含响应头输出 <公开 属性写 注释 = "指定返回内容中是否包含响应标头信息.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_HEADER, @<启用>);
+    }
+
+    方法 进度反馈 <公开 属性写 注释 = "是否启用进度反馈,只有启用了进度反馈,才会发送\"传输进度发生改变\"事件." 注释 = "本属性默认值为假(不启用).">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt (data ().GetCurl (), CURLOPT_NOPROGRESS, (@<启用> ? 0L : 1L));
+        @ if (@<启用>)
+        @     data ().SetXferinfoFunction ((INT_P)this, ProgressFn);
+        @ else
+        @     data ().SetXferinfoFunction (0, NULL);
+    }
+
+    方法 信号处理 <公开 属性写 注释 = "是否启用信号处理">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_NOSIGNAL, !@<启用>);
+    }
+
+    方法 通配符匹配 <公开 属性写 注释 = "是否启用目录通配符传输">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_WILDCARDMATCH, @<启用>);
+    }
+
+    方法 不跳过失败请求 <公开 属性写 注释 = "如果返回的HTTP响应码设置为400或大于400,启用该属性将会返回请求失败.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_FAILONERROR, @<启用>);
+    }
+
+    方法 忽略错误继续发送 <公开 属性写 注释 = "HTTP响应码>=300时,是否忽略错误继续发送请求体.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_KEEP_SENDING_ON_ERROR, @<启用>);
+    }
+
+    方法 地址 <公开 属性写 注释 = "设置所欲发送请求的目标网址.">
+    参数 内容 <类型 = 文本型 注释 = "例如:http://www.voldp.com/">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_URL, GetMbsText (@<内容>.GetText (), CVolMem(), NULL));
+    }
+
+    方法 不处理点序列 <公开 属性写 注释 = "是否不处理地址路径中的点序列,即\"../\".">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PATH_AS_IS, @<启用>);
+    }
+
+    方法 代理隧道传输 <公开 属性写 注释 = "是否启用代理隧道.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_HTTPPROXYTUNNEL, @<启用>);
+    }
+
+    方法 代理协商保护 <公开 属性写 注释 = "设置socks代理gssapi协商保护.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SOCKS5_GSSAPI_NEC, @<启用>);
+    }
+
+    方法 代理服务名称 <公开 属性写 注释 = "设置代理身份验证服务名称.">
+    参数 名称 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_SERVICE_NAME, (@<名称>.IsEmpty() ? NULL : GetMbsText (@<名称>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 认证服务名称 <公开 属性写 注释 = "设置认证服务名称.">
+    参数 名称 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SERVICE_NAME, (@<名称>.IsEmpty() ? NULL : GetMbsText (@<名称>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 网络接口名称 <公开 属性写 注释 = "设置所欲使用的网络接口.">
+    参数 接口名称 <类型 = 文本型 注释 = "例如:eth0,提供空文本表示恢复默认.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_INTERFACE, (@<接口名称>.IsEmpty() ? NULL : GetMbsText (@<接口名称>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 本地端口 <公开 属性写 注释 = "设置用于套接字的本地端口号.">
+    参数 端口号 <类型 = 整数>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_LOCALPORT, @<端口号>);
+    }
+
+    方法 本地端口范围 <公开 属性写 注释 = "设置要尝试的其他本地端口数.">
+    参数 数量 <类型 = 整数>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_LOCALPORTRANGE, @<数量>);
+    }
+
+    方法 DOH地址 <公开 属性写 注释 = "提供HTTPS上的DNS URL.">
+    参数 地址 <类型 = 文本型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_DOH_URL, GetMbsText (@<地址>.GetText (), CVolMem(), NULL));
+    }
+
+    方法 写入缓冲区尺寸 <公开 属性写 注释 = "指定写入数据缓冲区的尺寸.">
+    参数 尺寸 <类型 = 整数 注释 = "最大不能超过512kb,该参数单位为b.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_BUFFERSIZE, @<尺寸>);
+    }
+
+    方法 远程端口 <公开 属性写 注释 = "指定请求所欲使用的端口号.">
+    参数 端口 <类型 = 整数>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PORT, @<端口>);
+    }
+
+    方法 快速打开 <公开 属性写 注释 = "是否启用TCP快速打开.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_TCP_FASTOPEN, @<启用>);
+    }
+
+    方法 无延迟模式 <公开 属性写 注释 = "是否启用TCP无延迟模式.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_TCP_NODELAY, @<启用>);
+    }
+
+    方法 地址范围 <公开 属性写 注释 = "指定在连接到IPv6地址时要使用的作用域ID值.">
+    参数 范围 <类型 = 整数>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_ADDRESS_SCOPE, @<范围>);
+    }
+
+    方法 保活探测 <公开 属性写 注释 = "启用TCP保持活动探测(Keep-Alive).">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_TCP_KEEPALIVE, @<启用>);
+    }
+
+    方法 保活探测空闲超时 <公开 属性写 注释 = "设置TCP保持活动探测(Keep-Alive)空闲时间的超时等待.">
+    参数 超时 <类型 = 整数 注释 = "单位:秒.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_TCP_KEEPIDLE, @<超时>);
+    }
+
+    方法 保活探测间隔 <公开 属性写 注释 = "设置TCP保持活动探测(Keep-Alive)间隔时间.">
+    参数 间隔 <类型 = 整数 注释 = "单位:秒.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_TCP_KEEPINTVL, @<间隔>);
+    }
+
+    方法 UNIX套接字路径 <公开 属性写 注释 = "设置Unix域套接字">
+    参数 路径 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_UNIX_SOCKET_PATH, (@<路径>.IsEmpty() ? NULL : GetMbsText (@<路径>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 UNIX抽象套接字路径 <公开 属性写 注释 = "设置抽象的Unix域套接字.">
+    参数 路径 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_ABSTRACT_UNIX_SOCKET, (@<路径>.IsEmpty() ? NULL : GetMbsText (@<路径>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 DNS缓存超时 <公开 属性写 注释 = "设置DNS缓存条目的有效时间.">
+    参数 时长 <类型 = 整数 注释 = "单位:秒,为0表示禁用缓存,-1表示永久缓存.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_DNS_CACHE_TIMEOUT, @<时长>);
+    }
+
+    方法 允许协议 <公开 属性写 注释 = "设置允许使用的协议类型.">
+    参数 协议类型 <类型 = 整数 注释 = "请参考\"网络访问协议类型\"所提供的常量,可使用其单个或多个组合值." @默认值 = 网络访问协议类型.所有>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROTOCOLS, @<协议类型>);
+    }
+
+    方法 允许重定向协议 <公开 属性写 注释 = "设置允许重定向使用的协议类型.">
+    参数 协议类型 <类型 = 整数 注释 = "请参考\"网络访问协议类型\"所提供的常量,可使用其单个或多个组合值.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_REDIR_PROTOCOLS, @<协议类型>);
+    }
+
+    方法 默认协议名称 <公开 属性写 注释 = "当\"地址\"属性没有给出具体协议时,所欲使用的默认协议.">
+    参数 协议名称 <类型 = 文本型 注释 = "支持使用以下协议(方案)名称之一:"
+            注释 = "dict, file, ftp, ftps, gopher, http, https, imap, imaps, ldap, ldaps, pop3, pop3s, rtsp, scp, sftp, smb, smbs, smtp, smtps, telnet, tftp">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_DEFAULT_PROTOCOL, GetMbsText (@<协议名称>.GetText (), CVolMem(), NULL));
+    }
+
+    方法 代理地址 <公开 属性写 注释 = "设置所欲使用的代理地址,地址可包含协议名称以及端口号,也可单独设置.">
+    参数 地址 <类型 = 文本型 注释 = "支持多种代理协议(提供空文本表示禁用):" 注释 = "http://" 注释 = "https://" 注释 = "socks4://" 注释 = "socks4a://"
+            注释 = "socks5://" 注释 = "socks5h://">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY, (@<地址>.IsEmpty() ? NULL : GetMbsText (@<地址>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 前置代理地址 <公开 属性写 注释 = "设置所欲使用的前置代理(pre-proxy)地址,地址可包含协议名称以及端口号,也可单独设置.">
+    参数 地址 <类型 = 文本型 注释 = "仅支持使用socks系列协议,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY, (@<地址>.IsEmpty() ? NULL : GetMbsText (@<地址>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 代理端口 <公开 属性写 注释 = "设置所欲使用的代理端口.">
+    参数 端口 <类型 = 整数>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXYPORT, @<端口>);
+    }
+
+    方法 使用NETRC <公开 属性写 注释 = "请求使用.netrc">
+    参数 选项 <类型 = 整数 注释 = "可选项:"
+            注释 = "1,使用的〜/.netrc文件是可选的,并且在该URL信息将是优先的.将扫描该文件以查找主机和用户名(仅查找密码)或仅查找主机,以查找该机器之后的第一个用户名和密码(无论是否指定了信息)."
+            注释 = "2,将忽略〜/.netrc文件." 注释 = "3,必须使用〜/.netrc文件,并且URL中的信息将被忽略.将扫描该文件以查找主机和用户名(仅查找密码)或仅查找主机,以查找该机器之后的第一个用户名和密码(无论是否指定了信息).">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_NETRC, @<选项>);
+    }
+
+    方法 NETRC文件名 <公开 属性写 注释 = "设置所欲读取.netrc的文件名称.">
+    参数 文件名 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_NETRC_FILE, (@<文件名>.IsEmpty() ? NULL : GetMbsText (@<文件名>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 身份验证账号 <公开 属性写 注释 = "设置在身份验证中使用的用户名.">
+    参数 账号 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_USERNAME, (@<账号>.IsEmpty() ? NULL : GetMbsText (@<账号>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 身份验证密码 <公开 属性写 注释 = "设置在身份验证中使用的密码.">
+    参数 密码 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PASSWORD, (@<密码>.IsEmpty() ? NULL : GetMbsText (@<密码>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 代理身份验证账号 <公开 属性写 注释 = "设置在代理身份验证时使用的用户名.">
+    参数 账号 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXYUSERNAME, (@<账号>.IsEmpty() ? NULL : GetMbsText (@<账号>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 代理身份验证密码 <公开 属性写 注释 = "设置在代理身份验证时使用的密码.">
+    参数 密码 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXYPASSWORD, (@<密码>.IsEmpty() ? NULL : GetMbsText (@<密码>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 登录选项 <公开 属性写 注释 = "设置登录选项">
+    参数 选项 <类型 = 文本型 注释 = "例如:AUTH = * ,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_LOGIN_OPTIONS, (@<选项>.IsEmpty() ? NULL : GetMbsText (@<选项>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 服务器身份验证方案 <公开 属性写 注释 = "设置HTTP服务器身份验证方法.">
+    参数 方案 <类型 = 整数 注释 = "请参考\"身份验证方案\"所提供的常量.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_HTTPAUTH, @<方案>);
+    }
+
+    方法 代理身份验证方案 <公开 属性写 注释 = "设置HTTP代理身份验证方法.">
+    参数 方案 <类型 = 整数 注释 = "请参考\"身份验证方案\"所提供的常量.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXYAUTH, @<方案>);
+    }
+
+    方法 TLS身份验证账号 <公开 属性写 注释 = "设置用于TLS身份验证的用户名.">
+    参数 账号 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_TLSAUTH_USERNAME, (@<账号>.IsEmpty() ? NULL : GetMbsText (@<账号>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 TLS代理身份验证账号 <公开 属性写 注释 = "设置用于TLS代理身份验证的用户名.">
+    参数 账号 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_TLSAUTH_USERNAME, (@<账号>.IsEmpty() ? NULL : GetMbsText (@<账号>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 TLS身份验证密码 <公开 属性写 注释 = "设置用于TLS身份验证的密码.">
+    参数 密码 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_TLSAUTH_PASSWORD, (@<密码>.IsEmpty() ? NULL : GetMbsText (@<密码>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 TLS代理身份验证密码 <公开 属性写 注释 = "设置用于TLS代理身份验证的密码.">
+    参数 密码 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_TLSAUTH_PASSWORD, (@<密码>.IsEmpty() ? NULL : GetMbsText (@<密码>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 TLS身份验证方法 <公开 属性写 注释 = "设置所欲使用的TLS身份验证方法.">
+    参数 方法 <类型 = 文本型 注释 = "例如:SRP,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_TLSAUTH_TYPE, (@<方法>.IsEmpty() ? NULL : GetMbsText (@<方法>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 TLS代理身份验证方法 <公开 属性写 注释 = "设置所欲使用的TLS代理身份验证方法.">
+    参数 方法 <类型 = 文本型 注释 = "例如:SRP,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_TLSAUTH_TYPE , (@<方法>.IsEmpty() ? NULL : GetMbsText (@<方法>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SASL授权身份ID <公开 属性写 注释 = "设置授权身份,仅适用于\"IMAP,POP3和SMTP\"协议.">
+    参数 身份ID <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SASL_AUTHZID , (@<身份ID>.IsEmpty() ? NULL : GetMbsText (@<身份ID>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SASL发送初始响应 <公开 属性写 注释 = "是否在第一个数据包中发送初始响应.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SASL_IR, @<启用>);
+    }
+
+    方法 OAuth访问令牌 <公开 属性写 注释 = "指定OAuth 2.0访问令牌.">
+    参数 令牌 <类型 = 文本型 注释 = "例如:1ab9cb22ba269a7,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_XOAUTH2_BEARER , (@<令牌>.IsEmpty() ? NULL : GetMbsText (@<令牌>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 网址不含用户名 <公开 属性写 注释 = "禁止在网址中指定用户名.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_DISALLOW_USERNAME_IN_URL , @<启用>);
+    }
+
+    方法 自动更新来源地址 <公开 属性写 注释 = "是否启用自动更新来源地址(Referer).">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_AUTOREFERER , @<启用>);
+    }
+
+    方法 编码内容 <公开 属性写 注释 = "设置请求时所欲使用的\"Accept-Encoding\"头内容.">
+    参数 内容 <类型 = 文本型 注释 = "提供空对象表示禁用编码功能,提供空文本表示自动选择可用的编码方案.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_ACCEPT_ENCODING , (@<内容>.IsNullObject() ? NULL : GetMbsText (@<内容>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 传输编码 <公开 属性写 注释 = "HTTP请求传输编码.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_TRANSFER_ENCODING , @<启用>);
+    }
+
+    方法 遵循重定向 <公开 属性写 注释 = "是否在请求中遵循重定向.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_FOLLOWLOCATION , @<启用>);
+    }
+
+    方法 重定向后发送验证信息 <公开 属性写 注释 = "是否在重定向后继续将身份验证信息发送给重定向后的主机.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_UNRESTRICTED_AUTH , @<启用>);
+    }
+
+    方法 重定向最大次数 <公开 属性写 注释 = "设置允许的最大重定向数.">
+    参数 次数 <类型 = 整数 注释 = "提供-1则表示无限制.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_MAXREDIRS , @<次数>);
+    }
+
+    方法 POST重定向选项 <公开 属性写 注释 = "在进行POST请求时如有重定向,指定应如何处理.">
+    参数 选项 <类型 = 整数 注释 = "请参考\"POST重定向选项类型\"所提供的常量值.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_POSTREDIR , @<选项>);
+    }
+
+    方法 启用PUT请求 <公开 属性写 注释 = "是否指定为PUT方式请求.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PUT , @<启用>);
+    }
+
+    方法 启用POST请求 <公开 属性写 注释 = "是否指定为POST方式请求.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_POST , @<启用>);
+    }
+
+    方法 启用GET请求 <公开 属性写 注释 = "是否指定为GET方式请求.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_HTTPGET , @<启用>);
+    }
+
+    方法 来源地址 <公开 属性写 注释 = "设置请求时所欲使用的\"Referer\"头内容.">
+    参数 内容 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_REFERER , (@<内容>.IsEmpty() ? NULL : GetMbsText (@<内容>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 用户代理 <公开 属性写 注释 = "设置请求时所欲使用的\"User-Agent\"头内容.">
+    参数 内容 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_USERAGENT , (@<内容>.IsEmpty() ? NULL : GetMbsText (@<内容>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 HTTP版本 <公开 属性写 注释 = "指定所欲使用的HTTP协议版本.">
+    参数 版本 <类型 = 整数 注释 = "请参考\"HTTP协议版本\"所提供常量值.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_HTTP_VERSION , @<版本>);
+    }
+
+    方法 允许HTTP09响应 <公开 属性写 注释 = "设置是否允许HTTP / 0.9响应.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_HTTP09_ALLOWED , @<启用>);
+    }
+
+    方法 忽略内容长度属性 <公开 属性写 注释 = "设置是否忽略内容长度(Content-Length)属性.">
+    参数 忽略 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_IGNORE_CONTENT_LENGTH , @<忽略>);
+    }
+
+    方法 内容解码 <公开 属性写 注释 = "是否启用HTTP内容解码功能.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_HTTP_CONTENT_DECODING , @<启用>);
+    }
+
+    方法 传输解码 <公开 属性写 注释 = "是否启用HTTP传输解码功能.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_HTTP_TRANSFER_DECODING , @<启用>);
+    }
+
+    方法 预期超时间隔 <公开 属性写 注释 = "在预期超时后所欲等待重试的时间.">
+    参数 间隔 <类型 = 整数 注释 = "单位:毫秒.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_EXPECT_100_TIMEOUT_MS , @<间隔>);
+    }
+
+    方法 传输复用等待超时 <公开 属性写 注释 = "设置所欲等待传输连接复用的超时时间.">
+    参数 超时 <类型 = 整数 注释 = "默认为0(不启用).">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PIPEWAIT , @<超时>);
+    }
+
+    方法 SMTP发件人地址 <公开 属性写 注释 = "设置SMTP发件人地址.">
+    参数 地址 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_MAIL_FROM , (@<地址>.IsEmpty() ? NULL : GetMbsText (@<地址>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SMTP验证地址 <公开 属性写 注释 = "设置SMTP验证地址.">
+    参数 地址 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_MAIL_AUTH , (@<地址>.IsEmpty() ? NULL : GetMbsText (@<地址>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 忽略SMTP发送失败 <公开 属性写 注释 = "允许RCPT TO命令对于一些收件人发送失败.">
+    参数 忽略 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_MAIL_RCPT_ALLLOWFAILS , @<忽略>);
+    }
+
+    方法 TFTP数据块尺寸 <公开 属性写 注释 = "指定用于TFTP数据传输的块尺寸.">
+    参数 尺寸 <类型 = 整数 注释 = "范围:8-65464,单位:字节.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_TFTP_BLKSIZE , @<尺寸>);
+    }
+
+    方法 忽略TFTP选项 <公开 属性写 注释 = "不发送TFTP选项请求.">
+    参数 忽略 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_TFTP_NO_OPTIONS , @<忽略>);
+    }
+
+    方法 FTP连接端口 <公开 属性写 注释 = "连接到指定的IP地址(主机名,接口名称).">
+    参数 地址 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_FTPPORT , (@<地址>.IsEmpty() ? NULL : GetMbsText (@<地址>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 请求头发送方式 <公开 属性写 注释 = "设置请求头的作用方式.">
+    参数 方式 <类型 = 整数 注释 = "可选值:" 注释 = "0,使用\"置请求头\"方法设置的头将用于对服务器的所有请求,包括代理(默认)."
+            注释 = "1,使用\"置请求头\"方法设置的头仅用于对服务器的请求,发送给代理的请求头需要通过\"置代理请求头\"单独设置.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_HEADEROPT , @<方式>);
+    }
+
+    方法 ALTSVC缓存文件 <公开 属性写 注释 = "指定用作Alt-Svc缓存的文件.">
+    参数 文件 <类型 = 文本型 注释 = "例如:altsvc-cache.txt,提供空文本表示使用默认.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_ALTSVC , (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 ALTSVC缓存方式 <公开 属性写 注释 = "指定Alt-Svc缓存的方式.">
+    参数 方式 <类型 = 整数 注释 = "请参考\"ALTSVC缓存类型\"所提供的常量值.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_ALTSVC_CTRL , @<方式>);
+    }
+
+    方法 HSTS缓存文件 <公开 属性写 注释 = "指定用作HSTS(HTTP严格传输安全性)缓存的文件.">
+    参数 文件 <类型 = 文本型 注释 = "例如:/home/user/.hsts-cache,提供空文本表示使用默认.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_HSTS , (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 HSTS缓存方式 <公开 属性写 注释 = "指定HSTS(HTTP严格传输安全性)缓存的方式.">
+    参数 方式 <类型 = 整数 注释 = "请参考\"HSTS缓存类型\"所提供的常量值." "">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_HSTS_CTRL , @<方式>);
+    }
+
+    方法 允许FTP附加远程文件 <公开 属性写 注释 = "允许附加到远程文件.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_APPEND , @<启用>);
+    }
+
+    方法 允许使用EPRT <公开 属性写 注释 = "指定是否启用对FTP使用EPRT.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_FTP_USE_EPRT , @<启用>);
+    }
+
+    方法 允许使用EPSV <公开 属性写 注释 = "指定是否启用对FTP使用EPSV.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_FTP_USE_EPSV , @<启用>);
+    }
+
+    方法 允许使用PRET <公开 属性写 注释 = "指定是否启用对FTP使用PRET.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_FTP_USE_PRET , @<启用>);
+    }
+
+    方法 目录不存在时创建方案 <公开 属性写 注释 = "为FTP(SFTP)创建不存在的目录.">
+    参数 方案 <类型 = 整数 注释 = "请参考\"FTP目录创建方案\"所提供的常量值.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_FTP_CREATE_MISSING_DIRS , @<方案>);
+    }
+
+    方法 FTP响应超时 <公开 属性写 注释 = "设置等待FTP响应的超时时间.">
+    参数 超时 <类型 = 整数 注释 = "单位:秒">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_FTP_RESPONSE_TIMEOUT , @<超时>);
+    }
+
+    方法 FTP账户信息 <公开 属性写 注释 = "设置FTP的帐户信息.">
+    参数 账户 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_FTP_ACCOUNT, (@<账户>.IsEmpty() ? NULL : GetMbsText (@<账户>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 FTP遍历目录方案 <公开 属性写 注释 = "设置所欲使用的FTP目录遍历方法.">
+    参数 选项 <类型 = 整数 注释 = "请参考\"FTP遍历目录方案\"所提供的常量值.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_FTP_FILEMETHOD , @<选项>);
+    }
+
+    方法 RTSP请求方式 <公开 属性写 注释 = "设置指定的RTSP请求方式并使用.">
+    参数 请求方式 <类型 = 整数 注释 = "请参考\"RTSP请求方式\"所提供常量.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_RTSP_REQUEST , @<请求方式>);
+    }
+
+    方法 RTSP会话ID <公开 属性写 注释 = "设置RTSP会话ID.">
+    参数 会话 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_RTSP_SESSION_ID , (@<会话>.IsEmpty() ? NULL : GetMbsText (@<会话>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 RTSP流资源标识符 <公开 属性写 注释 = "设置RTSP流URI">
+    参数 资源标识 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_RTSP_STREAM_URI , (@<资源标识>.IsEmpty() ? NULL : GetMbsText (@<资源标识>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 RTSP传输头内容 <公开 属性写 注释 = "设置RTSP请求的\"Transport\"头内容.">
+    参数 传输 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_RTSP_TRANSPORT , (@<传输>.IsEmpty() ? NULL : GetMbsText (@<传输>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 RTSP客户端CSEQ编号 <公开 属性写 注释 = "设置RTSP客户端CSEQ编号.">
+    参数 编号 <类型 = 整数>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_RTSP_CLIENT_CSEQ , @<编号>);
+    }
+
+    方法 RTSP服务器CSEQ编号 <公开 属性写 注释 = "设置RTSP服务器CSEQ编号.">
+    参数 编号 <类型 = 整数>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_RTSP_SERVER_CSEQ , @<编号>);
+    }
+
+    方法 FTP文本传输 <公开 属性写 注释 = "设置FTP传输模式为文本内容,而非二进制内容.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_TRANSFERTEXT , @<启用>);
+    }
+
+    方法 FTP代理传输 <公开 属性写 注释 = "将代理应用到FTP的传输模式.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_TRANSFER_MODE , @<启用>);
+    }
+
+    方法 FTP安全级别 <公开 属性写 注释 = "设置FTP Kerberos安全级别.">
+    参数 级别 <类型 = 文本型 注释 = "可选值:\"clear\",\"safe\",\"confidential\",\"private\"">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_KRBLEVEL , (@<级别>.IsEmpty() ? NULL : GetMbsText (@<级别>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 CRLF转换 <公开 属性写 注释 = "指定是否将Unix换行符转换为CRLF换行符.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_CRLF , @<启用>);
+    }
+
+    方法 请求数据范围 <公开 属性写 注释 = "设置要请求的字节范围.">
+    参数 范围 <类型 = 文本型 注释 = "例如:0-199,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_RANGE , (@<范围>.IsEmpty() ? NULL : GetMbsText (@<范围>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 恢复传输 <公开 属性写 注释 = "从指定的位置恢复传输.">
+    参数 恢复点 <类型 = 长整数 注释 = "提供所欲恢复传输的位置,为0表示从头开始传输.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_RESUME_FROM_LARGE , @<恢复点>);
+    }
+
+    方法 忽略PASV响应IP <公开 属性写 注释 = "指定是否忽略PASV响应中的IP地址.">
+    参数 忽略 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_FTP_SKIP_PASV_IP , @<忽略>);
+    }
+
+    方法 FTP安全连接方案 <公开 属性写 注释 = "设置使用FTP时尝试TLS与SSL的顺序.">
+    参数 选项 <类型 = 整数 注释 = "请参考\"FTP安全连接方案\"所提供的常量值.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_FTPSSLAUTH , @<选项>);
+    }
+
+    方法 允许获取文档时间 <公开 属性写 注释 = "指定是否请求远程文档资源的修改时间,设置允许以在请求后使用\"取文档时间\"属性获取时间.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_FILETIME , @<启用>);
+    }
+
+    方法 仅获取目录文件名 <公开 属性写 注释 = "对于基于FTP和SFTP的请求,为真时将列出目录中文件的名称.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_DIRLISTONLY , @<启用>);
+    }
+
+    方法 忽略主体请求 <公开 属性写 注释 = "是否忽略主体(NOBODY)进行请求.">
+    参数 忽略 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_NOBODY , @<忽略>);
+    }
+
+    方法 上传文件预期尺寸 <公开 属性写 注释 = "在进行文件上传时,使用该属性告知服务器文件的预期大小." 注释 = "注意:该属性并不会限制上传文件数据的尺寸.">
+    参数 文件尺寸 <类型 = 长整数>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_INFILESIZE_LARGE , @<文件尺寸>);
+    }
+
+    方法 启用文件上传 <公开 属性写 注释 = "指定本次请求为上传文件.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_UPLOAD , @<启用>);
+    }
+
+    方法 上传缓冲区尺寸 <公开 属性写 注释 = "设置首选的上传缓冲区大小">
+    参数 尺寸 <类型 = 整数 注释 = "单位:字节,最大不允许超过2M.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_UPLOAD_BUFFERSIZE , @<尺寸>);
+    }
+
+    方法 下载文件最大尺寸 <公开 属性写 注释 = "允许下载的最大文件大小,如果超出该限制,将不会下载目标文件.">
+    参数 尺寸 <类型 = 长整数 注释 = "单位:字节.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_MAXFILESIZE_LARGE , @<尺寸>);
+    }
+
+    方法 请求超时 <公开 属性写 注释 = "设置完成整个请求的超时时间.">
+    参数 超时 <类型 = 整数 注释 = "单位:毫秒,为0表示无限制.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_TIMEOUT_MS , @<超时>);
+    }
+
+    方法 连接超时 <公开 属性写 注释 = "设置在连接到服务器阶段的超时时间.">
+    参数 超时 <类型 = 整数 注释 = "单位:毫秒,为0表示默认使用300秒.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_CONNECTTIMEOUT_MS , @<超时>);
+    }
+
+    方法 服务器响应超时 <公开 属性写 注释 = "设置当发送命令到服务器后等待服务器响应的超时时间,在此时本属性值将覆盖\"请求超时\"属性值."
+            注释 = "仅在使用 FTP, IMAP, POP3, SMTP 协议时有效,一般情况下可以将本属性值设置为小于\"请求超时\"属性的值.">
+    参数 响应超时时间 <类型 = 整数 注释 = "单位:毫秒. 小于等于0表示未设置,默认值为0.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SERVER_RESPONSE_TIMEOUT, @<响应超时时间> / 1000);
+    }
+
+    方法 解析IP版本 <公开 属性写 注释 = "指定所欲使用的IP协议版本.">
+    参数 选项 <类型 = 整数 注释 = "可选值:" 注释 = "0,默认使用系统支持." 注释 = "1,IPV4" 注释 = "2,IPV6">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_IPRESOLVE , @<选项>);
+    }
+
+    方法 仅连接 <公开 属性写 注释 = "表示仅连接到服务器,不进行任何数据传输.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_CONNECT_ONLY , @<启用>);
+    }
+
+    方法 启用SSL级别 <公开 属性写 注释 = "指定使用SSL/TLS进行请求并指定使用等级.">
+    参数 级别 <类型 = 整数 注释 = "可选值:" 注释 = "0,不要尝试使用SSL." 注释 = "1,尝试使用SSL." 注释 = "2,控制使用SSL连接." 注释 = "3,强制所有使用SSL.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_USE_SSL , @<级别>);
+    }
+
+    方法 低速限制 <公开 属性写 注释 = "设定一个最低速度的限制,通常与\"低速超时\"属性同时使用." 注释 = "如果在\"低速超时\"时间内平均传输速度低于\"低速限制\"的速度,将会认定为超时并终止传输过程.">
+    参数 速度 <类型 = 整数 注释 = "单位:字节/秒.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_LOW_SPEED_LIMIT , @<速度>);
+    }
+
+    方法 低速超时 <公开 属性写 注释 = "设置在低速传输情况下,持续时间后超时终止的超时时间.">
+    参数 超时 <类型 = 整数 注释 = "单位:秒,0表示不限制.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_LOW_SPEED_TIME , @<超时>);
+    }
+
+    方法 最大上传速度 <公开 属性写 注释 = "限定一个最大上传速度,传输过程中上传速度不会大于该限制.">
+    参数 最大速度 <类型 = 长整数 注释 = "单位:字节/秒,为0表示不限制.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_MAX_SEND_SPEED_LARGE , @<最大速度>);
+    }
+
+    方法 最大下载速度 <公开 属性写 注释 = "限定一个最大下载速度,传输过程中下载速度不会大于该限制.">
+    参数 最大速度 <类型 = 长整数 注释 = "单位:字节/秒,为0表示不限制.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_MAX_RECV_SPEED_LARGE , @<最大速度>);
+    }
+
+    方法 连接池最大连接数 <公开 属性写 注释 = "设置缓存的最大连接数.">
+    参数 最大连接 <类型 = 整数>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_MAXCONNECTS , @<最大连接>);
+    }
+
+    方法 强制使用新连接 <公开 属性写 注释 = "指定本次请求强制使用新的连接.">
+    参数 强制 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_FRESH_CONNECT , @<强制>);
+    }
+
+    方法 请求后立即关闭 <公开 属性写 注释 = "指定在请求后立即关闭该连接(默认情况下会缓存一段时间不关闭).">
+    参数 关闭 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_FORBID_REUSE , @<关闭>);
+    }
+
+    方法 连接缓存超时 <公开 属性写 注释 = "指定一个连接最大的缓存时间.">
+    参数 超时 <类型 = 整数 注释 = "单位:秒.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_MAXAGE_CONN , @<超时>);
+    }
+
+    方法 DNS随机排列地址 <公开 属性写 注释 = "设置当返回多个主机名时,随机排序地址.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_DNS_SHUFFLE_ADDRESSES , @<启用>);
+    }
+
+    方法 FTP服务器重连超时 <公开 属性写 注释 = "设置等待FTP服务器重新连接的超时时间.">
+    参数 超时 <类型 = 整数 注释 = "单位:毫秒.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_ACCEPTTIMEOUT_MS , @<超时>);
+    }
+
+    方法 连接维护检查间隔 <公开 属性写 注释 = "设置连接维护检查的时间间隔." @禁止流程检查 = 真>
+    参数 间隔 <类型 = 整数 注释 = "单位:毫秒.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_UPKEEP_INTERVAL_MS , @<间隔>);
+    }
+
+    方法 SSL客户端证书文件 <公开 属性写 注释 = "设置从文件加载所欲使用的SSL客户端证书.">
+    参数 文件 <类型 = 文本型 注释 = "提供SSL证书文件,例如:client.pem,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSLCERT, (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSL代理客户端证书文件 <公开 属性写 注释 = "设置从文件加载所欲使用的SSL代理客户端证书.">
+    参数 文件 <类型 = 文本型 注释 = "提供SSL证书文件,例如:client.pem,提供文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_SSLCERT, (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSL客户端证书 <公开 属性写 注释 = "设置从内存中加载所欲使用的SSL客户端证书数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供证书数据,提供空对象表示禁用.">
+    {
+        @ if (@<数据>.IsNullObject())
+        @ {
+        @     curl_easy_setopt(data().GetCurl(), CURLOPT_SSLCERT_BLOB, NULL);
+        @     return;
+        @ }
+        @ struct curl_blob stblob;
+        @ stblob.data = @<数据>.GetPtr();
+        @ stblob.len = (size_t)@<数据>.GetSize();
+        @ stblob.flags = CURL_BLOB_COPY;    //拷贝传递,不必保留该结构体
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSLCERT_BLOB, &stblob);
+    }
+
+    方法 SSL代理客户端证书 <公开 属性写 注释 = "设置从内存中加载所欲使用的SSL代理客户端证书数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供证书数据,提供空对象表示禁用.">
+    {
+        @ if (@<数据>.IsNullObject())
+        @ {
+        @     curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_SSLCERT_BLOB, NULL);
+        @     return;
+        @ }
+        @ struct curl_blob stblob;
+        @ stblob.data = @<数据>.GetPtr();
+        @ stblob.len = (size_t)@<数据>.GetSize();
+        @ stblob.flags = CURL_BLOB_COPY;
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_SSLCERT_BLOB, &stblob);
+    }
+
+    方法 SSL客户端证书类型 <公开 属性写 注释 = "指定客户端SSL证书的类型.">
+    参数 证书类型 <类型 = 文本型 注释 = "指定证书的类型,例如:PEM,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSLCERTTYPE, (@<证书类型>.IsEmpty() ? NULL : GetMbsText (@<证书类型>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSL代理客户端证书类型 <公开 属性写 注释 = "指定代理客户端SSL证书的类型.">
+    参数 证书类型 <类型 = 文本型 注释 = "指定证书的类型,例如:PEM,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_SSLCERTTYPE, (@<证书类型>.IsEmpty() ? NULL : GetMbsText (@<证书类型>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSL客户端私钥文件 <公开 属性写 注释 = "为TLS和SSL客户端证书指定私钥文件.">
+    参数 文件 <类型 = 文本型 注释 = "提供私钥文件,例如:key.pem,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSLKEY, (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSL客户端私钥 <公开 属性写 注释 = "为TLS和SSL客户端证书指定私钥数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加载的私钥数据,提供空对象表示禁用.">
+    {
+        @ if (@<数据>.IsNullObject())
+        @ {
+        @     curl_easy_setopt(data().GetCurl(), CURLOPT_SSLKEY_BLOB, NULL);
+        @     return;
+        @ }
+        @ struct curl_blob stblob;
+        @ stblob.data = @<数据>.GetPtr();
+        @ stblob.len = (size_t)@<数据>.GetSize();
+        @ stblob.flags = CURL_BLOB_COPY;
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSLKEY_BLOB, &stblob);
+    }
+
+    方法 SSL代理客户端私钥文件 <公开 属性写 注释 = "为TLS和SSL代理客户端证书指定私钥文件.">
+    参数 文件 <类型 = 文本型 注释 = "提供私钥文件,例如:key.pem,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_SSLKEY, (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSL代理客户端私钥 <公开 属性写 注释 = "为TLS和SSL代理客户端证书指定私钥数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲加载的私钥数据,提供空对象表示禁用.">
+    {
+        @ if (@<数据>.IsNullObject())
+        @ {
+        @     curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_SSLKEY_BLOB, NULL);
+        @     return;
+        @ }
+        @ struct curl_blob stblob;
+        @ stblob.data = @<数据>.GetPtr();
+        @ stblob.len = (size_t)@<数据>.GetSize();
+        @ stblob.flags = CURL_BLOB_COPY;
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_SSLKEY_BLOB, &stblob);
+    }
+
+    方法 SSL客户端私钥类型 <公开 属性写 注释 = "指定私钥的类型.">
+    参数 私钥类型 <类型 = 文本型 注释 = "例如:PEM,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSLKEYTYPE, (@<私钥类型>.IsEmpty() ? NULL : GetMbsText (@<私钥类型>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSL客户端私钥密码 <公开 属性写 注释 = "指定所欲使用的SSL客户端私钥的密码.">
+    参数 密码 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_KEYPASSWD, (@<密码>.IsEmpty() ? NULL : GetMbsText (@<密码>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSL代理客户端私钥密码 <公开 属性写 注释 = "指定所欲使用的SSL代理客户端私钥的密码.">
+    参数 密码 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_KEYPASSWD, (@<密码>.IsEmpty() ? NULL : GetMbsText (@<密码>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSL密钥交换算法 <公开 属性写 注释 = "设置密钥交换算法列表.">
+    参数 算法 <类型 = 文本型 注释 = "例如:X25519:P-521,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSL_EC_CURVES, (@<算法>.IsEmpty() ? NULL : GetMbsText (@<算法>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSL加密引擎标识 <公开 属性写 注释 = "提供所欲使用的SSL加密引擎标识符.">
+    参数 标识 <类型 = 文本型 注释 = "例如:dynamic,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSLENGINE, (@<标识>.IsEmpty() ? NULL : GetMbsText (@<标识>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSL握手假启动 <公开 属性写 注释 = "在TLS握手期间使用假启动.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSL_FALSESTART, @<启用>);
+    }
+
+    方法 SSL版本 <公开 属性写 注释 = "设置所欲使用的SSL版本.">
+    参数 版本 <类型 = 整数 注释 = "请参考\"SSL版本类型\"所提供的常量.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSLVERSION, @<版本>);
+    }
+
+    方法 代理SSL版本 <公开 属性写 注释 = "设置代理所欲使用的SSL版本.">
+    参数 版本 <类型 = 整数 注释 = "请参考\"SSL版本类型\"所提供的常量.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_SSLVERSION, @<版本>);
+    }
+
+    方法 SSL验证证书主机名 <公开 属性写 注释 = "是否严格检查服务器证书的声明身份.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSL_VERIFYHOST, @<启用>);
+    }
+
+    方法 SSL代理验证证书主机名 <公开 属性写 注释 = "是否严格检查代理服务器证书的声明身份.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_SSL_VERIFYHOST, @<启用>);
+    }
+
+    方法 SSL证书检查 <公开 属性写 注释 = "是否进行严格的证书检查.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSL_VERIFYPEER, @<启用>);
+    }
+
+    方法 SSL代理证书检查 <公开 属性写 注释 = "是否进行严格的代理证书检查.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_SSL_VERIFYPEER, @<启用>);
+    }
+
+    方法 SSL验证证书状态 <公开 属性写 注释 = "指定是否验证证书的状态.">
+    参数 启用 <类型 = 逻辑型 注释 = "注意需要服务器支持TLS扩展.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSL_VERIFYSTATUS, @<启用>);
+    }
+
+    方法 CA证书信息文件 <公开 属性写 注释 = "指定证书颁发机构(CA)软件包的路径.">
+    参数 文件 <类型 = 文本型 注释 = "例如:/etc/certs/cabundle.pem,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_CAINFO, (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 代理CA证书信息文件 <公开 属性写 注释 = "指定证书颁发机构(CA)软件包的路径.">
+    参数 文件 <类型 = 文本型 注释 = "例如:/etc/certs/cabundle.pem,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_CAINFO, (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 CA证书目录 <公开 属性写 注释 = "指定包含CA证书的目录.">
+    参数 目录 <类型 = 文本型 注释 = "例如:/etc/cert-dir,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_CAPATH, (@<目录>.IsEmpty() ? NULL : GetMbsText (@<目录>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 代理CA证书目录 <公开 属性写 注释 = "指定包含代理CA证书的目录.">
+    参数 目录 <类型 = 文本型 注释 = "例如:/etc/cert-dir,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_CAPATH, (@<目录>.IsEmpty() ? NULL : GetMbsText (@<目录>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 证书吊销列表文件 <公开 属性写 注释 = "指定证书吊销列表文件.">
+    参数 文件 <类型 = 文本型 注释 = "例如:/etc/certs/crl.pem,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_CRLFILE, (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 代理证书吊销列表文件 <公开 属性写 注释 = "指定代理证书吊销列表文件.">
+    参数 文件 <类型 = 文本型 注释 = "例如:/etc/certs/crl.pem,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_CRLFILE, (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 请求SSL证书信息 <公开 属性写 注释 = "指定本次请求是否获取SSL证书信息.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_CERTINFO, @<启用>);
+    }
+
+    方法 SSL固定公钥 <公开 属性写 注释 = "指定一个固定公钥,在进行SSL连接时如果提取的公钥不匹配将会终止连接.">
+    参数 公钥 <类型 = 文本型 注释 = "例如:sha256//YhKJKSzoTt2b5FP18fvpHo7fJYqQCjAa3HWY3tvRMwE= ,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PINNEDPUBLICKEY, (@<公钥>.IsEmpty() ? NULL : GetMbsText (@<公钥>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSL代理固定公钥 <公开 属性写 注释 = "指定一个固定公钥,在进行SSL代理连接时如果提取的公钥不匹配将会终止连接.">
+    参数 公钥 <类型 = 文本型 注释 = "例如:sha256//YhKJKSzoTt2b5FP18fvpHo7fJYqQCjAa3HWY3tvRMwE= ,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_PINNEDPUBLICKEY, (@<公钥>.IsEmpty() ? NULL : GetMbsText (@<公钥>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSL随机数种子 <公开 属性写 注释 = "指定随机数据的来源.">
+    参数 文件 <类型 = 文本型 注释 = "例如:junk.txt,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_RANDOM_FILE, (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 EDG套接字路径 <公开 属性写 注释 = "设置EGD套接字路径">
+    参数 路径 <类型 = 文本型 注释 = "例如:/var/egd.socket,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_EGDSOCKET, (@<路径>.IsEmpty() ? NULL : GetMbsText (@<路径>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSL加密列表 <公开 属性写 注释 = "指定用于TLS的加密方式列表.">
+    参数 内容 <类型 = 文本型 注释 = "例如:TLSv1,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSL_CIPHER_LIST, (@<内容>.IsEmpty() ? NULL : GetMbsText (@<内容>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 TLS13加密套件列表 <公开 属性写 注释 = "指定用于TLS 1.3的密码套件,更多内容可参考链接:https://curl.se/docs/ssl-ciphers.html">
+    参数 内容 <类型 = 文本型 注释 = "例如:TLS13-CHACHA20-POLY1305-SHA256, 提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_TLS13_CIPHERS, (@<内容>.IsEmpty() ? NULL : GetMbsText (@<内容>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 TLS13代理加密套件列表 <公开 属性写 注释 = "指定用于TLS 1.3代理的密码套件,更多内容可参考链接:https://curl.se/docs/ssl-ciphers.html">
+    参数 内容 <类型 = 文本型 注释 = "例如:TLS13-CHACHA20-POLY1305-SHA256, 提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_TLS13_CIPHERS, (@<内容>.IsEmpty() ? NULL : GetMbsText (@<内容>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSL会话ID缓存 <公开 属性写 注释 = "指定是否启用SSL会话ID缓存.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSL_SESSIONID_CACHE, @<启用>);
+    }
+
+    方法 CA证书文件 <公开 属性写 注释 = "指定颁发者SSL证书文件名.">
+    参数 文件 <类型 = 文本型 注释 = "例如:/etc/certs/cacert.pem, 提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_ISSUERCERT, (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 代理CA证书文件 <公开 属性写 注释 = "指定颁发者SSL代理证书文件名.">
+    参数 文件 <类型 = 文本型 注释 = "例如:/etc/certs/cacert.pem, 提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_ISSUERCERT, (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 CA证书数据 <公开 属性写 注释 = "指定颁发者SSL证书文件数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供空对象表示禁用.">
+    {
+        @ if (@<数据>.IsNullObject())
+        @ {
+        @     curl_easy_setopt(data().GetCurl(), CURLOPT_ISSUERCERT_BLOB, NULL);
+        @     return;
+        @ }
+        @ struct curl_blob stblob;
+        @ stblob.data = @<数据>.GetPtr();
+        @ stblob.len = (size_t)@<数据>.GetSize();
+        @ stblob.flags = CURL_BLOB_COPY;
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_ISSUERCERT_BLOB, &stblob);
+    }
+
+    方法 代理CA证书数据 <公开 属性写 注释 = "指定颁发者SSL代理证书文件数据.">
+    参数 数据 <类型 = 字节集类 注释 = "提供空对象表示禁用.">
+    {
+        @ if (@<数据>.IsNullObject())
+        @ {
+        @     curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_ISSUERCERT_BLOB, NULL);
+        @     return;
+        @ }
+        @ struct curl_blob stblob;
+        @ stblob.data = @<数据>.GetPtr();
+        @ stblob.len = (size_t)@<数据>.GetSize();
+        @ stblob.flags = CURL_BLOB_COPY;
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_ISSUERCERT_BLOB, &stblob);
+    }
+
+    方法 启用ALPN <公开 属性写 注释 = "指定是否启用SSL握手中的ALPN选项.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSL_ENABLE_ALPN, @<启用>);
+    }
+
+    方法 启用NPN <公开 属性写 注释 = "指定是否启用SSL握手中的NPN选项.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSL_ENABLE_NPN, @<启用>);
+    }
+
+    方法 SSH身份验证类型 <公开 属性写 注释 = "设置SFTP和SCP所欲使用的身份验证类型.">
+    参数 类型 <类型 = 整数 注释 = "请参考\"SSH身份验证类型\"所提供的常量,接受其单个或多个组合值.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSH_AUTH_TYPES, @<类型>);
+    }
+
+    方法 SSH压缩 <公开 属性写 注释 = "指定是否启用SSH压缩功能.">
+    参数 启用 <类型 = 逻辑型>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSH_COMPRESSION, @<启用>);
+    }
+
+    方法 SSH主机公钥摘要 <公开 属性写 注释 = "设置远程主机公钥的MD5摘要,如果不匹配连接将会被拒绝.">
+    参数 摘要内容 <类型 = 文本型 注释 = "提供以十六进制表示的MD5摘要内容,提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSH_HOST_PUBLIC_KEY_MD5, (@<摘要内容>.IsEmpty() ? NULL : GetMbsText (@<摘要内容>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSH公钥文件 <公开 属性写 注释 = "设置SSH身份验证的公钥文件.">
+    参数 文件 <类型 = 文本型 注释 = "例如:/home/clarkkent/.ssh/id_rsa.pub, 提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSH_HOST_PUBLIC_KEY_MD5, (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSH私钥文件 <公开 属性写 注释 = "设置SSH身份验证的私钥文件.">
+    参数 文件 <类型 = 文本型 注释 = "例如:/home/clarkkent/.ssh/id_rsa, 提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSH_PRIVATE_KEYFILE, (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 SSH已知主机文件 <公开 属性写 注释 = "设置保存SSH已知主机的文件名.">
+    参数 文件 <类型 = 文本型 注释 = "例如:/home/clarkkent/.ssh/known_hosts, 提供空文本表示禁用.">
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_SSH_KNOWNHOSTS, (@<文件>.IsEmpty() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 远程文件创建权限 <公开 属性写 注释 = "设置远程创建文件的权限,仅用于FTP,SFTP和file协议.">
+    参数 权限 <类型 = 整数>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_NEW_FILE_PERMS, @<权限>);
+    }
+
+    方法 远程目录创建权限 <公开 属性写 注释 = "设置远程创建目录的权限,仅用于FTP,SFTP和file协议.">
+    参数 权限 <类型 = 整数>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_NEW_DIRECTORY_PERMS, @<权限>);
+    }
+
+    方法 禁用指定代理 <公开 类型 = 整数 注释 = "禁用指定(多个)的代理地址的使用." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 内容 <类型 = 文本型 注释 = "提供所欲禁用的代理地址,如需禁用多个请使用逗号(,)分隔,如需禁用所有代理请提供*通配符,提供空文本表示禁用该功能.">
+    {
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_NOPROXY, (@<内容>.IsEmpty() ? NULL : GetMbsText (@<内容>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 URL编码 <公开 类型 = 文本型 注释 = "将指定的数据进行URL编码后返回." 返回值注释 = "如编码失败将返回空文本.">
+    参数 待编码内容 <类型 = 字节集类 注释 = "提供所欲进行URL编码的数据.">
+    {
+        如果 (待编码内容.取字节集长度 () == 0)
+        {
+            返回 ("")
+        }
+        变量 内容 <类型 = 文本型>
+        @ char * en = curl_easy_escape(data().GetCurl(), (const CHAR*)@<待编码内容>.GetPtr(), (INT)@<待编码内容>.GetSize());
+        @ @<内容>.SetText(en);
+        @ curl_free(en);
+        返回 (内容)
+    }
+
+    方法 URL解码 <公开 类型 = 字节集类 注释 = "将指定的URL编码的文本内容进行URL解码后返回." 返回值注释 = "如解码失败将返回空数据." @禁止流程检查 = 真>
+    参数 待解码内容 <类型 = 文本型 注释 = "提供所欲进行URL解码的数据.">
+    {
+        @ @an<CVolMem> mem;
+        @ if (@<待解码内容>.IsEmpty ())
+        @     return mem;
+        @ INT_P len;
+        @ const CHAR* ps = GetMbsText (@<待解码内容>.GetText (), mem, &len);
+        @ INT outLen;
+        @ char * en = curl_easy_unescape(data().GetCurl(), ps, (INT)len, &outLen);
+        @ @an<CVolMem> buf(en, outLen);
+        @ curl_free(en);
+        @ return buf;
+    }
+
+    方法 取上次请求方法 <公开 类型 = 文本型 注释 = "返回最后一次请求所使用的HTTP请求方法." 返回值注释 = "返回请求方法如\"GET\"" @禁止流程检查 = 真>
+    {
+        @ @m<GET_CHAR_INFO>(CURLINFO_EFFECTIVE_METHOD)
+    }
+
+    方法 取上次请求地址 <公开 类型 = 文本型 注释 = "获取最后一次请求的URL地址." @禁止流程检查 = 真>
+    {
+        @ @m<GET_CHAR_INFO>(CURLINFO_EFFECTIVE_URL)
+    }
+
+    方法 取上次请求响应码 <公开 类型 = 整数 注释 = "获取最后一次请求的响应代码(RESPONSE_CODE)." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_RESPONSE_CODE)
+    }
+
+    方法 取上次连接响应码 <公开 类型 = 整数 注释 = "获取连接请求最后一次接收到的HTTP代理响应代码." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_HTTP_CONNECTCODE)
+    }
+
+    方法 取HTTP协议版本 <公开 类型 = 整数 注释 = "获取最后一次HTTP连接所使用的协议版本." 返回值注释 = "返回值请参考\"HTTP协议版本\"所提供的常量." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_HTTP_VERSION)
+    }
+
+    方法 取文档时间 <公开 类型 = 长整数 注释 = "获取接收到远程文档的时间." 返回值注释 = "返回自1970年1月1日以来在GMT/UTC时区的秒数,如果为-1表示获取失败." @禁止流程检查 = 真>
+    {
+        @ @m<GET_LONGLONG_INFO>(CURLINFO_FILETIME_T)
+    }
+
+    方法 取接收时长 <公开 类型 = 长整数 注释 = "获取传输的总时间,包括名称解析,TCP连接,如有重定向将会把每次请求的时间加到一起." 返回值注释 = "单位:毫秒." @禁止流程检查 = 真>
+    {
+        @ @m<GET_LONGLONG_INFO>(CURLINFO_TOTAL_TIME_T)
+    }
+
+    方法 取名称解析时长 <公开 类型 = 长整数 注释 = "获取解析名称所耗费时间,如有重定向将会把每次请求的时间加到一起." 返回值注释 = "单位:毫秒." @禁止流程检查 = 真>
+    {
+        @ @m<GET_LONGLONG_INFO>(CURLINFO_NAMELOOKUP_TIME_T)
+    }
+
+    方法 取连接时长 <公开 类型 = 长整数 注释 = "获取从开始与远程主机(或代理)的连接完成时所耗费时间,如有重定向将会把每次请求时间加到一起." 返回值注释 = "单位:毫秒." @禁止流程检查 = 真>
+    {
+        @ @m<GET_LONGLONG_INFO>(CURLINFO_CONNECT_TIME_T)
+    }
+
+    方法 取完成握手时长 <公开 类型 = 长整数 注释 = "获取从开始与远程主机的SSL/SSH连接/握手所花费的时间,如有重定向将会把每次请求时间加到一起." 返回值注释 = "单位:毫秒." @禁止流程检查 = 真>
+    {
+        @ @m<GET_LONGLONG_INFO>(CURLINFO_APPCONNECT_TIME_T)
+    }
+
+    方法 取预传输时长 <公开 类型 = 长整数 注释 = "获取从开始直到文件传输开始的时间,如有重定向将会把每次请求时间加到一起." 返回值注释 = "单位:毫秒." @禁止流程检查 = 真>
+    {
+        @ @m<GET_LONGLONG_INFO>(CURLINFO_PRETRANSFER_TIME_T)
+    }
+
+    方法 取开始接收时长 <公开 类型 = 长整数 注释 = "获取从开始直到收到第一个字节的时间,如有重定向将会把每次请求时间加到一起." 返回值注释 = "单位:毫秒." @禁止流程检查 = 真>
+    {
+        @ @m<GET_LONGLONG_INFO>(CURLINFO_STARTTRANSFER_TIME_T)
+    }
+
+    方法 取全部重定向时长 <公开 类型 = 长整数 注释 = "获取从开始到完成所有重定向步骤的时间." 返回值注释 = "单位:毫秒." @禁止流程检查 = 真>
+    {
+        @ @m<GET_LONGLONG_INFO>(CURLINFO_REDIRECT_TIME_T)
+    }
+
+    方法 取重定向次数 <公开 类型 = 整数 注释 = "获取遵循重定向的总次数." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_REDIRECT_COUNT)
+    }
+
+    方法 取重定向地址 <公开 类型 = 文本型 注释 = "获取重定向后的URL地址." @禁止流程检查 = 真>
+    {
+        @ @m<GET_CHAR_INFO>(CURLINFO_REDIRECT_URL)
+    }
+
+    方法 取已上传字节数 <公开 类型 = 长整数 注释 = "获取上传的字节数." @禁止流程检查 = 真>
+    {
+        @ @m<GET_LONGLONG_INFO>(CURLINFO_SIZE_UPLOAD_T)
+    }
+
+    方法 取已下载字节数 <公开 类型 = 长整数 注释 = "获取下载的字节数." @禁止流程检查 = 真>
+    {
+        @ @m<GET_LONGLONG_INFO>(CURLINFO_SIZE_DOWNLOAD_T)
+    }
+
+    方法 取平均下载速度 <公开 类型 = 长整数 注释 = "获取根据已完整下载测得的平均下载速度." 返回值注释 = "单位:字节/秒." @禁止流程检查 = 真>
+    {
+        @ @m<GET_LONGLONG_INFO>(CURLINFO_SPEED_DOWNLOAD_T)
+    }
+
+    方法 取平均上传速度 <公开 类型 = 长整数 注释 = "获取根据已完整上传测得的平均上传速度." 返回值注释 = "单位:字节/秒." @禁止流程检查 = 真>
+    {
+        @ @m<GET_LONGLONG_INFO>(CURLINFO_SPEED_UPLOAD_T)
+    }
+
+    方法 取所有请求头尺寸 <公开 类型 = 整数 注释 = "获取所有接收到请求头的尺寸." 返回值注释 = "单位:字节." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_HEADER_SIZE)
+    }
+
+    方法 取已发送请求尺寸 <公开 类型 = 整数 注释 = "获取已经发送出去请求的尺寸." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_REQUEST_SIZE)
+    }
+
+    方法 取证书验证结果 <公开 类型 = 整数 注释 = "获取证书验证的结果." 返回值注释 = "如果为0表示通过验证." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_SSL_VERIFYRESULT)
+    }
+
+    方法 取代理错误码 <公开 类型 = 整数 注释 = "如果在请求过程中出现代理(SOCKS)错误,本方法可取出具体的错误原因." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_PROXY_ERROR)
+    }
+
+    方法 取代理证书验证结果 <公开 类型 = 整数 注释 = "获取代理证书验证的结果." 返回值注释 = "如果为0表示通过验证." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_SSL_VERIFYRESULT)
+    }
+
+    方法 重置选项 <公开 注释 = "将所有已设置的选项恢复至默认设置.">
+    {
+        @ curl_easy_reset(data().GetCurl());
+    }
+
+    方法 取SSL加密引擎列表 <公开 类型 = 文本数组类 注释 = "获取OpenSSL加密引擎的列表." @禁止流程检查 = 真>
+    {
+        @ @dt<文本数组类> ret;
+        @ struct curl_slist * engines;
+        @ if ((curl_easy_getinfo(data().GetCurl(), CURLINFO_SSL_ENGINES, &engines) == CURLE_OK) && engines) {
+        @     struct curl_slist *each = engines;
+        @     while (each) {
+        @         ret.data ().Add (GetWideText (each->data, CVolMem (), NULL));
+        @         each = each->next;
+        @     }
+        @     curl_slist_free_all(engines);
+        @ }
+        @ return ret;
+    }
+
+    方法 取内容长度 <公开 类型 = 长整数 注释 = "读取内容长度(Content-Length)." @禁止流程检查 = 真>
+    {
+        @ @m<GET_LONGLONG_INFO>(CURLINFO_CONTENT_LENGTH_DOWNLOAD_T)
+    }
+
+    方法 取上传长度 <公开 类型 = 长整数 注释 = "获取上传的内容长度." @禁止流程检查 = 真>
+    {
+        @ @m<GET_LONGLONG_INFO>(CURLINFO_CONTENT_LENGTH_UPLOAD_T)
+    }
+
+    方法 取内容类型 <公开 类型 = 文本型 注释 = "获取下载对象的内容类型(Content-Type)." @禁止流程检查 = 真>
+    {
+        @ @m<GET_CHAR_INFO>(CURLINFO_CONTENT_TYPE)
+    }
+
+    方法 取重试延迟 <公开 类型 = 长整数 注释 = "获取重试延迟(Retry-After)." 返回值注释 = "返回秒数." @禁止流程检查 = 真>
+    {
+        @ @m<GET_LONGLONG_INFO>(CURLINFO_RETRY_AFTER)
+    }
+
+    方法 取身份验证方法 <公开 类型 = 整数 注释 = "获取可用的HTTP身份验证方法." 返回值注释 = "请参考\"身份验证方案\"所提供的常量." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_HTTPAUTH_AVAIL)
+    }
+
+    方法 取代理身份验证方法 <公开 类型 = 整数 注释 = "获取可用的HTTP代理身份验证方法." 返回值注释 = "请参考\"身份验证方案\"所提供的常量." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_HTTPAUTH_AVAIL)
+    }
+
+    方法 取上次错误码 <公开 类型 = 整数 注释 = "在访问失败时可调用本方法获取错误码." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_OS_ERRNO)
+    }
+
+    方法 取已创建连接数 <公开 类型 = 整数 注释 = "获取已创建的连接数量." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_NUM_CONNECTS)
+    }
+
+    方法 取上次连接IP <公开 类型 = 文本型 注释 = "获取上次连接的IP地址." @禁止流程检查 = 真>
+    {
+        @ @m<GET_CHAR_INFO>(CURLINFO_PRIMARY_IP)
+    }
+
+    方法 取上次连接端口 <公开 类型 = 整数 注释 = "获取上次连接的端口号." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_PRIMARY_PORT)
+    }
+
+    方法 取上次连接本地IP <公开 类型 = 文本型 注释 = "获取上次连接的本地IP地址." @禁止流程检查 = 真>
+    {
+        @ @m<GET_CHAR_INFO>(CURLINFO_LOCAL_IP)
+    }
+
+    方法 取上次连接本地端口 <公开 类型 = 整数 注释 = "获取上次连接的本地端口号." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_LOCAL_PORT)
+    }
+
+    方法 取所有Cookie <公开 类型 = 文本数组类 注释 = "获取当前已有的所有Cookie信息." @禁止流程检查 = 真>
+    {
+        @ @dt<文本数组类> ret;
+        @ struct curl_slist * cookies;
+        @ if ((curl_easy_getinfo(data().GetCurl(), CURLINFO_COOKIELIST, &cookies) == CURLE_OK) && cookies) {
+        @     struct curl_slist *each = cookies;
+        @     while (each) {
+        @         ret.data ().Add (GetWideText (each->data, CVolMem (), NULL));
+        @         each = each->next;
+        @     }
+        @     curl_slist_free_all(cookies);
+        @ }
+        @ return ret;
+    }
+
+    方法 取最后输入路径 <公开 类型 = 文本型 注释 = "获取FTP服务器中的输入路径." @禁止流程检查 = 真>
+    {
+        @ @m<GET_CHAR_INFO>(CURLINFO_FTP_ENTRY_PATH)
+    }
+
+    方法 取证书信息 <公开 类型 = 对象数组类 注释 = "获取TLS证书链." 返回值注释 = "取出证书链信息,每个成员表示一个证书信息列表,即\"文本数组类\"作为成员." @禁止流程检查 = 真>
+    {
+        @ @dt<对象数组类> ret;
+        @ struct curl_certinfo * ci;
+        @ if ((curl_easy_getinfo(data().GetCurl(), CURLINFO_CERTINFO, &ci) == CURLE_OK) && ci) {
+        @     for (INT i = 0; i < ci->num_of_certs; i++)
+        @     {
+        @         @dt<文本数组类>* pvolList = new @dt<文本数组类>;
+        @         struct curl_slist *temp;
+        @         for(temp = ci->certinfo[i]; temp; temp = temp->next)
+        @             pvolList->data ().Add (GetWideText (temp->data, CVolMem (), NULL));
+        @         ret.AddTakeOverObject(pvolList);
+        @     }
+        @ }
+        @ return ret;
+    }
+
+    方法 取是否满足条件 <公开 类型 = 整数 注释 = "获取未满足时间条件或304 HTTP响应的信息." 返回值注释 = "返回0表示已满足条件." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_CONDITION_UNMET)
+    }
+
+    方法 取RTSP会话ID <公开 类型 = 文本型 注释 = "获取RTSP会话ID." @禁止流程检查 = 真>
+    {
+        @ @m<GET_CHAR_INFO>(CURLINFO_RTSP_SESSION_ID)
+    }
+
+    方法 取RTSP客户端命令序列 <公开 类型 = 整数 注释 = "获取下一个RTSP客户端CSeq(命令序列)." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_RTSP_CLIENT_CSEQ)
+    }
+
+    方法 取RTSP服务器命令序列 <公开 类型 = 整数 注释 = "获取下一个RTSP服务器CSeq(命令序列)." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_RTSP_SERVER_CSEQ)
+    }
+
+    方法 取RTSP最近接收命令序列 <公开 类型 = 整数 注释 = "获取最近收到的CSeq(命令序列)." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_RTSP_CSEQ_RECV)
+    }
+
+    方法 取上次连接协议 <公开 类型 = 整数 注释 = "获取上一个连接使用的协议." 返回值注释 = "请参考\"网络访问协议类型\"所提供的常量." @禁止流程检查 = 真>
+    {
+        @ @m<GET_INT_INFO>(CURLINFO_PROTOCOL)
+    }
+
+    方法 取上次连接方案 <公开 类型 = 文本型 注释 = "获取连接中使用的URL方案(协议)." @禁止流程检查 = 真>
+    {
+        @ @m<GET_CHAR_INFO>(CURLINFO_SCHEME)
+    }
+
+    方法 继续传输 <公开 类型 = 整数 注释 = "继续被暂停的网络传输" 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    {
+        @ return curl_easy_pause(data().GetCurl(), CURLPAUSE_CONT);
+    }
+
+    方法 暂停传输 <公开 类型 = 整数 注释 = "暂停或取消当前连接." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 选项 <类型 = 整数 注释 = "提供1表示仅暂停数据的接收." 注释 = "提供4表示仅暂停数据的发送." 注释 = "提供5表示暂停所有." @默认值 = 5>
+    {
+        @ return curl_easy_pause(data().GetCurl(), @<选项>);
+    }
+
+    方法 发送请求 <公开 类型 = 整数 注释 = "在所有选项配置完毕后,调用本方法以发送本次请求." 注释 = "注意:本方法将会阻塞直到请求结束."
+            返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 返回结果 <类型 = 字节集类 注释 = "  提供空对象则不会返回所请求的内容,提供非空变量则将请求所返回内容数据写" 注释 = "入该变量,此时如果使用了\"置写入数据回调函数\"设置过自定义函数时,该函数回调"
+            注释 = "时\"用户数据\"参数将会成为该变量的地址(即设置时所提供的\"用户数据\"参数将被覆盖)." @默认值 = 空对象>
+    参数 响应头 <类型 = 文本数组类 注释 = "提供空对象则不会返回响应头数据,提供非空变量则将所获取的响应头写入该变量." @默认值 = 空对象>
+    {
+        @ const BOOL_P blpNeedHeader = (@<响应头>.IsNullObject () == FALSE);
+        @ if (blpNeedHeader)  data ().SetHeaderFunction ((INT_P)&@<响应头>.data (), HeaderFn);
+        @ const BOOL_P blpNeedResultData = (@<返回结果>.IsNullObject () == FALSE);
+        @ if (blpNeedResultData)  data ().SetWriteFunction ((INT_P)&@<返回结果>, WriteFn);
+        @ const CURLcode res = curl_easy_perform (data ().GetCurl ());
+        @ if (blpNeedHeader)  data ().SetHeaderFunction (0, NULL);
+        @ if (blpNeedResultData)  data ().SetWriteFunction (0, NULL);
+        @ return (INT)res;
+    }
+
+    方法 接收数据 <公开 类型 = " 整数" 注释 = "从已建立的连接接收数据,通常与\"发送数据\"成对使用,以实现自定义协议." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)."
+            @禁止流程检查 = 真>
+    参数 缓冲区 <类型 = 字节集类 注释 = "所获取的数据将会置入该参数中.">
+    {
+        @ size_t dataLen = 0;
+        @ INT ret = curl_easy_recv(data().GetCurl(), @<缓冲区>.GetPtr(), (size_t)@<缓冲区>.GetSize(), &dataLen);
+        @ if (dataLen > 0)
+        @     @<缓冲区>.Realloc(dataLen);
+        @ return ret;
+    }
+
+    方法 发送数据 <公开 类型 = 整数 注释 = "通过已建立的连接发送任意数据,通常与\"接收数据\"成对使用,以实现自定义协议." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)."
+            @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲发送的数据.">
+    {
+        @ return curl_easy_send(data().GetCurl(), @<数据>.GetPtr(), (size_t)@<数据>.GetSize(), NULL);
+    }
+
+    方法 连接维护检查 <公开 类型 = 整数 注释 = "一些协议具有\"维持连接\"机制,这些机制通常在现有连接上发送一些流量,以使其保持活动状态." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)."
+            @禁止流程检查 = 真>
+    {
+        @ return curl_easy_upkeep(data().GetCurl());
+    }
+
+    方法 置提交数据 <公开 类型 = 整数 注释 = "设置带请求体的请求方式所欲提交的数据." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类 注释 = "提供所欲提交的数据内容,提供空对象表示恢复默认.">
+    参数 复制数据 <类型 = 逻辑型 注释 = "是否将\"数据\"参数复制(不能超过8MB),如采用不复制则必须确保\"数据\"参数在发送POST请求之前有效(未被释放),否则将出现异常" @默认值 = 真>
+    {
+        @ curl_easy_setopt(data().GetCurl(), CURLOPT_POSTFIELDSIZE, (INT)@<数据>.GetSize());    //必须先定义尺寸,否则会被认为是文本...不要使用_LARGE版本,在32位下会出现问题!!!
+        @ return curl_easy_setopt(data().GetCurl(), (@<复制数据> ? CURLOPT_COPYPOSTFIELDS : CURLOPT_POSTFIELDS), (@<数据>.IsNullObject() ? NULL : (char *)@<数据>.GetPtr()));
+    }
+
+    方法 置提交数据尺寸 <公开 类型 = 整数 注释 = "设置\"置提交数据\"所提供的数据尺寸,无必要时无需调用本方法." @禁止流程检查 = 真>
+    参数 尺寸 <类型 = 整数>
+    {
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_POSTFIELDSIZE, @<尺寸>);
+    }
+
+    方法 置请求头 <公开 类型 = 整数 注释 = "设置请求所欲使用的请求头." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 内容 <类型 = 文本数组类 注释 = "一个成员表示一个头,例如\"content-type: text/html\"">
+    {
+        @ data().ClearHeaderList();
+        @ data().headers = CCurlWraper::s_create_slist (@<内容>.data ());
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_HTTPHEADER, data().headers);
+    }
+
+    方法 置代理请求头 <公开 类型 = 整数 注释 = "设置请求所欲使用的代理请求头." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 内容 <类型 = 文本数组类 注释 = "一个成员表示一个头,例如\"content-type: text/html\"">
+    {
+        @ data().ClearProxyHeaderList();
+        @ data().proxyHeaders = CCurlWraper::s_create_slist (@<内容>.data ());
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_PROXYHEADER, data().proxyHeaders);
+    }
+
+    方法 置Cookie内容 <公开 类型 = 整数 注释 = "设置请求所欲使用的Cookie内容." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 内容 <类型 = 文本型 注释 = "例如:name1 = content1; name2 = content2; 提供空文本表示恢复默认NULL.">
+    {
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_COOKIE, (@<内容>.IsEmpty() ? NULL : GetMbsText (@<内容>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 添加新Cookie <公开 类型 = 整数 注释 = "将单个Cookie添加到内存中." @禁止流程检查 = 真>
+    参数 内容 <类型 = 文本型 注释 = "提供空文本表示禁用.">
+    {
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_COOKIELIST, (@<内容>.IsEmpty() ? NULL : GetMbsText (@<内容>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 操作Cookie <公开 类型 = 整数 注释 = "对Cookie进行指定操作." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 类型 <类型 = 文本型 注释 = "指定所欲操作的类型." 注释 = "可选值:" 注释 = "\"ALL\":表示清除当前内存中所有Cookie." 注释 = "\"SESS\":表示清除内存中保存所有会话Cookie."
+            注释 = "\"FLUSH\":将内存中所有Cookie立即写出到\"置写Cookie文件\"方法指定的文件中." 注释 = "\"RELOAD\":从\"置读Cookie文件\"方法指定的文件载入Cookie到内存中."
+            @默认值 = "RELOAD">
+    {
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_COOKIELIST, GetMbsText (@<类型>.GetText (), CVolMem(), NULL));
+    }
+
+    方法 置读Cookie文件 <公开 类型 = 整数 注释 = "设置请求从中读取Cookie内容的文件." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 文件 <类型 = 文本型 注释 = "例如:\"/tmp/cookie.txt\",如果为空文本则在内存中读取,空对象表示禁用." @默认值 = "">
+    {
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_COOKIEFILE, (@<文件>.IsNullObject() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 置写Cookie文件 <公开 类型 = 整数 注释 = "指定将Cookie内容写入储存的文件." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 文件 <类型 = 文本型 注释 = "例如:\"/tmp/cookie.txt\",如果为空文本则在内存中储存,空对象表示禁用." @默认值 = "">
+    {
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_COOKIEJAR, (@<文件>.IsNullObject() ? NULL : GetMbsText (@<文件>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 置新Cookie会话 <公开 类型 = 整数 注释 = "指定是否强制忽略上一次请求所保留下的Cookie内容,以确保下一次请求不会发送这些Cookie."
+            返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 忽略 <类型 = 逻辑型>
+    {
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_COOKIESESSION, @<忽略>);
+    }
+
+    方法 置连接协议 <公开 类型 = 整数 注释 = "连接到特定的服务器和端口,即\"CONNECT_TO\",与请求的地址与端口并非一致." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)."
+            @禁止流程检查 = 真>
+    参数 内容 <类型 = 文本数组类 注释 = "一个成员表示一个服务器,例如:example.com::server1.example.com.">
+    {
+        @ data().ClearConnectToList();
+        @ data().connect_to = CCurlWraper::s_create_slist (@<内容>.data ());
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_CONNECT_TO, data().connect_to);
+    }
+
+    方法 置请求成功别名列表 <公开 类型 = 整数 注释 = "设置所欲将其视为HTTP 200响应的结果别名列表." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 内容 <类型 = 文本数组类 注释 = "一个成员表示一个别名,例如:ICY 200 OK">
+    {
+        @ data().ClearAliasesList();
+        @ data().aliases = CCurlWraper::s_create_slist (@<内容>.data ());
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_HTTP200ALIASES, data().aliases);
+    }
+
+    方法 置SMTP收件人列表 <公开 类型 = 整数 注释 = "设置SMTP收件人地址列表." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 地址 <类型 = 文本数组类 注释 = "每个成员表示一个收件人地址.">
+    {
+        @ data().ClearRcptsList();
+        @ data().rcpts = CCurlWraper::s_create_slist (@<地址>.data ());
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_MAIL_RCPT, data().rcpts);
+    }
+
+    方法 置FTP预运行命令 <公开 类型 = 整数 注释 = "设置在连接到FTP后,所欲在传输之前执行的命令列表." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 命令 <类型 = 文本数组类 注释 = "一个成员表示一个命令.">
+    {
+        @ data().ClearFtpPreQuoteCmdsList();
+        @ data().ftpPreQuoteCmds = CCurlWraper::s_create_slist (@<命令>.data ());
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_PREQUOTE, data().ftpPreQuoteCmds);
+    }
+
+    方法 置FTP传输前命令 <公开 类型 = 整数 注释 = "指定在FTP发出任何其他命令之前完成(甚至在FTP的CWD命令之前完成)." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)."
+            @禁止流程检查 = 真>
+    参数 命令 <类型 = 文本数组类 注释 = "一个成员表示一个命令.">
+    {
+        @ data().ClearFtpQuoteCmdsList();
+        @ data().ftpQuoteCmds = CCurlWraper::s_create_slist (@<命令>.data ());
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_QUOTE, data().ftpQuoteCmds);
+    }
+
+    方法 置FTP传输后命令 <公开 类型 = 整数 注释 = "指定在FTP传输请求之后运行的命令." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 命令 <类型 = 文本数组类 注释 = "一个成员表示一个命令.">
+    {
+        @ data().ClearFtpPostQuoteCmdsList();
+        @ data().ftpPostQuoteCmds = CCurlWraper::s_create_slist (@<命令>.data ());
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_QUOTE, data().ftpPostQuoteCmds);
+    }
+
+    方法 置请求方式 <公开 类型 = 整数 注释 = "设置自定义请求方式." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 请求方法 <类型 = 文本型 注释 = "例如HTTP请求方法:HEAD." 注释 = "例如FTP请求:LIST" 注释 = "提供空文本表示恢复默认值NULL.">
+    {
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_CUSTOMREQUEST, (@<请求方法>.IsEmpty() ? NULL : GetMbsText (@<请求方法>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 置表单数据 <公开 类型 = 整数 注释 = "提供一个多段数据形式的MIME对象,在请求中发送." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 数据 <类型 = 多用途扩展格式类 注释 = "务必确保该对象在发送请求之前未被释放,提供空对象表示恢复默认值NULL.">
+    {
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_MIMEPOST, (@<数据>.IsNullObject() ? NULL : @<数据>.data().mime));
+    }
+
+    方法 置DNS首选服务器 <公开 类型 = 整数 注释 = "提供自定义DNS服务器,以代替系统默认使用的DNS服务器." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 DNS <类型 = 文本型 注释 = "例如:\"192.168.1.100:53,192.168.1.101\",提供空文本表示恢复默认.">
+    {
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_DNS_SERVERS, (@<DNS>.IsEmpty() ? NULL : GetMbsText (@<DNS>.GetText (), CVolMem(), NULL)));
+    }
+
+    方法 置SSL选项 <公开 类型 = 整数 注释 = "设置SSL的行为选项." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 选项 <类型 = 整数 注释 = "请参考\"SSL行为选项类型\"所提供的常量,接受其一个或多个组合值.">
+    {
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_SSL_OPTIONS, @<选项>);
+    }
+
+    方法 置代理SSL选项 <公开 类型 = 整数 注释 = "设置代理SSL的行为选项." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 选项 <类型 = 整数 注释 = "请参考\"SSL行为选项类型\"所提供的常量,接受其一个或多个组合值.">
+    {
+        @ return curl_easy_setopt(data().GetCurl(), CURLOPT_PROXY_SSL_OPTIONS, @<选项>);
+    }
+
+    方法 清理 <公开 注释 = "  将传输对象所使用相关资源全部释放,如果明确不再使用可以调用" 注释 = "本方法主动释放,以避免内存占用." 注释 = "  本方法调用不是必需的,对象释放时会自动进行清理,但是当长久"
+            注释 = "不使用本对象时,建议手动调用本方法以提前释放相关资源." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Cleanup ()
+    }
+
+    # 自定义回调函数相关 ---
+
+    方法 置写入数据回调函数 <公开 类型 = 整数 注释 = "自定义写入所接收数据(下载数据)的回调方法,设置成功后\"发送请求\"方法的返回结果参数将会无效!"
+            注释 = "注意:除非明确了解本方法设置的后果,否则不要调用该方法设置自定义回调函数." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @嵌入式方法 = "">
+    参数 目标方法 <注释 = "提供对应的回调函数.注意:定义该回调方法时务必定义为\"CDECL\"调用方式,定义方法见对应的模板匹配方法." @匹配方法 = "写入数据回调函数模板">
+    参数 用户数据 <类型 = 变整数 注释 = "提供回调函数中的用户数据参数内容." @默认值 = 0>
+    {
+        @ @sn<this>.data().SetWriteFunction (@<用户数据>, (curl_write_callback)&@<目标方法>)
+    }
+
+    方法 写入数据回调函数模板 <静态 类型 = 变整数 注释 = "\"置写入数据回调函数\"对应的方法模板." 注释 = "注意:定义该回调方法时务必定义为\"CDECL\"调用方式." 返回值注释 = "返回所处理的数据长度."
+            @视窗.前缀文本 = "@CDECL">
+    参数 数据 <类型 = 变整数 注释 = "本次回调提供的数据指针.">
+    参数 数据尺寸 <类型 = 变整数 注释 = "本次回调提供单个数据的长度,即总长度应为 \"数据尺寸\"*\"数据数量\".">
+    参数 数据数量 <类型 = 变整数 注释 = "本次回调提供数据的个数.">
+    参数 用户数据 <类型 = 变整数 注释 = "设置回调函数所传入的\"用户数据\"参数.">
+    {
+        返回 (数据尺寸 * 数据数量)
+    }
+
+    方法 置读取数据回调函数 <公开 类型 = 整数 注释 = "自定义读取数据的回调方法,当上传数据时将会回调该方法." 注释 = "注意:除非明确了解本方法设置的后果,否则不要调用该方法设置自定义回调函数."
+            返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @嵌入式方法 = "">
+    参数 目标方法 <注释 = "提供对应的回调函数.注意:定义该回调方法时务必定义为\"CDECL\"调用方式,定义方法见对应的模板匹配方法." @匹配方法 = "读取数据回调函数模板">
+    参数 用户数据 <类型 = 变整数 注释 = "提供回调函数中的用户数据参数内容." @默认值 = 0>
+    {
+        @ @sn<this>.data().SetReadFunction(@<用户数据>, (curl_read_callback)&@<目标方法>)
+    }
+
+    方法 读取数据回调函数模板 <静态 类型 = 变整数 注释 = "\"置读取数据回调函数\"对应的方法模板." 注释 = "注意:定义该回调方法时务必定义为\"CDECL\"调用方式." 返回值注释 = "返回读入的数据长度."
+            @视窗.前缀文本 = "@CDECL">
+    参数 缓冲区 <类型 = 变整数 注释 = "数据读入缓冲区.">
+    参数 数据尺寸 <类型 = 变整数 注释 = "本次回调提供单个数据的长度,即总长度应为 \"数据尺寸\"*\"数据数量\".">
+    参数 数据数量 <类型 = 变整数 注释 = "本次回调提供数据的个数.">
+    参数 用户数据 <类型 = 变整数 注释 = "设置回调函数所传入的\"用户数据\"参数.">
+    {
+        返回 (数据尺寸 * 数据数量)
+    }
+
+    方法 置输入流搜索回调函数 <公开 类型 = 整数 注释 = "设置在输入流中进行搜索时的回调方法." 注释 = "注意:除非明确了解本方法设置的后果,否则不要调用该方法设置自定义回调函数."
+            返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @嵌入式方法 = "">
+    参数 目标方法 <注释 = "提供对应的回调函数.注意:定义该回调方法时务必定义为\"CDECL\"调用方式,定义方法见对应的模板匹配方法." @匹配方法 = "输入流搜索回调函数模板">
+    参数 用户数据 <类型 = 变整数 注释 = "提供回调函数中的用户数据参数内容." @默认值 = 0>
+    {
+        @ @sn<this>.data().SetSeekFunction(@<用户数据>, (curl_seek_callback)&@<目标方法>)
+    }
+
+    方法 输入流搜索回调函数模板 <静态 类型 = 整数 注释 = "在输入流中进行搜索时将会回调该方法." 注释 = "注意:定义该回调方法时务必定义为\"CDECL\"调用方式." 返回值注释 = "返回0成功."
+            返回值注释 = "返回1将会传输失败." 返回值注释 = "返回2表示无法搜寻." @视窗.前缀文本 = "@CDECL">
+    参数 用户数据 <类型 = 变整数 注释 = "设置回调函数所传入的\"用户数据\"参数.">
+    参数 偏移量 <类型 = 变整数>
+    参数 原点 <类型 = 整数>
+    {
+        返回 (0)
+    }
+
+    方法 置传输进度回调函数 <公开 类型 = 整数 注释 = "设置在传输过程中回调进度数据的方法,设置成功后本类的\"传输进度发生改变\"事件将失效." 注释 = "注意:"
+            注释 = "  1. 除非明确了解本方法设置的后果,否则不要调用该方法设置自定义回调函数;" 注释 = "  2. 在调用本方法前,需要先设置\"进度反馈\"属性值为真以启用进度反馈."
+            返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @嵌入式方法 = "">
+    参数 目标方法 <注释 = "提供对应的回调函数.注意:定义该回调方法时务必定义为\"CDECL\"调用方式,定义方法见对应的模板匹配方法." @匹配方法 = "传输进度回调函数模板">
+    参数 用户数据 <类型 = 变整数 注释 = "提供回调函数中的用户数据参数内容." @默认值 = 0>
+    {
+        @ @sn<this>.data().SetXferinfoFunction (@<用户数据>, (curl_xferinfo_callback)&@<目标方法>)
+    }
+
+    方法 传输进度回调函数模板 <静态 类型 = 整数 注释 = "传输进度发生变化时将会调用该方法." 注释 = "注意:定义该回调方法时务必定义为\"CDECL\"调用方式." 返回值注释 = "返回0继续传输,返回非0则中止传输."
+            @视窗.前缀文本 = "@CDECL">
+    参数 用户数据 <类型 = 变整数 注释 = "设置回调函数所传入的\"用户数据\"参数.">
+    参数 下载总量 <类型 = 长整数 注释 = "预计所需下载数据的总尺寸.">
+    参数 当前下载 <类型 = 长整数 注释 = "当前所下载的数据尺寸.">
+    参数 上传总量 <类型 = 长整数 注释 = "预计所需上传数据的总尺寸.">
+    参数 当前上传 <类型 = 长整数 注释 = "当前所上传的数据尺寸.">
+    {
+        返回 (0)
+    }
+
+    方法 置接收响应头回调函数 <公开 类型 = 整数 注释 = "设置在传输过程中收到服务器发送的响应头时回调的方法,设置成功后\"发送请求\"方法的响应头参数将会无效!"
+            注释 = "注意:除非明确了解本方法设置的后果,否则不要调用该方法设置自定义回调函数." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @嵌入式方法 = "">
+    参数 目标方法 <注释 = "提供对应的回调函数.注意:定义该回调方法时务必定义为\"CDECL\"调用方式,定义方法见对应的模板匹配方法." @匹配方法 = "接收响应头回调函数模板">
+    参数 用户数据 <类型 = 变整数 注释 = "提供回调函数中的用户数据参数内容." @默认值 = 0>
+    {
+        @ @sn<this>.data().SetHeaderFunction (@<用户数据>, (curl_read_callback)&@<目标方法>)
+    }
+
+    方法 接收响应头回调函数模板 <静态 类型 = 整数 注释 = "\"置接收响应头回调函数\"对应的方法模板,每解析完成一个响应头时本方法被调用一次." 注释 = "注意:定义该回调方法时务必定义为\"CDECL\"调用方式."
+            返回值注释 = "返回响应头数据长度." @视窗.前缀文本 = "@CDECL">
+    参数 缓冲区 <类型 = 变整数 注释 = "响应头内容.">
+    参数 数据尺寸 <类型 = 整数 注释 = "本次回调提供单个数据的长度,即总长度应为 \"数据尺寸\"*\"数据数量\".">
+    参数 数据数量 <类型 = 整数 注释 = "本次回调提供数据的个数.">
+    参数 用户数据 <类型 = 变整数 注释 = "设置回调函数所传入的\"用户数据\"参数.">
+    {
+        返回 (数据尺寸 * 数据数量)
+    }
+}
+
+类 执行状态码 <公开 注释 = "本类提供网络传输类中的一些结果码返回值定义." @文档 = "category = \"辅助类\"">
+{
+    常量 成功 <公开 类型 = 整数 值 = 0 注释 = "表示执行成功.">
+    常量 对象未初始化 <公开 类型 = 整数 值 = @CURLE_OBJECT_NOT_INIT 注释 = "所使用对象尚未初始化">
+    常量 参数无效 <公开 类型 = 整数 值 = @CURLE_INVALID_PARAM 注释 = "所提供的参数无效">
+    常量 不支持协议 <公开 类型 = 整数 值 = 1 注释 = "表示服务器不接受该协议访问.">
+    常量 初始化失败 <公开 类型 = 整数 值 = 2 注释 = "表示请求对象初始化失败.">
+    常量 地址格式错误 <公开 类型 = 整数 值 = 3 注释 = "提供的请求地址格式不正确.">
+    常量 非内置功能 <公开 类型 = 整数 值 = 4 注释 = "不是内置的功能.">
+    常量 无法解析代理 <公开 类型 = 整数 值 = 5 注释 = "无法解析的代理.">
+    常量 无法解析主机 <公开 类型 = 整数 值 = 6 注释 = "无法解析的主机.">
+    常量 无法连接 <公开 类型 = 整数 值 = 7 注释 = "无法连接到服务器.">
+    常量 意外服务器回复 <公开 类型 = 整数 值 = 8 注释 = "表示服务器的回复无法处理.">
+    常量 拒绝远程访问 <公开 类型 = 整数 值 = 9 注释 = "远程访问被拒绝.">
+    常量 拒绝FTP访问 <公开 类型 = 整数 值 = 10 注释 = "访问FTP被拒绝.">
+    常量 FTP意外回复 <公开 类型 = 整数 值 = 11 注释 = "指示FTP返回了意外的代码.">
+    常量 FTP等待超时 <公开 类型 = 整数 值 = 12 注释 = "FTP等待会话超时.">
+    常量 FTP服务器缺陷 <公开 类型 = 整数 值 = 13 注释 = "FTP服务器的回复是意外的结果.">
+    常量 FTP无法解析227 <公开 类型 = 整数 值 = 14 注释 = "无法解析FTP服务器返回的227行.">
+    常量 FTP内部故障 <公开 类型 = 整数 值 = 15 注释 = "内部故障查找主机使用新的连接.">
+    常量 HTTP2协议错误 <类型 = 整数 值 = 16 注释 = "HTTP2协议层出现错误.">
+    常量 FTP传输类型错误 <公开 类型 = 整数 值 = 17 注释 = "FTP设置传送模式时失败.">
+    常量 FTP文件部分 <公开 类型 = 整数 值 = 18 注释 = "文件传输的尺寸小于或大于预期尺寸,数据不匹配.">
+    常量 FTP无法检索文件 <公开 类型 = 整数 值 = 19 注释 = "FTP无法检索目标文件.">
+    常量 返回命令错误 <公开 类型 = 整数 值 = 21 注释 = "远程命令返回错误.">
+    常量 HTTP返回错误 <公开 类型 = 整数 值 = 22 注释 = "HTTP返回错误.">
+    常量 写入错误 <公开 类型 = 整数 值 = 23 注释 = "数据写入错误.">
+    常量 上传命令错误 <公开 类型 = 整数 值 = 25 注释 = "上传命令错误.">
+    常量 读入错误 <公开 类型 = 整数 值 = 26 注释 = "无法打开/读取指定文件.">
+    常量 内存不足 <公开 类型 = 整数 值 = 27 注释 = "表示内存不足无法申请空间.">
+    常量 操作超时 <公开 类型 = 整数 值 = 28 注释 = "指定的操作已超时.">
+    常量 FTP端口错误 <公开 类型 = 整数 值 = 30 注释 = "FTP端口操作失败.">
+    常量 重置命令失败 <公开 类型 = 整数 值 = 31 注释 = "执行重置命令失败.">
+    常量 范围错误 <公开 类型 = 整数 值 = 33 注释 = "范围命令执行失败.">
+    常量 POST错误 <公开 类型 = 整数 值 = 34 注释 = "HTTP POST请求错误.">
+    常量 SSL连接错误 <公开 类型 = 整数 值 = 35 注释 = "连接到SSL出现错误.">
+    常量 无法恢复下载 <公开 类型 = 整数 值 = 36 注释 = "恢复下载出现错误.">
+    常量 无法读取文件 <公开 类型 = 整数 值 = 37 注释 = "无法读取文件.">
+    常量 LDAP无法绑定 <公开 类型 = 整数 值 = 38 注释 = "LDAP无法绑定.">
+    常量 LDAP搜索失败 <公开 类型 = 整数 值 = 39 注释 = "LDAP搜索出现错误.">
+    常量 回调方法中止 <公开 类型 = 整数 值 = 42 注释 = "表示回调方法返回指示操作中止.">
+    常量 参数错误 <公开 类型 = 整数 值 = 43 注释 = "函数调用了一个错误的参数.">
+    常量 接口错误 <公开 类型 = 整数 值 = 45 注释 = "指定的网络接口不能使用.">
+    常量 太多重定向 <公开 类型 = 整数 值 = 47 注释 = "过多的重定向,超出最大限制.">
+    常量 无法识别选项 <公开 类型 = 整数 值 = 48 注释 = "无法识别的选项.">
+    常量 TELNET选项非法 <公开 类型 = 整数 值 = 49 注释 = "TELNET选项内容格式不正确.">
+    常量 未返回任何内容 <公开 类型 = 整数 值 = 52 注释 = "服务器未返回任何内容.">
+    常量 未找到加密引擎 <公开 类型 = 整数 值 = 53 注释 = "表示未找到所指定的加密引擎以用于SSL.">
+    常量 加密引擎设置失败 <公开 类型 = 整数 值 = 54 注释 = "默认设置的加密引擎处理失败.">
+    常量 发送数据失败 <公开 类型 = 整数 值 = 55 注释 = "发送网络数据失败.">
+    常量 接收数据失败 <公开 类型 = 整数 值 = 56 注释 = "接收网络数据失败.">
+    常量 客户端证书错误 <公开 类型 = 整数 值 = 58 注释 = "本地客户端的证书出现问题.">
+    常量 SSL证书密码错误 <公开 类型 = 整数 值 = 59 注释 = "无法使用指定的SSL证书密码.">
+    常量 证书无法验证 <公开 类型 = 整数 值 = 60 注释 = "已有凭证无法与已知CA证书进行身份验证.">
+    常量 无法识别传输编码 <公开 类型 = 整数 值 = 61 注释 = "无法识别的传输编码.">
+    常量 LDAP地址错误 <公开 类型 = 整数 值 = 62 注释 = "提供了无效的LDAP地址.">
+    常量 文件尺寸超出限制 <公开 类型 = 整数 值 = 63 注释 = "文件尺寸超出最大限制.">
+    常量 启用SSL失败 <公开 类型 = 整数 值 = 64 注释 = "要求使用SSL失败.">
+    常量 重传数据失败 <公开 类型 = 整数 值 = 65 注释 = "重传数据发生错误.">
+    常量 SSL引擎启动失败 <公开 类型 = 整数 值 = 66 注释 = "SSL引擎启动失败.">
+    常量 拒绝登录 <公开 类型 = 整数 值 = 67 注释 = "远程服务器拒绝登录.">
+    常量 TFTP找不到文件 <公开 类型 = 整数 值 = 68 注释 = "TFTP服务器上找不到文件.">
+    常量 TFTP权限问题 <公开 类型 = 整数 值 = 69 注释 = "TFTP服务器上的权限问题.">
+    常量 服务器磁盘已满 <公开 类型 = 整数 值 = 70 注释 = "远程服务器的磁盘已满.">
+    常量 TFTP非法操作 <公开 类型 = 整数 值 = 71 注释 = "非法的TFTP操作.">
+    常量 TFTP未知传输ID <公开 类型 = 整数 值 = 72 注释 = "未知TFTP传输ID.">
+    常量 文件已存在 <公开 类型 = 整数 值 = 73 注释 = "远程服务器的文件已经存在,并且无法覆盖.">
+    常量 TFTP用户不存在 <公开 类型 = 整数 值 = 74 注释 = "未找到指定的用户.">
+    常量 字符转换失败 <公开 类型 = 整数 值 = 75 注释 = "字符转换失败.">
+    常量 未注册转换回调 <公开 类型 = 整数 值 = 76 注释 = "未注册指定的回调函数.">
+    常量 SSL证书格式错误 <公开 类型 = 整数 值 = 77 注释 = "提供的SSL证书格式有误.">
+    常量 找不到远程文件 <公开 类型 = 整数 值 = 78 注释 = "远程文件未找到.">
+    常量 SSH错误 <公开 类型 = 整数 值 = 79 注释 = "SSH会话发生未指定的错误.">
+    常量 SSL关闭失败 <公开 类型 = 整数 值 = 80 注释 = "关闭SSL连接失败.">
+    常量 数据收发未就绪 <公开 类型 = 整数 值 = 81 注释 = "数据发送/接收套接字暂未准备就绪,稍后再试.">
+    常量 CRL文件加载失败 <公开 类型 = 整数 值 = 82 注释 = "无法加载指定的CRL文件.">
+    常量 SSL发行人检查失败 <公开 类型 = 整数 值 = 83 注释 = "验证SSL发行人失败.">
+    常量 PRET命令执行失败 <公开 类型 = 整数 值 = 84 注释 = "PRET命令执行失败,可能是提供了不正确的参数.">
+    常量 CSEQ编号不正确 <公开 类型 = 整数 值 = 85 注释 = "RTSP的Cseq号码不匹配.">
+    常量 RTSP会话标识不匹配 <公开 类型 = 整数 值 = 86 注释 = "RTSP会话标识符不匹配.">
+    常量 FTP文件列表无法解析 <公开 类型 = 整数 值 = 87 注释 = "解析FTP文件列表失败.">
+    常量 块报告错误 <公开 类型 = 整数 值 = 88 注释 = "块回调报告错误.">
+    常量 无可用连接 <公开 类型 = 整数 值 = 89 注释 = "当前无可用的连接.">
+    常量 固定公钥不匹配 <公开 类型 = 整数 值 = 90 注释 = "SSL固定公钥不匹配.">
+    常量 证书状态无效 <公开 类型 = 整数 值 = 91 注释 = "无效的证书状态.">
+    常量 HTTP2帧错误 <公开 类型 = 整数 值 = 92 注释 = "HTTP/2帧层中的流错误.">
+    常量 递归的回调 <公开 类型 = 整数 值 = 93 注释 = "回调函数出现递归.">
+    常量 身份验证错误 <公开 类型 = 整数 值 = 94 注释 = "身份验证错误.">
+    常量 HTTP3协议错误 <公开 类型 = 整数 值 = 95 注释 = "HTTP3层出现问题.">
+    常量 QUIC连接错误 <公开 类型 = 整数 值 = 96 注释 = "QUIC连接出现错误.">
+    常量 代理握手失败 <公开 类型 = 整数 值 = 97 注释 = "代理握手失败.">
+}
+
+类 HTTP协议版本 <公开 注释 = "提供HTTP版本." @文档 = "category = \"辅助类\"">
+{
+    常量 未知 <公开 类型 = 整数 值 = @CURL_HTTP_VERSION_NONE 注释 = "未知HTTP协议版本.">
+    常量 HTTP1_0 <公开 类型 = 整数 值 = @CURL_HTTP_VERSION_1_0 注释 = "HTTP1.0">
+    常量 HTTP1_1 <公开 类型 = 整数 值 = @CURL_HTTP_VERSION_1_1 注释 = "HTTP1.1">
+    常量 HTTP2_0 <公开 类型 = 整数 值 = @CURL_HTTP_VERSION_2_0 注释 = "HTTP2">
+    常量 HTTP2TLS <公开 类型 = 整数 值 = @CURL_HTTP_VERSION_2TLS 注释 = "即在HTTPS情况下使用HTTP2,其他时候使用HTTP/1.1.">
+    常量 HTTP2_PRIOR_KNOWLEDGE <公开 类型 = 整数 值 = @CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE 注释 = "不带HTTP/1.1升级的HTTP2.">
+    常量 HTTP3 <公开 类型 = 整数 值 = @CURL_HTTP_VERSION_3 注释 = "HTTP3">
+}
+
+类 RTSP请求方式 <公开 注释 = "指定RTSP请求方法." @文档 = "category = \"辅助类\"">
+{
+    常量 OPTIONS <公开 类型 = 整数 值 = @CURL_RTSPREQ_OPTIONS 注释 = "用于检索服务器信息的方法.">
+    常量 DESCRIBE <公开 类型 = 整数 值 = @CURL_RTSPREQ_DESCRIBE 注释 = "用于获取流的低级描述.">
+    常量 ANNOUNCE <公开 类型 = 整数 值 = @CURL_RTSPREQ_ANNOUNCE 注释 = "由客户端发送时,此方法更改会话的描述.">
+    常量 SETUP <公开 类型 = 整数 值 = @CURL_RTSPREQ_SETUP 注释 = "用于初始化会话的传输层安装程序.">
+    常量 PLAY <公开 类型 = 整数 值 = @CURL_RTSPREQ_PLAY 注释 = "将播放命令发送到服务器.">
+    常量 PAUSE <公开 类型 = 整数 值 = @CURL_RTSPREQ_PAUSE 注释 = "将暂停命令发送到服务器.">
+    常量 TEARDOWN <公开 类型 = 整数 值 = @CURL_RTSPREQ_TEARDOWN 注释 = "终止RTSP会话.">
+    常量 GET_PARAMETER <公开 类型 = 整数 值 = @CURL_RTSPREQ_GET_PARAMETER 注释 = "从服务器检索获取参数.">
+    常量 SET_PARAMETER <公开 类型 = 整数 值 = @CURL_RTSPREQ_SET_PARAMETER 注释 = "设置服务器上的参数.">
+    常量 RECORD <公开 类型 = 整数 值 = @CURL_RTSPREQ_RECORD 注释 = "用于告诉服务器记录会话">
+    常量 RECEIVE <公开 类型 = 整数 值 = @CURL_RTSPREQ_RECEIVE 注释 = "这是一个特殊的请求,因为它不会将任何数据发送到服务器,应用程序可以使用此选项以接收交错的RTP数据.">
+}
+
+类 身份验证方案 <公开 注释 = "与远程服务器对话使用的身份验证方法." @文档 = "category = \"辅助类\"">
+{
+    常量 无 <公开 类型 = 整数 值 = @CURLAUTH_NONE 注释 = "无验证方案.">
+    常量 基础认证 <公开 类型 = 整数 值 = @CURLAUTH_BASIC 注释 = "HTTP基本身份验证.">
+    常量 摘要认证 <公开 类型 = 整数 值 = @CURLAUTH_DIGEST 注释 = "HTTP摘要认证.">
+    常量 IE摘要认证 <公开 类型 = 整数 值 = @CURLAUTH_DIGEST_IE 注释 = "具有IE风格的HTTP摘要式身份验证.">
+    常量 协商认证 <公开 类型 = 整数 值 = @CURLAUTH_NEGOTIATE 注释 = "HTTP协商(SPNEGO)身份验证.">
+    常量 NTLM认证 <公开 类型 = 整数 值 = @CURLAUTH_NTLM 注释 = "HTTP NTLM身份验证,Microsoft发明和使用的专有协议.">
+    常量 令牌认证 <公开 类型 = 整数 值 = @CURLAUTH_BEARER 注释 = "HTTP承载令牌认证,主要用于OAuth 2.0协议.">
+    常量 全自动选择 <公开 类型 = 整数 值 = @CURLAUTH_ANY 注释 = "自动选择最安全的认证方式.">
+    常量 非基础选择 <公开 类型 = 整数 值 = @CURLAUTH_ANYSAFE 注释 = "自动选择最安全的认证方式(排除基础认证方式).">
+}
+
+类 网络访问协议类型 <公开 注释 = "提供网络请求的各种协议类型." @文档 = "category = \"辅助类\"">
+{
+    常量 HTTP <公开 类型 = 整数 值 = @CURLPROTO_HTTP>
+    常量 HTTPS <公开 类型 = 整数 值 = @CURLPROTO_HTTPS>
+    常量 FTP <公开 类型 = 整数 值 = @CURLPROTO_FTP>
+    常量 FTPS <公开 类型 = 整数 值 = @CURLPROTO_FTPS>
+    常量 SCP <公开 类型 = 整数 值 = @CURLPROTO_SCP>
+    常量 SFTP <公开 类型 = 整数 值 = @CURLPROTO_SFTP>
+    常量 TELNET <公开 类型 = 整数 值 = @CURLPROTO_TELNET>
+    常量 LDAP <公开 类型 = 整数 值 = @CURLPROTO_LDAP>
+    常量 LDAPS <公开 类型 = 整数 值 = @CURLPROTO_LDAPS>
+    常量 DICT <公开 类型 = 整数 值 = @CURLPROTO_DICT>
+    常量 FILE <公开 类型 = 整数 值 = @CURLPROTO_FILE>
+    常量 TFTP <公开 类型 = 整数 值 = @CURLPROTO_TFTP>
+    常量 IMAP <公开 类型 = 整数 值 = @CURLPROTO_IMAP>
+    常量 IMAPS <公开 类型 = 整数 值 = @CURLPROTO_IMAPS>
+    常量 POP3 <公开 类型 = 整数 值 = @CURLPROTO_POP3>
+    常量 POP3S <公开 类型 = 整数 值 = @CURLPROTO_POP3S>
+    常量 SMTP <公开 类型 = 整数 值 = @CURLPROTO_SMTP>
+    常量 SMTPS <公开 类型 = 整数 值 = @CURLPROTO_SMTPS>
+    常量 RTSP <公开 类型 = 整数 值 = @CURLPROTO_RTSP>
+    常量 RTMP <公开 类型 = 整数 值 = @CURLPROTO_RTMP>
+    常量 RTMPT <公开 类型 = 整数 值 = @CURLPROTO_RTMPT>
+    常量 RTMPE <公开 类型 = 整数 值 = @CURLPROTO_RTMPE>
+    常量 RTMPTE <公开 类型 = 整数 值 = @CURLPROTO_RTMPTE>
+    常量 RTMPS <公开 类型 = 整数 值 = @CURLPROTO_RTMPS>
+    常量 RTMPTS <公开 类型 = 整数 值 = @CURLPROTO_RTMPTS>
+    常量 GOPHER <公开 类型 = 整数 值 = @CURLPROTO_GOPHER>
+    常量 SMB <公开 类型 = 整数 值 = @CURLPROTO_SMB>
+    常量 SMBS <公开 类型 = 整数 值 = @CURLPROTO_SMBS>
+    常量 MQTT <公开 类型 = 整数 值 = @CURLPROTO_MQTT>
+    常量 所有 <公开 类型 = 整数 值 = @CURLPROTO_ALL>
+}
+
+类 SSL版本类型 <公开 注释 = "指定SSL/TLS的版本." @文档 = "category = \"辅助类\"">
+{
+    常量 默认 <公开 类型 = 整数 值 = @CURL_SSLVERSION_DEFAULT 注释 = "使用默认版本." 编辑时信息 = "36AA7, 0, 0, 0">
+    常量 SSLv2 <公开 类型 = 整数 值 = @CURL_SSLVERSION_SSLv2 注释 = "SSL v2版本." 编辑时信息 = "36AA7, 0, 0, 0">
+    常量 SSLv3 <公开 类型 = 整数 值 = @CURL_SSLVERSION_SSLv3 注释 = "SSL v3版本." 编辑时信息 = "36AA7, 0, 0, 0">
+    常量 TLSv1_0 <公开 类型 = 整数 值 = @CURL_SSLVERSION_TLSv1_0 注释 = "TLS v1.0或更高版本.">
+    常量 TLSv1_1 <公开 类型 = 整数 值 = @CURL_SSLVERSION_TLSv1_1 注释 = "TLS v1.1或更高版本.">
+    常量 TLSv1_2 <公开 类型 = 整数 值 = @CURL_SSLVERSION_TLSv1_2 注释 = "TLS v1.2或更高版本.">
+    常量 TLSv1_3 <公开 类型 = 整数 值 = @CURL_SSLVERSION_TLSv1_3 注释 = "TLS v1.3或更高版本.">
+}
+
+类 SSL行为选项类型 <公开 注释 = "提供SSL行为选项." @文档 = "category = \"辅助类\"">
+{
+    常量 允许变通 <公开 类型 = 整数 值 = @CURLSSLOPT_ALLOW_BEAST>
+    常量 禁用证书吊销 <公开 类型 = 整数 值 = @CURLSSLOPT_NO_REVOKE>
+    常量 不接受非完整证书链 <公开 类型 = 整数 值 = @CURLSSLOPT_NO_PARTIALCHAIN>
+    常量 丢失时禁用证书吊销 <公开 类型 = 整数 值 = @CURLSSLOPT_REVOKE_BEST_EFFORT>
+    常量 使用本机CA证书 <公开 类型 = 整数 值 = @CURLSSLOPT_NATIVE_CA>
+}
+
+类 SSH身份验证类型 <公开 @文档 = "category = \"辅助类\"">
+{
+    常量 公钥验证 <公开 类型 = 整数 值 = @CURLSSH_AUTH_PUBLICKEY>
+    常量 密码验证 <公开 类型 = 整数 值 = @CURLSSH_AUTH_PASSWORD>
+    常量 主机验证 <公开 类型 = 整数 值 = @CURLSSH_AUTH_HOST>
+    常量 交互验证 <公开 类型 = 整数 值 = @CURLSSH_AUTH_KEYBOARD>
+    常量 代理验证 <公开 类型 = 整数 值 = @CURLSSH_AUTH_AGENT>
+}
+
+类 POST重定向选项类型 <公开 注释 = "指定POST请求时发生重定向后的选择." @文档 = "category = \"辅助类\"">
+{
+    常量 全部 <公开 类型 = 整数 值 = @CURL_REDIR_POST_ALL 注释 = "同时包含以下三种.">
+    常量 重定向301 <公开 类型 = 整数 值 = @CURL_REDIR_POST_301
+            注释 = "301重定向时不将POST请求转换为GET请求,遵循\"RFC 7231第6.4.2至6.4.4节(http://www.ietf.org/rfc/rfc7231.txt)\".">
+    常量 重定向302 <公开 类型 = 整数 值 = @CURL_REDIR_POST_302 注释 = "302重定向后保持请求方法.">
+    常量 重定向303 <公开 类型 = 整数 值 = @CURL_REDIR_POST_303 注释 = "303重定向后保持请求方法.">
+    常量 GET全部 <公开 类型 = 整数 值 = @CURL_REDIR_GET_ALL 注释 = "GET请求获取全部">
+}
+
+类 ALTSVC缓存类型 <公开 注释 = "指定ALTSVC缓存的方式." @文档 = "category = \"辅助类\"">
+{
+    常量 只读缓存 <公开 类型 = 整数 值 = 4 注释 = "只读缓存(仅读取缓存文件内容,而不往该文件写入缓存).">
+    常量 HTTP1_0替代 <公开 类型 = 整数 值 = 8 注释 = "接受通过HTTP/1.1提供的替代服务.">
+    常量 HTTP2替代 <公开 类型 = 整数 值 = 16 注释 = "接受通过HTTP/2提供的替代服务.">
+    常量 HTTP3替代 <公开 类型 = 整数 值 = 32 注释 = "接受通过HTTP/3提供的替代服务.">
+}
+
+类 HSTS缓存类型 <公开 注释 = "指定HSTS缓存的方式" @文档 = "category = \"辅助类\"">
+{
+    常量 禁用缓存 <公开 类型 = 整数 值 = 0>
+    常量 启用缓存 <公开 类型 = 整数 值 = 1>
+    常量 只读缓存 <公开 类型 = 整数 值 = 2 注释 = "只读缓存(仅读取缓存文件内容,而不往该文件写入缓存).">
+}
+
+类 FTP目录创建方案 <公开 注释 = "指定当FTP(SFTP)目录不存在时所欲使用的创建方案." @文档 = "category = \"辅助类\"">
+{
+    常量 不创建 <公开 类型 = 整数 值 = 0>
+    常量 尝试创建 <公开 类型 = 整数 值 = 1>
+    常量 重试创建 <公开 类型 = 整数 值 = 2>
+}
+
+类 FTP遍历目录方案 <公开 注释 = "指定FTP遍历目录所欲使用的方案." @文档 = "category = \"辅助类\"">
+{
+    常量 每个路径执行CWD <公开 类型 = 整数 值 = 1 注释 = "对给定URL中的每个路径部分执行单个CWD操作.">
+    常量 不执行CWD <公开 类型 = 整数 值 = 2 注释 = "不执行CWD,将执行SIZE,RETR,STOR等操作,并为所有这些命令提供到服务器的完整路径.">
+    常量 执行一个CWD <公开 类型 = 整数 值 = 3 注释 = "在完整的目标目录执行一个CWD.">
+}
+
+类 FTP安全连接方案 <公开 注释 = "指定FTP所欲使用的SSL优先方案." @文档 = "category = \"辅助类\"">
+{
+    常量 自动选择 <公开 类型 = 整数 值 = 0 注释 = "默认自动选择">
+    常量 SSL优先 <公开 类型 = 整数 值 = 1 注释 = "优先SSL,失败后使用TLS.">
+    常量 TLS优先 <公开 类型 = 整数 值 = 2 注释 = "优先TLS,失败后使用SSL.">
+}
+
+类 多用途扩展格式类 <公开 注释 = "用于构建邮件或HTTP多部分表单的内容." @文档 = "category = \"辅助类\"" @强制依赖 = "网络传输类">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CCurlMimeWraper)
+
+    方法 创建 <公开 类型 = 逻辑型 注释 = "根据指定网络访问对象进行初始化." 返回值注释 = "返回是否创建成功." @禁止流程检查 = 真>
+    参数 网络对象 <类型 = 网络传输类>
+    {
+        @ if (data().mime == NULL) 
+        @     data().mime = curl_mime_init(@<网络对象>.data().GetCurl());
+        @ return (data().mime != NULL);
+    }
+}
+
+类 多用途扩展格式片段类 <公开 注释 = "用于构建邮件或HTTP多部分表单的分段内容." @文档 = "category = \"辅助类\"" @强制依赖 = "网络传输类">
+{
+
+    # @begin
+    # <> <include>
+    # curl_mimepart* part = NULL;
+    # CRefObject* m_pMime = NULL;
+    # void @an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom);
+    # inline_ void @an<_OnCleanupExtra> ()  { m_pMime->SafeRelease (); }
+    # inline_ BOOL @an<_IsSelfEqualExtra> (const @sn<current_class>& objCompare) const  { return (part == objCompare.part); }
+    # <> </include>
+    # void @sn<current_class>::@an<_CopySelfFromExtra> (const @sn<current_class>& objCopyFrom)
+    # {
+    #     part = objCopyFrom.part;
+    #     CRefObject* pOldMime = m_pMime;
+    #     m_pMime = objCopyFrom.m_pMime;
+    #     if (m_pMime != NULL)  m_pMime->AddRef ();
+    #     pOldMime->SafeRelease ();
+    # }
+    # @end
+
+    方法 创建 <公开 类型 = 逻辑型 注释 = "根据指定多用途扩展格式实例进行初始化,使用任何方法之前必须先调用本方法." 返回值注释 = "返回是否创建成功." @禁止流程检查 = 真>
+    参数 格式对象 <类型 = 多用途扩展格式类 注释 = "提供所基于的多用途扩展格式类对象,该对象必需已经调用其\"创建\"方法成功初始化.">
+    {
+        @ if (part == NULL && @<格式对象>.data().mime != NULL) {
+        @     part = curl_mime_addpart (@<格式对象>.data().mime);
+        @     if (part != NULL) {
+        @         ASSERT (m_pMime == NULL);
+        @         m_pMime = @<格式对象>.GetRefObject ();
+        @         m_pMime->AddRef ();
+        @     }
+        @ }
+        @ return (part != NULL);
+    }
+
+    方法 置数据 <公开 类型 = 整数 注释 = "将指定数据置入该片段中" 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 数据 <类型 = 字节集类>
+    {
+        @ return (part != NULL ? curl_mime_data(part, (const char *)@<数据>.GetPtr(), (size_t)@<数据>.GetSize()) : CURLE_OBJECT_NOT_INIT);
+    }
+
+    方法 置文件数据 <公开 类型 = 整数 注释 = "同\"置数据\"方法,该方法可直接提供文件名以将文件数据置入." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 文件名 <类型 = 文本型>
+    {
+        @ return (part != NULL ? curl_mime_filedata(part, GetMbsText (@<文件名>.GetText (), CVolMem(), NULL)) : CURLE_OBJECT_NOT_INIT);
+    }
+
+    方法 置远程文件字段名称 <公开 类型 = 整数 注释 = "设置远程文件字段名称." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 字段名 <类型 = 文本型>
+    {
+        @ return (part != NULL ? curl_mime_filename(part, GetMbsText (@<字段名>.GetText (), CVolMem(), NULL)) : CURLE_OBJECT_NOT_INIT);
+    }
+
+    方法 置请求头 <公开 类型 = 整数 注释 = "设置当前片段数据所欲使用的自定义标头." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 内容 <类型 = 文本数组类 注释 = "一个成员表示一个头,例如\"Custom-Header: NO\"">
+    {
+        @ return (part != NULL ? curl_mime_headers(part, CCurlWraper::s_create_slist (@<内容>.data ()), TRUE) : CURLE_OBJECT_NOT_INIT);
+    }
+
+    方法 编码内容 <公开 类型 = 整数 注释 = "将当前片段中的内容在传输之前进行编码." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 选项 <类型 = 文本型 注释 = "可选值:\"binary\",\"8bit\",\"7bit\",\"base64\",\"quoted-printable\".">
+    {
+        @ return (part != NULL ? curl_mime_encoder(part, GetMbsText (@<选项>.GetText (), CVolMem(), NULL)) : CURLE_OBJECT_NOT_INIT);
+    }
+
+    方法 置片段名称 <公开 类型 = 整数 注释 = "设置当前片段的名称." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 名称 <类型 = 文本型>
+    {
+        @ return (part != NULL ? curl_mime_name(part, GetMbsText (@<名称>.GetText (), CVolMem(), NULL)) : CURLE_OBJECT_NOT_INIT);
+    }
+
+    方法 置片段类型 <公开 类型 = 整数 注释 = "设置当前片段的名类型." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 类型 <类型 = 文本型 注释 = "例如:image/png">
+    {
+        @ return (part != NULL ? curl_mime_type(part, GetMbsText (@<类型>.GetText (), CVolMem(), NULL)) : CURLE_OBJECT_NOT_INIT);
+    }
+
+    方法 添加子片段 <公开 类型 = 整数 注释 = "添加一个子片段." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 扩展对象 <类型 = 多用途扩展格式类 注释 = "提供所欲添加子片段所在的扩展实例,注意添加完毕后本对象将被清空.">
+    {
+        @ INT nResult = CURLE_OBJECT_NOT_INIT;
+        @ if (part != NULL && @<扩展对象>.data().mime != NULL) {
+        @     nResult = curl_mime_subparts (part, @<扩展对象>.data().mime);
+        @     if (nResult == CURLE_OK)  // 添加成功?
+        @         @<扩展对象>.data().mime = NULL;  // 已经被片段接管,避免其自动释放.
+        @ }
+        @ return nResult;
+    }
+}
+
+类 网络访问类 <公开 注释 = "对\"网络传输类\"的一个简单封装,提供一个请求网页资源的方法.">
+{
+    变量 传输对象 <公开 类型 = 网络传输类 进度反馈 = 真 快速打开 = 真>
+
+    方法 Cookie管理文件 <公开 属性写 注释 = "提供Cookie管理文件,如果为空对象则不会管理Cookie内容(可使用\"提交协议头/提交Cookie\"参数自行提交)."
+            注释 = "如提供空文本则表示在内存中管理Cookie(非持久化储存),如果指定了文件则表示持久化储存管理Cookie.">
+    参数 文件 <类型 = 文本型 @默认值 = 空对象>
+    {
+        如果 (文本是否为空对象 (文件) == 假)
+        {
+            如果 (文本是否为空 (文件))
+            {
+                传输对象.置读Cookie文件 ()
+                传输对象.置写Cookie文件 ()
+            }
+            否则
+            {
+                传输对象.置读Cookie文件 (文件)
+                传输对象.置写Cookie文件 (文件)
+            }
+        }
+        否则
+        {
+            传输对象.置读Cookie文件 (文件)  // 空对象置入过去等于清除原设置
+            传输对象.置写Cookie文件 (文件)
+        }
+    }
+
+    方法 网页访问 <公开 类型 = 网页访问响应类 注释 = "对指定网址发送请求并获取响应内容." 返回值注释 = "返回访问网页的结果.">
+    参数 网址 <类型 = 文本型 注释 = "提供所欲访问的网址内容." 编辑时信息 = "B3FF4, 0, 0, 0">
+    参数 访问方式 <类型 = 网页访问方式 注释 = "提供所欲使用的请求方式." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = 网页访问方式.GET>
+    参数 提交信息 <类型 = 文本型 注释 = "设置本次请求所提交的数据,非POST请求也支持提交请求体,如需携带请求体务必保证该参数不为空对象,如果需要提交空请求体提供空文本内容即可." 编辑时信息 = "B3FF4, 0, 0, 0"
+            @默认值 = 空对象>
+    参数 提交协议头 <类型 = 文本数组类 注释 = "提供本次请求所欲使用的附加协议头,每个成员表示一个协议." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = 空对象>
+    参数 提交Cookie <类型 = 文本型 注释 = "提供本次请求所欲使用的Cookie内容,注意该参数提交的内容不会同步到\"Cookie管理文件\"(不会写出至管理文件)." 编辑时信息 = "B3FF4, 0, 0, 0"
+            @默认值 = "">
+    参数 内容编码 <类型 = 文本型 注释 = "指定所欲请求服务器使用的内容编码(压缩)方式,即\"Accept-Encoding\"协议内容,例如\"gzip, deflate, br\",提供空文本则自动选择,提供空对象则禁用."
+            @默认值 = "">
+    参数 代理地址 <类型 = 文本型 注释 = "提供所欲使用的代理地址,支持多种协议(http,https,socks4,socks4a,socks5,socks5h),例如(http协议):http://127.0.0.1:8080"
+            编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = "">
+    参数 代理账号 <类型 = 文本型 注释 = "提供代理地址所需的用户名." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = "">
+    参数 代理密码 <类型 = 文本型 注释 = "提供代理地址所需的用户密码." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = "">
+    参数 超时时间 <类型 = 整数 注释 = "指定本次完成整个请求所限定的超时时间,为-1时不限制,单位:毫秒." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = -1>
+    参数 重定向次数 <类型 = 整数 注释 = "欲遵循网站重定向的最大次数,为-1时无限制,为0时禁止重定向." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = -1>
+    参数 忽略SSL错误 <类型 = 逻辑型 注释 = "是否忽略任何SSL验证相关错误,即不验证证书也不验证服务器(如使用了代理将会被一同忽略)." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = 真>
+    参数 欲上传的本地文件 <类型 = 文本数组类 注释 = "不需要上传文件留空即可." 注释 = "提供本地文件绝对路径数组." @默认值 = 空对象>
+    参数 文件对应name值 <类型 = 文本数组类 注释 = "在上传文件时通常需要提供一个\"name\"值,通常为\"file\"." 注释 = "注意:" 注释 = "    本参数的成员数务必和\"欲上传的本地文件\"成员数保持一致."
+            注释 = "    当本参数为空,且\"欲上传的本地文件\"参数不为空时,本参数默认提供\"file\"." 注释 = "    多个文件依次提供\"file\",\"file-1\",\"file-N\"..." @默认值 = 空对象>
+    参数 内容类型 <类型 = 文本数组类 注释 = "提供Content-Type值,留空提供\"application/x-www-form-urlencoded\"."
+            注释 = "注意:本参数的成员数务必和\"欲上传的本地文件\"成员数保持一致." @默认值 = 空对象>
+    {
+        变量 提交内容 <类型 = 字节集类>
+        如果 (文本是否为空对象 (提交信息) == 假)
+        {
+            如果 (文本是否为空 (提交信息) == 假)
+            {
+                提交内容 = 文本到多字节 (提交信息, 假)
+            }
+            // 否则提供0长度,空请求体
+        }
+        否则
+        {
+            提交内容.重置为空对象 ()  // 空对象标志
+        }
+        返回 (网页访问2 (网址, 访问方式, 提交内容, 提交协议头, 提交Cookie, 内容编码, 代理地址, 代理账号, 代理密码, 超时时间, 重定向次数, 忽略SSL错误, 欲上传的本地文件, 文件对应name值, 内容类型))
+    }
+
+    方法 网页访问2 <公开 类型 = 网页访问响应类 注释 = "与\"网页访问\"命令基本一致,不同的是本方法提交的请求体内容为字节集类型." 返回值注释 = "返回访问网页的结果.">
+    参数 网址 <类型 = 文本型 注释 = "提供所欲访问的网址内容." 编辑时信息 = "B3FF4, 0, 0, 0">
+    参数 访问方式 <类型 = 网页访问方式 注释 = "提供所欲使用的请求方式." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = 网页访问方式.GET>
+    参数 提交信息 <类型 = 字节集类 注释 = "设置本次请求所提交的数据,非POST请求也支持提交请求体,如需携带请求体务必保证该参数不为空对象,如果需要提交空请求体提供空字节集即可." 编辑时信息 = "B3FF4, 0, 0, 0"
+            @默认值 = 空对象>
+    参数 提交协议头 <类型 = 文本数组类 注释 = "提供本次请求所欲使用的附加协议头,每个成员表示一个协议." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = 空对象>
+    参数 提交Cookie <类型 = 文本型 注释 = "提供本次请求所欲使用的Cookie内容,注意该参数提交的内容不会同步到\"Cookie管理文件\"(不会写出至管理文件)." 编辑时信息 = "B3FF4, 0, 0, 0"
+            @默认值 = "">
+    参数 内容编码 <类型 = 文本型 注释 = "指定所欲请求服务器使用的内容编码(压缩)方式,即\"Accept-Encoding\"协议内容,例如\"gzip, deflate, br\",提供空文本则自动选择,提供空对象则禁用."
+            @默认值 = "">
+    参数 代理地址 <类型 = 文本型 注释 = "提供所欲使用的代理地址,支持多种协议(http,https,socks4,socks4a,socks5,socks5h),例如(http协议):http://127.0.0.1:8080"
+            编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = "">
+    参数 代理账号 <类型 = 文本型 注释 = "提供代理地址所需的用户名." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = "">
+    参数 代理密码 <类型 = 文本型 注释 = "提供代理地址所需的用户密码." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = "">
+    参数 超时时间 <类型 = 整数 注释 = "指定本次完成整个请求所限定的超时时间,为-1时不限制,单位:毫秒." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = -1>
+    参数 重定向次数 <类型 = 整数 注释 = "欲遵循网站重定向的最大次数,为-1时无限制,为0时禁止重定向." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = -1>
+    参数 忽略SSL错误 <类型 = 逻辑型 注释 = "是否忽略任何SSL验证相关错误,即不验证证书也不验证服务器(如使用了代理将会被一同忽略)." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = 真>
+    参数 欲上传的本地文件 <类型 = 文本数组类 注释 = "不需要上传文件留空即可." 注释 = "提供本地文件绝对路径数组." 折叠2 @默认值 = 空对象>
+    参数 文件对应name值 <类型 = 文本数组类 注释 = "在上传文件时通常需要提供一个\"name\"值,通常为\"file\"." 注释 = "注意:" 注释 = "    本参数的成员数务必和\"欲上传的本地文件\"成员数保持一致."
+            注释 = "    当本参数为空,且\"欲上传的本地文件\"参数不为空时,本参数默认提供\"file\"." 注释 = "    多个文件依次提供\"file\",\"file-1\",\"file-N\"..." 折叠2
+            @默认值 = 空对象>
+    参数 内容类型 <类型 = 文本数组类 注释 = "提供Content-Type值,留空提供\"application/x-www-form-urlencoded\"."
+            注释 = "注意:本参数的成员数务必和\"欲上传的本地文件\"成员数保持一致." 折叠2 @默认值 = 空对象>
+    {
+        传输对象.地址 = 网址
+        如果 (访问方式 == 网页访问方式.GET)
+        {
+            传输对象.置请求方式 ("GET")
+        }
+        否则 (访问方式 == 网页访问方式.POST)
+        {
+            传输对象.置请求方式 ("POST")
+        }
+        否则 (访问方式 == 网页访问方式.HEAD)
+        {
+            传输对象.置请求方式 ("HEAD")
+        }
+        否则 (访问方式 == 网页访问方式.PUT)
+        {
+            传输对象.置请求方式 ("PUT")
+        }
+        否则 (访问方式 == 网页访问方式.OPTIONS)
+        {
+            传输对象.置请求方式 ("OPTIONS")
+        }
+        否则 (访问方式 == 网页访问方式.DELETE)
+        {
+            传输对象.置请求方式 ("DELETE")
+        }
+        否则 (访问方式 == 网页访问方式.TRACE)
+        {
+            传输对象.置请求方式 ("TRACE")
+        }
+        否则 (访问方式 == 网页访问方式.CONNECT)
+        {
+            传输对象.置请求方式 ("CONNECT")
+        }
+        否则 (访问方式 == 网页访问方式.PATCH)
+        {
+            传输对象.置请求方式 ("PATCH")
+        }
+        否则
+        {
+            传输对象.置请求方式 ("GET")
+        }
+        传输对象.置请求头 (提交协议头)
+        传输对象.置Cookie内容 (提交Cookie)
+        如果 (是否为空对象 (提交信息) == 假)
+        {
+            如果 (提交信息.取字节集长度 () > 0)
+            {
+                传输对象.置提交数据 (提交信息)
+            }
+            否则
+            {
+                传输对象.置提交数据 (空对象, 假)
+                传输对象.置提交数据尺寸 (0)
+            }
+        }
+        否则
+        {
+            传输对象.置提交数据尺寸 (0)
+        }
+        如果 (访问方式 == 网页访问方式.HEAD)
+        {
+            传输对象.忽略主体请求 = 真
+        }
+        否则
+        {
+            传输对象.忽略主体请求 = 假
+        }
+        传输对象.编码内容 = 内容编码  // 覆盖提交协议头里的Accept-Encoding,如果仅提交协议头返回的内容不会自动解码!
+        如果 (重定向次数 == 0)
+        {
+            传输对象.遵循重定向 = 假
+        }
+        否则
+        {
+            传输对象.遵循重定向 = 真
+            传输对象.重定向最大次数 = 重定向次数
+        }
+        传输对象.代理地址 = 代理地址
+        传输对象.代理身份验证账号 = 代理账号
+        传输对象.代理身份验证密码 = 代理密码
+        如果 (超时时间 <= 0)
+        {
+            传输对象.请求超时 = 0
+        }
+        否则
+        {
+            传输对象.请求超时 = 超时时间
+        }
+        如果 (忽略SSL错误)
+        {
+            传输对象.SSL证书检查 = 假
+            传输对象.SSL验证证书主机名 = 假
+            传输对象.SSL代理证书检查 = 假
+            传输对象.SSL代理验证证书主机名 = 假
+        }
+        变量 表单 <类型 = 多用途扩展格式类>
+        如果 (欲上传的本地文件 != 空对象)
+        {
+            表单.创建 (传输对象)  // 必须先根据传输对象创建表单
+            欲上传的本地文件.枚举循环 ()
+            {
+                变量 子片段 <类型 = 多用途扩展格式片段类>
+                子片段.创建 (表单)  // 基于此表单添加一个片段
+                子片段.置文件数据 (欲上传的本地文件.取枚举值 ())  // 直接添加欲上传的文件
+                如果 (文件对应name值 == 空对象)
+                {
+                    如果 (欲上传的本地文件.取枚举索引 () == 0)
+                    {
+                        子片段.置片段名称 ("file")  // 对应name值
+                    }
+                    否则
+                    {
+                        子片段.置片段名称 ("file-" + 到文本 (欲上传的本地文件.取枚举索引 ()))  // 对应name值
+                    }
+                }
+                否则
+                {
+                    如果 (欲上传的本地文件.取成员数 () <= 文件对应name值.取成员数 ())  // 防止索引超出成员数
+                    {
+                        子片段.置片段名称 (文件对应name值.取成员 (欲上传的本地文件.取枚举索引 ()))
+                    }
+                }
+                如果 (内容类型 == 空对象)
+                {
+                    子片段.置片段类型 ("application/x-www-form-urlencoded")
+                }
+                否则
+                {
+                    如果 (欲上传的本地文件.取成员数 () <= 内容类型.取成员数 ())  // 防止索引超出成员数
+                    {
+                        子片段.置片段类型 (内容类型.取成员 (欲上传的本地文件.取枚举索引 ()))  // 对应Content-Type头
+                    }
+                }
+                子片段.置远程文件字段名称 (传输对象.URL编码 (文本到UTF8 (取文件名无路径部分 (欲上传的本地文件.取枚举值 ()), 假)))  // 对应filename
+            }
+            传输对象.置表单数据 (表单)  // 将组合完毕的表单置入,直接发送请求即可
+        }
+        变量 返回结果 <类型 = 网页访问响应类>
+        传输对象.发送请求 (返回结果.请求结果, 返回结果.响应头)
+        // 返回结果.Cookies = 传输对象.取所有Cookie ()    //会同时取出整个持久化管理的Cookie
+        返回结果.响应头.枚举循环 ()
+        {
+            变量 当前值 <类型 = 文本型>
+            当前值 = 返回结果.响应头.取枚举值 ()
+            变量 键名 <类型 = 文本型>
+            变量 键值 <类型 = 文本型>
+            分割左右文本 (当前值, ':', 键名, 键值)
+            如果 (键名 == "Set-Cookie")
+            {
+                返回结果.Cookies.加入成员 (键值)
+            }
+            如果 (键名 == "Location")
+            {
+                返回结果.重定向地址 = 键值
+            }
+            如果 (键名 == "Content-Type")
+            {
+                返回结果.内容类型 = 键值
+            }
+            如果 (键名 == "Content-MD5")
+            {
+                返回结果.内容MD5 = 键值
+            }
+            如果 (键名 == "Content-Encoding")
+            {
+                返回结果.内容编码 = 键值
+            }
+            如果 (键名 == "Content-Length")
+            {
+                返回结果.内容长度 = 文本到长整数 (键值)
+            }
+        }
+        返回结果.重定向次数 = 传输对象.取重定向次数 ()
+        如果 (文本是否为空 (返回结果.重定向地址))
+        {
+            返回结果.重定向地址 = 传输对象.取重定向地址 ()  // 返回的协议头里面没有,尝试通过内置方法获取.
+        }
+        // 返回结果.重定向地址 = 传输对象.取重定向地址 ()    //Curl对象无法获取,改用请求头方式取
+        返回结果.响应码 = 传输对象.取上次请求响应码 ()
+        返回结果.请求耗时 = 传输对象.取接收时长 ()
+        返回 (返回结果)
+    }
+
+    变量 文件读写 <静态 类型 = 文件读写类>
+    变量 文件下载保存位置 <类型 = 文本型 注释 = "当下载文件的时候,本变量用于临时存储文件下载保存位">
+
+    方法 下载文件 <公开 类型 = 网页访问响应类 注释 = "与\"网页访问\"命令基本一致,不同的是本方法用于下载文件." 注释 = "如果需要暂停,调用\"暂停下载\"即可."
+            返回值注释 = "返回访问网页的结果,注意本方法的返回\"请求结果\"无数据,访问结果将直接保存成文件.">
+    参数 网址 <类型 = 文本型 注释 = "提供所欲访问的网址内容." 编辑时信息 = "B3FF4, 0, 0, 0">
+    参数 访问方式 <类型 = 网页访问方式 注释 = "提供所欲使用的请求方式." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = 网页访问方式.GET>
+    参数 提交信息 <类型 = 字节集类 注释 = "设置本次请求所提交的数据,非POST请求也支持提交请求体,如需携带请求体务必保证该参数不为空对象,如果需要提交空请求体提供空字节集即可." 编辑时信息 = "B3FF4, 0, 0, 0"
+            @默认值 = 空对象>
+    参数 提交协议头 <类型 = 文本数组类 注释 = "提供本次请求所欲使用的附加协议头,每个成员表示一个协议." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = 空对象>
+    参数 提交Cookie <类型 = 文本型 注释 = "提供本次请求所欲使用的Cookie内容,注意该参数提交的内容不会同步到\"Cookie管理文件\"(不会写出至管理文件)." 编辑时信息 = "B3FF4, 0, 0, 0"
+            @默认值 = "">
+    参数 内容编码 <类型 = 文本型 注释 = "指定所欲请求服务器使用的内容编码(压缩)方式,即\"Accept-Encoding\"协议内容,例如\"gzip, deflate, br\",提供空文本则自动选择,提供空对象则禁用."
+            @默认值 = "">
+    参数 代理地址 <类型 = 文本型 注释 = "提供所欲使用的代理地址,支持多种协议(http,https,socks4,socks4a,socks5,socks5h),例如(http协议):http://127.0.0.1:8080"
+            编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = "">
+    参数 代理账号 <类型 = 文本型 注释 = "提供代理地址所需的用户名." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = "">
+    参数 代理密码 <类型 = 文本型 注释 = "提供代理地址所需的用户密码." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = "">
+    参数 超时时间 <类型 = 整数 注释 = "指定本次完成整个请求所限定的超时时间,为-1时不限制,单位:毫秒." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = -1>
+    参数 重定向次数 <类型 = 整数 注释 = "欲遵循网站重定向的最大次数,为-1时无限制,为0时禁止重定向." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = -1>
+    参数 忽略SSL错误 <类型 = 逻辑型 注释 = "是否忽略任何SSL验证相关错误,即不验证证书也不验证服务器(如使用了代理将会被一同忽略)." 编辑时信息 = "B3FF4, 0, 0, 0" @默认值 = 真>
+    参数 文件保存位置 <类型 = 文本型 注释 = "提供保存到本地的文件名">
+    参数 覆盖策略 <类型 = 网页访问覆盖策略 注释 = "提供下载覆盖策略,默认为覆盖文件." 注释 = "如果提供的参数值为\"网页访问覆盖策略.自定义断点续传\",某些服务器可能需要自定义协议头才能进行断点续传."
+            注释 = "这时需要您在\"提交协议头\"参数中提供对应的协议头信息." @默认值 = 网页访问覆盖策略.覆盖文件>
+    {
+        文件下载保存位置 = 文件保存位置
+        变量 网络文件尺寸 <类型 = 长整数>
+        网络文件尺寸 = 网页访问2 (网址, 网页访问方式.HEAD, 提交信息, 提交协议头, 提交Cookie, 内容编码, 代理地址, 代理账号, 代理密码, 超时时间, 重定向次数, 忽略SSL错误).内容长度
+        传输对象.置请求方式 (多项选择 ((整数)访问方式, "GET", "POST", "HEAD", "PUT", "OPTIONS", "DELETE", "TRACE", "CONNECT", "PATCH"))
+        传输对象.忽略主体请求 = 访问方式 == 网页访问方式.HEAD
+        如果 (文件读写.是否已打开 () == 假)
+        {
+            文件读写.打开文件 (文件保存位置, 选择 (文件是否存在 (文件保存位置) && 覆盖策略 == 网页访问覆盖策略.覆盖文件, 文件打开方式.重写, 文件打开方式.改写))
+        }
+        如果 (文件读写.取文件长度 () > 0 && 文件读写.取文件长度 () < 网络文件尺寸)  // 尝试使用内置的断点续传方式
+        {
+            如果 (覆盖策略 == 网页访问覆盖策略.断点续传)
+            {
+                传输对象.请求数据范围 = 到文本 (文件读写.取文件长度 ()) + "-" + 到文本 (网络文件尺寸)  // 指定所欲下载文件的范围(不是所有服务器都支持!)    //格式为 "起始下载位置-文件总尺寸"
+            }
+        }
+        否则 (文件读写.取文件长度 () > 网络文件尺寸)  // 文件尺寸异常?
+        {
+            文件读写.打开文件 (文件保存位置, 文件打开方式.重写)
+        }
+        传输对象.置写入数据回调函数 (写入数据回调)
+        变量 返回结果 <类型 = 网页访问响应类>
+        传输对象.发送请求 (, 返回结果.响应头)  // 这里不能返回响应数据否则会导致下载无效.
+        <折叠> 返回结果.响应头.枚举循环 ()
+        {
+            变量 当前值 <类型 = 文本型>
+            当前值 = 返回结果.响应头.取枚举值 ()
+            变量 键名 <类型 = 文本型>
+            变量 键值 <类型 = 文本型>
+            分割左右文本 (当前值, ':', 键名, 键值)
+            如果 (键名 == "Set-Cookie")
+            {
+                返回结果.Cookies.加入成员 (键值)
+            }
+            如果 (键名 == "Location")
+            {
+                返回结果.重定向地址 = 键值
+            }
+            如果 (键名 == "Content-Type")
+            {
+                返回结果.内容类型 = 键值
+            }
+            如果 (键名 == "Content-MD5")
+            {
+                返回结果.内容MD5 = 键值
+            }
+            如果 (键名 == "Content-Encoding")
+            {
+                返回结果.内容编码 = 键值
+            }
+            如果 (键名 == "Content-Length")
+            {
+                返回结果.内容长度 = 文本到长整数 (键值)
+            }
+        }
+        返回结果.重定向次数 = 传输对象.取重定向次数 ()
+        如果 (文本是否为空 (返回结果.重定向地址))
+        {
+            返回结果.重定向地址 = 传输对象.取重定向地址 ()  // 返回的协议头里面没有,尝试通过内置方法获取.
+        }
+        返回结果.响应码 = 传输对象.取上次请求响应码 ()
+        返回结果.请求耗时 = 传输对象.取接收时长 ()
+        返回 (返回结果)
+    }
+
+    方法 写入数据回调 <静态 类型 = 变整数 注释 = "\"置写入数据回调函数\"对应的方法模板." 返回值注释 = "返回所处理的数据长度." @视窗.前缀文本 = "@CDECL">
+    参数 数据 <类型 = 变整数 注释 = "本次回调提供的数据指针.">
+    参数 数据尺寸 <类型 = 变整数 注释 = "本次回调提供单个数据的长度,即总长度应为 \"数据尺寸\"*\"数据数量\".">
+    参数 数据数量 <类型 = 变整数 注释 = "本次回调提供数据的个数.">
+    参数 用户数据 <类型 = 变整数 注释 = "设置回调函数所传入的\"用户数据\"参数.">
+    {
+        文件读写.移到文件尾 ()
+        文件读写.写出字节集 (指针到字节集 (数据, (整数)数据尺寸 * (整数)数据数量))
+        返回 (数据尺寸 * 数据数量)
+    }
+
+    方法 继续 <公开 类型 = 逻辑型 注释 = "继续当前下载或上传任务." 返回值注释 = "失败返回假,可能是文件被占用.">
+    参数 继续下载 <类型 = 逻辑型 注释 = "提供真则继续下载任务,否则表示继续上传任务.">
+    {
+        如果 (继续下载 && 文件读写.是否已打开 () == 假)
+        {
+            如果 (文件读写.打开文件 (文件下载保存位置, 文件打开方式.改写) == 假)  // 打开失败?
+            {
+                返回 (假)
+            }
+        }
+        返回 (传输对象.继续传输 () == 0)
+    }
+
+    方法 暂停 <公开 注释 = "暂停当前下载或上传任务,重新访问调用\"继续\"方法即可.">
+    参数 是否关闭文件 <类型 = 逻辑型 注释 = "是否关闭文件占用,如果为上传任务本参数无效.">
+    {
+        传输对象.暂停传输 ()
+        如果 (是否关闭文件)
+        {
+            文件读写.关闭文件 ()  // 主要针对下载任务关闭文件占用
+        }
+    }
+
+    方法 URL编码 <公开 类型 = 文本型 注释 = "将指定文本内容进行URL编码后返回.">
+    参数 欲编码内容 <类型 = 文本型 注释 = "提供所欲编码的文本内容.">
+    参数 是否UTF8 <类型 = 逻辑型 注释 = "是否将该文本内容以UTF8方式编码." @默认值 = 真>
+    {
+        如果 (是否UTF8)
+        {
+            返回 (传输对象.URL编码 (文本到UTF8 (欲编码内容, 假)))
+        }
+        否则
+        {
+            返回 (传输对象.URL编码 (文本到多字节 (欲编码内容, 假)))
+        }
+    }
+
+    方法 URL解码 <公开 类型 = 文本型 注释 = "将指定URL编码的内容进行解码后返回." 折叠>
+    参数 欲解码内容 <类型 = 文本型 注释 = "提供所欲解码的文本内容.">
+    参数 是否UTF8 <类型 = 逻辑型 注释 = "是否将该文本内容以UTF8方式解码." @默认值 = 真>
+    {
+        如果 (是否UTF8)
+        {
+            返回 (UTF8到文本 (传输对象.URL解码 (欲解码内容)))
+        }
+        否则
+        {
+            返回 (多字节到文本 (传输对象.URL解码 (欲解码内容)))
+        }
+    }
+
+    方法 网络传输类_传输进度发生改变 <接收事件 类型 = 整数 注释 = "当传输进度发生改变时,本事件将被调用多次直到整个传输结束.">
+    参数 来源对象 <类型 = 网络传输类 注释 = "提供事件产生的具体来源对象">
+    参数 标记值 <类型 = 整数 注释 = "用户调用\"挂接事件\"命令时所提供的\"标记值\"参数值,非此方式挂接事件则本参数值固定为0.">
+    参数 下载总量 <类型 = 长整数 注释 = "预计需要下载的字节数.">
+    参数 当前下载 <类型 = 长整数 注释 = "当前已下载的字节数.">
+    参数 上传总量 <类型 = 长整数 注释 = "预计需要上传的字节数.">
+    参数 当前上传 <类型 = 长整数 注释 = "当前已上传的字节数.">
+    {
+        如果 (下载总量 != 0 && 当前下载 >= 下载总量)
+        {
+            文件读写.关闭文件 ()  // 下载完毕关闭文件
+        }
+        返回 (访问进度改变 (下载总量, 当前下载, 上传总量, 当前上传))
+    }
+
+    方法 访问进度改变 <公开 定义事件 类型 = 整数 注释 = "在发送请求过程中如果请求进度发生改变,将会响应本事件.">
+    参数 下载总量 <类型 = 长整数 注释 = "预计需要下载的字节数.">
+    参数 当前下载 <类型 = 长整数 注释 = "当前已下载的字节数.">
+    参数 上传总量 <类型 = 长整数 注释 = "预计需要上传的字节数.">
+    参数 当前上传 <类型 = 长整数 注释 = "当前已上传的字节数.">
+}
+
+类 网页访问响应类 <公开 基础类 = 扩展对象类 注释 = "包含网页访问所返回的结果内容.">
+{
+    变量 请求结果 <公开 类型 = 字节集类 注释 = "本次请求所返回的结果数据." @属性变量 = 真>
+    变量 Cookies <公开 类型 = 文本数组类 注释 = "本次请求所返回的Cookie内容." @属性变量 = 真>
+    变量 响应头 <公开 类型 = 文本数组类 注释 = "本次请求所接收到服务器的响应头内容." @属性变量 = 真>
+    变量 重定向地址 <公开 类型 = 文本型 注释 = "本次请求最终的重定向地址." @属性变量 = 真>
+    变量 重定向次数 <公开 类型 = 整数 注释 = "本次请求所遵循重定向的次数." @属性变量 = 真>
+    变量 响应码 <公开 类型 = 整数 注释 = "本次请求的HTTP状态码." @属性变量 = 真>
+    变量 请求耗时 <公开 类型 = 长整数 注释 = "本次请求所耗时长(毫秒)." @属性变量 = 真>
+    变量 内容类型 <公开 类型 = 文本型 注释 = "响应内容类型(Content-Type)" @属性变量 = 真>
+    变量 内容MD5 <公开 类型 = 文本型 注释 = "响应内容md5(Content-MD5)" @属性变量 = 真>
+    变量 内容编码 <公开 类型 = 文本型 注释 = "响应内容的编码方式，例如gzip、compress等(Content-Encoding)" @属性变量 = 真>
+    变量 内容长度 <公开 类型 = 长整数 注释 = "响应内容字节长度(Content-Length)" @属性变量 = 真>
+
+    方法 取展示内容 <公开 注释 = "将本对象中的所有数据用文本方式填入到所提供的文本参数中,用作调试或其它场合展示时使用." 注释 = "" @虚拟方法 = 可覆盖>
+    参数 展示内容 <类型 = 文本型 注释 = "用作填入本对象中所有数据的展示文本">
+    参数 最大展示数据尺寸 <类型 = 整数 注释 = "提供用户所指定的最大允许展示数据尺寸,小于0表示全部展示,等于0表示展示默认尺寸数据.">
+    {
+        展示内容 = UTF8到文本 (请求结果)
+    }
+
+    方法 取结果文本 <公开 类型 = 文本型 注释 = "取出请求结果所对应的文本内容">
+    参数 文本编码 <类型 = 文本编码类型 注释 = "提供网页编码类型,默认为utf8编码,如果是gbk网页请使用\"文本编码类型.多字节\"." @默认值 = 文本编码类型.UTF8>
+    {
+        如果 (文本编码 == 文本编码类型.多字节)
+        {
+            返回 (多字节到文本 (请求结果))
+        }
+        否则 (文本编码 == 文本编码类型.UTF16)
+        {
+            返回 (字节集到文本 (请求结果))
+        }
+        返回 (UTF8到文本 (请求结果))
+    }
+}
+
+类 网页访问覆盖策略 <公开 注释 = "主要为\"下载文件\"方法提供下载策略支持." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 覆盖文件 <公开 值 = 0 注释 = "当文件存在的时候覆盖文件">
+    常量 断点续传 <公开 值 = 1 注释 = "如果文件存在的时候尝试断点续传,文件不存在直接下载.">
+    常量 自定义断点续传 <公开 值 = 2 注释 = "某些服务器可能需要自定义协议头才能进行断点续传." 注释 = "提供本常亮后需要您自行在\"下载文件\"方法的\"提交协议头\"参数中提供相应的协议信息可以实现断点续传.">
+}
+
+类 网页访问方式 <公开 注释 = "包含网页访问的请求方式." @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 GET <公开 值 = 0>
+    常量 POST <公开 值 = 1>
+    常量 HEAD <公开 值 = 2>
+    常量 PUT <公开 值 = 3>
+    常量 OPTIONS <公开 值 = 4>
+    常量 DELETE <公开 值 = 5>
+    常量 TRACE <公开 值 = 6>
+    常量 CONNECT <公开 值 = 7>
+    常量 PATCH <公开 值 = 8>
+}
+
+# ===
+
+类 邮件发送类 <公开 注释 = "支持基于SMTP协议发送邮件." 注释 = "电子邮件接收请使用\"电子邮件接收\"类库中的\"邮件接收类\"." @视窗.外部头文件 = "vol\\mail\\vol_curl_send_mail.h"
+        @视窗.外部源文件 = "vol\\mail\\vol_curl_send_mail.cpp">
+{
+    变量 发信服务器 <公开 类型 = 文本型 注释 = "提供所使用的SMTP服务器地址" @属性变量 = 真>
+    变量 端口号 <公开 类型 = 整数 值 = 25 注释 = "指定欲连接到SMTP邮件服务器上的端口号(smtp默认25,smtps默认是465)" @属性变量 = 真>
+    变量 用户名 <公开 类型 = 文本型 注释 = "提供登录发信服务器的用户名,如无则为空文本." @属性变量 = 真>
+    变量 密码 <公开 类型 = 文本型 注释 = "提供登录发信服务器的密码,如无则为空文本." @属性变量 = 真>
+    变量 ""
+    变量 成员_传输对象 <类型 = 网络传输类 注释 = "所使用的网络传输对象" 启用SSL级别 = 3 SSL版本 = SSL版本类型.TLSv1_3 SSL证书检查 = 假 SSL验证证书主机名 = 假>
+    变量 成员_发信人邮件地址 <类型 = 文本型 注释 = "提供发信人的邮件地址,本属性值不能为空.">
+    变量 成员_发信人友好名称 <类型 = 文本型 注释 = "提供发信人的友好名称,如: \"递归软件开发有限公司\",为空文本表示无.">
+    变量 成员_邮件回复地址 <类型 = 文本型 注释 = "提供邮件的回复邮件地址,为空文本表示无.">
+    变量 成员_邮件标题 <类型 = 文本型 注释 = "提供所发送邮件的标题文本">
+    变量 成员_邮件正文 <类型 = 文本型 注释 = "提供所发送邮件的正文内容">
+    变量 成员_邮件正文媒体格式 <类型 = 文本型 值 = "text/plain" 注释 = "提供所发送邮件正文内容的媒体格式,常用的有如下几种:" 注释 = "  \"text/plain\": 纯文本"
+            注释 = "  \"text/html\": html文本" 注释 = "  \"text/xml\": xml文本">
+    变量 成员_附件数据数组 <类型 = 字节集数组类>
+    变量 成员_附件文件名 <类型 = 文本数组类>
+
+    方法 传输对象 <公开 属性读 类型 = 网络传输类 注释 = "提供所使用的网络传输对象,用户可以修改此对象的各种属性值以指定相关网络传输参数.">
+    {
+        返回 (成员_传输对象)
+    }
+
+    方法 发信人邮件地址 <公开 属性读 类型 = 文本型 注释 = "提供发信人的邮件地址">
+    {
+        返回 (成员_发信人邮件地址)
+    }
+
+    方法 发信人邮件地址 <公开 属性写 注释 = "设置发信人的邮件地址,本属性值不能为空.">
+    参数 发信人邮件地址内容 <类型 = 文本型>
+    {
+        如果 (成员_发信人邮件地址 != 发信人邮件地址内容)
+        {
+            成员_发信人邮件地址 = 发信人邮件地址内容
+            @ m_u8strPrepareContent.Empty ();  // 清空所准备的预处理内容
+        }
+    }
+
+    方法 发信人友好名称 <公开 属性读 类型 = 文本型 注释 = "提供发信人的友好名称,如: \"递归软件开发有限公司\",为空文本表示无.">
+    {
+        返回 (成员_发信人友好名称)
+    }
+
+    方法 发信人友好名称 <公开 属性写 注释 = "设置发信人的友好名称,如: \"递归软件开发有限公司\",为空文本表示无.">
+    参数 发信人友好名称内容 <类型 = 文本型>
+    {
+        如果 (成员_发信人友好名称 != 发信人友好名称内容)
+        {
+            成员_发信人友好名称 = 发信人友好名称内容
+            @ m_u8strPrepareContent.Empty ();
+        }
+    }
+
+    方法 邮件回复地址 <公开 属性读 类型 = 文本型 注释 = "提供邮件的回复邮件地址,为空文本表示无.">
+    {
+        返回 (成员_邮件回复地址)
+    }
+
+    方法 邮件回复地址 <公开 属性写 注释 = "设置即将发送邮件的回复邮件地址,为空文本表示无.">
+    参数 邮件回复地址内容 <类型 = 文本型>
+    {
+        如果 (成员_邮件回复地址 != 邮件回复地址内容)
+        {
+            成员_邮件回复地址 = 邮件回复地址内容
+            @ m_u8strPrepareContent.Empty ();
+        }
+    }
+
+    方法 邮件标题 <公开 属性读 类型 = 文本型 注释 = "提供所发送邮件的标题文本">
+    {
+        返回 (成员_邮件标题)
+    }
+
+    方法 邮件标题 <公开 属性写 注释 = "设置即将发送邮件的标题文本">
+    参数 邮件标题内容 <类型 = 文本型>
+    {
+        如果 (成员_邮件标题 != 邮件标题内容)
+        {
+            成员_邮件标题 = 邮件标题内容
+            @ m_u8strPrepareContent.Empty ();
+        }
+    }
+
+    方法 邮件正文 <公开 属性读 类型 = 文本型 注释 = "返回所设置的邮件正文内容">
+    {
+        返回 (成员_邮件正文)
+    }
+
+    方法 邮件正文 <公开 属性写 注释 = "设置即将发送邮件的正文内容">
+    参数 正文内容 <类型 = 文本型>
+    {
+        如果 (成员_邮件正文 != 正文内容)
+        {
+            成员_邮件正文 = 正文内容
+            @ m_u8strPrepareContent.Empty ();
+        }
+    }
+
+    方法 正文媒体格式 <公开 属性读 类型 = 文本型 注释 = "返回所设置的邮件正文媒体格式">
+    {
+        返回 (成员_邮件正文媒体格式)
+    }
+
+    方法 正文媒体格式 <公开 属性写 注释 = "设置即将发送邮件的正文媒体格式. 本属性值不能为空.">
+    参数 媒体格式 <类型 = 文本型 注释 = "提供所欲设置的邮件正文媒体格式,常用的有如下几种:" 注释 = "  \"text/plain\": 纯文本 (为本属性默认值)" 注释 = "  \"text/html\": html文本">
+    {
+        如果 (成员_邮件正文媒体格式 != 媒体格式)
+        {
+            成员_邮件正文媒体格式 = 媒体格式
+            @ m_u8strPrepareContent.Empty ();
+        }
+    }
+
+    方法 添加附件 <公开 类型 = 逻辑型 注释 = "添加即将发送邮件的附件数据" 返回值注释 = "成功返回真,失败返回假.">
+    参数 附件数据 <类型 = 字节集类 注释 = "提供所欲添加的附件数据,不能为空.">
+    参数 附件文件名 <类型 = 文本型 注释 = "提供附件数据所对应的文件名,其路径部分将被去除.">
+    {
+        如果 (字节集是否为空 (附件数据))
+        {
+            返回 (假)
+        }
+        成员_附件数据数组.加入成员 (附件数据)
+        成员_附件文件名.加入成员 (取文件名无路径部分 (附件文件名))
+        @ m_u8strPrepareContent.Empty ();
+        返回 (真)
+    }
+
+    方法 添加文件附件 <公开 类型 = 逻辑型 注释 = "读入所指定文件的数据,将其添加到即将发送邮件的附件中." 返回值注释 = "成功返回真,失败返回假.">
+    参数 附件文件名 <类型 = 文本型>
+    {
+        返回 (添加附件 (读入文件 (附件文件名), 附件文件名))
+    }
+
+    方法 删除所有附件 <公开 注释 = "删除即将发送邮件的所有附件数据">
+    {
+        如果 (成员_附件数据数组.是否为空 () == 假)
+        {
+            成员_附件数据数组.删除所有成员 ()
+            成员_附件文件名.删除所有成员 ()
+            @ m_u8strPrepareContent.Empty ();
+        }
+    }
+
+    方法 发送邮件 <公开 类型 = 整数 注释 = "  发送邮件到所指定邮件地址." 注释 = "  注意: 为了最大限度地支持资源重用和提高邮件批量发送速度,邮件发送完毕后"
+            注释 = "并不会立即释放相关资源及与SMTP服务器断开连接,因此当本对象持续存在且本批" 注释 = "次所有邮件均发送完毕暂时不会再发送邮件时,最好手动调用\"清理\"方法释放相关"
+            注释 = "资源并通知所连接的SMTP服务器断开连接,以避免由于连接空闲太长时间而导致" 注释 = "SMTP服务器主动超时出错断开." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)."
+            @禁止流程检查 = 真>
+    参数 收件人邮件地址 <类型 = 文本型 注释 = "提供所有收件人邮件地址,多个邮件地址之间使用逗号分隔. 不能为空.">
+    参数 抄送邮件地址 <类型 = 文本型 注释 = "提供所有抄送到的邮件地址,多个邮件地址之间使用逗号分隔. 为空文本表示无." @默认值 = "">
+    参数 密送邮件地址 <类型 = 文本型 注释 = "提供所有秘密送达的邮件地址,多个邮件地址之间使用逗号分隔. 为空文本表示无." 注释 = "密送的邮件地址,上面的收件人/抄送人/其它密送人都看不到." @默认值 = "">
+    参数 超时时间 <类型 = 整数 注释 = "指定发送完邮件所限定的超时时间,小于等于0表示不限制,单位:毫秒." @默认值 = 0>
+    {
+        如果 (端口号 == 465)
+        {
+            如果 (是否以文本开头 (发信服务器, "smtp://", 假))  // 使用了加密端口,判断是否使用了错误的协议.
+            {
+                子文本替换 (发信服务器, "smtp://", "smtps://", , 1, 假)  // 替换为正确协议
+            }
+            否则 (是否以文本开头 (发信服务器, "smtps://", 假) == 假)
+            {
+                发信服务器 = "smtps://" + 发信服务器
+            }
+        }
+        @ if (m_u8strPrepareContent.IsEmpty ()) {  // 尚未进行预处理?
+        @     if (CVolCurlMailSender::sPrepareSendingMail (@<成员_发信人邮件地址>.GetText (), @<成员_发信人友好名称>.GetText (), @<成员_邮件回复地址>.GetText (),
+        @             @<成员_邮件标题>.GetText (), @<成员_邮件正文>.GetText (), @<成员_邮件正文媒体格式>.GetText (), @<成员_附件数据数组>, @<成员_附件文件名>.data (), m_u8strPrepareContent) == FALSE)
+        @         return CURLE_INVALID_PARAM;
+        @ }
+        成员_传输对象.请求超时 = 取较大值 (0, 超时时间)
+        @ return CVolCurlMailSender::sSendMail (@<成员_传输对象>.data ().GetCurl (), @<发信服务器>.GetText (), @<端口号>, @<用户名>.GetText (), @<密码>.GetText (), @<成员_发信人邮件地址>.GetText (),
+        @         @<收件人邮件地址>.GetText (), @<抄送邮件地址>.GetText (), @<密送邮件地址>.GetText (), m_u8strPrepareContent.GetText ());
+    }
+
+    方法 清理 <公开 注释 = "  为了最大限度地支持资源重用和提高邮件批量发送速度,邮件发送完毕后并不会" 注释 = "立即释放相关资源及与SMTP服务器断开连接,因此当本批次所有邮件均发送完毕暂"
+            注释 = "时不会再发送邮件时,最好手动调用本方法释放相关资源并通知所连接的SMTP服务" 注释 = "器断开连接,以避免由于连接空闲太长时间而导致SMTP服务器主动超时出错断开." 注释 = "注意:"
+            注释 = "  1. 本方法调用不是必需的,本类对象被销毁时会自动进行清理;" 注释 = "  2. 调用本方法后,所有先前对\"传输对象\"进行过的属性设置需要重新设置.">
+    {
+        传输对象.清理 ()
+        @ InitCurlAttr ();
+    }
+
+    # @ <include>
+    # @ CU8String m_u8strPrepareContent;  // 用作记录即将发送邮件的预处理内容
+    # @ inline_ void @an<_OnInitExtra> () { InitCurlAttr (); }
+    # @ inline_ void InitCurlAttr () {
+    # @     CURL* pCurl = @<成员_传输对象>.data ().GetCurl ();
+    # @     curl_easy_setopt (pCurl, CURLOPT_LOGIN_OPTIONS, "AUTH=LOGIN");
+    # @     curl_easy_setopt (pCurl, CURLOPT_SSL_VERIFYPEER, 0L);
+    # @     curl_easy_setopt (pCurl, CURLOPT_SSL_VERIFYHOST, 0L);
+    # @ }
+    # @ </include>
+}
+
+# ===
+
+类 FTP操作类 <公开 注释 = "用作支持进行FTP网络操作" @视窗.外部头文件 = "vol\\ftp\\vol_curl_ftp.h" @视窗.外部源文件 = "vol\\ftp\\vol_curl_ftp.cpp">
+{
+    变量 FTP服务器 <公开 类型 = 文本型 注释 = "提供所欲登录的FTP服务器地址. 如\"\"ftp://example.com\"." @属性变量 = 真>
+    变量 用户名 <公开 类型 = 文本型 注释 = "提供登录FTP服务器的用户名,如无则为空文本." 注释 = "注意: 如果是匿名FTP服务器,可以提供用户名为\"anonymous\",密码提供自己的电子邮件地址或者不提供."
+            @属性变量 = 真>
+    变量 密码 <公开 类型 = 文本型 注释 = "提供登录FTP服务器的密码,如无则为空文本." @属性变量 = 真>
+    变量 账户 <公开 类型 = 文本型 注释 = "提供某些FTP服务器登录时所需要的特定账户信息,如无则为空文本." @属性变量 = 真>
+    变量 ""
+    变量 成员_传输对象 <类型 = 网络传输类 注释 = "所使用的网络传输对象">
+
+    方法 超时时间 <公开 属性写 注释 = "指定向FTP服务器发送完命令并等待其返回数据限定的超时时间">
+    参数 最大允许时间 <类型 = 整数 注释 = "单位:毫秒. 小于等于0表示不限制,默认值为0.">
+    {
+        成员_传输对象.请求超时 = 取较大值 (0, 最大允许时间)
+    }
+
+    方法 服务器响应超时 <公开 属性写 注释 = "设置当发送命令到FTP服务器后等待服务器响应的超时时间." 注释 = "一般情况下,可以将本属性值设置为小于\"超时时间\"属性的值.">
+    参数 最大允许时间 <类型 = 整数 注释 = "单位:毫秒. 小于等于0表示未设置,默认值为0.">
+    {
+        成员_传输对象.服务器响应超时 = 取较大值 (0, 最大允许时间)
+    }
+
+    方法 上传文件 <公开 类型 = 整数 注释 = "上传所指定文件到FTP服务器" 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义).">
+    参数 本地文件路径 <类型 = 文本型 注释 = "提供所欲上传的本地文件路径">
+    参数 FTP文件路径 <类型 = 文本型 注释 = "提供所欲上传到的FTP服务器上的文件路径. 如\"\"/temp/uploading.txt\"." 注释 = "如为相对路径,则相对登录FTP服务器后的根目录.">
+    参数 是否续传 <类型 = 逻辑型 注释 = "指定如果所指定FTP文件已经存在,是否从其尾部开始续传." @默认值 = 假>
+    参数 重试次数 <类型 = 整数 注释 = "指定如果传输失败,进行重试的数目." @默认值 = 0>
+    {
+        如果 (文件是否存在 (本地文件路径) == 假)
+        {
+            返回 (执行状态码.读入错误)
+        }
+        返回 (上传 (读入文件 (本地文件路径), FTP文件路径, 是否续传, 重试次数))
+    }
+
+    方法 下载文件 <公开 类型 = 整数 注释 = "下载FTP服务器上的所指定文件到本地" 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义).">
+    参数 FTP文件路径 <类型 = 文本型 注释 = "提供所欲下载的FTP服务器上的文件路径. 如\"\"/temp/uploading.txt\"." 注释 = "如为相对路径,则相对登录FTP服务器后的根目录.">
+    参数 本地文件路径 <类型 = 文本型 注释 = "提供所欲存放到的本地文件路径">
+    {
+        变量 下载结果数据 <类型 = 字节集类>
+        变量 下载结果码 <类型 = 整数>
+        下载结果码 = 下载 (FTP文件路径, 下载结果数据)
+        如果 (下载结果码 != 执行状态码.成功)
+        {
+            返回 (下载结果码)
+        }
+        返回 (选择 (写到文件 (本地文件路径, 下载结果数据, ), 执行状态码.成功, 执行状态码.写入错误))
+    }
+
+    方法 批量下载文件 <公开 类型 = 整数 注释 = "下载FTP服务器上所指定的一批文件到本地" 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 FTP文件路径 <类型 = 文本型 注释 = "  提供所欲下载的FTP服务器上的文件路径,可以携带通配符(\'*\'或\'?\'字符)."
+            注释 = "如\"*\", \"/temp/*.txt\", \"/temp/photo?.jpg\" 等." 注释 = "  如为相对路径,则相对登录FTP服务器后的根目录.">
+    参数 本地目录路径 <类型 = 文本型 注释 = "提供所批量下载的文件欲存放到的本地目录路径">
+    {
+        @ return CVolCurlFTP::sMutilDownload (@<成员_传输对象>.data ().GetCurl (), @<FTP服务器>.GetText (), @<用户名>.GetText (), @<密码>.GetText (), @<账户>.GetText (), @<FTP文件路径>.GetText (), @<本地目录路径>.GetText ());
+    }
+
+    方法 上传 <公开 类型 = 整数 注释 = "上传所指定数据到FTP服务器" 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 所欲上传数据 <类型 = 字节集类 注释 = "提供所欲上传的数据内容">
+    参数 FTP文件路径 <类型 = 文本型 注释 = "提供所欲上传到的FTP服务器上的文件路径. 如\"\"/temp/uploading.txt\"." 注释 = "如果文件路径中的目录尚不存在,将尝试自动创建."
+            注释 = "如为相对路径,则相对登录FTP服务器后的根目录.">
+    参数 是否续传 <类型 = 逻辑型 注释 = "指定如果所指定FTP文件已经存在,是否从其尾部开始续传." @默认值 = 假>
+    参数 重试次数 <类型 = 整数 注释 = "指定如果传输失败,进行重试的数目." @默认值 = 0>
+    {
+        @ return CVolCurlFTP::sUpload (@<成员_传输对象>.data ().GetCurl (), @<FTP服务器>.GetText (), @<用户名>.GetText (), @<密码>.GetText (), @<账户>.GetText (),
+        @         @<FTP文件路径>.GetText (), @<所欲上传数据>.GetPtr (), @<所欲上传数据>.GetSize (), @<是否续传>, @<重试次数>);
+    }
+
+    方法 下载 <公开 类型 = 整数 注释 = "下载FTP服务器上的所指定文件数据到本地" 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 FTP文件路径 <类型 = 文本型 注释 = "提供所欲下载的FTP服务器上的文件路径. 如\"\"/temp/uploading.txt\"." 注释 = "如为相对路径,则相对登录FTP服务器后的根目录.">
+    参数 结果存放字节集 <类型 = 字节集类 注释 = "提供所下载文件内容数据存放到的结果字节集">
+    {
+        @ return CVolCurlFTP::sDownload (@<成员_传输对象>.data ().GetCurl (), @<FTP服务器>.GetText (), @<用户名>.GetText (), @<密码>.GetText (), @<账户>.GetText (), @<FTP文件路径>.GetText (), @<结果存放字节集>);
+    }
+
+    方法 删除文件 <公开 类型 = 整数 注释 = "删除FTP服务器上的所指定文件. 注意所登录用户需要在FTP服务器上有对应权限." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义).">
+    参数 FTP文件路径 <类型 = 文本型 注释 = "提供FTP服务器上待删除文件的路径,如: \"/temp/temp.txt\"." 注释 = "如为相对路径,则相对登录FTP服务器后的根目录.">
+    {
+        返回 (发送命令 ("DELE " + 规范化FTP路径 (FTP文件路径), 真))
+    }
+
+    方法 修改文件名 <公开 类型 = 整数 注释 = "将FTP服务器上的所指定文件修改为另外一个名称. 注意所登录用户需要在FTP服务器上有对应权限."
+            返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义).">
+    参数 欲修改FTP文件名 <类型 = 文本型 注释 = "提供FTP服务器上待修改名称的文件路径,如: \"/temp/temp1.txt\"." 注释 = "如为相对路径,则相对登录FTP服务器后的根目录.">
+    参数 修改到FTP文件名 <类型 = 文本型 注释 = "提供FTP服务器上修改到名称的文件路径,如: \"/temp/temp2.txt\"." 注释 = "如为相对路径,则相对登录FTP服务器后的根目录.">
+    {
+        返回 (发送命令 ("RNFR " + 规范化FTP路径 (欲修改FTP文件名) + "\nRNTO " + 规范化FTP路径 (修改到FTP文件名), 真))
+    }
+
+    方法 创建目录 <公开 类型 = 整数 注释 = "创建FTP服务器上的所指定目录. 注意所登录用户需要在FTP服务器上有对应权限." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义).">
+    参数 FTP目录路径 <类型 = 文本型 注释 = "提供FTP服务器上待创建目录的路径,如: \"/temp\"." 注释 = "如为相对路径,则相对登录FTP服务器后的根目录.">
+    {
+        返回 (发送命令 ("MKD " + 规范化FTP路径 (FTP目录路径), 真))
+    }
+
+    方法 删除目录 <公开 类型 = 整数 注释 = "删除FTP服务器上的所指定目录. 注意所登录用户需要在FTP服务器上有对应权限." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义).">
+    参数 FTP目录路径 <类型 = 文本型 注释 = "提供FTP服务器上待删除目录的路径,如: \"/temp\"." 注释 = "如为相对路径,则相对登录FTP服务器后的根目录.">
+    {
+        返回 (发送命令 ("RMD " + 规范化FTP路径 (FTP目录路径), 真))
+    }
+
+    方法 删除目录及内容 <公开 类型 = 整数 注释 = "删除FTP服务器上的所指定目录及其中的所有内容,删除后将无法恢复. 注意所登录用户需要在FTP服务器上有对应权限."
+            返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义).">
+    参数 FTP目录路径 <类型 = 文本型 注释 = "提供FTP服务器上待删除目录的路径,如: \"/temp\"." 注释 = "如为相对路径,则相对登录FTP服务器后的根目录.">
+    {
+        变量 规范FTP路径 <类型 = 文本型>
+        变量 目录内容结果 <类型 = FTP文件数组类>
+        规范FTP路径 = 规范化FTP路径 (FTP目录路径)
+        取目录内容 (规范FTP路径, 目录内容结果)
+        目录内容结果.枚举循环 ()
+        {
+            变量 FTP文件 <类型 = FTP文件类>
+            FTP文件 = (FTP文件类)目录内容结果.取枚举值 ()
+            如果 (FTP文件.是否为文件)
+            {
+                发送命令 ("DELE " + 规范FTP路径 + "/" + FTP文件.文件名, 真)  // 删除文件
+            }
+            否则
+            {
+                删除目录及内容 (规范FTP路径 + "/" + FTP文件.文件名)
+            }
+        }
+        返回 (发送命令 ("RMD " + 规范FTP路径, 真))
+    }
+
+    方法 置服务器为UTF8编码 <公开 类型 = 整数 注释 = "设置FTP服务器的字符集编码是否为UTF8格式" 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义).">
+    参数 是否为UTF8 <类型 = 逻辑型 注释 = "  指定是否为UTF8编码格式." 注释 = "  本类使用UTF8编码和FTP服务器进行交互,绝大多数现代FTP服务器均使用UTF8编码格式,"
+            注释 = "如果某些服务器(譬如IIS的FTP服务器)不是,则调用本方法可以尝试将其切换到UTF8编码格式," 注释 = "以正确处理中文文件名,否则中文文件名将为乱码." 注释 = "注意:"
+            注释 = "  1. IIS 7.5版本之前的 FTP 服务器不支持UTF8编码,如果希望 IIS FTP 服务器支持,则需要" 注释 = "升级其版本到 7.5 以上;"
+            注释 = "  2. 本方法只是将相应请求发送到 FTP 服务器,其是否正确处理则依赖服务器自身. 最好的" 注释 = "方法是直接在 FTP 服务器上将其编码格式设置为 UTF-8 (如 IIS FTP 服务器).">
+    {
+        返回 (发送命令 (选择 (是否为UTF8, "OPTS UTF8 ON", "OPTS UTF8 OFF"), 假))
+    }
+
+    方法 取目录内容 <公开 类型 = 整数 注释 = "返回FTP服务器上所指定目录中内容解析后的列表信息" 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 FTP目录路径 <类型 = 文本型 注释 = "提供FTP服务器上所指定目录的路径,如: \"/temp\"." 注释 = "如为相对路径,则相对登录FTP服务器后的根目录.">
+    参数 目录内容结果 <类型 = FTP文件数组类 注释 = "用作保存所获得的目录内容列表结果数组">
+    {
+        @ std::vector<CVolCurlFTP::FTPFileEntry> fileEntries;
+        @ CURLcode code = (CURLcode)CVolCurlFTP::sGetFTPFileList (@<成员_传输对象>.data ().GetCurl (), @<FTP服务器>.GetText (), @<用户名>.GetText (), @<密码>.GetText (), @<账户>.GetText (), @<FTP目录路径>.GetText (), fileEntries);
+        @ if (code != CURLE_OK)  return (INT)code;
+        @ const size_t size = fileEntries.size ();
+        @ for (size_t i = 0; i < size; ++i) {
+        @     const CVolCurlFTP::FTPFileEntry& entry = fileEntries [i];
+        @     @dt<FTP文件类> file;
+        @     file.@n<FTP文件类.文件名>.SetText ((const U8CHAR*)entry.name.c_str ());
+        @     file.@n<FTP文件类.文件尺寸> = (@dt<长整数>)entry.size;
+        @     file.@n<FTP文件类.文件时间> = entry.modifyTime;
+        @     file.@n<FTP文件类.是否为文件> = (entry.isFile == true);
+        @     @<目录内容结果>.Add (file, NULL);
+        @ }
+        @ return (INT)CURLE_OK;
+    }
+
+    方法 取目录内容2 <公开 类型 = 整数 注释 = "返回FTP服务器上所指定目录中的原样内容列表" 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义).">
+    参数 FTP目录路径 <类型 = 文本型 注释 = "提供FTP服务器上所指定目录的路径,如: \"/temp\"." 注释 = "如为相对路径,则相对登录FTP服务器后的根目录.">
+    参数 目录内容结果 <类型 = 文本型 注释 = "用作保存所获得的目录内容列表结果">
+    {
+        返回 (发送命令 ("LIST " + 规范化FTP路径 (FTP目录路径), 假, 目录内容结果))
+    }
+
+    方法 取文件信息 <公开 类型 = 整数 注释 = "返回FTP服务器上所指定文件的信息" 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 FTP文件路径 <类型 = 文本型 注释 = "提供所欲检查的FTP服务器上的文件路径. 如\"\"/temp/uploading.txt\"." 注释 = "如为相对路径,则相对登录FTP服务器后的根目录.">
+    参数 文件尺寸 <类型 = 长整数类 注释 = "如果不为空对象,用作返回所获取的文件尺寸,单位字节.">
+    参数 文件时间 <类型 = 小数类 注释 = "如果不为空对象,用作返回所获取的文件时间." @默认值 = 空对象>
+    {
+        @ return CVolCurlFTP::sGetFileInfo (@<成员_传输对象>.data ().GetCurl (), @<FTP服务器>.GetText (), @<用户名>.GetText (), @<密码>.GetText (), @<账户>.GetText (),
+        @         @<FTP文件路径>.GetText (), (@<文件尺寸>.IsNullObject () ? NULL : &@<文件尺寸.值>), (@<文件时间>.IsNullObject () ? NULL : &@<文件时间.值>));
+    }
+
+    方法 发送命令 <公开 类型 = 整数 注释 = "连接所指定的FTP服务器,发送命令文本并获取其返回结果文本." 返回值注释 = "成功返回0,失败返回非0值(请参考\"执行状态码\"中所提供的常量定义)." @禁止流程检查 = 真>
+    参数 所欲发送的命令 <类型 = 文本型 注释 = "提供所欲发送的命令文本">
+    参数 是否为前置命令 <类型 = 逻辑型 注释 = "指定是否在FTP传输前发送此命令文本. 如果本参数值为真,\"所欲发送的命令\"参数中可以使用基于换行符(\'\\n\')分隔的多条命令.">
+    参数 结果存放文本 <类型 = 文本型 注释 = "  用作存放所发送命令被FTP服务器处理后的结果文本,如果为空对象,则表明不需要结果文本."
+            注释 = "  注意: 如果所发送命令被FTP服务器处理后没有返回结果文本而此处参数提供的又不是空对象(需要结果文本),则本方法将"
+            注释 = "一直等待所指定的超时时间(由\"超时时间\"属性指定)才会返回,如果\"超时时间\"属性值小于等于0(无限等待),则本方法将卡死." @默认值 = 空对象>
+    {
+        @ return CVolCurlFTP::sSendCommand (@<成员_传输对象>.data ().GetCurl (), @<FTP服务器>.GetText (), @<用户名>.GetText (), @<密码>.GetText (), @<账户>.GetText (),
+        @         @<所欲发送的命令>.GetText (), @<是否为前置命令>, (@<结果存放文本>.IsNullObject () ? NULL : &@<结果存放文本>));
+    }
+
+    方法 清理 <公开 注释 = "清理本对象,断开与FTP服务器的连接." 注释 = "注意:" 注释 = "  1. 本方法调用不是必需的,本类对象被销毁时会自动进行清理;"
+            注释 = "  2. 调用本方法后,所有先前对\"传输对象\"进行过的属性设置需要重新设置.">
+    {
+        成员_传输对象.清理 ()
+    }
+
+    方法 规范化FTP路径 <静态 类型 = 文本型 注释 = "规范化所指定的FTP文件路径" 返回值注释 = "返回规范化后的FTP文件路径结果" @嵌入式方法 = "">
+    参数 FTP文件路径 <类型 = 文本型 注释 = "提供所欲规范化的FTP服务器上的文件路径. 如\"\"/temp/uploading.txt\"." 注释 = "如为相对路径,则相对登录FTP服务器后的根目录.">
+    {
+        @ CVolCurlFTP::sNormalizeFtpFileName (@<FTP文件路径>.GetText (), CVolString ())
+    }
+}
+
+类 FTP文件数组类 <公开 基础类 = 对象数组模板类 @文档 = "category = \"辅助类\"" @模板实现类 = "FTP文件类">
+
+类 FTP文件类 <公开 @文档 = "category = \"辅助类\"">
+{
+    变量 文件名 <公开 类型 = 文本型 注释 = "文件名或目录名">
+    变量 文件尺寸 <公开 类型 = 长整数 注释 = "如果是目录或无法取出则返回0">
+    变量 文件时间 <公开 类型 = 小数 注释 = "返回文件时间,如果无法取出则为0.">
+    变量 是否为文件 <公开 类型 = 逻辑型 注释 = "真表示为文件,假表示为目录.">
+}

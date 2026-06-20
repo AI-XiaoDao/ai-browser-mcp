@@ -1,0 +1,103 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"windows.硬件特征\"" "" @视窗.外部头文件 = "COM_sapi\\sapi.tlh">
+
+类 ""
+{
+
+    #
+}
+
+类 ISpVoice <公开>
+{
+    方法 "//SetOutput" <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 pUnkOutput <注释 = "IUnknown * pUnkOutput">
+    参数 fAllowFormatChanges <类型 = 整数 注释 = "long fAllowFormatChanges">
+    {
+        @ @sn<this>.GetComObjPtr()->SetOutput(@<pUnkOutput>,@<fAllowFormatChanges>)
+    }
+
+    方法 "//GetOutputObjectToken" <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 ppObjectToken <注释 = "struct ISpObjectToken * * ppObjectToken">
+    {
+        @ @sn<this>.GetComObjPtr()->GetOutputObjectToken(@<ppObjectToken>)
+    }
+
+    方法 "//GetOutputStream" <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 ppStream <注释 = "struct ISpStreamFormat * * ppStream">
+    {
+        @ @sn<this>.GetComObjPtr()->GetOutputStream(@<ppStream>)
+    }
+
+    方法 Pause <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Pause()
+    }
+
+    方法 Resume <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    {
+        @ @sn<this>.GetComObjPtr()->Resume()
+    }
+
+    方法 "//SetVoice" <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 pToken <注释 = "struct ISpObjectToken * pToken">
+    {
+        @ @sn<this>.GetComObjPtr()->SetVoice(@<pToken>)
+    }
+
+    方法 "//GetVoice" <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 ppToken <注释 = "struct ISpObjectToken * * ppToken">
+    {
+        @ @sn<this>.GetComObjPtr()->GetVoice(@<ppToken>)
+    }
+
+    方法 "//Speak" <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 pwcs <注释 = "LPWSTR pwcs">
+    参数 dwFlags <类型 = 整数 注释 = "unsigned long dwFlags">
+    参数 pulStreamNumber <注释 = "unsigned long * pulStreamNumber">
+    {
+        @ @sn<this>.GetComObjPtr()->Speak(@<pwcs>,@<dwFlags>,@<pulStreamNumber>)
+    }
+
+    方法 "//SpeakStream" <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 pStream <注释 = "struct IStream * pStream">
+    参数 dwFlags <类型 = 整数 注释 = "unsigned long dwFlags">
+    参数 pulStreamNumber <注释 = "unsigned long * pulStreamNumber">
+    {
+        @ @sn<this>.GetComObjPtr()->SpeakStream(@<pStream>,@<dwFlags>,@<pulStreamNumber>)
+    }
+
+    方法 "//GetStatus" <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 ppszLastBookmark <注释 = "LPWSTR * ppszLastBookmark">
+    {
+        @ @sn<this>.GetComObjPtr()->GetStatus(@<ppszLastBookmark>)
+    }
+
+    方法 "//Skip" <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 pItemType <注释 = "LPWSTR pItemType">
+    参数 lNumItems <类型 = 整数 注释 = "long lNumItems">
+    参数 pulNumSkipped <注释 = "unsigned long * pulNumSkipped">
+    {
+        @ @sn<this>.GetComObjPtr()->Skip(@<pItemType>,@<lNumItems>,@<pulNumSkipped>)
+    }
+
+    方法 SetPriority <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 ePriority <类型 = 整数 注释 = "enum SPVPRIORITY ePriority">
+    {
+        @ @sn<this>.GetComObjPtr()->SetPriority(@<ePriority>)
+    }
+
+    方法 GetPriority <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 pePriority <类型 = 整数 注释 = "enum SPVPRIORITY * pePriority">
+    {
+        @ @sn<this>.GetComObjPtr()->GetPriority(@<pePriority>)
+    }
+
+    方法 SetAlertBoundary <公开 类型 = 整数 返回值注释 = "HRESULT" @嵌入式方法 = "">
+    参数 eBoundary <类型 = 整数 注释 = "enum SPEVENTENUM eBoundary">
+    {
+        @ @sn<this>.GetComObjPtr()->SetAlertBoundary(@<eBoundary>)
+    }
+
+    #
+}

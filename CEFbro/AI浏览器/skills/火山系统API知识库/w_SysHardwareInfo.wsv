@@ -1,0 +1,1152 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.系统操作支持库 <注释 = "APIHOOK、键鼠操作、系统硬件信息" @视窗.外部头文件 = "include\\WinOperateModule.h"
+        @视窗.外部源文件 = "include\\WinOperateModule.cpp" @视窗.外部头文件 = "include\\WinApiHook.h" @视窗.外部源文件 = "include\\WinApiHook.cpp">
+
+类 鼠标按键类型 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 左键 <公开 值 = 0>
+    常量 右键 <公开 值 = 1>
+    常量 中键 <公开 值 = 2>
+    常量 X键1 <公开 值 = 3>
+    常量 X键2 <公开 值 = 4>
+}
+
+类 事件标志值 <公开 @文档 = "category = \"辅助类\"" @常量类 = 整数>
+{
+    常量 跨进程异步 <公开 值 = @WINEVENT_OUTOFCONTEXT 注释 = "回调函数不会映射到生成事件的进程的地址空间.挂钩函数跨进程边界调用,保证事件异步按顺序排列.">
+    常量 跳过自身线程 <公开 值 = @WINEVENT_SKIPOWNTHREAD 注释 = "阻止此挂钩实例接收由注册此挂钩的线程生成的事件">
+    常量 跳过线程 <公开 值 = @WINEVENT_SKIPOWNPROCESS 注释 = "阻止此挂钩实例接收此进程中线程生成的事件.此标志不会阻止线程生成事件.">
+    常量 挂钩DLL <公开 值 = @WINEVENT_INCONTEXT 注释 = "包含回调函数的DLL映射到生成事件的进程的地址空间.指定此标志时,挂钩函数必须位于 DLL 中.">
+}
+
+类 常用事件常量值 <公开 注释 = "枚举了常用事件常量值" @文档 = "category = \"辅助类\"">
+{
+    常量 激活键盘快捷键 <公开 类型 = 整数 值 = @EVENT_OBJECT_ACCELERATORCHANGE 注释 = "激活键盘快捷键">
+    常量 窗口可视 <公开 类型 = 整数 值 = @EVENT_OBJECT_CLOAKED 注释 = "当窗口被遮盖时发送. 隐藏的窗口仍然存在,但对用户不可见.">
+    常量 滚动条到底 <公开 类型 = 整数 值 = 0x8015 注释 = "窗口对象的滚动已结束,无论滚动是水平滚动还是垂直滚动,每当滚动操作完成时,都发送此事件.">
+    常量 对象被创建 <公开 类型 = 整数 值 = @EVENT_OBJECT_CREATE 注释 = "已创建对象.窗口或控件被创建完成.">
+    常量 默认值被改变 <公开 类型 = 整数 值 = @EVENT_OBJECT_DEFACTIONCHANGE 注释 = "可用于如单选框多选框选中状态被更变">
+    常量 描述被改变 <公开 类型 = 整数 值 = @EVENT_OBJECT_DESCRIPTIONCHANGE 注释 = "基于对象的名称、角色、状态和值属性改变">
+    常量 对象被销毁 <公开 类型 = 整数 值 = @EVENT_OBJECT_DESTROY 注释 = "对象已被销毁">
+    常量 开始拖动元素 <公开 类型 = 整数 值 = @EVENT_OBJECT_DRAGSTART 注释 = "开始拖动元素">
+    常量 结束拖动元素 <公开 类型 = 整数 值 = @VENT_OBJECT_DRAGCANCEL 注释 = "已结束拖动操作">
+    常量 元素被拖动删除 <公开 类型 = 整数 值 = @EVENT_OBJECT_DRAGCOMPLETE 注释 = "删除了放置目标上的元素">
+    常量 元素拖动到边界 <公开 类型 = 整数 值 = @EVENT_OBJECT_DRAGENTER 注释 = "用户将元素拖动到放置目标的边界">
+    常量 元素被删除 <公开 类型 = 整数 值 = @EVENT_OBJECT_DRAGDROPPED 注释 = "元素被删除">
+    常量 最低事件值 <公开 类型 = 整数 值 = @EVENT_MIN 注释 = "最低对象事件值">
+    常量 最高事件值 <公开 类型 = 整数 值 = @EVENT_MAX 注释 = "最高对象事件值">
+    常量 接收到键盘焦点 <公开 类型 = 整数 值 = @EVENT_OBJECT_FOCUS 注释 = "对象已接收键盘焦点">
+    常量 帮助属性被改变 <公开 类型 = 整数 值 = @EVENT_OBJECT_HELPCHANGE 注释 = "对象的帮助属性已更改.服务器应用程序为它们的辅助性对象发送该事件.">
+    常量 对象被隐藏 <公开 类型 = 整数 值 = @EVENT_OBJECT_HIDE 注释 = "对象已隐藏">
+    常量 更改托管对象 <公开 类型 = 整数 值 = @EVENT_OBJECT_HOSTEDOBJECTSINVALIDATED 注释 = "承载其他可访问对象的窗口已更改托管对象">
+    常量 输入法被隐藏 <公开 类型 = 整数 值 = @EVENT_OBJECT_IME_HIDE 注释 = "已隐藏输入法窗口">
+    常量 输入法被显示 <公开 类型 = 整数 值 = @EVENT_OBJECT_IME_SHOW 注释 = "输入法窗口已变为可见">
+    常量 输入法尺寸改变 <公开 类型 = 整数 值 = @EVENT_OBJECT_IME_CHANGE 注释 = "输入法窗口尺寸被改变">
+    常量 对象被调用 <公开 类型 = 整数 值 = 0x8013 注释 = "已调用对象;例如,用户已单击按钮.">
+    常量 区域被更改 <公开 类型 = 整数 值 = @EVENT_OBJECT_LIVEREGIONCHANGED 注释 = "作为实时区域的一部分的对象已更改.实时区域是应用程序经常更改和/或异步更改的区域.">
+    常量 窗口尺寸被改变 <公开 类型 = 整数 值 = @EVENT_OBJECT_LOCATIONCHANGE 注释 = "对象已更改位置、形状和大小.">
+    常量 名称被更改 <公开 类型 = 整数 值 = @EVENT_OBJECT_NAMECHANGE 注释 = "对象的名称属性已更改">
+    常量 父对象改变 <公开 类型 = 整数 值 = @EVENT_OBJECT_PARENTCHANGE 注释 = "对象具有新的父对象">
+    常量 容器准备好 <公开 类型 = 整数 值 = @EVENT_OBJECT_REORDER 注释 = "容器对象已添加、移除其子对象或对其子对象重新排序." 注释 = "当子元素数或元素顺序发生更改时,列表视图对象会生成此事件."
+            注释 = "子窗口的Z顺序更改时,父窗口也会发送此事件.">
+    常量 焦点被改变 <公开 类型 = 整数 值 = @EVENT_OBJECT_SELECTION 注释 = "容器对象中的选择已更改">
+    常量 新增内容 <公开 类型 = 整数 值 = @EVENT_OBJECT_SELECTIONADD 注释 = "容器对象中的子对象已添加到现有选定内容,如超级列表添加列表项.">
+    常量 删除内容 <公开 类型 = 整数 值 = @EVENT_OBJECT_SELECTIONREMOVE 注释 = "容器对象中的项已从所选内容中删除,如超级列表删除列表项.">
+    常量 选中项被更改 <公开 类型 = 整数 值 = @EVENT_OBJECT_SELECTIONWITHIN 注释 = "容器对象中发生了许多选择更改,如列表项选择被更改.">
+    常量 对象被显示 <公开 类型 = 整数 值 = @EVENT_OBJECT_SHOW 注释 = "显示隐藏对象">
+    常量 状态改变 <公开 类型 = 整数 值 = @EVENT_OBJECT_STATECHANGE 注释 = "对象的状态已更改.例如,在单击或释放按钮对象或启用或禁用对象时发生状态更改.">
+    常量 输入法转换目标 <公开 类型 = 整数 值 = @EVENT_OBJECT_TEXTEDIT_CONVERSIONTARGETCHANGED 注释 = "输入法转换目标">
+    常量 选中文本被改变 <公开 类型 = 整数 值 = 0x8014 注释 = "对象的文本选择已更改">
+    常量 窗口未遮盖 <公开 类型 = 整数 值 = @EVENT_OBJECT_UNCLOAKED 注释 = "当窗口未遮盖时发送. 隐藏的窗口仍然存在,但对用户不可见.">
+    常量 内容被更改 <公开 类型 = 整数 值 = @EVENT_OBJECT_VALUECHANGE 注释 = "对象的内容属性被更改">
+    常量 已生成警报 <公开 类型 = 整数 值 = @EVENT_SYSTEM_ALERT 注释 = "已生成警报">
+    常量 显示预览框 <公开 类型 = 整数 值 = 0x8016 注释 = "正在显示预览矩形">
+    常量 鼠标反捕获 <公开 类型 = 整数 值 = @EVENT_SYSTEM_CAPTUREEND 注释 = "窗口已丢失鼠标捕获">
+    常量 鼠标捕获 <公开 类型 = 整数 值 = @EVENT_SYSTEM_CAPTURESTART 注释 = "窗口已收到鼠标捕获">
+    常量 退出帮助模式 <公开 类型 = 整数 值 = @EVENT_SYSTEM_CONTEXTHELPEND 注释 = "窗口已退出上下文相关的帮助模式">
+    常量 进入帮助模式 <公开 类型 = 整数 值 = @EVENT_SYSTEM_CONTEXTHELPSTART 注释 = "窗口已进入上下文相关的帮助模式">
+    常量 激活窗口被改变 <公开 类型 = 整数 值 = @EVENT_SYSTEM_DESKTOPSWITCH 注释 = "活动桌面已切换">
+    常量 关闭对话框 <公开 类型 = 整数 值 = @EVENT_SYSTEM_DIALOGEND 注释 = "关闭对话框">
+    常量 弹出对话框 <公开 类型 = 整数 值 = @EVENT_SYSTEM_DIALOGSTART 注释 = "弹出对话框">
+    常量 退出拖放模式 <公开 类型 = 整数 值 = @EVENT_SYSTEM_DRAGDROPEND 注释 = "应用程序将退出拖放模式">
+    常量 进入拖放模式 <公开 类型 = 整数 值 = @EVENT_SYSTEM_DRAGDROPSTART 注释 = "应用程序将进入拖放模式">
+    常量 最高系统事件值 <公开 类型 = 整数 值 = @EVENT_SYSTEM_END 注释 = "最高的系统事件值.">
+    常量 前台窗口被更改 <公开 类型 = 整数 值 = @EVENT_SYSTEM_FOREGROUND 注释 = "前台窗口已更改.同线程中的另一个窗口到前台,系统也会发送此事件.">
+    常量 系统菜单被关闭 <公开 类型 = 整数 值 = @EVENT_SYSTEM_MENUPOPUPEND 注释 = "弹出菜单已关闭">
+    常量 系统菜单被显示 <公开 类型 = 整数 值 = @EVENT_SYSTEM_MENUPOPUPSTART 注释 = "此时会显示一个弹出菜单">
+    常量 菜单栏菜单关闭 <公开 类型 = 整数 值 = @EVENT_SYSTEM_MENUEND 注释 = "菜单栏中的菜单已关闭">
+    常量 菜单栏菜单项选择 <公开 类型 = 整数 值 = @EVENT_SYSTEM_MENUSTART 注释 = "已选择菜单栏上的菜单项">
+    常量 窗口还原 <公开 类型 = 整数 值 = @EVENT_SYSTEM_MINIMIZEEND 注释 = "即将还原窗口对象">
+    常量 窗口最小化 <公开 类型 = 整数 值 = @EVENT_SYSTEM_MINIMIZESTART 注释 = "窗口对象即将最小化">
+    常量 窗口移动 <公开 类型 = 整数 值 = @EVENT_SYSTEM_MOVESIZEEND 注释 = "窗口的移动或调整大小已完成">
+    常量 窗口正在移动 <公开 类型 = 整数 值 = @EVENT_SYSTEM_MOVESIZESTART 注释 = "正在移动窗口或调整窗口的大小">
+    常量 滚动条滚动结束 <公开 类型 = 整数 值 = @EVENT_SYSTEM_SCROLLINGEND 注释 = "滚动条上的滚动已经结束">
+    常量 滚动条滚动开始 <公开 类型 = 整数 值 = @EVENT_SYSTEM_SCROLLINGSTART 注释 = "滚动条上的滚动已经开始">
+    常量 开始播放声音 <公开 类型 = 整数 值 = @EVENT_SYSTEM_SOUND 注释 = "一个声音已经播放">
+    常量 切换窗口 <公开 类型 = 整数 值 = @EVENT_SYSTEM_SWITCHEND 注释 = "ALT+TAB按键触发切换窗口">
+    常量 切换激活窗口 <公开 类型 = 整数 值 = @EVENT_SYSTEM_SWITCHSTART 注释 = "ALT+TAB按键切换,使得窗口被激活.">
+}
+
+类 扩展按键码 <公开 基础类 = 按键码 注释 = "虚拟按键码" @文档 = "category = \"辅助类\"">
+{
+    常量 "// 鼠标左键" <公开 类型 = 整数 值 = @VK_LBUTTON 注释 = "鼠标左键">
+    常量 "// 鼠标右键" <公开 类型 = 整数 值 = @VK_RBUTTON 注释 = "鼠标右键">
+    常量 "// 控制中断" <公开 类型 = 整数 值 = @VK_CANCEL 注释 = "控制中断处理">
+    常量 "// 鼠标中键" <公开 类型 = 整数 值 = @VK_MBUTTON 注释 = "鼠标中键">
+    常量 "// 鼠标X1键" <公开 类型 = 整数 值 = @VK_XBUTTON1 注释 = "Windows 2000 鼠标X1键">
+    常量 "// 鼠标X2键" <公开 类型 = 整数 值 = @VK_XBUTTON2 注释 = "Windows 2000 鼠标X2键">
+    常量 "// 清除键" <公开 类型 = 整数 值 = @VK_CLEAR 注释 = "清除键">
+    常量 "// 选择键" <公开 类型 = 整数 值 = @VK_SELECT>
+    常量 "// 打印键" <公开 类型 = 整数 值 = @VK_PRINT>
+    常量 "// 执行键" <公开 类型 = 整数 值 = @VK_EXECUTE>
+    常量 "// 截屏键" <公开 类型 = 整数 值 = @VK_SNAPSHOT>
+    常量 "// 帮助键" <公开 类型 = 整数 值 = @VK_HELP>
+    常量 "// 左WIN键" <公开 类型 = 整数 值 = @VK_LWIN>
+    常量 "// 右WIN键" <公开 类型 = 整数 值 = @VK_RWIN>
+    常量 "// 应用程序键" <公开 类型 = 整数 值 = @VK_APPS>
+    常量 "// 睡眠键" <公开 类型 = 整数 值 = @VK_SLEEP>
+    常量 数字键0 <公开 类型 = 整数 值 = @VK_NUMPAD0 注释 = "小键盘数字键0">
+    常量 数字键1 <公开 类型 = 整数 值 = @VK_NUMPAD1 注释 = "小键盘数字键1">
+    常量 数字键2 <公开 类型 = 整数 值 = @VK_NUMPAD2 注释 = "小键盘数字键2">
+    常量 数字键3 <公开 类型 = 整数 值 = @VK_NUMPAD3 注释 = "小键盘数字键3">
+    常量 数字键4 <公开 类型 = 整数 值 = @VK_NUMPAD4 注释 = "小键盘数字键4">
+    常量 数字键5 <公开 类型 = 整数 值 = @VK_NUMPAD5 注释 = "小键盘数字键5">
+    常量 数字键6 <公开 类型 = 整数 值 = @VK_NUMPAD6 注释 = "小键盘数字键6">
+    常量 数字键7 <公开 类型 = 整数 值 = @VK_NUMPAD7 注释 = "小键盘数字键7">
+    常量 数字键8 <公开 类型 = 整数 值 = @VK_NUMPAD8 注释 = "小键盘数字键8">
+    常量 数字键9 <公开 类型 = 整数 值 = @VK_NUMPAD9 注释 = "小键盘数字键9">
+    常量 副键盘减号 <公开 类型 = 整数 值 = @VK_SUBTRACT 注释 = "小键盘减号键">
+    常量 副键盘除号 <公开 类型 = 整数 值 = @VK_DIVIDE 注释 = "小键盘除法键">
+    常量 "// F17键" <公开 类型 = 整数 值 = @VK_F17>
+    常量 "// F18键" <公开 类型 = 整数 值 = @VK_F18>
+    常量 "// F19键" <公开 类型 = 整数 值 = @VK_F19>
+    常量 "// F20键" <公开 类型 = 整数 值 = @VK_F20>
+    常量 "// F21键" <公开 类型 = 整数 值 = @VK_F21>
+    常量 "// F22键" <公开 类型 = 整数 值 = @VK_F22>
+    常量 "// F23键" <公开 类型 = 整数 值 = @VK_F23>
+    常量 "// F24键" <公开 类型 = 整数 值 = @VK_F24>
+    常量 "// 左Shift键" <公开 类型 = 整数 值 = @VK_LSHIFT>
+    常量 "// 右Shift键" <公开 类型 = 整数 值 = @VK_RSHIFT>
+    常量 "// 左Ctrl键" <公开 类型 = 整数 值 = @VK_LCONTROL>
+    常量 "// 右Ctrl键" <公开 类型 = 整数 值 = @VK_RCONTROL>
+    常量 "// 左菜单键" <公开 类型 = 整数 值 = @VK_LMENU>
+    常量 "// 右菜单键" <公开 类型 = 整数 值 = @VK_RMENU>
+    常量 "// 浏览器返回键" <公开 类型 = 整数 值 = @VK_BROWSER_BACK>
+    常量 "// 浏览器转发键" <公开 类型 = 整数 值 = @VK_BROWSER_FORWARD>
+    常量 "// 浏览器刷新键" <公开 类型 = 整数 值 = @VK_BROWSER_REFRESH>
+    常量 "// 浏览器停止键" <公开 类型 = 整数 值 = @VK_BROWSER_STOP>
+    常量 "// 浏览器搜索键" <公开 类型 = 整数 值 = @VK_BROWSER_SEARCH>
+    常量 "// 浏览器收藏夹键" <公开 类型 = 整数 值 = @VK_BROWSER_FAVORITES>
+    常量 "// 浏览器主页键" <公开 类型 = 整数 值 = @VK_BROWSER_HOME>
+    常量 "// 音量静音键" <公开 类型 = 整数 值 = @VK_VOLUME_MUTE>
+    常量 "// 降低音量键" <公开 类型 = 整数 值 = @VK_VOLUME_DOWN>
+    常量 "// 提高音量键" <公开 类型 = 整数 值 = @VK_VOLUME_UP>
+    常量 "// 下一曲目键" <公开 类型 = 整数 值 = @VK_MEDIA_NEXT_TRACK>
+    常量 "// 前一曲目键" <公开 类型 = 整数 值 = @VK_MEDIA_PREV_TRACK>
+    常量 "// 停止媒体键" <公开 类型 = 整数 值 = @VK_MEDIA_STOP>
+    常量 "// 播放暂停键" <公开 类型 = 整数 值 = @VK_MEDIA_PLAY_PAUSE>
+    常量 "// 邮件键" <公开 类型 = 整数 值 = @VK_LAUNCH_MAIL>
+    常量 "// 选择媒体键" <公开 类型 = 整数 值 = @VK_LAUNCH_MEDIA_SELECT>
+    常量 "// 应用程序键1" <公开 类型 = 整数 值 = @VK_LAUNCH_APP1>
+    常量 "// 应用程序键2" <公开 类型 = 整数 值 = @VK_LAUNCH_APP2>
+    常量 "// 加号键" <公开 类型 = 整数 值 = @VK_OEM_PLUS>
+    常量 "// 句号键" <公开 类型 = 整数 值 = @VK_OEM_PERIOD>
+    常量 "// 问号键" <公开 类型 = 整数 值 = @VK_OEM_2>
+    常量 "// 延长键" <公开 类型 = 整数 值 = @VK_OEM_3>
+    常量 "// 左括号键" <公开 类型 = 整数 值 = @VK_OEM_4>
+    常量 "// 顿号键" <公开 类型 = 整数 值 = @VK_OEM_5>
+    常量 "// 右括号键" <公开 类型 = 整数 值 = @VK_OEM_6>
+    常量 "// 引号键" <公开 类型 = 整数 值 = @VK_OEM_7>
+    常量 "// 反斜杠键" <公开 类型 = 整数 值 = @VK_OEM_102 注释 = "键盘上的尖括号键或反斜杠键">
+    常量 "// 传递Unicode键" <公开 类型 = 整数 值 = @VK_PACKET 注释 = "用于传递 Unicode 字符,就好像它们是击键一样.">
+    常量 "// 播放键" <公开 类型 = 整数 值 = @VK_PLAY>
+    常量 "// 缩放键" <公开 类型 = 整数 值 = @VK_ZOOM>
+    常量 "// PA1键" <公开 类型 = 整数 值 = @VK_PA1>
+    常量 "// OEM清除键" <公开 类型 = 整数 值 = @VK_OEM_CLEAR>
+}
+
+类 APIHOOK执行结果 <公开 注释 = "调用apiHook方法时的返回值." 注释 = "用于判断执行状态." @文档 = "category = \"辅助类\"">
+{
+    常量 未知错误 <公开 类型 = 整数 值 = @MH_UNKNOWN 注释 = "未知错误">
+    常量 成功 <公开 类型 = 整数 值 = @MH_OK 注释 = "成功">
+    常量 已经初始化 <公开 类型 = 整数 值 = @MH_ERROR_ALREADY_INITIALIZED 注释 = "已经初始化,尝试再次初始化时返回该值.">
+    常量 尚未初始化 <公开 类型 = 整数 值 = @MH_ERROR_NOT_INITIALIZED 注释 = "尚未初始化">
+    常量 钩子已被创建 <公开 类型 = 整数 值 = @MH_ERROR_ALREADY_CREATED 注释 = "目标函数钩子已被创建">
+    常量 钩子尚未创建 <公开 类型 = 整数 值 = @MH_ERROR_NOT_CREATED 注释 = "尚未创建指定目标函数的钩子">
+    常量 钩子已被启用 <公开 类型 = 整数 值 = @MH_ERROR_ENABLED 注释 = "钩子已被启用">
+    常量 钩子启用失败 <公开 类型 = 整数 值 = @MH_ERROR_DISABLED 注释 = "钩子启用失败">
+    常量 无效指针 <公开 类型 = 整数 值 = @MH_ERROR_NOT_EXECUTABLE 注释 = "指针无效">
+    常量 连接函数失败 <公开 类型 = 整数 值 = @MH_ERROR_UNSUPPORTED_FUNCTION 注释 = "无法连接到指定的目标函数">
+    常量 无法分配内存 <公开 类型 = 整数 值 = @MH_ERROR_MEMORY_ALLOC 注释 = "无法分配内存">
+    常量 更改保护失败 <公开 类型 = 整数 值 = @MH_ERROR_MEMORY_PROTECT 注释 = "未能更改内存保护">
+    常量 未知模块 <公开 类型 = 整数 值 = @MH_ERROR_MODULE_NOT_FOUND 注释 = "没找到模块">
+    常量 未知函数 <公开 类型 = 整数 值 = @MH_ERROR_FUNCTION_NOT_FOUND 注释 = "没找到函数">
+}
+
+类 常用窗口消息 <公开 注释 = "枚举了一些常用窗口消息ID值" @文档 = "category = \"辅助类\"">
+{
+    常量 创建 <公开 类型 = 整数 值 = @WM_CREATE 注释 = "创建窗口" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 销毁 <公开 类型 = 整数 值 = @WM_DESTROY 注释 = "窗口正被销毁" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 移动 <公开 类型 = 整数 值 = @WM_MOVE 注释 = "窗口被移动" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 尺寸改变 <公开 类型 = 整数 值 = @WM_SIZE 注释 = "窗口尺寸被改变" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 尺寸改变中 <公开 类型 = 整数 值 = @WM_SIZING 注释 = "窗口正在调整大小">
+    常量 正在激活 <公开 类型 = 整数 值 = @WM_ACTIVATEAPP 注释 = "指示窗口是激活还是已停用" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 模式取消 <公开 类型 = 整数 值 = @WM_CANCELMODE 注释 = "发送到取消某些模式,例如鼠标反捕获." 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 子窗口激活 <公开 类型 = 整数 值 = @WM_CHILDACTIVATE 注释 = "子窗口被激活" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 关闭 <公开 类型 = 整数 值 = @WM_CLOSE 注释 = "发送为窗口或应用程序应终止的信号" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 系统内存不足 <公开 类型 = 整数 值 = @WM_COMPACTING 注释 = "当系统检测到超过30秒到60秒间隔的系统时间超过12.5%时,发送到所有顶级窗口.这表示系统内存较低."
+            编辑时信息 = "0, C6A9E, 0, 0">
+    常量 启用状态 <公开 类型 = 整数 值 = @WM_ENABLE 注释 = "当应用程序更改窗口的启用状态时发送" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 进入改变尺寸 <公开 类型 = 整数 值 = @WM_ENTERSIZEMOVE 注释 = "在窗口进入移动或调整大小时发送" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 退出改变尺寸 <公开 类型 = 整数 值 = @WM_EXITSIZEMOVE 注释 = "在窗口退出移动或调整大小后发送" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 取缩略图 <公开 类型 = 整数 值 = @WM_GETICON 注释 = "检索与窗口关联的大图标或小图标的句柄.当按下Alt+TAB时,对话框中显示大图标或在窗口标题中显示小图标都会触发该消息."
+            编辑时信息 = "0, C6A9E, 0, 0">
+    常量 最小化最大化 <公开 类型 = 整数 值 = @WM_GETMINMAXINFO 注释 = "当窗口的大小或位置即将更改时发送" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 输入法显示 <公开 类型 = 整数 值 = @WM_INPUTLANGCHANGE 注释 = "更改应用程序输入语言时发送" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 输入法切换 <公开 类型 = 整数 值 = @WM_INPUTLANGCHANGEREQUEST 注释 = "当用户选择新的输入语言时发送" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 移动中 <公开 类型 = 整数 值 = @WM_MOVING 注释 = "的窗口正在移动时发送" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 拖动图标 <公开 类型 = 整数 值 = @WM_QUERYDRAGICON 注释 = "最小化窗口被拖动时,没有为其类定义的图标.应用程序将句柄返回到图标或游标." 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 还原 <公开 类型 = 整数 值 = @WM_QUERYOPEN 注释 = "当用户请求将窗口还原到其以前的大小和位置时,发送图标显示." 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 退出程序 <公开 类型 = 整数 值 = @WM_QUIT 注释 = "指示终止应用程序的请求" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 显示 <公开 类型 = 整数 值 = @WM_SHOWWINDOW 注释 = "当窗口即将隐藏或显示时发送" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 样式改变 <公开 类型 = 整数 值 = @WM_STYLECHANGED 注释 = "更改窗口的一个或多个样式后发送" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 样式改变中 <公开 类型 = 整数 值 = @WM_STYLECHANGING 注释 = "更改窗口的一个或多个样式中" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 主题更改 <公开 类型 = 整数 值 = @WM_THEMECHANGED 注释 = "主题更改事件之后发送.主题更改事件包括主题的激活、主题停用或从一个主题过渡到另一个主题." 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 层次改变 <公开 类型 = 整数 值 = @WM_WINDOWPOSCHANGED 注释 = "窗口层次(Z顺序)被改变后发送" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 层次改变中 <公开 类型 = 整数 值 = @WM_WINDOWPOSCHANGING 注释 = "窗口层次(Z顺序)被改变中" 编辑时信息 = "0, C6A9E, 0, 0">
+    常量 设置文本 <公开 类型 = 整数 值 = @WM_SETTEXT 注释 = "设置窗口的文本">
+    常量 获取文本 <公开 类型 = 整数 值 = @WM_GETTEXT 注释 = "将对应于窗口的文本复制到调用方提供的缓冲区中">
+    常量 获取菜单 <公开 类型 = 整数 值 = @MN_GETHMENU 注释 = "检索当前窗口的菜单句柄">
+    常量 菜单项选择 <公开 类型 = 整数 值 = @WM_MENUSELECT 注释 = "菜单项选择">
+    常量 菜单快捷键按下 <公开 类型 = 整数 值 = @WM_MENUCHAR 注释 = "菜单快捷键按下">
+    常量 菜单右键抬起 <公开 类型 = 整数 值 = @WM_MENURBUTTONUP 注释 = "菜单中鼠标右键被抬起">
+    常量 菜单切换 <公开 类型 = 整数 值 = @WM_NEXTMENU 注释 = "系统菜单之间切换时发送">
+    常量 菜单下拉销毁 <公开 类型 = 整数 值 = @WM_UNINITMENUPOPUP 注释 = "下拉菜单或子菜单被销毁时发送">
+    常量 绘制文本 <公开 类型 = 整数 值 = @WM_GETFONT 注释 = "检索控件当前正在绘制其文本的字体">
+    常量 改变字体 <公开 类型 = 整数 值 = @WM_SETFONT 注释 = "设置控件在绘制文本时要使用的字体">
+    常量 键盘获得焦点 <公开 类型 = 整数 值 = @WM_SETFOCUS 注释 = "在窗口获得键盘焦点后发送到窗口">
+    常量 键盘失去焦点 <公开 类型 = 整数 值 = @WM_KILLFOCUS 注释 = "在窗口失去键盘焦点后发送到窗口">
+    常量 键盘功能键按下 <公开 类型 = 整数 值 = @WM_SYSKEYDOWN 注释 = "当用户按下F10键(激活菜单栏)或按住Alt键,然后按另一个键时发送.">
+    常量 键盘功能键放开 <公开 类型 = 整数 值 = @WM_SYSKEYUP 注释 = "功能键放开,Alt键放开.">
+    常量 键盘输入字符 <公开 类型 = 整数 值 = @WM_CHAR 注释 = "输入字符">
+    常量 键盘热键按下 <公开 类型 = 整数 值 = @WM_HOTKEY 注释 = "快捷键被按">
+    常量 键盘按键按下 <公开 类型 = 整数 值 = @WM_KEYDOWN 注释 = "按键按下">
+    常量 键盘按键抬起 <公开 类型 = 整数 值 = @WM_KEYUP 注释 = "按键抬起">
+    常量 鼠标失去焦点 <公开 类型 = 整数 值 = @WM_CAPTURECHANGED 注释 = "丢失鼠标捕获">
+    常量 鼠标左键双击 <公开 类型 = 整数 值 = @WM_LBUTTONDBLCLK 注释 = "双击鼠标左键时">
+    常量 鼠标左键按下 <公开 类型 = 整数 值 = @WM_LBUTTONDOWN 注释 = "鼠标左键按下">
+    常量 鼠标左键抬起 <公开 类型 = 整数 值 = @WM_LBUTTONUP 注释 = "鼠标左键抬起">
+    常量 鼠标中键双击 <公开 类型 = 整数 值 = @WM_MBUTTONDBLCLK 注释 = "双击鼠标中间按钮">
+    常量 鼠标中键按下 <公开 类型 = 整数 值 = @WM_MBUTTONDOWN 注释 = "鼠标中键按下">
+    常量 鼠标中键抬起 <公开 类型 = 整数 值 = @WM_MBUTTONUP 注释 = "鼠标中键抬起">
+    常量 鼠标激活 <公开 类型 = 整数 值 = @WM_MOUSEACTIVATE 注释 = "当光标处于非活动窗口中且用户按下鼠标按钮时发送">
+    常量 鼠标悬停 <公开 类型 = 整数 值 = @WM_MOUSEHOVER 注释 = "鼠标悬停直到指定时间段内">
+    常量 鼠标滑轮滚动 <公开 类型 = 整数 值 = @WM_MOUSEWHEEL 注释 = "鼠标滑轮滚动">
+    常量 鼠标离开 <公开 类型 = 整数 值 = @WM_MOUSELEAVE 注释 = "鼠标离开">
+    常量 鼠标移动 <公开 类型 = 整数 值 = @WM_MOUSEMOVE 注释 = "鼠标移动">
+    常量 鼠标右键双击 <公开 类型 = 整数 值 = @WM_RBUTTONDBLCLK 注释 = "鼠标右键双击">
+    常量 鼠标右键按下 <公开 类型 = 整数 值 = @WM_RBUTTONDOWN 注释 = "鼠标右键按下">
+    常量 鼠标右键抬起 <公开 类型 = 整数 值 = @WM_RBUTTONUP 注释 = "鼠标右键抬起">
+    常量 鼠标X键双击 <公开 类型 = 整数 值 = @WM_XBUTTONDBLCLK 注释 = "鼠标X键双击">
+    常量 鼠标X键按下 <公开 类型 = 整数 值 = @WM_XBUTTONDOWN 注释 = "鼠标X键按下">
+    常量 鼠标X键抬起 <公开 类型 = 整数 值 = @WM_XBUTTONUP 注释 = "鼠标X键抬起">
+}
+
+类 系统键鼠操作类 <公开 注释 = "提供键盘按键及鼠标模拟操作" @文档 = "category = \"键盘鼠标输入模拟\"">
+{
+
+    #  @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CWinKeyboardOperateModule)
+
+    方法 绑定窗口 <公开 属性写 注释 = "设置操作将指向被绑定窗口,鼠标操作时,如超过窗口范围,将被定位到窗口边缘.">
+    参数 窗口句柄 <类型 = 变整数 注释 = "要被绑定的窗口句柄.为0时,则表示取消绑定窗口." @默认值 = 0>
+    {
+        @ data().hStatusWnd=(HWND)@<窗口句柄>;
+    }
+
+    方法 绑定窗口 <公开 属性读 类型 = 变整数 注释 = "返回被绑定的窗口句柄." @禁止流程检查 = 真>
+    {
+        @  return (INT_P)data().hStatusWnd;
+    }
+
+    方法 后台模式 <公开 属性写 注释 = "设置键鼠操作前后台模式">
+    参数 所欲设置的值 <类型 = 逻辑型 注释 = "默认为假,表示窗口置于屏幕前台操作模式." 注释 = "如果为真,表示向绑定窗口发送操作信息的模式." @默认值 = 假>
+    {
+        @ data ().backstageModel=@<所欲设置的值>;
+    }
+
+    方法 后台模式 <公开 属性读 类型 = 逻辑型 注释 = "返回键鼠操作前后台模式" @禁止流程检查 = 真>
+    {
+        @ return data().backstageModel;
+    }
+
+    方法 位置定位方式 <公开 属性写 注释 = "设置鼠标前台操作时,位置是绝对位置或相对位置.绑定窗口后,忽略该属性.">
+    参数 所欲设置的值 <类型 = 逻辑型 注释 = "默认为真,表示指定坐标为屏幕绝对位置.如果为假,则指定以当前鼠标坐标为基准的相对位置.">
+    {
+        @ data().absolute=@<所欲设置的值>;
+    }
+
+    方法 位置定位方式 <公开 属性读 类型 = 逻辑型 注释 = "返回鼠标操作时,位置是绝对位置或相对位置." @禁止流程检查 = 真>
+    {
+        @ return data().absolute;
+    }
+
+    方法 置组合键 <公开 注释 = "设置键鼠操作时,是否附加Ctrl键及Shift键等功能键.">
+    参数 Ctrl键 <类型 = 逻辑型 注释 = "如果为真,表示附加Ctrl键.如果为假,表示取消附加Ctrl键.键盘鼠标有效." @默认值 = 假>
+    参数 Shift键 <类型 = 逻辑型 注释 = "如果为真,表示附加Shift键.如果为假,表示取消附加Shift键.键盘鼠标有效." @默认值 = 假>
+    参数 Atl键 <类型 = 逻辑型 注释 = "如果为真,表示附加Atl键.如果为假,表示取消附加Atl键.键盘有效." @默认值 = 假>
+    {
+        变量 局_位或值 <类型 = 整数 值 = 0>
+        局_位或值 = 位或 (局_位或值, 选择 (Ctrl键, 8, 0))
+        局_位或值 = 位或 (局_位或值, 选择 (Shift键, 4, 0))
+        局_位或值 = 位或 (局_位或值, 选择 (Atl键, 32, 0))
+        @ data().groupKey=@<局_位或值>;
+    }
+
+    方法 取按键状态 <公开 静态 类型 = 逻辑型 注释 = "用来判断函数调用时指定按键的状态.如键被按下,则返回真,否则返回假." @禁止流程检查 = 真>
+    参数 键鼠按键码 <类型 = 整数 注释 = "扩展按键码.*" "">
+    {
+        @ return ((GetAsyncKeyState(@<键鼠按键码>) & 0x01)==1);
+    }
+
+    方法 取按键开关状态 <公开 静态 类型 = 逻辑型 注释 = "取上一次按键状态.函数可实现按键逻辑开关状态获取.如获取大小写开关状态." 返回值注释 = "返回1" @禁止流程检查 = 真>
+    参数 键盘按键 <类型 = 整数 注释 = "扩展按键码.*" "">
+    {
+        @ return ((GetKeyState(@<键盘按键>) & 0x01)==1);
+    }
+
+    方法 取鼠标移动速度 <公开 静态 类型 = 整数 注释 = "返回当前鼠标速度快慢,范围为:1-20." @禁止流程检查 = 真>
+    {
+        @ int dwMouseSpeed = 0;
+        @ SystemParametersInfo(SPI_GETMOUSESPEED, 0, &dwMouseSpeed, 0);
+        @ return dwMouseSpeed;
+    }
+
+    方法 置鼠标移动速度 <公开 静态 类型 = 逻辑型 注释 = "设置当前鼠标速度快慢" @禁止流程检查 = 真>
+    参数 所欲设置的值 <类型 = 整数 注释 = "范围为:1-20.">
+    {
+        @ return SystemParametersInfo(SPI_SETMOUSESPEED, 0, (PVOID)NUM_EXTENTS(@<所欲设置的值>,1,20), SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
+    }
+
+    方法 取鼠标双击速度 <公开 静态 类型 = 整数 注释 = "返回鼠标双击速度" @禁止流程检查 = 真>
+    {
+        @ return GetDoubleClickTime();
+    }
+
+    方法 置鼠标双击速度 <公开 静态 类型 = 逻辑型 注释 = "设置鼠标双击速度" @禁止流程检查 = 真>
+    参数 所欲设置的值 <类型 = 整数 注释 = "单位:毫秒,范围为:0-5000.如果此参数设置为0,系统将使用默认的双击时间500毫秒.如果此参数值大于5000毫秒,则系统会将该值设置为5000毫秒.">
+    {
+        @ return SetDoubleClickTime(NUM_EXTENTS(@<所欲设置的值>,0,5000));
+    }
+
+    方法 置按键焦点 <公开 静态 类型 = 变整数 注释 = "为窗口设置键盘按键焦点,成功返回被设置焦点的窗口句柄,失败返回0,如窗口句柄无效、窗口处于禁用状态等." 返回值注释 = "成功返回绑定窗口的句柄" @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数 注释 = "要设置焦点的窗口句柄" "">
+    {
+        @ CWinKeyboardOperateModule::SetKeyboardFocus((HWND)@<窗口句柄>)
+    }
+
+    方法 鼠标捕获 <公开 静态 类型 = 变整数 注释 = "将鼠标捕获设置为属于当前线程指定的窗口." 注释 = "一旦窗口捕获了鼠标,所有鼠标输入都针对该窗口,无论光标是否在窗口的边界内." 注释 = "同一时刻只能有一个窗口捕获鼠标."
+            注释 = "如果鼠标光标在另一个线程创建的窗口上,只有当鼠标键按下时系统才将鼠标输入指向指定的窗口." 返回值注释 = "成功返回绑定窗口的句柄" @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数 注释 = "要设置焦点的窗口句柄" "">
+    参数 开启 <类型 = 逻辑型 注释 = "如果为真,表示开启鼠标捕获,反而,则表示释放鼠标捕获." @默认值 = 真>
+    {
+        @ CWinKeyboardOperateModule::SetMouseCapture((HWND)@<窗口句柄>,@<开启>)
+    }
+
+    方法 发送文本 <公开 静态 注释 = "将编辑控件中的选定文本或丰富的编辑控件替换为指定的文本" @嵌入式方法 = "">
+    参数 窗口句柄 <类型 = 变整数 注释 = "要将文本发送到的窗口句柄" "">
+    参数 要发送内容 <类型 = 文本型 注释 = "要发送文本内容" "">
+    {
+        @ SendMessage((HWND)@<窗口句柄>,EM_REPLACESEL,1,(LPARAM)@<要发送内容>.GetText())
+    }
+
+    方法 置键鼠输入状态 <公开 静态 类型 = 逻辑型 注释 = "启用或禁用指定窗口或控件的鼠标和键盘按键输入.禁用输入后,窗口不会接收输入,如鼠标单击和按键.启用输入后,窗口将接收所有输入." @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要设置焦点的窗口句柄" @默认值 = 0>
+    参数 是否禁止 <类型 = 逻辑型 注释 = "开启或禁止" "">
+    {
+        @ return EnableWindow((HWND)@<窗口句柄>,@<是否禁止>);
+    }
+
+    方法 取键鼠输入状态 <公开 静态 类型 = 逻辑型 注释 = "返回指定的窗口是否启用鼠标和键盘按键输入" @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要设置焦点的窗口句柄" @默认值 = 0>
+    {
+        @ return IsWindowEnabled((HWND)@<窗口句柄>);
+    }
+
+    方法 延时 <公开 静态 类型 = 逻辑型 注释 = "异步延时,退出程序前,需等待延时结束." @嵌入式方法 = "">
+    参数 欲等待的时间 <类型 = 长整数 注释 = "单位:毫秒.">
+    {
+        @ CWinKeyboardOperateModule::asyncDelay(@<欲等待的时间>);
+    }
+
+    方法 鼠标滚动 <公开 类型 = 逻辑型 注释 = "模拟鼠标滑轮滚动,如模式为后台并绑定窗口,则为向窗口发送鼠标滑轮滚动动作." 返回值注释 = "成功返回真,失败返回假.后台模式绑定窗口无效时,直接返回假,异步发送动作后返回真."
+            @嵌入式方法 = "">
+    参数 滚动方向 <类型 = 整数 注释 = "0为向上滚动,1为向下滚动.">
+    {
+        @ @sn<this>.data().MouseUpDownClick(0, 0, 0, NUM_EXTENTS(@<滚动方向> + 4,4,5));
+    }
+
+    方法 鼠标移动 <公开 类型 = 逻辑型 注释 = "模拟鼠标移动,如模式为后台并绑定窗口,则为向窗口发送鼠标移动动作." 返回值注释 = "成功返回真,失败返回假.后台模式绑定窗口无效时,直接返回假,异步发送动作后返回真."
+            @嵌入式方法 = "">
+    参数 横向坐标 <类型 = 整数 注释 = "指定水平方向的绝对位置或相对位置">
+    参数 纵向坐标 <类型 = 整数 注释 = "指定垂直方向的绝对位置或相对位置">
+    {
+        @ @sn<this>.data().MouseMove(@<横向坐标>,@<纵向坐标>)
+    }
+
+    方法 鼠标按下 <公开 类型 = 逻辑型 注释 = "模拟鼠标按下,如模式为后台并绑定窗口,则为向窗口发送鼠标按下动作." 返回值注释 = "成功返回真,失败返回假.后台模式绑定窗口无效时,直接返回假,异步发送动作后返回真."
+            @嵌入式方法 = "">
+    参数 鼠标按键 <类型 = 鼠标按键类型 注释 = "按下的鼠标键" @默认值 = 鼠标按键类型.左键>
+    参数 横向坐标 <类型 = 整数 注释 = "指定水平方向的绝对位置或相对位置.后台绑定窗口模式下有效,否则,忽略该参数." @默认值 = 0>
+    参数 纵向坐标 <类型 = 整数 注释 = "指定垂直方向的绝对位置或相对位置.后台绑定窗口模式下有效,否则,忽略该参数." @默认值 = 0>
+    {
+        @ @sn<this>.data().MouseUpDownClick(@<鼠标按键>,@<横向坐标>,@<纵向坐标>,0)
+    }
+
+    方法 鼠标抬起 <公开 类型 = 逻辑型 注释 = "模拟鼠标抬起,如模式为后台并绑定窗口,则为向窗口发送鼠标抬起动作." 返回值注释 = "成功返回真,失败返回假.后台模式绑定窗口无效时,直接返回假,异步发送动作后返回真."
+            @嵌入式方法 = "">
+    参数 鼠标按键 <类型 = 鼠标按键类型 注释 = "按下的鼠标键" @默认值 = 鼠标按键类型.左键>
+    参数 横向坐标 <类型 = 整数 注释 = "指定水平方向的绝对位置或相对位置.后台绑定窗口模式下有效,否则,忽略该参数." @默认值 = 0>
+    参数 纵向坐标 <类型 = 整数 注释 = "指定垂直方向的绝对位置或相对位置.后台绑定窗口模式下有效,否则,忽略该参数." @默认值 = 0>
+    {
+        @ @sn<this>.data().MouseUpDownClick(@<鼠标按键>,@<横向坐标>,@<纵向坐标>,1)
+    }
+
+    方法 鼠标单击 <公开 类型 = 逻辑型 注释 = "模拟鼠标单击,如模式为后台并绑定窗口,则为向窗口发送鼠标单击动作." 返回值注释 = "成功返回真,失败返回假.后台模式绑定窗口无效时,直接返回假,异步发送动作后返回真."
+            @嵌入式方法 = "">
+    参数 鼠标按键 <类型 = 鼠标按键类型 注释 = "按下的鼠标键" @默认值 = 鼠标按键类型.左键>
+    参数 横向坐标 <类型 = 整数 注释 = "后台绑定窗口模式下,指定对窗口发送点击信息的横向坐标位置,否则,忽略该参数." @默认值 = 0>
+    参数 纵向坐标 <类型 = 整数 注释 = "后台绑定窗口模式下,指定对窗口发送点击信息的纵向坐标位置,否则,忽略该参数." @默认值 = 0>
+    {
+        @ @sn<this>.data().MouseUpDownClick(@<鼠标按键>,@<横向坐标>,@<纵向坐标>,2)
+    }
+
+    方法 鼠标双击 <公开 类型 = 逻辑型 注释 = "模拟鼠标双击,如模式为后台并绑定窗口,则为向窗口发送鼠标双击动作." 返回值注释 = "成功返回真,失败返回假.后台模式绑定窗口无效时,直接返回假,异步发送动作后返回真."
+            @嵌入式方法 = "">
+    参数 鼠标按键 <类型 = 鼠标按键类型 注释 = "按下的鼠标键" @默认值 = 鼠标按键类型.左键>
+    参数 横向坐标 <类型 = 整数 注释 = "后台绑定窗口模式下,指定对窗口发送点击信息的横向坐标位置,否则,忽略该参数." @默认值 = 0>
+    参数 纵向坐标 <类型 = 整数 注释 = "后台绑定窗口模式下,指定对窗口发送点击信息的纵向坐标位置,否则,忽略该参数." @默认值 = 0>
+    {
+        @ @sn<this>.data().MouseUpDownClick(@<鼠标按键>,@<横向坐标>,@<纵向坐标>,3)
+    }
+
+    方法 键盘按下 <公开 类型 = 逻辑型 注释 = "模拟键盘按键按下,如模式为后台并绑定窗口,则为向窗口发送键盘按键按下动作." 返回值注释 = "成功返回真,失败返回假.后台模式绑定窗口无效时,直接返回假,异步发送动作后返回真."
+            @嵌入式方法 = "">
+    参数 键盘按键 <类型 = 整数 注释 = "扩展按键码.*.键盘按键的按键码." "">
+    参数 功能键 <类型 = 逻辑型 注释 = "默认为假,表示普通击键,如果为真,则表示功能键,可用于热键技能不输入字符.如果为功能键,请保持按下抬起一置." 注释 = "当组合键不为空时,作为功能键使用,忽略该参数." @默认值 = 假>
+    {
+        @ @sn<this>.data().KeyboardUpDownClickChar(@<键盘按键>,0,@<功能键>)
+    }
+
+    方法 键盘抬起 <公开 类型 = 逻辑型 注释 = "模拟键盘按键抬起,如模式为后台并绑定窗口,则为向窗口发送键盘按键抬起动作." 返回值注释 = "成功返回真,失败返回假.后台模式绑定窗口无效时,直接返回假,异步发送动作后返回真."
+            @嵌入式方法 = "">
+    参数 键盘按键 <类型 = 整数 注释 = "扩展按键码.*.键盘按键的按键码." "">
+    参数 功能键 <类型 = 逻辑型 注释 = "默认为假,表示普通击键,如果为真,则表示功能键,可用于热键技能不输入字符.如果为功能键,请保持按下抬起一置." 注释 = "当组合键不为空时,作为功能键使用,忽略该参数." @默认值 = 假>
+    {
+        @ @sn<this>.data().KeyboardUpDownClickChar(@<键盘按键>,1,@<功能键>)
+    }
+
+    方法 键盘单击 <公开 类型 = 逻辑型 注释 = "模拟键盘单击,如模式为后台并绑定窗口,则为向窗口发送键盘单击动作." 返回值注释 = "成功返回真,失败返回假.后台模式绑定窗口无效时,直接返回假,异步发送动作后返回真."
+            @嵌入式方法 = "">
+    参数 键盘按键 <类型 = 整数 注释 = "扩展按键码.*.键盘按键的按键码." "">
+    参数 功能键 <类型 = 逻辑型 注释 = "默认为假,表示普通击键,如果为真,则表示功能键,可用于热键技能不输入字符." 注释 = "当组合键不为空时,作为功能键使用,忽略该参数." @默认值 = 假>
+    {
+        @ @sn<this>.data().KeyboardUpDownClickChar(@<键盘按键>,2,@<功能键>)
+    }
+
+    方法 键盘输入 <公开 类型 = 逻辑型 注释 = "模拟键盘输入,如模式为后台并绑定窗口,则为向窗口发送键盘输入动作.如模式为前台等同于键盘单击."
+            返回值注释 = "成功返回真,失败返回假.后台模式绑定窗口无效时,直接返回假,异步发送动作后返回真." @嵌入式方法 = "">
+    参数 键盘按键 <类型 = 整数 注释 = "扩展按键码.*.键盘按键的按键码." "">
+    {
+        @ @sn<this>.data().KeyboardUpDownClickChar(@<键盘按键>,3,FALSE)
+    }
+}
+
+类 系统CPU信息类 <公开 注释 = "提供获取单个或多个CPU硬件设备信息" @文档 = "category = \"硬件信息\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CWinCpuInfo)
+    # <> <include>
+    # @sn<current_class> (IEnumWbemClassObject* pAdapter) : @sn<current_class> ()  {
+    #      data().m_pFirsthEnumerator = pAdapter;
+    #      data().GetIWbemClassObject();
+    #  }
+    # <> </include>
+    # @end
+
+    方法 到下一个 <公开 类型 = 逻辑型 注释 = "用于多个CPU硬件环境,成功将指向下一个CPU,如果失败将不改变当前指向CPU." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetIWbemClassObject()
+    }
+
+    方法 名称 <公开 属性读 类型 = 文本型 注释 = "当前CPU名称" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("name"))
+    }
+
+    方法 描述 <公开 属性读 类型 = 文本型 注释 = "当前CPU描述" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Description"))
+    }
+
+    方法 硬件ID <公开 属性读 类型 = 文本型 注释 = "当前CPU硬件ID" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("ProcessorId"))
+    }
+
+    方法 设备ID <公开 属性读 类型 = 文本型 注释 = "当前CPU设备ID" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("DeviceID"))
+    }
+
+    方法 序列号 <公开 属性读 类型 = 文本型 注释 = "当前CPU序列号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("SerialNumber"))
+    }
+
+    方法 制造商 <公开 属性读 类型 = 文本型 注释 = "当前CPU制造商" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Manufacturer"))
+    }
+
+    方法 插槽名称 <公开 属性读 类型 = 文本型 注释 = "当前CPU插槽名称" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("SocketDesignation"))
+    }
+
+    方法 状态 <公开 属性读 类型 = 文本型 注释 = "当前CPU状态" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Status"))
+    }
+
+    方法 核心数 <公开 属性读 类型 = 长整数 注释 = "当前CPU核心数量" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Int64GetHardwareInfo(_T("NumberOfCores"))
+    }
+
+    方法 逻辑核心数 <公开 属性读 类型 = 长整数 注释 = "当前CPU逻辑核心数量" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Int64GetHardwareInfo(_T("NumberOfLogicalProcessors"))
+    }
+
+    方法 启用核心数 <公开 属性读 类型 = 长整数 注释 = "当前CPU启用核心数" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Int64GetHardwareInfo(_T("NumberOfEnabledCore"))
+    }
+
+    方法 线程数 <公开 属性读 类型 = 长整数 注释 = "当前CPU每个核心的线程数." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Int64GetHardwareInfo(_T("ThreadCount"))
+    }
+
+    方法 数据宽度 <公开 属性读 类型 = 整数 注释 = "当前CPU数据宽度" 返回值注释 = "单位:bits." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().IntGetHardwareInfo(_T("DataWidth"))
+    }
+
+    方法 地址宽度 <公开 属性读 类型 = 整数 注释 = "当前CPU地址宽度" 返回值注释 = "单位:bits." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().IntGetHardwareInfo(_T("AddressWidth"))
+    }
+
+    方法 实时时钟频率 <公开 属性读 类型 = 长整数 注释 = "当前CPU实时时钟频率" 返回值注释 = "单位:MHz." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Int64GetHardwareInfo(_T("CurrentClockSpeed"))
+    }
+
+    方法 最大时钟频率 <公开 属性读 类型 = 长整数 注释 = "CPU最大时钟频率" 返回值注释 = "单位:MHz." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Int64GetHardwareInfo(_T("MaxClockSpeed"))
+    }
+
+    方法 外部时钟频率 <公开 属性读 类型 = 长整数 注释 = "CPU外部时钟频率" 返回值注释 = "单位:MHz." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Int64GetHardwareInfo(_T("ExtClock"))
+    }
+
+    方法 使用率 <公开 属性读 类型 = 整数 注释 = "当前CPU使用率,返回百分比数值." 返回值注释 = "百分比" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().IntGetHardwareInfo(_T("LoadPercentage"))
+    }
+
+    方法 处理器类型 <公开 属性读 类型 = 文本型 注释 = "当前CPU处理器类型" "">
+    {
+        变量 局_类型 <类型 = 整数>
+        @ @<局_类型>=data().IntGetHardwareInfo(_T("ProcessorType"));
+        返回 (多项选择 (局_类型, "其他", "其他", "未知", "中央处理器", "数学处理器", "DSP 处理器", "视频处理器"))
+    }
+
+    方法 二级缓存 <公开 属性读 类型 = 长整数 注释 = "当前CPU二级缓存,多核心时,为所有核心二级缓存总和." 返回值注释 = "计量单位:kb." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Int64GetHardwareInfo(_T("L2CacheSize"))
+    }
+
+    方法 二级缓存速度 <公开 属性读 类型 = 长整数 注释 = "当前CPU二级缓存速度." 返回值注释 = "计量单位:megahertz(MHz)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Int64GetHardwareInfo(_T("L2CacheSpeed"))
+    }
+
+    方法 三级缓存 <公开 属性读 类型 = 长整数 注释 = "当前CPU三级缓存,多核心时,为所有核心三级缓存总和." 返回值注释 = "计量单位:kb." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Int64GetHardwareInfo(_T("L3CacheSize"))
+    }
+
+    方法 三级缓存速度 <公开 属性读 类型 = 长整数 注释 = "当前CPU三级缓存速度." 返回值注释 = "计量单位:megahertz(MHz)." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Int64GetHardwareInfo(_T("L3CacheSpeed"))
+    }
+}
+
+类 系统硬盘信息类 <公开 注释 = "提供获取存储设备磁盘驱动器信息.包括:硬盘,U盘,移动硬盘等多个或单个设备." @文档 = "category = \"硬件信息\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CWinCpuInfo)
+    # <> <include>
+    # @sn<current_class> (IEnumWbemClassObject* pAdapter) : @sn<current_class> ()  {
+    #      data().m_pFirsthEnumerator = pAdapter;
+    #      data().GetIWbemClassObject();
+    #  }
+    # <> </include>
+    # @end
+
+    方法 到下一个 <公开 类型 = 逻辑型 注释 = "用于硬件有多个硬盘环境,成功将指向下一个硬盘,如果失败不改变当前指向硬盘." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetIWbemClassObject()
+    }
+
+    方法 状态 <公开 属性读 类型 = 文本型 注释 = "硬盘状态" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Status"))
+    }
+
+    方法 型号 <公开 属性读 类型 = 文本型 注释 = "硬盘型号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Model"))
+    }
+
+    方法 序列号 <公开 属性读 类型 = 文本型 注释 = "硬盘序列号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("SerialNumber"))
+    }
+
+    方法 制造商 <公开 属性读 类型 = 文本型 注释 = "硬盘制造商" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Manufacturer"))
+    }
+
+    方法 版本 <公开 属性读 类型 = 文本型 注释 = "硬盘版本" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Version"))
+    }
+
+    方法 描述 <公开 属性读 类型 = 文本型 注释 = "硬盘描述" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Description"))
+    }
+
+    方法 标签 <公开 属性读 类型 = 文本型 注释 = "硬盘标签" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Caption"))
+    }
+
+    方法 名称 <公开 属性读 类型 = 文本型 注释 = "硬盘名称" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("name"))
+    }
+}
+
+类 系统显示器信息类 <公开 注释 = "提供获取一个或多个显示器相关信息.注:当与Windows显示器驱动程序不兼容的硬件(WDDM)时,返回此类实例的属性值不准确." @文档 = "category = \"硬件信息\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CWinCpuInfo)
+    # <> <include>
+    # @sn<current_class> (IEnumWbemClassObject* pAdapter) : @sn<current_class> ()  {
+    #      data().m_pFirsthEnumerator = pAdapter;
+    #      data().GetIWbemClassObject();
+    #  }
+    # <> </include>
+    # @end
+
+    方法 到下一个 <公开 类型 = 逻辑型 注释 = "用于多个显示器硬件环境,成功将指向下一个显示器,如果失败将不改变当前指向的显示器." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetIWbemClassObject()
+    }
+
+    方法 名称 <公开 属性读 类型 = 文本型 注释 = "显示器名称" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Name"))
+    }
+
+    方法 描述 <公开 属性读 类型 = 文本型 注释 = "显示器描述" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Description"))
+    }
+
+    方法 制造商 <公开 属性读 类型 = 文本型 注释 = "显示器制造商" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("MonitorManufacturer"))
+    }
+
+    方法 状态 <公开 属性读 类型 = 文本型 注释 = "显示器状态" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Status"))
+    }
+
+    方法 设备ID <公开 属性读 类型 = 文本型 注释 = "显示器零件编号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("DeviceID"))
+    }
+
+    方法 型号 <公开 属性读 类型 = 文本型 注释 = "显示器型号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("PNPDeviceID"))
+    }
+
+    方法 类型 <公开 属性读 类型 = 文本型 注释 = "显示器类型" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("MonitorType"))
+    }
+
+    方法 版本 <公开 属性读 类型 = 文本型 注释 = "显示器版本,无记录时为空." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Version"))
+    }
+
+    方法 屏幕宽度 <公开 属性读 类型 = 长整数 注释 = "屏幕宽度,无记录时为空." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Int64GetHardwareInfo(_T("ScreenWidth"))
+    }
+
+    方法 屏幕高度 <公开 属性读 类型 = 长整数 注释 = "屏幕高度,无记录时为空." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().Int64GetHardwareInfo(_T("ScreenHeight"))
+    }
+}
+
+类 系统BIOS信息类 <公开 注释 = "提供获取主板BIOS相关信息" @文档 = "category = \"硬件信息\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CWinCpuInfo)
+    # <> <include>
+    # @sn<current_class> (IEnumWbemClassObject* pAdapter) : @sn<current_class> ()  {
+    #      data().m_pFirsthEnumerator = pAdapter;
+    #      data().GetIWbemClassObject();
+    #  }
+    # <> </include>
+    # @end
+
+    方法 到下一个 <公开 类型 = 逻辑型 注释 = "用于主板有多个BIOS环境,成功将指向下一个BIOS,如果失败不改变当前指向BIOS." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetIWbemClassObject()
+    }
+
+    方法 名称 <公开 属性读 类型 = 文本型 注释 = "BIOS名称" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Name"))
+    }
+
+    方法 描述 <公开 属性读 类型 = 文本型 注释 = "BIOS描述" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Description"))
+    }
+
+    方法 当前语言 <公开 属性读 类型 = 文本型 注释 = "BIOS当前语言" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("CurrentLanguage"))
+    }
+
+    方法 制造商 <公开 属性读 类型 = 文本型 注释 = "BIOS制造商" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Manufacturer"))
+    }
+
+    方法 状态 <公开 属性读 类型 = 文本型 注释 = "BIOS状态" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Status"))
+    }
+
+    方法 主版本号 <公开 属性读 类型 = 整数 注释 = "BIOS主要 SMBIOS 版本号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().IntGetHardwareInfo(_T("SMBIOSMajorVersion"))
+    }
+
+    方法 次版本号 <公开 属性读 类型 = 整数 注释 = "BIOS次要 SMBIOS 版本号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().IntGetHardwareInfo(_T("SMBIOSMinorVersion"))
+    }
+
+    方法 版本 <公开 属性读 类型 = 文本型 注释 = "BIOS版本.此字符串由BIOS制造商创建." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Version"))
+    }
+
+    方法 标识符 <公开 属性读 类型 = 文本型 注释 = "标识符" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("SoftwareElementID"))
+    }
+
+    方法 序列号 <公开 属性读 类型 = 文本型 注释 = "序列号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("SerialNumber"))
+    }
+}
+
+类 系统主板信息类 <公开 注释 = "提供获取主板相关信息" @文档 = "category = \"硬件信息\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CWinCpuInfo)
+    # <> <include>
+    # @sn<current_class> (IEnumWbemClassObject* pAdapter) : @sn<current_class> ()  {
+    #      data().m_pFirsthEnumerator = pAdapter;
+    #      data().GetIWbemClassObject();
+    #  }
+    # <> </include>
+    # @end
+
+    方法 名称 <公开 属性读 类型 = 文本型 注释 = "主板名称" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Name"))
+    }
+
+    方法 序列号 <公开 属性读 类型 = 文本型 注释 = "主板序列号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("SerialNumber"))
+    }
+
+    方法 描述 <公开 属性读 类型 = 文本型 注释 = "主板描述" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Description"))
+    }
+
+    方法 制造商 <公开 属性读 类型 = 文本型 注释 = "主板制造商" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Manufacturer"))
+    }
+
+    方法 其他标识 <公开 属性读 类型 = 文本型 注释 = "主板其他标识" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("OtherIdentifyingInfo"))
+    }
+
+    方法 状态 <公开 属性读 类型 = 文本型 注释 = "主板状态" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Status"))
+    }
+
+    方法 零件编号 <公开 属性读 类型 = 文本型 注释 = "主板零件编号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("PartNumber"))
+    }
+
+    方法 型号 <公开 属性读 类型 = 文本型 注释 = "主板型号" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Product"))
+    }
+
+    方法 版本 <公开 属性读 类型 = 文本型 注释 = "主板版本" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().CVolStrGetHardwareInfo(_T("Version"))
+    }
+}
+
+类 系统网卡信息类 <公开 注释 = "提供获取一个或多个网卡设备信息" @文档 = "category = \"硬件信息\"">
+{
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CWinAdaptersInfo)
+    # <> <include>
+    # @sn<current_class> (PIP_ADAPTER_INFO pAdapter) : @sn<current_class> ()  {
+    #      data().m_pAdapter = pAdapter;
+    #      data().m_pFirsthAdapter = pAdapter;
+    #  }
+    # <> </include>
+    # @end
+
+    方法 到下一个 <公开 注释 = "指向下一张网卡" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GoNext()
+    }
+
+    方法 到首网卡 <公开 注释 = "指向首张网卡" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GoFirsth()
+    }
+
+    方法 序号 <公开 属性读 类型 = 整数 注释 = "当前系统分配给网卡的序号,非网卡排列序号." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetAdapterIndex()
+    }
+
+    方法 网卡数量 <公开 属性读 类型 = 整数 注释 = "返回网卡数量" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetAdapterCount()
+    }
+
+    方法 名称 <公开 属性读 类型 = 文本型 注释 = "返回当前位置网卡的名称" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetAdapterName()
+    }
+
+    方法 描述 <公开 属性读 类型 = 文本型 注释 = "返回当前位置的网卡的描述" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetDescription()
+    }
+
+    方法 MAC <公开 属性读 类型 = 文本型 注释 = "返回当前位置网卡的MAC" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetAddress()
+    }
+
+    方法 IP地址 <公开 属性读 类型 = 文本型 注释 = "返回当前位置网卡的IP地址" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetIpAddress()
+    }
+
+    方法 子网掩码 <公开 属性读 类型 = 文本型 注释 = "返回当前位置网卡的子网掩码" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetIpMask()
+    }
+
+    方法 默认网关 <公开 属性读 类型 = 文本型 注释 = "返回当前位置网卡的默认网关" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetGatewayAddress()
+    }
+
+    方法 DHCP <公开 属性读 类型 = 文本型 注释 = "动态主机配置协议.如果开启,则返回DHCP路由地址,否则返回空文本." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetDhcpAddress()
+    }
+
+    方法 DNS1 <公开 属性读 类型 = 文本型 注释 = "返回当前位置网卡的DNS1" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetDnsServer(0)
+    }
+
+    方法 DNS2 <公开 属性读 类型 = 文本型 注释 = "返回当前位置网卡的DNS2" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().GetDnsServer(1)
+    }
+}
+
+类 系统硬件类 <公开 注释 = "系统硬件类.*,提供获取系统硬件信息类的静态方式." @文档 = "category = \"硬件信息\"">
+{
+    方法 取网卡信息 <公开 静态 类型 = 系统网卡信息类 注释 = "返回网卡信息类" @禁止流程检查 = 真>
+    {
+        @ return @dt<系统网卡信息类>(CWinHardwareInformation::GetAdaptersListInfo());
+    }
+
+    方法 取CPU信息 <公开 静态 类型 = 系统CPU信息类 注释 = "返回系统CPU信息类" @禁止流程检查 = 真>
+    {
+        @ return @dt<系统CPU信息类>(CWinHardwareInformation::GetIEnumWbemClassObject(0));
+    }
+
+    方法 取硬盘信息 <公开 静态 类型 = 系统硬盘信息类 注释 = "返回系统硬盘信息类" @禁止流程检查 = 真>
+    {
+        @ return @dt<系统硬盘信息类>(CWinHardwareInformation::GetIEnumWbemClassObject(1));
+    }
+
+    方法 取主板信息 <公开 静态 类型 = 系统主板信息类 注释 = "返回系统主板信息类" @禁止流程检查 = 真>
+    {
+        @ return @dt<系统主板信息类>(CWinHardwareInformation::GetIEnumWbemClassObject(2));
+    }
+
+    方法 取显示器信息 <公开 静态 类型 = 系统显示器信息类 注释 = "返回系统显示器信息类" @禁止流程检查 = 真>
+    {
+        @ return @dt<系统显示器信息类>(CWinHardwareInformation::GetIEnumWbemClassObject(3));
+    }
+
+    方法 取BIOS信息 <公开 静态 类型 = 系统BIOS信息类 注释 = "返回系统BIOS信息类" @禁止流程检查 = 真>
+    {
+        @ return @dt<系统BIOS信息类>(CWinHardwareInformation::GetIEnumWbemClassObject(4));
+    }
+}
+
+类 系统API钩子类 <公开 注释 = "提供对API函数HOOK方法" @文档 = "category = \"钩子操作\"">
+{
+
+    # @ @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CwinApihookModule)
+
+    方法 初始化 <公开 类型 = 整数 注释 = "初始化MinHook库,必须在程序开始做一次初始化,否则无法使用它进行API Hook." 返回值注释 = "APIHOOK执行结果.*" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().MH_Initialize()
+    }
+
+    方法 清理 <公开 类型 = 整数 注释 = "手动清理释放内存,该类退出时,会自动调用该方法." 返回值注释 = "APIHOOK执行结果.*" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().MH_Uninitialize()
+    }
+
+    方法 类_清理 <注释 = "关闭时自动清理">
+    {
+        清理 ()
+    }
+
+    方法 从指针创建 <公开 类型 = 整数 注释 = "从函数指针创建一个Hook,并保存进行Hook所需要的信息,成功加入HOOK列表." 返回值注释 = "APIHOOK执行结果.*" @嵌入式方法 = "">
+    参数 函数指针 <类型 = 变整数 注释 = "目标函数指针地址">
+    参数 挂接子程序 <类型 = 变整数 注释 = "用来HOOK的子程序指针">
+    参数 回调指针 <类型 = 变整数类 注释 = "返回值,原始函数回调指针,通过该指针可执行回原始函数.可为空." @默认值 = 空对象>
+    {
+        @ @sn<this>.data().MH_CreateHook((LPVOID)@<函数指针>,(LPVOID)@<挂接子程序>,reinterpret_cast<LPVOID*>(&@<回调指针.值>))
+    }
+
+    方法 从函数名创建 <公开 类型 = 整数 注释 = "从函数名创建一个Hook,并保存进行Hook所需要的信息,成功加入HOOK列表." 返回值注释 = "APIHOOK执行结果.*" @嵌入式方法 = "">
+    参数 模块名称 <类型 = 文本型 注释 = "指定函数所属模块名称">
+    参数 函数名称 <类型 = 文本型 注释 = "模块所在的目标函数名称">
+    参数 挂接子程序 <类型 = 变整数 注释 = "用来HOOK的子程序指针">
+    参数 回调指针 <类型 = 变整数类 注释 = "返回值,原始函数回调指针,通过该指针可执行回原始函数.可为空." @默认值 = 空对象>
+    参数 函数指针 <类型 = 变整数类 注释 = "返回值,目标函数指针地址,用以接收原始函数真实地址,可根据该值进行\"移除\",\"设置队列\"等操作.可为空." @默认值 = 空对象>
+    {
+        @ @sn<this>.data().MH_CreateHookApiEx(@<模块名称>.GetText(),GetMbsText (@<函数名称>, CVolMem (), NULL),(LPVOID)@<挂接子程序>,reinterpret_cast<LPVOID*>(&@<回调指针.值>),reinterpret_cast<LPVOID*>(&@<函数指针.值>))
+    }
+
+    方法 开启 <公开 类型 = 整数 注释 = "根据函数指针,开启Hook,使Hook生效.多函数时,使用\"开启队列\"方法." 返回值注释 = "APIHOOK执行结果.*" @嵌入式方法 = "">
+    参数 函数指针 <类型 = 变整数 注释 = "目标函数指针地址">
+    {
+        @ @sn<this>.data().MH_HookSwitch((LPVOID)@<函数指针>,TRUE)
+    }
+
+    方法 暂停 <公开 类型 = 整数 注释 = "根据函数指针,暂停Hook,使Hook暂时失效.多函数时,使用\"设置队列\"方法." 返回值注释 = "APIHOOK执行结果.*" @嵌入式方法 = "">
+    参数 函数指针 <类型 = 变整数 注释 = "目标函数指针地址">
+    {
+        @ @sn<this>.data().MH_HookSwitch((LPVOID)@<函数指针>,FALSE)
+    }
+
+    方法 设置队列 <公开 类型 = 整数 注释 = "以队列形式管理HOOK列表,设置队列中的某个函数是否开启HOOK." 注释 = "多函数可分多次设置.统一设置时,请将\"函数指针\"设为0."
+            注释 = "设置后执行\"开启队列\"方法使HOOK生效." 返回值注释 = "APIHOOK执行结果.*" @嵌入式方法 = "">
+    参数 函数指针 <类型 = 变整数 注释 = "目标函数指针地址.如果为0,表示设置对象为HOOK列表全部函数." @默认值 = 0>
+    参数 是否开启 <类型 = 逻辑型 注释 = "设置是否开启状态." @默认值 = 真>
+    {
+        @ @sn<this>.data().MH_QueueHookSwitch((LPVOID)@<函数指针>,@<是否开启>)
+    }
+
+    方法 开启队列 <公开 类型 = 整数 注释 = "根据HOOK列表及队列设置,选择性开启Hook,使Hook生效." 返回值注释 = "APIHOOK执行结果.*" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().MH_ApplyQueued()
+    }
+}
+
+类 系统消息钩子类 <公开 @文档 = "category = \"钩子操作\"">
+{
+    变量 当前类指针 <公开 静态 类型 = 变整数>
+
+    # @begin
+    # @m<DECLARE_REF_OBJECT_CLASS_WITH_DATA> (CWinHookMessage)
+    # static int OnMsgCallbackEvent (HWND hwnd, int umsg, INT_P wparm, INT_P lparm, INT_P upUserData)
+    # {
+    #    return ((@sn<current_class>*)upUserData)->@<拦截到窗口消息>((INT_P)hwnd,umsg,wparm,lparm);
+    # }
+    # static int OnKeyboCallbackEvent (WPARAM wparm, int wVk, int scanCode, int dwFlags, INT_P upUserData)
+    # {
+    #    return ((@sn<current_class>*)upUserData)->@<拦截到键盘消息>((int)wparm, (int)GetKeyCodeFromVirtualKey ((UINT_P)wVk), wVk, scanCode, dwFlags);
+    # }
+    # static int  OnMouseCallbackEvent (WPARAM wparm, int dx, int dy,int mouseData, INT_P upUserData)
+    # {
+    #    return ((@sn<current_class>*)upUserData)->@<拦截到鼠标消息>((int)wparm,dx,dy,mouseData);
+    # }
+    # static void CALLBACK OnCallbackEvent (HWINEVENTHOOK hWinEventHook, DWORD umsg, HWND hwnd, LONG idObject, LONG idChild, DWORD idEventThread, DWORD dwmsEventTime)
+    # {
+    #    ((@sn<current_class>*)@sn<current_class>::@<当前类指针>)->@<拦截到全局事件消息>((INT_P)hWinEventHook,(int)umsg,(INT_P)hwnd,(int)idObject,(int)idChild,(int)idEventThread,(int)dwmsEventTime);
+    # }
+    # @end
+
+    方法 安装全局事件钩子 <公开 类型 = 变整数 注释 = "安装全局事件钩子" 返回值注释 = "事件钩子句柄" @禁止流程检查 = 真>
+    参数 最低事件值 <类型 = 整数 注释 = "常用事件常量值.*,设置响应信息范围最低事件值. 使用常量\"常用事件常量值.最低事件值\"可以指定可能的最小事件值.">
+    参数 最高事件值 <类型 = 整数 注释 = "常用事件常量值.*,设置响应信息范围最高事件值. 使用常量\"常用事件常量值.最高事件值\"可以指定可能的最小事件值.">
+    参数 函数DLL句柄 <类型 = 变整数 注释 = "当\"事件标志值\"为\"挂钩DLL\"时,提供 DLL 句柄,其他标志时必须为0." @默认值 = 0>
+    参数 事件进程ID <类型 = 整数 注释 = "指定挂钩函数从中接收事件的进程的 ID. 指定为0,以从当前桌面上的所有进程接收事件." @默认值 = 0>
+    参数 事件线程ID <类型 = 整数 注释 = "指定挂钩函数从中接收事件的线程的 ID. 如果此参数为0,则挂钩函数与当前桌面上的所有现有线程相关联." @默认值 = 0>
+    参数 事件标志值 <类型 = 事件标志值 注释 = "事件标志值" @默认值 = 事件标志值.跨进程异步>
+    {
+        @ @<当前类指针>=((INT_P)this);
+        @ return (INT_P)SetWinEventHook((DWORD)@<最低事件值> , (DWORD)@<最高事件值> , (HMODULE)@<函数DLL句柄>, OnCallbackEvent, (DWORD)@<事件进程ID>, (DWORD)@<事件线程ID>, (DWORD)@<事件标志值> );
+    }
+
+    方法 卸载全局事件钩子 <公开 注释 = "卸载全局事件钩子">
+    参数 事件钩子句柄 <类型 = 变整数 注释 = "安装全局事件钩子返回的句柄">
+    {
+        @ if (@<事件钩子句柄> != 0)  UnhookWinEvent((HWINEVENTHOOK)@<事件钩子句柄>);
+    }
+
+    方法 拦截到全局事件消息 <公开 定义事件 类型 = 整数 注释 = "安装全局事件钩子触发的事件" "">
+    参数 事件钩子句柄 <类型 = 变整数 注释 = "事件挂钩函数的句柄.\"安装事件钩子\"时的返回此值,区分事件钩子的每个实例.">
+    参数 事件值 <类型 = 整数 注释 = "常用事件常量值.*">
+    参数 窗口句柄 <类型 = 变整数 注释 = "对生成事件的窗口的句柄.如果没有与事件关联的窗口,则为0.">
+    参数 对象标识 <类型 = 整数 注释 = "标识与事件关联的对象. 对象标识符之一或自定义对象ID.">
+    参数 子对象标识 <类型 = 整数 注释 = "标识事件是由对象还是对象的子元素触发. 如果此值为0,则事件由对象触发;否则,此值是触发事件的元素的子ID.">
+    参数 线程ID <类型 = 整数 注释 = "线程ID">
+    参数 响应时间 <类型 = 整数 注释 = "指定生成事件的时间（以毫秒为单位）">
+
+    方法 拦截到窗口消息 <公开 定义事件 类型 = 整数 注释 = "安装窗口消息钩子触发的事件." 返回值注释 = "  返回0表示将该消息向后继续传递到该窗口的原处理函数,返回1表示将该消息"
+            返回值注释 = "拦截不再进行后续处理,返回-1表示将该消息传递到Windows系统默认窗口消息" 返回值注释 = "处理函数而不是该窗口的原处理函数." "">
+    参数 窗口句柄 <类型 = 变整数 注释 = "消息所对应的窗口句柄值">
+    参数 消息值 <类型 = 整数 注释 = "消息ID值">
+    参数 参数一 <类型 = 变整数 注释 = "消息所携带参数一">
+    参数 参数二 <类型 = 变整数 注释 = "消息所携带参数二">
+
+    方法 拦截到鼠标消息 <公开 定义事件 类型 = 整数 注释 = "安装全局鼠标钩子触发的事件" 返回值注释 = "返回0表示将该消息向后继续传递,返回1表示将该消息拦截不再进行后续处理." "">
+    参数 消息值 <类型 = 整数 注释 = "请参考\"常用窗口消息\"中的鼠标标志,如\"常用窗口消息.鼠标左键按下\".">
+    参数 横向坐标 <类型 = 整数 注释 = "鼠标当前横向坐标">
+    参数 纵向坐标 <类型 = 整数 注释 = "鼠标当前横向坐标">
+    参数 鼠标数据 <类型 = 整数 注释 = "区分鼠标X键1或鼠标X键2,滑轮滚动向上或向下等的鼠标数据.">
+
+    方法 拦截到键盘消息 <公开 定义事件 类型 = 整数 注释 = "安装全局键盘钩子触发的事件" 返回值注释 = "返回0表示将该消息向后继续传递,返回1表示将该消息拦截不再进行后续处理." "">
+    参数 消息值 <类型 = 整数 注释 = "请参考\"常用窗口消息\"中的键盘标志,如\"常用窗口消息.键盘按键按下\".">
+    参数 火山按键码 <类型 = 整数 注释 = "提供按键的火山按键代码值(为\"扩展按键码\"类中的常量值)">
+    参数 虚拟键代码 <类型 = 整数 注释 = "提供按键的虚拟键代码">
+    参数 按键扫描码 <类型 = 整数 注释 = "提供按键的对应硬件扫描码">
+    参数 击键信息 <类型 = 整数 注释 = "指定击键关联的信息">
+
+    方法 安装窗口消息钩子 <公开 类型 = 逻辑型 注释 = "针对所指定窗口安装消息钩子,成功返回真,失败返回假.支持单窗口多消息." 注释 = "注意: 一个本类对象只能截获一个窗口的消息,如欲同时截获多个窗口,请使用多个本类对象."
+            @禁止流程检查 = 真>
+    参数 窗口句柄 <类型 = 变整数 注释 = "要安装钩子的窗口句柄,支持外部窗口.">
+    {
+        @ return data().HookWindowsHookEx((HWND)@<窗口句柄>,OnMsgCallbackEvent,(UINT_P)this);
+    }
+
+    方法 卸载窗口消息钩子 <公开 注释 = "卸载先前所安装的窗口消息钩子" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().UnHookWindowsHookEx()
+    }
+
+    方法 添加窗口过滤消息 <公开 注释 = "根据消息标识添加拦截过滤,多次添加可拦截的多个消息.只触发过滤器中消息.如无过滤器消息将触发全部消息." @嵌入式方法 = "">
+    参数 窗口消息ID <类型 = 整数 注释 = "\"常用窗口消息.*\"枚举了常用部分,并非全部.">
+    {
+        @ @sn<this>.data().AddWindowsHookEx((DWORD)@<窗口消息ID>)
+    }
+
+    方法 删除窗口过滤消息 <公开 注释 = "根据所指定的消息ID值删除拦截消息" @嵌入式方法 = "">
+    参数 窗口消息ID <类型 = 整数 注释 = "\"常用窗口消息.*\"枚举了常用部分,并非全部.">
+    {
+        @ @sn<this>.data().RemoveWindowsHookEx((DWORD)@<窗口消息ID>)
+    }
+
+    方法 清空窗口过滤消息 <公开 注释 = "清空过滤器中所有消息标识,清空后,由于失去过滤,将触发全部消息." @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().ClearWindowsHookEx()
+    }
+
+    方法 安装全局键盘钩子 <公开 类型 = 逻辑型 注释 = "安装键盘全局钩子" @禁止流程检查 = 真>
+    {
+        @ return data().AddKeyboardWinHookEx(OnKeyboCallbackEvent,(UINT_P)this);
+    }
+
+    方法 卸载全局键盘钩子 <公开 注释 = "卸载键盘全局钩子" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().RemoveKeyboardWinHookEx()
+    }
+
+    方法 安装全局鼠标钩子 <公开 类型 = 逻辑型 注释 = "安装鼠标全局钩子" @禁止流程检查 = 真>
+    {
+        @ return data().AddMouseWinHookEx(OnMouseCallbackEvent,(UINT_P)this);
+    }
+
+    方法 卸载全局鼠标钩子 <公开 注释 = "卸载鼠标全局钩子" @嵌入式方法 = "">
+    {
+        @ @sn<this>.data().RemoveMouseWinHookEx()
+    }
+}

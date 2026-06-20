@@ -1,0 +1,658 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.原创软件 <@文档 = "category = \"windows.注册表\"" "">
+
+类 注册表根类型_常量类 <公开 @常量类 = 变整数>
+{
+    常量 HKEY_CLASSES_ROOT <公开 值 = @"@(INT_P)HKEY_CLASSES_ROOT" "">
+    常量 HKEY_CURRENT_CONFIG <公开 值 = @"@(INT_P)HKEY_CURRENT_CONFIG">
+    常量 HKEY_CURRENT_USER <公开 值 = @"@(INT_P)HKEY_CURRENT_USER">
+    常量 HKEY_LOCAL_MACHINE <公开 值 = @"@(INT_P)HKEY_LOCAL_MACHINE">
+    常量 HKEY_USERS <公开 值 = @"@(INT_P)HKEY_USERS">
+
+    #
+    #
+}
+
+类 注册表打开方式_常量类 <公开 折叠>
+{
+    常量 KEY_CREATE_LINK <公开 类型 = 整数 值 = @KEY_CREATE_LINK "">
+    常量 创建子键 <公开 类型 = 整数 值 = @KEY_CREATE_SUB_KEY>
+    常量 枚举子键 <公开 类型 = 整数 值 = @KEY_ENUMERATE_SUB_KEYS>
+    常量 KEY_EXECUTE <公开 类型 = 整数 值 = @KEY_EXECUTE>
+    常量 KEY_NOTIFY <公开 类型 = 整数 值 = @KEY_NOTIFY>
+    常量 查询值 <公开 类型 = 整数 值 = @KEY_QUERY_VALUE>
+    常量 设置值 <公开 类型 = 整数 值 = @KEY_SET_VALUE>
+    常量 所有方式 <公开 类型 = 整数 值 = @KEY_ALL_ACCESS>
+    常量 读 <公开 类型 = 整数 值 = @KEY_READ>
+    常量 KEY_WOW64_64KEY <公开 类型 = 整数 值 = @KEY_WOW64_64KEY>
+    常量 KEY_WOW64_32KEY <公开 类型 = 整数 值 = @KEY_WOW64_32KEY>
+    常量 写 <公开 类型 = 整数 值 = @KEY_WRITE>
+
+    #
+}
+
+类 "//注册表基础_全局类" <公开 注释 = "https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regenumkeyexw"
+        注释 = "https://docs.microsoft.com/en-us/windows/win32/sysinfo/determining-the-registry-size" 折叠 折叠2>
+{
+    方法 打开 <公开 类型 = 整数 返回值注释 = "0 表示成功 ERROR_SUCCESS" @嵌入式方法 = "">
+    参数 根类型 <类型 = 注册表根类型_常量类 "">
+    参数 子键名称 <类型 = 文本型>
+    参数 打开方式 <类型 = 整数 注释 = "请使用 注册表打开方式_常量类 相关的常量">
+    参数 输出_键句柄 <类型 = 变整数>
+    {
+        @ RegOpenKeyExW( (HKEY)@<根类型>,@<子键名称>,0,(REGSAM)@<打开方式>,(PHKEY)&@<输出_键句柄>)
+    }
+
+    方法 关闭 <公开 静态 类型 = 整数 @嵌入式方法 = "">
+    参数 键句柄 <类型 = 变整数>
+    {
+        @ RegCloseKey((HKEY)@<键句柄>)
+    }
+
+    方法 枚举键 <公开 静态 @禁止流程检查 = 真>
+    参数 根类型 <类型 = 注册表根类型_常量类 "">
+    参数 索引 <类型 = 整数 注释 = "如果第一次调用，请填写0">
+    参数 子键名称 <类型 = 文本型>
+    参数 用户定义类名 <类型 = 文本型 @默认值 = 空对象>
+    {
+        @ wchar_t buffer[MAX_PATH] = {0}
+        @ DWORD dwKeySize = 0;
+        @ wchar_t lpClass[MAX_PATH] = {0}
+        @ DWORD dwClass = 0;
+        @ LSTATUS nState = RegEnumKeyExW((HKEY)@<根类型>,(DWORD)@<索引>,buffer,dwKeySize,NULL,lpClass,&dwClass,NULL);
+        如果 (用户定义类名 != 空对象)
+        {
+            @ @<用户定义类名> =  lpClass;
+        }
+        @ return nState;
+    }
+
+    #
+    #
+}
+
+类 ______注册表操作_全局类 <公开 @全局类 = 真>
+{
+    方法 注册表_取文本 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 注册表根类型_常量类 注释 = "具体请看 注册表根类型_常量类">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型 @默认值 = "">
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        @     REGSAM  option = KEY_QUERY_VALUE;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+
+        @  HKEY hSubKey;
+        @  TCHAR buffer[4096] = {0};
+        @ DWORD dwBufferSize = sizeof(TCHAR)*sizeof(buffer);
+        @  LONG lResult = RegOpenKeyEx((HKEY)@<根节点>,@<键路径>,0,option,&hSubKey);
+        @ 
+        @  if( ERROR_SUCCESS != lResult )
+        @  {
+        @   SetLastError(lResult);
+        @   return buffer;
+        @  }
+        @ 
+        @  lResult = RegQueryValueEx(hSubKey,@<键名称> , NULL, NULL ,(LPBYTE)buffer,&dwBufferSize);
+        @  if(ERROR_SUCCESS != lResult)
+        @  {
+        @   RegCloseKey(hSubKey);
+        @   SetLastError(lResult);
+        @   return buffer;
+        @  }
+        @  RegCloseKey(hSubKey);
+        @  return buffer;
+
+    }
+
+    方法 注册表_取整数 <公开 静态 类型 = 整数 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 注册表根类型_常量类 注释 = "具体请看 注册表根类型_常量类">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 返回值 <类型 = 整数>
+        @     REGSAM  option = KEY_QUERY_VALUE;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+
+        @  HKEY hSubKey;
+        @ DWORD dwBufferSize = 4;
+        @  LONG lResult = RegOpenKeyEx((HKEY)@<根节点>,@<键路径>,0,option,&hSubKey);
+        @ 
+        @  if( ERROR_SUCCESS != lResult )
+        @  {
+        @   SetLastError(lResult);
+        @   return -1;
+        @  }
+        @ 
+        @  lResult = RegQueryValueEx(hSubKey,@<键名称> , NULL, NULL ,(LPBYTE)&@<返回值>,&dwBufferSize);
+        @  if(ERROR_SUCCESS != lResult)
+        @  {
+        @   RegCloseKey(hSubKey);
+        @   SetLastError(lResult);
+        @   return -1;
+        @  }
+        @  RegCloseKey(hSubKey);
+        返回 (返回值)
+    }
+
+    方法 注册表_取长整数 <公开 静态 类型 = 长整数 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 注册表根类型_常量类 注释 = "具体请看 注册表根类型_常量类">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        变量 返回值 <类型 = 长整数>
+        @     REGSAM  option = KEY_QUERY_VALUE;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+
+        @  HKEY hSubKey;
+        @ DWORD dwBufferSize = 8;
+        @  LONG lResult = RegOpenKeyEx((HKEY)@<根节点>,@<键路径>,0,option,&hSubKey);
+        @ 
+        @  if( ERROR_SUCCESS != lResult )
+        @  {
+        @   SetLastError(lResult);
+        @   return -1;
+        @  }
+        @ 
+        @  lResult = RegQueryValueEx(hSubKey,@<键名称> , NULL, NULL ,(LPBYTE)&@<返回值>,&dwBufferSize);
+        @  if(ERROR_SUCCESS != lResult)
+        @  {
+        @   RegCloseKey(hSubKey);
+        @   SetLastError(lResult);
+        @   return -1;
+        @  }
+        @  RegCloseKey(hSubKey);
+
+        返回 (返回值)
+
+    }
+
+    方法 注册表_置文本 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 注册表根类型_常量类 注释 = "具体请看 注册表根类型_常量类">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型>
+    参数 键值 <类型 = 文本型>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        // LONG RegSetValueEx(  HKEY hKey,           // handle to key
+        // LPCTSTR lpValueName, // value name  DWORD Reserved,      // reserved
+        // DWORD dwType,        // value type  CONST BYTE *lpData,  // value data
+        // DWORD cbData         // size of value data);
+
+        变量 缓冲区指针 <类型 = 变整数>
+        变量 写入长度 <类型 = 整数>
+        缓冲区指针 = 取文本指针 (键值)
+        写入长度 = 取文本长度 (键值) * 2
+
+        @     REGSAM  option = KEY_WRITE;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+
+        @  HKEY hSubKey;
+        @  LONG lResult = RegCreateKeyEx((HKEY)@<根节点>,@<键路径>, 0, NULL, REG_OPTION_NON_VOLATILE, option, NULL, &hSubKey, NULL);
+        // @  LONG lResult = RegOpenKeyEx((HKEY)@<根节点>,@<键路径>,0,KEY_SET_VALUE|KEY_CREATE_SUB_KEY,&hSubKey);
+        @ 
+        @  if( ERROR_SUCCESS != lResult )
+        @  {
+        @   SetLastError(lResult);
+        @   return false;
+        @  }
+        @ 
+        @  lResult = RegSetValueEx(hSubKey,@<键名称> , NULL, REG_SZ ,(LPBYTE)@<缓冲区指针>,@<写入长度>);
+        @  if(ERROR_SUCCESS != lResult)
+        @  {
+        @   RegCloseKey(hSubKey);
+        @   SetLastError(lResult);
+        @   return false;
+        @  }
+        @  RegCloseKey(hSubKey);
+        @  return true;
+
+    }
+
+    方法 注册表_置整数 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 注册表根类型_常量类 注释 = "具体请看 注册表根类型_常量类">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型>
+    参数 键值 <类型 = 整数>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        // LONG RegSetValueEx(  HKEY hKey,           // handle to key
+        // LPCTSTR lpValueName, // value name  DWORD Reserved,      // reserved
+        // DWORD dwType,        // value type  CONST BYTE *lpData,  // value data
+        // DWORD cbData         // size of value data);
+        @     REGSAM  option = KEY_WRITE;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+
+        @  HKEY hSubKey;
+        @  LONG lResult = RegCreateKeyEx((HKEY)@<根节点>,@<键路径>, 0, NULL, REG_OPTION_NON_VOLATILE, option, NULL, &hSubKey, NULL);
+        @ 
+        @  if( ERROR_SUCCESS != lResult )
+        @  {
+        @   SetLastError(lResult);
+        @   return false;
+        @  }
+        @ 
+        @  lResult = RegSetValueEx(hSubKey,@<键名称> , NULL, REG_DWORD ,(LPBYTE)&@<键值>,4);
+        @  if(ERROR_SUCCESS != lResult)
+        @  {
+        @   RegCloseKey(hSubKey);
+        @   SetLastError(lResult);
+        @   return false;
+        @  }
+        @  RegCloseKey(hSubKey);
+        @  return true;
+
+    }
+
+    方法 注册表_置长整数 <公开 静态 类型 = 文本型 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 注册表根类型_常量类 注释 = "具体请看 注册表根类型_常量类">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型>
+    参数 键值 <类型 = 长整数>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        // LONG RegSetValueEx(  HKEY hKey,           // handle to key
+        // LPCTSTR lpValueName, // value name  DWORD Reserved,      // reserved
+        // DWORD dwType,        // value type  CONST BYTE *lpData,  // value data
+        // DWORD cbData         // size of value data);
+
+        @     REGSAM  option = KEY_WRITE;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+
+        @  HKEY hSubKey;
+        @  LONG lResult = RegCreateKeyEx((HKEY)@<根节点>,@<键路径>, 0, NULL, REG_OPTION_NON_VOLATILE, option, NULL, &hSubKey, NULL);
+        @ 
+        @  if( ERROR_SUCCESS != lResult )
+        @  {
+        @   SetLastError(lResult);
+        @   return false;
+        @  }
+        @ 
+        @  lResult = RegSetValueEx(hSubKey,@<键名称> , NULL, REG_QWORD ,(LPBYTE)&@<键值>,8);
+        @  if(ERROR_SUCCESS != lResult)
+        @  {
+        @   RegCloseKey(hSubKey);
+        @   SetLastError(lResult);
+        @   return false;
+        @  }
+        @  RegCloseKey(hSubKey);
+        @  return true;
+
+    }
+
+    方法 注册表_创建 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 注册表根类型_常量类 注释 = "具体请看 注册表根类型_常量类">
+    参数 键路径 <类型 = 文本型>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        @  DWORD dwOperat = REG_CREATED_NEW_KEY;
+        @     HKEY hTestKey;
+        @     REGSAM  option = KEY_QUERY_VALUE;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+
+        @  HKEY  hKey;
+        @  LONG  lResult  = RegCreateKeyEx((HKEY)@<根节点>,@<键路径>,NULL,NULL,NULL,option,NULL,&hKey,&dwOperat); 
+        @  if(lResult != ERROR_SUCCESS)
+        @  {
+        @   RegCloseKey(hKey);
+        @   SetLastError(lResult);
+        @   return false;
+        @  }
+        @  RegCloseKey(hKey);
+        @ return true;
+
+
+    }
+
+    方法 注册表_枚举健 <公开 静态 折叠>
+    参数 根节点 <类型 = 注册表根类型_常量类 注释 = "具体请看 注册表根类型_常量类">
+    参数 键路径 <类型 = 文本型>
+    参数 输出_用来保存键数组 <类型 = 文本数组类>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        输出_用来保存键数组.删除所有成员 ()
+        @ HKEY hKey = (HKEY)@<根节点>;
+        @ LPCTSTR lpsubkey = (LPCTSTR)@<键路径>;
+        @ #define MAX_KEY_LENGTH 255
+        @ #define MAX_VALUE_NAME 16383
+        @     HKEY hTestKey;
+        @     REGSAM  option = KEY_READ;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+        @     if (RegOpenKeyEx(hKey, lpsubkey, 0, option, &hTestKey) != ERROR_SUCCESS) return;
+        @ 
+        @     TCHAR    achKey[MAX_KEY_LENGTH];   // buffer for subkey name
+        @     DWORD    cbName;                   // size of name string 
+        @     TCHAR    achClass[MAX_PATH] = TEXT("");  // buffer for class name 
+        @     DWORD    cchClassName = MAX_PATH;  // size of class string 
+        @     DWORD    cSubKeys = 0;               // number of subkeys 
+        @     DWORD    cbMaxSubKey;              // longest subkey size 
+        @     DWORD    cchMaxClass;              // longest class string 
+        @     DWORD    cValues;              // number of values for key 
+        @     DWORD    cchMaxValue;          // longest value name 
+        @     DWORD    cbMaxValueData;       // longest value data 
+        @     DWORD    cbSecurityDescriptor; // size of security descriptor 
+        @     FILETIME ftLastWriteTime;      // last write time 
+        @ 
+        @     DWORD i, retCode;
+        @ 
+        @     //TCHAR  achValue[MAX_VALUE_NAME];
+        @     DWORD cchValue = MAX_VALUE_NAME;
+        @ 
+        @     // Get the class name and the value count. 
+        @     retCode = RegQueryInfoKey(
+        @         hTestKey,                    // key handle 
+        @         achClass,                // buffer for class name 
+        @         &cchClassName,           // size of class string 
+        @         NULL,                    // reserved 
+        @         &cSubKeys,               // number of subkeys 
+        @         &cbMaxSubKey,            // longest subkey size 
+        @         &cchMaxClass,            // longest class string 
+        @         &cValues,                // number of values for this key 
+        @         &cchMaxValue,            // longest value name 
+        @         &cbMaxValueData,         // longest value data 
+        @         &cbSecurityDescriptor,   // security descriptor 
+        @         &ftLastWriteTime);       // last write time 
+        @ 
+        @     // Enumerate the subkeys, until RegEnumKeyEx fails.
+        @ 
+        @     if (cSubKeys)
+        @     {
+        @         //printf("\nNumber of subkeys: %d\n", cSubKeys);
+        @ 
+        @         for (i = 0; i < cSubKeys; i++)
+        @         {
+        @             cbName = MAX_KEY_LENGTH;
+        @             retCode = RegEnumKeyEx(hTestKey, i,
+        @                 achKey,
+        @                 &cbName,
+        @                 NULL,
+        @                 NULL,
+        @                 NULL,
+        @                 &ftLastWriteTime);
+        @             if (retCode == ERROR_SUCCESS)
+        @             {
+        @                 @<输出_用来保存键数组>.data ().Add2 (achKey);
+        @             }
+        @         }
+        @     }
+        @ 
+        @     RegCloseKey(hTestKey);
+
+
+
+    }
+
+    方法 注册表_枚举值 <公开 静态 折叠>
+    参数 根节点 <类型 = 注册表根类型_常量类 注释 = "具体请看 注册表根类型_常量类">
+    参数 键路径 <类型 = 文本型>
+    参数 输出_用来保存键数组 <类型 = 文本数组类>
+    参数 输出_用来保存值类型数组 <类型 = 整数数组类 注释 = "如果传递空对象，则忽略此参数" @默认值 = 空对象>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+
+        输出_用来保存键数组.删除所有成员 ()
+        如果 (输出_用来保存值类型数组 != 空对象)
+        {
+            输出_用来保存值类型数组.删除所有成员 ()
+        }
+        @ HKEY hKey = (HKEY)@<根节点>;
+        @ LPCTSTR lpsubkey = (LPCTSTR)@<键路径>;
+        @ #define MAX_KEY_LENGTH 255
+        @ #define MAX_VALUE_NAME 16383
+        @     HKEY hTestKey;
+        @     REGSAM  option = KEY_READ;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+        @     if (RegOpenKeyEx(hKey, lpsubkey, 0, option, &hTestKey) != ERROR_SUCCESS) return;
+        @ 
+        @     TCHAR    achKey[MAX_KEY_LENGTH];   // buffer for subkey name
+        @     DWORD    cbName;                   // size of name string 
+        @     TCHAR    achClass[MAX_PATH] = TEXT("");  // buffer for class name 
+        @     DWORD    cchClassName = MAX_PATH;  // size of class string 
+        @     DWORD    cSubKeys = 0;               // number of subkeys 
+        @     DWORD    cbMaxSubKey;              // longest subkey size 
+        @     DWORD    cchMaxClass;              // longest class string 
+        @     DWORD    cValues;              // number of values for key 
+        @     DWORD    cchMaxValue;          // longest value name 
+        @     DWORD    cbMaxValueData;       // longest value data 
+        @     DWORD    cbSecurityDescriptor; // size of security descriptor 
+        @     FILETIME ftLastWriteTime;      // last write time 
+        @ 
+        @     DWORD i, retCode;
+        @ 
+        @     TCHAR  achValue[MAX_VALUE_NAME];
+        @     DWORD cchValue = MAX_VALUE_NAME;
+        @ 
+        @     // Get the class name and the value count. 
+        @     retCode = RegQueryInfoKey(
+        @         hTestKey,                    // key handle 
+        @         achClass,                // buffer for class name 
+        @         &cchClassName,           // size of class string 
+        @         NULL,                    // reserved 
+        @         &cSubKeys,               // number of subkeys 
+        @         &cbMaxSubKey,            // longest subkey size 
+        @         &cchMaxClass,            // longest class string 
+        @         &cValues,                // number of values for this key 
+        @         &cchMaxValue,            // longest value name 
+        @         &cbMaxValueData,         // longest value data 
+        @         &cbSecurityDescriptor,   // security descriptor 
+        @         &ftLastWriteTime);       // last write time 
+        @ 
+        @     // Enumerate the subkeys, until RegEnumKeyEx fails.
+        @ 
+        @     if (cValues)
+        @     {
+        @         for (i = 0, retCode = ERROR_SUCCESS; i < cValues; i++)
+        @         {
+        @             DWORD dwValueType = 0;
+        @             cchValue = MAX_VALUE_NAME;
+        @             achValue[0] = '\0';
+        @             retCode = RegEnumValue(hTestKey, i,achValue,&cchValue,NULL,&dwValueType,NULL,NULL);
+        @ 
+        @             if (retCode == ERROR_SUCCESS)
+        @             {
+        @                 @<输出_用来保存键数组>.data ().Add2 (achValue);
+        @             }
+        @             if( !@<输出_用来保存值类型数组>.IsNullObject () )
+        @             {
+        @                  @<输出_用来保存值类型数组>.data().Add2((INT)dwValueType);   
+        @             }
+        @         }
+        @     }
+        @ 
+        @     RegCloseKey(hTestKey);
+
+
+
+    }
+
+    # @begin
+    # LONG DeleteSubKeyTree(HKEY hKey, LPCTSTR lpSubKey,BOOL b64bit)
+    # {
+    #
+    #         LONG lResult;
+    #         HKEY hSubKey;
+    #         DWORD   dwIndex, cbName;
+    #         TCHAR   szSubKey[512];
+    #         FILETIME   ft;
+    #
+    #      REGSAM  option = KEY_READ;
+    #      if(b64bit)
+    #       option|=KEY_WOW64_64KEY;
+    #      else
+    #       option|=KEY_WOW64_32KEY;
+    #
+    #         lResult   =   RegOpenKeyEx(hKey,   lpSubKey,   0,   option,&hSubKey);
+    #         if (lResult != ERROR_SUCCESS)
+    #         {
+    #                 RegCloseKey(hSubKey);
+    #                 return lResult;
+    #         }
+    #         dwIndex = 0;
+    #         cbName = sizeof(szSubKey)/sizeof(szSubKey[0]);
+    #         while (ERROR_SUCCESS == (lResult = RegEnumKeyEx(hSubKey, dwIndex, szSubKey, &cbName, NULL, NULL, NULL, &ft)))
+    #         {
+    #                 DeleteSubKeyTree(hSubKey, szSubKey,b64bit);
+    #         }
+    #         RegCloseKey(hSubKey);
+    #         lResult = RegDeleteKey(hKey, lpSubKey);
+    #         return lResult;
+    # }
+    # @end
+
+    方法 "//注册表_删除键2" <公开 静态 类型 = 整数 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 注册表根类型_常量类 注释 = "具体请看 注册表根类型_常量类">
+    参数 键路径 <类型 = 文本型>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        @ return DeleteSubKeyTree((HKEY)@<根节点>,@<键路径>.GetText(),@<是否64位>);
+
+    }
+
+    方法 注册表_删除值 <公开 静态 类型 = 逻辑型 折叠 @禁止流程检查 = 真>
+    参数 根节点 <类型 = 注册表根类型_常量类 注释 = "具体请看 注册表根类型_常量类">
+    参数 键路径 <类型 = 文本型>
+    参数 键名称 <类型 = 文本型>
+    参数 是否64位 <类型 = 逻辑型 @默认值 = 假>
+    {
+        @  HKEY  hKey;
+        @  DWORD dwOperat = REG_CREATED_NEW_KEY;
+        @     REGSAM  option = KEY_WRITE;
+        @     if(@<是否64位>)
+        @      option|=KEY_WOW64_64KEY;
+        @     else
+        @      option|=KEY_WOW64_32KEY;
+        @  LONG  lResult  = RegCreateKeyEx((HKEY)@<根节点>,@<键路径>,NULL,NULL,NULL,option,NULL,&hKey,&dwOperat); 
+        @  if(lResult != ERROR_SUCCESS)
+        @  {
+        @   RegCloseKey(hKey);
+        @   SetLastError(lResult);
+        @   return false;
+        @  }
+        @  BOOL bOK = FALSE;
+        @  lResult = RegDeleteValue(hKey,@<键名称>);
+        @  if(lResult != ERROR_SUCCESS)
+        @  {
+        @   RegCloseKey(hKey);
+        @   SetLastError(lResult);
+        @   return false;
+        @  }
+        @  RegCloseKey(hKey);
+        @ return true;
+
+
+    }
+
+    方法 注册表_定位 <公开 静态 注释 = "注意，需要管理员权限" 折叠 @视窗.附属文件 = "Registry\\regjump.exe">
+    参数 定位位置 <类型 = 文本型>
+    {
+        调试输出 ("注意!!!! 注册表_定位  需要管理员权限，否则不会成功")
+        注册表_置整数 (注册表根类型_常量类.HKEY_CURRENT_USER, "Software\\Sysinternals\\Regjump", "EulaAccepted", 1)
+        运行f ("regjump " + 定位位置, 假, 4)
+
+
+
+
+
+
+
+    }
+}
+
+类 _____辅助注册表 <公开 注释 = "本模块由  绿茶(858058286)   提供" @全局类 = 真>
+{
+    方法 打开__RegOpenKeyExW <静态 类型 = 整数 注释 = "成功返回非零的数键句柄  ,  用于其他函数调用 以及调用后关闭句柄" 返回值注释 = "如果<=0   要么是打开失败, 要么是键路径不正确" 折叠
+            @禁止流程检查 = 真>
+    参数 参_键路径 <类型 = 文本型>
+    参数 参_KEY <类型 = 整数 注释 = "1= HKEY_CLASSES_ROOT" 注释 = "2= HKEY_CURRENT_USER" 注释 = "3= HKEY_LOCAL_MACHINE" 注释 = "4= HKEY_USERS"
+            注释 = "5= HKEY_CURRENT_CONFIG">
+    参数 参_是否64 <类型 = 逻辑型 @默认值 = 真>
+    {
+        @ HKEY WKey = NULL;
+        @ switch (@<参_KEY>)
+        @ {
+        @     case 1:
+        @         WKey = HKEY_CLASSES_ROOT;
+        @         break;
+        @     case 2:
+        @         WKey = HKEY_CURRENT_USER;
+        @         break;
+        @     case 3:
+        @         WKey = HKEY_LOCAL_MACHINE;
+        @         break;
+        @     case 4:
+        @         WKey = HKEY_USERS;
+        @         break;
+        @     case 5:
+        @         WKey = HKEY_CURRENT_CONFIG;
+        @         break;
+        @     default:
+        @         break;
+        @ }
+        @ if ( (INT_PTR) WKey >=0) return 0;
+        @ REGSAM X86X64 = @<参_是否64> ? KEY_WOW64_64KEY : KEY_WOW64_32KEY;
+        @ HKEY Hwndkey;
+        @ if ( RegOpenKeyExW(WKey, @<参_键路径>.GetText(), 0, X86X64 | KEY_ALL_ACCESS,   (PHKEY)&Hwndkey) != ERROR_SUCCESS)  return 0;
+        @ return (INT_PTR) Hwndkey;
+    }
+
+    方法 注册表_删除 <公开 静态 类型 = "逻辑型  " 注释 = "成功返回真" 返回值注释 = "不存在也返回真" @禁止流程检查 = 真>
+    参数 参__根节点 <类型 = 整数 注释 = "1= CLASSES_ROOT、2= CURRENT_USER、3=LOCAL_MACHINE、4=USERS、5=CURRENT_CONFIG">
+    参数 参__键路径 <类型 = 文本型 注释 = "例如： SOFTWARE\\XXXXX     后缀有无反斜杠都可以">
+    参数 参__是否64位 <类型 = 逻辑型 注释 = "真=64,  假=32" @默认值 = 真>
+    {
+        变量 局__键句柄 <类型 = 变整数>
+        局__键句柄 = 打开__RegOpenKeyExW (参__键路径, 参__根节点, 参__是否64位)
+        @ if (@<局__键句柄> <=0)  return true;//  键不存在  或 打开失败,  参数都填写正确的情况下打开失败的几率应该不会有吧....
+        @ if( RegDeleteKeyW((HKEY)@<局__键句柄>, _T("")) ==ERROR_SUCCESS ) return true;// 先用这个删除不包含子项的函数删除, 如果删除成功也就用不到下面的递归函数删除了
+        如果 (RegDeleteTreeWwW (局__键句柄) == 0)
+        {
+            @ SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);//  删除成功后应该得刷新下注册表吧,   测试的时候不刷新也没事
+            @ if( RegDeleteKeyW((HKEY)@<局__键句柄>, _T("")) ==ERROR_SUCCESS ) return true;// 递归删除子项之后 再删除指定的键路径就可以删除了
+            @  RegCloseKey ((HKEY)@<局__键句柄>);// 删除失败之后 关闭键句柄
+            @  return false;
+        }
+        @  RegCloseKey ((HKEY)@<局__键句柄>);// 删除失败之后 关闭键句柄
+        @  return false;
+
+    }
+
+    方法 RegDeleteTreeWwW <静态 类型 = 变整数 注释 = "成功返回0,   递归删除指定键路径下的所有子项 , 提供的键路径不会删除" @输出名 = "RegDeleteTreeW"
+            @视窗.输入 = "Advapi32.dll">
+    参数 参__键句柄 <类型 = 变整数 "">
+    参数 参__键路径 <类型 = 变整数 @默认值 = 0>
+    {
+
+    }
+
+    #
+}
