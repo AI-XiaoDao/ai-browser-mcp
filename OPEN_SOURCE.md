@@ -53,6 +53,7 @@
 | 内容 | 路径 |
 |------|------|
 | **MCP 服务核心** | `CEFbro/AI浏览器/src/*.wsv`（11 个源文件） |
+| **生成 C++ 对照** | `CEFbro/AI浏览器/generated-cpp/release-x64/`（33 cpp + 218 h） |
 | 文档 | `CEFbro/AI浏览器/docs/` — 客户手册、配置说明、使用技能书 |
 | 工具参考 | `CEFbro/AI浏览器/skills/AI浏览器MCP.md` — 217 工具 |
 | Agent 技能书 | `CEFbro/AI浏览器/skills/` — 火山 API 知识库 |
@@ -66,9 +67,10 @@
 
 | 内容 | 获取方式 |
 |------|----------|
-| `AI浏览器.exe` + CEF 运行时 | [GitHub Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) 下载 zip |
+| `AI浏览器.exe` + CEF 运行时 | [GitHub Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) → `AI-Browser-MCP-x64-v2.6.0.zip` |
+| C++ 源码 zip（可选） | 同上 → `AI-Browser-MCP-cpp-x64-v2.6.0.zip` |
 | FBrowser CEF 闭源库 | 安装火山视窗 IDE 时自带 |
-| 编译生成的 C++ | 本地编译时在 `_int/.../project/` 自动生成，不入仓 |
+| `linker/out/` 中间产物 | **勿下载、勿提交** — 仅为 `.obj`/`.pch`，不是源码 |
 
 ---
 
@@ -80,9 +82,9 @@
 
 | 目录 | 性质 | 是否入 Git |
 |------|------|------------|
-| **`project/`** | 火山**自动生成**的 C++（`vpkg_*.cpp`、`vcls_*.h`、`makefile`） | ❌ 可再生 |
+| **`project/`** / **`generated-cpp/`** | 火山**自动生成**的 C++（`vpkg_*.cpp`、`vcls_*.h`） | ✅ 已入仓 |
 | **`linker/`** | **运行成品**（exe、dll、docs、mcp 脚本） | ❌ 大二进制走 Releases |
-| **`linker/out/`** | 编译**中间产物**（`.obj`、`.pch`），**不是 C++ 源码** | ❌ 勿打包进 zip |
+| **`linker/out/`** | 编译**中间产物**（`.obj`、`.pch`），**不是 C++ 源码** | ❌ 禁止打包 |
 
 ```
 src/*.wsv  ──火山翻译──►  project/*.cpp  ──MSVC──►  linker/out/*.obj  ──链接──►  linker/AI浏览器.exe

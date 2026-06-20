@@ -11,6 +11,9 @@ node_modules/
 # 编译中间产物（保留源码 workflows/）
 CEFbro/AI浏览器/_int/
 
+# linker/out 为 .obj 中间产物，不是 C++ 源码，禁止提交或打入成品包
+**/linker/out/
+
 # CEF 浏览器缓存（运行时生成）
 **/CacheData/
 
@@ -24,6 +27,7 @@ release/**/libcef*
 
 # 本地打包产物与临时目录（勿提交）
 AI-Browser-MCP-*.zip
+AI-Browser-MCP-cpp-*.zip
 *_staging/
 _verify_zip/
 _zip_test/
