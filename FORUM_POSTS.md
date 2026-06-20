@@ -14,6 +14,7 @@
 |------|------|----------|
 | QQ / Telegram 群公告 | [§1](#1-qq--telegram-群公告) | 短帖 |
 | 火山视窗论坛 | [§2](#2-火山视窗论坛) | 专帖 |
+| **Discuz (DZ) BBCode** | **[§2-A](#2-a-discuz-dz-论坛--bbcode-格式)** | **纯 BBCode 复制** |
 | V2EX | [§3](#3-v2ex) | 分享帖 |
 | 掘金 | [§4](#4-掘金) | 文章 / 沸点 |
 | CSDN | [§5](#5-csdn) | 博客 |
@@ -121,6 +122,179 @@ Cursor / Claude / 任意 MCP 客户端可用自然语言调用 217 个 browser_*
 
 QQ：212577526 · 群：737680767 · 火山交流群：https://qm.qq.com/q/Hpv6qm8qUE
 ```
+
+> **火山论坛 / 其他 Discuz 站点**：请用下方 [§2-A DZ BBCode 专帖](#2-a-discuz-dz-论坛--bbcode-格式)，粘贴到论坛「高级模式」发帖框。
+
+---
+
+## 2-A. Discuz (DZ) 论坛 · BBCode 格式
+
+> **适用**：Discuz! X / 火山视窗论坛 / 看雪（部分版）/ 各类 `[b][url][img]` 标签站。  
+> **用法**：复制下方代码块 **整段** → 论坛发帖 → 切换到 **高级模式 / 纯文本** → 粘贴 → 预览 → 发表。  
+> **演示图外链**：`https://github.com/AI-XiaoDao/ai-browser-mcp/raw/main/.github/demo-douyin-post-scan.png`
+
+### BBCode 标签速查（发帖常用）
+
+| 效果 | 写法 |
+|------|------|
+| 粗体 | `[b]文字[/b]` |
+| 颜色 | `[color=#0066cc]文字[/color]` |
+| 字号 | `[size=4]标题[/size]` |
+| 链接 | `[url=https://github.com/...]显示文字[/url]` |
+| 图片 | `[img]https://...png[/img]` |
+| 代码 | `[code]内容[/code]` |
+| 引用 | `[quote]内容[/quote]` |
+| 列表 | `[list][*]第一项[*]第二项[/list]` |
+| 分割线 | `[hr]` |
+| 居中 | `[align=center]内容[/align]` |
+
+---
+
+### DZ · 标题建议
+
+```
+【开源】AI浏览器 MCP Server v2.6 — 217 工具 · 任意 AI 代理 · FBrowser CEF
+```
+
+或短标题：
+
+```
+【开源工具】Windows MCP 浏览器自动化 — Cursor 一句话采集/逆向/断点
+```
+
+---
+
+### DZ · 短帖 BBCode（推荐，适合「软件分享」版块）
+
+```
+[b][size=4][color=#0066cc]【开源】AI浏览器 MCP Server v2.6.0[/color][/size][/b]
+
+Windows 本地 [b]MCP 浏览器自动化[/b]服务 — [b]217 个[/b] browser_* 工具，[b]任意 AI 代理[/b]（Cursor / Claude / Cline / 自研 MCP）一句话操控 [b]FBrowser CEF 真实浏览器[/b]。
+
+[b]一句话自动执行：[/b]
+[list]
+[*][b]采集[/b]：「滚动列表，采标题价格 JSON」
+[*][b]逆向[/b]：「扫描 POST，标出疑似加密字段」（Hook 抓 body）
+[*][b]定位[/b]：「断点跟到 sign 函数，给源码片段」（CDP 调试器）
+[*][b]填表[/b]：「登录后台，导出订单表」
+[/list]
+
+[b]亮点：[/b]
+[list]
+[*]MIT 开源：火山 .wsv 源码 + 文档 + mcp_bridge.js
+[*]GitHub Release [b]217 工具全开放[/b]，解压即用（约 157MB）
+[*]本机 [url=http://127.0.0.1:9222/]127.0.0.1:9222[/url]，默认不暴露外网
+[*]sync-wait + batch + 工作流 JSON
+[/list]
+
+[b]下载：[/b][url=https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0]GitHub Releases v2.6.0[/url]
+[b]仓库：[/b][url=https://github.com/AI-XiaoDao/ai-browser-mcp]github.com/AI-XiaoDao/ai-browser-mcp[/url]
+
+[align=center][img]https://github.com/AI-XiaoDao/ai-browser-mcp/raw/main/.github/demo-douyin-post-scan.png[/img][/align]
+[i]实测：Cursor 一句话 → 抖音 POST 扫描 + Hook + 分析 33 条请求[/i]
+
+[b]交流：[/b]QQ 212577526 · 群 737680767 · 火山群 [url=https://qm.qq.com/q/Hpv6qm8qUE]点击加入[/url]
+
+欢迎 [b]Star ⭐[/b] / Issue / PR
+```
+
+---
+
+### DZ · 长帖 BBCode（适合「教程 / 综合讨论」版块）
+
+```
+[b][size=5][color=#0066cc]AI浏览器 MCP Server 正式开源[/color][/size][/b]
+[size=3][color=#666666]任意 AI 代理 · 一句话操控 Windows 真实浏览器 · MIT[/color][/size]
+
+[hr]
+
+[b]一、这是什么？[/b]
+
+在 Windows 上运行 [b]AI浏览器.exe[/b]，本机暴露 [b]Model Context Protocol (MCP)[/b] 服务（端口 [b]9222[/b]）。
+不限于 Cursor — Claude Desktop、Cline、OpenCode 或 HTTP POST 脚本均可调用 [b]217 个[/b] browser_* 工具。
+说一句话，Agent 自动串联执行，[b]不用手写 Playwright[/b]。
+
+[b]二、核心能力[/b]
+[list]
+[*][b]217 MCP 工具[/b]：导航 / 填表 / DOM / JS / 网络 / 工作流 / CDP 调试 / Hook / 截图 / 指纹 …
+[*][b]sync-wait + batch[/b]：同次调用等结果，批量串联，省 Token
+[*][b]工作流 JSON[/b]：多步骤任务 workflow_run 一键复跑
+[*][b]真实 CEF 窗口[/b]：FBrowser 内核，行为贴近日常浏览
+[*][b]本机优先[/b]：默认 127.0.0.1，数据不出机器
+[/list]
+
+[b]三、一句话场景（复制到 AI 代理）[/b]
+
+[quote]
+帮我把商品列表滚动 5 屏，把标题、价格、链接采成 JSON。
+打开抖音，扫描 XHR/fetch 的 POST，标出疑似加密字段和依据。
+提交时下断点，跟到计算 sign 的 JS 函数，给我函数名和源码片段。
+用账号登录后台，导出订单表前 20 行。
+[/quote]
+
+[b]四、3 步上手[/b]
+[list=1]
+[*]下载 [url=https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0]AI-Browser-MCP-x64-v2.6.0.zip[/url] → 解压 → 运行 [b]AI浏览器.exe[/b]
+[*]浏览器打开 [url=http://127.0.0.1:9222/health]http://127.0.0.1:9222/health[/url] 看到 [code]"status":"ok"[/code]
+[*]配置 [b]mcp_bridge.js[/b] 接入 Cursor / Claude → 对 AI 说上面任一句
+[/list]
+
+[b]五、开源内容[/b]
+[list]
+[*][b]src/*.wsv[/b] — 11 个 MCP 模块（~2 万行，MIT）
+[*][b]generated-cpp/[/b] — 火山生成 C++ 对照
+[*][b]docs / skills[/b] — 217 工具参考、客户手册、场景脚本
+[*]欢迎 PR（请改 .wsv 源码）
+[/list]
+
+[b]六、演示截图[/b]
+[align=center][img]https://github.com/AI-XiaoDao/ai-browser-mcp/raw/main/.github/demo-douyin-post-scan.png[/img][/align]
+
+[hr]
+
+[b]链接汇总[/b]
+[list]
+[*][b]仓库[/b]：[url=https://github.com/AI-XiaoDao/ai-browser-mcp]https://github.com/AI-XiaoDao/ai-browser-mcp[/url]
+[*][b]下载[/b]：[url=https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0]v2.6.0 Release[/url]
+[*][b]论坛发帖文案[/b]：[url=https://github.com/AI-XiaoDao/ai-browser-mcp/blob/main/FORUM_POSTS.md]FORUM_POSTS.md[/url]
+[/list]
+
+[b]QQ[/b]：212577526 · [b]群[/b]：737680767 · [b]微信[/b]：XSMZAS1
+
+欢迎 [b]Star ⭐[/b] · Issue · PR
+```
+
+---
+
+### DZ · 回帖 FAQ BBCode（评论回复用）
+
+```
+[b]Q：和 Playwright 有什么区别？[/b]
+A：217 工具已封装成 MCP，AI 代理直接调用，不用在 Agent 里写 Node 浏览器脚本。真实 FBrowser CEF 窗口，本机 9222。
+
+[b]Q：只能 Cursor 吗？[/b]
+A：否。任意 MCP 客户端或 HTTP POST [code]127.0.0.1:9222/mcp[/code] 均可。
+
+[b]Q：能抓 POST body 吗？[/b]
+A：默认网络工具不记 POST 正文；须 [code]browser_inject[/code] persist Hook。仓库有 [code]douyin_xhr_encrypt_scan.js[/code] 范例。
+
+[b]Q：Mac 支持吗？[/b]
+A：当前仅 Windows x64。Release 已含 CEF 运行时。
+
+下载：[url=https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0]点这里[/url]
+```
+
+---
+
+### DZ · 发帖注意事项
+
+| 项目 | 建议 |
+|------|------|
+| 编辑器 | 用 **高级模式**，勿用「可视化」粘贴（易丢标签） |
+| 图片 | 外链 `[img]` 若被禁，改用附件上传后 `[attach]id[/attach]` |
+| 外链 | 部分论坛需发帖满级才显示链接，可留 `github.com/AI-XiaoDao/ai-browser-mcp` 纯文本 |
+| 版块 | 软件分享 / 编程交流 / 资源发布；勿同一内容多版块刷屏 |
+| 标签 | `[b]开源[/b]` `[b]MCP[/b]` `[b]Cursor[/b]` `[b]浏览器自动化[/b]` |
 
 ---
 
