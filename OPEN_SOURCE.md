@@ -573,7 +573,8 @@ github.com/AI-XiaoDao/ai-browser-mcp
 
 | 场景 | 文件 / 章节 |
 |------|-------------|
-| **各大论坛发帖（推荐）** | **[FORUM_POSTS.md](FORUM_POSTS.md)** — V2EX / 掘金 / CSDN / 知乎 / 看雪 / Reddit 等 |
+| **各大论坛发帖（中文）** | **[FORUM_POSTS.md](FORUM_POSTS.md)** — V2EX / 掘金 / CSDN / 知乎 / 看雪 等 |
+| **Forum posts (English)** | **[FORUM_POSTS_EN.md](FORUM_POSTS_EN.md)** — Reddit / HN / Dev.to / Twitter 等 |
 | QQ 群 / 论坛短帖 | 本文「论坛短帖」 |
 | **典型话术（采集/逆向/定位）** | 本文「典型话术 · 一句话自动执行」 |
 | **全部优点长帖** | 本文「全部优点 · 长帖」 |

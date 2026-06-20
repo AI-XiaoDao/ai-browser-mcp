@@ -34,7 +34,7 @@
 | **场景速查卡** | [§20](#20-场景速查卡) | 群精华 |
 | **论坛回帖 FAQ** | [§21](#21-论坛回帖-faq) | 评论回复 |
 
-更完整的开源公告与 FAQ 见 [OPEN_SOURCE.md](OPEN_SOURCE.md) · 英文见 [OPEN_SOURCE_EN.md](OPEN_SOURCE_EN.md)。
+更完整的开源公告与 FAQ 见 [OPEN_SOURCE.md](OPEN_SOURCE.md) · 英文论坛文案见 [FORUM_POSTS_EN.md](FORUM_POSTS_EN.md) · 英文公告 [OPEN_SOURCE_EN.md](OPEN_SOURCE_EN.md)。
 
 ---
 

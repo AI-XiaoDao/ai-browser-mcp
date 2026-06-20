@@ -16,7 +16,7 @@
 [![Platform](https://img.shields.io/badge/Platform-Windows_x64-0078d4)]()
 [![FBrowser](https://img.shields.io/badge/Kernel-FBrowser_CEF-a78bfa)]()
 
-[⚡ 3 步上手](#-3-步上手) · [强大扩展](#-强大扩展能力) · [一句话场景](#-典型场景一句话自动执行) · [下载](#-下载与运行成品) · [核心优点](#-核心优点全景) · [文档](#-文档) · [论坛发帖](FORUM_POSTS.md) · [开源公告](OPEN_SOURCE.md) · [English](OPEN_SOURCE_EN.md)
+[⚡ 3 步上手](#-3-步上手) · [强大扩展](#-强大扩展能力) · [一句话场景](#-典型场景一句话自动执行) · [下载](#-下载与运行成品) · [核心优点](#-核心优点全景) · [文档](#-文档) · [论坛发帖 CN](FORUM_POSTS.md) · [Forum EN](FORUM_POSTS_EN.md) · [开源公告](OPEN_SOURCE.md) · [English](OPEN_SOURCE_EN.md)
 
 </div>
 
