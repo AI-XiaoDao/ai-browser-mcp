@@ -54,3 +54,5 @@ node CEFbro/AI浏览器/run_all_tests.js
 ## 联系
 
 QQ 212577526 · 群 737680767 · [火山编程交流群](https://qm.qq.com/q/Hpv6qm8qUE)
+
+安全漏洞请私下联系，见 [SECURITY.md](SECURITY.md)，勿公开 Issue。

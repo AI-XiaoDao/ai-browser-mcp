@@ -6,6 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/AI-XiaoDao/ai-browser-mcp?label=release)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
+[![Issues](https://img.shields.io/github/issues/AI-XiaoDao/ai-browser-mcp)](https://github.com/AI-XiaoDao/ai-browser-mcp/issues)
 [![MCP](https://img.shields.io/badge/MCP-217_tools-6ec6ff)](CEFbro/AI浏览器/skills/AI浏览器MCP.md)
 [![Platform](https://img.shields.io/badge/Platform-Windows_x64-0078d4)]()
 [![FBrowser](https://img.shields.io/badge/Kernel-FBrowser_CEF-a78bfa)]()
@@ -206,8 +207,9 @@ ai-browser-mcp/
 
 ## 🤝 参与与反馈
 
-- **Issue**：Bug、功能建议
-- **PR**：见 [CONTRIBUTING.md](CONTRIBUTING.md)；核心 `.wsv` 请附测试说明
+- **Issue**： [Bug 模板](https://github.com/AI-XiaoDao/ai-browser-mcp/issues/new?template=bug_report.yml) · [功能建议](https://github.com/AI-XiaoDao/ai-browser-mcp/issues/new?template=feature_request.yml)
+- **Discussions**：[问答 / 案例分享](https://github.com/AI-XiaoDao/ai-browser-mcp/discussions)（见 [.github/SOCIAL_PREVIEW.md](.github/SOCIAL_PREVIEW.md) 置顶帖文案）
+- **PR**：见 [CONTRIBUTING.md](CONTRIBUTING.md)
 - **宣传材料**：中文 [OPEN_SOURCE.md](OPEN_SOURCE.md) · 英文 [OPEN_SOURCE_EN.md](OPEN_SOURCE_EN.md)
 - **交流**：QQ 212577526 · 群 737680767 · [火山编程交流群](https://qm.qq.com/q/Hpv6qm8qUE)
 

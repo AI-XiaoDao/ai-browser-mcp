@@ -1,0 +1,47 @@
+name: ✨ 功能建议
+description: 新 MCP 工具、工作流、文档或体验改进
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请先查阅 [217 工具参考](https://github.com/AI-XiaoDao/ai-browser-mcp/blob/main/CEFbro/AI浏览器/skills/AI浏览器MCP.md) 是否已有类似能力。
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 问题或使用场景
+      description: 你想解决什么问题？谁会用？
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 期望方案
+      description: 工具名、参数、行为描述；或文档/脚本改进
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: 涉及模块
+      options:
+        - MCP 工具 / .wsv 核心
+        - mcp_bridge.js / Cursor 集成
+        - 文档 / 开源宣传
+        - 工作流 JSON
+        - VIP / CDP / 网络 Hook
+        - 其他
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: volunteer
+    attributes:
+      label: 参与意愿
+      options:
+        - label: 我愿意提交 PR 实现（需火山 IDE 编译环境）
+          required: false

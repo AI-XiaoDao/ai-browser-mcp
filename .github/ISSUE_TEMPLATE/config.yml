@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 客户使用手册
+    url: https://github.com/AI-XiaoDao/ai-browser-mcp/blob/main/CEFbro/AI浏览器/docs/客户使用手册.md
+    about: 安装、Cursor 配置、FAQ
+  - name: 💬 QQ 交流群
+    url: https://qm.qq.com/q/Hpv6qm8qUE
+    about: 火山编程交流群 · 群号 737680767
+  - name: 📦 下载 Release
+    url: https://github.com/AI-XiaoDao/ai-browser-mcp/releases
+    about: AI-Browser-MCP-x64-v2.6.0.zip 运行包

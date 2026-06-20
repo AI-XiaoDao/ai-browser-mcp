@@ -1,0 +1,84 @@
+name: 🐛 Bug 反馈
+description: MCP 服务、浏览器、桥接或工具调用异常
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        提交前请先：`http://127.0.0.1:9222/health` 与 `node mcp_bridge.js --check`
+        勿粘贴 token、cookie、敏感 URL 参数。
+
+  - type: input
+    id: version
+    attributes:
+      label: MCP 版本
+      description: 来自 /health 的 version 字段
+      placeholder: "2.6.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: 操作系统
+      options:
+        - Windows 11 x64
+        - Windows 10 x64
+        - 其他
+    validations:
+      required: true
+
+  - type: dropdown
+    id: source
+    attributes:
+      label: 使用方式
+      options:
+        - GitHub Release 解压包
+        - 自行编译
+        - 仅 clone 仓库脚本
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 从启动 exe 到出错的完整步骤
+      placeholder: |
+        1. 解压 AI-Browser-MCP-x64-v2.6.0.zip
+        2. 运行 AI浏览器.exe
+        3. Cursor 调用 browser_navigate ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望行为
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为 / 报错信息
+      description: 可附 MCP 返回 JSON、控制台截图文字
+    validations:
+      required: true
+
+  - type: input
+    id: tool
+    attributes:
+      label: 相关 MCP 工具名（如有）
+      placeholder: "browser_navigate"
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 自检
+      options:
+        - label: 已确认 /health 返回 status ok
+          required: false
+        - label: 已确认 mcp_bridge.js --check 通过
+          required: false

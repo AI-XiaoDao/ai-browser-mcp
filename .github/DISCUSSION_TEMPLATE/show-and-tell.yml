@@ -1,0 +1,22 @@
+name: 🎉 案例分享
+description: 分享自动化案例、工作流、Cursor 话术
+title: "[Showcase]: "
+labels: ["Show and tell"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        分享你用 AI浏览器 MCP 做的自动化案例、工作流 JSON、Cursor 话术等 🎉
+
+  - type: textarea
+    id: demo
+    attributes:
+      label: 案例描述
+      description: 做了什么、用了哪些 browser_* 工具或 workflow
+    validations:
+      required: true
+
+  - type: textarea
+    id: tips
+    attributes:
+      label: 经验 / 踩坑（可选）
