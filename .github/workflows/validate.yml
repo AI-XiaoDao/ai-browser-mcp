@@ -1,0 +1,45 @@
+name: docs
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Node syntax check
+        run: |
+          node --check CEFbro/AI浏览器/mcp_bridge.js
+          node --check CEFbro/AI浏览器/mcp_client.js
+          node --check CEFbro/AI浏览器/mcp_check.js
+          node --check CEFbro/AI浏览器/run_all_tests.js
+
+      - name: JSON validate
+        run: |
+          node -e "
+          const fs=require('fs');
+          const path=require('path');
+          const files=[
+            '.mcp.json',
+            'release/linker/mcp_config.json',
+            'CEFbro/AI浏览器/src/mcp_config.json'
+          ];
+          for (const f of files) JSON.parse(fs.readFileSync(f,'utf8'));
+          const wfDir='release/linker/workflows';
+          for (const w of fs.readdirSync(wfDir).filter(x=>x.endsWith('.json')))
+            JSON.parse(fs.readFileSync(path.join(wfDir,w),'utf8'));
+          console.log('JSON OK', files.length + fs.readdirSync(wfDir).length, 'files');
+          "
+
+      - name: Block secrets pattern (quick scan)
+        run: |
+          ! rg -i 'ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|session=XN0YXJ0-' --glob '!*.png' || (echo 'Possible secret found' && exit 1)

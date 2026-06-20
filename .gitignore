@@ -28,6 +28,7 @@ release/**/libcef*
 # 本地打包产物与临时目录（勿提交）
 AI-Browser-MCP-*.zip
 AI-Browser-MCP-cpp-*.zip
+_gql*.json
 *_staging/
 _verify_zip/
 _zip_test/

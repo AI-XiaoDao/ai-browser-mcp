@@ -36,14 +36,17 @@ Windows x64 · Port 9222
 
 ## 快速生成（可选）
 
-1. [GitHub Social Preview Generator](https://socialify.git.ci/) — 填 repo 名与描述  
-2. 或使用仓库 logo 文字：**AI浏览器 MCP**
+1. 仓库已附带参考图：[social-preview.png](social-preview.png)（1280×640 左右，可直接上传 GitHub Settings）
+2. [GitHub Social Preview Generator](https://socialify.git.ci/) — 填 repo 名与描述  
+3. 或使用仓库 logo 文字：**AI浏览器 MCP**
 
-上传后，分享 `https://github.com/AI-XiaoDao/ai-browser-mcp` 时卡片会显示该图。
+上传路径：**Settings → General → Social preview → Upload an image**
 
-## Discussions 置顶帖（复制）
+## Discussions 置顶帖
 
-启用 Discussions 后，在 **Discussions → General** 新建并 **Pin**：
+欢迎帖：https://github.com/AI-XiaoDao/ai-browser-mcp/discussions/1（请在 Discussions 列表中 **Pin** 置顶）
+
+备用内容见下方（可复制）：
 
 ```markdown
 # 👋 欢迎来到 AI Browser MCP Server

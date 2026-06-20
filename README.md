@@ -6,7 +6,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/AI-XiaoDao/ai-browser-mcp?label=release)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
+[![CI](https://github.com/AI-XiaoDao/ai-browser-mcp/actions/workflows/validate.yml/badge.svg)](https://github.com/AI-XiaoDao/ai-browser-mcp/actions/workflows/validate.yml)
 [![Issues](https://img.shields.io/github/issues/AI-XiaoDao/ai-browser-mcp)](https://github.com/AI-XiaoDao/ai-browser-mcp/issues)
+[![Discussions](https://img.shields.io/github/discussions/AI-XiaoDao/ai-browser-mcp?label=discussions)](https://github.com/AI-XiaoDao/ai-browser-mcp/discussions)
 [![MCP](https://img.shields.io/badge/MCP-217_tools-6ec6ff)](CEFbro/AI浏览器/skills/AI浏览器MCP.md)
 [![Platform](https://img.shields.io/badge/Platform-Windows_x64-0078d4)]()
 [![FBrowser](https://img.shields.io/badge/Kernel-FBrowser_CEF-a78bfa)]()
@@ -174,6 +176,9 @@ ai-browser-mcp/
 │   ├── linker/           # 成品配置包（文档/脚本/工作流，无 exe）
 │   └── pack-release.ps1  # Release 一键打包脚本
 ├── CONTRIBUTING.md       # 贡献与发版指南
+├── CHANGELOG.md          # 版本更新日志
+├── CODE_OF_CONDUCT.md    # 社区行为准则
+├── SECURITY.md           # 安全报告策略
 ├── OPEN_SOURCE.md        # 开源公告（中文，多平台可复制）
 ├── OPEN_SOURCE_EN.md     # Open-source announcement (English)
 ├── LICENSE               # MIT
