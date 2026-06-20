@@ -10,7 +10,7 @@
 [![Platform](https://img.shields.io/badge/Platform-Windows_x64-0078d4)]()
 [![FBrowser](https://img.shields.io/badge/Kernel-FBrowser_CEF-a78bfa)]()
 
-[快速开始](#-快速开始) · [下载成品](#-下载与运行成品) · [文档](#-文档) · [架构](#-架构) · [开源说明](OPEN_SOURCE.md)
+[快速开始](#-快速开始) · [下载成品](#-下载与运行成品) · [文档](#-文档) · [架构](#-架构) · [开源说明](OPEN_SOURCE.md) · [English](OPEN_SOURCE_EN.md)
 
 </div>
 
@@ -170,7 +170,8 @@ ai-browser-mcp/
 │   ├── workflows/        # 工作流 JSON 源码（编译复制到 linker/workflows/）
 │   └── AI浏览器.vprj     # 火山工程文件
 ├── release/linker/       # 成品配置包（文档/脚本/工作流，无 exe）
-├── OPEN_SOURCE.md        # 开源发布公告（可转发）
+├── OPEN_SOURCE.md        # 开源发布公告（中文，可转发）
+├── OPEN_SOURCE_EN.md     # Open-source announcement (English)
 ├── LICENSE               # MIT
 └── README.md
 ```

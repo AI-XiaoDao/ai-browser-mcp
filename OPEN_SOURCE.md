@@ -210,3 +210,75 @@ QQ：**212577526** · QQ群：**737680767** · 微信：**XSMZAS1**
 ---
 
 *AI浏览器 MCP Server v2.6.0 · MIT License · 内核 FBrowser CEF · 端口 9222*
+
+---
+
+## 📰 公众号 / 知乎 · 长文（复制即用）
+
+**标题建议**：《AI浏览器 MCP 正式开源：让 Cursor 用自然语言操控 Windows 真实浏览器》
+
+---
+
+### 前言
+
+做浏览器自动化，很多人第一反应是 Playwright 或 Puppeteer——要写脚本、管环境、还要让 AI Agent 自己拼代码。  
+**AI浏览器 MCP Server** 换了一条路：在 Windows 上跑一个带 FBrowser CEF 内核的真实浏览器，对外暴露 **Model Context Protocol (MCP)** 接口，把 **217 个**常用操作封装成 `browser_*` 工具。你在 **Cursor** 里说一句话，AI 直接调工具，不用从零写自动化脚本。
+
+项目已 **MIT 开源**，源码、文档、桥接脚本齐全，运行包可从 GitHub Releases 免费下载。
+
+---
+
+### 它能做什么？
+
+- **打开网页、读标题、读 DOM** — 信息采集  
+- **自动填表、点击** — 登录、录入、简单 RPA  
+- **网络请求列表** — 观察 URL、状态码（POST 正文需 Hook，见 FAQ）  
+- **工作流 JSON** — 多步骤任务一键 `workflow_run`  
+- **VIP 进阶** — 截图、CDP 断点、指纹、资源拦截（需授权码）
+
+默认监听 **127.0.0.1:9222**，仅本机访问，适合本地 Agent 场景。
+
+---
+
+### 3 步上手
+
+1. 下载 Release：https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0  
+   解压 **AI-Browser-MCP-x64-v2.6.0.zip**，运行 **AI浏览器.exe**  
+2. 浏览器打开 http://127.0.0.1:9222/health ，看到 `"status":"ok"`  
+3. 在 Cursor 里配置 `mcp_bridge.js`（解压目录内与 exe 同级），详见仓库 **OPEN_SOURCE.md**
+
+然后对 AI 说：「打开 https://example.com 并读取标题」—— 即可体验。
+
+---
+
+### 开源了什么？
+
+| 类型 | 说明 |
+|------|------|
+| `.wsv` 源码 | 11 个火山源文件，**权威源码**，欢迎 PR |
+| 生成 C++ | `generated-cpp/`，编译对照，自动生成 |
+| 文档 | 客户手册、217 工具参考、Agent 技能书 |
+| 脚本 | `mcp_bridge.js` 桥接 Cursor，`run_all_tests.js` 测试 |
+
+**exe 和 CEF 运行时**在 Releases 下载（约 157MB），不进 Git 仓库体积。
+
+> 常见误解：`linker/out/` 里是 `.obj` 中间文件，**不是 C++ 源码**；真正的生成 C++ 在 `generated-cpp/` 或 cpp zip 里。
+
+---
+
+### 适合谁？
+
+- 用 **Cursor / Claude** 做浏览器自动化的开发者  
+- 不想维护 Playwright 脚本链的 Agent 玩家  
+- **火山视窗 + FBrowser** 学习者（完整 MCP 服务参考实现）
+
+---
+
+### 链接与支持
+
+- GitHub：https://github.com/AI-XiaoDao/ai-browser-mcp  
+- QQ：212577526 · 群：737680767 · 微信：XSMZAS1  
+- 英文公告：[OPEN_SOURCE_EN.md](OPEN_SOURCE_EN.md)
+
+**欢迎 Star ⭐ 与 Issue 反馈。**
+
