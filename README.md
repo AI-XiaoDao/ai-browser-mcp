@@ -58,14 +58,19 @@
       "command": "node",
       "args": ["CEFbro/AI浏览器/mcp_bridge.js"],
       "env": {
-        "AI_BROWSER_MCP_HTTP_POST": "http://127.0.0.1:9222/mcp"
+        "AI_BROWSER_MCP_HTTP_POST": "http://127.0.0.1:9222/mcp",
+        "AI_BROWSER_MCP_HOST": "127.0.0.1",
+        "AI_BROWSER_MCP_PORT": "9222",
+        "AI_BROWSER_MCP_CURSOR_MODE": "0"
       }
     }
   }
 }
 ```
 
-Release 解压目录请将 `args` 改为本机 `mcp_bridge.js` 路径。自检：`node mcp_bridge.js --check`
+Release 解压目录请将 `args` 改为本机 `mcp_bridge.js` 路径。写入 `.cursor/mcp.json` 后重启 Cursor。自检：`node mcp_bridge.js --check`
+
+> Cursor 请用 **stdio 桥接**，勿直连 `url: http://127.0.0.1:9222/mcp`；桥接会自动修复协议版本与工具 schema。
 
 **其他 Agent**：任何实现 MCP 的客户端，只要指向 `http://127.0.0.1:9222/mcp`（HTTP）或配置 `mcp_bridge.js`（stdio）即可；亦可用 Node / Python 直接 `POST` JSON-RPC。
 
@@ -368,7 +373,7 @@ flowchart TB
 1. 从 [Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) 下载 **`AI-Browser-MCP-x64-v2.6.0.zip`**（约 157MB，已排除编译中间产物）
 2. 解压，双击 **`AI浏览器.exe`**
 3. 浏览器打开 `http://127.0.0.1:9222/health`，确认 `"status":"ok"`
-4. 接入 AI 代理（仓库根目录 [`.mcp.json`](.mcp.json) 可复制；亦可用 HTTP 直连 `9222/mcp`）：
+4. 接入 AI 代理（仓库根目录 [`.mcp.json`](.mcp.json) 或 [`.cursor/mcp.json`](.cursor/mcp.json) 可复制）：
 
 ```json
 {
@@ -377,12 +382,17 @@ flowchart TB
       "command": "node",
       "args": ["CEFbro/AI浏览器/mcp_bridge.js"],
       "env": {
-        "AI_BROWSER_MCP_HTTP_POST": "http://127.0.0.1:9222/mcp"
+        "AI_BROWSER_MCP_HTTP_POST": "http://127.0.0.1:9222/mcp",
+        "AI_BROWSER_MCP_HOST": "127.0.0.1",
+        "AI_BROWSER_MCP_PORT": "9222",
+        "AI_BROWSER_MCP_CURSOR_MODE": "0"
       }
     }
   }
 }
 ```
+
+Release 解压目录：`args` 改为 `["mcp_bridge.js"]`（与 exe 同目录）。
 
 5. 自检：`node CEFbro/AI浏览器/mcp_bridge.js --check`
 6. 对 AI 说一句话即可，例如见 [典型场景 · 话术示例](#-典型场景一句话自动执行)
@@ -529,7 +539,7 @@ ai-browser-mcp/
 | 问题 | 处理 |
 |------|------|
 | `/health` 失败 | 确认 exe 已启动；检查 9222 端口占用 |
-| AI 代理连不上 MCP | `node mcp_bridge.js --check`；确认 `AI_BROWSER_MCP_HTTP_POST` 或直连 `9222/mcp` |
+| AI 代理连不上 MCP | 先启动 exe → `node mcp_bridge.js --check`；Cursor 用 stdio 桥接（见 `.mcp.json`），勿直连 HTTP url |
 | 工具调用超时 | 增大 `mcp_config.json` 中 `default_timeout_ms` |
 | POST body 抓不到 | 默认网络层不记录 POST 正文，见 `skills/场景与Hook测试.md` |
 | 一句话采集没数据 | 检查是否需登录/滚动加载；让 AI 用 `browser_dom_query` 先试选择器 |

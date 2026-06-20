@@ -14,7 +14,7 @@
 - **双通道 JSON-RPC**：WebSocket + HTTP POST `/mcp`
 - **sync-wait**：同步等待 DOM / 标题 / JS 结果
 - **欢迎页控制台**：`http://127.0.0.1:9222/`
-- **Cursor 桥接**：`mcp_bridge.js` stdio ↔ HTTP
+- **Cursor 桥接**：`mcp_bridge.js` stdio ↔ HTTP（自动修复 Cursor 协议版本 / JSON-RPC id / schema）
 - **GitHub 开源**：`.wsv` 源码、`generated-cpp/` C++ 对照、完整文档与技能书
 
 ### 发布包

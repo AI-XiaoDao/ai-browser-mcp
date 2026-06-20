@@ -194,13 +194,16 @@
       "command": "node",
       "args": ["CEFbro/AI浏览器/mcp_bridge.js"],
       "env": {
-        "AI_BROWSER_MCP_HTTP_POST": "<span data-dynamic="post">http://127.0.0.1:9222/mcp</span>"
+        "AI_BROWSER_MCP_HTTP_POST": "<span data-dynamic="post">http://127.0.0.1:9222/mcp</span>",
+        "AI_BROWSER_MCP_HOST": "127.0.0.1",
+        "AI_BROWSER_MCP_PORT": "9222",
+        "AI_BROWSER_MCP_CURSOR_MODE": "0"
       }
     }
   }
 }</code></pre>
-<p>桥接脚本配置优先级：<code>AI_BROWSER_MCP_HTTP_POST</code> → <code>mcp_connect.json</code> → 默认 127.0.0.1:9222。</p>
-<div class="alert warn">必须先启动 AI浏览器.exe。仅运行 mcp_bridge.js 而没有浏览器进程时，所有请求将失败。</div>
+<p>桥接脚本配置优先级：<code>AI_BROWSER_MCP_HTTP_POST</code> → <code>mcp_connect.json</code> → 默认 127.0.0.1:9222。桥接自动修复 Cursor 协议版本与 JSON-RPC id。</p>
+<div class="alert warn">必须先启动 AI浏览器.exe。Cursor 请用 stdio 桥接，勿直接用 <code>url</code> 直连 HTTP。</div>
 </section>
 
 <!-- ── 工具分类 ── -->

@@ -37,7 +37,8 @@
           env: {
             AI_BROWSER_MCP_HOST: MCP.host,
             AI_BROWSER_MCP_PORT: String(MCP.port),
-            AI_BROWSER_MCP_HTTP_POST: MCP.http + '/mcp'
+            AI_BROWSER_MCP_HTTP_POST: MCP.http + '/mcp',
+            AI_BROWSER_MCP_CURSOR_MODE: '0'
           }
         }
       }

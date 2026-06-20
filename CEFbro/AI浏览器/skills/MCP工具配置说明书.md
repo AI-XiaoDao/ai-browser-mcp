@@ -34,7 +34,12 @@ Cursor：欢迎页 `http://127.0.0.1:9222/` → 复制 Cursor 配置 → `.curso
     "ai-browser": {
       "command": "node",
       "args": ["安装路径/mcp_bridge.js"],
-      "env": { "AI_BROWSER_MCP_HTTP_POST": "http://127.0.0.1:9222/mcp" }
+      "env": {
+        "AI_BROWSER_MCP_HTTP_POST": "http://127.0.0.1:9222/mcp",
+        "AI_BROWSER_MCP_HOST": "127.0.0.1",
+        "AI_BROWSER_MCP_PORT": "9222",
+        "AI_BROWSER_MCP_CURSOR_MODE": "0"
+      }
     }
   }
 }

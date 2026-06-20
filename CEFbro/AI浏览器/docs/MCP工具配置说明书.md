@@ -118,6 +118,8 @@
 
 ### 4.1 推荐：mcp_bridge.js（stdio）
 
+**Release 解压目录**请将 `args` 改为同目录的 `mcp_bridge.js`（或绝对路径）。
+
 ```json
 {
   "mcpServers": {
@@ -127,12 +129,23 @@
       "env": {
         "AI_BROWSER_MCP_HTTP_POST": "http://127.0.0.1:9222/mcp",
         "AI_BROWSER_MCP_HOST": "127.0.0.1",
-        "AI_BROWSER_MCP_PORT": "9222"
+        "AI_BROWSER_MCP_PORT": "9222",
+        "AI_BROWSER_MCP_CURSOR_MODE": "0"
       }
     }
   }
 }
 ```
+
+写入 **`.cursor/mcp.json`**（项目内）或 **`~/.cursor/mcp.json`**（全局），保存后**重启 Cursor**。
+
+桥接会自动修复 Cursor 兼容问题：补全 JSON-RPC `id`、协议版本 `2024-11-05`、schema `text`→`string`。
+
+| 环境变量 | 说明 |
+|----------|------|
+| `AI_BROWSER_MCP_CURSOR_MODE` | `0` 全量 216 工具（默认）；`1` 精简约 55 个常用工具 |
+
+> **勿**直接用 `"url": "http://127.0.0.1:9222/mcp"` 接 Cursor：服务端协议版本与 schema 需经桥接修正，否则易出现 loading tools 或连接失败。
 
 配置优先级：`AI_BROWSER_MCP_HTTP_POST` → `mcp_connect.json` → 默认 `127.0.0.1:9222`。
 
@@ -156,6 +169,8 @@ curl http://127.0.0.1:9222/health
 | `AI_BROWSER_MCP_HTTP_POST` | 手动/桥接 | HTTP JSON-RPC 地址 |
 | `AI_BROWSER_MCP_CONNECT` | 手动 | `mcp_connect.json` 路径 |
 | `AI_BROWSER_MCP_HOST` | 脚本 | 场景客户端主机，默认 `127.0.0.1` |
+| `AI_BROWSER_MCP_CURSOR_MODE` | 桥接 | `0` 全量工具；`1` 精简工具（Cursor loading 时可试） |
+| `AI_BROWSER_MCP_STDIO_LOG` | 桥接 | `1` 开启 stdio 调试日志（默认关闭） |
 | `AI_BROWSER_WORKFLOWS_DIR` | 手动 | 工作流目录，默认 `linker/workflows/` |
 
 ---

@@ -471,7 +471,7 @@ var cursorConfigText = '';
 var curlExampleText = '';
 
 function buildQuickStart(api) {
-  var bridgePath = 'CEFbro/AI浏览器/mcp_bridge.js';
+  var bridgePath = 'mcp_bridge.js';
   var host = MCP_HOST;
   var port = String(MCP_PORT);
   if (api && api.mcp_http_post) {
@@ -489,7 +489,8 @@ function buildQuickStart(api) {
         env: {
           AI_BROWSER_MCP_HOST: host,
           AI_BROWSER_MCP_PORT: port,
-          AI_BROWSER_MCP_HTTP_POST: MCP_BASE + '/mcp'
+          AI_BROWSER_MCP_HTTP_POST: MCP_BASE + '/mcp',
+          AI_BROWSER_MCP_CURSOR_MODE: '0'
         }
       }
     }

@@ -96,7 +96,10 @@ function sleep(ms) {
     return new Promise((r) => setTimeout(r, ms));
 }
 
+let stdioQuiet = false;
+
 function log(msg) {
+    if (stdioQuiet) return;
     process.stderr.write('[MCP-Bridge] ' + msg + '\n');
 }
 
@@ -280,6 +283,100 @@ function writeLine(obj) {
     process.stdout.write(JSON.stringify(obj) + '\n');
 }
 
+/** Cursor 精简工具集（216 个全量易导致 loading tools 卡死） */
+const CURSOR_TOOL_WHITELIST = new Set([
+    'browser_navigate', 'browser_get_url', 'browser_get_title', 'browser_back', 'browser_forward',
+    'browser_reload', 'browser_stop', 'browser_wait', 'browser_is_loading', 'browser_list',
+    'browser_execute_js', 'browser_evaluate', 'browser_get_source', 'browser_get_text',
+    'browser_dom_query', 'browser_dom_click', 'browser_dom_set_value', 'browser_dom_get_html',
+    'browser_console_eval', 'browser_find', 'browser_stop_find',
+    'browser_mouse_click', 'browser_mouse_move', 'browser_mouse_wheel', 'browser_key_event',
+    'browser_screenshot', 'browser_print_to_pdf', 'browser_network', 'browser_status',
+    'browser_get_cookies', 'browser_set_cookie', 'browser_delete_cookies',
+    'browser_set_zoom', 'browser_get_zoom', 'browser_open_devtools', 'browser_close_devtools',
+    'browser_fill_set_value', 'browser_fill_click', 'browser_fill_focus', 'browser_fill_scroll',
+    'browser_fill_exists', 'browser_fill_select', 'browser_cdp', 'browser_cdp_call',
+    'browser_get_frames', 'browser_window_info', 'browser_view_source',
+    'mcp_result', 'mcp_status', 'ping', 'batch',
+    'workflow_list', 'workflow_get', 'workflow_run', 'workflow_stop'
+]);
+
+function isCursorLiteMode() {
+    const v = (process.env.AI_BROWSER_MCP_CURSOR_MODE || '0').toLowerCase();
+    return v === '1' || v === 'true' || v === 'on' || v === 'lite';
+}
+
+function isStdioBridgeMode() {
+    const args = process.argv.slice(2);
+    return !args.some((a) => ['--check', '--call', '--feed', '--help', '-h', '--serve'].includes(a));
+}
+
+/** MCP 服务端部分工具 schema 使用 type:"text"，Cursor 无法解析 */
+function sanitizeJsonSchema(node) {
+    if (node == null || typeof node !== 'object') return node;
+    if (Array.isArray(node)) return node.map(sanitizeJsonSchema);
+    const out = {};
+    for (const [k, v] of Object.entries(node)) {
+        if (k === 'type' && v === 'text') out[k] = 'string';
+        else out[k] = sanitizeJsonSchema(v);
+    }
+    return out;
+}
+
+function normalizeToolSchema(schema) {
+    const s = sanitizeJsonSchema(schema);
+    if (!s || typeof s !== 'object' || Array.isArray(s)) return { type: 'object', properties: {} };
+    if (!s.type) s.type = 'object';
+    if (s.type === 'object' && !s.properties) s.properties = {};
+    return s;
+}
+
+function sanitizeToolEntry(tool) {
+    return {
+        name: tool.name,
+        description: typeof tool.description === 'string' ? tool.description.slice(0, 500) : '',
+        inputSchema: normalizeToolSchema(tool.inputSchema)
+    };
+}
+
+function filterToolsForClient(tools) {
+    if (!Array.isArray(tools)) return [];
+    let list = tools.map(sanitizeToolEntry);
+    if (isCursorLiteMode() && isStdioBridgeMode()) {
+        list = list.filter((t) => CURSOR_TOOL_WHITELIST.has(t.name));
+        log(`Cursor 精简模式: ${list.length}/${tools.length} 个工具`);
+    }
+    return list;
+}
+
+/** Cursor 支持的 MCP 协议版本；服务端返回 2026-06-05 会导致连接失败 */
+const CURSOR_PROTOCOL_VERSION = '2024-11-05';
+
+function sanitizeMcpResponse(response, request) {
+    if (!response || typeof response !== 'object') return response;
+    const method = request && request.method;
+    if (request && request.id !== undefined && response.id === undefined) {
+        response.id = request.id;
+    }
+    if (response.result && typeof response.result === 'object') {
+        delete response.result._req_id;
+        if (method === 'initialize') {
+            const requested = request.params && request.params.protocolVersion;
+            response.result.protocolVersion = requested || CURSOR_PROTOCOL_VERSION;
+        }
+    }
+    if (method === 'tools/list' && response.result && Array.isArray(response.result.tools)) {
+        response.result.tools = filterToolsForClient(response.result.tools);
+    }
+    return response;
+}
+
+function shouldRespond(request) {
+    if (!request || !request.method) return false;
+    if (request.method.startsWith('notifications/')) return false;
+    return request.id !== undefined;
+}
+
 async function healthCheck() {
     try {
         const j = await getHealth();
@@ -301,11 +398,7 @@ async function runCheck() {
 }
 
 async function runStdio() {
-    log(`已连接 ${CONFIG.host}:${CONFIG.port} POST ${CONFIG.path}`);
-    healthCheck().then((h) => {
-        if (h.ok) log('服务就绪 | 浏览器: ' + h.browsers);
-        else log('警告: ' + (h.message || '请先启动 AI浏览器.exe'));
-    });
+    stdioQuiet = process.env.AI_BROWSER_MCP_STDIO_LOG !== '1';
 
     process.stdin.setEncoding('utf8');
     let buffer = '';
@@ -332,7 +425,10 @@ async function runStdio() {
             }
             pending++;
             forward(request).then((response) => {
-                if (response !== null) writeLine(response);
+                if (response !== null && shouldRespond(request)) {
+                    sanitizeMcpResponse(response, request);
+                    writeLine(response);
+                }
                 pending--;
                 maybeExit();
             });
