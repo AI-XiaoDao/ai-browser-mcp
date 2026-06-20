@@ -32,7 +32,7 @@
 
 ✅ Open: Volcano .wsv source + generated C++ reference + docs (MIT)
 
-✅ Binary: GitHub Releases (~157MB, exe + CEF) — **all 217 tools included, download and go**
+✅ Binary: GitHub Releases — **x64 ~157MB / win32 ~136MB**, exe + CEF — **all 217 tools, download and go**
 
 ✅ Local-only: 127.0.0.1:9222 by default
 
@@ -40,9 +40,9 @@
 
 Download: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
 
-  · AI-Browser-MCP-x64-v2.6.0.zip      — runtime
+  · AI-Browser-MCP-x64-v2.6.0.zip / AI-Browser-MCP-win32-v2.6.0.zip — runtime
 
-  · AI-Browser-MCP-cpp-x64-v2.6.0.zip  — generated C++ (optional)
+  · AI-Browser-MCP-cpp-x64-v2.6.0.zip / AI-Browser-MCP-cpp-win32-v2.6.0.zip — generated C++ (optional)
 
 
 

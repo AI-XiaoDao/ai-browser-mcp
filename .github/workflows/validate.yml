@@ -1,4 +1,4 @@
-name: docs
+name: CI
 
 on:
   push:
@@ -22,6 +22,13 @@ jobs:
           node --check CEFbro/AI浏览器/mcp_client.js
           node --check CEFbro/AI浏览器/mcp_check.js
           node --check CEFbro/AI浏览器/run_all_tests.js
+          node --check CEFbro/AI浏览器/scenarios/verify_cursor_tools.js
+          for f in CEFbro/AI浏览器/scenarios/*.js; do
+            [ -f "$f" ] && node --check "$f"
+          done
+          for f in release/linker/scenarios/*.js; do
+            [ -f "$f" ] && node --check "$f"
+          done
 
       - name: JSON validate
         run: |
@@ -30,6 +37,7 @@ jobs:
           const path=require('path');
           const files=[
             '.mcp.json',
+            '.cursor/mcp.json',
             'release/linker/mcp_config.json',
             'CEFbro/AI浏览器/src/mcp_config.json'
           ];
@@ -38,6 +46,18 @@ jobs:
           for (const w of fs.readdirSync(wfDir).filter(x=>x.endsWith('.json')))
             JSON.parse(fs.readFileSync(path.join(wfDir,w),'utf8'));
           console.log('JSON OK', files.length + fs.readdirSync(wfDir).length, 'files');
+          "
+
+      - name: MCP config sync check
+        run: |
+          node -e "
+          const fs=require('fs');
+          const eqJson=(a,b)=>JSON.stringify(JSON.parse(fs.readFileSync(a)))===JSON.stringify(JSON.parse(fs.readFileSync(b)));
+          if(!eqJson('.mcp.json','.cursor/mcp.json')){console.error('.mcp.json vs .cursor/mcp.json mismatch');process.exit(1);}
+          if(fs.readFileSync('CEFbro/AI浏览器/mcp_bridge.js').toString()!==fs.readFileSync('release/linker/mcp_bridge.js').toString()){
+            console.error('mcp_bridge.js drift: CEFbro vs release/linker');process.exit(1);
+          }
+          console.log('MCP config sync OK');
           "
 
       - name: Block secrets pattern (quick scan)

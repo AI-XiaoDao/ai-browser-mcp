@@ -24,7 +24,9 @@
 
 ## ✨ 这是什么？
 
-在 Windows 上运行 **AI浏览器.exe**，本机暴露 **Model Context Protocol (MCP)** 服务。**不限于 Cursor** — 任何支持 MCP 的 AI 代理（Claude Desktop、Cline、OpenCode、自研 Agent 等）或 **HTTP/WebSocket 脚本** 均可调用 **217 个** `browser_*` 工具。说一句话，Agent 自动串联执行，无需手写 Playwright。
+在 Windows 上运行 **AI浏览器.exe**，本机暴露 **Model Context Protocol (MCP)** 服务，提供 **Windows 浏览器自动化**、**网页数据采集（web scraping）** 与 **POST 逆向分析**。**不限于 Cursor** — 任何支持 MCP 的 AI 代理（Claude Desktop、Cline、OpenCode、自研 Agent 等）或 **HTTP/WebSocket 脚本** 均可调用 **217 个** `browser_*` 工具。说一句话，Agent 自动串联执行，无需手写 Playwright / Puppeteer。
+
+> **Also known as:** AI Browser MCP · 浏览器 MCP · Cursor browser automation · Playwright MCP alternative · local CEF browser · Model Context Protocol server for Windows
 
 | 接入方式 | 适用 |
 |----------|------|
@@ -39,6 +41,17 @@
 | **定位算法** | 「断点跟到 sign 函数，给源码片段」（CDP 调试器） |
 | **自动填表** | 「登录后台，导出订单表」 |
 | **固化复用** | 「存成 workflow JSON，下次一键跑」 |
+
+### 与 Playwright / Puppeteer 对比（为何选 MCP 浏览器）
+
+| | 自建 Playwright / Puppeteer | **AI浏览器 MCP** |
+|--|---------------------------|------------------|
+| 上手 | 写脚本、装驱动、调试选择器 | 下载 zip → 运行 exe → Cursor 一句话 |
+| AI 集成 | Agent 现写代码，易出错 | **217 个预封装 MCP 工具**，Agent 直接调用 |
+| 浏览器 | 常无头 / 需额外配置 | **FBrowser CEF 真实窗口**，行为更接近用户 |
+| 逆向 / 断点 | 需自己 Hook + DevTools | 内置 `browser_inject`、**CDP 调试器**、场景脚本 |
+| 隐私 | 视部署方式 | 默认 **127.0.0.1 本机**，数据不出机器 |
+| 平台 | 跨平台 | **Windows x64 + win32** 专精 |
 
 ---
 
@@ -78,7 +91,7 @@ Release 解压目录请将 `args` 改为本机 `mcp_bridge.js` 路径。写入 `
 
 → 完整步骤见下方 [🚀 快速开始（详细）](#-快速开始详细)
 
-> **🎁 GitHub Release 下载即用**：[`AI-Browser-MCP-x64-*.zip`](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) 已包含 **全部 217 个工具**（截图、CDP 调试器、指纹、网络拦截、工作流等），解压运行即可，**无需额外配置**。
+> **🎁 GitHub Release 下载即用**：[`Releases`](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) 含 **x64 / win32** 运行包，**全部 217 个工具**（截图、CDP 调试器、指纹、网络拦截、工作流等），解压运行即可，**无需额外配置**。
 
 ```mermaid
 flowchart LR
@@ -370,7 +383,7 @@ flowchart TB
 
 ### 方式 A：使用成品（推荐新手）
 
-1. 从 [Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) 下载 **`AI-Browser-MCP-x64-v2.6.0.zip`**（约 157MB，已排除编译中间产物）
+1. 从 [Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) 下载 **x64**（~157MB）或 **win32**（~136MB）运行包
 2. 解压，双击 **`AI浏览器.exe`**
 3. 浏览器打开 `http://127.0.0.1:9222/health`，确认 `"status":"ok"`
 4. 接入 AI 代理（仓库根目录 [`.mcp.json`](.mcp.json) 或 [`.cursor/mcp.json`](.cursor/mcp.json) 可复制）：
@@ -507,6 +520,7 @@ ai-browser-mcp/
 | 文档 | 读者 |
 |------|------|
 | [客户使用手册](CEFbro/AI浏览器/docs/客户使用手册.md) | 终端用户 |
+| [Quick Start (English)](CEFbro/AI浏览器/docs/QUICKSTART_EN.md) | International users · SEO |
 | [MCP 工具配置说明书](CEFbro/AI浏览器/docs/MCP工具配置说明书.md) | 部署 / 集成 |
 | [使用技能书](CEFbro/AI浏览器/docs/使用技能书.md) | 开发者 / Agent |
 | [217 工具参考](CEFbro/AI浏览器/skills/AI浏览器MCP.md) | 全量 API |
@@ -532,7 +546,7 @@ ai-browser-mcp/
 - **Issue**： [Bug 模板](https://github.com/AI-XiaoDao/ai-browser-mcp/issues/new?template=bug_report.yml) · [功能建议](https://github.com/AI-XiaoDao/ai-browser-mcp/issues/new?template=feature_request.yml)
 - **Discussions**：[问答 / 案例分享](https://github.com/AI-XiaoDao/ai-browser-mcp/discussions)
 - **PR**：见 [CONTRIBUTING.md](CONTRIBUTING.md)
-- **宣传材料**：中文 [OPEN_SOURCE.md](OPEN_SOURCE.md) · 英文 [OPEN_SOURCE_EN.md](OPEN_SOURCE_EN.md)
+- **宣传 / 仓库展示配置**： [OPEN_SOURCE.md](OPEN_SOURCE.md) · [`.github/SOCIAL_PREVIEW.md`](.github/SOCIAL_PREVIEW.md)
 - **交流**：QQ 212577526 · 群 737680767 · [火山编程交流群](https://qm.qq.com/q/Hpv6qm8qUE)
 
 ## ❓ 常见问题
@@ -546,9 +560,53 @@ ai-browser-mcp/
 | 一句话采集没数据 | 检查是否需登录/滚动加载；让 AI 用 `browser_dom_query` 先试选择器 |
 | 逆向扫不到加密字段 | 使用 `browser_inject` persist Hook；参考 `douyin_xhr_encrypt_scan.js` |
 | 调试器断点不命中 | 确认已 `browser_debugger_enable` 且页面已触发提交 |
-| 成品 zip 较大 | 含 CEF 运行时，属正常体积 |
+| 成品 zip 较大 | 含 CEF 运行时，属正常体积（x64 ~157MB / win32 ~136MB） |
+| win32 与 x64 选哪个 | 64 位系统优先 x64；仅 32 位环境或老系统用 win32 Release |
 
 更多 FAQ 见 [OPEN_SOURCE.md#常见问题](OPEN_SOURCE.md#常见问题faq)。
+
+## 🔎 常见搜索问题（SEO）
+
+<details>
+<summary><b>Cursor / Claude 如何连接 Windows 浏览器 MCP？</b></summary>
+
+1. 下载 [Release](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) 并运行 `AI浏览器.exe`
+2. 确认 `http://127.0.0.1:9222/health` 返回 ok
+3. Cursor：配置 [`mcp_bridge.js`](CEFbro/AI浏览器/mcp_bridge.js) stdio 桥接（见 [`.cursor/mcp.json`](.cursor/mcp.json)）
+4. 自检：`node mcp_bridge.js --check`
+
+</details>
+
+<details>
+<summary><b>有没有 Playwright / Puppeteer 的 MCP 替代方案？</b></summary>
+
+有。本项目提供 **217 个预封装 `browser_*` MCP 工具**，Agent 用自然语言调用，无需从零写 Playwright 脚本。适合 **网页采集、表单自动化、网络 Hook、CDP 断点调试**。见上方 [对比表](#与-playwright--puppeteer-对比为何选-mcp-浏览器)。
+
+</details>
+
+<details>
+<summary><b>如何用 MCP 做网页数据采集（web scraping）？</b></summary>
+
+对 Cursor 说：「打开某 URL，滚动加载，把标题和价格采成 JSON」。Agent 会串联 `browser_navigate` → `browser_evaluate`（滚动）→ `browser_dom_query` / `browser_collect`。详见 [典型场景 · 数据采集](#-数据采集--帮我把这个页面的数据采下来)。
+
+</details>
+
+<details>
+<summary><b>如何逆向分析 POST 加密字段 / 定位 sign 算法？</b></summary>
+
+- **逆向 POST**：`browser_reverse_prepare` → `browser_inject`（persist Hook）→ 触发请求 → 分析字段
+- **定位算法**：`browser_debugger_enable` → 断点 → `debugger_stack` + `debugger_script_source`
+
+参考 [`scenarios/`](CEFbro/AI浏览器/scenarios/) 与 [场景与 Hook 测试](CEFbro/AI浏览器/skills/场景与Hook测试.md)。
+
+</details>
+
+<details>
+<summary><b>Search keywords / 搜索关键词</b></summary>
+
+`AI Browser MCP` · `浏览器 MCP` · `Cursor browser automation` · `Claude Desktop MCP browser` · `Windows MCP server` · `Model Context Protocol browser` · `Playwright alternative` · `web scraping MCP` · `browser automation MCP` · `reverse engineering POST` · `CDP debugger MCP` · `FBrowser CEF` · `数据采集` · `浏览器自动化` · `逆向 Hook`
+
+</details>
 
 ## 📄 许可证
 

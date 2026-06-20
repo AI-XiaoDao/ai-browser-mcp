@@ -25,6 +25,8 @@ body:
       options:
         - Windows 11 x64
         - Windows 10 x64
+        - Windows 11 win32
+        - Windows 10 win32
         - 其他
     validations:
       required: true
@@ -46,7 +48,7 @@ body:
       label: 复现步骤
       description: 从启动 exe 到出错的完整步骤
       placeholder: |
-        1. 解压 AI-Browser-MCP-x64-v2.6.0.zip
+        1. 解压 AI-Browser-MCP-x64-v2.6.0.zip（或 win32 版）
         2. 运行 AI浏览器.exe
         3. Cursor 调用 browser_navigate ...
     validations:

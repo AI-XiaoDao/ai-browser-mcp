@@ -15,12 +15,13 @@
 一句话自动执行：采集数据 · 逆向 POST 加密字段 · CDP 定位 sign 算法 — AI 自己串联工具，不用写 Playwright。
 
 ✅ 已开源：火山 .wsv 源码 + 生成 C++ 对照 + 文档/桥接脚本（MIT）
-✅ 成品下载：GitHub Releases（exe + CEF，约 157MB）— **217 工具全开放，解压即用**
+✅ 成品下载：GitHub Releases — **217 工具全开放，解压即用**
+  · x64 ~157MB · win32 ~136MB
 ✅ 本机 127.0.0.1:9222，默认不暴露外网
 
 下载：https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
-  · AI-Browser-MCP-x64-v2.6.0.zip      — 运行包
-  · AI-Browser-MCP-cpp-x64-v2.6.0.zip  — 火山生成 C++ 对照（可选）
+  · AI-Browser-MCP-x64-v2.6.0.zip / AI-Browser-MCP-win32-v2.6.0.zip — 运行包
+  · AI-Browser-MCP-cpp-x64-v2.6.0.zip / AI-Browser-MCP-cpp-win32-v2.6.0.zip — C++ 对照（可选）
 
 Star / Issue 欢迎：https://github.com/AI-XiaoDao/ai-browser-mcp
 QQ：212577526 · 群：737680767

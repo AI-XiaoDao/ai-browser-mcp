@@ -29,6 +29,7 @@ release/**/libcef*
 AI-Browser-MCP-*.zip
 AI-Browser-MCP-cpp-*.zip
 _gql*.json
-*_staging/
+_release_staging/
+_release_staging_*/
 _verify_zip/
 _zip_test/
