@@ -45,7 +45,8 @@
 > **纯文本**，QQ 群 / V2EX / 贴吧 / 知乎 / 火山论坛 均可直接粘贴。  
 > **Discuz 论坛**要排版请用 [§2-A BBCode](#2-a-discuz-dz-论坛--bbcode-格式)。  
 > **完整 HTML 宣传页**（可本地打开 / 托管 / 论坛外链）：[promo.html](../promo.html)  
-> **Word 宣传手册**（高级样式 · 可打印 / 论坛附件）：[AI-Browser-MCP-Promo-v2.6.docx](../AI-Browser-MCP-Promo-v2.6.docx) · 重新生成：`python release/build-promo-docx.py`
+> **Word 宣传手册**： [AI-Browser-MCP-Promo-v2.6.docx](../AI-Browser-MCP-Promo-v2.6.docx) · `python release/build-promo-docx.py`  
+> **PDF + 长图 + 标准链接**： [PROMO_ASSETS_LINKS.md](../PROMO_ASSETS_LINKS.md) · `python release/build-promo-pdf-image.py`
 
 **通用标题：**
 
