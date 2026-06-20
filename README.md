@@ -103,7 +103,7 @@ flowchart LR
 | **sync-wait + batch** | 同次调用等结果；一次请求串联多工具，省 Token、少轮次 |
 | **工作流 JSON** | `workflows/*.json` 多步骤编排，`workflow_run` 一键复跑，可版本管理 |
 | **事件 Hook** | 生命周期 / 网络 / 资源 / 弹窗 … 可扩展 Hook，支持 persist 注入 |
-| **场景脚本** | [`scenarios/`](CEFbro/AI浏览器/scenarios/) 逆向扫描、Hook 测试、断点恢复等现成范例 |
+| **场景脚本** | [`scenarios/`](CEFbro/AI浏览器/scenarios/) 逆向扫描、Hook 测试、断点恢复等现成范例 — [实测截图](.github/demo-douyin-post-scan.png) |
 | **技能书 + 测试** | [`skills/`](CEFbro/AI浏览器/skills/) Agent 知识库；[`run_all_tests.js`](CEFbro/AI浏览器/run_all_tests.js) 全量回归 |
 | **HTTP / WebSocket / stdio** | 任意 AI 代理或自研程序接入；[`mcp_bridge.js`](CEFbro/AI浏览器/mcp_bridge.js) 桥接 IDE |
 | **欢迎页 + 在线文档** | `9222` 健康检查、工具搜索、复制 MCP 配置、浏览 [`docs/`](CEFbro/AI浏览器/docs/) |
@@ -251,6 +251,10 @@ flowchart TB
 3. `browser_navigate` 或等你手动触发页面操作  
 4. `browser_network` / 读 Hook 回调 — 对比 POST 字段名与值形态（长 hex、无规律 base64 等）  
 5. 输出「疑似字段列表 + 依据」；必要时建议跑 `douyin_xhr_encrypt_scan.js` 对照
+
+**实测效果**（Cursor + Agent 一句话触发，自动注入 Hook、滚动触发请求、分析 33 条 POST）：
+
+![Douyin POST 逆向扫描演示 — 一句话打开抖音、Hook XHR/fetch、标出疑似加密字段](.github/demo-douyin-post-scan.png)
 
 #### Walkthrough：定位一句话的完整路径
 

@@ -246,7 +246,7 @@ You describe the goal in Cursor
 
 5. Optional: `douyin_xhr_encrypt_scan.js` for reference
 
-
+![Douyin POST reverse scan — one prompt, auto Hook + scroll + 33 POSTs analyzed](.github/demo-douyin-post-scan.png)
 
 #### Walkthrough: locate (CDP debugger)
 

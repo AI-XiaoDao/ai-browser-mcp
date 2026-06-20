@@ -15,6 +15,13 @@ Cursor / Claude / 自研 Agent · MCP 标准 · 217 tools
 github.com/AI-XiaoDao/ai-browser-mcp
 ```
 
+## 演示截图
+
+| 文件 | 用途 |
+|------|------|
+| [demo-douyin-post-scan.png](demo-douyin-post-scan.png) | README / OPEN_SOURCE — 抖音 POST 逆向一句话实测 |
+| [social-preview.png](social-preview.png) | GitHub Settings → Social preview（1280×640，可选另制） |
+
 ## 英文备选
 
 ```

@@ -135,6 +135,8 @@ QQ：212577526 · 群：737680767
 开 console 采集，我点提交后把 sign 相关日志整理给我。
 ```
 
+![Douyin POST 逆向扫描 — Agent 一句话自动 Hook + 滚动 + 分析 33 条 POST](.github/demo-douyin-post-scan.png)
+
 **定位算法**
 ```
 提交时下断点，单步跟到计算 sign 的 JS 函数，给我函数名和源码片段。
