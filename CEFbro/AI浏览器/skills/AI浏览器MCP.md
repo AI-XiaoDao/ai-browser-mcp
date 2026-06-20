@@ -10,7 +10,7 @@ trigger: 测试MCP|MCP工具|浏览器MCP|AI浏览器|FBrowser MCP|mcp_config|wo
 AI浏览器 MCP Server 基于火山 FBrowser CEF 框架，默认运行在 `ws://127.0.0.1:9222`。
 **217 个 MCP 工具**（含 4 个 GUI 受限：`browser_create` / `browser_create_background` / `browser_close` / `browser_create_tab`）。
 
-⏳=默认仍异步（需 mcp_result）　✅=默认 sync-wait　🔒=VIP专属　⚠️=暂未实现　R=需刷新页面
+⏳=默认仍异步（需 mcp_result）　✅=默认 sync-wait　🔒=VIP专属（**GitHub Release 成品 zip 已全部开放**；自编译须向 FBrowser 内核作者申请授权）　⚠️=暂未实现　R=需刷新页面
 
 ### 源码文件 (v2.6)
 | 文件 | 类 | 职责 |
