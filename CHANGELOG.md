@@ -28,8 +28,9 @@
 
 | 文件 | 说明 |
 |------|------|
-| GitHub Release | 运行成品 (exe + CEF，见 Releases 页面) |
-| GitHub Release | 火山生成 C++ 对照 (见 Releases 页面) |
+| GitHub Release x64 | 运行成品 (exe + CEF，~157 MB) |
+| GitHub Release win32 | 32 位运行成品 (exe + CEF，~136 MB) |
+| GitHub Release cpp | 火山生成 C++ 对照（x64 / win32） |
 
 ### 说明
 

@@ -8,15 +8,15 @@
 |------|------|
 | `linker/` | 与编译输出 `linker/` 同结构：桥接脚本、配置、文档、工作流（**无 exe/dll**） |
 
-## 火山编译目录对照（Release x64）
+## 火山编译目录对照（Release x64 / win32）
 
 与仓库 [README · 四层对照表](../README.md#四层对照先看这张表) 一致：
 
-| 层级 | 本地 `_int/.../release/x64/` | 入 Git | 成品 zip |
+| 层级 | 本地 `_int/.../release/{x64\|win32}/` | 入 Git | 成品 zip |
 |:--:|------------------------------|:--:|:--:|
-| ② 生成 C++ | `project/` | `generated-cpp/release-x64/` | cpp zip |
+| ② 生成 C++ | `project/` | `generated-cpp/release-{x64\|win32}/` | cpp zip |
 | ③ 中间产物 | `linker/out/` | ❌ | ❌ **必须排除** |
-| ④ 运行成品 | `linker/`（除 `out/`） | ❌ | x64 zip |
+| ④ 运行成品 | `linker/`（除 `out/`） | ❌ | x64 / win32 zip |
 
 ```
 src/*.wsv → project/ → linker/out/ → linker/AI浏览器.exe
@@ -67,13 +67,18 @@ AI-Browser-MCP-x64-v2.6.0.zip
 
 ## 一键打包
 
-编译 **Release x64** 后，将 `release/linker/` 目录打包为 zip，上传至 GitHub Releases 页面。
+编译 **Release x64 / win32** 后，运行打包脚本并上传至 GitHub Releases：
+
+```powershell
+.\release\pack-release.ps1 -Version 2.6.0 -Platform all
+gh release upload v2.6.0 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber
+```
 
 输出：
 
-- `AI-Browser-MCP-x64-v2.6.0.zip` — 运行包（自动排除 `out/`）
-- `AI-Browser-MCP-cpp-x64-v2.6.0.zip` — C++ 对照
-- 同步 `CEFbro/AI浏览器/generated-cpp/release-x64/`
+- `AI-Browser-MCP-x64-v2.6.0.zip` / `AI-Browser-MCP-win32-v2.6.0.zip` — 运行包（自动排除 `out/`）
+- `AI-Browser-MCP-cpp-x64-v2.6.0.zip` / `AI-Browser-MCP-cpp-win32-v2.6.0.zip` — C++ 对照
+- 同步 `CEFbro/AI浏览器/generated-cpp/release-x64/`、`release-win32/`
 
 上传：`gh release upload v2.6.0 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber`
 

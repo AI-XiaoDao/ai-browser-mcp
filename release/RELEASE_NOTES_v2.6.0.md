@@ -6,12 +6,14 @@
 
 ---
 
-### 下载（二选一或都下）
+### 下载
 
 | 文件 | 大小 | 内容 |
 |------|------|------|
-| **AI-Browser-MCP-x64-v2.6.0.zip** | ~157 MB | **运行包**：`AI浏览器.exe`、CEF 运行时、`mcp_bridge.js`、`docs/`、`workflows/` |
-| **AI-Browser-MCP-cpp-x64-v2.6.0.zip** | ~0.3 MB | **C++ 对照**：火山编译生成的 `vpkg_*.cpp` / `vcls_*.h`（33 + 218 文件） |
+| **AI-Browser-MCP-x64-v2.6.0.zip** | ~157 MB | **x64 运行包**：`AI浏览器.exe`、CEF、`mcp_bridge.js`、`docs/`、`workflows/` |
+| **AI-Browser-MCP-win32-v2.6.0.zip** | ~136 MB | **win32 运行包**（32 位 Windows） |
+| **AI-Browser-MCP-cpp-x64-v2.6.0.zip** | ~0.3 MB | **x64 C++ 对照** |
+| **AI-Browser-MCP-cpp-win32-v2.6.0.zip** | ~0.3 MB | **win32 C++ 对照** |
 
 **重要说明（四层对照，详见 [README](https://github.com/AI-XiaoDao/ai-browser-mcp#-开源范围与火山编译目录)）：**
 
@@ -20,7 +22,7 @@
 | ① | 权威源码 `src/*.wsv` | Git 仓库 |
 | ② | 生成 C++ `generated-cpp/`（= 编译时 `project/`） | cpp zip |
 | ③ | 中间产物 `linker/out/`（`.obj`/`.pch`，**不是源码**） | **不含** |
-| ④ | 运行成品 exe + CEF + 脚本 | x64 zip |
+| ④ | 运行成品 exe + CEF + 脚本 | x64 / win32 zip |
 
 ---
 

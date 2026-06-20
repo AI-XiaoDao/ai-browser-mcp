@@ -1,4 +1,4 @@
-# 火山编译生成的 C++ 源码（Release x64）
+# 火山编译生成的 C++ 源码（Release x64 / win32）
 
 本目录 = 本地编译 `_int/.../project/` 的 **Git 同步副本**，由火山 IDE 将 [`../src/`](../src/) 中的 `.wsv` **自动翻译**而来，供审计与对照。
 
@@ -7,7 +7,7 @@
 | 层级 | 本目录 | 本地 `_int` 对应 | 说明 |
 |:--:|--------|------------------|------|
 | ① | — | — | 权威源码在 **`../src/*.wsv`**，改代码请去那里 |
-| **②** | **`release-x64/`（本目录）** | **`project/`** | 生成 C++，**勿手工编辑** |
+| **②** | **`release-x64/`、`release-win32/`** | **`project/`** | 生成 C++，**勿手工编辑** |
 | ③ | — | `linker/out/` | `.obj`/`.pch`，**不是源码**，勿打包 |
 | ④ | — | `linker/`（除 `out/`） | exe + CEF，走 GitHub Releases |
 
@@ -30,8 +30,9 @@
 | 项 | 值 |
 |----|-----|
 | 版本 | 与 `MCP_版本号` 一致（当前 2.6.0） |
-| 手动同步 | 编译 Release x64 后，复制 `project/` → 覆盖 `release-x64/` |
-| 自动 | 编译 Release x64 后手动同步 `project/` → `release-x64/` |
+| x64 | 编译 Release x64 后，复制 `project/` → `release-x64/` |
+| win32 | 编译 Release win32 后，复制 `project/` → `release-win32/` |
+| 自动 | `.\release\pack-release.ps1 -Version 2.6.0 -Platform all` |
 
 ## 常见误区
 
