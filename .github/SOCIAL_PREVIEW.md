@@ -7,8 +7,9 @@
 
 ```
 AI Browser MCP Server
-让 Cursor 操控 Windows 真实浏览器
+让 Cursor 一句话操控 Windows 真实浏览器
 
+采集数据 · 逆向 POST · 定位 sign 算法
 217 MCP 工具 · FBrowser CEF · MIT 开源
 127.0.0.1:9222 · v2.6.0
 
@@ -21,6 +22,7 @@ github.com/AI-XiaoDao/ai-browser-mcp
 AI Browser MCP Server
 Local browser automation for Cursor & Claude
 
+One sentence: scrape · reverse crypto · locate sign JS
 217 tools · FBrowser CEF · MIT
 Windows x64 · Port 9222
 ```
@@ -32,7 +34,7 @@ Windows x64 · Port 9222
 | 背景 | 深色 (#0d1117) 或渐变蓝紫 |
 | 主色 | MCP 蓝 #6ec6ff · FBrowser 紫 #a78bfa |
 | 图标 | 浏览器窗口 + Cursor/AI 连线示意 |
-| 角标 | `MIT` `217 tools` `Windows` |
+| 角标 | `MIT` `217 tools` `Windows` `One sentence` |
 
 ## 快速生成（可选）
 
@@ -53,12 +55,21 @@ Windows x64 · Port 9222
 
 **Windows 本地浏览器自动化 MCP 服务** — 217 个工具，Cursor / Claude 即用。
 
+**一句话即可**：采集数据 · 逆向 POST 加密字段 · CDP 定位 sign 算法 — Agent 自动串联工具，不用写 Playwright。
+
 ## 快速链接
 
 - 📦 [下载 v2.6.0 Release](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0)
+- 💬 [典型话术 / 场景](https://github.com/AI-XiaoDao/ai-browser-mcp#-典型场景一句话自动执行)
 - 📖 [客户使用手册](https://github.com/AI-XiaoDao/ai-browser-mcp/blob/main/CEFbro/AI浏览器/docs/客户使用手册.md)
 - 📋 [开源公告 / FAQ](https://github.com/AI-XiaoDao/ai-browser-mcp/blob/main/OPEN_SOURCE.md)
 - 🛠 [贡献指南](https://github.com/AI-XiaoDao/ai-browser-mcp/blob/main/CONTRIBUTING.md)
+
+## 示例话术（复制到 Cursor）
+
+- 「滚动商品列表，把标题价格采成 JSON」
+- 「扫描 POST，标出疑似加密字段」
+- 「提交时下断点，定位 sign 函数并给源码片段」
 
 ## 提问方式
 

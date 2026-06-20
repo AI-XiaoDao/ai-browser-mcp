@@ -1,18 +1,42 @@
 name: 🎉 案例分享
-description: 分享自动化案例、工作流、Cursor 话术
+description: 分享自动化案例、工作流、Cursor 话术（采集/逆向/定位/填表）
 title: "[Showcase]: "
 labels: ["Show and tell"]
 body:
   - type: markdown
     attributes:
       value: |
-        分享你用 AI浏览器 MCP 做的自动化案例、工作流 JSON、Cursor 话术等 🎉
+        分享你用 AI浏览器 MCP 做的自动化案例 🎉  
+        常见类型：**数据采集** · **逆向 POST** · **定位 sign 算法** · **自动填表** · **workflow 复用**
+
+  - type: dropdown
+    id: scenario
+    attributes:
+      label: 场景类型
+      options:
+        - 数据采集
+        - 逆向算法
+        - 定位算法（CDP / VIP）
+        - 自动填表 / RPA
+        - 工作流 JSON
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    id: prompt
+    attributes:
+      label: 你对 Cursor 说的一句话（话术）
+      description: 例如「滚动商品列表，采标题价格 JSON」
+      placeholder: 「……」
+    validations:
+      required: false
 
   - type: textarea
     id: demo
     attributes:
       label: 案例描述
-      description: 做了什么、用了哪些 browser_* 工具或 workflow
+      description: 做了什么、用了哪些 browser_* 工具或 workflow、结果如何
     validations:
       required: true
 
@@ -20,3 +44,4 @@ body:
     id: tips
     attributes:
       label: 经验 / 踩坑（可选）
+      description: VIP 是否必需、Hook/断点技巧、空数据排查等
