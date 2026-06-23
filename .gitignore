@@ -3,15 +3,15 @@
 *.vhistory
 
 # 测试报告（运行 run_all_tests.js 可再生）
-CEFbro/AI浏览器/*_report.json
+**/*_report.json
 
 # Node
 node_modules/
 
-# 编译中间产物（保留源码 workflows/）
-CEFbro/AI浏览器/_int/
+# 编译中间产物
+**/_int/
 
-# linker/out 为 .obj 中间产物，不是 C++ 源码，禁止提交或打入成品包
+# linker/ 为编译产物目录，禁止提交
 **/linker/out/
 
 # CEF 浏览器缓存（运行时生成）
@@ -28,8 +28,23 @@ release/**/libcef*
 # 本地打包产物与临时目录（勿提交）
 AI-Browser-MCP-*.zip
 AI-Browser-MCP-cpp-*.zip
+AI-Fbowser-Mcp-*.zip
 _gql*.json
 _release_staging/
 _release_staging_*/
 _verify_zip/
 _zip_test/
+
+# 运行时产物
+**/mcp_cache.db*
+**/mcp_connect.json
+**/log.txt
+**/.ai_browser.pid
+**/package.vhistory
+
+# linker 编译产物（源码在 src/）
+**/linker/*.exe
+**/linker/*.dll
+**/linker/*.pak
+**/linker/*.bin
+**/linker/*.dat

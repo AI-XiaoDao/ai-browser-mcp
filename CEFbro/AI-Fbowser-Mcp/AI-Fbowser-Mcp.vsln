@@ -1,0 +1,21 @@
+doc_format_version = 1
+name = package
+property.settings.active_project_name = AIFbowserMcp
+
+root_filter
+{
+    child_filter
+    {
+        filter1
+        {
+            build_order = 0
+            project_file_name = "AI-Fbowser-Mcp.vprj"
+            projects_dependent
+            type = project
+        }
+
+        num_child_filters = 1
+    }
+
+    name = root
+}

@@ -1,0 +1,245 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+包 火山.程序
+# HTTP/WebSocket 服务器事件 — 从 MCP_Server.wsv 拆分 (L5)
+# ================================================================
+# CP 服务器事件 — HTTP + WebSocket
+# ================================================================
+类 类_MCP_服务器事件 <公开 基础类 = 类_FBrowser_服务器事件>
+{
+    方法 服务器即将创建 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    {
+        MCP命令服务器.绑定MCP服务器实例 (服务器)
+        调试输出 ("[MCP] 服务器已创建")
+    }
+    方法 服务器即将销毁 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    {
+        MCP命令服务器.MCP服务器实例.置空 ()
+        调试输出 ("[MCP] 服务器销毁")
+    }
+    方法 收到客户端连接 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    参数 连接ID <类型 = 整数>
+    方法 收到客户端断开连接 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    参数 连接ID <类型 = 整数>
+    # ======== HTTP 请求 — MCP Streamable HTTP ==========
+    方法 收到HTTP请求 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    参数 连接ID <类型 = 整数>
+    参数 客户端地址 <类型 = 文本型>
+    参数 请求 <类型 = 类_FBrowser_请求>
+    {
+        变量 HTTP方法 <类型 = 文本型>
+        HTTP方法 = 请求.取类型 ()
+        变量 请求地址 <类型 = 文本型>
+        请求地址 = 请求.取地址 ()
+        变量 URL路径 <类型 = 文本型>
+        URL路径 = MCP命令服务器.提取HTTP路径 (请求地址)
+        // === CORS 预检 ===
+        如果 (HTTP方法 == "OPTIONS")
+        {
+            MCP命令服务器.发送CORS200响应 (服务器, 连接ID, "text/plain", 0, 0)
+            返回
+        }
+        // === POST JSON-RPC: 主通道 /mcp, 兼容别名 / ===
+        如果 (HTTP方法 == "POST")
+        {
+            如果 (URL路径 == "/mcp" || URL路径 == "/")
+            {
+                变量 请求体JSON <类型 = 文本型>
+                请求体JSON = MCP命令服务器.读取HTTP_POST体 (请求)
+                如果 (请求体JSON != "")
+                {
+                    调试输出 ("[MCP] HTTP POST " + URL路径 + " 体长度:", 取文本长度 (请求体JSON))
+                    变量 响应JSON <类型 = 文本型>
+                    响应JSON = MCP命令服务器.处理MCP请求 (请求体JSON, 客户端地址)
+                    如果 (响应JSON != "")
+                    {
+                        变量 响应字节集 <类型 = 字节集类>
+                        响应字节集 = 文本到UTF8 (响应JSON, 假)
+                        MCP命令服务器.发送CORS200响应 (服务器, 连接ID, MCP_常量.HTTP_JSON内容类型, 取字节集指针 (响应字节集), 取字节集长度 (响应字节集))
+                    }
+                    否则
+                    {
+                        MCP命令服务器.发送CORS200响应 (服务器, 连接ID, MCP_常量.HTTP_JSON内容类型, 0, 0)
+                    }
+                    返回
+                }
+                MCP命令服务器.发送CORS404响应 (服务器, 连接ID)
+                返回
+            }
+            MCP命令服务器.发送CORS404响应 (服务器, 连接ID)
+            返回
+        }
+        // === 健康检查 /health ===
+        如果 (URL路径 == "/health" || URL路径 == "/healthz")
+        {
+            变量 健康JSON <类型 = YYJSON对象类>
+            健康JSON.创建自文本 ("{}")
+            健康JSON.加入文本成员 ("status", "ok")
+            健康JSON.加入整数成员 ("browsers", FBrowser_浏览器_取数量 ())
+            健康JSON.加入文本成员 ("version", MCP_常量.MCP_版本号)
+            健康JSON.加入长整数成员 ("uptime_ms", 取启动时间 () - MCP命令服务器.服务器启动时间戳)
+            健康JSON.加入文本成员 ("capabilities", "sync-wait,workflow,batch,debugger-flow,v8-hook")
+            健康JSON.加入整数成员 ("rate_limit_per_min", MCP命令服务器.速率限制_每分钟)
+            健康JSON.加入整数成员 ("rate_limit_used", MCP命令服务器.速率限制_计数器)
+            健康JSON.加入长整数成员 ("async_tasks", MCP命令服务器.异步任务计数器)
+            变量 健康JSON文本 <类型 = 文本型>
+            健康JSON文本 = 健康JSON.到可读文本 (YYJSON格式化选项.压缩)
+            变量 健康内容 <类型 = 字节集类>
+            健康内容 = 文本到UTF8 (健康JSON文本, 假)
+            MCP命令服务器.发送CORS200响应 (服务器, 连接ID, MCP_常量.HTTP_JSON内容类型, 取字节集指针 (健康内容), 取字节集长度 (健康内容))
+            返回
+        }
+        // === /json/version (Chrome CDP 兼容) ===
+        如果 (URL路径 == "/json/version")
+        {
+            变量 版本文本 <类型 = 文本型>
+            版本文本 = MCP命令服务器.构建JSON版本响应 ()
+            变量 版本内容 <类型 = 字节集类>
+            版本内容 = 文本到UTF8 (版本文本, 假)
+            MCP命令服务器.发送CORS200响应 (服务器, 连接ID, MCP_常量.HTTP_JSON内容类型, 取字节集指针 (版本内容), 取字节集长度 (版本内容))
+            返回
+        }
+        // === /json/list /json (Chrome CDP 数组格式) ===
+        如果 (URL路径 == "/json" || URL路径 == "/json/list")
+        {
+            变量 列表文本 <类型 = 文本型>
+            列表文本 = MCP命令服务器.构建JSON列表响应 ()
+            变量 列表内容 <类型 = 字节集类>
+            列表内容 = 文本到UTF8 (列表文本, 假)
+            MCP命令服务器.发送CORS200响应 (服务器, 连接ID, MCP_常量.HTTP_JSON内容类型, 取字节集指针 (列表内容), 取字节集长度 (列表内容))
+            返回
+        }
+        // === /tools GET ===
+        如果 (URL路径 == "/tools" || URL路径 == "/tools/list")
+        {
+            如果 (MCP命令服务器.工具列表缓存 == "")
+            {
+                MCP命令服务器.开始构建工具列表 ()
+                MCP命令服务器.填充工具列表 ()
+                MCP命令服务器.工具列表缓存 = "{\"tools\":" + MCP命令服务器.完成构建工具列表 () + "}"
+            }
+            变量 tools内容 <类型 = 字节集类>
+            tools内容 = 文本到UTF8 (MCP命令服务器.工具列表缓存, 假)
+            MCP命令服务器.发送CORS200响应 (服务器, 连接ID, MCP_常量.HTTP_JSON内容类型, 取字节集指针 (tools内容), 取字节集长度 (tools内容))
+            返回
+        }
+        // === GET /api 元信息 (JSON) ===
+        如果 (URL路径 == "/api" || URL路径 == "/mcp")
+        {
+            变量 信息文本 <类型 = 文本型>
+            信息文本 = MCP命令服务器.构建API元信息JSON ()
+            变量 信息内容 <类型 = 字节集类>
+            信息内容 = 文本到UTF8 (信息文本, 假)
+            MCP命令服务器.发送CORS200响应 (服务器, 连接ID, MCP_常量.HTTP_JSON内容类型, 取字节集指针 (信息内容), 取字节集长度 (信息内容))
+            返回
+        }
+        // === GET /docs 静态文档 ===
+        如果 (URL路径 == "/docs" || 是否以 (URL路径, "/docs/"))
+        {
+            如果 (MCP命令服务器.尝试发送静态文档 (服务器, 连接ID, URL路径))
+            {
+                返回
+            }
+            MCP命令服务器.发送CORS404HTML响应 (服务器, 连接ID, "文档不存在: " + URL路径 + " | 请确认 docs 目录已部署")
+            返回
+        }
+        // === GET / 欢迎页 (HTML) ===
+        如果 (URL路径 == "/")
+        {
+            变量 HTML文本 <类型 = 文本型>
+            HTML文本 = 浏览器容器.取欢迎页HTML ()
+            如果 (HTML文本 == "")
+            {
+                变量 HTTP基址 <类型 = 文本型>
+                变量 WS基址 <类型 = 文本型>
+                HTTP基址 = MCP命令服务器.取MCP_HTTP地址 ()
+                WS基址 = MCP命令服务器.取MCP_WS地址 ()
+                HTML文本 = "<!DOCTYPE html><html lang=\"zh-CN\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>AI浏览器 MCP Server</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(135deg,#0f0f1a,#1a1a2e,#16213e);color:#d0d0e0;min-height:100vh;padding:20px}.container{max-width:800px;margin:0 auto}.header{text-align:center;padding:40px 20px 30px}.header h1{font-size:2.2em;background:linear-gradient(135deg,#6ec6ff,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}.header .sub{font-size:.95em;color:#8080a0}.status-card{background:#1a1a30;border:1px solid #2a2a4a;border-radius:12px;padding:24px;margin:16px 0}.status-card h2{font-size:1.1em;color:#a0a0c0;margin-bottom:16px;display:flex;align-items:center;gap:8px}.status-dot{width:10px;height:10px;border-radius:50%;background:#4caf50;display:inline-block;animation:pulse 2s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}.endpoint-row{display:flex;align-items:center;padding:8px 12px;background:#0f0f1e;border-radius:6px;margin:6px 0;font-family:monospace;font-size:.9em}.endpoint-row .method{display:inline-block;padding:2px 8px;border-radius:3px;font-weight:700;font-size:.8em;margin-right:10px;min-width:50px;text-align:center}.method.get{background:#1b5e20;color:#81c784}.method.ws{background:#0d47a1;color:#90caf9}.method.post{background:#e65100;color:#ffcc80}.endpoint-row .url{color:#b0b0d0;word-break:break-all}.footer{text-align:center;padding:30px;color:#606080;font-size:.85em}.footer a{color:#6ec6ff;text-decoration:none}.footer a:hover{text-decoration:underline}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.btn{background:#2a2a4a;color:#c0c0e0;border:1px solid #3a3a5a;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.9em;text-decoration:none;display:inline-block}.btn:hover{background:#3a3a5a}.stat{text-align:center;padding:12px 20px;background:#0f0f1e;border-radius:8px}.stat .val{font-size:1.8em;font-weight:700;color:#6ec6ff}.stat .lbl{font-size:.8em;color:#8080a0;margin-top:4px}.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin:16px 0}</style></head><body><div class=\"container\"><div class=\"header\"><h1>AI浏览器 MCP Server</h1><p class=\"sub\">基于 FBrowser CEF 内核 | " + MCP_常量.MCP_版本号 + " | " + WS基址 + "</p></div><div class=\"stats-row\"><div class=\"stat\"><div class=\"val\">" + 到文本 (FBrowser_浏览器_取数量 ()) + "</div><div class=\"lbl\">浏览器实例</div></div><div class=\"stat\"><div class=\"val\">" + 到文本 ((取启动时间 () - MCP命令服务器.服务器启动时间戳) / 1000) + "s</div><div class=\"lbl\">运行时间</div></div><div class=\"stat\"><div class=\"val\" id=\"toolsCount\">—</div><div class=\"lbl\">MCP 工具</div></div></div><div class=\"status-card\"><h2><span class=\"status-dot\"></span> HTTP / WebSocket 端点</h2><div class=\"endpoint-row\"><span class=\"method post\">POST</span><span class=\"url\">" + HTTP基址 + "/mcp (JSON-RPC 主通道)</span></div><div class=\"endpoint-row\"><span class=\"method post\">POST</span><span class=\"url\">" + HTTP基址 + "/ (JSON-RPC 别名)</span></div><div class=\"endpoint-row\"><span class=\"method ws\">WS</span><span class=\"url\">" + WS基址 + " (JSON-RPC 主通道)</span></div><div class=\"endpoint-row\"><span class=\"method get\">GET</span><span class=\"url\">" + HTTP基址 + "/api (API元信息)</span></div><div class=\"endpoint-row\"><span class=\"method get\">GET</span><span class=\"url\">" + HTTP基址 + "/health</span></div><div class=\"endpoint-row\"><span class=\"method get\">GET</span><span class=\"url\">" + HTTP基址 + "/tools/list</span></div><div class=\"endpoint-row\"><span class=\"method get\">GET</span><span class=\"url\">" + HTTP基址 + "/json/list</span></div></div><div class=\"toolbar\"><a href=\"/api\" class=\"btn\">API 元信息</a><a href=\"/tools/list\" class=\"btn\">查看所有工具</a><a href=\"/health\" class=\"btn\">健康检查</a><a href=\"/json/list\" class=\"btn\">浏览器列表</a></div><div class=\"footer\"><p>CDP 请用 MCP 工具 browser_cdp_call | 交流群: <a href=\"https://qm.qq.com/q/Hpv6qm8qUE\">737680767</a></p></div><script>fetch('/tools/list').then(r=>r.json()).then(d=>{var el=document.getElementById('toolsCount');if(el&&d.tools)el.textContent=d.tools.length}).catch(()=>{})</script></div></body></html>"
+            }
+            变量 HTML字节集 <类型 = 字节集类>
+            HTML字节集 = 文本到UTF8 (HTML文本, 假)
+            MCP命令服务器.发送CORS200响应 (服务器, 连接ID, "text/html; charset=utf-8", 取字节集指针 (HTML字节集), 取字节集长度 (HTML字节集))
+            返回
+        }
+        调试输出 ("[MCP] HTTP 404 " + HTTP方法 + " " + URL路径)
+        MCP命令服务器.发送CORS404响应 (服务器, 连接ID)
+    }
+    # ======== WebSocket ==========
+    方法 收到WebSocket请求 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    参数 连接ID <类型 = 整数>
+    参数 客户端地址 <类型 = 文本型>
+    参数 请求 <类型 = 类_FBrowser_请求>
+    参数 回调 <类型 = 类_FBrowser_回调>
+    {
+        变量 WS路径 <类型 = 文本型>
+        WS路径 = MCP命令服务器.提取HTTP路径 (请求.取地址 ())
+        如果 (寻找文本 (WS路径, "/devtools/", 0, 假) > 0)
+        {
+            调试输出 ("[MCP] 拒绝未实现的 DevTools WS:", WS路径)
+            如果 (回调.是否为空 () == 假)
+            {
+                回调.取消 ()
+            }
+            返回
+        }
+        如果 (回调.是否为空 () == 假)
+        {
+            回调.继续 ()
+        }
+    }
+    方法 收到WebSocket连接 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    参数 连接ID <类型 = 整数>
+    {
+        调试输出 ("[MCP] WS连接 ID:", 连接ID)
+    }
+    方法 收到WebSocket消息 <公开 @虚拟方法 = 可覆盖>
+    参数 服务器 <类型 = 类_FBrowser_服务器>
+    参数 连接ID <类型 = 整数>
+    参数 数据指针 <类型 = 变整数>
+    参数 数据长度 <类型 = 整数>
+    {
+        // 防御: 拒绝超大WebSocket消息(>5MB),防止OOM闪退
+        // 同时检查空指针,防止恶意消息导致闪退
+        如果 (数据指针 == 0 || 数据长度 <= 0)
+        {
+            返回  // 空消息或空指针,静默丢弃
+        }
+        如果 (数据长度 > MCP_常量.WS最大消息字节)
+        {
+            调试输出 ("[MCP] WS消息过大被拒绝:", 数据长度, "字节")
+            变量 错误响应 <类型 = 字节集类>
+            错误响应 = 文本到UTF8 (MCP命令服务器.构建JSONRPC响应 ("", "", -32600, "消息过大,最大5MB"), 假)
+            服务器.发送WebSocket数据 (连接ID, 取字节集指针 (错误响应), 取字节集长度 (错误响应))
+            返回
+        }
+        变量 JSON文本 <类型 = 文本型>
+        变量 接收字节集 <类型 = 字节集类>
+        接收字节集 = 指针到字节集 (数据指针, 数据长度)
+        JSON文本 = UTF8到文本 (接收字节集)
+        如果 (取文本长度 (JSON文本) > 200)
+        {
+            调试输出 ("[MCP] 收到命令:" + 取文本左边 (JSON文本, 200) + "...(" + 到文本 (取文本长度 (JSON文本)) + "字符)")
+        }
+        否则
+        {
+            调试输出 ("[MCP] 收到命令:" + JSON文本)
+        }
+        调试输出 ("[MCP] WS消息长度:", 数据长度)
+        变量 响应JSON <类型 = 文本型>
+        // WS连接使用连接ID作为客户端标识用于速率限制
+        响应JSON = MCP命令服务器.处理MCP请求 (JSON文本, "ws_" + 到文本 (连接ID))
+        如果 (响应JSON != "")
+        {
+            变量 响应字节集 <类型 = 字节集类>
+            响应字节集 = 文本到UTF8 (响应JSON, 假)
+            服务器.发送WebSocket数据 (连接ID, 取字节集指针 (响应字节集), 取字节集长度 (响应字节集))
+        }
+    }
+    #
+}
