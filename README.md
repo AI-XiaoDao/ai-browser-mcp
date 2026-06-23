@@ -1,18 +1,17 @@
 <div align="center">
 
-# AI Browser MCP Server · Windows 浏览器自动化 MCP
+# AI-Fbowser-Mcp · Windows 浏览器自动化 MCP
 
 ### 任意 AI 代理 · 一句话操控 Windows 真实浏览器 · Cursor / Claude / Cline
 
-**Model Context Protocol (MCP)** · **217 browser tools** · **web scraping · POST reverse · CDP debugger** · **FBrowser CEF** · **`127.0.0.1:9222`** · **MIT**
+**Model Context Protocol (MCP)** · **200+ tools** · **native API first** · **web scraping · POST capture · CDP debugger** · **FBrowser CEF** · **`127.0.0.1:9222`** · **MIT**
 
-*Any MCP agent — Cursor, Claude Desktop, Cline, OpenCode, or your own LLM app · Download and go*
+*Native API optimized — 12+ tools de-JS'd · auto-enable · code_base64 · one-step scrape*
 
 [![Download v2.6.0](https://img.shields.io/badge/⬇_Download-v2.6.0-238636?style=for-the-badge)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/AI-XiaoDao/ai-browser-mcp?label=release)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
-[![CI](https://github.com/AI-XiaoDao/ai-browser-mcp/actions/workflows/validate.yml/badge.svg)](https://github.com/AI-XiaoDao/ai-browser-mcp/actions/workflows/validate.yml)
-[![MCP](https://img.shields.io/badge/MCP-217_tools-6ec6ff)](CEFbro/AI浏览器/skills/AI浏览器MCP.md)
+[![MCP](https://img.shields.io/badge/MCP-200+_tools-6ec6ff)]()
 [![Platform](https://img.shields.io/badge/Platform-Windows_x64%20%7C%20win32-0078d4)]()
 [![FBrowser](https://img.shields.io/badge/Kernel-FBrowser_CEF-a78bfa)]()
 
@@ -24,9 +23,7 @@
 
 ## ✨ 这是什么？
 
-在 Windows 上运行 **AI浏览器.exe**，本机暴露 **Model Context Protocol (MCP)** 服务，提供 **Windows 浏览器自动化**、**网页数据采集（web scraping）** 与 **POST 逆向分析**。**不限于 Cursor** — 任何支持 MCP 的 AI 代理（Claude Desktop、Cline、OpenCode、自研 Agent 等）或 **HTTP/WebSocket 脚本** 均可调用 **217 个** `browser_*` 工具。说一句话，Agent 自动串联执行，无需手写 Playwright / Puppeteer。
-
-> **Also known as:** AI Browser MCP · 浏览器 MCP · Cursor browser automation · Playwright MCP alternative · local CEF browser · Model Context Protocol server for Windows
+启动 **AI-Fbowser-Mcp.exe**，本机暴露 MCP 服务（`127.0.0.1:9222`）。200+ `browser_*` 工具：导航、原生DOM、填表、CDP断点、POST抓包、爬虫（`scrape`/`extract`）、工作流。原生 API 优先（12+ 工具已去 JS 化），自动启用，零转义。说一句话，Agent 自动串联。
 
 | 接入方式 | 适用 |
 |----------|------|

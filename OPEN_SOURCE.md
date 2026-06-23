@@ -8,32 +8,35 @@
 ## 📋 论坛 / 群公告 · 短帖（复制即用）
 
 ```
-【开源】AI浏览器 MCP Server v2.6.0 — Windows 本地浏览器自动化 MCP 服务
+【开源】AI-Fbowser-Mcp v2.6.0 — Windows 原生浏览器自动化 MCP 服务
 
-让 **任意 AI 代理**（Cursor / Claude / Cline / 自研 MCP 客户端）用自然语言操控真实浏览器：217 个 browser_* 工具，导航/填表/读 DOM/抓网络/工作流/CDP 断点。
+让 **任意 AI 代理**（Cursor / Claude / Cline / 自研 MCP 客户端）用自然语言操控真实浏览器：200+ browser_* 工具，导航/填表/读DOM/抓网络/CDP断点/爬虫一站式。
 
-一句话自动执行：采集数据 · 逆向 POST 加密字段 · CDP 定位 sign 算法 — AI 自己串联工具，不用写 Playwright。
+🔥 原生优先：get_title/dom_*/get_frames 等 12+ 工具已去 JS 化，改用 FBrowser 原生 API
+🔥 自动启用：console_get / network list 首次使用自动开启，无需手动 enable
+🔥 零转义：browser_evaluate 支持 code_base64 参数，curl 再无转义烦恼
+🔥 新工具：dom_rect/inner_html/extract/scrape/shutdown + network_idle 等待
 
 ✅ 已开源：火山 .wsv 源码 + 生成 C++ 对照 + 文档/桥接脚本（MIT）
-✅ 成品下载：GitHub Releases — **217 工具全开放，解压即用**
+✅ 成品下载：GitHub Releases — 200+ 工具全开放，解压即用
   · x64 ~157MB · win32 ~136MB
 ✅ 本机 127.0.0.1:9222，默认不暴露外网
 
-下载：https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
-  · AI-Browser-MCP-x64-v2.6.0.zip / AI-Browser-MCP-win32-v2.6.0.zip — 运行包
-  · AI-Browser-MCP-cpp-x64-v2.6.0.zip / AI-Browser-MCP-cpp-win32-v2.6.0.zip — C++ 对照（可选）
+下载：https://github.com/AI-XiaoDao/ai-browser-mcp/releases
+  · AI-Fbowser-Mcp-x64-v2.6.0.zip / AI-Fbowser-Mcp-win32-v2.6.0.zip — 运行包
+  · AI-Fbowser-Mcp-cpp-x64-v2.6.0.zip / AI-Fbowser-Mcp-cpp-win32-v2.6.0.zip — C++ 对照
 
 Star / Issue 欢迎：https://github.com/AI-XiaoDao/ai-browser-mcp
 QQ：212577526 · 群：737680767
 
-#MCP #Cursor #浏览器自动化 #webscraping #Playwright替代 #开源 #CEF #逆向
+#MCP #Cursor #浏览器自动化 #webscraping #Playwright替代 #开源 #CEF
 ```
 
 ---
 
 ## 一句话介绍
 
-**AI浏览器 MCP Server** —— 基于火山视窗 + FBrowser CEF 的 **Windows 本地浏览器自动化 MCP 服务**。启动 exe 后，**任何支持 MCP 的 AI 代理**（不限 Cursor）均可通过 HTTP/WebSocket 或 `mcp_bridge.js` 调用 **217 个** `browser_*` 工具。
+**AI-Fbowser-Mcp** —— 基于火山视窗 + FBrowser CEF 的 **Windows 本地浏览器自动化 MCP 服务**。原生 API 优先（12+ 工具已去 JS 化），200+ MCP 工具，解压即用。
 
 ---
 
