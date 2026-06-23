@@ -26,13 +26,13 @@ public:
     virtual void SaveIntoStream (CVolBaseOutputStream& stream) override;
 
 public:
-    static INT re_MCPFuWuChuangKou_timer_ZhouJiShiJian (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
-    {
-        return ((rg_MCPFuWuChuangKou*)pobjEventReceiver)->rg_timer_ZhouJiShiJian ((rg_volcano_MFCJieMian_base::rg_timer&)*pobjEventSource, nTagNumber);
-    }
     static INT re_MCPFuWuChuangKou_MCPFuWuChuangKou_ChuangJianWanBi (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
     {
         return ((rg_MCPFuWuChuangKou*)pobjEventReceiver)->rg_MCPFuWuChuangKou_ChuangJianWanBi ((rg_MCPFuWuChuangKou&)*pobjEventSource, nTagNumber);
+    }
+    static INT re_MCPFuWuChuangKou_timer_ZhouJiShiJian (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
+    {
+        return ((rg_MCPFuWuChuangKou*)pobjEventReceiver)->rg_timer_ZhouJiShiJian ((rg_volcano_MFCJieMian_base::rg_timer&)*pobjEventSource, nTagNumber);
     }
     static INT re_MCPFuWuChuangKou_MCPFuWuChuangKou_JiangBeiXiaoHui (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber)
     {
