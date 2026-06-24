@@ -280,7 +280,10 @@ async function pollUntil(checkFn, maxMs, intervalMs) {
 // ---------- stdio 桥接 ----------
 
 function writeLine(obj) {
-    process.stdout.write(JSON.stringify(obj) + '\n');
+    // MCP Stdio 传输规范: Content-Length: N\r\n\r\n{json}\n
+    const json = JSON.stringify(obj);
+    const len = Buffer.byteLength(json, 'utf8');
+    process.stdout.write('Content-Length: ' + len + '\r\n\r\n' + json + '\n');
 }
 
 /** Cursor 精简工具集（216 个全量易导致 loading tools 卡死） */
@@ -409,29 +412,56 @@ async function runStdio() {
         if (stdinEnded && pending === 0) process.exit(0);
     }
 
+    function processJsonLine(line) {
+        let request;
+        try { request = JSON.parse(line); }
+        catch (_) {
+            writeLine({ jsonrpc: '2.0', id: null, error: { code: -32700, message: 'Parse error' } });
+            return;
+        }
+        pending++;
+        forward(request).then((response) => {
+            if (response !== null && shouldRespond(request)) {
+                sanitizeMcpResponse(response, request);
+                writeLine(response);
+            }
+            pending--;
+            maybeExit();
+        });
+    }
+
     process.stdin.on('data', (chunk) => {
         buffer += chunk;
         while (true) {
+            // MCP Stdio 传输规范: Content-Length: N\r\n\r\n{json}
+            const headerEnd = buffer.indexOf('\r\n\r\n');
+            if (headerEnd !== -1 && buffer.slice(0, headerEnd).startsWith('Content-Length:')) {
+                // 解析 Content-Length 格式
+                const header = buffer.slice(0, headerEnd);
+                const match = header.match(/^Content-Length:\s*(\d+)/i);
+                if (match) {
+                    const contentLen = parseInt(match[1], 10);
+                    const jsonStart = headerEnd + 4;
+                    if (buffer.length >= jsonStart + contentLen) {
+                        const jsonStr = buffer.slice(jsonStart, jsonStart + contentLen);
+                        buffer = buffer.slice(jsonStart + contentLen);
+                        // 跳过可选尾随换行符
+                        if (buffer.startsWith('\n')) buffer = buffer.slice(1);
+                        if (buffer.startsWith('\r\n')) buffer = buffer.slice(2);
+                        if (!jsonStr.trim()) continue;
+                        processJsonLine(jsonStr);
+                        continue;
+                    }
+                }
+                break; // Content-Length 头存在但消息体不完整, 等待更多数据
+            }
+            // 向后兼容: 纯换行分隔 JSON (旧客户端/旧服务端)
             const nl = buffer.indexOf('\n');
             if (nl === -1) break;
             const line = buffer.slice(0, nl).trim();
             buffer = buffer.slice(nl + 1);
             if (!line) continue;
-            let request;
-            try { request = JSON.parse(line); }
-            catch (_) {
-                writeLine({ jsonrpc: '2.0', id: null, error: { code: -32700, message: 'Parse error' } });
-                continue;
-            }
-            pending++;
-            forward(request).then((response) => {
-                if (response !== null && shouldRespond(request)) {
-                    sanitizeMcpResponse(response, request);
-                    writeLine(response);
-                }
-                pending--;
-                maybeExit();
-            });
+            processJsonLine(line);
         }
     });
     process.stdin.on('end', () => { stdinEnded = true; maybeExit(); });

@@ -217,12 +217,13 @@
 
     变量 API密钥 <公开 静态 类型 = 文本型 值 = "">
     变量 是否启用认证 <公开 静态 类型 = 逻辑型 值 = 假>
-    变量 速率限制_每分钟 <公开 静态 类型 = 整数 值 = 300>
+    变量 速率限制_每分钟 <公开 静态 类型 = 整数 值 = 0 注释 = "0=禁用(本地桌面无需限速), 可通过 mcp_config.json 配置">
     变量 速率限制_计数器 <公开 静态 类型 = 整数 值 = 0>
     变量 速率限制_窗口开始 <公开 静态 类型 = 长整数 值 = 0>
     变量 配置已加载 <公开 静态 类型 = 逻辑型 值 = 假>
     变量 VIP授权码 <公开 静态 类型 = 文本型 值 = "" 注释 = "VIP功能授权码, 启动时从mcp_config.json读取, 供启动类使用">
     变量 服务器绑定地址 <公开 静态 类型 = 文本型 值 = "127.0.0.1">
+    变量 窗口置顶 <公开 静态 类型 = 逻辑型 值 = 真 注释 = "窗口是否置顶, 由 mcp_config.json window_topmost 控制">
     变量 MCP服务器实例 <公开 静态 类型 = 类_FBrowser_服务器 注释 = "HTTP/WS 内嵌服务器, 退出时须关闭()">
     变量 MCP正在关闭 <公开 静态 类型 = 逻辑型 值 = 假>
     变量 文档根目录缓存 <公开 静态 类型 = 文本型 值 = "" 注释 = "解析后的 docs 物理目录, 启动后缓存">
@@ -281,7 +282,7 @@
     常量 TLS指纹_1_3 <公开 类型 = 整数 值 = 792>
     常量 MCP_协议版本 <公开 类型 = 文本型 值 = "2026-06-21">
     常量 MCP_服务器名 <公开 类型 = 文本型 值 = "AI浏览器 MCP Server">
-    常量 MCP_版本号 <公开 类型 = 文本型 值 = "2.6.0">
+    常量 MCP_版本号 <公开 类型 = 文本型 值 = "2.6.1">
     常量 WS最大消息字节 <公开 类型 = 整数 值 = 5242880>
     常量 错误_无浏览器 <公开 类型 = 文本型 值 = "没有可用的浏览器 | 请启动AI浏览器GUI窗口(自动创建), 或确认 /health 返回 browsers>0">
     常量 错误_缺少参数 <公开 类型 = 文本型 值 = "参数不能为空 | 请查看工具描述补全必填参数">
@@ -301,6 +302,9 @@
     变量 持久缩放级别 <公开 静态 类型 = 小数 值 = 0>
     变量 持久静音状态 <公开 静态 类型 = 逻辑型 值 = 假>
     变量 持久V8扩展列表 <公开 静态 类型 = 文本数组类>
+    变量 持久反检测_禁用Debugger检测 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "内核开关: 禁用网页debugger检测(VIP), 浏览器创建时自动应用">
+    变量 持久反检测_伪装UA <公开 静态 类型 = 文本型 值 = "" 注释 = "持久UA伪装(空=不启用), 浏览器创建时自动应用">
+    变量 持久反检测_禁用自动化标志 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "移除navigator.webdriver等自动化检测标志, 浏览器创建时应用">
     变量 缓存数据库已打开 <公开 静态 类型 = 逻辑型 值 = 假>
 
     常量 持久V8扩展上限 <公开 类型 = 整数 值 = 100 注释 = "persist inject 最大条目, 超出删最旧">
@@ -461,10 +465,16 @@
         {
             是否自动关闭JS对话框 = 真
         }
+        如果 (配置解析.取文本 ("window_topmost") != "")
+        {
+            窗口置顶 = 配置解析.取逻辑值 ("window_topmost")
+        }
+        // 否则保持默认值(真), 避免缺失键将默认值真翻转为假
         配置已加载 = 真
         如果 (是否启用认证 == 假 && 服务器绑定地址 != "127.0.0.1" && 服务器绑定地址 != "::1" && 服务器绑定地址 != "localhost")
         {
             调试输出 ("[MCP] 警告: bind_address=" + 服务器绑定地址 + " 但未启用API认证, 建议配置 api_key 或保持本地绑定")
+            MCPStdio桥.写日志 ("[MCP] ⚠️ 安全警告: bind_address=" + 服务器绑定地址 + " 但未启用API认证! 请配置 api_key 或改回 127.0.0.1")
         }
         调试输出 ("[MCP] 配置已加载, 端口:", 服务器端口, " 绑定:", 服务器绑定地址, " 认证:", 是否启用认证, " 速率限制:", 速率限制_每分钟, "/min")
     }
@@ -532,6 +542,7 @@
             // 无法识别IP时回退到全局检查
             返回 (检查速率限制 ())
         }
+        异步缓存锁.加锁 ()
         如果 (IP速率限制字典.是否为空对象 () || IP速率限制字典.是否为空 ())
         {
             IP速率限制字典.创建 ()
@@ -576,8 +587,10 @@
         如果 (IP计数器 > 速率限制_每分钟)
         {
             调试输出 ("[MCP] IP速率限制触发:", 客户端地址, "计数器:", IP计数器)
+            异步缓存锁.解锁 ()
             返回 (假)
         }
+        异步缓存锁.解锁 ()
         返回 (真)
     }
 
@@ -948,6 +961,61 @@
         命令注册表.置整数值 ("browser_get_extra_data", 1057)
         命令注册表.置整数值 ("browser_fingerprint_ua", 1058)
         命令注册表.置整数值 ("browser_vip_orientation", 1060)
+        // JS逆向工具 (v2.6.1)
+        命令注册表.置整数值 ("browser.reverse_hook", 1300)
+        命令注册表.置整数值 ("browser_reverse_hook", 1300)
+        命令注册表.置整数值 ("browser.reverse_strings", 1301)
+        命令注册表.置整数值 ("browser_reverse_strings", 1301)
+        命令注册表.置整数值 ("browser.reverse_verify", 1302)
+        命令注册表.置整数值 ("browser_reverse_verify", 1302)
+        // 短名别名
+        命令注册表.置整数值 ("reverse_hook", 1300)
+        命令注册表.置整数值 ("reverse_strings", 1301)
+        命令注册表.置整数值 ("reverse_verify", 1302)
+        命令注册表.置整数值 ("browser.reverse_cookie_sources", 1303)
+        命令注册表.置整数值 ("browser_reverse_cookie_sources", 1303)
+        命令注册表.置整数值 ("reverse_cookie_sources", 1303)
+        命令注册表.置整数值 ("browser.reverse_env", 1304)
+        命令注册表.置整数值 ("browser_reverse_env", 1304)
+        命令注册表.置整数值 ("reverse_env", 1304)
+        命令注册表.置整数值 ("browser.reverse_instrument", 1305)
+        命令注册表.置整数值 ("browser_reverse_instrument", 1305)
+        命令注册表.置整数值 ("reverse_instrument", 1305)
+        命令注册表.置整数值 ("browser.reverse_search", 1306)
+        命令注册表.置整数值 ("browser_reverse_search", 1306)
+        命令注册表.置整数值 ("reverse_search", 1306)
+        命令注册表.置整数值 ("browser.reverse_initiator", 1307)
+        命令注册表.置整数值 ("browser_reverse_initiator", 1307)
+        命令注册表.置整数值 ("reverse_initiator", 1307)
+        命令注册表.置整数值 ("browser.reverse_preset", 1308)
+        命令注册表.置整数值 ("browser_reverse_preset", 1308)
+        命令注册表.置整数值 ("reverse_preset", 1308)
+        // CDP逆向增强 (v2.6.2)
+        命令注册表.置整数值 ("browser.reverse_cdp_hook", 1309)
+        命令注册表.置整数值 ("browser_reverse_cdp_hook", 1309)
+        命令注册表.置整数值 ("reverse_cdp_hook", 1309)
+        命令注册表.置整数值 ("browser.reverse_profile", 1310)
+        命令注册表.置整数值 ("browser_reverse_profile", 1310)
+        命令注册表.置整数值 ("reverse_profile", 1310)
+        命令注册表.置整数值 ("browser.reverse_dom_breakpoint", 1311)
+        命令注册表.置整数值 ("browser_reverse_dom_breakpoint", 1311)
+        命令注册表.置整数值 ("reverse_dom_breakpoint", 1311)
+        命令注册表.置整数值 ("browser.reverse_preload", 1312)
+        命令注册表.置整数值 ("browser_reverse_preload", 1312)
+        命令注册表.置整数值 ("reverse_preload", 1312)
+        命令注册表.置整数值 ("browser.reverse_call_fn", 1313)
+        命令注册表.置整数值 ("browser_reverse_call_fn", 1313)
+        命令注册表.置整数值 ("browser.reverse_websocket", 1314)
+        命令注册表.置整数值 ("browser_reverse_websocket", 1314)
+        命令注册表.置整数值 ("browser.reverse_heap", 1315)
+        命令注册表.置整数值 ("browser_reverse_heap", 1315)
+        命令注册表.置整数值 ("browser.reverse_runtime", 1316)
+        命令注册表.置整数值 ("browser_reverse_runtime", 1316)
+        命令注册表.置整数值 ("browser.reverse_network_intercept", 1317)
+        命令注册表.置整数值 ("browser_reverse_network_intercept", 1317)
+        命令注册表.置整数值 ("browser.reverse_setup", 1318)
+        命令注册表.置整数值 ("browser_reverse_setup", 1318)
+        命令注册表.置整数值 ("reverse_setup", 1318)
         命令注册表.置整数值 ("browser.vip_fingerprint_webrtc", 1035)
         命令注册表.置整数值 ("browser_vip_fingerprint_webrtc", 1035)
         命令注册表.置整数值 ("browser_vip_fingerprint_timezone", 1036)
@@ -1306,7 +1374,7 @@
     {
         变量 browser <类型 = 类_FBrowser_浏览器>
         browser = 取主浏览器 ()
-        如果 (browser.是否为空 () == 假)
+        如果 (browser.是否为空 () == 假 && browser.是否已关闭 () == 假)
         {
             变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
             vip_ctrl = browser.取VIP控制器 ()
@@ -1319,6 +1387,10 @@
                 如果 (params_value.是否为空 () == 假)
                 {
                     params_dict = params_value.取字典值 ()
+                }
+                否则 (paramsJSON文本 != "" && paramsJSON文本 != "{}")
+                {
+                    调试输出 ("[MCP] CDP params JSON解析失败,使用空字典: " + 取文本左边 (paramsJSON文本, 200))
                 }
                 // 自动注册DevTools观察者(首次使用时)
                 确保CDP观察者已注册 ()
@@ -1560,6 +1632,10 @@
     方法 应用持久配置到浏览器 <公开 静态>
     参数 浏览器 <类型 = 类_FBrowser_浏览器>
     {
+        如果 (浏览器.是否为空 () || 浏览器.是否已关闭 ())
+        {
+            返回
+        }
         如果 (持久代理地址 != "")
         {
             浏览器.设置代理 (持久代理地址, 持久代理账号, 持久代理密码)
@@ -1569,6 +1645,40 @@
             浏览器.置缩放级别 (持久缩放级别)
         }
         浏览器.置页面静音 (持久静音状态)
+        // v2.6.2: 反检测预配置 — 浏览器创建时自动应用, 无需逐命令
+        如果 (持久反检测_禁用Debugger检测)
+        {
+            变量 vipCtrl <类型 = 类_FBrowserVIP_控制器>
+            vipCtrl = 浏览器.取VIP控制器 ()
+            如果 (vipCtrl.是否为空 () == 假)
+            {
+                vipCtrl.内核开关_禁用Debugger (真)
+                调试输出 ("[MCP] 反检测: 已禁用Debugger检测 (浏览器创建时自动应用)")
+            }
+        }
+        如果 (持久反检测_伪装UA != "")
+        {
+            变量 vipUACtrl <类型 = 类_FBrowserVIP_控制器>
+            vipUACtrl = 浏览器.取VIP控制器 ()
+            如果 (vipUACtrl.是否为空 () == 假)
+            {
+                变量 uaData <类型 = 类_FBrowserVIP_UA数据>
+                uaData.创建 ()
+                uaData.置UserAgent (持久反检测_伪装UA)
+                vipUACtrl.指纹_虚拟UserAgent (uaData)
+                调试输出 ("[MCP] 反检测: UA伪装已应用 (浏览器创建时自动)")
+            }
+        }
+        如果 (持久反检测_禁用自动化标志)
+        {
+            变量 vipAutoCtrl <类型 = 类_FBrowserVIP_控制器>
+            vipAutoCtrl = 浏览器.取VIP控制器 ()
+            如果 (vipAutoCtrl.是否为空 () == 假)
+            {
+                vipAutoCtrl.指纹_虚拟Webdriver (假)
+                调试输出 ("[MCP] 反检测: 自动化标志已禁用 (浏览器创建时自动)")
+            }
+        }
     }
 
     # 持久 inject: 浏览器进程在框架载入时执行 (规避渲染进程静态列表不可见 + 火山跳过 mid-file 方法)
@@ -2695,6 +2805,13 @@
         enRaw = 执行CDP并同步等待 (命令ID + "_en", "Debugger.enable", "{}", 20000)
         如果 (CDP同步结果是否成功 (enRaw) == 假)
         {
+            // 浏览器可能已崩溃: 先检查后再重试, 避免无谓的20秒等待
+            变量 flowBrowser <类型 = 类_FBrowser_浏览器>
+            flowBrowser = 取主浏览器 ()
+            如果 (flowBrowser.是否为空 () || flowBrowser.是否已关闭 ())
+            {
+                返回 (DebuggerFlow失败返回 (命令ID, "{\"ok\":false,\"step\":\"enable\",\"error\":\"browser_closed\"}"))
+            }
             确保Debugger已恢复 (命令ID + "_retry")
             enRaw = 执行CDP并同步等待 (命令ID + "_en2", "Debugger.enable", "{}", 20000)
         }
@@ -3518,7 +3635,7 @@
         stmt.释放 ()
         修剪事件日志表_已持锁 ()
         异步缓存锁.解锁 ()
-        // 每1000条清理一次
+        // 每1000条清理一次; 同时监控写入速率防止磁盘写爆
         变量 清理计数 <静态 类型 = 整数 值 = 0>
         清理计数 = 清理计数 + 1
         如果 (清理计数 >= 日志清理间隔)
@@ -3814,6 +3931,18 @@
     {
         变量 过期时间 <类型 = 长整数>
         过期时间 = 取启动时间 () - 缓存保留天数 * 毫秒_每天
+        // 启动初期(取启动时间<7天): 过期时间为负, 无法清理上次运行的残留数据
+        // 此时使用取现行时间()的OLE日期差值作为绝对时间参考
+        如果 (过期时间 < 0)
+        {
+            // 首次启动清理: 直接清空所有非等待条目(来自上次进程运行)
+            异步缓存锁.加锁 ()
+            缓存数据库.执行SQL语句 ("DELETE FROM async_results WHERE is_waiting=0", )
+            缓存数据库.执行SQL语句 ("DELETE FROM event_log", )
+            缓存数据库.执行SQL语句 ("DELETE FROM response_cache", )
+            异步缓存锁.解锁 ()
+            返回
+        }
         异步缓存锁.加锁 ()
         执行参数化DELETE ("DELETE FROM async_results WHERE is_waiting=0 AND created_at<?", 到文本 (过期时间))
         变量 短TTL截止 <类型 = 长整数>
@@ -3911,6 +4040,11 @@
     参数 code <类型 = 文本型>
     参数 任务ID <类型 = 文本型>
     {
+        如果 (browser.是否为空 () || browser.是否已关闭 ())
+        {
+            存储异步结果 (任务ID, 构建标准失败JSON (错误_无浏览器))
+            返回 (任务ID)
+        }
         变量 安全框架 <类型 = 类_FBrowser_框架>
         安全框架 = 取安全主框架 (browser)
         如果 (安全框架.是否为空 () || 安全框架.是否有效 () == 假)
@@ -3918,7 +4052,6 @@
             存储异步结果 (任务ID, 构建标准失败JSON (错误_主框架无效))
             返回 (任务ID)
         }
-        // 直接传入JS代码, FBrowser V8 引擎原生执行, 无需 eval() 包装
         变量 JS回调 <类型 = 类_FBrowser_事件智能指针>
         JS回调.创建 (类_MCP_JS异步回调)
         JS回调.取执行类 (类_MCP_JS异步回调).任务ID = 任务ID
@@ -5267,8 +5400,9 @@
             }
         }
         code = yyjson取文本 (参数JSON, "file")
-        如果 (code != "" && 验证安全路径 (code))
+        如果 (code != "" && 验证安全路径 (code, 真))
         {
+            // 仅允许加载运行目录内的JS文件, 防止通过 file 参数读取任意系统文件
             变量 文件字节 <类型 = 字节集类>
             文件字节 = 读入文件 (code)
             如果 (取字节集长度 (文件字节) > 0)
@@ -5448,6 +5582,35 @@
         返回 (空vip)
     }
 
+    # ======== 架构优化: CDP逆向通用辅助 (消除重复模板) ==========
+
+    方法 取安全主浏览器 <公开 静态 类型 = 类_FBrowser_浏览器 注释 = "取主浏览器并验证未关闭, 用于逆向工具统一入口">
+    {
+        变量 browser <类型 = 类_FBrowser_浏览器>
+        browser = 取主浏览器 ()
+        如果 (browser.是否为空 () == 假 && browser.是否已关闭 () == 假)
+        {
+            返回 (browser)
+        }
+        变量 空browser <类型 = 类_FBrowser_浏览器>
+        返回 (空browser)
+    }
+
+    方法 执行逆向CDP命令 <公开 静态 类型 = 文本型 注释 = "CDP逆向工具统一入口: 取安全浏览器→注册观察者→执行CDP→返回异步结果">
+    参数 命令ID <类型 = 文本型>
+    参数 cdpMethod <类型 = 文本型>
+    参数 paramsJSON <类型 = 文本型>
+    {
+        变量 browser <类型 = 类_FBrowser_浏览器>
+        browser = 取安全主浏览器 ()
+        如果 (browser.是否为空 ())
+        {
+            返回 (命令失败 (命令ID, MCP_常量.错误_无浏览器))
+        }
+        确保CDP观察者已注册 ()
+        返回 (执行CDP命令_带参数 (命令ID, cdpMethod, paramsJSON))
+    }
+
     方法 取请求环境_安全 <公开 静态 类型 = 类_FBrowser_请求环境>
     {
         变量 browser <类型 = 类_FBrowser_浏览器>
@@ -5515,9 +5678,13 @@
         {
             返回 (假)
         }
-        // 1. 删首尾空白, 防止空白符绕过 (如 "\tjavascript:...")
+        // 1. 删首尾空白 + 删除URL中的制表符/换行符, 防止 scheme 内部空白绕过
+        //    (如 "java\tscript:alert(1)" → tab在scheme中, 绕过 javascript: 检测)
         变量 纯净URL <类型 = 文本型>
         纯净URL = 删首尾空 (输入URL)
+        子文本替换 (纯净URL, "\t", "", , , 真)
+        子文本替换 (纯净URL, "\r", "", , , 真)
+        子文本替换 (纯净URL, "\n", "", , , 真)
         // 2. 去除null字节, 防止C字符串截断绕过 (如 "java\0script:")
         子文本替换 (纯净URL, "\0", "", , , 假)
         // 3. 提取 scheme 部分并 URL 解码, 防止编码绕过 (如 java%0ascript: → javascript:)
@@ -5540,23 +5707,47 @@
         变量 小写检查 <类型 = 文本型>
         小写检查 = 到小写 (纯净URL)
         // 5. 拒绝危险的URL协议: javascript:, file:, data:(非image/png|jpeg|gif|webp)
-        如果 (寻找文本 (小写检查, "JAVASCRIPT:", 0, 假) == 1)
+        // 注: 寻找文本(,,假)=区分大小写, 故搜索串必须小写以匹配已小写的URL
+        如果 (寻找文本 (小写检查, "javascript:", 0, 假) == 1)
         {
             返回 (假)
         }
-        如果 (寻找文本 (小写检查, "FILE:", 0, 假) == 1 && 寻找文本 (小写检查, "://", 0, 假) > 0)
+        如果 (寻找文本 (小写检查, "file:", 0, 假) == 1 && 寻找文本 (小写检查, "://", 0, 假) > 0)
         {
             返回 (假)
         }
-        // data: 仅允许安全的 image MIME (png/jpeg/gif/webp), 拒绝 svg+xml 等可执行类型
-        如果 (寻找文本 (小写检查, "DATA:", 0, 假) == 1)
+        // data: 仅允许安全的 image MIME (png/jpeg/gif/webp/bmp/ico),
+        // 拒绝 svg+xml, text/html, application/javascript 等可执行/可注入类型
+        如果 (寻找文本 (小写检查, "data:", 0, 假) == 1)
         {
-            如果 (寻找文本 (小写检查, "IMAGE/SVG", 0, 假) > 0)
+            // 白名单: 仅允许 image/png, image/jpeg, image/gif, image/webp, image/bmp, image/x-icon
+            如果 (寻找文本 (小写检查, "image/png", 0, 假) > 0)
             {
-                返回 (假)
+                // 允许
             }
-            如果 (寻找文本 (小写检查, "IMAGE/", 0, 假) == 0)
+            否则 (寻找文本 (小写检查, "image/jpeg", 0, 假) > 0)
             {
+                // 允许
+            }
+            否则 (寻找文本 (小写检查, "image/gif", 0, 假) > 0)
+            {
+                // 允许
+            }
+            否则 (寻找文本 (小写检查, "image/webp", 0, 假) > 0)
+            {
+                // 允许
+            }
+            否则 (寻找文本 (小写检查, "image/bmp", 0, 假) > 0)
+            {
+                // 允许
+            }
+            否则 (寻找文本 (小写检查, "image/x-icon", 0, 假) > 0)
+            {
+                // 允许
+            }
+            否则
+            {
+                // data: URI 但 MIME 不在白名单内, 拒绝 (防止 text/html XSS / script 注入)
                 返回 (假)
             }
         }
@@ -5646,6 +5837,7 @@
         连接信息对象.加入文本成员 ("usage_step2", "Cursor: mcp.json 配置 node + mcp_bridge.js 路径")
         连接信息对象.加入文本成员 ("usage_step3", "调用 tools/call 或 browser_* 命令操作浏览器")
         连接信息对象.加入文本成员 ("quick_test", "curl -s " + 取MCP_HTTP地址 () + "/health")
+        连接信息对象.加入文本成员 ("env_vars_set", "AI_BROWSER_MCP_URL, AI_BROWSER_MCP_WS, AI_BROWSER_MCP_HOST, AI_BROWSER_MCP_PORT, AI_BROWSER_MCP_HEALTH, AI_BROWSER_MCP_HTTP_POST, AI_BROWSER_MCP_VERSION")
         连接信息对象.加入文本成员 ("cursor_mcp_config", "{\"mcpServers\":{\"ai-browser\":{\"command\":\"node\",\"args\":[\"mcp_bridge.js\"]}}}")
         连接信息对象.加入文本成员 ("docs_url", 取MCP_HTTP地址 () + "/docs/")
         变量 连接信息JSON <类型 = 文本型>
@@ -5722,10 +5914,32 @@
         清理过期缓存 ()
         清理过期CDP映射 ()
         修剪浏览器数组 ()
+        如果 (应用事件节流字典.是否为空 () == 假)
+        {
+            变量 当前维护时间 <类型 = 长整数>
+            当前维护时间 = 取启动时间 ()
+            变量 focusKeys <类型 = FBrowser_文本数组>
+            focusKeys = 应用事件节流字典.取关键字 ()
+            计次循环 (focusKeys.取个数 ())
+            {
+                变量 fk <类型 = 文本型>
+                fk = focusKeys.取数据 (取循环索引 ())
+                如果 (是否以 (fk, "focus_ts_"))
+                {
+                    变量 ft <类型 = 整数>
+                    ft = 应用事件节流字典.取整数值 (fk)
+                    如果 ((长整数)ft + 60000 < 当前维护时间)
+                    {
+                        应用事件节流字典.移除 (fk)
+                    }
+                }
+            }
+        }
         MCP_编排分派.强制终止超时工作流 ()
-        // 定期触发 WAL checkpoint, 防止 WAL 文件无限增长 (每60s执行, 无性能影响)
+        // 定期触发 WAL checkpoint, 防止 WAL 文件无限增长 (每60s执行)
+        // RESTART模式: 短暂阻塞写入者但确保WAL被截断, 比PASSIVE更可靠
         异步缓存锁.加锁 ()
-        缓存数据库.执行SQL语句 ("PRAGMA wal_checkpoint(PASSIVE)", )
+        缓存数据库.执行SQL语句 ("PRAGMA wal_checkpoint(RESTART)", )
         异步缓存锁.解锁 ()
         // 检测粘滞的URL请求槽: 槽满后 5 分钟仍无释放 → 强制重置
         异步缓存锁.加锁 ()
@@ -5952,8 +6166,15 @@
     参数 连接ID <类型 = 整数>
     参数 提示 <类型 = 文本型 @默认值 = "404 Not Found">
     {
+        变量 安全提示 <类型 = 文本型>
+        安全提示 = 提示
+        子文本替换 (安全提示, "&", "&amp;", , , 假)
+        子文本替换 (安全提示, "<", "&lt;", , , 假)
+        子文本替换 (安全提示, ">", "&gt;", , , 假)
+        子文本替换 (安全提示, "\"", "&quot;", , , 假)
+        子文本替换 (安全提示, "'", "&#39;", , , 假)
         变量 body <类型 = 字节集类>
-        body = 文本到UTF8 ("<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>404</title></head><body><h1>404</h1><p>" + 提示 + "</p></body></html>", 假)
+        body = 文本到UTF8 ("<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>404</title></head><body><h1>404</h1><p>" + 安全提示 + "</p></body></html>", 假)
         发送CORS响应 (服务器, 连接ID, 404, "text/html; charset=utf-8", 取字节集指针 (body), 取字节集长度 (body))
     }
 
@@ -6117,6 +6338,7 @@
             子文本替换 (修复JSON, "\\;", ";", , , 假)
             如果 (解析结果.创建自文本 (修复JSON))
             {
+                当前请求追踪ID = 当前请求追踪ID + "_fixed"
                 调试输出 ("[MCP] JSON转义自动修复成功 | _req_id=" + 当前请求追踪ID)
             }
             否则
@@ -6293,7 +6515,17 @@
         // 构建 result
         变量 结果对象 <类型 = YYJSON对象类>
         结果对象.创建自文本 ("{}")
-        结果对象.加入文本成员 ("protocolVersion", MCP_协议版本)
+        // 协议版本协商: 响应客户端请求的版本, 否则使用服务端版本
+        变量 协商版本 <类型 = 文本型>
+        如果 (参数JSON.是否为空 () == 假)
+        {
+            协商版本 = 参数JSON.取文本 ("protocolVersion")
+        }
+        如果 (协商版本 == "")
+        {
+            协商版本 = MCP_协议版本
+        }
+        结果对象.加入文本成员 ("protocolVersion", 协商版本)
         结果对象.加入成员 ("capabilities", 能力对象)
         结果对象.加入成员 ("serverInfo", 服务器信息)
         结果对象.加入文本成员 ("instructions", 指引)
@@ -6335,7 +6567,7 @@
         添加工具JSON ("browser_execute_js", "执行JS(无返回值)", 单参数Schema文本 ("code", "text", "JS代码"))
         添加工具JSON ("browser_evaluate", "执行JS并返回结果(默认同步)。支持code参数(inline)或file参数(从文件读取JS,避免转义问题)", 多属性Schema文本 (属性项JSON ("code", "text", "JS代码字符串") + "," + 属性项JSON ("file", "text", "JS文件路径(推荐:避免转义)") + "," + 属性项JSON ("max_ms", "integer", "同步等待ms"), ""))
         添加工具JSON ("browser_get_source", "获取HTML源码(默认异步, sync_wait:true可同步)", 单参数Schema文本 ("max_chars", "integer", "最大字符数(默认256KB=262144)", 假))
-        添加工具JSON ("browser_get_text", "获取页面文本(selector非空时默认同步)", 单参数Schema文本 ("max_chars", "integer", "最大字符数(默认256KB)", 假))
+        添加工具JSON ("browser_get_text", "获取页面文本(selector非空时默认同步, 空selector=全文)", 多属性Schema文本 (属性项JSON ("selector", "text", "CSS选择器(空=全文, 默认同步)") + "," + 属性项JSON ("max_chars", "integer", "最大字符数(默认256KB)"), ""))
         添加工具JSON ("browser_open_devtools", "打开开发者工具")
         添加工具JSON ("browser_close_devtools", "关闭开发者工具")
         添加工具JSON ("browser_create", "创建新的可见浏览器窗口", 单参数Schema文本 ("url", "text", "初始URL(默认about:blank)", 假))
@@ -6390,7 +6622,7 @@
         添加工具JSON ("browser_dom_query", "DOM查询(默认同步返回)", 多属性Schema文本 (属性项JSON ("selector", "text", "CSS选择器") + "," + 属性项JSON ("attribute", "text", "属性名") + "," + 属性项JSON ("index", "integer", "索引"), "\"selector\""))
         添加工具JSON ("browser_dom_click", "DOM点击(默认同步, 返回clicked/element not found)", 单参数Schema文本 ("selector", "text", "CSS选择器"))
         添加工具JSON ("browser_dom_set_value", "DOM设置值(默认同步, 返回ok状态)", 多属性Schema文本 (属性项JSON ("selector", "text", "CSS选择器") + "," + 属性项JSON ("value", "text", "值"), "\"selector\",\"value\""))
-        添加工具JSON ("browser_dom_get_html", "DOM获取HTML(selector非空时默认同步)", 单参数Schema文本 ("selector", "text", "CSS选择器", 假))
+        添加工具JSON ("browser_dom_get_html", "DOM获取HTML(selector非空时默认同步, 空selector=全文)", 多属性Schema文本 (属性项JSON ("selector", "text", "CSS选择器(空=全文源码)") + "," + 属性项JSON ("max_chars", "integer", "最大字符数(默认256KB)"), ""))
         添加工具JSON ("browser_dom_rect", "DOM获取元素坐标(原生API)", 单参数Schema文本 ("selector", "text", "CSS选择器"))
         添加工具JSON ("browser_dom_inner_html", "DOM获取innerHTML(原生API)", 单参数Schema文本 ("selector", "text", "CSS选择器"))
         添加工具JSON ("browser_dom_set_html", "DOM设置innerHTML(原生,同步)", 多属性Schema文本 (属性项JSON ("selector", "text", "选择器") + "," + 属性项JSON ("html", "text", "HTML代码"), "\"selector\",\"html\""))
@@ -6402,7 +6634,7 @@
         添加工具JSON ("browser_console_eval", "控制台执行JS(默认同步返回)", 单参数Schema文本 ("expression", "text", "JS表达式"))
         添加工具JSON ("browser_fingerprint", "浏览器指纹(VIP)", 多属性Schema文本 (属性项JSON ("action", "text", "操作") + "," + 属性项JSON ("config", "text", "JSON配置"), "\"action\""))
         添加工具JSON ("browser_intercept", "资源拦截(VIP)", 多属性Schema文本 (属性项JSON ("action", "text", "操作") + "," + 属性项JSON ("url", "text", "URL"), "\"action\""))
-        添加工具JSON ("browser_screenshot", "页面截图(VIP)", 单参数Schema文本 ("format", "text", "png/jpeg/webp", 假))
+        添加工具JSON ("browser_screenshot", "页面截图(VIP)", 多属性Schema文本 (属性项JSON ("format", "text", "png/jpeg/webp") + "," + 属性项JSON ("width", "integer", "宽度(默认1920)") + "," + 属性项JSON ("height", "integer", "高度(默认1080)") + "," + 属性项JSON ("x", "integer", "X偏移(默认0)") + "," + 属性项JSON ("y", "integer", "Y偏移(默认0)") + "," + 属性项JSON ("scale", "integer", "缩放(默认1)"), ""))
         添加工具JSON ("browser_collect", "网络/控制台/场景预备", 单参数Schema文本 ("action", "text", "network_*/console_*/reverse_prepare/debug_prepare/debug_flow/debug_wait_paused/debug_inspect/debug_script_source/debug_resume/automation_prepare"))
         添加工具JSON ("browser_network", "网络日志 list/enable/clear (list 默认 auto_enable)", 单参数Schema文本 ("action", "text", "list/get/enable/disable/clear/detail_enable"))
         添加工具JSON ("browser_status", "浏览器完整状态(弹窗/文档/加载/缩放/静音/URL/标题/句柄)")
@@ -6557,6 +6789,28 @@
         添加工具JSON ("browser_get_extra_data", "获取浏览器创建时传入的额外数据")
         添加工具JSON ("browser_fingerprint_ua", "VIP: 虚拟UA完整数据", 多属性Schema文本 (属性项JSON ("ua", "text", "UserAgent") + "," + 属性项JSON ("platform", "text", "navigator.platform") + "," + 属性项JSON ("accept_lang", "text", "Accept-Language") + "," + 属性项JSON ("brands", "text", "brands JSON") + "," + 属性项JSON ("mobile", "boolean", "mobile") + "," + 属性项JSON ("architecture", "text", "architecture") + "," + 属性项JSON ("bitness", "text", "bitness") + "," + 属性项JSON ("model", "text", "model") + "," + 属性项JSON ("wow64", "boolean", "wow64"), ""))
         添加工具JSON ("browser_vip_orientation", "VIP: 虚拟屏幕方向", 多属性Schema文本 (属性项JSON ("type", "integer", "方向类型") + "," + 属性项JSON ("angle", "integer", "角度"), ""))
+        // v2.6.1 JS逆向工具
+        添加工具JSON ("browser_reverse_hook", "JS逆向: 无侵入函数Hook(CDP/V8级)。type=function_call/xhr_fetch/websocket。自动记录参数/返回值/调用栈,不修改fn.toString()", 多属性Schema文本 (属性项JSON ("target", "text", "目标函数名/URL模式") + "," + 属性项JSON ("type", "text", "function_call/xhr_fetch/websocket") + "," + 属性项JSON ("capture_args", "boolean", "捕获参数(默认true)") + "," + 属性项JSON ("capture_return", "boolean", "捕获返回值(默认true)") + "," + 属性项JSON ("capture_stack", "boolean", "捕获调用栈"), ""))
+        添加工具JSON ("browser_reverse_strings", "JS逆向: 提取页面中的可疑字符串/加密数组。mode=suspicious(长字符串+Base64+HEX)/decrypt_array(解密数组)", 多属性Schema文本 (属性项JSON ("mode", "text", "suspicious/decrypt_array") + "," + 属性项JSON ("min_length", "integer", "最小长度(默认20)") + "," + 属性项JSON ("max_results", "integer", "最大结果数(默认200)"), ""))
+        添加工具JSON ("browser_reverse_verify", "JS逆向: 验证重实现算法。给定原始函数和重写版本+测试用例,自动比对输出是否一致", 多属性Schema文本 (属性项JSON ("original", "text", "原始函数路径(如window.sign)") + "," + 属性项JSON ("reimplementation", "text", "重写的JS函数") + "," + 属性项JSON ("test_inputs", "text", "测试用例JSON数组") + "," + 属性项JSON ("compare_mode", "text", "strict/lenient"), "\"original\",\"reimplementation\""))
+        // v2.6.2 JS逆向增强工具
+        添加工具JSON ("browser_reverse_cookie_sources", "JS逆向: Cookie归因分析。Hook document.cookie setter,记录每次JS写入的调用栈+值+时间戳。区分HTTP Set-Cookie vs JS写入", 空Schema文本 ())
+        添加工具JSON ("browser_reverse_env", "JS逆向: 浏览器环境全量收集(40+变量)。含navigator/screen/window/location/document/canvas/webgl/audio指纹,用于补环境对照", 空Schema文本 ())
+        添加工具JSON ("browser_reverse_instrument", "JS逆向: JSVMP解释器透明插桩。mode=transparent仅替换prototype getter保留toString; mode=interpreter Hook VM分发器。不破坏签名计算", 多属性Schema文本 (属性项JSON ("target", "text", "目标函数名(transparent模式可选,interpreter模式必填)") + "," + 属性项JSON ("mode", "text", "transparent(默认)/interpreter"), ""))
+        添加工具JSON ("browser_reverse_search", "JS逆向: 全局脚本搜索。在所有已加载script中搜索关键词(sign/encrypt/token/md5/aes),返回匹配行+脚本URL+行号", 多属性Schema文本 (属性项JSON ("query", "text", "搜索关键词(如sign/encrypt/md5)") + "," + 属性项JSON ("script_url", "text", "限定脚本URL片段(可选)"), "\"query\""))
+        添加工具JSON ("browser_reverse_initiator", "JS逆向: 网络溯源。Hook XHR+fetch,捕获匹配URL模式的请求的完整JS调用栈,定位发起请求的函数", 多属性Schema文本 (属性项JSON ("url_pattern", "text", "匹配URL片段(如/api/sign)") + "," + 属性项JSON ("request_id", "text", "网络请求ID(可选)"), ""))
+        添加工具JSON ("browser_reverse_preset", "JS逆向: 一键预设Hook。preset=xhr/fetch/cookie/websocket/crypto/debugger/all,批量安装常用Hook,数据存入window.__mcp_*_log", 单参数Schema文本 ("preset", "text", "xhr/fetch/cookie/websocket/crypto/debugger/all(默认)", 假))
+        // v2.6.2 CDP逆向增强 (原生CDP协议,非JS注入)
+        添加工具JSON ("browser_reverse_cdp_hook", "CDP逆向: 函数调用级别断点。Debugger.setBreakpointOnFunctionCall—Ghostwire风格,不修改JS源码,fn.toString()不变,防检测", 多属性Schema文本 (属性项JSON ("function_name", "text", "目标函数名(如window.sign)") + "," + 属性项JSON ("object_id", "text", "CDP Runtime objectId(可选,优先级高于function_name)") + "," + 属性项JSON ("condition", "text", "条件断点表达式(可选)"), ""))
+        添加工具JSON ("browser_reverse_profile", "CDP逆向: JS CPU性能分析。action=start开始采样/stop停止并获取报告/query查询。定位热点函数,识别加密算法性能瓶颈", 单参数Schema文本 ("action", "text", "start/start_precise(精确采样)/stop/query(默认start)"))
+        添加工具JSON ("browser_reverse_dom_breakpoint", "CDP逆向: DOM/XHR事件断点。type=xhr拦截所有XHR/fetch=拦截fetch/dom_event=DOM事件/timer=定时器。在事件触发时自动断点", 多属性Schema文本 (属性项JSON ("type", "text", "xhr/fetch/dom_event/timer") + "," + 属性项JSON ("target", "text", "URL模式(xhr)或事件名(dom_event)"), "\"type\""))
+        添加工具JSON ("browser_reverse_preload", "CDP逆向: 预注入脚本。Page.addScriptToEvaluateOnNewDocument—在所有页面JS执行之前注入,先于任何反检测/混淆代码加载", 多属性Schema文本 (属性项JSON ("code", "text", "JS代码") + "," + 属性项JSON ("file", "text", "JS文件路径(与code二选一)"), "\"code\""))
+        添加工具JSON ("browser_reverse_call_fn", "CDP逆向: 远程函数调用。Runtime.callFunctionOn—通过CDP objectId调用任意函数,可访问闭包/私有作用域中的函数,无需JS注入", 多属性Schema文本 (属性项JSON ("object_id", "text", "CDP Runtime objectId(先用browser_evaluate获取)") + "," + 属性项JSON ("arguments", "text", "参数JSON数组(可选,默认[])"), "\"object_id\""))
+        添加工具JSON ("browser_reverse_websocket", "CDP逆向: WebSocket消息拦截。Network.enable+webSocketFrameReceived—监听所有WS帧(send/receive),用于分析实时通信协议", 单参数Schema文本 ("action", "text", "enable(默认)/query"))
+        添加工具JSON ("browser_reverse_heap", "CDP逆向: 堆内存分析。HeapProfiler—snapshot堆快照/start_sampling采样/stop_sampling停止/get_object按ID查对象。定位内存中的加密密钥/签名对象", 多属性Schema文本 (属性项JSON ("action", "text", "snapshot/start_sampling/stop_sampling/get_object") + "," + 属性项JSON ("object_id", "text", "heap对象ID(get_object时必填)"), ""))
+        添加工具JSON ("browser_reverse_runtime", "CDP逆向: Runtime运行时分析。action=properties获取对象属性/evaluate在全局作用域执行表达式/global获取全局变量名列表", 多属性Schema文本 (属性项JSON ("action", "text", "properties/evaluate/global(默认properties)") + "," + 属性项JSON ("object_id", "text", "对象ID(properties时必填)") + "," + 属性项JSON ("expression", "text", "JS表达式(evaluate时必填)"), ""))
+        添加工具JSON ("browser_reverse_network_intercept", "CDP逆向: 网络请求拦截。action=enable启用URL模式拦截/disable禁用。拦截后可修改/重定向/阻塞匹配的请求,用于修改请求参数绕过签名校验", 多属性Schema文本 (属性项JSON ("action", "text", "enable(默认)/disable") + "," + 属性项JSON ("url_pattern", "text", "URL匹配模式(enable时可选,空则拦截全部)"), ""))
+        添加工具JSON ("browser_reverse_setup", "反检测预配置: 浏览器事件级架构—设置后所有新浏览器自动应用! disable_debugger禁用Debugger检测/user_agent伪装UA/disable_automation_flag移除webdriver标志。立即应用当前浏览器+持久化到新浏览器", 多属性Schema文本 (属性项JSON ("disable_debugger", "boolean", "禁用网页debugger检测(VIP)") + "," + 属性项JSON ("user_agent", "text", "伪装UserAgent") + "," + 属性项JSON ("disable_automation_flag", "boolean", "移除navigator.webdriver等自动化标志"), ""))
         // v1.8 浏览器事件查询
         添加工具JSON ("browser_event", "查询浏览器加载/崩溃事件", 单参数Schema文本 ("event_type", "text", "load_end/crash(空=全部)", 假))
         // CDP调试 (VIP)
@@ -6677,7 +6931,11 @@
             }
             如果 (参数字符串 != "" && (是否以 (参数字符串, "{") || 是否以 (参数字符串, "[")))
             {
-                工具参数字典.创建自文本 (参数字符串)
+                如果 (工具参数字典.创建自文本 (参数字符串) == 假)
+                {
+                    调试输出 ("[MCP] tools/call arguments JSON解析失败, 原始文本长度:", 取文本长度 (参数字符串))
+                    返回 (构建JSONRPC响应 (请求ID, "", -32602, "arguments JSON解析失败 | 请确认JSON格式正确, key必须用双引号包裹 | 收到: " + 取文本左边 (参数字符串, 200)))
+                }
             }
             否则
             {
@@ -6745,14 +7003,15 @@
         }
         否则
         {
-            内容文本 = yyjson取文本 (结果解析, "message")
-            如果 (内容文本 == "")
+            // 优先取工具映射的结果键名 (如 get_url→url, get_title→title), 确保结构化数据优先于message
+            变量 优先键名 <类型 = 文本型>
+            优先键名 = 取工具结果键名 (工具名)
+            如果 (优先键名 != "" && 优先键名 != "result")
             {
-                内容文本 = yyjson取文本 (结果解析, "url")
+                内容文本 = yyjson取文本 (结果解析, 优先键名)
             }
             如果 (内容文本 == "")
             {
-                // 优先取文本型result,若是对象/数组/数字则取JSON原文
                 内容文本 = yyjson取文本 (结果解析, "result")
                 如果 (内容文本 == "")
                 {
@@ -6773,6 +7032,14 @@
                         内容文本 = resultArr.到可读文本 (YYJSON格式化选项.压缩)
                     }
                 }
+            }
+            如果 (内容文本 == "")
+            {
+                内容文本 = yyjson取文本 (结果解析, "message")
+            }
+            如果 (内容文本 == "")
+            {
+                内容文本 = yyjson取文本 (结果解析, "url")
             }
             如果 (内容文本 == "")
             {
@@ -6948,6 +7215,10 @@
         否则 (是否以 (方法名, "workflow"))
         {
             result = MCP_编排分派.分类分派_编排操作 (命令ID, 方法名, 参数JSON)
+        }
+        否则 (是否以 (方法名, "browser_reverse_"))  //.reverse_ 已在L7150统一规范化为 browser_reverse_
+        {
+            result = MCP_逆向分派.分类分派_逆向操作 (命令ID, 方法名, 参数JSON)
         }
         否则 (方法名 == "ping" || 方法名 == "browser_send_message" || 方法名 == "browser_get_global_cache_dir" || 方法名 == "browser_get_process_type" || 方法名 == "browser_get_window_style" || 方法名 == "browser_set_window_style" || 方法名 == "browser_get_run_style" || 方法名 == "browser_create_tab" || 方法名 == "browser_task_runner_post")
         {
@@ -7187,6 +7458,13 @@
         信息JSON.加入文本成员 ("usage_step1", "启动 AI-Fbowser-Mcp.exe")
         信息JSON.加入文本成员 ("usage_step2", "Cursor 配置 node mcp_bridge.js (见欢迎页快速接入)")
         信息JSON.加入文本成员 ("usage_step3", "tools/call 调用 browser_navigate 等工具")
+        信息JSON.加入文本成员 ("env_AI_BROWSER_MCP_URL", "ws://" + 服务器绑定地址 + ":" + 到文本 (服务器端口))
+        信息JSON.加入文本成员 ("env_AI_BROWSER_MCP_WS", "ws://" + 服务器绑定地址 + ":" + 到文本 (服务器端口) + "/mcp")
+        信息JSON.加入文本成员 ("env_AI_BROWSER_MCP_HOST", 服务器绑定地址)
+        信息JSON.加入文本成员 ("env_AI_BROWSER_MCP_PORT", 到文本 (服务器端口))
+        信息JSON.加入文本成员 ("env_AI_BROWSER_MCP_HEALTH", "http://" + 服务器绑定地址 + ":" + 到文本 (服务器端口) + "/health")
+        信息JSON.加入文本成员 ("env_AI_BROWSER_MCP_HTTP_POST", "http://" + 服务器绑定地址 + ":" + 到文本 (服务器端口) + "/mcp")
+        信息JSON.加入文本成员 ("env_AI_BROWSER_MCP_VERSION", MCP_版本号)
         返回 (信息JSON.到可读文本 (YYJSON格式化选项.压缩))
     }
 
@@ -7376,7 +7654,18 @@
         {
             返回 (文档根目录缓存)
         }
-        文档根目录缓存 = 取运行目录 () + "\\docs"
+        变量 运行目录 <类型 = 文本型>
+        运行目录 = 取运行目录 ()
+        // 规范化: 去除尾部反斜杠, 防止拼接后出现 C:\\docs 双斜杠
+        如果 (取文本右边 (运行目录, 1) == "\\")
+        {
+            运行目录 = 取文本左边 (运行目录, 取文本长度 (运行目录) - 1)
+        }
+        文档根目录缓存 = 运行目录 + "\\docs"
+        如果 (目录是否存在 (文档根目录缓存) == 假)
+        {
+            调试输出 ("[MCP] 警告: docs 目录不存在:", 文档根目录缓存)
+        }
         返回 (文档根目录缓存)
     }
 
@@ -7425,9 +7714,16 @@
         {
             返回 (假)
         }
-        如果 (寻找文本 (相对路径, "\\", 0, 假) != -1 && 寻找文本 (相对路径, "/", 0, 假) != -1)
+        // 反斜杠检查: 调用方已将 / 统一转为 \, 路径中不应出现原始 /
+        // 允许在规范化的路径中保留分隔符, 但拒绝原始正斜杠(未转义的越界尝试)
+        如果 (寻找文本 (相对路径, "\\", 0, 假) != -1)
         {
-            返回 (假)
+            // 检查是否为单纯的目录分隔符 (已被规范化), 非路径穿越载荷
+            // 如果同时含有 .. 和 \, 则是穿越攻击
+            如果 (寻找文本 (解码路径, "..\\", 0, 假) != -1 || 寻找文本 (解码路径, "\\..", 0, 假) != -1)
+            {
+                返回 (假)
+            }
         }
         返回 (真)
     }
@@ -7534,6 +7830,11 @@
         }
         变量 MIME <类型 = 文本型>
         MIME = 取文档MIME类型 (相对路径)
+        // 文件扩展名白名单: 仅允许安全类型, 拒绝 application/octet-stream 等潜在危险类型
+        如果 (MIME == "application/octet-stream")
+        {
+            返回 (假)
+        }
         发送CORS200响应 (服务器, 连接ID, MIME, 取字节集指针 (文件字节), 取字节集长度 (文件字节))
         返回 (真)
     }

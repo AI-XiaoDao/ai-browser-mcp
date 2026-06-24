@@ -15,16 +15,26 @@
     {
         变量 行字节集 <类型 = 字节集类>
         @ // 可中断读取: PeekNamedPipe 轮询 + 线程退出检查, 避免退出时 ReadFile 永久阻塞
+        @ // 连续空轮询超过600次(≈30秒)无数据则判定stdin已关闭, 防止父进程断开后死循环
         @ HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
         @ if (hStdin == INVALID_HANDLE_VALUE || hStdin == NULL) return CVolString();
         @ std::vector<char> buf(4096);
+        @ DWORD emptyPolls = 0;
         @ for (;;) {
         @     if (*(volatile BOOL*)&@<Stdio应退出>) return CVolString();
         @     if (@<线程句柄> != 0 && g_objVolApp.GetThreadPool().IsThreadNeedBreak((HVOLTHREAD)@<线程句柄>, 0))
         @         return CVolString();
         @     DWORD avail = 0;
-        @     if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail, NULL)) break;
-        @     if (avail == 0) { Sleep(50); continue; }
+        @     if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail, NULL)) {
+        @         // PeekNamedPipe失败: 句柄无效或被关闭, 安全退出
+        @         break;
+        @     }
+        @     if (avail == 0) {
+        @         emptyPolls++;
+        @         if (emptyPolls > 600) break;  // 30秒无输入→stdin已关闭
+        @         Sleep(50); continue;
+        @     }
+        @     emptyPolls = 0;  // 有数据, 重置计数器
         @     DWORD total = 0;
         @     while (total < 1048576) {
         @         if (*(volatile BOOL*)&@<Stdio应退出>) return CVolString();
@@ -55,23 +65,30 @@
         }
         返回 (UTF8到文本 (行字节集))
     }
-    # ======== stdout 写入 ========
+    # ======== stdout 写入 (MCP Content-Length 帧格式) ========
     方法 写入一行 <公开 静态>
     参数 文本 <类型 = 文本型>
     {
+        @ // MCP传输规范: Content-Length: N\r\n\r\n{json}\n
         @ // WriteFile stdout, 自动处理UTF8, 检查失败
         @ std::string utf8 = CU8String(@<文本>.GetText()).GetText();
-        @ utf8 += "\n";
+        @ DWORD contentLen = (DWORD)utf8.size();
+        @ char header[128];
+        @ int headerLen = snprintf(header, sizeof(header), "Content-Length: %lu\r\n\r\n", (unsigned long)contentLen);
+        @ std::string frame(header, headerLen);
+        @ frame += utf8;
+        @ frame += "\n";
         @ HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
         @ if (hOut == INVALID_HANDLE_VALUE || hOut == NULL) return;
         @ DWORD written = 0;
-        @ if (!WriteFile(hOut, utf8.c_str(), (DWORD)utf8.size(), &written, NULL))
+        @ if (!WriteFile(hOut, frame.c_str(), (DWORD)frame.size(), &written, NULL))
         @ {
-        @     // 写失败: 尝试stderr告知用户
+        @     // 写失败: stdout已断开, 设置退出标志让主循环终止
+        @     *(volatile BOOL*)&@<Stdio应退出> = TRUE;
         @     HANDLE hErr = GetStdHandle(STD_ERROR_HANDLE);
         @     if (hErr != INVALID_HANDLE_VALUE && hErr != NULL)
         @     {
-        @         const char* err = "[MCP-Stdio] stdout写入失败\n";
+        @         const char* err = "[MCP-Stdio] stdout写入失败, 服务即将退出\n";
         @         WriteFile(hErr, err, (DWORD)strlen(err), &written, NULL);
         @     }
         @ }
@@ -112,7 +129,7 @@
     {
         写日志 ("============================================")
         写日志 ("AI浏览器 MCP Stdio Server 启动")
-        写日志 ("协议: JSON-RPC 2.0 over stdin/stdout")
+        写日志 ("协议: JSON-RPC 2.0 over stdin/stdout (Content-Length 帧格式)")
         写日志 ("直连: Claude Desktop / Cursor / Trace 等任意AI工具")
         写日志 ("============================================")
         // 循环读取 stdin → 处理 → stdout
@@ -158,7 +175,7 @@
     }
     方法 启动并行Stdio服务 <公开 静态>
     {
-        如果 (Stdio线程实例.是否正在运行 ())
+        如果 (Stdio线程实例.是否正在运行 () || MCP命令服务器.MCP正在关闭)
         {
             返回
         }

@@ -1,7 +1,7 @@
 ---
 name: AI浏览器MCP
 description: AI浏览器 MCP 服务工具参考 - 217个浏览器自动化工具 (v2.6 sync-wait/workflow/网络逆向)
-version: 2.6
+version: 2.6.1
 trigger: 测试MCP|MCP工具|浏览器MCP|AI浏览器|FBrowser MCP|mcp_config|workflow_run|sync-wait|run_all_tests|douyin_xhr|POST加密|browser_collect|browser_network
 ---
 # AI 浏览器 MCP 服务技能书 v2.6

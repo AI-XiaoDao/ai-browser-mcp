@@ -143,6 +143,16 @@
             {
                 返回 (MCP命令服务器.命令失败 (命令ID, "selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))
             }
+            变量 attrLower <类型 = 文本型>
+            attrLower = 到小写 (删首尾空 (attr))
+            如果 (attrLower == "href" || attrLower == "src" || attrLower == "action" || attrLower == "formaction")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "安全限制: 不允许设置 " + attr + " 属性(导航类) | 仅允许样式/数据/aria 属性"))
+            }
+            如果 (是否以 (attrLower, "on"))
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "安全限制: 不允许设置 " + attr + " 属性(事件处理器) | 仅允许样式/数据/aria 属性"))
+            }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
             如果 (browser.是否为空 () == 假)
@@ -238,8 +248,8 @@
                     变量 选择状态 <类型 = 逻辑型>
                     选择状态 = 真
                     变量 valLower <类型 = 文本型>
-                    valLower = 到小写 (value)
-                    如果 (valLower == "false" || valLower == "0" || valLower == "off" || valLower == "no")
+                    valLower = 到小写 (删首尾空 (value))
+                    如果 (valLower == "false" || valLower == "0" || valLower == "off" || valLower == "no" || valLower == "unchecked" || valLower == "unselected")
                     {
                         选择状态 = 假
                     }

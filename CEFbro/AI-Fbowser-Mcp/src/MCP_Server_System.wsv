@@ -15,11 +15,11 @@
         // === v1.6 VIP 标签页 (已禁用) ===
         如果 (方法名 == "browser_create_tab")
         {
-            返回 (MCP命令服务器.命令失败 (命令ID, "⛔ 远程创建标签页已禁用 | 浏览器由GUI自动管理"))
+            返回 (MCP命令服务器.命令失败 (命令ID, "⛔ 远程创建标签页已禁用 | 原因: GUI窗口自动管理浏览器实例, 无需手动创建标签页 | 替代方案: 使用 browser_navigate 在当前浏览器导航, 或 browser_create 创建新的独立浏览器窗口"))
         }
         否则 (方法名 == "browser_task_runner_post")
         {
-            返回 (MCP命令服务器.命令失败 (命令ID, "⛔ 远程 task_runner 创建浏览器已禁用 | 浏览器由GUI自动管理 | 如需线程投递请改用已有 browser_id 操作"))
+            返回 (MCP命令服务器.命令失败 (命令ID, "⛔ 远程 task_runner 创建浏览器已禁用 | 原因: GUI窗口自动管理浏览器实例 | 替代方案: 使用现有 browser_id 操作已有浏览器, 或使用 browser_create"))
         }
         // === v1.6 其他 ===
         否则 (方法名 == "browser_send_message")
@@ -84,7 +84,13 @@
             browser = MCP命令服务器.取主浏览器 ()
             如果 (browser.是否为空 () == 假)
             {
-                返回 (MCP命令服务器.构建简单JSON ("run_style", "暂不支持此方法工具"))
+                变量 风格对象 <类型 = YYJSON对象类>
+                风格对象.创建自文本 ("{}")
+                风格对象.加入逻辑值成员 ("success", 真)
+                风格对象.加入整数成员 ("window_style", browser.取窗口属性 (-16))
+                风格对象.加入逻辑值成员 ("is_popup", browser.是否为弹窗 ())
+                风格对象.加入整数成员 ("browser_id", browser.取ID ())
+                返回 (MCP命令服务器.命令成功_原始JSON (命令ID, 风格对象.到可读文本 (YYJSON格式化选项.压缩)))
             }
             返回 (MCP命令服务器.命令失败 (命令ID, MCP_常量.错误_无浏览器))
         }

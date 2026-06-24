@@ -16,9 +16,34 @@
         @ HWND hwnd = FindWindowW(NULL, L"AI浏览器-MCP");
         @ if (hwnd) return 0;
 
+        // 提前读取配置中的VIP授权码 (加载MCP配置在窗口创建后才执行,
+        // 但VIP注册必须在FBrowser_初始化前完成)
+        变量 配置路径 <类型 = 文本型>
+        配置路径 = 取运行目录 () + "\\mcp_config.json"
+        如果 (文件是否存在 (配置路径))
+        {
+            变量 配置字节 <类型 = 字节集类>
+            配置字节 = 读入文件 (配置路径)
+            如果 (取字节集长度 (配置字节) > 0)
+            {
+                变量 配置文本 <类型 = 文本型>
+                配置文本 = UTF8到文本 (配置字节)
+                变量 提前解析 <类型 = YYJSON只读对象类>
+                如果 (提前解析.创建自文本 (配置文本))
+                {
+                    变量 提前VIP码 <类型 = 文本型>
+                    提前VIP码 = 提前解析.取文本 ("vip_code")
+                    如果 (提前VIP码 != "")
+                    {
+                        MCP命令服务器.VIP授权码 = 提前VIP码
+                    }
+                }
+            }
+        }
         如果 (MCP命令服务器.VIP授权码 == "")
         {
             MCP命令服务器.VIP授权码 = "xsmzas1"
+            调试输出 ("[AI浏览器] 使用内置VIP授权码, 建议在 mcp_config.json 中配置 vip_code 字段")
         }
         FBrowserVIP注册.VIP注册_置授权码 (MCP命令服务器.VIP授权码)
         变量 设置 <类型 = FBrowser_初始化配置>
@@ -76,9 +101,12 @@
         变量 绑定地址 <类型 = 文本型>
         绑定地址 = MCP命令服务器.服务器绑定地址
         写环境变量 ("AI_BROWSER_MCP_URL", "ws://" + 绑定地址 + ":" + 端口文本)
+        写环境变量 ("AI_BROWSER_MCP_WS", "ws://" + 绑定地址 + ":" + 端口文本 + "/mcp")
         写环境变量 ("AI_BROWSER_MCP_PORT", 端口文本)
+        写环境变量 ("AI_BROWSER_MCP_HOST", 绑定地址)
         写环境变量 ("AI_BROWSER_MCP_HEALTH", "http://" + 绑定地址 + ":" + 端口文本 + "/health")
         写环境变量 ("AI_BROWSER_MCP_HTTP_POST", "http://" + 绑定地址 + ":" + 端口文本 + "/mcp")
+        写环境变量 ("AI_BROWSER_MCP_VERSION", MCP_常量.MCP_版本号)
         调试输出 ("[AI浏览器] MCP 服务已就绪 — " + MCP命令服务器.取MCP_WS地址 ())
         浏览器容器.MCP服务已就绪 = 真
         // 触发首个浏览器创建: 通过时钟线程在UI线程上创建, 导航到欢迎页
@@ -199,11 +227,12 @@
 
 # ── 服务窗口 (最小, 仅维护时钟 + 退出) ──
 
-类 MCP服务窗口 <基础类 = 窗口 标题 = "AI浏览器-MCP" @视窗.布局 = "client_size = \"280, 60\"">
+类 MCP服务窗口 <基础类 = 窗口 标题 = "AI浏览器-MCP" @视窗.布局 = "client_size = \"420, 72\"">
 {
-    变量 状态标签 <类型 = 标签 隐藏值属性 = "0" @视窗.布局 = "id = 101\r\npos = \"8, 8, 264, 20\"">
+    变量 状态标签 <类型 = 标签 隐藏值属性 = "0" @视窗.布局 = "id = 101\r\npos = \"8, 8, 404, 20\"">
     变量 维护时钟 <类型 = 时钟 隐藏值属性 = "0" @视窗.布局 = "id = 102\r\npos = \"0, 0, 1, 1\"" 时钟周期 = 500>
     变量 正在退出 <静态 类型 = 逻辑型 值 = 假>
+    变量 窗口句柄缓存 <静态 类型 = 变整数 值 = 0>
 
     方法 执行关闭序列 <公开 静态>
     {
@@ -213,17 +242,29 @@
         }
 
         正在退出 = 真
-        MCP命令服务器.MCP正在关闭 = 真
         MCP命令服务器.是否启用 = 假
         MCPStdio桥.停止Stdio服务 ()
         MCP命令服务器.注销CDP观察者 ()
         MCP命令服务器.关闭全部事件监控 ()
-        MCP命令服务器.关闭缓存数据库 ()
         MCP命令服务器.关闭MCP服务器 ()
+        MCP命令服务器.MCP正在关闭 = 真
         FBrowser_关闭 (真)
-        // 强制终止残留子进程
-        @ system("taskkill /F /IM FBroSubprocess.exe /T 2>nul");
-        @ system("taskkill /F /IM AI-Fbowser-Mcp.exe /FI \"PID ne 99999\" 2>nul");
+        // 清理残留子进程: 仅终止当前进程树的 FBroSubprocess.exe
+        @ // 获取当前进程ID, 仅终止父进程为当前PID的FBroSubprocess.exe子进程
+        @ DWORD curPid = GetCurrentProcessId();
+        @ HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+        @ if (hSnap != INVALID_HANDLE_VALUE) {
+        @     PROCESSENTRY32W pe = { sizeof(pe) };
+        @     if (Process32FirstW(hSnap, &pe)) {
+        @         do {
+        @             if (pe.th32ParentProcessID == curPid && _wcsicmp(pe.szExeFile, L"FBroSubprocess.exe") == 0) {
+        @                 HANDLE hChild = OpenProcess(PROCESS_TERMINATE, FALSE, pe.th32ProcessID);
+        @                 if (hChild) { TerminateProcess(hChild, 0); CloseHandle(hChild); }
+        @             }
+        @         } while (Process32NextW(hSnap, &pe));
+        @     }
+        @     CloseHandle(hSnap);
+        @ }
         结束 ()
     }
 
@@ -231,12 +272,16 @@
     参数 来源对象 <类型 = MCP服务窗口>
     参数 标记值 <类型 = 整数>
     {
-        // 窗口置顶
+        // 窗口置顶 (由 mcp_config.json window_topmost 控制, 默认开启)
+        MCP命令服务器.加载MCP配置 ()
         变量 hwnd <类型 = 变整数>
         hwnd = 来源对象.取窗口句柄 ()
-        @ SetWindowPos((HWND)(INT_P)@<hwnd>, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-        状态标签.标题 = "AI浏览器 MCP Server v" + MCP_常量.MCP_版本号 + " — " + MCP命令服务器.服务器绑定地址 + ":" + 到文本 (MCP命令服务器.服务器端口)
-        MCP命令服务器.加载MCP配置 ()
+        窗口句柄缓存 = hwnd
+        如果 (MCP命令服务器.窗口置顶)
+        {
+            @ SetWindowPos((HWND)(INT_P)@<hwnd>, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+        }
+        状态标签.标题 = "AI浏览器 MCP Server v" + MCP_常量.MCP_版本号 + " — 正在启动 MCP 服务..."
         返回 (0)
     }
 
@@ -293,6 +338,9 @@
                 状态文本 = 状态文本 + " | " + 短URL
             }
             状态标签.标题 = 状态文本
+            变量 标题栏文本 <类型 = 文本型>
+            标题栏文本 = "AI浏览器 v" + MCP_常量.MCP_版本号 + " | " + 到文本 (FBrowser_浏览器_取数量 ()) + " 标签"
+            @ SetWindowTextW((HWND)(INT_P)@<窗口句柄缓存>, (LPCWSTR)@<标题栏文本>.GetText());
         }
         如果 (维护计数 >= 120)
         {

@@ -8,5 +8,6 @@
   "enable_response_cache": false,
   "network_log_max_bytes": 262144,
   "auto_download_save": true,
-  "auto_dismiss_js_dialog": false
+  "auto_dismiss_js_dialog": false,
+  "window_topmost": true
 }

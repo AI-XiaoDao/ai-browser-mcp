@@ -294,7 +294,16 @@
                 变量 项 <类型 = YYJSON对象类>
                 项.创建自文本 ("{}")
                 项.加入整数成员 ("id", bid)
-                项.加入文本成员 ("url", bb.取主框架 ().取地址 ())
+                变量 urlFrame <类型 = 类_FBrowser_框架>
+                urlFrame = MCP命令服务器.取安全主框架 (bb)
+                如果 (urlFrame.是否为空 () == 假 && urlFrame.是否有效 ())
+                {
+                    项.加入文本成员 ("url", urlFrame.取地址 ())
+                }
+                否则
+                {
+                    项.加入文本成员 ("url", "about:blank")
+                }
                 json文本 = json文本 + 项.到可读文本 (YYJSON格式化选项.压缩)
             }
         }

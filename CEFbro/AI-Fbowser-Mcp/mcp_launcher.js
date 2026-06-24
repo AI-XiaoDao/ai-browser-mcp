@@ -132,8 +132,10 @@ function deletePid() {
 function isProcessRunning(pid) {
     try {
         if (os.platform() === 'win32') {
-            execSync(`tasklist /FI "PID eq ${pid}" 2>nul`, { stdio: 'ignore' });
-            return true;
+            // tasklist 即使未匹配到任何进程也返回 exit code 0,
+            // 所以需要解析输出判断 PID 是否真实存在
+            const out = execSync(`tasklist /NH /FI "PID eq ${pid}"`, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+            return out.includes(String(pid));
         }
         process.kill(pid, 0);
         return true;
@@ -187,6 +189,8 @@ async function start() {
         console.log(`PID文件: ${PID_FILE}`);
     } else {
         console.error('启动超时! 请检查 AI浏览器.exe 是否正常');
+        // 杀掉孤儿子进程, 防止其成为不可追踪的僵尸进程
+        try { child.kill(); } catch (_) {}
         deletePid();
         process.exit(1);
     }
@@ -285,17 +289,24 @@ async function main() {
     switch (cmd) {
         case 'start':
             await start();
-            if (!waitMode) {
-                // 保持运行; Ctrl+C 时优雅关闭
-                console.log('\n按 Ctrl+C 停止...');
-                process.on('SIGINT', async () => {
-                    console.log('\n正在关闭...');
-                    await stop();
-                    process.exit(0);
-                });
-                // 保持进程存活
-                setInterval(() => {}, 60000);
+            if (waitMode) {
+                // --wait 模式: 启动后就绪后直接退出
+                process.exit(0);
             }
+            // 保持运行; Ctrl+C 时优雅关闭
+            console.log('\n按 Ctrl+C 停止...');
+            process.on('SIGINT', async () => {
+                console.log('\n正在关闭...');
+                await stop();
+                process.exit(0);
+            });
+            process.on('SIGTERM', async () => {
+                console.log('\n收到SIGTERM, 正在关闭...');
+                await stop();
+                process.exit(0);
+            });
+            // 保持进程存活 (不占用CPU)
+            process.stdin.resume();
             break;
         case 'stop':
             await stop(force);

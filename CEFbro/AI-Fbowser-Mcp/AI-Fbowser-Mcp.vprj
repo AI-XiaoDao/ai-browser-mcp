@@ -98,6 +98,7 @@ root_filter
         file12.file_name = "src\\MCP_Constants.wsv"
         file13.file_name = "src\\MCP_ResponseBuilders.wsv"
         file14.file_name = "src\\MCP_Server_Utils.wsv"
+        file15.file_name = "src\\MCP_Server_Reverse.wsv"
         file2.file_name = "src\\MCP_Server.wsv"
         file3.file_name = "src\\MCP_Stdio.wsv"
         file4.file_name = "src\\MCP_BrowserEvents.wsv"
@@ -106,7 +107,7 @@ root_filter
         file7.file_name = "src\\MCP_Server_HTTP.wsv"
         file8.file_name = "src\\MCP_Server_Core.wsv"
         file9.file_name = "src\\MCP_Server_Form.wsv"
-        num_files = 14
+        num_files = 15
     }
 
     name = AIFbowserMcp

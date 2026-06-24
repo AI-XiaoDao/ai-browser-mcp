@@ -71,7 +71,15 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    vip_ctrl.高级鼠标_单击 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"), MCP命令服务器.yyjson取整数 (参数JSON, "button"))
+                    变量 vx <类型 = 整数>
+                    vx = MCP命令服务器.yyjson取整数 (参数JSON, "x")
+                    变量 vy <类型 = 整数>
+                    vy = MCP命令服务器.yyjson取整数 (参数JSON, "y")
+                    如果 (vx < 0 || vy < 0 || vx > 32767 || vy > 32767)
+                    {
+                        返回 (MCP命令服务器.命令失败 (命令ID, "坐标越界 | x,y 须在 0~32767 范围内"))
+                    }
+                    vip_ctrl.高级鼠标_单击 (vx, vy, MCP命令服务器.yyjson取整数 (参数JSON, "button"))
                     返回 (MCP命令服务器.命令成功 (命令ID, "VIP鼠标点击"))
                 }
                 返回 (MCP命令服务器.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
@@ -97,6 +105,12 @@
         }
         否则 (方法名 == "browser_vip_key_press")
         {
+            变量 pressKeyCode <类型 = 整数>
+            pressKeyCode = MCP命令服务器.yyjson取整数 (参数JSON, "key_code")
+            如果 (pressKeyCode <= 0 || pressKeyCode > 255)
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "参数 key_code 无效(" + 到文本 (pressKeyCode) + ") | 虚拟键码范围 1~255, 如回车=13, 空格=32, A=65"))
+            }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
             如果 (browser.是否为空 () == 假)
@@ -105,8 +119,8 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    vip_ctrl.高级键盘_按下 (MCP命令服务器.yyjson取整数 (参数JSON, "key_code"))
-                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP键盘按下"))
+                    vip_ctrl.高级键盘_按下 (pressKeyCode)
+                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP键盘按下: key_code=" + 到文本 (pressKeyCode)))
                 }
                 返回 (MCP命令服务器.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
             }
@@ -114,6 +128,12 @@
         }
         否则 (方法名 == "browser_vip_key_release")
         {
+            变量 releaseKeyCode <类型 = 整数>
+            releaseKeyCode = MCP命令服务器.yyjson取整数 (参数JSON, "key_code")
+            如果 (releaseKeyCode <= 0 || releaseKeyCode > 255)
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "参数 key_code 无效(" + 到文本 (releaseKeyCode) + ") | 虚拟键码范围 1~255"))
+            }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
             如果 (browser.是否为空 () == 假)
@@ -122,8 +142,8 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    vip_ctrl.高级键盘_放开 (MCP命令服务器.yyjson取整数 (参数JSON, "key_code"))
-                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP键盘放开"))
+                    vip_ctrl.高级键盘_放开 (releaseKeyCode)
+                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP键盘放开: key_code=" + 到文本 (releaseKeyCode)))
                 }
                 返回 (MCP命令服务器.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
             }
@@ -604,7 +624,25 @@
             如果 (vipGeo.是否为空 () == 假)
             {
                 // 注: API参数顺序为 (经度, 纬度), 即 (lng, lat)
-                vipGeo.指纹_虚拟定位 (MCP命令服务器.yyjson取小数 (参数JSON, "lng"), MCP命令服务器.yyjson取小数 (参数JSON, "lat"), MCP命令服务器.yyjson取小数 (参数JSON, "accuracy"), -10000, -1, -1, -1)
+                变量 geoLat <类型 = 小数>
+                geoLat = MCP命令服务器.yyjson取小数 (参数JSON, "lat")
+                变量 geoLng <类型 = 小数>
+                geoLng = MCP命令服务器.yyjson取小数 (参数JSON, "lng")
+                变量 geoAcc <类型 = 小数>
+                geoAcc = MCP命令服务器.yyjson取小数 (参数JSON, "accuracy")
+                如果 (geoLat < -90 || geoLat > 90)
+                {
+                    返回 (MCP命令服务器.命令失败 (命令ID, "纬度越界: " + 到文本 (geoLat) + " | 有效范围 -90 ~ 90"))
+                }
+                如果 (geoLng < -180 || geoLng > 180)
+                {
+                    返回 (MCP命令服务器.命令失败 (命令ID, "经度越界: " + 到文本 (geoLng) + " | 有效范围 -180 ~ 180"))
+                }
+                如果 (geoAcc < 0)
+                {
+                    返回 (MCP命令服务器.命令失败 (命令ID, "精度不能为负数: " + 到文本 (geoAcc)))
+                }
+                vipGeo.指纹_虚拟定位 (geoLng, geoLat, geoAcc, -10000, -1, -1, -1)
                 返回 (MCP命令服务器.响应_需要刷新 (命令ID, "定位指纹已设置"))
             }
             返回 (MCP命令服务器.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
@@ -772,6 +810,12 @@
         // === VIP CDP键盘补充 ===
         否则 (方法名 == "browser_vip_key_click")
         {
+            变量 clickKeyCode <类型 = 整数>
+            clickKeyCode = MCP命令服务器.yyjson取整数 (参数JSON, "key_code")
+            如果 (clickKeyCode <= 0 || clickKeyCode > 255)
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "参数 key_code 无效(" + 到文本 (clickKeyCode) + ") | 虚拟键码范围 1~255"))
+            }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
             如果 (browser.是否为空 () == 假)
@@ -780,8 +824,8 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    vip_ctrl.高级键盘_单击 (MCP命令服务器.yyjson取整数 (参数JSON, "key_code"))
-                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP键盘单击"))
+                    vip_ctrl.高级键盘_单击 (clickKeyCode)
+                    返回 (MCP命令服务器.命令成功 (命令ID, "VIP键盘单击: key_code=" + 到文本 (clickKeyCode)))
                 }
                 返回 (MCP命令服务器.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
             }
@@ -789,6 +833,12 @@
         }
         否则 (方法名 == "browser_vip_key_input")
         {
+            变量 charInput <类型 = 文本型>
+            charInput = MCP命令服务器.yyjson取文本 (参数JSON, "char_code")
+            如果 (charInput == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "参数 char_code 不能为空 | 提供要输入的字符"))
+            }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
             如果 (browser.是否为空 () == 假)
@@ -797,7 +847,7 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    vip_ctrl.高级键盘_输入字符 (MCP命令服务器.yyjson取文本 (参数JSON, "char_code"))
+                    vip_ctrl.高级键盘_输入字符 (charInput)
                     返回 (MCP命令服务器.命令成功 (命令ID, "VIP输入字符"))
                 }
                 返回 (MCP命令服务器.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
@@ -806,6 +856,12 @@
         }
         否则 (方法名 == "browser_vip_key_type")
         {
+            变量 typeText <类型 = 文本型>
+            typeText = MCP命令服务器.yyjson取文本 (参数JSON, "text")
+            如果 (typeText == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "参数 text 不能为空 | 请提供要输入的文本内容"))
+            }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
             如果 (browser.是否为空 () == 假)
@@ -814,7 +870,7 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    vip_ctrl.高级键盘_输入文本 (MCP命令服务器.yyjson取文本 (参数JSON, "text"))
+                    vip_ctrl.高级键盘_输入文本 (typeText)
                     返回 (MCP命令服务器.命令成功 (命令ID, "VIP输入文本"))
                 }
                 返回 (MCP命令服务器.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
@@ -895,13 +951,23 @@
         {
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
-            如果 (browser.是否为空 () == 假)
+            如果 (browser.是否为空 () == 假 && browser.是否已关闭 () == 假)
             {
                 变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    vip_ctrl.开发者消息_发送消息 (MCP命令服务器.yyjson取JSON文本 (参数JSON, "json"))
+                    变量 devJson <类型 = 文本型>
+                    devJson = MCP命令服务器.yyjson取JSON文本 (参数JSON, "json")
+                    如果 (devJson == "")
+                    {
+                        devJson = MCP命令服务器.yyjson取文本 (参数JSON, "json")
+                    }
+                    如果 (devJson == "")
+                    {
+                        返回 (MCP命令服务器.命令失败 (命令ID, "json 参数不能为空"))
+                    }
+                    vip_ctrl.开发者消息_发送消息 (devJson)
                     返回 (MCP命令服务器.命令成功 (命令ID, "DevTools消息已发送"))
                 }
                 返回 (MCP命令服务器.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
@@ -986,6 +1052,10 @@
             extCRX = MCP命令服务器.yyjson取文本 (参数JSON, "crx_path")
             如果 (extCRX != "")
             {
+                如果 (MCP命令服务器.验证安全路径 (extCRX) == 假)
+                {
+                    返回 (MCP命令服务器.命令失败 (命令ID, "路径不允许: " + extCRX + " | 仅允许运行目录内及无 .. 的路径"))
+                }
                 变量 reqEnv <类型 = 类_FBrowser_请求环境>
                 reqEnv = MCP命令服务器.取请求环境_安全 ()
                 如果 (reqEnv.是否为空 () == 假)
@@ -1086,6 +1156,10 @@
                 如果 (dDepth == 0)
                 {
                     dDepth = 3
+                }
+                如果 (dDepth > 10)
+                {
+                    返回 (MCP命令服务器.命令失败 (命令ID, "depth 最大为10, 超过会导致性能问题 | 当前值: " + 到文本 (dDepth)))
                 }
                 变量 异步DOMID <类型 = 文本型>
                 异步DOMID = MCP命令服务器.生成异步任务ID ()
