@@ -13,4 +13,4 @@
 | [index.html](./index.html) | 所有人 | 在线 HTML 完整文档 |
 | [assets/](./assets/) | — | 样式与 docs.js |
 
-开发用 217 工具完整参考：`skills/AI浏览器MCP.md`（体量大，不随 docs 编译）。
+开发用 234 工具完整参考：`skills/AI浏览器MCP.md`（体量大，不随 docs 编译）。

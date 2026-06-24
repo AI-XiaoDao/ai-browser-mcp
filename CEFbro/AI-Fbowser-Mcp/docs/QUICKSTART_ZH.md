@@ -1,11 +1,11 @@
 # AI浏览器 MCP — 中文快速上手（SEO）
 
-> **Windows 本地浏览器自动化 MCP 服务器** — 217 个工具，支持 Cursor、Claude Desktop、Cline 及任意 MCP 客户端。  
+> **Windows 本地浏览器自动化 MCP 服务器** — 234 个工具，支持 Cursor、Claude Desktop、Cline 及任意 MCP 客户端。  
 > 仓库：https://github.com/AI-XiaoDao/ai-browser-mcp
 
 ## 这是什么？
 
-**AI浏览器 MCP Server** 在 Windows 上运行真实 **FBrowser CEF** 浏览器，通过 **Model Context Protocol（MCP 模型上下文协议）** 对外提供 **217 个 `browser_*` 工具**。
+**AI浏览器 MCP Server** 在 Windows 上运行真实 **FBrowser CEF** 浏览器，通过 **Model Context Protocol（MCP 模型上下文协议）** 对外提供 **234 个 `browser_*` 工具**。
 
 无需手写 **Playwright / Puppeteer** 脚本 — 在 Cursor 里**一句话**完成：**网页数据采集**、**POST 逆向 Hook**、**CDP 断点定位 sign 算法**、**自动填表 RPA**。
 
@@ -16,7 +16,7 @@
 | [AI-Browser-MCP-x64-v2.6.1.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.6.1/AI-Browser-MCP-x64-v2.6.1.zip) | 64 位 Windows，~160MB |
 | [AI-Browser-MCP-win32-v2.6.1.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.6.1/AI-Browser-MCP-win32-v2.6.1.zip) | 32 位 Windows，~140MB |
 
-MIT 开源 · 本机 `127.0.0.1:9222` · 217 工具全开放。
+MIT 开源 · 本机 `127.0.0.1:9222` · 234 工具全开放。
 
 ## 三步上手
 
@@ -59,14 +59,14 @@ MIT 开源 · 本机 `127.0.0.1:9222` · 217 工具全开放。
 | | 自建 Playwright | AI浏览器 MCP |
 |--|----------------|--------------|
 | 上手 | 写脚本、装环境 | 下载 exe 即用 |
-| AI | Agent 现写代码 | **217 预封装 MCP 工具** |
+| AI | Agent 现写代码 | **234 预封装 MCP 工具** |
 | 逆向 | 手动 Hook | `browser_inject` + 场景脚本 |
 | 隐私 | 视部署 | **本机 127.0.0.1** |
 
 ## 相关文档
 
 - [完整 README](../../../README.md)
-- [217 工具参考](../skills/AI浏览器MCP.md)
+- [234 工具参考](../skills/AI浏览器MCP.md)
 - [SEO 关键词矩阵](../../../docs/SEO_KEYWORDS.md)
 - [场景与 Hook 测试](../skills/场景与Hook测试.md)
 
