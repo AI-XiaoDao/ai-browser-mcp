@@ -1,6 +1,8 @@
-# AI浏览器 MCP Server
+# AI Browser MCP Server — Windows 浏览器自动化 MCP
 
-> **Windows 真实浏览器自动化 MCP 服务端** — FBrowser CEF 内核 · 243 工具 · 本地 `127.0.0.1:9222` · MIT 开源
+> 🚀 **Cursor / Claude Desktop 最强浏览器 MCP 服务端** — 真实 FBrowser CEF 内核 · 243 自动化工具 · 本地 `127.0.0.1:9222` · MIT 开源
+> 
+> Web Scraping · JS Reverse Engineering · CDP Debugger · Fingerprint Anti-Detect · Form Automation RPA
 
 [![Release](https://img.shields.io/badge/release-v2.6.1-blue)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
@@ -10,11 +12,28 @@
 
 ## 这是什么？
 
-**AI浏览器 MCP Server** 在 Windows 上运行一个真实的 **FBrowser CEF** 浏览器，通过 **Model Context Protocol (MCP)** 对外暴露 **243 个 `browser_*` 自动化工具**。
+**AI浏览器 MCP Server** 是一个 **Windows 本地浏览器自动化 MCP 服务端**。它运行真实的 **FBrowser CEF (Chromium Embedded Framework)** 浏览器内核，通过 **Model Context Protocol (MCP 模型上下文协议)** 向 AI 编程助手暴露 **243 个浏览器自动化工具**。
 
-AI Agent (Cursor / Claude Desktop / Cline) 可直接调用这些工具完成：网页数据采集、JS 逆向 Hook、CDP 断点定位 sign 算法、自动填表 RPA、指纹伪装、网络抓包。
+### 为什么选择 AI 浏览器 MCP？
 
-无需手写 Playwright / Puppeteer 脚本。
+| vs | Playwright / Puppeteer | AI 浏览器 MCP |
+|----|----------------------|--------------|
+| 环境 | 需安装 Node + 驱动 + 写脚本 | 下载即用，双击运行 |
+| AI 集成 | 需手写 Playwright 代码 | **243 个预封装 MCP 工具**，自然语言调用 |
+| 反检测 | 易被 `navigator.webdriver` 检测 | **CEF 真实浏览器内核** + 指纹伪装 |
+| 逆向工程 | 手动 Hook + 浏览器 DevTools | 内置 **CDP 断点引擎** + 函数级 Hook |
+| 隐私 | 可能连外网 | **127.0.0.1 纯本地**，数据不出本机 |
+| 批量 | 一行代码调用 | `batch` 一条命令执行 200 步工作流 |
+
+### 核心使用场景
+
+- 🕷️ **Web Scraping 网页数据采集** — `scrape` 一步爬虫, 导航→等待→提取全自动
+- 🔍 **JS Reverse Engineering JS 逆向分析** — 函数 Hook/调用栈追踪/字符串解密/验证闭环
+- 🐛 **CDP Debugger 断点调试** — `debugger_flow` 一键断点→求值→resume
+- 🤖 **Form Automation RPA 自动填表** — 原生 CEF 填表 API, 非 JS 注入
+- 🎭 **Browser Fingerprint 指纹伪装** — 30+ 维度指纹虚拟 (Canvas/WebGL/Audio/WebRTC/SSL)
+- 📡 **Network Intercept 网络抓包拦截** — HTTP/WS 流量捕获、修改、替换、屏蔽
+- 🔄 **Workflow Automation 工作流编排** — JSON 步骤链, 最多 200 步批量执行
 
 ---
 
@@ -168,3 +187,9 @@ Cursor / Claude Desktop  ←→  mcp_bridge.js (stdio 桥接)
 - QQ: 212577526 | 微信: XSMZAS1
 
 MIT License © AI-XiaoDao
+
+---
+
+### 搜索关键词
+
+`MCP browser automation` · `Cursor browser MCP` · `Claude Desktop browser tools` · `Windows browser MCP server` · `web scraping MCP` · `Playwright alternative` · `Puppeteer alternative` · `Chrome DevTools Protocol MCP` · `CDP debugger MCP` · `browser fingerprint anti-detect` · `JS reverse engineering MCP` · `form automation RPA` · `CEF browser MCP` · `AI agent browser control` · `Model Context Protocol browser` · `网页数据采集 MCP` · `AI浏览器 MCP` · `浏览器自动化 MCP`
