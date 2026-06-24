@@ -1,11 +1,11 @@
 # AI Browser MCP — Quick Start (English)
 
-> **Windows local browser automation MCP server** — 234 tools for Cursor, Claude Desktop, Cline, or any MCP client.  
+> **Windows local browser automation MCP server** — 243 tools for Cursor, Claude Desktop, Cline, or any MCP client.  
 > Repository: https://github.com/AI-XiaoDao/ai-browser-mcp
 
 ## What is this?
 
-**AI Browser MCP Server** (AI浏览器 MCP) exposes a real **FBrowser CEF** browser on Windows via the **Model Context Protocol (MCP)**. Instead of writing **Playwright** or **Puppeteer** scripts, your AI agent calls **234 ready-made `browser_*` tools** over HTTP, WebSocket, or stdio.
+**AI Browser MCP Server** (AI浏览器 MCP) exposes a real **FBrowser CEF** browser on Windows via the **Model Context Protocol (MCP)**. Instead of writing **Playwright** or **Puppeteer** scripts, your AI agent calls **243 ready-made `browser_*` tools** over HTTP, WebSocket, or stdio.
 
 **One sentence → auto-run:** web scraping · reverse POST fields · locate sign algorithms with CDP debugger · form automation · workflow JSON.
 
@@ -16,7 +16,7 @@
 | [AI-Browser-MCP-x64-v2.6.1.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.6.1/AI-Browser-MCP-x64-v2.6.1.zip) | Windows 64-bit | ~160 MB |
 | [AI-Browser-MCP-win32-v2.6.1.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.6.1/AI-Browser-MCP-win32-v2.6.1.zip) | Windows 32-bit | ~140 MB |
 
-All **234 tools** included (screenshot, CDP, debugger, fingerprint, network hook, workflows). **MIT** open source.
+All **243 tools** included (screenshot, CDP, debugger, fingerprint, network hook, workflows). **MIT** open source.
 
 ## 3-step setup
 
@@ -59,7 +59,7 @@ Open https://example.com and scan XHR/fetch POST requests for suspected encrypte
 
 Set a breakpoint on form submit and locate the JS function that computes sign; show source snippet.
 
-Log in with user test / pass 123456, go to order list, export first 20 rows as a table.
+Log in with user test / pass 124356, go to order list, export first 20 rows as a table.
 ```
 
 ## vs Playwright / Puppeteer
@@ -67,7 +67,7 @@ Log in with user test / pass 123456, go to order list, export first 20 rows as a
 | | Playwright DIY | AI Browser MCP |
 |--|----------------|----------------|
 | Setup | Node + drivers + scripts | Download exe, run |
-| AI | Agent writes code each time | **234 MCP tools** pre-built |
+| AI | Agent writes code each time | **243 MCP tools** pre-built |
 | Reverse / debug | Manual Hook + DevTools | Built-in inject + **CDP debugger** |
 | Privacy | Varies | **127.0.0.1 local only** |
 
@@ -76,7 +76,7 @@ Log in with user test / pass 123456, go to order list, export first 20 rows as a
 | Doc | Link |
 |-----|------|
 | Full README | [README.md](../../../README.md) |
-| 234 tool reference | [AI浏览器MCP.md](../skills/AI浏览器MCP.md) |
+| 243 tool reference | [AI浏览器MCP.md](../skills/AI浏览器MCP.md) |
 | Open source announcement | [OPEN_SOURCE_EN.md](../../../OPEN_SOURCE_EN.md) |
 | Hook / reverse scenarios | [场景与Hook测试.md](../skills/场景与Hook测试.md) |
 
@@ -84,4 +84,4 @@ Log in with user test / pass 123456, go to order list, export first 20 rows as a
 
 See full matrix: [docs/SEO_KEYWORDS.md](../../../docs/SEO_KEYWORDS.md)
 
-Cursor browser MCP · Claude Desktop browser · Cline MCP · Windows browser automation · Model Context Protocol · web scraping MCP · Playwright alternative · Puppeteer alternative · reverse engineering POST · CDP debugger · form automation RPA · CEF browser · local MCP server · 234 browser tools · AI agent browser control
+Cursor browser MCP · Claude Desktop browser · Cline MCP · Windows browser automation · Model Context Protocol · web scraping MCP · Playwright alternative · Puppeteer alternative · reverse engineering POST · CDP debugger · form automation RPA · CEF browser · local MCP server · 243 browser tools · AI agent browser control

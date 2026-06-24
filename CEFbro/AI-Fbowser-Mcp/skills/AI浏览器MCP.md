@@ -1,6 +1,6 @@
 ---
 name: AI浏览器MCP
-description: AI浏览器 MCP 服务工具参考 - 234个浏览器自动化工具 (v2.6 sync-wait/workflow/网络逆向)
+description: AI浏览器 MCP 服务工具参考 - 243个浏览器自动化工具 (v2.6 sync-wait/workflow/网络逆向)
 version: 2.6.1
 trigger: 测试MCP|MCP工具|浏览器MCP|AI浏览器|FBrowser MCP|mcp_config|workflow_run|sync-wait|run_all_tests|douyin_xhr|POST加密|browser_collect|browser_network
 ---
@@ -8,7 +8,7 @@ trigger: 测试MCP|MCP工具|浏览器MCP|AI浏览器|FBrowser MCP|mcp_config|wo
 
 ## 概述
 AI浏览器 MCP Server 基于火山 FBrowser CEF 框架，默认运行在 `ws://127.0.0.1:9222`。
-**234 个 MCP 工具**（含 4 个 GUI 受限：`browser_create` / `browser_create_background` / `browser_close` / `browser_create_tab`）。
+**243 个 MCP 工具**（含 4 个 GUI 受限：`browser_create` / `browser_create_background` / `browser_close` / `browser_create_tab`）。
 
 ⏳=默认仍异步（需 mcp_result）　✅=默认 sync-wait　🔒=高级工具（Release 下载包已全部包含）　⚠️=暂未实现　R=需刷新页面
 
@@ -687,7 +687,7 @@ node CEFbro/AI浏览器/run_all_tests.js --quick   # regression + smoke ~5s
 |------|------|
 | `regression_sync_wait.js` | sync-wait / workflow / batch 专项（13 项） |
 | `full_test.js` | HTTP 冒烟（health、tools/list、ping 等 7 项） |
-| `tool_test_all.js` | 234 工具注册表冒烟（动态读 `/tools/list`；FAIL=0 为通过） |
+| `tool_test_all.js` | 243 工具注册表冒烟（动态读 `/tools/list`；FAIL=0 为通过） |
 | `scenario_test.js --skip-vip` | 场景集成（fixture 页 + 填表/Cookie/网络） |
 | `scenarios/run_all_scenarios.js` | **Hook + 场景顺序包**（v8/js_http/自动化/断点/逆向） |
 | `scenarios/v8_hook_test.js` | V8 inject / persist / navigate_block |

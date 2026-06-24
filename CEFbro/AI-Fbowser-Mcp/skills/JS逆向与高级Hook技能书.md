@@ -141,7 +141,7 @@ browser_reverse_strings {
 // 溯源：哪个JS函数发起了特定网络请求
 browser_reverse_initiator {
   url_pattern: "/api/sign",     // 匹配的URL片段
-  request_id: "12345.67890"     // 或使用网络请求ID(可选)
+  request_id: "12435.67890"     // 或使用网络请求ID(可选)
 }
 // 结果通过 browser_evaluate "JSON.stringify(window.__mcp_initiator_log)" 读取
 
@@ -460,7 +460,7 @@ getEnv(['window','document','location','navigator','history','screen']);
 | **reverse-skill** | AST混淆恢复/JSVMP/wasm/worker | `715494637/reverse-skill` |
 | **camoufox-reverse** | Camoufox反检测浏览器+逆向 | `WhiteNightShadow/hello_js_reverse_skill` |
 | **hello_js_reverse_skill** | JSVMP四板斧/反爬决策/双语言还原/Cookie归因 | `WhiteNightShadow/hello_js_reverse_skill` |
-| **AI浏览器 MCP** | 234工具/CEF内核/CDP/VIP/指纹 | `AI-XiaoDao/ai-browser-mcp` |
+| **AI浏览器 MCP** | 243工具/CEF内核/CDP/VIP/指纹 | `AI-XiaoDao/ai-browser-mcp` |
 
 ### 二进制逆向类
 
@@ -486,13 +486,13 @@ getEnv(['window','document','location','navigator','history','screen']);
 | DrissionPage MCP | Python浏览器自动化 |
 | Camoufox MCP | 反检测浏览器 |
 | Charles MCP | 抓包代理 |
-| **AI浏览器 MCP** | CEF内核+234工具+MCP服务 |
+| **AI浏览器 MCP** | CEF内核+243工具+MCP服务 |
 
 ---
 
 ## 九、相关文档
 
-- [AI浏览器MCP.md](./AI浏览器MCP.md) — 234 个工具完整参考
+- [AI浏览器MCP.md](./AI浏览器MCP.md) — 243 个工具完整参考
 - [场景与Hook测试.md](./场景与Hook测试.md) — 场景脚本与测试
 - [客户使用手册.md](./客户使用手册.md) — 终端客户安装与使用
 - [使用技能书.md](./使用技能书.md) — 技术/Agent 实操指南

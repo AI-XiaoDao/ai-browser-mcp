@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="AI Browser MCP Server — Windows local browser automation with 234 MCP tools. Cursor, Claude, web scraping, reverse POST, CDP debugger. Model Context Protocol, FBrowser CEF, MIT.">
+<meta name="description" content="AI Browser MCP Server — Windows local browser automation with 243 MCP tools. Cursor, Claude, web scraping, reverse POST, CDP debugger. Model Context Protocol, FBrowser CEF, MIT.">
 <meta name="keywords" content="MCP,browser automation,Cursor,Claude,Cline,web scraping,Playwright alternative,Puppeteer alternative,Model Context Protocol,Windows,CEF,reverse engineering,CDP,data scraping,form automation,RPA,AI agent,local MCP server,FBrowser,数据采集,浏览器自动化,逆向Hook">
 <title>AI浏览器 MCP 完整文档</title>
 <link rel="stylesheet" href="/docs/assets/style.css">
@@ -46,7 +46,7 @@
 <main class="main">
 
 <h1>AI浏览器 MCP Server</h1>
-<p class="lead">基于火山 FBrowser CEF 内核的浏览器自动化 MCP 服务。支持 WebSocket + HTTP 双通道 JSON-RPC，为 Cursor、Claude Desktop 及自定义脚本提供 <strong id="toolCountLive">234</strong> 个浏览器自动化工具。</p>
+<p class="lead">基于火山 FBrowser CEF 内核的浏览器自动化 MCP 服务。支持 WebSocket + HTTP 双通道 JSON-RPC，为 Cursor、Claude Desktop 及自定义脚本提供 <strong id="toolCountLive">243</strong> 个浏览器自动化工具。</p>
 
 <!-- ── 概述 ── -->
 <section id="overview">
@@ -114,7 +114,7 @@
   <tr><td><a href="/docs/客户使用手册.md">客户使用手册.md</a></td><td><strong>终端客户</strong></td><td>安装、Cursor、话术示例、VIP、FAQ</td></tr>
   <tr><td><a href="/docs/使用技能书.md">使用技能书.md</a></td><td>技术 / Agent</td><td>上手、常用工具、场景脚本、工作流、Hook 速查</td></tr>
   <tr><td><a href="/docs/MCP工具配置说明书.md">MCP工具配置说明书.md</a></td><td>部署 / 集成</td><td>mcp_config 全字段、Cursor、mcp_connect、环境变量、VIP</td></tr>
-  <tr><td><code>skills/AI浏览器MCP.md</code></td><td>开发</td><td>234 工具完整参考（源码 skills 目录）</td></tr>
+  <tr><td><code>skills/AI浏览器MCP.md</code></td><td>开发</td><td>243 工具完整参考（源码 skills 目录）</td></tr>
   <tr><td><code>skills/场景与Hook测试.md</code></td><td>测试 / 逆向</td><td>场景脚本、POST 扫描、debugger 恢复</td></tr>
 </table></div>
 <div class="alert info">火山编译附属文件：<code>docs/</code>、<code>mcp_config.json</code>、<code>mcp_bridge.js</code>、<code>workflows/</code> 自动输出到 linker。</div>
@@ -294,7 +294,7 @@ node CEFbro/AI浏览器/run_all_tests.js --quick   # regression + smoke ~5s</cod
   <tr><th>脚本</th><th>用途</th></tr>
   <tr><td><code>regression_sync_wait.js</code></td><td>sync-wait / workflow / batch 专项（13 项）</td></tr>
   <tr><td><code>full_test.js</code></td><td>HTTP 冒烟（health、tools/list 等 7 项）</td></tr>
-  <tr><td><code>tool_test_all.js</code></td><td>234 工具注册表冒烟（动态读 /tools/list）</td></tr>
+  <tr><td><code>tool_test_all.js</code></td><td>243 工具注册表冒烟（动态读 /tools/list）</td></tr>
   <tr><td><code>scenarios/douyin_xhr_encrypt_scan.js</code></td><td>XHR POST 加密字段扫描</td></tr>
   <tr><td><code>scenarios/run_all_scenarios.js</code></td><td>Hook + 场景顺序包</td></tr>
   <tr><td><code>scenarios/debugger_unfreeze.js</code></td><td>解除 debugger 卡死</td></tr>
