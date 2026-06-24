@@ -6,7 +6,17 @@
 
 [![Release](https://img.shields.io/badge/release-v2.6.1-blue)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Windows%20x64%20%7C%20win32-lightgrey)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
+[![Platform](https://img.shields.io/badge/platform-Windows_x64_|_win32-lightgrey)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
+
+<p align="center">
+  <a href="https://github.com/AI-XiaoDao/ai-browser-mcp/releases/latest">
+    <img src="https://img.shields.io/badge/⬇️_下载最新版-v2.6.1-brightgreen?style=for-the-badge" alt="下载 v2.6.1">
+  </a>
+  &nbsp;
+  <a href="https://github.com/AI-XiaoDao/ai-browser-mcp/releases">
+    <img src="https://img.shields.io/badge/📦_所有版本-Releases-blue?style=for-the-badge" alt="所有版本">
+  </a>
+</p>
 
 ---
 
@@ -41,10 +51,15 @@
 
 ### 1. 下载
 
+👉 **[前往 Releases 页面下载最新版](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/latest)**
+
 | 包 | 说明 |
 |----|------|
-| [x64 v2.6.1](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.6.1/AI-Browser-MCP-x64-v2.6.1.zip) | 64 位 Windows, ~160MB |
-| [win32 v2.6.1](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.6.1/AI-Browser-MCP-win32-v2.6.1.zip) | 32 位 Windows, ~140MB |
+| `AI-Fbowser-Mcp-x64-v2.6.1.zip` | 64 位 Windows, ~160MB |
+| `AI-Fbowser-Mcp-win32-v2.6.1.zip` | 32 位 Windows, ~140MB |
+| `AI-Fbowser-Mcp-cpp-*.zip` | C++ 生成源码（可选） |
+
+> 📦 所有历史版本: [Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 
 ### 2. 启动
 
