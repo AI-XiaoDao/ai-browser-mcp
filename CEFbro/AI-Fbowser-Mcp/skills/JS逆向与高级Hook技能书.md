@@ -1,13 +1,14 @@
 ---
 name: AI浏览器 JS逆向与高级Hook
-description: JS逆向工程全链路能力 — 函数Hook/调用追踪/闭包探查/字符串解密/网络溯源/验证闭环
-version: 2.6.1
-trigger: JS逆向|逆向分析|hook函数|sign算法|加密参数|debugger|断点|调用栈|字符串解密|反混淆|网络溯源|AST
+description: JS逆向工程全链路能力 — v2.8: 44逆向工具/58 CDP方法/11域覆盖/函数热补丁/跳过断点/事件监听查询/异步栈追踪/精确覆盖率/静默执行
+version: 2.8.0
+trigger: JS逆向|逆向分析|hook函数|sign算法|加密参数|debugger|断点|调用栈|字符串解密|反混淆|网络溯源|AST|CDP|热补丁|覆盖率|黑盒|事件监听|Promise
 ---
 
-# AI浏览器 — JS 逆向与高级 Hook 技能书
+# AI浏览器 — JS 逆向与高级 Hook 技能书 (v2.8)
 
-> 基于 CDP 协议的深度运行时分析能力 | 参考：Ghostwire / Wirebrowser / jshookmcp / JSReverser-MCP  
+> 基于 CDP 协议的深度运行时分析能力 | 参考：Ghostwire / Wirebrowser / jshookmcp / JSReverser-MCP
+> **v2.8 逆向工具从 18 → 44 (+144%)** | CDP 11域 58 方法全面封装
 > 配套：[AI浏览器MCP.md](./AI浏览器MCP.md) · [场景与Hook测试.md](./场景与Hook测试.md) · [使用技能书.md](./使用技能书.md)
 
 ---
@@ -460,7 +461,7 @@ getEnv(['window','document','location','navigator','history','screen']);
 | **reverse-skill** | AST混淆恢复/JSVMP/wasm/worker | `715494637/reverse-skill` |
 | **camoufox-reverse** | Camoufox反检测浏览器+逆向 | `WhiteNightShadow/hello_js_reverse_skill` |
 | **hello_js_reverse_skill** | JSVMP四板斧/反爬决策/双语言还原/Cookie归因 | `WhiteNightShadow/hello_js_reverse_skill` |
-| **AI浏览器 MCP** | 243工具/CEF内核/CDP/VIP/指纹 | `AI-XiaoDao/ai-browser-mcp` |
+| **AI浏览器 MCP** | 237工具/CEF内核/CDP/VIP/指纹 | `AI-XiaoDao/ai-browser-mcp` |
 
 ### 二进制逆向类
 
@@ -486,17 +487,28 @@ getEnv(['window','document','location','navigator','history','screen']);
 | DrissionPage MCP | Python浏览器自动化 |
 | Camoufox MCP | 反检测浏览器 |
 | Charles MCP | 抓包代理 |
-| **AI浏览器 MCP** | CEF内核+243工具+MCP服务 |
+| **AI浏览器 MCP** | CEF内核+236工具+MCP服务 |
 
 ---
 
 ## 九、相关文档
 
-- [AI浏览器MCP.md](./AI浏览器MCP.md) — 243 个工具完整参考
+- [AI浏览器MCP.md](./AI浏览器MCP.md) — 268 个工具完整参考 (v2.8)
 - [场景与Hook测试.md](./场景与Hook测试.md) — 场景脚本与测试
 - [客户使用手册.md](./客户使用手册.md) — 终端客户安装与使用
 - [使用技能书.md](./使用技能书.md) — 技术/Agent 实操指南
 - [awesome-ai-reverse](https://github.com/darbra/awesome-ai-reverse) — AI逆向工具大全（20+项目持续更新）
+
+## 🆕 v2.8 逆向工具矩阵 (28新增)
+
+| 类别 | 工具 (CDP方法) |
+|------|---------------|
+| 反反调试 | `reverse_skip_pauses`(setSkipAllPauses) `reverse_breakpoints_active`(setBreakpointsActive) `reverse_blackbox`(setBlackboxPatterns) `reverse_async_stack`(setAsyncCallStackDepth) `reverse_detect_traps`(JS扫描7类陷阱) |
+| 运行时分析 | `reverse_query_objects`(queryObjects) `reverse_compile_script`(compileScript) `reverse_await_promise`(awaitPromise) `reverse_evaluate_silent`(silent+userGesture) |
+| 函数插桩 | `reverse_patch`(replace/before/after/intercept) `reverse_listeners`(getEventListeners) `reverse_search_script`(searchInContent) `reverse_input_cdp`(dispatchMouse/Key) |
+| 网络/覆盖 | `reverse_precise_coverage`(startPreciseCoverage) `reverse_cache_disable`(setCacheDisabled) `reverse_network_conditions`(emulateNetworkConditions) `reverse_cookie_cdp`(Storage.getCookies) |
+| 页面/追踪 | `reverse_bypass_csp`(setBypassCSP) `reverse_trace`(Tracing) `reverse_emulate_focus`(setFocusEmulationEnabled) `reverse_css_coverage`(CSS) `reverse_layer_tree`(LayerTree) `reverse_dom_resolve`(resolveNode) |
+| 热补丁 | `reverse_patch` — 4模式: replace完全替换 / before前置(改args) / after后置(改返回值) / intercept拦截(手动决定调用) |
 
 ---
 

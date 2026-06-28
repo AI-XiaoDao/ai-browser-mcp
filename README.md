@@ -8,7 +8,7 @@
 
 *Native API optimized — 12+ tools de-JS'd · auto-enable · code_base64 · one-step scrape*
 
-[![Download v2.6.0](https://img.shields.io/badge/⬇_Download-v2.6.0-238636?style=for-the-badge)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0)
+[![Download v2.8.0](https://img.shields.io/badge/⬇_Download-v2.8.0-238636?style=for-the-badge)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/AI-XiaoDao/ai-browser-mcp?label=release)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 [![MCP](https://img.shields.io/badge/MCP-200+_tools-6ec6ff)]()
@@ -414,8 +414,8 @@ Release 解压目录：`args` 改为 `["mcp_bridge.js"]`（与 exe 同目录）�
 | 内容 | 路径 | 说明 |
 |------|------|------|
 | 运行时脚本与文档 | [`release/linker/`](release/linker/) | `mcp_bridge.js`、配置、工作流、在线文档（**无 exe**） |
-| 完整安装包 x64 | [GitHub Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) | `AI-Browser-MCP-x64-v2.6.0.zip`：**200+ 工具全开放**，exe + CEF + 文档/脚本 |
-| 完整安装包 win32 | [GitHub Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) | `AI-Browser-MCP-win32-v2.6.0.zip`：32 位 Windows 运行包 |
+| 完整安装包 x64 | [GitHub Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) | `AI-Browser-MCP-x64-v2.8.0.zip`：**268+ 工具全开放**，exe + CEF + 文档/脚本 |
+| 完整安装包 win32 | [GitHub Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) | `AI-Browser-MCP-win32-v2.8.0.zip`：32 位 Windows 运行包 |
 | 生成 C++ 源码 | [`generated-cpp/`](CEFbro/AI-Fbowser-Mcp/generated-cpp/) | `release-x64/`、`release-win32/` 火山翻译对照（亦见 Release cpp zip） |
 | 火山工程源码 | [`CEFbro/AI-Fbowser-Mcp/src/`](CEFbro/AI-Fbowser-Mcp/src/) | `.wsv` MCP 服务核心（**本仓开源主体**） |
 

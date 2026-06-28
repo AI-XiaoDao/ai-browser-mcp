@@ -286,20 +286,63 @@ function writeLine(obj) {
     process.stdout.write('Content-Length: ' + len + '\r\n\r\n' + json + '\n');
 }
 
-/** Cursor 精简工具集（216 个全量易导致 loading tools 卡死） */
+/** Cursor 精简工具集（v2.8: 40个核心工具 + 反检测/逆向高频） */
 const CURSOR_TOOL_WHITELIST = new Set([
+    // 导航/页面 (7)
     'browser_navigate', 'browser_get_url', 'browser_get_title', 'browser_back', 'browser_forward',
-    'browser_reload', 'browser_stop', 'browser_wait', 'browser_is_loading', 'browser_list',
+    'browser_reload', 'browser_stop',
+    // 等待/状态 (3)
+    'browser_wait', 'browser_is_loading', 'browser_status',
+    // JS执行/DOM (7)
     'browser_execute_js', 'browser_evaluate', 'browser_get_source', 'browser_get_text',
-    'browser_dom_query', 'browser_dom_click', 'browser_dom_set_value', 'browser_dom_get_html',
-    'browser_console_eval', 'browser_find', 'browser_stop_find',
+    'browser_dom_query', 'browser_dom_click', 'browser_dom_set_value',
+    'browser_dom_get_html', 'browser_console_eval',
+    // 提取/爬虫 (3)
+    'browser_extract', 'browser_scrape', 'browser_list',
+    // 查找/缩放 (4)
+    'browser_find', 'browser_stop_find', 'browser_set_zoom', 'browser_get_zoom',
+    // 鼠标键盘 (4)
     'browser_mouse_click', 'browser_mouse_move', 'browser_mouse_wheel', 'browser_key_event',
-    'browser_screenshot', 'browser_print_to_pdf', 'browser_network', 'browser_status',
+    // 截图/打印 (2)
+    'browser_screenshot', 'browser_print_to_pdf',
+    // 网络/拦截/CDP (5)
+    'browser_network', 'browser_collect', 'browser_cdp_call', 'browser_intercept', 'browser_inject',
+    // DevTools (2)
+    'browser_open_devtools', 'browser_close_devtools',
+    // Cookie/代理 (6)
     'browser_get_cookies', 'browser_set_cookie', 'browser_delete_cookies',
-    'browser_set_zoom', 'browser_get_zoom', 'browser_open_devtools', 'browser_close_devtools',
+    'browser_set_proxy', 'browser_clear_proxy',
+    // 填表 (6)
     'browser_fill_set_value', 'browser_fill_click', 'browser_fill_focus', 'browser_fill_scroll',
-    'browser_fill_exists', 'browser_fill_select', 'browser_cdp', 'browser_cdp_call',
+    'browser_fill_exists', 'browser_fill_select',
+    // 窗口/框架 (3)
     'browser_get_frames', 'browser_window_info', 'browser_view_source',
+    // v2.8 反检测 + 逆向 + 调试器 (10)
+    'browser_antidetect_presets', 'browser_reverse_setup',
+    'browser_fingerprint', 'browser_fingerprint_ua',
+    'browser_reverse_hook', 'browser_reverse_preset',
+    'browser_reverse_search', 'browser_reverse_extract',
+    'browser_reverse_detect_traps', 'browser_reverse_strings',
+    'browser_debugger_enable', 'browser_debugger_pause', 'browser_debugger_resume',
+    'browser_debugger_wait_paused', 'browser_debugger_inspect',
+    // v2.8 网络导出 + 权限伪装 + 重试 + Canvas噪声 (4)
+    'browser_network_export', 'browser_permission_spoof',
+    'browser_retry', 'browser_canvas_noise',
+    'browser_reverse_patch', 'browser_font_randomize',
+    'browser_reverse_skip_pauses', 'browser_reverse_listeners',
+    'browser_reverse_query_objects', 'browser_reverse_blackbox',
+    'browser_reverse_async_stack', 'browser_reverse_cache_disable',
+    'browser_reverse_compile_script', 'browser_reverse_breakpoints_active',
+    'browser_reverse_search_script', 'browser_reverse_precise_coverage',
+    'browser_reverse_bypass_csp', 'browser_reverse_await_promise',
+    'browser_fingerprint_webgl_vendor', 'browser_reverse_cookie_cdp',
+    'browser_reverse_network_conditions', 'browser_reverse_dom_resolve',
+    'browser_reverse_emulate_focus',
+    'browser_reverse_input_cdp', 'browser_reverse_trace',
+    'browser_reverse_evaluate_silent',
+    'browser_fingerprint_languages', 'browser_reverse_css_coverage',
+    'browser_reverse_layer_tree',
+    // 批量/工作流/系统 (5)
     'mcp_result', 'mcp_status', 'ping', 'batch',
     'workflow_list', 'workflow_get', 'workflow_run', 'workflow_stop'
 ]);
@@ -345,9 +388,10 @@ function sanitizeToolEntry(tool) {
 function filterToolsForClient(tools) {
     if (!Array.isArray(tools)) return [];
     let list = tools.map(sanitizeToolEntry);
+    // v2.8.1: 移除 Cursor 工具白名单过滤, 动态显示全部工具 (268+)
+    // 所有工具均已通过 MCP_Server 端 schema 验证, 无需桥接层精简
     if (isCursorLiteMode() && isStdioBridgeMode()) {
-        list = list.filter((t) => CURSOR_TOOL_WHITELIST.has(t.name));
-        log(`Cursor 精简模式: ${list.length}/${tools.length} 个工具`);
+        log(`Cursor 全量模式: ${list.length}/${tools.length} 个工具 (已移除精简限制)`);
     }
     return list;
 }

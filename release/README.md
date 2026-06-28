@@ -49,7 +49,7 @@ CEFbro/AI浏览器/mcp_config.json  → 编译后位于 linker/
 打包 zip 结构示例：
 
 ```
-AI-Browser-MCP-x64-v2.6.0.zip
+AI-Browser-MCP-x64-v2.8.0.zip
 ├── AI浏览器.exe
 ├── *.dll / CEF 运行时
 ├── docs/
@@ -71,15 +71,15 @@ AI-Browser-MCP-x64-v2.6.0.zip
 
 ```powershell
 .\release\pack-release.ps1 -Version 2.6.0 -Platform all
-gh release upload v2.6.0 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber
+gh release upload v2.8.0 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber
 ```
 
 输出：
 
-- `AI-Browser-MCP-x64-v2.6.0.zip` / `AI-Browser-MCP-win32-v2.6.0.zip` — 运行包（自动排除 `out/`）
-- `AI-Browser-MCP-cpp-x64-v2.6.0.zip` / `AI-Browser-MCP-cpp-win32-v2.6.0.zip` — C++ 对照
+- `AI-Browser-MCP-x64-v2.8.0.zip` / `AI-Browser-MCP-win32-v2.8.0.zip` — 运行包（自动排除 `out/`）
+- `AI-Browser-MCP-cpp-x64-v2.8.0.zip` / `AI-Browser-MCP-cpp-win32-v2.8.0.zip` — C++ 对照
 - 同步 `CEFbro/AI浏览器/generated-cpp/release-x64/`、`release-win32/`
 
-上传：`gh release upload v2.6.0 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber`
+上传：`gh release upload v2.8.0 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber`
 
-完整说明模板见 [`RELEASE_NOTES_v2.6.0.md`](RELEASE_NOTES_v2.6.0.md)。重新发版可先 `gh release delete v2.6.0 --yes` 再 `gh release create ... --notes-file release/RELEASE_NOTES_v2.6.0.md`。
+完整说明模板见 [`RELEASE_NOTES_v2.8.0.md`](RELEASE_NOTES_v2.8.0.md)。重新发版可先 `gh release delete v2.8.0 --yes` 再 `gh release create ... --notes-file release/RELEASE_NOTES_v2.8.0.md`。

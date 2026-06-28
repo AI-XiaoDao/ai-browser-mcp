@@ -18,11 +18,11 @@
 
 ```
 
-[Open Source] AI Browser MCP Server v2.6.0 — Local browser automation for Windows
+[Open Source] AI Browser MCP Server v2.8.0 — Local browser automation for Windows
 
 
 
-217 MCP tools for **any AI agent** (Cursor, Claude, Cline, custom MCP clients): navigate, fill forms, read DOM, network, workflows, CDP debugger.
+268 MCP tools for **any AI agent** (Cursor, Claude, Cline, custom MCP clients): navigate, fill forms, read DOM, network, workflows, CDP debugger.
 
 
 
@@ -32,17 +32,17 @@
 
 ✅ Open: Volcano .wsv source + generated C++ reference + docs (MIT)
 
-✅ Binary: GitHub Releases — **x64 ~157MB / win32 ~136MB**, exe + CEF — **all 217 tools, download and go**
+✅ Binary: GitHub Releases — **x64 ~157MB / win32 ~136MB**, exe + CEF — **all 268 tools, download and go**
 
 ✅ Local-only: 127.0.0.1:9222 by default
 
 
 
-Download: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
+Download: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.0
 
-  · AI-Browser-MCP-x64-v2.6.0.zip / AI-Browser-MCP-win32-v2.6.0.zip — runtime
+  · AI-Browser-MCP-x64-v2.8.0.zip / AI-Browser-MCP-win32-v2.8.0.zip — runtime
 
-  · AI-Browser-MCP-cpp-x64-v2.6.0.zip / AI-Browser-MCP-cpp-win32-v2.6.0.zip — generated C++ (optional)
+  · AI-Browser-MCP-cpp-x64-v2.8.0.zip / AI-Browser-MCP-cpp-win32-v2.8.0.zip — generated C++ (optional)
 
 
 
@@ -114,7 +114,7 @@ See [README · Core advantages](README.md#-核心优点全景) for the complete 
 
 |------|----------------|
 
-| **217 MCP tools** | Navigate, fill forms, DOM, JS, network, workflows, CDP — 24 categories |
+| **268 MCP tools** | Navigate, fill forms, DOM, JS, network, workflows, CDP — 24 categories |
 
 | **Natural language** | One sentence: scrape data, reverse crypto fields, locate sign functions — Agent chains tools |
 
@@ -132,7 +132,7 @@ See [README · Core advantages](README.md#-核心优点全景) for the complete 
 
 | **MIT open source** | `.wsv` source + `generated-cpp/` + docs + `run_all_tests.js` |
 
-| **Download = full power** | Release zip includes screenshot, CDP, debugger, fingerprint, intercept — all 217 tools |
+| **Download = full power** | Release zip includes screenshot, CDP, debugger, fingerprint, intercept — all 268 tools |
 
 | **Extensible** | Workflows, Hook scenarios, skills, MIT source — PRs welcome |
 
@@ -326,7 +326,7 @@ A: **No by default.** Use persist Hook (`browser_inject`). See `skills/场景与
 
 
 
-1. Download [AI-Browser-MCP-x64-v2.6.0.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.6.0/AI-Browser-MCP-x64-v2.6.0.zip) (~157MB)
+1. Download [AI-Browser-MCP-x64-v2.8.0.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.0/AI-Browser-MCP-x64-v2.8.0.zip) (~157MB)
 
 2. Extract and run **AI浏览器.exe**
 
@@ -384,7 +384,7 @@ A: **No by default.** Use persist Hook (`browser_inject`). See `skills/场景与
 
 ```
 
-[Open Source] AI Browser MCP v2.6 — 217 tools for Cursor on Windows
+[Open Source] AI Browser MCP v2.8 — 268 tools for Cursor on Windows
 
 
 
@@ -402,7 +402,7 @@ Local FBrowser CEF · MIT · 127.0.0.1:9222
 
 
 
-https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
+https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.0
 
 ```
 
@@ -418,7 +418,7 @@ https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
 
 ```
 
-Title: [Release] AI Browser MCP Server v2.6 — local Windows browser automation for any MCP AI agent (217 tools)
+Title: [Release] AI Browser MCP Server v2.8 — local Windows browser automation for any MCP AI agent (268 tools)
 
 
 
@@ -440,7 +440,7 @@ Plain-language prompts in Cursor:
 
 
 
-https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
+https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.0
 
 ```
 
@@ -496,7 +496,7 @@ https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
 
 - **Repo**: https://github.com/AI-XiaoDao/ai-browser-mcp
 
-- **Release v2.6.0**: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
+- **Release v2.8.0**: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.0
 
 - **Chinese announcement**: [OPEN_SOURCE.md](OPEN_SOURCE.md)
 
@@ -524,7 +524,7 @@ The repo ships Volcano `.wsv` source (authoritative), generated C++ for audit, d
 
 
 
-Download: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
+Download: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.0
 
 
 

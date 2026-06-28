@@ -267,4 +267,4 @@ curl http://127.0.0.1:9222/health
 - [客户使用手册.md](./客户使用手册.md) — **终端客户**安装、Cursor、VIP、FAQ
 - [使用技能书.md](./使用技能书.md) — 技术实操与场景脚本
 - [index.html](./index.html) — 在线 HTML 文档
-- `skills/AI浏览器MCP.md` — 243 工具完整参考
+- `skills/AI浏览器MCP.md` — 236 工具完整参考

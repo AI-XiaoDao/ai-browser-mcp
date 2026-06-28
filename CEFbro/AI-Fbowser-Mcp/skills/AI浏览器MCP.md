@@ -1,18 +1,18 @@
 ---
 name: AI浏览器MCP
-description: AI浏览器 MCP 服务工具参考 - 243个浏览器自动化工具 (v2.6 sync-wait/workflow/网络逆向)
-version: 2.6.1
-trigger: 测试MCP|MCP工具|浏览器MCP|AI浏览器|FBrowser MCP|mcp_config|workflow_run|sync-wait|run_all_tests|douyin_xhr|POST加密|browser_collect|browser_network
+description: AI浏览器 MCP 服务工具参考 - 268个浏览器自动化工具 (v2.8: 44逆向CDP/7反检测/workflow条件变量/HAR导出/resources+prompts/retry)
+version: 2.8.0
+trigger: 测试MCP|MCP工具|浏览器MCP|AI浏览器|FBrowser MCP|mcp_config|workflow_run|sync-wait|reverse|CDP|断点|debugger|Hook|反检测|fingerprint|加密|签名|网络抓包
 ---
-# AI 浏览器 MCP 服务技能书 v2.6
+# AI 浏览器 MCP 服务技能书 v2.8
 
 ## 概述
 AI浏览器 MCP Server 基于火山 FBrowser CEF 框架，默认运行在 `ws://127.0.0.1:9222`。
-**243 个 MCP 工具**（含 4 个 GUI 受限：`browser_create` / `browser_create_background` / `browser_close` / `browser_create_tab`）。
+**268 个 MCP 工具**（含 3 个 GUI 受限：`browser_create` / `browser_close` / `browser_create_tab`）。
 
-⏳=默认仍异步（需 mcp_result）　✅=默认 sync-wait　🔒=高级工具（Release 下载包已全部包含）　⚠️=暂未实现　R=需刷新页面
+⏳=默认仍异步（需 mcp_result）　✅=默认 sync-wait　🔒=VIP/高级工具　⚠️=暂未实现　R=需刷新页面　🆕=v2.8新增
 
-### 源码文件 (v2.6)
+### 源码文件 (v2.8)
 | 文件 | 类 | 职责 |
 |------|-----|------|
 | `MCP_Server.wsv` | `MCP命令服务器` | JSON-RPC、sync-wait、batch、工具注册、`执行浏览器命令` |
@@ -206,9 +206,9 @@ MCP_Server.wsv (开关+数据)  →  MCP_BrowserEvents.wsv (事件执行)
 | `browser_window_info` | - | 窗口信息 |
 | `browser_can_navigate` | - | 可否后退/前进 |
 
-> ⛔ **受限工具（不推荐使用）：** `browser_create` `browser_create_background` `browser_create_tab` `browser_close` `browser_close_try` — 创建/关闭浏览器可能导致资源泄漏或会话中断，仅在明确需要时使用。
+> ⛔ **受限工具（不推荐使用）：** `browser_create` `browser_create_tab` `browser_close` `browser_close_try` — 创建/关闭浏览器可能导致资源泄漏或会话中断，仅在明确需要时使用。
 
-### 三、JS执行 (5)
+### 三、JS执行 (7)
 
 | 工具 | 参数 | 说明 |
 |------|------|------|
@@ -217,8 +217,10 @@ MCP_Server.wsv (开关+数据)  →  MCP_BrowserEvents.wsv (事件执行)
 | `browser_console_eval` | `expression` | 控制台执行并返回 ⏳ |
 | `browser_get_source` | `max_chars`(可选,256KB) | 获取HTML源码 ⏳ |
 | `browser_get_text` | `max_chars`(可选,256KB) | 获取页面文本 ⏳ |
+| `browser_extract` | `type`(links/images/tables),`limit` | 提取页面结构化数据(链接/图片/表格) ⏳ |
+| `browser_scrape` | `url`,`extract_selector`,`wait_selector?`,`max_ms?` | 一站式爬虫: navigate→wait→extract 异步状态机 |
 
-### 四、DOM操作 (4)
+### 四、DOM操作 (10)
 
 | 工具 | 参数 | 说明 |
 |------|------|------|
@@ -226,6 +228,12 @@ MCP_Server.wsv (开关+数据)  →  MCP_BrowserEvents.wsv (事件执行)
 | `browser_dom_click` | `selector` | DOM点击（默认 sync-wait；失败 success:false） |
 | `browser_dom_set_value` | `selector`,`value` | DOM设置值 ⏳ |
 | `browser_dom_get_html` | `selector` | DOM获取HTML ⏳ |
+| `browser_dom_inner_html` | `selector` | DOM获取innerHTML(原生填表API，非JS) ⏳ |
+| `browser_dom_set_html` | `selector`,`html` | DOM设置innerHTML |
+| `browser_dom_checked` | `selector` | 获取checkbox checked状态(原生) ⏳ |
+| `browser_dom_selected` | `selector` | 获取select选中项(原生) ⏳ |
+| `browser_dom_select` | `selector`,`index` | 设置select选项index |
+| `browser_dom_rect` | `selector` | 获取元素坐标(原生) ⏳ |
 
 ### 五、填表框架 (9)
 
@@ -250,19 +258,15 @@ MCP_Server.wsv (开关+数据)  →  MCP_BrowserEvents.wsv (事件执行)
 | `browser_mouse_wheel` | `x`,`y`,`delta_x`,`delta_y` | 窗口消息滚轮 |
 | `browser_key_event` | `key_code`,`type`,`modifiers` | 窗口消息键盘 |
 
-### 七、鼠标键盘 — VIP CDP (10) 🔒
+### 七、鼠标键盘 — VIP CDP (4) 🔒
+
+> **v2.7合并**: `browser.mouse_click/move/wheel` 和 `browser.key_event` 已内置VIP CDP优先执行路径, 无需再调用 `browser_vip_*` 前缀。VIP不可用时自动退路至窗口消息API。
 
 | 工具 | 参数 | 说明 |
 |------|------|------|
-| `browser_vip_mouse_click` | `x`,`y` | CDP点击 |
-| `browser_vip_mouse_move` | `x`,`y` | CDP移动 |
-| `browser_vip_mouse_press` | `x`,`y` | CDP按下 |
-| `browser_vip_mouse_release` | `x`,`y` | CDP放开 |
-| `browser_vip_mouse_wheel` | `x`,`y`,`delta_x`,`delta_y` | CDP滚轮 |
-| `browser_vip_key_press` | `key_code`,`modifiers` | CDP按下 |
-| `browser_vip_key_release` | `key_code`,`modifiers` | CDP放开 |
-| `browser_vip_key_click` | `key_code`,`modifiers` | CDP单击 |
-| `browser_vip_key_input` | `char_code`(整数) | CDP输入字符 |
+| `browser_vip_mouse_press` | `x`,`y` | CDP按下(精细) |
+| `browser_vip_mouse_release` | `x`,`y` | CDP放开(精细) |
+| `browser_vip_key_input` | `char_code`(文本) | CDP输入字符 |
 | `browser_vip_key_type` | `text` | CDP输入文本 |
 
 ### 八、触摸 (4) 🔒
@@ -307,10 +311,8 @@ MCP_Server.wsv (开关+数据)  →  MCP_BrowserEvents.wsv (事件执行)
 | `browser_set_cookie` | `name`,`value`,`domain`,`url`... | 设置Cookie |
 | `browser_delete_cookies` | `confirm` | 删除全部 |
 | `browser_refresh_cookies` | - | 刷新到磁盘 |
-| `browser_set_proxy` | `address`,`username`,`password` | 代理(持久) |
-| `browser_clear_proxy` | - | 清除代理 |
-| `browser_set_s5_proxy` | `address`,`username`,`password` | S5代理 🔒 |
-| `browser_vip_clear_s5_proxy` | - | 清空S5 🔒 |
+| `browser_set_proxy` | `address`,`username`,`password` | 代理(VIP SOCKS5优先→HTTP退路,持久) |
+| `browser_clear_proxy` | - | 清除代理(VIP SOCKS5优先→HTTP退路) |
 | `browser_clear_cache` | - | 全局缓存 ⏳ |
 | `browser_clear_cache_browser` | - | 浏览器缓存 ⏳ |
 | `browser_cache_dir` | - | 缓存目录 |
@@ -536,7 +538,6 @@ browser_network { "action": "list", "limit": 500 }   # 补全 POST URL（无 bod
 | `browser_get_window_style` | - | 窗口风格值 |
 | `browser_set_window_style` | `type`,`style` | 设置窗口风格 |
 | `browser_get_run_style` | - | 运行风格 ⚠️ |
-| `browser_set_visibility` | `visible` | 显示/隐藏 |
 | `browser_set_focus` | `focus` | 焦点 |
 | `browser_set_auto_resize` | - | 自动调整大小 |
 | `browser_move_window` | `x`,`y`,`width`,`height`,`repaint` | 移动窗口 |
@@ -604,9 +605,64 @@ browser_network { "action": "list", "limit": 500 }   # 补全 POST URL（无 bod
 | `browser_vip_unload_extension` | `extension_id` | 卸载插件 |
 | `browser_vip_extension_info` | `extension_id` | 插件信息 |
 
+### 二十五、JS逆向/CDP Hook (18) 🔒
+
+| 工具 | 参数 | 说明 |
+|------|------|------|
+| `browser_reverse_hook` | `target`,`type`(function_call/xhr_fetch/websocket),`capture_args`,`capture_return`,`capture_stack` | CDP/V8级无侵入函数Hook |
+| `browser_reverse_strings` | `mode`(suspicious/decrypt_array),`min_length`,`max_results` | 提取可疑字符串/加密数组 |
+| `browser_reverse_verify` | `original`,`reimplementation`,`test_inputs`,`compare_mode` | 验证重实现算法 |
+| `browser_reverse_cookie_sources` | - | Cookie归因分析 |
+| `browser_reverse_env` | - | 浏览器环境全量收集(40+变量) |
+| `browser_reverse_instrument` | `target`,`mode`(transparent/interpreter) | JSVMP解释器透明插桩 |
+| `browser_reverse_search` | `query`,`script_url` | 全局脚本搜索 |
+| `browser_reverse_initiator` | `url_pattern`,`request_id` | XHR+fetch调用栈溯源 |
+| `browser_reverse_preset` | `preset`(xhr/fetch/cookie/websocket/crypto/debugger/all) | 一键预设Hook |
+| `browser_reverse_setup` | `disable_debugger`,`user_agent`,`disable_automation_flag` | 反检测预配置 |
+| `browser_reverse_extract` | `mode`(scan/download/analyze),`url_pattern`,`script_index`,`keyword` | 静态加密模块提取+分析 |
+| `browser_reverse_cdp_hook` | `function_name`,`object_id`,`condition` | CDP函数调用级别断点(Ghostwire风格) |
+| `browser_reverse_profile` | `action`(start/start_precise/stop/query) | JS CPU性能分析 |
+| `browser_reverse_dom_breakpoint` | `type`(xhr/fetch/dom_event/timer),`target` | DOM/XHR事件断点 |
+| `browser_reverse_preload` | `code`,`file` | Page.addScriptToEvaluateOnNewDocument预注入 |
+| `browser_reverse_call_fn` | `object_id`,`arguments` | CDP远程函数调用 |
+| `browser_reverse_websocket` | `action`(enable/query) | WebSocket消息拦截 |
+| `browser_reverse_heap` | `action`(snapshot/start_sampling/stop_sampling/get_object),`object_id` | 堆内存分析 |
+| `browser_reverse_runtime` | `action`(properties/evaluate/global),`object_id`,`expression` | Runtime运行时分析 |
+| `browser_reverse_network_intercept` | `action`(enable/disable),`url_pattern` | 网络请求拦截 |
+| `browser_reverse_patch` | `target`,`code`,`file`,`mode`(replace/before/after/intercept) | **v2.8** 函数运行时热补丁; 原函数→.__mcp_original__ |
+| `browser_reverse_detect_traps` | - | **v2.8** 检测7类反调试陷阱(debugger语句/toString重写等) |
+
+### 二十六、v2.8 反检测增强 (4)
+
+| 工具 | 参数 | 说明 |
+|------|------|------|
+| `browser_antidetect_presets` | `preset`(stealth/basic/full) | **v2.8** 一键部署反检测; stealth去webdriver; basic+指纹随机; full全伪装 |
+| `browser_permission_spoof` | `action`(apply/reset),`state`(granted/denied/prompt),`permissions` | **v2.8** 权限API伪装(7种); JS注入不需VIP |
+| `browser_canvas_noise` | `action`(inject/remove),`level`(1-5) | **v2.8** Canvas指纹噪点注入; 纯JS不需VIP |
+| `browser_font_randomize` | `action`(random/reset),`count`,`seed` | **v2.8** 字体枚举随机化(VIP+JS双通道) |
+
+### 二十七、v2.8 自动化/网络增强 (2)
+
+| 工具 | 参数 | 说明 |
+|------|------|------|
+| `browser_retry` | `tool`,`args`,`max_retries`,`backoff_ms`,`max_total_ms` | **v2.8** 带线性退避的重试机制 |
+| `browser_network_export` | `format`(har/json),`limit` | **v2.8** 网络日志HAR/JSON导出(兼容Chrome DevTools) |
+
+### 二十八、调试增强 (1)
+
+| 工具 | 参数 | 说明 |
+|------|------|------|
+| `browser_debugger_auto` | `breakpoint`,`max_hits`,`expressions`,`max_ms`,`url` | 自动断点求值循环(持续监控) |
+
+### 二十九、系统 (1)
+
+| 工具 | 参数 | 说明 |
+|------|------|------|
+| `browser_shutdown` | `confirm`,`delay_seconds` | 安全关闭AI浏览器进程 |
+
 ---
 
-## 异步工具完整列表 (共 30 个)
+## 异步工具完整列表 (共 40+ 个)
 
 以下工具返回异步任务ID（`task_` 前缀），需 `mcp_result` 轮询：
 
@@ -637,12 +693,9 @@ browser_network { "action": "list", "limit": 500 }   # 补全 POST URL（无 bod
 | `browser_get_global_cache_dir` | 函数触发库模板错误 (未注册) |
 | `browser_get_process_type` | 函数触发库模板错误 (未注册) |
 
-## 未注册隐藏工具 (2个)
+## 未注册隐藏工具
 
-| 工具 | 说明 |
-|------|------|
-| `browser_get_global_cache_dir` | 获取全局缓存目录 ⚠️ |
-| `browser_get_process_type` | 查询当前进程类型 ⚠️ |
+> ✅ v2.7 — 所有工具均已注册，无隐藏工具。
 
 ## 编码规范
 
@@ -675,11 +728,11 @@ browser_network { "action": "list", "limit": 500 }   # 补全 POST URL（无 bod
 
 ```bash
 # AI浏览器.exe 已启动后
-node CEFbro/AI浏览器/run_all_tests.js          # 完整 ~60–90s
-node CEFbro/AI浏览器/run_all_tests.js --quick   # regression + smoke ~5s
+node tests/batch_test.js           # 分类全量测试
+node tests/batch_test.js system    # 仅系统类
 ```
 
-`run_all_tests.js` 顺序：`regression_sync_wait` → `full_test` → `tool_test_all` → `scenario_test` → `workflow_runner`；失败即停（`--continue` 可继续）。
+测试覆盖 237 个 MCP 工具，按类别分批执行。
 
 ### 分项脚本
 
@@ -687,7 +740,7 @@ node CEFbro/AI浏览器/run_all_tests.js --quick   # regression + smoke ~5s
 |------|------|
 | `regression_sync_wait.js` | sync-wait / workflow / batch 专项（13 项） |
 | `full_test.js` | HTTP 冒烟（health、tools/list、ping 等 7 项） |
-| `tool_test_all.js` | 243 工具注册表冒烟（动态读 `/tools/list`；FAIL=0 为通过） |
+| `tool_test_all.js` | 237 工具注册表冒烟（动态读 `/tools/list`；FAIL=0 为通过） |
 | `scenario_test.js --skip-vip` | 场景集成（fixture 页 + 填表/Cookie/网络） |
 | `scenarios/run_all_scenarios.js` | **Hook + 场景顺序包**（v8/js_http/自动化/断点/逆向） |
 | `scenarios/v8_hook_test.js` | V8 inject / persist / navigate_block |
@@ -746,6 +799,24 @@ node CEFbro/AI浏览器/run_all_tests.js --quick   # regression + smoke ~5s
 ```
 详见 `src/mcp_config.README.md`。修改后需重启 AI浏览器。
 
+## v2.8 CDP 域覆盖
+
+| CDP 域 | 已封装MCP工具数 | 关键方法 |
+|---------|:-----------:|------|
+| **Debugger** | 15 | enable/pause/resume/step×3/setBreakpoint/stack/evaluate/wait_paused/last_paused/inspect/flow/script_source/auto/setSkipAllPauses/setBlackboxPatterns/setAsyncCallStackDepth/setBreakpointsActive/searchInContent |
+| **Runtime** | 11 | evaluate/getProperties/globalLexicalScopeNames/callFunctionOn/queryObjects/compileScript/awaitPromise |
+| **Profiler** | 6 | enable/start/stop/setSamplingInterval/getBestEffortCoverage/startPreciseCoverage/takePreciseCoverage/stopPreciseCoverage |
+| **Network** | 5 | enable/getResponseBody/setRequestInterception/setCacheDisabled/emulateNetworkConditions |
+| **DOM/DOMD** | 5 | setXHRBreakpoint/setEventListenerBreakpoint/setInstrumentationBreakpoint/getEventListeners/resolveNode/requestNode |
+| **Page** | 3 | addScriptToEvaluateOnNewDocument/setBypassCSP |
+| **HeapProfiler** | 4 | takeHeapSnapshot/startSampling/stopSampling/getObjectByHeapObjectId |
+| **Input** | 2 | dispatchMouseEvent/dispatchKeyEvent |
+| **Storage** | 2 | getCookies/clearCookies |
+| **Tracing** | 2 | start/end |
+| **Emulation** | 1 | setFocusEmulationEnabled |
+| **CSS/LayerTree** | 2 | startRuleUsageTracking/stopRuleUsageTracking/snapshotCommandLog/compositingReasons |
+| **总计** | **58** | 11个CDP域全覆盖 |
+
 ## 版本历史
 
 | 版本 | 变更 |
@@ -759,3 +830,4 @@ node CEFbro/AI浏览器/run_all_tests.js --quick   # regression + smoke ~5s
 | 2.5.2 | **断点开发者流** `wait_paused`/`last_paused`/`inspect`/`flow`；求值结果解析 `{ok,type,value}`；等待前清除陈旧 paused；CDP resume/step sync-wait |
 | 2.5.1 | **persist V8** 改浏览器进程 `应用持久V8到框架`; 场景脚本 `scenarios/*`; collect 预备 action; Hook 测试文档; debugger 工作流 `max_ms` 45s |
 | 2.6 | **客户文档**：`客户使用手册` + 使用技能书 + MCP配置说明书（`docs/` 编译输出）；**客户使用手册**面向终端客户 |
+| 2.8.0 | **31新工具** (237→268)：**反检测5** (`antidetect_presets` stealth/basic/full + `permission_spoof` + `canvas_noise` + `font_randomize` + `webgl_vendor` + `languages`)；**逆向12** (`reverse_detect_traps` + `reverse_patch` replace/before/after/intercept + `reverse_skip_pauses` + `reverse_listeners` + `reverse_query_objects` + `reverse_blackbox` + `reverse_async_stack` + `reverse_cache_disable` + `reverse_compile_script` + `reverse_breakpoints_active` + `reverse_search_script` + `reverse_precise_coverage` start/take/stop + `reverse_bypass_csp` + `reverse_await_promise` + `reverse_input_cdp` mouse/key + `reverse_trace` + `reverse_evaluate_silent` + `reverse_cookie_cdp` + `reverse_network_conditions` + `reverse_dom_resolve` + `reverse_emulate_focus` + `reverse_css_coverage` + `reverse_layer_tree`)；**自动化3** (workflow `condition`+`{{step.N.result}}` + `browser_retry` 退避重试)；**网络1** (`browser_network_export` HAR/JSON)；**协议** (`resources/list` + `prompts/list`)；**增强** `browser_extract` tables 自动表头；**代码** `注册命令双变体` 辅助方法 |

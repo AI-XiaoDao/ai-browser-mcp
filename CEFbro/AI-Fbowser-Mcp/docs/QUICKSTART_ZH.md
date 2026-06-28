@@ -13,8 +13,8 @@
 
 | 包 | 说明 |
 |----|------|
-| [AI-Browser-MCP-x64-v2.6.1.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.6.1/AI-Browser-MCP-x64-v2.6.1.zip) | 64 位 Windows，~160MB |
-| [AI-Browser-MCP-win32-v2.6.1.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.6.1/AI-Browser-MCP-win32-v2.6.1.zip) | 32 位 Windows，~140MB |
+| [AI-Browser-MCP-x64-v2.8.0.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.0/AI-Browser-MCP-x64-v2.8.0.zip) | 64 位 Windows，~160MB |
+| [AI-Browser-MCP-win32-v2.8.0.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.0/AI-Browser-MCP-win32-v2.8.0.zip) | 32 位 Windows，~140MB |
 
 MIT 开源 · 本机 `127.0.0.1:9222` · 243 工具全开放。
 

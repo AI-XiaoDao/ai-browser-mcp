@@ -175,7 +175,7 @@
                 }
             }
         }
-        子文本替换 (结果HTML, "{{MCP_VERSION}}", MCP命令服务器.MCP_版本号, , , 假)
+        子文本替换 (结果HTML, "{{MCP_VERSION}}", MCP_常量.MCP_版本号, , , 假)
         子文本替换 (结果HTML, "{{MCP_HTTP}}", MCP命令服务器.取MCP_HTTP地址 (), , , 假)
         子文本替换 (结果HTML, "{{MCP_WS}}", MCP命令服务器.取MCP_WS地址 (), , , 假)
         子文本替换 (结果HTML, "{{MCP_HOST}}", MCP命令服务器.服务器绑定地址, , , 假)
@@ -191,9 +191,7 @@
 
 类 MCP命令服务器 <公开 @全局类 = 真 @视窗.附属文件 = "..\\docs > docs" @视窗.附属文件 = "mcp_config.json" @视窗.附属文件 = "..\\mcp_config.README.md"
         @视窗.附属文件 = "index.html" @视窗.附属文件 = "..\\mcp_bridge.js" @视窗.附属文件 = "..\\mcp_client.js" @视窗.附属文件 = "..\\mcp_check.js"
-        @视窗.附属文件 = "..\\full_test.js" @视窗.附属文件 = "..\\regression_sync_wait.js" @视窗.附属文件 = "..\\workflow_runner.js"
-        @视窗.附属文件 = "..\\workflows > workflows" @视窗.附属文件 = "..\\scenarios > scenarios"
-        @视窗.附属文件 = "..\\test_fixtures > test_fixtures">
+        @视窗.附属文件 = "..\\workflows > workflows">
 {
     变量 服务器端口 <公开 静态 类型 = 整数 值 = 9222>
     变量 待创建URL <公开 静态 类型 = 文本型 值 = "">
@@ -221,9 +219,13 @@
     变量 速率限制_计数器 <公开 静态 类型 = 整数 值 = 0>
     变量 速率限制_窗口开始 <公开 静态 类型 = 长整数 值 = 0>
     变量 配置已加载 <公开 静态 类型 = 逻辑型 值 = 假>
+    变量 工具总数 <公开 静态 类型 = 整数 值 = 0 注释 = "动态工具计数, 由填充工具列表()完成后更新">
+    变量 工具构建计数 <静态 类型 = 整数 值 = 0>
     变量 VIP授权码 <公开 静态 类型 = 文本型 值 = "" 注释 = "VIP功能授权码, 启动时从mcp_config.json读取, 供启动类使用">
     变量 服务器绑定地址 <公开 静态 类型 = 文本型 值 = "127.0.0.1">
     变量 窗口置顶 <公开 静态 类型 = 逻辑型 值 = 真 注释 = "窗口是否置顶, 由 mcp_config.json window_topmost 控制">
+    变量 窗口默认宽度 <公开 静态 类型 = 整数 值 = 1000 注释 = "浏览器窗口默认宽度, 由 mcp_config.json window_width 控制">
+    变量 窗口默认高度 <公开 静态 类型 = 整数 值 = 800 注释 = "浏览器窗口默认高度, 由 mcp_config.json window_height 控制">
     变量 MCP服务器实例 <公开 静态 类型 = 类_FBrowser_服务器 注释 = "HTTP/WS 内嵌服务器, 退出时须关闭()">
     变量 MCP正在关闭 <公开 静态 类型 = 逻辑型 值 = 假>
     变量 文档根目录缓存 <公开 静态 类型 = 文本型 值 = "" 注释 = "解析后的 docs 物理目录, 启动后缓存">
@@ -236,58 +238,7 @@
 
     变量 缓存数据库 <公开 静态 类型 = SQLite数据库类>
     变量 异步任务计数器 <公开 静态 类型 = 长整数 值 = 0>
-
-    常量 缓存保留天数 <公开 类型 = 整数 值 = 7>
-    常量 缓存最大条目 <公开 类型 = 整数 值 = 10000>
-    常量 同步等待_默认毫秒 <公开 类型 = 整数 值 = 5000 注释 = "服务端内聚等待默认超时">
-    常量 同步等待_快读毫秒 <公开 类型 = 整数 值 = 3000 注释 = "标题/DOM/JS等轻量读">
-    常量 同步等待_轮询间隔 <公开 类型 = 整数 值 = 50 注释 = "poll SQLite 间隔">
-
-    # v2.4 统一魔法数字为命名常量
-
-    常量 截断_源码默认字节 <公开 类型 = 整数 值 = 262144 注释 = "256KB">
-
     变量 网络日志最大字节 <公开 静态 类型 = 整数 值 = 262144 注释 = "event_log单条JSON最大字符数, 可由mcp_config.json覆盖">
-
-    常量 截断_源码最大字节 <公开 类型 = 整数 值 = 1048576 注释 = "1MB">
-    常量 截断_CDP结果最大字节 <公开 类型 = 整数 值 = 1048576 注释 = "1MB">
-    常量 截断_VIP数据最大字节 <公开 类型 = 整数 值 = 262144 注释 = "256KB">
-    常量 Cookie最大项数 <公开 类型 = 整数 值 = 200>
-    常量 Cookie绝对上限 <公开 类型 = 整数 值 = 500>
-    常量 URL请求默认超时 <公开 类型 = 整数 值 = 30000>
-    常量 毫秒_每天 <公开 类型 = 长整数 值 = 86400000>
-    常量 速率限制_衰减因子 <公开 类型 = 整数 值 = 2 注释 = "分钟边界计数÷2, 防突发重置">
-    常量 日志清理间隔 <公开 类型 = 整数 值 = 1000>
-    常量 缓存清理_保留缓冲 <公开 类型 = 整数 值 = 500 注释 = "清理时多保留的条数">
-    常量 等待任务最大滞留毫秒 <公开 类型 = 整数 值 = 3600000 注释 = "abandoned _waiting 任务最长保留1小时">
-    常量 事件日志最大条目 <公开 类型 = 整数 值 = 10000>
-    常量 响应缓存最大条目 <公开 类型 = 整数 值 = 2000>
-    常量 下载保留天数 <公开 类型 = 整数 值 = 30 注释 = "Downloads 自动清理: 超过此天数的文件将被删除">
-    常量 响应缓存单条最大字节 <公开 类型 = 整数 值 = 10485760 注释 = "10MB, 超出则跳过写入">
-    常量 CDP映射清理间隔 <公开 类型 = 整数 值 = 100>
-    常量 拦截规则最大行数 <公开 类型 = 整数 值 = 200>
-    常量 定期维护间隔毫秒 <公开 类型 = 整数 值 = 60000 注释 = "UI时钟触发后台清理间隔">
-    常量 浏览器实例最大数量 <公开 类型 = 整数 值 = 16 注释 = "含主窗口+弹窗, 超出则拒绝新弹窗">
-    常量 批量命令最大条数 <公开 类型 = 整数 值 = 50>
-    常量 URL请求最大并发 <公开 类型 = 整数 值 = 8>
-    常量 截图异步最大字节 <公开 类型 = 整数 值 = 524288 注释 = "512KB, 超出拒绝写入SQLite">
-    常量 异步结果JSON最大字符 <公开 类型 = 整数 值 = 1048576 注释 = "1MB">
-    常量 异步结果非等待保留毫秒 <公开 类型 = 整数 值 = 86400000 注释 = "24小时, 比7天TTL更积极">
-
-    # TLS 版本映射常量 (FBrowser 指纹 API 枚举值, 用于 fingerprint ssl)
-
-    常量 TLS指纹_1_0 <公开 类型 = 整数 值 = 769>
-    常量 TLS指纹_1_1 <公开 类型 = 整数 值 = 790>
-    常量 TLS指纹_1_2 <公开 类型 = 整数 值 = 791>
-    常量 TLS指纹_1_3 <公开 类型 = 整数 值 = 792>
-    常量 MCP_协议版本 <公开 类型 = 文本型 值 = "2026-06-21">
-    常量 MCP_服务器名 <公开 类型 = 文本型 值 = "AI浏览器 MCP Server">
-    常量 MCP_版本号 <公开 类型 = 文本型 值 = "2.6.1">
-    常量 WS最大消息字节 <公开 类型 = 整数 值 = 5242880>
-    常量 错误_无浏览器 <公开 类型 = 文本型 值 = "没有可用的浏览器 | 请启动AI浏览器GUI窗口(自动创建), 或确认 /health 返回 browsers>0">
-    常量 错误_缺少参数 <公开 类型 = 文本型 值 = "参数不能为空 | 请查看工具描述补全必填参数">
-    常量 错误_VIP不可用 <公开 类型 = 文本型 值 = "VIP控制器不可用,需要VIP授权 | 请在 mcp_config.json 配置 vip_code">
-
     变量 请求计数器 <公开 静态 类型 = 长整数 值 = 0>
     变量 服务器启动时间戳 <公开 静态 类型 = 长整数 值 = 0>
     变量 活动URL请求数 <公开 静态 类型 = 整数 值 = 0>
@@ -306,8 +257,6 @@
     变量 持久反检测_伪装UA <公开 静态 类型 = 文本型 值 = "" 注释 = "持久UA伪装(空=不启用), 浏览器创建时自动应用">
     变量 持久反检测_禁用自动化标志 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "移除navigator.webdriver等自动化检测标志, 浏览器创建时应用">
     变量 缓存数据库已打开 <公开 静态 类型 = 逻辑型 值 = 假>
-
-    常量 持久V8扩展上限 <公开 类型 = 整数 值 = 100 注释 = "persist inject 最大条目, 超出删最旧">
 
     # ======== Hook开关 (事件预注册 + 动态启用, 参照网络日志模式) ==========
 
@@ -469,7 +418,20 @@
         {
             窗口置顶 = 配置解析.取逻辑值 ("window_topmost")
         }
-        // 否则保持默认值(真), 避免缺失键将默认值真翻转为假
+        // 窗口默认大小
+        变量 配置窗口宽 <类型 = 整数>
+        配置窗口宽 = 配置解析.取整数 ("window_width")
+        如果 (配置窗口宽 >= 400 && 配置窗口宽 <= 3840)
+        {
+            窗口默认宽度 = 配置窗口宽
+        }
+        变量 配置窗口高 <类型 = 整数>
+        配置窗口高 = 配置解析.取整数 ("window_height")
+        如果 (配置窗口高 >= 300 && 配置窗口高 <= 2160)
+        {
+            窗口默认高度 = 配置窗口高
+        }
+        // 否则保持默认值, 避免缺失键或越界值
         配置已加载 = 真
         如果 (是否启用认证 == 假 && 服务器绑定地址 != "127.0.0.1" && 服务器绑定地址 != "::1" && 服务器绑定地址 != "localhost")
         {
@@ -567,9 +529,9 @@
                     k = ipKeys.取数据 (取循环索引 ())
                     变量 oldCount <类型 = 整数>
                     oldCount = IP速率限制字典.取整数值 (k)
-                    如果 (oldCount > 速率限制_衰减因子)
+                    如果 (oldCount > MCP_常量.速率限制_衰减因子)
                     {
-                        IP速率限制字典.置整数值 (k, oldCount / 速率限制_衰减因子)
+                        IP速率限制字典.置整数值 (k, oldCount / MCP_常量.速率限制_衰减因子)
                     }
                     否则
                     {
@@ -595,6 +557,20 @@
     }
 
     # ======== 构建命令注册表 (字典预查找, 避免线性if-else) ==========
+    # v2.8: 辅助方法 — 自动注册 browser.xxx + browser_xxx 双变体, 减少重复代码
+
+    方法 注册命令双变体 <公开 静态>
+    参数 命令名基 <类型 = 文本型 注释 = "不含browser前缀的基名, 如 navigate">
+    参数 命令ID <类型 = 整数>
+    参数 注册短名 <类型 = 逻辑型 注释 = "是否同时注册不含browser_前缀的短别名" @默认值 = 真>
+    {
+        命令注册表.置整数值 ("browser." + 命令名基, 命令ID)
+        命令注册表.置整数值 ("browser_" + 命令名基, 命令ID)
+        如果 (注册短名)
+        {
+            命令注册表.置整数值 (命令名基, 命令ID)
+        }
+    }
 
     方法 构建命令注册表 <公开 静态>
     {
@@ -1016,6 +992,54 @@
         命令注册表.置整数值 ("browser.reverse_setup", 1318)
         命令注册表.置整数值 ("browser_reverse_setup", 1318)
         命令注册表.置整数值 ("reverse_setup", 1318)
+        // 静态加密模块提取 (v2.6.3)
+        命令注册表.置整数值 ("browser.reverse_extract", 1319)
+        命令注册表.置整数值 ("browser_reverse_extract", 1319)
+        命令注册表.置整数值 ("reverse_extract", 1319)
+        // v2.8 反检测预设 + 逆向增强
+        命令注册表.置整数值 ("browser.antidetect_presets", 1320)
+        命令注册表.置整数值 ("browser_antidetect_presets", 1320)
+        命令注册表.置整数值 ("antidetect_presets", 1320)
+        命令注册表.置整数值 ("browser.reverse_detect_traps", 1321)
+        命令注册表.置整数值 ("browser_reverse_detect_traps", 1321)
+        命令注册表.置整数值 ("reverse_detect_traps", 1321)
+        // v2.8 网络导出 + 权限伪装 (使用注册命令双变体辅助方法)
+        注册命令双变体 ("network_export", 1322)
+        注册命令双变体 ("permission_spoof", 1323)
+        // v2.8 自动化重试 + Canvas噪声
+        注册命令双变体 ("retry", 1324)
+        注册命令双变体 ("canvas_noise", 1325)
+        // v2.8 逆向热补丁 + 字体随机化
+        注册命令双变体 ("reverse_patch", 1326)
+        注册命令双变体 ("font_randomize", 1327)
+        // v2.8 CDP逆向增强 R5: Debugger/Runtime/DOMDebugger/Network 未暴露API
+        注册命令双变体 ("reverse_skip_pauses", 1328)
+        注册命令双变体 ("reverse_listeners", 1329)
+        注册命令双变体 ("reverse_query_objects", 1330)
+        注册命令双变体 ("reverse_blackbox", 1331)
+        注册命令双变体 ("reverse_async_stack", 1332)
+        注册命令双变体 ("reverse_cache_disable", 1333)
+        // v2.8 CDP逆向增强 R6: Runtime.compileScript/Profiler.preciseCoverage/Page.setBypassCSP等
+        注册命令双变体 ("reverse_compile_script", 1334)
+        注册命令双变体 ("reverse_breakpoints_active", 1335)
+        注册命令双变体 ("reverse_search_script", 1336)
+        注册命令双变体 ("reverse_precise_coverage", 1337)
+        注册命令双变体 ("reverse_bypass_csp", 1338)
+        注册命令双变体 ("reverse_await_promise", 1339)
+        // v2.8 R7: Storage.getCookies / Network.emulateNetworkConditions / DOM.resolveNode / Emulation.setFocusEmulation / WebGL vendor
+        注册命令双变体 ("fingerprint_webgl_vendor", 1340, 假)
+        注册命令双变体 ("reverse_cookie_cdp", 1341)
+        注册命令双变体 ("reverse_network_conditions", 1342)
+        注册命令双变体 ("reverse_dom_resolve", 1343)
+        注册命令双变体 ("reverse_emulate_focus", 1344)
+        // v2.8 R8: Input.dispatchMouseEvent/KeyEvent / Tracing.start/end / Runtime.evaluate(silent+userGesture)
+        注册命令双变体 ("reverse_input_cdp", 1345)
+        注册命令双变体 ("reverse_trace", 1346)
+        注册命令双变体 ("reverse_evaluate_silent", 1347)
+        // v2.8 R9: navigator.languages / CSS.startRuleUsageTracking / LayerTree
+        注册命令双变体 ("fingerprint_languages", 1348, 假)
+        注册命令双变体 ("reverse_css_coverage", 1349)
+        注册命令双变体 ("reverse_layer_tree", 1350)
         命令注册表.置整数值 ("browser.vip_fingerprint_webrtc", 1035)
         命令注册表.置整数值 ("browser_vip_fingerprint_webrtc", 1035)
         命令注册表.置整数值 ("browser_vip_fingerprint_timezone", 1036)
@@ -1072,26 +1096,6 @@
         命令注册表.置整数值 ("set_preference", 1147)
     }
 
-    # ======== 需要刷新生效的响应包装 ==========
-    # 指纹/代理/内核开关等必须在页面刷新后生效
-    # 给出明确的下一步操作提示
-
-    常量 提示_需要刷新 <公开 类型 = 文本型 值 = "设置已应用! 注意: 指纹/代理/内核变更需要刷新页面才能生效, 请调用 browser_reload 或 browser_navigate">
-
-    方法 响应_需要刷新 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 消息 <类型 = 文本型>
-    {
-        变量 对象 <类型 = YYJSON对象类>
-        对象.创建自文本 ("{}")
-        对象.加入文本成员 ("id", 命令ID)
-        对象.加入逻辑值成员 ("success", 真)
-        对象.加入文本成员 ("message", 消息 + " | " + 提示_需要刷新)
-        对象.加入逻辑值成员 ("needs_reload", 真)
-        对象.加入文本成员 ("_hint", "设置将在下次刷新/导航后生效")
-        返回 (对象.到可读文本 (YYJSON格式化选项.压缩))
-    }
-
     # ======== 批量操作处理 ==========
 
     方法 处理_批量操作 <公开 静态 类型 = 文本型>
@@ -1115,7 +1119,7 @@
             }
             如果 (批量JSON文本 == "")
             {
-                返回 (命令失败 (命令ID, "batch需要commands参数: [{name, arguments}, ...]"))
+                返回 (MCP_响应构建.命令失败 (命令ID, "batch需要commands参数: [{name, arguments}, ...]"))
             }
             如果 (是否以 (批量JSON文本, "["))
             {
@@ -1124,7 +1128,7 @@
             变量 批量解析 <类型 = YYJSON只读对象类>
             如果 (批量解析.创建自文本 (批量JSON文本) == 假)
             {
-                返回 (命令失败 (命令ID, "commands JSON解析失败"))
+                返回 (MCP_响应构建.命令失败 (命令ID, "commands JSON解析失败"))
             }
             命令数组 = 批量解析.取数组 ("commands")
             如果 (命令数组.是否为空对象 ())
@@ -1134,13 +1138,13 @@
         }
         如果 (命令数组.是否为空对象 ())
         {
-            返回 (命令失败 (命令ID, "commands解析失败,支持格式:[{name,arguments},...]或{commands:[...]}"))
+            返回 (MCP_响应构建.命令失败 (命令ID, "commands解析失败,支持格式:[{name,arguments},...]或{commands:[...]}"))
         }
         变量 数组成员数 <类型 = 整数>
         数组成员数 = (整数)命令数组.取成员数 ()
-        如果 (数组成员数 > 批量命令最大条数)
+        如果 (数组成员数 > MCP_常量.批量命令最大条数)
         {
-            返回 (命令失败 (命令ID, "batch 命令过多: " + 到文本 (数组成员数) + " > 上限 " + 到文本 (批量命令最大条数)))
+            返回 (MCP_响应构建.命令失败 (命令ID, "batch 命令过多: " + 到文本 (数组成员数) + " > 上限 " + 到文本 (MCP_常量.批量命令最大条数)))
         }
         变量 总成功数 <类型 = 整数 值 = 0>
         变量 总失败数 <类型 = 整数 值 = 0>
@@ -1227,45 +1231,7 @@
         汇总JSON = 汇总对象.到可读文本 (YYJSON格式化选项.压缩)
         // 嵌入 results 数组 (字符串拼接避免YYJSON嵌套bug)
         汇总JSON = 取文本左边 (汇总JSON, 取文本长度 (汇总JSON) - 1) + ",\"results\":" + 结果列表 + "}"
-        返回 (命令成功_原始JSON (命令ID, 汇总JSON, 总失败数 == 0))
-    }
-
-    常量 HTTP_JSON内容类型 <公开 类型 = 文本型 值 = "application/json; charset=utf-8">
-    常量 错误_主框架无效 <公开 类型 = 文本型 值 = "主框架无效 | 页面可能尚未加载完成, 请先 navigate 并等待2-3秒后重试">
-
-    # ======== JSON/UTF-8 统一辅助 (yyjson 转义, 禁止手工拼接未转义字符串) ========
-
-    方法 是否为合法JSON文档 <公开 静态 类型 = 逻辑型>
-    参数 文本 <类型 = 文本型>
-    {
-        如果 (文本 == "")
-        {
-            返回 (假)
-        }
-        变量 对象 <类型 = YYJSON只读对象类>
-        如果 (对象.创建自文本 (文本))
-        {
-            返回 (真)
-        }
-        如果 (是否以 (文本, "["))
-        {
-            变量 包装 <类型 = 文本型>
-            包装 = "{\"_a\":" + 文本 + "}"
-            返回 (对象.创建自文本 (包装))
-        }
-        返回 (假)
-    }
-
-    方法 提取JSON对象体内 <公开 静态 类型 = 文本型>
-    参数 对象JSON <类型 = 文本型>
-    {
-        变量 长度 <类型 = 整数>
-        长度 = 取文本长度 (对象JSON)
-        如果 (长度 < 2 || 取文本左边 (对象JSON, 1) != "{")
-        {
-            返回 (对象JSON)
-        }
-        返回 (取文本右边 (取文本左边 (对象JSON, 长度 - 1), 长度 - 2))
+        返回 (MCP_响应构建.命令成功_原始JSON (命令ID, 汇总JSON, 总失败数 == 0))
     }
 
     方法 构建JSONRPC头部前缀 <公开 静态 类型 = 文本型>
@@ -1284,85 +1250,6 @@
         变量 头JSON <类型 = 文本型>
         头JSON = 头对象.到可读文本 (YYJSON格式化选项.压缩)
         返回 (取文本左边 (头JSON, 取文本长度 (头JSON) - 1))
-    }
-
-    方法 构建简单错误JSON <公开 静态 类型 = 文本型>
-    参数 错误消息 <类型 = 文本型>
-    {
-        变量 对象 <类型 = YYJSON对象类>
-        对象.创建自文本 ("{}")
-        对象.加入文本成员 ("error", 错误消息)
-        返回 (对象.到可读文本 (YYJSON格式化选项.压缩))
-    }
-
-    方法 构建标准失败JSON <公开 静态 类型 = 文本型>
-    参数 错误消息 <类型 = 文本型>
-    {
-        变量 对象 <类型 = YYJSON对象类>
-        对象.创建自文本 ("{}")
-        对象.加入逻辑值成员 ("success", 假)
-        对象.加入文本成员 ("error", 错误消息)
-        返回 (对象.到可读文本 (YYJSON格式化选项.压缩))
-    }
-
-    方法 构建异步提交JSON <公开 静态 类型 = 文本型>
-    参数 任务ID <类型 = 文本型>
-    {
-        变量 对象 <类型 = YYJSON对象类>
-        对象.创建自文本 ("{}")
-        对象.加入逻辑值成员 ("_async", 真)
-        对象.加入文本成员 ("task_id", 任务ID)
-        返回 (对象.到可读文本 (YYJSON格式化选项.压缩))
-    }
-
-    方法 构建带数据字段JSON <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 是否成功 <类型 = 逻辑型>
-    参数 数据片段 <类型 = 文本型>
-    {
-        返回 (构建命令嵌套JSON (命令ID, 是否成功, "data", 数据片段))
-    }
-
-    方法 构建标准成功JSON <公开 静态 类型 = 文本型>
-    参数 消息 <类型 = 文本型>
-    {
-        变量 对象 <类型 = YYJSON对象类>
-        对象.创建自文本 ("{}")
-        对象.加入逻辑值成员 ("success", 真)
-        对象.加入文本成员 ("message", 消息)
-        返回 (对象.到可读文本 (YYJSON格式化选项.压缩))
-    }
-
-    方法 构建命令嵌套JSON <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 是否成功 <类型 = 逻辑型>
-    参数 嵌套键名 <类型 = 文本型>
-    参数 嵌套JSON片段 <类型 = 文本型>
-    {
-        变量 头对象 <类型 = YYJSON对象类>
-        头对象.创建自文本 ("{}")
-        头对象.加入文本成员 ("id", 命令ID)
-        头对象.加入逻辑值成员 ("success", 是否成功)
-        变量 头JSON <类型 = 文本型>
-        头JSON = 头对象.到可读文本 (YYJSON格式化选项.压缩)
-        如果 (是否为合法JSON文档 (嵌套JSON片段))
-        {
-            返回 (取文本左边 (头JSON, 取文本长度 (头JSON) - 1) + ",\"" + 嵌套键名 + "\":" + 嵌套JSON片段 + "}")
-        }
-        变量 完整 <类型 = YYJSON对象类>
-        完整.创建自文本 ("{}")
-        完整.加入文本成员 ("id", 命令ID)
-        完整.加入逻辑值成员 ("success", 是否成功)
-        完整.加入文本成员 (嵌套键名, 嵌套JSON片段)
-        返回 (完整.到可读文本 (YYJSON格式化选项.压缩))
-    }
-
-    方法 命令成功_原始JSON <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 JSON片段 <类型 = 文本型>
-    参数 是否成功 <类型 = 逻辑型 @默认值 = 真>
-    {
-        返回 (构建带数据字段JSON (命令ID, 是否成功, JSON片段))
     }
 
     # ======== CDP命令执行 ==========
@@ -1392,8 +1279,11 @@
                 {
                     调试输出 ("[MCP] CDP params JSON解析失败,使用空字典: " + 取文本左边 (paramsJSON文本, 200))
                 }
-                // 自动注册DevTools观察者(首次使用时)
-                确保CDP观察者已注册 ()
+                // CDP DevTools通道就绪检查 (不在此处注册, 避免 开发者消息_启用监管者事件 阻塞)
+                如果 (CDP观察者已注册 == 假)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "CDP DevTools通道未就绪 | 请通过 browser_vip_enable_inspector 启用DevTools监管者"))
+                }
                 // 清除同 task_id 旧结果,避免同步等待误读上一轮 CDP 缓存
                 删除异步结果 (命令ID)
                 // 分配CDP消息ID并记录映射:CDP消息ID → MCP请求ID
@@ -1410,9 +1300,9 @@
                 异步对象.加入文本成员 ("message", "CDP已提交:" + cdpMethod)
                 返回 (异步对象.到可读文本 (YYJSON格式化选项.压缩))
             }
-            返回 (命令失败 (命令ID, 错误_VIP不可用))
+            返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
         }
-        返回 (命令失败 (命令ID, 错误_无浏览器))
+        返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
     }
 
     方法 执行CDP命令 <公开 静态 类型 = 文本型>
@@ -1435,9 +1325,6 @@
     变量 CDP请求映射表 <公开 静态 类型 = 类_FBrowser_字典值>
     变量 CDP观察者已注册 <公开 静态 类型 = 逻辑型 值 = 假>
     变量 持久CDP观察者 <公开 静态 类型 = 类_FBrowser_事件智能指针>
-
-    常量 CDP映射TTL毫秒 <公开 类型 = 整数 值 = 300000 注释 = "5分钟过期">
-
     变量 CDP映射清理计数 <公开 静态 类型 = 整数 值 = 0>
 
     方法 确保CDP观察者已注册 <公开 静态>
@@ -1522,7 +1409,7 @@
             }
         }
         持久V8扩展列表.加入成员 (条目)
-        判断循环 (持久V8扩展列表.取成员数 () > 持久V8扩展上限)
+        判断循环 (持久V8扩展列表.取成员数 () > MCP_常量.持久V8扩展上限)
         {
             持久V8扩展列表.删除成员 (0)
         }
@@ -1538,12 +1425,11 @@
 
     方法 分配CDP消息ID <公开 静态 类型 = 整数>
     {
-        CDP消息计数器 = CDP消息计数器 + 1
-        // 防溢出: int 上限约21亿, 回绕到1(0保留为无效值)
-        // 回绕时不清空映射表, 依赖 CDP映射TTL毫秒 的定期清理机制处理过期条目
+        // 原子递增: 防MCP线程与VIP回调线程并发竞态
+        @ InterlockedIncrement((LONG volatile*)&@<CDP消息计数器>);
         如果 (CDP消息计数器 <= 0)
         {
-            CDP消息计数器 = 1
+            @ InterlockedExchange((LONG volatile*)&@<CDP消息计数器>, 1);
             调试输出 ("[MCP] CDP消息ID已回绕, ID从1重新开始(保留在途映射)")
         }
         返回 (CDP消息计数器)
@@ -1565,7 +1451,7 @@
         异步缓存锁.解锁 ()
         // 每 N 次CDP请求触发一次过期清理
         CDP映射清理计数 = CDP映射清理计数 + 1
-        如果 (CDP映射清理计数 >= CDP映射清理间隔)
+        如果 (CDP映射清理计数 >= MCP_常量.CDP映射清理间隔)
         {
             清理过期CDP映射 ()
         }
@@ -1590,7 +1476,7 @@
             变量 当前时间 <类型 = 长整数>
             当前时间 = 取启动时间 ()
             变量 过期阈值 <类型 = 长整数>
-            过期阈值 = 当前时间 - CDP映射TTL毫秒
+            过期阈值 = 当前时间 - MCP_常量.CDP映射TTL毫秒
             // 从最大消息ID向下扫描, 清理过期条目
             变量 maxID <类型 = 整数>
             maxID = CDP消息计数器
@@ -1772,9 +1658,9 @@
                 变量 结果UTF8 <类型 = 字节集类>
                 结果UTF8 = 指针到字节集 (结果指针, 结果大小)
                 结果文本 = UTF8到文本 (结果UTF8)
-                如果 (取文本长度 (结果文本) > 截断_CDP结果最大字节)
+                如果 (取文本长度 (结果文本) > MCP_常量.截断_CDP结果最大字节)
                 {
-                    结果文本 = 取文本左边 (结果文本, 截断_CDP结果最大字节) + "...[CDP结果已截断]"
+                    结果文本 = 取文本左边 (结果文本, MCP_常量.截断_CDP结果最大字节) + "...[CDP结果已截断]"
                 }
             }
             如果 (成功)
@@ -2001,8 +1887,8 @@
         变量 colNo <类型 = 整数>
         colNo = 提取JSON整数字段值 (text, "columnNumber")
         变量 framesJSON <类型 = 文本型>
-        framesJSON = "[{\"callFrameId\":\"" + JSON转义文本 (callFrameId) + "\",\"functionName\":\"" + JSON转义文本 (funcName) + "\",\"url\":\"" + JSON转义文本 (url) + "\",\"scriptId\":\"" + JSON转义文本 (scriptId) + "\",\"lineNumber\":" + 到文本 (lineNo) + ",\"columnNumber\":" + 到文本 (colNo) + "}]"
-        返回 ("{\"reason\":\"" + JSON转义文本 (reason) + "\",\"call_frame_id\":\"" + JSON转义文本 (callFrameId) + "\",\"functionName\":\"" + JSON转义文本 (funcName) + "\",\"url\":\"" + JSON转义文本 (url) + "\",\"scriptId\":\"" + JSON转义文本 (scriptId) + "\",\"lineNumber\":" + 到文本 (lineNo) + ",\"columnNumber\":" + 到文本 (colNo) + ",\"scopes\":[],\"hitBreakpoints\":[],\"frames\":" + framesJSON + ",\"_fallback\":true}")
+        framesJSON = "[{\"callFrameId\":\"" + MCP_响应构建.JSON转义文本 (callFrameId) + "\",\"functionName\":\"" + MCP_响应构建.JSON转义文本 (funcName) + "\",\"url\":\"" + MCP_响应构建.JSON转义文本 (url) + "\",\"scriptId\":\"" + MCP_响应构建.JSON转义文本 (scriptId) + "\",\"lineNumber\":" + 到文本 (lineNo) + ",\"columnNumber\":" + 到文本 (colNo) + "}]"
+        返回 ("{\"reason\":\"" + MCP_响应构建.JSON转义文本 (reason) + "\",\"call_frame_id\":\"" + MCP_响应构建.JSON转义文本 (callFrameId) + "\",\"functionName\":\"" + MCP_响应构建.JSON转义文本 (funcName) + "\",\"url\":\"" + MCP_响应构建.JSON转义文本 (url) + "\",\"scriptId\":\"" + MCP_响应构建.JSON转义文本 (scriptId) + "\",\"lineNumber\":" + 到文本 (lineNo) + ",\"columnNumber\":" + 到文本 (colNo) + ",\"scopes\":[],\"hitBreakpoints\":[],\"frames\":" + framesJSON + ",\"_fallback\":true}")
     }
 
     方法 等待CDP事件 <公开 静态 类型 = 文本型>
@@ -2137,7 +2023,7 @@
             }
             变量 fnScript <类型 = 文本型>
             fnScript = yyjson取文本 (locFi, "scriptId")
-            out = out + "{\"callFrameId\":\"" + JSON转义文本 (yyjson取文本 (fi, "callFrameId")) + "\",\"functionName\":\"" + JSON转义文本 (yyjson取文本 (fi, "functionName")) + "\",\"url\":\"" + JSON转义文本 (yyjson取文本 (fi, "url")) + "\",\"scriptId\":\"" + JSON转义文本 (fnScript) + "\",\"lineNumber\":" + 到文本 (fnLine) + ",\"columnNumber\":" + 到文本 (fnCol) + "}"
+            out = out + "{\"callFrameId\":\"" + MCP_响应构建.JSON转义文本 (yyjson取文本 (fi, "callFrameId")) + "\",\"functionName\":\"" + MCP_响应构建.JSON转义文本 (yyjson取文本 (fi, "functionName")) + "\",\"url\":\"" + MCP_响应构建.JSON转义文本 (yyjson取文本 (fi, "url")) + "\",\"scriptId\":\"" + MCP_响应构建.JSON转义文本 (fnScript) + "\",\"lineNumber\":" + 到文本 (fnLine) + ",\"columnNumber\":" + 到文本 (fnCol) + "}"
         }
         out = out + "]"
         返回 (out)
@@ -2169,7 +2055,7 @@
             sc = scopeChain.取成员 (取循环索引 ())
             变量 scObj <类型 = YYJSON只读对象类>
             scObj = sc.取对象 ("object")
-            out = out + "{\"type\":\"" + JSON转义文本 (yyjson取文本 (sc, "type")) + "\",\"name\":\"" + JSON转义文本 (yyjson取文本 (sc, "name")) + "\",\"className\":\"" + JSON转义文本 (yyjson取文本 (scObj, "className")) + "\"}"
+            out = out + "{\"type\":\"" + MCP_响应构建.JSON转义文本 (yyjson取文本 (sc, "type")) + "\",\"name\":\"" + MCP_响应构建.JSON转义文本 (yyjson取文本 (sc, "name")) + "\",\"className\":\"" + MCP_响应构建.JSON转义文本 (yyjson取文本 (scObj, "className")) + "\"}"
         }
         out = out + "]"
         返回 (out)
@@ -2258,7 +2144,7 @@
         {
             hitJSON = "[]"
         }
-        返回 ("{\"reason\":\"" + JSON转义文本 (reason) + "\",\"call_frame_id\":\"" + JSON转义文本 (callFrameId) + "\",\"functionName\":\"" + JSON转义文本 (funcName) + "\",\"url\":\"" + JSON转义文本 (url) + "\",\"scriptId\":\"" + JSON转义文本 (scriptId) + "\",\"lineNumber\":" + 到文本 (lineNo) + ",\"columnNumber\":" + 到文本 (colNo) + ",\"scopes\":" + scopesJSON + ",\"hitBreakpoints\":" + hitJSON + ",\"frames\":" + framesJSON + "}")
+        返回 ("{\"reason\":\"" + MCP_响应构建.JSON转义文本 (reason) + "\",\"call_frame_id\":\"" + MCP_响应构建.JSON转义文本 (callFrameId) + "\",\"functionName\":\"" + MCP_响应构建.JSON转义文本 (funcName) + "\",\"url\":\"" + MCP_响应构建.JSON转义文本 (url) + "\",\"scriptId\":\"" + MCP_响应构建.JSON转义文本 (scriptId) + "\",\"lineNumber\":" + 到文本 (lineNo) + ",\"columnNumber\":" + 到文本 (colNo) + ",\"scopes\":" + scopesJSON + ",\"hitBreakpoints\":" + hitJSON + ",\"frames\":" + framesJSON + "}")
     }
 
     方法 执行Debugger帧求值并等待 <公开 静态 类型 = 文本型>
@@ -2335,7 +2221,7 @@
         {
             val = unser
         }
-        返回 ("{\"type\":\"" + JSON转义文本 (valType) + "\",\"value\":\"" + JSON转义文本 (val) + "\",\"description\":\"" + JSON转义文本 (desc) + "\",\"objectId\":\"" + JSON转义文本 (objId) + "\",\"className\":\"" + JSON转义文本 (cls) + "\",\"subtype\":\"" + JSON转义文本 (sub) + "\"}")
+        返回 ("{\"type\":\"" + MCP_响应构建.JSON转义文本 (valType) + "\",\"value\":\"" + MCP_响应构建.JSON转义文本 (val) + "\",\"description\":\"" + MCP_响应构建.JSON转义文本 (desc) + "\",\"objectId\":\"" + MCP_响应构建.JSON转义文本 (objId) + "\",\"className\":\"" + MCP_响应构建.JSON转义文本 (cls) + "\",\"subtype\":\"" + MCP_响应构建.JSON转义文本 (sub) + "\"}")
     }
 
     方法 Runtime取对象属性JSON <公开 静态 类型 = 文本型>
@@ -2394,7 +2280,7 @@
             pi = props.取成员 (取循环索引 ())
             变量 pval <类型 = YYJSON只读对象类>
             pval = pi.取对象 ("value")
-            out = out + "{\"name\":\"" + JSON转义文本 (yyjson取文本 (pi, "name")) + "\",\"value\":" + RemoteObject摘要JSON (pval) + "}"
+            out = out + "{\"name\":\"" + MCP_响应构建.JSON转义文本 (yyjson取文本 (pi, "name")) + "\",\"value\":" + RemoteObject摘要JSON (pval) + "}"
         }
         out = out + "]"
         返回 (out)
@@ -2472,8 +2358,13 @@
     方法 确保Debugger已恢复 <公开 静态>
     参数 命令ID前缀 <类型 = 文本型>
     {
-        执行CDP并同步等待 (命令ID前缀 + "_rs0", "Debugger.resume", "{}", 3000)
-        执行CDP并同步等待 (命令ID前缀 + "_rs1", "Debugger.resume", "{}", 3000)
+        // 快速检查: 无缓存暂停事件时跳过resume, 省去6s无意义CDP超时
+        变量 暂停缓存 <类型 = 文本型>
+        暂停缓存 = 取CDP事件数据JSON ("Debugger.paused")
+        如果 (暂停缓存 != "")
+        {
+            执行CDP并同步等待 (命令ID前缀 + "_rs0", "Debugger.resume", "{}", 3000)
+        }
         执行CDP并同步等待 (命令ID前缀 + "_dis", "Debugger.disable", "{}", 5000)
         清除CDP事件记录 ("Debugger.paused")
     }
@@ -2570,6 +2461,146 @@
         返回 (err)
     }
 
+    # ======== CDP Runtime.evaluate 内联执行 (替换 CEF JS回调链) ==========
+
+    方法 CDP执行JS并等待 <公开 静态 类型 = 文本型 注释 = "通过CDP Runtime.evaluate执行JS并sync-wait取回结果, 绕过不稳定的CEF JS回调">
+    参数 JS代码 <类型 = 文本型>
+    参数 最大等待毫秒 <类型 = 整数 @默认值 = 15000>
+    参数 返回ByValue <类型 = 逻辑型 @默认值 = 真>
+    {
+        变量 临时命令ID <类型 = 文本型>
+        临时命令ID = "_rtev_" + 到文本 (取启动时间 ()) + "_" + 到文本 (取随机数 (1000, 9999))
+        变量 evalParams <类型 = YYJSON对象类>
+        evalParams.创建自文本 ("{}")
+        evalParams.加入文本成员 ("expression", JS代码)
+        evalParams.加入逻辑值成员 ("returnByValue", 返回ByValue)
+        evalParams.加入逻辑值成员 ("awaitPromise", 假)
+        evalParams.加入逻辑值成员 ("includeCommandLineAPI", 假)
+        变量 存储结果 <类型 = 文本型>
+        存储结果 = 执行CDP并同步等待 (临时命令ID, "Runtime.evaluate", evalParams.到可读文本 (YYJSON格式化选项.压缩), 最大等待毫秒)
+        如果 (存储结果 == "")
+        {
+            返回 ("")
+        }
+        变量 结果解析 <类型 = YYJSON只读对象类>
+        如果 (结果解析.创建自文本 (存储结果) == 假)
+        {
+            返回 ("")
+        }
+        如果 (结果解析.取逻辑值 ("success") == 假)
+        {
+            变量 cdpErr <类型 = 文本型>
+            cdpErr = 取CDP同步结果错误 (存储结果)
+            返回 ("{\"error\":\"CDP执行失败:" + MCP_响应构建.JSON转义文本 (cdpErr) + "\"}")
+        }
+        变量 cdpResult <类型 = 文本型>
+        cdpResult = yyjson取文本 (结果解析, "result")
+        如果 (cdpResult == "")
+        {
+            返回 ("")
+        }
+        变量 cdpObj <类型 = YYJSON只读对象类>
+        如果 (cdpObj.创建自文本 (cdpResult) == 假)
+        {
+            返回 (cdpResult)
+        }
+        // Runtime.evaluate 返回 {result: {type, value/description}, exceptionDetails: ...}
+        变量 exceptionJSON <类型 = 文本型>
+        exceptionJSON = yyjson取JSON文本 (cdpObj, "exceptionDetails")
+        如果 (exceptionJSON != "")
+        {
+            变量 excObj <类型 = YYJSON只读对象类>
+            如果 (excObj.创建自文本 (exceptionJSON))
+            {
+                变量 excText <类型 = 文本型>
+                excText = yyjson取文本 (excObj, "text")
+                如果 (excText == "")
+                {
+                    excText = yyjson取文本 (excObj, "description")
+                }
+                返回 ("{\"error\":\"JS异常:" + MCP_响应构建.JSON转义文本 (excText) + "\"}")
+            }
+            返回 ("{\"error\":\"JS异常: 解析失败\"}")
+        }
+        变量 resultObj <类型 = YYJSON只读对象类>
+        变量 resultRaw <类型 = 文本型>
+        resultRaw = yyjson取JSON文本 (cdpObj, "result")
+        如果 (resultRaw != "" && resultObj.创建自文本 (resultRaw))
+        {
+            变量 valType <类型 = 文本型>
+            valType = yyjson取文本 (resultObj, "type")
+            如果 (valType == "string")
+            {
+                返回 (yyjson取文本 (resultObj, "value"))
+            }
+            否则 (valType == "undefined" || valType == "null")
+            {
+                返回 ("null")
+            }
+            变量 val <类型 = 文本型>
+            val = yyjson取文本 (resultObj, "value")
+            如果 (val != "")
+            {
+                返回 (val)
+            }
+            变量 desc <类型 = 文本型>
+            desc = yyjson取文本 (resultObj, "description")
+            如果 (desc != "")
+            {
+                返回 (desc)
+            }
+            返回 (resultRaw)
+        }
+        返回 (cdpResult)
+    }
+
+    # ======== CDP Debugger.getScriptSource 静态下载脚本 ==========
+
+    方法 CDP获取脚本源 <公开 静态 类型 = 文本型 注释 = "通过CDP Debugger.getScriptSource下载脚本完整源码并按需截断">
+    参数 scriptId <类型 = 文本型>
+    参数 最大等待毫秒 <类型 = 整数 @默认值 = 20000>
+    参数 最大字节数 <类型 = 整数 @默认值 = MCP_常量.截断_CDP结果最大字节>
+    {
+        变量 临时命令ID <类型 = 文本型>
+        临时命令ID = "_gss_" + 到文本 (取启动时间 ()) + "_" + 到文本 (取随机数 (1000, 9999))
+        变量 gsParams <类型 = YYJSON对象类>
+        gsParams.创建自文本 ("{}")
+        gsParams.加入文本成员 ("scriptId", scriptId)
+        变量 存储结果 <类型 = 文本型>
+        存储结果 = 执行CDP并同步等待 (临时命令ID, "Debugger.getScriptSource", gsParams.到可读文本 (YYJSON格式化选项.压缩), 最大等待毫秒)
+        如果 (存储结果 == "")
+        {
+            返回 ("")
+        }
+        变量 结果解析 <类型 = YYJSON只读对象类>
+        如果 (结果解析.创建自文本 (存储结果) == 假)
+        {
+            返回 ("")
+        }
+        如果 (结果解析.取逻辑值 ("success") == 假)
+        {
+            返回 ("")
+        }
+        变量 cdpResult <类型 = 文本型>
+        cdpResult = yyjson取文本 (结果解析, "result")
+        如果 (cdpResult == "")
+        {
+            返回 ("")
+        }
+        变量 cdpObj <类型 = YYJSON只读对象类>
+        如果 (cdpObj.创建自文本 (cdpResult) == 假)
+        {
+            返回 ("")
+        }
+        变量 scriptSource <类型 = 文本型>
+        scriptSource = yyjson取文本 (cdpObj, "scriptSource")
+        如果 (scriptSource != "" && 取文本长度 (scriptSource) > 最大字节数)
+        {
+            scriptSource = 取文本左边 (scriptSource, 最大字节数) + "\n... [截断于" + 到文本 (最大字节数) + "字节]"
+        }
+        返回 (scriptSource)
+    }
+
     方法 CDP设置断点结果是否成功 <公开 静态 类型 = 逻辑型>
     参数 存储JSON <类型 = 文本型>
     {
@@ -2600,7 +2631,7 @@
         }
         如果 (yyjson取逻辑 (包装, "success") == 假)
         {
-            返回 ("{\"ok\":false,\"error\":\"" + JSON转义文本 (yyjson取文本 (包装, "message")) + "\"}")
+            返回 ("{\"ok\":false,\"error\":\"" + MCP_响应构建.JSON转义文本 (yyjson取文本 (包装, "message")) + "\"}")
         }
         变量 cdpText <类型 = 文本型>
         cdpText = yyjson取文本 (包装, "result")
@@ -2663,7 +2694,7 @@
         valPart = yyjson取JSON文本 (remote, "value")
         如果 (valPart != "" && valType == "string" && 是否以 (valPart, "\"") == 假)
         {
-            valPart = "\"" + JSON转义文本 (选择 (val != "", val, valPart)) + "\""
+            valPart = "\"" + MCP_响应构建.JSON转义文本 (选择 (val != "", val, valPart)) + "\""
         }
         如果 (valPart == "")
         {
@@ -2689,11 +2720,11 @@
             }
             否则
             {
-                valPart = "\"" + JSON转义文本 (val) + "\""
+                valPart = "\"" + MCP_响应构建.JSON转义文本 (val) + "\""
             }
         }
         变量 out <类型 = 文本型>
-        out = "{\"ok\":true,\"type\":\"" + JSON转义文本 (valType) + "\",\"value\":" + valPart + ",\"description\":\"" + JSON转义文本 (desc) + "\",\"className\":\"" + JSON转义文本 (cls) + "\",\"objectId\":\"" + JSON转义文本 (objId) + "\""
+        out = "{\"ok\":true,\"type\":\"" + MCP_响应构建.JSON转义文本 (valType) + "\",\"value\":" + valPart + ",\"description\":\"" + MCP_响应构建.JSON转义文本 (desc) + "\",\"className\":\"" + MCP_响应构建.JSON转义文本 (cls) + "\",\"objectId\":\"" + MCP_响应构建.JSON转义文本 (objId) + "\""
         如果 (展开对象 && objId != "" && (valType == "object" || valType == "function"))
         {
             out = out + ",\"properties\":" + Runtime取对象属性JSON (命令ID前缀, objId, 40)
@@ -2711,7 +2742,7 @@
                 srcText = yyjson取文本 (srcParsed, "value")
                 如果 (srcText != "")
                 {
-                    out = out + ",\"source\":\"" + JSON转义文本 (srcText) + "\""
+                    out = out + ",\"source\":\"" + MCP_响应构建.JSON转义文本 (srcText) + "\""
                 }
             }
         }
@@ -2759,7 +2790,7 @@
                     }
                     变量 evRaw <类型 = 文本型>
                     evRaw = 执行Debugger帧求值并等待 (命令ID + "_ev" + 到文本 (evalCount), callFrameId, oneExpr, 8000, effectiveRbV)
-                    evalOut = evalOut + "{\"expression\":\"" + JSON转义文本 (oneExpr) + "\",\"eval\":" + 解析Debugger求值结果 (evRaw, 命令ID + "_ev" + 到文本 (evalCount), callFrameId, oneExpr, 展开对象) + "}"
+                    evalOut = evalOut + "{\"expression\":\"" + MCP_响应构建.JSON转义文本 (oneExpr) + "\",\"eval\":" + 解析Debugger求值结果 (evRaw, 命令ID + "_ev" + 到文本 (evalCount), callFrameId, oneExpr, 展开对象) + "}"
                     evalCount = evalCount + 1
                 }
             }
@@ -2768,7 +2799,7 @@
         {
             变量 evRaw2 <类型 = 文本型>
             evRaw2 = 执行Debugger帧求值并等待 (命令ID + "_ev0", callFrameId, exprRaw, 8000, effectiveRbV)
-            evalOut = evalOut + "{\"expression\":\"" + JSON转义文本 (exprRaw) + "\",\"eval\":" + 解析Debugger求值结果 (evRaw2, 命令ID + "_ev0", callFrameId, exprRaw, 展开对象) + "}"
+            evalOut = evalOut + "{\"expression\":\"" + MCP_响应构建.JSON转义文本 (exprRaw) + "\",\"eval\":" + 解析Debugger求值结果 (evRaw2, 命令ID + "_ev0", callFrameId, exprRaw, 展开对象) + "}"
             evalCount = 1
         }
         evalOut = evalOut + "]"
@@ -2817,7 +2848,7 @@
         }
         如果 (CDP同步结果是否成功 (enRaw) == 假)
         {
-            返回 (DebuggerFlow失败返回 (命令ID, "{\"ok\":false,\"step\":\"enable\",\"error\":\"" + JSON转义文本 (取CDP同步结果错误 (enRaw)) + "\"}"))
+            返回 (DebuggerFlow失败返回 (命令ID, "{\"ok\":false,\"step\":\"enable\",\"error\":\"" + MCP_响应构建.JSON转义文本 (取CDP同步结果错误 (enRaw)) + "\"}"))
         }
         MCP可中断延时 (200)
         变量 bpParams <类型 = YYJSON对象类>
@@ -2849,7 +2880,7 @@
         bpRaw = 执行CDP并同步等待 (命令ID + "_bp", "Debugger.setBreakpointByUrl", bpParams.到可读文本 (YYJSON格式化选项.压缩), 20000)
         如果 (CDP设置断点结果是否成功 (bpRaw) == 假)
         {
-            返回 (DebuggerFlow失败返回 (命令ID, "{\"ok\":false,\"step\":\"set_breakpoint\",\"error\":\"" + JSON转义文本 (取CDP同步结果错误 (bpRaw)) + "\",\"breakpoint\":\"" + JSON转义文本 (bpRegex) + "\"}"))
+            返回 (DebuggerFlow失败返回 (命令ID, "{\"ok\":false,\"step\":\"set_breakpoint\",\"error\":\"" + MCP_响应构建.JSON转义文本 (取CDP同步结果错误 (bpRaw)) + "\",\"breakpoint\":\"" + MCP_响应构建.JSON转义文本 (bpRegex) + "\"}"))
         }
         // 须在 navigate 之前清除,否则加载时命中断点的事件会被误删
         清除CDP事件记录 ("Debugger.paused")
@@ -2878,7 +2909,7 @@
         pausedRaw = 等待CDP事件 ("Debugger.paused", maxMs, 假)
         如果 (pausedRaw == "")
         {
-            返回 (DebuggerFlow失败返回 (命令ID, "{\"ok\":false,\"step\":\"wait_paused\",\"error\":\"timeout\",\"breakpoint\":\"" + JSON转义文本 (bpRegex) + "\"}"))
+            返回 (DebuggerFlow失败返回 (命令ID, "{\"ok\":false,\"step\":\"wait_paused\",\"error\":\"timeout\",\"breakpoint\":\"" + MCP_响应构建.JSON转义文本 (bpRegex) + "\"}"))
         }
         变量 pausedSummary <类型 = 文本型>
         pausedSummary = 解析Debugger暂停摘要 (pausedRaw)
@@ -2912,9 +2943,9 @@
         }
         如果 (resumed == 假 && 应Resume)
         {
-            返回 (DebuggerFlow失败返回 (命令ID, "{\"ok\":false,\"step\":\"resume\",\"error\":\"resume_failed\",\"breakpoint\":\"" + JSON转义文本 (bpRegex) + "\",\"paused\":" + pausedSummary + ",\"evaluations\":" + evalOut + "}"))
+            返回 (DebuggerFlow失败返回 (命令ID, "{\"ok\":false,\"step\":\"resume\",\"error\":\"resume_failed\",\"breakpoint\":\"" + MCP_响应构建.JSON转义文本 (bpRegex) + "\",\"paused\":" + pausedSummary + ",\"evaluations\":" + evalOut + "}"))
         }
-        返回 ("{\"ok\":true,\"breakpoint\":\"" + JSON转义文本 (bpRegex) + "\",\"url\":\"" + JSON转义文本 (navUrl) + "\",\"paused\":" + pausedSummary + ",\"evaluations\":" + evalOut + ",\"resumed\":" + 选择 (resumed, "true", "false") + "}")
+        返回 ("{\"ok\":true,\"breakpoint\":\"" + MCP_响应构建.JSON转义文本 (bpRegex) + "\",\"url\":\"" + MCP_响应构建.JSON转义文本 (navUrl) + "\",\"paused\":" + pausedSummary + ",\"evaluations\":" + evalOut + ",\"resumed\":" + 选择 (resumed, "true", "false") + "}")
     }
 
     方法 取CDP同步结果体文本 <公开 静态 类型 = 文本型>
@@ -3009,9 +3040,9 @@
         }
         如果 (scriptId == "")
         {
-            返回 ("{\"ok\":false,\"error\":\"missing_script_id\",\"call_frame_id\":\"" + JSON转义文本 (frameId) + "\"}")
+            返回 ("{\"ok\":false,\"error\":\"missing_script_id\",\"call_frame_id\":\"" + MCP_响应构建.JSON转义文本 (frameId) + "\"}")
         }
-        返回 ("{\"ok\":true,\"call_frame_id\":\"" + JSON转义文本 (frameId) + "\",\"scriptId\":\"" + JSON转义文本 (scriptId) + "\",\"url\":\"" + JSON转义文本 (url) + "\",\"lineNumber\":" + 到文本 (lineNo) + ",\"columnNumber\":" + 到文本 (colNo) + "}")
+        返回 ("{\"ok\":true,\"call_frame_id\":\"" + MCP_响应构建.JSON转义文本 (frameId) + "\",\"scriptId\":\"" + MCP_响应构建.JSON转义文本 (scriptId) + "\",\"url\":\"" + MCP_响应构建.JSON转义文本 (url) + "\",\"lineNumber\":" + 到文本 (lineNo) + ",\"columnNumber\":" + 到文本 (colNo) + "}")
     }
 
     方法 构建Debugger脚本行上下文JSON <公开 静态 类型 = 文本型>
@@ -3089,7 +3120,7 @@
                 i = i + 1
             }
         }
-        返回 ("{\"currentLine\":\"" + JSON转义文本 (currentLine) + "\",\"contextSnippet\":\"" + JSON转义文本 (snippet) + "\",\"lineCount\":" + 到文本 (total) + ",\"lineNumber\":" + 到文本 (idx) + "}")
+        返回 ("{\"currentLine\":\"" + MCP_响应构建.JSON转义文本 (currentLine) + "\",\"contextSnippet\":\"" + MCP_响应构建.JSON转义文本 (snippet) + "\",\"lineCount\":" + 到文本 (total) + ",\"lineNumber\":" + 到文本 (idx) + "}")
     }
 
     方法 执行Debugger脚本源JSON <公开 静态 类型 = 文本型>
@@ -3202,20 +3233,20 @@
         syncRaw = 执行CDP并同步等待 (命令ID + "_gs", "Debugger.getScriptSource", gpObj.到可读文本 (YYJSON格式化选项.压缩), 20000)
         如果 (syncRaw == "" || CDP同步结果是否成功 (syncRaw) == 假)
         {
-            返回 ("{\"ok\":false,\"error\":\"" + JSON转义文本 (取CDP同步结果错误 (syncRaw)) + "\",\"scriptId\":\"" + JSON转义文本 (scriptId) + "\"}")
+            返回 ("{\"ok\":false,\"error\":\"" + MCP_响应构建.JSON转义文本 (取CDP同步结果错误 (syncRaw)) + "\",\"scriptId\":\"" + MCP_响应构建.JSON转义文本 (scriptId) + "\"}")
         }
         变量 cdpBody <类型 = 文本型>
         cdpBody = 取CDP同步结果体文本 (syncRaw)
         变量 cdpObj <类型 = YYJSON只读对象类>
         如果 (cdpObj.创建自文本 (cdpBody) == 假)
         {
-            返回 ("{\"ok\":false,\"error\":\"cdp_parse\",\"scriptId\":\"" + JSON转义文本 (scriptId) + "\"}")
+            返回 ("{\"ok\":false,\"error\":\"cdp_parse\",\"scriptId\":\"" + MCP_响应构建.JSON转义文本 (scriptId) + "\"}")
         }
         变量 scriptSource <类型 = 文本型>
         scriptSource = yyjson取文本 (cdpObj, "scriptSource")
         如果 (scriptSource == "")
         {
-            返回 ("{\"ok\":false,\"error\":\"empty_script_source\",\"scriptId\":\"" + JSON转义文本 (scriptId) + "\"}")
+            返回 ("{\"ok\":false,\"error\":\"empty_script_source\",\"scriptId\":\"" + MCP_响应构建.JSON转义文本 (scriptId) + "\"}")
         }
         变量 includeSource <类型 = 逻辑型>
         includeSource = 真
@@ -3240,9 +3271,9 @@
         srcPart = ""
         如果 (includeSource)
         {
-            srcPart = ",\"scriptSource\":\"" + JSON转义文本 (scriptSource) + "\""
+            srcPart = ",\"scriptSource\":\"" + MCP_响应构建.JSON转义文本 (scriptSource) + "\""
         }
-        返回 ("{\"ok\":true,\"call_frame_id\":\"" + JSON转义文本 (frameId) + "\",\"scriptId\":\"" + JSON转义文本 (scriptId) + "\",\"url\":\"" + JSON转义文本 (url) + "\",\"lineNumber\":" + 到文本 (lineNo) + ",\"columnNumber\":" + 到文本 (colNo) + ",\"lineCount\":" + 到文本 (lineCount) + ",\"currentLine\":\"" + JSON转义文本 (currentLine) + "\",\"contextSnippet\":\"" + JSON转义文本 (contextSnippet) + "\"" + srcPart + "}")
+        返回 ("{\"ok\":true,\"call_frame_id\":\"" + MCP_响应构建.JSON转义文本 (frameId) + "\",\"scriptId\":\"" + MCP_响应构建.JSON转义文本 (scriptId) + "\",\"url\":\"" + MCP_响应构建.JSON转义文本 (url) + "\",\"lineNumber\":" + 到文本 (lineNo) + ",\"columnNumber\":" + 到文本 (colNo) + ",\"lineCount\":" + 到文本 (lineCount) + ",\"currentLine\":\"" + MCP_响应构建.JSON转义文本 (currentLine) + "\",\"contextSnippet\":\"" + MCP_响应构建.JSON转义文本 (contextSnippet) + "\"" + srcPart + "}")
     }
 
     # 从 JSON 数组文本解析只读数组 (只读数组类无 创建自文本, 须 object 包装)
@@ -3278,8 +3309,11 @@
             缓存数据库.执行SQL语句 ("PRAGMA journal_mode=WAL", )
             缓存数据库.执行SQL语句 ("PRAGMA synchronous=NORMAL", )
             // 创建异步结果表
-            缓存数据库.执行SQL语句 ("CREATE TABLE IF NOT EXISTS async_results (task_id TEXT PRIMARY KEY, result_json TEXT NOT NULL, is_waiting INTEGER DEFAULT 0, created_at INTEGER NOT NULL, poll_count INTEGER DEFAULT 0)", )
+            缓存数据库.执行SQL语句 ("CREATE TABLE IF NOT EXISTS async_results (task_id TEXT PRIMARY KEY, result_json TEXT NOT NULL, is_waiting INTEGER DEFAULT 0, browser_id INTEGER DEFAULT 0, created_at INTEGER NOT NULL, poll_count INTEGER DEFAULT 0)", )
             缓存数据库.执行SQL语句 ("CREATE INDEX IF NOT EXISTS idx_async_created ON async_results(created_at)", )
+            缓存数据库.执行SQL语句 ("CREATE INDEX IF NOT EXISTS idx_async_waiting_browser ON async_results(browser_id, is_waiting)", )
+            // 兼容旧表: 尝试添加browser_id列 (如果已存在则忽略错误)
+            缓存数据库.执行SQL语句 ("ALTER TABLE async_results ADD COLUMN browser_id INTEGER DEFAULT 0", )
             // 创建事件日志表
             缓存数据库.执行SQL语句 ("CREATE TABLE IF NOT EXISTS event_log (id INTEGER PRIMARY KEY AUTOINCREMENT, log_type TEXT NOT NULL, event_name TEXT, browser_id INTEGER, data_json TEXT NOT NULL, created_at INTEGER NOT NULL)", )
             缓存数据库.执行SQL语句 ("CREATE INDEX IF NOT EXISTS idx_log_type ON event_log(log_type, created_at)", )
@@ -3292,7 +3326,7 @@
         {
             调试输出 ("[MCP] 警告: 无法打开缓存数据库, 使用内存模式降级")
             缓存数据库.打开 (":memory:")
-            缓存数据库.执行SQL语句 ("CREATE TABLE IF NOT EXISTS async_results (task_id TEXT PRIMARY KEY, result_json TEXT NOT NULL, is_waiting INTEGER DEFAULT 0, created_at INTEGER NOT NULL, poll_count INTEGER DEFAULT 0)", )
+            缓存数据库.执行SQL语句 ("CREATE TABLE IF NOT EXISTS async_results (task_id TEXT PRIMARY KEY, result_json TEXT NOT NULL, is_waiting INTEGER DEFAULT 0, browser_id INTEGER DEFAULT 0, created_at INTEGER NOT NULL, poll_count INTEGER DEFAULT 0)", )
             缓存数据库.执行SQL语句 ("CREATE TABLE IF NOT EXISTS event_log (id INTEGER PRIMARY KEY AUTOINCREMENT, log_type TEXT NOT NULL, event_name TEXT, browser_id INTEGER, data_json TEXT NOT NULL, created_at INTEGER NOT NULL)", )
             缓存数据库.执行SQL语句 ("CREATE TABLE IF NOT EXISTS response_cache (url TEXT PRIMARY KEY, mime_type TEXT, body BLOB, size INTEGER, created_at INTEGER NOT NULL)", )
         }
@@ -3380,7 +3414,7 @@
         }
         变量 原始长度 <类型 = 整数>
         原始长度 = 取文本长度 (结果JSON)
-        如果 (原始长度 <= 异步结果JSON最大字符)
+        如果 (原始长度 <= MCP_常量.异步结果JSON最大字符)
         {
             返回 (结果JSON)
         }
@@ -3389,20 +3423,20 @@
         包装对象.加入逻辑值成员 ("success", 假)
         包装对象.加入文本成员 ("error", "async结果过大(" + 到文本 (原始长度) + "字符), 已拒绝写入SQLite | 请缩小响应或使用 consume:true 及时读取")
         包装对象.加入整数成员 ("original_size", 原始长度)
-        包装对象.加入整数成员 ("max_size", 异步结果JSON最大字符)
+        包装对象.加入整数成员 ("max_size", MCP_常量.异步结果JSON最大字符)
         返回 (包装对象.到可读文本 (YYJSON格式化选项.压缩))
     }
 
     方法 尝试占用URL请求槽 <公开 静态 类型 = 逻辑型>
     {
         异步缓存锁.加锁 ()
-        如果 (活动URL请求数 >= URL请求最大并发)
+        如果 (活动URL请求数 >= MCP_常量.URL请求最大并发)
         {
             异步缓存锁.解锁 ()
             返回 (假)
         }
         活动URL请求数 = 活动URL请求数 + 1
-        如果 (活动URL请求数 >= URL请求最大并发 && URL请求槽满起始毫秒 == 0)
+        如果 (活动URL请求数 >= MCP_常量.URL请求最大并发 && URL请求槽满起始毫秒 == 0)
         {
             URL请求槽满起始毫秒 = 取启动时间 ()
         }
@@ -3417,7 +3451,7 @@
         {
             活动URL请求数 = 活动URL请求数 - 1
             最后URL请求槽释放时间 = 取启动时间 ()
-            如果 (活动URL请求数 < URL请求最大并发)
+            如果 (活动URL请求数 < MCP_常量.URL请求最大并发)
             {
                 URL请求槽满起始毫秒 = 0
             }
@@ -3425,56 +3459,10 @@
         异步缓存锁.解锁 ()
     }
 
-    方法 构建Base64图片异步JSON <公开 静态 类型 = 文本型>
-    参数 字节数据 <类型 = 字节集类>
-    参数 mime类型 <类型 = 文本型>
-    参数 原始字节数 <类型 = 整数 @默认值 = 0>
-    {
-        变量 实际大小 <类型 = 整数>
-        实际大小 = 原始字节数
-        如果 (实际大小 <= 0)
-        {
-            实际大小 = 取字节集长度 (字节数据)
-        }
-        如果 (实际大小 > 截图异步最大字节)
-        {
-            返回 (构建标准失败JSON ("图片过大(" + 到文本 (实际大小) + "字节), 上限=" + 到文本 (截图异步最大字节) + " | 请缩小截图区域或降低分辨率"))
-        }
-        变量 字节指针 <类型 = 变整数>
-        变量 字节长度 <类型 = 整数>
-        字节指针 = 取字节集指针 (字节数据)
-        字节长度 = 取字节集长度 (字节数据)
-        变量 base64数据 <类型 = 文本型>
-        @ // 二进制安全Base64: 直接对字节编码, 避免 字节集→文本→UTF8 双重转换损坏PNG/JPEG数据
-        @ {
-        @     const unsigned char* p = (const unsigned char*)(INT_P)@<字节指针>;
-        @     INT_P n = @<字节长度>;
-        @     static const char T[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-        @     std::string out;
-        @     out.reserve(((n + 2) / 3) * 4);
-        @     for (INT_P i = 0; i < n; i += 3) {
-        @         unsigned v = (unsigned)p[i] << 16;
-        @         if (i + 1 < n) v |= (unsigned)p[i+1] << 8;
-        @         if (i + 2 < n) v |= (unsigned)p[i+2];
-        @         out += T[(v >> 18) & 63];
-        @         out += T[(v >> 12) & 63];
-        @         out += (i + 1 < n) ? T[(v >> 6) & 63] : '=';
-        @         out += (i + 2 < n) ? T[v & 63] : '=';
-        @     }
-        @     @<base64数据> = CVolString(out.c_str());
-        @ }
-        变量 包装对象 <类型 = YYJSON对象类>
-        包装对象.创建自文本 ("{}")
-        包装对象.加入逻辑值成员 ("success", 真)
-        包装对象.加入文本成员 ("message", "data:" + mime类型 + ";base64," + base64数据)
-        包装对象.加入文本成员 ("mimeType", mime类型)
-        包装对象.加入整数成员 ("data_size", 实际大小)
-        返回 (包装对象.到可读文本 (YYJSON格式化选项.压缩))
-    }
-
     方法 存储异步结果 <公开 静态>
     参数 任务ID <类型 = 文本型>
     参数 结果JSON <类型 = 文本型>
+    参数 浏览器ID <类型 = 整数 @默认值 = 0>
     {
         如果 (缓存数据库可用 () == 假)
         {
@@ -3489,6 +3477,8 @@
         当前时间 = 取启动时间 ()
         变量 pollCount <类型 = 整数>
         pollCount = 0
+        变量 解析浏览器ID <类型 = 整数>
+        解析浏览器ID = 浏览器ID
         变量 结果解析 <类型 = YYJSON只读对象类>
         如果 (结果解析.创建自文本 (存储JSON))
         {
@@ -3497,21 +3487,170 @@
             {
                 是否等待 = 1
             }
+            // 如果参数未传浏览器ID, 尝试从JSON中提取
+            如果 (解析浏览器ID == 0)
+            {
+                解析浏览器ID = yyjson取整数 (结果解析, "_browser_id")
+            }
         }
         否则 (寻找文本 (存储JSON, "\"_waiting\":true", 0, 假) != -1)
         {
             是否等待 = 1
         }
+        // 如果仍未取到浏览器ID, 保留DB中已有值 (防止回调结果覆盖预占位的browser_id为0)
+        如果 (解析浏览器ID == 0)
+        {
+            变量 旧记录集 <类型 = SQLite记录集类>
+            旧记录集 = 缓存数据库.取记录集 ("SELECT browser_id FROM async_results WHERE task_id=?", )
+            旧记录集.置文本参数数据 (1, 任务ID)
+            如果 (旧记录集.执行语句 () == 100)
+            {
+                解析浏览器ID = 旧记录集.读整数数据 (0)
+            }
+            旧记录集.释放 ()
+        }
         变量 stmt <类型 = SQLite记录集类>
-        stmt = 缓存数据库.取记录集 ("INSERT OR REPLACE INTO async_results (task_id, result_json, is_waiting, created_at, poll_count) VALUES (?, ?, ?, ?, ?)", )
+        stmt = 缓存数据库.取记录集 ("INSERT OR REPLACE INTO async_results (task_id, result_json, is_waiting, browser_id, created_at, poll_count) VALUES (?, ?, ?, ?, ?, ?)", )
         stmt.置文本参数数据 (1, 任务ID)
         stmt.置文本参数数据 (2, 存储JSON)
         stmt.置整数参数数据 (3, 是否等待)
-        stmt.置长整数参数数据 (4, 当前时间)
-        stmt.置整数参数数据 (5, pollCount)
+        stmt.置整数参数数据 (4, 解析浏览器ID)
+        stmt.置长整数参数数据 (5, 当前时间)
+        stmt.置整数参数数据 (6, pollCount)
         stmt.执行语句 ()
         stmt.释放 ()
         修剪异步结果表_已持锁 ()
+        异步缓存锁.解锁 ()
+    }
+
+    # ── 浏览器事件驱动的等待任务解析 ──
+
+    方法 解析等待任务 <公开 静态>
+    参数 事件类型 <类型 = 文本型 注释 = "load_start/load_end/navigate">
+    参数 浏览器ID <类型 = 整数>
+    参数 事件数据 <类型 = 文本型 注释 = "URL或其他上下文">
+    {
+        如果 (缓存数据库可用 () == 假)
+        {
+            返回
+        }
+        异步缓存锁.加锁 ()
+        变量 记录集 <类型 = SQLite记录集类>
+        记录集 = 缓存数据库.取记录集 ("SELECT task_id, result_json FROM async_results WHERE is_waiting=1 AND (browser_id=0 OR browser_id=?)", )
+        记录集.置整数参数数据 (1, 浏览器ID)
+        循环判断首 ()
+        {
+            变量 rc <类型 = 整数>
+            rc = 记录集.执行语句 ()
+            如果 (rc != 100)
+            {
+                跳出循环
+            }
+            变量 任务ID <类型 = 文本型>
+            变量 结果JSON <类型 = 文本型>
+            任务ID = 记录集.读文本数据 (0)
+            结果JSON = 记录集.读文本数据 (1)
+            如果 (任务ID == "")
+            {
+                到循环尾
+            }
+            变量 解析 <类型 = YYJSON只读对象类>
+            如果 (解析.创建自文本 (结果JSON))
+            {
+                变量 等待类型 <类型 = 文本型>
+                等待类型 = 解析.取文本 ("what")
+                变量 匹配 <类型 = 逻辑型 值 = 假>
+                如果 (事件类型 == "load_end")
+                {
+                    如果 (等待类型 == "load_end" || 等待类型 == "navigate")
+                    {
+                        匹配 = 真
+                    }
+                }
+                否则 (事件类型 == "load_start")
+                {
+                    如果 (等待类型 == "load_start")
+                    {
+                        匹配 = 真
+                    }
+                }
+                否则 (事件类型 == "navigate")
+                {
+                    如果 (等待类型 == "navigate" || 等待类型 == "url_contains")
+                    {
+                        变量 目标值 <类型 = 文本型>
+                        目标值 = 解析.取文本 ("value")
+                        如果 (目标值 != "" && 寻找文本 (事件数据, 目标值, 0, 假) != -1)
+                        {
+                            匹配 = 真
+                        }
+                    }
+                }
+                如果 (匹配)
+                {
+                    变量 完成JSON <类型 = YYJSON对象类>
+                    完成JSON.创建自文本 ("{}")
+                    完成JSON.加入逻辑值成员 ("success", 真)
+                    完成JSON.加入逻辑值成员 ("_sync_waited", 真)
+                    完成JSON.加入文本成员 ("event", 事件类型)
+                    完成JSON.加入文本成员 ("url", 事件数据)
+                    完成JSON.加入文本成员 ("message", "等待条件满足: " + 事件类型 + " → " + 事件数据)
+                    变量 更新JSON <类型 = 文本型>
+                    更新JSON = 完成JSON.到可读文本 (YYJSON格式化选项.压缩)
+                    变量 updateStmt <类型 = SQLite记录集类>
+                    updateStmt = 缓存数据库.取记录集 ("UPDATE async_results SET result_json=?, is_waiting=0 WHERE task_id=?", )
+                    updateStmt.置文本参数数据 (1, 更新JSON)
+                    updateStmt.置文本参数数据 (2, 任务ID)
+                    updateStmt.执行语句 ()
+                    updateStmt.释放 ()
+                }
+            }
+        }
+        循环判断尾 (真)
+        记录集.释放 ()
+        异步缓存锁.解锁 ()
+    }
+
+    方法 存储等待任务错误 <公开 静态>
+    参数 浏览器ID <类型 = 整数>
+    参数 错误消息 <类型 = 文本型>
+    {
+        如果 (缓存数据库可用 () == 假)
+        {
+            返回
+        }
+        异步缓存锁.加锁 ()
+        变量 记录集 <类型 = SQLite记录集类>
+        记录集 = 缓存数据库.取记录集 ("SELECT task_id FROM async_results WHERE is_waiting=1 AND (browser_id=0 OR browser_id=?)", )
+        记录集.置整数参数数据 (1, 浏览器ID)
+        循环判断首 ()
+        {
+            变量 rc <类型 = 整数>
+            rc = 记录集.执行语句 ()
+            如果 (rc != 100)
+            {
+                跳出循环
+            }
+            变量 任务ID <类型 = 文本型>
+            任务ID = 记录集.读文本数据 (0)
+            如果 (任务ID != "")
+            {
+                变量 错误对象 <类型 = YYJSON对象类>
+                错误对象.创建自文本 ("{}")
+                错误对象.加入逻辑值成员 ("success", 假)
+                错误对象.加入文本成员 ("error", 错误消息)
+                变量 错误JSON <类型 = 文本型>
+                错误JSON = 错误对象.到可读文本 (YYJSON格式化选项.压缩)
+                变量 updateStmt <类型 = SQLite记录集类>
+                updateStmt = 缓存数据库.取记录集 ("UPDATE async_results SET result_json=?, is_waiting=0 WHERE task_id=?", )
+                updateStmt.置文本参数数据 (1, 错误JSON)
+                updateStmt.置文本参数数据 (2, 任务ID)
+                updateStmt.执行语句 ()
+                updateStmt.释放 ()
+            }
+        }
+        循环判断尾 (真)
+        记录集.释放 ()
         异步缓存锁.解锁 ()
     }
 
@@ -3633,16 +3772,25 @@
         stmt.置长整数参数数据 (5, 取启动时间 ())
         stmt.执行语句 ()
         stmt.释放 ()
-        修剪事件日志表_已持锁 ()
-        异步缓存锁.解锁 ()
-        // 每1000条清理一次; 同时监控写入速率防止磁盘写爆
+        // 修剪降频: 每次INSERT都修剪浪费COUNT查询, 改为每100次修剪一次
+        变量 事件修剪计数 <静态 类型 = 整数 值 = 0>
+        事件修剪计数 = 事件修剪计数 + 1
+        如果 (事件修剪计数 >= 100)
+        {
+            事件修剪计数 = 0
+            修剪事件日志表_已持锁 ()
+        }
+        // 每1000条清理一次; 计数在锁内保护, 防多线程竞争
         变量 清理计数 <静态 类型 = 整数 值 = 0>
         清理计数 = 清理计数 + 1
-        如果 (清理计数 >= 日志清理间隔)
+        如果 (清理计数 >= MCP_常量.日志清理间隔)
         {
             清理计数 = 0
+            异步缓存锁.解锁 ()
             清理过期缓存 ()
+            返回
         }
+        异步缓存锁.解锁 ()
     }
 
     # v2.4 参数化查询 — 动态WHERE条件通过条件构建+编号绑定, 彻底消除SQL注入风险
@@ -3819,24 +3967,24 @@
         {
             是否记录网络 = 真
             是否详细记录网络 = 假
-            返回 (命令成功 (命令ID, "网络日志已启用(基础模式)"))
+            返回 (MCP_响应构建.命令成功 (命令ID, "网络日志已启用(基础模式)"))
         }
         如果 (action == "detail_enable" || action == "network_detail_enable")
         {
             是否记录网络 = 真
             是否详细记录网络 = 真
-            返回 (命令成功 (命令ID, "网络日志已启用(详细模式)"))
+            返回 (MCP_响应构建.命令成功 (命令ID, "网络日志已启用(详细模式)"))
         }
         如果 (action == "disable" || action == "network_disable")
         {
             是否记录网络 = 假
             是否详细记录网络 = 假
-            返回 (命令成功 (命令ID, "网络日志已禁用"))
+            返回 (MCP_响应构建.命令成功 (命令ID, "网络日志已禁用"))
         }
         如果 (action == "clear" || action == "network_clear")
         {
             执行SQL ("DELETE FROM event_log WHERE log_type='network' OR log_type='network_detail'")
-            返回 (命令成功 (命令ID, "已清空"))
+            返回 (MCP_响应构建.命令成功 (命令ID, "已清空"))
         }
         如果 (action == "list" || action == "get" || action == "network_get")
         {
@@ -3850,9 +3998,9 @@
             {
                 限制 = 500
             }
-            返回 (命令成功_原始JSON (命令ID, 构建网络日志数据JSON (限制)))
+            返回 (MCP_响应构建.命令成功_原始JSON (命令ID, 构建网络日志数据JSON (限制)))
         }
-        返回 (命令失败 (命令ID, "未知action: " + action + " | 支持: list/get/enable/disable/clear/detail_enable (别名 network_*)"))
+        返回 (MCP_响应构建.命令失败 (命令ID, "未知action: " + action + " | 支持: list/get/enable/disable/clear/detail_enable (别名 network_*)"))
     }
 
     # ======== 缓存清理 — v2.4 参数化 ==========
@@ -3860,7 +4008,7 @@
     方法 清理滞留等待任务_已持锁 <公开 静态 注释 = "调用方须已持有 异步缓存锁">
     {
         变量 等待截止 <类型 = 长整数>
-        等待截止 = 取启动时间 () - 等待任务最大滞留毫秒
+        等待截止 = 取启动时间 () - MCP_常量.等待任务最大滞留毫秒
         缓存数据库.执行SQL语句 ("DELETE FROM async_results WHERE is_waiting=1 AND created_at<" + 到文本 (等待截止), )
     }
 
@@ -3873,17 +4021,17 @@
         {
             变量 总数 <类型 = 整数>
             总数 = 记录集.读整数数据 (0)
-            如果 (总数 > 缓存最大条目)
+            如果 (总数 > MCP_常量.缓存最大条目)
             {
                 变量 删除数 <类型 = 整数>
-                删除数 = 总数 - 缓存最大条目 + 缓存清理_保留缓冲
+                删除数 = 总数 - MCP_常量.缓存最大条目 + MCP_常量.缓存清理_保留缓冲
                 缓存数据库.执行SQL语句 ("DELETE FROM async_results WHERE task_id IN (SELECT task_id FROM async_results WHERE is_waiting=0 ORDER BY created_at ASC LIMIT " + 到文本 (删除数) + ")", )
                 变量 仍超限 <类型 = 整数>
                 仍超限 = 总数 - 删除数
-                如果 (仍超限 > 缓存最大条目)
+                如果 (仍超限 > MCP_常量.缓存最大条目)
                 {
                     变量 强制删除数 <类型 = 整数>
-                    强制删除数 = 仍超限 - 缓存最大条目 + 缓存清理_保留缓冲
+                    强制删除数 = 仍超限 - MCP_常量.缓存最大条目 + MCP_常量.缓存清理_保留缓冲
                     缓存数据库.执行SQL语句 ("DELETE FROM async_results WHERE task_id IN (SELECT task_id FROM async_results ORDER BY created_at ASC LIMIT " + 到文本 (强制删除数) + ")", )
                 }
             }
@@ -3899,10 +4047,10 @@
         {
             变量 总数 <类型 = 整数>
             总数 = 记录集.读整数数据 (0)
-            如果 (总数 > 事件日志最大条目)
+            如果 (总数 > MCP_常量.事件日志最大条目)
             {
                 变量 删除数 <类型 = 整数>
-                删除数 = 总数 - 事件日志最大条目 + 缓存清理_保留缓冲
+                删除数 = 总数 - MCP_常量.事件日志最大条目 + MCP_常量.缓存清理_保留缓冲
                 缓存数据库.执行SQL语句 ("DELETE FROM event_log WHERE id IN (SELECT id FROM event_log ORDER BY created_at ASC LIMIT " + 到文本 (删除数) + ")", )
             }
         }
@@ -3917,10 +4065,10 @@
         {
             变量 总数 <类型 = 整数>
             总数 = 记录集.读整数数据 (0)
-            如果 (总数 > 响应缓存最大条目)
+            如果 (总数 > MCP_常量.响应缓存最大条目)
             {
                 变量 删除数 <类型 = 整数>
-                删除数 = 总数 - 响应缓存最大条目 + 缓存清理_保留缓冲
+                删除数 = 总数 - MCP_常量.响应缓存最大条目 + MCP_常量.缓存清理_保留缓冲
                 缓存数据库.执行SQL语句 ("DELETE FROM response_cache WHERE url IN (SELECT url FROM response_cache ORDER BY created_at ASC LIMIT " + 到文本 (删除数) + ")", )
             }
         }
@@ -3930,7 +4078,7 @@
     方法 清理过期缓存 <公开 静态>
     {
         变量 过期时间 <类型 = 长整数>
-        过期时间 = 取启动时间 () - 缓存保留天数 * 毫秒_每天
+        过期时间 = 取启动时间 () - MCP_常量.缓存保留天数 * MCP_常量.毫秒_每天
         // 启动初期(取启动时间<7天): 过期时间为负, 无法清理上次运行的残留数据
         // 此时使用取现行时间()的OLE日期差值作为绝对时间参考
         如果 (过期时间 < 0)
@@ -3944,9 +4092,9 @@
             返回
         }
         异步缓存锁.加锁 ()
-        执行参数化DELETE ("DELETE FROM async_results WHERE is_waiting=0 AND created_at<?", 到文本 (过期时间))
+        // async_results 按非等待保留(24h)清理; event_log/response_cache 按缓存保留天数(14d)清理
         变量 短TTL截止 <类型 = 长整数>
-        短TTL截止 = 取启动时间 () - 异步结果非等待保留毫秒
+        短TTL截止 = 取启动时间 () - MCP_常量.异步结果非等待保留毫秒
         缓存数据库.执行SQL语句 ("DELETE FROM async_results WHERE is_waiting=0 AND created_at<" + 到文本 (短TTL截止), )
         清理滞留等待任务_已持锁 ()
         修剪异步结果表_已持锁 ()
@@ -3981,43 +4129,21 @@
         {
             返回
         }
-        如果 (size <= 0 || size > 响应缓存单条最大字节)
+        如果 (size <= 0 || size > MCP_常量.响应缓存单条最大字节)
         {
             返回
         }
         异步缓存锁.加锁 ()
         变量 当前时间 <类型 = 长整数>
         当前时间 = 取启动时间 ()
-        // body转hex, 避免blob绑定API限制; hex仅含[0-9a-fA-F], 校验后再拼接
+        // body转hex存储; 字节集到十六进制文本保证输出合法hex, 仅做长度合理性检查
         变量 hexBody <类型 = 文本型>
         hexBody = 字节集到十六进制文本 (body)
-        // 安全校验: hexBody仅允许[0-9a-fA-F], 非hex字符视为数据异常, 拒绝写入
-        变量 hexValid <类型 = 逻辑型 值 = 真>
         变量 hexLen <类型 = 整数>
         hexLen = 取文本长度 (hexBody)
         如果 (hexLen == 0 || hexLen % 2 != 0)
         {
-            hexValid = 假
-        }
-        否则
-        {
-            变量 hexAlphabet <类型 = 文本型 值 = "0123456789ABCDEFabcdef">
-            变量 hi <类型 = 整数>
-            计次循环 (hexLen)
-            {
-                hi = 取循环索引 ()
-                变量 hc <类型 = 文本型>
-                hc = 取文本中间 (hexBody, hi + 1, 1)
-                如果 (寻找文本 (hexAlphabet, hc, 0, 假) == -1)
-                {
-                    hexValid = 假
-                    跳出循环
-                }
-            }
-        }
-        如果 (hexValid == 假)
-        {
-            调试输出 ("[MCP] 警告: response_cache body hex校验失败, 拒绝写入 url=", url, " hexLen=", hexLen)
+            调试输出 ("[MCP] 警告: response_cache body hex长度异常, url=", url, " hexLen=", hexLen)
             异步缓存锁.解锁 ()
             返回
         }
@@ -4042,16 +4168,27 @@
     {
         如果 (browser.是否为空 () || browser.是否已关闭 ())
         {
-            存储异步结果 (任务ID, 构建标准失败JSON (错误_无浏览器))
+            存储异步结果 (任务ID, MCP_响应构建.构建标准失败JSON (MCP_常量.错误_无浏览器))
             返回 (任务ID)
         }
         变量 安全框架 <类型 = 类_FBrowser_框架>
         安全框架 = 取安全主框架 (browser)
         如果 (安全框架.是否为空 () || 安全框架.是否有效 () == 假)
         {
-            存储异步结果 (任务ID, 构建标准失败JSON (错误_主框架无效))
+            存储异步结果 (任务ID, MCP_响应构建.构建标准失败JSON (MCP_常量.错误_主框架无效))
             返回 (任务ID)
         }
+        // v2.7: 预存pending占位 — 即使CEF回调因页面导航丢失, 任务也不会"消失"
+        // mcp_result轮询此占位时按max_ms超时返回错误, 而非"未找到任务"
+        变量 预占位 <类型 = YYJSON对象类>
+        预占位.创建自文本 ("{}")
+        预占位.加入逻辑值成员 ("_waiting", 真)
+        预占位.加入文本成员 ("what", "js_exec")
+        预占位.加入文本成员 ("message", "JS执行中...")
+        预占位.加入长整数成员 ("start_time", 取启动时间 ())
+        预占位.加入整数成员 ("max_ms", MCP_常量.同步等待_JS执行超时)
+        预占位.加入整数成员 ("_browser_id", browser.取ID ())
+        存储异步结果 (任务ID, 预占位.到可读文本 (YYJSON格式化选项.压缩), browser.取ID ())
         变量 JS回调 <类型 = 类_FBrowser_事件智能指针>
         JS回调.创建 (类_MCP_JS异步回调)
         JS回调.取执行类 (类_MCP_JS异步回调).任务ID = 任务ID
@@ -4065,7 +4202,7 @@
     参数 browser <类型 = 类_FBrowser_浏览器>
     参数 任务ID <类型 = 文本型>
     {
-        返回 (异步取源码_带限制 (browser, 任务ID, 截断_源码默认字节))
+        返回 (异步取源码_带限制 (browser, 任务ID, MCP_常量.截断_源码默认字节))
     }
 
     # 带大小限制的异步取源码
@@ -4079,9 +4216,19 @@
         安全框架 = 取安全主框架 (browser)
         如果 (安全框架.是否为空 () || 安全框架.是否有效 () == 假)
         {
-            存储异步结果 (任务ID, 构建标准成功JSON (""))
+            存储异步结果 (任务ID, MCP_响应构建.构建标准成功JSON (""))
             返回 (任务ID)
         }
+        // v2.7: 预存pending占位, 防止frame失效导致回调丢失时任务"消失"
+        变量 预占位 <类型 = YYJSON对象类>
+        预占位.创建自文本 ("{}")
+        预占位.加入逻辑值成员 ("_waiting", 真)
+        预占位.加入文本成员 ("what", "js_exec")
+        预占位.加入文本成员 ("message", "取源码执行中...")
+        预占位.加入长整数成员 ("start_time", 取启动时间 ())
+        预占位.加入整数成员 ("max_ms", MCP_常量.同步等待_JS执行超时)
+        预占位.加入整数成员 ("_browser_id", browser.取ID ())
+        存储异步结果 (任务ID, 预占位.到可读文本 (YYJSON格式化选项.压缩), browser.取ID ())
         变量 字符串回调 <类型 = 类_FBrowser_事件智能指针>
         字符串回调.创建 (类_MCP_字符串异步回调)
         字符串回调.取执行类 (类_MCP_字符串异步回调).任务ID = 任务ID
@@ -4096,7 +4243,7 @@
     参数 browser <类型 = 类_FBrowser_浏览器>
     参数 任务ID <类型 = 文本型>
     {
-        返回 (异步取文本_带限制 (browser, 任务ID, 截断_源码默认字节))
+        返回 (异步取文本_带限制 (browser, 任务ID, MCP_常量.截断_源码默认字节))
     }
 
     # 带大小限制的异步取文本
@@ -4110,9 +4257,19 @@
         安全框架 = 取安全主框架 (browser)
         如果 (安全框架.是否为空 () || 安全框架.是否有效 () == 假)
         {
-            存储异步结果 (任务ID, 构建标准成功JSON (""))
+            存储异步结果 (任务ID, MCP_响应构建.构建标准成功JSON (""))
             返回 (任务ID)
         }
+        // v2.7: 预存pending占位, 防止frame失效导致回调丢失时任务"消失"
+        变量 预占位 <类型 = YYJSON对象类>
+        预占位.创建自文本 ("{}")
+        预占位.加入逻辑值成员 ("_waiting", 真)
+        预占位.加入文本成员 ("what", "js_exec")
+        预占位.加入文本成员 ("message", "取文本执行中...")
+        预占位.加入长整数成员 ("start_time", 取启动时间 ())
+        预占位.加入整数成员 ("max_ms", MCP_常量.同步等待_JS执行超时)
+        预占位.加入整数成员 ("_browser_id", browser.取ID ())
+        存储异步结果 (任务ID, 预占位.到可读文本 (YYJSON格式化选项.压缩), browser.取ID ())
         变量 字符串回调 <类型 = 类_FBrowser_事件智能指针>
         字符串回调.创建 (类_MCP_字符串异步回调)
         字符串回调.取执行类 (类_MCP_字符串异步回调).任务ID = 任务ID
@@ -4159,7 +4316,27 @@
         }
         变量 规范名 <类型 = 文本型>
         规范名 = 规范化工具名 (方法名)
-        如果 (规范名 == "browser_get_title" || 规范名 == "browser_evaluate" || 规范名 == "browser_console_eval")
+        如果 (规范名 == "browser_navigate" || 规范名 == "browser_reload")
+        {
+            如果 (参数JSON.是否为空 () == 假 && yyjson取逻辑 (参数JSON, "wait_for_load"))
+            {
+                返回 (真)
+            }
+            返回 (假)
+        }
+        如果 (规范名 == "browser_get_title" || 规范名 == "browser_evaluate" || 规范名 == "browser_execute_js" || 规范名 == "browser_console_eval")
+        {
+            返回 (真)
+        }
+        如果 (规范名 == "browser_get_url" || 规范名 == "browser_get_id" || 规范名 == "browser_status")
+        {
+            返回 (真)
+        }
+        如果 (规范名 == "browser_is_loading" || 规范名 == "browser_is_muted" || 规范名 == "browser_can_navigate" || 规范名 == "browser_get_zoom")
+        {
+            返回 (真)
+        }
+        如果 (规范名 == "browser_loading_info" || 规范名 == "browser_popup_info" || 规范名 == "browser_window_info")
         {
             返回 (真)
         }
@@ -4167,13 +4344,42 @@
         {
             返回 (真)
         }
+        如果 (规范名 == "browser_dom_inner_html" || 规范名 == "browser_dom_checked" || 规范名 == "browser_dom_selected" || 规范名 == "browser_dom_rect")
+        {
+            返回 (真)
+        }
         如果 (规范名 == "browser_get_frames" || 规范名 == "browser_frame_names")
         {
             返回 (真)
         }
-        如果 (规范名 == "browser_fill_exists" || 规范名 == "browser_fill_attr_get")
+        如果 (规范名 == "browser_fill_exists" || 规范名 == "browser_fill_attr_get" || 规范名 == "browser_fill_set_value" || 规范名 == "browser_fill_click")
         {
             返回 (真)
+        }
+        如果 (规范名 == "browser_get_cookies" || 规范名 == "browser_get_all_cookies")
+        {
+            返回 (真)
+        }
+        如果 (规范名 == "browser_screenshot")
+        {
+            返回 (真)
+        }
+        如果 (规范名 == "browser_get_source")
+        {
+            如果 (参数JSON.是否为空 () == 假)
+            {
+                变量 srcMC <类型 = 整数>
+                srcMC = yyjson取整数 (参数JSON, "max_chars")
+                如果 (srcMC <= 0 || srcMC > MCP_常量.截断_源码默认字节)
+                {
+                    srcMC = MCP_常量.截断_源码默认字节
+                }
+                如果 (srcMC < 65536)
+                {
+                    返回 (真)
+                }
+            }
+            返回 (假)
         }
         如果 (规范名 == "browser_debugger_wait_paused" || 规范名 == "browser_debugger_last_paused" || 规范名 == "browser_debugger_inspect" || 规范名 == "browser_debugger_flow" || 规范名 == "browser_debugger_script_source" || 规范名 == "browser_debugger_auto")
         {
@@ -4218,17 +4424,45 @@
         }
         变量 规范名 <类型 = 文本型>
         规范名 = 规范化工具名 (方法名)
-        如果 (规范名 == "browser_get_title" || 规范名 == "browser_evaluate" || 规范名 == "browser_console_eval")
+        如果 (规范名 == "browser_navigate" || 规范名 == "browser_reload")
         {
-            返回 (同步等待_快读毫秒)
+            返回 (30000)
+        }
+        如果 (规范名 == "browser_get_url" || 规范名 == "browser_get_id" || 规范名 == "browser_status")
+        {
+            返回 (MCP_常量.同步等待_即时毫秒)
+        }
+        如果 (规范名 == "browser_is_loading" || 规范名 == "browser_is_muted" || 规范名 == "browser_can_navigate" || 规范名 == "browser_get_zoom")
+        {
+            返回 (MCP_常量.同步等待_即时毫秒)
+        }
+        如果 (规范名 == "browser_loading_info" || 规范名 == "browser_popup_info" || 规范名 == "browser_window_info")
+        {
+            返回 (MCP_常量.同步等待_即时毫秒)
+        }
+        如果 (规范名 == "browser_get_title" || 规范名 == "browser_evaluate" || 规范名 == "browser_execute_js" || 规范名 == "browser_console_eval")
+        {
+            返回 (MCP_常量.同步等待_快读毫秒)
         }
         如果 (规范名 == "browser_dom_query" || 规范名 == "browser_dom_set_value" || 规范名 == "browser_dom_click")
         {
-            返回 (同步等待_快读毫秒)
+            返回 (MCP_常量.同步等待_快读毫秒)
         }
-        如果 (规范名 == "browser_fill_exists" || 规范名 == "browser_fill_attr_get")
+        如果 (规范名 == "browser_dom_inner_html" || 规范名 == "browser_dom_checked" || 规范名 == "browser_dom_selected" || 规范名 == "browser_dom_rect")
         {
-            返回 (同步等待_快读毫秒)
+            返回 (MCP_常量.同步等待_快读毫秒)
+        }
+        如果 (规范名 == "browser_fill_exists" || 规范名 == "browser_fill_attr_get" || 规范名 == "browser_fill_set_value" || 规范名 == "browser_fill_click")
+        {
+            返回 (MCP_常量.同步等待_快读毫秒)
+        }
+        如果 (规范名 == "browser_get_cookies" || 规范名 == "browser_get_all_cookies")
+        {
+            返回 (MCP_常量.同步等待_快读毫秒)
+        }
+        如果 (规范名 == "browser_screenshot" || 规范名 == "browser_get_source")
+        {
+            返回 (MCP_常量.同步等待_截图毫秒)
         }
         如果 (规范名 == "browser_debugger_flow")
         {
@@ -4250,7 +4484,7 @@
         {
             返回 (30000)
         }
-        返回 (同步等待_默认毫秒)
+        返回 (MCP_常量.同步等待_默认毫秒)
     }
 
     方法 取工具结果键名 <公开 静态 类型 = 文本型>
@@ -4282,6 +4516,50 @@
         {
             返回 ("names")
         }
+        如果 (规范名 == "browser_get_url")
+        {
+            返回 ("url")
+        }
+        如果 (规范名 == "browser_is_loading")
+        {
+            返回 ("loading")
+        }
+        如果 (规范名 == "browser_is_muted")
+        {
+            返回 ("muted")
+        }
+        如果 (规范名 == "browser_get_zoom")
+        {
+            返回 ("zoom")
+        }
+        如果 (规范名 == "browser_get_id")
+        {
+            返回 ("id")
+        }
+        如果 (规范名 == "browser_screenshot")
+        {
+            返回 ("image")
+        }
+        如果 (规范名 == "browser_get_cookies" || 规范名 == "browser_get_all_cookies")
+        {
+            返回 ("cookies")
+        }
+        如果 (规范名 == "browser_dom_inner_html")
+        {
+            返回 ("html")
+        }
+        如果 (规范名 == "browser_dom_checked")
+        {
+            返回 ("checked")
+        }
+        如果 (规范名 == "browser_dom_selected")
+        {
+            返回 ("selected")
+        }
+        如果 (规范名 == "browser_dom_rect")
+        {
+            返回 ("rect")
+        }
         如果 (规范名 == "browser_fill_exists")
         {
             返回 ("exists")
@@ -4296,7 +4574,7 @@
     方法 同步等待异步任务 <公开 静态 类型 = 文本型>
     参数 任务ID <类型 = 文本型>
     参数 最大毫秒 <类型 = 整数>
-    参数 轮询间隔毫秒 <类型 = 整数 @默认值 = 同步等待_轮询间隔>
+    参数 轮询间隔毫秒 <类型 = 整数 @默认值 = MCP_常量.同步等待_轮询间隔>
     {
         如果 (任务ID == "")
         {
@@ -4313,7 +4591,7 @@
             }
             如果 (MCP_编排分派.工作流应停止)
             {
-                返回 (构建标准失败JSON ("工作流已停止"))
+                返回 (MCP_响应构建.构建标准失败JSON ("工作流已停止"))
             }
             变量 存储结果 <类型 = 文本型>
             MCP执行锁.解锁 ()
@@ -4451,7 +4729,7 @@
     参数 最大毫秒 <类型 = 整数>
     参数 命令ID前缀 <类型 = 文本型>
     参数 工具名 <类型 = 文本型 @默认值 = "">
-    参数 轮询间隔毫秒 <类型 = 整数 @默认值 = 同步等待_轮询间隔>
+    参数 轮询间隔毫秒 <类型 = 整数 @默认值 = MCP_常量.同步等待_轮询间隔>
     {
         如果 (任务ID == "")
         {
@@ -4470,7 +4748,7 @@
             }
             如果 (MCP_编排分派.工作流应停止)
             {
-                返回 (构建标准失败JSON ("工作流已停止"))
+                返回 (MCP_响应构建.构建标准失败JSON ("工作流已停止"))
             }
             变量 存储结果 <类型 = 文本型>
             存储结果 = 查询异步结果 (任务ID)
@@ -4574,7 +4852,7 @@
         变量 结果解析 <类型 = YYJSON只读对象类>
         如果 (结果解析.创建自文本 (存储JSON) == 假)
         {
-            返回 (命令失败 (命令ID, "异步结果解析失败"))
+            返回 (MCP_响应构建.命令失败 (命令ID, "异步结果解析失败"))
         }
         如果 (结果解析.取逻辑值 ("success") == 假)
         {
@@ -4604,7 +4882,7 @@
             }
             否则
             {
-                返回 (命令失败 (命令ID, err))
+                返回 (MCP_响应构建.命令失败 (命令ID, err))
             }
         }
         变量 内容 <类型 = 文本型>
@@ -4625,7 +4903,7 @@
         }
         如果 (JS消息是否表示失败 (内容, 语义工具))
         {
-            返回 (命令失败 (命令ID, 内容))
+            返回 (MCP_响应构建.命令失败 (命令ID, 内容))
         }
         如果 (内容是否JSON结构 (内容))
         {
@@ -4646,7 +4924,7 @@
             {
                 响应JSON = 响应JSON + ",\"" + 结果键名 + "\":" + 内容
             }
-            响应JSON = 响应JSON + ",\"message\":\"" + JSON转义文本 (内容) + "\""
+            响应JSON = 响应JSON + ",\"message\":\"" + MCP_响应构建.JSON转义文本 (内容) + "\""
             如果 (结果键名 == "result" || 结果键名 == "")
             {
                 响应JSON = 响应JSON + ",\"result\":" + 内容
@@ -4720,9 +4998,9 @@
         {
             如果 (MCP正在关闭)
             {
-                返回 (命令失败 (命令ID, "MCP 服务正在关闭"))
+                返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_服务正在关闭))
             }
-            返回 (命令失败 (命令ID, "操作超时(" + 到文本 (最大毫秒) + "ms) | task_id=" + 任务ID + " | 可设 async_only:true 改异步"))
+            返回 (MCP_响应构建.命令失败 (命令ID, "⏱ 操作超时(" + 到文本 (最大毫秒 / 1000) + "s) | task_id=" + 任务ID + " | 页面可能较慢, 请: ①增大max_ms重试 ②设async_only:true改异步 ③用mcp_result轮询"))
         }
         返回 (将异步结果转为命令响应 (命令ID, 存储, 取工具结果键名 (方法名), (整数)(取启动时间 () - 开始), 方法名))
     }
@@ -4749,9 +5027,9 @@
             }
             如果 (MCP正在关闭)
             {
-                返回 (命令失败 (命令ID, "MCP 服务正在关闭"))
+                返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_服务正在关闭))
             }
-            返回 (命令失败 (命令ID, "操作超时(" + 到文本 (最大毫秒) + "ms) | task_id=" + 任务ID + " | 可设 async_only:true 改异步"))
+            返回 (MCP_响应构建.命令失败 (命令ID, "⏱ 操作超时(" + 到文本 (最大毫秒 / 1000) + "s) | task_id=" + 任务ID + " | 页面可能较慢, 请: ①增大max_ms重试 ②设async_only:true改异步 ③用mcp_result轮询"))
         }
         变量 对象 <类型 = YYJSON对象类>
         对象.创建自文本 ("{}")
@@ -4780,7 +5058,7 @@
         安全框架 = 取安全主框架 (browser)
         如果 (安全框架.是否为空 () || 安全框架.是否有效 () == 假)
         {
-            返回 (构建简单错误JSON (错误_主框架无效))
+            返回 (MCP_响应构建.构建简单错误JSON (MCP_常量.错误_主框架无效))
         }
         // 全部异步: 自动生成taskID
         如果 (任务ID == "")
@@ -4788,45 +5066,76 @@
             任务ID = 生成异步任务ID ()
         }
         异步执行JS (browser, code, 任务ID)
-        返回 (构建异步提交JSON (任务ID))
+        返回 (MCP_响应构建.构建异步提交JSON (任务ID))
     }
 
     方法 提交异步取源码任务 <公开 静态 类型 = 文本型>
     参数 browser <类型 = 类_FBrowser_浏览器>
     参数 任务ID <类型 = 文本型 @默认值 = "">
-    参数 最大字符数 <类型 = 整数 @默认值 = 截断_源码默认字节>
+    参数 最大字符数 <类型 = 整数 @默认值 = MCP_常量.截断_源码默认字节>
     {
         变量 安全框架 <类型 = 类_FBrowser_框架>
         安全框架 = 取安全主框架 (browser)
         如果 (安全框架.是否为空 () || 安全框架.是否有效 () == 假)
         {
-            返回 (构建简单错误JSON (错误_主框架无效))
+            返回 (MCP_响应构建.构建简单错误JSON (MCP_常量.错误_主框架无效))
         }
         如果 (任务ID == "")
         {
             任务ID = 生成异步任务ID ()
         }
         异步取源码_带限制 (browser, 任务ID, 最大字符数)
-        返回 (构建异步提交JSON (任务ID))
+        返回 (MCP_响应构建.构建异步提交JSON (任务ID))
     }
 
     方法 提交异步取文本任务 <公开 静态 类型 = 文本型>
     参数 browser <类型 = 类_FBrowser_浏览器>
     参数 任务ID <类型 = 文本型 @默认值 = "">
-    参数 最大字符数 <类型 = 整数 @默认值 = 截断_源码默认字节>
+    参数 最大字符数 <类型 = 整数 @默认值 = MCP_常量.截断_源码默认字节>
     {
         变量 安全框架 <类型 = 类_FBrowser_框架>
         安全框架 = 取安全主框架 (browser)
         如果 (安全框架.是否为空 () || 安全框架.是否有效 () == 假)
         {
-            返回 (构建简单错误JSON (错误_主框架无效))
+            返回 (MCP_响应构建.构建简单错误JSON (MCP_常量.错误_主框架无效))
         }
         如果 (任务ID == "")
         {
             任务ID = 生成异步任务ID ()
         }
         异步取文本_带限制 (browser, 任务ID, 最大字符数)
-        返回 (构建异步提交JSON (任务ID))
+        返回 (MCP_响应构建.构建异步提交JSON (任务ID))
+    }
+
+    # ======== 加载等待任务 (browser_navigate / browser_reload 共用的 wait_for_load) ==========
+
+    方法 注册加载等待任务 <公开 静态 类型 = 文本型 注释 = "注册load_end等待任务, 供browser_navigate/browser_reload的wait_for_load参数共用">
+    参数 命令ID <类型 = 文本型>
+    参数 参数JSON <类型 = YYJSON只读对象类>
+    参数 browser <类型 = 类_FBrowser_浏览器>
+    参数 上下文消息 <类型 = 文本型>
+    参数 返回消息 <类型 = 文本型>
+    {
+        变量 等待任务ID <类型 = 文本型>
+        等待任务ID = 生成异步任务ID ()
+        变量 等待存储 <类型 = YYJSON对象类>
+        等待存储.创建自文本 ("{}")
+        等待存储.加入逻辑值成员 ("_waiting", 真)
+        等待存储.加入文本成员 ("what", "load_end")
+        变量 maxMs <类型 = 整数>
+        maxMs = yyjson取整数 (参数JSON, "max_ms")
+        如果 (maxMs <= 0)
+        {
+            maxMs = 30000
+        }
+        等待存储.加入文本成员 ("message", 上下文消息)
+        等待存储.加入整数成员 ("max_ms", maxMs)
+        等待存储.加入长整数成员 ("start_time", 取启动时间 ())
+        等待存储.加入整数成员 ("_poll_count", 0)
+        等待存储.加入整数成员 ("_browser_id", browser.取ID ())
+        等待存储.加入逻辑值成员 ("_event_driven", 真)
+        存储异步结果 (等待任务ID, 等待存储.到可读文本 (YYJSON格式化选项.压缩))
+        返回 (命令成功_异步 (命令ID, 等待任务ID, 返回消息))
     }
 
     # ======== yyjson 安全取值 ==========
@@ -5062,7 +5371,7 @@
         {
             导航拦截规则 = 导航拦截规则 + "\n" + 新行
         }
-        导航拦截规则 = 裁剪规则文本到最大行数 (导航拦截规则, 拦截规则最大行数)
+        导航拦截规则 = 裁剪规则文本到最大行数 (导航拦截规则, MCP_常量.拦截规则最大行数)
     }
 
     方法 添加资源替换规则 <公开 静态>
@@ -5092,7 +5401,7 @@
         {
             资源替换规则 = 资源替换规则 + "\n" + 新行
         }
-        资源替换规则 = 裁剪规则文本到最大行数 (资源替换规则, 拦截规则最大行数)
+        资源替换规则 = 裁剪规则文本到最大行数 (资源替换规则, MCP_常量.拦截规则最大行数)
     }
 
     # ======== 网络日志 ==========
@@ -5562,6 +5871,16 @@
             {
                 返回 (frame)
             }
+            // v2.7 体验优化: 框架未就绪时延时500ms重试一次 (页面可能正在加载中)
+            MCP可中断延时 (500)
+            如果 (browser.是否已关闭 () == 假)
+            {
+                frame = browser.取主框架 ()
+                如果 (frame.是否为空 () == 假 && frame.是否有效 ())
+                {
+                    返回 (frame)
+                }
+            }
         }
         变量 空框架 <类型 = 类_FBrowser_框架>
         返回 (空框架)
@@ -5605,7 +5924,7 @@
         browser = 取安全主浏览器 ()
         如果 (browser.是否为空 ())
         {
-            返回 (命令失败 (命令ID, MCP_常量.错误_无浏览器))
+            返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
         }
         确保CDP观察者已注册 ()
         返回 (执行CDP命令_带参数 (命令ID, cdpMethod, paramsJSON))
@@ -5633,28 +5952,6 @@
         }
         变量 空dom <类型 = 类_FBrowserVIP_开发者DOM>
         返回 (空dom)
-    }
-
-    方法 构建逻辑值JSON <公开 静态 类型 = 文本型>
-    参数 键名 <类型 = 文本型>
-    参数 键值 <类型 = 逻辑型>
-    {
-        变量 对象 <类型 = YYJSON对象类>
-        对象.创建自文本 ("{}")
-        对象.加入逻辑值成员 ("success", 真)
-        对象.加入逻辑值成员 (键名, 键值)
-        返回 (对象.到可读文本 (YYJSON格式化选项.压缩))
-    }
-
-    方法 构建整数值JSON <公开 静态 类型 = 文本型>
-    参数 键名 <类型 = 文本型>
-    参数 键值 <类型 = 整数>
-    {
-        变量 对象 <类型 = YYJSON对象类>
-        对象.创建自文本 ("{}")
-        对象.加入逻辑值成员 ("success", 真)
-        对象.加入整数成员 (键名, 键值)
-        返回 (对象.到可读文本 (YYJSON格式化选项.压缩))
     }
 
     # ======== 命令预查找 (字典O(1), 找不到直接返回) ==========
@@ -5758,8 +6055,8 @@
     参数 路径 <类型 = 文本型>
     参数 仅允许运行目录内 <类型 = 逻辑型 注释 = "写操作应设真, 限制在取运行目录()子树内" @默认值 = 假>
     {
-        // 防止路径遍历攻击: 拒绝包含 ../ || ..\\ 的路径
-        如果 (寻找文本 (路径, "..", 0, 假) != -1)
+        // 防止路径遍历攻击: 拒绝 ../ || ..\\ 模式 (允许 .. 嵌入合法文件名如 foo..bar.txt)
+        如果 (寻找文本 (路径, "../", 0, 假) != -1 || 寻找文本 (路径, "..\\", 0, 假) != -1)
         {
             调试输出 ("[MCP] 安全拒绝(路径遍历):", 路径)
             返回 (假)
@@ -5943,7 +6240,7 @@
         异步缓存锁.解锁 ()
         // 检测粘滞的URL请求槽: 槽满后 5 分钟仍无释放 → 强制重置
         异步缓存锁.加锁 ()
-        如果 (活动URL请求数 >= URL请求最大并发)
+        如果 (活动URL请求数 >= MCP_常量.URL请求最大并发)
         {
             变量 粘滞起点 <类型 = 长整数>
             粘滞起点 = URL请求槽满起始毫秒
@@ -5953,7 +6250,7 @@
             }
             如果 (粘滞起点 > 0 && 取启动时间 () - 粘滞起点 > 300000)
             {
-                调试输出 ("[MCP] 警告: URL请求槽全部粘滞 " + 到文本 (活动URL请求数) + "/" + 到文本 (URL请求最大并发) + ", 强制重置")
+                调试输出 ("[MCP] 警告: URL请求槽全部粘滞 " + 到文本 (活动URL请求数) + "/" + 到文本 (MCP_常量.URL请求最大并发) + ", 强制重置")
                 活动URL请求数 = 0
                 最后URL请求槽释放时间 = 0
                 URL请求槽满起始毫秒 = 0
@@ -5976,7 +6273,7 @@
         变量 当前OLE日期 <类型 = 小数>
         当前OLE日期 = 取现行时间 ()
         变量 截止OLE日期 <类型 = 小数>
-        截止OLE日期 = 当前OLE日期 - 下载保留天数
+        截止OLE日期 = 当前OLE日期 - MCP_常量.下载保留天数
         变量 查找器 <类型 = 文件查找类>
         变量 找到名 <类型 = 文本型>
         找到名 = 查找器.寻找文件 (下载目录 + "\\*.*", -1, 0)
@@ -6158,7 +6455,7 @@
     参数 服务器 <类型 = 类_FBrowser_服务器>
     参数 连接ID <类型 = 整数>
     {
-        发送CORS响应 (服务器, 连接ID, 404, HTTP_JSON内容类型, 0, 0)
+        发送CORS响应 (服务器, 连接ID, 404, MCP_常量.HTTP_JSON内容类型, 0, 0)
     }
 
     方法 发送CORS404HTML响应 <公开 静态>
@@ -6188,10 +6485,10 @@
         errObj.加入文本成员 ("error", 错误消息)
         变量 errBody <类型 = 字节集类>
         errBody = 文本到UTF8 (errObj.到可读文本 (YYJSON格式化选项.压缩), 假)
-        发送CORS响应 (服务器, 连接ID, 500, HTTP_JSON内容类型, 取字节集指针 (errBody), 取字节集长度 (errBody))
+        发送CORS响应 (服务器, 连接ID, 500, MCP_常量.HTTP_JSON内容类型, 取字节集指针 (errBody), 取字节集长度 (errBody))
     }
 
-    # ======== JSON 响应构建（yyjson值序列化 + 文本拼接外层） ==========
+    # ======== JSON-RPC 协议信封构建（yyjson值序列化 + 文本拼接外层） ==========
     # 注: yyjson 的 加入成员() 嵌套对象在此版本存在访问违例 (0xC0000005)
     # 故改用: yyjson构建扁平内层对象→序列化→火山文本拼接外包装
 
@@ -6209,21 +6506,29 @@
             变量 结果JSON <类型 = 文本型>
             如果 (结果JSON文本 != "")
             {
-                变量 结果对象 <类型 = YYJSON对象类>
-                如果 (结果对象.创建自文本 (结果JSON文本))
+                // 无追踪ID时直接使用原始JSON, 跳过yyjson解析/序列化往返
+                如果 (当前请求追踪ID == "" && 是否以 (结果JSON文本, "{"))
                 {
-                    如果 (当前请求追踪ID != "")
-                    {
-                        结果对象.加入文本成员 ("_req_id", 当前请求追踪ID)
-                    }
-                    结果JSON = 结果对象.到可读文本 (YYJSON格式化选项.压缩)
+                    结果JSON = 结果JSON文本
                 }
                 否则
                 {
-                    变量 原始包装 <类型 = YYJSON对象类>
-                    原始包装.创建自文本 ("{}")
-                    原始包装.加入文本成员 ("_raw", 结果JSON文本)
-                    结果JSON = 原始包装.到可读文本 (YYJSON格式化选项.压缩)
+                    变量 结果对象 <类型 = YYJSON对象类>
+                    如果 (结果对象.创建自文本 (结果JSON文本))
+                    {
+                        如果 (当前请求追踪ID != "")
+                        {
+                            结果对象.加入文本成员 ("_req_id", 当前请求追踪ID)
+                        }
+                        结果JSON = 结果对象.到可读文本 (YYJSON格式化选项.压缩)
+                    }
+                    否则
+                    {
+                        变量 原始包装 <类型 = YYJSON对象类>
+                        原始包装.创建自文本 ("{}")
+                        原始包装.加入文本成员 ("_raw", 结果JSON文本)
+                        结果JSON = 原始包装.到可读文本 (YYJSON格式化选项.压缩)
+                    }
                 }
             }
             否则
@@ -6244,41 +6549,6 @@
         返回 (前缀 + ",\"error\":" + 错误对象.到可读文本 (YYJSON格式化选项.压缩) + "}")
     }
 
-    方法 构建简单JSON <公开 静态 类型 = 文本型>
-    参数 键名 <类型 = 文本型>
-    参数 键值 <类型 = 文本型>
-    {
-        // network_logs 值为 JSON 数组文本时嵌入为数组, 避免 "network_logs":"[]" 双重编码
-        如果 (键名 == "network_logs" && 是否以 (键值, "["))
-        {
-            变量 头对象 <类型 = YYJSON对象类>
-            头对象.创建自文本 ("{}")
-            头对象.加入逻辑值成员 ("success", 真)
-            变量 头JSON <类型 = 文本型>
-            头JSON = 头对象.到可读文本 (YYJSON格式化选项.压缩)
-            返回 (取文本左边 (头JSON, 取文本长度 (头JSON) - 1) + ",\"network_logs\":" + 键值 + "}")
-        }
-        变量 对象 <类型 = YYJSON对象类>
-        对象.创建自文本 ("{}")
-        对象.加入逻辑值成员 ("success", 真)
-        对象.加入文本成员 (键名, 键值)
-        返回 (对象.到可读文本 (YYJSON格式化选项.压缩))
-    }
-
-    方法 构建双键JSON <公开 静态 类型 = 文本型>
-    参数 键名1 <类型 = 文本型>
-    参数 键值1 <类型 = 文本型>
-    参数 键名2 <类型 = 文本型>
-    参数 键值2 <类型 = 文本型>
-    {
-        变量 对象 <类型 = YYJSON对象类>
-        对象.创建自文本 ("{}")
-        对象.加入逻辑值成员 ("success", 真)
-        对象.加入文本成员 (键名1, 键值1)
-        对象.加入文本成员 (键名2, 键值2)
-        返回 (对象.到可读文本 (YYJSON格式化选项.压缩))
-    }
-
     # ======== MCP JSON-RPC 入口处理 ==========
 
     方法 处理MCP请求 <公开 静态 类型 = 文本型>
@@ -6287,7 +6557,7 @@
     {
         如果 (MCP正在关闭 || 是否启用 == 假)
         {
-            返回 (构建JSONRPC响应 ("", "", -32000, "MCP 服务正在关闭"))
+            返回 (构建JSONRPC响应 ("", "", -32000, MCP_常量.错误_服务正在关闭))
         }
         紧凑响应模式 = 假  // 每个请求默认重置
         // 惰性定期维护: 距上次维护 >=60s 时触发 (替代GUI时钟, 无窗口架构)
@@ -6443,11 +6713,19 @@
                     {
                         取消原因 = "客户端取消"
                     }
-                    MCP命令服务器.存储异步结果 (取消请求ID, MCP命令服务器.构建标准失败JSON ("已取消: " + 取消原因))
+                    MCP命令服务器.存储异步结果 (取消请求ID, MCP_响应构建.构建标准失败JSON ("已取消: " + 取消原因))
                     调试输出 ("[MCP] 通知取消:", 取消请求ID, 取消原因)
                 }
             }
             返回 ("")  // 通知无需响应
+        }
+        否则 (方法名 == "resources/list")
+        {
+            返回 (处理_资源列表 (请求ID))
+        }
+        否则 (方法名 == "prompts/list")
+        {
+            返回 (处理_提示列表 (请求ID))
         }
         否则 (方法名 == "tools/list")
         {
@@ -6497,18 +6775,28 @@
             }
         }
         调试输出 ("[MCP] 初始化 — 客户端:", 客户端名)
-        // 构建 capabilities (含 tools + listChanged 通知支持)
+        // 构建 capabilities (含 tools/resources/prompts + listChanged 通知支持)
         变量 能力对象 <类型 = YYJSON对象类>
         能力对象.创建自文本 ("{}")
         变量 工具能力 <类型 = YYJSON对象类>
         工具能力.创建自文本 ("{}")
         工具能力.加入逻辑值成员 ("listChanged", 假)
         能力对象.加入成员 ("tools", 工具能力)
+        // v2.8: 声明 resources + prompts 能力
+        变量 资源能力 <类型 = YYJSON对象类>
+        资源能力.创建自文本 ("{}")
+        资源能力.加入逻辑值成员 ("listChanged", 假)
+        资源能力.加入逻辑值成员 ("subscribe", 假)
+        能力对象.加入成员 ("resources", 资源能力)
+        变量 提示能力 <类型 = YYJSON对象类>
+        提示能力.创建自文本 ("{}")
+        提示能力.加入逻辑值成员 ("listChanged", 假)
+        能力对象.加入成员 ("prompts", 提示能力)
         // 构建 serverInfo
         变量 服务器信息 <类型 = YYJSON对象类>
         服务器信息.创建自文本 ("{}")
-        服务器信息.加入文本成员 ("name", MCP_服务器名)
-        服务器信息.加入文本成员 ("version", MCP_版本号)
+        服务器信息.加入文本成员 ("name", MCP_常量.MCP_服务器名)
+        服务器信息.加入文本成员 ("version", MCP_常量.MCP_版本号)
         // instructions: 引导 LLM 有效使用工具 (MCP 推荐字段)
         变量 指引 <类型 = 文本型>
         指引 = "AI浏览器 MCP Server — 浏览器自动化工具集。" + "核心流程: browser_navigate(导航到URL) → browser_wait(等待加载) → browser_get_text/browser_extract(提取数据)。" + "一步爬虫: browser_scrape {url, extract_selector, wait_selector?, max_ms?}。" + "异步工具返回task_id, 轮询: mcp_result {request_id, consume:true}。" + "同步等待: 任意工具加 max_ms 参数→服务端阻塞返回结果。" + "网络抓包: browser_network detail_enable→操作→browser_network list。" + "逆向分析: browser_cdp_call / browser_debugger_flow(一键断点)。" + "批量: batch {commands:[{name,arguments}]}。" + "用 mcp_help 查看完整工具列表。"
@@ -6523,12 +6811,130 @@
         }
         如果 (协商版本 == "")
         {
-            协商版本 = MCP_协议版本
+            协商版本 = MCP_常量.MCP_协议版本
         }
         结果对象.加入文本成员 ("protocolVersion", 协商版本)
         结果对象.加入成员 ("capabilities", 能力对象)
         结果对象.加入成员 ("serverInfo", 服务器信息)
         结果对象.加入文本成员 ("instructions", 指引)
+        返回 (构建JSONRPC响应 (请求ID, 结果对象.到可读文本 (YYJSON格式化选项.压缩)))
+    }
+
+    # ======== MCP resources/list (v2.8) ==========
+
+    方法 处理_资源列表 <公开 静态 类型 = 文本型>
+    参数 请求ID <类型 = 文本型>
+    {
+        // 返回浏览器自动化相关资源: 当前页面的源码/截图/Network日志/Console日志 均可作为 resource URI
+        变量 资源数组 <类型 = YYJSON数组类>
+        资源数组.创建自文本数据 (MCP命令服务器.取空文本数组 ())
+        // 资源1: 当前页面源码
+        变量 资源源码 <类型 = YYJSON对象类>
+        资源源码.创建自文本 ("{}")
+        资源源码.加入文本成员 ("uri", "browser://current/source")
+        资源源码.加入文本成员 ("name", "当前页面源码")
+        资源源码.加入文本成员 ("description", "当前浏览器页面的 HTML 源码 (browser_get_source)")
+        资源源码.加入文本成员 ("mimeType", "text/html")
+        资源数组.加入成员 (资源源码)
+        // 资源2: 当前页面文本
+        变量 资源文本 <类型 = YYJSON对象类>
+        资源文本.创建自文本 ("{}")
+        资源文本.加入文本成员 ("uri", "browser://current/text")
+        资源文本.加入文本成员 ("name", "当前页面文本内容")
+        资源文本.加入文本成员 ("description", "当前浏览器页面的纯文本内容 (browser_get_text)")
+        资源文本.加入文本成员 ("mimeType", "text/plain")
+        资源数组.加入成员 (资源文本)
+        // 资源3: 页面截图
+        变量 资源截图 <类型 = YYJSON对象类>
+        资源截图.创建自文本 ("{}")
+        资源截图.加入文本成员 ("uri", "browser://current/screenshot")
+        资源截图.加入文本成员 ("name", "当前页面截图")
+        资源截图.加入文本成员 ("description", "当前浏览器页面的截图 (browser_screenshot)")
+        资源截图.加入文本成员 ("mimeType", "image/png")
+        资源数组.加入成员 (资源截图)
+        // 资源4: 网络日志
+        变量 资源网络 <类型 = YYJSON对象类>
+        资源网络.创建自文本 ("{}")
+        资源网络.加入文本成员 ("uri", "browser://current/network_logs")
+        资源网络.加入文本成员 ("name", "网络请求日志")
+        资源网络.加入文本成员 ("description", "当前浏览器会话的网络请求日志 (browser_network list)")
+        资源网络.加入文本成员 ("mimeType", "application/json")
+        资源数组.加入成员 (资源网络)
+        // 资源5: 控制台日志
+        变量 资源控制台 <类型 = YYJSON对象类>
+        资源控制台.创建自文本 ("{}")
+        资源控制台.加入文本成员 ("uri", "browser://current/console_logs")
+        资源控制台.加入文本成员 ("name", "控制台日志")
+        资源控制台.加入文本成员 ("description", "当前浏览器会话的控制台日志 (browser_collect console_enable)")
+        资源控制台.加入文本成员 ("mimeType", "application/json")
+        资源数组.加入成员 (资源控制台)
+        // 资源6: Cookie数据
+        变量 资源Cookie <类型 = YYJSON对象类>
+        资源Cookie.创建自文本 ("{}")
+        资源Cookie.加入文本成员 ("uri", "browser://current/cookies")
+        资源Cookie.加入文本成员 ("name", "Cookie 数据")
+        资源Cookie.加入文本成员 ("description", "当前浏览器会话的 Cookie 数据 (browser_get_cookies)")
+        资源Cookie.加入文本成员 ("mimeType", "application/json")
+        资源数组.加入成员 (资源Cookie)
+        变量 结果对象 <类型 = YYJSON对象类>
+        结果对象.创建自文本 ("{}")
+        结果对象.加入数组成员 ("resources", 资源数组)
+        返回 (构建JSONRPC响应 (请求ID, 结果对象.到可读文本 (YYJSON格式化选项.压缩)))
+    }
+
+    # ======== MCP prompts/list (v2.8) ==========
+
+    方法 处理_提示列表 <公开 静态 类型 = 文本型>
+    参数 请求ID <类型 = 文本型>
+    {
+        // 返回常用浏览器自动化/逆向分析 prompt 模板
+        变量 提示数组 <类型 = YYJSON数组类>
+        提示数组.创建自文本数据 (MCP命令服务器.取空文本数组 ())
+        // Prompt 1: 浏览器自动化爬取
+        变量 提示自动化 <类型 = YYJSON对象类>
+        提示自动化.创建自文本 ("{}")
+        提示自动化.加入文本成员 ("name", "browser_automation")
+        提示自动化.加入文本成员 ("description", "浏览器自动化: 导航→提取→填表 标准流程指导")
+        变量 自动化参数列表 <类型 = YYJSON数组类>
+        自动化参数列表.创建自文本数据 (MCP命令服务器.取空文本数组 ())
+        变量 自动化参数URL <类型 = YYJSON对象类>
+        自动化参数URL.创建自文本 ("{}")
+        自动化参数URL.加入文本成员 ("name", "url")
+        自动化参数URL.加入文本成员 ("description", "目标网站 URL")
+        自动化参数URL.加入逻辑值成员 ("required", 真)
+        自动化参数列表.加入成员 (自动化参数URL)
+        提示自动化.加入数组成员 ("arguments", 自动化参数列表)
+        提示数组.加入成员 (提示自动化)
+        // Prompt 2: JS逆向分析
+        变量 提示逆向 <类型 = YYJSON对象类>
+        提示逆向.创建自文本 ("{}")
+        提示逆向.加入文本成员 ("name", "js_reverse_analysis")
+        提示逆向.加入文本成员 ("description", "JS逆向分析: 加密参数定位→Hook→还原 标准流程指导")
+        变量 逆向参数列表 <类型 = YYJSON数组类>
+        逆向参数列表.创建自文本数据 (MCP命令服务器.取空文本数组 ())
+        变量 逆向参数URL <类型 = YYJSON对象类>
+        逆向参数URL.创建自文本 ("{}")
+        逆向参数URL.加入文本成员 ("name", "url")
+        逆向参数URL.加入文本成员 ("description", "目标网站 URL (如 https://www.douyin.com/)")
+        逆向参数URL.加入逻辑值成员 ("required", 真)
+        逆向参数列表.加入成员 (逆向参数URL)
+        提示逆向.加入数组成员 ("arguments", 逆向参数列表)
+        提示数组.加入成员 (提示逆向)
+        // Prompt 3: 反检测配置
+        变量 提示反检测 <类型 = YYJSON对象类>
+        提示反检测.创建自文本 ("{}")
+        提示反检测.加入文本成员 ("name", "antidetect_setup")
+        提示反检测.加入文本成员 ("description", "反检测配置: 浏览器指纹伪装完整流程指导")
+        提示数组.加入成员 (提示反检测)
+        // Prompt 4: 网络抓包分析
+        变量 提示网络 <类型 = YYJSON对象类>
+        提示网络.创建自文本 ("{}")
+        提示网络.加入文本成员 ("name", "network_capture")
+        提示网络.加入文本成员 ("description", "网络抓包: 开启Network日志→触发请求→分析参数 标准流程指导")
+        提示数组.加入成员 (提示网络)
+        变量 结果对象 <类型 = YYJSON对象类>
+        结果对象.创建自文本 ("{}")
+        结果对象.加入数组成员 ("prompts", 提示数组)
         返回 (构建JSONRPC响应 (请求ID, 结果对象.到可读文本 (YYJSON格式化选项.压缩)))
     }
 
@@ -6557,14 +6963,14 @@
     方法 填充工具列表 <公开 静态>
     {
         // === 核心 API (精简版 — 每个能力唯一) ===
-        添加工具JSON ("browser_navigate", "导航到指定URL", 单参数Schema文本 ("url", "text", "URL地址"))
+        添加工具JSON ("browser_navigate", "导航到指定URL。支持 wait_for_load:true 事件驱动等待载入完成", 多属性Schema文本 (属性项JSON ("url", "text", "URL地址") + "," + 属性项JSON ("wait_for_load", "boolean", "等待浏览器 OnLoadEnd 事件(默认false)") + "," + 属性项JSON ("max_ms", "integer", "wait_for_load超时ms"), "\"url\""))
         添加工具JSON ("browser_get_url", "获取当前页面URL")
-        添加工具JSON ("browser_get_title", "获取页面标题(默认同步返回, async_only:true改异步)")
+        添加工具JSON ("browser_get_title", "获取页面标题(默认同步返回CEF缓存标题, async_only:true改异步JS获取)", 单参数Schema文本 ("async_only", "boolean", "强制走异步JS获取(默认false=同步)", 假))
         添加工具JSON ("browser_back", "后退")
         添加工具JSON ("browser_forward", "前进")
-        添加工具JSON ("browser_reload", "刷新页面", 单参数Schema文本 ("ignore_cache", "boolean", "忽略缓存", 假))
+        添加工具JSON ("browser_reload", "刷新页面。支持 wait_for_load:true 事件驱动等待载入完成", 多属性Schema文本 (属性项JSON ("ignore_cache", "boolean", "忽略缓存") + "," + 属性项JSON ("wait_for_load", "boolean", "等待 OnLoadEnd 事件(默认false)") + "," + 属性项JSON ("max_ms", "integer", "超时ms"), ""))
         添加工具JSON ("browser_stop", "停止加载")
-        添加工具JSON ("browser_execute_js", "执行JS(无返回值)", 单参数Schema文本 ("code", "text", "JS代码"))
+        添加工具JSON ("browser_execute_js", "执行JS(事件驱动, 异步回调返回执行状态)", 多属性Schema文本 (属性项JSON ("code", "text", "JS代码字符串") + "," + 属性项JSON ("file", "text", "JS文件路径(与code二选一)"), ""))
         添加工具JSON ("browser_evaluate", "执行JS并返回结果(默认同步)。支持code参数(inline)或file参数(从文件读取JS,避免转义问题)", 多属性Schema文本 (属性项JSON ("code", "text", "JS代码字符串") + "," + 属性项JSON ("file", "text", "JS文件路径(推荐:避免转义)") + "," + 属性项JSON ("max_ms", "integer", "同步等待ms"), ""))
         添加工具JSON ("browser_get_source", "获取HTML源码(默认异步, sync_wait:true可同步)", 单参数Schema文本 ("max_chars", "integer", "最大字符数(默认256KB=262144)", 假))
         添加工具JSON ("browser_get_text", "获取页面文本(selector非空时默认同步, 空selector=全文)", 多属性Schema文本 (属性项JSON ("selector", "text", "CSS选择器(空=全文, 默认同步)") + "," + 属性项JSON ("max_chars", "integer", "最大字符数(默认256KB)"), ""))
@@ -6641,7 +7047,7 @@
         添加工具JSON ("browser_window_info", "窗口信息(title/hwnd/parent/opener/devtools/tag)")
         添加工具JSON ("browser_view_source", "打开源码视图")
         添加工具JSON ("browser_inject", "注入JS/CSS/Handler", 多属性Schema文本 (属性项JSON ("type", "text", "js/css/handler(persist时handler由渲染_即将初始化WebKit注册)") + "," + 属性项JSON ("code", "text", "代码") + "," + 属性项JSON ("persist", "boolean", "持久(V8预注入,type=handler时须persist)"), "\"type\",\"code\""))
-        添加工具JSON ("browser_wait", "异步等待条件 (轮询, 通过mcp_result查询)。what=selector/text/load_end/load_start/navigate/timeout。navigate无value等同load_end; navigate有value则等到URL匹配; load_start两阶段(先loading后complete, 适用于等下一次导航)", 多属性Schema文本 (属性项JSON ("what", "text", "selector/text/timeout/load_end/load_start/navigate") + "," + 属性项JSON ("value", "text", "等待值(navigate=目标URL, load_*可省略)") + "," + 属性项JSON ("max_ms", "integer", "最大ms(默认10000)"), "\"what\""))
+        添加工具JSON ("browser_wait", "异步等待条件 (轮询, 通过mcp_result查询)。what=selector/text/load_end/load_start/navigate/timeout/network_idle/url_contains。navigate无value等同load_end; navigate有value则等到URL匹配; network_idle等网络空闲(活动请求数=0); url_contains等URL包含指定字符串", 多属性Schema文本 (属性项JSON ("what", "text", "selector/text/timeout/load_end/load_start/navigate/network_idle/url_contains") + "," + 属性项JSON ("value", "text", "等待值(navigate/url_contains=目标URL, load_*/network_idle可省略)") + "," + 属性项JSON ("max_ms", "integer", "最大ms(默认10000)"), "\"what\""))
         添加工具JSON ("browser_cdp", "Chrome DevTools协议(VIP)", 多属性Schema文本 (属性项JSON ("method", "text", "CDP方法") + "," + 属性项JSON ("params", "text", "参数JSON"), "\"method\""))
         添加工具JSON ("browser_debugger_enable", "启用调试器(VIP)")
         添加工具JSON ("browser_debugger_pause", "暂停JS(VIP)")
@@ -6708,11 +7114,9 @@
         添加工具JSON ("browser_get_all_cookies", "获取全部Cookie(非URL限定)")
         添加工具JSON ("browser_set_preference", "设置Chromium首选项", 多属性Schema文本 (属性项JSON ("name", "text", "首选项名") + "," + 属性项JSON ("value", "text", "值"), "\"name\""))
         添加工具JSON ("aliases", "短名别名列表")
-        添加工具JSON ("browser_set_s5_proxy", "VIP: S5代理", 多属性Schema文本 (属性项JSON ("address", "text", "代理地址") + "," + 属性项JSON ("username", "text", "账号(可选)") + "," + 属性项JSON ("password", "text", "密码(可选)"), "\"address\""))
-        添加工具JSON ("browser_vip_mouse_click", "VIP: CDP鼠标点击", 双XY_Schema文本 ("x", "y", "X", "Y"))
-        添加工具JSON ("browser_vip_mouse_move", "VIP: CDP鼠标移动", 双XY_Schema文本 ("x", "y", "X", "Y"))
-        添加工具JSON ("browser_vip_key_press", "VIP: CDP键盘按下", 单参数Schema文本 ("key_code", "integer", "虚拟键码"))
-        添加工具JSON ("browser_vip_key_release", "VIP: CDP键盘放开", 单参数Schema文本 ("key_code", "integer", "虚拟键码"))
+        // (browser_set_s5_proxy 已合并至 browser.set_proxy — VIP SOCKS5优先)
+        // (browser_vip_mouse_click/move 已合并至 browser.mouse_click/move — VIP CDP优先)
+        // (browser_vip_key_press/release 已合并至 browser.key_event — VIP CDP优先)
         添加工具JSON ("browser_vip_disable_debugger", "VIP: 禁用Debugger检测", 单参数Schema文本 ("disable", "boolean", "禁用"))
         添加工具JSON ("browser_get_window_style", "获取窗口风格值(GWL_STYLE)")
         添加工具JSON ("browser_set_window_style", "设置窗口风格", 多属性Schema文本 (属性项JSON ("type", "integer", "风格类型") + "," + 属性项JSON ("style", "integer", "风格值"), "\"type\",\"style\""))
@@ -6730,8 +7134,8 @@
         添加工具JSON ("browser_fingerprint_screen_xy", "VIP: 虚拟屏幕XY", 多属性Schema文本 (属性项JSON ("x", "integer", "X") + "," + 属性项JSON ("y", "integer", "Y"), "\"x\",\"y\""))
         添加工具JSON ("browser_vip_mouse_press", "VIP: CDP鼠标按下", 双XY_Schema文本 ("x", "y", "X", "Y"))
         添加工具JSON ("browser_vip_mouse_release", "VIP: CDP鼠标放开", 双XY_Schema文本 ("x", "y", "X", "Y"))
-        添加工具JSON ("browser_vip_mouse_wheel", "VIP: CDP鼠标滚轮", 多属性Schema文本 (属性项JSON ("x", "integer", "X") + "," + 属性项JSON ("y", "integer", "Y") + "," + 属性项JSON ("delta_x", "integer", "dX") + "," + 属性项JSON ("delta_y", "integer", "dY"), "\"x\",\"y\""))
-        添加工具JSON ("browser_vip_key_click", "VIP: CDP键盘单击", 单参数Schema文本 ("key_code", "integer", "虚拟键码"))
+        // (browser_vip_mouse_wheel 已合并至 browser.mouse_wheel — VIP CDP优先)
+        // (browser_vip_key_click 已合并至 browser.key_event type=char — VIP CDP优先)
         添加工具JSON ("browser_vip_key_input", "VIP: CDP输入单个字符", 单参数Schema文本 ("char_code", "text", "单个字符(如A或中)"))
         添加工具JSON ("browser_vip_key_type", "VIP: CDP输入文本", 单参数Schema文本 ("text", "text", "文本"))
         // AI自动化
@@ -6753,7 +7157,7 @@
         添加工具JSON ("browser_fingerprint_appversion", "VIP: 虚拟appVersion", 单参数Schema文本 ("value", "text", "navigator.appVersion"))
         添加工具JSON ("browser_vip_enable_js_env", "VIP: 启用JS执行环境", 单参数Schema文本 ("enable", "boolean", "启用/关闭"))
         添加工具JSON ("browser_vip_get_js_env_ids", "VIP: 取JS环境ID清单", 空Schema文本 ())
-        添加工具JSON ("browser_vip_clear_s5_proxy", "VIP: 清空S5代理", 空Schema文本 ())
+        // (browser_vip_clear_s5_proxy 已合并至 browser.clear_proxy — VIP SOCKS5优先)
         添加工具JSON ("browser_vip_set_is_trusted", "VIP: 设置Event.isTrusted", 单参数Schema文本 ("enable", "boolean", "启用isTrusted"))
         添加工具JSON ("browser_vip_touch_cancel", "VIP: 取消触摸", 空Schema文本 ())
         添加工具JSON ("browser_vip_enable_inspector", "VIP: 启用Inspector窗口", 多属性Schema文本 (属性项JSON ("enable", "boolean", "启用") + "," + 属性项JSON ("repaint", "boolean", "强制重绘"), ""))
@@ -6811,6 +7215,48 @@
         添加工具JSON ("browser_reverse_runtime", "CDP逆向: Runtime运行时分析。action=properties获取对象属性/evaluate在全局作用域执行表达式/global获取全局变量名列表", 多属性Schema文本 (属性项JSON ("action", "text", "properties/evaluate/global(默认properties)") + "," + 属性项JSON ("object_id", "text", "对象ID(properties时必填)") + "," + 属性项JSON ("expression", "text", "JS表达式(evaluate时必填)"), ""))
         添加工具JSON ("browser_reverse_network_intercept", "CDP逆向: 网络请求拦截。action=enable启用URL模式拦截/disable禁用。拦截后可修改/重定向/阻塞匹配的请求,用于修改请求参数绕过签名校验", 多属性Schema文本 (属性项JSON ("action", "text", "enable(默认)/disable") + "," + 属性项JSON ("url_pattern", "text", "URL匹配模式(enable时可选,空则拦截全部)"), ""))
         添加工具JSON ("browser_reverse_setup", "反检测预配置: 浏览器事件级架构—设置后所有新浏览器自动应用! disable_debugger禁用Debugger检测/user_agent伪装UA/disable_automation_flag移除webdriver标志。立即应用当前浏览器+持久化到新浏览器", 多属性Schema文本 (属性项JSON ("disable_debugger", "boolean", "禁用网页debugger检测(VIP)") + "," + 属性项JSON ("user_agent", "text", "伪装UserAgent") + "," + 属性项JSON ("disable_automation_flag", "boolean", "移除navigator.webdriver等自动化标志"), ""))
+        // v2.6.3 静态加密模块提取
+        添加工具JSON ("browser_reverse_extract", "JS逆向: 静态加密模块提取(CDP Runtime.evaluate同步)。mode=scan枚举页面<script>标签返回脚本列表+加密特征检测; mode=download按DOM索引取脚本textContent完整源码; mode=analyze按url_pattern一次扫描+源码分析提取算法(AES/RSA/MD5/SHA/HMAC)和可疑密钥常量", 多属性Schema文本 (属性项JSON ("mode", "text", "scan(默认)/download/analyze") + "," + 属性项JSON ("url_pattern", "text", "URL片段(analyze模式必填, 匹配脚本src)") + "," + 属性项JSON ("script_index", "text", "DOM脚本索引(download模式必填, 取自scan返回的index)") + "," + 属性项JSON ("keyword", "text", "关键词(scan模式可选, 过滤含关键词的脚本)"), ""))
+        // v2.8 反检测预设 + 逆向增强
+        添加工具JSON ("browser_antidetect_presets", "反检测: 一键部署反检测预设。preset=stealth(去webdriver+去debugger检测+去自动化标志)/basic(stealth+Canvas/WebGL/Audio随机化)/full(basic+UA伪装+屏幕1920x1080+硬件8核8GB+时区Asia/Shanghai+WebRTC禁用+定位北京)。批量应用,持久生效,新浏览器自动应用", 单参数Schema文本 ("preset", "text", "stealth(默认)/basic/full"))
+        添加工具JSON ("browser_reverse_detect_traps", "JS逆向: 检测页面debugger陷阱。扫描所有<script>标签和全局事件,检测:debugger语句/Function.toString重写/console.clear调用/setInterval debugger/时间反调试/eval替换/console禁用等7类反调试模式", 空Schema文本 ())
+        // v2.8 网络导出 + 权限伪装
+        添加工具JSON ("browser_network_export", "网络: 导出网络日志为HAR(HTTP Archive 1.2)或JSON格式。HAR格式兼容Chrome DevTools Network面板导入。以JSON数组返回所有记录的请求/响应(URL/method/status/mime/size/timestamp)", 多属性Schema文本 (属性项JSON ("format", "text", "har/json(默认json)") + "," + 属性项JSON ("limit", "integer", "最大条目数(默认2000,上限50000)"), ""))
+        添加工具JSON ("browser_permission_spoof", "反检测: 伪装浏览器权限API。action=apply注入navigator.permissions.query()覆盖(返回指定state)+MediaDevices.enumerateDevices覆盖; action=reset移除伪装。permissions支持:geolocation/notifications/camera/microphone/midi/clipboard-read/clipboard-write", 多属性Schema文本 (属性项JSON ("action", "text", "apply(默认)/spoof/reset/remove") + "," + 属性项JSON ("state", "text", "granted(默认)/denied/prompt") + "," + 属性项JSON ("permissions", "text", "权限列表,逗号分隔(默认全部7项)"), ""))
+        // v2.8 自动化重试 + Canvas噪声 (v2.8)
+        添加工具JSON ("browser_retry", "自动化: 带线性退避的MCP工具重试机制。对不稳定的工具调用(如填表/点击/导航)自动重试max_retries次,每次失败后等待backoff_ms×attempt毫秒。直到成功或超过max_total_ms", 多属性Schema文本 (属性项JSON ("tool", "text", "要重试的MCP工具名") + "," + 属性项JSON ("args", "text", "工具参数JSON(默认{})") + "," + 属性项JSON ("max_retries", "integer", "最大重试次数(默认3,上限10)") + "," + 属性项JSON ("backoff_ms", "integer", "退避基数毫秒(默认1000,上限30000)") + "," + 属性项JSON ("max_total_ms", "integer", "总超时毫秒(默认60000)"), "\"tool\""))
+        添加工具JSON ("browser_canvas_noise", "反检测: Canvas指纹噪点注入(JS层实现,不需VIP)。action=inject为Canvas toDataURL/toBlob/getImageData添加±level随机噪声,防Canvas指纹追踪; action=remove移除噪声。不依赖内核VIP API,纯JS Hook", 多属性Schema文本 (属性项JSON ("action", "text", "inject(默认)/enable/remove/disable") + "," + 属性项JSON ("level", "integer", "噪声级别1-5(默认1, 越大噪声越明显)"), ""))
+        // v2.8 逆向热补丁 + 字体随机化
+        添加工具JSON ("browser_reverse_patch", "JS逆向: 运行时函数热补丁。mode=replace完全替换函数体/before前置Hook(可修改arguments)/after后置Hook(可修改返回值)/intercept拦截(接收orig,args,ctx,可决定是否调用原函数)。原函数自动保存到.__mcp_original__", 多属性Schema文本 (属性项JSON ("target", "text", "全局函数路径(如window.sign/XMLHttpRequest.prototype.send)") + "," + 属性项JSON ("code", "text", "替换函数体或Hook代码") + "," + 属性项JSON ("file", "text", "代码文件路径(与code二选一)") + "," + 属性项JSON ("mode", "text", "replace(默认)/before/after/intercept"), "\"target\""))
+        添加工具JSON ("browser_font_randomize", "反检测: 字体枚举指纹随机化(VIP+JS双通道)。action=random从60+中英文字体池随机抽取15-30种替换document.fonts.check; action=reset恢复。VIP可用时内核级虚拟化,否则JS回退Hook", 多属性Schema文本 (属性项JSON ("action", "text", "random(默认)/spoof/reset") + "," + 属性项JSON ("count", "integer", "随机抽取字体数(默认15-30随机)") + "," + 属性项JSON ("seed", "integer", "随机种子(默认自动)"), ""))
+        // v2.8 CDP逆向增强: 6个官方API封装
+        添加工具JSON ("browser_reverse_skip_pauses", "CDP逆向: Debugger.setSkipAllPauses—跳过所有debugger断点。反反调试核心工具,绕过网页中debugger;死循环或setInterval debugger陷阱。调用后resume即可跳过所有已知+后续断点", 多属性Schema文本 (属性项JSON ("skip", "boolean", "是否跳过(默认true)") + "," + 属性项JSON ("reason", "text", "跳过原因(如AI逆向分析中)"), ""))
+        添加工具JSON ("browser_reverse_listeners", "CDP逆向: DOMDebugger.getEventListeners—获取指定DOM节点上绑定的所有JS事件监听器(click/submit/input等)。用于定位表单提交/按钮点击的加密函数入口。默认穿透Shadow DOM", 多属性Schema文本 (属性项JSON ("object_id", "text", "CDP Runtime objectId") + "," + 属性项JSON ("selector", "text", "CSS选择器(自动转objectId)") + "," + 属性项JSON ("depth", "integer", "递归深度(默认3,上限10)"), ""))
+        添加工具JSON ("browser_reverse_query_objects", "CDP逆向: Runtime.queryObjects—查询某个构造函数原型的所有实例。如查找页面中所有Promise/ArrayBuffer对象,定位加密数据容器。返回objectId数组", 多属性Schema文本 (属性项JSON ("prototype_object_id", "text", "构造函数原型的CDP objectId(通过browser_evaluate获取Object.getPrototypeOf(target))") + "," + 属性项JSON ("object_group", "text", "对象组名(默认mcp_query_objects)"), "\"prototype_object_id\""))
+        添加工具JSON ("browser_reverse_blackbox", "CDP逆向: Debugger.setBlackboxPatterns—设置黑盒脚本URL正则。步进时自动跳过第三方库(如jquery/vue/react/webpack),仅在目标脚本中断点。action=set/clear", 多属性Schema文本 (属性项JSON ("action", "text", "set(默认)/clear") + "," + 属性项JSON ("patterns", "text", "URL正则列表,|分隔(默认跳过jquery/react/vue/lodash/webpack)"), ""))
+        添加工具JSON ("browser_reverse_async_stack", "CDP逆向: Debugger.setAsyncCallStackDepth—设置异步调用栈深度(默认32,最大64)。启用后可追踪Promise.then/async/await链的完整调用路径,定位异步加密函数的原始调用者", 单参数Schema文本 ("max_depth", "integer", "异步栈深度(默认32,上限64)"))
+        添加工具JSON ("browser_reverse_cache_disable", "CDP逆向: Network.setCacheDisabled—禁用浏览器HTTP缓存。确保每次请求都走网络(不命中disk cache/memory cache),配合网络抓包获取最新响应体,分析动态加密参数", 单参数Schema文本 ("cache_disabled", "boolean", "是否禁用缓存(默认true)"))
+        // v2.8 CDP逆向增强 R6: Runtime/Profiler/Page/Debugger 深度API
+        添加工具JSON ("browser_reverse_compile_script", "CDP逆向: Runtime.compileScript—编译JS脚本但不执行。用于语法检查/反调试模式检测/混淆代码预分析。返回编译错误(含行号)或scriptId(可后续使用)", 多属性Schema文本 (属性项JSON ("expression", "text", "要编译的JS代码") + "," + 属性项JSON ("persist", "boolean", "持久化脚本(默认false)"), "\"expression\""))
+        添加工具JSON ("browser_reverse_breakpoints_active", "CDP逆向: Debugger.setBreakpointsActive—全局切换所有断点激活/冻结。导航到新页面前冻结断点避免误触,到达目标页后激活。比逐个删除/重建断点高效", 单参数Schema文本 ("active", "boolean", "是否激活(默认true)"))
+        添加工具JSON ("browser_reverse_search_script", "CDP逆向: Debugger.searchInContent—在已加载的脚本中搜索关键词/正则。比browser_reverse_search更底层(CDP级),支持正则匹配,返回{lineNumber,lineContent}数组", 多属性Schema文本 (属性项JSON ("script_id", "text", "脚本ID(从browser_debugger_script_source获取)") + "," + 属性项JSON ("query", "text", "搜索关键词或正则") + "," + 属性项JSON ("case_sensitive", "boolean", "区分大小写") + "," + 属性项JSON ("is_regex", "boolean", "作为正则表达式搜索"), "\"script_id\",\"query\""))
+        添加工具JSON ("browser_reverse_precise_coverage", "CDP逆向: Profiler.startPreciseCoverage/take/stop—JS代码精确覆盖率(含调用计数)。action=start开始/take采样/stop停止。返回每个函数/每行的执行次数,用于定位加密算法实际调用路径和死代码", 多属性Schema文本 (属性项JSON ("action", "text", "start(默认)/take/stop") + "," + 属性项JSON ("detailed", "boolean", "详细块级覆盖(start时,默认false)"), ""))
+        添加工具JSON ("browser_reverse_bypass_csp", "CDP逆向: Page.setBypassCSP—绕过Content-Security-Policy。启用后可注入任意JS/CSS到页面(即使页面有严格CSP),配合browser_inject使用。典型场景:注入Hook脚本到CSP保护的站点", 单参数Schema文本 ("enabled", "boolean", "是否绕过CSP(默认true)"))
+        添加工具JSON ("browser_reverse_await_promise", "CDP逆向: Runtime.awaitPromise—在CDP层等待Promise解析并返回{value,exception}。用于检查异步数据(如fetch结果/加密后的Promise值)。比JS await更底层,不受页面JS环境影响", 多属性Schema文本 (属性项JSON ("promise_object_id", "text", "Promise的CDP objectId(通过browser_evaluate获取Promise引用)") + "," + 属性项JSON ("return_by_value", "boolean", "展开为值(默认true)"), "\"promise_object_id\""))
+        // v2.8 CDP逆向增强 R7: Storage/Network/DOM/Emulation + VIP WebGL vendor
+        添加工具JSON ("browser_fingerprint_webgl_vendor", "反检测: VIP WebGL厂商指纹虚拟化。设置navigator.gpu/webgl.getParameter(UNMASKED_VENDOR_WEBGL/UNMASKED_RENDERER_WEBGL)返回值。默认伪装为NVIDIA GeForce RTX 4060 Ti", 多属性Schema文本 (属性项JSON ("vendor", "text", "WebGL厂商名(默认Google Inc. (NVIDIA))") + "," + 属性项JSON ("renderer", "text", "WebGL渲染器串(默认ANGLE+NVIDIA RTX 4060 Ti)"), ""))
+        添加工具JSON ("browser_reverse_cookie_cdp", "CDP逆向: Storage.getCookies/clearCookies—CDP级Cookie操作。与browser_get_cookies互补:CDP通道可直接访问httpOnly Cookie,返回完整Cookie属性(name/value/domain/path/expires/httpOnly/secure/sameSite)", 多属性Schema文本 (属性项JSON ("action", "text", "get(默认)/clear") + "," + 属性项JSON ("url", "text", "过滤特定URL的Cookie(get时可选)"), ""))
+        添加工具JSON ("browser_reverse_network_conditions", "CDP逆向: Network.emulateNetworkConditions—模拟网络条件。action=emulate设置延迟/上下行带宽/离线模式; action=reset恢复。用于测试弱网下加密请求行为和超时重试逻辑", 多属性Schema文本 (属性项JSON ("action", "text", "emulate(默认)/reset") + "," + 属性项JSON ("offline", "boolean", "离线模式") + "," + 属性项JSON ("latency_ms", "integer", "延迟毫秒(默认150,3G)") + "," + 属性项JSON ("download_kbps", "integer", "下行带宽kbps(默认750,3G)") + "," + 属性项JSON ("upload_kbps", "integer", "上行带宽kbps(默认250)"), ""))
+        添加工具JSON ("browser_reverse_dom_resolve", "CDP逆向: DOM.resolveNode/requestNode—nodeId↔objectId双向转换。action=resolve将DOM.getDocument返回的nodeId转为Runtime objectId; action=request将objectId转为nodeId用于DOM操作", 多属性Schema文本 (属性项JSON ("action", "text", "resolve(默认)/request") + "," + 属性项JSON ("node_id", "integer", "DOM nodeId(resolve时必填)") + "," + 属性项JSON ("object_id", "text", "Runtime objectId(request时必填)"), ""))
+        添加工具JSON ("browser_reverse_emulate_focus", "CDP逆向: Emulation.setFocusEmulationEnabled—模拟页面焦点。启用后页面始终认为window有焦点(即使浏览器最小化),避免某些站点检测document.hidden/visibilitychange后暂停执行或跳过加密逻辑", 单参数Schema文本 ("enabled", "boolean", "是否启用焦点模拟(默认true)"))
+        // v2.8 CDP逆向增强 R8: Input/Tracing/Runtime 收尾
+        添加工具JSON ("browser_reverse_input_cdp", "CDP逆向: Input.dispatchMouseEvent/KeyEvent—CDP原始输入事件。type=mouse发送mousePressed/mouseMoved/mouseReleased; type=key发送keyDown/keyUp/char。比VIP鼠标/键盘更底层,直接注入到渲染管道,绕过页面级事件过滤", 多属性Schema文本 (属性项JSON ("type", "text", "mouse(默认)/key") + "," + 属性项JSON ("mouse_type", "text", "mousePressed/mouseReleased/mouseMoved") + "," + 属性项JSON ("x", "number", "X坐标") + "," + 属性项JSON ("y", "number", "Y坐标") + "," + 属性项JSON ("button", "text", "left/right/middle") + "," + 属性项JSON ("key", "text", "按键名(如Enter/a/Tab)") + "," + 属性项JSON ("key_type", "text", "keyDown/keyUp/char") + "," + 属性项JSON ("ctrl", "boolean", "Ctrl修饰键") + "," + 属性项JSON ("alt", "boolean", "Alt修饰键") + "," + 属性项JSON ("shift", "boolean", "Shift修饰键"), ""))
+        添加工具JSON ("browser_reverse_trace", "CDP逆向: Tracing.start/end—浏览器性能追踪。action=start开始记录V8执行/DevTools时间线; action=end停止并获取Trace事件流。用于定位加密函数的热路径和性能瓶颈", 多属性Schema文本 (属性项JSON ("action", "text", "start(默认)/end") + "," + 属性项JSON ("categories", "text", "追踪类别,逗号分隔(默认devtools.timeline,v8.execute)"), ""))
+        添加工具JSON ("browser_reverse_evaluate_silent", "CDP逆向: Runtime.evaluate增强—静默执行+userGesture模拟。silent模式不触发console/异常报告; userGesture模拟用户手势触发需用户交互的API。用于隐蔽执行JS而不被页面的反逆向机制检测到", 多属性Schema文本 (属性项JSON ("expression", "text", "JS表达式") + "," + 属性项JSON ("user_gesture", "boolean", "模拟用户手势(默认false)") + "," + 属性项JSON ("timeout_ms", "integer", "执行超时ms"), "\"expression\""))
+        // v2.8 CDP逆向增强 R9: fingerprint_languages + CSS/LayerTree 收尾
+        添加工具JSON ("browser_fingerprint_languages", "反检测: VIP navigator.languages指纹虚拟化。设置浏览器语言偏好列表,默认zh-CN,zh,en-US,en。配合UA和时区伪装可建立完整的浏览器语言环境一致性", 单参数Schema文本 ("languages", "text", "语言列表,逗号分隔(默认zh-CN,zh,en-US,en)"))
+        添加工具JSON ("browser_reverse_css_coverage", "CDP逆向: CSS.startRuleUsageTracking/stopRuleUsageTracking—CSS规则使用率追踪(覆盖率)。action=start开始追踪页面中哪些CSS规则被实际使用; action=stop停止并返回覆盖率数据。用于检测CSS指纹检测/媒体查询反检测", 单参数Schema文本 ("action", "text", "start(默认)/stop"))
+        添加工具JSON ("browser_reverse_layer_tree", "CDP逆向: LayerTree.snapshotCommandLog/compositingReasons—合成层分析。action=snapshot获取渲染层绘制命令日志; action=reasons查询特定层的合成原因。用于检测Canvas/WebGL元素的合成层特征(指纹检测常用)", 多属性Schema文本 (属性项JSON ("action", "text", "snapshot(默认)/reasons") + "," + 属性项JSON ("layer_id", "text", "层ID(reasons时必填)"), ""))
         // v1.8 浏览器事件查询
         添加工具JSON ("browser_event", "查询浏览器加载/崩溃事件", 单参数Schema文本 ("event_type", "text", "load_end/crash(空=全部)", 假))
         // CDP调试 (VIP)
@@ -6828,6 +7274,7 @@
     方法 开始构建工具列表 <公开 静态>
     {
         工具列表构建缓冲区 = "["
+        工具构建计数 = 0
     }
 
     方法 添加工具JSON <公开 静态>
@@ -6840,11 +7287,13 @@
             工具列表构建缓冲区 = 工具列表构建缓冲区 + ","
         }
         工具列表构建缓冲区 = 工具列表构建缓冲区 + "{\"name\":\"" + 名称 + "\",\"description\":\"" + 描述 + "\"," + schemaJSON + "}"
+        工具构建计数 = 工具构建计数 + 1
     }
 
     方法 完成构建工具列表 <公开 静态 类型 = 文本型>
     {
         工具列表构建缓冲区 = 工具列表构建缓冲区 + "]"
+        工具总数 = 工具构建计数
         返回 (工具列表构建缓冲区)
     }
 
@@ -7208,7 +7657,7 @@
         {
             result = MCP_填表分派.分类分派_填表操作 (命令ID, 方法名, 参数JSON)
         }
-        否则 (是否以 (方法名, "browser_vip_") || 是否以 (方法名, "browser_fingerprint_"))
+        否则 (是否以 (方法名, "browser_vip_") || 是否以 (方法名, "browser_fingerprint_") || 是否以 (方法名, "browser_font_"))
         {
             result = MCP_VIP分派.分类分派_VIP操作 (命令ID, 方法名, 参数JSON)
         }
@@ -7288,33 +7737,7 @@
         }
         目标浏览器ID = 保存浏览器ID
         MCP执行锁.解锁 ()
-        返回 (命令失败 (命令ID, "未知命令: " + 方法名 + " | 用 mcp_help 查看可用命令"))
-    }
-
-    # ======== 命令响应辅助（yyjson构建） ==========
-
-    方法 命令成功 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 消息 <类型 = 文本型>
-    {
-        变量 对象 <类型 = YYJSON对象类>
-        对象.创建自文本 ("{}")
-        对象.加入文本成员 ("id", 命令ID)
-        对象.加入逻辑值成员 ("success", 真)
-        对象.加入文本成员 ("message", 消息)
-        返回 (对象.到可读文本 (YYJSON格式化选项.压缩))
-    }
-
-    方法 命令失败 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 错误消息 <类型 = 文本型>
-    {
-        变量 对象 <类型 = YYJSON对象类>
-        对象.创建自文本 ("{}")
-        对象.加入文本成员 ("id", 命令ID)
-        对象.加入逻辑值成员 ("success", 假)
-        对象.加入文本成员 ("error", 错误消息)
-        返回 (对象.到可读文本 (YYJSON格式化选项.压缩))
+        返回 (MCP_响应构建.命令失败 (命令ID, "未知命令: " + 方法名 + " | 用 mcp_help 查看可用命令"))
     }
 
     # ======== 异步任务结果提取 ==========
@@ -7335,9 +7758,9 @@
             {
                 变量 错误文本 <类型 = 文本型>
                 错误文本 = 错误解析.取文本 ("error")
-                返回 (命令失败 (命令ID, 错误文本))
+                返回 (MCP_响应构建.命令失败 (命令ID, 错误文本))
             }
-            返回 (命令失败 (命令ID, 异步返回值))
+            返回 (MCP_响应构建.命令失败 (命令ID, 异步返回值))
         }
         // 检测自动异步切换标记
         如果 (是否以 (异步返回值, "{\"_async\":"))
@@ -7354,7 +7777,7 @@
             }
         }
         // 正常结果 (非异步标记)
-        返回 (构建简单JSON (键名, 异步返回值))
+        返回 (MCP_响应构建.构建简单JSON (键名, 异步返回值))
     }
 
     # ======== 短名别名映射表 ==========
@@ -7433,168 +7856,6 @@
             URL路径 = 取文本左边 (URL路径, hashPos - 1)
         }
         返回 (URL路径)
-    }
-
-    方法 构建API元信息JSON <公开 静态 类型 = 文本型>
-    {
-        变量 信息JSON <类型 = YYJSON对象类>
-        信息JSON.创建自文本 ("{}")
-        信息JSON.加入文本成员 ("server", MCP_服务器名)
-        信息JSON.加入文本成员 ("version", MCP_版本号)
-        信息JSON.加入整数成员 ("browsers", FBrowser_浏览器_取数量 ())
-        信息JSON.加入文本成员 ("protocol", "JSON-RPC 2.0")
-        信息JSON.加入文本成员 ("mcp_ws", 取MCP_WS地址 ())
-        信息JSON.加入文本成员 ("mcp_http_post", 取MCP_HTTP地址 () + "/mcp")
-        信息JSON.加入文本成员 ("mcp_http_post_alt", 取MCP_HTTP地址 () + "/")
-        信息JSON.加入文本成员 ("health", "/health")
-        信息JSON.加入文本成员 ("tools", "/tools/list")
-        信息JSON.加入文本成员 ("json_list", "/json/list")
-        信息JSON.加入文本成员 ("json_version", "/json/version")
-        信息JSON.加入文本成员 ("welcome", "/")
-        信息JSON.加入文本成员 ("docs", "/docs/")
-        信息JSON.加入文本成员 ("cdp_note", "CDP 请使用 MCP 工具 browser_cdp_call / browser_cdp_event, 非独立 WebSocket 代理")
-        信息JSON.加入文本成员 ("bridge_script", "mcp_bridge.js")
-        信息JSON.加入文本成员 ("check_command", "node mcp_bridge.js --check")
-        信息JSON.加入文本成员 ("usage_step1", "启动 AI-Fbowser-Mcp.exe")
-        信息JSON.加入文本成员 ("usage_step2", "Cursor 配置 node mcp_bridge.js (见欢迎页快速接入)")
-        信息JSON.加入文本成员 ("usage_step3", "tools/call 调用 browser_navigate 等工具")
-        信息JSON.加入文本成员 ("env_AI_BROWSER_MCP_URL", "ws://" + 服务器绑定地址 + ":" + 到文本 (服务器端口))
-        信息JSON.加入文本成员 ("env_AI_BROWSER_MCP_WS", "ws://" + 服务器绑定地址 + ":" + 到文本 (服务器端口) + "/mcp")
-        信息JSON.加入文本成员 ("env_AI_BROWSER_MCP_HOST", 服务器绑定地址)
-        信息JSON.加入文本成员 ("env_AI_BROWSER_MCP_PORT", 到文本 (服务器端口))
-        信息JSON.加入文本成员 ("env_AI_BROWSER_MCP_HEALTH", "http://" + 服务器绑定地址 + ":" + 到文本 (服务器端口) + "/health")
-        信息JSON.加入文本成员 ("env_AI_BROWSER_MCP_HTTP_POST", "http://" + 服务器绑定地址 + ":" + 到文本 (服务器端口) + "/mcp")
-        信息JSON.加入文本成员 ("env_AI_BROWSER_MCP_VERSION", MCP_版本号)
-        返回 (信息JSON.到可读文本 (YYJSON格式化选项.压缩))
-    }
-
-    方法 JSON转义文本 <公开 静态 类型 = 文本型 注释 = "转义文本以便安全嵌入JSON双引号字符串(\"...\")">
-    参数 源文本 <类型 = 文本型>
-    {
-        // == 转义映射表 (JSON双引号字符串上下文) ==
-        常量 JESC_BSLASH <类型 = 文本型 值 = "\\">
-        常量 JESC_DQUOTE <类型 = 文本型 值 = "\"">
-        常量 JESC_NEWLINE <类型 = 文本型 值 = "\n">
-        常量 JESC_CR <类型 = 文本型 值 = "\r">
-        // 转义目标值
-        常量 JREP_BSLASH <类型 = 文本型 值 = "\\\\">
-        常量 JREP_DQUOTE <类型 = 文本型 值 = "\\\"">
-        常量 JREP_NEWLINE <类型 = 文本型 值 = "\\n">
-        常量 JREP_CR <类型 = 文本型 值 = "\\r">
-        变量 结果 <类型 = 文本型>
-        结果 = 源文本
-        子文本替换 (结果, JESC_BSLASH, JREP_BSLASH, , , 假)
-        子文本替换 (结果, JESC_DQUOTE, JREP_DQUOTE, , , 假)
-        子文本替换 (结果, JESC_NEWLINE, JREP_NEWLINE, , , 假)
-        子文本替换 (结果, JESC_CR, JREP_CR, , , 假)
-        返回 (结果)
-    }
-
-    # mcp_result 响应: data 字段嵌入 JSON 对象(非字符串), 避免双重编码
-
-    方法 构建任务查询结果JSON <公开 静态 类型 = 文本型>
-    参数 是否成功 <类型 = 逻辑型>
-    参数 消息 <类型 = 文本型>
-    参数 原始数据JSON <类型 = 文本型>
-    参数 任务ID <类型 = 文本型 @默认值 = "">
-    {
-        变量 对象 <类型 = YYJSON对象类>
-        对象.创建自文本 ("{}")
-        对象.加入逻辑值成员 ("success", 是否成功)
-        如果 (任务ID != "")
-        {
-            对象.加入文本成员 ("task_id", 任务ID)
-        }
-        如果 (是否成功)
-        {
-            对象.加入文本成员 ("message", 消息)
-            变量 头JSON <类型 = 文本型>
-            头JSON = 对象.到可读文本 (YYJSON格式化选项.压缩)
-            如果 (原始数据JSON != "" && 是否为合法JSON文档 (原始数据JSON))
-            {
-                返回 (取文本左边 (头JSON, 取文本长度 (头JSON) - 1) + ",\"data\":" + 原始数据JSON + "}")
-            }
-            如果 (原始数据JSON != "")
-            {
-                对象.加入文本成员 ("data", 原始数据JSON)
-            }
-            返回 (对象.到可读文本 (YYJSON格式化选项.压缩))
-        }
-        对象.加入文本成员 ("error", 消息)
-        返回 (对象.到可读文本 (YYJSON格式化选项.压缩))
-    }
-
-    方法 构建JSON版本响应 <公开 静态 类型 = 文本型>
-    {
-        变量 版本JSON <类型 = YYJSON对象类>
-        版本JSON.创建自文本 ("{}")
-        版本JSON.加入文本成员 ("Browser", "AI浏览器 MCP/" + MCP_版本号)
-        版本JSON.加入文本成员 ("Protocol-Version", "1.3")
-        版本JSON.加入文本成员 ("User-Agent", MCP_服务器名)
-        版本JSON.加入文本成员 ("V8-Version", "CEF")
-        版本JSON.加入文本成员 ("WebKit-Version", "FBrowser CEF")
-        版本JSON.加入文本成员 ("webSocketDebuggerUrl", 取MCP_WS地址 ())
-        返回 (版本JSON.到可读文本 (YYJSON格式化选项.压缩))
-    }
-
-    方法 构建JSON列表响应 <公开 静态 类型 = 文本型>
-    {
-        变量 ID清单 <类型 = 类_FBrowser_列表值>
-        ID清单 = FBrowser_浏览器_取ID清单 ()
-        变量 json文本 <类型 = 文本型>
-        json文本 = "["
-        变量 first <类型 = 逻辑型 值 = 真>
-        计次循环 (ID清单.取大小 ())
-        {
-            变量 bid <类型 = 整数>
-            bid = ID清单.取整数值 (取循环索引 ())
-            变量 bb <类型 = 类_FBrowser_浏览器>
-            bb = FBrowser_浏览器_通过ID取浏览器 (bid)
-            如果 (bb.是否为空 () == 假 && bb.是否已关闭 () == 假)
-            {
-                如果 (first)
-                {
-                    first = 假
-                }
-                否则
-                {
-                    json文本 = json文本 + ","
-                }
-                变量 url文本 <类型 = 文本型>
-                变量 title文本 <类型 = 文本型>
-                变量 jsonUrlFrame <类型 = 类_FBrowser_框架>
-                jsonUrlFrame = 取安全主框架 (bb)
-                如果 (jsonUrlFrame.是否为空 () == 假 && jsonUrlFrame.是否有效 ())
-                {
-                    url文本 = jsonUrlFrame.取地址 ()
-                }
-                否则
-                {
-                    url文本 = "about:blank"
-                }
-                变量 窗口句柄 <类型 = 变整数>
-                窗口句柄 = bb.取窗口句柄 ()
-                如果 (窗口句柄 != 0)
-                {
-                    title文本 = bb.取窗口标题 ()
-                }
-                否则
-                {
-                    title文本 = "FBrowser #" + 到文本 (bid)
-                }
-                变量 页面对象 <类型 = YYJSON对象类>
-                页面对象.创建自文本 ("{}")
-                页面对象.加入文本成员 ("id", 到文本 (bid))
-                页面对象.加入文本成员 ("type", "page")
-                页面对象.加入文本成员 ("title", title文本)
-                页面对象.加入文本成员 ("url", url文本)
-                页面对象.加入文本成员 ("description", "MCP browser_id=" + 到文本 (bid) + ", CDP via browser_cdp_call")
-                页面对象.加入整数成员 ("mcp_browser_id", bid)
-                json文本 = json文本 + 页面对象.到可读文本 (YYJSON格式化选项.压缩)
-            }
-        }
-        json文本 = json文本 + "]"
-        返回 (json文本)
     }
 
     方法 读取HTTP_POST体 <公开 静态 类型 = 文本型>
@@ -7838,6 +8099,4 @@
         发送CORS200响应 (服务器, 连接ID, MIME, 取字节集指针 (文件字节), 取字节集长度 (文件字节))
         返回 (真)
     }
-
-    #
 }
