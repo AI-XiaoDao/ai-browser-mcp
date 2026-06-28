@@ -1,66 +1,43 @@
 <div align="center">
 
-# AI-Fbowser-Mcp · Windows 浏览器自动化 MCP
+# AI-Browser-MCP · Windows 浏览器自动化 MCP 服务
 
-### 任意 AI 代理 · 一句话操控 Windows 真实浏览器 · Cursor / Claude / Cline
+### 任意 AI 代理 · 一句话操控真实浏览器 · Cursor / Claude / Cline
 
-**Model Context Protocol (MCP)** · **200+ tools** · **native API first** · **web scraping · POST capture · CDP debugger** · **FBrowser CEF** · **`127.0.0.1:9222`** · **MIT**
-
-*Native API optimized — 12+ tools de-JS'd · auto-enable · code_base64 · one-step scrape*
+**268 工具** · **MCP 协议** · **原生 API 优先** · **FBrowser CEF** · **`127.0.0.1:9222`** · **MIT**
 
 [![Download v2.8.0](https://img.shields.io/badge/⬇_Download-v2.8.0-238636?style=for-the-badge)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/AI-XiaoDao/ai-browser-mcp?label=release)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
-[![MCP](https://img.shields.io/badge/MCP-200+_tools-6ec6ff)]()
-[![Platform](https://img.shields.io/badge/Platform-Windows_x64%20%7C%20win32-0078d4)]()
+[![MCP](https://img.shields.io/badge/MCP-268_tools-6ec6ff)]()
+[![Platform](https://img.shields.io/badge/Platform-Windows_x64_|_win32-0078d4)]()
 [![FBrowser](https://img.shields.io/badge/Kernel-FBrowser_CEF-a78bfa)]()
 
-[⚡ 3 步上手](#-3-步上手) · [强大扩展](#-强大扩展能力) · [一句话场景](#-典型场景一句话自动执行) · [下载](#-下载与运行成品) · [关键词 SEO](docs/SEO_KEYWORDS.md) · [文档](#-文档) · [开源公告](OPEN_SOURCE.md) · [English](OPEN_SOURCE_EN.md)
+⚡ [3 步上手](#-3-步上手) · [场景演示](#-典型场景) · [对比 Playwright](#-vs-playwright--puppeteer) · [下载](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) · [开源公告](OPEN_SOURCE.md) · [English](OPEN_SOURCE_EN.md)
 
 </div>
 
 ---
 
-## ✨ 这是什么？
+## ✨ 一句话介绍
 
-启动 **AI-Fbowser-Mcp.exe**，本机暴露 MCP 服务（`127.0.0.1:9222`）。200+ `browser_*` 工具：导航、原生DOM、填表、CDP断点、POST抓包、爬虫（`scrape`/`extract`）、工作流。原生 API 优先（12+ 工具已去 JS 化），自动启用，零转义。说一句话，Agent 自动串联。
+下载 `AI-Browser-MCP-x64-v2.8.0.zip`（~157MB），解压运行 `AI-Browser-MCP.exe`。在 Cursor / Claude 里说句话，**268 个预封装工具**自动执行：采集数据、逆向 POST 加密、CDP 定位签名算法、自动填表。
 
 | 接入方式 | 适用 |
 |----------|------|
-| **stdio MCP** | Cursor、Claude Desktop、Cline 等 — 用 [`mcp_bridge.js`](CEFbro/AI-Fbowser-Mcp/mcp_bridge.js) 桥接 |
+| **stdio MCP** | Cursor、Claude Desktop、Cline — 配置 [`mcp_bridge.js`](CEFbro/AI-Fbowser-Mcp/mcp_bridge.js) |
 | **HTTP POST** | 任意语言 / 自研 Agent — `POST http://127.0.0.1:9222/mcp` |
 | **WebSocket** | 长连接 JSON-RPC — `ws://127.0.0.1:9222` |
-
-| 一句话场景 | 示例 |
-|------------|------|
-| **采集数据** | 「滚动商品列表，采标题价格 JSON」 |
-| **逆向算法** | 「扫描 POST，标出疑似加密字段」（Hook 抓 body） |
-| **定位算法** | 「断点跟到 sign 函数，给源码片段」（CDP 调试器） |
-| **自动填表** | 「登录后台，导出订单表」 |
-| **固化复用** | 「存成 workflow JSON，下次一键跑」 |
-
-### 与 Playwright / Puppeteer 对比（为何选 MCP 浏览器）
-
-| | 自建 Playwright / Puppeteer | **AI-Fbowser-Mcp** |
-|--|---------------------------|------------------|
-| 上手 | 写脚本、装驱动、调试选择器 | 下载 zip → 运行 exe → Cursor 一句话 |
-| AI 集成 | Agent 现写代码，易出错 | **200+ 个预封装 MCP 工具**，Agent 直接调用 |
-| 浏览器 | 常无头 / 需额外配置 | **FBrowser CEF 真实窗口**，行为更接近用户 |
-| 逆向 / 断点 | 需自己 Hook + DevTools | 内置 `browser_inject`、**CDP 调试器**、场景脚本 |
-| 隐私 | 视部署方式 | 默认 **127.0.0.1 本机**，数据不出机器 |
-| 平台 | 跨平台 | **Windows x64 + win32** 专精 |
 
 ---
 
 ## ⚡ 3 步上手
 
-1. **下载** [x64](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)（~157MB）→ 解压 → 双击 **`AI-Fbowser-Mcp.exe`**
-2. **确认** [`http://127.0.0.1:9222/health`](http://127.0.0.1:9222/health) → `"status":"ok"` 或 `node mcp_launcher.js status`
-3. **接入 AI 代理** → 说：**「打开抖音，提取10条视频」**
+**1.** 下载 [x64](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)（~157MB）或 [win32](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)（~136MB）→ 解压 → 双击 **`AI-Browser-MCP.exe`**
 
-<details>
-<summary><b>Cursor 配置（点击展开）</b></summary>
+**2.** 确认 [`http://127.0.0.1:9222/health`](http://127.0.0.1:9222/health) → `"status":"ok"`
 
+**3.** Cursor 配置（`.cursor/mcp.json`）：
 ```json
 {
   "mcpServers": {
@@ -71,408 +48,128 @@
   }
 }
 ```
-自检：`node mcp_bridge.js --check` 或 `curl http://127.0.0.1:9222/health`
-</details>
+自检：`node mcp_bridge.js --check`。然后对 AI 说：**「打开百度搜索今日新闻」**
 
-**其他 Agent**：任何实现 MCP 的客户端，只要指向 `http://127.0.0.1:9222/mcp`（HTTP）或配置 `mcp_bridge.js`（stdio）即可；亦可用 Node / Python 直接 `POST` JSON-RPC。
-
-</details>
-
-→ 完整步骤见下方 [🚀 快速开始（详细）](#-快速开始详细)
-
-> **🎁 GitHub Release 下载即用**：[`Releases`](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) 含 **x64 / win32** 运行包，**全部 200+ 个工具**（截图、CDP 调试器、指纹、网络拦截、工作流等），解压运行即可，**无需额外配置**。
-
-```mermaid
-flowchart LR
-  subgraph clients [AI 代理 / MCP 客户端]
-    IDE[Cursor / Claude / Cline …]
-    Agent[自研 Agent / LLM 应用]
-    Script[HTTP / WS 脚本]
-  end
-  Bridge[mcp_bridge.js\n可选 stdio 桥接]
-  MCP[MCP Server\nHTTP + WebSocket]
-  CEF[FBrowser CEF\n真实浏览器]
-
-  IDE --> Bridge --> MCP --> CEF
-  Agent --> MCP
-  Script --> MCP
-```
+> **其他 Agent**：任意 MCP 客户端指向 `http://127.0.0.1:9222/mcp` HTTP 或 `ws://127.0.0.1:9222` WebSocket。
 
 ---
 
-## 🔌 强大扩展能力
+## 🎯 典型场景
 
-不只是一个浏览器远程控制端 — 自带 **Agent 编排层** 与 **可二次开发** 生态：
+不用写脚本。在 AI 代理里用自然语言描述目标即可。
 
-| 扩展 | 能做什么 |
-|------|----------|
-| **217 MCP 工具** | 导航 / 填表 / DOM / JS / 网络 / 截图 / CDP / 调试器 / 指纹 … 24 大类，[完整参考](CEFbro/AI-Fbowser-Mcp/skills/AI浏览器MCP.md) |
-| **sync-wait + batch** | 同次调用等结果；一次请求串联多工具，省 Token、少轮次 |
-| **工作流 JSON** | `workflows/*.json` 多步骤编排，`workflow_run` 一键复跑，可版本管理 |
-| **事件 Hook** | 生命周期 / 网络 / 资源 / 弹窗 … 可扩展 Hook，支持 persist 注入 |
-| **场景脚本** | [`scenarios/`](CEFbro/AI-Fbowser-Mcp/scenarios/) 逆向扫描、Hook 测试、断点恢复等现成范例 — [实测截图](.github/demo-douyin-post-scan.png) |
-| **技能书 + 测试** | [`skills/`](CEFbro/AI-Fbowser-Mcp/skills/) Agent 知识库；[`run_all_tests.js`](CEFbro/AI-Fbowser-Mcp/run_all_tests.js) 全量回归 |
-| **HTTP / WebSocket / stdio** | 任意 AI 代理或自研程序接入；[`mcp_bridge.js`](CEFbro/AI-Fbowser-Mcp/mcp_bridge.js) 桥接 IDE |
-| **欢迎页 + 在线文档** | `9222` 健康检查、工具搜索、复制 MCP 配置、浏览 [`docs/`](CEFbro/AI-Fbowser-Mcp/docs/) |
-| **MIT 源码** | 11 个 `.wsv` 模块（~2 万行）欢迎 PR — 改 [`src/`](CEFbro/AI-Fbowser-Mcp/src/) 即可扩展新工具 |
+| # | 场景 | 一句话 | 自动调用的工具 |
+|:-:|------|--------|----------------|
+| ① | **数据采集** | 「滚动商品列表，采标题价格 JSON」 | `navigate` → `evaluate` → `dom_query` / `collect` |
+| ② | **逆向 POST** | 「扫描 XHR/fetch，标出疑似加密字段」 | `reverse_prepare` → `inject` Hook → `network` |
+| ③ | **定位算法** | 「提交时下断点，跟到 sign 函数给源码」 | `debugger_enable` → `set_breakpoint` → `stack` |
+| ④ | **自动填表** | 「登录后台，导出订单前20行」 | `fill_*` → `click` → `collect` |
+| ⑤ | **固化复用** | 「存成 workflow，下次一键跑」 | `workflow_run` |
 
 <details>
-<summary><b>二次开发 / 自行编译（点击展开）</b></summary>
-
-- **改 MCP 逻辑**：编辑 `CEFbro/AI-Fbowser-Mcp/src/*.wsv`，详见 [CONTRIBUTING.md](CONTRIBUTING.md)
-- **火山编译**：打开 `AI-Fbowser-Mcp.vprj` → Release x64；C++ 对照见 [`generated-cpp/`](CEFbro/AI-Fbowser-Mcp/generated-cpp/)
-
-</details>
-
----
-
-## 🌟 核心优点（全景）
-
-### 对 AI 用户 — 为什么选它？
-
-| 优点 | 说明 |
-|------|------|
-| **自然语言驱动** | 在任意 MCP AI 代理里说需求，Agent 自动选工具，无需从零写 Playwright/Puppeteer 脚本 |
-| **200+ 个开箱工具** | 导航、填表、读 DOM、执行 JS、网络观察、工作流、CDP 断点等，覆盖常见自动化场景 |
-| **真实浏览器窗口** | 基于 **FBrowser CEF** 内核，非纯无头模拟，页面行为更接近用户日常浏览 |
-| **sync-wait 智能同步** | 常用读操作默认在同一次调用内等待结果，Agent 编排更简单、少轮询 |
-| **工作流 JSON** | 多步骤任务写成 JSON，一键 `workflow_run`，可版本管理、可分享 |
-| **batch 批量调用** | 一次请求串联多工具，减少往返、降低 Token 消耗 |
-| **欢迎页控制台** | `http://127.0.0.1:9222/` 查健康状态、浏览文档、复制 MCP 客户端配置 |
-| **一句话自动执行** | 说需求即可：Agent 自选工具链（导航→Hook→读网络→断点→导出），全程 MCP 驱动 |
-
-### 典型场景 · 一句话自动执行 {#一句话能干啥}
-
-不用写脚本、不用记 200+ 个工具名。在 **任意 AI 代理**（Cursor、Claude、自研 MCP 客户端等）里用自然语言描述目标，Agent 会按场景自动组合 `browser_*` / `workflow_*` / 调试器，并在每步 **sync-wait** 等结果后再决定下一步。
-
-#### 场景速查
-
-| # | 场景 | 一句话示例 | 主要工具 |
-|:-:|------|------------|----------|
-| ① | **数据采集** | 「滚动列表，采标题价格 JSON」 | `dom_query` / `collect` / `evaluate` |
-| ② | **逆向分析** | 「扫描 POST，标出疑似加密字段」 | `reverse_prepare` / `inject` / `network` |
-| ③ | **定位算法** | 「断点跟到 sign 函数，给源码」 | `debugger_*` |
-| ④ | **自动填表** | 「登录后台，导出订单表」 | `fill_*` / `workflow_run` |
-| ⑤ | **工作流复用** | 「存成 JSON，下次一键跑」 | `workflow_*` |
-
-#### 以前 vs 现在
-
-| 任务 | 传统做法（Playwright 等） | AI-Fbowser-Mcp |
-|------|---------------------------|--------------|
-| 采商品列表 | 写选择器 + 滚动循环 + 解析 + 存文件 | 对 Agent：**「滚动采标题价格 JSON」** → 自动调 MCP |
-| 找 POST 加密字段 | 开 DevTools → 手动 Hook → 对比字段 | **「扫描 POST 标加密字段」** → `inject` + 网络对比 |
-| 找 sign 函数 | 搜源码 → 手动下断点 → 跟栈 | **「提交时下断点，给 sign 源码」** → `debugger_*` 编排 |
-| 固定日报 | 维护 cron + 脚本版本 | **workflow JSON** + 一句 `workflow_run` |
-
-#### ① 数据采集 — 「帮我把这个页面的数据采下来」
-
-| 你说 | AI 通常会做 |
-|------|-------------|
-| 「打开某电商列表页，滚动加载，把商品名、价格、销量采成 JSON」 | `browser_navigate` → `browser_evaluate` 滚动 → `browser_dom_query` / `browser_collect` → 整理输出 |
-| 「登录后进入订单页，把表格每一行导出」 | 填表登录 → 等 DOM → 循环读单元格 → 结构化返回 |
-| 「盯着这个接口，把返回 JSON 里的 list 字段提出来」 | `browser_network` / `browser_collect` → 过滤 URL → 解析响应 |
-
-**相关工具**：`browser_dom_query`、`browser_collect`、`browser_network`、`browser_evaluate`、`workflow_run`（多页可写成工作流 JSON 复用）。
-
-#### ② 逆向算法 — 「帮我找出 POST 里哪个字段是加密的」
-
-| 你说 | AI 通常会做 |
-|------|-------------|
-| 「打开抖音，扫描 XHR/fetch 的 POST，标出疑似加密字段」 | `browser_reverse_prepare` → `browser_inject` 持久 Hook → 触发请求 → 对比字段启发式 |
-| 「抓这个表单提交时的请求体和响应」 | 开网络详情 → 填表提交 → `browser_network` / 资源拦截读 body |
-| 「Hook console，把页面里打印的 sign 参数记下来」 | `browser_console_enable` → 操作页面 → `browser_console_get` |
-
-**要点**：MCP 网络层**默认不记 POST body**，须 **persist Hook**（`browser_inject`）或资源拦截。可参考 [`douyin_xhr_encrypt_scan.js`](CEFbro/AI-Fbowser-Mcp/scenarios/douyin_xhr_encrypt_scan.js) 与 [`场景与Hook测试.md`](CEFbro/AI-Fbowser-Mcp/skills/场景与Hook测试.md)。
-
-#### ③ 定位算法 — 「帮我定位签名算法在哪个 JS 函数里」
-
-| 你说 | AI 通常会做 |
-|------|-------------|
-| 「在提交按钮处下断点，单步跟到算 sign 的函数」 | `browser_debugger_enable` → 设 DOM/XHR 断点 → `debugger_step` / `debugger_stack` |
-| 「列出所有脚本，搜索包含 md5 / sign 的函数并断在那里」 | CDP 脚本枚举 → `debugger_set_breakpoint` → 触发请求 → 读栈与局部变量 |
-| 「把命中断点时的 call stack 和源码片段给我」 | `debugger_stack` + `debugger_script_source` → 标注函数名与行号 |
-
-**相关工具**：`browser_debugger_*` 断点/单步/栈/源码/flow 编排（Release 成品已开放）；配合 `browser_evaluate` 可在页面内探测 `window` 上的加密对象。
-
-#### ④ 自动填表 / 简单 RPA — 「帮我把这个表单填完并提交」
-
-| 你说 | AI 通常会做 |
-|------|-------------|
-| 「打开后台，用户名 admin、密码 xxx，点登录」 | `browser_navigate` → `browser_fill_*` → `browser_fill_click` → 等跳转 |
-| 「把 Excel 里这 10 行逐条录入这个页面」 | 读你提供的表格 → 循环填表 → 语义失败时报告哪一行出错 |
-| 「每天固定：打开某页 → 点导出 → 等下载完成」 | 可固化成 `workflows/*.json`，以后一句 `workflow_run` |
-
-**相关工具**：`browser_fill_click`、`browser_fill_set_value`、`browser_fill_select`、`workflow_run`。
-
-#### ⑤ 固化复用 — 「把这个流程存成工作流，下次一键跑」
-
-多步骤任务（登录 → 翻页采集 → 导出）可写成 JSON 放进 `workflows/`，Agent 或脚本调用 `workflow_list` / `workflow_get` / `workflow_run` 重复执行，适合**定时采集**、**回归测试**、**演示复现**。
-
-#### Agent 怎么「一句话」跑起来？
-
-```mermaid
-flowchart TB
-  U[你在 AI 代理里说一句话] --> A[Agent 理解目标场景]
-  A --> T{选工具链}
-  T -->|采集| C1[navigate → scroll → dom_query / collect]
-  T -->|逆向| C2[reverse_prepare → inject Hook → network]
-  T -->|定位| C3[debugger_enable → breakpoint → stack]
-  T -->|填表| C4[fill_* → click → 等 DOM]
-  C1 --> W[sync-wait 等每步结果]
-  C2 --> W
-  C3 --> W
-  C4 --> W
-  W --> R{成功?}
-  R -->|否| A
-  R -->|是| O[整理 JSON / 表格 / 源码片段返回给你]
-```
-
-#### Walkthrough：采集一句话的完整路径
-
-**你说：**
-```
-打开 https://example.com/products ，滚动加载 2 屏，把每个商品的标题和价格采成 JSON 数组。
-```
-
-**Agent 内部大致会：**
-
-1. `browser_navigate` → sync-wait 等页面加载  
-2. `browser_evaluate` 执行 `window.scrollBy` 或点击「加载更多」  
-3. `browser_dom_query` 或 `browser_collect` 读列表节点  
-4. 若某选择器为空 → 收到 `success:false`，自动换选择器或报告原因  
-5. 将结果整理为 JSON 文本回复（你可再说「导出 CSV」继续）
-
-**逆向 / 定位**同理：你说目标，Agent 在 Hook、网络、断点、栈之间循环，直到给出「疑似加密字段列表」或「sign 函数源码片段」。
-
-#### Walkthrough：逆向一句话的完整路径
-
-**你说：**
-```
-打开 https://www.douyin.com ，扫描 XHR/fetch 的 POST，标出疑似加密的字段并说明依据。
-```
-
-**Agent 内部大致会：**
-
-1. `browser_reverse_prepare` — 开网络详情 + console，返回逆向指引  
-2. `browser_inject` — 注入 persist Hook 拦截 `XMLHttpRequest.send` / `fetch`  
-3. `browser_navigate` 或等你手动触发页面操作  
-4. `browser_network` / 读 Hook 回调 — 对比 POST 字段名与值形态（长 hex、无规律 base64 等）  
-5. 输出「疑似字段列表 + 依据」；必要时建议跑 `douyin_xhr_encrypt_scan.js` 对照
-
-**实测效果**（Cursor + Agent 一句话触发，自动注入 Hook、滚动触发请求、分析 33 条 POST）：
-
-![Douyin POST 逆向扫描演示 — 一句话打开抖音、Hook XHR/fetch、标出疑似加密字段](.github/demo-douyin-post-scan.png)
-
-#### Walkthrough：定位一句话的完整路径
-
-**你说：**
-```
-在这个登录页点提交时下断点，跟到计算 sign 的 JS 函数，把函数名和源码片段给我。
-```
-
-**Agent 内部大致会：**
-
-1. `browser_debugger_enable` — 开启 CDP 调试器  
-2. `browser_navigate` 到目标页  
-3. `debugger_set_breakpoint` — 在提交事件或 XHR 发送处断住  
-4. 你或 AI 触发提交 → `debugger_stack` + `debugger_script_source`  
-5. `debugger_step` 单步直到进入 sign 计算函数 → 返回函数名、行号、源码片段
-
-若断点不命中：让 AI 改挂 `fetch` 发送断点，或先用 `browser_evaluate` 搜 `window` 上的 sign 相关对象。
-
-#### 话术示例（复制到 AI 代理对话即可）
+<summary><b>📖 查看完整话术示例</b></summary>
 
 ```
-帮我把 https://example.com/products 前 3 页的商品标题和价格采集成 JSON 数组。
+帮我把 https://example.com/products 前 3 页的商品标题和价格采集成 JSON。
 
-打开 https://www.douyin.com ，找出 POST 请求里疑似加密的字段，并说明依据。
+打开 https://www.douyin.com ，找出 POST 请求里疑似加密的字段并说明依据。
 
-在这个登录页提交时下断点，定位计算 password/sign 的 JS 函数，把函数名和源码片段给我。
+在这个登录页提交时下断点，定位计算 password/sign 的 JS 函数，把函数名和源码给我。
 
 用账号 test / 密码 123456 登录后台，进入「订单列表」，把前 20 行导出成表格。
 
-把「打开某站 → 登录 → 翻 3 页采集 → 汇总 JSON」写成 workflow JSON，保存到 workflows/ 并跑一遍验证。
+把「打开某站 → 登录 → 翻 3 页采集 → 汇总 JSON」写成 workflow JSON 并跑一遍验证。
 ```
 
-### 协议与集成 — 接得进、用得广
-
-| 优点 | 说明 |
-|------|------|
-| **标准 MCP** | 实现 Model Context Protocol — **Cursor / Claude / Cline / OpenCode / 自研 Agent** 等任意 MCP 客户端 |
-| **双通道 JSON-RPC** | **WebSocket** 长连接 + **HTTP POST** `/mcp`，脚本与 IDE 均可接入 |
-| **stdio 桥接（可选）** | `mcp_bridge.js`：stdio ↔ HTTP，供 IDE 类客户端；仓库自带 `.mcp.json` 示例 |
-| **全端点 CORS** | HTTP 接口均带 CORS，前端页面可直接 `fetch` 调 MCP |
-| **CDP 原生暴露** | `ws://127.0.0.1:9222/devtools/browser/{id}`，可接 Chrome DevTools 生态 |
-| **环境变量自注册** | 启动后自动设置 `AI_BROWSER_MCP_URL` / `PORT` / `HEALTH`，客户端自动发现 |
-| **在线文档服务** | 编译后 `linker/docs/` 可通过 `9222` 直接阅读，无需翻仓库 |
-
-### 浏览器能力 — 200+ 工具分域
-
-| 域 | 能力概要 |
-|----|----------|
-| 导航与页面 | 打开/后退/刷新、多框架、标题/URL |
-| DOM / 填表 | 查询/点击/设值、FBrowser 官方填表 API |
-| JS 执行 | `evaluate`、控制台脚本 |
-| 网络 | 请求列表、`collect` 采集 |
-| 鼠标键盘 / 编辑 | 基本输入与编辑操作 |
-| Cookie / 缓存 / 代理 | 会话与环境控制 |
-| 工作流 | `workflow_list/get/run/stop` |
-| 截图 / PDF / 下载 | 页面留存与文件 |
-| 网络拦截 / CDP | 改包、协议级控制 |
-| 指纹 / 内核开关 | 防检测、UA/Canvas/WebGL 等 |
-| 调试器 | 断点、单步、栈、脚本源码、flow 编排 |
-| DevTools / 窗口 | 开发者工具、窗口与系统级控制 |
-
-> 完整工具表见 [`AI浏览器MCP.md`](CEFbro/AI-Fbowser-Mcp/skills/AI浏览器MCP.md)（200+ 工具 · 24 类）。
-
-### 工程与体验 — 为 Agent 设计
-
-| 优点 | 说明 |
-|------|------|
-| **语义失败检测** | 元素未找到、`{ok:false}` 等返回 `success:false`，避免 AI 误判成功 |
-| **async 任务 ID** | `task_<毫秒>_<盐>_<计数>`，可追踪长任务，`mcp_result` 取回结果 |
-| **事件 Hook 系统** | 浏览器生命周期、网络、回调等可扩展 Hook |
-| **双通道资源拦截** | 内核 API + 事件 Hook 协同，支持网络观察与改包 |
-| **可配置超时/日志** | `mcp_config.json` 调节速率、网络日志、响应缓存等 |
-| **全量测试脚本** | `run_all_tests.js` 顺序验证 MCP 工具，便于回归 |
-| **托盘常驻** | 关闭主窗口后 MCP 常仍在托盘运行，适合长时间 Agent 任务 |
-
-### 安全与本地优先
-
-| 优点 | 说明 |
-|------|------|
-| **默认本机绑定** | 服务监听 `127.0.0.1:9222`，不暴露公网，适合本地 Agent |
-| **数据不出本机** | 浏览器与 MCP 同机运行，页面数据由你掌控 |
-| **MIT 开源可审计** | `.wsv` 权威源码 + `generated-cpp/` 对照，协议与行为透明 |
-
-### 开源与生态 — 能学、能改、能发
-
-| 优点 | 说明 |
-|------|------|
-| **完整源码公开** | 11 个 `.wsv` MCP 模块（~2 万行）+ 文档 + 技能书 + 测试 |
-| **四层产物清晰** | `src` → `generated-cpp` → 运行包，结构清晰可审计 |
-| **GitHub Release** | 编译后上传 `release/linker/` 到 Releases 页面 |
-| **国内技术栈** | 火山视窗 + FBrowser CEF，中文文档与 QQ/火山社群支持 |
-| **GitHub 配套齐全** | Issue/PR 模板、Discussions、CI 校验、CHANGELOG |
-
-### 为什么选择 AI-Fbowser-Mcp
-
-| 维度 | 亮点 |
-|------|------|
-| **AI 接入** | 标准 MCP — Cursor / Claude / 自研 Agent 均可 |
-| **上手** | 下载 Release → 运行 exe → 接入代理，分钟级 |
-| **工具深度** | **217 预封装** 工具，含 CDP / Hook / 工作流 / 调试器 |
-| **一句话执行** | 采集 / 分析 / 定位 / 填表 — Agent 自动串联 |
-| **隐私** | 本机 `127.0.0.1`，数据不出机器 |
-| **开源** | MIT · 完整 `.wsv` 源码 · 欢迎扩展 PR |
-
----
-
-## 🚀 快速开始（详细）
-
-### 方式 A：使用成品（推荐新手）
-
-1. 从 [Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) 下载 **x64**（~157MB）或 **win32**（~136MB）运行包
-2. 解压，双击 **`AI-Fbowser-Mcp.exe`**
-3. 浏览器打开 `http://127.0.0.1:9222/health`，确认 `"status":"ok"`
-4. 接入 AI 代理（仓库根目录 [`.mcp.json`](.mcp.json) 或 [`.cursor/mcp.json`](.cursor/mcp.json) 可复制）：
-
-```json
-{
-  "mcpServers": {
-    "ai-browser": {
-      "command": "node",
-      "args": ["CEFbro/AI-Fbowser-Mcp/mcp_bridge.js"],
-      "env": {
-        "AI_BROWSER_MCP_HTTP_POST": "http://127.0.0.1:9222/mcp",
-        "AI_BROWSER_MCP_HOST": "127.0.0.1",
-        "AI_BROWSER_MCP_PORT": "9222",
-        "AI_BROWSER_MCP_CURSOR_MODE": "0"
-      }
-    }
-  }
-}
+**执行流程**（AI 自动编排）：
 ```
-
-Release 解压目录：`args` 改为 `["mcp_bridge.js"]`（与 exe 同目录）。
-
-5. 自检：`node CEFbro/AI-Fbowser-Mcp/mcp_bridge.js --check`
-6. 对 AI 说一句话即可，例如见 [典型场景 · 话术示例](#-典型场景一句话自动执行)
-
-### 方式 B：从火山源码编译
-
-**依赖**：Windows x64、[火山视窗 IDE](https://www.voldp.com/)（含 FBrowser CEF 模块）、Node.js（桥接脚本）
-
-1. 打开 `CEFbro/AI-Fbowser-Mcp/AI-Fbowser-Mcp.vprj`，编译 **Release x64**
-2. 运行时分发目录：`_int/AI-Fbowser-Mcp/release/x64/linker/`（含 exe、dll、docs、workflows）
-3. 打包 Release 时排除编译缓存（`_int/`、`CacheData/` 等）
-
----
-
-## 📦 下载与运行成品
-
-| 内容 | 路径 | 说明 |
-|------|------|------|
-| 运行时脚本与文档 | [`release/linker/`](release/linker/) | `mcp_bridge.js`、配置、工作流、在线文档（**无 exe**） |
-| 完整安装包 x64 | [GitHub Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) | `AI-Browser-MCP-x64-v2.8.0.zip`：**268+ 工具全开放**，exe + CEF + 文档/脚本 |
-| 完整安装包 win32 | [GitHub Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) | `AI-Browser-MCP-win32-v2.8.0.zip`：32 位 Windows 运行包 |
-| 生成 C++ 源码 | [`generated-cpp/`](CEFbro/AI-Fbowser-Mcp/generated-cpp/) | `release-x64/`、`release-win32/` 火山翻译对照（亦见 Release cpp zip） |
-| 火山工程源码 | [`CEFbro/AI-Fbowser-Mcp/src/`](CEFbro/AI-Fbowser-Mcp/src/) | `.wsv` MCP 服务核心（**本仓开源主体**） |
-
-运行包从 [Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) 下载；源码在本仓库 `src/` 与 `generated-cpp/`。
-
----
-
-<details>
-<summary><b>📂 开发者：源码结构与编译说明（点击展开）</b></summary>
-
-## 开源范围与火山编译目录
-
-本仓库 MIT 公开 **MCP 服务 `.wsv` 源码**、**生成 C++ 对照**、文档/脚本/场景；运行包 exe 见 [Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)。
-
-### 四层对照
-
-| 层级 | 是什么 | 二次开发改这里？ | Git 仓库 | Release 附件 |
-|:--:|--------|:--:|----------|--------------|
-| **① 权威源码** | 火山 `.wsv` | ✅ | `src/*.wsv` | — |
-| **② 生成 C++** | 编译对照 | 只读 | `generated-cpp/` | cpp zip |
-| **③ 中间产物** | `.obj`/`.pch` | — | 不入仓 | — |
-| **④ 运行成品** | exe + CEF | — | Releases | x64 / win32 zip |
-
-> 改 **`src/*.wsv`** 提 PR；C++ 见 **`generated-cpp/`**（= 编译时 `project/`）。
-
-### 编译流水线
-
-```mermaid
-flowchart LR
-  A["① src/*.wsv"]
-  B["② generated-cpp/"]
-  C["③ 中间产物"]
-  D["④ exe · Releases"]
-
-  A -->|火山翻译| B
-  B -->|MSVC| C
-  C -->|链接| D
+你说一句话 → Agent 选工具链 → sync-wait 逐步等结果 → 整理返回
+若某步失败（success:false）→ Agent 自动换策略或报告原因
 ```
-
-维护者发版：详见 [`generated-cpp/README.md`](CEFbro/AI-Fbowser-Mcp/generated-cpp/README.md) · [`CONTRIBUTING.md`](CONTRIBUTING.md)。
 
 </details>
 
+![Douyin POST 逆向扫描演示](.github/demo-douyin-post-scan.png)
+
 ---
 
-## 🧰 能力速查
+## 🆚 VS Playwright / Puppeteer
 
-| 类别 | 示例工具 |
-|------|----------|
-| 导航 | `browser_navigate` / `back` / `reload` |
-| DOM / 填表 | `browser_fill_click` / `browser_dom_query` |
-| JS | `browser_evaluate` / `execute_js` |
-| 网络 | `browser_network` / `browser_collect` |
-| 工作流 | `workflow_run` 多步骤 JSON |
-| 截图 / CDP / 调试 | `browser_screenshot` / `browser_debugger_enable` 等 |
+| 维度 | 自建 Playwright / Puppeteer | **AI-Browser-MCP** |
+|------|---------------------------|-------------------|
+| 上手 | 写脚本、装驱动、调试选择器 | **下载 zip → 运行 exe → AI 一句话** |
+| AI 集成 | Agent 现写代码，易出错 | **268 个预封装 MCP 工具**，Agent 直接调用 |
+| 浏览器 | 常无头 / 需额外配置 | **FBrowser CEF 真实窗口**，行为接近用户 |
+| 逆向 / 断点 | 需自己 Hook + DevTools | 内置 `browser_inject`、**CDP 调试器**、场景脚本 |
+| 隐私 | 视部署方式 | 默认 **127.0.0.1 本机**，数据不出机器 |
+| 平台 | 跨平台 | **Windows x64 + win32** 专精 |
+| 许可 | 视项目 | **MIT** · 完整源码公开 |
 
-完整 200+ 工具分 24 类，见 [`skills/AI浏览器MCP.md`](CEFbro/AI-Fbowser-Mcp/skills/AI浏览器MCP.md)。**全部优点**见上方 [核心优点（全景）](#-核心优点全景)。
+---
+
+## 🔌 核心能力（268 工具 · 22 分类）
+
+| 分类 | 工具数 | 能力 |
+|------|:------:|------|
+| 导航与页面 | 11 | `navigate` `reload` `back` `forward` `get_url` `get_title` … |
+| DOM 查询 | 8 | `dom_query` `dom_click` `dom_get_html` `dom_inner_html` … |
+| DOM 填表 | 13 | `fill_click` `fill_set_value` `fill_select` `fill_exists` … |
+| JS 执行 | 5 | `evaluate` `execute_js` `console_eval` `inject` … |
+| 等待与状态 | 4 | `wait` `is_loading` `loading_info` `status` … |
+| 网络抓包 | 6 | `network` `network_export` `network_body` `intercept` … |
+| 数据提取 | 2 | `scrape` `extract` |
+| 截图与打印 | 3 | `screenshot` `print` `print_to_pdf` |
+| Cookie / 代理 | 9 | `get_cookies` `set_cookie` `delete_cookies` `set_proxy` … |
+| 鼠标键盘 | 7 | `mouse_click` `mouse_move` `key_event` `touch_*` … |
+| 窗口管理 | 5 | `create` `close` `move_window` `resize` … |
+| CDP 协议 | 3 | `cdp` `cdp_call` `cdp_event` |
+| 调试器 | 13 | `debugger_enable` `set_breakpoint` `stack` `step_*` `flow` … |
+| JS 逆向 | 25 | `reverse_hook` `reverse_patch` `reverse_search` `reverse_preload` … |
+| CDP 逆向 | 19 | `reverse_cdp_hook` `reverse_call_fn` `reverse_heap` `reverse_trace` … |
+| 反检测 | 7 | `antidetect_presets` `fingerprint_ua` `canvas_noise` `font_randomize` … |
+| 指纹虚拟 | 20+ | `fingerprint_screen` `fingerprint_hardware` `fingerprint_webgl` … |
+| 工作流 | 4 | `workflow_list` `workflow_get` `workflow_run` `workflow_stop` |
+| 批量与重试 | 2 | `batch` `retry` |
+| 系统 | 8 | `ping` `mcp_result` `mcp_status` `fbro_version` `shutdown` … |
+| 编码与工具 | 5 | `base64_encode/decode` `uri_encode/decode` `aliases` … |
+
+> 📚 完整 API 参考：[`skills/AI浏览器MCP.md`](CEFbro/AI-Fbowser-Mcp/skills/AI浏览器MCP.md)
+
+---
+
+## 🏗 架构
+
+```
+AI 代理 (Cursor/Claude/Cline)
+    │ stdio MCP / HTTP POST / WebSocket
+    ▼
+AI-Browser-MCP Server  ← mcp_bridge.js (stdio 桥接)
+    │ FBrowser CEF API
+    ▼
+真实浏览器窗口 (CEF 内核)
+```
+
+| 模块 | 文件 | 职责 |
+|------|------|------|
+| 入口 | `src/main.wsv` | GUI + FBrowser 初始化 |
+| MCP 核心 | `src/MCP_Server.wsv` (~7800 行) | JSON-RPC、工具注册、sync-wait、CDP/Debugger |
+| 分派层 | `src/MCP_Server_Core/Form/VIP/System/Workflow/Reverse.wsv` | 268 工具实现 |
+| HTTP/WS | `src/MCP_Server_HTTP.wsv` | 欢迎页、健康检查、`/mcp` 端点 |
+| 事件 Hook | `src/MCP_BrowserEvents.wsv` | 生命周期/网络/回调事件 |
+| 桥接 | `mcp_bridge.js` | stdio ↔ HTTP，Cursor/IDE 接入 |
+
+---
+
+## 📦 下载
+
+| 包 | 平台 | 大小 |
+|----|------|------|
+| [**AI-Browser-MCP-x64-v2.8.0.zip**](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.0/AI-Browser-MCP-x64-v2.8.0.zip) | Windows x64 | ~157 MB |
+| [**AI-Browser-MCP-win32-v2.8.0.zip**](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.0/AI-Browser-MCP-win32-v2.8.0.zip) | Windows 32-bit | ~136 MB |
+| [**AI-Browser-MCP-cpp-x64-v2.8.0.zip**](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.0/AI-Browser-MCP-cpp-x64-v2.8.0.zip) | C++ 对照 x64 | ~396 KB |
+| [**AI-Browser-MCP-cpp-win32-v2.8.0.zip**](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.0/AI-Browser-MCP-cpp-win32-v2.8.0.zip) | C++ 对照 win32 | ~396 KB |
+
+**环境要求**：Windows 10/11 · Node.js 18+（Cursor 桥接）· 64 位系统优先用 x64
 
 ---
 
@@ -482,23 +179,18 @@ flowchart LR
 ai-browser-mcp/
 ├── CEFbro/AI-Fbowser-Mcp/
 │   ├── src/              # 火山 .wsv 源码（MCP 核心，开源主体）
-│   ├── generated-cpp/    # 火山生成的 C++ 对照（release-x64/、release-win32/）
-│   ├── docs/             # 客户手册、配置说明
-│   ├── skills/           # Agent 技能书 + 200+ 工具参考 + 火山 API 知识库
+│   ├── generated-cpp/    # 火山生成 C++ 对照（release-x64/、release-win32/）
+│   ├── docs/             # 客户手册、配置说明、快速上手
+│   ├── skills/           # Agent 技能书 + 268 工具参考 + 火山 API 知识库
+│   ├── workflows/        # 工作流 JSON
+│   ├── scenarios/        # 场景脚本（逆向、Hook 测试）
 │   ├── mcp_bridge.js     # Cursor stdio 桥接
-│   ├── run_all_tests.js  # MCP 全量测试
-│   ├── workflows/        # 工作流 JSON 源码（编译复制到 linker/workflows/）
-│   └── AI-Fbowser-Mcp.vprj     # 火山工程文件
-├── release/
-│   ├── linker/           # 成品配置包（文档/脚本/工作流，无 exe）
-│   └── (已移除: 发布通过 GitHub Releases 手动上传)
+│   └── mcp_config.json   # MCP 服务配置
+├── release/              # 发行辅助脚本
 ├── CONTRIBUTING.md       # 贡献与发版指南
 ├── CHANGELOG.md          # 版本更新日志
-├── CODE_OF_CONDUCT.md    # 社区行为准则
-├── SECURITY.md           # 安全报告策略
-├── OPEN_SOURCE.md        # 开源公告（中文，多平台可复制）
+├── OPEN_SOURCE.md        # 开源公告（中文）
 ├── OPEN_SOURCE_EN.md     # Open-source announcement (English)
-├── LICENSE               # MIT
 └── README.md
 ```
 
@@ -508,105 +200,32 @@ ai-browser-mcp/
 
 | 文档 | 读者 |
 |------|------|
+| [268 工具完整参考](CEFbro/AI-Fbowser-Mcp/skills/AI浏览器MCP.md) | 开发者 / Agent |
 | [客户使用手册](CEFbro/AI-Fbowser-Mcp/docs/客户使用手册.md) | 终端用户 |
-| [中文快速上手 · SEO](CEFbro/AI-Fbowser-Mcp/docs/QUICKSTART_ZH.md) | 中文检索 / 论坛外链 |
-| [Quick Start (English)](CEFbro/AI-Fbowser-Mcp/docs/QUICKSTART_EN.md) | International SEO |
-| [SEO 关键词矩阵](docs/SEO_KEYWORDS.md) | 搜索词 / 发帖标签 |
 | [MCP 工具配置说明书](CEFbro/AI-Fbowser-Mcp/docs/MCP工具配置说明书.md) | 部署 / 集成 |
 | [使用技能书](CEFbro/AI-Fbowser-Mcp/docs/使用技能书.md) | 开发者 / Agent |
-| [200+ 工具参考](CEFbro/AI-Fbowser-Mcp/skills/AI浏览器MCP.md) | 全量 API |
-| [场景与 Hook 测试](CEFbro/AI-Fbowser-Mcp/skills/场景与Hook测试.md) | 逆向 / persist Hook / 断点恢复 |
-| [典型场景（README）](#-典型场景一句话自动执行) | 采集 / 逆向 / 定位话术 |
+| [场景与 Hook 测试](CEFbro/AI-Fbowser-Mcp/skills/场景与Hook测试.md) | 逆向 / persist Hook |
+| [快速上手（中文/SEO）](CEFbro/AI-Fbowser-Mcp/docs/QUICKSTART_ZH.md) | 中文检索 |
+| [Quick Start (English)](CEFbro/AI-Fbowser-Mcp/docs/QUICKSTART_EN.md) | International SEO |
 
 ---
 
-## 🏗 架构
+## 🤝 参与
 
-| 模块 | 文件 | 职责 |
-|------|------|------|
-| 入口 | `main.wsv` | GUI + FBrowser 初始化 |
-| MCP 核心 | `MCP_Server.wsv` | JSON-RPC、工具注册、sync-wait |
-| 分派 | `MCP_Server_Core/Form/VIP/System/Workflow.wsv` | 200+ 工具实现 |
-| HTTP/WS | `MCP_Server_HTTP.wsv` | 欢迎页、健康检查、文档 |
-| 桥接 | `mcp_bridge.js` | stdio MCP 客户端 ↔ HTTP POST（Cursor 等 IDE 可选） |
-
----
-
-## 🤝 参与与反馈
-
-- **Issue**： [Bug 模板](https://github.com/AI-XiaoDao/ai-browser-mcp/issues/new?template=bug_report.yml) · [功能建议](https://github.com/AI-XiaoDao/ai-browser-mcp/issues/new?template=feature_request.yml)
-- **Discussions**：[问答 / 案例分享](https://github.com/AI-XiaoDao/ai-browser-mcp/discussions)
-- **PR**：见 [CONTRIBUTING.md](CONTRIBUTING.md)
-- **宣传 / 仓库展示配置**： [OPEN_SOURCE.md](OPEN_SOURCE.md) · [`.github/SOCIAL_PREVIEW.md`](.github/SOCIAL_PREVIEW.md)
+- **Issue**：[Bug 报告](https://github.com/AI-XiaoDao/ai-browser-mcp/issues/new?template=bug_report.yml) · [功能建议](https://github.com/AI-XiaoDao/ai-browser-mcp/issues/new?template=feature_request.yml)
+- **PR**：见 [CONTRIBUTING.md](CONTRIBUTING.md)，改 `src/*.wsv` 提 PR
 - **交流**：QQ 212577526 · 群 737680767 · [火山编程交流群](https://qm.qq.com/q/Hpv6qm8qUE)
 
-## ❓ 常见问题
+## ❓ FAQ
 
-| 问题 | 处理 |
+| 问题 | 解决 |
 |------|------|
-| `/health` 失败 | 确认 exe 已启动；检查 9222 端口占用 |
-| AI 代理连不上 MCP | 先启动 exe → `node mcp_bridge.js --check`；Cursor 用 stdio 桥接（见 `.mcp.json`），勿直连 HTTP url |
-| 工具调用超时 | 增大 `mcp_config.json` 中 `default_timeout_ms` |
-| POST body 抓不到 | 默认网络层不记录 POST 正文，见 `skills/场景与Hook测试.md` |
-| 一句话采集没数据 | 检查是否需登录/滚动加载；让 AI 用 `browser_dom_query` 先试选择器 |
-| 逆向扫不到加密字段 | 使用 `browser_inject` persist Hook；参考 `douyin_xhr_encrypt_scan.js` |
-| 调试器断点不命中 | 确认已 `browser_debugger_enable` 且页面已触发提交 |
-| 成品 zip 较大 | 含 CEF 运行时，属正常体积（x64 ~157MB / win32 ~136MB） |
-| win32 与 x64 选哪个 | 64 位系统优先 x64；仅 32 位环境或老系统用 win32 Release |
-
-更多 FAQ 见 [OPEN_SOURCE.md#常见问题](OPEN_SOURCE.md#常见问题faq)。
-
-## 🔎 常见搜索问题（SEO）
-
-<details>
-<summary><b>Cursor / Claude 如何连接 Windows 浏览器 MCP？</b></summary>
-
-1. 下载 [Release](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) 并运行 `AI-Fbowser-Mcp.exe`
-2. 确认 `http://127.0.0.1:9222/health` 返回 ok
-3. Cursor：配置 [`mcp_bridge.js`](CEFbro/AI-Fbowser-Mcp/mcp_bridge.js) stdio 桥接（见 [`.cursor/mcp.json`](.cursor/mcp.json)）
-4. 自检：`node mcp_bridge.js --check`
-
-</details>
-
-<details>
-<summary><b>有没有 Playwright / Puppeteer 的 MCP 替代方案？</b></summary>
-
-有。本项目提供 **200+ 个预封装 `browser_*` MCP 工具**，Agent 用自然语言调用，无需从零写 Playwright 脚本。适合 **网页采集、表单自动化、网络 Hook、CDP 断点调试**。见上方 [对比表](#与-playwright--puppeteer-对比为何选-mcp-浏览器)。
-
-</details>
-
-<details>
-<summary><b>如何用 MCP 做网页数据采集（web scraping）？</b></summary>
-
-对 Cursor 说：「打开某 URL，滚动加载，把标题和价格采成 JSON」。Agent 会串联 `browser_navigate` → `browser_evaluate`（滚动）→ `browser_dom_query` / `browser_collect`。详见 [典型场景 · 数据采集](#-数据采集--帮我把这个页面的数据采下来)。
-
-</details>
-
-<details>
-<summary><b>如何逆向分析 POST 加密字段 / 定位 sign 算法？</b></summary>
-
-- **逆向 POST**：`browser_reverse_prepare` → `browser_inject`（persist Hook）→ 触发请求 → 分析字段
-- **定位算法**：`browser_debugger_enable` → 断点 → `debugger_stack` + `debugger_script_source`
-
-参考 [`scenarios/`](CEFbro/AI-Fbowser-Mcp/scenarios/) 与 [场景与 Hook 测试](CEFbro/AI-Fbowser-Mcp/skills/场景与Hook测试.md)。
-
-</details>
-
-<details>
-<summary><b>Cline / OpenCode 能用吗？</b></summary>
-
-可以。任何支持 **MCP** 的客户端均可接入：stdio 配置 [`mcp_bridge.js`](CEFbro/AI-Fbowser-Mcp/mcp_bridge.js)，或 HTTP `POST http://127.0.0.1:9222/mcp`、WebSocket `ws://127.0.0.1:9222`。
-
-</details>
-
-<details>
-<summary><b>Search keywords / 搜索关键词（完整列表）</b></summary>
-
-完整矩阵见 **[docs/SEO_KEYWORDS.md](docs/SEO_KEYWORDS.md)**。
-
-高频词：`Cursor browser MCP` · `Claude Desktop MCP` · `Windows browser automation` · `web scraping MCP` · `Playwright alternative` · `Puppeteer MCP` · `POST reverse engineering` · `CDP debugger MCP` · `浏览器 MCP` · `数据采集` · `逆向 Hook` · `自动填表 RPA` · `Model Context Protocol` · `FBrowser CEF` · `217 MCP tools`
-
-</details>
+| `/health` 失败 | 确认 exe 已启动；检查 9222 端口未被占用 |
+| AI 代理连不上 | 先启动 exe → `node mcp_bridge.js --check`；Cursor 用 stdio 桥接勿直连 URL |
+| 工具调用超时 | 增大 `mcp_config.json` 中 `default_timeout_ms` 或给工具加 `max_ms` 参数 |
+| POST body 抓不到 | 默认网络层不记 POST 正文，用 `browser_inject` persist Hook |
+| 调试器断点不命中 | 确认 `browser_debugger_enable` 已执行且页面已触发目标事件 |
+| x64 vs win32 | 64 位系统优先 x64；仅 32 位环境用 win32 |
 
 ## 📄 许可证
 
