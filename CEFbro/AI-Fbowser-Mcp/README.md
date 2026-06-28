@@ -1,6 +1,6 @@
 # AI Browser MCP Server — Windows 浏览器自动化 MCP
 
-> 🚀 **Cursor / Claude Desktop 最强浏览器 MCP 服务端** — 真实 FBrowser CEF 内核 · 243 自动化工具 · 本地 `127.0.0.1:9222` · MIT 开源
+> 🚀 **Cursor / Claude Desktop 最强浏览器 MCP 服务端** — 真实 FBrowser CEF 内核 · 268 自动化工具 · 本地 `127.0.0.1:9222` · MIT 开源
 > 
 > Web Scraping · JS Reverse Engineering · CDP Debugger · Fingerprint Anti-Detect · Form Automation RPA
 
@@ -22,14 +22,14 @@
 
 ## 这是什么？
 
-**AI浏览器 MCP Server** 是一个 **Windows 本地浏览器自动化 MCP 服务端**。它运行真实的 **FBrowser CEF (Chromium Embedded Framework)** 浏览器内核，通过 **Model Context Protocol (MCP 模型上下文协议)** 向 AI 编程助手暴露 **243 个浏览器自动化工具**。
+**AI浏览器 MCP Server** 是一个 **Windows 本地浏览器自动化 MCP 服务端**。它运行真实的 **FBrowser CEF (Chromium Embedded Framework)** 浏览器内核，通过 **Model Context Protocol (MCP 模型上下文协议)** 向 AI 编程助手暴露 **268 个浏览器自动化工具**。
 
 ### 为什么选择 AI 浏览器 MCP？
 
 | vs | Playwright / Puppeteer | AI 浏览器 MCP |
 |----|----------------------|--------------|
 | 环境 | 需安装 Node + 驱动 + 写脚本 | 下载即用，双击运行 |
-| AI 集成 | 需手写 Playwright 代码 | **243 个预封装 MCP 工具**，自然语言调用 |
+| AI 集成 | 需手写 Playwright 代码 | **268 个预封装 MCP 工具**，自然语言调用 |
 | 反检测 | 易被 `navigator.webdriver` 检测 | **CEF 真实浏览器内核** + 指纹伪装 |
 | 逆向工程 | 手动 Hook + 浏览器 DevTools | 内置 **CDP 断点引擎** + 函数级 Hook |
 | 隐私 | 可能连外网 | **127.0.0.1 纯本地**，数据不出本机 |
@@ -87,7 +87,7 @@
 
 ---
 
-## 核心能力 (243 工具)
+## 核心能力 (268 工具)
 
 | 类别 | 数量 | 代表工具 |
 |------|------|---------|
@@ -139,7 +139,7 @@
 | `AI_BROWSER_MCP_PORT` | `9222` |
 | `AI_BROWSER_MCP_HEALTH` | `http://127.0.0.1:9222/health` |
 | `AI_BROWSER_MCP_HTTP_POST` | `http://127.0.0.1:9222/mcp` |
-| `AI_BROWSER_MCP_VERSION` | `2.6.1` |
+| `AI_BROWSER_MCP_VERSION` | `2.8.0` |
 
 ---
 

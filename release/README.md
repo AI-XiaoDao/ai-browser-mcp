@@ -63,14 +63,14 @@ AI-Browser-MCP-x64-v2.8.0.zip
 
 ## 版本
 
-与源码 `MCP_版本号`（当前 2.6.0）保持一致。
+与源码 `MCP_版本号`（当前 2.8.0）保持一致。
 
 ## 一键打包
 
 编译 **Release x64 / win32** 后，运行打包脚本并上传至 GitHub Releases：
 
 ```powershell
-.\release\pack-release.ps1 -Version 2.6.0 -Platform all
+.\release\pack-release.ps1 -Version 2.8.0 -Platform all
 gh release upload v2.8.0 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber
 ```
 

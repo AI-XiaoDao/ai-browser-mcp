@@ -283,7 +283,7 @@ https://github.com/AI-XiaoDao/ai-browser-mcp
 }
 ```
 
-自检：`node mcp_bridge.js --check` → 应显示版本 `2.6.0` 且浏览器数量 ≥ 1。
+自检：`node mcp_bridge.js --check` → 应显示版本 `2.8.0` 且浏览器数量 ≥ 1。
 
 ---
 

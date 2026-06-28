@@ -29,10 +29,10 @@
 
 | 项 | 值 |
 |----|-----|
-| 版本 | 与 `MCP_版本号` 一致（当前 2.6.1） |
+| 版本 | 与 `MCP_版本号` 一致（当前 2.8.0） |
 | x64 | 编译 Release x64 后，复制 `project/` → `release-x64/` |
 | win32 | 编译 Release win32 后，复制 `project/` → `release-win32/` |
-| 自动 | `.\release\pack-release.ps1 -Version 2.6.1 -Platform all` |
+| 自动 | `.\release\pack-release.ps1 -Version 2.8.0 -Platform all` |
 
 ## 常见误区
 

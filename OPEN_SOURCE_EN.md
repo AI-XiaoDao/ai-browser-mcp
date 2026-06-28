@@ -422,7 +422,7 @@ Title: [Release] AI Browser MCP Server v2.8 — local Windows browser automation
 
 
 
-Windows-native MCP server wrapping FBrowser CEF with 217 browser_* tools.
+Windows-native MCP server wrapping FBrowser CEF with 268 browser_* tools.
 
 
 

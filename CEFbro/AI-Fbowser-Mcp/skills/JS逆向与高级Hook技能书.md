@@ -512,7 +512,7 @@ getEnv(['window','document','location','navigator','history','screen']);
 
 ---
 
-> 版本 2.6.1 · 在线研究日期：2026-06-24  
+> 版本 2.8.0 · 在线研究日期：2026-06-24  
 > 来源：Bing搜索 + CSDN + GitHub + V2EX + 技术博客  
 > QQ: 212577526 | QQ群: 737680767 | 微信: XSMZAS1  
 > GitHub: https://github.com/AI-XiaoDao/ai-browser-mcp
