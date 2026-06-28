@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Node syntax check
+        run: |
+          node --check CEFbro/AI浏览器/mcp_bridge.js
+          node --check CEFbro/AI浏览器/mcp_client.js
+          node --check CEFbro/AI浏览器/mcp_check.js
+          node --check CEFbro/AI浏览器/run_all_tests.js
+          node --check CEFbro/AI浏览器/scenarios/verify_cursor_tools.js
+          for f in CEFbro/AI浏览器/scenarios/*.js; do
+            [ -f "$f" ] && node --check "$f"
+          done
+          for f in release/linker/scenarios/*.js; do
+            [ -f "$f" ] && node --check "$f"
+          done
+
+      - name: JSON validate
+        run: |
+          node -e "
+          const fs=require('fs');
+          const path=require('path');
+          const files=[
+            '.mcp.json',
+            '.cursor/mcp.json',
+            'release/linker/mcp_config.json',
+            'CEFbro/AI浏览器/src/mcp_config.json'
+          ];
+          for (const f of files) JSON.parse(fs.readFileSync(f,'utf8'));
+          const wfDir='release/linker/workflows';
+          for (const w of fs.readdirSync(wfDir).filter(x=>x.endsWith('.json')))
+            JSON.parse(fs.readFileSync(path.join(wfDir,w),'utf8'));
+          console.log('JSON OK', files.length + fs.readdirSync(wfDir).length, 'files');
+          "
+
+      - name: MCP config sync check
+        run: |
+          node -e "
+          const fs=require('fs');
+          const eqJson=(a,b)=>JSON.stringify(JSON.parse(fs.readFileSync(a)))===JSON.stringify(JSON.parse(fs.readFileSync(b)));
+          if(!eqJson('.mcp.json','.cursor/mcp.json')){console.error('.mcp.json vs .cursor/mcp.json mismatch');process.exit(1);}
+          if(fs.readFileSync('CEFbro/AI浏览器/mcp_bridge.js').toString()!==fs.readFileSync('release/linker/mcp_bridge.js').toString()){
+            console.error('mcp_bridge.js drift: CEFbro vs release/linker');process.exit(1);
+          }
+          console.log('MCP config sync OK');
+          "
+
+      - name: Block secrets pattern (quick scan)
+        run: |
+          ! grep -rI --include='*.js' --include='*.json' --include='*.md' --include='*.wsv' -i 'ghp_[A-Za-z0-9]\{20,\}\|github_pat_[A-Za-z0-9_]\{20,\}' . 2>/dev/null || (echo 'Possible secret found' && exit 1)

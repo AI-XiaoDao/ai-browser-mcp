@@ -1,0 +1,13 @@
+{
+  "name": "ping_navigate",
+  "description": "连通检查 → 导航到空白页 → 等待加载 (browser_wait 需 mcp_result 推进)",
+  "version": "1.0",
+  "on_error": "stop",
+  "steps": [
+    { "tool": "ping", "args": {} },
+    { "delay_ms": 200 },
+    { "tool": "browser_navigate", "args": { "url": "about:blank" } },
+    { "delay_ms": 500 },
+    { "tool": "browser_wait", "args": { "what": "timeout", "value": "500", "max_ms": 2000 }, "wait_async": true, "max_ms": 3000 }
+  ]
+}

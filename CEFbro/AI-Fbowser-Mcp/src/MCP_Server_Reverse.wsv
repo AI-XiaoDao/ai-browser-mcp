@@ -1,0 +1,310 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+包 火山.程序
+# MCP_逆向分派 — JS逆向+CDP Hook (v2.6.2)
+类 MCP_逆向分派 <公开 @全局类 = 真>
+{
+    方法 分类分派_逆向操作 <公开 静态 类型 = 文本型>
+    参数 命令ID <类型 = 文本型>
+    参数 方法名 <类型 = 文本型>
+    参数 参数JSON <类型 = YYJSON只读对象类>
+    {
+        子文本替换 (方法名, "browser.", "browser_", , , 假)
+        如果 (方法名 == "browser_reverse_profile")
+        {
+            变量 prAction <类型 = 文本型>
+            prAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (prAction == "")
+            {
+                prAction = "start"
+            }
+            如果 (prAction == "start")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Profiler.enable", "{}"))
+            }
+            否则 (prAction == "start_precise")
+            {
+                变量 prPreciseParams <类型 = YYJSON对象类>
+                prPreciseParams.创建自文本 ("{}")
+                prPreciseParams.加入整数成员 ("interval", 100)
+                prPreciseParams.加入整数成员 ("maxDepth", 32)
+                MCP命令服务器.执行逆向CDP命令 (命令ID + "_pre", "Profiler.setSamplingInterval", prPreciseParams.到可读文本 (YYJSON格式化选项.压缩))
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Profiler.enable", "{}"))
+            }
+            否则 (prAction == "stop")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Profiler.stop", "{}"))
+            }
+            否则 (prAction == "query")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Profiler.getBestEffortCoverage", "{}"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, "未知action: " + prAction + " | 支持: start/start_precise/stop/query"))
+        }
+        否则 (方法名 == "browser_reverse_dom_breakpoint")
+        {
+            变量 dbType <类型 = 文本型>
+            dbType = MCP命令服务器.yyjson取文本 (参数JSON, "type")
+            如果 (dbType == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "需要 type 参数 | 支持: xhr/fetch/dom_event/timer(target:setTimeout/setInterval/默认requestAnimationFrame)"))
+            }
+            变量 dbTarget <类型 = 文本型>
+            dbTarget = MCP命令服务器.yyjson取文本 (参数JSON, "target")
+            如果 (dbType == "xhr" || dbType == "fetch")
+            {
+                变量 dbXhrParams <类型 = YYJSON对象类>
+                dbXhrParams.创建自文本 ("{}")
+                变量 dbUrl <类型 = 文本型>
+                dbUrl = "*"
+                如果 (dbTarget != "")
+                {
+                    dbUrl = dbTarget
+                }
+                dbXhrParams.加入文本成员 ("url", dbUrl)
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "DOMDebugger.setXHRBreakpoint", dbXhrParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            否则 (dbType == "dom_event")
+            {
+                如果 (dbTarget == "")
+                {
+                    返回 (MCP命令服务器.命令失败 (命令ID, "dom_event需要target参数 | 事件名: click/submit/load/error/change"))
+                }
+                变量 dbDomParams <类型 = YYJSON对象类>
+                dbDomParams.创建自文本 ("{}")
+                dbDomParams.加入文本成员 ("eventName", dbTarget)
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "DOMDebugger.setEventListenerBreakpoint", dbDomParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            否则 (dbType == "timer")
+            {
+                变量 dbTimerEvent <类型 = 文本型>
+                dbTimerEvent = "requestAnimationFrame"
+                如果 (dbTarget == "setTimeout" || dbTarget == "setInterval")
+                {
+                    dbTimerEvent = dbTarget
+                }
+                变量 dbTimerParams <类型 = YYJSON对象类>
+                dbTimerParams.创建自文本 ("{}")
+                dbTimerParams.加入文本成员 ("eventName", dbTimerEvent)
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "DOMDebugger.setInstrumentationBreakpoint", dbTimerParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, "未知type: " + dbType))
+        }
+        否则 (方法名 == "browser_reverse_cdp_hook")
+        {
+            变量 chFuncName <类型 = 文本型>
+            chFuncName = MCP命令服务器.yyjson取文本 (参数JSON, "function_name")
+            变量 chObjectId <类型 = 文本型>
+            chObjectId = MCP命令服务器.yyjson取文本 (参数JSON, "object_id")
+            如果 (chObjectId == "" && chFuncName == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "需要 object_id 或 function_name"))
+            }
+            变量 chCondition <类型 = 文本型>
+            chCondition = MCP命令服务器.yyjson取文本 (参数JSON, "condition")
+            变量 chParams <类型 = YYJSON对象类>
+            chParams.创建自文本 ("{}")
+            如果 (chObjectId != "")
+            {
+                // CDP Debugger.setBreakpointOnFunctionCall 要求参数名为 functionObjectId, 非 objectId
+                chParams.加入文本成员 ("functionObjectId", chObjectId)
+            }
+            如果 (chCondition != "")
+            {
+                chParams.加入文本成员 ("condition", chCondition)
+            }
+            返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Debugger.setBreakpointOnFunctionCall", chParams.到可读文本 (YYJSON格式化选项.压缩)))
+        }
+        否则 (方法名 == "browser_reverse_call_fn")
+        {
+            变量 cfObjectId <类型 = 文本型>
+            cfObjectId = MCP命令服务器.yyjson取文本 (参数JSON, "object_id")
+            如果 (cfObjectId == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "需要 object_id | 先用 browser_evaluate 获取目标对象的objectId"))
+            }
+            变量 cfParams <类型 = YYJSON对象类>
+            cfParams.创建自文本 ("{}")
+            cfParams.加入文本成员 ("objectId", cfObjectId)
+            cfParams.加入文本成员 ("functionDeclaration", "function(...args){return this.apply(null,args)}")
+            cfParams.加入逻辑值成员 ("returnByValue", 真)
+            返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Runtime.callFunctionOn", cfParams.到可读文本 (YYJSON格式化选项.压缩)))
+        }
+        否则 (方法名 == "browser_reverse_preload")
+        {
+            变量 plCode <类型 = 文本型>
+            plCode = MCP命令服务器.yyjson取文本 (参数JSON, "code")
+            如果 (plCode == "")
+            {
+                // 从 file 参数加载JS文件内容 (非直接用文件路径当源码)
+                变量 plFile <类型 = 文本型>
+                plFile = MCP命令服务器.yyjson取文本 (参数JSON, "file")
+                如果 (plFile != "")
+                {
+                    如果 (MCP命令服务器.验证安全路径 (plFile, 真) == 假)
+                    {
+                        返回 (MCP命令服务器.命令失败 (命令ID, "文件路径不合法: " + plFile))
+                    }
+                    变量 plFileBytes <类型 = 字节集类>
+                    plFileBytes = 读入文件 (plFile)
+                    如果 (取字节集长度 (plFileBytes) > 0)
+                    {
+                        plCode = UTF8到文本 (plFileBytes)
+                    }
+                }
+            }
+            如果 (plCode == "")
+            {
+                返回 (MCP命令服务器.命令失败 (命令ID, "需要 code(JS代码) 或 file(JS文件路径)"))
+            }
+            变量 plParams <类型 = YYJSON对象类>
+            plParams.创建自文本 ("{}")
+            plParams.加入文本成员 ("source", plCode)
+            plParams.加入逻辑值成员 ("runImmediately", 真)
+            返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Page.addScriptToEvaluateOnNewDocument", plParams.到可读文本 (YYJSON格式化选项.压缩)))
+        }
+        否则 (方法名 == "browser_reverse_websocket")
+        {
+            变量 wsAction <类型 = 文本型>
+            wsAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (wsAction == "")
+            {
+                wsAction = "enable"
+            }
+            如果 (wsAction == "enable")
+            {
+                // Network.enable 仅需调用一次 (附带 maxPostDataSize)
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Network.enable", "{\"maxPostDataSize\":65536}"))
+            }
+            否则 (wsAction == "query")
+            {
+                // Network.getResponseBody 必须提供 requestId 参数
+                变量 wsReqId <类型 = 文本型>
+                wsReqId = MCP命令服务器.yyjson取文本 (参数JSON, "request_id")
+                如果 (wsReqId == "")
+                {
+                    wsReqId = MCP命令服务器.yyjson取文本 (参数JSON, "requestId")
+                }
+                如果 (wsReqId == "")
+                {
+                    返回 (MCP命令服务器.命令失败 (命令ID, "query 需要 request_id (从Network.requestWillBeSent事件获取)"))
+                }
+                变量 wsQueryParams <类型 = YYJSON对象类>
+                wsQueryParams.创建自文本 ("{}")
+                wsQueryParams.加入文本成员 ("requestId", wsReqId)
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Network.getResponseBody", wsQueryParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, "未知action: " + wsAction + " | 支持: enable/query"))
+        }
+        否则 (方法名 == "browser_reverse_heap")
+        {
+            变量 hpAction <类型 = 文本型>
+            hpAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (hpAction == "")
+            {
+                hpAction = "snapshot"
+            }
+            如果 (hpAction == "snapshot")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "HeapProfiler.takeHeapSnapshot", "{\"reportProgress\":false}"))
+            }
+            否则 (hpAction == "start_sampling")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "HeapProfiler.startSampling", "{\"samplingInterval\":32768}"))
+            }
+            否则 (hpAction == "stop_sampling")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "HeapProfiler.stopSampling", "{}"))
+            }
+            否则 (hpAction == "get_object")
+            {
+                变量 hpObjId <类型 = 文本型>
+                hpObjId = MCP命令服务器.yyjson取文本 (参数JSON, "object_id")
+                如果 (hpObjId == "")
+                {
+                    返回 (MCP命令服务器.命令失败 (命令ID, "get_object 需要 object_id"))
+                }
+                变量 hpObjParams <类型 = YYJSON对象类>
+                hpObjParams.创建自文本 ("{}")
+                hpObjParams.加入文本成员 ("objectId", hpObjId)
+                hpObjParams.加入文本成员 ("objectGroup", "reverse_heap")
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "HeapProfiler.getObjectByHeapObjectId", hpObjParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, "未知action: " + hpAction + " | 支持: snapshot/start_sampling/stop_sampling/get_object"))
+        }
+        否则 (方法名 == "browser_reverse_runtime")
+        {
+            变量 rtAction <类型 = 文本型>
+            rtAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (rtAction == "")
+            {
+                rtAction = "properties"
+            }
+            如果 (rtAction == "properties")
+            {
+                变量 rtObjId <类型 = 文本型>
+                rtObjId = MCP命令服务器.yyjson取文本 (参数JSON, "object_id")
+                如果 (rtObjId == "")
+                {
+                    返回 (MCP命令服务器.命令失败 (命令ID, "properties 需要 object_id"))
+                }
+                变量 rtParams <类型 = YYJSON对象类>
+                rtParams.创建自文本 ("{}")
+                rtParams.加入文本成员 ("objectId", rtObjId)
+                rtParams.加入逻辑值成员 ("ownProperties", 真)
+                rtParams.加入逻辑值成员 ("generatePreview", 真)
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Runtime.getProperties", rtParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            否则 (rtAction == "evaluate")
+            {
+                变量 rtExpr <类型 = 文本型>
+                rtExpr = MCP命令服务器.yyjson取文本 (参数JSON, "expression")
+                如果 (rtExpr == "")
+                {
+                    返回 (MCP命令服务器.命令失败 (命令ID, "evaluate 需要 expression"))
+                }
+                变量 rtEvalParams <类型 = YYJSON对象类>
+                rtEvalParams.创建自文本 ("{}")
+                rtEvalParams.加入文本成员 ("expression", rtExpr)
+                rtEvalParams.加入逻辑值成员 ("returnByValue", 真)
+                rtEvalParams.加入逻辑值成员 ("generatePreview", 真)
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Runtime.evaluate", rtEvalParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            否则 (rtAction == "global")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Runtime.globalLexicalScopeNames", "{}"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, "未知action: " + rtAction + " | 支持: properties/evaluate/global"))
+        }
+        否则 (方法名 == "browser_reverse_network_intercept")
+        {
+            变量 niAction <类型 = 文本型>
+            niAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (niAction == "")
+            {
+                niAction = "enable"
+            }
+            如果 (niAction == "enable")
+            {
+                变量 niPattern <类型 = 文本型>
+                niPattern = MCP命令服务器.yyjson取文本 (参数JSON, "url_pattern")
+                变量 niParams <类型 = YYJSON对象类>
+                niParams.创建自文本 ("{}")
+                如果 (niPattern != "")
+                {
+                    变量 niPatArr <类型 = YYJSON数组类>
+                    niPatArr.创建自文本数据 (MCP命令服务器.取空文本数组 ())
+                    niPatArr.加入文本成员 (niPattern)
+                    niParams.加入数组成员 ("patterns", niPatArr)
+                }
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Network.setRequestInterception", niParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            否则 (niAction == "disable")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Network.setRequestInterception", "{\"patterns\":[]}"))
+            }
+            返回 (MCP命令服务器.命令失败 (命令ID, "未知action: " + niAction + " | 支持: enable/disable"))
+        }
+        返回 ("")
+    }
+    #
+}

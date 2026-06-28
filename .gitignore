@@ -1,0 +1,50 @@
+# 火山 IDE 自动备份
+**/*.~vbak.wsv
+*.vhistory
+
+# 测试报告（运行 run_all_tests.js 可再生）
+**/*_report.json
+
+# Node
+node_modules/
+
+# 编译中间产物
+**/_int/
+
+# linker/ 为编译产物目录，禁止提交
+**/linker/out/
+
+# CEF 浏览器缓存（运行时生成）
+**/CacheData/
+
+# 成品大二进制走 GitHub Releases，不进 git
+release/**/*.exe
+release/**/*.dll
+release/**/*.pak
+release/**/*.bin
+release/**/*.dat
+release/**/libcef*
+
+# 本地打包产物与临时目录（勿提交）
+AI-Browser-MCP-*.zip
+AI-Browser-MCP-cpp-*.zip
+AI-Fbowser-Mcp-*.zip
+_gql*.json
+_release_staging/
+_release_staging_*/
+_verify_zip/
+_zip_test/
+
+# 运行时产物
+**/mcp_cache.db*
+**/mcp_connect.json
+**/log.txt
+**/.ai_browser.pid
+**/package.vhistory
+
+# linker 编译产物（源码在 src/）
+**/linker/*.exe
+**/linker/*.dll
+**/linker/*.pak
+**/linker/*.bin
+**/linker/*.dat
