@@ -9,6 +9,10 @@ namespace rg_volcano_app
 
 INT CALLBACK rg_MCP_FuWuQiGongJu::rg_ZhengShuDaoTLSBanBen (INT rg_ZhengShuZhi)
 {
+    if (rg_ZhengShuZhi == 0)
+    {
+        return (0);
+    }
     if (rg_ZhengShuZhi == 769)
     {
         return (769);
@@ -25,7 +29,8 @@ INT CALLBACK rg_MCP_FuWuQiGongJu::rg_ZhengShuDaoTLSBanBen (INT rg_ZhengShuZhi)
     {
         return (792);
     }
-    return (791);
+    _DEBUG_STATMENT (DebugTrace (FALSE, 0, 0, _T ("S"), (_CT2 (_T ("[MCP] 警告: 未知TLS版本值 ")) + CVolString (rg_ZhengShuZhi) + _T (", 回退为TLS版本.空")).GetText ()));
+    return (0);
 }
 
 }

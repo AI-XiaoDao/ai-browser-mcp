@@ -13,8 +13,8 @@ class rg_MCPFuWuChuangKou : public rg_volcano_MFCJieMian_base::CVolWinForm
 
 public:
 
-    virtual INT GetDesignClientWidth () const override  {  return _DPISIZE (280);  }
-    virtual INT GetDesignClientHeight () const override  {  return _DPISIZE (60);  }
+    virtual INT GetDesignClientWidth () const override  {  return _DPISIZE (460);  }
+    virtual INT GetDesignClientHeight () const override  {  return _DPISIZE (154);  }
 
     static void CALLBACK rg_ZhiHangGuanBiXuLie ();
     rg_MCPFuWuChuangKou ();
@@ -40,14 +40,24 @@ public:
     }
 
 protected:
+    static CVolString CALLBACK rg_QuChongWuQingXu (INT64 rg_YunHangMiaoShu, INT rg_LiuLanQiShu, INT rg_SuLuShiYongLu, INT rg_YiBuRenWuShu);
+    static CVolString CALLBACK rg_QuChongWuDiShiYu (CVolString& rg_QingXu);
+    static CVolString CALLBACK rg_QuZhaYanBiaoQing (CVolString& rg_QingXu1);
     INT rg_MCPFuWuChuangKou_ChuangJianWanBi (rg_MCPFuWuChuangKou& rg_LaiYuanDuiXiang, INT rg_BiaoJiZhi);
     INT rg_timer_ZhouJiShiJian (rg_volcano_MFCJieMian_base::rg_timer& rg_LaiYuanDuiXiang1, INT rg_BiaoJiZhi1);
     INT rg_MCPFuWuChuangKou_JiangBeiXiaoHui (rg_MCPFuWuChuangKou& rg_LaiYuanDuiXiang2, INT rg_BiaoJiZhi2);
 
 protected:
-    rg_volcano_MFCJieMian_base::rg_label rg_ZhuangTaiBiaoQian;
+    rg_volcano_MFCJieMian_base::rg_label rg_ZhuangTaiBiaoTiBiaoQian;
+    rg_volcano_MFCJieMian_base::rg_label rg_DuanDianBiaoQian;
+    rg_volcano_MFCJieMian_base::rg_label rg_TongJiBiaoQian;
+    rg_volcano_MFCJieMian_base::rg_label rg_URLBiaoQian;
+    rg_volcano_MFCJieMian_base::rg_label rg_DiShiBiaoQian;
     rg_volcano_MFCJieMian_base::rg_timer rg_WeiHuShiZhong;
     static BOOL rg_ZhengZaiTuiChu;
+    static INT64 rg_ChuangKouGouBingHuanCun;
+    static INT rg_DongHuaZheng;
+    static INT rg_GuanJiYanChiShengYuHaoMiao;
     CVolEventObjectPointer* rw_43;
 };
 

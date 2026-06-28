@@ -98,6 +98,7 @@ public:
     }
 
 public:
+    INT rg_JiaRuShuJu (CVolString& rg_QuDongID, CVolString& rg_YingJianMing, CVolString& rg_FenZuID);
     inline_ rg_FBrowser_MeiTiYingJianShuZu () { }
     inline_ void _VolObjectInitMembers () { }
 };

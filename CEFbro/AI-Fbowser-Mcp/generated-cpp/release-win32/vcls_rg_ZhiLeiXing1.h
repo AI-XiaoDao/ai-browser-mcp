@@ -21,7 +21,7 @@ public:
     static const INT rg_LuoJi;
     static const INT rg_ZhengShuXing;
     static const INT rg_ShuangJingDuXiaoShuXing;
-    static const INT rg_string7;
+    static const INT rg_string6;
     static const INT rg_ZiJieJiXing;
     static const INT rg_ZiDianZhiXing;
     static const INT rg_LieBiaoXing;

@@ -19,7 +19,6 @@ public:
     void rg_GunDongDaoYuanSu (CVolString& rg_XuanZeQi1, INT rg_SuoYin5, BOOL rg_ShiFouDingDuanDuiJi);
     void rg_ZhiYuanSuXuanZeKuang (CVolString& rg_XuanZeQi2, INT rg_SuoYin6, BOOL rg_XuanZe2);
     void rg_QuYuanSuXuanZeKuang (CVolString& rg_XuanZeQi3, INT rg_SuoYin7, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao3);
-    void rg_ZhiYuanSuXuanZeXiang (CVolString& rg_XuanZeQi4, INT rg_SuoYin8, INT rg_XuanZeXiang);
     void rg_QuYuanSuXuanZeXiang (CVolString& rg_XuanZeQi5, INT rg_SuoYin9, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao4);
     void rg_ZhiYuanSuJiaoDian (CVolString& rg_XuanZeQi6, INT rg_SuoYin10, BOOL rg_ShiFouJiaoDian);
     void rg_ZhiYuanSuNeiRong (CVolString& rg_XuanZeQi7, INT rg_SuoYin11, CVolString& rg_NeiRong6);

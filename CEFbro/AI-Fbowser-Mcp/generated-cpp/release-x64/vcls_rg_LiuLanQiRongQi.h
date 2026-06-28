@@ -13,8 +13,10 @@ class rg_LiuLanQiRongQi : public CVolObject
 
 public:
     static void CALLBACK rg_ChongZhiHuanYingYeDaoHangZhuangTai ();
+    static void CALLBACK rg_BiaoJiHuanYingYeDaoHangYiFaQi ();
     static void CALLBACK rg_BiaoJiXuYaoChongJianLiuLanQi ();
     static void CALLBACK rg_BiaoJiXuYaoHuiFuBuJu ();
+    static void CALLBACK rg_HuiFuHuanYingYe ();
     static CVolString CALLBACK rg_QuHuanYingYeDeZhi ();
     static CVolString CALLBACK rg_QuHuanYingYeHTML ();
     inline_ rg_LiuLanQiRongQi () { }

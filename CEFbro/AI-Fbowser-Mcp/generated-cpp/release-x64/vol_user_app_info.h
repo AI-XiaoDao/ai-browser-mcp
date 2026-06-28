@@ -11,7 +11,7 @@
 #define _T_VOL_USER_APP_NAME  _T ("火山应用程序")
 #define _VOL_USER_APP_VERSION_NUMBER  1
 #define _VOL_USER_APP_MINOR_VERSION_NUMBER  0
-#define _T_USER_APP_VERSION_NAME  _T ("2.7.0")
+#define _T_USER_APP_VERSION_NAME  _T ("2.8.0")
 #define _VOL_USER_APP_ICON_RES_ID  100
 
 #endif  // __VOL_USER_APP_INFO_H__

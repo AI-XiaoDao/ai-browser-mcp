@@ -12,7 +12,9 @@ class rg_MCP_TianBiaoFenPa : public CVolObject
     DECLARE_EMPTY_VOL_CLASS (rg_volcano_app, rg_MCP_TianBiaoFenPa)
 
 public:
-    static CVolString CALLBACK rg_FenLeiFenPa_TianBiaoCaoZuo (CVolString& rg_MingLingID31, CVolString& rg_FangFaMing9, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON17);
+    static CVolString CALLBACK rg_ZhiHangTianBiaoYiBuCaoZuo (CVolString& rg_MingLingID28, CVolString& rg_CaoZuoLeiXing1, CVolString& rg_XuanZeQiWenBen2, CVolString& rg_CaoZuoZhi1, CVolString& rg_ShuXingMing1, CVolString& rg_ShiJianLeiXing7, CVolString& rg_WanChengXiaoXi);
+    static CVolString CALLBACK rg_ZhiHangTianBiaoChaXunCaoZuo (CVolString& rg_MingLingID29, CVolString& rg_XuanZeQiWenBen3, CVolString& rg_ShuXingMing2, CVolString& rg_WanChengXiaoXi1);
+    static CVolString CALLBACK rg_FenLeiFenPa_TianBiaoCaoZuo (CVolString& rg_MingLingID30, CVolString& rg_FangFaMing9, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON18);
     inline_ rg_MCP_TianBiaoFenPa () { }
     inline_ void _VolObjectInitMembers () { }
 };

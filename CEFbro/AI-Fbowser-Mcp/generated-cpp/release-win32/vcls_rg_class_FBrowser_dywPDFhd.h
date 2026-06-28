@@ -17,7 +17,7 @@ public:
         virtual void OnPdfPrintFinished(const CefString& path, bool ok) override;
 
 public:
-    virtual void rg_JiJiangWanChengDaYin (CVolString& rg_LuJing3, BOOL rg_ShiFouChengGong14);
+    virtual void rg_JiJiangWanChengDaYin (CVolString& rg_LuJing3, BOOL rg_ShiFouChengGong10);
     rg_class_FBrowser_dywPDFhd ();
     void _VolObjectInitMembers ();
     virtual ~rg_class_FBrowser_dywPDFhd ();

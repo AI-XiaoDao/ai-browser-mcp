@@ -17,7 +17,7 @@ public:
         virtual void Visit(const CefString& string) override;
 
 public:
-    virtual void rg_HuiDiao4 (CVolString& rg_string6);
+    virtual void rg_HuiDiao4 (CVolString& rg_string5);
     rg_class_FBrowser_zfchhd ();
     void _VolObjectInitMembers ();
     virtual ~rg_class_FBrowser_zfchhd ();

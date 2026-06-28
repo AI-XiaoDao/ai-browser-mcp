@@ -933,7 +933,7 @@ rg_FBrowser_JiTongShiJian::rg_FBrowser_JiTongShiJian ()
 void rg_FBrowser_JiTongShiJian::_VolObjectInitMembers ()
 {
     rg_GouBing = 0;
-    rg_XiaoXi12 = 0;
+    rg_XiaoXi9 = 0;
     rg_wParam = 0;
     rg_lParam = 0;
     rg_ShiJian2 = 0;
@@ -942,7 +942,7 @@ void rg_FBrowser_JiTongShiJian::_VolObjectInitMembers ()
 BOOL rg_FBrowser_JiTongShiJian::_IsSelfEqual (const rg_FBrowser_JiTongShiJian& objCompare) const
 {
     if (rg_GouBing != objCompare.rg_GouBing)  return FALSE;
-    if (rg_XiaoXi12 != objCompare.rg_XiaoXi12)  return FALSE;
+    if (rg_XiaoXi9 != objCompare.rg_XiaoXi9)  return FALSE;
     if (rg_wParam != objCompare.rg_wParam)  return FALSE;
     if (rg_lParam != objCompare.rg_lParam)  return FALSE;
     if (rg_ShiJian2 != objCompare.rg_ShiJian2)  return FALSE;
@@ -953,7 +953,7 @@ BOOL rg_FBrowser_JiTongShiJian::_IsSelfEqual (const rg_FBrowser_JiTongShiJian& o
 void rg_FBrowser_JiTongShiJian::_CopySelfFrom (const rg_FBrowser_JiTongShiJian& objCopyFrom)
 {
     rg_GouBing = objCopyFrom.rg_GouBing;
-    rg_XiaoXi12 = objCopyFrom.rg_XiaoXi12;
+    rg_XiaoXi9 = objCopyFrom.rg_XiaoXi9;
     rg_wParam = objCopyFrom.rg_wParam;
     rg_lParam = objCopyFrom.rg_lParam;
     rg_ShiJian2 = objCopyFrom.rg_ShiJian2;
@@ -965,7 +965,7 @@ void rg_FBrowser_JiTongShiJian::LoadFromStream (CVolBaseInputStream& stream)
     if (stream.IsFoundError ())  return;
     BaseClass::LoadFromStream (stream);
     stream.ReadExact (&rg_GouBing, sizeof (INT64));
-    stream.ReadExact (&rg_XiaoXi12, sizeof (INT));
+    stream.ReadExact (&rg_XiaoXi9, sizeof (INT));
     stream.ReadExact (&rg_wParam, sizeof (INT64));
     stream.ReadExact (&rg_lParam, sizeof (INT64));
     stream.ReadExact (&rg_ShiJian2, sizeof (INT));
@@ -977,7 +977,7 @@ void rg_FBrowser_JiTongShiJian::SaveIntoStream (CVolBaseOutputStream& stream)
     if (stream.IsFoundError ())  return;
     BaseClass::SaveIntoStream (stream);
     stream.write (&rg_GouBing, sizeof (INT64));
-    stream.write (&rg_XiaoXi12, sizeof (INT));
+    stream.write (&rg_XiaoXi9, sizeof (INT));
     stream.write (&rg_wParam, sizeof (INT64));
     stream.write (&rg_lParam, sizeof (INT64));
     stream.write (&rg_ShiJian2, sizeof (INT));
@@ -985,7 +985,7 @@ void rg_FBrowser_JiTongShiJian::SaveIntoStream (CVolBaseOutputStream& stream)
 }
 POINT_OSEVENT rg_FBrowser_JiTongShiJian::ToFBroData(){
   m_data.hwnd=(HWND)rg_GouBing;
-  m_data.message=rg_XiaoXi12;
+  m_data.message=rg_XiaoXi9;
   m_data.wParam=(WPARAM)rg_wParam;
   m_data.lParam=(LPARAM)rg_lParam;
   m_data.time=rg_ShiJian2;
@@ -995,7 +995,7 @@ POINT_OSEVENT rg_FBrowser_JiTongShiJian::ToFBroData(){
 }
 void rg_FBrowser_JiTongShiJian::ToHsData(){
   rg_GouBing=(INT64)m_data.hwnd;
-  rg_XiaoXi12=m_data.message;
+  rg_XiaoXi9=m_data.message;
   rg_wParam=m_data.wParam;
   rg_lParam=m_data.lParam;
   rg_ShiJian2=m_data.time;
@@ -1995,6 +1995,11 @@ void rg_FBrowser_YinPinCanShu::ToHsData(){
      rg_TongDaoBuJu=m_data.channel_layout;
      rg_CaiYangPinLu=m_data.sample_rate;
      rg_ZhengHuanChong=m_data.frames_per_buffer;
+}
+
+INT rg_FBrowser_MeiTiYingJianShuZu::rg_JiaRuShuJu (CVolString& rg_QuDongID, CVolString& rg_YingJianMing, CVolString& rg_FenZuID)
+{
+    return AddItem(rg_QuDongID.GetText(),rg_YingJianMing.GetText(),rg_FenZuID.GetText());
 }
 
 rg_FBrowser_PDFDaYinSheZhi::rg_FBrowser_PDFDaYinSheZhi ()

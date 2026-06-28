@@ -463,14 +463,14 @@ void CVolWinForm::ra_CVolWinForm_TuoPanShiJian (VOID_FUNC fnReceiver, CVolEventO
     _OnAfterEventAttached (fnReceiver != NULL);
 }
 
-INT CVolWinForm::rg_TuoPanShiJian (INT rg_CaoZuoLeiXing1)
+INT CVolWinForm::rg_TuoPanShiJian (INT rg_CaoZuoLeiXing3)
 {
     VOID_FUNC fnReceiver;
     INT nTagNumber, nEventResult = 0;
     CVolEventObjectPointer* pEventReceiver = rw_20.BeginSendEvent (&fnReceiver, &nTagNumber);
     if (pEventReceiver != NULL)
     {
-        nEventResult = ((INT (*) (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber, INT rg_CaoZuoLeiXing1))fnReceiver) (pEventReceiver->GetVolObject (), this, nTagNumber, rg_CaoZuoLeiXing1);
+        nEventResult = ((INT (*) (CVolObject* pobjEventReceiver, CVolObject* pobjEventSource, INT nTagNumber, INT rg_CaoZuoLeiXing3))fnReceiver) (pEventReceiver->GetVolObject (), this, nTagNumber, rg_CaoZuoLeiXing3);
         CVolEventReceiver::sEndSendEvent (pEventReceiver);
     }
     return nEventResult;

@@ -13,8 +13,8 @@ class rg_MCPStdioQiao : public CVolObject
 
 public:
     static CVolString CALLBACK rg_DouQuYiHang (INT64 rg_XianChengGouBing);
-    static void CALLBACK rg_XieRuYiHang (CVolString& rg_string4);
-    static void CALLBACK rg_XieRiZhi (CVolString& rg_string5);
+    static void CALLBACK rg_XieRuYiHang (CVolString& rg_string3);
+    static void CALLBACK rg_XieRiZhi (CVolString& rg_string4);
     static BOOL CALLBACK rg_ShiFouWeiStdioMoShi ();
     static void CALLBACK rg_YunHangStdioZhuXunHuan (INT64 rg_XianChengGouBing1);
     static void CALLBACK rg_QiDongBingHangStdioFuWu ();

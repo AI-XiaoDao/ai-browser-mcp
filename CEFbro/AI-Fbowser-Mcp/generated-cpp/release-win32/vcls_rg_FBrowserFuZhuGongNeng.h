@@ -18,7 +18,7 @@ public:
     static CVolString CALLBACK rg_FBrowser_Parser_URIjm (CVolString& rg_ShuJu18, BOOL rg_convert_to_utf, BOOL rg_unescape_rule);
     static rg_FBrowser_value::FBroValue CALLBACK rg_FBrowser_Parser_jxJSON (CVolString& rg_json_string, INT rg_options);
     static void CALLBACK rg_FBrowser_QingLiQuanJuHuanCun (CVolString& rg_YuanDeZhi3, INT64 rg_QingLiDuiXiang, INT64 rg_CunChuLeiXing, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao);
-    static rg_class_FBrowser_LiuLanQi CALLBACK rg_FBrowser_llq_tgIDqllq (INT rg_LiuLanQiID6);
+    static rg_class_FBrowser_LiuLanQi CALLBACK rg_FBrowser_llq_tgIDqllq (INT rg_LiuLanQiID10);
     static rg_class_FBrowser_LiuLanQi CALLBACK rg_FBrowser_llq_tgchkgbqllq (INT rg_ChuangKouGouBing5);
     static rg_class_FBrowser_LiuLanQi CALLBACK rg_FBrowser_llq_tgyhbshqllq (CVolString& rg_YongHuBiaoShi);
     static INT CALLBACK rg_FBrowser_LiuLanQi_QuShuLiang ();

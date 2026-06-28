@@ -206,47 +206,52 @@ void rg_YYJSONDuiXiangLei::TakeOverNewRefObject (CRefObject* pNewRefObject)
     m_pRefObject = pNewRefObject;
 }
 
-BOOL rg_YYJSONDuiXiangLei::rg_JiaRuLuoJiZhiChengYuan (CVolString& rg_JianMing19, BOOL rg_value123)
+BOOL rg_YYJSONDuiXiangLei::rg_JiaRuLuoJiZhiChengYuan (CVolString& rg_JianMing14, BOOL rg_value123)
 {
-    return yyjson_mut_obj_add_bool(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing19), rg_value123);
+    return yyjson_mut_obj_add_bool(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing14), rg_value123);
 }
 
-BOOL rg_YYJSONDuiXiangLei::rg_JiaRuChangZhengShuChengYuan (CVolString& rg_JianMing20, INT64 rg_value124)
+BOOL rg_YYJSONDuiXiangLei::rg_JiaRuChangZhengShuChengYuan (CVolString& rg_JianMing15, INT64 rg_value124)
 {
-    return yyjson_mut_obj_add_sint(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing20), (int64_t)rg_value124);
+    return yyjson_mut_obj_add_sint(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing15), (int64_t)rg_value124);
 }
 
-BOOL rg_YYJSONDuiXiangLei::rg_JiaRuZhengShuChengYuan (CVolString& rg_JianMing21, INT rg_value125)
+BOOL rg_YYJSONDuiXiangLei::rg_JiaRuZhengShuChengYuan (CVolString& rg_JianMing16, INT rg_value125)
 {
-    return yyjson_mut_obj_add_int(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing21), (int64_t)rg_value125);
+    return yyjson_mut_obj_add_int(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing16), (int64_t)rg_value125);
 }
 
-BOOL rg_YYJSONDuiXiangLei::rg_JiaRuWenBenChengYuan (CVolString& rg_JianMing23, CVolString& rg_value127)
+BOOL rg_YYJSONDuiXiangLei::rg_JiaRuXiaoShuChengYuan (CVolString& rg_JianMing17, DOUBLE rg_value126)
 {
-    return yyjson_mut_obj_add_strcpy(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing23), (const char *)CU8String(rg_value127.GetText()).GetText());
+    return yyjson_mut_obj_add_real(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing17), (double)rg_value126);
 }
 
-BOOL rg_YYJSONDuiXiangLei::rg_JiaRuChengYuan43 (CVolString& rg_JianMing24, rg_YYJSONDuiXiangLei& rg_value128, BOOL rg_FuGai3)
+BOOL rg_YYJSONDuiXiangLei::rg_JiaRuWenBenChengYuan (CVolString& rg_JianMing18, CVolString& rg_value127)
 {
-    yyjson_mut_val* key = yyjson_mut_strcpy(data().GetDoc(), (const char *)CU8String(rg_JianMing24.GetText()).GetText());
+    return yyjson_mut_obj_add_strcpy(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing18), (const char *)CU8String(rg_value127.GetText()).GetText());
+}
+
+BOOL rg_YYJSONDuiXiangLei::rg_JiaRuChengYuan43 (CVolString& rg_JianMing19, rg_YYJSONDuiXiangLei& rg_value128, BOOL rg_FuGai3)
+{
+    yyjson_mut_val* key = yyjson_mut_strcpy(data().GetDoc(), (const char *)CU8String(rg_JianMing19.GetText()).GetText());
     if (rg_FuGai3)
         return yyjson_mut_obj_put(data().GetObject(), key, rg_value128.data().GetObject());
     else
         return yyjson_mut_obj_add(data().GetObject(), key, rg_value128.data().GetObject());
 }
 
-BOOL rg_YYJSONDuiXiangLei::rg_JiaRuShuZuChengYuan (CVolString& rg_JianMing26, rg_YYJSONShuZuLei& rg_value130, BOOL rg_FuGai5)
+BOOL rg_YYJSONDuiXiangLei::rg_JiaRuShuZuChengYuan (CVolString& rg_JianMing21, rg_YYJSONShuZuLei& rg_value130, BOOL rg_FuGai5)
 {
-    yyjson_mut_val* key = yyjson_mut_strcpy(data().GetDoc(), (const char *)CU8String(rg_JianMing26.GetText()).GetText());
+    yyjson_mut_val* key = yyjson_mut_strcpy(data().GetDoc(), (const char *)CU8String(rg_JianMing21.GetText()).GetText());
     if (rg_FuGai5)
         return yyjson_mut_obj_put(data().GetObject(), key, rg_value130.data().GetArray());
     else
         return yyjson_mut_obj_add(data().GetObject(), key, rg_value130.data().GetArray());
 }
 
-BOOL rg_YYJSONDuiXiangLei::rg_ShanChuChengYuan34 (CVolString& rg_JianMing36)
+BOOL rg_YYJSONDuiXiangLei::rg_ShanChuChengYuan34 (CVolString& rg_JianMing31)
 {
-    return yyjson_mut_obj_remove_str(data().GetObject(), (const char *)CU8String(rg_JianMing36.GetText()).GetText());
+    return yyjson_mut_obj_remove_str(data().GetObject(), (const char *)CU8String(rg_JianMing31.GetText()).GetText());
 }
 
 void rg_YYJSONDuiXiangLei::GetDumpString (CVolString& rg_ZhanShiNeiRong90, INT rg_ZuiDaZhanShiShuJuCheCun90)

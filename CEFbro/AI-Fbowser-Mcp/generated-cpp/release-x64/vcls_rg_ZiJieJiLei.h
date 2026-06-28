@@ -12,6 +12,7 @@ class rg_ZiJieJiLei : public CVolObject
     DECLARE_EMPTY_VOL_CLASS (rg_volcano_base, rg_ZiJieJiLei)
 
 public:
+    static CVolMem CALLBACK rg_QuKongBaiZiJieJi (INT rg_LingZiJieShuMu);
     inline_ rg_ZiJieJiLei () { }
     inline_ void _VolObjectInitMembers () { }
 };

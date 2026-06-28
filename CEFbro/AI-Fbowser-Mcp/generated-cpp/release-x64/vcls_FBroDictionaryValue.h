@@ -23,12 +23,13 @@ public:
 public:
     BOOL rg_ShiFouWeiKong160 ();
     void rg_ChuangJian23 ();
+    BOOL rg_QingKong52 ();
     rg_FBrowser_ShuJuLeiXing::rg_FBrowser_WenBenShuZu rg_QuGuanJianZi ();
     BOOL rg_YiChu2 (CVolString& rg_GuanJianZi95);
     INT rg_QuZhengShuZhi2 (CVolString& rg_GuanJianZi98);
     CVolString rg_QuWenBenZhi2 (CVolString& rg_GuanJianZi100);
     BOOL rg_ZhiZhengShuZhi2 (CVolString& rg_GuanJianZi104, INT rg_ZhengShuZhi6);
-    BOOL rg_ZhiWenBenZhi2 (CVolString& rg_GuanJianZi106, CVolString& rg_string20);
+    BOOL rg_ZhiWenBenZhi2 (CVolString& rg_GuanJianZi106, CVolString& rg_string19);
     inline_ FBroDictionaryValue () { }
     inline_ void _VolObjectInitMembers () { }
 };

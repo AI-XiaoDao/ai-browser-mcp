@@ -22,9 +22,9 @@ public:
 public:
     BOOL rg_ShiFouWeiKong169 ();
     void rg_QiYong4 (CVolString& rg_BaoGuaKongGe);
-    void rg_MeiJuDOM (INT rg_ShenDu1, BOOL rg_ChuanTou, rg_FBrowser_LiuLanQi::rg_class_FBrowser_shjzhnzhzh& rg_HuiDiao15);
-    void rg_YuChaZhaoWenBen (CVolString& rg_ChaXunWenBen, BOOL rg_includeUserAgentShadowDOM, rg_FBrowser_LiuLanQi::rg_class_FBrowser_shjzhnzhzh& rg_HuiDiao22);
-    void rg_QuChaZhaoWenBen (CVolString& rg_ChaZhaoID1, INT rg_KaiShiSuoYin, INT rg_JieShuSuoYin, rg_FBrowser_LiuLanQi::rg_class_FBrowser_shjzhnzhzh& rg_HuiDiao23);
+    void rg_MeiJuDOM (INT rg_ShenDu1, BOOL rg_ChuanTou, rg_FBrowser_LiuLanQi::rg_class_FBrowser_shjzhnzhzh& rg_HuiDiao16);
+    void rg_YuChaZhaoWenBen (CVolString& rg_ChaXunWenBen, BOOL rg_includeUserAgentShadowDOM, rg_FBrowser_LiuLanQi::rg_class_FBrowser_shjzhnzhzh& rg_HuiDiao23);
+    void rg_QuChaZhaoWenBen (CVolString& rg_ChaZhaoID1, INT rg_KaiShiSuoYin, INT rg_JieShuSuoYin, rg_FBrowser_LiuLanQi::rg_class_FBrowser_shjzhnzhzh& rg_HuiDiao24);
     inline_ rg_class_FBrowserVIP_kfzhDOM () { }
     inline_ void _VolObjectInitMembers () { }
 };

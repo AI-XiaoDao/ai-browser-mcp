@@ -27,13 +27,14 @@ public:
 inline_ rg_YYJSONDuiXiangLei (yyjson_mut_val* obj, CRefJsonMutObjectPtrWithData* pRefObject) : rg_YYJSONDuiXiangLei()  { data().SetObject(obj, pRefObject); }
 
 public:
-    BOOL rg_JiaRuLuoJiZhiChengYuan (CVolString& rg_JianMing19, BOOL rg_value123);
-    BOOL rg_JiaRuChangZhengShuChengYuan (CVolString& rg_JianMing20, INT64 rg_value124);
-    BOOL rg_JiaRuZhengShuChengYuan (CVolString& rg_JianMing21, INT rg_value125);
-    BOOL rg_JiaRuWenBenChengYuan (CVolString& rg_JianMing23, CVolString& rg_value127);
-    BOOL rg_JiaRuChengYuan43 (CVolString& rg_JianMing24, rg_YYJSONDuiXiangLei& rg_value128, BOOL rg_FuGai3);
-    BOOL rg_JiaRuShuZuChengYuan (CVolString& rg_JianMing26, rg_YYJSONShuZuLei& rg_value130, BOOL rg_FuGai5);
-    BOOL rg_ShanChuChengYuan34 (CVolString& rg_JianMing36);
+    BOOL rg_JiaRuLuoJiZhiChengYuan (CVolString& rg_JianMing14, BOOL rg_value123);
+    BOOL rg_JiaRuChangZhengShuChengYuan (CVolString& rg_JianMing15, INT64 rg_value124);
+    BOOL rg_JiaRuZhengShuChengYuan (CVolString& rg_JianMing16, INT rg_value125);
+    BOOL rg_JiaRuXiaoShuChengYuan (CVolString& rg_JianMing17, DOUBLE rg_value126);
+    BOOL rg_JiaRuWenBenChengYuan (CVolString& rg_JianMing18, CVolString& rg_value127);
+    BOOL rg_JiaRuChengYuan43 (CVolString& rg_JianMing19, rg_YYJSONDuiXiangLei& rg_value128, BOOL rg_FuGai3);
+    BOOL rg_JiaRuShuZuChengYuan (CVolString& rg_JianMing21, rg_YYJSONShuZuLei& rg_value130, BOOL rg_FuGai5);
+    BOOL rg_ShanChuChengYuan34 (CVolString& rg_JianMing31);
     virtual void GetDumpString (CVolString& rg_ZhanShiNeiRong90, INT rg_ZuiDaZhanShiShuJuCheCun90);
     virtual void LoadFromStream (CVolBaseInputStream& rg_LiuDuiXiang46);
     virtual void SaveIntoStream (CVolBaseOutputStream& rg_LiuDuiXiang47);

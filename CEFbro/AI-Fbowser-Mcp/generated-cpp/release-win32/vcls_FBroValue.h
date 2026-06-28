@@ -25,7 +25,7 @@ public:
     void rg_ChuangJian22 ();
     BOOL rg_ZhiLuoJiZhi1 (BOOL rg_bool_value4);
     BOOL rg_ZhiZhengShuZhi1 (INT rg_ZhengShuZhi5);
-    BOOL rg_ZhiWenBenZhi1 (CVolString& rg_string19);
+    BOOL rg_ZhiWenBenZhi1 (CVolString& rg_string18);
     FBroDictionaryValue rg_QuZiDianZhi2 ();
     inline_ FBroValue () { }
     inline_ void _VolObjectInitMembers () { }

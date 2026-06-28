@@ -105,7 +105,7 @@ void rg_class_FBrowser_dywPDFhd::OnPdfPrintFinished(const CefString& path, bool 
   rg_JiJiangWanChengDaYin(CVolString(path.ToWString().c_str()),ok);
 }
 
-void rg_class_FBrowser_dywPDFhd::rg_JiJiangWanChengDaYin (CVolString& rg_LuJing3, BOOL rg_ShiFouChengGong14)
+void rg_class_FBrowser_dywPDFhd::rg_JiJiangWanChengDaYin (CVolString& rg_LuJing3, BOOL rg_ShiFouChengGong10)
 {
 }
 
@@ -139,7 +139,7 @@ void rg_class_FBrowser_zfchhd::Visit(const CefString& string){
   rg_HuiDiao4(CVolString(string.ToWString().c_str()));
 }
 
-void rg_class_FBrowser_zfchhd::rg_HuiDiao4 (CVolString& rg_string6)
+void rg_class_FBrowser_zfchhd::rg_HuiDiao4 (CVolString& rg_string5)
 {
 }
 
@@ -173,7 +173,7 @@ void rg_class_FBrowser_JSHuiDiao::Callback(CefRefPtr<CefListValue> pListValue){
   rg_HuiDiao3(rg_FBrowser_value::FBroListValue(pListValue));
 }
 
-void rg_class_FBrowser_JSHuiDiao::rg_HuiDiao3 (rg_FBrowser_value::FBroListValue& rg_FanHuiJieGuo2)
+void rg_class_FBrowser_JSHuiDiao::rg_HuiDiao3 (rg_FBrowser_value::FBroListValue& rg_FanHuiJieGuo3)
 {
 }
 
@@ -463,7 +463,7 @@ void rg_class_FBrowser_qlhchd::DoFinish(bool success){
   rg_WanCheng(success);
 }
 
-void rg_class_FBrowser_qlhchd::rg_WanCheng (BOOL rg_ShiFouChengGong15)
+void rg_class_FBrowser_qlhchd::rg_WanCheng (BOOL rg_ShiFouChengGong11)
 {
 }
 

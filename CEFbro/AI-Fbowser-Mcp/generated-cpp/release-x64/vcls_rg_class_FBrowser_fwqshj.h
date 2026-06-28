@@ -29,7 +29,7 @@ public:
     virtual void rg_ShouDaoKeHuDuanLianJie (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi19, INT rg_LianJieID12);
     virtual void rg_ShouDaoKeHuDuanDuanKaiLianJie (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi20, INT rg_LianJieID13);
     virtual void rg_ShouDaoHTTPQingQiu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi21, INT rg_LianJieID14, CVolString& rg_KeHuDuanDeZhi4, rg_FBrowser_LiuLanQi::FBroRequest& rg_QingQiu23);
-    virtual void rg_ShouDaoWebSocketQingQiu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi22, INT rg_LianJieID15, CVolString& rg_KeHuDuanDeZhi5, rg_FBrowser_LiuLanQi::FBroRequest& rg_QingQiu24, rg_FBrowser_HuiDiao::rg_class_FBrowser_HuiDiao& rg_HuiDiao14);
+    virtual void rg_ShouDaoWebSocketQingQiu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi22, INT rg_LianJieID15, CVolString& rg_KeHuDuanDeZhi5, rg_FBrowser_LiuLanQi::FBroRequest& rg_QingQiu24, rg_FBrowser_HuiDiao::rg_class_FBrowser_HuiDiao& rg_HuiDiao15);
     virtual void rg_ShouDaoWebSocketLianJie (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi23, INT rg_LianJieID16);
     virtual void rg_ShouDaoWebSocketXiaoXi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi24, INT rg_LianJieID17, INT64 rg_ShuJuZhiZhen15, INT rg_ShuJuChangDu1);
     rg_class_FBrowser_fwqshj ();

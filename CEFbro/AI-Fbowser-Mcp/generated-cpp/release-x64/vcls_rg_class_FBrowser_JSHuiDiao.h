@@ -17,7 +17,7 @@ public:
         virtual void Callback(CefRefPtr<CefListValue> pListValue) override;
 
 public:
-    virtual void rg_HuiDiao3 (rg_FBrowser_value::FBroListValue& rg_FanHuiJieGuo2);
+    virtual void rg_HuiDiao3 (rg_FBrowser_value::FBroListValue& rg_FanHuiJieGuo3);
     rg_class_FBrowser_JSHuiDiao ();
     void _VolObjectInitMembers ();
     virtual ~rg_class_FBrowser_JSHuiDiao ();

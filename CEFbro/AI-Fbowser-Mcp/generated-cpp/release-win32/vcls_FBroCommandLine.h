@@ -20,6 +20,8 @@ public:
     inline_ void Set (CefRefPtr<CefCommandLine> object) { m_class = object; }
 
 public:
+    void rg_JinYongGPU ();
+    void rg_JinYongGPUHuanCun ();
     inline_ FBroCommandLine () { }
     inline_ void _VolObjectInitMembers () { }
 };

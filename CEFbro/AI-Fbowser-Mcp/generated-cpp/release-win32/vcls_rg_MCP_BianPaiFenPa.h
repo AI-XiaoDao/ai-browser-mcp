@@ -14,7 +14,7 @@ class rg_MCP_BianPaiFenPa : public CVolObject
 public:
     static void CALLBACK rg_ChongZhiGongZuoLiuZhuangTai ();
     static void CALLBACK rg_JiangZhiZhongZhiChaoShiGongZuoLiu ();
-    static CVolString CALLBACK rg_FenLeiFenPa_BianPaiCaoZuo (CVolString& rg_MingLingID34, CVolString& rg_FangFaMing12, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON20);
+    static CVolString CALLBACK rg_FenLeiFenPa_BianPaiCaoZuo (CVolString& rg_MingLingID34, CVolString& rg_FangFaMing13, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON22);
     static BOOL CALLBACK rg_MuLuHanGongZuoLiuJSON (CVolString& rg_MuLu);
     static CVolString CALLBACK rg_DouRuGongZuoLiuJSONWenBen (CVolString& rg_WenJianLuJing6);
     static rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouShuZuLei CALLBACK rg_CongDingYiDuiXiangQuBuZhouShuZu (rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_DingYiDuiXiang);
@@ -22,15 +22,18 @@ public:
     static CVolString CALLBACK rg_GuiFanHuaGongZuoLiuMing (CVolString& rg_YuanShiMing);
     static CVolString CALLBACK rg_ChuLi_GongZuoLiuLieBiao (CVolString& rg_MingLingID35);
     static CVolString CALLBACK rg_ChuLi_GongZuoLiuHuoQu (CVolString& rg_MingLingID36, CVolString& rg_GongZuoLiuMing1);
-    static CVolString CALLBACK rg_JiaZaiGongZuoLiuDingYi (rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON21);
-    static CVolString CALLBACK rg_CongJieGuoDiQuRenWuID (CVolString& rg_JieGuoJSON7);
-    static CVolString CALLBACK rg_DengDaiBuZhouYiBuWanCheng (CVolString& rg_RenWuID30, INT rg_ZuiDaHaoMiao7, CVolString& rg_GongZuoLiuMingLingID, CVolString& rg_GongJuMing4);
+    static CVolString CALLBACK rg_JiaZaiGongZuoLiuDingYi (rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON23);
+    static CVolString CALLBACK rg_CongJieGuoDiQuRenWuID (CVolString& rg_JieGuoJSON8);
+    static CVolString CALLBACK rg_DengDaiBuZhouYiBuWanCheng (CVolString& rg_RenWuID31, INT rg_ZuiDaHaoMiao7, CVolString& rg_GongZuoLiuMingLingID, CVolString& rg_GongJuMing4);
     static CVolString CALLBACK rg_BuZhouJSONPianDuanLieBiaoDaoShuZuWenBen (rg_volcano_base::rg_WenBenShuZuLei& rg_PianDuanLieBiao);
-    static void CALLBACK rg_ZhuiJiaBuZhouJieGouShiBaiJiLu (rg_volcano_base::rg_WenBenShuZuLei& rg_BuZhouJieGuoJSONLieBiao, INT rg_BuSuoYin, CVolString& rg_GongJuMing5, CVolString& rg_CuoWuXiaoXi8);
-    static CVolString CALLBACK rg_ZhiHangGongZuoLiuChanBu (CVolString& rg_MingLingID37, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_BuZhou, INT rg_BuSuoYin1, CVolString& rg_QuanJuonError, rg_volcano_base::rg_WenBenShuZuLei& rg_BuZhouJieGuoJSONLieBiao1);
+    static void CALLBACK rg_ZhuiJiaBuZhouJieGouShiBaiJiLu (rg_volcano_base::rg_WenBenShuZuLei& rg_BuZhouJieGuoJSONLieBiao, INT rg_BuSuoYin, CVolString& rg_GongJuMing5, CVolString& rg_CuoWuXiaoXi6);
+    static void CALLBACK rg_ChuShiHuaGongZuoLiuBianLiang ();
+    static void CALLBACK rg_CunChuGongZuoLiuBuZhouBianLiang (INT rg_BuSuoYin1, CVolString& rg_JieGuoJSON9);
+    static CVolString CALLBACK rg_TiHuanMoBanBianLiang (CVolString& rg_YuanShiWenBen1);
+    static CVolString CALLBACK rg_ZhiHangGongZuoLiuChanBu (CVolString& rg_MingLingID37, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_BuZhou, INT rg_BuSuoYin2, CVolString& rg_QuanJuonError, rg_volcano_base::rg_WenBenShuZuLei& rg_BuZhouJieGuoJSONLieBiao1);
     static BOOL CALLBACK rg_BuZhouShuZuMoXiao (rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouShuZuLei& rg_BuZhouShuZu);
-    static rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouShuZuLei CALLBACK rg_JieXiBuZhouShuZuCanShu (rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON22);
-    static CVolString CALLBACK rg_ChuLi_GongZuoLiuYunHang (CVolString& rg_MingLingID38, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON23);
+    static rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouShuZuLei CALLBACK rg_JieXiBuZhouShuZuCanShu (rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON24);
+    static CVolString CALLBACK rg_ChuLi_GongZuoLiuYunHang (CVolString& rg_MingLingID38, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON25);
     inline_ rg_MCP_BianPaiFenPa () { }
     inline_ void _VolObjectInitMembers () { }
 
@@ -41,6 +44,7 @@ public:
     static CVolString rg_GongZuoLiuMuLuHuanCun;
     static INT64 rg_GongZuoLiuKaiShiShiJian;
     static const INT rg_GongZuoLiuZuiDaYunHangHaoMiao;
+    static rg_FBrowser_value::FBroDictionaryValue rg_GongZuoLiuBuZhouBianLiangZiDian;
 };
 
 }

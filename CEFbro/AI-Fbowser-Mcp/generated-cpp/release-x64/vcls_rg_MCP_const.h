@@ -16,16 +16,43 @@ public:
     inline_ void _VolObjectInitMembers () { }
 
 public:
+    static const INT rg_HuanCunBaoLiuTianShu;
+    static const INT rg_HuanCunZuiDaTiaoMu;
+    static const INT rg_TongBuDengDai_MoRenHaoMiao;
+    static const INT rg_TongBuDengDai_KuaiDouHaoMiao;
+    static const INT rg_TongBuDengDai_JiShiHaoMiao;
+    static const INT rg_TongBuDengDai_JieTuHaoMiao;
+    static const INT rg_TongBuDengDai_LunXunJianGe;
     static const INT rg_JieDuan_YuanMaMoRenZiJie;
     static const INT rg_JieDuan_YuanMaZuiDaZiJie;
+    static const INT rg_JieDuan_CDPJieGuoZuiDaZiJie;
     static const INT rg_JieDuan_VIPShuJuZuiDaZiJie;
+    static const INT rg_CookieZuiDaXiangShu;
+    static const INT rg_CookieJueDuiShangXian;
     static const INT rg_URLQingQiuMoRenChaoShi;
+    static const INT64 rg_HaoMiao_MeiTian;
+    static const INT rg_SuLuXianZhi_CuiJianYinZi;
+    static const INT rg_RiZhiQingLiJianGe;
+    static const INT rg_HuanCunQingLi_BaoLiuHuanChong;
+    static const INT rg_DengDaiRenWuZuiDaZhiLiuHaoMiao;
+    static const INT rg_TongBuDengDai_JSZhiHangChaoShi;
+    static const INT rg_ShiJianRiZhiZuiDaTiaoMu;
+    static const INT rg_XiangYingHuanCunZuiDaTiaoMu;
+    static const INT rg_XiaZaiBaoLiuTianShu;
     static const INT rg_XiangYingHuanCunChanTiaoZuiDaZiJie;
+    static const INT rg_CDPYingSheQingLiJianGe;
+    static const INT rg_LanJieGuiZeZuiDaHangShu;
     static const INT rg_DingJiWeiHuJianGeHaoMiao;
     static const INT rg_LiuLanQiShiLiZuiDaShuLiang;
+    static const INT rg_PiLiangMingLingZuiDaTiaoShu;
     static const INT rg_URLQingQiuZuiDaBingFa;
     static const INT rg_JieTuYiBuZuiDaZiJie;
+    static const INT rg_YiBuJieGuoJSONZuiDaZiFu;
+    static const INT rg_YiBuJieGuoFeiDengDaiBaoLiuHaoMiao;
+    static const INT rg_CDPYingSheTTLHaoMiao;
+    static const INT rg_ChiJiuV8KuoZhanShangXian;
     static const INT rg_WSZuiDaXiaoXiZiJie;
+    static const INT rg_RiZhiJieDuanZiFuShu;
     static const INT rg_TLSZhiWen_1_n;
     static const INT rg_TLSZhiWen_1_n1;
     static const INT rg_TLSZhiWen_1_n2;
@@ -40,6 +67,7 @@ public:
     static CVolString rg_CuoWu_BuZhiChiDeURLXieYi;
     static CVolString rg_CuoWu_TianBiaoKuangJiaMoXiao;
     static CVolString rg_CuoWu_QingQiuHuanJingBuKeYong;
+    static CVolString rg_CuoWu_FuWuZhengZaiGuanBi;
     static CVolString rg_CuoWu_BanBenBiXuWeiZhengZhengShu;
     static CVolString rg_DiShi_XuYaoShuaXin;
     static CVolString rg_HTTP_JSONNeiRongLeiXing;

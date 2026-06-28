@@ -17,7 +17,7 @@ public:
         virtual void DoFinish(bool success) override;
 
 public:
-    virtual void rg_WanCheng (BOOL rg_ShiFouChengGong15);
+    virtual void rg_WanCheng (BOOL rg_ShiFouChengGong11);
     rg_class_FBrowser_qlhchd ();
     void _VolObjectInitMembers ();
     virtual ~rg_class_FBrowser_qlhchd ();

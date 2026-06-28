@@ -12,7 +12,7 @@ class rg_MCP_HeXinFenPa : public CVolObject
     DECLARE_EMPTY_VOL_CLASS (rg_volcano_app, rg_MCP_HeXinFenPa)
 
 public:
-    static CVolString CALLBACK rg_FenLeiFenPa_HeXinCaoZuo (CVolString& rg_MingLingID30, CVolString& rg_FangFaMing8, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON16);
+    static CVolString CALLBACK rg_FenLeiFenPa_HeXinCaoZuo (CVolString& rg_MingLingID27, CVolString& rg_FangFaMing8, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON17);
     inline_ rg_MCP_HeXinFenPa () { }
     inline_ void _VolObjectInitMembers () { }
 };

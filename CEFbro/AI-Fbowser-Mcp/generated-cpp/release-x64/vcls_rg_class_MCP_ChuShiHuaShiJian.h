@@ -20,6 +20,7 @@ public:
     virtual void rg_XuanRan_ZaiRuCuoWu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi3, rg_FBrowser_LiuLanQi::FBroFrame& rg_KuangJia3, INT rg_CuoWuDaiMa, CVolString& rg_CuoWuWenBen, CVolString& rg_ShiBaiDeZhi);
     virtual void rg_XuanRan_LiuLanQiChuangJian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi4, rg_FBrowser_value::FBroDictionaryValue& rg_EWaiXinXi);
     virtual void rg_XuanRan_JiJiangXiaoHuiLiuLanQi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi5);
+    virtual void rg_JiJiangChuLiMingLingHang (CVolString& rg_JinChengLeiXing, rg_FBrowser_LiuLanQi::FBroCommandLine& rg_MingLingHang);
     inline_ rg_class_MCP_ChuShiHuaShiJian () { }
     inline_ void _VolObjectInitMembers () { }
 

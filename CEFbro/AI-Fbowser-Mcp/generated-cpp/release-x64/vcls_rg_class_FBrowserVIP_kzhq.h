@@ -41,7 +41,7 @@ public:
     void rg_ZhiWen_XuNiCanvas_DingZhi (CVolString& rg_CanShuWenBen1);
     void rg_ZhiWen_XuNiWebGL_DingZhi (CVolString& rg_CanShuWenBen2);
     void rg_ZhiWen_XuNiAudio_DingZhi (CVolString& rg_CanShuWenBen3);
-    void rg_ZhiWen_XuNiPlugins (INT rg_XiuGaiLeiXing, CVolString& rg_JSONWenBen6);
+    void rg_ZhiWen_XuNiPlugins (INT rg_XiuGaiLeiXing, CVolString& rg_JSONWenBen5);
     void rg_ZhiWen_XuNiJavaEnabled (BOOL rg_XuNiZhi11);
     void rg_ZhiWen_XuNiWebdriver (BOOL rg_XuNiZhi12);
     void rg_ZhiWen_XuNiOnLine (BOOL rg_XuNiZhi13);
@@ -86,12 +86,12 @@ public:
     void rg_GaoJiChuMo_FangKai (INT rg_HengZuoBiao13, INT rg_ZongZuoBiao13);
     void rg_GaoJiChuMo_YiDong (INT rg_HengZuoBiao14, INT rg_ZongZuoBiao14);
     void rg_GaoJiChuMo_QuXiao (INT rg_HengZuoBiao15, INT rg_ZongZuoBiao15);
-    void rg_GaoJi_FaSongJianPanShiJian (CVolString& rg_LeiXing14, INT rg_XiuShiJian1, CVolString& rg_string21, CVolString& rg_WeiXiuShiWenBen, CVolString& rg_GuanJianBiaoShiFu, CVolString& rg_DaiMa, CVolString& rg_AnJian, INT rg_JiTongXuNiJianDaiMa, INT rg_BenJiXuNiJianDaiMa, BOOL rg_ZiDongChongFu, BOOL rg_ShiFouWeiJianPan, BOOL rg_ShiFouWeiJiTong, INT rg_JianPanWeiZhi);
+    void rg_GaoJi_FaSongJianPanShiJian (CVolString& rg_LeiXing14, INT rg_XiuShiJian1, CVolString& rg_string20, CVolString& rg_WeiXiuShiWenBen, CVolString& rg_GuanJianBiaoShiFu, CVolString& rg_DaiMa, CVolString& rg_AnJian, INT rg_JiTongXuNiJianDaiMa, INT rg_BenJiXuNiJianDaiMa, BOOL rg_ZiDongChongFu, BOOL rg_ShiFouWeiJianPan, BOOL rg_ShiFouWeiJiTong, INT rg_JianPanWeiZhi);
     void rg_GaoJiJianPan_AnXia (INT rg_JianDaiMa4, INT rg_XiuShiJian2, BOOL rg_ShiFouWeiJianPan1);
     void rg_GaoJiJianPan_FangKai (INT rg_JianDaiMa5, INT rg_XiuShiJian3, BOOL rg_ShiFouWeiJianPan2);
     void rg_GaoJiJianPan_ChanJi (INT rg_JianDaiMa6, INT rg_XiuShiJian4, INT rg_ChanJiYanShi1, BOOL rg_ShiFouWeiJianPan3);
-    void rg_GaoJiJianPan_ShuRuZiFu (CVolString& rg_string22);
-    void rg_GaoJiJianPan_ShuRuWenBen (CVolString& rg_string23, INT rg_ZhuZiShuRuYanShi);
+    void rg_GaoJiJianPan_ShuRuZiFu (CVolString& rg_string21);
+    void rg_GaoJiJianPan_ShuRuWenBen (CVolString& rg_string22, INT rg_ZhuZiShuRuYanShi);
     void rg_GaoJi_FaSongShuBiaoShiJian (CVolString& rg_LeiXing15, INT rg_HengZuoBiao17, INT rg_ZongZuoBiao17, INT rg_XiuShiJian5, CVolString& rg_AnJianWenBen, INT rg_AnJianJi, INT rg_DianJiCiShu1, INT rg_CSSXiangSuHengZuoBiao, INT rg_CSSXiangSuZongZuoBiao, CVolString& rg_ZhiZhenLeiXing);
     void rg_GaoJiShuBiao_AnXia (INT rg_HengZuoBiao18, INT rg_ZongZuoBiao18, INT rg_AnJianLeiXing2);
     void rg_GaoJiShuBiao_FangKai (INT rg_HengZuoBiao19, INT rg_ZongZuoBiao19, INT rg_AnJianLeiXing3);

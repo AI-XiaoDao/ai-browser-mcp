@@ -23,7 +23,7 @@ public:
 public:
     virtual BOOL rg_KaiFaZheXiaoXi_VIP_ShouDaoXiaoXi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi162, INT64 rg_XiaoXiZhiZhen1, INT rg_XiaoXiDaXiao1);
     virtual void rg_KaiFaZheXiaoXi_VIP_ZhiHangWanCheng (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi163, INT rg_XiaoXiID2, BOOL rg_ChengGong13, INT64 rg_JieGuoZhiZhen2, INT rg_JieGuoDaXiao2);
-    virtual void rg_KaiFaZheXiaoXi_VIP_ShouDaoShiJian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi164, CVolString& rg_FangFaMing13, INT64 rg_CanShuZhiZhen1, INT rg_CanShuDaXiao1);
+    virtual void rg_KaiFaZheXiaoXi_VIP_ShouDaoShiJian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi164, CVolString& rg_FangFaMing14, INT64 rg_CanShuZhiZhen1, INT rg_CanShuDaXiao1);
     virtual void rg_KaiFaZheXiaoXi_VIP_YiFuJia (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi165);
     virtual void rg_KaiFaZheXiaoXi_VIP_YiFenLi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi166);
     rg_class_FBrowser_kfzhxxshj ();

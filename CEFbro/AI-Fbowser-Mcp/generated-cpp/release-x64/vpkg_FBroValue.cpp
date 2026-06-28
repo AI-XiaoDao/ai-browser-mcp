@@ -152,10 +152,10 @@ BOOL FBroValue::rg_ZhiZhengShuZhi1 (INT rg_ZhengShuZhi5)
     return FBroHsValue_SetInt(m_class,rg_ZhengShuZhi5);
 }
 
-BOOL FBroValue::rg_ZhiWenBenZhi1 (CVolString& rg_string19)
+BOOL FBroValue::rg_ZhiWenBenZhi1 (CVolString& rg_string18)
 {
     if(IsEmpty()) return false;
-    return FBroHsValue_SetString(m_class,rg_string19.GetText());
+    return FBroHsValue_SetString(m_class,rg_string18.GetText());
 }
 
 FBroDictionaryValue FBroValue::rg_QuZiDianZhi2 ()
@@ -185,6 +185,12 @@ BOOL FBroDictionaryValue::rg_ShiFouWeiKong160 ()
 void FBroDictionaryValue::rg_ChuangJian23 ()
 {
     Set(FBroHsDictionaryValue_Create());
+}
+
+BOOL FBroDictionaryValue::rg_QingKong52 ()
+{
+    if(IsEmpty ()) return false;
+    return FBroHsDictionaryValue_Clear(m_class);
 }
 
 rg_FBrowser_ShuJuLeiXing::rg_FBrowser_WenBenShuZu FBroDictionaryValue::rg_QuGuanJianZi ()
@@ -218,10 +224,10 @@ BOOL FBroDictionaryValue::rg_ZhiZhengShuZhi2 (CVolString& rg_GuanJianZi104, INT 
     return FBroHsDictionaryValue_SetInt(m_class,rg_GuanJianZi104.GetText(),rg_ZhengShuZhi6);
 }
 
-BOOL FBroDictionaryValue::rg_ZhiWenBenZhi2 (CVolString& rg_GuanJianZi106, CVolString& rg_string20)
+BOOL FBroDictionaryValue::rg_ZhiWenBenZhi2 (CVolString& rg_GuanJianZi106, CVolString& rg_string19)
 {
     if(IsEmpty()) return false;
-    return FBroHsDictionaryValue_SetString(m_class,rg_GuanJianZi106.GetText(),rg_string20.GetText());
+    return FBroHsDictionaryValue_SetString(m_class,rg_GuanJianZi106.GetText(),rg_string19.GetText());
 }
 
 BOOL FBroPostDataElementVector::_IsSelfEqual (const FBroPostDataElementVector& objCompare) const

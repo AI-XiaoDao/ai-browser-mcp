@@ -54,10 +54,10 @@ public:
     virtual void rg_KuoZhanChaJian_XieZaiChengGong (rg_FBrowser_LiuLanQi::FBroRequestContext& rg_QingQiuHuanJing4, CVolString& rg_ChaJianID3);
     virtual void rg_HuoQuMoRenShiJian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi54, CVolString& rg_DeZhi3, rg_FBrowser_LiuLanQi::rg_class_FBrowser_yhewpzh& rg_YongHuEWaiPeiZhi1);
     virtual void rg_ZhiHangGuanBiWanBi (rg_volcano_base::rg_LuoJiXingLei& rg_ShiFouJieShuChengXu1);
-    virtual void rg_JiJiangChuLiMingLingHang (CVolString& rg_JinChengLeiXing1, rg_FBrowser_LiuLanQi::FBroCommandLine& rg_MingLingHang);
+    virtual void rg_JiJiangChuLiMingLingHang (CVolString& rg_JinChengLeiXing2, rg_FBrowser_LiuLanQi::FBroCommandLine& rg_MingLingHang1);
     virtual void rg_ZhuCeZiDingYiFangAn (rg_FBrowser_LiuLanQi::FBroSchemeRegistrar& rg_FangAn);
     virtual void rg_LiuLanQi_ChuShiHuaWanBi ();
-    virtual void rg_LiuLanQi_JiJiangQiDongZiJinCheng (rg_FBrowser_LiuLanQi::FBroCommandLine& rg_MingLingHang1);
+    virtual void rg_LiuLanQi_JiJiangQiDongZiJinCheng (rg_FBrowser_LiuLanQi::FBroCommandLine& rg_MingLingHang2);
     virtual void rg_LiuLanQi_JiJiangQiDongXiaoXiDiaoDu (INT64 rg_YanChiShiJian);
     virtual void rg_XuanRan_JiJiangChuShiHuaWebKit ();
     virtual void rg_XuanRan_LiuLanQiChuangJian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi55, rg_FBrowser_value::FBroDictionaryValue& rg_EWaiXinXi3);
@@ -66,7 +66,7 @@ public:
     virtual void rg_XuanRan_JiJiangShiFangV8HuanJing (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi58, rg_FBrowser_LiuLanQi::FBroFrame& rg_KuangJia21, rg_FBrowser_LiuLanQi::FBroV8Context& rg_V8HuanJing3);
     virtual void rg_XuanRan_JiJiangBuHuoYiChang (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi59, rg_FBrowser_LiuLanQi::FBroFrame& rg_KuangJia22, rg_FBrowser_LiuLanQi::FBroV8Context& rg_V8HuanJing4, rg_FBrowser_LiuLanQi::FBroV8Exception& rg_V8YiChang1, rg_FBrowser_LiuLanQi::FBroV8StackTrace& rg_V8DuiZhanZongJi1);
     virtual void rg_XuanRan_JiaoDianJieDianGaiBian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi60, rg_FBrowser_LiuLanQi::FBroFrame& rg_KuangJia23, rg_FBrowser_LiuLanQi::FBroDOMNode& rg_DOMJieDian1);
-    virtual BOOL rg_XuanRan_ShouDaoXiaoXi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi61, rg_FBrowser_LiuLanQi::FBroFrame& rg_KuangJia24, INT rg_YuanJinCheng, rg_FBrowser_LiuLanQi::FBroProcessMessage& rg_XiaoXi13);
+    virtual BOOL rg_XuanRan_ShouDaoXiaoXi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi61, rg_FBrowser_LiuLanQi::FBroFrame& rg_KuangJia24, INT rg_YuanJinCheng, rg_FBrowser_LiuLanQi::FBroProcessMessage& rg_XiaoXi10);
     virtual void rg_XuanRan_ZaiRuZhuangTaiBeiGaiBian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi62, BOOL rg_ShiFouDouQuZhong, BOOL rg_KeHouTui, BOOL rg_KeQianJin);
     virtual void rg_XuanRan_ZaiRuKaiShi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi63, rg_FBrowser_LiuLanQi::FBroFrame& rg_KuangJia25, INT rg_GuoDuLeiXing2);
     virtual void rg_XuanRan_ZaiRuJieShu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi64, rg_FBrowser_LiuLanQi::FBroFrame& rg_KuangJia26, INT rg_ZhuangTaiMa5);

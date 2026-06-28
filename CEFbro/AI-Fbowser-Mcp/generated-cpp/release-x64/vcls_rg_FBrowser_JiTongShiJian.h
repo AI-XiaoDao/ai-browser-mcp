@@ -29,7 +29,7 @@ public:
 
 public:
     INT64 rg_GouBing;
-    INT rg_XiaoXi12;
+    INT rg_XiaoXi9;
     INT64 rg_wParam;
     INT64 rg_lParam;
     INT rg_ShiJian2;

@@ -55,7 +55,7 @@ public:
     INT rg_ShouCiJiHuo ();
     INT rg_BeiJiHuo ();
     INT rg_BeiQuXiaoJiHuo ();
-    INT rg_TuoPanShiJian (INT rg_CaoZuoLeiXing1);
+    INT rg_TuoPanShiJian (INT rg_CaoZuoLeiXing3);
     INT rg_WeiZhiXianZhi (rg_ChuangKouWeiZhiXianZhiXinXi& rg_WeiZhiXianZhiXinXi);
     INT rg_DuiHuaKuangYiChuShiHua ();
     virtual BOOL rg_XiaoXiGuoLu1 (INT rg_ChuangKouGouBing6, INT rg_XiaoXiZhi1, INT rg_XiaoXiCanShu2, INT rg_XiaoXiCanShu3, INT rg_XiaoXiDeZhi1);

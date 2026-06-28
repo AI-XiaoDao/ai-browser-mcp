@@ -20,7 +20,7 @@ public:
     virtual void SaveIntoStream (CVolBaseOutputStream& stream) override;
 
 public:
-    CVolString rg_RenWuID7;
+    CVolString rg_RenWuID8;
 };
 
 }

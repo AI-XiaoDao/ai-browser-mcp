@@ -27,6 +27,7 @@ public:
 protected:
     CVolString rg_CookieLieBiaoJSON;
     BOOL rg_ShouXiang;
+    INT rg_DangQianZongShu;
 };
 
 }

@@ -13,18 +13,30 @@ CVolString CALLBACK rg_MCPStdioQiao::rg_DouQuYiHang (INT64 rg_XianChengGouBing)
     HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
     if (hStdin == INVALID_HANDLE_VALUE || hStdin == NULL) return CVolString();
     std::vector<char> buf(4096);
+    DWORD emptyPolls = 0;
+    DWORD peekErrors = 0;
     for (;;) {
         if (*(volatile BOOL*)&rg_StdioYingTuiChu) return CVolString();
-        if (rg_XianChengGouBing != 0 && g_objVolApp.GetThreadPool().IsThreadNeedBreak((HVOLTHREAD)rg_XianChengGouBing, 0))
-            return CVolString();
         DWORD avail = 0;
-        if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail, NULL)) break;
-        if (avail == 0) { Sleep(50); continue; }
+        if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail, NULL)) {
+            DWORD err = GetLastError();
+            if (err == ERROR_BROKEN_PIPE || err == ERROR_NO_DATA || err == ERROR_PIPE_NOT_CONNECTED) {
+                break;
+            }
+            peekErrors++;
+            if (peekErrors > 10) break;
+            Sleep(50); continue;
+        }
+        peekErrors = 0;
+        if (avail == 0) {
+            emptyPolls++;
+            if (emptyPolls > 600) break;
+            Sleep(50); continue;
+        }
+        emptyPolls = 0;
         DWORD total = 0;
         while (total < 1048576) {
             if (*(volatile BOOL*)&rg_StdioYingTuiChu) return CVolString();
-            if (rg_XianChengGouBing != 0 && g_objVolApp.GetThreadPool().IsThreadNeedBreak((HVOLTHREAD)rg_XianChengGouBing, 0))
-                return CVolString();
             DWORD n = 0;
             DWORD toRead = (DWORD)min((size_t)(buf.size() - total - 1), (size_t)4096);
             if (!ReadFile(hStdin, &buf[total], toRead, &n, NULL) || n == 0) break;
@@ -51,28 +63,34 @@ CVolString CALLBACK rg_MCPStdioQiao::rg_DouQuYiHang (INT64 rg_XianChengGouBing)
     return (rg_volcano_base::rg_WenBenLei::rg_UTF8DaoWenBen (rg_HangZiJieJi));
 }
 
-void CALLBACK rg_MCPStdioQiao::rg_XieRuYiHang (CVolString& rg_string4)
+void CALLBACK rg_MCPStdioQiao::rg_XieRuYiHang (CVolString& rg_string3)
 {
-    std::string utf8 = CU8String(rg_string4.GetText()).GetText();
-    utf8 += "\n";
+    std::string utf8 = CU8String(rg_string3.GetText()).GetText();
+    DWORD contentLen = (DWORD)utf8.size();
+    char header[128];
+    int headerLen = snprintf(header, sizeof(header), "Content-Length: %lu\r\n\r\n", (unsigned long)contentLen);
+    std::string frame(header, headerLen);
+    frame += utf8;
+    frame += "\n";
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hOut == INVALID_HANDLE_VALUE || hOut == NULL) return;
     DWORD written = 0;
-    if (!WriteFile(hOut, utf8.c_str(), (DWORD)utf8.size(), &written, NULL))
+    if (!WriteFile(hOut, frame.c_str(), (DWORD)frame.size(), &written, NULL))
     {
+        *(volatile BOOL*)&rg_StdioYingTuiChu = TRUE;
         HANDLE hErr = GetStdHandle(STD_ERROR_HANDLE);
         if (hErr != INVALID_HANDLE_VALUE && hErr != NULL)
         {
-            const char* err = "[MCP-Stdio] stdout写入失败\n";
+            const char* err = "[MCP-Stdio] stdout写入失败, 服务即将退出\n";
             WriteFile(hErr, err, (DWORD)strlen(err), &written, NULL);
         }
     }
 }
 
-void CALLBACK rg_MCPStdioQiao::rg_XieRiZhi (CVolString& rg_string5)
+void CALLBACK rg_MCPStdioQiao::rg_XieRiZhi (CVolString& rg_string4)
 {
     std::string msg = "[MCP-Stdio] ";
-    msg += CU8String(rg_string5.GetText()).GetText();
+    msg += CU8String(rg_string4.GetText()).GetText();
     msg += "\n";
     HANDLE hErr = GetStdHandle(STD_ERROR_HANDLE);
     if (hErr == INVALID_HANDLE_VALUE || hErr == NULL) return;
@@ -102,7 +120,7 @@ void CALLBACK rg_MCPStdioQiao::rg_YunHangStdioZhuXunHuan (INT64 rg_XianChengGouB
 {
     rg_XieRiZhi (_CT2 (_T ("============================================")));
     rg_XieRiZhi (_CT2 (_T ("AI浏览器 MCP Stdio Server 启动")));
-    rg_XieRiZhi (_CT2 (_T ("协议: JSON-RPC 2.0 over stdin/stdout")));
+    rg_XieRiZhi (_CT2 (_T ("协议: JSON-RPC 2.0 over stdin/stdout (Content-Length 帧格式)")));
     rg_XieRiZhi (_CT2 (_T ("直连: Claude Desktop / Cursor / Trace 等任意AI工具")));
     rg_XieRiZhi (_CT2 (_T ("============================================")));
     do
@@ -146,7 +164,7 @@ void CALLBACK rg_MCPStdioQiao::rg_YunHangStdioZhuXunHuan (INT64 rg_XianChengGouB
 
 void CALLBACK rg_MCPStdioQiao::rg_QiDongBingHangStdioFuWu ()
 {
-    if ((BOOL)g_objVolApp.GetThreadPool ().IsThreadRunning (rg_StdioXianChengShiLi.data ().m_hThreadHandle))
+    if ((BOOL)g_objVolApp.GetThreadPool ().IsThreadRunning (rg_StdioXianChengShiLi.data ().m_hThreadHandle) || rg_MCPMingLingFuWuQi::rg_MCPZhengZaiGuanBi)
     {
         return;
     }
