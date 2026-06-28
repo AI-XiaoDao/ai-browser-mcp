@@ -10,7 +10,7 @@
 ```
 【开源】AI-Browser-MCP v2.8.0 — Windows 原生浏览器自动化 MCP 服务
 
-让 **任意 AI 代理**（Cursor / Claude / Cline / 自研 MCP 客户端）用自然语言操控真实浏览器：200+ browser_* 工具，导航/填表/读DOM/抓网络/CDP断点/爬虫一站式。
+让 **任意 AI 代理**（Cursor / Claude / Cline / 自研 MCP 客户端）用自然语言操控真实浏览器：268 browser_* 工具，导航/填表/读DOM/抓网络/CDP断点/爬虫一站式。
 
 🔥 原生优先：get_title/dom_*/get_frames 等 12+ 工具已去 JS 化，改用 FBrowser 原生 API
 🔥 自动启用：console_get / network list 首次使用自动开启，无需手动 enable

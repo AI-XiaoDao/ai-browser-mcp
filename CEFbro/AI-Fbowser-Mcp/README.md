@@ -55,9 +55,9 @@
 
 | 包 | 说明 |
 |----|------|
-| `AI-Fbowser-Mcp-x64-v2.8.0.zip` | 64 位 Windows, ~160MB |
-| `AI-Fbowser-Mcp-win32-v2.8.0.zip` | 32 位 Windows, ~140MB |
-| `AI-Fbowser-Mcp-cpp-*.zip` | C++ 生成源码（可选） |
+| `AI-Browser-MCP-x64-v2.8.0.zip` | 64 位 Windows, ~160MB |
+| `AI-Browser-MCP-win32-v2.8.0.zip` | 32 位 Windows, ~140MB |
+| `AI-Browser-MCP-cpp-*.zip` | C++ 生成源码（可选） |
 
 > 📦 所有历史版本: [Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 

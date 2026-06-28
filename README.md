@@ -21,7 +21,7 @@
 
 ## ✨ 一句话介绍
 
-下载 `AI-Browser-MCP-x64-v2.8.0.zip`（~157MB），解压运行 `AI-Browser-MCP.exe`。在 Cursor / Claude 里说句话，**268 个预封装工具**自动执行：采集数据、逆向 POST 加密、CDP 定位签名算法、自动填表。
+下载 `AI-Browser-MCP-x64-v2.8.0.zip`（~157MB），解压运行 `AI-Fbowser-Mcp.exe`。在 Cursor / Claude 里说句话，**268 个预封装工具**自动执行：采集数据、逆向 POST 加密、CDP 定位签名算法、自动填表。
 
 | 接入方式 | 适用 |
 |----------|------|
@@ -33,7 +33,7 @@
 
 ## ⚡ 3 步上手
 
-**1.** 下载 [x64](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)（~157MB）或 [win32](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)（~136MB）→ 解压 → 双击 **`AI-Browser-MCP.exe`**
+**1.** 下载 [x64](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)（~157MB）或 [win32](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)（~136MB）→ 解压 → 双击 **`AI-Fbowser-Mcp.exe`**
 
 **2.** 确认 [`http://127.0.0.1:9222/health`](http://127.0.0.1:9222/health) → `"status":"ok"`
 
