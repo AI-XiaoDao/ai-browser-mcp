@@ -3,14 +3,14 @@ contact_links:
   - name: 📖 客户使用手册
     url: https://github.com/AI-XiaoDao/ai-browser-mcp/blob/main/CEFbro/AI浏览器/docs/客户使用手册.md
     about: 安装、Cursor 配置、FAQ
-  - name: 🧰 217 工具参考
+  - name: 🧰 268 工具参考
     url: https://github.com/AI-XiaoDao/ai-browser-mcp/blob/main/CEFbro/AI浏览器/skills/AI浏览器MCP.md
     about: MCP 工具完整列表与参数
   - name: 💬 Discussions · 案例分享
     url: https://github.com/AI-XiaoDao/ai-browser-mcp/discussions
     about: 问答、Show and tell、使用技巧
   - name: 📦 下载 Release
-    url: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.6.0
+    url: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.0
     about: x64 / win32 运行包 + C++ 对照 zip
   - name: 💬 QQ 交流群
     url: https://qm.qq.com/q/Hpv6qm8qUE

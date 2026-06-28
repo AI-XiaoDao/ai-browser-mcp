@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        请先查阅 [217 工具参考](https://github.com/AI-XiaoDao/ai-browser-mcp/blob/main/CEFbro/AI浏览器/skills/AI浏览器MCP.md) 是否已有类似能力。
+        请先查阅 [268 工具参考](https://github.com/AI-XiaoDao/ai-browser-mcp/blob/main/CEFbro/AI浏览器/skills/AI浏览器MCP.md) 是否已有类似能力。
 
   - type: textarea
     id: problem
