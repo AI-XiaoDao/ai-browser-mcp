@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var MCP = { host: '127.0.0.1', port: 9222, http: '', ws: '', version: '2.6.0' };
+  var MCP = { host: '127.0.0.1', port: 9222, http: '', ws: '', version: '2.8.0' };
 
   function $(sel) { return document.querySelector(sel); }
   function $all(sel) { return document.querySelectorAll(sel); }

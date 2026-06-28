@@ -94,7 +94,7 @@ Repo: github.com/AI-XiaoDao/ai-browser-mcp
 
 
 
-**AI Browser MCP Server** is a **Windows-native local MCP service** built with Volcano IDE + FBrowser CEF. **Any MCP-compatible AI agent** — Cursor, Claude Desktop, Cline, OpenCode, or your own app — can drive a real browser with **217** `browser_*` tools via HTTP/WebSocket or `mcp_bridge.js`.
+**AI Browser MCP Server** is a **Windows-native local MCP service** built with Volcano IDE + FBrowser CEF. **Any MCP-compatible AI agent** — Cursor, Claude Desktop, Cline, OpenCode, or your own app — can drive a real browser with **268** `browser_*` tools via HTTP/WebSocket or `mcp_bridge.js`.
 
 
 
@@ -280,7 +280,7 @@ You describe the goal in Cursor
 
 | Offline | ✅ | ✅ | ❌ |
 
-| Pre-built tools | **217** | roll your own | vendor-dependent |
+| Pre-built tools | **268** | roll your own | vendor-dependent |
 
 | One-sentence run | ✅ scrape / reverse / locate | ❌ write scripts | ❌ write API calls |
 
@@ -462,7 +462,7 @@ https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.0
 
 | **Generated C++ reference** | `CEFbro/AI浏览器/generated-cpp/release-x64/` |
 
-| Docs & 217-tool reference | `docs/`, `skills/AI浏览器MCP.md` |
+| Docs & 268-tool reference | `docs/`, `skills/AI浏览器MCP.md` |
 
 | Bridge & tests | `mcp_bridge.js`, `run_all_tests.js` |
 
@@ -512,7 +512,7 @@ https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.0
 
 
 
-**AI Browser MCP Server** bridges the gap between AI assistants and a real Windows browser. Instead of asking Cursor to write Playwright scripts from scratch, you run a local exe that exposes **217** ready-made MCP tools.
+**AI Browser MCP Server** bridges the gap between AI assistants and a real Windows browser. Instead of asking Cursor to write Playwright scripts from scratch, you run a local exe that exposes **268** ready-made MCP tools.
 
 
 
