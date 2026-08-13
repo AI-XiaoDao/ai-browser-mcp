@@ -1,0 +1,72 @@
+# 火山 IDE 自动备份
+**/*.~vbak.wsv
+**/*.~vbak.vprj
+*.vhistory
+
+# 测试报告（运行 run_all_tests.js 可再生）
+**/*_report.json
+
+# Node
+node_modules/
+
+# 编译中间产物
+**/_int/
+
+# linker/ 为编译产物目录，禁止提交
+**/linker/out/
+
+# CEF 浏览器缓存（运行时生成）
+**/CacheData/
+
+# 成品大二进制走 GitHub Releases，不进 git
+release/**/*.exe
+release/**/*.dll
+release/**/*.pak
+release/**/*.bin
+release/**/*.dat
+release/**/libcef*
+
+# 本地打包产物与临时目录（勿提交）
+AI-Browser-MCP-*.zip
+AI-Browser-MCP-cpp-*.zip
+AI-Fbowser-Mcp-*.zip
+_gql*.json
+_release_staging/
+_release_staging_*/
+_verify_zip/
+_zip_test/
+
+# 运行时产物
+**/mcp_cache.db*
+**/mcp_connect.json
+**/log.txt
+**/.ai_browser.pid
+**/package.vhistory
+
+# linker 编译产物（源码在 src/）
+**/linker/*.exe
+**/linker/*.dll
+**/linker/*.pak
+**/linker/*.bin
+**/linker/*.dat
+
+# 火山技能书知识库 (本地安装, 不入库)
+/视窗模块源码wsv格式AI知识库/
+/视窗wsv源码demoAI知识库/
+/火山视窗AI辅助文件/
+/CEFbro/AI-Fbowser-Mcp/skills/火山系统API知识库/
+/CEFbro/AI-Fbowser-Mcp/skills/火山FB浏览器样例代码/
+/CEFbro/AI-Fbowser-Mcp/skills/火山FB浏览器官方模块使用示例代码/
+/CEFbro/AI-Fbowser-Mcp/skills/火山FB浏览器官方模块API/
+/CEFbro/AI-Fbowser-Mcp/skills/火山wsv文本格式语法手册.md
+/CEFbro/AI-Fbowser-Mcp/skills/火山视窗AI辅助文件/
+/.claude/skills/volcano-windows-dev/
+/.claude/skills/火山视窗AI辅助文件/
+/.claude/skills/火山wsv文本格式语法手册.md
+火山wsv文件格式标准.md
+/.claude/skills/输出文档/
+/.claude/skills/技能书README.md
+
+# 本地调试临时文件与崩溃转储（勿提交）
+.tmp_*.py
+*.dmp

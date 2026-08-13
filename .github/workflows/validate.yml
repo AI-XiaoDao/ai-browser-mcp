@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Node syntax check
+        run: |
+          node --check CEFbro/AI-Fbowser-Mcp/mcp_bridge.js
+          node --check CEFbro/AI-Fbowser-Mcp/mcp_client.js
+          node --check CEFbro/AI-Fbowser-Mcp/mcp_check.js
+          node --check CEFbro/AI-Fbowser-Mcp/full_test.js
+          node --check CEFbro/AI-Fbowser-Mcp/regression_sync_wait.js
+          node --check CEFbro/AI-Fbowser-Mcp/mcp_launcher.js
+
+      - name: JSON validate
+        run: |
+          node -e "
+          const fs=require('fs');
+          const path=require('path');
+          const files=[
+            '.mcp.json',
+            '.cursor/mcp.json',
+            'CEFbro/AI-Fbowser-Mcp/src/mcp_config.json',
+            'CEFbro/AI-Fbowser-Mcp/mcp_config.json'
+          ].filter(f=>fs.existsSync(f));
+          for (const f of files) JSON.parse(fs.readFileSync(f,'utf8'));
+          const wfDir='CEFbro/AI-Fbowser-Mcp/workflows';
+          for (const w of fs.readdirSync(wfDir).filter(x=>x.endsWith('.json')))
+            JSON.parse(fs.readFileSync(path.join(wfDir,w),'utf8'));
+          console.log('JSON OK', files.length + fs.readdirSync(wfDir).length, 'files');
+          "
+
+      - name: MCP config sync check
+        run: |
+          node -e "
+          const fs=require('fs');
+          const eqJson=(a,b)=>JSON.stringify(JSON.parse(fs.readFileSync(a)))===JSON.stringify(JSON.parse(fs.readFileSync(b)));
+          if(!eqJson('.mcp.json','.cursor/mcp.json')){console.error('.mcp.json vs .cursor/mcp.json mismatch');process.exit(1);}
+          console.log('MCP config sync OK');
+          "
+
+      - name: Block secrets pattern (quick scan)
+        run: |
+          ! grep -rI --include='*.js' --include='*.json' --include='*.md' --include='*.wsv' -i 'ghp_[A-Za-z0-9]\{20,\}\|github_pat_[A-Za-z0-9_]\{20,\}' . 2>/dev/null || (echo 'Possible secret found' && exit 1)

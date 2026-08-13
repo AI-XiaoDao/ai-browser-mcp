@@ -1,0 +1,35 @@
+name: ❓ 问答
+description: 安装、Cursor 配置、工具使用、编译相关问题
+title: "[Q&A]: "
+labels: ["Q&A"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 提问前请先
+
+        1. [客户使用手册](https://github.com/AI-XiaoDao/ai-browser-mcp/blob/main/CEFbro/AI浏览器/docs/客户使用手册.md)
+        2. [OPEN_SOURCE FAQ](https://github.com/AI-XiaoDao/ai-browser-mcp/blob/main/OPEN_SOURCE.md#常见问题faq)
+        3. `node mcp_bridge.js --check`
+
+  - type: textarea
+    id: question
+    attributes:
+      label: 你的问题
+      description: 环境（Release/自编译）、MCP 版本、已尝试步骤
+    validations:
+      required: true
+
+  - type: dropdown
+    id: topic
+    attributes:
+      label: 主题
+      options:
+        - 安装与启动
+        - Cursor / MCP 配置
+        - 工具调用
+        - 编译 / 火山 IDE
+        - VIP / CDP / Hook
+        - 其他
+    validations:
+      required: true

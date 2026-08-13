@@ -1,0 +1,124 @@
+=== 全量工具探测报告 ===
+总数: 255
+PASS: 143
+ROUTED(优雅报错,前置条件不满足): 40
+FAIL: 8
+SKIP(破坏性/状态污染): 64
+
+--- FAIL 明细 ---
+  browser_evaluate  → ⏱ 操作超时(3s) | task_id=task_97975109_43994_22 | 页面可能较慢, 请: ①增大max_ms重试 ②设async_only:true改异步 
+  browser_debugger_enable  → HTTP/异常: HTTP timeout
+  browser_debugger_resume  → HTTP/异常: HTTP timeout
+  browser_debugger_evaluate  → HTTP/异常: HTTP timeout
+  browser_debugger_script_source  → HTTP/异常: HTTP timeout
+  browser_cdp_call  → HTTP/异常: HTTP timeout
+  browser_cdp_event  → HTTP/异常: HTTP timeout
+  browser_reverse_search  → HTTP/异常: HTTP timeout
+
+--- ROUTED 明细 ---
+  browser_forward  → 无法前进 — 无导航历史 | 当前页面没有可前进的历史记录
+  browser_set_auto_resize  → ⛔ 嵌入式GUI浏览器不支持 set_auto_resize | 尺寸由主窗口 adjust_layout 管理
+  browser_move_window  → ⛔ 嵌入式GUI浏览器不支持 move_window | 窗口尺寸由主窗口自动管理
+  browser_dom_query  → null
+  browser_dom_set_value  → element not found: input
+  browser_dom_checked  [预期优雅,实际: [无法序列化的值] 可能原因: ①JS返回了DOM对象/函数等(建议JSON.stringify()]
+  browser_dom_selected  [预期优雅,实际: [无法序列化的值] 可能原因: ①JS返回了DOM对象/函数等(建议JSON.stringify()]
+  browser_fingerprint  → 未知action: get | 支持: clear/count/canvas_random/webgl_random/audio_random/audio_param/webrtc
+  browser_intercept  → 参数 url 不能为空
+  browser_screenshot  → 不支持的截图格式: test | 仅支持 png/jpeg/webp
+  browser_wait  [预期优雅,实际: 未知what: load | 支持: selector/text/timeout/load_end/]
+  browser_debugger_step_over  → 页面未处于暂停状态 | 请先 debugger_flow 或 debugger_enable + 断点 + wait_paused
+  browser_debugger_step_into  → 页面未处于暂停状态 | 请先 debugger_flow 或 debugger_enable + 断点 + wait_paused
+  browser_debugger_step_out  → 页面未处于暂停状态 | 请先 debugger_flow 或 debugger_enable + 断点 + wait_paused
+  browser_debugger_stack  → 页面未处于暂停状态 | 请先 debugger_flow 或 debugger_enable + 断点 + wait_paused
+  browser_debugger_last_paused  → 尚无 Debugger.paused 事件 | 请先 enable + 断点 + 触发暂停
+  browser_debugger_inspect  → 缺少 call_frame_id | 请先 browser_debugger_wait_paused 或 browser_debugger_last_paused
+  browser_is_same  → other_id 必须为正整数
+  browser_find_by_tag  → 未找到标识为: none 的浏览器
+  browser_find_by_hwnd  → hwnd 参数不能为空 | 请查看工具描述补全必填参数
+  browser_ipc_send_to  → process_id 必须为正整数
+  mcp_result  → 未找到任务结果: task_nonexistent_test | 可能原因: ①任务仍在执行(2-5秒后重试) ②request_id拼写错误 ③任务已过期被清理 | 💡大多数工
+  workflow_get  → 工作流不存在: test
+  browser_vip_fingerprint_media_devices  → 未知target: test | 支持 audio_input/audio_output/video_input
+  browser_vip_dom_search  → 需要query或search_id参数
+  browser_reverse_hook  → 未知type: links | 支持: function_call/xhr_fetch/websocket/eval_dynamic/cookie_set
+  browser_reverse_strings  → 未知mode: test | 支持: suspicious/decrypt_array
+  browser_reverse_instrument  → 未知mode: test | 支持: transparent/interpreter
+  browser_reverse_profile  → 未知action: get | 支持: start/start_precise/stop/query
+  browser_reverse_dom_breakpoint  → 未知type: links
+  browser_reverse_websocket  → 未知action: get | 支持: enable/query
+  browser_reverse_heap  → 未知action: get | 支持: snapshot/start_sampling/stop_sampling/get_object
+  browser_reverse_runtime  → 未知action: get | 支持: properties/evaluate/global
+  browser_reverse_network_intercept  → 未知action: get | 支持: enable/disable
+  browser_reverse_extract  → 未知mode: test | 支持: scan/download/analyze
+  browser_permission_spoof  → 未知action: get | 支持: apply/spoof/reset/remove
+  browser_retry  → retry 需要 tool 参数: 要重试的MCP工具名
+  browser_canvas_noise  → 未知action: get | 支持: inject/enable/remove/disable
+  browser_reverse_hook_multi  → functions 需要JSON数组: ["fn1","obj.fn2"]
+  browser_fill_form  → fields JSON解析失败 | 格式: [{"selector":"#id","value":"文本"},...]
+
+--- SKIP 明细 ---
+  browser_open_devtools
+  browser_close_devtools
+  browser_create
+  browser_close
+  browser_close_try
+  browser_find
+  browser_stop_find
+  browser_print
+  browser_print_to_pdf
+  browser_set_cookie
+  browser_delete_cookies
+  browser_clear_cache
+  browser_clear_cache_browser
+  browser_set_proxy
+  browser_clear_proxy
+  browser_start_download
+  browser_download_image
+  browser_edit_cut
+  browser_edit_copy
+  browser_edit_paste
+  browser_shutdown
+  browser_inject
+  browser_debugger_set_breakpoint
+  browser_debugger_wait_paused
+  browser_debugger_flow
+  browser_debugger_auto
+  browser_set_parent
+  browser_file_dialog
+  browser_vip_websocket_intercept
+  workflow_run
+  workflow_stop
+  browser_set_preference
+  browser_vip_disable_debugger
+  browser_set_window_style
+  browser_fingerprint_appname
+  browser_fingerprint_pixel_ratio
+  browser_vip_set_css_version
+  browser_vip_set_web_version
+  browser_vip_set_v8_version
+  browser_vip_send_devtools_msg
+  browser_fingerprint_screen_xy
+  browser_vip_mouse_press
+  browser_vip_mouse_release
+  browser_vip_key_input
+  browser_vip_key_type
+  browser_fingerprint_cookie_enabled
+  browser_fingerprint_java_enabled
+  browser_fingerprint_online
+  browser_fingerprint_appcodename
+  browser_fingerprint_appversion
+  browser_vip_enable_js_env
+  browser_vip_set_is_trusted
+  browser_vip_enable_inspector
+  browser_fingerprint_product_sub
+  browser_fingerprint_vendor_sub
+  browser_vip_fingerprint_canvas_fixed
+  browser_vip_fingerprint_webgl_fixed
+  browser_vip_fingerprint_audio_fixed
+  browser_vip_disable_console
+  browser_vip_load_extension
+  browser_vip_unload_extension
+  browser_vip_extension_info
+  browser_vip_execute_js_context
+  browser_vip_enable_devtools_observer

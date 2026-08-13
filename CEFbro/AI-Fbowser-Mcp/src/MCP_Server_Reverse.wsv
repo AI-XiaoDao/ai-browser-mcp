@@ -1,0 +1,811 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+包 火山.程序
+# MCP_逆向分派 — JS逆向+CDP Hook (v2.6.2)
+类 MCP_逆向分派 <公开 @全局类 = 真>
+{
+    方法 分类分派_逆向操作 <公开 静态 类型 = 文本型>
+    参数 命令ID <类型 = 文本型>
+    参数 方法名 <类型 = 文本型>
+    参数 参数JSON <类型 = YYJSON只读对象类>
+    {
+        子文本替换 (方法名, "browser.", "browser_", , , 假)
+        如果 (方法名 == "browser_reverse_profile")
+        {
+            变量 prAction <类型 = 文本型>
+            prAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (prAction == "")
+            {
+                prAction = "start"
+            }
+            如果 (prAction == "start")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Profiler.enable", "{}"))
+            }
+            否则 (prAction == "start_precise")
+            {
+                变量 prPreciseParams <类型 = YYJSON对象类>
+                prPreciseParams.创建自文本 ("{}")
+                prPreciseParams.加入整数成员 ("interval", 100)
+                prPreciseParams.加入整数成员 ("maxDepth", 32)
+                MCP命令服务器.执行逆向CDP命令 (命令ID + "_pre", "Profiler.setSamplingInterval", prPreciseParams.到可读文本 (YYJSON格式化选项.压缩))
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Profiler.enable", "{}"))
+            }
+            否则 (prAction == "stop")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Profiler.stop", "{}"))
+            }
+            否则 (prAction == "query")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Profiler.getBestEffortCoverage", "{}"))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, "未知action: " + prAction + " | 支持: start/start_precise/stop/query"))
+        }
+        否则 (方法名 == "browser_reverse_dom_breakpoint")
+        {
+            变量 dbType <类型 = 文本型>
+            dbType = MCP命令服务器.yyjson取文本 (参数JSON, "type")
+            如果 (dbType == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "需要 type 参数 | 支持: xhr/fetch/dom_event/timer(target:setTimeout/setInterval/默认requestAnimationFrame)"))
+            }
+            变量 dbTarget <类型 = 文本型>
+            dbTarget = MCP命令服务器.yyjson取文本 (参数JSON, "target")
+            如果 (dbType == "xhr" || dbType == "fetch")
+            {
+                变量 dbXhrParams <类型 = YYJSON对象类>
+                dbXhrParams.创建自文本 ("{}")
+                变量 dbUrl <类型 = 文本型>
+                dbUrl = "*"
+                如果 (dbTarget != "")
+                {
+                    dbUrl = dbTarget
+                }
+                dbXhrParams.加入文本成员 ("url", dbUrl)
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "DOMDebugger.setXHRBreakpoint", dbXhrParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            否则 (dbType == "dom_event")
+            {
+                如果 (dbTarget == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "dom_event需要target参数 | 事件名: click/submit/load/error/change"))
+                }
+                变量 dbDomParams <类型 = YYJSON对象类>
+                dbDomParams.创建自文本 ("{}")
+                dbDomParams.加入文本成员 ("eventName", dbTarget)
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "DOMDebugger.setEventListenerBreakpoint", dbDomParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            否则 (dbType == "timer")
+            {
+                变量 dbTimerEvent <类型 = 文本型>
+                dbTimerEvent = "requestAnimationFrame"
+                如果 (dbTarget == "setTimeout" || dbTarget == "setInterval")
+                {
+                    dbTimerEvent = dbTarget
+                }
+                变量 dbTimerParams <类型 = YYJSON对象类>
+                dbTimerParams.创建自文本 ("{}")
+                dbTimerParams.加入文本成员 ("eventName", dbTimerEvent)
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "DOMDebugger.setInstrumentationBreakpoint", dbTimerParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, "未知type: " + dbType))
+        }
+        否则 (方法名 == "browser_reverse_cdp_hook")
+        {
+            变量 chFuncName <类型 = 文本型>
+            chFuncName = MCP命令服务器.yyjson取文本 (参数JSON, "function_name")
+            变量 chObjectId <类型 = 文本型>
+            chObjectId = MCP命令服务器.yyjson取文本 (参数JSON, "object_id")
+            如果 (chObjectId == "" && chFuncName == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "需要 object_id 或 function_name"))
+            }
+            如果 (chObjectId == "" && chFuncName != "")
+            {
+                // 通过函数名自动获取objectId: Runtime.evaluate → result.objectId (完整链路)
+                变量 chEvalParams <类型 = YYJSON对象类>
+                chEvalParams.创建自文本 ("{}")
+                chEvalParams.加入文本成员 ("expression", chFuncName)
+                chEvalParams.加入文本成员 ("objectGroup", "reverse_cdp_hook")
+                chEvalParams.加入逻辑值成员 ("returnByValue", 假)
+                chEvalParams.加入逻辑值成员 ("generatePreview", 假)
+                变量 chEvalID <类型 = 文本型>
+                chEvalID = "cdp_hook_eval_" + 到文本 (取启动时间 ()) + "_" + 到文本 (取随机数 (1000, 9999))
+                变量 chEvalRes <类型 = 文本型>
+                chEvalRes = MCP命令服务器.执行CDP并同步等待 (chEvalID, "Runtime.evaluate", chEvalParams.到可读文本 (YYJSON格式化选项.压缩), 8000)
+                如果 (MCP命令服务器.CDP同步结果是否成功 (chEvalRes))
+                {
+                    变量 chEvalParse <类型 = YYJSON只读对象类>
+                    如果 (chEvalParse.创建自文本 (chEvalRes))
+                    {
+                        变量 chResultTxt <类型 = 文本型>
+                        chResultTxt = MCP命令服务器.yyjson取文本 (chEvalParse, "result")
+                        如果 (chResultTxt != "")
+                        {
+                            变量 chCdpParse <类型 = YYJSON只读对象类>
+                            如果 (chCdpParse.创建自文本 (chResultTxt))
+                            {
+                                变量 chRemote <类型 = YYJSON只读对象类>
+                                chRemote = chCdpParse.取对象 ("result")
+                                如果 (chRemote.是否为空 () == 假)
+                                {
+                                    chObjectId = MCP命令服务器.yyjson取文本 (chRemote, "objectId")
+                                }
+                            }
+                        }
+                    }
+                }
+                如果 (chObjectId == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "无法获取函数 objectId | function_name: " + chFuncName + " | 确认该函数在全局作用域可直接访问, 或改用 browser_evaluate 取得 objectId 后传 object_id 参数"))
+                }
+            }
+            变量 chCondition <类型 = 文本型>
+            chCondition = MCP命令服务器.yyjson取文本 (参数JSON, "condition")
+            变量 chParams <类型 = YYJSON对象类>
+            chParams.创建自文本 ("{}")
+            如果 (chObjectId != "")
+            {
+                // CDP Debugger.setBreakpointOnFunctionCall 要求参数名为 functionObjectId, 非 objectId
+                chParams.加入文本成员 ("functionObjectId", chObjectId)
+            }
+            如果 (chCondition != "")
+            {
+                chParams.加入文本成员 ("condition", chCondition)
+            }
+            返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Debugger.setBreakpointOnFunctionCall", chParams.到可读文本 (YYJSON格式化选项.压缩)))
+        }
+        否则 (方法名 == "browser_reverse_call_fn")
+        {
+            // 无浏览器预检: 避免CDP同步等待白等8秒后报误导性错误
+            变量 cfBrowser预检 <类型 = 类_FBrowser_浏览器>
+            cfBrowser预检 = MCP命令服务器.取主浏览器 ()
+            如果 (cfBrowser预检.是否为空 () || cfBrowser预检.是否已关闭 ())
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+            }
+            变量 cfObjectId <类型 = 文本型>
+            cfObjectId = MCP命令服务器.yyjson取文本 (参数JSON, "object_id")
+            变量 cfFuncName <类型 = 文本型>
+            cfFuncName = MCP命令服务器.yyjson取文本 (参数JSON, "function_name")
+            // 宿主模式: 调用方同时传 object_id(宿主对象) + function_name(方法名) → this绑定宿主
+            变量 cfHostMode <类型 = 逻辑型 值 = 假>
+            如果 (cfObjectId != "" && cfFuncName != "")
+            {
+                cfHostMode = 真
+            }
+            // 纯算法调用增强: 支持 function_name 直调, 自动 Runtime.evaluate 解析 objectId (免手动取objectId)
+            如果 (cfObjectId == "" && cfFuncName != "")
+            {
+                变量 cfEvalParams <类型 = YYJSON对象类>
+                cfEvalParams.创建自文本 ("{}")
+                cfEvalParams.加入文本成员 ("expression", cfFuncName)
+                cfEvalParams.加入文本成员 ("objectGroup", "reverse_call_fn")
+                cfEvalParams.加入逻辑值成员 ("returnByValue", 假)
+                cfEvalParams.加入逻辑值成员 ("generatePreview", 假)
+                变量 cfEvalID <类型 = 文本型>
+                cfEvalID = "call_fn_eval_" + 到文本 (取启动时间 ()) + "_" + 到文本 (取随机数 (1000, 9999))
+                变量 cfEvalRes <类型 = 文本型>
+                cfEvalRes = MCP命令服务器.执行CDP并同步等待 (cfEvalID, "Runtime.evaluate", cfEvalParams.到可读文本 (YYJSON格式化选项.压缩), 8000)
+                如果 (MCP命令服务器.CDP同步结果是否成功 (cfEvalRes))
+                {
+                    变量 cfEvalParse <类型 = YYJSON只读对象类>
+                    如果 (cfEvalParse.创建自文本 (cfEvalRes))
+                    {
+                        变量 cfResultTxt <类型 = 文本型>
+                        cfResultTxt = MCP命令服务器.yyjson取文本 (cfEvalParse, "result")
+                        如果 (cfResultTxt != "")
+                        {
+                            变量 cfCdpParse <类型 = YYJSON只读对象类>
+                            如果 (cfCdpParse.创建自文本 (cfResultTxt))
+                            {
+                                变量 cfRemote <类型 = YYJSON只读对象类>
+                                cfRemote = cfCdpParse.取对象 ("result")
+                                如果 (cfRemote.是否为空 () == 假)
+                                {
+                                    cfObjectId = MCP命令服务器.yyjson取文本 (cfRemote, "objectId")
+                                }
+                            }
+                        }
+                    }
+                }
+                如果 (cfObjectId == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "无法获取函数 objectId | function_name: " + cfFuncName + " | 确认该函数在全局作用域可直接访问, 或改用 browser_cdp_call {method:'Runtime.evaluate', params:'{\"expression\":\"函数名\",\"returnByValue\":false}'} 取 objectId 后传 object_id"))
+                }
+            }
+            如果 (cfObjectId == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "需要 object_id 或 function_name"))
+            }
+            // arguments: JSON数组内联进 functionDeclaration (规避CDP通道CBOR对arguments数组反序列化失败)
+            // JSON字面量即合法JS字面量, 类型天然保留 (数字/逻辑值/null/嵌套结构原样)
+            变量 cfArgsRaw <类型 = 文本型>
+            cfArgsRaw = MCP命令服务器.yyjson取JSON文本 (参数JSON, "arguments")
+            变量 cfArgsText <类型 = 文本型>
+            cfArgsText = MCP命令服务器.yyjson取文本 (参数JSON, "args")
+            如果 (cfArgsRaw == "" && cfArgsText != "")
+            {
+                cfArgsRaw = "[\"" + MCP_响应构建.JSON转义文本 (cfArgsText) + "\"]"
+            }
+            如果 (cfArgsRaw == "")
+            {
+                cfArgsRaw = "[]"
+            }
+            否则
+            {
+                // 前导/尾部空白修剪后再判断数组形态 (防" [1,2]"被误包装成数组套数组)
+                cfArgsRaw = 删首尾空 (cfArgsRaw)
+                如果 (是否以 (cfArgsRaw, "[") == 假)
+                {
+                    // 非数组JSON文本(裸字符串/数字/对象): 包装为单元素数组
+                    // 防裸字符串被apply当类数组拆成单字符参数
+                    cfArgsRaw = "[" + cfArgsRaw + "]"
+                }
+            }
+            // functionDeclaration: 宿主模式this绑定宿主对象(方法内this依赖可用); 纯算法模式this=函数自身
+            变量 cfDecl <类型 = 文本型>
+            如果 (cfHostMode)
+            {
+                cfDecl = "function(){var __f=this['" + MCP命令服务器.简单转义JS (cfFuncName) + "'];return __f.apply(this," + cfArgsRaw + ")}"
+            }
+            否则
+            {
+                cfDecl = "function(){return this.apply(this," + cfArgsRaw + ")}"
+            }
+            变量 cfParamsText <类型 = 文本型>
+            cfParamsText = "{\"objectId\":\"" + MCP_响应构建.JSON转义文本 (cfObjectId) + "\",\"functionDeclaration\":\"" + MCP_响应构建.JSON转义文本 (cfDecl) + "\",\"returnByValue\":true}"
+            返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Runtime.callFunctionOn", cfParamsText))
+        }
+        否则 (方法名 == "browser_reverse_preload")
+        {
+            变量 plCode <类型 = 文本型>
+            plCode = MCP命令服务器.yyjson取文本 (参数JSON, "code")
+            如果 (plCode == "")
+            {
+                // 从 file 参数加载JS文件内容 (非直接用文件路径当源码)
+                变量 plFile <类型 = 文本型>
+                plFile = MCP命令服务器.yyjson取文本 (参数JSON, "file")
+                如果 (plFile != "")
+                {
+                    如果 (MCP命令服务器.验证安全路径 (plFile, 真) == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "文件路径不合法: " + plFile))
+                    }
+                    变量 plFileBytes <类型 = 字节集类>
+                    plFileBytes = 读入文件 (plFile)
+                    如果 (取字节集长度 (plFileBytes) > 0)
+                    {
+                        plCode = UTF8到文本 (plFileBytes)
+                    }
+                }
+            }
+            如果 (plCode == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "需要 code(JS代码) 或 file(JS文件路径)"))
+            }
+            变量 plParams <类型 = YYJSON对象类>
+            plParams.创建自文本 ("{}")
+            plParams.加入文本成员 ("source", plCode)
+            plParams.加入逻辑值成员 ("runImmediately", 真)
+            返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Page.addScriptToEvaluateOnNewDocument", plParams.到可读文本 (YYJSON格式化选项.压缩)))
+        }
+        否则 (方法名 == "browser_reverse_websocket")
+        {
+            变量 wsAction <类型 = 文本型>
+            wsAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (wsAction == "")
+            {
+                wsAction = "enable"
+            }
+            如果 (wsAction == "enable")
+            {
+                // Network.enable 仅需调用一次 (附带 maxPostDataSize)
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Network.enable", "{\"maxPostDataSize\":65536}"))
+            }
+            否则 (wsAction == "query")
+            {
+                // Network.getResponseBody 必须提供 requestId 参数
+                变量 wsReqId <类型 = 文本型>
+                wsReqId = MCP命令服务器.yyjson取文本 (参数JSON, "request_id")
+                如果 (wsReqId == "")
+                {
+                    wsReqId = MCP命令服务器.yyjson取文本 (参数JSON, "requestId")
+                }
+                如果 (wsReqId == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "query 需要 request_id (从Network.requestWillBeSent事件获取)"))
+                }
+                变量 wsQueryParams <类型 = YYJSON对象类>
+                wsQueryParams.创建自文本 ("{}")
+                wsQueryParams.加入文本成员 ("requestId", wsReqId)
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Network.getResponseBody", wsQueryParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, "未知action: " + wsAction + " | 支持: enable/query"))
+        }
+        否则 (方法名 == "browser_reverse_heap")
+        {
+            变量 hpAction <类型 = 文本型>
+            hpAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (hpAction == "")
+            {
+                hpAction = "snapshot"
+            }
+            如果 (hpAction == "snapshot")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "HeapProfiler.takeHeapSnapshot", "{\"reportProgress\":false}"))
+            }
+            否则 (hpAction == "start_sampling")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "HeapProfiler.startSampling", "{\"samplingInterval\":32768}"))
+            }
+            否则 (hpAction == "stop_sampling")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "HeapProfiler.stopSampling", "{}"))
+            }
+            否则 (hpAction == "get_object")
+            {
+                变量 hpObjId <类型 = 文本型>
+                hpObjId = MCP命令服务器.yyjson取文本 (参数JSON, "object_id")
+                如果 (hpObjId == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "get_object 需要 object_id"))
+                }
+                变量 hpObjParams <类型 = YYJSON对象类>
+                hpObjParams.创建自文本 ("{}")
+                hpObjParams.加入文本成员 ("objectId", hpObjId)
+                hpObjParams.加入文本成员 ("objectGroup", "reverse_heap")
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "HeapProfiler.getObjectByHeapObjectId", hpObjParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, "未知action: " + hpAction + " | 支持: snapshot/start_sampling/stop_sampling/get_object"))
+        }
+        否则 (方法名 == "browser_reverse_runtime")
+        {
+            变量 rtAction <类型 = 文本型>
+            rtAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (rtAction == "")
+            {
+                rtAction = "properties"
+            }
+            如果 (rtAction == "properties")
+            {
+                变量 rtObjId <类型 = 文本型>
+                rtObjId = MCP命令服务器.yyjson取文本 (参数JSON, "object_id")
+                如果 (rtObjId == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "properties 需要 object_id"))
+                }
+                变量 rtParams <类型 = YYJSON对象类>
+                rtParams.创建自文本 ("{}")
+                rtParams.加入文本成员 ("objectId", rtObjId)
+                rtParams.加入逻辑值成员 ("ownProperties", 真)
+                rtParams.加入逻辑值成员 ("generatePreview", 真)
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Runtime.getProperties", rtParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            否则 (rtAction == "evaluate")
+            {
+                变量 rtExpr <类型 = 文本型>
+                rtExpr = MCP命令服务器.yyjson取文本 (参数JSON, "expression")
+                如果 (rtExpr == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "evaluate 需要 expression"))
+                }
+                // v2.8.2: return_by_value 可选 (默认true); 传false返回objectId, 供 browser_reverse_call_fn 直接调用
+                // 兼容真布尔(schema声明boolean)与文本"false"/"0"两种传参
+                变量 rbvVal <类型 = 逻辑型>
+                rbvVal = MCP命令服务器.yyjson取逻辑_默认 (参数JSON, "return_by_value", 真)
+                变量 rtEvalParams <类型 = YYJSON对象类>
+                rtEvalParams.创建自文本 ("{}")
+                rtEvalParams.加入文本成员 ("expression", rtExpr)
+                rtEvalParams.加入逻辑值成员 ("returnByValue", rbvVal)
+                rtEvalParams.加入逻辑值成员 ("generatePreview", 真)
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Runtime.evaluate", rtEvalParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            否则 (rtAction == "global")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Runtime.globalLexicalScopeNames", "{}"))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, "未知action: " + rtAction + " | 支持: properties/evaluate/global"))
+        }
+        否则 (方法名 == "browser_reverse_network_intercept")
+        {
+            变量 niAction <类型 = 文本型>
+            niAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (niAction == "")
+            {
+                niAction = "enable"
+            }
+            如果 (niAction == "enable")
+            {
+                变量 niPattern <类型 = 文本型>
+                niPattern = MCP命令服务器.yyjson取文本 (参数JSON, "url_pattern")
+                变量 niParams <类型 = YYJSON对象类>
+                niParams.创建自文本 ("{}")
+                如果 (niPattern != "")
+                {
+                    变量 niPatArr <类型 = YYJSON数组类>
+                    niPatArr.创建自文本数据 (MCP命令服务器.取空文本数组 ())
+                    niPatArr.加入文本成员 (niPattern)
+                    niParams.加入数组成员 ("patterns", niPatArr)
+                }
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Network.setRequestInterception", niParams.到可读文本 (YYJSON格式化选项.压缩)))
+            }
+            否则 (niAction == "disable")
+            {
+                返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Network.setRequestInterception", "{\"patterns\":[]}"))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, "未知action: " + niAction + " | 支持: enable/disable"))
+        }
+        // === v2.8.1 逆向定位/解密能力 (内核JS通道同步返回) ===
+        否则 (方法名 == "browser_reverse_scan_crypto")
+        {
+            // 加密算法特征扫描: MD5/AES/SHA/XOR/自定义base64表/RSA 特征定位
+            变量 scBrowser <类型 = 类_FBrowser_浏览器>
+            scBrowser = MCP命令服务器.取主浏览器 ()
+            如果 (scBrowser.是否为空 () == 假 && scBrowser.是否已关闭 () == 假)
+            {
+                变量 scCode <类型 = 文本型>
+                scCode = "(function(){var FE={md5:['67452301','0123456789abcdef'],aes:['637c777bf26b6fc5','63,0x7c,0x77,0x7b'],sha:['6a09e667','bb67ae85'],cryptojs:['CryptoJS'],custom_b64:['ABCDEFGHIJKLMNOPQRSTUVWXYZ'],rsa:['modulus','BigInt'],xor:[]};var out=[];var ss=document.querySelectorAll('script');"
+                scCode = scCode + "for(var i=0;i<ss.length;i++){var t=ss[i].textContent||'';if(t.length<50)continue;var found={};"
+                scCode = scCode + "if(t.indexOf('67452301')!==-1||(t.indexOf('0123456789abcdef')!==-1&&t.indexOf('0123456789abcdefghijklmnopqrstuvwxyz')===-1))found.md5=1;"
+                scCode = scCode + "if(t.indexOf('637c777b')!==-1||t.indexOf('63,0x7c,0x77')!==-1)found.aes=1;"
+                scCode = scCode + "if(t.indexOf('6a09e667')!==-1||t.indexOf('bb67ae85')!==-1)found.sha=1;"
+                scCode = scCode + "if(t.indexOf('CryptoJS')!==-1)found.cryptojs=1;"
+                scCode = scCode + "var b64t=t.match(/[A-Za-z0-9+/]{64,}={0,2}/);if(b64t&&b64t[0].indexOf('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/')===-1)found.custom_b64=b64t[0].substring(0,64);"
+                scCode = scCode + "if(t.indexOf('modulus')!==-1&&t.indexOf('BigInt')!==-1)found.rsa=1;"
+                scCode = scCode + "var keys=Object.keys(found);if(keys.length){out.push({script:i,src:(ss[i].src||'inline').substring(0,200),len:t.length,found:found});}}"
+                scCode = scCode + "return JSON.stringify({count:out.length,scripts:out});})()"
+                变量 scWanted <类型 = 整数>
+                scWanted = MCP命令服务器.取同步等待毫秒 (方法名, 参数JSON)
+                变量 scTaskID <类型 = 文本型>
+                scTaskID = MCP命令服务器.生成异步任务ID ()
+                变量 scSubmit <类型 = 文本型>
+                scSubmit = MCP命令服务器.提交异步JS任务 (scBrowser, scCode, scTaskID)
+                如果 (是否以 (scSubmit, "{\"error\""))
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_主框架无效))
+                }
+                变量 scStore <类型 = 文本型>
+                scStore = MCP命令服务器.同步等待异步任务 (scTaskID, scWanted)
+                如果 (scStore == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "加密特征扫描超时 | 页面脚本过多, 可先browser_wait等加载完成"))
+                }
+                变量 scWrap <类型 = YYJSON只读对象类>
+                如果 (scWrap.创建自文本 (scStore))
+                {
+                    如果 (MCP命令服务器.yyjson取逻辑 (scWrap, "success") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "扫描错误: " + MCP命令服务器.yyjson取文本 (scWrap, "error")))
+                    }
+                    变量 scMsg <类型 = 文本型>
+                    scMsg = MCP命令服务器.yyjson取文本 (scWrap, "message")
+                    如果 (scMsg != "")
+                    {
+                        变量 scData <类型 = YYJSON对象类>
+                        scData.创建自文本 ("{}")
+                        scData.加入逻辑值成员 ("success", 真)
+                        scData.加入文本成员 ("scan_json", scMsg)
+                        返回 (MCP_响应构建.命令成功_原始JSON (命令ID, scData.到可读文本 (YYJSON格式化选项.压缩)))
+                    }
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, "扫描结果解析失败"))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+        }
+        否则 (方法名 == "browser_reverse_string_refs")
+        {
+            // 字符串引用定位: 指定字符串在哪些脚本的哪个位置出现 (定位密钥/常量使用点)
+            变量 srValue <类型 = 文本型>
+            srValue = MCP命令服务器.yyjson取文本 (参数JSON, "value")
+            如果 (srValue == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "value " + MCP_常量.错误_缺少参数))
+            }
+            变量 srBrowser <类型 = 类_FBrowser_浏览器>
+            srBrowser = MCP命令服务器.取主浏览器 ()
+            如果 (srBrowser.是否为空 () == 假 && srBrowser.是否已关闭 () == 假)
+            {
+                变量 srMax <类型 = 整数>
+                srMax = MCP命令服务器.yyjson取整数 (参数JSON, "max_results")
+                如果 (srMax <= 0 || srMax > 50)
+                {
+                    srMax = 20
+                }
+                变量 srEsc <类型 = 文本型>
+                srEsc = MCP命令服务器.简单转义JS (srValue)
+                变量 srCode <类型 = 文本型>
+                srCode = "(function(){var v='" + srEsc + "';var MAX=" + 到文本 (srMax) + ";var out=[];var ss=document.querySelectorAll('script');"
+                srCode = srCode + "for(var i=0;i<ss.length&&out.length<MAX;i++){var t=ss[i].textContent||'';var pos=0;while((pos=t.indexOf(v,pos))!==-1&&out.length<MAX){var before=t.substring(Math.max(0,pos-100),pos);var after=t.substring(pos+v.length,pos+v.length+100);var line=1;for(var j=0;j<pos;j++){if(t.charAt(j)==='\\n')line++;}out.push({script:i,src:(ss[i].src||'inline').substring(0,200),line:line,index:pos,before:before,after:after});pos+=v.length;}}"
+                srCode = srCode + "return JSON.stringify({count:out.length,refs:out});})()"
+                变量 srWanted <类型 = 整数>
+                srWanted = MCP命令服务器.取同步等待毫秒 (方法名, 参数JSON)
+                变量 srTaskID <类型 = 文本型>
+                srTaskID = MCP命令服务器.生成异步任务ID ()
+                变量 srSubmit <类型 = 文本型>
+                srSubmit = MCP命令服务器.提交异步JS任务 (srBrowser, srCode, srTaskID)
+                如果 (是否以 (srSubmit, "{\"error\""))
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_主框架无效))
+                }
+                变量 srStore <类型 = 文本型>
+                srStore = MCP命令服务器.同步等待异步任务 (srTaskID, srWanted)
+                如果 (srStore == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "引用定位超时"))
+                }
+                变量 srWrap <类型 = YYJSON只读对象类>
+                如果 (srWrap.创建自文本 (srStore))
+                {
+                    如果 (MCP命令服务器.yyjson取逻辑 (srWrap, "success") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "定位错误: " + MCP命令服务器.yyjson取文本 (srWrap, "error")))
+                    }
+                    变量 srMsg <类型 = 文本型>
+                    srMsg = MCP命令服务器.yyjson取文本 (srWrap, "message")
+                    如果 (srMsg != "")
+                    {
+                        变量 srData <类型 = YYJSON对象类>
+                        srData.创建自文本 ("{}")
+                        srData.加入逻辑值成员 ("success", 真)
+                        srData.加入文本成员 ("refs_json", srMsg)
+                        返回 (MCP_响应构建.命令成功_原始JSON (命令ID, srData.到可读文本 (YYJSON格式化选项.压缩)))
+                    }
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, "定位结果解析失败"))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+        }
+        否则 (方法名 == "browser_reverse_detect_obfuscator")
+        {
+            // 混淆器识别: obfuscator.io/JSVMP/JsJiami/sojson/自定义编码 特征检测
+            变量 doBrowser <类型 = 类_FBrowser_浏览器>
+            doBrowser = MCP命令服务器.取主浏览器 ()
+            如果 (doBrowser.是否为空 () == 假 && doBrowser.是否已关闭 () == 假)
+            {
+                变量 doCode <类型 = 文本型>
+                doCode = "(function(){var det=[];var total='';var ss=document.querySelectorAll('script');for(var i=0;i<ss.length;i++){total+=(ss[i].textContent||'')+'\\n';}"
+                doCode = doCode + "if(total.indexOf('jsjiami.com')!==-1)det.push({type:'jsjiami',confidence:0.95});"
+                doCode = doCode + "if(total.indexOf('sojson')!==-1)det.push({type:'sojson',confidence:0.9});"
+                doCode = doCode + "if(total.indexOf('_0x')!==-1&&/_0x[0-9a-f]{4,5}/.test(total)&&/function\\s+_0x[0-9a-f]/.test(total))det.push({type:'obfuscator.io',confidence:0.85});"
+                doCode = doCode + "var sw=total.match(/switch\\s*\\([^)]*\\)\\s*\\{[\\s\\S]{0,200}?case\\s+0x[0-9a-f]+:/);if(sw)det.push({type:'jsvmp_like(大switch状态机)',confidence:0.7});"
+                doCode = doCode + "var b64t=total.match(/[A-Za-z0-9+/]{64,}={0,2}/);if(b64t&&b64t[0].indexOf('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/')===-1)det.push({type:'custom_encoding(自定义编码表)',confidence:0.8,table:b64t[0].substring(0,64)});"
+                doCode = doCode + "var hexarr=total.match(/\\[[\\s]*('|\")[0-9a-f]{2,}(\\1)[\\s]*,/);if(hexarr&&total.indexOf('charCodeAt')!==-1)det.push({type:'hex_string_array(十六进制字符串数组)',confidence:0.6});"
+                doCode = doCode + "return JSON.stringify({detected:det.length,items:det,total_len:total.length});})()"
+                变量 doWanted <类型 = 整数>
+                doWanted = MCP命令服务器.取同步等待毫秒 (方法名, 参数JSON)
+                变量 doTaskID <类型 = 文本型>
+                doTaskID = MCP命令服务器.生成异步任务ID ()
+                变量 doSubmit <类型 = 文本型>
+                doSubmit = MCP命令服务器.提交异步JS任务 (doBrowser, doCode, doTaskID)
+                如果 (是否以 (doSubmit, "{\"error\""))
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_主框架无效))
+                }
+                变量 doStore <类型 = 文本型>
+                doStore = MCP命令服务器.同步等待异步任务 (doTaskID, doWanted)
+                如果 (doStore == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "混淆识别超时"))
+                }
+                变量 doWrap <类型 = YYJSON只读对象类>
+                如果 (doWrap.创建自文本 (doStore))
+                {
+                    如果 (MCP命令服务器.yyjson取逻辑 (doWrap, "success") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "识别错误: " + MCP命令服务器.yyjson取文本 (doWrap, "error")))
+                    }
+                    变量 doMsg <类型 = 文本型>
+                    doMsg = MCP命令服务器.yyjson取文本 (doWrap, "message")
+                    如果 (doMsg != "")
+                    {
+                        变量 doData <类型 = YYJSON对象类>
+                        doData.创建自文本 ("{}")
+                        doData.加入逻辑值成员 ("success", 真)
+                        doData.加入文本成员 ("detect_json", doMsg)
+                        返回 (MCP_响应构建.命令成功_原始JSON (命令ID, doData.到可读文本 (YYJSON格式化选项.压缩)))
+                    }
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, "识别结果解析失败"))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+        }
+        否则 (方法名 == "browser_reverse_hook_logs")
+        {
+            // Hook日志查询: 读取 eval_dynamic/websocket/cookie_set Hook 记录的日志
+            变量 hlKey <类型 = 文本型>
+            hlKey = MCP命令服务器.yyjson取文本 (参数JSON, "log_key")
+            如果 (hlKey == "")
+            {
+                hlKey = "__MCP_EVAL_LOG__"
+            }
+            变量 hlAction <类型 = 文本型>
+            hlAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (hlAction == "")
+            {
+                hlAction = "query"
+            }
+            变量 hlBrowser <类型 = 类_FBrowser_浏览器>
+            hlBrowser = MCP命令服务器.取主浏览器 ()
+            如果 (hlBrowser.是否为空 () == 假 && hlBrowser.是否已关闭 () == 假)
+            {
+                变量 hlEsc <类型 = 文本型>
+                hlEsc = MCP命令服务器.简单转义JS (hlKey)
+                变量 hlCode <类型 = 文本型>
+                如果 (hlAction == "clear")
+                {
+                    hlCode = "(function(){var k='" + hlEsc + "';var a=window[k]||[];window[k]=[];return JSON.stringify({cleared:a.length});})()"
+                }
+                否则
+                {
+                    // 兼容数组型日志(__MCP_*_LOG__)与对象型结果(__mcp_instrument_results 等 {results:[...]})
+                    // 逐项安全序列化: 循环引用/函数条目不导致整个查询失败
+                    hlCode = "(function(){var k='" + hlEsc + "';var v=window[k];var items=[];var total=0;if(Array.isArray(v)){total=v.length;items=v.slice(Math.max(0,v.length-200));}else if(v&&typeof v==='object'&&Array.isArray(v.results)){total=v.results.length;items=v.results.slice(Math.max(0,v.results.length-200));}else if(v!==undefined){total=1;items=[v];}var safe=[];for(var i=0;i<items.length;i++){try{safe.push(JSON.parse(JSON.stringify(items[i])))}catch(e){try{safe.push(String(items[i]).substring(0,300))}catch(e2){safe.push('[unserializable]')}}}try{return JSON.stringify({count:total,returned:safe.length,items:safe})}catch(e){return JSON.stringify({count:total,returned:0,items:[],error:'serialize_failed'})}})()"
+                }
+                变量 hlWanted <类型 = 整数>
+                hlWanted = MCP命令服务器.取同步等待毫秒 (方法名, 参数JSON)
+                变量 hlTaskID <类型 = 文本型>
+                hlTaskID = MCP命令服务器.生成异步任务ID ()
+                变量 hlSubmit <类型 = 文本型>
+                hlSubmit = MCP命令服务器.提交异步JS任务 (hlBrowser, hlCode, hlTaskID)
+                如果 (是否以 (hlSubmit, "{\"error\""))
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_主框架无效))
+                }
+                变量 hlStore <类型 = 文本型>
+                hlStore = MCP命令服务器.同步等待异步任务 (hlTaskID, hlWanted)
+                如果 (hlStore == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "日志查询超时"))
+                }
+                变量 hlWrap <类型 = YYJSON只读对象类>
+                如果 (hlWrap.创建自文本 (hlStore))
+                {
+                    如果 (MCP命令服务器.yyjson取逻辑 (hlWrap, "success") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "查询错误: " + MCP命令服务器.yyjson取文本 (hlWrap, "error")))
+                    }
+                    变量 hlMsg <类型 = 文本型>
+                    hlMsg = MCP命令服务器.yyjson取文本 (hlWrap, "message")
+                    如果 (hlMsg != "")
+                    {
+                        变量 hlData <类型 = YYJSON对象类>
+                        hlData.创建自文本 ("{}")
+                        hlData.加入逻辑值成员 ("success", 真)
+                        hlData.加入文本成员 ("logs_json", hlMsg)
+                        返回 (MCP_响应构建.命令成功_原始JSON (命令ID, hlData.到可读文本 (YYJSON格式化选项.压缩)))
+                    }
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, "日志解析失败"))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+        }
+        // === v2.8.1 Hook逆向增强: 批量函数Hook + 调用栈快照 ===
+        否则 (方法名 == "browser_reverse_hook_multi")
+        {
+            // 批量函数Hook: functions为JSON数组["fn1","obj.fn2",...], 一次包装全部, 日志统一__MCP_HOOK_LOG__
+            变量 hmFuncs <类型 = 文本型>
+            hmFuncs = MCP命令服务器.yyjson取文本 (参数JSON, "functions")
+            如果 (hmFuncs == "")
+            {
+                hmFuncs = MCP命令服务器.yyjson取JSON文本 (参数JSON, "functions")
+            }
+            变量 hmArr <类型 = YYJSON只读数组类>
+            hmArr = MCP命令服务器.取JSON数组自文本 (hmFuncs, "functions")
+            如果 (hmArr.是否为空对象 () || hmArr.取成员数 () == 0)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "functions 需要JSON数组: [\"fn1\",\"obj.fn2\"]"))
+            }
+            变量 hmBrowser <类型 = 类_FBrowser_浏览器>
+            hmBrowser = MCP命令服务器.取主浏览器 ()
+            如果 (hmBrowser.是否为空 () == 假 && hmBrowser.是否已关闭 () == 假)
+            {
+                // 组装函数名数组 JS 字面量
+                变量 hmListJS <类型 = 文本型>
+                hmListJS = "["
+                计次循环 ((整数)hmArr.取成员数 ())
+                {
+                    如果 (取循环索引 () > 0)
+                    {
+                        hmListJS = hmListJS + ","
+                    }
+                    变量 hmName <类型 = 文本型>
+                    hmName = hmArr.取文本 (取循环索引 ())
+                    hmListJS = hmListJS + "'" + MCP命令服务器.简单转义JS (hmName) + "'"
+                }
+                hmListJS = hmListJS + "]"
+                变量 hmCapArgs <类型 = 逻辑型>
+                hmCapArgs = MCP命令服务器.yyjson取逻辑_默认 (参数JSON, "capture_args", 真)
+                变量 hmCode <类型 = 文本型>
+                hmCode = "(function(){var fns=" + hmListJS + ";var CAP=" + 选择 (hmCapArgs, "true", "false") + ";"
+                hmCode = hmCode + "var lg=window.__MCP_HOOK_LOG__=window.__MCP_HOOK_LOG__||[];var found=[];function __cap(){if(lg.length>2000){lg.splice(0,1000);}};"
+                hmCode = hmCode + "for(var i=0;i<fns.length;i++){var name=fns[i];var parts=name.split('.');var obj=window;var ok=true;for(var j=0;j<parts.length-1;j++){obj=obj[parts[j]];if(!obj){ok=false;break;}}if(ok&&typeof obj[parts[parts.length-1]]==='function'){var last=parts[parts.length-1];var __orig=obj[last];obj[last]=function(){var a=Array.prototype.slice.call(arguments);var e={fn:name,ts:Date.now()};if(CAP){try{e.args=JSON.stringify(a).substring(0,512);}catch(x){e.args='[unserializable]';}}try{var r=__orig.apply(this,a);try{e.ret=JSON.stringify(r).substring(0,512);}catch(x){e.ret=String(r).substring(0,512);}__cap();lg.push(e);return r;}catch(x){__cap();lg.push({fn:name,ts:Date.now(),threw:x.message});throw x;}};found.push(name);}}"
+                hmCode = hmCode + "return JSON.stringify({found:found.length,hooked:found,log_key:'__MCP_HOOK_LOG__'});})()"
+                变量 hmWanted <类型 = 整数>
+                hmWanted = MCP命令服务器.取同步等待毫秒 (方法名, 参数JSON)
+                变量 hmTaskID <类型 = 文本型>
+                hmTaskID = MCP命令服务器.生成异步任务ID ()
+                变量 hmSubmit <类型 = 文本型>
+                hmSubmit = MCP命令服务器.提交异步JS任务 (hmBrowser, hmCode, hmTaskID)
+                如果 (是否以 (hmSubmit, "{\"error\""))
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_主框架无效))
+                }
+                变量 hmStore <类型 = 文本型>
+                hmStore = MCP命令服务器.同步等待异步任务 (hmTaskID, hmWanted)
+                如果 (hmStore == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "批量Hook超时"))
+                }
+                变量 hmWrap <类型 = YYJSON只读对象类>
+                如果 (hmWrap.创建自文本 (hmStore))
+                {
+                    如果 (MCP命令服务器.yyjson取逻辑 (hmWrap, "success") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "Hook错误: " + MCP命令服务器.yyjson取文本 (hmWrap, "error")))
+                    }
+                    变量 hmMsg <类型 = 文本型>
+                    hmMsg = MCP命令服务器.yyjson取文本 (hmWrap, "message")
+                    如果 (hmMsg != "")
+                    {
+                        变量 hmData <类型 = YYJSON对象类>
+                        hmData.创建自文本 ("{}")
+                        hmData.加入逻辑值成员 ("success", 真)
+                        hmData.加入文本成员 ("hook_json", hmMsg)
+                        返回 (MCP_响应构建.命令成功_原始JSON (命令ID, hmData.到可读文本 (YYJSON格式化选项.压缩)))
+                    }
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, "Hook结果解析失败"))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+        }
+        否则 (方法名 == "browser_reverse_stack_trace")
+        {
+            // 调用栈快照: 返回当前JS调用栈(Error().stack), 定位调用链路无需断点
+            变量 stBrowser <类型 = 类_FBrowser_浏览器>
+            stBrowser = MCP命令服务器.取主浏览器 ()
+            如果 (stBrowser.是否为空 () == 假 && stBrowser.是否已关闭 () == 假)
+            {
+                变量 stCode <类型 = 文本型>
+                stCode = "(function(){var e=new Error('__MCP_STACK__');var s=e.stack||'';return JSON.stringify({stack:s.length>4000?s.substring(0,4000):s});})()"
+                变量 stWanted <类型 = 整数>
+                stWanted = MCP命令服务器.取同步等待毫秒 (方法名, 参数JSON)
+                变量 stTaskID <类型 = 文本型>
+                stTaskID = MCP命令服务器.生成异步任务ID ()
+                变量 stSubmit <类型 = 文本型>
+                stSubmit = MCP命令服务器.提交异步JS任务 (stBrowser, stCode, stTaskID)
+                如果 (是否以 (stSubmit, "{\"error\""))
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_主框架无效))
+                }
+                变量 stStore <类型 = 文本型>
+                stStore = MCP命令服务器.同步等待异步任务 (stTaskID, stWanted)
+                如果 (stStore == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "调用栈获取超时"))
+                }
+                变量 stWrap <类型 = YYJSON只读对象类>
+                如果 (stWrap.创建自文本 (stStore))
+                {
+                    如果 (MCP命令服务器.yyjson取逻辑 (stWrap, "success") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "获取错误: " + MCP命令服务器.yyjson取文本 (stWrap, "error")))
+                    }
+                    变量 stMsg <类型 = 文本型>
+                    stMsg = MCP命令服务器.yyjson取文本 (stWrap, "message")
+                    如果 (stMsg != "")
+                    {
+                        变量 stData <类型 = YYJSON对象类>
+                        stData.创建自文本 ("{}")
+                        stData.加入逻辑值成员 ("success", 真)
+                        stData.加入文本成员 ("stack_json", stMsg)
+                        返回 (MCP_响应构建.命令成功_原始JSON (命令ID, stData.到可读文本 (YYJSON格式化选项.压缩)))
+                    }
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, "调用栈解析失败"))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+        }
+        返回 ("")
+    }
+    #
+}
