@@ -17,6 +17,7 @@ const path = require('path');
 const { URL } = require('url');
 
 const REQUEST_TIMEOUT_MS = parseInt(process.env.AI_BROWSER_MCP_TIMEOUT || '120000', 10);
+const MAX_FRAME_BYTES = 64 * 1024 * 1024; // stdio 单帧上限: 防恶意 Content-Length 导致内存耗尽
 
 // ---------- 配置 ----------
 
@@ -73,10 +74,11 @@ function loadConfig() {
         const wsUrl = process.env.AI_BROWSER_MCP_URL || (connect && connect.mcp_url) || '';
         const ws = parseWsEndpoint(wsUrl);
         const host = process.env.AI_BROWSER_MCP_HOST || (ws && ws.host) || (connect && connect.bind_address) || '127.0.0.1';
-        const port = parseInt(
+        let port = parseInt(
             process.env.AI_BROWSER_MCP_PORT || (ws && String(ws.port)) || (connect && String(connect.port)) || '9222',
             10
         );
+        if (!Number.isInteger(port) || port < 1 || port > 65535) port = 9222; // 非法端口回退默认
         cfg = { host, port, path: '/mcp' };
     }
     const altPath = (connect && connect.mcp_http_post_alt) ? parseHttpEndpoint(connect.mcp_http_post_alt) : null;
@@ -84,7 +86,7 @@ function loadConfig() {
         host: cfg.host,
         port: cfg.port,
         path: cfg.path || '/mcp',
-        altPath: altPath ? altPath.path : '/',
+        altPath: altPath ? altPath.path : null, // 未配置 alt 时为 null, 避免无谓重试 '/'
         healthUrl: (connect && connect.health_url) || `http://${cfg.host}:${cfg.port}/health`,
         connectFile: connect ? 'loaded' : 'default'
     };
@@ -142,7 +144,10 @@ async function forward(request, cfg, timeoutMs) {
         const result = await postOnce(request, postPath, c, timeoutMs);
         if (result.error) { lastErr = result.error; continue; }
         if (result.status === 404) continue;
-        if (result.status === 200 && result.data.length === 0) return null;
+        if (result.status === 200 && result.data.length === 0) {
+            // 仅通知(无 id)允许空响应被丢弃; 带 id 的请求必须回错误, 否则客户端永久挂起
+            return (request.id === undefined) ? null : errorResponse(request.id, -32000, 'MCP 服务器返回空响应');
+        }
         if (result.status === 200 && result.data.length > 0) {
             try { return JSON.parse(result.data); }
             catch (_) {
@@ -158,6 +163,7 @@ async function forward(request, cfg, timeoutMs) {
 function httpGet(url, timeoutMs) {
     return new Promise((resolve) => {
         const req = http.get(url, { timeout: timeoutMs || 8000 }, (res) => {
+            res.setEncoding('utf8'); // 避免多字节字符被 chunk 切开产生乱码
             let data = '';
             res.on('data', (c) => { data += c; });
             res.on('end', () => resolve({ status: res.statusCode, data }));
@@ -173,7 +179,9 @@ async function getHealth(cfg) {
     if (res.error || res.status !== 200) {
         throw new Error(`无法连接 MCP (${c.host}:${c.port}) — ${res.error ? res.error.message : 'HTTP ' + res.status}`);
     }
-    const j = JSON.parse(res.data);
+    let j;
+    try { j = JSON.parse(res.data); }
+    catch (_) { throw new Error('MCP health 返回非 JSON: ' + String(res.data).slice(0, 80)); }
     if (j.status !== 'ok') throw new Error('MCP health status=' + j.status);
     return j;
 }
@@ -279,83 +287,21 @@ async function pollUntil(checkFn, maxMs, intervalMs) {
 
 // ---------- stdio 桥接 ----------
 
+// 串行写队列 + 背压: 大响应(截图base64/DOM快照)不再无限缓冲, 防止 OOM
+let writeQueue = Promise.resolve();
 function writeLine(obj) {
-    // MCP Stdio 传输规范: Content-Length: N\r\n\r\n{json}\n
+    // MCP Stdio 传输规范: Content-Length: N\r\n\r\n{json} (帧后不加多余换行)
     const json = JSON.stringify(obj);
     const len = Buffer.byteLength(json, 'utf8');
-    process.stdout.write('Content-Length: ' + len + '\r\n\r\n' + json + '\n');
+    const frame = 'Content-Length: ' + len + '\r\n\r\n' + json;
+    writeQueue = writeQueue.then(() => new Promise((resolve) => {
+        if (process.stdout.write(frame)) resolve();
+        else process.stdout.once('drain', resolve);
+    }));
+    return writeQueue;
 }
 
-/** Cursor 精简工具集（v2.8: 40个核心工具 + 反检测/逆向高频） */
-const CURSOR_TOOL_WHITELIST = new Set([
-    // 导航/页面 (7)
-    'browser_navigate', 'browser_get_url', 'browser_get_title', 'browser_back', 'browser_forward',
-    'browser_reload', 'browser_stop',
-    // 等待/状态 (3)
-    'browser_wait', 'browser_is_loading', 'browser_status',
-    // JS执行/DOM (7)
-    'browser_execute_js', 'browser_evaluate', 'browser_get_source', 'browser_get_text',
-    'browser_dom_query', 'browser_dom_click', 'browser_dom_set_value',
-    'browser_dom_get_html', 'browser_console_eval',
-    // 提取/爬虫 (3)
-    'browser_extract', 'browser_scrape', 'browser_list',
-    // 查找/缩放 (4)
-    'browser_find', 'browser_stop_find', 'browser_set_zoom', 'browser_get_zoom',
-    // 鼠标键盘 (4)
-    'browser_mouse_click', 'browser_mouse_move', 'browser_mouse_wheel', 'browser_key_event',
-    // 截图/打印 (2)
-    'browser_screenshot', 'browser_print_to_pdf',
-    // 网络/拦截/CDP (5)
-    'browser_network', 'browser_collect', 'browser_cdp_call', 'browser_intercept', 'browser_inject',
-    // DevTools (2)
-    'browser_open_devtools', 'browser_close_devtools',
-    // Cookie/代理 (6)
-    'browser_get_cookies', 'browser_set_cookie', 'browser_delete_cookies',
-    'browser_set_proxy', 'browser_clear_proxy',
-    // 填表 (6)
-    'browser_fill_set_value', 'browser_fill_click', 'browser_fill_focus', 'browser_fill_scroll',
-    'browser_fill_exists', 'browser_fill_select',
-    // 窗口/框架 (3)
-    'browser_get_frames', 'browser_window_info', 'browser_view_source',
-    // v2.8 反检测 + 逆向 + 调试器 (10)
-    'browser_antidetect_presets', 'browser_reverse_setup',
-    'browser_fingerprint', 'browser_fingerprint_ua',
-    'browser_reverse_hook', 'browser_reverse_preset',
-    'browser_reverse_search', 'browser_reverse_extract',
-    'browser_reverse_detect_traps', 'browser_reverse_strings',
-    'browser_debugger_enable', 'browser_debugger_pause', 'browser_debugger_resume',
-    'browser_debugger_wait_paused', 'browser_debugger_inspect',
-    // v2.8 网络导出 + 权限伪装 + 重试 + Canvas噪声 (4)
-    'browser_network_export', 'browser_permission_spoof',
-    'browser_retry', 'browser_canvas_noise',
-    'browser_reverse_patch', 'browser_font_randomize',
-    'browser_reverse_skip_pauses', 'browser_reverse_listeners',
-    'browser_reverse_query_objects', 'browser_reverse_blackbox',
-    'browser_reverse_async_stack', 'browser_reverse_cache_disable',
-    'browser_reverse_compile_script', 'browser_reverse_breakpoints_active',
-    'browser_reverse_search_script', 'browser_reverse_precise_coverage',
-    'browser_reverse_bypass_csp', 'browser_reverse_await_promise',
-    'browser_fingerprint_webgl_vendor', 'browser_reverse_cookie_cdp',
-    'browser_reverse_network_conditions', 'browser_reverse_dom_resolve',
-    'browser_reverse_emulate_focus',
-    'browser_reverse_input_cdp', 'browser_reverse_trace',
-    'browser_reverse_evaluate_silent',
-    'browser_fingerprint_languages', 'browser_reverse_css_coverage',
-    'browser_reverse_layer_tree',
-    // 批量/工作流/系统 (5)
-    'mcp_result', 'mcp_status', 'ping', 'batch',
-    'workflow_list', 'workflow_get', 'workflow_run', 'workflow_stop'
-]);
-
-function isCursorLiteMode() {
-    const v = (process.env.AI_BROWSER_MCP_CURSOR_MODE || '0').toLowerCase();
-    return v === '1' || v === 'true' || v === 'on' || v === 'lite';
-}
-
-function isStdioBridgeMode() {
-    const args = process.argv.slice(2);
-    return !args.some((a) => ['--check', '--call', '--feed', '--tools', '--help', '-h'].includes(a));
-}
+/** Cursor 精简工具集已移除 (v2.8.1): 动态显示全部工具, 保留注释说明以防误加回 */
 
 /** MCP 服务端部分工具 schema 使用 type:"text"，Cursor 无法解析 */
 function sanitizeJsonSchema(node) {
@@ -387,13 +333,9 @@ function sanitizeToolEntry(tool) {
 
 function filterToolsForClient(tools) {
     if (!Array.isArray(tools)) return [];
-    let list = tools.map(sanitizeToolEntry);
-    // v2.8.1: 移除 Cursor 工具白名单过滤, 动态显示全部工具 (255)
+    // v2.8.1: 已移除 Cursor 工具白名单过滤, 动态显示全部工具
     // 所有工具均已通过 MCP_Server 端 schema 验证, 无需桥接层精简
-    if (isCursorLiteMode() && isStdioBridgeMode()) {
-        log(`Cursor 全量模式: ${list.length}/${tools.length} 个工具 (已移除精简限制)`);
-    }
-    return list;
+    return tools.map(sanitizeToolEntry);
 }
 
 /** Cursor 支持的 MCP 协议版本；服务端为 2026-06-21，经桥接回写客户端请求的 2024-11-05 */
@@ -450,8 +392,8 @@ async function runStdio() {
     // 小白全自动: MCP 服务未运行且能找到 exe 时自动拉起 (AI_BROWSER_AUTO_START=0 可禁用)
     await ensureRunning(CONFIG).catch(() => false);
 
-    process.stdin.setEncoding('utf8');
-    let buffer = '';
+    // 不用 setEncoding('utf8'): 帧解析按字节进行 (Content-Length 为 UTF-8 字节数), chunk 保持 Buffer
+    let buffer = Buffer.alloc(0);
     let pending = 0;
     let stdinEnded = false;
 
@@ -467,51 +409,77 @@ async function runStdio() {
             return;
         }
         pending++;
-        forward(request).then((response) => {
-            if (response !== null && shouldRespond(request)) {
-                sanitizeMcpResponse(response, request);
-                writeLine(response);
+        forward(request).then(
+            (response) => {
+                if (response !== null && shouldRespond(request)) {
+                    sanitizeMcpResponse(response, request);
+                    writeLine(response);
+                }
+            },
+            (err) => {
+                if (shouldRespond(request)) {
+                    writeLine(errorResponse(request.id, -32603, '桥接层错误: ' + (err && err.message ? err.message : err)));
+                }
             }
+        ).finally(() => {
             pending--;
             maybeExit();
         });
     }
 
     process.stdin.on('data', (chunk) => {
-        buffer += chunk;
+        // 修复: 字节级缓冲解析 — Content-Length 为 UTF-8 字节数, 原字符串缓冲(UTF-16单元)
+        // 导致中文/emoji 等多字节JSON体的 字节数 > 字符数, 永远等不满帧 → 请求被卡死
+        buffer = Buffer.concat([buffer, chunk]);
         while (true) {
+            // 无 Content-Length 的裸数据防护: 防止 buffer 无限增长
+            if (buffer.length > MAX_FRAME_BYTES + 1024) {
+                writeLine({ jsonrpc: '2.0', id: null, error: { code: -32600, message: 'Frame too large' } });
+                buffer = Buffer.alloc(0);
+                break;
+            }
             // MCP Stdio 传输规范: Content-Length: N\r\n\r\n{json}
             const headerEnd = buffer.indexOf('\r\n\r\n');
-            if (headerEnd !== -1 && buffer.slice(0, headerEnd).startsWith('Content-Length:')) {
-                // 解析 Content-Length 格式
-                const header = buffer.slice(0, headerEnd);
-                const match = header.match(/^Content-Length:\s*(\d+)/i);
-                if (match) {
-                    const contentLen = parseInt(match[1], 10);
-                    const jsonStart = headerEnd + 4;
-                    if (buffer.length >= jsonStart + contentLen) {
-                        const jsonStr = buffer.slice(jsonStart, jsonStart + contentLen);
-                        buffer = buffer.slice(jsonStart + contentLen);
-                        // 跳过可选尾随换行符
-                        if (buffer.startsWith('\n')) buffer = buffer.slice(1);
-                        if (buffer.startsWith('\r\n')) buffer = buffer.slice(2);
-                        if (!jsonStr.trim()) continue;
-                        processJsonLine(jsonStr);
-                        continue;
-                    }
+            // 头部为纯ASCII, 其字符索引即字节索引, 可用 ascii 解码比较前缀
+            const maybeHeader = buffer.slice(0, headerEnd === -1 ? buffer.length : headerEnd).toString('ascii');
+            if (/^Content-Length:/i.test(maybeHeader)) {
+                if (headerEnd === -1) break; // 帧头跨 chunk 到达: 等待更多数据, 绝不落入换行回退分支
+                const match = maybeHeader.match(/^Content-Length:\s*(\d+)/i);
+                const contentLen = match ? parseInt(match[1], 10) : -1;
+                if (!Number.isInteger(contentLen) || contentLen < 0 || contentLen > MAX_FRAME_BYTES) {
+                    writeLine({ jsonrpc: '2.0', id: null, error: { code: -32600, message: 'Invalid Content-Length' } });
+                    buffer = Buffer.alloc(0);
+                    break;
+                }
+                const jsonStart = headerEnd + 4;
+                if (buffer.length >= jsonStart + contentLen) {
+                    const jsonStr = buffer.slice(jsonStart, jsonStart + contentLen).toString('utf8');
+                    buffer = buffer.slice(jsonStart + contentLen);
+                    // 跳过可选尾随换行符
+                    if (buffer.length && buffer[0] === 0x0A) buffer = buffer.slice(1);
+                    if (buffer.length >= 2 && buffer[0] === 0x0D && buffer[1] === 0x0A) buffer = buffer.slice(2);
+                    if (!jsonStr.trim()) continue;
+                    processJsonLine(jsonStr);
+                    continue;
                 }
                 break; // Content-Length 头存在但消息体不完整, 等待更多数据
             }
             // 向后兼容: 纯换行分隔 JSON (旧客户端/旧服务端)
-            const nl = buffer.indexOf('\n');
+            const nl = buffer.indexOf(0x0A);
             if (nl === -1) break;
-            const line = buffer.slice(0, nl).trim();
+            const line = buffer.slice(0, nl).toString('utf8').trim();
             buffer = buffer.slice(nl + 1);
             if (!line) continue;
             processJsonLine(line);
         }
     });
-    process.stdin.on('end', () => { stdinEnded = true; maybeExit(); });
+    process.stdin.on('end', () => {
+        stdinEnded = true;
+        // 新行分隔模式下最后一条无尾随换行的 JSON 不再被静默丢弃
+        const tail = buffer.toString('utf8').trim();
+        if (tail) processJsonLine(tail);
+        maybeExit();
+    });
     process.stdin.on('error', () => process.exit(1));
 }
 
@@ -840,5 +808,12 @@ module.exports = {
     parsePayload,
     unwrapData,
     parseEvaluateJson,
-    forward
+    extractTaskId,
+    forward,
+    writeLine,
+    sanitizeMcpResponse,
+    filterToolsForClient,
+    normalizeToolSchema,
+    shouldRespond,
+    errorResponse
 };

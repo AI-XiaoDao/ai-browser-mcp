@@ -259,4 +259,7 @@ async function main() {
     process.exit(failed > 0 ? 1 : 0);
 }
 
-main();
+main().catch((e) => {
+    console.error('Fatal:', (e && e.message) || e);
+    process.exit(1);
+});

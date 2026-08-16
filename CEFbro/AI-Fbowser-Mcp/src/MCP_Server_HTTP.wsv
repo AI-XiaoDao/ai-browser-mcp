@@ -67,7 +67,10 @@
                     }
                     返回
                 }
-                MCP命令服务器.发送CORS404响应 (服务器, 连接ID)
+                // 修复: 空body按JSON-RPC解析错误返回, 不再误导为404端点不存在
+                变量 空体错误 <类型 = 字节集类>
+                空体错误 = 文本到UTF8 (MCP命令服务器.构建JSONRPC响应 ("", "", -32700, "请求体为空"), 假)
+                MCP命令服务器.发送CORS200响应 (服务器, 连接ID, MCP_常量.HTTP_JSON内容类型, 取字节集指针 (空体错误), 取字节集长度 (空体错误))
                 返回
             }
             MCP命令服务器.发送CORS404响应 (服务器, 连接ID)
@@ -81,7 +84,7 @@
             健康JSON.加入文本成员 ("status", "ok")
             健康JSON.加入整数成员 ("browsers", FBrowser_浏览器_取数量 ())
             健康JSON.加入文本成员 ("version", MCP_常量.MCP_版本号)
-            健康JSON.加入长整数成员 ("uptime_ms", MCP命令服务器.取现行时间毫秒 () - MCP命令服务器.服务器启动墙钟毫秒)
+            健康JSON.加入长整数成员 ("uptime_ms", 取启动时间 () - MCP命令服务器.服务器启动时间戳)
             健康JSON.加入文本成员 ("capabilities", "sync-wait,workflow,batch,debugger-flow,v8-hook")
             健康JSON.加入整数成员 ("rate_limit_per_min", MCP命令服务器.速率限制_每分钟)
             健康JSON.加入整数成员 ("rate_limit_used", MCP命令服务器.速率限制_计数器)
@@ -93,6 +96,14 @@
             如果 (健康统计 != "")
             {
                 健康JSON.加入文本成员 ("db_stats", 健康统计)
+                // 修复: 补充扁平整数成员, 客户端无需二次解析字符串化JSON (db_stats 保留向后兼容)
+                变量 统计解析 <类型 = YYJSON只读对象类>
+                如果 (统计解析.创建自文本 (健康统计))
+                {
+                    健康JSON.加入长整数成员 ("db_async_results", MCP命令服务器.yyjson取长整数 (统计解析, "async_results"))
+                    健康JSON.加入长整数成员 ("db_event_log", MCP命令服务器.yyjson取长整数 (统计解析, "event_log"))
+                    健康JSON.加入长整数成员 ("db_response_cache", MCP命令服务器.yyjson取长整数 (统计解析, "response_cache"))
+                }
             }
             变量 健康JSON文本 <类型 = 文本型>
             健康JSON文本 = 健康JSON.到可读文本 (YYJSON格式化选项.压缩)
@@ -114,7 +125,7 @@
             }
             桥接脚本路径 = 桥接脚本路径 + "mcp_bridge.js"
             变量 配置文本 <类型 = 文本型>
-            配置文本 = "{\"mcpServers\":{\"ai-browser\":{\"command\":\"node\",\"args\":[\"" + MCP_响应构建.JSON转义文本 (桥接脚本路径) + "\"],\"env\":{\"AI_BROWSER_MCP_HOST\":\"" + MCP命令服务器.服务器绑定地址 + "\",\"AI_BROWSER_MCP_PORT\":\"" + 到文本 (MCP命令服务器.服务器端口) + "\",\"AI_BROWSER_MCP_HTTP_POST\":\"" + MCP_响应构建.JSON转义文本 (MCP命令服务器.取MCP_HTTP地址 ()) + "/mcp\",\"AI_BROWSER_MCP_CURSOR_MODE\":\"0\"}}}}"
+            配置文本 = "{\"mcpServers\":{\"ai-browser\":{\"command\":\"node\",\"args\":[\"" + MCP_响应构建.JSON转义文本 (桥接脚本路径) + "\"],\"env\":{\"AI_BROWSER_MCP_HOST\":\"" + MCP_响应构建.JSON转义文本 (MCP命令服务器.服务器绑定地址) + "\",\"AI_BROWSER_MCP_PORT\":\"" + 到文本 (MCP命令服务器.服务器端口) + "\",\"AI_BROWSER_MCP_HTTP_POST\":\"" + MCP_响应构建.JSON转义文本 (MCP命令服务器.取MCP_HTTP地址 ()) + "/mcp\",\"AI_BROWSER_MCP_CURSOR_MODE\":\"0\"}}}}"
             变量 配置内容 <类型 = 字节集类>
             配置内容 = 文本到UTF8 (配置文本, 假)
             MCP命令服务器.发送CORS200响应 (服务器, 连接ID, MCP_常量.HTTP_JSON内容类型, 取字节集指针 (配置内容), 取字节集长度 (配置内容))
@@ -143,12 +154,16 @@
         // === /tools GET ===
         如果 (URL路径 == "/tools" || URL路径 == "/tools/list")
         {
+            // 修复: check-then-act 重建纳入协议锁, 与 RPC tools/list 路径一致,
+            // 防止 HTTP/WS/stdio 多线程并发交错写入 工具列表构建缓冲区 导致工具列表JSON损坏
+            MCP命令服务器.协议锁.加锁 ()
             如果 (MCP命令服务器.工具列表缓存 == "")
             {
                 MCP命令服务器.开始构建工具列表 ()
                 MCP命令服务器.填充工具列表 ()
                 MCP命令服务器.工具列表缓存 = "{\"tools\":" + MCP命令服务器.完成构建工具列表 () + "}"
             }
+            MCP命令服务器.协议锁.解锁 ()
             变量 tools内容 <类型 = 字节集类>
             tools内容 = 文本到UTF8 (MCP命令服务器.工具列表缓存, 假)
             MCP命令服务器.发送CORS200响应 (服务器, 连接ID, MCP_常量.HTTP_JSON内容类型, 取字节集指针 (tools内容), 取字节集长度 (tools内容))
@@ -205,7 +220,7 @@
     {
         变量 WS路径 <类型 = 文本型>
         WS路径 = MCP命令服务器.提取HTTP路径 (请求.取地址 ())
-        如果 (寻找文本 (WS路径, "/devtools/", 0, 假) > 0)
+        如果 (寻找文本 (WS路径, "/devtools/", 0, 假) == 0)
         {
             控制台输出 (到文本 ("[MCP] 拒绝未实现的 DevTools WS:") + ", " + 到文本 (WS路径))
             如果 (回调.是否为空 () == 假)
@@ -231,7 +246,7 @@
     参数 数据指针 <类型 = 变整数>
     参数 数据长度 <类型 = 整数>
     {
-        // 防御: 拒绝超大WebSocket消息(>5MB),防止OOM闪退
+        // 防御: 拒绝超大WebSocket消息(>50MB),防止OOM闪退 (常量 WS最大消息字节)
         // 同时检查空指针,防止恶意消息导致闪退
         如果 (数据指针 == 0 || 数据长度 <= 0)
         {
@@ -241,7 +256,8 @@
         {
             控制台输出 (到文本 ("[MCP] WS消息过大被拒绝:") + ", " + 到文本 (数据长度) + ", " + 到文本 ("字节"))
             变量 错误响应 <类型 = 字节集类>
-            错误响应 = 文本到UTF8 (MCP命令服务器.构建JSONRPC响应 ("", "", -32600, "消息过大,最大5MB"), 假)
+            // 修复: 错误提示与实际常量一致(原注释/文案写5MB, 实际50MB)
+            错误响应 = 文本到UTF8 (MCP命令服务器.构建JSONRPC响应 ("", "", -32600, "消息过大,最大" + 到文本 (MCP_常量.WS最大消息字节 / 1048576) + "MB"), 假)
             服务器.发送WebSocket数据 (连接ID, 取字节集指针 (错误响应), 取字节集长度 (错误响应))
             返回
         }

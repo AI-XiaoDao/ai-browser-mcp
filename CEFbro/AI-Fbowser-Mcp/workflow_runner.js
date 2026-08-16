@@ -37,7 +37,13 @@ function postMcp(body) {
             headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(data) }
         }, (res) => {
             let raw = '';
-            res.on('data', (c) => { raw += c; });
+            res.on('data', (c) => {
+                raw += c;
+                if (raw.length > 64 * 1024 * 1024) { // 响应大小保护: 超限即断开
+                    req.destroy();
+                    reject(new Error('响应超过64MB上限, 已断开'));
+                }
+            });
             res.on('end', () => {
                 try { resolve({ status: res.statusCode, json: JSON.parse(raw) }); }
                 catch (e) { reject(new Error('非 JSON: ' + raw.slice(0, 300))); }
@@ -122,7 +128,7 @@ async function pollAsync(taskId, maxMs) {
     throw new Error('async timeout task_id=' + taskId);
 }
 
-async function runStep(step, index, onError) {
+async function runStep(step, index) {
     if (step.skip) {
         console.log('  SKIP step', index);
         return { skipped: true };
@@ -155,7 +161,7 @@ async function runWorkflow(def) {
 
     for (let i = 0; i < steps.length; i++) {
         try {
-            const r = await runStep(steps[i], i + 1, onError);
+            const r = await runStep(steps[i], i + 1);
             results.push({ index: i + 1, ok: true, result: r.plain || r });
         } catch (e) {
             const msg = e.message || String(e);
@@ -175,6 +181,7 @@ function listLocalWorkflows() {
 }
 
 function loadWorkflow(nameOrPath) {
+    if (!nameOrPath) throw new Error('缺少工作流名/路径 (用法: node workflow_runner.js <名称> | --inline <json> | --server <名称>)');
     let filePath = nameOrPath;
     if (!filePath.endsWith('.json')) {
         filePath = path.join(WF_DIR, nameOrPath + '.json');

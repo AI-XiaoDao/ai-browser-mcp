@@ -43,11 +43,14 @@ function postMcp(body) {
 
 function get(path) {
     return new Promise((resolve, reject) => {
-        http.get({ hostname: HOST, port: PORT, path, timeout: 5000 }, (res) => {
+        const req = http.get({ hostname: HOST, port: PORT, path, timeout: 5000 }, (res) => {
             let raw = '';
             res.on('data', (c) => { raw += c; });
             res.on('end', () => resolve({ status: res.statusCode, raw }));
-        }).on('error', reject);
+        });
+        req.on('error', reject);
+        // timeout 仅触发事件不会自动销毁 socket, 必须显式 destroy, 否则挂起
+        req.on('timeout', () => { req.destroy(); reject(new Error('timeout')); });
     });
 }
 

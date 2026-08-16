@@ -143,6 +143,11 @@
             {
                 返回 (MCP_响应构建.命令失败 (命令ID, "selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))
             }
+            如果 (删首尾空 (attr) == "")
+            {
+                // 修复: 空属性名会触发 置元素属性 设置空属性(无意义且可能触发框架异常)
+                返回 (MCP_响应构建.命令失败 (命令ID, "attribute 不能为空 | 如 style / data-* / aria-*"))
+            }
             变量 attrLower <类型 = 文本型>
             attrLower = 到小写 (删首尾空 (attr))
             如果 (attrLower == "href" || attrLower == "src" || attrLower == "action" || attrLower == "formaction")
@@ -245,16 +250,31 @@
                 填表框架 = browser.取主填表框架 ()
                 如果 (填表框架.是否有效 ())
                 {
-                    变量 选择状态 <类型 = 逻辑型>
-                    选择状态 = 真
-                    变量 valLower <类型 = 文本型>
-                    valLower = 到小写 (删首尾空 (value))
-                    如果 (valLower == "false" || valLower == "0" || valLower == "off" || valLower == "no" || valLower == "unchecked" || valLower == "unselected")
+                    如果 (value == "")
                     {
-                        选择状态 = 假
+                        返回 (MCP_响应构建.命令失败 (命令ID, "value 不能为空 | select 下拉项的选项值, 如 'US' / '男'"))
                     }
-                    填表框架.置元素选择框 (selector, 0, 选择状态)
-                    返回 (MCP_响应构建.命令成功 (命令ID, "select已设置: " + selector))
+                    // 修复: select 按 value 选中 — 置元素选择项第三参为整数索引(非选项值),
+                    // 故优先原生JS按value设置+事件链(兼容React受控用原生setter); 主框架无效且value为纯数字时回退按索引设置
+                    变量 fselFrame <类型 = 类_FBrowser_框架>
+                    fselFrame = browser.取主框架 ()
+                    如果 (fselFrame.是否为空 () == 假 && fselFrame.是否有效 ())
+                    {
+                        变量 fselSel <类型 = 文本型>
+                        fselSel = MCP命令服务器.简单转义JS (selector)
+                        变量 fselVal <类型 = 文本型>
+                        fselVal = MCP命令服务器.简单转义JS (value)
+                        fselFrame.执行JS代码 ("(function(){var e=document.querySelector('" + fselSel + "');if(!e)return;var n=Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype,'value');if(n&&n.set){n.set.call(e,'" + fselVal + "')}else{e.value='" + fselVal + "'};e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));})()", "", 0)
+                        返回 (MCP_响应构建.命令成功 (命令ID, "select已设置: " + selector + " = " + value))
+                    }
+                    变量 fselIdx <类型 = 整数>
+                    fselIdx = 文本到整数 (value)
+                    如果 (到文本 (fselIdx) == value)
+                    {
+                        填表框架.置元素选择项 (selector, 0, fselIdx)
+                        返回 (MCP_响应构建.命令成功 (命令ID, "select已按索引设置: " + selector + " = " + value))
+                    }
+                    返回 (MCP_响应构建.命令失败 (命令ID, "主框架无效且 value 非整数索引, 无法设置 select"))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, "填表框架无效"))
             }
@@ -295,6 +315,11 @@
                     变量 ff首次 <类型 = 逻辑型 值 = 真>
                     变量 ff总数 <类型 = 整数>
                     ff总数 = (整数)ffArr.取成员数 ()
+                    // 修复: 字段数上限, 防超大fields构建巨型JS/结果字符串OOM
+                    如果 (ff总数 > 500)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "fields 字段数超过上限(500)"))
+                    }
                     // 阶段A: 批量存在性检查 (单次内核JS, 非逐字段注入)
                     变量 ff存在映射 <类型 = YYJSON只读对象类>
                     变量 ff检查代码 <类型 = 文本型>

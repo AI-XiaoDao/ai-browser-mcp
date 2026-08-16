@@ -9,6 +9,7 @@
 {
     变量 Stdio线程实例 <公开 静态 类型 = 类_MCP_Stdio服务线程>
     变量 Stdio应退出 <公开 静态 类型 = 逻辑型 值 = 假>
+    变量 上次读取为断开 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "读取一行 返回空串时区分真断开(句柄关闭/读失败=真)与瞬态(超时/畸形帧=假), 主循环仅真断开计入空读次数">
     # ======== stdin 读取 (MCP Content-Length 帧解析 + 裸单行兼容, 可响应线程停止) ========
     方法 读取一行 <公开 静态 类型 = 文本型>
     参数 线程句柄 <类型 = 变整数 @默认值 = 0 注释 = "非0时在等待stdin期间检查是否需要退出">
@@ -16,8 +17,11 @@
         变量 行字节集 <类型 = 字节集类>
         @ // 可中断读取: PeekNamedPipe 轮询 + 线程退出检查, 避免退出时 ReadFile 永久阻塞
         @ // 协议: 优先解析 "Content-Length: N\r\n\r\n{json}" 帧; 无头时按裸单行处理
+        @ *(volatile BOOL*)&@<上次读取为断开> = FALSE;
         @ HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
-        @ if (hStdin == INVALID_HANDLE_VALUE || hStdin == NULL) return CVolString();
+        @ if (hStdin == INVALID_HANDLE_VALUE || hStdin == NULL) { *(volatile BOOL*)&@<上次读取为断开> = TRUE; return CVolString(); }
+        @ // 修复: 文件/控制台重定向的stdin不是管道, PeekNamedPipe对其返回FALSE会被误判为断开; 非管道改直读模式
+        @ const bool isPipe = (GetFileType(hStdin) == FILE_TYPE_PIPE);
         @ DWORD emptyPolls = 0;
         @ std::string headLine;
         @ for (;;) {
@@ -25,27 +29,54 @@
         @     if (@<线程句柄> != 0 && g_objVolApp.GetThreadPool().IsThreadNeedBreak((HVOLTHREAD)@<线程句柄>, 0))
         @         return CVolString();
         @     DWORD avail = 0;
-        @     if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail, NULL)) break;  // 句柄关闭, 安全退出
-        @     if (avail == 0) {
-        @         if (++emptyPolls > 600) break;  // 30秒无输入→stdin已关闭
-        @         Sleep(50); continue;
-        @     }
+        @     if (isPipe) { if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail, NULL)) { *(volatile BOOL*)&@<上次读取为断开> = TRUE; break; } }
+        @     else { avail = 1; }  // 非管道: 数据总是可读, EOF由ReadFile返回0检出
+        @     if (isPipe && avail == 0) { Sleep(50); continue; }  // 管道仍打开: 空闲等待, 不把空闲误判为断开
         @     emptyPolls = 0;
-        @     // 读头部行(或裸JSON行)
+        @     // 读头部行(或裸JSON行): Peek轮询+退出检查, 避免ReadFile阻塞导致停止死等
         @     DWORD headLen = 0;
         @     bool gotNewline = false;
+        @     bool headFailed = false;
+        @     DWORD headEmptyPolls = 0;
         @     while (headLen < 1048576) {
         @         if (*(volatile BOOL*)&@<Stdio应退出>) return CVolString();
+        @         if (@<线程句柄> != 0 && g_objVolApp.GetThreadPool().IsThreadNeedBreak((HVOLTHREAD)@<线程句柄>, 0))
+        @             return CVolString();
+        @         DWORD availH = 0;
+        @         if (isPipe) { if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &availH, NULL)) { headFailed = true; *(volatile BOOL*)&@<上次读取为断开> = TRUE; break; } }
+        @         else { availH = 1; }
+        @         if (isPipe && availH == 0) { if (++headEmptyPolls > 1200) { headFailed = true; break; } Sleep(50); continue; }
+        @         headEmptyPolls = 0;
         @         char c; DWORD n = 0;
-        @         if (!ReadFile(hStdin, &c, 1, &n, NULL) || n == 0) break;
+        @         if (!ReadFile(hStdin, &c, 1, &n, NULL) || n == 0) { headFailed = true; *(volatile BOOL*)&@<上次读取为断开> = TRUE; break; }
         @         if (c == '\n') { gotNewline = true; break; }
         @         if (c != '\r') headLine += c;
         @         headLen++;
         @     }
+        @     if (headFailed) break;  // 句柄关闭或头部超时(60秒): 丢弃本次读取并返回空
         @     if (headLine.empty()) { Sleep(50); continue; }
         @     long contentLen = -1;
         @     if (strncmp(headLine.c_str(), "Content-Length:", 15) == 0)
         @         contentLen = atol(headLine.c_str() + 15);
+        @     if (contentLen > 67108864) {  // 64MB上限: 防恶意/畸形头部导致内存耗尽
+        @         fprintf(stderr, "[MCP-Stdio] Content-Length %ld 超过64MB上限, 拒绝并排空该帧\n", contentLen);
+        @         long toDiscard = contentLen;
+        @         if (toDiscard > 67108864) toDiscard = 67108864;  // 最多排空64MB, 防恶意无限排空
+        @         while (toDiscard > 0) {
+        @             if (*(volatile BOOL*)&@<Stdio应退出>) return CVolString();
+        @             DWORD avail5 = 0;
+        @             if (isPipe) { if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail5, NULL)) break; }
+        @             else { avail5 = 1; }
+        @             if (isPipe && avail5 == 0) { if (++emptyPolls > 600) break; Sleep(20); continue; }
+        @             emptyPolls = 0;
+        @             char tmpD[4096];
+        @             DWORD n5 = 0;
+        @             DWORD toRead = (DWORD)(toDiscard > 4096 ? 4096 : toDiscard);
+        @             if (!ReadFile(hStdin, tmpD, toRead, &n5, NULL) || n5 == 0) break;
+        @             toDiscard -= n5;
+        @         }
+        @         break;
+        @     }
         @     if (contentLen < 0) {
         @         // 裸单行模式: 头部行即请求体
         @         @<行字节集>.CopyFrom(headLine.data(), (INT_P)headLine.size());
@@ -55,20 +86,40 @@
         @     std::string body;
         @     body.reserve((size_t)contentLen);
         @     if (gotNewline) {
-        @         DWORD avail2 = 0;
-        @         if (PeekNamedPipe(hStdin, NULL, 0, NULL, &avail2, NULL) && avail2 > 0) {
+        @         // 修复: 无条件等待并消费空行分隔符(轮询+退出检查), 防客户端分块写时漏消费导致帧体错位
+        @         bool sepDone = false;
+        @         while (!sepDone) {
+        @             if (*(volatile BOOL*)&@<Stdio应退出>) return CVolString();
+        @             if (@<线程句柄> != 0 && g_objVolApp.GetThreadPool().IsThreadNeedBreak((HVOLTHREAD)@<线程句柄>, 0))
+        @                 return CVolString();
+        @             DWORD avail2 = 0;
+        @             if (isPipe) { if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail2, NULL)) { *(volatile BOOL*)&@<上次读取为断开> = TRUE; sepDone = true; break; } }
+        @             else { avail2 = 1; }
+        @             if (isPipe && avail2 == 0) { if (++headEmptyPolls > 1200) { sepDone = true; break; } Sleep(50); continue; }
+        @             headEmptyPolls = 0;
         @             char c0; DWORD n0 = 0;
-        @             if (ReadFile(hStdin, &c0, 1, &n0, NULL) && n0 > 0) {
-        @                 if (c0 == '\r') {
+        @             if (!ReadFile(hStdin, &c0, 1, &n0, NULL) || n0 == 0) { *(volatile BOOL*)&@<上次读取为断开> = TRUE; sepDone = true; break; }
+        @             if (c0 == '\r') {
+        @                 // 等待下一字节区分 \r\n 空行分隔 与 \r 为body首字节 (轮询+退出检查)
+        @                 bool c1Done = false;
+        @                 while (!c1Done) {
+        @                     if (*(volatile BOOL*)&@<Stdio应退出>) return CVolString();
+        @                     if (@<线程句柄> != 0 && g_objVolApp.GetThreadPool().IsThreadNeedBreak((HVOLTHREAD)@<线程句柄>, 0))
+        @                         return CVolString();
+        @                     DWORD avail2b = 0;
+        @                     if (isPipe) { if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail2b, NULL)) { *(volatile BOOL*)&@<上次读取为断开> = TRUE; body += c0; c1Done = true; break; } }
+        @                     else { avail2b = 1; }
+        @                     if (isPipe && avail2b == 0) { if (++headEmptyPolls > 1200) { body += c0; c1Done = true; break; } Sleep(50); continue; }
+        @                     headEmptyPolls = 0;
         @                     char c1; DWORD n1 = 0;
-        @                     if (ReadFile(hStdin, &c1, 1, &n1, NULL) && n1 > 0 && c1 != '\n') {
-        @                         body += c1;  // 不是空行: c1是body首字节, 保留
-        @                     }
-        @                 } else if (c0 == '\n') {
-        @                     // 空行已跳过
-        @                 } else {
-        @                     body += c0;  // c0是body首字节, 保留
+        @                     if (!ReadFile(hStdin, &c1, 1, &n1, NULL) || n1 == 0) { *(volatile BOOL*)&@<上次读取为断开> = TRUE; body += c0; c1Done = true; break; }
+        @                     if (c1 == '\n') { sepDone = true; c1Done = true; }
+        @                     else { body += c0; body += c1; sepDone = true; c1Done = true; }  // \r与c1均为body首部字节
         @                 }
+        @             } else if (c0 == '\n') {
+        @                 sepDone = true;  // 空行已消费
+        @             } else {
+        @                 body += c0; sepDone = true;  // c0是body首字节
         @             }
         @         }
         @     }
@@ -77,8 +128,9 @@
         @         if (@<线程句柄> != 0 && g_objVolApp.GetThreadPool().IsThreadNeedBreak((HVOLTHREAD)@<线程句柄>, 0))
         @             return CVolString();
         @         DWORD avail3 = 0;
-        @         if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail3, NULL)) break;
-        @         if (avail3 == 0) { if (++emptyPolls > 600) break; Sleep(20); continue; }
+        @         if (isPipe) { if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail3, NULL)) break; }
+        @         else { avail3 = 1; }
+        @         if (isPipe && avail3 == 0) { if (++emptyPolls > 600) break; Sleep(20); continue; }
         @         emptyPolls = 0;
         @         char tmpB[4096];
         @         DWORD n3 = 0;
@@ -86,18 +138,13 @@
         @         if (!ReadFile(hStdin, tmpB, toRead, &n3, NULL) || n3 == 0) break;
         @         body.append(tmpB, n3);
         @     }
-        @     // 吃掉帧尾换行(若存在)
-        @     {
-        @         DWORD avail4 = 0;
-        @         if (PeekNamedPipe(hStdin, NULL, 0, NULL, &avail4, NULL) && avail4 > 0) {
-        @             char c2; DWORD n4 = 0;
-        @             if (ReadFile(hStdin, &c2, 1, &n4, NULL) && n4 > 0 && c2 == '\n') { /* 帧尾\n已消费 */ }
-        @         }
+        @     if ((long)body.size() < contentLen) {  // 帧体不完整(超时/断开): 丢弃本帧, 防帧错位
+        @         fprintf(stderr, "[MCP-Stdio] 帧体不完整(已读%ld/%ld字节), 丢弃本帧\n", (long)body.size(), contentLen);
+        @         break;
         @     }
         @     @<行字节集>.CopyFrom(body.data(), (INT_P)body.size());
         @     break;
         @ }
-        @ return CVolString();
         如果 (取字节集长度 (行字节集) == 0)
         {
             返回 ("")
@@ -108,7 +155,7 @@
     方法 写入一行 <公开 静态>
     参数 文本 <类型 = 文本型>
     {
-        @ // MCP传输规范: Content-Length: N\r\n\r\n{json}\n
+        @ // MCP传输规范: Content-Length: N\r\n\r\n{json} (帧后不加多余换行, 严格对齐规范)
         @ // WriteFile stdout, 自动处理UTF8, 检查失败
         @ std::string utf8 = CU8String(@<文本>.GetText()).GetText();
         @ DWORD contentLen = (DWORD)utf8.size();
@@ -116,7 +163,6 @@
         @ int headerLen = snprintf(header, sizeof(header), "Content-Length: %lu\r\n\r\n", (unsigned long)contentLen);
         @ std::string frame(header, headerLen);
         @ frame += utf8;
-        @ frame += "\n";
         @ HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
         @ if (hOut == INVALID_HANDLE_VALUE || hOut == NULL) return;
         @ // 循环写满: 超大帧部分写入时继续写剩余 (防帧损坏)
@@ -200,8 +246,11 @@
                 {
                     跳出循环
                 }
-                // stdin连续30秒无数据3次(父进程断开): 置退出标志, 防止孤儿进程常驻
-                空读次数 = 空读次数 + 1
+                // 修复: 仅句柄关闭(真断开)计入空读; 头部/帧体超时与畸形帧属瞬态, 不误判断开
+                如果 (上次读取为断开)
+                {
+                    空读次数 = 空读次数 + 1
+                }
                 如果 (空读次数 >= 3)
                 {
                     写日志 ("stdin已断开(父进程退出), stdio服务自动停止")
@@ -212,8 +261,6 @@
             }
             空读次数 = 0
             // === 核心: 复用已有MCP引擎处理 ===
-            变量 响应JSON <类型 = 文本型>
-            响应JSON = MCP命令服务器.处理MCP请求 (请求JSON, "stdio")
             如果 (取文本长度 (请求JSON) > 200)
             {
                 写日志 ("收到命令: " + 取文本左边 (请求JSON, 200) + "...(" + 到文本 (取文本长度 (请求JSON)) + "字符)")
@@ -222,6 +269,8 @@
             {
                 写日志 ("收到命令: " + 请求JSON)
             }
+            变量 响应JSON <类型 = 文本型>
+            响应JSON = MCP命令服务器.处理MCP请求 (请求JSON, "stdio")
             // === 输出响应 ===
             如果 (响应JSON != "")
             {

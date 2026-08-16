@@ -49,12 +49,15 @@ function findExe() {
     return results[0] || 'AI-Fbowser-Mcp.exe';
 }
 
-function findFiles(dir, name) {
+function findFiles(dir, name, depth = 0) {
     const results = [];
+    if (depth > 4) return results; // 限制递归深度, 防止大目录树同步阻塞启动
+    const SKIP = new Set(['node_modules', '.git', '_int', 'generated-cpp', 'docs', 'CacheData', 'release']);
     try {
         for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-            if (entry.isDirectory() && entry.name !== 'node_modules' && !entry.name.startsWith('.')) {
-                results.push(...findFiles(path.join(dir, entry.name), name));
+            if (entry.isDirectory()) {
+                if (SKIP.has(entry.name) || entry.name.startsWith('.')) continue;
+                results.push(...findFiles(path.join(dir, entry.name), name, depth + 1));
             } else if (entry.name === name) {
                 results.push(path.join(dir, entry.name));
             }
@@ -105,7 +108,8 @@ async function waitForReady(timeoutMs = STARTUP_TIMEOUT) {
     process.stdout.write('等待 AI浏览器 就绪');
     while (Date.now() - start < timeoutMs) {
         const health = await healthCheck(3000);
-        if (health && health.status === 'ok' && health.browsers >= 0) {
+        // browsers 字段缺失(旧版本/异常)时仍视为就绪, 与 start() 的判据保持一致
+        if (health && health.status === 'ok' && (health.browsers == null || health.browsers >= 0)) {
             process.stdout.write(' ✓\n');
             return health;
         }
@@ -135,7 +139,11 @@ function isProcessRunning(pid) {
             // tasklist 即使未匹配到任何进程也返回 exit code 0,
             // 所以需要解析输出判断 PID 是否真实存在
             const out = execSync(`tasklist /NH /FI "PID eq ${pid}"`, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
-            return out.includes(String(pid));
+            // 按 PID 列精确匹配 (第二列), 避免 pid=123 命中 1234 / 内存列 "1,234K" 的子串误判
+            return out.split(/\r?\n/).some((l) => {
+                const cols = l.trim().split(/\s+/);
+                return cols.length >= 2 && parseInt(cols[1], 10) === pid;
+            });
         }
         process.kill(pid, 0);
         return true;

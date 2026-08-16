@@ -220,28 +220,24 @@
                 {
                     变量 ids <类型 = 类_FBrowser_列表值>
                     ids = vip_ctrl.高级_取当前环境ID清单 ()
-                    变量 idsListJSON <类型 = 文本型>
-                    idsListJSON = "["
+                    // 修复: ids 原为二次转义的JSON字符串, 客户端按数组解析失败; 改为真JSON数组
+                    变量 idsArr <类型 = YYJSON数组类>
+                    idsArr.创建自文本数据 (MCP命令服务器.取空文本数组 ())
                     变量 idsCount <类型 = 整数 值 = 0>
                     如果 (ids.是否为空 () == 假)
                     {
                         idsCount = ids.取大小 ()
                         计次循环 (idsCount)
                         {
-                            如果 (取循环索引 () > 0)
-                            {
-                                idsListJSON = idsListJSON + ","
-                            }
-                            idsListJSON = idsListJSON + 到文本 (ids.取整数值 (取循环索引 ()))
+                            idsArr.加入整数成员 (ids.取整数值 (取循环索引 ()))
                         }
                     }
-                    idsListJSON = idsListJSON + "]"
                     // 输出完整ID清单(供 browser_vip_execute_js_context 使用), 空清单是合法状态
                     变量 idsOut <类型 = YYJSON对象类>
                     idsOut.创建自文本 ("{}")
                     idsOut.加入逻辑值成员 ("success", 真)
                     idsOut.加入整数成员 ("count", idsCount)
-                    idsOut.加入文本成员 ("ids", idsListJSON)
+                    idsOut.加入数组成员 ("ids", idsArr)
                     返回 (MCP_响应构建.命令成功_原始JSON (命令ID, idsOut.到可读文本 (YYJSON格式化选项.压缩)))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
@@ -919,11 +915,13 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    如果 (文本到整数 (cssVerText) < 116)
-                {
-                    返回 (MCP_响应构建.命令失败 (命令ID, "内核版本须在116-135范围内(官方API支持值)"))
-                }
-                vip_ctrl.内核开关_设置CSS内核 (文本到整数 (cssVerText))
+                    变量 cssVer <类型 = 整数>
+                    cssVer = 文本到整数 (cssVerText)
+                    如果 (cssVer < MCP_常量.内核版本最小 || cssVer > MCP_常量.内核版本最大 || 到文本 (cssVer) != cssVerText)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "内核版本须为116-135范围内的纯数字(官方API支持值)"))
+                    }
+                    vip_ctrl.内核开关_设置CSS内核 (cssVer)
                     返回 (MCP_响应构建.响应_需要刷新 (命令ID, "CSS内核已设置"))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
@@ -946,11 +944,13 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    如果 (文本到整数 (webVerText) < 116)
-                {
-                    返回 (MCP_响应构建.命令失败 (命令ID, "内核版本须在116-135范围内(官方API支持值)"))
-                }
-                vip_ctrl.内核开关_设置Web内核 (文本到整数 (webVerText))
+                    变量 webVer <类型 = 整数>
+                    webVer = 文本到整数 (webVerText)
+                    如果 (webVer < MCP_常量.内核版本最小 || webVer > MCP_常量.内核版本最大 || 到文本 (webVer) != webVerText)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "内核版本须为116-135范围内的纯数字(官方API支持值)"))
+                    }
+                    vip_ctrl.内核开关_设置Web内核 (webVer)
                     返回 (MCP_响应构建.响应_需要刷新 (命令ID, "Web内核已设置"))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
@@ -973,11 +973,13 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    如果 (文本到整数 (v8VerText) < 116)
-                {
-                    返回 (MCP_响应构建.命令失败 (命令ID, "内核版本须在116-135范围内(官方API支持值)"))
-                }
-                vip_ctrl.内核开关_设置V8内核 (文本到整数 (v8VerText))
+                    变量 v8Ver <类型 = 整数>
+                    v8Ver = 文本到整数 (v8VerText)
+                    如果 (v8Ver < MCP_常量.内核版本最小 || v8Ver > MCP_常量.内核版本最大 || 到文本 (v8Ver) != v8VerText)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "内核版本须为116-135范围内的纯数字(官方API支持值)"))
+                    }
+                    vip_ctrl.内核开关_设置V8内核 (v8Ver)
                     返回 (MCP_响应构建.响应_需要刷新 (命令ID, "V8内核已设置"))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))

@@ -11,12 +11,15 @@
         @ {
         @     std::wstring ws = @<文本>.GetText();
         @     int n = WideCharToMultiByte(936, 0, ws.c_str(), (int)ws.size(), NULL, 0, NULL, NULL);
+        @     std::string out;
         @     if (n > 0) {
-        @         std::string out(n, '\0');
-        @         WideCharToMultiByte(936, 0, ws.c_str(), (int)ws.size(), &out[0], n, NULL, NULL);
-        @         fwrite(out.c_str(), 1, out.size(), stderr);
+        @         out.assign(n, '\0');
+        @         int written = WideCharToMultiByte(936, 0, ws.c_str(), (int)ws.size(), &out[0], n, NULL, NULL);
+        @         if (written > 0) out.resize(written);
+        @         else out.clear();  // 修复: 转换失败时丢弃, 不把NUL填充写入stderr
         @     }
-        @     fwrite("\n", 1, 1, stderr);
+        @     out += '\n';
+        @     fwrite(out.data(), 1, out.size(), stderr);  // 修复: 正文+换行单次写出, 防多线程日志交错错位
         @     fflush(stderr);
         @ }
     }

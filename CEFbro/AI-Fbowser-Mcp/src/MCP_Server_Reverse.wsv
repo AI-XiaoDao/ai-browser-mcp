@@ -27,7 +27,13 @@
                 prPreciseParams.创建自文本 ("{}")
                 prPreciseParams.加入整数成员 ("interval", 100)
                 prPreciseParams.加入整数成员 ("maxDepth", 32)
-                MCP命令服务器.执行逆向CDP命令 (命令ID + "_pre", "Profiler.setSamplingInterval", prPreciseParams.到可读文本 (YYJSON格式化选项.压缩))
+                // 修复: 校验setSamplingInterval提交结果, 原返回值被丢弃(失败静默, 用户误以为precise已生效)
+                变量 prPreciseRes <类型 = 文本型>
+                prPreciseRes = MCP命令服务器.执行逆向CDP命令 (命令ID + "_pre", "Profiler.setSamplingInterval", prPreciseParams.到可读文本 (YYJSON格式化选项.压缩))
+                如果 (是否以 (prPreciseRes, "{\"error\""))
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "setSamplingInterval 提交失败: " + prPreciseRes))
+                }
                 返回 (MCP命令服务器.执行逆向CDP命令 (命令ID, "Profiler.enable", "{}"))
             }
             否则 (prAction == "stop")
@@ -109,7 +115,8 @@
                 chEvalParams.加入逻辑值成员 ("returnByValue", 假)
                 chEvalParams.加入逻辑值成员 ("generatePreview", 假)
                 变量 chEvalID <类型 = 文本型>
-                chEvalID = "cdp_hook_eval_" + 到文本 (取启动时间 ()) + "_" + 到文本 (取随机数 (1000, 9999))
+                // 修复: 原 毫秒+4位随机数 同毫秒并发会碰撞串读CDP结果, 复用带自增计数器的生成异步任务ID
+                chEvalID = "cdp_hook_eval_" + MCP命令服务器.生成异步任务ID ()
                 变量 chEvalRes <类型 = 文本型>
                 chEvalRes = MCP命令服务器.执行CDP并同步等待 (chEvalID, "Runtime.evaluate", chEvalParams.到可读文本 (YYJSON格式化选项.压缩), 8000)
                 如果 (MCP命令服务器.CDP同步结果是否成功 (chEvalRes))
@@ -183,7 +190,8 @@
                 cfEvalParams.加入逻辑值成员 ("returnByValue", 假)
                 cfEvalParams.加入逻辑值成员 ("generatePreview", 假)
                 变量 cfEvalID <类型 = 文本型>
-                cfEvalID = "call_fn_eval_" + 到文本 (取启动时间 ()) + "_" + 到文本 (取随机数 (1000, 9999))
+                // 修复: 原 毫秒+4位随机数 同毫秒并发会碰撞串读CDP结果, 复用带自增计数器的生成异步任务ID
+                cfEvalID = "call_fn_eval_" + MCP命令服务器.生成异步任务ID ()
                 变量 cfEvalRes <类型 = 文本型>
                 cfEvalRes = MCP命令服务器.执行CDP并同步等待 (cfEvalID, "Runtime.evaluate", cfEvalParams.到可读文本 (YYJSON格式化选项.压缩), 8000)
                 如果 (MCP命令服务器.CDP同步结果是否成功 (cfEvalRes))
@@ -271,11 +279,32 @@
                     {
                         返回 (MCP_响应构建.命令失败 (命令ID, "文件路径不合法: " + plFile))
                     }
+                    // 修复: 读入前先取文件大小预检, 超大文件不再整读进内存再拒绝
+                    变量 pl预检大小 <类型 = 长整数>
+                    @ {
+                    @     WIN32_FILE_ATTRIBUTE_DATA fd;
+                    @     @<pl预检大小> = (GetFileAttributesExW(@<plFile>.GetText(), GetFileExInfoStandard, &fd) && !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+                    @         ? ((LONGLONG)fd.nFileSizeHigh << 32) | (LONGLONG)(DWORD)fd.nFileSizeLow : -1;
+                    @ }
+                    如果 (pl预检大小 > 2097152)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "JS文件过大(" + 到文本 (pl预检大小) + "字节), 上限2MB"))
+                    }
                     变量 plFileBytes <类型 = 字节集类>
                     plFileBytes = 读入文件 (plFile)
+                    如果 (取字节集长度 (plFileBytes) > 2097152)
+                    {
+                        // 预检失败(-1)时的兜底校验
+                        返回 (MCP_响应构建.命令失败 (命令ID, "JS文件过大(" + 到文本 (取字节集长度 (plFileBytes)) + "字节), 上限2MB"))
+                    }
                     如果 (取字节集长度 (plFileBytes) > 0)
                     {
                         plCode = UTF8到文本 (plFileBytes)
+                    }
+                    否则
+                    {
+                        // 修复: 区分"文件读取失败/为空"与"参数缺失", 避免误导排查方向
+                        返回 (MCP_响应构建.命令失败 (命令ID, "文件读取失败或文件为空: " + plFile))
                     }
                 }
             }
@@ -694,6 +723,11 @@
             如果 (hmArr.是否为空对象 () || hmArr.取成员数 () == 0)
             {
                 返回 (MCP_响应构建.命令失败 (命令ID, "functions 需要JSON数组: [\"fn1\",\"obj.fn2\"]"))
+            }
+            如果 ((整数)hmArr.取成员数 () > 200)
+            {
+                // 修复: 函数数上限, 防超大数组O(n²)拼接与巨型JS
+                返回 (MCP_响应构建.命令失败 (命令ID, "functions 数组过大 (上限200)"))
             }
             变量 hmBrowser <类型 = 类_FBrowser_浏览器>
             hmBrowser = MCP命令服务器.取主浏览器 ()

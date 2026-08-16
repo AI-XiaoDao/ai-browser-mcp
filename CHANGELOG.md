@@ -6,6 +6,34 @@
 
 ---
 
+## [3.0.0] - 2026-08-17
+
+### 修复（源码优化升级批次：P0×1 + P1×22 + P2×70+）
+
+- **P0 stdio 传输失效**：`MCPStdio桥.读取一行` 内联 C++ 循环后残留的 `return CVolString()` 使火山返回代码不可达，stdio 模式恒空读后自断退出；已删除并理顺读取路径
+- **P1 桥接层中文请求卡死（复审仿真发现）**：mcp_bridge.js 帧解析用 JS 字符串长度(UTF-16单元)对比 Content-Length(UTF-8字节数)，含中文/emoji 的请求体永远等不满帧；改为字节级缓冲解析（Buffer 累积 + ascii 头解析 + 字节切片 utf8 解码），113 项场景套件全部通过
+- **全面复审批次（三个并行复审 + 场景套件 + 静态核验）**：修复 14 项确认问题，含 permission_spoof 转义顺序回归、安装代理配置空 mcpServers 插入错位（非法JSON）、stdio 空行分隔符条件消费（分块写帧体错位）、yyjson取逻辑_默认 布尔/数值节点失效、持久配置锁覆盖反检测字段、64MB帧拒绝后排空、字节截断切中文产生U+FFFD（新增 字节安全截断）、line_replace CRLF 行尾风格、preload 读前大小预检、set_zoom JSON数字0、task_ 片段长 1-based 补偿等
+- **Stdio 加固**：Content-Length 64MB 上限；取消"帧尾换行消费"防下一帧错位；空闲不再误判断开（仅句柄关闭退出）；帧体不完整整帧丢弃；头部 Peek 轮询防停止死等；写入帧对齐 MCP 规范（去多余尾换行）
+- **并发修复**：新增 `事件节流锁`（焦点回调 vs 定期维护的 CEF 字典无锁读写）；新增 `工作流状态锁`（工作流状态变量含 CVolString 跨线程读写）；`分配CDP消息ID` 返回原子操作结果；`生成异步任务ID` 改 InterlockedIncrement64；CDP 映射清理计数移入锁内；/tools 缓存重建纳入协议锁
+- **正确性修复**：browser_create 比较-清除防抹掉 __SHUTDOWN__ 关闭标记；browser_set_cookie 子域名改结尾判断；browser_retry 拒绝重试自身；browser_fill_select 改用 select 选项 API；存在后填表回调 success 区分"已执行"；line_replace 补 UTF-8 边界处理；reverse_extract analyze 输出真对象数组；vip_get_js_env_ids ids 改真数组；工作流 task_id 提取按 1-based 截断；wait_for_load 布尔感知；主线程关闭延时改非阻塞
+- **JSON/协议**：JSON转义补全全部控制字符；异步响应去除重复 result 键；持久V8管道符转义四层往返无损；/health db_stats 补扁平字段、uptime 改单调时钟；空 body 回 400 语义；workflow_stop 快速通道空闲返回真实语义
+- **安全**：验证安全路径补尾分隔符防兄弟目录越界；replace_file 补路径白名单与缺字段提示
+- **性能**：轮询参数循环外构造；日志 limit/max_ms/fields/functions 等全部钳制上限；截断按字节；js_bridge 帧解析重写+背压写队列+死代码清理
+- **功能**：补 browser.create/browser.close 点号双路由；工作流汇总新增 delay_count（delay 不再计入 success_count）
+- **并发加固（第二轮）**：新增 `持久配置锁`（持久代理/缩放/静音字段跨线程读写）；导航重定向链式保护（2秒内>10次放行，防互指规则死循环）
+- **资源安全（第二轮）**：截图宽高上限7680/scale上限4；reverse_extract 取数组判空；下载进度回调对象判空；打开缓存数据库改列存在性检查
+- **重构（第二轮）**：欢迎页三方法主体去重为 `导航欢迎页内部()`
+- **持续找 bug（第五轮，静态扫描 15 维度 + 锁对象逐名核验）**：未知命令回退路径补静态上下文恢复；fingerprint webdriver 键存在性改 取类型()==未知；fill_select 改原生 value setter（React 受控兼容）；workflow delay 步骤补记录；崩溃防护计数改 Interlocked 原子接口；response_cache 警告日志移出锁；5 处失效行号注释与锁序注释修正
+- **实机功能测试批次（32/32 全绿）— 发现并修复系统性 0-based 语义缺陷**：经火山 SDK `_vol_str_impl.cpp` 源码证实 `SearchText` 返回 0-based 索引（技能书文档误标 1-based），全库 14 处算术系统性差一——URL 安全拦截失效（javascript:/file:/data: 放行）、域名提取少末字符（同域 Cookie 被误拒）、前导点剥离连域名首字符、查询串剥离、DevTools WS 拒绝失效、CDP 日志去括号、task_id 提取四处、file: 前缀剥离等，全部修正并编译+实机复测通过
+- **将异步结果转为命令响应 重复 result 键**（YYJSON对象分支）→ 排重
+- **stdio 非管道 stdin 支持**：文件/控制台重定向原被 PeekNamedPipe 误判断开，改 GetFileType 判别 + 直读模式；stdio ping 冒烟通过
+- **navigate/reload wait_for_load 同步等待真实生效（流畅与稳定性轮）**：原"防竞态补查"仅以 `取加载状态()==假` 判定页面已加载完，而 `载入地址()` 发出后 OnLoadStart 尚未到达时该标志仍为假 → 同步等待立即返回"已导航到…通过mcp_result查询"提交消息，页面实际还在导航中。修复：新增 `浏览器容器.最后载入结束毫秒`（OnLoadEnd 时记录），补查仅当"本次导航发起后确实发生过 load_end"（时间戳≥载入前发起毫秒）才即时完成；同址导航改由 browser_navigate 在载入地址()前判等直接返回"已在目标页面"（竞态安全）
+- **自托管页面死锁防护（navigate/reload → 服务器自身页面）**：FBrowser 服务器事件循环单线程，同步等待期间无法服务自托管页面（MCP 服务自身 127.0.0.1:9222 的 docs/欢迎页等），wait_for_load 必然 20-30s 超时。新增 `是否本机自托管URL`/`URL主机端口匹配`（含端口边界校验防 9222 误匹配 92220），`应同步等待` 对目标/当前页为自托管 URL 时（含显式 sync_wait:true）自动降级为异步 task_id 轮询——load_end 后任务仍由事件驱动正常完成，实测 9ms 返回、mcp_result 秒级取到"等待条件满足: load_end"
+- **渲染进程崩溃处置增强（实机 V8 OOM 崩溃验证）**：`浏览器_渲染意外终止` 新增 ①崩溃后立即将该浏览器上所有 `_waiting` 等待任务快速失败（原只能干等 max_ms 超时收到误导性"页面可能较慢"，实测 4 个等待任务均秒级收到"渲染进程崩溃"错误）②状态码语义化输出（0异常终止/1被杀死/2崩溃/3内存耗尽OOM）。`存储等待任务错误` 精确匹配浏览器ID（防误伤全局任务）。browser_event 的 crash 查询改为跨浏览器（崩溃浏览器已移出数组/重建后原按当前主浏览器ID过滤查不到历史崩溃记录）
+- **关窗退出不再无限重启**：`浏览器_即将关闭` 原在最后一个窗口关闭时无条件标记重建 → 用户关掉 index 页窗口后新窗口立刻弹出、再关再弹、无限循环。修复：按关闭来源判别——用户手动关窗/browser_close（浏览器仍在数组中）→ 优雅退出整个 MCP 进程；崩溃清理路径（`渲染意外终止` 已先移出数组）→ 仍按崩溃恢复机制自动重建欢迎页。实测：browser_close 后进程约 1 秒内完整退出；Page.crash 后进程存活且 6 秒内重建新窗口
+
+---
+
 ## [2.8.2] - 2026-08-14
 
 ### 新增（AI 交互增强 / v2.8.1 UX 批次）

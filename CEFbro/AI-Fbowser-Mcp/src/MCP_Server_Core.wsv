@@ -34,6 +34,15 @@
                     navFrame = MCP命令服务器.取安全主框架 (browser)
                     如果 (navFrame.是否为空 () == 假 && navFrame.是否有效 ())
                     {
+                        // 同址导航: 主框架已在目标URL且未在加载时直接返回成功(载入地址前判等, 无竞态);
+                        // 否则依赖后续load事件或超时, 快速路径避免30s无谓等待
+                        如果 (navFrame.取地址 () == url && 浏览器容器.取加载状态 () == 假)
+                        {
+                            返回 (MCP_响应构建.命令成功 (命令ID, "已在目标页面: " + url + " | 未重复导航"))
+                        }
+                        // 记录导航发起时刻(载入地址前), 供注册加载等待任务判序load_end是否属于本次导航
+                        变量 导航发起毫秒 <类型 = 长整数>
+                        导航发起毫秒 = 取启动时间 ()
                         navFrame.载入地址 (url)
                         // wait_for_load 默认真: AI导航后立即操作DOM/填表, 等待载入完成大幅提升成功率
                         // 传 "false"/"0" 或 async_only:true 可跳过等待
@@ -42,7 +51,7 @@
                         waitLoad = MCP命令服务器.yyjson取逻辑_默认 (参数JSON, "wait_for_load", 真)
                         如果 (waitLoad && MCP命令服务器.yyjson取逻辑 (参数JSON, "async_only") == 假)
                         {
-                            返回 (MCP命令服务器.注册加载等待任务 (命令ID, 参数JSON, browser, "等待导航完成: " + url, "已导航到: " + url + " | 等待载入完成, 通过mcp_result查询"))
+                            返回 (MCP命令服务器.注册加载等待任务 (命令ID, 参数JSON, browser, "等待导航完成: " + url, "已导航到: " + url + " | 等待载入完成, 通过mcp_result查询", 导航发起毫秒))
                         }
                         返回 (MCP_响应构建.命令成功 (命令ID, "已导航到: " + url))
                     }
@@ -126,6 +135,9 @@
             {
                 变量 忽略缓存 <类型 = 逻辑型>
                 忽略缓存 = MCP命令服务器.yyjson取逻辑 (参数JSON, "ignore_cache")
+                // 记录重载发起时刻(重新载入前), 供注册加载等待任务判序load_end是否属于本次刷新
+                变量 重载发起毫秒 <类型 = 长整数>
+                重载发起毫秒 = 取启动时间 ()
                 如果 (忽略缓存)
                 {
                     browser.重新载入_忽略缓存 ()
@@ -140,7 +152,7 @@
                 relWaitLoad = MCP命令服务器.yyjson取逻辑_默认 (参数JSON, "wait_for_load", 真)
                 如果 (relWaitLoad && MCP命令服务器.yyjson取逻辑 (参数JSON, "async_only") == 假)
                 {
-                    返回 (MCP命令服务器.注册加载等待任务 (命令ID, 参数JSON, browser, "等待刷新完成", "页面已刷新 | 等待载入完成, 通过mcp_result查询"))
+                    返回 (MCP命令服务器.注册加载等待任务 (命令ID, 参数JSON, browser, "等待刷新完成", "页面已刷新 | 等待载入完成, 通过mcp_result查询", 重载发起毫秒))
                 }
                 返回 (MCP_响应构建.命令成功 (命令ID, "页面已刷新"))
             }
@@ -341,7 +353,11 @@
             创建成功 = MCP命令服务器.待创建完成
             如果 (创建成功)
             {
-                MCP命令服务器.待创建URL = ""
+                // 仅清除本命令写入的URL: 若等待期间shutdown已写入 __SHUTDOWN__ 标记则保留, 防止关闭请求被抹掉
+                如果 (MCP命令服务器.待创建URL == url)
+                {
+                    MCP命令服务器.待创建URL = ""
+                }
             }
             否则
             {
@@ -455,6 +471,16 @@
                 {
                     level = 到文本 (levelNum)
                 }
+                否则 (levelNum == 0)
+                {
+                    // 修复: JSON数字0(取文本空且数值=0)是合法的"0=复位默认缩放", 用键存在性区分于缺参
+                    变量 lv节点 <类型 = YYJSON只读对象类>
+                    lv节点 = 参数JSON.取对象 ("level")
+                    如果 (lv节点.取类型 () != YYJSON值类型.未知)
+                    {
+                        level = "0"
+                    }
+                }
             }
             如果 (level != "")
             {
@@ -462,12 +488,17 @@
                 browser = MCP命令服务器.取主浏览器 ()
                 如果 (browser.是否为空 () == 假)
                 {
-                    如果 (文本到小数 (level) <= 0 || 文本到小数 (level) > 10)
+                    // 修复: 允许0(CEF缩放0=100%复位默认), 且单次转换复用局部变量(原连调4次文本到小数)
+                    变量 lvNum <类型 = 小数>
+                    lvNum = 文本到小数 (level)
+                    如果 (lvNum < 0 || lvNum > 10)
                     {
-                        返回 (MCP_响应构建.命令失败 (命令ID, "level 须在 0~10 之间(如1.0/1.5/0.8)"))
+                        返回 (MCP_响应构建.命令失败 (命令ID, "level 须在 0~10 之间(如1.0/1.5/0.8; 0=复位默认100%)"))
                     }
-                    browser.置缩放级别 (文本到小数 (level))
-                    MCP命令服务器.持久缩放级别 = 文本到小数 (level)
+                    browser.置缩放级别 (lvNum)
+                    MCP命令服务器.持久配置锁.加锁 ()
+                    MCP命令服务器.持久缩放级别 = lvNum
+                    MCP命令服务器.持久配置锁.解锁 ()
                     返回 (MCP_响应构建.命令成功 (命令ID, "缩放(持久): " + level))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
@@ -658,9 +689,14 @@
                 {
                     按键事件.类型 = 按键事件.放开
                 }
-                否则
+                否则 (类型文本 == "" || 类型文本 == "char" || 类型文本 == "click" || 类型文本 == "press")
                 {
                     按键事件.类型 = 按键事件.单击
+                }
+                否则
+                {
+                    // 修复: 未知type显式拒绝, 与VIP路径语义对齐(原静默按单击处理)
+                    返回 (MCP_响应构建.命令失败 (命令ID, "未知type: " + 类型文本 + " | 支持: keydown/keyup/char"))
                 }
                 按键事件.系统按键 = key
                 // 修饰键: 位标志组合 (1=Ctrl, 2=Alt, 4=Shift), 默认0=无
@@ -682,7 +718,9 @@
                 变量 静音 <类型 = 逻辑型>
                 静音 = MCP命令服务器.yyjson取逻辑 (参数JSON, "mute")
                 browser.置页面静音 (静音)
+                MCP命令服务器.持久配置锁.加锁 ()
                 MCP命令服务器.持久静音状态 = 静音
+                MCP命令服务器.持久配置锁.解锁 ()
                 返回 (MCP_响应构建.命令成功 (命令ID, "静音(持久): " + 到文本 (静音)))
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
@@ -844,12 +882,12 @@
                             // 提取 :// 和终止符之间的域名
                             domain = 取文本中间 (currentURL, hostStart, hostEnd - hostStart)
                         }
-                        // 去除端口号 (如 example.com:8080 → example.com)
+                        // 去除端口号 (如 example.com:8080 → example.com); 0-based: 冒号位置=域名字符数
                         变量 冒号位置 <类型 = 整数>
                         冒号位置 = 寻找文本 (domain, ":", 0, 假)
                         如果 (冒号位置 > 0)
                         {
-                            domain = 取文本左边 (domain, 冒号位置 - 1)
+                            domain = 取文本左边 (domain, 冒号位置)
                         }
                         // 加前导点以匹配子域名, 同时去掉可能的尾随空白
                         domain = "." + domain
@@ -909,12 +947,12 @@
                         chEnd = 取文本长度 (currentURL) + 1
                     }
                     currentDomain = 取文本中间 (currentURL, chStart, chEnd - chStart)
-                    // 去除端口号
+                    // 去除端口号; 0-based: cpPos=域名字符数
                     变量 cpPos <类型 = 整数>
                     cpPos = 寻找文本 (currentDomain, ":", 0, 假)
                     如果 (cpPos > 0)
                     {
-                        currentDomain = 取文本左边 (currentDomain, cpPos - 1)
+                        currentDomain = 取文本左边 (currentDomain, cpPos)
                     }
                 }
                 变量 cleanDomain <类型 = 文本型>
@@ -924,7 +962,7 @@
                 {
                     cleanDomain = 取文本右边 (cleanDomain, 取文本长度 (cleanDomain) - 1)
                 }
-                如果 (currentDomain != "" && cleanDomain != "" && currentDomain != cleanDomain && 是否以 (currentDomain, "." + cleanDomain) == 假 && 是否以 (cleanDomain, "." + currentDomain) == 假)
+                如果 (currentDomain != "" && cleanDomain != "" && currentDomain != cleanDomain && 是否以文本结束 (currentDomain, "." + cleanDomain) == 假 && 是否以文本结束 (cleanDomain, "." + currentDomain) == 假)
                 {
                     返回 (MCP_响应构建.命令失败 (命令ID, "Cookie domain(" + domain + ") 与当前页面域名(" + currentDomain + ")不匹配, 拒绝跨域设置"))
                 }
@@ -934,8 +972,8 @@
             urlDomain = domain
             如果 (MCP命令服务器.是否以 (urlDomain, "."))
             {
-                // 去除前导点: 已知以.开头(位置1), 从位置2取剩余全部
-                urlDomain = 取文本中间 (urlDomain, 2, 取文本长度 (urlDomain) - 1)
+                // 去除前导点; 0-based: 从索引1起取 len-1 个字符 (原2会连域名首字符一起剥掉)
+                urlDomain = 取文本中间 (urlDomain, 1, 取文本长度 (urlDomain) - 1)
             }
             变量 Cookie数据 <类型 = FBrowser_Cookie数据>
             Cookie数据.名 = name
@@ -1077,17 +1115,21 @@
                     如果 (vip_ctrl.是否为空 () == 假)
                     {
                         vip_ctrl.高级_设置代理 (address, username, password)
+                        MCP命令服务器.持久配置锁.加锁 ()
                         MCP命令服务器.持久代理地址 = address
                         MCP命令服务器.持久代理账号 = username
                         MCP命令服务器.持久代理密码 = password
+                        MCP命令服务器.持久配置锁.解锁 ()
                         返回 (MCP_响应构建.响应_需要刷新 (命令ID, "S5代理已设置: " + address))
                     }
                     // 普通HTTP代理 (VIP不可用时退路)
                     browser.设置代理 (address, username, password)
                     // 持久化: 新浏览器自动应用
+                    MCP命令服务器.持久配置锁.加锁 ()
                     MCP命令服务器.持久代理地址 = address
                     MCP命令服务器.持久代理账号 = username
                     MCP命令服务器.持久代理密码 = password
+                    MCP命令服务器.持久配置锁.解锁 ()
                     返回 (MCP_响应构建.响应_需要刷新 (命令ID, "代理已设置(持久): " + address))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
@@ -1106,16 +1148,20 @@
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
                     vip_ctrl.高级_清空代理 ()
+                    MCP命令服务器.持久配置锁.加锁 ()
                     MCP命令服务器.持久代理地址 = ""
                     MCP命令服务器.持久代理账号 = ""
                     MCP命令服务器.持久代理密码 = ""
+                    MCP命令服务器.持久配置锁.解锁 ()
                     返回 (MCP_响应构建.响应_需要刷新 (命令ID, "S5代理已清除"))
                 }
                 // 普通HTTP代理清除 (VIP不可用时退路)
                 browser.清空代理 ()
+                MCP命令服务器.持久配置锁.加锁 ()
                 MCP命令服务器.持久代理地址 = ""
                 MCP命令服务器.持久代理账号 = ""
                 MCP命令服务器.持久代理密码 = ""
+                MCP命令服务器.持久配置锁.解锁 ()
                 返回 (MCP_响应构建.响应_需要刷新 (命令ID, "代理已清除"))
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
@@ -1957,8 +2003,15 @@
                                 vip_ctrl.指纹_虚拟DeviceMemory (intVal)
                                 appliedCount = appliedCount + 1
                             }
-                            vip_ctrl.指纹_虚拟Webdriver (MCP命令服务器.yyjson取逻辑 (配置解析, "webdriver"))
-                            appliedCount = appliedCount + 1
+                            // 修复: 仅当 config 存在 webdriver 键时才应用并计数, 恢复 appliedCount==0 分支可达
+                            // 键存在性用 取对象+取类型(未知=缺失键假节点) 判别, 比源文本匹配更精确
+                            变量 wd节点 <类型 = YYJSON只读对象类>
+                            wd节点 = 配置解析.取对象 ("webdriver")
+                            如果 (wd节点.取类型 () != YYJSON值类型.未知)
+                            {
+                                vip_ctrl.指纹_虚拟Webdriver (MCP命令服务器.yyjson取逻辑 (配置解析, "webdriver"))
+                                appliedCount = appliedCount + 1
+                            }
                             变量 w <类型 = 整数>
                             w = MCP命令服务器.yyjson取整数 (配置解析, "width")
                             变量 h <类型 = 整数>
@@ -2207,10 +2260,23 @@
                     {
                         截图大小.高度 = 1080
                     }
+                    // 修复: 尺寸上限钳制, 防超大分辨率截图内存分配风险
+                    如果 (截图大小.宽度 > 7680)
+                    {
+                        截图大小.宽度 = 7680
+                    }
+                    如果 (截图大小.高度 > 7680)
+                    {
+                        截图大小.高度 = 7680
+                    }
                     截图大小.缩放 = MCP命令服务器.yyjson取整数 (参数JSON, "scale")
                     如果 (截图大小.缩放 <= 0)
                     {
                         截图大小.缩放 = 1
+                    }
+                    如果 (截图大小.缩放 > 4)
+                    {
+                        截图大小.缩放 = 4
                     }
                     // 全部异步: 生成task_id, 回调触发时存储结果
                     变量 异步截图ID <类型 = 文本型>
@@ -2368,6 +2434,10 @@
             {
                 sMaxMs = 30000
             }
+            如果 (sMaxMs > 300000)
+            {
+                sMaxMs = 300000  // 修复: 上限5分钟, 防极大max_ms使任务永不超时长期占用_waiting
+            }
             变量 sStore <类型 = YYJSON对象类>
             sStore.创建自文本 ("{}")
             sStore.加入逻辑值成员 ("_waiting", 真)
@@ -2411,6 +2481,10 @@
             如果 (extractLimit <= 0)
             {
                 extractLimit = 100
+            }
+            如果 (extractLimit > 5000)
+            {
+                extractLimit = 5000  // 修复: 上限防超大limit令JS遍历海量DOM并返回巨型JSON
             }
             如果 (extractType == "links")
             {
@@ -2617,6 +2691,11 @@
             如果 (retTool == "")
             {
                 返回 (MCP_响应构建.命令失败 (命令ID, "retry 需要 tool 参数: 要重试的MCP工具名"))
+            }
+            如果 (retTool == "browser_retry" || retTool == "browser.retry" || retTool == "retry")
+            {
+                // 自引用防护: 允许 retry 自身会指数级递归直至栈溢出
+                返回 (MCP_响应构建.命令失败 (命令ID, "browser_retry 不支持重试自身"))
             }
             变量 retArgs <类型 = YYJSON只读对象类>
             retArgs = MCP命令服务器.yyjson取对象成员 (参数JSON, "args")
@@ -2867,7 +2946,10 @@
                         // 通过 JS 注入覆盖 Permissions API
                         变量 psCode <类型 = 文本型>
                         psCode = "(function(){"
-                        psCode = psCode + "var state='" + psState + "';"
+                        psCode = psCode + "var state='" + MCP命令服务器.简单转义JS (psState) + "';"
+                        // 修复: 先转义用户数据再按逗号拆分; 原顺序(先拆分后转义)会把拆入的语法引号也转义成
+                        // 单元素数组 ['geolocation\',\'notifications'...], 使perms.indexOf永远-1, 伪装静默失效
+                        psPerms = MCP命令服务器.简单转义JS (psPerms)
                         子文本替换 (psPerms, ",", "','", , , 假)
                         psCode = psCode + "var perms=['" + psPerms + "'];"
                         psCode = psCode + "if(navigator.permissions&&navigator.permissions.query){"
@@ -3653,7 +3735,7 @@
                                                 {
                                                     sMsg = sExtResult
                                                 }
-                                                sFinal.加入文本成员 ("text", 取文本左边 (sMsg, 262144))
+                                                sFinal.加入文本成员 ("text", 取文本左边 (sMsg, MCP_常量.截断_响应文本最大字符))
                                                 MCP命令服务器.存储异步结果 (request_id, sFinal.到可读文本 (YYJSON格式化选项.压缩))
                                                 MCP命令服务器.清理等待检查子任务 (存储结果)
                                                 返回 (sFinal.到可读文本 (YYJSON格式化选项.压缩))
@@ -3747,30 +3829,6 @@
                                             }
                                             如果 (foundMatch)
                                             {
-                                                如果 (waitWhat == "load_start")
-                                                {
-                                                    变量 loadPhase <类型 = 整数>
-                                                    loadPhase = MCP命令服务器.yyjson取整数 (结果解析, "_load_phase")
-                                                    如果 (loadPhase == 0)
-                                                    {
-                                                        MCP命令服务器.清理等待检查子任务 (存储结果)
-                                                        变量 阶段切换 <类型 = YYJSON对象类>
-                                                        阶段切换.创建自文本 (存储结果)
-                                                        阶段切换.加入整数成员 ("_load_phase", 1)
-                                                        阶段切换.加入文本成员 ("check_code", "(function(){return JSON.stringify({found:document.readyState==='complete',readyState:document.readyState})})()")
-                                                        阶段切换.删除成员 ("_check_task_id")
-                                                        阶段切换.加入整数成员 ("_poll_count", pollCount)
-                                                        MCP命令服务器.存储异步结果 (request_id, 阶段切换.到可读文本 (YYJSON格式化选项.压缩))
-                                                        变量 阶段等待 <类型 = YYJSON对象类>
-                                                        阶段等待.创建自文本 ("{}")
-                                                        阶段等待.加入逻辑值成员 ("success", 真)
-                                                        阶段等待.加入逻辑值成员 ("_waiting", 真)
-                                                        阶段等待.加入文本成员 ("message", "load_start: 已检测到 loading, 等待 load_end... 已过" + 到文本 ((取启动时间 () - waitStartTime) / 1000) + "s/" + 到文本 (waitMaxMs / 1000) + "s")
-                                                        阶段等待.加入长整数成员 ("elapsed_ms", 取启动时间 () - waitStartTime)
-                                                        阶段等待.加入长整数成员 ("remaining_ms", waitMaxMs - (取启动时间 () - waitStartTime))
-                                                        返回 (阶段等待.到可读文本 (YYJSON格式化选项.压缩))
-                                                    }
-                                                }
                                                 MCP命令服务器.清理等待检查子任务 (存储结果)
                                                 变量 找到结果 <类型 = YYJSON对象类>
                                                 找到结果.创建自文本 ("{}")
@@ -3992,7 +4050,15 @@
                 如果 (evtBrowser.是否为空 () == 假)
                 {
                     变量 evtResult <类型 = 文本型>
-                    evtResult = MCP命令服务器.查询事件日志 ("browser_event", evtType, evtBrowser.取ID (), evtLimit)
+                    变量 evt查询BID <类型 = 整数>
+                    evt查询BID = evtBrowser.取ID ()
+                    // crash 事件跨浏览器查询: 崩溃的浏览器已被移出数组(或重建后ID变化),
+                    // 按当前主浏览器ID过滤将查不到历史崩溃记录 (渲染意外终止写入的crash事件在崩溃浏览器ID下)
+                    如果 (evtType == "crash")
+                    {
+                        evt查询BID = 0
+                    }
+                    evtResult = MCP命令服务器.查询事件日志 ("browser_event", evtType, evt查询BID, evtLimit)
                     如果 (evtResult != "[]")
                     {
                         返回 (MCP_响应构建.命令成功_原始JSON (命令ID, evtResult))
@@ -4037,7 +4103,8 @@
                 如果 (legacyLog != "[]" && legacyLog != "" && MCP命令服务器.是否以 (legacyLog, "["))
                 {
                     变量 内层JSON <类型 = 文本型>
-                    内层JSON = 取文本中间 (legacyLog, 2, 取文本长度 (legacyLog) - 2)
+                    // 0-based语义: 去掉首尾的[ ], 内容从索引1起 len-2 个字符
+                    内层JSON = 取文本中间 (legacyLog, 1, 取文本长度 (legacyLog) - 2)
                     如果 (eventName == "Debugger.paused")
                     {
                         变量 摘要 <类型 = 文本型>
@@ -5172,7 +5239,7 @@
             {
                 hookType = "function_call"
             }
-            如果 (hookTarget == "" && hookType != "xhr_fetch" && hookType != "websocket")
+            如果 (hookTarget == "" && hookType != "xhr_fetch" && hookType != "websocket" && hookType != "eval_dynamic" && hookType != "cookie_set")
             {
                 返回 (MCP_响应构建.命令失败 (命令ID, "target 不能为空 | 指定函数名/URL正则/选择器"))
             }
@@ -5184,7 +5251,7 @@
             captureStack = MCP命令服务器.yyjson取逻辑_默认 (参数JSON, "capture_stack", 假)
             变量 hookCode <类型 = 文本型>
             变量 hookLabel <类型 = 文本型>
-            hookLabel = "mcp_hook_" + 到文本 (取启动时间 ())
+            hookLabel = "mcp_hook_" + 到文本 (取启动时间 ()) + "_" + 到文本 (取随机数 (1000, 999999))
             如果 (hookType == "function_call")
             {
                 // 防注入: 转义目标名中的引号和反斜杠 (见 reverse_search 同款用法)
@@ -5291,6 +5358,10 @@
             如果 (rsMaxResults <= 0)
             {
                 rsMaxResults = 200
+            }
+            如果 (rsMaxResults > 2000)
+            {
+                rsMaxResults = 2000  // 修复: 上限防JS无界收集超大数组
             }
             变量 rsCode <类型 = 文本型>
             如果 (rsMode == "suspicious")
@@ -5594,8 +5665,15 @@
                 {
                     返回 (MCP_响应构建.命令失败 (命令ID, "download需要script_index | 先用 mode=scan 获取脚本列表, 脚本的index即script_index"))
                 }
+                // 修复: 校验非负整数, 防非数字拼出非法JS (var idx=abc;) 静默失败
+                变量 exIdxNum <类型 = 整数>
+                exIdxNum = 文本到整数 (exScriptIdx)
+                如果 (exIdxNum < 0 || 到文本 (exIdxNum) != exScriptIdx)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "script_index 必须为非负整数"))
+                }
                 变量 exDlCode <类型 = 文本型>
-                exDlCode = "(function(){var idx=" + exScriptIdx + ";var ss=document.querySelectorAll('script');if(idx>=0&&idx<ss.length){var s=ss[idx];var src=s.src||'(inline)';var txt=s.textContent||'';return JSON.stringify({script_index:idx,src:src,size:txt.length,source:txt})}return JSON.stringify({error:'script_not_found_at_index_'+idx})})()"
+                exDlCode = "(function(){var idx=" + 到文本 (exIdxNum) + ";var ss=document.querySelectorAll('script');if(idx>=0&&idx<ss.length){var s=ss[idx];var src=s.src||'(inline)';var txt=s.textContent||'';return JSON.stringify({script_index:idx,src:src,size:txt.length,source:txt})}return JSON.stringify({error:'script_not_found_at_index_'+idx})})()"
                 变量 exSrcRaw <类型 = 文本型>
                 exSrcRaw = MCP命令服务器.CDP执行JS并等待 (exDlCode, exWantedMS, 真)
                 如果 (exSrcRaw == "")
@@ -5629,7 +5707,8 @@
                 }
                 变量 anScriptsArr <类型 = YYJSON只读数组类>
                 anScriptsArr = anScanObj.取数组 ("scripts")
-                如果 (anScriptsArr.取成员数 () == 0)
+                // 修复: CDP返回异常结构时取数组可能为空引用, 补判空
+                如果 (anScriptsArr.是否为空对象 () || anScriptsArr.取成员数 () == 0)
                 {
                     返回 (MCP_响应构建.命令失败 (命令ID, "analyze: 未找到匹配 url_pattern=" + exUrlPat + " 的脚本"))
                 }
@@ -5640,8 +5719,9 @@
                     返回 (MCP_响应构建.命令失败 (命令ID, "analyze: 未找到匹配 url_pattern=" + exUrlPat + " 的脚本"))
                 }
                 // Step2: 对每个脚本提取加密特征 (源码已内嵌在scan结果中)
-                变量 anResults <类型 = YYJSON数组类>
-                anResults.创建自文本数据 (MCP命令服务器.取空文本数组 ())
+                // 修复: results 原为"字符串数组"(加入文本成员), 现改为文本数组拼接, 输出真对象数组且规避yyjson嵌套崩溃红线
+                变量 anResultsText <类型 = 文本型 值 = "">
+                变量 anAnalyzed <类型 = 整数 值 = 0>
                 变量 anMax <类型 = 整数>
                 anMax = (整数)anScriptsArr.取成员数 ()
                 如果 (anMax > 20)
@@ -5775,16 +5855,24 @@
                     }
                     // source_preview
                     anEntry.加入文本成员 ("source_preview", 取文本左边 (anSrc, 2000))
-                    anResults.加入文本成员 (anEntry.到可读文本 (YYJSON格式化选项.压缩))
+                    如果 (anResultsText == "")
+                    {
+                        anResultsText = anEntry.到可读文本 (YYJSON格式化选项.压缩)
+                    }
+                    否则
+                    {
+                        anResultsText = anResultsText + "," + anEntry.到可读文本 (YYJSON格式化选项.压缩)
+                    }
+                    anAnalyzed = anAnalyzed + 1
                 }
                 变量 anSummary <类型 = YYJSON对象类>
                 anSummary.创建自文本 ("{}")
                 anSummary.加入文本成员 ("url_pattern", exUrlPat)
                 anSummary.加入整数成员 ("matched_scripts", anCount)
-                anSummary.加入整数成员 ("analyzed", (整数)anResults.取成员数 ())
+                anSummary.加入整数成员 ("analyzed", anAnalyzed)
                 变量 anSummaryJSON <类型 = 文本型>
                 anSummaryJSON = anSummary.到可读文本 (YYJSON格式化选项.压缩)
-                anSummaryJSON = 取文本左边 (anSummaryJSON, 取文本长度 (anSummaryJSON) - 1) + ",\"results\":" + anResults.到可读文本 (YYJSON格式化选项.压缩) + "}"
+                anSummaryJSON = 取文本左边 (anSummaryJSON, 取文本长度 (anSummaryJSON) - 1) + ",\"results\":[" + anResultsText + "]}"
                 返回 (MCP_响应构建.命令成功_原始JSON (命令ID, anSummaryJSON))
             }
             否则
@@ -5838,8 +5926,10 @@
             // Level 1: stealth — 去webdriver+自动化标志 (内核级, 不需VIP)
             如果 (adPreset == "stealth" || adPreset == "basic" || adPreset == "full")
             {
+                MCP命令服务器.持久配置锁.加锁 ()
                 MCP命令服务器.持久反检测_禁用Debugger检测 = 真
                 MCP命令服务器.持久反检测_禁用自动化标志 = 真
+                MCP命令服务器.持久配置锁.解锁 ()
                 adLog = adLog + "✓ debugger检测已禁用; ✓ 自动化标志已移除"
                 如果 (adHasVIP)
                 {
@@ -5908,19 +5998,25 @@
             suDisableDebugger = MCP命令服务器.yyjson取逻辑 (参数JSON, "disable_debugger")
             如果 (suDisableDebugger)
             {
+                MCP命令服务器.持久配置锁.加锁 ()
                 MCP命令服务器.持久反检测_禁用Debugger检测 = 真
+                MCP命令服务器.持久配置锁.解锁 ()
             }
             变量 suUA <类型 = 文本型>
             suUA = MCP命令服务器.yyjson取文本 (参数JSON, "user_agent")
             如果 (suUA != "")
             {
+                MCP命令服务器.持久配置锁.加锁 ()
                 MCP命令服务器.持久反检测_伪装UA = suUA
+                MCP命令服务器.持久配置锁.解锁 ()
             }
             变量 suDisableAuto <类型 = 逻辑型>
             suDisableAuto = MCP命令服务器.yyjson取逻辑 (参数JSON, "disable_automation_flag")
             如果 (suDisableAuto)
             {
+                MCP命令服务器.持久配置锁.加锁 ()
                 MCP命令服务器.持久反检测_禁用自动化标志 = 真
+                MCP命令服务器.持久配置锁.解锁 ()
             }
             // 立即应用到当前浏览器
             MCP命令服务器.应用持久配置到浏览器 (MCP命令服务器.取主浏览器 ())
@@ -5964,7 +6060,7 @@
                 {
                     rpCode = rpCode + "var __origSetInterval=window.setInterval;var __origSetTimeout=window.setTimeout;var __bypassCount=0;window.setInterval=function(fn,t){var s=fn.toString();if(s.indexOf('debugger')!==-1||s.indexOf('debu')!==-1){__bypassCount++;return 0}return __origSetInterval.apply(this,arguments)};window.setTimeout=function(fn,t){var s=fn.toString();if(s.indexOf('debugger')!==-1||s.indexOf('debu')!==-1){__bypassCount++;return 0}return __origSetTimeout.apply(this,arguments)};__hooks.push('debugger_bypass');"
                 }
-                rpCode = rpCode + "return JSON.stringify({preset:'" + rpPreset + "',hooks_installed:__hooks,bypass_count:" + 选择 (rpPreset == "debugger" || rpPreset == "all", "__bypassCount", "0") + ",hint:'Hooks active. Access window.__mcp_*_log to view collected data'})})()"
+                rpCode = rpCode + "return JSON.stringify({preset:'" + MCP命令服务器.简单转义JS (rpPreset) + "',hooks_installed:__hooks,bypass_count:" + 选择 (rpPreset == "debugger" || rpPreset == "all", "__bypassCount", "0") + ",hint:'Hooks active. Access window.__mcp_*_log to view collected data'})})()"
                 变量 rpTaskID <类型 = 文本型>
                 rpTaskID = MCP命令服务器.生成异步任务ID ()
                 MCP命令服务器.提交异步JS任务 (rpBrowser, rpCode, rpTaskID)
@@ -6421,7 +6517,8 @@
                 变量 hlCode <类型 = 文本型>
                 如果 (hlAction == "clear")
                 {
-                    hlCode = "(function(){var a=window.__MCP_HL__||[];for(var k=0;k<a.length;k++){var q=a[k];if(q&&q.__mcpOrigOutline!==undefined){q.style.outline=q.__mcpOrigOutline;q.style.outlineOffset=q.__mcpOrigOffset;delete q.__mcpOrigOutline;delete q.__mcpOrigOffset;}}window.__MCP_HL__=[];return JSON.stringify({cleared:true,count:a.length});})()"
+                    // 修复: clear 时同步清除自动清除定时器, 防手动清除后定时器残留副作用
+                    hlCode = "(function(){clearTimeout(window.__MCP_HL_TIMER__);window.__MCP_HL_TIMER__=null;var a=window.__MCP_HL__||[];for(var k=0;k<a.length;k++){var q=a[k];if(q&&q.__mcpOrigOutline!==undefined){q.style.outline=q.__mcpOrigOutline;q.style.outlineOffset=q.__mcpOrigOffset;delete q.__mcpOrigOutline;delete q.__mcpOrigOffset;}}window.__MCP_HL__=[];return JSON.stringify({cleared:true,count:a.length});})()"
                 }
                 否则
                 {
