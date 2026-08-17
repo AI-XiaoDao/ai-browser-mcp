@@ -6063,7 +6063,7 @@ void CALLBACK rg_MCPMingLingFuWuQi::rg_QiDongMCPFuWuQi ()
     rg_LianJieXinXiDuiXiang.rg_JiaRuWenBenChengYuan (_CT2 (_T ("cdp_note")), _CT2 (_T ("CDP 请使用 MCP 工具 browser_cdp_call, 非 /devtools WebSocket 代理")));
     rg_LianJieXinXiDuiXiang.rg_JiaRuWenBenChengYuan (_CT2 (_T ("bridge_script")), _CT2 (_T ("mcp_bridge.js")));
     rg_LianJieXinXiDuiXiang.rg_JiaRuWenBenChengYuan (_CT2 (_T ("check_command")), _CT2 (_T ("node mcp_bridge.js --check")));
-    rg_LianJieXinXiDuiXiang.rg_JiaRuWenBenChengYuan (_CT2 (_T ("usage_step1")), _CT2 (_T ("启动 AI-Fbowser-Mcp.exe (保持运行, 关闭窗口会最小化到托盘)")));
+    rg_LianJieXinXiDuiXiang.rg_JiaRuWenBenChengYuan (_CT2 (_T ("usage_step1")), _CT2 (_T ("启动 AI-Fbowser-Mcp.exe (保持运行请最小化控制台窗口, 关闭浏览器窗口将退出程序)")));
     rg_LianJieXinXiDuiXiang.rg_JiaRuWenBenChengYuan (_CT2 (_T ("usage_step2")), _CT2 (_T ("Cursor: mcp.json 配置 node + mcp_bridge.js 路径")));
     rg_LianJieXinXiDuiXiang.rg_JiaRuWenBenChengYuan (_CT2 (_T ("usage_step3")), _CT2 (_T ("调用 tools/call 或 browser_* 命令操作浏览器")));
     rg_LianJieXinXiDuiXiang.rg_JiaRuWenBenChengYuan (_CT2 (_T ("quick_test")), _CT2 (_T ("curl -s ")) + rg_QuMCP_HTTPDeZhi () + _T ("/health"));
