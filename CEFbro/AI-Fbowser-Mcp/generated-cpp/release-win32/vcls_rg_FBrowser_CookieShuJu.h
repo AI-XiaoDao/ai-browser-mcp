@@ -27,7 +27,7 @@ public:
 
 public:
     CVolString rg_Ming10;
-    CVolString rg_value94;
+    CVolString rg_value95;
     CVolString rg_Yu;
     CVolString rg_LuJing4;
     BOOL rg_ShiFouZhiYouhttp;

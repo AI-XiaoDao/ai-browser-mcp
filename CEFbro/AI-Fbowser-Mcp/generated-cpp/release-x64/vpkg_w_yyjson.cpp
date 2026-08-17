@@ -211,42 +211,42 @@ void rg_YYJSONDuiXiangLei::TakeOverNewRefObject (CRefObject* pNewRefObject)
     m_pRefObject = pNewRefObject;
 }
 
-BOOL rg_YYJSONDuiXiangLei::rg_JiaRuLuoJiZhiChengYuan (CVolString& rg_JianMing14, BOOL rg_value126)
+BOOL rg_YYJSONDuiXiangLei::rg_JiaRuLuoJiZhiChengYuan (CVolString& rg_JianMing14, BOOL rg_value127)
 {
-    return yyjson_mut_obj_add_bool(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing14), rg_value126);
+    return yyjson_mut_obj_add_bool(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing14), rg_value127);
 }
 
-BOOL rg_YYJSONDuiXiangLei::rg_JiaRuChangZhengShuChengYuan (CVolString& rg_JianMing15, INT64 rg_value127)
+BOOL rg_YYJSONDuiXiangLei::rg_JiaRuChangZhengShuChengYuan (CVolString& rg_JianMing15, INT64 rg_value128)
 {
-    return yyjson_mut_obj_add_sint(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing15), (int64_t)rg_value127);
+    return yyjson_mut_obj_add_sint(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing15), (int64_t)rg_value128);
 }
 
-BOOL rg_YYJSONDuiXiangLei::rg_JiaRuZhengShuChengYuan (CVolString& rg_JianMing16, INT rg_value128)
+BOOL rg_YYJSONDuiXiangLei::rg_JiaRuZhengShuChengYuan (CVolString& rg_JianMing16, INT rg_value129)
 {
-    return yyjson_mut_obj_add_int(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing16), (int64_t)rg_value128);
+    return yyjson_mut_obj_add_int(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing16), (int64_t)rg_value129);
 }
 
-BOOL rg_YYJSONDuiXiangLei::rg_JiaRuWenBenChengYuan (CVolString& rg_JianMing18, CVolString& rg_value130)
+BOOL rg_YYJSONDuiXiangLei::rg_JiaRuWenBenChengYuan (CVolString& rg_JianMing18, CVolString& rg_value131)
 {
-    return yyjson_mut_obj_add_strcpy(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing18), (const char *)CU8String(rg_value130.GetText()).GetText());
+    return yyjson_mut_obj_add_strcpy(data().GetDoc(), data().GetObject(), (const char *)data().CloneKey(rg_JianMing18), (const char *)CU8String(rg_value131.GetText()).GetText());
 }
 
-BOOL rg_YYJSONDuiXiangLei::rg_JiaRuChengYuan43 (CVolString& rg_JianMing19, rg_YYJSONDuiXiangLei& rg_value131, BOOL rg_FuGai3)
+BOOL rg_YYJSONDuiXiangLei::rg_JiaRuChengYuan43 (CVolString& rg_JianMing19, rg_YYJSONDuiXiangLei& rg_value132, BOOL rg_FuGai3)
 {
     yyjson_mut_val* key = yyjson_mut_strcpy(data().GetDoc(), (const char *)CU8String(rg_JianMing19.GetText()).GetText());
     if (rg_FuGai3)
-        return yyjson_mut_obj_put(data().GetObject(), key, rg_value131.data().GetObject());
+        return yyjson_mut_obj_put(data().GetObject(), key, rg_value132.data().GetObject());
     else
-        return yyjson_mut_obj_add(data().GetObject(), key, rg_value131.data().GetObject());
+        return yyjson_mut_obj_add(data().GetObject(), key, rg_value132.data().GetObject());
 }
 
-BOOL rg_YYJSONDuiXiangLei::rg_JiaRuShuZuChengYuan (CVolString& rg_JianMing21, rg_YYJSONShuZuLei& rg_value133, BOOL rg_FuGai5)
+BOOL rg_YYJSONDuiXiangLei::rg_JiaRuShuZuChengYuan (CVolString& rg_JianMing21, rg_YYJSONShuZuLei& rg_value134, BOOL rg_FuGai5)
 {
     yyjson_mut_val* key = yyjson_mut_strcpy(data().GetDoc(), (const char *)CU8String(rg_JianMing21.GetText()).GetText());
     if (rg_FuGai5)
-        return yyjson_mut_obj_put(data().GetObject(), key, rg_value133.data().GetArray());
+        return yyjson_mut_obj_put(data().GetObject(), key, rg_value134.data().GetArray());
     else
-        return yyjson_mut_obj_add(data().GetObject(), key, rg_value133.data().GetArray());
+        return yyjson_mut_obj_add(data().GetObject(), key, rg_value134.data().GetArray());
 }
 
 BOOL rg_YYJSONDuiXiangLei::rg_ShanChuChengYuan34 (CVolString& rg_JianMing31)
@@ -364,19 +364,19 @@ BOOL rg_YYJSONShuZuLei::rg_JiaRuChengYuan44 (rg_YYJSONDuiXiangLei& rg_TianJiaZhi
     return yyjson_mut_arr_append(data().GetArray(), rg_TianJiaZhi4.data().GetObject());
 }
 
-BOOL rg_YYJSONShuZuLei::rg_JiaRuZhengShuChengYuan1 (INT rg_value141)
+BOOL rg_YYJSONShuZuLei::rg_JiaRuZhengShuChengYuan1 (INT rg_value142)
 {
-    return yyjson_mut_arr_add_int(data().GetDoc(), data().GetArray(), (int64_t)rg_value141);
+    return yyjson_mut_arr_add_int(data().GetDoc(), data().GetArray(), (int64_t)rg_value142);
 }
 
-BOOL rg_YYJSONShuZuLei::rg_JiaRuXiaoShuChengYuan1 (DOUBLE rg_value142)
+BOOL rg_YYJSONShuZuLei::rg_JiaRuXiaoShuChengYuan1 (DOUBLE rg_value143)
 {
-    return yyjson_mut_arr_add_real(data().GetDoc(), data().GetArray(), (double)rg_value142);
+    return yyjson_mut_arr_add_real(data().GetDoc(), data().GetArray(), (double)rg_value143);
 }
 
-BOOL rg_YYJSONShuZuLei::rg_JiaRuWenBenChengYuan1 (CVolString& rg_value143)
+BOOL rg_YYJSONShuZuLei::rg_JiaRuWenBenChengYuan1 (CVolString& rg_value144)
 {
-    return yyjson_mut_arr_add_strcpy(data().GetDoc(), data().GetArray(), (const char *)CU8String(rg_value143.GetText()).GetText());
+    return yyjson_mut_arr_add_strcpy(data().GetDoc(), data().GetArray(), (const char *)CU8String(rg_value144.GetText()).GetText());
 }
 
 void rg_YYJSONShuZuLei::GetDumpString (CVolString& rg_ZhanShiNeiRong91, INT rg_ZuiDaZhanShiShuJuCheCun91)

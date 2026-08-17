@@ -793,7 +793,7 @@ BOOL FBroImage::rg_QuTuPianXinXi (DOUBLE rg_BiLiYinZi, rg_volcano_base::rg_XiaoS
     int pixel_width,pixel_height;
     scale_factor=(float)rg_BiLiYinZi;
     bool retbool = FBroHsImage_GetRepresentationInfo(m_class,scale_factor,actual_scale_factor,pixel_width,pixel_height);
-    rg_ShiJiBiLi1.rg_value16=actual_scale_factor;rg_KuanDu15.rg_value12=pixel_width;rg_GaoDu15.rg_value12=pixel_height;
+    rg_ShiJiBiLi1.rg_value17=actual_scale_factor;rg_KuanDu15.rg_value13=pixel_width;rg_GaoDu15.rg_value13=pixel_height;
     return retbool;
 }
 
@@ -806,8 +806,8 @@ rg_FBrowser_value::FBroBinaryValue FBroImage::rg_QuTuPianShuJu_PNG (DOUBLE rg_Bi
     int quality,pixel_width,pixel_height;
     quality=rg_TouMing;
     CefRefPtr<CefBinaryValue> datapoint=FBroHsImage_GetAsPNG(m_class,scale_factor,quality,pixel_width,pixel_height);
-    rg_KuanDu18.rg_value12=pixel_width;
-    rg_GaoDu18.rg_value12=pixel_height;
+    rg_KuanDu18.rg_value13=pixel_width;
+    rg_GaoDu18.rg_value13=pixel_height;
     rg_TuPianShuJu2.Set(datapoint);
     return (rg_TuPianShuJu2);
 }
@@ -1380,12 +1380,12 @@ void rg_class_FBrowser_TianBiaoKuangJia::rg_QuYuanSuWaiDaiMa (CVolString& rg_Xua
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_ZhiYuanSuShuXing (CVolString& rg_XuanZeQi17, INT rg_SuoYin21, CVolString& rg_YuanSuMing, CVolString& rg_value101)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_ZhiYuanSuShuXing (CVolString& rg_XuanZeQi17, INT rg_SuoYin21, CVolString& rg_YuanSuMing, CVolString& rg_value102)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi17.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
-        FBroHsBrowserFrameTianBiao_SetAttribute(m_class,rg_XuanZeQi17.GetText(),rg_SuoYin21,rg_YuanSuMing.GetText(),rg_value101.GetText());
+        FBroHsBrowserFrameTianBiao_SetAttribute(m_class,rg_XuanZeQi17.GetText(),rg_SuoYin21,rg_YuanSuMing.GetText(),rg_value102.GetText());
     }
 }
 

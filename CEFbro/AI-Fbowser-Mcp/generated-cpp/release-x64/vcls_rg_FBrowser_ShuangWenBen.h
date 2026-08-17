@@ -25,7 +25,7 @@ public:
 
 public:
     CVolString rg_name1;
-    CVolString rg_value88;
+    CVolString rg_value89;
 };
 
 }

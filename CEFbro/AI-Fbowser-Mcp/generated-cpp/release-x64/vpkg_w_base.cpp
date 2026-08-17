@@ -27,32 +27,32 @@ rg_ZiJieLei::rg_ZiJieLei ()
 
 void rg_ZiJieLei::_VolObjectInitMembers ()
 {
-    rg_value9 = 0;
+    rg_value10 = 0;
 }
 
 BOOL rg_ZiJieLei::_IsSelfEqual (const rg_ZiJieLei& objCompare) const
 {
-    if (rg_value9 != objCompare.rg_value9)  return FALSE;
+    if (rg_value10 != objCompare.rg_value10)  return FALSE;
     return TRUE;
 }
 
 void rg_ZiJieLei::_CopySelfFrom (const rg_ZiJieLei& objCopyFrom)
 {
-    rg_value9 = objCopyFrom.rg_value9;
+    rg_value10 = objCopyFrom.rg_value10;
 }
 
 void rg_ZiJieLei::LoadFromStream (CVolBaseInputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::LoadFromStream (stream);
-    stream.ReadExact (&rg_value9, sizeof (S_BYTE));
+    stream.ReadExact (&rg_value10, sizeof (S_BYTE));
 }
 
 void rg_ZiJieLei::SaveIntoStream (CVolBaseOutputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::SaveIntoStream (stream);
-    stream.write (&rg_value9, sizeof (S_BYTE));
+    stream.write (&rg_value10, sizeof (S_BYTE));
 }
 
 rg_DuanZhengShuLei::rg_DuanZhengShuLei ()
@@ -62,32 +62,32 @@ rg_DuanZhengShuLei::rg_DuanZhengShuLei ()
 
 void rg_DuanZhengShuLei::_VolObjectInitMembers ()
 {
-    rg_value10 = 0;
+    rg_value11 = 0;
 }
 
 BOOL rg_DuanZhengShuLei::_IsSelfEqual (const rg_DuanZhengShuLei& objCompare) const
 {
-    if (rg_value10 != objCompare.rg_value10)  return FALSE;
+    if (rg_value11 != objCompare.rg_value11)  return FALSE;
     return TRUE;
 }
 
 void rg_DuanZhengShuLei::_CopySelfFrom (const rg_DuanZhengShuLei& objCopyFrom)
 {
-    rg_value10 = objCopyFrom.rg_value10;
+    rg_value11 = objCopyFrom.rg_value11;
 }
 
 void rg_DuanZhengShuLei::LoadFromStream (CVolBaseInputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::LoadFromStream (stream);
-    stream.ReadExact (&rg_value10, sizeof (SHORT));
+    stream.ReadExact (&rg_value11, sizeof (SHORT));
 }
 
 void rg_DuanZhengShuLei::SaveIntoStream (CVolBaseOutputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::SaveIntoStream (stream);
-    stream.write (&rg_value10, sizeof (SHORT));
+    stream.write (&rg_value11, sizeof (SHORT));
 }
 
 rg_ZiFuLei::rg_ZiFuLei ()
@@ -97,32 +97,32 @@ rg_ZiFuLei::rg_ZiFuLei ()
 
 void rg_ZiFuLei::_VolObjectInitMembers ()
 {
-    rg_value11 = 0;
+    rg_value12 = 0;
 }
 
 BOOL rg_ZiFuLei::_IsSelfEqual (const rg_ZiFuLei& objCompare) const
 {
-    if (rg_value11 != objCompare.rg_value11)  return FALSE;
+    if (rg_value12 != objCompare.rg_value12)  return FALSE;
     return TRUE;
 }
 
 void rg_ZiFuLei::_CopySelfFrom (const rg_ZiFuLei& objCopyFrom)
 {
-    rg_value11 = objCopyFrom.rg_value11;
+    rg_value12 = objCopyFrom.rg_value12;
 }
 
 void rg_ZiFuLei::LoadFromStream (CVolBaseInputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::LoadFromStream (stream);
-    stream.ReadExact (&rg_value11, sizeof (TCHAR));
+    stream.ReadExact (&rg_value12, sizeof (TCHAR));
 }
 
 void rg_ZiFuLei::SaveIntoStream (CVolBaseOutputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::SaveIntoStream (stream);
-    stream.write (&rg_value11, sizeof (TCHAR));
+    stream.write (&rg_value12, sizeof (TCHAR));
 }
 
 rg_ZhengShuLei::rg_ZhengShuLei ()
@@ -132,32 +132,32 @@ rg_ZhengShuLei::rg_ZhengShuLei ()
 
 void rg_ZhengShuLei::_VolObjectInitMembers ()
 {
-    rg_value12 = 0;
+    rg_value13 = 0;
 }
 
 BOOL rg_ZhengShuLei::_IsSelfEqual (const rg_ZhengShuLei& objCompare) const
 {
-    if (rg_value12 != objCompare.rg_value12)  return FALSE;
+    if (rg_value13 != objCompare.rg_value13)  return FALSE;
     return TRUE;
 }
 
 void rg_ZhengShuLei::_CopySelfFrom (const rg_ZhengShuLei& objCopyFrom)
 {
-    rg_value12 = objCopyFrom.rg_value12;
+    rg_value13 = objCopyFrom.rg_value13;
 }
 
 void rg_ZhengShuLei::LoadFromStream (CVolBaseInputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::LoadFromStream (stream);
-    stream.ReadExact (&rg_value12, sizeof (INT));
+    stream.ReadExact (&rg_value13, sizeof (INT));
 }
 
 void rg_ZhengShuLei::SaveIntoStream (CVolBaseOutputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::SaveIntoStream (stream);
-    stream.write (&rg_value12, sizeof (INT));
+    stream.write (&rg_value13, sizeof (INT));
 }
 
 rg_BianZhengShuLei::rg_BianZhengShuLei ()
@@ -167,32 +167,32 @@ rg_BianZhengShuLei::rg_BianZhengShuLei ()
 
 void rg_BianZhengShuLei::_VolObjectInitMembers ()
 {
-    rg_value13 = 0;
+    rg_value14 = 0;
 }
 
 BOOL rg_BianZhengShuLei::_IsSelfEqual (const rg_BianZhengShuLei& objCompare) const
 {
-    if (rg_value13 != objCompare.rg_value13)  return FALSE;
+    if (rg_value14 != objCompare.rg_value14)  return FALSE;
     return TRUE;
 }
 
 void rg_BianZhengShuLei::_CopySelfFrom (const rg_BianZhengShuLei& objCopyFrom)
 {
-    rg_value13 = objCopyFrom.rg_value13;
+    rg_value14 = objCopyFrom.rg_value14;
 }
 
 void rg_BianZhengShuLei::LoadFromStream (CVolBaseInputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::LoadFromStream (stream);
-    stream.ReadExact (&rg_value13, sizeof (INT64));
+    stream.ReadExact (&rg_value14, sizeof (INT64));
 }
 
 void rg_BianZhengShuLei::SaveIntoStream (CVolBaseOutputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::SaveIntoStream (stream);
-    stream.write (&rg_value13, sizeof (INT64));
+    stream.write (&rg_value14, sizeof (INT64));
 }
 
 rg_ChangZhengShuLei::rg_ChangZhengShuLei ()
@@ -202,32 +202,32 @@ rg_ChangZhengShuLei::rg_ChangZhengShuLei ()
 
 void rg_ChangZhengShuLei::_VolObjectInitMembers ()
 {
-    rg_value14 = 0;
+    rg_value15 = 0;
 }
 
 BOOL rg_ChangZhengShuLei::_IsSelfEqual (const rg_ChangZhengShuLei& objCompare) const
 {
-    if (rg_value14 != objCompare.rg_value14)  return FALSE;
+    if (rg_value15 != objCompare.rg_value15)  return FALSE;
     return TRUE;
 }
 
 void rg_ChangZhengShuLei::_CopySelfFrom (const rg_ChangZhengShuLei& objCopyFrom)
 {
-    rg_value14 = objCopyFrom.rg_value14;
+    rg_value15 = objCopyFrom.rg_value15;
 }
 
 void rg_ChangZhengShuLei::LoadFromStream (CVolBaseInputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::LoadFromStream (stream);
-    stream.ReadExact (&rg_value14, sizeof (INT64));
+    stream.ReadExact (&rg_value15, sizeof (INT64));
 }
 
 void rg_ChangZhengShuLei::SaveIntoStream (CVolBaseOutputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::SaveIntoStream (stream);
-    stream.write (&rg_value14, sizeof (INT64));
+    stream.write (&rg_value15, sizeof (INT64));
 }
 
 rg_ChanJingDuXiaoShuLei::rg_ChanJingDuXiaoShuLei ()
@@ -237,32 +237,32 @@ rg_ChanJingDuXiaoShuLei::rg_ChanJingDuXiaoShuLei ()
 
 void rg_ChanJingDuXiaoShuLei::_VolObjectInitMembers ()
 {
-    rg_value15 = 0;
+    rg_value16 = 0;
 }
 
 BOOL rg_ChanJingDuXiaoShuLei::_IsSelfEqual (const rg_ChanJingDuXiaoShuLei& objCompare) const
 {
-    if (IsFloatEqual (rg_value15, objCompare.rg_value15) == FALSE)  return FALSE;
+    if (IsFloatEqual (rg_value16, objCompare.rg_value16) == FALSE)  return FALSE;
     return TRUE;
 }
 
 void rg_ChanJingDuXiaoShuLei::_CopySelfFrom (const rg_ChanJingDuXiaoShuLei& objCopyFrom)
 {
-    rg_value15 = objCopyFrom.rg_value15;
+    rg_value16 = objCopyFrom.rg_value16;
 }
 
 void rg_ChanJingDuXiaoShuLei::LoadFromStream (CVolBaseInputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::LoadFromStream (stream);
-    stream.ReadExact (&rg_value15, sizeof (FLOAT));
+    stream.ReadExact (&rg_value16, sizeof (FLOAT));
 }
 
 void rg_ChanJingDuXiaoShuLei::SaveIntoStream (CVolBaseOutputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::SaveIntoStream (stream);
-    stream.write (&rg_value15, sizeof (FLOAT));
+    stream.write (&rg_value16, sizeof (FLOAT));
 }
 
 rg_XiaoShuLei::rg_XiaoShuLei ()
@@ -272,32 +272,32 @@ rg_XiaoShuLei::rg_XiaoShuLei ()
 
 void rg_XiaoShuLei::_VolObjectInitMembers ()
 {
-    rg_value16 = 0;
+    rg_value17 = 0;
 }
 
 BOOL rg_XiaoShuLei::_IsSelfEqual (const rg_XiaoShuLei& objCompare) const
 {
-    if (IsDoubleEqual (rg_value16, objCompare.rg_value16) == FALSE)  return FALSE;
+    if (IsDoubleEqual (rg_value17, objCompare.rg_value17) == FALSE)  return FALSE;
     return TRUE;
 }
 
 void rg_XiaoShuLei::_CopySelfFrom (const rg_XiaoShuLei& objCopyFrom)
 {
-    rg_value16 = objCopyFrom.rg_value16;
+    rg_value17 = objCopyFrom.rg_value17;
 }
 
 void rg_XiaoShuLei::LoadFromStream (CVolBaseInputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::LoadFromStream (stream);
-    stream.ReadExact (&rg_value16, sizeof (DOUBLE));
+    stream.ReadExact (&rg_value17, sizeof (DOUBLE));
 }
 
 void rg_XiaoShuLei::SaveIntoStream (CVolBaseOutputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::SaveIntoStream (stream);
-    stream.write (&rg_value16, sizeof (DOUBLE));
+    stream.write (&rg_value17, sizeof (DOUBLE));
 }
 
 rg_LuoJiXingLei::rg_LuoJiXingLei ()
@@ -307,32 +307,32 @@ rg_LuoJiXingLei::rg_LuoJiXingLei ()
 
 void rg_LuoJiXingLei::_VolObjectInitMembers ()
 {
-    rg_value17 = FALSE;
+    rg_value18 = FALSE;
 }
 
 BOOL rg_LuoJiXingLei::_IsSelfEqual (const rg_LuoJiXingLei& objCompare) const
 {
-    if (rg_value17 != objCompare.rg_value17)  return FALSE;
+    if (rg_value18 != objCompare.rg_value18)  return FALSE;
     return TRUE;
 }
 
 void rg_LuoJiXingLei::_CopySelfFrom (const rg_LuoJiXingLei& objCopyFrom)
 {
-    rg_value17 = objCopyFrom.rg_value17;
+    rg_value18 = objCopyFrom.rg_value18;
 }
 
 void rg_LuoJiXingLei::LoadFromStream (CVolBaseInputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::LoadFromStream (stream);
-    stream.ReadExact (&rg_value17, sizeof (BOOL));
+    stream.ReadExact (&rg_value18, sizeof (BOOL));
 }
 
 void rg_LuoJiXingLei::SaveIntoStream (CVolBaseOutputStream& stream)
 {
     if (stream.IsFoundError ())  return;
     BaseClass::SaveIntoStream (stream);
-    stream.write (&rg_value17, sizeof (BOOL));
+    stream.write (&rg_value18, sizeof (BOOL));
 }
 
 }

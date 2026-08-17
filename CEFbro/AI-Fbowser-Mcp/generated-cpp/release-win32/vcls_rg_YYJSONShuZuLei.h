@@ -29,9 +29,9 @@ inline_ rg_YYJSONShuZuLei (yyjson_mut_val* arr, CRefJsonMutObjectPtrWithData* pR
 public:
     BOOL rg_ChuangJianZiWenBenShuJu (rg_volcano_base::rg_WenBenShuZuLei& rg_member15);
     BOOL rg_JiaRuChengYuan44 (rg_YYJSONDuiXiangLei& rg_TianJiaZhi4);
-    BOOL rg_JiaRuZhengShuChengYuan1 (INT rg_value141);
-    BOOL rg_JiaRuXiaoShuChengYuan1 (DOUBLE rg_value142);
-    BOOL rg_JiaRuWenBenChengYuan1 (CVolString& rg_value143);
+    BOOL rg_JiaRuZhengShuChengYuan1 (INT rg_value142);
+    BOOL rg_JiaRuXiaoShuChengYuan1 (DOUBLE rg_value143);
+    BOOL rg_JiaRuWenBenChengYuan1 (CVolString& rg_value144);
     virtual void GetDumpString (CVolString& rg_ZhanShiNeiRong91, INT rg_ZuiDaZhanShiShuJuCheCun91);
     rg_YYJSONShuZuLei ();
     void _VolObjectInitMembers ();

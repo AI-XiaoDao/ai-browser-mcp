@@ -28,6 +28,8 @@ public:
     static const INT rg_JieDuan_YuanMaZuiDaZiJie;
     static const INT rg_JieDuan_CDPJieGuoZuiDaZiJie;
     static const INT rg_JieDuan_VIPShuJuZuiDaZiJie;
+    static const INT rg_JieDuan_XiangYingWenBenZuiDaZiFu;
+    static const INT rg_URLXiangYingLeiJiZuiDaZiJie;
     static const INT rg_CookieMoRenXiangShu;
     static const INT rg_CookieZuiDaXiangShu;
     static const INT rg_URLQingQiuMoRenChaoShi;
@@ -52,6 +54,8 @@ public:
     static const INT rg_CDPYingSheTTLHaoMiao;
     static const INT rg_ChiJiuV8KuoZhanShangXian;
     static const INT rg_WSZuiDaXiaoXiZiJie;
+    static const INT rg_NeiHeBanBenZuiXiao;
+    static const INT rg_NeiHeBanBenZuiDa;
     static const INT rg_ChuangKouYangShi_GWL_STYLE;
     static const INT rg_TLSZhiWen_1_n;
     static const INT rg_TLSZhiWen_1_n1;

@@ -13,21 +13,21 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
     {
         CVolString rg_selector11;
         rg_selector11 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("selector")));
-        CVolString rg_value6;
-        rg_value6 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("value")));
+        CVolString rg_value7;
+        rg_value7 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("value")));
         if (rg_selector11 == _T (""))
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser109;
-        rg_browser109 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser109.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser107;
+        rg_browser107 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser107.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_FBrowser_LiuLanQi::rg_class_FBrowser_TianBiaoKuangJia rg_TianBiaoKuangJia8;
-            rg_TianBiaoKuangJia8 = rg_browser109.rg_QuZhuTianBiaoKuangJia ();
+            rg_TianBiaoKuangJia8 = rg_browser107.rg_QuZhuTianBiaoKuangJia ();
             if (rg_TianBiaoKuangJia8.rg_ShiFouYouXiao ())
             {
-                rg_TianBiaoKuangJia8.rg_ZhiYuanSuNeiRong (rg_selector11, 0, rg_value6);
+                rg_TianBiaoKuangJia8.rg_ZhiYuanSuNeiRong (rg_selector11, 0, rg_value7);
                 return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID28, _CT2 (_T ("已设置: ")) + rg_selector11));
             }
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("填表框架无效"))));
@@ -42,12 +42,12 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser110;
-        rg_browser110 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser110.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser108;
+        rg_browser108 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser108.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_FBrowser_LiuLanQi::rg_class_FBrowser_TianBiaoKuangJia rg_TianBiaoKuangJia9;
-            rg_TianBiaoKuangJia9 = rg_browser110.rg_QuZhuTianBiaoKuangJia ();
+            rg_TianBiaoKuangJia9 = rg_browser108.rg_QuZhuTianBiaoKuangJia ();
             if (rg_TianBiaoKuangJia9.rg_ShiFouYouXiao ())
             {
                 rg_TianBiaoKuangJia9.rg_DianJiYuanSu (rg_selector12, 0);
@@ -65,12 +65,12 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser111;
-        rg_browser111 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser111.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser109;
+        rg_browser109 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser109.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_FBrowser_LiuLanQi::rg_class_FBrowser_TianBiaoKuangJia rg_TianBiaoKuangJia10;
-            rg_TianBiaoKuangJia10 = rg_browser111.rg_QuZhuTianBiaoKuangJia ();
+            rg_TianBiaoKuangJia10 = rg_browser109.rg_QuZhuTianBiaoKuangJia ();
             if (rg_TianBiaoKuangJia10.rg_ShiFouYouXiao ())
             {
                 rg_TianBiaoKuangJia10.rg_ZhiYuanSuJiaoDian (rg_selector13, 0, TRUE);
@@ -88,12 +88,12 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser112;
-        rg_browser112 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser112.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser110;
+        rg_browser110 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser110.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_FBrowser_LiuLanQi::rg_class_FBrowser_TianBiaoKuangJia rg_TianBiaoKuangJia11;
-            rg_TianBiaoKuangJia11 = rg_browser112.rg_QuZhuTianBiaoKuangJia ();
+            rg_TianBiaoKuangJia11 = rg_browser110.rg_QuZhuTianBiaoKuangJia ();
             if (rg_TianBiaoKuangJia11.rg_ShiFouYouXiao ())
             {
                 rg_TianBiaoKuangJia11.rg_GunDongDaoYuanSu (rg_selector14, 0, TRUE);
@@ -111,12 +111,12 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser113;
-        rg_browser113 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser113.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser111;
+        rg_browser111 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser111.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_FBrowser_LiuLanQi::rg_class_FBrowser_TianBiaoKuangJia rg_TianBiaoKuangJia12;
-            rg_TianBiaoKuangJia12 = rg_browser113.rg_QuZhuTianBiaoKuangJia ();
+            rg_TianBiaoKuangJia12 = rg_browser111.rg_QuZhuTianBiaoKuangJia ();
             if (rg_TianBiaoKuangJia12.rg_ShiFouYouXiao ())
             {
                 CVolString rg_YiBuCunZaiID;
@@ -137,11 +137,15 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
         rg_selector16 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("selector")));
         CVolString rg_attr;
         rg_attr = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("attribute")));
-        CVolString rg_value7;
-        rg_value7 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("value")));
+        CVolString rg_value8;
+        rg_value8 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("value")));
         if (rg_selector16 == _T (""))
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
+        }
+        if (CVolString (rg_attr).TrimAll () == _T (""))
+        {
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("attribute 不能为空 | 如 style / data-* / aria-*"))));
         }
         CVolString rg_attrLower;
         rg_attrLower = CVolString (CVolString (rg_attr).TrimAll ()).MakeLower ();
@@ -153,15 +157,15 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("安全限制: 不允许设置 ")) + rg_attr + _T (" 属性(事件处理器) | 仅允许样式/数据/aria 属性")));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser114;
-        rg_browser114 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser114.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser112;
+        rg_browser112 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser112.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_FBrowser_LiuLanQi::rg_class_FBrowser_TianBiaoKuangJia rg_TianBiaoKuangJia13;
-            rg_TianBiaoKuangJia13 = rg_browser114.rg_QuZhuTianBiaoKuangJia ();
+            rg_TianBiaoKuangJia13 = rg_browser112.rg_QuZhuTianBiaoKuangJia ();
             if (rg_TianBiaoKuangJia13.rg_ShiFouYouXiao ())
             {
-                rg_TianBiaoKuangJia13.rg_ZhiYuanSuShuXing (rg_selector16, 0, rg_attr, rg_value7);
+                rg_TianBiaoKuangJia13.rg_ZhiYuanSuShuXing (rg_selector16, 0, rg_attr, rg_value8);
                 return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID28, _CT2 (_T ("属性已设置: ")) + rg_selector16));
             }
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("填表框架无效"))));
@@ -178,12 +182,12 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser115;
-        rg_browser115 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser115.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser113;
+        rg_browser113 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser113.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_FBrowser_LiuLanQi::rg_class_FBrowser_TianBiaoKuangJia rg_TianBiaoKuangJia14;
-            rg_TianBiaoKuangJia14 = rg_browser115.rg_QuZhuTianBiaoKuangJia ();
+            rg_TianBiaoKuangJia14 = rg_browser113.rg_QuZhuTianBiaoKuangJia ();
             if (rg_TianBiaoKuangJia14.rg_ShiFouYouXiao ())
             {
                 CVolString rg_YiBuTianBiaoID1;
@@ -212,12 +216,12 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser116;
-        rg_browser116 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser116.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser114;
+        rg_browser114 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser114.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_FBrowser_LiuLanQi::rg_class_FBrowser_TianBiaoKuangJia rg_TianBiaoKuangJia15;
-            rg_TianBiaoKuangJia15 = rg_browser116.rg_QuZhuTianBiaoKuangJia ();
+            rg_TianBiaoKuangJia15 = rg_browser114.rg_QuZhuTianBiaoKuangJia ();
             if (rg_TianBiaoKuangJia15.rg_ShiFouYouXiao ())
             {
                 rg_TianBiaoKuangJia15.rg_ChuFaYuanSuShiJian (rg_selector18, 0, rg_eventType, 0);
@@ -231,30 +235,43 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
     {
         CVolString rg_selector19;
         rg_selector19 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("selector")));
-        CVolString rg_value8;
-        rg_value8 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("value")));
+        CVolString rg_value9;
+        rg_value9 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("value")));
         if (rg_selector19 == _T (""))
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser117;
-        rg_browser117 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser117.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser115;
+        rg_browser115 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser115.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_FBrowser_LiuLanQi::rg_class_FBrowser_TianBiaoKuangJia rg_TianBiaoKuangJia16;
-            rg_TianBiaoKuangJia16 = rg_browser117.rg_QuZhuTianBiaoKuangJia ();
+            rg_TianBiaoKuangJia16 = rg_browser115.rg_QuZhuTianBiaoKuangJia ();
             if (rg_TianBiaoKuangJia16.rg_ShiFouYouXiao ())
             {
-                BOOL rg_XuanZeZhuangTai1;
-                rg_XuanZeZhuangTai1 = TRUE;
-                CVolString rg_valLower1;
-                rg_valLower1 = CVolString (CVolString (rg_value8).TrimAll ()).MakeLower ();
-                if (rg_valLower1 == _T ("false") || rg_valLower1 == _T ("0") || rg_valLower1 == _T ("off") || rg_valLower1 == _T ("no") || rg_valLower1 == _T ("unchecked") || rg_valLower1 == _T ("unselected"))
+                if (rg_value9 == _T (""))
                 {
-                    rg_XuanZeZhuangTai1 = FALSE;
+                    return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("value 不能为空 | select 下拉项的选项值, 如 'US' / '男'"))));
                 }
-                rg_TianBiaoKuangJia16.rg_ZhiYuanSuXuanZeKuang (rg_selector19, 0, rg_XuanZeZhuangTai1);
-                return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID28, _CT2 (_T ("select已设置: ")) + rg_selector19));
+                rg_FBrowser_LiuLanQi::FBroFrame rg_fselFrame;
+                rg_fselFrame = rg_browser115.rg_QuZhuKuangJia ();
+                if (rg_fselFrame.rg_ShiFouWeiKong128 () == FALSE && rg_fselFrame.rg_ShiFouYouXiao ())
+                {
+                    CVolString rg_fselSel;
+                    rg_fselSel = rg_MCPMingLingFuWuQi::rg_JianChanZhuaiYiJS (rg_selector19);
+                    CVolString rg_fselVal;
+                    rg_fselVal = rg_MCPMingLingFuWuQi::rg_JianChanZhuaiYiJS (rg_value9);
+                    rg_fselFrame.rg_ZhiHangJSDaiMa (_CT2 (_T ("(function(){var e=document.querySelector('")) + rg_fselSel + _T ("');if(!e)return;var n=Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype,'value');if(n&&n.set){n.set.call(e,'") + rg_fselVal + _T ("')}else{e.value='") + rg_fselVal + _T ("'};e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));})()"), _CT2 (_T ("")), 0);
+                    return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID28, _CT2 (_T ("select已设置: ")) + rg_selector19 + _T (" = ") + rg_value9));
+                }
+                INT rg_fselIdx;
+                rg_fselIdx = _ttoi (rg_value9.GetText ());
+                if (CVolString (rg_fselIdx) == rg_value9)
+                {
+                    rg_TianBiaoKuangJia16.rg_ZhiYuanSuXuanZeXiang (rg_selector19, 0, rg_fselIdx);
+                    return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID28, _CT2 (_T ("select已按索引设置: ")) + rg_selector19 + _T (" = ") + rg_value9));
+                }
+                return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("主框架无效且 value 非整数索引, 无法设置 select"))));
             }
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("填表框架无效"))));
         }
@@ -293,6 +310,10 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
                 BOOL rg_ffShouCi = TRUE;
                 INT rg_ffZongShu;
                 rg_ffZongShu = (INT)yyjson_arr_size(rg_ffArr.data().GetArray());
+                if (rg_ffZongShu > 500)
+                {
+                    return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("fields 字段数超过上限(500)"))));
+                }
                 rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei rg_ffCunZaiYingShe;
                 CVolString rg_ffJianChaDaiMa;
                 rg_ffJianChaDaiMa = _T ("(function(){var sels=[");

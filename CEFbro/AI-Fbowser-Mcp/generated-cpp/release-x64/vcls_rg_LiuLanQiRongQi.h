@@ -14,9 +14,11 @@ class rg_LiuLanQiRongQi : public CVolObject
 public:
     static void CALLBACK rg_ZhiJiaZaiZhuangTai (BOOL rg_value);
     static BOOL CALLBACK rg_QuJiaZaiZhuangTai ();
-    static void CALLBACK rg_ZhiZuiXinDeZhi (CVolString& rg_value1);
+    static void CALLBACK rg_ZhiZuiHouZaiRuJieShuHaoMiao (INT64 rg_value1);
+    static INT64 CALLBACK rg_QuZuiHouZaiRuJieShuHaoMiao ();
+    static void CALLBACK rg_ZhiZuiXinDeZhi (CVolString& rg_value2);
     static CVolString CALLBACK rg_QuZuiXinDeZhi ();
-    static void CALLBACK rg_ZhiYeMianBiaoTi (CVolString& rg_value2);
+    static void CALLBACK rg_ZhiYeMianBiaoTi (CVolString& rg_value3);
     static CVolString CALLBACK rg_QuYeMianBiaoTi ();
     static void CALLBACK rg_ChongZhiHuanYingYeDaoHangZhuangTai ();
     static void CALLBACK rg_BiaoJiHuanYingYeDaoHangYiFaQi ();
@@ -24,6 +26,7 @@ public:
     static void CALLBACK rg_BiaoJiXuYaoHuiFuBuJu ();
     static void CALLBACK rg_HuiFuHuanYingYe ();
     static CVolString CALLBACK rg_QuHuanYingYeDeZhi ();
+    static void CALLBACK rg_DaoHangHuanYingYeNeiBu ();
     static CVolString CALLBACK rg_QuHuanYingYeHTML ();
     inline_ rg_LiuLanQiRongQi () { }
     inline_ void _VolObjectInitMembers () { }
@@ -32,6 +35,7 @@ public:
     static CVolString rg_ZuiXinDeZhi;
     static CVolString rg_DangQianYeMianBiaoTi;
     static BOOL rg_YeMianJiaZaiZhong;
+    static INT64 rg_ZuiHouZaiRuJieShuHaoMiao;
     static rg_volcano_base::rg_HuChiSuoLei rg_ZhuangTaiSuo;
     static CVolObjectArray rg_LiuLanQiShuZu;
     static CVolString rg_WangYeShuJu;

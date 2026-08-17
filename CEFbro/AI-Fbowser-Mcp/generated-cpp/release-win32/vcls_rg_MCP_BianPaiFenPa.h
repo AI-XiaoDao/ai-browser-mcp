@@ -12,7 +12,7 @@ class rg_MCP_BianPaiFenPa : public CVolObject
     DECLARE_EMPTY_VOL_CLASS (rg_volcano_app, rg_MCP_BianPaiFenPa)
 
 public:
-    static void CALLBACK rg_QingQiuGongZuoLiuTingZhi ();
+    static BOOL CALLBACK rg_QingQiuGongZuoLiuTingZhi ();
     static void CALLBACK rg_ChongZhiGongZuoLiuZhuangTai ();
     static void CALLBACK rg_JiangZhiZhongZhiChaoShiGongZuoLiu ();
     static CVolString CALLBACK rg_FenLeiFenPa_BianPaiCaoZuo (CVolString& rg_MingLingID32, CVolString& rg_FangFaMing13, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON22);
@@ -41,7 +41,9 @@ public:
     static CVolString rg_DangQianGongZuoLiuMing;
     static CVolString rg_GongZuoLiuMuLuHuanCun;
     static INT64 rg_GongZuoLiuKaiShiShiJian;
+    static rg_volcano_base::rg_HuChiSuoLei rg_GongZuoLiuZhuangTaiSuo;
     static const INT rg_GongZuoLiuZuiDaYunHangHaoMiao;
+    static const INT rg_GongZuoLiuChanBuZuiDaDengDaiHaoMiao;
 };
 
 }

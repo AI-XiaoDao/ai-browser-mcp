@@ -16,6 +16,10 @@ public:
     inline_ void _VolObjectInitMembers () { }
 
 public:
+    static const INT rg_WeiZhi33;
+    static const INT rg_KongZhi2;
+    static const INT rg_bool_value6;
+    static const INT rg_ShuZhi1;
     static const INT rg_WenBenZhi4;
     static const INT rg_ShuZuZhi1;
     static const INT rg_DuiXiangZhi;

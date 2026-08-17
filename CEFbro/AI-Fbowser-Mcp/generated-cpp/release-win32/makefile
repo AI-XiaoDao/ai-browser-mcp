@@ -9,7 +9,7 @@ PCH_FULL_FILE_NAME = $(OUT_DIR)\stdafx.pch
 PCH_HEADER_FILE_NAME = stdafx.h
 PCH_CPP_FILE_NAME = stdafx.cpp
 
-_PARAM_INCLUDE =  /I "C:\Users\cxzxc\Desktop\官方火山编PC视窗wsv源码\ai-browser-mcp\CEFbro\AI-Fbowser-Mcp\_int\AI-Fbowser-Mcp\release\win32\project" /I "E:\HSPC\plugins\vprj_win\classlib" /I "E:\HSPC\plugins\vprj_win\classlib\shared\extern_lib\common\sqlite3\2\include\default" /I "E:\HSPC\plugins\vprj_win\classlib\sys\yyjson\src"
+_PARAM_INCLUDE =  /I "C:\Users\cxzxc\Desktop\MCP源码\ai-browser-mcp\CEFbro\AI-Fbowser-Mcp\_int\AI-Fbowser-Mcp\release\win32\project" /I "E:\HSPC\plugins\vprj_win\classlib" /I "E:\HSPC\plugins\vprj_win\classlib\shared\extern_lib\common\sqlite3\2\include\default" /I "E:\HSPC\plugins\vprj_win\classlib\sys\yyjson\src"
 _PARAM_PREDEFINE = /D CRTAPI1=_cdecl /D CRTAPI2=_cdecl /D WIN32 /D _WIN32 /D _WINDOWS /D _UNICODE /D UNICODE /D NDEBUG /D _CONSOLE /D _VOL_STATIC_RUNTIME /D _VOL_CONSOLE_EXE /D _VOL_DISABLE_STANDARD_STARTUP /D _VOL_WIN32
 _CPP_PARAMS = /c /nologo /GS /W3 /Zc:wchar_t /fp:precise /errorReport:none /WX- /Gd /Zc:forScope /EHa $(_PARAM_INCLUDE) $(_PARAM_PREDEFINE) /Oy- /MT /GL /Gy /O2 /Oi /O2 /Ot /std:c++17
 _PCH_CPP_PARAMS = $(PCH_HEADER_FILE_NAME) /Fp$(PCH_FULL_FILE_NAME) /Fd$(OUT_DIR)\ /Fo$(OUT_DIR)\ $(_CPP_PARAMS)

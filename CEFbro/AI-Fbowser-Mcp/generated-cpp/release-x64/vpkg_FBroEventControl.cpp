@@ -1153,15 +1153,15 @@ INT rg_class_FBrowser_zyglq::rg_XiuGaiShuJu (INT64 rg_BiaoShiID35, INT64 rg_ShuR
 {
     if (rg_ShuRuDaXiao2 > rg_ShuChuDaXiao3)
     {
-        rg_ShuRuDouQuDaXiao2.rg_value12 = rg_ShuChuDaXiao3;
-        rg_ShuChuXieRuDaXiao3.rg_value12 = rg_ShuChuDaXiao3;
+        rg_ShuRuDouQuDaXiao2.rg_value13 = rg_ShuChuDaXiao3;
+        rg_ShuChuXieRuDaXiao3.rg_value13 = rg_ShuChuDaXiao3;
         rg_volcano_base::rg_ZhiZhenCaoZuoLei::rg_NeiCunFuZhi (rg_ShuChuZhiZhen3, rg_ShuRuZhiZhen2, rg_ShuChuDaXiao3);
         return (0);
     }
     else
     {
-        rg_ShuRuDouQuDaXiao2.rg_value12 = rg_ShuRuDaXiao2;
-        rg_ShuChuXieRuDaXiao3.rg_value12 = rg_ShuRuDaXiao2;
+        rg_ShuRuDouQuDaXiao2.rg_value13 = rg_ShuRuDaXiao2;
+        rg_ShuChuXieRuDaXiao3.rg_value13 = rg_ShuRuDaXiao2;
         rg_volcano_base::rg_ZhiZhenCaoZuoLei::rg_NeiCunFuZhi (rg_ShuChuZhiZhen3, rg_ShuRuZhiZhen2, rg_ShuRuDaXiao2);
         return (1);
     }

@@ -27,7 +27,7 @@ public:
     void rg_ZhiYuanSuNeiDaiMa (CVolString& rg_XuanZeQi13, INT rg_SuoYin17, CVolString& rg_DaiMaWenBen1);
     void rg_QuYuanSuNeiDaiMa (CVolString& rg_XuanZeQi14, INT rg_SuoYin18, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao8);
     void rg_QuYuanSuWaiDaiMa (CVolString& rg_XuanZeQi16, INT rg_SuoYin20, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao9);
-    void rg_ZhiYuanSuShuXing (CVolString& rg_XuanZeQi17, INT rg_SuoYin21, CVolString& rg_YuanSuMing, CVolString& rg_value101);
+    void rg_ZhiYuanSuShuXing (CVolString& rg_XuanZeQi17, INT rg_SuoYin21, CVolString& rg_YuanSuMing, CVolString& rg_value102);
     void rg_QuYuanSuShuXing (CVolString& rg_XuanZeQi18, INT rg_SuoYin22, CVolString& rg_YuanSuMing1, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao10);
     void rg_YuanSuShiFouCunZai (CVolString& rg_XuanZeQi19, INT rg_SuoYin23, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao11);
     void rg_QuYuanSuZuoBiao (CVolString& rg_XuanZeQi20, INT rg_SuoYin24, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao12);

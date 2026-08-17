@@ -12,8 +12,8 @@ class rg_LuoJiXingLei : public CVolBaseDataType
     DECLARE_VOL_CLASS (rg_volcano_base, rg_LuoJiXingLei)
 
 public:
-    virtual void* GetDataPtr () override  { return &rg_value17; }
-    virtual void GetDumpString (CVolString& strDump, INT nMaxDumpSize) override  { strDump.SetValueText (rg_value17); }
+    virtual void* GetDataPtr () override  { return &rg_value18; }
+    virtual void GetDumpString (CVolString& strDump, INT nMaxDumpSize) override  { strDump.SetValueText (rg_value18); }
 
 public:
     rg_LuoJiXingLei ();
@@ -22,7 +22,7 @@ public:
     virtual void SaveIntoStream (CVolBaseOutputStream& stream) override;
 
 public:
-    BOOL rg_value17;
+    BOOL rg_value18;
 };
 
 }

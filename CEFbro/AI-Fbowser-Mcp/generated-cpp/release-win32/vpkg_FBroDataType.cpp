@@ -1057,14 +1057,14 @@ POINT_MOUSEEVENT rg_FBrowser_ShuBiaoShiJian::ToFBroData(){
 BOOL rg_FBrowser_ShuangWenBen::_IsSelfEqual (const rg_FBrowser_ShuangWenBen& objCompare) const
 {
     if (rg_name1 != objCompare.rg_name1)  return FALSE;
-    if (rg_value88 != objCompare.rg_value88)  return FALSE;
+    if (rg_value89 != objCompare.rg_value89)  return FALSE;
     return TRUE;
 }
 
 void rg_FBrowser_ShuangWenBen::_CopySelfFrom (const rg_FBrowser_ShuangWenBen& objCopyFrom)
 {
     rg_name1 = objCopyFrom.rg_name1;
-    rg_value88 = objCopyFrom.rg_value88;
+    rg_value89 = objCopyFrom.rg_value89;
 }
 
 void rg_FBrowser_ShuangWenBen::LoadFromStream (CVolBaseInputStream& stream)
@@ -1072,7 +1072,7 @@ void rg_FBrowser_ShuangWenBen::LoadFromStream (CVolBaseInputStream& stream)
     if (stream.IsFoundError ())  return;
     BaseClass::LoadFromStream (stream);
     rg_name1.LoadFromStream (stream);
-    rg_value88.LoadFromStream (stream);
+    rg_value89.LoadFromStream (stream);
 }
 
 void rg_FBrowser_ShuangWenBen::SaveIntoStream (CVolBaseOutputStream& stream)
@@ -1080,12 +1080,12 @@ void rg_FBrowser_ShuangWenBen::SaveIntoStream (CVolBaseOutputStream& stream)
     if (stream.IsFoundError ())  return;
     BaseClass::SaveIntoStream (stream);
     rg_name1.SaveIntoStream (stream);
-    rg_value88.SaveIntoStream (stream);
+    rg_value89.SaveIntoStream (stream);
 }
 PTELIB_STRING_STRING rg_FBrowser_ShuangWenBen::ToFBroData(){
   release();
   m_data.first=FBroUnit::UnicodeToAnsi(rg_name1);
-  m_data.second=FBroUnit::UnicodeToAnsi(rg_value88);
+  m_data.second=FBroUnit::UnicodeToAnsi(rg_value89);
   return &m_data;
 }
 void rg_FBrowser_ShuangWenBen::release(){
@@ -1122,7 +1122,7 @@ INT rg_FBrowser_ShuangWenBenShuZu::rg_QuGeShu2 ()
 
 void rg_FBrowser_ShuangWenBenShuZu::rg_JiaRuChengYuan35 (rg_FBrowser_ShuangWenBen& rg_member2)
 {
-    if(!IsEmpty()) FBroDoubleString_Add(m_data,rg_member2.rg_name1.GetText(), rg_member2.rg_value88.GetText());
+    if(!IsEmpty()) FBroDoubleString_Add(m_data,rg_member2.rg_name1.GetText(), rg_member2.rg_value89.GetText());
 }
 
 void rg_FBrowser_ShuangWenBenShuZu::rg_DaoShuZuShou2 ()
@@ -1140,7 +1140,7 @@ rg_FBrowser_ShuangWenBen rg_FBrowser_ShuangWenBenShuZu::rg_QuDangQianWeiZhiShuJu
 {
     rg_FBrowser_ShuangWenBen rg_temp3;
     rg_temp3.rg_name1 = rg_QuDangQianWeiZhiShuJu_GuanJianZi ();
-    rg_temp3.rg_value88 = rg_QuDangQianWeiZhiShuJu_ShuJu ();
+    rg_temp3.rg_value89 = rg_QuDangQianWeiZhiShuJu_ShuJu ();
     return (rg_temp3);
 }
 
@@ -1377,7 +1377,7 @@ void rg_FBrowser_CookieShuJu::_VolObjectInitMembers ()
 BOOL rg_FBrowser_CookieShuJu::_IsSelfEqual (const rg_FBrowser_CookieShuJu& objCompare) const
 {
     if (rg_Ming10 != objCompare.rg_Ming10)  return FALSE;
-    if (rg_value94 != objCompare.rg_value94)  return FALSE;
+    if (rg_value95 != objCompare.rg_value95)  return FALSE;
     if (rg_Yu != objCompare.rg_Yu)  return FALSE;
     if (rg_LuJing4 != objCompare.rg_LuJing4)  return FALSE;
     if (rg_ShiFouZhiYouhttp != objCompare.rg_ShiFouZhiYouhttp)  return FALSE;
@@ -1393,7 +1393,7 @@ BOOL rg_FBrowser_CookieShuJu::_IsSelfEqual (const rg_FBrowser_CookieShuJu& objCo
 void rg_FBrowser_CookieShuJu::_CopySelfFrom (const rg_FBrowser_CookieShuJu& objCopyFrom)
 {
     rg_Ming10 = objCopyFrom.rg_Ming10;
-    rg_value94 = objCopyFrom.rg_value94;
+    rg_value95 = objCopyFrom.rg_value95;
     rg_Yu = objCopyFrom.rg_Yu;
     rg_LuJing4 = objCopyFrom.rg_LuJing4;
     rg_ShiFouZhiYouhttp = objCopyFrom.rg_ShiFouZhiYouhttp;
@@ -1410,7 +1410,7 @@ void rg_FBrowser_CookieShuJu::LoadFromStream (CVolBaseInputStream& stream)
     if (stream.IsFoundError ())  return;
     BaseClass::LoadFromStream (stream);
     rg_Ming10.LoadFromStream (stream);
-    rg_value94.LoadFromStream (stream);
+    rg_value95.LoadFromStream (stream);
     rg_Yu.LoadFromStream (stream);
     rg_LuJing4.LoadFromStream (stream);
     stream.ReadExact (&rg_ShiFouZhiYouhttp, sizeof (BOOL));
@@ -1427,7 +1427,7 @@ void rg_FBrowser_CookieShuJu::SaveIntoStream (CVolBaseOutputStream& stream)
     if (stream.IsFoundError ())  return;
     BaseClass::SaveIntoStream (stream);
     rg_Ming10.SaveIntoStream (stream);
-    rg_value94.SaveIntoStream (stream);
+    rg_value95.SaveIntoStream (stream);
     rg_Yu.SaveIntoStream (stream);
     rg_LuJing4.SaveIntoStream (stream);
     stream.write (&rg_ShiFouZhiYouhttp, sizeof (BOOL));
@@ -1441,7 +1441,7 @@ void rg_FBrowser_CookieShuJu::SaveIntoStream (CVolBaseOutputStream& stream)
 POINT_COOKIEDATA rg_FBrowser_CookieShuJu::ToFBroData(){
   release();
   m_data.name = FBroUnit::UnicodeToAnsi(rg_Ming10.GetText());
-  m_data.value = FBroUnit::UnicodeToAnsi(rg_value94.GetText());
+  m_data.value = FBroUnit::UnicodeToAnsi(rg_value95.GetText());
   m_data.domain = FBroUnit::UnicodeToAnsi(rg_Yu.GetText());
   m_data.path = FBroUnit::UnicodeToAnsi(rg_LuJing4.GetText());
   m_data.httponly = rg_ShiFouZhiYouhttp;
@@ -1457,7 +1457,7 @@ POINT_COOKIEDATA rg_FBrowser_CookieShuJu::ToFBroData(){
 }
 void rg_FBrowser_CookieShuJu::ToHsData(){
   rg_Ming10=FBroUnit::ToCWString(m_data.name);
-  rg_value94=FBroUnit::ToCWString(m_data.value);
+  rg_value95=FBroUnit::ToCWString(m_data.value);
   rg_Yu=FBroUnit::ToCWString(m_data.domain);
   rg_LuJing4=FBroUnit::ToCWString(m_data.path);
   rg_ShiFouZhiYouhttp = m_data.httponly;

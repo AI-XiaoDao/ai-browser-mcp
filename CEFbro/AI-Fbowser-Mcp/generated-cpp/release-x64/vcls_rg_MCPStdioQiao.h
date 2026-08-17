@@ -25,6 +25,7 @@ public:
 public:
     static rg_class_MCP_StdioFuWuXianCheng rg_StdioXianChengShiLi;
     static BOOL rg_StdioYingTuiChu;
+    static BOOL rg_ShangCiDouQuWeiDuanKai;
 };
 
 }

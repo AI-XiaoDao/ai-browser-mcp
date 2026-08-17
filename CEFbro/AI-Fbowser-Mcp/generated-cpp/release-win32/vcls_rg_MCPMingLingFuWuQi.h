@@ -14,6 +14,8 @@ class rg_MCPMingLingFuWuQi : public CVolObject
 public:
     static CVolString CALLBACK rg_QuMCP_WSDeZhi ();
     static CVolString CALLBACK rg_QuMCP_HTTPDeZhi ();
+    static BOOL CALLBACK rg_ShiFouBenJiZiTuoGuanURL (CVolString& rg_ShuRuURL);
+    static BOOL CALLBACK rg_URLZhuJiDuanKouPiPei (CVolString& rg_XiaoXieURL1, CVolString& rg_ZhuJiXiaoXie, CVolString& rg_DuanKouWenBen2);
     static void CALLBACK rg_YingYongMoRenShiJianJianKong ();
     static void CALLBACK rg_JiaZaiMCPPeiZhi ();
     static BOOL CALLBACK rg_YanZhengAPIMiYao (rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_QingQiuCanShu);
@@ -86,6 +88,7 @@ public:
     static void CALLBACK rg_ShiFangURLQingQiuCao ();
     static void CALLBACK rg_CunChuYiBuJieGuo (CVolString& rg_RenWuID14, CVolString& rg_JieGuoJSON3, INT rg_LiuLanQiID3);
     static void CALLBACK rg_JieXiDengDaiRenWu (CVolString& rg_ShiJianLeiXing3, INT rg_LiuLanQiID4, CVolString& rg_ShiJianShuJu);
+    static void CALLBACK rg_CunChuDengDaiRenWuCuoWu (INT rg_LiuLanQiID5, CVolString& rg_CuoWuXiaoXi3);
     static CVolString CALLBACK rg_ChaXunYiBuJieGuo (CVolString& rg_RenWuID17, BOOL rg_QuZouHouShanChu);
     static void CALLBACK rg_ShanChuYiBuJieGuo (CVolString& rg_RenWuID18);
     static void CALLBACK rg_CunChuRenWuJieGuo (CVolString& rg_MingLingID17, CVolString& rg_JieGuoJSON5);
@@ -101,9 +104,9 @@ public:
     static void CALLBACK rg_QingLiGuoJiHuanCun ();
     static void CALLBACK rg_ZhiHangSQL (CVolString& rg_sql1);
     static void CALLBACK rg_CunChuXiangYingHuanCun (CVolString& rg_url5, CVolString& rg_mime, CVolMem& rg_body, INT rg_size);
-    static CVolString CALLBACK rg_YiBuZhiHangJS (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser7, CVolString& rg_code, CVolString& rg_RenWuID19);
-    static CVolString CALLBACK rg_YiBuQuYuanMa_DaiXianZhi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser9, CVolString& rg_RenWuID21, INT rg_ZuiDaZiFuShu1);
-    static CVolString CALLBACK rg_YiBuQuWenBen_DaiXianZhi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser11, CVolString& rg_RenWuID23, INT rg_ZuiDaZiFuShu2);
+    static CVolString CALLBACK rg_YiBuZhiHangJS (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser5, CVolString& rg_code, CVolString& rg_RenWuID19);
+    static CVolString CALLBACK rg_YiBuQuYuanMa_DaiXianZhi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser7, CVolString& rg_RenWuID21, INT rg_ZuiDaZiFuShu1);
+    static CVolString CALLBACK rg_YiBuQuWenBen_DaiXianZhi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser9, CVolString& rg_RenWuID23, INT rg_ZuiDaZiFuShu2);
     static CVolString CALLBACK rg_GuiFanHuaGongJuMing (CVolString& rg_FangFaMing1);
     static BOOL CALLBACK rg_YingTongBuDengDai (CVolString& rg_FangFaMing2, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON10);
     static INT CALLBACK rg_QuTongBuDengDaiHaoMiao (CVolString& rg_FangFaMing3, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON11);
@@ -116,10 +119,10 @@ public:
     static CVolString CALLBACK rg_ChangShiTongBuGenSuiYiBuXiangYing (CVolString& rg_MingLingID21, CVolString& rg_XiangYingJSON1, CVolString& rg_FangFaMing5, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON12, BOOL rg_JiangZhiTongBu, BOOL rg_XuFangSuoDengDai);
     static CVolString CALLBACK rg_QuShuJuKuTongJiJSON ();
     static CVolString CALLBACK rg_MingLingChengGong_YiBu (CVolString& rg_MingLingID22, CVolString& rg_RenWuID27, CVolString& rg_XiaoXi5, INT rg_YuGuHaoShiHaoMiao);
-    static CVolString CALLBACK rg_DiJiaoYiBuJSRenWu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser12, CVolString& rg_code1, CVolString& rg_RenWuID28);
-    static CVolString CALLBACK rg_DiJiaoYiBuQuYuanMaRenWu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser13, CVolString& rg_RenWuID29, INT rg_ZuiDaZiFuShu3);
-    static CVolString CALLBACK rg_DiJiaoYiBuQuWenBenRenWu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser14, CVolString& rg_RenWuID30, INT rg_ZuiDaZiFuShu4);
-    static CVolString CALLBACK rg_ZhuCeJiaZaiDengDaiRenWu (CVolString& rg_MingLingID23, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON13, rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser15, CVolString& rg_ShangXiaWenXiaoXi, CVolString& rg_FanHuiXiaoXi);
+    static CVolString CALLBACK rg_DiJiaoYiBuJSRenWu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser10, CVolString& rg_code1, CVolString& rg_RenWuID28);
+    static CVolString CALLBACK rg_DiJiaoYiBuQuYuanMaRenWu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser11, CVolString& rg_RenWuID29, INT rg_ZuiDaZiFuShu3);
+    static CVolString CALLBACK rg_DiJiaoYiBuQuWenBenRenWu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser12, CVolString& rg_RenWuID30, INT rg_ZuiDaZiFuShu4);
+    static CVolString CALLBACK rg_ZhuCeJiaZaiDengDaiRenWu (CVolString& rg_MingLingID23, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON13, rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser13, CVolString& rg_ShangXiaWenXiaoXi, CVolString& rg_FanHuiXiaoXi, INT64 rg_DaoHangFaQiHaoMiao);
     static CVolString CALLBACK rg_yyjsonQuWenBen (rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_JSONDuiXiang, CVolString& rg_JianMing3);
     static INT CALLBACK rg_yyjsonQuZhengShu (rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_JSONDuiXiang1, CVolString& rg_JianMing4);
     static DOUBLE CALLBACK rg_yyjsonQuXiaoShu (rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_JSONDuiXiang2, CVolString& rg_JianMing5);
@@ -135,7 +138,7 @@ public:
     static CVolString CALLBACK rg_GuiZeZiDuanZhuaiYi (CVolString& rg_YuanWenBen1);
     static CVolString CALLBACK rg_GuiZeZiDuanFanZhuaiYi (CVolString& rg_YuanWenBen2);
     static void CALLBACK rg_TianJiaZiYuanTiHuanGuiZe (CVolString& rg_DongZuo1, CVolString& rg_GuiZeURL1, CVolString& rg_SouSuoWenBen1, CVolString& rg_TiHuanWenBen1, CVolString& rg_WenJianLuJing1, CVolString& rg_MIMELeiXing1);
-    static CVolString CALLBACK rg_PiPeiZiYuanCuanGaiGuiZe (CVolString& rg_MuBiaoURL);
+    static CVolString CALLBACK rg_PiPeiZiYuanCuanGaiGuiZe (CVolString& rg_MuBiaoURL1);
     static CVolString CALLBACK rg_GouJianDaiLiAnZhuangJSON ();
     static BOOL CALLBACK rg_AnZhuangDaiLiPeiZhi (CVolString& rg_PeiZhiLuJing1, BOOL rg_ShiTOML);
     static INT CALLBACK rg_JianChaBingZiDongAnZhuangDaiLi ();
@@ -151,17 +154,21 @@ public:
     static void CALLBACK rg_JiLuYingYongShiJian (CVolString& rg_ShiJianLeiXing6, CVolString& rg_ShiJianShuJuJSON1);
     static void CALLBACK rg_JiLuKongZhiTaiXiaoXi (INT rg_RiZhiJiBie1, CVolString& rg_XiaoXi6, CVolString& rg_LaiYuanURL, INT rg_HangHao);
     static CVolString CALLBACK rg_JieMaJSDaiMa (rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON14);
-    static BOOL CALLBACK rg_ShiFouYi (CVolString& rg_YuanWenBen3, CVolString& rg_QianZhui);
+    static BOOL CALLBACK rg_ShiFouYi (CVolString& rg_YuanWenBen3, CVolString& rg_QianZhui1);
     static rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi CALLBACK rg_QuLiuLanQiByID (INT rg_browserID);
     static rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi CALLBACK rg_QuZhuLiuLanQi ();
-    static rg_FBrowser_LiuLanQi::FBroFrame CALLBACK rg_QuAnQuanZhuKuangJia (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser16);
+    static rg_FBrowser_LiuLanQi::FBroFrame CALLBACK rg_QuAnQuanZhuKuangJia (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_browser14);
     static rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq CALLBACK rg_QuVIPKongZhiQi ();
     static rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi CALLBACK rg_QuAnQuanZhuLiuLanQi ();
     static CVolString CALLBACK rg_ZhiHangNiXiangCDPMingLing (CVolString& rg_MingLingID24, CVolString& rg_cdpMethod5, CVolString& rg_paramsJSON1);
     static rg_FBrowser_LiuLanQi::FBroRequestContext CALLBACK rg_QuQingQiuHuanJing_AnQuan ();
     static rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kfzhDOM CALLBACK rg_QuKaiFaZheDOM_AnQuan ();
     static INT CALLBACK rg_ChaZhaoMingLingID (CVolString& rg_MingLingMing);
-    static BOOL CALLBACK rg_YanZhengURLAnQuan (CVolString& rg_ShuRuURL1);
+    static BOOL CALLBACK rg_YanZhengURLAnQuan (CVolString& rg_ShuRuURL2);
+    static CVolString CALLBACK rg_ZiJieAnQuanJieDuan (CVolString& rg_YuanWen, INT rg_ZuiDaZiJie);
+    static INT CALLBACK rg_YuanZiDiZengBengHuiJiShu ();
+    static void CALLBACK rg_YuanZiQingLingBengHuiJiShu ();
+    static INT64 CALLBACK rg_YuanZiZhiShouCiBengHuiShiJian (INT64 rg_ShiJianZhi);
     static BOOL CALLBACK rg_YanZhengAnQuanLuJing (CVolString& rg_LuJing1, BOOL rg_JinYunXuYunHangMuLuNei);
     static void CALLBACK rg_QiDongMCPFuWuQi ();
     static void CALLBACK rg_QingLiDengDaiJianChaZiRenWu (CVolString& rg_DengDaiShangXiaWenJSON);
@@ -213,6 +220,9 @@ public:
     static INT rg_FuWuQiDuanKou;
     static CVolString rg_DaiChuangJianURL;
     static BOOL rg_DaiChuangJianWanCheng;
+    static INT64 rg_DaiGuanBiJieZhiHaoMiao;
+    static INT rg_ChongDingXiangLianJiShu;
+    static INT64 rg_ChongDingXiangLianQiShiHaoMiao;
     static rg_volcano_base::rg_HuChiSuoLei rg_DaiChuangJianSuo;
     static BOOL rg_ShiFouQiYong;
     static rg_volcano_base::rg_HuChiSuoLei rg_LiuLanQiShuZuSuo;
@@ -258,6 +268,7 @@ public:
     static CVolString rg_ChiJiuDaiLiDeZhi;
     static CVolString rg_ChiJiuDaiLiZhangHao;
     static CVolString rg_ChiJiuDaiLiMiMa;
+    static rg_volcano_base::rg_HuChiSuoLei rg_ChiJiuPeiZhiSuo;
     static DOUBLE rg_ChiJiuSuFangJiBie;
     static BOOL rg_ChiJiuJingYinZhuangTai;
     static rg_volcano_base::rg_WenBenShuZuLei rg_ChiJiuV8KuoZhanLieBiao;
@@ -301,6 +312,7 @@ public:
     static rg_FBrowser_value::FBroDictionaryValue rg_IPSuLuXianZhiZiDian;
     static INT rg_IPSuLu_DangQianFenZhongTong;
     static rg_FBrowser_value::FBroDictionaryValue rg_YingYongShiJianJieLiuZiDian;
+    static rg_volcano_base::rg_HuChiSuoLei rg_ShiJianJieLiuSuo;
     static INT rg_CDPFuZhaoLiuLanQiID;
     static rg_volcano_base::rg_WenBenShuZuLei rg_DuanDianZhuCeBiao;
     static rg_volcano_base::rg_WenBenShuZuLei rg_DuanDianIDZhuCeBiao;

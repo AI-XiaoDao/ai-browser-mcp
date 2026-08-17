@@ -14,12 +14,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     {
         BOOL rg_enableFlag;
         rg_enableFlag = rg_MCPMingLingFuWuQi::rg_yyjsonQuLuoJi (rg_CanShuJSON21, _CT2 (_T ("enable")));
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser122;
-        rg_browser122 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser122.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser120;
+        rg_browser120 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser120.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl13;
-            rg_vip_ctrl13 = rg_browser122.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl13 = rg_browser120.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl13.rg_ShiFouWeiKong167 () == FALSE)
             {
                 if (rg_enableFlag)
@@ -44,12 +44,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, _CT2 (_T ("address ")) + rg_MCP_const::rg_CuoWu_QueShaoCanShu));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser123;
-        rg_browser123 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser123.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser121;
+        rg_browser121 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser121.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl14;
-            rg_vip_ctrl14 = rg_browser123.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl14 = rg_browser121.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl14.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl14.rg_GaoJi_SheZhiDaiLi (rg_address1, rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON21, _CT2 (_T ("username"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON21, _CT2 (_T ("password"))), FALSE);
@@ -61,12 +61,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_mouse_click"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser124;
-        rg_browser124 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser124.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser122;
+        rg_browser122 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser122.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl15;
-            rg_vip_ctrl15 = rg_browser124.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl15 = rg_browser122.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl15.rg_ShiFouWeiKong167 () == FALSE)
             {
                 INT rg_vx;
@@ -86,12 +86,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_mouse_move"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser125;
-        rg_browser125 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser125.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser123;
+        rg_browser123 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser123.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl16;
-            rg_vip_ctrl16 = rg_browser125.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl16 = rg_browser123.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl16.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl16.rg_GaoJiShuBiao_YiDong (rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("x"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("y"))));
@@ -109,12 +109,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, _CT2 (_T ("参数 key_code 无效(")) + CVolString (rg_pressKeyCode) + _T (") | 虚拟键码范围 1~255, 如回车=13, 空格=32, A=65")));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser126;
-        rg_browser126 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser126.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser124;
+        rg_browser124 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser124.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl17;
-            rg_vip_ctrl17 = rg_browser126.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl17 = rg_browser124.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl17.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl17.rg_GaoJiJianPan_AnXia (rg_pressKeyCode, 0, FALSE);
@@ -132,12 +132,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, _CT2 (_T ("参数 key_code 无效(")) + CVolString (rg_releaseKeyCode) + _T (") | 虚拟键码范围 1~255")));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser127;
-        rg_browser127 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser127.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser125;
+        rg_browser125 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser125.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl18;
-            rg_vip_ctrl18 = rg_browser127.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl18 = rg_browser125.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl18.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl18.rg_GaoJiJianPan_FangKai (rg_releaseKeyCode, 0, FALSE);
@@ -149,12 +149,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_clear_s5_proxy"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser128;
-        rg_browser128 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser128.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser126;
+        rg_browser126 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser126.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl19;
-            rg_vip_ctrl19 = rg_browser128.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl19 = rg_browser126.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl19.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl19.rg_GaoJi_QingKongDaiLi ();
@@ -166,12 +166,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_enable_inspector"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser129;
-        rg_browser129 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser129.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser127;
+        rg_browser127 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser127.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl20;
-            rg_vip_ctrl20 = rg_browser129.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl20 = rg_browser127.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl20.rg_ShiFouWeiKong167 () == FALSE)
             {
                 if (rg_MCPMingLingFuWuQi::rg_yyjsonQuLuoJi (rg_CanShuJSON21, _CT2 (_T ("enable"))))
@@ -190,12 +190,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_enable_js_env"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser130;
-        rg_browser130 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser130.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser128;
+        rg_browser128 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser128.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl21;
-            rg_vip_ctrl21 = rg_browser130.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl21 = rg_browser128.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl21.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl21.rg_GaoJi_QiYongZhiHangHuanJing (rg_MCPMingLingFuWuQi::rg_yyjsonQuLuoJi (rg_CanShuJSON21, _CT2 (_T ("enable"))));
@@ -207,37 +207,32 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_get_js_env_ids"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser131;
-        rg_browser131 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser131.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser129;
+        rg_browser129 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser129.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl22;
-            rg_vip_ctrl22 = rg_browser131.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl22 = rg_browser129.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl22.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_FBrowser_value::FBroListValue rg_ids;
                 rg_ids = rg_vip_ctrl22.rg_GaoJi_QuDangQianHuanJingIDQingChan ();
-                CVolString rg_idsListJSON;
-                rg_idsListJSON = _T ("[");
+                rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONShuZuLei rg_idsArr;
+                rg_idsArr.rg_ChuangJianZiWenBenShuJu (rg_MCPMingLingFuWuQi::rg_QuKongWenBenShuZu ());
                 INT rg_idsCount = 0;
                 if (rg_ids.rg_ShiFouWeiKong158 () == FALSE)
                 {
                     rg_idsCount = rg_ids.rg_QuDaXiao1 ();
                     for (INT_P __vol_counter_index = 0; __vol_counter_index < rg_idsCount; __vol_counter_index++)
                     {
-                        if ((INT)__vol_counter_index > 0)
-                        {
-                            rg_idsListJSON = rg_idsListJSON + _T (",");
-                        }
-                        rg_idsListJSON = rg_idsListJSON + CVolString (rg_ids.rg_QuZhengShuZhi ((INT)__vol_counter_index));
+                        rg_idsArr.rg_JiaRuZhengShuChengYuan1 (rg_ids.rg_QuZhengShuZhi ((INT)__vol_counter_index));
                     }
                 }
-                rg_idsListJSON = rg_idsListJSON + _T ("]");
                 rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_idsOut;
                 rg_idsOut.data().CreateFromText(_CT2 (_T ("{}")));
                 rg_idsOut.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("success")), TRUE);
                 rg_idsOut.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("count")), rg_idsCount);
-                rg_idsOut.rg_JiaRuWenBenChengYuan (_CT2 (_T ("ids")), rg_idsListJSON);
+                rg_idsOut.rg_JiaRuShuZuChengYuan (_CT2 (_T ("ids")), rg_idsArr, FALSE);
                 return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong_YuanShiJSON (rg_MingLingID31, rg_idsOut.data().ToString(YYJSON_WRITE_NOFLAG), TRUE));
             }
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, rg_MCP_const::rg_CuoWu_VIPBuKeYong));
@@ -246,12 +241,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_touch_cancel"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser132;
-        rg_browser132 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser132.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser130;
+        rg_browser130 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser130.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl23;
-            rg_vip_ctrl23 = rg_browser132.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl23 = rg_browser130.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl23.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl23.rg_GaoJiChuMo_QuXiao (rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("x"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("y"))));
@@ -263,12 +258,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_disable_debugger"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser133;
-        rg_browser133 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser133.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser131;
+        rg_browser131 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser131.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl24;
-            rg_vip_ctrl24 = rg_browser133.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl24 = rg_browser131.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl24.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl24.rg_NeiHeKaiGuan_JinYongDebugger (rg_MCPMingLingFuWuQi::rg_yyjsonQuLuoJi (rg_CanShuJSON21, _CT2 (_T ("disable"))));
@@ -280,12 +275,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_fingerprint_plugins"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser134;
-        rg_browser134 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser134.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser132;
+        rg_browser132 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser132.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl25;
-            rg_vip_ctrl25 = rg_browser134.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl25 = rg_browser132.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl25.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl25.rg_ZhiWen_XuNiPlugins (rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("type"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuJSONWenBen (rg_CanShuJSON21, _CT2 (_T ("json"))));
@@ -297,12 +292,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_fingerprint_appname"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser135;
-        rg_browser135 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser135.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser133;
+        rg_browser133 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser133.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl26;
-            rg_vip_ctrl26 = rg_browser135.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl26 = rg_browser133.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl26.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl26.rg_ZhiWen_XuNiAppName (rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON21, _CT2 (_T ("value"))));
@@ -314,12 +309,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_fingerprint_cookie_enabled"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser136;
-        rg_browser136 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser136.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser134;
+        rg_browser134 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser134.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl27;
-            rg_vip_ctrl27 = rg_browser136.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl27 = rg_browser134.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl27.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl27.rg_ZhiWen_XuNiCookieEnabled (rg_MCPMingLingFuWuQi::rg_yyjsonQuLuoJi (rg_CanShuJSON21, _CT2 (_T ("value"))));
@@ -331,12 +326,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_fingerprint_java_enabled"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser137;
-        rg_browser137 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser137.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser135;
+        rg_browser135 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser135.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl28;
-            rg_vip_ctrl28 = rg_browser137.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl28 = rg_browser135.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl28.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl28.rg_ZhiWen_XuNiJavaEnabled (rg_MCPMingLingFuWuQi::rg_yyjsonQuLuoJi (rg_CanShuJSON21, _CT2 (_T ("value"))));
@@ -348,12 +343,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_fingerprint_online"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser138;
-        rg_browser138 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser138.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser136;
+        rg_browser136 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser136.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl29;
-            rg_vip_ctrl29 = rg_browser138.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl29 = rg_browser136.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl29.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl29.rg_ZhiWen_XuNiOnLine (rg_MCPMingLingFuWuQi::rg_yyjsonQuLuoJi (rg_CanShuJSON21, _CT2 (_T ("value"))));
@@ -365,12 +360,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_fingerprint_appcodename"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser139;
-        rg_browser139 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser139.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser137;
+        rg_browser137 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser137.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl30;
-            rg_vip_ctrl30 = rg_browser139.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl30 = rg_browser137.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl30.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl30.rg_ZhiWen_XuNiAppCodeName (rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON21, _CT2 (_T ("value"))));
@@ -382,12 +377,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_fingerprint_appversion"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser140;
-        rg_browser140 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser140.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser138;
+        rg_browser138 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser138.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl31;
-            rg_vip_ctrl31 = rg_browser140.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl31 = rg_browser138.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl31.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl31.rg_ZhiWen_XuNiAppVersion (rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON21, _CT2 (_T ("value"))));
@@ -399,12 +394,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_fingerprint_product_sub"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser141;
-        rg_browser141 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser141.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser139;
+        rg_browser139 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser139.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl32;
-            rg_vip_ctrl32 = rg_browser141.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl32 = rg_browser139.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl32.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl32.rg_ZhiWen_XuNiProductSub (rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON21, _CT2 (_T ("value"))));
@@ -416,12 +411,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_fingerprint_vendor_sub"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser142;
-        rg_browser142 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser142.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser140;
+        rg_browser140 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser140.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl33;
-            rg_vip_ctrl33 = rg_browser142.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl33 = rg_browser140.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl33.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl33.rg_ZhiWen_XuNiVendorSub (rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON21, _CT2 (_T ("value"))));
@@ -433,12 +428,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_fingerprint_canvas_fixed"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser143;
-        rg_browser143 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser143.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser141;
+        rg_browser141 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser141.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl34;
-            rg_vip_ctrl34 = rg_browser143.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl34 = rg_browser141.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl34.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl34.rg_ZhiWen_XuNiCanvas_DingZhi (rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON21, _CT2 (_T ("value"))));
@@ -450,12 +445,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_fingerprint_webgl_fixed"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser144;
-        rg_browser144 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser144.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser142;
+        rg_browser142 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser142.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl35;
-            rg_vip_ctrl35 = rg_browser144.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl35 = rg_browser142.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl35.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl35.rg_ZhiWen_XuNiWebGL_DingZhi (rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON21, _CT2 (_T ("value"))));
@@ -467,12 +462,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_fingerprint_audio_fixed"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser145;
-        rg_browser145 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser145.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser143;
+        rg_browser143 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser143.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl36;
-            rg_vip_ctrl36 = rg_browser145.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl36 = rg_browser143.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl36.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl36.rg_ZhiWen_XuNiAudio_DingZhi (rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON21, _CT2 (_T ("value"))));
@@ -484,12 +479,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_fingerprint_rect"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser146;
-        rg_browser146 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser146.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser144;
+        rg_browser144 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser144.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl37;
-            rg_vip_ctrl37 = rg_browser146.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl37 = rg_browser144.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl37.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl37.rg_ZhiWen_XuNiRect (rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("x"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("y"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("w"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("h"))));
@@ -501,12 +496,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_fingerprint_pixel_ratio"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser147;
-        rg_browser147 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser147.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser145;
+        rg_browser145 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser145.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl38;
-            rg_vip_ctrl38 = rg_browser147.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl38 = rg_browser145.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl38.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl38.rg_zhw_xnDevicePixelRatio (rg_MCPMingLingFuWuQi::rg_yyjsonQuXiaoShu (rg_CanShuJSON21, _CT2 (_T ("value"))));
@@ -518,12 +513,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_fingerprint_touch_enable"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser148;
-        rg_browser148 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser148.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser146;
+        rg_browser146 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser146.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl39;
-            rg_vip_ctrl39 = rg_browser148.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl39 = rg_browser146.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl39.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl39.rg_ZhiWen_QiYongChuMoShiJian (rg_MCPMingLingFuWuQi::rg_yyjsonQuLuoJi (rg_CanShuJSON21, _CT2 (_T ("enable"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("points"))));
@@ -535,12 +530,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_fingerprint_screen_xy"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser149;
-        rg_browser149 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser149.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser147;
+        rg_browser147 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser147.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl40;
-            rg_vip_ctrl40 = rg_browser149.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl40 = rg_browser147.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl40.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl40.rg_ZhiWen_XuNiBingMuXY (rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("x"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("y"))));
@@ -552,12 +547,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_mouse_press"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser150;
-        rg_browser150 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser150.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser148;
+        rg_browser148 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser148.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl41;
-            rg_vip_ctrl41 = rg_browser150.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl41 = rg_browser148.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl41.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl41.rg_GaoJiShuBiao_AnXia (rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("x"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("y"))), 0);
@@ -569,12 +564,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_mouse_release"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser151;
-        rg_browser151 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser151.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser149;
+        rg_browser149 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser149.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl42;
-            rg_vip_ctrl42 = rg_browser151.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl42 = rg_browser149.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl42.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl42.rg_GaoJiShuBiao_FangKai (rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("x"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("y"))), 0);
@@ -586,12 +581,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_mouse_wheel"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser152;
-        rg_browser152 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser152.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser150;
+        rg_browser150 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser150.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl43;
-            rg_vip_ctrl43 = rg_browser152.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl43 = rg_browser150.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl43.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl43.rg_GaoJiShuBiao_GunLunGunDong (rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("x"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("y"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("delta_x"))), rg_MCPMingLingFuWuQi::rg_yyjsonQuZhengShu (rg_CanShuJSON21, _CT2 (_T ("delta_y"))));
@@ -819,12 +814,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, _CT2 (_T ("参数 key_code 无效(")) + CVolString (rg_clickKeyCode) + _T (") | 虚拟键码范围 1~255")));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser153;
-        rg_browser153 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser153.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser151;
+        rg_browser151 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser151.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl44;
-            rg_vip_ctrl44 = rg_browser153.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl44 = rg_browser151.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl44.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl44.rg_GaoJiJianPan_ChanJi (rg_clickKeyCode, 0, 50, FALSE);
@@ -842,12 +837,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, _CT2 (_T ("参数 char_code 不能为空 | 提供要输入的字符"))));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser154;
-        rg_browser154 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser154.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser152;
+        rg_browser152 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser152.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl45;
-            rg_vip_ctrl45 = rg_browser154.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl45 = rg_browser152.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl45.rg_ShiFouWeiKong167 () == FALSE)
             {
                 if ((INT)rg_charInput.GetLength () > 1)
@@ -869,12 +864,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, _CT2 (_T ("参数 text 不能为空 | 请提供要输入的文本内容"))));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser155;
-        rg_browser155 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser155.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser153;
+        rg_browser153 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser153.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl46;
-            rg_vip_ctrl46 = rg_browser155.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl46 = rg_browser153.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl46.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip_ctrl46.rg_GaoJiJianPan_ShuRuWenBen (rg_typeText, 0);
@@ -892,19 +887,21 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, rg_MCP_const::rg_CuoWu_BanBenBiXuWeiZhengZhengShu));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser156;
-        rg_browser156 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser156.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser154;
+        rg_browser154 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser154.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl47;
-            rg_vip_ctrl47 = rg_browser156.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl47 = rg_browser154.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl47.rg_ShiFouWeiKong167 () == FALSE)
             {
-                if (_ttoi (rg_cssVerText.GetText ()) < 116)
+                INT rg_cssVer;
+                rg_cssVer = _ttoi (rg_cssVerText.GetText ());
+                if (rg_cssVer < 116 || rg_cssVer > 135 || CVolString (rg_cssVer) != rg_cssVerText)
                 {
-                    return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, _CT2 (_T ("内核版本须在116-135范围内(官方API支持值)"))));
+                    return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, _CT2 (_T ("内核版本须为116-135范围内的纯数字(官方API支持值)"))));
                 }
-                rg_vip_ctrl47.rg_NeiHeKaiGuan_SheZhiCSSNeiHe (_ttoi (rg_cssVerText.GetText ()));
+                rg_vip_ctrl47.rg_NeiHeKaiGuan_SheZhiCSSNeiHe (rg_cssVer);
                 return (rg_MCP_XiangYingGouJian::rg_XiangYing_XuYaoShuaXin (rg_MingLingID31, _CT2 (_T ("CSS内核已设置"))));
             }
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, rg_MCP_const::rg_CuoWu_VIPBuKeYong));
@@ -919,19 +916,21 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, rg_MCP_const::rg_CuoWu_BanBenBiXuWeiZhengZhengShu));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser157;
-        rg_browser157 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser157.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser155;
+        rg_browser155 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser155.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl48;
-            rg_vip_ctrl48 = rg_browser157.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl48 = rg_browser155.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl48.rg_ShiFouWeiKong167 () == FALSE)
             {
-                if (_ttoi (rg_webVerText.GetText ()) < 116)
+                INT rg_webVer;
+                rg_webVer = _ttoi (rg_webVerText.GetText ());
+                if (rg_webVer < 116 || rg_webVer > 135 || CVolString (rg_webVer) != rg_webVerText)
                 {
-                    return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, _CT2 (_T ("内核版本须在116-135范围内(官方API支持值)"))));
+                    return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, _CT2 (_T ("内核版本须为116-135范围内的纯数字(官方API支持值)"))));
                 }
-                rg_vip_ctrl48.rg_NeiHeKaiGuan_SheZhiWebNeiHe (_ttoi (rg_webVerText.GetText ()));
+                rg_vip_ctrl48.rg_NeiHeKaiGuan_SheZhiWebNeiHe (rg_webVer);
                 return (rg_MCP_XiangYingGouJian::rg_XiangYing_XuYaoShuaXin (rg_MingLingID31, _CT2 (_T ("Web内核已设置"))));
             }
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, rg_MCP_const::rg_CuoWu_VIPBuKeYong));
@@ -946,19 +945,21 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, rg_MCP_const::rg_CuoWu_BanBenBiXuWeiZhengZhengShu));
         }
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser158;
-        rg_browser158 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser158.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser156;
+        rg_browser156 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser156.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl49;
-            rg_vip_ctrl49 = rg_browser158.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl49 = rg_browser156.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl49.rg_ShiFouWeiKong167 () == FALSE)
             {
-                if (_ttoi (rg_v8VerText.GetText ()) < 116)
+                INT rg_v8Ver;
+                rg_v8Ver = _ttoi (rg_v8VerText.GetText ());
+                if (rg_v8Ver < 116 || rg_v8Ver > 135 || CVolString (rg_v8Ver) != rg_v8VerText)
                 {
-                    return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, _CT2 (_T ("内核版本须在116-135范围内(官方API支持值)"))));
+                    return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, _CT2 (_T ("内核版本须为116-135范围内的纯数字(官方API支持值)"))));
                 }
-                rg_vip_ctrl49.rg_NeiHeKaiGuan_SheZhiV8NeiHe (_ttoi (rg_v8VerText.GetText ()));
+                rg_vip_ctrl49.rg_NeiHeKaiGuan_SheZhiV8NeiHe (rg_v8Ver);
                 return (rg_MCP_XiangYingGouJian::rg_XiangYing_XuYaoShuaXin (rg_MingLingID31, _CT2 (_T ("V8内核已设置"))));
             }
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID31, rg_MCP_const::rg_CuoWu_VIPBuKeYong));
@@ -967,12 +968,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_send_devtools_msg"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser159;
-        rg_browser159 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser159.rg_ShiFouWeiKong127 () == FALSE && rg_browser159.rg_ShiFouYiGuanBi () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser157;
+        rg_browser157 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser157.rg_ShiFouWeiKong127 () == FALSE && rg_browser157.rg_ShiFouYiGuanBi () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip_ctrl50;
-            rg_vip_ctrl50 = rg_browser159.rg_QuVIPKongZhiQi1 ();
+            rg_vip_ctrl50 = rg_browser157.rg_QuVIPKongZhiQi1 ();
             if (rg_vip_ctrl50.rg_ShiFouWeiKong167 () == FALSE)
             {
                 CVolString rg_devJson;
@@ -1009,12 +1010,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_set_preference"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser160;
-        rg_browser160 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser160.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser158;
+        rg_browser158 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser158.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_FBrowser_LiuLanQi::FBroRequestContext rg_reqCtx2;
-            rg_reqCtx2 = rg_browser160.rg_QuQingQiuHuanJing ();
+            rg_reqCtx2 = rg_browser158.rg_QuQingQiuHuanJing ();
             if (rg_reqCtx2.rg_ShiFouWeiKong130 () == FALSE)
             {
                 CVolString rg_MingChen1;
@@ -1329,12 +1330,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_get_extra_data"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser161;
-        rg_browser161 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser161.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser159;
+        rg_browser159 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser159.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_FBrowser_value::FBroDictionaryValue rg_extraData;
-            rg_extraData = rg_browser161.rg_QuEWaiShuJu ();
+            rg_extraData = rg_browser159.rg_QuEWaiShuJu ();
             if (rg_extraData.rg_ShiFouWeiKong160 () == FALSE)
             {
                 rg_FBrowser_ShuJuLeiXing::rg_FBrowser_WenBenShuZu rg_extraKeys;
@@ -1357,12 +1358,12 @@ CVolString CALLBACK rg_MCP_VIPFenPa::rg_FenLeiFenPa_VIPCaoZuo (CVolString& rg_Mi
     }
     else if (rg_FangFaMing12 == _T ("browser_vip_disable_console"))
     {
-        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser162;
-        rg_browser162 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
-        if (rg_browser162.rg_ShiFouWeiKong127 () == FALSE)
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser160;
+        rg_browser160 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
+        if (rg_browser160.rg_ShiFouWeiKong127 () == FALSE)
         {
             rg_LiuLanQi_VIP::rg_class_FBrowserVIP_kzhq rg_vip5;
-            rg_vip5 = rg_browser162.rg_QuVIPKongZhiQi1 ();
+            rg_vip5 = rg_browser160.rg_QuVIPKongZhiQi1 ();
             if (rg_vip5.rg_ShiFouWeiKong167 () == FALSE)
             {
                 rg_vip5.rg_NeiHeKaiGuan_JinYongConsoleLog (rg_MCPMingLingFuWuQi::rg_yyjsonQuLuoJi (rg_CanShuJSON21, _CT2 (_T ("log"))));

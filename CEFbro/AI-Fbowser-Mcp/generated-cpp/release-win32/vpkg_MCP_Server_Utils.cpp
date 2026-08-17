@@ -12,12 +12,15 @@ void CALLBACK rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (CVolString& rg_string3)
     {
         std::wstring ws = rg_string3.GetText();
         int n = WideCharToMultiByte(936, 0, ws.c_str(), (int)ws.size(), NULL, 0, NULL, NULL);
+        std::string out;
         if (n > 0) {
-            std::string out(n, '\0');
-            WideCharToMultiByte(936, 0, ws.c_str(), (int)ws.size(), &out[0], n, NULL, NULL);
-            fwrite(out.c_str(), 1, out.size(), stderr);
+            out.assign(n, '\0');
+            int written = WideCharToMultiByte(936, 0, ws.c_str(), (int)ws.size(), &out[0], n, NULL, NULL);
+            if (written > 0) out.resize(written);
+            else out.clear();
         }
-        fwrite("\n", 1, 1, stderr);
+        out += '\n';
+        fwrite(out.data(), 1, out.size(), stderr);
         fflush(stderr);
     }
 }

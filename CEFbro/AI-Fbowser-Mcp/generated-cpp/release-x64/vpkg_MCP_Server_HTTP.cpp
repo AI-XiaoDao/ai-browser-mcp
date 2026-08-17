@@ -63,7 +63,9 @@ void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoHTTPQingQiu (rg_FBrowser_LiuLanQi::rg
                 }
                 return;
             }
-            rg_MCPMingLingFuWuQi::rg_FaSongCORS404XiangYing (rg_FuWuQi11, rg_LianJieID8);
+            CVolMem rg_KongTiCuoWu;
+            rg_KongTiCuoWu = rg_volcano_base::rg_WenBenLei::rg_WenBenDaoUTF (rg_MCPMingLingFuWuQi::rg_GouJianJSONRPCXiangYing (_CT2 (_T ("")), _CT2 (_T ("")), -32700, _CT2 (_T ("请求体为空"))), FALSE);
+            rg_MCPMingLingFuWuQi::rg_FaSongCORS200XiangYing (rg_FuWuQi11, rg_LianJieID8, rg_MCP_const::rg_HTTP_JSONNeiRongLeiXing, (INT_P)rg_KongTiCuoWu.GetPtr (), (INT)rg_KongTiCuoWu.GetSize ());
             return;
         }
         rg_MCPMingLingFuWuQi::rg_FaSongCORS404XiangYing (rg_FuWuQi11, rg_LianJieID8);
@@ -76,7 +78,7 @@ void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoHTTPQingQiu (rg_FBrowser_LiuLanQi::rg
         rg_JianKangJSON.rg_JiaRuWenBenChengYuan (_CT2 (_T ("status")), _CT2 (_T ("ok")));
         rg_JianKangJSON.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("browsers")), rg_FBrowser_LiuLanQi::rg_FBrowserFuZhuGongNeng::rg_FBrowser_LiuLanQi_QuShuLiang ());
         rg_JianKangJSON.rg_JiaRuWenBenChengYuan (_CT2 (_T ("version")), rg_MCP_const::rg_MCP_BanBenHao);
-        rg_JianKangJSON.rg_JiaRuChangZhengShuChengYuan (_CT2 (_T ("uptime_ms")), rg_MCPMingLingFuWuQi::rg_QuXianHangShiJianHaoMiao () - rg_MCPMingLingFuWuQi::rg_FuWuQiQiDongQiangZhongHaoMiao);
+        rg_JianKangJSON.rg_JiaRuChangZhengShuChengYuan (_CT2 (_T ("uptime_ms")), rg_volcano_base::rg_ChangYongGongNengLei::rg_QuQiDongShiJian () - rg_MCPMingLingFuWuQi::rg_FuWuQiQiDongShiJianChuo);
         rg_JianKangJSON.rg_JiaRuWenBenChengYuan (_CT2 (_T ("capabilities")), _CT2 (_T ("sync-wait,workflow,batch,debugger-flow,v8-hook")));
         rg_JianKangJSON.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("rate_limit_per_min")), rg_MCPMingLingFuWuQi::rg_SuLuXianZhi_MeiFenZhong);
         rg_JianKangJSON.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("rate_limit_used")), rg_MCPMingLingFuWuQi::rg_SuLuXianZhi_JiShuQi);
@@ -88,6 +90,13 @@ void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoHTTPQingQiu (rg_FBrowser_LiuLanQi::rg
         if (rg_JianKangTongJi != _T (""))
         {
             rg_JianKangJSON.rg_JiaRuWenBenChengYuan (_CT2 (_T ("db_stats")), rg_JianKangTongJi);
+            rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei rg_TongJiJieXi;
+            if (rg_TongJiJieXi.data().CreateFromText(rg_JianKangTongJi))
+            {
+                rg_JianKangJSON.rg_JiaRuChangZhengShuChengYuan (_CT2 (_T ("db_async_results")), rg_MCPMingLingFuWuQi::rg_yyjsonQuChangZhengShu (rg_TongJiJieXi, _CT2 (_T ("async_results"))));
+                rg_JianKangJSON.rg_JiaRuChangZhengShuChengYuan (_CT2 (_T ("db_event_log")), rg_MCPMingLingFuWuQi::rg_yyjsonQuChangZhengShu (rg_TongJiJieXi, _CT2 (_T ("event_log"))));
+                rg_JianKangJSON.rg_JiaRuChangZhengShuChengYuan (_CT2 (_T ("db_response_cache")), rg_MCPMingLingFuWuQi::rg_yyjsonQuChangZhengShu (rg_TongJiJieXi, _CT2 (_T ("response_cache"))));
+            }
         }
         CVolString rg_JianKangJSONWenBen;
         rg_JianKangJSONWenBen = rg_JianKangJSON.data().ToString(YYJSON_WRITE_NOFLAG);
@@ -106,7 +115,7 @@ void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoHTTPQingQiu (rg_FBrowser_LiuLanQi::rg
         }
         rg_QiaoJieJiaoBenLuJing1 = rg_QiaoJieJiaoBenLuJing1 + _T ("mcp_bridge.js");
         CVolString rg_PeiZhiWenBen1;
-        rg_PeiZhiWenBen1 = _CT2 (_T ("{\"mcpServers\":{\"ai-browser\":{\"command\":\"node\",\"args\":[\"")) + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_QiaoJieJiaoBenLuJing1) + _T ("\"],\"env\":{\"AI_BROWSER_MCP_HOST\":\"") + rg_MCPMingLingFuWuQi::rg_FuWuQiBangDingDeZhi + _T ("\",\"AI_BROWSER_MCP_PORT\":\"") + CVolString (rg_MCPMingLingFuWuQi::rg_FuWuQiDuanKou) + _T ("\",\"AI_BROWSER_MCP_HTTP_POST\":\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_MCPMingLingFuWuQi::rg_QuMCP_HTTPDeZhi ()) + _T ("/mcp\",\"AI_BROWSER_MCP_CURSOR_MODE\":\"0\"}}}}");
+        rg_PeiZhiWenBen1 = _CT2 (_T ("{\"mcpServers\":{\"ai-browser\":{\"command\":\"node\",\"args\":[\"")) + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_QiaoJieJiaoBenLuJing1) + _T ("\"],\"env\":{\"AI_BROWSER_MCP_HOST\":\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_MCPMingLingFuWuQi::rg_FuWuQiBangDingDeZhi) + _T ("\",\"AI_BROWSER_MCP_PORT\":\"") + CVolString (rg_MCPMingLingFuWuQi::rg_FuWuQiDuanKou) + _T ("\",\"AI_BROWSER_MCP_HTTP_POST\":\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_MCPMingLingFuWuQi::rg_QuMCP_HTTPDeZhi ()) + _T ("/mcp\",\"AI_BROWSER_MCP_CURSOR_MODE\":\"0\"}}}}");
         CVolMem rg_PeiZhiNeiRong;
         rg_PeiZhiNeiRong = rg_volcano_base::rg_WenBenLei::rg_WenBenDaoUTF (rg_PeiZhiWenBen1, FALSE);
         rg_MCPMingLingFuWuQi::rg_FaSongCORS200XiangYing (rg_FuWuQi11, rg_LianJieID8, rg_MCP_const::rg_HTTP_JSONNeiRongLeiXing, (INT_P)rg_PeiZhiNeiRong.GetPtr (), (INT)rg_PeiZhiNeiRong.GetSize ());
@@ -132,12 +141,14 @@ void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoHTTPQingQiu (rg_FBrowser_LiuLanQi::rg
     }
     if (rg_URLLuJing2 == _T ("/tools") || rg_URLLuJing2 == _T ("/tools/list"))
     {
+        rg_MCPMingLingFuWuQi::rg_XieYiSuo.data ().lock (FALSE);
         if (rg_MCPMingLingFuWuQi::rg_GongJuLieBiaoHuanCun == _T (""))
         {
             rg_MCPMingLingFuWuQi::rg_KaiShiGouJianGongJuLieBiao ();
             rg_MCPMingLingFuWuQi::rg_TianChongGongJuLieBiao ();
             rg_MCPMingLingFuWuQi::rg_GongJuLieBiaoHuanCun = _CT2 (_T ("{\"tools\":")) + rg_MCPMingLingFuWuQi::rg_WanChengGouJianGongJuLieBiao () + _T ("}");
         }
+        rg_MCPMingLingFuWuQi::rg_XieYiSuo.data ().unlock ();
         CVolMem rg_toolsNeiRong;
         rg_toolsNeiRong = rg_volcano_base::rg_WenBenLei::rg_WenBenDaoUTF (rg_MCPMingLingFuWuQi::rg_GongJuLieBiaoHuanCun, FALSE);
         rg_MCPMingLingFuWuQi::rg_FaSongCORS200XiangYing (rg_FuWuQi11, rg_LianJieID8, rg_MCP_const::rg_HTTP_JSONNeiRongLeiXing, (INT_P)rg_toolsNeiRong.GetPtr (), (INT)rg_toolsNeiRong.GetSize ());
@@ -186,7 +197,7 @@ void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoWebSocketQingQiu (rg_FBrowser_LiuLanQ
 {
     CVolString rg_WSLuJing;
     rg_WSLuJing = rg_MCPMingLingFuWuQi::rg_DiQuHTTPLuJing (rg_QingQiu12.rg_QuDeZhi1 ());
-    if ((INT)rg_WSLuJing.SearchText (_CT2 (_T ("/devtools/")).GetText (), 0, FALSE, FALSE) > 0)
+    if ((INT)rg_WSLuJing.SearchText (_CT2 (_T ("/devtools/")).GetText (), 0, FALSE, FALSE) == 0)
     {
         rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (CVolString (_CT2 (_T ("[MCP] 拒绝未实现的 DevTools WS:"))) + _T (", ") + CVolString (rg_WSLuJing));
         if (rg_HuiDiao5.rg_ShiFouWeiKong113 () == FALSE)
@@ -216,7 +227,7 @@ void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoWebSocketXiaoXi (rg_FBrowser_LiuLanQi
     {
         rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (CVolString (_CT2 (_T ("[MCP] WS消息过大被拒绝:"))) + _T (", ") + CVolString (rg_ShuJuChangDu) + _T (", ") + CVolString (_CT2 (_T ("字节"))));
         CVolMem rg_CuoWuXiangYing;
-        rg_CuoWuXiangYing = rg_volcano_base::rg_WenBenLei::rg_WenBenDaoUTF (rg_MCPMingLingFuWuQi::rg_GouJianJSONRPCXiangYing (_CT2 (_T ("")), _CT2 (_T ("")), -32600, _CT2 (_T ("消息过大,最大5MB"))), FALSE);
+        rg_CuoWuXiangYing = rg_volcano_base::rg_WenBenLei::rg_WenBenDaoUTF (rg_MCPMingLingFuWuQi::rg_GouJianJSONRPCXiangYing (_CT2 (_T ("")), _CT2 (_T ("")), -32600, _CT2 (_T ("消息过大,最大")) + CVolString (52428800 / 1048576) + _T ("MB")), FALSE);
         rg_FuWuQi14.rg_FaSongWebSocketShuJu (rg_LianJieID11, (INT_P)rg_CuoWuXiangYing.GetPtr (), (INT)rg_CuoWuXiangYing.GetSize ());
         return;
     }

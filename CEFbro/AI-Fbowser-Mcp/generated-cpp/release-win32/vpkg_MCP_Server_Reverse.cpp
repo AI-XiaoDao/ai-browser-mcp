@@ -28,7 +28,12 @@ CVolString CALLBACK rg_MCP_NiXiangFenPa::rg_FenLeiFenPa_NiXiangCaoZuo (CVolStrin
             rg_prPreciseParams1.data().CreateFromText(_CT2 (_T ("{}")));
             rg_prPreciseParams1.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("interval")), 100);
             rg_prPreciseParams1.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("maxDepth")), 32);
-            rg_MCPMingLingFuWuQi::rg_ZhiHangNiXiangCDPMingLing (rg_MingLingID29 + _T ("_pre"), _CT2 (_T ("Profiler.setSamplingInterval")), rg_prPreciseParams1.data().ToString(YYJSON_WRITE_NOFLAG));
+            CVolString rg_prPreciseRes;
+            rg_prPreciseRes = rg_MCPMingLingFuWuQi::rg_ZhiHangNiXiangCDPMingLing (rg_MingLingID29 + _T ("_pre"), _CT2 (_T ("Profiler.setSamplingInterval")), rg_prPreciseParams1.data().ToString(YYJSON_WRITE_NOFLAG));
+            if (rg_MCPMingLingFuWuQi::rg_ShiFouYi (rg_prPreciseRes, _CT2 (_T ("{\"error\""))))
+            {
+                return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID29, _CT2 (_T ("setSamplingInterval 提交失败: ")) + rg_prPreciseRes));
+            }
             return (rg_MCPMingLingFuWuQi::rg_ZhiHangNiXiangCDPMingLing (rg_MingLingID29, _CT2 (_T ("Profiler.enable")), _CT2 (_T ("{}"))));
         }
         else if (rg_prAction1 == _T ("stop"))
@@ -109,7 +114,7 @@ CVolString CALLBACK rg_MCP_NiXiangFenPa::rg_FenLeiFenPa_NiXiangCaoZuo (CVolStrin
             rg_chEvalParams1.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("returnByValue")), FALSE);
             rg_chEvalParams1.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("generatePreview")), FALSE);
             CVolString rg_chEvalID1;
-            rg_chEvalID1 = _CT2 (_T ("cdp_hook_eval_")) + CVolString (rg_volcano_base::rg_ChangYongGongNengLei::rg_QuQiDongShiJian ()) + _T ("_") + CVolString (randint2 (1000, 9999));
+            rg_chEvalID1 = _CT2 (_T ("cdp_hook_eval_")) + rg_MCPMingLingFuWuQi::rg_ShengChengYiBuRenWuID ();
             CVolString rg_chEvalRes1;
             rg_chEvalRes1 = rg_MCPMingLingFuWuQi::rg_ZhiHangCDPBingTongBuDengDai (rg_chEvalID1, _CT2 (_T ("Runtime.evaluate")), rg_chEvalParams1.data().ToString(YYJSON_WRITE_NOFLAG), 8000);
             if (rg_MCPMingLingFuWuQi::rg_CDPTongBuJieGuoShiFouChengGong (rg_chEvalRes1))
@@ -179,7 +184,7 @@ CVolString CALLBACK rg_MCP_NiXiangFenPa::rg_FenLeiFenPa_NiXiangCaoZuo (CVolStrin
             rg_cfEvalParams.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("returnByValue")), FALSE);
             rg_cfEvalParams.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("generatePreview")), FALSE);
             CVolString rg_cfEvalID;
-            rg_cfEvalID = _CT2 (_T ("call_fn_eval_")) + CVolString (rg_volcano_base::rg_ChangYongGongNengLei::rg_QuQiDongShiJian ()) + _T ("_") + CVolString (randint2 (1000, 9999));
+            rg_cfEvalID = _CT2 (_T ("call_fn_eval_")) + rg_MCPMingLingFuWuQi::rg_ShengChengYiBuRenWuID ();
             CVolString rg_cfEvalRes;
             rg_cfEvalRes = rg_MCPMingLingFuWuQi::rg_ZhiHangCDPBingTongBuDengDai (rg_cfEvalID, _CT2 (_T ("Runtime.evaluate")), rg_cfEvalParams.data().ToString(YYJSON_WRITE_NOFLAG), 8000);
             if (rg_MCPMingLingFuWuQi::rg_CDPTongBuJieGuoShiFouChengGong (rg_cfEvalRes))
@@ -260,11 +265,29 @@ CVolString CALLBACK rg_MCP_NiXiangFenPa::rg_FenLeiFenPa_NiXiangCaoZuo (CVolStrin
                 {
                     return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID29, _CT2 (_T ("文件路径不合法: ")) + rg_plFile));
                 }
+                INT64 rg_plYuJianDaXiao = 0;
+                {
+                    WIN32_FILE_ATTRIBUTE_DATA fd;
+                    rg_plYuJianDaXiao = (GetFileAttributesExW(rg_plFile.GetText(), GetFileExInfoStandard, &fd) && !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+                        ? ((LONGLONG)fd.nFileSizeHigh << 32) | (LONGLONG)(DWORD)fd.nFileSizeLow : -1;
+                }
+                if (rg_plYuJianDaXiao > 2097152)
+                {
+                    return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID29, _CT2 (_T ("JS文件过大(")) + CVolString (rg_plYuJianDaXiao) + _T ("字节), 上限2MB")));
+                }
                 CVolMem rg_plFileBytes;
                 rg_plFileBytes = rg_volcano_base::rg_CiPanCaoZuoLei::rg_DouRuWenJian (rg_plFile, -1);
+                if ((INT)rg_plFileBytes.GetSize () > 2097152)
+                {
+                    return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID29, _CT2 (_T ("JS文件过大(")) + CVolString ((INT)rg_plFileBytes.GetSize ()) + _T ("字节), 上限2MB")));
+                }
                 if ((INT)rg_plFileBytes.GetSize () > 0)
                 {
                     rg_plCode1 = rg_volcano_base::rg_WenBenLei::rg_UTF8DaoWenBen (rg_plFileBytes);
+                }
+                else
+                {
+                    return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID29, _CT2 (_T ("文件读取失败或文件为空: ")) + rg_plFile));
                 }
             }
         }
@@ -670,6 +693,10 @@ CVolString CALLBACK rg_MCP_NiXiangFenPa::rg_FenLeiFenPa_NiXiangCaoZuo (CVolStrin
         if ((BOOL)rg_hmArr.IsNullObject () || yyjson_arr_size(rg_hmArr.data().GetArray()) == 0)
         {
             return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID29, _CT2 (_T ("functions 需要JSON数组: [\"fn1\",\"obj.fn2\"]"))));
+        }
+        if ((INT)yyjson_arr_size(rg_hmArr.data().GetArray()) > 200)
+        {
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID29, _CT2 (_T ("functions 数组过大 (上限200)"))));
         }
         rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_hmBrowser;
         rg_hmBrowser = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();

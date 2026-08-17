@@ -10,8 +10,10 @@ namespace rg_volcano_app
 CVolString CALLBACK rg_MCPStdioQiao::rg_DouQuYiHang (INT rg_XianChengGouBing)
 {
     CVolMem rg_HangZiJieJi;
+    *(volatile BOOL*)&rg_ShangCiDouQuWeiDuanKai = FALSE;
     HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
-    if (hStdin == INVALID_HANDLE_VALUE || hStdin == NULL) return CVolString();
+    if (hStdin == INVALID_HANDLE_VALUE || hStdin == NULL) { *(volatile BOOL*)&rg_ShangCiDouQuWeiDuanKai = TRUE; return CVolString(); }
+    const bool isPipe = (GetFileType(hStdin) == FILE_TYPE_PIPE);
     DWORD emptyPolls = 0;
     std::string headLine;
     for (;;) {
@@ -19,26 +21,53 @@ CVolString CALLBACK rg_MCPStdioQiao::rg_DouQuYiHang (INT rg_XianChengGouBing)
         if (rg_XianChengGouBing != 0 && g_objVolApp.GetThreadPool().IsThreadNeedBreak((HVOLTHREAD)rg_XianChengGouBing, 0))
             return CVolString();
         DWORD avail = 0;
-        if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail, NULL)) break;
-        if (avail == 0) {
-            if (++emptyPolls > 600) break;
-            Sleep(50); continue;
-        }
+        if (isPipe) { if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail, NULL)) { *(volatile BOOL*)&rg_ShangCiDouQuWeiDuanKai = TRUE; break; } }
+        else { avail = 1; }
+        if (isPipe && avail == 0) { Sleep(50); continue; }
         emptyPolls = 0;
         DWORD headLen = 0;
         bool gotNewline = false;
+        bool headFailed = false;
+        DWORD headEmptyPolls = 0;
         while (headLen < 1048576) {
             if (*(volatile BOOL*)&rg_StdioYingTuiChu) return CVolString();
+            if (rg_XianChengGouBing != 0 && g_objVolApp.GetThreadPool().IsThreadNeedBreak((HVOLTHREAD)rg_XianChengGouBing, 0))
+                return CVolString();
+            DWORD availH = 0;
+            if (isPipe) { if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &availH, NULL)) { headFailed = true; *(volatile BOOL*)&rg_ShangCiDouQuWeiDuanKai = TRUE; break; } }
+            else { availH = 1; }
+            if (isPipe && availH == 0) { if (++headEmptyPolls > 1200) { headFailed = true; break; } Sleep(50); continue; }
+            headEmptyPolls = 0;
             char c; DWORD n = 0;
-            if (!ReadFile(hStdin, &c, 1, &n, NULL) || n == 0) break;
+            if (!ReadFile(hStdin, &c, 1, &n, NULL) || n == 0) { headFailed = true; *(volatile BOOL*)&rg_ShangCiDouQuWeiDuanKai = TRUE; break; }
             if (c == '\n') { gotNewline = true; break; }
             if (c != '\r') headLine += c;
             headLen++;
         }
+        if (headFailed) break;
         if (headLine.empty()) { Sleep(50); continue; }
         long contentLen = -1;
         if (strncmp(headLine.c_str(), "Content-Length:", 15) == 0)
             contentLen = atol(headLine.c_str() + 15);
+        if (contentLen > 67108864) {
+            fprintf(stderr, "[MCP-Stdio] Content-Length %ld 超过64MB上限, 拒绝并排空该帧\n", contentLen);
+            long toDiscard = contentLen;
+            if (toDiscard > 67108864) toDiscard = 67108864;
+            while (toDiscard > 0) {
+                if (*(volatile BOOL*)&rg_StdioYingTuiChu) return CVolString();
+                DWORD avail5 = 0;
+                if (isPipe) { if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail5, NULL)) break; }
+                else { avail5 = 1; }
+                if (isPipe && avail5 == 0) { if (++emptyPolls > 600) break; Sleep(20); continue; }
+                emptyPolls = 0;
+                char tmpD[4096];
+                DWORD n5 = 0;
+                DWORD toRead = (DWORD)(toDiscard > 4096 ? 4096 : toDiscard);
+                if (!ReadFile(hStdin, tmpD, toRead, &n5, NULL) || n5 == 0) break;
+                toDiscard -= n5;
+            }
+            break;
+        }
         if (contentLen < 0) {
             rg_HangZiJieJi.CopyFrom(headLine.data(), (INT_P)headLine.size());
             break;
@@ -46,19 +75,38 @@ CVolString CALLBACK rg_MCPStdioQiao::rg_DouQuYiHang (INT rg_XianChengGouBing)
         std::string body;
         body.reserve((size_t)contentLen);
         if (gotNewline) {
-            DWORD avail2 = 0;
-            if (PeekNamedPipe(hStdin, NULL, 0, NULL, &avail2, NULL) && avail2 > 0) {
+            bool sepDone = false;
+            while (!sepDone) {
+                if (*(volatile BOOL*)&rg_StdioYingTuiChu) return CVolString();
+                if (rg_XianChengGouBing != 0 && g_objVolApp.GetThreadPool().IsThreadNeedBreak((HVOLTHREAD)rg_XianChengGouBing, 0))
+                    return CVolString();
+                DWORD avail2 = 0;
+                if (isPipe) { if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail2, NULL)) { *(volatile BOOL*)&rg_ShangCiDouQuWeiDuanKai = TRUE; sepDone = true; break; } }
+                else { avail2 = 1; }
+                if (isPipe && avail2 == 0) { if (++headEmptyPolls > 1200) { sepDone = true; break; } Sleep(50); continue; }
+                headEmptyPolls = 0;
                 char c0; DWORD n0 = 0;
-                if (ReadFile(hStdin, &c0, 1, &n0, NULL) && n0 > 0) {
-                    if (c0 == '\r') {
+                if (!ReadFile(hStdin, &c0, 1, &n0, NULL) || n0 == 0) { *(volatile BOOL*)&rg_ShangCiDouQuWeiDuanKai = TRUE; sepDone = true; break; }
+                if (c0 == '\r') {
+                    bool c1Done = false;
+                    while (!c1Done) {
+                        if (*(volatile BOOL*)&rg_StdioYingTuiChu) return CVolString();
+                        if (rg_XianChengGouBing != 0 && g_objVolApp.GetThreadPool().IsThreadNeedBreak((HVOLTHREAD)rg_XianChengGouBing, 0))
+                            return CVolString();
+                        DWORD avail2b = 0;
+                        if (isPipe) { if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail2b, NULL)) { *(volatile BOOL*)&rg_ShangCiDouQuWeiDuanKai = TRUE; body += c0; c1Done = true; break; } }
+                        else { avail2b = 1; }
+                        if (isPipe && avail2b == 0) { if (++headEmptyPolls > 1200) { body += c0; c1Done = true; break; } Sleep(50); continue; }
+                        headEmptyPolls = 0;
                         char c1; DWORD n1 = 0;
-                        if (ReadFile(hStdin, &c1, 1, &n1, NULL) && n1 > 0 && c1 != '\n') {
-                            body += c1;
-                        }
-                    } else if (c0 == '\n') {
-                    } else {
-                        body += c0;
+                        if (!ReadFile(hStdin, &c1, 1, &n1, NULL) || n1 == 0) { *(volatile BOOL*)&rg_ShangCiDouQuWeiDuanKai = TRUE; body += c0; c1Done = true; break; }
+                        if (c1 == '\n') { sepDone = true; c1Done = true; }
+                        else { body += c0; body += c1; sepDone = true; c1Done = true; }
                     }
+                } else if (c0 == '\n') {
+                    sepDone = true;
+                } else {
+                    body += c0; sepDone = true;
                 }
             }
         }
@@ -67,8 +115,9 @@ CVolString CALLBACK rg_MCPStdioQiao::rg_DouQuYiHang (INT rg_XianChengGouBing)
             if (rg_XianChengGouBing != 0 && g_objVolApp.GetThreadPool().IsThreadNeedBreak((HVOLTHREAD)rg_XianChengGouBing, 0))
                 return CVolString();
             DWORD avail3 = 0;
-            if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail3, NULL)) break;
-            if (avail3 == 0) { if (++emptyPolls > 600) break; Sleep(20); continue; }
+            if (isPipe) { if (!PeekNamedPipe(hStdin, NULL, 0, NULL, &avail3, NULL)) break; }
+            else { avail3 = 1; }
+            if (isPipe && avail3 == 0) { if (++emptyPolls > 600) break; Sleep(20); continue; }
             emptyPolls = 0;
             char tmpB[4096];
             DWORD n3 = 0;
@@ -76,17 +125,13 @@ CVolString CALLBACK rg_MCPStdioQiao::rg_DouQuYiHang (INT rg_XianChengGouBing)
             if (!ReadFile(hStdin, tmpB, toRead, &n3, NULL) || n3 == 0) break;
             body.append(tmpB, n3);
         }
-        {
-            DWORD avail4 = 0;
-            if (PeekNamedPipe(hStdin, NULL, 0, NULL, &avail4, NULL) && avail4 > 0) {
-                char c2; DWORD n4 = 0;
-                if (ReadFile(hStdin, &c2, 1, &n4, NULL) && n4 > 0 && c2 == '\n') { /* 帧尾\n已消费 */ }
-            }
+        if ((long)body.size() < contentLen) {
+            fprintf(stderr, "[MCP-Stdio] 帧体不完整(已读%ld/%ld字节), 丢弃本帧\n", (long)body.size(), contentLen);
+            break;
         }
         rg_HangZiJieJi.CopyFrom(body.data(), (INT_P)body.size());
         break;
     }
-    return CVolString();
     if ((INT)rg_HangZiJieJi.GetSize () == 0)
     {
         return (_T (""));
@@ -102,7 +147,6 @@ void CALLBACK rg_MCPStdioQiao::rg_XieRuYiHang (CVolString& rg_string4)
     int headerLen = snprintf(header, sizeof(header), "Content-Length: %lu\r\n\r\n", (unsigned long)contentLen);
     std::string frame(header, headerLen);
     frame += utf8;
-    frame += "\n";
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hOut == INVALID_HANDLE_VALUE || hOut == NULL) return;
     const char* wp = frame.c_str();
@@ -181,7 +225,10 @@ void CALLBACK rg_MCPStdioQiao::rg_YunHangStdioZhuXunHuan (INT rg_XianChengGouBin
             {
                 break;
             }
-            rg_KongDouCiShu = rg_KongDouCiShu + 1;
+            if (rg_ShangCiDouQuWeiDuanKai)
+            {
+                rg_KongDouCiShu = rg_KongDouCiShu + 1;
+            }
             if (rg_KongDouCiShu >= 3)
             {
                 rg_XieRiZhi (_CT2 (_T ("stdin已断开(父进程退出), stdio服务自动停止")));
@@ -191,8 +238,6 @@ void CALLBACK rg_MCPStdioQiao::rg_YunHangStdioZhuXunHuan (INT rg_XianChengGouBin
             continue;
         }
         rg_KongDouCiShu = 0;
-        CVolString rg_XiangYingJSON5;
-        rg_XiangYingJSON5 = rg_MCPMingLingFuWuQi::rg_ChuLiMCPQingQiu (rg_QingQiuJSON2, _CT2 (_T ("stdio")));
         if ((INT)rg_QingQiuJSON2.GetLength () > 200)
         {
             rg_XieRiZhi (_CT2 (_T ("收到命令: ")) + rg_QingQiuJSON2.Left (200) + _T ("...(") + CVolString ((INT)rg_QingQiuJSON2.GetLength ()) + _T ("字符)"));
@@ -201,6 +246,8 @@ void CALLBACK rg_MCPStdioQiao::rg_YunHangStdioZhuXunHuan (INT rg_XianChengGouBin
         {
             rg_XieRiZhi (_CT2 (_T ("收到命令: ")) + rg_QingQiuJSON2);
         }
+        CVolString rg_XiangYingJSON5;
+        rg_XiangYingJSON5 = rg_MCPMingLingFuWuQi::rg_ChuLiMCPQingQiu (rg_QingQiuJSON2, _CT2 (_T ("stdio")));
         if (rg_XiangYingJSON5 != _T (""))
         {
             rg_XieRuYiHang (rg_XiangYingJSON5);
