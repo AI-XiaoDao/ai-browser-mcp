@@ -7130,7 +7130,7 @@
         连接信息对象.加入文本成员 ("cdp_note", "CDP 请使用 MCP 工具 browser_cdp_call, 非 /devtools WebSocket 代理")
         连接信息对象.加入文本成员 ("bridge_script", "mcp_bridge.js")
         连接信息对象.加入文本成员 ("check_command", "node mcp_bridge.js --check")
-        连接信息对象.加入文本成员 ("usage_step1", "启动 AI-Fbowser-Mcp.exe (保持运行, 关闭窗口会最小化到托盘)")
+        连接信息对象.加入文本成员 ("usage_step1", "启动 AI-Fbowser-Mcp.exe (保持运行请最小化控制台窗口, 关闭浏览器窗口将退出程序)")
         连接信息对象.加入文本成员 ("usage_step2", "Cursor: mcp.json 配置 node + mcp_bridge.js 路径")
         连接信息对象.加入文本成员 ("usage_step3", "调用 tools/call 或 browser_* 命令操作浏览器")
         连接信息对象.加入文本成员 ("quick_test", "curl -s " + 取MCP_HTTP地址 () + "/health")

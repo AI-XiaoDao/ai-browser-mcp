@@ -18,7 +18,7 @@
 
 ```
 
-[Open Source] AI Browser MCP Server v2.8.2 — Local browser automation for Windows
+[Open Source] AI Browser MCP Server v3.0.0 — Local browser automation for Windows
 
 
 
@@ -38,11 +38,11 @@
 
 
 
-Download: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.2
+Download: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v3.0.0
 
-  · AI-Browser-MCP-x64-v2.8.2.zip / AI-Browser-MCP-win32-v2.8.2.zip — runtime
+  · AI-Browser-MCP-x64-v3.0.0.zip / AI-Browser-MCP-win32-v3.0.0.zip — runtime
 
-  · AI-Browser-MCP-cpp-x64-v2.8.2.zip / AI-Browser-MCP-cpp-win32-v2.8.2.zip — generated C++ (optional)
+  · AI-Browser-MCP-cpp-x64-v3.0.0.zip / AI-Browser-MCP-cpp-win32-v3.0.0.zip — generated C++ (optional)
 
 
 
@@ -324,9 +324,9 @@ A: **No by default.** Use persist Hook (`browser_inject`). See `skills/场景与
 
 
 
-1. Download [AI-Browser-MCP-x64-v2.8.2.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.2/AI-Browser-MCP-x64-v2.8.2.zip) (~157MB)
+1. Download [AI-Browser-MCP-x64-v3.0.0.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v3.0.0/AI-Browser-MCP-x64-v3.0.0.zip) (~157MB)
 
-2. Extract and run **AI浏览器.exe**
+2. Extract and run **AI-Fbowser-Mcp.exe**
 
 3. Open http://127.0.0.1:9222/health → `"status":"ok"`
 
@@ -400,7 +400,7 @@ Local FBrowser CEF · MIT · 127.0.0.1:9222
 
 
 
-https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.2
+https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v3.0.0
 
 ```
 
@@ -438,7 +438,7 @@ Plain-language prompts in Cursor:
 
 
 
-https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.2
+https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v3.0.0
 
 ```
 
@@ -494,7 +494,7 @@ https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.2
 
 - **Repo**: https://github.com/AI-XiaoDao/ai-browser-mcp
 
-- **Release v2.8.2**: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.2
+- **Release v3.0.0**: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v3.0.0
 
 - **Chinese announcement**: [OPEN_SOURCE.md](OPEN_SOURCE.md)
 
@@ -522,7 +522,7 @@ The repo ships Volcano `.wsv` source (authoritative), generated C++ for audit, d
 
 
 
-Download: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.2
+Download: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v3.0.0
 
 
 

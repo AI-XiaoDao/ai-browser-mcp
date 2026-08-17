@@ -6,7 +6,7 @@
 
 **255 工具** · **MCP 协议** · **原生 API 优先** · **FBrowser CEF** · **`127.0.0.1:9222`** · **MIT**
 
-[![Download v2.8.2](https://img.shields.io/badge/⬇_Download-v2.8.2-238636?style=for-the-badge)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.2)
+[![Download v3.0.0](https://img.shields.io/badge/⬇_Download-v3.0.0-238636?style=for-the-badge)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v3.0.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/AI-XiaoDao/ai-browser-mcp?label=release)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 [![MCP](https://img.shields.io/badge/MCP-255_tools-6ec6ff)]()
@@ -21,7 +21,7 @@
 
 ## ✨ 一句话介绍
 
-下载 `AI-Browser-MCP-x64-v2.8.2.zip`（~157MB），解压运行 `AI-Fbowser-Mcp.exe`。在 Cursor / Claude 里说句话，**255 个预封装工具**自动执行：采集数据、逆向 POST 加密、CDP 定位签名算法、自动填表。
+下载 `AI-Browser-MCP-x64-v3.0.0.zip`（~157MB），解压运行 `AI-Fbowser-Mcp.exe`。在 Cursor / Claude 里说句话，**255 个预封装工具**自动执行：采集数据、逆向 POST 加密、CDP 定位签名算法、自动填表。
 
 | 接入方式 | 适用 |
 |----------|------|
@@ -162,10 +162,10 @@ AI-Browser-MCP Server  ← mcp_bridge.js (stdio 桥接)
 
 | 包 | 平台 | 大小 |
 |----|------|------|
-| [**AI-Browser-MCP-x64-v2.8.2.zip**](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.2/AI-Browser-MCP-x64-v2.8.2.zip) | Windows x64 | ~157 MB |
-| [**AI-Browser-MCP-win32-v2.8.2.zip**](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.2/AI-Browser-MCP-win32-v2.8.2.zip) | Windows 32-bit | ~136 MB |
-| [**AI-Browser-MCP-cpp-x64-v2.8.2.zip**](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.2/AI-Browser-MCP-cpp-x64-v2.8.2.zip) | C++ 对照 x64 | ~396 KB |
-| [**AI-Browser-MCP-cpp-win32-v2.8.2.zip**](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.2/AI-Browser-MCP-cpp-win32-v2.8.2.zip) | C++ 对照 win32 | ~396 KB |
+| [**AI-Browser-MCP-x64-v3.0.0.zip**](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v3.0.0/AI-Browser-MCP-x64-v3.0.0.zip) | Windows x64 | ~157 MB |
+| [**AI-Browser-MCP-win32-v3.0.0.zip**](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v3.0.0/AI-Browser-MCP-win32-v3.0.0.zip) | Windows 32-bit | ~136 MB |
+| [**AI-Browser-MCP-cpp-x64-v3.0.0.zip**](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v3.0.0/AI-Browser-MCP-cpp-x64-v3.0.0.zip) | C++ 对照 x64 | ~396 KB |
+| [**AI-Browser-MCP-cpp-win32-v3.0.0.zip**](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v3.0.0/AI-Browser-MCP-cpp-win32-v3.0.0.zip) | C++ 对照 win32 | ~396 KB |
 
 **环境要求**：Windows 10/11 · Node.js 18+（Cursor 桥接）· 64 位系统优先用 x64
 

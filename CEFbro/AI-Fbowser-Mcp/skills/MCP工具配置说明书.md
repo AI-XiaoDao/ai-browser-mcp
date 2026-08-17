@@ -1,7 +1,7 @@
 ---
 name: AI浏览器MCP配置
 description: mcp_config.json / Cursor / VIP — MCP 配置说明书（客户见「零、给客户看的3步」）
-version: 2.8.2
+version: 3.0.0
 trigger: mcp_config|配置文件|vip_code|端口|bind_address|Cursor配置|mcp.json|环境变量|客户配置
 ---
 # AI浏览器 — MCP 工具配置说明书
@@ -12,7 +12,7 @@ trigger: mcp_config|配置文件|vip_code|端口|bind_address|Cursor配置|mcp.j
 
 1. 打开 exe 同目录 `mcp_config.json`
 2. 填写 `"vip_code": "授权码"`（基础功能可不填）
-3. 保存并**重启** AI浏览器.exe
+3. 保存并**重启** AI-Fbowser-Mcp.exe
 
 Cursor：欢迎页 `http://127.0.0.1:9222/` → 复制 Cursor 配置 → `.cursor/mcp.json` → 重启 Cursor。
 

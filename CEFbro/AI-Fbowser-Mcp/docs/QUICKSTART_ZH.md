@@ -3,7 +3,7 @@
 > **Windows 本地浏览器自动化 MCP 服务器** — 255 个工具，支持 Cursor、Claude Desktop、Cline 及任意 MCP 客户端。
 >
 > 🐣 **零基础用户请看**：[小白使用指南](小白使用指南.md)（3 分钟上手，会双击就会用）
-> 💡 关闭主窗口 = 最小化到托盘（不会退出），双击托盘图标恢复窗口，支持 Cursor、Claude Desktop、Cline 及任意 MCP 客户端。  
+> 💡 关闭浏览器窗口 = 退出程序；保持运行请最小化控制台窗口，支持 Cursor、Claude Desktop、Cline 及任意 MCP 客户端。  
 > 仓库：https://github.com/AI-XiaoDao/ai-browser-mcp
 
 ## 这是什么？
@@ -16,14 +16,14 @@
 
 | 包 | 说明 |
 |----|------|
-| [AI-Browser-MCP-x64-v2.8.2.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.2/AI-Browser-MCP-x64-v2.8.2.zip) | 64 位 Windows，~160MB |
-| [AI-Browser-MCP-win32-v2.8.2.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.2/AI-Browser-MCP-win32-v2.8.2.zip) | 32 位 Windows，~140MB |
+| [AI-Browser-MCP-x64-v3.0.0.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v3.0.0/AI-Browser-MCP-x64-v3.0.0.zip) | 64 位 Windows，~160MB |
+| [AI-Browser-MCP-win32-v3.0.0.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v3.0.0/AI-Browser-MCP-win32-v3.0.0.zip) | 32 位 Windows，~140MB |
 
 MIT 开源 · 本机 `127.0.0.1:9222` · 255 工具全开放。
 
 ## 三步上手
 
-1. 解压 → 双击 **AI浏览器.exe**（关闭窗口会最小化到托盘，不会退出）
+1. 解压 → 双击 **AI-Fbowser-Mcp.exe**（关闭浏览器窗口会退出程序，保持运行请最小化控制台窗口）
 2. 打开 http://127.0.0.1:9222/health → `"status":"ok"`
 3. 配置 Cursor / Claude（见下）
 

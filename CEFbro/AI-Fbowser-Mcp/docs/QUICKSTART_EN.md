@@ -13,14 +13,14 @@
 
 | Package | Platform | Size |
 |---------|----------|------|
-| [AI-Browser-MCP-x64-v2.8.2.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.2/AI-Browser-MCP-x64-v2.8.2.zip) | Windows 64-bit | ~160 MB |
-| [AI-Browser-MCP-win32-v2.8.2.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.2/AI-Browser-MCP-win32-v2.8.2.zip) | Windows 32-bit | ~140 MB |
+| [AI-Browser-MCP-x64-v3.0.0.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v3.0.0/AI-Browser-MCP-x64-v3.0.0.zip) | Windows 64-bit | ~160 MB |
+| [AI-Browser-MCP-win32-v3.0.0.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v3.0.0/AI-Browser-MCP-win32-v3.0.0.zip) | Windows 32-bit | ~140 MB |
 
 All **255 tools** included (screenshot, CDP, debugger, fingerprint, network hook, workflows). **MIT** open source.
 
 ## 3-step setup
 
-1. Extract zip → run **`AI浏览器.exe`**
+1. Extract zip → run **`AI-Fbowser-Mcp.exe`**
 2. Open http://127.0.0.1:9222/health → `"status":"ok"`
 3. Connect your AI agent (see below)
 

@@ -8,7 +8,7 @@
 ## 📋 论坛 / 群公告 · 短帖（复制即用）
 
 ```
-【开源】AI-Browser-MCP v2.8.2 — Windows 原生浏览器自动化 MCP 服务
+【开源】AI-Browser-MCP v3.0.0 — Windows 原生浏览器自动化 MCP 服务
 
 让 **任意 AI 代理**（Cursor / Claude / Cline / 自研 MCP 客户端）用自然语言操控真实浏览器：255 browser_* 工具，导航/填表/读DOM/抓网络/CDP断点/爬虫一站式。
 
@@ -23,8 +23,8 @@
 ✅ 本机 127.0.0.1:9222，默认不暴露外网
 
 下载：https://github.com/AI-XiaoDao/ai-browser-mcp/releases
-  · AI-Browser-MCP-x64-v2.8.2.zip / AI-Browser-MCP-win32-v2.8.2.zip — 运行包
-  · AI-Browser-MCP-cpp-x64-v2.8.2.zip / AI-Browser-MCP-cpp-win32-v2.8.2.zip — C++ 对照
+  · AI-Browser-MCP-x64-v3.0.0.zip / AI-Browser-MCP-win32-v3.0.0.zip — 运行包
+  · AI-Browser-MCP-cpp-x64-v3.0.0.zip / AI-Browser-MCP-cpp-win32-v3.0.0.zip — C++ 对照
 
 Star / Issue 欢迎：https://github.com/AI-XiaoDao/ai-browser-mcp
 QQ：212577526 · 群：737680767
@@ -104,7 +104,7 @@ QQ：212577526 · 群：737680767
 
 ▸ 安全与本地
   · 默认 127.0.0.1:9222，本机 Agent，数据不出机器
-  · 托盘常驻：关主窗口后 MCP 仍可服务长时间任务
+  · 控制台常驻：最小化控制台窗口，MCP 可服务长时间任务
 
 ▸ 开源与生态
   · MIT：11 个 .wsv 模块（~2 万行）+ generated-cpp 对照 + 255 工具文档
@@ -117,7 +117,7 @@ QQ：212577526 · 群：737680767
   · 下载 exe 即用 vs 环境+脚本+维护
   · 本地离线 vs 云端 Browser API 依赖网络与计费
 
-下载：https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.2
+下载：https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v3.0.0
 仓库：https://github.com/AI-XiaoDao/ai-browser-mcp
 ```
 
@@ -187,7 +187,7 @@ One sentence → auto-runs:
 
 Local FBrowser CEF · MIT · 127.0.0.1:9222
 
-https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.2
+https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v3.0.0
 ```
 
 ---
@@ -206,7 +206,7 @@ Instead of writing Playwright scripts, you tell Cursor in plain language:
 
 Runs locally on 127.0.0.1:9222. MIT license, .wsv source included.
 
-Download: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.2
+Download: https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v3.0.0
 Repo: https://github.com/AI-XiaoDao/ai-browser-mcp
 ```
 
@@ -234,12 +234,12 @@ https://github.com/AI-XiaoDao/ai-browser-mcp
 
 | 文件 | 大小 | 用途 |
 |------|------|------|
-| [AI-Browser-MCP-x64-v2.8.2.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.2/AI-Browser-MCP-x64-v2.8.2.zip) | ~157MB | **运行包**：exe + CEF + 脚本/文档 |
-| [AI-Browser-MCP-cpp-x64-v2.8.2.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v2.8.2/AI-Browser-MCP-cpp-x64-v2.8.2.zip) | ~0.3MB | **C++ 对照**（可选，与仓库 `generated-cpp/` 相同） |
+| [AI-Browser-MCP-x64-v3.0.0.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v3.0.0/AI-Browser-MCP-x64-v3.0.0.zip) | ~157MB | **运行包**：exe + CEF + 脚本/文档 |
+| [AI-Browser-MCP-cpp-x64-v3.0.0.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v3.0.0/AI-Browser-MCP-cpp-x64-v3.0.0.zip) | ~0.3MB | **C++ 对照**（可选，与仓库 `generated-cpp/` 相同） |
 
 ```
-1. 解压 AI-Browser-MCP-x64-v2.8.2.zip 到任意目录
-2. 双击 AI浏览器.exe
+1. 解压 AI-Browser-MCP-x64-v3.0.0.zip 到任意目录
+2. 双击 AI-Fbowser-Mcp.exe
 3. 浏览器打开 http://127.0.0.1:9222/health → 确认 "status":"ok"
 4. 配置 Cursor（见下方）
 5. 对 AI 说：「打开 https://example.com 并读取标题」— 或见下方「典型话术」
@@ -281,7 +281,7 @@ https://github.com/AI-XiaoDao/ai-browser-mcp
 }
 ```
 
-自检：`node mcp_bridge.js --check` → 应显示版本 `2.8.0` 且浏览器数量 ≥ 1。
+自检：`node mcp_bridge.js --check` → 应显示版本 `3.0.0` 且浏览器数量 ≥ 1。
 
 ---
 
@@ -306,7 +306,7 @@ https://github.com/AI-XiaoDao/ai-browser-mcp
 
 | 内容 | 获取方式 |
 |------|----------|
-| `AI浏览器.exe` + CEF 运行时 | [Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) → x64 zip |
+| `AI-Fbowser-Mcp.exe` + CEF 运行时 | [Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases) → x64 zip |
 | C++ 对照（与 `generated-cpp/` 相同） | Releases → cpp zip |
 | MCP 权威源码 | 本仓库 `src/*.wsv`（MIT） |
 
@@ -326,7 +326,7 @@ https://github.com/AI-XiaoDao/ai-browser-mcp
 | **④ 运行成品** | Releases x64 zip | 下载即用 |
 
 ```
-src/*.wsv → project/ ≡ generated-cpp/ → linker/out/ → AI浏览器.exe
+src/*.wsv → project/ ≡ generated-cpp/ → linker/out/ → AI-Fbowser-Mcp.exe
   ① 改这里      ② 对照                  ③ 勿发布        ④ 给用户
 ```
 
@@ -379,7 +379,7 @@ A：**逆向**侧重找「哪个请求/字段被加密、body 长什么样」（
 | 资源 | URL |
 |------|-----|
 | **GitHub 仓库** | https://github.com/AI-XiaoDao/ai-browser-mcp |
-| **v2.8.2 Release** | https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.2 |
+| **v3.0.0 Release** | https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v3.0.0 |
 | **客户使用手册** | 仓库 `CEFbro/AI浏览器/docs/客户使用手册.md` |
 | **255 工具参考** | 仓库 `CEFbro/AI浏览器/skills/AI浏览器MCP.md` |
 | **火山编程交流群** | https://qm.qq.com/q/Hpv6qm8qUE |
@@ -394,7 +394,7 @@ QQ：**212577526** · QQ群：**737680767** · 微信：**XSMZAS1**
 
 ---
 
-*AI浏览器 MCP Server v2.8.2 · MIT License · 内核 FBrowser CEF · 端口 9222*
+*AI浏览器 MCP Server v3.0.0 · MIT License · 内核 FBrowser CEF · 端口 9222*
 
 ---
 
@@ -460,8 +460,8 @@ QQ：**212577526** · QQ群：**737680767** · 微信：**XSMZAS1**
 
 ### 3 步上手
 
-1. 下载 Release：https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.2  
-   解压 **AI-Browser-MCP-x64-v2.8.2.zip**，运行 **AI浏览器.exe**  
+1. 下载 Release：https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v3.0.0  
+   解压 **AI-Browser-MCP-x64-v3.0.0.zip**，运行 **AI-Fbowser-Mcp.exe**  
 2. 浏览器打开 http://127.0.0.1:9222/health ，看到 `"status":"ok"`  
 3. 在 Cursor 里配置 `mcp_bridge.js`（解压目录内与 exe 同级），详见仓库 **OPEN_SOURCE.md**
 
@@ -511,9 +511,9 @@ QQ：**212577526** · QQ群：**737680767** · 微信：**XSMZAS1**
 
 基于火山视窗 + FBrowser CEF 的 MCP 浏览器自动化服务现已 MIT 开源。
 
-【项目】AI Browser MCP Server v2.8.2
+【项目】AI Browser MCP Server v3.0.0
 【仓库】https://github.com/AI-XiaoDao/ai-browser-mcp
-【成品】https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.2
+【成品】https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v3.0.0
 
 【技术栈】
 · 源码：火山 .wsv（11 个 MCP 模块，~2 万行）
@@ -549,7 +549,7 @@ AI浏览器 MCP Server 开源啦｜Cursor 一句话操控 Windows 真实浏览�
 
 说目标 AI 自己跑：不用写 Playwright，Agent 自动串联 navigate/collect/inject/debugger
 
-下载：https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v2.8.2
+下载：https://github.com/AI-XiaoDao/ai-browser-mcp/releases/tag/v3.0.0
 仓库：https://github.com/AI-XiaoDao/ai-browser-mcp
 文档：见仓库 OPEN_SOURCE.md
 

@@ -1,11 +1,11 @@
 ---
 name: AI浏览器 JS逆向与高级Hook
-description: JS逆向工程全链路能力 — v2.8.2: browser_reverse_*套件/58 CDP方法/11域覆盖/函数热补丁/调用栈快照/混淆器识别/加密特征扫描
-version: 2.8.2
+description: JS逆向工程全链路能力 — v3.0.0: browser_reverse_*套件/58 CDP方法/11域覆盖/函数热补丁/调用栈快照/混淆器识别/加密特征扫描
+version: 3.0.0
 trigger: JS逆向|逆向分析|hook函数|sign算法|加密参数|debugger|断点|调用栈|字符串解密|反混淆|网络溯源|AST|CDP|热补丁|覆盖率|黑盒|事件监听|Promise
 ---
 
-# AI浏览器 — JS 逆向与高级 Hook 技能书 (v2.8.2)
+# AI浏览器 — JS 逆向与高级 Hook 技能书 (v3.0.0)
 
 > 基于 CDP 协议的深度运行时分析能力 | 参考：Ghostwire / Wirebrowser / jshookmcp / JSReverser-MCP
 > **v2.8 逆向工具从 18 → 44 (+144%)** | CDP 11域 58 方法全面封装
@@ -491,7 +491,7 @@ getEnv(['window','document','location','navigator','history','screen']);
 
 ## 九、相关文档
 
-- [AI浏览器MCP.md](./AI浏览器MCP.md) — 255 个工具完整参考 (v2.8.2)
+- [AI浏览器MCP.md](./AI浏览器MCP.md) — 255 个工具完整参考 (v3.0.0)
 - [场景与Hook测试.md](./场景与Hook测试.md) — 场景脚本与测试
 - [客户使用手册.md](./客户使用手册.md) — 终端客户安装与使用
 - [使用技能书.md](./使用技能书.md) — 技术/Agent 实操指南
@@ -510,7 +510,7 @@ getEnv(['window','document','location','navigator','history','screen']);
 
 ---
 
-> 版本 2.8.2 · 在线研究日期：2026-06-24  
+> 版本 3.0.0 · 在线研究日期：2026-06-24  
 > 来源：Bing搜索 + CSDN + GitHub + V2EX + 技术博客  
 > QQ: 212577526 | QQ群: 737680767 | 微信: XSMZAS1  
 > GitHub: https://github.com/AI-XiaoDao/ai-browser-mcp

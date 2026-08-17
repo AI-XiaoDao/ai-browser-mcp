@@ -1,6 +1,6 @@
 # AI浏览器 — 成品发布包说明
 
-本目录为**可直接分发给终端用户**的运行时配置包（不含 CEF 二进制时需配合 `AI浏览器.exe`）。
+本目录为**可直接分发给终端用户**的运行时配置包（不含 CEF 二进制时需配合 `AI-Fbowser-Mcp.exe`）。
 
 ## 目录
 
@@ -19,7 +19,7 @@
 | ④ 运行成品 | `linker/`（除 `out/`） | ❌ | x64 / win32 zip |
 
 ```
-src/*.wsv → project/ → linker/out/ → linker/AI浏览器.exe
+src/*.wsv → project/ → linker/out/ → linker/AI-Fbowser-Mcp.exe
   ①           ②           ③              ④
 ```
 
@@ -29,7 +29,7 @@ src/*.wsv → project/ → linker/out/ → linker/AI浏览器.exe
 
 ### 已有 exe（Release 或自行编译）
 
-1. 将 `linker/` 内全部文件复制到 **AI浏览器.exe 同目录**
+1. 将 `linker/` 内全部文件复制到 **AI-Fbowser-Mcp.exe 同目录**
 2. 双击运行 exe，访问 `http://127.0.0.1:9222/`
 3. 按 `docs/客户使用手册.md` 配置 Cursor
 
@@ -49,7 +49,7 @@ CEFbro/AI-Fbowser-Mcp/mcp_config.json  → 编译后位于 linker/
 打包 zip 结构示例：
 
 ```
-AI-Browser-MCP-x64-v2.8.2.zip
+AI-Browser-MCP-x64-v3.0.0.zip
 ├── AI-Fbowser-Mcp.exe
 ├── *.dll / CEF 运行时
 ├── docs/
@@ -63,23 +63,23 @@ AI-Browser-MCP-x64-v2.8.2.zip
 
 ## 版本
 
-与源码 `MCP_版本号`（当前 2.8.0）保持一致。
+与源码 `MCP_版本号`（当前 3.0.0）保持一致。
 
 ## 一键打包
 
 编译 **Release x64 / win32** 后，运行打包脚本并上传至 GitHub Releases：
 
 ```powershell
-.\release\pack-release.ps1 -Version 2.8.0 -Platform all
-gh release upload v2.8.2 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber
+.\release\pack-release.ps1 -Version 3.0.0 -Platform all
+gh release upload v3.0.0 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber
 ```
 
 输出：
 
-- `AI-Browser-MCP-x64-v2.8.2.zip` / `AI-Browser-MCP-win32-v2.8.2.zip` — 运行包（自动排除 `out/`）
-- `AI-Browser-MCP-cpp-x64-v2.8.2.zip` / `AI-Browser-MCP-cpp-win32-v2.8.2.zip` — C++ 对照
+- `AI-Browser-MCP-x64-v3.0.0.zip` / `AI-Browser-MCP-win32-v3.0.0.zip` — 运行包（自动排除 `out/`）
+- `AI-Browser-MCP-cpp-x64-v3.0.0.zip` / `AI-Browser-MCP-cpp-win32-v3.0.0.zip` — C++ 对照
 - 同步 `CEFbro/AI-Fbowser-Mcp/generated-cpp/release-x64/`、`release-win32/`
 
-上传：`gh release upload v2.8.2 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber`
+上传：`gh release upload v3.0.0 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber`
 
-完整说明模板见 [`RELEASE_NOTES_v2.6.0.md`](RELEASE_NOTES_v2.6.0.md)。重新发版可先 `gh release delete v2.8.2 --yes` 再 `gh release create ... --notes-file release/RELEASE_NOTES_v2.6.0.md`。
+完整说明模板见 [`RELEASE_NOTES_v2.6.0.md`](RELEASE_NOTES_v2.6.0.md)。重新发版可先 `gh release delete v3.0.0 --yes` 再 `gh release create ... --notes-file release/RELEASE_NOTES_v2.6.0.md`。

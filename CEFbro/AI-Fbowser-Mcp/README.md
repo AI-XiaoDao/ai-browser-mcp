@@ -4,13 +4,13 @@
 > 
 > Web Scraping · JS Reverse Engineering · CDP Debugger · Fingerprint Anti-Detect · Form Automation RPA
 
-[![Release](https://img.shields.io/badge/release-v2.8.2-blue)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
+[![Release](https://img.shields.io/badge/release-v3.0.0-blue)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows_x64_|_win32-lightgrey)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 
 <p align="center">
   <a href="https://github.com/AI-XiaoDao/ai-browser-mcp/releases/latest">
-    <img src="https://img.shields.io/badge/⬇️_下载最新版-v2.8.2-brightgreen?style=for-the-badge" alt="下载 v2.8.2">
+    <img src="https://img.shields.io/badge/⬇️_下载最新版-v3.0.0-brightgreen?style=for-the-badge" alt="下载 v3.0.0">
   </a>
   &nbsp;
   <a href="https://github.com/AI-XiaoDao/ai-browser-mcp/releases">
@@ -55,15 +55,15 @@
 
 | 包 | 说明 |
 |----|------|
-| `AI-Browser-MCP-x64-v2.8.2.zip` | 64 位 Windows, ~160MB |
-| `AI-Browser-MCP-win32-v2.8.2.zip` | 32 位 Windows, ~140MB |
+| `AI-Browser-MCP-x64-v3.0.0.zip` | 64 位 Windows, ~160MB |
+| `AI-Browser-MCP-win32-v3.0.0.zip` | 32 位 Windows, ~140MB |
 | `AI-Browser-MCP-cpp-*.zip` | C++ 生成源码（可选） |
 
 > 📦 所有历史版本: [Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 
 ### 2. 启动
 
-解压 → 双击 `AI-Fbowser-Mcp.exe` → 自动启动 MCP 服务（关闭窗口=最小化到托盘，双击托盘图标恢复；小白请看 [docs/小白使用指南.md](docs/小白使用指南.md)）  
+解压 → 双击 `AI-Fbowser-Mcp.exe` → 自动启动 MCP 服务（关闭浏览器窗口=退出程序；保持运行请最小化控制台窗口；小白请看 [docs/小白使用指南.md](docs/小白使用指南.md)）  
 打开 http://127.0.0.1:9222/health → `{"status":"ok"}`
 
 ### 3. 接入 AI Agent
@@ -139,7 +139,7 @@
 | `AI_BROWSER_MCP_PORT` | `9222` |
 | `AI_BROWSER_MCP_HEALTH` | `http://127.0.0.1:9222/health` |
 | `AI_BROWSER_MCP_HTTP_POST` | `http://127.0.0.1:9222/mcp` |
-| `AI_BROWSER_MCP_VERSION` | `2.8.2` |
+| `AI_BROWSER_MCP_VERSION` | `3.0.0` |
 
 ---
 

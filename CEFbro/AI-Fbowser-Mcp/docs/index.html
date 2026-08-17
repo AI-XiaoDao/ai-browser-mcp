@@ -13,7 +13,7 @@
 <aside class="sidebar">
   <div class="brand">
     <h2>AI浏览器 MCP</h2>
-    <p>完整使用文档 v<span data-dynamic="version">2.8.2</span></p>
+    <p>完整使用文档 v<span data-dynamic="version">3.0.0</span></p>
   </div>
   <nav class="nav">
     <div class="nav-group">入门</div>
@@ -77,7 +77,7 @@
 </div>
 <div class="table-wrap"><table>
   <tr><th>章节</th><th>内容</th></tr>
-  <tr><td>安装与首次启动</td><td>exe、health 检查、欢迎页、托盘说明</td></tr>
+  <tr><td>安装与首次启动</td><td>exe、health 检查、欢迎页、窗口说明</td></tr>
   <tr><td>三种使用方式</td><td>Cursor 对话 / 欢迎页 / 自有脚本</td></tr>
   <tr><td>对 AI 说什么</td><td>打开网页、填表、看网络等话术示例</td></tr>
   <tr><td>VIP 授权</td><td>mcp_config.json 填写 vip_code</td></tr>
@@ -89,7 +89,7 @@
 <section id="quickstart">
 <h2>快速开始</h2>
 <div class="steps">
-  <div class="step"><strong>启动 AI浏览器.exe</strong><br>关闭主窗口会最小化到托盘，MCP 服务保持运行。托盘右键可退出程序。</div>
+  <div class="step"><strong>启动 AI-Fbowser-Mcp.exe</strong><br>关闭浏览器窗口 = 退出程序；最小化控制台窗口可保持 MCP 服务运行。</div>
   <div class="step"><strong>自检连接</strong><br>在项目目录执行：<code>node CEFbro/AI-Fbowser-Mcp/mcp_bridge.js --check</code></div>
   <div class="step"><strong>配置 Cursor</strong><br>将下方 JSON 写入 <code>.cursor/mcp.json</code>，重启 Cursor 即可使用工具。</div>
   <div class="step"><strong>调用工具</strong><br>在对话中让 AI 使用 <code>browser_navigate</code> 打开网页；读操作如 <code>browser_get_title</code> 默认 sync-wait 一次返回。</div>
@@ -205,7 +205,7 @@
   }
 }</code></pre>
 <p>桥接脚本配置优先级：<code>AI_BROWSER_MCP_HTTP_POST</code> → <code>mcp_connect.json</code> → 默认 127.0.0.1:9222。桥接自动修复 Cursor 协议版本与 JSON-RPC id。</p>
-<div class="alert warn">必须先启动 AI浏览器.exe。Cursor 请用 stdio 桥接，勿直接用 <code>url</code> 直连 HTTP。</div>
+<div class="alert warn">必须先启动 AI-Fbowser-Mcp.exe。Cursor 请用 stdio 桥接，勿直接用 <code>url</code> 直连 HTTP。</div>
 </section>
 
 <!-- ── 工具分类 ── -->
@@ -362,13 +362,13 @@ node regression_sync_wait.js          # sync-wait / workflow / batch 专项</cod
 <section id="faq">
 <h2>常见问题</h2>
 <h3>连接失败 / ECONNREFUSED</h3>
-<p>确认 AI浏览器.exe 已启动。运行 <code>node mcp_bridge.js --check</code> 排查。</p>
+<p>确认 AI-Fbowser-Mcp.exe 已启动。运行 <code>node mcp_bridge.js --check</code> 排查。</p>
 <h3>browsers: 0</h3>
 <p>主窗口浏览器尚未创建，等待数秒或打开 GUI 窗口。</p>
 <h3>工具返回 task_id 但 mcp_result 为空</h3>
 <p>若未设 <code>async_only:true</code>，白名单工具应已 sync-wait 直接返回。纯异步任务可能仍在执行，稍等后重试。</p>
 <h3>关闭窗口后 MCP 还在吗？</h3>
-<p>是的。关闭窗口仅隐藏到托盘，MCP 继续运行。托盘右键可真正退出。</p>
+<p>是的。关闭浏览器窗口即退出程序（控制台版无托盘）。</p>
 <h3>文档/静态资源 404</h3>
 <p>请确认 exe 同目录存在 <code>docs/</code> 文件夹（重新编译或安装完整发布包）。新客户请读 <a href="/docs/客户使用手册.md">客户使用手册</a>。</p>
 <h3>页面卡住 / MCP 超时</h3>

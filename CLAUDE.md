@@ -20,9 +20,9 @@
 - **Stdio 传输**: `CEFbro/AI-Fbowser-Mcp/src/MCP_Stdio.wsv` — stdin/stdout MCP 传输 (~210 行)
 - **工具类**: `CEFbro/AI-Fbowser-Mcp/src/MCP_Server_Utils.wsv` — TLS 版本映射等 (~35 行)
 - **配置**: `CEFbro/AI-Fbowser-Mcp/src/mcp_config.json` — MCP 服务端口/速率限制等
-- **发布包**: `AI浏览器_MCP_发布包/linker/` — 编译产物与运行时
+- **发布包**: GitHub Release `AI-Browser-MCP-<平台>-v<版本>.zip`（由 `release/pack-release.ps1` 从 `_int/.../release/<平台>/linker/` 打包）
 
-MCP 服务运行在 `ws://127.0.0.1:9222`，提供 **255 个浏览器自动化工具**（2 个 GUI 受限：`browser_create` / `browser_close`）。v2.8.2 核心增强：AI 交互 6 工具（快照/文本点击/表单枚举/高亮/填表/元素操作）、`browser_reverse_*` 逆向套件、断点注册表管理、事件时间线模式。
+MCP 服务运行在 `ws://127.0.0.1:9222`，提供 **255 个浏览器自动化工具**（2 个 GUI 受限：`browser_create` / `browser_close`）。v3.0.0 核心增强：AI 交互 6 工具（快照/文本点击/表单枚举/高亮/填表/元素操作）、`browser_reverse_*` 逆向套件、断点注册表管理、事件时间线模式。
 
 ---
 
@@ -44,7 +44,7 @@ MCP 服务运行在 `ws://127.0.0.1:9222`，提供 **255 个浏览器自动化�
 | [客户使用手册.md](CEFbro/AI-Fbowser-Mcp/skills/客户使用手册.md) | **终端客户必读** — 安装、Cursor、话术、VIP、FAQ（编译 `docs/客户使用手册.md`） |
 | [使用技能书.md](CEFbro/AI-Fbowser-Mcp/skills/使用技能书.md) | 技术/Agent 实操（编译 `docs/使用技能书.md`） |
 | [MCP工具配置说明书.md](CEFbro/AI-Fbowser-Mcp/skills/MCP工具配置说明书.md) | mcp_config / Cursor / VIP（编译 `docs/`） |
-| [AI浏览器MCP.md](CEFbro/AI-Fbowser-Mcp/skills/AI浏览器MCP.md) | **255 个 MCP 工具完整参考** v2.8.2（sync-wait、workflow条件变量、AI交互6工具、browser_reverse_*套件、HAR导出、retry） |
+| [AI浏览器MCP.md](CEFbro/AI-Fbowser-Mcp/skills/AI浏览器MCP.md) | **255 个 MCP 工具完整参考** v3.0.0（sync-wait、workflow条件变量、AI交互6工具、browser_reverse_*套件、HAR导出、retry） |
 | [场景与Hook测试.md](CEFbro/AI-Fbowser-Mcp/skills/场景与Hook测试.md) | 场景脚本、Hook、POST 加密扫描、debugger 恢复 |
 
 ### 系统 API 知识库
@@ -90,8 +90,8 @@ MCP 服务运行在 `ws://127.0.0.1:9222`，提供 **255 个浏览器自动化�
 | `index.html` | 欢迎页控制台 |
 
 ### 编译与运行
-- 项目使用火山视窗 IDE (`E:\voldev25\`) 编译
-- 编译产物输出到 `CEFbro/AI-Fbowser-Mcp/_int/AI浏览器/debug/x64/linker/`
+- 项目使用火山视窗 IDE (`E:\HSPC\`) 编译（命令行编译：`E:\HSPC\bin\x64\voldev_awp.exe @compile "<vsln>" /r /ff "<log>" /p "AIFbowserMcp"`；32位用 `bin\win32\` 工具链并在IDE中切换编译目标为x86）
+- 编译产物输出到 `CEFbro/AI-Fbowser-Mcp/_int/AI-Fbowser-Mcp/release/x64/linker/`（32位为 `release/win32/linker/`）
 - MCP 服务启动后自动注册环境变量 `AI_BROWSER_MCP_URL/PORT/HEALTH`
 
 ### 常用操作
@@ -99,21 +99,20 @@ MCP 服务运行在 `ws://127.0.0.1:9222`，提供 **255 个浏览器自动化�
 # 代码统计
 cd "CEFbro/AI-Fbowser-Mcp/src" && wc -l *.wsv
 
-# 清理编译缓存
-rm -rf "CEFbro/AI-Fbowser-Mcp/_int/AI浏览器/debug/x64/linker/CacheData/MCP_TaskResults/"*
-rm -rf "CEFbro/AI-Fbowser-Mcp/_int/AI浏览器/debug/x64/linker/CacheData/MCP_ResponseCache/"*
+# 清理编译缓存 (app 停止后)
+rm -rf "CEFbro/AI-Fbowser-Mcp/_int/AI-Fbowser-Mcp/release/x64/linker/CacheData/"*
 
 # 清理备份文件
 rm "CEFbro/AI-Fbowser-Mcp/src/"*.~vbak.wsv
 
-# 运行测试 (需先启动 AI浏览器.exe)
+# 运行测试 (需先启动 AI-Fbowser-Mcp.exe)
 node CEFbro/AI-Fbowser-Mcp/tests/batch_test.js
 
 # 场景脚本 (需外网)
 node CEFbro/AI-Fbowser-Mcp/tests/batch_test.js system
 
-# 发布打包
-cp -r "CEFbro/AI-Fbowser-Mcp/_int/AI浏览器/release/x64/linker/"* "AI浏览器_MCP_发布包/linker/"
+# 发布打包 (x64/win32 双平台, 详见 release/README.md)
+powershell -ExecutionPolicy Bypass -File release/pack-release.ps1 -Version 3.0.0 -Platform all
 ```
 
 ### API 查阅优先级
