@@ -8581,7 +8581,8 @@
         {
             工具列表构建缓冲区 = 工具列表构建缓冲区 + ","
         }
-        工具列表构建缓冲区 = 工具列表构建缓冲区 + "{\"name\":\"" + 名称 + "\",\"description\":\"" + 描述 + "\"," + schemaJSON + "}"
+        // 修复(运行时): 描述/名称 JSON 转义, 防描述含引号(如 [\"a\",\"b\"]) 生成非法 tools/list JSON
+        工具列表构建缓冲区 = 工具列表构建缓冲区 + "{\"name\":\"" + MCP_响应构建.JSON转义文本 (名称) + "\",\"description\":\"" + MCP_响应构建.JSON转义文本 (描述) + "\"," + schemaJSON + "}"
         工具构建计数 = 工具构建计数 + 1
     }
 
@@ -8604,7 +8605,7 @@
     参数 必须 <类型 = 逻辑型 @默认值 = 真>
     {
         变量 s <类型 = 文本型>
-        s = "\"inputSchema\":{\"type\":\"object\",\"properties\":{\"" + 名 + "\":{\"type\":\"" + 类型 + "\",\"description\":\"" + 描述 + "\"}}"
+        s = "\"inputSchema\":{\"type\":\"object\",\"properties\":{\"" + MCP_响应构建.JSON转义文本 (名) + "\":{\"type\":\"" + MCP_响应构建.JSON转义文本 (类型) + "\",\"description\":\"" + MCP_响应构建.JSON转义文本 (描述) + "\"}}"
         如果 (必须)
         {
             s = s + ",\"required\":[\"" + 名 + "\"]"
@@ -8619,7 +8620,7 @@
     参数 描述1 <类型 = 文本型>
     参数 描述2 <类型 = 文本型>
     {
-        返回 ("\"inputSchema\":{\"type\":\"object\",\"properties\":{\"" + 名1 + "\":{\"type\":\"integer\",\"description\":\"" + 描述1 + "\"},\"" + 名2 + "\":{\"type\":\"integer\",\"description\":\"" + 描述2 + "\"}},\"required\":[\"" + 名1 + "\",\"" + 名2 + "\"]}")
+        返回 ("\"inputSchema\":{\"type\":\"object\",\"properties\":{\"" + MCP_响应构建.JSON转义文本 (名1) + "\":{\"type\":\"integer\",\"description\":\"" + MCP_响应构建.JSON转义文本 (描述1) + "\"},\"" + MCP_响应构建.JSON转义文本 (名2) + "\":{\"type\":\"integer\",\"description\":\"" + MCP_响应构建.JSON转义文本 (描述2) + "\"}},\"required\":[\"" + MCP_响应构建.JSON转义文本 (名1) + "\",\"" + MCP_响应构建.JSON转义文本 (名2) + "\"]}")
     }
 
     方法 多属性Schema文本 <公开 静态 类型 = 文本型>
@@ -8641,7 +8642,8 @@
     参数 类型 <类型 = 文本型>
     参数 描述 <类型 = 文本型>
     {
-        返回 ("\"" + 名 + "\":{\"type\":\"" + 类型 + "\",\"description\":\"" + 描述 + "\"}")
+        // 修复(运行时): 描述 JSON 转义(描述可能含引号如 [\"a\",\"b\"]), 防 tools/list 生成非法 JSON
+        返回 ("\"" + MCP_响应构建.JSON转义文本 (名) + "\":{\"type\":\"" + MCP_响应构建.JSON转义文本 (类型) + "\",\"description\":\"" + MCP_响应构建.JSON转义文本 (描述) + "\"}")
     }
 
     # ======== MCP tools/call ==========
