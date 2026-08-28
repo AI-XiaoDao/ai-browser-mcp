@@ -164,6 +164,7 @@
     }
 
     # 重构: 恢复/尝试恢复/尝试导航 三方法的公共主体(取浏览器→判空→取框架→URL非空白不覆盖→载入→标记)
+
     方法 导航欢迎页内部 <公开 静态>
     {
         变量 browser <类型 = 类_FBrowser_浏览器>
@@ -2257,7 +2258,7 @@
     方法 MCP可中断延时 <公开 静态>
     参数 毫秒 <类型 = 整数>
     参数 分片毫秒 <类型 = 整数 @默认值 = 50>
-    参数 是否持锁 <类型 = 逻辑型 @默认值 = 真 注释 = "调用方已持有MCP执行锁时默认真(延时期间放锁); 未持锁必须传假, 否则对未持有锁解锁是未定义行为">
+    参数 是否持锁 <类型 = 逻辑型 注释 = "调用方已持有MCP执行锁时默认真(延时期间放锁); 未持锁必须传假, 否则对未持有锁解锁是未定义行为" @默认值 = 真>
     {
         如果 (毫秒 <= 0)
         {
@@ -5676,7 +5677,7 @@
     参数 browser <类型 = 类_FBrowser_浏览器>
     参数 上下文消息 <类型 = 文本型>
     参数 返回消息 <类型 = 文本型>
-    参数 导航发起毫秒 <类型 = 长整数 @默认值 = 0 注释 = "本次载入地址()/重新载入()调用前的取启动时间, 用于判序load_end是否属于本次导航">
+    参数 导航发起毫秒 <类型 = 长整数 注释 = "本次载入地址()/重新载入()调用前的取启动时间, 用于判序load_end是否属于本次导航" @默认值 = 0>
     {
         变量 等待任务ID <类型 = 文本型>
         等待任务ID = 生成异步任务ID ()
@@ -5778,6 +5779,7 @@
 
     # 读取逻辑参数 (兼容真布尔/文本/数值), 成员不存在时返回默认值
     # 判别法: 取对象(键名)后 到文本() 归一化为文本比较 — 缺失键节点到文本为空串, 与假节点("false")可区分
+
     方法 yyjson取逻辑_默认 <公开 静态 类型 = 逻辑型>
     参数 JSON对象 <类型 = YYJSON只读对象类>
     参数 键名 <类型 = 文本型>
@@ -5829,6 +5831,7 @@
     }
 
     # 安全取对象成员: 缺失键返回空引用 (取对象对缺失键返回假节点, 是否为空判存在会误判)
+
     方法 yyjson取对象成员_安全 <公开 静态 类型 = YYJSON只读对象类>
     参数 JSON对象 <类型 = YYJSON只读对象类>
     参数 键名 <类型 = 文本型>
@@ -6040,6 +6043,7 @@
 
     # 修复(竞态): 导航拦截在CEF回调线程直读 导航拦截规则, 与MCP线程写(规则锁)并发会撕裂读;
     # 统一走持锁快照, 拦截逻辑基于局部副本
+
     方法 取导航规则快照 <公开 静态 类型 = 文本型>
     {
         变量 快照 <类型 = 文本型>
@@ -6050,6 +6054,7 @@
     }
 
     # 规则字段转义: 百分号编码 (字段内永不出现分隔符|与换行, 与 规则字段反转义 对称)
+
     方法 规则字段转义 <公开 静态 类型 = 文本型>
     参数 源文本 <类型 = 文本型>
     {
@@ -6063,6 +6068,7 @@
     }
 
     # 规则字段反转义 (与 规则字段转义 对称, 逆序还原)
+
     方法 规则字段反转义 <公开 静态 类型 = 文本型>
     参数 源文本 <类型 = 文本型>
     {
@@ -6109,6 +6115,7 @@
     }
 
     # 手写篡改: 按URL匹配资源替换规则, 返回匹配JSON {action,search,replace,file} 或空文本
+
     方法 匹配资源篡改规则 <公开 静态 类型 = 文本型>
     参数 目标URL <类型 = 文本型>
     {
@@ -6195,6 +6202,7 @@
     }
 
     # 零手动接入: 构建Agent安装用的MCP配置JSON (与/cursor-config同源)
+
     方法 构建代理安装JSON <公开 静态 类型 = 文本型>
     {
         变量 桥接脚本路径 <类型 = 文本型>
@@ -6210,6 +6218,7 @@
     }
 
     # 零手动接入: 安装到单个Agent配置文件 (JSON: 插入mcpServers内; TOML: 末尾追加段; 已含ai-browser则跳过)
+
     方法 安装代理配置 <公开 静态 类型 = 逻辑型>
     参数 配置路径 <类型 = 文本型>
     参数 是TOML <类型 = 逻辑型>
@@ -6305,6 +6314,7 @@
     }
 
     # 零手动接入: 检查并自动安装到所有主流Agent (Cursor/Claude Desktop/Codex/Cline/Windsurf)
+
     方法 检查并自动安装代理 <公开 静态 类型 = 整数>
     {
         变量 安装计数 <类型 = 整数 值 = 0>
@@ -6352,6 +6362,7 @@
     }
 
     # 文本类MIME判断 (modify篡改仅对文本资源生效, 二进制资源UTF8转换会损坏数据)
+
     方法 是否文本类MIME <公开 静态 类型 = 逻辑型>
     参数 MIME类型 <类型 = 文本型>
     {
@@ -6373,6 +6384,7 @@
     }
 
     # replace_file 文件内容缓存: 规则设置时MCP线程预读入库, 挂载时UI线程免磁盘IO
+
     方法 缓存篡改文件内容 <公开 静态>
     参数 文件路径 <类型 = 文本型>
     参数 文件内容 <类型 = 文本型>
@@ -6393,6 +6405,7 @@
     }
 
     # 取 replace_file 文件缓存内容 (未命中返回空文本)
+
     方法 取篡改文件缓存 <公开 静态 类型 = 文本型>
     参数 文件路径 <类型 = 文本型>
     {
@@ -7073,6 +7086,7 @@
     }
 
     # 按字节安全截断: 防截断点落在多字节UTF-8字符中间产生U+FFFD替换字符
+
     方法 字节安全截断 <公开 静态 类型 = 文本型>
     参数 原文 <类型 = 文本型>
     参数 最大字节 <类型 = 整数>
@@ -7094,16 +7108,19 @@
     }
 
     # 崩溃计数原子操作: 渲染意外终止(UI线程)与 执行定期维护(MCP/主线程)跨线程读写, 统一走原子接口
+
     方法 原子递增崩溃计数 <公开 静态 类型 = 整数>
     {
         变量 新值 <类型 = 整数>
         @ @<新值> = (INT)InterlockedIncrement((LONG volatile*)&@<近期崩溃次数>);
         返回 (新值)
     }
+
     方法 原子清零崩溃计数 <公开 静态>
     {
         @ InterlockedExchange((LONG volatile*)&@<近期崩溃次数>, 0);
     }
+
     方法 原子置首次崩溃时间 <公开 静态 类型 = 长整数>
     参数 时间值 <类型 = 长整数>
     {
@@ -7276,6 +7293,7 @@
     }
 
     # 防呆: Debugger.pause 自动恢复 (主循环500ms节拍调用, 10秒无暂停事件即resume, 防CDP队列堵塞)
+
     方法 检查暂停自动恢复 <公开 静态>
     {
         如果 (待恢复暂停时间 > 0 && 取启动时间 () - 待恢复暂停时间 > 10000)
@@ -8312,8 +8330,8 @@
         添加工具JSON ("browser_extract", "提取页面结构化数据(链接/图片/表格)", 多属性Schema文本 (属性项JSON ("type", "text", "links/images/tables") + "," + 属性项JSON ("limit", "integer", "上限"), "\"type\""))
         添加工具JSON ("browser_scrape", "一站式爬虫:导航→等待→提取", 多属性Schema文本 (属性项JSON ("url", "text", "目标URL") + "," + 属性项JSON ("extract_selector", "text", "提取选择器(body=全文)") + "," + 属性项JSON ("wait_selector", "text", "等待选择器") + "," + 属性项JSON ("max_ms", "integer", "最大ms"), "\"url\""))
         添加工具JSON ("browser_console_eval", "控制台执行JS(默认同步返回)", 单参数Schema文本 ("expression", "text", "JS表达式"))
-        添加工具JSON ("browser_fingerprint", "浏览器指纹(VIP)", 多属性Schema文本 (属性项JSON ("action", "text", "操作") + "," + 属性项JSON ("config", "text", "JSON配置"), "\"action\""))
-        添加工具JSON ("browser_intercept", "资源拦截/篡改(手写ResponseFilter过滤器, 不依赖VIP)。action=modify(流式内容搜索替换,需search_text/replace_text,仅文本类MIME)/replace_data(整体替换为replace_text数据)/replace_file(整体替换为file_path文件内容,需文本类文件)/block(返回屏蔽提示页)/line_replace(行号区间替换,需line_start/line_end/replace_text)/navigate_block/navigate_redirect/popup_config/cache/clear。url为子串匹配, 刷新页面后生效", 多属性Schema文本 (属性项JSON ("action", "text", "modify/replace_data/replace_file/block/line_replace/navigate_block/navigate_redirect/popup_config/popup_disable/cache/uncache/clear/ws_hook") + "," + 属性项JSON ("url", "text", "目标URL子串(匹配请求URL包含该串的资源)") + "," + 属性项JSON ("search_text", "text", "modify: 被替换内容") + "," + 属性项JSON ("replace_text", "text", "modify: 替换为内容 / replace_data: 替换数据 / line_replace: 替换为代码块") + "," + 属性项JSON ("file_path", "text", "replace_file: 本地文本文件路径") + "," + 属性项JSON ("line_start", "integer", "line_replace: 起始行号(含, 从1开始)") + "," + 属性项JSON ("line_end", "integer", "line_replace: 结束行号(含)") + "," + 属性项JSON ("target", "text", "navigate_redirect: 重定向目标URL") + "," + 属性项JSON ("match_mode", "text", "预留(手写通道为子串匹配)"), "\"action\""))
+        // 添加工具JSON ("browser_fingerprint", "浏览器指纹(VIP)", 多属性Schema文本 (属性项JSON ("action", "text", "操作") + "," + 属性项JSON ("config", "text", "JSON配置"), "\"action\"")))
+        // 添加工具JSON ("browser_intercept", "资源拦截/篡改(手写ResponseFilter过滤器, 不依赖VIP)。action=modify(流式内容搜索替换,需search_text/replace_text,仅文本类MIME)/replace_data(整体替换为replace_text数据)/replace_file(整体替换为file_path文件内容,需文本类文件)/block(返回屏蔽提示页)/line_replace(行号区间替换,需line_start/line_end/replace_text)/navigate_block/navigate_redirect/popup_config/cache/clear。url为子串匹配, 刷新页面后生效", 多属性Schema文本 (属性项JSON ("action", "text", "modify/replace_data/replace_file/block/line_replace/navigate_block/navigate_redirect/popup_config/popup_disable/cache/uncache/clear/ws_hook") + "," + 属性项JSON ("url", "text", "目标URL子串(匹配请求URL包含该串的资源)") + "," + 属性项JSON ("search_text", "text", "modify: 被替换内容") + "," + 属性项JSON ("replace_text", "text", "modify: 替换为内容 / replace_data: 替换数据 / line_replace: 替换为代码块") + "," + 属性项JSON ("file_path", "text", "replace_file: 本地文本文件路径") + "," + 属性项JSON ("line_start", "integer", "line_replace: 起始行号(含, 从1开始)") + "," + 属性项JSON ("line_end", "integer", "line_replace: 结束行号(含)") + "," + 属性项JSON ("target", "text", "navigate_redirect: 重定向目标URL") + "," + 属性项JSON ("match_mode", "text", "预留(手写通道为子串匹配)"), "\"action\"")))
         添加工具JSON ("browser_screenshot", "页面截图(VIP)", 多属性Schema文本 (属性项JSON ("format", "text", "png/jpeg/webp") + "," + 属性项JSON ("width", "integer", "宽度(默认1920)") + "," + 属性项JSON ("height", "integer", "高度(默认1080)") + "," + 属性项JSON ("x", "integer", "X偏移(默认0)") + "," + 属性项JSON ("y", "integer", "Y偏移(默认0)") + "," + 属性项JSON ("scale", "integer", "缩放(默认1)"), ""))
         添加工具JSON ("browser_collect", "网络/控制台/场景预备。console_get 支持 keyword 参数按日志内容搜索(定位Hook输出/报错/特征串), limit 限制条数", 单参数Schema文本 ("action", "text", "network_*/console_*/reverse_prepare/debug_prepare/debug_flow/debug_wait_paused/debug_inspect/debug_script_source/debug_resume/automation_prepare"))
         添加工具JSON ("browser_network", "网络日志 list/enable/clear (list 默认 auto_enable)", 单参数Schema文本 ("action", "text", "list/get/enable/disable/clear/detail_enable"))
@@ -8323,7 +8341,7 @@
         添加工具JSON ("browser_inject", "注入JS/CSS/Handler", 多属性Schema文本 (属性项JSON ("type", "text", "js/css/handler(persist时handler由渲染_即将初始化WebKit注册)") + "," + 属性项JSON ("code", "text", "代码") + "," + 属性项JSON ("persist", "boolean", "持久(V8预注入,type=handler时须persist)"), "\"type\",\"code\""))
         添加工具JSON ("browser_wait", "异步等待条件 (轮询, 通过mcp_result查询)。what=selector/text/load_end/load_start/navigate/timeout/network_idle/url_contains。navigate无value等同load_end; navigate有value则等到URL匹配; network_idle等网络空闲(活动请求数=0); url_contains等URL包含指定字符串", 多属性Schema文本 (属性项JSON ("what", "text", "selector/text/timeout/load_end/load_start/navigate/network_idle/url_contains") + "," + 属性项JSON ("value", "text", "等待值(navigate/url_contains=目标URL, load_*/network_idle可省略)") + "," + 属性项JSON ("max_ms", "integer", "最大ms(默认10000)"), "\"what\""))
         添加工具JSON ("browser_cdp", "Chrome DevTools协议(VIP)", 多属性Schema文本 (属性项JSON ("method", "text", "CDP方法") + "," + 属性项JSON ("params", "text", "参数JSON"), "\"method\""))
-        添加工具JSON ("browser_debugger_enable", "启用调试器(VIP)") // 注: pause 恒失败已从工具清单剔除(会冻结无JS执行页面并堵塞CDP队列), 用 debugger_flow
+        添加工具JSON ("browser_debugger_enable", "启用调试器(VIP)")  // 注: pause 恒失败已从工具清单剔除(会冻结无JS执行页面并堵塞CDP队列), 用 debugger_flow
         添加工具JSON ("browser_debugger_resume", "继续JS(VIP)")
         添加工具JSON ("browser_debugger_step_over", "单步跳过(VIP)")
         添加工具JSON ("browser_debugger_step_into", "单步进入(VIP)")
@@ -8381,17 +8399,17 @@
         添加工具JSON ("workflow_get", "读取工作流定义", 单参数Schema文本 ("name", "text", "工作流名(无.json)"))
         添加工具JSON ("workflow_run", "执行工作流(同步)", 多属性Schema文本 (属性项JSON ("name", "text", "工作流文件名") + "," + 属性项JSON ("definition", "text", "完整JSON定义") + "," + 属性项JSON ("steps", "text", "内联步骤JSON数组") + "," + 属性项JSON ("on_error", "text", "stop|continue"), "\"name\""))
         添加工具JSON ("workflow_stop", "停止正在运行的工作流")
-        添加工具JSON ("browser_kernel_cert", "内核层: 证书错误管理。action=list查看页面证书错误记录(SSL校验失败URL/错误码), ignore开启忽略证书错误(自动放行跳转), ignore_off关闭, clear清空, status查开关状态", 多属性Schema文本 (属性项JSON ("action", "text", "list/ignore/ignore_off/clear/status"), "action"))
-        添加工具JSON ("browser_kernel_auth", "内核层: HTTP认证凭据(Basic/Digest)。action=set {host,port,username,password,realm} 注入站点认证账号密码(浏览器_获得需授权证书事件自动应答), clear {host,port} 清除, list 列出", 多属性Schema文本 (属性项JSON ("action", "text", "set/clear/list") + "," + 属性项JSON ("host", "text", "主机(例: example.com)") + "," + 属性项JSON ("port", "integer", "端口(默认443)") + "," + 属性项JSON ("username", "text", "账号(set时必填)") + "," + 属性项JSON ("password", "text", "密码(set时必填)") + "," + 属性项JSON ("realm", "text", "认证域(可选)"), "action"))
-        添加工具JSON ("browser_kernel_download", "内核层: 下载控制。action=pause/resume/cancel {url或download_id} 排队控制进行中下载(浏览器_正在下载事件即时执行), clear_queue清空队列; 下载进度用 browser_event 查询 download_progress", 多属性Schema文本 (属性项JSON ("action", "text", "pause/resume/cancel/clear_queue") + "," + 属性项JSON ("url", "text", "下载URL(匹配包含)") + "," + 属性项JSON ("download_id", "text", "下载标识(整数文本)"), "action"))
-        添加工具JSON ("browser_kernel_scheme", "内核层: 自定义协议方案。action=register {domain,mime,data或file} 注册 mcp://域名 动态内容(CEF资源处理器返回), unregister {domain} 解除, clear 清理全部, list 列出。注册后用 browser_navigate 访问 mcp://域名/", 多属性Schema文本 (属性项JSON ("action", "text", "register/unregister/clear/list") + "," + 属性项JSON ("domain", "text", "方案域名(例: api → mcp://api)") + "," + 属性项JSON ("mime", "text", "响应MIME(默认text/html)") + "," + 属性项JSON ("data", "text", "响应内容(与file二选一)") + "," + 属性项JSON ("file", "text", "响应内容文件路径(与data二选一)"), "action"))
+        添加工具JSON ("browser_kernel_cert", "内核层: 证书错误管理。action=list查看页面证书错误记录(SSL校验失败URL/错误码), ignore开启忽略证书错误(自动放行跳转), ignore_off关闭, clear清空, status查开关状态", 多属性Schema文本 (属性项JSON ("action", "text", "list/ignore/ignore_off/clear/status"), "\"action\""))
+        添加工具JSON ("browser_kernel_auth", "内核层: HTTP认证凭据(Basic/Digest)。action=set {host,port,username,password,realm} 注入站点认证账号密码(浏览器_获得需授权证书事件自动应答), clear {host,port} 清除, list 列出", 多属性Schema文本 (属性项JSON ("action", "text", "set/clear/list") + "," + 属性项JSON ("host", "text", "主机(例: example.com)") + "," + 属性项JSON ("port", "integer", "端口(默认443)") + "," + 属性项JSON ("username", "text", "账号(set时必填)") + "," + 属性项JSON ("password", "text", "密码(set时必填)") + "," + 属性项JSON ("realm", "text", "认证域(可选)"), "\"action\""))
+        添加工具JSON ("browser_kernel_download", "内核层: 下载控制。action=pause/resume/cancel {url或download_id} 排队控制进行中下载(浏览器_正在下载事件即时执行), clear_queue清空队列; 下载进度用 browser_event 查询 download_progress", 多属性Schema文本 (属性项JSON ("action", "text", "pause/resume/cancel/clear_queue") + "," + 属性项JSON ("url", "text", "下载URL(匹配包含)") + "," + 属性项JSON ("download_id", "text", "下载标识(整数文本)"), "\"action\""))
+        添加工具JSON ("browser_kernel_scheme", "内核层: 自定义协议方案。action=register {domain,mime,data或file} 注册 mcp://域名 动态内容(CEF资源处理器返回), unregister {domain} 解除, clear 清理全部, list 列出。注册后用 browser_navigate 访问 mcp://域名/", 多属性Schema文本 (属性项JSON ("action", "text", "register/unregister/clear/list") + "," + 属性项JSON ("domain", "text", "方案域名(例: api → mcp://api)") + "," + 属性项JSON ("mime", "text", "响应MIME(默认text/html)") + "," + 属性项JSON ("data", "text", "响应内容(与file二选一)") + "," + 属性项JSON ("file", "text", "响应内容文件路径(与data二选一)"), "\"action\""))
         添加工具JSON ("browser_kernel_menu", "内核层: 右键快捷菜单屏蔽。action=disable屏蔽页面右键菜单(内核事件拦截), enable恢复, status查状态(触发条件以实际内核为准)", 单参数Schema文本 ("action", "text", "disable/enable/status"))
         添加工具JSON ("browser_kernel_reverse_probe", "动态插桩总包: 五维API插桩(XHR/fetch/WebSocket/定时器/事件监听), 记录URL/状态/响应/调用栈。action=enable注入, get取回(window.__MCP_PROBE__), clear清空, disable移除", 单参数Schema文本 ("action", "text", "enable/get/clear/disable"))
-        添加工具JSON ("browser_kernel_reverse_trace", "动态调用追踪: 包装目标函数记录调用栈+参数+返回值+耗时。targets为JSON数组(如 [\"window.fetch\",\"crypto.subtle.encrypt\"] 点路径逐级解析)。action=start/get/clear/stop", 多属性Schema文本 (属性项JSON ("action", "text", "start/get/clear/stop") + "," + 属性项JSON ("targets", "text", "JSON数组: [\"obj.path.fn\",...]"), "action"))
+        添加工具JSON ("browser_kernel_reverse_trace", "动态调用追踪: 包装目标函数记录调用栈+参数+返回值+耗时。targets为JSON数组(如 [\"window.fetch\",\"crypto.subtle.encrypt\"] 点路径逐级解析)。action=start/get/clear/stop", 多属性Schema文本 (属性项JSON ("action", "text", "start/get/clear/stop") + "," + 属性项JSON ("targets", "text", "JSON数组: [\"obj.path.fn\",...]"), "\"action\""))
         添加工具JSON ("browser_kernel_reverse_algo", "动态算法Hook: 包装CryptoJS全算法(MD5/SHA/AES/DES/RC4/HMAC等)+全局哈希/base64+WebCrypto subtle(encrypt/decrypt/digest/sign), 记录算法名/参数/输出/调用栈(window.__MCP_ALGO_LOG__)。action=start/get/clear/stop", 单参数Schema文本 ("action", "text", "start/get/clear/stop"))
         添加工具JSON ("browser_kernel_reverse_functions", "动态函数提取: 枚举window全局函数+常用对象链+核心类prototype方法, 输出路径/函数名/参数个数/源码toString。filter按路径关键词过滤, max上限(默认500)", 多属性Schema文本 (属性项JSON ("filter", "text", "路径关键词过滤(可选)") + "," + 属性项JSON ("max", "integer", "上限(默认500,最大1000)"), ""))
         添加工具JSON ("browser_kernel_reverse_sources", "动态JS源码提取: document.scripts全量(含inline), index指定单脚本(从1起), max_len单脚本截断(默认20000,最大200000)", 多属性Schema文本 (属性项JSON ("index", "integer", "单脚本索引(0=全部)") + "," + 属性项JSON ("max_len", "integer", "单脚本截断字符"), ""))
-        添加工具JSON ("browser_kernel_reverse_watch_global", "全局变量动态追踪: defineProperty包装指定全局变量, 记录写入者调用栈+新值(window.__MCP_GWATCH__)。names为JSON数组(如 [\"token\",\"sign\"] )。action=start/get/clear/stop", 多属性Schema文本 (属性项JSON ("action", "text", "start/get/clear/stop") + "," + 属性项JSON ("names", "text", "JSON数组: [\"var1\",\"var2\"]"), "action"))
+        添加工具JSON ("browser_kernel_reverse_watch_global", "全局变量动态追踪: defineProperty包装指定全局变量, 记录写入者调用栈+新值(window.__MCP_GWATCH__)。names为JSON数组(如 [\"token\",\"sign\"] )。action=start/get/clear/stop", 多属性Schema文本 (属性项JSON ("action", "text", "start/get/clear/stop") + "," + 属性项JSON ("names", "text", "JSON数组: [\"var1\",\"var2\"]"), "\"action\""))
         添加工具JSON ("browser_refresh_cookies", "刷新Cookie到磁盘")
         添加工具JSON ("browser_get_all_cookies", "获取全部Cookie(非URL限定)")
         添加工具JSON ("browser_set_preference", "设置Chromium首选项", 多属性Schema文本 (属性项JSON ("name", "text", "首选项名") + "," + 属性项JSON ("value", "text", "值"), "\"name\""))
