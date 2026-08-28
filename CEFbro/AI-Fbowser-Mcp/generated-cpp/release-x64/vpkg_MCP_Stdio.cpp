@@ -272,7 +272,16 @@ void CALLBACK rg_MCPStdioQiao::rg_TingZhiStdioFuWu ()
     rg_StdioYingTuiChu = TRUE;
     if ((BOOL)g_objVolApp.GetThreadPool ().IsThreadRunning (rg_StdioXianChengShiLi.data ().m_hThreadHandle))
     {
-        rg_StdioXianChengShiLi.rg_TingZhi3 ();
+        INT rg_TingZhiLunXunCiShu = 0;
+        while ((BOOL)g_objVolApp.GetThreadPool ().IsThreadRunning (rg_StdioXianChengShiLi.data ().m_hThreadHandle) && rg_TingZhiLunXunCiShu < 30)
+        {
+            rg_TingZhiLunXunCiShu = rg_TingZhiLunXunCiShu + 1;
+            Sleep(100);
+        }
+        if ((BOOL)g_objVolApp.GetThreadPool ().IsThreadRunning (rg_StdioXianChengShiLi.data ().m_hThreadHandle))
+        {
+            rg_XieRiZhi (_CT2 (_T ("停止超时(线程可能卡在长调用), 放弃等待, 由进程退出强制终止")));
+        }
     }
 }
 

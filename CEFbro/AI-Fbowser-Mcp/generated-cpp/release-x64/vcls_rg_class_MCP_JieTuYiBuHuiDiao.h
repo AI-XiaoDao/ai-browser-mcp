@@ -12,7 +12,7 @@ class rg_class_MCP_JieTuYiBuHuiDiao : public rg_FBrowser_HuiDiao::rg_class_FBrow
     DECLARE_VOL_CLASS (rg_volcano_app, rg_class_MCP_JieTuYiBuHuiDiao)
 
 public:
-    virtual void rg_ShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi44, INT rg_BiaoShiID, BOOL rg_ChengGong, INT64 rg_ShuJuZhiZhen, INT rg_ShuJuDaXiao);
+    virtual void rg_ShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi49, INT rg_BiaoShiID, BOOL rg_ChengGong, INT64 rg_ShuJuZhiZhen, INT rg_ShuJuDaXiao);
     rg_class_MCP_JieTuYiBuHuiDiao ();
     void _VolObjectInitMembers ();
     virtual void LoadFromStream (CVolBaseInputStream& stream) override;

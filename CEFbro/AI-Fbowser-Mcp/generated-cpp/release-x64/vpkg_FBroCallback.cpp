@@ -102,10 +102,10 @@ void rg_class_FBrowser_zfchhd::rg_class_FBrowser_zfchhd_class_ql ()
     _FBRO_SHOW_CLASS_TYPE(_CT("类_FBrowser_字符串回调"), 1);
 }
 void rg_class_FBrowser_zfchhd::Visit(const CefString& string){
-  rg_HuiDiao4(CVolString(string.ToWString().c_str()));
+  rg_HuiDiao5(CVolString(string.ToWString().c_str()));
 }
 
-void rg_class_FBrowser_zfchhd::rg_HuiDiao4 (CVolString& rg_string6)
+void rg_class_FBrowser_zfchhd::rg_HuiDiao5 (CVolString& rg_string6)
 {
 }
 
@@ -136,10 +136,10 @@ void rg_class_FBrowser_JSHuiDiao::rg_class_FBrowser_JShd_class_ql ()
     _FBRO_SHOW_CLASS_TYPE(_CT("类_FBrowser_JS回调"), 1);
 }
 void rg_class_FBrowser_JSHuiDiao::Callback(CefRefPtr<CefListValue> pListValue){
-  rg_HuiDiao3(rg_FBrowser_value::FBroListValue(pListValue));
+  rg_HuiDiao4(rg_FBrowser_value::FBroListValue(pListValue));
 }
 
-void rg_class_FBrowser_JSHuiDiao::rg_HuiDiao3 (rg_FBrowser_value::FBroListValue& rg_FanHuiJieGuo3)
+void rg_class_FBrowser_JSHuiDiao::rg_HuiDiao4 (rg_FBrowser_value::FBroListValue& rg_FanHuiJieGuo3)
 {
 }
 
@@ -165,6 +165,16 @@ BOOL rg_class_FBrowser_ShouQuanHuiDiao::_IsSelfEqual (const rg_class_FBrowser_Sh
 void rg_class_FBrowser_ShouQuanHuiDiao::_CopySelfFrom (const rg_class_FBrowser_ShouQuanHuiDiao& objCopyFrom)
 {
     _CopySelfFromExtra (objCopyFrom);
+}
+
+BOOL rg_class_FBrowser_ShouQuanHuiDiao::rg_ShiFouWeiKong106 ()
+{
+    return IsEmpty();
+}
+
+void rg_class_FBrowser_ShouQuanHuiDiao::rg_JiXu3 (CVolString& rg_YongHuMing1, CVolString& rg_MiMa1)
+{
+    if(!IsEmpty()) FBroAuthCallback_Continue(m_class,rg_YongHuMing1.GetText(),rg_MiMa1.GetText());
 }
 
 BOOL rg_class_FBrowser_yhmlcchhd::_IsSelfEqual (const rg_class_FBrowser_yhmlcchhd& objCompare) const
@@ -211,6 +221,26 @@ BOOL rg_class_FBrowser_zhzxzhd::_IsSelfEqual (const rg_class_FBrowser_zhzxzhd& o
 void rg_class_FBrowser_zhzxzhd::_CopySelfFrom (const rg_class_FBrowser_zhzxzhd& objCopyFrom)
 {
     _CopySelfFromExtra (objCopyFrom);
+}
+
+BOOL rg_class_FBrowser_zhzxzhd::rg_ShiFouWeiKong109 ()
+{
+    return IsEmpty();
+}
+
+void rg_class_FBrowser_zhzxzhd::rg_QuXiao1 ()
+{
+    if(!IsEmpty()) FBroHsBeforeDownloadCallback_Cancel(m_class);
+}
+
+void rg_class_FBrowser_zhzxzhd::rg_ZanTing3 ()
+{
+    if(!IsEmpty()) FBroHsBeforeDownloadCallback_Pause(m_class);
+}
+
+void rg_class_FBrowser_zhzxzhd::rg_HuiFu ()
+{
+    if(!IsEmpty()) FBroHsBeforeDownloadCallback_Resume(m_class);
 }
 
 BOOL rg_class_FBrowser_dhkhd::_IsSelfEqual (const rg_class_FBrowser_dhkhd& objCompare) const
@@ -322,6 +352,30 @@ void rg_class_FBrowser_HuiDiao::rg_QuXiao3 ()
     if(!IsEmpty()) FBroCallback_Cancel(m_class);
 }
 
+BOOL rg_class_FBrowser_zyhlhd::_IsSelfEqual (const rg_class_FBrowser_zyhlhd& objCompare) const
+{
+    if (_IsSelfEqualExtra (objCompare) == FALSE)
+        return FALSE;
+    return TRUE;
+}
+
+void rg_class_FBrowser_zyhlhd::_CopySelfFrom (const rg_class_FBrowser_zyhlhd& objCopyFrom)
+{
+    _CopySelfFromExtra (objCopyFrom);
+}
+
+BOOL rg_class_FBrowser_zydqhd::_IsSelfEqual (const rg_class_FBrowser_zydqhd& objCompare) const
+{
+    if (_IsSelfEqualExtra (objCompare) == FALSE)
+        return FALSE;
+    return TRUE;
+}
+
+void rg_class_FBrowser_zydqhd::_CopySelfFrom (const rg_class_FBrowser_zydqhd& objCopyFrom)
+{
+    _CopySelfFromExtra (objCopyFrom);
+}
+
 rg_class_FBrowserVIP_tyhd::rg_class_FBrowserVIP_tyhd ()
 {
     _VolObjectInitMembers ();
@@ -352,14 +406,14 @@ void rg_class_FBrowserVIP_tyhd::rg_class_FBrowserVIP_tyhd_class_ql ()
         rg_ShuJuHuiDiao(rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi(browser),message_id,success,(int64_t)data,(INT)datasize);
 };
 
-void rg_class_FBrowserVIP_tyhd::rg_ShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi51, INT rg_BiaoShiID24, BOOL rg_ChengGong10, INT64 rg_ShuJuZhiZhen13, INT rg_ShuJuDaXiao7)
+void rg_class_FBrowserVIP_tyhd::rg_ShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi56, INT rg_BiaoShiID30, BOOL rg_ChengGong10, INT64 rg_ShuJuZhiZhen13, INT rg_ShuJuDaXiao7)
 {
 }
     void rg_class_FBrowserVIP_tyhd::Callback_ListData(CefRefPtr<CefBrowser> browser,int message_id,bool success,CefRefPtr<CefListValue> listvalue){
         rg_LieBiaoShuJuHuiDiao(rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi(browser),message_id,success,rg_FBrowser_value::FBroListValue(listvalue));
 };
 
-void rg_class_FBrowserVIP_tyhd::rg_LieBiaoShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi52, INT rg_BiaoShiID25, BOOL rg_ChengGong11, rg_FBrowser_value::FBroListValue& rg_LieBiaoZhi1)
+void rg_class_FBrowserVIP_tyhd::rg_LieBiaoShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi57, INT rg_BiaoShiID31, BOOL rg_ChengGong11, rg_FBrowser_value::FBroListValue& rg_LieBiaoZhi1)
 {
 }
 

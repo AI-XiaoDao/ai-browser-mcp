@@ -12,13 +12,13 @@ class rg_FBrowserFuZhuGongNeng : public CVolObject
     DECLARE_EMPTY_VOL_CLASS (rg_FBrowser_LiuLanQi, rg_FBrowserFuZhuGongNeng)
 
 public:
-    static CVolString CALLBACK rg_FBrowser_Parser_Base64bm (CVolString& rg_ShuJu14);
-    static rg_FBrowser_value::FBroBinaryValue CALLBACK rg_FBrowser_Parser_Base64jm (CVolString& rg_ShuJu15);
-    static CVolString CALLBACK rg_FBrowser_Parser_URIbm (CVolString& rg_ShuJu17, BOOL rg_use_plus);
-    static CVolString CALLBACK rg_FBrowser_Parser_URIjm (CVolString& rg_ShuJu18, BOOL rg_convert_to_utf, BOOL rg_unescape_rule);
+    static CVolString CALLBACK rg_FBrowser_Parser_Base64bm (CVolString& rg_ShuJu20);
+    static rg_FBrowser_value::FBroBinaryValue CALLBACK rg_FBrowser_Parser_Base64jm (CVolString& rg_ShuJu21);
+    static CVolString CALLBACK rg_FBrowser_Parser_URIbm (CVolString& rg_ShuJu23, BOOL rg_use_plus);
+    static CVolString CALLBACK rg_FBrowser_Parser_URIjm (CVolString& rg_ShuJu24, BOOL rg_convert_to_utf, BOOL rg_unescape_rule);
     static rg_FBrowser_value::FBroValue CALLBACK rg_FBrowser_Parser_jxJSON (CVolString& rg_json_string, INT rg_options);
-    static void CALLBACK rg_FBrowser_QingLiQuanJuHuanCun (CVolString& rg_YuanDeZhi3, INT64 rg_QingLiDuiXiang, INT64 rg_CunChuLeiXing, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao);
-    static rg_class_FBrowser_LiuLanQi CALLBACK rg_FBrowser_llq_tgIDqllq (INT rg_LiuLanQiID10);
+    static void CALLBACK rg_FBrowser_QingLiQuanJuHuanCun (CVolString& rg_YuanDeZhi4, INT64 rg_QingLiDuiXiang, INT64 rg_CunChuLeiXing, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao);
+    static rg_class_FBrowser_LiuLanQi CALLBACK rg_FBrowser_llq_tgIDqllq (INT rg_LiuLanQiID11);
     static rg_class_FBrowser_LiuLanQi CALLBACK rg_FBrowser_llq_tgchkgbqllq (INT rg_ChuangKouGouBing4);
     static rg_class_FBrowser_LiuLanQi CALLBACK rg_FBrowser_llq_tgyhbshqllq (CVolString& rg_YongHuBiaoShi);
     static INT CALLBACK rg_FBrowser_LiuLanQi_QuShuLiang ();

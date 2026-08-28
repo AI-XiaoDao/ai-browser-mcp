@@ -21,6 +21,8 @@ public:
     ~FBroSchemeRegistrar(){};
 
 public:
+    BOOL rg_ShiFouWeiKong142 ();
+    void rg_TianJiaZiDingYiFangAn (CVolString& rg_FangAnMing1, INT rg_KongZhi1);
     inline_ FBroSchemeRegistrar () { }
     inline_ void _VolObjectInitMembers () { }
 };

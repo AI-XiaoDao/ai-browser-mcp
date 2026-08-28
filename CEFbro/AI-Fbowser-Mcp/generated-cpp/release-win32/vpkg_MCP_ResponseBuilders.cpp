@@ -7,49 +7,49 @@
 namespace rg_volcano_app
 {
 
-CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_MingLingChengGong (CVolString& rg_MingLingID, CVolString& rg_XiaoXi1)
+CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_MingLingChengGong (CVolString& rg_MingLingID17, CVolString& rg_XiaoXi2)
 {
     rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_DuiXiang;
     rg_DuiXiang.data().CreateFromText(_CT2 (_T ("{}")));
-    rg_DuiXiang.rg_JiaRuWenBenChengYuan (_CT2 (_T ("id")), rg_MingLingID);
+    rg_DuiXiang.rg_JiaRuWenBenChengYuan (_CT2 (_T ("id")), rg_MingLingID17);
     rg_DuiXiang.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("success")), TRUE);
-    rg_DuiXiang.rg_JiaRuWenBenChengYuan (_CT2 (_T ("message")), rg_XiaoXi1);
+    rg_DuiXiang.rg_JiaRuWenBenChengYuan (_CT2 (_T ("message")), rg_XiaoXi2);
     return (rg_DuiXiang.data().ToString(YYJSON_WRITE_NOFLAG));
 }
 
-CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_MingLingShiBai (CVolString& rg_MingLingID1, CVolString& rg_CuoWuXiaoXi)
+CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_MingLingShiBai (CVolString& rg_MingLingID18, CVolString& rg_CuoWuXiaoXi)
 {
     rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_DuiXiang1;
     rg_DuiXiang1.data().CreateFromText(_CT2 (_T ("{}")));
-    rg_DuiXiang1.rg_JiaRuWenBenChengYuan (_CT2 (_T ("id")), rg_MingLingID1);
+    rg_DuiXiang1.rg_JiaRuWenBenChengYuan (_CT2 (_T ("id")), rg_MingLingID18);
     rg_DuiXiang1.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("success")), FALSE);
     rg_DuiXiang1.rg_JiaRuWenBenChengYuan (_CT2 (_T ("error")), rg_CuoWuXiaoXi);
     return (rg_DuiXiang1.data().ToString(YYJSON_WRITE_NOFLAG));
 }
 
-CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_XiangYing_XuYaoShuaXin (CVolString& rg_MingLingID2, CVolString& rg_XiaoXi2)
+CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_XiangYing_XuYaoShuaXin (CVolString& rg_MingLingID19, CVolString& rg_XiaoXi3)
 {
     rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_DuiXiang2;
     rg_DuiXiang2.data().CreateFromText(_CT2 (_T ("{}")));
-    rg_DuiXiang2.rg_JiaRuWenBenChengYuan (_CT2 (_T ("id")), rg_MingLingID2);
+    rg_DuiXiang2.rg_JiaRuWenBenChengYuan (_CT2 (_T ("id")), rg_MingLingID19);
     rg_DuiXiang2.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("success")), TRUE);
-    rg_DuiXiang2.rg_JiaRuWenBenChengYuan (_CT2 (_T ("message")), rg_XiaoXi2 + _T (" | ") + rg_MCP_const::rg_DiShi_XuYaoShuaXin);
+    rg_DuiXiang2.rg_JiaRuWenBenChengYuan (_CT2 (_T ("message")), rg_XiaoXi3 + _T (" | ") + rg_MCP_const::rg_DiShi_XuYaoShuaXin);
     rg_DuiXiang2.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("needs_reload")), TRUE);
     rg_DuiXiang2.rg_JiaRuWenBenChengYuan (_CT2 (_T ("_hint")), _CT2 (_T ("设置将在下次刷新/导航后生效")));
     return (rg_DuiXiang2.data().ToString(YYJSON_WRITE_NOFLAG));
 }
 
-CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_MingLingChengGong_YuanShiJSON (CVolString& rg_MingLingID3, CVolString& rg_JSONPianDuan, BOOL rg_ShiFouChengGong2)
+CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_MingLingChengGong_YuanShiJSON (CVolString& rg_MingLingID20, CVolString& rg_JSONPianDuan, BOOL rg_ShiFouChengGong2)
 {
-    return (rg_GouJianDaiShuJuZiDuanJSON (rg_MingLingID3, rg_ShiFouChengGong2, rg_JSONPianDuan));
+    return (rg_GouJianDaiShuJuZiDuanJSON (rg_MingLingID20, rg_ShiFouChengGong2, rg_JSONPianDuan));
 }
 
-CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_GouJianBiaoZhunChengGongJSON (CVolString& rg_XiaoXi3)
+CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_GouJianBiaoZhunChengGongJSON (CVolString& rg_XiaoXi4)
 {
     rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_DuiXiang3;
     rg_DuiXiang3.data().CreateFromText(_CT2 (_T ("{}")));
     rg_DuiXiang3.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("success")), TRUE);
-    rg_DuiXiang3.rg_JiaRuWenBenChengYuan (_CT2 (_T ("message")), rg_XiaoXi3);
+    rg_DuiXiang3.rg_JiaRuWenBenChengYuan (_CT2 (_T ("message")), rg_XiaoXi4);
     return (rg_DuiXiang3.data().ToString(YYJSON_WRITE_NOFLAG));
 }
 
@@ -70,20 +70,20 @@ CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_GouJianJianChanCuoWuJSON (CVolSt
     return (rg_DuiXiang5.data().ToString(YYJSON_WRITE_NOFLAG));
 }
 
-CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_GouJianYiBuDiJiaoJSON (CVolString& rg_RenWuID12)
+CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_GouJianYiBuDiJiaoJSON (CVolString& rg_RenWuID11)
 {
     rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_DuiXiang6;
     rg_DuiXiang6.data().CreateFromText(_CT2 (_T ("{}")));
     rg_DuiXiang6.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("_async")), TRUE);
-    rg_DuiXiang6.rg_JiaRuWenBenChengYuan (_CT2 (_T ("task_id")), rg_RenWuID12);
+    rg_DuiXiang6.rg_JiaRuWenBenChengYuan (_CT2 (_T ("task_id")), rg_RenWuID11);
     return (rg_DuiXiang6.data().ToString(YYJSON_WRITE_NOFLAG));
 }
 
-CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_GouJianMingLingKanTaoJSON (CVolString& rg_MingLingID4, BOOL rg_ShiFouChengGong3, CVolString& rg_KanTaoJianMing, CVolString& rg_KanTaoJSONPianDuan)
+CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_GouJianMingLingKanTaoJSON (CVolString& rg_MingLingID21, BOOL rg_ShiFouChengGong3, CVolString& rg_KanTaoJianMing, CVolString& rg_KanTaoJSONPianDuan)
 {
     rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_TouDuiXiang;
     rg_TouDuiXiang.data().CreateFromText(_CT2 (_T ("{}")));
-    rg_TouDuiXiang.rg_JiaRuWenBenChengYuan (_CT2 (_T ("id")), rg_MingLingID4);
+    rg_TouDuiXiang.rg_JiaRuWenBenChengYuan (_CT2 (_T ("id")), rg_MingLingID21);
     rg_TouDuiXiang.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("success")), rg_ShiFouChengGong3);
     CVolString rg_TouJSON;
     rg_TouJSON = rg_TouDuiXiang.data().ToString(YYJSON_WRITE_NOFLAG);
@@ -93,15 +93,15 @@ CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_GouJianMingLingKanTaoJSON (CVolS
     }
     rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_WanZheng;
     rg_WanZheng.data().CreateFromText(_CT2 (_T ("{}")));
-    rg_WanZheng.rg_JiaRuWenBenChengYuan (_CT2 (_T ("id")), rg_MingLingID4);
+    rg_WanZheng.rg_JiaRuWenBenChengYuan (_CT2 (_T ("id")), rg_MingLingID21);
     rg_WanZheng.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("success")), rg_ShiFouChengGong3);
     rg_WanZheng.rg_JiaRuWenBenChengYuan (rg_KanTaoJianMing, rg_KanTaoJSONPianDuan);
     return (rg_WanZheng.data().ToString(YYJSON_WRITE_NOFLAG));
 }
 
-CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_GouJianDaiShuJuZiDuanJSON (CVolString& rg_MingLingID5, BOOL rg_ShiFouChengGong4, CVolString& rg_ShuJuPianDuan)
+CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_GouJianDaiShuJuZiDuanJSON (CVolString& rg_MingLingID22, BOOL rg_ShiFouChengGong4, CVolString& rg_ShuJuPianDuan)
 {
-    return (rg_GouJianMingLingKanTaoJSON (rg_MingLingID5, rg_ShiFouChengGong4, _CT2 (_T ("data")), rg_ShuJuPianDuan));
+    return (rg_GouJianMingLingKanTaoJSON (rg_MingLingID22, rg_ShiFouChengGong4, _CT2 (_T ("data")), rg_ShuJuPianDuan));
 }
 
 BOOL CALLBACK rg_MCP_XiangYingGouJian::rg_ShiFouWeiGeFaJSONWenDang (CVolString& rg_string1)
@@ -140,17 +140,17 @@ CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (CVolString& r
     static CVolString rg_JREP_TAB = _T ("\\t");
     static CVolString rg_JREP_BACKSPACE = _T ("\\b");
     static CVolString rg_JREP_FORMFEED = _T ("\\f");
-    CVolString rg_JieGuo;
-    rg_JieGuo = rg_YuanWenBen;
-    rg_JieGuo.ReplaceSubText (rg_JESC_BSLASH, rg_JREP_BSLASH, 0, -1, !FALSE);
-    rg_JieGuo.ReplaceSubText (rg_JESC_DQUOTE, rg_JREP_DQUOTE, 0, -1, !FALSE);
-    rg_JieGuo.ReplaceSubText (rg_JESC_NEWLINE, rg_JREP_NEWLINE, 0, -1, !FALSE);
-    rg_JieGuo.ReplaceSubText (rg_JESC_CR, rg_JREP_CR, 0, -1, !FALSE);
-    rg_JieGuo.ReplaceSubText (rg_JESC_TAB, rg_JREP_TAB, 0, -1, !FALSE);
-    rg_JieGuo.ReplaceSubText (rg_JESC_BACKSPACE, rg_JREP_BACKSPACE, 0, -1, !FALSE);
-    rg_JieGuo.ReplaceSubText (rg_JESC_FORMFEED, rg_JREP_FORMFEED, 0, -1, !FALSE);
+    CVolString rg_JieGuo3;
+    rg_JieGuo3 = rg_YuanWenBen;
+    rg_JieGuo3.ReplaceSubText (rg_JESC_BSLASH, rg_JREP_BSLASH, 0, -1, !FALSE);
+    rg_JieGuo3.ReplaceSubText (rg_JESC_DQUOTE, rg_JREP_DQUOTE, 0, -1, !FALSE);
+    rg_JieGuo3.ReplaceSubText (rg_JESC_NEWLINE, rg_JREP_NEWLINE, 0, -1, !FALSE);
+    rg_JieGuo3.ReplaceSubText (rg_JESC_CR, rg_JREP_CR, 0, -1, !FALSE);
+    rg_JieGuo3.ReplaceSubText (rg_JESC_TAB, rg_JREP_TAB, 0, -1, !FALSE);
+    rg_JieGuo3.ReplaceSubText (rg_JESC_BACKSPACE, rg_JREP_BACKSPACE, 0, -1, !FALSE);
+    rg_JieGuo3.ReplaceSubText (rg_JESC_FORMFEED, rg_JREP_FORMFEED, 0, -1, !FALSE);
     {
-        std::wstring ws = rg_JieGuo.GetText();
+        std::wstring ws = rg_JieGuo3.GetText();
         std::wstring out;
         out.reserve(ws.size() + 8);
         static const wchar_t* H = L"0123456789ABCDEF";
@@ -164,9 +164,9 @@ CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (CVolString& r
                 out += c;
             }
         }
-        rg_JieGuo = CVolString(out.c_str());
+        rg_JieGuo3 = CVolString(out.c_str());
     }
-    return (rg_JieGuo);
+    return (rg_JieGuo3);
 }
 
 CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_GouJianJianChanJSON (CVolString& rg_JianMing, CVolString& rg_JianZhi)
@@ -282,16 +282,16 @@ CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_GouJianJSONLieBiaoXiangYing ()
     return (rg_jsonWenBen);
 }
 
-CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_GouJianRenWuChaXunJieGuoJSON (BOOL rg_ShiFouChengGong5, CVolString& rg_XiaoXi4, CVolString& rg_YuanShiShuJuJSON, CVolString& rg_RenWuID13)
+CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_GouJianRenWuChaXunJieGuoJSON (BOOL rg_ShiFouChengGong5, CVolString& rg_XiaoXi5, CVolString& rg_YuanShiShuJuJSON, CVolString& rg_RenWuID12)
 {
     rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_DuiXiang11;
     rg_DuiXiang11.data().CreateFromText(_CT2 (_T ("{}")));
     rg_DuiXiang11.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("success")), rg_ShiFouChengGong5);
-    rg_DuiXiang11.rg_JiaRuWenBenChengYuan (_CT2 (_T ("message")), rg_XiaoXi4);
+    rg_DuiXiang11.rg_JiaRuWenBenChengYuan (_CT2 (_T ("message")), rg_XiaoXi5);
     rg_DuiXiang11.rg_JiaRuWenBenChengYuan (_CT2 (_T ("data")), rg_YuanShiShuJuJSON);
-    if (rg_RenWuID13 != _T (""))
+    if (rg_RenWuID12 != _T (""))
     {
-        rg_DuiXiang11.rg_JiaRuWenBenChengYuan (_CT2 (_T ("task_id")), rg_RenWuID13);
+        rg_DuiXiang11.rg_JiaRuWenBenChengYuan (_CT2 (_T ("task_id")), rg_RenWuID12);
     }
     return (rg_DuiXiang11.data().ToString(YYJSON_WRITE_NOFLAG));
 }
@@ -326,13 +326,13 @@ CVolString CALLBACK rg_MCP_XiangYingGouJian::rg_GouJianBase64TuPianYiBuJSON (CVo
         }
         rg_base64ShuJu = CVolString(out.c_str());
     }
-    rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_BaoZhuangDuiXiang12;
-    rg_BaoZhuangDuiXiang12.data().CreateFromText(_CT2 (_T ("{}")));
-    rg_BaoZhuangDuiXiang12.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("success")), TRUE);
-    rg_BaoZhuangDuiXiang12.rg_JiaRuWenBenChengYuan (_CT2 (_T ("message")), _CT2 (_T ("data:")) + rg_mimeLeiXing + _T (";base64,") + rg_base64ShuJu);
-    rg_BaoZhuangDuiXiang12.rg_JiaRuWenBenChengYuan (_CT2 (_T ("mimeType")), rg_mimeLeiXing);
-    rg_BaoZhuangDuiXiang12.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("data_size")), rg_ShiJiDaXiao);
-    return (rg_BaoZhuangDuiXiang12.data().ToString(YYJSON_WRITE_NOFLAG));
+    rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_BaoZhuangDuiXiang11;
+    rg_BaoZhuangDuiXiang11.data().CreateFromText(_CT2 (_T ("{}")));
+    rg_BaoZhuangDuiXiang11.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("success")), TRUE);
+    rg_BaoZhuangDuiXiang11.rg_JiaRuWenBenChengYuan (_CT2 (_T ("message")), _CT2 (_T ("data:")) + rg_mimeLeiXing + _T (";base64,") + rg_base64ShuJu);
+    rg_BaoZhuangDuiXiang11.rg_JiaRuWenBenChengYuan (_CT2 (_T ("mimeType")), rg_mimeLeiXing);
+    rg_BaoZhuangDuiXiang11.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("data_size")), rg_ShiJiDaXiao);
+    return (rg_BaoZhuangDuiXiang11.data().ToString(YYJSON_WRITE_NOFLAG));
 }
 
 }

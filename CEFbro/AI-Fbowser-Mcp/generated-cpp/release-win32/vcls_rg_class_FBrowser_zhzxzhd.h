@@ -21,6 +21,10 @@ public:
     ~rg_class_FBrowser_zhzxzhd(){};
 
 public:
+    BOOL rg_ShiFouWeiKong109 ();
+    void rg_QuXiao1 ();
+    void rg_ZanTing3 ();
+    void rg_HuiFu ();
     inline_ rg_class_FBrowser_zhzxzhd () { }
     inline_ void _VolObjectInitMembers () { }
 };

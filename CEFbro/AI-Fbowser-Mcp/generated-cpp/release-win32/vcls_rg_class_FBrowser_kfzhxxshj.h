@@ -21,11 +21,11 @@ public:
         virtual void OnDevToolsAgentDetached(CefRefPtr<CefBrowser> browser) override;
 
 public:
-    virtual BOOL rg_KaiFaZheXiaoXi_VIP_ShouDaoXiaoXi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi162, INT rg_XiaoXiZhiZhen1, INT rg_XiaoXiDaXiao1);
-    virtual void rg_KaiFaZheXiaoXi_VIP_ZhiHangWanCheng (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi163, INT rg_XiaoXiID2, BOOL rg_ChengGong13, INT rg_JieGuoZhiZhen2, INT rg_JieGuoDaXiao2);
-    virtual void rg_KaiFaZheXiaoXi_VIP_ShouDaoShiJian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi164, CVolString& rg_FangFaMing14, INT rg_CanShuZhiZhen1, INT rg_CanShuDaXiao1);
-    virtual void rg_KaiFaZheXiaoXi_VIP_YiFuJia (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi165);
-    virtual void rg_KaiFaZheXiaoXi_VIP_YiFenLi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi166);
+    virtual BOOL rg_KaiFaZheXiaoXi_VIP_ShouDaoXiaoXi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi167, INT rg_XiaoXiZhiZhen1, INT rg_XiaoXiDaXiao1);
+    virtual void rg_KaiFaZheXiaoXi_VIP_ZhiHangWanCheng (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi168, INT rg_XiaoXiID2, BOOL rg_ChengGong13, INT rg_JieGuoZhiZhen2, INT rg_JieGuoDaXiao2);
+    virtual void rg_KaiFaZheXiaoXi_VIP_ShouDaoShiJian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi169, CVolString& rg_FangFaMing15, INT rg_CanShuZhiZhen1, INT rg_CanShuDaXiao1);
+    virtual void rg_KaiFaZheXiaoXi_VIP_YiFuJia (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi170);
+    virtual void rg_KaiFaZheXiaoXi_VIP_YiFenLi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi171);
     rg_class_FBrowser_kfzhxxshj ();
     void _VolObjectInitMembers ();
     virtual ~rg_class_FBrowser_kfzhxxshj ();

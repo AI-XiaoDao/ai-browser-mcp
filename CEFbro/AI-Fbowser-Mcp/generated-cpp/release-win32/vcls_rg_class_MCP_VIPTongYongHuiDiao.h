@@ -12,15 +12,15 @@ class rg_class_MCP_VIPTongYongHuiDiao : public rg_FBrowser_HuiDiao::rg_class_FBr
     DECLARE_VOL_CLASS (rg_volcano_app, rg_class_MCP_VIPTongYongHuiDiao)
 
 public:
-    virtual void rg_ShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi48, INT rg_BiaoShiID1, BOOL rg_ChengGong2, INT rg_ShuJuZhiZhen1, INT rg_ShuJuDaXiao1);
-    virtual void rg_LieBiaoShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi49, INT rg_BiaoShiID2, BOOL rg_ChengGong3, rg_FBrowser_value::FBroListValue& rg_LieBiaoZhi);
+    virtual void rg_ShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi53, INT rg_BiaoShiID1, BOOL rg_ChengGong2, INT rg_ShuJuZhiZhen1, INT rg_ShuJuDaXiao1);
+    virtual void rg_LieBiaoShuJuHuiDiao (rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi& rg_LiuLanQi54, INT rg_BiaoShiID2, BOOL rg_ChengGong3, rg_FBrowser_value::FBroListValue& rg_LieBiaoZhi);
     inline_ rg_class_MCP_VIPTongYongHuiDiao () { }
     inline_ void _VolObjectInitMembers () { }
     virtual void LoadFromStream (CVolBaseInputStream& stream) override;
     virtual void SaveIntoStream (CVolBaseOutputStream& stream) override;
 
 public:
-    CVolString rg_RenWuID8;
+    CVolString rg_RenWuID7;
 };
 
 }

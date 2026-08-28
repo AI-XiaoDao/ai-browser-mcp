@@ -12,7 +12,7 @@ class rg_MCP_JiTongFenPa : public CVolObject
     DECLARE_EMPTY_VOL_CLASS (rg_volcano_app, rg_MCP_JiTongFenPa)
 
 public:
-    static CVolString CALLBACK rg_FenLeiFenPa_JiTongCaoZuo (CVolString& rg_MingLingID30, CVolString& rg_FangFaMing11, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON20);
+    static CVolString CALLBACK rg_FenLeiFenPa_JiTongCaoZuo (CVolString& rg_MingLingID47, CVolString& rg_FangFaMing12, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON38);
     inline_ rg_MCP_JiTongFenPa () { }
     inline_ void _VolObjectInitMembers () { }
 };

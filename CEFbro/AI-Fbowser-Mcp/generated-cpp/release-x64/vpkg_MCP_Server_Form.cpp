@@ -7,17 +7,17 @@
 namespace rg_volcano_app
 {
 
-CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolString& rg_MingLingID28, CVolString& rg_FangFaMing9, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON18)
+CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolString& rg_MingLingID45, CVolString& rg_FangFaMing10, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_CanShuJSON36)
 {
-    if (rg_FangFaMing9 == _T ("browser.fill_set_value") || rg_FangFaMing9 == _T ("browser_fill_set_value"))
+    if (rg_FangFaMing10 == _T ("browser.fill_set_value") || rg_FangFaMing10 == _T ("browser_fill_set_value"))
     {
         CVolString rg_selector11;
-        rg_selector11 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("selector")));
-        CVolString rg_value7;
-        rg_value7 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("value")));
+        rg_selector11 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("selector")));
+        CVolString rg_value10;
+        rg_value10 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("value")));
         if (rg_selector11 == _T (""))
         {
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
         rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser107;
         rg_browser107 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
@@ -27,20 +27,20 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
             rg_TianBiaoKuangJia8 = rg_browser107.rg_QuZhuTianBiaoKuangJia ();
             if (rg_TianBiaoKuangJia8.rg_ShiFouYouXiao ())
             {
-                rg_TianBiaoKuangJia8.rg_ZhiYuanSuNeiRong (rg_selector11, 0, rg_value7);
-                return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID28, _CT2 (_T ("已设置: ")) + rg_selector11));
+                rg_TianBiaoKuangJia8.rg_ZhiYuanSuNeiRong (rg_selector11, 0, rg_value10);
+                return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID45, _CT2 (_T ("已设置: ")) + rg_selector11));
             }
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("填表框架无效"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("填表框架无效"))));
         }
-        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
+        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
     }
-    else if (rg_FangFaMing9 == _T ("browser.fill_click") || rg_FangFaMing9 == _T ("browser_fill_click"))
+    else if (rg_FangFaMing10 == _T ("browser.fill_click") || rg_FangFaMing10 == _T ("browser_fill_click"))
     {
         CVolString rg_selector12;
-        rg_selector12 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("selector")));
+        rg_selector12 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("selector")));
         if (rg_selector12 == _T (""))
         {
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
         rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser108;
         rg_browser108 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
@@ -51,19 +51,19 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
             if (rg_TianBiaoKuangJia9.rg_ShiFouYouXiao ())
             {
                 rg_TianBiaoKuangJia9.rg_DianJiYuanSu (rg_selector12, 0);
-                return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID28, _CT2 (_T ("已点击: ")) + rg_selector12));
+                return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID45, _CT2 (_T ("已点击: ")) + rg_selector12));
             }
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("填表框架无效"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("填表框架无效"))));
         }
-        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
+        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
     }
-    else if (rg_FangFaMing9 == _T ("browser.fill_focus") || rg_FangFaMing9 == _T ("browser_fill_focus"))
+    else if (rg_FangFaMing10 == _T ("browser.fill_focus") || rg_FangFaMing10 == _T ("browser_fill_focus"))
     {
         CVolString rg_selector13;
-        rg_selector13 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("selector")));
+        rg_selector13 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("selector")));
         if (rg_selector13 == _T (""))
         {
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
         rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser109;
         rg_browser109 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
@@ -74,19 +74,19 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
             if (rg_TianBiaoKuangJia10.rg_ShiFouYouXiao ())
             {
                 rg_TianBiaoKuangJia10.rg_ZhiYuanSuJiaoDian (rg_selector13, 0, TRUE);
-                return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID28, _CT2 (_T ("焦点已设置: ")) + rg_selector13));
+                return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID45, _CT2 (_T ("焦点已设置: ")) + rg_selector13));
             }
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("填表框架无效"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("填表框架无效"))));
         }
-        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
+        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
     }
-    else if (rg_FangFaMing9 == _T ("browser.fill_scroll") || rg_FangFaMing9 == _T ("browser_fill_scroll"))
+    else if (rg_FangFaMing10 == _T ("browser.fill_scroll") || rg_FangFaMing10 == _T ("browser_fill_scroll"))
     {
         CVolString rg_selector14;
-        rg_selector14 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("selector")));
+        rg_selector14 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("selector")));
         if (rg_selector14 == _T (""))
         {
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
         rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser110;
         rg_browser110 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
@@ -97,19 +97,19 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
             if (rg_TianBiaoKuangJia11.rg_ShiFouYouXiao ())
             {
                 rg_TianBiaoKuangJia11.rg_GunDongDaoYuanSu (rg_selector14, 0, TRUE);
-                return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID28, _CT2 (_T ("已滚动到: ")) + rg_selector14));
+                return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID45, _CT2 (_T ("已滚动到: ")) + rg_selector14));
             }
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("填表框架无效"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("填表框架无效"))));
         }
-        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
+        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
     }
-    else if (rg_FangFaMing9 == _T ("browser.fill_exists") || rg_FangFaMing9 == _T ("browser_fill_exists"))
+    else if (rg_FangFaMing10 == _T ("browser.fill_exists") || rg_FangFaMing10 == _T ("browser_fill_exists"))
     {
         CVolString rg_selector15;
-        rg_selector15 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("selector")));
+        rg_selector15 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("selector")));
         if (rg_selector15 == _T (""))
         {
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
         rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser111;
         rg_browser111 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
@@ -125,37 +125,37 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
                 rg_CunZaiHuiDiao.m_class = static_cast<rg_class_MCP_JSYiBuHuiDiao*>(new rg_class_MCP_JSYiBuHuiDiao());
                 (*static_cast<rg_class_MCP_JSYiBuHuiDiao *>(rg_CunZaiHuiDiao.m_class.get())).rg_RenWuID = rg_YiBuCunZaiID;
                 rg_TianBiaoKuangJia12.rg_YuanSuShiFouCunZai (rg_selector15, 0, rg_CunZaiHuiDiao);
-                return (rg_MCPMingLingFuWuQi::rg_MingLingChengGong_YiBu (rg_MingLingID28, rg_YiBuCunZaiID, _CT2 (_T ("存在检查已提交, 通过mcp_result查询")), 0));
+                return (rg_MCPMingLingFuWuQi::rg_MingLingChengGong_YiBu (rg_MingLingID45, rg_YiBuCunZaiID, _CT2 (_T ("存在检查已提交, 通过mcp_result查询")), 0));
             }
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("填表框架无效"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("填表框架无效"))));
         }
-        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
+        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
     }
-    else if (rg_FangFaMing9 == _T ("browser.fill_attr_set") || rg_FangFaMing9 == _T ("browser_fill_attr_set"))
+    else if (rg_FangFaMing10 == _T ("browser.fill_attr_set") || rg_FangFaMing10 == _T ("browser_fill_attr_set"))
     {
         CVolString rg_selector16;
-        rg_selector16 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("selector")));
+        rg_selector16 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("selector")));
         CVolString rg_attr;
-        rg_attr = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("attribute")));
-        CVolString rg_value8;
-        rg_value8 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("value")));
+        rg_attr = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("attribute")));
+        CVolString rg_value11;
+        rg_value11 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("value")));
         if (rg_selector16 == _T (""))
         {
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
         if (CVolString (rg_attr).TrimAll () == _T (""))
         {
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("attribute 不能为空 | 如 style / data-* / aria-*"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("attribute 不能为空 | 如 style / data-* / aria-*"))));
         }
         CVolString rg_attrLower;
         rg_attrLower = CVolString (CVolString (rg_attr).TrimAll ()).MakeLower ();
         if (rg_attrLower == _T ("href") || rg_attrLower == _T ("src") || rg_attrLower == _T ("action") || rg_attrLower == _T ("formaction"))
         {
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("安全限制: 不允许设置 ")) + rg_attr + _T (" 属性(导航类) | 仅允许样式/数据/aria 属性")));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("安全限制: 不允许设置 ")) + rg_attr + _T (" 属性(导航类) | 仅允许样式/数据/aria 属性")));
         }
         if (rg_MCPMingLingFuWuQi::rg_ShiFouYi (rg_attrLower, _CT2 (_T ("on"))))
         {
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("安全限制: 不允许设置 ")) + rg_attr + _T (" 属性(事件处理器) | 仅允许样式/数据/aria 属性")));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("安全限制: 不允许设置 ")) + rg_attr + _T (" 属性(事件处理器) | 仅允许样式/数据/aria 属性")));
         }
         rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser112;
         rg_browser112 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
@@ -165,22 +165,22 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
             rg_TianBiaoKuangJia13 = rg_browser112.rg_QuZhuTianBiaoKuangJia ();
             if (rg_TianBiaoKuangJia13.rg_ShiFouYouXiao ())
             {
-                rg_TianBiaoKuangJia13.rg_ZhiYuanSuShuXing (rg_selector16, 0, rg_attr, rg_value8);
-                return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID28, _CT2 (_T ("属性已设置: ")) + rg_selector16));
+                rg_TianBiaoKuangJia13.rg_ZhiYuanSuShuXing (rg_selector16, 0, rg_attr, rg_value11);
+                return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID45, _CT2 (_T ("属性已设置: ")) + rg_selector16));
             }
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("填表框架无效"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("填表框架无效"))));
         }
-        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
+        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
     }
-    else if (rg_FangFaMing9 == _T ("browser.fill_attr_get") || rg_FangFaMing9 == _T ("browser_fill_attr_get"))
+    else if (rg_FangFaMing10 == _T ("browser.fill_attr_get") || rg_FangFaMing10 == _T ("browser_fill_attr_get"))
     {
         CVolString rg_selector17;
-        rg_selector17 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("selector")));
+        rg_selector17 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("selector")));
         CVolString rg_attr1;
-        rg_attr1 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("attribute")));
+        rg_attr1 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("attribute")));
         if (rg_selector17 == _T (""))
         {
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
         rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser113;
         rg_browser113 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
@@ -196,25 +196,25 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
                 rg_TianBiaoHuiDiao1.m_class = static_cast<rg_class_MCP_JSYiBuHuiDiao*>(new rg_class_MCP_JSYiBuHuiDiao());
                 (*static_cast<rg_class_MCP_JSYiBuHuiDiao *>(rg_TianBiaoHuiDiao1.m_class.get())).rg_RenWuID = rg_YiBuTianBiaoID1;
                 rg_TianBiaoKuangJia14.rg_QuYuanSuShuXing (rg_selector17, 0, rg_attr1, rg_TianBiaoHuiDiao1);
-                return (rg_MCPMingLingFuWuQi::rg_MingLingChengGong_YiBu (rg_MingLingID28, rg_YiBuTianBiaoID1, _CT2 (_T ("属性获取已提交, 通过mcp_result查询")), 0));
+                return (rg_MCPMingLingFuWuQi::rg_MingLingChengGong_YiBu (rg_MingLingID45, rg_YiBuTianBiaoID1, _CT2 (_T ("属性获取已提交, 通过mcp_result查询")), 0));
             }
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("填表框架无效"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("填表框架无效"))));
         }
-        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
+        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
     }
-    else if (rg_FangFaMing9 == _T ("browser.fill_trigger") || rg_FangFaMing9 == _T ("browser_fill_trigger"))
+    else if (rg_FangFaMing10 == _T ("browser.fill_trigger") || rg_FangFaMing10 == _T ("browser_fill_trigger"))
     {
         CVolString rg_selector18;
-        rg_selector18 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("selector")));
+        rg_selector18 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("selector")));
         CVolString rg_eventType;
-        rg_eventType = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("event")));
+        rg_eventType = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("event")));
         if (rg_eventType == _T (""))
         {
             rg_eventType = _T ("click");
         }
         if (rg_selector18 == _T (""))
         {
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
         rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser114;
         rg_browser114 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
@@ -225,21 +225,21 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
             if (rg_TianBiaoKuangJia15.rg_ShiFouYouXiao ())
             {
                 rg_TianBiaoKuangJia15.rg_ChuFaYuanSuShiJian (rg_selector18, 0, rg_eventType, 0);
-                return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID28, _CT2 (_T ("事件已触发: ")) + rg_eventType + _T (" -> ") + rg_selector18));
+                return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID45, _CT2 (_T ("事件已触发: ")) + rg_eventType + _T (" -> ") + rg_selector18));
             }
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("填表框架无效"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("填表框架无效"))));
         }
-        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
+        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
     }
-    else if (rg_FangFaMing9 == _T ("browser.fill_select") || rg_FangFaMing9 == _T ("browser_fill_select"))
+    else if (rg_FangFaMing10 == _T ("browser.fill_select") || rg_FangFaMing10 == _T ("browser_fill_select"))
     {
         CVolString rg_selector19;
-        rg_selector19 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("selector")));
-        CVolString rg_value9;
-        rg_value9 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("value")));
+        rg_selector19 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("selector")));
+        CVolString rg_value12;
+        rg_value12 = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("value")));
         if (rg_selector19 == _T (""))
         {
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("selector 不能为空 | CSS选择器示例: #id / .class / input[name='q']"))));
         }
         rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_browser115;
         rg_browser115 = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
@@ -249,9 +249,9 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
             rg_TianBiaoKuangJia16 = rg_browser115.rg_QuZhuTianBiaoKuangJia ();
             if (rg_TianBiaoKuangJia16.rg_ShiFouYouXiao ())
             {
-                if (rg_value9 == _T (""))
+                if (rg_value12 == _T (""))
                 {
-                    return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("value 不能为空 | select 下拉项的选项值, 如 'US' / '男'"))));
+                    return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("value 不能为空 | select 下拉项的选项值, 如 'US' / '男'"))));
                 }
                 rg_FBrowser_LiuLanQi::FBroFrame rg_fselFrame;
                 rg_fselFrame = rg_browser115.rg_QuZhuKuangJia ();
@@ -260,40 +260,40 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
                     CVolString rg_fselSel;
                     rg_fselSel = rg_MCPMingLingFuWuQi::rg_JianChanZhuaiYiJS (rg_selector19);
                     CVolString rg_fselVal;
-                    rg_fselVal = rg_MCPMingLingFuWuQi::rg_JianChanZhuaiYiJS (rg_value9);
+                    rg_fselVal = rg_MCPMingLingFuWuQi::rg_JianChanZhuaiYiJS (rg_value12);
                     rg_fselFrame.rg_ZhiHangJSDaiMa (_CT2 (_T ("(function(){var e=document.querySelector('")) + rg_fselSel + _T ("');if(!e)return;var n=Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype,'value');if(n&&n.set){n.set.call(e,'") + rg_fselVal + _T ("')}else{e.value='") + rg_fselVal + _T ("'};e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));})()"), _CT2 (_T ("")), 0);
-                    return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID28, _CT2 (_T ("select已设置: ")) + rg_selector19 + _T (" = ") + rg_value9));
+                    return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID45, _CT2 (_T ("select已设置: ")) + rg_selector19 + _T (" = ") + rg_value12));
                 }
                 INT rg_fselIdx;
-                rg_fselIdx = _ttoi (rg_value9.GetText ());
-                if (CVolString (rg_fselIdx) == rg_value9)
+                rg_fselIdx = _ttoi (rg_value12.GetText ());
+                if (CVolString (rg_fselIdx) == rg_value12)
                 {
                     rg_TianBiaoKuangJia16.rg_ZhiYuanSuXuanZeXiang (rg_selector19, 0, rg_fselIdx);
-                    return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID28, _CT2 (_T ("select已按索引设置: ")) + rg_selector19 + _T (" = ") + rg_value9));
+                    return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong (rg_MingLingID45, _CT2 (_T ("select已按索引设置: ")) + rg_selector19 + _T (" = ") + rg_value12));
                 }
-                return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("主框架无效且 value 非整数索引, 无法设置 select"))));
+                return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("主框架无效且 value 非整数索引, 无法设置 select"))));
             }
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("填表框架无效"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("填表框架无效"))));
         }
-        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
+        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
     }
-    else if (rg_FangFaMing9 == _T ("browser_fill_form"))
+    else if (rg_FangFaMing10 == _T ("browser_fill_form"))
     {
         CVolString rg_ffFields;
-        rg_ffFields = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON18, _CT2 (_T ("fields")));
+        rg_ffFields = rg_MCPMingLingFuWuQi::rg_yyjsonQuWenBen (rg_CanShuJSON36, _CT2 (_T ("fields")));
         if (rg_ffFields == _T (""))
         {
-            rg_ffFields = rg_MCPMingLingFuWuQi::rg_yyjsonQuJSONWenBen (rg_CanShuJSON18, _CT2 (_T ("fields")));
+            rg_ffFields = rg_MCPMingLingFuWuQi::rg_yyjsonQuJSONWenBen (rg_CanShuJSON36, _CT2 (_T ("fields")));
         }
         if (rg_ffFields == _T (""))
         {
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("fields ")) + rg_MCP_const::rg_CuoWu_QueShaoCanShu));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("fields ")) + rg_MCP_const::rg_CuoWu_QueShaoCanShu));
         }
         rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouShuZuLei rg_ffArr;
         rg_ffArr = rg_MCPMingLingFuWuQi::rg_QuJSONShuZuZiWenBen (rg_ffFields, _CT2 (_T ("fields")));
         if ((BOOL)rg_ffArr.IsNullObject () || yyjson_arr_size(rg_ffArr.data().GetArray()) == 0)
         {
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("fields JSON解析失败 | 格式: [{\"selector\":\"#id\",\"value\":\"文本\"},...]"))));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("fields JSON解析失败 | 格式: [{\"selector\":\"#id\",\"value\":\"文本\"},...]"))));
         }
         rg_FBrowser_LiuLanQi::rg_class_FBrowser_LiuLanQi rg_ffBrowser;
         rg_ffBrowser = rg_MCPMingLingFuWuQi::rg_QuZhuLiuLanQi ();
@@ -312,7 +312,7 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
                 rg_ffZongShu = (INT)yyjson_arr_size(rg_ffArr.data().GetArray());
                 if (rg_ffZongShu > 500)
                 {
-                    return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, _CT2 (_T ("fields 字段数超过上限(500)"))));
+                    return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, _CT2 (_T ("fields 字段数超过上限(500)"))));
                 }
                 rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei rg_ffCunZaiYingShe;
                 CVolString rg_ffJianChaDaiMa;
@@ -403,7 +403,7 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
                 }
                 rg_ffJieGuo = rg_ffJieGuo + _T ("]");
                 BOOL rg_ffSubmit;
-                rg_ffSubmit = rg_MCPMingLingFuWuQi::rg_yyjsonQuLuoJi (rg_CanShuJSON18, _CT2 (_T ("submit")));
+                rg_ffSubmit = rg_MCPMingLingFuWuQi::rg_yyjsonQuLuoJi (rg_CanShuJSON36, _CT2 (_T ("submit")));
                 CVolString rg_ffDiJiaoZhuangTai;
                 rg_ffDiJiaoZhuangTai = _T ("not_requested");
                 if (rg_ffSubmit)
@@ -450,11 +450,11 @@ CVolString CALLBACK rg_MCP_TianBiaoFenPa::rg_FenLeiFenPa_TianBiaoCaoZuo (CVolStr
                 rg_ffOut.rg_JiaRuLuoJiZhiChengYuan (_CT2 (_T ("submit")), rg_ffSubmit);
                 rg_ffOut.rg_JiaRuWenBenChengYuan (_CT2 (_T ("submit_status")), rg_ffDiJiaoZhuangTai);
                 rg_ffOut.rg_JiaRuWenBenChengYuan (_CT2 (_T ("field_results")), rg_ffJieGuo);
-                return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong_YuanShiJSON (rg_MingLingID28, rg_ffOut.data().ToString(YYJSON_WRITE_NOFLAG), TRUE));
+                return (rg_MCP_XiangYingGouJian::rg_MingLingChengGong_YuanShiJSON (rg_MingLingID45, rg_ffOut.data().ToString(YYJSON_WRITE_NOFLAG), TRUE));
             }
-            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, rg_MCP_const::rg_CuoWu_TianBiaoKuangJiaMoXiao));
+            return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, rg_MCP_const::rg_CuoWu_TianBiaoKuangJiaMoXiao));
         }
-        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID28, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
+        return (rg_MCP_XiangYingGouJian::rg_MingLingShiBai (rg_MingLingID45, rg_MCP_const::rg_CuoWu_MoLiuLanQi));
     }
     return (_T (""));
 }

@@ -27,7 +27,7 @@ CXXFLAGS = $(CPPFLAGS)
 MANIFEST_FILES = "E:\HSPC\plugins\vprj_win\res\default-x64.manifest"
 MANIFEST_FLAGS = /MANIFESTINPUT:"E:\HSPC\plugins\vprj_win\res\default-x64.manifest"
 LIBS = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib
-OBJS = $(OUT_DIR)\AI-Fbowser-Mcp.res $(OUT_DIR)\stdafx.obj $(OUT_DIR)\vol_app_static_data.obj $(OUT_DIR)\vpkg_FBroCallback.obj $(OUT_DIR)\vpkg_FBroDataType.obj $(OUT_DIR)\vpkg_FBroEventControl.obj $(OUT_DIR)\vpkg_FBroHelp.obj $(OUT_DIR)\vpkg_FBroLib.obj $(OUT_DIR)\vpkg_FBroValue.obj $(OUT_DIR)\vpkg_FBroVip.obj $(OUT_DIR)\vpkg_main.obj $(OUT_DIR)\vpkg_MCP_BrowserEvents.obj $(OUT_DIR)\vpkg_MCP_Callbacks.obj $(OUT_DIR)\vpkg_MCP_ResponseBuilders.obj $(OUT_DIR)\vpkg_MCP_Server.obj $(OUT_DIR)\vpkg_MCP_Server_Core.obj $(OUT_DIR)\vpkg_MCP_Server_Form.obj $(OUT_DIR)\vpkg_MCP_Server_HTTP.obj $(OUT_DIR)\vpkg_MCP_Server_Reverse.obj $(OUT_DIR)\vpkg_MCP_Server_System.obj $(OUT_DIR)\vpkg_MCP_Server_Utils.obj $(OUT_DIR)\vpkg_MCP_Server_VIP.obj $(OUT_DIR)\vpkg_MCP_Server_Workflow.obj $(OUT_DIR)\vpkg_MCP_Stdio.obj $(OUT_DIR)\vpkg_w_array.obj $(OUT_DIR)\vpkg_w_base.obj $(OUT_DIR)\vpkg_w_mfc_startup.obj $(OUT_DIR)\vpkg_w_misc.obj $(OUT_DIR)\vpkg_w_muti_thread.obj $(OUT_DIR)\vpkg_w_sqlite3.obj $(OUT_DIR)\vpkg_w_startup.obj $(OUT_DIR)\vpkg_w_stream.obj $(OUT_DIR)\vpkg_w_string.obj $(OUT_DIR)\vpkg_w_yyjson.obj $(OUT_DIR)\vpkg_数据操作库_.obj $(EXTERN_OUT_DIR)\vol_array.obj $(EXTERN_OUT_DIR)\vol_assert.obj $(EXTERN_OUT_DIR)\vol_bitmap.obj $(EXTERN_OUT_DIR)\vol_classes.obj $(EXTERN_OUT_DIR)\vol_com.obj $(EXTERN_OUT_DIR)\vol_functions.obj $(EXTERN_OUT_DIR)\vol_key.obj $(EXTERN_OUT_DIR)\vol_math.obj $(EXTERN_OUT_DIR)\vol_mem.obj $(EXTERN_OUT_DIR)\vol_mem_pool.obj $(EXTERN_OUT_DIR)\vol_muti_thread.obj $(EXTERN_OUT_DIR)\vol_stream.obj $(EXTERN_OUT_DIR)\vol_string.obj $(EXTERN_OUT_DIR)\vol_time.obj $(EXTERN_OUT_DIR)\vol_mfc.obj $(EXTERN_OUT_DIR)\yyjson.obj
+OBJS = $(OUT_DIR)\AI-Fbowser-Mcp.res $(OUT_DIR)\stdafx.obj $(OUT_DIR)\vol_app_static_data.obj $(OUT_DIR)\vpkg_FBroCallback.obj $(OUT_DIR)\vpkg_FBroDataType.obj $(OUT_DIR)\vpkg_FBroEventControl.obj $(OUT_DIR)\vpkg_FBroHelp.obj $(OUT_DIR)\vpkg_FBroLib.obj $(OUT_DIR)\vpkg_FBroValue.obj $(OUT_DIR)\vpkg_FBroVip.obj $(OUT_DIR)\vpkg_main.obj $(OUT_DIR)\vpkg_MCP_BrowserEvents.obj $(OUT_DIR)\vpkg_MCP_Callbacks.obj $(OUT_DIR)\vpkg_MCP_Kernel.obj $(OUT_DIR)\vpkg_MCP_ResponseBuilders.obj $(OUT_DIR)\vpkg_MCP_Server.obj $(OUT_DIR)\vpkg_MCP_Server_Core.obj $(OUT_DIR)\vpkg_MCP_Server_Form.obj $(OUT_DIR)\vpkg_MCP_Server_HTTP.obj $(OUT_DIR)\vpkg_MCP_Server_Reverse.obj $(OUT_DIR)\vpkg_MCP_Server_System.obj $(OUT_DIR)\vpkg_MCP_Server_Utils.obj $(OUT_DIR)\vpkg_MCP_Server_VIP.obj $(OUT_DIR)\vpkg_MCP_Server_Workflow.obj $(OUT_DIR)\vpkg_MCP_Stdio.obj $(OUT_DIR)\vpkg_w_array.obj $(OUT_DIR)\vpkg_w_base.obj $(OUT_DIR)\vpkg_w_mfc_startup.obj $(OUT_DIR)\vpkg_w_misc.obj $(OUT_DIR)\vpkg_w_muti_thread.obj $(OUT_DIR)\vpkg_w_sqlite3.obj $(OUT_DIR)\vpkg_w_startup.obj $(OUT_DIR)\vpkg_w_stream.obj $(OUT_DIR)\vpkg_w_string.obj $(OUT_DIR)\vpkg_w_yyjson.obj $(OUT_DIR)\vpkg_数据操作库_.obj $(EXTERN_OUT_DIR)\vol_array.obj $(EXTERN_OUT_DIR)\vol_assert.obj $(EXTERN_OUT_DIR)\vol_bitmap.obj $(EXTERN_OUT_DIR)\vol_classes.obj $(EXTERN_OUT_DIR)\vol_com.obj $(EXTERN_OUT_DIR)\vol_functions.obj $(EXTERN_OUT_DIR)\vol_key.obj $(EXTERN_OUT_DIR)\vol_math.obj $(EXTERN_OUT_DIR)\vol_mem.obj $(EXTERN_OUT_DIR)\vol_mem_pool.obj $(EXTERN_OUT_DIR)\vol_muti_thread.obj $(EXTERN_OUT_DIR)\vol_stream.obj $(EXTERN_OUT_DIR)\vol_string.obj $(EXTERN_OUT_DIR)\vol_time.obj $(EXTERN_OUT_DIR)\vol_mfc.obj $(EXTERN_OUT_DIR)\yyjson.obj
 EXTERN_LIBS = "E:\HSPC\plugins\vprj_win\classlib\shared\extern_lib\common\sqlite3\2\x64\sqlite3dllmt.lib" "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\projects\x64\asm_64\spin_lock_64.lib" "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\lib64\FBrowserCEF3lib.lib" "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\lib64\FBrowserVIP.lib" "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\lib64\libcef.lib" "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\lib64\release\libcef_dll_wrapper.lib"
 
 build : $(OUT_FILE_NAME)
@@ -36,6 +36,653 @@ $(OUT_FILE_NAME) : $(PCH_FULL_FILE_NAME) $(OBJS) $(MANIFEST_FILES) $(EXTERN_LIBS
     link $(LFLAGS) $(MANIFEST_FLAGS) $(LIBS) $(EXTERN_LIBS) @<<
 $(OBJS)
 <<NOKEEP
+
+stdafx.cpp : \
+    stdafx.h
+
+stdafx.h : \
+    targetver.h \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\mfc_ui_base\src\vol_mfc.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\FBroBaseDis.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\shared\extern_lib\common\sqlite3\2\include\vol_sqlite3.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\yyjson\src\vol_yyjson.h"
+
+vol_app_static_data.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vol_user_app.h : \
+    vol_user_app_info.h \
+    vpkg_w_startup.h \
+    vpkg_w_mfc_startup.h \
+    vpkg_图像处理库_.h \
+    vpkg_编码进制库_.h \
+    vcls_rg_DuiXiangLei.h \
+    vcls_rg_KuoZhanDuiXiangLei.h \
+    vcls_rg_ZhengShuShuZuLei.h \
+    vcls_rg_ZiJieJiShuZuLei.h \
+    vcls_rg_ZhengShuLei.h \
+    vcls_rg_DuiXiangShuZuLei.h \
+    vcls_rg_ZiJieJiLei.h \
+    vcls_rg_WenBenShuZuLei.h \
+    vcls_rg_JiBenLiuLei.h \
+    vcls_rg_FBrowser_JuXingWeiZhi.h \
+    vcls_rg_FBrowser_CheCun.h \
+    vcls_rg_HuanCunXianChengLei.h \
+    vcls_rg_class_FBrowser_qlhchd.h \
+    vcls_rg_FBrowser_ShuangWenBenShuZu.h \
+    vcls_rg_FBrowser_FanWei.h \
+    vcls_rg_class_FBrowser_YingYongShiJian.h \
+    vcls_rg_class_FBrowser_zyglq.h \
+    vcls_rg_class_FBrowser_zychlq.h \
+    vcls_rg_class_FBrowser_llqshj.h \
+    vcls_rg_FBrowser_JiaSuHuiZhiEWaiXinXi.h \
+    vcls_FBroDictionaryValue.h \
+    vcls_rg_class_FBrowser_FuWuQi.h \
+    vcls_rg_YYJSONZhiDouDuiXiangLei.h \
+    vcls_rg_SQLiteShuJuKuLei.h \
+    vcls_rg_FBrowser_ShiJianLeiXing.h \
+    vcls_rg_class_FBrowserVIP_tyhd.h \
+    vcls_rg_FBrowser_WeiZhi.h \
+    vcls_rg_HuChiSuoLei.h \
+    vcls_rg_ShuChuLiuLei.h \
+    vcls_rg_class_FBrowser_dywPDFhd.h \
+    vcls_rg_class_FBrowser_zfchhd.h \
+    vcls_rg_class_FBrowser_Cookiehd.h \
+    vcls_rg_class_FBrowser_xztphd.h \
+    vcls_rg_ShuRuLiuLei.h \
+    vcls_rg_LuoJiXingLei.h \
+    vcls_rg_ChengXuLei.h \
+    vcls_rg_class_FBrowser_JSHuiDiao.h \
+    vcls_rg_class_FBrowser_fwqshj.h \
+    vcls_rg_class_FBrowser_URLqqshj.h \
+    vcls_rg_class_FBrowser_shjzhnzhzh.h \
+    vcls_FBroBaseFrame.h \
+    vcls_rg_class_FBrowser_kfzhxxshj.h \
+    vcls_rg_class_MCP_StdioFuWuXianCheng.h \
+    vcls_rg_class_MCP_CunZaiHouDianJiHuiDiao.h \
+    vcls_rg_class_MCP_ZiFuChuanYiBuHuiDiao.h \
+    vcls_rg_class_MCP_Cookieshjhd.h \
+    vcls_rg_class_MCP_DaYinPDFHuiDiao.h \
+    vcls_rg_class_MCP_URLQingQiuHuiDiao.h \
+    vcls_rg_class_MCP_XiaZaiTuPianHuiDiao.h \
+    vcls_rg_class_MCP_CuanGaiGuoLuQi.h \
+    vcls_rg_MCP_NeiHeFenPa.h \
+    vcls_rg_MCP_XiangYingGouJian.h \
+    vcls_rg_MCPMingLingFuWuQi.h \
+    vcls_rg_MCP_TianBiaoFenPa.h \
+    vcls_rg_ZiJieLei.h \
+    vcls_rg_BianZhengShuLei.h \
+    vcls_rg_SuanShuYunSuanLei.h \
+    vcls_rg_ShiJianZiDuanLeiXing.h \
+    vcls_rg_ZhiZhenCaoZuoLei.h \
+    vcls_rg_ChengXuDiaoShiLei.h \
+    vcls_rg_HuanJingCunQuLei.h \
+    vcls_rg_class_FBrowser_ShouQuanHuiDiao.h \
+    vcls_rg_class_FBrowser_jjxzhd.h \
+    vcls_rg_class_FBrowser_dhkhd.h \
+    vcls_rg_class_FBrowser_zyhlhd.h \
+    vcls_rg_class_FBrowser_mtjrhd.h \
+    vcls_rg_AnJianShiJian2.h \
+    vcls_rg_ShuBiaoAnJianLeiXing.h \
+    vcls_rg_JSONJieXi.h \
+    vcls_rg_JSFanHuiZhiLeiXing.h \
+    vcls_rg_HuanCunLeiXing.h \
+    vcls_rg_BingMuFangXiangLeiXing.h \
+    vcls_rg_FBrowser_JuXingWeiZhiShuZu.h \
+    vcls_rg_FBrowser_AnJianShiJian.h \
+    vcls_rg_FBrowser_ShuBiaoShiJian.h \
+    vcls_rg_FBrowser_WenBenShuZu.h \
+    vcls_rg_class_FBrowser_shzhzyglq.h \
+    vcls_FBroFrame.h \
+    vcls_FBroRequestContext.h \
+    vcls_FBroRequest.h \
+    vcls_FBroHsPostDataElement.h \
+    vcls_rg_class_FBrowser_Cookieglq.h \
+    vcls_FBroContextMenuParams.h \
+    vcls_FBroDownloadItem.h \
+    vcls_FBroV8Context.h \
+    vcls_FBroV8StackTrace.h \
+    vcls_rg_class_FBrowser_TianBiaoKuangJia.h \
+    vcls_rg_class_FBrowser_URLqq.h \
+    vcls_FBroListValue.h \
+    vcls_rg_class_FBrowser_X509zhshshz.h \
+    vcls_rg_FBrowserVIPZhuCe.h \
+    vcls_rg_class_FBrowserVIP_WebSocketkhd.h \
+    vcls_rg_YYJSONZhiDouShuZuLei.h \
+    vcls_rg_YYJSONShuZuLei.h \
+    vcls_rg_YYJSONGeShiHuaXuanXiang.h \
+    vcls_rg_startup_class.h \
+    vcls_rg_class_MCP_ChuShiHuaShiJian.h \
+    vcls_rg_WenBenChuLiLei_n.h \
+    vcls_rg_YYJSONZhiLeiXing.h \
+    vcls_rg_YYJSONDuiXiangLei.h \
+    vcls_rg_SQLiteJiLuJiLei.h \
+    vcls_rg_class_FBrowserVIP_UAshj.h \
+    vcls_rg_class_FBrowserVIP_kfzhDOM.h \
+    vcls_rg_class_FBrowserVIP_kzhq.h \
+    vcls_FBroDragData.h \
+    vcls_FBroPostDataElementVector.h \
+    vcls_FBroValue.h \
+    vcls_FBroBinaryValue.h \
+    vcls_rg_class_FBrowser_yhewpzh.h \
+    vcls_FBroSSLInfo.h \
+    vcls_FBroDOMNode.h \
+    vcls_FBroV8Exception.h \
+    vcls_FBroSchemeRegistrar.h \
+    vcls_FBroMenuModel.h \
+    vcls_rg_class_FBrowser_XiangYing.h \
+    vcls_FBroProcessMessage.h \
+    vcls_FBroPostData.h \
+    vcls_FBroImage.h \
+    vcls_FBroCommandLine.h \
+    vcls_rg_class_FBrowser_LiuLanQi.h \
+    vcls_rg_FBrowserFuZhuGongNeng.h \
+    vcls_rg_FBrowserChuShiHuaKongZhi.h \
+    vcls_rg_class_FBrowser_shzhzychlq.h \
+    vcls_rg_FBrowser_JieTuBianKuangShuJu.h \
+    vcls_rg_FBrowser_JinYongShiJian.h \
+    vcls_rg_FBrowser_MeiTiYingJianShuZu.h \
+    vcls_rg_FBrowser_JiaSuHuiZhiXinXi.h \
+    vcls_rg_FBrowser_PDFDaYinSheZhi.h \
+    vcls_rg_FBrowser_YinPinCanShu.h \
+    vcls_rg_FBrowser_VIPChuMoShiJian.h \
+    vcls_rg_FBrowser_BingMuXinXi.h \
+    vcls_rg_FBrowser_CookieShuJu.h \
+    vcls_rg_FBrowser_GuangBiaoXinXi.h \
+    vcls_rg_FBrowser_string.h \
+    vcls_rg_FBrowser_ShuangWenBen.h \
+    vcls_rg_FBrowser_JiTongShiJian.h \
+    vcls_rg_FBrowser_TuoYeWeiZhiShuZu.h \
+    vcls_rg_FBrowser_DanChuGongNeng.h \
+    vcls_rg_FBrowser_LiuLanQiPeiZhi.h \
+    vcls_rg_FBrowser_ChuangKouXinXi.h \
+    vcls_rg_FBrowser_ChuShiHuaPeiZhi.h \
+    vcls_rg_TLSBanBen.h \
+    vcls_rg_QingLiHuanCun.h \
+    vcls_rg_ZiYuanGuoLuQi.h \
+    vcls_rg_ZhiLeiXing1.h \
+    vcls_rg_ShiJianBiaoShi2.h \
+    vcls_rg_RiZhiJiBie2.h \
+    vcls_rg_class_FBrowser_qxdshhd.h \
+    vcls_rg_class_FBrowser_kjcchhd.h \
+    vcls_rg_class_FBrowser_zydqhd.h \
+    vcls_rg_class_FBrowser_HuiDiao.h \
+    vcls_rg_class_FBrowser_JSdhkhd.h \
+    vcls_rg_class_FBrowser_zhzxzhd.h \
+    vcls_rg_class_FBrowser_yhmlcchhd.h \
+    vcls_rg_class_FBrowser_xzzhshhd.h \
+    vcls_rg_CiPanCaoZuoLei.h \
+    vcls_rg_WenBenLei.h \
+    vcls_rg_WenBenBianMaLeiXing.h \
+    vcls_rg_DongTaiKuChengXuLei.h \
+    vcls_rg_LiuCuoWuMa.h \
+    vcls_rg_ChuangKouChengXuLei.h \
+    vcls_rg_WenJianChaZhaoGouBingLei.h \
+    vcls_rg_WenJianChaZhaoLei.h \
+    vcls_rg_WenJianShuXing.h \
+    vcls_rg_MuLuShanChuMoShi.h \
+    vcls_rg_ChangYongGongNengLei.h \
+    vcls_rg_LiuChengKongZhiLei.h \
+    vcls_rg_ShiJianCaoZuoLei.h \
+    vcls_rg_ShuZhiZhuaiHuanLei.h \
+    vcls_rg_ChanJingDuXiaoShuLei.h \
+    vcls_rg_XiaoShuLei.h \
+    vcls_rg_ChangZhengShuLei.h \
+    vcls_rg_ZiFuLei.h \
+    vcls_rg_DuanZhengShuLei.h \
+    vcls_rg_MCP_NiXiangFenPa.h \
+    vcls_rg_MCP_FuWuQiGongJu.h \
+    vcls_rg_ZhengShuCanKaoShuZuLei.h \
+    vcls_rg_MCP_BianPaiFenPa.h \
+    vcls_rg_MCPStdioQiao.h \
+    vcls_rg_MCP_VIPFenPa.h \
+    vcls_rg_MCP_JiTongFenPa.h \
+    vcls_rg_class_MCP_FuWuQiShiJian.h \
+    vcls_rg_MCP_HeXinFenPa.h \
+    vcls_rg_LiuLanQiRongQi.h \
+    vcls_rg_class_MCP_FangAnZiYuanChuLiQi.h \
+    vcls_rg_MCP_const.h \
+    vcls_rg_class_MCP_HuanCunGuoLuQi.h \
+    vcls_rg_class_MCP_QingLiHuanCunHuiDiao.h \
+    vcls_rg_class_MCP_VIPTongYongHuiDiao.h \
+    vcls_rg_class_MCP_DevToolsgchzh.h \
+    vcls_rg_class_MCP_JieTuYiBuHuiDiao.h \
+    vcls_rg_class_MCP_CunZaiHouTianBiaoHuiDiao.h \
+    vcls_rg_class_MCP_JSYiBuHuiDiao.h \
+    vcls_rg_class_MCP_LiuLanQiShiJian.h
+
+vpkg_FBroCallback.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_FBroDataType.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_FBroEventControl.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_FBroHelp.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_FBroLib.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_FBroValue.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_FBroVip.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_main.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_MCP_BrowserEvents.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_MCP_Callbacks.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_MCP_Kernel.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_MCP_ResponseBuilders.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_MCP_Server.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_MCP_Server_Core.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_MCP_Server_Form.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_MCP_Server_HTTP.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_MCP_Server_Reverse.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_MCP_Server_System.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_MCP_Server_Utils.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_MCP_Server_VIP.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_MCP_Server_Workflow.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_MCP_Stdio.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_w_array.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_w_base.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_w_mfc_startup.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_w_misc.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_w_muti_thread.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_w_sqlite3.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_w_startup.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_w_stream.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_w_string.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_w_yyjson.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_数据操作库_.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+"E:\HSPC\plugins\vprj_win\classlib\shared\extern_lib\common\sqlite3\2\include\vol_sqlite3.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\shared\extern_lib\common\sqlite3\2\include\default\sqlite3.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\_vol_str_impl.cpp" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\_vol_str_macro.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_array.cpp" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_assert.cpp" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_bitmap.cpp" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_classes.cpp" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_com.cpp" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_functions.cpp" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_key.cpp" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_math.cpp" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_mem.cpp" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_mem_pool.cpp" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_muti_thread.cpp" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_stream.cpp" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_string.cpp" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\_vol_str_impl.cpp"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_time.cpp" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\_vol_str_class_impl.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\_vol_str_macro.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\_vol_str_func_impl.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\_vol_str_macro.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_string_class.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\_vol_str_class_impl.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_string_func.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\_vol_str_func_impl.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\vol_base.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_decl.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_public.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\tr_vol_const.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_functions.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_time.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_string_func.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_mem_pool.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_object.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_mem.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_string_class.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_stream.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_math.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_key.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_array.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_muti_thread.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_sort_array.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_string_array.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_unique_array.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_classes.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_bitmap.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_app_instance.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_com.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_network.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\include\vol_menu.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroApp.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroBrowserHost.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroBrowserListControl.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsEvent.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroClient.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroApp.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroClient.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroCookieManager.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroDump.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\pch.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroFrame.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\pch.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsEvent.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroVersionControl.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsEvent.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\pch.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroMiddleData.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroBaseEvent.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroUseExtraData.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroMiddleData.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroBrowser.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroOnceClosureTask.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\base\cef_callback.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroQueryHandler.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroResourceHandler.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroResponseFilter.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroServerHandler.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroSynEventDis.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroMiddleData.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroTaskRunner.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroTypes.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\wrapper\cef_message_router.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroBaseType.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroUnits.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroTypes.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroBase.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroMiddleData.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroString.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroURLRequest.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroV8Context.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroV8Value.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroVIPEventInterface.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroBaseEvent.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroWSSClient.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\fbrowser\fbro_wssclient.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\pch.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_client.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_base.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_app.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_browser.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_frame.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_ssl_info.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_dialog_handler.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_jsdialog_handler.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_menu_model.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_context_menu_handler.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_download_item.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_download_handler.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_auth_callback.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_resource_bundle.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_server.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_response_filter.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_parser.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_request.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_image.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_task.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_request_handler.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_request_context.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_request_context_handler.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_command_line.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_urlrequest.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_x509_certificate.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_response.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_v8.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_dom.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_drag_data.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_stream.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_render_handler.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\cef_waitable_event.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\include\internal\cef_win.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroBase.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroUnits.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroTypes.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroOnceClosureTask.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\FBroBaseDis.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\pch.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroApp.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroBase.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroBaseEvent.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroBrowser.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroBrowserHost.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroBrowserListControl.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroCallback.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroClient.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroCommand.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroContextIdData.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroControl.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroCookieManager.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroDictionaryValue.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroDom.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroDownloadItem.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroDragData.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroDump.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroEValueControl.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroFrame.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroFrameTianBiao.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroGlobalInterface.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHookEvent.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsBaseEvent.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroHsEvent.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroImage.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroInit.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroListValue.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroMenuModel.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroOnceClosureTask.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroPostData.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroProcessMessage.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroProxyUserData.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroQueryHandler.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroRequest.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroRequestContext.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroResourceHandler.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroResponse.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroResponseFilter.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroServer.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroServerHandler.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroSetControl.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroSharedMemoryRegion.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroSocket.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroSSLInfo.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroStream.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroSynEventDis.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroTaskRunner.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroTypes.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroUnits.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroV8Context.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroV8Exception.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroV8Stack.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroV8Value.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroValue.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroVersionControl.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroWebSocket.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroWebSocketClient.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroWSSClient.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroX509Certificate.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroX509CertPrincipal.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroString.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroMiddleData.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroUseExtraData.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroURLRequest.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroVersion.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroVIPStruct.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroVIPControl.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroVIPUserAgentData.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroVIPEventInterface.h" \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\FBrowserCEF3lib\FBroVIPInterface.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\mfc_ui_base\src\vol_mfc.cpp" : \
+    stdafx.h \
+    vol_user_app_info.h
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\yyjson\src\vol_yyjson.h" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\yyjson\src\yyjson.h"
+
+"E:\HSPC\plugins\vprj_win\classlib\sys\yyjson\src\yyjson.c" : \
+    "E:\HSPC\plugins\vprj_win\classlib\sys\yyjson\src\yyjson.h"
+
+$(OUT_DIR)\AI-Fbowser-Mcp.res : AI-Fbowser-Mcp.rc
+    $(RC) $(RFLAGS) /fo$(OUT_DIR)\AI-Fbowser-Mcp.res AI-Fbowser-Mcp.rc
+
+AI-Fbowser-Mcp.rc : "E:\HSPC\plugins\vprj_win\res\default.ico"
 
 $(EXTERN_OUT_DIR)\vol_array.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_array.cpp"
     $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_array.cpp"

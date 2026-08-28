@@ -4,7 +4,7 @@
 
 - **编译输出**：`linker/docs/MCP工具配置说明书.md`
 - **在线**：`http://127.0.0.1:9222/docs/MCP工具配置说明书.md`
-- **开发**：`docs/MCP工具配置说明书.md`、`skills/MCP工具配置说明书.md`
+- **开发**：`docs/MCP工具配置说明书.md`
 
 ## 字段简表
 
@@ -19,7 +19,10 @@
 | `enable_console_log` | false | 控制台采集 |
 | `enable_response_cache` | false | SQLite 响应缓存 |
 | `network_log_max_bytes` | 262144 | network_detail 单条上限 |
-| `vip_code` | — | VIP 授权码 |
+| `vip_code` | — | VIP 授权码（缺省用内置兜底码） |
+| `auto_install_agents` | false | 启动时自动写入 Cursor/Claude/Codex/Cline/Windsurf 配置 |
+| `window_topmost` | true | 窗口置顶 |
+| `window_width` / `window_height` | — | 窗口尺寸（400-3840 / 300-2160 校验） |
 | `auto_download_save` | true | 下载自动保存 |
 | `auto_dismiss_js_dialog` | false | 自动关闭 JS 对话框 |
 

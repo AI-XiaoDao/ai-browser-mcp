@@ -5,7 +5,7 @@
 
 ## What is this?
 
-**AI Browser MCP Server** (AI浏览器 MCP) exposes a real **FBrowser CEF** browser on Windows via the **Model Context Protocol (MCP)**. Instead of writing **Playwright** or **Puppeteer** scripts, your AI agent calls **268 ready-made `browser_*` tools** over HTTP, WebSocket, or stdio.
+**AI Browser MCP Server** (AI浏览器 MCP) exposes a real **FBrowser CEF** browser on Windows via the **Model Context Protocol (MCP)**. Instead of writing **Playwright** or **Puppeteer** scripts, your AI agent calls **255 ready-made `browser_*` tools** over HTTP, WebSocket, or stdio.
 
 **One sentence → auto-run:** web scraping · reverse POST fields · locate sign algorithms with CDP debugger · form automation · workflow JSON.
 
@@ -67,7 +67,7 @@ Log in with user test / pass 124356, go to order list, export first 20 rows as a
 | | Playwright DIY | AI Browser MCP |
 |--|----------------|----------------|
 | Setup | Node + drivers + scripts | Download exe, run |
-| AI | Agent writes code each time | **268 MCP tools** pre-built |
+| AI | Agent writes code each time | **255 MCP tools** pre-built |
 | Reverse / debug | Manual Hook + DevTools | Built-in inject + **CDP debugger** |
 | Privacy | Varies | **127.0.0.1 local only** |
 
@@ -76,12 +76,12 @@ Log in with user test / pass 124356, go to order list, export first 20 rows as a
 | Doc | Link |
 |-----|------|
 | Full README | [README.md](../../../README.md) |
-| 268 tool reference | [AI浏览器MCP.md](../skills/AI浏览器MCP.md) |
+| 255 tool reference | [index.html](./index.html) |
 | Open source announcement | [OPEN_SOURCE_EN.md](../../../OPEN_SOURCE_EN.md) |
-| Hook / reverse scenarios | [场景与Hook测试.md](../skills/场景与Hook测试.md) |
+| Hook / reverse scenarios | [使用技能书.md](./使用技能书.md) |
 
 ## Keywords
 
 See full matrix: [docs/SEO_KEYWORDS.md](../../../docs/SEO_KEYWORDS.md)
 
-Cursor browser MCP · Claude Desktop browser · Cline MCP · Windows browser automation · Model Context Protocol · web scraping MCP · Playwright alternative · Puppeteer alternative · reverse engineering POST · CDP debugger · form automation RPA · CEF browser · local MCP server · 268 browser tools · AI agent browser control
+Cursor browser MCP · Claude Desktop browser · Cline MCP · Windows browser automation · Model Context Protocol · web scraping MCP · Playwright alternative · Puppeteer alternative · reverse engineering POST · CDP debugger · form automation RPA · CEF browser · local MCP server · 255 browser tools · AI agent browser control

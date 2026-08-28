@@ -457,7 +457,7 @@
         配置路径 = 取运行目录 () + "\\mcp_config.json"
         如果 (文件是否存在 (配置路径) == 假)
         {
-            控制台输出 (到文本 ("[MCP] 配置文件不存在, 使用默认配置:") + ", " + 到文本 (配置路径))
+            控制台输出 (到文本 ("[MCP] 配置文件不存在, 使用默认配置:") + 到文本 (配置路径))
             配置已加载 = 真
             是否启用认证 = 假
             应用默认事件监控 ()
@@ -592,7 +592,7 @@
             控制台输出 ("[MCP] 警告: bind_address=" + 服务器绑定地址 + " 但未启用API认证, 建议配置 api_key 或保持本地绑定")
             MCPStdio桥.写日志 ("[MCP] ⚠️ 安全警告: bind_address=" + 服务器绑定地址 + " 但未启用API认证! 请配置 api_key 或改回 127.0.0.1")
         }
-        控制台输出 (到文本 ("[MCP] 配置已加载, 端口:") + ", " + 到文本 (服务器端口) + ", " + 到文本 (" 绑定:") + ", " + 到文本 (服务器绑定地址) + ", " + 到文本 (" 认证:") + ", " + 到文本 (是否启用认证) + ", " + 到文本 (" 速率限制:") + ", " + 到文本 (速率限制_每分钟) + ", " + 到文本 ("/min"))
+        控制台输出 (到文本 ("[MCP] 配置已加载, 端口:") + 到文本 (服务器端口) + " 绑定:" + 到文本 (服务器绑定地址) + " 认证:" + 到文本 (是否启用认证) + " 速率限制:" + 到文本 (速率限制_每分钟) + "/min")
     }
 
     # ======== API密钥验证 ==========
@@ -672,7 +672,8 @@
             IP速率限制字典.创建 ()
         }
         变量 当前时间 <类型 = 长整数>
-        当前时间 = 取启动时间 ()
+        // 修复(回绕): 分钟桶改墙钟基准, 防 取启动时间 32位回绕(24.85天)后桶值为负导致限流错乱
+        当前时间 = 取现行时间毫秒 ()
         // v2.4: 分钟桶切换 → 平滑衰减所有IP计数器(/衰减因子), 防脉冲攻击
         变量 当前分钟桶 <类型 = 整数>
         当前分钟桶 = 文本到整数 (到文本 (当前时间 / 60000))
@@ -716,7 +717,7 @@
             触发计数 = IP计数器
             异步缓存锁.解锁 ()
             // 日志移出锁外: 控制台I/O可能阻塞
-            控制台输出 (到文本 ("[MCP] IP速率限制触发:") + ", " + 到文本 (触发IP) + ", " + 到文本 ("计数器:") + ", " + 到文本 (触发计数))
+            控制台输出 (到文本 ("[MCP] IP速率限制触发:") + 到文本 (触发IP) + "计数器:" + 到文本 (触发计数))
             返回 (假)
         }
         异步缓存锁.解锁 ()
@@ -1812,7 +1813,7 @@
         // 日志移出锁外: 控制台I/O可能阻塞, 不延长异步缓存锁持有时间
         如果 (需记录清理)
         {
-            控制台输出 (到文本 ("[MCP] CDP映射清理:") + ", " + 到文本 (cleaned) + ", " + 到文本 ("条过期"))
+            控制台输出 (到文本 ("[MCP] CDP映射清理:") + 到文本 (cleaned) + "条过期")
         }
     }
 
@@ -2256,6 +2257,7 @@
     方法 MCP可中断延时 <公开 静态>
     参数 毫秒 <类型 = 整数>
     参数 分片毫秒 <类型 = 整数 @默认值 = 50>
+    参数 是否持锁 <类型 = 逻辑型 @默认值 = 真 注释 = "调用方已持有MCP执行锁时默认真(延时期间放锁); 未持锁必须传假, 否则对未持有锁解锁是未定义行为">
     {
         如果 (毫秒 <= 0)
         {
@@ -2269,9 +2271,17 @@
             {
                 返回
             }
-            MCP执行锁.解锁 ()
-            延时 (分片毫秒)
-            MCP执行锁.加锁 ()
+            如果 (是否持锁)
+            {
+                MCP执行锁.解锁 ()
+                延时 (分片毫秒)
+                MCP执行锁.加锁 ()
+            }
+            否则
+            {
+                // 修复(竞态): 调用方未持锁(如browser_create等待循环已显式解锁)时纯延时, 不做解锁/加锁
+                延时 (分片毫秒)
+            }
         }
     }
 
@@ -3665,7 +3675,7 @@
             缓存数据库.执行SQL语句 ("CREATE INDEX IF NOT EXISTS idx_log_event ON event_log(event_name, browser_id)", )
             // 创建响应缓存表
             缓存数据库.执行SQL语句 ("CREATE TABLE IF NOT EXISTS response_cache (url TEXT PRIMARY KEY, mime_type TEXT, body BLOB, size INTEGER, created_at INTEGER NOT NULL)", )
-            控制台输出 (到文本 ("[MCP] SQLite缓存数据库已打开:") + ", " + 到文本 (dbPath))
+            控制台输出 (到文本 ("[MCP] SQLite缓存数据库已打开:") + 到文本 (dbPath))
         }
         否则
         {
@@ -3697,7 +3707,10 @@
             返回
         }
         缓存数据库已打开 = 假
+        // 修复(竞态): 关闭前取异步缓存锁, 防止CEF回调线程/在途HTTP线程在关闭窗口内并发访问已关闭连接
+        异步缓存锁.加锁 ()
         缓存数据库.关闭 ()
+        异步缓存锁.解锁 ()
         控制台输出 ("[MCP] SQLite缓存数据库已关闭")
     }
 
@@ -4069,15 +4082,54 @@
         变量 存储JSON <类型 = 文本型>
         存储JSON = 规范化异步结果JSON (结果JSON)
         变量 是否等待 <类型 = 整数>
-        如果 (寻找文本 (存储JSON, "\"_waiting\":true", 0, 假) != -1)
+        是否等待 = 0
+        // 修复(数据): 等待态判定改 JSON 解析(与 存储异步结果 一致), 防结果文本含 _waiting:true 字面量误判
+        变量 结果解析 <类型 = YYJSON只读对象类>
+        如果 (结果解析.创建自文本 (存储JSON))
         {
-            是否等待 = 1
+            如果 (结果解析.取逻辑值 ("_waiting"))
+            {
+                是否等待 = 1
+            }
         }
-        否则
+        // 修复(数据): REPLACE 覆盖前保留既有 browser_id/poll_count (原仅4列写入致其归零, 引发跨浏览器等待误触发)
+        变量 保留浏览器ID <类型 = 整数>
+        保留浏览器ID = 0
+        变量 保留轮询数 <类型 = 整数>
+        保留轮询数 = 0
+        如果 (结果解析.创建自文本 (存储JSON))
         {
-            是否等待 = 0
+            保留浏览器ID = yyjson取整数 (结果解析, "_browser_id")
+            保留轮询数 = yyjson取整数 (结果解析, "_poll_count")
         }
-        执行参数化INSERT ("INSERT OR REPLACE INTO async_results (task_id, result_json, is_waiting, created_at) VALUES (?, ?, ?, ?)", 命令ID, 存储JSON, 是否等待, 当前时间)
+        如果 (保留浏览器ID == 0 || 保留轮询数 == 0)
+        {
+            变量 旧记录集 <类型 = SQLite记录集类>
+            旧记录集 = 缓存数据库.取记录集 ("SELECT browser_id, poll_count FROM async_results WHERE task_id=?", )
+            旧记录集.置文本参数数据 (1, 命令ID)
+            如果 (旧记录集.执行语句 () == 100)
+            {
+                如果 (保留浏览器ID == 0)
+                {
+                    保留浏览器ID = 旧记录集.读整数数据 (0)
+                }
+                如果 (保留轮询数 == 0)
+                {
+                    保留轮询数 = 旧记录集.读整数数据 (1)
+                }
+            }
+            旧记录集.释放 ()
+        }
+        变量 stmt <类型 = SQLite记录集类>
+        stmt = 缓存数据库.取记录集 ("INSERT OR REPLACE INTO async_results (task_id, result_json, is_waiting, browser_id, created_at, poll_count) VALUES (?, ?, ?, ?, ?, ?)", )
+        stmt.置文本参数数据 (1, 命令ID)
+        stmt.置文本参数数据 (2, 存储JSON)
+        stmt.置整数参数数据 (3, 是否等待)
+        stmt.置整数参数数据 (4, 保留浏览器ID)
+        stmt.置长整数参数数据 (5, 当前时间)
+        stmt.置整数参数数据 (6, 保留轮询数)
+        stmt.执行语句 ()
+        stmt.释放 ()
         修剪异步结果表_已持锁 ()
         异步缓存锁.解锁 ()
     }
@@ -4118,7 +4170,14 @@
         存储JSON = 数据JSON
         如果 (取文本长度 (存储JSON) > 网络日志最大字节)
         {
-            存储JSON = 取文本左边 (存储JSON, 网络日志最大字节) + "...[truncated]"
+            // 修复(数据): 原任意截断会切坏 JSON 字符串, 导致网络/事件/控制台日志整段不可解析;
+            // 改为截断后 yyjson 重建为合法 JSON 对象(查询侧可直接解析)
+            变量 截断包装 <类型 = YYJSON对象类>
+            截断包装.创建自文本 ("{}")
+            截断包装.加入逻辑值成员 ("_truncated", 真)
+            截断包装.加入整数成员 ("_original_len", 取文本长度 (存储JSON))
+            截断包装.加入文本成员 ("_preview", 取文本左边 (存储JSON, 200))
+            存储JSON = 截断包装.到可读文本 (YYJSON格式化选项.压缩)
         }
         异步缓存锁.加锁 ()
         变量 stmt <类型 = SQLite记录集类>
@@ -4452,9 +4511,11 @@
                 仍超限 = 总数 - 删除数
                 如果 (仍超限 > MCP_常量.缓存最大条目)
                 {
+                    // 修复(数据): 强制删除排除 is_waiting=1, 防轮询中的等待任务被强删(客户端假"未找到任务结果")
+                    // 等待任务由 清理滞留等待任务_已持锁 按1小时滞留期兜底回收
                     变量 强制删除数 <类型 = 整数>
                     强制删除数 = 仍超限 - MCP_常量.缓存最大条目 + MCP_常量.缓存清理_保留缓冲
-                    缓存数据库.执行SQL语句 ("DELETE FROM async_results WHERE task_id IN (SELECT task_id FROM async_results ORDER BY created_at ASC LIMIT " + 到文本 (强制删除数) + ")", )
+                    缓存数据库.执行SQL语句 ("DELETE FROM async_results WHERE task_id IN (SELECT task_id FROM async_results WHERE is_waiting=0 ORDER BY created_at ASC LIMIT " + 到文本 (强制删除数) + ")", )
                 }
             }
         }
@@ -4557,7 +4618,7 @@
         {
             // 修复: 警告日志移出锁外, 不延长异步缓存锁持有时间
             变量 hex警告 <类型 = 文本型>
-            hex警告 = 到文本 ("[MCP] 警告: response_cache body hex长度异常, url=") + ", " + 到文本 (url) + ", " + 到文本 (" hexLen=") + ", " + 到文本 (hexLen)
+            hex警告 = 到文本 ("[MCP] 警告: response_cache body hex长度异常, url=") + 到文本 (url) + " hexLen=" + 到文本 (hexLen)
             异步缓存锁.解锁 ()
             控制台输出 (hex警告)
             返回
@@ -5134,10 +5195,10 @@
         {
             返回 (真)
         }
-        如果 (消息文本 == "null" && (规范名 == "browser_dom_query" || 规范名 == "browser_dom_get_html"))
-        {
-            返回 (真)
-        }
+        // 修复(探测发现): 原将 dom_query/dom_get_html 的 "null" 值判定为失败——
+        // 但 取元素内容 对 body 等非输入元素返回 null 属正常语义(元素无value内容),
+        // 导致同步查询 body/title 恒 isError "null"; 元素不存在由上方 element not found 独立拦截
+        // 移除后 null 值按 success 返回, 客户端自行判空(空值≠查询失败)
         如果 (是否以 (消息文本, "{"))
         {
             变量 inner <类型 = YYJSON只读对象类>
@@ -5977,6 +6038,17 @@
         规则锁.解锁 ()
     }
 
+    # 修复(竞态): 导航拦截在CEF回调线程直读 导航拦截规则, 与MCP线程写(规则锁)并发会撕裂读;
+    # 统一走持锁快照, 拦截逻辑基于局部副本
+    方法 取导航规则快照 <公开 静态 类型 = 文本型>
+    {
+        变量 快照 <类型 = 文本型>
+        规则锁.加锁 ()
+        快照 = 导航拦截规则
+        规则锁.解锁 ()
+        返回 (快照)
+    }
+
     # 规则字段转义: 百分号编码 (字段内永不出现分隔符|与换行, 与 规则字段反转义 对称)
     方法 规则字段转义 <公开 静态 类型 = 文本型>
     参数 源文本 <类型 = 文本型>
@@ -6133,7 +6205,7 @@
         }
         桥接脚本路径 = 桥接脚本路径 + "mcp_bridge.js"
         变量 配置文本 <类型 = 文本型>
-        配置文本 = "{\"mcpServers\":{\"ai-browser\":{\"command\":\"node\",\"args\":[\"" + MCP_响应构建.JSON转义文本 (桥接脚本路径) + "\"],\"env\":{\"AI_BROWSER_MCP_HOST\":\"" + 服务器绑定地址 + "\",\"AI_BROWSER_MCP_PORT\":\"" + 到文本 (服务器端口) + "\",\"AI_BROWSER_MCP_HTTP_POST\":\"" + MCP_响应构建.JSON转义文本 (取MCP_HTTP地址 ()) + "/mcp\",\"AI_BROWSER_MCP_CURSOR_MODE\":\"0\"}}}}"
+        配置文本 = "{\"mcpServers\":{\"ai-browser\":{\"command\":\"node\",\"args\":[\"" + MCP_响应构建.JSON转义文本 (桥接脚本路径) + "\"],\"env\":{\"AI_BROWSER_MCP_HOST\":\"" + 服务器绑定地址 + "\",\"AI_BROWSER_MCP_PORT\":\"" + 到文本 (服务器端口) + "\",\"AI_BROWSER_MCP_HTTP_POST\":\"" + MCP_响应构建.JSON转义文本 (取MCP_HTTP地址 ()) + "/mcp\"}}}}"
         返回 (配置文本)
     }
 
@@ -6545,7 +6617,7 @@
             事件包装.加入整数成员 ("error_code", 附加数据)
         }
         记录事件日志 ("browser_event", 事件类型, 浏览器ID, 事件包装.到可读文本 (YYJSON格式化选项.压缩))
-        控制台输出 (到文本 ("[MCP] 浏览器事件:") + ", " + 到文本 (事件类型) + ", " + 到文本 ("ID:") + ", " + 到文本 (浏览器ID))
+        控制台输出 (到文本 ("[MCP] 浏览器事件:") + 到文本 (事件类型) + "ID:" + 到文本 (浏览器ID))
     }
 
     # 通用浏览器事件记录 (SQLite)
@@ -6731,7 +6803,7 @@
             result = 取浏览器ByID (目标浏览器ID)
             如果 (result.是否为空 ())
             {
-                控制台输出 (到文本 ("[MCP] 错误: 指定的浏览器ID=") + ", " + 到文本 (目标浏览器ID) + ", " + 到文本 (" 未找到或已关闭"))
+                控制台输出 (到文本 ("[MCP] 错误: 指定的浏览器ID=") + 到文本 (目标浏览器ID) + " 未找到或已关闭")
             }
             返回 (result)
         }
@@ -6789,7 +6861,7 @@
             fb = FBrowser_浏览器_通过ID取浏览器 (firstID)
             如果 (fb.是否为空 () == 假 && fb.是否已关闭 () == 假)
             {
-                控制台输出 (到文本 ("[MCP] 浏览器数组为空, 从FBrowser同步: id=") + ", " + 到文本 (firstID))
+                控制台输出 (到文本 ("[MCP] 浏览器数组为空, 从FBrowser同步: id=") + 到文本 (firstID))
                 返回 (fb)
             }
         }
@@ -7047,7 +7119,7 @@
         // 防止路径遍历攻击: 拒绝 ../ || ..\\ 模式 (允许 .. 嵌入合法文件名如 foo..bar.txt)
         如果 (寻找文本 (路径, "../", 0, 假) != -1 || 寻找文本 (路径, "..\\", 0, 假) != -1)
         {
-            控制台输出 (到文本 ("[MCP] 安全拒绝(路径遍历):") + ", " + 到文本 (路径))
+            控制台输出 (到文本 ("[MCP] 安全拒绝(路径遍历):") + 到文本 (路径))
             返回 (假)
         }
         // 写操作: 仅允许 取运行目录() 子树内的路径, 防止污染系统目录
@@ -7062,7 +7134,7 @@
             }
             如果 (是否以 (路径, 运行根) == 假)
             {
-                控制台输出 (到文本 ("[MCP] 安全拒绝(路径越界):") + ", " + 到文本 (路径) + ", " + 到文本 (" 根目录:") + ", " + 到文本 (运行根))
+                控制台输出 (到文本 ("[MCP] 安全拒绝(路径越界):") + 到文本 (路径) + " 根目录:" + 到文本 (运行根))
                 返回 (假)
             }
         }
@@ -7096,7 +7168,7 @@
                 cb = FBrowser_浏览器_通过ID取浏览器 (cid)
                 如果 (cb.是否为空 () == 假 && cb.是否已关闭 () == 假)
                 {
-                    控制台输出 (到文本 ("[MCP] 清理残留浏览器: id=") + ", " + 到文本 (cid))
+                    控制台输出 (到文本 ("[MCP] 清理残留浏览器: id=") + 到文本 (cid))
                     cb.关闭浏览器 ()
                 }
                 // 不因空/已关闭而跳出 — 继续清理, 最多50次防死循环
@@ -7110,7 +7182,8 @@
         打开缓存数据库 ()
         变量 服务器事件 <类型 = 类_FBrowser_事件智能指针>
         服务器事件.创建 (类_MCP_服务器事件)
-        服务器启动时间戳 = 取启动时间 ()
+        // 修复(回绕): 墙钟基准(与 /health uptime_ms 差值一致), 防 取启动时间 32位回绕后 uptime 为负
+        服务器启动时间戳 = 取现行时间毫秒 ()
         服务器启动墙钟毫秒 = 取现行时间毫秒 ()
         请求计数器 = 0
         FBrowser_服务器_创建 (服务器绑定地址, 服务器端口, 100, 服务器事件)
@@ -7226,8 +7299,12 @@
 
     方法 执行定期维护 <公开 静态 注释 = "由请求入口惰性触发 (≥60s间隔), 清理缓存/CDP映射/浏览器数组/WAL checkpoint/过期下载">
     {
+        // 修复(竞态): 主循环节拍与请求入口双路径 check-then-set 非原子, 可能同时进入; 原子占位防重入
+        变量 维护占用 <静态 类型 = 整数 值 = 0>
+        @ if (InterlockedCompareExchange((volatile LONG*)&@<维护占用>, 1, 0) != 0) return;
         如果 (MCP正在关闭 || 缓存数据库已打开 == 假)
         {
+            @ InterlockedExchange((volatile LONG*)&@<维护占用>, 0);
             返回
         }
         // 崩溃计数复位: 浏览器存活且计数未达阈值时, 窗口随维护周期滚动 (修复: 原子写, 与UI线程崩溃计数竞争)
@@ -7297,10 +7374,20 @@
         异步缓存锁.解锁 ()
         // 清理过期下载文件 (每60秒检查一次, 实际删除为每天首次触发)
         清理过期下载 ()
+        @ InterlockedExchange((volatile LONG*)&@<维护占用>, 0);
     }
 
     方法 清理过期下载 <公开 静态 注释 = "删除Downloads目录中超过下载保留天数的文件">
     {
+        // 修复(性能): 实际删除每天首次触发即可, 避免每60秒维护全目录扫描
+        变量 上次清理OLE日期 <静态 类型 = 小数 值 = 0>
+        变量 当前OLE日期 <类型 = 小数>
+        当前OLE日期 = 取现行时间 ()
+        如果 (上次清理OLE日期 != 0 && 当前OLE日期 - 上次清理OLE日期 < 1)
+        {
+            返回
+        }
+        上次清理OLE日期 = 当前OLE日期
         变量 下载目录 <类型 = 文本型>
         下载目录 = 取运行目录 () + "\\Downloads"
         如果 (MCP_服务器工具.检查目录是否存在 (下载目录) == 假)
@@ -7308,8 +7395,6 @@
             返回
         }
         // 取现行时间 / 取文件时间 返回 OLE 日期 (小数, 天为单位), 30天 = 30.0
-        变量 当前OLE日期 <类型 = 小数>
-        当前OLE日期 = 取现行时间 ()
         变量 截止OLE日期 <类型 = 小数>
         截止OLE日期 = 当前OLE日期 - MCP_常量.下载保留天数
         变量 查找器 <类型 = 文件查找类>
@@ -7331,7 +7416,7 @@
         }
         如果 (清理计数 > 0)
         {
-            控制台输出 (到文本 ("[MCP] 清理过期下载:") + ", " + 到文本 (清理计数) + ", " + 到文本 ("个文件"))
+            控制台输出 (到文本 ("[MCP] 清理过期下载:") + 到文本 (清理计数) + "个文件")
         }
     }
 
@@ -7379,10 +7464,15 @@
 
     方法 关闭MCP服务器 <公开 静态>
     {
-        如果 (MCP正在关闭)
+        // 修复: 原守卫用 MCP正在关闭 早退, 但关闭序列(main.wsv)先置位该标志再调本方法,
+        // 导致下方全部清理体(含关闭服务器实例/关闭缓存数据库)被跳过;
+        // 改为静态标志防重复清理, 首次调用必定执行完整清理
+        变量 清理已执行 <静态 类型 = 逻辑型 值 = 假>
+        如果 (清理已执行)
         {
             返回
         }
+        清理已执行 = 真
         MCP正在关闭 = 真
         是否启用 = 假
         浏览器容器.MCP服务已就绪 = 假
@@ -7557,7 +7647,19 @@
                 // 无追踪ID时直接使用原始JSON, 跳过yyjson解析/序列化往返
                 如果 (当前请求追踪ID == "" && 是否以 (结果JSON文本, "{"))
                 {
-                    结果JSON = 结果JSON文本
+                    // 修复(数据): 快速通道也先校验合法性, 防上游非法JSON直通为非法响应
+                    变量 快速校验 <类型 = YYJSON只读对象类>
+                    如果 (快速校验.创建自文本 (结果JSON文本))
+                    {
+                        结果JSON = 结果JSON文本
+                    }
+                    否则
+                    {
+                        变量 快速原始包装 <类型 = YYJSON对象类>
+                        快速原始包装.创建自文本 ("{}")
+                        快速原始包装.加入文本成员 ("_raw", 结果JSON文本)
+                        结果JSON = 快速原始包装.到可读文本 (YYJSON格式化选项.压缩)
+                    }
                 }
                 否则
                 {
@@ -7653,7 +7755,7 @@
         // === 速率限制检查 (按IP优先, 回退全局) ===
         如果 (检查IP速率限制 (客户端地址) == 假)
         {
-            控制台输出 (到文本 ("[MCP] 速率限制触发, IP:") + ", " + 到文本 (客户端地址))
+            控制台输出 (到文本 ("[MCP] 速率限制触发, IP:") + 到文本 (客户端地址))
             变量 剩余秒 <类型 = 整数>
             如果 (客户端地址 != "")
             {
@@ -7804,7 +7906,7 @@
             }
             返回 (构建JSONRPC响应 (请求ID, "", -32600, "缺少method"))
         }
-        控制台输出 (到文本 ("[MCP] RPC方法:") + ", " + 到文本 (方法名))
+        控制台输出 (到文本 ("[MCP] RPC方法:") + 到文本 (方法名))
         // --- MCP 协议方法 ---
         如果 (方法名 == "initialize")
         {
@@ -7845,7 +7947,7 @@
                         取消原因 = "客户端取消"
                     }
                     MCP命令服务器.存储异步结果 (取消请求ID, MCP_响应构建.构建标准失败JSON ("已取消: " + 取消原因))
-                    控制台输出 (到文本 ("[MCP] 通知取消:") + ", " + 到文本 (取消请求ID) + ", " + 到文本 (取消原因))
+                    控制台输出 (到文本 ("[MCP] 通知取消:") + 到文本 (取消请求ID) + " 原因:" + 到文本 (取消原因))
                 }
             }
             返回 ("")  // 通知无需响应
@@ -7903,7 +8005,7 @@
         {
             变量 直接参数 <类型 = YYJSON只读对象类>
             直接参数 = 解析结果.取对象 ("params")
-            控制台输出 (到文本 ("[MCP] 直接命令:") + ", " + 到文本 (方法名))
+            控制台输出 (到文本 ("[MCP] 直接命令:") + 到文本 (方法名))
             // 副作用命令: 通知也执行, 但不返回响应
             变量 命令响应文本 <类型 = 文本型>
             命令响应文本 = 执行浏览器命令 (请求ID, 方法名, 直接参数)
@@ -7941,7 +8043,7 @@
                 客户端版本 = 客户端信息.取文本 ("version")
             }
         }
-        控制台输出 (到文本 ("[MCP] 初始化 — 客户端:") + ", " + 到文本 (客户端名))
+        控制台输出 (到文本 ("[MCP] 初始化 — 客户端:") + 到文本 (客户端名))
         // 构建 capabilities (含 tools/resources/prompts + listChanged 通知支持)
         变量 能力对象 <类型 = YYJSON对象类>
         能力对象.创建自文本 ("{}")
@@ -7977,7 +8079,7 @@
             协商版本 = 参数JSON.取文本 ("protocolVersion")
             如果 (协商版本 != MCP_常量.MCP_协议版本)
             {
-                控制台输出 (到文本 ("[MCP] 客户端协议版本不受支持:") + ", " + 到文本 (协商版本) + ", " + 到文本 ("| 服务端版本:") + ", " + 到文本 (MCP_常量.MCP_协议版本))
+                控制台输出 (到文本 ("[MCP] 客户端协议版本不受支持:") + 到文本 (协商版本) + "| 服务端版本:" + 到文本 (MCP_常量.MCP_协议版本))
                 协商版本 = MCP_常量.MCP_协议版本
             }
         }
@@ -8126,7 +8228,7 @@
         结果JSON = "{\"tools\":" + 完成构建工具列表 () + "}"
         // 缓存结果JSON
         工具列表缓存 = 结果JSON
-        控制台输出 (到文本 ("[MCP] tools/list 已缓存, 长度=") + ", " + 到文本 (取文本长度 (结果JSON)))
+        控制台输出 (到文本 ("[MCP] tools/list 已缓存, 长度=") + 到文本 (取文本长度 (结果JSON)))
         返回 (构建JSONRPC响应 (请求ID, 结果JSON))
     }
 
@@ -8221,8 +8323,7 @@
         添加工具JSON ("browser_inject", "注入JS/CSS/Handler", 多属性Schema文本 (属性项JSON ("type", "text", "js/css/handler(persist时handler由渲染_即将初始化WebKit注册)") + "," + 属性项JSON ("code", "text", "代码") + "," + 属性项JSON ("persist", "boolean", "持久(V8预注入,type=handler时须persist)"), "\"type\",\"code\""))
         添加工具JSON ("browser_wait", "异步等待条件 (轮询, 通过mcp_result查询)。what=selector/text/load_end/load_start/navigate/timeout/network_idle/url_contains。navigate无value等同load_end; navigate有value则等到URL匹配; network_idle等网络空闲(活动请求数=0); url_contains等URL包含指定字符串", 多属性Schema文本 (属性项JSON ("what", "text", "selector/text/timeout/load_end/load_start/navigate/network_idle/url_contains") + "," + 属性项JSON ("value", "text", "等待值(navigate/url_contains=目标URL, load_*/network_idle可省略)") + "," + 属性项JSON ("max_ms", "integer", "最大ms(默认10000)"), "\"what\""))
         添加工具JSON ("browser_cdp", "Chrome DevTools协议(VIP)", 多属性Schema文本 (属性项JSON ("method", "text", "CDP方法") + "," + 属性项JSON ("params", "text", "参数JSON"), "\"method\""))
-        添加工具JSON ("browser_debugger_enable", "启用调试器(VIP)")
-        添加工具JSON ("browser_debugger_pause", "暂停JS(VIP)")
+        添加工具JSON ("browser_debugger_enable", "启用调试器(VIP)") // 注: pause 恒失败已从工具清单剔除(会冻结无JS执行页面并堵塞CDP队列), 用 debugger_flow
         添加工具JSON ("browser_debugger_resume", "继续JS(VIP)")
         添加工具JSON ("browser_debugger_step_over", "单步跳过(VIP)")
         添加工具JSON ("browser_debugger_step_into", "单步进入(VIP)")
@@ -8280,6 +8381,17 @@
         添加工具JSON ("workflow_get", "读取工作流定义", 单参数Schema文本 ("name", "text", "工作流名(无.json)"))
         添加工具JSON ("workflow_run", "执行工作流(同步)", 多属性Schema文本 (属性项JSON ("name", "text", "工作流文件名") + "," + 属性项JSON ("definition", "text", "完整JSON定义") + "," + 属性项JSON ("steps", "text", "内联步骤JSON数组") + "," + 属性项JSON ("on_error", "text", "stop|continue"), "\"name\""))
         添加工具JSON ("workflow_stop", "停止正在运行的工作流")
+        添加工具JSON ("browser_kernel_cert", "内核层: 证书错误管理。action=list查看页面证书错误记录(SSL校验失败URL/错误码), ignore开启忽略证书错误(自动放行跳转), ignore_off关闭, clear清空, status查开关状态", 多属性Schema文本 (属性项JSON ("action", "text", "list/ignore/ignore_off/clear/status"), "action"))
+        添加工具JSON ("browser_kernel_auth", "内核层: HTTP认证凭据(Basic/Digest)。action=set {host,port,username,password,realm} 注入站点认证账号密码(浏览器_获得需授权证书事件自动应答), clear {host,port} 清除, list 列出", 多属性Schema文本 (属性项JSON ("action", "text", "set/clear/list") + "," + 属性项JSON ("host", "text", "主机(例: example.com)") + "," + 属性项JSON ("port", "integer", "端口(默认443)") + "," + 属性项JSON ("username", "text", "账号(set时必填)") + "," + 属性项JSON ("password", "text", "密码(set时必填)") + "," + 属性项JSON ("realm", "text", "认证域(可选)"), "action"))
+        添加工具JSON ("browser_kernel_download", "内核层: 下载控制。action=pause/resume/cancel {url或download_id} 排队控制进行中下载(浏览器_正在下载事件即时执行), clear_queue清空队列; 下载进度用 browser_event 查询 download_progress", 多属性Schema文本 (属性项JSON ("action", "text", "pause/resume/cancel/clear_queue") + "," + 属性项JSON ("url", "text", "下载URL(匹配包含)") + "," + 属性项JSON ("download_id", "text", "下载标识(整数文本)"), "action"))
+        添加工具JSON ("browser_kernel_scheme", "内核层: 自定义协议方案。action=register {domain,mime,data或file} 注册 mcp://域名 动态内容(CEF资源处理器返回), unregister {domain} 解除, clear 清理全部, list 列出。注册后用 browser_navigate 访问 mcp://域名/", 多属性Schema文本 (属性项JSON ("action", "text", "register/unregister/clear/list") + "," + 属性项JSON ("domain", "text", "方案域名(例: api → mcp://api)") + "," + 属性项JSON ("mime", "text", "响应MIME(默认text/html)") + "," + 属性项JSON ("data", "text", "响应内容(与file二选一)") + "," + 属性项JSON ("file", "text", "响应内容文件路径(与data二选一)"), "action"))
+        添加工具JSON ("browser_kernel_menu", "内核层: 右键快捷菜单屏蔽。action=disable屏蔽页面右键菜单(内核事件拦截), enable恢复, status查状态(触发条件以实际内核为准)", 单参数Schema文本 ("action", "text", "disable/enable/status"))
+        添加工具JSON ("browser_kernel_reverse_probe", "动态插桩总包: 五维API插桩(XHR/fetch/WebSocket/定时器/事件监听), 记录URL/状态/响应/调用栈。action=enable注入, get取回(window.__MCP_PROBE__), clear清空, disable移除", 单参数Schema文本 ("action", "text", "enable/get/clear/disable"))
+        添加工具JSON ("browser_kernel_reverse_trace", "动态调用追踪: 包装目标函数记录调用栈+参数+返回值+耗时。targets为JSON数组(如 [\"window.fetch\",\"crypto.subtle.encrypt\"] 点路径逐级解析)。action=start/get/clear/stop", 多属性Schema文本 (属性项JSON ("action", "text", "start/get/clear/stop") + "," + 属性项JSON ("targets", "text", "JSON数组: [\"obj.path.fn\",...]"), "action"))
+        添加工具JSON ("browser_kernel_reverse_algo", "动态算法Hook: 包装CryptoJS全算法(MD5/SHA/AES/DES/RC4/HMAC等)+全局哈希/base64+WebCrypto subtle(encrypt/decrypt/digest/sign), 记录算法名/参数/输出/调用栈(window.__MCP_ALGO_LOG__)。action=start/get/clear/stop", 单参数Schema文本 ("action", "text", "start/get/clear/stop"))
+        添加工具JSON ("browser_kernel_reverse_functions", "动态函数提取: 枚举window全局函数+常用对象链+核心类prototype方法, 输出路径/函数名/参数个数/源码toString。filter按路径关键词过滤, max上限(默认500)", 多属性Schema文本 (属性项JSON ("filter", "text", "路径关键词过滤(可选)") + "," + 属性项JSON ("max", "integer", "上限(默认500,最大1000)"), ""))
+        添加工具JSON ("browser_kernel_reverse_sources", "动态JS源码提取: document.scripts全量(含inline), index指定单脚本(从1起), max_len单脚本截断(默认20000,最大200000)", 多属性Schema文本 (属性项JSON ("index", "integer", "单脚本索引(0=全部)") + "," + 属性项JSON ("max_len", "integer", "单脚本截断字符"), ""))
+        添加工具JSON ("browser_kernel_reverse_watch_global", "全局变量动态追踪: defineProperty包装指定全局变量, 记录写入者调用栈+新值(window.__MCP_GWATCH__)。names为JSON数组(如 [\"token\",\"sign\"] )。action=start/get/clear/stop", 多属性Schema文本 (属性项JSON ("action", "text", "start/get/clear/stop") + "," + 属性项JSON ("names", "text", "JSON数组: [\"var1\",\"var2\"]"), "action"))
         添加工具JSON ("browser_refresh_cookies", "刷新Cookie到磁盘")
         添加工具JSON ("browser_get_all_cookies", "获取全部Cookie(非URL限定)")
         添加工具JSON ("browser_set_preference", "设置Chromium首选项", 多属性Schema文本 (属性项JSON ("name", "text", "首选项名") + "," + 属性项JSON ("value", "text", "值"), "\"name\""))
@@ -8532,7 +8644,7 @@
         {
             返回 (构建JSONRPC响应 (请求ID, "", -32602, "缺少工具名: params.name 不能为空"))
         }
-        控制台输出 (到文本 ("[MCP] 调用工具:") + ", " + 到文本 (工具名))
+        控制台输出 (到文本 ("[MCP] 调用工具:") + 到文本 (工具名))
         // 提取 arguments
         变量 工具参数字典 <类型 = YYJSON只读对象类>
         如果 (参数对象.是否为空 () == 假)
@@ -8547,7 +8659,7 @@
             {
                 如果 (工具参数字典.创建自文本 (参数字符串) == 假)
                 {
-                    控制台输出 (到文本 ("[MCP] tools/call arguments JSON解析失败, 原始文本长度:") + ", " + 到文本 (取文本长度 (参数字符串)))
+                    控制台输出 (到文本 ("[MCP] tools/call arguments JSON解析失败, 原始文本长度:") + 到文本 (取文本长度 (参数字符串)))
                     返回 (构建JSONRPC响应 (请求ID, "", -32602, "arguments JSON解析失败 | 请确认JSON格式正确, key必须用双引号包裹 | 收到: " + 取文本左边 (参数字符串, 200)))
                 }
             }
@@ -8820,7 +8932,7 @@
         // 高频轮询工具(mcp_result)不打执行日志, 避免同步等待期间控制台刷屏
         如果 (方法名 != "mcp_result")
         {
-            控制台输出 (到文本 ("[MCP] 执行:") + ", " + 到文本 (方法名))
+            控制台输出 (到文本 ("[MCP] 执行:") + 到文本 (方法名))
         }
         变量 请求浏览器ID <类型 = 整数>
         变量 保存浏览器ID <类型 = 整数>
@@ -8845,6 +8957,10 @@
         否则 (是否以 (方法名, "browser_reverse_"))  //.reverse_ 已在L7150统一规范化为 browser_reverse_
         {
             result = MCP_逆向分派.分类分派_逆向操作 (命令ID, 方法名, 参数JSON)
+        }
+        否则 (是否以 (方法名, "browser_kernel_"))
+        {
+            result = MCP_内核分派.分类分派_内核操作 (命令ID, 方法名, 参数JSON)
         }
         否则 (方法名 == "ping" || 方法名 == "browser_send_message" || 方法名 == "browser_get_global_cache_dir" || 方法名 == "browser_get_process_type" || 方法名 == "browser_get_window_style" || 方法名 == "browser_set_window_style" || 方法名 == "browser_get_run_style" || 方法名 == "browser_create_tab" || 方法名 == "browser_task_runner_post" || 方法名 == "browser_shutdown")
         {
@@ -8874,6 +8990,10 @@
             如果 (result == "")
             {
                 result = MCP_编排分派.分类分派_编排操作 (命令ID, 方法名, 参数JSON)
+            }
+            如果 (result == "")
+            {
+                result = MCP_内核分派.分类分派_内核操作 (命令ID, 方法名, 参数JSON)
             }
         }
         如果 (result != "")
@@ -8908,6 +9028,10 @@
                 如果 (result == "")
                 {
                     result = MCP_编排分派.分类分派_编排操作 (命令ID, 短名映射, 参数JSON)
+                }
+                如果 (result == "")
+                {
+                    result = MCP_内核分派.分类分派_内核操作 (命令ID, 短名映射, 参数JSON)
                 }
                 目标浏览器ID = 保存浏览器ID
                 当前命令方法名 = 保存命令方法名
@@ -9061,8 +9185,9 @@
         变量 元素个数 <类型 = 整数>
         元素个数 = 元素数组.取个数 ()
         变量 全部字节数据 <类型 = 字节集类>
-        变量 总字节数 <类型 = 整数>
+        变量 总字节数 <类型 = 长整数>
         总字节数 = 0
+        // 修复: HTTP POST 体大小上限(与 WS 一致 50MB), 边累加边检查, 防超大请求体 OOM
         元素数组.到数组首 ()
         计次循环 (元素个数)
         {
@@ -9074,12 +9199,17 @@
                 数据大小 = 当前元素.取数据大小 ()
                 如果 (数据大小 > 0)
                 {
+                    如果 (总字节数 + (长整数)数据大小 > MCP_常量.WS最大消息字节)
+                    {
+                        控制台输出 ("[MCP] HTTP POST 体超过 " + 到文本 (MCP_常量.WS最大消息字节 / 1048576) + "MB 上限, 已拒绝")
+                        返回 ("")
+                    }
                     变量 字节数据 <类型 = 字节集类>
                     字节数据 = 当前元素.取字节集数据 (数据大小)
                     如果 (字节数据.字节集是否为空 () == 假)
                     {
                         全部字节数据.添加字节集 (字节数据)
-                        总字节数 = 总字节数 + 数据大小
+                        总字节数 = 总字节数 + (长整数)数据大小
                     }
                 }
             }
@@ -9110,7 +9240,7 @@
         文档根目录缓存 = 运行目录 + "\\docs"
         如果 (MCP_服务器工具.检查目录是否存在 (文档根目录缓存) == 假)
         {
-            控制台输出 (到文本 ("[MCP] 警告: docs 目录不存在:") + ", " + 到文本 (文档根目录缓存))
+            控制台输出 (到文本 ("[MCP] 警告: docs 目录不存在:") + 到文本 (文档根目录缓存))
         }
         返回 (文档根目录缓存)
     }

@@ -29,11 +29,11 @@ public:
 
 public:
     INT64 rg_GouBing;
-    INT rg_XiaoXi8;
+    INT rg_XiaoXi9;
     INT64 rg_wParam;
     INT64 rg_lParam;
     INT rg_ShiJian2;
-    rg_FBrowser_WeiZhi rg_WeiZhi18;
+    rg_FBrowser_WeiZhi rg_WeiZhi19;
 };
 
 }

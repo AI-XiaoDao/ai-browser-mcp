@@ -70,11 +70,10 @@ public:
     void rg_ZhiChuangKouShuXing (INT rg_FengGeLeiXing, INT rg_FengGe2);
     INT rg_QuChuangKouShuXing (INT rg_FengGeLeiXing1);
     CVolString rg_QuChuangKouBiaoTi ();
-    BOOL rg_JinChengJianXiaoXi_FaSongShuJu_DaoQuanBuXuanRanJinCheng (CVolString& rg_XiaoXiMing2, CVolMem& rg_XiaoXi12);
-    BOOL rg_JinChengJianXiaoXi_FaSongShuJu_DaoZhiDingXuanRanJinCheng (INT rg_XuanRanJinChengID1, CVolString& rg_XiaoXiMing3, CVolMem& rg_XiaoXi13);
+    BOOL rg_JinChengJianXiaoXi_FaSongShuJu_DaoQuanBuXuanRanJinCheng (CVolString& rg_XiaoXiMing3, CVolMem& rg_XiaoXi13);
+    BOOL rg_JinChengJianXiaoXi_FaSongShuJu_DaoZhiDingXuanRanJinCheng (INT rg_XuanRanJinChengID1, CVolString& rg_XiaoXiMing4, CVolMem& rg_XiaoXi14);
     rg_volcano_base::rg_ZhengShuShuZuLei rg_JinChengJianXiaoXi_QuXuanRanJinChengIDQingChan ();
-    BOOL rg_JinChengJianXiaoXi_FaSongShuJu_DaoZhuJinCheng (CVolString& rg_XiaoXiMing4, CVolMem& rg_XiaoXi14);
-    void rg_QingLiHuanCun1 (CVolString& rg_YuanDeZhi4, INT64 rg_QingLiDuiXiang1, INT64 rg_CunChuLeiXing1, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao1);
+    void rg_QingLiHuanCun1 (CVolString& rg_YuanDeZhi5, INT64 rg_QingLiDuiXiang1, INT64 rg_CunChuLeiXing1, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao1);
     void rg_SheZhiDaiLi (CVolString& rg_DaiLiDeZhi, CVolString& rg_DaiLiZhangHao, CVolString& rg_DaiLiMiMa);
     void rg_QingKongDaiLi ();
     rg_class_FBrowser_TianBiaoKuangJia rg_QuZhuTianBiaoKuangJia ();

@@ -22,7 +22,9 @@ public:
 
 public:
     INT rg_QuZhuangTai ();
+    void rg_ZhiZhuangTai (INT rg_ZhuangTaiDaiMa);
     CVolString rg_QuMIMELeiXing ();
+    void rg_ZhiMIMELeiXing (CVolString& rg_MIMELeiXing5);
     CVolString rg_QuXieYiTou_MingChen1 (CVolString& rg_MingChen7);
     rg_FBrowser_ShuJuLeiXing::rg_FBrowser_ShuangWenBenShuZu rg_QuXieYiTouShuJu1 ();
     inline_ rg_class_FBrowser_XiangYing () { }

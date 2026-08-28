@@ -33,7 +33,7 @@
 | 反检测 | 易被 `navigator.webdriver` 检测 | **CEF 真实浏览器内核** + 指纹伪装 |
 | 逆向工程 | 手动 Hook + 浏览器 DevTools | 内置 **CDP 断点引擎** + 函数级 Hook |
 | 隐私 | 可能连外网 | **127.0.0.1 纯本地**，数据不出本机 |
-| 批量 | 一行代码调用 | `batch` 一条命令执行 200 步工作流 |
+| 批量 | 一行代码调用 | `batch` 单次最多 200 条命令顺序执行 |
 
 ### 核心使用场景
 
@@ -43,7 +43,7 @@
 - 🤖 **Form Automation RPA 自动填表** — 原生 CEF 填表 API, 非 JS 注入
 - 🎭 **Browser Fingerprint 指纹伪装** — 30+ 维度指纹虚拟 (Canvas/WebGL/Audio/WebRTC/SSL)
 - 📡 **Network Intercept 网络抓包拦截** — HTTP/WS 流量捕获、修改、替换、屏蔽
-- 🔄 **Workflow Automation 工作流编排** — JSON 步骤链, 最多 200 步批量执行
+- 🔄 **Workflow Automation 工作流编排** — JSON 步骤链, 单步可异步等待（无步数上限, 总时长 30 分钟）
 
 ---
 
@@ -102,7 +102,7 @@
 | **Cookie/代理** | 8 | `get_cookies`, `set_cookie`, `delete_cookies`, `set_proxy`, `set_s5_proxy` |
 | **截图/打印** | 3 | `screenshot`, `print`, `print_to_pdf` |
 | **CDP 协议** | 3 | `cdp_call`, `cdp_event`, `cdp` |
-| **断点调试** | 16 | `debugger_flow` (一键), `debugger_auto` (循环), `debugger_enable/pause/resume/step_*`, `debugger_set_breakpoint`, `debugger_evaluate`, `debugger_inspect`, `debugger_wait_paused` |
+| **断点调试** | 15 | `debugger_flow` (一键), `debugger_auto` (循环), `debugger_enable/resume/step_*`, `debugger_set_breakpoint`, `debugger_evaluate`, `debugger_inspect`, `debugger_wait_paused` (pause 已并入 debugger_flow) |
 | **JS 逆向** | 19 | `reverse_hook`, `reverse_strings`, `reverse_verify`, `reverse_instrument`, `reverse_search`, `reverse_initiator`, `reverse_cdp_hook`, `reverse_env`, `reverse_preset` 等 |
 | **指纹伪装** | 45 | `fingerprint` (批量/清除/计数), canvas/webgl/audio/webrtc/geolocation/timezone/ssl/ua/font/viewport/screen/hardware/battery 等 30+ 维度 |
 | **工作流** | 4 | `workflow_list`, `workflow_get`, `workflow_run`, `workflow_stop` |
@@ -123,6 +123,9 @@
 | `http://127.0.0.1:9222/` | 欢迎页控制台 |
 | `http://127.0.0.1:9222/health` | 健康检查 |
 | `http://127.0.0.1:9222/tools/list` | 工具列表 |
+| `http://127.0.0.1:9222/api` | API 元信息 |
+| `http://127.0.0.1:9222/cursor-config` | 动态 Cursor 配置（一键复制） |
+| `http://127.0.0.1:9222/json/version`、`/json/list` | Chrome CDP 兼容元数据 |
 | `http://127.0.0.1:9222/docs/` | 完整文档 |
 
 ---

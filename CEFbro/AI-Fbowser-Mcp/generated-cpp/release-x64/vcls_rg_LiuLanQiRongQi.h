@@ -12,13 +12,13 @@ class rg_LiuLanQiRongQi : public CVolObject
     DECLARE_EMPTY_VOL_CLASS (rg_volcano_app, rg_LiuLanQiRongQi)
 
 public:
-    static void CALLBACK rg_ZhiJiaZaiZhuangTai (BOOL rg_value);
+    static void CALLBACK rg_ZhiJiaZaiZhuangTai (BOOL rg_value3);
     static BOOL CALLBACK rg_QuJiaZaiZhuangTai ();
-    static void CALLBACK rg_ZhiZuiHouZaiRuJieShuHaoMiao (INT64 rg_value1);
+    static void CALLBACK rg_ZhiZuiHouZaiRuJieShuHaoMiao (INT64 rg_value4);
     static INT64 CALLBACK rg_QuZuiHouZaiRuJieShuHaoMiao ();
-    static void CALLBACK rg_ZhiZuiXinDeZhi (CVolString& rg_value2);
+    static void CALLBACK rg_ZhiZuiXinDeZhi (CVolString& rg_value5);
     static CVolString CALLBACK rg_QuZuiXinDeZhi ();
-    static void CALLBACK rg_ZhiYeMianBiaoTi (CVolString& rg_value3);
+    static void CALLBACK rg_ZhiYeMianBiaoTi (CVolString& rg_value6);
     static CVolString CALLBACK rg_QuYeMianBiaoTi ();
     static void CALLBACK rg_ChongZhiHuanYingYeDaoHangZhuangTai ();
     static void CALLBACK rg_BiaoJiHuanYingYeDaoHangYiFaQi ();

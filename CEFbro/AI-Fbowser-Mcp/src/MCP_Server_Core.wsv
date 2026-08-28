@@ -346,7 +346,8 @@
                     跳出循环
                 }
                 MCP命令服务器.MCP执行锁.解锁 ()
-                MCP命令服务器.MCP可中断延时 (50)
+                // 修复(竞态): 此处已显式解锁, 延时不再内部解锁/加锁(传 是否持锁=假), 防无主解锁破坏锁计数
+                MCP命令服务器.MCP可中断延时 (50, 50, 假)
                 MCP命令服务器.MCP执行锁.加锁 ()
             }
             MCP命令服务器.待创建锁.加锁 ()
@@ -3365,7 +3366,10 @@
                     如果 (结果解析.创建自文本 (存储结果))
                     {
                         // 异步 stub 含 task_id 时, 自动跟随到真实结果
-                        如果 (结果解析.取逻辑值 ("_async") && 结果解析.取逻辑值 ("_waiting") == 假)
+                        // 修复(数据): 等待中的 stub 也跟随查询——真实结果已就绪时替换并返回,
+                        // 防 js_exec 类(执行JS回调写真实行)轮询 stub 行永久等待导致假超时;
+                        // 真实结果仍在等待时不替换, 保持 stub 走下方 browser_wait 状态机
+                        如果 (结果解析.取逻辑值 ("_async"))
                         {
                             变量 linkedTaskID <类型 = 文本型>
                             linkedTaskID = MCP命令服务器.yyjson取文本 (结果解析, "task_id")
@@ -3375,9 +3379,16 @@
                                 真实结果 = MCP命令服务器.查询异步结果 (linkedTaskID)
                                 如果 (真实结果 != "")
                                 {
-                                    存储结果 = 真实结果
-                                    实际任务ID = linkedTaskID
-                                    结果解析.创建自文本 (存储结果)
+                                    变量 真实解析 <类型 = YYJSON只读对象类>
+                                    如果 (真实解析.创建自文本 (真实结果))
+                                    {
+                                        如果 (真实解析.取逻辑值 ("_waiting") == 假)
+                                        {
+                                            存储结果 = 真实结果
+                                            实际任务ID = linkedTaskID
+                                            结果解析.创建自文本 (存储结果)
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -4458,6 +4469,14 @@
         }
         否则 (方法名 == "browser_debugger_flow")
         {
+            // 修复(探测发现): 原缺 breakpoint 校验, 无参调用会进入断点流程挂起(最长maxMs),
+            // 持协议锁堵塞整个CDP队列, 殃及 evaluate/reverse_* 等全部CDP依赖工具直至超时自愈
+            变量 flowBp <类型 = 文本型>
+            flowBp = MCP命令服务器.yyjson取文本 (参数JSON, "breakpoint")
+            如果 (flowBp == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "breakpoint 不能为空 | URL正则, 如: example\\.com/main\\.js | 无参调用不会进入断点流程"))
+            }
             // 自愈: 反检测Debugger禁用与断点冲突, 自动恢复防止渲染进程illegal instruction崩溃
             MCP命令服务器.确保Debugger可用 (MCP命令服务器.取主浏览器 ())
             变量 flowJSON <类型 = 文本型>
@@ -4470,6 +4489,15 @@
         }
         否则 (方法名 == "browser_debugger_script_source")
         {
+            // 修复(探测发现): 无暂停上下文时快速返回, 防CDP调用挂起堵塞队列
+            变量 srcCtx <类型 = 文本型>
+            srcCtx = MCP命令服务器.取CDP事件数据JSON ("Debugger.paused")
+            变量 srcCtx2 <类型 = 文本型>
+            srcCtx2 = MCP命令服务器.yyjson取文本 (参数JSON, "script_id")
+            如果 (srcCtx == "" && srcCtx2 == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "未处于暂停状态且未指定 script_id | 请先 debugger_flow / debugger_enable + 断点 + wait_paused"))
+            }
             变量 srcJSON <类型 = 文本型>
             srcJSON = MCP命令服务器.执行Debugger脚本源JSON (命令ID, 参数JSON)
             如果 (srcJSON == "" || MCP命令服务器.是否以 (srcJSON, "{\"ok\":false"))

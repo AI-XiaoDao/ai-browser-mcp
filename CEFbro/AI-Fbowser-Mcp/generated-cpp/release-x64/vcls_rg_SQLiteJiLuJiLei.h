@@ -32,9 +32,9 @@ inline_ sqlite3_stmt* GetStmt () { return data().GetData(); }
 
 public:
     INT rg_ZhiHangYuGou ();
-    INT rg_ZhiZhengShuCanShuShuJu (INT rg_CanShuSuoYin2, INT rg_value118);
-    INT rg_ZhiChangZhengShuCanShuShuJu (INT rg_CanShuSuoYin3, INT64 rg_value119);
-    INT rg_ZhiWenBenCanShuShuJu (INT rg_CanShuSuoYin4, CVolString& rg_value120);
+    INT rg_ZhiZhengShuCanShuShuJu (INT rg_CanShuSuoYin2, INT rg_value121);
+    INT rg_ZhiChangZhengShuCanShuShuJu (INT rg_CanShuSuoYin3, INT64 rg_value122);
+    INT rg_ZhiWenBenCanShuShuJu (INT rg_CanShuSuoYin4, CVolString& rg_value123);
     INT rg_DouZhengShuShuJu (INT rg_LieSuoYin24);
     INT64 rg_DouChangZhengShuShuJu (INT rg_LieSuoYin25);
     CVolString rg_DouWenBenShuJu (INT rg_LieSuoYin26);

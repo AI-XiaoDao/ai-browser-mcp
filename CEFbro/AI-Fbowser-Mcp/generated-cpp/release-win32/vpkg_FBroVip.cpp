@@ -363,9 +363,9 @@ void rg_class_FBrowserVIP_kzhq::rg_GaoJi_QingKongDaiLi ()
     FBroHsVIPControl_ClearS5Auth (m_class);
 }
 
-void rg_class_FBrowserVIP_kzhq::rg_KaiFaZheXiaoXi_FaSongXiaoXi (CVolString& rg_XiaoXiWenBen6)
+void rg_class_FBrowserVIP_kzhq::rg_KaiFaZheXiaoXi_FaSongXiaoXi (CVolString& rg_XiaoXiWenBen7)
 {
-    if(rg_FBrowser_LiuLanQi::rg_FBrowserChuShiHuaKongZhi::rg_ShiFouWeiVIP && !IsEmpty()) FBroHsVIPControl_SendDevToolsMessage(m_class,rg_XiaoXiWenBen6.GetText());
+    if(rg_FBrowser_LiuLanQi::rg_FBrowserChuShiHuaKongZhi::rg_ShiFouWeiVIP && !IsEmpty()) FBroHsVIPControl_SendDevToolsMessage(m_class,rg_XiaoXiWenBen7.GetText());
 }
 
 void rg_class_FBrowserVIP_kzhq::rg_KaiFaZheXiaoXi_ZhiHangFangFa (INT rg_XiaoXiID3, CVolString& rg_FangFaWenBen, rg_FBrowser_value::FBroDictionaryValue& rg_param24)
@@ -461,10 +461,10 @@ void rg_class_FBrowserVIP_kzhq::rg_GaoJiChuMo_QuXiao (INT rg_HengZuoBiao15, INT 
     rg_GaoJi_FaSongChuMoShiJian (2, rg_ChuMoShiJian6, 0);
 }
 
-void rg_class_FBrowserVIP_kzhq::rg_GaoJi_FaSongJianPanShiJian (CVolString& rg_LeiXing14, INT rg_XiuShiJian1, CVolString& rg_string21, CVolString& rg_WeiXiuShiWenBen, CVolString& rg_GuanJianBiaoShiFu, CVolString& rg_DaiMa, CVolString& rg_AnJian, INT rg_JiTongXuNiJianDaiMa, INT rg_BenJiXuNiJianDaiMa, BOOL rg_ZiDongChongFu, BOOL rg_ShiFouWeiJianPan, BOOL rg_ShiFouWeiJiTong, INT rg_JianPanWeiZhi)
+void rg_class_FBrowserVIP_kzhq::rg_GaoJi_FaSongJianPanShiJian (CVolString& rg_LeiXing14, INT rg_XiuShiJian1, CVolString& rg_string21, CVolString& rg_WeiXiuShiWenBen, CVolString& rg_GuanJianBiaoShiFu, CVolString& rg_DaiMa1, CVolString& rg_AnJian, INT rg_JiTongXuNiJianDaiMa, INT rg_BenJiXuNiJianDaiMa, BOOL rg_ZiDongChongFu, BOOL rg_ShiFouWeiJianPan, BOOL rg_ShiFouWeiJiTong, INT rg_JianPanWeiZhi)
 {
     if(!rg_FBrowser_LiuLanQi::rg_FBrowserChuShiHuaKongZhi::rg_ShiFouWeiVIP || IsEmpty()) return ;
-    FBroHsVIPControl_DispatchKeyEvent(m_class, rg_LeiXing14.GetText(), rg_XiuShiJian1, rg_string21.GetText(), rg_WeiXiuShiWenBen.GetText(), rg_GuanJianBiaoShiFu.GetText(), rg_DaiMa.GetText(), rg_AnJian.GetText(), rg_JiTongXuNiJianDaiMa, rg_BenJiXuNiJianDaiMa, rg_ZiDongChongFu, rg_ShiFouWeiJianPan, rg_ShiFouWeiJiTong, rg_JianPanWeiZhi);
+    FBroHsVIPControl_DispatchKeyEvent(m_class, rg_LeiXing14.GetText(), rg_XiuShiJian1, rg_string21.GetText(), rg_WeiXiuShiWenBen.GetText(), rg_GuanJianBiaoShiFu.GetText(), rg_DaiMa1.GetText(), rg_AnJian.GetText(), rg_JiTongXuNiJianDaiMa, rg_BenJiXuNiJianDaiMa, rg_ZiDongChongFu, rg_ShiFouWeiJianPan, rg_ShiFouWeiJiTong, rg_JianPanWeiZhi);
 }
 
 void rg_class_FBrowserVIP_kzhq::rg_GaoJiJianPan_AnXia (INT rg_JianDaiMa4, INT rg_XiuShiJian2, BOOL rg_ShiFouWeiJianPan1)
@@ -712,27 +712,27 @@ void rg_class_FBrowserVIP_kfzhDOM::rg_QiYong4 (CVolString& rg_BaoGuaKongGe)
     if(!IsEmpty()) FBroHsDevToolsDOM_enable(m_class,rg_BaoGuaKongGe.GetText());
 }
 
-void rg_class_FBrowserVIP_kfzhDOM::rg_MeiJuDOM (INT rg_ShenDu1, BOOL rg_ChuanTou, rg_FBrowser_LiuLanQi::rg_class_FBrowser_shjzhnzhzh& rg_HuiDiao15)
+void rg_class_FBrowserVIP_kfzhDOM::rg_MeiJuDOM (INT rg_ShenDu1, BOOL rg_ChuanTou, rg_FBrowser_LiuLanQi::rg_class_FBrowser_shjzhnzhzh& rg_HuiDiao18)
 {
     if(IsEmpty()) return ;
-    _FBRO_CHECK_EVENT_TYPE(rg_HuiDiao15.GetPtr(),GeneralResultCallbackType,_CT("类_FBrowserVIP_开发者DOM"),_CT("枚举DOM"));
-    CefRefPtr<FBroHsGeneralResultCallback> callback = static_cast<FBroHsGeneralResultCallback*>(rg_HuiDiao15.GetPtr());
+    _FBRO_CHECK_EVENT_TYPE(rg_HuiDiao18.GetPtr(),GeneralResultCallbackType,_CT("类_FBrowserVIP_开发者DOM"),_CT("枚举DOM"));
+    CefRefPtr<FBroHsGeneralResultCallback> callback = static_cast<FBroHsGeneralResultCallback*>(rg_HuiDiao18.GetPtr());
     FBroHsDevToolsDOM_getDocument(m_class,rg_ShenDu1,rg_ChuanTou,callback,nullptr,0);
 }
 
-void rg_class_FBrowserVIP_kfzhDOM::rg_YuChaZhaoWenBen (CVolString& rg_ChaXunWenBen, BOOL rg_includeUserAgentShadowDOM, rg_FBrowser_LiuLanQi::rg_class_FBrowser_shjzhnzhzh& rg_HuiDiao22)
+void rg_class_FBrowserVIP_kfzhDOM::rg_YuChaZhaoWenBen (CVolString& rg_ChaXunWenBen, BOOL rg_includeUserAgentShadowDOM, rg_FBrowser_LiuLanQi::rg_class_FBrowser_shjzhnzhzh& rg_HuiDiao25)
 {
     if(IsEmpty()) return;
-    _FBRO_CHECK_EVENT_TYPE(rg_HuiDiao22.GetPtr(),GeneralResultCallbackType,_CT("类_FBrowserVIP_开发者DOM"),_CT("预查找文本"));
-    CefRefPtr<FBroHsGeneralResultCallback> callback = static_cast<FBroHsGeneralResultCallback*>(rg_HuiDiao22.GetPtr());
+    _FBRO_CHECK_EVENT_TYPE(rg_HuiDiao25.GetPtr(),GeneralResultCallbackType,_CT("类_FBrowserVIP_开发者DOM"),_CT("预查找文本"));
+    CefRefPtr<FBroHsGeneralResultCallback> callback = static_cast<FBroHsGeneralResultCallback*>(rg_HuiDiao25.GetPtr());
     FBroHsDevToolsDOM_performSearch(m_class,rg_ChaXunWenBen.GetText(),rg_includeUserAgentShadowDOM, callback, nullptr, 0);
 }
 
-void rg_class_FBrowserVIP_kfzhDOM::rg_QuChaZhaoWenBen (CVolString& rg_ChaZhaoID1, INT rg_KaiShiSuoYin, INT rg_JieShuSuoYin, rg_FBrowser_LiuLanQi::rg_class_FBrowser_shjzhnzhzh& rg_HuiDiao23)
+void rg_class_FBrowserVIP_kfzhDOM::rg_QuChaZhaoWenBen (CVolString& rg_ChaZhaoID1, INT rg_KaiShiSuoYin, INT rg_JieShuSuoYin, rg_FBrowser_LiuLanQi::rg_class_FBrowser_shjzhnzhzh& rg_HuiDiao26)
 {
     if(IsEmpty()) return;
-    _FBRO_CHECK_EVENT_TYPE(rg_HuiDiao23.GetPtr(),GeneralResultCallbackType,_CT("类_FBrowserVIP_开发者DOM"),_CT("取查找文本"));
-    CefRefPtr<FBroHsGeneralResultCallback> callback = static_cast<FBroHsGeneralResultCallback*>(rg_HuiDiao23.GetPtr());
+    _FBRO_CHECK_EVENT_TYPE(rg_HuiDiao26.GetPtr(),GeneralResultCallbackType,_CT("类_FBrowserVIP_开发者DOM"),_CT("取查找文本"));
+    CefRefPtr<FBroHsGeneralResultCallback> callback = static_cast<FBroHsGeneralResultCallback*>(rg_HuiDiao26.GetPtr());
     FBroHsDevToolsDOM_getSearchResults(m_class,rg_ChaZhaoID1.GetText(),rg_KaiShiSuoYin,rg_JieShuSuoYin, callback, nullptr, 0);
 }
 

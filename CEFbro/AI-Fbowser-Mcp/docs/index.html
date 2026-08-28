@@ -114,8 +114,8 @@
   <tr><td><a href="/docs/客户使用手册.md">客户使用手册.md</a></td><td><strong>终端客户</strong></td><td>安装、Cursor、话术示例、VIP、FAQ</td></tr>
   <tr><td><a href="/docs/使用技能书.md">使用技能书.md</a></td><td>技术 / Agent</td><td>上手、常用工具、场景脚本、工作流、Hook 速查</td></tr>
   <tr><td><a href="/docs/MCP工具配置说明书.md">MCP工具配置说明书.md</a></td><td>部署 / 集成</td><td>mcp_config 全字段、Cursor、mcp_connect、环境变量、VIP</td></tr>
-  <tr><td><code>skills/AI浏览器MCP.md</code></td><td>开发</td><td>255 工具完整参考（源码 skills 目录）</td></tr>
-  <tr><td><code>skills/场景与Hook测试.md</code></td><td>测试 / 逆向</td><td>场景脚本、POST 扫描、debugger 恢复</td></tr>
+  <tr><td><code>tools/list</code></td><td>开发</td><td>255 工具动态清单（HTTP 接口）</td></tr>
+  <tr><td><a href="/docs/使用技能书.md">使用技能书.md</a></td><td>测试 / 逆向</td><td>场景脚本、POST 扫描、debugger 恢复</td></tr>
 </table></div>
 <div class="alert info">火山编译附属文件：<code>docs/</code>、<code>mcp_config.json</code>、<code>mcp_bridge.js</code>、<code>workflows/</code> 自动输出到 linker。</div>
 </section>
@@ -172,7 +172,7 @@
 <section id="protocol">
 <h2>MCP 协议流程</h2>
 <h3>1. initialize</h3>
-<pre><code>{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2026-06-21","clientInfo":{"name":"my-app","version":"1.0"}}}</code></pre>
+<pre><code>{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","clientInfo":{"name":"my-app","version":"1.0"}}}</code></pre>
 <h3>2. notifications/initialized</h3>
 <pre><code>{"jsonrpc":"2.0","method":"notifications/initialized"}</code></pre>
 <h3>3. tools/list — 获取工具</h3>
@@ -198,8 +198,7 @@
       "env": {
         "AI_BROWSER_MCP_HTTP_POST": "<span data-dynamic="post">http://127.0.0.1:9222/mcp</span>",
         "AI_BROWSER_MCP_HOST": "127.0.0.1",
-        "AI_BROWSER_MCP_PORT": "9222",
-        "AI_BROWSER_MCP_CURSOR_MODE": "0"
+        "AI_BROWSER_MCP_PORT": "9222"
       }
     }
   }
@@ -309,7 +308,8 @@ node regression_sync_wait.js          # sync-wait / workflow / batch 专项</cod
 <h3>事件监控</h3>
 <pre><code>{"name":"browser_collect","arguments":{"action":"event_all_enable"}}
 {"name":"browser_event","arguments":{"event_type":"navigate"}}</code></pre>
-<p>支持 <code>event_load_enable</code>、<code>event_resource_enable</code>、<code>event_dialog_enable</code> 等单项；<code>event_all_disable</code> 批量关闭。详见 <a href="/docs/使用技能书.md">使用技能书</a> 与 <code>skills/AI浏览器MCP.md</code>。</p>
+<p>支持 <code>event_load_enable</code>、<code>event_resource_enable</code>、<code>event_dialog_enable</code> 等单项；<code>event_all_disable</code> 批量关闭。详见 <a href="/docs/使用技能书.md">使用技能书</a> 与 <code>tools/list</code> 动态清单。</p>
+<p><strong>默认开启</strong>：载入 / 生命周期 / 标题 / 下载 4 类；进度 / 资源 / 对话框 / 全屏 / 图标 / 查找 / 框架 / 键盘焦点 / 应用事件默认关闭。<code>event_all_enable</code> 开启 10 项（<strong>不含</strong> 资源与键盘焦点两类高频噪音，需单独 <code>event_resource_enable</code> / <code>event_focus_enable</code>）。</p>
 </section>
 
 <!-- ── CDP ── -->

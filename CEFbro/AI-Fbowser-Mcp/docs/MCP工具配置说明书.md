@@ -61,7 +61,11 @@
   "network_log_max_bytes": 262144,
   "vip_code": "",
   "auto_download_save": true,
-  "auto_dismiss_js_dialog": false
+  "auto_dismiss_js_dialog": false,
+  "auto_install_agents": false,
+  "window_topmost": true,
+  "window_width": 1200,
+  "window_height": 800
 }
 ```
 
@@ -93,6 +97,9 @@
 | `vip_code` | string | `""` | FBrowser VIP 授权码；空则 VIP/CDP/指纹等工具返回「VIP控制器不可用」 |
 | `auto_download_save` | bool | `true` | 下载是否自动保存 |
 | `auto_dismiss_js_dialog` | bool | `false` | 是否自动关闭 alert/confirm 等 JS 对话框 |
+| `auto_install_agents` | bool | `false` | 启动时自动写入 Cursor/Claude/Codex/Cline/Windsurf 的 MCP 配置（零手动接入） |
+| `window_topmost` | bool | `true` | 浏览器窗口置顶 |
+| `window_width` / `window_height` | int | `1200` / `800` | 窗口尺寸（400–3840 / 300–2160 校验） |
 
 ---
 
@@ -129,8 +136,7 @@
       "env": {
         "AI_BROWSER_MCP_HTTP_POST": "http://127.0.0.1:9222/mcp",
         "AI_BROWSER_MCP_HOST": "127.0.0.1",
-        "AI_BROWSER_MCP_PORT": "9222",
-        "AI_BROWSER_MCP_CURSOR_MODE": "0"
+        "AI_BROWSER_MCP_PORT": "9222"
       }
     }
   }
@@ -143,7 +149,7 @@
 
 | 环境变量 | 说明 |
 |----------|------|
-| `AI_BROWSER_MCP_CURSOR_MODE` | `0` 全量 216 工具（默认）；`1` 精简约 55 个常用工具 |
+| `AI_BROWSER_MCP_CURSOR_MODE` | 已移除（v2.8.1 起桥接层不再做工具白名单过滤，全部工具动态显示；变量保留仅为兼容旧配置） |
 
 > **勿**直接用 `"url": "http://127.0.0.1:9222/mcp"` 接 Cursor：服务端协议版本与 schema 需经桥接修正，否则易出现 loading tools 或连接失败。
 
@@ -164,12 +170,14 @@ curl http://127.0.0.1:9222/health
 | 变量 | 设置时机 | 说明 |
 |------|----------|------|
 | `AI_BROWSER_MCP_URL` | exe 启动 | WebSocket 地址 |
+| `AI_BROWSER_MCP_WS` | exe 启动 | WebSocket MCP 通道地址（`ws://…/mcp`） |
 | `AI_BROWSER_MCP_PORT` | exe 启动 | 端口 |
 | `AI_BROWSER_MCP_HEALTH` | exe 启动 | 健康检查 URL |
+| `AI_BROWSER_MCP_VERSION` | exe 启动 | 服务版本号 |
 | `AI_BROWSER_MCP_HTTP_POST` | 手动/桥接 | HTTP JSON-RPC 地址 |
 | `AI_BROWSER_MCP_CONNECT` | 手动 | `mcp_connect.json` 路径 |
 | `AI_BROWSER_MCP_HOST` | 脚本 | 场景客户端主机，默认 `127.0.0.1` |
-| `AI_BROWSER_MCP_CURSOR_MODE` | 桥接 | `0` 全量工具；`1` 精简工具（Cursor loading 时可试） |
+| `AI_BROWSER_MCP_CURSOR_MODE` | 桥接 | 已失效（v2.8.1 起忽略，全部工具动态显示） |
 | `AI_BROWSER_MCP_STDIO_LOG` | 桥接 | `1` 开启 stdio 调试日志（默认关闭） |
 | `AI_BROWSER_WORKFLOWS_DIR` | 手动 | 工作流目录，默认 `linker/workflows/` |
 
@@ -267,4 +275,4 @@ curl http://127.0.0.1:9222/health
 - [客户使用手册.md](./客户使用手册.md) — **终端客户**安装、Cursor、VIP、FAQ
 - [使用技能书.md](./使用技能书.md) — 技术实操与场景脚本
 - [index.html](./index.html) — 在线 HTML 文档
-- `skills/AI浏览器MCP.md` — 255 工具完整参考
+- `docs/index.html` — 255 工具完整参考（skills 目录未随仓库发布）

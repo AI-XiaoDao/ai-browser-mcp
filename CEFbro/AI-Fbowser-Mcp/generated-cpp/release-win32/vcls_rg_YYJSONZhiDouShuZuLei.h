@@ -27,8 +27,8 @@ public:
 inline_ rg_YYJSONZhiDouShuZuLei (yyjson_val* arr, CRefJsonObjectPtrWithData* pRefObject) : rg_YYJSONZhiDouShuZuLei()  { data().SetArray(arr, pRefObject); }
 
 public:
-    rg_YYJSONZhiDouDuiXiangLei rg_QuChengYuan55 (INT rg_SuoYin49);
-    CVolString rg_QuWenBen10 (INT rg_SuoYin54);
+    rg_YYJSONZhiDouDuiXiangLei rg_QuChengYuan55 (INT rg_SuoYin51);
+    CVolString rg_QuWenBen10 (INT rg_SuoYin56);
     virtual void GetDumpString (CVolString& rg_ZhanShiNeiRong89, INT rg_ZuiDaZhanShiShuJuCheCun89);
     rg_YYJSONZhiDouShuZuLei ();
     void _VolObjectInitMembers ();

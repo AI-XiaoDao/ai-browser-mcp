@@ -27,14 +27,14 @@ void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoKeHuDuanDuanKaiLianJie (rg_FBrowser_L
 {
 }
 
-void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoHTTPQingQiu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi11, INT rg_LianJieID8, CVolString& rg_KeHuDuanDeZhi3, rg_FBrowser_LiuLanQi::FBroRequest& rg_QingQiu11)
+void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoHTTPQingQiu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi11, INT rg_LianJieID8, CVolString& rg_KeHuDuanDeZhi3, rg_FBrowser_LiuLanQi::FBroRequest& rg_QingQiu13)
 {
     CVolString rg_HTTPFangFa;
-    rg_HTTPFangFa = rg_QingQiu11.rg_QuLeiXing1 ();
-    CVolString rg_QingQiuDeZhi1;
-    rg_QingQiuDeZhi1 = rg_QingQiu11.rg_QuDeZhi1 ();
+    rg_HTTPFangFa = rg_QingQiu13.rg_QuLeiXing1 ();
+    CVolString rg_QingQiuDeZhi2;
+    rg_QingQiuDeZhi2 = rg_QingQiu13.rg_QuDeZhi1 ();
     CVolString rg_URLLuJing2;
-    rg_URLLuJing2 = rg_MCPMingLingFuWuQi::rg_DiQuHTTPLuJing (rg_QingQiuDeZhi1);
+    rg_URLLuJing2 = rg_MCPMingLingFuWuQi::rg_DiQuHTTPLuJing (rg_QingQiuDeZhi2);
     if (rg_HTTPFangFa == _T ("OPTIONS"))
     {
         rg_MCPMingLingFuWuQi::rg_FaSongCORS200XiangYing (rg_FuWuQi11, rg_LianJieID8, _CT2 (_T ("text/plain")), 0, 0);
@@ -45,17 +45,17 @@ void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoHTTPQingQiu (rg_FBrowser_LiuLanQi::rg
         if (rg_URLLuJing2 == _T ("/mcp") || rg_URLLuJing2 == _T ("/"))
         {
             CVolString rg_QingQiuTiJSON2;
-            rg_QingQiuTiJSON2 = rg_MCPMingLingFuWuQi::rg_DouQuHTTP_POSTTi (rg_QingQiu11);
+            rg_QingQiuTiJSON2 = rg_MCPMingLingFuWuQi::rg_DouQuHTTP_POSTTi (rg_QingQiu13);
             if (rg_QingQiuTiJSON2 != _T (""))
             {
-                rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (CVolString (_CT2 (_T ("[MCP] HTTP POST ")) + rg_URLLuJing2 + _T (" 体长度:")) + _T (", ") + CVolString ((INT)rg_QingQiuTiJSON2.GetLength ()));
+                rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (CVolString (_CT2 (_T ("[MCP] HTTP POST ")) + rg_URLLuJing2 + _T (" 体长度:")) + CVolString ((INT)rg_QingQiuTiJSON2.GetLength ()));
                 CVolString rg_XiangYingJSON3;
                 rg_XiangYingJSON3 = rg_MCPMingLingFuWuQi::rg_ChuLiMCPQingQiu (rg_QingQiuTiJSON2, rg_KeHuDuanDeZhi3);
                 if (rg_XiangYingJSON3 != _T (""))
                 {
-                    CVolMem rg_XiangYingZiJieJi;
-                    rg_XiangYingZiJieJi = rg_volcano_base::rg_WenBenLei::rg_WenBenDaoUTF (rg_XiangYingJSON3, FALSE);
-                    rg_MCPMingLingFuWuQi::rg_FaSongCORS200XiangYing (rg_FuWuQi11, rg_LianJieID8, rg_MCP_const::rg_HTTP_JSONNeiRongLeiXing, (INT_P)rg_XiangYingZiJieJi.GetPtr (), (INT)rg_XiangYingZiJieJi.GetSize ());
+                    CVolMem rg_XiangYingZiJieJi1;
+                    rg_XiangYingZiJieJi1 = rg_volcano_base::rg_WenBenLei::rg_WenBenDaoUTF (rg_XiangYingJSON3, FALSE);
+                    rg_MCPMingLingFuWuQi::rg_FaSongCORS200XiangYing (rg_FuWuQi11, rg_LianJieID8, rg_MCP_const::rg_HTTP_JSONNeiRongLeiXing, (INT_P)rg_XiangYingZiJieJi1.GetPtr (), (INT)rg_XiangYingZiJieJi1.GetSize ());
                 }
                 else
                 {
@@ -78,7 +78,7 @@ void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoHTTPQingQiu (rg_FBrowser_LiuLanQi::rg
         rg_JianKangJSON.rg_JiaRuWenBenChengYuan (_CT2 (_T ("status")), _CT2 (_T ("ok")));
         rg_JianKangJSON.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("browsers")), rg_FBrowser_LiuLanQi::rg_FBrowserFuZhuGongNeng::rg_FBrowser_LiuLanQi_QuShuLiang ());
         rg_JianKangJSON.rg_JiaRuWenBenChengYuan (_CT2 (_T ("version")), rg_MCP_const::rg_MCP_BanBenHao);
-        rg_JianKangJSON.rg_JiaRuChangZhengShuChengYuan (_CT2 (_T ("uptime_ms")), rg_volcano_base::rg_ChangYongGongNengLei::rg_QuQiDongShiJian () - rg_MCPMingLingFuWuQi::rg_FuWuQiQiDongShiJianChuo);
+        rg_JianKangJSON.rg_JiaRuChangZhengShuChengYuan (_CT2 (_T ("uptime_ms")), rg_MCPMingLingFuWuQi::rg_QuXianHangShiJianHaoMiao () - rg_MCPMingLingFuWuQi::rg_FuWuQiQiDongShiJianChuo);
         rg_JianKangJSON.rg_JiaRuWenBenChengYuan (_CT2 (_T ("capabilities")), _CT2 (_T ("sync-wait,workflow,batch,debugger-flow,v8-hook")));
         rg_JianKangJSON.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("rate_limit_per_min")), rg_MCPMingLingFuWuQi::rg_SuLuXianZhi_MeiFenZhong);
         rg_JianKangJSON.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("rate_limit_used")), rg_MCPMingLingFuWuQi::rg_SuLuXianZhi_JiShuQi);
@@ -115,7 +115,7 @@ void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoHTTPQingQiu (rg_FBrowser_LiuLanQi::rg
         }
         rg_QiaoJieJiaoBenLuJing1 = rg_QiaoJieJiaoBenLuJing1 + _T ("mcp_bridge.js");
         CVolString rg_PeiZhiWenBen1;
-        rg_PeiZhiWenBen1 = _CT2 (_T ("{\"mcpServers\":{\"ai-browser\":{\"command\":\"node\",\"args\":[\"")) + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_QiaoJieJiaoBenLuJing1) + _T ("\"],\"env\":{\"AI_BROWSER_MCP_HOST\":\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_MCPMingLingFuWuQi::rg_FuWuQiBangDingDeZhi) + _T ("\",\"AI_BROWSER_MCP_PORT\":\"") + CVolString (rg_MCPMingLingFuWuQi::rg_FuWuQiDuanKou) + _T ("\",\"AI_BROWSER_MCP_HTTP_POST\":\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_MCPMingLingFuWuQi::rg_QuMCP_HTTPDeZhi ()) + _T ("/mcp\",\"AI_BROWSER_MCP_CURSOR_MODE\":\"0\"}}}}");
+        rg_PeiZhiWenBen1 = _CT2 (_T ("{\"mcpServers\":{\"ai-browser\":{\"command\":\"node\",\"args\":[\"")) + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_QiaoJieJiaoBenLuJing1) + _T ("\"],\"env\":{\"AI_BROWSER_MCP_HOST\":\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_MCPMingLingFuWuQi::rg_FuWuQiBangDingDeZhi) + _T ("\",\"AI_BROWSER_MCP_PORT\":\"") + CVolString (rg_MCPMingLingFuWuQi::rg_FuWuQiDuanKou) + _T ("\",\"AI_BROWSER_MCP_HTTP_POST\":\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_MCPMingLingFuWuQi::rg_QuMCP_HTTPDeZhi ()) + _T ("/mcp\"}}}}");
         CVolMem rg_PeiZhiNeiRong;
         rg_PeiZhiNeiRong = rg_volcano_base::rg_WenBenLei::rg_WenBenDaoUTF (rg_PeiZhiWenBen1, FALSE);
         rg_MCPMingLingFuWuQi::rg_FaSongCORS200XiangYing (rg_FuWuQi11, rg_LianJieID8, rg_MCP_const::rg_HTTP_JSONNeiRongLeiXing, (INT_P)rg_PeiZhiNeiRong.GetPtr (), (INT)rg_PeiZhiNeiRong.GetSize ());
@@ -193,28 +193,28 @@ void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoHTTPQingQiu (rg_FBrowser_LiuLanQi::rg
     rg_MCPMingLingFuWuQi::rg_FaSongCORS404XiangYing (rg_FuWuQi11, rg_LianJieID8);
 }
 
-void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoWebSocketQingQiu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi12, INT rg_LianJieID9, CVolString& rg_KeHuDuanDeZhi4, rg_FBrowser_LiuLanQi::FBroRequest& rg_QingQiu12, rg_FBrowser_HuiDiao::rg_class_FBrowser_HuiDiao& rg_HuiDiao5)
+void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoWebSocketQingQiu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi12, INT rg_LianJieID9, CVolString& rg_KeHuDuanDeZhi4, rg_FBrowser_LiuLanQi::FBroRequest& rg_QingQiu14, rg_FBrowser_HuiDiao::rg_class_FBrowser_HuiDiao& rg_HuiDiao8)
 {
     CVolString rg_WSLuJing;
-    rg_WSLuJing = rg_MCPMingLingFuWuQi::rg_DiQuHTTPLuJing (rg_QingQiu12.rg_QuDeZhi1 ());
+    rg_WSLuJing = rg_MCPMingLingFuWuQi::rg_DiQuHTTPLuJing (rg_QingQiu14.rg_QuDeZhi1 ());
     if ((INT)rg_WSLuJing.SearchText (_CT2 (_T ("/devtools/")).GetText (), 0, FALSE, FALSE) == 0)
     {
-        rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (CVolString (_CT2 (_T ("[MCP] 拒绝未实现的 DevTools WS:"))) + _T (", ") + CVolString (rg_WSLuJing));
-        if (rg_HuiDiao5.rg_ShiFouWeiKong113 () == FALSE)
+        rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (CVolString (_CT2 (_T ("[MCP] 拒绝未实现的 DevTools WS:"))) + CVolString (rg_WSLuJing));
+        if (rg_HuiDiao8.rg_ShiFouWeiKong113 () == FALSE)
         {
-            rg_HuiDiao5.rg_QuXiao3 ();
+            rg_HuiDiao8.rg_QuXiao3 ();
         }
         return;
     }
-    if (rg_HuiDiao5.rg_ShiFouWeiKong113 () == FALSE)
+    if (rg_HuiDiao8.rg_ShiFouWeiKong113 () == FALSE)
     {
-        rg_HuiDiao5.rg_JiXu8 ();
+        rg_HuiDiao8.rg_JiXu8 ();
     }
 }
 
 void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoWebSocketLianJie (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi13, INT rg_LianJieID10)
 {
-    rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (CVolString (_CT2 (_T ("[MCP] WS连接 ID:"))) + _T (", ") + CVolString (rg_LianJieID10));
+    rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (CVolString (_CT2 (_T ("[MCP] WS连接 ID:"))) + CVolString (rg_LianJieID10));
 }
 
 void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoWebSocketXiaoXi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi14, INT rg_LianJieID11, INT64 rg_ShuJuZhiZhen6, INT rg_ShuJuChangDu)
@@ -225,7 +225,7 @@ void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoWebSocketXiaoXi (rg_FBrowser_LiuLanQi
     }
     if (rg_ShuJuChangDu > 52428800)
     {
-        rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (CVolString (_CT2 (_T ("[MCP] WS消息过大被拒绝:"))) + _T (", ") + CVolString (rg_ShuJuChangDu) + _T (", ") + CVolString (_CT2 (_T ("字节"))));
+        rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (CVolString (_CT2 (_T ("[MCP] WS消息过大被拒绝:"))) + CVolString (rg_ShuJuChangDu) + _T ("字节"));
         CVolMem rg_CuoWuXiangYing;
         rg_CuoWuXiangYing = rg_volcano_base::rg_WenBenLei::rg_WenBenDaoUTF (rg_MCPMingLingFuWuQi::rg_GouJianJSONRPCXiangYing (_CT2 (_T ("")), _CT2 (_T ("")), -32600, _CT2 (_T ("消息过大,最大")) + CVolString (52428800 / 1048576) + _T ("MB")), FALSE);
         rg_FuWuQi14.rg_FaSongWebSocketShuJu (rg_LianJieID11, (INT_P)rg_CuoWuXiangYing.GetPtr (), (INT)rg_CuoWuXiangYing.GetSize ());
@@ -243,14 +243,13 @@ void rg_class_MCP_FuWuQiShiJian::rg_ShouDaoWebSocketXiaoXi (rg_FBrowser_LiuLanQi
     {
         rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (_CT2 (_T ("[MCP] 收到命令:")) + rg_JSONWenBen3);
     }
-    rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (CVolString (_CT2 (_T ("[MCP] WS消息长度:"))) + _T (", ") + CVolString (rg_ShuJuChangDu));
     CVolString rg_XiangYingJSON4;
     rg_XiangYingJSON4 = rg_MCPMingLingFuWuQi::rg_ChuLiMCPQingQiu (rg_JSONWenBen3, _CT2 (_T ("ws_")) + CVolString (rg_LianJieID11));
     if (rg_XiangYingJSON4 != _T (""))
     {
-        CVolMem rg_XiangYingZiJieJi1;
-        rg_XiangYingZiJieJi1 = rg_volcano_base::rg_WenBenLei::rg_WenBenDaoUTF (rg_XiangYingJSON4, FALSE);
-        rg_FuWuQi14.rg_FaSongWebSocketShuJu (rg_LianJieID11, (INT_P)rg_XiangYingZiJieJi1.GetPtr (), (INT)rg_XiangYingZiJieJi1.GetSize ());
+        CVolMem rg_XiangYingZiJieJi2;
+        rg_XiangYingZiJieJi2 = rg_volcano_base::rg_WenBenLei::rg_WenBenDaoUTF (rg_XiangYingJSON4, FALSE);
+        rg_FuWuQi14.rg_FaSongWebSocketShuJu (rg_LianJieID11, (INT_P)rg_XiangYingZiJieJi2.GetPtr (), (INT)rg_XiangYingZiJieJi2.GetSize ());
     }
 }
 

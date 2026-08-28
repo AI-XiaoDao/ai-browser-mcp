@@ -27,8 +27,8 @@ public:
     BOOL rg_ShiFouWeiZhuKuangJia ();
     BOOL rg_ShiFouWeiJiaoDianKuangJia ();
     CVolString rg_QuKuangJiaID1 ();
-    void rg_ZhiHangJSDaiMa (CVolString& rg_ZhiHangDaiMa1, CVolString& rg_JiaoBenDeZhi, INT rg_KaiShiHang);
-    void rg_ZhiHangJSDaiMa_DaiFanHuiZhi (CVolString& rg_ZhiHangDaiMa2, CVolString& rg_JiaoBenDeZhi1, INT rg_KaiShiHang1, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao2);
+    void rg_ZhiHangJSDaiMa (CVolString& rg_ZhiHangDaiMa, CVolString& rg_JiaoBenDeZhi, INT rg_KaiShiHang);
+    void rg_ZhiHangJSDaiMa_DaiFanHuiZhi (CVolString& rg_ZhiHangDaiMa1, CVolString& rg_JiaoBenDeZhi1, INT rg_KaiShiHang1, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao2);
     inline_ FBroBaseFrame () { }
     inline_ void _VolObjectInitMembers () { }
 };

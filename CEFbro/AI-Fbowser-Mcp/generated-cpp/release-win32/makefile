@@ -27,7 +27,7 @@ CXXFLAGS = $(CPPFLAGS)
 MANIFEST_FILES = "E:\HSPC\plugins\vprj_win\res\default-win32.manifest"
 MANIFEST_FLAGS = /MANIFESTINPUT:"E:\HSPC\plugins\vprj_win\res\default-win32.manifest"
 LIBS = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib
-OBJS = $(OUT_DIR)\AI-Fbowser-Mcp.res $(OUT_DIR)\stdafx.obj $(OUT_DIR)\vol_app_static_data.obj $(OUT_DIR)\vpkg_FBroCallback.obj $(OUT_DIR)\vpkg_FBroDataType.obj $(OUT_DIR)\vpkg_FBroEventControl.obj $(OUT_DIR)\vpkg_FBroHelp.obj $(OUT_DIR)\vpkg_FBroLib.obj $(OUT_DIR)\vpkg_FBroValue.obj $(OUT_DIR)\vpkg_FBroVip.obj $(OUT_DIR)\vpkg_main.obj $(OUT_DIR)\vpkg_MCP_BrowserEvents.obj $(OUT_DIR)\vpkg_MCP_Callbacks.obj $(OUT_DIR)\vpkg_MCP_ResponseBuilders.obj $(OUT_DIR)\vpkg_MCP_Server.obj $(OUT_DIR)\vpkg_MCP_Server_Core.obj $(OUT_DIR)\vpkg_MCP_Server_Form.obj $(OUT_DIR)\vpkg_MCP_Server_HTTP.obj $(OUT_DIR)\vpkg_MCP_Server_Reverse.obj $(OUT_DIR)\vpkg_MCP_Server_System.obj $(OUT_DIR)\vpkg_MCP_Server_Utils.obj $(OUT_DIR)\vpkg_MCP_Server_VIP.obj $(OUT_DIR)\vpkg_MCP_Server_Workflow.obj $(OUT_DIR)\vpkg_MCP_Stdio.obj $(OUT_DIR)\vpkg_w_array.obj $(OUT_DIR)\vpkg_w_base.obj $(OUT_DIR)\vpkg_w_mfc_startup.obj $(OUT_DIR)\vpkg_w_misc.obj $(OUT_DIR)\vpkg_w_muti_thread.obj $(OUT_DIR)\vpkg_w_sqlite3.obj $(OUT_DIR)\vpkg_w_startup.obj $(OUT_DIR)\vpkg_w_stream.obj $(OUT_DIR)\vpkg_w_string.obj $(OUT_DIR)\vpkg_w_yyjson.obj $(OUT_DIR)\vpkg_数据操作库_.obj $(EXTERN_OUT_DIR)\vol_array.obj $(EXTERN_OUT_DIR)\vol_assert.obj $(EXTERN_OUT_DIR)\vol_bitmap.obj $(EXTERN_OUT_DIR)\vol_classes.obj $(EXTERN_OUT_DIR)\vol_com.obj $(EXTERN_OUT_DIR)\vol_functions.obj $(EXTERN_OUT_DIR)\vol_key.obj $(EXTERN_OUT_DIR)\vol_math.obj $(EXTERN_OUT_DIR)\vol_mem.obj $(EXTERN_OUT_DIR)\vol_mem_pool.obj $(EXTERN_OUT_DIR)\vol_muti_thread.obj $(EXTERN_OUT_DIR)\vol_stream.obj $(EXTERN_OUT_DIR)\vol_string.obj $(EXTERN_OUT_DIR)\vol_time.obj $(EXTERN_OUT_DIR)\vol_mfc.obj $(EXTERN_OUT_DIR)\yyjson.obj
+OBJS = $(OUT_DIR)\AI-Fbowser-Mcp.res $(OUT_DIR)\stdafx.obj $(OUT_DIR)\vol_app_static_data.obj $(OUT_DIR)\vpkg_FBroCallback.obj $(OUT_DIR)\vpkg_FBroDataType.obj $(OUT_DIR)\vpkg_FBroEventControl.obj $(OUT_DIR)\vpkg_FBroHelp.obj $(OUT_DIR)\vpkg_FBroLib.obj $(OUT_DIR)\vpkg_FBroValue.obj $(OUT_DIR)\vpkg_FBroVip.obj $(OUT_DIR)\vpkg_main.obj $(OUT_DIR)\vpkg_MCP_BrowserEvents.obj $(OUT_DIR)\vpkg_MCP_Callbacks.obj $(OUT_DIR)\vpkg_MCP_Kernel.obj $(OUT_DIR)\vpkg_MCP_ResponseBuilders.obj $(OUT_DIR)\vpkg_MCP_Server.obj $(OUT_DIR)\vpkg_MCP_Server_Core.obj $(OUT_DIR)\vpkg_MCP_Server_Form.obj $(OUT_DIR)\vpkg_MCP_Server_HTTP.obj $(OUT_DIR)\vpkg_MCP_Server_Reverse.obj $(OUT_DIR)\vpkg_MCP_Server_System.obj $(OUT_DIR)\vpkg_MCP_Server_Utils.obj $(OUT_DIR)\vpkg_MCP_Server_VIP.obj $(OUT_DIR)\vpkg_MCP_Server_Workflow.obj $(OUT_DIR)\vpkg_MCP_Stdio.obj $(OUT_DIR)\vpkg_w_array.obj $(OUT_DIR)\vpkg_w_base.obj $(OUT_DIR)\vpkg_w_mfc_startup.obj $(OUT_DIR)\vpkg_w_misc.obj $(OUT_DIR)\vpkg_w_muti_thread.obj $(OUT_DIR)\vpkg_w_sqlite3.obj $(OUT_DIR)\vpkg_w_startup.obj $(OUT_DIR)\vpkg_w_stream.obj $(OUT_DIR)\vpkg_w_string.obj $(OUT_DIR)\vpkg_w_yyjson.obj $(OUT_DIR)\vpkg_数据操作库_.obj $(EXTERN_OUT_DIR)\vol_array.obj $(EXTERN_OUT_DIR)\vol_assert.obj $(EXTERN_OUT_DIR)\vol_bitmap.obj $(EXTERN_OUT_DIR)\vol_classes.obj $(EXTERN_OUT_DIR)\vol_com.obj $(EXTERN_OUT_DIR)\vol_functions.obj $(EXTERN_OUT_DIR)\vol_key.obj $(EXTERN_OUT_DIR)\vol_math.obj $(EXTERN_OUT_DIR)\vol_mem.obj $(EXTERN_OUT_DIR)\vol_mem_pool.obj $(EXTERN_OUT_DIR)\vol_muti_thread.obj $(EXTERN_OUT_DIR)\vol_stream.obj $(EXTERN_OUT_DIR)\vol_string.obj $(EXTERN_OUT_DIR)\vol_time.obj $(EXTERN_OUT_DIR)\vol_mfc.obj $(EXTERN_OUT_DIR)\yyjson.obj
 EXTERN_LIBS = "E:\HSPC\plugins\vprj_win\classlib\shared\extern_lib\common\sqlite3\2\win32\sqlite3dllmt.lib" "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\lib\FBrowserCEF3lib.lib" "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\lib\FBrowserVIP.lib" "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\lib\libcef.lib" "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\lib\release\libcef_dll_wrapper.lib"
 
 build : $(OUT_FILE_NAME)
@@ -67,38 +67,39 @@ vol_user_app.h : \
     vcls_rg_ZiJieJiLei.h \
     vcls_rg_WenBenShuZuLei.h \
     vcls_rg_JiBenLiuLei.h \
-    vcls_rg_FBrowser_CheCun.h \
     vcls_rg_FBrowser_JuXingWeiZhi.h \
+    vcls_rg_FBrowser_CheCun.h \
     vcls_rg_HuanCunXianChengLei.h \
-    vcls_rg_HuChiSuoLei.h \
-    vcls_rg_FBrowser_ShiJianLeiXing.h \
+    vcls_rg_class_FBrowser_qlhchd.h \
+    vcls_rg_FBrowser_ShuangWenBenShuZu.h \
     vcls_rg_FBrowser_FanWei.h \
-    vcls_rg_class_FBrowser_zyglq.h \
-    vcls_rg_class_FBrowser_llqshj.h \
     vcls_rg_class_FBrowser_YingYongShiJian.h \
+    vcls_rg_class_FBrowser_zyglq.h \
+    vcls_rg_class_FBrowser_zychlq.h \
+    vcls_rg_class_FBrowser_llqshj.h \
     vcls_rg_FBrowser_JiaSuHuiZhiEWaiXinXi.h \
-    vcls_rg_class_FBrowser_FuWuQi.h \
     vcls_FBroDictionaryValue.h \
+    vcls_rg_class_FBrowser_FuWuQi.h \
     vcls_rg_YYJSONZhiDouDuiXiangLei.h \
     vcls_rg_SQLiteShuJuKuLei.h \
-    vcls_rg_FBrowser_ShuangWenBenShuZu.h \
-    vcls_rg_class_FBrowser_xztphd.h \
+    vcls_rg_FBrowser_ShiJianLeiXing.h \
+    vcls_rg_class_FBrowserVIP_tyhd.h \
     vcls_rg_FBrowser_WeiZhi.h \
-    vcls_rg_class_FBrowser_dywPDFhd.h \
+    vcls_rg_HuChiSuoLei.h \
     vcls_rg_ShuChuLiuLei.h \
-    vcls_rg_ShuRuLiuLei.h \
-    vcls_rg_ChengXuLei.h \
-    vcls_rg_LuoJiXingLei.h \
-    vcls_rg_class_FBrowser_JSHuiDiao.h \
+    vcls_rg_class_FBrowser_dywPDFhd.h \
     vcls_rg_class_FBrowser_zfchhd.h \
     vcls_rg_class_FBrowser_Cookiehd.h \
-    vcls_rg_class_FBrowserVIP_tyhd.h \
-    vcls_rg_class_FBrowser_qlhchd.h \
+    vcls_rg_class_FBrowser_xztphd.h \
+    vcls_rg_ShuRuLiuLei.h \
+    vcls_rg_LuoJiXingLei.h \
+    vcls_rg_ChengXuLei.h \
+    vcls_rg_class_FBrowser_JSHuiDiao.h \
+    vcls_rg_class_FBrowser_fwqshj.h \
     vcls_rg_class_FBrowser_URLqqshj.h \
     vcls_rg_class_FBrowser_shjzhnzhzh.h \
     vcls_FBroBaseFrame.h \
     vcls_rg_class_FBrowser_kfzhxxshj.h \
-    vcls_rg_class_FBrowser_fwqshj.h \
     vcls_rg_class_MCP_StdioFuWuXianCheng.h \
     vcls_rg_class_MCP_CunZaiHouDianJiHuiDiao.h \
     vcls_rg_class_MCP_ZiFuChuanYiBuHuiDiao.h \
@@ -107,6 +108,7 @@ vol_user_app.h : \
     vcls_rg_class_MCP_URLQingQiuHuiDiao.h \
     vcls_rg_class_MCP_XiaZaiTuPianHuiDiao.h \
     vcls_rg_class_MCP_CuanGaiGuoLuQi.h \
+    vcls_rg_MCP_NeiHeFenPa.h \
     vcls_rg_MCP_XiangYingGouJian.h \
     vcls_rg_MCPMingLingFuWuQi.h \
     vcls_rg_MCP_TianBiaoFenPa.h \
@@ -116,21 +118,22 @@ vol_user_app.h : \
     vcls_rg_ShiJianZiDuanLeiXing.h \
     vcls_rg_ZhiZhenCaoZuoLei.h \
     vcls_rg_ChengXuDiaoShiLei.h \
-    vcls_rg_class_FBrowser_xzzhshhd.h \
-    vcls_rg_class_FBrowser_yhmlcchhd.h \
-    vcls_rg_class_FBrowser_zhzxzhd.h \
-    vcls_rg_class_FBrowser_kjcchhd.h \
-    vcls_rg_RiZhiJiBie2.h \
-    vcls_rg_ShiJianBiaoShi2.h \
-    vcls_rg_ZhiLeiXing1.h \
-    vcls_rg_ZiYuanGuoLuQi.h \
-    vcls_rg_QingLiHuanCun.h \
-    vcls_rg_TLSBanBen.h \
-    vcls_rg_FBrowser_ChuShiHuaPeiZhi.h \
-    vcls_rg_FBrowser_TuoYeWeiZhiShuZu.h \
-    vcls_rg_FBrowser_JiTongShiJian.h \
-    vcls_rg_FBrowser_string.h \
-    vcls_rg_FBrowser_CookieShuJu.h \
+    vcls_rg_HuanJingCunQuLei.h \
+    vcls_rg_class_FBrowser_ShouQuanHuiDiao.h \
+    vcls_rg_class_FBrowser_jjxzhd.h \
+    vcls_rg_class_FBrowser_dhkhd.h \
+    vcls_rg_class_FBrowser_zyhlhd.h \
+    vcls_rg_class_FBrowser_mtjrhd.h \
+    vcls_rg_AnJianShiJian2.h \
+    vcls_rg_ShuBiaoAnJianLeiXing.h \
+    vcls_rg_JSONJieXi.h \
+    vcls_rg_JSFanHuiZhiLeiXing.h \
+    vcls_rg_HuanCunLeiXing.h \
+    vcls_rg_BingMuFangXiangLeiXing.h \
+    vcls_rg_FBrowser_JuXingWeiZhiShuZu.h \
+    vcls_rg_FBrowser_AnJianShiJian.h \
+    vcls_rg_FBrowser_ShuBiaoShiJian.h \
+    vcls_rg_FBrowser_WenBenShuZu.h \
     vcls_rg_class_FBrowser_shzhzyglq.h \
     vcls_FBroFrame.h \
     vcls_FBroRequestContext.h \
@@ -178,39 +181,41 @@ vol_user_app.h : \
     vcls_rg_FBrowserFuZhuGongNeng.h \
     vcls_rg_FBrowserChuShiHuaKongZhi.h \
     vcls_rg_class_FBrowser_shzhzychlq.h \
-    vcls_rg_FBrowser_VIPChuMoShiJian.h \
-    vcls_rg_FBrowser_YinPinCanShu.h \
+    vcls_rg_FBrowser_JieTuBianKuangShuJu.h \
+    vcls_rg_FBrowser_JinYongShiJian.h \
+    vcls_rg_FBrowser_MeiTiYingJianShuZu.h \
     vcls_rg_FBrowser_JiaSuHuiZhiXinXi.h \
     vcls_rg_FBrowser_PDFDaYinSheZhi.h \
-    vcls_rg_FBrowser_MeiTiYingJianShuZu.h \
-    vcls_rg_FBrowser_JinYongShiJian.h \
-    vcls_rg_FBrowser_JieTuBianKuangShuJu.h \
+    vcls_rg_FBrowser_YinPinCanShu.h \
+    vcls_rg_FBrowser_VIPChuMoShiJian.h \
     vcls_rg_FBrowser_BingMuXinXi.h \
+    vcls_rg_FBrowser_CookieShuJu.h \
     vcls_rg_FBrowser_GuangBiaoXinXi.h \
-    vcls_rg_FBrowser_WenBenShuZu.h \
+    vcls_rg_FBrowser_string.h \
     vcls_rg_FBrowser_ShuangWenBen.h \
-    vcls_rg_FBrowser_ShuBiaoShiJian.h \
-    vcls_rg_FBrowser_AnJianShiJian.h \
-    vcls_rg_FBrowser_JuXingWeiZhiShuZu.h \
-    vcls_rg_FBrowser_ChuangKouXinXi.h \
-    vcls_rg_FBrowser_LiuLanQiPeiZhi.h \
+    vcls_rg_FBrowser_JiTongShiJian.h \
+    vcls_rg_FBrowser_TuoYeWeiZhiShuZu.h \
     vcls_rg_FBrowser_DanChuGongNeng.h \
-    vcls_rg_BingMuFangXiangLeiXing.h \
-    vcls_rg_HuanCunLeiXing.h \
-    vcls_rg_JSFanHuiZhiLeiXing.h \
-    vcls_rg_JSONJieXi.h \
-    vcls_rg_ShuBiaoAnJianLeiXing.h \
-    vcls_rg_AnJianShiJian2.h \
+    vcls_rg_FBrowser_LiuLanQiPeiZhi.h \
+    vcls_rg_FBrowser_ChuangKouXinXi.h \
+    vcls_rg_FBrowser_ChuShiHuaPeiZhi.h \
+    vcls_rg_TLSBanBen.h \
+    vcls_rg_QingLiHuanCun.h \
+    vcls_rg_ZiYuanGuoLuQi.h \
+    vcls_rg_ZhiLeiXing1.h \
+    vcls_rg_ShiJianBiaoShi2.h \
+    vcls_rg_RiZhiJiBie2.h \
     vcls_rg_class_FBrowser_qxdshhd.h \
-    vcls_rg_class_FBrowser_mtjrhd.h \
+    vcls_rg_class_FBrowser_kjcchhd.h \
+    vcls_rg_class_FBrowser_zydqhd.h \
     vcls_rg_class_FBrowser_HuiDiao.h \
     vcls_rg_class_FBrowser_JSdhkhd.h \
-    vcls_rg_class_FBrowser_dhkhd.h \
-    vcls_rg_class_FBrowser_jjxzhd.h \
-    vcls_rg_class_FBrowser_ShouQuanHuiDiao.h \
-    vcls_rg_HuanJingCunQuLei.h \
+    vcls_rg_class_FBrowser_zhzxzhd.h \
+    vcls_rg_class_FBrowser_yhmlcchhd.h \
+    vcls_rg_class_FBrowser_xzzhshhd.h \
     vcls_rg_CiPanCaoZuoLei.h \
     vcls_rg_WenBenLei.h \
+    vcls_rg_WenBenBianMaLeiXing.h \
     vcls_rg_DongTaiKuChengXuLei.h \
     vcls_rg_LiuCuoWuMa.h \
     vcls_rg_ChuangKouChengXuLei.h \
@@ -237,6 +242,7 @@ vol_user_app.h : \
     vcls_rg_class_MCP_FuWuQiShiJian.h \
     vcls_rg_MCP_HeXinFenPa.h \
     vcls_rg_LiuLanQiRongQi.h \
+    vcls_rg_class_MCP_FangAnZiYuanChuLiQi.h \
     vcls_rg_MCP_const.h \
     vcls_rg_class_MCP_HuanCunGuoLuQi.h \
     vcls_rg_class_MCP_QingLiHuanCunHuiDiao.h \
@@ -284,6 +290,10 @@ vpkg_MCP_BrowserEvents.cpp : \
     vol_user_app.h
 
 vpkg_MCP_Callbacks.cpp : \
+    stdafx.h \
+    vol_user_app.h
+
+vpkg_MCP_Kernel.cpp : \
     stdafx.h \
     vol_user_app.h
 

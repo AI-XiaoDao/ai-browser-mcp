@@ -24,11 +24,11 @@ public:
     BOOL rg_ShiFouWeiKong158 ();
     BOOL rg_ShiFouYouXiao8 ();
     INT rg_QuDaXiao1 ();
-    INT rg_QuLeiXing6 (INT rg_SuoYin27);
-    BOOL rg_QuLuoJiZhi (INT rg_SuoYin28);
-    INT rg_QuZhengShuZhi (INT rg_SuoYin29);
-    DOUBLE rg_QuShuangJingDuXiaoShuZhi (INT rg_SuoYin30);
-    CVolString rg_QuWenBenZhi (INT rg_SuoYin31);
+    INT rg_QuLeiXing6 (INT rg_SuoYin29);
+    BOOL rg_QuLuoJiZhi (INT rg_SuoYin30);
+    INT rg_QuZhengShuZhi (INT rg_SuoYin31);
+    DOUBLE rg_QuShuangJingDuXiaoShuZhi (INT rg_SuoYin32);
+    CVolString rg_QuWenBenZhi (INT rg_SuoYin33);
     inline_ FBroListValue () { }
     inline_ void _VolObjectInitMembers () { }
 };

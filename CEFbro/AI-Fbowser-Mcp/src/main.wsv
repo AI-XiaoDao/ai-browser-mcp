@@ -297,6 +297,17 @@
         记录应用监控事件 ("app_v8_exception", 数据.到可读文本 (YYJSON格式化选项.压缩))
     }
 
+    # 内核层: 初始化期注册自定义方案 "mcp" (CEF 要求初始化前声明, 运行期由 browser_kernel_scheme 挂载资源处理器)
+    方法 注册自定义方案 <公开 @虚拟方法 = 可覆盖>
+    参数 方案 <类型 = 类_FBrowser_方案注册>
+    {
+        如果 (方案.是否为空 () == 假)
+        {
+            // CEF 官方 cef_scheme_options_t: CEF_SCHEME_OPTION_STANDARD = 0x1 (标准URL解析, 含host)
+            方案.添加自定义方案 ("mcp", 1)
+        }
+    }
+
     方法 渲染_焦点节点改变 <公开 @虚拟方法 = 可覆盖>
     参数 浏览器 <类型 = 类_FBrowser_浏览器>
     参数 框架 <类型 = 类_FBrowser_框架>
@@ -385,5 +396,33 @@
         数据.创建自文本 ("{}")
         数据.加入整数成员 ("browser_id", 浏览器.取ID ())
         记录应用监控事件 ("app_render_browser_destroyed", 数据.到可读文本 (YYJSON格式化选项.压缩))
+    }
+
+    # ================================================================
+    # 内核层: IPC 下行通道 (主进程 browser_ipc_send_all/to 发送 →
+    # 渲染进程本事件接收 → 注入页面 window.__mcp_ipc_queue 供 JS 消费)
+    # 逆向场景: 主进程可随时向页面推送指令/数据, 页面 JS 应答写入
+    # window.__mcp_ipc_queue, 主进程经 browser_kernel_ipc_queue 轮询取回
+    # ================================================================
+    方法 进程间消息_收到主进程消息 <公开 @虚拟方法 = 可覆盖>
+    参数 浏览器 <类型 = 类_FBrowser_浏览器>
+    参数 消息名 <类型 = 文本型>
+    参数 消息内容 <类型 = 字节集类>
+    {
+        如果 (浏览器.是否为空 () == 假 && 消息名 != "")
+        {
+            变量 主框架 <类型 = 类_FBrowser_框架>
+            主框架 = 浏览器.取主框架 ()
+            如果 (主框架.是否为空 () == 假 && 主框架.是否有效 ())
+            {
+                变量 消息文本 <类型 = 文本型>
+                消息文本 = UTF8到文本 (消息内容)
+                // 注入队列: window.__mcp_ipc_queue.push({name, data, ts})
+                // 注: 简单转义JS 为单引号JS字符串上下文(不带引号), 须用单引号包裹
+                变量 注入代码 <类型 = 文本型>
+                注入代码 = "(function(){var q=window.__mcp_ipc_queue;if(!q){q=[];window.__mcp_ipc_queue=q}q.push({name:'" + MCP命令服务器.简单转义JS (消息名) + "',data:'" + MCP命令服务器.简单转义JS (消息文本) + "',ts:Date.now()});if(window.__mcp_onmessage){try{window.__mcp_onmessage(q[q.length-1])}catch(e){}}})()"
+                主框架.执行JS代码 (注入代码, "", 0)
+            }
+        }
     }
 }

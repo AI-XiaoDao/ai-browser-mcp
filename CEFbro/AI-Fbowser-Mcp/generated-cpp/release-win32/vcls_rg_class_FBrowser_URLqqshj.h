@@ -28,8 +28,8 @@ public:
     virtual void rg_JiJiangWanCheng (INT64 rg_BiaoShi5, rg_FBrowser_LiuLanQi::rg_class_FBrowser_URLqq& rg_URLQingQiu3);
     virtual void rg_ShangChuanJinDu (INT64 rg_BiaoShi6, rg_FBrowser_LiuLanQi::rg_class_FBrowser_URLqq& rg_URLQingQiu4, INT64 rg_DangQianDaXiao, INT64 rg_GeJiDaXiao);
     virtual void rg_XiaZaiJinDu (INT64 rg_BiaoShi7, rg_FBrowser_LiuLanQi::rg_class_FBrowser_URLqq& rg_URLQingQiu5, INT64 rg_DangQianDaXiao1, INT64 rg_GeJiDaXiao1);
-    virtual void rg_HuoQuDaoShuJu (INT64 rg_BiaoShi8, rg_FBrowser_LiuLanQi::rg_class_FBrowser_URLqq& rg_URLQingQiu6, CVolMem& rg_ShuJu13);
-    virtual BOOL rg_HuoDeXuShouQuanZhengShu (INT64 rg_BiaoShi9, BOOL rg_ShiFouWeiDaiLi2, CVolString& rg_ZhuJi1, INT rg_DuanKou8, CVolString& rg_YuMing1, CVolString& rg_RenZhengFangAn1, rg_FBrowser_HuiDiao::rg_class_FBrowser_ShouQuanHuiDiao& rg_ShouQuanHuiDiao1);
+    virtual void rg_HuoQuDaoShuJu (INT64 rg_BiaoShi8, rg_FBrowser_LiuLanQi::rg_class_FBrowser_URLqq& rg_URLQingQiu6, CVolMem& rg_ShuJu19);
+    virtual BOOL rg_HuoDeXuShouQuanZhengShu (INT64 rg_BiaoShi9, BOOL rg_ShiFouWeiDaiLi3, CVolString& rg_ZhuJi4, INT rg_DuanKou11, CVolString& rg_YuMing5, CVolString& rg_RenZhengFangAn2, rg_FBrowser_HuiDiao::rg_class_FBrowser_ShouQuanHuiDiao& rg_ShouQuanHuiDiao2);
     rg_class_FBrowser_URLqqshj ();
     void _VolObjectInitMembers ();
     virtual ~rg_class_FBrowser_URLqqshj ();

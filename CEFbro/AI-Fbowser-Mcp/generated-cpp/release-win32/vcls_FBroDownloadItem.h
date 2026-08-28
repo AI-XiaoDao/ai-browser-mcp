@@ -25,6 +25,8 @@ public:
     INT rg_QuXiaZaiBaiFenBi ();
     INT64 rg_QuZongChangDu ();
     INT64 rg_QuYiXiaZaiChangDu ();
+    INT rg_QuGuanLianBiaoShiFu ();
+    CVolString rg_QuDeZhi4 ();
     CVolString rg_QuTuiJianWenJianMing ();
     inline_ FBroDownloadItem () { }
     inline_ void _VolObjectInitMembers () { }

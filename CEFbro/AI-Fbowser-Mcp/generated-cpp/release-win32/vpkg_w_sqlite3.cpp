@@ -148,21 +148,21 @@ INT rg_SQLiteJiLuJiLei::rg_ZhiHangYuGou ()
     return SQLITE_ERROR;
 }
 
-INT rg_SQLiteJiLuJiLei::rg_ZhiZhengShuCanShuShuJu (INT rg_CanShuSuoYin2, INT rg_value118)
+INT rg_SQLiteJiLuJiLei::rg_ZhiZhengShuCanShuShuJu (INT rg_CanShuSuoYin2, INT rg_value121)
 {
-    if (GetStmt()) return sqlite3_bind_int(GetStmt(), rg_CanShuSuoYin2, rg_value118);
+    if (GetStmt()) return sqlite3_bind_int(GetStmt(), rg_CanShuSuoYin2, rg_value121);
     return SQLITE_ERROR;
 }
 
-INT rg_SQLiteJiLuJiLei::rg_ZhiChangZhengShuCanShuShuJu (INT rg_CanShuSuoYin3, INT64 rg_value119)
+INT rg_SQLiteJiLuJiLei::rg_ZhiChangZhengShuCanShuShuJu (INT rg_CanShuSuoYin3, INT64 rg_value122)
 {
-    if (GetStmt()) return sqlite3_bind_int64(GetStmt(), rg_CanShuSuoYin3, rg_value119);
+    if (GetStmt()) return sqlite3_bind_int64(GetStmt(), rg_CanShuSuoYin3, rg_value122);
     return SQLITE_ERROR;
 }
 
-INT rg_SQLiteJiLuJiLei::rg_ZhiWenBenCanShuShuJu (INT rg_CanShuSuoYin4, CVolString& rg_value120)
+INT rg_SQLiteJiLuJiLei::rg_ZhiWenBenCanShuShuJu (INT rg_CanShuSuoYin4, CVolString& rg_value123)
 {
-    CU8String u8str (rg_value120.GetText ());
+    CU8String u8str (rg_value123.GetText ());
     const U8CHAR* ps = u8str.GetText ();
     if (GetStmt()) return sqlite3_bind_text(GetStmt(), rg_CanShuSuoYin4, ps, (INT)strlen(ps), SQLITE_TRANSIENT);
     return SQLITE_ERROR;

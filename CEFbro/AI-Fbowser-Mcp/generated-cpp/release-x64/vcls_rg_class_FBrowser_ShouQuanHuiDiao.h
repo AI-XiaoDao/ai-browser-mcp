@@ -21,6 +21,8 @@ public:
     ~rg_class_FBrowser_ShouQuanHuiDiao(){};
 
 public:
+    BOOL rg_ShiFouWeiKong106 ();
+    void rg_JiXu3 (CVolString& rg_YongHuMing1, CVolString& rg_MiMa1);
     inline_ rg_class_FBrowser_ShouQuanHuiDiao () { }
     inline_ void _VolObjectInitMembers () { }
 };

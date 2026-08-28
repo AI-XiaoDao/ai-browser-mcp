@@ -21,7 +21,7 @@ public:
     ~rg_class_FBrowser_FuWuQi(){};
 
 public:
-    static void CALLBACK rg_FBrowser_FuWuQi_ChuangJian (CVolString& rg_DeZhi17, INT rg_DuanKou9, INT rg_ZuiDaLianJieShu, rg_class_FBrowser_shjzhnzhzh& rg_FuWuChuLiShiJian);
+    static void CALLBACK rg_FBrowser_FuWuQi_ChuangJian (CVolString& rg_DeZhi17, INT rg_DuanKou12, INT rg_ZuiDaLianJieShu, rg_class_FBrowser_shjzhnzhzh& rg_FuWuChuLiShiJian);
     BOOL rg_ShiFouWeiKong152 ();
     void rg_ZhiKong26 ();
     void rg_GuanBi3 ();

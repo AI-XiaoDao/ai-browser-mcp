@@ -21,6 +21,8 @@ public:
     ~FBroProcessMessage(){};
 
 public:
+    BOOL rg_ShiFouWeiKong135 ();
+    CVolString rg_QuMingChen ();
     inline_ FBroProcessMessage () { }
     inline_ void _VolObjectInitMembers () { }
 };

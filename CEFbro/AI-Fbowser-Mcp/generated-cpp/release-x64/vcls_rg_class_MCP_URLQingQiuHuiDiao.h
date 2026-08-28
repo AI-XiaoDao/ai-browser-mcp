@@ -21,7 +21,7 @@ public:
     virtual void SaveIntoStream (CVolBaseOutputStream& stream) override;
 
 public:
-    CVolString rg_RenWuID9;
+    CVolString rg_RenWuID8;
     CVolMem rg_XiangYingShuJu1;
 
 protected:

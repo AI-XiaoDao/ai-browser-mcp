@@ -12,7 +12,7 @@ class rg_class_MCP_JSYiBuHuiDiao : public rg_FBrowser_HuiDiao::rg_class_FBrowser
     DECLARE_VOL_CLASS (rg_volcano_app, rg_class_MCP_JSYiBuHuiDiao)
 
 public:
-    virtual void rg_HuiDiao3 (rg_FBrowser_value::FBroListValue& rg_FanHuiJieGuo);
+    virtual void rg_HuiDiao4 (rg_FBrowser_value::FBroListValue& rg_FanHuiJieGuo);
     inline_ rg_class_MCP_JSYiBuHuiDiao () { }
     inline_ void _VolObjectInitMembers () { }
     virtual void LoadFromStream (CVolBaseInputStream& stream) override;

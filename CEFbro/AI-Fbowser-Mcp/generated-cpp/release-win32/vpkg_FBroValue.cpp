@@ -44,15 +44,15 @@ CVolString FBroBinaryValue::rg_QuWenBen7 ()
 CVolMem FBroBinaryValue::rg_QuZiJieJi21 ()
 {
     if(IsEmpty ()) return CVolMem();
-    INT rg_size4;
+    INT rg_size5;
     INT rg_datapoint;
     CVolMem rg_tempret4;
-    rg_size4 = rg_QuDaXiao ();
-    if (rg_size4 > 0)
+    rg_size5 = rg_QuDaXiao ();
+    if (rg_size5 > 0)
     {
-        rg_datapoint = (INT_P)malloc ((size_t)rg_size4);
-        rg_QuZhi26 (rg_datapoint, rg_size4, 0);
-        rg_tempret4 = CVolMem ((void*)rg_datapoint, rg_size4);
+        rg_datapoint = (INT_P)malloc ((size_t)rg_size5);
+        rg_QuZhi26 (rg_datapoint, rg_size5, 0);
+        rg_tempret4 = CVolMem ((void*)rg_datapoint, rg_size5);
         free ((void*)rg_datapoint);
     }
     return (rg_tempret4);
@@ -87,34 +87,34 @@ INT FBroListValue::rg_QuDaXiao1 ()
     return FBroHsListValue_GetSize(m_class);
 }
 
-INT FBroListValue::rg_QuLeiXing6 (INT rg_SuoYin27)
+INT FBroListValue::rg_QuLeiXing6 (INT rg_SuoYin29)
 {
     if(IsEmpty ()) return 0;
-    return FBroHsListValue_GetType(m_class,rg_SuoYin27);
+    return FBroHsListValue_GetType(m_class,rg_SuoYin29);
 }
 
-BOOL FBroListValue::rg_QuLuoJiZhi (INT rg_SuoYin28)
+BOOL FBroListValue::rg_QuLuoJiZhi (INT rg_SuoYin30)
 {
     if(IsEmpty ()) return false;
-    return FBroHsListValue_GetBool(m_class,rg_SuoYin28);
+    return FBroHsListValue_GetBool(m_class,rg_SuoYin30);
 }
 
-INT FBroListValue::rg_QuZhengShuZhi (INT rg_SuoYin29)
+INT FBroListValue::rg_QuZhengShuZhi (INT rg_SuoYin31)
 {
     if(IsEmpty ()) return 0;
-    return FBroHsListValue_GetInt(m_class,rg_SuoYin29);
+    return FBroHsListValue_GetInt(m_class,rg_SuoYin31);
 }
 
-DOUBLE FBroListValue::rg_QuShuangJingDuXiaoShuZhi (INT rg_SuoYin30)
+DOUBLE FBroListValue::rg_QuShuangJingDuXiaoShuZhi (INT rg_SuoYin32)
 {
     if(IsEmpty ()) return 0;
-    return FBroHsListValue_GetDouble(m_class,rg_SuoYin30);
+    return FBroHsListValue_GetDouble(m_class,rg_SuoYin32);
 }
 
-CVolString FBroListValue::rg_QuWenBenZhi (INT rg_SuoYin31)
+CVolString FBroListValue::rg_QuWenBenZhi (INT rg_SuoYin33)
 {
     if(IsEmpty()) return CVolString();
-    CefRefPtr<FBroString> fbrostring = FBroHsListValue_GetString(m_class,rg_SuoYin31);
+    CefRefPtr<FBroString> fbrostring = FBroHsListValue_GetString(m_class,rg_SuoYin33);
     return FBroUnit::FBroStringToCWString(fbrostring);
 }
 

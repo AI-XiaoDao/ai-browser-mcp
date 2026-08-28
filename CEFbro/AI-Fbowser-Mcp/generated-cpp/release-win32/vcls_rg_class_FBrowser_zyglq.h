@@ -20,10 +20,10 @@ public:
         virtual CefResponseFilter::FilterStatus Filter(INT64 flag,void* data_in,size_t data_in_size,size_t& data_in_read,void* data_out,size_t data_out_size,size_t& data_out_written)override;
 
 public:
-    virtual void rg_JieShu1 (INT64 rg_BiaoShiID32);
-    virtual BOOL rg_ChuShiHuaGuoLuQi (INT64 rg_BiaoShiID33);
-    virtual void rg_HuoQuShuJu (INT64 rg_BiaoShiID34, INT rg_ShuJuZhiZhen15, INT rg_ShuJuDaXiao8);
-    virtual INT rg_XiuGaiShuJu (INT64 rg_BiaoShiID35, INT rg_ShuRuZhiZhen2, INT rg_ShuRuDaXiao2, rg_volcano_base::rg_ZhengShuLei& rg_ShuRuDouQuDaXiao2, INT rg_ShuChuZhiZhen3, INT rg_ShuChuDaXiao3, rg_volcano_base::rg_ZhengShuLei& rg_ShuChuXieRuDaXiao3);
+    virtual void rg_JieShu1 (INT64 rg_BiaoShiID38);
+    virtual BOOL rg_ChuShiHuaGuoLuQi (INT64 rg_BiaoShiID39);
+    virtual void rg_HuoQuShuJu (INT64 rg_BiaoShiID40, INT rg_ShuJuZhiZhen15, INT rg_ShuJuDaXiao8);
+    virtual INT rg_XiuGaiShuJu (INT64 rg_BiaoShiID41, INT rg_ShuRuZhiZhen2, INT rg_ShuRuDaXiao2, rg_volcano_base::rg_ZhengShuLei& rg_ShuRuDouQuDaXiao2, INT rg_ShuChuZhiZhen3, INT rg_ShuChuDaXiao3, rg_volcano_base::rg_ZhengShuLei& rg_ShuChuXieRuDaXiao3);
     rg_class_FBrowser_zyglq ();
     void _VolObjectInitMembers ();
     virtual ~rg_class_FBrowser_zyglq ();

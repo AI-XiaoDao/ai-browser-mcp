@@ -22,7 +22,7 @@ public:
 
 public:
     INT rg_QuGeShu3 ();
-    CVolString rg_QuShuJu3 (INT rg_SuoYin3);
+    CVolString rg_QuShuJu3 (INT rg_SuoYin5);
     inline_ rg_FBrowser_WenBenShuZu () { }
     inline_ void _VolObjectInitMembers () { }
 };

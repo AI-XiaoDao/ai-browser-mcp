@@ -338,7 +338,7 @@ function filterToolsForClient(tools) {
     return tools.map(sanitizeToolEntry);
 }
 
-/** Cursor 支持的 MCP 协议版本；服务端为 2026-06-21，经桥接回写客户端请求的 2024-11-05 */
+/** Cursor 支持的 MCP 协议版本；服务端为 2025-06-18，经桥接回写客户端请求的 2024-11-05 */
 const CURSOR_PROTOCOL_VERSION = '2024-11-05';
 
 function sanitizeMcpResponse(response, request) {

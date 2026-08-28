@@ -12,8 +12,8 @@ class rg_ZhengShuLei : public CVolBaseDataType
     DECLARE_VOL_CLASS (rg_volcano_base, rg_ZhengShuLei)
 
 public:
-    virtual void* GetDataPtr () override  { return &rg_value13; }
-    virtual void GetDumpString (CVolString& strDump, INT nMaxDumpSize) override  { strDump.SetValueText (rg_value13); }
+    virtual void* GetDataPtr () override  { return &rg_value16; }
+    virtual void GetDumpString (CVolString& strDump, INT nMaxDumpSize) override  { strDump.SetValueText (rg_value16); }
 
 public:
     rg_ZhengShuLei ();
@@ -22,7 +22,7 @@ public:
     virtual void SaveIntoStream (CVolBaseOutputStream& stream) override;
 
 public:
-    INT rg_value13;
+    INT rg_value16;
 };
 
 }

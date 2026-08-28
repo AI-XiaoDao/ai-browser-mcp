@@ -72,7 +72,7 @@ public:
     void rg_WebSocket_QiYongLanJie ();
     void rg_GaoJi_SheZhiDaiLi (CVolString& rg_DaiLiDeZhi3, CVolString& rg_DaiLiZhangHao3, CVolString& rg_DaiLiMiMa3, BOOL rg_GuanBiS5CuoWuDiShi1);
     void rg_GaoJi_QingKongDaiLi ();
-    void rg_KaiFaZheXiaoXi_FaSongXiaoXi (CVolString& rg_XiaoXiWenBen6);
+    void rg_KaiFaZheXiaoXi_FaSongXiaoXi (CVolString& rg_XiaoXiWenBen7);
     void rg_KaiFaZheXiaoXi_ZhiHangFangFa (INT rg_XiaoXiID3, CVolString& rg_FangFaWenBen, rg_FBrowser_value::FBroDictionaryValue& rg_param24);
     BOOL rg_KaiFaZheXiaoXi_QiYongJianGuanZheShiJian (rg_FBrowser_LiuLanQi::rg_class_FBrowser_shjzhnzhzh& rg_XiaoXiShiJian);
     BOOL rg_KaiFaZheXiaoXi_GuanBiJianGuanZheShiJian ();
@@ -86,7 +86,7 @@ public:
     void rg_GaoJiChuMo_FangKai (INT rg_HengZuoBiao13, INT rg_ZongZuoBiao13);
     void rg_GaoJiChuMo_YiDong (INT rg_HengZuoBiao14, INT rg_ZongZuoBiao14);
     void rg_GaoJiChuMo_QuXiao (INT rg_HengZuoBiao15, INT rg_ZongZuoBiao15);
-    void rg_GaoJi_FaSongJianPanShiJian (CVolString& rg_LeiXing14, INT rg_XiuShiJian1, CVolString& rg_string21, CVolString& rg_WeiXiuShiWenBen, CVolString& rg_GuanJianBiaoShiFu, CVolString& rg_DaiMa, CVolString& rg_AnJian, INT rg_JiTongXuNiJianDaiMa, INT rg_BenJiXuNiJianDaiMa, BOOL rg_ZiDongChongFu, BOOL rg_ShiFouWeiJianPan, BOOL rg_ShiFouWeiJiTong, INT rg_JianPanWeiZhi);
+    void rg_GaoJi_FaSongJianPanShiJian (CVolString& rg_LeiXing14, INT rg_XiuShiJian1, CVolString& rg_string21, CVolString& rg_WeiXiuShiWenBen, CVolString& rg_GuanJianBiaoShiFu, CVolString& rg_DaiMa1, CVolString& rg_AnJian, INT rg_JiTongXuNiJianDaiMa, INT rg_BenJiXuNiJianDaiMa, BOOL rg_ZiDongChongFu, BOOL rg_ShiFouWeiJianPan, BOOL rg_ShiFouWeiJiTong, INT rg_JianPanWeiZhi);
     void rg_GaoJiJianPan_AnXia (INT rg_JianDaiMa4, INT rg_XiuShiJian2, BOOL rg_ShiFouWeiJianPan1);
     void rg_GaoJiJianPan_FangKai (INT rg_JianDaiMa5, INT rg_XiuShiJian3, BOOL rg_ShiFouWeiJianPan2);
     void rg_GaoJiJianPan_ChanJi (INT rg_JianDaiMa6, INT rg_XiuShiJian4, INT rg_ChanJiYanShi1, BOOL rg_ShiFouWeiJianPan3);

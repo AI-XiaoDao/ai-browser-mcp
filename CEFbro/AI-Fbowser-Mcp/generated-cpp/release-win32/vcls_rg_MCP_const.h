@@ -57,6 +57,8 @@ public:
     static const INT rg_NeiHeBanBenZuiXiao;
     static const INT rg_NeiHeBanBenZuiDa;
     static const INT rg_ChuangKouYangShi_GWL_STYLE;
+    static const INT rg_ChuangKouYangShi_GWL_EXSTYLE;
+    static const INT rg_ChuangKouYangShi_GWL_ID;
     static const INT rg_TLSZhiWen_1_n;
     static const INT rg_TLSZhiWen_1_n1;
     static const INT rg_TLSZhiWen_1_n2;

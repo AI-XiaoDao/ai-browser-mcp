@@ -27,12 +27,12 @@ void CALLBACK rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (CVolString& rg_string3)
 
 BOOL CALLBACK rg_MCP_FuWuQiGongJu::rg_JianChaMuLuShiFouCunZai (CVolString& rg_MuLuLuJing)
 {
-    BOOL rg_JieGuo4 = FALSE;
+    BOOL rg_JieGuo7 = FALSE;
     {
         DWORD dwAttr = GetFileAttributesW(rg_MuLuLuJing.GetText());
-        rg_JieGuo4 = (dwAttr != INVALID_FILE_ATTRIBUTES && (dwAttr & FILE_ATTRIBUTE_DIRECTORY) != 0);
+        rg_JieGuo7 = (dwAttr != INVALID_FILE_ATTRIBUTES && (dwAttr & FILE_ATTRIBUTE_DIRECTORY) != 0);
     }
-    return (rg_JieGuo4);
+    return (rg_JieGuo7);
 }
 
 INT CALLBACK rg_MCP_FuWuQiGongJu::rg_ZhengShuDaoTLSBanBen (INT rg_ZhengShuZhi)

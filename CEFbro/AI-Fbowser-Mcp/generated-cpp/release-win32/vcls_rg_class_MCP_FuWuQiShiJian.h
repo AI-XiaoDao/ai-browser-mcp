@@ -16,8 +16,8 @@ public:
     virtual void rg_FuWuQiJiJiangXiaoHui (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi8);
     virtual void rg_ShouDaoKeHuDuanLianJie (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi9, INT rg_LianJieID6);
     virtual void rg_ShouDaoKeHuDuanDuanKaiLianJie (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi10, INT rg_LianJieID7);
-    virtual void rg_ShouDaoHTTPQingQiu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi11, INT rg_LianJieID8, CVolString& rg_KeHuDuanDeZhi3, rg_FBrowser_LiuLanQi::FBroRequest& rg_QingQiu11);
-    virtual void rg_ShouDaoWebSocketQingQiu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi12, INT rg_LianJieID9, CVolString& rg_KeHuDuanDeZhi4, rg_FBrowser_LiuLanQi::FBroRequest& rg_QingQiu12, rg_FBrowser_HuiDiao::rg_class_FBrowser_HuiDiao& rg_HuiDiao5);
+    virtual void rg_ShouDaoHTTPQingQiu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi11, INT rg_LianJieID8, CVolString& rg_KeHuDuanDeZhi3, rg_FBrowser_LiuLanQi::FBroRequest& rg_QingQiu13);
+    virtual void rg_ShouDaoWebSocketQingQiu (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi12, INT rg_LianJieID9, CVolString& rg_KeHuDuanDeZhi4, rg_FBrowser_LiuLanQi::FBroRequest& rg_QingQiu14, rg_FBrowser_HuiDiao::rg_class_FBrowser_HuiDiao& rg_HuiDiao8);
     virtual void rg_ShouDaoWebSocketLianJie (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi13, INT rg_LianJieID10);
     virtual void rg_ShouDaoWebSocketXiaoXi (rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi& rg_FuWuQi14, INT rg_LianJieID11, INT rg_ShuJuZhiZhen6, INT rg_ShuJuChangDu);
     inline_ rg_class_MCP_FuWuQiShiJian () { }

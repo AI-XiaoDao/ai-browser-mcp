@@ -12,8 +12,8 @@ class rg_ChanJingDuXiaoShuLei : public CVolBaseDataType
     DECLARE_VOL_CLASS (rg_volcano_base, rg_ChanJingDuXiaoShuLei)
 
 public:
-    virtual void* GetDataPtr () override  { return &rg_value16; }
-    virtual void GetDumpString (CVolString& strDump, INT nMaxDumpSize) override  { strDump.SetValueText (rg_value16); }
+    virtual void* GetDataPtr () override  { return &rg_value19; }
+    virtual void GetDumpString (CVolString& strDump, INT nMaxDumpSize) override  { strDump.SetValueText (rg_value19); }
 
 public:
     rg_ChanJingDuXiaoShuLei ();
@@ -22,7 +22,7 @@ public:
     virtual void SaveIntoStream (CVolBaseOutputStream& stream) override;
 
 public:
-    FLOAT rg_value16;
+    FLOAT rg_value19;
 };
 
 }

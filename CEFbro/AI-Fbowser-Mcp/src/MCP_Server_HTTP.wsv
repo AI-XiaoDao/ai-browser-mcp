@@ -52,7 +52,7 @@
                 请求体JSON = MCP命令服务器.读取HTTP_POST体 (请求)
                 如果 (请求体JSON != "")
                 {
-                    控制台输出 (到文本 ("[MCP] HTTP POST " + URL路径 + " 体长度:") + ", " + 到文本 (取文本长度 (请求体JSON)))
+                    控制台输出 (到文本 ("[MCP] HTTP POST " + URL路径 + " 体长度:") + 到文本 (取文本长度 (请求体JSON)))
                     变量 响应JSON <类型 = 文本型>
                     响应JSON = MCP命令服务器.处理MCP请求 (请求体JSON, 客户端地址)
                     如果 (响应JSON != "")
@@ -84,7 +84,7 @@
             健康JSON.加入文本成员 ("status", "ok")
             健康JSON.加入整数成员 ("browsers", FBrowser_浏览器_取数量 ())
             健康JSON.加入文本成员 ("version", MCP_常量.MCP_版本号)
-            健康JSON.加入长整数成员 ("uptime_ms", 取启动时间 () - MCP命令服务器.服务器启动时间戳)
+            健康JSON.加入长整数成员 ("uptime_ms", 取现行时间毫秒 () - MCP命令服务器.服务器启动时间戳)
             健康JSON.加入文本成员 ("capabilities", "sync-wait,workflow,batch,debugger-flow,v8-hook")
             健康JSON.加入整数成员 ("rate_limit_per_min", MCP命令服务器.速率限制_每分钟)
             健康JSON.加入整数成员 ("rate_limit_used", MCP命令服务器.速率限制_计数器)
@@ -125,7 +125,7 @@
             }
             桥接脚本路径 = 桥接脚本路径 + "mcp_bridge.js"
             变量 配置文本 <类型 = 文本型>
-            配置文本 = "{\"mcpServers\":{\"ai-browser\":{\"command\":\"node\",\"args\":[\"" + MCP_响应构建.JSON转义文本 (桥接脚本路径) + "\"],\"env\":{\"AI_BROWSER_MCP_HOST\":\"" + MCP_响应构建.JSON转义文本 (MCP命令服务器.服务器绑定地址) + "\",\"AI_BROWSER_MCP_PORT\":\"" + 到文本 (MCP命令服务器.服务器端口) + "\",\"AI_BROWSER_MCP_HTTP_POST\":\"" + MCP_响应构建.JSON转义文本 (MCP命令服务器.取MCP_HTTP地址 ()) + "/mcp\",\"AI_BROWSER_MCP_CURSOR_MODE\":\"0\"}}}}"
+            配置文本 = "{\"mcpServers\":{\"ai-browser\":{\"command\":\"node\",\"args\":[\"" + MCP_响应构建.JSON转义文本 (桥接脚本路径) + "\"],\"env\":{\"AI_BROWSER_MCP_HOST\":\"" + MCP_响应构建.JSON转义文本 (MCP命令服务器.服务器绑定地址) + "\",\"AI_BROWSER_MCP_PORT\":\"" + 到文本 (MCP命令服务器.服务器端口) + "\",\"AI_BROWSER_MCP_HTTP_POST\":\"" + MCP_响应构建.JSON转义文本 (MCP命令服务器.取MCP_HTTP地址 ()) + "/mcp\"}}}}"
             变量 配置内容 <类型 = 字节集类>
             配置内容 = 文本到UTF8 (配置文本, 假)
             MCP命令服务器.发送CORS200响应 (服务器, 连接ID, MCP_常量.HTTP_JSON内容类型, 取字节集指针 (配置内容), 取字节集长度 (配置内容))
@@ -222,7 +222,7 @@
         WS路径 = MCP命令服务器.提取HTTP路径 (请求.取地址 ())
         如果 (寻找文本 (WS路径, "/devtools/", 0, 假) == 0)
         {
-            控制台输出 (到文本 ("[MCP] 拒绝未实现的 DevTools WS:") + ", " + 到文本 (WS路径))
+            控制台输出 (到文本 ("[MCP] 拒绝未实现的 DevTools WS:") + 到文本 (WS路径))
             如果 (回调.是否为空 () == 假)
             {
                 回调.取消 ()
@@ -238,7 +238,7 @@
     参数 服务器 <类型 = 类_FBrowser_服务器>
     参数 连接ID <类型 = 整数>
     {
-        控制台输出 (到文本 ("[MCP] WS连接 ID:") + ", " + 到文本 (连接ID))
+        控制台输出 (到文本 ("[MCP] WS连接 ID:") + 到文本 (连接ID))
     }
     方法 收到WebSocket消息 <公开 @虚拟方法 = 可覆盖>
     参数 服务器 <类型 = 类_FBrowser_服务器>
@@ -254,7 +254,7 @@
         }
         如果 (数据长度 > MCP_常量.WS最大消息字节)
         {
-            控制台输出 (到文本 ("[MCP] WS消息过大被拒绝:") + ", " + 到文本 (数据长度) + ", " + 到文本 ("字节"))
+            控制台输出 (到文本 ("[MCP] WS消息过大被拒绝:") + 到文本 (数据长度) + "字节")
             变量 错误响应 <类型 = 字节集类>
             // 修复: 错误提示与实际常量一致(原注释/文案写5MB, 实际50MB)
             错误响应 = 文本到UTF8 (MCP命令服务器.构建JSONRPC响应 ("", "", -32600, "消息过大,最大" + 到文本 (MCP_常量.WS最大消息字节 / 1048576) + "MB"), 假)
@@ -273,7 +273,6 @@
         {
             控制台输出 ("[MCP] 收到命令:" + JSON文本)
         }
-        控制台输出 (到文本 ("[MCP] WS消息长度:") + ", " + 到文本 (数据长度))
         变量 响应JSON <类型 = 文本型>
         // WS连接使用连接ID作为客户端标识用于速率限制
         响应JSON = MCP命令服务器.处理MCP请求 (JSON文本, "ws_" + 到文本 (连接ID))

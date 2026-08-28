@@ -63,6 +63,18 @@ void CALLBACK rg_FBrowserChuShiHuaKongZhi::rg_FBrowser_GuanBi (BOOL rg_JieShuChe
     FBroShutdown(rg_JieShuChengXu);
 }
 
+void CALLBACK rg_FBrowserChuShiHuaKongZhi::rg_FBrowser_ZiDingYiFangAn_ZhuCe (CVolString& rg_FangAnMing, CVolString& rg_YuMing6, rg_class_FBrowser_shjzhnzhzh& rg_ZiYuanChuLiQi1)
+{
+    _FBRO_CHECK_EVENT_TYPE(rg_ZiYuanChuLiQi1.GetPtr(),ResourceHandlerType,_CT("FBrowser初始化控制"),_CT("FBrowser_自定义方案_注册"));
+    CefRefPtr<FBroHsResourceHandler> tempclass=static_cast<FBroHsResourceHandler*>(rg_ZiYuanChuLiQi1.GetPtr());
+    FBroHsRegisterSchemeHandlerFactory(rg_FangAnMing.GetText(),rg_YuMing6.GetText(),tempclass);
+}
+
+void CALLBACK rg_FBrowserChuShiHuaKongZhi::rg_FBrowser_ZiDingYiFangAn_QingLi ()
+{
+    FBroClearSchemeHandlerFactories();
+}
+
 void CALLBACK rg_FBrowserChuShiHuaKongZhi::rg_FBrowser_NeiCun_YaSuQingLi ()
 {
     FBroClearWorkingAndV8Memory();
@@ -73,11 +85,11 @@ INT CALLBACK rg_FBrowserChuShiHuaKongZhi::rg_FBrowser_JinCheng_QuDangQianJinChen
     return FBroGetProcessType();
 }
 
-void CALLBACK rg_FBrowserChuShiHuaKongZhi::rg_FBrowser_ChuangJianURLQingQiu (FBroRequest& rg_QingQiu25, FBroRequestContext& rg_QingQiuHuanJing5, rg_class_FBrowser_shjzhnzhzh& rg_URLQingQiuShiJian1, INT64 rg_BiaoShi10)
+void CALLBACK rg_FBrowserChuShiHuaKongZhi::rg_FBrowser_ChuangJianURLQingQiu (FBroRequest& rg_QingQiu27, FBroRequestContext& rg_QingQiuHuanJing5, rg_class_FBrowser_shjzhnzhzh& rg_URLQingQiuShiJian1, INT64 rg_BiaoShi10)
 {
     _FBRO_CHECK_EVENT_TYPE(rg_URLQingQiuShiJian1.GetPtr(),URLRequestClientType,_CT("FBrowser初始化控制"),_CT("FBrowser_创建URL请求"));
     CefRefPtr<FBroHsURLRequestClient> tempclass = static_cast<FBroHsURLRequestClient*>(rg_URLQingQiuShiJian1.GetPtr());
-    FBroHsURLRequest_Create(rg_QingQiu25.m_class,rg_QingQiuHuanJing5.m_class,tempclass,rg_BiaoShi10);
+    FBroHsURLRequest_Create(rg_QingQiu27.m_class,rg_QingQiuHuanJing5.m_class,tempclass,rg_BiaoShi10);
 }
 
 CVolString CALLBACK rg_FBrowserChuShiHuaKongZhi::rg_FBrowser_QuBanBenHao ()
@@ -104,26 +116,26 @@ void rg_class_FBrowser_shjzhnzhzh::rg_ZhiKong ()
     m_class=nullptr;
 }
 
-CVolString CALLBACK rg_FBrowserFuZhuGongNeng::rg_FBrowser_Parser_Base64bm (CVolString& rg_ShuJu14)
+CVolString CALLBACK rg_FBrowserFuZhuGongNeng::rg_FBrowser_Parser_Base64bm (CVolString& rg_ShuJu20)
 {
-    CefRefPtr<FBroString> temp = FBroHsBase64Encode(rg_ShuJu14.GetText());
+    CefRefPtr<FBroString> temp = FBroHsBase64Encode(rg_ShuJu20.GetText());
     return FBroUnit::FBroStringToCWString(temp);
 }
 
-rg_FBrowser_value::FBroBinaryValue CALLBACK rg_FBrowserFuZhuGongNeng::rg_FBrowser_Parser_Base64jm (CVolString& rg_ShuJu15)
+rg_FBrowser_value::FBroBinaryValue CALLBACK rg_FBrowserFuZhuGongNeng::rg_FBrowser_Parser_Base64jm (CVolString& rg_ShuJu21)
 {
-    return rg_FBrowser_value::FBroBinaryValue(FBroHsBase64Decode(rg_ShuJu15.GetText()));
+    return rg_FBrowser_value::FBroBinaryValue(FBroHsBase64Decode(rg_ShuJu21.GetText()));
 }
 
-CVolString CALLBACK rg_FBrowserFuZhuGongNeng::rg_FBrowser_Parser_URIbm (CVolString& rg_ShuJu17, BOOL rg_use_plus)
+CVolString CALLBACK rg_FBrowserFuZhuGongNeng::rg_FBrowser_Parser_URIbm (CVolString& rg_ShuJu23, BOOL rg_use_plus)
 {
-    CefRefPtr<FBroString> temp = FBroHsURIEncode(rg_ShuJu17.GetText(),rg_use_plus);
+    CefRefPtr<FBroString> temp = FBroHsURIEncode(rg_ShuJu23.GetText(),rg_use_plus);
     return FBroUnit::FBroStringToCWString(temp);
 }
 
-CVolString CALLBACK rg_FBrowserFuZhuGongNeng::rg_FBrowser_Parser_URIjm (CVolString& rg_ShuJu18, BOOL rg_convert_to_utf, BOOL rg_unescape_rule)
+CVolString CALLBACK rg_FBrowserFuZhuGongNeng::rg_FBrowser_Parser_URIjm (CVolString& rg_ShuJu24, BOOL rg_convert_to_utf, BOOL rg_unescape_rule)
 {
-    CefRefPtr<FBroString> temp = FBroHsURIDecode(rg_ShuJu18.GetText(),rg_convert_to_utf,rg_unescape_rule);
+    CefRefPtr<FBroString> temp = FBroHsURIDecode(rg_ShuJu24.GetText(),rg_convert_to_utf,rg_unescape_rule);
     return FBroUnit::FBroStringToCWString(temp);
 }
 
@@ -132,16 +144,16 @@ rg_FBrowser_value::FBroValue CALLBACK rg_FBrowserFuZhuGongNeng::rg_FBrowser_Pars
     return rg_FBrowser_value::FBroValue(FBroHsParseJSON(rg_json_string.GetText(),rg_options));
 }
 
-void CALLBACK rg_FBrowserFuZhuGongNeng::rg_FBrowser_QingLiQuanJuHuanCun (CVolString& rg_YuanDeZhi3, INT64 rg_QingLiDuiXiang, INT64 rg_CunChuLeiXing, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao)
+void CALLBACK rg_FBrowserFuZhuGongNeng::rg_FBrowser_QingLiQuanJuHuanCun (CVolString& rg_YuanDeZhi4, INT64 rg_QingLiDuiXiang, INT64 rg_CunChuLeiXing, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao)
 {
     _FBRO_CHECK_EVENT_TYPE(rg_JieGuoHuiDiao.GetPtr(),ClearCacheCallbackType,_CT("FBrowser辅助功能"),_CT("FBrowser_清理全局缓存"));
     CefRefPtr<FBroHsClearCacheCallback> callback = static_cast<FBroHsClearCacheCallback*>(rg_JieGuoHuiDiao.GetPtr());
-    FBroHsBrowser_ClearGlobalCacheData(rg_YuanDeZhi3.GetText(),(unsigned long)rg_QingLiDuiXiang,(unsigned long)rg_CunChuLeiXing,callback);
+    FBroHsBrowser_ClearGlobalCacheData(rg_YuanDeZhi4.GetText(),(unsigned long)rg_QingLiDuiXiang,(unsigned long)rg_CunChuLeiXing,callback);
 }
 
-rg_class_FBrowser_LiuLanQi CALLBACK rg_FBrowserFuZhuGongNeng::rg_FBrowser_llq_tgIDqllq (INT rg_LiuLanQiID10)
+rg_class_FBrowser_LiuLanQi CALLBACK rg_FBrowserFuZhuGongNeng::rg_FBrowser_llq_tgIDqllq (INT rg_LiuLanQiID11)
 {
-    return rg_class_FBrowser_LiuLanQi(FBroHsBrowserListControl_GetBrowserFromID(rg_LiuLanQiID10));
+    return rg_class_FBrowser_LiuLanQi(FBroHsBrowserListControl_GetBrowserFromID(rg_LiuLanQiID11));
 }
 
 rg_class_FBrowser_LiuLanQi CALLBACK rg_FBrowserFuZhuGongNeng::rg_FBrowser_llq_tgchkgbqllq (INT64 rg_ChuangKouGouBing4)
@@ -490,18 +502,18 @@ CVolString rg_class_FBrowser_LiuLanQi::rg_QuChuangKouBiaoTi ()
     return FBroUnit::FBroStringToCWString(fbrostring);
 }
 
-BOOL rg_class_FBrowser_LiuLanQi::rg_JinChengJianXiaoXi_FaSongShuJu_DaoQuanBuXuanRanJinCheng (CVolString& rg_XiaoXiMing2, CVolMem& rg_XiaoXi12)
-{
-    if(IsEmpty()) return false;
-    auto tempname=FBroUnit::UnicodeToAnsiUnique(rg_XiaoXiMing2.GetText());
-    return FBroHsSocketServer_SendByBrowser(m_class,tempname.get(),(char *)rg_XiaoXi12.GetPtr (),rg_XiaoXi12.GetSize ());
-}
-
-BOOL rg_class_FBrowser_LiuLanQi::rg_JinChengJianXiaoXi_FaSongShuJu_DaoZhiDingXuanRanJinCheng (INT rg_XuanRanJinChengID1, CVolString& rg_XiaoXiMing3, CVolMem& rg_XiaoXi13)
+BOOL rg_class_FBrowser_LiuLanQi::rg_JinChengJianXiaoXi_FaSongShuJu_DaoQuanBuXuanRanJinCheng (CVolString& rg_XiaoXiMing3, CVolMem& rg_XiaoXi13)
 {
     if(IsEmpty()) return false;
     auto tempname=FBroUnit::UnicodeToAnsiUnique(rg_XiaoXiMing3.GetText());
-    return FBroHsSocketServer_SendByBrowserProcessID(m_class,rg_XuanRanJinChengID1,tempname.get(),(char *)rg_XiaoXi13.GetPtr (),rg_XiaoXi13.GetSize ());
+    return FBroHsSocketServer_SendByBrowser(m_class,tempname.get(),(char *)rg_XiaoXi13.GetPtr (),rg_XiaoXi13.GetSize ());
+}
+
+BOOL rg_class_FBrowser_LiuLanQi::rg_JinChengJianXiaoXi_FaSongShuJu_DaoZhiDingXuanRanJinCheng (INT rg_XuanRanJinChengID1, CVolString& rg_XiaoXiMing4, CVolMem& rg_XiaoXi14)
+{
+    if(IsEmpty()) return false;
+    auto tempname=FBroUnit::UnicodeToAnsiUnique(rg_XiaoXiMing4.GetText());
+    return FBroHsSocketServer_SendByBrowserProcessID(m_class,rg_XuanRanJinChengID1,tempname.get(),(char *)rg_XiaoXi14.GetPtr (),rg_XiaoXi14.GetSize ());
 }
 
 rg_volcano_base::rg_ZhengShuShuZuLei rg_class_FBrowser_LiuLanQi::rg_JinChengJianXiaoXi_QuXuanRanJinChengIDQingChan ()
@@ -512,19 +524,12 @@ rg_volcano_base::rg_ZhengShuShuZuLei rg_class_FBrowser_LiuLanQi::rg_JinChengJian
     }return rg_volcano_base::rg_ZhengShuShuZuLei();
 }
 
-BOOL rg_class_FBrowser_LiuLanQi::rg_JinChengJianXiaoXi_FaSongShuJu_DaoZhuJinCheng (CVolString& rg_XiaoXiMing4, CVolMem& rg_XiaoXi14)
-{
-    if(IsEmpty()) return false;
-    auto tempname=FBroUnit::UnicodeToAnsiUnique(rg_XiaoXiMing4.GetText());
-    return FBroHsSocketClient_SendByBrowser(m_class,tempname.get(),(char *)rg_XiaoXi14.GetPtr (),rg_XiaoXi14.GetSize ());
-}
-
-void rg_class_FBrowser_LiuLanQi::rg_QingLiHuanCun1 (CVolString& rg_YuanDeZhi4, INT64 rg_QingLiDuiXiang1, INT64 rg_CunChuLeiXing1, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao1)
+void rg_class_FBrowser_LiuLanQi::rg_QingLiHuanCun1 (CVolString& rg_YuanDeZhi5, INT64 rg_QingLiDuiXiang1, INT64 rg_CunChuLeiXing1, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao1)
 {
     _FBRO_CHECK_EVENT_TYPE(rg_JieGuoHuiDiao1.GetPtr(),ClearCacheCallbackType,_CT("类_FBrowser_浏览器"),_CT("清理缓存"));
     if(IsEmpty()) return;
     CefRefPtr<FBroHsClearCacheCallback> callback = static_cast<FBroHsClearCacheCallback*>(rg_JieGuoHuiDiao1.GetPtr());
-    FBroHsBrowser_ClearCacheData(m_class,rg_YuanDeZhi4.GetText(),(unsigned long)rg_QingLiDuiXiang1,(unsigned long)rg_CunChuLeiXing1,callback);
+    FBroHsBrowser_ClearCacheData(m_class,rg_YuanDeZhi5.GetText(),(unsigned long)rg_QingLiDuiXiang1,(unsigned long)rg_CunChuLeiXing1,callback);
 }
 
 void rg_class_FBrowser_LiuLanQi::rg_SheZhiDaiLi (CVolString& rg_DaiLiDeZhi, CVolString& rg_DaiLiZhangHao, CVolString& rg_DaiLiMiMa)
@@ -619,18 +624,18 @@ CVolString FBroBaseFrame::rg_QuKuangJiaID1 ()
     return FBroUnit::FBroStringToCWString(fbrostring);
 }
 
-void FBroBaseFrame::rg_ZhiHangJSDaiMa (CVolString& rg_ZhiHangDaiMa1, CVolString& rg_JiaoBenDeZhi, INT rg_KaiShiHang)
+void FBroBaseFrame::rg_ZhiHangJSDaiMa (CVolString& rg_ZhiHangDaiMa, CVolString& rg_JiaoBenDeZhi, INT rg_KaiShiHang)
 {
     if(IsEmpty()) return;
-    FBroHsBrowserFrame_ExecuteJavaScript(m_class,rg_ZhiHangDaiMa1.GetText(),rg_JiaoBenDeZhi.GetText(),rg_KaiShiHang);
+    FBroHsBrowserFrame_ExecuteJavaScript(m_class,rg_ZhiHangDaiMa.GetText(),rg_JiaoBenDeZhi.GetText(),rg_KaiShiHang);
 }
 
-void FBroBaseFrame::rg_ZhiHangJSDaiMa_DaiFanHuiZhi (CVolString& rg_ZhiHangDaiMa2, CVolString& rg_JiaoBenDeZhi1, INT rg_KaiShiHang1, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao2)
+void FBroBaseFrame::rg_ZhiHangJSDaiMa_DaiFanHuiZhi (CVolString& rg_ZhiHangDaiMa1, CVolString& rg_JiaoBenDeZhi1, INT rg_KaiShiHang1, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao2)
 {
     if(IsEmpty()) return;
     _FBRO_CHECK_EVENT_TYPE(rg_JieGuoHuiDiao2.GetPtr(),JsCallbackType,_CT("类_FBrowser_基础框架"),_CT("执行JS代码_带返回值"));
     CefRefPtr<FBroHsJsCallback> tempclass=static_cast<FBroHsJsCallback*>(rg_JieGuoHuiDiao2.GetPtr());
-    FBroHsBrowserFrame_ExecuteJavaScriptToHasReturn(m_class,rg_ZhiHangDaiMa2.GetText(),rg_JiaoBenDeZhi1.GetText(),rg_KaiShiHang1,tempclass);
+    FBroHsBrowserFrame_ExecuteJavaScriptToHasReturn(m_class,rg_ZhiHangDaiMa1.GetText(),rg_JiaoBenDeZhi1.GetText(),rg_KaiShiHang1,tempclass);
 }
 
 void FBroFrame::rg_CheXiao ()
@@ -793,7 +798,7 @@ BOOL FBroImage::rg_QuTuPianXinXi (DOUBLE rg_BiLiYinZi, rg_volcano_base::rg_XiaoS
     int pixel_width,pixel_height;
     scale_factor=(float)rg_BiLiYinZi;
     bool retbool = FBroHsImage_GetRepresentationInfo(m_class,scale_factor,actual_scale_factor,pixel_width,pixel_height);
-    rg_ShiJiBiLi1.rg_value17=actual_scale_factor;rg_KuanDu15.rg_value13=pixel_width;rg_GaoDu15.rg_value13=pixel_height;
+    rg_ShiJiBiLi1.rg_value20=actual_scale_factor;rg_KuanDu15.rg_value16=pixel_width;rg_GaoDu15.rg_value16=pixel_height;
     return retbool;
 }
 
@@ -806,8 +811,8 @@ rg_FBrowser_value::FBroBinaryValue FBroImage::rg_QuTuPianShuJu_PNG (DOUBLE rg_Bi
     int quality,pixel_width,pixel_height;
     quality=rg_TouMing;
     CefRefPtr<CefBinaryValue> datapoint=FBroHsImage_GetAsPNG(m_class,scale_factor,quality,pixel_width,pixel_height);
-    rg_KuanDu18.rg_value13=pixel_width;
-    rg_GaoDu18.rg_value13=pixel_height;
+    rg_KuanDu18.rg_value16=pixel_width;
+    rg_GaoDu18.rg_value16=pixel_height;
     rg_TuPianShuJu2.Set(datapoint);
     return (rg_TuPianShuJu2);
 }
@@ -938,10 +943,10 @@ CVolMem FBroHsPostDataElement::rg_QuZiJieJiShuJu1 (INT rg_ShuJuDaXiao9)
 
 CVolString FBroHsPostDataElement::rg_QuWenBenShuJu (BOOL rg_ShiFouWeiUTF)
 {
-    INT rg_size1;
-    rg_size1 = rg_QuShuJuDaXiao ();
+    INT rg_size2;
+    rg_size2 = rg_QuShuJuDaXiao ();
     CVolMem rg_bytes;
-    rg_bytes = rg_QuZiJieJiShuJu1 (rg_size1);
+    rg_bytes = rg_QuZiJieJiShuJu1 (rg_size2);
     if (rg_ShiFouWeiUTF)
     {
         return (rg_volcano_base::rg_WenBenLei::rg_UTF8DaoWenBen (rg_bytes));
@@ -962,6 +967,18 @@ BOOL FBroProcessMessage::_IsSelfEqual (const FBroProcessMessage& objCompare) con
 void FBroProcessMessage::_CopySelfFrom (const FBroProcessMessage& objCopyFrom)
 {
     _CopySelfFromExtra (objCopyFrom);
+}
+
+BOOL FBroProcessMessage::rg_ShiFouWeiKong135 ()
+{
+    return IsEmpty();
+}
+
+CVolString FBroProcessMessage::rg_QuMingChen ()
+{
+    if(IsEmpty()) return CVolString();
+    CefRefPtr<FBroString> fbrostring = FBroHsProcessMessage_GetName(m_class);
+    return FBroUnit::FBroStringToCWString(fbrostring);
 }
 
 BOOL rg_class_FBrowser_Cookieglq::_IsSelfEqual (const rg_class_FBrowser_Cookieglq& objCompare) const
@@ -1032,11 +1049,21 @@ INT rg_class_FBrowser_XiangYing::rg_QuZhuangTai ()
     if(!IsEmpty()) return FBroHsResponse_GetStatus(m_class);
 }
 
+void rg_class_FBrowser_XiangYing::rg_ZhiZhuangTai (INT rg_ZhuangTaiDaiMa)
+{
+    if(!IsEmpty()) FBroHsResponse_SetStatus(m_class,rg_ZhuangTaiDaiMa);
+}
+
 CVolString rg_class_FBrowser_XiangYing::rg_QuMIMELeiXing ()
 {
     if(IsEmpty()) return CVolString();
     CefRefPtr<FBroString> fbrostring = FBroHsResponse_GetMimeType(m_class);
     return FBroUnit::FBroStringToCWString(fbrostring);
+}
+
+void rg_class_FBrowser_XiangYing::rg_ZhiMIMELeiXing (CVolString& rg_MIMELeiXing5)
+{
+    if(!IsEmpty()) FBroHsResponse_SetMimeType(m_class,rg_MIMELeiXing5.GetText());
 }
 
 CVolString rg_class_FBrowser_XiangYing::rg_QuXieYiTou_MingChen1 (CVolString& rg_MingChen7)
@@ -1108,6 +1135,18 @@ INT64 FBroDownloadItem::rg_QuYiXiaZaiChangDu ()
     return IsEmpty() ? 0 : FBroHsDownloadItem_GetReceivedBytes(m_class);
 }
 
+INT FBroDownloadItem::rg_QuGuanLianBiaoShiFu ()
+{
+    return IsEmpty() ? 0 : FBroHsDownloadItem_GetDownloadId(m_class);
+}
+
+CVolString FBroDownloadItem::rg_QuDeZhi4 ()
+{
+    if(IsEmpty()) return CVolString();
+    CefRefPtr<FBroString> fbrostring = FBroHsDownloadItem_GetDownloadURL(m_class);
+    return FBroUnit::FBroStringToCWString(fbrostring);
+}
+
 CVolString FBroDownloadItem::rg_QuTuiJianWenJianMing ()
 {
     if(IsEmpty()) return CVolString();
@@ -1125,6 +1164,16 @@ BOOL FBroSchemeRegistrar::_IsSelfEqual (const FBroSchemeRegistrar& objCompare) c
 void FBroSchemeRegistrar::_CopySelfFrom (const FBroSchemeRegistrar& objCopyFrom)
 {
     _CopySelfFromExtra (objCopyFrom);
+}
+
+BOOL FBroSchemeRegistrar::rg_ShiFouWeiKong142 ()
+{
+    return IsEmpty();
+}
+
+void FBroSchemeRegistrar::rg_TianJiaZiDingYiFangAn (CVolString& rg_FangAnMing1, INT rg_KongZhi1)
+{
+    if(!IsEmpty()) FBroSchemeRegistrar_AddCustomScheme(m_class,rg_FangAnMing1.GetText(),rg_KongZhi1);
 }
 
 BOOL FBroV8Context::_IsSelfEqual (const FBroV8Context& objCompare) const
@@ -1223,11 +1272,11 @@ void rg_class_FBrowser_FuWuQi::_CopySelfFrom (const rg_class_FBrowser_FuWuQi& ob
     _CopySelfFromExtra (objCopyFrom);
 }
 
-void CALLBACK rg_class_FBrowser_FuWuQi::rg_FBrowser_FuWuQi_ChuangJian (CVolString& rg_DeZhi17, INT rg_DuanKou9, INT rg_ZuiDaLianJieShu, rg_class_FBrowser_shjzhnzhzh& rg_FuWuChuLiShiJian)
+void CALLBACK rg_class_FBrowser_FuWuQi::rg_FBrowser_FuWuQi_ChuangJian (CVolString& rg_DeZhi17, INT rg_DuanKou12, INT rg_ZuiDaLianJieShu, rg_class_FBrowser_shjzhnzhzh& rg_FuWuChuLiShiJian)
 {
     _FBRO_CHECK_EVENT_TYPE(rg_FuWuChuLiShiJian.GetPtr(),ServerHandleType,_CT("类_FBrowser_服务器"),_CT("FBrowser_服务器_创建"));
     CefRefPtr<FBroHsServerHandle> callback = static_cast<FBroHsServerHandle*>(rg_FuWuChuLiShiJian.GetPtr());
-    FBroHsServer_CreateServer(rg_DeZhi17.GetText(),rg_DuanKou9,rg_ZuiDaLianJieShu,callback);
+    FBroHsServer_CreateServer(rg_DeZhi17.GetText(),rg_DuanKou12,rg_ZuiDaLianJieShu,callback);
 }
 
 BOOL rg_class_FBrowser_FuWuQi::rg_ShiFouWeiKong152 ()
@@ -1260,174 +1309,174 @@ void rg_class_FBrowser_FuWuQi::rg_FaSongHttpResponse (INT rg_LianJieID25, INT rg
     if(!IsEmpty()) FBroHsServer_SendHttpResponse(m_class,rg_LianJieID25,rg_XiangYingDaiMa,rg_XiangYingLeiXing.GetText(),rg_NeiRongChangDu2,rg_EWaiTouShuJu.m_data);
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_DianJiYuanSu (CVolString& rg_XuanZeQi, INT rg_SuoYin4)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_DianJiYuanSu (CVolString& rg_XuanZeQi, INT rg_SuoYin6)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
-        FBroHsBrowserFrameTianBiao_SetClick(m_class,rg_XuanZeQi.GetText(),rg_SuoYin4);
+        FBroHsBrowserFrameTianBiao_SetClick(m_class,rg_XuanZeQi.GetText(),rg_SuoYin6);
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_GunDongDaoYuanSu (CVolString& rg_XuanZeQi1, INT rg_SuoYin5, BOOL rg_ShiFouDingDuanDuiJi)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_GunDongDaoYuanSu (CVolString& rg_XuanZeQi1, INT rg_SuoYin7, BOOL rg_ShiFouDingDuanDuiJi)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi1.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
-        FBroHsBrowserFrameTianBiao_SetScrollIntoView(m_class,rg_XuanZeQi1.GetText(),rg_SuoYin5,rg_ShiFouDingDuanDuiJi);
+        FBroHsBrowserFrameTianBiao_SetScrollIntoView(m_class,rg_XuanZeQi1.GetText(),rg_SuoYin7,rg_ShiFouDingDuanDuiJi);
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_ZhiYuanSuXuanZeKuang (CVolString& rg_XuanZeQi2, INT rg_SuoYin6, BOOL rg_XuanZe2)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_ZhiYuanSuXuanZeKuang (CVolString& rg_XuanZeQi2, INT rg_SuoYin8, BOOL rg_XuanZe2)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi2.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
-        FBroHsBrowserFrameTianBiao_SetChecked(m_class,rg_XuanZeQi2.GetText(),rg_SuoYin6,rg_XuanZe2);
+        FBroHsBrowserFrameTianBiao_SetChecked(m_class,rg_XuanZeQi2.GetText(),rg_SuoYin8,rg_XuanZe2);
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_QuYuanSuXuanZeKuang (CVolString& rg_XuanZeQi3, INT rg_SuoYin7, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao3)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_QuYuanSuXuanZeKuang (CVolString& rg_XuanZeQi3, INT rg_SuoYin9, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao3)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi3.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
         _FBRO_CHECK_EVENT_TYPE(rg_JieGuoHuiDiao3.GetPtr(),JsCallbackType,_CT("类_FBrowser_填表框架"),_CT("取元素选择框"));
         CefRefPtr<FBroHsJsCallback> callback = static_cast<FBroHsJsCallback *>(rg_JieGuoHuiDiao3.GetPtr());
-        FBroHsBrowserFrameTianBiao_GetChecked(m_class,rg_XuanZeQi3.GetText(),rg_SuoYin7,callback);
+        FBroHsBrowserFrameTianBiao_GetChecked(m_class,rg_XuanZeQi3.GetText(),rg_SuoYin9,callback);
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_ZhiYuanSuXuanZeXiang (CVolString& rg_XuanZeQi4, INT rg_SuoYin8, INT rg_XuanZeXiang)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_ZhiYuanSuXuanZeXiang (CVolString& rg_XuanZeQi4, INT rg_SuoYin10, INT rg_XuanZeXiang)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi4.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
-        FBroHsBrowserFrameTianBiao_SetSelected(m_class,rg_XuanZeQi4.GetText(),rg_SuoYin8,rg_XuanZeXiang);
+        FBroHsBrowserFrameTianBiao_SetSelected(m_class,rg_XuanZeQi4.GetText(),rg_SuoYin10,rg_XuanZeXiang);
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_QuYuanSuXuanZeXiang (CVolString& rg_XuanZeQi5, INT rg_SuoYin9, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao4)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_QuYuanSuXuanZeXiang (CVolString& rg_XuanZeQi5, INT rg_SuoYin11, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao4)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi5.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
         _FBRO_CHECK_EVENT_TYPE(rg_JieGuoHuiDiao4.GetPtr(),JsCallbackType,_CT("类_FBrowser_填表框架"),_CT("取元素选择项"));
         CefRefPtr<FBroHsJsCallback> callback = static_cast<FBroHsJsCallback*>(rg_JieGuoHuiDiao4.GetPtr());
-        FBroHsBrowserFrameTianBiao_GetSelected(m_class,rg_XuanZeQi5.GetText(),rg_SuoYin9,callback);
+        FBroHsBrowserFrameTianBiao_GetSelected(m_class,rg_XuanZeQi5.GetText(),rg_SuoYin11,callback);
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_ZhiYuanSuJiaoDian (CVolString& rg_XuanZeQi6, INT rg_SuoYin10, BOOL rg_ShiFouJiaoDian)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_ZhiYuanSuJiaoDian (CVolString& rg_XuanZeQi6, INT rg_SuoYin12, BOOL rg_ShiFouJiaoDian)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi6.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
-        FBroHsBrowserFrameTianBiao_SetFocus(m_class,rg_XuanZeQi6.GetText(),rg_SuoYin10,rg_ShiFouJiaoDian);
+        FBroHsBrowserFrameTianBiao_SetFocus(m_class,rg_XuanZeQi6.GetText(),rg_SuoYin12,rg_ShiFouJiaoDian);
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_ZhiYuanSuNeiRong (CVolString& rg_XuanZeQi7, INT rg_SuoYin11, CVolString& rg_NeiRong6)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_ZhiYuanSuNeiRong (CVolString& rg_XuanZeQi7, INT rg_SuoYin13, CVolString& rg_NeiRong6)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi7.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
         rg_NeiRong6.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
-        FBroHsBrowserFrameTianBiao_SetValue(m_class,rg_XuanZeQi7.GetText(),rg_SuoYin11,rg_NeiRong6.GetText());
+        FBroHsBrowserFrameTianBiao_SetValue(m_class,rg_XuanZeQi7.GetText(),rg_SuoYin13,rg_NeiRong6.GetText());
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_QuYuanSuNeiRong (CVolString& rg_XuanZeQi8, INT rg_SuoYin12, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao5)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_QuYuanSuNeiRong (CVolString& rg_XuanZeQi8, INT rg_SuoYin14, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao5)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi8.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
         _FBRO_CHECK_EVENT_TYPE(rg_JieGuoHuiDiao5.GetPtr(),JsCallbackType,_CT("类_FBrowser_填表框架"),_CT("取元素内容"));
         CefRefPtr<FBroHsJsCallback> callback = static_cast<FBroHsJsCallback*>(rg_JieGuoHuiDiao5.GetPtr());
-        FBroHsBrowserFrameTianBiao_GetValue(m_class,rg_XuanZeQi8.GetText(),rg_SuoYin12,callback);
+        FBroHsBrowserFrameTianBiao_GetValue(m_class,rg_XuanZeQi8.GetText(),rg_SuoYin14,callback);
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_ZhiYuanSuNeiDaiMa (CVolString& rg_XuanZeQi13, INT rg_SuoYin17, CVolString& rg_DaiMaWenBen1)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_ZhiYuanSuNeiDaiMa (CVolString& rg_XuanZeQi13, INT rg_SuoYin19, CVolString& rg_DaiMaWenBen1)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi13.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
         rg_DaiMaWenBen1.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
-        FBroHsBrowserFrameTianBiao_SetInnerHTML(m_class,rg_XuanZeQi13.GetText(),rg_SuoYin17,rg_DaiMaWenBen1.GetText());
+        FBroHsBrowserFrameTianBiao_SetInnerHTML(m_class,rg_XuanZeQi13.GetText(),rg_SuoYin19,rg_DaiMaWenBen1.GetText());
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_QuYuanSuNeiDaiMa (CVolString& rg_XuanZeQi14, INT rg_SuoYin18, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao8)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_QuYuanSuNeiDaiMa (CVolString& rg_XuanZeQi14, INT rg_SuoYin20, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao8)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi14.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
         _FBRO_CHECK_EVENT_TYPE(rg_JieGuoHuiDiao8.GetPtr(),JsCallbackType,_CT("类_FBrowser_填表框架"),_CT("取元素内代码"));
         CefRefPtr<FBroHsJsCallback> callback = static_cast<FBroHsJsCallback*>(rg_JieGuoHuiDiao8.GetPtr());
-        FBroHsBrowserFrameTianBiao_GetInnerHTML(m_class,rg_XuanZeQi14.GetText(),rg_SuoYin18,callback);
+        FBroHsBrowserFrameTianBiao_GetInnerHTML(m_class,rg_XuanZeQi14.GetText(),rg_SuoYin20,callback);
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_QuYuanSuWaiDaiMa (CVolString& rg_XuanZeQi16, INT rg_SuoYin20, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao9)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_QuYuanSuWaiDaiMa (CVolString& rg_XuanZeQi16, INT rg_SuoYin22, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao9)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi16.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
         _FBRO_CHECK_EVENT_TYPE(rg_JieGuoHuiDiao9.GetPtr(),JsCallbackType,_CT("类_FBrowser_填表框架"),_CT("取元素外代码"));
         CefRefPtr<FBroHsJsCallback> callback = static_cast<FBroHsJsCallback*>(rg_JieGuoHuiDiao9.GetPtr());
-        FBroHsBrowserFrameTianBiao_GetOuterHTML(m_class,rg_XuanZeQi16.GetText(),rg_SuoYin20,callback);
+        FBroHsBrowserFrameTianBiao_GetOuterHTML(m_class,rg_XuanZeQi16.GetText(),rg_SuoYin22,callback);
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_ZhiYuanSuShuXing (CVolString& rg_XuanZeQi17, INT rg_SuoYin21, CVolString& rg_YuanSuMing, CVolString& rg_value102)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_ZhiYuanSuShuXing (CVolString& rg_XuanZeQi17, INT rg_SuoYin23, CVolString& rg_YuanSuMing, CVolString& rg_value105)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi17.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
-        FBroHsBrowserFrameTianBiao_SetAttribute(m_class,rg_XuanZeQi17.GetText(),rg_SuoYin21,rg_YuanSuMing.GetText(),rg_value102.GetText());
+        FBroHsBrowserFrameTianBiao_SetAttribute(m_class,rg_XuanZeQi17.GetText(),rg_SuoYin23,rg_YuanSuMing.GetText(),rg_value105.GetText());
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_QuYuanSuShuXing (CVolString& rg_XuanZeQi18, INT rg_SuoYin22, CVolString& rg_YuanSuMing1, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao10)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_QuYuanSuShuXing (CVolString& rg_XuanZeQi18, INT rg_SuoYin24, CVolString& rg_YuanSuMing1, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao10)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi18.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
         _FBRO_CHECK_EVENT_TYPE(rg_JieGuoHuiDiao10.GetPtr(),JsCallbackType,_CT("类_FBrowser_填表框架"),_CT("取元素属性"));
         CefRefPtr<FBroHsJsCallback> callback = static_cast<FBroHsJsCallback*>(rg_JieGuoHuiDiao10.GetPtr());
-        FBroHsBrowserFrameTianBiao_GetAttribute(m_class,rg_XuanZeQi18.GetText(),rg_SuoYin22,rg_YuanSuMing1.GetText(),callback);
+        FBroHsBrowserFrameTianBiao_GetAttribute(m_class,rg_XuanZeQi18.GetText(),rg_SuoYin24,rg_YuanSuMing1.GetText(),callback);
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_YuanSuShiFouCunZai (CVolString& rg_XuanZeQi19, INT rg_SuoYin23, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao11)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_YuanSuShiFouCunZai (CVolString& rg_XuanZeQi19, INT rg_SuoYin25, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao11)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi19.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
         _FBRO_CHECK_EVENT_TYPE(rg_JieGuoHuiDiao11.GetPtr(),JsCallbackType,_CT("类_FBrowser_填表框架"),_CT("元素是否存在"));
         CefRefPtr<FBroHsJsCallback> callback = static_cast<FBroHsJsCallback*>(rg_JieGuoHuiDiao11.GetPtr());
-        FBroHsBrowserFrameTianBiao_HasAttribute(m_class,rg_XuanZeQi19.GetText(),rg_SuoYin23,callback);
+        FBroHsBrowserFrameTianBiao_HasAttribute(m_class,rg_XuanZeQi19.GetText(),rg_SuoYin25,callback);
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_QuYuanSuZuoBiao (CVolString& rg_XuanZeQi20, INT rg_SuoYin24, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao12)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_QuYuanSuZuoBiao (CVolString& rg_XuanZeQi20, INT rg_SuoYin26, rg_class_FBrowser_shjzhnzhzh& rg_JieGuoHuiDiao12)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi20.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
         _FBRO_CHECK_EVENT_TYPE(rg_JieGuoHuiDiao12.GetPtr(),JsCallbackType,_CT("类_FBrowser_填表框架"),_CT("取元素坐标"));
         CefRefPtr<FBroHsJsCallback> callback = static_cast<FBroHsJsCallback*>(rg_JieGuoHuiDiao12.GetPtr());
-        FBroHsBrowserFrameTianBiao_GetPoint(m_class, rg_XuanZeQi20.GetText(), rg_SuoYin24, callback);
+        FBroHsBrowserFrameTianBiao_GetPoint(m_class, rg_XuanZeQi20.GetText(), rg_SuoYin26, callback);
     }
 }
 
-void rg_class_FBrowser_TianBiaoKuangJia::rg_ChuFaYuanSuShiJian (CVolString& rg_XuanZeQi21, INT rg_SuoYin25, CVolString& rg_ShiJianMing5, INT rg_AnJianDaiMa)
+void rg_class_FBrowser_TianBiaoKuangJia::rg_ChuFaYuanSuShiJian (CVolString& rg_XuanZeQi21, INT rg_SuoYin27, CVolString& rg_ShiJianMing5, INT rg_AnJianDaiMa)
 {
     if (rg_ShiFouYouXiao ())
     {
         rg_XuanZeQi21.ReplaceSubText (_CT2 (_T ("\"")), _CT2 (_T ("\\\"")), 0, -1, !TRUE);
-        FBroHsBrowserFrameTianBiao_DispatchEvent(m_class,rg_XuanZeQi21.GetText(),rg_SuoYin25,rg_ShiJianMing5.GetText(),rg_AnJianDaiMa);
+        FBroHsBrowserFrameTianBiao_DispatchEvent(m_class,rg_XuanZeQi21.GetText(),rg_SuoYin27,rg_ShiJianMing5.GetText(),rg_AnJianDaiMa);
     }
 }
 

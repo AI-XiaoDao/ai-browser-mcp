@@ -12,8 +12,8 @@ class rg_ZiFuLei : public CVolBaseDataType
     DECLARE_VOL_CLASS (rg_volcano_base, rg_ZiFuLei)
 
 public:
-    virtual void* GetDataPtr () override  { return &rg_value12; }
-    virtual void GetDumpString (CVolString& strDump, INT nMaxDumpSize) override  { strDump.SetValueText (rg_value12); }
+    virtual void* GetDataPtr () override  { return &rg_value15; }
+    virtual void GetDumpString (CVolString& strDump, INT nMaxDumpSize) override  { strDump.SetValueText (rg_value15); }
 
 public:
     rg_ZiFuLei ();
@@ -22,7 +22,7 @@ public:
     virtual void SaveIntoStream (CVolBaseOutputStream& stream) override;
 
 public:
-    TCHAR rg_value12;
+    TCHAR rg_value15;
 };
 
 }
