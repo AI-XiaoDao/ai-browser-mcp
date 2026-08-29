@@ -88,7 +88,7 @@
 
 ```bash
 node mcp_bridge.js --check
-node full_test.js        # 全量冒烟测试
+# 原生 stdio 自检: AI-Fbowser-Mcp.exe --mcp-stdio 启动后向 stdin 发送 ping 请求
 ```
 
 ---
@@ -156,7 +156,9 @@ Cursor / Claude Desktop  ←→  mcp_bridge.js (stdio 桥接)
     FBrowser CEF (libcef.dll)
 ```
 
-**开发语言**：火山视窗（中文编程）— 全部源码 `src/*.wsv` 开源（`generated-cpp/` 为 C++ 生成对照）。
+**开发语言**：火山视窗（中文编程）— 全部源码 `src/*.wsv` 开源，运行时零依赖（原生 stdio 直连 / Node 桥两种接入均可）。
+
+> 📐 **完整架构说明见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** — 进程模型 / 传输层 / 协议合规 / 请求处理链 / 同步等待引擎 / 事件层 / 源码布局 / 构建发布。
 
 ---
 
@@ -164,12 +166,13 @@ Cursor / Claude Desktop  ←→  mcp_bridge.js (stdio 桥接)
 
 ```text
 ├── CEFbro/AI-Fbowser-Mcp/
-│   ├── src/                 # 火山源码 (15 个 .wsv)
-│   ├── docs/                # 文档 (客户手册/使用技能书/配置说明书)
-│   ├── skills/              # AI 技能书 (工具参考/Hook 场景)
-│   ├── workflows/           # 示例工作流 JSON
-│   └── generated-cpp/       # C++ 生成源码对照 (x64/win32)
-├── release/                 # 打包发布脚本
+│   ├── src/                 # 火山源码 (16 个 .wsv, MCP引擎/工具/事件/stdio/内核)
+│   ├── AI-Fbowser-Mcp.vprj / .vsln   # 火山工程
+│   ├── workflows/           # 示例工作流 JSON (编译附属)
+│   ├── docs/                # 成品在线文档 (服务器 /docs/ 路由)
+│   ├── mcp_bridge.js        # Node 桥 (备用接入)
+│   └── mcp_config.json / mcp_config.README.md
+├── release/                 # 成品打包脚本 + 发布说明
 └── .mcp.json / .cursor/     # 一键接入配置
 ```
 
@@ -180,10 +183,10 @@ Cursor / Claude Desktop  ←→  mcp_bridge.js (stdio 桥接)
 | 文档 | 读者 |
 |---|---|
 | [客户使用手册](CEFbro/AI-Fbowser-Mcp/docs/客户使用手册.md) | 终端客户 — 安装/Cursor/话术/VIP/FAQ |
-| [使用技能书](CEFbro/AI-Fbowser-Mcp/docs/使用技能书.md) | 技术/Agent — 工具调用/Hook/场景 |
+| [架构说明](docs/ARCHITECTURE.md) | 开发者/架构 — 进程模型/传输/协议/源码布局 |
 | [MCP工具配置说明书](CEFbro/AI-Fbowser-Mcp/docs/MCP工具配置说明书.md) | 部署 — 配置全字段/环境变量 |
-| [AI浏览器MCP.md 工具参考](CEFbro/AI-Fbowser-Mcp/skills/AI浏览器MCP.md) | 265 工具完整参考 |
-| [场景与Hook测试](CEFbro/AI-Fbowser-Mcp/skills/场景与Hook测试.md) | JS 逆向场景脚本 |
+| [小白使用指南](CEFbro/AI-Fbowser-Mcp/docs/小白使用指南.md) | 新用户 — 下载即用 |
+| [QUICKSTART (EN)](CEFbro/AI-Fbowser-Mcp/docs/QUICKSTART_EN.md) | English quick start |
 
 ---
 

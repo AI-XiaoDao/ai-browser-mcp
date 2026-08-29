@@ -75,3 +75,6 @@ _zip_test/
 **/备份/
 **/*.bak
 **/schema_check*.js
+
+# C++ 生成源码对照(可再生成, Releases 提供 cpp 参考包)
+**/generated-cpp/

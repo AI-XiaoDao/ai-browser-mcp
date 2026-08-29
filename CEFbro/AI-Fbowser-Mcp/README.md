@@ -166,7 +166,7 @@
 | 文档 | 读者 |
 |------|------|
 | [客户使用手册](docs/客户使用手册.md) | 终端客户 — 安装、Cursor、话术、VIP、FAQ |
-| [使用技能书](docs/使用技能书.md) | 技术/Agent — MCP 调用、场景脚本、Hook |
+| [架构说明](../../../docs/ARCHITECTURE.md) | 系统架构/源码布局/构建发布 |
 | [MCP工具配置说明书](docs/MCP工具配置说明书.md) | 部署 — mcp_config 全字段、环境变量 |
 | [QUICKSTART ZH](docs/QUICKSTART_ZH.md) | 中文快速上手 |
 | [QUICKSTART EN](docs/QUICKSTART_EN.md) | English Quick Start |
