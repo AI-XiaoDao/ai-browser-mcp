@@ -235,7 +235,7 @@
 # ================================================================
 
 类 MCP命令服务器 <公开 @全局类 = 真 @视窗.附属文件 = "..\\docs > docs" @视窗.附属文件 = "mcp_config.json" @视窗.附属文件 = "..\\mcp_config.README.md"
-        @视窗.附属文件 = "index.html" @视窗.附属文件 = "..\\mcp_bridge.js" @视窗.附属文件 = "..\\mcp_client.js" @视窗.附属文件 = "..\\mcp_check.js"
+        @视窗.附属文件 = "index.html" @视窗.附属文件 = "..\\mcp_bridge.js"
         @视窗.附属文件 = "..\\workflows > workflows">
 {
     变量 服务器端口 <公开 静态 类型 = 整数 值 = 9222>
@@ -8614,6 +8614,11 @@
     参数 描述 <类型 = 文本型>
     参数 必须 <类型 = 逻辑型 @默认值 = 真>
     {
+        // 标准合规: 历史遗留类型名 "text" 不是 JSON Schema 合法类型, 统一映射为 "string" (Anthropic API 等严格校验会拒绝 type:"text")
+        如果 (类型 == "text")
+        {
+            类型 = "string"
+        }
         变量 s <类型 = 文本型>
         s = "\"inputSchema\":{\"type\":\"object\",\"properties\":{\"" + MCP_响应构建.JSON转义文本 (名) + "\":{\"type\":\"" + MCP_响应构建.JSON转义文本 (类型) + "\",\"description\":\"" + MCP_响应构建.JSON转义文本 (描述) + "\"}}"
         如果 (必须)
@@ -8652,6 +8657,11 @@
     参数 类型 <类型 = 文本型>
     参数 描述 <类型 = 文本型>
     {
+        // 标准合规: 历史遗留类型名 "text" 不是 JSON Schema 合法类型, 统一映射为 "string" (Anthropic API 等严格校验会拒绝 type:"text")
+        如果 (类型 == "text")
+        {
+            类型 = "string"
+        }
         // 修复(运行时): 描述 JSON 转义(描述可能含引号如 [\"a\",\"b\"]), 防 tools/list 生成非法 JSON
         返回 ("\"" + MCP_响应构建.JSON转义文本 (名) + "\":{\"type\":\"" + MCP_响应构建.JSON转义文本 (类型) + "\",\"description\":\"" + MCP_响应构建.JSON转义文本 (描述) + "\"}")
     }
