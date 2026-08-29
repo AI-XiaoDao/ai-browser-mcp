@@ -13,8 +13,8 @@
 
 | Package | Platform | Size |
 |---------|----------|------|
-| [AI-Browser-MCP-x64-v3.0.0.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v3.0.0/AI-Browser-MCP-x64-v3.0.0.zip) | Windows 64-bit | ~160 MB |
-| [AI-Browser-MCP-win32-v3.0.0.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v3.0.0/AI-Browser-MCP-win32-v3.0.0.zip) | Windows 32-bit | ~140 MB |
+| [AI-Browser-MCP-x64-v3.1.0.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v3.1.0/AI-Browser-MCP-x64-v3.1.0.zip) | Windows 64-bit | ~160 MB |
+| [AI-Browser-MCP-win32-v3.1.0.zip](https://github.com/AI-XiaoDao/ai-browser-mcp/releases/download/v3.1.0/AI-Browser-MCP-win32-v3.1.0.zip) | Windows 32-bit | ~140 MB |
 
 All **255 tools** included (screenshot, CDP, debugger, fingerprint, network hook, workflows). **MIT** open source.
 
