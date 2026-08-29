@@ -32,7 +32,7 @@ public:
     BOOL rg_QiYongWaiBuXiaoXi;
     BOOL rg_QiYongLiBingXuanRan;
     BOOL rg_JinYongMingLingCanShu;
-    CVolString rg_HuanCunMuLu;
+    CVolString rg_HuanCunMuLu1;
     BOOL rg_BaoLiuSession;
     CVolString rg_LiuLanQiBiaoShi;
     CVolString rg_LiuLanQiBiaoShiBanBen;

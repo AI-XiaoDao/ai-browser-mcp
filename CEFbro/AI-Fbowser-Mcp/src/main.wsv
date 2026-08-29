@@ -74,7 +74,17 @@
         }
         变量 设置 <类型 = FBrowser_初始化配置>
         设置.无沙箱 = 真
-        设置.缓存目录 = 取运行目录 () + "\\CacheData\\GlobalData"
+        // stdio 子进程模式使用独立CEF缓存目录: 与常驻HTTP实例共存时避免CacheData\GlobalData文件锁互斥(此前导致实例崩溃)
+        变量 缓存目录 <类型 = 文本型>
+        如果 (MCP_Stdio模式)
+        {
+            缓存目录 = 取运行目录 () + "\\CacheData\\GlobalData_Stdio"
+        }
+        否则
+        {
+            缓存目录 = 取运行目录 () + "\\CacheData\\GlobalData"
+        }
+        设置.缓存目录 = 缓存目录
         设置.本地化语言 = "zh-CN"
         设置.接收语言清单 = "zh-CN,zh,en"
         设置.启用系统消息循环 = 真

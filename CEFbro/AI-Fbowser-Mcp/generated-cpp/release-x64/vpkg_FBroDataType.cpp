@@ -41,7 +41,7 @@ BOOL rg_FBrowser_ChuShiHuaPeiZhi::_IsSelfEqual (const rg_FBrowser_ChuShiHuaPeiZh
     if (rg_QiYongWaiBuXiaoXi != objCompare.rg_QiYongWaiBuXiaoXi)  return FALSE;
     if (rg_QiYongLiBingXuanRan != objCompare.rg_QiYongLiBingXuanRan)  return FALSE;
     if (rg_JinYongMingLingCanShu != objCompare.rg_JinYongMingLingCanShu)  return FALSE;
-    if (rg_HuanCunMuLu != objCompare.rg_HuanCunMuLu)  return FALSE;
+    if (rg_HuanCunMuLu1 != objCompare.rg_HuanCunMuLu1)  return FALSE;
     if (rg_BaoLiuSession != objCompare.rg_BaoLiuSession)  return FALSE;
     if (rg_LiuLanQiBiaoShi != objCompare.rg_LiuLanQiBiaoShi)  return FALSE;
     if (rg_LiuLanQiBiaoShiBanBen != objCompare.rg_LiuLanQiBiaoShiBanBen)  return FALSE;
@@ -75,7 +75,7 @@ void rg_FBrowser_ChuShiHuaPeiZhi::_CopySelfFrom (const rg_FBrowser_ChuShiHuaPeiZ
     rg_QiYongWaiBuXiaoXi = objCopyFrom.rg_QiYongWaiBuXiaoXi;
     rg_QiYongLiBingXuanRan = objCopyFrom.rg_QiYongLiBingXuanRan;
     rg_JinYongMingLingCanShu = objCopyFrom.rg_JinYongMingLingCanShu;
-    rg_HuanCunMuLu = objCopyFrom.rg_HuanCunMuLu;
+    rg_HuanCunMuLu1 = objCopyFrom.rg_HuanCunMuLu1;
     rg_BaoLiuSession = objCopyFrom.rg_BaoLiuSession;
     rg_LiuLanQiBiaoShi = objCopyFrom.rg_LiuLanQiBiaoShi;
     rg_LiuLanQiBiaoShiBanBen = objCopyFrom.rg_LiuLanQiBiaoShiBanBen;
@@ -110,7 +110,7 @@ void rg_FBrowser_ChuShiHuaPeiZhi::LoadFromStream (CVolBaseInputStream& stream)
     stream.ReadExact (&rg_QiYongWaiBuXiaoXi, sizeof (BOOL));
     stream.ReadExact (&rg_QiYongLiBingXuanRan, sizeof (BOOL));
     stream.ReadExact (&rg_JinYongMingLingCanShu, sizeof (BOOL));
-    rg_HuanCunMuLu.LoadFromStream (stream);
+    rg_HuanCunMuLu1.LoadFromStream (stream);
     stream.ReadExact (&rg_BaoLiuSession, sizeof (BOOL));
     rg_LiuLanQiBiaoShi.LoadFromStream (stream);
     rg_LiuLanQiBiaoShiBanBen.LoadFromStream (stream);
@@ -145,7 +145,7 @@ void rg_FBrowser_ChuShiHuaPeiZhi::SaveIntoStream (CVolBaseOutputStream& stream)
     stream.write (&rg_QiYongWaiBuXiaoXi, sizeof (BOOL));
     stream.write (&rg_QiYongLiBingXuanRan, sizeof (BOOL));
     stream.write (&rg_JinYongMingLingCanShu, sizeof (BOOL));
-    rg_HuanCunMuLu.SaveIntoStream (stream);
+    rg_HuanCunMuLu1.SaveIntoStream (stream);
     stream.write (&rg_BaoLiuSession, sizeof (BOOL));
     rg_LiuLanQiBiaoShi.SaveIntoStream (stream);
     rg_LiuLanQiBiaoShiBanBen.SaveIntoStream (stream);
@@ -177,7 +177,7 @@ FBroInitSettings* rg_FBrowser_ChuShiHuaPeiZhi::ToFBroData(){
   tempdata.external_message_pump=rg_QiYongWaiBuXiaoXi;
   tempdata.windowless_rendering_enabled=rg_QiYongLiBingXuanRan;
   tempdata.command_line_args_disabled=rg_JinYongMingLingCanShu;
-  tempdata.cache_path=FBroUnit::UnicodeToAnsi(rg_HuanCunMuLu.GetText());
+  tempdata.cache_path=FBroUnit::UnicodeToAnsi(rg_HuanCunMuLu1.GetText());
   tempdata.persist_session_cookies=rg_BaoLiuSession;
   tempdata.user_agent=FBroUnit::UnicodeToAnsi(rg_LiuLanQiBiaoShi.GetText());
   tempdata.user_agent_product=FBroUnit::UnicodeToAnsi(rg_LiuLanQiBiaoShiBanBen.GetText());

@@ -64,7 +64,16 @@ INT rg_startup_class::rg_startup_method ()
     }
     rg_FBrowser_ShuJuLeiXing::rg_FBrowser_ChuShiHuaPeiZhi rg_SheZhi;
     rg_SheZhi.rg_MoShaXiang = TRUE;
-    rg_SheZhi.rg_HuanCunMuLu = rg_volcano_base::rg_HuanJingCunQuLei::rg_QuYunHangMuLu () + _T ("\\CacheData\\GlobalData");
+    CVolString rg_HuanCunMuLu;
+    if (rg_MCP_StdioMoShi)
+    {
+        rg_HuanCunMuLu = rg_volcano_base::rg_HuanJingCunQuLei::rg_QuYunHangMuLu () + _T ("\\CacheData\\GlobalData_Stdio");
+    }
+    else
+    {
+        rg_HuanCunMuLu = rg_volcano_base::rg_HuanJingCunQuLei::rg_QuYunHangMuLu () + _T ("\\CacheData\\GlobalData");
+    }
+    rg_SheZhi.rg_HuanCunMuLu1 = rg_HuanCunMuLu;
     rg_SheZhi.rg_BenDeHuaYuYan = _T ("zh-CN");
     rg_SheZhi.rg_JieShouYuYanQingChan = _T ("zh-CN,zh,en");
     rg_SheZhi.rg_QiYongJiTongXiaoXiXunHuan = TRUE;
