@@ -17,7 +17,7 @@ Windows local MCP browser automation — 255 tools, any AI agent (Cursor/Claude/
 
 **中文（Discussions / 简介补充）：**
 ```
-Windows 本地 MCP 浏览器自动化 — 255 工具，Cursor/Claude 一句话：采集、逆向 POST、CDP 定位。下载即用，MIT 开源。
+Windows 本地 MCP 浏览器自动化 — 265 工具，Cursor/Claude Code/Trae 一句话：采集、逆向、CDP 定位。原生 stdio 直连，下载即用，MIT 开源。
 ```
 
 ## Topics（建议保留/补充）
