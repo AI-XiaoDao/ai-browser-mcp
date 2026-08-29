@@ -48,8 +48,9 @@ foreach ($plat in $platforms) {
     # 过滤多余文件: 链接中间产物/历史残留zip/运行时缓存与日志
     Get-ChildItem $linker.FullName | Where-Object {
         $_.Name -ne 'out' -and
-        $_.Name -notmatch '^log\.txt$|^CacheData$|^mcp_cache\.db' -and
-        $_.Name -notmatch '\.zip$'
+        $_.Name -notmatch '^log\.txt$|^CacheData$|^mcp_cache\.db|^mcp_connect\.json$' -and
+        $_.Name -notmatch '^locales \(2\)$|^NVIDIA Corporation$' -and
+        $_.Name -notmatch '\.zip$|\.bak$'
     } | ForEach-Object {
         Copy-Item $_.FullName -Destination $staging -Recurse -Force
     }
