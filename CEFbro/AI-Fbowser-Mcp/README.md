@@ -22,7 +22,7 @@
 
 ## 这是什么？
 
-**AI浏览器 MCP Server** 是一个 **Windows 本地浏览器自动化 MCP 服务端**。它运行真实的 **FBrowser CEF (Chromium Embedded Framework)** 浏览器内核，通过 **Model Context Protocol (MCP 模型上下文协议)** 向 AI 编程助手暴露 **255 个浏览器自动化工具**。
+**AI浏览器 MCP Server** 是一个 **Windows 本地浏览器自动化 MCP 服务端**。它运行真实的 **FBrowser CEF (Chromium Embedded Framework)** 浏览器内核，通过 **Model Context Protocol (MCP 模型上下文协议)** 向 AI 编程助手暴露 **265 个浏览器自动化工具**。
 
 ### 为什么选择 AI 浏览器 MCP？
 
@@ -87,7 +87,7 @@
 
 ---
 
-## 核心能力 (255 工具)
+## 核心能力 (265 工具)
 
 | 类别 | 数量 | 代表工具 |
 |------|------|---------|

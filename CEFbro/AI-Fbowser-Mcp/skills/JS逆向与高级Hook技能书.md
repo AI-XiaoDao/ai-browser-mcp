@@ -491,7 +491,7 @@ getEnv(['window','document','location','navigator','history','screen']);
 
 ## 九、相关文档
 
-- [AI浏览器MCP.md](./AI浏览器MCP.md) — 255 个工具完整参考 (v3.0.0)
+- [AI浏览器MCP.md](./AI浏览器MCP.md) — 265 个工具完整参考 (v3.0.0)
 - [场景与Hook测试.md](./场景与Hook测试.md) — 场景脚本与测试
 - [客户使用手册.md](./客户使用手册.md) — 终端客户安装与使用
 - [使用技能书.md](./使用技能书.md) — 技术/Agent 实操指南

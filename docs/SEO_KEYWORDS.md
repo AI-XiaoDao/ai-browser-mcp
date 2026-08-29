@@ -89,7 +89,7 @@ Playwright 替代 MCP
 Puppeteer alternative MCP
 Puppeteer MCP server
 browser-use alternative
-Selenium MCP（对比：本项为 CEF 真实浏览器 + 255 工具）
+Selenium MCP（对比：本项为 CEF 真实浏览器 + 265 工具）
 无头浏览器 MCP vs 真实浏览器
 ```
 
@@ -109,7 +109,7 @@ Chrome MCP Windows local
 127.0.0.1 MCP browser
 stdio MCP bridge
 mcp_bridge.js
-255 MCP tools
+265 MCP tools
 browser_* tools
 sync-wait MCP
 workflow JSON MCP
@@ -140,7 +140,7 @@ x64 win32 Windows browser MCP
 Windows 浏览器自动化 开源
 Cursor 怎么控制浏览器
 Claude 连接本地浏览器
-MCP 浏览器 255 工具
+MCP 浏览器 265 工具
 本机浏览器 AI 控制
 一句话 采集 网页数据
 浏览器 Hook POST 请求
@@ -167,5 +167,5 @@ AI 代理 浏览器 工具
 | [QUICKSTART_EN.md](../CEFbro/AI-Fbowser-Mcp/docs/QUICKSTART_EN.md) | 英文检索 |
 | [QUICKSTART_ZH.md](../CEFbro/AI-Fbowser-Mcp/docs/QUICKSTART_ZH.md) | 中文检索 |
 | [OPEN_SOURCE.md](../OPEN_SOURCE.md) | 论坛复制文案 |
-| [AI浏览器MCP.md](../CEFbro/AI-Fbowser-Mcp/skills/AI浏览器MCP.md) | 255 工具长尾 |
+| [AI浏览器MCP.md](../CEFbro/AI-Fbowser-Mcp/skills/AI浏览器MCP.md) | 265 工具长尾 |
 | [场景与Hook测试.md](../CEFbro/AI-Fbowser-Mcp/skills/场景与Hook测试.md) | 逆向 Hook 长尾 |

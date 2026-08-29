@@ -7263,7 +7263,7 @@ void CALLBACK rg_MCPMingLingFuWuQi::rg_TianJiaGongJuJSON (CVolString& rg_MingChe
     {
         rg_GongJuLieBiaoGouJianHuanChongOu = rg_GongJuLieBiaoGouJianHuanChongOu + _T (",");
     }
-    rg_GongJuLieBiaoGouJianHuanChongOu = rg_GongJuLieBiaoGouJianHuanChongOu + _T ("{\"name\":\"") + rg_MingChen + _T ("\",\"description\":\"") + rg_MiaoShu + _T ("\",") + rg_schemaJSON + _T ("}");
+    rg_GongJuLieBiaoGouJianHuanChongOu = rg_GongJuLieBiaoGouJianHuanChongOu + _T ("{\"name\":\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_MingChen) + _T ("\",\"description\":\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_MiaoShu) + _T ("\",") + rg_schemaJSON + _T ("}");
     rg_GongJuGouJianJiShu = rg_GongJuGouJianJiShu + 1;
 }
 
@@ -7282,7 +7282,7 @@ CVolString CALLBACK rg_MCPMingLingFuWuQi::rg_KongSchemaWenBen ()
 CVolString CALLBACK rg_MCPMingLingFuWuQi::rg_ChanCanShuSchemaWenBen (CVolString& rg_Ming1, CVolString& rg_LeiXing, CVolString& rg_MiaoShu1, BOOL rg_BiXu)
 {
     CVolString rg_s;
-    rg_s = _CT2 (_T ("\"inputSchema\":{\"type\":\"object\",\"properties\":{\"")) + rg_Ming1 + _T ("\":{\"type\":\"") + rg_LeiXing + _T ("\",\"description\":\"") + rg_MiaoShu1 + _T ("\"}}");
+    rg_s = _CT2 (_T ("\"inputSchema\":{\"type\":\"object\",\"properties\":{\"")) + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_Ming1) + _T ("\":{\"type\":\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_LeiXing) + _T ("\",\"description\":\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_MiaoShu1) + _T ("\"}}");
     if (rg_BiXu)
     {
         rg_s = rg_s + _T (",\"required\":[\"") + rg_Ming1 + _T ("\"]");
@@ -7293,7 +7293,7 @@ CVolString CALLBACK rg_MCPMingLingFuWuQi::rg_ChanCanShuSchemaWenBen (CVolString&
 
 CVolString CALLBACK rg_MCPMingLingFuWuQi::rg_ShuangXY_SchemaWenBen (CVolString& rg_Ming2, CVolString& rg_Ming3, CVolString& rg_MiaoShu2, CVolString& rg_MiaoShu3)
 {
-    return (_CT2 (_T ("\"inputSchema\":{\"type\":\"object\",\"properties\":{\"")) + rg_Ming2 + _T ("\":{\"type\":\"integer\",\"description\":\"") + rg_MiaoShu2 + _T ("\"},\"") + rg_Ming3 + _T ("\":{\"type\":\"integer\",\"description\":\"") + rg_MiaoShu3 + _T ("\"}},\"required\":[\"") + rg_Ming2 + _T ("\",\"") + rg_Ming3 + _T ("\"]}"));
+    return (_CT2 (_T ("\"inputSchema\":{\"type\":\"object\",\"properties\":{\"")) + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_Ming2) + _T ("\":{\"type\":\"integer\",\"description\":\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_MiaoShu2) + _T ("\"},\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_Ming3) + _T ("\":{\"type\":\"integer\",\"description\":\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_MiaoShu3) + _T ("\"}},\"required\":[\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_Ming2) + _T ("\",\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_Ming3) + _T ("\"]}"));
 }
 
 CVolString CALLBACK rg_MCPMingLingFuWuQi::rg_DuoShuXingSchemaWenBen (CVolString& rg_ShuXingLieBiaoWenBen, CVolString& rg_BiXuLieBiaoWenBen)
@@ -7310,7 +7310,7 @@ CVolString CALLBACK rg_MCPMingLingFuWuQi::rg_DuoShuXingSchemaWenBen (CVolString&
 
 CVolString CALLBACK rg_MCPMingLingFuWuQi::rg_ShuXingXiangJSON (CVolString& rg_Ming4, CVolString& rg_LeiXing1, CVolString& rg_MiaoShu4)
 {
-    return (_CT2 (_T ("\"")) + rg_Ming4 + _T ("\":{\"type\":\"") + rg_LeiXing1 + _T ("\",\"description\":\"") + rg_MiaoShu4 + _T ("\"}"));
+    return (_CT2 (_T ("\"")) + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_Ming4) + _T ("\":{\"type\":\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_LeiXing1) + _T ("\",\"description\":\"") + rg_MCP_XiangYingGouJian::rg_JSONZhuaiYiWenBen (rg_MiaoShu4) + _T ("\"}"));
 }
 
 CVolString CALLBACK rg_MCPMingLingFuWuQi::rg_ChuLi_GongJuDiaoYong (CVolString& rg_QingQiuID7, rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei& rg_QingQiuJSON1)

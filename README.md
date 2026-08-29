@@ -1,6 +1,6 @@
 # 🚀 AI浏览器 MCP Server
 
-> **Windows 本地浏览器自动化 MCP 服务端** — 真实 FBrowser CEF 内核 · **268 个浏览器自动化工具** · 本地 `127.0.0.1:9222` · MIT 开源
+> **Windows 本地浏览器自动化 MCP 服务端** — 真实 FBrowser CEF 内核 · **265 个浏览器自动化工具** · 本地 `127.0.0.1:9222` · MIT 开源
 >
 > Web Scraping · JS Reverse Engineering · CDP Debugger · 内核层扩展 · 指纹反检测 · Form Automation RPA
 
@@ -12,7 +12,7 @@
 
 ## 📖 这是什么？
 
-**AI浏览器 MCP Server** 是一个 **Windows 本地浏览器自动化 MCP 服务端**：运行真实的 **FBrowser CEF（Chromium）浏览器内核**，通过 **Model Context Protocol（MCP）** 向 AI 编程助手（Cursor / Claude Desktop / Cline / 任意 MCP 客户端）暴露 **268 个浏览器自动化工具**。
+**AI浏览器 MCP Server** 是一个 **Windows 本地浏览器自动化 MCP 服务端**：运行真实的 **FBrowser CEF（Chromium）浏览器内核**，通过 **Model Context Protocol（MCP）** 向 AI 编程助手（Cursor / Claude Desktop / Cline / 任意 MCP 客户端）暴露 **265 个浏览器自动化工具**。
 
 无需安装 Node 驱动、无需编写 Playwright/Puppeteer 脚本——**下载解压即用**，AI 用自然语言即可操控浏览器完成：
 
@@ -93,7 +93,7 @@ node full_test.js        # 全量冒烟测试
 
 ---
 
-## 🛠 核心能力一览（268 工具）
+## 🛠 核心能力一览（265 工具）
 
 | 类别 | 数量 | 代表工具 |
 |---|---|---|
@@ -182,7 +182,7 @@ Cursor / Claude Desktop  ←→  mcp_bridge.js (stdio 桥接)
 | [客户使用手册](CEFbro/AI-Fbowser-Mcp/docs/客户使用手册.md) | 终端客户 — 安装/Cursor/话术/VIP/FAQ |
 | [使用技能书](CEFbro/AI-Fbowser-Mcp/docs/使用技能书.md) | 技术/Agent — 工具调用/Hook/场景 |
 | [MCP工具配置说明书](CEFbro/AI-Fbowser-Mcp/docs/MCP工具配置说明书.md) | 部署 — 配置全字段/环境变量 |
-| [AI浏览器MCP.md 工具参考](CEFbro/AI-Fbowser-Mcp/skills/AI浏览器MCP.md) | 268 工具完整参考 |
+| [AI浏览器MCP.md 工具参考](CEFbro/AI-Fbowser-Mcp/skills/AI浏览器MCP.md) | 265 工具完整参考 |
 | [场景与Hook测试](CEFbro/AI-Fbowser-Mcp/skills/场景与Hook测试.md) | JS 逆向场景脚本 |
 
 ---
@@ -203,4 +203,4 @@ Cursor / Claude Desktop  ←→  mcp_bridge.js (stdio 桥接)
 
 ### 搜索关键词
 
-`MCP browser automation` · `Cursor browser MCP` · `浏览器自动化 MCP` · `web scraping MCP` · `Playwright alternative` · `CDP debugger MCP` · `JS reverse engineering MCP` · `浏览器指纹反检测` · `火山视窗 CEF` · `AI浏览器 MCP` · `browser kernel extension` · `268 MCP tools`
+`MCP browser automation` · `Cursor browser MCP` · `浏览器自动化 MCP` · `web scraping MCP` · `Playwright alternative` · `CDP debugger MCP` · `JS reverse engineering MCP` · `浏览器指纹反检测` · `火山视窗 CEF` · `AI浏览器 MCP` · `browser kernel extension` · `265 MCP tools`
