@@ -142,7 +142,7 @@ Cursor / Claude Desktop  ←→  mcp_bridge.js (stdio 桥接)
             ▼
     127.0.0.1:9222 (HTTP/WS JSON-RPC)
             │
-    MCP_Server.wsv (~9400行)
+    MCP_Server.wsv (MCP引擎/工具注册/路由)
     ├── Core       — 导航/JS/DOM/CDP/截图/拦截/等待 (162工具)
     ├── Form       — FBrowser 填表框架 (10工具)
     ├── VIP        — 指纹/代理/高级键鼠/CDP (68工具)
@@ -198,12 +198,12 @@ Cursor / Claude Desktop  ←→  mcp_bridge.js (stdio 桥接)
 
 ## ⚖️ 开源
 
-- **MIT License** — 源码、文档、技能书全部开放
+- **MIT License** — 源码与文档全部开放（[LICENSE](LICENSE)）
 - 仓库：https://github.com/AI-XiaoDao/ai-browser-mcp
 - 技术支持：QQ 212577526 · QQ群 737680767
 
 ---
 
-### 搜索关键词
 
-`MCP browser automation` · `Cursor browser MCP` · `浏览器自动化 MCP` · `web scraping MCP` · `Playwright alternative` · `CDP debugger MCP` · `JS reverse engineering MCP` · `浏览器指纹反检测` · `火山视窗 CEF` · `AI浏览器 MCP` · `browser kernel extension` · `265 MCP tools`
+
+<!-- SEO: MCP browser automation · Cursor browser MCP · 浏览器自动化 MCP · web scraping MCP · Playwright alternative · CDP debugger MCP · JS reverse engineering MCP · 浏览器指纹反检测 · 火山视窗 CEF · AI浏览器 MCP · browser kernel extension · 265 MCP tools -->

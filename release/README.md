@@ -1,85 +1,54 @@
-# AI浏览器 — 成品发布包说明
+# 发布说明 (Release Guide)
 
-本目录为**可直接分发给终端用户**的运行时配置包（不含 CEF 二进制时需配合 `AI-Fbowser-Mcp.exe`）。
+本目录包含**成品发布**所需的脚本与说明。运行时二进制（zip 包）发布在 [GitHub Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)。
 
-## 目录
+## 文件
 
-| 路径 | 内容 |
+| 文件 | 用途 |
 |------|------|
-| `linker/` | 与编译输出 `linker/` 同结构：桥接脚本、配置、文档、工作流（**无 exe/dll**） |
+| `pack-release.ps1` | 一键打包 x64/win32 运行时 zip + C++ 参考 zip，并同步 generated-cpp |
+| `RELEASE_NOTES_v3.1.0.md` | 当前版本发布说明 |
 
-## 火山编译目录对照（Release x64 / win32）
-
-与仓库 [README · 四层对照表](../README.md#四层对照先看这张表) 一致：
-
-| 层级 | 本地 `_int/.../release/{x64\|win32}/` | 入 Git | 成品 zip |
-|:--:|------------------------------|:--:|:--:|
-| ② 生成 C++ | `project/` | `generated-cpp/release-{x64\|win32}/` | cpp zip |
-| ③ 中间产物 | `linker/out/` | ❌ | ❌ **必须排除** |
-| ④ 运行成品 | `linker/`（除 `out/`） | ❌ | x64 / win32 zip |
-
-```
-src/*.wsv → project/ → linker/out/ → linker/AI-Fbowser-Mcp.exe
-  ①           ②           ③              ④
-```
-
-**误区**：`out/` 只有 `.obj`/`.pch`，不是 C++；C++ 在 **`project/`**（= Git `generated-cpp/`）。
-
-## 使用方式
-
-### 已有 exe（Release 或自行编译）
-
-1. 将 `linker/` 内全部文件复制到 **AI-Fbowser-Mcp.exe 同目录**
-2. 双击运行 exe，访问 `http://127.0.0.1:9222/`
-3. 按 `docs/客户使用手册.md` 配置 Cursor
-
-### 仅本仓库脚本（开发调试）
-
-若已在本地编译并启动 MCP 服务，也可直接使用仓库内：
-
-```
-CEFbro/AI-Fbowser-Mcp/mcp_bridge.js
-CEFbro/AI-Fbowser-Mcp/mcp_config.json  → 编译后位于 linker/
-```
-
-## 发布 GitHub Release 建议
-
-从 `_int/AI-Fbowser-Mcp/release/x64/linker/` 打包时，**不要包含 `out/` 目录**（火山编译中间产物：`.obj`、`.pch`、`make_params.txt` 等，非运行所需，体积约 400MB）。
-
-打包 zip 结构示例：
-
-```
-AI-Browser-MCP-x64-v3.0.0.zip
-├── AI-Fbowser-Mcp.exe
-├── *.dll / CEF 运行时
-├── docs/
-├── workflows/
-├── locales/
-├── mcp_bridge.js
-├── mcp_config.json
-└── index.html
-（不含 out/）
-```
-
-## 版本
-
-与源码 `MCP_版本号`（当前 3.0.0）保持一致。
-
-## 一键打包
-
-编译 **Release x64 / win32** 后，运行打包脚本并上传至 GitHub Releases：
+## 打包
 
 ```powershell
-.\release\pack-release.ps1 -Version 3.0.0 -Platform all
-gh release upload v3.0.0 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber
+# 打包全部平台（产物在仓库根目录）
+.\release\pack-release.ps1 -Version 3.1.0 -Platform all
+# 或仅 x64
+.\release\pack-release.ps1 -Version 3.1.0 -Platform x64
 ```
 
-输出：
+产出 4 个 zip：
 
-- `AI-Browser-MCP-x64-v3.0.0.zip` / `AI-Browser-MCP-win32-v3.0.0.zip` — 运行包（自动排除 `out/`）
-- `AI-Browser-MCP-cpp-x64-v3.0.0.zip` / `AI-Browser-MCP-cpp-win32-v3.0.0.zip` — C++ 对照
-- 同步 `CEFbro/AI-Fbowser-Mcp/generated-cpp/release-x64/`、`release-win32/`
+| 包 | 内容 |
+|------|------|
+| `AI-Browser-MCP-x64-v3.1.0.zip` | x64 运行时（exe + CEF DLL + 配置 + 文档 + 工作流） |
+| `AI-Browser-MCP-win32-v3.1.0.zip` | win32 运行时 |
+| `AI-Browser-MCP-cpp-x64-v3.1.0.zip` | x64 生成 C++ 参考（`_int/.../release/x64/project/`） |
+| `AI-Browser-MCP-cpp-win32-v3.1.0.zip` | win32 生成 C++ 参考 |
 
-上传：`gh release upload v3.0.0 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber`
+运行时 zip 的打包规则：
 
-完整说明模板见 [`RELEASE_NOTES_v2.6.0.md`](RELEASE_NOTES_v2.6.0.md)。重新发版可先 `gh release delete v3.0.0 --yes` 再 `gh release create ... --notes-file release/RELEASE_NOTES_v2.6.0.md`。
+- 取编译输出 `_int/AI-Fbowser-Mcp/release/{x64,win32}/linker/`
+- **排除** `out/`（编译中间产物 .obj/.pch）、`CacheData/`、`mcp_cache.db*`、`log.txt`、历史 zip
+- 包含：exe、CEF 运行时（`*.dll`/`*.pak`/`*.bin`/`*.dat`）、`docs/`、`workflows/`、`locales/`、`js/`、`mcp_bridge.js`、`mcp_config.json`、`index.html`
+
+## 发布流程
+
+1. 编译 x64 与 win32 发布版（见 `CONTRIBUTING.md`）
+2. 运行 `pack-release.ps1`
+3. 上传到 GitHub Release：
+
+```powershell
+gh release upload v3.1.0 AI-Browser-MCP-*.zip -R AI-XiaoDao/ai-browser-mcp --clobber
+```
+
+## 目录对照
+
+编译产物的生命周期：
+
+```
+src/*.wsv (源码) → project/ (生成 C++) → linker/out/ (编译中间) → linker/ (运行成品)
+```
+
+其中 `project/`（生成 C++）不进入 git 仓库；需要参考 C++ 时使用 Releases 的 cpp zip 包。

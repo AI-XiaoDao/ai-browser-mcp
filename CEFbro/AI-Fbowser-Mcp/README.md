@@ -117,11 +117,11 @@
 | **Cookie/代理** | 8 | `get_cookies`, `set_cookie`, `delete_cookies`, `set_proxy`, `set_s5_proxy` |
 | **截图/打印** | 3 | `screenshot`, `print`, `print_to_pdf` |
 | **CDP 协议** | 3 | `cdp_call`, `cdp_event`, `cdp` |
-| **断点调试** | 15 | `debugger_flow` (一键), `debugger_auto` (循环), `debugger_enable/resume/step_*`, `debugger_set_breakpoint`, `debugger_evaluate`, `debugger_inspect`, `debugger_wait_paused` (pause 已并入 debugger_flow) |
+| **断点调试** | 15 | `debugger_flow` (一键), `debugger_auto` (循环), `debugger_enable/resume/step_*`, `debugger_set_breakpoint`, `debugger_evaluate`, `debugger_inspect`, `debugger_wait_paused` |
 | **JS 逆向** | 19 | `reverse_hook`, `reverse_strings`, `reverse_verify`, `reverse_instrument`, `reverse_search`, `reverse_initiator`, `reverse_cdp_hook`, `reverse_env`, `reverse_preset` 等 |
 | **指纹伪装** | 45 | `fingerprint` (批量/清除/计数), canvas/webgl/audio/webrtc/geolocation/timezone/ssl/ua/font/viewport/screen/hardware/battery 等 30+ 维度 |
 | **工作流** | 4 | `workflow_list`, `workflow_get`, `workflow_run`, `workflow_stop` |
-| **VIP 其他** | 43 | 高级键鼠 (CDP级)、插件管理、DOM搜索、触摸仿真、内核开关、isTrusted 等 |
+| **高级能力** | 43 | 高级键鼠 (CDP级)、插件管理、DOM搜索、触摸仿真、内核开关、isTrusted 等 |
 | **窗口/系统** | 15 | `window_info`, `popup_info`, `ipc_*`, `edit_*`, `find_*`, `file_dialog`, `compress_memory` |
 | **编码/解码** | 4 | `base64_encode`, `base64_decode`, `uri_encode`, `uri_decode` |
 | **输入交互** | 14 | mouse_click/move/wheel, key_event, touch_press/move/release, vip_mouse_*, vip_key_* |
@@ -157,7 +157,7 @@
 | `AI_BROWSER_MCP_PORT` | `9222` |
 | `AI_BROWSER_MCP_HEALTH` | `http://127.0.0.1:9222/health` |
 | `AI_BROWSER_MCP_HTTP_POST` | `http://127.0.0.1:9222/mcp` |
-| `AI_BROWSER_MCP_VERSION` | `3.0.0` |
+| `AI_BROWSER_MCP_VERSION` | `3.1.0` |
 
 ---
 
@@ -165,7 +165,7 @@
 
 | 文档 | 读者 |
 |------|------|
-| [客户使用手册](docs/客户使用手册.md) | 终端客户 — 安装、Cursor、话术、VIP、FAQ |
+| [客户使用手册](docs/客户使用手册.md) | 终端客户 — 安装、Cursor、FAQ |
 | [架构说明](../../../docs/ARCHITECTURE.md) | 系统架构/源码布局/构建发布 |
 | [MCP工具配置说明书](docs/MCP工具配置说明书.md) | 部署 — mcp_config 全字段、环境变量 |
 | [QUICKSTART ZH](docs/QUICKSTART_ZH.md) | 中文快速上手 |
@@ -198,7 +198,7 @@ Cursor / Claude Desktop  ←→  mcp_bridge.js (stdio 桥接)
             ▼
     127.0.0.1:9222 (HTTP/WS JSON-RPC)
             │
-    MCP_Server.wsv (~8000行)
+    MCP_Server.wsv (MCP引擎/工具/路由)
     ├── Core      — 导航/JS/DOM/CDP/截图/拦截/等待
     ├── Form      — FBrowser 填表框架
     ├── VIP       — 指纹/代理/高级键鼠/CDP
@@ -208,7 +208,7 @@ Cursor / Claude Desktop  ←→  mcp_bridge.js (stdio 桥接)
     ├── HTTP      — HTTP/WebSocket 路由
     └── Events    — 浏览器事件 Hook 系统
             │
-    FBrowser CEF (libcef.dll ~236MB)
+    FBrowser CEF (libcef.dll)
 ```
 
 ---

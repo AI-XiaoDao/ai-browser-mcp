@@ -1,0 +1,29 @@
+# 文本文件统一 LF 换行
+* text=auto
+
+*.wsv text eol=lf
+*.vprj text eol=lf
+*.vsln text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.ps1 text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+.gitattributes text eol=lf
+.gitignore text eol=lf
+.editorconfig text eol=lf
+
+# 二进制文件
+*.exe binary
+*.dll binary
+*.pak binary
+*.bin binary
+*.dat binary
+*.jpg binary
+*.png binary
+*.gif binary
+*.pdf binary
+*.zip binary
