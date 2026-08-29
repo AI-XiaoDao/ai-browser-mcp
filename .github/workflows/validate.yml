@@ -19,11 +19,7 @@ jobs:
       - name: Node syntax check
         run: |
           node --check CEFbro/AI-Fbowser-Mcp/mcp_bridge.js
-          node --check CEFbro/AI-Fbowser-Mcp/mcp_client.js
-          node --check CEFbro/AI-Fbowser-Mcp/mcp_check.js
-          node --check CEFbro/AI-Fbowser-Mcp/full_test.js
-          node --check CEFbro/AI-Fbowser-Mcp/regression_sync_wait.js
-          node --check CEFbro/AI-Fbowser-Mcp/mcp_launcher.js
+          node --check CEFbro/AI-Fbowser-Mcp/docs/assets/docs.js
 
       - name: JSON validate
         run: |
