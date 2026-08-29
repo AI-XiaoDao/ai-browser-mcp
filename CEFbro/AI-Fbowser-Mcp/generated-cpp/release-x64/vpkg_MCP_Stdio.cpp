@@ -47,8 +47,12 @@ CVolString CALLBACK rg_MCPStdioQiao::rg_DouQuYiHang (INT64 rg_XianChengGouBing)
         if (headFailed) break;
         if (headLine.empty()) { Sleep(50); continue; }
         long contentLen = -1;
-        if (strncmp(headLine.c_str(), "Content-Length:", 15) == 0)
+        if (strncmp(headLine.c_str(), "Content-Length:", 15) == 0) {
             contentLen = atol(headLine.c_str() + 15);
+            *(volatile BOOL*)&rg_ShuChuZhengMoShiCL = TRUE;
+        } else {
+            *(volatile BOOL*)&rg_ShuChuZhengMoShiCL = FALSE;
+        }
         if (contentLen > 67108864) {
             fprintf(stderr, "[MCP-Stdio] Content-Length %ld 超过64MB上限, 拒绝并排空该帧\n", contentLen);
             long toDiscard = contentLen;
@@ -142,11 +146,17 @@ CVolString CALLBACK rg_MCPStdioQiao::rg_DouQuYiHang (INT64 rg_XianChengGouBing)
 void CALLBACK rg_MCPStdioQiao::rg_XieRuYiHang (CVolString& rg_string4)
 {
     std::string utf8 = CU8String(rg_string4.GetText()).GetText();
-    DWORD contentLen = (DWORD)utf8.size();
-    char header[128];
-    int headerLen = snprintf(header, sizeof(header), "Content-Length: %lu\r\n\r\n", (unsigned long)contentLen);
-    std::string frame(header, headerLen);
-    frame += utf8;
+    std::string frame;
+    if (*(volatile BOOL*)&rg_ShuChuZhengMoShiCL) {
+        DWORD contentLen = (DWORD)utf8.size();
+        char header[128];
+        int headerLen = snprintf(header, sizeof(header), "Content-Length: %lu\r\n\r\n", (unsigned long)contentLen);
+        frame.assign(header, headerLen);
+        frame += utf8;
+    } else {
+        frame = utf8;
+        frame += "\n";
+    }
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hOut == INVALID_HANDLE_VALUE || hOut == NULL) return;
     const char* wp = frame.c_str();
@@ -203,7 +213,7 @@ void CALLBACK rg_MCPStdioQiao::rg_YunHangStdioZhuXunHuan (INT64 rg_XianChengGouB
 {
     rg_XieRiZhi (_CT2 (_T ("============================================")));
     rg_XieRiZhi (_CT2 (_T ("AI浏览器 MCP Stdio Server 启动")));
-    rg_XieRiZhi (_CT2 (_T ("协议: JSON-RPC 2.0 over stdin/stdout (Content-Length 帧格式)")));
+    rg_XieRiZhi (_CT2 (_T ("协议: JSON-RPC 2.0 over stdin/stdout (帧格式自适应: 官方换行分隔 / 兼容Content-Length)")));
     rg_XieRiZhi (_CT2 (_T ("直连: Claude Desktop / Cursor / Trace 等任意AI工具")));
     rg_XieRiZhi (_CT2 (_T ("============================================")));
     INT rg_KongDouCiShu = 0;

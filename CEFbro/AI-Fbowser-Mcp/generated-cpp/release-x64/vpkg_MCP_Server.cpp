@@ -102,6 +102,10 @@ void CALLBACK rg_LiuLanQiRongQi::rg_HuiFuHuanYingYe ()
 
 CVolString CALLBACK rg_LiuLanQiRongQi::rg_QuHuanYingYeDeZhi ()
 {
+    if (rg_MCPStdioQiao::rg_ShiFouWeiStdioMoShi ())
+    {
+        return (_T ("about:blank"));
+    }
     return (_CT2 (_T ("http://")) + rg_MCPMingLingFuWuQi::rg_FuWuQiBangDingDeZhi + _T (":") + CVolString (rg_MCPMingLingFuWuQi::rg_FuWuQiDuanKou) + _T ("/"));
 }
 
@@ -6078,7 +6082,10 @@ void CALLBACK rg_MCPMingLingFuWuQi::rg_QiDongMCPFuWuQi ()
     rg_FuWuQiQiDongShiJianChuo = rg_QuXianHangShiJianHaoMiao ();
     rg_FuWuQiQiDongQiangZhongHaoMiao = rg_QuXianHangShiJianHaoMiao ();
     rg_QingQiuJiShuQi = 0;
-    rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi::rg_FBrowser_FuWuQi_ChuangJian (rg_FuWuQiBangDingDeZhi, rg_FuWuQiDuanKou, 100, rg_FuWuQiShiJian);
+    if (rg_MCPStdioQiao::rg_ShiFouWeiStdioMoShi () == FALSE)
+    {
+        rg_FBrowser_LiuLanQi::rg_class_FBrowser_FuWuQi::rg_FBrowser_FuWuQi_ChuangJian (rg_FuWuQiBangDingDeZhi, rg_FuWuQiDuanKou, 100, rg_FuWuQiShiJian);
+    }
     rg_LiuLanQiRongQi::rg_MCPFuWuYiJiuXu = TRUE;
     rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (_CT2 (_T ("[MCP] AI浏览器 MCP 服务器已启动 ")) + rg_QuMCP_WSDeZhi ());
     rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_LianJieXinXiDuiXiang;

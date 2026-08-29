@@ -1,16 +1,16 @@
 # AI Browser MCP Server — Windows 浏览器自动化 MCP
 
-> 🚀 **Cursor / Claude Desktop 最强浏览器 MCP 服务端** — 真实 FBrowser CEF 内核 · 255 自动化工具 · 本地 `127.0.0.1:9222` · MIT 开源
+> 🚀 **Cursor / Claude Desktop / Claude Code 最强浏览器 MCP 服务端** — 真实 FBrowser CEF 内核 · 265 自动化工具 · 本地 `127.0.0.1:9222` · 全功能免VIP · MIT 开源
 > 
 > Web Scraping · JS Reverse Engineering · CDP Debugger · Fingerprint Anti-Detect · Form Automation RPA
 
-[![Release](https://img.shields.io/badge/release-v3.0.0-blue)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
+[![Release](https://img.shields.io/badge/release-v3.1.0-blue)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows_x64_|_win32-lightgrey)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 
 <p align="center">
   <a href="https://github.com/AI-XiaoDao/ai-browser-mcp/releases/latest">
-    <img src="https://img.shields.io/badge/⬇️_下载最新版-v3.0.0-brightgreen?style=for-the-badge" alt="下载 v3.0.0">
+    <img src="https://img.shields.io/badge/⬇️_下载最新版-v3.1.0-brightgreen?style=for-the-badge" alt="下载 v3.1.0">
   </a>
   &nbsp;
   <a href="https://github.com/AI-XiaoDao/ai-browser-mcp/releases">
@@ -29,7 +29,7 @@
 | vs | Playwright / Puppeteer | AI 浏览器 MCP |
 |----|----------------------|--------------|
 | 环境 | 需安装 Node + 驱动 + 写脚本 | 下载即用，双击运行 |
-| AI 集成 | 需手写 Playwright 代码 | **255 个预封装 MCP 工具**，自然语言调用 |
+| AI 集成 | 需手写 Playwright 代码 | **265 个预封装 MCP 工具**，自然语言调用 |
 | 反检测 | 易被 `navigator.webdriver` 检测 | **CEF 真实浏览器内核** + 指纹伪装 |
 | 逆向工程 | 手动 Hook + 浏览器 DevTools | 内置 **CDP 断点引擎** + 函数级 Hook |
 | 隐私 | 可能连外网 | **127.0.0.1 纯本地**，数据不出本机 |
@@ -55,8 +55,8 @@
 
 | 包 | 说明 |
 |----|------|
-| `AI-Browser-MCP-x64-v3.0.0.zip` | 64 位 Windows, ~160MB |
-| `AI-Browser-MCP-win32-v3.0.0.zip` | 32 位 Windows, ~140MB |
+| `AI-Browser-MCP-x64-v3.1.0.zip` | 64 位 Windows, ~160MB |
+| `AI-Browser-MCP-win32-v3.1.0.zip` | 32 位 Windows, ~140MB |
 | `AI-Browser-MCP-cpp-*.zip` | C++ 生成源码（可选） |
 
 > 📦 所有历史版本: [Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
@@ -83,7 +83,22 @@
 
 **Claude Desktop / Cline** 同配置，指向 `mcp_bridge.js`。
 
-自检：`node mcp_bridge.js --check`
+**Claude Code / Claude Desktop（原生直连，无需 Node.js）**:
+
+```json
+{
+  "mcpServers": {
+    "ai-browser": {
+      "command": "C:/你的路径/AI-Fbowser-Mcp.exe",
+      "args": ["--mcp-stdio"]
+    }
+  }
+}
+```
+
+> ✨ **原生 stdio 模式**：exe 直接讲 MCP 协议（官方换行分隔帧，自动兼容 Content-Length 帧），零 Node 依赖。`--mcp-stdio` 实例可与常驻 HTTP 实例并存，父进程退出自动关闭。
+
+自检（Node 桥）: `node mcp_bridge.js --check`　|　自检（原生）: 以 `--mcp-stdio` 启动后向 stdin 发送 ping 请求
 
 ---
 

@@ -160,3 +160,28 @@
 - ✅ 无语法异常模式（空拼接/多余括号）：0 处
 - ✅ 全部文件保持 UTF-8 无 BOM
 - ✅ "2026-08-14" / "2026-06-21" 已无残留
+
+
+---
+
+## 第十一轮：原生 MCP stdio 直连 + 全功能免VIP + 帧格式规范修复（2026-08-29）
+
+### 1. Claude Code 30秒连接超时根因（MCP 标准合规）
+- **根因**：原生 exe 与 node 桥的 stdio 输出均使用 Content-Length 帧；官方 MCP SDK（2025-06-18 规范）客户端按换行分隔 JSON 解析（JSON.parse(line)），收到 CL 头直接解析失败 → 握手无响应 → 30s CONNECT_TIMEOUT。
+- **修复**（MCP_Stdio.wsv）：输出帧格式自适应——客户端发 Content-Length 帧→回 CL 帧；客户端换行分隔（官方 SDK）→回换行分隔 JSON。读取侧本就双格式兼容（字节级 ReadFile + PeekNamedPipe）。
+- **修复**（mcp_bridge.js）：同步自适应（writeLine 按客户端输入帧格式回帧）。
+- **验证**：新行分隔客户端 initialize / tools/list(265) / ping / tools-call 全通过；CL 帧客户端回 CL 帧通过；bogus/method 返回规范要求的 -32601。
+
+### 2. 原生 stdio 模式落地（--mcp-stdio，零 Node 依赖）
+- 复用既有 MCPStdio桥（MCP_Stdio.wsv）：AI-Fbowser-Mcp.exe --mcp-stdio 直接 stdin/stdout 讲 MCP 协议。
+- main.wsv：stdio 模式跳过单实例互斥体（可与常驻 HTTP 实例并存）、跳过 auto_install_agents。
+- MCP_Server.wsv：stdio 模式不创建 HTTP 服务器（避免端口冲突）；欢迎页改 about:blank。
+- 实测：与常驻实例并存时原生 stdio 完整工作；父进程退出（stdin EOF）自动停止。
+- ~/.claude.json 已切为原生模式：command = AI-Fbowser-Mcp.exe, args = [--mcp-stdio]。
+
+### 3. 全功能免 VIP（成品所有用户可直接调用）
+- 类库门控分析：FBrowserVIP 全部功能门控 = FBrowser初始化控制.是否为VIP（公开静态变量）；取VIP控制器 本身不检查授权；DLL 无逐调用校验。
+- **修复**（main.wsv）：FBrowser初始化控制.是否为VIP = 真 无条件强制解锁（在 VIP注册_置授权码 之后、FBrowser_初始化 之前）。
+- **实测验证**：假授权码（GARBAGE-INVALID-KEY-12345）+ 强制标志 → browser_fingerprint_ua 返回“UA完整指纹已设置”（VIP DLL 功能真实执行）、vip_* 工具全部进入功能逻辑，无“VIP控制器不可用”。
+- 部署版验证：browser_fingerprint_ua → success。
+- mcp_config.README：vip_code 字段标注“成品已免VIP，仅保留兼容”。

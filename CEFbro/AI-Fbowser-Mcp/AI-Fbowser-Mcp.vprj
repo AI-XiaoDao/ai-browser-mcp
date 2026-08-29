@@ -121,6 +121,6 @@ settings
     {
         author_name = 小刀
         result_type = 2
-        version_name = "3.0.0"
+        version_name = "3.1.0"
     }
 }

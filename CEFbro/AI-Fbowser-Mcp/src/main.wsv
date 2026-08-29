@@ -19,6 +19,10 @@
     方法 启动方法 <公开 类型 = 整数>
     {
         // 禁止多开: 命名互斥体 (控制台无窗口, 不能用FindWindow)
+        变量 MCP_Stdio模式 <类型 = 逻辑型>
+        MCP_Stdio模式 = MCPStdio桥.是否为Stdio模式 ()
+        如果 (MCP_Stdio模式 == 假)
+        {
         @ {
         @     HANDLE hMutex = CreateMutexW(NULL, TRUE, L"Global\\AI-Fbowser-Mcp-Singleton");
         @     if (hMutex && GetLastError() == ERROR_ALREADY_EXISTS) {
@@ -27,13 +31,14 @@
         @     }
         @     @<单实例互斥体> = (INT_P)hMutex;  // 进程存活期间保持句柄
         @ }
+        }
         // 拦截Ctrl+C/关闭控制台窗口: 置标志走优雅退出, 防信号传播误杀CEF渲染子进程
         @ SetConsoleCtrlHandler(MCPCtrlHandlerProc, TRUE);
         控制台输出 ("[AI浏览器] ========== AI浏览器 MCP Server v" + MCP_常量.MCP_版本号 + " (控制台版) 启动 ==========")
         // 加载MCP配置 (端口/认证/置顶/事件监控默认值)
         MCP命令服务器.加载MCP配置 ()
         // 零手动接入: auto_install_agents=true 时启动即注册到各Agent配置 (Cursor/Claude/Codex/Cline/Windsurf)
-        如果 (MCP命令服务器.自动安装代理)
+        如果 (MCP_Stdio模式 == 假 && MCP命令服务器.自动安装代理)
         {
             MCP命令服务器.检查并自动安装代理 ()
         }
@@ -41,9 +46,11 @@
         如果 (MCP命令服务器.VIP授权码 == "")
         {
             MCP命令服务器.VIP授权码 = "xsmzas1"
-            控制台输出 ("[AI浏览器] 使用内置VIP授权码, 建议在 mcp_config.json 中配置 vip_code 字段")
+            控制台输出 ("[AI浏览器] 使用内置VIP授权码")
         }
         FBrowserVIP注册.VIP注册_置授权码 (MCP命令服务器.VIP授权码)
+        // 免VIP: 强制解锁类库VIP门控标志 (FBrowser初始化控制.是否为VIP 为类库公开静态变量, 成品对所有用户开放全部功能)
+        FBrowser初始化控制.是否为VIP = 真
         // 崩溃恢复: 上次运行渲染进程崩溃过(标记文件存在) → 初始化前清空CEF全局缓存, 防止重建后连环崩溃
         变量 恢复标记路径 <类型 = 文本型>
         恢复标记路径 = 取运行目录 () + "\\CacheData\\.crash_recovery"

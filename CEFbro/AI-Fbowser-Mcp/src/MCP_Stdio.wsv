@@ -10,6 +10,7 @@
     变量 Stdio线程实例 <公开 静态 类型 = 类_MCP_Stdio服务线程>
     变量 Stdio应退出 <公开 静态 类型 = 逻辑型 值 = 假>
     变量 上次读取为断开 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "读取一行 返回空串时区分真断开(句柄关闭/读失败=真)与瞬态(超时/畸形帧=假), 主循环仅真断开计入空读次数">
+    变量 输出帧模式CL <公开 静态 类型 = 逻辑型 值 = 假 注释 = "按客户端发送的帧格式回帧: 客户端Content-Length帧输入→CL输出; 换行分隔输入→换行输出(官方SDK 2025-06-18规范默认), 读取一行 每次解析时更新">
     # ======== stdin 读取 (MCP Content-Length 帧解析 + 裸单行兼容, 可响应线程停止) ========
     方法 读取一行 <公开 静态 类型 = 文本型>
     参数 线程句柄 <类型 = 变整数 @默认值 = 0 注释 = "非0时在等待stdin期间检查是否需要退出">
@@ -56,8 +57,12 @@
         @     if (headFailed) break;  // 句柄关闭或头部超时(60秒): 丢弃本次读取并返回空
         @     if (headLine.empty()) { Sleep(50); continue; }
         @     long contentLen = -1;
-        @     if (strncmp(headLine.c_str(), "Content-Length:", 15) == 0)
+        @     if (strncmp(headLine.c_str(), "Content-Length:", 15) == 0) {
         @         contentLen = atol(headLine.c_str() + 15);
+        @         *(volatile BOOL*)&@<输出帧模式CL> = TRUE;  // 客户端CL帧输入: 回帧用CL
+        @     } else {
+        @         *(volatile BOOL*)&@<输出帧模式CL> = FALSE;  // 换行分隔客户端(官方SDK规范): 回帧用换行分隔
+        @     }
         @     if (contentLen > 67108864) {  // 64MB上限: 防恶意/畸形头部导致内存耗尽
         @         fprintf(stderr, "[MCP-Stdio] Content-Length %ld 超过64MB上限, 拒绝并排空该帧\n", contentLen);
         @         long toDiscard = contentLen;
@@ -155,14 +160,21 @@
     方法 写入一行 <公开 静态>
     参数 文本 <类型 = 文本型>
     {
-        @ // MCP传输规范: Content-Length: N\r\n\r\n{json} (帧后不加多余换行, 严格对齐规范)
+        @ // 帧格式自适应: 客户端CL帧输入→回CL帧; 换行分隔输入(官方SDK)→回换行分隔JSON
         @ // WriteFile stdout, 自动处理UTF8, 检查失败
         @ std::string utf8 = CU8String(@<文本>.GetText()).GetText();
-        @ DWORD contentLen = (DWORD)utf8.size();
-        @ char header[128];
-        @ int headerLen = snprintf(header, sizeof(header), "Content-Length: %lu\r\n\r\n", (unsigned long)contentLen);
-        @ std::string frame(header, headerLen);
-        @ frame += utf8;
+        @ std::string frame;
+        @ if (*(volatile BOOL*)&@<输出帧模式CL>) {
+        @     DWORD contentLen = (DWORD)utf8.size();
+        @     char header[128];
+        @     int headerLen = snprintf(header, sizeof(header), "Content-Length: %lu\r\n\r\n", (unsigned long)contentLen);
+        @     frame.assign(header, headerLen);
+        @     frame += utf8;
+        @ } else {
+        @     // MCP stdio spec: newline-delimited JSON, one message per line
+        @     frame = utf8;
+        @     frame += "\n";
+        @ }
         @ HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
         @ if (hOut == INVALID_HANDLE_VALUE || hOut == NULL) return;
         @ // 循环写满: 超大帧部分写入时继续写剩余 (防帧损坏)
@@ -223,7 +235,7 @@
     {
         写日志 ("============================================")
         写日志 ("AI浏览器 MCP Stdio Server 启动")
-        写日志 ("协议: JSON-RPC 2.0 over stdin/stdout (Content-Length 帧格式)")
+        写日志 ("协议: JSON-RPC 2.0 over stdin/stdout (帧格式自适应: 官方换行分隔 / 兼容Content-Length)")
         写日志 ("直连: Claude Desktop / Cursor / Trace 等任意AI工具")
         写日志 ("============================================")
         // 循环读取 stdin → 处理 → stdout

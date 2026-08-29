@@ -292,8 +292,9 @@ let writeQueue = Promise.resolve();
 function writeLine(obj) {
     // MCP Stdio 传输规范: Content-Length: N\r\n\r\n{json} (帧后不加多余换行)
     const json = JSON.stringify(obj);
-    const len = Buffer.byteLength(json, 'utf8');
-    const frame = 'Content-Length: ' + len + '\r\n\r\n' + json;
+    const frame = outFrameCL
+        ? 'Content-Length: ' + Buffer.byteLength(json, 'utf8') + '\r\n\r\n' + json
+        : json + '\n';
     writeQueue = writeQueue.then(() => new Promise((resolve) => {
         if (process.stdout.write(frame)) resolve();
         else process.stdout.once('drain', resolve);
@@ -443,6 +444,7 @@ async function runStdio() {
             // 头部为纯ASCII, 其字符索引即字节索引, 可用 ascii 解码比较前缀
             const maybeHeader = buffer.slice(0, headerEnd === -1 ? buffer.length : headerEnd).toString('ascii');
             if (/^Content-Length:/i.test(maybeHeader)) {
+                outFrameCL = true;
                 if (headerEnd === -1) break; // 帧头跨 chunk 到达: 等待更多数据, 绝不落入换行回退分支
                 const match = maybeHeader.match(/^Content-Length:\s*(\d+)/i);
                 const contentLen = match ? parseInt(match[1], 10) : -1;
@@ -465,6 +467,7 @@ async function runStdio() {
                 break; // Content-Length 头存在但消息体不完整, 等待更多数据
             }
             // 向后兼容: 纯换行分隔 JSON (旧客户端/旧服务端)
+            outFrameCL = false;
             const nl = buffer.indexOf(0x0A);
             if (nl === -1) break;
             const line = buffer.slice(0, nl).toString('utf8').trim();

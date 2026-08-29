@@ -55,7 +55,7 @@ const INT rg_volcano_app::rg_MCP_const::rg_TLSZhiWen_1_n2 = 791;
 const INT rg_volcano_app::rg_MCP_const::rg_TLSZhiWen_1_n3 = 792;
 CVolString rg_volcano_app::rg_MCP_const::rg_MCP_XieYiBanBen = _T ("2025-06-18");
 CVolString rg_volcano_app::rg_MCP_const::rg_MCP_FuWuQiMing = _T ("AI浏览器 MCP Server");
-CVolString rg_volcano_app::rg_MCP_const::rg_MCP_BanBenHao = _T ("3.0.0");
+CVolString rg_volcano_app::rg_MCP_const::rg_MCP_BanBenHao = _T ("3.1.0");
 CVolString rg_volcano_app::rg_MCP_const::rg_CuoWu_MoLiuLanQi = _T ("没有可用的浏览器 | 请启动AI浏览器GUI窗口(自动创建), 或确认 /health 返回 browsers>0");
 CVolString rg_volcano_app::rg_MCP_const::rg_CuoWu_QueShaoCanShu = _T ("参数不能为空 | 请查看工具描述补全必填参数");
 CVolString rg_volcano_app::rg_MCP_const::rg_CuoWu_VIPBuKeYong = _T ("VIP控制器不可用,需要VIP授权 | 请在 mcp_config.json 配置 vip_code");
@@ -221,6 +221,7 @@ const INT rg_volcano_app::rg_MCP_BianPaiFenPa::rg_GongZuoLiuChanBuZuiDaDengDaiHa
 rg_volcano_app::rg_class_MCP_StdioFuWuXianCheng rg_volcano_app::rg_MCPStdioQiao::rg_StdioXianChengShiLi;
 BOOL rg_volcano_app::rg_MCPStdioQiao::rg_StdioYingTuiChu = FALSE;
 BOOL rg_volcano_app::rg_MCPStdioQiao::rg_ShangCiDouQuWeiDuanKai = FALSE;
+BOOL rg_volcano_app::rg_MCPStdioQiao::rg_ShuChuZhengMoShiCL = FALSE;
 const INT rg_volcano_base::rg_ShiJianZiDuanLeiXing::rg_Ri = 4;
 const INT rg_volcano_base::rg_ShiJianZiDuanLeiXing::rg_XiaoShi = 5;
 const INT rg_volcano_base::rg_ShiJianZiDuanLeiXing::rg_FenZhong = 6;

@@ -19,7 +19,7 @@
 | `enable_console_log` | false | 控制台采集 |
 | `enable_response_cache` | false | SQLite 响应缓存 |
 | `network_log_max_bytes` | 262144 | network_detail 单条上限 |
-| `vip_code` | — | VIP 授权码（缺省用内置兜底码） |
+| `vip_code` | — | VIP 授权码（**成品已免VIP全功能解锁**，此字段仅保留兼容，可留空） |
 | `auto_install_agents` | false | 启动时自动写入 Cursor/Claude/Codex/Cline/Windsurf 配置 |
 | `window_topmost` | true | 窗口置顶 |
 | `window_width` / `window_height` | — | 窗口尺寸（400-3840 / 300-2160 校验） |

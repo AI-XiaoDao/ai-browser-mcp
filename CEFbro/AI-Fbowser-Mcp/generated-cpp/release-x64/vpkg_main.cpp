@@ -16,27 +16,33 @@ static BOOL WINAPI MCPCtrlHandlerProc(DWORD dwType) { if (dwType == CTRL_C_EVENT
 INT rg_startup_class::rg_startup_method ()
 {
     _sOnClassesStaticInit ();
+    BOOL rg_MCP_StdioMoShi;
+    rg_MCP_StdioMoShi = rg_MCPStdioQiao::rg_ShiFouWeiStdioMoShi ();
+    if (rg_MCP_StdioMoShi == FALSE)
     {
-        HANDLE hMutex = CreateMutexW(NULL, TRUE, L"Global\\AI-Fbowser-Mcp-Singleton");
-        if (hMutex && GetLastError() == ERROR_ALREADY_EXISTS) {
-            CloseHandle(hMutex);
-            return 0;
+        {
+            HANDLE hMutex = CreateMutexW(NULL, TRUE, L"Global\\AI-Fbowser-Mcp-Singleton");
+            if (hMutex && GetLastError() == ERROR_ALREADY_EXISTS) {
+                CloseHandle(hMutex);
+                return 0;
+            }
+            rg_ChanShiLiHuChiTi = (INT_P)hMutex;
         }
-        rg_ChanShiLiHuChiTi = (INT_P)hMutex;
     }
     SetConsoleCtrlHandler(MCPCtrlHandlerProc, TRUE);
     rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (_CT2 (_T ("[AI浏览器] ========== AI浏览器 MCP Server v")) + rg_MCP_const::rg_MCP_BanBenHao + _T (" (控制台版) 启动 =========="));
     rg_MCPMingLingFuWuQi::rg_JiaZaiMCPPeiZhi ();
-    if (rg_MCPMingLingFuWuQi::rg_ZiDongAnZhuangDaiLi)
+    if (rg_MCP_StdioMoShi == FALSE && rg_MCPMingLingFuWuQi::rg_ZiDongAnZhuangDaiLi)
     {
         rg_MCPMingLingFuWuQi::rg_JianChaBingZiDongAnZhuangDaiLi ();
     }
     if (rg_MCPMingLingFuWuQi::rg_VIPShouQuanMa == _T (""))
     {
         rg_MCPMingLingFuWuQi::rg_VIPShouQuanMa = _T ("xsmzas1");
-        rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (_CT2 (_T ("[AI浏览器] 使用内置VIP授权码, 建议在 mcp_config.json 中配置 vip_code 字段")));
+        rg_MCP_FuWuQiGongJu::rg_KongZhiTaiShuChu (_CT2 (_T ("[AI浏览器] 使用内置VIP授权码")));
     }
     rg_LiuLanQi_VIP::rg_FBrowserVIPZhuCe::rg_VIPZhuCe_ZhiShouQuanMa (rg_MCPMingLingFuWuQi::rg_VIPShouQuanMa);
+    rg_FBrowser_LiuLanQi::rg_FBrowserChuShiHuaKongZhi::rg_ShiFouWeiVIP = TRUE;
     CVolString rg_HuiFuBiaoJiLuJing;
     rg_HuiFuBiaoJiLuJing = rg_volcano_base::rg_HuanJingCunQuLei::rg_QuYunHangMuLu () + _T ("\\CacheData\\.crash_recovery");
     if ((BOOL)IsOSFileExist (rg_HuiFuBiaoJiLuJing.GetText ()))
