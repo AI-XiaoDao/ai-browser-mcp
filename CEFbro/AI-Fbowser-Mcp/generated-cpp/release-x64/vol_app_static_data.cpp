@@ -121,6 +121,7 @@ BOOL rg_volcano_app::rg_MCPMingLingFuWuQi::rg_ShiFouHuanCunXiangYing = FALSE;
 BOOL rg_volcano_app::rg_MCPMingLingFuWuQi::rg_ShiFouXiangXiJiLuWangLao = FALSE;
 CVolString rg_volcano_app::rg_MCPMingLingFuWuQi::rg_GongJuLieBiaoHuanCun = _T ("");
 CVolString rg_volcano_app::rg_MCPMingLingFuWuQi::rg_DangQianQingQiuZhuiZongID = _T ("");
+BOOL rg_volcano_app::rg_MCPMingLingFuWuQi::rg_DangQianQingQiuIDShiShuZhi = FALSE;
 INT rg_volcano_app::rg_MCPMingLingFuWuQi::rg_MuBiaoLiuLanQiID = 0;
 BOOL rg_volcano_app::rg_MCPMingLingFuWuQi::rg_JinCouXiangYingMoShi = FALSE;
 CVolString rg_volcano_app::rg_MCPMingLingFuWuQi::rg_DangQianMingLingFangFaMing = _T ("");

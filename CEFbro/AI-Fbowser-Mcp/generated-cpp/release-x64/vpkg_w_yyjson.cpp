@@ -65,6 +65,11 @@ rg_YYJSONZhiDouDuiXiangLei rg_YYJSONZhiDouDuiXiangLei::rg_QuDuiXiang2 (CVolStrin
     return rg_YYJSONZhiDouDuiXiangLei(yyjson_obj_get(data().GetObject(), (const char *)CU8String(rg_JianMingChen5.GetText()).GetText()), data().GetRefObject());
 }
 
+rg_YYJSONZhiDouDuiXiangLei rg_YYJSONZhiDouDuiXiangLei::rg_QuLuJingDuiXiang (CVolString& rg_LuJing18)
+{
+    return rg_YYJSONZhiDouDuiXiangLei(yyjson_get_pointer(data().GetObject(), (const char *)CU8String(rg_LuJing18.GetText()).GetText()), data().GetRefObject());
+}
+
 rg_YYJSONZhiDouShuZuLei rg_YYJSONZhiDouDuiXiangLei::rg_QuShuZu1 (CVolString& rg_JianMingChen6)
 {
     return rg_YYJSONZhiDouShuZuLei(yyjson_obj_get(data().GetObject(), (const char *)CU8String(rg_JianMingChen6.GetText()).GetText()), data().GetRefObject());

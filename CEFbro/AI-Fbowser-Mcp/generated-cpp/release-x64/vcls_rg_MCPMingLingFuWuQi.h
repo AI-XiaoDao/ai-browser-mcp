@@ -235,6 +235,7 @@ public:
     static BOOL rg_ShiFouXiangXiJiLuWangLao;
     static CVolString rg_GongJuLieBiaoHuanCun;
     static CVolString rg_DangQianQingQiuZhuiZongID;
+    static BOOL rg_DangQianQingQiuIDShiShuZhi;
     static INT rg_MuBiaoLiuLanQiID;
     static BOOL rg_JinCouXiangYingMoShi;
     static CVolString rg_DangQianMingLingFangFaMing;

@@ -1171,7 +1171,14 @@ CVolString CALLBACK rg_MCPMingLingFuWuQi::rg_GouJianJSONRPCTouBuQianZhui (CVolSt
     }
     if (rg_QingQiuID != _T (""))
     {
-        rg_TouDuiXiang2.rg_JiaRuWenBenChengYuan (_CT2 (_T ("id")), rg_QingQiuID);
+        if (rg_DangQianQingQiuIDShiShuZhi)
+        {
+            rg_TouDuiXiang2.rg_JiaRuChangZhengShuChengYuan (_CT2 (_T ("id")), StrToN64 (rg_QingQiuID.GetText ()));
+        }
+        else
+        {
+            rg_TouDuiXiang2.rg_JiaRuWenBenChengYuan (_CT2 (_T ("id")), rg_QingQiuID);
+        }
     }
     CVolString rg_TouJSON2;
     rg_TouJSON2 = rg_TouDuiXiang2.data().ToString(YYJSON_WRITE_NOFLAG);
@@ -6497,10 +6504,6 @@ CVolString CALLBACK rg_MCPMingLingFuWuQi::rg_GouJianJSONRPCXiangYing (CVolString
                 rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_JieGuoDuiXiang1;
                 if (rg_JieGuoDuiXiang1.data().CreateFromText(rg_JieGuoJSONWenBen))
                 {
-                    if (rg_DangQianQingQiuZhuiZongID != _T (""))
-                    {
-                        rg_JieGuoDuiXiang1.rg_JiaRuWenBenChengYuan (_CT2 (_T ("_req_id")), rg_DangQianQingQiuZhuiZongID);
-                    }
                     rg_JieGuoJSON6 = rg_JieGuoDuiXiang1.data().ToString(YYJSON_WRITE_NOFLAG);
                 }
                 else
@@ -6522,10 +6525,6 @@ CVolString CALLBACK rg_MCPMingLingFuWuQi::rg_GouJianJSONRPCXiangYing (CVolString
     rg_CuoWuDuiXiang1.data().CreateFromText(_CT2 (_T ("{}")));
     rg_CuoWuDuiXiang1.rg_JiaRuZhengShuChengYuan (_CT2 (_T ("code")), rg_CuoWuMa2);
     rg_CuoWuDuiXiang1.rg_JiaRuWenBenChengYuan (_CT2 (_T ("message")), rg_CuoWuXiaoXi5);
-    if (rg_DangQianQingQiuZhuiZongID != _T (""))
-    {
-        rg_CuoWuDuiXiang1.rg_JiaRuWenBenChengYuan (_CT2 (_T ("_req_id")), rg_DangQianQingQiuZhuiZongID);
-    }
     return (rg_QianZhui3 + _T (",\"error\":") + rg_CuoWuDuiXiang1.data().ToString(YYJSON_WRITE_NOFLAG) + _T ("}"));
 }
 
@@ -6586,16 +6585,18 @@ CVolString CALLBACK rg_MCPMingLingFuWuQi::rg_ChuLiMCPQingQiu_NeiBu (CVolString& 
         }
         CVolString rg_XianLiuID;
         rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei rg_XianLiuJieXi;
+        rg_DangQianQingQiuIDShiShuZhi = FALSE;
         if (rg_XianLiuJieXi.data().CreateFromText(rg_QingQiuTiJSON1))
         {
             rg_XianLiuID = rg_yyjsonQuWenBen (rg_XianLiuJieXi, _CT2 (_T ("id")));
             if (rg_XianLiuID == _T (""))
             {
-                INT64 rg_XianLiuZhengShuID;
-                rg_XianLiuZhengShuID = rg_yyjsonQuChangZhengShu (rg_XianLiuJieXi, _CT2 (_T ("id")));
-                if (rg_XianLiuZhengShuID != 0)
+                rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei rg_XianLiuidZhiDuiXiang;
+                rg_XianLiuidZhiDuiXiang = rg_XianLiuJieXi.rg_QuLuJingDuiXiang (_CT2 (_T ("/id")));
+                if (yyjson_is_null(rg_XianLiuidZhiDuiXiang.data().GetObject()) == FALSE && yyjson_is_num(rg_XianLiuidZhiDuiXiang.data().GetObject()))
                 {
-                    rg_XianLiuID = CVolString (rg_XianLiuZhengShuID);
+                    rg_XianLiuID = rg_XianLiuidZhiDuiXiang.data().ToString(YYJSON_WRITE_NOFLAG);
+                    rg_DangQianQingQiuIDShiShuZhi = TRUE;
                 }
             }
         }
@@ -6639,21 +6640,17 @@ CVolString CALLBACK rg_MCPMingLingFuWuQi::rg_ChuLiMCPQingQiu_NeiBu (CVolString& 
     }
     CVolString rg_QingQiuID2;
     rg_QingQiuID2 = rg_yyjsonQuWenBen (rg_JieXiJieGuo, _CT2 (_T ("id")));
+    rg_DangQianQingQiuIDShiShuZhi = FALSE;
     if (rg_QingQiuID2 == _T (""))
     {
-        INT64 rg_QingQiuZhengShuID;
-        rg_QingQiuZhengShuID = rg_yyjsonQuChangZhengShu (rg_JieXiJieGuo, _CT2 (_T ("id")));
-        if (rg_QingQiuZhengShuID != 0)
+        rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONZhiDouDuiXiangLei rg_idZhiDuiXiang;
+        rg_idZhiDuiXiang = rg_JieXiJieGuo.rg_QuLuJingDuiXiang (_CT2 (_T ("/id")));
+        if (yyjson_is_null(rg_idZhiDuiXiang.data().GetObject()) == FALSE)
         {
-            rg_QingQiuID2 = CVolString (rg_QingQiuZhengShuID);
-        }
-        else
-        {
-            DOUBLE rg_QingQiuXiaoShuID;
-            rg_QingQiuXiaoShuID = rg_yyjsonQuXiaoShu (rg_JieXiJieGuo, _CT2 (_T ("id")));
-            if (rg_QingQiuXiaoShuID != 0)
+            if (yyjson_is_num(rg_idZhiDuiXiang.data().GetObject()))
             {
-                rg_QingQiuID2 = CVolString (rg_QingQiuXiaoShuID);
+                rg_QingQiuID2 = rg_idZhiDuiXiang.data().ToString(YYJSON_WRITE_NOFLAG);
+                rg_DangQianQingQiuIDShiShuZhi = TRUE;
             }
         }
     }

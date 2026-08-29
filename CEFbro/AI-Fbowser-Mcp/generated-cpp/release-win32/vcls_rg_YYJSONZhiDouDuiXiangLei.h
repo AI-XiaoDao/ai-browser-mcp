@@ -30,6 +30,7 @@ public:
     CVolString rg_DaoWenBen1 ();
     CVolString rg_QuWenBen9 (CVolString& rg_JianMingChen4);
     rg_YYJSONZhiDouDuiXiangLei rg_QuDuiXiang2 (CVolString& rg_JianMingChen5);
+    rg_YYJSONZhiDouDuiXiangLei rg_QuLuJingDuiXiang (CVolString& rg_LuJing18);
     rg_YYJSONZhiDouShuZuLei rg_QuShuZu1 (CVolString& rg_JianMingChen6);
     rg_YYJSONZhiDouShuZuLei rg_QuLuJingShuZu (CVolString& rg_LuJing19);
     virtual void GetDumpString (CVolString& rg_ZhanShiNeiRong88, INT rg_ZuiDaZhanShiShuJuCheCun88);

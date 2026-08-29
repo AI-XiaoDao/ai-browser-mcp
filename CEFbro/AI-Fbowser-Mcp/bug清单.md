@@ -185,3 +185,10 @@
 - **实测验证**：假授权码（GARBAGE-INVALID-KEY-12345）+ 强制标志 → browser_fingerprint_ua 返回“UA完整指纹已设置”（VIP DLL 功能真实执行）、vip_* 工具全部进入功能逻辑，无“VIP控制器不可用”。
 - 部署版验证：browser_fingerprint_ua → success。
 - mcp_config.README：vip_code 字段标注“成品已免VIP，仅保留兼容”。
+
+
+### 4. JSON-RPC 标准合规修复（官方 SDK 1.30.0 严格校验驱动）
+- **id:0 被误判为通知**（MCP_Server.wsv）：JSON-RPC 2.0 允许数字 id 含 0，原实现 yyjson取文本 对数字 id 返回空 + 回退分支 != 0 判断 → id:0 无响应 → Trae（initialize 用 id:0）握手 30s 超时。修复：用 取路径对象(/id) 键存在性判定 + 到可读文本 取值，id:0 正常响应。
+- **响应 id 类型**：数字 id 回显为数值（加入长整数成员），文本 id 回文本 — 满足 JSON-RPC 响应 id 与请求 id 同值的要求。
+- **移除 _req_id 自定义扩展字段**（成功/错误响应均不再注入）：官方 SDK 1.30 zod 严格 schema 拒绝未知键 → ping 都失败。桥接层原先为 Cursor 剥除该字段，原生模式直接暴露。
+- **验证**：npm 安装官方 @modelcontextprotocol/sdk@1.30.0，真客户端跑通 connect / listTools(265) / ping / callTool / listResources(6) / listPrompts(4)，零 schema 拒绝。
