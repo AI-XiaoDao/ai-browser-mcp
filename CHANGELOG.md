@@ -2,6 +2,33 @@
 
 本项目遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 与语义化版本（[SemVer](https://semver.org/lang/zh-CN/)）。
 
+## [v3.2.0] - 2026-09-13
+
+### 新增
+- 334 个 MCP 工具全量逐个真机核验通过（311 通过 / 23 受控跳过 / 0 失败），全程零冷重启
+- 调试期控制台窗口可见 + 日志双写 `mcp_console.log`（发布成品可去掉）
+- 启动器 ShellExecuteW 外壳启动（重启命令 10 分钟 → 6 秒）
+- 审计工具链入库：`_audit/sweep334.py`（334 回合逐个测试）、`tool_ledger.py` 台账、全套受控 verify 脚本
+
+### 修复
+- AB-BA 死锁（协议锁 × MCP执行锁，原生执行JS并等待 等待期间放锁）
+- 非法 browser_id（-1/文本/布尔）静默回退主浏览器 → 入口校验拒绝（防 browser_close 误杀服务）
+- browser_close 主窗口缺 confirm 闸门（与 browser_close_try 对称）
+- CDP 观察者：注销不再回退到无关浏览器；确保/注销传显式浏览器参数
+- 并发 browser_create 握手覆盖 → 命令ID 令牌
+- mcp_help 深链最后一个工具详情尾部多 `]}` 非法 JSON
+- hwnd 经 32 位整数截断 → 改长整数
+- 四处 DB 查询缺"缓存数据库可用"守卫（异常终止请求线程）
+- HAR 导出 startedDateTime 恒空 → 网络记录补 timestamp
+- 异步取源码/取文本主框架无效时"失败报成成功" → 改失败语义
+- 取短名映射点号兜底（防 browser_browser.xxx 畸形别名）
+- evaluate/console_eval/extract/view_source 改 CDP 优先（原生通道约 8% 丢回调 → 5s 超时）
+- key_event 改 CDP Input.dispatchKeyEvent 优先（内核注入毒化会话通道）
+- step 三工具无断点时如实跳过实际单步（根除 pause→step→resume 毒化 CDP）
+- browser_fingerprint_ua 会话级毒化警告（UA 变更重启渲染器）
+- wheel 遮挡自愈重试、Tracing 残留自愈、指纹设置后渲染器自愈等待
+- 活体探针双段判据（browser_status 基线 + 1.5s 短探×2），不误杀不白等
+
 ## [v3.1.0] - 2026-08-29
 
 ### 新增
