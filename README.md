@@ -1,8 +1,6 @@
 # 🚀 AI浏览器 MCP Server
 
-> **Windows 本地浏览器自动化 MCP 服务端** — 真实 FBrowser CEF 内核 · **334 个浏览器自动化工具** · 本地 `127.0.0.1:9222` · MIT 开源
->
-> Web Scraping · JS Reverse Engineering · CDP Debugger · 内核层扩展 · 指纹反检测 · Form Automation RPA
+> **Windows 本地浏览器自动化 MCP 服务端** — 真实 FBrowser CEF 内核 · **334 个浏览器自动化工具（全量真机核验：0 失败 / 0 闪退）** · 本地 `127.0.0.1:9222` · MIT 开源
 
 [![Release](https://img.shields.io/badge/release-v3.2.0-blue)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
@@ -12,54 +10,30 @@
 
 ## 📖 这是什么？
 
-**AI浏览器 MCP Server** 是一个 **Windows 本地浏览器自动化 MCP 服务端**：运行真实的 **FBrowser CEF（Chromium）浏览器内核**，通过 **Model Context Protocol（MCP）** 向 AI 编程助手（Cursor / Claude Desktop / Cline / 任意 MCP 客户端）暴露 **334 个浏览器自动化工具**。
+**AI浏览器 MCP Server** 运行真实的 **FBrowser CEF（Chromium）浏览器内核**，通过 **Model Context Protocol（MCP）** 向 AI 编程助手（Cursor / Claude / Cline / Trae / 任意 MCP 客户端）暴露 **334 个浏览器自动化工具**。无需安装 Node 驱动、无需编写脚本——**下载解压即用**：
 
-无需安装 Node 驱动、无需编写 Playwright/Puppeteer 脚本——**下载解压即用**，AI 用自然语言即可操控浏览器完成：
-
-- 🕷️ **Web Scraping 网页采集** — `browser_scrape` 一步爬虫（导航→等待→提取全自动）
-- 🔍 **JS 逆向分析** — 函数 Hook / 调用栈追踪 / 算法识别 / 混淆检测 / 动态提取
-- 🐛 **CDP 断点调试** — `debugger_flow` 一键断点→求值→resume，定位 sign 算法
-- ⚙️ **内核层扩展** — 自定义协议(`mcp://`)、证书管理、HTTP 认证注入、下载控制、事件反应器
-- 🤖 **Form Automation RPA** — 原生 CEF 填表 API（非 JS 注入）
-- 🎭 **浏览器指纹伪装** — 30+ 维度（Canvas/WebGL/Audio/WebRTC/SSL/字体/硬件）
-- 📡 **网络抓包拦截** — HTTP/WS 流量捕获、修改、替换、屏蔽
+- 🕷️ **Web Scraping** — `browser_scrape` 一步爬虫（导航→等待→提取全自动）
+- 🔍 **JS 逆向分析** — Hook / 调用栈 / 算法识别 / 混淆检测 / 动态提取
+- 🐛 **CDP 断点调试** — `debugger_flow` 一键断点→求值→resume
+- ⚙️ **内核层扩展** — 自定义协议 / 证书 / HTTP 认证注入 / 下载控制 / 事件反应器
+- 🤖 **填表 RPA** — 原生 CEF 填表 API（非 JS 注入）
+- 🎭 **指纹反检测** — 30+ 维度（Canvas/WebGL/Audio/SSL/字体/硬件）
+- 📡 **网络抓包拦截** — HTTP/WS 捕获、修改、替换、屏蔽
 - 🔄 **工作流编排** — JSON 步骤链批量执行
 
 **隐私**：纯本地 `127.0.0.1:9222`，数据不出本机。
 
 ---
 
-## 🆕 v3.2.0 新增（334 工具全量真机核验版）
+## 🆕 v3.2.0（334 工具全量真机核验版）
 
-| 能力 | 说明 |
+| 项 | 说明 |
 |---|---|
 | **334 工具逐个核验** | 311 通过 / 23 受控跳过 / 0 失败，全程零冷重启（35 秒跑完一遍）|
 | **稳定性修复 20+** | AB-BA 死锁、非法 browser_id 静默回退、browser_close confirm 闸门、CDP 观察者归属、并发 create 握手令牌、mcp_help 深链非法 JSON、hwnd 32 位截断、DB 守卫、HAR timestamp 等 |
-| **CDP 优先改造** | evaluate/console_eval/extract/view_source/key_event 改走 CDP（原生通道 8% 丢回调 → 5s 超时）；step 无断点如实跳过（根除通道毒化）|
+| **CDP 优先改造** | evaluate/console_eval/extract/view_source/key_event 改走 CDP（原生通道 8% 丢回调 → 5s 超时）；step 无断点如实跳过 |
 | **调试体验** | 控制台窗口可见 + 日志双写 `mcp_console.log`；启动器 ShellExecuteW（重启 10 分钟 → 6 秒）|
 | **质量基线** | 操作备注/死代码/残注释/幽灵注册全零；fastcheck 56/56；菜单回归 22/22 |
-
-## 📜 v3.1.0 历史版本（内核层能力扩展）
-
-| 能力 | 工具 | 说明 |
-|---|---|---|
-| **自定义协议** | `browser_kernel_scheme` | 注册 `mcp://域名` 动态内容（CEF 资源处理器，支持 data/file）|
-| **证书管理** | `browser_kernel_cert` | 证书错误收集 / 一键忽略 SSL 错误 |
-| **HTTP 认证注入** | `browser_kernel_auth` | Basic/Digest 凭据自动应答（内核事件级）|
-| **下载控制** | `browser_kernel_download` | 暂停/恢复/取消进行中下载 |
-| **IPC 双向通道** | `browser_kernel_ipc_queue` / `ipc_clear` | 主进程↔渲染进程双工通信（页面队列）|
-| **CDP 事件监控** | `browser_kernel_cdp_monitor` | CDP 事件订阅自动落库（`Network.*` 等）|
-| **事件反应器** | `browser_kernel_reactor` | 事件触发→自动执行页面 JS（组合引擎）|
-| **定时监视** | `browser_kernel_watch` | 表达式周期求值 + 变更检测（`watch_changed` 事件）|
-| **一键全事件流** | `browser_kernel_events_all` | 13 项浏览器/应用事件 + 控制台 + 网络详细 |
-| **动态插桩** | `browser_kernel_reverse_probe` | XHR/fetch/WebSocket/定时器/监听器五维插桩 |
-| **动态调用追踪** | `browser_kernel_reverse_trace` | 目标函数包装：调用栈+参数+返回值+耗时 |
-| **动态算法 Hook** | `browser_kernel_reverse_algo` | CryptoJS 全算法 + WebCrypto subtle + 哈希/base64 |
-| **动态函数/源码提取** | `browser_kernel_reverse_functions` / `sources` | 枚举函数 toString 源码 / 全脚本提取 |
-| **全局变量追踪** | `browser_kernel_reverse_watch_global` | setter 包装记录写入者调用栈+新值 |
-| **快捷菜单屏蔽** | `browser_kernel_menu` | 右键菜单内核级拦截 |
-
-另有大量稳定性修复：debugger 参数校验防 CDP 队列堵塞、竞态修复（导航规则锁/原子维护）、HTTP POST 体上限、日志截断合法 JSON 等。
 
 ---
 
@@ -92,7 +66,7 @@
 }
 ```
 
-> 也可以用欢迎页 `http://127.0.0.1:9222/` 一键复制 Cursor 配置；或启用 `auto_install_agents` 自动写入 Cursor/Claude/Codex/Cline/Windsurf。
+> 也可以用欢迎页 `http://127.0.0.1:9222/` 一键复制 Cursor 配置；或启用 `auto_install_agents` 自动写入 Cursor/Claude/Codex/Cline/Windsurf。成品包内附带完整使用手册。
 
 ### 4. 自检
 
@@ -126,7 +100,7 @@ node mcp_bridge.js --check
 | 编码 | 4 | `base64_*` `uri_*` |
 | 工作流 | 4 | `workflow_list` `run` `stop` |
 
-**Sync-Wait 同步等待**：轻量读操作（get_title/evaluate/dom_*）自动同步返回，重量操作（截图/源码）异步 task_id 轮询；`max_ms` 调超时、`async_only:true` 强制异步。
+**Sync-Wait 同步等待**：轻量读操作自动同步返回，重量操作异步 task_id 轮询；`max_ms` 调超时、`async_only:true` 强制异步。
 
 ---
 
@@ -140,7 +114,6 @@ node mcp_bridge.js --check
 | `http://127.0.0.1:9222/health` | 健康检查 |
 | `http://127.0.0.1:9222/tools/list` | 工具列表 |
 | `http://127.0.0.1:9222/api` / `/cursor-config` / `/json/version` / `/json/list` | 元信息/CDP 兼容 |
-| `http://127.0.0.1:9222/docs/` | 完整文档 |
 
 ---
 
@@ -153,22 +126,20 @@ Cursor / Claude Desktop  ←→  mcp_bridge.js (stdio 桥接)
     127.0.0.1:9222 (HTTP/WS JSON-RPC)
             │
     MCP_Server.wsv (MCP引擎/工具注册/路由)
-    ├── Core       — 导航/JS/DOM/CDP/截图/拦截/等待 (162工具)
-    ├── Form       — FBrowser 填表框架 (10工具)
-    ├── VIP        — 指纹/代理/高级键鼠/CDP (68工具)
-    ├── Kernel     — 内核层: 自定义协议/证书/认证/下载/IPC/事件引擎 (28工具)
+    ├── Core       — 导航/JS/DOM/CDP/截图/拦截/等待
+    ├── Form       — FBrowser 填表框架
+    ├── VIP        — 指纹/代理/高级键鼠/CDP
+    ├── Kernel     — 内核层: 自定义协议/证书/认证/下载/IPC/事件引擎
     ├── Reverse    — JS逆向: Hook/断点/堆/混淆检测
     ├── System     — 系统/进程/窗口
     ├── Workflow   — JSON 工作流引擎
     ├── HTTP       — HTTP/WebSocket 路由
-    └── Events     — 浏览器事件 Hook 系统 (40+事件)
+    └── Events     — 浏览器事件 Hook 系统
             │
     FBrowser CEF (libcef.dll)
 ```
 
-**开发语言**：火山视窗（中文编程）— 全部源码 `src/*.wsv` 开源，运行时零依赖（原生 stdio 直连 / Node 桥两种接入均可）。
-
-> 📐 **完整架构说明见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** — 进程模型 / 传输层 / 协议合规 / 请求处理链 / 同步等待引擎 / 事件层 / 源码布局 / 构建发布。
+**开发语言**：火山视窗（中文编程）— 全部源码 `src/*.wsv` 开源，运行时零依赖。
 
 ---
 
@@ -176,27 +147,13 @@ Cursor / Claude Desktop  ←→  mcp_bridge.js (stdio 桥接)
 
 ```text
 ├── CEFbro/AI-Fbowser-Mcp/
-│   ├── src/                 # 火山源码 (16 个 .wsv, MCP引擎/工具/事件/stdio/内核)
+│   ├── src/                 # 火山源码 (16 个 .wsv)
 │   ├── AI-Fbowser-Mcp.vprj / .vsln   # 火山工程
-│   ├── workflows/           # 示例工作流 JSON (编译附属)
-│   ├── docs/                # 成品在线文档 (服务器 /docs/ 路由)
-│   ├── mcp_bridge.js        # Node 桥 (备用接入)
+│   ├── workflows/           # 示例工作流 JSON
+│   ├── mcp_bridge.js        # Node 桥 (stdio 接入)
 │   └── mcp_config.json / mcp_config.README.md
-├── release/                 # 成品打包脚本 + 发布说明
-└── .mcp.json / .cursor/     # 一键接入配置
+└── .mcp.json                # 仓库级一键接入配置
 ```
-
----
-
-## 📚 文档
-
-| 文档 | 读者 |
-|---|---|
-| [客户使用手册](CEFbro/AI-Fbowser-Mcp/docs/客户使用手册.md) | 终端客户 — 安装/Cursor/话术/VIP/FAQ |
-| [架构说明](docs/ARCHITECTURE.md) | 开发者/架构 — 进程模型/传输/协议/源码布局 |
-| [MCP工具配置说明书](CEFbro/AI-Fbowser-Mcp/docs/MCP工具配置说明书.md) | 部署 — 配置全字段/环境变量 |
-| [小白使用指南](CEFbro/AI-Fbowser-Mcp/docs/小白使用指南.md) | 新用户 — 下载即用 |
-| [QUICKSTART (EN)](CEFbro/AI-Fbowser-Mcp/docs/QUICKSTART_EN.md) | English quick start |
 
 ---
 
@@ -211,9 +168,5 @@ Cursor / Claude Desktop  ←→  mcp_bridge.js (stdio 桥接)
 - **MIT License** — 源码与文档全部开放（[LICENSE](LICENSE)）
 - 仓库：https://github.com/AI-XiaoDao/ai-browser-mcp
 - 技术支持：QQ 212577526 · QQ群 737680767
-
----
-
-
 
 <!-- SEO: MCP browser automation · Cursor browser MCP · 浏览器自动化 MCP · web scraping MCP · Playwright alternative · CDP debugger MCP · JS reverse engineering MCP · 浏览器指纹反检测 · 火山视窗 CEF · AI浏览器 MCP · browser kernel extension · 334 MCP tools -->

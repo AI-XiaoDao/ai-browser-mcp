@@ -1,8 +1,0 @@
-HIGH	browser_vip_enable_inspector	enable	decl=string	read=文本/逻辑
-HIGH	browser_vip_fingerprint_battery	charging_time	decl=text	read=小数
-HIGH	browser_vip_fingerprint_battery	discharging_time	decl=text	read=小数
-HIGH	browser_vip_fingerprint_battery	level	decl=text	read=小数
-HIGH	browser_vip_fingerprint_geolocation	accuracy	decl=text	read=小数
-HIGH	browser_vip_fingerprint_geolocation	lat	decl=text	read=小数
-HIGH	browser_vip_fingerprint_geolocation	lng	decl=text	read=小数
-WEIRD	browser_debugger_set_breakpoint	column	decl=integer	read=整数/文本

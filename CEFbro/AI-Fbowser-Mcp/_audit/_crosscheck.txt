@@ -1,3 +1,0 @@
-file	jump_line	depth	next_line	jump_text	next_text
-MCP_Server_Core.wsv	705	4	707	返回 (MCP_响应构建.命令失败 (命令ID, "                                                                                                                                                                                                     "))	变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
-MCP_Server_Core.wsv	1173	4	1175	返回 (MCP_响应构建.命令失败 (命令ID, "                                                                                                                                                                                                     "))	变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>

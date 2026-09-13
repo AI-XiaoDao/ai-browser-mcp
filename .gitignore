@@ -78,3 +78,12 @@ _zip_test/
 
 # C++ 生成源码对照(可再生成, Releases 提供 cpp 参考包)
 **/generated-cpp/
+
+# 本地开发资产(不入仓)
+CEFbro/AI-Fbowser-Mcp/_audit/
+CEFbro/AI-Fbowser-Mcp/docs/
+CEFbro/AI-Fbowser-Mcp/README.md
+CEFbro/AI-Fbowser-Mcp/MCP工具可用性检测报告.md
+CEFbro/AI-Fbowser-Mcp/审计报告-火山语法与逻辑.md
+CEFbro/AI-Fbowser-Mcp/检测报告-第二轮.md
+CEFbro/AI-Fbowser-Mcp/输出名对照表.md
