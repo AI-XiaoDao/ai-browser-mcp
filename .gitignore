@@ -88,3 +88,8 @@ CEFbro/AI-Fbowser-Mcp/MCP工具可用性检测报告.md
 CEFbro/AI-Fbowser-Mcp/审计报告-火山语法与逻辑.md
 CEFbro/AI-Fbowser-Mcp/检测报告-第二轮.md
 CEFbro/AI-Fbowser-Mcp/输出名对照表.md
+
+# VS/独立编译产物(可再生成)
+CEFbro/AI-Fbowser-Mcp/generated-cpp/linker/
+CEFbro/AI-Fbowser-Mcp/generated-cpp/x64/out/
+CEFbro/AI-Fbowser-Mcp/generated-cpp/win32/out/
