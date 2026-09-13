@@ -9,7 +9,7 @@ PCH_FULL_FILE_NAME = $(OUT_DIR)\stdafx.pch
 PCH_HEADER_FILE_NAME = stdafx.h
 PCH_CPP_FILE_NAME = stdafx.cpp
 
-_PARAM_INCLUDE =  /I "C:\Users\cxzxc\Desktop\MCP源码\ai-browser-mcp\CEFbro\AI-Fbowser-Mcp\_int\AI-Fbowser-Mcp\release\x64\project" /I "E:\HSPC\plugins\vprj_win\classlib" /I "E:\HSPC\plugins\vprj_win\classlib\shared\extern_lib\common\sqlite3\2\include\default" /I "E:\HSPC\plugins\vprj_win\classlib\sys\yyjson\src"
+_PARAM_INCLUDE =  /I "." /I "..\..\standalone\sdk\vprj_win\classlib" /I "..\..\standalone\sdk\vprj_win\classlib\shared\extern_lib\common\sqlite3\2\include\default" /I "..\..\standalone\sdk\vprj_win\classlib\sys\yyjson\src"
 _PARAM_PREDEFINE = /D CRTAPI1=_cdecl /D CRTAPI2=_cdecl /D WIN32 /D _WIN32 /D _WINDOWS /D _UNICODE /D UNICODE /D NDEBUG /D WIN64 /D _WIN64 /D _CONSOLE /D _VOL_STATIC_RUNTIME /D _VOL_CONSOLE_EXE /D _VOL_DISABLE_STANDARD_STARTUP /D _VOL_X64
 _CPP_PARAMS = /c /nologo /GS /W3 /Zc:wchar_t /fp:precise /errorReport:none /WX- /Gd /Zc:forScope /EHa $(_PARAM_INCLUDE) $(_PARAM_PREDEFINE) /MT /GL /Gy /O2 /Oi /O2 /Ot /std:c++17
 _PCH_CPP_PARAMS = $(PCH_HEADER_FILE_NAME) /Fp$(PCH_FULL_FILE_NAME) /Fd$(OUT_DIR)\ /Fo$(OUT_DIR)\ $(_CPP_PARAMS)
@@ -24,11 +24,11 @@ LFLAGS = /ERRORREPORT:NONE /NOLOGO /TLBID:1 /ignore:4099 /NXCOMPAT /DYNAMICBASE 
 CFLAGS = $(CPPFLAGS)
 CXXFLAGS = $(CPPFLAGS)
 
-MANIFEST_FILES = "E:\HSPC\plugins\vprj_win\res\default-x64.manifest"
-MANIFEST_FLAGS = /MANIFESTINPUT:"E:\HSPC\plugins\vprj_win\res\default-x64.manifest"
+MANIFEST_FILES = "..\..\standalone\sdk\vprj_win\res\default-x64.manifest"
+MANIFEST_FLAGS = /MANIFESTINPUT:"..\..\standalone\sdk\vprj_win\res\default-x64.manifest"
 LIBS = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib
 OBJS = $(OUT_DIR)\AI-Fbowser-Mcp.res $(OUT_DIR)\stdafx.obj $(OUT_DIR)\vol_app_static_data.obj $(OUT_DIR)\vpkg_FBroCallback.obj $(OUT_DIR)\vpkg_FBroDataType.obj $(OUT_DIR)\vpkg_FBroEventControl.obj $(OUT_DIR)\vpkg_FBroHelp.obj $(OUT_DIR)\vpkg_FBroLib.obj $(OUT_DIR)\vpkg_FBroValue.obj $(OUT_DIR)\vpkg_FBroVip.obj $(OUT_DIR)\vpkg_main.obj $(OUT_DIR)\vpkg_MCP_BrowserEvents.obj $(OUT_DIR)\vpkg_MCP_Callbacks.obj $(OUT_DIR)\vpkg_MCP_Kernel.obj $(OUT_DIR)\vpkg_MCP_ResponseBuilders.obj $(OUT_DIR)\vpkg_MCP_Server.obj $(OUT_DIR)\vpkg_MCP_Server_Core.obj $(OUT_DIR)\vpkg_MCP_Server_Form.obj $(OUT_DIR)\vpkg_MCP_Server_HTTP.obj $(OUT_DIR)\vpkg_MCP_Server_Reverse.obj $(OUT_DIR)\vpkg_MCP_Server_System.obj $(OUT_DIR)\vpkg_MCP_Server_Utils.obj $(OUT_DIR)\vpkg_MCP_Server_VIP.obj $(OUT_DIR)\vpkg_MCP_Server_Workflow.obj $(OUT_DIR)\vpkg_MCP_Stdio.obj $(OUT_DIR)\vpkg_w_array.obj $(OUT_DIR)\vpkg_w_base.obj $(OUT_DIR)\vpkg_w_mfc_startup.obj $(OUT_DIR)\vpkg_w_misc.obj $(OUT_DIR)\vpkg_w_muti_thread.obj $(OUT_DIR)\vpkg_w_sqlite3.obj $(OUT_DIR)\vpkg_w_startup.obj $(OUT_DIR)\vpkg_w_stream.obj $(OUT_DIR)\vpkg_w_string.obj $(OUT_DIR)\vpkg_w_yyjson.obj $(OUT_DIR)\vpkg_加密解密库_.obj $(OUT_DIR)\vpkg_数据操作库_.obj $(EXTERN_OUT_DIR)\vol_array.obj $(EXTERN_OUT_DIR)\vol_assert.obj $(EXTERN_OUT_DIR)\vol_bitmap.obj $(EXTERN_OUT_DIR)\vol_classes.obj $(EXTERN_OUT_DIR)\vol_com.obj $(EXTERN_OUT_DIR)\vol_functions.obj $(EXTERN_OUT_DIR)\vol_key.obj $(EXTERN_OUT_DIR)\vol_math.obj $(EXTERN_OUT_DIR)\vol_mem.obj $(EXTERN_OUT_DIR)\vol_mem_pool.obj $(EXTERN_OUT_DIR)\vol_muti_thread.obj $(EXTERN_OUT_DIR)\vol_stream.obj $(EXTERN_OUT_DIR)\vol_string.obj $(EXTERN_OUT_DIR)\vol_time.obj $(EXTERN_OUT_DIR)\vol_mfc.obj $(EXTERN_OUT_DIR)\yyjson.obj $(EXTERN_OUT_DIR)\md5_.obj
-EXTERN_LIBS = "E:\HSPC\plugins\vprj_win\classlib\shared\extern_lib\common\sqlite3\2\x64\sqlite3dllmt.lib" "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\projects\x64\asm_64\spin_lock_64.lib" "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\lib64\FBrowserCEF3lib.lib" "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\lib64\FBrowserVIP.lib" "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\lib64\libcef.lib" "E:\HSPC\plugins\vprj_win\classlib\sys\FBrowser\src\env\lib64\release\libcef_dll_wrapper.lib"
+EXTERN_LIBS = "..\..\standalone\sdk\vprj_win\classlib\shared\extern_lib\common\sqlite3\2\x64\sqlite3dllmt.lib" "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\projects\x64\asm_64\spin_lock_64.lib" "..\..\standalone\sdk\vprj_win\classlib\sys\FBrowser\src\env\lib64\FBrowserCEF3lib.lib" "..\..\standalone\sdk\vprj_win\classlib\sys\FBrowser\src\env\lib64\FBrowserVIP.lib" "..\..\standalone\sdk\vprj_win\classlib\sys\FBrowser\src\env\lib64\libcef.lib" "..\..\standalone\sdk\vprj_win\classlib\sys\FBrowser\src\env\lib64\release\libcef_dll_wrapper.lib"
 
 build : $(OUT_FILE_NAME)
 
@@ -37,56 +37,56 @@ $(OUT_FILE_NAME) : $(PCH_FULL_FILE_NAME) $(OBJS) $(MANIFEST_FILES) $(EXTERN_LIBS
 $(OBJS)
 <<NOKEEP
 
-$(EXTERN_OUT_DIR)\vol_array.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_array.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_array.cpp"
+$(EXTERN_OUT_DIR)\vol_array.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_array.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_array.cpp"
 
-$(EXTERN_OUT_DIR)\vol_assert.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_assert.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_assert.cpp"
+$(EXTERN_OUT_DIR)\vol_assert.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_assert.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_assert.cpp"
 
-$(EXTERN_OUT_DIR)\vol_bitmap.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_bitmap.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_bitmap.cpp"
+$(EXTERN_OUT_DIR)\vol_bitmap.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_bitmap.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_bitmap.cpp"
 
-$(EXTERN_OUT_DIR)\vol_classes.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_classes.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_classes.cpp"
+$(EXTERN_OUT_DIR)\vol_classes.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_classes.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_classes.cpp"
 
-$(EXTERN_OUT_DIR)\vol_com.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_com.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_com.cpp"
+$(EXTERN_OUT_DIR)\vol_com.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_com.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_com.cpp"
 
-$(EXTERN_OUT_DIR)\vol_functions.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_functions.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_functions.cpp"
+$(EXTERN_OUT_DIR)\vol_functions.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_functions.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_functions.cpp"
 
-$(EXTERN_OUT_DIR)\vol_key.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_key.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_key.cpp"
+$(EXTERN_OUT_DIR)\vol_key.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_key.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_key.cpp"
 
-$(EXTERN_OUT_DIR)\vol_math.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_math.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_math.cpp"
+$(EXTERN_OUT_DIR)\vol_math.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_math.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_math.cpp"
 
-$(EXTERN_OUT_DIR)\vol_mem.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_mem.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_mem.cpp"
+$(EXTERN_OUT_DIR)\vol_mem.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_mem.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_mem.cpp"
 
-$(EXTERN_OUT_DIR)\vol_mem_pool.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_mem_pool.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_mem_pool.cpp"
+$(EXTERN_OUT_DIR)\vol_mem_pool.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_mem_pool.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_mem_pool.cpp"
 
-$(EXTERN_OUT_DIR)\vol_muti_thread.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_muti_thread.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_muti_thread.cpp"
+$(EXTERN_OUT_DIR)\vol_muti_thread.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_muti_thread.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_muti_thread.cpp"
 
-$(EXTERN_OUT_DIR)\vol_stream.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_stream.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_stream.cpp"
+$(EXTERN_OUT_DIR)\vol_stream.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_stream.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_stream.cpp"
 
-$(EXTERN_OUT_DIR)\vol_string.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_string.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_string.cpp"
+$(EXTERN_OUT_DIR)\vol_string.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_string.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_string.cpp"
 
-$(EXTERN_OUT_DIR)\vol_time.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_time.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_time.cpp"
+$(EXTERN_OUT_DIR)\vol_time.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_time.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\base\libs\win_base\cpp\vol_time.cpp"
 
-$(EXTERN_OUT_DIR)\vol_mfc.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\mfc_ui_base\src\vol_mfc.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\mfc_ui_base\src\vol_mfc.cpp"
+$(EXTERN_OUT_DIR)\vol_mfc.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\mfc_ui_base\src\vol_mfc.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\mfc_ui_base\src\vol_mfc.cpp"
 
-$(EXTERN_OUT_DIR)\yyjson.obj : "E:\HSPC\plugins\vprj_win\classlib\sys\yyjson\src\yyjson.c"
-    $(CC) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\sys\yyjson\src\yyjson.c"
+$(EXTERN_OUT_DIR)\yyjson.obj : "..\..\standalone\sdk\vprj_win\classlib\sys\yyjson\src\yyjson.c"
+    $(CC) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\sys\yyjson\src\yyjson.c"
 
-$(EXTERN_OUT_DIR)\md5_.obj : "E:\HSPC\plugins\vprj_win\classlib\user\yw\md5\md5_.cpp"
-    $(CPP) $(CPPFLAGS) "E:\HSPC\plugins\vprj_win\classlib\user\yw\md5\md5_.cpp"
+$(EXTERN_OUT_DIR)\md5_.obj : "..\..\standalone\sdk\vprj_win\classlib\user\yw\md5\md5_.cpp"
+    $(CPP) $(CPPFLAGS) "..\..\standalone\sdk\vprj_win\classlib\user\yw\md5\md5_.cpp"
 
 $(OUT_DIR)\stdafx.obj : $(PCH_CPP_FILE_NAME)
     $(CPP) $(CPPFLAGS_CREATE_PCH) $(PCH_CPP_FILE_NAME)
