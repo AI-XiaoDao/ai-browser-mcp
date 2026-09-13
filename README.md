@@ -1,10 +1,10 @@
 # 🚀 AI浏览器 MCP Server
 
-> **Windows 本地浏览器自动化 MCP 服务端** — 真实 FBrowser CEF 内核 · **265 个浏览器自动化工具** · 本地 `127.0.0.1:9222` · MIT 开源
+> **Windows 本地浏览器自动化 MCP 服务端** — 真实 FBrowser CEF 内核 · **334 个浏览器自动化工具** · 本地 `127.0.0.1:9222` · MIT 开源
 >
 > Web Scraping · JS Reverse Engineering · CDP Debugger · 内核层扩展 · 指纹反检测 · Form Automation RPA
 
-[![Release](https://img.shields.io/badge/release-v3.1.0-blue)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
+[![Release](https://img.shields.io/badge/release-v3.2.0-blue)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows_x64_|_win32-lightgrey)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 
@@ -12,7 +12,7 @@
 
 ## 📖 这是什么？
 
-**AI浏览器 MCP Server** 是一个 **Windows 本地浏览器自动化 MCP 服务端**：运行真实的 **FBrowser CEF（Chromium）浏览器内核**，通过 **Model Context Protocol（MCP）** 向 AI 编程助手（Cursor / Claude Desktop / Cline / 任意 MCP 客户端）暴露 **265 个浏览器自动化工具**。
+**AI浏览器 MCP Server** 是一个 **Windows 本地浏览器自动化 MCP 服务端**：运行真实的 **FBrowser CEF（Chromium）浏览器内核**，通过 **Model Context Protocol（MCP）** 向 AI 编程助手（Cursor / Claude Desktop / Cline / 任意 MCP 客户端）暴露 **334 个浏览器自动化工具**。
 
 无需安装 Node 驱动、无需编写 Playwright/Puppeteer 脚本——**下载解压即用**，AI 用自然语言即可操控浏览器完成：
 
@@ -29,7 +29,17 @@
 
 ---
 
-## 🆕 v3.1.0 新增（内核层能力扩展）
+## 🆕 v3.2.0 新增（334 工具全量真机核验版）
+
+| 能力 | 说明 |
+|---|---|
+| **334 工具逐个核验** | 311 通过 / 23 受控跳过 / 0 失败，全程零冷重启（35 秒跑完一遍）|
+| **稳定性修复 20+** | AB-BA 死锁、非法 browser_id 静默回退、browser_close confirm 闸门、CDP 观察者归属、并发 create 握手令牌、mcp_help 深链非法 JSON、hwnd 32 位截断、DB 守卫、HAR timestamp 等 |
+| **CDP 优先改造** | evaluate/console_eval/extract/view_source/key_event 改走 CDP（原生通道 8% 丢回调 → 5s 超时）；step 无断点如实跳过（根除通道毒化）|
+| **调试体验** | 控制台窗口可见 + 日志双写 `mcp_console.log`；启动器 ShellExecuteW（重启 10 分钟 → 6 秒）|
+| **质量基线** | 操作备注/死代码/残注释/幽灵注册全零；fastcheck 56/56；菜单回归 22/22 |
+
+## 📜 v3.1.0 历史版本（内核层能力扩展）
 
 | 能力 | 工具 | 说明 |
 |---|---|---|
@@ -61,8 +71,8 @@
 
 | 包 | 说明 |
 |---|---|
-| `AI-Browser-MCP-x64-v3.1.0.zip` | 64 位 Windows（~160MB）|
-| `AI-Browser-MCP-win32-v3.1.0.zip` | 32 位 Windows（~140MB）|
+| `AI-Browser-MCP-x64-v3.2.0.zip` | 64 位 Windows（~160MB）|
+| `AI-Browser-MCP-win32-v3.2.0.zip` | 32 位 Windows（~140MB）|
 | `AI-Browser-MCP-cpp-*.zip` | C++ 生成源码对照 |
 
 ### 2. 启动
@@ -93,7 +103,7 @@ node mcp_bridge.js --check
 
 ---
 
-## 🛠 核心能力一览（265 工具）
+## 🛠 核心能力一览（334 工具）
 
 | 类别 | 数量 | 代表工具 |
 |---|---|---|
@@ -206,4 +216,4 @@ Cursor / Claude Desktop  ←→  mcp_bridge.js (stdio 桥接)
 
 
 
-<!-- SEO: MCP browser automation · Cursor browser MCP · 浏览器自动化 MCP · web scraping MCP · Playwright alternative · CDP debugger MCP · JS reverse engineering MCP · 浏览器指纹反检测 · 火山视窗 CEF · AI浏览器 MCP · browser kernel extension · 265 MCP tools -->
+<!-- SEO: MCP browser automation · Cursor browser MCP · 浏览器自动化 MCP · web scraping MCP · Playwright alternative · CDP debugger MCP · JS reverse engineering MCP · 浏览器指纹反检测 · 火山视窗 CEF · AI浏览器 MCP · browser kernel extension · 334 MCP tools -->

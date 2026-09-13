@@ -1,10 +1,10 @@
 # 🚀 AI Browser MCP Server
 
-> **Windows local browser automation MCP server** — real FBrowser CEF (Chromium) engine · **265 browser automation tools** · local `127.0.0.1:9222` · MIT open source
+> **Windows local browser automation MCP server** — real FBrowser CEF (Chromium) engine · **334 browser automation tools** · local `127.0.0.1:9222` · MIT open source
 >
 > Web Scraping · JS Reverse Engineering · CDP Debugger · Kernel Extensions · Fingerprint Anti-Detection · Form Automation RPA
 
-[![Release](https://img.shields.io/badge/release-v3.1.0-blue)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
+[![Release](https://img.shields.io/badge/release-v3.2.0-blue)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows_x64_|_win32-lightgrey)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 [![Stars](https://img.shields.io/github/stars/AI-XiaoDao/ai-browser-mcp?style=social)](https://github.com/AI-XiaoDao/ai-browser-mcp)
@@ -15,7 +15,7 @@
 
 ## What is it?
 
-**AI Browser MCP Server** is a **Windows local browser automation MCP server**: it embeds a real **FBrowser CEF (Chromium)** engine and exposes **265 browser automation tools** to any AI coding assistant (Cursor / Claude Code / Claude Desktop / Trae / Cline) over the standard **Model Context Protocol (MCP)**.
+**AI Browser MCP Server** is a **Windows local browser automation MCP server**: it embeds a real **FBrowser CEF (Chromium)** engine and exposes **334 browser automation tools** to any AI coding assistant (Cursor / Claude Code / Claude Desktop / Trae / Cline) over the standard **Model Context Protocol (MCP)**.
 
 No Node driver, no Playwright/Puppeteer scripts — **download, extract, double-click, done**. AI controls the browser with natural language:
 
@@ -38,8 +38,8 @@ Download the latest release from the [Releases page](https://github.com/AI-XiaoD
 
 | Package | Description |
 |---|---|
-| `AI-Browser-MCP-x64-v3.1.0.zip` | 64-bit Windows (~160MB) |
-| `AI-Browser-MCP-win32-v3.1.0.zip` | 32-bit Windows (~140MB) |
+| `AI-Browser-MCP-x64-v3.2.0.zip` | 64-bit Windows (~160MB) |
+| `AI-Browser-MCP-win32-v3.2.0.zip` | 32-bit Windows (~140MB) |
 | `AI-Browser-MCP-cpp-*.zip` | Generated C++ sources (reference) |
 
 ### 2. Start
