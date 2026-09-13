@@ -1,45 +1,62 @@
 @echo off
 rem ============================================================
-rem  AI-Fbowser-Mcp 独立编译脚本(不依赖火山开发环境)
-rem  前置要求(微软标准组件, 可从 VS Installer 安装):
-rem    1) Visual Studio 2019/2022 Build Tools, 勾选 "C++ 桌面开发"
-rem    2) "适用于最新 v143/v142 生成工具的 C++ MFC"(MFC 组件, 必须)
+rem  AI-Fbowser-Mcp standalone build (no Volcano dev env needed)
+rem  Prerequisites (Microsoft standard components via VS Installer):
+rem    1) Visual Studio 2019/2022 Build Tools with "Desktop development with C++"
+rem    2) "C++ MFC" component (REQUIRED - vol_mfc.h depends on MFC headers)
 rem    3) Windows 10/11 SDK
-rem  用法(在本文件所在目录执行):
-rem    build.cmd x64     编译 64 位 -> ..\linker\AI-Fbowser-Mcp.exe
-rem    build.cmd win32   编译 32 位 -> ..\linker\AI-Fbowser-Mcp.exe
-rem  SDK 依赖全部在本仓库 standalone\ 目录内(头文件/源/库/manifest 相对路径),
-rem  不引用任何 E:\HSPC 或火山环境路径。
+rem  Usage (run in this folder):
+rem    build.cmd x64      -> ..\linker\AI-Fbowser-Mcp.exe (64-bit)
+rem    build.cmd win32    -> ..\linker\AI-Fbowser-Mcp.exe (32-bit)
+rem  All SDK deps live in ..\standalone\ (relative paths, no Volcano paths).
 rem ============================================================
 setlocal
 set ARCH=%~1
 if "%ARCH%"=="" set ARCH=x64
+rem vcvarsall: 32-bit uses x86 (win32 is not a valid vcvarsall arg)
+set VCVARARG=%ARCH%
+if "%ARCH%"=="win32" set VCVARARG=x86
 
-rem 定位 Visual Studio 安装目录(vswhere 标准位置)
-set VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe
-if not exist "%VSWHERE%" (
-  echo [错误] 未找到 vswhere, 请先安装 Visual Studio Build Tools(含 MFC 组件)
+set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
+set "VSDIR="
+if exist "%VSWHERE%" (
+  for /f "usebackq tokens=*" %%i in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "VSDIR=%%i"
+)
+
+set USE_FALLBACK=0
+if "%VSDIR%"=="" set USE_FALLBACK=1
+if not "%USE_FALLBACK%"=="1" (
+  dir /b "%VSDIR%\VC\Tools\MSVC\*\atlmfc" >nul 2>&1
+  if errorlevel 1 set USE_FALLBACK=1
+)
+
+set "FALLBACK_VS=E:\HSPC\plugins\vprj_win\sdk\compiler\normal"
+if "%USE_FALLBACK%"=="1" (
+  if exist "%FALLBACK_VS%\VC\Auxiliary\Build\vcvarsall.bat" (
+    echo [INFO] VS without MFC found; falling back to bundled MSVC+MFC toolchain (toolchain only)
+    call "%FALLBACK_VS%\VC\Auxiliary\Build\vcvarsall.bat" %VCVARARG% >nul 2>&1
+    goto :build
+  )
+  echo [ERROR] No MFC-capable C++ toolchain found. Install VS2019/2022 with the MFC component.
   exit /b 1
 )
-for /f "usebackq tokens=*" %%i in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set VSDIR=%%i
-if "%VSDIR%"=="" (
-  echo [错误] 未找到含 C++ 工具链的 Visual Studio
-  exit /b 1
-)
-call "%VSDIR%\VC\Auxiliary\Build\vcvarsall.bat" %ARCH% >nul 2>&1
+call "%VSDIR%\VC\Auxiliary\Build\vcvarsall.bat" %VCVARARG% >nul 2>&1
 if errorlevel 1 (
-  echo [错误] vcvarsall %ARCH% 失败
+  echo [ERROR] vcvarsall %ARCH% failed
   exit /b 1
 )
 
+:build
 cd /d "%~dp0%ARCH%"
 if not exist ..\linker mkdir ..\linker
 if not exist ..\linker\out mkdir ..\linker\out
 if not exist ..\linker\out\extern mkdir ..\linker\out\extern
+rem clean stale artifacts from the other arch (shared out dir; x64/win32 objects are incompatible)
+del /q ..\linker\out\*.obj ..\linker\out\*.pch ..\linker\out\*.pdb ..\linker\out\*.res 2>nul
 nmake /f makefile
 if errorlevel 1 (
-  echo [失败] 编译未通过, 请查看上方输出
+  echo [FAILED] build failed, see output above
   exit /b 1
 )
-echo [成功] 产出: %~dp0%ARCH%\..\linker\AI-Fbowser-Mcp.exe
+echo [OK] Output: %~dp0%ARCH%\..\linker\AI-Fbowser-Mcp.exe
 endlocal

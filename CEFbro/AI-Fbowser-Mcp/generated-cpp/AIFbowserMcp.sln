@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AIFbowserMcp", "AIFbowserMcp.vcxproj", "{8E3A2F41-9B6D-4C7E-A5F1-2B0C6D3E7A90}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Release|x64 = Release|x64
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E3A2F41-9B6D-4C7E-A5F1-2B0C6D3E7A90}.Release|x64.ActiveCfg = Release|x64
+		{8E3A2F41-9B6D-4C7E-A5F1-2B0C6D3E7A90}.Release|x64.Build.0 = Release|x64
+		{8E3A2F41-9B6D-4C7E-A5F1-2B0C6D3E7A90}.Release|Win32.ActiveCfg = Release|Win32
+		{8E3A2F41-9B6D-4C7E-A5F1-2B0C6D3E7A90}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

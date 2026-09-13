@@ -1016,7 +1016,7 @@ CVolString CALLBACK MCPReverseDispatch::DispatchClassReverseOp (CVolString& Comm
             {
                 rg_ivOut.rg_JiaRuWenBenChengYuan (_CT2 (_T ("verified")), _CT2 (_T ("false")));
                 rg_ivOut.rg_JiaRuWenBenChengYuan (_CT2 (_T ("warning")), _CT2 (_T ("本机实测: CDP接受了该插装, 但不会实际暂停(自检未观察到 Debugger.paused)。即 install 返回成功 ≠ 插装真的拦得住页面脚本")));
-                rg_ivOut.rg_JiaRuWenBenChengYuan (_CT2 (_T ("alternative")), _CT2 (_T ("本机可用的等效路径: browser_reverse_preload(Page.addScriptToEvaluateOnNewDocument, 在所有页面JS之前注入, 拦打包器最稳) / browser_debugger_flow(一键 enable+断点+导航+等暂停) / browser_debugger_set_breakpoint 在目标脚本首行下断点")));
+                rg_ivOut.rg_JiaRuWenBenChengYuan (_CT2 (_T ("alternative")), _CT2 (_T ("本机可用的等效路径: browser_reverse_preload(Page.addScriptToEvaluateOnNewDocument, 在所有页面JS之前注入, 拦打包器最稳) / browser_debugger_flow(组合 enable+断点+导航+等暂停) / browser_debugger_set_breakpoint 在目标脚本首行下断点")));
             }
             return (MCPResponseBuilder::CommandSuccessRawJSON (CommandID, rg_ivOut.data().ToString(YYJSON_WRITE_NOFLAG), TRUE));
         }

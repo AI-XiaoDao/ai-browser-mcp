@@ -1000,7 +1000,7 @@ CVolString CALLBACK MCPCoreDispatch::DispatchClassCore (CVolString& CommandID, C
             rg_ShuBiaoShiJian.rg_XiuShiJian = 0;
             rg_browser28.rg_FaSongShuBiaoDianJiShiJian (rg_AnNiuLeiXing, rg_ShuBiaoShiJian, FALSE, 1);
             rg_browser28.rg_FaSongShuBiaoDianJiShiJian (rg_AnNiuLeiXing, rg_ShuBiaoShiJian, TRUE, 1);
-            return (MCPResponseBuilder::CommandSuccess (CommandID, _CT2 (_T ("点击 (")) + CVolString (rg_x) + _T (",") + CVolString (rg_y) + _T (") 按钮:") + rg_AnNiuWenBen + _T (" | 经 CEF 事件派发(VIP控制器不可用时的退路)")));
+            return (MCPResponseBuilder::CommandSuccess (CommandID, _CT2 (_T ("点击 (")) + CVolString (rg_x) + _T (",") + CVolString (rg_y) + _T (") 按钮:") + rg_AnNiuWenBen + _T (" | 经 CEF 事件派发(高级功能控制器不可用时的退路)")));
         }
         return (MCPResponseBuilder::CommandFailure (CommandID, MCPConst::ErrorNoBrowser));
     }
@@ -1038,7 +1038,7 @@ CVolString CALLBACK MCPCoreDispatch::DispatchClassCore (CVolString& CommandID, C
             rg_ShuBiaoShiJian1.rg_ZongZuoBiao3 = rg_y1;
             rg_ShuBiaoShiJian1.rg_XiuShiJian = 0;
             rg_browser29.rg_FaSongShuBiaoYiDongShiJian (rg_ShuBiaoShiJian1, FALSE);
-            return (MCPResponseBuilder::CommandSuccess (CommandID, _CT2 (_T ("鼠标移动到 (")) + CVolString (rg_x1) + _T (",") + CVolString (rg_y1) + _T (") | 经 CEF 事件派发(VIP控制器不可用时的退路)")));
+            return (MCPResponseBuilder::CommandSuccess (CommandID, _CT2 (_T ("鼠标移动到 (")) + CVolString (rg_x1) + _T (",") + CVolString (rg_y1) + _T (") | 经 CEF 事件派发(高级功能控制器不可用时的退路)")));
         }
         return (MCPResponseBuilder::CommandFailure (CommandID, MCPConst::ErrorNoBrowser));
     }
@@ -1536,7 +1536,7 @@ CVolString CALLBACK MCPCoreDispatch::DispatchClassCore (CVolString& CommandID, C
             rg_ShuBiaoShiJian2.rg_ZongZuoBiao3 = rg_y2;
             rg_ShuBiaoShiJian2.rg_XiuShiJian = 0;
             rg_browser39.rg_FaSongShuBiaoGunLunShiJian (rg_ShuBiaoShiJian2, rg_deltaX, rg_deltaY);
-            return (MCPResponseBuilder::CommandSuccess (CommandID, _CT2 (_T ("滚轮 (")) + CVolString (rg_x2) + _T (",") + CVolString (rg_y2) + _T (") delta:") + CVolString (rg_deltaX) + _T (",") + CVolString (rg_deltaY) + _T (" | 经 CEF 事件派发(VIP控制器不可用时的退路)")));
+            return (MCPResponseBuilder::CommandSuccess (CommandID, _CT2 (_T ("滚轮 (")) + CVolString (rg_x2) + _T (",") + CVolString (rg_y2) + _T (") delta:") + CVolString (rg_deltaX) + _T (",") + CVolString (rg_deltaY) + _T (" | 经 CEF 事件派发(高级功能控制器不可用时的退路)")));
         }
         return (MCPResponseBuilder::CommandFailure (CommandID, MCPConst::ErrorNoBrowser));
     }
@@ -4158,7 +4158,7 @@ CVolString CALLBACK MCPCoreDispatch::DispatchClassCore (CVolString& CommandID, C
             rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_ZhiNa1;
             rg_ZhiNa1.data().CreateFromText(_CT2 (_T ("{}")));
             rg_ZhiNa1.rg_JiaRuWenBenChengYuan (_CT2 (_T ("scenario")), _CT2 (_T ("debugger")));
-            rg_ZhiNa1.rg_JiaRuWenBenChengYuan (_CT2 (_T ("tip")), _CT2 (_T ("VIP: debugger_flow 一键 | 或 enable→breakpoint→navigate→wait_paused→inspect→resume")));
+            rg_ZhiNa1.rg_JiaRuWenBenChengYuan (_CT2 (_T ("tip")), _CT2 (_T ("推荐: debugger_flow 组合流程 | 或 enable→breakpoint→navigate→wait_paused→inspect→resume")));
             rg_ZhiNa1.rg_JiaRuWenBenChengYuan (_CT2 (_T ("script")), _CT2 (_T ("browser_debugger_flow 或 mcp_bridge.js --call browser_debugger_flow")));
             rg_ZhiNa1.rg_JiaRuWenBenChengYuan (_CT2 (_T ("workflow")), _CT2 (_T ("workflow_run name=debugger_full")));
             rg_ZhiNa1.rg_JiaRuWenBenChengYuan (_CT2 (_T ("next_tools")), _CT2 (_T ("browser_debugger_flow {url,breakpoint,expressions} | wait_paused → inspect / script_source → resume")));
@@ -5539,7 +5539,7 @@ CVolString CALLBACK MCPCoreDispatch::DispatchClassCore (CVolString& CommandID, C
         }
         if (MCPCommandServer::EnsureDebuggerPaused (CommandID) == FALSE)
         {
-            return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法制造暂停点(已安排执行点 + Debugger.pause 并等待约6秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(about:blank/纯静态页) 或 CDP 通道不可用 | 替代: 先 browser_navigate 到有脚本的页面再暂停, 或用 browser_debugger_flow 一键断点"))));
+            return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法制造暂停点(已安排执行点 + Debugger.pause 并等待约6秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(about:blank/纯静态页) 或 CDP 通道不可用 | 替代: 先 browser_navigate 到有脚本的页面再暂停, 或用 browser_debugger_flow 组合断点"))));
         }
         rg_HuoShanShiChuang_JSONZhiChi::rg_YYJSONDuiXiangLei rg_ZanTingChengGongDuiXiang;
         rg_ZanTingChengGongDuiXiang.data().CreateFromText(_CT2 (_T ("{}")));
@@ -5571,11 +5571,11 @@ CVolString CALLBACK MCPCoreDispatch::DispatchClassCore (CVolString& CommandID, C
     {
         if ((INT)MCPCommandServer::BreakpointRegisterTable.data ().GetCount () == 0)
         {
-            return (MCPResponseBuilder::CommandSuccess (CommandID, _CT2 (_T ("本会话未设置任何断点, 单步没有可停靠的检查点, 已跳过实际单步(页面保持运行, 实例不受影响) | 要单步调试请先 browser_debugger_set_breakpoint 设断点, 或直接 browser_debugger_flow 一键断点流程"))));
+            return (MCPResponseBuilder::CommandSuccess (CommandID, _CT2 (_T ("本会话未设置任何断点, 单步没有可停靠的检查点, 已跳过实际单步(页面保持运行, 实例不受影响) | 要单步调试请先 browser_debugger_set_breakpoint 设断点, 或直接 browser_debugger_flow 组合断点流程"))));
         }
         if (MCPCommandServer::EnsureDebuggerPaused (CommandID) == FALSE)
         {
-            return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 一键断点流程"))));
+            return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 组合断点流程"))));
         }
         CVolString rg_stepOverHuiZhi;
         rg_stepOverHuiZhi = MCPCommandServer::ExecuteCDPCommand (CommandID, _CT2 (_T ("Debugger.stepOver")), ParamJSON);
@@ -5585,11 +5585,11 @@ CVolString CALLBACK MCPCoreDispatch::DispatchClassCore (CVolString& CommandID, C
     {
         if ((INT)MCPCommandServer::BreakpointRegisterTable.data ().GetCount () == 0)
         {
-            return (MCPResponseBuilder::CommandSuccess (CommandID, _CT2 (_T ("本会话未设置任何断点, 单步没有可停靠的检查点, 已跳过实际单步(页面保持运行, 实例不受影响) | 要单步调试请先 browser_debugger_set_breakpoint 设断点, 或直接 browser_debugger_flow 一键断点流程"))));
+            return (MCPResponseBuilder::CommandSuccess (CommandID, _CT2 (_T ("本会话未设置任何断点, 单步没有可停靠的检查点, 已跳过实际单步(页面保持运行, 实例不受影响) | 要单步调试请先 browser_debugger_set_breakpoint 设断点, 或直接 browser_debugger_flow 组合断点流程"))));
         }
         if (MCPCommandServer::EnsureDebuggerPaused (CommandID) == FALSE)
         {
-            return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 一键断点流程"))));
+            return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 组合断点流程"))));
         }
         CVolString rg_stepIntoHuiZhi;
         rg_stepIntoHuiZhi = MCPCommandServer::ExecuteCDPCommand (CommandID, _CT2 (_T ("Debugger.stepInto")), ParamJSON);
@@ -5599,11 +5599,11 @@ CVolString CALLBACK MCPCoreDispatch::DispatchClassCore (CVolString& CommandID, C
     {
         if ((INT)MCPCommandServer::BreakpointRegisterTable.data ().GetCount () == 0)
         {
-            return (MCPResponseBuilder::CommandSuccess (CommandID, _CT2 (_T ("本会话未设置任何断点, 单步没有可停靠的检查点, 已跳过实际单步(页面保持运行, 实例不受影响) | 要单步调试请先 browser_debugger_set_breakpoint 设断点, 或直接 browser_debugger_flow 一键断点流程"))));
+            return (MCPResponseBuilder::CommandSuccess (CommandID, _CT2 (_T ("本会话未设置任何断点, 单步没有可停靠的检查点, 已跳过实际单步(页面保持运行, 实例不受影响) | 要单步调试请先 browser_debugger_set_breakpoint 设断点, 或直接 browser_debugger_flow 组合断点流程"))));
         }
         if (MCPCommandServer::EnsureDebuggerPaused (CommandID) == FALSE)
         {
-            return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 一键断点流程"))));
+            return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 组合断点流程"))));
         }
         CVolString rg_stepOutHuiZhi;
         rg_stepOutHuiZhi = MCPCommandServer::ExecuteCDPCommand (CommandID, _CT2 (_T ("Debugger.stepOut")), ParamJSON);
@@ -5746,7 +5746,7 @@ CVolString CALLBACK MCPCoreDispatch::DispatchClassCore (CVolString& CommandID, C
     {
         if (MCPCommandServer::EnsureDebuggerPaused (CommandID) == FALSE)
         {
-            return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法自动制造暂停点(已启用调试器域 + 安排执行点 + Debugger.pause 并等待6秒仍未收到 Debugger.paused) | 可能原因: CDP 通道不可用 | 替代: browser_debugger_flow 一键断点流程"))));
+            return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法自动制造暂停点(已启用调试器域 + 安排执行点 + Debugger.pause 并等待6秒仍未收到 Debugger.paused) | 可能原因: CDP 通道不可用 | 替代: browser_debugger_flow 组合断点流程"))));
         }
         CVolString rg_stId;
         rg_stId = MCPCommandServer::YyjsonGetText (ParamJSON, _CT2 (_T ("stack_trace_id")));
@@ -5848,7 +5848,7 @@ CVolString CALLBACK MCPCoreDispatch::DispatchClassCore (CVolString& CommandID, C
         {
             if (MCPCommandServer::EnsureDebuggerPaused (CommandID) == FALSE)
             {
-                return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 一键断点流程"))));
+                return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 组合断点流程"))));
             }
             rg_rawLast = MCPCommandServer::GetCDPEventDataJSON (_CT2 (_T ("Debugger.paused")));
         }
@@ -5864,7 +5864,7 @@ CVolString CALLBACK MCPCoreDispatch::DispatchClassCore (CVolString& CommandID, C
         {
             if (MCPCommandServer::EnsureDebuggerPaused (CommandID) == FALSE)
             {
-                return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 一键断点流程"))));
+                return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 组合断点流程"))));
             }
             CVolString rg_rawInspect;
             rg_rawInspect = MCPCommandServer::GetCDPEventDataJSON (_CT2 (_T ("Debugger.paused")));
@@ -5931,7 +5931,7 @@ CVolString CALLBACK MCPCoreDispatch::DispatchClassCore (CVolString& CommandID, C
         {
             if (MCPCommandServer::EnsureDebuggerPaused (CommandID) == FALSE)
             {
-                return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 一键断点流程"))));
+                return (MCPResponseBuilder::CommandFailure (CommandID, _CT2 (_T ("无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 组合断点流程"))));
             }
         }
         CVolString rg_srcJSON;
@@ -8484,7 +8484,7 @@ CVolString CALLBACK MCPCoreDispatch::DispatchClassCore (CVolString& CommandID, C
             }
             else
             {
-                rg_adLog = rg_adLog + _T ("; ⚠️ Canvas/WebGL/Audio需VIP授权");
+                rg_adLog = rg_adLog + _T ("; ⚠️ Canvas/WebGL/Audio需高级功能支持");
             }
         }
         if (rg_adPreset == _T ("full"))
@@ -8515,7 +8515,7 @@ CVolString CALLBACK MCPCoreDispatch::DispatchClassCore (CVolString& CommandID, C
             }
             else
             {
-                rg_adLog = rg_adLog + _T ("; ⚠️ full级伪装需VIP授权, 仅应用了内核级反检测");
+                rg_adLog = rg_adLog + _T ("; ⚠️ full级伪装需高级功能支持, 仅应用了内核级反检测");
             }
         }
         if (rg_adLog == _T (""))

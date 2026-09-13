@@ -47,7 +47,7 @@ INT rg_startup_class::rg_startup_method ()
     if (MCPCommandServer::VIPLicenseCode == _T (""))
     {
         MCPCommandServer::VIPLicenseCode = _T ("xsmzas1");
-        MCPServerTool::ConsoleOutput (_CT2 (_T ("[AI浏览器] 使用内置VIP授权码")));
+        MCPServerTool::ConsoleOutput (_CT2 (_T ("[AI浏览器] 使用内置授权")));
     }
     rg_LiuLanQi_VIP::rg_FBrowserVIPZhuCe::rg_VIPZhuCe_ZhiShouQuanMa (MCPCommandServer::VIPLicenseCode);
     rg_FBrowser_LiuLanQi::rg_FBrowserChuShiHuaKongZhi::rg_ShiFouWeiVIP = TRUE;

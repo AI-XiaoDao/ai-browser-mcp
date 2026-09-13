@@ -6,7 +6,7 @@
 |---|---|
 | `x64/` | 64 位 C++ 工程（makefile + vcls_*.h + *.cpp）|
 | `win32/` | 32 位 C++ 工程 |
-| `build.cmd` | 一键独立编译脚本（不依赖火山环境）|
+| `build.cmd` | 独立编译脚本（不依赖火山环境）|
 | `../standalone/sdk/` | 编译所需 SDK（火山类库头文件/源 + FBrowser SDK 头/库 + sqlite3/yyjson，全部相对路径）|
 
 ## ✅ 独立编译（不依赖火山开发环境，实测通过）
