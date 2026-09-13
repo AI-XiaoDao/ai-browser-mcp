@@ -1,0 +1,215 @@
+[
+ {
+  "name": "browser_forward",
+  "first_verdict": "ERR_WEAK",
+  "verdict": "ERR_WEAK",
+  "args": {},
+  "elapsed": 0.02,
+  "detail": "无法前进 — 无导航历史 | 当前页面没有可前进的历史记录"
+ },
+ {
+  "name": "browser_debugger_enable",
+  "first_verdict": "TIMEOUT",
+  "verdict": "OK",
+  "args": {},
+  "elapsed": 0.03,
+  "detail": "{\"debuggerId\":\"-1058458149482100061.-4556659130498830769\"}"
+ },
+ {
+  "name": "browser_debugger_set_breakpoint",
+  "first_verdict": "TIMEOUT",
+  "verdict": "OK",
+  "args": {
+   "url": "https://example.com"
+  },
+  "elapsed": 0.03,
+  "detail": "{\"id\":\"20000\",\"success\":true,\"data\":{\"success\":true,\"cdp_result\":\"{\\\"breakpointId\\\":\\\"2:0:0:https://example.com\\\",\\\"locations\\\":[]}\"}}"
+ },
+ {
+  "name": "browser_debugger_evaluate",
+  "first_verdict": "TIMEOUT",
+  "verdict": "OK",
+  "args": {
+   "call_frame_id": "mcp_probe",
+   "expression": "1"
+  },
+  "elapsed": 0.03,
+  "detail": "{\"id\":\"20000\",\"success\":true,\"data\":{\"ok\":false,\"error\":\"\"}}"
+ },
+ {
+  "name": "browser_debugger_wait_paused",
+  "first_verdict": "TIMEOUT",
+  "verdict": "TIMEOUT",
+  "args": {},
+  "elapsed": 30.01,
+  "detail": "timed out"
+ },
+ {
+  "name": "browser_debugger_last_paused",
+  "first_verdict": "TIMEOUT",
+  "verdict": "ERR_GOOD",
+  "args": {},
+  "elapsed": 0.03,
+  "detail": "尚无 Debugger.paused 事件 | 请先 enable + 断点 + 触发暂停"
+ },
+ {
+  "name": "browser_debugger_flow",
+  "first_verdict": "TIMEOUT",
+  "verdict": "TIMEOUT",
+  "args": {
+   "breakpoint": "mcp_probe"
+  },
+  "elapsed": 30.02,
+  "detail": "timed out"
+ },
+ {
+  "name": "browser_debugger_script_source",
+  "first_verdict": "TIMEOUT",
+  "verdict": "ERR_GOOD",
+  "args": {},
+  "elapsed": 15.35,
+  "detail": "未处于暂停状态且未指定 script_id | 请先 debugger_flow / debugger_enable + 断点 + wait_paused"
+ },
+ {
+  "name": "browser_debugger_auto",
+  "first_verdict": "TIMEOUT",
+  "verdict": "TIMEOUT",
+  "args": {
+   "breakpoint": "mcp_probe"
+  },
+  "elapsed": 30.01,
+  "detail": "timed out"
+ },
+ {
+  "name": "browser_network_body",
+  "first_verdict": "TIMEOUT",
+  "verdict": "TIMEOUT",
+  "args": {
+   "request_id": "mcp_probe"
+  },
+  "elapsed": 30.01,
+  "detail": "timed out"
+ },
+ {
+  "name": "browser_touch_press",
+  "first_verdict": "TIMEOUT",
+  "verdict": "OK",
+  "args": {
+   "x": 10,
+   "y": 10
+  },
+  "elapsed": 0.43,
+  "detail": "{\"id\":\"20000\",\"success\":true,\"message\":\"触摸按下\"}"
+ },
+ {
+  "name": "browser_touch_release",
+  "first_verdict": "TIMEOUT",
+  "verdict": "OK",
+  "args": {
+   "x": 10,
+   "y": 10
+  },
+  "elapsed": 0.01,
+  "detail": "{\"id\":\"20000\",\"success\":true,\"message\":\"触摸放开\"}"
+ },
+ {
+  "name": "browser_find_by_tag",
+  "first_verdict": "ERR_WEAK",
+  "verdict": "ERR_WEAK",
+  "args": {
+   "tag": "mcp_probe"
+  },
+  "elapsed": 0.01,
+  "detail": "未找到标识为: mcp_probe 的浏览器 | 可能原因: 该标识未被 browser_user_tags 设置过, 或浏览器已关闭 | 建议: 先用 browser_list 查看现有浏览器及其 id"
+ },
+ {
+  "name": "workflow_get",
+  "first_verdict": "ERR_WEAK",
+  "verdict": "ERR_WEAK",
+  "args": {
+   "name": "mcp_probe"
+  },
+  "elapsed": 0.01,
+  "detail": "工作流不存在: mcp_probe | 建议: 先用 workflow_list 列出可用工作流名(不含 .json 后缀)"
+ },
+ {
+  "name": "workflow_run",
+  "first_verdict": "ERR_WEAK",
+  "verdict": "ERR_WEAK",
+  "args": {
+   "name": "mcp_probe"
+  },
+  "elapsed": 0.01,
+  "detail": "工作流缺少 steps 数组 | steps 须为 JSON 数组, 每项形如 {\"tool\":\"browser_navigate\",\"args\":{\"url\":\"https://example.com\"}} | 也可用 name 指向 workflows 目录下的工作流文件"
+ },
+ {
+  "name": "browser_kernel_reverse_functions",
+  "first_verdict": "TIMEOUT",
+  "verdict": "ERR_GOOD",
+  "args": {},
+  "elapsed": 15.24,
+  "detail": "函数提取失败: CDP JS 执行无响应(已等待15秒) | 常见原因: 页面尚未就绪或脚本数量过大导致枚举超时 | 建议: 先 browser_navigate 确认页面可交互, 或用 filter 缩小枚举范围后重试"
+ },
+ {
+  "name": "browser_kernel_reverse_sources",
+  "first_verdict": "TIMEOUT",
+  "verdict": "ERR_GOOD",
+  "args": {},
+  "elapsed": 15.24,
+  "detail": "源码提取失败: CDP JS 执行无响应(已等待15秒) | 常见原因: 页面尚未就绪 | 建议: 先 browser_navigate 确认页面可交互; 若页面脚本极多可先用 index 取单个脚本"
+ },
+ {
+  "name": "browser_kernel_events_all",
+  "first_verdict": "ERR_WEAK",
+  "verdict": "ERR_WEAK",
+  "args": {
+   "action": "mcp_probe"
+  },
+  "elapsed": 0.02,
+  "detail": "action 须为 enable/disable"
+ },
+ {
+  "name": "browser_cdp_event",
+  "first_verdict": "ERR_WEAK",
+  "verdict": "ERR_WEAK",
+  "args": {},
+  "elapsed": 0.01,
+  "detail": "指定 event_name 或 event 参数，例如 Debugger.paused"
+ },
+ {
+  "name": "browser_reverse_strings",
+  "first_verdict": "TIMEOUT",
+  "verdict": "ERR_GOOD",
+  "args": {},
+  "elapsed": 15.18,
+  "detail": "CDP Runtime.evaluate 超时(15000ms) | 可重试或使用 async_only:true"
+ },
+ {
+  "name": "browser_reverse_search",
+  "first_verdict": "TIMEOUT",
+  "verdict": "ERR_GOOD",
+  "args": {
+   "query": "sign"
+  },
+  "elapsed": 15.2,
+  "detail": "CDP Runtime.evaluate 超时(15000ms) | 可重试或使用 async_only:true"
+ },
+ {
+  "name": "browser_reverse_extract",
+  "first_verdict": "TIMEOUT",
+  "verdict": "ERR_GOOD",
+  "args": {},
+  "elapsed": 15.2,
+  "detail": "scan 超时(15000ms) | 可重试"
+ },
+ {
+  "name": "browser_fill_form",
+  "first_verdict": "ERR_WEAK",
+  "verdict": "ERR_WEAK",
+  "args": {
+   "fields": "mcp_probe"
+  },
+  "elapsed": 0.01,
+  "detail": "fields JSON解析失败 | 格式: [{\"selector\":\"#id\",\"value\":\"文本\"},...]"
+ }
+]

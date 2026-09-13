@@ -1,0 +1,643 @@
+====================================================================================================
+A2 工具契约检查: schema(广告) <-> 实现(实际读取)  双向交叉 + 类型一致性
+方法: 解析 265 条 添加工具JSON 的 schema 声明；对 7 个分派器的工具分支做
+      花括号精确分块；键读取含跨辅助方法的传递闭包(深度<=4)。
+====================================================================================================
+
+schema 解析结果: 265 个工具
+  其中无参数 schema (空Schema文本 或无第3参): 74 个
+
+####################################################################################################
+# [HIGH 候选] schema 声明类型 与 实现读取器 不兼容  —— 共 0 处
+####################################################################################################
+
+####################################################################################################
+# [INFO] 需人工确认的软性不匹配 —— 共 4 处
+####################################################################################################
+  browser_debugger_set_breakpoint            参数 column             schema=integer  实现=yyjson取文本   (分支 MCP_Server_Core.wsv:4200)
+  browser_debugger_flow                      参数 column             schema=integer  实现=yyjson取文本   (分支 MCP_Server_Core.wsv:4469)
+  browser_debugger_script_source             参数 line               schema=integer  实现=yyjson取文本   (分支 MCP_Server_Core.wsv:4489)
+  browser_debugger_script_source             参数 column             schema=integer  实现=yyjson取文本   (分支 MCP_Server_Core.wsv:4489)
+
+####################################################################################################
+# [MED 候选] 实现读取了 schema 未广告的参数 —— 共 298 处
+####################################################################################################
+  browser_execute_js                         读取 code_base64          方式=文本
+      分支 MCP_Server_Core.wsv:174   schema 声明 MCP_Server.wsv:8247
+  browser_evaluate                           读取 code_base64          方式=文本
+      分支 MCP_Server_Core.wsv:212   schema 声明 MCP_Server.wsv:8248
+  browser_dom_set_value                      读取 allow_empty          方式=整数
+      分支 MCP_Server_Core.wsv:1490   schema 声明 MCP_Server.wsv:8304
+  browser_console_eval                       读取 file                 方式=文本
+      分支 MCP_Server_Core.wsv:1757   schema 声明 MCP_Server.wsv:8314
+  browser_fingerprint                        读取 avail_height         方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 avail_width          方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 channels             方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 ciphers              方式=文本
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 device_memory        方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 disable              方式=逻辑
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 frames_per_buffer    方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 hardware_concurrency 方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 height               方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 host                 方式=文本
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 iana                 方式=文本
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 languages            方式=文本
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 latitude             方式=小数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 local_ip             方式=文本
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 longitude            方式=小数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 max                  方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 min                  方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 name                 方式=文本
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 offset_h             方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 offset_m             方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 product              方式=文本
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 public_ip            方式=文本
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 sample_rate          方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 seed                 方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 tls_max              方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 tls_min              方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 user_agent           方式=文本
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 vendor               方式=文本
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 webdriver            方式=逻辑
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 webgl_renderer       方式=文本
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 webgl_vendor         方式=文本
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_fingerprint                        读取 width                方式=整数
+      分支 MCP_Server_Core.wsv:1800   schema 声明 MCP_Server.wsv:8315
+  browser_intercept                          读取 height               方式=整数
+      分支 MCP_Server_Core.wsv:2048   schema 声明 MCP_Server.wsv:8316
+  browser_intercept                          读取 width                方式=整数
+      分支 MCP_Server_Core.wsv:2048   schema 声明 MCP_Server.wsv:8316
+  browser_intercept                          读取 x                    方式=整数
+      分支 MCP_Server_Core.wsv:2048   schema 声明 MCP_Server.wsv:8316
+  browser_intercept                          读取 y                    方式=整数
+      分支 MCP_Server_Core.wsv:2048   schema 声明 MCP_Server.wsv:8316
+  browser_collect                            读取 _check_task_id       方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 _event_driven        方式=逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 _extract_task_id     方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 _phase               方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 _poll_count          方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 address              方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 allow_empty          方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 args                 方式=对象成员
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 arguments            方式=JSON文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 attribute            方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 auto_enable          方式=文本,逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 avail_height         方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 avail_width          方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 backoff_ms           方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 breakpoint           方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 breakpointId         方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 button               方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 call_frame_id        方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 capture_args         方式=逻辑_默认
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 capture_return       方式=逻辑_默认
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 capture_stack        方式=逻辑_默认
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 channels             方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 check_code           方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 ciphers              方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 clear                方式=逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 code                 方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 column               方式=整数,文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 column_number        方式=整数,文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 compare_mode         方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 condition            方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 config               方式=JSON文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 consume              方式=逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 content_length       方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 data                 方式=JSON文本,文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 delta_x              方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 delta_y              方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 device_memory        方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 disable              方式=逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 disable_automation_flag 方式=逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 disable_debugger     方式=逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 domain               方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 duration_ms          方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 error                方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 event                方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 event_name           方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 event_type           方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 exact                方式=逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 expression           方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 expressions          方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 extract_selector     方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 file                 方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 file_path            方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 focus                方式=逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 form_index           方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 format               方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 frames_per_buffer    方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 fresh                方式=逻辑_默认
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 function_name        方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 hardware_concurrency 方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 height               方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 host                 方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 html                 方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 hwnd                 方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 iana                 方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 idle_ms              方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 ignore_cache         方式=逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 include_links        方式=逻辑_默认
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 index                方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 inject_id            方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 key_code             方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 keyword              方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 languages            方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 latitude             方式=小数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 level                方式=小数,整数,文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 limit                方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 line                 方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 line_end             方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 line_number          方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 line_start           方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 local_ip             方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 longitude            方式=小数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 matched              方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 max                  方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 max_chars            方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 max_hits             方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 max_items            方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 max_results          方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 max_retries          方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 max_total_ms         方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 message              方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 method               方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 mime                 方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 min                  方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 min_length           方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 mode                 方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 modifiers            方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 mute                 方式=逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 name                 方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 objectId             方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 object_id            方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 offset_h             方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 offset_m             方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 original             方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 other_id             方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 overwrite            方式=逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 parse                方式=逻辑_默认
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 password             方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 path                 方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 permissions          方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 persist              方式=逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 preset               方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 process_id           方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 product              方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 public_ip            方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 query                方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 reimplementation     方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 replace_text         方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 request_id           方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 result               方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 sample_rate          方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 scale                方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 script_id            方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 script_index         方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 script_url           方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 search_text          方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 seed                 方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 selector             方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 smooth               方式=逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 source               方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 src                  方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 start_time           方式=长整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 state                方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 status               方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 success              方式=逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 tag                  方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 target               方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 task_id              方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 test_inputs          方式=JSON文本,文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 text                 方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 text_length          方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 timestamp            方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 tls_max              方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 tls_min              方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 tool                 方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 type                 方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 url                  方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 url_pattern          方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 user_agent           方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 username             方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 value                方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 vendor               方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 wait_for_load        方式=逻辑_默认
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 wait_selector        方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 webdriver            方式=逻辑
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 webgl_renderer       方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 webgl_vendor         方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 what                 方式=文本
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 width                方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 x                    方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_collect                            读取 y                    方式=整数
+      分支 MCP_Server_Core.wsv:2991   schema 声明 MCP_Server.wsv:8318
+  browser_network                            读取 auto_enable          方式=文本,逻辑
+      分支 MCP_Server_Core.wsv:2607   schema 声明 MCP_Server.wsv:8319
+  browser_network                            读取 limit                方式=整数
+      分支 MCP_Server_Core.wsv:2607   schema 声明 MCP_Server.wsv:8319
+  browser_view_source                        读取 max_chars            方式=整数
+      分支 MCP_Server_Core.wsv:3257   schema 声明 MCP_Server.wsv:8322
+  browser_inject                             读取 inject_id            方式=文本
+      分支 MCP_Server_Core.wsv:2519   schema 声明 MCP_Server.wsv:8323
+  browser_debugger_enable                    读取 params               方式=JSON文本
+      分支 MCP_Server_Core.wsv:4639   schema 声明 MCP_Server.wsv:8326
+  browser_debugger_resume                    读取 params               方式=JSON文本
+      分支 MCP_Server_Core.wsv:4166   schema 声明 MCP_Server.wsv:8327
+  browser_debugger_step_over                 读取 params               方式=JSON文本
+      分支 MCP_Server_Core.wsv:4175   schema 声明 MCP_Server.wsv:8328
+  browser_debugger_step_into                 读取 params               方式=JSON文本
+      分支 MCP_Server_Core.wsv:4183   schema 声明 MCP_Server.wsv:8329
+  browser_debugger_step_out                  读取 params               方式=JSON文本
+      分支 MCP_Server_Core.wsv:4191   schema 声明 MCP_Server.wsv:8330
+  browser_debugger_stack                     读取 params               方式=JSON文本
+      分支 MCP_Server_Core.wsv:4343   schema 声明 MCP_Server.wsv:8331
+  browser_debugger_set_breakpoint            读取 breakpointId         方式=文本
+      分支 MCP_Server_Core.wsv:4200   schema 声明 MCP_Server.wsv:8332
+  browser_debugger_set_breakpoint            读取 column_number        方式=整数,文本
+      分支 MCP_Server_Core.wsv:4200   schema 声明 MCP_Server.wsv:8332
+  browser_debugger_set_breakpoint            读取 line_number          方式=整数
+      分支 MCP_Server_Core.wsv:4200   schema 声明 MCP_Server.wsv:8332
+  browser_debugger_set_breakpoint            读取 result               方式=文本
+      分支 MCP_Server_Core.wsv:4200   schema 声明 MCP_Server.wsv:8332
+  browser_debugger_wait_paused               读取 call_frame_id        方式=文本
+      分支 MCP_Server_Core.wsv:4385   schema 声明 MCP_Server.wsv:8334
+  browser_debugger_flow                      读取 call_frame_id        方式=文本
+      分支 MCP_Server_Core.wsv:4469   schema 声明 MCP_Server.wsv:8337
+  browser_debugger_flow                      读取 column_number        方式=整数,文本
+      分支 MCP_Server_Core.wsv:4469   schema 声明 MCP_Server.wsv:8337
+  browser_debugger_flow                      读取 line_number          方式=整数
+      分支 MCP_Server_Core.wsv:4469   schema 声明 MCP_Server.wsv:8337
+  browser_debugger_flow                      读取 url_regex            方式=文本
+      分支 MCP_Server_Core.wsv:4469   schema 声明 MCP_Server.wsv:8337
+  browser_debugger_script_source             读取 columnNumber         方式=整数,文本
+      分支 MCP_Server_Core.wsv:4489   schema 声明 MCP_Server.wsv:8338
+  browser_debugger_script_source             读取 column_number        方式=整数,文本
+      分支 MCP_Server_Core.wsv:4489   schema 声明 MCP_Server.wsv:8338
+  browser_debugger_script_source             读取 contextSnippet       方式=文本
+      分支 MCP_Server_Core.wsv:4489   schema 声明 MCP_Server.wsv:8338
+  browser_debugger_script_source             读取 currentLine          方式=文本
+      分支 MCP_Server_Core.wsv:4489   schema 声明 MCP_Server.wsv:8338
+  browser_debugger_script_source             读取 lineCount            方式=整数
+      分支 MCP_Server_Core.wsv:4489   schema 声明 MCP_Server.wsv:8338
+  browser_debugger_script_source             读取 lineNumber           方式=整数,文本
+      分支 MCP_Server_Core.wsv:4489   schema 声明 MCP_Server.wsv:8338
+  browser_debugger_script_source             读取 line_number          方式=整数,文本
+      分支 MCP_Server_Core.wsv:4489   schema 声明 MCP_Server.wsv:8338
+  browser_debugger_script_source             读取 scriptId             方式=文本
+      分支 MCP_Server_Core.wsv:4489   schema 声明 MCP_Server.wsv:8338
+  browser_debugger_script_source             读取 scriptSource         方式=文本
+      分支 MCP_Server_Core.wsv:4489   schema 声明 MCP_Server.wsv:8338
+  browser_debugger_script_source             读取 url                  方式=文本
+      分支 MCP_Server_Core.wsv:4489   schema 声明 MCP_Server.wsv:8338
+  browser_debugger_auto                      读取 call_frame_id        方式=文本
+      分支 MCP_Server_Core.wsv:4509   schema 声明 MCP_Server.wsv:8339
+  browser_file_dialog                        读取 file_path            方式=文本
+      分支 MCP_Server_Core.wsv:5037   schema 声明 MCP_Server.wsv:8358
+  browser_file_dialog                        读取 path                 方式=文本
+      分支 MCP_Server_Core.wsv:5037   schema 声明 MCP_Server.wsv:8358
+  browser_cdp_event                          读取 event                方式=文本
+      分支 MCP_Server_Core.wsv:4084   schema 声明 MCP_Server.wsv:8432
+  browser_vip_touch_cancel                   读取 x                    方式=整数
+      分支 MCP_Server_VIP.wsv:248   schema 声明 MCP_Server.wsv:8444
+  browser_vip_touch_cancel                   读取 y                    方式=整数
+      分支 MCP_Server_VIP.wsv:248   schema 声明 MCP_Server.wsv:8444
+  browser_reverse_hook                       读取 url_pattern          方式=文本
+      分支 MCP_Server_Core.wsv:5259   schema 声明 MCP_Server.wsv:8479
+  browser_reverse_strings                    读取 error                方式=文本
+      分支 MCP_Server_Core.wsv:5369   schema 声明 MCP_Server.wsv:8480
+  browser_reverse_search                     读取 error                方式=文本
+      分支 MCP_Server_Core.wsv:5599   schema 声明 MCP_Server.wsv:8486
+  browser_reverse_cdp_hook                   读取 objectId             方式=文本
+      分支 MCP_Server_Core.wsv:6099   schema 声明 MCP_Server.wsv:8490
+  browser_reverse_cdp_hook                   读取 result               方式=文本
+      分支 MCP_Server_Core.wsv:6099   schema 声明 MCP_Server.wsv:8490
+  browser_reverse_call_fn                    读取 objectId             方式=文本
+      分支 MCP_Server_Core.wsv:6257   schema 声明 MCP_Server.wsv:8494
+  browser_reverse_call_fn                    读取 result               方式=文本
+      分支 MCP_Server_Core.wsv:6257   schema 声明 MCP_Server.wsv:8494
+  browser_reverse_websocket                  读取 requestId            方式=文本
+      分支 MCP_Server_Core.wsv:6279   schema 声明 MCP_Server.wsv:8495
+  browser_reverse_websocket                  读取 request_id           方式=文本
+      分支 MCP_Server_Core.wsv:6279   schema 声明 MCP_Server.wsv:8495
+  browser_reverse_extract                    读取 error                方式=文本
+      分支 MCP_Server_Core.wsv:5639   schema 声明 MCP_Server.wsv:8501
+  browser_reverse_extract                    读取 index                方式=整数
+      分支 MCP_Server_Core.wsv:5639   schema 声明 MCP_Server.wsv:8501
+  browser_reverse_extract                    读取 matched              方式=整数
+      分支 MCP_Server_Core.wsv:5639   schema 声明 MCP_Server.wsv:8501
+  browser_reverse_extract                    读取 script_id            方式=文本
+      分支 MCP_Server_Core.wsv:5639   schema 声明 MCP_Server.wsv:8501
+  browser_reverse_extract                    读取 source               方式=文本
+      分支 MCP_Server_Core.wsv:5639   schema 声明 MCP_Server.wsv:8501
+  browser_reverse_extract                    读取 src                  方式=文本
+      分支 MCP_Server_Core.wsv:5639   schema 声明 MCP_Server.wsv:8501
+  browser_network_export                     读取 content_length       方式=整数
+      分支 MCP_Server_Core.wsv:2861   schema 声明 MCP_Server.wsv:8505
+  browser_network_export                     读取 method               方式=文本
+      分支 MCP_Server_Core.wsv:2861   schema 声明 MCP_Server.wsv:8505
+  browser_network_export                     读取 mime                 方式=文本
+      分支 MCP_Server_Core.wsv:2861   schema 声明 MCP_Server.wsv:8505
+  browser_network_export                     读取 status               方式=整数
+      分支 MCP_Server_Core.wsv:2861   schema 声明 MCP_Server.wsv:8505
+  browser_network_export                     读取 timestamp            方式=文本
+      分支 MCP_Server_Core.wsv:2861   schema 声明 MCP_Server.wsv:8505
+  browser_network_export                     读取 url                  方式=文本
+      分支 MCP_Server_Core.wsv:2861   schema 声明 MCP_Server.wsv:8505
+  browser_snapshot                           读取 error                方式=文本
+      分支 MCP_Server_Core.wsv:6336   schema 声明 MCP_Server.wsv:8519
+  browser_snapshot                           读取 message              方式=文本
+      分支 MCP_Server_Core.wsv:6336   schema 声明 MCP_Server.wsv:8519
+  browser_snapshot                           读取 success              方式=逻辑
+      分支 MCP_Server_Core.wsv:6336   schema 声明 MCP_Server.wsv:8519
+  browser_click_text                         读取 error                方式=文本
+      分支 MCP_Server_Core.wsv:6403   schema 声明 MCP_Server.wsv:8520
+  browser_click_text                         读取 message              方式=文本
+      分支 MCP_Server_Core.wsv:6403   schema 声明 MCP_Server.wsv:8520
+  browser_click_text                         读取 success              方式=逻辑
+      分支 MCP_Server_Core.wsv:6403   schema 声明 MCP_Server.wsv:8520
+  browser_get_forms                          读取 error                方式=文本
+      分支 MCP_Server_Core.wsv:6472   schema 声明 MCP_Server.wsv:8521
+  browser_get_forms                          读取 message              方式=文本
+      分支 MCP_Server_Core.wsv:6472   schema 声明 MCP_Server.wsv:8521
+  browser_get_forms                          读取 success              方式=逻辑
+      分支 MCP_Server_Core.wsv:6472   schema 声明 MCP_Server.wsv:8521
+  browser_get_scroll                         读取 error                方式=文本
+      分支 MCP_Server_Core.wsv:6610   schema 声明 MCP_Server.wsv:8523
+  browser_get_scroll                         读取 message              方式=文本
+      分支 MCP_Server_Core.wsv:6610   schema 声明 MCP_Server.wsv:8523
+  browser_get_scroll                         读取 success              方式=逻辑
+      分支 MCP_Server_Core.wsv:6610   schema 声明 MCP_Server.wsv:8523
+  browser_element_action                     读取 error                方式=文本
+      分支 MCP_Server_Core.wsv:6722   schema 声明 MCP_Server.wsv:8526
+  browser_element_action                     读取 message              方式=文本
+      分支 MCP_Server_Core.wsv:6722   schema 声明 MCP_Server.wsv:8526
+  browser_element_action                     读取 success              方式=逻辑
+      分支 MCP_Server_Core.wsv:6722   schema 声明 MCP_Server.wsv:8526
+  browser_reverse_hook_multi                 读取 error                方式=文本
+      分支 MCP_Server_Reverse.wsv:713   schema 声明 MCP_Server.wsv:8529
+  browser_reverse_hook_multi                 读取 message              方式=文本
+      分支 MCP_Server_Reverse.wsv:713   schema 声明 MCP_Server.wsv:8529
+  browser_reverse_hook_multi                 读取 success              方式=逻辑
+      分支 MCP_Server_Reverse.wsv:713   schema 声明 MCP_Server.wsv:8529
+  browser_reverse_stack_trace                读取 error                方式=文本
+      分支 MCP_Server_Reverse.wsv:796   schema 声明 MCP_Server.wsv:8530
+  browser_reverse_stack_trace                读取 message              方式=文本
+      分支 MCP_Server_Reverse.wsv:796   schema 声明 MCP_Server.wsv:8530
+  browser_reverse_stack_trace                读取 success              方式=逻辑
+      分支 MCP_Server_Reverse.wsv:796   schema 声明 MCP_Server.wsv:8530
+  browser_scroll_by                          读取 error                方式=文本
+      分支 MCP_Server_Core.wsv:6665   schema 声明 MCP_Server.wsv:8531
+  browser_scroll_by                          读取 message              方式=文本
+      分支 MCP_Server_Core.wsv:6665   schema 声明 MCP_Server.wsv:8531
+  browser_scroll_by                          读取 success              方式=逻辑
+      分支 MCP_Server_Core.wsv:6665   schema 声明 MCP_Server.wsv:8531
+  browser_highlight                          读取 error                方式=文本
+      分支 MCP_Server_Core.wsv:6532   schema 声明 MCP_Server.wsv:8532
+  browser_highlight                          读取 message              方式=文本
+      分支 MCP_Server_Core.wsv:6532   schema 声明 MCP_Server.wsv:8532
+  browser_highlight                          读取 success              方式=逻辑
+      分支 MCP_Server_Core.wsv:6532   schema 声明 MCP_Server.wsv:8532
+  browser_reverse_scan_crypto                读取 error                方式=文本
+      分支 MCP_Server_Reverse.wsv:469   schema 声明 MCP_Server.wsv:8534
+  browser_reverse_scan_crypto                读取 message              方式=文本
+      分支 MCP_Server_Reverse.wsv:469   schema 声明 MCP_Server.wsv:8534
+  browser_reverse_scan_crypto                读取 success              方式=逻辑
+      分支 MCP_Server_Reverse.wsv:469   schema 声明 MCP_Server.wsv:8534
+  browser_reverse_string_refs                读取 error                方式=文本
+      分支 MCP_Server_Reverse.wsv:525   schema 声明 MCP_Server.wsv:8535
+  browser_reverse_string_refs                读取 message              方式=文本
+      分支 MCP_Server_Reverse.wsv:525   schema 声明 MCP_Server.wsv:8535
+  browser_reverse_string_refs                读取 success              方式=逻辑
+      分支 MCP_Server_Reverse.wsv:525   schema 声明 MCP_Server.wsv:8535
+  browser_reverse_detect_obfuscator          读取 error                方式=文本
+      分支 MCP_Server_Reverse.wsv:588   schema 声明 MCP_Server.wsv:8536
+  browser_reverse_detect_obfuscator          读取 message              方式=文本
+      分支 MCP_Server_Reverse.wsv:588   schema 声明 MCP_Server.wsv:8536
+  browser_reverse_detect_obfuscator          读取 success              方式=逻辑
+      分支 MCP_Server_Reverse.wsv:588   schema 声明 MCP_Server.wsv:8536
+  browser_reverse_hook_logs                  读取 error                方式=文本
+      分支 MCP_Server_Reverse.wsv:642   schema 声明 MCP_Server.wsv:8537
+  browser_reverse_hook_logs                  读取 message              方式=文本
+      分支 MCP_Server_Reverse.wsv:642   schema 声明 MCP_Server.wsv:8537
+  browser_reverse_hook_logs                  读取 success              方式=逻辑
+      分支 MCP_Server_Reverse.wsv:642   schema 声明 MCP_Server.wsv:8537
+  browser_fill_form                          读取 message              方式=文本
+      分支 MCP_Server_Form.wsv:284   schema 声明 MCP_Server.wsv:8538
+  browser_fill_form                          读取 selector             方式=文本
+      分支 MCP_Server_Form.wsv:284   schema 声明 MCP_Server.wsv:8538
+  browser_fill_form                          读取 value                方式=文本
+      分支 MCP_Server_Form.wsv:284   schema 声明 MCP_Server.wsv:8538
+
+####################################################################################################
+# [MED 候选] schema 广告了但整个项目从未读取 —— 共 14 处
+####################################################################################################
+  browser_get_text                           参数 max_chars            声明=integer  (schema MCP_Server.wsv:8250)
+  browser_move_window                        参数 height               声明=integer  (schema MCP_Server.wsv:8301)
+  browser_move_window                        参数 repaint              声明=boolean  (schema MCP_Server.wsv:8301)
+  browser_move_window                        参数 width                声明=integer  (schema MCP_Server.wsv:8301)
+  browser_move_window                        参数 x                    声明=integer  (schema MCP_Server.wsv:8301)
+  browser_move_window                        参数 y                    声明=integer  (schema MCP_Server.wsv:8301)
+  browser_dom_query                          参数 index                声明=integer  (schema MCP_Server.wsv:8302)
+  browser_intercept                          参数 match_mode           声明=text     (schema MCP_Server.wsv:8316)
+  browser_debugger_last_paused               参数 parse                声明=boolean  (schema MCP_Server.wsv:8335)
+  browser_vip_enable_inspector               参数 repaint              声明=boolean  (schema MCP_Server.wsv:8445)
+  browser_vip_fingerprint_media_devices      参数 devices              声明=text     (schema MCP_Server.wsv:8465)
+  browser_fingerprint_ua                     参数 brands               声明=text     (schema MCP_Server.wsv:8476)
+  browser_reverse_scan_crypto                参数 script_index         声明=integer  (schema MCP_Server.wsv:8534)
+  browser_reverse_detect_obfuscator          参数 script_index         声明=integer  (schema MCP_Server.wsv:8536)
+
+====================================================================================================
+汇总: 硬性类型不匹配 0 | 软性不匹配 4 | 未广告参数 298 | 广告未读 14
+注: 未广告/未读列表含跨分裂分支的噪声(同一工具在多个分派器有分支)，需人工复核。
+====================================================================================================

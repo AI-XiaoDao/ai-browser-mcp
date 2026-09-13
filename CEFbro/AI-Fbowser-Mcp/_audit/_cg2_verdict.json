@@ -1,0 +1,6563 @@
+[
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用ConsoleAssert",
+  "params": [
+   [
+    "是否禁用",
+    "<类型 = 逻辑型 注释 = \"为真为禁用，假为不禁用\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_disable_console(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用ConsoleClear",
+  "params": [
+   [
+    "是否禁用",
+    "<类型 = 逻辑型 注释 = \"为真为禁用，假为不禁用\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_disable_console(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用ConsoleCount",
+  "params": [
+   [
+    "是否禁用",
+    "<类型 = 逻辑型 注释 = \"为真为禁用，假为不禁用\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_disable_console(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用ConsoleDebug",
+  "params": [
+   [
+    "是否禁用",
+    "<类型 = 逻辑型 注释 = \"为真为禁用，假为不禁用\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_disable_console(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用ConsoleDir",
+  "params": [
+   [
+    "是否禁用",
+    "<类型 = 逻辑型 注释 = \"为真为禁用，假为不禁用\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_disable_console(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用ConsoleError",
+  "params": [
+   [
+    "是否禁用",
+    "<类型 = 逻辑型 注释 = \"为真为禁用，假为不禁用\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_disable_console(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用ConsoleGroup",
+  "params": [
+   [
+    "是否禁用",
+    "<类型 = 逻辑型 注释 = \"为真为禁用，假为不禁用\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_disable_console(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用ConsoleInfo",
+  "params": [
+   [
+    "是否禁用",
+    "<类型 = 逻辑型 注释 = \"为真为禁用，假为不禁用\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_disable_console(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用ConsoleLog",
+  "params": [
+   [
+    "是否禁用",
+    "<类型 = 逻辑型 注释 = \"为真为禁用，假为不禁用\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_disable_console(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用ConsoleProfile",
+  "params": [
+   [
+    "是否禁用",
+    "<类型 = 逻辑型 注释 = \"为真为禁用，假为不禁用\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_disable_console(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用ConsoleTable",
+  "params": [
+   [
+    "是否禁用",
+    "<类型 = 逻辑型 注释 = \"为真为禁用，假为不禁用\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_disable_console(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用ConsoleTime",
+  "params": [
+   [
+    "是否禁用",
+    "<类型 = 逻辑型 注释 = \"为真为禁用，假为不禁用\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_disable_console(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用ConsoleTrace",
+  "params": [
+   [
+    "是否禁用",
+    "<类型 = 逻辑型 注释 = \"为真为禁用，假为不禁用\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_disable_console(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用ConsoleWarn",
+  "params": [
+   [
+    "是否禁用",
+    "<类型 = 逻辑型 注释 = \"为真为禁用，假为不禁用\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_disable_console(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用Debugger",
+  "params": [
+   [
+    "是否禁用",
+    "<类型 = 逻辑型 注释 = \"为真为禁用，假为不禁用\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_antidetect_presets, browser_vip_disable_debugger(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_禁用Performance检测",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_disable_console(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_设置CSS内核",
+  "params": [
+   [
+    "内核版本",
+    "<类型 = 整数 注释 = \"支持设置值为135到116\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_set_css_version(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_设置EventIsTrusted",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_set_is_trusted(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_设置V8内核",
+  "params": [
+   [
+    "内核版本",
+    "<类型 = 整数 注释 = \"支持设置值为135到116\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_set_v8_version(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "内核开关_设置Web内核",
+  "params": [
+   [
+    "内核版本",
+    "<类型 = 整数 注释 = \"支持设置值为135到116\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_set_web_version(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_取调用计数",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B2",
+  "route": "action 枚举",
+  "who": "browser_fingerprint action=count(MCP_Server_Core.wsv:1986 分支真调用, 行号见 covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_启用触摸事件",
+  "params": [
+   [
+    "是否启用",
+    "<类型 = 逻辑型>"
+   ],
+   [
+    "最大触摸点数",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_antidetect_presets, browser_fingerprint_touch_enable, browser_vip_touch_emulation(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_清空调用计数",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "FBroHsVIPControl_ClearFingerCount(只清计数, 保留伪装); browser_fingerprint 只有 action=count(读) 与 action=clear(→ vip_ctrl.清理数据, 是**清掉全部伪装**的 ClearAllData, MCP_Server_Core.wsv:2000), 二者语义不同, 无法只清计数",
+  "note": "",
+  "tool": "browser_fingerprint action=clear_count",
+  "prio": "P2",
+  "reuse": "MCP_Server_Core.wsv:1986 分支内加一个 action 即可(一行 vip_ctrl.指纹_清空调用计数())"
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟AppCodeName",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint_appcodename(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟AppName",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint_appname(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟AppVersion",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint_appversion(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟AudioInput设备",
+  "params": [
+   [
+    "类型",
+    "<类型 = 整数 注释 = \"0为清空，1为添加，2为覆盖,如果为0，下面修改数据设不设置都不会生效\">"
+   ],
+   [
+    "媒体硬件清单",
+    "<类型 = FBrowser_媒体硬件数组"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_fingerprint_media_devices(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟AudioOutput设备",
+  "params": [
+   [
+    "类型",
+    "<类型 = 整数 注释 = \"0为清空，1为添加，2为覆盖,如果为0，下面修改数据设不设置都不会生效\">"
+   ],
+   [
+    "媒体硬件清单",
+    "<类型 = FBrowser_媒体硬件数组"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_fingerprint_media_devices(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟Audio_定值",
+  "params": [
+   [
+    "参数文本",
+    "<类型 = 文本型 注释 = \"注意：文本不能太长，太长可能会崩，最好元素个数在1000以下\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_fingerprint_audio_fixed(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟Audio_随机",
+  "params": [
+   [
+    "最少噪点数",
+    "<类型 = 整数 注释 = \"最好不低于100个\">"
+   ],
+   [
+    "最大噪点数",
+    "<类型 = 整数 注释 = \"1000以下\">"
+   ],
+   [
+    "随机种子",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B2",
+  "route": "action 枚举",
+  "who": "browser_fingerprint action=audio_random(MCP_Server_Core.wsv:1986 分支真调用, 行号见 covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟BatteryManagerCharging",
+  "params": [
+   [
+    "是否充电中",
+    "<类型 = 逻辑型>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_fingerprint_battery(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟BatteryManagerChargingTime",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 小数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_fingerprint_battery(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟BatteryManagerDischargingTime",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 小数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_fingerprint_battery(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟BatteryManagerLevel",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 小数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_fingerprint_battery(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟CSS字体指纹",
+  "params": [
+   [
+    "字体清单",
+    "<类型 = 文本型>"
+   ],
+   [
+    "宽偏移量",
+    "<类型 = 整数 注释 = \"增加或减少字体的宽度\">"
+   ],
+   [
+    "高偏移量",
+    "<类型 = 整数 注释 = \"增加或减少字体的高度\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_font_randomize, browser_vip_fingerprint_font(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟Canvas_定值",
+  "params": [
+   [
+    "参数文本",
+    "<类型 = 文本型 注释 = \"单个噪点格式：x:y:r:g:b:a，多个数据以,隔开，x和y是噪点坐标，rgba为噪点颜色值，都为正整数值;注意：文本不能太长，太长可能会崩，最好元素个数在100以下\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_fingerprint_canvas_fixed(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟Canvas_随机",
+  "params": [
+   [
+    "最少噪点数",
+    "<类型 = 整数>"
+   ],
+   [
+    "最大噪点数",
+    "<类型 = 整数 注释 = \"100以下\">"
+   ],
+   [
+    "随机种子",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B2",
+  "route": "action 枚举",
+  "who": "browser_fingerprint action=canvas_random(MCP_Server_Core.wsv:1986 分支真调用, 行号见 covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟Canvas字体指纹",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 小数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_font_randomize, browser_vip_fingerprint_canvas_font(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟CookieEnabled",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 逻辑型>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint_cookie_enabled(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟Date时区",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_antidetect_presets, browser_fingerprint, browser_vip_fingerprint_timezone(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟DeviceMemory",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_antidetect_presets, browser_fingerprint, browser_vip_fingerprint_hardware(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟DevicePixelRatio",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 小数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_antidetect_presets, browser_fingerprint_pixel_ratio(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟HardwareConcurrency",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_antidetect_presets, browser_fingerprint, browser_vip_fingerprint_hardware(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟JavaEnabled",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 逻辑型>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint_java_enabled(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟Languages",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint, browser_fingerprint_languages(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟OnLine",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 逻辑型>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint_online(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟Plugins",
+  "params": [
+   [
+    "修改类型",
+    "<类型 = 整数 注释 = \"0未不修改，1为添加，2为覆盖\">"
+   ],
+   [
+    "JSON文本",
+    "<类型 = 文本型 注释 = \"插件JSON格式文本，否则无效\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint_plugins(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟Product",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint, browser_vip_fingerprint_product(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟ProductSub",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint_product_sub, browser_vip_fingerprint_product(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟Rect",
+  "params": [
+   [
+    "X",
+    "<类型 = 整数>"
+   ],
+   [
+    "Y",
+    "<类型 = 整数>"
+   ],
+   [
+    "W",
+    "<类型 = 整数>"
+   ],
+   [
+    "H",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_antidetect_presets, browser_vip_fingerprint_rect(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟UserAgent",
+  "params": [
+   [
+    "userAgent",
+    "<类型 = 类_FBrowserVIP_UA数据 注释 = \"UA数据\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_antidetect_presets, browser_fingerprint, browser_fingerprint_ua(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟Vendor",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint, browser_vip_fingerprint_product(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟VendorSub",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint_vendor_sub, browser_vip_fingerprint_product(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟VideoInput设备",
+  "params": [
+   [
+    "类型",
+    "<类型 = 整数 注释 = \"0为清空，1为添加，2为覆盖,如果为0，下面修改数据设不设置都不会生效\">"
+   ],
+   [
+    "媒体硬件清单",
+    "<类型 = FBrowser_媒体硬件数组"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_fingerprint_media_devices(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟Viewport",
+  "params": [
+   [
+    "OffsetTop",
+    "<类型 = 整数>"
+   ],
+   [
+    "OffsetLeft",
+    "<类型 = 整数>"
+   ],
+   [
+    "Height",
+    "<类型 = 整数>"
+   ],
+   [
+    "Width",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_fingerprint_viewport(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟WebGL_定值",
+  "params": [
+   [
+    "参数文本",
+    "<类型 = 文本型 注释 = \"单个噪点格式:x:y, 多个以,隔开，x和y是噪点坐标,为1以下小数值，可为负数;注意：文本不能太长，太长可能会崩，最好元素个数在100以下\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_fingerprint_webgl_fixed(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟WebGL_随机",
+  "params": [
+   [
+    "最少噪点数",
+    "<类型 = 整数>"
+   ],
+   [
+    "最大噪点数",
+    "<类型 = 整数 注释 = \"100以下\">"
+   ],
+   [
+    "随机种子",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B2",
+  "route": "action 枚举",
+  "who": "browser_fingerprint action=webgl_random(MCP_Server_Core.wsv:1986 分支真调用, 行号见 covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟Webdriver",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 逻辑型>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B2",
+  "route": "action 枚举",
+  "who": "browser_fingerprint action=set_batch —— 批量指纹配置 JSON 的 `webdriver` 键(MCP_Server_Core.wsv:2194-2201 判键存在后调用); 同一 set_batch 块还吃下 ua/vendor/product/languages/webgl_vendor/hardware_concurrency/device_memory/width/height/avail_width/avail_height 等键",
+  "note": "注: webdriver 也由 browser_antidetect_presets preset=stealth 一并处理",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟Webglrenderer",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint, browser_fingerprint_webgl_vendor(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟Webglvendor",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint, browser_fingerprint_webgl_vendor(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟WebrtcIP",
+  "params": [
+   [
+    "当地IP",
+    "<类型 = 文本型 注释 = \"外网地址,设置为“”则为不修改,要和代理保持一致\">"
+   ],
+   [
+    "本地IP",
+    "<类型 = 文本型 注释 = \"本地地址一般是192、127、10开头，设置为“”则为不修改，如不设置一般默认是host名\" @默认值 = \"\">"
+   ],
+   [
+    "host",
+    "<类型 = 文本型"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_antidetect_presets, browser_fingerprint, browser_vip_fingerprint_webrtc(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟内核功能",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "已被 browser_vip_set_web_version/browser_vip_set_v8_version/browser_vip_set_css_version 三件套取代(同类库内 `内核开关_设置Web/V8/CSS内核`, 三个都已有专属工具且被直调); 且本方法类库标注**弃用**",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟定位",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_antidetect_presets, browser_fingerprint, browser_vip_fingerprint_geolocation(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟屏幕XY",
+  "params": [
+   [
+    "X",
+    "<类型 = 整数>"
+   ],
+   [
+    "Y",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_antidetect_presets, browser_fingerprint_screen_xy(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟屏幕colorDepth",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 整数 注释 = \"如果是模拟手机环境，这个值要设置大于1，否则可能会被检测\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_fingerprint_screen(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟屏幕pixelDepth",
+  "params": [
+   [
+    "虚拟值",
+    "<类型 = 整数 注释 = \"如果是模拟手机环境，这个值要设置大于1，否则可能会被检测\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_fingerprint_screen(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟屏幕分辨率",
+  "params": [
+   [
+    "高度",
+    "<类型 = 整数>"
+   ],
+   [
+    "宽度",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint, browser_vip_fingerprint_screen(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟屏幕可用高度和宽度",
+  "params": [
+   [
+    "高度",
+    "<类型 = 整数>"
+   ],
+   [
+    "宽度",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint, browser_vip_fingerprint_screen(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_虚拟屏幕方向",
+  "params": [
+   [
+    "方向类型",
+    "<类型 = 屏幕方向类型 注释 = \"设置方向类型，横屏或竖屏；参考:屏幕方向类型.，通过window.screen.orientation.type验证\">"
+   ],
+   [
+    "角度",
+    "<类型 = 整数 注释 = \"-90到180，一般0为横屏，90为竖屏，可通过window.orientation验证\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_orientation(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "指纹_设置SSL加密套件",
+  "params": [
+   [
+    "TLS最小版本",
+    "<类型 = TLS版本 注释 = \"参考：TLS版本,不设置默认为1.2到1.3\" @默认值 = TLS版本.空>"
+   ],
+   [
+    "TLS最大版本",
+    "<类型 = TLS版本 注释 = \"参考：TLS版本,不设置默认为1.2到1.3\" @默认值 = TLS版本.空>"
+   ],
+   [
+    "加密支持文本",
+    "<类型 = 文本型 注释 = \"设置支持的加密方式，不设置当前浏览器默认值为“ALL:!aPSK:!ECDSA+SHA1:!3DES”，\""
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fingerprint, browser_vip_fingerprint_ssl(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "清理数据",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B2",
+  "route": "action 枚举",
+  "who": "browser_fingerprint action=clear(MCP_Server_Core.wsv:1986 分支真调用, 行号见 covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "逐字分割",
+  "params": [
+   [
+    "待分割文本",
+    "<类型 = 文本型>"
+   ],
+   [
+    "返回数据",
+    "<类型 = 文本数组类>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "纯字符串工具函数(把文本按字符拆成文本数组), 被 高级键盘_输入文本 内部调用; 不是用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级_创建标签浏览器",
+  "params": [
+   [
+    "地址",
+    "<类型 = 文本型 注释 = \"可以为空，为空会获取当前浏览器的地址\">"
+   ],
+   [
+    "序号",
+    "<类型 = 整数 注释 = \"UI上需要插入的序号位置，设置为-1为在末尾添加\" @默认值 = -1>"
+   ],
+   [
+    "是否激活",
+    "<类型 = 逻辑型 注释 = \"为真会激活并跳转标签，为假为不激活\" @默认值 = 假>"
+   ],
+   [
+    "额外信息",
+    "<类型 = 类_FBrowser_字典值 注释 = \"传递给事件的额外数据，可不设置，和创建浏览器不同的事这里不会传递给渲染进程\" @默认值 = 空对象>"
+   ],
+   [
+    "浏览器事件",
+    "<类型 = 类_FBrowser_事件智能指针 注释 = \"使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowser_浏览器事件”的自定义类事件；\""
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "C",
+  "route": "存疑",
+  "who": "卡在「浏览器以什么 UI 模式创建」。类库注释限定「谷歌模式(Chrome UI)下才可以使用」; main.wsv:203-212 只用 FBrowser_窗口信息(父窗口句柄=0/坐标/宽高) 调 FBrowser_创建浏览器, 未见 CEF_RUNTIME_STYLE_CHROME(常量 谷歌=1, FBroConst.wsv:753) 的显式设定。需证据: ① 实测 browser_create 出来的浏览器是否有 Chrome 式 Tab 条; ② 或读 FBroConst.wsv 里 CEF_RUNTIME_STYLE_* 常量被哪个属性消费。若为普通窗口模式, 该项应改判为 B4(架构不适用)。",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级_发送触摸事件",
+  "params": [
+   [
+    "类型",
+    "<类型 = 整数 注释 = \"touchStart=0,touchMove=1,touchCancel=2,touchEnd=3，第一次执行要先touchStart,执行完操作后touchEnd\">"
+   ],
+   [
+    "触摸事件",
+    "<类型 = FBrowser_VIP触摸事件>"
+   ],
+   [
+    "修饰符",
+    "<类型 = 整数 注释 = \"Alt=1, Ctrl=2, Meta/Command=4, Shift=8 (default: 0)\" @默认值 = 0>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reverse_input_cdp(kind=touch) / browser_touch_press+move+release(kernel:true 走内核注入) / browser_vip_touch_cancel 等",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级_发送键盘事件",
+  "params": [
+   [
+    "类型",
+    "<类型 = 文本型 注释 = \"type:Type of the key event.Allowed Values: keyDown, keyUp, rawKeyDown, char.\""
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_key_event(MCP_Server_Core.wsv:704 分支 → 725/730 直调 高级键盘_按下/放开) / browser_reverse_input_cdp(kind=key, 13 项参数由 CDP Input.dispatchKeyEvent 表达)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级_发送鼠标事件",
+  "params": [
+   [
+    "类型",
+    "<类型 = 文本型 注释 = \"type:Type of the mouse event.Allowed Values: mousePressed, mouseReleased, mouseMoved, mouseWheel.\""
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reverse_input_cdp(kind=mouse, 直发 CDP 原始输入) / browser_vip_mouse_press/release/move/wheel(内核注入) / browser_mouse_click 等工具的 kernel:true(内核级注入, MCP_Server_Core.wsv:643 确有执行)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级_取当前环境ID清单",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_get_js_env_ids(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级_启用执行环境",
+  "params": [
+   [
+    "是否启用",
+    "<类型 = 逻辑型 注释 = \"真启用，假关闭\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_enable_js_env(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级_执行JS",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_execute_js_context(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级_执行JS_主框架",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_execute_js_context(context_id, 主框架 contextId=1) / browser_execute_js",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级_执行JS_全部框架",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_get_frames + browser_vip_execute_js_context 逐个框架执行(等价, 需 AI 侧循环; 无「一次批量」工具)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级_执行JS_框架ID",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_execute_js_context(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级_执行JS_框架序号",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_execute_js_context(frame_id, 由 browser_vip_get_js_env_ids 取) / browser_get_frames 提供序号→框架映射",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级_清空代理",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_clear_proxy, browser_vip_clear_s5_proxy(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级_网页截图",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_screenshot(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级_设置代理",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_set_proxy, browser_set_s5_proxy(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级_设置触发鼠标触摸事件",
+  "params": [
+   [
+    "启用",
+    "<类型 = 逻辑型>"
+   ],
+   [
+    "配置",
+    "<类型 = 整数 注释 = \"默认为0，0为MOBILE模式，1为DESKTOP模式\" @默认值 = 0>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B3",
+  "route": "CDP 直通",
+  "who": "browser_cdp_call{method:\"Emulation.setEmitTouchEventsForMouse\"}(CDP Emulation 域原生方法, 与 FBroHsVIPControl_SetEmitTouchEventsForMouse 同义)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级触摸_单击",
+  "params": [
+   [
+    "横坐标",
+    "<类型 = 整数>"
+   ],
+   [
+    "纵坐标",
+    "<类型 = 整数>"
+   ],
+   [
+    "单击延时",
+    "<类型 = 整数 注释 = \"单位：毫秒；为空，默认为50毫秒\" @默认值 = 50>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_touch_press + browser_touch_release 组合(类库实现同为 按下→延时→放开 两步)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级触摸_取消",
+  "params": [
+   [
+    "横坐标",
+    "<类型 = 整数>"
+   ],
+   [
+    "纵坐标",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_touch_cancel(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级触摸_按下",
+  "params": [
+   [
+    "横坐标",
+    "<类型 = 整数>"
+   ],
+   [
+    "纵坐标",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_touch_press(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级触摸_放开",
+  "params": [
+   [
+    "横坐标",
+    "<类型 = 整数>"
+   ],
+   [
+    "纵坐标",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_touch_release(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级触摸_移动",
+  "params": [
+   [
+    "横坐标",
+    "<类型 = 整数>"
+   ],
+   [
+    "纵坐标",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_touch_move(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级键盘_单击",
+  "params": [
+   [
+    "键代码",
+    "<类型 = 整数>"
+   ],
+   [
+    "修饰键",
+    "<类型 = 整数 注释 = \"Alt=1, Ctrl=2, Meta/Command=4, Shift=8\" @默认值 = 0>"
+   ],
+   [
+    "单击延时",
+    "<类型 = 整数 注释 = \"单位：毫秒；为空，默认为50毫秒\" @默认值 = 50>"
+   ],
+   [
+    "是否为键盘",
+    "<类型 = 逻辑型 注释 = \"事件是否从键盘生成\" @默认值 = 假>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_key_event, browser_vip_key_click(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级键盘_按下",
+  "params": [
+   [
+    "键代码",
+    "<类型 = 整数>"
+   ],
+   [
+    "修饰键",
+    "<类型 = 整数 注释 = \"Alt=1, Ctrl=2, Meta/Command=4, Shift=8\" @默认值 = 0>"
+   ],
+   [
+    "是否为键盘",
+    "<类型 = 逻辑型 注释 = \"事件是否从键盘生成\" @默认值 = 假>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_key_event, browser_vip_key_press(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级键盘_放开",
+  "params": [
+   [
+    "键代码",
+    "<类型 = 整数>"
+   ],
+   [
+    "修饰键",
+    "<类型 = 整数 注释 = \"Alt=1, Ctrl=2, Meta/Command=4, Shift=8\" @默认值 = 0>"
+   ],
+   [
+    "是否为键盘",
+    "<类型 = 逻辑型 注释 = \"事件是否从键盘生成\" @默认值 = 假>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_key_event, browser_vip_key_release(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级键盘_输入字符",
+  "params": [
+   [
+    "文本",
+    "<类型 = 文本型 注释 = \"输入文本，可以是中文，但只能输入一个字，否则会出错\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_key_input(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级键盘_输入文本",
+  "params": [
+   [
+    "文本",
+    "<类型 = 文本型 注释 = \"输入文本，可以是中文，连续的文本\">"
+   ],
+   [
+    "逐字输入延时",
+    "<类型 = 整数 注释 = \"单位：毫秒；为空，默认为0，不延时\" @默认值 = 0>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_key_type(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级鼠标_单击",
+  "params": [
+   [
+    "横坐标",
+    "<类型 = 整数>"
+   ],
+   [
+    "纵坐标",
+    "<类型 = 整数>"
+   ],
+   [
+    "按键类型",
+    "<类型 = 整数 注释 = \"0为左键，1为中间，2为右键，默认为0，左键\">"
+   ],
+   [
+    "单击延时",
+    "<类型 = 整数 注释 = \"单位：毫秒；为空，默认为50毫秒\" @默认值 = 50>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_mouse_click, browser_vip_mouse_click(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级鼠标_按下",
+  "params": [
+   [
+    "横坐标",
+    "<类型 = 整数>"
+   ],
+   [
+    "纵坐标",
+    "<类型 = 整数>"
+   ],
+   [
+    "按键类型",
+    "<类型 = 整数 注释 = \"0为左键，1为中间，2为右键，默认为0，左键\" @默认值 = 0>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_mouse_press(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级鼠标_放开",
+  "params": [
+   [
+    "横坐标",
+    "<类型 = 整数>"
+   ],
+   [
+    "纵坐标",
+    "<类型 = 整数>"
+   ],
+   [
+    "按键类型",
+    "<类型 = 整数 注释 = \"0为左键，1为中间，2为右键，默认为0，左键\" @默认值 = 0>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_mouse_release(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级鼠标_滚轮滚动",
+  "params": [
+   [
+    "横坐标",
+    "<类型 = 整数>"
+   ],
+   [
+    "纵坐标",
+    "<类型 = 整数>"
+   ],
+   [
+    "横向滚动",
+    "<类型 = 整数 注释 = \"负数向左，正数向右，以像素点位单位\">"
+   ],
+   [
+    "纵向滚动",
+    "<类型 = 整数 注释 = \"负数向上，正数向下，以像素点位单位\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_mouse_wheel, browser_vip_mouse_wheel(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_控制器",
+  "method": "高级鼠标_移动",
+  "params": [
+   [
+    "横坐标",
+    "<类型 = 整数>"
+   ],
+   [
+    "纵坐标",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_mouse_move, browser_vip_mouse_move(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "即将处理命令行",
+  "params": [
+   [
+    "进程类型",
+    "<类型 = 文本型 注释 = \"The |process_type| value will be empty for the browser process，此参数只会在子进程中才会有值\">"
+   ],
+   [
+    "命令行",
+    "<类型 = 类_FBrowser_命令行 \"\">"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "执行关闭完毕",
+  "params": [
+   [
+    "是否结束程序",
+    "<类型 = 逻辑型类 注释 = \"由“FBrowser_关闭”的“结束程序”参数传递而来，可直接修改\">"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "扩展插件_创建失败",
+  "params": [
+   [
+    "请求环境",
+    "<类型 = 类_FBrowser_请求环境>"
+   ],
+   [
+    "插件ID",
+    "<类型 = 文本型 注释 = \"这个有可能是空\">"
+   ],
+   [
+    "插件路径",
+    "<类型 = 文本型>"
+   ],
+   [
+    "错误信息",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "扩展插件_创建成功",
+  "params": [
+   [
+    "请求环境",
+    "<类型 = 类_FBrowser_请求环境>"
+   ],
+   [
+    "插件ID",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "扩展插件_卸载成功",
+  "params": [
+   [
+    "请求环境",
+    "<类型 = 类_FBrowser_请求环境>"
+   ],
+   [
+    "插件ID",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "扩展插件_载入成功",
+  "params": [
+   [
+    "请求环境",
+    "<类型 = 类_FBrowser_请求环境>"
+   ],
+   [
+    "插件ID",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "注册自定义方案",
+  "params": [
+   [
+    "方案",
+    "<类型 = 类_FBrowser_方案注册>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_VIP_WebSocket客户端_关闭",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ],
+   [
+    "框架",
+    "<类型 = 类_FBrowser_框架>"
+   ],
+   [
+    "websocket客户端",
+    "<类型 = 类_FBrowserVIP_WebSocket客户端>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_VIP_WebSocket客户端_创建",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ],
+   [
+    "框架",
+    "<类型 = 类_FBrowser_框架>"
+   ],
+   [
+    "websocket客户端",
+    "<类型 = 类_FBrowserVIP_WebSocket客户端>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_VIP_WebSocket客户端_发送数据",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_VIP_WebSocket客户端_接收数据",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_VIP_WebSocket客户端_连接服务器",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ],
+   [
+    "框架",
+    "<类型 = 类_FBrowser_框架>"
+   ],
+   [
+    "websocket客户端",
+    "<类型 = 类_FBrowserVIP_WebSocket客户端>"
+   ],
+   [
+    "url",
+    "<类型 = 文本型 注释 = \"可修改，修改后会重定向新的连接地址\">"
+   ],
+   [
+    "protocols",
+    "<类型 = 文本型 注释 = \"可修改\">"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_即将创建V8环境",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ],
+   [
+    "框架",
+    "<类型 = 类_FBrowser_框架>"
+   ],
+   [
+    "V8环境",
+    "<类型 = 类_FBrowser_V8环境>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_即将初始化WebKit",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_即将捕获异常",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ],
+   [
+    "框架",
+    "<类型 = 类_FBrowser_框架>"
+   ],
+   [
+    "V8环境",
+    "<类型 = 类_FBrowser_V8环境>"
+   ],
+   [
+    "V8异常",
+    "<类型 = 类_FBrowser_V8异常>"
+   ],
+   [
+    "V8堆栈踪迹",
+    "<类型 = 类_FBrowser_V8堆栈踪迹>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_即将释放V8环境",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ],
+   [
+    "框架",
+    "<类型 = 类_FBrowser_框架>"
+   ],
+   [
+    "V8环境",
+    "<类型 = 类_FBrowser_V8环境>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_即将销毁浏览器",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_收到消息",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ],
+   [
+    "框架",
+    "<类型 = 类_FBrowser_框架>"
+   ],
+   [
+    "源进程",
+    "<类型 = 整数>"
+   ],
+   [
+    "消息",
+    "<类型 = 类_FBrowser_进程消息>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_浏览器创建",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ],
+   [
+    "额外信息",
+    "<类型 = 类_FBrowser_字典值>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_焦点节点改变",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ],
+   [
+    "框架",
+    "<类型 = 类_FBrowser_框架>"
+   ],
+   [
+    "DOM节点",
+    "<类型 = 类_FBrowser_DOM节点>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_载入开始",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ],
+   [
+    "框架",
+    "<类型 = 类_FBrowser_框架>"
+   ],
+   [
+    "过渡类型",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_载入状态被改变",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ],
+   [
+    "是否读取中",
+    "<类型 = 逻辑型>"
+   ],
+   [
+    "可后退",
+    "<类型 = 逻辑型>"
+   ],
+   [
+    "可前进",
+    "<类型 = 逻辑型>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_载入结束",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ],
+   [
+    "框架",
+    "<类型 = 类_FBrowser_框架>"
+   ],
+   [
+    "状态码",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "渲染_载入错误",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ],
+   [
+    "框架",
+    "<类型 = 类_FBrowser_框架>"
+   ],
+   [
+    "错误代码",
+    "<类型 = 整数>"
+   ],
+   [
+    "错误文本",
+    "<类型 = 文本型>"
+   ],
+   [
+    "失败地址",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_event(app_* 族) —— main.wsv 的 类_MCP_初始化事件 已 **override 本方法** 并写入 app_* 记录; 开关由 browser_collect(event_app_enable 等)/browser_kernel_events_all 控制(MCP_Kernel.wsv:1205-1218)",
+  "note": "⚠ 注: 渲染进程侧(app_render_*)事件在本架构下不会真正派发(渲染进程是独立的 FBroSubprocess.exe), 项目已在 MCP_Server_Core.wsv:3341 自我声明; 页面侧等价能力请用 browser_event(load_start/load_end/…)、browser_reverse_websocket、browser_collect",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_应用事件",
+  "method": "获取默认事件",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器 注释 = \"当前要获取默认事件的浏览器，注意：这里浏览器并没有完全创建成功，只能做一些简单的操作\">"
+   ],
+   [
+    "地址",
+    "<类型 = 文本型 注释 = \"当前要获取事件的地址\">"
+   ],
+   [
+    "用户额外配置",
+    "<类型 = 类_FBrowser_用户额外配置 注释 = \"这里面不单独设置事件即为使用内置默认不控制，要控制就需要自行设置浏览器事件\">"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "main.wsv:779 已 override 获取默认事件(类_FBrowser_应用事件的虚方法)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_JS交互_删除",
+  "params": [
+   [
+    "JS执行函数名",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_JS交互_注册",
+  "params": [
+   [
+    "JS执行函数名",
+    "<类型 = 文本型 注释 = \"js_query_function，详见text.html调用JS例子中的doQuery\">"
+   ],
+   [
+    "JS退出函数名",
+    "<类型 = 文本型 注释 = \"js_cancel_function，详见text.html调用JS例子中的doQueryCancel\" \"\">"
+   ],
+   [
+    "JS交互事件",
+    "<类型 = 类_FBrowser_事件智能指针 注释 = \"异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。\""
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_kernel_ipc_queue/browser_ipc_send_to 构成的双工 IPC(页面 window.__mcp_ipc_queue ↔ 宿主), 覆盖「页面 JS 回调宿主」需求",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_关闭",
+  "params": [
+   [
+    "结束程序",
+    "<类型 = 逻辑型 注释 = \"为真结束当前程序\" @默认值 = 假>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_shutdown(main.wsv:233 执行关闭序列 内调用 FBrowser_关闭 (真), 该序列由 browser_shutdown 触发)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_内存_压缩清理",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_compress_memory(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_创建URL请求",
+  "params": [
+   [
+    "请求",
+    "<类型 = 类_FBrowser_请求 注释 = \"要请求的数据的，用于设置请求地址，类型等参数\">"
+   ],
+   [
+    "请求环境",
+    "<类型 = 类_FBrowser_请求环境 注释 = \"为空为全局环境\" @默认值 = 空对象>"
+   ],
+   [
+    "URL请求事件",
+    "<类型 = 类_FBrowser_事件智能指针 注释 = \"获取数据和状态的异步回调。\""
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_create_url_request(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_初始化",
+  "params": [
+   [
+    "基础设置",
+    "<类型 = FBrowser_初始化配置 注释 = \"如果不设置执行进程，则默认使用FBrowserCEF3Subprocess.exe当执行进程\">"
+   ],
+   [
+    "初始化事件",
+    "<类型 = 类_FBrowser_事件智能指针 注释 = \"使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowser_应用事件”的自定义类事件；\""
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "启动期一次性调用(main.wsv:98), 不构成运行期工具能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_初始化_设置V8环境默认堆栈大小",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "FBroSetV8DefaultsHeapSize(初始尺寸,最大尺寸); src 全库 0 命中(仅类库自身文档提到); 必须在 FBrowser_初始化 前调用, main.wsv:98 之后无法补救",
+  "note": "渲染进程栈溢出崩溃的官方缓解手段",
+  "tool": "(启动参数通道) browser_kernel_initsetting",
+  "prio": "P2",
+  "reuse": "复用 main.wsv:75-98 的 设置 块, 在 FBrowser_初始化 之前根据启动参数/env 调用"
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_初始化_设置内存释放",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "C",
+  "route": "存疑",
+  "who": "FBroSetReleaseMemoryCycleTime/FBroSetMaxReleaseMemory; src 0 命中。类库**自标弃用**「弃用, 用于设置系统内部内存释放线程」。卡在: 弃用后该 API 是否仍生效未知(需真机验证长驻进程内存曲线), 若已失效则应改判 B4。需证据: ① 一版带本调用与不带本调用的编译产物长时间运行的内存占用对比; ② 或向 SDK 作者确认弃用后的替代品(类库另有 FBrowser_内存_压缩清理, 已被 browser_compress_memory 暴露)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_初始化_设置守护",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "C",
+  "route": "存疑",
+  "who": "FBroSetIsLiveMainProcessCycleTime; src 0 命中; 类库**自标弃用**「弃用, 设置系统内部守护线程」。卡在: 弃用 API 的实际效果未知; 且本项目已有自己的子进程残留治理(启动时检测上次渲染进程崩溃并清理缓存, main.wsv:67), 是否还需要守护线程需先确认。需证据: ① 强杀主进程后观察 FBroSubprocess.exe 是否残留(本项目已做过的类似真机验证); ② SDK 作者对弃用原因的说明",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_取初始化缓存目录",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_cache_dir(browser.取请求环境.取缓存路径) + browser_get_global_cache_dir(MCP_Server_System.wsv:50)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_取版本号",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_fbro_version, browser_meta, browser_reverse_env(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_消息循环_执行",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "本项目自建消息泵(main.wsv:112-118 PeekMessage 循环)+ 设置.启用系统消息循环=真(main.wsv:90), SDK 消息循环 API 不参与; 暴露为工具反而会与主循环冲突",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_消息循环_设置系统模式",
+  "params": [
+   [
+    "系统模式",
+    "<类型 = 逻辑型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_消息循环_运行",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_消息循环_退出",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上(退出由 browser_shutdown + 主循环标志位完成)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_自定义方案_注册",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_kernel_scheme action=register(MCP_Kernel.wsv:443 直调 FBrowser_自定义方案_注册(\"mcp\", 域名, 处理器))",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_自定义方案_清理",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_kernel_scheme action=clear(MCP_Kernel.wsv:480 直调 FBrowser_自定义方案_清理())",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_设置程序DPI模式",
+  "params": [
+   [
+    "DPI模式",
+    "<类型 = DPI模式 注释 = \"参考：DPI模式.\">"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "FBroHsSetProcessDPI(DPI模式); src 全库 0 命中 `DPI`; 类库注明「在程序入口初始化之前调用」, 是纯启动期设置",
+  "note": "CDP 无对应(Emulation.setDeviceMetricsOverride 只改页面视口 DPR, 不改进程 DPI 感知)",
+  "tool": "(启动参数通道) browser_kernel_initsetting",
+  "prio": "P2",
+  "reuse": "放在 main.wsv 启动方法最前(第 19 行 启动方法 内, FBrowser_初始化 之前)"
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "FBrowser_进程_取当前进程类型",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_get_process_type(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser初始化控制",
+  "method": "启用自带调试提示",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "C",
+  "route": "存疑",
+  "who": "类库注释「**仅调试模式下有用**, 启用模块类调试输出提示」; src 0 命中; 无工具暴露 SDK 自身调试输出开关。卡在: 本项目是 release 编译时(编译产物/编译命令未见调试版标记), 该开关可能完全无效果。需证据: ① 确认本项目构建是 debug 还是 release(编译参数/generated-cpp 产物); ② 调试版下实测 启用自带调试提示(真) 是否真的多出 SDK 事件类初始化/销毁提示。若为 release 构建 → 改判 B4",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_Parser_Base64编码",
+  "params": [
+   [
+    "数据",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_base64_encode(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_Parser_Base64解码",
+  "params": [
+   [
+    "数据",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_base64_decode(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_Parser_URI编码",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_uri_encode(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_Parser_URI解码",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_uri_decode(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_Parser_写入JSON",
+  "params": [
+   [
+    "node",
+    "<类型 = 类_FBrowser_值>"
+   ],
+   [
+    "options",
+    "<类型 = 整数 注释 = \"参考：JSON解析.*\">"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "JSON 序列化内部件; 项目统一使用 YYJSON(火山内置), 该 API 属 类_FBrowser_值 的附属",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_Parser_取数据URI",
+  "params": [
+   [
+    "mimetype",
+    "<类型 = 文本型>"
+   ],
+   [
+    "数据",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_base64_encode(mimetype 前缀由调用方拼接)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_Parser_字节值解析为JSON",
+  "params": [
+   [
+    "字节值",
+    "<类型 = 类_FBrowser_字节集>"
+   ],
+   [
+    "options",
+    "<类型 = 整数 注释 = \"参考：JSON解析.*\">"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_Parser_解析JSON",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "JSON 解析内部件(项目通篇使用 YYJSON, 该 API 仅用于 CDP params 解析 MCP_Server.wsv:1629); 对 AI 无独立价值 —— 传参本来就已是 JSON",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_启用异常收集",
+  "params": [
+   [
+    "异常信息文件名",
+    "<类型 = 文本型>"
+   ],
+   [
+    "异常执行回调",
+    "<@匹配方法 = \"异常收集回调模板函数\">"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "类库自带注释「火山版本内置已经设置了, 所以这个没用」—— 官方明示无效",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_浏览器_取ID清单",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_list(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_浏览器_取数量",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_create, browser_meta, mcp_status, ping(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_浏览器_取用户标识清单",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_user_tags(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_浏览器_通过ID取浏览器",
+  "params": [
+   [
+    "浏览器ID",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_close, browser_is_same, browser_list(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_浏览器_通过序号取浏览器",
+  "params": [
+   [
+    "序号",
+    "<类型 = 整数 注释 = \"从0开始\">"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_list(返回 id 清单) + browser_get_main_browser + browser_id 参数",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_浏览器_通过用户标识取浏览器",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_find_by_tag(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_浏览器_通过窗口句柄取浏览器",
+  "params": [
+   [
+    "窗口句柄",
+    "<类型 = 变整数>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_find_by_hwnd(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "FBrowser_清理全局缓存",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_clear_cache(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser辅助功能",
+  "method": "异常收集回调模板函数",
+  "params": [
+   [
+    "异常记录文件",
+    "<类型 = 文本型 注释 = \"生成的异常文件\">"
+   ],
+   [
+    "异常数据",
+    "<类型 = 变整数 注释 = \"_EXCEPTION_POINTERS* 类型指针数据\">"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上, 是 启用异常收集 的 @匹配方法 模板, 无独立能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "FBrowser_V8值_创建函数",
+  "params": [
+   [
+    "函数名",
+    "<类型 = 文本型>"
+   ],
+   [
+    "处理回调",
+    "<类型 = 类_FBrowser_事件智能指针 注释 = \"使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的“创建”方法来创建一个继承于“类_FBrowser_V8处理程序”的自定义类事件；\""
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reverse_call_fn(arguments 传 JSON 数组, 类型原样保留, MCP_Server.wsv:9752) / browser_reverse_set_variable(value 传 JSON 字面量) —— JS 值构造已下移到 CDP/JSON 层, 无需宿主侧 V8 值对象",
+  "note": "注: 宿主侧原生 V8 值对象(含 创建函数)未暴露, 但等价的「宿主函数暴露给页面」由 browser_reverse_add_binding(Runtime.addBinding) 覆盖",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "FBrowser_V8值_创建双精度小数型值",
+  "params": [
+   [
+    "值",
+    "<类型 = 小数>"
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reverse_call_fn(arguments 传 JSON 数组, 类型原样保留, MCP_Server.wsv:9752) / browser_reverse_set_variable(value 传 JSON 字面量) —— JS 值构造已下移到 CDP/JSON 层, 无需宿主侧 V8 值对象",
+  "note": "注: 宿主侧原生 V8 值对象(含 创建函数)未暴露, 但等价的「宿主函数暴露给页面」由 browser_reverse_add_binding(Runtime.addBinding) 覆盖",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "FBrowser_V8值_创建数组值",
+  "params": [
+   [
+    "长度",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reverse_call_fn(arguments 传 JSON 数组, 类型原样保留, MCP_Server.wsv:9752) / browser_reverse_set_variable(value 传 JSON 字面量) —— JS 值构造已下移到 CDP/JSON 层, 无需宿主侧 V8 值对象",
+  "note": "注: 宿主侧原生 V8 值对象(含 创建函数)未暴露, 但等价的「宿主函数暴露给页面」由 browser_reverse_add_binding(Runtime.addBinding) 覆盖",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "FBrowser_V8值_创建数组缓存值",
+  "params": [
+   [
+    "数组指针",
+    "<类型 = 变整数>"
+   ],
+   [
+    "数据长度",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reverse_call_fn(arguments 传 JSON 数组, 类型原样保留, MCP_Server.wsv:9752) / browser_reverse_set_variable(value 传 JSON 字面量) —— JS 值构造已下移到 CDP/JSON 层, 无需宿主侧 V8 值对象",
+  "note": "注: 宿主侧原生 V8 值对象(含 创建函数)未暴露, 但等价的「宿主函数暴露给页面」由 browser_reverse_add_binding(Runtime.addBinding) 覆盖",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "FBrowser_V8值_创建整型值",
+  "params": [
+   [
+    "值",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reverse_call_fn(arguments 传 JSON 数组, 类型原样保留, MCP_Server.wsv:9752) / browser_reverse_set_variable(value 传 JSON 字面量) —— JS 值构造已下移到 CDP/JSON 层, 无需宿主侧 V8 值对象",
+  "note": "注: 宿主侧原生 V8 值对象(含 创建函数)未暴露, 但等价的「宿主函数暴露给页面」由 browser_reverse_add_binding(Runtime.addBinding) 覆盖",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "FBrowser_V8值_创建文本值",
+  "params": [
+   [
+    "值",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reverse_call_fn(arguments 传 JSON 数组, 类型原样保留, MCP_Server.wsv:9752) / browser_reverse_set_variable(value 传 JSON 字面量) —— JS 值构造已下移到 CDP/JSON 层, 无需宿主侧 V8 值对象",
+  "note": "注: 宿主侧原生 V8 值对象(含 创建函数)未暴露, 但等价的「宿主函数暴露给页面」由 browser_reverse_add_binding(Runtime.addBinding) 覆盖",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "FBrowser_V8值_创建无符号整型值",
+  "params": [
+   [
+    "值",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reverse_call_fn(arguments 传 JSON 数组, 类型原样保留, MCP_Server.wsv:9752) / browser_reverse_set_variable(value 传 JSON 字面量) —— JS 值构造已下移到 CDP/JSON 层, 无需宿主侧 V8 值对象",
+  "note": "注: 宿主侧原生 V8 值对象(含 创建函数)未暴露, 但等价的「宿主函数暴露给页面」由 browser_reverse_add_binding(Runtime.addBinding) 覆盖",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "FBrowser_V8值_创建日期值",
+  "params": [
+   [
+    "值",
+    "<类型 = FBrowser_时间类型>"
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reverse_call_fn(arguments 传 JSON 数组, 类型原样保留, MCP_Server.wsv:9752) / browser_reverse_set_variable(value 传 JSON 字面量) —— JS 值构造已下移到 CDP/JSON 层, 无需宿主侧 V8 值对象",
+  "note": "注: 宿主侧原生 V8 值对象(含 创建函数)未暴露, 但等价的「宿主函数暴露给页面」由 browser_reverse_add_binding(Runtime.addBinding) 覆盖",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "FBrowser_V8值_创建未定义类",
+  "params": [],
+  "file": "FBroValue.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reverse_call_fn(arguments 传 JSON 数组, 类型原样保留, MCP_Server.wsv:9752) / browser_reverse_set_variable(value 传 JSON 字面量) —— JS 值构造已下移到 CDP/JSON 层, 无需宿主侧 V8 值对象",
+  "note": "注: 宿主侧原生 V8 值对象(含 创建函数)未暴露, 但等价的「宿主函数暴露给页面」由 browser_reverse_add_binding(Runtime.addBinding) 覆盖",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "FBrowser_V8值_创建空类",
+  "params": [],
+  "file": "FBroValue.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reverse_call_fn(arguments 传 JSON 数组, 类型原样保留, MCP_Server.wsv:9752) / browser_reverse_set_variable(value 传 JSON 字面量) —— JS 值构造已下移到 CDP/JSON 层, 无需宿主侧 V8 值对象",
+  "note": "注: 宿主侧原生 V8 值对象(含 创建函数)未暴露, 但等价的「宿主函数暴露给页面」由 browser_reverse_add_binding(Runtime.addBinding) 覆盖",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "FBrowser_V8值_创建类",
+  "params": [
+   [
+    "存取器回调",
+    "<类型 = 类_FBrowser_事件智能指针 注释 = \"异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。\""
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reverse_call_fn(arguments 传 JSON 数组, 类型原样保留, MCP_Server.wsv:9752) / browser_reverse_set_variable(value 传 JSON 字面量) —— JS 值构造已下移到 CDP/JSON 层, 无需宿主侧 V8 值对象",
+  "note": "注: 宿主侧原生 V8 值对象(含 创建函数)未暴露, 但等价的「宿主函数暴露给页面」由 browser_reverse_add_binding(Runtime.addBinding) 覆盖",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "FBrowser_V8值_创建逻辑值",
+  "params": [
+   [
+    "值",
+    "<类型 = 逻辑型>"
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reverse_call_fn(arguments 传 JSON 数组, 类型原样保留, MCP_Server.wsv:9752) / browser_reverse_set_variable(value 传 JSON 字面量) —— JS 值构造已下移到 CDP/JSON 层, 无需宿主侧 V8 值对象",
+  "note": "注: 宿主侧原生 V8 值对象(含 创建函数)未暴露, 但等价的「宿主函数暴露给页面」由 browser_reverse_add_binding(Runtime.addBinding) 覆盖",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "将重新抛出异常",
+  "params": [],
+  "file": "FBroValue.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "V8 C++ 异常转发内部件",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "执行函数",
+  "params": [
+   [
+    "对象",
+    "<类型 = 类_FBrowser_V8值 @默认值 = 空对象>"
+   ],
+   [
+    "参数",
+    "<类型 = 类_FBrowser_V8值数组>"
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reverse_call_fn(Runtime.callFunctionOn, 可传 object_id 或 function_name)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "清理异常",
+  "params": [],
+  "file": "FBroValue.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值",
+  "method": "调整外部内存大小",
+  "params": [
+   [
+    "调整大小",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "V8 外部内存记账内部件",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_浏览器",
+  "method": "FBrowser_创建后台浏览器",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "src 全库 0 命中 `后台浏览器`/`FBroHsCreate`; 唯一创建入口 browser_create 描述明写「新建一个可见浏览器窗口」(MCP_Server.wsv:9490), 无 background/headless 参数",
+  "note": "批量取数核心: 无窗口、占用更低, 类库注释称优于无头模式",
+  "tool": "browser_create_background",
+  "prio": "P0",
+  "reuse": "main.wsv:202-212 已有一条 `FBrowser_创建浏览器` 的 UI 线程创建路径, 可原样改调 `FBrowser_创建后台浏览器`; 同步版需经 `FBrowser_任务运行器_投递任务`"
+ },
+ {
+  "cls": "类_FBrowser_浏览器",
+  "method": "FBrowser_创建后台浏览器_同步",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "同上; 且 `FBrowser_任务运行器_投递任务` 在 src 中 0 调用(对应工具位 browser_task_runner_post 被 MCP_Server_System.wsv:20-22 硬禁用)",
+  "note": "同步版返回 类_FBrowser_浏览器, 必须在 UI 线程调用",
+  "tool": "browser_create_background",
+  "prio": "P0",
+  "reuse": "复用 MCP_Server_System.wsv:9 系统分派器; 需先解禁/改造 task_runner 通道"
+ },
+ {
+  "cls": "类_FBrowser_浏览器",
+  "method": "FBrowser_创建浏览器",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_create(main.wsv:212 UI 线程创建路径直调, 由 browser_create 写入 待创建URL 触发)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_浏览器",
+  "method": "FBrowser_创建浏览器_同步",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_create + browser_list/browser_wait(异步创建→轮询取 id, 语义等价; 项目一律以 browser_id 寻址)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_浏览器",
+  "method": "停止载入",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_stop(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_浏览器",
+  "method": "可否前进",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_can_navigate, browser_forward, browser_loading_info, browser_reverse_env, browser_status(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_浏览器",
+  "method": "尝试关闭浏览器",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_close(MCP_Server_Core.wsv:440 调 关闭浏览器, 类库注释即明写会触发 onbeforeunload); 且 browser_close_try 描述明写「[已废弃] 已替换为 browser_close」",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_浏览器",
+  "method": "开始下载",
+  "params": [
+   [
+    "地址",
+    "<类型 = 文本型 注释 = \"url\">"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_start_download(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_浏览器",
+  "method": "打开对话框",
+  "params": [
+   [
+    "模式",
+    "<类型 = 整数 注释 = \"打开模式，参考：文件对话框.xxx，多个类型用：位或运算\" @默认值 = 文件对话框.打开>"
+   ],
+   [
+    "标题",
+    "<类型 = 文本型 注释 = \"打开窗口标题\" @默认值 = \"\">"
+   ],
+   [
+    "默认文件名",
+    "<类型 = 文本型 注释 = \"模式为保存时候的默认文件名\" @默认值 = \"\">"
+   ],
+   [
+    "过滤器",
+    "<类型 = FBrowser_文本数组 注释 = \"可空,used to restrict the selectable file types and may any combination of\""
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B3",
+  "route": "CDP 直通",
+  "who": "browser_cdp_call{method:\"Page.setInterceptFileChooserDialog\"} 拦下原生文件对话框 + {method:\"DOM.setFileInputFiles\"} 直接给 <input type=file> 塞文件 —— 自动化真正需要的语义(选文件)由此覆盖",
+  "note": "⚠ 可用性差距: 现有 browser_file_dialog 是**故意不弹窗**的桩(MCP_Server_Core.wsv:5380「不弹任何窗口…其会阻塞控制台」), 只校验 path 存在性; 原生 RunFileDialog 本身对 AI 无意义",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_浏览器",
+  "method": "显示隐藏窗口",
+  "params": [
+   [
+    "显示隐藏",
+    "<类型 = 逻辑型 注释 = \"为真显示浏览器，为假隐藏浏览器\">"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "src 全库 0 命中 `显示隐藏窗口`/`ShowWindows`; 无工具、无桩位, 也无 CDP 等价(CDP 无隐藏宿主窗口的方法)",
+  "note": "多浏览器轮换/降低干扰时常用",
+  "tool": "browser_show_window",
+  "prio": "P2",
+  "reuse": "类_FBrowser_浏览器::显示隐藏窗口(显示隐藏 逻辑型) → FBroHsBrowserHost_ShowWindows"
+ },
+ {
+  "cls": "类_FBrowser_浏览器",
+  "method": "清理缓存",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B3",
+  "route": "CDP 直通",
+  "who": "browser_cdp_call{method:\"Storage.clearDataForOrigin\",params:{origin,storageTypes}} —— 按源+存储类型清理(CDP Storage 域原生); 类库 清理缓存(源地址,清理对象位或,存储类型) 的粒度可由它完全表达",
+  "note": "⚠ 可用性差距: 现有 browser_clear_cache_browser 虽然直调 清理缓存, 但**四个参数全传空**(MCP_Server_Core.wsv:5578 `browser.清理缓存 (, , , 清理回调)`), 即「只清 localStorage/IndexedDB 而保留 Cookie」这类需求只能靠手写 CDP Storage.clearDataForOrigin",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_浏览器",
+  "method": "移动窗口",
+  "params": [
+   [
+    "左边",
+    "<类型 = 整数>"
+   ],
+   [
+    "顶边",
+    "<类型 = 整数>"
+   ],
+   [
+    "宽度",
+    "<类型 = 整数>"
+   ],
+   [
+    "高度",
+    "<类型 = 整数>"
+   ],
+   [
+    "是否重画",
+    "<类型 = 逻辑型 @默认值 = 假>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无(工具位恒失败)",
+  "who": "browser_move_window 已注册(MCP_Server.wsv:9538)但描述写「⛔ 本工具恒失败」, MCP_Server_Core.wsv:5369 分支直接返回失败; 无任何替代工具能改原生窗口位置/尺寸",
+  "note": "注: 需求侧可用 browser_vip_fingerprint_viewport / browser_screenshot(width,height) 做视口仿真, 但改的是视口不是窗口",
+  "tool": "browser_move_window(解禁)",
+  "prio": "P2",
+  "reuse": "类_FBrowser_浏览器::移动窗口 → FBroHsBrowserHost_MoveWindow, 一行即可接回; 当前被架构(嵌入式主窗口布局)主动禁用"
+ },
+ {
+  "cls": "类_FBrowser_浏览器",
+  "method": "设置代理",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_set_proxy, browser_set_s5_proxy(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_浏览器",
+  "method": "重新载入",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reload(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_浏览器",
+  "method": "重新载入_忽略缓存",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_reload(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_命令行",
+  "method": "FBrowser_命令行_创建",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类库 FBroLib.wsv 定义; src 全库仅把 `类_FBrowser_命令行` 用作事件参数类型(main.wsv:461/474), 未调用任何方法",
+  "note": "需新写: 自建命令行对象(供测试/预演), 与 取全局 同族",
+  "tool": "browser_kernel_cmdline",
+  "prio": "P2",
+  "reuse": "需新写: 自建命令行对象(供测试/预演), 与 取全局 同族"
+ },
+ {
+  "cls": "类_FBrowser_命令行",
+  "method": "FBrowser_命令行_取全局",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类库 FBroLib.wsv 定义; src 全库仅把 `类_FBrowser_命令行` 用作事件参数类型(main.wsv:461/474), 未调用任何方法",
+  "note": "需新写: 取 CEF 全局命令行对象的唯一入口; 无它则任何启动参数工具都无从下手",
+  "tool": "browser_kernel_cmdline",
+  "prio": "P2",
+  "reuse": "需新写: 取 CEF 全局命令行对象的唯一入口; 无它则任何启动参数工具都无从下手"
+ },
+ {
+  "cls": "类_FBrowser_命令行",
+  "method": "启用单进程模式",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类库 FBroLib.wsv 定义; src 全库仅把 `类_FBrowser_命令行` 用作事件参数类型(main.wsv:461/474), 未调用任何方法",
+  "note": "同上",
+  "tool": "browser_kernel_cmdline",
+  "prio": "P2",
+  "reuse": "同上"
+ },
+ {
+  "cls": "类_FBrowser_命令行",
+  "method": "启用录音",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类库 FBroLib.wsv 定义; src 全库仅把 `类_FBrowser_命令行` 用作事件参数类型(main.wsv:461/474), 未调用任何方法",
+  "note": "同上",
+  "tool": "browser_kernel_cmdline",
+  "prio": "P2",
+  "reuse": "同上"
+ },
+ {
+  "cls": "类_FBrowser_命令行",
+  "method": "启用摄像头",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类库 FBroLib.wsv 定义; src 全库仅把 `类_FBrowser_命令行` 用作事件参数类型(main.wsv:461/474), 未调用任何方法",
+  "note": "同上",
+  "tool": "browser_kernel_cmdline",
+  "prio": "P2",
+  "reuse": "同上"
+ },
+ {
+  "cls": "类_FBrowser_命令行",
+  "method": "启用无头模式",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类库 FBroLib.wsv 定义; src 全库仅把 `类_FBrowser_命令行` 用作事件参数类型(main.wsv:461/474), 未调用任何方法",
+  "note": "同上; 现状: 全项目 `--headless` 只出现在 MCP_Stdio.wsv:225 的**服务端**参数判定, 与浏览器无头模式无关",
+  "tool": "browser_kernel_cmdline",
+  "prio": "P1",
+  "reuse": "同上; 现状: 全项目 `--headless` 只出现在 MCP_Stdio.wsv:225 的**服务端**参数判定, 与浏览器无头模式无关"
+ },
+ {
+  "cls": "类_FBrowser_命令行",
+  "method": "启用自动播放",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类库 FBroLib.wsv 定义; src 全库仅把 `类_FBrowser_命令行` 用作事件参数类型(main.wsv:461/474), 未调用任何方法",
+  "note": "同上(媒体自动化前置)",
+  "tool": "browser_kernel_cmdline",
+  "prio": "P1",
+  "reuse": "同上(媒体自动化前置)"
+ },
+ {
+  "cls": "类_FBrowser_命令行",
+  "method": "启用跨框架操作模式",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类库 FBroLib.wsv 定义; src 全库仅把 `类_FBrowser_命令行` 用作事件参数类型(main.wsv:461/474), 未调用任何方法",
+  "note": "同上",
+  "tool": "browser_kernel_cmdline",
+  "prio": "P2",
+  "reuse": "同上"
+ },
+ {
+  "cls": "类_FBrowser_命令行",
+  "method": "忽略GPU禁用清单",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类库 FBroLib.wsv 定义; src 全库仅把 `类_FBrowser_命令行` 用作事件参数类型(main.wsv:461/474), 未调用任何方法",
+  "note": "同上",
+  "tool": "browser_kernel_cmdline",
+  "prio": "P2",
+  "reuse": "同上"
+ },
+ {
+  "cls": "类_FBrowser_命令行",
+  "method": "插入值",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类库 FBroLib.wsv 定义; src 全库仅把 `类_FBrowser_命令行` 用作事件参数类型(main.wsv:461/474), 未调用任何方法",
+  "note": "复用 main.wsv:459 已覆盖的 `即将处理命令行` 空实现(注: 该事件在 FBrowser_初始化 前派发, 是插入开关的唯一天然落点) + 类_FBrowser_命令行::插入值",
+  "tool": "browser_kernel_cmdline",
+  "prio": "P1",
+  "reuse": "复用 main.wsv:459 已覆盖的 `即将处理命令行` 空实现(注: 该事件在 FBrowser_初始化 前派发, 是插入开关的唯一天然落点) + 类_FBrowser_命令行::插入值"
+ },
+ {
+  "cls": "类_FBrowser_命令行",
+  "method": "禁用GPU",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类库 FBroLib.wsv 定义; src 全库仅把 `类_FBrowser_命令行` 用作事件参数类型(main.wsv:461/474), 未调用任何方法",
+  "note": "同上(虚拟机/无GPU环境稳定性)",
+  "tool": "browser_kernel_cmdline",
+  "prio": "P2",
+  "reuse": "同上(虚拟机/无GPU环境稳定性)"
+ },
+ {
+  "cls": "类_FBrowser_命令行",
+  "method": "禁用GPU缓存",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类库 FBroLib.wsv 定义; src 全库仅把 `类_FBrowser_命令行` 用作事件参数类型(main.wsv:461/474), 未调用任何方法",
+  "note": "同上",
+  "tool": "browser_kernel_cmdline",
+  "prio": "P2",
+  "reuse": "同上"
+ },
+ {
+  "cls": "类_FBrowser_命令行",
+  "method": "禁用代理",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_clear_proxy(MCP_Server_Core.wsv:1232 调 高级_清空代理)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_命令行",
+  "method": "设置全局代理",
+  "params": [
+   [
+    "代理地址",
+    "<类型 = 文本型 注释 = \"要区分大小写，不要有空格，否则地址错误将会设置失败\">"
+   ],
+   [
+    "代理账号",
+    "<类型 = 文本型 @默认值 = \"\">"
+   ],
+   [
+    "代理密码",
+    "<类型 = 文本型 @默认值 = \"\">"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_set_proxy/browser_set_s5_proxy/browser_clear_proxy(实例级代理, MCP_Server_Core.wsv:1199 调 高级_设置代理); 差异仅在「全局 vs 实例级」, 单浏览器场景等价",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_命令行",
+  "method": "设置远程调试端口",
+  "params": [
+   [
+    "端口号",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类库 FBroLib.wsv 定义; src 全库仅把 `类_FBrowser_命令行` 用作事件参数类型(main.wsv:461/474), 未调用任何方法",
+  "note": "同上; 现状: src 全库 0 命中 `remote-debugging`",
+  "tool": "browser_kernel_cmdline",
+  "prio": "P1",
+  "reuse": "同上; 现状: src 全库 0 命中 `remote-debugging`"
+ },
+ {
+  "cls": "类_FBrowser_菜单模式",
+  "method": "存在快捷键",
+  "params": [
+   [
+    "命令ID",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "src 0 调用(见本节导语; 类库对应 HasAccelerator(命令ID))",
+  "note": "",
+  "tool": "browser_context_menu",
+  "prio": "P2",
+  "reuse": "复用 MCP_BrowserEvents.wsv:2658 `浏览器_即将打开菜单` 已在手的 菜单模式 参数, 按 action 调 添加菜单/添加分隔栏/置可见状态/置禁止状态/选中状态; 规则表仿 browser_kernel_scheme(MCP_Kernel.wsv:391-490)"
+ },
+ {
+  "cls": "类_FBrowser_菜单模式",
+  "method": "存在快捷键_索引",
+  "params": [
+   [
+    "索引ID",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "src 0 调用(见本节导语; 类库对应 HasAcceleratorAt(索引ID))",
+  "note": "",
+  "tool": "browser_context_menu",
+  "prio": "P2",
+  "reuse": "复用 MCP_BrowserEvents.wsv:2658 `浏览器_即将打开菜单` 已在手的 菜单模式 参数, 按 action 调 添加菜单/添加分隔栏/置可见状态/置禁止状态/选中状态; 规则表仿 browser_kernel_scheme(MCP_Kernel.wsv:391-490)"
+ },
+ {
+  "cls": "类_FBrowser_菜单模式",
+  "method": "添加Check菜单",
+  "params": [
+   [
+    "命令ID",
+    "<类型 = 整数>"
+   ],
+   [
+    "标签名",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "src 0 调用(见本节导语; 类库对应 AddCheckItem(命令ID,标签名))",
+  "note": "",
+  "tool": "browser_context_menu",
+  "prio": "P2",
+  "reuse": "复用 MCP_BrowserEvents.wsv:2658 `浏览器_即将打开菜单` 已在手的 菜单模式 参数, 按 action 调 添加菜单/添加分隔栏/置可见状态/置禁止状态/选中状态; 规则表仿 browser_kernel_scheme(MCP_Kernel.wsv:391-490)"
+ },
+ {
+  "cls": "类_FBrowser_菜单模式",
+  "method": "添加Radio菜单",
+  "params": [
+   [
+    "命令ID",
+    "<类型 = 整数>"
+   ],
+   [
+    "标签名",
+    "<类型 = 文本型>"
+   ],
+   [
+    "群ID",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "src 0 调用(见本节导语; 类库对应 AddRadioItem(命令ID,标签名,群ID))",
+  "note": "",
+  "tool": "browser_context_menu",
+  "prio": "P2",
+  "reuse": "复用 MCP_BrowserEvents.wsv:2658 `浏览器_即将打开菜单` 已在手的 菜单模式 参数, 按 action 调 添加菜单/添加分隔栏/置可见状态/置禁止状态/选中状态; 规则表仿 browser_kernel_scheme(MCP_Kernel.wsv:391-490)"
+ },
+ {
+  "cls": "类_FBrowser_菜单模式",
+  "method": "添加分隔栏",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "src 0 调用(见本节导语; 类库对应 AddSeparator())",
+  "note": "",
+  "tool": "browser_context_menu",
+  "prio": "P2",
+  "reuse": "复用 MCP_BrowserEvents.wsv:2658 `浏览器_即将打开菜单` 已在手的 菜单模式 参数, 按 action 调 添加菜单/添加分隔栏/置可见状态/置禁止状态/选中状态; 规则表仿 browser_kernel_scheme(MCP_Kernel.wsv:391-490)"
+ },
+ {
+  "cls": "类_FBrowser_菜单模式",
+  "method": "添加子菜单",
+  "params": [
+   [
+    "命令ID",
+    "<类型 = 整数>"
+   ],
+   [
+    "标签名",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "src 0 调用(见本节导语; 类库对应 AddSubMenu(命令ID,标签名))",
+  "note": "",
+  "tool": "browser_context_menu",
+  "prio": "P2",
+  "reuse": "复用 MCP_BrowserEvents.wsv:2658 `浏览器_即将打开菜单` 已在手的 菜单模式 参数, 按 action 调 添加菜单/添加分隔栏/置可见状态/置禁止状态/选中状态; 规则表仿 browser_kernel_scheme(MCP_Kernel.wsv:391-490)"
+ },
+ {
+  "cls": "类_FBrowser_菜单模式",
+  "method": "添加菜单",
+  "params": [
+   [
+    "命令ID",
+    "<类型 = 整数>"
+   ],
+   [
+    "标签名",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "src 0 调用(见本节导语; 类库对应 AddItem(命令ID,标签名))",
+  "note": "",
+  "tool": "browser_context_menu",
+  "prio": "P2",
+  "reuse": "复用 MCP_BrowserEvents.wsv:2658 `浏览器_即将打开菜单` 已在手的 菜单模式 参数, 按 action 调 添加菜单/添加分隔栏/置可见状态/置禁止状态/选中状态; 规则表仿 browser_kernel_scheme(MCP_Kernel.wsv:391-490)"
+ },
+ {
+  "cls": "类_FBrowser_菜单模式",
+  "method": "移除快捷键",
+  "params": [
+   [
+    "命令ID",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "src 0 调用(见本节导语; 类库对应 RemoveAccelerator(命令ID))",
+  "note": "",
+  "tool": "browser_context_menu",
+  "prio": "P2",
+  "reuse": "复用 MCP_BrowserEvents.wsv:2658 `浏览器_即将打开菜单` 已在手的 菜单模式 参数, 按 action 调 添加菜单/添加分隔栏/置可见状态/置禁止状态/选中状态; 规则表仿 browser_kernel_scheme(MCP_Kernel.wsv:391-490)"
+ },
+ {
+  "cls": "类_FBrowser_菜单模式",
+  "method": "移除快捷键_索引",
+  "params": [
+   [
+    "索引ID",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "src 0 调用(见本节导语; 类库对应 RemoveAcceleratorAt(索引ID))",
+  "note": "",
+  "tool": "browser_context_menu",
+  "prio": "P2",
+  "reuse": "复用 MCP_BrowserEvents.wsv:2658 `浏览器_即将打开菜单` 已在手的 菜单模式 参数, 按 action 调 添加菜单/添加分隔栏/置可见状态/置禁止状态/选中状态; 规则表仿 browser_kernel_scheme(MCP_Kernel.wsv:391-490)"
+ },
+ {
+  "cls": "类_FBrowser_菜单模式",
+  "method": "设置快捷键",
+  "params": [
+   [
+    "命令ID",
+    "<类型 = 整数>"
+   ],
+   [
+    "键代码",
+    "<类型 = 整数 注释 = \"key_code\">"
+   ],
+   [
+    "是否按下shift",
+    "<类型 = 逻辑型 注释 = \"shift_pressed\" @默认值 = 假>"
+   ],
+   [
+    "是否按下ctrl",
+    "<类型 = 逻辑型 注释 = \"ctrl_pressed\" @默认值 = 假>"
+   ],
+   [
+    "是否按下alt",
+    "<类型 = 逻辑型 注释 = \"alt_pressed\" @默认值 = 假>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "src 0 调用(见本节导语; 类库对应 SetAccelerator(命令ID,键代码,shift,ctrl,alt))",
+  "note": "",
+  "tool": "browser_context_menu",
+  "prio": "P2",
+  "reuse": "复用 MCP_BrowserEvents.wsv:2658 `浏览器_即将打开菜单` 已在手的 菜单模式 参数, 按 action 调 添加菜单/添加分隔栏/置可见状态/置禁止状态/选中状态; 规则表仿 browser_kernel_scheme(MCP_Kernel.wsv:391-490)"
+ },
+ {
+  "cls": "类_FBrowser_菜单模式",
+  "method": "设置快捷键_索引",
+  "params": [
+   [
+    "索引ID",
+    "<类型 = 整数>"
+   ],
+   [
+    "键代码",
+    "<类型 = 整数 注释 = \"key_code\">"
+   ],
+   [
+    "是否按下shift",
+    "<类型 = 逻辑型 注释 = \"shift_pressed\" @默认值 = 假>"
+   ],
+   [
+    "是否按下ctrl",
+    "<类型 = 逻辑型 注释 = \"ctrl_pressed\" @默认值 = 假>"
+   ],
+   [
+    "是否按下alt",
+    "<类型 = 逻辑型 注释 = \"alt_pressed\" @默认值 = 假>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "src 0 调用(见本节导语; 类库对应 SetAcceleratorAt(索引ID,键代码,shift,ctrl,alt))",
+  "note": "",
+  "tool": "browser_context_menu",
+  "prio": "P2",
+  "reuse": "复用 MCP_BrowserEvents.wsv:2658 `浏览器_即将打开菜单` 已在手的 菜单模式 参数, 按 action 调 添加菜单/添加分隔栏/置可见状态/置禁止状态/选中状态; 规则表仿 browser_kernel_scheme(MCP_Kernel.wsv:391-490)"
+ },
+ {
+  "cls": "类_FBrowser_菜单模式",
+  "method": "选中状态",
+  "params": [
+   [
+    "命令ID",
+    "<类型 = 整数>"
+   ],
+   [
+    "选中",
+    "<类型 = 逻辑型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "src 0 调用(见本节导语; 类库对应 SetCheck(命令ID,选中))",
+  "note": "",
+  "tool": "browser_context_menu",
+  "prio": "P2",
+  "reuse": "复用 MCP_BrowserEvents.wsv:2658 `浏览器_即将打开菜单` 已在手的 菜单模式 参数, 按 action 调 添加菜单/添加分隔栏/置可见状态/置禁止状态/选中状态; 规则表仿 browser_kernel_scheme(MCP_Kernel.wsv:391-490)"
+ },
+ {
+  "cls": "类_FBrowser_菜单模式",
+  "method": "选中状态_索引",
+  "params": [
+   [
+    "索引ID",
+    "<类型 = 整数>"
+   ],
+   [
+    "选中",
+    "<类型 = 逻辑型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "src 0 调用(见本节导语; 类库对应 SetCheckedAt(索引ID,选中))",
+  "note": "",
+  "tool": "browser_context_menu",
+  "prio": "P2",
+  "reuse": "复用 MCP_BrowserEvents.wsv:2658 `浏览器_即将打开菜单` 已在手的 菜单模式 参数, 按 action 调 添加菜单/添加分隔栏/置可见状态/置禁止状态/选中状态; 规则表仿 browser_kernel_scheme(MCP_Kernel.wsv:391-490)"
+ },
+ {
+  "cls": "类_FBrowser_服务器事件",
+  "method": "收到HTTP请求",
+  "params": [
+   [
+    "服务器",
+    "<类型 = 类_FBrowser_服务器>"
+   ],
+   [
+    "连接ID",
+    "<类型 = 整数>"
+   ],
+   [
+    "客户端地址",
+    "<类型 = 文本型>"
+   ],
+   [
+    "请求",
+    "<类型 = 类_FBrowser_请求>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "MCP 自身 HTTP/WS 传输层已全部 override 实现(MCP_Server_HTTP.wsv:33/36/40/296/319/325), 事件即 MCP 协议入口本身, 不是待补的浏览器工具能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_服务器事件",
+  "method": "收到WebSocket消息",
+  "params": [
+   [
+    "服务器",
+    "<类型 = 类_FBrowser_服务器>"
+   ],
+   [
+    "连接ID",
+    "<类型 = 整数>"
+   ],
+   [
+    "数据指针",
+    "<类型 = 变整数 注释 = \"注意数据转码,这里是UTF8编码\">"
+   ],
+   [
+    "数据长度",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "MCP 自身 HTTP/WS 传输层已全部 override 实现(MCP_Server_HTTP.wsv:33/36/40/296/319/325), 事件即 MCP 协议入口本身, 不是待补的浏览器工具能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_服务器事件",
+  "method": "收到WebSocket请求",
+  "params": [
+   [
+    "服务器",
+    "<类型 = 类_FBrowser_服务器>"
+   ],
+   [
+    "连接ID",
+    "<类型 = 整数>"
+   ],
+   [
+    "客户端地址",
+    "<类型 = 文本型>"
+   ],
+   [
+    "请求",
+    "<类型 = 类_FBrowser_请求>"
+   ],
+   [
+    "回调",
+    "<类型 = 类_FBrowser_回调>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "MCP 自身 HTTP/WS 传输层已全部 override 实现(MCP_Server_HTTP.wsv:33/36/40/296/319/325), 事件即 MCP 协议入口本身, 不是待补的浏览器工具能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_服务器事件",
+  "method": "收到WebSocket连接",
+  "params": [
+   [
+    "服务器",
+    "<类型 = 类_FBrowser_服务器>"
+   ],
+   [
+    "连接ID",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "MCP 自身 HTTP/WS 传输层已全部 override 实现(MCP_Server_HTTP.wsv:33/36/40/296/319/325), 事件即 MCP 协议入口本身, 不是待补的浏览器工具能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_服务器事件",
+  "method": "收到客户端断开连接",
+  "params": [
+   [
+    "服务器",
+    "<类型 = 类_FBrowser_服务器>"
+   ],
+   [
+    "连接ID",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "MCP 自身 HTTP/WS 传输层已全部 override 实现(MCP_Server_HTTP.wsv:33/36/40/296/319/325), 事件即 MCP 协议入口本身, 不是待补的浏览器工具能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_服务器事件",
+  "method": "收到客户端连接",
+  "params": [
+   [
+    "服务器",
+    "<类型 = 类_FBrowser_服务器>"
+   ],
+   [
+    "连接ID",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "MCP 自身 HTTP/WS 传输层已全部 override 实现(MCP_Server_HTTP.wsv:33/36/40/296/319/325), 事件即 MCP 协议入口本身, 不是待补的浏览器工具能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_服务器事件",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_服务器事件",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowserVIP全局功能",
+  "method": "FBrowser_VIP功能_启用插件高级功能",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类库注释: 「必须在加载插件前启用…默认 CEF 不支持插件 content_scripts.js 脚本执行, 启用高级功能后才能支持」; src 全库 0 命中。已有 browser_vip_load_extension / extension_info / unload_extension 三个工具管插件, 却无这个前置开关",
+  "note": "",
+  "tool": "browser_vip_enable_extension_advanced",
+  "prio": "P2",
+  "reuse": "复用 MCP_Server_VIP.wsv:1322 browser_vip_load_extension 分支, 加载前调用一次"
+ },
+ {
+  "cls": "FBrowserVIP全局功能",
+  "method": "FBrowser_VIP过滤器_修改内容",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B2",
+  "route": "action 枚举",
+  "who": "browser_intercept action=modify(MCP_Server_Core.wsv:2347 真调用 添加资源替换规则)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowserVIP全局功能",
+  "method": "FBrowser_VIP过滤器_取消修改内容",
+  "params": [
+   [
+    "目标地址",
+    "<类型 = 文本型 注释 = \"和之前设置的目标地址一一对应\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "只支持全局 clear: browser_intercept 的 action=clear 把 资源替换规则/导航拦截规则 **整串清空**(MCP_Server_Core.wsv:2250-2253), 而 src 只有 `添加资源替换规则`(MCP_Server.wsv:6979)、**没有** 移除/删除单条规则的函数",
+  "note": "",
+  "tool": "browser_intercept action=remove(url)",
+  "prio": "P2",
+  "reuse": "复用 MCP_Server.wsv:6979 添加资源替换规则 的同款规则串(规则格式 `action|url|search|replace|file`), 新写一个按 url 过滤的 移除资源替换规则"
+ },
+ {
+  "cls": "FBrowserVIP全局功能",
+  "method": "FBrowser_VIP过滤器_取消全部修改内容",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B2",
+  "route": "action 枚举",
+  "who": "browser_intercept action=clear(MCP_Server_Core.wsv:2250 清空全部规则)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowserVIP全局功能",
+  "method": "FBrowser_VIP过滤器_取消全部替换资源",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B2",
+  "route": "action 枚举",
+  "who": "browser_intercept action=clear",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowserVIP全局功能",
+  "method": "FBrowser_VIP过滤器_取消替换资源",
+  "params": [
+   [
+    "目标地址",
+    "<类型 = 文本型 注释 = \"和之前设置的目标地址一一对应\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "同上(取消单条替换资源规则, 而非全部)",
+  "note": "",
+  "tool": "browser_intercept action=remove(url)",
+  "prio": "P2",
+  "reuse": "同上"
+ },
+ {
+  "cls": "FBrowserVIP全局功能",
+  "method": "FBrowser_VIP过滤器_替换资源_数据",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B2",
+  "route": "action 枚举",
+  "who": "browser_intercept action=replace_data(MCP_Server_Core.wsv:2362)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowserVIP全局功能",
+  "method": "FBrowser_VIP过滤器_替换资源_文件",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B2",
+  "route": "action 枚举",
+  "who": "browser_intercept action=replace_file(MCP_Server_Core.wsv:2371)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_URL请求事件",
+  "method": "上传进度",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "OnUploadProgress 需先置 UR_FLAG_REPORT_UPLOAD_PROGRESS(= 类_FBrowser_请求::设置标识), 该 flag 无入口; 且 类_MCP_URL请求回调 未 override 本方法",
+  "note": "类库注释明确「只有在请求上设置了 UR_FLAG_REPORT_UPLOAD_PROGRESS 标志时才会调用」",
+  "tool": "扩展 browser_create_url_request",
+  "prio": "P2",
+  "reuse": "同上回调类新增 override; 上传体用 FBrowser_读取流_从文件创建"
+ },
+ {
+  "cls": "类_FBrowser_URL请求事件",
+  "method": "即将完成",
+  "params": [
+   [
+    "标识",
+    "<类型 = 长整数>"
+   ],
+   [
+    "URL请求",
+    "<类型 = 类_FBrowser_URL请求>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_create_url_request(MCP_Callbacks.wsv:779 已 override)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_URL请求事件",
+  "method": "开始创建",
+  "params": [
+   [
+    "标识",
+    "<类型 = 长整数>"
+   ],
+   [
+    "URL请求",
+    "<类型 = 类_FBrowser_URL请求>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类库回调 Start(flag, request) 的唯一落点; src 里 类_MCP_URL请求回调(MCP_Callbacks.wsv:723) 只 override 了 获取到数据/读取结束/即将完成, **未 override 开始创建**, 因此无法在发出请求前设置头/体/flag; CDP 无 CEF USRRequest 客户端的对应域",
+  "note": "宿主侧 HTTP 客户端(不经页面/CORS)的定制入口",
+  "tool": "扩展 browser_create_url_request",
+  "prio": "P1",
+  "reuse": "复用 MCP_Callbacks.wsv:723 类_MCP_URL请求回调, 加一个 `开始创建` override; 内部用 URL请求.取请求() 拿到 类_FBrowser_请求 后调用 设置/增加元素/读取流"
+ },
+ {
+  "cls": "类_FBrowser_URL请求事件",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_URL请求事件",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_URL请求事件",
+  "method": "获取到数据",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_create_url_request(MCP_Callbacks.wsv:739 已 override)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_URL请求事件",
+  "method": "读取结束",
+  "params": [
+   [
+    "标识",
+    "<类型 = 长整数>"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_create_url_request(MCP_Callbacks.wsv:766 已 override)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_任务运行器",
+  "method": "FBrowser_任务运行器_取当前",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "线程基础设施; 对应的唯一工具位 browser_task_runner_post 已被 MCP_Server_System.wsv:20-22 主动禁用(理由: GUI 窗口自动管理浏览器实例)。真正缺的是「后台浏览器创建」, 见 A 段",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_任务运行器",
+  "method": "FBrowser_任务运行器_取指定线程",
+  "params": [
+   [
+    "线程ID",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_任务运行器",
+  "method": "FBrowser_任务运行器_投递任务",
+  "params": [
+   [
+    "线程ID",
+    "<类型 = 整数 注释 = \"参考：线程ID.xxx\">"
+   ],
+   [
+    "任务执行回调",
+    "<类型 = 类_FBrowser_事件智能指针 注释 = \"异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。\""
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_任务运行器",
+  "method": "FBrowser_任务运行器_投递任务_延迟",
+  "params": [
+   [
+    "线程ID",
+    "<类型 = 整数 注释 = \"参考：线程ID.xxx\">"
+   ],
+   [
+    "延迟时间",
+    "<类型 = 长整数 注释 = \"ms\">"
+   ],
+   [
+    "任务执行回调",
+    "<类型 = 类_FBrowser_事件智能指针 注释 = \"异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。\""
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_任务运行器",
+  "method": "FBrowser_任务运行器_是否指定线程上调用",
+  "params": [
+   [
+    "线程ID",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_任务运行器",
+  "method": "投递任务",
+  "params": [
+   [
+    "任务执行回调",
+    "<类型 = 类_FBrowser_事件智能指针 注释 = \"异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。\""
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_任务运行器",
+  "method": "投递延时任务",
+  "params": [
+   [
+    "延时",
+    "<类型 = 长整数 注释 = \"ms\">"
+   ],
+   [
+    "任务执行回调",
+    "<类型 = 类_FBrowser_事件智能指针 注释 = \"异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。\""
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8拦截器",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8拦截器",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8拦截器",
+  "method": "获取_名",
+  "params": [
+   [
+    "标识ID",
+    "<类型 = 长整数>"
+   ],
+   [
+    "名",
+    "<类型 = 文本型>"
+   ],
+   [
+    "对象",
+    "<类型 = 类_FBrowser_V8值>"
+   ],
+   [
+    "设置返回值",
+    "<类型 = 类_FBrowser_设置V8值 注释 = \"设置对象返回值\">"
+   ],
+   [
+    "返回异常文本",
+    "<类型 = FBrowser_文本 注释 = \"设置异常返回文本\">"
+   ]
+  ],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "V8 Handler 的 C++ 属性存取器",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8拦截器",
+  "method": "获取_索引",
+  "params": [
+   [
+    "标识ID",
+    "<类型 = 长整数>"
+   ],
+   [
+    "索引",
+    "<类型 = 整数>"
+   ],
+   [
+    "对象",
+    "<类型 = 类_FBrowser_V8值>"
+   ],
+   [
+    "设置返回值",
+    "<类型 = 类_FBrowser_设置V8值 注释 = \"设置对象返回值\">"
+   ],
+   [
+    "返回异常文本",
+    "<类型 = FBrowser_文本 注释 = \"设置异常返回文本\">"
+   ]
+  ],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8拦截器",
+  "method": "设置_名",
+  "params": [
+   [
+    "标识ID",
+    "<类型 = 长整数>"
+   ],
+   [
+    "名",
+    "<类型 = 文本型>"
+   ],
+   [
+    "对象",
+    "<类型 = 类_FBrowser_V8值>"
+   ],
+   [
+    "值",
+    "<类型 = 类_FBrowser_V8值>"
+   ],
+   [
+    "返回异常文本",
+    "<类型 = FBrowser_文本 注释 = \"设置异常返回文本\">"
+   ]
+  ],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8拦截器",
+  "method": "设置_索引",
+  "params": [
+   [
+    "标识ID",
+    "<类型 = 长整数>"
+   ],
+   [
+    "索引",
+    "<类型 = 整数>"
+   ],
+   [
+    "对象",
+    "<类型 = 类_FBrowser_V8值>"
+   ],
+   [
+    "值",
+    "<类型 = 类_FBrowser_V8值>"
+   ],
+   [
+    "返回异常文本",
+    "<类型 = FBrowser_文本 注释 = \"设置异常返回文本\">"
+   ]
+  ],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser类辅助",
+  "method": "FBrowser创建类指针",
+  "params": [
+   [
+    "数据类型",
+    "<类型 = 对象类 注释 = \"需要创建的指针类型\" @需求类型 = 数据类型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "火山类与 C++ 指针互转的封装辅助(反射层), 每个包装类都自动生成",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser类辅助",
+  "method": "FBrowser取执行类",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser类辅助",
+  "method": "FBrowser设置类",
+  "params": [
+   [
+    "类指针",
+    "<类型 = 变整数 注释 = \"类指针\">"
+   ],
+   [
+    "值指针",
+    "<类型 = 对象类 注释 = \"要设置的值\">"
+   ],
+   [
+    "数据类型",
+    "<类型 = 对象类 注释 = \"需要设置指针值类型\" @需求类型 = 数据类型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser类辅助",
+  "method": "FBrowser释放当前类",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser类辅助",
+  "method": "FBrowser释放类",
+  "params": [
+   [
+    "类指针",
+    "<类型 = 变整数 注释 = \"类指针\">"
+   ],
+   [
+    "数据类型",
+    "<类型 = 对象类 注释 = \"需要释放的指针值类型\" @需求类型 = 数据类型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_开发者DOM",
+  "method": "枚举DOM",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_dom_get_document(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_开发者DOM",
+  "method": "清除查找",
+  "params": [
+   [
+    "查找ID",
+    "<类型 = 文本型 注释 = \"searchId\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B3",
+  "route": "CDP 直通",
+  "who": "browser_cdp_call{method:\"DOM.discardSearchResults\"}(类库对应 CefDOMSearchId 释放; 搜索本身已由 browser_vip_dom_search 覆盖)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_开发者DOM",
+  "method": "移除节点",
+  "params": [
+   [
+    "节点ID",
+    "<类型 = 整数 注释 = \"nodeID\">"
+   ]
+  ],
+  "file": "FBroVip.wsv",
+  "verdict": "B3",
+  "route": "CDP 直通",
+  "who": "browser_cdp_call{method:\"DOM.removeNode\",params:{nodeId}}(类库注释即「removeNode」; nodeId 可由 browser_vip_dom_get_document 的枚举结果取得)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_开发者DOM",
+  "method": "移除节点属性",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B3",
+  "route": "CDP 直通",
+  "who": "browser_cdp_call{method:\"DOM.removeAttribute\",params:{nodeId,name}}(类库注释即「removeAttribute」)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_开发者DOM",
+  "method": "预查找文本",
+  "params": [],
+  "file": "FBroVip.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_vip_dom_search(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_通用回调",
+  "method": "列表数据回调",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ],
+   [
+    "标识ID",
+    "<类型 = 整数>"
+   ],
+   [
+    "成功",
+    "<类型 = 逻辑型>"
+   ],
+   [
+    "列表值",
+    "<类型 = 类_FBrowser_列表值>"
+   ]
+  ],
+  "file": "FBroCallback.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "MCP_Callbacks.wsv:648 已 override(browser_vip_dom_search 结果回调)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_通用回调",
+  "method": "数据回调",
+  "params": [
+   [
+    "浏览器",
+    "<类型 = 类_FBrowser_浏览器>"
+   ],
+   [
+    "标识ID",
+    "<类型 = 整数>"
+   ],
+   [
+    "成功",
+    "<类型 = 逻辑型>"
+   ],
+   [
+    "数据指针",
+    "<类型 = 变整数>"
+   ],
+   [
+    "数据大小",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroCallback.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "MCP_Callbacks.wsv:395/617 已 override(高级_执行JS 的异步结果回调)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_通用回调",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowserVIP_通用回调",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_JS交互事件",
+  "method": "即将取消查询",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_JS交互事件",
+  "method": "即将查询",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_kernel_ipc_queue/browser_ipc_send_to(双工 IPC)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_JS交互事件",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_JS交互事件",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_资源过滤器",
+  "method": "修改数据",
+  "params": [
+   [
+    "标识ID",
+    "<类型 = 长整数>"
+   ],
+   [
+    "输入指针",
+    "<类型 = 变整数 注释 = \"传入数据指针\">"
+   ],
+   [
+    "输入大小",
+    "<类型 = 整数 注释 = \"传入数据大小\">"
+   ],
+   [
+    "输入读取大小",
+    "<类型 = 整数类 注释 = \"传入数据回写大小，用作告诉来源已经接纳了多少数据\">"
+   ],
+   [
+    "输出指针",
+    "<类型 = 变整数 注释 = \"写回数据输出指针，写回后浏览器接收显示相应的数据\">"
+   ],
+   [
+    "输出大小",
+    "<类型 = 整数 注释 = \"写回数据缓存能容纳数据的最大值，输出数据都不能大于此值，否则浏览器崩溃，如大于必须做分包处理\">"
+   ],
+   [
+    "输出写入大小",
+    "<类型 = 整数类 注释 = \"写回数据会写大小，用作告诉浏览器我写入了多少数据\">"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "同上(MCP_Callbacks.wsv:925)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_资源过滤器",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_资源过滤器",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_资源过滤器",
+  "method": "获取数据",
+  "params": [
+   [
+    "标识ID",
+    "<类型 = 长整数>"
+   ],
+   [
+    "数据指针",
+    "<类型 = 变整数 注释 = \"传递过来的数据指针,数据类型为UTF8\">"
+   ],
+   [
+    "数据大小",
+    "<类型 = 整数 注释 = \"当前数据大小\">"
+   ]
+  ],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_intercept(action=modify/replace_data/replace_file 的过滤器实现类_MCP_篡改过滤器, MCP_Callbacks.wsv:907)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_下载图片回调",
+  "method": "图片下载完成",
+  "params": [
+   [
+    "图片链接",
+    "<类型 = 文本型>"
+   ],
+   [
+    "状态码",
+    "<类型 = 整数>"
+   ],
+   [
+    "图片",
+    "<类型 = 类_FBrowser_图片>"
+   ]
+  ],
+  "file": "FBroCallback.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_download_image(MCP_Callbacks.wsv:857 已 override)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_下载图片回调",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_下载图片回调",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_打开文件对话框回调",
+  "method": "即将关闭文件对话框",
+  "params": [
+   [
+    "文件路径",
+    "<类型 = 文本型 注释 = \"多个以\\\";\\\"隔开\">"
+   ]
+  ],
+  "file": "FBroCallback.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_file_dialog(MCP_Callbacks.wsv:557 已 override)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_打开文件对话框回调",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_打开文件对话框回调",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_打印为PDF回调",
+  "method": "即将完成打印",
+  "params": [
+   [
+    "路径",
+    "<类型 = 文本型>"
+   ],
+   [
+    "是否成功",
+    "<类型 = 逻辑型>"
+   ]
+  ],
+  "file": "FBroCallback.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_print_to_pdf(MCP_Callbacks.wsv:587 已 override)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_打印为PDF回调",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_打印为PDF回调",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser_双文本数组",
+  "method": "到下一个",
+  "params": [],
+  "file": "FBroDataType.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser_双文本数组",
+  "method": "到数组首",
+  "params": [],
+  "file": "FBroDataType.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser_双文本数组",
+  "method": "查找数据",
+  "params": [
+   [
+    "关键字",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroDataType.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器查找内部件",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser_文本数组",
+  "method": "到下一个",
+  "params": [],
+  "file": "FBroDataType.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser_文本数组",
+  "method": "到数组首",
+  "params": [],
+  "file": "FBroDataType.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser_文本数组",
+  "method": "到火山文本数组",
+  "params": [],
+  "file": "FBroDataType.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器↔火山原生类型转换内部件",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_框架",
+  "method": "访问DOM对象",
+  "params": [
+   [
+    "DOM回调",
+    "<类型 = 类_FBrowser_事件智能指针 注释 = \"异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。\""
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "类库注释「只能在渲染进程中调用」; 本项目渲染进程为独立 FBroSubprocess.exe, 主进程不可用; DOM 能力由 browser_dom_*/CDP DOM 域覆盖",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_框架",
+  "method": "载入地址",
+  "params": [
+   [
+    "地址",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_navigate(MCP_Server_Core.wsv 多处直调 载入地址)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_框架",
+  "method": "载入请求",
+  "params": [
+   [
+    "请求",
+    "<类型 = 类_FBrowser_请求>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B3",
+  "route": "CDP 直通",
+  "who": "browser_cdp_call{method:\"Page.navigate\",params:{url,referrer,referrerPolicy,transitionType}} / {method:\"Network.setExtraHTTPHeaders\"} —— 带自定义 Referer/请求头的导航可表达",
+  "note": "⚠ 可用性差距: Page.navigate 的 referrer 与 setExtraHTTPHeaders 的语义与 CefRequest 不等价(setExtraHTTPHeaders 是浏览器级持续生效), 需用户自己知道方法名与参数",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_请求",
+  "method": "获取地址_首件cookie",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "GetFirstPartyForCookies; src 0 命中; 出站请求的 cookie 归属域不可读",
+  "note": "",
+  "tool": "扩展 browser_create_url_request",
+  "prio": "P2",
+  "reuse": "同 设置标识 路径"
+ },
+ {
+  "cls": "类_FBrowser_请求",
+  "method": "设置地址_首件cookie",
+  "params": [
+   [
+    "地址",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "SetFirstPartyForCookies; src 0 命中; 无法为宿主侧请求指定 cookie 归属域(带登录态取数的关键)",
+  "note": "",
+  "tool": "扩展 browser_create_url_request",
+  "prio": "P1",
+  "reuse": "同 设置标识 路径"
+ },
+ {
+  "cls": "类_FBrowser_请求",
+  "method": "设置标识",
+  "params": [
+   [
+    "标识",
+    "<类型 = 整数 注释 = \"参考：请求标识.xxx\">"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "SetFlags(请求标识: 无/跳过缓存/只使用缓存); src 全库 0 命中; browser_create_url_request 的 schema 只有 url+method(MCP_Server.wsv:9601), 无法置 flag",
+  "note": "同时是 上传进度 事件生效的前置条件",
+  "tool": "扩展 browser_create_url_request",
+  "prio": "P2",
+  "reuse": "MCP_Server_Core.wsv:5505-5514 已构造 类_FBrowser_请求 并 置地址/置类型, 追加一行 设置标识 即可"
+ },
+ {
+  "cls": "类_FBrowser_POST数据",
+  "method": "增加元素",
+  "params": [
+   [
+    "POST元素",
+    "<类型 = 类_FBrowser_POST元素>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "类_FBrowser_POST数据/CefPostData 的元素数组; src 全库只**读**不写(MCP_Server.wsv:7410/10651 用 取POST数据/取元素), 0 命中 增加元素/移除元素",
+  "note": "与 类_FBrowser_请求::设置(…POST数据…) 组合即为「带自定义 body 的 POST」",
+  "tool": "扩展 browser_create_url_request",
+  "prio": "P1",
+  "reuse": "MCP_Server_Core.wsv:5505 处新建 类_FBrowser_POST数据 并 增加元素(元素含 读取流), 再传给 请求.设置"
+ },
+ {
+  "cls": "类_FBrowser_POST数据",
+  "method": "移除元素",
+  "params": [
+   [
+    "POST元素",
+    "<类型 = 类_FBrowser_POST元素>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "同上, 元素数组维护的从属方法",
+  "note": "",
+  "tool": "扩展 browser_create_url_request",
+  "prio": "P2",
+  "reuse": "同 增加元素"
+ },
+ {
+  "cls": "类_FBrowser_POST数据",
+  "method": "移除所有元素",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "同上, 元素数组维护的从属方法",
+  "note": "",
+  "tool": "扩展 browser_create_url_request",
+  "prio": "P2",
+  "reuse": "同 增加元素"
+ },
+ {
+  "cls": "类_FBrowser_V8环境",
+  "method": "FBrowser_V8_注册JS扩展",
+  "params": [
+   [
+    "扩展名",
+    "<类型 = 文本型>"
+   ],
+   [
+    "扩展JS代码",
+    "<类型 = 文本型>"
+   ],
+   [
+    "处理回调事件",
+    "<类型 = 类_FBrowser_事件智能指针 注释 = \"异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。\""
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "「页面脚本执行前注入自定义代码」这一能力已由三条现成路径覆盖: ① browser_reverse_preload(Page.addScriptToEvaluateOnNewDocument, 真·先于任何页面 JS); ② browser_inject persist=true —— 实现走 `持久V8扩展列表`(MCP_Server.wsv:1864 加入持久V8扩展) 并由 **浏览器_载入开始** 事件消费(MCP_BrowserEvents.wsv:1537 → MCP_Server.wsv:2088 应用持久V8到框架 → 框架.执行JS代码, 按标识去重); ③ browser_reverse_add_binding(Runtime.addBinding, 原生函数, fn.toString 查不出)",
+  "note": "⚠ 残余差异(非缺口但值得知道): 类库此法走 FBroHsRegisterExtension = **原生 V8 扩展**, 在上下文创建期注入且对页面 JS 完全不可见(比 ② 的 `执行JS代码` 更隐蔽); 该原生通道未暴露, 且 类_FBrowser_V8处理程序 的回调通路(给扩展挂原生函数)完全未用。要「不可检测」时请用 ①+③ 组合",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8环境",
+  "method": "FBrowser_V8环境_取当前环境",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "类库注释「只能在渲染进程中使用」; 本项目渲染进程是 SDK 自带 FBroSubprocess.exe, 该静态方法取的是当前(渲染)进程的上下文",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8环境",
+  "method": "FBrowser_V8环境_取运行环境",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上(GetEnteredContext)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_同步辅助类",
+  "method": "停止等待",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同步等待原语(供 SDK 内部阻塞式等待), 属线程/同步基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_同步辅助类",
+  "method": "添加字节集",
+  "params": [
+   [
+    "数据",
+    "<类型 = 字节集类>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "字节集拼接内部实现(被多个回调用于累积响应体)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_同步辅助类",
+  "method": "清理数据",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "内部状态复位",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_值转换",
+  "method": "FBrowser_字节集到字节集",
+  "params": [
+   [
+    "字节集",
+    "<类型 = 字节集类>"
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "类型转换内部件(字节集↔火山字节集), 无用户可见能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_值转换",
+  "method": "FBrowser_数据到字节集",
+  "params": [
+   [
+    "数据指针",
+    "<类型 = 变整数>"
+   ],
+   [
+    "数据大小",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_值转换",
+  "method": "FBrowser_文本到字节集",
+  "params": [
+   [
+    "文本",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "同上",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_字符串回调",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_字符串回调",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_JS回调",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_JS回调",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_DOM回调",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_DOM回调",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_任务回调",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_任务回调",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_Cookie回调",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_Cookie回调",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8处理程序",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8处理程序",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8存取器",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8存取器",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_清理缓存回调",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_清理缓存回调",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroCallback.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser_矩形位置数组",
+  "method": "到下一个",
+  "params": [],
+  "file": "FBroDataType.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser_矩形位置数组",
+  "method": "到数组首",
+  "params": [],
+  "file": "FBroDataType.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser_拖拽位置数组",
+  "method": "到下一个",
+  "params": [],
+  "file": "FBroDataType.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser_拖拽位置数组",
+  "method": "到数组首",
+  "params": [],
+  "file": "FBroDataType.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser_下划线组成数组",
+  "method": "到下一个",
+  "params": [],
+  "file": "FBroDataType.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "FBrowser_下划线组成数组",
+  "method": "到数组首",
+  "params": [],
+  "file": "FBroDataType.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_浏览器事件",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_浏览器事件",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_资源处理器",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_资源处理器",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_开发者消息事件",
+  "method": "类_初始化",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_开发者消息事件",
+  "method": "类_清理",
+  "params": [],
+  "file": "FBroEventControl.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "框架生命周期方法(每个事件/回调基类都有), 由 SDK 在对象创建/销毁时自动调用, 不是可调用的用户能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_Cookie管理器",
+  "method": "FBrowser_Cookie管理器_取全局",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_delete_cookies, browser_get_all_cookies, browser_get_cookies, browser_refresh_cookies, browser_reverse_cookie_sources, browser_set_cookie(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_Cookie管理器",
+  "method": "刷新Cookie",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_refresh_cookies(src 直调, covmap)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_服务器",
+  "method": "FBrowser_服务器_创建",
+  "params": [
+   [
+    "地址",
+    "<类型 = 文本型>"
+   ],
+   [
+    "端口",
+    "<类型 = 整数>"
+   ],
+   [
+    "最大连接数",
+    "<类型 = 整数>"
+   ],
+   [
+    "服务处理事件",
+    "<类型 = 类_FBrowser_事件智能指针 注释 = \"异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法。\""
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "MCP 自身的 HTTP/WS 传输层(MCP_Server.wsv:8121 调用), 不是浏览器能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_服务器",
+  "method": "关闭连接",
+  "params": [
+   [
+    "连接ID",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "MCP 自身 HTTP/WS 服务的连接管理(生命周期由进程掌控), 非浏览器能力",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_读取流",
+  "method": "FBrowser_读取流_从数据创建",
+  "params": [
+   [
+    "数据指针",
+    "<类型 = 变整数>"
+   ],
+   [
+    "数据大小",
+    "<类型 = 整数>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "CefStreamReader 构造; src 全库 0 命中; POST 上传体只能来自内存/文件流, 无流即无 body",
+  "note": "",
+  "tool": "扩展 browser_create_url_request",
+  "prio": "P1",
+  "reuse": "需新写(仅在 URL 请求拼装处使用)"
+ },
+ {
+  "cls": "类_FBrowser_读取流",
+  "method": "FBrowser_读取流_从文件创建",
+  "params": [
+   [
+    "文件名",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "A",
+  "route": "无",
+  "who": "同上; 从文件建流(上传本地文件作 body)",
+  "note": "",
+  "tool": "扩展 browser_create_url_request",
+  "prio": "P1",
+  "reuse": "需新写"
+ },
+ {
+  "cls": "类_FBrowser_字节集数组",
+  "method": "到下一个",
+  "params": [],
+  "file": "FBroValue.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_字节集数组",
+  "method": "到数组首",
+  "params": [],
+  "file": "FBroValue.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_POST元素数组",
+  "method": "到下一个",
+  "params": [],
+  "file": "FBroValue.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_POST元素数组",
+  "method": "到数组首",
+  "params": [],
+  "file": "FBroValue.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_X509证书数组",
+  "method": "到下一个",
+  "params": [],
+  "file": "FBroValue.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_X509证书数组",
+  "method": "到数组首",
+  "params": [],
+  "file": "FBroValue.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值数组",
+  "method": "到下一个",
+  "params": [],
+  "file": "FBroValue.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_V8值数组",
+  "method": "到数组首",
+  "params": [],
+  "file": "FBroValue.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "数组容器的迭代原语(遍历 CEF 数组用), 属数据类型基础设施",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_事件智能指针",
+  "method": "FBrowser创建事件智能指针",
+  "params": [
+   [
+    "数据类型",
+    "<类型 = 对象类 注释 = \"需要创建的指针类型，必须是继承事件或者回调的类，否则会出错\" @需求类型 = 数据类型>"
+   ]
+  ],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "全局函数形式的等价物已在项目内普遍使用: `事件智能指针变量.创建(执行类)`(如 MCP_Server.wsv:1720/3370/5295)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_请求环境",
+  "method": "FBrowser_请求环境_取全局",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "宿主侧全局请求环境句柄, 项目经 browser.取请求环境() 获取(MCP_Server.wsv:7868 取请求环境_安全)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_方案注册",
+  "method": "添加自定义方案",
+  "params": [],
+  "file": "FBroLib.wsv",
+  "verdict": "B1",
+  "route": "工具名",
+  "who": "browser_kernel_scheme(main.wsv:321-329 注册自定义方案 事件里调 添加自定义方案, 运行期由 browser_kernel_scheme 挂载资源处理器)",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ },
+ {
+  "cls": "类_FBrowser_拖拽数据",
+  "method": "增加文件",
+  "params": [
+   [
+    "文件路径",
+    "<类型 = 文本型>"
+   ],
+   [
+    "显示名",
+    "<类型 = 文本型>"
+   ]
+  ],
+  "file": "FBroValue.wsv",
+  "verdict": "B4",
+  "route": "非能力项",
+  "who": "仅离线渲染(OSR)拖拽事件路径使用; 本项目为窗口内嵌渲染, 该类只在 离屏渲染_开始拖拽 事件参数中出现(MCP_BrowserEvents.wsv:3074), 且项目已声明 OSR 事件不触发",
+  "note": "",
+  "tool": "",
+  "prio": "",
+  "reuse": ""
+ }
+]

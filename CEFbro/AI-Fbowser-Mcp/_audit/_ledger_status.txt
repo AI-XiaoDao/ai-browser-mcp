@@ -1,0 +1,52 @@
+﻿== 功能台账 ==
+工具总数 312 | 已测 306 | 未测 6
+通过 265 | 失败 41 | 其中把实例卡死 0
+auto_prepared 生效 4
+   失败性质 TARGET       26
+   失败性质 OTHER        9
+   失败性质 PARAM        3
+   失败性质 STATE        2
+   失败性质 GUARD        1
+
+未通过明细:
+   browser_cdp_call                         PARAM      非法 CDP 方法名: mcp_probe | 规范格式为 域.方法, 例: Network.getResponseBody / Runtime.evaluat
+   browser_cdp_event                        OTHER      指定 event_name 或 event 参数，例如 Debugger.paused
+   browser_debugger_auto                    TARGET     未捕获到任何断点命中(0 hits) | 停止原因: 等待 Debugger.paused 超时(12000ms): 该窗口内页面未执行到断点位置 | 注: 下
+   browser_debugger_flow                    OTHER      debugger_flow 失败: {"ok":false,"step":"wait_paused","error":"timeout","breakpoint
+   browser_dom_checked                      TARGET     元素不存在或取不到值: #mcp-probe-nonexistent | 建议: 先用 browser_fill_exists 或 browser_snapsh
+   browser_dom_click                        TARGET     element not found: #mcp-probe-nonexistent | 该选择器在当前页面上匹配到 0 个元素 | 建议: 先用 browser
+   browser_dom_inner_html                   TARGET     元素不存在或取不到值: #mcp-probe-nonexistent | 建议: 先用 browser_fill_exists 或 browser_snapsh
+   browser_dom_query                        TARGET     元素不存在或取不到值: #mcp-probe-nonexistent | 建议: 先用 browser_fill_exists 或 browser_snapsh
+   browser_dom_rect                         TARGET     元素不存在或取不到值: #mcp-probe-nonexistent | 建议: 先用 browser_fill_exists 或 browser_snapsh
+   browser_dom_selected                     TARGET     元素不存在或取不到值: #mcp-probe-nonexistent | 建议: 先用 browser_fill_exists 或 browser_snapsh
+   browser_dom_set_value                    TARGET     元素不存在或取不到值: #mcp-probe-nonexistent | 设置值未执行 | 建议: 先用 browser_snapshot 或 browser_
+   browser_file_dialog                      OTHER      文件对话框已改为程序化选择(不弹窗口) | 请传 path 参数指定目标文件路径
+   browser_fill_attr_get                    TARGET     元素不存在或取不到值: #mcp-probe-nonexistent | 建议: 先用 browser_fill_exists 或 browser_snapsh
+   browser_fill_attr_set                    TARGET     attribute 不能为空 | 如 style / data-* / aria-*
+   browser_fill_click                       TARGET     点击未执行: 选择器在当前页面匹配到 0 个元素 -> #mcp-probe-nonexistent | 建议: 先用 browser_snapshot 或 b
+   browser_fill_focus                       TARGET     设置焦点未执行: 选择器在当前页面匹配到 0 个元素 -> #mcp-probe-nonexistent | 建议: 先用 browser_snapshot 或
+   browser_fill_scroll                      TARGET     滚动到元素未执行: 选择器在当前页面匹配到 0 个元素 -> #mcp-probe-nonexistent | 建议: 先用 browser_snapshot 
+   browser_fill_select                      TARGET     设置select选中项未执行: 选择器在当前页面匹配到 0 个元素 -> #mcp-probe-nonexistent | 建议: 先用 browser_sna
+   browser_fill_set_value                   TARGET     设置值未执行: 选择器在当前页面匹配到 0 个元素 -> #mcp-probe-nonexistent | 建议: 先用 browser_snapshot 或 
+   browser_fill_trigger                     TARGET     触发事件未执行: 选择器在当前页面匹配到 0 个元素 -> #mcp-probe-nonexistent | 建议: 先用 browser_snapshot 或
+   browser_find_by_hwnd                     TARGET     未找到窗口句柄为 1 的浏览器
+   browser_find_by_tag                      TARGET     未找到标识为: mcp_probe 的浏览器 | 可能原因: 该标识未被 browser_user_tags 设置过, 或浏览器已关闭 | 建议: 先用 bro
+   browser_forward                          OTHER      无法前进 — 无导航历史 | 当前页面没有可前进的历史记录
+   browser_intercept                        TARGET     参数 url 不能为空
+   browser_kernel_auth                      TARGET     host 不能为空 | 例: example.com
+   browser_kernel_reactor                   TARGET     event 不能为空 | 例: load_end / navigate / url_changed / *
+   browser_kernel_scheme                    TARGET     domain 不能为空 | 访问形式: mcp://域名/任意路径
+   browser_kernel_watch                     TARGET     expression 不能为空 | 例: document.title / window.__token
+   browser_network_body                     PARAM      非法 CDP request_id: mcp_probe | CDP 请求标识为数字串(形如 1000012345.5) | 如何取得有效值: ① browse
+   browser_reverse_instrument_script        OTHER      install 需要显式确认 | 实测: 装上后本会话的 **JS 通道即被阻塞**(browser_execute_js / browser_debugger
+   browser_reverse_precise_coverage         OTHER      Profiler.takePreciseCoverage 失败: Precise coverage has not been started.
+   browser_reverse_return_value             STATE      页面未处于暂停态 | 该工具只在 Debugger.paused 时有效: 先设断点/插装并触发暂停, 再用 browser_debugger_wait_pau
+   browser_reverse_set_variable             STATE      页面未处于暂停态且未提供 call_frame_id | 先在断点处暂停, 或用 browser_debugger_get_stack 取 call_frame
+   browser_set_window_style                 PARAM      非法窗口属性类型(1) | 支持: -16(GWL_STYLE) / -20(GWL_EXSTYLE) / -12(GWL_ID)
+   browser_vip_dom_search                   OTHER      需要query或search_id参数
+   browser_vip_enable_js_env                OTHER      启用 JS 执行环境需显式确认 | ⚠ 实测启用后会破坏本会话的 JS 通道: CDP 优先工具(browser_dom_query / browser_dom
+   browser_vip_execute_js_context           OTHER      需要code参数
+   browser_vip_mouse_wheel                  GUARD      必须提供 delta_y 或 delta_x (滚动量, 正值向下/向右) | 省略会造成滚动 0 像素却报成功
+   browser_wait                             TARGET     value 不能为空: what=selector 需要指定等待目标值
+   mcp_result                               TARGET     未找到任务结果: mcp_probe | 可能原因: ①任务仍在执行(2-5秒后重试) ②request_id拼写错误 ③任务已过期被清理 | 💡大多数工具已默
+   workflow_get                             TARGET     工作流不存在: mcp_probe | 建议: 先用 workflow_list 列出可用工作流名(不含 .json 后缀)

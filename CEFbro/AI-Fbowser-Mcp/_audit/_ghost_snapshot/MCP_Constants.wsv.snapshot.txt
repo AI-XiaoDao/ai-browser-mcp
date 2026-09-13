@@ -1,0 +1,88 @@
+<火山程序 类型 = "通常" 版本 = 1 />
+
+包 火山.程序
+
+# MCP_常量 — 全局常量定义 (从 MCP_Server.wsv 抽取)
+
+类 MCP_常量 <公开 @全局类 = 真 @输出名 = "MCPConst">
+{
+
+    # ── 超时与限值 ──
+
+    常量 缓存保留天数 <公开 类型 = 整数 值 = 14 @输出名 = "CacheRetentionDays">
+    常量 缓存最大条目 <公开 类型 = 整数 值 = 50000 @输出名 = "CacheMaxEntry">
+    常量 同步等待_默认毫秒 <公开 类型 = 整数 值 = 15000 注释 = "服务端内聚等待默认超时(本地桌面, 放宽至15s)" @输出名 = "SyncWaitDefaultMs">
+    常量 同步等待_即时毫秒 <公开 类型 = 整数 值 = 1000 注释 = "get_url/status等即时读" @输出名 = "SyncWaitImmediateMs">
+    常量 同步等待_截图毫秒 <公开 类型 = 整数 值 = 15000 注释 = "screenshot/get_source等待" @输出名 = "SyncWaitScreenshotMs">
+    常量 同步等待_JS执行超时 <公开 类型 = 整数 值 = 30000 注释 = "JS执行pending占位超时(与发布版一致)" @输出名 = "SyncWaitJSExecuteTimeout">
+    常量 同步等待_快读毫秒 <公开 类型 = 整数 值 = 5000 注释 = "标题/DOM/JS等轻量读(本地桌面, 放宽至5s)" @输出名 = "SyncWaitFastReadMs">
+    常量 同步等待_轮询间隔 <公开 类型 = 整数 值 = 50 注释 = "poll SQLite 间隔" @输出名 = "SyncWaitPollInterval">
+    常量 截断_源码默认字节 <公开 类型 = 整数 值 = 524288 注释 = "512KB(本地桌面放宽)" @输出名 = "TruncateSourceDefaultByte">
+    常量 截断_源码最大字节 <公开 类型 = 整数 值 = 5242880 注释 = "5MB(本地桌面放宽)" @输出名 = "TruncateSourceMaxByte">
+    常量 截断_CDP结果最大字节 <公开 类型 = 整数 值 = 5242880 注释 = "5MB(本地桌面放宽)" @输出名 = "TruncateCDPResultMaxByte">
+    常量 截断_VIP数据最大字节 <公开 类型 = 整数 值 = 524288 注释 = "512KB(本地桌面放宽)" @输出名 = "TruncateVIPDataMaxByte">
+    常量 截断_响应文本最大字符 <公开 类型 = 整数 值 = 262144 注释 = "回调侧mcp_result载荷上限(256KB), 收敛原散布的262144魔数" @输出名 = "TruncateResponseTextMaxChar">
+    常量 URL响应累积最大字节 <公开 类型 = 整数 值 = 1048576 注释 = "URL请求回调累积上限(1MB字节≈256KB字符的4倍余量), 防50MB攒满再截断浪费内存" @输出名 = "URLResponseAccumulateMaxByte">
+    常量 Cookie默认项数 <公开 类型 = 整数 值 = 200 @输出名 = "CookieDefaultItemCount">
+    常量 Cookie最大项数 <公开 类型 = 整数 值 = 500 @输出名 = "CookieMaxItemCount">
+    常量 Cookie绝对上限 <公开 类型 = 整数 值 = 1000 @输出名 = "CookieAbsoluteLimit">
+    常量 URL请求默认超时 <公开 类型 = 整数 值 = 60000 @输出名 = "URLRequestDefaultTimeout">
+    常量 毫秒_每天 <公开 类型 = 长整数 值 = 86400000 @输出名 = "MsPerDay">
+    常量 速率限制_衰减因子 <公开 类型 = 整数 值 = 2 注释 = "分钟边界计数÷2, 防突发重置" @输出名 = "RateLimitDecaySubFactor">
+    常量 日志清理间隔 <公开 类型 = 整数 值 = 1000 @输出名 = "LogCleanInterval">
+    常量 缓存清理_保留缓冲 <公开 类型 = 整数 值 = 500 注释 = "清理时多保留的条数" @输出名 = "CacheCleanRetentionBuffer">
+    常量 等待任务最大滞留毫秒 <公开 类型 = 整数 值 = 3600000 注释 = "abandoned _waiting 任务最长保留1小时" @输出名 = "WaitTaskMaxStalledMs">
+    常量 事件日志最大条目 <公开 类型 = 整数 值 = 50000 @输出名 = "EventLogMaxEntry">
+    常量 响应缓存最大条目 <公开 类型 = 整数 值 = 5000 @输出名 = "ResponseCacheMaxEntry">
+    常量 下载保留天数 <公开 类型 = 整数 值 = 30 注释 = "Downloads 自动清理: 超过此天数的文件将被删除" @输出名 = "DownloadRetentionDays">
+    常量 响应缓存单条最大字节 <公开 类型 = 整数 值 = 52428800 注释 = "50MB, 防OOM上限" @输出名 = "ResponseCacheSingleItemMaxByte">
+    常量 CDP映射清理间隔 <公开 类型 = 整数 值 = 100 @输出名 = "CDPMapCleanInterval">
+    常量 拦截规则最大行数 <公开 类型 = 整数 值 = 500 @输出名 = "InterceptRuleMaxLineCount">
+    常量 定期维护间隔毫秒 <公开 类型 = 整数 值 = 60000 注释 = "UI时钟触发后台清理间隔" @输出名 = "PeriodicMaintainIntervalMs">
+    常量 浏览器实例最大数量 <公开 类型 = 整数 值 = 64 注释 = "防内存耗尽上限, 本地桌面用户自行管控" @输出名 = "BrowserInstanceMaxCount">
+    常量 批量命令最大条数 <公开 类型 = 整数 值 = 200 @输出名 = "BatchCommandMaxCount">
+    常量 URL请求最大并发 <公开 类型 = 整数 值 = 32 @输出名 = "URLRequestMaxConcurrency">
+    常量 截图异步最大字节 <公开 类型 = 整数 值 = 5242880 注释 = "5MB, 防OOM上限" @输出名 = "ScreenshotAsyncMaxByte">
+    常量 异步结果JSON最大字符 <公开 类型 = 整数 值 = 10485760 注释 = "10MB, 防OOM上限" @输出名 = "AsyncResultJSONMaxChar">
+    常量 异步结果非等待保留毫秒 <公开 类型 = 整数 值 = 86400000 注释 = "24小时" @输出名 = "AsyncResultNotWaitRetainMs">
+    常量 CDP映射TTL毫秒 <公开 类型 = 整数 值 = 600000 注释 = "10分钟过期" @输出名 = "CDPMapTTLMs">
+    常量 持久V8扩展上限 <公开 类型 = 整数 值 = 500 注释 = "persist inject 最大条目, 防内存泄漏上限" @输出名 = "PersistentV8ExtensionLimit">
+    常量 WS最大消息字节 <公开 类型 = 整数 值 = 52428800 注释 = "50MB, 防OOM上限" @输出名 = "WSMaxMessageByte">
+    常量 内核版本最小 <公开 类型 = 整数 值 = 116 注释 = "CSS/Web/V8 内核开关版本下界" @输出名 = "KernelVersionMin">
+    常量 内核版本最大 <公开 类型 = 整数 值 = 135 注释 = "CSS/Web/V8 内核开关版本上界" @输出名 = "KernelVersionMax">
+    常量 窗口样式_GWL_STYLE <公开 类型 = 整数 值 = -16 注释 = "Win32 GetWindowLong 窗口风格索引" @输出名 = "WindowStyleGWLSTYLE">
+    常量 窗口样式_GWL_EXSTYLE <公开 类型 = 整数 值 = -20 注释 = "Win32 GetWindowLong 扩展窗口风格索引" @输出名 = "WindowStyleGWLEXSTYLE">
+    常量 窗口样式_GWL_ID <公开 类型 = 整数 值 = -12 注释 = "Win32 GetWindowLong 窗口标识索引" @输出名 = "WindowStyleGWLID">
+
+    # ── TLS 版本映射常量 (FBrowser 指纹 API 枚举值) ──
+
+    常量 TLS指纹_1_0 <公开 类型 = 整数 值 = 769 @输出名 = "TLSFingerprint10">
+    常量 TLS指纹_1_1 <公开 类型 = 整数 值 = 790 @输出名 = "TLSFingerprint11">
+    常量 TLS指纹_1_2 <公开 类型 = 整数 值 = 791 @输出名 = "TLSFingerprint12">
+    常量 TLS指纹_1_3 <公开 类型 = 整数 值 = 792 @输出名 = "TLSFingerprint13">
+
+    # ── MCP 协议 ──
+
+    常量 MCP_协议版本 <公开 类型 = 文本型 值 = "2025-06-18" @输出名 = "MCPProtocolVersion">
+    常量 MCP_服务器名 <公开 类型 = 文本型 值 = "AI浏览器 MCP Server" @输出名 = "MCPServerName">
+    常量 MCP_版本号 <公开 类型 = 文本型 值 = "3.1.0" @输出名 = "MCPVersionNo">
+
+    # ── 错误消息 ──
+
+    常量 错误_无浏览器 <公开 类型 = 文本型 值 = "没有可用的浏览器 | 请启动AI浏览器GUI窗口(自动创建), 或确认 /health 返回 browsers>0" @输出名 = "ErrorNoBrowser">
+    常量 错误_缺少参数 <公开 类型 = 文本型 值 = "参数不能为空 | 请查看工具描述补全必填参数" @输出名 = "ErrorMissingParam">
+    常量 错误_VIP不可用 <公开 类型 = 文本型 值 = "VIP控制器不可用,需要VIP授权 | 请在 mcp_config.json 配置 vip_code" @输出名 = "ErrorVIPNotAvailable">
+    常量 错误_主框架无效 <公开 类型 = 文本型 值 = "主框架无效 | 页面可能尚未加载完成, 请先 navigate 并等待2-3秒后重试" @输出名 = "ErrorMainFrameInvalid">
+    常量 错误_不支持的URL协议 <公开 类型 = 文本型
+            值 = "不支持的URL协议 | 仅允许 http/https/about/data/ftp | 示例: browser_navigate {url:'https://www.baidu.com/'}" @输出名 = "ErrorUnsupportedURLProtocol">
+    常量 错误_填表框架无效 <公开 类型 = 文本型 值 = "填表框架无效 | 页面可能尚未加载完成或使用跨域iframe, 请先 browser_navigate 并等待 load_end 后重试" @输出名 = "ErrorFormFrameInvalid">
+    常量 错误_请求环境不可用 <公开 类型 = 文本型 值 = "请求环境不可用 | 页面可能尚未加载完成" @输出名 = "ErrorRequestEnvironmentNotAvailable">
+    常量 错误_服务正在关闭 <公开 类型 = 文本型 值 = "MCP 服务正在关闭" @输出名 = "ErrorServiceIsClose">
+    常量 错误_版本必须为正整数 <公开 类型 = 文本型 值 = "version 必须为正整数 | 有效范围: 1-65535" @输出名 = "ErrorVersionMustBePositiveInt">
+    常量 提示_需要刷新 <公开 类型 = 文本型 值 = "设置已应用! 注意: 指纹/代理/内核变更需要刷新页面才能生效, 请调用 browser_reload 或 browser_navigate" @输出名 = "HintNeedReload">
+    常量 HTTP_JSON内容类型 <公开 类型 = 文本型 值 = "application/json; charset=utf-8" @输出名 = "HTTPJSONContentType">
+
+    # ── 欢迎页 ──
+
+    常量 欢迎页导航超时毫秒 <公开 类型 = 整数 值 = 15000 @输出名 = "WelcomePageNavigateTimeoutMs">
+}

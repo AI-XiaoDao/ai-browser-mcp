@@ -1,12 +1,12 @@
 <火山程序 类型 = "通常" 版本 = 1 />
 包 火山.程序
 # VIP 命令分派 — 从 MCP_Server.wsv 拆分 (L5/M10)
-类 MCP_VIP分派 <公开 @全局类 = 真>
+类 MCP_VIP分派 <公开 @全局类 = 真 @输出名 = "MCPVIPDispatch">
 {
-    方法 分类分派_VIP操作 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 方法名 <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分类分派_VIP操作 <公开 静态 类型 = 文本型 @输出名 = "DispatchClassVIPOp" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 方法名 <类型 = 文本型 @输出名 = "MethodName">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         子文本替换 (方法名, "browser.", "browser_", , , 假)
         如果 (方法名 == "browser_vip_websocket_intercept")
@@ -21,6 +21,10 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
+                    如果 (MCP命令服务器.参数键存在 (参数JSON, "enable") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "enable 不能省略 | 请显式传 enable:true 开启 WebSocket 拦截 | 说明: 本工具只支持开启, 关闭请用 browser_intercept action=clear"))
+                    }
                     如果 (enableFlag)
                     {
                         vip_ctrl.WebSocket_启用拦截 ()
@@ -35,7 +39,7 @@
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
         }
-        // === v1.6 快速连通性检查 ===
+        // === 快速连通性检查 ===
         // === VIP S5代理 ===
         否则 (方法名 == "browser_set_s5_proxy")
         {
@@ -75,12 +79,28 @@
                     vx = MCP命令服务器.yyjson取整数 (参数JSON, "x")
                     变量 vy <类型 = 整数>
                     vy = MCP命令服务器.yyjson取整数 (参数JSON, "y")
+                    // x/y 为必填整数坐标: 缺省会退化为在页面左上角 (0,0) 单击, 故拒绝执行
+                    如果 (MCP命令服务器.参数键存在 (参数JSON, "x") == 假 || MCP命令服务器.参数键存在 (参数JSON, "y") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "必须同时提供 x 与 y (整数坐标) | 缺省会被当作 (0,0) 而在页面左上角误点, 故拒绝执行; 如需点左上角请显式传 x=0 y=0"))
+                    }
                     如果 (vx < 0 || vy < 0 || vx > 32767 || vy > 32767)
                     {
                         返回 (MCP_响应构建.命令失败 (命令ID, "坐标越界 | x,y 须在 0~32767 范围内"))
                     }
-                    vip_ctrl.高级鼠标_单击 (vx, vy, MCP命令服务器.yyjson取整数 (参数JSON, "button"))
-                    返回 (MCP_响应构建.命令成功 (命令ID, "VIP鼠标点击"))
+                    // 单击延时(类库第4参, 默认50ms): 反爬场景常需要更长的按压时长, 原先被截断只能吃默认值
+                    变量 vclick延迟 <类型 = 整数>
+                    vclick延迟 = MCP命令服务器.yyjson取整数 (参数JSON, "delay_ms")
+                    如果 (vclick延迟 <= 0)
+                    {
+                        vclick延迟 = 50
+                    }
+                    如果 (vclick延迟 > 5000)
+                    {
+                        vclick延迟 = 5000
+                    }
+                    vip_ctrl.高级鼠标_单击 (vx, vy, MCP命令服务器.yyjson取整数 (参数JSON, "button"), vclick延迟)
+                    返回 (MCP_响应构建.命令成功 (命令ID, "VIP鼠标点击 button=" + 到文本 (MCP命令服务器.yyjson取整数 (参数JSON, "button")) + " delay_ms=" + 到文本 (vclick延迟)))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
             }
@@ -96,6 +116,11 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
+                    // x/y 为必填整数坐标: 缺参会把鼠标移到页面左上角 (0,0), 故拒绝执行
+                    如果 (MCP命令服务器.参数键存在 (参数JSON, "x") == 假 || MCP命令服务器.参数键存在 (参数JSON, "y") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "必须同时提供 x 与 y (整数坐标) | 缺省会被当成 (0,0) 而把鼠标移到页面左上角, 故拒绝执行"))
+                    }
                     vip_ctrl.高级鼠标_移动 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
                     返回 (MCP_响应构建.命令成功 (命令ID, "VIP鼠标移动"))
                 }
@@ -169,6 +194,46 @@
         }
         否则 (方法名 == "browser_vip_enable_inspector")
         {
+            // enable 缺失一律拒绝(不接受缺省): 缺省会被当成关闭, 会注销 CDP 观察者。
+            // 缺失键用 参数键存在 判定; 取值归一化: 文本 false/0/off 视为关闭, true/1/on 视为启用;
+            // **非空但无法识别的取值同样拒绝**(见下 取值已识别 白名单)。
+            变量 开关文本 <类型 = 文本型>
+            开关文本 = MCP命令服务器.yyjson取文本 (参数JSON, "enable")
+            变量 开关布尔 <类型 = 逻辑型>
+            开关布尔 = MCP命令服务器.yyjson取逻辑 (参数JSON, "enable")
+            如果 (MCP命令服务器.参数键存在 (参数JSON, "enable") == 假)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "必须显式指定 enable | 启用: enable:true | 关闭: enable:false | 不接受缺省, 因为缺省会被当成关闭并注销 CDP 观察者"))
+            }
+            变量 目标状态 <类型 = 逻辑型>
+            目标状态 = 开关布尔
+            // ★ 安全性(与 browser_vip_enable_devtools_observer 同一缺陷类): 只挡"键缺失"不够 ——
+            //   于是**无法识别的非空取值**会一路走到 目标状态=开关布尔(=非布尔节点取逻辑=假),
+            //   再落进 注销CDP观察者() 这个破坏性分支。即"最危险的取值成了兜底"。
+            //   台账实测: enable:"mcp_probe" 落到过 "监管者事件已关闭"。
+            变量 取值已识别 <类型 = 逻辑型 值 = 假>
+            如果 (开关文本 == "false" || 开关文本 == "0" || 开关文本 == "off")
+            {
+                目标状态 = 假
+                取值已识别 = 真
+            }
+            否则 (开关文本 == "true" || 开关文本 == "1" || 开关文本 == "on")
+            {
+                目标状态 = 真
+                取值已识别 = 真
+            }
+            否则 (开关文本 == "")
+            {
+                // 键已确认存在, 且本工具明确接受 布尔 false 作为关闭(见上面缺失键的提示文案),
+                // 故非文本(布尔)取值沿用 目标状态=开关布尔 的既有语义。
+                // 注: 这里对 "裸数字 1" 之类非布尔节点仍无法与 布尔 false 区分(类库取逻辑对非布尔一律给假),
+                //     属本工具既有歧义(行为未改变); 文档形式请用字符串 "true"/"1"。
+                取值已识别 = 真
+            }
+            如果 (取值已识别 == 假)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "enable 取值无法识别: " + 开关文本 + " | 只接受: 字符串 true/false/1/0/on/off, 或布尔 true/false | 无法识别的取值一律拒绝, 不落进'关闭观察者'这个破坏性分支"))
+            }
             变量 browser <类型 = 类_FBrowser_浏览器>
             browser = MCP命令服务器.取主浏览器 ()
             如果 (browser.是否为空 () == 假)
@@ -177,13 +242,15 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"))
+                    如果 (目标状态)
                     {
-                        MCP命令服务器.确保CDP观察者已注册 ()
+                        MCP命令服务器.确保CDP观察者已注册 (browser)
                     }
                     否则
                     {
-                        MCP命令服务器.注销CDP观察者 ()
+                        // 同 browser_vip_enable_devtools_observer: 关闭会注销 CDP 观察者
+                        MCP命令服务器.注销CDP观察者 (browser)
+                        返回 (MCP_响应构建.命令成功 (命令ID, "监管者事件已关闭 | 已注销 CDP 观察者(cdp_ready=false) | 实测纠正: 下一次 CDP 调用会自动重新注册观察者并自愈, 通常无需重启(旧文案'需重启进程才能恢复'与实测不符)"))
                     }
                     返回 (MCP_响应构建.命令成功 (命令ID, "监管者事件已设置"))
                 }
@@ -201,12 +268,260 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
+                    // enable 不能省略: 省略等同于关闭 JS 执行环境, 会让页面脚本整体失效
+                    如果 (MCP命令服务器.参数键存在 (参数JSON, "enable") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "enable 不能省略 | 省略等同于**关闭** JS 执行环境(会让页面脚本失效); 请显式传 true=启用 / false=关闭"))
+                    }
+                    // 启用 JS 执行环境为破坏性操作: 需显式传 confirm:true;
+                    // 启用会破坏本会话 JS 通道, 只有重启进程才能恢复。
+                    如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable") && MCP命令服务器.参数键存在 (参数JSON, "confirm") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "启用 JS 执行环境需显式确认 | ⚠ 实测启用后会破坏本会话的 JS 通道: CDP 优先工具(browser_dom_query / browser_dom_rect / browser_get_text 等)会退化为 null, browser_execute_js 也会超时, 且注销/重注册监管者与重新导航均无法恢复, 只有重启进程才能恢复。确认要继续请传 confirm:true"))
+                    }
                     vip_ctrl.高级_启用执行环境 (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"))
-                    返回 (MCP_响应构建.命令成功 (命令ID, "JS执行环境已设置"))
+                    // 维护自有状态: 供 browser_vip_execute_js_context 做**前置判断**,
+                    // 避免"未启用执行环境 -> 回调永不触发 -> 调用方白等到超时"。
+                    MCP命令服务器.VIP_JS环境已启用 = MCP命令服务器.yyjson取逻辑 (参数JSON, "enable")
+                    如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"))
+                    {
+                        返回 (MCP_响应构建.命令成功 (命令ID, "JS执行环境已设置 | ⚠ 已启用: 实测启用后会破坏 CDP 通道, 使 CDP 优先的工具(browser_dom_query / browser_dom_rect / browser_get_text 等)退回原生路径并可能返回 null, 且需重启进程才能恢复; 若非确有必要, 建议只在会话末尾使用"))
+                    }
+                    // 诚实性(本机实测): 关闭路径同样会破坏本会话 CDP 通道(execute_js 0.02s → 30s)且不恢复 ——
+                    // 原实现只在启用路径加警告, 关闭路径静默毒化; 现在两侧一致声明"需重启进程恢复"。
+                    返回 (MCP_响应构建.命令成功 (命令ID, "JS执行环境已关闭 | ⚠ 实测: 关闭操作同样会破坏本会话 CDP 通道(execute_js 退化到 30s)且不会恢复, 需重启进程; 若非确有必要, 建议只在会话末尾使用"))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+        }
+        // === VIP 新标签页(高级_创建标签浏览器): 分诊 B5 真缺口 ===
+        // 类库前置(原文): 谷歌模式下才可以使用; 空地址=当前浏览器地址; 序号 -1=末尾; 激活真=跳转该标签。
+        否则 (方法名 == "browser_vip_new_tab")
+        {
+            变量 ntBrowser <类型 = 类_FBrowser_浏览器>
+            ntBrowser = MCP命令服务器.取主浏览器 ()
+            如果 (ntBrowser.是否为空 () == 假)
+            {
+                // 与 browser_create/弹窗同款实例上限(2025-09-13 补): 此前本路径无判定, 可越过 64 上限
+                如果 (FBrowser_浏览器_取数量 () >= MCP_常量.浏览器实例最大数量)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "浏览器实例已达上限(" + 到文本 (MCP_常量.浏览器实例最大数量) + ")"))
+                }
+                变量 ntVIP <类型 = 类_FBrowserVIP_控制器>
+                ntVIP = ntBrowser.取VIP控制器 ()
+                如果 (ntVIP.是否为空 () == 假)
+                {
+                    // 前置校验(类库原文: 谷歌模式下才可以使用) —— 非谷歌模式明确失败, 不静默。
+                    变量 nt风格 <类型 = 窗口运行风格>
+                    nt风格 = ntBrowser.取窗口运行风格 ()
+                    如果 ((整数)nt风格 != 1)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "本工具需**谷歌模式**(类库原文) | 当前 runtime_style=" + 到文本 ((整数)nt风格) + "(0默认/1谷歌/2经典; 用 browser_get_run_style 查) | 替代: 跨窗口用 browser_create, 同窗口多页用 browser_navigate"))
+                    }
+                    变量 ntURL <类型 = 文本型>
+                    ntURL = MCP命令服务器.yyjson取文本 (参数JSON, "url")
+                    变量 nt序号 <类型 = 整数>
+                    nt序号 = MCP命令服务器.yyjson取整数 (参数JSON, "index")
+                    变量 nt激活 <类型 = 逻辑型>
+                    nt激活 = MCP命令服务器.yyjson取逻辑_默认 (参数JSON, "activate", 假)
+                    变量 nt标识 <类型 = 文本型>
+                    nt标识 = MCP命令服务器.yyjson取文本 (参数JSON, "tag")
+                    如果 (ntURL != "")
+                    {
+                        如果 (MCP命令服务器.验证URL安全 (ntURL) == 假 || (是否以 (ntURL, "http://") == 假 && 是否以 (ntURL, "https://") == 假))
+                        {
+                            返回 (MCP_响应构建.命令失败 (命令ID, "不支持的URL协议, 仅允许 http/https"))
+                        }
+                    }
+                    变量 nt字典 <类型 = 类_FBrowser_字典值>
+                    nt字典.创建 ()
+                    变量 nt禁用 <类型 = FBrowser_禁用事件>
+                    ntVIP.高级_创建标签浏览器 (ntURL, nt序号, nt激活, nt字典, 空对象, nt禁用, nt标识)
+                    返回 (MCP_响应构建.命令成功 (命令ID, "标签浏览器创建已提交 | url=" + 选择 (ntURL == "", "(当前浏览器地址)", ntURL) + " index=" + 到文本 (nt序号) + " activate=" + 选择 (nt激活, "true", "false") + " tag=" + nt标识 + " | 新标签会出现在 browser_list(新 browser_id), 之后任何工具传 browser_id 即可操作 | 诚实边界: 类库为异步创建, 立即 browser_list 可能尚未出现, 稍候重查"))
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+        }
+        // === VIP 响应过滤器: 文本改写(过滤器_修改内容 / 取消修改内容) ===
+        // 类库原文: 对目标地址通过匹配目标文本修改内容, 在资源加载前设置(浏览器创建后设置也有效);
+        // 若 浏览器_获取资源过滤器 事件返回真自定义拦截, 此设置不生效; 同一目标多次调用需保持匹配模式一致。
+        // 诚实边界: 类库无读取接口, 本工具无法回读; 对**设置之后加载**的目标资源生效, 用刷新/重新导航后
+        // 页面侧回读验证。VIP 高级功能(需赞助; 本机可用)。
+        否则 (方法名 == "browser_vip_filter_patch_text")
+        {
+            变量 fpAction <类型 = 文本型>
+            fpAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (fpAction == "")
+            {
+                fpAction = "set"
+            }
+            变量 fpURL <类型 = 文本型>
+            fpURL = MCP命令服务器.yyjson取文本 (参数JSON, "url")
+            变量 fpFind <类型 = 文本型>
+            fpFind = MCP命令服务器.yyjson取文本 (参数JSON, "find")
+            变量 fpReplace <类型 = 文本型>
+            fpReplace = MCP命令服务器.yyjson取文本 (参数JSON, "replace")
+            变量 fpVIP <类型 = 类_FBrowserVIP_控制器>
+            fpVIP = MCP命令服务器.取VIP控制器 ()
+            如果 (fpVIP.是否为空 ())
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
+            }
+            如果 (fpAction == "clear")
+            {
+                如果 (fpURL == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "clear 需要 url(与之前设置的目标地址一一对应)"))
+                }
+                fpVIP.过滤器_取消修改内容 (fpURL)
+                返回 (MCP_响应构建.命令成功 (命令ID, "已取消该地址的文本改写: " + fpURL))
+            }
+            如果 (fpAction != "set")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "未知 action: " + fpAction + " | 支持 set/clear"))
+            }
+            如果 (fpURL == "" || fpFind == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "set 需要 url 与 find | replace 可留空(把目标文本删除); 对之后加载的资源生效, 刷新/重新导航后验证"))
+            }
+            变量 fpMatch <类型 = 整数>
+            fpMatch = MCP命令服务器.yyjson取整数 (参数JSON, "match")
+            如果 (fpMatch < 0 || fpMatch > 4)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "match 需在 0..4 | 0=完全匹配(默认) 1=模糊 2=头部模糊(尾同) 3=尾部模糊(头同) 4=正则"))
+            }
+            变量 fpMode <类型 = 整数>
+            fpMode = MCP命令服务器.yyjson取整数 (参数JSON, "mode")
+            如果 (fpMode < 0 || fpMode > 3)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "mode 需在 0..3 | 0=修改第一个匹配(默认) 1=修改全部匹配 2=在第一个匹配后插入 3=全部匹配后插入"))
+            }
+            fpVIP.过滤器_修改内容 (fpMatch, fpURL, fpMode, fpFind, fpReplace)
+            返回 (MCP_响应构建.命令成功 (命令ID, "文本改写已设置: " + fpURL + " | 诚实边界: 类库无读取接口, 无法回读; 对**设置之后加载**的目标资源生效(刷新/重新导航后页面侧回读验证); 若 浏览器_获取资源过滤器 事件返回真自定义拦截则不生效 | 取消: action=clear {url}"))
+        }
+        // === VIP 响应过滤器: 整体资源替换(过滤器_替换资源_数据 / 取消替换资源) ===
+        否则 (方法名 == "browser_vip_filter_replace_data")
+        {
+            变量 frAction <类型 = 文本型>
+            frAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (frAction == "")
+            {
+                frAction = "set"
+            }
+            变量 frURL <类型 = 文本型>
+            frURL = MCP命令服务器.yyjson取文本 (参数JSON, "url")
+            变量 frVIP <类型 = 类_FBrowserVIP_控制器>
+            frVIP = MCP命令服务器.取VIP控制器 ()
+            如果 (frVIP.是否为空 ())
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
+            }
+            如果 (frAction == "clear")
+            {
+                如果 (frURL == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "clear 需要 url(与之前设置的目标地址一一对应)"))
+                }
+                frVIP.过滤器_取消替换资源 (frURL)
+                返回 (MCP_响应构建.命令成功 (命令ID, "已取消该地址的整体资源替换: " + frURL))
+            }
+            如果 (frAction != "set")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "未知 action: " + frAction + " | 支持 set/clear"))
+            }
+            变量 frBody <类型 = 文本型>
+            frBody = MCP命令服务器.yyjson取文本 (参数JSON, "body")
+            变量 frBase64 <类型 = 文本型>
+            frBase64 = MCP命令服务器.yyjson取文本 (参数JSON, "body_base64")
+            如果 (frURL == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "set 需要 url(目标资源完整地址)"))
+            }
+            如果 (frBody == "" && frBase64 == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "set 需要 body(替换内容文本, UTF-8) 或 body_base64(二进制内容)"))
+            }
+            变量 fr字节 <类型 = 字节集类>
+            如果 (frBase64 != "")
+            {
+                变量 fr解码 <类型 = 类_FBrowser_字节集>
+                fr解码 = FBrowser_Parser_Base64解码 (frBase64)
+                如果 (fr解码.是否为空 () || fr解码.取大小 () == 0)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "body_base64 解码失败或为空"))
+                }
+                fr字节 = fr解码.取字节集 ()
+            }
+            否则
+            {
+                fr字节 = 文本到UTF8 (frBody, 假)
+            }
+            变量 frMatch <类型 = 整数>
+            frMatch = MCP命令服务器.yyjson取整数 (参数JSON, "match")
+            如果 (frMatch < 0 || frMatch > 4)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "match 需在 0..4 | 0=完全匹配(默认) 1=模糊 2=头部模糊(尾同) 3=尾部模糊(头同) 4=正则"))
+            }
+            变量 frMime <类型 = 文本型>
+            frMime = MCP命令服务器.yyjson取文本 (参数JSON, "mime_type")
+            变量 fr头 <类型 = FBrowser_双文本数组>
+            frVIP.过滤器_替换资源_数据 (frMatch, frURL, frMime, fr头, fr字节)
+            返回 (MCP_响应构建.命令成功 (命令ID, "整体资源替换已设置: " + frURL + " (" + 到文本 (取字节集长度 (fr字节)) + " 字节) | 诚实边界: 类库无读取接口, 无法回读; 对**设置之后加载**的目标资源生效(刷新/重新导航后页面侧回读验证); 若 浏览器_获取资源处理器 事件返回真自定义资源则不生效 | 取消: action=clear {url}"))
+        }
+        // === VIP 响应过滤器: 整体资源替换·本地文件版(过滤器_替换资源_文件 / 取消替换资源) ===
+        // 与 替换资源_数据 同族, 替换内容来自本地文件; 路径经 验证安全路径 拦截遍历(../)攻击。
+        否则 (方法名 == "browser_vip_filter_replace_file")
+        {
+            变量 ffAction <类型 = 文本型>
+            ffAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (ffAction == "")
+            {
+                ffAction = "set"
+            }
+            变量 ffURL <类型 = 文本型>
+            ffURL = MCP命令服务器.yyjson取文本 (参数JSON, "url")
+            变量 ffFile <类型 = 文本型>
+            ffFile = MCP命令服务器.yyjson取文本 (参数JSON, "file")
+            变量 ffVIP <类型 = 类_FBrowserVIP_控制器>
+            ffVIP = MCP命令服务器.取VIP控制器 ()
+            如果 (ffVIP.是否为空 ())
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
+            }
+            如果 (ffAction == "clear")
+            {
+                如果 (ffURL == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "clear 需要 url(与之前设置的目标地址一一对应)"))
+                }
+                ffVIP.过滤器_取消替换资源 (ffURL)
+                返回 (MCP_响应构建.命令成功 (命令ID, "已取消该地址的整体资源替换: " + ffURL))
+            }
+            如果 (ffAction != "set")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "未知 action: " + ffAction + " | 支持 set/clear"))
+            }
+            如果 (ffURL == "" || ffFile == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "set 需要 url 与 file(本地替换文件的完整路径)"))
+            }
+            如果 (MCP命令服务器.验证安全路径 (ffFile, 假) == 假)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "路径不允许(含路径遍历): " + ffFile))
+            }
+            变量 ffMatch <类型 = 整数>
+            ffMatch = MCP命令服务器.yyjson取整数 (参数JSON, "match")
+            如果 (ffMatch < 0 || ffMatch > 4)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "match 需在 0..4 | 0=完全匹配(默认) 1=模糊 2=头部模糊(尾同) 3=尾部模糊(头同) 4=正则"))
+            }
+            变量 ffMime <类型 = 文本型>
+            ffMime = MCP命令服务器.yyjson取文本 (参数JSON, "mime_type")
+            变量 ff头2 <类型 = FBrowser_双文本数组>
+            ffVIP.过滤器_替换资源_文件 (ffMatch, ffURL, ffMime, ff头2, ffFile)
+            返回 (MCP_响应构建.命令成功 (命令ID, "整体资源替换已设置(文件): " + ffURL + " ← " + ffFile + " | 诚实边界: 类库无读取接口, 无法回读; 对**设置之后加载**的目标资源生效(刷新/重新导航后页面侧回读验证); 文件在请求时由内核读取, 请在替换期间保持文件存在 | 取消: action=clear {url}"))
         }
         否则 (方法名 == "browser_vip_get_js_env_ids")
         {
@@ -220,16 +535,38 @@
                 {
                     变量 ids <类型 = 类_FBrowser_列表值>
                     ids = vip_ctrl.高级_取当前环境ID清单 ()
-                    // 修复: ids 原为二次转义的JSON字符串, 客户端按数组解析失败; 改为真JSON数组
-                    变量 idsArr <类型 = YYJSON数组类>
-                    idsArr.创建自文本数据 (MCP命令服务器.取空文本数组 ())
+                    // 类库注释原文: 返回**文本列表值**, 值为环境ID文本数据; 官方例子(main14.wsv)逐项取文本值、
+                    // 需要整数时再 文本到整数 转换。原实现逐项取整数值 —— CEF 列表值分类型, 文本元素走取整数
+                    // 通道拿不到数值(实测回包 ids 全 0 的静默错误)。故: ids_text 逐项取文本值(原文照发, 权威),
+                    // ids_int 尽力转整数(供 context_id 直用), 并如实说明两者关系。
+                    变量 idsTextArr <类型 = YYJSON数组类>
+                    idsTextArr.创建自文本数据 (MCP命令服务器.取空文本数组 ())
+                    变量 idsIntArr <类型 = YYJSON数组类>
+                    idsIntArr.创建自文本数据 (MCP命令服务器.取空文本数组 ())
                     变量 idsCount <类型 = 整数 值 = 0>
                     如果 (ids.是否为空 () == 假)
                     {
                         idsCount = ids.取大小 ()
                         计次循环 (idsCount)
                         {
-                            idsArr.加入整数成员 (ids.取整数值 (取循环索引 ()))
+                            变量 一项文本 <类型 = 文本型>
+                            一项文本 = ids.取文本值 (取循环索引 ())
+                            idsTextArr.加入文本成员 (一项文本)
+                            变量 一项整数 <类型 = 整数>
+                            一项整数 = 文本到整数 (一项文本)
+                            如果 (一项整数 == 0)
+                            {
+                                // 实测: 清单元素是**上下文对象 JSON 文本**, 整数环境ID在 context.id 成员里
+                                // (顶层只有 context 键); 纯文本转整数拿不到, 需解析 JSON 两级取 id。
+                                变量 一项对象 <类型 = YYJSON只读对象类>
+                                如果 (一项对象.创建自文本 (一项文本))
+                                {
+                                    变量 上下文成员 <类型 = YYJSON只读对象类>
+                                    上下文成员 = MCP命令服务器.yyjson取对象成员 (一项对象, "context")
+                                    一项整数 = MCP命令服务器.yyjson取整数 (上下文成员, "id")
+                                }
+                            }
+                            idsIntArr.加入整数成员 (一项整数)
                         }
                     }
                     // 输出完整ID清单(供 browser_vip_execute_js_context 使用), 空清单是合法状态
@@ -237,7 +574,9 @@
                     idsOut.创建自文本 ("{}")
                     idsOut.加入逻辑值成员 ("success", 真)
                     idsOut.加入整数成员 ("count", idsCount)
-                    idsOut.加入数组成员 ("ids", idsArr)
+                    idsOut.加入数组成员 ("ids_text", idsTextArr)
+                    idsOut.加入数组成员 ("ids_int", idsIntArr)
+                    idsOut.加入文本成员 ("note", "类库返回文本列表值: ids_text 为权威原文(实测每项是上下文对象JSON文本, 含 id/frameId/uniqueId, context_id 与 frame_id 都取自它); ids_int 为尽力转整数(纯数字直转, 对象JSON取 id 成员, 其余为 0) | 清单需先 browser_vip_enable_js_env 启用执行环境才有效, 未启用时空清单是合法状态")
                     返回 (MCP_响应构建.命令成功_原始JSON (命令ID, idsOut.到可读文本 (YYJSON格式化选项.压缩)))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
@@ -314,6 +653,161 @@
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
         }
+        否则 (方法名 == "browser_fingerprint_languages")
+        {
+            变量 langReset <类型 = 逻辑型>
+            langReset = MCP命令服务器.yyjson取逻辑_默认 (参数JSON, "reset", 假)
+            变量 langText <类型 = 文本型>
+            langText = MCP命令服务器.yyjson取文本 (参数JSON, "languages")
+            如果 (langReset == 假 && langText == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "languages 不能为空, 例: zh-CN,zh,en | 恢复默认请传 reset:true"))
+            }
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    如果 (langReset)
+                    {
+                        // 类库无单项复位API(仅 清理数据 为全量清除): 传空文本交回库内部默认
+                        vip_ctrl.指纹_虚拟Languages ("")
+                        返回 (MCP_响应构建.响应_需要刷新 (命令ID, "语言指纹已恢复默认(传空文本) | 类库无单项复位API, 空文本由库内部按默认处理; 彻底复位请用 browser_fingerprint action=clear"))
+                    }
+                    vip_ctrl.指纹_虚拟Languages (langText)
+                    返回 (MCP_响应构建.响应_需要刷新 (命令ID, "已设置语言: " + langText))
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+        }
+        否则 (方法名 == "browser_fingerprint_webgl_vendor")
+        {
+            变量 glVendor <类型 = 文本型>
+            glVendor = MCP命令服务器.yyjson取文本 (参数JSON, "vendor")
+            如果 (glVendor == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "vendor 不能为空, 例: Google Inc. (NVIDIA)"))
+            }
+            变量 glRenderer <类型 = 文本型>
+            glRenderer = MCP命令服务器.yyjson取文本 (参数JSON, "renderer")
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    // 类库将 vendor 与 renderer 拆为两个独立API (见 Core 的 set_batch 既有调用)
+                    vip_ctrl.指纹_虚拟Webglvendor (glVendor)
+                    如果 (glRenderer != "")
+                    {
+                        vip_ctrl.指纹_虚拟Webglrenderer (glRenderer)
+                        返回 (MCP_响应构建.响应_需要刷新 (命令ID, "WebGL vendor已设置: " + glVendor + " | renderer已设置: " + glRenderer))
+                    }
+                    返回 (MCP_响应构建.响应_需要刷新 (命令ID, "WebGL vendor已设置: " + glVendor + " | renderer 未提供, 由库内部决定"))
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+        }
+        否则 (方法名 == "browser_font_randomize")
+        {
+            变量 frAction <类型 = 文本型>
+            frAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (frAction == "")
+            {
+                frAction = "random"
+            }
+            如果 (frAction != "random" && frAction != "reset")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "action 只支持 random/reset"))
+            }
+            变量 frCount <类型 = 整数>
+            frCount = MCP命令服务器.yyjson取整数 (参数JSON, "count")
+            变量 frSeed <类型 = 整数>
+            frSeed = MCP命令服务器.yyjson取整数 (参数JSON, "seed")
+            如果 (frCount < 0)
+            {
+                frCount = 0
+            }
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 () == 假)
+            {
+                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                vip_ctrl = browser.取VIP控制器 ()
+                如果 (vip_ctrl.是否为空 () == 假)
+                {
+                    如果 (frAction == "reset")
+                    {
+                        // 类库无字体单项复位API: 字体清单置空 + 偏移归零 = 交回库默认枚举
+                        vip_ctrl.指纹_虚拟CSS字体指纹 ("", 0, 0)
+                        vip_ctrl.指纹_虚拟Canvas字体指纹 (0)
+                        返回 (MCP_响应构建.响应_需要刷新 (命令ID, "字体随机化已复位: 字体清单置空 + 宽高偏移归零 + Canvas字体度量归零 | 类库无字体单项复位API, 空清单由库内部按默认处理; 彻底复位请用 browser_fingerprint action=clear"))
+                    }
+                    // seed 非0 时固定随机序列, 便于复现同一套字体指纹
+                    如果 (frSeed != 0)
+                    {
+                        置随机数种子 (frSeed)
+                    }
+                    变量 frFonts <类型 = 文本型>
+                    frFonts = ""
+                    如果 (frCount > 0)
+                    {
+                        // 候选字体池: 逗号分隔文本, 与 browser_vip_fingerprint_font 的字体清单同形
+                        变量 frPool <类型 = 文本数组类>
+                        分割文本 ("Arial,Helvetica,Times New Roman,Courier New,Georgia,Verdana,Tahoma,Trebuchet MS,Calibri,Cambria,Consolas,Segoe UI,Microsoft YaHei,SimSun,SimHei,KaiTi,FangSong,MS Gothic,Meiryo,Malgun Gothic", ",", frPool, 真, 真)
+                        变量 fr剩余 <类型 = 文本数组类>
+                        计次循环 (frPool.取成员数 ())
+                        {
+                            fr剩余.加入成员 (frPool.取成员 (取循环索引 ()))
+                        }
+                        如果 (frCount > fr剩余.取成员数 ())
+                        {
+                            frCount = fr剩余.取成员数 ()
+                        }
+                        计次循环 (frCount)
+                        {
+                            变量 frPick <类型 = 整数>
+                            frPick = 取随机数 (0, fr剩余.取成员数 () - 1)
+                            如果 (frFonts != "")
+                            {
+                                frFonts = frFonts + ","
+                            }
+                            frFonts = frFonts + fr剩余.取成员 (frPick)
+                            // 文本数组类无置成员方法, 按既有做法剔除后重建 (保证不重复抽取同一字体)
+                            变量 fr新池 <类型 = 文本数组类>
+                            计次循环 (fr剩余.取成员数 ())
+                            {
+                                如果 (取循环索引 () != frPick)
+                                {
+                                    fr新池.加入成员 (fr剩余.取成员 (取循环索引 ()))
+                                }
+                            }
+                            fr剩余 = fr新池
+                        }
+                    }
+                    // 宽/高偏移量小幅随机 (单位同 browser_vip_fingerprint_font 的 w_offset/h_offset)
+                    变量 frW <类型 = 整数>
+                    frW = 取随机数 (-2, 2)
+                    变量 frH <类型 = 整数>
+                    frH = 取随机数 (-2, 2)
+                    // Canvas字体度量噪点: 复用 browser_vip_fingerprint_canvas_font 的调用形态
+                    变量 frCanvas <类型 = 小数>
+                    frCanvas = 取随机小数 (-0.5, 0.5)
+                    vip_ctrl.指纹_虚拟CSS字体指纹 (frFonts, frW, frH)
+                    vip_ctrl.指纹_虚拟Canvas字体指纹 (frCanvas)
+                    返回 (MCP_响应构建.响应_需要刷新 (命令ID, "字体枚举已随机化: count=" + 到文本 (frCount) + " | 宽偏移=" + 到文本 (frW) + " | 高偏移=" + 到文本 (frH) + " | Canvas字体度量噪点=" + 到文本 (frCanvas) + " | seed=" + 到文本 (frSeed) + " | 字体清单: " + 选择 (frFonts == "", "(空: 用库默认)", frFonts)))
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+        }
         // === 指纹补充: Cookie/Java/Online ===
         否则 (方法名 == "browser_fingerprint_cookie_enabled")
         {
@@ -359,6 +853,11 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
+                    // value 不能省略: 省略等同于把 navigator.onLine 伪造成 false
+                    如果 (MCP命令服务器.参数键存在 (参数JSON, "value") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "value 不能省略 | 省略等同于把 navigator.onLine 伪造成 false; 请显式传 true 或 false"))
+                    }
                     vip_ctrl.指纹_虚拟OnLine (MCP命令服务器.yyjson取逻辑 (参数JSON, "value"))
                     返回 (MCP_响应构建.响应_需要刷新 (命令ID, "OnLine指纹已设置"))
                 }
@@ -568,8 +1067,20 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    vip_ctrl.高级鼠标_按下 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
-                    返回 (MCP_响应构建.命令成功 (命令ID, "VIP鼠标按下"))
+                    // x/y 必填: 缺参会退化成在 (0,0) 按下并报成功
+                    如果 (MCP命令服务器.参数键存在 (参数JSON, "x") == 假 || MCP命令服务器.参数键存在 (参数JSON, "y") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "必须同时提供 x 与 y (整数坐标) | 缺省会退化成在 (0,0) 按下, 故拒绝执行"))
+                    }
+                    // 按键类型(类库第3参): 0左/1中/2右 —— 原先不传 ⇒ 按下的**永远是左键**
+                    变量 mp按钮 <类型 = 整数>
+                    mp按钮 = MCP命令服务器.yyjson取整数 (参数JSON, "button")
+                    如果 (mp按钮 < 0 || mp按钮 > 2)
+                    {
+                        mp按钮 = 0
+                    }
+                    vip_ctrl.高级鼠标_按下 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"), mp按钮)
+                    返回 (MCP_响应构建.命令成功 (命令ID, "VIP鼠标按下 button=" + 到文本 (mp按钮)))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
             }
@@ -585,8 +1096,18 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
-                    vip_ctrl.高级鼠标_放开 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
-                    返回 (MCP_响应构建.命令成功 (命令ID, "VIP鼠标放开"))
+                    如果 (MCP命令服务器.参数键存在 (参数JSON, "x") == 假 || MCP命令服务器.参数键存在 (参数JSON, "y") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "必须同时提供 x 与 y (整数坐标) | 缺省会退化成在 (0,0) 放开, 故拒绝执行"))
+                    }
+                    变量 mr按钮 <类型 = 整数>
+                    mr按钮 = MCP命令服务器.yyjson取整数 (参数JSON, "button")
+                    如果 (mr按钮 < 0 || mr按钮 > 2)
+                    {
+                        mr按钮 = 0
+                    }
+                    vip_ctrl.高级鼠标_放开 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"), mr按钮)
+                    返回 (MCP_响应构建.命令成功 (命令ID, "VIP鼠标放开 button=" + 到文本 (mr按钮)))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
             }
@@ -602,14 +1123,29 @@
                 vip_ctrl = browser.取VIP控制器 ()
                 如果 (vip_ctrl.是否为空 () == 假)
                 {
+                    // x/y 必填(省略会退化为在 (0,0) 滚动); delta_x/delta_y 至少提供一个(否则滚动 0 像素)
+                    如果 (MCP命令服务器.参数键存在 (参数JSON, "x") == 假 || MCP命令服务器.参数键存在 (参数JSON, "y") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "必须同时提供 x 与 y (整数坐标) | 缺省会退化成在 (0,0) 滚动"))
+                    }
+                    如果 (MCP命令服务器.参数键存在 (参数JSON, "delta_y") == 假 && MCP命令服务器.参数键存在 (参数JSON, "delta_x") == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "必须提供 delta_y 或 delta_x (滚动量, 正值向下/向右) | 省略会造成滚动 0 像素却报成功"))
+                    }
+                    // 零前置(实测): 内核注入的滚动效果受**窗口前台状态**影响 —— 默认流程下实测出现过
+                    // "回包成功但页面侧 scrollY 不动"; 先强制显示窗口(显示隐藏窗口(真), 实测 visible_before
+                    // 已为真时该调用仍能修正前台状态)再注入, 之后页面侧 scrollY 与 delta 一致。
+                    browser.显示隐藏窗口 (真)
                     vip_ctrl.高级鼠标_滚轮滚动 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"), MCP命令服务器.yyjson取整数 (参数JSON, "delta_x"), MCP命令服务器.yyjson取整数 (参数JSON, "delta_y"))
-                    返回 (MCP_响应构建.命令成功 (命令ID, "VIP鼠标滚轮"))
+                    // 诚实边界(实测): 本工具每次调用都会毒化本会话 CDP 通道(警告见工具描述), 故**无法在本工具内
+                    // 做页面侧回读确认**; 需要可验证的滚动请用 CDP 版 browser_mouse_wheel(实测 0.03s 且不毒化)。
+                    返回 (MCP_响应构建.命令成功 (命令ID, "VIP鼠标滚轮(内核注入) | 诚实边界: 本工具每次调用都会破坏本会话 CDP 通道(需重启恢复), 且无法在本工具内回读确认滚动效果 | 需要可验证、不毒化的滚动请用 CDP 版 browser_mouse_wheel(实测 0.03s, 页面侧 scrollY 可回读一致)"))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
         }
-        // === VIP 指纹补充 (v1.7) ===
+        // === VIP 指纹补充 ===
         否则 (方法名 == "browser_vip_fingerprint_webrtc")
         {
             变量 vip1 <类型 = 类_FBrowserVIP_控制器>
@@ -674,6 +1210,17 @@
                 变量 tls_max_enum <类型 = TLS版本>
                 tls_min_int = MCP命令服务器.yyjson取整数 (参数JSON, "tls_min")
                 tls_max_int = MCP命令服务器.yyjson取整数 (参数JSON, "tls_max")
+                // ★ 实测缺陷修正: 未知 tls 值原本被 MCP_服务器工具.整数到TLS版本 静默回退成"不限制(TLS版本.空)",
+                //   而本工具照样回 success ⇒ 调用方以为"已按指定版本限制", 实际根本没限制(**静默假成功**)。
+                //   故这里先做显式校验: 只接受 0(不限制) 与 769/790/791/792, 其它值**明确拒绝**并列出支持值。
+                如果 (tls_min_int != 0 && tls_min_int != MCP_常量.TLS指纹_1_0 && tls_min_int != MCP_常量.TLS指纹_1_1 && tls_min_int != MCP_常量.TLS指纹_1_2 && tls_min_int != MCP_常量.TLS指纹_1_3)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "非法 tls_min: " + 到文本 (tls_min_int) + " | 支持: 0(不限制) / 769(TLS1.0) / 790(TLS1.1) / 791(TLS1.2) / 792(TLS1.3); 未知值不会被静默忽略 —— 否则会出现「回 success 但其实没限制」的假成功"))
+                }
+                如果 (tls_max_int != 0 && tls_max_int != MCP_常量.TLS指纹_1_0 && tls_max_int != MCP_常量.TLS指纹_1_1 && tls_max_int != MCP_常量.TLS指纹_1_2 && tls_max_int != MCP_常量.TLS指纹_1_3)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "非法 tls_max: " + 到文本 (tls_max_int) + " | 支持: 0(不限制) / 769(TLS1.0) / 790(TLS1.1) / 791(TLS1.2) / 792(TLS1.3); 未知值不会被静默忽略"))
+                }
                 // 整数→TLS版本枚举映射 (使用 MCP_服务器工具 统一方法)
                 tls_min_enum = MCP_服务器工具.整数到TLS版本 (tls_min_int)
                 tls_max_enum = MCP_服务器工具.整数到TLS版本 (tls_max_int)
@@ -726,6 +1273,19 @@
             {
                 vipFont.指纹_虚拟CSS字体指纹 (MCP命令服务器.yyjson取文本 (参数JSON, "font_list"), MCP命令服务器.yyjson取整数 (参数JSON, "w_offset"), MCP命令服务器.yyjson取整数 (参数JSON, "h_offset"))
                 返回 (MCP_响应构建.响应_需要刷新 (命令ID, "CSS字体指纹已设置"))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
+        }
+        否则 (方法名 == "browser_vip_fingerprint_canvas_font")
+        {
+            // value 为小数; 影响 Canvas 2D measureText/字体度量结果,
+            // 与 Canvas 随机/定值噪点、CSS字体指纹是不同维度(反指纹检测常单独校验)。
+            变量 vipCanvasFont <类型 = 类_FBrowserVIP_控制器>
+            vipCanvasFont = MCP命令服务器.取VIP控制器 ()
+            如果 (vipCanvasFont.是否为空 () == 假)
+            {
+                vipCanvasFont.指纹_虚拟Canvas字体指纹 (MCP命令服务器.yyjson取小数 (参数JSON, "value"))
+                返回 (MCP_响应构建.响应_需要刷新 (命令ID, "Canvas字体指纹已设置 | 设置已应用! 注意: 指纹/代理/内核变更需刷新页面生效"))
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
         }
@@ -801,25 +1361,86 @@
             vipMD = MCP命令服务器.取VIP控制器 ()
             如果 (vipMD.是否为空 () == 假)
             {
+                如果 (MCP命令服务器.参数键存在 (参数JSON, "type") == 假)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "缺少参数 type | 0=清空(不需要 devices), 1=添加设备(需 devices), 2=覆盖设备(需 devices) | type 无默认值: 省略即报错, 以免静默清空已设设备"))
+                }
+                变量 medType <类型 = 整数>
+                medType = MCP命令服务器.yyjson取整数 (参数JSON, "type")
+                如果 (medType < 0 || medType > 2)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "参数 type 无效(" + 到文本 (medType) + ") | 只支持 0清空/1添加/2覆盖"))
+                }
                 变量 medTarget <类型 = 文本型>
                 medTarget = MCP命令服务器.yyjson取文本 (参数JSON, "target")
-                如果 (medTarget == "audio_input")
-                {
-                    vipMD.指纹_虚拟AudioInput设备 (MCP命令服务器.yyjson取整数 (参数JSON, "type"))
-                }
-                否则 (medTarget == "audio_output")
-                {
-                    vipMD.指纹_虚拟AudioOutput设备 (MCP命令服务器.yyjson取整数 (参数JSON, "type"))
-                }
-                否则 (medTarget == "video_input")
-                {
-                    vipMD.指纹_虚拟VideoInput设备 (MCP命令服务器.yyjson取整数 (参数JSON, "type"))
-                }
-                否则
+                如果 (medTarget != "audio_input" && medTarget != "audio_output" && medTarget != "video_input")
                 {
                     返回 (MCP_响应构建.命令失败 (命令ID, "未知target: " + medTarget + " | 支持 audio_input/audio_output/video_input"))
                 }
-                返回 (MCP_响应构建.响应_需要刷新 (命令ID, "媒体设备指纹已设置"))
+                变量 medDevices <类型 = FBrowser_媒体硬件数组>
+                变量 medCount <类型 = 整数>
+                medCount = 0
+                如果 (medType != 0)
+                {
+                    变量 medDevicesText <类型 = 文本型>
+                    medDevicesText = MCP命令服务器.yyjson取JSON文本 (参数JSON, "devices")
+                    变量 medArr <类型 = YYJSON只读数组类>
+                    medArr = MCP命令服务器.取JSON数组自文本 (medDevicesText, "devices")
+                    如果 (medArr.是否为空对象 () || medArr.取成员数 () == 0)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "type=" + 到文本 (medType) + " 必须同时给 devices 设备清单(非空JSON数组) | 只传 type 时内核收到的清单为空, 设置不会产生任何效果(旧版在这里返回假成功) | 每项字段: device_id(驱动ID, 驱动属性里查到的硬件ID; 特殊值 default/communications), label(硬件名, 可选), group_id(分组ID, 可选)"))
+                    }
+                    计次循环 ((整数)medArr.取成员数 ())
+                    {
+                        变量 medItem <类型 = YYJSON只读对象类>
+                        medItem = medArr.取成员 (取循环索引 ())
+                        变量 medDeviceID <类型 = 文本型>
+                        medDeviceID = MCP命令服务器.yyjson取文本 (medItem, "device_id")
+                        如果 (medDeviceID == "")
+                        {
+                            medDeviceID = MCP命令服务器.yyjson取文本 (medItem, "driver_id")
+                        }
+                        如果 (medDeviceID == "")
+                        {
+                            medDeviceID = MCP命令服务器.yyjson取文本 (medItem, "id")
+                        }
+                        如果 (medDeviceID == "")
+                        {
+                            返回 (MCP_响应构建.命令失败 (命令ID, "devices[" + 到文本 (取循环索引 ()) + "] 缺少 device_id(驱动ID) | 类库按 驱动ID/硬件名/分组ID 三元组描述设备, 驱动ID 不能为空(别名 driver_id / id 亦可)"))
+                        }
+                        变量 medDeviceLabel <类型 = 文本型>
+                        medDeviceLabel = MCP命令服务器.yyjson取文本 (medItem, "label")
+                        如果 (medDeviceLabel == "")
+                        {
+                            medDeviceLabel = MCP命令服务器.yyjson取文本 (medItem, "name")
+                        }
+                        变量 medDeviceGroup <类型 = 文本型>
+                        medDeviceGroup = MCP命令服务器.yyjson取文本 (medItem, "group_id")
+                        如果 (medDeviceGroup == "")
+                        {
+                            medDeviceGroup = MCP命令服务器.yyjson取文本 (medItem, "group")
+                        }
+                        medDevices.加入数据 (medDeviceID, medDeviceLabel, medDeviceGroup)
+                        medCount = medCount + 1
+                    }
+                }
+                如果 (medTarget == "audio_input")
+                {
+                    vipMD.指纹_虚拟AudioInput设备 (medType, medDevices)
+                }
+                否则 (medTarget == "audio_output")
+                {
+                    vipMD.指纹_虚拟AudioOutput设备 (medType, medDevices)
+                }
+                否则
+                {
+                    vipMD.指纹_虚拟VideoInput设备 (medType, medDevices)
+                }
+                如果 (medType == 0)
+                {
+                    返回 (MCP_响应构建.响应_需要刷新 (命令ID, "媒体设备指纹已清空: target=" + medTarget + " | 类库原文警告: 虚拟媒体设备可能造成浏览器声音或麦克风异常, 无法获取真实设备"))
+                }
+                返回 (MCP_响应构建.响应_需要刷新 (命令ID, "媒体设备指纹已设置: target=" + medTarget + ", type=" + 到文本 (medType) + ", 设备数=" + 到文本 (medCount) + " | 类库原文警告: 虚拟媒体设备可能造成浏览器声音或麦克风异常, 无法获取真实设备"))
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
         }
@@ -1079,32 +1700,61 @@
                     {
                         返回 (MCP_响应构建.命令失败 (命令ID, "首选项设置失败: " + 错误文本))
                     }
-                    返回 (MCP_响应构建.命令成功 (命令ID, "首选项 " + 名称 + " 已设置"))
+                    // 诚实边界(本机对照实测): ① 类库无读取接口, 无法回读核对; ② 字体类首选项
+                    // (default_font_size / minimum_font_size)对既有与新建浏览器均无页面侧效果(新导航/异源/新建
+                    // 浏览器三臂全 16px); ③ 未知首选项名(如 no.such.pref.xyz)会被存储但不生效且**不报错**
+                    // (CEF SetPreference 语义)。故如实声明"已写入存储", 不做行为保证 —— 需要行为级效果
+                    // 请改用对应专有工具(如代理用 browser_set_proxy, 缓存用 browser_clear_cache 等)。
+                    返回 (MCP_响应构建.命令成功 (命令ID, "首选项 " + 名称 + " 已写入请求环境首选项存储 | 诚实边界(本机实测): 无读取接口无法回读; 字体类首选项对既有/新建浏览器均无页面侧效果; 未知首选项名不报错但也不生效 | 效果因首选项与本机内核而异, 请勿当作行为保证"))
                 }
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
         }
-        // === VIP 插件管理 (v1.7) ===
+        // === VIP 插件管理 ===
         否则 (方法名 == "browser_vip_load_extension")
         {
             变量 extCRX <类型 = 文本型>
             extCRX = MCP命令服务器.yyjson取文本 (参数JSON, "crx_path")
-            如果 (extCRX != "")
+            变量 ext目录 <类型 = 文本型>
+            ext目录 = MCP命令服务器.yyjson取文本 (参数JSON, "path")
+            如果 (extCRX == "" && ext目录 == "")
             {
-                如果 (MCP命令服务器.验证安全路径 (extCRX) == 假)
+                返回 (MCP_响应构建.命令失败 (命令ID, "需要 path(已解压插件目录) 或 crx_path(.crx 插件包) 之一 | 类库原文: 载入解压目录效率高于 CRX 安装, 且 CRX 会概率性出现「页面已打开但插件未装完」(装完刷新即生效)"))
+            }
+            // 插件高级功能: 类库要求"必须在加载插件前启用", 否则插件 content_scripts.js 不执行且**无任何报错**。
+            // 进程启动时(main.wsv)已开启一次; 这里再幂等确保, 并如实回报开关状态。
+            如果 (MCP命令服务器.VIP_插件高级功能已启用 == 假)
+            {
+                FBrowser_VIP功能_启用插件高级功能 ()
+                MCP命令服务器.VIP_插件高级功能已启用 = 真
+            }
+            如果 (ext目录 != "")
+            {
+                如果 (MCP命令服务器.验证安全路径 (ext目录) == 假)
                 {
-                    返回 (MCP_响应构建.命令失败 (命令ID, "路径不允许: " + extCRX + " | 仅允许运行目录内及无 .. 的路径"))
+                    返回 (MCP_响应构建.命令失败 (命令ID, "路径不允许: " + ext目录 + " | 仅允许运行目录内及无 .. 的路径"))
                 }
-                变量 reqEnv <类型 = 类_FBrowser_请求环境>
-                reqEnv = MCP命令服务器.取请求环境_安全 ()
-                如果 (reqEnv.是否为空 () == 假)
+                变量 reqEnvU <类型 = 类_FBrowser_请求环境>
+                reqEnvU = MCP命令服务器.取请求环境_安全 ()
+                如果 (reqEnvU.是否为空 () == 真)
                 {
-                    reqEnv.VIP_高级_安装CRX插件包 (extCRX)
-                    返回 (MCP_响应构建.命令成功 (命令ID, "CRX插件包已提交安装: " + extCRX))
+                    返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_请求环境不可用))
                 }
+                reqEnvU.VIP_高级_载入插件路径 (ext目录)
+                返回 (MCP_响应构建.命令成功 (命令ID, "已提交载入插件目录: " + ext目录 + " | mode=unpacked | advanced_enabled=" + 选择 (MCP命令服务器.VIP_插件高级功能已启用, "true", "false") + " | 类库为异步载入, 若页面已打开请 browser_reload 后再验证 content_scripts 是否生效"))
+            }
+            如果 (MCP命令服务器.验证安全路径 (extCRX) == 假)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "路径不允许: " + extCRX + " | 仅允许运行目录内及无 .. 的路径"))
+            }
+            变量 reqEnv <类型 = 类_FBrowser_请求环境>
+            reqEnv = MCP命令服务器.取请求环境_安全 ()
+            如果 (reqEnv.是否为空 () == 真)
+            {
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_请求环境不可用))
             }
-            返回 (MCP_响应构建.命令失败 (命令ID, "需要crx_path参数"))
+            reqEnv.VIP_高级_安装CRX插件包 (extCRX)
+            返回 (MCP_响应构建.命令成功 (命令ID, "CRX插件包已提交安装: " + extCRX + " | mode=crx | advanced_enabled=" + 选择 (MCP命令服务器.VIP_插件高级功能已启用, "true", "false") + " | 类库原文: CRX 安装较慢, 可能页面已打开而插件未装完, 装完 browser_reload 即生效"))
         }
         否则 (方法名 == "browser_vip_unload_extension")
         {
@@ -1148,7 +1798,7 @@
             }
             返回 (MCP_响应构建.命令失败 (命令ID, "需要extension_id参数"))
         }
-        // === VIP 指定环境执行JS (v1.7) ===
+        // === VIP 指定环境执行JS ===
         否则 (方法名 == "browser_vip_execute_js_context")
         {
             变量 jsCode <类型 = 文本型>
@@ -1159,22 +1809,105 @@
                 vipCtrl = MCP命令服务器.取VIP控制器 ()
                 如果 (vipCtrl.是否为空 () == 假)
                 {
+                    变量 vipTarget <类型 = 文本型>
+                    vipTarget = MCP命令服务器.yyjson取文本 (参数JSON, "target")
                     变量 ctxID <类型 = 整数>
                     ctxID = MCP命令服务器.yyjson取整数 (参数JSON, "context_id")
                     变量 frmID <类型 = 文本型>
                     frmID = MCP命令服务器.yyjson取文本 (参数JSON, "frame_id")
+                    变量 frmIndex <类型 = 整数>
+                    frmIndex = MCP命令服务器.yyjson取整数 (参数JSON, "frame_index")
+                    // 六个执行参数(分诊确认原实现全部写死): 超时/静默/用户手势/禁用断点/repl模式/命令行API。
+                    // 语义: repl=true 才允许顶层 await 与重复 let; user_gesture 影响需用户手势的 API(clipboard/全屏等);
+                    // silent=true 异常不回报; disable_breaks 决定执行会不会被自己的插装断点拦停;
+                    // 超时默认 60000ms(与既有一致)。
+                    变量 vip超时 <类型 = 整数>
+                    vip超时 = MCP命令服务器.yyjson取整数 (参数JSON, "timeout_ms")
+                    如果 (vip超时 <= 0)
+                    {
+                        vip超时 = 60000
+                    }
+                    变量 vip静默 <类型 = 逻辑型>
+                    vip静默 = MCP命令服务器.yyjson取逻辑_默认 (参数JSON, "silent", 假)
+                    变量 vip手势 <类型 = 逻辑型>
+                    vip手势 = MCP命令服务器.yyjson取逻辑_默认 (参数JSON, "user_gesture", 真)
+                    变量 vip断点 <类型 = 逻辑型>
+                    vip断点 = MCP命令服务器.yyjson取逻辑_默认 (参数JSON, "disable_breaks", 假)
+                    变量 vipRepl <类型 = 逻辑型>
+                    vipRepl = MCP命令服务器.yyjson取逻辑_默认 (参数JSON, "repl_mode", 假)
+                    变量 vip命令行API <类型 = 逻辑型>
+                    vip命令行API = MCP命令服务器.yyjson取逻辑_默认 (参数JSON, "include_command_line_api", 真)
+                    // 前置判断: 这些 VIP 方法需先"启用执行环境"才生效; 未启用时回调可能永不触发,
+                    // 调用方只会白等到超时且看不出原因 —— 故此处**明确失败并给指引**(可行动, 不静默)。
+                    如果 (vipTarget == "main" || vipTarget == "all_frames" || vipTarget == "frame_index")
+                    {
+                        如果 (MCP命令服务器.VIP_JS环境已启用 == 假)
+                        {
+                            返回 (MCP_响应构建.命令失败 (命令ID, "target=" + vipTarget + " 需要先启用 VIP JS 执行环境: 请先调 browser_vip_enable_js_env {enable:true, confirm:true} | ⚠ 实测启用后会破坏本会话 CDP 通道(CDP 优先工具会退化), 且需重启进程才能恢复 —— 建议只在确实需要时使用 | 另: browser_execute_js 走 CDP, 不需要该环境"))
+                        }
+                    }
                     变量 异步VIPJSID <类型 = 文本型>
                     异步VIPJSID = MCP命令服务器.生成异步任务ID ()
+                    如果 (vipTarget == "all_frames")
+                    {
+                        // 多帧: 用**累计式**回调(每帧一次, 覆盖式回调只会留最后一帧)
+                        变量 多帧回调 <类型 = 类_FBrowser_事件智能指针>
+                        多帧回调.创建 (类_MCP_VIP多帧回调)
+                        多帧回调.取执行类 (类_MCP_VIP多帧回调).任务ID = 异步VIPJSID
+                        多帧回调.取执行类 (类_MCP_VIP多帧回调).帧计数 = 0
+                        多帧回调.取执行类 (类_MCP_VIP多帧回调).累计文本 = ""
+                        vipCtrl.高级_执行JS_全部框架 (jsCode, vip命令行API, vip静默, vip手势, vip超时, vip断点, vipRepl, 多帧回调)
+                        返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步VIPJSID, "JS已提交到**全部框架** | 每个框架回调一次, 结果为累计(frame_count/frames_text) | 是否跑完请对比 browser_get_frames 的帧数"))
+                    }
                     变量 VIPJS回调 <类型 = 类_FBrowser_事件智能指针>
                     VIPJS回调.创建 (类_MCP_VIP通用回调)
                     VIPJS回调.取执行类 (类_MCP_VIP通用回调).任务ID = 异步VIPJSID
+                    如果 (vipTarget == "main")
+                    {
+                        vipCtrl.高级_执行JS_主框架 (jsCode, vip命令行API, vip静默, vip手势, vip超时, vip断点, vipRepl, VIPJS回调)
+                        返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步VIPJSID, "JS已提交到**主框架**(顶级框架)"))
+                    }
+                    如果 (vipTarget == "frame_index")
+                    {
+                        如果 (frmIndex < 0)
+                        {
+                            返回 (MCP_响应构建.命令失败 (命令ID, "target=frame_index 需要 frame_index(从0开始, 0 一般为主框架)"))
+                        }
+                        vipCtrl.高级_执行JS_框架序号 (jsCode, frmIndex, vip命令行API, vip静默, vip手势, vip超时, vip断点, vipRepl, VIPJS回调)
+                        返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步VIPJSID, "JS已提交到框架序号 " + 到文本 (frmIndex)))
+                    }
                     如果 (frmID != "")
                     {
-                        vipCtrl.高级_执行JS_框架ID (jsCode, frmID, 真, 假, 真, MCP_常量.URL请求默认超时, 假, 假, VIPJS回调)
+                        vipCtrl.高级_执行JS_框架ID (jsCode, frmID, vip命令行API, vip静默, vip手势, vip超时, vip断点, vipRepl, VIPJS回调)
                     }
                     否则
                     {
-                        vipCtrl.高级_执行JS (jsCode, ctxID, 真, 假, 真, MCP_常量.URL请求默认超时, 假, 假, VIPJS回调)
+                        变量 执行环境ID <类型 = 整数>
+                        执行环境ID = ctxID
+                        如果 (执行环境ID <= 0)
+                        {
+                            // 零前置: 缺省 context_id 时自动取环境清单第一个上下文 id(实测清单是上下文对象JSON文本,
+                            // id 在 context.id; 不带 id 时类库报「VIP操作失败或返回空数据」这类不可行动错误)。
+                            变量 环境清单 <类型 = 类_FBrowser_列表值>
+                            环境清单 = vipCtrl.高级_取当前环境ID清单 ()
+                            如果 (环境清单.是否为空 () == 假 && 环境清单.取大小 () > 0)
+                            {
+                                变量 首环境文本 <类型 = 文本型>
+                                首环境文本 = 环境清单.取文本值 (0)
+                                变量 首环境对象 <类型 = YYJSON只读对象类>
+                                如果 (首环境对象.创建自文本 (首环境文本))
+                                {
+                                    变量 首上下文 <类型 = YYJSON只读对象类>
+                                    首上下文 = MCP命令服务器.yyjson取对象成员 (首环境对象, "context")
+                                    执行环境ID = MCP命令服务器.yyjson取整数 (首上下文, "id")
+                                }
+                            }
+                            如果 (执行环境ID <= 0)
+                            {
+                                返回 (MCP_响应构建.命令失败 (命令ID, "未给 context_id 且自动解析环境清单失败(清单为空或解析不到 id) | 请先 browser_vip_enable_js_env 启用执行环境, 再用 browser_vip_get_js_env_ids 取 ids_int 传入 context_id | 或改用 target=main"))
+                            }
+                        }
+                        vipCtrl.高级_执行JS (jsCode, 执行环境ID, vip命令行API, vip静默, vip手势, vip超时, vip断点, vipRepl, VIPJS回调)
                     }
                     返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步VIPJSID, "JS已提交到指定环境"))
                 }
@@ -1182,9 +1915,65 @@
             }
             返回 (MCP_响应构建.命令失败 (命令ID, "需要code参数"))
         }
-        // === VIP CDP DOM文档获取 (v1.7) ===
+        // === VIP CDP DOM文档获取 ===
         否则 (方法名 == "browser_vip_dom_get_document")
         {
+            变量 dDepth0 <类型 = 整数>
+            dDepth0 = MCP命令服务器.yyjson取整数 (参数JSON, "depth")
+            如果 (dDepth0 == 0)
+            {
+                dDepth0 = 3
+            }
+            如果 (dDepth0 > 10)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "depth 最大为10, 超过会导致性能问题 | 当前值: " + 到文本 (dDepth0)))
+            }
+            变量 dPierce0 <类型 = 逻辑型>
+            dPierce0 = MCP命令服务器.yyjson取逻辑_默认 (参数JSON, "pierce", 假)
+            如果 (dPierce0)
+            {
+                // ★ 安全闸门(三次独立运行实测): pierce=true 在**含 author shadow root 的页面**上会
+                //   "先正常返回、再让下一条 CDP 命令挂住" —— 也就是**延迟打死本会话的 CDP 命令通道**
+                //   (之后所有 CDP 类工具 30s 才靠原生回退返回, 需重启进程恢复)。
+                //   故先用**页面侧廉价探测**(不走 DOM 域, 因此安全)判断有没有影子树: 有就拒绝并给替代。
+                变量 d影子探测 <类型 = 文本型>
+                d影子探测 = MCP命令服务器.CDP执行JS并等待 ("(function(){try{var all=document.querySelectorAll('*');var n=Math.min(all.length,3000);for(var i=0;i<n;i++){if(all[i].shadowRoot)return 'YES'}return 'NO'}catch(e){return 'ERR'}})()", 8000, 真)
+                如果 (d影子探测 == "YES")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "pierce=true 在本页**被拒绝**: 页面含 author shadow root | 实测(三次一致): 本机对这种页面枚举影子树会**先正常返回、再让下一条 CDP 命令挂住**, 即**延迟打死本会话的 CDP 命令通道**(之后所有 CDP 类工具 30s 才返回, 需重启进程恢复) | 替代(安全): 用页面侧 JS 直接读影子树 —— browser_execute_js code=\"document.getElementById('宿主id').shadowRoot.querySelectorAll('*')\" 或对具体元素取 shadowRoot.innerHTML | 只读普通 DOM 仍可用: 本工具不带 pierce 的枚举实测安全(可重复 3 次)"))
+                }
+                如果 (d影子探测 == "ERR")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "pierce=true 的影子树探测失败(页面可能未就绪): 无法确认安全性故拒绝 | 先 browser_navigate / browser_wait what=load_end 让页面就绪, 或改用 browser_execute_js 读影子树"))
+                }
+            }
+            变量 dVia <类型 = 文本型>
+            dVia = MCP命令服务器.yyjson取文本 (参数JSON, "via")
+            如果 (dVia == "")
+            {
+                dVia = "cdp"
+            }
+            // ★ 默认走 CDP 的 DOM 域: 实测类库路线(`开发者DOM.启用("all")` + 枚举)会把**本会话的 CDP 命令通道打死**
+            //   (之后每条 CDP 命令 30s 才靠原生回退返回), 而 CDP 自身的 `DOM.getDocument` 完全无害,
+            //   回包形态与类库一致(`{"root":{...}}`), 故对调用方透明。
+            如果 (dVia == "cdp")
+            {
+                变量 dParams <类型 = 文本型>
+                dParams = "{\"depth\":" + 到文本 (dDepth0) + ",\"pierce\":" + 选择 (dPierce0, "true", "false") + "}"
+                变量 dCdp结果 <类型 = 文本型>
+                MCP命令服务器.执行CDP命令_带参数 (命令ID + "_gd", "DOM.getDocument", dParams)
+                dCdp结果 = MCP命令服务器.同步等待异步任务 (命令ID + "_gd", 15000)
+                如果 (MCP命令服务器.CDP同步结果是否成功 (dCdp结果))
+                {
+                    变量 d载荷 <类型 = 文本型>
+                    d载荷 = MCP命令服务器.取CDP载荷文本 (dCdp结果)
+                    如果 (d载荷 != "")
+                    {
+                        返回 (MCP_响应构建.命令成功_原始JSON (命令ID, d载荷))
+                    }
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, "CDP DOM.getDocument 失败: " + MCP命令服务器.取CDP同步结果错误 (dCdp结果) + " | 可显式改用 via:library(类库开发者DOM 路线; **实测会让本会话 CDP 命令通道失效**)"))
+            }
             变量 vipDom <类型 = 类_FBrowserVIP_开发者DOM>
             vipDom = MCP命令服务器.取开发者DOM_安全 ()
             如果 (vipDom.是否为空 () == 假)
@@ -1205,8 +1994,11 @@
                 变量 DOM回调 <类型 = 类_FBrowser_事件智能指针>
                 DOM回调.创建 (类_MCP_VIP通用回调)
                 DOM回调.取执行类 (类_MCP_VIP通用回调).任务ID = 异步DOMID
-                vipDom.枚举DOM (dDepth, 假, DOM回调)
-                返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步DOMID, "DOM文档已提交枚举, 通过mcp_result查询"))
+                // 穿透(pierce): 类库第 2 参; 原先**恒传假** ⇒ shadow DOM 内容枚举不到。改为可显式开启。
+                变量 dPierce <类型 = 逻辑型>
+                dPierce = MCP命令服务器.yyjson取逻辑_默认 (参数JSON, "pierce", 假)
+                vipDom.枚举DOM (dDepth, dPierce, DOM回调)
+                返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步DOMID, "DOM文档已提交枚举(经类库开发者DOM 路线), 通过mcp_result查询 | ⚠ 实测: 该路线会让本会话的 CDP 命令通道失效(之后 CDP 类工具退化为原生回退, 每次 10~35 秒且可能超时), 需重启进程恢复; 下次请用默认的 via:cdp"))
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
         }
@@ -1214,43 +2006,457 @@
         {
             变量 searchQuery <类型 = 文本型>
             searchQuery = MCP命令服务器.yyjson取文本 (参数JSON, "query")
-            如果 (searchQuery != "")
+            变量 sSearchID <类型 = 文本型>
+            sSearchID = MCP命令服务器.yyjson取文本 (参数JSON, "search_id")
+            如果 (searchQuery == "" && sSearchID == "")
             {
-                变量 vipDom2 <类型 = 类_FBrowserVIP_开发者DOM>
-                vipDom2 = MCP命令服务器.取开发者DOM_安全 ()
-                如果 (vipDom2.是否为空 () == 假)
+                返回 (MCP_响应构建.命令失败 (命令ID, "需要 query 或 search_id | query: 预查找并**立即取回**结果(单次调用完成, 推荐); search_id: 翻页取已预查找的结果(必须紧接着预查找使用, 中间不得再枚举 DOM)"))
+            }
+            // ★ 全走我方 CDP 通道(DOM 域), 不再碰类库开发者DOM —— 实测: 类库的 预查找文本 即使调用失败也会
+            //   **毒化本会话 CDP 通道**(之后每条 CDP 命令 30s 才返回, 需重启恢复), 且未先 启用 时报
+            //   「VIP操作失败或返回空数据」; 而经我方通道 DOM.enable → performSearch → getSearchResults 全程 0.03s 且通道健康。
+            //   本机 CEF 约束(实测): ① performSearch 前必须 DOM.enable; ② 搜索结果要拿到**真实 nodeId**,
+            //   必须先做一次 getDocument 填充节点映射(否则 nodeIds 全 0); ③ 每次 getDocument 都会重建映射并作废旧搜索会话。
+            如果 (MCP命令服务器.确保DOM域已启用 (命令ID) == 假)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "DOM 域启用失败(CDP DOM.enable 未成功) | 若本机浏览器不支持 DOM 域, 请改用 browser_dom_query / browser_execute_js 页面侧查找"))
+            }
+            如果 (sSearchID != "")
+            {
+                变量 sFrom <类型 = 整数>
+                sFrom = MCP命令服务器.yyjson取整数 (参数JSON, "from_index")
+                变量 sTo <类型 = 整数>
+                sTo = MCP命令服务器.yyjson取整数 (参数JSON, "to_index")
+                如果 (sFrom < 0)
                 {
-                    变量 sID <类型 = 文本型>
-                    sID = MCP命令服务器.yyjson取文本 (参数JSON, "search_id")
-                    如果 (sID != "")
+                    sFrom = 0
+                }
+                如果 (sTo <= 0)
+                {
+                    sTo = 100
+                }
+                如果 (sSearchID == MCP命令服务器.DOM上次搜索ID)
+                {
+                    如果 (MCP命令服务器.DOM上次搜索数量 == 0)
                     {
-                        变量 异步搜索ID <类型 = 文本型>
-                        异步搜索ID = MCP命令服务器.生成异步任务ID ()
-                        变量 搜索回调 <类型 = 类_FBrowser_事件智能指针>
-                        搜索回调.创建 (类_MCP_VIP通用回调)
-                        搜索回调.取执行类 (类_MCP_VIP通用回调).任务ID = 异步搜索ID
-                        vipDom2.取查找文本 (sID, 0, 100, 搜索回调)
-                        返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步搜索ID, "查找结果已提交, 通过mcp_result查询"))
+                        变量 空翻页说明 <类型 = 文本型>
+                        空翻页说明 = "该次预查找命中数为 0, 无结果可取(nodeIds 为空) | 换个 query 重新预查找"
+                        返回 (MCP_响应构建.命令成功_原始JSON (命令ID, "{\"searchId\":\"" + MCP_响应构建.JSON转义文本 (sSearchID) + "\",\"nodeIds\":[],\"note\":\"" + MCP_响应构建.JSON转义文本 (空翻页说明) + "\"}"))
                     }
-                    否则
+                    如果 (sTo > MCP命令服务器.DOM上次搜索数量)
                     {
-                        变量 异步预查ID <类型 = 文本型>
-                        异步预查ID = MCP命令服务器.生成异步任务ID ()
-                        变量 预查回调 <类型 = 类_FBrowser_事件智能指针>
-                        预查回调.创建 (类_MCP_VIP通用回调)
-                        预查回调.取执行类 (类_MCP_VIP通用回调).任务ID = 异步预查ID
-                        vipDom2.预查找文本 (searchQuery, 假, 预查回调)
-                        返回 (MCP命令服务器.命令成功_异步 (命令ID, 异步预查ID, "预查找已提交, 通过mcp_result查询, 从结果中取searchId再query"))
+                        sTo = MCP命令服务器.DOM上次搜索数量
                     }
                 }
-                返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
+                变量 取结果参数 <类型 = 文本型>
+                取结果参数 = "{\"searchId\":\"" + MCP_响应构建.JSON转义文本 (sSearchID) + "\",\"fromIndex\":" + 到文本 (sFrom) + ",\"toIndex\":" + 到文本 (sTo) + "}"
+                变量 取结果返回 <类型 = 文本型>
+                MCP命令服务器.执行CDP命令_带参数 (命令ID + "_gsr", "DOM.getSearchResults", 取结果参数)
+                取结果返回 = MCP命令服务器.同步等待异步任务 (命令ID + "_gsr", 15000)
+                如果 (MCP命令服务器.CDP同步结果是否成功 (取结果返回))
+                {
+                    返回 (MCP_响应构建.命令成功_原始JSON (命令ID, MCP命令服务器.取CDP载荷文本 (取结果返回)))
+                }
+                变量 取结果错误 <类型 = 文本型>
+                取结果错误 = MCP命令服务器.取CDP同步结果错误 (取结果返回)
+                如果 (寻找文本 (取结果错误, "No search session", 0, 假) != -1)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "search_id 会话已不存在 | 实测: 任何一次 browser_vip_dom_get_document 枚举都会重建节点映射并作废旧搜索会话 | 请重新用 query 预查找(本工具已把取回结果并入同一次调用)"))
+                }
+                如果 (寻找文本 (取结果错误, "Invalid search result range", 0, 假) != -1)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "from_index..to_index 超出该次预查找的命中范围(resultCount) | 用 query 重新预查找可拿到最新 resultCount 与前 100 条结果"))
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, "取查找结果失败: " + 取结果错误))
             }
-            返回 (MCP_响应构建.命令失败 (命令ID, "需要query或search_id参数"))
+            // —— query 模式: ① 有界枚举填充节点映射 → ② performSearch → ③ getSearchResults 立即取回 ——
+            变量 sUaShadow <类型 = 逻辑型>
+            sUaShadow = MCP命令服务器.yyjson取逻辑_默认 (参数JSON, "ua_shadow", 假)
+            变量 映射返回 <类型 = 文本型>
+            MCP命令服务器.执行CDP命令_带参数 (命令ID + "_sdoc", "DOM.getDocument", "{\"depth\":10,\"pierce\":false}")
+            映射返回 = MCP命令服务器.同步等待异步任务 (命令ID + "_sdoc", 15000)
+            如果 (MCP命令服务器.CDP同步结果是否成功 (映射返回) == 假)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "预查找前填充节点映射失败: " + MCP命令服务器.取CDP同步结果错误 (映射返回)))
+            }
+            变量 预查参数 <类型 = 文本型>
+            预查参数 = "{\"query\":\"" + MCP_响应构建.JSON转义文本 (searchQuery) + "\",\"includeUserAgentShadowDOM\":" + 选择 (sUaShadow, "true", "false") + "}"
+            变量 预查返回 <类型 = 文本型>
+            MCP命令服务器.执行CDP命令_带参数 (命令ID + "_ps", "DOM.performSearch", 预查参数)
+            预查返回 = MCP命令服务器.同步等待异步任务 (命令ID + "_ps", 15000)
+            如果 (MCP命令服务器.CDP同步结果是否成功 (预查返回) == 假)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "预查找失败: " + MCP命令服务器.取CDP同步结果错误 (预查返回) + " | 无匹配时 resultCount=0 属正常(不会报错)"))
+            }
+            变量 预查对象 <类型 = YYJSON只读对象类>
+            预查对象 = MCP命令服务器.取CDP结果对象 (预查返回)
+            变量 新搜索ID <类型 = 文本型>
+            新搜索ID = MCP命令服务器.yyjson取文本 (预查对象, "searchId")
+            变量 新搜索数量 <类型 = 整数>
+            新搜索数量 = MCP命令服务器.yyjson取整数 (预查对象, "resultCount")
+            MCP命令服务器.DOM上次搜索ID = 新搜索ID
+            MCP命令服务器.DOM上次搜索数量 = 新搜索数量
+            变量 取回数量 <类型 = 整数>
+            取回数量 = 新搜索数量
+            如果 (取回数量 > 100)
+            {
+                取回数量 = 100
+            }
+            变量 nodeIds文本 <类型 = 文本型>
+            nodeIds文本 = "[]"
+            如果 (新搜索数量 > 0)
+            {
+                变量 取回参数 <类型 = 文本型>
+                取回参数 = "{\"searchId\":\"" + MCP_响应构建.JSON转义文本 (新搜索ID) + "\",\"fromIndex\":0,\"toIndex\":" + 到文本 (取回数量) + "}"
+                变量 取回返回 <类型 = 文本型>
+                MCP命令服务器.执行CDP命令_带参数 (命令ID + "_gsr2", "DOM.getSearchResults", 取回参数)
+                取回返回 = MCP命令服务器.同步等待异步任务 (命令ID + "_gsr2", 15000)
+                如果 (MCP命令服务器.CDP同步结果是否成功 (取回返回) == 假)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "取回搜索结果失败: " + MCP命令服务器.取CDP同步结果错误 (取回返回) + " | 本次失败不影响页面与 CDP 通道"))
+                }
+                变量 取回载荷 <类型 = 文本型>
+                取回载荷 = MCP命令服务器.取CDP载荷文本 (取回返回)
+                变量 数起 <类型 = 整数>
+                数起 = 寻找文本 (取回载荷, "[", 0, 假)
+                如果 (数起 != -1)
+                {
+                    变量 数止 <类型 = 整数>
+                    数止 = 寻找文本 (取回载荷, "]", 数起, 假)
+                    如果 (数止 != -1 && 数止 > 数起)
+                    {
+                        nodeIds文本 = "[" + 取文本中间 (取回载荷, 数起 + 1, 数止 - 数起 - 1) + "]"
+                    }
+                }
+            }
+            变量 搜索说明 <类型 = 文本型>
+            搜索说明 = "nodeIds 可直接用作 browser_vip_dom_node_edit 的 node_id | 注意: 每次 DOM 枚举(含本工具内部这次)都会重建节点映射, 返回的 nodeIds 只在**下一次枚举之前**有效; 本工具内部的枚举会作废**之前**所有 node_id"
+            返回 (MCP_响应构建.命令成功_原始JSON (命令ID, "{\"searchId\":\"" + MCP_响应构建.JSON转义文本 (新搜索ID) + "\",\"resultCount\":" + 到文本 (新搜索数量) + ",\"returned\":" + 到文本 (取回数量) + ",\"nodeIds\":" + nodeIds文本 + ",\"note\":\"" + MCP_响应构建.JSON转义文本 (搜索说明) + "\"}"))
+        }
+        // === VIP 开发者 DOM: 节点编辑(CDP DOM 域, 同步执行 + 回读验证) ===
+        // 覆盖类库 7 个真缺口: 移除节点 / 移除节点属性 / 清除查找 + 置节点属性值 / 置节点属性文本 / 置节点值 / 置节点源码。
+        // 硬守卫(照抄类库约束 + 项目惯例):
+        //   · 节点类动作必须显式 confirm:true —— 它们**真实改写用户页面**(不可撤销, 只能刷新恢复);
+        //   · node_id 必须 >0 且不能是根节点(类库原文: 移除节点"不能是根节点");
+        //   · 每次 DOM 枚举都会**重建节点映射**(实测: 同一元素三次枚举 nodeId 依次 18/36/54), 故 node_id
+        //     只在最近一次枚举后、再次枚举前有效; 失效提交会得到 CDP 「Could not find node」干净报错(实测 0.03s, 不挂不毒化),
+        //     本工具把它转成可行动失败(重新枚举 / 改用 selector 由本工具内部定位)。
+        //   · 提交成功**不等于页面已变** —— 本工具对每类动作做 CDP 回读验证(getAttributes/getOuterHTML,
+        //     移除节点以 CDP 「Could not find node」为移除确认), 验证失败如实报错(不静默假成功)。
+        // 通道纪律(对照实测): 一律走我方 CDP 通道(DOM 域, 全程 0.03s); 类库 开发者DOM.启用/预查找文本 会**毒化
+        // 本会话 CDP 通道**(之后每条 CDP 命令 30s 才返回, 需重启恢复), 故本分支不再触碰类库开发者DOM。
+        否则 (方法名 == "browser_vip_dom_node_edit")
+        {
+            变量 neAction <类型 = 文本型>
+            neAction = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (neAction == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "需要 action | 可用: remove_node(移除节点, 连子节点一并删) / remove_attr(移除属性) / set_attr(置属性值) / set_attr_text(置属性文本) / set_node_value(置节点值, 仅文本节点) / set_outer_html(置节点源码) / discard_search(清除搜索会话)"))
+            }
+            // —— discard_search: 本机 CEF 无 DOM.discardSearch(实测 -32601 「wasn't found」) ——
+            // 用 DOM.disable + DOM.enable 重建 DOM 代理(实测等效清除**全部**搜索会话且通道保持健康);
+            // 节点映射本就每次枚举重建, 重建代理无额外副作用。
+            如果 (neAction == "discard_search")
+            {
+                变量 dsID <类型 = 文本型>
+                dsID = MCP命令服务器.yyjson取文本 (参数JSON, "search_id")
+                如果 (MCP命令服务器.DOM域已启用)
+                {
+                    变量 关返回 <类型 = 文本型>
+                    MCP命令服务器.执行CDP命令_带参数 (命令ID + "_domoff", "DOM.disable", "{}")
+                    关返回 = MCP命令服务器.同步等待异步任务 (命令ID + "_domoff", 15000)
+                    变量 开返回 <类型 = 文本型>
+                    MCP命令服务器.执行CDP命令_带参数 (命令ID + "_domon", "DOM.enable", "{\"includeWhitespace\":\"none\"}")
+                    开返回 = MCP命令服务器.同步等待异步任务 (命令ID + "_domon", 15000)
+                    如果 (MCP命令服务器.CDP同步结果是否成功 (关返回) && MCP命令服务器.CDP同步结果是否成功 (开返回))
+                    {
+                        MCP命令服务器.DOM域已启用 = 真
+                        变量 清理说明 <类型 = 文本型>
+                        清理说明 = "本机 CEF 无 DOM.discardSearch 方法(实测 -32601) | 已用 DOM.disable+DOM.enable 重建 DOM 代理, 等效清除**全部**搜索会话(含 search_id 指定的那次) | 节点映射本就每次枚举重建, 无额外副作用"
+                        返回 (MCP_响应构建.命令成功_原始JSON (命令ID, "{\"success\":true,\"action\":\"discard_search\",\"search_id\":\"" + MCP_响应构建.JSON转义文本 (dsID) + "\",\"note\":\"" + MCP_响应构建.JSON转义文本 (清理说明) + "\"}"))
+                    }
+                    返回 (MCP_响应构建.命令失败 (命令ID, "重建 DOM 代理失败(disable/enable 未成功): " + MCP命令服务器.取CDP同步结果错误 (关返回) + " / " + MCP命令服务器.取CDP同步结果错误 (开返回)))
+                }
+                变量 无会话说明 <类型 = 文本型>
+                无会话说明 = "DOM 域尚未启用, 无活动搜索会话可清除 | 本机 CEF 无 DOM.discardSearch(实测 -32601); 搜索会话在每次 DOM 枚举时也会被自动作废"
+                返回 (MCP_响应构建.命令成功_原始JSON (命令ID, "{\"success\":true,\"action\":\"discard_search\",\"search_id\":\"" + MCP_响应构建.JSON转义文本 (dsID) + "\",\"note\":\"" + MCP_响应构建.JSON转义文本 (无会话说明) + "\"}"))
+            }
+            变量 neNodeID <类型 = 整数>
+            neNodeID = MCP命令服务器.yyjson取整数 (参数JSON, "node_id")
+            变量 neSelector <类型 = 文本型>
+            neSelector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
+            如果 (neNodeID <= 0 && neSelector == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "需要 node_id(>0) 或 selector | node_id 来自 browser_vip_dom_get_document 枚举的 nodeId, 且**只在最近一次枚举后有效**(每次枚举都会重建节点映射); selector(如 \"#id\")由本工具内部定位, 抗映射重建, **推荐**"))
+            }
+            如果 (neSelector == "" && neNodeID == 1)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "node_id=1 是根文档节点 | 类库原文: 移除节点**不能是根节点**; 属性/值类动作对根节点也无意义, 故一律拒绝"))
+            }
+            如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "confirm") == 假)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "该动作会**真实改写用户页面**(不可撤销, 只能刷新恢复), 故需显式 confirm:true | 动作: " + neAction + " | 想只读查看请用 browser_vip_dom_get_document / browser_dom_query"))
+            }
+            变量 neAttr <类型 = 文本型>
+            neAttr = MCP命令服务器.yyjson取文本 (参数JSON, "attr_name")
+            变量 neValue <类型 = 文本型>
+            neValue = MCP命令服务器.yyjson取文本 (参数JSON, "value")
+            如果 (neAction == "remove_attr" || neAction == "set_attr" || neAction == "set_attr_text")
+            {
+                如果 (neAttr == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, neAction + " 需要 attr_name | set_attr_text 还需要 value(文本)"))
+                }
+            }
+            如果 (neAction == "set_outer_html" && neValue == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "set_outer_html 需要 value(新的 outerHTML 源码)"))
+            }
+            变量 neCdp方法 <类型 = 文本型>
+            neCdp方法 = ""
+            如果 (neAction == "remove_attr")
+            {
+                neCdp方法 = "DOM.removeAttribute"
+            }
+            否则 (neAction == "set_attr")
+            {
+                neCdp方法 = "DOM.setAttributeValue"
+            }
+            否则 (neAction == "set_attr_text")
+            {
+                neCdp方法 = "DOM.setAttributesAsText"
+            }
+            否则 (neAction == "set_node_value")
+            {
+                neCdp方法 = "DOM.setNodeValue"
+            }
+            否则 (neAction == "set_outer_html")
+            {
+                neCdp方法 = "DOM.setOuterHTML"
+            }
+            否则 (neAction == "remove_node")
+            {
+                neCdp方法 = "DOM.removeNode"
+            }
+            否则
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "未知 action: " + neAction + " | 可用: remove_node / remove_attr / set_attr / set_attr_text / set_node_value / set_outer_html / discard_search"))
+            }
+            // —— 定位实际节点: selector 优先(内部 getDocument+querySelector, 抗映射重建), 否则用调用方给的 node_id ——
+            变量 实际节点ID <类型 = 整数>
+            实际节点ID = neNodeID
+            如果 (neSelector != "")
+            {
+                如果 (MCP命令服务器.确保DOM域已启用 (命令ID) == 假)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "DOM 域启用失败(CDP DOM.enable 未成功) | selector 定位需要 DOM 域"))
+                }
+                // 取根节点: getDocument(depth=1) → root.nodeId → querySelector(selector)
+                变量 根映射返回 <类型 = 文本型>
+                MCP命令服务器.执行CDP命令_带参数 (命令ID + "_rt", "DOM.getDocument", "{\"depth\":1,\"pierce\":false}")
+                根映射返回 = MCP命令服务器.同步等待异步任务 (命令ID + "_rt", 15000)
+                如果 (MCP命令服务器.CDP同步结果是否成功 (根映射返回) == 假)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "selector 定位前取根节点失败: " + MCP命令服务器.取CDP同步结果错误 (根映射返回)))
+                }
+                变量 根对象 <类型 = YYJSON只读对象类>
+                根对象 = MCP命令服务器.取CDP结果对象 (根映射返回)
+                变量 根成员 <类型 = YYJSON只读对象类>
+                根成员 = MCP命令服务器.yyjson取对象成员 (根对象, "root")
+                变量 根节点ID <类型 = 整数>
+                根节点ID = MCP命令服务器.yyjson取整数 (根成员, "nodeId")
+                如果 (根节点ID <= 0)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "取根节点 ID 失败(枚举回包缺少 root.nodeId)"))
+                }
+                变量 查询参数 <类型 = 文本型>
+                查询参数 = "{\"nodeId\":" + 到文本 (根节点ID) + ",\"selector\":\"" + MCP_响应构建.JSON转义文本 (neSelector) + "\"}"
+                变量 查询返回 <类型 = 文本型>
+                MCP命令服务器.执行CDP命令_带参数 (命令ID + "_qs", "DOM.querySelector", 查询参数)
+                查询返回 = MCP命令服务器.同步等待异步任务 (命令ID + "_qs", 15000)
+                如果 (MCP命令服务器.CDP同步结果是否成功 (查询返回) == 假)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "querySelector 执行失败: " + MCP命令服务器.取CDP同步结果错误 (查询返回) + " | 选择器语法同 CSS(document.querySelector)"))
+                }
+                变量 查询对象 <类型 = YYJSON只读对象类>
+                查询对象 = MCP命令服务器.取CDP结果对象 (查询返回)
+                实际节点ID = MCP命令服务器.yyjson取整数 (查询对象, "nodeId")
+                如果 (实际节点ID <= 0)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "selector 未命中任何节点(CDP 返回 nodeId=0): " + neSelector + " | 检查选择器是否与页面当前 DOM 匹配(动态页面先 browser_wait 就绪)"))
+                }
+                如果 (实际节点ID == 1)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "selector 命中的是根文档节点(html) | 类库原文: 移除节点**不能是根节点**; 属性/值类动作对根节点也无意义, 故一律拒绝 | 请收窄选择器到具体元素"))
+                }
+            }
+            否则
+            {
+                如果 (MCP命令服务器.确保DOM域已启用 (命令ID) == 假)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "DOM 域启用失败(CDP DOM.enable 未成功)"))
+                }
+            }
+            // —— 构造参数并提交 ——
+            变量 neParams <类型 = 文本型>
+            neParams = ""
+            如果 (neAction == "remove_attr")
+            {
+                neParams = "{\"nodeId\":" + 到文本 (实际节点ID) + ",\"name\":\"" + MCP_响应构建.JSON转义文本 (neAttr) + "\"}"
+            }
+            否则 (neAction == "set_attr")
+            {
+                neParams = "{\"nodeId\":" + 到文本 (实际节点ID) + ",\"name\":\"" + MCP_响应构建.JSON转义文本 (neAttr) + "\",\"value\":\"" + MCP_响应构建.JSON转义文本 (neValue) + "\"}"
+            }
+            否则 (neAction == "set_attr_text")
+            {
+                // 类库语义: 置节点属性文本 (节点ID, 属性名, 文本) → CDP text=「属性名="值"」, name=属性名
+                neParams = "{\"nodeId\":" + 到文本 (实际节点ID) + ",\"text\":\"" + MCP_响应构建.JSON转义文本 (neAttr + "=\"" + neValue + "\"") + "\",\"name\":\"" + MCP_响应构建.JSON转义文本 (neAttr) + "\"}"
+            }
+            否则 (neAction == "set_node_value")
+            {
+                neParams = "{\"nodeId\":" + 到文本 (实际节点ID) + ",\"value\":\"" + MCP_响应构建.JSON转义文本 (neValue) + "\"}"
+            }
+            否则 (neAction == "set_outer_html")
+            {
+                neParams = "{\"nodeId\":" + 到文本 (实际节点ID) + ",\"outerHTML\":\"" + MCP_响应构建.JSON转义文本 (neValue) + "\"}"
+            }
+            否则 (neAction == "remove_node")
+            {
+                neParams = "{\"nodeId\":" + 到文本 (实际节点ID) + "}"
+            }
+            变量 提交返回 <类型 = 文本型>
+            MCP命令服务器.执行CDP命令_带参数 (命令ID + "_ne", neCdp方法, neParams)
+            提交返回 = MCP命令服务器.同步等待异步任务 (命令ID + "_ne", 15000)
+            如果 (MCP命令服务器.CDP同步结果是否成功 (提交返回) == 假)
+            {
+                变量 提交错误 <类型 = 文本型>
+                提交错误 = MCP命令服务器.取CDP同步结果错误 (提交返回)
+                如果 (寻找文本 (提交错误, "Could not find node", 0, 假) != -1)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "node_id 已失效: 每次 browser_vip_dom_get_document 枚举都会**重建节点映射**(实测同一元素每次枚举 nodeId 都变, 如 18→36→54), 故 node_id 只在最近一次枚举后、再次枚举前有效 | 修复: 重新 browser_vip_dom_get_document 取最新 node_id, 或改用 selector 参数由本工具自行定位(推荐) | CDP错误: " + 提交错误))
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, "CDP " + neCdp方法 + " 提交失败: " + 提交错误 + " | 该失败不影响页面与 CDP 通道; 若是节点类型不符(如对非文本节点 set_node_value), 请重新枚举确认节点"))
+            }
+            // —— 回读验证(不静默假成功) ——
+            变量 读回返回 <类型 = 文本型>
+            变量 读回参数 <类型 = 文本型>
+            读回参数 = "{\"nodeId\":" + 到文本 (实际节点ID) + "}"
+            如果 (neAction == "remove_node")
+            {
+                // 删除成功的确认信号 = 再取属性得到 「Could not find node with given id」(实测)
+                MCP命令服务器.执行CDP命令_带参数 (命令ID + "_rb", "DOM.getAttributes", 读回参数)
+                读回返回 = MCP命令服务器.同步等待异步任务 (命令ID + "_rb", 15000)
+                如果 (MCP命令服务器.CDP同步结果是否成功 (读回返回) == 假 && 寻找文本 (MCP命令服务器.取CDP同步结果错误 (读回返回), "Could not find node", 0, 假) != -1)
+                {
+                    变量 删除说明 <类型 = 文本型>
+                    删除说明 = "节点已从 DOM 移除(CDP 回读确认: getAttributes 返回 Could not find node) | 该 node_id 已失效; 页面真实效果可再枚举核对"
+                    返回 (MCP_响应构建.命令成功_原始JSON (命令ID, "{\"action\":\"" + MCP_响应构建.JSON转义文本 (neAction) + "\",\"method\":\"" + neCdp方法 + "\",\"node_id\":" + 到文本 (实际节点ID) + ",\"submitted\":true,\"verified\":true,\"readback\":\"node-gone\",\"note\":\"" + MCP_响应构建.JSON转义文本 (删除说明) + "\"}"))
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, "remove_node 已提交但回读未确认(节点仍可被取到或回读失败) | 请 browser_vip_dom_get_document 重新枚举核对节点是否还在 | 回读: " + MCP命令服务器.取CDP载荷文本 (读回返回) + " / " + MCP命令服务器.取CDP同步结果错误 (读回返回)))
+            }
+            否则 (neAction == "set_node_value" || neAction == "set_outer_html")
+            {
+                MCP命令服务器.执行CDP命令_带参数 (命令ID + "_rb", "DOM.getOuterHTML", 读回参数)
+                读回返回 = MCP命令服务器.同步等待异步任务 (命令ID + "_rb", 15000)
+                变量 源码载荷 <类型 = 文本型>
+                源码载荷 = MCP命令服务器.取CDP载荷文本 (读回返回)
+                变量 源码命中 <类型 = 逻辑型>
+                源码命中 = 寻找文本 (源码载荷, MCP_响应构建.JSON转义文本 (neValue), 0, 假) != -1
+                如果 (源码命中 == 假)
+                {
+                    // CEF 序列化会把属性引号统一成双引号(实测: 提交 <b id='bold'> 回读为 <b id="bold">),
+                    // 故把单引号换成双引号再对一次, 避免"实际已生效但回读误判未确认"。
+                    变量 引号归一值 <类型 = 文本型>
+                    引号归一值 = neValue
+                    子文本替换 (引号归一值, "'", "\"", , , 假)
+                    源码命中 = 寻找文本 (源码载荷, MCP_响应构建.JSON转义文本 (引号归一值), 0, 假) != -1
+                }
+                如果 (MCP命令服务器.CDP同步结果是否成功 (读回返回) && 源码命中)
+                {
+                    变量 源码说明 <类型 = 文本型>
+                    源码说明 = "CDP 回读确认: getOuterHTML 已包含新内容 | 页面真实效果可再枚举核对"
+                    返回 (MCP_响应构建.命令成功_原始JSON (命令ID, "{\"action\":\"" + MCP_响应构建.JSON转义文本 (neAction) + "\",\"method\":\"" + neCdp方法 + "\",\"node_id\":" + 到文本 (实际节点ID) + ",\"submitted\":true,\"verified\":true,\"readback\":\"" + MCP_响应构建.JSON转义文本 (取文本左边 (源码载荷, 200)) + "\",\"note\":\"" + MCP_响应构建.JSON转义文本 (源码说明) + "\"}"))
+                }
+                如果 (neAction == "set_outer_html" && MCP命令服务器.CDP同步结果是否成功 (读回返回) == 假 && 寻找文本 (MCP命令服务器.取CDP同步结果错误 (读回返回), "Could not find node", 0, 假) != -1)
+                {
+                    // CEF 的 setOuterHTML 是**替换**语义: 提交成功后旧 nodeId 可能被作废(实测 selector 路径
+                    // 提交成功、页面侧已见新节点, 而旧 id 回读报 Could not find node) —— 提交成功 + 旧 id 消失 = 已替换。
+                    变量 替换说明 <类型 = 文本型>
+                    替换说明 = "节点已被替换确认: 提交成功后旧 nodeId 已作废(CDP 回读 Could not find node; CEF setOuterHTML 为替换语义, 旧 id 失效属预期) | 页面真实效果可再枚举核对"
+                    返回 (MCP_响应构建.命令成功_原始JSON (命令ID, "{\"action\":\"" + MCP_响应构建.JSON转义文本 (neAction) + "\",\"method\":\"" + neCdp方法 + "\",\"node_id\":" + 到文本 (实际节点ID) + ",\"submitted\":true,\"verified\":true,\"readback\":\"node-replaced\",\"note\":\"" + MCP_响应构建.JSON转义文本 (替换说明) + "\"}"))
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, neAction + " 已提交但回读未确认(getOuterHTML 不含预期内容或回读失败) | 请 browser_vip_dom_get_document 重新枚举核对 | 回读: " + 源码载荷 + " / " + MCP命令服务器.取CDP同步结果错误 (读回返回)))
+            }
+            否则
+            {
+                // remove_attr / set_attr / set_attr_text: getAttributes 回读属性数组
+                MCP命令服务器.执行CDP命令_带参数 (命令ID + "_rb", "DOM.getAttributes", 读回参数)
+                读回返回 = MCP命令服务器.同步等待异步任务 (命令ID + "_rb", 15000)
+                如果 (MCP命令服务器.CDP同步结果是否成功 (读回返回) == 假)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, neAction + " 已提交但回读失败(getAttributes): " + MCP命令服务器.取CDP同步结果错误 (读回返回) + " | 请 browser_vip_dom_get_document 重新枚举核对"))
+                }
+                变量 属性载荷 <类型 = 文本型>
+                属性载荷 = MCP命令服务器.取CDP载荷文本 (读回返回)
+                变量 回读通过 <类型 = 逻辑型>
+                回读通过 = 假
+                如果 (neAction == "remove_attr")
+                {
+                    回读通过 = 寻找文本 (属性载荷, "\"" + MCP_响应构建.JSON转义文本 (neAttr) + "\"", 0, 假) == -1
+                }
+                否则
+                {
+                    回读通过 = 寻找文本 (属性载荷, "\"" + MCP_响应构建.JSON转义文本 (neAttr) + "\",\"" + MCP_响应构建.JSON转义文本 (neValue) + "\"", 0, 假) != -1
+                }
+                如果 (回读通过)
+                {
+                    变量 属性说明 <类型 = 文本型>
+                    属性说明 = "CDP 回读确认: getAttributes 与预期一致 | 页面真实效果可再枚举核对"
+                    返回 (MCP_响应构建.命令成功_原始JSON (命令ID, "{\"action\":\"" + MCP_响应构建.JSON转义文本 (neAction) + "\",\"method\":\"" + neCdp方法 + "\",\"node_id\":" + 到文本 (实际节点ID) + ",\"submitted\":true,\"verified\":true,\"readback\":\"" + MCP_响应构建.JSON转义文本 (取文本左边 (属性载荷, 200)) + "\",\"note\":\"" + MCP_响应构建.JSON转义文本 (属性说明) + "\"}"))
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, neAction + " 已提交但回读未确认(属性与预期不符) | 请 browser_vip_dom_get_document 重新枚举核对 | 回读: " + 属性载荷))
+            }
         }
         否则 (方法名 == "browser_vip_enable_devtools_observer")
         {
+            // enable 缺失即拒绝(不接受缺省): 缺省会被当成关闭, 而关闭 CDP 观察者会让全部
+            // CDP 类工具(debugger_*/cdp_*/reverse CDP类)永久失效且需重启进程才能恢复。
             变量 enableObs <类型 = 逻辑型>
-            enableObs = MCP命令服务器.yyjson取逻辑 (参数JSON, "enable")
+            // 取值判据: 只有显式字符串 "false"/"0"/"off" 才算关闭意图;
+            // 缺省(与布尔 false 在协议层无法区分)一律拒绝 —— 任何歧义都不执行破坏性动作。
+            变量 开关文本 <类型 = 文本型>
+            开关文本 = MCP命令服务器.yyjson取文本 (参数JSON, "enable")
+            变量 开关布尔 <类型 = 逻辑型>
+            开关布尔 = MCP命令服务器.yyjson取逻辑 (参数JSON, "enable")
+            变量 目标状态 <类型 = 逻辑型>
+            目标状态 = 开关布尔
+            // ★ 安全性(实测): 只挡"空文本"不够 —— **无法识别的取值会掉进破坏性分支**:
+            //   实测传 enable:"mcp_probe" 时: 开关文本非空 -> 该守卫不触发 -> 目标状态沿用 开关布尔(非布尔节点取逻辑=假)
+            //   -> 结果把 CDP 观察者**关掉**了(台账那一批之后紧跟一次冷重启, 正是被这个动作搞坏的)。
+            //   即"最危险的分支成了兜底"。契约: 只认显式白名单取值, 其余一律拒绝并说明。
+            变量 取值已识别 <类型 = 逻辑型 值 = 假>
+            如果 (开关文本 == "false" || 开关文本 == "0" || 开关文本 == "off")
+            {
+                目标状态 = 假
+                取值已识别 = 真
+            }
+            否则 (开关文本 == "true" || 开关文本 == "1" || 开关文本 == "on")
+            {
+                目标状态 = 真
+                取值已识别 = 真
+            }
+            否则 (开关文本 == "" && 开关布尔)
+            {
+                // 空文本但布尔为真: 协议层能明确区分, 视为启用
+                目标状态 = 真
+                取值已识别 = 真
+            }
+            如果 (取值已识别 == 假)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "enable 取值无法识别: " + 开关文本 + " | 只接受: 字符串 true/false/1/0/on/off, 或布尔 true | **不接受缺省**(缺省会被当成关闭) | 无法识别的取值一律拒绝, 不落进'关闭观察者'这个破坏性分支(实测: 传 enable 值为 mcp_probe 时旧实现会静默关闭观察者)"))
+            }
+            enableObs = 目标状态
             变量 vipObs <类型 = 类_FBrowserVIP_控制器>
             vipObs = MCP命令服务器.取VIP控制器 ()
             如果 (vipObs.是否为空 () == 假)
@@ -1263,14 +2469,54 @@
                 否则
                 {
                     MCP命令服务器.注销CDP观察者 ()
-                    返回 (MCP_响应构建.命令成功 (命令ID, "DevTools消息监听已关闭"))
+                    返回 (MCP_响应构建.命令成功 (命令ID, "DevTools消息监听已关闭 | 已注销 CDP 观察者(cdp_ready=false) | 实测纠正: 关闭**不是**永久的 —— 下一次 CDP 调用会自动重新注册观察者(cdp_ready 回到 true), 通道自愈, 通常无需重启进程(旧文案声称'需重启进程才能恢复', 与实测不符) | 仅当重注册失败(控制器侧仍持有旧观察者)时 CDP 类工具才持续不可用, 那时按报错提示重启"))
                 }
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
         }
-        // === VIP 触摸模拟 (v1.7) ===
+        // === VIP 触摸模拟 ===
         否则 (方法名 == "browser_vip_touch_emulation")
         {
+            // mode=mouse: 鼠标事件转触摸事件(**CDP 路线**)。
+            // 实测结论: 内核级注入会让本会话 CDP 通道失效, 而 CDP 的 Emulation.setEmitTouchEventsForMouse
+            // 不需要启用 JS 执行环境、不需要刷新页面, 也不会破坏 CDP 通道 —— 故优先提供这条。
+            变量 触摸模式 <类型 = 文本型>
+            触摸模式 = MCP命令服务器.yyjson取文本 (参数JSON, "mode")
+            如果 (触摸模式 == "mouse")
+            {
+                变量 转触摸配置 <类型 = 文本型>
+                转触摸配置 = MCP命令服务器.yyjson取文本 (参数JSON, "configuration")
+                如果 (转触摸配置 == "")
+                {
+                    转触摸配置 = "mobile"
+                }
+                如果 (转触摸配置 != "mobile" && 转触摸配置 != "desktop")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "configuration 只支持 mobile / desktop | mobile=视口按移动端触摸布局, desktop=按桌面端"))
+                }
+                变量 转触摸启用 <类型 = 逻辑型>
+                转触摸启用 = MCP命令服务器.yyjson取逻辑 (参数JSON, "enable")
+                变量 转触摸参数 <类型 = 文本型>
+                如果 (转触摸启用)
+                {
+                    转触摸参数 = "{\"enabled\":true,\"configuration\":\"" + 转触摸配置 + "\"}"
+                }
+                否则
+                {
+                    转触摸参数 = "{\"enabled\":false}"
+                }
+                变量 转触摸结果 <类型 = 文本型>
+                转触摸结果 = MCP命令服务器.执行CDP并同步等待 ("mcp_emittouch_" + 到文本 (取启动时间 ()), "Emulation.setEmitTouchEventsForMouse", 转触摸参数, 8000)
+                如果 (MCP命令服务器.CDP同步结果是否成功 (转触摸结果) == 假)
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "CDP Emulation.setEmitTouchEventsForMouse 失败: " + MCP命令服务器.取CDP同步结果错误 (转触摸结果) + " | 可用替代: browser_vip_touch_emulation {enable:true, max_points:N}(内核级触摸仿真, 需刷新页面)"))
+                }
+                如果 (转触摸启用)
+                {
+                    返回 (MCP_响应构建.命令成功 (命令ID, "鼠标事件已转为触摸事件(CDP Emulation.setEmitTouchEventsForMouse): configuration=" + 转触摸配置 + " | 撤销: 同参数传 enable=false"))
+                }
+                返回 (MCP_响应构建.命令成功 (命令ID, "已关闭鼠标转触摸(CDP)"))
+            }
             变量 vipTouch <类型 = 类_FBrowserVIP_控制器>
             vipTouch = MCP命令服务器.取VIP控制器 ()
             如果 (vipTouch.是否为空 () == 假)
@@ -1280,7 +2526,7 @@
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
         }
-        // === VIP UA完整指纹 (v1.7) ===
+        // === VIP UA完整指纹 ===
         否则 (方法名 == "browser_fingerprint_ua")
         {
             变量 vipUA <类型 = 类_FBrowserVIP_控制器>
@@ -1316,12 +2562,34 @@
                 }
                 ua_data.置Mobile (MCP命令服务器.yyjson取逻辑 (参数JSON, "mobile"))
                 ua_data.置Wow64 (MCP命令服务器.yyjson取逻辑 (参数JSON, "wow64"))
+                // ★ 契约: UA 字符串与 UA-CH 必须一起设 —— 只设基础字段会
+                //   漏掉 UA-CH(navigator.userAgentData) 的 brands/fullVersionList/platformVersion/fullVersion。
+                //   只改 UA 字符串而不改 UA-CH, 两者不一致反而**更容易被识别**, 故必须能一起设。
+                //   类库签名(实读): 置PlatformVersion(文本) / 置FullVersion(文本) /
+                //   置Brands(FBrowser_双文本数组) / 置FullVersionList(FBrowser_双文本数组)。
+                //   品牌表用紧凑文本 "Chromium:120,Google Chrome:120"(见 解析双文本表)。
+                如果 (MCP命令服务器.yyjson取文本 (参数JSON, "platform_version") != "")
+                {
+                    ua_data.置PlatformVersion (MCP命令服务器.yyjson取文本 (参数JSON, "platform_version"))
+                }
+                如果 (MCP命令服务器.yyjson取文本 (参数JSON, "full_version") != "")
+                {
+                    ua_data.置FullVersion (MCP命令服务器.yyjson取文本 (参数JSON, "full_version"))
+                }
+                如果 (MCP命令服务器.yyjson取文本 (参数JSON, "brands") != "")
+                {
+                    ua_data.置Brands (MCP命令服务器.解析双文本表 (MCP命令服务器.yyjson取文本 (参数JSON, "brands")))
+                }
+                如果 (MCP命令服务器.yyjson取文本 (参数JSON, "full_version_list") != "")
+                {
+                    ua_data.置FullVersionList (MCP命令服务器.解析双文本表 (MCP命令服务器.yyjson取文本 (参数JSON, "full_version_list")))
+                }
                 vipUA.指纹_虚拟UserAgent (ua_data)
                 返回 (MCP_响应构建.响应_需要刷新 (命令ID, "UA完整指纹已设置"))
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
         }
-        // === VIP 屏幕方向 (v1.7) ===
+        // === VIP 屏幕方向 ===
         否则 (方法名 == "browser_vip_orientation")
         {
             变量 vipOrient <类型 = 类_FBrowserVIP_控制器>
@@ -1359,7 +2627,7 @@
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
         }
-        // === 获取额外数据 (v1.7) ===
+        // === 获取额外数据 ===
         否则 (方法名 == "browser_get_extra_data")
         {
             变量 browser <类型 = 类_FBrowser_浏览器>
@@ -1413,7 +2681,26 @@
                     vip.内核开关_禁用ConsoleCount (MCP命令服务器.yyjson取逻辑 (参数JSON, "count"))
                     vip.内核开关_禁用ConsoleGroup (MCP命令服务器.yyjson取逻辑 (参数JSON, "group"))
                     vip.内核开关_禁用ConsoleProfile (MCP命令服务器.yyjson取逻辑 (参数JSON, "profile"))
-                    vip.内核开关_禁用Performance检测 (MCP命令服务器.yyjson取逻辑 (参数JSON, "performance"))
+                    // 约束: 类库把 最小值/最大值 声明为 @默认值 = 0, 而它自己的注释写的是"默认值0.3/默认值1"。
+                    // 只传布尔会让内核收到 0~0 —— 于是 performance.now/mark/measure 退化成**固定 0**,
+                    // 比不伪装更容易被反调试识别(常量 0 是最明显的特征)。故这里显式给区间, 并允许调用方覆盖。
+                    变量 性能最小毫秒 <类型 = 小数>
+                    性能最小毫秒 = MCP命令服务器.yyjson取小数 (参数JSON, "performance_min_ms")
+                    如果 (性能最小毫秒 <= 0)
+                    {
+                        性能最小毫秒 = 0.3
+                    }
+                    变量 性能最大毫秒 <类型 = 小数>
+                    性能最大毫秒 = MCP命令服务器.yyjson取小数 (参数JSON, "performance_max_ms")
+                    如果 (性能最大毫秒 <= 0)
+                    {
+                        性能最大毫秒 = 1
+                    }
+                    如果 (性能最大毫秒 < 性能最小毫秒)
+                    {
+                        性能最大毫秒 = 性能最小毫秒
+                    }
+                    vip.内核开关_禁用Performance检测 (MCP命令服务器.yyjson取逻辑 (参数JSON, "performance"), 性能最小毫秒, 性能最大毫秒)
                     返回 (MCP_响应构建.响应_需要刷新 (命令ID, "Console/Performance禁用已设置"))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
@@ -1431,7 +2718,8 @@
                 vp = br.取VIP控制器 ()
                 如果 (vp.是否为空 () == 假)
                 {
-                    vp.内核开关_设置EventIsTrusted (MCP命令服务器.yyjson取逻辑 (参数JSON, "value"))
+                    // 参数名为 enable(见 MCP_Server.wsv schema); 键缺失时取逻辑值为假
+                    vp.内核开关_设置EventIsTrusted (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"))
                     返回 (MCP_响应构建.响应_需要刷新 (命令ID, "isTrusted已设置"))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))

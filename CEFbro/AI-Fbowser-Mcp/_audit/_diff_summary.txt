@@ -1,0 +1,154 @@
+diff 行数 281 | 删除 79 (其中可执行 59) | 新增 103 (其中可执行 88)
+
+== 被删除的可执行行(必须逐条能解释) ==
+  - 如果 (方法名 == "browser_mouse_click")
+  - 变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+  - vip_ctrl = browser.取VIP控制器 ()
+  - 如果 (vip_ctrl.是否为空 () == 假)
+  - {
+  - 变量 vip按钮文本 <类型 = 文本型>
+  - vip按钮文本 = MCP命令服务器.yyjson取文本 (参数JSON, "button")
+  - 变量 vip按钮类型 <类型 = 整数>
+  - 如果 (vip按钮文本 == "right")
+  - {
+  - vip按钮类型 = 鼠标按键类型.右键
+  - }
+  - 否则 (vip按钮文本 == "middle")
+  - {
+  - vip按钮类型 = 鼠标按键类型.中键
+  - }
+  - 否则 (vip按钮文本 == "left" || vip按钮文本 == "")
+  - {
+  - vip按钮类型 = 鼠标按键类型.左键
+  - }
+  - 否则
+  - {
+  - 返回 (MCP_响应构建.命令失败 (命令ID, "未知按钮类型: " + vip按钮文本 + " | 支持: left/right/middle"))
+  - }
+  - 如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "kernel") == 假)
+  - {
+  - 变量 cdp按钮名 <类型 = 文本型>
+  - cdp按钮名 = vip按钮文本
+  - 如果 (cdp按钮名 == "")
+  - {
+  - cdp按钮名 = "left"
+  - }
+  - 如果 (MCP命令服务器.CDP派发鼠标事件 ("mousePressed", x, y, cdp按钮名) && MCP命令服务器.CDP派发鼠标事件 ("mouseReleased", x, y, cdp按钮名))
+  - {
+  - 返回 (MCP_响应构建.命令成功 (命令ID, "点击 (" + 到文本 (x) + "," + 到文本 (y) + ") 按钮:" + cdp按钮名 + " | 经 CDP 派发(不破坏 CDP 会话) | 如需内核级注入请传 kernel:true"))
+  - }
+  - }
+  - 返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发鼠标事件失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级鼠标注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_element_action 点击元素 /
+  - vip_ctrl.高级鼠标_单击 (x, y, vip按钮类型)
+  - 返回 (MCP_响应构建.命令成功 (命令ID, "VIP点击 (" + 到文本 (x) + "," + 到文本 (y) + ") | ⚠ 内核级鼠标注入实测会使 CDP 通道失效(CDP 优先工具随后退化为原生路径, 每次白等约10秒且部分返回 null), 需重启进程才能恢复"))
+  - }
+  - 按钮类型 = 鼠标按键类型.左键  // 默认左键
+  - 返回 (MCP_响应构建.命令成功 (命令ID, "点击 (" + 到文本 (x) + "," + 到文本 (y) + ") 按钮:" + 按钮文本))
+  - }
+  - 返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发鼠标事件失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级鼠标注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_element_action 点击元素 /
+  - 返回 (MCP_响应构建.命令成功 (命令ID, "VIP鼠标移动到 (" + 到文本 (x) + "," + 到文本 (y) + ") | ⚠ 本工具走**内核级鼠标注入**, 实测该调用会使 CDP 通道失效: 之后 browser_dom_query / browser_dom_rect / browser_ge
+  - }
+  - 返回 (MCP_响应构建.命令成功 (命令ID, "鼠标移动到 (" + 到文本 (x) + "," + 到文本 (y) + ")"))
+  - }
+  - 返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发鼠标事件失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级鼠标注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_element_action 点击元素 /
+  - 返回 (MCP_响应构建.命令成功 (命令ID, "VIP滚轮 (" + 到文本 (x) + "," + 到文本 (y) + ") delta:" + 到文本 (deltaX) + "," + 到文本 (deltaY) + " | ⚠ 内核级鼠标注入实测会使 CDP 通道失效(CDP 优先工具随后退化为原生路径, 每次
+  - }
+  - 返回 (MCP_响应构建.命令成功 (命令ID, "滚轮 (" + 到文本 (x) + "," + 到文本 (y) + ") delta:" + 到文本 (deltaX) + "," + 到文本 (deltaY)))
+  - vip.高级触摸_按下 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+  - 返回 (MCP_响应构建.命令成功 (命令ID, "触摸按下"))
+  - vip.高级触摸_放开 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+  - 返回 (MCP_响应构建.命令成功 (命令ID, "触摸放开"))
+  - vip.高级触摸_移动 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+  - 返回 (MCP_响应构建.命令成功 (命令ID, "触摸移动"))
+
+== 新增的可执行行(应为新结构) ==
+  + 否则 (方法名 == "browser_mouse_click")
+  + 按钮类型 = 鼠标按键类型.左键
+  + 变量 cdp按钮名 <类型 = 文本型>
+  + cdp按钮名 = 按钮文本
+  + 如果 (cdp按钮名 == "")
+  + {
+  + cdp按钮名 = "left"
+  + }
+  + 如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "kernel") == 假)
+  + {
+  + 如果 (MCP命令服务器.CDP派发鼠标事件 ("mousePressed", x, y, cdp按钮名) && MCP命令服务器.CDP派发鼠标事件 ("mouseReleased", x, y, cdp按钮名))
+  + {
+  + 返回 (MCP_响应构建.命令成功 (命令ID, "点击 (" + 到文本 (x) + "," + 到文本 (y) + ") 按钮:" + cdp按钮名 + " | 经 CDP 派发(不破坏 CDP 会话) | 如需内核级注入请传 kernel:true"))
+  + }
+  + 返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发鼠标事件失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_element_action 点击元素 / b
+  + }
+  + 变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+  + vip_ctrl = browser.取VIP控制器 ()
+  + 如果 (vip_ctrl.是否为空 () == 假)
+  + {
+  + vip_ctrl.高级鼠标_单击 (x, y, 按钮类型)
+  + 返回 (MCP_响应构建.命令成功 (命令ID, "点击 (" + 到文本 (x) + "," + 到文本 (y) + ") 按钮:" + 按钮文本 + " | ⚠ 内核级鼠标注入: 实测会使 CDP 通道在本会话内失效(此后 CDP 优先工具退化), 需重启 AI-Fbowser-Mcp.exe 恢复"))
+  + }
+  + 返回 (MCP_响应构建.命令成功 (命令ID, "点击 (" + 到文本 (x) + "," + 到文本 (y) + ") 按钮:" + 按钮文本 + " | 经 CEF 事件派发(VIP控制器不可用时的退路)"))
+  + 返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发鼠标事件失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_element_action / browse
+  + }
+  + 返回 (MCP_响应构建.命令成功 (命令ID, "鼠标移动到 (" + 到文本 (x) + "," + 到文本 (y) + ") | ⚠ 内核级鼠标注入: 实测会使 CDP 通道在本会话内失效(此后 CDP 优先工具退化), 需重启 AI-Fbowser-Mcp.exe 恢复"))
+  + }
+  + 返回 (MCP_响应构建.命令成功 (命令ID, "鼠标移动到 (" + 到文本 (x) + "," + 到文本 (y) + ") | 经 CEF 事件派发(VIP控制器不可用时的退路)"))
+  + 返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发鼠标事件失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_element_action / browse
+  + }
+  + 返回 (MCP_响应构建.命令成功 (命令ID, "滚轮 (" + 到文本 (x) + "," + 到文本 (y) + ") delta:" + 到文本 (deltaX) + "," + 到文本 (deltaY) + " | ⚠ 内核级鼠标注入: 实测会使 CDP 通道在本会话内失效(此后 CDP 优先工具退化), 需
+  + }
+  + 返回 (MCP_响应构建.命令成功 (命令ID, "滚轮 (" + 到文本 (x) + "," + 到文本 (y) + ") delta:" + 到文本 (deltaX) + "," + 到文本 (deltaY) + " | 经 CEF 事件派发(VIP控制器不可用时的退路)"))
+  + 如果 (MCP命令服务器.参数键存在 (参数JSON, "x") == 假 || MCP命令服务器.参数键存在 (参数JSON, "y") == 假)
+  + {
+  + 返回 (MCP_响应构建.命令失败 (命令ID, "必须同时提供 x 与 y (整数坐标) | 缺省会被当作 (0,0) 而在页面左上角误触, 故拒绝执行; 如需触左上角请显式传 x=0 y=0"))
+  + }
+  + 变量 touchX <类型 = 整数>
+  + touchX = MCP命令服务器.yyjson取整数 (参数JSON, "x")
+  + 变量 touchY <类型 = 整数>
+  + touchY = MCP命令服务器.yyjson取整数 (参数JSON, "y")
+  + 如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "kernel") == 假)
+  + {
+  + 如果 (MCP命令服务器.CDP派发触摸事件 ("touchStart", touchX, touchY))
+  + {
+  + 返回 (MCP_响应构建.命令成功 (命令ID, "触摸按下 (" + 到文本 (touchX) + "," + 到文本 (touchY) + ") | 经 CDP 派发(不破坏 CDP 会话) | 如需内核级注入请传 kernel:true"))
+  + }
+  + 返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发触摸失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_cdp_call method=Input.dis
+  + }
+  + vip.高级触摸_按下 (touchX, touchY)
+  + 返回 (MCP_响应构建.命令成功 (命令ID, "触摸按下 (" + 到文本 (touchX) + "," + 到文本 (touchY) + ") | ⚠ 内核级触摸注入实测会使 CDP 通道在本会话内失效, 需重启进程恢复"))
+  + 如果 (MCP命令服务器.参数键存在 (参数JSON, "x") == 假 || MCP命令服务器.参数键存在 (参数JSON, "y") == 假)
+  + {
+  + 返回 (MCP_响应构建.命令失败 (命令ID, "必须同时提供 x 与 y (整数坐标) | 缺省会被当作 (0,0) 而在页面左上角误触, 故拒绝执行; 如需触左上角请显式传 x=0 y=0"))
+  + }
+  + 变量 touchX <类型 = 整数>
+  + touchX = MCP命令服务器.yyjson取整数 (参数JSON, "x")
+  + 变量 touchY <类型 = 整数>
+  + touchY = MCP命令服务器.yyjson取整数 (参数JSON, "y")
+  + 如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "kernel") == 假)
+  + {
+  + 如果 (MCP命令服务器.CDP派发触摸事件 ("touchEnd", touchX, touchY))
+  + {
+  + 返回 (MCP_响应构建.命令成功 (命令ID, "触摸放开 (" + 到文本 (touchX) + "," + 到文本 (touchY) + ") | 经 CDP 派发(不破坏 CDP 会话)"))
+  + }
+  + 返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发触摸失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_cdp_call method=Input.dis
+  + }
+  + vip.高级触摸_放开 (touchX, touchY)
+  + 返回 (MCP_响应构建.命令成功 (命令ID, "触摸放开 (" + 到文本 (touchX) + "," + 到文本 (touchY) + ") | ⚠ 内核级触摸注入实测会使 CDP 通道在本会话内失效, 需重启进程恢复"))
+  + 如果 (MCP命令服务器.参数键存在 (参数JSON, "x") == 假 || MCP命令服务器.参数键存在 (参数JSON, "y") == 假)
+  + {
+  + 返回 (MCP_响应构建.命令失败 (命令ID, "必须同时提供 x 与 y (整数坐标) | 缺省会被当作 (0,0) 而在页面左上角误触, 故拒绝执行; 如需触左上角请显式传 x=0 y=0"))
+  + }
+  + 变量 touchX <类型 = 整数>
+  + touchX = MCP命令服务器.yyjson取整数 (参数JSON, "x")
+  + 变量 touchY <类型 = 整数>
+  + touchY = MCP命令服务器.yyjson取整数 (参数JSON, "y")
+  + 如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "kernel") == 假)
+  + {
+  + 如果 (MCP命令服务器.CDP派发触摸事件 ("touchMove", touchX, touchY))
+  + {
+  + 返回 (MCP_响应构建.命令成功 (命令ID, "触摸拖动 (" + 到文本 (touchX) + "," + 到文本 (touchY) + ") | 经 CDP 派发(不破坏 CDP 会话)"))
+  + }
+  + 返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发触摸失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_cdp_call method=Input.dis
+  + }
+  + vip.高级触摸_移动 (touchX, touchY)
+  + 返回 (MCP_响应构建.命令成功 (命令ID, "触摸拖动 (" + 到文本 (touchX) + "," + 到文本 (touchY) + ") | ⚠ 内核级触摸注入实测会使 CDP 通道在本会话内失效, 需重启进程恢复"))
+
+完整 diff: _audit/_core_diff.txt

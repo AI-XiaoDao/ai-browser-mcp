@@ -1,0 +1,101 @@
+﻿{
+ "snapshot_utc": "2026-09-13 02:14:58",
+ "files": {
+  "MCP_BrowserEvents.wsv": {
+   "md5": "d5d933bc97100c71392399305a375943",
+   "bytes": 98920,
+   "lines": 3160,
+   "mtime": "2026-09-13 01:42:36"
+  },
+  "MCP_Callbacks.wsv": {
+   "md5": "58953ceee33efa5b81b93ed9c3be0de2",
+   "bytes": 65744,
+   "lines": 1347,
+   "mtime": "2026-09-13 01:31:25"
+  },
+  "MCP_Constants.wsv": {
+   "md5": "eb02d77cb7c72830f6e001afcc7a4790",
+   "bytes": 9608,
+   "lines": 89,
+   "mtime": "2026-09-12 18:29:01"
+  },
+  "MCP_Kernel.wsv": {
+   "md5": "2abfbc035840520a62e8838018ef3721",
+   "bytes": 100124,
+   "lines": 1788,
+   "mtime": "2026-09-13 02:01:52"
+  },
+  "MCP_ResponseBuilders.wsv": {
+   "md5": "b1e7d073aa52e376d3dd657edcd3dad3",
+   "bytes": 21777,
+   "lines": 445,
+   "mtime": "2026-09-13 01:30:58"
+  },
+  "MCP_Server.wsv": {
+   "md5": "a9eeff083f162517ee3ef26df5be81ef",
+   "bytes": 615588,
+   "lines": 10807,
+   "mtime": "2026-09-13 02:14:55"
+  },
+  "MCP_Server_Core.wsv": {
+   "md5": "49811a8128c23a4d762ec2004444ef7e",
+   "bytes": 447197,
+   "lines": 6970,
+   "mtime": "2026-09-13 02:14:39"
+  },
+  "MCP_Server_Form.wsv": {
+   "md5": "cd3de6946dbc67cac8fd3eafe9de5105",
+   "bytes": 35707,
+   "lines": 588,
+   "mtime": "2026-09-13 01:31:35"
+  },
+  "MCP_Server_HTTP.wsv": {
+   "md5": "eff169ba3799b8b8da2edec10c3eec74",
+   "bytes": 26991,
+   "lines": 370,
+   "mtime": "2026-09-13 01:31:19"
+  },
+  "MCP_Server_Reverse.wsv": {
+   "md5": "4260f6245f4a1edb8f19aea2045715d6",
+   "bytes": 117665,
+   "lines": 1819,
+   "mtime": "2026-09-13 01:29:40"
+  },
+  "MCP_Server_System.wsv": {
+   "md5": "70396684fac389c83a6a63addca1351f",
+   "bytes": 9113,
+   "lines": 153,
+   "mtime": "2026-09-13 01:30:58"
+  },
+  "MCP_Server_Utils.wsv": {
+   "md5": "3857af84c26304a7c89788fc20aca20e",
+   "bytes": 3081,
+   "lines": 68,
+   "mtime": "2026-09-12 18:29:01"
+  },
+  "MCP_Server_VIP.wsv": {
+   "md5": "43883ca4b90bdb1680a917ac343a5a74",
+   "bytes": 89628,
+   "lines": 1547,
+   "mtime": "2026-09-13 01:29:06"
+  },
+  "MCP_Server_Workflow.wsv": {
+   "md5": "46acd314aafb2d818aa4285309bdce9a",
+   "bytes": 39196,
+   "lines": 845,
+   "mtime": "2026-09-13 01:31:07"
+  },
+  "MCP_Stdio.wsv": {
+   "md5": "c9dd59611c6346e3aad89e3dd257dd8d",
+   "bytes": 20061,
+   "lines": 340,
+   "mtime": "2026-09-13 01:29:45"
+  },
+  "main.wsv": {
+   "md5": "e8e2aa0b2eafd4ebe1424605c364442e",
+   "bytes": 38979,
+   "lines": 794,
+   "mtime": "2026-09-13 01:41:15"
+  }
+ }
+}

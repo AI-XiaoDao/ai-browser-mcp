@@ -1,0 +1,42 @@
+====================================================================================================
+A1 格式与编码合规检查
+依据: 技能书 参考/wsv文件格式.md (规则1-4) + 参考/语法速查.md §3
+====================================================================================================
+
+文件                       编码        行尾     BOM         行数  末depth     问题
+----------------------------------------------------------------------------------------------------
+main.wsv                 utf-8     LF     无          793       0      0
+MCP_Server.wsv           utf-8     LF     无        10461       0      0
+MCP_Server_Core.wsv      utf-8     LF     无         7235       0      0
+MCP_Server_HTTP.wsv      utf-8     LF     无          371       0      0
+MCP_Server_System.wsv    utf-8     CRLF   无          157       0      0
+MCP_Server_Form.wsv      utf-8     CRLF   无          592       0      0
+MCP_Server_VIP.wsv       utf-8     LF     无         1578       0      0
+MCP_Server_Workflow.wsv  utf-8     CRLF   无          845       0      0
+MCP_Server_Reverse.wsv   utf-8     CRLF   无          846       0      0
+MCP_Stdio.wsv            utf-8     CRLF   无          341       0      0
+MCP_Kernel.wsv           utf-8     LF     EFBBBF    1744       0      0
+MCP_BrowserEvents.wsv    utf-8     LF     无         3158       0      0
+MCP_Callbacks.wsv        utf-8     CRLF   无         1347       0      0
+MCP_Constants.wsv        utf-8     CRLF   无           89       0      0
+MCP_ResponseBuilders.wsv utf-8     CRLF   无          385       0      0
+MCP_Server_Utils.wsv     utf-8     CRLF   无           68       0      0
+
+总计问题: 0
+
+>>> 结构/编码层面: 16/16 文件零违规
+
+--- 行尾一致性 (LOW: 非 CRLF 会导致 IDE 保存时产生全文件 diff) ---
+  main.wsv                 LF
+  MCP_Server.wsv           LF
+  MCP_Server_Core.wsv      LF
+  MCP_Server_HTTP.wsv      LF
+  MCP_Server_VIP.wsv       LF
+  MCP_Kernel.wsv           LF
+  MCP_BrowserEvents.wsv    LF
+
+--- 已剔除的检查项 (建模错误，避免误报) ---
+  x  '语句行以 包/类/方法/参数/常量/变量 开头须有 <>'
+     理由: wsv格式规则中『变量/常量』可合法位于『方法子语句体(局部变量)』，
+     此时它们是成员定义行而非语句行，IDE 本身即不带 <> 前缀。
+     前任审计报告 §1.1 亦称该项 0 处违规，与本次实测一致。

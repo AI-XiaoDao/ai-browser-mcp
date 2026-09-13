@@ -1,12 +1,12 @@
 <火山程序 类型 = "通常" 版本 = 1 />
 包 火山.程序
 # MCP_服务器工具 — TLS 版本映射 (被 Core/VIP fingerprint ssl 调用)
-类 MCP_服务器工具 <公开 @全局类 = 真>
+类 MCP_服务器工具 <公开 @全局类 = 真 @输出名 = "MCPServerTool">
 {
     # 控制台日志输出: 标准错误流(stderr) — 控制台显示 + 不污染stdio模式的stdout协议帧
     # GBK编码输出(中文Windows控制台默认代码页936, 与IDE输出面板一致, 防UTF-8乱码)
-    方法 控制台输出 <公开 静态>
-    参数 文本 <类型 = 文本型>
+    方法 控制台输出 <公开 静态 @输出名 = "ConsoleOutput" @强制输出 = 真>
+    参数 文本 <类型 = 文本型 @输出名 = "Text">
     {
         @ {
         @     std::wstring ws = @<文本>.GetText();
@@ -16,17 +16,36 @@
         @         out.assign(n, '\0');
         @         int written = WideCharToMultiByte(936, 0, ws.c_str(), (int)ws.size(), &out[0], n, NULL, NULL);
         @         if (written > 0) out.resize(written);
-        @         else out.clear();  // 修复: 转换失败时丢弃, 不把NUL填充写入stderr
+        @         else out.clear();  // 转换失败必须丢弃: 否则会把 NUL 填充写进 stderr
         @     }
         @     out += '\n';
-        @     fwrite(out.data(), 1, out.size(), stderr);  // 修复: 正文+换行单次写出, 防多线程日志交错错位
+        @     fwrite(out.data(), 1, out.size(), stderr);  // 正文与换行必须单次写出: 分两次写会让多线程日志交错错位
         @     fflush(stderr);
+        @     // 调试期双写: 控制台窗口实时可见(现场看日志), 同内容追加到 exe 目录下
+        @     // mcp_console.log 供审计脚本边写边读核对日志证据(发布成品可去掉此段)
+        @     static HANDLE s_log = INVALID_HANDLE_VALUE;
+        @     if (s_log == INVALID_HANDLE_VALUE) {
+        @         wchar_t path[300] = {0};
+        @         DWORD n2 = GetModuleFileNameW(NULL, path, 260);
+        @         if (n2 > 0 && n2 < 260) {
+        @             for (int i = (int)n2 - 1; i >= 0; i--) { if (path[i] == L'\\') { path[i + 1] = 0; break; } }
+        @             lstrcatW(path, L"mcp_console.log");
+        @             WIN32_FILE_ATTRIBUTE_DATA fa;
+        @             if (GetFileAttributesExW(path, GetFileExInfoStandard, &fa) && fa.nFileSizeHigh == 0 && fa.nFileSizeLow > 16 * 1024 * 1024) DeleteFileW(path);
+        @         }
+        @         s_log = CreateFileW(path, FILE_APPEND_DATA, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+        @     }
+        @     if (s_log != INVALID_HANDLE_VALUE) {
+        @         DWORD w2 = 0;
+        @         WriteFile(s_log, out.data(), (DWORD)out.size(), &w2, NULL);
+        @         FlushFileBuffers(s_log);
+        @     }
         @ }
     }
 
     # 目录存在性检查 (内联Win32实现, 规避不同火山版本 目录是否存在 内置API的SDK声明缺失问题)
-    方法 检查目录是否存在 <公开 静态 类型 = 逻辑型>
-    参数 目录路径 <类型 = 文本型>
+    方法 检查目录是否存在 <公开 静态 类型 = 逻辑型 @输出名 = "CheckDirIsExists" @强制输出 = 真>
+    参数 目录路径 <类型 = 文本型 @输出名 = "DirPath">
     {
         变量 结果 <类型 = 逻辑型 值 = 假>
         @ {
@@ -36,8 +55,8 @@
         返回 (结果)
     }
 
-    方法 整数到TLS版本 <公开 静态 类型 = TLS版本>
-    参数 整数值 <类型 = 整数>
+    方法 整数到TLS版本 <公开 静态 类型 = TLS版本 @输出名 = "IntToTLSVersion" @强制输出 = 真>
+    参数 整数值 <类型 = 整数 @输出名 = "IntValue">
     {
         // 0=空, 表示不设置/不限制TLS版本, 让系统决定
         如果 (整数值 == 0)

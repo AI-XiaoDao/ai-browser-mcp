@@ -1,0 +1,440 @@
+{
+ "snapshot": "C:\\Users\\cxzxc\\Desktop\\MCP源码\\ai-browser-mcp\\CEFbro\\AI-Fbowser-Mcp\\_audit\\_ghost_snapshot",
+ "tool_list_count": 301,
+ "dict_count": 618,
+ "dispatcher_info": {
+  "分类分派_核心操作": {
+   "file": "MCP_Server_Core.wsv",
+   "def_line": 12,
+   "end_line": 6970,
+   "branch_literals": 491,
+   "bare_else_lines": [
+    145,
+    293,
+    407,
+    432,
+    470,
+    482,
+    627,
+    666,
+    759,
+    778,
+    900,
+    966,
+    987,
+    1441,
+    1459,
+    1540,
+    1572,
+    1714,
+    1987,
+    2639,
+    2675,
+    2807,
+    2887,
+    3110,
+    3123,
+    3499,
+    3872,
+    3886,
+    3925,
+    3975,
+    4045,
+    4096,
+    4160,
+    4165,
+    4596,
+    4628,
+    5110,
+    5162,
+    5199,
+    5229,
+    5253,
+    5280,
+    5535,
+    5681,
+    5739,
+    5915,
+    6167,
+    6197,
+    6226,
+    6242,
+    6313,
+    6352,
+    6692,
+    6721,
+    6779,
+    6922
+   ],
+   "tail": []
+  },
+  "分类分派_填表操作": {
+   "file": "MCP_Server_Form.wsv",
+   "def_line": 7,
+   "end_line": 568,
+   "branch_literals": 42,
+   "bare_else_lines": [
+    244,
+    422,
+    481,
+    490,
+    523,
+    528,
+    533
+   ],
+   "tail": [
+    "# 本方法先用 CDP JS 同步确认元素存在; 只有**确定不存在**时才返回失败响应。",
+    "# 失败开放: CDP 自身取不到结果时返回空串放行, 避免 CDP 不可用反而让写操作全部报错。"
+   ]
+  },
+  "分类分派_VIP操作": {
+   "file": "MCP_Server_VIP.wsv",
+   "def_line": 6,
+   "end_line": 1547,
+   "branch_literals": 98,
+   "bare_else_lines": [
+    33,
+    219,
+    897,
+    1141,
+    1150,
+    1254,
+    1314,
+    1364,
+    1454
+   ],
+   "tail": []
+  },
+  "分类分派_系统操作": {
+   "file": "MCP_Server_System.wsv",
+   "def_line": 9,
+   "end_line": 153,
+   "branch_literals": 11,
+   "bare_else_lines": [],
+   "tail": []
+  },
+  "分类分派_编排操作": {
+   "file": "MCP_Server_Workflow.wsv",
+   "def_line": 63,
+   "end_line": 109,
+   "branch_literals": 9,
+   "bare_else_lines": [
+    97
+   ],
+   "tail": [
+    "返回 (MCP_响应构建.命令成功 (命令ID, \"没有正在运行的工作流, 无需停止\"))",
+    "返回 (\"\")"
+   ]
+  },
+  "分类分派_逆向操作": {
+   "file": "MCP_Server_Reverse.wsv",
+   "def_line": 6,
+   "end_line": 1713,
+   "branch_literals": 141,
+   "bare_else_lines": [
+    241,
+    258,
+    303,
+    667,
+    672,
+    680,
+    726,
+    961,
+    1063,
+    1298,
+    1368,
+    1489,
+    1527
+   ],
+   "tail": []
+  },
+  "分类分派_内核操作": {
+   "file": "MCP_Kernel.wsv",
+   "def_line": 53,
+   "end_line": 148,
+   "branch_literals": 17,
+   "bare_else_lines": [],
+   "tail": []
+  }
+ },
+ "rows": [
+  {
+   "tool": "browser_aliases",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1087,
+     "id": 1005,
+     "how": "置整数值",
+     "raw": "命令注册表.置整数值 (\"browser_aliases\", 1005)"
+    }
+   ],
+   "dispatch_hits": [
+    {
+     "dispatcher": "分类分派_核心操作",
+     "line": 4279,
+     "kind": "方法名==字面量",
+     "value": "aliases",
+     "code": "否则 (方法名 == \"aliases\" || 方法名 == \"browser_aliases\")"
+    },
+    {
+     "dispatcher": "分类分派_核心操作",
+     "line": 4279,
+     "kind": "方法名==字面量",
+     "value": "browser_aliases",
+     "code": "否则 (方法名 == \"aliases\" || 方法名 == \"browser_aliases\")"
+    }
+   ]
+  },
+  {
+   "tool": "browser_batch",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1088,
+     "id": 1004,
+     "how": "置整数值",
+     "raw": "命令注册表.置整数值 (\"browser_batch\", 1004)"
+    }
+   ],
+   "dispatch_hits": [
+    {
+     "dispatcher": "分类分派_核心操作",
+     "line": 5289,
+     "kind": "方法名==字面量",
+     "value": "batch",
+     "code": "否则 (方法名 == \"batch\" || 方法名 == \"browser_batch\")"
+    },
+    {
+     "dispatcher": "分类分派_核心操作",
+     "line": 5289,
+     "kind": "方法名==字面量",
+     "value": "browser_batch",
+     "code": "否则 (方法名 == \"batch\" || 方法名 == \"browser_batch\")"
+    }
+   ]
+  },
+  {
+   "tool": "browser_create_tab",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1144,
+     "id": 1141,
+     "how": "置整数值",
+     "raw": "命令注册表.置整数值 (\"browser_create_tab\", 1141)"
+    }
+   ],
+   "dispatch_hits": [
+    {
+     "dispatcher": "分类分派_系统操作",
+     "line": 16,
+     "kind": "方法名==字面量",
+     "value": "browser_create_tab",
+     "code": "如果 (方法名 == \"browser_create_tab\")"
+    }
+   ]
+  },
+  {
+   "tool": "browser_debugger_pause",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1040,
+     "id": 832,
+     "how": "置整数值",
+     "raw": "命令注册表.置整数值 (\"browser_debugger_pause\", 832)"
+    }
+   ],
+   "dispatch_hits": [
+    {
+     "dispatcher": "分类分派_核心操作",
+     "line": 4466,
+     "kind": "方法名==字面量",
+     "value": "browser_debugger_pause",
+     "code": "否则 (方法名 == \"browser_debugger_pause\")"
+    }
+   ]
+  },
+  {
+   "tool": "browser_fingerprint_languages",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1285,
+     "id": 1348,
+     "how": "注册命令双变体(fingerprint_languages) 不带短名",
+     "raw": "注册命令双变体 (\"fingerprint_languages\", 1348, 假)"
+    }
+   ],
+   "dispatch_hits": []
+  },
+  {
+   "tool": "browser_fingerprint_webgl_vendor",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1275,
+     "id": 1340,
+     "how": "注册命令双变体(fingerprint_webgl_vendor) 不带短名",
+     "raw": "注册命令双变体 (\"fingerprint_webgl_vendor\", 1340, 假)"
+    }
+   ],
+   "dispatch_hits": []
+  },
+  {
+   "tool": "browser_font_randomize",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1259,
+     "id": 1327,
+     "how": "注册命令双变体(font_randomize)",
+     "raw": "注册命令双变体 (\"font_randomize\", 1327)"
+    }
+   ],
+   "dispatch_hits": []
+  },
+  {
+   "tool": "browser_reverse_cookie_cdp",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1276,
+     "id": 1341,
+     "how": "注册命令双变体(reverse_cookie_cdp)",
+     "raw": "注册命令双变体 (\"reverse_cookie_cdp\", 1341)"
+    }
+   ],
+   "dispatch_hits": []
+  },
+  {
+   "tool": "browser_reverse_css_coverage",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1286,
+     "id": 1349,
+     "how": "注册命令双变体(reverse_css_coverage)",
+     "raw": "注册命令双变体 (\"reverse_css_coverage\", 1349)"
+    }
+   ],
+   "dispatch_hits": []
+  },
+  {
+   "tool": "browser_reverse_detect_traps",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1249,
+     "id": 1321,
+     "how": "置整数值",
+     "raw": "命令注册表.置整数值 (\"browser_reverse_detect_traps\", 1321)"
+    }
+   ],
+   "dispatch_hits": []
+  },
+  {
+   "tool": "browser_reverse_emulate_focus",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1279,
+     "id": 1344,
+     "how": "注册命令双变体(reverse_emulate_focus)",
+     "raw": "注册命令双变体 (\"reverse_emulate_focus\", 1344)"
+    }
+   ],
+   "dispatch_hits": []
+  },
+  {
+   "tool": "browser_reverse_input_cdp",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1281,
+     "id": 1345,
+     "how": "注册命令双变体(reverse_input_cdp)",
+     "raw": "注册命令双变体 (\"reverse_input_cdp\", 1345)"
+    }
+   ],
+   "dispatch_hits": []
+  },
+  {
+   "tool": "browser_reverse_layer_tree",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1287,
+     "id": 1350,
+     "how": "注册命令双变体(reverse_layer_tree)",
+     "raw": "注册命令双变体 (\"reverse_layer_tree\", 1350)"
+    }
+   ],
+   "dispatch_hits": []
+  },
+  {
+   "tool": "browser_reverse_network_conditions",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1277,
+     "id": 1342,
+     "how": "注册命令双变体(reverse_network_conditions)",
+     "raw": "注册命令双变体 (\"reverse_network_conditions\", 1342)"
+    }
+   ],
+   "dispatch_hits": []
+  },
+  {
+   "tool": "browser_reverse_trace",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1282,
+     "id": 1346,
+     "how": "注册命令双变体(reverse_trace)",
+     "raw": "注册命令双变体 (\"reverse_trace\", 1346)"
+    }
+   ],
+   "dispatch_hits": []
+  },
+  {
+   "tool": "browser_task_runner_post",
+   "tools_list": null,
+   "dict_registry": [
+    {
+     "file": "MCP_Server.wsv",
+     "line": 1163,
+     "id": 1142,
+     "how": "置整数值",
+     "raw": "命令注册表.置整数值 (\"browser_task_runner_post\", 1142)"
+    }
+   ],
+   "dispatch_hits": [
+    {
+     "dispatcher": "分类分派_系统操作",
+     "line": 20,
+     "kind": "方法名==字面量",
+     "value": "browser_task_runner_post",
+     "code": "否则 (方法名 == \"browser_task_runner_post\")"
+    }
+   ]
+  }
+ ]
+}

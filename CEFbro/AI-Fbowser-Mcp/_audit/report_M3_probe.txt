@@ -1,0 +1,133 @@
+========================================================================================================
+M3 探针结果深度分析  (265 个工具真机调用)
+========================================================================================================
+
+分级               数量  含义
+--------------------------------------------------------------------------------------------------------
+OK              160  成功返回且 content 非空
+ERR_GOOD         60  失败，但信息指出了具体参数/原因/下一步 —— **正确行为**
+ERR_WEAK         28  失败，但只有泛化提示(未指出哪个参数) —— 可优化
+TIMEOUT          17  客户端 6s 超时 —— 需判定是设计如此还是缺陷
+
+========================================================================================================
+【重点 1】17 个 TIMEOUT —— 逐项判定
+========================================================================================================
+
+工具                                         仅校验    描述
+--------------------------------------------------------------------------------------------------------
+browser_debugger_enable                    是      启用调试器(VIP)
+browser_debugger_resume                    是      继续JS(VIP)
+browser_debugger_step_over                 是      单步跳过(VIP)
+browser_debugger_wait_paused               否      等待 Debugger.paused(VIP)
+browser_debugger_last_paused               否      最近断点暂停信息(VIP)
+browser_debugger_inspect                   否      断点处批量求值(VIP)
+browser_debugger_flow                      是      断点一键流程(VIP)
+browser_debugger_script_source             否      断点脚本源码(VIP)
+browser_kernel_reverse_probe               否      动态插桩总包: 五维API插桩(XHR/fetch/WebSocket/定时器/事件监听), 记录URL/状态/
+browser_kernel_reverse_algo                否      动态算法Hook: 包装CryptoJS全算法(MD5/SHA/AES/DES/RC4/HMAC等)+全局哈希/
+browser_kernel_reverse_functions           否      动态函数提取: 枚举window全局函数+常用对象链+核心类prototype方法, 输出路径/函数名/参数个数
+browser_kernel_reverse_sources             否      动态JS源码提取: document.scripts全量(含inline), index指定单脚本(从1起), 
+browser_kernel_reverse_watch_global        否      全局变量动态追踪: defineProperty包装指定全局变量, 记录写入者调用栈+新值(window.__M
+browser_reverse_strings                    是      JS逆向: 提取页面中的可疑字符串/加密数组。mode=suspicious(长字符串+Base64+HEX)/
+browser_reverse_verify                     是      JS逆向: 验证重实现算法。给定原始函数和重写版本+测试用例,自动比对输出是否一致
+browser_reverse_extract                    是      JS逆向: 静态加密模块提取(CDP Runtime.evaluate同步)。mode=scan枚举页面<scr
+browser_antidetect_presets                 否      反检测: 一键部署反检测预设。preset=stealth(去webdriver+去debugger检测+去自动
+
+========================================================================================================
+【重点 2】错误信息质量 (影响 AI 能否自我纠正)
+========================================================================================================
+
+需要改进的失败信息: 28 个
+   browser_back                               [ERR_WEAK]
+        无法后退 — 无导航历史 | 当前页面没有可后退的历史记录
+   browser_forward                            [ERR_WEAK]
+        无法前进 — 无导航历史 | 当前页面没有可前进的历史记录
+   browser_get_text                           [ERR_WEAK]
+        [无法序列化的值] 可能原因: ①JS返回了DOM对象/函数等(建议JSON.stringify()包裹) ②原生API目标元素不存在或类型不符(请检查selector与元素类型)
+   browser_close_try                          [ERR_WEAK]
+        ⛔ 远程关闭浏览器已禁用 | 浏览器生命周期由GUI管理
+   browser_delete_cookies                     [ERR_WEAK]
+        此操作将清除所有域名下所有Cookie, 请设置 confirm: true 以确认操作
+   browser_frame_by_name                      [ERR_WEAK]
+        name 参数不能为空 | 请查看工具描述补全必填参数
+   browser_shutdown                           [ERR_WEAK]
+        此操作将关闭AI-Fbowser-Mcp.exe进程! 请设置 confirm: true 确认
+   browser_dom_inner_html                     [ERR_WEAK]
+        
+
+<!-- ════════════ HEADER ════════════ -->
+<div class="header">
+  <h1>AI浏览器 MCP Server</h1>
+  <p class="subti
+   browser_scrape                             [ERR_WEAK]
+        url 参数不能为空 | 请查看工具描述补全必填参数
+   browser_wait                               [ERR_WEAK]
+        未知what:  | 支持: selector/text/timeout/load_end/load_start/navigate/network_idle/url_contains
+   browser_debugger_set_breakpoint            [ERR_WEAK]
+        url 参数不能为空 | 请查看工具描述补全必填参数
+   browser_network_body                       [ERR_WEAK]
+        request_id 参数不能为空 | 请查看工具描述补全必填参数
+   browser_set_parent                         [ERR_WEAK]
+        hwnd 不能为0 | 请提供有效的父窗口句柄
+   browser_find_by_tag                        [ERR_WEAK]
+        tag 参数不能为空 | 请查看工具描述补全必填参数
+   browser_find_by_hwnd                       [ERR_WEAK]
+        hwnd 参数不能为空 | 请查看工具描述补全必填参数
+   browser_file_dialog                        [ERR_WEAK]
+        文件对话框已改为程序化选择(不弹窗口) | 请传 path 参数指定目标文件路径
+   browser_send_message                       [ERR_WEAK]
+        name 参数不能为空 | 请查看工具描述补全必填参数
+   browser_ipc_send_all                       [ERR_WEAK]
+        name 参数不能为空 | 请查看工具描述补全必填参数
+   browser_create_url_request                 [ERR_WEAK]
+        url 参数不能为空 | 请查看工具描述补全必填参数
+   browser_kernel_auth                        [ERR_WEAK]
+        action 须为 set/clear/list
+   browser_kernel_scheme                      [ERR_WEAK]
+        action 须为 register/unregister/clear/list
+   browser_kernel_menu                        [ERR_WEAK]
+        action 须为 disable/enable/status
+   browser_set_window_style                   [ERR_WEAK]
+        非法窗口属性类型(0) | 支持: -16(GWL_STYLE) / -20(GWL_EXSTYLE) / -12(GWL_ID)
+   browser_vip_fingerprint_media_devices      [ERR_WEAK]
+        未知target:  | 支持 audio_input/audio_output/video_input
+   browser_snapshot                           [ERR_WEAK]
+        快照执行错误: [无法序列化的值] 可能原因: ①JS返回了DOM对象/函数等(建议JSON.stringify()包裹) ②原生API目标元素不存在或类型不符(请检查selector与元素类型)
+   browser_click_text                         [ERR_WEAK]
+        text 参数不能为空 | 请查看工具描述补全必填参数
+   browser_highlight                          [ERR_WEAK]
+        selector 参数不能为空 | 请查看工具描述补全必填参数
+   browser_reverse_string_refs                [ERR_WEAK]
+        value 参数不能为空 | 请查看工具描述补全必填参数
+
+========================================================================================================
+【重点 3】成功返回的结构形态 (AI 解析友好度)
+========================================================================================================
+
+   succ+msg 扁平                         97   例: browser_stop, browser_open_devtools, browser_close_devtools, browser_create, browser_close
+   文本(形似JSON但解析失败)                     29   例: browser_reload, browser_print_to_pdf, browser_clear_cache, browser_clear_cache_browser, browser_meta
+   succ,msg,data 三层包裹                  23   例: browser_get_focused_frame, browser_user_tags, browser_request_context, browser_ipc_renderer_ids, ping
+   纯文本                                 11   例: browser_get_url, browser_get_title, browser_execute_js, browser_evaluate, browser_dom_query
+
+========================================================================================================
+【重点 4】无参数工具 (74 个) 是否真的都无需参数
+========================================================================================================
+
+   无参数 schema 的工具: 74  (其中无参调用成功 63, 其余 11)
+      browser_back                               ERR_WEAK     无法后退 — 无导航历史 | 当前页面没有可后退的历史记录
+      browser_forward                            ERR_WEAK     无法前进 — 无导航历史 | 当前页面没有可前进的历史记录
+      browser_close_try                          ERR_WEAK     ⛔ 远程关闭浏览器已禁用 | 浏览器生命周期由GUI管理
+      browser_set_auto_resize                    ERR_GOOD     ⛔ 嵌入式GUI浏览器不支持 set_auto_resize | 尺寸由主窗口 adjust_layout 管理
+      browser_debugger_enable                    TIMEOUT      timed out
+      browser_debugger_resume                    TIMEOUT      timed out
+      browser_debugger_step_over                 TIMEOUT      timed out
+      browser_debugger_step_into                 ERR_GOOD     页面未处于暂停状态 | 请先 debugger_flow 或 debugger_enable + 断点 + wait_paused
+      browser_debugger_step_out                  ERR_GOOD     页面未处于暂停状态 | 请先 debugger_flow 或 debugger_enable + 断点 + wait_paused
+      browser_debugger_stack                     ERR_GOOD     页面未处于暂停状态 | 请先 debugger_flow 或 debugger_enable + 断点 + wait_paused
+      browser_file_dialog                        ERR_WEAK     文件对话框已改为程序化选择(不弹窗口) | 请传 path 参数指定目标文件路径
+
+========================================================================================================
+【重点 5】返回异步 stub、需要 mcp_result 轮询的工具
+========================================================================================================
+
+   共 0 个（探针用空参数调用即返回 stub，说明这些工具**默认异步**）

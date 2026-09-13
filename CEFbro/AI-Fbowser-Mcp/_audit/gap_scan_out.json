@@ -1,0 +1,4336 @@
+{
+ "FBrowser初始化控制": [
+  {
+   "line": 27,
+   "name": "启用自带调试提示",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 37,
+   "name": "初始化调试信息显示",
+   "public": false,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 93,
+   "name": "FBrowser_初始化",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 6,
+   "callsample": [
+    [
+     "main.wsv",
+     103,
+     "如果真 (FBrowser_初始化 (设置, 初始化事件) == 假)"
+    ]
+   ],
+   "anysample": [
+    [
+     "main.wsv",
+     45,
+     "// 提前读取配置中的VIP授权码 (VIP注册必须在FBrowser_初始化前完成)"
+    ],
+    [
+     "main.wsv",
+     56,
+     "// (早于 FBrowser_初始化, 因此也早于任何请求环境/插件加载)。"
+    ],
+    [
+     "main.wsv",
+     80,
+     "变量 设置 <类型 = FBrowser_初始化配置>"
+    ],
+    [
+     "main.wsv",
+     103,
+     "如果真 (FBrowser_初始化 (设置, 初始化事件) == 假)"
+    ],
+    [
+     "MCP_Server.wsv",
+     392,
+     "# 白名单布尔键来源: mcp_config.json (加载MCP配置 在 FBrowser_初始化 之前调用, 时机天然合适);"
+    ],
+    [
+     "MCP_Server.wsv",
+     639,
+     "// 只读配置写静态字段; 真正施加在 启动类.即将处理命令行 里完成(FBrowser_初始化 之前)"
+    ]
+   ]
+  },
+  {
+   "line": 113,
+   "name": "FBrowser_关闭",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "main.wsv",
+     254,
+     "FBrowser_关闭 (真)"
+    ]
+   ],
+   "anysample": [
+    [
+     "main.wsv",
+     254,
+     "FBrowser_关闭 (真)"
+    ]
+   ]
+  },
+  {
+   "line": 121,
+   "name": "FBrowser_消息循环_执行",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 127,
+   "name": "FBrowser_消息循环_运行",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 133,
+   "name": "FBrowser_消息循环_退出",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 139,
+   "name": "FBrowser_消息循环_设置系统模式",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 146,
+   "name": "FBrowser_自定义方案_注册",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 2,
+   "callsample": [
+    [
+     "MCP_Kernel.wsv",
+     443,
+     "FBrowser_自定义方案_注册 (\"mcp\", 域名, 处理器)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Kernel.wsv",
+     43,
+     "# ── 自定义方案 (FBrowser_自定义方案_注册 + 类_MCP_方案资源处理器) ──"
+    ],
+    [
+     "MCP_Kernel.wsv",
+     443,
+     "FBrowser_自定义方案_注册 (\"mcp\", 域名, 处理器)"
+    ]
+   ]
+  },
+  {
+   "line": 161,
+   "name": "FBrowser_自定义方案_清理",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Kernel.wsv",
+     480,
+     "FBrowser_自定义方案_清理 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Kernel.wsv",
+     480,
+     "FBrowser_自定义方案_清理 ()"
+    ]
+   ]
+  },
+  {
+   "line": 167,
+   "name": "FBrowser_初始化_设置守护",
+   "public": false,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 174,
+   "name": "FBrowser_初始化_设置内存释放",
+   "public": false,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 184,
+   "name": "FBrowser_初始化_设置V8环境默认堆栈大小",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 195,
+   "name": "FBrowser_内存_压缩清理",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     1808,
+     "FBrowser_内存_压缩清理 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     1808,
+     "FBrowser_内存_压缩清理 ()"
+    ]
+   ]
+  },
+  {
+   "line": 202,
+   "name": "FBrowser_JS交互_注册",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 214,
+   "name": "FBrowser_JS交互_删除",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 222,
+   "name": "FBrowser_进程_取当前进程类型",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_System.wsv",
+     86,
+     "进程类型值 = FBrowser_进程_取当前进程类型 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_System.wsv",
+     86,
+     "进程类型值 = FBrowser_进程_取当前进程类型 ()"
+    ]
+   ]
+  },
+  {
+   "line": 228,
+   "name": "FBrowser_创建URL请求",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 3,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     7106,
+     "FBrowser_创建URL请求 (请求, , URL请求回调, MCP_常量.URL请求默认超时)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Callbacks.wsv",
+     860,
+     "// ⚠ 标识不可用于区分请求: 本项目 FBrowser_创建URL请求 的第 4 实参传的是"
+    ],
+    [
+     "MCP_Server.wsv",
+     388,
+     "变量 是否监控自建URL请求 <公开 静态 类型 = 逻辑型 值 = 假 注释 = \"开始创建/下载进度/获得需授权证书 → browser_event:urlreq_start|urlreq_download|urlreq_auth (仅自建 FBrowser_创建URL请求)\" @输出名 = \"IsMonitorURLRequest\">"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7106,
+     "FBrowser_创建URL请求 (请求, , URL请求回调, MCP_常量.URL请求默认超时)"
+    ]
+   ]
+  },
+  {
+   "line": 243,
+   "name": "FBrowser_取版本号",
+   "public": true,
+   "indent": 4,
+   "calls": 3,
+   "anys": 3,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     1815,
+     "版本号 = FBrowser_取版本号 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4143,
+     "元数据对象.加入文本成员 (\"fbro_version\", FBrowser_取版本号 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7577,
+     "envNative.加入文本成员 (\"fbro_version\", FBrowser_取版本号 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     1815,
+     "版本号 = FBrowser_取版本号 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4143,
+     "元数据对象.加入文本成员 (\"fbro_version\", FBrowser_取版本号 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7577,
+     "envNative.加入文本成员 (\"fbro_version\", FBrowser_取版本号 ())"
+    ]
+   ]
+  },
+  {
+   "line": 252,
+   "name": "FBrowser_取初始化缓存目录",
+   "public": true,
+   "indent": 4,
+   "calls": 2,
+   "anys": 2,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     10819,
+     "添加工具JSON (\"browser_get_global_cache_dir\", \"获取全局缓存目录路径(CEF用户数据根目录)| 真值取自类库 FBrowser_取初始化缓存目录(); 目录随启动分支变化: --mcp-stdio/--stdio/--headless 下为 CacheData 下的 GlobalData_Stdio, 常驻HTTP下为 CacheData 下的 GlobalData(见 main.wsv 的 是否为Stdio模式 开关) | 旧实现硬编码 GlobalData, stdio 分支下会静默返回错值 | 注意 profile 级缓存(Cache/Cookies/Local Storage)位于该目录下的 Default 子目录\")"
+    ],
+    [
+     "MCP_Server_System.wsv",
+     54,
+     "// 注: 类库 FBrowser_取初始化缓存目录() 本机**编译不过**(FBroLib.v:155 error C3861 IsEmpty),"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     10819,
+     "添加工具JSON (\"browser_get_global_cache_dir\", \"获取全局缓存目录路径(CEF用户数据根目录)| 真值取自类库 FBrowser_取初始化缓存目录(); 目录随启动分支变化: --mcp-stdio/--stdio/--headless 下为 CacheData 下的 GlobalData_Stdio, 常驻HTTP下为 CacheData 下的 GlobalData(见 main.wsv 的 是否为Stdio模式 开关) | 旧实现硬编码 GlobalData, stdio 分支下会静默返回错值 | 注意 profile 级缓存(Cache/Cookies/Local Storage)位于该目录下的 Default 子目录\")"
+    ],
+    [
+     "MCP_Server_System.wsv",
+     54,
+     "// 注: 类库 FBrowser_取初始化缓存目录() 本机**编译不过**(FBroLib.v:155 error C3861 IsEmpty),"
+    ]
+   ]
+  },
+  {
+   "line": 260,
+   "name": "FBrowser_设置程序DPI模式",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  }
+ ],
+ "FBrowser辅助功能": [
+  {
+   "line": 379,
+   "name": "FBrowser_Parser_Base64编码",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     5696,
+     "result = FBrowser_Parser_Base64编码 (data)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     5696,
+     "result = FBrowser_Parser_Base64编码 (data)"
+    ]
+   ]
+  },
+  {
+   "line": 387,
+   "name": "FBrowser_Parser_Base64解码",
+   "public": true,
+   "indent": 4,
+   "calls": 4,
+   "anys": 5,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     7820,
+     "base64字节 = FBrowser_Parser_Base64解码 (code)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     5708,
+     "字节结果 = FBrowser_Parser_Base64解码 (data)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     5848,
+     "codec编码B64 = FBrowser_Parser_Base64解码 (codec数据)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     5952,
+     "codecB64 = FBrowser_Parser_Base64解码 (codec数据)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     7815,
+     "// code_base64: Base64编码传参, 零转义风险 (官方FBrowser_Parser_Base64解码)"
+    ],
+    [
+     "MCP_Server.wsv",
+     7820,
+     "base64字节 = FBrowser_Parser_Base64解码 (code)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     5708,
+     "字节结果 = FBrowser_Parser_Base64解码 (data)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     5848,
+     "codec编码B64 = FBrowser_Parser_Base64解码 (codec数据)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     5952,
+     "codecB64 = FBrowser_Parser_Base64解码 (codec数据)"
+    ]
+   ]
+  },
+  {
+   "line": 394,
+   "name": "FBrowser_Parser_取数据URI",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 404,
+   "name": "FBrowser_Parser_URI编码",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     5730,
+     "result = FBrowser_Parser_URI编码 (data, usePlus)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     5730,
+     "result = FBrowser_Parser_URI编码 (data, usePlus)"
+    ]
+   ]
+  },
+  {
+   "line": 418,
+   "name": "FBrowser_Parser_URI解码",
+   "public": true,
+   "indent": 4,
+   "calls": 4,
+   "anys": 5,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     9078,
+     "decodedScheme = FBrowser_Parser_URI解码 (rawScheme, 真, 真)"
+    ],
+    [
+     "MCP_Server.wsv",
+     11921,
+     "解码路径 = FBrowser_Parser_URI解码 (相对路径, 真, 真)"
+    ],
+    [
+     "MCP_Server.wsv",
+     12027,
+     "相对路径 = FBrowser_Parser_URI解码 (相对路径, 真, 真)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     5749,
+     "result = FBrowser_Parser_URI解码 (data, toUtf8, keepEscaped)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     9078,
+     "decodedScheme = FBrowser_Parser_URI解码 (rawScheme, 真, 真)"
+    ],
+    [
+     "MCP_Server.wsv",
+     11921,
+     "解码路径 = FBrowser_Parser_URI解码 (相对路径, 真, 真)"
+    ],
+    [
+     "MCP_Server.wsv",
+     12027,
+     "相对路径 = FBrowser_Parser_URI解码 (相对路径, 真, 真)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     5749,
+     "result = FBrowser_Parser_URI解码 (data, toUtf8, keepEscaped)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     5777,
+     "uOut.加入文本成员 (\"via\", \"lib:FBrowser_Parser_URI解码\")"
+    ]
+   ]
+  },
+  {
+   "line": 433,
+   "name": "FBrowser_Parser_解析JSON",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     1663,
+     "params_value = FBrowser_Parser_解析JSON (paramsJSON文本, JSON解析.RFC)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     1663,
+     "params_value = FBrowser_Parser_解析JSON (paramsJSON文本, JSON解析.RFC)"
+    ]
+   ]
+  },
+  {
+   "line": 443,
+   "name": "FBrowser_Parser_字节值解析为JSON",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 450,
+   "name": "FBrowser_Parser_写入JSON",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 459,
+   "name": "FBrowser_清理全局缓存",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     1375,
+     "FBrowser_清理全局缓存 (, , , 清理缓存回调)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     1375,
+     "FBrowser_清理全局缓存 (, , , 清理缓存回调)"
+    ]
+   ]
+  },
+  {
+   "line": 481,
+   "name": "FBrowser_浏览器_通过ID取浏览器",
+   "public": true,
+   "indent": 4,
+   "calls": 10,
+   "anys": 10,
+   "callsample": [
+    [
+     "MCP_Callbacks.wsv",
+     136,
+     "bb = FBrowser_浏览器_通过ID取浏览器 (浏览器ID)"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     198,
+     "bb = FBrowser_浏览器_通过ID取浏览器 (浏览器ID)"
+    ],
+    [
+     "MCP_ResponseBuilders.wsv",
+     353,
+     "bb = FBrowser_浏览器_通过ID取浏览器 (bid)"
+    ],
+    [
+     "MCP_Server.wsv",
+     1605,
+     "目标CDP浏览器 = FBrowser_浏览器_通过ID取浏览器 (目标浏览器ID)"
+    ],
+    [
+     "MCP_Server.wsv",
+     7887,
+     "返回 (FBrowser_浏览器_通过ID取浏览器 (browserID))"
+    ],
+    [
+     "MCP_Server.wsv",
+     7953,
+     "fb = FBrowser_浏览器_通过ID取浏览器 (firstID)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Callbacks.wsv",
+     136,
+     "bb = FBrowser_浏览器_通过ID取浏览器 (浏览器ID)"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     198,
+     "bb = FBrowser_浏览器_通过ID取浏览器 (浏览器ID)"
+    ],
+    [
+     "MCP_ResponseBuilders.wsv",
+     353,
+     "bb = FBrowser_浏览器_通过ID取浏览器 (bid)"
+    ],
+    [
+     "MCP_Server.wsv",
+     1605,
+     "目标CDP浏览器 = FBrowser_浏览器_通过ID取浏览器 (目标浏览器ID)"
+    ],
+    [
+     "MCP_Server.wsv",
+     7887,
+     "返回 (FBrowser_浏览器_通过ID取浏览器 (browserID))"
+    ],
+    [
+     "MCP_Server.wsv",
+     7953,
+     "fb = FBrowser_浏览器_通过ID取浏览器 (firstID)"
+    ],
+    [
+     "MCP_Server.wsv",
+     9235,
+     "cb = FBrowser_浏览器_通过ID取浏览器 (cid)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     734,
+     "closeBrowser = FBrowser_浏览器_通过ID取浏览器 (closeID)"
+    ]
+   ]
+  },
+  {
+   "line": 487,
+   "name": "FBrowser_浏览器_通过序号取浏览器",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 494,
+   "name": "FBrowser_浏览器_通过窗口句柄取浏览器",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     7118,
+     "found = FBrowser_浏览器_通过窗口句柄取浏览器 (hwnd)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     7118,
+     "found = FBrowser_浏览器_通过窗口句柄取浏览器 (hwnd)"
+    ]
+   ]
+  },
+  {
+   "line": 501,
+   "name": "FBrowser_浏览器_通过用户标识取浏览器",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     6673,
+     "found = FBrowser_浏览器_通过用户标识取浏览器 (tag)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     6673,
+     "found = FBrowser_浏览器_通过用户标识取浏览器 (tag)"
+    ]
+   ]
+  },
+  {
+   "line": 508,
+   "name": "FBrowser_浏览器_取数量",
+   "public": true,
+   "indent": 4,
+   "calls": 11,
+   "anys": 11,
+   "callsample": [
+    [
+     "main.wsv",
+     170,
+     "如果 (FBrowser_浏览器_取数量 () == 0 && MCP命令服务器.MCP正在关闭 == 假)"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     1435,
+     "当前浏览器数 = FBrowser_浏览器_取数量 ()"
+    ],
+    [
+     "MCP_ResponseBuilders.wsv",
+     312,
+     "信息JSON.加入整数成员 (\"browsers\", FBrowser_浏览器_取数量 ())"
+    ],
+    [
+     "MCP_Server.wsv",
+     9225,
+     "判断循环 (FBrowser_浏览器_取数量 () > 0 && 清理尝试 < 50)"
+    ],
+    [
+     "MCP_Server.wsv",
+     10009,
+     "文本 = 文本 + \"mcp_browsers \" + 到文本 (FBrowser_浏览器_取数量 ()) + \"\\n\""
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     654,
+     "如果 (FBrowser_浏览器_取数量 () >= MCP_常量.浏览器实例最大数量)"
+    ]
+   ],
+   "anysample": [
+    [
+     "main.wsv",
+     170,
+     "如果 (FBrowser_浏览器_取数量 () == 0 && MCP命令服务器.MCP正在关闭 == 假)"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     1435,
+     "当前浏览器数 = FBrowser_浏览器_取数量 ()"
+    ],
+    [
+     "MCP_ResponseBuilders.wsv",
+     312,
+     "信息JSON.加入整数成员 (\"browsers\", FBrowser_浏览器_取数量 ())"
+    ],
+    [
+     "MCP_Server.wsv",
+     9225,
+     "判断循环 (FBrowser_浏览器_取数量 () > 0 && 清理尝试 < 50)"
+    ],
+    [
+     "MCP_Server.wsv",
+     10009,
+     "文本 = 文本 + \"mcp_browsers \" + 到文本 (FBrowser_浏览器_取数量 ()) + \"\\n\""
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     654,
+     "如果 (FBrowser_浏览器_取数量 () >= MCP_常量.浏览器实例最大数量)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4142,
+     "元数据对象.加入整数成员 (\"browser_count\", FBrowser_浏览器_取数量 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4781,
+     "状态对象.加入整数成员 (\"browser_count\", FBrowser_浏览器_取数量 ())"
+    ]
+   ]
+  },
+  {
+   "line": 513,
+   "name": "FBrowser_浏览器_取ID清单",
+   "public": true,
+   "indent": 4,
+   "calls": 4,
+   "anys": 4,
+   "callsample": [
+    [
+     "MCP_ResponseBuilders.wsv",
+     344,
+     "ID清单 = FBrowser_浏览器_取ID清单 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     7947,
+     "ID清单 = FBrowser_浏览器_取ID清单 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     9229,
+     "残留ID清单 = FBrowser_浏览器_取ID清单 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     753,
+     "ID清单 = FBrowser_浏览器_取ID清单 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_ResponseBuilders.wsv",
+     344,
+     "ID清单 = FBrowser_浏览器_取ID清单 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     7947,
+     "ID清单 = FBrowser_浏览器_取ID清单 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     9229,
+     "残留ID清单 = FBrowser_浏览器_取ID清单 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     753,
+     "ID清单 = FBrowser_浏览器_取ID清单 ()"
+    ]
+   ]
+  },
+  {
+   "line": 518,
+   "name": "FBrowser_浏览器_取用户标识清单",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     7141,
+     "tag清单 = FBrowser_浏览器_取用户标识清单 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     7141,
+     "tag清单 = FBrowser_浏览器_取用户标识清单 ()"
+    ]
+   ]
+  },
+  {
+   "line": 523,
+   "name": "异常收集回调模板函数",
+   "public": false,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 531,
+   "name": "FBrowser_启用异常收集",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  }
+ ],
+ "类_FBrowser_浏览器": [
+  {
+   "line": 553,
+   "name": "FBrowser_创建浏览器",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "main.wsv",
+     233,
+     "FBrowser_创建浏览器 (url, 窗口信息, 浏览器配置, , , 浏览器事件, , MCP命令服务器.待创建标识)"
+    ]
+   ],
+   "anysample": [
+    [
+     "main.wsv",
+     233,
+     "FBrowser_创建浏览器 (url, 窗口信息, 浏览器配置, , , 浏览器事件, , MCP命令服务器.待创建标识)"
+    ]
+   ]
+  },
+  {
+   "line": 573,
+   "name": "FBrowser_创建浏览器_同步",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 594,
+   "name": "FBrowser_创建后台浏览器",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 2,
+   "callsample": [
+    [
+     "main.wsv",
+     226,
+     "FBrowser_创建后台浏览器 (bgUrl, 浏览器配置, , , 浏览器事件, , MCP命令服务器.待创建标识)"
+    ]
+   ],
+   "anysample": [
+    [
+     "main.wsv",
+     226,
+     "FBrowser_创建后台浏览器 (bgUrl, 浏览器配置, , , 浏览器事件, , MCP命令服务器.待创建标识)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     644,
+     "// FBrowser_创建后台浏览器 —— 与 main.wsv 里 `__SHUTDOWN__` 前缀同一惯例, 无需额外握手字段。"
+    ]
+   ]
+  },
+  {
+   "line": 615,
+   "name": "FBrowser_创建后台浏览器_同步",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 637,
+   "name": "是否为空",
+   "public": true,
+   "indent": 4,
+   "calls": 512,
+   "anys": 531,
+   "callsample": [
+    [
+     "main.wsv",
+     334,
+     "如果 (V8异常.是否为空 () == 假)"
+    ],
+    [
+     "main.wsv",
+     345,
+     "如果 (方案.是否为空 () == 假)"
+    ],
+    [
+     "main.wsv",
+     367,
+     "如果 (MCP命令服务器.应用事件节流字典.是否为空对象 () || MCP命令服务器.应用事件节流字典.是否为空 ())"
+    ],
+    [
+     "main.wsv",
+     386,
+     "如果 (DOM节点.是否为空 () == 假)"
+    ],
+    [
+     "main.wsv",
+     451,
+     "如果 (浏览器.是否为空 () == 假 && 消息名 != \"\")"
+    ],
+    [
+     "main.wsv",
+     455,
+     "如果 (主框架.是否为空 () == 假 && 主框架.是否有效 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "main.wsv",
+     334,
+     "如果 (V8异常.是否为空 () == 假)"
+    ],
+    [
+     "main.wsv",
+     345,
+     "如果 (方案.是否为空 () == 假)"
+    ],
+    [
+     "main.wsv",
+     367,
+     "如果 (MCP命令服务器.应用事件节流字典.是否为空对象 () || MCP命令服务器.应用事件节流字典.是否为空 ())"
+    ],
+    [
+     "main.wsv",
+     386,
+     "如果 (DOM节点.是否为空 () == 假)"
+    ],
+    [
+     "main.wsv",
+     451,
+     "如果 (浏览器.是否为空 () == 假 && 消息名 != \"\")"
+    ],
+    [
+     "main.wsv",
+     455,
+     "如果 (主框架.是否为空 () == 假 && 主框架.是否有效 ())"
+    ],
+    [
+     "main.wsv",
+     816,
+     "如果 (框架.是否为空 () || 框架.是否有效 () == 假)"
+    ],
+    [
+     "main.wsv",
+     835,
+     "如果 (浏览器.是否为空 ())"
+    ]
+   ]
+  },
+  {
+   "line": 642,
+   "name": "置空",
+   "public": true,
+   "indent": 4,
+   "calls": 5,
+   "anys": 10,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     1649,
+     "持久CDP观察者.置空 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1843,
+     "持久CDP观察者.置空 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1882,
+     "持久CDP观察者.置空 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     9633,
+     "MCP服务器实例.置空 ()"
+    ],
+    [
+     "MCP_Server_HTTP.wsv",
+     30,
+     "MCP命令服务器.MCP服务器实例.置空 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     1649,
+     "持久CDP观察者.置空 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1843,
+     "持久CDP观察者.置空 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1882,
+     "持久CDP观察者.置空 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     9633,
+     "MCP服务器实例.置空 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     10827,
+     "添加工具JSON (\"browser_font_randomize\", \"VIP: 字体枚举随机化(抗字体指纹)。action=random(默认) 从候选池随机挑 count 个字体并加宽/高偏移与 Canvas 字体度量噪点; seed 非0 时固定随机序列, 便于复现同一套指纹; action=reset 复位(清单置空+偏移归零)。设置后需刷新页面生效\", 多属性Schema文本 (属性项JSON (\"action\", \"text\", \"random(默认)/reset\") + \",\" + 属性项JSON (\"count\", \"integer\", \"随机挑选的字体个数(默认0=用库默认)\") + \",\" + 属性项JSON (\"seed\", \"integer\", \"随机种子(非0=可复现, 默认0)\"), \"\"))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     2696,
+     "// 数据允许为空(置空响应体)"
+    ],
+    [
+     "MCP_Server_Form.wsv",
+     172,
+     "// 空属性名会触发 置元素属性 设置空属性(无意义且可能触发框架异常)"
+    ],
+    [
+     "MCP_Server_HTTP.wsv",
+     30,
+     "MCP命令服务器.MCP服务器实例.置空 ()"
+    ]
+   ]
+  },
+  {
+   "line": 647,
+   "name": "是否已关闭",
+   "public": true,
+   "indent": 4,
+   "calls": 72,
+   "anys": 72,
+   "callsample": [
+    [
+     "MCP_BrowserEvents.wsv",
+     1117,
+     "如果 (浏览器.是否已关闭 () == 假)"
+    ],
+    [
+     "MCP_Kernel.wsv",
+     872,
+     "如果 (动作浏览器.是否为空 () == 假 && 动作浏览器.是否已关闭 () == 假 && 动作代码 != \"\")"
+    ],
+    [
+     "MCP_Kernel.wsv",
+     1031,
+     "如果 (监视浏览器.是否为空 () || 监视浏览器.是否已关闭 ())"
+    ],
+    [
+     "MCP_ResponseBuilders.wsv",
+     354,
+     "如果 (bb.是否为空 () == 假 && bb.是否已关闭 () == 假)"
+    ],
+    [
+     "MCP_Server.wsv",
+     140,
+     "如果 (browser.是否为空 () || browser.是否已关闭 ())"
+    ],
+    [
+     "MCP_Server.wsv",
+     1606,
+     "如果 (目标CDP浏览器.是否为空 () || 目标CDP浏览器.是否已关闭 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_BrowserEvents.wsv",
+     1117,
+     "如果 (浏览器.是否已关闭 () == 假)"
+    ],
+    [
+     "MCP_Kernel.wsv",
+     872,
+     "如果 (动作浏览器.是否为空 () == 假 && 动作浏览器.是否已关闭 () == 假 && 动作代码 != \"\")"
+    ],
+    [
+     "MCP_Kernel.wsv",
+     1031,
+     "如果 (监视浏览器.是否为空 () || 监视浏览器.是否已关闭 ())"
+    ],
+    [
+     "MCP_ResponseBuilders.wsv",
+     354,
+     "如果 (bb.是否为空 () == 假 && bb.是否已关闭 () == 假)"
+    ],
+    [
+     "MCP_Server.wsv",
+     140,
+     "如果 (browser.是否为空 () || browser.是否已关闭 ())"
+    ],
+    [
+     "MCP_Server.wsv",
+     1606,
+     "如果 (目标CDP浏览器.是否为空 () || 目标CDP浏览器.是否已关闭 ())"
+    ],
+    [
+     "MCP_Server.wsv",
+     1613,
+     "如果 (browser.是否为空 () == 假 && browser.是否已关闭 () == 假)"
+    ],
+    [
+     "MCP_Server.wsv",
+     1862,
+     "如果 (browser.是否为空 () == 假 && browser.是否已关闭 () == 假)"
+    ]
+   ]
+  },
+  {
+   "line": 655,
+   "name": "取用户标识",
+   "public": true,
+   "indent": 4,
+   "calls": 2,
+   "anys": 4,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     4043,
+     "状态对象.加入文本成员 (\"user_flag\", browser.取用户标识 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6456,
+     "win对象.加入文本成员 (\"user_tag\", browser.取用户标识 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     4043,
+     "状态对象.加入文本成员 (\"user_flag\", browser.取用户标识 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6456,
+     "win对象.加入文本成员 (\"user_tag\", browser.取用户标识 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7141,
+     "tag清单 = FBrowser_浏览器_取用户标识清单 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7156,
+     "返回 (MCP_响应构建.命令失败 (命令ID, \"无法获取用户标识清单\"))"
+    ]
+   ]
+  },
+  {
+   "line": 663,
+   "name": "可否后退",
+   "public": true,
+   "indent": 4,
+   "calls": 5,
+   "anys": 6,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     197,
+     "如果 (browser.是否为空 () == 假 && browser.可否后退 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1398,
+     "navObj.加入逻辑值成员 (\"can_go_back\", browser.可否后退 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4026,
+     "状态对象.加入逻辑值成员 (\"can_go_back\", browser.可否后退 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6727,
+     "info对象.加入逻辑值成员 (\"can_go_back\", browser.可否后退 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7573,
+     "envNative.加入逻辑值成员 (\"can_go_back\", envBrowser.可否后退 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     10666,
+     "添加工具JSON (\"browser_can_navigate\", \"查询当前页面可否后退/前进\")"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     197,
+     "如果 (browser.是否为空 () == 假 && browser.可否后退 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1398,
+     "navObj.加入逻辑值成员 (\"can_go_back\", browser.可否后退 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4026,
+     "状态对象.加入逻辑值成员 (\"can_go_back\", browser.可否后退 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6727,
+     "info对象.加入逻辑值成员 (\"can_go_back\", browser.可否后退 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7573,
+     "envNative.加入逻辑值成员 (\"can_go_back\", envBrowser.可否后退 ())"
+    ]
+   ]
+  },
+  {
+   "line": 669,
+   "name": "后退",
+   "public": true,
+   "indent": 4,
+   "calls": 6,
+   "anys": 21,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     197,
+     "如果 (browser.是否为空 () == 假 && browser.可否后退 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     203,
+     "browser.后退 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1398,
+     "navObj.加入逻辑值成员 (\"can_go_back\", browser.可否后退 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4026,
+     "状态对象.加入逻辑值成员 (\"can_go_back\", browser.可否后退 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6727,
+     "info对象.加入逻辑值成员 (\"can_go_back\", browser.可否后退 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7573,
+     "envNative.加入逻辑值成员 (\"can_go_back\", envBrowser.可否后退 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "main.wsv",
+     203,
+     "// 非阻塞延迟关闭: 记录截止时刻, 主循环继续泵消息, 到点后退出"
+    ],
+    [
+     "main.wsv",
+     617,
+     "参数 可后退 <类型 = 逻辑型 @输出名 = \"CanGoBack\">"
+    ],
+    [
+     "main.wsv",
+     627,
+     "事件数据.加入文本成员 (\"can_go_back\", 到文本 (可后退))"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     1595,
+     "参数 是否能后退 <类型 = 逻辑型 @输出名 = \"IsCanBack\">"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     1611,
+     "状态数据.加入逻辑值成员 (\"can_go_back\", 是否能后退)"
+    ],
+    [
+     "MCP_Server.wsv",
+     3456,
+     "// 预占位: 即使 CEF 回调丢失, 任务也不会\"消失\", 轮询能看到 _waiting 并在超时后退出"
+    ],
+    [
+     "MCP_Server.wsv",
+     6038,
+     "// 超时: 循环最后一次迭代已重新加锁后退出, 直接返回让调用者统一解锁"
+    ],
+    [
+     "MCP_Server.wsv",
+     10633,
+     "添加工具JSON (\"browser_back\", \"后退一页| 无导航历史时返回失败\")"
+    ]
+   ]
+  },
+  {
+   "line": 675,
+   "name": "可否前进",
+   "public": true,
+   "indent": 4,
+   "calls": 5,
+   "anys": 5,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     222,
+     "如果 (browser.是否为空 () == 假 && browser.可否前进 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1399,
+     "navObj.加入逻辑值成员 (\"can_go_forward\", browser.可否前进 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4027,
+     "状态对象.加入逻辑值成员 (\"can_go_forward\", browser.可否前进 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6728,
+     "info对象.加入逻辑值成员 (\"can_go_forward\", browser.可否前进 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7574,
+     "envNative.加入逻辑值成员 (\"can_go_forward\", envBrowser.可否前进 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     222,
+     "如果 (browser.是否为空 () == 假 && browser.可否前进 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1399,
+     "navObj.加入逻辑值成员 (\"can_go_forward\", browser.可否前进 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4027,
+     "状态对象.加入逻辑值成员 (\"can_go_forward\", browser.可否前进 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6728,
+     "info对象.加入逻辑值成员 (\"can_go_forward\", browser.可否前进 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7574,
+     "envNative.加入逻辑值成员 (\"can_go_forward\", envBrowser.可否前进 ())"
+    ]
+   ]
+  },
+  {
+   "line": 681,
+   "name": "前进",
+   "public": true,
+   "indent": 4,
+   "calls": 6,
+   "anys": 31,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     222,
+     "如果 (browser.是否为空 () == 假 && browser.可否前进 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     227,
+     "browser.前进 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1399,
+     "navObj.加入逻辑值成员 (\"can_go_forward\", browser.可否前进 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4027,
+     "状态对象.加入逻辑值成员 (\"can_go_forward\", browser.可否前进 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6728,
+     "info对象.加入逻辑值成员 (\"can_go_forward\", browser.可否前进 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7574,
+     "envNative.加入逻辑值成员 (\"can_go_forward\", envBrowser.可否前进 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "main.wsv",
+     255,
+     "// 清理残留子进程: 仅终止当前进程树的 FBroSubprocess.exe"
+    ],
+    [
+     "main.wsv",
+     256,
+     "@ // 获取当前进程ID, 仅终止父进程为当前PID的FBroSubprocess.exe子进程"
+    ],
+    [
+     "main.wsv",
+     618,
+     "参数 可前进 <类型 = 逻辑型 @输出名 = \"CanGoForward\">"
+    ],
+    [
+     "main.wsv",
+     628,
+     "事件数据.加入文本成员 (\"can_go_forward\", 到文本 (可前进))"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     1597,
+     "参数 是否能前进 <类型 = 逻辑型 @输出名 = \"IsCanForward\">"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     1613,
+     "状态数据.加入逻辑值成员 (\"can_go_forward\", 是否能前进)"
+    ],
+    [
+     "MCP_Server.wsv",
+     292,
+     "变量 当前进度令牌 <公开 静态 类型 = 文本型 值 = \"\" @输出名 = \"CurrentProgressToken\">"
+    ],
+    [
+     "MCP_Server.wsv",
+     5892,
+     "保存进度令牌 = 当前进度令牌"
+    ]
+   ]
+  },
+  {
+   "line": 687,
+   "name": "是否读取中",
+   "public": true,
+   "indent": 4,
+   "calls": 5,
+   "anys": 7,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     1385,
+     "返回 (MCP_响应构建.构建逻辑值JSON (\"loading\", browser.是否读取中 ()))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4028,
+     "状态对象.加入逻辑值成员 (\"is_loading\", browser.是否读取中 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6425,
+     "popup对象.加入逻辑值成员 (\"is_loading\", browser.是否读取中 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6726,
+     "info对象.加入逻辑值成员 (\"is_loading\", browser.是否读取中 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7572,
+     "envNative.加入逻辑值成员 (\"is_loading\", envBrowser.是否读取中 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "main.wsv",
+     616,
+     "参数 是否读取中 <类型 = 逻辑型 @输出名 = \"IsLoading\">"
+    ],
+    [
+     "main.wsv",
+     626,
+     "事件数据.加入文本成员 (\"is_loading\", 到文本 (是否读取中))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1385,
+     "返回 (MCP_响应构建.构建逻辑值JSON (\"loading\", browser.是否读取中 ()))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4028,
+     "状态对象.加入逻辑值成员 (\"is_loading\", browser.是否读取中 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6425,
+     "popup对象.加入逻辑值成员 (\"is_loading\", browser.是否读取中 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6726,
+     "info对象.加入逻辑值成员 (\"is_loading\", browser.是否读取中 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7572,
+     "envNative.加入逻辑值成员 (\"is_loading\", envBrowser.是否读取中 ())"
+    ]
+   ]
+  },
+  {
+   "line": 693,
+   "name": "重新载入",
+   "public": true,
+   "indent": 4,
+   "calls": 2,
+   "anys": 4,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     6555,
+     "参数 导航发起毫秒 <类型 = 长整数 注释 = \"本次载入地址()/重新载入()调用前的取启动时间, 用于判序load_end是否属于本次导航\" @默认值 = 0 @输出名 = \"NavigateStartMs\">"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     259,
+     "browser.重新载入 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     6555,
+     "参数 导航发起毫秒 <类型 = 长整数 注释 = \"本次载入地址()/重新载入()调用前的取启动时间, 用于判序load_end是否属于本次导航\" @默认值 = 0 @输出名 = \"NavigateStartMs\">"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     250,
+     "// 记录重载发起时刻(重新载入前), 供注册加载等待任务判序load_end是否属于本次刷新"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     255,
+     "browser.重新载入_忽略缓存 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     259,
+     "browser.重新载入 ()"
+    ]
+   ]
+  },
+  {
+   "line": 700,
+   "name": "重新载入_忽略缓存",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     255,
+     "browser.重新载入_忽略缓存 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     255,
+     "browser.重新载入_忽略缓存 ()"
+    ]
+   ]
+  },
+  {
+   "line": 707,
+   "name": "停止载入",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     279,
+     "browser.停止载入 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     279,
+     "browser.停止载入 ()"
+    ]
+   ]
+  },
+  {
+   "line": 714,
+   "name": "取ID",
+   "public": true,
+   "indent": 4,
+   "calls": 136,
+   "anys": 140,
+   "callsample": [
+    [
+     "main.wsv",
+     332,
+     "数据.加入整数成员 (\"browser_id\", 浏览器.取ID ())"
+    ],
+    [
+     "main.wsv",
+     364,
+     "prevKey = \"focus_ts_\" + 到文本 (浏览器.取ID ())"
+    ],
+    [
+     "main.wsv",
+     384,
+     "数据.加入整数成员 (\"browser_id\", 浏览器.取ID ())"
+    ],
+    [
+     "main.wsv",
+     400,
+     "数据.加入整数成员 (\"browser_id\", 浏览器.取ID ())"
+    ],
+    [
+     "main.wsv",
+     414,
+     "数据.加入整数成员 (\"browser_id\", 浏览器.取ID ())"
+    ],
+    [
+     "main.wsv",
+     427,
+     "数据.加入整数成员 (\"browser_id\", 浏览器.取ID ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "main.wsv",
+     332,
+     "数据.加入整数成员 (\"browser_id\", 浏览器.取ID ())"
+    ],
+    [
+     "main.wsv",
+     364,
+     "prevKey = \"focus_ts_\" + 到文本 (浏览器.取ID ())"
+    ],
+    [
+     "main.wsv",
+     384,
+     "数据.加入整数成员 (\"browser_id\", 浏览器.取ID ())"
+    ],
+    [
+     "main.wsv",
+     400,
+     "数据.加入整数成员 (\"browser_id\", 浏览器.取ID ())"
+    ],
+    [
+     "main.wsv",
+     414,
+     "数据.加入整数成员 (\"browser_id\", 浏览器.取ID ())"
+    ],
+    [
+     "main.wsv",
+     427,
+     "数据.加入整数成员 (\"browser_id\", 浏览器.取ID ())"
+    ],
+    [
+     "main.wsv",
+     436,
+     "数据.加入整数成员 (\"browser_id\", 浏览器.取ID ())"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     85,
+     "控制台输出 (到文本 (\"[MCP] 浏览器创建完毕 [ID:\") + 到文本 (浏览器.取ID ()) + \"]\")"
+    ]
+   ]
+  },
+  {
+   "line": 722,
+   "name": "是否相同",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     6805,
+     "返回 (MCP_响应构建.构建逻辑值JSON (\"same\", browser.是否相同 (other)))"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     6805,
+     "返回 (MCP_响应构建.构建逻辑值JSON (\"same\", browser.是否相同 (other)))"
+    ]
+   ]
+  },
+  {
+   "line": 730,
+   "name": "是否为弹窗",
+   "public": true,
+   "indent": 4,
+   "calls": 6,
+   "anys": 6,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     7917,
+     "如果 (b.是否为弹窗 () == 假)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4024,
+     "状态对象.加入逻辑值成员 (\"is_popup\", browser.是否为弹窗 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6423,
+     "popup对象.加入逻辑值成员 (\"is_popup\", browser.是否为弹窗 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6729,
+     "info对象.加入逻辑值成员 (\"is_popup\", browser.是否为弹窗 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7571,
+     "envNative.加入逻辑值成员 (\"is_popup\", envBrowser.是否为弹窗 ())"
+    ],
+    [
+     "MCP_Server_System.wsv",
+     134,
+     "风格对象.加入逻辑值成员 (\"is_popup\", browser.是否为弹窗 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     7917,
+     "如果 (b.是否为弹窗 () == 假)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4024,
+     "状态对象.加入逻辑值成员 (\"is_popup\", browser.是否为弹窗 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6423,
+     "popup对象.加入逻辑值成员 (\"is_popup\", browser.是否为弹窗 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6729,
+     "info对象.加入逻辑值成员 (\"is_popup\", browser.是否为弹窗 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7571,
+     "envNative.加入逻辑值成员 (\"is_popup\", envBrowser.是否为弹窗 ())"
+    ],
+    [
+     "MCP_Server_System.wsv",
+     134,
+     "风格对象.加入逻辑值成员 (\"is_popup\", browser.是否为弹窗 ())"
+    ]
+   ]
+  },
+  {
+   "line": 736,
+   "name": "是否有文档",
+   "public": true,
+   "indent": 4,
+   "calls": 2,
+   "anys": 2,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     4025,
+     "状态对象.加入逻辑值成员 (\"has_document\", browser.是否有文档 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6424,
+     "popup对象.加入逻辑值成员 (\"has_document\", browser.是否有文档 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     4025,
+     "状态对象.加入逻辑值成员 (\"has_document\", browser.是否有文档 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6424,
+     "popup对象.加入逻辑值成员 (\"has_document\", browser.是否有文档 ())"
+    ]
+   ]
+  },
+  {
+   "line": 742,
+   "name": "取主框架",
+   "public": true,
+   "indent": 4,
+   "calls": 10,
+   "anys": 11,
+   "callsample": [
+    [
+     "main.wsv",
+     454,
+     "主框架 = 浏览器.取主框架 ()"
+    ],
+    [
+     "main.wsv",
+     840,
+     "兜底框架 = 浏览器.取主框架 ()"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     210,
+     "svFrame = bb.取主框架 ()"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     244,
+     "asFrame = bb.取主框架 ()"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     307,
+     "shFrame = bb.取主框架 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     5561,
+     "自托管框架 = 自托管浏览器.取主框架 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "main.wsv",
+     454,
+     "主框架 = 浏览器.取主框架 ()"
+    ],
+    [
+     "main.wsv",
+     834,
+     "// 取主框架兜底 —— 与 main.wsv 进程间消息_收到主进程消息 的既有写法一致。"
+    ],
+    [
+     "main.wsv",
+     840,
+     "兜底框架 = 浏览器.取主框架 ()"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     210,
+     "svFrame = bb.取主框架 ()"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     244,
+     "asFrame = bb.取主框架 ()"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     307,
+     "shFrame = bb.取主框架 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     5561,
+     "自托管框架 = 自托管浏览器.取主框架 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     7971,
+     "frame = browser.取主框架 ()"
+    ]
+   ]
+  },
+  {
+   "line": 749,
+   "name": "取当前焦点框架",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     4085,
+     "focusFrame = browser.取当前焦点框架 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     4085,
+     "focusFrame = browser.取当前焦点框架 ()"
+    ]
+   ]
+  },
+  {
+   "line": 757,
+   "name": "取框架_ID",
+   "public": true,
+   "indent": 4,
+   "calls": 7,
+   "anys": 8,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     8189,
+     "主判定框架 = 浏览器.取框架_ID (目标框架ID)"
+    ],
+    [
+     "MCP_Server.wsv",
+     8209,
+     "目标框架对象 = 浏览器.取框架_ID (目标框架ID)"
+    ],
+    [
+     "MCP_Server.wsv",
+     8226,
+     "前框架对象 = 浏览器.取框架_ID (id数组.取数据 (前位))"
+    ],
+    [
+     "MCP_Server.wsv",
+     8463,
+     "候选 = 浏览器.取框架_ID (目标框架)"
+    ],
+    [
+     "MCP_Server.wsv",
+     8496,
+     "候选 = 浏览器.取框架_ID (id清单.取数据 (序号))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1743,
+     "帧实体 = browser.取框架_ID (id数组.取数据 (fi))"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     8189,
+     "主判定框架 = 浏览器.取框架_ID (目标框架ID)"
+    ],
+    [
+     "MCP_Server.wsv",
+     8209,
+     "目标框架对象 = 浏览器.取框架_ID (目标框架ID)"
+    ],
+    [
+     "MCP_Server.wsv",
+     8226,
+     "前框架对象 = 浏览器.取框架_ID (id数组.取数据 (前位))"
+    ],
+    [
+     "MCP_Server.wsv",
+     8447,
+     "# 依据: 类库 取框架_ID / 取框架_名称 对错误标识一律返回空类(类库原文: ID 错误返回空, 对空类执行操作会崩溃)。"
+    ],
+    [
+     "MCP_Server.wsv",
+     8463,
+     "候选 = 浏览器.取框架_ID (目标框架)"
+    ],
+    [
+     "MCP_Server.wsv",
+     8496,
+     "候选 = 浏览器.取框架_ID (id清单.取数据 (序号))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1743,
+     "帧实体 = browser.取框架_ID (id数组.取数据 (fi))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6642,
+     "frame = browser.取框架_ID (frameId)"
+    ]
+   ]
+  },
+  {
+   "line": 764,
+   "name": "取框架_名称",
+   "public": true,
+   "indent": 4,
+   "calls": 2,
+   "anys": 3,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     8469,
+     "候选 = 浏览器.取框架_名称 (目标框架)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6601,
+     "frame = browser.取框架_名称 (frameName)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     8447,
+     "# 依据: 类库 取框架_ID / 取框架_名称 对错误标识一律返回空类(类库原文: ID 错误返回空, 对空类执行操作会崩溃)。"
+    ],
+    [
+     "MCP_Server.wsv",
+     8469,
+     "候选 = 浏览器.取框架_名称 (目标框架)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6601,
+     "frame = browser.取框架_名称 (frameName)"
+    ]
+   ]
+  },
+  {
+   "line": 771,
+   "name": "取框架ID",
+   "public": true,
+   "indent": 4,
+   "calls": 8,
+   "anys": 9,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     8114,
+     "id数组 = 浏览器.取框架ID ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     8175,
+     "// 实测类库 取框架ID() 的顺序不保证主框架在前(本机出现过 [子框架, 主框架])。"
+    ],
+    [
+     "MCP_Server.wsv",
+     8491,
+     "id清单 = 浏览器.取框架ID ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1705,
+     "id数组 = browser.取框架ID ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1736,
+     "// 实测 类库 取框架ID() 的顺序**不保证主框架在前**(本机出现过 [子框架, 主框架] 的次序),"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4092,
+     "框架信息.加入文本成员 (\"frame_id\", focusFrame.取框架ID ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     8114,
+     "id数组 = 浏览器.取框架ID ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     8175,
+     "// 实测类库 取框架ID() 的顺序不保证主框架在前(本机出现过 [子框架, 主框架])。"
+    ],
+    [
+     "MCP_Server.wsv",
+     8445,
+     "# 接受: 空/main/主框架 -> 主框架; CEF 框架ID(取框架ID 给出的 id); 框架名; 纯数字序号(它在框架清单里的位置, 主框架不一定在 0 位)。"
+    ],
+    [
+     "MCP_Server.wsv",
+     8491,
+     "id清单 = 浏览器.取框架ID ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1705,
+     "id数组 = browser.取框架ID ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1736,
+     "// 实测 类库 取框架ID() 的顺序**不保证主框架在前**(本机出现过 [子框架, 主框架] 的次序),"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4092,
+     "框架信息.加入文本成员 (\"frame_id\", focusFrame.取框架ID ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6611,
+     "f对象.加入文本成员 (\"frame_id\", frame.取框架ID ())"
+    ]
+   ]
+  },
+  {
+   "line": 779,
+   "name": "取框架名称",
+   "public": true,
+   "indent": 4,
+   "calls": 3,
+   "anys": 3,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     8116,
+     "name数组 = 浏览器.取框架名称 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1707,
+     "name数组 = browser.取框架名称 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6564,
+     "name数组 = browser.取框架名称 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     8116,
+     "name数组 = 浏览器.取框架名称 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1707,
+     "name数组 = browser.取框架名称 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6564,
+     "name数组 = browser.取框架名称 ()"
+    ]
+   ]
+  },
+  {
+   "line": 785,
+   "name": "关闭浏览器",
+   "public": true,
+   "indent": 4,
+   "calls": 3,
+   "anys": 6,
+   "callsample": [
+    [
+     "MCP_BrowserEvents.wsv",
+     1121,
+     "浏览器.关闭浏览器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     9239,
+     "cb.关闭浏览器 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     744,
+     "closeBrowser.关闭浏览器 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_BrowserEvents.wsv",
+     1121,
+     "浏览器.关闭浏览器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     9239,
+     "cb.关闭浏览器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     9300,
+     "连接信息对象.加入文本成员 (\"usage_step1\", \"启动 AI-Fbowser-Mcp.exe (保持运行请最小化控制台窗口, 关闭浏览器窗口将退出程序)\")"
+    ],
+    [
+     "MCP_Server.wsv",
+     10645,
+     "添加工具JSON (\"browser_close_try\", \"[已废弃] 关闭浏览器, 已替换为 browser_close | ⛔ 该工具恒失败, 请改用 browser_close\")"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     744,
+     "closeBrowser.关闭浏览器 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4055,
+     "返回 (MCP_响应构建.命令失败 (命令ID, \"⛔ 远程关闭浏览器已禁用(本工具刻意不实现) | 真实原因: 本项目是控制台程序, 浏览器窗口**就是**程序窗口, 关闭浏览器等于退出整个 MCP 服务(见 docs: 关闭浏览器窗口会退出整个程序), 因此不提供 API 关闭入口 —— 旧文案称'由GUI管理'与代码事实不符, 已按实测更正 | 想关闭请用 browser_close(可指定 browser_id 只关后台浏览器) 或 browser_shutdown(需 confirm:true)\"))"
+    ]
+   ]
+  },
+  {
+   "line": 796,
+   "name": "尝试关闭浏览器",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 809,
+   "name": "置焦点",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 3,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     1789,
+     "browser.置焦点 (焦点)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     10688,
+     "添加工具JSON (\"browser_set_focus\", \"设置焦点\", 单参数Schema文本 (\"focus\", \"boolean\", \"焦点\"))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1789,
+     "browser.置焦点 (焦点)"
+    ],
+    [
+     "MCP_Server_Form.wsv",
+     89,
+     "前置失败 = 前置存在校验 (命令ID, selector, \"设置焦点\", browser, 参数JSON)"
+    ]
+   ]
+  },
+  {
+   "line": 817,
+   "name": "取窗口句柄",
+   "public": true,
+   "indent": 4,
+   "calls": 4,
+   "anys": 5,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     1773,
+     "返回 (MCP_响应构建.构建简单JSON (\"hwnd\", 到文本 (browser.取窗口句柄 ())))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4045,
+     "hwnd = browser.取窗口句柄 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6451,
+     "win对象.加入长整数成员 (\"hwnd\", browser.取窗口句柄 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7569,
+     "envNative.加入长整数成员 (\"hwnd\", envBrowser.取窗口句柄 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     10687,
+     "添加工具JSON (\"browser_get_window_handle\", \"获取窗口句柄\")"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1773,
+     "返回 (MCP_响应构建.构建简单JSON (\"hwnd\", 到文本 (browser.取窗口句柄 ())))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4045,
+     "hwnd = browser.取窗口句柄 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6451,
+     "win对象.加入长整数成员 (\"hwnd\", browser.取窗口句柄 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7569,
+     "envNative.加入长整数成员 (\"hwnd\", envBrowser.取窗口句柄 ())"
+    ]
+   ]
+  },
+  {
+   "line": 824,
+   "name": "取打开者窗口句柄",
+   "public": true,
+   "indent": 4,
+   "calls": 2,
+   "anys": 2,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     6453,
+     "win对象.加入长整数成员 (\"opener_hwnd\", browser.取打开者窗口句柄 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6784,
+     "openerHWND = browser.取打开者窗口句柄 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     6453,
+     "win对象.加入长整数成员 (\"opener_hwnd\", browser.取打开者窗口句柄 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6784,
+     "openerHWND = browser.取打开者窗口句柄 ()"
+    ]
+   ]
+  },
+  {
+   "line": 831,
+   "name": "是否浏览器视图",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     6817,
+     "返回 (MCP_响应构建.构建逻辑值JSON (\"is_view\", browser.是否浏览器视图 ()))"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     6817,
+     "返回 (MCP_响应构建.构建逻辑值JSON (\"is_view\", browser.是否浏览器视图 ()))"
+    ]
+   ]
+  },
+  {
+   "line": 838,
+   "name": "取缩放级别",
+   "public": true,
+   "indent": 4,
+   "calls": 3,
+   "anys": 3,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     1479,
+     "返回 (MCP_响应构建.构建简单JSON (\"zoom_level\", 到文本 (browser.取缩放级别 ())))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4031,
+     "状态对象.加入整数成员 (\"zoom_level_pct\", 取整 (四舍五入 (browser.取缩放级别 () * 100, 0)))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7575,
+     "envNative.加入文本成员 (\"zoom_level\", 到文本 (envBrowser.取缩放级别 ()))"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     1479,
+     "返回 (MCP_响应构建.构建简单JSON (\"zoom_level\", 到文本 (browser.取缩放级别 ())))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4031,
+     "状态对象.加入整数成员 (\"zoom_level_pct\", 取整 (四舍五入 (browser.取缩放级别 () * 100, 0)))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7575,
+     "envNative.加入文本成员 (\"zoom_level\", 到文本 (envBrowser.取缩放级别 ()))"
+    ]
+   ]
+  },
+  {
+   "line": 845,
+   "name": "置缩放级别",
+   "public": true,
+   "indent": 4,
+   "calls": 2,
+   "anys": 2,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     2079,
+     "浏览器.置缩放级别 (应用缩放)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     852,
+     "browser.置缩放级别 (lvNum)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     2079,
+     "浏览器.置缩放级别 (应用缩放)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     852,
+     "browser.置缩放级别 (lvNum)"
+    ]
+   ]
+  },
+  {
+   "line": 852,
+   "name": "开始下载",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     1570,
+     "browser.开始下载 (url)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     1570,
+     "browser.开始下载 (url)"
+    ]
+   ]
+  },
+  {
+   "line": 859,
+   "name": "下载图片",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 8,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     4126,
+     "browser.下载图片 (url, 假, 0, 假, 下载回调)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Callbacks.wsv",
+     6,
+     "# MCP回调类 — JS异步/字符串/截图/Cookie/DevTools/文件对话框/PDF/任务/VIP/URL/清理缓存/下载图片"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     966,
+     "# 下载图片回调 — 参照样例 browser_callback.wsv: 类_FBrowser_下载图片回调"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     969,
+     "类 类_MCP_下载图片回调 <公开 基础类 = 类_FBrowser_下载图片回调 @输出名 = \"MCPDownloadImageCallback\">"
+    ],
+    [
+     "MCP_Server.wsv",
+     10674,
+     "添加工具JSON (\"browser_download_image\", \"下载图片到 Downloads 目录| 异步, 用 mcp_result 取保存路径\", 单参数Schema文本 (\"url\", \"text\", \"图片URL\"))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4102,
+     "// === 下载图片 ==="
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4124,
+     "下载回调.创建 (类_MCP_下载图片回调)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4125,
+     "下载回调.取执行类 (类_MCP_下载图片回调).任务ID = 异步下载ID"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4126,
+     "browser.下载图片 (url, 假, 0, 假, 下载回调)"
+    ]
+   ]
+  },
+  {
+   "line": 878,
+   "name": "打开对话框",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 2,
+   "callsample": [],
+   "anysample": [
+    [
+     "MCP_BrowserEvents.wsv",
+     2007,
+     "方法 浏览器_JS即将打开对话框 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     2131,
+     "方法 浏览器_即将打开对话框 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>"
+    ]
+   ]
+  },
+  {
+   "line": 901,
+   "name": "打印",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 16,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     1103,
+     "browser.打印 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Callbacks.wsv",
+     597,
+     "# 打印PDF回调 — 参照样例 browser_callback.wsv: 类_FBrowser_打印为PDF回调"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     600,
+     "类 类_MCP_打印PDF回调 <公开 基础类 = 类_FBrowser_打印为PDF回调 @输出名 = \"MCPPrintPDFCallback\">"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     604,
+     "方法 即将完成打印 <公开 @虚拟方法 = 可覆盖>"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     618,
+     "包装对象.加入文本成员 (\"error\", \"PDF打印失败: \" + 路径)"
+    ],
+    [
+     "MCP_Server.wsv",
+     906,
+     "// ID 600-799: Cookie/代理/下载/打印"
+    ],
+    [
+     "MCP_Server.wsv",
+     1626,
+     "//   日志会打印\"已自动注册到浏览器 ID:1\"(即 API 报告成功), 但**通道其实再也回不来**:"
+    ],
+    [
+     "MCP_Server.wsv",
+     10655,
+     "添加工具JSON (\"browser_print\", \"打印\")"
+    ],
+    [
+     "MCP_Server.wsv",
+     10656,
+     "添加工具JSON (\"browser_print_to_pdf\", \"把当前页面打印为 PDF 文件| 异步执行, 用 mcp_result 取结果; 需给 path; 目标文件已存在时需 overwrite:true\", 多属性Schema文本 (属性项JSON (\"path\", \"text\", \"路径\") + \",\" + 属性项JSON (\"overwrite\", \"boolean\", \"覆盖\"), \"\"))"
+    ]
+   ]
+  },
+  {
+   "line": 908,
+   "name": "打印为PDF",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 3,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     1146,
+     "browser.打印为PDF (路径, PDF设置, PDF回调)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Callbacks.wsv",
+     597,
+     "# 打印PDF回调 — 参照样例 browser_callback.wsv: 类_FBrowser_打印为PDF回调"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     600,
+     "类 类_MCP_打印PDF回调 <公开 基础类 = 类_FBrowser_打印为PDF回调 @输出名 = \"MCPPrintPDFCallback\">"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1146,
+     "browser.打印为PDF (路径, PDF设置, PDF回调)"
+    ]
+   ]
+  },
+  {
+   "line": 925,
+   "name": "查找",
+   "public": true,
+   "indent": 4,
+   "calls": 5,
+   "anys": 54,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     9037,
+     "# ======== 命令预查找 (字典O(1), 找不到直接返回) =========="
+    ],
+    [
+     "MCP_Server.wsv",
+     11743,
+     "// 优先用命令注册表查找 (O(1) 字典)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     873,
+     "browser.查找 (text, 真, 假, 假)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     886,
+     "browser.停止查找 (真)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6663,
+     "// === 浏览器查找(按标识) ==="
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_BrowserEvents.wsv",
+     2249,
+     "方法 浏览器_查找返馈 <公开 @虚拟方法 = 可覆盖>"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     2265,
+     "如果 (MCP命令服务器.是否监控查找)"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     2269,
+     "变量 查找数据 <类型 = YYJSON对象类>"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     2271,
+     "查找数据.创建自文本 (\"{}\")"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     2273,
+     "查找数据.加入整数成员 (\"find_id\", ID)"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     2275,
+     "查找数据.加入整数成员 (\"match_count\", 数量)"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     2277,
+     "查找数据.加入整数成员 (\"active_match\", 顺序)"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     2279,
+     "查找数据.加入逻辑值成员 (\"final_update\", 最后更新)"
+    ]
+   ]
+  },
+  {
+   "line": 935,
+   "name": "停止查找",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 2,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     886,
+     "browser.停止查找 (真)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     10650,
+     "添加工具JSON (\"browser_stop_find\", \"停止查找\")"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     886,
+     "browser.停止查找 (真)"
+    ]
+   ]
+  },
+  {
+   "line": 942,
+   "name": "打开开发者工具",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 2,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     614,
+     "browser.打开开发者工具 (\"AI调试工具\", 0, 0, 0, 1024, 800)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     10641,
+     "添加工具JSON (\"browser_open_devtools\", \"打开开发者工具\")"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     614,
+     "browser.打开开发者工具 (\"AI调试工具\", 0, 0, 0, 1024, 800)"
+    ]
+   ]
+  },
+  {
+   "line": 964,
+   "name": "关闭开发者工具",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 2,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     625,
+     "browser.关闭开发者工具 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     10642,
+     "添加工具JSON (\"browser_close_devtools\", \"关闭开发者工具\")"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     625,
+     "browser.关闭开发者工具 ()"
+    ]
+   ]
+  },
+  {
+   "line": 970,
+   "name": "是否为开发者",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     6455,
+     "win对象.加入逻辑值成员 (\"is_devtools\", browser.是否为开发者 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     6455,
+     "win对象.加入逻辑值成员 (\"is_devtools\", browser.是否为开发者 ())"
+    ]
+   ]
+  },
+  {
+   "line": 976,
+   "name": "是否存在开发者工具",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     6454,
+     "win对象.加入逻辑值成员 (\"has_devtools\", browser.是否存在开发者工具 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     6454,
+     "win对象.加入逻辑值成员 (\"has_devtools\", browser.是否存在开发者工具 ())"
+    ]
+   ]
+  },
+  {
+   "line": 982,
+   "name": "发送按键事件",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     1071,
+     "browser.发送按键事件 (按键事件)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     1071,
+     "browser.发送按键事件 (按键事件)"
+    ]
+   ]
+  },
+  {
+   "line": 989,
+   "name": "发送鼠标点击事件",
+   "public": true,
+   "indent": 4,
+   "calls": 2,
+   "anys": 2,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     960,
+     "browser.发送鼠标点击事件 (按钮类型, 鼠标事件, 假, 1)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     961,
+     "browser.发送鼠标点击事件 (按钮类型, 鼠标事件, 真, 1)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     960,
+     "browser.发送鼠标点击事件 (按钮类型, 鼠标事件, 假, 1)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     961,
+     "browser.发送鼠标点击事件 (按钮类型, 鼠标事件, 真, 1)"
+    ]
+   ]
+  },
+  {
+   "line": 999,
+   "name": "发送鼠标移动事件",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     1002,
+     "browser.发送鼠标移动事件 (鼠标事件, 假)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     1002,
+     "browser.发送鼠标移动事件 (鼠标事件, 假)"
+    ]
+   ]
+  },
+  {
+   "line": 1007,
+   "name": "发送鼠标滚轮事件",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     1467,
+     "browser.发送鼠标滚轮事件 (鼠标事件, deltaX, deltaY)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     1467,
+     "browser.发送鼠标滚轮事件 (鼠标事件, deltaX, deltaY)"
+    ]
+   ]
+  },
+  {
+   "line": 1017,
+   "name": "发送触摸事件",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1024,
+   "name": "置页面静音",
+   "public": true,
+   "indent": 4,
+   "calls": 2,
+   "anys": 2,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     2081,
+     "浏览器.置页面静音 (应用静音)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1089,
+     "browser.置页面静音 (静音)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     2081,
+     "浏览器.置页面静音 (应用静音)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1089,
+     "browser.置页面静音 (静音)"
+    ]
+   ]
+  },
+  {
+   "line": 1031,
+   "name": "是否页面静音",
+   "public": true,
+   "indent": 4,
+   "calls": 3,
+   "anys": 3,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     1801,
+     "返回 (MCP_响应构建.构建逻辑值JSON (\"muted\", browser.是否页面静音 ()))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4029,
+     "状态对象.加入逻辑值成员 (\"is_muted\", browser.是否页面静音 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7576,
+     "envNative.加入逻辑值成员 (\"is_muted\", envBrowser.是否页面静音 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     1801,
+     "返回 (MCP_响应构建.构建逻辑值JSON (\"muted\", browser.是否页面静音 ()))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     4029,
+     "状态对象.加入逻辑值成员 (\"is_muted\", browser.是否页面静音 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7576,
+     "envNative.加入逻辑值成员 (\"is_muted\", envBrowser.是否页面静音 ())"
+    ]
+   ]
+  },
+  {
+   "line": 1038,
+   "name": "置自动调整大小",
+   "public": true,
+   "indent": 4,
+   "calls": 3,
+   "anys": 4,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     6872,
+     "//   类库: 置自动调整大小(启用,最小高度,最小宽度,最大高度,最大宽度) -> SetAutoResizeEnabled。"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6894,
+     "arBrowser.置自动调整大小 (ar启用, ar最小高, ar最小宽, ar最大高, ar最大宽)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6903,
+     "ar结果.加入文本成员 (\"message\", \"已调用类库 置自动调整大小(SetAutoResizeEnabled) | 类库该设置无返回值、也没有可回读的查询接口, 故无法确认是否生效: 本工具不谎报 verified=true | 参数按类库声明顺序 最小高度/最小宽度 传入(与 CEF 的 {width,height} 顺序相反, 传非对称值请自行确认)\")"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     10689,
+     "添加工具JSON (\"browser_set_auto_resize\", \"启用/关闭窗口自动调整大小(CEF SetAutoResizeEnabled)。**已实现**: 经类库 置自动调整大小 调用宿主 SetAutoResizeEnabled(不需 HWND)。类库无返回值、且该类设置没有可回读的查询接口, 故只报 verified=false 而不谎报生效。⚠ 类库声明顺序是 最小**高度**、最小**宽度**(与 CEF 的 {width,height} 相反), 官方样例都用对称值无法消歧 —— 传非对称值时请自行确认顺序\", 多属性Schema文本 (属性项JSON (\"enable\", \"boolean\", \"true=启用(窗口可随内容增长) / false=关闭 | 必填\") + \",\" + 属性项JSON (\"min_height\", \"integer\", \"最小高度(0=该维不限)\") + \",\" + 属性项JSON (\"min_width\", \"integer\", \"最小宽度(0=该维不限)\") + \",\" + 属性项JSON (\"max_height\", \"integer\", \"最大高度(0=该维不限)\") + \",\" + 属性项JSON (\"max_width\", \"integer\", \"最大宽度(0=该维不限)\"), \"\\\"enable\\\"\"))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6872,
+     "//   类库: 置自动调整大小(启用,最小高度,最小宽度,最大高度,最大宽度) -> SetAutoResizeEnabled。"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6894,
+     "arBrowser.置自动调整大小 (ar启用, ar最小高, ar最小宽, ar最大高, ar最大宽)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6903,
+     "ar结果.加入文本成员 (\"message\", \"已调用类库 置自动调整大小(SetAutoResizeEnabled) | 类库该设置无返回值、也没有可回读的查询接口, 故无法确认是否生效: 本工具不谎报 verified=true | 参数按类库声明顺序 最小高度/最小宽度 传入(与 CEF 的 {width,height} 顺序相反, 传非对称值请自行确认)\")"
+    ]
+   ]
+  },
+  {
+   "line": 1050,
+   "name": "取请求环境",
+   "public": true,
+   "indent": 4,
+   "calls": 5,
+   "anys": 10,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     8052,
+     "返回 (browser.取请求环境 ())"
+    ],
+    [
+     "MCP_Server.wsv",
+     10662,
+     "添加工具JSON (\"browser_cache_dir\", \"获取当前浏览器请求环境的缓存路径(类库 取请求环境().取缓存路径() 的 cache_path)| 无浏览器时明确失败 | 要取进程级全局缓存目录(不受浏览器存活影响)请用 browser_get_global_cache_dir\")"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6702,
+     "reqCtx = browser.取请求环境 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7297,
+     "reqCtx = browser.取请求环境 ()"
+    ],
+    [
+     "MCP_Server_VIP.wsv",
+     1357,
+     "reqCtx = browser.取请求环境 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     8046,
+     "方法 取请求环境_安全 <公开 静态 类型 = 类_FBrowser_请求环境 @输出名 = \"GetRequestEnvironmentSafe\" @强制输出 = 真>"
+    ],
+    [
+     "MCP_Server.wsv",
+     8052,
+     "返回 (browser.取请求环境 ())"
+    ],
+    [
+     "MCP_Server.wsv",
+     10662,
+     "添加工具JSON (\"browser_cache_dir\", \"获取当前浏览器请求环境的缓存路径(类库 取请求环境().取缓存路径() 的 cache_path)| 无浏览器时明确失败 | 要取进程级全局缓存目录(不受浏览器存活影响)请用 browser_get_global_cache_dir\")"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6702,
+     "reqCtx = browser.取请求环境 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7297,
+     "reqCtx = browser.取请求环境 ()"
+    ],
+    [
+     "MCP_Server_VIP.wsv",
+     1357,
+     "reqCtx = browser.取请求环境 ()"
+    ],
+    [
+     "MCP_Server_VIP.wsv",
+     1429,
+     "reqEnvU = MCP命令服务器.取请求环境_安全 ()"
+    ],
+    [
+     "MCP_Server_VIP.wsv",
+     1442,
+     "reqEnv = MCP命令服务器.取请求环境_安全 ()"
+    ]
+   ]
+  },
+  {
+   "line": 1058,
+   "name": "移动窗口",
+   "public": true,
+   "indent": 4,
+   "calls": 3,
+   "anys": 5,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     6466,
+     "//   类库确有 移动窗口(左边,顶边,宽度,高度,是否重画) -> FBroHsBrowserHost_MoveWindow,"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6506,
+     "// 类库签名: 移动窗口(左边, 顶边, 宽度, 高度, 是否重画)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6507,
+     "mwBrowser.移动窗口 (mwX, mwY, mwW, mwH, mwRepaint)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     10693,
+     "添加工具JSON (\"browser_move_window\", \"移动/缩放浏览器窗口。**已实现**: 经类库 移动窗口 -> 宿主 MoveWindow(不需 HWND), 并用 CDP Browser.getWindowForTarget 回读 bounds 验证, 回读不符则如实报 verified=false。width/height 省略时保持当前尺寸。注意: 用户看到的就是浏览器窗口本身(本项目为控制台程序, 浏览器以桌面为父窗口), 所以本工具会真的移动你眼前的窗口\", 多属性Schema文本 (属性项JSON (\"x\", \"integer\", \"X\") + \",\" + 属性项JSON (\"y\", \"integer\", \"Y\") + \",\" + 属性项JSON (\"width\", \"integer\", \"宽(省略/<=0=保持当前)\") + \",\" + 属性项JSON (\"height\", \"integer\", \"高(省略/<=0=保持当前)\") + \",\" + 属性项JSON (\"repaint\", \"boolean\", \"是否重画(默认false)\"), \"\\\"x\\\",\\\"y\\\"\"))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6466,
+     "//   类库确有 移动窗口(左边,顶边,宽度,高度,是否重画) -> FBroHsBrowserHost_MoveWindow,"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6506,
+     "// 类库签名: 移动窗口(左边, 顶边, 宽度, 高度, 是否重画)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6507,
+     "mwBrowser.移动窗口 (mwX, mwY, mwW, mwH, mwRepaint)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6550,
+     "mw结果.加入文本成员 (\"message\", \"已调用类库 移动窗口, 但回读未确认生效(可能被窗口管理器/宿主约束) | 请以 actual_* 为准 | 类库该方法无返回值, 故不谎报成功\")"
+    ]
+   ]
+  },
+  {
+   "line": 1071,
+   "name": "显示隐藏窗口",
+   "public": true,
+   "indent": 4,
+   "calls": 2,
+   "anys": 4,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     6824,
+     "// ★ 补能力(能力面反查确认的真缺口): 类库 显示隐藏窗口(显示隐藏) -> FBroHsBrowserHost_ShowWindows。"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6840,
+     "swBrowser.显示隐藏窗口 (sw目标)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     10692,
+     "添加工具JSON (\"browser_show_window\", \"显示/隐藏浏览器窗口。**已实现**: 经类库 显示隐藏窗口 调用宿主 ShowWindows(不需 HWND), 并用 GWL_STYLE 的 WS_VISIBLE 位**回读验证**; 位没变成请求的状态就如实报 verified=false, 不谎报成功。说明: 用户看到的窗口就是浏览器窗口本身(本项目为控制台程序, 浏览器以桌面为父窗口), 所以隐藏后**你需要再调一次 visible:true 把它显示回来**\", 多属性Schema文本 (属性项JSON (\"visible\", \"boolean\", \"true=显示窗口 / false=隐藏窗口 | 必填(缺省语义不明, 不接受缺省)\"), \"\\\"visible\\\"\"))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6824,
+     "// ★ 补能力(能力面反查确认的真缺口): 类库 显示隐藏窗口(显示隐藏) -> FBroHsBrowserHost_ShowWindows。"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6840,
+     "swBrowser.显示隐藏窗口 (sw目标)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6863,
+     "sw结果.加入文本成员 (\"message\", \"已调用类库 显示隐藏窗口, 但回读 GWL_STYLE 的 WS_VISIBLE 位未变成请求的状态 | 可能被宿主/桌面环境约束 | 以 style_before/style_after 为准, 不谎报成功\")"
+    ]
+   ]
+  },
+  {
+   "line": 1078,
+   "name": "取父窗口句柄",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     6452,
+     "win对象.加入长整数成员 (\"parent_hwnd\", browser.取父窗口句柄 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     6452,
+     "win对象.加入长整数成员 (\"parent_hwnd\", browser.取父窗口句柄 ())"
+    ]
+   ]
+  },
+  {
+   "line": 1085,
+   "name": "置父窗口",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 2,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     6762,
+     "browser.置父窗口 (hwnd)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     10745,
+     "添加工具JSON (\"browser_set_parent\", \"设置父窗口\", 单参数Schema文本 (\"hwnd\", \"integer\", \"父句柄\"))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6762,
+     "browser.置父窗口 (hwnd)"
+    ]
+   ]
+  },
+  {
+   "line": 1092,
+   "name": "置窗口属性",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_System.wsv",
+     118,
+     "browser.置窗口属性 (窗口类型, MCP命令服务器.yyjson取整数 (参数JSON, \"style\"))"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_System.wsv",
+     118,
+     "browser.置窗口属性 (窗口类型, MCP命令服务器.yyjson取整数 (参数JSON, \"style\"))"
+    ]
+   ]
+  },
+  {
+   "line": 1100,
+   "name": "取窗口属性",
+   "public": true,
+   "indent": 4,
+   "calls": 4,
+   "anys": 5,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     6839,
+     "sw前 = swBrowser.取窗口属性 (MCP_常量.窗口样式_GWL_STYLE)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6843,
+     "sw后 = swBrowser.取窗口属性 (MCP_常量.窗口样式_GWL_STYLE)"
+    ],
+    [
+     "MCP_Server_System.wsv",
+     96,
+     "返回 (MCP_响应构建.构建简单JSON (\"style\", 到文本 (browser.取窗口属性 (MCP_常量.窗口样式_GWL_STYLE))))"
+    ],
+    [
+     "MCP_Server_System.wsv",
+     133,
+     "风格对象.加入整数成员 (\"window_style\", browser.取窗口属性 (MCP_常量.窗口样式_GWL_STYLE))"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     6827,
+     "//   验证: 回读 GWL_STYLE 的 WS_VISIBLE 位(0x10000000)前后对比 —— 项目已在用 取窗口属性。"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6839,
+     "sw前 = swBrowser.取窗口属性 (MCP_常量.窗口样式_GWL_STYLE)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6843,
+     "sw后 = swBrowser.取窗口属性 (MCP_常量.窗口样式_GWL_STYLE)"
+    ],
+    [
+     "MCP_Server_System.wsv",
+     96,
+     "返回 (MCP_响应构建.构建简单JSON (\"style\", 到文本 (browser.取窗口属性 (MCP_常量.窗口样式_GWL_STYLE))))"
+    ],
+    [
+     "MCP_Server_System.wsv",
+     133,
+     "风格对象.加入整数成员 (\"window_style\", browser.取窗口属性 (MCP_常量.窗口样式_GWL_STYLE))"
+    ]
+   ]
+  },
+  {
+   "line": 1107,
+   "name": "取窗口标题",
+   "public": true,
+   "indent": 4,
+   "calls": 4,
+   "anys": 4,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     4042,
+     "状态对象.加入文本成员 (\"window_title\", browser.取窗口标题 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6450,
+     "win对象.加入文本成员 (\"title\", browser.取窗口标题 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6773,
+     "返回 (MCP_响应构建.构建简单JSON (\"title\", browser.取窗口标题 ()))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7568,
+     "envNative.加入文本成员 (\"window_title\", envBrowser.取窗口标题 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     4042,
+     "状态对象.加入文本成员 (\"window_title\", browser.取窗口标题 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6450,
+     "win对象.加入文本成员 (\"title\", browser.取窗口标题 ())"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     6773,
+     "返回 (MCP_响应构建.构建简单JSON (\"title\", browser.取窗口标题 ()))"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7568,
+     "envNative.加入文本成员 (\"window_title\", envBrowser.取窗口标题 ())"
+    ]
+   ]
+  },
+  {
+   "line": 1114,
+   "name": "进程间消息_发送数据_到全部渲染进程",
+   "public": true,
+   "indent": 4,
+   "calls": 2,
+   "anys": 2,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     6955,
+     "browser.进程间消息_发送数据_到全部渲染进程 (msgName, 文本到字节集 (msgData))"
+    ],
+    [
+     "MCP_Server_System.wsv",
+     41,
+     "browser.进程间消息_发送数据_到全部渲染进程 (msgName, 文本到UTF8 (msgData, 假))"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     6955,
+     "browser.进程间消息_发送数据_到全部渲染进程 (msgName, 文本到字节集 (msgData))"
+    ],
+    [
+     "MCP_Server_System.wsv",
+     41,
+     "browser.进程间消息_发送数据_到全部渲染进程 (msgName, 文本到UTF8 (msgData, 假))"
+    ]
+   ]
+  },
+  {
+   "line": 1126,
+   "name": "进程间消息_发送数据_到指定渲染进程",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     6980,
+     "browser.进程间消息_发送数据_到指定渲染进程 (processID, msgName, 文本到字节集 (msgData))"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     6980,
+     "browser.进程间消息_发送数据_到指定渲染进程 (processID, msgName, 文本到字节集 (msgData))"
+    ]
+   ]
+  },
+  {
+   "line": 1137,
+   "name": "进程间消息_取渲染进程数量",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1142,
+   "name": "进程间消息_取渲染进程ID清单",
+   "public": true,
+   "indent": 4,
+   "calls": 2,
+   "anys": 2,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     6992,
+     "清单 = browser.进程间消息_取渲染进程ID清单 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7006,
+     "清单 = browser.进程间消息_取渲染进程ID清单 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     6992,
+     "清单 = browser.进程间消息_取渲染进程ID清单 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7006,
+     "清单 = browser.进程间消息_取渲染进程ID清单 ()"
+    ]
+   ]
+  },
+  {
+   "line": 1150,
+   "name": "进程间消息_发送数据_到主进程",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 1,
+   "callsample": [],
+   "anysample": [
+    [
+     "MCP_BrowserEvents.wsv",
+     2643,
+     "# 类库扩展 IPC 通道 (非 CEF 原生): 页面/注入脚本调 进程间消息_发送数据_到主进程 后, 在此收到"
+    ]
+   ]
+  },
+  {
+   "line": 1160,
+   "name": "离屏渲染_离屏渲染被禁用",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1166,
+   "name": "离屏渲染_通知已被调整大小",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1174,
+   "name": "离屏渲染_通知已被隐藏",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1183,
+   "name": "离屏渲染_通知屏幕信息被改变",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1194,
+   "name": "离屏渲染_使视图无效",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1204,
+   "name": "离屏渲染_取帧率",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1213,
+   "name": "离屏渲染_置帧率",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1225,
+   "name": "离屏渲染_IME置组成",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1252,
+   "name": "离屏渲染_IME置交互文本",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1267,
+   "name": "离屏渲染_IME完成组合文本",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1278,
+   "name": "离屏渲染_IME取消组合",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1287,
+   "name": "离屏渲染_拖动进入",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1301,
+   "name": "离屏渲染_拖动移动",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1312,
+   "name": "离屏渲染_拖动离开",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1321,
+   "name": "离屏渲染_拖动放下",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1331,
+   "name": "离屏渲染_拖动结束位置",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1346,
+   "name": "离屏渲染_拖动系统结束",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1357,
+   "name": "清理缓存",
+   "public": true,
+   "indent": 4,
+   "calls": 2,
+   "anys": 33,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     7165,
+     "// 修(能力缺口): 原实现是 `清理缓存 (, , , 回调)` —— 三个过滤参数全缺省,"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     7275,
+     "browser.清理缓存 (ccOrigin, ccMask, ccTypeMask, 清理回调2)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_BrowserEvents.wsv",
+     1133,
+     "// 崩溃恢复: 渲染进程崩溃可能损坏CEF磁盘缓存导致重建后连环崩溃, 写标记文件, 下次启动时自动清理缓存"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     1149,
+     "// 标记写失败时告警, 防下次启动漏清理缓存导致连环崩溃复现"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     1155,
+     "控制台输出 (\"[MCP] 警告: 崩溃恢复标记写入失败(\" + 恢复标记路径 + \"), 重启后可能无法自动清理缓存\")"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     1161,
+     "// 重启程序后启动时自动清理缓存, 循环即断"
+    ],
+    [
+     "MCP_BrowserEvents.wsv",
+     1191,
+     "控制台输出 (\"[MCP] 120秒内连续崩溃 \" + 到文本 (崩溃次数) + \" 次, 停止自动重建 | 请重启程序(启动时将自动清理缓存)\")"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     6,
+     "# MCP回调类 — JS异步/字符串/截图/Cookie/DevTools/文件对话框/PDF/任务/VIP/URL/清理缓存/下载图片"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     938,
+     "# 清理缓存回调 — 参照样例 browser_callback12.wsv: 类_FBrowser_清理缓存回调"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     941,
+     "类 类_MCP_清理缓存回调 <公开 基础类 = 类_FBrowser_清理缓存回调 @输出名 = \"MCPCleanCacheCallback\">"
+    ]
+   ]
+  },
+  {
+   "line": 1381,
+   "name": "设置代理",
+   "public": true,
+   "indent": 4,
+   "calls": 4,
+   "anys": 4,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     2075,
+     "浏览器.设置代理 (应用代理, 应用账号, 应用密码)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1503,
+     "vip_ctrl.高级_设置代理 (address, username, password)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1512,
+     "browser.设置代理 (address, username, password)"
+    ],
+    [
+     "MCP_Server_VIP.wsv",
+     60,
+     "vip_ctrl.高级_设置代理 (address, MCP命令服务器.yyjson取文本 (参数JSON, \"username\"), MCP命令服务器.yyjson取文本 (参数JSON, \"password\"))"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     2075,
+     "浏览器.设置代理 (应用代理, 应用账号, 应用密码)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1503,
+     "vip_ctrl.高级_设置代理 (address, username, password)"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1512,
+     "browser.设置代理 (address, username, password)"
+    ],
+    [
+     "MCP_Server_VIP.wsv",
+     60,
+     "vip_ctrl.高级_设置代理 (address, MCP命令服务器.yyjson取文本 (参数JSON, \"username\"), MCP命令服务器.yyjson取文本 (参数JSON, \"password\"))"
+    ]
+   ]
+  },
+  {
+   "line": 1393,
+   "name": "清空代理",
+   "public": true,
+   "indent": 4,
+   "calls": 3,
+   "anys": 3,
+   "callsample": [
+    [
+     "MCP_Server_Core.wsv",
+     1536,
+     "vip_ctrl.高级_清空代理 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1545,
+     "browser.清空代理 ()"
+    ],
+    [
+     "MCP_Server_VIP.wsv",
+     177,
+     "vip_ctrl.高级_清空代理 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_Core.wsv",
+     1536,
+     "vip_ctrl.高级_清空代理 ()"
+    ],
+    [
+     "MCP_Server_Core.wsv",
+     1545,
+     "browser.清空代理 ()"
+    ],
+    [
+     "MCP_Server_VIP.wsv",
+     177,
+     "vip_ctrl.高级_清空代理 ()"
+    ]
+   ]
+  },
+  {
+   "line": 1399,
+   "name": "取主填表框架",
+   "public": true,
+   "indent": 4,
+   "calls": 3,
+   "anys": 3,
+   "callsample": [
+    [
+     "MCP_Callbacks.wsv",
+     140,
+     "ff = bb.取主填表框架 ()"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     202,
+     "ff = bb.取主填表框架 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     8519,
+     "返回 (浏览器.取主填表框架 ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Callbacks.wsv",
+     140,
+     "ff = bb.取主填表框架 ()"
+    ],
+    [
+     "MCP_Callbacks.wsv",
+     202,
+     "ff = bb.取主填表框架 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     8519,
+     "返回 (浏览器.取主填表框架 ())"
+    ]
+   ]
+  },
+  {
+   "line": 1406,
+   "name": "取焦点填表框架",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 0,
+   "callsample": [],
+   "anysample": []
+  },
+  {
+   "line": 1414,
+   "name": "取填表框架_ID",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     8522,
+     "按ID取 = 浏览器.取填表框架_ID (目标框架)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     8522,
+     "按ID取 = 浏览器.取填表框架_ID (目标框架)"
+    ]
+   ]
+  },
+  {
+   "line": 1422,
+   "name": "取填表框架_名称",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 1,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     8528,
+     "按名取 = 浏览器.取填表框架_名称 (目标框架)"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     8528,
+     "按名取 = 浏览器.取填表框架_名称 (目标框架)"
+    ]
+   ]
+  },
+  {
+   "line": 1429,
+   "name": "取开发者DOM",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 4,
+   "callsample": [
+    [
+     "MCP_Server.wsv",
+     8064,
+     "返回 (browser.取开发者DOM ())"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     8058,
+     "方法 取开发者DOM_安全 <公开 静态 类型 = 类_FBrowserVIP_开发者DOM @输出名 = \"GetDevToolsDOMSafe\" @强制输出 = 真>"
+    ],
+    [
+     "MCP_Server.wsv",
+     8064,
+     "返回 (browser.取开发者DOM ())"
+    ],
+    [
+     "MCP_Server_VIP.wsv",
+     1568,
+     "vipDom = MCP命令服务器.取开发者DOM_安全 ()"
+    ],
+    [
+     "MCP_Server_VIP.wsv",
+     1599,
+     "vipDom2 = MCP命令服务器.取开发者DOM_安全 ()"
+    ]
+   ]
+  },
+  {
+   "line": 1436,
+   "name": "取额外数据",
+   "public": true,
+   "indent": 4,
+   "calls": 1,
+   "anys": 2,
+   "callsample": [
+    [
+     "MCP_Server_VIP.wsv",
+     1806,
+     "extraData = browser.取额外数据 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Server_VIP.wsv",
+     1798,
+     "// === 获取额外数据 ==="
+    ],
+    [
+     "MCP_Server_VIP.wsv",
+     1806,
+     "extraData = browser.取额外数据 ()"
+    ]
+   ]
+  },
+  {
+   "line": 1443,
+   "name": "取主浏览器",
+   "public": true,
+   "indent": 4,
+   "calls": 208,
+   "anys": 212,
+   "callsample": [
+    [
+     "MCP_Kernel.wsv",
+     871,
+     "动作浏览器 = MCP命令服务器.取主浏览器 ()"
+    ],
+    [
+     "MCP_Kernel.wsv",
+     1030,
+     "监视浏览器 = MCP命令服务器.取主浏览器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     139,
+     "browser = MCP命令服务器.取主浏览器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1601,
+     "browser = 取主浏览器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1817,
+     "browser = 取主浏览器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1860,
+     "browser = 取主浏览器 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_Kernel.wsv",
+     871,
+     "动作浏览器 = MCP命令服务器.取主浏览器 ()"
+    ],
+    [
+     "MCP_Kernel.wsv",
+     1030,
+     "监视浏览器 = MCP命令服务器.取主浏览器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     139,
+     "browser = MCP命令服务器.取主浏览器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1601,
+     "browser = 取主浏览器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1817,
+     "browser = 取主浏览器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1860,
+     "browser = 取主浏览器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     3443,
+     "browser = 取主浏览器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     3959,
+     "flowBrowser = 取主浏览器 ()"
+    ]
+   ]
+  },
+  {
+   "line": 1449,
+   "name": "取VIP控制器",
+   "public": true,
+   "indent": 4,
+   "calls": 86,
+   "anys": 87,
+   "callsample": [
+    [
+     "MCP_BrowserEvents.wsv",
+     277,
+     "closeVip = 浏览器.取VIP控制器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1621,
+     "vip_ctrl = browser.取VIP控制器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1790,
+     "dbgVip = dbgBrowser.取VIP控制器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1821,
+     "vip_ctrl = browser.取VIP控制器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1865,
+     "vip_ctrl = browser.取VIP控制器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     2086,
+     "vipCtrl = 浏览器.取VIP控制器 ()"
+    ]
+   ],
+   "anysample": [
+    [
+     "MCP_BrowserEvents.wsv",
+     277,
+     "closeVip = 浏览器.取VIP控制器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1621,
+     "vip_ctrl = browser.取VIP控制器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1790,
+     "dbgVip = dbgBrowser.取VIP控制器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1821,
+     "vip_ctrl = browser.取VIP控制器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     1865,
+     "vip_ctrl = browser.取VIP控制器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     2086,
+     "vipCtrl = 浏览器.取VIP控制器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     2096,
+     "vipUACtrl = 浏览器.取VIP控制器 ()"
+    ],
+    [
+     "MCP_Server.wsv",
+     2109,
+     "vipAutoCtrl = 浏览器.取VIP控制器 ()"
+    ]
+   ]
+  },
+  {
+   "line": 1456,
+   "name": "取窗口运行风格",
+   "public": true,
+   "indent": 4,
+   "calls": 0,
+   "anys": 2,
+   "callsample": [],
+   "anysample": [
+    [
+     "MCP_Server.wsv",
+     10818,
+     "添加工具JSON (\"browser_get_run_style\", \"获取窗口运行风格\")"
+    ],
+    [
+     "MCP_Server_System.wsv",
+     123,
+     "// === 获取窗口运行风格 ==="
+    ]
+   ]
+  }
+ ]
+}

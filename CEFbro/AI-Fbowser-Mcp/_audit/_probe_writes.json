@@ -1,0 +1,97 @@
+[
+ {
+  "tag": "fill_set_value (#inp)",
+  "ok": true,
+  "detail": "生效, 预言机='hello-mcp'"
+ },
+ {
+  "tag": "fill_click (#btn -> clicks=1)",
+  "ok": true,
+  "detail": "生效, 预言机='1'"
+ },
+ {
+  "tag": "fill_focus (#inp)",
+  "ok": true,
+  "detail": "生效, 预言机='inp'"
+ },
+ {
+  "tag": "fill_attr_set (#box data-x=42)",
+  "ok": true,
+  "detail": "生效, 预言机='42'"
+ },
+ {
+  "tag": "dom_set_value (#inp)",
+  "ok": true,
+  "detail": "生效, 预言机='dom-val'"
+ },
+ {
+  "tag": "dom_set_html (#box)",
+  "ok": true,
+  "detail": "生效, 预言机='<b>hi</b>'"
+ },
+ {
+  "tag": "dom_click (#btn -> clicks=2)",
+  "ok": true,
+  "detail": "生效, 预言机='2'"
+ },
+ {
+  "tag": "dom_select (#sel index=0)",
+  "ok": true,
+  "detail": "生效, 预言机='0'"
+ },
+ {
+  "tag": "fill_set_value 未命中",
+  "ok": true,
+  "detail": "如实报错: 设置值未执行: 选择器在当前页面匹配到 0 个元素 -> #nonexistent-xyz | 建议: 先用 browser_snapshot 或 browser_get_forms 获取页面可用元素/选择器; 注意 i"
+ },
+ {
+  "tag": "fill_click 未命中",
+  "ok": true,
+  "detail": "如实报错: 点击未执行: 选择器在当前页面匹配到 0 个元素 -> #nonexistent-xyz | 建议: 先用 browser_snapshot 或 browser_get_forms 获取页面可用元素/选择器; 注意 if"
+ },
+ {
+  "tag": "fill_focus 未命中",
+  "ok": true,
+  "detail": "如实报错: 设置焦点未执行: 选择器在当前页面匹配到 0 个元素 -> #nonexistent-xyz | 建议: 先用 browser_snapshot 或 browser_get_forms 获取页面可用元素/选择器; 注意 "
+ },
+ {
+  "tag": "fill_attr_set 未命中",
+  "ok": true,
+  "detail": "如实报错: 设置属性未执行: 选择器在当前页面匹配到 0 个元素 -> #nonexistent-xyz | 建议: 先用 browser_snapshot 或 browser_get_forms 获取页面可用元素/选择器; 注意 "
+ },
+ {
+  "tag": "fill_trigger 未命中",
+  "ok": true,
+  "detail": "如实报错: 触发事件未执行: 选择器在当前页面匹配到 0 个元素 -> #nonexistent-xyz | 建议: 先用 browser_snapshot 或 browser_get_forms 获取页面可用元素/选择器; 注意 "
+ },
+ {
+  "tag": "fill_scroll 未命中",
+  "ok": true,
+  "detail": "如实报错: 滚动到元素未执行: 选择器在当前页面匹配到 0 个元素 -> #nonexistent-xyz | 建议: 先用 browser_snapshot 或 browser_get_forms 获取页面可用元素/选择器; 注意"
+ },
+ {
+  "tag": "fill_select 未命中",
+  "ok": true,
+  "detail": "如实报错: 设置select选中项未执行: 选择器在当前页面匹配到 0 个元素 -> #nonexistent-xyz | 建议: 先用 browser_snapshot 或 browser_get_forms 获取页面可用元素/选"
+ },
+ {
+  "tag": "dom_set_value 未命中",
+  "ok": true,
+  "detail": "如实报错: 元素不存在或取不到值: #nonexistent-xyz | 设置值未执行 | 建议: 先用 browser_snapshot 或 browser_get_forms 确认元素存在"
+ },
+ {
+  "tag": "dom_set_html 未命中",
+  "ok": true,
+  "detail": "如实报错: \"{\\\"success\\\":false,\\\"error\\\":\\\"element not found: #nonexistent-xyz | 该选择器在当前页面上匹配到 0 个元素 | 建议: 先用 browser_sna"
+ },
+ {
+  "tag": "dom_click 未命中",
+  "ok": true,
+  "detail": "如实报错: element not found: #nonexistent-xyz | 该选择器在当前页面上匹配到 0 个元素 | 建议: 先用 browser_snapshot 或 browser_get_forms 获取页面可用"
+ },
+ {
+  "tag": "dom_select 未命中",
+  "ok": true,
+  "detail": "如实报错: \"{\\\"success\\\":false,\\\"error\\\":\\\"element not found: #nonexistent-xyz | 该选择器在当前页面上匹配到 0 个元素 | 建议: 先用 browser_sna"
+ }
+]

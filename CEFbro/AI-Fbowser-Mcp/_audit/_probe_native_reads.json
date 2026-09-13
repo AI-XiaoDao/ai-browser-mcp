@@ -1,0 +1,57 @@
+[
+ {
+  "tag": "dom_rect (#pp)",
+  "ok": true,
+  "detail": "{\"selector\": \"#pp229521\", \"x\": 196.796875, \"y\": 280.828125, \"left\": 196.796875, \"top\": 280.828125, \"width\": 590.390625, \"height\": 20, \"visible\": true}"
+ },
+ {
+  "tag": "dom_rect (display:none 应 visible=false)",
+  "ok": true,
+  "detail": "{\"selector\": \"#hid229521\", \"x\": 0, \"y\": 0, \"left\": 0, \"top\": 0, \"width\": 0, \"height\": 0, \"visible\": false}"
+ },
+ {
+  "tag": "dom_rect (元素不存在应报错)",
+  "ok": true,
+  "detail": "元素不存在或取不到值: #nonexistent-xyz | 建议: 先用 browser_fill_exists 或 browser_snapshot 确认元素存在"
+ },
+ {
+  "tag": "dom_checked (应 checked=true)",
+  "ok": true,
+  "detail": "{\"selector\": \"#cb229521\", \"checked\": true, \"type\": \"checkbox\", \"name\": \"\", \"value\": \"on\"}"
+ },
+ {
+  "tag": "dom_checked (取消勾选应 false)",
+  "ok": true,
+  "detail": "{\"selector\": \"#cb229521\", \"checked\": false, \"type\": \"checkbox\", \"name\": \"\", \"value\": \"on\"}"
+ },
+ {
+  "tag": "dom_checked (非勾选元素应报错)",
+  "ok": true,
+  "detail": "该元素没有勾选状态(不是 checkbox/radio): #pp229521 | 建议: 先用 browser_snapshot 或 browser_dom_query 的 selector 模式确认元素类型"
+ },
+ {
+  "tag": "dom_checked (元素不存在应报错)",
+  "ok": true,
+  "detail": "元素不存在或取不到值: #nonexistent-xyz | 建议: 先用 browser_fill_exists 或 browser_snapshot 确认元素存在"
+ },
+ {
+  "tag": "dom_selected",
+  "ok": true,
+  "detail": "{\"selector\": \"#sel229521\", \"index\": 1, \"value\": \"b\", \"text\": \"b\", \"values\": [\"b\"], \"texts\": [\"b\"], \"multiple\": false, \"option_count\": 2}"
+ },
+ {
+  "tag": "dom_selected (非select应报错)",
+  "ok": true,
+  "detail": "该元素不是 select 下拉框, 没有选中项: #pp229521 | 建议: 先用 browser_snapshot 或 browser_dom_query 的 selector 模式确认元素类型"
+ },
+ {
+  "tag": "dom_selected (元素不存在应报错)",
+  "ok": true,
+  "detail": "元素不存在或取不到值: #nonexistent-xyz | 建议: 先用 browser_fill_exists 或 browser_snapshot 确认元素存在"
+ },
+ {
+  "tag": "get_source 同步(最多3次)",
+  "ok": true,
+  "detail": "含 Example Domain, 长度=777 (第1次)"
+ }
+]

@@ -1,0 +1,3832 @@
+{
+ "noimpl": [],
+ "unreg": [
+  "browser_aliases",
+  "browser_batch",
+  "browser_create_tab",
+  "browser_debugger_pause",
+  "browser_task_runner_post",
+  "clear_queue",
+  "ignore_off",
+  "line_replace",
+  "replace_data",
+  "replace_file"
+ ],
+ "dead": [
+  "antidetect_presets",
+  "back",
+  "browser.",
+  "browser.antidetect_presets",
+  "browser.back",
+  "browser.base64_decode",
+  "browser.base64_encode",
+  "browser.cache_dir",
+  "browser.can_navigate",
+  "browser.cdp",
+  "browser.cdp_call",
+  "browser.cdp_event",
+  "browser.clear_cache",
+  "browser.clear_cache_browser",
+  "browser.clear_proxy",
+  "browser.close",
+  "browser.close_devtools",
+  "browser.close_try",
+  "browser.collect",
+  "browser.compress_memory",
+  "browser.console_eval",
+  "browser.create",
+  "browser.create_tab",
+  "browser.create_url_request",
+  "browser.debugger_auto",
+  "browser.debugger_enable",
+  "browser.debugger_evaluate",
+  "browser.debugger_flow",
+  "browser.debugger_inspect",
+  "browser.debugger_last_paused",
+  "browser.debugger_pause",
+  "browser.debugger_resume",
+  "browser.debugger_script_source",
+  "browser.debugger_set_breakpoint",
+  "browser.debugger_stack",
+  "browser.debugger_step_into",
+  "browser.debugger_step_out",
+  "browser.debugger_step_over",
+  "browser.debugger_wait_paused",
+  "browser.delete_cookies",
+  "browser.dom_checked",
+  "browser.dom_click",
+  "browser.dom_get_html",
+  "browser.dom_inner_html",
+  "browser.dom_query",
+  "browser.dom_rect",
+  "browser.dom_select",
+  "browser.dom_selected",
+  "browser.dom_set_html",
+  "browser.dom_set_value",
+  "browser.download_image",
+  "browser.edit_copy",
+  "browser.edit_cut",
+  "browser.edit_delete",
+  "browser.edit_paste",
+  "browser.edit_redo",
+  "browser.edit_select_all",
+  "browser.edit_undo",
+  "browser.evaluate",
+  "browser.event",
+  "browser.execute_js",
+  "browser.extract",
+  "browser.fbro_version",
+  "browser.file_dialog",
+  "browser.fill_attr_get",
+  "browser.fill_attr_set",
+  "browser.fill_click",
+  "browser.fill_exists",
+  "browser.fill_focus",
+  "browser.fill_scroll",
+  "browser.fill_select",
+  "browser.fill_set_value",
+  "browser.fill_trigger",
+  "browser.find",
+  "browser.find_by_hwnd",
+  "browser.find_by_tag",
+  "browser.fingerprint",
+  "browser.fingerprint_appcodename",
+  "browser.fingerprint_appversion",
+  "browser.fingerprint_cookie_enabled",
+  "browser.fingerprint_java_enabled",
+  "browser.fingerprint_online",
+  "browser.fingerprint_product_sub",
+  "browser.fingerprint_vendor_sub",
+  "browser.forward",
+  "browser.frame_by_name",
+  "browser.frame_names",
+  "browser.get_cookies",
+  "browser.get_focused_frame",
+  "browser.get_frames",
+  "browser.get_id",
+  "browser.get_main_browser",
+  "browser.get_source",
+  "browser.get_text",
+  "browser.get_title",
+  "browser.get_url",
+  "browser.get_window_handle",
+  "browser.get_zoom",
+  "browser.inject",
+  "browser.intercept",
+  "browser.ipc_renderer_count",
+  "browser.ipc_renderer_ids",
+  "browser.ipc_send_all",
+  "browser.ipc_send_to",
+  "browser.is_loading",
+  "browser.is_muted",
+  "browser.is_same",
+  "browser.is_view",
+  "browser.key_event",
+  "browser.list",
+  "browser.loading_info",
+  "browser.meta",
+  "browser.mouse_click",
+  "browser.mouse_move",
+  "browser.mouse_wheel",
+  "browser.move_window",
+  "browser.navigate",
+  "browser.network",
+  "browser.network_body",
+  "browser.open_devtools",
+  "browser.popup_info",
+  "browser.print",
+  "browser.print_to_pdf",
+  "browser.reload",
+  "browser.request_context",
+  "browser.restore_gui",
+  "browser.reverse_call_fn",
+  "browser.reverse_cdp_hook",
+  "browser.reverse_cookie_sources",
+  "browser.reverse_detect_traps",
+  "browser.reverse_dom_breakpoint",
+  "browser.reverse_env",
+  "browser.reverse_extract",
+  "browser.reverse_heap",
+  "browser.reverse_hook",
+  "browser.reverse_initiator",
+  "browser.reverse_instrument",
+  "browser.reverse_network_intercept",
+  "browser.reverse_preload",
+  "browser.reverse_preset",
+  "browser.reverse_profile",
+  "browser.reverse_runtime",
+  "browser.reverse_search",
+  "browser.reverse_setup",
+  "browser.reverse_strings",
+  "browser.reverse_verify",
+  "browser.reverse_websocket",
+  "browser.scrape",
+  "browser.screenshot",
+  "browser.send_message",
+  "browser.set_auto_resize",
+  "browser.set_cookie",
+  "browser.set_focus",
+  "browser.set_mute",
+  "browser.set_parent",
+  "browser.set_proxy",
+  "browser.set_zoom",
+  "browser.start_download",
+  "browser.status",
+  "browser.stop",
+  "browser.stop_find",
+  "browser.task_runner_post",
+  "browser.touch_move",
+  "browser.touch_press",
+  "browser.touch_release",
+  "browser.uri_decode",
+  "browser.uri_encode",
+  "browser.user_tags",
+  "browser.view_source",
+  "browser.vip_disable_console",
+  "browser.vip_fingerprint_audio_fixed",
+  "browser.vip_fingerprint_canvas_fixed",
+  "browser.vip_fingerprint_rect",
+  "browser.vip_fingerprint_webgl_fixed",
+  "browser.vip_fingerprint_webrtc",
+  "browser.vip_set_is_trusted",
+  "browser.vip_websocket_intercept",
+  "browser.wait",
+  "browser.window_info",
+  "browser_",
+  "browser_reverse_detect_traps",
+  "cdp",
+  "clear_proxy",
+  "close",
+  "collect",
+  "create",
+  "delete_cookies",
+  "dom_checked",
+  "dom_click",
+  "dom_get_html",
+  "dom_inner_html",
+  "dom_query",
+  "dom_rect",
+  "dom_select",
+  "dom_selected",
+  "dom_set_html",
+  "dom_set_value",
+  "evaluate",
+  "execute_js",
+  "extract",
+  "find",
+  "fingerprint",
+  "forward",
+  "get_all_cookies",
+  "get_cookies",
+  "get_source",
+  "get_text",
+  "get_title",
+  "get_url",
+  "get_zoom",
+  "inject",
+  "intercept",
+  "key_event",
+  "mcp.help",
+  "mcp.result",
+  "mcp.status",
+  "mouse_click",
+  "mouse_move",
+  "mouse_wheel",
+  "navigate",
+  "network",
+  "print",
+  "refresh_cookies",
+  "reload",
+  "reverse_cdp_hook",
+  "reverse_cookie_sources",
+  "reverse_detect_traps",
+  "reverse_dom_breakpoint",
+  "reverse_env",
+  "reverse_extract",
+  "reverse_hook",
+  "reverse_initiator",
+  "reverse_instrument",
+  "reverse_preload",
+  "reverse_preset",
+  "reverse_profile",
+  "reverse_search",
+  "reverse_setup",
+  "reverse_strings",
+  "reverse_verify",
+  "scrape",
+  "screenshot",
+  "set_cookie",
+  "set_mute",
+  "set_preference",
+  "set_proxy",
+  "set_zoom",
+  "shutdown",
+  "wait",
+  "workflow.get",
+  "workflow.list",
+  "workflow.run",
+  "workflow.stop"
+ ],
+ "regs": {
+  "browser_navigate": [
+   [
+    "MCP_Server.wsv",
+    9073
+   ]
+  ],
+  "browser_get_url": [
+   [
+    "MCP_Server.wsv",
+    9074
+   ]
+  ],
+  "browser_get_title": [
+   [
+    "MCP_Server.wsv",
+    9075
+   ]
+  ],
+  "browser_back": [
+   [
+    "MCP_Server.wsv",
+    9076
+   ]
+  ],
+  "browser_forward": [
+   [
+    "MCP_Server.wsv",
+    9077
+   ]
+  ],
+  "browser_reload": [
+   [
+    "MCP_Server.wsv",
+    9078
+   ]
+  ],
+  "browser_stop": [
+   [
+    "MCP_Server.wsv",
+    9079
+   ]
+  ],
+  "browser_execute_js": [
+   [
+    "MCP_Server.wsv",
+    9080
+   ]
+  ],
+  "browser_evaluate": [
+   [
+    "MCP_Server.wsv",
+    9081
+   ]
+  ],
+  "browser_get_source": [
+   [
+    "MCP_Server.wsv",
+    9082
+   ]
+  ],
+  "browser_get_text": [
+   [
+    "MCP_Server.wsv",
+    9083
+   ]
+  ],
+  "browser_open_devtools": [
+   [
+    "MCP_Server.wsv",
+    9084
+   ]
+  ],
+  "browser_close_devtools": [
+   [
+    "MCP_Server.wsv",
+    9085
+   ]
+  ],
+  "browser_create": [
+   [
+    "MCP_Server.wsv",
+    9086
+   ]
+  ],
+  "browser_close": [
+   [
+    "MCP_Server.wsv",
+    9087
+   ]
+  ],
+  "browser_close_try": [
+   [
+    "MCP_Server.wsv",
+    9088
+   ]
+  ],
+  "browser_list": [
+   [
+    "MCP_Server.wsv",
+    9089
+   ]
+  ],
+  "browser_set_zoom": [
+   [
+    "MCP_Server.wsv",
+    9090
+   ]
+  ],
+  "browser_get_zoom": [
+   [
+    "MCP_Server.wsv",
+    9091
+   ]
+  ],
+  "browser_find": [
+   [
+    "MCP_Server.wsv",
+    9092
+   ]
+  ],
+  "browser_stop_find": [
+   [
+    "MCP_Server.wsv",
+    9093
+   ]
+  ],
+  "browser_mouse_click": [
+   [
+    "MCP_Server.wsv",
+    9094
+   ]
+  ],
+  "browser_mouse_move": [
+   [
+    "MCP_Server.wsv",
+    9095
+   ]
+  ],
+  "browser_mouse_wheel": [
+   [
+    "MCP_Server.wsv",
+    9096
+   ]
+  ],
+  "browser_key_event": [
+   [
+    "MCP_Server.wsv",
+    9097
+   ]
+  ],
+  "browser_print": [
+   [
+    "MCP_Server.wsv",
+    9098
+   ]
+  ],
+  "browser_print_to_pdf": [
+   [
+    "MCP_Server.wsv",
+    9099
+   ]
+  ],
+  "browser_get_cookies": [
+   [
+    "MCP_Server.wsv",
+    9100
+   ]
+  ],
+  "browser_set_cookie": [
+   [
+    "MCP_Server.wsv",
+    9101
+   ]
+  ],
+  "browser_delete_cookies": [
+   [
+    "MCP_Server.wsv",
+    9102
+   ]
+  ],
+  "browser_clear_cache": [
+   [
+    "MCP_Server.wsv",
+    9103
+   ]
+  ],
+  "browser_clear_cache_browser": [
+   [
+    "MCP_Server.wsv",
+    9104
+   ]
+  ],
+  "browser_cache_dir": [
+   [
+    "MCP_Server.wsv",
+    9105
+   ]
+  ],
+  "browser_set_mute": [
+   [
+    "MCP_Server.wsv",
+    9106
+   ]
+  ],
+  "browser_is_muted": [
+   [
+    "MCP_Server.wsv",
+    9107
+   ]
+  ],
+  "browser_is_loading": [
+   [
+    "MCP_Server.wsv",
+    9108
+   ]
+  ],
+  "browser_can_navigate": [
+   [
+    "MCP_Server.wsv",
+    9109
+   ]
+  ],
+  "browser_get_id": [
+   [
+    "MCP_Server.wsv",
+    9110
+   ]
+  ],
+  "browser_compress_memory": [
+   [
+    "MCP_Server.wsv",
+    9111
+   ]
+  ],
+  "browser_fbro_version": [
+   [
+    "MCP_Server.wsv",
+    9112
+   ]
+  ],
+  "browser_meta": [
+   [
+    "MCP_Server.wsv",
+    9113
+   ]
+  ],
+  "browser_set_proxy": [
+   [
+    "MCP_Server.wsv",
+    9114
+   ]
+  ],
+  "browser_clear_proxy": [
+   [
+    "MCP_Server.wsv",
+    9115
+   ]
+  ],
+  "browser_start_download": [
+   [
+    "MCP_Server.wsv",
+    9116
+   ]
+  ],
+  "browser_download_image": [
+   [
+    "MCP_Server.wsv",
+    9117
+   ]
+  ],
+  "browser_edit_undo": [
+   [
+    "MCP_Server.wsv",
+    9118
+   ]
+  ],
+  "browser_edit_redo": [
+   [
+    "MCP_Server.wsv",
+    9119
+   ]
+  ],
+  "browser_edit_cut": [
+   [
+    "MCP_Server.wsv",
+    9120
+   ]
+  ],
+  "browser_edit_copy": [
+   [
+    "MCP_Server.wsv",
+    9121
+   ]
+  ],
+  "browser_edit_paste": [
+   [
+    "MCP_Server.wsv",
+    9122
+   ]
+  ],
+  "browser_edit_delete": [
+   [
+    "MCP_Server.wsv",
+    9123
+   ]
+  ],
+  "browser_edit_select_all": [
+   [
+    "MCP_Server.wsv",
+    9124
+   ]
+  ],
+  "browser_get_frames": [
+   [
+    "MCP_Server.wsv",
+    9125
+   ]
+  ],
+  "browser_frame_names": [
+   [
+    "MCP_Server.wsv",
+    9126
+   ]
+  ],
+  "browser_frame_by_name": [
+   [
+    "MCP_Server.wsv",
+    9127
+   ]
+  ],
+  "browser_get_focused_frame": [
+   [
+    "MCP_Server.wsv",
+    9128
+   ]
+  ],
+  "browser_get_window_handle": [
+   [
+    "MCP_Server.wsv",
+    9129
+   ]
+  ],
+  "browser_set_focus": [
+   [
+    "MCP_Server.wsv",
+    9130
+   ]
+  ],
+  "browser_set_auto_resize": [
+   [
+    "MCP_Server.wsv",
+    9131
+   ]
+  ],
+  "browser_restore_gui": [
+   [
+    "MCP_Server.wsv",
+    9132
+   ]
+  ],
+  "browser_shutdown": [
+   [
+    "MCP_Server.wsv",
+    9133
+   ]
+  ],
+  "browser_move_window": [
+   [
+    "MCP_Server.wsv",
+    9134
+   ]
+  ],
+  "browser_dom_query": [
+   [
+    "MCP_Server.wsv",
+    9135
+   ]
+  ],
+  "browser_dom_click": [
+   [
+    "MCP_Server.wsv",
+    9136
+   ]
+  ],
+  "browser_dom_set_value": [
+   [
+    "MCP_Server.wsv",
+    9137
+   ]
+  ],
+  "browser_dom_get_html": [
+   [
+    "MCP_Server.wsv",
+    9138
+   ]
+  ],
+  "browser_dom_rect": [
+   [
+    "MCP_Server.wsv",
+    9139
+   ]
+  ],
+  "browser_dom_inner_html": [
+   [
+    "MCP_Server.wsv",
+    9140
+   ]
+  ],
+  "browser_dom_set_html": [
+   [
+    "MCP_Server.wsv",
+    9141
+   ]
+  ],
+  "browser_dom_checked": [
+   [
+    "MCP_Server.wsv",
+    9142
+   ]
+  ],
+  "browser_dom_selected": [
+   [
+    "MCP_Server.wsv",
+    9143
+   ]
+  ],
+  "browser_dom_select": [
+   [
+    "MCP_Server.wsv",
+    9144
+   ]
+  ],
+  "browser_extract": [
+   [
+    "MCP_Server.wsv",
+    9145
+   ]
+  ],
+  "browser_scrape": [
+   [
+    "MCP_Server.wsv",
+    9146
+   ]
+  ],
+  "browser_console_eval": [
+   [
+    "MCP_Server.wsv",
+    9147
+   ]
+  ],
+  "browser_fingerprint": [
+   [
+    "MCP_Server.wsv",
+    9148
+   ]
+  ],
+  "browser_intercept": [
+   [
+    "MCP_Server.wsv",
+    9149
+   ]
+  ],
+  "browser_screenshot": [
+   [
+    "MCP_Server.wsv",
+    9150
+   ]
+  ],
+  "browser_collect": [
+   [
+    "MCP_Server.wsv",
+    9151
+   ]
+  ],
+  "browser_network": [
+   [
+    "MCP_Server.wsv",
+    9152
+   ]
+  ],
+  "browser_status": [
+   [
+    "MCP_Server.wsv",
+    9153
+   ]
+  ],
+  "browser_window_info": [
+   [
+    "MCP_Server.wsv",
+    9154
+   ]
+  ],
+  "browser_view_source": [
+   [
+    "MCP_Server.wsv",
+    9155
+   ]
+  ],
+  "browser_inject": [
+   [
+    "MCP_Server.wsv",
+    9156
+   ]
+  ],
+  "browser_wait": [
+   [
+    "MCP_Server.wsv",
+    9157
+   ]
+  ],
+  "browser_cdp": [
+   [
+    "MCP_Server.wsv",
+    9158
+   ]
+  ],
+  "browser_debugger_enable": [
+   [
+    "MCP_Server.wsv",
+    9159
+   ]
+  ],
+  "browser_debugger_resume": [
+   [
+    "MCP_Server.wsv",
+    9160
+   ]
+  ],
+  "browser_debugger_step_over": [
+   [
+    "MCP_Server.wsv",
+    9161
+   ]
+  ],
+  "browser_debugger_step_into": [
+   [
+    "MCP_Server.wsv",
+    9162
+   ]
+  ],
+  "browser_debugger_step_out": [
+   [
+    "MCP_Server.wsv",
+    9163
+   ]
+  ],
+  "browser_debugger_stack": [
+   [
+    "MCP_Server.wsv",
+    9164
+   ]
+  ],
+  "browser_debugger_set_breakpoint": [
+   [
+    "MCP_Server.wsv",
+    9165
+   ]
+  ],
+  "browser_debugger_evaluate": [
+   [
+    "MCP_Server.wsv",
+    9166
+   ]
+  ],
+  "browser_debugger_wait_paused": [
+   [
+    "MCP_Server.wsv",
+    9167
+   ]
+  ],
+  "browser_debugger_last_paused": [
+   [
+    "MCP_Server.wsv",
+    9168
+   ]
+  ],
+  "browser_debugger_inspect": [
+   [
+    "MCP_Server.wsv",
+    9169
+   ]
+  ],
+  "browser_debugger_flow": [
+   [
+    "MCP_Server.wsv",
+    9170
+   ]
+  ],
+  "browser_debugger_script_source": [
+   [
+    "MCP_Server.wsv",
+    9171
+   ]
+  ],
+  "browser_debugger_auto": [
+   [
+    "MCP_Server.wsv",
+    9172
+   ]
+  ],
+  "browser_network_body": [
+   [
+    "MCP_Server.wsv",
+    9173
+   ]
+  ],
+  "browser_touch_press": [
+   [
+    "MCP_Server.wsv",
+    9174
+   ]
+  ],
+  "browser_touch_release": [
+   [
+    "MCP_Server.wsv",
+    9175
+   ]
+  ],
+  "browser_touch_move": [
+   [
+    "MCP_Server.wsv",
+    9176
+   ]
+  ],
+  "browser_base64_encode": [
+   [
+    "MCP_Server.wsv",
+    9177
+   ]
+  ],
+  "browser_base64_decode": [
+   [
+    "MCP_Server.wsv",
+    9178
+   ]
+  ],
+  "browser_uri_encode": [
+   [
+    "MCP_Server.wsv",
+    9179
+   ]
+  ],
+  "browser_uri_decode": [
+   [
+    "MCP_Server.wsv",
+    9180
+   ]
+  ],
+  "browser_get_window_title": [
+   [
+    "MCP_Server.wsv",
+    9182
+   ]
+  ],
+  "browser_set_parent": [
+   [
+    "MCP_Server.wsv",
+    9183
+   ]
+  ],
+  "browser_get_main_browser": [
+   [
+    "MCP_Server.wsv",
+    9184
+   ]
+  ],
+  "browser_is_same": [
+   [
+    "MCP_Server.wsv",
+    9185
+   ]
+  ],
+  "browser_is_view": [
+   [
+    "MCP_Server.wsv",
+    9186
+   ]
+  ],
+  "browser_user_tags": [
+   [
+    "MCP_Server.wsv",
+    9187
+   ]
+  ],
+  "browser_find_by_tag": [
+   [
+    "MCP_Server.wsv",
+    9188
+   ]
+  ],
+  "browser_find_by_hwnd": [
+   [
+    "MCP_Server.wsv",
+    9189
+   ]
+  ],
+  "browser_request_context": [
+   [
+    "MCP_Server.wsv",
+    9190
+   ]
+  ],
+  "browser_file_dialog": [
+   [
+    "MCP_Server.wsv",
+    9191
+   ]
+  ],
+  "browser_send_message": [
+   [
+    "MCP_Server.wsv",
+    9192
+   ]
+  ],
+  "browser_ipc_send_all": [
+   [
+    "MCP_Server.wsv",
+    9193
+   ]
+  ],
+  "browser_ipc_send_to": [
+   [
+    "MCP_Server.wsv",
+    9194
+   ]
+  ],
+  "browser_ipc_renderer_count": [
+   [
+    "MCP_Server.wsv",
+    9195
+   ]
+  ],
+  "browser_ipc_renderer_ids": [
+   [
+    "MCP_Server.wsv",
+    9196
+   ]
+  ],
+  "browser_create_url_request": [
+   [
+    "MCP_Server.wsv",
+    9197
+   ]
+  ],
+  "browser_vip_websocket_intercept": [
+   [
+    "MCP_Server.wsv",
+    9198
+   ]
+  ],
+  "browser_fill_set_value": [
+   [
+    "MCP_Server.wsv",
+    9199
+   ]
+  ],
+  "browser_fill_click": [
+   [
+    "MCP_Server.wsv",
+    9200
+   ]
+  ],
+  "browser_fill_focus": [
+   [
+    "MCP_Server.wsv",
+    9201
+   ]
+  ],
+  "browser_fill_scroll": [
+   [
+    "MCP_Server.wsv",
+    9202
+   ]
+  ],
+  "browser_fill_exists": [
+   [
+    "MCP_Server.wsv",
+    9203
+   ]
+  ],
+  "browser_fill_attr_get": [
+   [
+    "MCP_Server.wsv",
+    9204
+   ]
+  ],
+  "browser_fill_attr_set": [
+   [
+    "MCP_Server.wsv",
+    9205
+   ]
+  ],
+  "browser_fill_trigger": [
+   [
+    "MCP_Server.wsv",
+    9206
+   ]
+  ],
+  "browser_fill_select": [
+   [
+    "MCP_Server.wsv",
+    9207
+   ]
+  ],
+  "mcp_status": [
+   [
+    "MCP_Server.wsv",
+    9208
+   ]
+  ],
+  "mcp_help": [
+   [
+    "MCP_Server.wsv",
+    9209
+   ]
+  ],
+  "mcp_result": [
+   [
+    "MCP_Server.wsv",
+    9210
+   ]
+  ],
+  "ping": [
+   [
+    "MCP_Server.wsv",
+    9211
+   ]
+  ],
+  "batch": [
+   [
+    "MCP_Server.wsv",
+    9212
+   ]
+  ],
+  "workflow_list": [
+   [
+    "MCP_Server.wsv",
+    9213
+   ]
+  ],
+  "workflow_get": [
+   [
+    "MCP_Server.wsv",
+    9214
+   ]
+  ],
+  "workflow_run": [
+   [
+    "MCP_Server.wsv",
+    9215
+   ]
+  ],
+  "workflow_stop": [
+   [
+    "MCP_Server.wsv",
+    9216
+   ]
+  ],
+  "browser_kernel_cert": [
+   [
+    "MCP_Server.wsv",
+    9217
+   ]
+  ],
+  "browser_kernel_auth": [
+   [
+    "MCP_Server.wsv",
+    9218
+   ]
+  ],
+  "browser_kernel_download": [
+   [
+    "MCP_Server.wsv",
+    9219
+   ]
+  ],
+  "browser_kernel_scheme": [
+   [
+    "MCP_Server.wsv",
+    9220
+   ]
+  ],
+  "browser_kernel_menu": [
+   [
+    "MCP_Server.wsv",
+    9221
+   ]
+  ],
+  "browser_kernel_reverse_probe": [
+   [
+    "MCP_Server.wsv",
+    9222
+   ]
+  ],
+  "browser_kernel_reverse_trace": [
+   [
+    "MCP_Server.wsv",
+    9223
+   ]
+  ],
+  "browser_kernel_reverse_algo": [
+   [
+    "MCP_Server.wsv",
+    9224
+   ]
+  ],
+  "browser_kernel_reverse_functions": [
+   [
+    "MCP_Server.wsv",
+    9225
+   ]
+  ],
+  "browser_kernel_reverse_sources": [
+   [
+    "MCP_Server.wsv",
+    9226
+   ]
+  ],
+  "browser_kernel_reverse_watch_global": [
+   [
+    "MCP_Server.wsv",
+    9227
+   ]
+  ],
+  "browser_kernel_ipc_queue": [
+   [
+    "MCP_Server.wsv",
+    9231
+   ]
+  ],
+  "browser_kernel_ipc_clear": [
+   [
+    "MCP_Server.wsv",
+    9232
+   ]
+  ],
+  "browser_kernel_cdp_monitor": [
+   [
+    "MCP_Server.wsv",
+    9233
+   ]
+  ],
+  "browser_kernel_reactor": [
+   [
+    "MCP_Server.wsv",
+    9234
+   ]
+  ],
+  "browser_kernel_watch": [
+   [
+    "MCP_Server.wsv",
+    9235
+   ]
+  ],
+  "browser_kernel_events_all": [
+   [
+    "MCP_Server.wsv",
+    9236
+   ]
+  ],
+  "browser_set_s5_proxy": [
+   [
+    "MCP_Server.wsv",
+    9237
+   ]
+  ],
+  "browser_vip_clear_s5_proxy": [
+   [
+    "MCP_Server.wsv",
+    9238
+   ]
+  ],
+  "browser_vip_mouse_click": [
+   [
+    "MCP_Server.wsv",
+    9239
+   ]
+  ],
+  "browser_vip_mouse_move": [
+   [
+    "MCP_Server.wsv",
+    9240
+   ]
+  ],
+  "browser_vip_mouse_wheel": [
+   [
+    "MCP_Server.wsv",
+    9241
+   ]
+  ],
+  "browser_vip_key_press": [
+   [
+    "MCP_Server.wsv",
+    9242
+   ]
+  ],
+  "browser_vip_key_release": [
+   [
+    "MCP_Server.wsv",
+    9243
+   ]
+  ],
+  "browser_vip_key_click": [
+   [
+    "MCP_Server.wsv",
+    9244
+   ]
+  ],
+  "browser_refresh_cookies": [
+   [
+    "MCP_Server.wsv",
+    9245
+   ]
+  ],
+  "browser_get_all_cookies": [
+   [
+    "MCP_Server.wsv",
+    9246
+   ]
+  ],
+  "browser_set_preference": [
+   [
+    "MCP_Server.wsv",
+    9247
+   ]
+  ],
+  "aliases": [
+   [
+    "MCP_Server.wsv",
+    9248
+   ]
+  ],
+  "browser_vip_disable_debugger": [
+   [
+    "MCP_Server.wsv",
+    9252
+   ]
+  ],
+  "browser_get_window_style": [
+   [
+    "MCP_Server.wsv",
+    9253
+   ]
+  ],
+  "browser_set_window_style": [
+   [
+    "MCP_Server.wsv",
+    9254
+   ]
+  ],
+  "browser_get_run_style": [
+   [
+    "MCP_Server.wsv",
+    9255
+   ]
+  ],
+  "browser_get_global_cache_dir": [
+   [
+    "MCP_Server.wsv",
+    9256
+   ]
+  ],
+  "browser_get_process_type": [
+   [
+    "MCP_Server.wsv",
+    9257
+   ]
+  ],
+  "browser_fingerprint_plugins": [
+   [
+    "MCP_Server.wsv",
+    9258
+   ]
+  ],
+  "browser_fingerprint_appname": [
+   [
+    "MCP_Server.wsv",
+    9259
+   ]
+  ],
+  "browser_fingerprint_pixel_ratio": [
+   [
+    "MCP_Server.wsv",
+    9260
+   ]
+  ],
+  "browser_fingerprint_touch_enable": [
+   [
+    "MCP_Server.wsv",
+    9261
+   ]
+  ],
+  "browser_vip_set_css_version": [
+   [
+    "MCP_Server.wsv",
+    9262
+   ]
+  ],
+  "browser_vip_set_web_version": [
+   [
+    "MCP_Server.wsv",
+    9263
+   ]
+  ],
+  "browser_vip_set_v8_version": [
+   [
+    "MCP_Server.wsv",
+    9264
+   ]
+  ],
+  "browser_vip_send_devtools_msg": [
+   [
+    "MCP_Server.wsv",
+    9265
+   ]
+  ],
+  "browser_fingerprint_screen_xy": [
+   [
+    "MCP_Server.wsv",
+    9266
+   ]
+  ],
+  "browser_vip_mouse_press": [
+   [
+    "MCP_Server.wsv",
+    9267
+   ]
+  ],
+  "browser_vip_mouse_release": [
+   [
+    "MCP_Server.wsv",
+    9268
+   ]
+  ],
+  "browser_vip_key_input": [
+   [
+    "MCP_Server.wsv",
+    9271
+   ]
+  ],
+  "browser_vip_key_type": [
+   [
+    "MCP_Server.wsv",
+    9272
+   ]
+  ],
+  "browser_popup_info": [
+   [
+    "MCP_Server.wsv",
+    9278
+   ]
+  ],
+  "browser_loading_info": [
+   [
+    "MCP_Server.wsv",
+    9279
+   ]
+  ],
+  "browser_cdp_call": [
+   [
+    "MCP_Server.wsv",
+    9281
+   ]
+  ],
+  "browser_cdp_event": [
+   [
+    "MCP_Server.wsv",
+    9282
+   ]
+  ],
+  "browser_vip_fingerprint_webrtc": [
+   [
+    "MCP_Server.wsv",
+    9284
+   ]
+  ],
+  "browser_fingerprint_cookie_enabled": [
+   [
+    "MCP_Server.wsv",
+    9285
+   ]
+  ],
+  "browser_fingerprint_java_enabled": [
+   [
+    "MCP_Server.wsv",
+    9286
+   ]
+  ],
+  "browser_fingerprint_online": [
+   [
+    "MCP_Server.wsv",
+    9287
+   ]
+  ],
+  "browser_fingerprint_appcodename": [
+   [
+    "MCP_Server.wsv",
+    9288
+   ]
+  ],
+  "browser_fingerprint_appversion": [
+   [
+    "MCP_Server.wsv",
+    9289
+   ]
+  ],
+  "browser_vip_enable_js_env": [
+   [
+    "MCP_Server.wsv",
+    9290
+   ]
+  ],
+  "browser_vip_get_js_env_ids": [
+   [
+    "MCP_Server.wsv",
+    9291
+   ]
+  ],
+  "browser_vip_set_is_trusted": [
+   [
+    "MCP_Server.wsv",
+    9293
+   ]
+  ],
+  "browser_vip_touch_cancel": [
+   [
+    "MCP_Server.wsv",
+    9294
+   ]
+  ],
+  "browser_vip_enable_inspector": [
+   [
+    "MCP_Server.wsv",
+    9295
+   ]
+  ],
+  "browser_fingerprint_product_sub": [
+   [
+    "MCP_Server.wsv",
+    9296
+   ]
+  ],
+  "browser_fingerprint_vendor_sub": [
+   [
+    "MCP_Server.wsv",
+    9297
+   ]
+  ],
+  "browser_vip_fingerprint_canvas_fixed": [
+   [
+    "MCP_Server.wsv",
+    9298
+   ]
+  ],
+  "browser_vip_fingerprint_canvas_font": [
+   [
+    "MCP_Server.wsv",
+    9299
+   ]
+  ],
+  "browser_vip_fingerprint_webgl_fixed": [
+   [
+    "MCP_Server.wsv",
+    9300
+   ]
+  ],
+  "browser_vip_fingerprint_audio_fixed": [
+   [
+    "MCP_Server.wsv",
+    9301
+   ]
+  ],
+  "browser_vip_disable_console": [
+   [
+    "MCP_Server.wsv",
+    9302
+   ]
+  ],
+  "browser_vip_fingerprint_rect": [
+   [
+    "MCP_Server.wsv",
+    9303
+   ]
+  ],
+  "browser_vip_fingerprint_timezone": [
+   [
+    "MCP_Server.wsv",
+    9304
+   ]
+  ],
+  "browser_vip_fingerprint_geolocation": [
+   [
+    "MCP_Server.wsv",
+    9305
+   ]
+  ],
+  "browser_vip_fingerprint_ssl": [
+   [
+    "MCP_Server.wsv",
+    9306
+   ]
+  ],
+  "browser_vip_fingerprint_canvas": [
+   [
+    "MCP_Server.wsv",
+    9307
+   ]
+  ],
+  "browser_vip_fingerprint_webgl": [
+   [
+    "MCP_Server.wsv",
+    9308
+   ]
+  ],
+  "browser_vip_fingerprint_audio": [
+   [
+    "MCP_Server.wsv",
+    9309
+   ]
+  ],
+  "browser_vip_fingerprint_font": [
+   [
+    "MCP_Server.wsv",
+    9310
+   ]
+  ],
+  "browser_vip_fingerprint_viewport": [
+   [
+    "MCP_Server.wsv",
+    9311
+   ]
+  ],
+  "browser_vip_fingerprint_screen": [
+   [
+    "MCP_Server.wsv",
+    9312
+   ]
+  ],
+  "browser_vip_fingerprint_hardware": [
+   [
+    "MCP_Server.wsv",
+    9313
+   ]
+  ],
+  "browser_vip_fingerprint_product": [
+   [
+    "MCP_Server.wsv",
+    9314
+   ]
+  ],
+  "browser_vip_fingerprint_battery": [
+   [
+    "MCP_Server.wsv",
+    9315
+   ]
+  ],
+  "browser_vip_fingerprint_media_devices": [
+   [
+    "MCP_Server.wsv",
+    9316
+   ]
+  ],
+  "browser_vip_load_extension": [
+   [
+    "MCP_Server.wsv",
+    9318
+   ]
+  ],
+  "browser_vip_unload_extension": [
+   [
+    "MCP_Server.wsv",
+    9319
+   ]
+  ],
+  "browser_vip_extension_info": [
+   [
+    "MCP_Server.wsv",
+    9320
+   ]
+  ],
+  "browser_vip_execute_js_context": [
+   [
+    "MCP_Server.wsv",
+    9321
+   ]
+  ],
+  "browser_vip_enable_devtools_observer": [
+   [
+    "MCP_Server.wsv",
+    9322
+   ]
+  ],
+  "browser_vip_dom_get_document": [
+   [
+    "MCP_Server.wsv",
+    9323
+   ]
+  ],
+  "browser_vip_dom_search": [
+   [
+    "MCP_Server.wsv",
+    9324
+   ]
+  ],
+  "browser_vip_touch_emulation": [
+   [
+    "MCP_Server.wsv",
+    9325
+   ]
+  ],
+  "browser_get_extra_data": [
+   [
+    "MCP_Server.wsv",
+    9326
+   ]
+  ],
+  "browser_fingerprint_ua": [
+   [
+    "MCP_Server.wsv",
+    9327
+   ]
+  ],
+  "browser_vip_orientation": [
+   [
+    "MCP_Server.wsv",
+    9328
+   ]
+  ],
+  "browser_reverse_hook": [
+   [
+    "MCP_Server.wsv",
+    9330
+   ]
+  ],
+  "browser_reverse_strings": [
+   [
+    "MCP_Server.wsv",
+    9331
+   ]
+  ],
+  "browser_reverse_verify": [
+   [
+    "MCP_Server.wsv",
+    9332
+   ]
+  ],
+  "browser_reverse_cookie_sources": [
+   [
+    "MCP_Server.wsv",
+    9334
+   ]
+  ],
+  "browser_reverse_env": [
+   [
+    "MCP_Server.wsv",
+    9335
+   ]
+  ],
+  "browser_reverse_instrument": [
+   [
+    "MCP_Server.wsv",
+    9336
+   ]
+  ],
+  "browser_reverse_search": [
+   [
+    "MCP_Server.wsv",
+    9337
+   ]
+  ],
+  "browser_reverse_initiator": [
+   [
+    "MCP_Server.wsv",
+    9338
+   ]
+  ],
+  "browser_reverse_preset": [
+   [
+    "MCP_Server.wsv",
+    9339
+   ]
+  ],
+  "browser_reverse_cdp_hook": [
+   [
+    "MCP_Server.wsv",
+    9341
+   ]
+  ],
+  "browser_reverse_profile": [
+   [
+    "MCP_Server.wsv",
+    9342
+   ]
+  ],
+  "browser_reverse_dom_breakpoint": [
+   [
+    "MCP_Server.wsv",
+    9343
+   ]
+  ],
+  "browser_reverse_preload": [
+   [
+    "MCP_Server.wsv",
+    9344
+   ]
+  ],
+  "browser_reverse_call_fn": [
+   [
+    "MCP_Server.wsv",
+    9345
+   ]
+  ],
+  "browser_reverse_websocket": [
+   [
+    "MCP_Server.wsv",
+    9346
+   ]
+  ],
+  "browser_reverse_heap": [
+   [
+    "MCP_Server.wsv",
+    9347
+   ]
+  ],
+  "browser_reverse_runtime": [
+   [
+    "MCP_Server.wsv",
+    9348
+   ]
+  ],
+  "browser_reverse_network_intercept": [
+   [
+    "MCP_Server.wsv",
+    9349
+   ]
+  ],
+  "browser_reverse_setup": [
+   [
+    "MCP_Server.wsv",
+    9350
+   ]
+  ],
+  "browser_reverse_extract": [
+   [
+    "MCP_Server.wsv",
+    9352
+   ]
+  ],
+  "browser_antidetect_presets": [
+   [
+    "MCP_Server.wsv",
+    9354
+   ]
+  ],
+  "browser_network_export": [
+   [
+    "MCP_Server.wsv",
+    9356
+   ]
+  ],
+  "browser_permission_spoof": [
+   [
+    "MCP_Server.wsv",
+    9357
+   ]
+  ],
+  "browser_retry": [
+   [
+    "MCP_Server.wsv",
+    9359
+   ]
+  ],
+  "browser_canvas_noise": [
+   [
+    "MCP_Server.wsv",
+    9360
+   ]
+  ],
+  "browser_event": [
+   [
+    "MCP_Server.wsv",
+    9368
+   ]
+  ],
+  "browser_snapshot": [
+   [
+    "MCP_Server.wsv",
+    9370
+   ]
+  ],
+  "browser_click_text": [
+   [
+    "MCP_Server.wsv",
+    9371
+   ]
+  ],
+  "browser_get_forms": [
+   [
+    "MCP_Server.wsv",
+    9372
+   ]
+  ],
+  "browser_get_scroll": [
+   [
+    "MCP_Server.wsv",
+    9374
+   ]
+  ],
+  "browser_element_action": [
+   [
+    "MCP_Server.wsv",
+    9377
+   ]
+  ],
+  "browser_debugger_list_breakpoints": [
+   [
+    "MCP_Server.wsv",
+    9378
+   ]
+  ],
+  "browser_debugger_clear_breakpoints": [
+   [
+    "MCP_Server.wsv",
+    9379
+   ]
+  ],
+  "browser_reverse_hook_multi": [
+   [
+    "MCP_Server.wsv",
+    9380
+   ]
+  ],
+  "browser_reverse_stack_trace": [
+   [
+    "MCP_Server.wsv",
+    9381
+   ]
+  ],
+  "browser_scroll_by": [
+   [
+    "MCP_Server.wsv",
+    9382
+   ]
+  ],
+  "browser_highlight": [
+   [
+    "MCP_Server.wsv",
+    9383
+   ]
+  ],
+  "browser_reverse_scan_crypto": [
+   [
+    "MCP_Server.wsv",
+    9385
+   ]
+  ],
+  "browser_reverse_string_refs": [
+   [
+    "MCP_Server.wsv",
+    9386
+   ]
+  ],
+  "browser_reverse_detect_obfuscator": [
+   [
+    "MCP_Server.wsv",
+    9387
+   ]
+  ],
+  "browser_reverse_hook_logs": [
+   [
+    "MCP_Server.wsv",
+    9388
+   ]
+  ],
+  "browser_fill_form": [
+   [
+    "MCP_Server.wsv",
+    9389
+   ]
+  ]
+ },
+ "branches": {
+  "replace_file": [
+   [
+    "MCP_Server.wsv",
+    6674
+   ],
+   [
+    "MCP_BrowserEvents.wsv",
+    419
+   ],
+   [
+    "MCP_BrowserEvents.wsv",
+    449
+   ]
+  ],
+  "workflow_stop": [
+   [
+    "MCP_Server.wsv",
+    8316
+   ],
+   [
+    "MCP_Server.wsv",
+    8316
+   ],
+   [
+    "MCP_Server_Workflow.wsv",
+    86
+   ],
+   [
+    "MCP_Server_Workflow.wsv",
+    86
+   ]
+  ],
+  "browser_send_message": [
+   [
+    "MCP_Server.wsv",
+    10008
+   ],
+   [
+    "MCP_Server_System.wsv",
+    25
+   ]
+  ],
+  "browser_get_global_cache_dir": [
+   [
+    "MCP_Server.wsv",
+    10008
+   ],
+   [
+    "MCP_Server_System.wsv",
+    47
+   ]
+  ],
+  "browser_get_process_type": [
+   [
+    "MCP_Server.wsv",
+    10008
+   ],
+   [
+    "MCP_Server_System.wsv",
+    54
+   ]
+  ],
+  "browser_get_window_style": [
+   [
+    "MCP_Server.wsv",
+    10008
+   ],
+   [
+    "MCP_Server_System.wsv",
+    61
+   ]
+  ],
+  "browser_set_window_style": [
+   [
+    "MCP_Server.wsv",
+    10008
+   ],
+   [
+    "MCP_Server_System.wsv",
+    71
+   ]
+  ],
+  "browser_get_run_style": [
+   [
+    "MCP_Server.wsv",
+    10008
+   ],
+   [
+    "MCP_Server_System.wsv",
+    99
+   ]
+  ],
+  "browser_create_tab": [
+   [
+    "MCP_Server.wsv",
+    10008
+   ],
+   [
+    "MCP_Server_System.wsv",
+    16
+   ]
+  ],
+  "browser_task_runner_post": [
+   [
+    "MCP_Server.wsv",
+    10008
+   ],
+   [
+    "MCP_Server_System.wsv",
+    20
+   ]
+  ],
+  "browser_shutdown": [
+   [
+    "MCP_Server.wsv",
+    10008
+   ],
+   [
+    "MCP_Server_System.wsv",
+    124
+   ]
+  ],
+  "replace_data": [
+   [
+    "MCP_BrowserEvents.wsv",
+    419
+   ],
+   [
+    "MCP_BrowserEvents.wsv",
+    441
+   ]
+  ],
+  "line_replace": [
+   [
+    "MCP_BrowserEvents.wsv",
+    419
+   ],
+   [
+    "MCP_BrowserEvents.wsv",
+    515
+   ],
+   [
+    "MCP_Callbacks.wsv",
+    1164
+   ]
+  ],
+  "browser_vip_websocket_intercept": [
+   [
+    "MCP_Server_VIP.wsv",
+    12
+   ]
+  ],
+  "browser_set_s5_proxy": [
+   [
+    "MCP_Server_VIP.wsv",
+    47
+   ]
+  ],
+  "browser_vip_mouse_click": [
+   [
+    "MCP_Server_VIP.wsv",
+    71
+   ]
+  ],
+  "browser_vip_mouse_move": [
+   [
+    "MCP_Server_VIP.wsv",
+    103
+   ]
+  ],
+  "browser_vip_key_press": [
+   [
+    "MCP_Server_VIP.wsv",
+    126
+   ]
+  ],
+  "browser_vip_key_release": [
+   [
+    "MCP_Server_VIP.wsv",
+    149
+   ]
+  ],
+  "browser_vip_clear_s5_proxy": [
+   [
+    "MCP_Server_VIP.wsv",
+    173
+   ]
+  ],
+  "browser_vip_enable_inspector": [
+   [
+    "MCP_Server_VIP.wsv",
+    190
+   ]
+  ],
+  "browser_vip_enable_js_env": [
+   [
+    "MCP_Server_VIP.wsv",
+    243
+   ]
+  ],
+  "browser_vip_get_js_env_ids": [
+   [
+    "MCP_Server_VIP.wsv",
+    284
+   ]
+  ],
+  "browser_vip_touch_cancel": [
+   [
+    "MCP_Server_VIP.wsv",
+    320
+   ]
+  ],
+  "browser_vip_disable_debugger": [
+   [
+    "MCP_Server_VIP.wsv",
+    338
+   ]
+  ],
+  "browser_fingerprint_plugins": [
+   [
+    "MCP_Server_VIP.wsv",
+    356
+   ]
+  ],
+  "browser_fingerprint_appname": [
+   [
+    "MCP_Server_VIP.wsv",
+    373
+   ]
+  ],
+  "browser_fingerprint_cookie_enabled": [
+   [
+    "MCP_Server_VIP.wsv",
+    391
+   ]
+  ],
+  "browser_fingerprint_java_enabled": [
+   [
+    "MCP_Server_VIP.wsv",
+    408
+   ]
+  ],
+  "browser_fingerprint_online": [
+   [
+    "MCP_Server_VIP.wsv",
+    425
+   ]
+  ],
+  "browser_fingerprint_appcodename": [
+   [
+    "MCP_Server_VIP.wsv",
+    449
+   ]
+  ],
+  "browser_fingerprint_appversion": [
+   [
+    "MCP_Server_VIP.wsv",
+    466
+   ]
+  ],
+  "browser_fingerprint_product_sub": [
+   [
+    "MCP_Server_VIP.wsv",
+    483
+   ]
+  ],
+  "browser_fingerprint_vendor_sub": [
+   [
+    "MCP_Server_VIP.wsv",
+    500
+   ]
+  ],
+  "browser_vip_fingerprint_canvas_fixed": [
+   [
+    "MCP_Server_VIP.wsv",
+    518
+   ]
+  ],
+  "browser_vip_fingerprint_webgl_fixed": [
+   [
+    "MCP_Server_VIP.wsv",
+    535
+   ]
+  ],
+  "browser_vip_fingerprint_audio_fixed": [
+   [
+    "MCP_Server_VIP.wsv",
+    552
+   ]
+  ],
+  "browser_vip_fingerprint_rect": [
+   [
+    "MCP_Server_VIP.wsv",
+    570
+   ]
+  ],
+  "browser_fingerprint_pixel_ratio": [
+   [
+    "MCP_Server_VIP.wsv",
+    587
+   ]
+  ],
+  "browser_fingerprint_touch_enable": [
+   [
+    "MCP_Server_VIP.wsv",
+    604
+   ]
+  ],
+  "browser_fingerprint_screen_xy": [
+   [
+    "MCP_Server_VIP.wsv",
+    622
+   ]
+  ],
+  "browser_vip_mouse_press": [
+   [
+    "MCP_Server_VIP.wsv",
+    640
+   ]
+  ],
+  "browser_vip_mouse_release": [
+   [
+    "MCP_Server_VIP.wsv",
+    657
+   ]
+  ],
+  "browser_vip_mouse_wheel": [
+   [
+    "MCP_Server_VIP.wsv",
+    674
+   ]
+  ],
+  "browser_vip_fingerprint_webrtc": [
+   [
+    "MCP_Server_VIP.wsv",
+    702
+   ]
+  ],
+  "browser_vip_fingerprint_timezone": [
+   [
+    "MCP_Server_VIP.wsv",
+    713
+   ]
+  ],
+  "browser_vip_fingerprint_geolocation": [
+   [
+    "MCP_Server_VIP.wsv",
+    724
+   ]
+  ],
+  "browser_vip_fingerprint_ssl": [
+   [
+    "MCP_Server_VIP.wsv",
+    754
+   ]
+  ],
+  "browser_vip_fingerprint_canvas": [
+   [
+    "MCP_Server_VIP.wsv",
+    774
+   ]
+  ],
+  "browser_vip_fingerprint_webgl": [
+   [
+    "MCP_Server_VIP.wsv",
+    786
+   ]
+  ],
+  "browser_vip_fingerprint_audio": [
+   [
+    "MCP_Server_VIP.wsv",
+    798
+   ]
+  ],
+  "browser_vip_fingerprint_font": [
+   [
+    "MCP_Server_VIP.wsv",
+    810
+   ]
+  ],
+  "browser_vip_fingerprint_canvas_font": [
+   [
+    "MCP_Server_VIP.wsv",
+    821
+   ]
+  ],
+  "browser_vip_fingerprint_viewport": [
+   [
+    "MCP_Server_VIP.wsv",
+    835
+   ]
+  ],
+  "browser_vip_fingerprint_screen": [
+   [
+    "MCP_Server_VIP.wsv",
+    847
+   ]
+  ],
+  "browser_vip_fingerprint_hardware": [
+   [
+    "MCP_Server_VIP.wsv",
+    861
+   ]
+  ],
+  "browser_vip_fingerprint_product": [
+   [
+    "MCP_Server_VIP.wsv",
+    873
+   ]
+  ],
+  "browser_vip_fingerprint_battery": [
+   [
+    "MCP_Server_VIP.wsv",
+    887
+   ]
+  ],
+  "browser_vip_fingerprint_media_devices": [
+   [
+    "MCP_Server_VIP.wsv",
+    901
+   ]
+  ],
+  "browser_vip_key_click": [
+   [
+    "MCP_Server_VIP.wsv",
+    930
+   ]
+  ],
+  "browser_vip_key_input": [
+   [
+    "MCP_Server_VIP.wsv",
+    953
+   ]
+  ],
+  "browser_vip_key_type": [
+   [
+    "MCP_Server_VIP.wsv",
+    981
+   ]
+  ],
+  "browser_vip_set_css_version": [
+   [
+    "MCP_Server_VIP.wsv",
+    1005
+   ]
+  ],
+  "browser_vip_set_web_version": [
+   [
+    "MCP_Server_VIP.wsv",
+    1034
+   ]
+  ],
+  "browser_vip_set_v8_version": [
+   [
+    "MCP_Server_VIP.wsv",
+    1063
+   ]
+  ],
+  "browser_vip_send_devtools_msg": [
+   [
+    "MCP_Server_VIP.wsv",
+    1092
+   ]
+  ],
+  "browser_refresh_cookies": [
+   [
+    "MCP_Server_VIP.wsv",
+    1120
+   ]
+  ],
+  "browser_get_all_cookies": [
+   [
+    "MCP_Server_VIP.wsv",
+    1125
+   ]
+  ],
+  "browser_set_preference": [
+   [
+    "MCP_Server_VIP.wsv",
+    1136
+   ]
+  ],
+  "browser_vip_load_extension": [
+   [
+    "MCP_Server_VIP.wsv",
+    1191
+   ]
+  ],
+  "browser_vip_unload_extension": [
+   [
+    "MCP_Server_VIP.wsv",
+    1212
+   ]
+  ],
+  "browser_vip_extension_info": [
+   [
+    "MCP_Server_VIP.wsv",
+    1229
+   ]
+  ],
+  "browser_vip_execute_js_context": [
+   [
+    "MCP_Server_VIP.wsv",
+    1255
+   ]
+  ],
+  "browser_vip_dom_get_document": [
+   [
+    "MCP_Server_VIP.wsv",
+    1289
+   ]
+  ],
+  "browser_vip_dom_search": [
+   [
+    "MCP_Server_VIP.wsv",
+    1316
+   ]
+  ],
+  "browser_vip_enable_devtools_observer": [
+   [
+    "MCP_Server_VIP.wsv",
+    1353
+   ]
+  ],
+  "browser_vip_touch_emulation": [
+   [
+    "MCP_Server_VIP.wsv",
+    1402
+   ]
+  ],
+  "browser_fingerprint_ua": [
+   [
+    "MCP_Server_VIP.wsv",
+    1414
+   ]
+  ],
+  "browser_vip_orientation": [
+   [
+    "MCP_Server_VIP.wsv",
+    1455
+   ]
+  ],
+  "browser_get_extra_data": [
+   [
+    "MCP_Server_VIP.wsv",
+    1493
+   ]
+  ],
+  "browser_vip_disable_console": [
+   [
+    "MCP_Server_VIP.wsv",
+    1522
+   ]
+  ],
+  "browser_vip_set_is_trusted": [
+   [
+    "MCP_Server_VIP.wsv",
+    1554
+   ]
+  ],
+  "browser_navigate": [
+   [
+    "MCP_Server_Core.wsv",
+    18
+   ]
+  ],
+  "browser_get_url": [
+   [
+    "MCP_Server_Core.wsv",
+    64
+   ]
+  ],
+  "browser_get_title": [
+   [
+    "MCP_Server_Core.wsv",
+    80
+   ]
+  ],
+  "browser_back": [
+   [
+    "MCP_Server_Core.wsv",
+    100
+   ]
+  ],
+  "browser_forward": [
+   [
+    "MCP_Server_Core.wsv",
+    115
+   ]
+  ],
+  "browser_reload": [
+   [
+    "MCP_Server_Core.wsv",
+    130
+   ]
+  ],
+  "browser_stop": [
+   [
+    "MCP_Server_Core.wsv",
+    161
+   ]
+  ],
+  "browser_execute_js": [
+   [
+    "MCP_Server_Core.wsv",
+    173
+   ]
+  ],
+  "browser_evaluate": [
+   [
+    "MCP_Server_Core.wsv",
+    225
+   ]
+  ],
+  "browser_get_source": [
+   [
+    "MCP_Server_Core.wsv",
+    245
+   ]
+  ],
+  "browser_get_text": [
+   [
+    "MCP_Server_Core.wsv",
+    263
+   ]
+  ],
+  "browser_open_devtools": [
+   [
+    "MCP_Server_Core.wsv",
+    343
+   ]
+  ],
+  "browser_close_devtools": [
+   [
+    "MCP_Server_Core.wsv",
+    354
+   ]
+  ],
+  "browser_create": [
+   [
+    "MCP_Server_Core.wsv",
+    366
+   ]
+  ],
+  "browser_close": [
+   [
+    "MCP_Server_Core.wsv",
+    437
+   ]
+  ],
+  "browser_list": [
+   [
+    "MCP_Server_Core.wsv",
+    459
+   ]
+  ],
+  "browser_set_zoom": [
+   [
+    "MCP_Server_Core.wsv",
+    515
+   ]
+  ],
+  "browser_find": [
+   [
+    "MCP_Server_Core.wsv",
+    580
+   ]
+  ],
+  "browser_stop_find": [
+   [
+    "MCP_Server_Core.wsv",
+    597
+   ]
+  ],
+  "browser_mouse_click": [
+   [
+    "MCP_Server_Core.wsv",
+    609
+   ]
+  ],
+  "browser_mouse_move": [
+   [
+    "MCP_Server_Core.wsv",
+    703
+   ]
+  ],
+  "browser_key_event": [
+   [
+    "MCP_Server_Core.wsv",
+    746
+   ]
+  ],
+  "browser_set_mute": [
+   [
+    "MCP_Server_Core.wsv",
+    815
+   ]
+  ],
+  "browser_print": [
+   [
+    "MCP_Server_Core.wsv",
+    837
+   ]
+  ],
+  "browser_print_to_pdf": [
+   [
+    "MCP_Server_Core.wsv",
+    848
+   ]
+  ],
+  "browser_get_cookies": [
+   [
+    "MCP_Server_Core.wsv",
+    892
+   ]
+  ],
+  "browser_set_cookie": [
+   [
+    "MCP_Server_Core.wsv",
+    932
+   ]
+  ],
+  "browser_delete_cookies": [
+   [
+    "MCP_Server_Core.wsv",
+    1097
+   ]
+  ],
+  "browser_clear_cache": [
+   [
+    "MCP_Server_Core.wsv",
+    1108
+   ]
+  ],
+  "browser_is_loading": [
+   [
+    "MCP_Server_Core.wsv",
+    1119
+   ]
+  ],
+  "browser_can_navigate": [
+   [
+    "MCP_Server_Core.wsv",
+    1129
+   ]
+  ],
+  "browser_get_id": [
+   [
+    "MCP_Server_Core.wsv",
+    1144
+   ]
+  ],
+  "browser_mouse_wheel": [
+   [
+    "MCP_Server_Core.wsv",
+    1155
+   ]
+  ],
+  "browser_get_zoom": [
+   [
+    "MCP_Server_Core.wsv",
+    1215
+   ]
+  ],
+  "browser_set_proxy": [
+   [
+    "MCP_Server_Core.wsv",
+    1226
+   ]
+  ],
+  "browser_clear_proxy": [
+   [
+    "MCP_Server_Core.wsv",
+    1267
+   ]
+  ],
+  "browser_start_download": [
+   [
+    "MCP_Server_Core.wsv",
+    1298
+   ]
+  ],
+  "browser_edit_undo": [
+   [
+    "MCP_Server_Core.wsv",
+    1320
+   ]
+  ],
+  "browser_edit_redo": [
+   [
+    "MCP_Server_Core.wsv",
+    1337
+   ]
+  ],
+  "browser_edit_cut": [
+   [
+    "MCP_Server_Core.wsv",
+    1354
+   ]
+  ],
+  "browser_edit_copy": [
+   [
+    "MCP_Server_Core.wsv",
+    1371
+   ]
+  ],
+  "browser_edit_paste": [
+   [
+    "MCP_Server_Core.wsv",
+    1388
+   ]
+  ],
+  "browser_edit_delete": [
+   [
+    "MCP_Server_Core.wsv",
+    1405
+   ]
+  ],
+  "browser_edit_select_all": [
+   [
+    "MCP_Server_Core.wsv",
+    1422
+   ]
+  ],
+  "browser_get_frames": [
+   [
+    "MCP_Server_Core.wsv",
+    1440
+   ]
+  ],
+  "browser_get_window_handle": [
+   [
+    "MCP_Server_Core.wsv",
+    1493
+   ]
+  ],
+  "browser_set_focus": [
+   [
+    "MCP_Server_Core.wsv",
+    1503
+   ]
+  ],
+  "browser_is_muted": [
+   [
+    "MCP_Server_Core.wsv",
+    1522
+   ]
+  ],
+  "browser_compress_memory": [
+   [
+    "MCP_Server_Core.wsv",
+    1533
+   ]
+  ],
+  "browser_fbro_version": [
+   [
+    "MCP_Server_Core.wsv",
+    1539
+   ]
+  ],
+  "browser_dom_query": [
+   [
+    "MCP_Server_Core.wsv",
+    1546
+   ]
+  ],
+  "browser_dom_click": [
+   [
+    "MCP_Server_Core.wsv",
+    1616
+   ]
+  ],
+  "browser_dom_set_value": [
+   [
+    "MCP_Server_Core.wsv",
+    1647
+   ]
+  ],
+  "browser_dom_get_html": [
+   [
+    "MCP_Server_Core.wsv",
+    1714
+   ]
+  ],
+  "browser_dom_rect": [
+   [
+    "MCP_Server_Core.wsv",
+    1756
+   ]
+  ],
+  "browser_dom_inner_html": [
+   [
+    "MCP_Server_Core.wsv",
+    1802
+   ]
+  ],
+  "browser_dom_checked": [
+   [
+    "MCP_Server_Core.wsv",
+    1846
+   ]
+  ],
+  "browser_dom_selected": [
+   [
+    "MCP_Server_Core.wsv",
+    1894
+   ]
+  ],
+  "browser_dom_select": [
+   [
+    "MCP_Server_Core.wsv",
+    1943
+   ]
+  ],
+  "browser_dom_set_html": [
+   [
+    "MCP_Server_Core.wsv",
+    1978
+   ]
+  ],
+  "browser_console_eval": [
+   [
+    "MCP_Server_Core.wsv",
+    2013
+   ]
+  ],
+  "browser_fingerprint": [
+   [
+    "MCP_Server_Core.wsv",
+    2056
+   ]
+  ],
+  "browser_intercept": [
+   [
+    "MCP_Server_Core.wsv",
+    2304
+   ]
+  ],
+  "browser_screenshot": [
+   [
+    "MCP_Server_Core.wsv",
+    2495
+   ]
+  ],
+  "browser_wait": [
+   [
+    "MCP_Server_Core.wsv",
+    2561
+   ]
+  ],
+  "browser_scrape": [
+   [
+    "MCP_Server_Core.wsv",
+    2666
+   ]
+  ],
+  "browser_extract": [
+   [
+    "MCP_Server_Core.wsv",
+    2734
+   ]
+  ],
+  "browser_inject": [
+   [
+    "MCP_Server_Core.wsv",
+    2782
+   ]
+  ],
+  "browser_network": [
+   [
+    "MCP_Server_Core.wsv",
+    2870
+   ]
+  ],
+  "browser_retry": [
+   [
+    "MCP_Server_Core.wsv",
+    2955
+   ]
+  ],
+  "browser_canvas_noise": [
+   [
+    "MCP_Server_Core.wsv",
+    3048
+   ]
+  ],
+  "browser_network_export": [
+   [
+    "MCP_Server_Core.wsv",
+    3127
+   ]
+  ],
+  "browser_permission_spoof": [
+   [
+    "MCP_Server_Core.wsv",
+    3184
+   ]
+  ],
+  "browser_collect": [
+   [
+    "MCP_Server_Core.wsv",
+    3257
+   ]
+  ],
+  "browser_status": [
+   [
+    "MCP_Server_Core.wsv",
+    3532
+   ]
+  ],
+  "browser_close_try": [
+   [
+    "MCP_Server_Core.wsv",
+    3569
+   ]
+  ],
+  "browser_view_source": [
+   [
+    "MCP_Server_Core.wsv",
+    3574
+   ]
+  ],
+  "browser_get_focused_frame": [
+   [
+    "MCP_Server_Core.wsv",
+    3595
+   ]
+  ],
+  "browser_download_image": [
+   [
+    "MCP_Server_Core.wsv",
+    3620
+   ]
+  ],
+  "browser_meta": [
+   [
+    "MCP_Server_Core.wsv",
+    3649
+   ]
+  ],
+  "mcp_result": [
+   [
+    "MCP_Server_Core.wsv",
+    3664
+   ],
+   [
+    "MCP_Server_Core.wsv",
+    3664
+   ]
+  ],
+  "mcp_status": [
+   [
+    "MCP_Server_Core.wsv",
+    4274
+   ],
+   [
+    "MCP_Server_Core.wsv",
+    4274
+   ]
+  ],
+  "mcp_help": [
+   [
+    "MCP_Server_Core.wsv",
+    4295
+   ],
+   [
+    "MCP_Server_Core.wsv",
+    4295
+   ]
+  ],
+  "browser_aliases": [
+   [
+    "MCP_Server_Core.wsv",
+    4350
+   ]
+  ],
+  "browser_cdp_call": [
+   [
+    "MCP_Server_Core.wsv",
+    4365
+   ]
+  ],
+  "browser_event": [
+   [
+    "MCP_Server_Core.wsv",
+    4385
+   ]
+  ],
+  "browser_cdp_event": [
+   [
+    "MCP_Server_Core.wsv",
+    4458
+   ]
+  ],
+  "browser_cdp": [
+   [
+    "MCP_Server_Core.wsv",
+    4508
+   ]
+  ],
+  "browser_network_body": [
+   [
+    "MCP_Server_Core.wsv",
+    4519
+   ]
+  ],
+  "browser_debugger_pause": [
+   [
+    "MCP_Server_Core.wsv",
+    4544
+   ]
+  ],
+  "browser_debugger_resume": [
+   [
+    "MCP_Server_Core.wsv",
+    4551
+   ]
+  ],
+  "browser_debugger_step_over": [
+   [
+    "MCP_Server_Core.wsv",
+    4560
+   ]
+  ],
+  "browser_debugger_step_into": [
+   [
+    "MCP_Server_Core.wsv",
+    4568
+   ]
+  ],
+  "browser_debugger_step_out": [
+   [
+    "MCP_Server_Core.wsv",
+    4576
+   ]
+  ],
+  "browser_debugger_set_breakpoint": [
+   [
+    "MCP_Server_Core.wsv",
+    4585
+   ]
+  ],
+  "browser_debugger_list_breakpoints": [
+   [
+    "MCP_Server_Core.wsv",
+    4658
+   ]
+  ],
+  "browser_debugger_clear_breakpoints": [
+   [
+    "MCP_Server_Core.wsv",
+    4684
+   ]
+  ],
+  "browser_debugger_stack": [
+   [
+    "MCP_Server_Core.wsv",
+    4728
+   ]
+  ],
+  "browser_debugger_evaluate": [
+   [
+    "MCP_Server_Core.wsv",
+    4737
+   ]
+  ],
+  "browser_debugger_wait_paused": [
+   [
+    "MCP_Server_Core.wsv",
+    4770
+   ]
+  ],
+  "browser_debugger_last_paused": [
+   [
+    "MCP_Server_Core.wsv",
+    4798
+   ]
+  ],
+  "browser_debugger_inspect": [
+   [
+    "MCP_Server_Core.wsv",
+    4810
+   ]
+  ],
+  "browser_debugger_flow": [
+   [
+    "MCP_Server_Core.wsv",
+    4854
+   ]
+  ],
+  "browser_debugger_script_source": [
+   [
+    "MCP_Server_Core.wsv",
+    4874
+   ]
+  ],
+  "browser_debugger_auto": [
+   [
+    "MCP_Server_Core.wsv",
+    4894
+   ]
+  ],
+  "browser_debugger_enable": [
+   [
+    "MCP_Server_Core.wsv",
+    5024
+   ]
+  ],
+  "browser_base64_encode": [
+   [
+    "MCP_Server_Core.wsv",
+    5031
+   ]
+  ],
+  "browser_base64_decode": [
+   [
+    "MCP_Server_Core.wsv",
+    5043
+   ]
+  ],
+  "browser_uri_encode": [
+   [
+    "MCP_Server_Core.wsv",
+    5062
+   ]
+  ],
+  "browser_uri_decode": [
+   [
+    "MCP_Server_Core.wsv",
+    5074
+   ]
+  ],
+  "browser_touch_press": [
+   [
+    "MCP_Server_Core.wsv",
+    5087
+   ]
+  ],
+  "browser_touch_release": [
+   [
+    "MCP_Server_Core.wsv",
+    5104
+   ]
+  ],
+  "browser_touch_move": [
+   [
+    "MCP_Server_Core.wsv",
+    5121
+   ]
+  ],
+  "browser_popup_info": [
+   [
+    "MCP_Server_Core.wsv",
+    5139
+   ]
+  ],
+  "browser_window_info": [
+   [
+    "MCP_Server_Core.wsv",
+    5166
+   ]
+  ],
+  "browser_move_window": [
+   [
+    "MCP_Server_Core.wsv",
+    5185
+   ]
+  ],
+  "browser_frame_names": [
+   [
+    "MCP_Server_Core.wsv",
+    5190
+   ]
+  ],
+  "browser_frame_by_name": [
+   [
+    "MCP_Server_Core.wsv",
+    5221
+   ]
+  ],
+  "browser_find_by_tag": [
+   [
+    "MCP_Server_Core.wsv",
+    5255
+   ]
+  ],
+  "browser_request_context": [
+   [
+    "MCP_Server_Core.wsv",
+    5286
+   ]
+  ],
+  "browser_loading_info": [
+   [
+    "MCP_Server_Core.wsv",
+    5309
+   ]
+  ],
+  "browser_batch": [
+   [
+    "MCP_Server_Core.wsv",
+    5336
+   ]
+  ],
+  "browser_set_parent": [
+   [
+    "MCP_Server_Core.wsv",
+    5341
+   ]
+  ],
+  "browser_get_window_title": [
+   [
+    "MCP_Server_Core.wsv",
+    5358
+   ]
+  ],
+  "browser_get_main_browser": [
+   [
+    "MCP_Server_Core.wsv",
+    5368
+   ]
+  ],
+  "browser_is_same": [
+   [
+    "MCP_Server_Core.wsv",
+    5380
+   ]
+  ],
+  "browser_is_view": [
+   [
+    "MCP_Server_Core.wsv",
+    5402
+   ]
+  ],
+  "browser_set_auto_resize": [
+   [
+    "MCP_Server_Core.wsv",
+    5413
+   ]
+  ],
+  "browser_restore_gui": [
+   [
+    "MCP_Server_Core.wsv",
+    5417
+   ]
+  ],
+  "browser_file_dialog": [
+   [
+    "MCP_Server_Core.wsv",
+    5422
+   ]
+  ],
+  "browser_ipc_send_all": [
+   [
+    "MCP_Server_Core.wsv",
+    5451
+   ]
+  ],
+  "browser_ipc_send_to": [
+   [
+    "MCP_Server_Core.wsv",
+    5470
+   ]
+  ],
+  "browser_ipc_renderer_count": [
+   [
+    "MCP_Server_Core.wsv",
+    5495
+   ]
+  ],
+  "browser_ipc_renderer_ids": [
+   [
+    "MCP_Server_Core.wsv",
+    5507
+   ]
+  ],
+  "browser_create_url_request": [
+   [
+    "MCP_Server_Core.wsv",
+    5528
+   ]
+  ],
+  "browser_find_by_hwnd": [
+   [
+    "MCP_Server_Core.wsv",
+    5562
+   ]
+  ],
+  "browser_user_tags": [
+   [
+    "MCP_Server_Core.wsv",
+    5591
+   ]
+  ],
+  "browser_clear_cache_browser": [
+   [
+    "MCP_Server_Core.wsv",
+    5612
+   ]
+  ],
+  "browser_cache_dir": [
+   [
+    "MCP_Server_Core.wsv",
+    5628
+   ]
+  ],
+  "browser_reverse_hook": [
+   [
+    "MCP_Server_Core.wsv",
+    5644
+   ]
+  ],
+  "browser_reverse_strings": [
+   [
+    "MCP_Server_Core.wsv",
+    5754
+   ]
+  ],
+  "browser_reverse_verify": [
+   [
+    "MCP_Server_Core.wsv",
+    5819
+   ]
+  ],
+  "browser_reverse_cookie_sources": [
+   [
+    "MCP_Server_Core.wsv",
+    5859
+   ]
+  ],
+  "browser_reverse_env": [
+   [
+    "MCP_Server_Core.wsv",
+    5891
+   ]
+  ],
+  "browser_reverse_instrument": [
+   [
+    "MCP_Server_Core.wsv",
+    5934
+   ]
+  ],
+  "browser_reverse_search": [
+   [
+    "MCP_Server_Core.wsv",
+    5984
+   ]
+  ],
+  "browser_reverse_extract": [
+   [
+    "MCP_Server_Core.wsv",
+    6024
+   ]
+  ],
+  "browser_reverse_initiator": [
+   [
+    "MCP_Server_Core.wsv",
+    6296
+   ]
+  ],
+  "browser_antidetect_presets": [
+   [
+    "MCP_Server_Core.wsv",
+    6319
+   ]
+  ],
+  "browser_reverse_setup": [
+   [
+    "MCP_Server_Core.wsv",
+    6418
+   ]
+  ],
+  "browser_reverse_preset": [
+   [
+    "MCP_Server_Core.wsv",
+    6448
+   ]
+  ],
+  "browser_reverse_cdp_hook": [
+   [
+    "MCP_Server_Core.wsv",
+    6495
+   ],
+   [
+    "MCP_Server_Reverse.wsv",
+    98
+   ]
+  ],
+  "browser_reverse_profile": [
+   [
+    "MCP_Server_Core.wsv",
+    6567
+   ],
+   [
+    "MCP_Server_Reverse.wsv",
+    12
+   ]
+  ],
+  "browser_reverse_dom_breakpoint": [
+   [
+    "MCP_Server_Core.wsv",
+    6599
+   ],
+   [
+    "MCP_Server_Reverse.wsv",
+    49
+   ]
+  ],
+  "browser_reverse_preload": [
+   [
+    "MCP_Server_Core.wsv",
+    6634
+   ],
+   [
+    "MCP_Server_Reverse.wsv",
+    267
+   ]
+  ],
+  "browser_reverse_call_fn": [
+   [
+    "MCP_Server_Core.wsv",
+    6653
+   ],
+   [
+    "MCP_Server_Reverse.wsv",
+    164
+   ]
+  ],
+  "browser_reverse_websocket": [
+   [
+    "MCP_Server_Core.wsv",
+    6675
+   ],
+   [
+    "MCP_Server_Reverse.wsv",
+    321
+   ]
+  ],
+  "browser_reverse_heap": [
+   [
+    "MCP_Server_Core.wsv",
+    6695
+   ],
+   [
+    "MCP_Server_Reverse.wsv",
+    354
+   ]
+  ],
+  "browser_snapshot": [
+   [
+    "MCP_Server_Core.wsv",
+    6732
+   ]
+  ],
+  "browser_click_text": [
+   [
+    "MCP_Server_Core.wsv",
+    6799
+   ]
+  ],
+  "browser_get_forms": [
+   [
+    "MCP_Server_Core.wsv",
+    6868
+   ]
+  ],
+  "browser_highlight": [
+   [
+    "MCP_Server_Core.wsv",
+    6928
+   ]
+  ],
+  "browser_get_scroll": [
+   [
+    "MCP_Server_Core.wsv",
+    7025
+   ]
+  ],
+  "browser_scroll_by": [
+   [
+    "MCP_Server_Core.wsv",
+    7080
+   ]
+  ],
+  "browser_element_action": [
+   [
+    "MCP_Server_Core.wsv",
+    7141
+   ]
+  ],
+  "browser_fill_set_value": [
+   [
+    "MCP_Server_Form.wsv",
+    12
+   ],
+   [
+    "MCP_Server_Form.wsv",
+    12
+   ]
+  ],
+  "browser_fill_click": [
+   [
+    "MCP_Server_Form.wsv",
+    43
+   ],
+   [
+    "MCP_Server_Form.wsv",
+    43
+   ]
+  ],
+  "browser_fill_focus": [
+   [
+    "MCP_Server_Form.wsv",
+    72
+   ],
+   [
+    "MCP_Server_Form.wsv",
+    72
+   ]
+  ],
+  "browser_fill_scroll": [
+   [
+    "MCP_Server_Form.wsv",
+    101
+   ],
+   [
+    "MCP_Server_Form.wsv",
+    101
+   ]
+  ],
+  "browser_fill_exists": [
+   [
+    "MCP_Server_Form.wsv",
+    130
+   ],
+   [
+    "MCP_Server_Form.wsv",
+    130
+   ]
+  ],
+  "browser_fill_attr_set": [
+   [
+    "MCP_Server_Form.wsv",
+    158
+   ],
+   [
+    "MCP_Server_Form.wsv",
+    158
+   ]
+  ],
+  "browser_fill_attr_get": [
+   [
+    "MCP_Server_Form.wsv",
+    206
+   ],
+   [
+    "MCP_Server_Form.wsv",
+    206
+   ]
+  ],
+  "browser_fill_trigger": [
+   [
+    "MCP_Server_Form.wsv",
+    278
+   ],
+   [
+    "MCP_Server_Form.wsv",
+    278
+   ]
+  ],
+  "browser_fill_select": [
+   [
+    "MCP_Server_Form.wsv",
+    313
+   ],
+   [
+    "MCP_Server_Form.wsv",
+    313
+   ]
+  ],
+  "browser_fill_form": [
+   [
+    "MCP_Server_Form.wsv",
+    367
+   ]
+  ],
+  "workflow_list": [
+   [
+    "MCP_Server_Workflow.wsv",
+    68
+   ],
+   [
+    "MCP_Server_Workflow.wsv",
+    68
+   ]
+  ],
+  "workflow_get": [
+   [
+    "MCP_Server_Workflow.wsv",
+    72
+   ],
+   [
+    "MCP_Server_Workflow.wsv",
+    72
+   ]
+  ],
+  "workflow_run": [
+   [
+    "MCP_Server_Workflow.wsv",
+    82
+   ],
+   [
+    "MCP_Server_Workflow.wsv",
+    82
+   ]
+  ],
+  "browser_reverse_runtime": [
+   [
+    "MCP_Server_Reverse.wsv",
+    390
+   ]
+  ],
+  "browser_reverse_network_intercept": [
+   [
+    "MCP_Server_Reverse.wsv",
+    438
+   ]
+  ],
+  "browser_reverse_scan_crypto": [
+   [
+    "MCP_Server_Reverse.wsv",
+    468
+   ]
+  ],
+  "browser_reverse_string_refs": [
+   [
+    "MCP_Server_Reverse.wsv",
+    524
+   ]
+  ],
+  "browser_reverse_detect_obfuscator": [
+   [
+    "MCP_Server_Reverse.wsv",
+    587
+   ]
+  ],
+  "browser_reverse_hook_logs": [
+   [
+    "MCP_Server_Reverse.wsv",
+    641
+   ]
+  ],
+  "browser_reverse_hook_multi": [
+   [
+    "MCP_Server_Reverse.wsv",
+    712
+   ]
+  ],
+  "browser_reverse_stack_trace": [
+   [
+    "MCP_Server_Reverse.wsv",
+    795
+   ]
+  ],
+  "browser_kernel_cert": [
+   [
+    "MCP_Kernel.wsv",
+    61
+   ]
+  ],
+  "browser_kernel_auth": [
+   [
+    "MCP_Kernel.wsv",
+    69
+   ]
+  ],
+  "browser_kernel_download": [
+   [
+    "MCP_Kernel.wsv",
+    73
+   ]
+  ],
+  "browser_kernel_scheme": [
+   [
+    "MCP_Kernel.wsv",
+    81
+   ]
+  ],
+  "browser_kernel_menu": [
+   [
+    "MCP_Kernel.wsv",
+    85
+   ]
+  ],
+  "browser_kernel_ipc_queue": [
+   [
+    "MCP_Kernel.wsv",
+    89
+   ]
+  ],
+  "browser_kernel_ipc_clear": [
+   [
+    "MCP_Kernel.wsv",
+    89
+   ]
+  ],
+  "browser_kernel_cdp_monitor": [
+   [
+    "MCP_Kernel.wsv",
+    93
+   ]
+  ],
+  "browser_kernel_reactor": [
+   [
+    "MCP_Kernel.wsv",
+    101
+   ]
+  ],
+  "browser_kernel_watch": [
+   [
+    "MCP_Kernel.wsv",
+    109
+   ]
+  ],
+  "browser_kernel_events_all": [
+   [
+    "MCP_Kernel.wsv",
+    117
+   ]
+  ],
+  "browser_kernel_reverse_probe": [
+   [
+    "MCP_Kernel.wsv",
+    121
+   ]
+  ],
+  "browser_kernel_reverse_trace": [
+   [
+    "MCP_Kernel.wsv",
+    125
+   ]
+  ],
+  "browser_kernel_reverse_algo": [
+   [
+    "MCP_Kernel.wsv",
+    129
+   ]
+  ],
+  "browser_kernel_reverse_functions": [
+   [
+    "MCP_Kernel.wsv",
+    133
+   ]
+  ],
+  "browser_kernel_reverse_sources": [
+   [
+    "MCP_Kernel.wsv",
+    137
+   ]
+  ],
+  "browser_kernel_reverse_watch_global": [
+   [
+    "MCP_Kernel.wsv",
+    141
+   ]
+  ],
+  "ignore_off": [
+   [
+    "MCP_Kernel.wsv",
+    161
+   ]
+  ],
+  "clear_queue": [
+   [
+    "MCP_Kernel.wsv",
+    356
+   ]
+  ]
+ }
+}

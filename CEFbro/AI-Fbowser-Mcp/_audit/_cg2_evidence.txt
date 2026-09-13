@@ -1,0 +1,3598 @@
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用ConsoleAssert   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1665 vip.内核开关_禁用ConsoleAssert (MCP命令服务器.yyjson取逻辑 (参数JSON, "assert"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1665 vip.内核开关_禁用ConsoleAssert (MCP命令服务器.yyjson取逻辑 (参数JSON, "assert"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用ConsoleClear   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1664 vip.内核开关_禁用ConsoleClear (MCP命令服务器.yyjson取逻辑 (参数JSON, "clear"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1664 vip.内核开关_禁用ConsoleClear (MCP命令服务器.yyjson取逻辑 (参数JSON, "clear"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用ConsoleCount   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1669 vip.内核开关_禁用ConsoleCount (MCP命令服务器.yyjson取逻辑 (参数JSON, "count"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1669 vip.内核开关_禁用ConsoleCount (MCP命令服务器.yyjson取逻辑 (参数JSON, "count"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用ConsoleDebug   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1661 vip.内核开关_禁用ConsoleDebug (MCP命令服务器.yyjson取逻辑 (参数JSON, "debug"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1661 vip.内核开关_禁用ConsoleDebug (MCP命令服务器.yyjson取逻辑 (参数JSON, "debug"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用ConsoleDir   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1666 vip.内核开关_禁用ConsoleDir (MCP命令服务器.yyjson取逻辑 (参数JSON, "dir"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1666 vip.内核开关_禁用ConsoleDir (MCP命令服务器.yyjson取逻辑 (参数JSON, "dir"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用ConsoleError   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1660 vip.内核开关_禁用ConsoleError (MCP命令服务器.yyjson取逻辑 (参数JSON, "error"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1660 vip.内核开关_禁用ConsoleError (MCP命令服务器.yyjson取逻辑 (参数JSON, "error"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用ConsoleGroup   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1670 vip.内核开关_禁用ConsoleGroup (MCP命令服务器.yyjson取逻辑 (参数JSON, "group"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1670 vip.内核开关_禁用ConsoleGroup (MCP命令服务器.yyjson取逻辑 (参数JSON, "group"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用ConsoleInfo   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1662 vip.内核开关_禁用ConsoleInfo (MCP命令服务器.yyjson取逻辑 (参数JSON, "info"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1662 vip.内核开关_禁用ConsoleInfo (MCP命令服务器.yyjson取逻辑 (参数JSON, "info"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用ConsoleLog   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1658 vip.内核开关_禁用ConsoleLog (MCP命令服务器.yyjson取逻辑 (参数JSON, "log"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1658 vip.内核开关_禁用ConsoleLog (MCP命令服务器.yyjson取逻辑 (参数JSON, "log"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用ConsoleProfile   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1671 vip.内核开关_禁用ConsoleProfile (MCP命令服务器.yyjson取逻辑 (参数JSON, "profile"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1671 vip.内核开关_禁用ConsoleProfile (MCP命令服务器.yyjson取逻辑 (参数JSON, "profile"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用ConsoleTable   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1667 vip.内核开关_禁用ConsoleTable (MCP命令服务器.yyjson取逻辑 (参数JSON, "table"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1667 vip.内核开关_禁用ConsoleTable (MCP命令服务器.yyjson取逻辑 (参数JSON, "table"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用ConsoleTime   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1668 vip.内核开关_禁用ConsoleTime (MCP命令服务器.yyjson取逻辑 (参数JSON, "time"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1668 vip.内核开关_禁用ConsoleTime (MCP命令服务器.yyjson取逻辑 (参数JSON, "time"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用ConsoleTrace   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1663 vip.内核开关_禁用ConsoleTrace (MCP命令服务器.yyjson取逻辑 (参数JSON, "trace"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1663 vip.内核开关_禁用ConsoleTrace (MCP命令服务器.yyjson取逻辑 (参数JSON, "trace"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用ConsoleWarn   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1659 vip.内核开关_禁用ConsoleWarn (MCP命令服务器.yyjson取逻辑 (参数JSON, "warn"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1659 vip.内核开关_禁用ConsoleWarn (MCP命令服务器.yyjson取逻辑 (参数JSON, "warn"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用Debugger   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否禁用 <类型 = 逻辑型 注释 = "为真为禁用，假为不禁用">
+src 直调点(4):
+    MCP_Server.wsv:1743 dbgVip.内核开关_禁用Debugger (假)
+    MCP_Server.wsv:2041 vipCtrl.内核开关_禁用Debugger (真)
+    MCP_Server_Core.wsv:6288 adVIP.内核开关_禁用Debugger (真)
+    MCP_Server_VIP.wsv:327 vip_ctrl.内核开关_禁用Debugger (MCP命令服务器.yyjson取逻辑 (参数JSON, "disable"))
+字面量命中(4):
+    MCP_Server.wsv:1743 dbgVip.内核开关_禁用Debugger (假)
+    MCP_Server.wsv:2041 vipCtrl.内核开关_禁用Debugger (真)
+    MCP_Server_Core.wsv:6288 adVIP.内核开关_禁用Debugger (真)
+    MCP_Server_VIP.wsv:327 vip_ctrl.内核开关_禁用Debugger (MCP命令服务器.yyjson取逻辑 (参数JSON, "disable"))
+相关工具(关键词): browser_debugger_enable(1), browser_vip_disable_debugger(1), browser_reverse_setup(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_禁用Performance检测   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_VIP.wsv:1672 vip.内核开关_禁用Performance检测 (MCP命令服务器.yyjson取逻辑 (参数JSON, "performance"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1672 vip.内核开关_禁用Performance检测 (MCP命令服务器.yyjson取逻辑 (参数JSON, "performance"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_设置CSS内核   [候选]
+来源文件: FBroVip.wsv
+参数表: 内核版本 <类型 = 整数 注释 = "支持设置值为135到116">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1158 vip_ctrl.内核开关_设置CSS内核 (cssVer)
+字面量命中(1):
+    MCP_Server_VIP.wsv:1158 vip_ctrl.内核开关_设置CSS内核 (cssVer)
+相关工具(关键词): browser_vip_set_css_version(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_设置EventIsTrusted   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_VIP.wsv:1691 vp.内核开关_设置EventIsTrusted (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1691 vp.内核开关_设置EventIsTrusted (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_设置V8内核   [候选]
+来源文件: FBroVip.wsv
+参数表: 内核版本 <类型 = 整数 注释 = "支持设置值为135到116">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1216 vip_ctrl.内核开关_设置V8内核 (v8Ver)
+字面量命中(1):
+    MCP_Server_VIP.wsv:1216 vip_ctrl.内核开关_设置V8内核 (v8Ver)
+相关工具(关键词): browser_vip_set_v8_version(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 内核开关_设置Web内核   [候选]
+来源文件: FBroVip.wsv
+参数表: 内核版本 <类型 = 整数 注释 = "支持设置值为135到116">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1187 vip_ctrl.内核开关_设置Web内核 (webVer)
+字面量命中(1):
+    MCP_Server_VIP.wsv:1187 vip_ctrl.内核开关_设置Web内核 (webVer)
+相关工具(关键词): browser_vip_set_web_version(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_取调用计数   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_Core.wsv:2005 返回 (MCP_响应构建.构建简单JSON ("count", vip_ctrl.指纹_取调用计数 ()))
+字面量命中(1):
+    MCP_Server_Core.wsv:2005 返回 (MCP_响应构建.构建简单JSON ("count", vip_ctrl.指纹_取调用计数 ()))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_启用触摸事件   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否启用 <类型 = 逻辑型> | 最大触摸点数 <类型 = 整数>
+src 直调点(3):
+    MCP_Server_Core.wsv:6337 adVIP.指纹_启用触摸事件 (假, 0)
+    MCP_Server_VIP.wsv:747 vip_ctrl.指纹_启用触摸事件 (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"), MCP命令服务器.yyjson取整数 (参数JSON, "points"))
+    MCP_Server_VIP.wsv:1534 vipTouch.指纹_启用触摸事件 (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"), MCP命令服务器.yyjson取整数 (参数JSON, "max_points"))
+字面量命中(3):
+    MCP_Server_Core.wsv:6337 adVIP.指纹_启用触摸事件 (假, 0)
+    MCP_Server_VIP.wsv:747 vip_ctrl.指纹_启用触摸事件 (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"), MCP命令服务器.yyjson取整数 (参数JSON, "points"))
+    MCP_Server_VIP.wsv:1534 vipTouch.指纹_启用触摸事件 (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"), MCP命令服务器.yyjson取整数 (参数JSON, "max_points"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_清空调用计数   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟AppCodeName   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 文本型>
+src 直调点(1):
+    MCP_Server_VIP.wsv:592 vip_ctrl.指纹_虚拟AppCodeName (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:592 vip_ctrl.指纹_虚拟AppCodeName (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟AppName   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 文本型>
+src 直调点(1):
+    MCP_Server_VIP.wsv:362 vip_ctrl.指纹_虚拟AppName (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:362 vip_ctrl.指纹_虚拟AppName (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+相关工具(关键词): browser_fingerprint_appname(2), browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟AppVersion   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 文本型>
+src 直调点(1):
+    MCP_Server_VIP.wsv:609 vip_ctrl.指纹_虚拟AppVersion (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:609 vip_ctrl.指纹_虚拟AppVersion (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟AudioInput设备   [候选]
+来源文件: FBroVip.wsv
+参数表: 类型 <类型 = 整数 注释 = "0为清空，1为添加，2为覆盖,如果为0，下面修改数据设不设置都不会生效"> | 媒体硬件清单 <类型 = FBrowser_媒体硬件数组
+src 直调点(1):
+    MCP_Server_VIP.wsv:1042 vipMD.指纹_虚拟AudioInput设备 (MCP命令服务器.yyjson取整数 (参数JSON, "type"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1042 vipMD.指纹_虚拟AudioInput设备 (MCP命令服务器.yyjson取整数 (参数JSON, "type"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟AudioOutput设备   [候选]
+来源文件: FBroVip.wsv
+参数表: 类型 <类型 = 整数 注释 = "0为清空，1为添加，2为覆盖,如果为0，下面修改数据设不设置都不会生效"> | 媒体硬件清单 <类型 = FBrowser_媒体硬件数组
+src 直调点(1):
+    MCP_Server_VIP.wsv:1046 vipMD.指纹_虚拟AudioOutput设备 (MCP命令服务器.yyjson取整数 (参数JSON, "type"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1046 vipMD.指纹_虚拟AudioOutput设备 (MCP命令服务器.yyjson取整数 (参数JSON, "type"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟Audio_定值   [候选]
+来源文件: FBroVip.wsv
+参数表: 参数文本 <类型 = 文本型 注释 = "注意：文本不能太长，太长可能会崩，最好元素个数在1000以下">
+src 直调点(1):
+    MCP_Server_VIP.wsv:695 vip_ctrl.指纹_虚拟Audio_定值 (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:695 vip_ctrl.指纹_虚拟Audio_定值 (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+相关工具(关键词): browser_vip_fingerprint_canvas_fixed(2), browser_vip_fingerprint_canvas_font(2), browser_vip_fingerprint_webgl_fixed(2), browser_vip_fingerprint_audio_fixed(2), browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟Audio_随机   [候选]
+来源文件: FBroVip.wsv
+参数表: 最少噪点数 <类型 = 整数 注释 = "最好不低于100个"> | 最大噪点数 <类型 = 整数 注释 = "1000以下"> | 随机种子 <类型 = 整数>
+src 直调点(3):
+    MCP_Server_Core.wsv:2055 vip_ctrl.指纹_虚拟Audio_随机 (minN, maxN, MCP命令服务器.yyjson取整数 (参数JSON, "seed"))
+    MCP_Server_Core.wsv:6298 adVIP.指纹_虚拟Audio_随机 (1, 99999999, (整数)((取启动时间 () + 2) % 10000))
+    MCP_Server_VIP.wsv:937 audio随机值 = vipAudio.指纹_虚拟Audio_随机 (MCP命令服务器.yyjson取整数 (参数JSON, "min"), MCP命令服务器.yyjson取整数 (参数JSON, "max"), MCP命令服务器.yyjson取整数 (参数JSON, "seed"))
+字面量命中(3):
+    MCP_Server_Core.wsv:2055 vip_ctrl.指纹_虚拟Audio_随机 (minN, maxN, MCP命令服务器.yyjson取整数 (参数JSON, "seed"))
+    MCP_Server_Core.wsv:6298 adVIP.指纹_虚拟Audio_随机 (1, 99999999, (整数)((取启动时间 () + 2) % 10000))
+    MCP_Server_VIP.wsv:937 audio随机值 = vipAudio.指纹_虚拟Audio_随机 (MCP命令服务器.yyjson取整数 (参数JSON, "min"), MCP命令服务器.yyjson取整数 (参数JSON, "max"), MCP命令服务器.yyjson取整数 (参数JSON, "seed"))
+相关工具(关键词): browser_fingerprint(2), browser_font_randomize(2), browser_vip_fingerprint_canvas_font(2), browser_vip_fingerprint_canvas(2), browser_vip_fingerprint_webgl(2), browser_vip_fingerprint_audio(2), browser_canvas_noise(2), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟BatteryManagerCharging   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否充电中 <类型 = 逻辑型>
+src 直调点(1):
+    MCP_Server_VIP.wsv:1024 vipBat.指纹_虚拟BatteryManagerCharging (MCP命令服务器.yyjson取逻辑 (参数JSON, "charging"))
+字面量命中(2):
+    MCP_Server_VIP.wsv:1024 vipBat.指纹_虚拟BatteryManagerCharging (MCP命令服务器.yyjson取逻辑 (参数JSON, "charging"))
+    MCP_Server_VIP.wsv:1026 vipBat.指纹_虚拟BatteryManagerChargingTime (MCP命令服务器.yyjson取小数 (参数JSON, "charging_time"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟BatteryManagerChargingTime   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 小数>
+src 直调点(1):
+    MCP_Server_VIP.wsv:1026 vipBat.指纹_虚拟BatteryManagerChargingTime (MCP命令服务器.yyjson取小数 (参数JSON, "charging_time"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1026 vipBat.指纹_虚拟BatteryManagerChargingTime (MCP命令服务器.yyjson取小数 (参数JSON, "charging_time"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟BatteryManagerDischargingTime   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 小数>
+src 直调点(1):
+    MCP_Server_VIP.wsv:1027 vipBat.指纹_虚拟BatteryManagerDischargingTime (MCP命令服务器.yyjson取小数 (参数JSON, "discharging_time"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1027 vipBat.指纹_虚拟BatteryManagerDischargingTime (MCP命令服务器.yyjson取小数 (参数JSON, "discharging_time"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟BatteryManagerLevel   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 小数>
+src 直调点(1):
+    MCP_Server_VIP.wsv:1025 vipBat.指纹_虚拟BatteryManagerLevel (MCP命令服务器.yyjson取小数 (参数JSON, "level"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1025 vipBat.指纹_虚拟BatteryManagerLevel (MCP命令服务器.yyjson取小数 (参数JSON, "level"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟CSS字体指纹   [候选]
+来源文件: FBroVip.wsv
+参数表: 字体清单 <类型 = 文本型> | 宽偏移量 <类型 = 整数 注释 = "增加或减少字体的宽度"> | 高偏移量 <类型 = 整数 注释 = "增加或减少字体的高度">
+src 直调点(3):
+    MCP_Server_VIP.wsv:462 vip_ctrl.指纹_虚拟CSS字体指纹 ("", 0, 0)
+    MCP_Server_VIP.wsv:516 vip_ctrl.指纹_虚拟CSS字体指纹 (frFonts, frW, frH)
+    MCP_Server_VIP.wsv:948 vipFont.指纹_虚拟CSS字体指纹 (MCP命令服务器.yyjson取文本 (参数JSON, "font_list"), MCP命令服务器.yyjson取整数 (参数JSON, "w_offset"), MCP命令服务器.yyjson取整数 (参数JSON, "h_offset"))
+字面量命中(3):
+    MCP_Server_VIP.wsv:462 vip_ctrl.指纹_虚拟CSS字体指纹 ("", 0, 0)
+    MCP_Server_VIP.wsv:516 vip_ctrl.指纹_虚拟CSS字体指纹 (frFonts, frW, frH)
+    MCP_Server_VIP.wsv:948 vipFont.指纹_虚拟CSS字体指纹 (MCP命令服务器.yyjson取文本 (参数JSON, "font_list"), MCP命令服务器.yyjson取整数 (参数JSON, "w_offset"), MCP命令服务器.yyjson取整数 (参数JSON, "h_offset"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟Canvas_定值   [候选]
+来源文件: FBroVip.wsv
+参数表: 参数文本 <类型 = 文本型 注释 = "单个噪点格式：x:y:r:g:b:a，多个数据以,隔开，x和y是噪点坐标，rgba为噪点颜色值，都为正整数
+src 直调点(1):
+    MCP_Server_VIP.wsv:661 vip_ctrl.指纹_虚拟Canvas_定值 (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:661 vip_ctrl.指纹_虚拟Canvas_定值 (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+相关工具(关键词): browser_vip_fingerprint_canvas_font(3), browser_vip_fingerprint_canvas_fixed(2), browser_vip_fingerprint_webgl_fixed(2), browser_vip_fingerprint_audio_fixed(2), browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟Canvas_随机   [候选]
+来源文件: FBroVip.wsv
+参数表: 最少噪点数 <类型 = 整数> | 最大噪点数 <类型 = 整数 注释 = "100以下"> | 随机种子 <类型 = 整数>
+src 直调点(3):
+    MCP_Server_Core.wsv:2021 vip_ctrl.指纹_虚拟Canvas_随机 (minN, maxN, MCP命令服务器.yyjson取整数 (参数JSON, "seed"))
+    MCP_Server_Core.wsv:6296 adVIP.指纹_虚拟Canvas_随机 (1, 99999999, (整数)(取启动时间 () % 10000))
+    MCP_Server_VIP.wsv:913 canvas随机值 = vipCanvas.指纹_虚拟Canvas_随机 (MCP命令服务器.yyjson取整数 (参数JSON, "min"), MCP命令服务器.yyjson取整数 (参数JSON, "max"), MCP命令服务器.yyjson取整数 (参数JSON, "seed"))
+字面量命中(3):
+    MCP_Server_Core.wsv:2021 vip_ctrl.指纹_虚拟Canvas_随机 (minN, maxN, MCP命令服务器.yyjson取整数 (参数JSON, "seed"))
+    MCP_Server_Core.wsv:6296 adVIP.指纹_虚拟Canvas_随机 (1, 99999999, (整数)(取启动时间 () % 10000))
+    MCP_Server_VIP.wsv:913 canvas随机值 = vipCanvas.指纹_虚拟Canvas_随机 (MCP命令服务器.yyjson取整数 (参数JSON, "min"), MCP命令服务器.yyjson取整数 (参数JSON, "max"), MCP命令服务器.yyjson取整数 (参数JSON, "seed"))
+相关工具(关键词): browser_vip_fingerprint_canvas_font(3), browser_fingerprint(2), browser_font_randomize(2), browser_vip_fingerprint_canvas(2), browser_vip_fingerprint_webgl(2), browser_vip_fingerprint_audio(2), browser_canvas_noise(2), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟Canvas字体指纹   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 小数>
+src 直调点(3):
+    MCP_Server_VIP.wsv:463 vip_ctrl.指纹_虚拟Canvas字体指纹 (0)
+    MCP_Server_VIP.wsv:517 vip_ctrl.指纹_虚拟Canvas字体指纹 (frCanvas)
+    MCP_Server_VIP.wsv:961 vipCanvasFont.指纹_虚拟Canvas字体指纹 (MCP命令服务器.yyjson取小数 (参数JSON, "value"))
+字面量命中(3):
+    MCP_Server_VIP.wsv:463 vip_ctrl.指纹_虚拟Canvas字体指纹 (0)
+    MCP_Server_VIP.wsv:517 vip_ctrl.指纹_虚拟Canvas字体指纹 (frCanvas)
+    MCP_Server_VIP.wsv:961 vipCanvasFont.指纹_虚拟Canvas字体指纹 (MCP命令服务器.yyjson取小数 (参数JSON, "value"))
+相关工具(关键词): browser_vip_fingerprint_canvas_font(2), browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟CookieEnabled   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 逻辑型>
+src 直调点(1):
+    MCP_Server_VIP.wsv:535 vip_ctrl.指纹_虚拟CookieEnabled (MCP命令服务器.yyjson取逻辑 (参数JSON, "value"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:535 vip_ctrl.指纹_虚拟CookieEnabled (MCP命令服务器.yyjson取逻辑 (参数JSON, "value"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟Date时区   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(3):
+    MCP_Server_Core.wsv:2116 vip_ctrl.指纹_虚拟Date时区 (MCP命令服务器.yyjson取整数 (参数JSON, "offset_h"), MCP命令服务器.yyjson取整数 (参数JSON, "offset_m"), MCP命令服务器.yyjson取文本 (参数JSON, "name"), MCP命令服务器.
+    MCP_Server_Core.wsv:6319 adVIP.指纹_虚拟Date时区 (8, 0, "Asia/Shanghai", "Asia/Shanghai")
+    MCP_Server_VIP.wsv:851 vip2.指纹_虚拟Date时区 (MCP命令服务器.yyjson取整数 (参数JSON, "offset_h"), MCP命令服务器.yyjson取整数 (参数JSON, "offset_m"), MCP命令服务器.yyjson取文本 (参数JSON, "name"), MCP命令服务器.yyjs
+字面量命中(3):
+    MCP_Server_Core.wsv:2116 vip_ctrl.指纹_虚拟Date时区 (MCP命令服务器.yyjson取整数 (参数JSON, "offset_h"), MCP命令服务器.yyjson取整数 (参数JSON, "offset_m"), MCP命令服务器.yyjson取文本 (参数JSON, "name"), MCP命令服务器.
+    MCP_Server_Core.wsv:6319 adVIP.指纹_虚拟Date时区 (8, 0, "Asia/Shanghai", "Asia/Shanghai")
+    MCP_Server_VIP.wsv:851 vip2.指纹_虚拟Date时区 (MCP命令服务器.yyjson取整数 (参数JSON, "offset_h"), MCP命令服务器.yyjson取整数 (参数JSON, "offset_m"), MCP命令服务器.yyjson取文本 (参数JSON, "name"), MCP命令服务器.yyjs
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟DeviceMemory   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 整数>
+src 直调点(3):
+    MCP_Server_Core.wsv:2191 vip_ctrl.指纹_虚拟DeviceMemory (intVal)
+    MCP_Server_Core.wsv:6317 adVIP.指纹_虚拟DeviceMemory (8)
+    MCP_Server_VIP.wsv:999 vipHW.指纹_虚拟DeviceMemory (MCP命令服务器.yyjson取整数 (参数JSON, "memory"))
+字面量命中(3):
+    MCP_Server_Core.wsv:2191 vip_ctrl.指纹_虚拟DeviceMemory (intVal)
+    MCP_Server_Core.wsv:6317 adVIP.指纹_虚拟DeviceMemory (8)
+    MCP_Server_VIP.wsv:999 vipHW.指纹_虚拟DeviceMemory (MCP命令服务器.yyjson取整数 (参数JSON, "memory"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟DevicePixelRatio   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 小数>
+src 直调点(2):
+    MCP_Server_Core.wsv:6314 adVIP.指纹_虚拟DevicePixelRatio (2.0)
+    MCP_Server_VIP.wsv:730 vip_ctrl.指纹_虚拟DevicePixelRatio (MCP命令服务器.yyjson取小数 (参数JSON, "value"))
+字面量命中(2):
+    MCP_Server_Core.wsv:6314 adVIP.指纹_虚拟DevicePixelRatio (2.0)
+    MCP_Server_VIP.wsv:730 vip_ctrl.指纹_虚拟DevicePixelRatio (MCP命令服务器.yyjson取小数 (参数JSON, "value"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟HardwareConcurrency   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 整数>
+src 直调点(3):
+    MCP_Server_Core.wsv:2185 vip_ctrl.指纹_虚拟HardwareConcurrency (intVal)
+    MCP_Server_Core.wsv:6316 adVIP.指纹_虚拟HardwareConcurrency (8)
+    MCP_Server_VIP.wsv:998 vipHW.指纹_虚拟HardwareConcurrency (MCP命令服务器.yyjson取整数 (参数JSON, "concurrency"))
+字面量命中(3):
+    MCP_Server_Core.wsv:2185 vip_ctrl.指纹_虚拟HardwareConcurrency (intVal)
+    MCP_Server_Core.wsv:6316 adVIP.指纹_虚拟HardwareConcurrency (8)
+    MCP_Server_VIP.wsv:998 vipHW.指纹_虚拟HardwareConcurrency (MCP命令服务器.yyjson取整数 (参数JSON, "concurrency"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟JavaEnabled   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 逻辑型>
+src 直调点(1):
+    MCP_Server_VIP.wsv:552 vip_ctrl.指纹_虚拟JavaEnabled (MCP命令服务器.yyjson取逻辑 (参数JSON, "value"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:552 vip_ctrl.指纹_虚拟JavaEnabled (MCP命令服务器.yyjson取逻辑 (参数JSON, "value"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟Languages   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 文本型>
+src 直调点(3):
+    MCP_Server_Core.wsv:2166 vip_ctrl.指纹_虚拟Languages (val)
+    MCP_Server_VIP.wsv:390 vip_ctrl.指纹_虚拟Languages ("")
+    MCP_Server_VIP.wsv:393 vip_ctrl.指纹_虚拟Languages (langText)
+字面量命中(3):
+    MCP_Server_Core.wsv:2166 vip_ctrl.指纹_虚拟Languages (val)
+    MCP_Server_VIP.wsv:390 vip_ctrl.指纹_虚拟Languages ("")
+    MCP_Server_VIP.wsv:393 vip_ctrl.指纹_虚拟Languages (langText)
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟OnLine   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 逻辑型>
+src 直调点(1):
+    MCP_Server_VIP.wsv:574 vip_ctrl.指纹_虚拟OnLine (MCP命令服务器.yyjson取逻辑 (参数JSON, "value"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:574 vip_ctrl.指纹_虚拟OnLine (MCP命令服务器.yyjson取逻辑 (参数JSON, "value"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟Plugins   [候选]
+来源文件: FBroVip.wsv
+参数表: 修改类型 <类型 = 整数 注释 = "0未不修改，1为添加，2为覆盖"> | JSON文本 <类型 = 文本型 注释 = "插件JSON格式文本，否则无效">
+src 直调点(1):
+    MCP_Server_VIP.wsv:345 vip_ctrl.指纹_虚拟Plugins (MCP命令服务器.yyjson取整数 (参数JSON, "type"), MCP命令服务器.yyjson取JSON文本 (参数JSON, "json"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:345 vip_ctrl.指纹_虚拟Plugins (MCP命令服务器.yyjson取整数 (参数JSON, "type"), MCP命令服务器.yyjson取JSON文本 (参数JSON, "json"))
+相关工具(关键词): browser_fingerprint_plugins(2), browser_fingerprint(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟Product   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 文本型>
+src 直调点(2):
+    MCP_Server_Core.wsv:2160 vip_ctrl.指纹_虚拟Product (val)
+    MCP_Server_VIP.wsv:1010 vipProd.指纹_虚拟Product (MCP命令服务器.yyjson取文本 (参数JSON, "product"))
+字面量命中(4):
+    MCP_Server_Core.wsv:2160 vip_ctrl.指纹_虚拟Product (val)
+    MCP_Server_VIP.wsv:626 vip_ctrl.指纹_虚拟ProductSub (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+    MCP_Server_VIP.wsv:1010 vipProd.指纹_虚拟Product (MCP命令服务器.yyjson取文本 (参数JSON, "product"))
+    MCP_Server_VIP.wsv:1011 vipProd.指纹_虚拟ProductSub (MCP命令服务器.yyjson取文本 (参数JSON, "product_sub"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟ProductSub   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 文本型>
+src 直调点(2):
+    MCP_Server_VIP.wsv:626 vip_ctrl.指纹_虚拟ProductSub (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+    MCP_Server_VIP.wsv:1011 vipProd.指纹_虚拟ProductSub (MCP命令服务器.yyjson取文本 (参数JSON, "product_sub"))
+字面量命中(2):
+    MCP_Server_VIP.wsv:626 vip_ctrl.指纹_虚拟ProductSub (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+    MCP_Server_VIP.wsv:1011 vipProd.指纹_虚拟ProductSub (MCP命令服务器.yyjson取文本 (参数JSON, "product_sub"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟Rect   [候选]
+来源文件: FBroVip.wsv
+参数表: X <类型 = 整数> | Y <类型 = 整数> | W <类型 = 整数> | H <类型 = 整数>
+src 直调点(2):
+    MCP_Server_Core.wsv:6313 adVIP.指纹_虚拟Rect (0, 0, 1920, 1080)
+    MCP_Server_VIP.wsv:713 vip_ctrl.指纹_虚拟Rect (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"), MCP命令服务器.yyjson取整数 (参数JSON, "w"), MCP命令服务器.yyjson取整数 (参数JSON, 
+字面量命中(2):
+    MCP_Server_Core.wsv:6313 adVIP.指纹_虚拟Rect (0, 0, 1920, 1080)
+    MCP_Server_VIP.wsv:713 vip_ctrl.指纹_虚拟Rect (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"), MCP命令服务器.yyjson取整数 (参数JSON, "w"), MCP命令服务器.yyjson取整数 (参数JSON, 
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟UserAgent   [候选]
+来源文件: FBroVip.wsv
+参数表: userAgent <类型 = 类_FBrowserVIP_UA数据 注释 = "UA数据">
+src 直调点(4):
+    MCP_Server.wsv:2054 vipUACtrl.指纹_虚拟UserAgent (uaData)
+    MCP_Server_Core.wsv:2148 vip_ctrl.指纹_虚拟UserAgent (ua)
+    MCP_Server_Core.wsv:6331 adVIP.指纹_虚拟UserAgent (adUAData)
+    MCP_Server_VIP.wsv:1575 vipUA.指纹_虚拟UserAgent (ua_data)
+字面量命中(4):
+    MCP_Server.wsv:2054 vipUACtrl.指纹_虚拟UserAgent (uaData)
+    MCP_Server_Core.wsv:2148 vip_ctrl.指纹_虚拟UserAgent (ua)
+    MCP_Server_Core.wsv:6331 adVIP.指纹_虚拟UserAgent (adUAData)
+    MCP_Server_VIP.wsv:1575 vipUA.指纹_虚拟UserAgent (ua_data)
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟Vendor   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 文本型>
+src 直调点(2):
+    MCP_Server_Core.wsv:2154 vip_ctrl.指纹_虚拟Vendor (val)
+    MCP_Server_VIP.wsv:1012 vipProd.指纹_虚拟Vendor (MCP命令服务器.yyjson取文本 (参数JSON, "vendor"))
+字面量命中(4):
+    MCP_Server_Core.wsv:2154 vip_ctrl.指纹_虚拟Vendor (val)
+    MCP_Server_VIP.wsv:643 vip_ctrl.指纹_虚拟VendorSub (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+    MCP_Server_VIP.wsv:1012 vipProd.指纹_虚拟Vendor (MCP命令服务器.yyjson取文本 (参数JSON, "vendor"))
+    MCP_Server_VIP.wsv:1013 vipProd.指纹_虚拟VendorSub (MCP命令服务器.yyjson取文本 (参数JSON, "vendor_sub"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟VendorSub   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 文本型>
+src 直调点(2):
+    MCP_Server_VIP.wsv:643 vip_ctrl.指纹_虚拟VendorSub (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+    MCP_Server_VIP.wsv:1013 vipProd.指纹_虚拟VendorSub (MCP命令服务器.yyjson取文本 (参数JSON, "vendor_sub"))
+字面量命中(2):
+    MCP_Server_VIP.wsv:643 vip_ctrl.指纹_虚拟VendorSub (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+    MCP_Server_VIP.wsv:1013 vipProd.指纹_虚拟VendorSub (MCP命令服务器.yyjson取文本 (参数JSON, "vendor_sub"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟VideoInput设备   [候选]
+来源文件: FBroVip.wsv
+参数表: 类型 <类型 = 整数 注释 = "0为清空，1为添加，2为覆盖,如果为0，下面修改数据设不设置都不会生效"> | 媒体硬件清单 <类型 = FBrowser_媒体硬件数组
+src 直调点(1):
+    MCP_Server_VIP.wsv:1050 vipMD.指纹_虚拟VideoInput设备 (MCP命令服务器.yyjson取整数 (参数JSON, "type"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:1050 vipMD.指纹_虚拟VideoInput设备 (MCP命令服务器.yyjson取整数 (参数JSON, "type"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟Viewport   [候选]
+来源文件: FBroVip.wsv
+参数表: OffsetTop <类型 = 整数> | OffsetLeft <类型 = 整数> | Height <类型 = 整数> | Width <类型 = 整数>
+src 直调点(2):
+    MCP_Server_VIP.wsv:972 // 官方签名: 指纹_虚拟Viewport(OffsetTop, OffsetLeft, Height, Width) — 注意第三参是Height
+    MCP_Server_VIP.wsv:973 vipVP.指纹_虚拟Viewport (MCP命令服务器.yyjson取整数 (参数JSON, "top"), MCP命令服务器.yyjson取整数 (参数JSON, "left"), MCP命令服务器.yyjson取整数 (参数JSON, "height"), MCP命令服务器.yyjson取整
+字面量命中(2):
+    MCP_Server_VIP.wsv:972 // 官方签名: 指纹_虚拟Viewport(OffsetTop, OffsetLeft, Height, Width) — 注意第三参是Height
+    MCP_Server_VIP.wsv:973 vipVP.指纹_虚拟Viewport (MCP命令服务器.yyjson取整数 (参数JSON, "top"), MCP命令服务器.yyjson取整数 (参数JSON, "left"), MCP命令服务器.yyjson取整数 (参数JSON, "height"), MCP命令服务器.yyjson取整
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟WebGL_定值   [候选]
+来源文件: FBroVip.wsv
+参数表: 参数文本 <类型 = 文本型 注释 = "单个噪点格式:x:y, 多个以,隔开，x和y是噪点坐标,为1以下小数值，可为负数;注意：文本不能太长，太长
+src 直调点(1):
+    MCP_Server_VIP.wsv:678 vip_ctrl.指纹_虚拟WebGL_定值 (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:678 vip_ctrl.指纹_虚拟WebGL_定值 (MCP命令服务器.yyjson取文本 (参数JSON, "value"))
+相关工具(关键词): browser_vip_fingerprint_canvas_fixed(2), browser_vip_fingerprint_canvas_font(2), browser_vip_fingerprint_webgl_fixed(2), browser_vip_fingerprint_audio_fixed(2), browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟WebGL_随机   [候选]
+来源文件: FBroVip.wsv
+参数表: 最少噪点数 <类型 = 整数> | 最大噪点数 <类型 = 整数 注释 = "100以下"> | 随机种子 <类型 = 整数>
+src 直调点(3):
+    MCP_Server_Core.wsv:2038 vip_ctrl.指纹_虚拟WebGL_随机 (minN, maxN, MCP命令服务器.yyjson取整数 (参数JSON, "seed"))
+    MCP_Server_Core.wsv:6297 adVIP.指纹_虚拟WebGL_随机 (1, 99999999, (整数)((取启动时间 () + 1) % 10000))
+    MCP_Server_VIP.wsv:925 webgl随机值 = vipWebGL.指纹_虚拟WebGL_随机 (MCP命令服务器.yyjson取整数 (参数JSON, "min"), MCP命令服务器.yyjson取整数 (参数JSON, "max"), MCP命令服务器.yyjson取整数 (参数JSON, "seed"))
+字面量命中(3):
+    MCP_Server_Core.wsv:2038 vip_ctrl.指纹_虚拟WebGL_随机 (minN, maxN, MCP命令服务器.yyjson取整数 (参数JSON, "seed"))
+    MCP_Server_Core.wsv:6297 adVIP.指纹_虚拟WebGL_随机 (1, 99999999, (整数)((取启动时间 () + 1) % 10000))
+    MCP_Server_VIP.wsv:925 webgl随机值 = vipWebGL.指纹_虚拟WebGL_随机 (MCP命令服务器.yyjson取整数 (参数JSON, "min"), MCP命令服务器.yyjson取整数 (参数JSON, "max"), MCP命令服务器.yyjson取整数 (参数JSON, "seed"))
+相关工具(关键词): browser_fingerprint(2), browser_font_randomize(2), browser_vip_fingerprint_canvas_font(2), browser_vip_fingerprint_canvas(2), browser_vip_fingerprint_webgl(2), browser_vip_fingerprint_audio(2), browser_canvas_noise(2), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟Webdriver   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 逻辑型>
+src 直调点(2):
+    MCP_Server.wsv:2064 vipAutoCtrl.指纹_虚拟Webdriver (假)
+    MCP_Server_Core.wsv:2199 vip_ctrl.指纹_虚拟Webdriver (MCP命令服务器.yyjson取逻辑 (配置解析, "webdriver"))
+字面量命中(2):
+    MCP_Server.wsv:2064 vipAutoCtrl.指纹_虚拟Webdriver (假)
+    MCP_Server_Core.wsv:2199 vip_ctrl.指纹_虚拟Webdriver (MCP命令服务器.yyjson取逻辑 (配置解析, "webdriver"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟Webglrenderer   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 文本型>
+src 直调点(2):
+    MCP_Server_Core.wsv:2178 vip_ctrl.指纹_虚拟Webglrenderer (val)
+    MCP_Server_VIP.wsv:422 vip_ctrl.指纹_虚拟Webglrenderer (glRenderer)
+字面量命中(2):
+    MCP_Server_Core.wsv:2178 vip_ctrl.指纹_虚拟Webglrenderer (val)
+    MCP_Server_VIP.wsv:422 vip_ctrl.指纹_虚拟Webglrenderer (glRenderer)
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟Webglvendor   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 文本型>
+src 直调点(2):
+    MCP_Server_Core.wsv:2172 vip_ctrl.指纹_虚拟Webglvendor (val)
+    MCP_Server_VIP.wsv:419 vip_ctrl.指纹_虚拟Webglvendor (glVendor)
+字面量命中(2):
+    MCP_Server_Core.wsv:2172 vip_ctrl.指纹_虚拟Webglvendor (val)
+    MCP_Server_VIP.wsv:419 vip_ctrl.指纹_虚拟Webglvendor (glVendor)
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟WebrtcIP   [候选]
+来源文件: FBroVip.wsv
+参数表: 当地IP <类型 = 文本型 注释 = "外网地址,设置为“”则为不修改,要和代理保持一致"> | 本地IP <类型 = 文本型 注释 = "本地地址一般是192、127、10开头，设置为“”则为不修改，如不设置一般默认是host名" @默认值 = | host <类型 = 文本型
+src 直调点(3):
+    MCP_Server_Core.wsv:2102 vip_ctrl.指纹_虚拟WebrtcIP (MCP命令服务器.yyjson取文本 (参数JSON, "public_ip"), MCP命令服务器.yyjson取文本 (参数JSON, "local_ip"), MCP命令服务器.yyjson取文本 (参数JSON, "host"), MCP命令服
+    MCP_Server_Core.wsv:6333 adVIP.指纹_虚拟WebrtcIP ("", "", "", 真)
+    MCP_Server_VIP.wsv:840 vip1.指纹_虚拟WebrtcIP (MCP命令服务器.yyjson取文本 (参数JSON, "public_ip"), MCP命令服务器.yyjson取文本 (参数JSON, "local_ip"), MCP命令服务器.yyjson取文本 (参数JSON, "host"), MCP命令服务器.y
+字面量命中(3):
+    MCP_Server_Core.wsv:2102 vip_ctrl.指纹_虚拟WebrtcIP (MCP命令服务器.yyjson取文本 (参数JSON, "public_ip"), MCP命令服务器.yyjson取文本 (参数JSON, "local_ip"), MCP命令服务器.yyjson取文本 (参数JSON, "host"), MCP命令服
+    MCP_Server_Core.wsv:6333 adVIP.指纹_虚拟WebrtcIP ("", "", "", 真)
+    MCP_Server_VIP.wsv:840 vip1.指纹_虚拟WebrtcIP (MCP命令服务器.yyjson取文本 (参数JSON, "public_ip"), MCP命令服务器.yyjson取文本 (参数JSON, "local_ip"), MCP命令服务器.yyjson取文本 (参数JSON, "host"), MCP命令服务器.y
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟内核功能   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟定位   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(3):
+    MCP_Server_Core.wsv:2111 vip_ctrl.指纹_虚拟定位 (lng, lat, 10, -10000, -1, -1, -1)
+    MCP_Server_Core.wsv:6335 adVIP.指纹_虚拟定位 (39.9042, 116.4074, 50, -10000, -1, -1, -1)
+    MCP_Server_VIP.wsv:881 vipGeo.指纹_虚拟定位 (geoLng, geoLat, geoAcc, -10000, -1, -1, -1)
+字面量命中(3):
+    MCP_Server_Core.wsv:2111 vip_ctrl.指纹_虚拟定位 (lng, lat, 10, -10000, -1, -1, -1)
+    MCP_Server_Core.wsv:6335 adVIP.指纹_虚拟定位 (39.9042, 116.4074, 50, -10000, -1, -1, -1)
+    MCP_Server_VIP.wsv:881 vipGeo.指纹_虚拟定位 (geoLng, geoLat, geoAcc, -10000, -1, -1, -1)
+相关工具(关键词): browser_vip_fingerprint_geolocation(2), browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟屏幕XY   [候选]
+来源文件: FBroVip.wsv
+参数表: X <类型 = 整数> | Y <类型 = 整数>
+src 直调点(2):
+    MCP_Server_Core.wsv:6312 adVIP.指纹_虚拟屏幕XY (0, 0)
+    MCP_Server_VIP.wsv:765 vip_ctrl.指纹_虚拟屏幕XY (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+字面量命中(2):
+    MCP_Server_Core.wsv:6312 adVIP.指纹_虚拟屏幕XY (0, 0)
+    MCP_Server_VIP.wsv:765 vip_ctrl.指纹_虚拟屏幕XY (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_fingerprint_screen_xy(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟屏幕colorDepth   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 整数 注释 = "如果是模拟手机环境，这个值要设置大于1，否则可能会被检测">
+src 直调点(1):
+    MCP_Server_VIP.wsv:986 vipScreen.指纹_虚拟屏幕colorDepth (MCP命令服务器.yyjson取整数 (参数JSON, "depth"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:986 vipScreen.指纹_虚拟屏幕colorDepth (MCP命令服务器.yyjson取整数 (参数JSON, "depth"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟屏幕pixelDepth   [候选]
+来源文件: FBroVip.wsv
+参数表: 虚拟值 <类型 = 整数 注释 = "如果是模拟手机环境，这个值要设置大于1，否则可能会被检测">
+src 直调点(1):
+    MCP_Server_VIP.wsv:987 vipScreen.指纹_虚拟屏幕pixelDepth (MCP命令服务器.yyjson取整数 (参数JSON, "pixel_depth"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:987 vipScreen.指纹_虚拟屏幕pixelDepth (MCP命令服务器.yyjson取整数 (参数JSON, "pixel_depth"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟屏幕分辨率   [候选]
+来源文件: FBroVip.wsv
+参数表: 高度 <类型 = 整数> | 宽度 <类型 = 整数>
+src 直调点(2):
+    MCP_Server_Core.wsv:2208 vip_ctrl.指纹_虚拟屏幕分辨率 (h, w)
+    MCP_Server_VIP.wsv:984 vipScreen.指纹_虚拟屏幕分辨率 (MCP命令服务器.yyjson取整数 (参数JSON, "height"), MCP命令服务器.yyjson取整数 (参数JSON, "width"))
+字面量命中(2):
+    MCP_Server_Core.wsv:2208 vip_ctrl.指纹_虚拟屏幕分辨率 (h, w)
+    MCP_Server_VIP.wsv:984 vipScreen.指纹_虚拟屏幕分辨率 (MCP命令服务器.yyjson取整数 (参数JSON, "height"), MCP命令服务器.yyjson取整数 (参数JSON, "width"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟屏幕可用高度和宽度   [候选]
+来源文件: FBroVip.wsv
+参数表: 高度 <类型 = 整数> | 宽度 <类型 = 整数>
+src 直调点(2):
+    MCP_Server_Core.wsv:2215 vip_ctrl.指纹_虚拟屏幕可用高度和宽度 (h, w)
+    MCP_Server_VIP.wsv:985 vipScreen.指纹_虚拟屏幕可用高度和宽度 (MCP命令服务器.yyjson取整数 (参数JSON, "avail_h"), MCP命令服务器.yyjson取整数 (参数JSON, "avail_w"))
+字面量命中(2):
+    MCP_Server_Core.wsv:2215 vip_ctrl.指纹_虚拟屏幕可用高度和宽度 (h, w)
+    MCP_Server_VIP.wsv:985 vipScreen.指纹_虚拟屏幕可用高度和宽度 (MCP命令服务器.yyjson取整数 (参数JSON, "avail_h"), MCP命令服务器.yyjson取整数 (参数JSON, "avail_w"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_虚拟屏幕方向   [候选]
+来源文件: FBroVip.wsv
+参数表: 方向类型 <类型 = 屏幕方向类型 注释 = "设置方向类型，横屏或竖屏；参考:屏幕方向类型.，通过window.screen.orientatio | 角度 <类型 = 整数 注释 = "-90到180，一般0为横屏，90为竖屏，可通过window.orientation验证">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1613 vipOrient.指纹_虚拟屏幕方向 (orient_enum, angle_int)
+字面量命中(1):
+    MCP_Server_VIP.wsv:1613 vipOrient.指纹_虚拟屏幕方向 (orient_enum, angle_int)
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 指纹_设置SSL加密套件   [候选]
+来源文件: FBroVip.wsv
+参数表: TLS最小版本 <类型 = TLS版本 注释 = "参考：TLS版本,不设置默认为1.2到1.3" @默认值 = TLS版本.空> | TLS最大版本 <类型 = TLS版本 注释 = "参考：TLS版本,不设置默认为1.2到1.3" @默认值 = TLS版本.空> | 加密支持文本 <类型 = 文本型 注释 = "设置支持的加密方式，不设置当前浏览器默认值为“ALL:!aPSK:!ECDSA+SHA1:!3DES”，"
+src 直调点(2):
+    MCP_Server_Core.wsv:2130 vip_ctrl.指纹_设置SSL加密套件 (tls_min_enum, tls_max_enum, MCP命令服务器.yyjson取文本 (参数JSON, "ciphers"))
+    MCP_Server_VIP.wsv:901 vipSSL.指纹_设置SSL加密套件 (tls_min_enum, tls_max_enum, MCP命令服务器.yyjson取文本 (参数JSON, "ciphers"))
+字面量命中(2):
+    MCP_Server_Core.wsv:2130 vip_ctrl.指纹_设置SSL加密套件 (tls_min_enum, tls_max_enum, MCP命令服务器.yyjson取文本 (参数JSON, "ciphers"))
+    MCP_Server_VIP.wsv:901 vipSSL.指纹_设置SSL加密套件 (tls_min_enum, tls_max_enum, MCP命令服务器.yyjson取文本 (参数JSON, "ciphers"))
+相关工具(关键词): browser_fingerprint(1), browser_fingerprint_plugins(1), browser_fingerprint_appname(1), browser_fingerprint_touch_enable(1), browser_fingerprint_languages(1), browser_fingerprint_webgl_vendor(1), browser_font_randomize(1), browser_vip_fingerprint_webrtc(1), browser_vip_fingerprint_canvas_fixed(1), browser_vip_fingerprint_canvas_font(1), browser_vip_fingerprint_webgl_fixed(1), browser_vip_fingerprint_audio_fixed(1), browser_vip_fingerprint_rect(1), browser_vip_fingerprint_timezone(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 清理数据   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_Core.wsv:2000 vip_ctrl.清理数据 ()
+字面量命中(2):
+    MCP_Server_Core.wsv:2000 vip_ctrl.清理数据 ()
+    MCP_Server_VIP.wsv:389 // 类库无单项复位API(仅 清理数据 为全量清除): 传空文本交回库内部默认
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 逐字分割   [候选]
+来源文件: FBroVip.wsv
+参数表: 待分割文本 <类型 = 文本型> | 返回数据 <类型 = 文本数组类>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级_创建标签浏览器   [候选]
+来源文件: FBroVip.wsv
+参数表: 地址 <类型 = 文本型 注释 = "可以为空，为空会获取当前浏览器的地址"> | 序号 <类型 = 整数 注释 = "UI上需要插入的序号位置，设置为-1为在末尾添加" @默认值 = -1> | 是否激活 <类型 = 逻辑型 注释 = "为真会激活并跳转标签，为假为不激活" @默认值 = 假> | 额外信息 <类型 = 类_FBrowser_字典值 注释 = "传递给事件的额外数据，可不设置，和创建浏览器不同的事这里不会传递给渲染进程" @默认 | 浏览器事件 <类型 = 类_FBrowser_事件智能指针 注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级_发送触摸事件   [候选]
+来源文件: FBroVip.wsv
+参数表: 类型 <类型 = 整数 注释 = "touchStart=0,touchMove=1,touchCancel=2,touchEnd=3，第一次执 | 触摸事件 <类型 = FBrowser_VIP触摸事件> | 修饰符 <类型 = 整数 注释 = "Alt=1, Ctrl=2, Meta/Command=4, Shift=8 (default: 0)" @
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级_发送键盘事件   [候选]
+来源文件: FBroVip.wsv
+参数表: 类型 <类型 = 文本型 注释 = "type:Type of the key event.Allowed Values: keyDown, k
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_key_event(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级_发送鼠标事件   [候选]
+来源文件: FBroVip.wsv
+参数表: 类型 <类型 = 文本型 注释 = "type:Type of the mouse event.Allowed Values: mousePre
+src 直调点(0):
+字面量命中(1):
+    MCP_Server.wsv:3162 # 根因(实测): 内核级鼠标注入(高级鼠标_* → 高级_发送鼠标事件)会让 **CDP 通道整体失效** ——
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级_取当前环境ID清单   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_VIP.wsv:274 ids = vip_ctrl.高级_取当前环境ID清单 ()
+字面量命中(1):
+    MCP_Server_VIP.wsv:274 ids = vip_ctrl.高级_取当前环境ID清单 ()
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级_启用执行环境   [候选]
+来源文件: FBroVip.wsv
+参数表: 是否启用 <类型 = 逻辑型 注释 = "真启用，假关闭">
+src 直调点(1):
+    MCP_Server_VIP.wsv:252 vip_ctrl.高级_启用执行环境 (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:252 vip_ctrl.高级_启用执行环境 (MCP命令服务器.yyjson取逻辑 (参数JSON, "enable"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级_执行JS   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_VIP.wsv:1411 vipCtrl.高级_执行JS (jsCode, ctxID, 真, 假, 真, MCP_常量.URL请求默认超时, 假, 假, VIPJS回调)
+字面量命中(3):
+    MCP_Callbacks.wsv:610 # VIP通用回调 — 用于高级_执行JS/枚举DOM/预查找文本等VIP异步操作
+    MCP_Server_VIP.wsv:1407 vipCtrl.高级_执行JS_框架ID (jsCode, frmID, 真, 假, 真, MCP_常量.URL请求默认超时, 假, 假, VIPJS回调)
+    MCP_Server_VIP.wsv:1411 vipCtrl.高级_执行JS (jsCode, ctxID, 真, 假, 真, MCP_常量.URL请求默认超时, 假, 假, VIPJS回调)
+相关工具(关键词): browser_get_url(1), browser_execute_js(1), browser_evaluate(1), browser_console_eval(1), browser_debugger_auto(1), browser_vip_execute_js_context(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级_执行JS_主框架   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_get_url(1), browser_execute_js(1), browser_evaluate(1), browser_console_eval(1), browser_debugger_auto(1), browser_vip_execute_js_context(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级_执行JS_全部框架   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_get_url(1), browser_execute_js(1), browser_evaluate(1), browser_console_eval(1), browser_debugger_auto(1), browser_vip_execute_js_context(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级_执行JS_框架ID   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_VIP.wsv:1407 vipCtrl.高级_执行JS_框架ID (jsCode, frmID, 真, 假, 真, MCP_常量.URL请求默认超时, 假, 假, VIPJS回调)
+字面量命中(1):
+    MCP_Server_VIP.wsv:1407 vipCtrl.高级_执行JS_框架ID (jsCode, frmID, 真, 假, 真, MCP_常量.URL请求默认超时, 假, 假, VIPJS回调)
+相关工具(关键词): browser_vip_execute_js_context(2), browser_get_url(1), browser_execute_js(1), browser_evaluate(1), browser_console_eval(1), browser_debugger_auto(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级_执行JS_框架序号   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_get_url(1), browser_execute_js(1), browser_evaluate(1), browser_console_eval(1), browser_debugger_auto(1), browser_vip_execute_js_context(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级_清空代理   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(2):
+    MCP_Server_Core.wsv:1232 vip_ctrl.高级_清空代理 ()
+    MCP_Server_VIP.wsv:177 vip_ctrl.高级_清空代理 ()
+字面量命中(2):
+    MCP_Server_Core.wsv:1232 vip_ctrl.高级_清空代理 ()
+    MCP_Server_VIP.wsv:177 vip_ctrl.高级_清空代理 ()
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级_网页截图   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_Core.wsv:2478 vip_ctrl.高级_网页截图 (fmt, 80, 截图大小, 假, 假, 截图回调)
+字面量命中(1):
+    MCP_Server_Core.wsv:2478 vip_ctrl.高级_网页截图 (fmt, 80, 截图大小, 假, 假, 截图回调)
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级_设置代理   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(2):
+    MCP_Server_Core.wsv:1199 vip_ctrl.高级_设置代理 (address, username, password)
+    MCP_Server_VIP.wsv:60 vip_ctrl.高级_设置代理 (address, MCP命令服务器.yyjson取文本 (参数JSON, "username"), MCP命令服务器.yyjson取文本 (参数JSON, "password"))
+字面量命中(2):
+    MCP_Server_Core.wsv:1199 vip_ctrl.高级_设置代理 (address, username, password)
+    MCP_Server_VIP.wsv:60 vip_ctrl.高级_设置代理 (address, MCP命令服务器.yyjson取文本 (参数JSON, "username"), MCP命令服务器.yyjson取文本 (参数JSON, "password"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级_设置触发鼠标触摸事件   [候选]
+来源文件: FBroVip.wsv
+参数表: 启用 <类型 = 逻辑型> | 配置 <类型 = 整数 注释 = "默认为0，0为MOBILE模式，1为DESKTOP模式" @默认值 = 0>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级触摸_单击   [候选]
+来源文件: FBroVip.wsv
+参数表: 横坐标 <类型 = 整数> | 纵坐标 <类型 = 整数> | 单击延时 <类型 = 整数 注释 = "单位：毫秒；为空，默认为50毫秒" @默认值 = 50>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_vip_mouse_click(1), browser_vip_key_click(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级触摸_取消   [候选]
+来源文件: FBroVip.wsv
+参数表: 横坐标 <类型 = 整数> | 纵坐标 <类型 = 整数>
+src 直调点(1):
+    MCP_Server_VIP.wsv:309 vip_ctrl.高级触摸_取消 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:309 vip_ctrl.高级触摸_取消 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+相关工具(关键词): browser_vip_touch_cancel(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级触摸_按下   [候选]
+来源文件: FBroVip.wsv
+参数表: 横坐标 <类型 = 整数> | 纵坐标 <类型 = 整数>
+src 直调点(1):
+    MCP_Server_Core.wsv:5006 vip.高级触摸_按下 (touchX, touchY)
+字面量命中(1):
+    MCP_Server_Core.wsv:5006 vip.高级触摸_按下 (touchX, touchY)
+相关工具(关键词): browser_touch_press(1), browser_touch_move(1), browser_vip_key_press(1), browser_vip_key_click(1), browser_vip_mouse_press(1), browser_reverse_input_cdp(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级触摸_放开   [候选]
+来源文件: FBroVip.wsv
+参数表: 横坐标 <类型 = 整数> | 纵坐标 <类型 = 整数>
+src 直调点(1):
+    MCP_Server_Core.wsv:5039 vip.高级触摸_放开 (touchX, touchY)
+字面量命中(1):
+    MCP_Server_Core.wsv:5039 vip.高级触摸_放开 (touchX, touchY)
+相关工具(关键词): browser_touch_release(1), browser_vip_key_press(1), browser_vip_key_release(1), browser_vip_key_click(1), browser_vip_mouse_release(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级触摸_移动   [候选]
+来源文件: FBroVip.wsv
+参数表: 横坐标 <类型 = 整数> | 纵坐标 <类型 = 整数>
+src 直调点(1):
+    MCP_Server_Core.wsv:5072 vip.高级触摸_移动 (touchX, touchY)
+字面量命中(1):
+    MCP_Server_Core.wsv:5072 vip.高级触摸_移动 (touchX, touchY)
+相关工具(关键词): browser_mouse_move(1), browser_move_window(1), browser_touch_press(1), browser_vip_mouse_move(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级键盘_单击   [候选]
+来源文件: FBroVip.wsv
+参数表: 键代码 <类型 = 整数> | 修饰键 <类型 = 整数 注释 = "Alt=1, Ctrl=2, Meta/Command=4, Shift=8" @默认值 = 0> | 单击延时 <类型 = 整数 注释 = "单位：毫秒；为空，默认为50毫秒" @默认值 = 50> | 是否为键盘 <类型 = 逻辑型 注释 = "事件是否从键盘生成" @默认值 = 假>
+src 直调点(2):
+    MCP_Server_Core.wsv:735 vip_ctrl.高级键盘_单击 (key)
+    MCP_Server_VIP.wsv:1077 vip_ctrl.高级键盘_单击 (clickKeyCode)
+字面量命中(2):
+    MCP_Server_Core.wsv:735 vip_ctrl.高级键盘_单击 (key)
+    MCP_Server_VIP.wsv:1077 vip_ctrl.高级键盘_单击 (clickKeyCode)
+相关工具(关键词): browser_vip_mouse_click(1), browser_vip_key_click(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级键盘_按下   [候选]
+来源文件: FBroVip.wsv
+参数表: 键代码 <类型 = 整数> | 修饰键 <类型 = 整数 注释 = "Alt=1, Ctrl=2, Meta/Command=4, Shift=8" @默认值 = 0> | 是否为键盘 <类型 = 逻辑型 注释 = "事件是否从键盘生成" @默认值 = 假>
+src 直调点(2):
+    MCP_Server_Core.wsv:725 vip_ctrl.高级键盘_按下 (key)
+    MCP_Server_VIP.wsv:136 vip_ctrl.高级键盘_按下 (pressKeyCode)
+字面量命中(2):
+    MCP_Server_Core.wsv:725 vip_ctrl.高级键盘_按下 (key)
+    MCP_Server_VIP.wsv:136 vip_ctrl.高级键盘_按下 (pressKeyCode)
+相关工具(关键词): browser_touch_press(1), browser_touch_move(1), browser_vip_key_press(1), browser_vip_key_click(1), browser_vip_mouse_press(1), browser_reverse_input_cdp(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级键盘_放开   [候选]
+来源文件: FBroVip.wsv
+参数表: 键代码 <类型 = 整数> | 修饰键 <类型 = 整数 注释 = "Alt=1, Ctrl=2, Meta/Command=4, Shift=8" @默认值 = 0> | 是否为键盘 <类型 = 逻辑型 注释 = "事件是否从键盘生成" @默认值 = 假>
+src 直调点(2):
+    MCP_Server_Core.wsv:730 vip_ctrl.高级键盘_放开 (key)
+    MCP_Server_VIP.wsv:159 vip_ctrl.高级键盘_放开 (releaseKeyCode)
+字面量命中(2):
+    MCP_Server_Core.wsv:730 vip_ctrl.高级键盘_放开 (key)
+    MCP_Server_VIP.wsv:159 vip_ctrl.高级键盘_放开 (releaseKeyCode)
+相关工具(关键词): browser_touch_release(1), browser_vip_key_press(1), browser_vip_key_release(1), browser_vip_key_click(1), browser_vip_mouse_release(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级键盘_输入字符   [候选]
+来源文件: FBroVip.wsv
+参数表: 文本 <类型 = 文本型 注释 = "输入文本，可以是中文，但只能输入一个字，否则会出错">
+src 直调点(1):
+    MCP_Server_VIP.wsv:1105 vip_ctrl.高级键盘_输入字符 (charInput)
+字面量命中(1):
+    MCP_Server_VIP.wsv:1105 vip_ctrl.高级键盘_输入字符 (charInput)
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级键盘_输入文本   [候选]
+来源文件: FBroVip.wsv
+参数表: 文本 <类型 = 文本型 注释 = "输入文本，可以是中文，连续的文本"> | 逐字输入延时 <类型 = 整数 注释 = "单位：毫秒；为空，默认为0，不延时" @默认值 = 0>
+src 直调点(1):
+    MCP_Server_VIP.wsv:1128 vip_ctrl.高级键盘_输入文本 (typeText)
+字面量命中(1):
+    MCP_Server_VIP.wsv:1128 vip_ctrl.高级键盘_输入文本 (typeText)
+相关工具(关键词): browser_key_event(1), browser_vip_key_type(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级鼠标_单击   [候选]
+来源文件: FBroVip.wsv
+参数表: 横坐标 <类型 = 整数> | 纵坐标 <类型 = 整数> | 按键类型 <类型 = 整数 注释 = "0为左键，1为中间，2为右键，默认为0，左键"> | 单击延时 <类型 = 整数 注释 = "单位：毫秒；为空，默认为50毫秒" @默认值 = 50>
+src 直调点(2):
+    MCP_Server_Core.wsv:648 vip_ctrl.高级鼠标_单击 (x, y, 按钮类型)
+    MCP_Server_VIP.wsv:91 vip_ctrl.高级鼠标_单击 (vx, vy, MCP命令服务器.yyjson取整数 (参数JSON, "button"))
+字面量命中(2):
+    MCP_Server_Core.wsv:648 vip_ctrl.高级鼠标_单击 (x, y, 按钮类型)
+    MCP_Server_VIP.wsv:91 vip_ctrl.高级鼠标_单击 (vx, vy, MCP命令服务器.yyjson取整数 (参数JSON, "button"))
+相关工具(关键词): browser_vip_mouse_click(1), browser_vip_key_click(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级鼠标_按下   [候选]
+来源文件: FBroVip.wsv
+参数表: 横坐标 <类型 = 整数> | 纵坐标 <类型 = 整数> | 按键类型 <类型 = 整数 注释 = "0为左键，1为中间，2为右键，默认为0，左键" @默认值 = 0>
+src 直调点(1):
+    MCP_Server_VIP.wsv:783 vip_ctrl.高级鼠标_按下 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:783 vip_ctrl.高级鼠标_按下 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+相关工具(关键词): browser_touch_press(1), browser_touch_move(1), browser_vip_key_press(1), browser_vip_key_click(1), browser_vip_mouse_press(1), browser_reverse_input_cdp(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级鼠标_放开   [候选]
+来源文件: FBroVip.wsv
+参数表: 横坐标 <类型 = 整数> | 纵坐标 <类型 = 整数> | 按键类型 <类型 = 整数 注释 = "0为左键，1为中间，2为右键，默认为0，左键" @默认值 = 0>
+src 直调点(1):
+    MCP_Server_VIP.wsv:800 vip_ctrl.高级鼠标_放开 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+字面量命中(1):
+    MCP_Server_VIP.wsv:800 vip_ctrl.高级鼠标_放开 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+相关工具(关键词): browser_touch_release(1), browser_vip_key_press(1), browser_vip_key_release(1), browser_vip_key_click(1), browser_vip_mouse_release(1)
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级鼠标_滚轮滚动   [候选]
+来源文件: FBroVip.wsv
+参数表: 横坐标 <类型 = 整数> | 纵坐标 <类型 = 整数> | 横向滚动 <类型 = 整数 注释 = "负数向左，正数向右，以像素点位单位"> | 纵向滚动 <类型 = 整数 注释 = "负数向上，正数向下，以像素点位单位">
+src 直调点(2):
+    MCP_Server_Core.wsv:1155 vip_ctrl.高级鼠标_滚轮滚动 (x, y, deltaX, deltaY)
+    MCP_Server_VIP.wsv:826 vip_ctrl.高级鼠标_滚轮滚动 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"), MCP命令服务器.yyjson取整数 (参数JSON, "delta_x"), MCP命令服务器.yyjson取整数 (参数
+字面量命中(2):
+    MCP_Server_Core.wsv:1155 vip_ctrl.高级鼠标_滚轮滚动 (x, y, deltaX, deltaY)
+    MCP_Server_VIP.wsv:826 vip_ctrl.高级鼠标_滚轮滚动 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"), MCP命令服务器.yyjson取整数 (参数JSON, "delta_x"), MCP命令服务器.yyjson取整数 (参数
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_控制器 :: 高级鼠标_移动   [候选]
+来源文件: FBroVip.wsv
+参数表: 横坐标 <类型 = 整数> | 纵坐标 <类型 = 整数>
+src 直调点(2):
+    MCP_Server_Core.wsv:690 vip_ctrl.高级鼠标_移动 (x, y)
+    MCP_Server_VIP.wsv:113 vip_ctrl.高级鼠标_移动 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+字面量命中(2):
+    MCP_Server_Core.wsv:690 vip_ctrl.高级鼠标_移动 (x, y)
+    MCP_Server_VIP.wsv:113 vip_ctrl.高级鼠标_移动 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+相关工具(关键词): browser_mouse_move(1), browser_move_window(1), browser_touch_press(1), browser_vip_mouse_move(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 即将处理命令行   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 进程类型 <类型 = 文本型 注释 = "The |process_type| value will be empty for the browse | 命令行 <类型 = 类_FBrowser_命令行 "">
+src 直调点(0):
+字面量命中(2):
+    MCP_Server.wsv:395 变量 是否监控启动流程 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "请求环境初始化完毕/即将处理命令行/即将启动子进程/消息调度/即将初始化WebKit → app_event:startup_*" @输出名 = "IsMonitorStartup">
+    main.wsv:459 方法 即将处理命令行 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 执行关闭完毕   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 是否结束程序 <类型 = 逻辑型类 注释 = "由“FBrowser_关闭”的“结束程序”参数传递而来，可直接修改">
+src 直调点(0):
+字面量命中(1):
+    main.wsv:295 方法 执行关闭完毕 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 扩展插件_创建失败   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 请求环境 <类型 = 类_FBrowser_请求环境> | 插件ID <类型 = 文本型 注释 = "这个有可能是空"> | 插件路径 <类型 = 文本型> | 错误信息 <类型 = 文本型>
+src 直调点(0):
+字面量命中(1):
+    main.wsv:602 方法 扩展插件_创建失败 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 扩展插件_创建成功   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 请求环境 <类型 = 类_FBrowser_请求环境> | 插件ID <类型 = 文本型>
+src 直调点(0):
+字面量命中(2):
+    MCP_Server.wsv:394 变量 是否监控插件生命周期 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "扩展插件_创建成功/创建失败/载入成功/卸载成功 → app_event:extension_*" @输出名 = "IsMonitorExtension">
+    main.wsv:588 方法 扩展插件_创建成功 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 扩展插件_卸载成功   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 请求环境 <类型 = 类_FBrowser_请求环境> | 插件ID <类型 = 文本型>
+src 直调点(0):
+字面量命中(1):
+    main.wsv:634 方法 扩展插件_卸载成功 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 扩展插件_载入成功   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 请求环境 <类型 = 类_FBrowser_请求环境> | 插件ID <类型 = 文本型>
+src 直调点(0):
+字面量命中(1):
+    main.wsv:620 方法 扩展插件_载入成功 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 注册自定义方案   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 方案 <类型 = 类_FBrowser_方案注册>
+src 直调点(0):
+字面量命中(3):
+    MCP_Kernel.wsv:13 # 初始化期: main.wsv 注册自定义方案 "mcp" (CEF 要求初始化前声明)
+    main.wsv:320 # 内核层: 初始化期注册自定义方案 "mcp" (CEF 要求初始化前声明, 运行期由 browser_kernel_scheme 挂载资源处理器)
+    main.wsv:321 方法 注册自定义方案 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_VIP_WebSocket客户端_关闭   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器> | 框架 <类型 = 类_FBrowser_框架> | websocket客户端 <类型 = 类_FBrowserVIP_WebSocket客户端>
+src 直调点(0):
+字面量命中(1):
+    main.wsv:661 方法 渲染_VIP_WebSocket客户端_关闭 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_fingerprint_webgl_vendor(2), browser_vip_enable_inspector(2), browser_vip_enable_devtools_observer(2), browser_close_devtools(1), browser_close(1), browser_close_try(1), browser_shutdown(1), browser_intercept(1), browser_collect(1), browser_inject(1), browser_cdp(1), browser_debugger_wait_paused(1), browser_debugger_last_paused(1), browser_debugger_inspect(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_VIP_WebSocket客户端_创建   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器> | 框架 <类型 = 类_FBrowser_框架> | websocket客户端 <类型 = 类_FBrowserVIP_WebSocket客户端>
+src 直调点(0):
+字面量命中(2):
+    MCP_Server.wsv:397 变量 是否监控WebSocket渲染 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "渲染_VIP_WebSocket客户端_创建/关闭/连接服务器/接收数据/发送数据 → app_event:render_ws_*" @输出名 = "IsMonitorRenderWS">
+    main.wsv:648 方法 渲染_VIP_WebSocket客户端_创建 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_fingerprint_webgl_vendor(2), browser_create(1), browser_intercept(1), browser_collect(1), browser_inject(1), browser_cdp(1), browser_debugger_wait_paused(1), browser_debugger_last_paused(1), browser_debugger_inspect(1), browser_debugger_auto(1), browser_network_body(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_VIP_WebSocket客户端_发送数据   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(1):
+    main.wsv:710 方法 渲染_VIP_WebSocket客户端_发送数据 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_fingerprint_webgl_vendor(2), browser_intercept(1), browser_collect(1), browser_inject(1), browser_cdp(1), browser_debugger_wait_paused(1), browser_debugger_last_paused(1), browser_debugger_inspect(1), browser_debugger_auto(1), browser_network_body(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_VIP_WebSocket客户端_接收数据   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(1):
+    main.wsv:693 方法 渲染_VIP_WebSocket客户端_接收数据 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_fingerprint_webgl_vendor(2), browser_intercept(1), browser_collect(1), browser_inject(1), browser_cdp(1), browser_debugger_wait_paused(1), browser_debugger_last_paused(1), browser_debugger_inspect(1), browser_debugger_auto(1), browser_network_body(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_VIP_WebSocket客户端_连接服务器   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器> | 框架 <类型 = 类_FBrowser_框架> | websocket客户端 <类型 = 类_FBrowserVIP_WebSocket客户端> | url <类型 = 文本型 注释 = "可修改，修改后会重定向新的连接地址"> | protocols <类型 = 文本型 注释 = "可修改">
+src 直调点(0):
+字面量命中(1):
+    main.wsv:674 方法 渲染_VIP_WebSocket客户端_连接服务器 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_fingerprint_webgl_vendor(2), browser_intercept(1), browser_collect(1), browser_inject(1), browser_cdp(1), browser_debugger_wait_paused(1), browser_debugger_last_paused(1), browser_debugger_inspect(1), browser_debugger_auto(1), browser_network_body(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_即将创建V8环境   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器> | 框架 <类型 = 类_FBrowser_框架> | V8环境 <类型 = 类_FBrowser_V8环境>
+src 直调点(0):
+字面量命中(3):
+    MCP_Server.wsv:396 变量 是否监控渲染细节 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "渲染_即将创建V8环境/收到消息/载入状态被改变/载入开始/载入结束 → app_event:render_*" @输出名 = "IsMonitorRenderDetail">
+    MCP_Server_Core.wsv:2719 // 持久js模式: 存入持久V8扩展列表, 由 渲染_即将创建V8环境 → V8环境.执行JS代码 自动注入
+    main.wsv:505 方法 渲染_即将创建V8环境 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_collect(1), browser_inject(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1), browser_kernel_ipc_queue(1), browser_kernel_ipc_clear(1), browser_get_process_type(1), browser_fingerprint_webgl_vendor(1), browser_reverse_network_conditions(1), browser_reverse_trace(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_即将初始化WebKit   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(3):
+    MCP_Server.wsv:9560 添加工具JSON ("browser_inject", "注入JS/CSS/Handler", 多属性Schema文本 (属性项JSON ("type", "text", "js/css/handler(persist时handler由渲染_即将初始化WebKit注册)") + "," + 属性项J
+    MCP_Server_Core.wsv:2736 // 持久handler模式: 存入持久V8扩展列表, 由 渲染_即将初始化WebKit → FBrowser_V8_注册JS扩展 自动注入
+    main.wsv:496 方法 渲染_即将初始化WebKit <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_inject(2), browser_collect(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1), browser_kernel_ipc_queue(1), browser_kernel_ipc_clear(1), browser_get_process_type(1), browser_fingerprint_webgl_vendor(1), browser_reverse_network_conditions(1), browser_reverse_trace(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_即将捕获异常   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器> | 框架 <类型 = 类_FBrowser_框架> | V8环境 <类型 = 类_FBrowser_V8环境> | V8异常 <类型 = 类_FBrowser_V8异常> | V8堆栈踪迹 <类型 = 类_FBrowser_V8堆栈踪迹>
+src 直调点(0):
+字面量命中(1):
+    main.wsv:302 方法 渲染_即将捕获异常 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_collect(1), browser_inject(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1), browser_kernel_ipc_queue(1), browser_kernel_ipc_clear(1), browser_get_process_type(1), browser_fingerprint_webgl_vendor(1), browser_reverse_network_conditions(1), browser_reverse_trace(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_即将释放V8环境   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器> | 框架 <类型 = 类_FBrowser_框架> | V8环境 <类型 = 类_FBrowser_V8环境>
+src 直调点(0):
+字面量命中(1):
+    main.wsv:372 方法 渲染_即将释放V8环境 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_collect(1), browser_inject(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1), browser_kernel_ipc_queue(1), browser_kernel_ipc_clear(1), browser_get_process_type(1), browser_fingerprint_webgl_vendor(1), browser_reverse_network_conditions(1), browser_reverse_trace(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_即将销毁浏览器   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器>
+src 直调点(0):
+字面量命中(1):
+    main.wsv:410 方法 渲染_即将销毁浏览器 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_collect(1), browser_inject(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1), browser_kernel_ipc_queue(1), browser_kernel_ipc_clear(1), browser_get_process_type(1), browser_fingerprint_webgl_vendor(1), browser_reverse_network_conditions(1), browser_reverse_trace(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_收到消息   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器> | 框架 <类型 = 类_FBrowser_框架> | 源进程 <类型 = 整数> | 消息 <类型 = 类_FBrowser_进程消息>
+src 直调点(0):
+字面量命中(1):
+    main.wsv:518 方法 渲染_收到消息 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_collect(1), browser_inject(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1), browser_kernel_ipc_queue(1), browser_kernel_ipc_clear(1), browser_get_process_type(1), browser_fingerprint_webgl_vendor(1), browser_reverse_network_conditions(1), browser_reverse_trace(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_浏览器创建   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器> | 额外信息 <类型 = 类_FBrowser_字典值>
+src 直调点(0):
+字面量命中(1):
+    main.wsv:400 方法 渲染_浏览器创建 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_collect(1), browser_inject(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1), browser_kernel_ipc_queue(1), browser_kernel_ipc_clear(1), browser_get_process_type(1), browser_fingerprint_webgl_vendor(1), browser_get_extra_data(1), browser_reverse_network_conditions(1), browser_reverse_trace(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_焦点节点改变   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器> | 框架 <类型 = 类_FBrowser_框架> | DOM节点 <类型 = 类_FBrowser_DOM节点>
+src 直调点(0):
+字面量命中(1):
+    main.wsv:331 方法 渲染_焦点节点改变 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_collect(1), browser_inject(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1), browser_kernel_ipc_queue(1), browser_kernel_ipc_clear(1), browser_get_process_type(1), browser_fingerprint_webgl_vendor(1), browser_reverse_network_conditions(1), browser_reverse_trace(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_载入开始   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器> | 框架 <类型 = 类_FBrowser_框架> | 过渡类型 <类型 = 整数>
+src 直调点(0):
+字面量命中(1):
+    main.wsv:556 方法 渲染_载入开始 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_collect(1), browser_inject(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1), browser_kernel_ipc_queue(1), browser_kernel_ipc_clear(1), browser_get_process_type(1), browser_fingerprint_webgl_vendor(1), browser_reverse_network_conditions(1), browser_reverse_trace(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_载入状态被改变   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器> | 是否读取中 <类型 = 逻辑型> | 可后退 <类型 = 逻辑型> | 可前进 <类型 = 逻辑型>
+src 直调点(0):
+字面量命中(2):
+    main.wsv:537 方法 渲染_载入状态被改变 <公开 @虚拟方法 = 可覆盖>
+    main.wsv:756 // 用于渲染进程事件但参数只有浏览器、没有框架的情况(如 渲染_载入状态被改变)。
+相关工具(关键词): browser_collect(1), browser_inject(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1), browser_kernel_ipc_queue(1), browser_kernel_ipc_clear(1), browser_get_process_type(1), browser_fingerprint_webgl_vendor(1), browser_reverse_network_conditions(1), browser_reverse_trace(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_载入结束   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器> | 框架 <类型 = 类_FBrowser_框架> | 状态码 <类型 = 整数>
+src 直调点(0):
+字面量命中(1):
+    main.wsv:572 方法 渲染_载入结束 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_collect(1), browser_inject(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1), browser_kernel_ipc_queue(1), browser_kernel_ipc_clear(1), browser_get_process_type(1), browser_fingerprint_webgl_vendor(1), browser_reverse_network_conditions(1), browser_reverse_trace(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 渲染_载入错误   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器> | 框架 <类型 = 类_FBrowser_框架> | 错误代码 <类型 = 整数> | 错误文本 <类型 = 文本型> | 失败地址 <类型 = 文本型>
+src 直调点(0):
+字面量命中(1):
+    main.wsv:384 方法 渲染_载入错误 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): browser_collect(1), browser_inject(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1), browser_kernel_ipc_queue(1), browser_kernel_ipc_clear(1), browser_get_process_type(1), browser_fingerprint_webgl_vendor(1), browser_reverse_network_conditions(1), browser_reverse_trace(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 类_初始化   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 类_清理   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_应用事件 :: 获取默认事件   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器 注释 = "当前要获取默认事件的浏览器，注意：这里浏览器并没有完全创建成功，只能做一些简单的操作 | 地址 <类型 = 文本型 注释 = "当前要获取事件的地址"> | 用户额外配置 <类型 = 类_FBrowser_用户额外配置 注释 = "这里面不单独设置事件即为使用内置默认不控制，要控制就需要自行设置浏览器事件">
+src 直调点(1):
+    main.wsv:769 # v3.2 (C) 关键补齐: 获取默认事件 (OnGetDefaultClient)
+字面量命中(3):
+    main.wsv:769 # v3.2 (C) 关键补齐: 获取默认事件 (OnGetDefaultClient)
+    main.wsv:775 # 而 获取默认事件 的参数说明是:
+    main.wsv:779 方法 获取默认事件 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_JS交互_删除   [候选]
+来源文件: FBroLib.wsv
+参数表: JS执行函数名 <类型 = 文本型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_delete_cookies(1), browser_edit_delete(1), browser_debugger_set_breakpoint(1), mcp_result(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_JS交互_注册   [候选]
+来源文件: FBroLib.wsv
+参数表: JS执行函数名 <类型 = 文本型 注释 = "js_query_function，详见text.html调用JS例子中的doQuery"> | JS退出函数名 <类型 = 文本型 注释 = "js_cancel_function，详见text.html调用JS例子中的doQueryCancel"  | JS交互事件 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1), browser_debugger_set_breakpoint(1), browser_kernel_scheme(1), browser_kernel_reactor(1), browser_debugger_clear_breakpoints(1), browser_reverse_search_script(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_关闭   [候选]
+来源文件: FBroLib.wsv
+参数表: 结束程序 <类型 = 逻辑型 注释 = "为真结束当前程序" @默认值 = 假>
+src 直调点(1):
+    main.wsv:233 FBrowser_关闭 (真)
+字面量命中(1):
+    main.wsv:233 FBrowser_关闭 (真)
+相关工具(关键词): browser_close_devtools(1), browser_close(1), browser_close_try(1), browser_shutdown(1), browser_debugger_set_breakpoint(1), batch(1), browser_kernel_cert(1), browser_kernel_events_all(1), browser_vip_enable_inspector(1), browser_vip_enable_devtools_observer(1), browser_reverse_pause_on_exceptions(1), browser_reverse_async_stack(1), browser_reverse_layer_tree(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_内存_压缩清理   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_Core.wsv:1488 FBrowser_内存_压缩清理 ()
+字面量命中(1):
+    MCP_Server_Core.wsv:1488 FBrowser_内存_压缩清理 ()
+相关工具(关键词): browser_compress_memory(1), browser_debugger_set_breakpoint(1), browser_refresh_cookies(1), browser_vip_fingerprint_hardware(1), browser_reverse_heap(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_创建URL请求   [候选]
+来源文件: FBroLib.wsv
+参数表: 请求 <类型 = 类_FBrowser_请求 注释 = "要请求的数据的，用于设置请求地址，类型等参数"> | 请求环境 <类型 = 类_FBrowser_请求环境 注释 = "为空为全局环境" @默认值 = 空对象> | URL请求事件 <类型 = 类_FBrowser_事件智能指针 注释 = "获取数据和状态的异步回调。"
+src 直调点(1):
+    MCP_Server_Core.wsv:5499 FBrowser_创建URL请求 (请求, , URL请求回调, MCP_常量.URL请求默认超时)
+字面量命中(1):
+    MCP_Server_Core.wsv:5499 FBrowser_创建URL请求 (请求, , URL请求回调, MCP_常量.URL请求默认超时)
+相关工具(关键词): browser_debugger_set_breakpoint(1), browser_create_url_request(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_初始化   [候选]
+来源文件: FBroLib.wsv
+参数表: 基础设置 <类型 = FBrowser_初始化配置 注释 = "如果不设置执行进程，则默认使用FBrowserCEF3Subprocess.exe当 | 初始化事件 <类型 = 类_FBrowser_事件智能指针 注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的
+src 直调点(1):
+    main.wsv:98 如果真 (FBrowser_初始化 (设置, 初始化事件) == 假)
+字面量命中(3):
+    main.wsv:45 // 提前读取配置中的VIP授权码 (VIP注册必须在FBrowser_初始化前完成)
+    main.wsv:75 变量 设置 <类型 = FBrowser_初始化配置>
+    main.wsv:98 如果真 (FBrowser_初始化 (设置, 初始化事件) == 假)
+相关工具(关键词): browser_inject(1), browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_初始化_设置V8环境默认堆栈大小   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1), browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_初始化_设置内存释放   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1), browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_初始化_设置守护   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1), browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_取初始化缓存目录   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_取版本号   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(3):
+    MCP_Server_Core.wsv:1495 版本号 = FBrowser_取版本号 ()
+    MCP_Server_Core.wsv:3580 元数据对象.加入文本成员 ("fbro_version", FBrowser_取版本号 ())
+    MCP_Server_Core.wsv:5855 envNative.加入文本成员 ("fbro_version", FBrowser_取版本号 ())
+字面量命中(3):
+    MCP_Server_Core.wsv:1495 版本号 = FBrowser_取版本号 ()
+    MCP_Server_Core.wsv:3580 元数据对象.加入文本成员 ("fbro_version", FBrowser_取版本号 ())
+    MCP_Server_Core.wsv:5855 envNative.加入文本成员 ("fbro_version", FBrowser_取版本号 ())
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_消息循环_执行   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_get_url(1), browser_execute_js(1), browser_evaluate(1), browser_print_to_pdf(1), browser_console_eval(1), browser_debugger_resume(1), browser_debugger_step_over(1), browser_debugger_step_out(1), browser_debugger_set_breakpoint(1), browser_debugger_auto(1), batch(1), workflow_run(1), browser_kernel_download(1), browser_kernel_reactor(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_消息循环_设置系统模式   [候选]
+来源文件: FBroLib.wsv
+参数表: 系统模式 <类型 = 逻辑型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_消息循环_运行   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1), workflow_stop(1), browser_get_run_style(1), browser_reverse_runtime(1), browser_reverse_patch(1), browser_reverse_query_objects(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_消息循环_退出   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_自定义方案_注册   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Kernel.wsv:443 FBrowser_自定义方案_注册 ("mcp", 域名, 处理器)
+字面量命中(2):
+    MCP_Kernel.wsv:43 # ── 自定义方案 (FBrowser_自定义方案_注册 + 类_MCP_方案资源处理器) ──
+    MCP_Kernel.wsv:443 FBrowser_自定义方案_注册 ("mcp", 域名, 处理器)
+相关工具(关键词): browser_inject(1), browser_debugger_set_breakpoint(1), browser_kernel_scheme(1), browser_kernel_reactor(1), browser_debugger_clear_breakpoints(1), browser_reverse_search_script(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_自定义方案_清理   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Kernel.wsv:480 FBrowser_自定义方案_清理 ()
+字面量命中(1):
+    MCP_Kernel.wsv:480 FBrowser_自定义方案_清理 ()
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_debugger_set_breakpoint(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_设置程序DPI模式   [候选]
+来源文件: FBroLib.wsv
+参数表: DPI模式 <类型 = DPI模式 注释 = "参考：DPI模式.">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: FBrowser_进程_取当前进程类型   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_System.wsv:57 进程类型值 = FBrowser_进程_取当前进程类型 ()
+字面量命中(1):
+    MCP_Server_System.wsv:57 进程类型值 = FBrowser_进程_取当前进程类型 ()
+相关工具(关键词): browser_mouse_click(1), browser_mouse_move(1), browser_mouse_wheel(1), browser_debugger_set_breakpoint(1), browser_touch_press(1), browser_send_message(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_ipc_renderer_count(1), browser_ipc_renderer_ids(1), browser_kernel_ipc_queue(1), browser_get_process_type(1), browser_vip_enable_inspector(1), browser_vip_enable_devtools_observer(1)
+
+====================================================================================================
+### FBrowser初始化控制 :: 启用自带调试提示   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_Parser_Base64编码   [候选]
+来源文件: FBroLib.wsv
+参数表: 数据 <类型 = 文本型>
+src 直调点(1):
+    MCP_Server_Core.wsv:4931 result = FBrowser_Parser_Base64编码 (data)
+字面量命中(1):
+    MCP_Server_Core.wsv:4931 result = FBrowser_Parser_Base64编码 (data)
+相关工具(关键词): browser_debugger_set_breakpoint(1), browser_base64_encode(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_Parser_Base64解码   [候选]
+来源文件: FBroLib.wsv
+参数表: 数据 <类型 = 文本型>
+src 直调点(2):
+    MCP_Server.wsv:7623 base64字节 = FBrowser_Parser_Base64解码 (code)
+    MCP_Server_Core.wsv:4943 字节结果 = FBrowser_Parser_Base64解码 (data)
+字面量命中(3):
+    MCP_Server.wsv:7618 // code_base64: Base64编码传参, 零转义风险 (官方FBrowser_Parser_Base64解码)
+    MCP_Server.wsv:7623 base64字节 = FBrowser_Parser_Base64解码 (code)
+    MCP_Server_Core.wsv:4943 字节结果 = FBrowser_Parser_Base64解码 (data)
+相关工具(关键词): browser_debugger_set_breakpoint(1), browser_base64_decode(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_Parser_URI编码   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_Core.wsv:4962 result = FBrowser_Parser_URI编码 (data, 假)
+字面量命中(1):
+    MCP_Server_Core.wsv:4962 result = FBrowser_Parser_URI编码 (data, 假)
+相关工具(关键词): browser_debugger_set_breakpoint(1), browser_uri_encode(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_Parser_URI解码   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7927 decodedScheme = FBrowser_Parser_URI解码 (rawScheme, 真, 真)
+    MCP_Server.wsv:10762 解码路径 = FBrowser_Parser_URI解码 (相对路径, 真, 真)
+    MCP_Server.wsv:10868 相对路径 = FBrowser_Parser_URI解码 (相对路径, 真, 真)
+    MCP_Server_Core.wsv:4974 result = FBrowser_Parser_URI解码 (data, 真, 真)
+字面量命中(4):
+    MCP_Server.wsv:7927 decodedScheme = FBrowser_Parser_URI解码 (rawScheme, 真, 真)
+    MCP_Server.wsv:10762 解码路径 = FBrowser_Parser_URI解码 (相对路径, 真, 真)
+    MCP_Server.wsv:10868 相对路径 = FBrowser_Parser_URI解码 (相对路径, 真, 真)
+    MCP_Server_Core.wsv:4974 result = FBrowser_Parser_URI解码 (data, 真, 真)
+相关工具(关键词): browser_debugger_set_breakpoint(1), browser_uri_decode(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_Parser_写入JSON   [候选]
+来源文件: FBroLib.wsv
+参数表: node <类型 = 类_FBrowser_值> | options <类型 = 整数 注释 = "参考：JSON解析.*">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_Parser_取数据URI   [候选]
+来源文件: FBroLib.wsv
+参数表: mimetype <类型 = 文本型> | 数据 <类型 = 文本型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_Parser_字节值解析为JSON   [候选]
+来源文件: FBroLib.wsv
+参数表: 字节值 <类型 = 类_FBrowser_字节集> | options <类型 = 整数 注释 = "参考：JSON解析.*">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_Parser_解析JSON   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server.wsv:1629 params_value = FBrowser_Parser_解析JSON (paramsJSON文本, JSON解析.RFC)
+字面量命中(1):
+    MCP_Server.wsv:1629 params_value = FBrowser_Parser_解析JSON (paramsJSON文本, JSON解析.RFC)
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_启用异常收集   [候选]
+来源文件: FBroLib.wsv
+参数表: 异常信息文件名 <类型 = 文本型> | 异常执行回调 <@匹配方法 = "异常收集回调模板函数">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_浏览器_取ID清单   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_ResponseBuilders.wsv:344 ID清单 = FBrowser_浏览器_取ID清单 ()
+    MCP_Server.wsv:7763 ID清单 = FBrowser_浏览器_取ID清单 ()
+    MCP_Server.wsv:8078 残留ID清单 = FBrowser_浏览器_取ID清单 ()
+    MCP_Server_Core.wsv:449 ID清单 = FBrowser_浏览器_取ID清单 ()
+字面量命中(4):
+    MCP_ResponseBuilders.wsv:344 ID清单 = FBrowser_浏览器_取ID清单 ()
+    MCP_Server.wsv:7763 ID清单 = FBrowser_浏览器_取ID清单 ()
+    MCP_Server.wsv:8078 残留ID清单 = FBrowser_浏览器_取ID清单 ()
+    MCP_Server_Core.wsv:449 ID清单 = FBrowser_浏览器_取ID清单 ()
+相关工具(关键词): browser_navigate(1), browser_create(1), browser_close(1), browser_close_try(1), browser_list(1), browser_clear_cache(1), browser_clear_cache_browser(1), browser_get_id(1), browser_set_proxy(1), browser_set_auto_resize(1), browser_shutdown(1), browser_move_window(1), browser_fingerprint(1), browser_status(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_浏览器_取数量   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(6):
+    MCP_BrowserEvents.wsv:1341 当前浏览器数 = FBrowser_浏览器_取数量 ()
+    MCP_ResponseBuilders.wsv:312 信息JSON.加入整数成员 ("browsers", FBrowser_浏览器_取数量 ())
+    MCP_Server.wsv:8074 判断循环 (FBrowser_浏览器_取数量 () > 0 && 清理尝试 < 50)
+    MCP_Server.wsv:8856 文本 = 文本 + "mcp_browsers " + 到文本 (FBrowser_浏览器_取数量 ()) + "\n"
+    MCP_Server_Core.wsv:365 如果 (FBrowser_浏览器_取数量 () >= MCP_常量.浏览器实例最大数量)
+    MCP_Server_Core.wsv:3579 元数据对象.加入整数成员 ("browser_count", FBrowser_浏览器_取数量 ())
+字面量命中(6):
+    MCP_BrowserEvents.wsv:1341 当前浏览器数 = FBrowser_浏览器_取数量 ()
+    MCP_ResponseBuilders.wsv:312 信息JSON.加入整数成员 ("browsers", FBrowser_浏览器_取数量 ())
+    MCP_Server.wsv:8074 判断循环 (FBrowser_浏览器_取数量 () > 0 && 清理尝试 < 50)
+    MCP_Server.wsv:8856 文本 = 文本 + "mcp_browsers " + 到文本 (FBrowser_浏览器_取数量 ()) + "\n"
+    MCP_Server_Core.wsv:365 如果 (FBrowser_浏览器_取数量 () >= MCP_常量.浏览器实例最大数量)
+    MCP_Server_Core.wsv:3579 元数据对象.加入整数成员 ("browser_count", FBrowser_浏览器_取数量 ())
+相关工具(关键词): browser_navigate(1), browser_create(1), browser_close(1), browser_close_try(1), browser_list(1), browser_clear_cache(1), browser_clear_cache_browser(1), browser_get_id(1), browser_set_proxy(1), browser_set_auto_resize(1), browser_shutdown(1), browser_move_window(1), browser_fingerprint(1), browser_status(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_浏览器_取用户标识清单   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_Core.wsv:5534 tag清单 = FBrowser_浏览器_取用户标识清单 ()
+字面量命中(1):
+    MCP_Server_Core.wsv:5534 tag清单 = FBrowser_浏览器_取用户标识清单 ()
+相关工具(关键词): browser_navigate(1), browser_create(1), browser_close(1), browser_close_try(1), browser_list(1), browser_clear_cache(1), browser_clear_cache_browser(1), browser_get_id(1), browser_set_proxy(1), browser_set_auto_resize(1), browser_shutdown(1), browser_move_window(1), browser_fingerprint(1), browser_status(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_浏览器_通过ID取浏览器   [候选]
+来源文件: FBroLib.wsv
+参数表: 浏览器ID <类型 = 整数>
+src 直调点(6):
+    MCP_Callbacks.wsv:136 bb = FBrowser_浏览器_通过ID取浏览器 (浏览器ID)
+    MCP_Callbacks.wsv:198 bb = FBrowser_浏览器_通过ID取浏览器 (浏览器ID)
+    MCP_ResponseBuilders.wsv:353 bb = FBrowser_浏览器_通过ID取浏览器 (bid)
+    MCP_Server.wsv:1566 目标CDP浏览器 = FBrowser_浏览器_通过ID取浏览器 (目标浏览器ID)
+    MCP_Server.wsv:1592 旧CDP浏览器 = FBrowser_浏览器_通过ID取浏览器 (CDP附着浏览器ID)
+    MCP_Server.wsv:7769 fb = FBrowser_浏览器_通过ID取浏览器 (firstID)
+字面量命中(6):
+    MCP_Callbacks.wsv:136 bb = FBrowser_浏览器_通过ID取浏览器 (浏览器ID)
+    MCP_Callbacks.wsv:198 bb = FBrowser_浏览器_通过ID取浏览器 (浏览器ID)
+    MCP_ResponseBuilders.wsv:353 bb = FBrowser_浏览器_通过ID取浏览器 (bid)
+    MCP_Server.wsv:1566 目标CDP浏览器 = FBrowser_浏览器_通过ID取浏览器 (目标浏览器ID)
+    MCP_Server.wsv:1592 旧CDP浏览器 = FBrowser_浏览器_通过ID取浏览器 (CDP附着浏览器ID)
+    MCP_Server.wsv:7769 fb = FBrowser_浏览器_通过ID取浏览器 (firstID)
+相关工具(关键词): browser_navigate(1), browser_create(1), browser_close(1), browser_close_try(1), browser_list(1), browser_clear_cache(1), browser_clear_cache_browser(1), browser_get_id(1), browser_set_proxy(1), browser_set_auto_resize(1), browser_shutdown(1), browser_move_window(1), browser_fingerprint(1), browser_status(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_浏览器_通过序号取浏览器   [候选]
+来源文件: FBroLib.wsv
+参数表: 序号 <类型 = 整数 注释 = "从0开始">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_navigate(1), browser_create(1), browser_close(1), browser_close_try(1), browser_list(1), browser_clear_cache(1), browser_clear_cache_browser(1), browser_get_id(1), browser_set_proxy(1), browser_set_auto_resize(1), browser_shutdown(1), browser_move_window(1), browser_fingerprint(1), browser_status(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_浏览器_通过用户标识取浏览器   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_Core.wsv:5205 found = FBrowser_浏览器_通过用户标识取浏览器 (tag)
+字面量命中(1):
+    MCP_Server_Core.wsv:5205 found = FBrowser_浏览器_通过用户标识取浏览器 (tag)
+相关工具(关键词): browser_navigate(1), browser_create(1), browser_close(1), browser_close_try(1), browser_list(1), browser_clear_cache(1), browser_clear_cache_browser(1), browser_get_id(1), browser_set_proxy(1), browser_set_auto_resize(1), browser_shutdown(1), browser_move_window(1), browser_fingerprint(1), browser_status(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_浏览器_通过窗口句柄取浏览器   [候选]
+来源文件: FBroLib.wsv
+参数表: 窗口句柄 <类型 = 变整数>
+src 直调点(1):
+    MCP_Server_Core.wsv:5511 found = FBrowser_浏览器_通过窗口句柄取浏览器 (hwnd)
+字面量命中(1):
+    MCP_Server_Core.wsv:5511 found = FBrowser_浏览器_通过窗口句柄取浏览器 (hwnd)
+相关工具(关键词): browser_navigate(1), browser_create(1), browser_close(1), browser_close_try(1), browser_list(1), browser_clear_cache(1), browser_clear_cache_browser(1), browser_get_id(1), browser_set_proxy(1), browser_set_auto_resize(1), browser_shutdown(1), browser_move_window(1), browser_fingerprint(1), browser_status(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: FBrowser_清理全局缓存   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_Core.wsv:1071 FBrowser_清理全局缓存 (, , , 清理缓存回调)
+字面量命中(1):
+    MCP_Server_Core.wsv:1071 FBrowser_清理全局缓存 (, , , 清理缓存回调)
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowser辅助功能 :: 异常收集回调模板函数   [候选]
+来源文件: FBroLib.wsv
+参数表: 异常记录文件 <类型 = 文本型 注释 = "生成的异常文件"> | 异常数据 <类型 = 变整数 注释 = "_EXCEPTION_POINTERS* 类型指针数据">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_V8值 :: FBrowser_V8值_创建函数   [候选]
+来源文件: FBroValue.wsv
+参数表: 函数名 <类型 = 文本型> | 处理回调 <类型 = 类_FBrowser_事件智能指针 注释 = "使用“FBrowser创建事件智能指针”全局方法或者在设置之前用该类型参数中的
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_V8值 :: FBrowser_V8值_创建双精度小数型值   [候选]
+来源文件: FBroValue.wsv
+参数表: 值 <类型 = 小数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_V8值 :: FBrowser_V8值_创建数组值   [候选]
+来源文件: FBroValue.wsv
+参数表: 长度 <类型 = 整数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_V8值 :: FBrowser_V8值_创建数组缓存值   [候选]
+来源文件: FBroValue.wsv
+参数表: 数组指针 <类型 = 变整数> | 数据长度 <类型 = 整数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_V8值 :: FBrowser_V8值_创建整型值   [候选]
+来源文件: FBroValue.wsv
+参数表: 值 <类型 = 整数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_V8值 :: FBrowser_V8值_创建文本值   [候选]
+来源文件: FBroValue.wsv
+参数表: 值 <类型 = 文本型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_V8值 :: FBrowser_V8值_创建无符号整型值   [候选]
+来源文件: FBroValue.wsv
+参数表: 值 <类型 = 整数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_V8值 :: FBrowser_V8值_创建日期值   [候选]
+来源文件: FBroValue.wsv
+参数表: 值 <类型 = FBrowser_时间类型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_V8值 :: FBrowser_V8值_创建未定义类   [候选]
+来源文件: FBroValue.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_V8值 :: FBrowser_V8值_创建空类   [候选]
+来源文件: FBroValue.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_V8值 :: FBrowser_V8值_创建类   [候选]
+来源文件: FBroValue.wsv
+参数表: 存取器回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_V8值 :: FBrowser_V8值_创建逻辑值   [候选]
+来源文件: FBroValue.wsv
+参数表: 值 <类型 = 逻辑型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_V8值 :: 将重新抛出异常   [候选]
+来源文件: FBroValue.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_V8值 :: 执行函数   [候选]
+来源文件: FBroValue.wsv
+参数表: 对象 <类型 = 类_FBrowser_V8值 @默认值 = 空对象> | 参数 <类型 = 类_FBrowser_V8值数组>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_V8值 :: 清理异常   [候选]
+来源文件: FBroValue.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_V8值 :: 调整外部内存大小   [候选]
+来源文件: FBroValue.wsv
+参数表: 调整大小 <类型 = 整数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_浏览器 :: FBrowser_创建后台浏览器   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_浏览器 :: FBrowser_创建后台浏览器_同步   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_get_url(1), browser_get_title(1), browser_evaluate(1), browser_get_source(1), browser_get_text(1), browser_get_frames(1), browser_frame_names(1), browser_dom_query(1), browser_dom_click(1), browser_dom_set_value(1), browser_dom_get_html(1), browser_dom_set_html(1), browser_dom_select(1), browser_console_eval(1)
+
+====================================================================================================
+### 类_FBrowser_浏览器 :: FBrowser_创建浏览器   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    main.wsv:212 FBrowser_创建浏览器 (url, 窗口信息, 浏览器配置, , , 浏览器事件, , )
+字面量命中(1):
+    main.wsv:212 FBrowser_创建浏览器 (url, 窗口信息, 浏览器配置, , , 浏览器事件, , )
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_浏览器 :: FBrowser_创建浏览器_同步   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_get_url(1), browser_get_title(1), browser_evaluate(1), browser_get_source(1), browser_get_text(1), browser_get_frames(1), browser_frame_names(1), browser_dom_query(1), browser_dom_click(1), browser_dom_set_value(1), browser_dom_get_html(1), browser_dom_set_html(1), browser_dom_select(1), browser_console_eval(1)
+
+====================================================================================================
+### 类_FBrowser_浏览器 :: 停止载入   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_Core.wsv:167 browser.停止载入 ()
+字面量命中(1):
+    MCP_Server_Core.wsv:167 browser.停止载入 ()
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_浏览器 :: 可否前进   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(5):
+    MCP_Server_Core.wsv:119 如果 (browser.是否为空 () == 假 && browser.可否前进 ())
+    MCP_Server_Core.wsv:1095 navObj.加入逻辑值成员 ("can_go_forward", browser.可否前进 ())
+    MCP_Server_Core.wsv:3464 状态对象.加入逻辑值成员 ("can_go_forward", browser.可否前进 ())
+    MCP_Server_Core.wsv:5260 info对象.加入逻辑值成员 ("can_go_forward", browser.可否前进 ())
+    MCP_Server_Core.wsv:5852 envNative.加入逻辑值成员 ("can_go_forward", envBrowser.可否前进 ())
+字面量命中(5):
+    MCP_Server_Core.wsv:119 如果 (browser.是否为空 () == 假 && browser.可否前进 ())
+    MCP_Server_Core.wsv:1095 navObj.加入逻辑值成员 ("can_go_forward", browser.可否前进 ())
+    MCP_Server_Core.wsv:3464 状态对象.加入逻辑值成员 ("can_go_forward", browser.可否前进 ())
+    MCP_Server_Core.wsv:5260 info对象.加入逻辑值成员 ("can_go_forward", browser.可否前进 ())
+    MCP_Server_Core.wsv:5852 envNative.加入逻辑值成员 ("can_go_forward", envBrowser.可否前进 ())
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_浏览器 :: 尝试关闭浏览器   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_浏览器 :: 开始下载   [候选]
+来源文件: FBroLib.wsv
+参数表: 地址 <类型 = 文本型 注释 = "url">
+src 直调点(1):
+    MCP_Server_Core.wsv:1266 browser.开始下载 (url)
+字面量命中(1):
+    MCP_Server_Core.wsv:1266 browser.开始下载 (url)
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_浏览器 :: 打开对话框   [候选]
+来源文件: FBroLib.wsv
+参数表: 模式 <类型 = 整数 注释 = "打开模式，参考：文件对话框.xxx，多个类型用：位或运算" @默认值 = 文件对话框.打开> | 标题 <类型 = 文本型 注释 = "打开窗口标题" @默认值 = ""> | 默认文件名 <类型 = 文本型 注释 = "模式为保存时候的默认文件名" @默认值 = ""> | 过滤器 <类型 = FBrowser_文本数组 注释 = "可空,used to restrict the selectable file typ
+src 直调点(0):
+字面量命中(2):
+    MCP_BrowserEvents.wsv:1875 方法 浏览器_JS即将打开对话框 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
+    MCP_BrowserEvents.wsv:1999 方法 浏览器_即将打开对话框 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_浏览器 :: 显示隐藏窗口   [候选]
+来源文件: FBroLib.wsv
+参数表: 显示隐藏 <类型 = 逻辑型 注释 = "为真显示浏览器，为假隐藏浏览器">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_浏览器 :: 清理缓存   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_Core.wsv:5563 browser.清理缓存 (, , , 清理回调)
+字面量命中(6):
+    MCP_BrowserEvents.wsv:1039 // 崩溃恢复: 渲染进程崩溃可能损坏CEF磁盘缓存导致重建后连环崩溃, 写标记文件, 下次启动时自动清理缓存
+    MCP_BrowserEvents.wsv:1055 // 标记写失败时告警, 防下次启动漏清理缓存导致连环崩溃复现
+    MCP_BrowserEvents.wsv:1061 控制台输出 ("[MCP] 警告: 崩溃恢复标记写入失败(" + 恢复标记路径 + "), 重启后可能无法自动清理缓存")
+    MCP_BrowserEvents.wsv:1067 // 重启程序后启动时自动清理缓存, 循环即断
+    MCP_BrowserEvents.wsv:1097 控制台输出 ("[MCP] 120秒内连续崩溃 " + 到文本 (崩溃次数) + " 次, 停止自动重建 | 请重启程序(启动时将自动清理缓存)")
+    MCP_Callbacks.wsv:6 # MCP回调类 — JS异步/字符串/截图/Cookie/DevTools/文件对话框/PDF/任务/VIP/URL/清理缓存/下载图片
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_浏览器 :: 移动窗口   [候选]
+来源文件: FBroLib.wsv
+参数表: 左边 <类型 = 整数> | 顶边 <类型 = 整数> | 宽度 <类型 = 整数> | 高度 <类型 = 整数> | 是否重画 <类型 = 逻辑型 @默认值 = 假>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_浏览器 :: 设置代理   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:2027 浏览器.设置代理 (应用代理, 应用账号, 应用密码)
+    MCP_Server_Core.wsv:1199 vip_ctrl.高级_设置代理 (address, username, password)
+    MCP_Server_Core.wsv:1208 browser.设置代理 (address, username, password)
+    MCP_Server_VIP.wsv:60 vip_ctrl.高级_设置代理 (address, MCP命令服务器.yyjson取文本 (参数JSON, "username"), MCP命令服务器.yyjson取文本 (参数JSON, "password"))
+字面量命中(4):
+    MCP_Server.wsv:2027 浏览器.设置代理 (应用代理, 应用账号, 应用密码)
+    MCP_Server_Core.wsv:1199 vip_ctrl.高级_设置代理 (address, username, password)
+    MCP_Server_Core.wsv:1208 browser.设置代理 (address, username, password)
+    MCP_Server_VIP.wsv:60 vip_ctrl.高级_设置代理 (address, MCP命令服务器.yyjson取文本 (参数JSON, "username"), MCP命令服务器.yyjson取文本 (参数JSON, "password"))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_浏览器 :: 重新载入   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(2):
+    MCP_Server.wsv:6404 参数 导航发起毫秒 <类型 = 长整数 注释 = "本次载入地址()/重新载入()调用前的取启动时间, 用于判序load_end是否属于本次导航" @默认值 = 0 @输出名 = "NavigateStartMs">
+    MCP_Server_Core.wsv:147 browser.重新载入 ()
+字面量命中(4):
+    MCP_Server.wsv:6404 参数 导航发起毫秒 <类型 = 长整数 注释 = "本次载入地址()/重新载入()调用前的取启动时间, 用于判序load_end是否属于本次导航" @默认值 = 0 @输出名 = "NavigateStartMs">
+    MCP_Server_Core.wsv:138 // 记录重载发起时刻(重新载入前), 供注册加载等待任务判序load_end是否属于本次刷新
+    MCP_Server_Core.wsv:143 browser.重新载入_忽略缓存 ()
+    MCP_Server_Core.wsv:147 browser.重新载入 ()
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_浏览器 :: 重新载入_忽略缓存   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_Core.wsv:143 browser.重新载入_忽略缓存 ()
+字面量命中(1):
+    MCP_Server_Core.wsv:143 browser.重新载入_忽略缓存 ()
+相关工具(关键词): browser_reload(1)
+
+====================================================================================================
+### 类_FBrowser_命令行 :: FBrowser_命令行_创建   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_create(1), browser_debugger_set_breakpoint(1), browser_create_url_request(1), browser_get_extra_data(1), browser_reverse_search_script(1)
+
+====================================================================================================
+### 类_FBrowser_命令行 :: FBrowser_命令行_取全局   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1), browser_get_global_cache_dir(1), browser_reverse_runtime(1)
+
+====================================================================================================
+### 类_FBrowser_命令行 :: 启用单进程模式   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_命令行 :: 启用录音   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_命令行 :: 启用摄像头   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_命令行 :: 启用无头模式   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_命令行 :: 启用自动播放   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_命令行 :: 启用跨框架操作模式   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_命令行 :: 忽略GPU禁用清单   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_命令行 :: 插入值   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_命令行 :: 禁用GPU   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_命令行 :: 禁用GPU缓存   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_命令行 :: 禁用代理   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_命令行 :: 设置全局代理   [候选]
+来源文件: FBroLib.wsv
+参数表: 代理地址 <类型 = 文本型 注释 = "要区分大小写，不要有空格，否则地址错误将会设置失败"> | 代理账号 <类型 = 文本型 @默认值 = ""> | 代理密码 <类型 = 文本型 @默认值 = "">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_命令行 :: 设置远程调试端口   [候选]
+来源文件: FBroLib.wsv
+参数表: 端口号 <类型 = 整数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_菜单模式 :: 存在快捷键   [候选]
+来源文件: FBroLib.wsv
+参数表: 命令ID <类型 = 整数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_菜单模式 :: 存在快捷键_索引   [候选]
+来源文件: FBroLib.wsv
+参数表: 索引ID <类型 = 整数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_dom_query(1), browser_dom_select(1), browser_kernel_reverse_sources(1), browser_reverse_extract(1), browser_snapshot(1), browser_element_action(1)
+
+====================================================================================================
+### 类_FBrowser_菜单模式 :: 添加Check菜单   [候选]
+来源文件: FBroLib.wsv
+参数表: 命令ID <类型 = 整数> | 标签名 <类型 = 文本型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_菜单模式 :: 添加Radio菜单   [候选]
+来源文件: FBroLib.wsv
+参数表: 命令ID <类型 = 整数> | 标签名 <类型 = 文本型> | 群ID <类型 = 整数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_菜单模式 :: 添加分隔栏   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_菜单模式 :: 添加子菜单   [候选]
+来源文件: FBroLib.wsv
+参数表: 命令ID <类型 = 整数> | 标签名 <类型 = 文本型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_菜单模式 :: 添加菜单   [候选]
+来源文件: FBroLib.wsv
+参数表: 命令ID <类型 = 整数> | 标签名 <类型 = 文本型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_菜单模式 :: 移除快捷键   [候选]
+来源文件: FBroLib.wsv
+参数表: 命令ID <类型 = 整数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_菜单模式 :: 移除快捷键_索引   [候选]
+来源文件: FBroLib.wsv
+参数表: 索引ID <类型 = 整数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_dom_query(1), browser_dom_select(1), browser_kernel_reverse_sources(1), browser_reverse_extract(1), browser_snapshot(1), browser_element_action(1)
+
+====================================================================================================
+### 类_FBrowser_菜单模式 :: 设置快捷键   [候选]
+来源文件: FBroLib.wsv
+参数表: 命令ID <类型 = 整数> | 键代码 <类型 = 整数 注释 = "key_code"> | 是否按下shift <类型 = 逻辑型 注释 = "shift_pressed" @默认值 = 假> | 是否按下ctrl <类型 = 逻辑型 注释 = "ctrl_pressed" @默认值 = 假> | 是否按下alt <类型 = 逻辑型 注释 = "alt_pressed" @默认值 = 假>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_菜单模式 :: 设置快捷键_索引   [候选]
+来源文件: FBroLib.wsv
+参数表: 索引ID <类型 = 整数> | 键代码 <类型 = 整数 注释 = "key_code"> | 是否按下shift <类型 = 逻辑型 注释 = "shift_pressed" @默认值 = 假> | 是否按下ctrl <类型 = 逻辑型 注释 = "ctrl_pressed" @默认值 = 假> | 是否按下alt <类型 = 逻辑型 注释 = "alt_pressed" @默认值 = 假>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_dom_query(1), browser_dom_select(1), browser_kernel_reverse_sources(1), browser_reverse_extract(1), browser_snapshot(1), browser_element_action(1)
+
+====================================================================================================
+### 类_FBrowser_菜单模式 :: 选中状态   [候选]
+来源文件: FBroLib.wsv
+参数表: 命令ID <类型 = 整数> | 选中 <类型 = 逻辑型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_菜单模式 :: 选中状态_索引   [候选]
+来源文件: FBroLib.wsv
+参数表: 索引ID <类型 = 整数> | 选中 <类型 = 逻辑型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_dom_query(1), browser_dom_select(1), browser_kernel_reverse_sources(1), browser_reverse_extract(1), browser_snapshot(1), browser_element_action(1)
+
+====================================================================================================
+### 类_FBrowser_服务器事件 :: 收到HTTP请求   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 服务器 <类型 = 类_FBrowser_服务器> | 连接ID <类型 = 整数> | 客户端地址 <类型 = 文本型> | 请求 <类型 = 类_FBrowser_请求>
+src 直调点(0):
+字面量命中(1):
+    MCP_Server_HTTP.wsv:40 方法 收到HTTP请求 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_服务器事件 :: 收到WebSocket消息   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 服务器 <类型 = 类_FBrowser_服务器> | 连接ID <类型 = 整数> | 数据指针 <类型 = 变整数 注释 = "注意数据转码,这里是UTF8编码"> | 数据长度 <类型 = 整数>
+src 直调点(0):
+字面量命中(1):
+    MCP_Server_HTTP.wsv:325 方法 收到WebSocket消息 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_服务器事件 :: 收到WebSocket请求   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 服务器 <类型 = 类_FBrowser_服务器> | 连接ID <类型 = 整数> | 客户端地址 <类型 = 文本型> | 请求 <类型 = 类_FBrowser_请求> | 回调 <类型 = 类_FBrowser_回调>
+src 直调点(0):
+字面量命中(1):
+    MCP_Server_HTTP.wsv:296 方法 收到WebSocket请求 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_服务器事件 :: 收到WebSocket连接   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 服务器 <类型 = 类_FBrowser_服务器> | 连接ID <类型 = 整数>
+src 直调点(0):
+字面量命中(1):
+    MCP_Server_HTTP.wsv:319 方法 收到WebSocket连接 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_服务器事件 :: 收到客户端断开连接   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 服务器 <类型 = 类_FBrowser_服务器> | 连接ID <类型 = 整数>
+src 直调点(0):
+字面量命中(1):
+    MCP_Server_HTTP.wsv:36 方法 收到客户端断开连接 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_服务器事件 :: 收到客户端连接   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 服务器 <类型 = 类_FBrowser_服务器> | 连接ID <类型 = 整数>
+src 直调点(0):
+字面量命中(1):
+    MCP_Server_HTTP.wsv:33 方法 收到客户端连接 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_服务器事件 :: 类_初始化   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_服务器事件 :: 类_清理   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### FBrowserVIP全局功能 :: FBrowser_VIP功能_启用插件高级功能   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowserVIP全局功能 :: FBrowser_VIP过滤器_修改内容   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowserVIP全局功能 :: FBrowser_VIP过滤器_取消修改内容   [候选]
+来源文件: FBroVip.wsv
+参数表: 目标地址 <类型 = 文本型 注释 = "和之前设置的目标地址一一对应">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowserVIP全局功能 :: FBrowser_VIP过滤器_取消全部修改内容   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowserVIP全局功能 :: FBrowser_VIP过滤器_取消全部替换资源   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowserVIP全局功能 :: FBrowser_VIP过滤器_取消替换资源   [候选]
+来源文件: FBroVip.wsv
+参数表: 目标地址 <类型 = 文本型 注释 = "和之前设置的目标地址一一对应">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### FBrowserVIP全局功能 :: FBrowser_VIP过滤器_替换资源_数据   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_meta(1), browser_extract(1), browser_intercept(1), browser_debugger_set_breakpoint(1), browser_send_message(1), browser_ipc_send_all(1), browser_ipc_send_to(1), browser_fingerprint_plugins(1), browser_get_extra_data(1), browser_fingerprint_ua(1), browser_reverse_preset(1), browser_reverse_trace(1), browser_reverse_evaluate_silent(1)
+
+====================================================================================================
+### FBrowserVIP全局功能 :: FBrowser_VIP过滤器_替换资源_文件   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_execute_js(1), browser_evaluate(1), browser_print_to_pdf(1), browser_intercept(1), browser_debugger_set_breakpoint(1), browser_file_dialog(1), workflow_run(1), browser_kernel_scheme(1), browser_reverse_preload(1)
+
+====================================================================================================
+### 类_FBrowser_URL请求事件 :: 上传进度   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_URL请求事件 :: 即将完成   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 标识 <类型 = 长整数> | URL请求 <类型 = 类_FBrowser_URL请求>
+src 直调点(0):
+字面量命中(3):
+    MCP_Callbacks.wsv:587 方法 即将完成打印 <公开 @虚拟方法 = 可覆盖>
+    MCP_Callbacks.wsv:770 // End 先于 OnRequestComplete 或未触发即将完成时, 避免 task 永久无结果
+    MCP_Callbacks.wsv:779 方法 即将完成 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_URL请求事件 :: 开始创建   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 标识 <类型 = 长整数> | URL请求 <类型 = 类_FBrowser_URL请求>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_URL请求事件 :: 类_初始化   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_URL请求事件 :: 类_清理   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_URL请求事件 :: 获取到数据   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(1):
+    MCP_Callbacks.wsv:739 方法 获取到数据 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_URL请求事件 :: 读取结束   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 标识 <类型 = 长整数>
+src 直调点(0):
+字面量命中(1):
+    MCP_Callbacks.wsv:766 方法 读取结束 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_任务运行器 :: FBrowser_任务运行器_取当前   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_get_url(1), browser_get_zoom(1), browser_get_id(1), browser_debugger_stack(1), browser_debugger_set_breakpoint(1), browser_get_process_type(1)
+
+====================================================================================================
+### 类_FBrowser_任务运行器 :: FBrowser_任务运行器_取指定线程   [候选]
+来源文件: FBroLib.wsv
+参数表: 线程ID <类型 = 整数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_任务运行器 :: FBrowser_任务运行器_投递任务   [候选]
+来源文件: FBroLib.wsv
+参数表: 线程ID <类型 = 整数 注释 = "参考：线程ID.xxx"> | 任务执行回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_任务运行器 :: FBrowser_任务运行器_投递任务_延迟   [候选]
+来源文件: FBroLib.wsv
+参数表: 线程ID <类型 = 整数 注释 = "参考：线程ID.xxx"> | 延迟时间 <类型 = 长整数 注释 = "ms"> | 任务执行回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_shutdown(1), browser_debugger_set_breakpoint(1), browser_highlight(1), browser_reverse_network_conditions(1)
+
+====================================================================================================
+### 类_FBrowser_任务运行器 :: FBrowser_任务运行器_是否指定线程上调用   [候选]
+来源文件: FBroLib.wsv
+参数表: 线程ID <类型 = 整数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_任务运行器 :: 投递任务   [候选]
+来源文件: FBroLib.wsv
+参数表: 任务执行回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_任务运行器 :: 投递延时任务   [候选]
+来源文件: FBroLib.wsv
+参数表: 延时 <类型 = 长整数 注释 = "ms"> | 任务执行回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_V8拦截器 :: 类_初始化   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_V8拦截器 :: 类_清理   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_V8拦截器 :: 获取_名   [候选]
+来源文件: FBroCallback.wsv
+参数表: 标识ID <类型 = 长整数> | 名 <类型 = 文本型> | 对象 <类型 = 类_FBrowser_V8值> | 设置返回值 <类型 = 类_FBrowser_设置V8值 注释 = "设置对象返回值"> | 返回异常文本 <类型 = FBrowser_文本 注释 = "设置异常返回文本">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_get_title(1), browser_get_source(1), browser_get_text(1), browser_get_cookies(1), browser_cache_dir(1), browser_get_focused_frame(1), browser_get_window_handle(1), browser_dom_get_html(1), browser_dom_rect(1), browser_dom_inner_html(1), browser_dom_checked(1), browser_dom_selected(1), browser_network_body(1), browser_get_window_title(1)
+
+====================================================================================================
+### 类_FBrowser_V8拦截器 :: 获取_索引   [候选]
+来源文件: FBroCallback.wsv
+参数表: 标识ID <类型 = 长整数> | 索引 <类型 = 整数> | 对象 <类型 = 类_FBrowser_V8值> | 设置返回值 <类型 = 类_FBrowser_设置V8值 注释 = "设置对象返回值"> | 返回异常文本 <类型 = FBrowser_文本 注释 = "设置异常返回文本">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_get_title(1), browser_get_source(1), browser_get_text(1), browser_get_cookies(1), browser_cache_dir(1), browser_get_focused_frame(1), browser_get_window_handle(1), browser_dom_query(1), browser_dom_get_html(1), browser_dom_rect(1), browser_dom_inner_html(1), browser_dom_checked(1), browser_dom_selected(1), browser_dom_select(1)
+
+====================================================================================================
+### 类_FBrowser_V8拦截器 :: 设置_名   [候选]
+来源文件: FBroCallback.wsv
+参数表: 标识ID <类型 = 长整数> | 名 <类型 = 文本型> | 对象 <类型 = 类_FBrowser_V8值> | 值 <类型 = 类_FBrowser_V8值> | 返回异常文本 <类型 = FBrowser_文本 注释 = "设置异常返回文本">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_set_zoom(1), browser_set_cookie(1), browser_set_mute(1), browser_set_proxy(1), browser_set_focus(1), browser_dom_set_value(1), browser_dom_set_html(1), browser_dom_select(1), browser_set_parent(1), browser_fill_set_value(1), browser_fill_attr_set(1), browser_fill_select(1), browser_set_s5_proxy(1), browser_vip_clear_s5_proxy(1)
+
+====================================================================================================
+### 类_FBrowser_V8拦截器 :: 设置_索引   [候选]
+来源文件: FBroCallback.wsv
+参数表: 标识ID <类型 = 长整数> | 索引 <类型 = 整数> | 对象 <类型 = 类_FBrowser_V8值> | 值 <类型 = 类_FBrowser_V8值> | 返回异常文本 <类型 = FBrowser_文本 注释 = "设置异常返回文本">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_dom_select(2), browser_set_zoom(1), browser_set_cookie(1), browser_set_mute(1), browser_set_proxy(1), browser_set_focus(1), browser_dom_query(1), browser_dom_set_value(1), browser_dom_set_html(1), browser_set_parent(1), browser_fill_set_value(1), browser_fill_attr_set(1), browser_fill_select(1), browser_kernel_reverse_sources(1)
+
+====================================================================================================
+### FBrowser类辅助 :: FBrowser创建类指针   [候选]
+来源文件: FBroLib.wsv
+参数表: 数据类型 <类型 = 对象类 注释 = "需要创建的指针类型" @需求类型 = 数据类型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser类辅助 :: FBrowser取执行类   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser类辅助 :: FBrowser设置类   [候选]
+来源文件: FBroLib.wsv
+参数表: 类指针 <类型 = 变整数 注释 = "类指针"> | 值指针 <类型 = 对象类 注释 = "要设置的值"> | 数据类型 <类型 = 对象类 注释 = "需要设置指针值类型" @需求类型 = 数据类型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser类辅助 :: FBrowser释放当前类   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser类辅助 :: FBrowser释放类   [候选]
+来源文件: FBroLib.wsv
+参数表: 类指针 <类型 = 变整数 注释 = "类指针"> | 数据类型 <类型 = 对象类 注释 = "需要释放的指针值类型" @需求类型 = 数据类型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_开发者DOM :: 枚举DOM   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_VIP.wsv:1442 vipDom.枚举DOM (dDepth, 假, DOM回调)
+字面量命中(2):
+    MCP_Callbacks.wsv:610 # VIP通用回调 — 用于高级_执行JS/枚举DOM/预查找文本等VIP异步操作
+    MCP_Server_VIP.wsv:1442 vipDom.枚举DOM (dDepth, 假, DOM回调)
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_开发者DOM :: 清除查找   [候选]
+来源文件: FBroVip.wsv
+参数表: 查找ID <类型 = 文本型 注释 = "searchId">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_开发者DOM :: 移除节点   [候选]
+来源文件: FBroVip.wsv
+参数表: 节点ID <类型 = 整数 注释 = "nodeID">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_开发者DOM :: 移除节点属性   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_开发者DOM :: 预查找文本   [候选]
+来源文件: FBroVip.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_VIP.wsv:1476 vipDom2.预查找文本 (searchQuery, 假, 预查回调)
+字面量命中(2):
+    MCP_Callbacks.wsv:610 # VIP通用回调 — 用于高级_执行JS/枚举DOM/预查找文本等VIP异步操作
+    MCP_Server_VIP.wsv:1476 vipDom2.预查找文本 (searchQuery, 假, 预查回调)
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_通用回调 :: 列表数据回调   [候选]
+来源文件: FBroCallback.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器> | 标识ID <类型 = 整数> | 成功 <类型 = 逻辑型> | 列表值 <类型 = 类_FBrowser_列表值>
+src 直调点(0):
+字面量命中(1):
+    MCP_Callbacks.wsv:648 方法 列表数据回调 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_通用回调 :: 数据回调   [候选]
+来源文件: FBroCallback.wsv
+参数表: 浏览器 <类型 = 类_FBrowser_浏览器> | 标识ID <类型 = 整数> | 成功 <类型 = 逻辑型> | 数据指针 <类型 = 变整数> | 数据大小 <类型 = 整数>
+src 直调点(0):
+字面量命中(3):
+    MCP_Callbacks.wsv:395 方法 数据回调 <公开 @虚拟方法 = 可覆盖>
+    MCP_Callbacks.wsv:617 方法 数据回调 <公开 @虚拟方法 = 可覆盖>
+    MCP_Callbacks.wsv:648 方法 列表数据回调 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowserVIP_通用回调 :: 类_初始化   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowserVIP_通用回调 :: 类_清理   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_JS交互事件 :: 即将取消查询   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_JS交互事件 :: 即将查询   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_JS交互事件 :: 类_初始化   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_JS交互事件 :: 类_清理   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_资源过滤器 :: 修改数据   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 标识ID <类型 = 长整数> | 输入指针 <类型 = 变整数 注释 = "传入数据指针"> | 输入大小 <类型 = 整数 注释 = "传入数据大小"> | 输入读取大小 <类型 = 整数类 注释 = "传入数据回写大小，用作告诉来源已经接纳了多少数据"> | 输出指针 <类型 = 变整数 注释 = "写回数据输出指针，写回后浏览器接收显示相应的数据"> | 输出大小 <类型 = 整数 注释 = "写回数据缓存能容纳数据的最大值，输出数据都不能大于此值，否则浏览器崩溃，如大于必须做分包处理"> | 输出写入大小 <类型 = 整数类 注释 = "写回数据会写大小，用作告诉浏览器我写入了多少数据">
+src 直调点(0):
+字面量命中(3):
+    MCP_Callbacks.wsv:925 方法 修改数据 <公开 类型 = 整数 @虚拟方法 = 可覆盖>
+    MCP_Callbacks.wsv:1081 # 修改数据: 统一文本通道; 遵守CEF契约 — 输入大小==0(EOF)时必须返回完成
+    MCP_Callbacks.wsv:1082 方法 修改数据 <公开 类型 = 整数 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_资源过滤器 :: 类_初始化   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_资源过滤器 :: 类_清理   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_资源过滤器 :: 获取数据   [候选]
+来源文件: FBroEventControl.wsv
+参数表: 标识ID <类型 = 长整数> | 数据指针 <类型 = 变整数 注释 = "传递过来的数据指针,数据类型为UTF8"> | 数据大小 <类型 = 整数 注释 = "当前数据大小">
+src 直调点(0):
+字面量命中(3):
+    MCP_Callbacks.wsv:907 方法 获取数据 <公开 @虚拟方法 = 可覆盖>
+    MCP_Callbacks.wsv:990 # 获取数据: 与类_MCP_缓存过滤器同形 (原始数据累积, 保证框架数据通道一致)
+    MCP_Callbacks.wsv:991 方法 获取数据 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_下载图片回调 :: 图片下载完成   [候选]
+来源文件: FBroCallback.wsv
+参数表: 图片链接 <类型 = 文本型> | 状态码 <类型 = 整数> | 图片 <类型 = 类_FBrowser_图片>
+src 直调点(0):
+字面量命中(1):
+    MCP_Callbacks.wsv:857 方法 图片下载完成 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_下载图片回调 :: 类_初始化   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_下载图片回调 :: 类_清理   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_打开文件对话框回调 :: 即将关闭文件对话框   [候选]
+来源文件: FBroCallback.wsv
+参数表: 文件路径 <类型 = 文本型 注释 = "多个以\";\"隔开">
+src 直调点(0):
+字面量命中(1):
+    MCP_Callbacks.wsv:557 方法 即将关闭文件对话框 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_打开文件对话框回调 :: 类_初始化   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_打开文件对话框回调 :: 类_清理   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_打印为PDF回调 :: 即将完成打印   [候选]
+来源文件: FBroCallback.wsv
+参数表: 路径 <类型 = 文本型> | 是否成功 <类型 = 逻辑型>
+src 直调点(0):
+字面量命中(1):
+    MCP_Callbacks.wsv:587 方法 即将完成打印 <公开 @虚拟方法 = 可覆盖>
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_打印为PDF回调 :: 类_初始化   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_打印为PDF回调 :: 类_清理   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### FBrowser_双文本数组 :: 到下一个   [候选]
+来源文件: FBroDataType.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+字面量命中(5):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:9917 # 实现: 在 工具列表缓存 里按 `{"name":"<tool>",` 定位, 到下一个 `},{"name":"` 或数组末尾为止。
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser_双文本数组 :: 到数组首   [候选]
+来源文件: FBroDataType.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+字面量命中(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser_双文本数组 :: 查找数据   [候选]
+来源文件: FBroDataType.wsv
+参数表: 关键字 <类型 = 文本型>
+src 直调点(0):
+字面量命中(6):
+    MCP_BrowserEvents.wsv:2137 变量 查找数据 <类型 = YYJSON对象类>
+    MCP_BrowserEvents.wsv:2139 查找数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv:2141 查找数据.加入整数成员 ("find_id", ID)
+    MCP_BrowserEvents.wsv:2143 查找数据.加入整数成员 ("match_count", 数量)
+    MCP_BrowserEvents.wsv:2145 查找数据.加入整数成员 ("active_match", 顺序)
+    MCP_BrowserEvents.wsv:2147 查找数据.加入逻辑值成员 ("final_update", 最后更新)
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser_文本数组 :: 到下一个   [候选]
+来源文件: FBroDataType.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+字面量命中(5):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:9917 # 实现: 在 工具列表缓存 里按 `{"name":"<tool>",` 定位, 到下一个 `},{"name":"` 或数组末尾为止。
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser_文本数组 :: 到数组首   [候选]
+来源文件: FBroDataType.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+字面量命中(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser_文本数组 :: 到火山文本数组   [候选]
+来源文件: FBroDataType.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_框架 :: 访问DOM对象   [候选]
+来源文件: FBroLib.wsv
+参数表: DOM回调 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_框架 :: 载入地址   [候选]
+来源文件: FBroLib.wsv
+参数表: 地址 <类型 = 文本型>
+src 直调点(6):
+    MCP_BrowserEvents.wsv:1285 框架.载入地址 (重定向目标)
+    MCP_Server.wsv:198 frame.载入地址 (欢迎地址)
+    MCP_Server.wsv:3851 navFrame.载入地址 (navUrl)
+    MCP_Server.wsv:6404 参数 导航发起毫秒 <类型 = 长整数 注释 = "本次载入地址()/重新载入()调用前的取启动时间, 用于判序load_end是否属于本次导航" @默认值 = 0 @输出名 = "NavigateStartMs">
+    MCP_Server.wsv:6425 // 防竞态补查: 载入地址()后OnLoadEnd可能先于本注册完成(快速缓存页), 若页面已加载完立即写完成结果
+    MCP_Server.wsv:6426 // 修复(同步等待提前返回根因): 原条件"未在加载"会在载入地址()已发出而OnLoadStart尚未到达时误判,
+字面量命中(6):
+    MCP_BrowserEvents.wsv:1285 框架.载入地址 (重定向目标)
+    MCP_Server.wsv:87 变量 欢迎页导航已发起 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "已调用载入地址, 等待load_end确认" @输出名 = "WelcomePageNavigateStarted">
+    MCP_Server.wsv:198 frame.载入地址 (欢迎地址)
+    MCP_Server.wsv:3851 navFrame.载入地址 (navUrl)
+    MCP_Server.wsv:6404 参数 导航发起毫秒 <类型 = 长整数 注释 = "本次载入地址()/重新载入()调用前的取启动时间, 用于判序load_end是否属于本次导航" @默认值 = 0 @输出名 = "NavigateStartMs">
+    MCP_Server.wsv:6425 // 防竞态补查: 载入地址()后OnLoadEnd可能先于本注册完成(快速缓存页), 若页面已加载完立即写完成结果
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_框架 :: 载入请求   [候选]
+来源文件: FBroLib.wsv
+参数表: 请求 <类型 = 类_FBrowser_请求>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_请求 :: 获取地址_首件cookie   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_请求 :: 设置地址_首件cookie   [候选]
+来源文件: FBroLib.wsv
+参数表: 地址 <类型 = 文本型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_请求 :: 设置标识   [候选]
+来源文件: FBroLib.wsv
+参数表: 标识 <类型 = 整数 注释 = "参考：请求标识.xxx">
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_POST数据 :: 增加元素   [候选]
+来源文件: FBroLib.wsv
+参数表: POST元素 <类型 = 类_FBrowser_POST元素>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_POST数据 :: 移除元素   [候选]
+来源文件: FBroLib.wsv
+参数表: POST元素 <类型 = 类_FBrowser_POST元素>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_POST数据 :: 移除所有元素   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_V8环境 :: FBrowser_V8_注册JS扩展   [候选]
+来源文件: FBroLib.wsv
+参数表: 扩展名 <类型 = 文本型> | 扩展JS代码 <类型 = 文本型> | 处理回调事件 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法
+src 直调点(0):
+字面量命中(1):
+    MCP_Server_Core.wsv:2736 // 持久handler模式: 存入持久V8扩展列表, 由 渲染_即将初始化WebKit → FBrowser_V8_注册JS扩展 自动注入
+相关工具(关键词): browser_compress_memory(1), browser_inject(1), browser_debugger_set_breakpoint(1), browser_vip_set_v8_version(1), browser_reverse_hook(1), browser_reverse_instrument_script(1), browser_reverse_blackbox(1), browser_reverse_async_stack(1), browser_reverse_precise_coverage(1), browser_reverse_patch(1), browser_reverse_search_script(1), browser_reverse_trace(1)
+
+====================================================================================================
+### 类_FBrowser_V8环境 :: FBrowser_V8环境_取当前环境   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_V8环境 :: FBrowser_V8环境_取运行环境   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_同步辅助类 :: 停止等待   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_同步辅助类 :: 添加字节集   [候选]
+来源文件: FBroLib.wsv
+参数表: 数据 <类型 = 字节集类>
+src 直调点(6):
+    MCP_Callbacks.wsv:758 响应数据.添加字节集 (数据)
+    MCP_Callbacks.wsv:922 添加字节集 (数据缓存, 指针到字节集 (数据指针, 数据大小))
+    MCP_Callbacks.wsv:998 添加字节集 (原始数据缓存, 指针到字节集 (数据指针, 数据大小))
+    MCP_Callbacks.wsv:1172 添加字节集 (行合并字节, 尾部字节)
+    MCP_Callbacks.wsv:1173 添加字节集 (行合并字节, 行新字节)
+    MCP_Callbacks.wsv:1182 添加字节集 (尾部字节, 指针到字节集 (取字节集指针 (行合并字节) + (行合并总长 - 3), 3))
+字面量命中(6):
+    MCP_Callbacks.wsv:758 响应数据.添加字节集 (数据)
+    MCP_Callbacks.wsv:922 添加字节集 (数据缓存, 指针到字节集 (数据指针, 数据大小))
+    MCP_Callbacks.wsv:998 添加字节集 (原始数据缓存, 指针到字节集 (数据指针, 数据大小))
+    MCP_Callbacks.wsv:1172 添加字节集 (行合并字节, 尾部字节)
+    MCP_Callbacks.wsv:1173 添加字节集 (行合并字节, 行新字节)
+    MCP_Callbacks.wsv:1182 添加字节集 (尾部字节, 指针到字节集 (取字节集指针 (行合并字节) + (行合并总长 - 3), 3))
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_同步辅助类 :: 清理数据   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_Core.wsv:2000 vip_ctrl.清理数据 ()
+字面量命中(2):
+    MCP_Server_Core.wsv:2000 vip_ctrl.清理数据 ()
+    MCP_Server_VIP.wsv:389 // 类库无单项复位API(仅 清理数据 为全量清除): 传空文本交回库内部默认
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_值转换 :: FBrowser_字节集到字节集   [候选]
+来源文件: FBroValue.wsv
+参数表: 字节集 <类型 = 字节集类>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_值转换 :: FBrowser_数据到字节集   [候选]
+来源文件: FBroValue.wsv
+参数表: 数据指针 <类型 = 变整数> | 数据大小 <类型 = 整数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_值转换 :: FBrowser_文本到字节集   [候选]
+来源文件: FBroValue.wsv
+参数表: 文本 <类型 = 文本型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_字符串回调 :: 类_初始化   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_字符串回调 :: 类_清理   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_JS回调 :: 类_初始化   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_JS回调 :: 类_清理   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_DOM回调 :: 类_初始化   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_DOM回调 :: 类_清理   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_任务回调 :: 类_初始化   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_任务回调 :: 类_清理   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_Cookie回调 :: 类_初始化   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_Cookie回调 :: 类_清理   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_V8处理程序 :: 类_初始化   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_V8处理程序 :: 类_清理   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_V8存取器 :: 类_初始化   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_V8存取器 :: 类_清理   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_清理缓存回调 :: 类_初始化   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_清理缓存回调 :: 类_清理   [候选]
+来源文件: FBroCallback.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### FBrowser_矩形位置数组 :: 到下一个   [候选]
+来源文件: FBroDataType.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+字面量命中(5):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:9917 # 实现: 在 工具列表缓存 里按 `{"name":"<tool>",` 定位, 到下一个 `},{"name":"` 或数组末尾为止。
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser_矩形位置数组 :: 到数组首   [候选]
+来源文件: FBroDataType.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+字面量命中(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser_拖拽位置数组 :: 到下一个   [候选]
+来源文件: FBroDataType.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+字面量命中(5):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:9917 # 实现: 在 工具列表缓存 里按 `{"name":"<tool>",` 定位, 到下一个 `},{"name":"` 或数组末尾为止。
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser_拖拽位置数组 :: 到数组首   [候选]
+来源文件: FBroDataType.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+字面量命中(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser_下划线组成数组 :: 到下一个   [候选]
+来源文件: FBroDataType.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+字面量命中(5):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:9917 # 实现: 在 工具列表缓存 里按 `{"name":"<tool>",` 定位, 到下一个 `},{"name":"` 或数组末尾为止。
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+相关工具(关键词): 
+
+====================================================================================================
+### FBrowser_下划线组成数组 :: 到数组首   [候选]
+来源文件: FBroDataType.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+字面量命中(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_浏览器事件 :: 类_初始化   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_浏览器事件 :: 类_清理   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_资源处理器 :: 类_初始化   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_资源处理器 :: 类_清理   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_开发者消息事件 :: 类_初始化   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_inject(1)
+
+====================================================================================================
+### 类_FBrowser_开发者消息事件 :: 类_清理   [候选]
+来源文件: FBroEventControl.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_clear_cache(1), browser_clear_cache_browser(1), browser_kernel_scheme(1)
+
+====================================================================================================
+### 类_FBrowser_Cookie管理器 :: FBrowser_Cookie管理器_取全局   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(6):
+    MCP_Server_Core.wsv:877 FBrowser_Cookie管理器_取全局 ().取地址Cookie (urlFrame.取地址 (), 真, Cookie回调)
+    MCP_Server_Core.wsv:1050 FBrowser_Cookie管理器_取全局 ().置Cookie ("http://" + urlDomain, Cookie数据)
+    MCP_Server_Core.wsv:1061 FBrowser_Cookie管理器_取全局 ().删除Cookie ("", "")
+    MCP_Server_Core.wsv:5822 FBrowser_Cookie管理器_取全局 ().取地址Cookie (caUrl, 真, caCookieCB)
+    MCP_Server_VIP.wsv:1253 FBrowser_Cookie管理器_取全局 ().刷新Cookie ()
+    MCP_Server_VIP.wsv:1263 FBrowser_Cookie管理器_取全局 ().取全部Cookie (Cookie回调)
+字面量命中(6):
+    MCP_Server_Core.wsv:877 FBrowser_Cookie管理器_取全局 ().取地址Cookie (urlFrame.取地址 (), 真, Cookie回调)
+    MCP_Server_Core.wsv:1050 FBrowser_Cookie管理器_取全局 ().置Cookie ("http://" + urlDomain, Cookie数据)
+    MCP_Server_Core.wsv:1061 FBrowser_Cookie管理器_取全局 ().删除Cookie ("", "")
+    MCP_Server_Core.wsv:5822 FBrowser_Cookie管理器_取全局 ().取地址Cookie (caUrl, 真, caCookieCB)
+    MCP_Server_VIP.wsv:1253 FBrowser_Cookie管理器_取全局 ().刷新Cookie ()
+    MCP_Server_VIP.wsv:1263 FBrowser_Cookie管理器_取全局 ().取全部Cookie (Cookie回调)
+相关工具(关键词): browser_debugger_set_breakpoint(1), browser_get_global_cache_dir(1), browser_reverse_runtime(1)
+
+====================================================================================================
+### 类_FBrowser_Cookie管理器 :: 刷新Cookie   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    MCP_Server_VIP.wsv:1253 FBrowser_Cookie管理器_取全局 ().刷新Cookie ()
+字面量命中(1):
+    MCP_Server_VIP.wsv:1253 FBrowser_Cookie管理器_取全局 ().刷新Cookie ()
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_服务器 :: FBrowser_服务器_创建   [候选]
+来源文件: FBroLib.wsv
+参数表: 地址 <类型 = 文本型> | 端口 <类型 = 整数> | 最大连接数 <类型 = 整数> | 服务处理事件 <类型 = 类_FBrowser_事件智能指针 注释 = "异步获取数据或者触发响应事件的回调，数据反馈或者事件响应会触发回调中对应的方法
+src 直调点(2):
+    MCP_Server.wsv:90 变量 HTTP服务已尝试 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "已调用过 FBrowser_服务器_创建 (成败由事件回填)" @输出名 = "HTTPServiceAttempted">
+    MCP_Server.wsv:8121 FBrowser_服务器_创建 (服务器绑定地址, 服务器端口, 100, 服务器事件)
+字面量命中(5):
+    MCP_Server.wsv:90 变量 HTTP服务已尝试 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "已调用过 FBrowser_服务器_创建 (成败由事件回填)" @输出名 = "HTTPServiceAttempted">
+    MCP_Server.wsv:8106 // FBrowser_服务器_创建, 却照样输出"服务器已启动"+HTTP地址、照样写 mcp_connect.json、
+    MCP_Server.wsv:8108 // 且 FBrowser_服务器_创建 返回 void(内部丢弃 FBroHsServer_CreateServer 结果),
+    MCP_Server.wsv:8121 FBrowser_服务器_创建 (服务器绑定地址, 服务器端口, 100, 服务器事件)
+    MCP_Server_HTTP.wsv:12 // FBrowser_服务器_创建 返回 void, SDK 丢弃 FBroHsServer_CreateServer
+相关工具(关键词): browser_create(1), browser_debugger_set_breakpoint(1), browser_create_url_request(1), mcp_status(1), browser_get_extra_data(1), browser_reverse_search_script(1)
+
+====================================================================================================
+### 类_FBrowser_服务器 :: 关闭连接   [候选]
+来源文件: FBroLib.wsv
+参数表: 连接ID <类型 = 整数>
+src 直调点(0):
+字面量命中(1):
+    MCP_Server.wsv:4326 // 修复(竞态): 关闭前取异步缓存锁, 防止CEF回调线程/在途HTTP线程在关闭窗口内并发访问已关闭连接
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_读取流 :: FBrowser_读取流_从数据创建   [候选]
+来源文件: FBroLib.wsv
+参数表: 数据指针 <类型 = 变整数> | 数据大小 <类型 = 整数>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_读取流 :: FBrowser_读取流_从文件创建   [候选]
+来源文件: FBroLib.wsv
+参数表: 文件名 <类型 = 文本型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1)
+
+====================================================================================================
+### 类_FBrowser_字节集数组 :: 到下一个   [候选]
+来源文件: FBroValue.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+字面量命中(5):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:9917 # 实现: 在 工具列表缓存 里按 `{"name":"<tool>",` 定位, 到下一个 `},{"name":"` 或数组末尾为止。
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_字节集数组 :: 到数组首   [候选]
+来源文件: FBroValue.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+字面量命中(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_POST元素数组 :: 到下一个   [候选]
+来源文件: FBroValue.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+字面量命中(5):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:9917 # 实现: 在 工具列表缓存 里按 `{"name":"<tool>",` 定位, 到下一个 `},{"name":"` 或数组末尾为止。
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_POST元素数组 :: 到数组首   [候选]
+来源文件: FBroValue.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+字面量命中(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_X509证书数组 :: 到下一个   [候选]
+来源文件: FBroValue.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+字面量命中(5):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:9917 # 实现: 在 工具列表缓存 里按 `{"name":"<tool>",` 定位, 到下一个 `},{"name":"` 或数组末尾为止。
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_X509证书数组 :: 到数组首   [候选]
+来源文件: FBroValue.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+字面量命中(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_V8值数组 :: 到下一个   [候选]
+来源文件: FBroValue.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+字面量命中(5):
+    MCP_Server.wsv:7400 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:7444 继续循环 = post成员数组.到下一个 ()
+    MCP_Server.wsv:7497 继续 = 头数组.到下一个 ()
+    MCP_Server.wsv:9917 # 实现: 在 工具列表缓存 里按 `{"name":"<tool>",` 定位, 到下一个 `},{"name":"` 或数组末尾为止。
+    MCP_Server.wsv:10694 元素数组.到下一个 ()
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_V8值数组 :: 到数组首   [候选]
+来源文件: FBroValue.wsv
+参数表: (无参数)
+src 直调点(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+字面量命中(4):
+    MCP_Server.wsv:7390 头数组.到数组首 ()
+    MCP_Server.wsv:7420 post成员数组.到数组首 ()
+    MCP_Server.wsv:7487 头数组.到数组首 ()
+    MCP_Server.wsv:10669 元素数组.到数组首 ()
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_事件智能指针 :: FBrowser创建事件智能指针   [候选]
+来源文件: FBroLib.wsv
+参数表: 数据类型 <类型 = 对象类 注释 = "需要创建的指针类型，必须是继承事件或者回调的类，否则会出错" @需求类型 = 数据类型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_请求环境 :: FBrowser_请求环境_取全局   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): browser_debugger_set_breakpoint(1), browser_request_context(1), browser_get_global_cache_dir(1), browser_reverse_runtime(1)
+
+====================================================================================================
+### 类_FBrowser_方案注册 :: 添加自定义方案   [候选]
+来源文件: FBroLib.wsv
+参数表: (无参数)
+src 直调点(1):
+    main.wsv:327 方案.添加自定义方案 ("mcp", 1)
+字面量命中(1):
+    main.wsv:327 方案.添加自定义方案 ("mcp", 1)
+相关工具(关键词): 
+
+====================================================================================================
+### 类_FBrowser_拖拽数据 :: 增加文件   [候选]
+来源文件: FBroValue.wsv
+参数表: 文件路径 <类型 = 文本型> | 显示名 <类型 = 文本型>
+src 直调点(0):
+字面量命中(0):
+相关工具(关键词): 

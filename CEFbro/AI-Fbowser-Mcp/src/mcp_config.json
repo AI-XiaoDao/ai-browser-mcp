@@ -9,5 +9,14 @@
   "network_log_max_bytes": 262144,
   "auto_download_save": true,
   "auto_dismiss_js_dialog": false,
-  "window_topmost": true
+  "window_topmost": true,
+  "enable_media_stream": false,
+  "enable_speech_input": false,
+  "enable_autoplay": false,
+  "disable_gpu": false,
+  "disable_gpu_cache": false,
+  "ignore_gpu_blocklist": false,
+  "enable_cross_frame": false,
+  "disable_proxy": false,
+  "startup_switches": {}
 }

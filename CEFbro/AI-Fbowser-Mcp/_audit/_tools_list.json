@@ -1,0 +1,5320 @@
+{
+ "count": 312,
+ "tools": [
+  {
+   "name": "browser_navigate",
+   "description": "导航到指定URL。默认等待载入完成(推荐, AI随后操作DOM/填表成功率高); wait_for_load传false/0或async_only:true跳过等待 | 仅支持 http/https/about/ftp 协议; data: 仅图片类型(image/png|jpeg|gif|webp|bmp|x-icon), 为防脚本注入 data:text/html 被拒",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "URL地址"
+     },
+     "wait_for_load": {
+      "type": "boolean",
+      "description": "等待浏览器 OnLoadEnd 事件(默认true, 传false跳过)"
+     },
+     "max_ms": {
+      "type": "integer",
+      "description": "wait_for_load超时ms"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   }
+  },
+  {
+   "name": "browser_get_url",
+   "description": "取当前页面URL| 即时同步返回(读 CEF 缓存值, 不执行JS)",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_get_title",
+   "description": "获取页面标题(默认同步返回CEF缓存标题, async_only:true改异步JS获取)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "async_only": {
+      "type": "boolean",
+      "description": "强制走异步JS获取(默认false=同步)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_back",
+   "description": "后退一页| 无导航历史时返回失败",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_forward",
+   "description": "前进一页| 无导航历史时返回失败",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_reload",
+   "description": "刷新页面。默认等待载入完成(wait_for_load传false/0跳过)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "ignore_cache": {
+      "type": "boolean",
+      "description": "忽略缓存"
+     },
+     "wait_for_load": {
+      "type": "boolean",
+      "description": "等待 OnLoadEnd 事件(默认true; 传 false/0 跳过等待)"
+     },
+     "max_ms": {
+      "type": "integer",
+      "description": "超时ms"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_stop",
+   "description": "停止加载",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_execute_js",
+   "description": "执行JS(事件驱动, 异步回调返回执行状态)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "code": {
+      "type": "string",
+      "description": "JS代码字符串"
+     },
+     "file": {
+      "type": "string",
+      "description": "JS文件路径(与code二选一)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_evaluate",
+   "description": "执行JS并返回结果(默认同步)。支持code参数(inline)或file参数(从文件读取JS,避免转义问题)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "code": {
+      "type": "string",
+      "description": "JS代码字符串"
+     },
+     "file": {
+      "type": "string",
+      "description": "JS文件路径(推荐:避免转义)"
+     },
+     "max_ms": {
+      "type": "integer",
+      "description": "同步等待ms"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_get_source",
+   "description": "获取HTML源码(默认异步, sync_wait:true可同步)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "max_chars": {
+      "type": "integer",
+      "description": "最大字符数(默认256KB=262144)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_get_text",
+   "description": "获取页面文本(selector非空时默认同步, 空selector=全文)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器(空=全文, 默认同步)"
+     },
+     "max_chars": {
+      "type": "integer",
+      "description": "最大字符数(默认256KB)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_open_devtools",
+   "description": "打开开发者工具",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_close_devtools",
+   "description": "关闭开发者工具",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_create",
+   "description": "新建浏览器窗口(默认 about:blank) | background:true 时创建**完全无窗口的后台浏览器**(类库注明: 无窗口无窗口句柄、只能后台不能显示, 与先创建再隐藏窗口不同、也非无头模式, 适合纯后台刷新取数, 占用比前台更低)| 需要浏览器级隔离或纯后台取数时使用, 常规自动化无需手动创建 | 允许 http/https/about/ftp; data: 仅图片类型(image/png|jpeg|gif|webp|bmp|x-icon), 为防脚本注入 data:text/html 被拒 | 新建后用 browser_list 取它的 id, 后续任何工具传 browser_id=<该id> 即可操作它(不传则仍作用于主浏览器)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "初始URL(默认about:blank)"
+     },
+     "background": {
+      "type": "boolean",
+      "description": "true=创建完全无窗口的后台浏览器(不显示、占用更低, 适合纯后台刷新取数); 默认false=可见窗口。实测: browser_id 目标隔离正确、不影响主浏览器的 CDP 工具, 且读取(execute_js/get_text)均正常"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_close",
+   "description": "关闭指定浏览器(默认关闭主浏览器)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "browser_id": {
+      "type": "integer",
+      "description": "浏览器ID(省略则关闭主浏览器)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_close_try",
+   "description": "[已废弃] 关闭浏览器, 已替换为 browser_close | ⛔ 该工具恒失败, 请改用 browser_close",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_list",
+   "description": "列出所有浏览器实例(返回各自的 id/url)。**多浏览器用法**: 返回的 id 可直接作为任何工具的公共参数 browser_id 传入, 该次调用即作用于指定浏览器(如 browser_navigate {url:..., browser_id:2}); 不传 browser_id 则作用于主浏览器。browser_id 是请求级公共参数, 无需在单个工具 schema 里声明",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_set_zoom",
+   "description": "设置缩放",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "level": {
+      "type": "string",
+      "description": "如1.0,1.5,0.8 (文本或数值均可)"
+     }
+    },
+    "required": [
+     "level"
+    ]
+   }
+  },
+  {
+   "name": "browser_get_zoom",
+   "description": "取当前缩放级别(如 1.0)",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_find",
+   "description": "页面内查找文本并高亮| 返回匹配总数/当前序号; 用 stop_find 停止",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "text": {
+      "type": "string",
+      "description": "查找内容"
+     }
+    },
+    "required": [
+     "text"
+    ]
+   }
+  },
+  {
+   "name": "browser_stop_find",
+   "description": "停止查找",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_mouse_click",
+   "description": "在页面坐标 (x,y) 处点击鼠标| button=left/right/middle(默认left); 坐标是页面视口坐标, 可用 dom_rect 取元素坐标| 默认经 CDP 派发(不破坏会话); kernel:true 改内核注入(更难被反爬检测但**会使 CDP 通道失效**, 需重启进程恢复)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "x": {
+      "type": "integer",
+      "description": "X"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y"
+     },
+     "button": {
+      "type": "string",
+      "description": "left/right/middle"
+     },
+     "kernel": {
+      "type": "boolean",
+      "description": "true=内核注入(会破坏CDP会话); 默认false=CDP派发"
+     }
+    },
+    "required": [
+     "x",
+     "y"
+    ]
+   }
+  },
+  {
+   "name": "browser_mouse_move",
+   "description": "把鼠标移动到页面坐标 (x,y)| 默认经 CDP Input.dispatchMouseEvent 派发(不会破坏 CDP 会话); 传 kernel:true 改用内核级注入(更难被反爬检测, 但实测**会使 CDP 通道失效**: 之后 CDP 优先工具退化为原生路径、每次白等约10秒且部分返回 null, 需重启进程才能恢复)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "x": {
+      "type": "integer",
+      "description": "X"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y"
+     },
+     "kernel": {
+      "type": "boolean",
+      "description": "true=内核级注入(会破坏CDP会话); 默认false=CDP派发"
+     }
+    },
+    "required": [
+     "x",
+     "y"
+    ]
+   }
+  },
+  {
+   "name": "browser_mouse_wheel",
+   "description": "在 (x,y) 处滚动鼠标滚轮| delta_y 为正向下滚; 单纯滚动页面也可用 scroll_by| 默认经 CDP 派发(不破坏会话); kernel:true 改内核注入(更难被反爬检测但**会使 CDP 通道失效**, 需重启进程恢复)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "x": {
+      "type": "integer",
+      "description": "X"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y"
+     },
+     "delta_x": {
+      "type": "integer",
+      "description": "横向"
+     },
+     "delta_y": {
+      "type": "integer",
+      "description": "纵向"
+     },
+     "kernel": {
+      "type": "boolean",
+      "description": "true=内核注入(会破坏CDP会话); 默认false=CDP派发"
+     }
+    },
+    "required": [
+     "x",
+     "y"
+    ]
+   }
+  },
+  {
+   "name": "browser_key_event",
+   "description": "发送键盘事件| key_code=虚拟键码(如 13=Enter, 65=A), type=keydown/keyup/char, modifiers=修饰键位掩码; 输入文本请用 vip_key_type",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "key_code": {
+      "type": "integer",
+      "description": "虚拟键码"
+     },
+     "type": {
+      "type": "string",
+      "description": "keydown/keyup/char"
+     },
+     "modifiers": {
+      "type": "integer",
+      "description": "修饰键"
+     }
+    },
+    "required": [
+     "key_code"
+    ]
+   }
+  },
+  {
+   "name": "browser_print",
+   "description": "打印",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_print_to_pdf",
+   "description": "把当前页面打印为 PDF 文件| 异步执行, 用 mcp_result 取结果; 需给 path; 目标文件已存在时需 overwrite:true",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "path": {
+      "type": "string",
+      "description": "路径"
+     },
+     "overwrite": {
+      "type": "boolean",
+      "description": "覆盖"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_get_cookies",
+   "description": "获取Cookie(含HttpOnly)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "limit": {
+      "type": "integer",
+      "description": "上限(默认200)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_set_cookie",
+   "description": "设置Cookie",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "description": "名称"
+     },
+     "value": {
+      "type": "string",
+      "description": "值"
+     },
+     "domain": {
+      "type": "string",
+      "description": "域名"
+     }
+    },
+    "required": [
+     "name",
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_delete_cookies",
+   "description": "删除所有域名下全部Cookie| 破坏性操作, 必须传 confirm:true",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "confirm": {
+      "type": "boolean",
+      "description": "确认"
+     }
+    },
+    "required": [
+     "confirm"
+    ]
+   }
+  },
+  {
+   "name": "browser_clear_cache",
+   "description": "清理CEF全局缓存| 异步; 影响所有浏览器实例, 不只当前页",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_clear_cache_browser",
+   "description": "清理当前浏览器缓存 | 可选**按对象粒度**清理(类库的位或语义): targets 传逗号分隔的对象名, 例 localstorage,indexeddb 即只清本地存储与索引库而**保留 Cookies**; origin 留空=当前域 | 缺省与旧行为一致: 当前域 + 全部对象 + 全部存储类型",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "origin": {
+      "type": "string",
+      "description": "只清该源(须含 http(s) 且不含路径), 例 https://www.example.com; 留空=当前origin"
+     },
+     "targets": {
+      "type": "string",
+      "description": "逗号分隔的清理对象(缺省=all): appcache,cookies,filesystem,indexeddb,localstorage,shadercache,websql,serviceworkers,cachestorage,pluginprivatedata,backgroundfetch,conversions,all"
+     },
+     "storage_types": {
+      "type": "string",
+      "description": "逗号分隔的存储类型(缺省=all): temporary,persistent,syncable,all"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_cache_dir",
+   "description": "获取缓存目录",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_set_mute",
+   "description": "设置静音",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "mute": {
+      "type": "boolean",
+      "description": "静音"
+     }
+    },
+    "required": [
+     "mute"
+    ]
+   }
+  },
+  {
+   "name": "browser_is_muted",
+   "description": "查询静音状态",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_is_loading",
+   "description": "查询页面是否正在加载| 取自 CEF OnLoadStart/End 状态, 比读 JS readyState 更可靠",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_can_navigate",
+   "description": "查询当前页面可否后退/前进",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_get_id",
+   "description": "取当前操作目标浏览器的ID| 未显式指定 browser_id 时即为已有网页的主浏览器",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_compress_memory",
+   "description": "V8内存压缩",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_fbro_version",
+   "description": "CEF内核版本",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_meta",
+   "description": "元数据(机器码/授权/版本)",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_set_proxy",
+   "description": "设置浏览器代理并持久生效(新浏览器自动应用)| address 形如 ip:port; 设置后需刷新页面才作用于当前页",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "address": {
+      "type": "string",
+      "description": "代理地址"
+     },
+     "username": {
+      "type": "string",
+      "description": "账号"
+     },
+     "password": {
+      "type": "string",
+      "description": "密码"
+     }
+    },
+    "required": [
+     "address"
+    ]
+   }
+  },
+  {
+   "name": "browser_clear_proxy",
+   "description": "清除代理",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_start_download",
+   "description": "触发下载 | 仅支持 http/https 协议",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "URL"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   }
+  },
+  {
+   "name": "browser_download_image",
+   "description": "下载图片到 Downloads 目录| 异步, 用 mcp_result 取保存路径",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "图片URL"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   }
+  },
+  {
+   "name": "browser_edit_undo",
+   "description": "撤销上一次编辑(原生编辑命令)| 作用于当前焦点元素",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_edit_redo",
+   "description": "重做(撤销的逆操作, redo)| 注意不是 resume",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_edit_cut",
+   "description": "剪切选中内容到剪贴板| 作用于当前焦点元素",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_edit_copy",
+   "description": "复制选中内容到剪贴板| 作用于当前焦点元素",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_edit_paste",
+   "description": "把剪贴板内容粘贴到当前焦点元素",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_edit_delete",
+   "description": "删除选中内容| 作用于当前焦点元素",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_edit_select_all",
+   "description": "全选当前页面/焦点元素内容",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_get_frames",
+   "description": "框架列表(默认同步返回)",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_frame_names",
+   "description": "框架名称列表(默认同步返回)",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_frame_by_name",
+   "description": "按名查框架",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "description": "框架名"
+     }
+    },
+    "required": [
+     "name"
+    ]
+   }
+  },
+  {
+   "name": "browser_get_focused_frame",
+   "description": "获取焦点框架",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_get_window_handle",
+   "description": "获取窗口句柄",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_set_focus",
+   "description": "设置焦点",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "focus": {
+      "type": "boolean",
+      "description": "焦点"
+     }
+    },
+    "required": [
+     "focus"
+    ]
+   }
+  },
+  {
+   "name": "browser_set_auto_resize",
+   "description": "⛔ 本工具恒失败: 嵌入式GUI浏览器尺寸由主窗口布局管理, 不支持自动调整| 需要改视口请用 fingerprint viewport",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_restore_gui",
+   "description": "恢复嵌入式GUI布局与欢迎页",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_shutdown",
+   "description": "安全关闭AI浏览器(需confirm:true)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "confirm": {
+      "type": "boolean",
+      "description": "确认关闭"
+     },
+     "delay_seconds": {
+      "type": "integer",
+      "description": "延迟秒"
+     }
+    },
+    "required": [
+     "confirm"
+    ]
+   }
+  },
+  {
+   "name": "browser_move_window",
+   "description": "⛔ 本工具恒失败: 嵌入式GUI浏览器的窗口由主窗口统一管理, 不支持移动/改尺寸| 需要不同视口请用 browser_screenshot 的 width/height 或 fingerprint viewport",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "x": {
+      "type": "integer",
+      "description": "X"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y"
+     },
+     "width": {
+      "type": "integer",
+      "description": "宽"
+     },
+     "height": {
+      "type": "integer",
+      "description": "高"
+     },
+     "repaint": {
+      "type": "boolean",
+      "description": "重绘"
+     }
+    },
+    "required": [
+     "x",
+     "y"
+    ]
+   }
+  },
+  {
+   "name": "browser_dom_query",
+   "description": "DOM查询(默认同步返回)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     },
+     "attribute": {
+      "type": "string",
+      "description": "属性名"
+     },
+     "index": {
+      "type": "integer",
+      "description": "索引"
+     }
+    },
+    "required": [
+     "selector"
+    ]
+   }
+  },
+  {
+   "name": "browser_dom_click",
+   "description": "DOM点击(默认同步, 返回clicked/element not found)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     }
+    },
+    "required": [
+     "selector"
+    ]
+   }
+  },
+  {
+   "name": "browser_dom_set_value",
+   "description": "DOM设置值(默认同步, 返回ok状态)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     },
+     "value": {
+      "type": "string",
+      "description": "值"
+     }
+    },
+    "required": [
+     "selector",
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_dom_get_html",
+   "description": "DOM获取HTML(selector非空时默认同步, 空selector=全文)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器(空=全文源码)"
+     },
+     "max_chars": {
+      "type": "integer",
+      "description": "最大字符数(默认256KB)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_dom_rect",
+   "description": "DOM获取元素坐标(原生API)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     }
+    },
+    "required": [
+     "selector"
+    ]
+   }
+  },
+  {
+   "name": "browser_dom_inner_html",
+   "description": "DOM获取innerHTML(原生API)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     }
+    },
+    "required": [
+     "selector"
+    ]
+   }
+  },
+  {
+   "name": "browser_dom_set_html",
+   "description": "DOM设置innerHTML(原生,同步)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "选择器"
+     },
+     "html": {
+      "type": "string",
+      "description": "HTML代码"
+     }
+    },
+    "required": [
+     "selector",
+     "html"
+    ]
+   }
+  },
+  {
+   "name": "browser_dom_checked",
+   "description": "DOM获取checkbox状态(原生API)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     }
+    },
+    "required": [
+     "selector"
+    ]
+   }
+  },
+  {
+   "name": "browser_dom_selected",
+   "description": "DOM获取select选中项(原生API)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     }
+    },
+    "required": [
+     "selector"
+    ]
+   }
+  },
+  {
+   "name": "browser_dom_select",
+   "description": "DOM设置select选中项(原生,同步)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "选择器"
+     },
+     "index": {
+      "type": "integer",
+      "description": "选中索引"
+     }
+    },
+    "required": [
+     "selector"
+    ]
+   }
+  },
+  {
+   "name": "browser_extract",
+   "description": "提取页面结构化数据(链接/图片/表格)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "type": {
+      "type": "string",
+      "description": "links/images/tables"
+     },
+     "limit": {
+      "type": "integer",
+      "description": "上限"
+     }
+    },
+    "required": [
+     "type"
+    ]
+   }
+  },
+  {
+   "name": "browser_scrape",
+   "description": "一站式爬虫:导航→等待→提取 | 仅支持 http/https/about/ftp 协议; data: 仅图片类型(image/png|jpeg|gif|webp|bmp|x-icon), 为防脚本注入 data:text/html 被拒",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "目标URL"
+     },
+     "extract_selector": {
+      "type": "string",
+      "description": "提取选择器(body=全文)"
+     },
+     "wait_selector": {
+      "type": "string",
+      "description": "等待选择器"
+     },
+     "max_ms": {
+      "type": "integer",
+      "description": "最大ms"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   }
+  },
+  {
+   "name": "browser_console_eval",
+   "description": "控制台执行JS(默认同步返回)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "expression": {
+      "type": "string",
+      "description": "JS表达式"
+     }
+    },
+    "required": [
+     "expression"
+    ]
+   }
+  },
+  {
+   "name": "browser_fingerprint",
+   "description": "浏览器指纹总入口(按 action 分派)| canvas_random/webgl_random/audio_random 为随机噪点, audio_param 设音频参数, webrtc/geolocation/timezone/ssl 为对应维度虚拟化, set_batch 批量下发, ua 走 browser_fingerprint_ua, count 查当前生效项数, clear 清空 | 多数改动需刷新页面生效",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "canvas_random/webgl_random/audio_random/audio_param/webrtc/geolocation/timezone/ssl/ua/set_batch/count/clear"
+     },
+     "config": {
+      "type": "string",
+      "description": "JSON配置"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_intercept",
+   "description": "资源拦截/篡改(手写ResponseFilter过滤器, 不依赖VIP; url一律按子串匹配, 无正则模式)。action=modify(流式内容搜索替换,需search_text/replace_text,仅文本类MIME)/replace_data(整体替换为replace_text数据)/replace_file(整体替换为file_path文件内容,需文本类文件)/block(返回屏蔽提示页)/line_replace(行号区间替换,需line_start/line_end/replace_text)/navigate_block/navigate_redirect/popup_config/cache/clear。url为子串匹配, 刷新页面后生效",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "modify/replace_data/replace_file/block/line_replace/navigate_block/navigate_redirect/popup_config/popup_disable/cache/uncache/clear/ws_hook"
+     },
+     "url": {
+      "type": "string",
+      "description": "目标URL子串(匹配请求URL包含该串的资源)"
+     },
+     "search_text": {
+      "type": "string",
+      "description": "modify: 被替换内容"
+     },
+     "replace_text": {
+      "type": "string",
+      "description": "modify: 替换为内容 / replace_data: 替换数据 / line_replace: 替换为代码块"
+     },
+     "file_path": {
+      "type": "string",
+      "description": "replace_file: 本地文本文件路径"
+     },
+     "line_start": {
+      "type": "integer",
+      "description": "line_replace: 起始行号(含, 从1开始)"
+     },
+     "line_end": {
+      "type": "integer",
+      "description": "line_replace: 结束行号(含)"
+     },
+     "target": {
+      "type": "string",
+      "description": "navigate_redirect: 重定向目标URL"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_screenshot",
+   "description": "页面截图| 返回 base64 图片(data:image/...); format=png/jpeg/webp, 可指定 width/height/x/y/scale 裁剪缩放",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "format": {
+      "type": "string",
+      "description": "png/jpeg/webp"
+     },
+     "width": {
+      "type": "integer",
+      "description": "宽度(默认1920)"
+     },
+     "height": {
+      "type": "integer",
+      "description": "高度(默认1080)"
+     },
+     "x": {
+      "type": "integer",
+      "description": "X偏移(默认0)"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y偏移(默认0)"
+     },
+     "scale": {
+      "type": "integer",
+      "description": "缩放(默认1)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_collect",
+   "description": "网络/控制台/场景预备/事件族开关。console_get 支持 keyword 参数按日志内容搜索(定位Hook输出/报错/特征串), limit 限制条数。事件族开关(每族独立, 也可用 browser_kernel_events_all action=enable 一次全开): event_load/title/progress/resource/dialog/fullscreen/favicon/find/frame/download/focus/lifecycle/app_enable(原有12族), event_menu/quickmenu/navintent/ui/extension/startup/render/renderws/permission_enable(v3.2新增9族, 其中 permission 可感知页面索要摄像头/麦克风/定位), event_offscreen_enable(v3.3, 离屏渲染族, 仅OSR模式触发), event_all_enable / event_all_disable。开启后用 browser_event 查询",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "network_*/console_*/reverse_prepare/debug_prepare/debug_flow/debug_wait_paused/debug_inspect/debug_script_source/debug_resume/automation_prepare/cache_enable/cache_clear/detail_enable/clear/list/network_clear/network_detail_enable/network_disable/network_enable/network_get/console_enable/console_disable/console_clear/event_load_enable/event_title_enable/event_progress_enable/event_resource_enable/event_dialog_enable/event_fullscreen_enable/event_favicon_enable/event_find_enable/event_frame_enable/event_download_enable/event_focus_enable/event_lifecycle_enable/event_app_enable/event_menu_enable/event_quickmenu_enable/event_navintent_enable/event_ui_enable/event_extension_enable/event_startup_enable/event_render_enable/event_renderws_enable/event_permission_enable/event_offscreen_enable/event_all_enable/event_all_disable"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_network",
+   "description": "网络日志 list/enable/clear (list 默认 auto_enable; 亦接受 network_ 前缀别名)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "list/get/enable/disable/clear/detail_enable/network_get/network_enable/network_disable/network_clear/network_detail_enable"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_status",
+   "description": "浏览器完整状态(弹窗/文档/加载/缩放/静音/URL/标题/句柄)",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_window_info",
+   "description": "窗口信息(title/hwnd/parent/opener/devtools/tag)",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_view_source",
+   "description": "在新标签打开当前页面源码视图(view-source:)| 取源码字符串请用 get_source",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_inject",
+   "description": "注入JS/CSS/Handler",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "type": {
+      "type": "string",
+      "description": "js/css/handler(persist时handler由渲染_即将初始化WebKit注册)"
+     },
+     "code": {
+      "type": "string",
+      "description": "代码"
+     },
+     "persist": {
+      "type": "boolean",
+      "description": "持久(V8预注入,type=handler时须persist)"
+     }
+    },
+    "required": [
+     "type",
+     "code"
+    ]
+   }
+  },
+  {
+   "name": "browser_wait",
+   "description": "异步等待条件 (轮询, 通过mcp_result查询)。what=selector/text/load_end/load_start/navigate/timeout/network_idle/url_contains。navigate无value等同load_end; navigate有value则等到URL匹配; network_idle等网络空闲(活动请求数=0); url_contains等URL包含指定字符串",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "what": {
+      "type": "string",
+      "description": "selector/text/timeout/load_end/load_start/navigate/network_idle/url_contains"
+     },
+     "value": {
+      "type": "string",
+      "description": "等待值(navigate/url_contains=目标URL, load_*/network_idle可省略)"
+     },
+     "max_ms": {
+      "type": "integer",
+      "description": "最大ms(默认10000)"
+     }
+    },
+    "required": [
+     "what"
+    ]
+   }
+  },
+  {
+   "name": "browser_cdp",
+   "description": "Chrome DevTools协议(VIP)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "method": {
+      "type": "string",
+      "description": "CDP方法"
+     },
+     "params": {
+      "type": "string",
+      "description": "参数JSON"
+     }
+    },
+    "required": [
+     "method"
+    ]
+   }
+  },
+  {
+   "name": "browser_debugger_enable",
+   "description": "启用CDP调试器(Debugger.enable)| 断点类工具的前置步骤; 调用会自动清除与之冲突的反检测项(禁用Debugger检测)",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_debugger_resume",
+   "description": "从断点继续执行(Debugger.resume)| 需页面处于暂停态, 否则返回 页面未处于暂停状态",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_debugger_step_over",
+   "description": "单步跳过(执行当前行但不进入被调函数)| 需页面处于暂停态",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_debugger_step_into",
+   "description": "单步进入(进入被调函数内部)| 需页面处于暂停态",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_debugger_step_out",
+   "description": "单步跳出(执行完当前函数并返回调用处)| 需页面处于暂停态",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_debugger_stack",
+   "description": "取当前暂停点的JS调用栈(函数名/URL/行号/作用域) | **无需任何前置调用**: 页面未暂停时会自动启用调试器、安排执行点并制造暂停点(经 auto_prepared 上报), 用完请 browser_debugger_resume 恢复 | 若显式传 stack_trace_id 则改走 CDP 的 Debugger.getStackTrace(该 id 来自错误对象的 stackTrace, 由 browser_event/异常事件给出)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "stack_trace_id": {
+      "type": "string",
+      "description": "可选: 错误对象上的 stackTraceId(来自 Runtime.exceptionThrown); 省略=取当前暂停点调用栈"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_debugger_set_breakpoint",
+   "description": "在URL匹配正则的脚本上设行断点(Debugger.setBreakpointByUrl)| 设完需导航或触发脚本才会命中, 再用 wait_paused 等待",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "脚本URL正则(如 my\\\\.js 或 example\\\\.com)"
+     },
+     "line": {
+      "type": "integer",
+      "description": "行号(0起算,默认0,FBrowser必填)"
+     },
+     "column": {
+      "type": "integer",
+      "description": "列号(0起算,可选)"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   }
+  },
+  {
+   "name": "browser_debugger_evaluate",
+   "description": "在指定调用帧内求值(Debugger.evaluateOnCallFrame)| 断点处查看变量的主力工具; parse:true 走同步解析",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "call_frame_id": {
+      "type": "string",
+      "description": "帧ID"
+     },
+     "expression": {
+      "type": "string",
+      "description": "表达式"
+     },
+     "parse": {
+      "type": "boolean",
+      "description": "同步解析结果(默认false)"
+     },
+     "expand": {
+      "type": "boolean",
+      "description": "展开object/function属性(默认true)"
+     },
+     "return_by_value": {
+      "type": "boolean",
+      "description": "returnByValue(默认true)"
+     }
+    },
+    "required": [
+     "call_frame_id",
+     "expression"
+    ]
+   }
+  },
+  {
+   "name": "browser_debugger_wait_paused",
+   "description": "等待 Debugger.paused(VIP)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "max_ms": {
+      "type": "integer",
+      "description": "超时毫秒(默认30000)"
+     },
+     "fresh": {
+      "type": "boolean",
+      "description": "先清除旧事件(默认false; flow内自动处理)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_debugger_last_paused",
+   "description": "最近断点暂停信息(VIP)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "parse": {
+      "type": "boolean",
+      "description": "解析call_frame_id/frames(默认true)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_debugger_inspect",
+   "description": "断点处批量求值(VIP)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "call_frame_id": {
+      "type": "string",
+      "description": "帧ID(空=最近paused)"
+     },
+     "expressions": {
+      "type": "string",
+      "description": "JSON数组或单表达式"
+     },
+     "expression": {
+      "type": "string",
+      "description": "单表达式"
+     },
+     "expand": {
+      "type": "boolean",
+      "description": "展开object/function(默认true)"
+     },
+     "return_by_value": {
+      "type": "boolean",
+      "description": "returnByValue(默认true)"
+     }
+    },
+    "required": [
+     "expressions"
+    ]
+   }
+  },
+  {
+   "name": "browser_debugger_flow",
+   "description": "断点一键流程: enable→设断点→导航→等暂停→帧内求值→resume| 逆向调试首选, 免手工编排6步",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "导航URL(可选)"
+     },
+     "breakpoint": {
+      "type": "string",
+      "description": "URL正则"
+     },
+     "line": {
+      "type": "integer",
+      "description": "断点行号(0起)"
+     },
+     "column": {
+      "type": "integer",
+      "description": "断点列号(可选)"
+     },
+     "expressions": {
+      "type": "string",
+      "description": "帧内求值JSON数组"
+     },
+     "expand": {
+      "type": "boolean",
+      "description": "展开object/function(默认true)"
+     },
+     "return_by_value": {
+      "type": "boolean",
+      "description": "returnByValue(默认true)"
+     },
+     "max_ms": {
+      "type": "integer",
+      "description": "等待暂停毫秒"
+     },
+     "resume": {
+      "type": "boolean",
+      "description": "求值后自动resume(默认true)"
+     }
+    },
+    "required": [
+     "breakpoint"
+    ]
+   }
+  },
+  {
+   "name": "browser_debugger_script_source",
+   "description": "取断点处脚本源码与上下文行| 无暂停上下文时需显式给 script_id",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "call_frame_id": {
+      "type": "string",
+      "description": "帧ID(空=最近paused)"
+     },
+     "script_id": {
+      "type": "string",
+      "description": "scriptId(空=paused自动)"
+     },
+     "line": {
+      "type": "integer",
+      "description": "行号(0起,空=paused)"
+     },
+     "column": {
+      "type": "integer",
+      "description": "列号(可选)"
+     },
+     "context_lines": {
+      "type": "integer",
+      "description": "上下文行数(默认3)"
+     },
+     "include_source": {
+      "type": "boolean",
+      "description": "返回完整scriptSource(默认true)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_debugger_auto",
+   "description": "自动断点求值(VIP): 断点命中→自动执行JS→resume→循环, max_hits次后自动停止",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "breakpoint": {
+      "type": "string",
+      "description": "URL正则(必填)"
+     },
+     "line": {
+      "type": "integer",
+      "description": "行号"
+     },
+     "url": {
+      "type": "string",
+      "description": "导航URL(可选)"
+     },
+     "expressions": {
+      "type": "string",
+      "description": "求值表达式JSON数组(默认[location.href])"
+     },
+     "max_hits": {
+      "type": "integer",
+      "description": "最大命中次数(默认5,最大100)"
+     },
+     "max_ms": {
+      "type": "integer",
+      "description": "每次等待超时ms(默认60000)"
+     }
+    },
+    "required": [
+     "breakpoint"
+    ]
+   }
+  },
+  {
+   "name": "browser_network_body",
+   "description": "获取响应体(VIP)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "request_id": {
+      "type": "string",
+      "description": "请求ID"
+     }
+    },
+    "required": [
+     "request_id"
+    ]
+   }
+  },
+  {
+   "name": "browser_touch_press",
+   "description": "触摸按下(移动端仿真)| 缺省经 CDP Input.dispatchTouchEvent 派发, 会自动开启触摸仿真(零前置, 无需先调 fingerprint touch_enable), 且实测不破坏 CDP 会话 | 与 touch_move/touch_release 配对做拖拽/滑动 | 仅当传 kernel:true 才走内核级注入(过反爬场景, 但会使 CDP 通道在本会话内永久失效, 需重启进程恢复)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "x": {
+      "type": "integer",
+      "description": "X"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y"
+     }
+    },
+    "required": [
+     "x",
+     "y"
+    ]
+   }
+  },
+  {
+   "name": "browser_touch_release",
+   "description": "触摸放开| 与 touch_press 配对, 结束触摸/拖拽 | 缺省经 CDP 派发(不破坏 CDP 会话, 无需前置) | 仅当传 kernel:true 才走内核级注入(会使 CDP 通道在本会话内失效)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "x": {
+      "type": "integer",
+      "description": "X"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y"
+     }
+    },
+    "required": [
+     "x",
+     "y"
+    ]
+   }
+  },
+  {
+   "name": "browser_touch_move",
+   "description": "触摸拖动| 用于滑动/长按拖动 | 缺省经 CDP 派发(不破坏 CDP 会话); 若当前并无按下点, 会自动补一次 touchStart 并经 auto_prepared 如实上报(想控制拖动起点请先 touch_press) | 仅当传 kernel:true 才走内核级注入(会使 CDP 通道在本会话内失效)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "x": {
+      "type": "integer",
+      "description": "X"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y"
+     }
+    },
+    "required": [
+     "x",
+     "y"
+    ]
+   }
+  },
+  {
+   "name": "browser_base64_encode",
+   "description": "Base64编码",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "data": {
+      "type": "string",
+      "description": "数据"
+     }
+    },
+    "required": [
+     "data"
+    ]
+   }
+  },
+  {
+   "name": "browser_base64_decode",
+   "description": "Base64解码",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "data": {
+      "type": "string",
+      "description": "数据"
+     }
+    },
+    "required": [
+     "data"
+    ]
+   }
+  },
+  {
+   "name": "browser_uri_encode",
+   "description": "URI编码",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "data": {
+      "type": "string",
+      "description": "数据"
+     }
+    },
+    "required": [
+     "data"
+    ]
+   }
+  },
+  {
+   "name": "browser_uri_decode",
+   "description": "URI解码",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "data": {
+      "type": "string",
+      "description": "数据"
+     }
+    },
+    "required": [
+     "data"
+    ]
+   }
+  },
+  {
+   "name": "browser_get_window_title",
+   "description": "获取OS窗口标题",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_set_parent",
+   "description": "设置父窗口",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "hwnd": {
+      "type": "integer",
+      "description": "父句柄"
+     }
+    },
+    "required": [
+     "hwnd"
+    ]
+   }
+  },
+  {
+   "name": "browser_get_main_browser",
+   "description": "获取打开者浏览器信息",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_is_same",
+   "description": "检查是否同一实例",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "other_id": {
+      "type": "integer",
+      "description": "另一ID"
+     }
+    },
+    "required": [
+     "other_id"
+    ]
+   }
+  },
+  {
+   "name": "browser_is_view",
+   "description": "是否视图模式",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_user_tags",
+   "description": "列出用户标识",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_find_by_tag",
+   "description": "按标识查找浏览器",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "tag": {
+      "type": "string",
+      "description": "标识"
+     }
+    },
+    "required": [
+     "tag"
+    ]
+   }
+  },
+  {
+   "name": "browser_find_by_hwnd",
+   "description": "按句柄查找浏览器",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "hwnd": {
+      "type": "integer",
+      "description": "窗口句柄"
+     }
+    },
+    "required": [
+     "hwnd"
+    ]
+   }
+  },
+  {
+   "name": "browser_request_context",
+   "description": "请求环境信息",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_file_dialog",
+   "description": "打开文件对话框",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_send_message",
+   "description": "向主进程发消息",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "description": "消息名"
+     },
+     "data": {
+      "type": "string",
+      "description": "数据"
+     }
+    },
+    "required": [
+     "name"
+    ]
+   }
+  },
+  {
+   "name": "browser_ipc_send_all",
+   "description": "向所有渲染进程推送一条进程间消息| 页面侧由 window.__mcp_ipc_queue 接收(逆向时可作主进程→页面的指令通道)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "description": "消息名"
+     },
+     "data": {
+      "type": "string",
+      "description": "数据"
+     }
+    },
+    "required": [
+     "name"
+    ]
+   }
+  },
+  {
+   "name": "browser_ipc_send_to",
+   "description": "向指定渲染进程推送一条进程间消息| 渲染进程ID 用 ipc_renderer_ids 获取",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "process_id": {
+      "type": "integer",
+      "description": "进程ID"
+     },
+     "name": {
+      "type": "string",
+      "description": "消息名"
+     },
+     "data": {
+      "type": "string",
+      "description": "数据"
+     }
+    },
+    "required": [
+     "process_id",
+     "name"
+    ]
+   }
+  },
+  {
+   "name": "browser_ipc_renderer_count",
+   "description": "渲染进程数量",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_ipc_renderer_ids",
+   "description": "渲染进程ID清单",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_create_url_request",
+   "description": "创建URL请求 | 仅支持 http/https 协议",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "description": "URL"
+     },
+     "method": {
+      "type": "string",
+      "description": "GET/POST"
+     }
+    },
+    "required": [
+     "url"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_websocket_intercept",
+   "description": "WebSocket拦截(VIP)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "enable": {
+      "type": "boolean",
+      "description": "开关"
+     }
+    },
+    "required": [
+     "enable"
+    ]
+   }
+  },
+  {
+   "name": "browser_fill_set_value",
+   "description": "填表(原生CEF, 非JS注入): 设置输入元素的值| selector 未命中时直接报错(不再假成功), 无需先调 fill_exists",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     },
+     "value": {
+      "type": "string",
+      "description": "值"
+     }
+    },
+    "required": [
+     "selector",
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_fill_click",
+   "description": "填表(原生CEF, 非JS注入): 点击元素| selector 未命中时直接报错(不再假成功)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     }
+    },
+    "required": [
+     "selector"
+    ]
+   }
+  },
+  {
+   "name": "browser_fill_focus",
+   "description": "填表(原生CEF): 让元素获得焦点",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     }
+    },
+    "required": [
+     "selector"
+    ]
+   }
+  },
+  {
+   "name": "browser_fill_scroll",
+   "description": "填表(原生CEF): 滚动到元素所在位置",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     }
+    },
+    "required": [
+     "selector"
+    ]
+   }
+  },
+  {
+   "name": "browser_fill_exists",
+   "description": "填表(原生CEF): 判断元素是否存在| 异步返回, 用 mcp_result 取 exists 布尔值",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     }
+    },
+    "required": [
+     "selector"
+    ]
+   }
+  },
+  {
+   "name": "browser_fill_attr_get",
+   "description": "填表(原生CEF): 取元素属性值| 省略 attribute 则返回元素文本(textContent); 默认同步返回, 取不到会报错",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     },
+     "attribute": {
+      "type": "string",
+      "description": "属性名"
+     }
+    },
+    "required": [
+     "selector",
+     "attribute"
+    ]
+   }
+  },
+  {
+   "name": "browser_fill_attr_set",
+   "description": "填表(原生CEF): 设置元素属性| 已禁用 href/src/action/formaction 与 on* 事件属性",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     },
+     "attribute": {
+      "type": "string",
+      "description": "属性名"
+     },
+     "value": {
+      "type": "string",
+      "description": "属性值"
+     }
+    },
+    "required": [
+     "selector"
+    ]
+   }
+  },
+  {
+   "name": "browser_fill_trigger",
+   "description": "填表(原生CEF): 触发元素事件(默认 click)| 可绕过部分前端的手势/可信事件校验",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     },
+     "event": {
+      "type": "string",
+      "description": "事件类型"
+     }
+    },
+    "required": [
+     "selector"
+    ]
+   }
+  },
+  {
+   "name": "browser_fill_select",
+   "description": "填表: 设置 <select> 选中项| 优先按 value 走原生 setter 并冒泡 input/change(兼容 React 受控组件)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器"
+     },
+     "value": {
+      "type": "string",
+      "description": "选项值"
+     }
+    },
+    "required": [
+     "selector"
+    ]
+   }
+  },
+  {
+   "name": "mcp_status",
+   "description": "MCP服务器状态",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "mcp_help",
+   "description": "帮助信息| 不带参数返回按功能域分类的工具清单; 传 tool 参数则返回该工具的完整描述与参数 schema, 例: mcp_help tool=browser_navigate",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "mcp_result",
+   "description": "查询异步任务结果",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "request_id": {
+      "type": "string",
+      "description": "任务ID或JSON-RPC id"
+     },
+     "consume": {
+      "type": "boolean",
+      "description": "读取后删除(默认false)"
+     }
+    },
+    "required": [
+     "request_id"
+    ]
+   }
+  },
+  {
+   "name": "ping",
+   "description": "连通检查",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "batch",
+   "description": "批量执行(默认自动等待子命令异步结果, async_only:true关闭)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "commands": {
+      "type": "string",
+      "description": "JSON数组"
+     }
+    },
+    "required": [
+     "commands"
+    ]
+   }
+  },
+  {
+   "name": "workflow_list",
+   "description": "列出 workflows 目录下的 JSON 工作流",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "workflow_get",
+   "description": "读取工作流定义",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "description": "工作流名(无.json)"
+     }
+    },
+    "required": [
+     "name"
+    ]
+   }
+  },
+  {
+   "name": "workflow_run",
+   "description": "执行工作流(同步)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "description": "工作流文件名"
+     },
+     "definition": {
+      "type": "string",
+      "description": "完整JSON定义"
+     },
+     "steps": {
+      "type": "string",
+      "description": "内联步骤JSON数组"
+     },
+     "on_error": {
+      "type": "string",
+      "description": "stop|continue"
+     }
+    },
+    "required": [
+     "name"
+    ]
+   }
+  },
+  {
+   "name": "workflow_stop",
+   "description": "停止正在运行的工作流",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_kernel_cert",
+   "description": "内核层: 证书错误管理。action=list查看页面证书错误记录(SSL校验失败URL/错误码), ignore开启忽略证书错误(自动放行跳转), ignore_off关闭, clear清空, status查开关状态",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "list/ignore/ignore_off/clear/status"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_kernel_auth",
+   "description": "内核层: HTTP认证凭据(Basic/Digest)。action=set {host,port,username,password,realm} 注入站点认证账号密码(浏览器_获得需授权证书事件自动应答), clear {host,port} 清除, list 列出",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "set/clear/list"
+     },
+     "host": {
+      "type": "string",
+      "description": "主机(例: example.com)"
+     },
+     "port": {
+      "type": "integer",
+      "description": "端口(默认443)"
+     },
+     "username": {
+      "type": "string",
+      "description": "账号(set时必填)"
+     },
+     "password": {
+      "type": "string",
+      "description": "密码(set时必填)"
+     },
+     "realm": {
+      "type": "string",
+      "description": "认证域(可选)"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_kernel_download",
+   "description": "内核层: 下载控制。action=pause/resume/cancel {url或download_id} 排队控制进行中下载(浏览器_正在下载事件即时执行), clear_queue清空队列; 下载进度用 browser_event 查询 download_progress",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "pause/resume/cancel/clear_queue"
+     },
+     "url": {
+      "type": "string",
+      "description": "下载URL(匹配包含)"
+     },
+     "download_id": {
+      "type": "string",
+      "description": "下载标识(整数文本)"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_kernel_scheme",
+   "description": "内核层: 自定义协议方案。action=register {domain,mime,data或file} 注册 mcp://域名 动态内容(CEF资源处理器返回), unregister {domain} 解除, clear 清理全部, list 列出。注册后用 browser_navigate 访问 mcp://域名/",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "register/unregister/clear/list"
+     },
+     "domain": {
+      "type": "string",
+      "description": "方案域名(例: api → mcp://api)"
+     },
+     "mime": {
+      "type": "string",
+      "description": "响应MIME(默认text/html)"
+     },
+     "data": {
+      "type": "string",
+      "description": "响应内容(与file二选一)"
+     },
+     "file": {
+      "type": "string",
+      "description": "响应内容文件路径(与data二选一)"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_kernel_menu",
+   "description": "内核层: 右键快捷菜单屏蔽。action=disable屏蔽页面右键菜单(内核事件拦截), enable恢复, status查状态(触发条件以实际内核为准)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "disable/enable/status"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_kernel_reverse_probe",
+   "description": "动态插桩总包: 五维API插桩(XHR/fetch/WebSocket/定时器/事件监听), 记录URL/状态/响应/调用栈。action=enable注入, get取回(window.__MCP_PROBE__), clear清空, disable移除",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "enable/get/clear/disable"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_kernel_reverse_trace",
+   "description": "动态调用追踪: 包装目标函数记录调用栈+参数+返回值+耗时。targets为JSON数组(如 [\"window.fetch\",\"crypto.subtle.encrypt\"] 点路径逐级解析)。action=start/get/clear/stop",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "start/get/clear/stop"
+     },
+     "targets": {
+      "type": "string",
+      "description": "JSON数组: [\"obj.path.fn\",...]"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_kernel_reverse_algo",
+   "description": "动态算法Hook: 包装CryptoJS全算法(MD5/SHA/AES/DES/RC4/HMAC等)+全局哈希/base64+WebCrypto subtle(encrypt/decrypt/digest/sign), 记录算法名/参数/输出/调用栈(window.__MCP_ALGO_LOG__)。action=start/get/clear/stop",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "start/get/clear/stop"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_kernel_reverse_functions",
+   "description": "动态函数提取: 枚举window全局函数+常用对象链+核心类prototype方法, 输出路径/函数名/参数个数/源码toString。filter按路径关键词过滤, max上限(默认500)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "filter": {
+      "type": "string",
+      "description": "路径关键词过滤(可选)"
+     },
+     "max": {
+      "type": "integer",
+      "description": "上限(默认500,最大1000)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_kernel_reverse_sources",
+   "description": "动态JS源码提取: document.scripts全量(含inline), index指定单脚本(从1起), max_len单脚本截断(默认20000,最大200000)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "index": {
+      "type": "integer",
+      "description": "单脚本索引(0=全部)"
+     },
+     "max_len": {
+      "type": "integer",
+      "description": "单脚本截断字符"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_kernel_reverse_watch_global",
+   "description": "全局变量动态追踪: defineProperty包装指定全局变量, 记录写入者调用栈+新值(window.__MCP_GWATCH__)。names为JSON数组(如 [\"token\",\"sign\"] )。action=start/get/clear/stop",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "start/get/clear/stop"
+     },
+     "names": {
+      "type": "string",
+      "description": "JSON数组: [\"var1\",\"var2\"]"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_kernel_ipc_queue",
+   "description": "内核层: 渲染侧IPC消息队列读取。读取注入脚本收集的 __mcp_ipc_queue(渲染进程与浏览器进程间的IPC消息)。action 必填: queue 取回队列JSON, clear 清空。用于逆向分析渲染侧通信协议",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "queue 取回队列 / clear 清空"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_kernel_ipc_clear",
+   "description": "内核层: 清空渲染侧IPC消息队列(__mcp_ipc_queue)。action 必填且只能为 clear。等价于 browser_kernel_ipc_queue action=clear, 保留独立工具名兼容旧调用",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "固定传 clear"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_kernel_cdp_monitor",
+   "description": "内核层: CDP事件订阅监控。action=add {methods,max} 订阅CDP事件(方法名模式, 默认*通配, max为缓存上限默认500最大5000), remove移除, clear清空, enable/disable总开关。配合 browser_cdp_event 读取捕获到的事件",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "add/remove/clear/enable/disable"
+     },
+     "methods": {
+      "type": "string",
+      "description": "CDP方法名模式(默认*匹配全部, 例: Network.*)"
+     },
+     "max": {
+      "type": "integer",
+      "description": "事件缓存上限(默认500, 最大5000)"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_kernel_reactor",
+   "description": "内核层: 事件反应器。action=add {event,code,cooldown_ms} 注册规则——当浏览器事件触发时自动在页面执行指定JS; cooldown_ms限流防抖(默认1000), clear清空全部规则。用于无人值守自动化。**事件名必须用下面列出的真实值**: 写错(如 load_end)的规则会被接受但**永不触发**且无任何提示 —— 可用 * 通配兜底",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "add/clear"
+     },
+     "event": {
+      "type": "string",
+      "description": "事件名(真实值): * (通配, 推荐先用它验证链路) / navigate / url_changed / loading_state_change / load_progress / resource_request / resource_response / resource_redirect / popup / popup_failed / download_start / download_progress / fullscreen / favicon / find_result / key_press / status_message / before_unload / browser_created / browser_closing / do_close"
+     },
+     "code": {
+      "type": "string",
+      "description": "事件触发时执行的JS代码"
+     },
+     "cooldown_ms": {
+      "type": "integer",
+      "description": "冷却毫秒(默认1000)"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_kernel_watch",
+   "description": "内核层: 定时监视。action=start {expression,key,interval_ms} 周期性求值页面表达式并记录值变化(表达式例: document.title / window.__token), stop停止, clear清空; 同key覆盖去重, interval_ms最小500默认2000。用于轮询等待页面状态变化",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "start/stop/clear"
+     },
+     "expression": {
+      "type": "string",
+      "description": "被监视的JS表达式(例: document.title)"
+     },
+     "key": {
+      "type": "string",
+      "description": "监视任务标识(缺省自动生成)"
+     },
+     "interval_ms": {
+      "type": "integer",
+      "description": "轮询间隔毫秒(最小500, 默认2000)"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_kernel_events_all",
+   "description": "内核层: 全事件流总开关。action 必填: enable 一次性打开13项浏览器/应用事件监控(载入/标题/进度/资源/对话框/全屏/图标/查找/框架/下载/焦点/生命周期/应用)并开启控制台与网络详细记录; disable 全部关闭。免去逐个 browser_event action=*_enable 的繁琐",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "enable 全开 / disable 全关"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_set_s5_proxy",
+   "description": "VIP代理: 设置SOCKS5代理。address为 host:port, username/password可选认证。设置后需刷新页面生效。用于换IP/绕过地域限制",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "address": {
+      "type": "string",
+      "description": "代理地址 host:port (必填)"
+     },
+     "username": {
+      "type": "string",
+      "description": "代理账号(可选)"
+     },
+     "password": {
+      "type": "string",
+      "description": "代理密码(可选)"
+     }
+    },
+    "required": [
+     "address"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_clear_s5_proxy",
+   "description": "VIP代理: 清除已设置的SOCKS5代理并恢复直连, 需刷新页面生效",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_vip_mouse_click",
+   "description": "VIP输入: 内核级鼠标单击。x,y为页面坐标(0~32767), button为按键(0左/1中/2右, 默认0)。经CEF内核注入真实输入事件, 比JS模拟更难被检测, 用于过反爬 | **警告: 本工具走内核级注入, 实测每次调用都会让 CDP 通道在本会话内失效**(之后所有 CDP 优先工具都会超时/退化, 连 browser_status 都可能挂), 必须重启 AI-Fbowser-Mcp.exe 才能恢复;如后续还要用 CDP 类工具, 请改用 CDP 版: browser_mouse_click / browser_mouse_move / browser_mouse_wheel / browser_key_event",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "x": {
+      "type": "integer",
+      "description": "X坐标(0~32767, 必填)"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y坐标(0~32767, 必填)"
+     },
+     "button": {
+      "type": "integer",
+      "description": "按键: 0左/1中/2右 (默认0)"
+     }
+    },
+    "required": [
+     "x",
+     "y"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_mouse_move",
+   "description": "VIP输入: 内核级鼠标移动到指定坐标(不点击)。x,y为页面坐标。常与 browser_vip_mouse_click 配合模拟真实移动轨迹 | **警告: 本工具走内核级注入, 实测每次调用都会让 CDP 通道在本会话内失效**(之后所有 CDP 优先工具都会超时/退化, 连 browser_status 都可能挂), 必须重启 AI-Fbowser-Mcp.exe 才能恢复;如后续还要用 CDP 类工具, 请改用 CDP 版: browser_mouse_click / browser_mouse_move / browser_mouse_wheel / browser_key_event",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "x": {
+      "type": "integer",
+      "description": "X坐标(必填)"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y坐标(必填)"
+     }
+    },
+    "required": [
+     "x",
+     "y"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_mouse_wheel",
+   "description": "VIP输入: 内核级鼠标滚轮。x,y为滚轮所在坐标, delta_x/delta_y为滚动量(正值向下滚)。用于触发依赖滚轮事件的懒加载 | **警告: 本工具走内核级注入, 实测每次调用都会让 CDP 通道在本会话内失效**(之后所有 CDP 优先工具都会超时/退化, 连 browser_status 都可能挂), 必须重启 AI-Fbowser-Mcp.exe 才能恢复;如后续还要用 CDP 类工具, 请改用 CDP 版: browser_mouse_click / browser_mouse_move / browser_mouse_wheel / browser_key_event",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "x": {
+      "type": "integer",
+      "description": "X坐标(必填)"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y坐标(必填)"
+     },
+     "delta_x": {
+      "type": "integer",
+      "description": "水平滚动量(默认0)"
+     },
+     "delta_y": {
+      "type": "integer",
+      "description": "垂直滚动量(正值向下)"
+     }
+    },
+    "required": [
+     "x",
+     "y"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_key_press",
+   "description": "VIP输入: 内核级按键按下(不放开)。key_code为Windows虚拟键码1~255(回车13/空格32/A65)。按住类组合键时先press再release | **警告: 本工具走内核级注入, 实测每次调用都会让 CDP 通道在本会话内失效**(之后所有 CDP 优先工具都会超时/退化, 连 browser_status 都可能挂), 必须重启 AI-Fbowser-Mcp.exe 才能恢复;如后续还要用 CDP 类工具, 请改用 CDP 版: browser_mouse_click / browser_mouse_move / browser_mouse_wheel / browser_key_event",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "key_code": {
+      "type": "integer",
+      "description": "虚拟键码1~255 (必填, 例: 回车13)"
+     }
+    },
+    "required": [
+     "key_code"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_key_release",
+   "description": "VIP输入: 内核级按键放开。key_code为Windows虚拟键码1~255, 与 browser_vip_key_press 配对使用以完成按住/组合键 | **警告: 本工具走内核级注入, 实测每次调用都会让 CDP 通道在本会话内失效**(之后所有 CDP 优先工具都会超时/退化, 连 browser_status 都可能挂), 必须重启 AI-Fbowser-Mcp.exe 才能恢复;如后续还要用 CDP 类工具, 请改用 CDP 版: browser_mouse_click / browser_mouse_move / browser_mouse_wheel / browser_key_event",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "key_code": {
+      "type": "integer",
+      "description": "虚拟键码1~255 (必填)"
+     }
+    },
+    "required": [
+     "key_code"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_key_click",
+   "description": "VIP输入: 内核级按键单击(按下+放开)。key_code为Windows虚拟键码1~255(回车13/空格32/A65)。最常用的按键工具 | **警告: 本工具走内核级注入, 实测每次调用都会让 CDP 通道在本会话内失效**(之后所有 CDP 优先工具都会超时/退化, 连 browser_status 都可能挂), 必须重启 AI-Fbowser-Mcp.exe 才能恢复;如后续还要用 CDP 类工具, 请改用 CDP 版: browser_mouse_click / browser_mouse_move / browser_mouse_wheel / browser_key_event",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "key_code": {
+      "type": "integer",
+      "description": "虚拟键码1~255 (必填, 例: 回车13)"
+     }
+    },
+    "required": [
+     "key_code"
+    ]
+   }
+  },
+  {
+   "name": "browser_refresh_cookies",
+   "description": "把内存中的 Cookie 刷写到磁盘| 用于持久化登录态, 一般无需手动调用",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_get_all_cookies",
+   "description": "获取全部Cookie(非URL限定)",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_set_preference",
+   "description": "设置Chromium首选项",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "description": "首选项名"
+     },
+     "value": {
+      "type": "string",
+      "description": "值"
+     }
+    },
+    "required": [
+     "name"
+    ]
+   }
+  },
+  {
+   "name": "aliases",
+   "description": "短名别名列表",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_vip_disable_debugger",
+   "description": "VIP: 禁用Debugger检测",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "disable": {
+      "type": "boolean",
+      "description": "禁用"
+     }
+    },
+    "required": [
+     "disable"
+    ]
+   }
+  },
+  {
+   "name": "browser_get_window_style",
+   "description": "获取窗口风格值(GWL_STYLE)",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_set_window_style",
+   "description": "设置窗口风格",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "type": {
+      "type": "integer",
+      "description": "风格类型"
+     },
+     "style": {
+      "type": "integer",
+      "description": "风格值"
+     }
+    },
+    "required": [
+     "type",
+     "style"
+    ]
+   }
+  },
+  {
+   "name": "browser_get_run_style",
+   "description": "获取窗口运行风格",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_get_global_cache_dir",
+   "description": "获取全局缓存目录路径",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_get_process_type",
+   "description": "获取当前CEF进程类型(浏览器=0/渲染=1/GPU=2)",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_fingerprint_plugins",
+   "description": "VIP: 虚拟Plugins指纹",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "type": {
+      "type": "integer",
+      "description": "插件类型"
+     },
+     "json": {
+      "type": "string",
+      "description": "JSON数据"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_fingerprint_appname",
+   "description": "VIP: 虚拟AppName指纹",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "string",
+      "description": "值"
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_fingerprint_pixel_ratio",
+   "description": "VIP: 虚拟屏幕像素比",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "string",
+      "description": "如1.5"
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_fingerprint_touch_enable",
+   "description": "VIP: 触摸事件指纹",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "enable": {
+      "type": "boolean",
+      "description": "启用"
+     },
+     "points": {
+      "type": "integer",
+      "description": "触摸点数"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_fingerprint_languages",
+   "description": "VIP: navigator.languages 语言指纹。languages 传逗号分隔清单(如 zh-CN,zh,en); reset:true 恢复默认(类库无单项复位API, 以空文本交回库内部默认; 彻底复位用 browser_fingerprint action=clear)。设置后需刷新页面生效",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "languages": {
+      "type": "string",
+      "description": "语言清单, 逗号分隔, 例: zh-CN,zh,en"
+     },
+     "reset": {
+      "type": "boolean",
+      "description": "true=恢复默认(与 languages 二选一)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_fingerprint_webgl_vendor",
+   "description": "VIP: WebGL 厂商/渲染器字符串。默认渲染器字符串会把真实显卡与驱动暴露给指纹脚本, 故反指纹场景常需改写。vendor 例: Google Inc. (NVIDIA); renderer 可选(类库有独立API)。设置后需刷新页面生效",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "vendor": {
+      "type": "string",
+      "description": "厂商字符串, 例: Google Inc. (NVIDIA)"
+     },
+     "renderer": {
+      "type": "string",
+      "description": "渲染器字符串(可选; 省略则由库内部决定)"
+     }
+    },
+    "required": [
+     "vendor"
+    ]
+   }
+  },
+  {
+   "name": "browser_font_randomize",
+   "description": "VIP: 字体枚举随机化(抗字体指纹)。action=random(默认) 从候选池随机挑 count 个字体并加宽/高偏移与 Canvas 字体度量噪点; seed 非0 时固定随机序列, 便于复现同一套指纹; action=reset 复位(清单置空+偏移归零)。设置后需刷新页面生效",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "random(默认)/reset"
+     },
+     "count": {
+      "type": "integer",
+      "description": "随机挑选的字体个数(默认0=用库默认)"
+     },
+     "seed": {
+      "type": "integer",
+      "description": "随机种子(非0=可复现, 默认0)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_set_css_version",
+   "description": "VIP: 设置CSS内核版本",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "version": {
+      "type": "string",
+      "description": "版本号"
+     }
+    },
+    "required": [
+     "version"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_set_web_version",
+   "description": "VIP: 设置Web内核版本",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "version": {
+      "type": "string",
+      "description": "版本号"
+     }
+    },
+    "required": [
+     "version"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_set_v8_version",
+   "description": "VIP: 设置V8内核版本",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "version": {
+      "type": "string",
+      "description": "版本号"
+     }
+    },
+    "required": [
+     "version"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_send_devtools_msg",
+   "description": "VIP: 发送DevTools原始消息",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "json": {
+      "type": "string",
+      "description": "JSON消息"
+     }
+    },
+    "required": [
+     "json"
+    ]
+   }
+  },
+  {
+   "name": "browser_fingerprint_screen_xy",
+   "description": "VIP: 虚拟屏幕XY",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "x": {
+      "type": "integer",
+      "description": "X"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y"
+     }
+    },
+    "required": [
+     "x",
+     "y"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_mouse_press",
+   "description": "VIP: CDP鼠标按下 | **警告: 本工具实测每次调用都会让 CDP 通道在本会话内失效**(之后所有 CDP 优先工具都会超时/退化), 必须重启 AI-Fbowser-Mcp.exe 才能恢复; 如后续还要用 CDP 类工具, 请改用 browser_mouse_click / browser_mouse_move / browser_mouse_wheel / browser_key_event",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "x": {
+      "type": "integer",
+      "description": "X"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y"
+     }
+    },
+    "required": [
+     "x",
+     "y"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_mouse_release",
+   "description": "VIP: CDP鼠标放开 | **警告: 本工具实测每次调用都会让 CDP 通道在本会话内失效**(之后所有 CDP 优先工具都会超时/退化), 必须重启 AI-Fbowser-Mcp.exe 才能恢复; 如后续还要用 CDP 类工具, 请改用 browser_mouse_click / browser_mouse_move / browser_mouse_wheel / browser_key_event",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "x": {
+      "type": "integer",
+      "description": "X"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y"
+     }
+    },
+    "required": [
+     "x",
+     "y"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_key_input",
+   "description": "VIP: CDP输入单个字符 | **警告: 本工具实测每次调用都会让 CDP 通道在本会话内失效**(之后所有 CDP 优先工具都会超时/退化), 必须重启 AI-Fbowser-Mcp.exe 才能恢复; 如后续还要用 CDP 类工具, 请改用 browser_mouse_click / browser_mouse_move / browser_mouse_wheel / browser_key_event",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "char_code": {
+      "type": "string",
+      "description": "单个字符(如A或中)"
+     }
+    },
+    "required": [
+     "char_code"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_key_type",
+   "description": "VIP: CDP输入文本 | **警告: 本工具实测每次调用都会让 CDP 通道在本会话内失效**(之后所有 CDP 优先工具都会超时/退化), 必须重启 AI-Fbowser-Mcp.exe 才能恢复; 如后续还要用 CDP 类工具, 请改用 browser_mouse_click / browser_mouse_move / browser_mouse_wheel / browser_key_event",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "text": {
+      "type": "string",
+      "description": "文本"
+     }
+    },
+    "required": [
+     "text"
+    ]
+   }
+  },
+  {
+   "name": "browser_popup_info",
+   "description": "获取弹窗/文档状态: is_popup, has_document, is_loading, id, url",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_loading_info",
+   "description": "获取加载/导航状态: is_loading, can_go_back/forward, is_popup, url",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_cdp_call",
+   "description": "VIP: CDP命令(带结果回传)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "method": {
+      "type": "string",
+      "description": "CDP方法名"
+     },
+     "params": {
+      "type": "string",
+      "description": "参数JSON"
+     }
+    },
+    "required": [
+     "method"
+    ]
+   }
+  },
+  {
+   "name": "browser_cdp_event",
+   "description": "VIP: 读取最近的CDP事件",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "event_name": {
+      "type": "string",
+      "description": "事件名(如 Debugger.paused)；亦可用 event"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_webrtc",
+   "description": "VIP: 虚拟WebRTC IP指纹",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "public_ip": {
+      "type": "string",
+      "description": "公网IP"
+     },
+     "local_ip": {
+      "type": "string",
+      "description": "本地IP"
+     },
+     "host": {
+      "type": "string",
+      "description": "host名"
+     },
+     "disable": {
+      "type": "boolean",
+      "description": "禁用"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_fingerprint_cookie_enabled",
+   "description": "VIP: 虚拟Cookie启用",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "boolean",
+      "description": "是否启用"
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_fingerprint_java_enabled",
+   "description": "VIP: 虚拟Java启用",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "boolean",
+      "description": "是否启用"
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_fingerprint_online",
+   "description": "VIP: 虚拟在线状态",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "boolean",
+      "description": "navigator.onLine"
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_fingerprint_appcodename",
+   "description": "VIP: 虚拟appCodeName",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "string",
+      "description": "navigator.appCodeName"
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_fingerprint_appversion",
+   "description": "VIP: 虚拟appVersion",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "string",
+      "description": "navigator.appVersion"
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_enable_js_env",
+   "description": "VIP: 启用JS执行环境",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "enable": {
+      "type": "boolean",
+      "description": "启用/关闭"
+     }
+    },
+    "required": [
+     "enable"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_get_js_env_ids",
+   "description": "VIP: 取JS环境ID清单",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_vip_set_is_trusted",
+   "description": "VIP: 设置Event.isTrusted",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "enable": {
+      "type": "boolean",
+      "description": "启用isTrusted"
+     }
+    },
+    "required": [
+     "enable"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_touch_cancel",
+   "description": "VIP: 取消触摸 | **警告: 本工具实测每次调用都会让 CDP 通道在本会话内失效**(之后所有 CDP 优先工具都会超时/退化), 必须重启 AI-Fbowser-Mcp.exe 才能恢复; 如需取消触摸且后续还要用 CDP 类工具, 请改用 browser_touch_release(走 CDP 派发, 不破坏会话)",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_vip_enable_inspector",
+   "description": "VIP: 启用/关闭Inspector(CDP监管者事件)。⚠ 关闭后全部 CDP 类工具(debugger_*/cdp_*/reverse CDP类)立即失效, 需重启进程才能恢复。因此本工具要求显式表态: 启用传字符串 true(或布尔 true), 关闭必须传字符串 false; 完全不传 enable 会被拒绝(缺省与布尔 false 在协议层无法区分, 为避免误关故不接受缺省)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "enable": {
+      "type": "string",
+      "description": "字符串 true 启用 / 字符串 false 关闭(会导致CDP工具全部失效, 需重启恢复); 也接受布尔 true"
+     }
+    },
+    "required": [
+     "enable"
+    ]
+   }
+  },
+  {
+   "name": "browser_fingerprint_product_sub",
+   "description": "VIP: 虚拟productSub",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "string",
+      "description": "navigator.productSub"
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_fingerprint_vendor_sub",
+   "description": "VIP: 虚拟vendorSub",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "string",
+      "description": "navigator.vendorSub"
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_canvas_fixed",
+   "description": "VIP: Canvas定值噪点指纹",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "string",
+      "description": "x:y:r:g:b:a格式,多个逗号隔开"
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_canvas_font",
+   "description": "VIP: 虚拟Canvas字体指纹。value为小数(虚拟字体度量值)。改的是 Canvas 2D measureText/字体度量结果, 与 canvas(随机噪点)/canvas_fixed(定值噪点)/font(CSS字体列表)是不同维度, 反指纹检测常单独校验本项。设置后需刷新页面生效",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "number",
+      "description": "虚拟字体度量值(小数, 必填)"
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_webgl_fixed",
+   "description": "VIP: WebGL定值噪点指纹",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "string",
+      "description": "x:y格式,多个逗号隔开"
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_audio_fixed",
+   "description": "VIP: Audio定值噪点指纹",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "string",
+      "description": "定值数据"
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_disable_console",
+   "description": "VIP: 禁用控制台/性能输出",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "log": {
+      "type": "boolean",
+      "description": "console.log"
+     },
+     "warn": {
+      "type": "boolean",
+      "description": "console.warn"
+     },
+     "error": {
+      "type": "boolean",
+      "description": "console.error"
+     },
+     "debug": {
+      "type": "boolean",
+      "description": "console.debug"
+     },
+     "info": {
+      "type": "boolean",
+      "description": "console.info"
+     },
+     "trace": {
+      "type": "boolean",
+      "description": "console.trace"
+     },
+     "clear": {
+      "type": "boolean",
+      "description": "console.clear"
+     },
+     "assert": {
+      "type": "boolean",
+      "description": "console.assert"
+     },
+     "dir": {
+      "type": "boolean",
+      "description": "console.dir"
+     },
+     "table": {
+      "type": "boolean",
+      "description": "console.table"
+     },
+     "time": {
+      "type": "boolean",
+      "description": "console.time"
+     },
+     "count": {
+      "type": "boolean",
+      "description": "console.count"
+     },
+     "group": {
+      "type": "boolean",
+      "description": "console.group"
+     },
+     "profile": {
+      "type": "boolean",
+      "description": "console.profile"
+     },
+     "performance": {
+      "type": "boolean",
+      "description": "performance.now"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_rect",
+   "description": "VIP: 虚拟DOMRect指纹",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "x": {
+      "type": "integer",
+      "description": "X"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y"
+     },
+     "w": {
+      "type": "integer",
+      "description": "宽度"
+     },
+     "h": {
+      "type": "integer",
+      "description": "高度"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_timezone",
+   "description": "VIP: 虚拟时区指纹",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "offset_h": {
+      "type": "integer",
+      "description": "时区小时"
+     },
+     "offset_m": {
+      "type": "integer",
+      "description": "时区分钟"
+     },
+     "name": {
+      "type": "string",
+      "description": "时区名"
+     },
+     "iana": {
+      "type": "string",
+      "description": "标准IANA"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_geolocation",
+   "description": "VIP: 虚拟定位指纹",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "lat": {
+      "type": "string",
+      "description": "纬度"
+     },
+     "lng": {
+      "type": "string",
+      "description": "经度"
+     },
+     "accuracy": {
+      "type": "string",
+      "description": "精确度"
+     }
+    },
+    "required": [
+     "lat",
+     "lng"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_ssl",
+   "description": "VIP: SSL加密套件指纹",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "tls_min": {
+      "type": "integer",
+      "description": "TLS最小版本"
+     },
+     "tls_max": {
+      "type": "integer",
+      "description": "TLS最大版本"
+     },
+     "ciphers": {
+      "type": "string",
+      "description": "加密文本"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_canvas",
+   "description": "VIP: Canvas指纹随机噪点",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "min": {
+      "type": "integer",
+      "description": "最少噪点"
+     },
+     "max": {
+      "type": "integer",
+      "description": "最大噪点"
+     },
+     "seed": {
+      "type": "integer",
+      "description": "随机种子"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_webgl",
+   "description": "VIP: WebGL指纹随机噪点",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "min": {
+      "type": "integer",
+      "description": "最少噪点"
+     },
+     "max": {
+      "type": "integer",
+      "description": "最大噪点"
+     },
+     "seed": {
+      "type": "integer",
+      "description": "随机种子"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_audio",
+   "description": "VIP: Audio指纹随机噪点",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "min": {
+      "type": "integer",
+      "description": "最少噪点"
+     },
+     "max": {
+      "type": "integer",
+      "description": "最大噪点"
+     },
+     "seed": {
+      "type": "integer",
+      "description": "随机种子"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_font",
+   "description": "VIP: CSS字体指纹",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "font_list": {
+      "type": "string",
+      "description": "字体清单"
+     },
+     "w_offset": {
+      "type": "integer",
+      "description": "宽度偏移"
+     },
+     "h_offset": {
+      "type": "integer",
+      "description": "高度偏移"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_viewport",
+   "description": "VIP: 虚拟Viewport",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "top": {
+      "type": "integer",
+      "description": "OffsetTop"
+     },
+     "left": {
+      "type": "integer",
+      "description": "OffsetLeft"
+     },
+     "width": {
+      "type": "integer",
+      "description": "Width"
+     },
+     "height": {
+      "type": "integer",
+      "description": "Height"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_screen",
+   "description": "VIP: 虚拟屏幕分辨率",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "width": {
+      "type": "integer",
+      "description": "宽度"
+     },
+     "height": {
+      "type": "integer",
+      "description": "高度"
+     },
+     "avail_w": {
+      "type": "integer",
+      "description": "可用宽度"
+     },
+     "avail_h": {
+      "type": "integer",
+      "description": "可用高度"
+     },
+     "depth": {
+      "type": "integer",
+      "description": "colorDepth"
+     },
+     "pixel_depth": {
+      "type": "integer",
+      "description": "pixelDepth"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_hardware",
+   "description": "VIP: 虚拟硬件指纹",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "concurrency": {
+      "type": "integer",
+      "description": "逻辑核心数"
+     },
+     "memory": {
+      "type": "integer",
+      "description": "设备内存GB"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_product",
+   "description": "VIP: 虚拟产品标识",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "product": {
+      "type": "string",
+      "description": "navigator.product"
+     },
+     "product_sub": {
+      "type": "string",
+      "description": "productSub"
+     },
+     "vendor": {
+      "type": "string",
+      "description": "navigator.vendor"
+     },
+     "vendor_sub": {
+      "type": "string",
+      "description": "vendorSub"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_battery",
+   "description": "VIP: 虚拟电池指纹",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "charging": {
+      "type": "boolean",
+      "description": "充电中"
+     },
+     "level": {
+      "type": "string",
+      "description": "电量0-1"
+     },
+     "charging_time": {
+      "type": "string",
+      "description": "充电时间"
+     },
+     "discharging_time": {
+      "type": "string",
+      "description": "放电时间"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_fingerprint_media_devices",
+   "description": "VIP: 虚拟媒体设备指纹。target选择设备类别(audio_input/audio_output/video_input), type控制动作(0清空/1添加/2覆盖); 设置后需刷新页面生效",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "type": {
+      "type": "integer",
+      "description": "0清空/1添加/2覆盖"
+     },
+     "target": {
+      "type": "string",
+      "description": "audio_input/audio_output/video_input"
+     }
+    },
+    "required": [
+     "target"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_load_extension",
+   "description": "VIP: 加载CRX插件包",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "crx_path": {
+      "type": "string",
+      "description": "CRX文件路径"
+     }
+    },
+    "required": [
+     "crx_path"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_unload_extension",
+   "description": "VIP: 卸载插件",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "extension_id": {
+      "type": "string",
+      "description": "插件ID"
+     }
+    },
+    "required": [
+     "extension_id"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_extension_info",
+   "description": "VIP: 查询插件信息",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "extension_id": {
+      "type": "string",
+      "description": "插件ID"
+     }
+    },
+    "required": [
+     "extension_id"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_execute_js_context",
+   "description": "VIP: 指定环境执行JS",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "code": {
+      "type": "string",
+      "description": "JS代码"
+     },
+     "context_id": {
+      "type": "integer",
+      "description": "环境ID"
+     },
+     "frame_id": {
+      "type": "string",
+      "description": "框架ID"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_enable_devtools_observer",
+   "description": "VIP: 启用DevTools消息监听。⚠ 关闭会使全部 CDP 类工具(debugger_*/cdp_*/reverse CDP类)失效且需重启进程才能恢复, 故关闭必须显式传 enable 的字符串值 false; 启用可传字符串 true 或布尔 true; 完全不传 enable 会被拒绝(缺省与布尔 false 在协议层无法区分, 为避免误关故不接受缺省)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "enable": {
+      "type": "string",
+      "description": "字符串 true 启用 / 字符串 false 关闭(CDP工具会全部失效); 也接受布尔 true"
+     }
+    },
+    "required": [
+     "enable"
+    ]
+   }
+  },
+  {
+   "name": "browser_vip_dom_get_document",
+   "description": "VIP: CDP获取DOM文档(JSON)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "depth": {
+      "type": "integer",
+      "description": "深度"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_dom_search",
+   "description": "VIP: CDP DOM文本搜索",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "description": "搜索文本"
+     },
+     "search_id": {
+      "type": "string",
+      "description": "已有searchId可选"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_touch_emulation",
+   "description": "VIP: 触摸事件模拟",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "enable": {
+      "type": "boolean",
+      "description": "启用"
+     },
+     "max_points": {
+      "type": "integer",
+      "description": "最大触摸点"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_get_extra_data",
+   "description": "获取浏览器创建时传入的额外数据",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_fingerprint_ua",
+   "description": "VIP: 虚拟UA完整数据",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "ua": {
+      "type": "string",
+      "description": "UserAgent"
+     },
+     "platform": {
+      "type": "string",
+      "description": "navigator.platform"
+     },
+     "accept_lang": {
+      "type": "string",
+      "description": "Accept-Language"
+     },
+     "mobile": {
+      "type": "boolean",
+      "description": "mobile"
+     },
+     "architecture": {
+      "type": "string",
+      "description": "architecture"
+     },
+     "bitness": {
+      "type": "string",
+      "description": "bitness"
+     },
+     "model": {
+      "type": "string",
+      "description": "model"
+     },
+     "wow64": {
+      "type": "boolean",
+      "description": "wow64"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_vip_orientation",
+   "description": "VIP: 虚拟屏幕方向",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "type": {
+      "type": "integer",
+      "description": "方向类型"
+     },
+     "angle": {
+      "type": "integer",
+      "description": "角度"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_hook",
+   "description": "JS逆向: 无侵入函数Hook(CDP/V8级)。type=function_call(支持obj.fn点路径)/xhr_fetch/websocket/eval_dynamic/cookie_set。自动记录参数/返回值/调用栈到__MCP_HOOK_LOG__(hook_logs可查)与console,不修改fn.toString()",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "description": "目标函数名(支持obj.fn点路径)/URL模式"
+     },
+     "type": {
+      "type": "string",
+      "description": "function_call/xhr_fetch/websocket/eval_dynamic/cookie_set"
+     },
+     "capture_args": {
+      "type": "boolean",
+      "description": "捕获参数(默认true)"
+     },
+     "capture_return": {
+      "type": "boolean",
+      "description": "捕获返回值(默认true)"
+     },
+     "capture_stack": {
+      "type": "boolean",
+      "description": "捕获调用栈"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_strings",
+   "description": "JS逆向: 提取页面中的可疑字符串/加密数组。mode=suspicious(长字符串+Base64+HEX)/decrypt_array(解密数组)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "mode": {
+      "type": "string",
+      "description": "suspicious/decrypt_array"
+     },
+     "min_length": {
+      "type": "integer",
+      "description": "最小长度(默认20)"
+     },
+     "max_results": {
+      "type": "integer",
+      "description": "最大结果数(默认200)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_verify",
+   "description": "JS逆向: 验证重实现算法。给定原始函数和重写版本+测试用例,自动比对输出是否一致",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "original": {
+      "type": "string",
+      "description": "原始函数路径(如window.sign)"
+     },
+     "reimplementation": {
+      "type": "string",
+      "description": "重写的JS函数"
+     },
+     "test_inputs": {
+      "type": "string",
+      "description": "测试用例JSON数组"
+     },
+     "compare_mode": {
+      "type": "string",
+      "description": "strict/lenient"
+     }
+    },
+    "required": [
+     "original",
+     "reimplementation"
+    ]
+   }
+  },
+  {
+   "name": "browser_reverse_cookie_sources",
+   "description": "JS逆向: Cookie归因分析。Hook document.cookie setter,记录每次JS写入的调用栈+值+时间戳。区分HTTP Set-Cookie vs JS写入",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_reverse_env",
+   "description": "JS逆向: 浏览器环境全量收集(40+变量)。含navigator/screen/window/location/document/canvas/webgl/audio指纹,用于补环境对照",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_reverse_instrument",
+   "description": "JS逆向: JSVMP解释器透明插桩。mode=transparent仅替换prototype getter保留toString; mode=interpreter Hook VM分发器。不破坏签名计算",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "target": {
+      "type": "string",
+      "description": "目标函数名(transparent模式可选,interpreter模式必填)"
+     },
+     "mode": {
+      "type": "string",
+      "description": "transparent(默认)/interpreter"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_search",
+   "description": "JS逆向: 全局脚本搜索。在所有已加载script中搜索关键词(sign/encrypt/token/md5/aes),返回匹配行+脚本URL+行号",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "description": "搜索关键词(如sign/encrypt/md5)"
+     },
+     "script_url": {
+      "type": "string",
+      "description": "限定脚本URL片段(可选)"
+     }
+    },
+    "required": [
+     "query"
+    ]
+   }
+  },
+  {
+   "name": "browser_reverse_initiator",
+   "description": "JS逆向: 网络溯源。Hook XHR+fetch,捕获匹配URL模式的请求的完整JS调用栈,定位发起请求的函数",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "url_pattern": {
+      "type": "string",
+      "description": "匹配URL片段(如/api/sign)"
+     },
+     "request_id": {
+      "type": "string",
+      "description": "网络请求ID(可选)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_preset",
+   "description": "JS逆向: 一键预设Hook。preset=xhr/fetch/cookie/websocket/crypto/debugger/all,批量安装常用Hook,数据存入window.__mcp_*_log",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "preset": {
+      "type": "string",
+      "description": "xhr/fetch/cookie/websocket/crypto/debugger/all(默认)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_cdp_hook",
+   "description": "CDP逆向: 函数调用级别断点。Debugger.setBreakpointOnFunctionCall—Ghostwire风格,不修改JS源码,fn.toString()不变,防检测",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "function_name": {
+      "type": "string",
+      "description": "目标函数名(如window.sign)"
+     },
+     "object_id": {
+      "type": "string",
+      "description": "CDP Runtime objectId(可选,优先级高于function_name)"
+     },
+     "condition": {
+      "type": "string",
+      "description": "条件断点表达式(可选)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_profile",
+   "description": "CDP逆向: JS CPU性能分析。action=start开始采样/stop停止并获取报告/query查询。定位热点函数,识别加密算法性能瓶颈",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "start/start_precise(精确采样)/stop/query(默认start)"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_reverse_dom_breakpoint",
+   "description": "CDP逆向: DOM/XHR事件断点。type=xhr拦截所有XHR/fetch=拦截fetch/dom_event=DOM事件/timer=定时器。在事件触发时自动断点",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "type": {
+      "type": "string",
+      "description": "xhr/fetch/dom_event/timer"
+     },
+     "target": {
+      "type": "string",
+      "description": "URL模式(xhr)或事件名(dom_event)"
+     }
+    },
+    "required": [
+     "type"
+    ]
+   }
+  },
+  {
+   "name": "browser_reverse_preload",
+   "description": "CDP逆向: 预注入脚本。Page.addScriptToEvaluateOnNewDocument—在所有页面JS执行之前注入,先于任何反检测/混淆代码加载",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "code": {
+      "type": "string",
+      "description": "JS代码"
+     },
+     "file": {
+      "type": "string",
+      "description": "JS文件路径(与code二选一)"
+     }
+    },
+    "required": [
+     "code"
+    ]
+   }
+  },
+  {
+   "name": "browser_reverse_call_fn",
+   "description": "CDP逆向: 远程函数调用(纯算法直调)。Runtime.callFunctionOn—传object_id或function_name(自动解析objectId)调用任意函数,arguments传JSON数组时类型原样保留(数字/逻辑值不降级),可访问闭包/私有作用域函数",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "object_id": {
+      "type": "string",
+      "description": "CDP Runtime objectId(与function_name二选一)"
+     },
+     "function_name": {
+      "type": "string",
+      "description": "全局函数名(自动Runtime.evaluate解析objectId,与object_id二选一)"
+     },
+     "arguments": {
+      "type": "string",
+      "description": "参数JSON数组(类型原样保留,如[admin123,42,true])"
+     },
+     "args": {
+      "type": "string",
+      "description": "单文本参数(自动包装为单元素数组)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_websocket",
+   "description": "CDP逆向: WebSocket消息拦截。Network.enable+webSocketFrameReceived—监听所有WS帧(send/receive),用于分析实时通信协议",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "enable(默认)/query"
+     }
+    },
+    "required": [
+     "action"
+    ]
+   }
+  },
+  {
+   "name": "browser_reverse_heap",
+   "description": "CDP逆向: 堆内存分析。HeapProfiler—snapshot堆快照/start_sampling采样/stop_sampling停止/get_object按ID查对象。定位内存中的加密密钥/签名对象",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "snapshot/start_sampling/stop_sampling/get_object"
+     },
+     "object_id": {
+      "type": "string",
+      "description": "heap对象ID(get_object时必填)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_runtime",
+   "description": "CDP逆向: Runtime运行时分析。action=properties获取对象属性/evaluate在全局作用域执行表达式(return_by_value:false可返回objectId供call_fn直调)/global获取全局变量名列表",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "properties/evaluate/global(默认properties)"
+     },
+     "object_id": {
+      "type": "string",
+      "description": "对象ID(properties时必填)"
+     },
+     "expression": {
+      "type": "string",
+      "description": "JS表达式(evaluate时必填)"
+     },
+     "return_by_value": {
+      "type": "boolean",
+      "description": "evaluate时生效(默认true; false返回objectId)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_network_intercept",
+   "description": "CDP逆向: 网络请求拦截。action=enable启用URL模式拦截/disable禁用。拦截后可修改/重定向/阻塞匹配的请求,用于修改请求参数绕过签名校验",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "enable(默认)/disable"
+     },
+     "url_pattern": {
+      "type": "string",
+      "description": "URL匹配模式(enable时可选,空则拦截全部)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_setup",
+   "description": "反检测预配置: 浏览器事件级架构—设置后所有新浏览器自动应用! disable_debugger禁用Debugger检测/user_agent伪装UA/disable_automation_flag移除webdriver标志。立即应用当前浏览器+持久化到新浏览器",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "disable_debugger": {
+      "type": "boolean",
+      "description": "禁用网页debugger检测(VIP)"
+     },
+     "user_agent": {
+      "type": "string",
+      "description": "伪装UserAgent"
+     },
+     "disable_automation_flag": {
+      "type": "boolean",
+      "description": "移除navigator.webdriver等自动化标志"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_extract",
+   "description": "JS逆向: 静态加密模块提取(CDP Runtime.evaluate同步)。mode=scan枚举页面<script>标签返回脚本列表+加密特征检测; mode=download按DOM索引取脚本textContent完整源码; mode=analyze按url_pattern一次扫描+源码分析提取算法(AES/RSA/MD5/SHA/HMAC)和可疑密钥常量",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "mode": {
+      "type": "string",
+      "description": "scan(默认)/download/analyze"
+     },
+     "url_pattern": {
+      "type": "string",
+      "description": "URL片段(analyze模式必填, 匹配脚本src)"
+     },
+     "script_index": {
+      "type": "string",
+      "description": "DOM脚本索引(download模式必填, 取自scan返回的index)"
+     },
+     "keyword": {
+      "type": "string",
+      "description": "关键词(scan模式可选, 过滤含关键词的脚本)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_antidetect_presets",
+   "description": "反检测: 一键部署反检测预设。preset=stealth(去webdriver+去debugger检测+去自动化标志)/basic(stealth+Canvas/WebGL/Audio随机化)/full(basic+UA伪装+屏幕1920x1080+硬件8核8GB+时区Asia/Shanghai+WebRTC禁用+定位北京)。批量应用,持久生效,新浏览器自动应用",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "preset": {
+      "type": "string",
+      "description": "stealth(默认)/basic/full"
+     }
+    },
+    "required": [
+     "preset"
+    ]
+   }
+  },
+  {
+   "name": "browser_network_export",
+   "description": "网络: 导出网络日志为HAR(HTTP Archive 1.2)或JSON格式。HAR格式兼容Chrome DevTools Network面板导入。以JSON数组返回所有记录的请求/响应(URL/method/status/mime/size/timestamp)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "format": {
+      "type": "string",
+      "description": "har/json(默认json)"
+     },
+     "limit": {
+      "type": "integer",
+      "description": "最大条目数(默认2000,上限50000)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_permission_spoof",
+   "description": "反检测: 伪装浏览器权限API。action=apply注入navigator.permissions.query()覆盖(返回指定state)+MediaDevices.enumerateDevices覆盖; action=reset移除伪装。permissions支持:geolocation/notifications/camera/microphone/midi/clipboard-read/clipboard-write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "apply(默认)/spoof/reset/remove"
+     },
+     "state": {
+      "type": "string",
+      "description": "granted(默认)/denied/prompt"
+     },
+     "permissions": {
+      "type": "string",
+      "description": "权限列表,逗号分隔(默认全部7项)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_retry",
+   "description": "自动化: 带线性退避的MCP工具重试机制。对不稳定的工具调用(如填表/点击/导航)自动重试max_retries次,每次失败后等待backoff_ms×attempt毫秒。直到成功或超过max_total_ms",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "tool": {
+      "type": "string",
+      "description": "要重试的MCP工具名"
+     },
+     "args": {
+      "type": "string",
+      "description": "工具参数JSON(默认{})"
+     },
+     "max_retries": {
+      "type": "integer",
+      "description": "最大重试次数(默认3,上限10)"
+     },
+     "backoff_ms": {
+      "type": "integer",
+      "description": "退避基数毫秒(默认1000,上限30000)"
+     },
+     "max_total_ms": {
+      "type": "integer",
+      "description": "总超时毫秒(默认60000)"
+     }
+    },
+    "required": [
+     "tool"
+    ]
+   }
+  },
+  {
+   "name": "browser_canvas_noise",
+   "description": "反检测: Canvas指纹噪点注入(JS层实现,不需VIP)。action=inject为Canvas toDataURL/toBlob/getImageData添加±level随机噪声,防Canvas指纹追踪; action=remove移除噪声。不依赖内核VIP API,纯JS Hook",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "inject(默认)/enable/remove/disable"
+     },
+     "level": {
+      "type": "integer",
+      "description": "噪声级别1-5(默认1, 越大噪声越明显)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_event",
+   "description": "查询浏览器事件。event_type为空时返回最近全部事件的时间线(默认50条, limit可调); 指定event_type查询特定类型; app_*查询应用事件。**event_type 必须用下面列出的名字**: load_start/load_end/load_error/crash/navigate/popup/popup_failed/loading_state_change/url_changed/browser_created/browser_closing/do_close/title_changed/load_progress/js_dialog/before_unload/file_dialog/fullscreen/favicon/find_result/key_press, 以及通配族 resource_*/frame_*/download_*/focus_*(注意: 要按带星号的族名查, 如 resource_*, 传具体名 resource_response 会报未找到)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "event_type": {
+      "type": "string",
+      "description": "上述类型之一, 或通配族 resource_*/frame_*/download_*/focus_*/app_* (空=时间线模式)"
+     },
+     "limit": {
+      "type": "integer",
+      "description": "返回条数(默认50,上限500)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_snapshot",
+   "description": "AI页面快照: 提取页面全部交互元素(a/button/input/select/textarea/[role]/[onclick])为紧凑清单, 含索引/标签/可见文本/id/name/CSS选择器。AI据此精准定位元素, 配合browser_click_text/browser_dom_click操作",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "max_items": {
+      "type": "integer",
+      "description": "最大元素数(默认200,上限500)"
+     },
+     "include_links": {
+      "type": "string",
+      "description": "false/0=排除链接(默认true)"
+     },
+     "text_length": {
+      "type": "integer",
+      "description": "单元素文本截断长度(默认80)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_click_text",
+   "description": "AI点击: 按可见文本点击元素。自动匹配textContent精确/包含该文本的button/a/span/div/li等元素, 优先精确匹配, 模拟真实点击事件链(mousedown/mouseup/click)。适合快照后按文字操作, 无需手写选择器",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "text": {
+      "type": "string",
+      "description": "要点击的可见文本(精确或部分匹配)"
+     },
+     "selector": {
+      "type": "string",
+      "description": "限定范围CSS选择器(可选, 仅在范围内查找)"
+     },
+     "index": {
+      "type": "integer",
+      "description": "多匹配时选第几个(默认0=第一个)"
+     },
+     "exact": {
+      "type": "boolean",
+      "description": "仅精确匹配(默认false)"
+     }
+    },
+    "required": [
+     "text"
+    ]
+   }
+  },
+  {
+   "name": "browser_get_forms",
+   "description": "AI表单枚举: 列出页面全部表单及其字段(name/type/value/placeholder/required/选择器)。填表前先调用本工具了解字段结构, 配合browser_fill_form一键填写",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "form_index": {
+      "type": "integer",
+      "description": "只枚举第N个表单(默认全部)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_get_scroll",
+   "description": "AI滚动: 获取页面当前滚动位置(x/y)与最大可滚动范围(max_x/max_y)——判断是否到底、翻页采集进度",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "指定滚动容器(默认window)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_element_action",
+   "description": "AI操作: 按browser_snapshot返回的索引直接操作元素(点击/设值/聚焦/滚动/取值)。snapshot会为每个元素注入唯一data-mcp-id标记, 无需手写CSS选择器——AI操作页面元素的最高成功率方式。注意: 页面刷新后索引失效, 需重新snapshot",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "index": {
+      "type": "integer",
+      "description": "快照元素索引(snapshot返回的i字段)"
+     },
+     "action": {
+      "type": "string",
+      "description": "click(默认)/set_value/focus/scroll/get_value"
+     },
+     "value": {
+      "type": "string",
+      "description": "set_value时的值"
+     }
+    },
+    "required": [
+     "index"
+    ]
+   }
+  },
+  {
+   "name": "browser_debugger_list_breakpoints",
+   "description": "断点管理: 列出当前会话通过browser_debugger_set_breakpoint设置的全部断点(位置与CDP断点ID)——管理断点状态, 避免重复设置",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_debugger_clear_breakpoints",
+   "description": "断点管理: 逐个移除全部已记录断点(Debugger.removeBreakpoint)并清空注册表。返回移除成功/失败数; 页面仍暂停时需先debugger_resume",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_reverse_hook_multi",
+   "description": "Hook逆向: 批量函数Hook。一次包装多个函数(支持obj.fn点路径), 统一记录参数/返回值/异常到__MCP_HOOK_LOG__(经browser_reverse_hook_logs查询)——同时观察加密函数簇的调用关系",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "functions": {
+      "type": "string",
+      "description": "JSON数组字符串, 例:[sign,utils.md5,enc.aesEncrypt]"
+     },
+     "capture_args": {
+      "type": "boolean",
+      "description": "捕获参数(默认true)"
+     }
+    },
+    "required": [
+     "functions"
+    ]
+   }
+  },
+  {
+   "name": "browser_reverse_stack_trace",
+   "description": "逆向定位: 当前JS调用栈快照(Error().stack, 截断4000字符)——无需断点即可观察调用链路, 配合reverse_hook定位调用源",
+   "inputSchema": {
+    "type": "object"
+   }
+  },
+  {
+   "name": "browser_scroll_by",
+   "description": "AI滚动: 按像素增量滚动页面(x水平/y垂直, 正数向右/下)。配合browser_get_scroll实现翻页采集: 滚动→等待→采集→重复",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "x": {
+      "type": "integer",
+      "description": "水平增量像素(默认0)"
+     },
+     "y": {
+      "type": "integer",
+      "description": "垂直增量像素(默认800)"
+     },
+     "smooth": {
+      "type": "boolean",
+      "description": "平滑滚动(默认false)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_highlight",
+   "description": "AI高亮: 页面上高亮显示指定选择器匹配的元素(红色虚线边框+半透明背景), 便于肉眼确认目标元素。action=show显示(默认), action=clear清除全部高亮",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器(show时必填)"
+     },
+     "action": {
+      "type": "string",
+      "description": "show(默认)/clear"
+     },
+     "duration_ms": {
+      "type": "integer",
+      "description": "自动清除延迟毫秒(默认3000, 0=不自动清除)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_scan_crypto",
+   "description": "逆向定位: 加密算法特征扫描。扫描全部已加载脚本, 识别MD5(常量0x67452301)/AES(S-box)/SHA(初始向量)/CryptoJS/自定义base64编码表/RSA特征, 返回每个命中脚本的特征清单——快速判断sign/token用的什么算法",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "script_index": {
+      "type": "integer",
+      "description": "只扫描第N个脚本(默认全部)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_string_refs",
+   "description": "逆向定位: 字符串引用定位。在全部脚本中搜索指定字符串(密钥/常量/特征串), 返回每个出现位置的脚本/行号/前后各100字符上下文——快速定位密钥在哪被使用",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "string",
+      "description": "要定位的字符串"
+     },
+     "max_results": {
+      "type": "integer",
+      "description": "最大结果数(默认20,上限50)"
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_reverse_detect_obfuscator",
+   "description": "逆向解密: 混淆器类型识别。检测obfuscator.io(_0x十六进制数组)/JsJiami/sojson/JSVMP大switch状态机/自定义编码表/十六进制字符串数组特征, 给出置信度——选择正确的反混淆策略",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "script_index": {
+      "type": "integer",
+      "description": "只检测第N个脚本(默认全部)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_hook_logs",
+   "description": "逆向解密: Hook日志查询。读取全部Hook日志(函数Hook/eval_dynamic/websocket/cookie_set)。**不传log_key时自动探测全部日志键并合并**, 返回by_key给出各键条数; 传log_key则只读该键。action=query查询(默认, 每键最近200条)/clear清空(原地截断, 不会让已安装的Hook失效)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "log_key": {
+      "type": "string",
+      "description": "可选, 指定单个日志键: __MCP_HOOK_LOG__(函数Hook默认写这里)/__MCP_EVAL_LOG__/__MCP_WS_LOG__/__MCP_COOKIE_LOG__; 省略则自动全部合并"
+     },
+     "action": {
+      "type": "string",
+      "description": "query(默认)/clear"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_instrument_script",
+   "description": "V8插装(拆打包器核心): Debugger.setInstrumentationBreakpoint在**每个脚本执行之前**暂停——脚本还没跑、反调试还没生效时就能拿到原始源码与首次解包结果, 是JSVMP/打包器/反调试页面首选的介入点。action=install/remove/suppress(插装保留但不再拦截, 本机止血用), event=beforeScriptExecution(默认)/beforeScriptWithSourceMapExecution。需先browser_debugger_enable; 命中后页面暂停, 分析完务必browser_debugger_resume(调试器未启用时会自动启用并上报)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "install(默认)/remove/suppress(不卸载但停止拦截)"
+     },
+     "event": {
+      "type": "string",
+      "description": "beforeScriptExecution(默认)/beforeScriptWithSourceMapExecution"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_pause_on_exceptions",
+   "description": "异常暂停: Debugger.setPauseOnExceptions。混淆代码常把异常当流程控制或吞异常做反调试——抓\"被抛出的那一刻现场\"是定位内部逻辑的捷径, 配合browser_reverse_async_stack可得完整异步链路。state=none(关闭)/uncaught/caught(默认)/all",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "state": {
+      "type": "string",
+      "description": "none=关闭/uncaught=仅未捕获/caught=捕获+未捕获(默认)/all=全部暂停"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_blackbox",
+   "description": "V8黑盒(降噪): Debugger.setBlackboxPatterns。命中断点时不再进入匹配的脚本——把jquery/analytics/反调试库黑盒掉, 断点只停在目标业务代码。patterns为正则数组, 例:[\".*jquery.*\",\".*analytics.*\"]; 省略或空数组=清除黑盒",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "patterns": {
+      "type": "string",
+      "description": "JSON数组字符串, 元素为正则, 例: [\".*jquery.*\",\".*analytics.*\"]; 空=清除"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_async_stack",
+   "description": "V8异步栈: Debugger.setAsyncCallStackDepth。让断点/异常携带完整async链路——混淆代码把Promise/setTimeout链路打散后, 只有它能还原到底是谁调用了加密函数。depth缺省32, 显式0=关闭",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "depth": {
+      "type": "integer",
+      "description": "最大深度(缺省32, 显式0=关闭, 上限512)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_breakpoints_active",
+   "description": "断点总开关: Debugger.setBreakpointsActive。保留断点定义但不命中——跑完整流程时临时静音, 需要时一键恢复, 免去逐个删/加断点",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "active": {
+      "type": "boolean",
+      "description": "true(默认)=启用命中, false=静音"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_skip_pauses",
+   "description": "应急开关: Debugger.setSkipAllPauses。跳过全部暂停, 用于防止页面被断点/大批量插装卡死; 批量插装脚本时先跳过再逐个放行",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "skip": {
+      "type": "boolean",
+      "description": "true(默认)=跳过全部暂停, false=恢复"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_precise_coverage",
+   "description": "混淆定位利器: Profiler精确覆盖率插装(含调用次数)。故意看不懂的混淆代码, 让它跑一遍, V8直接告诉你哪些函数被执行了几次——从几十万行混淆里定位真实执行路径最快的手段。流程: start→触发目标逻辑(登录/验签)→take, cdp_result里count>0的函数即真实执行过",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "start(开启,记调用次数)/take(取数)/stop(停止); 默认take"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_patch",
+   "description": "脚本热补丁: Debugger.setScriptSource。运行中替换已加载脚本源码(V8层生效, 无需刷新页面)——验签/风控逻辑的活体改写。建议先dry_run:true验证新源码能编译再实改。**script_id可省略**(自动选字节最大的脚本并报告选中项)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "source": {
+      "type": "string",
+      "description": "替换后的完整脚本源码"
+     },
+     "script_id": {
+      "type": "string",
+      "description": "CDP scriptId(可省略=自动选最大脚本)"
+     },
+     "dry_run": {
+      "type": "boolean",
+      "description": "只验证能否编译不实际替换(默认false)"
+     }
+    },
+    "required": [
+     "source"
+    ]
+   }
+  },
+  {
+   "name": "browser_reverse_return_value",
+   "description": "断点处篡改返回值: Debugger.setReturnValue。页面暂停时直接把当前函数返回值改成指定值——改验签结果/绕过校验的最短路径。value必须是合法JSON字面量(true/0/\"ok\"/{\"code\":0})。需页面处于Debugger.paused; 之后用browser_debugger_resume继续",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "string",
+      "description": "新返回值, 合法JSON字面量, 例: true / 0 / \"ok\" / {\"code\":0}"
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_reverse_set_variable",
+   "description": "断点处改变量: Debugger.setVariableValue。暂停时改参数或中间变量(如把校验标志位调成true), 配合reverse_return_value完成活体篡改。call_frame_id省略时自动取最近一次暂停的顶层帧。需页面处于Debugger.paused",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "variable_name": {
+      "type": "string",
+      "description": "要改的变量名"
+     },
+     "value": {
+      "type": "string",
+      "description": "新值, 合法JSON字面量, 例: true / 0 / \"ok\""
+     },
+     "call_frame_id": {
+      "type": "string",
+      "description": "调用帧ID(省略=自动取最近暂停帧)"
+     },
+     "scope_number": {
+      "type": "integer",
+      "description": "作用域序号(默认0=最内层)"
+     }
+    },
+    "required": [
+     "variable_name",
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "browser_reverse_search_script",
+   "description": "V8全脚本检索(混淆定位主力): Debugger.searchInContent在V8自己的脚本对象里搜, 覆盖eval/blob:/Worker/动态创建脚本, 比只扫<script>标签的browser_reverse_search彻底。action=search(默认, 需query)/list(列已注册脚本及scriptId)/clear(清空注册表)。**无需任何前置调用**——注册表为空时会自动启用调试器并等待脚本上报",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "search(默认)/list/clear"
+     },
+     "query": {
+      "type": "string",
+      "description": "搜索串(action=search时必填, 如 sign/encrypt/密钥)"
+     },
+     "url_filter": {
+      "type": "string",
+      "description": "只搜URL含该片段的脚本(可选)"
+     },
+     "max_scripts": {
+      "type": "integer",
+      "description": "最多扫描脚本数(默认40, 上限200)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_get_possible_breakpoints",
+   "description": "混淆定点下断: Debugger.getPossibleBreakpoints。obfuscator.io/JSFuck常把整包压成一行, 按行下断会因\"该行无有效位置\"失败——本工具列出该脚本真正可下断的精确行/列, 拿到后再用browser_debugger_set_breakpoint下断。**script_id可省略**(自动选字节最大的脚本并在回复里报告选中项)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "script_id": {
+      "type": "string",
+      "description": "CDP scriptId(可省略=自动选最大脚本; 要指定则用browser_reverse_search_script action=list查)"
+     },
+     "line": {
+      "type": "integer",
+      "description": "起始行(0起算, 默认0)"
+     },
+     "end_line": {
+      "type": "integer",
+      "description": "结束行(缺省=起始+200)"
+     },
+     "restrict_to_function": {
+      "type": "boolean",
+      "description": "只返回函数边界内的可断点(默认false)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_add_binding",
+   "description": "原生桥接(防检测): Runtime.addBinding。装一个由内核提供的函数供页面JS直接调用——不改任何JS对象、fn.toString也查不出, 比包装JS函数更隐蔽, 适合防检测环境下回传日志",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "description": "绑定的函数名, 如 __mcp_send"
+     },
+     "execution_context_name": {
+      "type": "string",
+      "description": "限定生效的执行上下文名(可选)"
+     }
+    },
+    "required": [
+     "name"
+    ]
+   }
+  },
+  {
+   "name": "browser_reverse_listeners",
+   "description": "监听器取证: DOMDebugger.getEventListeners。反调试/风控常靠事件监听器(keydown/mousemove检测自动化, beforeunload阻断跳转)——本工具列出目标对象真实挂载的监听器(含handler源码与位置), 是拆这些陷阱的入口。传selector或object_id",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器, 如 #app; 也支持 document/window/body"
+     },
+     "object_id": {
+      "type": "string",
+      "description": "CDP objectId(优先于selector; 可用browser_reverse_dom_resolve取)"
+     },
+     "depth": {
+      "type": "integer",
+      "description": "递归深度(默认1, 上限5)"
+     },
+     "pierce": {
+      "type": "boolean",
+      "description": "穿透shadow DOM(默认true)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_dom_resolve",
+   "description": "取objectId(公共入口): 把selector/expression求值成CDP objectId, 并顺带列出该对象的自有属性。所有需要object_id的能力(listeners/query_objects/await_promise/call_fn)都可用它取句柄",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "selector": {
+      "type": "string",
+      "description": "CSS选择器, 如 #app"
+     },
+     "expression": {
+      "type": "string",
+      "description": "JS表达式(优先于selector), 如 window.someObj"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_query_objects",
+   "description": "找全部实例: Runtime.queryObjects。混淆代码里\"哪个类负责加密\"很难静态判断——已知一个原型(如 CryptoJS.AES.prototype)就能一次列出运行时所有存活实例",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "prototype_expression": {
+      "type": "string",
+      "description": "原型表达式, 如 window.CryptoJS.AES.prototype"
+     },
+     "prototype_object_id": {
+      "type": "string",
+      "description": "原型的CDP objectId(优先于expression)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_compile_script",
+   "description": "编译不执行: Runtime.compileScript。热补丁前校验候选源码能否编译(语法错误直接暴露), 也可预热脚本便于后续下断",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "source": {
+      "type": "string",
+      "description": "要编译的脚本源码"
+     },
+     "url": {
+      "type": "string",
+      "description": "sourceURL(默认 mcp://compiled)"
+     },
+     "persist": {
+      "type": "boolean",
+      "description": "保留脚本引用(默认false)"
+     }
+    },
+    "required": [
+     "source"
+    ]
+   }
+  },
+  {
+   "name": "browser_reverse_bypass_csp",
+   "description": "绕过CSP: Page.setBypassCSP。混淆/加固页面常用CSP挡住注入脚本与eval, 导致插装/preload全部失效——打开旁路是让后续注入生效的前置开关(需重新导航才对本次加载生效)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "enable": {
+      "type": "boolean",
+      "description": "true(默认)=绕过, false=恢复"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_cache_disable",
+   "description": "缓存总开关: Network.setCacheDisabled。改过脚本/资源后必须让页面重新拉取才看得到效果; 排查缓存投毒/旧版本脚本也靠它",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "disable": {
+      "type": "boolean",
+      "description": "true(默认)=禁用缓存, false=恢复"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_network_conditions",
+   "description": "网络条件仿真: Network.emulateNetworkConditions。复现弱网/断网/高延迟(只改渲染进程的网络体感, 不动系统网卡与代理), 排查本地很快但用户端超时的问题。CDP硬约束: latency/downloadThroughput/uploadThroughput 三项必须同时给出, -1 表示该方向不限速(本工具已自动补齐三项)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "offline": {
+      "type": "boolean",
+      "description": "断网(默认false)"
+     },
+     "latency": {
+      "type": "integer",
+      "description": "额外延迟ms(默认0)"
+     },
+     "download_throughput": {
+      "type": "integer",
+      "description": "下行字节/秒; -1=不限速(默认-1)"
+     },
+     "upload_throughput": {
+      "type": "integer",
+      "description": "上行字节/秒; -1=不限速(默认-1)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_emulate_focus",
+   "description": "焦点仿真: Emulation.setFocusEmulationEnabled。让页面始终认为窗口处于聚焦状态——后台/最小化时页面会因 blur 暂停 rAF 与定时器、甚至降级混淆逻辑, 打开后这类环境相关行为才与前台一致",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "enabled": {
+      "type": "boolean",
+      "description": "true(默认)=开启焦点仿真, false=恢复真实焦点"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_cookie_cdp",
+   "description": "Cookie 直读: Storage.getCookies / Network.getCookies。不传 urls 取浏览器上下文全部 Cookie(含 httpOnly); 传 urls(逗号分隔)只取这些 URL 会带上的 Cookie。走 CDP 读的是内核真实 cookie 库, 不依赖页面上下文",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "urls": {
+      "type": "string",
+      "description": "逗号分隔URL(可选, 例: https://a.com,https://b.com); 省略=全部Cookie"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_css_coverage",
+   "description": "CSS 规则覆盖率: start/take/stop 三段式。反查哪些样式规则从未命中——用于裁剪混淆样式表, 也能反推某元素到底由哪条规则在起作用",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "start(开始)/take(取增量)/stop(结束并汇总); 默认start"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_trace",
+   "description": "Chrome trace: Tracing.start/end。拿内核级时间线(渲染/合成/脚本/V8), 回答这段时间到底卡在哪。**注意**: trace 数据以 Tracing.dataCollected 事件内联返回, 故建议先 action=start 之前用 browser_kernel_cdp_monitor 加规则 Tracing.* , 否则采集完拿不回数据",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "start(默认)/end"
+     },
+     "categories": {
+      "type": "string",
+      "description": "trace类别(默认 -* 采集全部默认类别)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_layer_tree",
+   "description": "合成层诊断: LayerTree.enable/disable。元素为什么不合成、为什么掉帧的最终判据——开启后内核推送 LayerTree.layerTreeDidChange, 可看到层数量与合成原因(如 transform/opacity 未提升为合成层)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "enabled": {
+      "type": "boolean",
+      "description": "true(默认)=开启上报, false=关闭(持续上报有开销)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_input_cdp",
+   "description": "底层 Input 域派发: 直发 CDP 原始输入事件, 比坐标点击更可控、不受 UI 命中与遮挡影响。kind=mouse/touch/key; 鼠标与触摸复用项目内已验证的 CDP 派发(自动处理触摸仿真与按下态, 不破坏 CDP 会话), 键盘直发 Input.dispatchKeyEvent",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "kind": {
+      "type": "string",
+      "description": "mouse(默认)/touch/key"
+     },
+     "type": {
+      "type": "string",
+      "description": "mouse: mouseMoved(默认)/mousePressed/mouseReleased/mouseWheel; touch: touchStart(默认)/touchMove/touchEnd/touchCancel; key: keyDown(默认)/keyUp/char/rawKeyDown"
+     },
+     "x": {
+      "type": "integer",
+      "description": "X坐标"
+     },
+     "y": {
+      "type": "integer",
+      "description": "Y坐标"
+     },
+     "button": {
+      "type": "string",
+      "description": "鼠标按键 left/right/middle(默认left)"
+     },
+     "delta_x": {
+      "type": "integer",
+      "description": "mouseWheel横向增量"
+     },
+     "delta_y": {
+      "type": "integer",
+      "description": "mouseWheel纵向增量"
+     },
+     "key": {
+      "type": "string",
+      "description": "key事件: 键名(如 Enter / a)"
+     },
+     "windows_virtual_key_code": {
+      "type": "integer",
+      "description": "key事件: 虚拟键码"
+     },
+     "text": {
+      "type": "string",
+      "description": "key事件: type=char 时要输入的字符"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_detect_traps",
+   "description": "反调试/风控陷阱检测(只检测布置了哪些陷阱, 不绕过): 在 V8 已加载的脚本里逐类检索 7 类常见反调试特征——debugger语句 / Function.prototype.toString 重写 / console 探测 / performance.now 时序检测 / setInterval 定时自陷 / navigator.webdriver 自动化探测 / devtools 探测, 每类给出命中数与命中行号及结论。**script_id 可省略**(自动选字节最大的脚本, 注册表为空时自动启用调试器等待上报)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "script_id": {
+      "type": "string",
+      "description": "CDP scriptId(可省略=自动选最大脚本)"
+     },
+     "classes": {
+      "type": "string",
+      "description": "只检测指定类别, 逗号分隔, 可选: debugger_stmt/tostring_hook/console_hook/timing_check/timer_debugger/automation_detect/devtools_probe(省略=全部)"
+     },
+     "max_hits": {
+      "type": "integer",
+      "description": "每类最多列出的命中行号数(默认5, 上限50)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_reverse_evaluate_silent",
+   "description": "静默求值: Runtime.evaluate(silent)。silent让求值不触发断点/异常暂停、不污染控制台——在已插装/已下断点的页面上继续取数据而不惊动调试状态, 也避免被console副作用检测发现",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "expression": {
+      "type": "string",
+      "description": "JS表达式"
+     },
+     "silent": {
+      "type": "boolean",
+      "description": "不触发断点/不写控制台(默认true)"
+     },
+     "user_gesture": {
+      "type": "boolean",
+      "description": "带用户手势(默认true, 绕过需手势的限制)"
+     },
+     "await_promise": {
+      "type": "boolean",
+      "description": "等待Promise结果(默认false)"
+     },
+     "return_by_value": {
+      "type": "boolean",
+      "description": "按值返回(默认true)"
+     }
+    },
+    "required": [
+     "expression"
+    ]
+   }
+  },
+  {
+   "name": "browser_reverse_await_promise",
+   "description": "等Promise结果: Runtime.awaitPromise。异步加密/验签拿不到返回值时, 先求值出Promise句柄再让它resolve出结果(被拒绝会返回exceptionDetails, 不是工具失败)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "expression": {
+      "type": "string",
+      "description": "返回Promise的表达式, 如 fetch('/api').then(r=>r.json())"
+     },
+     "promise_object_id": {
+      "type": "string",
+      "description": "Promise的CDP objectId(优先于expression)"
+     },
+     "return_by_value": {
+      "type": "boolean",
+      "description": "按值返回(默认true)"
+     }
+    }
+   }
+  },
+  {
+   "name": "browser_fill_form",
+   "description": "AI一键填表: 按字段清单批量填写表单。fields为JSON数组[{selector,value},...], 逐个用原生填表框架置入内容并模拟输入事件, 返回每字段成败。配合browser_get_forms使用",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "fields": {
+      "type": "string",
+      "description": "JSON数组字符串, 例: [{selector:#name,value:张三},{selector:#pwd,value:123}]"
+     },
+     "submit": {
+      "type": "boolean",
+      "description": "填完后自动提交表单(默认false)"
+     }
+    },
+    "required": [
+     "fields"
+    ]
+   }
+  }
+ ]
+}

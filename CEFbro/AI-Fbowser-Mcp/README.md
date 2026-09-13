@@ -4,13 +4,13 @@
 > 
 > Web Scraping · JS Reverse Engineering · CDP Debugger · Fingerprint Anti-Detect · Form Automation RPA
 
-[![Release](https://img.shields.io/badge/release-v3.1.0-blue)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
+[![Release](https://img.shields.io/badge/release-v3.2.0-blue)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows_x64_|_win32-lightgrey)](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
 
 <p align="center">
   <a href="https://github.com/AI-XiaoDao/ai-browser-mcp/releases/latest">
-    <img src="https://img.shields.io/badge/⬇️_下载最新版-v3.1.0-brightgreen?style=for-the-badge" alt="下载 v3.1.0">
+    <img src="https://img.shields.io/badge/⬇️_下载最新版-v3.2.0-brightgreen?style=for-the-badge" alt="下载 v3.2.0">
   </a>
   &nbsp;
   <a href="https://github.com/AI-XiaoDao/ai-browser-mcp/releases">
@@ -22,7 +22,7 @@
 
 ## 这是什么？
 
-**AI浏览器 MCP Server** 是一个 **Windows 本地浏览器自动化 MCP 服务端**。它运行真实的 **FBrowser CEF (Chromium Embedded Framework)** 浏览器内核，通过 **Model Context Protocol (MCP 模型上下文协议)** 向 AI 编程助手暴露 **265 个浏览器自动化工具**。
+**AI浏览器 MCP Server** 是一个 **Windows 本地浏览器自动化 MCP 服务端**。它运行真实的 **FBrowser CEF (Chromium Embedded Framework)** 浏览器内核，通过 **Model Context Protocol (MCP 模型上下文协议)** 向 AI 编程助手暴露 **334 个浏览器自动化工具**。
 
 ### 为什么选择 AI 浏览器 MCP？
 
@@ -55,8 +55,8 @@
 
 | 包 | 说明 |
 |----|------|
-| `AI-Browser-MCP-x64-v3.1.0.zip` | 64 位 Windows, ~160MB |
-| `AI-Browser-MCP-win32-v3.1.0.zip` | 32 位 Windows, ~140MB |
+| `AI-Browser-MCP-x64-v3.2.0.zip` | 64 位 Windows, ~160MB |
+| `AI-Browser-MCP-win32-v3.2.0.zip` | 32 位 Windows, ~140MB |
 | `AI-Browser-MCP-cpp-*.zip` | C++ 生成源码（可选） |
 
 > 📦 所有历史版本: [Releases](https://github.com/AI-XiaoDao/ai-browser-mcp/releases)
@@ -157,7 +157,7 @@
 | `AI_BROWSER_MCP_PORT` | `9222` |
 | `AI_BROWSER_MCP_HEALTH` | `http://127.0.0.1:9222/health` |
 | `AI_BROWSER_MCP_HTTP_POST` | `http://127.0.0.1:9222/mcp` |
-| `AI_BROWSER_MCP_VERSION` | `3.1.0` |
+| `AI_BROWSER_MCP_VERSION` | `3.2.0` |
 
 ---
 

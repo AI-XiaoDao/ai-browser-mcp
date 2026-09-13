@@ -1,0 +1,71 @@
+﻿at_line: 298
+brace_in_string: 741
+comment_line: 1905
+inline_comment: 48
+kw_判断循环: 35
+kw_到循环尾: 18
+kw_否则: 738
+kw_如果: 2752
+kw_如果真: 3
+kw_循环判断尾: 10
+kw_循环判断首: 10
+kw_继续循环: 1
+kw_计次循环: 77
+kw_跳出循环: 55
+kw_返回: 2097
+kw_返回值类型: 3
+
+--- brace_in_string: 741 ---
+    MCP_BrowserEvents.wsv 169         创建数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 225         关闭数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 653             下载数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 677                         记录监控事件 (MCP命令服务器.是否监控下载事件, "download_start_error", 浏览器.取ID (), "{\"error\":\"download_dir_create_failed\"}")
+    MCP_BrowserEvents.wsv 753                 进度数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 903             地址数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 1149             导航数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 1417             弹窗数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 1447         失败数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 1475             状态数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 1505             状态数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 1553             数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 1621             数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 1659             标题数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 1703             请求数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 1737             响应数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 1775             重定向数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 1935             对话框数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 1981             离开数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 2025             文件数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 2061             全屏数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 2087             图标数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 2139             查找数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 2175             fc数据.创建自文本 ("{}")
+    MCP_BrowserEvents.wsv 2203             fd数据.创建自文本 ("{}")
+--- comment_with_brace: 41 ---
+    MCP_Kernel.wsv 1086                     // 判据修正: 提交**成功**时返回的是非空回执(本项目统一用 是否以(...,"{\"error\"") 判失败),
+    MCP_Kernel.wsv 1659     # 查询方案内容 (类_MCP_方案资源处理器 事件内调用), 返回 {"mime":..,"body":..}, 未找到返回 ""
+    MCP_Server.wsv 1814         // 四层最长token优先转义, 读取侧用占位符逆序还原, 保证 {PIPE}/{PIPE_ESC}/{PIPE_ESC_ESC} 字面量往返无损
+    MCP_Server.wsv 2082             // 还原: 先用占位符保护最长token, 防串级还原 (修复 {PIPE_ESC}/{PIPE_ESC_ESC} 字面量被误还原)
+    MCP_Server.wsv 2083             // 占位符 {MPE1}/{MPE2}/{MPE3} 形似非法JS片段, 实际注入代码几乎不可能包含
+    MCP_Server.wsv 2394     # 存储格式为 {success,message,cdpEvent} 时解出 params；已是 callFrames 则原样返回
+    MCP_Server.wsv 3178     #   CDP 通道并非总是可用 —— 已确认 browser_vip_enable_js_env {enable:true} 会**破坏 CDP**,
+    MCP_Server.wsv 3281         // Runtime.evaluate 返回 {result: {type, value/description}, exceptionDetails: ...}
+    MCP_Server.wsv 3314                 // (实测 browser_vip_enable_js_env {enable:true} 之后, CDP 查询恒得 null:
+    MCP_Server.wsv 5760                 // {ok:false} 仅对DOM/填表工具有效, 避免误判正常JSON返回值
+    MCP_Server.wsv 6298             // 真机实测: browser_scroll_by {"y":"100"} -> y 读成 0 -> 命中 y==0 兜底 -> 真的滚了 800px;
+    MCP_Server.wsv 6299             //           browser_dom_set_value {"allow_empty":true} -> 读成 0 -> 无法清空字段。
+    MCP_Server.wsv 6389             // 且照样返回 success。真机实测: browser_fingerprint_online {"value":"true"}
+    MCP_Server.wsv 6391             // 同类高危: {"mute":"true"} 会变成取消静音、{"focus":"true"} 会变成失去焦点。
+    MCP_Server.wsv 6430     #   {"_phase":0, ..., "_phase":3,"_extract_task_id":"...94",
+    MCP_Server.wsv 6431     #     "_phase":3,"_extract_task_id":"...95", ... }   <- _phase 出现 9 次
+    MCP_Server.wsv 6466     # 实机证据(本机真跑): browser_set_zoom {} -> "缩放(持久): 0", 且 browser_get_zoom 读回 0
+    MCP_Server.wsv 6468     #   browser_mouse_click {} -> "VIP点击 (0,0)" —— 真的在 (0,0) 点了一下;
+    MCP_Server.wsv 6469     #   browser_antidetect_presets {} -> 部署 stealth 预设(持久生效)。
+    MCP_Server.wsv 6491         //      (browser_set_window_style {type:-12} 缺 style、browser_mouse_wheel {x,y} 缺 delta
+    MCP_Server.wsv 6842     # 手写篡改: 按URL匹配资源替换规则, 返回匹配JSON {action,search,replace,file} 或空文本
+    MCP_Server.wsv 6957         // 提取服务器条目 (ai-browser: {...}, 不含外层mcpServers壳)
+    MCP_Server.wsv 7012                 // 空mcpServers({})时不加尾逗号, 防生成非法JSON {"mcpServers":{...},}
+    MCP_Server.wsv 7013                 // 0-based语义: prefix=Left(开括号+1)含"{", suffix=Right(len-开括号-1)从"{"之后开始
+    MCP_Server.wsv 9053             // MCP 标准 ping: 返回空对象 {} (ping通知允许无响应)
+--- inline_comment_with_brace: 1 ---
+    MCP_Server.wsv 6966         条目文本 = 取文本左边 (条目文本, 取文本长度 (条目文本) - 2)  // 去掉尾部 }}

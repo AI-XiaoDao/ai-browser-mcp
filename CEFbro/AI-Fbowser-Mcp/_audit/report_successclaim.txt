@@ -1,0 +1,21 @@
+MCP_Server_Core.wsv	browser_print_to_pdf	PDF打印已提交, 通过mcp_result查询结果
+MCP_Server_Core.wsv	browser_get_cookies	Cookie获取已提交(含HttpOnly), 通过mcp_result查询
+MCP_Server_Core.wsv	browser_clear_cache	全局缓存清理已提交, 通过mcp_result查询
+MCP_Server_Core.wsv	browser_dom_query	DOM属性查询(原生)已提交
+MCP_Server_Core.wsv	browser_dom_rect	元素坐标(原生)获取已提交; 该原生路径只返回「x, y」且无宽度/高度, 如需宽高请重试以走 CDP 路径
+MCP_Server_Core.wsv	browser_dom_inner_html	innerHTML(原生)获取已提交
+MCP_Server_Core.wsv	browser_dom_checked	checkbox状态(原生)获取已提交; 该原生路径只返回 1/0, 1=已勾选
+MCP_Server_Core.wsv	browser_dom_selected	select选项(原生)获取已提交; 该原生路径只返回选中项**索引**(非 value), 请勿当作值使用
+MCP_Server_Core.wsv	browser_screenshot	截图已提交, 通过mcp_result查询
+MCP_Server_Core.wsv	browser_wait	等待已提交, 通过mcp_result轮询结果
+MCP_Server_Core.wsv	browser_download_image	图片下载已提交, 通过mcp_result查询
+MCP_Server_Core.wsv	browser_reverse_cookie_sources	Cookie归因已提交(原生Cookie API) | HTTP Set-Cookie 请在请求前开启 browser_
+MCP_Server_Form.wsv	browser.fill_exists	存在检查已提交, 通过mcp_result查询
+MCP_Server_Form.wsv	browser.fill_attr_get	属性获取已提交, 通过mcp_result查询
+MCP_Server_VIP.wsv	browser_vip_websocket_intercept	WebSocket拦截已启用
+MCP_Server_VIP.wsv	browser_vip_enable_js_env	JS执行环境已设置 | ⚠ 已启用: 实测启用后会破坏 CDP 通道, 使 CDP 优先的工具(browser_dom_
+MCP_Server_VIP.wsv	browser_get_all_cookies	全部Cookie获取已提交, 通过mcp_result查询
+MCP_Server_VIP.wsv	browser_vip_load_extension	CRX插件包已提交安装: 
+MCP_Server_VIP.wsv	browser_vip_execute_js_context	JS已提交到指定环境
+MCP_Server_VIP.wsv	browser_vip_dom_get_document	DOM文档已提交枚举, 通过mcp_result查询
+MCP_Server_VIP.wsv	browser_vip_dom_search	查找结果已提交, 通过mcp_result查询

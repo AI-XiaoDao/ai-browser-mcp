@@ -1,0 +1,87 @@
+# 全量幽灵扫描 (快照 C:\Users\cxzxc\Desktop\MCP源码\ai-browser-mcp\CEFbro\AI-Fbowser-Mcp\_audit\_ghost_snapshot)
+
+## tools/list 已登记(301) 但分派链无分支  => 工具在列表里可见却不可用 (严重)
+  小计 = 0
+
+## 仅命令注册表有(camel/短名/遗留) 且分派链无分支 => 死注册项
+  browser.fingerprint_languages              命令注册表 MCP_Server.wsv:1285 注册命令双变体(fingerprint_languages) 不带短名
+  browser.fingerprint_webgl_vendor           命令注册表 MCP_Server.wsv:1275 注册命令双变体(fingerprint_webgl_vendor) 不带短名
+  browser.font_randomize                     命令注册表 MCP_Server.wsv:1259 注册命令双变体(font_randomize)
+  browser.reverse_cookie_cdp                 命令注册表 MCP_Server.wsv:1276 注册命令双变体(reverse_cookie_cdp)
+  browser.reverse_css_coverage               命令注册表 MCP_Server.wsv:1286 注册命令双变体(reverse_css_coverage)
+  browser.reverse_detect_traps               命令注册表 MCP_Server.wsv:1248 置整数值
+  browser.reverse_emulate_focus              命令注册表 MCP_Server.wsv:1279 注册命令双变体(reverse_emulate_focus)
+  browser.reverse_input_cdp                  命令注册表 MCP_Server.wsv:1281 注册命令双变体(reverse_input_cdp)
+  browser.reverse_layer_tree                 命令注册表 MCP_Server.wsv:1287 注册命令双变体(reverse_layer_tree)
+  browser.reverse_network_conditions         命令注册表 MCP_Server.wsv:1277 注册命令双变体(reverse_network_conditions)
+  browser.reverse_trace                      命令注册表 MCP_Server.wsv:1282 注册命令双变体(reverse_trace)
+  browser_fingerprint_languages              命令注册表 MCP_Server.wsv:1285 注册命令双变体(fingerprint_languages) 不带短名
+  browser_fingerprint_webgl_vendor           命令注册表 MCP_Server.wsv:1275 注册命令双变体(fingerprint_webgl_vendor) 不带短名
+  browser_font_randomize                     命令注册表 MCP_Server.wsv:1259 注册命令双变体(font_randomize)
+  browser_reverse_cookie_cdp                 命令注册表 MCP_Server.wsv:1276 注册命令双变体(reverse_cookie_cdp)
+  browser_reverse_css_coverage               命令注册表 MCP_Server.wsv:1286 注册命令双变体(reverse_css_coverage)
+  browser_reverse_detect_traps               命令注册表 MCP_Server.wsv:1249 置整数值
+  browser_reverse_emulate_focus              命令注册表 MCP_Server.wsv:1279 注册命令双变体(reverse_emulate_focus)
+  browser_reverse_input_cdp                  命令注册表 MCP_Server.wsv:1281 注册命令双变体(reverse_input_cdp)
+  browser_reverse_layer_tree                 命令注册表 MCP_Server.wsv:1287 注册命令双变体(reverse_layer_tree)
+  browser_reverse_network_conditions         命令注册表 MCP_Server.wsv:1277 注册命令双变体(reverse_network_conditions)
+  browser_reverse_trace                      命令注册表 MCP_Server.wsv:1282 注册命令双变体(reverse_trace)
+  font_randomize                             命令注册表 MCP_Server.wsv:1259 注册命令双变体(font_randomize)
+  reverse_cookie_cdp                         命令注册表 MCP_Server.wsv:1276 注册命令双变体(reverse_cookie_cdp)
+  reverse_css_coverage                       命令注册表 MCP_Server.wsv:1286 注册命令双变体(reverse_css_coverage)
+  reverse_detect_traps                       命令注册表 MCP_Server.wsv:1250 置整数值
+  reverse_emulate_focus                      命令注册表 MCP_Server.wsv:1279 注册命令双变体(reverse_emulate_focus)
+  reverse_input_cdp                          命令注册表 MCP_Server.wsv:1281 注册命令双变体(reverse_input_cdp)
+  reverse_layer_tree                         命令注册表 MCP_Server.wsv:1287 注册命令双变体(reverse_layer_tree)
+  reverse_network_conditions                 命令注册表 MCP_Server.wsv:1277 注册命令双变体(reverse_network_conditions)
+  reverse_trace                              命令注册表 MCP_Server.wsv:1282 注册命令双变体(reverse_trace)
+
+## 复用路径候选实现状态
+  browser_fingerprint                      tools/list=Y   分派分支=分类分派_核心操作 L2010 browser_fingerprint
+  browser_fingerprint_ua                   tools/list=Y   分派分支=分类分派_VIP操作 L1385 browser_fingerprint_ua
+  browser_vip_fingerprint_font             tools/list=Y   分派分支=分类分派_VIP操作 L787 browser_vip_fingerprint_font
+  browser_vip_fingerprint_canvas_font      tools/list=Y   分派分支=分类分派_VIP操作 L798 browser_vip_fingerprint_canvas_font
+  browser_vip_fingerprint_webgl            tools/list=Y   分派分支=分类分派_VIP操作 L763 browser_vip_fingerprint_webgl
+  browser_vip_fingerprint_languages        tools/list=N   分派分支=无
+  browser_get_all_cookies                  tools/list=Y   分派分支=分类分派_VIP操作 L1101 browser_get_all_cookies
+  browser_reverse_cookie_sources           tools/list=Y   分派分支=分类分派_核心操作 L5811 browser_reverse_cookie_sources
+  browser_get_cookies                      tools/list=Y   分派分支=分类分派_核心操作 L869 browser_get_cookies
+  browser_vip_mouse_press                  tools/list=Y   分派分支=分类分派_VIP操作 L618 browser_vip_mouse_press
+  browser_vip_mouse_release                tools/list=Y   分派分支=分类分派_VIP操作 L635 browser_vip_mouse_release
+  browser_vip_mouse_click                  tools/list=Y   分派分支=分类分派_VIP操作 L68 browser_vip_mouse_click
+  browser_vip_key_type                     tools/list=Y   分派分支=分类分派_VIP操作 L957 browser_vip_key_type
+  browser_vip_key_input                    tools/list=Y   分派分支=分类分派_VIP操作 L929 browser_vip_key_input
+  browser_mouse_click                      tools/list=Y   分派分支=分类分派_核心操作 L588 browser_mouse_click
+  browser_key_event                        tools/list=Y   分派分支=分类分派_核心操作 L725 browser_key_event
+  browser_kernel_reverse_trace             tools/list=Y   分派分支=分类分派_内核操作 L124 browser_kernel_reverse_trace
+  browser_kernel_reverse_probe             tools/list=Y   分派分支=分类分派_内核操作 L120 browser_kernel_reverse_probe
+  browser_reverse_precise_coverage         tools/list=Y   分派分支=分类分派_逆向操作 L1099 browser_reverse_precise_coverage
+  browser_reverse_profile                  tools/list=Y   分派分支=分类分派_核心操作 L6441 browser_reverse_profile; 分类分派_逆向操作 L12 browser_reverse_profile
+  browser_reverse_skip_pauses              tools/list=Y   分派分支=分类分派_逆向操作 L1089 browser_reverse_skip_pauses
+  browser_reverse_blackbox                 tools/list=Y   分派分支=分类分派_逆向操作 L1023 browser_reverse_blackbox
+  browser_reverse_bypass_csp               tools/list=Y   分派分支=分类分派_逆向操作 L1631 browser_reverse_bypass_csp
+  browser_reverse_async_stack              tools/list=Y   分派分支=分类分派_逆向操作 L1053 browser_reverse_async_stack
+  browser_reverse_cache_disable            tools/list=Y   分派分支=分类分派_逆向操作 L1646 browser_reverse_cache_disable
+  browser_reverse_heap                     tools/list=Y   分派分支=分类分派_逆向操作 L353 browser_reverse_heap
+  browser_reverse_runtime                  tools/list=Y   分派分支=分类分派_逆向操作 L389 browser_reverse_runtime
+  browser_reverse_cdp_hook                 tools/list=Y   分派分支=分类分派_逆向操作 L97 browser_reverse_cdp_hook
+  browser_reverse_instrument               tools/list=Y   分派分支=分类分派_核心操作 L5886 browser_reverse_instrument
+  browser_reverse_setup                    tools/list=Y   分派分支=分类分派_核心操作 L6363 browser_reverse_setup
+  browser_reverse_extract                  tools/list=Y   分派分支=分类分派_核心操作 L5976 browser_reverse_extract
+  browser_antidetect_presets               tools/list=Y   分派分支=分类分派_核心操作 L6271 browser_antidetect_presets
+  browser_reverse_detect_obfuscator        tools/list=Y   分派分支=分类分派_逆向操作 L586 browser_reverse_detect_obfuscator
+  browser_permission_spoof                 tools/list=Y   分派分支=分类分派_核心操作 L3130 browser_permission_spoof
+  browser_canvas_noise                     tools/list=Y   分派分支=分类分派_核心操作 L2994 browser_canvas_noise
+  browser_retry                            tools/list=Y   分派分支=分类分派_核心操作 L2901 browser_retry; 分类分派_核心操作 L2909 browser_retry; 分类分派_核心操作 L2909 retry
+  browser_reverse_hook                     tools/list=Y   分派分支=分类分派_核心操作 L5596 browser_reverse_hook
+  browser_reverse_search                   tools/list=Y   分派分支=分类分派_核心操作 L5936 browser_reverse_search
+  browser_reverse_dom_breakpoint           tools/list=Y   分派分支=分类分派_逆向操作 L48 browser_reverse_dom_breakpoint
+  browser_reverse_network_intercept        tools/list=Y   分派分支=分类分派_逆向操作 L437 browser_reverse_network_intercept
+  browser_reverse_websocket                tools/list=Y   分派分支=分类分派_逆向操作 L320 browser_reverse_websocket
+  browser_reverse_patch                    tools/list=Y   分派分支=分类分派_逆向操作 L1133 browser_reverse_patch
+  browser_reverse_evaluate_silent          tools/list=Y   分派分支=分类分派_逆向操作 L1660 browser_reverse_evaluate_silent
+  browser_reverse_compile_script           tools/list=Y   分派分支=分类分派_逆向操作 L1608 browser_reverse_compile_script
+  browser_network_export                   tools/list=Y   分派分支=分类分派_核心操作 L3073 browser_network_export
+  browser_reverse_add_binding              tools/list=Y   分派分支=分类分派_逆向操作 L1471 browser_reverse_add_binding
+  browser_reverse_listeners                tools/list=Y   分派分支=分类分派_逆向操作 L1495 browser_reverse_listeners
+  browser_reverse_dom_resolve              tools/list=Y   分派分支=分类分派_逆向操作 L1541 browser_reverse_dom_resolve

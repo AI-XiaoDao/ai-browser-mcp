@@ -1,0 +1,209 @@
+{
+ "A": [
+  {
+   "file": "MCP_Server_Core.wsv",
+   "class": "MCP_核心分派",
+   "method": "分类分派_核心操作",
+   "container_kind": "if",
+   "container_header_line": 684,
+   "container_header": "如果 (browser.是否为空 () == 假)",
+   "container_brace_line": 685,
+   "container_close_line": 721,
+   "container_chain": "class(L7) < method(L12) < else(L680)",
+   "branch_kind": "else",
+   "branch_line": 680,
+   "branch_header": "否则 (方法名 == \"browser_mouse_move\")",
+   "jump_line": 705,
+   "jump_kind": "返回",
+   "jump_text": "返回 (MCP_响应构建.命令失败 (命令ID, \"CDP 派发鼠标事件失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级鼠标注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_element_action 点击元素 / browser_execute_js 派发事件 | 如仍要内核注入请显式传 kernel:true(会确认 CDP 已失效)\"))",
+   "dead_region": [
+    {
+     "line": 706,
+     "kind": "comment",
+     "text": "// VIP优先: CDP高级鼠标移动 (内核注入, 会破坏 CDP 会话)"
+    },
+    {
+     "line": 707,
+     "kind": "code",
+     "text": "变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>"
+    },
+    {
+     "line": 708,
+     "kind": "code",
+     "text": "vip_ctrl = browser.取VIP控制器 ()"
+    },
+    {
+     "line": 709,
+     "kind": "code",
+     "text": "如果 (vip_ctrl.是否为空 () == 假)"
+    },
+    {
+     "line": 710,
+     "kind": "code",
+     "text": "{"
+    },
+    {
+     "line": 711,
+     "kind": "code",
+     "text": "vip_ctrl.高级鼠标_移动 (x, y)"
+    },
+    {
+     "line": 712,
+     "kind": "code",
+     "text": "返回 (MCP_响应构建.命令成功 (命令ID, \"VIP鼠标移动到 (\" + 到文本 (x) + \",\" + 到文本 (y) + \") | ⚠ 本工具走**内核级鼠标注入**, 实测该调用会使 CDP 通道失效: 之后 browser_dom_query / browser_dom_rect / browser_get_text 等 CDP 优先工具都会退化为原生路径(每个白等约10秒, 部分会返回 null), 且注销重注册监管者/重新导航均无法恢复, 需重启进程。如后续还要用 CDP 类工具, 建议改用 browser_element_action 或 browser_execute_js 派发事件\"))"
+    },
+    {
+     "line": 713,
+     "kind": "code",
+     "text": "}"
+    },
+    {
+     "line": 714,
+     "kind": "comment",
+     "text": "// 普通CEF鼠标移动 (VIP不可用时退路)"
+    },
+    {
+     "line": 715,
+     "kind": "code",
+     "text": "变量 鼠标事件 <类型 = FBrowser_鼠标事件>"
+    },
+    {
+     "line": 716,
+     "kind": "code",
+     "text": "鼠标事件.横坐标 = x"
+    },
+    {
+     "line": 717,
+     "kind": "code",
+     "text": "鼠标事件.纵坐标 = y"
+    },
+    {
+     "line": 718,
+     "kind": "code",
+     "text": "鼠标事件.修饰键 = 事件标识.无"
+    },
+    {
+     "line": 719,
+     "kind": "code",
+     "text": "browser.发送鼠标移动事件 (鼠标事件, 假)"
+    },
+    {
+     "line": 720,
+     "kind": "code",
+     "text": "返回 (MCP_响应构建.命令成功 (命令ID, \"鼠标移动到 (\" + 到文本 (x) + \",\" + 到文本 (y) + \")\"))"
+    },
+    {
+     "line": 721,
+     "kind": "code",
+     "text": "}"
+    }
+   ]
+  },
+  {
+   "file": "MCP_Server_Core.wsv",
+   "class": "MCP_核心分派",
+   "method": "分类分派_核心操作",
+   "container_kind": "if",
+   "container_header_line": 1144,
+   "container_header": "如果 (browser.是否为空 () == 假)",
+   "container_brace_line": 1145,
+   "container_close_line": 1189,
+   "container_chain": "class(L7) < method(L12) < else(L1132)",
+   "branch_kind": "else",
+   "branch_line": 1132,
+   "branch_header": "否则 (方法名 == \"browser_mouse_wheel\")",
+   "jump_line": 1173,
+   "jump_kind": "返回",
+   "jump_text": "返回 (MCP_响应构建.命令失败 (命令ID, \"CDP 派发鼠标事件失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级鼠标注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_element_action 点击元素 / browser_execute_js 派发事件 | 如仍要内核注入请显式传 kernel:true(会确认 CDP 已失效)\"))",
+   "dead_region": [
+    {
+     "line": 1174,
+     "kind": "comment",
+     "text": "// VIP优先: CDP高级鼠标滚轮 (内核注入, 会破坏 CDP 会话)"
+    },
+    {
+     "line": 1175,
+     "kind": "code",
+     "text": "变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>"
+    },
+    {
+     "line": 1176,
+     "kind": "code",
+     "text": "vip_ctrl = browser.取VIP控制器 ()"
+    },
+    {
+     "line": 1177,
+     "kind": "code",
+     "text": "如果 (vip_ctrl.是否为空 () == 假)"
+    },
+    {
+     "line": 1178,
+     "kind": "code",
+     "text": "{"
+    },
+    {
+     "line": 1179,
+     "kind": "code",
+     "text": "vip_ctrl.高级鼠标_滚轮滚动 (x, y, deltaX, deltaY)"
+    },
+    {
+     "line": 1180,
+     "kind": "code",
+     "text": "返回 (MCP_响应构建.命令成功 (命令ID, \"VIP滚轮 (\" + 到文本 (x) + \",\" + 到文本 (y) + \") delta:\" + 到文本 (deltaX) + \",\" + 到文本 (deltaY) + \" | ⚠ 内核级鼠标注入实测会使 CDP 通道失效(CDP 优先工具随后退化为原生路径, 每次白等约10秒且部分返回 null), 需重启进程才能恢复\"))"
+    },
+    {
+     "line": 1181,
+     "kind": "code",
+     "text": "}"
+    },
+    {
+     "line": 1182,
+     "kind": "comment",
+     "text": "// 普通CEF鼠标滚轮 (VIP不可用时退路)"
+    },
+    {
+     "line": 1183,
+     "kind": "code",
+     "text": "变量 鼠标事件 <类型 = FBrowser_鼠标事件>"
+    },
+    {
+     "line": 1184,
+     "kind": "code",
+     "text": "鼠标事件.横坐标 = x"
+    },
+    {
+     "line": 1185,
+     "kind": "code",
+     "text": "鼠标事件.纵坐标 = y"
+    },
+    {
+     "line": 1186,
+     "kind": "code",
+     "text": "鼠标事件.修饰键 = 事件标识.无"
+    },
+    {
+     "line": 1187,
+     "kind": "code",
+     "text": "browser.发送鼠标滚轮事件 (鼠标事件, deltaX, deltaY)"
+    },
+    {
+     "line": 1188,
+     "kind": "code",
+     "text": "返回 (MCP_响应构建.命令成功 (命令ID, \"滚轮 (\" + 到文本 (x) + \",\" + 到文本 (y) + \") delta:\" + 到文本 (deltaX) + \",\" + 到文本 (deltaY)))"
+    },
+    {
+     "line": 1189,
+     "kind": "code",
+     "text": "}"
+    }
+   ]
+  }
+ ],
+ "B": [],
+ "stats": {
+  "files": 16,
+  "methods": 504,
+  "findingsA": 2,
+  "findingsB": 0
+ }
+}

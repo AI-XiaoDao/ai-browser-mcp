@@ -1,0 +1,281 @@
+--- 写入前
++++ 当前
+@@ -586,5 +586,5 @@
+         }
+         // === 鼠标 ===
+-        如果 (方法名 == "browser_mouse_click")
++        否则 (方法名 == "browser_mouse_click")
+         {
+             如果 (MCP命令服务器.参数键存在 (参数JSON, "x") == 假 || MCP命令服务器.参数键存在 (参数JSON, "y") == 假)
+@@ -604,51 +604,5 @@
+                     返回 (MCP_响应构建.命令失败 (命令ID, "坐标越界 | x,y 须在 0~32767 范围内"))
+                 }
+-                // VIP优先: CDP高级鼠标点击 (绕过反自动化检测, 更可靠)
+-                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+-                vip_ctrl = browser.取VIP控制器 ()
+-                如果 (vip_ctrl.是否为空 () == 假)
+-                {
+-                    // VIP路径同退路一样先做按钮文本→枚举映射 (字符串"right"/"middle"取整数恒为0会误按左键)
+-                    变量 vip按钮文本 <类型 = 文本型>
+-                    vip按钮文本 = MCP命令服务器.yyjson取文本 (参数JSON, "button")
+-                    变量 vip按钮类型 <类型 = 整数>
+-                    如果 (vip按钮文本 == "right")
+-                    {
+-                        vip按钮类型 = 鼠标按键类型.右键
+-                    }
+-                    否则 (vip按钮文本 == "middle")
+-                    {
+-                        vip按钮类型 = 鼠标按键类型.中键
+-                    }
+-                    否则 (vip按钮文本 == "left" || vip按钮文本 == "")
+-                    {
+-                        vip按钮类型 = 鼠标按键类型.左键
+-                    }
+-                    否则
+-                    {
+-                        返回 (MCP_响应构建.命令失败 (命令ID, "未知按钮类型: " + vip按钮文本 + " | 支持: left/right/middle"))
+-                    }
+-                    // kernel 缺省/为假时走 CDP 派发(按下+抬起); kernel:true 走内核注入(过反爬场景)
+-                    如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "kernel") == 假)
+-                    {
+-                        变量 cdp按钮名 <类型 = 文本型>
+-                        cdp按钮名 = vip按钮文本
+-                        如果 (cdp按钮名 == "")
+-                        {
+-                            cdp按钮名 = "left"
+-                        }
+-                        如果 (MCP命令服务器.CDP派发鼠标事件 ("mousePressed", x, y, cdp按钮名) && MCP命令服务器.CDP派发鼠标事件 ("mouseReleased", x, y, cdp按钮名))
+-                        {
+-                            返回 (MCP_响应构建.命令成功 (命令ID, "点击 (" + 到文本 (x) + "," + 到文本 (y) + ") 按钮:" + cdp按钮名 + " | 经 CDP 派发(不破坏 CDP 会话) | 如需内核级注入请传 kernel:true"))
+-                        }
+-                    }
+-                    // CDP 派发失败时不再静默回退内核注入: 内核注入会让 CDP 通道在本会话内永久失效
+-                    // (此后每个 CDP 优先工具都白等超时, 连 browser_status 都会挂, 只能重启进程恢复);
+-                    // 一次鼠标操作失败不该连累整场会话, 故如实报错并给出可用替代。
+-                    返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发鼠标事件失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级鼠标注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_element_action 点击元素 / browser_execute_js 派发事件 | 如仍要内核注入请显式传 kernel:true(会确认 CDP 已失效)"))
+-                    vip_ctrl.高级鼠标_单击 (x, y, vip按钮类型)
+-                    返回 (MCP_响应构建.命令成功 (命令ID, "VIP点击 (" + 到文本 (x) + "," + 到文本 (y) + ") | ⚠ 内核级鼠标注入实测会使 CDP 通道失效(CDP 优先工具随后退化为原生路径, 每次白等约10秒且部分返回 null), 需重启进程才能恢复"))
+-                }
+-                // 普通CEF鼠标点击 (VIP不可用时退路)
++                // 按钮文本→枚举只映射一份: 原先 VIP 路径与 CEF 退路各抄一份, 且字符串"right"当整数用会误按左键
+                 变量 按钮文本 <类型 = 文本型>
+                 按钮文本 = MCP命令服务器.yyjson取文本 (参数JSON, "button")
+@@ -664,5 +618,5 @@
+                 否则 (按钮文本 == "left" || 按钮文本 == "")
+                 {
+-                    按钮类型 = 鼠标按键类型.左键  // 默认左键
++                    按钮类型 = 鼠标按键类型.左键
+                 }
+                 否则
+@@ -670,4 +624,30 @@
+                     返回 (MCP_响应构建.命令失败 (命令ID, "未知按钮类型: " + 按钮文本 + " | 支持: left/right/middle"))
+                 }
++                变量 cdp按钮名 <类型 = 文本型>
++                cdp按钮名 = 按钮文本
++                如果 (cdp按钮名 == "")
++                {
++                    cdp按钮名 = "left"
++                }
++                // 缺省路径: CDP 派发(按下+抬起)。CDP 与 VIP 控制器无关, 故不再嵌在 VIP 分支内
++                // (原先嵌在里面 -> VIP 不可用时永不尝试 CDP, 直接掉到 CEF 退路)
++                如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "kernel") == 假)
++                {
++                    如果 (MCP命令服务器.CDP派发鼠标事件 ("mousePressed", x, y, cdp按钮名) && MCP命令服务器.CDP派发鼠标事件 ("mouseReleased", x, y, cdp按钮名))
++                    {
++                        返回 (MCP_响应构建.命令成功 (命令ID, "点击 (" + 到文本 (x) + "," + 到文本 (y) + ") 按钮:" + cdp按钮名 + " | 经 CDP 派发(不破坏 CDP 会话) | 如需内核级注入请传 kernel:true"))
++                    }
++                    // 失败不静默回退内核注入: 内核注入会让 CDP 通道在本会话内永久失效, 一次点击失败不该连累整场会话
++                    返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发鼠标事件失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_element_action 点击元素 / browser_execute_js 派发事件"))
++                }
++                // kernel:true = 显式要求内核级注入(过反爬场景), 此处**确实执行**注入
++                变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
++                vip_ctrl = browser.取VIP控制器 ()
++                如果 (vip_ctrl.是否为空 () == 假)
++                {
++                    vip_ctrl.高级鼠标_单击 (x, y, 按钮类型)
++                    返回 (MCP_响应构建.命令成功 (命令ID, "点击 (" + 到文本 (x) + "," + 到文本 (y) + ") 按钮:" + 按钮文本 + " | ⚠ 内核级鼠标注入: 实测会使 CDP 通道在本会话内失效(此后 CDP 优先工具退化), 需重启 AI-Fbowser-Mcp.exe 恢复"))
++                }
++                // VIP 控制器不可用时的退路: 普通 CEF 事件(不经内核, 也不破坏 CDP)
+                 变量 鼠标事件 <类型 = FBrowser_鼠标事件>
+                 鼠标事件.横坐标 = x
+@@ -676,5 +656,5 @@
+                 browser.发送鼠标点击事件 (按钮类型, 鼠标事件, 假, 1)
+                 browser.发送鼠标点击事件 (按钮类型, 鼠标事件, 真, 1)
+-                返回 (MCP_响应构建.命令成功 (命令ID, "点击 (" + 到文本 (x) + "," + 到文本 (y) + ") 按钮:" + 按钮文本))
++                返回 (MCP_响应构建.命令成功 (命令ID, "点击 (" + 到文本 (x) + "," + 到文本 (y) + ") 按钮:" + 按钮文本 + " | 经 CEF 事件派发(VIP控制器不可用时的退路)"))
+             }
+             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+@@ -694,5 +674,5 @@
+                     返回 (MCP_响应构建.命令失败 (命令ID, "坐标越界 | x,y 须在 0~32767 范围内"))
+                 }
+-                // kernel 缺省/为假时走 CDP Input.dispatchMouseEvent 派发(真实输入事件, 不破坏 CDP 会话); 确需内核注入(过反爬)时显式传 kernel:true
++                // 缺省路径: CDP Input.dispatchMouseEvent(真实输入事件, 不破坏 CDP 会话)
+                 如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "kernel") == 假)
+                 {
+@@ -701,10 +681,7 @@
+                         返回 (MCP_响应构建.命令成功 (命令ID, "鼠标移动到 (" + 到文本 (x) + "," + 到文本 (y) + ") | 经 CDP Input.dispatchMouseEvent 派发(不破坏 CDP 会话) | 如需内核级注入请传 kernel:true"))
+                     }
+-                }
+-                    // CDP 派发失败时不再静默回退内核注入: 内核注入会让 CDP 通道在本会话内永久失效
+-                    // (此后每个 CDP 优先工具都白等超时, 连 browser_status 都会挂, 只能重启进程恢复);
+-                    // 一次鼠标操作失败不该连累整场会话, 故如实报错并给出可用替代。
+-                    返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发鼠标事件失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级鼠标注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_element_action 点击元素 / browser_execute_js 派发事件 | 如仍要内核注入请显式传 kernel:true(会确认 CDP 已失效)"))
+-                // VIP优先: CDP高级鼠标移动 (内核注入, 会破坏 CDP 会话)
++                    返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发鼠标事件失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_element_action / browser_execute_js 派发事件"))
++                }
++                // kernel:true = 显式要求内核级注入(过反爬场景), 此处**确实执行**注入
+                 变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                 vip_ctrl = browser.取VIP控制器 ()
+@@ -712,7 +689,7 @@
+                 {
+                     vip_ctrl.高级鼠标_移动 (x, y)
+-                    返回 (MCP_响应构建.命令成功 (命令ID, "VIP鼠标移动到 (" + 到文本 (x) + "," + 到文本 (y) + ") | ⚠ 本工具走**内核级鼠标注入**, 实测该调用会使 CDP 通道失效: 之后 browser_dom_query / browser_dom_rect / browser_get_text 等 CDP 优先工具都会退化为原生路径(每个白等约10秒, 部分会返回 null), 且注销重注册监管者/重新导航均无法恢复, 需重启进程。如后续还要用 CDP 类工具, 建议改用 browser_element_action 或 browser_execute_js 派发事件"))
+-                }
+-                // 普通CEF鼠标移动 (VIP不可用时退路)
++                    返回 (MCP_响应构建.命令成功 (命令ID, "鼠标移动到 (" + 到文本 (x) + "," + 到文本 (y) + ") | ⚠ 内核级鼠标注入: 实测会使 CDP 通道在本会话内失效(此后 CDP 优先工具退化), 需重启 AI-Fbowser-Mcp.exe 恢复"))
++                }
++                // VIP 控制器不可用时的退路: 普通 CEF 鼠标移动事件
+                 变量 鼠标事件 <类型 = FBrowser_鼠标事件>
+                 鼠标事件.横坐标 = x
+@@ -720,5 +697,5 @@
+                 鼠标事件.修饰键 = 事件标识.无
+                 browser.发送鼠标移动事件 (鼠标事件, 假)
+-                返回 (MCP_响应构建.命令成功 (命令ID, "鼠标移动到 (" + 到文本 (x) + "," + 到文本 (y) + ")"))
++                返回 (MCP_响应构建.命令成功 (命令ID, "鼠标移动到 (" + 到文本 (x) + "," + 到文本 (y) + ") | 经 CEF 事件派发(VIP控制器不可用时的退路)"))
+             }
+             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+@@ -1162,5 +1139,5 @@
+                     返回 (MCP_响应构建.命令失败 (命令ID, "滚轮增量越界 | delta_x/delta_y 须在 ±10000 范围内"))
+                 }
+-                // kernel 缺省/为假时走 CDP 派发 mouseWheel; 内核注入仅 kernel:true 时启用
++                // 缺省路径: CDP 派发 mouseWheel
+                 如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "kernel") == 假)
+                 {
+@@ -1169,10 +1146,7 @@
+                         返回 (MCP_响应构建.命令成功 (命令ID, "滚轮 (" + 到文本 (x) + "," + 到文本 (y) + ") delta:" + 到文本 (deltaX) + "," + 到文本 (deltaY) + " | 经 CDP 派发(不破坏 CDP 会话) | 如需内核级注入请传 kernel:true"))
+                     }
+-                }
+-                    // CDP 派发失败时不再静默回退内核注入: 内核注入会让 CDP 通道在本会话内永久失效
+-                    // (此后每个 CDP 优先工具都白等超时, 连 browser_status 都会挂, 只能重启进程恢复);
+-                    // 一次鼠标操作失败不该连累整场会话, 故如实报错并给出可用替代。
+-                    返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发鼠标事件失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级鼠标注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_element_action 点击元素 / browser_execute_js 派发事件 | 如仍要内核注入请显式传 kernel:true(会确认 CDP 已失效)"))
+-                // VIP优先: CDP高级鼠标滚轮 (内核注入, 会破坏 CDP 会话)
++                    返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发鼠标事件失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_element_action / browser_execute_js 派发事件"))
++                }
++                // kernel:true = 显式要求内核级注入(过反爬场景), 此处**确实执行**注入
+                 变量 vip_ctrl <类型 = 类_FBrowserVIP_控制器>
+                 vip_ctrl = browser.取VIP控制器 ()
+@@ -1180,7 +1154,7 @@
+                 {
+                     vip_ctrl.高级鼠标_滚轮滚动 (x, y, deltaX, deltaY)
+-                    返回 (MCP_响应构建.命令成功 (命令ID, "VIP滚轮 (" + 到文本 (x) + "," + 到文本 (y) + ") delta:" + 到文本 (deltaX) + "," + 到文本 (deltaY) + " | ⚠ 内核级鼠标注入实测会使 CDP 通道失效(CDP 优先工具随后退化为原生路径, 每次白等约10秒且部分返回 null), 需重启进程才能恢复"))
+-                }
+-                // 普通CEF鼠标滚轮 (VIP不可用时退路)
++                    返回 (MCP_响应构建.命令成功 (命令ID, "滚轮 (" + 到文本 (x) + "," + 到文本 (y) + ") delta:" + 到文本 (deltaX) + "," + 到文本 (deltaY) + " | ⚠ 内核级鼠标注入: 实测会使 CDP 通道在本会话内失效(此后 CDP 优先工具退化), 需重启 AI-Fbowser-Mcp.exe 恢复"))
++                }
++                // VIP 控制器不可用时的退路: 普通 CEF 鼠标滚轮事件
+                 变量 鼠标事件 <类型 = FBrowser_鼠标事件>
+                 鼠标事件.横坐标 = x
+@@ -1188,5 +1162,5 @@
+                 鼠标事件.修饰键 = 事件标识.无
+                 browser.发送鼠标滚轮事件 (鼠标事件, deltaX, deltaY)
+-                返回 (MCP_响应构建.命令成功 (命令ID, "滚轮 (" + 到文本 (x) + "," + 到文本 (y) + ") delta:" + 到文本 (deltaX) + "," + 到文本 (deltaY)))
++                返回 (MCP_响应构建.命令成功 (命令ID, "滚轮 (" + 到文本 (x) + "," + 到文本 (y) + ") delta:" + 到文本 (deltaX) + "," + 到文本 (deltaY) + " | 经 CEF 事件派发(VIP控制器不可用时的退路)"))
+             }
+             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+@@ -5001,7 +4975,25 @@
+             返回 (MCP_响应构建.构建简单JSON ("decoded", result))
+         }
+-        // === VIP触摸事件 (官方VIP API) ===
++        // === 触摸事件 (CDP 派发优先; 内核注入为显式 opt-in) ===
++        // 与鼠标三件套同源: 内核级输入注入会让 CDP 通道在本会话内永久失效(见 CDP派发鼠标事件 的实测结论),
++        // 故缺省走 CDP Input.dispatchTouchEvent; kernel:true 才走 VIP 内核注入(过反爬场景)。
+         否则 (方法名 == "browser_touch_press")
+         {
++            如果 (MCP命令服务器.参数键存在 (参数JSON, "x") == 假 || MCP命令服务器.参数键存在 (参数JSON, "y") == 假)
++            {
++                返回 (MCP_响应构建.命令失败 (命令ID, "必须同时提供 x 与 y (整数坐标) | 缺省会被当作 (0,0) 而在页面左上角误触, 故拒绝执行; 如需触左上角请显式传 x=0 y=0"))
++            }
++            变量 touchX <类型 = 整数>
++            touchX = MCP命令服务器.yyjson取整数 (参数JSON, "x")
++            变量 touchY <类型 = 整数>
++            touchY = MCP命令服务器.yyjson取整数 (参数JSON, "y")
++            如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "kernel") == 假)
++            {
++                如果 (MCP命令服务器.CDP派发触摸事件 ("touchStart", touchX, touchY))
++                {
++                    返回 (MCP_响应构建.命令成功 (命令ID, "触摸按下 (" + 到文本 (touchX) + "," + 到文本 (touchY) + ") | 经 CDP 派发(不破坏 CDP 会话) | 如需内核级注入请传 kernel:true"))
++                }
++                返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发触摸失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_cdp_call method=Input.dispatchTouchEvent / browser_execute_js 派发 TouchEvent | 如仍要内核注入请显式传 kernel:true"))
++            }
+             变量 browser <类型 = 类_FBrowser_浏览器>
+             browser = MCP命令服务器.取主浏览器 ()
+@@ -5012,6 +5004,6 @@
+                 如果 (vip.是否为空 () == 假)
+                 {
+-                    vip.高级触摸_按下 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+-                    返回 (MCP_响应构建.命令成功 (命令ID, "触摸按下"))
++                    vip.高级触摸_按下 (touchX, touchY)
++                    返回 (MCP_响应构建.命令成功 (命令ID, "触摸按下 (" + 到文本 (touchX) + "," + 到文本 (touchY) + ") | ⚠ 内核级触摸注入实测会使 CDP 通道在本会话内失效, 需重启进程恢复"))
+                 }
+                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
+@@ -5021,4 +5013,20 @@
+         否则 (方法名 == "browser_touch_release")
+         {
++            如果 (MCP命令服务器.参数键存在 (参数JSON, "x") == 假 || MCP命令服务器.参数键存在 (参数JSON, "y") == 假)
++            {
++                返回 (MCP_响应构建.命令失败 (命令ID, "必须同时提供 x 与 y (整数坐标) | 缺省会被当作 (0,0) 而在页面左上角误触, 故拒绝执行; 如需触左上角请显式传 x=0 y=0"))
++            }
++            变量 touchX <类型 = 整数>
++            touchX = MCP命令服务器.yyjson取整数 (参数JSON, "x")
++            变量 touchY <类型 = 整数>
++            touchY = MCP命令服务器.yyjson取整数 (参数JSON, "y")
++            如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "kernel") == 假)
++            {
++                如果 (MCP命令服务器.CDP派发触摸事件 ("touchEnd", touchX, touchY))
++                {
++                    返回 (MCP_响应构建.命令成功 (命令ID, "触摸放开 (" + 到文本 (touchX) + "," + 到文本 (touchY) + ") | 经 CDP 派发(不破坏 CDP 会话)"))
++                }
++                返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发触摸失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_cdp_call method=Input.dispatchTouchEvent | 如仍要内核注入请显式传 kernel:true"))
++            }
+             变量 browser <类型 = 类_FBrowser_浏览器>
+             browser = MCP命令服务器.取主浏览器 ()
+@@ -5029,6 +5037,6 @@
+                 如果 (vip.是否为空 () == 假)
+                 {
+-                    vip.高级触摸_放开 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+-                    返回 (MCP_响应构建.命令成功 (命令ID, "触摸放开"))
++                    vip.高级触摸_放开 (touchX, touchY)
++                    返回 (MCP_响应构建.命令成功 (命令ID, "触摸放开 (" + 到文本 (touchX) + "," + 到文本 (touchY) + ") | ⚠ 内核级触摸注入实测会使 CDP 通道在本会话内失效, 需重启进程恢复"))
+                 }
+                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))
+@@ -5038,4 +5046,20 @@
+         否则 (方法名 == "browser_touch_move")
+         {
++            如果 (MCP命令服务器.参数键存在 (参数JSON, "x") == 假 || MCP命令服务器.参数键存在 (参数JSON, "y") == 假)
++            {
++                返回 (MCP_响应构建.命令失败 (命令ID, "必须同时提供 x 与 y (整数坐标) | 缺省会被当作 (0,0) 而在页面左上角误触, 故拒绝执行; 如需触左上角请显式传 x=0 y=0"))
++            }
++            变量 touchX <类型 = 整数>
++            touchX = MCP命令服务器.yyjson取整数 (参数JSON, "x")
++            变量 touchY <类型 = 整数>
++            touchY = MCP命令服务器.yyjson取整数 (参数JSON, "y")
++            如果 (MCP命令服务器.yyjson取逻辑 (参数JSON, "kernel") == 假)
++            {
++                如果 (MCP命令服务器.CDP派发触摸事件 ("touchMove", touchX, touchY))
++                {
++                    返回 (MCP_响应构建.命令成功 (命令ID, "触摸拖动 (" + 到文本 (touchX) + "," + 到文本 (touchY) + ") | 经 CDP 派发(不破坏 CDP 会话)"))
++                }
++                返回 (MCP_响应构建.命令失败 (命令ID, "CDP 派发触摸失败: 本会话 CDP 通道已不可用(常见诱因是先前调用过内核级注入 kernel:true; 该失效在会话内不可恢复, 需重启 AI-Fbowser-Mcp.exe) | 可用替代: browser_cdp_call method=Input.dispatchTouchEvent | 如仍要内核注入请显式传 kernel:true"))
++            }
+             变量 browser <类型 = 类_FBrowser_浏览器>
+             browser = MCP命令服务器.取主浏览器 ()
+@@ -5046,6 +5070,6 @@
+                 如果 (vip.是否为空 () == 假)
+                 {
+-                    vip.高级触摸_移动 (MCP命令服务器.yyjson取整数 (参数JSON, "x"), MCP命令服务器.yyjson取整数 (参数JSON, "y"))
+-                    返回 (MCP_响应构建.命令成功 (命令ID, "触摸移动"))
++                    vip.高级触摸_移动 (touchX, touchY)
++                    返回 (MCP_响应构建.命令成功 (命令ID, "触摸拖动 (" + 到文本 (touchX) + "," + 到文本 (touchY) + ") | ⚠ 内核级触摸注入实测会使 CDP 通道在本会话内失效, 需重启进程恢复"))
+                 }
+                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_VIP不可用))

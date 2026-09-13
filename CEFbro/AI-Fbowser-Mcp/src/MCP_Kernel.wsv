@@ -15,48 +15,54 @@
 # 依据: FBrowser浏览器 类库官方签名 (FBroLib / FBroEventControl / FBroCallback)
 # ================================================================
 
-类 MCP_内核分派 <公开 @全局类 = 真>
+类 MCP_内核分派 <公开 @全局类 = 真 @输出名 = "MCPKernelDispatch">
 {
 
     # ── 证书错误 (浏览器_请求证书错误 事件) ──
 
-    变量 忽略证书错误 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "为真时证书错误自动继续并放行">
-    变量 证书错误条目 <公开 静态 类型 = 文本数组类 注释 = "JSON 行: {time_ms,error_code,url,browser_id}">
-    变量 证书错误锁 <公开 静态 类型 = 互斥锁类 注释 = "CEF主进程事件线程写 / MCP线程读">
+    变量 忽略证书错误 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "为真时证书错误自动继续并放行" @输出名 = "IgnoreCertificateError">
+    变量 证书错误条目 <公开 静态 类型 = 文本数组类 注释 = "JSON 行: {time_ms,error_code,url,browser_id}" @输出名 = "CertificateErrorEntry">
+    变量 证书错误锁 <公开 静态 类型 = 互斥锁类 注释 = "CEF主进程事件线程写 / MCP线程读" @输出名 = "CertificateErrorLock">
 
     # ── HTTP 认证凭据 (浏览器_获得需授权证书 事件) ──
 
-    变量 认证凭据键 <公开 静态 类型 = 文本数组类 注释 = "host:port[:realm] 键">
-    变量 认证凭据用户 <公开 静态 类型 = 文本数组类>
-    变量 认证凭据密码 <公开 静态 类型 = 文本数组类>
-    变量 认证凭据锁 <公开 静态 类型 = 互斥锁类>
+    变量 认证凭据键 <公开 静态 类型 = 文本数组类 注释 = "host:port[:realm] 键" @输出名 = "AuthCredentialKey">
+    变量 认证凭据用户 <公开 静态 类型 = 文本数组类 @输出名 = "AuthCredentialUser">
+    变量 认证凭据密码 <公开 静态 类型 = 文本数组类 @输出名 = "AuthCredentialPassword">
+    变量 认证凭据锁 <公开 静态 类型 = 互斥锁类 @输出名 = "AuthCredentialLock">
 
     # ── 下载控制 (浏览器_正在下载 事件内即时执行) ──
 
-    变量 待执行下载操作 <公开 静态 类型 = 文本数组类 注释 = "JSON: {action,url,id} 待执行队列">
-    变量 下载操作锁 <公开 静态 类型 = 互斥锁类>
+    变量 待执行下载操作 <公开 静态 类型 = 文本数组类 注释 = "JSON: {action,url,id} 待执行队列" @输出名 = "PendingExecuteDownloadOp">
+    变量 下载操作锁 <公开 静态 类型 = 互斥锁类 @输出名 = "DownloadOpLock">
 
     # ── 快捷菜单 (浏览器_即将运行快捷菜单 事件) ──
 
-    变量 屏蔽快捷菜单 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "为真时屏蔽右键快捷菜单(触发条件以实际内核为准)">
+    变量 屏蔽快捷菜单 <公开 静态 类型 = 逻辑型 值 = 假 注释 = "为真时屏蔽右键快捷菜单(触发条件以实际内核为准)" @输出名 = "BlockContextMenu">
 
     # ── 自定义方案 (FBrowser_自定义方案_注册 + 类_MCP_方案资源处理器) ──
 
-    变量 方案内容键 <公开 静态 类型 = 文本数组类 注释 = "scheme://domain 键">
-    变量 方案内容值 <公开 静态 类型 = 文本数组类 注释 = "JSON: {mime, body}">
-    变量 方案内容锁 <公开 静态 类型 = 互斥锁类 注释 = "MCP线程写 / CEF资源处理线程读">
+    变量 方案内容键 <公开 静态 类型 = 文本数组类 注释 = "scheme://domain 键" @输出名 = "SchemeContentKey">
+    变量 方案内容值 <公开 静态 类型 = 文本数组类 注释 = "JSON: {mime, body}" @输出名 = "SchemeContentValue">
+    变量 方案内容锁 <公开 静态 类型 = 互斥锁类 注释 = "MCP线程写 / CEF资源处理线程读" @输出名 = "SchemeContentLock">
 
     # ============================================================
     # 分类分派: browser_kernel_*
     # ============================================================
 
-    方法 分类分派_内核操作 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 方法名 <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分类分派_内核操作 <公开 静态 类型 = 文本型 @输出名 = "DispatchClassKernelOp" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 方法名 <类型 = 文本型 @输出名 = "MethodName">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
+        // 这组 browser_kernel_* 工具: 缺参一律拒绝, 并要求查询时显式传 action:list。
+        // (省略 action 会静默降级成查询(list)并返回 success, 调用方会误以为动作已执行)
         如果 (方法名 == "browser_kernel_cert")
         {
+            如果 (MCP命令服务器.参数键存在 (参数JSON, "action") == 假)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "browser_kernel_cert 需要 action | 省略会静默退化为查询并返回 success, 使调用方误以为动作已执行 | 查询请显式传 action:list"))
+            }
             返回 (分派_证书管理 (命令ID, 参数JSON))
         }
         否则 (方法名 == "browser_kernel_auth")
@@ -65,6 +71,10 @@
         }
         否则 (方法名 == "browser_kernel_download")
         {
+            如果 (MCP命令服务器.参数键存在 (参数JSON, "action") == 假)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "browser_kernel_download 需要 action | 省略会静默退化为查询并返回 success | 查询请显式传 action:list"))
+            }
             返回 (分派_下载管理 (命令ID, 参数JSON))
         }
         否则 (方法名 == "browser_kernel_scheme")
@@ -81,14 +91,26 @@
         }
         否则 (方法名 == "browser_kernel_cdp_monitor")
         {
+            如果 (MCP命令服务器.参数键存在 (参数JSON, "action") == 假)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "browser_kernel_cdp_monitor 需要 action | 省略会静默退化为查询并返回 success | 查询请显式传 action:list"))
+            }
             返回 (分派_CDP监控 (命令ID, 参数JSON))
         }
         否则 (方法名 == "browser_kernel_reactor")
         {
+            如果 (MCP命令服务器.参数键存在 (参数JSON, "action") == 假)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "browser_kernel_reactor 需要 action | 省略会静默退化为查询并返回 success | 查询请显式传 action:list"))
+            }
             返回 (分派_反应器 (命令ID, 参数JSON))
         }
         否则 (方法名 == "browser_kernel_watch")
         {
+            如果 (MCP命令服务器.参数键存在 (参数JSON, "action") == 假)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "browser_kernel_watch 需要 action | 省略会静默退化为查询并返回 success | 查询请显式传 action:list"))
+            }
             返回 (分派_定时监视 (命令ID, 参数JSON))
         }
         否则 (方法名 == "browser_kernel_events_all")
@@ -124,9 +146,9 @@
 
     # ==================== 证书管理 ====================
 
-    方法 分派_证书管理 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_证书管理 <公开 静态 类型 = 文本型 @输出名 = "DispatchCertificateManage" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 动作 <类型 = 文本型>
         动作 = MCP命令服务器.yyjson取文本 (参数JSON, "action")
@@ -184,9 +206,9 @@
 
     # ==================== HTTP 认证凭据 ====================
 
-    方法 分派_认证管理 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_认证管理 <公开 静态 类型 = 文本型 @输出名 = "DispatchAuthManage" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 动作 <类型 = 文本型>
         动作 = MCP命令服务器.yyjson取文本 (参数JSON, "action")
@@ -303,9 +325,9 @@
 
     # ==================== 下载控制 ====================
 
-    方法 分派_下载管理 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_下载管理 <公开 静态 类型 = 文本型 @输出名 = "DispatchDownloadManage" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 动作 <类型 = 文本型>
         动作 = MCP命令服务器.yyjson取文本 (参数JSON, "action")
@@ -366,9 +388,9 @@
 
     # ==================== 自定义方案 ====================
 
-    方法 分派_方案管理 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_方案管理 <公开 静态 类型 = 文本型 @输出名 = "DispatchSchemeManage" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 动作 <类型 = 文本型>
         动作 = MCP命令服务器.yyjson取文本 (参数JSON, "action")
@@ -388,9 +410,28 @@
             }
             变量 body <类型 = 文本型>
             body = MCP命令服务器.yyjson取文本 (参数JSON, "data")
-            如果 (body == "" && 文件是否存在 (MCP命令服务器.yyjson取文本 (参数JSON, "file")))
+            // 实测缺陷修正: 原实现只写 "body 为空且文件存在才读", 于是 file 写错(或 data/file 都不给)会被
+            //   **静默忽略**, 结果注册出一个空内容方案却回 success —— 调用方以为注册好了, 页面却是空的。
+            变量 方案文件 <类型 = 文本型>
+            方案文件 = MCP命令服务器.yyjson取文本 (参数JSON, "file")
+            如果 (body == "")
             {
-                body = 读入文本文件 (MCP命令服务器.yyjson取文本 (参数JSON, "file"))
+                如果 (方案文件 != "")
+                {
+                    如果 (文件是否存在 (方案文件) == 假)
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "file 不存在: " + 方案文件 + " | 请给**绝对路径**(相对路径按进程运行目录解析) | 如实说明: 此前 file 写错会被静默忽略并注册出一个**空内容**方案却回 success(假成功), 现已改为明确报错"))
+                    }
+                    body = 读入文本文件 (方案文件)
+                    如果 (body == "")
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "file 读取为空: " + 方案文件 + " | 页面只会拿到空文档, 无实际意义; 请确认文件内容"))
+                    }
+                }
+                否则
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "必须提供 data(响应内容) 或 file(存在的文件绝对路径) | 二者都不给时此前会注册一个**空内容**方案并回 success(假成功), 现已拒绝"))
+                }
             }
             变量 键 <类型 = 文本型>
             键 = "mcp://" + 域名
@@ -489,9 +530,9 @@
 
     # ==================== 快捷菜单 ====================
 
-    方法 分派_菜单管理 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_菜单管理 <公开 静态 类型 = 文本型 @输出名 = "DispatchMenuManage" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 动作 <类型 = 文本型>
         动作 = MCP命令服务器.yyjson取文本 (参数JSON, "action")
@@ -519,12 +560,22 @@
     # 链路: browser_ipc_send_all/to 下发 → 渲染进程间消息_收到主进程消息 注入
     # window.__mcp_ipc_queue → 页面JS应答写入队列 → 本工具取回 (双工IPC)
 
-    方法 分派_IPC队列 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_IPC队列 <公开 静态 类型 = 文本型 @输出名 = "DispatchIPCQueue" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 动作 <类型 = 文本型>
         动作 = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+        // 工具名 browser_kernel_ipc_clear 自带"清空"语义: 未给 action 时应按 clear 处理,
+        // 否则会**静默退化为读取队列**并回 success —— 调用方以为已清空, 实际什么都没清(实测缺陷)。
+        如果 (动作 == "" && MCP命令服务器.当前命令方法名 == "browser_kernel_ipc_clear")
+        {
+            动作 = "clear"
+        }
+        如果 (动作 != "" && 动作 != "clear" && 动作 != "queue" && 动作 != "list" && 动作 != "get")
+        {
+            返回 (MCP_响应构建.命令失败 (命令ID, "未知 action: " + 动作 + " | 支持 clear(清空) / queue(读取, 缺省行为) | 如实说明: 此前未知 action 会**静默退化为读取**并回 success, 调用方会以为已清空"))
+        }
         如果 (动作 == "clear")
         {
             MCP命令服务器.CDP执行JS并等待 ("(window.__mcp_ipc_queue=[])", 8000, 真)
@@ -550,13 +601,13 @@
 
     # ==================== CDP 事件订阅监控 ====================
 
-    变量 CDP监控启用 <公开 静态 类型 = 逻辑型 值 = 假>
-    变量 CDP监控模式 <公开 静态 类型 = 文本数组类 注释 = "CDP方法前缀, 如 Network.*">
-    变量 CDP监控上限 <公开 静态 类型 = 整数 值 = 200>
+    变量 CDP监控启用 <公开 静态 类型 = 逻辑型 值 = 假 @输出名 = "CDPMonitorEnable">
+    变量 CDP监控模式 <公开 静态 类型 = 文本数组类 注释 = "CDP方法前缀, 如 Network.*" @输出名 = "CDPMonitorMode">
+    变量 CDP监控上限 <公开 静态 类型 = 整数 值 = 200 @输出名 = "CDPMonitorLimit">
 
-    方法 分派_CDP监控 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_CDP监控 <公开 静态 类型 = 文本型 @输出名 = "DispatchCDPMonitor" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 动作 <类型 = 文本型>
         动作 = MCP命令服务器.yyjson取文本 (参数JSON, "action")
@@ -588,6 +639,23 @@
                 CDP监控模式.加入成员 (方法模式)
             }
             CDP监控启用 = 真
+            // 零前置: CDP 域事件只有在 域.enable 之后才会下发 —— 不启用则该域事件永不产生,
+            // 订阅看着成功而 events 恒为空(实测: Network.* 订阅后为空; 手工 Network.enable 后
+            // 同一事件立即到达; Page.frameNavigated 同理需 Page.enable)。
+            // 故按模式前缀自动启用对应域, 并经 auto_prepared 如实上报。
+            变量 监控域 <类型 = 文本型>
+            监控域 = ""
+            变量 监控点 <类型 = 整数>
+            监控点 = 寻找文本 (方法模式, ".", 0, 假)
+            如果 (监控点 > 0)
+            {
+                监控域 = 取文本左边 (方法模式, 监控点)
+            }
+            如果 (监控域 != "" && 监控域 != "*")
+            {
+                MCP命令服务器.执行CDP并同步等待 (命令ID + "_den", 监控域 + ".enable", "{}", 10000)
+                MCP_响应构建.记录自动处理 (监控域 + ".enable(CDP监控订阅所需)")
+            }
             返回 (MCP_响应构建.命令成功 (命令ID, "CDP监控已添加: " + 方法模式 + " (max=" + 到文本 (CDP监控上限) + ")"))
         }
         否则 (动作 == "remove")
@@ -651,14 +719,18 @@
         }
         模式列表 = 模式列表 + "]"
         st.加入文本成员 ("patterns", 模式列表)
+        // 捕获事件读取路径: 检查CDP监控 把命中订阅的事件写入 event_log(log_type=cdp_monitor),
+        // 但此前**没有任何工具读它** —— 订阅只写不读, 用户永远看不到捕获结果, 功能形同虚设。
+        // 故 list 时一并返回最近捕获的事件, 让订阅真正可用。
+        st.加入文本成员 ("events_json", MCP命令服务器.查询事件日志 ("cdp_monitor", "", 0, 200))
         返回 (MCP_响应构建.命令成功_原始JSON (命令ID, st.到可读文本 (YYJSON格式化选项.压缩)))
     }
 
     # 钩子: 存储CDPDevTools事件 内调用 (MCP_Server.wsv), 命中订阅写入 event_log
 
-    方法 检查CDP监控 <公开 静态>
-    参数 事件方法名 <类型 = 文本型>
-    参数 参数JSON <类型 = 文本型>
+    方法 检查CDP监控 <公开 静态 @输出名 = "CheckCDPMonitor" @强制输出 = 真>
+    参数 事件方法名 <类型 = 文本型 @输出名 = "EventMethodName">
+    参数 参数JSON <类型 = 文本型 @输出名 = "ParamJSON">
     {
         如果 (CDP监控启用 == 假 || CDP监控模式.取成员数 () == 0 || 事件方法名 == "")
         {
@@ -674,6 +746,19 @@
                 命中 = 真
                 跳出循环
             }
+            // 带通配的写法(工具描述里的示例就是 Network.*): 去掉尾部 "*" 后按前缀匹配。
+            // 原匹配只做精确相等或 是否以 前缀比较, 而 是否以("Network.requestWillBeSent","Network.*")
+            // 恒为假 —— 即**按文档示例订阅永远抓不到任何事件**(订阅看着成功、events 永远为空)。
+            如果 (取文本右边 (模式, 1) == "*")
+            {
+                变量 通配前缀 <类型 = 文本型>
+                通配前缀 = 取文本左边 (模式, 取文本长度 (模式) - 1)
+                如果 (通配前缀 != "" && 是否以 (事件方法名, 通配前缀))
+                {
+                    命中 = 真
+                    跳出循环
+                }
+            }
         }
         如果 (命中)
         {
@@ -684,12 +769,12 @@
 
     # ==================== 事件反应器 (事件组合引擎) ====================
 
-    变量 反应器规则 <公开 静态 类型 = 文本数组类 注释 = "JSON: {event,code,cooldown_ms}">
-    变量 反应器冷却 <公开 静态 类型 = 文本数组类 注释 = "event|index → 上次触发毫秒文本">
+    变量 反应器规则 <公开 静态 类型 = 文本数组类 注释 = "JSON: {event,code,cooldown_ms}" @输出名 = "ReactorRule">
+    变量 反应器冷却 <公开 静态 类型 = 文本数组类 注释 = "event|index → 上次触发毫秒文本" @输出名 = "ReactorCooldown">
 
-    方法 分派_反应器 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_反应器 <公开 静态 类型 = 文本型 @输出名 = "DispatchReactor" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 动作 <类型 = 文本型>
         动作 = MCP命令服务器.yyjson取文本 (参数JSON, "action")
@@ -719,6 +804,14 @@
             规则.加入文本成员 ("code", 代码)
             规则.加入整数成员 ("cooldown_ms", 冷却)
             反应器规则.加入成员 (规则.到可读文本 (YYJSON格式化选项.压缩))
+            // 零前置: 事件只有在**对应事件族已开启**时才会被记录; 族关时事件根本不进日志,
+            // 规则也就静默永不触发(实测冷启动族默认全关 -> 时间线里连该事件都不存在)。
+            // 这里直接复用同类的"全事件流"开关自动开启 —— 不去建"事件名→族"映射表, 因为映射错了
+            // 会把规则指向错误的族(比不修更糟); 全量开启虽偏重但**保证规则可触发**, 且经 auto_prepared 如实上报。
+            变量 自动开族参数 <类型 = YYJSON只读对象类>
+            自动开族参数.创建自文本 ("{\"action\":\"enable\"}")
+            分派_全事件流 (命令ID + "_ev", 自动开族参数)
+            MCP_响应构建.记录自动处理 ("全事件族(反应器规则需事件被记录才会触发)")
             返回 (MCP_响应构建.命令成功 (命令ID, "反应器规则已添加: event=" + 事件模式 + " cooldown=" + 到文本 (冷却) + "ms"))
         }
         否则 (动作 == "clear")
@@ -749,8 +842,8 @@
 
     # 钩子: 记录监控事件 内调用 (事件被记录时触发规则动作)
 
-    方法 检查反应器 <公开 静态>
-    参数 事件类型 <类型 = 文本型>
+    方法 检查反应器 <公开 静态 @输出名 = "CheckReactor" @强制输出 = 真>
+    参数 事件类型 <类型 = 文本型 @输出名 = "EventType">
     {
         如果 (反应器规则.取成员数 () == 0 || 事件类型 == "")
         {
@@ -819,14 +912,14 @@
 
     # ==================== 定时监视 (表达式周期监控 → watch_changed 事件) ====================
 
-    变量 监视任务 <公开 静态 类型 = 文本数组类 注释 = "JSON: {key,expr,interval_ms}">
-    变量 监视上次值 <公开 静态 类型 = 文本数组类 注释 = "key → 上次结果文本">
-    变量 监视提交态 <公开 静态 类型 = 文本数组类 注释 = "key → taskID 或 空">
-    变量 监视提交毫秒 <公开 静态 类型 = 文本数组类 注释 = "key → 上次提交毫秒文本">
+    变量 监视任务 <公开 静态 类型 = 文本数组类 注释 = "JSON: {key,expr,interval_ms}" @输出名 = "WatchTask">
+    变量 监视上次值 <公开 静态 类型 = 文本数组类 注释 = "key → 上次结果文本" @输出名 = "WatchLastValue">
+    变量 监视提交态 <公开 静态 类型 = 文本数组类 注释 = "key → taskID 或 空" @输出名 = "WatchSubmitState">
+    变量 监视提交毫秒 <公开 静态 类型 = 文本数组类 注释 = "key → 上次提交毫秒文本" @输出名 = "WatchSubmitMs">
 
-    方法 分派_定时监视 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_定时监视 <公开 静态 类型 = 文本型 @输出名 = "DispatchTimerWatch" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 动作 <类型 = 文本型>
         动作 = MCP命令服务器.yyjson取文本 (参数JSON, "action")
@@ -933,12 +1026,28 @@
             监视列表 = 监视列表 + 监视任务.取成员 (取循环索引 ())
         }
         监视列表 = 监视列表 + "]"
-        返回 (MCP_响应构建.构建简单JSON ("watches", 监视列表))
+        // 读取路径(此前"只写不读"): 检查定时监视 把变更写进 event_log(log_type=watch_changed, browser_id=0),
+        // 但 list 只回任务定义 —— 用户永远看不到监视到的变更, 与 browser_kernel_cdp_monitor 当初的缺陷同类。
+        // 契约: 按同族**已实测可用**的写法。两个易错点:
+        //   ① 第4参浏览器ID 必须传 0: 写入侧恒写 0, 传主浏览器ID 会因 "AND browser_id=?" 过滤而永远查不到;
+        //   ② 若此处调用失败, 不要归因"该上下文不能调 查询事件日志"; 真因更可能是 查询事件日志 当时
+        //      **独缺 缓存数据库可用() 守卫**(已补), DB 未就绪时线程异常终止 -> 客户端看到 200+空体。
+        变量 变更JSON <类型 = 文本型>
+        变更JSON = MCP命令服务器.查询事件日志 ("watch_changed", "", 0, 200)
+        如果 (变更JSON == "")
+        {
+            变更JSON = "[]"
+        }
+        // 用文本拼接而非 yyjson: watches 与 changes 都是 JSON 数组, 走 加入文本成员 会被转义成字符串
+        // (调用方还得再解析一层); 直接拼 JSON 文本既保持数组形态, 又避开嵌套 yyjson 的 0xC0000005 风险。
+        变量 监视响应 <类型 = 文本型>
+        监视响应 = "{\"success\":true,\"watches\":" + 监视列表 + ",\"watch_count\":" + 到文本 (监视任务.取成员数 ()) + ",\"changes_json\":" + 变更JSON + "}"
+        返回 (MCP_响应构建.命令成功_原始JSON (命令ID, 监视响应))
     }
 
     # 钩子: main.wsv 主循环节拍 调用 (每500ms), 提交/查询/对比监视表达式
 
-    方法 检查定时监视 <公开 静态>
+    方法 检查定时监视 <公开 静态 @输出名 = "CheckTimerWatch" @强制输出 = 真>
     {
         如果 (监视任务.取成员数 () == 0)
         {
@@ -1016,7 +1125,10 @@
                     求值包装 = "JSON.stringify((function(){try{var v=" + 表达式 + ";return (typeof v==='string')?v:JSON.stringify(v)}catch(e){return 'ERR:'+e.message}})())"
                     变量 提交返回 <类型 = 文本型>
                     提交返回 = MCP命令服务器.提交异步JS任务 (监视浏览器, 求值包装, 求值任务ID)
-                    如果 (提交返回 == "")
+                    // 判据修正: 提交**成功**时返回的是非空回执(本项目统一用 是否以(...,"{\"error\"") 判失败),
+                    // 原判据写成 `提交返回 == ""` 等于"只在提交失败时才登记任务ID" -> 成功提交反而不登记,
+                    // 下一拍 进行任务ID 恒为空 -> 查询分支永不执行 -> 结果永远读不到 -> 永不产生 watch_changed。
+                    如果 (是否以 (提交返回, "{\"error\"") == 假)
                     {
                         置监视平行值 (监视提交态, 键, 求值任务ID)
                     }
@@ -1027,10 +1139,10 @@
 
     # 平行数组辅助: 数组置成员 (文本数组类无置成员方法, 重建保序)
 
-    方法 数组置成员 <公开 静态>
-    参数 数组 <类型 = 文本数组类>
-    参数 索引 <类型 = 整数>
-    参数 值 <类型 = 文本型>
+    方法 数组置成员 <公开 静态 @输出名 = "ArraySetMember" @强制输出 = 真>
+    参数 数组 <类型 = 文本数组类 @输出名 = "Array">
+    参数 索引 <类型 = 整数 @输出名 = "Index">
+    参数 值 <类型 = 文本型 @输出名 = "Value">
     {
         变量 新数组 <类型 = 文本数组类>
         新数组 = MCP命令服务器.取空文本数组 ()
@@ -1050,9 +1162,9 @@
 
     # 平行数组辅助: 按键取/置值 (数组元素格式 "key=value")
 
-    方法 取监视平行值 <公开 静态 类型 = 文本型>
-    参数 数组 <类型 = 文本数组类>
-    参数 键 <类型 = 文本型>
+    方法 取监视平行值 <公开 静态 类型 = 文本型 @输出名 = "GetWatchParallelValue" @强制输出 = 真>
+    参数 数组 <类型 = 文本数组类 @输出名 = "Array">
+    参数 键 <类型 = 文本型 @输出名 = "Key">
     {
         变量 值 <类型 = 文本型>
         值 = ""
@@ -1069,10 +1181,10 @@
         返回 (值)
     }
 
-    方法 置监视平行值 <公开 静态>
-    参数 数组 <类型 = 文本数组类>
-    参数 键 <类型 = 文本型>
-    参数 值 <类型 = 文本型>
+    方法 置监视平行值 <公开 静态 @输出名 = "SetWatchParallelValue" @强制输出 = 真>
+    参数 数组 <类型 = 文本数组类 @输出名 = "Array">
+    参数 键 <类型 = 文本型 @输出名 = "Key">
+    参数 值 <类型 = 文本型 @输出名 = "Value">
     {
         变量 已更新 <类型 = 逻辑型 值 = 假>
         计次循环 (数组.取成员数 ())
@@ -1092,15 +1204,21 @@
 
     # ==================== 全事件流一键开关 ====================
 
-    方法 分派_全事件流 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_全事件流 <公开 静态 类型 = 文本型 @输出名 = "DispatchAllEventStream" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 动作 <类型 = 文本型>
         动作 = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (MCP命令服务器.参数键存在 (参数JSON, "action") == 假)
+            {
+                // 缺参一律拒绝: 省略 action 会落到下面 动作 == "" 分支直接执行 enable
+                // (监控/插桩/Hook 立即生效, 属意外动作), 而工具描述写明 action 必填。
+                返回 (MCP_响应构建.命令失败 (命令ID, "action 不能省略 | 省略会直接执行 enable 并使 28 个监控/记录开关立即生效, 属意外动作 | 查询状态请显式传 action:get"))
+            }
         如果 (动作 == "enable" || 动作 == "")
         {
-            // 浏览器事件全开 (13项)
+            // 浏览器/应用事件族 + 日志 全开(28 个开关, 与 disable 分支逐项对称)
             MCP命令服务器.是否监控载入事件 = 真
             MCP命令服务器.是否监控标题改变 = 真
             MCP命令服务器.是否监控加载进度 = 真
@@ -1118,7 +1236,20 @@
             MCP命令服务器.是否记录控制台 = 真
             MCP命令服务器.是否记录网络 = 真
             MCP命令服务器.是否详细记录网络 = 真
-            返回 (MCP_响应构建.命令成功 (命令ID, "全事件流已开启: 13项浏览器/应用事件 + 控制台 + 网络详细 | 查询: browser_event / browser_network list / browser_collect console_get"))
+            // 事件覆盖: 浏览器侧(菜单/快捷菜单/导航意图/界面细节) + 应用侧(插件生命周期/启动流程/渲染细节/渲染WebSocket)
+            MCP命令服务器.是否监控菜单事件 = 真
+            MCP命令服务器.是否监控快捷菜单 = 真
+            MCP命令服务器.是否监控导航意图 = 真
+            MCP命令服务器.是否监控界面细节 = 真
+            MCP命令服务器.是否监控插件生命周期 = 真
+            MCP命令服务器.是否监控启动流程 = 真
+            MCP命令服务器.是否监控渲染细节 = 真
+            MCP命令服务器.是否监控WebSocket渲染 = 真
+            MCP命令服务器.是否监控许可提示 = 真
+            MCP命令服务器.是否监控离屏渲染 = 真
+            MCP命令服务器.是否监控开发者窗口 = 真
+            MCP命令服务器.是否监控自建URL请求 = 真
+            返回 (MCP_响应构建.命令成功 (命令ID, "全事件流已开启: 28 个开关(13 核心事件族 + 3 日志 + 12 扩展事件族), 与 disable 完全对称 | 查询: browser_event(支持 resource_* 等族名通配) / browser_network list / browser_collect console_get"))
         }
         否则 (动作 == "disable")
         {
@@ -1138,9 +1269,172 @@
             MCP命令服务器.是否记录控制台 = 假
             MCP命令服务器.是否记录网络 = 假
             MCP命令服务器.是否详细记录网络 = 假
+            MCP命令服务器.是否监控菜单事件 = 假
+            MCP命令服务器.是否监控快捷菜单 = 假
+            MCP命令服务器.是否监控导航意图 = 假
+            MCP命令服务器.是否监控界面细节 = 假
+            MCP命令服务器.是否监控插件生命周期 = 假
+            MCP命令服务器.是否监控启动流程 = 假
+            MCP命令服务器.是否监控渲染细节 = 假
+            MCP命令服务器.是否监控WebSocket渲染 = 假
+            MCP命令服务器.是否监控许可提示 = 假
+            MCP命令服务器.是否监控离屏渲染 = 假
+            MCP命令服务器.是否监控开发者窗口 = 假
+            MCP命令服务器.是否监控自建URL请求 = 假
             返回 (MCP_响应构建.命令成功 (命令ID, "全事件流已关闭"))
         }
-        返回 (MCP_响应构建.命令失败 (命令ID, "action 须为 enable/disable"))
+        如果 (动作 == "get")
+        {
+            // 只读: 回报 28 个开关的真值(此前工具文案承诺 action:get 但并未实现, 导致状态不可观测)
+            变量 evt状态 <类型 = YYJSON对象类>
+            evt状态.创建自文本 ("{}")
+            变量 evt已开 <类型 = 整数>
+            evt已开 = 0
+            如果 (MCP命令服务器.是否监控载入事件)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控标题改变)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控加载进度)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控资源事件)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控对话框)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控全屏)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控图标)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控查找)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控框架)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控下载事件)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控键盘焦点)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控生命周期)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控应用事件)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否记录控制台)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否记录网络)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否详细记录网络)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控菜单事件)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控快捷菜单)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控导航意图)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控界面细节)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控插件生命周期)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控启动流程)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控渲染细节)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控WebSocket渲染)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控许可提示)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控离屏渲染)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控开发者窗口)
+            {
+                evt已开 = evt已开 + 1
+            }
+            如果 (MCP命令服务器.是否监控自建URL请求)
+            {
+                evt已开 = evt已开 + 1
+            }
+            evt状态.加入逻辑值成员 ("是否监控载入事件", MCP命令服务器.是否监控载入事件)
+            evt状态.加入逻辑值成员 ("是否监控标题改变", MCP命令服务器.是否监控标题改变)
+            evt状态.加入逻辑值成员 ("是否监控加载进度", MCP命令服务器.是否监控加载进度)
+            evt状态.加入逻辑值成员 ("是否监控资源事件", MCP命令服务器.是否监控资源事件)
+            evt状态.加入逻辑值成员 ("是否监控对话框", MCP命令服务器.是否监控对话框)
+            evt状态.加入逻辑值成员 ("是否监控全屏", MCP命令服务器.是否监控全屏)
+            evt状态.加入逻辑值成员 ("是否监控图标", MCP命令服务器.是否监控图标)
+            evt状态.加入逻辑值成员 ("是否监控查找", MCP命令服务器.是否监控查找)
+            evt状态.加入逻辑值成员 ("是否监控框架", MCP命令服务器.是否监控框架)
+            evt状态.加入逻辑值成员 ("是否监控下载事件", MCP命令服务器.是否监控下载事件)
+            evt状态.加入逻辑值成员 ("是否监控键盘焦点", MCP命令服务器.是否监控键盘焦点)
+            evt状态.加入逻辑值成员 ("是否监控生命周期", MCP命令服务器.是否监控生命周期)
+            evt状态.加入逻辑值成员 ("是否监控应用事件", MCP命令服务器.是否监控应用事件)
+            evt状态.加入逻辑值成员 ("是否记录控制台", MCP命令服务器.是否记录控制台)
+            evt状态.加入逻辑值成员 ("是否记录网络", MCP命令服务器.是否记录网络)
+            evt状态.加入逻辑值成员 ("是否详细记录网络", MCP命令服务器.是否详细记录网络)
+            evt状态.加入逻辑值成员 ("是否监控菜单事件", MCP命令服务器.是否监控菜单事件)
+            evt状态.加入逻辑值成员 ("是否监控快捷菜单", MCP命令服务器.是否监控快捷菜单)
+            evt状态.加入逻辑值成员 ("是否监控导航意图", MCP命令服务器.是否监控导航意图)
+            evt状态.加入逻辑值成员 ("是否监控界面细节", MCP命令服务器.是否监控界面细节)
+            evt状态.加入逻辑值成员 ("是否监控插件生命周期", MCP命令服务器.是否监控插件生命周期)
+            evt状态.加入逻辑值成员 ("是否监控启动流程", MCP命令服务器.是否监控启动流程)
+            evt状态.加入逻辑值成员 ("是否监控渲染细节", MCP命令服务器.是否监控渲染细节)
+            evt状态.加入逻辑值成员 ("是否监控WebSocket渲染", MCP命令服务器.是否监控WebSocket渲染)
+            evt状态.加入逻辑值成员 ("是否监控许可提示", MCP命令服务器.是否监控许可提示)
+            evt状态.加入逻辑值成员 ("是否监控离屏渲染", MCP命令服务器.是否监控离屏渲染)
+            evt状态.加入逻辑值成员 ("是否监控开发者窗口", MCP命令服务器.是否监控开发者窗口)
+            evt状态.加入逻辑值成员 ("是否监控自建URL请求", MCP命令服务器.是否监控自建URL请求)
+            evt状态.加入整数成员 ("enabled_count", evt已开)
+            evt状态.加入整数成员 ("total", 28)
+            返回 (MCP_响应构建.命令成功_原始JSON (命令ID, evt状态.到可读文本 (YYJSON格式化选项.压缩)))
+        }
+        返回 (MCP_响应构建.命令失败 (命令ID, "action 须为 enable/disable/get"))
     }
 
     # ================================================================
@@ -1150,21 +1444,33 @@
     # ================================================================
     # ── 动态探针: XHR/fetch/WebSocket/定时器/事件监听 五维 API 插桩 ──
 
-    方法 分派_动态探针 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_动态探针 <公开 静态 类型 = 文本型 @输出名 = "DispatchDynamicProbe" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 动作 <类型 = 文本型>
         动作 = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (MCP命令服务器.参数键存在 (参数JSON, "action") == 假)
+            {
+                // 缺参一律拒绝: 省略 action 会落到下面 动作 == "" 分支直接执行 enable
+                // (监控/插桩/Hook 立即生效, 属意外动作), 而工具描述写明 action 必填。
+                返回 (MCP_响应构建.命令失败 (命令ID, "action 不能省略 | 省略会直接执行 enable 并使五维插桩立即生效, 属意外动作 | 查询状态请显式传 action:get"))
+            }
         如果 (动作 == "enable" || 动作 == "")
         {
             变量 注入代码 <类型 = 文本型>
-            注入代码 = "(function(){if(window.__MCP_PROBE__)return'__already';var L=window.__MCP_PROBE__={xhr:[],fetch:[],ws:[],timers:[],listeners:[],limit:300,orig:{}};function P(k,o){if(L[k].length>=L.limit)L[k].shift();L[k].push(o);}var OX=XMLHttpRequest.prototype;['open','send'].forEach(function(m){var f=OX[m];OX[m]=function(){try{if(m==='open'){this.__u=String(arguments[1]);this.__m=arguments[0];this.__t=Date.now();this.__s=new Error().stack}else{var self=this;var resp='';try{resp=self.responseType==='json'?JSON.stringify(self.response).slice(0,500):String(self.response).slice(0,500)}catch(e){}P('xhr',{u:self.__u,m:self.__m,status:self.status,t:Date.now()-self.__t,resp:resp,st:self.__s?self.__s.slice(0,400):''})}}catch(e){}return f.apply(this,arguments)}});var OF=window.fetch;window.fetch=function(){try{var u=(arguments[0]&&arguments[0].url)?arguments[0].url:String(arguments[0]);var o=arguments[1]||{};P('fetch',{u:u,method:o.method||'GET',st:new Error().stack.slice(0,400),t:Date.now()})}catch(e){}return OF.apply(this,arguments)};try{var WS=window.WebSocket;var OWS=WS.prototype;['send','close'].forEach(function(m){var f=OWS[m];OWS[m]=function(){try{if(m==='send'){P('ws',{send:typeof arguments[0]==='string'?arguments[0].slice(0,300):'[binary]',st:new Error().stack.slice(0,400)})}}catch(e){}return f.apply(this,arguments)}})}catch(e){}['setTimeout','setInterval'].forEach(function(m){var f=window[m];window[m]=function(){try{P('timers',{m:m,d:arguments[1],st:new Error().stack.slice(0,300)})}catch(e){}return f.apply(this,arguments)}});var OE=EventTarget.prototype.addEventListener;EventTarget.prototype.addEventListener=function(t,fn,o){try{P('listeners',{t:t,fn:fn&&fn.toString?fn.toString().slice(0,200):'',st:new Error().stack.slice(0,300)})}catch(e){}return OE.call(this,t,fn,o)};return'__ok'})()"
+            注入代码 = "(function(){if(window.__MCP_PROBE__)return'__already';var L=window.__MCP_PROBE__={xhr:[],fetch:[],ws:[],timers:[],listeners:[],limit:300,orig:{}};function P(k,o){if(L[k].length>=L.limit){var __pk=L.limit-1,__pj;for(__pj=0;__pj<__pk;__pj++){L[k][__pj]=L[k][L[k].length-__pk+__pj];}L[k].length=__pk;}L[k][L[k].length]=o;}var OX=XMLHttpRequest.prototype;['open','send'].forEach(function(m){var f=OX[m];OX[m]=function(){try{if(m==='open'){this.__u=String(arguments[1]);this.__m=arguments[0];this.__t=Date.now();this.__s=new Error().stack}else{var self=this;var resp='';try{resp=self.responseType==='json'?JSON.stringify(self.response).slice(0,500):String(self.response).slice(0,500)}catch(e){}P('xhr',{u:self.__u,m:self.__m,status:self.status,t:Date.now()-self.__t,resp:resp,st:self.__s?self.__s.slice(0,400):''})}}catch(e){}return f.apply(this,arguments)}});var OF=window.fetch;window.fetch=function(){try{var u=(arguments[0]&&arguments[0].url)?arguments[0].url:String(arguments[0]);var o=arguments[1]||{};P('fetch',{u:u,method:o.method||'GET',st:new Error().stack.slice(0,400),t:Date.now()})}catch(e){}return OF.apply(this,arguments)};try{var WS=window.WebSocket;var OWS=WS.prototype;['send','close'].forEach(function(m){var f=OWS[m];OWS[m]=function(){try{if(m==='send'){P('ws',{send:typeof arguments[0]==='string'?arguments[0].slice(0,300):'[binary]',st:new Error().stack.slice(0,400)})}}catch(e){}return f.apply(this,arguments)}})}catch(e){}['setTimeout','setInterval'].forEach(function(m){var f=window[m];window[m]=function(){try{P('timers',{m:m,d:arguments[1],st:new Error().stack.slice(0,300)})}catch(e){}return f.apply(this,arguments)}});var OE=EventTarget.prototype.addEventListener;EventTarget.prototype.addEventListener=function(t,fn,o){try{P('listeners',{t:t,fn:fn&&fn.toString?fn.toString().slice(0,200):'',st:new Error().stack.slice(0,300)})}catch(e){}return OE.call(this,t,fn,o)};return'__ok'})()"
             变量 注入结果 <类型 = 文本型>
             注入结果 = MCP命令服务器.CDP执行JS并等待 (注入代码, 10000, 真)
             如果 (注入结果 == "" || 是否以 (注入结果, "{\"error\""))
             {
-                返回 (MCP_响应构建.命令失败 (命令ID, "探针注入失败: " + 注入结果))
+                如果 (注入结果 == "")
+                {
+                    // CDP执行JS并等待 超时返回空串, 而这恰是最常见的失败模式 → 空串必须单独给出可行动原因,
+                    // 直接拼进消息只会得到 "探针注入失败: " (冒号后无任何信息)。
+                    返回 (MCP_响应构建.命令失败 (命令ID, "探针注入失败: CDP JS 执行无响应(已等待10秒) | 常见原因: 页面尚未就绪, 或 CDP 监管者事件未注册(可用 browser_vip_enable_inspector enable=true 恢复) | 建议: 确认页面已加载后重试, 或改用 async_only:true"))
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, "探针注入失败: " + 注入结果 + " | 注入脚本自身执行失败(说明: 本工具经 CDP 求值注入, **不受页面 CSP 约束**, 故通常不是 CSP 问题; 若为语法/解析类错误则属本工具注入脚本缺陷, 重试无意义, 请改用 browser_reverse_search_script / browser_kernel_reverse_sources 交叉确认)"))
             }
             返回 (MCP_响应构建.命令成功 (命令ID, "动态探针已注入(五维API插桩): " + 注入结果 + " | 数据在 window.__MCP_PROBE__, 用 action=get 取回"))
         }
@@ -1198,12 +1504,18 @@
 
     # ── 动态调用追踪: 目标函数包装, 记录调用栈/参数/返回值/耗时 ──
 
-    方法 分派_调用追踪 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_调用追踪 <公开 静态 类型 = 文本型 @输出名 = "DispatchCallTrace" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 动作 <类型 = 文本型>
         动作 = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (MCP命令服务器.参数键存在 (参数JSON, "action") == 假)
+            {
+                // 缺参一律拒绝: 省略 action 会落到下面 动作 == "" 分支直接执行 start
+                // (监控/插桩/Hook 立即生效, 属意外动作), 而工具描述写明 action 必填。
+                返回 (MCP_响应构建.命令失败 (命令ID, "action 不能省略 | 省略会直接执行 start 并使调用追踪立即生效, 属意外动作 | 查询状态请显式传 action:get"))
+            }
         如果 (动作 == "start" || 动作 == "")
         {
             变量 目标文本 <类型 = 文本型>
@@ -1218,7 +1530,7 @@
                 返回 (MCP_响应构建.命令失败 (命令ID, "targets 不能为空 | 例: [\"window.fetch\",\"crypto.subtle.encrypt\"]"))
             }
             变量 注入代码 <类型 = 文本型>
-            注入代码 = "(function(){if(window.__MCP_TRACE__)return'__already';var T=window.__MCP_TRACE__={calls:[],limit:200,errors:0};function S(v){try{if(v===undefined)return'undefined';if(v===null)return'null';if(typeof v==='function')return'[Function '+(v.name||'')+']';if(typeof v==='object'){var s=JSON.stringify(v);return s?s.slice(0,200):'[Object]'}return String(v).slice(0,200)}catch(e){return'[unserializable]'}}function wrap(path,obj,name){try{var f=obj[name];if(typeof f!=='function'||f.__mcp_tr)return;var orig=f;obj[name]=function(){var args=[].slice.call(arguments);var st=new Error().stack;var t0=Date.now();try{var r=orig.apply(this,arguments);T.calls.push({p:path,a:args.map(S).slice(0,10),r:S(r),ms:Date.now()-t0,st:st?st.slice(0,300):''});if(T.calls.length>T.limit)T.calls.shift();return r}catch(e){T.calls.push({p:path,a:args.map(S).slice(0,10),err:e.message,st:st?st.slice(0,300):''});if(T.calls.length>T.limit)T.calls.shift();throw e}};obj[name].__mcp_tr=true}catch(e){T.errors++}}var targets=" + 目标文本 + ";for(var i=0;i<targets.length;i++){var parts=String(targets[i]).split('.');var o=window;var ok=true;for(var j=0;j<parts.length-1;j++){if(o[parts[j]]==null){ok=false;break}o=o[parts[j]]}if(ok&&o[parts[parts.length-1]]!=null)wrap(targets[i],o,parts[parts.length-1])}return'__ok wrapped='+window.__MCP_TRACE__.errors+'fail'})()"
+            注入代码 = "(function(){if(window.__MCP_TRACE__)return'__already';var T=window.__MCP_TRACE__={calls:[],limit:200,errors:0};function S(v){try{if(v===undefined)return'undefined';if(v===null)return'null';if(typeof v==='function')return'[Function '+(v.name||'')+']';if(typeof v==='object'){var s=JSON.stringify(v);return s?s.slice(0,200):'[Object]'}return String(v).slice(0,200)}catch(e){return'[unserializable]'}}function wrap(path,obj,name){try{var f=obj[name];if(typeof f!=='function'||f.__mcp_tr)return;var orig=f;obj[name]=function(){var __tn=arguments.length,args=[],__ti;for(__ti=0;__ti<__tn;__ti++){args[__ti]=arguments[__ti];}var st=new Error().stack;var t0=Date.now();try{var r=Reflect.apply(orig,this,arguments);T.calls[T.calls.length]={p:path,a:args.map(S).slice(0,10),r:S(r),ms:Date.now()-t0,st:st?st.slice(0,300):''};if(T.calls.length>T.limit){var __ck=T.limit,__cj;for(__cj=0;__cj<__ck;__cj++){T.calls[__cj]=T.calls[T.calls.length-__ck+__cj];}T.calls.length=__ck;}return r}catch(e){T.calls[T.calls.length]={p:path,a:args.map(S).slice(0,10),err:e.message,st:st?st.slice(0,300):''};if(T.calls.length>T.limit){var __ck=T.limit,__cj;for(__cj=0;__cj<__ck;__cj++){T.calls[__cj]=T.calls[T.calls.length-__ck+__cj];}T.calls.length=__ck;}throw e}};obj[name].__mcp_tr=true}catch(e){T.errors++}}var targets=" + 目标文本 + ";for(var i=0;i<targets.length;i++){var parts=String(targets[i]).split('.');var o=window;var ok=true;for(var j=0;j<parts.length-1;j++){if(o[parts[j]]==null){ok=false;break}o=o[parts[j]]}if(ok&&o[parts[parts.length-1]]!=null)wrap(targets[i],o,parts[parts.length-1])}return'__ok wrapped='+window.__MCP_TRACE__.errors+'fail'})()"
             变量 注入结果 <类型 = 文本型>
             注入结果 = MCP命令服务器.CDP执行JS并等待 (注入代码, 10000, 真)
             如果 (注入结果 == "" || 是否以 (注入结果, "{\"error\""))
@@ -1256,12 +1568,18 @@
 
     # ── 动态算法 Hook: CryptoJS/全局哈希/base64/WebCrypto 参数与结果全记录 ──
 
-    方法 分派_算法Hook <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_算法Hook <公开 静态 类型 = 文本型 @输出名 = "DispatchAlgorithmHook" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 动作 <类型 = 文本型>
         动作 = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (MCP命令服务器.参数键存在 (参数JSON, "action") == 假)
+            {
+                // 缺参一律拒绝: 省略 action 会落到下面 动作 == "" 分支直接执行 start
+                // (监控/插桩/Hook 立即生效, 属意外动作), 而工具描述写明 action 必填。
+                返回 (MCP_响应构建.命令失败 (命令ID, "action 不能省略 | 省略会直接执行 start 并使算法 Hook立即生效, 属意外动作 | 查询状态请显式传 action:get"))
+            }
         如果 (动作 == "start" || 动作 == "")
         {
             变量 注入代码 <类型 = 文本型>
@@ -1270,7 +1588,11 @@
             注入结果 = MCP命令服务器.CDP执行JS并等待 (注入代码, 10000, 真)
             如果 (注入结果 == "" || 是否以 (注入结果, "{\"error\""))
             {
-                返回 (MCP_响应构建.命令失败 (命令ID, "算法Hook注入失败: " + 注入结果))
+                如果 (注入结果 == "")
+                {
+                    返回 (MCP_响应构建.命令失败 (命令ID, "算法Hook注入失败: CDP JS 执行无响应(已等待10秒) | 常见原因: 页面尚未就绪, 或 CDP 监管者事件未注册(可用 browser_vip_enable_inspector enable=true 恢复) | 建议: 确认页面已加载后重试, 或改用 async_only:true"))
+                }
+                返回 (MCP_响应构建.命令失败 (命令ID, "算法Hook注入失败: " + 注入结果 + " | 注入脚本自身执行失败(说明: 经 CDP 求值注入, **不受页面 CSP 约束**; 若为语法/解析类错误则属本工具注入脚本缺陷, 重试无意义) | 另: 页面未使用 CryptoJS/WebCrypto 时 Hook 本身仍应注入成功, 故本项失败与页面是否用这些库无关"))
             }
             返回 (MCP_响应构建.命令成功 (命令ID, "算法Hook已启动(CryptoJS+哈希+base64+WebCrypto) | 数据在 window.__MCP_ALGO_LOG__"))
         }
@@ -1303,9 +1625,9 @@
 
     # ── 动态函数提取: 枚举 window/对象链/prototype 函数与源码(toString) ──
 
-    方法 分派_函数提取 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_函数提取 <公开 静态 类型 = 文本型 @输出名 = "DispatchFunctionExtract" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 最大数 <类型 = 整数>
         最大数 = MCP命令服务器.yyjson取整数 (参数JSON, "max")
@@ -1316,7 +1638,7 @@
         变量 过滤词 <类型 = 文本型>
         过滤词 = MCP命令服务器.yyjson取文本 (参数JSON, "filter")
         变量 注入代码 <类型 = 文本型>
-        注入代码 = "JSON.stringify((function(){var out=[];var seen={};var MAX=" + 到文本 (最大数) + ";var FIL='' ;function add(p,f){try{if(typeof f!=='function')return;var src=f.toString();if(FIL&&p.indexOf(FIL)<0)return;var k=src.length+'|'+src.slice(0,40);if(seen[k])return;seen[k]=1;out.push({p:p,n:f.name||'',l:f.length,s:src.slice(0,1500)})}catch(e){}}try{Object.keys(window).forEach(function(k){try{if(typeof window[k]==='function')add('window.'+k,window[k])}catch(e){}})}catch(e){}['location','navigator','document','history','crypto','performance','localStorage','sessionStorage','console'].forEach(function(o){try{var obj=window[o];if(!obj)return;Object.keys(obj).forEach(function(k){try{if(typeof obj[k]==='function')add(o+'.'+k,obj[k])}catch(e){}})}catch(e){}})['XMLHttpRequest','WebSocket','Promise','Map','Set','Array','Object','String','Number','Date','RegExp','JSON','WebAssembly','URL','Blob','FileReader','FormData','Headers','Request','Response','AbortController','IntersectionObserver','MutationObserver','ResizeObserver'].forEach(function(c){try{var C=window[c];if(!C||typeof C!=='function')return;add('window.'+c,C);try{Object.getOwnPropertyNames(C.prototype).forEach(function(k){try{add(c+'.prototype.'+k,C.prototype[k])}catch(e){}})}catch(e){}}catch(e){}})return out.slice(0,MAX)})())"
+        注入代码 = "JSON.stringify((function(){var out=[];var seen={};var MAX=" + 到文本 (最大数) + ";var FIL='' ;function add(p,f){try{if(typeof f!=='function')return;var src=f.toString();if(FIL&&p.indexOf(FIL)<0)return;var k=src.length+'|'+src.slice(0,40);if(seen[k])return;seen[k]=1;out.push({p:p,n:f.name||'',l:f.length,s:src.slice(0,1500)})}catch(e){}}try{Object.keys(window).forEach(function(k){try{if(typeof window[k]==='function')add('window.'+k,window[k])}catch(e){}})}catch(e){}['location','navigator','document','history','crypto','performance','localStorage','sessionStorage','console'].forEach(function(o){try{var obj=window[o];if(!obj)return;Object.keys(obj).forEach(function(k){try{if(typeof obj[k]==='function')add(o+'.'+k,obj[k])}catch(e){}})}catch(e){}});['XMLHttpRequest','WebSocket','Promise','Map','Set','Array','Object','String','Number','Date','RegExp','JSON','WebAssembly','URL','Blob','FileReader','FormData','Headers','Request','Response','AbortController','IntersectionObserver','MutationObserver','ResizeObserver'].forEach(function(c){try{var C=window[c];if(!C||typeof C!=='function')return;add('window.'+c,C);try{Object.getOwnPropertyNames(C.prototype).forEach(function(k){try{add(c+'.prototype.'+k,C.prototype[k])}catch(e){}})}catch(e){}}catch(e){}});return out.slice(0,MAX)})())"
         // 过滤词注入 (单引号安全)
         如果 (过滤词 != "")
         {
@@ -1326,7 +1648,11 @@
         数据 = MCP命令服务器.CDP执行JS并等待 (注入代码, 15000, 真)
         如果 (数据 == "" || 是否以 (数据, "{\"error\""))
         {
-            返回 (MCP_响应构建.命令失败 (命令ID, "函数提取失败: " + 数据))
+            如果 (数据 == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "函数提取失败: CDP JS 执行无响应(已等待15秒) | 常见原因: 页面尚未就绪或脚本数量过大导致枚举超时 | 建议: 先 browser_navigate 确认页面可交互, 或用 filter 缩小枚举范围后重试"))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, "函数提取失败: " + 数据 + " | 注入脚本自身执行失败(说明: 本工具经 CDP 求值注入, **不受页面 CSP 约束**, 故通常不是 CSP 问题; 若为语法/解析类错误则属本工具注入脚本缺陷, 重试无意义, 请改用 browser_reverse_search_script / browser_kernel_reverse_sources 交叉确认)"))
         }
         变量 包 <类型 = YYJSON对象类>
         包.创建自文本 ("{}")
@@ -1338,9 +1664,9 @@
 
     # ── 动态 JS 源码提取: document.scripts 全量(含inline), 按索引/截断 ──
 
-    方法 分派_源码提取 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_源码提取 <公开 静态 类型 = 文本型 @输出名 = "DispatchSourceExtract" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 单脚本上限 <类型 = 整数>
         单脚本上限 = MCP命令服务器.yyjson取整数 (参数JSON, "max_len")
@@ -1356,7 +1682,11 @@
         数据 = MCP命令服务器.CDP执行JS并等待 (注入代码, 15000, 真)
         如果 (数据 == "" || 是否以 (数据, "{\"error\""))
         {
-            返回 (MCP_响应构建.命令失败 (命令ID, "源码提取失败: " + 数据))
+            如果 (数据 == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "源码提取失败: CDP JS 执行无响应(已等待15秒) | 常见原因: 页面尚未就绪 | 建议: 先 browser_navigate 确认页面可交互; 若页面脚本极多可先用 index 取单个脚本"))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, "源码提取失败: " + 数据 + " | 页面可能因 CSP 限制, 或已跨域跳转"))
         }
         变量 包 <类型 = YYJSON对象类>
         包.创建自文本 ("{}")
@@ -1368,12 +1698,18 @@
 
     # ── 全局变量动态追踪: defineProperty setter 记录写入者调用栈与新值 ──
 
-    方法 分派_全局变量追踪 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分派_全局变量追踪 <公开 静态 类型 = 文本型 @输出名 = "DispatchGlobalVariableTrace" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         变量 动作 <类型 = 文本型>
         动作 = MCP命令服务器.yyjson取文本 (参数JSON, "action")
+            如果 (MCP命令服务器.参数键存在 (参数JSON, "action") == 假)
+            {
+                // 缺参一律拒绝: 省略 action 会落到下面 动作 == "" 分支直接执行 start
+                // (监控/插桩/Hook 立即生效, 属意外动作), 而工具描述写明 action 必填。
+                返回 (MCP_响应构建.命令失败 (命令ID, "action 不能省略 | 省略会直接执行 start 并使全局变量追踪立即生效, 属意外动作 | 查询状态请显式传 action:get"))
+            }
         如果 (动作 == "start" || 动作 == "")
         {
             变量 名称文本 <类型 = 文本型>
@@ -1426,10 +1762,10 @@
     # ==================== 事件侧辅助 (供 MCP_BrowserEvents 调用) ====================
     # 记录证书错误 (浏览器_请求证书错误 事件内调用)
 
-    方法 记录证书错误 <公开 静态>
-    参数 浏览器ID <类型 = 整数>
-    参数 错误代码 <类型 = 整数>
-    参数 目标地址 <类型 = 文本型>
+    方法 记录证书错误 <公开 静态 @输出名 = "RecordCertificateError" @强制输出 = 真>
+    参数 浏览器ID <类型 = 整数 @输出名 = "BrowserID">
+    参数 错误代码 <类型 = 整数 @输出名 = "ErrorCode">
+    参数 目标地址 <类型 = 文本型 @输出名 = "TargetUrl">
     {
         变量 条目 <类型 = YYJSON对象类>
         条目.创建自文本 ("{}")
@@ -1448,10 +1784,10 @@
 
     # 查询认证凭据 (浏览器_获得需授权证书 事件内调用), 返回 "user|pass", 未命中返回 ""
 
-    方法 查询认证凭据 <公开 静态 类型 = 文本型>
-    参数 主机 <类型 = 文本型>
-    参数 端口 <类型 = 整数>
-    参数 域名 <类型 = 文本型>
+    方法 查询认证凭据 <公开 静态 类型 = 文本型 @输出名 = "QueryAuthCredential" @强制输出 = 真>
+    参数 主机 <类型 = 文本型 @输出名 = "Host">
+    参数 端口 <类型 = 整数 @输出名 = "Port">
+    参数 域名 <类型 = 文本型 @输出名 = "Domain">
     {
         变量 结果 <类型 = 文本型>
         结果 = ""
@@ -1478,9 +1814,9 @@
 
     # 消费下载操作 (浏览器_正在下载 事件内调用), 返回命中动作 "", 未命中返回 ""
 
-    方法 消费下载操作 <公开 静态 类型 = 文本型>
-    参数 下载标识 <类型 = 文本型>
-    参数 下载地址 <类型 = 文本型>
+    方法 消费下载操作 <公开 静态 类型 = 文本型 @输出名 = "ConsumeDownloadOp" @强制输出 = 真>
+    参数 下载标识 <类型 = 文本型 @输出名 = "DownloadKey">
+    参数 下载地址 <类型 = 文本型 @输出名 = "DownloadUrl">
     {
         变量 命中动作 <类型 = 文本型>
         命中动作 = ""
@@ -1519,8 +1855,8 @@
 
     # 查询方案内容 (类_MCP_方案资源处理器 事件内调用), 返回 {"mime":..,"body":..}, 未找到返回 ""
 
-    方法 取方案内容 <公开 静态 类型 = 文本型>
-    参数 请求地址 <类型 = 文本型>
+    方法 取方案内容 <公开 静态 类型 = 文本型 @输出名 = "GetSchemeContent" @强制输出 = 真>
+    参数 请求地址 <类型 = 文本型 @输出名 = "RequestUrl">
     {
         变量 结果 <类型 = 文本型>
         结果 = ""
@@ -1549,16 +1885,16 @@
 # 范式参照: FBrowser模块例子/Scheme_callback.wsv (官方)
 # ================================================================
 
-类 类_MCP_方案资源处理器 <公开 基础类 = 类_FBrowser_资源处理器>
+类 类_MCP_方案资源处理器 <公开 基础类 = 类_FBrowser_资源处理器 @输出名 = "MCPSchemeResourceHandler">
 {
-    变量 响应字节集 <类型 = 字节集类>
-    变量 当前MIME <类型 = 文本型>
+    变量 响应字节集 <类型 = 字节集类 @输出名 = "ResponseBytes">
+    变量 当前MIME <类型 = 文本型 @输出名 = "CurrentMIME">
 
     方法 打开 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
-    参数 标识ID <类型 = 长整数>
-    参数 请求 <类型 = 类_FBrowser_请求>
-    参数 处理请求 <类型 = 逻辑型类 注释 = "设置为真才会启用事件 处理请求">
-    参数 回调 <类型 = 类_FBrowser_回调>
+    参数 标识ID <类型 = 长整数 @输出名 = "KeyID">
+    参数 请求 <类型 = 类_FBrowser_请求 @输出名 = "Request">
+    参数 处理请求 <类型 = 逻辑型类 注释 = "设置为真才会启用事件 处理请求" @输出名 = "HandleRequest">
+    参数 回调 <类型 = 类_FBrowser_回调 @输出名 = "Callback">
     {
         变量 方案结果 <类型 = 文本型>
         方案结果 = MCP_内核分派.取方案内容 (请求.取地址 ())
@@ -1579,19 +1915,19 @@
     }
 
     方法 处理请求 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
-    参数 标识ID <类型 = 长整数>
-    参数 请求 <类型 = 类_FBrowser_请求>
-    参数 回调 <类型 = 类_FBrowser_回调>
+    参数 标识ID <类型 = 长整数 @输出名 = "KeyID">
+    参数 请求 <类型 = 类_FBrowser_请求 @输出名 = "Request">
+    参数 回调 <类型 = 类_FBrowser_回调 @输出名 = "Callback">
     {
         回调.继续 ()
         返回 (真)
     }
 
     方法 取响应头 <公开 @虚拟方法 = 可覆盖>
-    参数 标识ID <类型 = 长整数>
-    参数 响应 <类型 = 类_FBrowser_响应>
-    参数 响应长度 <类型 = 长整数类 注释 = "需修改的数据大小, 大于0修改才会有效">
-    参数 重定向地址 <类型 = FBrowser_文本>
+    参数 标识ID <类型 = 长整数 @输出名 = "KeyID">
+    参数 响应 <类型 = 类_FBrowser_响应 @输出名 = "Response">
+    参数 响应长度 <类型 = 长整数类 注释 = "需修改的数据大小, 大于0修改才会有效" @输出名 = "ResponseLength">
+    参数 重定向地址 <类型 = FBrowser_文本 @输出名 = "RedirectUrl">
     {
         响应.置MIME类型 (当前MIME)
         响应.置状态 (200)
@@ -1599,20 +1935,20 @@
     }
 
     方法 忽略 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
-    参数 标识ID <类型 = 长整数>
-    参数 可忽略大小 <类型 = 长整数>
-    参数 被忽略大小 <类型 = 长整数类>
-    参数 资源忽略回调 <类型 = 类_FBrowser_资源忽略回调>
+    参数 标识ID <类型 = 长整数 @输出名 = "KeyID">
+    参数 可忽略大小 <类型 = 长整数 @输出名 = "CanIgnoreSize">
+    参数 被忽略大小 <类型 = 长整数类 @输出名 = "IgnoredSize">
+    参数 资源忽略回调 <类型 = 类_FBrowser_资源忽略回调 @输出名 = "ResourceIgnoreCallback">
     {
         返回 (假)
     }
 
     方法 读取 <公开 类型 = 逻辑型 @虚拟方法 = 可覆盖>
-    参数 标识ID <类型 = 长整数>
-    参数 输出数据指针 <类型 = 变整数 注释 = "data_out">
-    参数 读取大小 <类型 = 整数 注释 = "bytes_to_read">
-    参数 读入大小 <类型 = 整数类 注释 = "写入数据大小">
-    参数 资源读取回调 <类型 = 类_FBrowser_资源读取回调>
+    参数 标识ID <类型 = 长整数 @输出名 = "KeyID">
+    参数 输出数据指针 <类型 = 变整数 注释 = "data_out" @输出名 = "OutputDataPtr">
+    参数 读取大小 <类型 = 整数 注释 = "bytes_to_read" @输出名 = "ReadSize">
+    参数 读入大小 <类型 = 整数类 注释 = "写入数据大小" @输出名 = "ReadInSize">
+    参数 资源读取回调 <类型 = 类_FBrowser_资源读取回调 @输出名 = "ResourceReadCallback">
     {
         变量 size <类型 = 整数>
         size = 响应字节集.取字节集长度 ()
@@ -1624,7 +1960,12 @@
         {
             内存复制 (输出数据指针, 响应字节集.取字节集指针 (), 读取大小)
             读入大小.值 = 读取大小
-            取字节集右边 (响应字节集, size - 读取大小)
+            // 取字节集右边 是**纯取值访问器**
+            // (类库 视窗基本类/w_bin_p.wsv:95 —— 返回新字节集, 不修改接收者),
+            // 故不赋值回写时 响应字节集 始终不缩短 -> size 恒大于 读取大小 -> 永远进不到
+            // 下面的 清空字节集/返回假 终止路径, 任何超过 CEF 单次读取块(8~32KB)的
+            // mcp:// 响应体会重复输出首块(数据损坏/挂死)。必须赋值回写。
+            响应字节集 = 取字节集右边 (响应字节集, size - 读取大小)
         }
         否则
         {
@@ -1636,7 +1977,7 @@
     }
 
     方法 退出 <公开 @虚拟方法 = 可覆盖>
-    参数 标识ID <类型 = 长整数>
+    参数 标识ID <类型 = 长整数 @输出名 = "KeyID">
     {
         响应字节集.清空字节集 ()
     }

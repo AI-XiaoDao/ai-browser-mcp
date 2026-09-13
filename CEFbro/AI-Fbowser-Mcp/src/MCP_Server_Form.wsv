@@ -1,13 +1,13 @@
 <火山程序 类型 = "通常" 版本 = 1 />
 包 火山.程序
 # MCP_填表分派 — 从 MCP_Server.wsv 拆分 (L5)
-类 MCP_填表分派 <公开 @全局类 = 真>
+类 MCP_填表分派 <公开 @全局类 = 真 @输出名 = "MCPFormDispatch">
 {
     # === 分类分派: 填表操作 (FBrowser 官方填表框架 API) ===
-    方法 分类分派_填表操作 <公开 静态 类型 = 文本型>
-    参数 命令ID <类型 = 文本型>
-    参数 方法名 <类型 = 文本型>
-    参数 参数JSON <类型 = YYJSON只读对象类>
+    方法 分类分派_填表操作 <公开 静态 类型 = 文本型 @输出名 = "DispatchClassFormOp" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 方法名 <类型 = 文本型 @输出名 = "MethodName">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
     {
         如果 (方法名 == "browser.fill_set_value" || 方法名 == "browser_fill_set_value")
         {
@@ -24,9 +24,15 @@
             如果 (browser.是否为空 () == 假)
             {
                 变量 填表框架 <类型 = 类_FBrowser_填表框架>
-                填表框架 = browser.取主填表框架 ()
+                填表框架 = MCP命令服务器.解析填表框架 (browser, MCP命令服务器.yyjson取文本 (参数JSON, "frame_id"))
                 如果 (填表框架.是否有效 ())
                 {
+                    变量 前置失败 <类型 = 文本型>
+                    前置失败 = 前置存在校验 (命令ID, selector, "设置值", browser, 参数JSON)
+                    如果 (前置失败 != "")
+                    {
+                        返回 (前置失败)
+                    }
                     填表框架.置元素内容 (selector, 0, value)
                     返回 (MCP_响应构建.命令成功 (命令ID, "已设置: " + selector))
                 }
@@ -47,9 +53,15 @@
             如果 (browser.是否为空 () == 假)
             {
                 变量 填表框架 <类型 = 类_FBrowser_填表框架>
-                填表框架 = browser.取主填表框架 ()
+                填表框架 = MCP命令服务器.解析填表框架 (browser, MCP命令服务器.yyjson取文本 (参数JSON, "frame_id"))
                 如果 (填表框架.是否有效 ())
                 {
+                    变量 前置失败 <类型 = 文本型>
+                    前置失败 = 前置存在校验 (命令ID, selector, "点击", browser, 参数JSON)
+                    如果 (前置失败 != "")
+                    {
+                        返回 (前置失败)
+                    }
                     填表框架.点击元素 (selector, 0)
                     返回 (MCP_响应构建.命令成功 (命令ID, "已点击: " + selector))
                 }
@@ -70,9 +82,15 @@
             如果 (browser.是否为空 () == 假)
             {
                 变量 填表框架 <类型 = 类_FBrowser_填表框架>
-                填表框架 = browser.取主填表框架 ()
+                填表框架 = MCP命令服务器.解析填表框架 (browser, MCP命令服务器.yyjson取文本 (参数JSON, "frame_id"))
                 如果 (填表框架.是否有效 ())
                 {
+                    变量 前置失败 <类型 = 文本型>
+                    前置失败 = 前置存在校验 (命令ID, selector, "设置焦点", browser, 参数JSON)
+                    如果 (前置失败 != "")
+                    {
+                        返回 (前置失败)
+                    }
                     填表框架.置元素焦点 (selector, 0, 真)
                     返回 (MCP_响应构建.命令成功 (命令ID, "焦点已设置: " + selector))
                 }
@@ -93,9 +111,15 @@
             如果 (browser.是否为空 () == 假)
             {
                 变量 填表框架 <类型 = 类_FBrowser_填表框架>
-                填表框架 = browser.取主填表框架 ()
+                填表框架 = MCP命令服务器.解析填表框架 (browser, MCP命令服务器.yyjson取文本 (参数JSON, "frame_id"))
                 如果 (填表框架.是否有效 ())
                 {
+                    变量 前置失败 <类型 = 文本型>
+                    前置失败 = 前置存在校验 (命令ID, selector, "滚动到元素", browser, 参数JSON)
+                    如果 (前置失败 != "")
+                    {
+                        返回 (前置失败)
+                    }
                     填表框架.滚动到元素 (selector, 0, 真)
                     返回 (MCP_响应构建.命令成功 (命令ID, "已滚动到: " + selector))
                 }
@@ -116,7 +140,7 @@
             如果 (browser.是否为空 () == 假)
             {
                 变量 填表框架 <类型 = 类_FBrowser_填表框架>
-                填表框架 = browser.取主填表框架 ()
+                填表框架 = MCP命令服务器.解析填表框架 (browser, MCP命令服务器.yyjson取文本 (参数JSON, "frame_id"))
                 如果 (填表框架.是否有效 ())
                 {
                     变量 异步存在ID <类型 = 文本型>
@@ -145,7 +169,7 @@
             }
             如果 (删首尾空 (attr) == "")
             {
-                // 修复: 空属性名会触发 置元素属性 设置空属性(无意义且可能触发框架异常)
+                // 空属性名会触发 置元素属性 设置空属性(无意义且可能触发框架异常)
                 返回 (MCP_响应构建.命令失败 (命令ID, "attribute 不能为空 | 如 style / data-* / aria-*"))
             }
             变量 attrLower <类型 = 文本型>
@@ -163,9 +187,15 @@
             如果 (browser.是否为空 () == 假)
             {
                 变量 填表框架 <类型 = 类_FBrowser_填表框架>
-                填表框架 = browser.取主填表框架 ()
+                填表框架 = MCP命令服务器.解析填表框架 (browser, MCP命令服务器.yyjson取文本 (参数JSON, "frame_id"))
                 如果 (填表框架.是否有效 ())
                 {
+                    变量 前置失败 <类型 = 文本型>
+                    前置失败 = 前置存在校验 (命令ID, selector, "设置属性", browser, 参数JSON)
+                    如果 (前置失败 != "")
+                    {
+                        返回 (前置失败)
+                    }
                     填表框架.置元素属性 (selector, 0, attr, value)
                     返回 (MCP_响应构建.命令成功 (命令ID, "属性已设置: " + selector))
                 }
@@ -187,8 +217,58 @@
             browser = MCP命令服务器.取主浏览器 ()
             如果 (browser.是否为空 () == 假)
             {
+                // 本工具走 填表框架.取元素属性, 该原生 API 经 CEF JS 回调在本内核下
+                // 恒返回空值并被写成字面 "null" -> 元素存在时也静默返回 null(isError=false)。
+                // 优先走 CDP JS(绕过不稳定的 CEF JS 回调), 取不到再回退下方原生路径。
+                // 按 attribute 是否为空分别构造 JS: 非空取 HTML 属性; 为空取 textContent
+                // (与 browser_dom_query 空 attribute 的既有语义一致)。两条路径都 CDP 优先。
+                如果 (attr != "")
+                {
+                    变量 js属性码 <类型 = 文本型>
+                    js属性码 = "(function(){var e=document.querySelector('" + MCP命令服务器.简单转义JS (selector) + "');if(!e)return '__MCP_NO_ELEM__';var v=e.getAttribute('" + MCP命令服务器.简单转义JS (attr) + "');return v===null?'__MCP_NO_ATTR__':v})()"
+                    变量 js属性值 <类型 = 文本型>
+                    js属性值 = MCP命令服务器.CDP执行JS按框架 (browser, 参数JSON, js属性码, 10000)
+                    // 约束: 指定了框架却解析不到 -> 明确报错。否则会落到"只用原生填表框架"的兜底,
+                    // 报出与真因无关的"填表框架无效", 更难定位。
+                    如果 (是否以 (js属性值, "{\"error\"") && MCP命令服务器.yyjson取文本 (参数JSON, "frame_id") != "" && MCP命令服务器.yyjson取文本 (参数JSON, "frame_id") != "main")
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, js属性值 + " | 该框架内取属性未成功, 未回退到主框架取(否则会读到主框架元素)"))
+                    }
+                    如果 (js属性值 != "" && js属性值 != "null" && js属性值 != "undefined" && 是否以 (js属性值, "{\"error\"") == 假)
+                    {
+                        如果 (js属性值 == "__MCP_NO_ELEM__")
+                        {
+                            返回 (MCP_响应构建.命令失败 (命令ID, "元素不存在或取不到值: " + MCP命令服务器.简单转义JS (selector) + " | 建议: 先用 browser_fill_exists 或 browser_snapshot 确认元素存在"))
+                        }
+                        如果 (js属性值 == "__MCP_NO_ATTR__")
+                        {
+                            返回 (MCP_响应构建.命令失败 (命令ID, "属性不存在: 元素已找到, 但没有该 HTML 属性 | 提示: textContent/innerText/value 等是 DOM 属性(property)而非 HTML 属性, 取它们请用 browser_get_text 或不传 attribute"))
+                        }
+                        返回 (MCP_响应构建.命令成功 (命令ID, js属性值))
+                    }
+                }
+                否则
+                {
+                    // __MCP_TEXT__ 前缀使"元素存在但文本为空"与"CDP 取不到"可区分(CDP 对空串返回 "")
+                    变量 js文本码 <类型 = 文本型>
+                    js文本码 = "(function(){var e=document.querySelector('" + MCP命令服务器.简单转义JS (selector) + "');if(!e)return '__MCP_NO_ELEM__';return '__MCP_TEXT__'+String(e.textContent)})()"
+                    变量 js文本值 <类型 = 文本型>
+                    js文本值 = MCP命令服务器.CDP执行JS按框架 (browser, 参数JSON, js文本码, 10000)
+                    如果 (是否以 (js文本值, "{\"error\"") && MCP命令服务器.yyjson取文本 (参数JSON, "frame_id") != "" && MCP命令服务器.yyjson取文本 (参数JSON, "frame_id") != "main")
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, js文本值 + " | 该框架内取文本未成功, 未回退到主框架取(否则会读到主框架元素)"))
+                    }
+                    如果 (js文本值 == "__MCP_NO_ELEM__")
+                    {
+                        返回 (MCP_响应构建.命令失败 (命令ID, "元素不存在或取不到值: " + MCP命令服务器.简单转义JS (selector) + " | 建议: 先用 browser_fill_exists 或 browser_snapshot 确认元素存在"))
+                    }
+                    如果 (是否以 (js文本值, "__MCP_TEXT__"))
+                    {
+                        返回 (MCP_响应构建.命令成功 (命令ID, 取文本右边 (js文本值, 取文本长度 (js文本值) - 取文本长度 ("__MCP_TEXT__"))))
+                    }
+                }
                 变量 填表框架 <类型 = 类_FBrowser_填表框架>
-                填表框架 = browser.取主填表框架 ()
+                填表框架 = MCP命令服务器.解析填表框架 (browser, MCP命令服务器.yyjson取文本 (参数JSON, "frame_id"))
                 如果 (填表框架.是否有效 ())
                 {
                     变量 异步填表ID <类型 = 文本型>
@@ -202,6 +282,96 @@
                 返回 (MCP_响应构建.命令失败 (命令ID, "填表框架无效"))
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+        }
+        否则 (方法名 == "browser.fill_get_text" || 方法名 == "browser_fill_get_text")
+        {
+            变量 selector <类型 = 文本型>
+            selector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
+            如果 (selector == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "selector 不能为空 | CSS选择器示例: #id / .class / h1"))
+            }
+            变量 browser <类型 = 类_FBrowser_浏览器>
+            browser = MCP命令服务器.取主浏览器 ()
+            如果 (browser.是否为空 ())
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+            }
+            // 与 browser_fill_attr_get 同款: 哨兵区分"元素不存在"与"文本为空"(CDP 对空串返回 "")
+            变量 js码 <类型 = 文本型>
+            js码 = "(function(){var e=document.querySelector('" + MCP命令服务器.简单转义JS (selector) + "');if(!e)return '__MCP_NO_ELEM__';return '__MCP_TEXT__'+String(e.innerText==null?'':e.innerText)})()"
+            变量 js值 <类型 = 文本型>
+            js值 = MCP命令服务器.CDP执行JS按框架 (browser, 参数JSON, js码, 10000)
+            // 约束: 框架解析失败时不能把 {"error":…} 当成功消息返回(此前的兜底分支会把任何未命中哨兵的值
+            // 原样当成功消息发出, 于是调用方看到 success:true + 一段错误文本)。
+            如果 (是否以 (js值, "{\"error\""))
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, js值 + " | 该框架内取 innerText 未成功"))
+            }
+            如果 (js值 == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "取 innerText 失败: CDP 通道无返回 | 该工具走 CDP(原生回调式读 API 在本内核恒返回空值) | 可先用 browser_fill_exists 确认元素存在, 或改用 browser_fill_attr_get(不传 attribute 取 textContent)"))
+            }
+            如果 (js值 == "__MCP_NO_ELEM__")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "元素不存在: " + selector + " | 建议: 先用 browser_fill_exists 或 browser_snapshot 确认元素存在/选择器正确"))
+            }
+            如果 (是否以 (js值, "__MCP_TEXT__"))
+            {
+                返回 (MCP_响应构建.命令成功 (命令ID, 取文本右边 (js值, 取文本长度 (js值) - 取文本长度 ("__MCP_TEXT__"))))
+            }
+            // 未命中哨兵: 原样返回(不吞掉内容)
+            返回 (MCP_响应构建.命令成功 (命令ID, js值))
+        }
+        否则 (方法名 == "browser.fill_set_text" || 方法名 == "browser_fill_set_text")
+        {
+            变量 selector <类型 = 文本型>
+            selector = MCP命令服务器.yyjson取文本 (参数JSON, "selector")
+            变量 新文本 <类型 = 文本型>
+            新文本 = MCP命令服务器.yyjson取文本 (参数JSON, "text")
+            如果 (selector == "")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "selector 不能为空"))
+            }
+            如果 (MCP命令服务器.参数键存在 (参数JSON, "text") == 假)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "text 不能省略 | 省略会被当作空串而清空元素文本; 确实要清空请显式传 text: \"\""))
+            }
+            变量 browser2 <类型 = 类_FBrowser_浏览器>
+            browser2 = MCP命令服务器.取主浏览器 ()
+            如果 (browser2.是否为空 ())
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
+            }
+            // text 必须嵌入**单引号** JS 字符串 -> 用 简单转义JS(双引号上下文请用 JSON转义文本)
+            变量 设码 <类型 = 文本型>
+            设码 = "(function(){var e=document.querySelector('" + MCP命令服务器.简单转义JS (selector) + "');if(!e)return '__MCP_NO_ELEM__';e.innerText='" + MCP命令服务器.简单转义JS (新文本) + "';return '__MCP_OK__'})()"
+            变量 设值 <类型 = 文本型>
+            设值 = MCP命令服务器.CDP执行JS按框架 (browser2, 参数JSON, 设码, 10000)
+            如果 (设值 == "__MCP_NO_ELEM__")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "元素不存在: " + selector))
+            }
+            如果 (设值 != "__MCP_OK__")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "设置 innerText 失败: " + 设值 + " | CDP 未确认写入"))
+            }
+            // 回读验证(项目横切不变量: 写操作要回读, 不静默假成功)
+            变量 读码 <类型 = 文本型>
+            读码 = "(function(){var e=document.querySelector('" + MCP命令服务器.简单转义JS (selector) + "');if(!e)return '__MCP_NO_ELEM__';return '__MCP_TEXT__'+String(e.innerText==null?'':e.innerText)})()"
+            变量 读值 <类型 = 文本型>
+            读值 = MCP命令服务器.CDP执行JS按框架 (browser2, 参数JSON, 读码, 10000)
+            变量 回读文本 <类型 = 文本型>
+            回读文本 = ""
+            如果 (是否以 (读值, "__MCP_TEXT__"))
+            {
+                回读文本 = 取文本右边 (读值, 取文本长度 (读值) - 取文本长度 ("__MCP_TEXT__"))
+            }
+            如果 (回读文本 != 新文本)
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, "写入未被回读确认: 期望 [" + 新文本 + "] 实际 [" + 回读文本 + "] | 元素可能不可编辑或文本被页面脚本改写"))
+            }
+            返回 (MCP_响应构建.命令成功 (命令ID, "innerText 已设置并回读确认: " + 回读文本))
         }
         否则 (方法名 == "browser.fill_trigger" || 方法名 == "browser_fill_trigger")
         {
@@ -222,9 +392,15 @@
             如果 (browser.是否为空 () == 假)
             {
                 变量 填表框架 <类型 = 类_FBrowser_填表框架>
-                填表框架 = browser.取主填表框架 ()
+                填表框架 = MCP命令服务器.解析填表框架 (browser, MCP命令服务器.yyjson取文本 (参数JSON, "frame_id"))
                 如果 (填表框架.是否有效 ())
                 {
+                    变量 前置失败 <类型 = 文本型>
+                    前置失败 = 前置存在校验 (命令ID, selector, "触发事件", browser, 参数JSON)
+                    如果 (前置失败 != "")
+                    {
+                        返回 (前置失败)
+                    }
                     填表框架.触发元素事件 (selector, 0, eventType, 0)
                     返回 (MCP_响应构建.命令成功 (命令ID, "事件已触发: " + eventType + " -> " + selector))
                 }
@@ -247,14 +423,20 @@
             如果 (browser.是否为空 () == 假)
             {
                 变量 填表框架 <类型 = 类_FBrowser_填表框架>
-                填表框架 = browser.取主填表框架 ()
+                填表框架 = MCP命令服务器.解析填表框架 (browser, MCP命令服务器.yyjson取文本 (参数JSON, "frame_id"))
                 如果 (填表框架.是否有效 ())
                 {
+                    变量 前置失败 <类型 = 文本型>
+                    前置失败 = 前置存在校验 (命令ID, selector, "设置select选中项", browser, 参数JSON)
+                    如果 (前置失败 != "")
+                    {
+                        返回 (前置失败)
+                    }
                     如果 (value == "")
                     {
                         返回 (MCP_响应构建.命令失败 (命令ID, "value 不能为空 | select 下拉项的选项值, 如 'US' / '男'"))
                     }
-                    // 修复: select 按 value 选中 — 置元素选择项第三参为整数索引(非选项值),
+                    // select 按 value 选中 — 置元素选择项第三参为整数索引(非选项值),
                     // 故优先原生JS按value设置+事件链(兼容React受控用原生setter); 主框架无效且value为纯数字时回退按索引设置
                     变量 fselFrame <类型 = 类_FBrowser_框架>
                     fselFrame = browser.取主框架 ()
@@ -282,7 +464,7 @@
         }
         否则 (方法名 == "browser_fill_form")
         {
-            // v2.8.1 UX: 一键批量填表 — fields: [{selector,value},...] 逐个原生置入
+            // 一键批量填表 — fields: [{selector,value},...] 逐个原生置入
             变量 ffFields <类型 = 文本型>
             ffFields = MCP命令服务器.yyjson取文本 (参数JSON, "fields")
             如果 (ffFields == "")
@@ -305,7 +487,7 @@
             如果 (ffBrowser.是否为空 () == 假)
             {
                 变量 ff框架 <类型 = 类_FBrowser_填表框架>
-                ff框架 = ffBrowser.取主填表框架 ()
+                ff框架 = MCP命令服务器.解析填表框架 (ffBrowser, MCP命令服务器.yyjson取文本 (参数JSON, "frame_id"))
                 如果 (ff框架.是否有效 ())
                 {
                     变量 ff成功 <类型 = 整数 值 = 0>
@@ -315,7 +497,7 @@
                     变量 ff首次 <类型 = 逻辑型 值 = 真>
                     变量 ff总数 <类型 = 整数>
                     ff总数 = (整数)ffArr.取成员数 ()
-                    // 修复: 字段数上限, 防超大fields构建巨型JS/结果字符串OOM
+                    // 字段数上限, 防超大fields构建巨型JS/结果字符串OOM
                     如果 (ff总数 > 500)
                     {
                         返回 (MCP_响应构建.命令失败 (命令ID, "fields 字段数超过上限(500)"))
@@ -455,13 +637,19 @@
                     }
                     变量 ffOut <类型 = YYJSON对象类>
                     ffOut.创建自文本 ("{}")
-                    ffOut.加入逻辑值成员 ("success", 真)
+                    // 只有**没有失败字段**才算 success。
+                    ffOut.加入逻辑值成员 ("success", ff失败 == 0)
                     ffOut.加入整数成员 ("filled", ff成功)
                     ffOut.加入整数成员 ("failed", ff失败)
                     ffOut.加入逻辑值成员 ("submit", ffSubmit)
                     ffOut.加入文本成员 ("submit_status", ff提交状态)
                     // 字段明细作为文本注入, 规避yyjson嵌套崩溃
                     ffOut.加入文本成员 ("field_results", ff结果)
+                    如果 (ff成功 == 0 && ff失败 > 0)
+                    {
+                        // 全部字段都失败: 用 isError 返回, 只读 isError/success 的调用方也能立刻发现
+                        返回 (MCP_响应构建.命令失败 (命令ID, "全部字段填写失败: " + 到文本 (ff失败) + " 个 | 字段明细: " + ff结果 + " | 建议: 先用 browser_get_forms 或 browser_snapshot 获取页面上真实可用的 selector"))
+                    }
                     返回 (MCP_响应构建.命令成功_原始JSON (命令ID, ffOut.到可读文本 (YYJSON格式化选项.压缩)))
                 }
                 返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_填表框架无效))
@@ -470,5 +658,49 @@
         }
         返回 ("")
     }
+
+    # === 写操作前置存在校验 (修复"静默假成功") ===
+    # 原生写操作(置元素内容/点击元素/置元素焦点/滚动到元素/置元素属性/触发元素事件/置元素选择项)
+    # 在 selector 未命中时**不产生任何返回**, 而本类原先一律回"已设置/已点击"成功消息 ->
+    # AI 会认定操作已生效并继续推进。这是最危险的失败模式("成功但什么都没做")。
+    # 本方法先用 CDP JS 同步确认元素存在; 只有**确定不存在**时才返回失败响应。
+    # 失败开放: CDP 自身取不到结果时返回空串放行, 避免 CDP 不可用反而让写操作全部报错。
+
+    方法 前置存在校验 <公开 静态 类型 = 文本型 注释 = "元素确定不存在时返回可直接回给调用方的失败响应JSON; 元素存在或无法判定时返回空串(放行)" @输出名 = "PreCheckElementExists" @强制输出 = 真>
+    参数 命令ID <类型 = 文本型 @输出名 = "CommandID">
+    参数 选择器 <类型 = 文本型 @输出名 = "Selector">
+    参数 操作名 <类型 = 文本型 @输出名 = "OperationName">
+    参数 浏览器 <类型 = 类_FBrowser_浏览器 @输出名 = "Browser">
+    参数 参数JSON <类型 = YYJSON只读对象类 @输出名 = "ParamJSON">
+    {
+        // CDP 对空字符串返回 ""(与失败不可区分), 故用 __MCP_YES__ 前缀确保正例非空
+        变量 js码 <类型 = 文本型>
+        js码 = "(function(){return document.querySelector('" + MCP命令服务器.简单转义JS (选择器) + "')?'__MCP_YES__':'__MCP_NO_ELEM__'})()"
+        变量 js值 <类型 = 文本型>
+        // 框架感知: 带 frame_id 时在**该 iframe 内**探测。此前恒在主框架探测, 于是"元素只在 iframe 里"的
+        // 写操作会被这里判成"匹配到 0 个元素"直接失败 —— 原生框架路径根本没机会执行。
+        js值 = MCP命令服务器.CDP执行JS按框架 (浏览器, 参数JSON, js码, 10000)
+        变量 校验框架 <类型 = 文本型>
+        校验框架 = ""
+        如果 (参数JSON.是否为空 () == 假)
+        {
+            校验框架 = MCP命令服务器.yyjson取文本 (参数JSON, "frame_id")
+        }
+        如果 (是否以 (js值, "{\"error\"") && 校验框架 != "" && 校验框架 != "main" && 校验框架 != "主框架")
+        {
+            // 框架解析失败: **不放行**。放行会让下面的原生写在主框架执行, 那是静默跑错框架。
+            返回 (MCP_响应构建.命令失败 (命令ID, 操作名 + "未执行: " + js值))
+        }
+        如果 (js值 == "__MCP_NO_ELEM__")
+        {
+            如果 (校验框架 != "" && 校验框架 != "main" && 校验框架 != "主框架")
+            {
+                返回 (MCP_响应构建.命令失败 (命令ID, 操作名 + "未执行: 框架(" + 校验框架 + ")内匹配到 0 个元素 -> " + 选择器 + " | 建议: 先用 browser_get_frames 确认框架标识, 再用 browser_dom_query {frame_id} 确认能取到该元素"))
+            }
+            返回 (MCP_响应构建.命令失败 (命令ID, 操作名 + "未执行: 选择器在当前页面匹配到 0 个元素 -> " + 选择器 + " | 建议: 先用 browser_snapshot 或 browser_get_forms 获取页面可用元素/选择器; 若元素在 iframe 内请传 frame_id(取自 browser_get_frames)"))
+        }
+        返回 ("")
+    }
+
     #
 }
