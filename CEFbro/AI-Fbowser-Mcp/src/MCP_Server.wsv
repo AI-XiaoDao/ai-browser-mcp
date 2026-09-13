@@ -241,7 +241,7 @@
     变量 配置已加载 <公开 静态 类型 = 逻辑型 值 = 假 @输出名 = "ConfigHasLoad">
     变量 工具总数 <公开 静态 类型 = 整数 值 = 0 注释 = "动态工具计数, 由填充工具列表()完成后更新" @输出名 = "ToolTotal">
     变量 工具构建计数 <静态 类型 = 整数 值 = 0 @输出名 = "ToolBuildCount">
-    变量 VIP授权码 <公开 静态 类型 = 文本型 值 = "" 注释 = "VIP功能授权码, 启动时从mcp_config.json读取, 供启动类使用" @输出名 = "VIPLicenseCode">
+    变量 VIP授权码 <公开 静态 类型 = 文本型 值 = "" 注释 = "类库授权码, 启动时从mcp_config.json读取, 供启动类使用" @输出名 = "VIPLicenseCode">
     变量 服务器绑定地址 <公开 静态 类型 = 文本型 值 = "127.0.0.1" @输出名 = "ServerBindAddress">
     变量 窗口置顶 <公开 静态 类型 = 逻辑型 值 = 真 注释 = "窗口是否置顶, 由 mcp_config.json window_topmost 控制" @输出名 = "WindowSetTop">
     变量 窗口默认宽度 <公开 静态 类型 = 整数 值 = 1000 注释 = "浏览器窗口默认宽度, 由 mcp_config.json window_width 控制" @输出名 = "WindowDefaultWidth">
@@ -645,7 +645,7 @@
         {
             网络日志最大字节 = 配置网络字节
         }
-        // === VIP授权码 (供启动类使用, 需在FBrowser初始化前设置) ===
+        // === 类库授权码 (供启动类使用, 需在FBrowser初始化前设置) ===
         变量 配置VIP码 <类型 = 文本型>
         配置VIP码 = 配置解析.取文本 ("vip_code")
         如果 (配置VIP码 != "")
@@ -10933,7 +10933,7 @@
         浏览器数组锁.解锁 ()
     }
 
-    # 防呆: Debugger.pause 自动恢复 (主循环500ms节拍调用, 10秒无暂停事件即resume, 防CDP队列堵塞)
+    # 保护: Debugger.pause 自动恢复 (主循环500ms节拍调用, 10秒无暂停事件即resume, 防CDP队列堵塞)
 
     方法 检查暂停自动恢复 <公开 静态 @输出名 = "CheckPauseAutoResume" @强制输出 = 真>
     {
@@ -10977,7 +10977,7 @@
                 原子置首次崩溃时间 (0)
             }
         }
-        // 防呆: Debugger.pause 自动恢复 (由主循环500ms节拍检查, 此处不再重复)
+        // 保护: Debugger.pause 自动恢复 (由主循环500ms节拍检查, 此处不再重复)
         检查暂停自动恢复 ()
         清理过期缓存 ()
         清理过期CDP映射 ()
@@ -12022,7 +12022,7 @@
         服务器信息.加入文本成员 ("version", MCP_常量.MCP_版本号)
         // instructions: 引导 LLM 有效使用工具 (MCP 推荐字段)
         变量 指引 <类型 = 文本型>
-        指引 = "AI浏览器 MCP Server — 浏览器自动化工具集。" + "核心流程: browser_navigate(导航到URL) → browser_wait(等待加载) → browser_get_text/browser_extract(提取数据)。" + "一步爬虫: browser_scrape {url, extract_selector, wait_selector?, max_ms?}。" + "异步工具返回task_id, 轮询: mcp_result {request_id, consume:true}。" + "同步等待: 任意工具加 max_ms 参数→服务端阻塞返回结果。" + "网络抓包: browser_network detail_enable→操作→browser_network list。" + "逆向分析: browser_cdp_call / browser_debugger_flow(一键断点)。" + "批量: batch {commands:[{name,arguments}]}。" + "**所有工具通用参数**(由入口统一处理; 多数工具的 schema 未逐个声明, 故在此统一说明): browser_id(多浏览器时指定目标) / max_ms(同步等待上限毫秒) / async_only(true=立刻返回 task_id 不等结果) / sync_wait(是否阻塞等待)。" + "**大参数注意**: MCP HTTP 通道在请求体约 1MB 处会被内核直接断连且**没有错误码**, 大内容请改用文件类参数(如 browser_create_url_request 的 body_file)或 WebSocket/stdio 通道。" + "用 mcp_help 查看完整工具列表。"
+        指引 = "AI浏览器 MCP Server — 浏览器自动化工具集。" + "核心流程: browser_navigate(导航到URL) → browser_wait(等待加载) → browser_get_text/browser_extract(提取数据)。" + "一步爬虫: browser_scrape {url, extract_selector, wait_selector?, max_ms?}。" + "异步工具返回task_id, 轮询: mcp_result {request_id, consume:true}。" + "同步等待: 任意工具加 max_ms 参数→服务端阻塞返回结果。" + "网络抓包: browser_network detail_enable→操作→browser_network list。" + "逆向分析: browser_cdp_call / browser_debugger_flow(组合断点)。" + "批量: batch {commands:[{name,arguments}]}。" + "**所有工具通用参数**(由入口统一处理; 多数工具的 schema 未逐个声明, 故在此统一说明): browser_id(多浏览器时指定目标) / max_ms(同步等待上限毫秒) / async_only(true=立刻返回 task_id 不等结果) / sync_wait(是否阻塞等待)。" + "**大参数注意**: MCP HTTP 通道在请求体约 1MB 处会被内核直接断连且**没有错误码**, 大内容请改用文件类参数(如 browser_create_url_request 的 body_file)或 WebSocket/stdio 通道。" + "用 mcp_help 查看完整工具列表。"
         // 构建 result
         变量 结果对象 <类型 = YYJSON对象类>
         结果对象.创建自文本 ("{}")
@@ -12293,7 +12293,7 @@
         添加工具JSON ("browser_wait", "异步等待条件 (轮询, 通过mcp_result查询)。what=selector/text/load_end/load_start/navigate/timeout/network_idle/url_contains。navigate无value等同load_end; navigate有value则等到URL匹配; network_idle等网络空闲(活动请求数=0); url_contains等URL包含指定字符串", 多属性Schema文本 (属性项JSON ("what", "text", "selector/text/timeout/load_end/load_start/navigate/network_idle/url_contains") + "," + 属性项JSON ("value", "text", "等待值(navigate/url_contains=目标URL, load_*/network_idle可省略)") + "," + 属性项JSON ("max_ms", "integer", "最大ms(默认10000)"), "\"what\""))
         添加工具JSON ("browser_cdp", "Chrome DevTools协议(VIP)", 多属性Schema文本 (属性项JSON ("method", "text", "CDP方法") + "," + 属性项JSON ("params", "text", "参数JSON"), "\"method\""))
         添加工具JSON ("browser_debugger_enable", "启用CDP调试器(Debugger.enable)| 断点类工具的前置步骤; 调用会自动清除与之冲突的反检测项(禁用Debugger检测)")  // 注: pause 恒失败已从工具清单剔除(会冻结无JS执行页面并堵塞CDP队列), 用 debugger_flow
-        添加工具JSON ("browser_debugger_pause", "可靠暂停页面(随时可用) | 裸发 Debugger.pause 在**没有 JS 执行点的页面**上永不返回, 还会堵塞 CDP 命令队列(FIFO —— 后续命令与自动 resume 全排在它后面, 连锁超时), 故本工具**不裸发**: 先显式启用 Debugger 域 → 用页面自身的 setTimeout 安排一个 30ms 后**必然执行**的语句给 pause 一个落点 → 再 pause 并等 Debugger.paused, 让暂停成为**有界**操作(失败会给出原因与替代, 不会静默堵队列; 另有主循环 10 秒防呆, 未等到暂停事件会自动 resume)。看现场: browser_debugger_last_paused / browser_debugger_stack / browser_debugger_evaluate; 恢复: browser_debugger_resume —— 即使忘了恢复, 后续任意 CDP 工具都会自动 resume 并**续等原请求**, 不会把实例卡死 | 想看某个函数/URL 被调用时的现场, 用 browser_debugger_flow 一键断点更直接")
+        添加工具JSON ("browser_debugger_pause", "可靠暂停页面(随时可用) | 裸发 Debugger.pause 在**没有 JS 执行点的页面**上永不返回, 还会堵塞 CDP 命令队列(FIFO —— 后续命令与自动 resume 全排在它后面, 连锁超时), 故本工具**不裸发**: 先显式启用 Debugger 域 → 用页面自身的 setTimeout 安排一个 30ms 后**必然执行**的语句给 pause 一个落点 → 再 pause 并等 Debugger.paused, 让暂停成为**有界**操作(失败会给出原因与替代, 不会静默堵队列; 另有主循环 10 秒保护, 未等到暂停事件会自动 resume)。看现场: browser_debugger_last_paused / browser_debugger_stack / browser_debugger_evaluate; 恢复: browser_debugger_resume —— 即使忘了恢复, 后续任意 CDP 工具都会自动 resume 并**续等原请求**, 不会把实例卡死 | 想看某个函数/URL 被调用时的现场, 用 browser_debugger_flow 组合断点更直接")
 添加工具JSON ("browser_debugger_resume", "从断点继续执行(Debugger.resume)| 需页面处于暂停态, 否则返回 页面未处于暂停状态")
         添加工具JSON ("browser_debugger_step_over", "单步跳过(执行当前行但不进入被调函数)| 需页面处于暂停态")
         添加工具JSON ("browser_debugger_step_into", "单步进入(进入被调函数内部)| 需页面处于暂停态")
@@ -12304,7 +12304,7 @@
         添加工具JSON ("browser_debugger_wait_paused", "等待 Debugger.paused(VIP)", 多属性Schema文本 (属性项JSON ("max_ms", "integer", "超时毫秒(默认30000)") + "," + 属性项JSON ("fresh", "boolean", "先清除旧事件(默认false; flow内自动处理)"), ""))
 添加工具JSON ("browser_debugger_last_paused", "最近断点暂停信息(VIP) | 说明(第133轮更正): 本工具**不读** parse 参数(旧 schema 误抄了 evaluate 的参数, 已删除) —— 它始终返回最近一次暂停的原始信息")
         添加工具JSON ("browser_debugger_inspect", "断点处批量求值(VIP)", 多属性Schema文本 (属性项JSON ("call_frame_id", "text", "帧ID(空=最近paused)") + "," + 属性项JSON ("expressions", "text", "JSON数组或单表达式") + "," + 属性项JSON ("expression", "text", "单表达式") + "," + 属性项JSON ("expand", "boolean", "展开object/function(默认true)") + "," + 属性项JSON ("return_by_value", "boolean", "returnByValue(默认true)"), "\"expressions\""))
-        添加工具JSON ("browser_debugger_flow", "断点一键流程: enable→设断点→导航→等暂停→帧内求值→resume| 逆向调试首选, 免手工编排6步", 多属性Schema文本 (属性项JSON ("url", "text", "导航URL(可选)") + "," + 属性项JSON ("breakpoint", "text", "URL正则") + "," + 属性项JSON ("line", "integer", "断点行号(0起)") + "," + 属性项JSON ("column", "integer", "断点列号(可选)") + "," + 属性项JSON ("expressions", "text", "帧内求值JSON数组") + "," + 属性项JSON ("expand", "boolean", "展开object/function(默认true)") + "," + 属性项JSON ("return_by_value", "boolean", "returnByValue(默认true)") + "," + 属性项JSON ("max_ms", "integer", "等待暂停毫秒(默认12000; 客户端自身超时更短时请调低)") + "," + 属性项JSON ("resume", "boolean", "求值后自动resume(默认true)"), "\"breakpoint\""))
+        添加工具JSON ("browser_debugger_flow", "断点组合流程: enable→设断点→导航→等暂停→帧内求值→resume| 逆向调试首选, 免手工编排6步", 多属性Schema文本 (属性项JSON ("url", "text", "导航URL(可选)") + "," + 属性项JSON ("breakpoint", "text", "URL正则") + "," + 属性项JSON ("line", "integer", "断点行号(0起)") + "," + 属性项JSON ("column", "integer", "断点列号(可选)") + "," + 属性项JSON ("expressions", "text", "帧内求值JSON数组") + "," + 属性项JSON ("expand", "boolean", "展开object/function(默认true)") + "," + 属性项JSON ("return_by_value", "boolean", "returnByValue(默认true)") + "," + 属性项JSON ("max_ms", "integer", "等待暂停毫秒(默认12000; 客户端自身超时更短时请调低)") + "," + 属性项JSON ("resume", "boolean", "求值后自动resume(默认true)"), "\"breakpoint\""))
         添加工具JSON ("browser_debugger_script_source", "取断点处脚本源码与上下文行| 无暂停上下文时需显式给 script_id", 多属性Schema文本 (属性项JSON ("call_frame_id", "text", "帧ID(空=最近paused)") + "," + 属性项JSON ("script_id", "text", "scriptId(空=paused自动)") + "," + 属性项JSON ("line", "integer", "行号(0起,空=paused)") + "," + 属性项JSON ("column", "integer", "列号(可选)") + "," + 属性项JSON ("context_lines", "integer", "上下文行数(默认3)") + "," + 属性项JSON ("include_source", "boolean", "返回完整scriptSource(默认true)"), ""))
         添加工具JSON ("browser_debugger_auto", "自动断点求值(VIP): 断点命中→自动执行JS→resume→循环, max_hits次后自动停止", 多属性Schema文本 (属性项JSON ("breakpoint", "text", "URL正则(必填)") + "," + 属性项JSON ("line", "integer", "行号") + "," + 属性项JSON ("url", "text", "导航URL(可选)") + "," + 属性项JSON ("expressions", "text", "求值表达式JSON数组(默认[location.href])") + "," + 属性项JSON ("max_hits", "integer", "最大命中次数(默认5,最大100)") + "," + 属性项JSON ("max_ms", "integer", "每次等待超时ms(默认60000)"), "\"breakpoint\""))
         添加工具JSON ("browser_network_body", "获取某个请求的响应体(Network.getResponseBody) | **零前置**: 不传 request_id 时自动开启 Network 域与 Network.* 捕获, 并按 url(先精确后包含)或不带 url 时取最新一条自动跳过 favicon.ico 这类自动请求**)自动解析 requestId, 解析来源在 resolve_note 里如实回传; 给了 url 但尚未出现时会在 wait_ms(默认2000, 上限15000)内轮询等待 | 实测限制(如实说明): 响应体只对**本 CDP 会话内、捕获开启之后**发生的请求可取, 且可能已被浏览器回收(此时报错给出可行动指引) | 与 browser_network {action:body} 等价", 多属性Schema文本 (属性项JSON ("request_id", "text", "CDP 请求ID(可省略; 省略则按 url 或最新请求自动解析)") + "," + 属性项JSON ("url", "text", "按 URL 解析请求ID(可省略; 与 request_id 二选一, 同时给时以 request_id 为准)") + "," + 属性项JSON ("wait_ms", "integer", "给了 url 时的等待上限毫秒(默认2000, 上限15000)"), ""))
@@ -12480,7 +12480,7 @@
         添加工具JSON ("browser_reverse_instrument", "JS逆向: JSVMP解释器透明插桩。mode=transparent仅替换prototype getter保留toString; mode=interpreter Hook VM分发器。不破坏签名计算", 多属性Schema文本 (属性项JSON ("target", "text", "目标函数名(transparent模式可选,interpreter模式必填)") + "," + 属性项JSON ("mode", "text", "transparent(默认)/interpreter"), ""))
         添加工具JSON ("browser_reverse_search", "JS逆向: 全局脚本搜索。在所有已加载script中搜索关键词(sign/encrypt/token/md5/aes),返回匹配行+脚本URL+行号", 多属性Schema文本 (属性项JSON ("query", "text", "搜索关键词(如sign/encrypt/md5)") + "," + 属性项JSON ("script_url", "text", "限定脚本URL片段(可选)"), "\"query\""))
         添加工具JSON ("browser_reverse_initiator", "JS逆向: 网络溯源。Hook XHR+fetch,捕获匹配URL模式的请求的完整JS调用栈,定位发起请求的函数", 多属性Schema文本 (属性项JSON ("url_pattern", "text", "匹配URL片段(如/api/sign)") + "," + 属性项JSON ("request_id", "text", "网络请求ID(可选)"), ""))
-        添加工具JSON ("browser_reverse_preset", "JS逆向: 一键预设Hook。preset=xhr/fetch/cookie/websocket/crypto/debugger/all,批量安装常用Hook,数据存入window.__mcp_*_log", 单参数Schema文本 ("preset", "text", "xhr/fetch/cookie/websocket/crypto/debugger/all(默认)", 假))
+        添加工具JSON ("browser_reverse_preset", "JS逆向: 批量预设Hook。preset=xhr/fetch/cookie/websocket/crypto/debugger/all,批量安装常用Hook,数据存入window.__mcp_*_log", 单参数Schema文本 ("preset", "text", "xhr/fetch/cookie/websocket/crypto/debugger/all(默认)", 假))
         // CDP逆向: 原生CDP协议, 非JS注入
         添加工具JSON ("browser_reverse_cdp_hook", "CDP逆向: 函数调用级别断点。Debugger.setBreakpointOnFunctionCall—Ghostwire风格,不修改JS源码,fn.toString()不变,防检测", 多属性Schema文本 (属性项JSON ("function_name", "text", "目标函数名(如window.sign)") + "," + 属性项JSON ("object_id", "text", "CDP Runtime objectId(可选,优先级高于function_name)") + "," + 属性项JSON ("condition", "text", "条件断点表达式(可选)"), ""))
         添加工具JSON ("browser_reverse_profile", "CDP逆向: JS CPU性能分析。action=start开始采样/stop停止并获取报告/query查询。定位热点函数,识别加密算法性能瓶颈", 单参数Schema文本 ("action", "text", "start/start_precise(精确采样)/stop/query(默认start)"))
@@ -12495,13 +12495,13 @@
         // 静态加密模块提取
         添加工具JSON ("browser_reverse_extract", "JS逆向: 静态加密模块提取(CDP Runtime.evaluate同步)。mode=scan枚举页面<script>标签返回脚本列表+加密特征检测; mode=download按DOM索引取脚本textContent完整源码; mode=analyze按url_pattern一次扫描+源码分析提取算法(AES/RSA/MD5/SHA/HMAC)和可疑密钥常量", 多属性Schema文本 (属性项JSON ("mode", "text", "scan(默认)/download/analyze") + "," + 属性项JSON ("url_pattern", "text", "URL片段(analyze模式必填, 匹配脚本src)") + "," + 属性项JSON ("script_index", "text", "DOM脚本索引(download模式必填, 取自scan返回的index)") + "," + 属性项JSON ("keyword", "text", "关键词(scan模式可选, 过滤含关键词的脚本)") + "," + 属性项JSON ("script_id", "text", "限定在某个脚本内提取(取自 browser_reverse_search_script 的 scriptId)"), ""))
         // 反检测预设 + 逆向工具
-        添加工具JSON ("browser_antidetect_presets", "反检测: 一键部署反检测预设。preset=stealth(去webdriver+去debugger检测+去自动化标志)/basic(stealth+Canvas/WebGL/Audio随机化)/full(basic+UA伪装+屏幕1920x1080+硬件8核8GB+时区Asia/Shanghai+WebRTC禁用+定位北京)。批量应用,持久生效,新浏览器自动应用", 单参数Schema文本 ("preset", "text", "stealth(默认)/basic/full"))
+        添加工具JSON ("browser_antidetect_presets", "反检测: 批量部署反检测预设。preset=stealth(去webdriver+去debugger检测+去自动化标志)/basic(stealth+Canvas/WebGL/Audio随机化)/full(basic+UA伪装+屏幕1920x1080+硬件8核8GB+时区Asia/Shanghai+WebRTC禁用+定位北京)。批量应用,持久生效,新浏览器自动应用", 单参数Schema文本 ("preset", "text", "stealth(默认)/basic/full"))
         // 网络导出 + 权限伪装
         添加工具JSON ("browser_network_export", "网络: 导出网络日志为HAR(HTTP Archive 1.2)或JSON格式。HAR格式兼容Chrome DevTools Network面板导入。以JSON数组返回所有记录的请求/响应(URL/method/status/mime/size/timestamp)", 多属性Schema文本 (属性项JSON ("format", "text", "har/json(默认json)") + "," + 属性项JSON ("limit", "integer", "最大条目数(默认2000,上限50000)"), ""))
         添加工具JSON ("browser_permission_spoof", "反检测: 伪装浏览器权限API。action=apply注入navigator.permissions.query()覆盖(返回指定state)+MediaDevices.enumerateDevices覆盖; action=reset移除伪装。permissions支持:geolocation/notifications/camera/microphone/midi/clipboard-read/clipboard-write", 多属性Schema文本 (属性项JSON ("action", "text", "apply(默认)/spoof/reset/remove") + "," + 属性项JSON ("state", "text", "granted(默认)/denied/prompt") + "," + 属性项JSON ("permissions", "text", "权限列表,逗号分隔(默认全部7项)"), ""))
         // 自动化重试 + Canvas噪声
         添加工具JSON ("browser_retry", "自动化: 带线性退避的MCP工具重试机制。对不稳定的工具调用(如填表/点击/导航)自动重试max_retries次,每次失败后等待backoff_ms×attempt毫秒。直到成功或超过max_total_ms", 多属性Schema文本 (属性项JSON ("tool", "text", "要重试的MCP工具名") + "," + 属性项JSON ("args", "text", "工具参数JSON(默认{})") + "," + 属性项JSON ("max_retries", "integer", "最大重试次数(默认3,上限10)") + "," + 属性项JSON ("backoff_ms", "integer", "退避基数毫秒(默认1000,上限30000)") + "," + 属性项JSON ("max_total_ms", "integer", "总超时毫秒(默认60000)"), "\"tool\""))
-        添加工具JSON ("browser_canvas_noise", "反检测: Canvas指纹噪点注入(JS层实现,不需VIP)。action=inject为Canvas toDataURL/toBlob/getImageData添加±level随机噪声,防Canvas指纹追踪; action=remove移除噪声。不依赖内核VIP API,纯JS Hook", 多属性Schema文本 (属性项JSON ("action", "text", "inject(默认)/enable/remove/disable") + "," + 属性项JSON ("level", "integer", "噪声级别1-5(默认1, 越大噪声越明显)"), ""))
+        添加工具JSON ("browser_canvas_noise", "反检测: Canvas指纹噪点注入(JS层实现,无需授权)。action=inject为Canvas toDataURL/toBlob/getImageData添加±level随机噪声,防Canvas指纹追踪; action=remove移除噪声。不依赖内核高级 API,纯JS Hook", 多属性Schema文本 (属性项JSON ("action", "text", "inject(默认)/enable/remove/disable") + "," + 属性项JSON ("level", "integer", "噪声级别1-5(默认1, 越大噪声越明显)"), ""))
         // 逆向热补丁 + 字体随机化
         // CDP逆向: 6个官方API封装
         // CDP逆向: Runtime/Profiler/Page/Debugger 深度API
@@ -12513,7 +12513,7 @@
         // AI 交互增强 (内核执行JS代码通道同步返回, 无需轮询)
         添加工具JSON ("browser_snapshot", "AI页面快照: 提取页面全部交互元素(a/button/input/select/textarea/[role]/[onclick])为紧凑清单, 含索引/标签/可见文本/id/name/CSS选择器。AI据此精准定位元素, 配合browser_click_text/browser_dom_click操作", 多属性Schema文本 (属性项JSON ("max_items", "integer", "最大元素数(默认200,上限500)") + "," + 属性项JSON ("include_links", "text", "false/0=排除链接(默认true)") + "," + 属性项JSON ("text_length", "integer", "单元素文本截断长度(默认80)"), ""))
         添加工具JSON ("browser_click_text", "AI点击: 按可见文本点击元素。自动匹配textContent精确/包含该文本的button/a/span/div/li等元素, 优先精确匹配, 模拟真实点击事件链(mousedown/mouseup/click)。适合快照后按文字操作, 无需手写选择器", 多属性Schema文本 (属性项JSON ("text", "text", "要点击的可见文本(精确或部分匹配)") + "," + 属性项JSON ("selector", "text", "限定范围CSS选择器(可选, 仅在范围内查找)") + "," + 属性项JSON ("index", "integer", "多匹配时选第几个(默认0=第一个)") + "," + 属性项JSON ("exact", "boolean", "仅精确匹配(默认false)"), "\"text\""))
-        添加工具JSON ("browser_get_forms", "AI表单枚举: 列出页面全部表单及其字段(name/type/value/placeholder/required/选择器)。填表前先调用本工具了解字段结构, 配合browser_fill_form一键填写", 单参数Schema文本 ("form_index", "integer", "只枚举第N个表单(默认全部)", 假))
+        添加工具JSON ("browser_get_forms", "AI表单枚举: 列出页面全部表单及其字段(name/type/value/placeholder/required/选择器)。填表前先调用本工具了解字段结构, 配合browser_fill_form批量填写", 单参数Schema文本 ("form_index", "integer", "只枚举第N个表单(默认全部)", 假))
         // 滚动控制 (AI翻页采集核心)
         添加工具JSON ("browser_get_scroll", "AI滚动: 获取页面当前滚动位置(x/y)与最大可滚动范围(max_x/max_y)——判断是否到底、翻页采集进度", 单参数Schema文本 ("selector", "text", "指定滚动容器(默认window)", 假))
         // 断点管理 + 批量Hook + 调用栈
@@ -12534,7 +12534,7 @@
         添加工具JSON ("browser_reverse_pause_on_exceptions", "异常暂停: Debugger.setPauseOnExceptions。混淆代码常把异常当流程控制或吞异常做反调试——抓\"被抛出的那一刻现场\"是定位内部逻辑的捷径, 配合browser_reverse_async_stack可得完整异步链路。state=none(关闭)/uncaught/caught(默认)/all", 多属性Schema文本 (属性项JSON ("state", "text", "none=关闭/uncaught=仅未捕获/caught=捕获+未捕获(默认)/all=全部暂停"), ""))
         添加工具JSON ("browser_reverse_blackbox", "V8黑盒(降噪): Debugger.setBlackboxPatterns。命中断点时不再进入匹配的脚本——把jquery/analytics/反调试库黑盒掉, 断点只停在目标业务代码。patterns为正则数组, 例:[\".*jquery.*\",\".*analytics.*\"]; 省略或空数组=清除黑盒", 多属性Schema文本 (属性项JSON ("patterns", "text", "JSON数组字符串, 元素为正则, 例: [\".*jquery.*\",\".*analytics.*\"]; 空=清除"), ""))
         添加工具JSON ("browser_reverse_async_stack", "V8异步栈: Debugger.setAsyncCallStackDepth。让断点/异常携带完整async链路——混淆代码把Promise/setTimeout链路打散后, 只有它能还原到底是谁调用了加密函数。depth缺省32, 显式0=关闭", 多属性Schema文本 (属性项JSON ("depth", "integer", "最大深度(缺省32, 显式0=关闭, 上限512)"), ""))
-        添加工具JSON ("browser_reverse_breakpoints_active", "断点总开关: Debugger.setBreakpointsActive。保留断点定义但不命中——跑完整流程时临时静音, 需要时一键恢复, 免去逐个删/加断点", 多属性Schema文本 (属性项JSON ("active", "boolean", "true(默认)=启用命中, false=静音"), ""))
+        添加工具JSON ("browser_reverse_breakpoints_active", "断点总开关: Debugger.setBreakpointsActive。保留断点定义但不命中——跑完整流程时临时静音, 需要时一次调用恢复, 免去逐个删/加断点", 多属性Schema文本 (属性项JSON ("active", "boolean", "true(默认)=启用命中, false=静音"), ""))
         添加工具JSON ("browser_reverse_skip_pauses", "应急开关: Debugger.setSkipAllPauses。跳过全部暂停, 用于防止页面被断点/大批量插装卡死; 批量插装脚本时先跳过再逐个放行", 多属性Schema文本 (属性项JSON ("skip", "boolean", "true(默认)=跳过全部暂停, false=恢复"), ""))
         添加工具JSON ("browser_reverse_precise_coverage", "混淆定位利器: Profiler精确覆盖率插装(含调用次数)。故意看不懂的混淆代码, 让它跑一遍, V8直接告诉你哪些函数被执行了几次——从几十万行混淆里定位真实执行路径最快的手段。流程: start→触发目标逻辑(登录/验签)→take, cdp_result里count>0的函数即真实执行过", 多属性Schema文本 (属性项JSON ("action", "text", "start(开启,记调用次数)/take(取数)/stop(停止); 默认take"), ""))
         添加工具JSON ("browser_reverse_patch", "脚本热补丁: Debugger.setScriptSource。运行中替换已加载脚本源码(V8层生效, 无需刷新页面)——验签/风控逻辑的活体改写。建议先dry_run:true验证新源码能编译再实改。**script_id可省略**(自动选字节最大的脚本并报告选中项)", 多属性Schema文本 (属性项JSON ("source", "text", "替换后的完整脚本源码") + "," + 属性项JSON ("script_id", "text", "CDP scriptId(可省略=自动选最大脚本)") + "," + 属性项JSON ("dry_run", "boolean", "只验证能否编译不实际替换(默认false)"), "\"source\""))
@@ -12559,7 +12559,7 @@
         添加工具JSON ("browser_reverse_detect_traps", "反调试/风控陷阱检测(只检测布置了哪些陷阱, 不绕过): 在 V8 已加载的脚本里逐类检索 7 类常见反调试特征——debugger语句 / Function.prototype.toString 重写 / console 探测 / performance.now 时序检测 / setInterval 定时自陷 / navigator.webdriver 自动化探测 / devtools 探测, 每类给出命中数与命中行号及结论。**script_id 可省略**(自动选字节最大的脚本, 注册表为空时自动启用调试器等待上报)", 多属性Schema文本 (属性项JSON ("script_id", "text", "CDP scriptId(可省略=自动选最大脚本)") + "," + 属性项JSON ("classes", "text", "只检测指定类别, 逗号分隔, 可选: debugger_stmt/tostring_hook/console_hook/timing_check/timer_debugger/automation_detect/devtools_probe(省略=全部)") + "," + 属性项JSON ("max_hits", "integer", "每类最多列出的命中行号数(默认5, 上限50)"), ""))
         添加工具JSON ("browser_reverse_evaluate_silent", "静默求值: Runtime.evaluate(silent)。silent让求值不触发断点/异常暂停、不污染控制台——在已插装/已下断点的页面上继续取数据而不惊动调试状态, 也避免被console副作用检测发现", 多属性Schema文本 (属性项JSON ("expression", "text", "JS表达式") + "," + 属性项JSON ("silent", "boolean", "不触发断点/不写控制台(默认true)") + "," + 属性项JSON ("user_gesture", "boolean", "带用户手势(默认true, 绕过需手势的限制)") + "," + 属性项JSON ("await_promise", "boolean", "等待Promise结果(默认false)") + "," + 属性项JSON ("return_by_value", "boolean", "按值返回(默认true)"), "\"expression\""))
         添加工具JSON ("browser_reverse_await_promise", "等Promise结果: Runtime.awaitPromise。异步加密/验签拿不到返回值时, 先求值出Promise句柄再让它resolve出结果(被拒绝会返回exceptionDetails, 不是工具失败)", 多属性Schema文本 (属性项JSON ("expression", "text", "返回Promise的表达式, 如 fetch('/api').then(r=>r.json())") + "," + 属性项JSON ("promise_object_id", "text", "Promise的CDP objectId(优先于expression)") + "," + 属性项JSON ("return_by_value", "boolean", "按值返回(默认true)"), ""))
-        添加工具JSON ("browser_fill_form", "AI一键填表: 按字段清单批量填写表单。fields为JSON数组[{selector,value},...], 逐个用原生填表框架置入内容并模拟输入事件, 返回每字段成败。配合browser_get_forms使用", 多属性Schema文本 (属性项JSON ("fields", "text", "JSON数组字符串, 例: [{selector:#name,value:张三},{selector:#pwd,value:123}]") + "," + 属性项JSON ("submit", "boolean", "填完后自动提交表单(默认false)") + "," + 属性项JSON ("frame_id", "text", "iframe 的框架ID(取自 browser_get_frames 的 id, 形如 6-XXXX) / 框架名 / 序号(它在 browser_get_frames 清单里的位置); 省略=主框架。给 frame_id 时本工具在该 **iframe 内**定位(走 CDP 隔离世界: DOM 可达, 但**页面在该框架里挂的全局变量/函数不可见** —— 需要它们请用 browser_execute_js {frame_id, world:main}); 框架不存在会**明确报错**, 不会静默改到主框架操作"), "\"fields\""))
+        添加工具JSON ("browser_fill_form", "AI批量填表: 按字段清单批量填写表单。fields为JSON数组[{selector,value},...], 逐个用原生填表框架置入内容并模拟输入事件, 返回每字段成败。配合browser_get_forms使用", 多属性Schema文本 (属性项JSON ("fields", "text", "JSON数组字符串, 例: [{selector:#name,value:张三},{selector:#pwd,value:123}]") + "," + 属性项JSON ("submit", "boolean", "填完后自动提交表单(默认false)") + "," + 属性项JSON ("frame_id", "text", "iframe 的框架ID(取自 browser_get_frames 的 id, 形如 6-XXXX) / 框架名 / 序号(它在 browser_get_frames 清单里的位置); 省略=主框架。给 frame_id 时本工具在该 **iframe 内**定位(走 CDP 隔离世界: DOM 可达, 但**页面在该框架里挂的全局变量/函数不可见** —— 需要它们请用 browser_execute_js {frame_id, world:main}); 框架不存在会**明确报错**, 不会静默改到主框架操作"), "\"fields\""))
         // CDP调试 (VIP)
         // 网络抓包
     }

@@ -72,7 +72,7 @@
 
     常量 错误_无浏览器 <公开 类型 = 文本型 值 = "没有可用的浏览器 | 请启动AI浏览器GUI窗口(自动创建), 或确认 /health 返回 browsers>0" @输出名 = "ErrorNoBrowser">
     常量 错误_缺少参数 <公开 类型 = 文本型 值 = "参数不能为空 | 请查看工具描述补全必填参数" @输出名 = "ErrorMissingParam">
-    常量 错误_VIP不可用 <公开 类型 = 文本型 值 = "VIP控制器不可用,需要VIP授权 | 请在 mcp_config.json 配置 vip_code" @输出名 = "ErrorVIPNotAvailable">
+    常量 错误_VIP不可用 <公开 类型 = 文本型 值 = "高级功能控制器不可用 | 请重启 AI浏览器 后重试" @输出名 = "ErrorVIPNotAvailable">
     常量 错误_主框架无效 <公开 类型 = 文本型 值 = "主框架无效 | 页面可能尚未加载完成, 请先 navigate 并等待2-3秒后重试" @输出名 = "ErrorMainFrameInvalid">
     常量 错误_不支持的URL协议 <公开 类型 = 文本型
             值 = "不支持的URL协议 | 允许: http/https/about/ftp | data: **仅图片类型**(image/png|jpeg|gif|webp|bmp|x-icon) —— 为防脚本注入, data:text/html 与 data:application/javascript 一律被拒 | 示例: browser_navigate {url:'https://www.baidu.com/'}" @输出名 = "ErrorUnsupportedURLProtocol">

@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="AI Browser MCP Server — Windows 本地浏览器自动化 MCP, 265 工具。Cursor/Claude/Cline 网页数据采集、JS 逆向 Hook、CDP 断点调试、指纹伪装、自动填表 RPA。Playwright/Puppeteer 替代方案。FBrowser CEF 内核, MIT 开源, 纯本地 127.0.0.1:9222。">
+<meta name="description" content="AI Browser MCP Server — Windows 本地浏览器自动化 MCP, 334 工具。Cursor/Claude/Cline 网页数据采集、JS 逆向 Hook、CDP 断点调试、指纹伪装、自动填表 RPA。Playwright/Puppeteer 替代方案。FBrowser CEF 内核, MIT 开源, 纯本地 127.0.0.1:9222。">
 <meta name="keywords" content="MCP,browser automation,Cursor browser MCP,Claude Desktop browser,Cline MCP,web scraping,Playwright alternative,Puppeteer alternative,Windows browser MCP,CEF browser,CDP debugger,reverse engineering JS,data scraping,form automation RPA,AI agent browser control,local MCP server,FBrowser,fingerprint anti-detect,network intercept,browser workflow,数据采集,浏览器自动化,逆向Hook,网页抓包,指纹伪装,自动填表">
-<title>AI浏览器 MCP Server — Windows 浏览器自动化 MCP | 265 工具</title>
+<title>AI浏览器 MCP Server — Windows 浏览器自动化 MCP | 334 工具</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -307,7 +307,6 @@ body{
   <p class="subtitle">基于 FBrowser CEF 内核的浏览器自动化服务 |
     <a href="/docs/客户使用手册.md" style="color:var(--accent-blue)">📘 客户手册</a> ·
     <a href="/docs/" style="color:var(--accent-blue)">📖 完整文档</a> ·
-    <a href="/docs/使用技能书.md" style="color:var(--accent-blue)">使用技能书</a> ·
     <a href="/docs/MCP工具配置说明书.md" style="color:var(--accent-blue)">配置说明书</a>
   </p>
   <span class="version" id="versionTag">{{MCP_VERSION}}</span>
@@ -380,16 +379,15 @@ body{
   </div>
 </div>
 
-<!-- ════════════ SYNC-WAIT / WORKFLOW / TESTING ════════════ -->
+<!-- ════════════ ADVANCED USAGE ════════════ -->
 <div class="section" id="sec-advanced">
   <div class="section-title" onclick="toggleSection('sec-advanced')">
-    <span class="arrow">▸</span> Sync-Wait · 工作流 · 测试
-    <span class="count">v2.6</span>
+    <span class="arrow">▸</span> 高级用法：Sync-Wait · 工作流 · 测试
   </div>
   <div class="section-body" style="font-size:.88em;color:var(--text-secondary);line-height:1.7">
     <p><strong style="color:var(--text-primary)">Sync-Wait</strong> — 白名单读操作（<code>get_title</code>、<code>dom_query</code>、<code>dom_click</code> 等）默认一次调用返回结果；设 <code>async_only:true</code> 改纯异步。<span class="tag sync" style="margin-left:4px">同步</span></p>
     <p style="margin-top:8px"><strong style="color:var(--text-primary)">工作流</strong> — <code>workflow_list</code> / <code>workflow_get</code> / <code>workflow_run</code> / <code>workflow_stop</code>；JSON 步骤存于 <code>workflows/</code> 目录。</p>
-    <p style="margin-top:8px"><strong style="color:var(--text-primary)">测试</strong> — <code>node run_all_tests.js</code> 顺序跑全量套件（勿并行）。详见 <a href="/docs/#testing" style="color:var(--accent-blue)">/docs/#testing</a></p>
+    <p style="margin-top:8px"><strong style="color:var(--text-primary)">测试</strong> — <code>node run_all_tests.js</code> 顺序运行全量套件（请勿并行）。详见 <a href="/docs/#testing" style="color:var(--accent-blue)">/docs/#testing</a></p>
   </div>
 </div>
 
@@ -462,7 +460,7 @@ var categories = [
   { name:'指纹 / 内核开关', re:/fingerprint|vip_set_css|vip_set_web|vip_set_v8|vip_disable_console|vip_set_is_trusted/ },
   { name:'网络 / CDP / 调试', re:/cdp\b|cdp_call|cdp_event|intercept|network\b|collect\b|wait\b|inject\b|event\b|network_body|debugger_/ },
   { name:'工具 / Cookie / 代理', re:/cookies|cookie\b|proxy\b|cache\b|screenshot|print\b|download|frame|meta\b|fbro_version|get_id|compress|base64|uri_/ },
-  { name:'VIP 高级 / 插件', re:/vip_execute_js|vip_dom_|vip_enable|vip_touch|vip_websocket|vip_load|vip_unload|vip_extension|vip_orientation/ },
+  { name:'高级功能 / 插件', re:/vip_execute_js|vip_dom_|vip_enable|vip_touch|vip_websocket|vip_load|vip_unload|vip_extension|vip_orientation/ },
   { name:'工作流 / 编排', re:/workflow_/ },
   { name:'系统 / 其他', re:/mcp_|ping|batch|aliases|window_handle|window_title|window_style|set_visibility|set_focus|move_window|send_message|ipc_|user_tags|find_by|request_context|get_extra|set_preference|run_style|process_type|global_cache/ }
 ];
@@ -795,7 +793,7 @@ function getTags(tool) {
     tags.push({ text:'同步', cls:'sync', title:'默认 sync-wait，一次调用返回结果；设 async_only:true 改异步' });
   }
   if (desc.indexOf('🔒') >= 0 || desc.indexOf('vip') >= 0 || name.indexOf('vip_') >= 0) {
-    tags.push({ text:'VIP', cls:'vip', title:'需要 VIP 授权' });
+    tags.push({ text:'高级', cls:'vip', title:'高级功能（发布包已全部开放）' });
   }
   if (desc.indexOf('需刷新') >= 0 || desc.indexOf('reload') >= 0 || desc.indexOf('刷新页面') >= 0) {
     tags.push({ text:'刷新', cls:'reload', title:'设置后需要刷新页面生效' });

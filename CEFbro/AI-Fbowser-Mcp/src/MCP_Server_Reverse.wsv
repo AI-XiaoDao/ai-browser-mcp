@@ -2240,7 +2240,7 @@
 
                     ivOut.加入文本成员 ("warning", "本机实测: CDP接受了该插装, 但不会实际暂停(自检未观察到 Debugger.paused)。即 install 返回成功 ≠ 插装真的拦得住页面脚本")
 
-                    ivOut.加入文本成员 ("alternative", "本机可用的等效路径: browser_reverse_preload(Page.addScriptToEvaluateOnNewDocument, 在所有页面JS之前注入, 拦打包器最稳) / browser_debugger_flow(一键 enable+断点+导航+等暂停) / browser_debugger_set_breakpoint 在目标脚本首行下断点")
+                    ivOut.加入文本成员 ("alternative", "本机可用的等效路径: browser_reverse_preload(Page.addScriptToEvaluateOnNewDocument, 在所有页面JS之前注入, 拦打包器最稳) / browser_debugger_flow(组合 enable+断点+导航+等暂停) / browser_debugger_set_breakpoint 在目标脚本首行下断点")
 
                 }
 
@@ -2504,7 +2504,7 @@
 
             // 断点总开关: Debugger.setBreakpointsActive
 
-            // 保留断点定义但不命中 —— 跑流程时临时静音, 需要时一键恢复, 免去逐个删/加。
+            // 保留断点定义但不命中 —— 跑流程时临时静音, 需要时一次调用恢复, 免去逐个删/加。
 
             变量 baActive <类型 = 逻辑型>
 

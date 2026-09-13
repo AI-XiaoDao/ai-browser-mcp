@@ -464,7 +464,7 @@
         }
         否则 (方法名 == "browser_fill_form")
         {
-            // 一键批量填表 — fields: [{selector,value},...] 逐个原生置入
+            // 批量填表 — fields: [{selector,value},...] 逐个原生置入
             变量 ffFields <类型 = 文本型>
             ffFields = MCP命令服务器.yyjson取文本 (参数JSON, "fields")
             如果 (ffFields == "")

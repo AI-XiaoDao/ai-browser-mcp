@@ -1141,7 +1141,7 @@
                 鼠标事件.修饰键 = 事件标识.无
                 browser.发送鼠标点击事件 (按钮类型, 鼠标事件, 假, 1)
                 browser.发送鼠标点击事件 (按钮类型, 鼠标事件, 真, 1)
-                返回 (MCP_响应构建.命令成功 (命令ID, "点击 (" + 到文本 (x) + "," + 到文本 (y) + ") 按钮:" + 按钮文本 + " | 经 CEF 事件派发(VIP控制器不可用时的退路)"))
+                返回 (MCP_响应构建.命令成功 (命令ID, "点击 (" + 到文本 (x) + "," + 到文本 (y) + ") 按钮:" + 按钮文本 + " | 经 CEF 事件派发(高级功能控制器不可用时的退路)"))
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
         }
@@ -1182,7 +1182,7 @@
                 鼠标事件.纵坐标 = y
                 鼠标事件.修饰键 = 事件标识.无
                 browser.发送鼠标移动事件 (鼠标事件, 假)
-                返回 (MCP_响应构建.命令成功 (命令ID, "鼠标移动到 (" + 到文本 (x) + "," + 到文本 (y) + ") | 经 CEF 事件派发(VIP控制器不可用时的退路)"))
+                返回 (MCP_响应构建.命令成功 (命令ID, "鼠标移动到 (" + 到文本 (x) + "," + 到文本 (y) + ") | 经 CEF 事件派发(高级功能控制器不可用时的退路)"))
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
         }
@@ -1726,7 +1726,7 @@
                 鼠标事件.纵坐标 = y
                 鼠标事件.修饰键 = 事件标识.无
                 browser.发送鼠标滚轮事件 (鼠标事件, deltaX, deltaY)
-                返回 (MCP_响应构建.命令成功 (命令ID, "滚轮 (" + 到文本 (x) + "," + 到文本 (y) + ") delta:" + 到文本 (deltaX) + "," + 到文本 (deltaY) + " | 经 CEF 事件派发(VIP控制器不可用时的退路)"))
+                返回 (MCP_响应构建.命令成功 (命令ID, "滚轮 (" + 到文本 (x) + "," + 到文本 (y) + ") delta:" + 到文本 (deltaX) + "," + 到文本 (deltaY) + " | 经 CEF 事件派发(高级功能控制器不可用时的退路)"))
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
         }
@@ -1752,7 +1752,7 @@
             {
                 username = MCP命令服务器.yyjson取文本 (参数JSON, "username")
                 password = MCP命令服务器.yyjson取文本 (参数JSON, "password")
-                // 地址格式守卫: 该工具会把地址**持久化**到新浏览器自动应用, 垃圾地址(如探针占位串)会污染
+                // 地址格式守卫: 该工具会把地址**持久化**到新浏览器自动应用, 无效地址(如探针占位串)会污染
                 // 整个后续会话; 要求形如 host:port。
                 如果 (寻找文本 (address, ":", 0, 假) == -1)
                 {
@@ -2975,7 +2975,7 @@
             }
             否则 (action == "popup_config")
             {
-                // 事件Hook通道: 自定义弹窗属性 (无需VIP, 无需浏览器实例)
+                // 事件Hook通道: 自定义弹窗属性 (无需授权, 无需浏览器实例)
                 变量 弹窗宽度 <类型 = 整数>
                 弹窗宽度 = MCP命令服务器.yyjson取整数 (参数JSON, "width")
                 变量 弹窗高度 <类型 = 整数>
@@ -4279,7 +4279,7 @@
             }
             返回 (MCP_响应构建.命令失败 (命令ID, "重试" + 到文本 (retAttempt) + "次后仍失败 | tool=" + retTool + " | 最后错误已输出"))
         }
-        // === Canvas指纹噪点注入 (反检测, JS实现, 不需VIP) ===
+        // === Canvas指纹噪点注入 (反检测, JS实现, 无需授权) ===
         否则 (方法名 == "browser_canvas_noise")
         {
             变量 cnAction <类型 = 文本型>
@@ -4537,7 +4537,7 @@
                 变量 指南1 <类型 = YYJSON对象类>
                 指南1.创建自文本 ("{}")
                 指南1.加入文本成员 ("scenario", "debugger")
-                指南1.加入文本成员 ("tip", "VIP: debugger_flow 一键 | 或 enable→breakpoint→navigate→wait_paused→inspect→resume")
+                指南1.加入文本成员 ("tip", "推荐: debugger_flow 组合流程 | 或 enable→breakpoint→navigate→wait_paused→inspect→resume")
                 指南1.加入文本成员 ("script", "browser_debugger_flow 或 mcp_bridge.js --call browser_debugger_flow")
                 指南1.加入文本成员 ("workflow", "workflow_run name=debugger_full")
                 指南1.加入文本成员 ("next_tools", "browser_debugger_flow {url,breakpoint,expressions} | wait_paused → inspect / script_source → resume")
@@ -6051,12 +6051,12 @@
             MCP命令服务器.暂停前事件指纹 = 取文本左边 (暂停前已有, 200)
             如果 (暂停前已有 == "")
             {
-                // 只在"由本次调用制造暂停"时武装防呆网(主循环 10 秒没等到暂停事件就自动 resume)
+                // 只在"由本次调用制造暂停"时武装保护网(主循环 10 秒没等到暂停事件就自动 resume)
                 MCP命令服务器.待恢复暂停时间 = 取启动时间 ()
             }
             如果 (MCP命令服务器.确保调试器已暂停 (命令ID) == 假)
             {
-                返回 (MCP_响应构建.命令失败 (命令ID, "无法制造暂停点(已安排执行点 + Debugger.pause 并等待约6秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(about:blank/纯静态页) 或 CDP 通道不可用 | 替代: 先 browser_navigate 到有脚本的页面再暂停, 或用 browser_debugger_flow 一键断点"))
+                返回 (MCP_响应构建.命令失败 (命令ID, "无法制造暂停点(已安排执行点 + Debugger.pause 并等待约6秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(about:blank/纯静态页) 或 CDP 通道不可用 | 替代: 先 browser_navigate 到有脚本的页面再暂停, 或用 browser_debugger_flow 组合断点"))
             }
             变量 暂停成功对象 <类型 = YYJSON对象类>
             暂停成功对象.创建自文本 ("{}")
@@ -6098,11 +6098,11 @@
             {
                 // 无断点可停: 单步没有检查点, 且实测 pause→step→resume 序列会毒化本会话 CDP 通道
                 // (2025-09-13 全量扫测: step 后通道真坏, 活体短探连败被误判冷重启)。如实跳过实际单步。
-                返回 (MCP_响应构建.命令成功 (命令ID, "本会话未设置任何断点, 单步没有可停靠的检查点, 已跳过实际单步(页面保持运行, 实例不受影响) | 要单步调试请先 browser_debugger_set_breakpoint 设断点, 或直接 browser_debugger_flow 一键断点流程"))
+                返回 (MCP_响应构建.命令成功 (命令ID, "本会话未设置任何断点, 单步没有可停靠的检查点, 已跳过实际单步(页面保持运行, 实例不受影响) | 要单步调试请先 browser_debugger_set_breakpoint 设断点, 或直接 browser_debugger_flow 组合断点流程"))
             }
             如果 (MCP命令服务器.确保调试器已暂停 (命令ID) == 假)
             {
-                返回 (MCP_响应构建.命令失败 (命令ID, "无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 一键断点流程"))
+                返回 (MCP_响应构建.命令失败 (命令ID, "无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 组合断点流程"))
             }
             变量 stepOver回执 <类型 = 文本型>
             stepOver回执 = MCP命令服务器.执行CDP命令 (命令ID, "Debugger.stepOver", 参数JSON)
@@ -6112,11 +6112,11 @@
         {
             如果 (MCP命令服务器.断点注册表.取成员数 () == 0)
             {
-                返回 (MCP_响应构建.命令成功 (命令ID, "本会话未设置任何断点, 单步没有可停靠的检查点, 已跳过实际单步(页面保持运行, 实例不受影响) | 要单步调试请先 browser_debugger_set_breakpoint 设断点, 或直接 browser_debugger_flow 一键断点流程"))
+                返回 (MCP_响应构建.命令成功 (命令ID, "本会话未设置任何断点, 单步没有可停靠的检查点, 已跳过实际单步(页面保持运行, 实例不受影响) | 要单步调试请先 browser_debugger_set_breakpoint 设断点, 或直接 browser_debugger_flow 组合断点流程"))
             }
             如果 (MCP命令服务器.确保调试器已暂停 (命令ID) == 假)
             {
-                返回 (MCP_响应构建.命令失败 (命令ID, "无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 一键断点流程"))
+                返回 (MCP_响应构建.命令失败 (命令ID, "无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 组合断点流程"))
             }
             变量 stepInto回执 <类型 = 文本型>
             stepInto回执 = MCP命令服务器.执行CDP命令 (命令ID, "Debugger.stepInto", 参数JSON)
@@ -6126,11 +6126,11 @@
         {
             如果 (MCP命令服务器.断点注册表.取成员数 () == 0)
             {
-                返回 (MCP_响应构建.命令成功 (命令ID, "本会话未设置任何断点, 单步没有可停靠的检查点, 已跳过实际单步(页面保持运行, 实例不受影响) | 要单步调试请先 browser_debugger_set_breakpoint 设断点, 或直接 browser_debugger_flow 一键断点流程"))
+                返回 (MCP_响应构建.命令成功 (命令ID, "本会话未设置任何断点, 单步没有可停靠的检查点, 已跳过实际单步(页面保持运行, 实例不受影响) | 要单步调试请先 browser_debugger_set_breakpoint 设断点, 或直接 browser_debugger_flow 组合断点流程"))
             }
             如果 (MCP命令服务器.确保调试器已暂停 (命令ID) == 假)
             {
-                返回 (MCP_响应构建.命令失败 (命令ID, "无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 一键断点流程"))
+                返回 (MCP_响应构建.命令失败 (命令ID, "无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 组合断点流程"))
             }
             变量 stepOut回执 <类型 = 文本型>
             stepOut回执 = MCP命令服务器.执行CDP命令 (命令ID, "Debugger.stepOut", 参数JSON)
@@ -6284,7 +6284,7 @@
         {
             如果 (MCP命令服务器.确保调试器已暂停 (命令ID) == 假)
             {
-                返回 (MCP_响应构建.命令失败 (命令ID, "无法自动制造暂停点(已启用调试器域 + 安排执行点 + Debugger.pause 并等待6秒仍未收到 Debugger.paused) | 可能原因: CDP 通道不可用 | 替代: browser_debugger_flow 一键断点流程"))
+                返回 (MCP_响应构建.命令失败 (命令ID, "无法自动制造暂停点(已启用调试器域 + 安排执行点 + Debugger.pause 并等待6秒仍未收到 Debugger.paused) | 可能原因: CDP 通道不可用 | 替代: browser_debugger_flow 组合断点流程"))
             }
             // 参数语义: Debugger.getStackTrace 要的不是**工具自身的 MCP 参数** —— CDP 该方法
             // 需要的是 `stackTraceId`(来自**错误对象**上的 stackTrace, 由 Runtime.exceptionThrown 给出),
@@ -6404,7 +6404,7 @@
                 // 零前置: 没有暂停事件时自动制造一个, 再重取(而不是让调用方先去编排断点)
                 如果 (MCP命令服务器.确保调试器已暂停 (命令ID) == 假)
                 {
-                    返回 (MCP_响应构建.命令失败 (命令ID, "无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 一键断点流程"))
+                    返回 (MCP_响应构建.命令失败 (命令ID, "无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 组合断点流程"))
                 }
                 rawLast = MCP命令服务器.取CDP事件数据JSON ("Debugger.paused")
             }
@@ -6421,7 +6421,7 @@
                 // 零前置: 未给帧ID 且页面未暂停时, 先自动制造暂停点(已暂停则立即返回真)
                 如果 (MCP命令服务器.确保调试器已暂停 (命令ID) == 假)
                 {
-                    返回 (MCP_响应构建.命令失败 (命令ID, "无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 一键断点流程"))
+                    返回 (MCP_响应构建.命令失败 (命令ID, "无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 组合断点流程"))
                 }
                 变量 rawInspect <类型 = 文本型>
                 rawInspect = MCP命令服务器.取CDP事件数据JSON ("Debugger.paused")
@@ -6492,7 +6492,7 @@
                 // (给了 script_id 的调用方无需暂停, 故不动那条路径)
                 如果 (MCP命令服务器.确保调试器已暂停 (命令ID) == 假)
                 {
-                    返回 (MCP_响应构建.命令失败 (命令ID, "无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 一键断点流程"))
+                    返回 (MCP_响应构建.命令失败 (命令ID, "无法自动制造暂停点(已安排执行点 + Debugger.pause 并等待5秒仍未收到 Debugger.paused) | 可能原因: 页面没有可执行的JS(纯静态页/about:blank) 或 CDP 通道不可用 | 替代: browser_debugger_flow 组合断点流程"))
                 }
             }
             变量 srcJSON <类型 = 文本型>
@@ -9198,8 +9198,8 @@
             }
             返回 (MCP_响应构建.命令失败 (命令ID, MCP_常量.错误_无浏览器))
         }
-        // === 反检测预配置 (浏览器事件级) + 一键预设Hook ===
-        // === 反检测预设一键部署 ===
+        // === 反检测预配置 (浏览器事件级) + 批量预设Hook ===
+        // === 反检测预设批量部署 ===
         否则 (方法名 == "browser_antidetect_presets")
         {
             变量 adPreset <类型 = 文本型>
@@ -9219,7 +9219,7 @@
             }
             变量 adLog <类型 = 文本型>
             adLog = ""
-            // Level 1: stealth — 去webdriver+自动化标志 (内核级, 不需VIP)
+            // Level 1: stealth — 去webdriver+自动化标志 (内核级, 无需授权)
             如果 (adPreset == "stealth" || adPreset == "basic" || adPreset == "full")
             {
                 MCP命令服务器.持久配置锁.加锁 ()
@@ -9244,7 +9244,7 @@
                 }
                 否则
                 {
-                    adLog = adLog + "; ⚠️ Canvas/WebGL/Audio需VIP授权"
+                    adLog = adLog + "; ⚠️ Canvas/WebGL/Audio需高级功能支持"
                 }
             }
             // Level 3: full — basic + 全部硬件/屏幕/时区伪装
@@ -9283,7 +9283,7 @@
                 }
                 否则
                 {
-                    adLog = adLog + "; ⚠️ full级伪装需VIP授权, 仅应用了内核级反检测"
+                    adLog = adLog + "; ⚠️ full级伪装需高级功能支持, 仅应用了内核级反检测"
                 }
             }
             如果 (adLog == "")

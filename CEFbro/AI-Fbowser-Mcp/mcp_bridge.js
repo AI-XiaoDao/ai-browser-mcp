@@ -390,7 +390,7 @@ async function runCheck() {
 async function runStdio() {
     stdioQuiet = process.env.AI_BROWSER_MCP_STDIO_LOG !== '1';
 
-    // 小白全自动: MCP 服务未运行且能找到 exe 时自动拉起 (AI_BROWSER_AUTO_START=0 可禁用)
+    // 自动拉起: MCP 服务未运行且能找到 exe 时自动启动 (AI_BROWSER_AUTO_START=0 可禁用)
     await ensureRunning(CONFIG).catch(() => false);
 
     // 不用 setEncoding('utf8'): 帧解析按字节进行 (Content-Length 为 UTF-8 字节数), chunk 保持 Buffer
@@ -678,7 +678,7 @@ Cursor stdio (默认):
 `);
 }
 
-// ---------- 自动启动 AI浏览器.exe (小白全自动: 未运行时自动拉起) ----------
+// ---------- 自动启动 AI浏览器.exe (未运行时自动拉起) ----------
 
 function findExeCandidates() {
     const cands = [
@@ -764,7 +764,7 @@ async function runCli() {
         printCliHelp();
         return;
     }
-    // 小白全自动: 所有模式(stdio/check/call/tools/feed)未运行时自动拉起 exe (AI_BROWSER_AUTO_START=0 可禁用)
+    // 自动拉起: 所有模式(stdio/check/call/tools/feed)未运行时自动启动 exe (AI_BROWSER_AUTO_START=0 可禁用)
     await ensureRunning(CONFIG).catch(() => false);
     if (args.includes('--check')) {
         await runCheck();
