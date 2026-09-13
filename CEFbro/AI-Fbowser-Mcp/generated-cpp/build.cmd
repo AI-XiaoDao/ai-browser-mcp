@@ -52,7 +52,9 @@ if not exist ..\linker mkdir ..\linker
 if not exist ..\linker\out mkdir ..\linker\out
 if not exist ..\linker\out\extern mkdir ..\linker\out\extern
 rem clean stale artifacts from the other arch (shared out dir; x64/win32 objects are incompatible)
-del /q ..\linker\out\*.obj ..\linker\out\*.pch ..\linker\out\*.pdb ..\linker\out\*.res 2>nul
+rmdir /s /q ..\linker\out 2>nul
+if not exist ..\linker\out mkdir ..\linker\out
+if not exist ..\linker\out\extern mkdir ..\linker\out\extern
 nmake /f makefile
 if errorlevel 1 (
   echo [FAILED] build failed, see output above
