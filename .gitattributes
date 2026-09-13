@@ -1,7 +1,9 @@
 # 文本文件统一 LF 换行
 * text=auto
 
-*.wsv text eol=lf
+# 语言统计: 火山视窗 .wsv 源码按 C++ 统计(火山编译产物为 C++, GitHub 默认会误判成 HTML)
+*.wsv text eol=lf linguist-language=C++
+
 *.vprj text eol=lf
 *.vsln text eol=lf
 *.js text eol=lf
