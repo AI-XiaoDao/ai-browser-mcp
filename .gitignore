@@ -76,8 +76,9 @@ _zip_test/
 **/*.bak
 **/schema_check*.js
 
-# C++ 生成源码对照(可再生成, Releases 提供 cpp 参考包)
-**/generated-cpp/
+# C++ 生成源码: 从 v3.2.0 起正式进仓(语言栏真实 C++ 主导; 由火山环境一条命令再生成, 也可直接对照)
+!CEFbro/AI-Fbowser-Mcp/generated-cpp/
+!CEFbro/AI-Fbowser-Mcp/generated-cpp/**
 
 # 本地开发资产(不入仓)
 CEFbro/AI-Fbowser-Mcp/_audit/
